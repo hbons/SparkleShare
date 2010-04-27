@@ -1,5 +1,5 @@
-//   SparklePony 0.0.2
-//
+//   SparklePony 0.0.3
+
 //   SparklePony, an instant update workflow to Git.
 //   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
 //
@@ -114,6 +114,7 @@ public class SparklePonyUI {
 		// Get all the folders in ~/Collaboration
 		string [] Folders = Directory.GetDirectories (FoldersPath);
 		Repositories = new Repository [Folders.Length];
+		AutoFetcher AutoFetcher = new AutoFetcher (Repositories);
 
 		int i = 0;
 		foreach (string Folder in Folders) {
@@ -165,11 +166,18 @@ public class AutoFetcher {
 
 	private Timer Timer;
 
-	public AutoFetcher (Repository Repository) {
+	public AutoFetcher (Repository [] Repositories) {
 		Timer = new Timer();
 		// Fetch changes every 30 seconds
-		Timer.Interval = 30000;
-		Timer.Elapsed += delegate (object o, ElapsedEventArgs args) { Repository.Fetch (); };
+		Timer.Interval = 5000;
+		Timer.Elapsed += delegate (object o, ElapsedEventArgs args) { 
+			foreach (Repository Repository in Repositories) {
+				Timer.Stop ();
+				if (!Repository.MonitorOnly)
+					Repository.Fetch ();
+				Timer.Start ();
+			}
+		};
 		Timer.Start();
 	}
 
@@ -190,7 +198,6 @@ public class AutoFetcher {
 public class Repository {
 
 	private Process Process;
-	private Timer Timer;
 	private Timer BufferTimer;
 	private FileSystemWatcher Watcher;
 
@@ -205,6 +212,8 @@ public class Repository {
 	public bool MonitorOnly;
 
 	public Repository (string Path) {
+
+		MonitorOnly = false;
 
 		Process = new Process();
 		Process.EnableRaisingEvents = false; 
@@ -262,11 +271,6 @@ public class Repository {
 
 		// Call Fetch () every 30 seconds
 		BufferTimer = new Timer ();
-		Timer = new Timer();
-		Timer.Interval = 30000; //TODO: Make this have get/set
-		Timer.Elapsed += new ElapsedEventHandler(Fetch);
-		Timer.Start();
-
 
 // TODO: uncomment when status checking is implemented
 //		Add ();
@@ -332,7 +336,6 @@ public class Repository {
 	}
 
 	public void Fetch () {
-		Timer.Stop ();
 		Console.WriteLine ("Fetching changes...");
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "fetch";
@@ -349,7 +352,6 @@ public class Repository {
 	}
 
 	public void Merge () {
-		Timer.Stop ();
 		Watcher.EnableRaisingEvents = false;
 		Console.WriteLine ("Merging fetched changes...");
 		Process.StartInfo.FileName = "git";
@@ -358,7 +360,6 @@ public class Repository {
 		Process.WaitForExit ();
 		// TODO: Notify user with the last fetched commit
 		Watcher.EnableRaisingEvents = true;
-		Timer.Start ();
 	}
 
 	public void Push () {
