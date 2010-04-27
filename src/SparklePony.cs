@@ -150,12 +150,12 @@ public class SparklePonyUI {
 public class SparklePonyStatusIcon : StatusIcon {
 
 	public SparklePonyStatusIcon () : base ()  {
-		IconName = "folder-publicshare";
+		IconName = "folder-remote";
 		// Activate += delegate (object o, EventArgs args) { SetSyncingState (); };
 	}
 
 	public void SetIdleState () {
-		IconName = "folder-publicshare";
+		IconName = "folder-remote";
 	}
 
 	public void SetSyncingState () {
@@ -377,7 +377,7 @@ public class Repository {
 	// Can potentially be moved from this class as well
 	public void ShowNotification (string Title, string SubText) {
 		Notification Notification = new Notification (Title, SubText);
-		Notification.IconName = "folder-publicshare";
+		Notification.IconName = "folder-remote";
 		Notification.Urgency = Urgency.Low;
 		Notification.Timeout = 3000;
 
@@ -403,7 +403,7 @@ public class SparklePonyWindow : Window {
 		SetSizeRequest (640, 480);
  		SetPosition (WindowPosition.Center);
 		BorderWidth = 6;
-		IconName = "folder-publicshare";
+		IconName = "folder-remote";
 
 		ListStore FoldersStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
 		string RemoteFolderIcon = "/usr/share/icons/gnome/16x16/places/folder.png";
