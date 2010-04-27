@@ -48,7 +48,7 @@ public class SparklePony {
 		Process.StartInfo.UseShellExecute = false;
 		Process.StartInfo.FileName = "git";
 		Process.Start();
-		if (Process.StandardOutput.ReadToEnd().IndexOf ("version") > -1) {
+		if (Process.StandardOutput.ReadToEnd().IndexOf ("version") == -1) {
 			Console.WriteLine ("Git wasn't found.\nYou can get it from http://git-scm.com/.");
 			Environment.Exit (0);
 		}
