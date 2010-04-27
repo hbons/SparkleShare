@@ -304,7 +304,6 @@ public class Repository {
 	}
 
 	public void Fetch (object o, ElapsedEventArgs args) {
-		Timer.Stop ();
 		Console.WriteLine ("Fetching changes...");
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "fetch";
@@ -313,12 +312,14 @@ public class Repository {
 	}
 
 	public void Merge () {
+		Timer.Stop ();
 		Watcher.EnableRaisingEvents = false;
 		Console.WriteLine ("Merging fetched changes...");
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "merge origin/master";
 		Process.Start();
-		Process.WaitForExit ();		
+		Process.WaitForExit ();
+		// TODO: Notify user with the last fetched commit
 		Watcher.EnableRaisingEvents = true;
 		Timer.Start ();
 	}
@@ -398,10 +399,11 @@ public class SparklePonyWindow : Window {
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
 
+		// TODO: fix hard coding, system independant
 		Process.StartInfo.WorkingDirectory = "/home/hbons/Collaboration/Deal";
 
 		Process.StartInfo.FileName = "git";
-		Process.StartInfo.Arguments = "log --pretty=oneline -25";
+		Process.StartInfo.Arguments = "log --pretty=oneline -20";
 		Process.Start();
 
 		string Output = Process.StandardOutput.ReadToEnd().Trim ();
@@ -427,6 +429,8 @@ public class SparklePonyWindow : Window {
 		LayoutVerticalLeft.BorderWidth = 12;
 
 		VBox LayoutVerticalRight = new VBox ();
+
+		// TODO: Fix this, it's hardcoded
 
 		Label Label1 = new Label ("Remote URL:");
 		Label1.UseMarkup = true;
