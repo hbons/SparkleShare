@@ -40,9 +40,22 @@ using System.Text.RegularExpressions;
 
 public class SparklePony {
 
-	public static void Main () {
+	public static void Main (string [] args) {
+
+		bool HideUI = false;
+		if (args.Length > 0) {
+			foreach (string Argument in args) {
+				if (Argument.Equals ("--disable-gui")) {
+					HideUI = true;
+				}
+			}
+
+		}
+		
+
+
 		Gtk.Application.Init ();
-		SparklePonyUI SparklePonyUI = new SparklePonyUI ();
+		SparklePonyUI SparklePonyUI = new SparklePonyUI (HideUI);
 		SparklePonyUI.StartMonitoring ();
 		Gtk.Application.Run ();
 	}
@@ -57,7 +70,7 @@ public class SparklePonyUI {
 	public string UserHome;
 	public Repository [] Repositories;
 
-	public SparklePonyUI () {
+	public SparklePonyUI (bool HideUI) {
 
 		Process Process = new Process();
 		Process.EnableRaisingEvents = false;
@@ -87,13 +100,16 @@ public class SparklePonyUI {
 			i++;
 		}
 
-		// Create the window
-		SparklePonyWindow = new SparklePonyWindow (Repositories);
-		SparklePonyWindow.DeleteEvent += CloseSparklePonyWindow;
+		if (!HideUI) {
 
-		// Create the status icon
-		SparklePonyStatusIcon = new SparklePonyStatusIcon ();
-		SparklePonyStatusIcon.Activate += delegate  { SparklePonyWindow.ToggleVisibility (); };
+			// Create the window
+			SparklePonyWindow = new SparklePonyWindow (Repositories);
+			SparklePonyWindow.DeleteEvent += CloseSparklePonyWindow;
+
+			// Create the status icon
+			SparklePonyStatusIcon = new SparklePonyStatusIcon ();
+			SparklePonyStatusIcon.Activate += delegate  { SparklePonyWindow.ToggleVisibility (); };
+		}
 
 	}
 
@@ -110,12 +126,12 @@ public class SparklePonyUI {
 public class SparklePonyStatusIcon : StatusIcon {
 
 	public SparklePonyStatusIcon () : base ()  {
-		IconName = "folder-remote";
+		IconName = "folder-publicshare";
 		// Activate += delegate (object o, EventArgs args) { SetSyncingState (); };
 	}
 
 	public void SetIdleState () {
-		IconName = "folder-remote";
+		IconName = "folder-publicshare";
 	}
 
 	public void SetSyncingState () {
@@ -349,7 +365,7 @@ public class Repository {
 	// Can potentially be moved from this class as well
 	public void ShowNotification (string Title, string SubText) {
 		Notification Notification = new Notification (Title, SubText);
-		Notification.IconName = "folder-remote";
+		Notification.IconName = "folder-publicshare";
 		Notification.Urgency = Urgency.Low;
 		Notification.Timeout = 3000;
 
@@ -375,10 +391,10 @@ public class SparklePonyWindow : Window {
 		SetSizeRequest (640, 480);
  		SetPosition (WindowPosition.Center);
 		BorderWidth = 6;
-		IconName = "folder-remote";
+		IconName = "folder-publicshare";
 
 		ListStore FoldersStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
-		string RemoteFolderIcon = "/usr/share/icons/gnome/16x16/places/folder-remote.png";
+		string RemoteFolderIcon = "/usr/share/icons/gnome/16x16/places/folder.png";
 
 		foreach (Repository Repository in Repositories)
 			FoldersStore.AppendValues (new Gdk.Pixbuf (RemoteFolderIcon), Repository.Name);
@@ -411,7 +427,7 @@ public class SparklePonyWindow : Window {
 		ListStore LogStore = new ListStore (typeof (string), typeof (string), typeof (string));
 
 		foreach (string Message in Regex.Split (Output, "\n"))
-			LogStore.AppendValues (Message.Substring (41), "Deal", "2 hours ago");
+			LogStore.AppendValues ("", "Deal", "2 hours ago");
 
 		TreeView LogView = new TreeView (LogStore); 
 		LogView.AppendColumn ("What?", new Gtk.CellRendererText (), "text", 0);  
@@ -502,15 +518,10 @@ public class SparklePonyWindow : Window {
 
 	public void ToggleVisibility() {
 		if (Visibility) {
-			if (!HasFocus) {
-				Present ();Console.WriteLine ("A");
-			} else {
+			if (HasFocus)
 				HideAll ();
-				Visibility = false;	Console.WriteLine ("B");
-			}	
 		} else {
 			ShowAll ();
-			Visibility = true;Console.WriteLine ("C");
 		}
 	}
 
