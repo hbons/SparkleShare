@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ "$1" == "start" ]]; then
-	mono /usr/share/sparklepony/SparklePony.exe
+	mono /usr/share/local/sparklepony/SparklePony.exe
 else
 	if [[ "$1" == "stop" ]]; then
 		# Stop SparklePony.exe
