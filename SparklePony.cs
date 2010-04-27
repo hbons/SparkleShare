@@ -269,6 +269,7 @@ public class Repository {
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "clone " + RemoteOriginUrl;
 		Process.Start();
+		// TODO: Add a gitignore file for *~
 	}
 
 	public void Add () {
