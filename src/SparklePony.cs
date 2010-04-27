@@ -114,13 +114,15 @@ public class SparklePonyUI {
 		// Get all the folders in ~/Collaboration
 		string [] Folders = Directory.GetDirectories (FoldersPath);
 		Repositories = new Repository [Folders.Length];
-		AutoFetcher AutoFetcher = new AutoFetcher (Repositories);
+
 
 		int i = 0;
 		foreach (string Folder in Folders) {
 			Repositories [i] = new Repository (Folder);
 			i++;
 		}
+
+		AutoFetcher AutoFetcher = new AutoFetcher (Repositories);
 
 		if (!HideUI) {
 
@@ -162,35 +164,23 @@ public class SparklePonyStatusIcon : StatusIcon {
 
 }
 
-public class AutoFetcher {
+public class AutoFetcher : Timer {
 
-	private Timer Timer;
+	public AutoFetcher (Repository [] Repositories) : base () {
 
-	public AutoFetcher (Repository [] Repositories) {
-		Timer = new Timer();
 		// Fetch changes every 30 seconds
-		Timer.Interval = 5000;
-		Timer.Elapsed += delegate (object o, ElapsedEventArgs args) { 
+		Interval = 5000;
+		Elapsed += delegate (object o, ElapsedEventArgs args) { 
 			foreach (Repository Repository in Repositories) {
-				Timer.Stop ();
+				Stop ();
 				if (!Repository.MonitorOnly)
 					Repository.Fetch ();
-				Timer.Start ();
+				Start ();
 			}
 		};
-		Timer.Start();
-	}
 
-	public void StartTimer () {
-		Timer.Start ();
-	}
+		Start();
 
-	public void StopTimer () {
-		Timer.Stop ();
-	}
-
-	public bool isRunning () {
-		return Timer.Enabled;
 	}
 
 }
