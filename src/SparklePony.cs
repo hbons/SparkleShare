@@ -45,19 +45,29 @@ public class SparklePony {
 		bool HideUI = false;
 		if (args.Length > 0) {
 			foreach (string Argument in args) {
-				if (Argument.Equals ("--disable-gui")) {
+				if (Argument.Equals ("--disable-gui") || Argument.Equals ("-d"))
 					HideUI = true;
+				if (Argument.Equals ("--help") || Argument.Equals ("-h")) {
+					ShowHelp ();
 				}
 			}
-
 		}
 		
-
-
 		Gtk.Application.Init ();
 		SparklePonyUI SparklePonyUI = new SparklePonyUI (HideUI);
 		SparklePonyUI.StartMonitoring ();
 		Gtk.Application.Run ();
+	}
+
+	public static void ShowHelp () {
+		Console.WriteLine ("Usage: mono SparklePony.exe [OPTION]...");
+		Console.WriteLine ("Sync Collaboration folder with remote repositories.");
+		Console.WriteLine ("");
+		Console.WriteLine ("Arguments:");
+		Console.WriteLine ("\t -d, --disable-gui\tDon't show the notification icon.");
+		Console.WriteLine ("\t -h, --help\t\tDisplay this help text.");
+		Console.WriteLine ("");
+		Environment.Exit (0);
 	}
 
 }
