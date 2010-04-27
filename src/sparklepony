@@ -22,7 +22,7 @@ if [[ "$1" == "stop" ]]; then
 		echo -n "Stopping SparklePony..."
 		kill `cat /tmp/sparklepony/sparklepony.pid` 
 		rm -f /tmp/sparklepony/sparklepony.pid
-		echo " Done."
+		echo "Done."
 	else
 		echo "SparklePony isn't running."
 	fi

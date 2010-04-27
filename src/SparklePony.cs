@@ -1,4 +1,4 @@
-//   SparklePony 0.0.3
+//   SparklePony 0.0.4
 
 //   SparklePony, an instant update workflow to Git.
 //   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
@@ -436,15 +436,14 @@ public class SparklePonyWindow : Window {
 
 		string Output = Process.StandardOutput.ReadToEnd().Trim ();
 
-		ListStore LogStore = new ListStore (typeof (string), typeof (string), typeof (string));
+		ListStore LogStore = new ListStore (typeof (string), typeof (string));
 
 		foreach (string Message in Regex.Split (Output, "\n"))
-			LogStore.AppendValues ("", "Deal", "2 hours ago");
+			LogStore.AppendValues ("", "2 hours ago");
 
 		TreeView LogView = new TreeView (LogStore); 
-		LogView.AppendColumn ("What?", new Gtk.CellRendererText (), "text", 0);  
-		LogView.AppendColumn ("Where?", new Gtk.CellRendererText (), "text", 1);
-		LogView.AppendColumn ("When?", new Gtk.CellRendererText (), "text", 2);
+		LogView.AppendColumn ("", new Gtk.CellRendererText (), "text", 0);
+		LogView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
 		
 		ScrolledWindow ScrolledWindow = new ScrolledWindow ();
 		ScrolledWindow.AddWithViewport (LogView);
@@ -525,6 +524,7 @@ public class SparklePonyWindow : Window {
 	// General options: [X] Run at startup. [X]
 
 	public void Quit (object o, EventArgs args) {
+		File.Delete ("/tmp/sparklepony/sparklepony.pid");
 		Application.Quit ();
 	}
 
