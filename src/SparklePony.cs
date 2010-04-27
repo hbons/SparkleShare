@@ -169,7 +169,7 @@ public class AutoFetcher : Timer {
 	public AutoFetcher (Repository [] Repositories) : base () {
 
 		// Fetch changes every 30 seconds
-		Interval = 5000;
+		Interval = 30000;
 		Elapsed += delegate (object o, ElapsedEventArgs args) { 
 			foreach (Repository Repository in Repositories) {
 				Stop ();
