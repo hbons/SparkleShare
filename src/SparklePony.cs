@@ -42,6 +42,17 @@ public class SparklePony {
 
 	public static void Main (string [] args) {
 
+		// Check if git is installed
+		Process Process = new Process();
+		Process.StartInfo.RedirectStandardOutput = true;
+		Process.StartInfo.UseShellExecute = false;
+		Process.StartInfo.FileName = "git";
+		Process.Start();
+		if (Process.StandardOutput.ReadToEnd().IndexOf ("version") > -1) {
+			Console.WriteLine ("Git wasn't found.\nYou can get it from http://git-scm.com/.");
+			Environment.Exit (0);
+		}
+
 		bool HideUI = false;
 		if (args.Length > 0) {
 			foreach (string Argument in args) {
