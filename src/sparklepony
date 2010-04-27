@@ -10,7 +10,7 @@ if [[ "$1" == "start" ]]; then
 		echo -n "Starting SparklePony..."
 
 		# Start SparklePony in the background and save the pid
-		mono /usr/local/share/sparklepony/SparklePony.exe &
+		mono /usr/local/share/sparklepony/SparklePony.exe $2 &
 		PID=$!
 		echo $PID > /tmp/sparklepony/sparklepony.pid
 		echo " Done."
@@ -26,4 +26,8 @@ if [[ "$1" == "stop" ]]; then
 	else
 		echo "SparklePony isn't running."
 	fi
+fi
+
+if [[ "$1" == "--help" ]]; then
+		mono /usr/local/share/sparklepony/SparklePony.exe --help
 fi

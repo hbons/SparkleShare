@@ -71,7 +71,7 @@ public class SparklePony {
 	}
 
 	public static void ShowHelp () {
-		Console.WriteLine ("Usage: mono SparklePony.exe [OPTION]...");
+		Console.WriteLine ("Usage: sparklepony [start|stop] [OPTION]...");
 		Console.WriteLine ("Sync Collaboration folder with remote repositories.");
 		Console.WriteLine ("");
 		Console.WriteLine ("Arguments:");
