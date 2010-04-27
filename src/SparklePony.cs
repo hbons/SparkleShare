@@ -502,10 +502,15 @@ public class SparklePonyWindow : Window {
 
 	public void ToggleVisibility() {
 		if (Visibility) {
-			if (HasFocus)
+			if (!HasFocus) {
+				Present ();Console.WriteLine ("A");
+			} else {
 				HideAll ();
+				Visibility = false;	Console.WriteLine ("B");
+			}	
 		} else {
 			ShowAll ();
+			Visibility = true;Console.WriteLine ("C");
 		}
 	}
 
