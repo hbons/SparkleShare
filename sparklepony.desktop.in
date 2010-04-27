@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Collaboration Folders
+Exec=sparklepony start
+Icon=folder-publicshare
+Terminal=false
