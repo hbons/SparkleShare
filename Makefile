@@ -4,8 +4,10 @@ SparklePony.exe : src/SparklePony.cs
 install:
 	mkdir /usr/share/sparklepony
 	cp src/SparklePony.exe /usr/share/sparklepony
+	cp src/sparklepony /usr/bin
 
 uninstall:
+	rm /usr/bin/sparklepony
 	rm /usr/share/sparklepony/SparklePony.exe
 	mkdir /usr/share/sparklepony
 
