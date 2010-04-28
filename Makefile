@@ -11,7 +11,7 @@ install:
 
 uninstall:
 	rm /usr/local/bin/sparklepony
-	rm /usr/local/sparklepony/SparklePony.exe
+	rm /usr/local/share/sparklepony/SparklePony.exe
 	rmdir /usr/local/share/sparklepony
 	rm /usr/share/icons/hicolor/*x*/places/folder-publicshare.png
 

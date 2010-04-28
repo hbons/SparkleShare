@@ -273,7 +273,7 @@ public class Repository {
 			// Delay for a few seconds to see if more files change
 			BufferTimer.Interval = Interval; 
 			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) { Add (); } ;
-			Console.WriteLine ("Waiting for more changes...");
+			Console.WriteLine ("[Buffer] Waiting for more changes...");
 			BufferTimer.Start();
 		} else {
 			// Extend the delay when something changes
@@ -282,17 +282,15 @@ public class Repository {
 			BufferTimer.Interval = 3000;
 			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) { Add (); } ;
 			BufferTimer.Start();
-			Console.WriteLine ("Waiting for more changes...");
+			Console.WriteLine ("[Buffer] Waiting for more changes...");
 		}
 	}
 
 	public void OnFileActivity (object o, FileSystemEventArgs args) {
        WatcherChangeTypes wct = args.ChangeType;
 		 if (!ShouldIgnore (args.Name)) {
-	      Console.WriteLine(wct.ToString() + " '" + args.Name + "'");
+	      Console.WriteLine("[Event] " + wct.ToString() + " '" + args.Name + "'");
 			StartBufferTimer ();
-		} else {
-			// Console.WriteLine("[ignore] " + wct.ToString() + " '" + args.Name + "'");
 		}
 	}
 
@@ -304,19 +302,18 @@ public class Repository {
 	}
 
 	public void Add () {
-		Console.WriteLine ("Done waiting.");
+		Console.WriteLine ("[Buffer] Done waiting.");
 		BufferTimer.Stop ();
-		Console.WriteLine ("Staging changes...");
+		Console.WriteLine ("[Git] Staging changes...");
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "add --all";
 		Process.Start();
 		// TODO: Format the commit message here
-		// TODO: Only commit if there are changes
 		Commit ("Stuff happened");
 	}
 
 	public void Commit (string Message) {
-		Console.WriteLine ("Commiting changes...");
+		Console.WriteLine ("[Git] Commiting changes...");
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "commit -m '" + Message + "'";
 		ShowNotification ("Stuff happened", "");
@@ -326,7 +323,7 @@ public class Repository {
 	}
 
 	public void Fetch () {
-		Console.WriteLine ("Fetching changes...");
+		Console.WriteLine ("[Git] Fetching changes...");
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "fetch";
 		Process.Start();
@@ -334,7 +331,7 @@ public class Repository {
 	}
 
 	public void Fetch (object o, ElapsedEventArgs args) {
-		Console.WriteLine ("Fetching changes...");
+		Console.WriteLine ("[Git] Fetching changes...");
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "fetch";
 		Process.Start();
@@ -343,7 +340,7 @@ public class Repository {
 
 	public void Merge () {
 		Watcher.EnableRaisingEvents = false;
-		Console.WriteLine ("Merging fetched changes...");
+		Console.WriteLine ("[Git] Merging fetched changes...");
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "merge origin/master";
 		Process.Start();
@@ -357,7 +354,7 @@ public class Repository {
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "push";
 		Process.Start();
-		Console.WriteLine ("Pushing changes...");
+		Console.WriteLine ("[Git] Pushing changes...");
 		Process.WaitForExit ();
 	}
 
@@ -417,26 +414,25 @@ public class SparklePonyWindow : Window {
 
 		HBox AddRemoveButtons = new HBox ();
 		Button AddButton = new Button ("Add...");
-		Button RemoveButton = new Button ("Remove");
-
 		AddRemoveButtons.PackStart (AddButton, true, true, 0);
+		Button RemoveButton = new Button ("Remove");
 		AddRemoveButtons.PackStart (RemoveButton, false, false, 0);
+
+
+
+		ListStore LogStore = new ListStore (typeof (string), typeof (string));
+
 
 		Process Process = new Process();
 		Process.EnableRaisingEvents = false; 
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
-
 		// TODO: fix hard coding, system independant
 		Process.StartInfo.WorkingDirectory = "/home/hbons/Collaboration/Deal";
-
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "log --pretty=oneline -20";
 		Process.Start();
-
 		string Output = Process.StandardOutput.ReadToEnd().Trim ();
-
-		ListStore LogStore = new ListStore (typeof (string), typeof (string));
 
 		foreach (string Message in Regex.Split (Output, "\n"))
 			LogStore.AppendValues ("", "2 hours ago");
@@ -493,28 +489,30 @@ public class SparklePonyWindow : Window {
 		LayoutVerticalRight.PackStart (Table, false, false, 24);
 	
 
-
 		HBox LayoutHorizontal = new HBox (false, 12);
 		LayoutHorizontal.PackStart (LayoutVerticalLeft, false, false, 0);
 		LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 0);
 
 		Notebook Notebook = new Notebook ();
+		Notebook.BorderWidth = 6;
 		Notebook.AppendPage (LayoutHorizontal, new Label ("Folders"));
 		Notebook.AppendPage (ScrolledWindow, new Label ("Events"));
 
 
-		VBox LayoutVertical = new VBox (false, 0);
-		Button CloseButton = new Button (Stock.Close);
+
 
 		HButtonBox DialogButtons = new HButtonBox ();
 		DialogButtons.BorderWidth = 6;
-		Notebook.BorderWidth = 6;
+
 		Button QuitButton = new Button ("Quit Service");
 		QuitButton.Clicked += Quit;
 		DialogButtons.Add (QuitButton);
+
+		Button CloseButton = new Button (Stock.Close);
+		CloseButton.Clicked += delegate (object o, EventArgs args) { HideAll (); Visibility = false; };
 		DialogButtons.Add (CloseButton);
 
-		CloseButton.Clicked += delegate (object o, EventArgs args) { HideAll (); Visibility = false; };
+		VBox LayoutVertical = new VBox (false, 0);
 		LayoutVertical.PackStart (Notebook, true, true, 0);
 		LayoutVertical.PackStart (DialogButtons, false, false, 0);
 		Add (LayoutVertical);
@@ -526,6 +524,22 @@ public class SparklePonyWindow : Window {
 	public void Quit (object o, EventArgs args) {
 		File.Delete ("/tmp/sparklepony/sparklepony.pid");
 		Application.Quit ();
+	}
+
+	public void CreateRepoList() {
+
+	}
+
+	public void UpdateRepoList() {
+
+	}
+
+	public void CreateEventLog() {
+
+	}
+
+	public void UpdateEventLog() {
+
 	}
 
 	public void ToggleVisibility() {
