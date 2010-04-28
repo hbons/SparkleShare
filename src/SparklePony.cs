@@ -17,6 +17,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //   Dependencies: 
+//             git
 //             mono-core
 //             gtk-sharp2
 //             gtk-sharp2-devel
@@ -71,7 +72,7 @@ public class SparklePony {
 	}
 
 	public static void ShowHelp () {
-		Console.WriteLine ("Usage: sparklepony [start|stop] [OPTION]...");
+		Console.WriteLine ("Usage: sparklepony [start|stop|restart] [OPTION]...");
 		Console.WriteLine ("Sync Collaboration folder with remote repositories.");
 		Console.WriteLine ("");
 		Console.WriteLine ("Arguments:");
@@ -328,6 +329,7 @@ public class Repository {
 	}
 
 	public void Fetch () {
+		// TODO: change status icon to sync
 		Console.WriteLine ("[Git] Fetching changes...");
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "fetch";
@@ -336,6 +338,7 @@ public class Repository {
 	}
 
 	public void Fetch (object o, ElapsedEventArgs args) {
+		// TODO: change status icon to sync
 		Console.WriteLine ("[Git] Fetching changes...");
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "fetch";
@@ -352,6 +355,7 @@ public class Repository {
 		Process.WaitForExit ();
 		// TODO: Notify user with the last fetched commit
 		Watcher.EnableRaisingEvents = true;
+		// TODO: change status icon to normal
 	}
 
 	public void Push () {
@@ -374,6 +378,10 @@ public class Repository {
 		else if (s.Length > 3 && s.Substring (s.Length - 4).Equals (".swp"))
 			return true;
 		else return false;
+	}
+
+	public string GetPeopleList [] () {
+
 	}
 
 	// Can potentially be moved from this class as well
@@ -425,7 +433,7 @@ public class SparklePonyWindow : Window {
 
 
 
-		ListStore LogStore = new ListStore (typeof (string), typeof (string));
+		ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
 
 
 		Process Process = new Process();
@@ -439,13 +447,29 @@ public class SparklePonyWindow : Window {
 		Process.Start();
 		string Output = Process.StandardOutput.ReadToEnd().Trim ();
 
-		foreach (string Message in Regex.Split (Output, "\n"))
-			LogStore.AppendValues ("", "2 hours ago");
+
+		Gdk.Pixbuf Icon = new Gdk.Pixbuf ("/usr/share/icons/hicolor/16x16/status/document-edited.png");
+		Gdk.Pixbuf Icon2 = new Gdk.Pixbuf ("/usr/share/icons/hicolor/16x16/status/document-added.png");
+		Gdk.Pixbuf Icon3 = new Gdk.Pixbuf ("/usr/share/icons/hicolor/16x16/status/document-removed.png");
+		Gdk.Pixbuf Icon4 = new Gdk.Pixbuf ("/usr/share/icons/hicolor/16x16/status/document-moved.png");
+
+		TreeIter Iter;
+		foreach (string Message in Regex.Split (Output, "\n")) {
+			Iter = LogStore.Prepend ();
+			LogStore.SetValue (Iter, 0, Icon);
+			LogStore.SetValue (Iter, 1, "In 'GNOME3', Hylke Bons edited 'mockup.svg'");
+			LogStore.SetValue (Iter, 2, "32 minutes ago ");
+		}
 
 		TreeView LogView = new TreeView (LogStore); 
-		LogView.AppendColumn ("", new Gtk.CellRendererText (), "text", 0);
+		LogView.AppendColumn ("", new Gtk.CellRendererPixbuf (), "pixbuf", 0);
 		LogView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
-		
+		LogView.AppendColumn ("", new Gtk.CellRendererText (), "text", 2);
+
+		TreeViewColumn [] Columns = LogView.Columns;
+		Columns [0].MinWidth = 32;
+		Columns [1].Expand = true;
+
 		ScrolledWindow ScrolledWindow = new ScrolledWindow ();
 		ScrolledWindow.AddWithViewport (LogView);
 		ScrolledWindow.BorderWidth = 12;
