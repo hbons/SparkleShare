@@ -309,6 +309,11 @@ public class Repository {
 		Process.StartInfo.Arguments = "add --all";
 		Process.Start();
 		// TODO: Format the commit message here
+		// Format: list-add In 'GNOME3', Hylke Bons added 'widgets.svg' and 3 more.
+		// Format: pencil In 'GNOME3', Hylke Bons changed 'widgets.svg' and 2 more.
+		// Format:  pencil In 'GNOME3', Hylke Bons renamed 'widgets.svg' to 'gnome.svg'.
+		// Format:  edit-redo 'GNOME3', Hylke Bons moved 'widgets.svg' to 'gnome.svg'.
+		// Format: list-remove In 'GNOME3', Hylke Bons deleted 'widgets.svg'.
 		Commit ("Stuff happened");
 	}
 
