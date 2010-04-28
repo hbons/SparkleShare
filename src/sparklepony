@@ -28,6 +28,30 @@ if [[ "$1" == "stop" ]]; then
 	fi
 fi
 
+if [[ "$1" == "restart" ]]; then
+	if [ -e "/tmp/sparklepony/sparklepony.pid" ]; then
+		echo -n "Stopping SparklePony..."
+		kill `cat /tmp/sparklepony/sparklepony.pid` 
+		rm -f /tmp/sparklepony/sparklepony.pid
+		echo " Done."
+	else
+		echo "SparklePony isn't running."
+	fi
+
+	if [ -e "/tmp/sparklepony/sparklepony.pid" ]; then
+		echo "SparklePony is already running."
+	else
+		echo -n "Starting SparklePony..."
+
+		# Start SparklePony in the background and save the pid
+		mono /usr/local/share/sparklepony/SparklePony.exe $2 &
+		PID=$!
+		echo $PID > /tmp/sparklepony/sparklepony.pid
+		echo " Done."
+	fi
+fi
+
+
 if [[ "$1" == "--help" ]]; then
 		mono /usr/local/share/sparklepony/SparklePony.exe --help
 fi

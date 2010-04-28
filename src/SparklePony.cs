@@ -211,6 +211,7 @@ public class Repository {
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
 
+		// Get user.name, example: "/home/user/Collaboration/"
 		RepoPath = Path;
 		Process.StartInfo.WorkingDirectory = RepoPath;
 
@@ -259,8 +260,6 @@ public class Repository {
 		Watcher.Created += new FileSystemEventHandler(OnFileActivity);
 		Watcher.Deleted += new FileSystemEventHandler(OnFileActivity);
 
-
-		// Call Fetch () every 30 seconds
 		BufferTimer = new Timer ();
 
 // TODO: uncomment when status checking is implemented
@@ -269,14 +268,17 @@ public class Repository {
 	}
 
 	public void StartBufferTimer () {
+
 		int Interval = 3000;
 		if (!BufferTimer.Enabled) {	
+
 			// Delay for a few seconds to see if more files change
 			BufferTimer.Interval = Interval; 
 			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) { Add (); } ;
 			Console.WriteLine ("[Buffer] Waiting for more changes...");
 			BufferTimer.Start();
 		} else {
+
 			// Extend the delay when something changes
 			BufferTimer.Close ();
 			BufferTimer = new Timer ();
@@ -299,7 +301,11 @@ public class Repository {
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "clone " + RemoteOriginUrl;
 		Process.Start();
-		// TODO: Add a gitignore file for *~
+
+		// Add a gitignore file
+		Process.StartInfo.FileName = "/bin/sh";
+		Process.StartInfo.Arguments = "echo \"*~\" >> " + RepoPath + "/.gitignore";
+		Process.Start();
 	}
 
 	public void Add () {
@@ -309,11 +315,21 @@ public class Repository {
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "add --all";
 		Process.Start();
+
+
+
+
+
+
+
+
+
+
+
 		// TODO: Format the commit message here
 		// Format: list-add In 'GNOME3', Hylke Bons added 'widgets.svg' and 3 more.
 		// Format: pencil In 'GNOME3', Hylke Bons changed 'widgets.svg' and 2 more.
-		// Format:  pencil In 'GNOME3', Hylke Bons renamed 'widgets.svg' to 'gnome.svg'.
-		// Format:  edit-redo 'GNOME3', Hylke Bons moved 'widgets.svg' to 'gnome.svg'.
+		// Format:  edit-redo 'GNOME3', Hylke Bons renamed 'widgets.svg' to 'gnome.svg'.
 		// Format: list-remove In 'GNOME3', Hylke Bons deleted 'widgets.svg'.
 		Commit ("Stuff happened");
 	}
@@ -322,7 +338,6 @@ public class Repository {
 		Console.WriteLine ("[Git] Commiting changes...");
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "commit -m '" + Message + "'";
-		ShowNotification ("Stuff happened", "");
 		Process.Start();
 		Fetch ();
 		Push ();
@@ -338,6 +353,7 @@ public class Repository {
 	}
 
 	public void Fetch (object o, ElapsedEventArgs args) {
+		// TODO: What happens when network disconnects during a fetch
 		// TODO: change status icon to sync
 		Console.WriteLine ("[Git] Fetching changes...");
 		Process.StartInfo.FileName = "git";
@@ -353,13 +369,18 @@ public class Repository {
 		Process.StartInfo.Arguments = "merge origin/master";
 		Process.Start();
 		Process.WaitForExit ();
-		// TODO: Notify user with the last fetched commit
+
+		Process.StartInfo.FileName = "git";
+		Process.StartInfo.Arguments = "log --pretty=oneline -1";
+		Process.Start();
+		string LastCommitMessage = Process.StandardOutput.ReadToEnd().Trim ().Substring (41);
+		ShowNotification (LastCommitMessage, "");
 		Watcher.EnableRaisingEvents = true;
 		// TODO: change status icon to normal
 	}
 
 	public void Push () {
-		// TODO: Ping first, then push
+		// TODO: What happens when network disconnects during a push
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "push";
 		Process.Start();
@@ -380,8 +401,9 @@ public class Repository {
 		else return false;
 	}
 
-	public string GetPeopleList [] () {
-
+	// TODO: To UI
+	public string [] GetPeopleList () {
+		return null;
 	}
 
 	// Can potentially be moved from this class as well
@@ -418,11 +440,16 @@ public class SparklePonyWindow : Window {
 		ListStore FoldersStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
 		string RemoteFolderIcon = "/usr/share/icons/gnome/16x16/places/folder.png";
 
-		foreach (Repository Repository in Repositories)
-			FoldersStore.AppendValues (new Gdk.Pixbuf (RemoteFolderIcon), Repository.Name);
+		TreeIter Iter2;
+
+		foreach (Repository Repository in Repositories) {
+			Iter2 = FoldersStore.Prepend ();
+			FoldersStore.SetValue (Iter2, 1, null);
+			FoldersStore.SetValue (Iter2, 1, Repository.Name);
+		}
 
 		TreeView FoldersView = new TreeView (FoldersStore); 
-		FoldersView.AppendColumn ("", new Gtk.CellRendererPixbuf (), "pixbuf", 0);  
+		FoldersView.AppendColumn ("", new CellRendererPixbuf () , "pixbuf", 0);  
 		FoldersView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
 
 		HBox AddRemoveButtons = new HBox ();
