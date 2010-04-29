@@ -1,15 +1,31 @@
-For whom is SparklePony designed?
+SparklePony
 
 SparklePony isn't just a piece of software, it's a workflow. 
-It's designed to make sharing documents easier, and to make 
-peers aware of what you are doing.The user interface and 
-features are made to support this goal. However, you may 
-find SparklePony useful for other kinds of purposes as well.
+It's designed to make sharing documents and collaboration 
+easier, and to make peers aware of what you are doing. The 
+user interface and features are made to support this goal. 
+However, you may find SparklePony useful for other kinds 
+of purposes as well, like backing up files or monitoring 
+your favourite project.
+
+SparklePony currently only works on Linux, 
+Windows and OSX versions are planned for the future.
 
 What SparklePony is not:
 	- A graphical frontend to git
-   - 
+   - A backup tool
 
-And therefor SparklePony will not support:
+And therefore SparklePony will not support:
 	- Branching
-	- 
+
+In contrast to the projects name, we will very likely 
+refuse to implement your own ponies. :)
+
+SparklePony currently requires:
+  - mono-core >= 2.0
+  - git >= 1.6
+  - gtk-sharp2 >= 2.12
+  - notify-sharp >= 0.4.0
+
+The official website is:
+   http://www.github.com/hbons/SparklePony
