@@ -207,9 +207,9 @@ public class Repository {
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
 
-		// Get user.name, example: "/home/user/Collaboration/"
+		// Get the repository's path, example: "/home/user/Collaboration/repo"
 		RepoPath = Path;
-		Process.StartInfo.WorkingDirectory = RepoPath;
+		Process.StartInfo.WorkingDirectory = RepoPath + "/";
 
 		// Get user.name, example: "User Name"
 		UserName = "Anonymous";
@@ -232,7 +232,7 @@ public class Repository {
 		RemoteOriginUrl = Process.StandardOutput.ReadToEnd().Trim ();
 
 		// Get the repository name, example: "project"
-		Name = RepoPath.Substring (RepoPath.LastIndexOf ("/") + 1);
+		Name = RepoPath.Substring (RepoPath.TrimEnd ( "/".ToCharArray ()).LastIndexOf ("/") + 1);
 
 		// Get the domain, example: "github.com" 
 		Domain = RemoteOriginUrl; 
@@ -305,7 +305,7 @@ public class Repository {
 		Process.Start();
 
 		// Add a gitignore file
-      TextWriter Writer = new StreamWriter(RepoPath + "/.gitignore");
+      TextWriter Writer = new StreamWriter(RepoPath + ".gitignore");
       Writer.WriteLine("*~");
       Writer.Close();
 	}
