@@ -41,6 +41,8 @@ using System.Text.RegularExpressions;
 
 public class SparklePony {
 
+	public static SparklePonyUI SparklePonyUI;
+
 	public static void Main (string [] args) {
 
 		// Check if git is installed
@@ -74,7 +76,7 @@ public class SparklePony {
 		}
 		
 		Gtk.Application.Init ();
-		SparklePonyUI SparklePonyUI = new SparklePonyUI (HideUI);
+		SparklePonyUI = new SparklePonyUI (HideUI);
 		SparklePonyUI.StartMonitoring ();
 		Gtk.Application.Run ();
 	}
@@ -434,43 +436,43 @@ public class Repository {
 		foreach (string Line in Regex.Split (Output, "\n")) {
 
 			if (Line.IndexOf ("new file:") > -1 && !DoneAddCommit) {
+				DoneAddCommit = true;
 				if (FilesAdded > 1)
 					return "In '" + Name + "', " + UserName + " added '" + 
 							  Line.Replace ("#\tnew file:", "").Trim () + "' and " + (FilesAdded - 1) + " more.";
 				else
 					return "In '" + Name + "', " + UserName + " added '" + 
 							  Line.Replace ("#\tnew file:", "").Trim () + "'.";
-				DoneAddCommit = true;
 			}
 
 			if (Line.IndexOf ("modified:") > -1 && !DoneEditCommit) {
+				DoneEditCommit = true;
 				if (FilesEdited > 1)
 					return "In '" + Name + "', " + UserName + " edited '" + 
 							  Line.Replace ("#\tmodified:", "").Trim () + "' and " + (FilesEdited - 1) + " more.";
 				else
 					return "In '" + Name + "', " + UserName + " edited '" + 
 							  Line.Replace ("#\tmodified:", "").Trim () + "'.";
-				DoneEditCommit = true;
 			}
 
 			if (Line.IndexOf ("renamed:") > -1 && !DoneRenameCommit) {
+				DoneDeleteCommit = true;
 				if (FilesRenamed > 1)
 					return "In '" + Name + "', " + UserName + " renamed '" + 
 							  Line.Replace ("#\trenamed:", "").Trim ().Replace (" -> ", "' to '") + "' and " + (FilesDeleted - 1) + " more.";
 				else
 					return "In '" + Name + "', " + UserName + " renamed '" + 
 							  Line.Replace ("#\trenamed:", "").Trim ().Replace (" -> ", "' to '") + "'.";
-				DoneDeleteCommit = true;
 			}
 
 			if (Line.IndexOf ("deleted:") > -1 && !DoneDeleteCommit) {
+				DoneDeleteCommit = true;
 				if (FilesDeleted > 1)
 					return "In '" + Name + "', " + UserName + " deleted '" + 
 							  Line.Replace ("#\tdeleted:", "").Trim () + "' and " + (FilesDeleted - 1) + " more.";
 				else
 					return "In '" + Name + "', " + UserName + " deleted '" + 
 							  Line.Replace ("#\tdeleted:", "").Trim () + "'.";
-				DoneDeleteCommit = true;
 			}
 
 		}
@@ -643,7 +645,7 @@ public class SparklePonyWindow : Window {
 
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "log --pretty=oneline -20";
-		Process.StartInfo.WorkingDirectory = Repositories [0].RepoPath;
+		Process.StartInfo.WorkingDirectory = Repositories [1].RepoPath;
 		Process.Start();
 		string Output = Process.StandardOutput.ReadToEnd().Trim ();
 
