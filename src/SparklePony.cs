@@ -72,6 +72,13 @@ public class SparklePony {
 	}
 
 	public static void ShowHelp () {
+		Console.WriteLine ("SparklePony Copyright (C) 2010 Hylke Bons");
+		Console.WriteLine ("This program comes with ABSOLUTELY NO WARRANTY.");
+		Console.WriteLine ("This is free software, and you are welcome to redistribute it ");
+		Console.WriteLine ("under certain conditions. Please read the GNU GPLv3 for details.");
+		Console.WriteLine ("");
+		Console.WriteLine ("SparklePony syncs the ~/Collaboration folder with remote repositories.");
+		Console.WriteLine ("");
 		Console.WriteLine ("Usage: sparklepony [start|stop|restart] [OPTION]...");
 		Console.WriteLine ("Sync Collaboration folder with remote repositories.");
 		Console.WriteLine ("");
@@ -88,7 +95,7 @@ public class SparklePonyUI {
 
 	public SparklePonyWindow SparklePonyWindow;
 	public SparklePonyStatusIcon SparklePonyStatusIcon;
-	public string FoldersPath;
+	public string ReposPath;
 	public string UserHome;
 	public Repository [] Repositories;
 
@@ -103,18 +110,18 @@ public class SparklePonyUI {
 		UserHome = Environment.GetEnvironmentVariable("HOME");
 
 		// Create 'Collaboration' folder in the user's home folder
-		FoldersPath = UserHome + "/Collaboration";
-		if (!Directory.Exists (FoldersPath)) {
-			Directory.CreateDirectory (FoldersPath);
-			Console.WriteLine ("Created '" + FoldersPath + "'");
+		ReposPath = UserHome + "/Collaboration";
+		if (!Directory.Exists (ReposPath)) {
+			Directory.CreateDirectory (ReposPath);
+			Console.WriteLine ("Created '" + ReposPath + "'");
 		}
 
-		// Get all the folders in ~/Collaboration
-		string [] Folders = Directory.GetDirectories (FoldersPath);
-		Repositories = new Repository [Folders.Length];
+		// Get all the Repos in ~/Collaboration
+		string [] Repos = Directory.GetDirectories (ReposPath);
+		Repositories = new Repository [Repos.Length];
 
 		int i = 0;
-		foreach (string Folder in Folders) {
+		foreach (string Folder in Repos) {
 			Repositories [i] = new Repository (Folder);
 			i++;
 		}
@@ -377,7 +384,7 @@ public class Repository {
 		Process.WaitForExit ();
 	}
 
-	// Ignore folders, dotfiles, swap files and the like.
+	// Ignore Repos, dotfiles, swap files and the like.
 	public bool ShouldIgnore (string s) {
 		if (s.Substring (0, 1).Equals (".") ||
 			 s.Contains (".lock") ||
@@ -464,11 +471,6 @@ public class Repository {
 
 	}
 
-	// TODO: To UI
-	public string [] GetPeopleList () {
-		return null;
-	}
-
 	// Can potentially be moved from this class as well
 	public void ShowNotification (string Title, string SubText) {
 		Notification Notification = new Notification (Title, SubText);
@@ -499,20 +501,20 @@ public class SparklePonyWindow : Window {
 		BorderWidth = 6;
 		IconName = "folder-remote";
 
-		ListStore FoldersStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
+		ListStore ReposStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
 		string RemoteFolderIcon = "/usr/share/icons/gnome/16x16/places/folder.png";
 
 		TreeIter Iter2;
 
 		foreach (Repository Repository in Repositories) {
-			Iter2 = FoldersStore.Prepend ();
-			FoldersStore.SetValue (Iter2, 1, null);
-			FoldersStore.SetValue (Iter2, 1, Repository.Name);
+			Iter2 = ReposStore.Prepend ();
+			ReposStore.SetValue (Iter2, 1, null);
+			ReposStore.SetValue (Iter2, 1, Repository.Name);
 		}
 
-		TreeView FoldersView = new TreeView (FoldersStore); 
-		FoldersView.AppendColumn ("", new CellRendererPixbuf () , "pixbuf", 0);  
-		FoldersView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
+		TreeView ReposView = new TreeView (ReposStore); 
+		ReposView.AppendColumn ("", new CellRendererPixbuf () , "pixbuf", 0);  
+		ReposView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
 
 		HBox AddRemoveButtons = new HBox ();
 		Button AddButton = new Button ("Add...");
@@ -530,8 +532,8 @@ public class SparklePonyWindow : Window {
 		Process.EnableRaisingEvents = false; 
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
-		// TODO: fix hard coding, system independant
-		Process.StartInfo.WorkingDirectory = Environment.GetEnvironmentVariable("HOME") + "/Collaboration/Deal";
+
+		Process.StartInfo.WorkingDirectory = Environment.GetEnvironmentVariable("HOME") + "/Collaboration/Deal/";
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "log --pretty=oneline -20";
 		Process.Start();
@@ -565,7 +567,7 @@ public class SparklePonyWindow : Window {
 		ScrolledWindow.BorderWidth = 12;
 
 		VBox LayoutVerticalLeft = new VBox (false, 0);
-		LayoutVerticalLeft.PackStart (FoldersView, true, true, 0);
+		LayoutVerticalLeft.PackStart (ReposView, true, true, 0);
 		LayoutVerticalLeft.PackStart (AddRemoveButtons, false, false, 0);
 
 		LayoutVerticalLeft.BorderWidth = 12;
@@ -614,7 +616,7 @@ public class SparklePonyWindow : Window {
 
 		Notebook Notebook = new Notebook ();
 		Notebook.BorderWidth = 6;
-		Notebook.AppendPage (LayoutHorizontal, new Label ("Folders"));
+		Notebook.AppendPage (LayoutHorizontal, new Label ("Repos"));
 		Notebook.AppendPage (ScrolledWindow, new Label ("Events"));
 
 
@@ -658,6 +660,14 @@ public class SparklePonyWindow : Window {
 	}
 
 	public void UpdateEventLog() {
+
+	}
+
+	public void CreatePeopleList () {
+
+	}
+
+	public void UpdatePeopleList () {
 
 	}
 
