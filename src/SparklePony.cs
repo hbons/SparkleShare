@@ -569,7 +569,11 @@ public class SparklePonyWindow : Window {
 		ReposView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
 		TreeViewColumn [] ReposViewColumns = ReposView.Columns;
 		ReposViewColumns [0].MinWidth = 34;
-		ReposViewColumns [1].Spacing = 34;
+
+		ReposStore.IterNthChild (out ReposIter, 1);
+
+		ReposView.ActivateRow (ReposStore.GetPath (ReposIter), ReposViewColumns [1]);
+
 
 		HBox AddRemoveButtons = new HBox ();
 		Button AddButton = new Button ("Add...");
@@ -639,19 +643,28 @@ public class SparklePonyWindow : Window {
 
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "log --pretty=oneline -20";
+		Process.StartInfo.WorkingDirectory = Repositories [0].RepoPath;
 		Process.Start();
 		string Output = Process.StandardOutput.ReadToEnd().Trim ();
 
-		Gdk.Pixbuf Icon = new Gdk.Pixbuf ("/usr/share/icons/hicolor/16x16/status/document-edited.png");
-		Gdk.Pixbuf Icon2 = new Gdk.Pixbuf ("/usr/share/icons/hicolor/16x16/status/document-added.png");
-		Gdk.Pixbuf Icon3 = new Gdk.Pixbuf ("/usr/share/icons/hicolor/16x16/status/document-removed.png");
-		Gdk.Pixbuf Icon4 = new Gdk.Pixbuf ("/usr/share/icons/hicolor/16x16/status/document-moved.png");
 
 		TreeIter Iter;
-		foreach (string Message in Regex.Split (Output, "\n")) {
-			Iter = LogStore.Prepend ();
-			LogStore.SetValue (Iter, 0, Icon);
-			LogStore.SetValue (Iter, 1, "In 'GNOME3', Hylke Bons edited 'mockup.svg'");
+		string Message, IconFile;
+		foreach (string Line in Regex.Split (Output, "\n")) {
+			Iter = LogStore.Append ();
+
+			Message = Line.Substring (41);
+			IconFile = "/usr/share/icons/hicolor/16x16/status/document-edited.png";		
+			if (Message.IndexOf (" added ") > -1)
+				IconFile = "/usr/share/icons/hicolor/16x16/status/document-added.png";
+			if (Message.IndexOf (" deleted ") > -1)
+				IconFile = "/usr/share/icons/hicolor/16x16/status/document-removed.png";
+			if (Message.IndexOf (" moved ") > -1 || Message.IndexOf (" renamed ") > -1)
+				IconFile = "/usr/share/icons/hicolor/16x16/status/document-moved.png";
+
+
+			LogStore.SetValue (Iter, 0, new Gdk.Pixbuf (IconFile));
+			LogStore.SetValue (Iter, 1, Message);
 			LogStore.SetValue (Iter, 2, "32 minutes ago ");
 		}
 
