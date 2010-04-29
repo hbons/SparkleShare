@@ -241,11 +241,11 @@ public class Repository {
 		// Get the domain, example: "github.com" 
 		Domain = RemoteOriginUrl; 
 		Domain = Domain.Substring (Domain.IndexOf ("@") + 1);
-		if (Domain.IndexOf (":") > -1) {
+		if (Domain.IndexOf (":") > -1)
 			Domain = Domain.Substring (0, Domain.IndexOf (":"));
-		} else {
+		else
 			Domain = Domain.Substring (0, Domain.IndexOf ("/"));
-		}
+
 
 		// Get hash of the current commit
 		Process.StartInfo.FileName = "git";
@@ -253,8 +253,6 @@ public class Repository {
 		Process.Start();
 		CurrentHash = Process.StandardOutput.ReadToEnd().Trim ();
 
-
-		// TODO: This does not belong in this class...
 		// Watch the repository's folder
 		Watcher = new FileSystemWatcher (RepoPath);
 		Watcher.IncludeSubdirectories = true;
@@ -266,31 +264,9 @@ public class Repository {
 
 		BufferTimer = new Timer ();
 
-// TODO: uncomment when status checking is implemented
-//		Add ();
+		// Add everything that changed since SparklePony was stopped
+		Add ();
 
-	}
-
-	public void StartBufferTimer () {
-
-		int Interval = 5000;
-		if (!BufferTimer.Enabled) {	
-
-			// Delay for a few seconds to see if more files change
-			BufferTimer.Interval = Interval; 
-			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) { Add (); } ;
-			Console.WriteLine ("[Buffer] Waiting for more changes...");
-			BufferTimer.Start();
-		} else {
-
-			// Extend the delay when something changes
-			BufferTimer.Close ();
-			BufferTimer = new Timer ();
-			BufferTimer.Interval = Interval;
-			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) { Add (); } ;
-			BufferTimer.Start();
-			Console.WriteLine ("[Buffer] Waiting for more changes...");
-		}
 	}
 
 	public void OnFileActivity (object o, FileSystemEventArgs args) {
@@ -301,34 +277,63 @@ public class Repository {
 		}
 	}
 
+	public void StartBufferTimer () {
+
+		int Interval = 5000;
+		if (!BufferTimer.Enabled) {	
+
+			// Delay for a few seconds to see if more files change
+			BufferTimer.Interval = Interval; 
+			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
+				Console.WriteLine ("[Buffer] Done waiting.");
+				Add ();
+			};
+			Console.WriteLine ("[Buffer] Waiting for more changes...");
+			BufferTimer.Start();
+		} else {
+
+			// Extend the delay when something changes
+			BufferTimer.Close ();
+			BufferTimer = new Timer ();
+			BufferTimer.Interval = Interval;
+			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
+				Console.WriteLine ("[Buffer] Done waiting.");
+				Add ();
+			};
+			BufferTimer.Start();
+			Console.WriteLine ("[Buffer] Waiting for more changes...");
+		}
+	}
+
 	public void Clone () {
 		Process.StartInfo.Arguments = "clone " + RemoteOriginUrl;
 		Process.Start();
 
 		// Add a gitignore file
-		Process.StartInfo.FileName = "/bin/sh";
-		Process.StartInfo.Arguments = "echo \"*~\" >> " + RepoPath + "/.gitignore";
+		Process.StartInfo.FileName = "touch";
+		Process.StartInfo.Arguments = RepoPath + "/.gitignore";
 		Process.Start();
+		// TODO: add *~ contents.
 		Process.StartInfo.FileName = "git";
 
 	}
 
 	public void Add () {
-		Console.WriteLine ("[Buffer] Done waiting.");
 		BufferTimer.Stop ();
 		Console.WriteLine ("[Git] Staging changes...");
 		Process.StartInfo.Arguments = "add --all";
 		Process.Start();
 
-		Commit (FormatCommitMessage ());
-		
-		Fetch ();
-		Push ();
-
+		string Message = FormatCommitMessage ();
+		if (!Message.Equals ("")) {
+			Commit (Message);
+			Fetch ();
+			Push ();
+		}
 	}
 
 	public void Commit (string Message) {
-		Console.WriteLine (Message);
+		Console.WriteLine ("[Commit] " + Message);
 		Console.WriteLine ("[Git] Commiting changes...");
 		Process.StartInfo.Arguments = "commit -m '" + Message + "'";
 		Process.Start();
@@ -374,9 +379,9 @@ public class Repository {
 
 	public void Push () {
 		// TODO: What happens when network disconnects during a push
+		Console.WriteLine ("[Git] Pushing changes...");
 		Process.StartInfo.Arguments = "push";
 		Process.Start();
-		Console.WriteLine ("[Git] Pushing changes...");
 		Process.WaitForExit ();
 	}
 
@@ -463,7 +468,7 @@ public class Repository {
 
 		}
 
-		return "Nothing seems to have happened, strange...";
+		return "";
 
 	}
 
@@ -526,6 +531,7 @@ public class SparklePonyWindow : Window {
 
 
 		ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
+
 
 
 		Process Process = new Process();
