@@ -155,7 +155,11 @@ public class SparklePonyStatusIcon : StatusIcon {
 
 	public SparklePonyStatusIcon () : base ()  {
 		IconName = "folder-remote";
-		// Activate += delegate (object o, EventArgs args) { SetSyncingState (); };
+		Notification Notification = new Notification ("herro", "");
+		Notification.StatusIcon = this;
+		Notification.Urgency = Urgency.Normal;
+		Notification.Timeout = 3500;
+		Notification.Show ();
 	}
 
 	public void SetIdleState () {
@@ -334,7 +338,8 @@ public class Repository {
 	public void Commit (string Message) {
 		Console.WriteLine ("[Commit] " + Message);
 		Console.WriteLine ("[Git] Commiting changes...");
-		Process.StartInfo.Arguments = "commit -m '" + Message + "'";
+		Process.StartInfo.Arguments = "commit -m \"" + Message + "\"";
+		Console.WriteLine ("commit -m '" + Message + "'");
 		Process.Start();
 	}
 
