@@ -100,10 +100,8 @@ public class SparklePonyUI {
 		Process.StartInfo.UseShellExecute = false;
 
 		// Get home folder, example: "/home/user" 
-		Process.StartInfo.FileName = "whoami";
-		Process.StartInfo.Arguments = "";
-		Process.Start();
-		UserHome = "/home/" + Process.StandardOutput.ReadToEnd().Trim () + "/";
+		UserHome = Environment.GetEnvironmentVariable("HOME");
+		Console.WriteLine (UserHome);
 
 		// Create 'Collaboration' folder in the user's home folder
 		FoldersPath = UserHome + "/Collaboration";
@@ -539,7 +537,7 @@ public class SparklePonyWindow : Window {
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
 		// TODO: fix hard coding, system independant
-		Process.StartInfo.WorkingDirectory = "/home/hbons/Collaboration/Deal";
+		Process.StartInfo.WorkingDirectory = Environment.GetEnvironmentVariable("HOME") + "/Collaboration/Deal";
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "log --pretty=oneline -20";
 		Process.Start();
