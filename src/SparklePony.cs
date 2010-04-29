@@ -54,6 +54,14 @@ public class SparklePony {
 			Environment.Exit (0);
 		}
 
+		// Don't allow running as root
+		Process.StartInfo.FileName = "whoami";
+		Process.Start();
+		if (Process.StandardOutput.ReadToEnd().Trim ().Equals ("root")) {
+			Console.WriteLine ("Sorry, you shouldn't run SparklePony as root.\nThings will go utterly wrong.");
+			Environment.Exit (0);
+		}
+
 		bool HideUI = false;
 		if (args.Length > 0) {
 			foreach (string Argument in args) {
@@ -155,10 +163,10 @@ public class SparklePonyStatusIcon : StatusIcon {
 
 	public SparklePonyStatusIcon () : base ()  {
 		IconName = "folder-remote";
-		Notification Notification = new Notification ("herro", "");
-		Notification.StatusIcon = this;
+		// TODO: Only on first run
+		Notification Notification = new Notification ("Welcome to SparklePony!", "Click here to add some folders.");
 		Notification.Urgency = Urgency.Normal;
-		Notification.Timeout = 3500;
+		Notification.Timeout = 10000;
 		Notification.Show ();
 	}
 
