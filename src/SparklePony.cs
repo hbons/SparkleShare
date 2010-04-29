@@ -305,12 +305,9 @@ public class Repository {
 		Process.Start();
 
 		// Add a gitignore file
-		Process.StartInfo.FileName = "touch";
-		Process.StartInfo.Arguments = RepoPath + "/.gitignore";
-		Process.Start();
-		// TODO: add *~ contents.
-		Process.StartInfo.FileName = "git";
-
+      TextWriter Writer = new StreamWriter(RepoPath + "/.gitignore");
+      Writer.WriteLine("*~");
+      Writer.Close();
 	}
 
 	public void Add () {
