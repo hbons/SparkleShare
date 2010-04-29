@@ -1,4 +1,4 @@
-//   SparklePony 0.0.4
+//   SparklePony 0.0.5
 
 //   SparklePony, an instant update workflow to Git.
 //   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
