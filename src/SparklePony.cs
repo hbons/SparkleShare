@@ -339,7 +339,6 @@ public class Repository {
 		Console.WriteLine ("[Commit] " + Message);
 		Console.WriteLine ("[Git] Commiting changes...");
 		Process.StartInfo.Arguments = "commit -m \"" + Message + "\"";
-		Console.WriteLine ("commit -m '" + Message + "'");
 		Process.Start();
 	}
 
