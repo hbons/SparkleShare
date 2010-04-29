@@ -170,7 +170,7 @@ public class AutoFetcher : Timer {
 	public AutoFetcher (Repository [] Repositories) : base () {
 
 		// Fetch changes every 30 seconds
-		Interval = 30000;
+		Interval = 45000; // Keep high for now
 		Elapsed += delegate (object o, ElapsedEventArgs args) { 
 			foreach (Repository Repository in Repositories) {
 				Stop ();
@@ -269,7 +269,7 @@ public class Repository {
 
 	public void StartBufferTimer () {
 
-		int Interval = 3000;
+		int Interval = 5000;
 		if (!BufferTimer.Enabled) {	
 
 			// Delay for a few seconds to see if more files change
@@ -282,7 +282,7 @@ public class Repository {
 			// Extend the delay when something changes
 			BufferTimer.Close ();
 			BufferTimer = new Timer ();
-			BufferTimer.Interval = 3000;
+			BufferTimer.Interval = Interval;
 			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) { Add (); } ;
 			BufferTimer.Start();
 			Console.WriteLine ("[Buffer] Waiting for more changes...");
@@ -298,7 +298,6 @@ public class Repository {
 	}
 
 	public void Clone () {
-		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "clone " + RemoteOriginUrl;
 		Process.Start();
 
@@ -306,47 +305,34 @@ public class Repository {
 		Process.StartInfo.FileName = "/bin/sh";
 		Process.StartInfo.Arguments = "echo \"*~\" >> " + RepoPath + "/.gitignore";
 		Process.Start();
+		Process.StartInfo.FileName = "git";
+
 	}
 
 	public void Add () {
 		Console.WriteLine ("[Buffer] Done waiting.");
 		BufferTimer.Stop ();
 		Console.WriteLine ("[Git] Staging changes...");
-		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "add --all";
 		Process.Start();
 
+		Commit (FormatCommitMessage ());
+		
+		Fetch ();
+		Push ();
 
-
-
-
-
-
-
-
-
-
-		// TODO: Format the commit message here
-		// Format: list-add In 'GNOME3', Hylke Bons added 'widgets.svg' and 3 more.
-		// Format: pencil In 'GNOME3', Hylke Bons changed 'widgets.svg' and 2 more.
-		// Format:  edit-redo 'GNOME3', Hylke Bons renamed 'widgets.svg' to 'gnome.svg'.
-		// Format: list-remove In 'GNOME3', Hylke Bons deleted 'widgets.svg'.
-		Commit ("Stuff happened");
 	}
 
 	public void Commit (string Message) {
+		Console.WriteLine (Message);
 		Console.WriteLine ("[Git] Commiting changes...");
-		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "commit -m '" + Message + "'";
 		Process.Start();
-		Fetch ();
-		Push ();
 	}
 
 	public void Fetch () {
 		// TODO: change status icon to sync
 		Console.WriteLine ("[Git] Fetching changes...");
-		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "fetch";
 		Process.Start();
 		Merge ();
@@ -356,32 +342,34 @@ public class Repository {
 		// TODO: What happens when network disconnects during a fetch
 		// TODO: change status icon to sync
 		Console.WriteLine ("[Git] Fetching changes...");
-		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "fetch";
 		Process.Start();
+		Process.WaitForExit ();
 		Merge ();
 	}
 
 	public void Merge () {
 		Watcher.EnableRaisingEvents = false;
 		Console.WriteLine ("[Git] Merging fetched changes...");
-		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "merge origin/master";
 		Process.Start();
 		Process.WaitForExit ();
+		string Output = Process.StandardOutput.ReadToEnd().Trim ();
 
-		Process.StartInfo.FileName = "git";
-		Process.StartInfo.Arguments = "log --pretty=oneline -1";
-		Process.Start();
-		string LastCommitMessage = Process.StandardOutput.ReadToEnd().Trim ().Substring (41);
-		ShowNotification (LastCommitMessage, "");
+		// Show notification if there are updates
+		if (!Output.Equals ("Already up-to-date.")) {
+			Process.StartInfo.Arguments = "log --pretty=oneline -1";
+			Process.Start();
+			string LastCommitMessage = Process.StandardOutput.ReadToEnd().Trim ().Substring (41);
+			ShowNotification (LastCommitMessage, "");
+		}
+
 		Watcher.EnableRaisingEvents = true;
 		// TODO: change status icon to normal
 	}
 
 	public void Push () {
 		// TODO: What happens when network disconnects during a push
-		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "push";
 		Process.Start();
 		Console.WriteLine ("[Git] Pushing changes...");
@@ -401,6 +389,80 @@ public class Repository {
 		else return false;
 	}
 
+	public string FormatCommitMessage () {
+
+		bool DoneAddCommit = false;
+		bool DoneEditCommit = false;
+		bool DoneRenameCommit = false;
+		bool DoneDeleteCommit = false;
+		int FilesAdded = 0;
+		int FilesEdited = 0;
+		int FilesRenamed = 0;
+		int FilesDeleted = 0;
+
+		Process.StartInfo.Arguments = "status";
+		Process.Start();
+		string Output = Process.StandardOutput.ReadToEnd();
+
+		foreach (string Line in Regex.Split (Output, "\n")) {
+			if (Line.IndexOf ("new file:") > -1)
+				FilesAdded++;
+			if (Line.IndexOf ("modified:") > -1)
+				FilesEdited++;
+			if (Line.IndexOf ("renamed:") > -1)
+				FilesRenamed++;
+			if (Line.IndexOf ("deleted:") > -1)
+				FilesDeleted++;
+		}
+
+		foreach (string Line in Regex.Split (Output, "\n")) {
+
+			if (Line.IndexOf ("new file:") > -1 && !DoneAddCommit) {
+				if (FilesAdded > 1)
+					return "In '" + Name + "', " + UserName + " added '" + 
+							  Line.Replace ("#\tnew file:", "").Trim () + "' and " + (FilesAdded - 1) + " more.";
+				else
+					return "In '" + Name + "', " + UserName + " added '" + 
+							  Line.Replace ("#\tnew file:", "").Trim () + "'.";
+				DoneAddCommit = true;
+			}
+
+			if (Line.IndexOf ("modified:") > -1 && !DoneEditCommit) {
+				if (FilesEdited > 1)
+					return "In '" + Name + "', " + UserName + " edited '" + 
+							  Line.Replace ("#\tmodified:", "").Trim () + "' and " + (FilesEdited - 1) + " more.";
+				else
+					return "In '" + Name + "', " + UserName + " edited '" + 
+							  Line.Replace ("#\tmodified:", "").Trim () + "'.";
+				DoneEditCommit = true;
+			}
+
+			if (Line.IndexOf ("renamed:") > -1 && !DoneRenameCommit) {
+				if (FilesRenamed > 1)
+					return "In '" + Name + "', " + UserName + " renamed '" + 
+							  Line.Replace ("#\trenamed:", "").Trim ().Replace (" -> ", "' to '") + "' and " + (FilesDeleted - 1) + " more.";
+				else
+					return "In '" + Name + "', " + UserName + " renamed '" + 
+							  Line.Replace ("#\trenamed:", "").Trim ().Replace (" -> ", "' to '") + "'.";
+				DoneDeleteCommit = true;
+			}
+
+			if (Line.IndexOf ("deleted:") > -1 && !DoneDeleteCommit) {
+				if (FilesDeleted > 1)
+					return "In '" + Name + "', " + UserName + " deleted '" + 
+							  Line.Replace ("#\tdeleted:", "").Trim () + "' and " + (FilesDeleted - 1) + " more.";
+				else
+					return "In '" + Name + "', " + UserName + " deleted '" + 
+							  Line.Replace ("#\tdeleted:", "").Trim () + "'.";
+				DoneDeleteCommit = true;
+			}
+
+		}
+
+		return "Nothing seems to have happened, strange...";
+
+	}
+
 	// TODO: To UI
 	public string [] GetPeopleList () {
 		return null;
@@ -409,9 +471,8 @@ public class Repository {
 	// Can potentially be moved from this class as well
 	public void ShowNotification (string Title, string SubText) {
 		Notification Notification = new Notification (Title, SubText);
-		Notification.IconName = "folder-remote";
 		Notification.Urgency = Urgency.Low;
-		Notification.Timeout = 3000;
+		Notification.Timeout = 3500;
 
 		// Add a button to open the folder the changed file resides in
 //		Notification.AddAction(File, "Open Folder", 
