@@ -241,7 +241,11 @@ public class Repository {
 		// Get the domain, example: "github.com" 
 		Domain = RemoteOriginUrl; 
 		Domain = Domain.Substring (Domain.IndexOf ("@") + 1);
-		Domain = Domain.Substring (0, Domain.IndexOf ("/"));
+		if (Domain.IndexOf (":") > -1) {
+			Domain = Domain.Substring (0, Domain.IndexOf (":"));
+		} else {
+			Domain = Domain.Substring (0, Domain.IndexOf ("/"));
+		}
 
 		// Get hash of the current commit
 		Process.StartInfo.FileName = "git";
