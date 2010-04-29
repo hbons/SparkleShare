@@ -207,7 +207,7 @@ public class Repository {
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
 
-		// Get the repository's path, example: "/home/user/Collaboration/repo"
+		// Get the repository's path, example: "/home/user/Collaboration/repo/"
 		RepoPath = Path;
 		Process.StartInfo.WorkingDirectory = RepoPath + "/";
 
