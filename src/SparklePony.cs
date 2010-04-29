@@ -101,7 +101,6 @@ public class SparklePonyUI {
 
 		// Get home folder, example: "/home/user" 
 		UserHome = Environment.GetEnvironmentVariable("HOME");
-		Console.WriteLine (UserHome);
 
 		// Create 'Collaboration' folder in the user's home folder
 		FoldersPath = UserHome + "/Collaboration";
