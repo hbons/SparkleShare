@@ -12,20 +12,17 @@ SparklePony currently only works on Linux,
 Windows and OSX versions are planned for the future.
 
 What SparklePony is not:
-	- A graphical frontend to git
+   - A graphical frontend for git
    - A backup tool
 
-And therefore SparklePony will not support:
-	- Branching
-
 In contrast to the projects name, we will very likely 
-refuse to implement your own ponies. :)
+refuse to implement your personal ponies. :)
 
 SparklePony currently requires:
-  - mono-core >= 2.0
-  - git >= 1.6
-  - gtk-sharp2 >= 2.12
-  - notify-sharp >= 0.4.0
+   - mono-core >= 2.0
+   - git >= 1.6
+   - gtk-sharp2 >= 2.12
+   - notify-sharp >= 0.4.0
 
 The official website is:
-   http://www.github.com/hbons/SparklePony
+http://www.github.com/hbons/SparklePony

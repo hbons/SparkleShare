@@ -134,8 +134,6 @@ public class SparklePonyUI {
 			i++;
 		}
 
-		AutoFetcher AutoFetcher = new AutoFetcher (Repositories);
-
 		if (!HideUI) {
 
 			// Create the window
@@ -180,30 +178,11 @@ public class SparklePonyStatusIcon : StatusIcon {
 
 }
 
-public class AutoFetcher : Timer {
-
-	public AutoFetcher (Repository [] Repositories) : base () {
-
-		// Fetch changes every 30 seconds
-		Interval = 45000; // Keep high for now
-		Elapsed += delegate (object o, ElapsedEventArgs args) { 
-			foreach (Repository Repository in Repositories) {
-				Stop ();
-				if (!Repository.MonitorOnly)
-					Repository.Fetch ();
-				Start ();
-			}
-		};
-
-		Start();
-
-	}
-
-}
 
 public class Repository {
 
 	private Process Process;
+	private Timer FetchTimer;
 	private Timer BufferTimer;
 	private FileSystemWatcher Watcher;
 
@@ -276,6 +255,17 @@ public class Repository {
 		Watcher.Created += new FileSystemEventHandler(OnFileActivity);
 		Watcher.Deleted += new FileSystemEventHandler(OnFileActivity);
 
+		// Fetch changes every 20 seconds
+
+		FetchTimer = new Timer ();
+		FetchTimer.Interval = 20000;
+		FetchTimer.Elapsed += delegate { 
+			Fetch ();
+			
+		};
+
+		FetchTimer.Start();
+
 		BufferTimer = new Timer ();
 
 		// Add everything that changed since SparklePony was stopped
@@ -285,24 +275,24 @@ public class Repository {
 
 	public void OnFileActivity (object o, FileSystemEventArgs args) {
        WatcherChangeTypes wct = args.ChangeType;
-		 if (!ShouldIgnore (args.Name)) {
-	      Console.WriteLine("[Event] " + wct.ToString() + " '" + args.Name + "'");
+		 if (!ShouldIgnore (args.Name) && !MonitorOnly) {
+	      Console.WriteLine("[" + Name + "][Event] " + wct.ToString() + " '" + args.Name + "'");
 			StartBufferTimer ();
 		}
 	}
 
 	public void StartBufferTimer () {
 
-		int Interval = 5000;
+		int Interval = 3000;
 		if (!BufferTimer.Enabled) {	
 
 			// Delay for a few seconds to see if more files change
 			BufferTimer.Interval = Interval; 
 			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
-				Console.WriteLine ("[Buffer] Done waiting.");
+				Console.WriteLine ("[" + Name + "][Buffer] Done waiting.");
 				Add ();
 			};
-			Console.WriteLine ("[Buffer] Waiting for more changes...");
+			Console.WriteLine ("[" + Name + "][Buffer] Waiting for more changes...");
 			BufferTimer.Start();
 		} else {
 
@@ -311,11 +301,11 @@ public class Repository {
 			BufferTimer = new Timer ();
 			BufferTimer.Interval = Interval;
 			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
-				Console.WriteLine ("[Buffer] Done waiting.");
+				Console.WriteLine ("[" + Name + "][Buffer] Done waiting.");
 				Add ();
 			};
 			BufferTimer.Start();
-			Console.WriteLine ("[Buffer] Waiting for more changes...");
+			Console.WriteLine ("[" + Name + "][Buffer] Waiting for more changes...");
 		}
 	}
 
@@ -331,7 +321,7 @@ public class Repository {
 
 	public void Add () {
 		BufferTimer.Stop ();
-		Console.WriteLine ("[Git] Staging changes...");
+		Console.WriteLine ("[" + Name + "][Git] Staging changes...");
 		Process.StartInfo.Arguments = "add --all";
 		Process.Start();
 
@@ -344,33 +334,39 @@ public class Repository {
 	}
 
 	public void Commit (string Message) {
-		Console.WriteLine ("[Commit] " + Message);
-		Console.WriteLine ("[Git] Commiting changes...");
+		Console.WriteLine ("[" + Name + "][Commit] " + Message);
+		Console.WriteLine ("[" + Name + "][Git] Commiting changes...");
 		Process.StartInfo.Arguments = "commit -m \"" + Message + "\"";
 		Process.Start();
 	}
 
 	public void Fetch () {
 		// TODO: change status icon to sync
-		Console.WriteLine ("[Git] Fetching changes...");
+		FetchTimer.Stop ();
+		Console.WriteLine ("[" + Name + "][Git] Fetching changes...");
 		Process.StartInfo.Arguments = "fetch";
 		Process.Start();
+		Process.WaitForExit ();
 		Merge ();
+		FetchTimer.Start ();
 	}
 
 	public void Fetch (object o, ElapsedEventArgs args) {
 		// TODO: What happens when network disconnects during a fetch
 		// TODO: change status icon to sync
-		Console.WriteLine ("[Git] Fetching changes...");
+		FetchTimer.Stop ();
+		Console.WriteLine ("[" + Name + "][Git] Fetching changes...");
 		Process.StartInfo.Arguments = "fetch";
 		Process.Start();
 		Process.WaitForExit ();
 		Merge ();
+		FetchTimer.Start ();
+
 	}
 
 	public void Merge () {
 		Watcher.EnableRaisingEvents = false;
-		Console.WriteLine ("[Git] Merging fetched changes...");
+		Console.WriteLine ("[" + Name + "][Git] Merging fetched changes...");
 		Process.StartInfo.Arguments = "merge origin/master";
 		Process.Start();
 		Process.WaitForExit ();
@@ -390,7 +386,7 @@ public class Repository {
 
 	public void Push () {
 		// TODO: What happens when network disconnects during a push
-		Console.WriteLine ("[Git] Pushing changes...");
+		Console.WriteLine ("[" + Name + "][Git] Pushing changes...");
 		Process.StartInfo.Arguments = "push";
 		Process.Start();
 		Process.WaitForExit ();
@@ -504,8 +500,15 @@ public class Repository {
 public class SparklePonyWindow : Window {
 
 	private bool Visibility;
+	private VBox LayoutVerticalLeft;
+	private VBox LayoutVerticalRight;
+	private TreeView ReposView;
+	private ListStore ReposStore;
+	private Repository [] Repositories;
 
-	public SparklePonyWindow (Repository [] Repositories) : base ("Collaboration Folders")  {
+	public SparklePonyWindow (Repository [] R) : base ("Collaboration Folders")  {
+
+		Repositories = R;
 
 		Visibility = false;
 		SetSizeRequest (640, 480);
@@ -513,44 +516,131 @@ public class SparklePonyWindow : Window {
 		BorderWidth = 6;
 		IconName = "folder-remote";
 
-		ListStore ReposStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
-		string RemoteFolderIcon = "/usr/share/icons/gnome/16x16/places/folder.png";
+			VBox LayoutVertical = new VBox (false, 0);
 
-		TreeIter Iter2;
+				Notebook Notebook = new Notebook ();
+				Notebook.BorderWidth = 6;
 
+					HBox LayoutHorizontal = new HBox (false, 12);
+
+						ReposStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string));
+						LayoutVerticalLeft = CreateReposList ();
+						LayoutVerticalLeft.BorderWidth = 12;
+
+						LayoutVerticalRight = CreateDetailsView ();
+
+					LayoutHorizontal.PackStart (LayoutVerticalLeft, false, false, 0);
+					LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 0);
+
+				Notebook.AppendPage (LayoutHorizontal, new Label ("Folders"));
+				Notebook.AppendPage (CreateEventLog (), new Label ("Events"));
+
+			LayoutVertical.PackStart (Notebook, true, true, 0);
+
+				HButtonBox DialogButtons = new HButtonBox ();
+				DialogButtons.BorderWidth = 6;
+
+					Button QuitServiceButton = new Button ("Quit Service");
+					QuitServiceButton.Clicked += Quit;
+
+					Button CloseButton = new Button (Stock.Close);
+					CloseButton.Clicked += delegate (object o, EventArgs args) { HideAll (); Visibility = false; };
+
+				DialogButtons.Add (QuitServiceButton);
+				DialogButtons.Add (CloseButton);
+
+			LayoutVertical.PackStart (DialogButtons, false, false, 0);
+
+		Add (LayoutVertical);
+
+	}
+
+	public VBox CreateReposList() {
+
+		string RemoteFolderIcon = "/usr/share/icons/gnome/22x22/places/folder-remote.png";
+		TreeIter ReposIter;
 		foreach (Repository Repository in Repositories) {
-			Iter2 = ReposStore.Prepend ();
-			ReposStore.SetValue (Iter2, 1, null);
-			ReposStore.SetValue (Iter2, 1, Repository.Name);
+			ReposIter = ReposStore.Prepend ();
+			ReposStore.SetValue (ReposIter, 0, new Gdk.Pixbuf (RemoteFolderIcon));
+			ReposStore.SetValue (ReposIter, 1, Repository.Name + "     \n" + Repository.Domain + "     ");
 		}
-
-		TreeView ReposView = new TreeView (ReposStore); 
+		ReposView = new TreeView (ReposStore); 
 		ReposView.AppendColumn ("", new CellRendererPixbuf () , "pixbuf", 0);  
 		ReposView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
+		TreeViewColumn [] ReposViewColumns = ReposView.Columns;
+		ReposViewColumns [0].MinWidth = 34;
+		ReposViewColumns [1].Spacing = 34;
 
 		HBox AddRemoveButtons = new HBox ();
 		Button AddButton = new Button ("Add...");
 		AddRemoveButtons.PackStart (AddButton, true, true, 0);
-		Button RemoveButton = new Button ("Remove");
+
+		Image RemoveImage = new Image (Stock.Remove);
+		Button RemoveButton = new Button (RemoveImage);
 		AddRemoveButtons.PackStart (RemoveButton, false, false, 0);
 
+		VBox VBox = new VBox (false, 0);
+		VBox.PackStart (ReposView, true, true, 0);
+		VBox.PackStart (AddRemoveButtons, false, false, 0);
 
+		return VBox;
+	}
+
+	public VBox CreateDetailsView () {
+
+		Label Label1 = new Label ("Remote URL:");
+		Label1.UseMarkup = true;
+		Label1.SetAlignment (0, 0);
+
+		Label Label2 = new Label ("<b>ssh://git@github.com/hbons/Dedsfdsfsal.git</b>");
+		Label2.UseMarkup = true;
+		Label2.SetAlignment (0, 0);
+
+		Label Label5 = new Label ("Path:");
+		Label5.UseMarkup = true;
+		Label5.SetAlignment (0, 0);
+
+		Label Label6 = new Label ("<b>~/Collaboration/Deal</b>");
+		Label6.UseMarkup = true;
+		Label6.SetAlignment (0, 0);
+
+		Button NotificationsCheckButton = new CheckButton ("Notify me when something changes");
+		Button ChangesCheckButton = new CheckButton ("Synchronize my changes");
+
+		Table Table = new Table(6, 2, false);
+		Table.RowSpacing = 6;
+
+		Table.Attach(Label1, 0, 1, 0, 1);
+		Table.Attach(Label2, 1, 2, 0, 1);
+		Table.Attach(Label5, 0, 1, 1, 2);
+		Table.Attach(Label6, 1, 2, 1, 2);
+		Table.Attach(NotificationsCheckButton, 0, 2, 3, 4);
+		Table.Attach(ChangesCheckButton, 0, 2, 4, 5);
+
+		VBox VBox = new VBox (false, 0);
+		VBox.PackStart (Table, false, false, 24);
+
+		return VBox;
+
+	}
+
+	public void UpdateRepoList() {
+
+	}
+
+	public ScrolledWindow CreateEventLog() {
 
 		ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
-
-
 
 		Process Process = new Process();
 		Process.EnableRaisingEvents = false; 
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
 
-		Process.StartInfo.WorkingDirectory = Environment.GetEnvironmentVariable("HOME") + "/Collaboration/Deal/";
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "log --pretty=oneline -20";
 		Process.Start();
 		string Output = Process.StandardOutput.ReadToEnd().Trim ();
-
 
 		Gdk.Pixbuf Icon = new Gdk.Pixbuf ("/usr/share/icons/hicolor/16x16/status/document-edited.png");
 		Gdk.Pixbuf Icon2 = new Gdk.Pixbuf ("/usr/share/icons/hicolor/16x16/status/document-added.png");
@@ -578,96 +668,7 @@ public class SparklePonyWindow : Window {
 		ScrolledWindow.AddWithViewport (LogView);
 		ScrolledWindow.BorderWidth = 12;
 
-		VBox LayoutVerticalLeft = new VBox (false, 0);
-		LayoutVerticalLeft.PackStart (ReposView, true, true, 0);
-		LayoutVerticalLeft.PackStart (AddRemoveButtons, false, false, 0);
-
-		LayoutVerticalLeft.BorderWidth = 12;
-
-		VBox LayoutVerticalRight = new VBox ();
-
-		// TODO: Fix this, it's hardcoded
-
-		Label Label1 = new Label ("Remote URL:");
-		Label1.UseMarkup = true;
-		Label1.SetAlignment (0, 0);
-
-		Label Label2 = new Label ("<b>ssh://git@github.com/hbons/Deal.git</b>");
-		Label2.UseMarkup = true;
-		Label2.SetAlignment (0, 0);
-
-
-		Label Label5 = new Label ("Path:");
-		Label5.UseMarkup = true;
-		Label5.SetAlignment (0, 0);
-
-		Label Label6 = new Label ("<b>~/Collaboration/Deal</b>");
-		Label6.UseMarkup = true;
-		Label6.SetAlignment (0, 0);
-
-		Button NotificationsCheckButton = new CheckButton ("Notify me when something changes");
-		Button ChangesCheckButton = new CheckButton ("Synchronize my changes");
-
-		Table Table = new Table(6, 2, false);
-		Table.RowSpacing = 6;
-
-		Table.Attach(Label1, 0, 1, 0, 1);
-		Table.Attach(Label2, 1, 2, 0, 1);
-		Table.Attach(Label5, 0, 1, 1, 2);
-		Table.Attach(Label6, 1, 2, 1, 2);
-		Table.Attach(NotificationsCheckButton, 0, 2, 3, 4);
-		Table.Attach(ChangesCheckButton, 0, 2, 4, 5);
-
-
-		LayoutVerticalRight.PackStart (Table, false, false, 24);
-	
-
-		HBox LayoutHorizontal = new HBox (false, 12);
-		LayoutHorizontal.PackStart (LayoutVerticalLeft, false, false, 0);
-		LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 0);
-
-		Notebook Notebook = new Notebook ();
-		Notebook.BorderWidth = 6;
-		Notebook.AppendPage (LayoutHorizontal, new Label ("Repos"));
-		Notebook.AppendPage (ScrolledWindow, new Label ("Events"));
-
-
-
-
-		HButtonBox DialogButtons = new HButtonBox ();
-		DialogButtons.BorderWidth = 6;
-
-		Button QuitButton = new Button ("Quit Service");
-		QuitButton.Clicked += Quit;
-		DialogButtons.Add (QuitButton);
-
-		Button CloseButton = new Button (Stock.Close);
-		CloseButton.Clicked += delegate (object o, EventArgs args) { HideAll (); Visibility = false; };
-		DialogButtons.Add (CloseButton);
-
-		VBox LayoutVertical = new VBox (false, 0);
-		LayoutVertical.PackStart (Notebook, true, true, 0);
-		LayoutVertical.PackStart (DialogButtons, false, false, 0);
-		Add (LayoutVertical);
-
-	}
-
-	// General options: [X] Run at startup. [X]
-
-	public void Quit (object o, EventArgs args) {
-		File.Delete ("/tmp/sparklepony/sparklepony.pid");
-		Application.Quit ();
-	}
-
-	public void CreateRepoList() {
-
-	}
-
-	public void UpdateRepoList() {
-
-	}
-
-	public void CreateEventLog() {
+		return ScrolledWindow;
 
 	}
 
@@ -690,6 +691,11 @@ public class SparklePonyWindow : Window {
 		} else {
 			ShowAll ();
 		}
+	}
+
+	public void Quit (object o, EventArgs args) {
+		File.Delete ("/tmp/sparklepony/sparklepony.pid");
+		Application.Quit ();
 	}
 
 }
