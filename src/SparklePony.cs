@@ -113,7 +113,6 @@ public class SparklePonyUI {
 		string [] Folders = Directory.GetDirectories (FoldersPath);
 		Repositories = new Repository [Folders.Length];
 
-
 		int i = 0;
 		foreach (string Folder in Folders) {
 			Repositories [i] = new Repository (Folder);
@@ -242,7 +241,6 @@ public class Repository {
 			Domain = Domain.Substring (0, Domain.IndexOf (":"));
 		else
 			Domain = Domain.Substring (0, Domain.IndexOf ("/"));
-
 
 		// Get hash of the current commit
 		Process.StartInfo.FileName = "git";
