@@ -28,5 +28,15 @@ SparklePony currently requires:
    - gtk-sharp2 >= 2.12
    - notify-sharp >= 0.4.0
 
+You can build and install SparklyPony like this:
+   $ make
+   # make install
+
+Run it:
+   $ sparklepony start
+
+For help:
+   $ sparklepony --help
+
 The official website is:
 http://www.github.com/hbons/SparklePony
