@@ -639,24 +639,36 @@ public class SparklePonyWindow : Window {
 		ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
 
 		Process Process = new Process();
-		Process.EnableRaisingEvents = false; 
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
 
 		Process.StartInfo.FileName = "git";
-		Process.StartInfo.Arguments = "log --pretty=oneline -20";
-		Process.StartInfo.WorkingDirectory = Repositories [0].RepoPath;
-		Process.Start();
-		string Output = Process.StandardOutput.ReadToEnd().Trim ();
+		string Output = "";
+		foreach (Repository Repository in Repositories) {
 
+			// We're using the snowman here to separate messages :)
+			Process.StartInfo.Arguments = "log --format=\"%at☃%s☃%cr\" -25";
+			Process.StartInfo.WorkingDirectory = Repository.RepoPath;
+			Process.Start();
+			Output += "\n" + Process.StandardOutput.ReadToEnd().Trim ();
+		}
+		string [] Lines = Regex.Split (Output.TrimStart ("\n".ToCharArray ()), "\n");
+
+		// Sort by time and get the last 25
+		Array.Sort (Lines);
+		Array.Reverse (Lines);
+		string [] LastTwentyFive = new string [25];
+		Array.Copy (Lines, 0, LastTwentyFive, 0, 25);
 
 		TreeIter Iter;
-		string Message, IconFile;
-		foreach (string Line in Regex.Split (Output, "\n")) {
-			Iter = LogStore.Append ();
+		foreach (string Line in LastTwentyFive) {
 
-			Message = Line.Substring (41);
-			IconFile = "/usr/share/icons/hicolor/16x16/status/document-edited.png";		
+			// Look for the snowman!
+			string [] Parts = Regex.Split (Line, "☃");
+			string Message = Parts [1];
+			string TimeAgo = Parts [2];
+
+			string IconFile = "/usr/share/icons/hicolor/16x16/status/document-edited.png";		
 			if (Message.IndexOf (" added ") > -1)
 				IconFile = "/usr/share/icons/hicolor/16x16/status/document-added.png";
 			if (Message.IndexOf (" deleted ") > -1)
@@ -664,10 +676,10 @@ public class SparklePonyWindow : Window {
 			if (Message.IndexOf (" moved ") > -1 || Message.IndexOf (" renamed ") > -1)
 				IconFile = "/usr/share/icons/hicolor/16x16/status/document-moved.png";
 
-
+			Iter = LogStore.Append ();
 			LogStore.SetValue (Iter, 0, new Gdk.Pixbuf (IconFile));
 			LogStore.SetValue (Iter, 1, Message);
-			LogStore.SetValue (Iter, 2, "  32 minutes ago ");
+			LogStore.SetValue (Iter, 2, "  " + TimeAgo);
 		}
 
 		TreeView LogView = new TreeView (LogStore); 
