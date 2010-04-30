@@ -1,19 +1,23 @@
 SparklePony
 
-SparklePony isn't just a piece of software, it's a workflow. 
-It's designed to make sharing documents and collaboration 
-easier, and to make peers aware of what you are doing. The 
-user interface and features are made to support this goal. 
-However, you may find SparklePony useful for other kinds 
-of purposes as well, like backing up files or monitoring 
-your favourite project.
+SparklePony is a file sharing and collaboration tool 
+inspired by DropBox. It allows you to instantly sync 
+with any Git repository you have access to.
+
+SparklePony isn't just a piece of software, it's part of 
+your workflow. It's designed to make sharing documents 
+and collaboration easier, and to make peers aware of what 
+you are doing. The user interface and features are made 
+to support this goal. However, you may find SparklePony 
+useful for other kinds of purposes as well, like backing 
+up files or monitoring your favourite project.
 
 SparklePony currently only works on Linux, 
 Windows and OSX versions are planned for the future.
 
-What SparklePony is not:
-   - A graphical frontend for git
-   - A backup tool
+SparklePony is not:
+   - a graphical frontend for git
+   - a backup tool
 
 In contrast to the projects name, we will very likely 
 refuse to implement your personal ponies. :)

@@ -645,7 +645,7 @@ public class SparklePonyWindow : Window {
 
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "log --pretty=oneline -20";
-		Process.StartInfo.WorkingDirectory = Repositories [1].RepoPath;
+		Process.StartInfo.WorkingDirectory = Repositories [0].RepoPath;
 		Process.Start();
 		string Output = Process.StandardOutput.ReadToEnd().Trim ();
 
@@ -667,7 +667,7 @@ public class SparklePonyWindow : Window {
 
 			LogStore.SetValue (Iter, 0, new Gdk.Pixbuf (IconFile));
 			LogStore.SetValue (Iter, 1, Message);
-			LogStore.SetValue (Iter, 2, "32 minutes ago ");
+			LogStore.SetValue (Iter, 2, "  32 minutes ago ");
 		}
 
 		TreeView LogView = new TreeView (LogStore); 
@@ -678,6 +678,9 @@ public class SparklePonyWindow : Window {
 		TreeViewColumn [] Columns = LogView.Columns;
 		Columns [0].MinWidth = 32;
 		Columns [1].Expand = true;
+		Columns [1].MaxWidth = 150;
+
+
 
 		ScrolledWindow ScrolledWindow = new ScrolledWindow ();
 		ScrolledWindow.AddWithViewport (LogView);
