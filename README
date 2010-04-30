@@ -24,7 +24,7 @@ refuse to implement your personal ponies. :)
 
 SparklePony currently requires:
    - mono-core >= 2.0
-   - git >= 1.6
+   - git >= 1.7
    - gtk-sharp2 >= 2.12
    - notify-sharp >= 0.4.0
 
