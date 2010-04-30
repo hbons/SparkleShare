@@ -438,40 +438,40 @@ public class Repository {
 			if (Line.IndexOf ("new file:") > -1 && !DoneAddCommit) {
 				DoneAddCommit = true;
 				if (FilesAdded > 1)
-					return "In '" + Name + "', " + UserName + " added '" + 
+					return UserName + " added '" + 
 							  Line.Replace ("#\tnew file:", "").Trim () + "' and " + (FilesAdded - 1) + " more.";
 				else
-					return "In '" + Name + "', " + UserName + " added '" + 
+					return UserName + " added '" + 
 							  Line.Replace ("#\tnew file:", "").Trim () + "'.";
 			}
 
 			if (Line.IndexOf ("modified:") > -1 && !DoneEditCommit) {
 				DoneEditCommit = true;
 				if (FilesEdited > 1)
-					return "In '" + Name + "', " + UserName + " edited '" + 
+					return UserName + " edited '" + 
 							  Line.Replace ("#\tmodified:", "").Trim () + "' and " + (FilesEdited - 1) + " more.";
 				else
-					return "In '" + Name + "', " + UserName + " edited '" + 
+					return UserName + " edited '" + 
 							  Line.Replace ("#\tmodified:", "").Trim () + "'.";
 			}
 
 			if (Line.IndexOf ("renamed:") > -1 && !DoneRenameCommit) {
 				DoneDeleteCommit = true;
 				if (FilesRenamed > 1)
-					return "In '" + Name + "', " + UserName + " renamed '" + 
+					return UserName + " renamed '" + 
 							  Line.Replace ("#\trenamed:", "").Trim ().Replace (" -> ", "' to '") + "' and " + (FilesDeleted - 1) + " more.";
 				else
-					return "In '" + Name + "', " + UserName + " renamed '" + 
+					return UserName + " renamed '" + 
 							  Line.Replace ("#\trenamed:", "").Trim ().Replace (" -> ", "' to '") + "'.";
 			}
 
 			if (Line.IndexOf ("deleted:") > -1 && !DoneDeleteCommit) {
 				DoneDeleteCommit = true;
 				if (FilesDeleted > 1)
-					return "In '" + Name + "', " + UserName + " deleted '" + 
+					return UserName + " deleted '" + 
 							  Line.Replace ("#\tdeleted:", "").Trim () + "' and " + (FilesDeleted - 1) + " more.";
 				else
-					return "In '" + Name + "', " + UserName + " deleted '" + 
+					return UserName + " deleted '" + 
 							  Line.Replace ("#\tdeleted:", "").Trim () + "'.";
 			}
 
@@ -639,6 +639,7 @@ public class SparklePonyWindow : Window {
 		ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
 
 		Process Process = new Process();
+		Process.EnableRaisingEvents = false; 
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
 
@@ -647,7 +648,7 @@ public class SparklePonyWindow : Window {
 		foreach (Repository Repository in Repositories) {
 
 			// We're using the snowman here to separate messages :)
-			Process.StartInfo.Arguments = "log --format=\"%at☃%s☃%cr\" -25";
+			Process.StartInfo.Arguments = "log --format=\"%at☃In '" + Repository.Name + "', %s☃%cr\" -25";
 			Process.StartInfo.WorkingDirectory = Repository.RepoPath;
 			Process.Start();
 			Output += "\n" + Process.StandardOutput.ReadToEnd().Trim ();
