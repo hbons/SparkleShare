@@ -270,7 +270,7 @@ public class Repository {
 
 	public void StartBufferTimer () {
 
-		int Interval = 3000;
+		int Interval = 2000;
 		if (!BufferTimer.Enabled) {	
 
 			// Delay for a few seconds to see if more files change
@@ -291,6 +291,7 @@ public class Repository {
 				Console.WriteLine ("[" + Name + "][Buffer] Done waiting.");
 				Add ();
 			};
+
 			BufferTimer.Start();
 			Console.WriteLine ("[" + Name + "][Buffer] Waiting for more changes...");
 		}
@@ -423,40 +424,40 @@ public class Repository {
 			if (Line.IndexOf ("new file:") > -1 && !DoneAddCommit) {
 				DoneAddCommit = true;
 				if (FilesAdded > 1)
-					return UserName + " added '" + 
+					return "added '" + 
 							  Line.Replace ("#\tnew file:", "").Trim () + "' and " + (FilesAdded - 1) + " more.";
 				else
-					return UserName + " added '" + 
+					return "added '" + 
 							  Line.Replace ("#\tnew file:", "").Trim () + "'.";
 			}
 
 			if (Line.IndexOf ("modified:") > -1 && !DoneEditCommit) {
 				DoneEditCommit = true;
 				if (FilesEdited > 1)
-					return UserName + " edited '" + 
+					return "edited '" + 
 							  Line.Replace ("#\tmodified:", "").Trim () + "' and " + (FilesEdited - 1) + " more.";
 				else
-					return UserName + " edited '" + 
+					return "edited '" + 
 							  Line.Replace ("#\tmodified:", "").Trim () + "'.";
 			}
 
 			if (Line.IndexOf ("renamed:") > -1 && !DoneRenameCommit) {
 				DoneDeleteCommit = true;
 				if (FilesRenamed > 1)
-					return UserName + " renamed '" + 
+					return "renamed '" + 
 							  Line.Replace ("#\trenamed:", "").Trim ().Replace (" -> ", "' to '") + "' and " + (FilesDeleted - 1) + " more.";
 				else
-					return UserName + " renamed '" + 
+					return "renamed '" + 
 							  Line.Replace ("#\trenamed:", "").Trim ().Replace (" -> ", "' to '") + "'.";
 			}
 
 			if (Line.IndexOf ("deleted:") > -1 && !DoneDeleteCommit) {
 				DoneDeleteCommit = true;
 				if (FilesDeleted > 1)
-					return UserName + " deleted '" + 
+					return "deleted '" + 
 							  Line.Replace ("#\tdeleted:", "").Trim () + "' and " + (FilesDeleted - 1) + " more.";
 				else
-					return UserName + " deleted '" + 
+					return "deleted '" + 
 							  Line.Replace ("#\tdeleted:", "").Trim () + "'.";
 			}
 
@@ -635,7 +636,7 @@ public class SparklePonyWindow : Window {
 		foreach (Repository Repository in Repositories) {
 
 			// We're using the snowman here to separate messages :)
-			Process.StartInfo.Arguments = "log --format=\"%at☃In '" + Repository.Name + "', %s☃%cr\" -25";
+			Process.StartInfo.Arguments = "log --format=\"%at☃In '" + Repository.Name + "', %an %s☃%cr\" -25";
 			Process.StartInfo.WorkingDirectory = Repository.RepoPath;
 			Process.Start();
 			Output += "\n" + Process.StandardOutput.ReadToEnd().Trim ();
@@ -657,16 +658,17 @@ public class SparklePonyWindow : Window {
 			string TimeAgo = Parts [2];
 
 			string IconFile = "/usr/share/icons/hicolor/16x16/status/document-edited.png";		
-			if (Message.IndexOf (" added ") > -1)
+			if (Message.IndexOf ("added ") > -1)
 				IconFile = "/usr/share/icons/hicolor/16x16/status/document-added.png";
-			if (Message.IndexOf (" deleted ") > -1)
+			if (Message.IndexOf ("deleted ") > -1)
 				IconFile = "/usr/share/icons/hicolor/16x16/status/document-removed.png";
-			if (Message.IndexOf (" moved ") > -1 || Message.IndexOf (" renamed ") > -1)
+			if (Message.IndexOf ("moved ") > -1 || Message.IndexOf ("renamed ") > -1)
 				IconFile = "/usr/share/icons/hicolor/16x16/status/document-moved.png";
 
 			Iter = LogStore.Append ();
 			LogStore.SetValue (Iter, 0, new Gdk.Pixbuf (IconFile));
 			LogStore.SetValue (Iter, 1, Message);
+			// TODO: right align time
 			LogStore.SetValue (Iter, 2, "  " + TimeAgo);
 		}
 
