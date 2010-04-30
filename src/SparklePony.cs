@@ -601,7 +601,7 @@ public class SparklePonyWindow : Window {
 		Button NotificationsCheckButton = new CheckButton ("Notify me when something changes");
 		Button ChangesCheckButton = new CheckButton ("Synchronize my changes");
 
-		Table Table = new Table(6, 2, false);
+		Table Table = new Table(8, 2, false);
 		Table.RowSpacing = 6;
 
 		Table.Attach(Label1, 0, 1, 0, 1);
@@ -610,6 +610,7 @@ public class SparklePonyWindow : Window {
 		Table.Attach(Label6, 1, 2, 1, 2);
 		Table.Attach(NotificationsCheckButton, 0, 2, 3, 4);
 		Table.Attach(ChangesCheckButton, 0, 2, 4, 5);
+		Table.Attach (CreatePeopleList (Repositories [0]), 0, 2, 5, 8);
 
 		VBox VBox = new VBox (false, 0);
 		VBox.PackStart (Table, false, false, 24);
@@ -694,8 +695,38 @@ public class SparklePonyWindow : Window {
 
 	}
 
-	public void CreatePeopleList () {
+	public TreeView CreatePeopleList (Repository Repository) {
 
+		Process Process = new Process ();
+		Process.EnableRaisingEvents = false; 
+		Process.StartInfo.RedirectStandardOutput = true;
+		Process.StartInfo.UseShellExecute = false;
+
+		Process.StartInfo.FileName = "git";
+		Process.StartInfo.Arguments = "log --format=\"%an☃%ae\" -50";
+		Process.StartInfo.WorkingDirectory = Repository.RepoPath;
+		Process.Start();
+		string [] Lines = Regex.Split (Process.StandardOutput.ReadToEnd().Trim (), "\n");
+
+
+		ListStore PeopleStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
+		string PersonIcon = "/usr/share/icons/gnome/22x22/status/printer-error.png";
+		TreeIter PeopleIter;
+		foreach (string Line in Lines) {
+			string [] Parts = Regex.Split (Line, "☃");
+			PeopleIter = PeopleStore.Prepend ();
+			PeopleStore.SetValue (PeopleIter, 0, new Gdk.Pixbuf (PersonIcon));
+			PeopleStore.SetValue (PeopleIter, 1, Parts [0]);
+			PeopleStore.SetValue (PeopleIter, 2, Parts [1]);
+		}
+		TreeView PeopleView = new TreeView (PeopleStore); 
+		PeopleView.AppendColumn ("", new CellRendererPixbuf () , "pixbuf", 0);  
+		PeopleView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
+		PeopleView.AppendColumn ("", new Gtk.CellRendererText (), "text", 2);
+		TreeViewColumn [] PeopleViewColumns = PeopleView.Columns;
+		PeopleViewColumns [0].MinWidth = 34;
+
+		return PeopleView;
 	}
 
 	public void UpdatePeopleList () {
