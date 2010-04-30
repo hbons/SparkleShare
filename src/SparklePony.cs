@@ -658,11 +658,11 @@ public class SparklePonyWindow : Window {
 			string TimeAgo = Parts [2];
 
 			string IconFile = "/usr/share/icons/hicolor/16x16/status/document-edited.png";		
-			if (Message.IndexOf ("added ") > -1)
+			if (Message.IndexOf (" added '") > -1)
 				IconFile = "/usr/share/icons/hicolor/16x16/status/document-added.png";
-			if (Message.IndexOf ("deleted ") > -1)
+			if (Message.IndexOf (" deleted '") > -1)
 				IconFile = "/usr/share/icons/hicolor/16x16/status/document-removed.png";
-			if (Message.IndexOf ("moved ") > -1 || Message.IndexOf ("renamed ") > -1)
+			if (Message.IndexOf (" moved '") > -1 || Message.IndexOf (" renamed '") > -1)
 				IconFile = "/usr/share/icons/hicolor/16x16/status/document-moved.png";
 
 			Iter = LogStore.Append ();
