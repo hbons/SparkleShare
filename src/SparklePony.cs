@@ -16,21 +16,6 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-//   Dependencies: 
-//             git
-//             mono-core
-//             gtk-sharp2
-//             gtk-sharp2-devel
-//             notify-sharp
-//             notify-sharp-devel
-//             dbus-sharp
-//
-//   Compile: 
-//             gmcs -pkg:gtk-sharp-2.0 -pkg:notify-sharp SparklePony.cs
-//
-//   Run:
-//             mono SparklePony.exe
-
 using Gtk;
 using System;
 using System.IO;
@@ -379,7 +364,7 @@ public class Repository {
 			Process.StartInfo.Arguments = "log --pretty=oneline -1";
 			Process.Start();
 			string LastCommitMessage = Process.StandardOutput.ReadToEnd().Trim ().Substring (41);
-			ShowNotification (LastCommitMessage, "");
+			ShowNotification (LastCommitMessage, "", true);
 		}
 
 		Watcher.EnableRaisingEvents = true;
@@ -481,19 +466,21 @@ public class Repository {
 
 	}
 
-	// Can potentially be moved from this class as well
-	public void ShowNotification (string Title, string SubText) {
+	public void ShowNotification (string Title, string SubText, bool ShowButtons) {
+
 		Notification Notification = new Notification (Title, SubText);
 		Notification.Urgency = Urgency.Low;
-		Notification.Timeout = 3500;
+		Notification.Timeout = 4500;
 
 		// Add a button to open the folder the changed file resides in
-//		Notification.AddAction(File, "Open Folder", 
-	//	                       delegate (object o, ActionArgs args) {
-		//                       	Process.StartInfo.FileName = "nautilus";
-		  //                     	Process.StartInfo.Arguments = "'" + Directory.GetParent (RepoPath + "/" + File) + "'";
-		    //                   	Process.Start();									     
-		      //                 } );
+		if (ShowButtons)	
+			Notification.AddAction ("", "Open Folder", 
+				                    delegate (object o, ActionArgs args) {
+					                    	Process.StartInfo.FileName = "xdg-open";
+			  	                     	Process.StartInfo.Arguments = RepoPath;
+				 	                   	Process.Start();			     
+			  	                     	Process.StartInfo.FileName = "git";
+				                    } );
 		Notification.Show ();
 	}
 
@@ -692,8 +679,6 @@ public class SparklePonyWindow : Window {
 		Columns [0].MinWidth = 32;
 		Columns [1].Expand = true;
 		Columns [1].MaxWidth = 150;
-
-
 
 		ScrolledWindow ScrolledWindow = new ScrolledWindow ();
 		ScrolledWindow.AddWithViewport (LogView);
