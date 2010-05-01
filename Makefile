@@ -10,12 +10,14 @@ install:
 	cp data/icons /usr/share/ -R
 	mkdir -p ~/.config/autostart
 	cp sparklepony.desktop.in ~/.config/autostart/sparklepony.desktop
+	gtk-update-icon-cache /usr/share/icons/hicolor -f
+
 
 uninstall:
 	rm /usr/local/bin/sparklepony
 	rm /usr/local/share/sparklepony/SparklePony.exe
 	rmdir /usr/local/share/sparklepony
-	rm /usr/share/icons/hicolor/*x*/places/folder-publicshare.png
+	rm /usr/share/icons/hicolor/*x*/places/folder-sparklepony.png
 	rm /usr/share/icons/hicolor/*x*/status/document-*ed.png
 	rm /usr/share/icons/hicolor/*x*/status/avatar-default.png
 	rm ~/.config/autostart/sparklepony.desktop

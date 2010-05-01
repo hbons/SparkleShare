@@ -121,6 +121,13 @@ public class SparklePonyUI {
 		if (!Directory.Exists (ReposPath)) {
 			Directory.CreateDirectory (ReposPath);
 			Console.WriteLine ("[Config] Created '" + ReposPath + "'");
+
+			Process.StartInfo.FileName = "gvfs-set-attribute";
+			Process.StartInfo.Arguments = ReposPath + " metadata::custom-icon " +
+			                              "file:///usr/share/icons/hicolor/" +
+			                              "48x48/places/folder-sparklepony.png";
+			Process.Start();
+
 		}
 
 		// Create place to store configuration user's home folder
@@ -190,7 +197,7 @@ public class SparklePonyStatusIcon : StatusIcon {
 
 	public SparklePonyStatusIcon () : base ()  {
 
-		IconName = "folder-publicshare";
+		IconName = "folder-sparklepony";
 
 		string UserHome = Environment.GetEnvironmentVariable("HOME") + "/";
 		string FirstRunFile = UserHome + ".config/sparklepony/firstrun";
@@ -213,7 +220,7 @@ public class SparklePonyStatusIcon : StatusIcon {
 	}
 
 	public void SetIdleState () {
-		IconName = "folder-publicshare";
+		IconName = "folder-sparklepony";
 	}
 
 	public void SetSyncingState () {
@@ -605,7 +612,7 @@ public class SparklePonyWindow : Window {
 		SetSizeRequest (720, 540);
  		SetPosition (WindowPosition.Center);
 		BorderWidth = 6;
-		IconName = "folder-publicshare";
+		IconName = "folder-sparklepony";
 
 			VBox LayoutVertical = new VBox (false, 0);
 
