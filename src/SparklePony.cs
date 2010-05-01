@@ -124,8 +124,7 @@ public class SparklePonyUI {
 
 			Process.StartInfo.FileName = "gvfs-set-attribute";
 			Process.StartInfo.Arguments = ReposPath + " metadata::custom-icon " +
-			                              "file:///usr/share/icons/hicolor/" +
-			                              "48x48/places/folder-sparklepony.png";
+			                              "folder-sparklepony";
 			Process.Start();
 
 		}
@@ -636,7 +635,7 @@ public class SparklePonyWindow : Window {
 
 		LayoutVerticalRight.PackStart (PeopleLabel, false, false, 0);
 
-		LayoutVerticalRight.PackStart (CreatePeopleList (Repositories [0]), true, true, 12);
+		LayoutVerticalRight.PackStart (CreatePeopleList (Repositories [1]), true, true, 12);
 
 					LayoutHorizontal.PackStart (LayoutVerticalLeft, false, false, 0);
 					LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
@@ -839,7 +838,7 @@ public class SparklePonyWindow : Window {
 
 		ScrolledWindow ScrolledWindow = new ScrolledWindow ();
 		ScrolledWindow.AddWithViewport (LogView);
-		ScrolledWindow.BorderWidth = 6;
+		ScrolledWindow.BorderWidth = 9;
 
 		return ScrolledWindow;
 
@@ -895,22 +894,7 @@ public class SparklePonyWindow : Window {
 				PeopleStore.SetValue (PeopleIter, 1, UserName + "  ");
 				PeopleStore.SetValue (PeopleIter, 2, UserEmail + "  ");
 
-				// Let's try to get the person's gravatar for next time
-				string AvatarsDirSmall =
-					Environment.GetEnvironmentVariable("HOME") + 
-					"/.config/sparklepony/avatars/24x24/";
 
-				WebClient WebClient1 = new WebClient ();
-				Uri UriSmall = new Uri ("http://www.gravatar.com/avatar/" + SparklePonyHelpers.SparklePonyHelpers.GetMD5 (UserEmail) + ".jpg?s=24");
-				WebClient1.DownloadFileAsync (UriSmall,  AvatarsDirSmall + UserEmail);
-
-				string AvatarsDirLarge =
-					Environment.GetEnvironmentVariable("HOME") + 
-					"/.config/sparklepony/avatars/48x48/";
-
-				WebClient WebClient2 = new WebClient ();
-				Uri UriLarge = new Uri ("http://www.gravatar.com/avatar/" + SparklePonyHelpers.SparklePonyHelpers.GetMD5 (UserEmail) + ".jpg?s=48");
-				WebClient2.DownloadFileAsync (UriLarge,  AvatarsDirLarge + UserEmail);
 
 			}
 			i++;
@@ -962,15 +946,35 @@ namespace SparklePonyHelpers {
 
 		public static string GetAvatarFileName (string Email, int Size) {
 
-			string GravatarFile = Environment.GetEnvironmentVariable("HOME") + 
+			string AvatarPath = Environment.GetEnvironmentVariable("HOME") + 
 				                   "/.config/sparklepony/avatars/" + 
-			                      Size + "x" + Size + 
-				                   "/" + Email;
+			                      Size + "x" + Size + "/";
 
-			if (File.Exists (GravatarFile))
-				return GravatarFile;
+			string AvatarFile = AvatarPath + Email;
+
+			if (File.Exists (AvatarFile))
+				return AvatarFile;
 
 			else {
+
+				// Let's try to get the person's gravatar for next time
+
+				WebClient WebClient = new WebClient ();
+				Uri GravatarUri = new Uri ("http://www.gravatar.com/avatar/" + 
+				                   GetMD5 (Email) + ".jpg?s=" + Size);
+
+				string TmpFile = "/tmp/" + Email + Size;
+
+				if (!File.Exists (TmpFile)) {
+
+					WebClient.DownloadFileAsync (GravatarUri, TmpFile);
+
+					WebClient.DownloadFileCompleted += delegate {
+						File.Delete (AvatarPath + Email);
+						File.Move (TmpFile, AvatarPath + Email);
+					};
+
+				}
 
 				string FallbackFileName = "/usr/share/icons/hicolor/" + 
 				                          Size + "x" + Size + 
