@@ -29,13 +29,20 @@ SparklePony currently requires:
    - mono-core >= 2.2
    - notify-sharp >= 0.4.0
 
+Installing dependencies on Fedora:
+   # yum install git gtk-sharp2 gtk-sharp2-devel mono-core notify-sharp \
+	  notify-sharp-devel
 
 You can build and install SparklePony like this:
    $ make
+   $ su
    # make install
 
-Run it:
+Run the service:
    $ sparklepony start
+
+You can stop the service via the graphical interface or by typing:
+   $ sparklepony stop
 
 For help:
    $ sparklepony --help
