@@ -12,9 +12,6 @@ to support this goal. However, you may find SparklePony
 useful for other kinds of purposes as well, like backing 
 up files or monitoring your favourite project.
 
-SparklePony currently only works on Linux, 
-Windows and OSX versions are planned for the future.
-
 SparklePony is not:
    - a graphical frontend for git
    - a backup tool
@@ -22,11 +19,21 @@ SparklePony is not:
 In contrast to the projects name, we will very likely 
 refuse to implement your personal ponies. :)
 
+SparklePony currently only works on Linux.
+Windows and OSX versions are planned for the future.
+
+
+SparklePony is free software and licensed under the 
+GNU GPLv3. For more information see the LICENSE file 
+or visit http://www.gnu.org/licenses/gpl-3.0.html
+
+
 SparklePony currently requires:
-   - mono-core >= 2.0
-   - git >= 1.7
-   - gtk-sharp2 >= 2.12
+   - git >= 1.7.0.6
+   - gtk-sharp2 >= 2.12.7
+   - mono-core >= 2.2
    - notify-sharp >= 0.4.0
+
 
 You can build and install SparklyPony like this:
    $ make
@@ -38,5 +45,9 @@ Run it:
 For help:
    $ sparklepony --help
 
+
 The official website is:
 http://www.github.com/hbons/SparklePony
+
+
+Have fun! :)
