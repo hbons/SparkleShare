@@ -9,7 +9,7 @@ install:
 	chmod 755 /usr/local/bin/sparklepony
 	cp data/icons /usr/share/ -R
 	mkdir -p ~/.config/autostart
-	cp sparklepony.desktop.in ~/.config/autostart/sparklepony.desktop
+	cp data/sparklepony.desktop.in ~/.config/autostart/sparklepony.desktop
 	gtk-update-icon-cache /usr/share/icons/hicolor -f
 
 
