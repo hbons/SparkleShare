@@ -1,4 +1,4 @@
-//   SparklePony 0.0.6
+//   SparklePony 0.0.7
 
 //   SparklePony, an instant update workflow to Git.
 //   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
@@ -28,7 +28,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
 
-
+// This is SparklePony!
 public class SparklePony {
 
 	public static SparklePonyUI SparklePonyUI;
@@ -50,7 +50,7 @@ public class SparklePony {
 		Process.StartInfo.FileName = "whoami";
 		Process.Start();
 		if (Process.StandardOutput.ReadToEnd().Trim ().Equals ("root")) {
-			Console.WriteLine ("Sorry, you shouldn't run SparklePony as root.\nThings will go utterly wrong.");
+			Console.WriteLine ("Sorry, you can't run SparklePony as root.\nThings will go utterly wrong.");
 			Environment.Exit (0);
 		}
 
@@ -73,14 +73,15 @@ public class SparklePony {
 
 	public static void ShowHelp () {
 		Console.WriteLine ("SparklePony Copyright (C) 2010 Hylke Bons");
+		Console.WriteLine ("");
 		Console.WriteLine ("This program comes with ABSOLUTELY NO WARRANTY.");
 		Console.WriteLine ("This is free software, and you are welcome to redistribute it ");
 		Console.WriteLine ("under certain conditions. Please read the GNU GPLv3 for details.");
 		Console.WriteLine ("");
-		Console.WriteLine ("SparklePony syncs the ~/Collaboration folder with remote repositories.");
+		Console.WriteLine ("SparklePony syncs the ~/SparklePony folder with remote repositories.");
 		Console.WriteLine ("");
 		Console.WriteLine ("Usage: sparklepony [start|stop|restart] [OPTION]...");
-		Console.WriteLine ("Sync Collaboration folder with remote repositories.");
+		Console.WriteLine ("Sync SparklePony folder with remote repositories.");
 		Console.WriteLine ("");
 		Console.WriteLine ("Arguments:");
 		Console.WriteLine ("\t -d, --disable-gui\tDon't show the notification icon.");
@@ -107,8 +108,8 @@ public class SparklePonyUI {
 		// Get home folder, example: "/home/user/" 
 		string UserHome = Environment.GetEnvironmentVariable("HOME") + "/";
 
-		// Create 'Collaboration' folder in the user's home folder
-		string ReposPath = UserHome + "Collaboration";
+		// Create 'SparklePony' folder in the user's home folder
+		string ReposPath = UserHome + "SparklePony";
 		if (!Directory.Exists (ReposPath)) {
 			Directory.CreateDirectory (ReposPath);
 			Console.WriteLine ("[Config] Created '" + ReposPath + "'");
@@ -123,7 +124,7 @@ public class SparklePonyUI {
 			Console.WriteLine ("[Config] Created '" + ConfigPath + "gravatars'");
 		}
 
-		// Get all the Repos in ~/Collaboration
+		// Get all the Repos in ~/SparklePony
 		string [] Repos = Directory.GetDirectories (ReposPath);
 		Repositories = new Repository [Repos.Length];
 
@@ -133,6 +134,7 @@ public class SparklePonyUI {
 			i++;
 		}
 
+		// Don't create the window and status icon if --disable-gui was given
 		if (!HideUI) {
 
 			// Create the window
@@ -142,6 +144,7 @@ public class SparklePonyUI {
 			// Create the status icon
 			SparklePonyStatusIcon = new SparklePonyStatusIcon ();
 			SparklePonyStatusIcon.Activate += delegate  { SparklePonyWindow.ToggleVisibility (); };
+
 		}
 
 	}
@@ -163,7 +166,7 @@ public class SparklePonyStatusIcon : StatusIcon {
 		// TODO: Only on first run
 		Notification Notification = new Notification ("Welcome to SparklePony!", "Click here to add some folders.");
 		Notification.Urgency = Urgency.Normal;
-		Notification.Timeout = 10000;
+		Notification.Timeout = 7500;
 		Notification.Show ();
 	}
 
@@ -178,6 +181,7 @@ public class SparklePonyStatusIcon : StatusIcon {
 }
 
 
+// Repository class holds repository information and timers
 public class Repository {
 
 	private Process Process;
@@ -203,7 +207,8 @@ public class Repository {
 		Process.EnableRaisingEvents = false; 
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
-		// Get the repository's path, example: "/home/user/Collaboration/repo/"
+
+		// Get the repository's path, example: "/home/user/SparklePony/repo/"
 		RepoPath = Path;
 		Process.StartInfo.WorkingDirectory = RepoPath + "/";
 
@@ -227,7 +232,7 @@ public class Repository {
 		Process.Start();
 		RemoteOriginUrl = Process.StandardOutput.ReadToEnd().Trim ();
 
-		// Get the repository name, example: "project"
+		// Get the repository name, example: "Project"
 		Name = RepoPath.Substring (RepoPath.TrimEnd ( "/".ToCharArray ()).LastIndexOf ("/") + 1);
 
 		// Get the domain, example: "github.com" 
@@ -253,8 +258,7 @@ public class Repository {
 		Watcher.Created += new FileSystemEventHandler(OnFileActivity);
 		Watcher.Deleted += new FileSystemEventHandler(OnFileActivity);
 
-		// Fetch changes every 20 seconds
-
+		// Fetch remote changes every 20 seconds
 		FetchTimer = new Timer ();
 		FetchTimer.Interval = 20000;
 		FetchTimer.Elapsed += delegate { 
@@ -262,12 +266,14 @@ public class Repository {
 			
 		};
 
-		FetchTimer.Start();
+		// Add everything that changed 
+		// since SparklePony was stopped
 
+		FetchTimer.Start();
 		BufferTimer = new Timer ();
 
-		// Add everything that changed since SparklePony was stopped
 		Add ();
+
 
 	}
 
@@ -508,12 +514,12 @@ public class SparklePonyWindow : Window {
 	private ListStore ReposStore;
 	private Repository [] Repositories;
 
-	public SparklePonyWindow (Repository [] R) : base ("Collaboration Folders")  {
+	public SparklePonyWindow (Repository [] R) : base ("SparklePony")  {
 
 		Repositories = R;
 
 		Visibility = false;
-		SetSizeRequest (800, 600);
+		SetSizeRequest (720, 540);
  		SetPosition (WindowPosition.Center);
 		BorderWidth = 6;
 		IconName = "folder-publicshare";
@@ -622,7 +628,7 @@ public class SparklePonyWindow : Window {
 		Label5.UseMarkup = true;
 		Label5.SetAlignment (0, 0);
 
-		Label Label6 = new Label ("<b>~/Collaboration/Deal</b>   ");
+		Label Label6 = new Label ("<b>~/SparklePony/Deal</b>   ");
 		Label6.UseMarkup = true;
 		Label6.SetAlignment (0, 0);
 
@@ -728,6 +734,7 @@ public class SparklePonyWindow : Window {
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
 
+		// Get a log of commits, example: "Hylke Bons☃added 'file'."
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "log --format=\"%an☃%ae\" -50";
 		Process.StartInfo.WorkingDirectory = Repository.RepoPath;
@@ -742,27 +749,36 @@ public class SparklePonyWindow : Window {
 		TreeIter PeopleIter;
 		int i = 0;
 		foreach (string Line in Lines) {
+
+			// Only add name if it isn't there already
 			if (Array.IndexOf (People, Line) == -1) {
+
 				People [i] = Line;
 				string [] Parts = Regex.Split (Line, "☃");
+
+				// Do something special if the person is you
 				if (Parts [0].Equals (Repository.UserName))
 					Parts [0] += " (that's you)";
 
-				if (File.Exists (Environment.GetEnvironmentVariable("HOME") + "/.config/sparklepony/gravatars/" + Parts [1]))
-					PersonIcon = Environment.GetEnvironmentVariable("HOME") + "/.config/sparklepony/gravatars/" + Parts [1];
+				string GravatarFile = Environment.GetEnvironmentVariable("HOME") + 
+				                          "/.config/sparklepony/gravatars/" + Parts [1];
+
+				// Add a gravatar if it has been downloaded before
+				if (File.Exists (GravatarFile))
+					PersonIcon = GravatarFile;
+
+				// Actually add to the list
 				PeopleIter = PeopleStore.Prepend ();
 				PeopleStore.SetValue (PeopleIter, 0, new Gdk.Pixbuf (PersonIcon));
 				PeopleStore.SetValue (PeopleIter, 1, Parts [0]);
 				PeopleStore.SetValue (PeopleIter, 2, Parts [1] + "  ");
 
-				// Let's get the gravatar for next time
-				WebClient WebClient = new WebClient ();
+				// Let's try to get the person's gravatar for next time
 				string AvatarsDir = Environment.GetEnvironmentVariable("HOME") + "/.config/sparklepony/gravatars/";
 
-				Uri Uri1, Uri2;
-				Console.WriteLine ("http://www.gravatar.com/avatar/" + GetMD5 (Parts [1]) + ".jpg");
-				Uri1 = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (Parts [1]) + ".jpg?s=22");
-				WebClient.DownloadFileAsync (Uri1,  AvatarsDir + Parts [1]);
+				WebClient WebClient = new WebClient ();
+				Uri Uri = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (Parts [1]) + ".jpg?s=22");
+				WebClient.DownloadFileAsync (Uri,  AvatarsDir + Parts [1]);
 
 			}
 			i++;
