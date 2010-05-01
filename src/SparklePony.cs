@@ -145,9 +145,9 @@ public class SparklePonyUI {
 			Directory.CreateDirectory (ConfigPath + "avatars/");
 			Console.WriteLine ("[Config] Created '" + ConfigPath + "avatars'");
 
-			Directory.CreateDirectory (ConfigPath + "avatars/22x22/");
+			Directory.CreateDirectory (ConfigPath + "avatars/24x24/");
 			Console.WriteLine ("[Config] Created '" + ConfigPath + 
-			                   "avatars/22x22/'");
+			                   "avatars/24x24/'");
 
 			Directory.CreateDirectory (ConfigPath + "avatars/48x48/");
 			Console.WriteLine ("[Config] Created '" + ConfigPath + 
@@ -515,12 +515,12 @@ public class Repository {
 			if (Line.IndexOf ("new file:") > -1 && !DoneAddCommit) {
 				DoneAddCommit = true;
 				if (FilesAdded > 1)
-					return "added '" + 
+					return "added ‘" + 
 							  Line.Replace ("#\tnew file:", "").Trim () + 
-					        "' and " + (FilesAdded - 1) + " more.";
+					        "’ and " + (FilesAdded - 1) + " more.";
 				else
-					return "added '" + 
-							  Line.Replace ("#\tnew file:", "").Trim () + "'.";
+					return "added ‘" + 
+							  Line.Replace ("#\tnew file:", "").Trim () + "’.";
 			}
 
 			// Format message for when files are edited,
@@ -528,12 +528,12 @@ public class Repository {
 			if (Line.IndexOf ("modified:") > -1 && !DoneEditCommit) {
 				DoneEditCommit = true;
 				if (FilesEdited > 1)
-					return "edited '" + 
+					return "edited ‘" + 
 							  Line.Replace ("#\tmodified:", "").Trim () + 
-					        "' and " + (FilesEdited - 1) + " more.";
+					        "’ and " + (FilesEdited - 1) + " more.";
 				else
-					return "edited '" + 
-							  Line.Replace ("#\tmodified:", "").Trim () + "'.";
+					return "edited ‘" + 
+							  Line.Replace ("#\tmodified:", "").Trim () + "’.";
 			}
 
 			// Format message for when files are edited,
@@ -541,12 +541,12 @@ public class Repository {
 			if (Line.IndexOf ("deleted:") > -1 && !DoneDeleteCommit) {
 				DoneDeleteCommit = true;
 				if (FilesDeleted > 1)
-					return "deleted '" + 
+					return "deleted ‘" + 
 							  Line.Replace ("#\tdeleted:", "").Trim () + 
-					        "' and " + (FilesDeleted - 1) + " more.";
+					        "’ and " + (FilesDeleted - 1) + " more.";
 				else
-					return "deleted '" + 
-							  Line.Replace ("#\tdeleted:", "").Trim () + "'.";
+					return "deleted ‘" + 
+							  Line.Replace ("#\tdeleted:", "").Trim () + "’.";
 			}
 
 			// Format message for when files are renamed,
@@ -554,14 +554,14 @@ public class Repository {
 			if (Line.IndexOf ("renamed:") > -1 && !DoneRenameCommit) {
 				DoneDeleteCommit = true;
 				if (FilesRenamed > 1)
-					return "renamed '" + 
+					return "renamed ‘" + 
 							  Line.Replace ("#\trenamed:", "").Trim ().Replace
-					        (" -> ", "' to '") + "' and " + (FilesDeleted - 1) + 
+					        (" -> ", "’ to ‘") + "’ and " + (FilesDeleted - 1) + 
 					        " more.";
 				else
-					return "renamed '" + 
+					return "renamed ‘" + 
 							  Line.Replace ("#\trenamed:", "").Trim ().Replace
-					        (" -> ", "' to '") + "'.";
+					        (" -> ", "’ to ‘") + "’.";
 			}
 
 		}
@@ -670,7 +670,7 @@ public class SparklePonyWindow : Window {
 	// Creates a visual list of repositories
 	public VBox CreateReposList() {
 
-		string RemoteFolderIcon = "/usr/share/icons/gnome/22x22/places/folder.png";
+		string RemoteFolderIcon = "/usr/share/icons/gnome/24x24/places/folder.png";
 		TreeIter ReposIter;
 		foreach (Repository Repository in Repositories) {
 			ReposIter = ReposStore.Prepend ();
@@ -692,6 +692,7 @@ public class SparklePonyWindow : Window {
 
 		ReposView.ActivateRow (ReposStore.GetPath (ReposIter),
 		                       ReposViewColumns [1]);
+
 
 		HBox AddRemoveButtons = new HBox (false, 6);
 		Button AddButton = new Button ("Add...");
@@ -775,7 +776,7 @@ public class SparklePonyWindow : Window {
 
 			// We're using the snowman here to separate messages :)
 			Process.StartInfo.Arguments =
-				"log --format=\"%at☃In '" + Repository.Name + "', %an %s☃%cr\" -25";
+				"log --format=\"%at☃In ‘" + Repository.Name + "’, %an %s☃%cr\" -25";
 
 			Process.StartInfo.WorkingDirectory = Repository.RepoPath;
 			Process.Start();
@@ -802,16 +803,16 @@ public class SparklePonyWindow : Window {
 			string IconFile =
 				"/usr/share/icons/hicolor/16x16/status/document-edited.png";		
 
-			if (Message.IndexOf (" added '") > -1)
+			if (Message.IndexOf (" added ‘") > -1)
 				IconFile = 
 					"/usr/share/icons/hicolor/16x16/status/document-added.png";
 
-			if (Message.IndexOf (" deleted '") > -1)
+			if (Message.IndexOf (" deleted ‘") > -1)
 				IconFile = 
 					"/usr/share/icons/hicolor/16x16/status/document-removed.png";
 
-			if (Message.IndexOf (" moved '") > -1 || 
-			    Message.IndexOf (" renamed '") > -1)
+			if (Message.IndexOf (" moved ‘") > -1 || 
+			    Message.IndexOf (" renamed ‘") > -1)
 
 				IconFile =
 					"/usr/share/icons/hicolor/16x16/status/document-moved.png";
@@ -825,6 +826,8 @@ public class SparklePonyWindow : Window {
 		}
 
 		TreeView LogView = new TreeView (LogStore); 
+		LogView.HeadersVisible = false;
+
 		LogView.AppendColumn ("", new Gtk.CellRendererPixbuf (), "pixbuf", 0);
 		LogView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
 		LogView.AppendColumn ("", new Gtk.CellRendererText (), "text", 2);
@@ -836,7 +839,7 @@ public class SparklePonyWindow : Window {
 
 		ScrolledWindow ScrolledWindow = new ScrolledWindow ();
 		ScrolledWindow.AddWithViewport (LogView);
-		ScrolledWindow.BorderWidth = 12;
+		ScrolledWindow.BorderWidth = 6;
 
 		return ScrolledWindow;
 
@@ -888,17 +891,17 @@ public class SparklePonyWindow : Window {
 
 				// Actually add to the list
 				PeopleIter = PeopleStore.Prepend ();
-				PeopleStore.SetValue (PeopleIter, 0, new Gdk.Pixbuf (SparklePonyHelpers.SparklePonyHelpers.GetAvatarFileName (UserEmail, 22)));
+				PeopleStore.SetValue (PeopleIter, 0, new Gdk.Pixbuf (SparklePonyHelpers.SparklePonyHelpers.GetAvatarFileName (UserEmail, 24)));
 				PeopleStore.SetValue (PeopleIter, 1, UserName + "  ");
 				PeopleStore.SetValue (PeopleIter, 2, UserEmail + "  ");
 
 				// Let's try to get the person's gravatar for next time
 				string AvatarsDirSmall =
 					Environment.GetEnvironmentVariable("HOME") + 
-					"/.config/sparklepony/avatars/22x22/";
+					"/.config/sparklepony/avatars/24x24/";
 
 				WebClient WebClient1 = new WebClient ();
-				Uri UriSmall = new Uri ("http://www.gravatar.com/avatar/" + SparklePonyHelpers.SparklePonyHelpers.GetMD5 (UserEmail) + ".jpg?s=22");
+				Uri UriSmall = new Uri ("http://www.gravatar.com/avatar/" + SparklePonyHelpers.SparklePonyHelpers.GetMD5 (UserEmail) + ".jpg?s=24");
 				WebClient1.DownloadFileAsync (UriSmall,  AvatarsDirSmall + UserEmail);
 
 				string AvatarsDirLarge =
@@ -920,6 +923,8 @@ public class SparklePonyWindow : Window {
 		TreeViewColumn [] PeopleViewColumns = PeopleView.Columns;
 		PeopleViewColumns [0].MinWidth = 32;
 		PeopleViewColumns [1].Expand = true;
+
+		PeopleView.HeadersVisible = false;
 
 		ScrolledWindow ScrolledWindow = new ScrolledWindow ();
 		ScrolledWindow.AddWithViewport (PeopleView);

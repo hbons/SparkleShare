@@ -23,11 +23,13 @@ to change and redistribute it under certain conditions. For more information
 see the LICENSE file or visit http://www.gnu.org/licenses/gpl-3.0.html
 
 
-SparklePony currently requires:
-   - git >= 1.7.0.6
+SparklePony currently requires (in alphabetical order):
+   - ndesk-dbus-devel >= 0.6
+   - git >= 1.7
    - gtk-sharp2 >= 2.12.7
    - mono-core >= 2.2
    - notify-sharp >= 0.4.0
+
 
 Installing dependencies on Fedora:
    # yum install git gtk-sharp2 gtk-sharp2-devel mono-core notify-sharp \
