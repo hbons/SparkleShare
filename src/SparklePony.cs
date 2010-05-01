@@ -144,13 +144,6 @@ public class SparklePonyUI {
 			Directory.CreateDirectory (ConfigPath + "avatars/");
 			Console.WriteLine ("[Config] Created '" + ConfigPath + "avatars'");
 
-			Directory.CreateDirectory (ConfigPath + "avatars/24x24/");
-			Console.WriteLine ("[Config] Created '" + ConfigPath + 
-			                   "avatars/24x24/'");
-
-			Directory.CreateDirectory (ConfigPath + "avatars/48x48/");
-			Console.WriteLine ("[Config] Created '" + ConfigPath + 
-			                   "avatars/48x48/'");
 		}
 
 		// Get all the repos in ~/SparklePony
@@ -626,16 +619,14 @@ public class SparklePonyWindow : Window {
 						LayoutVerticalLeft = CreateReposList ();
 						LayoutVerticalLeft.BorderWidth = 12;
 
-						LayoutVerticalRight = CreateDetailsView ();
+						LayoutVerticalRight = CreateDetailedView (Repositories [1]);
 
+							Label PeopleLabel = new Label ("<span font_size='large'><b>People</b></span>");
+							PeopleLabel.UseMarkup = true;
+							PeopleLabel.SetAlignment (0, 0);
 
-		Label PeopleLabel = new Label ("<span font_size='large'><b>People</b></span>");
-		PeopleLabel.UseMarkup = true;
-		PeopleLabel.SetAlignment (0, 0);
-
-		LayoutVerticalRight.PackStart (PeopleLabel, false, false, 0);
-
-		LayoutVerticalRight.PackStart (CreatePeopleList (Repositories [1]), true, true, 12);
+						LayoutVerticalRight.PackStart (PeopleLabel, false, false, 0);
+						LayoutVerticalRight.PackStart (CreatePeopleList (Repositories [1]), true, true, 12);
 
 					LayoutHorizontal.PackStart (LayoutVerticalLeft, false, false, 0);
 					LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
@@ -713,29 +704,29 @@ public class SparklePonyWindow : Window {
 	}
 
 	// Creates the detailed view
-	public VBox CreateDetailsView () {
+	public VBox CreateDetailedView (Repository Repository) {
 
 		Label Label1 = new Label ("Remote URL:   ");
-		Label1.UseMarkup = true;
 		Label1.SetAlignment (0, 0);
 
-		Label Label2 = new Label ("<b>ssh://git@github.com/hbons/Dedsfdsfsal.git</b>");
+		Label Label2 = new Label ("<b>" + Repository.RemoteOriginUrl + "</b>");
 		Label2.UseMarkup = true;
 		Label2.SetAlignment (0, 0);
 
 		Label Label5 = new Label ("Path:");
-		Label5.UseMarkup = true;
 		Label5.SetAlignment (0, 0);
 
-		Label Label6 = new Label ("<b>~/SparklePony/Deal</b>   ");
+		Label Label6 = new Label ("<b>" + Repository.RepoPath + "</b>   ");
 		Label6.UseMarkup = true;
 		Label6.SetAlignment (0, 0);
 
-		Button NotificationsCheckButton = 
+		CheckButton NotificationsCheckButton = 
 			new CheckButton ("Notify me when something changes");
+		NotificationsCheckButton.Active = true;
 
-		Button ChangesCheckButton = 
+		CheckButton ChangesCheckButton = 
 			new CheckButton ("Synchronize my changes");
+		ChangesCheckButton.Active = true;
 
 		Table Table = new Table(7, 2, false);
 		Table.RowSpacing = 6;
@@ -751,10 +742,6 @@ public class SparklePonyWindow : Window {
 		VBox.PackStart (Table, false, false, 12);
 
 		return VBox;
-
-	}
-
-	public void UpdateRepoList() {
 
 	}
 
@@ -844,10 +831,6 @@ public class SparklePonyWindow : Window {
 
 	}
 
-	public void UpdateEventLog() {
-
-	}
-
 	// Creates a visual list of people working in the repo
 	public ScrolledWindow CreatePeopleList (Repository Repository) {
 
@@ -868,7 +851,6 @@ public class SparklePonyWindow : Window {
 		string [] Lines = Regex.Split (Output, "\n");
 
 		ListStore PeopleStore = new ListStore (typeof (Gdk.Pixbuf),
-		                                       typeof (string),
 		                                       typeof (string));
 
 		TreeIter PeopleIter;
@@ -890,22 +872,21 @@ public class SparklePonyWindow : Window {
 
 				// Actually add to the list
 				PeopleIter = PeopleStore.Prepend ();
-				PeopleStore.SetValue (PeopleIter, 0, new Gdk.Pixbuf (SparklePonyHelpers.SparklePonyHelpers.GetAvatarFileName (UserEmail, 24)));
-				PeopleStore.SetValue (PeopleIter, 1, UserName + "  ");
-				PeopleStore.SetValue (PeopleIter, 2, UserEmail + "  ");
-
-
+				PeopleStore.SetValue (PeopleIter, 0, new Gdk.Pixbuf (SparklePonyHelpers.SparklePonyHelpers.GetAvatarFileName (UserEmail, 32)));
+				PeopleStore.SetValue (PeopleIter, 1, UserName + "\n" + UserEmail);
 
 			}
+
 			i++;
+
 		}
 
 		TreeView PeopleView = new TreeView (PeopleStore); 
 		PeopleView.AppendColumn ("", new CellRendererPixbuf () , "pixbuf", 0);  
 		PeopleView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
-		PeopleView.AppendColumn ("", new Gtk.CellRendererText (), "text", 2);
 		TreeViewColumn [] PeopleViewColumns = PeopleView.Columns;
-		PeopleViewColumns [0].MinWidth = 32;
+		PeopleViewColumns [0].MinWidth = 48;
+
 		PeopleViewColumns [1].Expand = true;
 
 		PeopleView.HeadersVisible = false;
@@ -940,8 +921,8 @@ public class SparklePonyWindow : Window {
 
 namespace SparklePonyHelpers {
 
-
-	// Helper that returns a user's avatar
+	// Helper that returns a user's avatar,
+	// either from a file or the web
 	class SparklePonyHelpers {
 
 		public static string GetAvatarFileName (string Email, int Size) {
@@ -950,6 +931,11 @@ namespace SparklePonyHelpers {
 				                   "/.config/sparklepony/avatars/" + 
 			                      Size + "x" + Size + "/";
 
+			if (!Directory.Exists (AvatarPath)) {
+				Directory.CreateDirectory (AvatarPath);
+				Console.WriteLine ("[Config] Created '" + AvatarPath + "'");
+
+			}
 			string AvatarFile = AvatarPath + Email;
 
 			if (File.Exists (AvatarFile))
@@ -1000,6 +986,5 @@ namespace SparklePonyHelpers {
 		}
 
 	}
-
 
 }
