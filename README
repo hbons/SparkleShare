@@ -1,18 +1,13 @@
-SparklePony
+SparklePony is a file sharing and collaboration tool inspired by DropBox. It 
+allows you to instantly sync with any Git repository you have access to.
 
-SparklePony is a file sharing and collaboration tool 
-inspired by DropBox. It allows you to instantly sync 
-with any Git repository you have access to.
+SparklePony isn't just a piece of software, it's part of your workflow. It's 
+designed to make sharing documents and collaboration easier, and to make peers 
+aware of what you are doing. The user interface and features are made to 
+support this goal. However, you may find SparklePony useful for other kinds of 
+purposes as well, like backing up files or monitoring your favourite project.
 
-SparklePony isn't just a piece of software, it's part of 
-your workflow. It's designed to make sharing documents 
-and collaboration easier, and to make peers aware of what 
-you are doing. The user interface and features are made 
-to support this goal. However, you may find SparklePony 
-useful for other kinds of purposes as well, like backing 
-up files or monitoring your favourite project.
-
-SparklePony is not:
+SparklePony is not designed to be:
    - a graphical frontend for git
    - a backup tool
 
@@ -23,9 +18,9 @@ SparklePony currently only works on Linux.
 Windows and OSX versions are planned for the future.
 
 
-SparklePony is free software and licensed under the 
-GNU GPLv3. For more information see the LICENSE file 
-or visit http://www.gnu.org/licenses/gpl-3.0.html
+SparklePony is free software and licensed under the GNU GPLv3. You are welcome 
+to change and redistribute it under certain conditions. For more information 
+see the LICENSE file or visit http://www.gnu.org/licenses/gpl-3.0.html
 
 
 SparklePony currently requires:
