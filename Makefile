@@ -15,6 +15,7 @@ uninstall:
 	rmdir /usr/local/share/sparklepony
 	rm /usr/share/icons/hicolor/*x*/places/folder-publicshare.png
 	rm /usr/share/icons/hicolor/*x*/status/document-*ed.png
+	rm /usr/share/icons/hicolor/*x*/status/avatar-default.png
 
 clean:
 	rm src/SparklePony.exe

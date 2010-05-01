@@ -17,12 +17,17 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
-using System;
-using System.IO;
-using System.Diagnostics;
-using System.Timers;
 using Notifications;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Timers;
+
 
 public class SparklePony {
 
@@ -90,8 +95,6 @@ public class SparklePonyUI {
 
 	public SparklePonyWindow SparklePonyWindow;
 	public SparklePonyStatusIcon SparklePonyStatusIcon;
-	public string ReposPath;
-	public string UserHome;
 	public Repository [] Repositories;
 
 	public SparklePonyUI (bool HideUI) {
@@ -101,14 +104,23 @@ public class SparklePonyUI {
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
 
-		// Get home folder, example: "/home/user" 
-		UserHome = Environment.GetEnvironmentVariable("HOME");
+		// Get home folder, example: "/home/user/" 
+		string UserHome = Environment.GetEnvironmentVariable("HOME") + "/";
 
 		// Create 'Collaboration' folder in the user's home folder
-		ReposPath = UserHome + "/Collaboration";
+		string ReposPath = UserHome + "Collaboration";
 		if (!Directory.Exists (ReposPath)) {
 			Directory.CreateDirectory (ReposPath);
-			Console.WriteLine ("Created '" + ReposPath + "'");
+			Console.WriteLine ("[Config] Created '" + ReposPath + "'");
+		}
+
+		// Create place to store configuration user's home folder
+		string ConfigPath = UserHome + ".config/sparklepony/";
+		if (!Directory.Exists (ConfigPath)) {
+			Directory.CreateDirectory (ConfigPath);
+			Console.WriteLine ("[Config] Created '" + ConfigPath + "'");
+			Directory.CreateDirectory (ConfigPath + "gravatars");
+			Console.WriteLine ("[Config] Created '" + ConfigPath + "gravatars'");
 		}
 
 		// Get all the Repos in ~/Collaboration
@@ -147,7 +159,7 @@ public class SparklePonyUI {
 public class SparklePonyStatusIcon : StatusIcon {
 
 	public SparklePonyStatusIcon () : base ()  {
-		IconName = "folder-remote";
+		IconName = "folder-publicshare";
 		// TODO: Only on first run
 		Notification Notification = new Notification ("Welcome to SparklePony!", "Click here to add some folders.");
 		Notification.Urgency = Urgency.Normal;
@@ -156,7 +168,7 @@ public class SparklePonyStatusIcon : StatusIcon {
 	}
 
 	public void SetIdleState () {
-		IconName = "folder-remote";
+		IconName = "folder-publicshare";
 	}
 
 	public void SetSyncingState () {
@@ -191,7 +203,6 @@ public class Repository {
 		Process.EnableRaisingEvents = false; 
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
-
 		// Get the repository's path, example: "/home/user/Collaboration/repo/"
 		RepoPath = Path;
 		Process.StartInfo.WorkingDirectory = RepoPath + "/";
@@ -303,7 +314,8 @@ public class Repository {
 
 		// Add a gitignore file
       TextWriter Writer = new StreamWriter(RepoPath + ".gitignore");
-      Writer.WriteLine("*~");
+      Writer.WriteLine("*~"); // Ignore gedit swap files
+      Writer.WriteLine(".*.sw?"); // Ignore vi swap files
       Writer.Close();
 	}
 
@@ -381,14 +393,14 @@ public class Repository {
 	}
 
 	// Ignore Repos, dotfiles, swap files and the like.
-	public bool ShouldIgnore (string s) {
-		if (s.Substring (0, 1).Equals (".") ||
-			 s.Contains (".lock") ||
-			 s.Contains (".git") ||
-			 s.Contains ("/.") ||
-			 Directory.Exists (Process.StartInfo.WorkingDirectory + "/" + s))
+	public bool ShouldIgnore (string FileName) {
+		if (FileName.Substring (0, 1).Equals (".") ||
+			 FileName.Contains (".lock") ||
+			 FileName.Contains (".git") ||
+			 FileName.Contains ("/.") ||
+			 Directory.Exists (RepoPath + FileName))
 			return true; // Yes, ignore it.
-		else if (s.Length > 3 && s.Substring (s.Length - 4).Equals (".swp"))
+		else if (FileName.Length > 3 && FileName.Substring (FileName.Length - 4).Equals (".swp"))
 			return true;
 		else return false;
 	}
@@ -501,17 +513,17 @@ public class SparklePonyWindow : Window {
 		Repositories = R;
 
 		Visibility = false;
-		SetSizeRequest (640, 480);
+		SetSizeRequest (800, 600);
  		SetPosition (WindowPosition.Center);
 		BorderWidth = 6;
-		IconName = "folder-remote";
+		IconName = "folder-publicshare";
 
 			VBox LayoutVertical = new VBox (false, 0);
 
 				Notebook Notebook = new Notebook ();
 				Notebook.BorderWidth = 6;
 
-					HBox LayoutHorizontal = new HBox (false, 12);
+					HBox LayoutHorizontal = new HBox (false, 0);
 
 						ReposStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string));
 						LayoutVerticalLeft = CreateReposList ();
@@ -519,8 +531,17 @@ public class SparklePonyWindow : Window {
 
 						LayoutVerticalRight = CreateDetailsView ();
 
+
+		Label PeopleLabel = new Label ("<span font_size='large'><b>People</b></span>");
+		PeopleLabel.UseMarkup = true;
+		PeopleLabel.SetAlignment (0, 0);
+
+		LayoutVerticalRight.PackStart (PeopleLabel, false, false, 0);
+
+		LayoutVerticalRight.PackStart (CreatePeopleList (Repositories [0]), true, true, 12);
+
 					LayoutHorizontal.PackStart (LayoutVerticalLeft, false, false, 0);
-					LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 0);
+					LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
 
 				Notebook.AppendPage (LayoutHorizontal, new Label ("Folders"));
 				Notebook.AppendPage (CreateEventLog (), new Label ("Events"));
@@ -547,13 +568,17 @@ public class SparklePonyWindow : Window {
 
 	public VBox CreateReposList() {
 
-		string RemoteFolderIcon = "/usr/share/icons/gnome/22x22/places/folder-remote.png";
+		string RemoteFolderIcon = "/usr/share/icons/gnome/22x22/places/folder.png";
 		TreeIter ReposIter;
 		foreach (Repository Repository in Repositories) {
 			ReposIter = ReposStore.Prepend ();
 			ReposStore.SetValue (ReposIter, 0, new Gdk.Pixbuf (RemoteFolderIcon));
 			ReposStore.SetValue (ReposIter, 1, Repository.Name + "     \n" + Repository.Domain + "     ");
 		}
+
+
+		ScrolledWindow ScrolledWindow = new ScrolledWindow ();
+
 		ReposView = new TreeView (ReposStore); 
 		ReposView.AppendColumn ("", new CellRendererPixbuf () , "pixbuf", 0);  
 		ReposView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
@@ -565,16 +590,19 @@ public class SparklePonyWindow : Window {
 		ReposView.ActivateRow (ReposStore.GetPath (ReposIter), ReposViewColumns [1]);
 
 
-		HBox AddRemoveButtons = new HBox ();
+		HBox AddRemoveButtons = new HBox (false, 6);
 		Button AddButton = new Button ("Add...");
 		AddRemoveButtons.PackStart (AddButton, true, true, 0);
 
-		Image RemoveImage = new Image (Stock.Remove);
-		Button RemoveButton = new Button (RemoveImage);
+		Image RemoveImage = new Image ("/usr/share/icons/gnome/16x16/actions/list-remove.png");
+		Button RemoveButton = new Button ();
+		RemoveButton.Image = RemoveImage;
 		AddRemoveButtons.PackStart (RemoveButton, false, false, 0);
 
-		VBox VBox = new VBox (false, 0);
-		VBox.PackStart (ReposView, true, true, 0);
+		ScrolledWindow.AddWithViewport (ReposView);
+		ScrolledWindow.WidthRequest = 200;
+		VBox VBox = new VBox (false, 6);
+		VBox.PackStart (ScrolledWindow, true, true, 0);
 		VBox.PackStart (AddRemoveButtons, false, false, 0);
 
 		return VBox;
@@ -582,7 +610,7 @@ public class SparklePonyWindow : Window {
 
 	public VBox CreateDetailsView () {
 
-		Label Label1 = new Label ("Remote URL:");
+		Label Label1 = new Label ("Remote URL:   ");
 		Label1.UseMarkup = true;
 		Label1.SetAlignment (0, 0);
 
@@ -594,26 +622,25 @@ public class SparklePonyWindow : Window {
 		Label5.UseMarkup = true;
 		Label5.SetAlignment (0, 0);
 
-		Label Label6 = new Label ("<b>~/Collaboration/Deal</b>");
+		Label Label6 = new Label ("<b>~/Collaboration/Deal</b>   ");
 		Label6.UseMarkup = true;
 		Label6.SetAlignment (0, 0);
 
 		Button NotificationsCheckButton = new CheckButton ("Notify me when something changes");
 		Button ChangesCheckButton = new CheckButton ("Synchronize my changes");
 
-		Table Table = new Table(8, 2, false);
+		Table Table = new Table(7, 2, false);
 		Table.RowSpacing = 6;
 
-		Table.Attach(Label1, 0, 1, 0, 1);
-		Table.Attach(Label2, 1, 2, 0, 1);
-		Table.Attach(Label5, 0, 1, 1, 2);
-		Table.Attach(Label6, 1, 2, 1, 2);
-		Table.Attach(NotificationsCheckButton, 0, 2, 3, 4);
-		Table.Attach(ChangesCheckButton, 0, 2, 4, 5);
-		Table.Attach (CreatePeopleList (Repositories [0]), 0, 2, 5, 8);
+		Table.Attach(Label1, 0, 1, 1, 2);
+		Table.Attach(Label2, 1, 2, 1, 2);
+		Table.Attach(Label5, 0, 1, 2, 3);
+		Table.Attach(Label6, 1, 2, 2, 3);
+		Table.Attach(NotificationsCheckButton, 0, 2, 4, 5);
+		Table.Attach(ChangesCheckButton, 0, 2, 5, 6);
 
 		VBox VBox = new VBox (false, 0);
-		VBox.PackStart (Table, false, false, 24);
+		VBox.PackStart (Table, false, false, 12);
 
 		return VBox;
 
@@ -635,7 +662,6 @@ public class SparklePonyWindow : Window {
 		Process.StartInfo.FileName = "git";
 		string Output = "";
 		foreach (Repository Repository in Repositories) {
-
 			// We're using the snowman here to separate messages :)
 			Process.StartInfo.Arguments = "log --format=\"%at☃In '" + Repository.Name + "', %an %s☃%cr\" -25";
 			Process.StartInfo.WorkingDirectory = Repository.RepoPath;
@@ -695,7 +721,7 @@ public class SparklePonyWindow : Window {
 
 	}
 
-	public TreeView CreatePeopleList (Repository Repository) {
+	public ScrolledWindow CreatePeopleList (Repository Repository) {
 
 		Process Process = new Process ();
 		Process.EnableRaisingEvents = false; 
@@ -706,27 +732,54 @@ public class SparklePonyWindow : Window {
 		Process.StartInfo.Arguments = "log --format=\"%an☃%ae\" -50";
 		Process.StartInfo.WorkingDirectory = Repository.RepoPath;
 		Process.Start();
+
+      string [] People = new string [50];
 		string [] Lines = Regex.Split (Process.StandardOutput.ReadToEnd().Trim (), "\n");
 
-
 		ListStore PeopleStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
-		string PersonIcon = "/usr/share/icons/gnome/22x22/status/printer-error.png";
+
+		string PersonIcon = "/usr/share/icons/hicolor/16x16/status/avatar-default.png";
 		TreeIter PeopleIter;
+		int i = 0;
 		foreach (string Line in Lines) {
-			string [] Parts = Regex.Split (Line, "☃");
-			PeopleIter = PeopleStore.Prepend ();
-			PeopleStore.SetValue (PeopleIter, 0, new Gdk.Pixbuf (PersonIcon));
-			PeopleStore.SetValue (PeopleIter, 1, Parts [0]);
-			PeopleStore.SetValue (PeopleIter, 2, Parts [1]);
+			if (Array.IndexOf (People, Line) == -1) {
+				People [i] = Line;
+				string [] Parts = Regex.Split (Line, "☃");
+				if (Parts [0].Equals (Repository.UserName))
+					Parts [0] += " (that's you)";
+
+				if (File.Exists (Environment.GetEnvironmentVariable("HOME") + "/.config/sparklepony/gravatars/" + Parts [1]))
+					PersonIcon = Environment.GetEnvironmentVariable("HOME") + "/.config/sparklepony/gravatars/" + Parts [1];
+				PeopleIter = PeopleStore.Prepend ();
+				PeopleStore.SetValue (PeopleIter, 0, new Gdk.Pixbuf (PersonIcon));
+				PeopleStore.SetValue (PeopleIter, 1, Parts [0]);
+				PeopleStore.SetValue (PeopleIter, 2, Parts [1] + "  ");
+
+				// Let's get the gravatar for next time
+				WebClient WebClient = new WebClient ();
+				string AvatarsDir = Environment.GetEnvironmentVariable("HOME") + "/.config/sparklepony/gravatars/";
+
+				Uri Uri1, Uri2;
+				Console.WriteLine ("http://www.gravatar.com/avatar/" + GetMD5 (Parts [1]) + ".jpg");
+				Uri1 = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (Parts [1]) + ".jpg?s=22");
+				WebClient.DownloadFileAsync (Uri1,  AvatarsDir + Parts [1]);
+
+			}
+			i++;
 		}
 		TreeView PeopleView = new TreeView (PeopleStore); 
 		PeopleView.AppendColumn ("", new CellRendererPixbuf () , "pixbuf", 0);  
 		PeopleView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
 		PeopleView.AppendColumn ("", new Gtk.CellRendererText (), "text", 2);
 		TreeViewColumn [] PeopleViewColumns = PeopleView.Columns;
-		PeopleViewColumns [0].MinWidth = 34;
+		PeopleViewColumns [0].MinWidth = 32;
+		PeopleViewColumns [1].Expand = true;
 
-		return PeopleView;
+		ScrolledWindow ScrolledWindow = new ScrolledWindow ();
+		ScrolledWindow.AddWithViewport (PeopleView);
+
+
+		return ScrolledWindow;
 	}
 
 	public void UpdatePeopleList () {
@@ -734,6 +787,7 @@ public class SparklePonyWindow : Window {
 	}
 
 	public void ToggleVisibility() {
+		Present ();
 		if (Visibility) {
 			if (HasFocus)
 				HideAll ();
@@ -745,6 +799,17 @@ public class SparklePonyWindow : Window {
 	public void Quit (object o, EventArgs args) {
 		File.Delete ("/tmp/sparklepony/sparklepony.pid");
 		Application.Quit ();
+	}
+
+	// Helper that creates an MD5 hash
+	public static string GetMD5 (string s) {
+
+	  MD5 md5 = new MD5CryptoServiceProvider ();
+	  Byte[] Bytes = ASCIIEncoding.Default.GetBytes (s);
+	  Byte[] EncodedBytes = md5.ComputeHash (Bytes);
+
+	  return BitConverter.ToString(EncodedBytes).ToLower ().Replace ("-", "");
+
 	}
 
 }
