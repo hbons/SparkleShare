@@ -1,4 +1,4 @@
-//   SparklePony 0.0.7
+//   SparklePony 0.0.8
 
 //   SparklePony, an instant update workflow to Git.
 //   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
@@ -18,6 +18,7 @@
 
 using Gtk;
 using Notifications;
+using SparklePonyHelpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -42,7 +43,8 @@ public class SparklePony {
 		Process.StartInfo.FileName = "git";
 		Process.Start();
 		if (Process.StandardOutput.ReadToEnd().IndexOf ("version") == -1) {
-			Console.WriteLine ("Git wasn't found.\nYou can get it from http://git-scm.com/.");
+			Console.WriteLine ("Git wasn't found.");
+			Console.WriteLine ("You can get it from http://git-scm.com/.");
 			Environment.Exit (0);
 		}
 
@@ -50,10 +52,12 @@ public class SparklePony {
 		Process.StartInfo.FileName = "whoami";
 		Process.Start();
 		if (Process.StandardOutput.ReadToEnd().Trim ().Equals ("root")) {
-			Console.WriteLine ("Sorry, you can't run SparklePony as root.\nThings will go utterly wrong.");
+			Console.WriteLine ("Sorry, you can't run SparklePony as root.");
+			Console.WriteLine ("Things will go utterly wrong."); 
 			Environment.Exit (0);
 		}
 
+		// Parse the command line arguments
 		bool HideUI = false;
 		if (args.Length > 0) {
 			foreach (string Argument in args) {
@@ -64,11 +68,14 @@ public class SparklePony {
 				}
 			}
 		}
-		
+
 		Gtk.Application.Init ();
+
 		SparklePonyUI = new SparklePonyUI (HideUI);
 		SparklePonyUI.StartMonitoring ();
+
 		Gtk.Application.Run ();
+
 	}
 
 	public static void ShowHelp () {
@@ -92,6 +99,7 @@ public class SparklePony {
 
 }
 
+// Holds the status icon, window and repository list
 public class SparklePonyUI {
 
 	public SparklePonyWindow SparklePonyWindow;
@@ -118,13 +126,28 @@ public class SparklePonyUI {
 		// Create place to store configuration user's home folder
 		string ConfigPath = UserHome + ".config/sparklepony/";
 		if (!Directory.Exists (ConfigPath)) {
+
 			Directory.CreateDirectory (ConfigPath);
 			Console.WriteLine ("[Config] Created '" + ConfigPath + "'");
-			Directory.CreateDirectory (ConfigPath + "gravatars");
-			Console.WriteLine ("[Config] Created '" + ConfigPath + "gravatars'");
+
+			// Create a first run file to show the intro message
+			File.Create (ConfigPath + "firstrun");
+			Console.WriteLine ("[Config] Created '" + ConfigPath + "firstrun'");
+
+			// Create a place to store the avatars
+			Directory.CreateDirectory (ConfigPath + "avatars/");
+			Console.WriteLine ("[Config] Created '" + ConfigPath + "avatars'");
+
+			Directory.CreateDirectory (ConfigPath + "avatars/22x22/");
+			Console.WriteLine ("[Config] Created '" + ConfigPath + 
+			                   "avatars/22x22/'");
+
+			Directory.CreateDirectory (ConfigPath + "avatars/48x48/");
+			Console.WriteLine ("[Config] Created '" + ConfigPath + 
+			                   "avatars/48x48/'");
 		}
 
-		// Get all the Repos in ~/SparklePony
+		// Get all the repos in ~/SparklePony
 		string [] Repos = Directory.GetDirectories (ReposPath);
 		Repositories = new Repository [Repos.Length];
 
@@ -134,7 +157,8 @@ public class SparklePonyUI {
 			i++;
 		}
 
-		// Don't create the window and status icon if --disable-gui was given
+		// Don't create the window and status 
+		// icon when --disable-gui was given
 		if (!HideUI) {
 
 			// Create the window
@@ -143,12 +167,15 @@ public class SparklePonyUI {
 
 			// Create the status icon
 			SparklePonyStatusIcon = new SparklePonyStatusIcon ();
-			SparklePonyStatusIcon.Activate += delegate  { SparklePonyWindow.ToggleVisibility (); };
+			SparklePonyStatusIcon.Activate += delegate { 
+				SparklePonyWindow.ToggleVisibility ();
+			};
 
 		}
 
 	}
 
+	// Closes the window
 	public void CloseSparklePonyWindow (object o, DeleteEventArgs args) {
 		SparklePonyWindow = new SparklePonyWindow (Repositories);
 		SparklePonyWindow.DeleteEvent += CloseSparklePonyWindow;
@@ -162,12 +189,27 @@ public class SparklePonyUI {
 public class SparklePonyStatusIcon : StatusIcon {
 
 	public SparklePonyStatusIcon () : base ()  {
+
 		IconName = "folder-publicshare";
-		// TODO: Only on first run
-		Notification Notification = new Notification ("Welcome to SparklePony!", "Click here to add some folders.");
-		Notification.Urgency = Urgency.Normal;
-		Notification.Timeout = 7500;
-		Notification.Show ();
+
+		string UserHome = Environment.GetEnvironmentVariable("HOME") + "/";
+		string FirstRunFile = UserHome + ".config/sparklepony/firstrun";
+
+		// Show a notification on the first run
+		if (File.Exists (FirstRunFile)) {
+
+			Notification Notification;
+			Notification = new Notification ("Welcome to SparklePony!",
+				                               "Click here to add some folders.");
+
+			Notification.Urgency = Urgency.Normal;
+			Notification.Timeout = 7500;
+			Notification.Show ();
+
+			File.Delete (FirstRunFile);
+			Console.WriteLine ("[Config] Deleted '" + FirstRunFile + "'");
+		}
+
 	}
 
 	public void SetIdleState () {
@@ -233,7 +275,9 @@ public class Repository {
 		RemoteOriginUrl = Process.StandardOutput.ReadToEnd().Trim ();
 
 		// Get the repository name, example: "Project"
-		Name = RepoPath.Substring (RepoPath.TrimEnd ( "/".ToCharArray ()).LastIndexOf ("/") + 1);
+
+		string s = RepoPath.TrimEnd ( "/".ToCharArray ());
+		Name = RepoPath.Substring (s.LastIndexOf ("/") + 1);
 
 		// Get the domain, example: "github.com" 
 		Domain = RemoteOriginUrl; 
@@ -266,25 +310,28 @@ public class Repository {
 			
 		};
 
-		// Add everything that changed 
-		// since SparklePony was stopped
-
 		FetchTimer.Start();
 		BufferTimer = new Timer ();
 
+		// Add everything that changed 
+		// since SparklePony was stopped
 		Add ();
 
 
 	}
 
+	// Starts a time buffer when something changes
 	public void OnFileActivity (object o, FileSystemEventArgs args) {
        WatcherChangeTypes wct = args.ChangeType;
 		 if (!ShouldIgnore (args.Name) && !MonitorOnly) {
-	      Console.WriteLine("[" + Name + "][Event] " + wct.ToString() + " '" + args.Name + "'");
+	      Console.WriteLine("[Event][" + Name + "] " + wct.ToString() + 
+			                  " '" + args.Name + "'");
 			StartBufferTimer ();
 		}
 	}
 
+	// A buffer that will fetch changes after 
+	// file activity has settles down
 	public void StartBufferTimer () {
 
 		int Interval = 2000;
@@ -293,10 +340,12 @@ public class Repository {
 			// Delay for a few seconds to see if more files change
 			BufferTimer.Interval = Interval; 
 			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
-				Console.WriteLine ("[" + Name + "][Buffer] Done waiting.");
+				Console.WriteLine ("[Buffer][" + Name + "] Done waiting.");
 				Add ();
 			};
-			Console.WriteLine ("[" + Name + "][Buffer] Waiting for more changes...");
+			Console.WriteLine ("[Buffer][" + Name + "] " + 
+			                   "Waiting for more changes...");
+
 			BufferTimer.Start();
 		} else {
 
@@ -305,15 +354,19 @@ public class Repository {
 			BufferTimer = new Timer ();
 			BufferTimer.Interval = Interval;
 			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
-				Console.WriteLine ("[" + Name + "][Buffer] Done waiting.");
+				Console.WriteLine ("[Buffer][" + Name + "] Done waiting.");
 				Add ();
 			};
 
 			BufferTimer.Start();
-			Console.WriteLine ("[" + Name + "][Buffer] Waiting for more changes...");
+			Console.WriteLine ("[Buffer][" + Name + "] " + 
+			                   "Waiting for more changes...");
+
 		}
+
 	}
 
+	// Clones a remote repo
 	public void Clone () {
 		Process.StartInfo.Arguments = "clone " + RemoteOriginUrl;
 		Process.Start();
@@ -325,9 +378,10 @@ public class Repository {
       Writer.Close();
 	}
 
+	// Stages the made changes
 	public void Add () {
 		BufferTimer.Stop ();
-		Console.WriteLine ("[" + Name + "][Git] Staging changes...");
+		Console.WriteLine ("[Git][" + Name + "] Staging changes...");
 		Process.StartInfo.Arguments = "add --all";
 		Process.Start();
 
@@ -339,17 +393,21 @@ public class Repository {
 		}
 	}
 
+	// Commits the made changes
 	public void Commit (string Message) {
-		Console.WriteLine ("[" + Name + "][Commit] " + Message);
-		Console.WriteLine ("[" + Name + "][Git] Commiting changes...");
+		Console.WriteLine ("[Commit][" + Name + "] " + Message);
+		Console.WriteLine ("[Git][" + Name + "] Commiting changes...");
 		Process.StartInfo.Arguments = "commit -m \"" + Message + "\"";
 		Process.Start();
+		ShowEventNotification (UserName + " " + Message, 
+		                       SparklePonyHelpers.SparklePonyHelpers.GetAvatarFileName (UserEmail, 48), true);
 	}
 
+	// Fetches changes from the remote repo	
 	public void Fetch () {
 		// TODO: change status icon to sync
 		FetchTimer.Stop ();
-		Console.WriteLine ("[" + Name + "][Git] Fetching changes...");
+		Console.WriteLine ("[Git][" + Name + "] Fetching changes...");
 		Process.StartInfo.Arguments = "fetch";
 		Process.Start();
 		Process.WaitForExit ();
@@ -357,22 +415,10 @@ public class Repository {
 		FetchTimer.Start ();
 	}
 
-	public void Fetch (object o, ElapsedEventArgs args) {
-		// TODO: What happens when network disconnects during a fetch
-		// TODO: change status icon to sync
-		FetchTimer.Stop ();
-		Console.WriteLine ("[" + Name + "][Git] Fetching changes...");
-		Process.StartInfo.Arguments = "fetch";
-		Process.Start();
-		Process.WaitForExit ();
-		Merge ();
-		FetchTimer.Start ();
-
-	}
-
+	// Merges the fetched changes
 	public void Merge () {
 		Watcher.EnableRaisingEvents = false;
-		Console.WriteLine ("[" + Name + "][Git] Merging fetched changes...");
+		Console.WriteLine ("[Git][" + Name + "] Merging fetched changes...");
 		Process.StartInfo.Arguments = "merge origin/master";
 		Process.Start();
 		Process.WaitForExit ();
@@ -380,25 +426,41 @@ public class Repository {
 
 		// Show notification if there are updates
 		if (!Output.Equals ("Already up-to-date.")) {
-			Process.StartInfo.Arguments = "log --pretty=oneline -1";
+
+			// Get the last commit message
+			Process.StartInfo.Arguments = "log --format=\"%ae\" -1";
 			Process.Start();
-			string LastCommitMessage = Process.StandardOutput.ReadToEnd().Trim ().Substring (41);
-			ShowNotification (LastCommitMessage, "", true);
+			string LastCommitEmail = Process.StandardOutput.ReadToEnd().Trim ();
+
+			// Get the last commit message
+			Process.StartInfo.Arguments = "log --format=\"%s\" -1";
+			Process.Start();
+			string LastCommitMessage = Process.StandardOutput.ReadToEnd().Trim ();
+
+			// Get the last commiter
+			Process.StartInfo.Arguments = "log --format=\"%an\" -1";
+			Process.Start();
+			string LastCommitUserName = Process.StandardOutput.ReadToEnd().Trim ();
+
+			ShowEventNotification (LastCommitUserName + " " + LastCommitMessage, 
+		                       SparklePonyHelpers.SparklePonyHelpers.GetAvatarFileName (LastCommitEmail, 48), true);
+
 		}
 
 		Watcher.EnableRaisingEvents = true;
 		// TODO: change status icon to normal
 	}
 
+	// Pushes the changes to the remote repo
 	public void Push () {
 		// TODO: What happens when network disconnects during a push
-		Console.WriteLine ("[" + Name + "][Git] Pushing changes...");
+		Console.WriteLine ("[Git][" + Name + "] Pushing changes...");
 		Process.StartInfo.Arguments = "push";
 		Process.Start();
 		Process.WaitForExit ();
 	}
 
-	// Ignore Repos, dotfiles, swap files and the like.
+	// Ignores Repos, dotfiles, swap files and the like.
 	public bool ShouldIgnore (string FileName) {
 		if (FileName.Substring (0, 1).Equals (".") ||
 			 FileName.Contains (".lock") ||
@@ -406,11 +468,13 @@ public class Repository {
 			 FileName.Contains ("/.") ||
 			 Directory.Exists (RepoPath + FileName))
 			return true; // Yes, ignore it.
-		else if (FileName.Length > 3 && FileName.Substring (FileName.Length - 4).Equals (".swp"))
+		else if (FileName.Length > 3 &&
+		         FileName.Substring (FileName.Length - 4).Equals (".swp"))
 			return true;
 		else return false;
 	}
 
+	// Creates a pretty commit message based on what has changed
 	public string FormatCommitMessage () {
 
 		bool DoneAddCommit = false;
@@ -439,65 +503,84 @@ public class Repository {
 
 		foreach (string Line in Regex.Split (Output, "\n")) {
 
+			// Format message for when files are added,
+			// example: "added 'file' and 3 more."
 			if (Line.IndexOf ("new file:") > -1 && !DoneAddCommit) {
 				DoneAddCommit = true;
 				if (FilesAdded > 1)
 					return "added '" + 
-							  Line.Replace ("#\tnew file:", "").Trim () + "' and " + (FilesAdded - 1) + " more.";
+							  Line.Replace ("#\tnew file:", "").Trim () + 
+					        "' and " + (FilesAdded - 1) + " more.";
 				else
 					return "added '" + 
 							  Line.Replace ("#\tnew file:", "").Trim () + "'.";
 			}
 
+			// Format message for when files are edited,
+			// example: "edited 'file'."
 			if (Line.IndexOf ("modified:") > -1 && !DoneEditCommit) {
 				DoneEditCommit = true;
 				if (FilesEdited > 1)
 					return "edited '" + 
-							  Line.Replace ("#\tmodified:", "").Trim () + "' and " + (FilesEdited - 1) + " more.";
+							  Line.Replace ("#\tmodified:", "").Trim () + 
+					        "' and " + (FilesEdited - 1) + " more.";
 				else
 					return "edited '" + 
 							  Line.Replace ("#\tmodified:", "").Trim () + "'.";
 			}
 
-			if (Line.IndexOf ("renamed:") > -1 && !DoneRenameCommit) {
-				DoneDeleteCommit = true;
-				if (FilesRenamed > 1)
-					return "renamed '" + 
-							  Line.Replace ("#\trenamed:", "").Trim ().Replace (" -> ", "' to '") + "' and " + (FilesDeleted - 1) + " more.";
-				else
-					return "renamed '" + 
-							  Line.Replace ("#\trenamed:", "").Trim ().Replace (" -> ", "' to '") + "'.";
-			}
-
+			// Format message for when files are edited,
+			// example: "deleted 'file'."
 			if (Line.IndexOf ("deleted:") > -1 && !DoneDeleteCommit) {
 				DoneDeleteCommit = true;
 				if (FilesDeleted > 1)
 					return "deleted '" + 
-							  Line.Replace ("#\tdeleted:", "").Trim () + "' and " + (FilesDeleted - 1) + " more.";
+							  Line.Replace ("#\tdeleted:", "").Trim () + 
+					        "' and " + (FilesDeleted - 1) + " more.";
 				else
 					return "deleted '" + 
 							  Line.Replace ("#\tdeleted:", "").Trim () + "'.";
 			}
 
+			// Format message for when files are renamed,
+			// example: "renamed 'file' to 'new name'."
+			if (Line.IndexOf ("renamed:") > -1 && !DoneRenameCommit) {
+				DoneDeleteCommit = true;
+				if (FilesRenamed > 1)
+					return "renamed '" + 
+							  Line.Replace ("#\trenamed:", "").Trim ().Replace
+					        (" -> ", "' to '") + "' and " + (FilesDeleted - 1) + 
+					        " more.";
+				else
+					return "renamed '" + 
+							  Line.Replace ("#\trenamed:", "").Trim ().Replace
+					        (" -> ", "' to '") + "'.";
+			}
+
 		}
 
+		// Nothing happened:
 		return "";
 
 	}
 
-	public void ShowNotification (string Title, string SubText, bool ShowButtons) {
+	// Shows a notification with text and image
+	public void ShowEventNotification (string Title, 
+	                                   string IconFileName, 
+	                                   bool ShowButtons) {
 
-		Notification Notification = new Notification (Title, SubText);
+		Notification Notification = new Notification (Title, " ");
 		Notification.Urgency = Urgency.Low;
 		Notification.Timeout = 4500;
+		Notification.Icon = new Gdk.Pixbuf (IconFileName);
 
-		// Add a button to open the folder the changed file resides in
-		if (ShowButtons)	
+		// Add a button to open the folder where the changed file is
+		if (ShowButtons)
 			Notification.AddAction ("", "Open Folder", 
 				                    delegate (object o, ActionArgs args) {
 					                    	Process.StartInfo.FileName = "xdg-open";
 			  	                     	Process.StartInfo.Arguments = RepoPath;
-				 	                   	Process.Start();			     
+				 	                   	Process.Start();
 			  	                     	Process.StartInfo.FileName = "git";
 				                    } );
 		Notification.Show ();
@@ -531,7 +614,9 @@ public class SparklePonyWindow : Window {
 
 					HBox LayoutHorizontal = new HBox (false, 0);
 
-						ReposStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string));
+						ReposStore = new ListStore (typeof (Gdk.Pixbuf), 
+						                            typeof (string));
+
 						LayoutVerticalLeft = CreateReposList ();
 						LayoutVerticalLeft.BorderWidth = 12;
 
@@ -561,7 +646,10 @@ public class SparklePonyWindow : Window {
 					QuitServiceButton.Clicked += Quit;
 
 					Button CloseButton = new Button (Stock.Close);
-					CloseButton.Clicked += delegate (object o, EventArgs args) { HideAll (); Visibility = false; };
+					CloseButton.Clicked += delegate (object o, EventArgs args) {
+						Visibility = false;
+						HideAll ();
+					};
 
 				DialogButtons.Add (QuitServiceButton);
 				DialogButtons.Add (CloseButton);
@@ -572,6 +660,7 @@ public class SparklePonyWindow : Window {
 
 	}
 
+	// Creates a visual list of repositories
 	public VBox CreateReposList() {
 
 		string RemoteFolderIcon = "/usr/share/icons/gnome/22x22/places/folder.png";
@@ -579,7 +668,8 @@ public class SparklePonyWindow : Window {
 		foreach (Repository Repository in Repositories) {
 			ReposIter = ReposStore.Prepend ();
 			ReposStore.SetValue (ReposIter, 0, new Gdk.Pixbuf (RemoteFolderIcon));
-			ReposStore.SetValue (ReposIter, 1, Repository.Name + "     \n" + Repository.Domain + "     ");
+			ReposStore.SetValue (ReposIter, 1, Repository.Name + "     \n" + 
+			                                   Repository.Domain + "     ");
 		}
 
 
@@ -593,8 +683,8 @@ public class SparklePonyWindow : Window {
 
 		ReposStore.IterNthChild (out ReposIter, 1);
 
-		ReposView.ActivateRow (ReposStore.GetPath (ReposIter), ReposViewColumns [1]);
-
+		ReposView.ActivateRow (ReposStore.GetPath (ReposIter),
+		                       ReposViewColumns [1]);
 
 		HBox AddRemoveButtons = new HBox (false, 6);
 		Button AddButton = new Button ("Add...");
@@ -612,8 +702,10 @@ public class SparklePonyWindow : Window {
 		VBox.PackStart (AddRemoveButtons, false, false, 0);
 
 		return VBox;
+
 	}
 
+	// Creates the detailed view
 	public VBox CreateDetailsView () {
 
 		Label Label1 = new Label ("Remote URL:   ");
@@ -632,8 +724,11 @@ public class SparklePonyWindow : Window {
 		Label6.UseMarkup = true;
 		Label6.SetAlignment (0, 0);
 
-		Button NotificationsCheckButton = new CheckButton ("Notify me when something changes");
-		Button ChangesCheckButton = new CheckButton ("Synchronize my changes");
+		Button NotificationsCheckButton = 
+			new CheckButton ("Notify me when something changes");
+
+		Button ChangesCheckButton = 
+			new CheckButton ("Synchronize my changes");
 
 		Table Table = new Table(7, 2, false);
 		Table.RowSpacing = 6;
@@ -658,23 +753,30 @@ public class SparklePonyWindow : Window {
 
 	public ScrolledWindow CreateEventLog() {
 
-		ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
+		ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf),
+		                                    typeof (string),
+		                                    typeof (string));
 
 		Process Process = new Process();
 		Process.EnableRaisingEvents = false; 
 		Process.StartInfo.RedirectStandardOutput = true;
 		Process.StartInfo.UseShellExecute = false;
-
 		Process.StartInfo.FileName = "git";
+
 		string Output = "";
 		foreach (Repository Repository in Repositories) {
+
 			// We're using the snowman here to separate messages :)
-			Process.StartInfo.Arguments = "log --format=\"%at☃In '" + Repository.Name + "', %an %s☃%cr\" -25";
+			Process.StartInfo.Arguments =
+				"log --format=\"%at☃In '" + Repository.Name + "', %an %s☃%cr\" -25";
+
 			Process.StartInfo.WorkingDirectory = Repository.RepoPath;
 			Process.Start();
 			Output += "\n" + Process.StandardOutput.ReadToEnd().Trim ();
 		}
-		string [] Lines = Regex.Split (Output.TrimStart ("\n".ToCharArray ()), "\n");
+
+		Output = Output.TrimStart ("\n".ToCharArray ());
+		string [] Lines = Regex.Split (Output, "\n");
 
 		// Sort by time and get the last 25
 		Array.Sort (Lines);
@@ -690,19 +792,29 @@ public class SparklePonyWindow : Window {
 			string Message = Parts [1];
 			string TimeAgo = Parts [2];
 
-			string IconFile = "/usr/share/icons/hicolor/16x16/status/document-edited.png";		
+			string IconFile =
+				"/usr/share/icons/hicolor/16x16/status/document-edited.png";		
+
 			if (Message.IndexOf (" added '") > -1)
-				IconFile = "/usr/share/icons/hicolor/16x16/status/document-added.png";
+				IconFile = 
+					"/usr/share/icons/hicolor/16x16/status/document-added.png";
+
 			if (Message.IndexOf (" deleted '") > -1)
-				IconFile = "/usr/share/icons/hicolor/16x16/status/document-removed.png";
-			if (Message.IndexOf (" moved '") > -1 || Message.IndexOf (" renamed '") > -1)
-				IconFile = "/usr/share/icons/hicolor/16x16/status/document-moved.png";
+				IconFile = 
+					"/usr/share/icons/hicolor/16x16/status/document-removed.png";
+
+			if (Message.IndexOf (" moved '") > -1 || 
+			    Message.IndexOf (" renamed '") > -1)
+
+				IconFile =
+					"/usr/share/icons/hicolor/16x16/status/document-moved.png";
 
 			Iter = LogStore.Append ();
 			LogStore.SetValue (Iter, 0, new Gdk.Pixbuf (IconFile));
 			LogStore.SetValue (Iter, 1, Message);
 			// TODO: right align time
 			LogStore.SetValue (Iter, 2, "  " + TimeAgo);
+
 		}
 
 		TreeView LogView = new TreeView (LogStore); 
@@ -727,6 +839,7 @@ public class SparklePonyWindow : Window {
 
 	}
 
+	// Creates a visual list of people working in the repo
 	public ScrolledWindow CreatePeopleList (Repository Repository) {
 
 		Process Process = new Process ();
@@ -740,12 +853,15 @@ public class SparklePonyWindow : Window {
 		Process.StartInfo.WorkingDirectory = Repository.RepoPath;
 		Process.Start();
 
+
+		string Output = Process.StandardOutput.ReadToEnd().Trim ();
       string [] People = new string [50];
-		string [] Lines = Regex.Split (Process.StandardOutput.ReadToEnd().Trim (), "\n");
+		string [] Lines = Regex.Split (Output, "\n");
 
-		ListStore PeopleStore = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (string));
+		ListStore PeopleStore = new ListStore (typeof (Gdk.Pixbuf),
+		                                       typeof (string),
+		                                       typeof (string));
 
-		string PersonIcon = "/usr/share/icons/hicolor/16x16/status/avatar-default.png";
 		TreeIter PeopleIter;
 		int i = 0;
 		foreach (string Line in Lines) {
@@ -753,36 +869,43 @@ public class SparklePonyWindow : Window {
 			// Only add name if it isn't there already
 			if (Array.IndexOf (People, Line) == -1) {
 
-				People [i] = Line;
+				People [i]      = Line;
 				string [] Parts = Regex.Split (Line, "☃");
 
+				string UserName  = Parts [0];
+				string UserEmail = Parts [1];
+
 				// Do something special if the person is you
-				if (Parts [0].Equals (Repository.UserName))
-					Parts [0] += " (that's you)";
-
-				string GravatarFile = Environment.GetEnvironmentVariable("HOME") + 
-				                          "/.config/sparklepony/gravatars/" + Parts [1];
-
-				// Add a gravatar if it has been downloaded before
-				if (File.Exists (GravatarFile))
-					PersonIcon = GravatarFile;
+				if (UserName.Equals (Repository.UserName))
+					UserName += " (that's you)";
 
 				// Actually add to the list
 				PeopleIter = PeopleStore.Prepend ();
-				PeopleStore.SetValue (PeopleIter, 0, new Gdk.Pixbuf (PersonIcon));
-				PeopleStore.SetValue (PeopleIter, 1, Parts [0]);
-				PeopleStore.SetValue (PeopleIter, 2, Parts [1] + "  ");
+				PeopleStore.SetValue (PeopleIter, 0, new Gdk.Pixbuf (SparklePonyHelpers.SparklePonyHelpers.GetAvatarFileName (UserEmail, 22)));
+				PeopleStore.SetValue (PeopleIter, 1, UserName + "  ");
+				PeopleStore.SetValue (PeopleIter, 2, UserEmail + "  ");
 
 				// Let's try to get the person's gravatar for next time
-				string AvatarsDir = Environment.GetEnvironmentVariable("HOME") + "/.config/sparklepony/gravatars/";
+				string AvatarsDirSmall =
+					Environment.GetEnvironmentVariable("HOME") + 
+					"/.config/sparklepony/avatars/22x22/";
 
-				WebClient WebClient = new WebClient ();
-				Uri Uri = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (Parts [1]) + ".jpg?s=22");
-				WebClient.DownloadFileAsync (Uri,  AvatarsDir + Parts [1]);
+				WebClient WebClient1 = new WebClient ();
+				Uri UriSmall = new Uri ("http://www.gravatar.com/avatar/" + SparklePonyHelpers.SparklePonyHelpers.GetMD5 (UserEmail) + ".jpg?s=22");
+				WebClient1.DownloadFileAsync (UriSmall,  AvatarsDirSmall + UserEmail);
+
+				string AvatarsDirLarge =
+					Environment.GetEnvironmentVariable("HOME") + 
+					"/.config/sparklepony/avatars/48x48/";
+
+				WebClient WebClient2 = new WebClient ();
+				Uri UriLarge = new Uri ("http://www.gravatar.com/avatar/" + SparklePonyHelpers.SparklePonyHelpers.GetMD5 (UserEmail) + ".jpg?s=48");
+				WebClient2.DownloadFileAsync (UriLarge,  AvatarsDirLarge + UserEmail);
 
 			}
 			i++;
 		}
+
 		TreeView PeopleView = new TreeView (PeopleStore); 
 		PeopleView.AppendColumn ("", new CellRendererPixbuf () , "pixbuf", 0);  
 		PeopleView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
@@ -794,8 +917,8 @@ public class SparklePonyWindow : Window {
 		ScrolledWindow ScrolledWindow = new ScrolledWindow ();
 		ScrolledWindow.AddWithViewport (PeopleView);
 
-
 		return ScrolledWindow;
+
 	}
 
 	public void UpdatePeopleList () {
@@ -817,15 +940,50 @@ public class SparklePonyWindow : Window {
 		Application.Quit ();
 	}
 
-	// Helper that creates an MD5 hash
-	public static string GetMD5 (string s) {
+}
 
-	  MD5 md5 = new MD5CryptoServiceProvider ();
-	  Byte[] Bytes = ASCIIEncoding.Default.GetBytes (s);
-	  Byte[] EncodedBytes = md5.ComputeHash (Bytes);
+namespace SparklePonyHelpers {
 
-	  return BitConverter.ToString(EncodedBytes).ToLower ().Replace ("-", "");
+
+	// Helper that returns a user's avatar
+	class SparklePonyHelpers {
+
+		public static string GetAvatarFileName (string Email, int Size) {
+
+			string GravatarFile = Environment.GetEnvironmentVariable("HOME") + 
+				                   "/.config/sparklepony/avatars/" + 
+			                      Size + "x" + Size + 
+				                   "/" + Email;
+
+			if (File.Exists (GravatarFile))
+				return GravatarFile;
+
+			else {
+
+				string FallbackFileName = "/usr/share/icons/hicolor/" + 
+				                          Size + "x" + Size + 
+				                          "/status/avatar-default.png";
+
+				if (File.Exists (FallbackFileName))
+					return FallbackFileName;
+				else
+					return "/usr/share/icons/hicolor/16x16/status/avatar-default.png";
+			}
+
+		}
+
+		// Helper that creates an MD5 hash
+		public static string GetMD5 (string s) {
+
+		  MD5 md5 = new MD5CryptoServiceProvider ();
+		  Byte[] Bytes = ASCIIEncoding.Default.GetBytes (s);
+		  Byte[] EncodedBytes = md5.ComputeHash (Bytes);
+
+		  return BitConverter.ToString(EncodedBytes).ToLower ().Replace ("-", "");
+
+		}
 
 	}
+
 
 }
