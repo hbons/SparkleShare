@@ -30,7 +30,7 @@ SparklePony currently requires:
    - notify-sharp >= 0.4.0
 
 
-You can build and install SparklyPony like this:
+You can build and install SparklePony like this:
    $ make
    # make install
 
