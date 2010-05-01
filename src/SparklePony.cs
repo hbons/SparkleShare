@@ -887,7 +887,7 @@ public class SparklePonyWindow : Window {
 
 				// Do something special if the person is you
 				if (UserName.Equals (Repository.UserName))
-					UserName += " (that's you)";
+					UserName += " (that’s you)";
 
 				// Actually add to the list
 				PeopleIter = PeopleStore.Prepend ();
