@@ -1,4 +1,4 @@
-//   SparklePony 0.0.8
+//   SparklePony 0.0.9
 
 //   SparklePony, an instant update workflow to Git.
 //   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
@@ -877,7 +877,7 @@ public class SparklePonyWindow : Window {
 
 		ScrolledWindow ScrolledWindow = new ScrolledWindow ();
 		ScrolledWindow.AddWithViewport (LogView);
-		ScrolledWindow.BorderWidth = 9;
+		ScrolledWindow.BorderWidth = 12;
 
 		return ScrolledWindow;
 
