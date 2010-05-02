@@ -10,8 +10,8 @@ install:
 	cp data/icons /usr/share/ -R
 	mkdir -p ~/.config/autostart
 	cp data/sparklepony.desktop.in ~/.config/autostart/sparklepony.desktop
+	chmod 775 ~/.config/autostart/sparklepony.desktop
 	gtk-update-icon-cache /usr/share/icons/hicolor -f
-
 
 uninstall:
 	rm /usr/local/bin/sparklepony

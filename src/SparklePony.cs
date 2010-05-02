@@ -596,7 +596,7 @@ public class SparklePonyWindow : Window {
 	private ListStore ReposStore;
 	private Repository [] Repositories;
 
-	public SparklePonyWindow (Repository [] R) : base ("SparklePony")  {
+	public SparklePonyWindow (Repository [] R) : base ("SparkleShare")  {
 
 		Repositories = R;
 
@@ -621,12 +621,12 @@ public class SparklePonyWindow : Window {
 
 						LayoutVerticalRight = CreateDetailedView (Repositories [1]);
 
-							Label PeopleLabel = new Label ("<span font_size='large'><b>People</b></span>");
+							Label PeopleLabel = new Label ("<span font_size='large'><b>Active users</b></span>");
 							PeopleLabel.UseMarkup = true;
 							PeopleLabel.SetAlignment (0, 0);
 
 						LayoutVerticalRight.PackStart (PeopleLabel, false, false, 0);
-						LayoutVerticalRight.PackStart (CreatePeopleList (Repositories [1]), true, true, 12);
+						LayoutVerticalRight.PackStart (CreatePeopleList (Repositories [1]), true, true, 6);
 
 					LayoutHorizontal.PackStart (LayoutVerticalLeft, false, false, 0);
 					LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
@@ -660,7 +660,7 @@ public class SparklePonyWindow : Window {
 	// Creates a visual list of repositories
 	public VBox CreateReposList() {
 
-		string RemoteFolderIcon = "/usr/share/icons/gnome/24x24/places/folder.png";
+		string RemoteFolderIcon = "/usr/share/icons/gnome/32x32/places/folder.png";
 		TreeIter ReposIter;
 		foreach (Repository Repository in Repositories) {
 			ReposIter = ReposStore.Prepend ();
@@ -676,10 +676,12 @@ public class SparklePonyWindow : Window {
 		ReposView.AppendColumn ("", new CellRendererPixbuf () , "pixbuf", 0);  
 		ReposView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
 		TreeViewColumn [] ReposViewColumns = ReposView.Columns;
-		ReposViewColumns [0].MinWidth = 34;
+		ReposViewColumns [0].MinWidth = 48;
 
-		ReposStore.IterNthChild (out ReposIter, 1);
+		ReposView.HeadersVisible = false;
 
+
+		ReposStore.IterNthChild (out ReposIter, 0);
 		ReposView.ActivateRow (ReposStore.GetPath (ReposIter),
 		                       ReposViewColumns [1]);
 
@@ -814,9 +816,12 @@ public class SparklePonyWindow : Window {
 		TreeView LogView = new TreeView (LogStore); 
 		LogView.HeadersVisible = false;
 
+		CellRendererText TextCellRight = new Gtk.CellRendererText ();
+		TextCellRight.Alignment = Pango.Alignment.Right;
+
 		LogView.AppendColumn ("", new Gtk.CellRendererPixbuf (), "pixbuf", 0);
 		LogView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
-		LogView.AppendColumn ("", new Gtk.CellRendererText (), "text", 2);
+		LogView.AppendColumn ("", TextCellRight, "text", 2);
 
 		TreeViewColumn [] Columns = LogView.Columns;
 		Columns [0].MinWidth = 32;
