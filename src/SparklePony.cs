@@ -232,7 +232,7 @@ public class Repository {
 
 	public string Name;
 	public string Domain;
-	public string RepoPath;
+	public string LocalPath;
 	public string RemoteOriginUrl;
 	public string CurrentHash;
 
@@ -250,8 +250,8 @@ public class Repository {
 		Process.StartInfo.UseShellExecute = false;
 
 		// Get the repository's path, example: "/home/user/SparklePony/repo/"
-		RepoPath = Path;
-		Process.StartInfo.WorkingDirectory = RepoPath + "/";
+		LocalPath = Path;
+		Process.StartInfo.WorkingDirectory = LocalPath + "/";
 
 		// Get user.name, example: "User Name"
 		UserName = "Anonymous";
@@ -275,8 +275,8 @@ public class Repository {
 
 		// Get the repository name, example: "Project"
 
-		string s = RepoPath.TrimEnd ( "/".ToCharArray ());
-		Name = RepoPath.Substring (s.LastIndexOf ("/") + 1);
+		string s = LocalPath.TrimEnd ( "/".ToCharArray ());
+		Name = LocalPath.Substring (s.LastIndexOf ("/") + 1);
 
 		// Get the domain, example: "github.com" 
 		Domain = RemoteOriginUrl; 
@@ -293,7 +293,7 @@ public class Repository {
 		CurrentHash = Process.StandardOutput.ReadToEnd().Trim ();
 
 		// Watch the repository's folder
-		Watcher = new FileSystemWatcher (RepoPath);
+		Watcher = new FileSystemWatcher (LocalPath);
 		Watcher.IncludeSubdirectories = true;
 		Watcher.EnableRaisingEvents = true;
 		Watcher.Filter = "*";
@@ -371,7 +371,7 @@ public class Repository {
 		Process.Start();
 
 		// Add a gitignore file
-      TextWriter Writer = new StreamWriter(RepoPath + ".gitignore");
+      TextWriter Writer = new StreamWriter(LocalPath + ".gitignore");
       Writer.WriteLine("*~"); // Ignore gedit swap files
       Writer.WriteLine(".*.sw?"); // Ignore vi swap files
       Writer.Close();
@@ -387,7 +387,9 @@ public class Repository {
 		string Message = FormatCommitMessage ();
 		if (!Message.Equals ("")) {
 			Commit (Message);
+			Push ();
 			Fetch ();
+			// Push again in case of a conflict
 			Push ();
 		}
 	}
@@ -417,7 +419,9 @@ public class Repository {
 	// Merges the fetched changes
 	public void Merge () {
 		Watcher.EnableRaisingEvents = false;
+
 		Console.WriteLine ("[Git][" + Name + "] Merging fetched changes...");
+
 		Process.StartInfo.Arguments = "merge origin/master";
 		Process.Start();
 		Process.WaitForExit ();
@@ -465,7 +469,7 @@ public class Repository {
 			 FileName.Contains (".lock") ||
 			 FileName.Contains (".git") ||
 			 FileName.Contains ("/.") ||
-			 Directory.Exists (RepoPath + FileName))
+			 Directory.Exists (LocalPath + FileName))
 			return true; // Yes, ignore it.
 		else if (FileName.Length > 3 &&
 		         FileName.Substring (FileName.Length - 4).Equals (".swp"))
@@ -578,7 +582,7 @@ public class Repository {
 			Notification.AddAction ("", "Open Folder", 
 				                    delegate (object o, ActionArgs args) {
 					                    	Process.StartInfo.FileName = "xdg-open";
-			  	                     	Process.StartInfo.Arguments = RepoPath;
+			  	                     	Process.StartInfo.Arguments = LocalPath;
 				 	                   	Process.Start();
 			  	                     	Process.StartInfo.FileName = "git";
 				                    } );
@@ -592,6 +596,8 @@ public class SparklePonyWindow : Window {
 	private bool Visibility;
 	private VBox LayoutVerticalLeft;
 	private VBox LayoutVerticalRight;
+	private HBox LayoutHorizontal;
+
 	private TreeView ReposView;
 	private ListStore ReposStore;
 	private Repository [] Repositories;
@@ -611,26 +617,16 @@ public class SparklePonyWindow : Window {
 				Notebook Notebook = new Notebook ();
 				Notebook.BorderWidth = 6;
 
-					HBox LayoutHorizontal = new HBox (false, 0);
+					LayoutHorizontal = new HBox (false, 0);
 
 						ReposStore = new ListStore (typeof (Gdk.Pixbuf), 
-						                            typeof (string));
+						                            typeof (string),
+						                            typeof (Repository));
 
 						LayoutVerticalLeft = CreateReposList ();
 						LayoutVerticalLeft.BorderWidth = 12;
 
 						LayoutVerticalRight = CreateDetailedView (Repositories [1]);
-
-							Label PeopleLabel =
-								new Label ("<span font_size='large'><b>Active users" +
-								           "</b></span>");
-
-							PeopleLabel.UseMarkup = true;
-							PeopleLabel.SetAlignment (0, 0);
-
-						LayoutVerticalRight.PackStart (PeopleLabel, false, false, 0);
-						LayoutVerticalRight.PackStart
-							(CreatePeopleList (Repositories [1]), true, true, 6);
 
 					LayoutHorizontal.PackStart (LayoutVerticalLeft, false, false, 0);
 					LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
@@ -671,6 +667,8 @@ public class SparklePonyWindow : Window {
 			ReposStore.SetValue (ReposIter, 0, new Gdk.Pixbuf (RemoteFolderIcon));
 			ReposStore.SetValue (ReposIter, 1, Repository.Name + "     \n" + 
 			                                   Repository.Domain + "     ");
+			ReposStore.SetValue (ReposIter, 2, Repository);
+
 		}
 
 
@@ -684,10 +682,27 @@ public class SparklePonyWindow : Window {
 
 		ReposView.HeadersVisible = false;
 
-
 		ReposStore.IterNthChild (out ReposIter, 0);
 		ReposView.ActivateRow (ReposStore.GetPath (ReposIter),
 		                       ReposViewColumns [1]);
+
+
+
+		ReposView.CursorChanged += delegate {
+			TreeSelection Selection = ReposView.Selection;;
+			TreeIter Iter = new TreeIter ();;
+			Selection.GetSelected (out Iter);
+			Repository Repository = (Repository)ReposStore.GetValue (Iter, 2);
+			Console.WriteLine(Repository.Name);									
+			
+			LayoutHorizontal.Remove (LayoutVerticalRight);
+
+			LayoutVerticalRight = CreateDetailedView (Repository);
+
+			LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
+			ShowAll ();
+		};
+
 
 
 		HBox AddRemoveButtons = new HBox (false, 6);
@@ -711,20 +726,38 @@ public class SparklePonyWindow : Window {
 
 	// Creates the detailed view
 	public VBox CreateDetailedView (Repository Repository) {
+	Console.WriteLine ("repo: " + Repository.Name);
 
-		Label Label1 = new Label ("Remote URL:   ");
-		Label1.SetAlignment (0, 0);
+		// Create box layout for remote url
+		HBox RemoteUrlBox = new HBox (false, 0);
 
-		Label Label2 = new Label ("<b>" + Repository.RemoteOriginUrl + "</b>");
-		Label2.UseMarkup = true;
-		Label2.SetAlignment (0, 0);
+			Label Property1 = new Label ("Remote URL:");
+			Property1.WidthRequest = 120;
+			Property1.SetAlignment (0, 0);
 
-		Label Label5 = new Label ("Path:");
-		Label5.SetAlignment (0, 0);
+			Label Value1 = new Label
+				("<b>" + Repository.RemoteOriginUrl + "</b>");
 
-		Label Label6 = new Label ("<b>" + Repository.RepoPath + "</b>   ");
-		Label6.UseMarkup = true;
-		Label6.SetAlignment (0, 0);
+			Value1.UseMarkup = true;
+
+		RemoteUrlBox.PackStart (Property1, false, false, 0);
+		RemoteUrlBox.PackStart (Value1, false, false, 0);
+
+		// Create box layout for repository path
+		HBox LocalPathBox = new HBox (false, 0);
+
+			Label Property2 = new Label ("Local path:");
+			Property2.WidthRequest = 120;
+			Property2.SetAlignment (0, 0);
+
+			Label Value2 = new Label
+				("<b>" + Repository.LocalPath + "</b>");
+
+			Value2.UseMarkup = true;
+
+		LocalPathBox.PackStart (Property2, false, false, 0);
+		LocalPathBox.PackStart (Value2, false, false, 0);
+
 
 		CheckButton NotificationsCheckButton = 
 			new CheckButton ("Notify me when something changes");
@@ -737,15 +770,25 @@ public class SparklePonyWindow : Window {
 		Table Table = new Table(7, 2, false);
 		Table.RowSpacing = 6;
 
-		Table.Attach(Label1, 0, 1, 1, 2);
-		Table.Attach(Label2, 1, 2, 1, 2);
-		Table.Attach(Label5, 0, 1, 2, 3);
-		Table.Attach(Label6, 1, 2, 2, 3);
+		Table.Attach(RemoteUrlBox, 0, 2, 0, 1);
+		Table.Attach(LocalPathBox, 0, 2, 1, 2);
 		Table.Attach(NotificationsCheckButton, 0, 2, 4, 5);
 		Table.Attach(ChangesCheckButton, 0, 2, 5, 6);
 
 		VBox VBox = new VBox (false, 0);
 		VBox.PackStart (Table, false, false, 12);
+
+							Label PeopleLabel =
+								new Label ("<span font_size='large'><b>Active users" +
+								           "</b></span>");
+
+							PeopleLabel.UseMarkup = true;
+							PeopleLabel.SetAlignment (0, 0);
+
+
+						VBox.PackStart (PeopleLabel, false, false, 0);
+						VBox.PackStart
+							(CreatePeopleList (Repository ), true, true, 12);
 
 		return VBox;
 
@@ -770,7 +813,7 @@ public class SparklePonyWindow : Window {
 			Process.StartInfo.Arguments =
 				"log --format=\"%at☃In ‘" + Repository.Name + "’, %an %s☃%cr\" -25";
 
-			Process.StartInfo.WorkingDirectory = Repository.RepoPath;
+			Process.StartInfo.WorkingDirectory = Repository.LocalPath;
 			Process.Start();
 			Output += "\n" + Process.StandardOutput.ReadToEnd().Trim ();
 		}
@@ -851,7 +894,7 @@ public class SparklePonyWindow : Window {
 		// Get a log of commits, example: "Hylke Bons☃added 'file'."
 		Process.StartInfo.FileName = "git";
 		Process.StartInfo.Arguments = "log --format=\"%an☃%ae\" -50";
-		Process.StartInfo.WorkingDirectory = Repository.RepoPath;
+		Process.StartInfo.WorkingDirectory = Repository.LocalPath;
 		Process.Start();
 
 
@@ -877,7 +920,7 @@ public class SparklePonyWindow : Window {
 
 				// Do something special if the person is you
 				if (UserName.Equals (Repository.UserName))
-					UserName += " (that’s you)";
+					UserName += " (that’s you!)";
 
 				// Actually add to the list
 				PeopleIter = PeopleStore.Prepend ();
