@@ -621,12 +621,16 @@ public class SparklePonyWindow : Window {
 
 						LayoutVerticalRight = CreateDetailedView (Repositories [1]);
 
-							Label PeopleLabel = new Label ("<span font_size='large'><b>Active users</b></span>");
+							Label PeopleLabel =
+								new Label ("<span font_size='large'><b>Active users" +
+								           "</b></span>");
+
 							PeopleLabel.UseMarkup = true;
 							PeopleLabel.SetAlignment (0, 0);
 
 						LayoutVerticalRight.PackStart (PeopleLabel, false, false, 0);
-						LayoutVerticalRight.PackStart (CreatePeopleList (Repositories [1]), true, true, 6);
+						LayoutVerticalRight.PackStart
+							(CreatePeopleList (Repositories [1]), true, true, 6);
 
 					LayoutHorizontal.PackStart (LayoutVerticalLeft, false, false, 0);
 					LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
@@ -952,17 +956,18 @@ namespace SparklePonyHelpers {
 
 				WebClient WebClient = new WebClient ();
 				Uri GravatarUri = new Uri ("http://www.gravatar.com/avatar/" + 
-				                   GetMD5 (Email) + ".jpg?s=" + Size);
+				                   GetMD5 (Email) + ".jpg?s=" + Size + "&d=404");
 
 				string TmpFile = "/tmp/" + Email + Size;
 
 				if (!File.Exists (TmpFile)) {
 
 					WebClient.DownloadFileAsync (GravatarUri, TmpFile);
-
 					WebClient.DownloadFileCompleted += delegate {
 						File.Delete (AvatarPath + Email);
-						File.Move (TmpFile, AvatarPath + Email);
+						FileInfo TmpFileInfo = new FileInfo (TmpFile);
+						if (TmpFileInfo.Length > 255)
+							File.Move (TmpFile, AvatarPath + Email);
 					};
 
 				}
