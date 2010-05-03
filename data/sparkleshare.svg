@@ -16,7 +16,7 @@
    inkscape:export-ydpi="90.000000"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:version="0.46"
-   sodipodi:docname="sparklepony.svg"
+   sodipodi:docname="sparkleshare.svg"
    sodipodi:version="0.32"
    style="display:inline;enable-background:new"
    version="1.0"
@@ -163,7 +163,7 @@
             <dc:title>Lapo Calamandrei</dc:title>
           </cc:Agent>
         </dc:creator>
-        <dc:title>SparklePony</dc:title>
+        <dc:title>sparkleshare</dc:title>
         <dc:subject>
           <rdf:Bag>
             <rdf:li>folder</rdf:li>
@@ -1832,7 +1832,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer17"
-     inkscape:label="artwork:sparklepony"
+     inkscape:label="artwork:sparkleshare"
      style="display:inline"
      transform="translate(0,300)">
     <g
@@ -1911,7 +1911,7 @@
            y="-228.48639"
            x="166.9707"
            sodipodi:role="line"
-           id="tspan4716">sparklepony</tspan></text>
+           id="tspan4716">sparkleshare</tspan></text>
     </g>
     <g
        inkscape:groupmode="layer"
