@@ -53,7 +53,7 @@ namespace SparkleShare {
 
 				Process.StartInfo.FileName = "gvfs-set-attribute";
 				Process.StartInfo.Arguments = ReposPath + " metadata::custom-icon " +
-					                          "folder-sparkleshare";
+					                          "file://usr/share/icons/hicolor/48x48/places/folder-sparkleshare";
 				Process.Start();
 
 			}
