@@ -64,7 +64,7 @@ namespace SparkleShare {
 							LayoutVerticalLeft = CreateReposList ();
 							LayoutVerticalLeft.BorderWidth = 12;
 
-							LayoutVerticalRight = CreateDetailedView (Repositories [1]);
+							LayoutVerticalRight = CreateDetailedView (Repositories [0]);
 
 						LayoutHorizontal.PackStart (LayoutVerticalLeft, false, false, 0);
 						LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
@@ -94,7 +94,7 @@ namespace SparkleShare {
 
 
 			// Fetch remote changes every 20 seconds
-			Timer RedrawTimer = new Timer ();
+/*			Timer RedrawTimer = new Timer ();
 			RedrawTimer.Interval = 5000;
 			RedrawTimer.Elapsed += delegate { 
 
@@ -115,7 +115,7 @@ namespace SparkleShare {
 			};
 
 			RedrawTimer.Start();
-
+*/
 			Add (LayoutVertical);
 
 		}
