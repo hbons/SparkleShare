@@ -34,23 +34,7 @@ namespace SparkleShare {
 
 			IconName = "folder-sparkleshare";
 
-			string UserHome = Environment.GetEnvironmentVariable("HOME") + "/";
-			string FirstRunFile = UserHome + ".config/sparkleshare/firstrun";
 
-			// Show a notification on the first run
-			if (File.Exists (FirstRunFile)) {
-
-				Notification Notification;
-				Notification = new Notification ("Welcome to SparkleShare!",
-						                           "Click here to add some folders.");
-
-				Notification.Urgency = Urgency.Normal;
-				Notification.Timeout = 7500;
-				Notification.Show ();
-
-				File.Delete (FirstRunFile);
-				Console.WriteLine ("[Config] Deleted '" + FirstRunFile + "'");
-			}
 
 		}
 
