@@ -43,7 +43,31 @@ namespace SparkleShare {
 		public SparkleShareWindow (Repository [] R) : base ("SparkleShare")  {
 
 			Repositories = R;
+			
+			// Show a notification if there are no folders yet
+			if (Repositories.Length == 0) {
+				Notification Notification;
+				Notification = new Notification ("Welcome to SparkleShare!",
+						                           "You don't have any folders " +
+						                           "configured yet.");
 
+				Notification.AddAction ("", "Add a Folder", 
+						                delegate { CreateAddDialog (); } );
+
+				Notification.Urgency = Urgency.Normal;
+				Notification.Timeout = 7500;
+				Notification.Show ();
+
+			} else {
+
+				CreateWindow ();
+
+			}
+
+		}
+
+		public void CreateWindow () {
+		
 			Visibility = false;
 			SetSizeRequest (720, 540);
 	 		SetPosition (WindowPosition.Center);
@@ -116,9 +140,10 @@ namespace SparkleShare {
 
 			RedrawTimer.Start();
 */
-			Add (LayoutVertical);
-
+			Add (LayoutVertical);		
+		
 		}
+
 
 		// Creates a visual list of repositories
 		public VBox CreateReposList() {
@@ -129,7 +154,7 @@ namespace SparkleShare {
 				ReposIter = ReposStore.Prepend ();
 				ReposStore.SetValue (ReposIter, 0, new Gdk.Pixbuf (RemoteFolderIcon));
 				ReposStore.SetValue (ReposIter, 1, Repository.Name + "     \n" + 
-					                               Repository.Domain + "     ");
+					                                Repository.Domain + "     ");
 				ReposStore.SetValue (ReposIter, 2, Repository);
 
 			}
@@ -191,10 +216,10 @@ namespace SparkleShare {
 		public VBox CreateDetailedView (Repository Repository) {
 		Console.WriteLine ("repo: " + Repository.Name);
 
-			// Create box layout for remote url
+			// Create box layout for Remote Address
 			HBox RemoteUrlBox = new HBox (false, 0);
 
-				Label Property1 = new Label ("Remote URL:");
+				Label Property1 = new Label ("Remote Address:");
 				Property1.WidthRequest = 120;
 				Property1.SetAlignment (0, 0);
 
@@ -233,10 +258,10 @@ namespace SparkleShare {
 			Table Table = new Table(7, 2, false);
 			Table.RowSpacing = 6;
 
-			Table.Attach(RemoteUrlBox, 0, 2, 0, 1);
-			Table.Attach(LocalPathBox, 0, 2, 1, 2);
-			Table.Attach(NotificationsCheckButton, 0, 2, 4, 5);
-			Table.Attach(ChangesCheckButton, 0, 2, 5, 6);
+			Table.Attach (RemoteUrlBox, 0, 2, 0, 1);
+			Table.Attach (LocalPathBox, 0, 2, 1, 2);
+			Table.Attach (NotificationsCheckButton, 0, 2, 4, 5);
+			Table.Attach (ChangesCheckButton, 0, 2, 5, 6);
 
 			VBox VBox = new VBox (false, 0);
 			VBox.PackStart (Table, false, false, 12);
@@ -362,7 +387,7 @@ namespace SparkleShare {
 
 
 			string Output = Process.StandardOutput.ReadToEnd().Trim ();
-		  string [] People = new string [50];
+			string [] People = new string [50];
 			string [] Lines = Regex.Split (Output, "\n");
 
 			ListStore PeopleStore = new ListStore (typeof (Gdk.Pixbuf),
@@ -413,18 +438,84 @@ namespace SparkleShare {
 
 		}
 
-		public void UpdatePeopleList () {
+		public void CreateAddDialog () {
+		
+		Window AddDialog = new Window ("Add Folder");
+		AddDialog.SetPosition (WindowPosition.Center);
+//		AddDialog.SetSizeRequest (320, 200);
+		AddDialog.BorderWidth = 6;
+		
+		
+			Label NameLabel = new Label ("Folder Name:   ");
+			Entry NameEntry = new Entry ();
+			Label NameExample = new Label ("<span size='small'><i>Example: ‘Project’.</i></span>");
+			NameExample.UseMarkup = true;
+			NameExample.SetAlignment (0, 0);
+			NameLabel.Xalign = 1;
+			
 
+
+			Label RemoteUrlLabel = new Label ("Remote Address:   ");
+
+			string [] DefaultUrls = new string [3] { "ssh://git@github.com/",
+			                                         "ssh://git@git.gnome.org/",
+			                                         "ssh://git@gitorious.org/" };
+
+			ComboBoxEntry RemoteUrlCombo = new ComboBoxEntry (DefaultUrls);
+
+			Label RemoteUrlExample = new Label ("<span size='small'><i>Example: ‘ssh://git@github.com/’.</i></span>");
+			RemoteUrlExample.UseMarkup = true;
+			RemoteUrlExample.SetAlignment (0, 0);
+			RemoteUrlLabel.Xalign = 1;
+
+			HButtonBox ButtonBox = new HButtonBox ();
+			ButtonBox.Layout = ButtonBoxStyle.End;
+			ButtonBox.Spacing = 6;
+			ButtonBox.BorderWidth = 6;
+				Button AddButton = new Button (Stock.Add);
+				Button CancelButton = new Button (Stock.Cancel);
+				CancelButton.Clicked += delegate {
+					AddDialog.Destroy ();
+				};
+			ButtonBox.Add (CancelButton);
+			ButtonBox.Add (AddButton);
+
+
+			Table Table = new Table(4, 2, false);
+			Table.RowSpacing = 6;
+			Table.BorderWidth = 6;
+			Table.Attach (NameLabel, 0, 1, 0, 1);
+			Table.Attach (NameEntry, 1, 2, 0, 1);
+			Table.Attach (NameExample, 1, 2, 1, 2);
+
+			Table.Attach (RemoteUrlLabel, 0, 1, 3, 4);
+			Table.Attach (RemoteUrlCombo, 1, 2, 3, 4);
+			Table.Attach (RemoteUrlExample, 1, 2, 4, 5);
+
+			VBox VBox = new VBox (false, 0);
+			VBox.PackStart (Table, false, false, 0);
+			VBox.PackStart (ButtonBox, false, false, 0);
+
+
+		AddDialog.Add (VBox);
+		AddDialog.ShowAll ();
+		// Name:
+		// Remote Address:
+		// (Example: ssh://git@github.com/james/project.git)
+		// 
+		
 		}
 
 		public void ToggleVisibility() {
-			Present ();
-			if (Visibility) {
-				if (HasFocus)
-					HideAll ();
-			} else {
-				ShowAll ();
-			}
+			if (Repositories.Length > 0) {
+				Present ();
+				if (Visibility) {
+					if (HasFocus)
+						HideAll ();
+				} else {
+					ShowAll ();
+				}
+			} else CreateAddDialog ();
 		}
 
 		public void Quit (object o, EventArgs args) {
@@ -433,10 +524,7 @@ namespace SparkleShare {
 		}
 
 		
-		
-		
-		
-				public static string GetAvatarFileName (string Email, int Size) {
+		public static string GetAvatarFileName (string Email, int Size) {
 
 			string AvatarPath = Environment.GetEnvironmentVariable("HOME") + 
 				                   "/.config/sparkleshare/avatars/" + 
@@ -498,9 +586,5 @@ namespace SparkleShare {
 		}
 
 	}
-
-		
-		
-	
 
 }
