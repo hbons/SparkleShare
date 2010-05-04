@@ -24,4 +24,4 @@ uninstall:
 	rm ~/.config/autostart/sparkleshare.desktop
 
 clean:
-	rm src/sparkleshare.exe
+	rm SparkleShare/bin/Debug/SparkleShare.exe
