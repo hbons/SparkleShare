@@ -15,7 +15,6 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
-using Notifications;
 using SparkleShare;
 using System;
 using System.Collections.Generic;
@@ -29,7 +28,7 @@ using System.Timers;
 
 namespace SparkleShare {
 
-	public class SparkleShareWindow : Window {
+	public class SparkleWindow : Window {
 
 		private bool Visibility;
 		private VBox LayoutVerticalLeft;
@@ -40,23 +39,21 @@ namespace SparkleShare {
 		private ListStore ReposStore;
 		private Repository [] Repositories;
 
-		public SparkleShareWindow (Repository [] R) : base ("SparkleShare")  {
+		public SparkleWindow (Repository [] R) : base ("SparkleShare")  {
 
 			Repositories = R;
 			
 			// Show a notification if there are no folders yet
 			if (Repositories.Length == 0) {
-				Notification Notification;
-				Notification = new Notification ("Welcome to SparkleShare!",
-						                           "You don't have any folders " +
-						                           "configured yet.");
 
-				Notification.AddAction ("", "Add a Folder", 
-						                delegate { CreateAddDialog (); } );
+				SparkleBubble NoFoldersBubble;
+				NoFoldersBubble = new SparkleBubble ("Welcome to SparkleShare!",
+				                                     "You don't have any folders " +
+						                               "configured yet.");
 
-				Notification.Urgency = Urgency.Normal;
-				Notification.Timeout = 7500;
-				Notification.Show ();
+				NoFoldersBubble.AddAction ("", "Add a Folder", 
+				                           delegate { CreateAddDialog (); } );
+
 
 			} else {
 
@@ -440,11 +437,11 @@ namespace SparkleShare {
 
 		public void CreateAddDialog () {
 		
-		Window AddDialog = new Window ("Add Folder");
+		Window AddDialog = new Window ("");
 		AddDialog.SetPosition (WindowPosition.Center);
 //		AddDialog.SetSizeRequest (320, 200);
 		AddDialog.BorderWidth = 6;
-		
+		AddDialog.IconName = "folder-sparkleshare";
 		
 			Label NameLabel = new Label ("Folder Name:   ");
 			Entry NameEntry = new Entry ();
