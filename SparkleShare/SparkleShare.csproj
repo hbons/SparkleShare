@@ -32,8 +32,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
-    <Compile Include="Repository.cs" />
+    <Compile Include="SparkleShare.cs" />
+    <Compile Include="SparkleRepo.cs" />
     <Compile Include="SparkleUI.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleWindow.cs" />
