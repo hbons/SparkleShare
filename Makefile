@@ -17,6 +17,7 @@ install:
 uninstall:
 	rm /usr/local/bin/sparkleshare
 	rm /usr/local/share/sparkleshare/SparkleShare.exe
+	rm /usr/local/share/sparkleshare/SparkleShare.exe.mdb
 	rmdir /usr/local/share/sparkleshare
 	rm /usr/share/icons/hicolor/*x*/places/folder-sparkleshare.png
 	rm /usr/share/icons/hicolor/*x*/status/document-*ed.png
@@ -25,3 +26,4 @@ uninstall:
 
 clean:
 	rm SparkleShare/bin/Debug/SparkleShare.exe
+	rm SparkleShare/bin/Debug/SparkleShare.exe.mdb
