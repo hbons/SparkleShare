@@ -26,8 +26,8 @@ using System.Timers;
 
 namespace SparkleShare {
 
-	// Repository class holds repository information and timers
-	public class Repository {
+	// SparkleRepo class holds repository information and timers
+	public class SparkleRepo {
 
 		private Process Process;
 		private Timer FetchTimer;
@@ -44,7 +44,7 @@ namespace SparkleShare {
 		public string UserName;
 		public bool MonitorOnly;
 
-		public Repository (string Path) {
+		public SparkleRepo (string Path) {
 
 			MonitorOnly = false;
 

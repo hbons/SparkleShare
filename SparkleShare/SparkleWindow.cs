@@ -36,9 +36,9 @@ namespace SparkleShare {
 
 		private TreeView ReposView;
 		private ListStore ReposStore;
-		private Repository [] Repositories;
+		private SparkleRepo [] Repositories;
 
-		public SparkleWindow (Repository [] R) : base ("SparkleShare")  {
+		public SparkleWindow (SparkleRepo [] R) : base ("SparkleShare")  {
 
 			Repositories = R;
 			
@@ -73,8 +73,8 @@ namespace SparkleShare {
 						LayoutHorizontal = new HBox (false, 0);
 
 							ReposStore = new ListStore (typeof (Gdk.Pixbuf), 
-								                        typeof (string),
-								                        typeof (Repository));
+								                         typeof (string),
+								                         typeof (SparkleRepo));
 
 							LayoutVerticalLeft = CreateReposList ();
 							LayoutVerticalLeft.BorderWidth = 12;
@@ -120,12 +120,12 @@ namespace SparkleShare {
 				TreeSelection Selection = ReposView.Selection;;
 				TreeIter Iter = new TreeIter ();;
 				Selection.GetSelected (out Iter);
-				Repository Repository = (Repository)ReposStore.GetValue (Iter, 2);
-				Console.WriteLine(Repository.Name);									
+				SparkleRepo SparkleRepo = (SparkleRepo)ReposStore.GetValue (Iter, 2);
+				Console.WriteLine(SparkleRepo.Name);									
 			
 				LayoutHorizontal.Remove (LayoutVerticalRight);
 
-				LayoutVerticalRight = CreateDetailedView (Repository);
+				LayoutVerticalRight = CreateDetailedView (SparkleRepo);
 
 				LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
 				ShowAll ();
@@ -147,16 +147,16 @@ namespace SparkleShare {
 				"/usr/share/icons/gnome/32x32/places/folder.png";
 				
 			TreeIter ReposIter;
-			foreach (Repository Repository in Repositories) {
+			foreach (SparkleRepo SparkleRepo in Repositories) {
 
 				ReposIter = ReposStore.Prepend ();
 
 				ReposStore.SetValue (ReposIter, 0, new Gdk.Pixbuf (FolderIcon));
 
-				ReposStore.SetValue (ReposIter, 1, Repository.Name + "    \n" + 
-					                                Repository.Domain + "    ");
+				ReposStore.SetValue (ReposIter, 1, SparkleRepo.Name + "    \n" + 
+					                                SparkleRepo.Domain + "    ");
 
-				ReposStore.SetValue (ReposIter, 2, Repository);
+				ReposStore.SetValue (ReposIter, 2, SparkleRepo);
 
 			}
 
@@ -185,10 +185,10 @@ namespace SparkleShare {
 
 				Selection.GetSelected (out Iter);
 
-				Repository Repository = (Repository)ReposStore.GetValue (Iter, 2);
+				SparkleRepo SparkleRepo = (SparkleRepo)ReposStore.GetValue (Iter, 2);
 			
 				LayoutHorizontal.Remove (LayoutVerticalRight);
-				LayoutVerticalRight = CreateDetailedView (Repository);
+				LayoutVerticalRight = CreateDetailedView (SparkleRepo);
 				LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
 				ShowAll ();
 
@@ -220,17 +220,17 @@ namespace SparkleShare {
 		}
 
 		// Creates the detailed view
-		public VBox CreateDetailedView (Repository Repository) {
+		public VBox CreateDetailedView (SparkleRepo SparkleRepo) {
 
 			// Create box layout for Remote Address
 			HBox RemoteUrlBox = new HBox (false, 0);
 
-				Label Property1 = new Label ("Remote Address:");
+				Label Property1 = new Label ("Remote address:");
 				Property1.WidthRequest = 120;
 				Property1.SetAlignment (0, 0);
 
 				Label Value1 = new Label
-					("<b>" + Repository.RemoteOriginUrl + "</b>");
+					("<b>" + SparkleRepo.RemoteOriginUrl + "</b>");
 
 				Value1.UseMarkup = true;
 
@@ -240,12 +240,12 @@ namespace SparkleShare {
 			// Create box layout for repository path
 			HBox LocalPathBox = new HBox (false, 0);
 
-				Label Property2 = new Label ("Local Path:");
+				Label Property2 = new Label ("Local path:");
 				Property2.WidthRequest = 120;
 				Property2.SetAlignment (0, 0);
 
 				Label Value2 = new Label
-					("<b>" + Repository.LocalPath + "</b>");
+					("<b>" + SparkleRepo.LocalPath + "</b>");
 
 				Value2.UseMarkup = true;
 
@@ -280,7 +280,7 @@ namespace SparkleShare {
 			VBox.PackStart (Table, false, false, 12);
 
 			VBox.PackStart (PeopleLabel, false, false, 0);
-			VBox.PackStart (CreatePeopleList (Repository ), true, true, 12);
+			VBox.PackStart (CreatePeopleList (SparkleRepo ), true, true, 12);
 
 			return VBox;
 
@@ -299,13 +299,13 @@ namespace SparkleShare {
 			Process.StartInfo.FileName = "git";
 
 			string Output = "";
-			foreach (Repository Repository in Repositories) {
+			foreach (SparkleRepo SparkleRepo in Repositories) {
 
 				// We're using the snowman here to separate messages :)
 				Process.StartInfo.Arguments =
-					"log --format=\"%at☃In ‘" + Repository.Name + "’, %an %s☃%cr\" -25";
+					"log --format=\"%at☃In ‘" + SparkleRepo.Name + "’, %an %s☃%cr\" -25";
 
-				Process.StartInfo.WorkingDirectory = Repository.LocalPath;
+				Process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
 				Process.Start();
 				Output += "\n" + Process.StandardOutput.ReadToEnd().Trim ();
 			}
@@ -378,7 +378,7 @@ namespace SparkleShare {
 		}
 
 		// Creates a visual list of people working in the repo
-		public ScrolledWindow CreatePeopleList (Repository Repository) {
+		public ScrolledWindow CreatePeopleList (SparkleRepo SparkleRepo) {
 
 			Process Process = new Process ();
 			Process.EnableRaisingEvents = false; 
@@ -388,7 +388,7 @@ namespace SparkleShare {
 			// Get a log of commits, example: "Hylke Bons☃added 'file'."
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.Arguments = "log --format=\"%an☃%ae\" -50";
-			Process.StartInfo.WorkingDirectory = Repository.LocalPath;
+			Process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
 			Process.Start();
 
 			string Output = Process.StandardOutput.ReadToEnd().Trim ();
@@ -412,7 +412,7 @@ namespace SparkleShare {
 					string UserEmail = Parts [1];
 
 					// Do something special if the person is you
-					if (UserName.Equals (Repository.UserName))
+					if (UserName.Equals (SparkleRepo.UserName))
 						UserName += " (that’s you!)";
 
 					string AvatarFileName = GetAvatarFileName (UserEmail, 32);
@@ -465,7 +465,7 @@ namespace SparkleShare {
 			NameExample.SetAlignment (0, 0);
 			NameLabel.Xalign = 1;
 		
-			Label RemoteUrlLabel = new Label ("Remote Address:   ");
+			Label RemoteUrlLabel = new Label ("Remote address:   ");
 
 			string [] DefaultUrls = new string [3] { "ssh://git@github.com/",
 				                                      "ssh://git@git.gnome.org/",
