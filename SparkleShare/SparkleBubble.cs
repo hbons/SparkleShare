@@ -14,36 +14,16 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using Gtk;
 using Notifications;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Timers;
 
 namespace SparkleShare {
 	
-	public class SparkleShareStatusIcon : StatusIcon {
+	public class SparkleBubble : Notification {
 
-		public SparkleShareStatusIcon () : base ()  {
-
-			IconName = "folder-sparkleshare";
-
-
-
-		}
-
-		public void SetIdleState () {
-			IconName = "folder-sparkleshare";
-		}
-
-		public void SetSyncingState () {
-			IconName = "view-refresh"; // Massively abusing this icon here :)
+		public SparkleBubble (string Title, string Subtext) : base (Title, Subtext)  {
+				Timeout = 4500;
+				Urgency = Urgency.Normal;
+				Show ();
 		}
 
 	}

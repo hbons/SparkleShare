@@ -15,7 +15,6 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
-using Notifications;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,15 +25,12 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
 
-
 namespace SparkleShare {
 
 	// This is SparkleShare!
 	public class SparkleShare {
-
 		
-		
-		public static SparkleShareUI SparkleShareUI;
+		public static SparkleUI SparkleUI;
 
 		public static void Main (string [] args) {
 
@@ -73,8 +69,8 @@ namespace SparkleShare {
 
 			Gtk.Application.Init ();
 
-			SparkleShareUI = new SparkleShareUI (HideUI);
-			SparkleShareUI.StartMonitoring ();
+			SparkleUI = new SparkleUI (HideUI);
+			SparkleUI.StartMonitoring ();
 
 			Gtk.Application.Run ();
 
@@ -100,7 +96,5 @@ namespace SparkleShare {
 		}
 
 	}
-
-	
 	
 }

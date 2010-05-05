@@ -15,7 +15,6 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
-using Notifications;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -206,7 +205,7 @@ namespace SparkleShare {
 			Console.WriteLine ("[Git][" + Name + "] Commiting changes...");
 			Process.StartInfo.Arguments = "commit -m \"" + Message + "\"";
 			Process.Start();
-			ShowEventNotification (UserName + " " + Message, 
+			ShowEventBubble (UserName + " " + Message, 
 				                   GetAvatarFileName (UserEmail, 48), true);
 		}
 
@@ -251,7 +250,7 @@ namespace SparkleShare {
 				Process.Start();
 				string LastCommitUserName = Process.StandardOutput.ReadToEnd().Trim ();
 
-				ShowEventNotification (LastCommitUserName + " " + LastCommitMessage, 
+				ShowEventBubble (LastCommitUserName + " " + LastCommitMessage, 
 				                       GetAvatarFileName (LastCommitEmail, 48), true);
 
 			}
@@ -374,25 +373,22 @@ namespace SparkleShare {
 		}
 
 		// Shows a notification with text and image
-		public void ShowEventNotification (string Title, 
-			                               string IconFileName, 
-			                               bool ShowButtons) {
+		public void ShowEventBubble (string Title, 
+			                                string IconFileName, 
+			                                bool ShowButtons) {
 
-			Notification Notification = new Notification (Title, " ");
-			Notification.Urgency = Urgency.Low;
-			Notification.Timeout = 4500;
-			Notification.Icon = new Gdk.Pixbuf (IconFileName);
+			SparkleBubble StuffChangedBubble = new SparkleBubble (Title, "");
+			StuffChangedBubble.Icon = new Gdk.Pixbuf (IconFileName);
 
 			// Add a button to open the folder where the changed file is
 			if (ShowButtons)
-				Notification.AddAction ("", "Open Folder", 
-						                delegate (object o, ActionArgs args) {
-							                	Process.StartInfo.FileName = "xdg-open";
+				StuffChangedBubble.AddAction ("", "Open Folder", 
+						                   delegate {
+							                  Process.StartInfo.FileName = "xdg-open";
 				  	                     	Process.StartInfo.Arguments = LocalPath;
 					 	                   	Process.Start();
 				  	                     	Process.StartInfo.FileName = "git";
-						                } );
-			Notification.Show ();
+							                } );
 		}
 
 	

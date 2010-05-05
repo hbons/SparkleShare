@@ -15,7 +15,6 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
-using Notifications;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,13 +28,13 @@ using System.Timers;
 namespace SparkleShare {
 
 	// Holds the status icon, window and repository list
-	public class SparkleShareUI {
+	public class SparkleUI {
 
-		public SparkleShareWindow SparkleShareWindow;
-		public SparkleShareStatusIcon SparkleShareStatusIcon;
+		public SparkleWindow SparkleWindow;
+		public SparkleStatusIcon SparkleStatusIcon;
 		public Repository [] Repositories;
 
-		public SparkleShareUI (bool HideUI) {
+		public SparkleUI (bool HideUI) {
 
 			Process Process = new Process();
 			Process.EnableRaisingEvents = false;
@@ -90,13 +89,13 @@ namespace SparkleShare {
 			if (!HideUI) {
 
 				// Create the window
-				SparkleShareWindow = new SparkleShareWindow (Repositories);
-				SparkleShareWindow.DeleteEvent += CloseSparkleShareWindow;
+				SparkleWindow = new SparkleWindow (Repositories);
+				SparkleWindow.DeleteEvent += CloseSparkleWindow;
 
 				// Create the status icon
-				SparkleShareStatusIcon = new SparkleShareStatusIcon ();
-				SparkleShareStatusIcon.Activate += delegate { 
-					SparkleShareWindow.ToggleVisibility ();
+				SparkleStatusIcon = new SparkleStatusIcon ();
+				SparkleStatusIcon.Activate += delegate { 
+					SparkleWindow.ToggleVisibility ();
 				};
 
 			}
@@ -104,9 +103,9 @@ namespace SparkleShare {
 		}
 
 		// Closes the window
-		public void CloseSparkleShareWindow (object o, DeleteEventArgs args) {
-			SparkleShareWindow = new SparkleShareWindow (Repositories);
-			SparkleShareWindow.DeleteEvent += CloseSparkleShareWindow;
+		public void CloseSparkleWindow (object o, DeleteEventArgs args) {
+			SparkleWindow = new SparkleWindow (Repositories);
+			SparkleWindow.DeleteEvent += CloseSparkleWindow;
 		}
 
 		public void StartMonitoring () {	}

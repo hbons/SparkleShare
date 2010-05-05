@@ -34,8 +34,9 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="Repository.cs" />
-    <Compile Include="SparkleShareUI.cs" />
-    <Compile Include="SparkleShareStatusIcon.cs" />
-    <Compile Include="SparkleShareWindow.cs" />
+    <Compile Include="SparkleUI.cs" />
+    <Compile Include="SparkleStatusIcon.cs" />
+    <Compile Include="SparkleWindow.cs" />
+    <Compile Include="SparkleBubble.cs" />
   </ItemGroup>
 </Project>
