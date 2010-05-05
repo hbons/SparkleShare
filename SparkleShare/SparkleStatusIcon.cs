@@ -15,35 +15,23 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
-using Notifications;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Timers;
 
 namespace SparkleShare {
 	
 	public class SparkleStatusIcon : StatusIcon {
 
 		public SparkleStatusIcon () : base ()  {
-
-			IconName = "folder-sparkleshare";
-
-
-
+			SetIdleState ();
 		}
 
 		public void SetIdleState () {
 			IconName = "folder-sparkleshare";
+			Tooltip = "SparkleShare, all up to date";
 		}
 
 		public void SetSyncingState () {
 			IconName = "view-refresh"; // Massively abusing this icon here :)
+			Tooltip = "SparkleShare, updating changes...";
 		}
 
 	}
