@@ -24,7 +24,7 @@ namespace SparkleShare {
 	// Holds the status icon, window and repository list
 	public class SparkleUI {
 
-		public Repository [] Repositories;
+		public SparkleRepo [] Repositories;
 
 		public SparkleWindow SparkleWindow;
 		public SparkleStatusIcon SparkleStatusIcon;
@@ -75,11 +75,11 @@ namespace SparkleShare {
 
 			// Get all the repos in ~/SparkleShare
 			string [] Repos = Directory.GetDirectories (ReposPath);
-			Repositories = new Repository [Repos.Length];
+			Repositories = new SparkleRepo [Repos.Length];
 
 			int i = 0;
 			foreach (string Folder in Repos) {
-				Repositories [i] = new Repository (Folder);
+				Repositories [i] = new SparkleRepo (Folder);
 				i++;
 			}
 
