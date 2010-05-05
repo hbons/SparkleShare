@@ -16,14 +16,7 @@
 
 using Gtk;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Timers;
 
 namespace SparkleShare {
 
@@ -40,6 +33,7 @@ namespace SparkleShare {
 			Process.StartInfo.UseShellExecute = false;
 			Process.StartInfo.FileName = "git";
 			Process.Start();
+
 			if (Process.StandardOutput.ReadToEnd().IndexOf ("version") == -1) {
 				Console.WriteLine ("Git wasn't found.");
 				Console.WriteLine ("You can get it from http://git-scm.com/.");
@@ -72,10 +66,12 @@ namespace SparkleShare {
 			SparkleUI = new SparkleUI (HideUI);
 			SparkleUI.StartMonitoring ();
 
+			// The main loop
 			Gtk.Application.Run ();
 
 		}
 
+		// Prints the help output
 		public static void ShowHelp () {
 			Console.WriteLine ("SparkleShare Copyright (C) 2010 Hylke Bons");
 			Console.WriteLine ("");

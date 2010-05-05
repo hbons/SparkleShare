@@ -17,7 +17,6 @@
 using Gtk;
 using SparkleShare;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -48,18 +47,13 @@ namespace SparkleShare {
 
 				SparkleBubble NoFoldersBubble;
 				NoFoldersBubble = new SparkleBubble ("Welcome to SparkleShare!",
-				                                     "You don't have any folders " +
-						                               "configured yet.");
+				                                     "You don't have any " +
+						                               "folders set up yet.");
 
-				NoFoldersBubble.AddAction ("", "Add a Folder", 
+				NoFoldersBubble.AddAction ("", "Set up a folder", 
 				                           delegate { CreateAddDialog (); } );
 
-
-			} else {
-
-				CreateWindow ();
-
-			}
+			} else CreateWindow ();
 
 		}
 
@@ -85,10 +79,14 @@ namespace SparkleShare {
 							LayoutVerticalLeft = CreateReposList ();
 							LayoutVerticalLeft.BorderWidth = 12;
 
-							LayoutVerticalRight = CreateDetailedView (Repositories [0]);
+							LayoutVerticalRight =
+								CreateDetailedView (Repositories [0]);
 
-						LayoutHorizontal.PackStart (LayoutVerticalLeft, false, false, 0);
-						LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
+						LayoutHorizontal.PackStart (LayoutVerticalLeft,
+						                            false, false, 0);
+						                            
+						LayoutHorizontal.PackStart (LayoutVerticalRight,
+						                            true, true, 12);
 
 					Notebook.AppendPage (LayoutHorizontal, new Label ("Folders"));
 					Notebook.AppendPage (CreateEventLog (), new Label ("Events"));
@@ -145,53 +143,65 @@ namespace SparkleShare {
 		// Creates a visual list of repositories
 		public VBox CreateReposList() {
 
-			string RemoteFolderIcon = "/usr/share/icons/gnome/32x32/places/folder.png";
+			string FolderIcon =
+				"/usr/share/icons/gnome/32x32/places/folder.png";
+				
 			TreeIter ReposIter;
 			foreach (Repository Repository in Repositories) {
+
 				ReposIter = ReposStore.Prepend ();
-				ReposStore.SetValue (ReposIter, 0, new Gdk.Pixbuf (RemoteFolderIcon));
-				ReposStore.SetValue (ReposIter, 1, Repository.Name + "     \n" + 
-					                                Repository.Domain + "     ");
+
+				ReposStore.SetValue (ReposIter, 0, new Gdk.Pixbuf (FolderIcon));
+
+				ReposStore.SetValue (ReposIter, 1, Repository.Name + "    \n" + 
+					                                Repository.Domain + "    ");
+
 				ReposStore.SetValue (ReposIter, 2, Repository);
 
 			}
 
-
 			ScrolledWindow ScrolledWindow = new ScrolledWindow ();
 
 			ReposView = new TreeView (ReposStore); 
+			ReposView.HeadersVisible = false;
+
 			ReposView.AppendColumn ("", new CellRendererPixbuf () , "pixbuf", 0);  
 			ReposView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
-			TreeViewColumn [] ReposViewColumns = ReposView.Columns;
-			ReposViewColumns [0].MinWidth = 48;
 
-			ReposView.HeadersVisible = false;
+			TreeViewColumn [] ReposViewColumns = ReposView.Columns;
+
+			ReposViewColumns [0].MinWidth = 48;
 
 			ReposStore.IterNthChild (out ReposIter, 0);
 			ReposView.ActivateRow (ReposStore.GetPath (ReposIter),
-				                   ReposViewColumns [1]);
+			                       ReposViewColumns [1]);
 
-
-
+			// Update the detailed view when something
+			// gets selected in the folders list.
 			ReposView.CursorChanged += delegate {
+
 				TreeSelection Selection = ReposView.Selection;;
 				TreeIter Iter = new TreeIter ();;
+
 				Selection.GetSelected (out Iter);
+
 				Repository Repository = (Repository)ReposStore.GetValue (Iter, 2);
-				Console.WriteLine(Repository.Name);									
 			
 				LayoutHorizontal.Remove (LayoutVerticalRight);
-
 				LayoutVerticalRight = CreateDetailedView (Repository);
-
 				LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
 				ShowAll ();
+
 			};
 
-
-
 			HBox AddRemoveButtons = new HBox (false, 6);
-			Button AddButton = new Button ("Add...");
+
+				Button AddButton = new Button ("Add...");
+
+				AddButton.Clicked += delegate {
+					CreateAddDialog ();
+				};
+
 			AddRemoveButtons.PackStart (AddButton, true, true, 0);
 
 			Image RemoveImage = new Image ("/usr/share/icons/gnome/16x16/actions/list-remove.png");
@@ -211,7 +221,6 @@ namespace SparkleShare {
 
 		// Creates the detailed view
 		public VBox CreateDetailedView (Repository Repository) {
-		Console.WriteLine ("repo: " + Repository.Name);
 
 			// Create box layout for Remote Address
 			HBox RemoteUrlBox = new HBox (false, 0);
@@ -231,7 +240,7 @@ namespace SparkleShare {
 			// Create box layout for repository path
 			HBox LocalPathBox = new HBox (false, 0);
 
-				Label Property2 = new Label ("Local path:");
+				Label Property2 = new Label ("Local Path:");
 				Property2.WidthRequest = 120;
 				Property2.SetAlignment (0, 0);
 
@@ -243,7 +252,6 @@ namespace SparkleShare {
 			LocalPathBox.PackStart (Property2, false, false, 0);
 			LocalPathBox.PackStart (Value2, false, false, 0);
 
-
 			CheckButton NotificationsCheckButton = 
 				new CheckButton ("Notify me when something changes");
 			NotificationsCheckButton.Active = true;
@@ -252,28 +260,27 @@ namespace SparkleShare {
 				new CheckButton ("Synchronize my changes");
 			ChangesCheckButton.Active = true;
 
-			Table Table = new Table(7, 2, false);
-			Table.RowSpacing = 6;
-
-			Table.Attach (RemoteUrlBox, 0, 2, 0, 1);
-			Table.Attach (LocalPathBox, 0, 2, 1, 2);
-			Table.Attach (NotificationsCheckButton, 0, 2, 4, 5);
-			Table.Attach (ChangesCheckButton, 0, 2, 5, 6);
-
 			VBox VBox = new VBox (false, 0);
+
+				Table Table = new Table(7, 2, false);
+				Table.RowSpacing = 6;
+
+				Table.Attach (RemoteUrlBox, 0, 2, 0, 1);
+				Table.Attach (LocalPathBox, 0, 2, 1, 2);
+				Table.Attach (NotificationsCheckButton, 0, 2, 4, 5);
+				Table.Attach (ChangesCheckButton, 0, 2, 5, 6);
+
+				Label PeopleLabel =
+					new Label ("<span font_size='large'><b>Active users" +
+						        "</b></span>");
+
+				PeopleLabel.UseMarkup = true;
+				PeopleLabel.SetAlignment (0, 0);
+
 			VBox.PackStart (Table, false, false, 12);
 
-								Label PeopleLabel =
-									new Label ("<span font_size='large'><b>Active users" +
-										       "</b></span>");
-
-								PeopleLabel.UseMarkup = true;
-								PeopleLabel.SetAlignment (0, 0);
-
-
-							VBox.PackStart (PeopleLabel, false, false, 0);
-							VBox.PackStart
-								(CreatePeopleList (Repository ), true, true, 12);
+			VBox.PackStart (PeopleLabel, false, false, 0);
+			VBox.PackStart (CreatePeopleList (Repository ), true, true, 12);
 
 			return VBox;
 
@@ -340,8 +347,7 @@ namespace SparkleShare {
 				Iter = LogStore.Append ();
 				LogStore.SetValue (Iter, 0, new Gdk.Pixbuf (IconFile));
 				LogStore.SetValue (Iter, 1, Message);
-				// TODO: right align time
-				LogStore.SetValue (Iter, 2, "  " + TimeAgo);
+				LogStore.SetValue (Iter, 2, " " + TimeAgo);
 
 			}
 
@@ -351,8 +357,11 @@ namespace SparkleShare {
 			CellRendererText TextCellRight = new Gtk.CellRendererText ();
 			TextCellRight.Alignment = Pango.Alignment.Right;
 
+			CellRendererText TextCellMiddle = new Gtk.CellRendererText ();
+			TextCellMiddle.Ellipsize = Pango.EllipsizeMode.End;
+
 			LogView.AppendColumn ("", new Gtk.CellRendererPixbuf (), "pixbuf", 0);
-			LogView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
+			LogView.AppendColumn ("", TextCellMiddle, "text", 1);
 			LogView.AppendColumn ("", TextCellRight, "text", 2);
 
 			TreeViewColumn [] Columns = LogView.Columns;
@@ -382,7 +391,6 @@ namespace SparkleShare {
 			Process.StartInfo.WorkingDirectory = Repository.LocalPath;
 			Process.Start();
 
-
 			string Output = Process.StandardOutput.ReadToEnd().Trim ();
 			string [] People = new string [50];
 			string [] Lines = Regex.Split (Output, "\n");
@@ -390,8 +398,8 @@ namespace SparkleShare {
 			ListStore PeopleStore = new ListStore (typeof (Gdk.Pixbuf),
 				                                   typeof (string));
 
-			TreeIter PeopleIter;
 			int i = 0;
+			TreeIter PeopleIter;
 			foreach (string Line in Lines) {
 
 				// Only add name if it isn't there already
@@ -407,9 +415,12 @@ namespace SparkleShare {
 					if (UserName.Equals (Repository.UserName))
 						UserName += " (that’s you!)";
 
+					string AvatarFileName = GetAvatarFileName (UserEmail, 32);
+
 					// Actually add to the list
 					PeopleIter = PeopleStore.Prepend ();
-					PeopleStore.SetValue (PeopleIter, 0, new Gdk.Pixbuf (GetAvatarFileName (UserEmail, 32)));
+					PeopleStore.SetValue (PeopleIter, 0,
+					                      new Gdk.Pixbuf (AvatarFileName));
 					PeopleStore.SetValue (PeopleIter, 1, UserName + "\n" + UserEmail);
 
 				}
@@ -439,24 +450,26 @@ namespace SparkleShare {
 		
 		Window AddDialog = new Window ("");
 		AddDialog.SetPosition (WindowPosition.Center);
-//		AddDialog.SetSizeRequest (320, 200);
+		AddDialog.KeepAbove = true;
+		AddDialog.Modal = true;
+		AddDialog.TransientFor = this;
 		AddDialog.BorderWidth = 6;
 		AddDialog.IconName = "folder-sparkleshare";
 		
+		VBox VBox = new VBox (false, 0);
+
 			Label NameLabel = new Label ("Folder Name:   ");
 			Entry NameEntry = new Entry ();
 			Label NameExample = new Label ("<span size='small'><i>Example: ‘Project’.</i></span>");
 			NameExample.UseMarkup = true;
 			NameExample.SetAlignment (0, 0);
 			NameLabel.Xalign = 1;
-			
-
-
+		
 			Label RemoteUrlLabel = new Label ("Remote Address:   ");
 
 			string [] DefaultUrls = new string [3] { "ssh://git@github.com/",
-			                                         "ssh://git@git.gnome.org/",
-			                                         "ssh://git@gitorious.org/" };
+				                                      "ssh://git@git.gnome.org/",
+				                                      "ssh://git@gitorious.org/" };
 
 			ComboBoxEntry RemoteUrlCombo = new ComboBoxEntry (DefaultUrls);
 
@@ -477,29 +490,22 @@ namespace SparkleShare {
 			ButtonBox.Add (CancelButton);
 			ButtonBox.Add (AddButton);
 
-
 			Table Table = new Table(4, 2, false);
 			Table.RowSpacing = 6;
 			Table.BorderWidth = 6;
 			Table.Attach (NameLabel, 0, 1, 0, 1);
+		
 			Table.Attach (NameEntry, 1, 2, 0, 1);
 			Table.Attach (NameExample, 1, 2, 1, 2);
-
 			Table.Attach (RemoteUrlLabel, 0, 1, 3, 4);
 			Table.Attach (RemoteUrlCombo, 1, 2, 3, 4);
 			Table.Attach (RemoteUrlExample, 1, 2, 4, 5);
 
-			VBox VBox = new VBox (false, 0);
-			VBox.PackStart (Table, false, false, 0);
-			VBox.PackStart (ButtonBox, false, false, 0);
-
+		VBox.PackStart (Table, false, false, 0);
+		VBox.PackStart (ButtonBox, false, false, 0);
 
 		AddDialog.Add (VBox);
 		AddDialog.ShowAll ();
-		// Name:
-		// Remote Address:
-		// (Example: ssh://git@github.com/james/project.git)
-		// 
 		
 		}
 
@@ -519,7 +525,6 @@ namespace SparkleShare {
 			File.Delete ("/tmp/sparkleshare/sparkleshare.pid");
 			Application.Quit ();
 		}
-
 		
 		public static string GetAvatarFileName (string Email, int Size) {
 

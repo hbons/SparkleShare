@@ -16,23 +16,18 @@
 
 using Gtk;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Timers;
 
 namespace SparkleShare {
 
 	// Holds the status icon, window and repository list
 	public class SparkleUI {
 
+		public Repository [] Repositories;
+
 		public SparkleWindow SparkleWindow;
 		public SparkleStatusIcon SparkleStatusIcon;
-		public Repository [] Repositories;
 
 		public SparkleUI (bool HideUI) {
 
@@ -43,16 +38,20 @@ namespace SparkleShare {
 
 			// Get home folder, example: "/home/user/" 
 			string UserHome = Environment.GetEnvironmentVariable("HOME") + "/";
+			string ReposPath = UserHome + "SparkleShare";
 
 			// Create 'SparkleShare' folder in the user's home folder
-			string ReposPath = UserHome + "SparkleShare";
+			// if it's not there already
 			if (!Directory.Exists (ReposPath)) {
 				Directory.CreateDirectory (ReposPath);
 				Console.WriteLine ("[Config] Created '" + ReposPath + "'");
 
 				Process.StartInfo.FileName = "gvfs-set-attribute";
-				Process.StartInfo.Arguments = ReposPath + " metadata::custom-icon " +
-					                          "file://usr/share/icons/hicolor/48x48/places/folder-sparkleshare";
+				Process.StartInfo.Arguments = ReposPath +
+				                              " metadata::custom-icon " +
+					                           "file:///usr/share/icons/hicolor/" +
+					                           "48x48/places/" +
+					                           "folder-sparkleshare.png";
 				Process.Start();
 
 			}
