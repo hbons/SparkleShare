@@ -27,6 +27,7 @@ namespace SparkleShare {
 
 		public static void Main (string [] args) {
 
+
 			// Check if git is installed
 			Process Process = new Process();
 			Process.StartInfo.RedirectStandardOutput = true;
