@@ -15,6 +15,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
+using System;
 using System.Timers;
 
 namespace SparkleShare {
@@ -22,9 +23,9 @@ namespace SparkleShare {
 	// This is a close implementation of GtkSpinner
 	public class SparkleSpinner : Gdk.Pixbuf {
 
-		public int CycleDuration;
-		public int NumSteps;
-		public bool Active;
+		private int CycleDuration;
+		private int NumSteps;
+		private bool Active;
 
 		private Timer Timer;
 		private int CurrentStep;
@@ -32,12 +33,23 @@ namespace SparkleShare {
 		public SparkleSpinner () : base ("")  {
 			Timer = new Timer ();
 			CycleDuration = 1000;
-			Timer.Interval = 50;
-			Timer.Elapsed += delegate { 
-				//
-			};
+			CurrentStep = 0;
+			NumSteps = 20;
+			Timer.Interval = CycleDuration / NumSteps;
+			Timer.Elapsed += delegate { NextImage (); };
 			Start ();
-
+		}
+		
+		private void NextImage () {
+		Console.WriteLine (CurrentStep);
+			if (CurrentStep < NumSteps)
+				CurrentStep++;
+			else
+				CurrentStep = 0;
+		}
+				
+		public bool IsActive () {
+			return Active;
 		}
 
 		public void Start () {
