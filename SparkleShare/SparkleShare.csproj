@@ -38,5 +38,8 @@
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleWindow.cs" />
     <Compile Include="SparkleBubble.cs" />
+    <Compile Include="SparkleSpinner.cs" />
+    <Compile Include="SparklePaths.cs" />
+    <Compile Include="SparkleHelpers.cs" />
   </ItemGroup>
 </Project>

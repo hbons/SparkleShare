@@ -18,9 +18,6 @@ using Gtk;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
 
@@ -205,7 +202,8 @@ namespace SparkleShare {
 			Process.StartInfo.Arguments = "commit -m \"" + Message + "\"";
 			Process.Start();
 			ShowEventBubble (UserName + " " + Message, 
-				                   GetAvatarFileName (UserEmail, 48), true);
+				              SparkleHelpers.GetAvatarFileName (UserEmail, 48),
+				              true);
 		}
 
 		// Fetches changes from the remote repo	
@@ -250,7 +248,8 @@ namespace SparkleShare {
 				string LastCommitUserName = Process.StandardOutput.ReadToEnd().Trim ();
 
 				ShowEventBubble (LastCommitUserName + " " + LastCommitMessage, 
-				                       GetAvatarFileName (LastCommitEmail, 48), true);
+				                 SparkleHelpers.GetAvatarFileName (LastCommitEmail, 48),
+				                 true);
 
 			}
 
@@ -390,70 +389,6 @@ namespace SparkleShare {
 							                } );
 		}
 
-	
-	
-		public static string GetAvatarFileName (string Email, int Size) {
-
-			string AvatarPath = Environment.GetEnvironmentVariable("HOME") + 
-				                   "/.config/sparkleshare/avatars/" + 
-			                      Size + "x" + Size + "/";
-
-			if (!Directory.Exists (AvatarPath)) {
-				Directory.CreateDirectory (AvatarPath);
-				Console.WriteLine ("[Config] Created '" + AvatarPath + "'");
-
-			}
-			string AvatarFile = AvatarPath + Email;
-
-			if (File.Exists (AvatarFile))
-				return AvatarFile;
-
-			else {
-
-				// Let's try to get the person's gravatar for next time
-
-				WebClient WebClient = new WebClient ();
-				Uri GravatarUri = new Uri ("http://www.gravatar.com/avatar/" + 
-				                   GetMD5 (Email) + ".jpg?s=" + Size + "&d=404");
-
-				string TmpFile = "/tmp/" + Email + Size;
-
-				if (!File.Exists (TmpFile)) {
-
-					WebClient.DownloadFileAsync (GravatarUri, TmpFile);
-					WebClient.DownloadFileCompleted += delegate {
-						File.Delete (AvatarPath + Email);
-						FileInfo TmpFileInfo = new FileInfo (TmpFile);
-						if (TmpFileInfo.Length > 255)
-							File.Move (TmpFile, AvatarPath + Email);
-					};
-
-				}
-
-				string FallbackFileName = "/usr/share/icons/hicolor/" + 
-				                          Size + "x" + Size + 
-				                          "/status/avatar-default.png";
-
-				if (File.Exists (FallbackFileName))
-					return FallbackFileName;
-				else
-					return "/usr/share/icons/hicolor/16x16/status/avatar-default.png";
-			}
-
-		}
-
-		// Helper that creates an MD5 hash
-		public static string GetMD5 (string s) {
-
-		  MD5 md5 = new MD5CryptoServiceProvider ();
-		  Byte[] Bytes = ASCIIEncoding.Default.GetBytes (s);
-		  Byte[] EncodedBytes = md5.ComputeHash (Bytes);
-
-		  return BitConverter.ToString(EncodedBytes).ToLower ().Replace ("-", "");
-
-		}
-
 	}
-
 
 }
