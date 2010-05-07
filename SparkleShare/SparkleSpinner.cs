@@ -68,7 +68,7 @@ namespace SparkleShare {
 			if (CurrentStep < NumSteps)
 				CurrentStep++;
 			else
-				CurrentStep = 1;
+				CurrentStep = 0;
 			Pixbuf = Images [CurrentStep];
 		}
 						
@@ -77,7 +77,8 @@ namespace SparkleShare {
 		}
 
 		public void Start () {
-			Active = true;		
+			CurrentStep = 0;
+			Active = true;
 			Timer.Start ();
 		}
 
