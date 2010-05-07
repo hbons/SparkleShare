@@ -94,16 +94,12 @@ namespace SparkleShare {
 					HButtonBox DialogButtons = new HButtonBox ();
 					DialogButtons.BorderWidth = 6;
 
-						Button QuitServiceButton = new Button ("Quit Service");
-						QuitServiceButton.Clicked += Quit;
-
 						Button CloseButton = new Button (Stock.Close);
 						CloseButton.Clicked += delegate (object o, EventArgs args) {
 							Visibility = false;
 							HideAll ();
 						};
 
-					DialogButtons.Add (QuitServiceButton);
 					DialogButtons.Add (CloseButton);
 
 				LayoutVertical.PackStart (DialogButtons, false, false, 0);
