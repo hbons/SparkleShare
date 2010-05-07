@@ -27,7 +27,6 @@ namespace SparkleShare {
 
 		public static void Main (string [] args) {
 
-
 			// Check if git is installed
 			Process Process = new Process();
 			Process.StartInfo.RedirectStandardOutput = true;
@@ -66,6 +65,8 @@ namespace SparkleShare {
 
 			SparkleUI = new SparkleUI (HideUI);
 			SparkleUI.StartMonitoring ();
+
+
 
 			// The main loop
 			Gtk.Application.Run ();
