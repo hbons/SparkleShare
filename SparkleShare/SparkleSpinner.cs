@@ -15,39 +15,63 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
-using System;
 using System.Timers;
 
 namespace SparkleShare {
 		
 	// This is a close implementation of GtkSpinner
-	public class SparkleSpinner : Gdk.Pixbuf {
+	public class SparkleSpinner : Image {
 
-		private int CycleDuration;
-		private int NumSteps;
-		private bool Active;
+		public bool Active;
 
+		private Gdk.Pixbuf [] Images;
 		private Timer Timer;
+		private int CycleDuration;
 		private int CurrentStep;
+		private int NumSteps;
+		private int Size;
 
-		public SparkleSpinner () : base ("")  {
-			Timer = new Timer ();
-			CycleDuration = 1000;
+		public SparkleSpinner () : base ()  {
+
+			Size = 48;
+			Gdk.Pixbuf SpinnerGallery = new Gdk.Pixbuf ("/usr/share/icons/" +
+			                                            "gnome/" + Size + "x" + 
+			                                            Size + "/animations/" +
+			                                            "process-working.png");
+			CycleDuration = 750;
 			CurrentStep = 0;
-			NumSteps = 20;
+
+			int FramesInWidth = SpinnerGallery.Width / Size;
+			int FramesInHeight = SpinnerGallery.Height / Size;
+			NumSteps = FramesInWidth * FramesInHeight;
+			Images = new Gdk.Pixbuf [NumSteps - 1];
+
+			int i = 0;
+			for (int y = 0; y < FramesInHeight; y++) {
+				for (int x = 0; x < FramesInWidth; x++) {
+					if (!(y == 0 && x == 0)) {
+						Images [i] = new Gdk.Pixbuf (SpinnerGallery,
+						                             x * Size, y * Size, Size, Size);
+						i++;
+					}
+				}
+			}
+
+			Timer = new Timer ();
 			Timer.Interval = CycleDuration / NumSteps;
 			Timer.Elapsed += delegate { NextImage (); };
 			Start ();
+
 		}
-		
+
 		private void NextImage () {
-		Console.WriteLine (CurrentStep);
 			if (CurrentStep < NumSteps)
 				CurrentStep++;
 			else
-				CurrentStep = 0;
+				CurrentStep = 1;
+			Pixbuf = Images [CurrentStep];
 		}
-				
+						
 		public bool IsActive () {
 			return Active;
 		}

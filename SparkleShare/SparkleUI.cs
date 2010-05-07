@@ -36,18 +36,16 @@ namespace SparkleShare {
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
 
-			// Get home folder, example: "/home/user/" 
-			string UserHome = Environment.GetEnvironmentVariable("HOME") + "/";
-			string ReposPath = UserHome + "SparkleShare";
+			string SparkleDir = SparklePaths.SparkleDir;
 
 			// Create 'SparkleShare' folder in the user's home folder
 			// if it's not there already
-			if (!Directory.Exists (ReposPath)) {
-				Directory.CreateDirectory (ReposPath);
-				Console.WriteLine ("[Config] Created '" + ReposPath + "'");
+			if (!Directory.Exists (SparkleDir)) {
+				Directory.CreateDirectory (SparkleDir);
+				Console.WriteLine ("[Config] Created '" + SparkleDir + "'");
 
 				Process.StartInfo.FileName = "gvfs-set-attribute";
-				Process.StartInfo.Arguments = ReposPath +
+				Process.StartInfo.Arguments = SparkleDir +
 				                              " metadata::custom-icon " +
 					                           "file:///usr/share/icons/hicolor/" +
 					                           "48x48/places/" +
@@ -57,24 +55,21 @@ namespace SparkleShare {
 			}
 
 			// Create place to store configuration user's home folder
-			string ConfigPath = UserHome + ".config/sparkleshare/";
-			if (!Directory.Exists (ConfigPath)) {
+			string ConfigDir = SparklePaths.SparkleConfigDir;
+			string AvatarDir = SparklePaths.SparkleAvatarsDir;
+			if (!Directory.Exists (ConfigDir)) {
 
-				Directory.CreateDirectory (ConfigPath);
-				Console.WriteLine ("[Config] Created '" + ConfigPath + "'");
-
-				// Create a first run file to show the intro message
-				File.Create (ConfigPath + "firstrun");
-				Console.WriteLine ("[Config] Created '" + ConfigPath + "firstrun'");
+				Directory.CreateDirectory (ConfigDir);
+				Console.WriteLine ("[Config] Created '" + ConfigDir + "'");
 
 				// Create a place to store the avatars
-				Directory.CreateDirectory (ConfigPath + "avatars/");
-				Console.WriteLine ("[Config] Created '" + ConfigPath + "avatars'");
+				Directory.CreateDirectory (AvatarDir);
+				Console.WriteLine ("[Config] Created '" + AvatarDir + "avatars'");
 
 			}
 
 			// Get all the repos in ~/SparkleShare
-			string [] Repos = Directory.GetDirectories (ReposPath);
+			string [] Repos = Directory.GetDirectories (SparkleDir);
 			Repositories = new SparkleRepo [Repos.Length];
 
 			int i = 0;
