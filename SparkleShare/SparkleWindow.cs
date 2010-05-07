@@ -200,6 +200,7 @@ namespace SparkleShare {
 					CreateAddDialog ();
 				};
 
+
 			AddRemoveButtons.PackStart (AddButton, true, true, 0);
 
 			Image RemoveImage = new Image ("/usr/share/icons/gnome/16x16/actions/list-remove.png");
@@ -492,7 +493,13 @@ namespace SparkleShare {
 					AddButton.Clicked += delegate {
 
 						AddDialog.Remove (AddDialog.Child);
-						AddDialog.Add (new Label ("Downloading files...\nPlease wait."));
+							VBox Box = new VBox (false, 24);
+							SparkleSpinner Spinner = new SparkleSpinner ();
+							Label Label = new Label ("Downloading files,\nthis may take a while...");
+							Box.PackStart (Spinner, false, false, 0);
+							Box.PackStart (Label, false, false, 0);
+						AddDialog.BorderWidth = 30;
+						AddDialog.Add (Box);
 						AddDialog.ShowAll ();
 
 						string RepoRemoteUrl = RemoteUrlCombo.Entry.Text;
@@ -518,6 +525,7 @@ namespace SparkleShare {
 						};
 						
 					};
+
 				ButtonBox.Add (CancelButton);
 				ButtonBox.Add (AddButton);
 
