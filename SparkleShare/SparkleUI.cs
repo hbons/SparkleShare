@@ -44,6 +44,7 @@ namespace SparkleShare {
 				Directory.CreateDirectory (SparklePath);
 				Console.WriteLine ("[Config] Created '" + SparklePath + "'");
 
+				// Linux/GNOME specific
 				Process.StartInfo.FileName = "gvfs-set-attribute";
 				Process.StartInfo.Arguments = SparklePath +
 				                              " metadata::custom-icon " +
@@ -51,7 +52,7 @@ namespace SparkleShare {
 					                           "48x48/places/" +
 					                           "folder-sparkleshare.png";
 				Process.Start();
-
+				
 			}
 
 			// Create place to store configuration user's home folder
@@ -76,6 +77,15 @@ namespace SparkleShare {
 			foreach (string Folder in Repos) {
 				Repositories [i] = new SparkleRepo (Folder);
 				i++;
+
+				// Linux/GNOME only: attach emblems
+				Process.StartInfo.FileName = "gvfs-set-attribute";
+				Console.WriteLine (Folder);
+				Process.StartInfo.Arguments = " file://" + Folder + 
+				                              " metadata::emblems " +
+														"[synced]";
+				Console.WriteLine (Process.StartInfo.Arguments);
+				Process.Start();				
 			}
 
 			// Don't create the window and status 
