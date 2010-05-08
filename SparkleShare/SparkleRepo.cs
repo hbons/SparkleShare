@@ -41,7 +41,7 @@ namespace SparkleShare {
 		public string UserName;
 		public bool MonitorOnly;
 
-		public SparkleRepo (string Path) {
+		public SparkleRepo (string RepoPath) {
 
 			MonitorOnly = false;
 
@@ -50,9 +50,9 @@ namespace SparkleShare {
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
 
-			// Get the repository's path, example: "/home/user/SparkleShare/repo/"
-			LocalPath = Path;
-			Process.StartInfo.WorkingDirectory = LocalPath + "/";
+			// Get the repository's path, example: "/home/user/SparkleShare/repo"
+			LocalPath = RepoPath;
+			Process.StartInfo.WorkingDirectory = LocalPath;
 
 			// Get user.name, example: "User Name"
 			UserName = "Anonymous";
@@ -75,9 +75,7 @@ namespace SparkleShare {
 			RemoteOriginUrl = Process.StandardOutput.ReadToEnd().Trim ();
 
 			// Get the repository name, example: "Project"
-
-			string s = LocalPath.TrimEnd ( "/".ToCharArray ());
-			Name = LocalPath.Substring (s.LastIndexOf ("/") + 1);
+			Name = Path.GetFileName (LocalPath);
 
 			// Get the domain, example: "github.com" 
 			Domain = RemoteOriginUrl; 
