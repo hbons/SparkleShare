@@ -27,7 +27,7 @@ namespace SparkleShare {
 		public SparkleRepo [] Repositories;
 
 		public SparkleWindow SparkleWindow;
-		public SparkleStatusIcon SparkleStatusIcon;
+		public static SparkleStatusIcon NotificationIcon;
 
 		public SparkleUI (bool HideUI) {
 
@@ -108,8 +108,8 @@ namespace SparkleShare {
 				SparkleWindow.DeleteEvent += CloseSparkleWindow;
 
 				// Create the status icon
-				SparkleStatusIcon = new SparkleStatusIcon ();
-				SparkleStatusIcon.Activate += delegate { 
+				NotificationIcon = new SparkleStatusIcon ();
+				NotificationIcon.Activate += delegate { 
 					SparkleWindow.ToggleVisibility ();
 				};
 

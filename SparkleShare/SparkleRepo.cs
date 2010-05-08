@@ -15,6 +15,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
+using SparkleShare;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -207,10 +208,12 @@ namespace SparkleShare {
 		public void Fetch () {
 			// TODO: change status icon to sync
 			FetchTimer.Stop ();
+			SparkleUI.NotificationIcon.SetSyncingState ();
 			Console.WriteLine ("[Git][" + Name + "] Fetching changes...");
 			Process.StartInfo.Arguments = "fetch";
 			Process.Start();
 			Process.WaitForExit ();
+			SparkleUI.NotificationIcon.SetIdleState ();
 			Merge ();
 			FetchTimer.Start ();
 		}
