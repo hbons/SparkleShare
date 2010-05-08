@@ -23,6 +23,7 @@ uninstall:
 	rm /usr/share/icons/hicolor/*x*/status/document-*ed.png
 	rm /usr/share/icons/hicolor/*x*/status/avatar-default.png
 	rm /usr/share/icons/hicolor/*x*/emblems/emblem-sync*.png
+	rm /usr/share/icons/hicolor/*x*/animations/process-working.png
 	rm ~/.config/autostart/sparkleshare.desktop
 
 clean:
