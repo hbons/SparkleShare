@@ -516,8 +516,12 @@ namespace SparkleShare {
 
 						Process.Start ();
 						Process.Exited += delegate {
-							Directory.Move (SparklePaths.SparkleTmpPath + RepoName,
-							                SparklePaths.SparklePath + "Sticky");
+							Directory.Move (
+								SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
+								                            RepoName),
+								SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+								                            RepoName)
+							);
 							AddDialog.Destroy ();						
 						};
 						
