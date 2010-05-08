@@ -36,16 +36,16 @@ namespace SparkleShare {
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
 
-			string SparkleDir = SparklePaths.SparkleDir;
+			string SparklePath = SparklePaths.SparklePath;
 
 			// Create 'SparkleShare' folder in the user's home folder
 			// if it's not there already
-			if (!Directory.Exists (SparkleDir)) {
-				Directory.CreateDirectory (SparkleDir);
-				Console.WriteLine ("[Config] Created '" + SparkleDir + "'");
+			if (!Directory.Exists (SparklePath)) {
+				Directory.CreateDirectory (SparklePath);
+				Console.WriteLine ("[Config] Created '" + SparklePath + "'");
 
 				Process.StartInfo.FileName = "gvfs-set-attribute";
-				Process.StartInfo.Arguments = SparkleDir +
+				Process.StartInfo.Arguments = SparklePath +
 				                              " metadata::custom-icon " +
 					                           "file:///usr/share/icons/hicolor/" +
 					                           "48x48/places/" +
@@ -55,21 +55,21 @@ namespace SparkleShare {
 			}
 
 			// Create place to store configuration user's home folder
-			string ConfigDir = SparklePaths.SparkleConfigDir;
-			string AvatarDir = SparklePaths.SparkleAvatarsDir;
-			if (!Directory.Exists (ConfigDir)) {
+			string ConfigPath = SparklePaths.SparkleConfigPath;
+			string AvatarPath = SparklePaths.SparkleAvatarPath;
+			if (!Directory.Exists (ConfigPath)) {
 
-				Directory.CreateDirectory (ConfigDir);
-				Console.WriteLine ("[Config] Created '" + ConfigDir + "'");
+				Directory.CreateDirectory (ConfigPath);
+				Console.WriteLine ("[Config] Created '" + ConfigPath + "'");
 
 				// Create a place to store the avatars
-				Directory.CreateDirectory (AvatarDir);
-				Console.WriteLine ("[Config] Created '" + AvatarDir + "avatars'");
+				Directory.CreateDirectory (AvatarPath);
+				Console.WriteLine ("[Config] Created '" + AvatarPath + "avatars'");
 
 			}
 
 			// Get all the repos in ~/SparkleShare
-			string [] Repos = Directory.GetDirectories (SparkleDir);
+			string [] Repos = Directory.GetDirectories (SparklePath);
 			Repositories = new SparkleRepo [Repos.Length];
 
 			int i = 0;

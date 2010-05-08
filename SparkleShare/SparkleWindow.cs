@@ -92,6 +92,7 @@ namespace SparkleShare {
 				LayoutVertical.PackStart (Notebook, true, true, 0);
 
 					HButtonBox DialogButtons = new HButtonBox ();
+					DialogButtons.Layout = ButtonBoxStyle.End;
 					DialogButtons.BorderWidth = 6;
 
 						Button CloseButton = new Button (Stock.Close);
@@ -507,7 +508,7 @@ namespace SparkleShare {
 						Process.StartInfo.UseShellExecute = false;
 						Process.StartInfo.FileName = "git";
 						Process.StartInfo.WorkingDirectory =
-							SparklePaths.SparkleTmpDir;
+							SparklePaths.SparkleTmpPath;
 
 						Process.StartInfo.Arguments = "clone " +
 						                               RepoRemoteUrl + " " +
@@ -515,8 +516,8 @@ namespace SparkleShare {
 
 						Process.Start ();
 						Process.Exited += delegate {
-							Directory.Move (SparklePaths.SparkleTmpDir + RepoName,
-							                SparklePaths.SparkleDir + "Sticky");
+							Directory.Move (SparklePaths.SparkleTmpPath + RepoName,
+							                SparklePaths.SparklePath + "Sticky");
 							AddDialog.Destroy ();						
 						};
 						
@@ -557,7 +558,7 @@ namespace SparkleShare {
 		}
 
 		public void Quit (object o, EventArgs args) {
-			File.Delete (SparklePaths.SparkleTmpDir + "sparkleshare.pid");
+			File.Delete (SparklePaths.SparkleTmpPath + "sparkleshare.pid");
 			Application.Quit ();
 		}
 
