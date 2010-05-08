@@ -26,8 +26,8 @@ namespace SparkleShare {
 
 		public static string GetAvatarFileName (string Email, int Size) {
 
-			string AvatarPath = SparklePaths.SparkleAvatarsDir +  
-			                    Size + "x" + Size + "/";
+			string AvatarPath = Path.Combine (SparklePaths.SparkleAvatarPath, 
+			                    Size + "x" + Size);
 
 			if (!Directory.Exists (AvatarPath)) {
 				Directory.CreateDirectory (AvatarPath);
@@ -35,10 +35,10 @@ namespace SparkleShare {
 
 			}
 			
-			string AvatarFile = AvatarPath + Email;
+			string AvatarFilePath = AvatarPath + Email;
 
-			if (File.Exists (AvatarFile))
-				return AvatarFile;
+			if (File.Exists (AvatarFilePath))
+				return AvatarFilePath;
 
 			else {
 
@@ -48,7 +48,7 @@ namespace SparkleShare {
 				Uri GravatarUri = new Uri ("http://www.gravatar.com/avatar/" + 
 				                   GetMD5 (Email) + ".jpg?s=" + Size + "&d=404");
 
-				string TmpFile = SparklePaths.SparkleTmpDir + Email + Size;
+				string TmpFile = SparklePaths.SparkleTmpPath + Email + Size;
 
 				if (!File.Exists (TmpFile)) {
 
@@ -62,14 +62,15 @@ namespace SparkleShare {
 
 				}
 
-				string FallbackFileName = "/usr/share/icons/hicolor/" + 
-				                          Size + "x" + Size + 
-				                          "/status/avatar-default.png";
+				string FallbackFileName = CombineMore (SparklePaths.SparkleIconPath,
+																	Size + "x" + Size,
+																	"status",
+																	"avatar-default.png");
 
 				if (File.Exists (FallbackFileName))
 					return FallbackFileName;
 				else
-					return "/usr/share/icons/hicolor/16x16/status/avatar-default.png";
+					return "";
 			}
 
 		}
@@ -83,6 +84,13 @@ namespace SparkleShare {
 
 		  return BitConverter.ToString(EncodedBytes).ToLower ().Replace ("-", "");
 
+		}
+		
+		public static string CombineMore (params string [] Parts) {
+			string NewPath = "";
+			foreach (string Part in Parts)
+				NewPath = Path.Combine(NewPath, Part);
+			return NewPath;
 		}
 
 	}
