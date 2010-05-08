@@ -31,12 +31,12 @@ namespace SparkleShare {
 
 		public SparkleUI (bool HideUI) {
 
+			string SparklePath = SparklePaths.SparklePath;
+
 			Process Process = new Process();
 			Process.EnableRaisingEvents = false;
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
-
-			string SparklePath = SparklePaths.SparklePath;
 
 			// Create 'SparkleShare' folder in the user's home folder
 			// if it's not there already
@@ -66,19 +66,6 @@ namespace SparkleShare {
 
 			}
 
-			// Create place to store configuration user's home folder
-			string ConfigPath = SparklePaths.SparkleConfigPath;
-			string AvatarPath = SparklePaths.SparkleAvatarPath;
-			if (!Directory.Exists (ConfigPath)) {
-
-				Directory.CreateDirectory (ConfigPath);
-				Console.WriteLine ("[Config] Created '" + ConfigPath + "'");
-
-				// Create a place to store the avatars
-				Directory.CreateDirectory (AvatarPath);
-				Console.WriteLine ("[Config] Created '" + AvatarPath + "avatars'");
-
-			}
 
 			// Get all the repos in ~/SparkleShare
 			string [] Repos = Directory.GetDirectories (SparklePath);
@@ -112,6 +99,20 @@ namespace SparkleShare {
 				NotificationIcon.Activate += delegate { 
 					SparkleWindow.ToggleVisibility ();
 				};
+
+			}
+
+			// Create place to store configuration user's home folder
+			string ConfigPath = SparklePaths.SparkleConfigPath;
+			string AvatarPath = SparklePaths.SparkleAvatarPath;
+			if (!Directory.Exists (ConfigPath)) {
+
+				Directory.CreateDirectory (ConfigPath);
+				Console.WriteLine ("[Config] Created '" + ConfigPath + "'");
+
+				// Create a place to store the avatars
+				Directory.CreateDirectory (AvatarPath);
+				Console.WriteLine ("[Config] Created '" + AvatarPath + "avatars'");
 
 			}
 
