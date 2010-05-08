@@ -103,7 +103,7 @@ namespace SparkleShare {
 
 			// Fetch remote changes every 20 seconds
 			FetchTimer = new Timer ();
-			FetchTimer.Interval = 20000;
+			FetchTimer.Interval = 10000;
 			FetchTimer.Elapsed += delegate { 
 				Fetch ();
 			};
@@ -182,7 +182,7 @@ namespace SparkleShare {
 			Console.WriteLine ("[Git][" + Name + "] Staging changes...");
 			Process.StartInfo.Arguments = "add --all";
 			Process.Start();
-
+//			SparkleUI.NotificationIcon.SetSyncingState ();
 			string Message = FormatCommitMessage ();
 			if (!Message.Equals ("")) {
 				Commit (Message);
@@ -206,29 +206,27 @@ namespace SparkleShare {
 
 		// Fetches changes from the remote repo	
 		public void Fetch () {
-			// TODO: change status icon to sync
 			FetchTimer.Stop ();
 			SparkleUI.NotificationIcon.SetSyncingState ();
-			Console.WriteLine ("[Git][" + Name + "] Fetching changes...");
+			Console.WriteLine ("[Git][" + Name + "] Fetching changes... ");
 			Process.StartInfo.Arguments = "fetch";
 			Process.Start();
 			Process.WaitForExit ();
-			SparkleUI.NotificationIcon.SetIdleState ();
+			Console.WriteLine ("[Git][" + Name + "] Done fetching changes ");
 			Merge ();
+			SparkleUI.NotificationIcon.SetIdleState ();
 			FetchTimer.Start ();
 		}
 
 		// Merges the fetched changes
 		public void Merge () {
 			Watcher.EnableRaisingEvents = false;
-
-			Console.WriteLine ("[Git][" + Name + "] Merging fetched changes...");
-
+			Console.WriteLine ("[Git][" + Name + "] Merging fetched changes... ");
 			Process.StartInfo.Arguments = "merge origin/master";
 			Process.Start();
 			Process.WaitForExit ();
+			Console.WriteLine ("[Git][" + Name + "] Done merging changes ");
 			string Output = Process.StandardOutput.ReadToEnd().Trim ();
-
 			// Show notification if there are updates
 			if (!Output.Equals ("Already up-to-date.")) {
 
@@ -254,7 +252,7 @@ namespace SparkleShare {
 			}
 
 			Watcher.EnableRaisingEvents = true;
-			// TODO: change status icon to normal
+
 		}
 
 		// Pushes the changes to the remote repo
@@ -264,6 +262,7 @@ namespace SparkleShare {
 			Process.StartInfo.Arguments = "push";
 			Process.Start();
 			Process.WaitForExit ();
+//			SparkleUI.NotificationIcon.SetIdleState ();
 		}
 
 		// Ignores Repos, dotfiles, swap files and the like.
