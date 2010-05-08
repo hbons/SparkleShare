@@ -15,27 +15,26 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.IO;
 
 namespace SparkleShare {
 	
 	public static class SparklePaths {
 
-		public static string SparkleTmpDir = "/tmp/sparkleshare";
+		public static string SparkleTmpPath = "/tmp/sparkleshare";
 
-		public static string SparkleDir =
-			Environment.GetEnvironmentVariable("HOME") +
-			                                   "/" + "SparkleShare/";
+		public static string HomePath =
+			Environment.GetEnvironmentVariable("HOME");
+			
+		public static string SparklePath = Path.Combine (HomePath ,"SparkleShare");
 
-		public static string SparkleConfigDir =
-			Environment.GetEnvironmentVariable("HOME") +
-			                                   "/" + ".config/sparkleshare/";
+		public static string SparkleConfigPath =
+			Path.Combine (HomePath, Path.Combine (".config", "sparkleshare"));
 
-		public static string SparkleAvatarsDir =
-			Environment.GetEnvironmentVariable("HOME") +
-			                                   "/" + ".config/sparkleshare/" +
-			                                   "avatars/";
+		public static string SparkleAvatarPath =
+			Path.Combine (SparkleConfigPath, "avatars");
 			                                   
-		public static string SparkleIconsDir = "/usr/share/icons/hicolor/";
+		public static string SparkleIconPath = "/usr/share/icons/hicolor";
 
 	}
 
