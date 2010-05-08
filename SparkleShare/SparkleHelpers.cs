@@ -32,18 +32,15 @@ namespace SparkleShare {
 			if (!Directory.Exists (AvatarPath)) {
 				Directory.CreateDirectory (AvatarPath);
 				Console.WriteLine ("[Config] Created '" + AvatarPath + "'");
-
 			}
 			
 			string AvatarFilePath = AvatarPath + Email;
 
 			if (File.Exists (AvatarFilePath))
 				return AvatarFilePath;
-
 			else {
 
 				// Let's try to get the person's gravatar for next time
-
 				WebClient WebClient = new WebClient ();
 				Uri GravatarUri = new Uri ("http://www.gravatar.com/avatar/" + 
 				                   GetMD5 (Email) + ".jpg?s=" + Size + "&d=404");
@@ -66,26 +63,25 @@ namespace SparkleShare {
 																	Size + "x" + Size,
 																	"status",
 																	"avatar-default.png");
-
 				if (File.Exists (FallbackFileName))
 					return FallbackFileName;
 				else
 					return "";
+
 			}
 
 		}
 
-		// Helper that creates an MD5 hash
+		// Creates an MD5 hash
 		public static string GetMD5 (string s) {
-
 		  MD5 md5 = new MD5CryptoServiceProvider ();
 		  Byte[] Bytes = ASCIIEncoding.Default.GetBytes (s);
 		  Byte[] EncodedBytes = md5.ComputeHash (Bytes);
-
 		  return BitConverter.ToString(EncodedBytes).ToLower ().Replace ("-", "");
-
 		}
 		
+		// Makes it possible to combine more than
+		// two paths at once.
 		public static string CombineMore (params string [] Parts) {
 			string NewPath = "";
 			foreach (string Part in Parts)
