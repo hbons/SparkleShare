@@ -63,10 +63,10 @@ namespace SparkleShare {
 																	Size + "x" + Size,
 																	"status",
 																	"avatar-default.png");
-				if (File.Exists (FallbackFileName))
-					return FallbackFileName;
+				if (File.Exists (AvatarPath + Email))
+					return AvatarPath + Email;
 				else
-					return "";
+					return FallbackFileName;
 
 			}
 

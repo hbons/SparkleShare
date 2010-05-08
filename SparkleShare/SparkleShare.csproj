@@ -32,14 +32,15 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SparkleShare.cs" />
-    <Compile Include="SparkleRepo.cs" />
-    <Compile Include="SparkleUI.cs" />
-    <Compile Include="SparkleStatusIcon.cs" />
-    <Compile Include="SparkleWindow.cs" />
     <Compile Include="SparkleBubble.cs" />
-    <Compile Include="SparkleSpinner.cs" />
-    <Compile Include="SparklePaths.cs" />
     <Compile Include="SparkleHelpers.cs" />
+    <Compile Include="SparklePaths.cs" />
+    <Compile Include="SparklePlatform.cs" />
+    <Compile Include="SparkleRepo.cs" />
+    <Compile Include="SparkleShare.cs" />
+    <Compile Include="SparkleSpinner.cs" />
+    <Compile Include="SparkleStatusIcon.cs" />
+    <Compile Include="SparkleUI.cs" />
+    <Compile Include="SparkleWindow.cs" />
   </ItemGroup>
 </Project>

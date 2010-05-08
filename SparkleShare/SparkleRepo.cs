@@ -105,7 +105,6 @@ namespace SparkleShare {
 			FetchTimer.Interval = 20000;
 			FetchTimer.Elapsed += delegate { 
 				Fetch ();
-			
 			};
 
 			FetchTimer.Start();
