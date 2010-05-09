@@ -22,8 +22,9 @@ namespace SparkleShare {
 
 		public SparkleBubble (string Title, string Subtext) : base (Title, Subtext)  {
 				Timeout = 4500;
-				Urgency = Urgency.Normal;
+				Urgency = Urgency.Low;
 				Show ();
+//				StatusIcon = SparkleUI.NotificationIcon;
 		}
 
 	}
