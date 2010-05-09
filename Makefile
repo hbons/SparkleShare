@@ -20,6 +20,7 @@ uninstall:
 	rm /usr/local/share/sparkleshare/SparkleShare.exe.mdb
 	rmdir /usr/local/share/sparkleshare
 	rm /usr/share/icons/hicolor/*x*/places/folder-sparkleshare.png
+	rm /usr/share/icons/hicolor/*x*/places/folder-sync*.png
 	rm /usr/share/icons/hicolor/*x*/status/document-*ed.png
 	rm /usr/share/icons/hicolor/*x*/status/avatar-default.png
 	rm /usr/share/icons/hicolor/*x*/emblems/emblem-sync*.png
