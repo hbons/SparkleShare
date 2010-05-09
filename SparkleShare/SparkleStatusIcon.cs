@@ -25,13 +25,18 @@ namespace SparkleShare {
 		}
 
 		public void SetIdleState () {
-			IconName = "folder-sparkleshare";
+			IconName = "folder-synced";
 			Tooltip = "SparkleShare, all up to date";
 		}
 
 		public void SetSyncingState () {
-			IconName = "view-refresh"; // Massively abusing this icon here :)
-			Tooltip = "SparkleShare, updating changes...";
+			IconName = "folder-syncing";
+			Tooltip = "SparkleShare, updating files...";
+		}
+
+		public void SetErrorState () {
+			IconName = "folder-sync-error";
+			Tooltip = "SparkleShare, something went wrong";
 		}
 
 	}
