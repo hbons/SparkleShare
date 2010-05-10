@@ -138,15 +138,14 @@ namespace SparkleShare {
 		// Creates a visual list of repositories
 		public VBox CreateReposList() {
 
-			string FolderIcon =
-				"/usr/share/icons/gnome/32x32/places/folder.png";
+			Gdk.Pixbuf FolderIcon = SparkleHelpers.GetIcon ("folder", 32);
 				
 			TreeIter ReposIter;
 			foreach (SparkleRepo SparkleRepo in Repositories) {
 
 				ReposIter = ReposStore.Prepend ();
 
-				ReposStore.SetValue (ReposIter, 0, new Gdk.Pixbuf (FolderIcon));
+				ReposStore.SetValue (ReposIter, 0, FolderIcon);
 
 				ReposStore.SetValue (ReposIter, 1, SparkleRepo.Name + "    \n" + 
 					                                SparkleRepo.Domain + "    ");
@@ -200,9 +199,11 @@ namespace SparkleShare {
 
 			AddRemoveButtons.PackStart (AddButton, true, true, 0);
 
-			Image RemoveImage = new Image ("/usr/share/icons/gnome/16x16/actions/list-remove.png");
+			Image RemoveIcon = new Image (
+				SparkleHelpers.GetIcon ("document-removed", 16));
+
 			Button RemoveButton = new Button ();
-			RemoveButton.Image = RemoveImage;
+			RemoveButton.Add (RemoveIcon);
 			AddRemoveButtons.PackStart (RemoveButton, false, false, 0);
 
 			ScrolledWindow.AddWithViewport (ReposView);
@@ -285,8 +286,8 @@ namespace SparkleShare {
 		public ScrolledWindow CreateEventLog() {
 
 			ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf),
-				                                typeof (string),
-				                                typeof (string));
+				                                 typeof (string),
+				                                 typeof (string));
 
 			Process Process = new Process();
 			Process.EnableRaisingEvents = false; 
@@ -323,25 +324,21 @@ namespace SparkleShare {
 				string Message = Parts [1];
 				string TimeAgo = Parts [2];
 
-				string IconFile =
-					"/usr/share/icons/hicolor/16x16/status/document-edited.png";		
+				string IconFile = "document-edited";		
 
 				if (Message.IndexOf (" added ‘") > -1)
-					IconFile = 
-						"/usr/share/icons/hicolor/16x16/status/document-added.png";
+					IconFile = "document-added";
 
 				if (Message.IndexOf (" deleted ‘") > -1)
-					IconFile = 
-						"/usr/share/icons/hicolor/16x16/status/document-removed.png";
+					IconFile = "document-removed";
 
 				if (Message.IndexOf (" moved ‘") > -1 || 
 					Message.IndexOf (" renamed ‘") > -1)
+					IconFile = "document-moved";
 
-					IconFile =
-						"/usr/share/icons/hicolor/16x16/status/document-moved.png";
-
+				Gdk.Pixbuf ChangeIcon = SparkleHelpers.GetIcon (IconFile, 16);
 				Iter = LogStore.Append ();
-				LogStore.SetValue (Iter, 0, new Gdk.Pixbuf (IconFile));
+				LogStore.SetValue (Iter, 0, ChangeIcon);
 				LogStore.SetValue (Iter, 1, Message);
 				LogStore.SetValue (Iter, 2, " " + TimeAgo);
 

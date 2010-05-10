@@ -14,6 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using Gtk;
 using System;
 using System.IO;
 using System.Net;
@@ -85,8 +86,18 @@ namespace SparkleShare {
 		public static string CombineMore (params string [] Parts) {
 			string NewPath = "";
 			foreach (string Part in Parts)
-				NewPath = Path.Combine(NewPath, Part);
+				NewPath = Path.Combine (NewPath, Part);
 			return NewPath;
+		}
+
+
+		public static IconTheme SparkleTheme = new IconTheme ();
+
+		// Looks up an icon from the system's theme
+		public static Gdk.Pixbuf GetIcon (string Name, int Size) {
+//			SparkleTheme.AppendSearchPath (SparklePaths.SparkleInstallPath);
+			return SparkleTheme.LoadIcon (Name, Size,
+			                              IconLookupFlags.GenericFallback);
 		}
 
 	}
