@@ -103,7 +103,7 @@ namespace SparkleShare {
 
 			// Fetch remote changes every 20 seconds
 			FetchTimer = new Timer ();
-			FetchTimer.Interval = 10000;
+			FetchTimer.Interval = 17500;
 			FetchTimer.Elapsed += delegate { 
 				Fetch ();
 			};
