@@ -408,13 +408,10 @@ namespace SparkleShare {
 					if (UserName.Equals (SparkleRepo.UserName))
 						UserName += " (that’s you!)";
 
-					string AvatarFileName =
-						SparkleHelpers.GetAvatarFileName (UserEmail, 32);
-
 					// Actually add to the list
 					PeopleIter = PeopleStore.Prepend ();
 					PeopleStore.SetValue (PeopleIter, 0,
-					                      new Gdk.Pixbuf (AvatarFileName));
+					                      SparkleHelpers.GetAvatar (UserEmail , 32));
 					PeopleStore.SetValue (PeopleIter, 1, UserName + "\n" + UserEmail);
 
 				}
