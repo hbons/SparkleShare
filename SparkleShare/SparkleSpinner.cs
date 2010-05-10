@@ -33,15 +33,12 @@ namespace SparkleShare {
 
 		public SparkleSpinner () : base ()  {
 
-			Size = 48;
-			string SpinnerFileName = SparkleHelpers.CombineMore (
-			                         	SparklePaths.SparkleIconPath,
-			                      		Size + "x" + Size, "animations",
-                               		"process-working.png");
-
-			Gdk.Pixbuf SpinnerGallery = new Gdk.Pixbuf (SpinnerFileName);
 			CycleDuration = 750;
 			CurrentStep = 0;
+			Size = 48;			
+
+			Gdk.Pixbuf SpinnerGallery = SparkleHelpers.GetIcon ("process-working",
+			                                                    Size);
 
 			int FramesInWidth = SpinnerGallery.Width / Size;
 			int FramesInHeight = SpinnerGallery.Height / Size;
