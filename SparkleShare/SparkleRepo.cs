@@ -132,7 +132,8 @@ namespace SparkleShare {
 		// file activity has settles down
 		public void StartBufferTimer () {
 
-			int Interval = 2000;
+			FetchTimer.Stop ();
+			int Interval = 4000;
 			if (!BufferTimer.Enabled) {	
 
 				// Delay for a few seconds to see if more files change
@@ -155,6 +156,7 @@ namespace SparkleShare {
 					Console.WriteLine ("[Buffer][" + Name + "] Done waiting.");
 					Add ();
 				};
+				FetchTimer.Start ();
 
 				BufferTimer.Start();
 				Console.WriteLine ("[Buffer][" + Name + "] " + 
@@ -182,6 +184,8 @@ namespace SparkleShare {
 			Console.WriteLine ("[Git][" + Name + "] Staging changes...");
 			Process.StartInfo.Arguments = "add --all";
 			Process.Start();
+			Process.WaitForExit ();
+			Console.WriteLine ("[Git][" + Name + "] Changed staged.");
 //			SparkleUI.NotificationIcon.SetSyncingState ();
 			string Message = FormatCommitMessage ();
 			if (!Message.Equals ("")) {
@@ -199,6 +203,8 @@ namespace SparkleShare {
 			Console.WriteLine ("[Git][" + Name + "] Commiting changes...");
 			Process.StartInfo.Arguments = "commit -m \"" + Message + "\"";
 			Process.Start();
+			Process.WaitForExit ();
+			Console.WriteLine ("[Git][" + Name + "] Changes commited.");
 			ShowEventBubble (UserName + " " + Message, 
 				              SparkleHelpers.GetAvatar (UserEmail, 48),
 				              true);
@@ -212,7 +218,7 @@ namespace SparkleShare {
 			Process.StartInfo.Arguments = "fetch";
 			Process.Start();
 			Process.WaitForExit ();
-			Console.WriteLine ("[Git][" + Name + "] Done fetching changes ");
+			Console.WriteLine ("[Git][" + Name + "] Changes fetched.");
 			Merge ();
 			SparkleUI.NotificationIcon.SetIdleState ();
 			FetchTimer.Start ();
@@ -225,7 +231,7 @@ namespace SparkleShare {
 			Process.StartInfo.Arguments = "merge origin/master";
 			Process.Start();
 			Process.WaitForExit ();
-			Console.WriteLine ("[Git][" + Name + "] Done merging changes ");
+			Console.WriteLine ("[Git][" + Name + "] Changes merged.");
 			string Output = Process.StandardOutput.ReadToEnd().Trim ();
 			// Show notification if there are updates
 			if (!Output.Equals ("Already up-to-date.")) {
@@ -252,6 +258,7 @@ namespace SparkleShare {
 			}
 
 			Watcher.EnableRaisingEvents = true;
+			Console.WriteLine ("[Git][" + Name + "] Nothing going on... ");
 
 		}
 
@@ -262,6 +269,8 @@ namespace SparkleShare {
 			Process.StartInfo.Arguments = "push";
 			Process.Start();
 			Process.WaitForExit ();
+			Console.WriteLine ("[Git][" + Name + "] Changes pushed.");
+
 //			SparkleUI.NotificationIcon.SetIdleState ();
 		}
 
