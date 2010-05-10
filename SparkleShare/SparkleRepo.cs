@@ -200,7 +200,7 @@ namespace SparkleShare {
 			Process.StartInfo.Arguments = "commit -m \"" + Message + "\"";
 			Process.Start();
 			ShowEventBubble (UserName + " " + Message, 
-				              SparkleHelpers.GetAvatarFileName (UserEmail, 48),
+				              SparkleHelpers.GetAvatar (UserEmail, 48),
 				              true);
 		}
 
@@ -246,7 +246,7 @@ namespace SparkleShare {
 				string LastCommitUserName = Process.StandardOutput.ReadToEnd().Trim ();
 
 				ShowEventBubble (LastCommitUserName + " " + LastCommitMessage, 
-				                 SparkleHelpers.GetAvatarFileName (LastCommitEmail, 48),
+				                 SparkleHelpers.GetAvatar (LastCommitEmail, 48),
 				                 true);
 
 			}
@@ -371,11 +371,11 @@ namespace SparkleShare {
 
 		// Shows a notification with text and image
 		public void ShowEventBubble (string Title, 
-			                                string IconFileName, 
-			                                bool ShowButtons) {
+			                          Gdk.Pixbuf Avatar, 
+			                          bool ShowButtons) {
 
 			SparkleBubble StuffChangedBubble = new SparkleBubble (Title, "");
-			StuffChangedBubble.Icon = new Gdk.Pixbuf (IconFileName);
+			StuffChangedBubble.Icon = Avatar;
 
 			// Add a button to open the folder where the changed file is
 			if (ShowButtons)

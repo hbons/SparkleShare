@@ -25,7 +25,7 @@ namespace SparkleShare {
 	
 	public static class SparkleHelpers {
 
-		public static string GetAvatarFileName (string Email, int Size) {
+		public static Gdk.Pixbuf GetAvatar (string Email, int Size) {
 
 			string AvatarPath = Path.Combine (SparklePaths.SparkleAvatarPath, 
 			                    Size + "x" + Size);
@@ -38,7 +38,7 @@ namespace SparkleShare {
 			string AvatarFilePath = AvatarPath + Email;
 
 			if (File.Exists (AvatarFilePath))
-				return AvatarFilePath;
+				return new Gdk.Pixbuf (AvatarFilePath);
 			else {
 
 				// Let's try to get the person's gravatar for next time
@@ -60,14 +60,10 @@ namespace SparkleShare {
 
 				}
 
-				string FallbackFileName = CombineMore (SparklePaths.SparkleIconPath,
-																	Size + "x" + Size,
-																	"status",
-																	"avatar-default.png");
 				if (File.Exists (AvatarPath + Email))
-					return AvatarPath + Email;
+					return new Gdk.Pixbuf (AvatarPath + Email);
 				else
-					return FallbackFileName;
+					return GetIcon ("avatar-default", Size);
 
 			}
 
@@ -95,7 +91,7 @@ namespace SparkleShare {
 
 		// Looks up an icon from the system's theme
 		public static Gdk.Pixbuf GetIcon (string Name, int Size) {
-//			SparkleTheme.AppendSearchPath (SparklePaths.SparkleInstallPath);
+			SparkleTheme.AppendSearchPath (SparklePaths.SparkleInstallPath);
 			return SparkleTheme.LoadIcon (Name, Size,
 			                              IconLookupFlags.GenericFallback);
 		}
