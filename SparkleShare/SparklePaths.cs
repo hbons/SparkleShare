@@ -29,7 +29,11 @@ namespace SparkleShare {
 		public static string SparklePath = Path.Combine (HomePath ,"SparkleShare");
 
 		public static string SparkleConfigPath =
-			Path.Combine (HomePath, Path.Combine (".config", "sparkleshare"));
+			SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
+			
+		public static string SparkleInstallPath =
+			SparkleHelpers.CombineMore ("usr", "share", "sparkleshare",
+			                            "icons", "hicolor");
 
 		public static string SparkleAvatarPath =
 			Path.Combine (SparkleConfigPath, "avatars");
