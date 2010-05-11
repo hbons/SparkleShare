@@ -106,8 +106,6 @@ namespace SparkleShare {
 				LayoutVertical.PackStart (DialogButtons, false, false, 0);
 
 
-
-			// Fetch remote changes every 20 seconds
 /*			Timer RedrawTimer = new Timer ();
 			RedrawTimer.Interval = 5000;
 			RedrawTimer.Elapsed += delegate { 
@@ -486,7 +484,8 @@ namespace SparkleShare {
 						AddDialog.Remove (AddDialog.Child);
 							VBox Box = new VBox (false, 24);
 							SparkleSpinner Spinner = new SparkleSpinner ();
-							Label Label = new Label ("Downloading files,\nthis may take a while...");
+							Label Label = new Label ("Downloading files,\n" + 
+							                         "this may take a while...");
 							Box.PackStart (Spinner, false, false, 0);
 							Box.PackStart (Label, false, false, 0);
 						AddDialog.BorderWidth = 30;
@@ -556,7 +555,8 @@ namespace SparkleShare {
 		}
 
 		public void Quit (object o, EventArgs args) {
-			File.Delete (SparklePaths.SparkleTmpPath + "sparkleshare.pid");
+			File.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath +
+			                                         "sparkleshare.pid"));
 			Application.Quit ();
 		}
 
