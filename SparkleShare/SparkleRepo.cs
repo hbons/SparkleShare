@@ -264,13 +264,11 @@ namespace SparkleShare {
 
 		// Pushes the changes to the remote repo
 		public void Push () {
-			// TODO: What happens when network disconnects during a push
 			Console.WriteLine ("[Git][" + Name + "] Pushing changes...");
 			Process.StartInfo.Arguments = "push";
 			Process.Start();
 			Process.WaitForExit ();
 			Console.WriteLine ("[Git][" + Name + "] Changes pushed.");
-
 //			SparkleUI.NotificationIcon.SetIdleState ();
 		}
 
