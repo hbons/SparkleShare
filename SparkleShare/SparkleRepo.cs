@@ -114,7 +114,7 @@ namespace SparkleShare {
 			// Add everything that changed 
 			// since SparkleShare was stopped
 			Add ();
-
+			Console.WriteLine ("[Git][" + Name + "] Nothing going on...");
 
 		}
 
