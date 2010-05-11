@@ -31,6 +31,7 @@ namespace SparkleShare {
 		private VBox LayoutVerticalRight;
 		private HBox LayoutHorizontal;
 
+		private Notebook Notebook;
 		private TreeView ReposView;
 		private ListStore ReposStore;
 		private SparkleRepo [] Repositories;
@@ -65,7 +66,7 @@ namespace SparkleShare {
 
 				VBox LayoutVertical = new VBox (false, 0);
 
-					Notebook Notebook = new Notebook ();
+					Notebook = new Notebook ();
 					Notebook.BorderWidth = 6;
 
 						LayoutHorizontal = new HBox (false, 0);
@@ -86,8 +87,8 @@ namespace SparkleShare {
 						LayoutHorizontal.PackStart (LayoutVerticalRight,
 						                            true, true, 12);
 
-					Notebook.AppendPage (LayoutHorizontal, new Label ("Folders"));
 					Notebook.AppendPage (CreateEventLog (), new Label ("Events"));
+					Notebook.AppendPage (LayoutHorizontal, new Label ("Folders"));
 
 				LayoutVertical.PackStart (Notebook, true, true, 0);
 
@@ -515,7 +516,9 @@ namespace SparkleShare {
 								SparkleHelpers.CombineMore (SparklePaths.SparklePath,
 								                            RepoName)
 							);
-							AddDialog.Destroy ();						
+							AddDialog.Destroy ();
+							ToggleVisibility ();
+							Notebook.CurrentPage = 1;
 						};
 						
 					};
