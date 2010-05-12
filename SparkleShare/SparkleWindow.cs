@@ -468,6 +468,8 @@ namespace SparkleShare {
 				RemoteUrlExample.SetAlignment (0, 0);
 				RemoteUrlLabel.Xalign = 1;
 
+						// NameEntry.Text;
+
 				HButtonBox ButtonBox = new HButtonBox ();
 				ButtonBox.Layout = ButtonBoxStyle.End;
 				ButtonBox.Spacing = 6;
@@ -480,7 +482,17 @@ namespace SparkleShare {
 						AddDialog.Destroy ();
 					};
 
+					AddButton.State = StateType.Insensitive;
 					AddButton.Clicked += delegate {
+				RemoteUrlCombo.Entry.Changed += delegate {
+					if (SparkleHelpers.IsGitUrl (RemoteUrlCombo.Entry.Text))
+						AddButton.State = StateType.Normal;
+				};
+				
+				RemoteUrlCombo.Entry.Changed += delegate {
+					if (RemoteUrlCombo.Entry.Text.Length > 0)
+						AddButton.State = StateType.Normal;
+				};
 
 						AddDialog.Remove (AddDialog.Child);
 							VBox Box = new VBox (false, 24);
