@@ -96,6 +96,10 @@ namespace SparkleShare {
 			                              IconLookupFlags.GenericFallback);
 		}
 
+		public static bool IsGitUrl (string Url) {
+			return false;
+		}
+
 	}
 
 }
