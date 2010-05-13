@@ -29,9 +29,9 @@ namespace SparkleShare {
 
 			// Check if git is installed
 			Process Process = new Process();
+			Process.StartInfo.FileName = "git";
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
-			Process.StartInfo.FileName = "git";
 			Process.Start();
 
 			if (Process.StandardOutput.ReadToEnd().IndexOf ("version") == -1) {
