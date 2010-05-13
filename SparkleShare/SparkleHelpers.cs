@@ -87,7 +87,6 @@ namespace SparkleShare {
 			return NewPath;
 		}
 
-
 		public static IconTheme SparkleTheme = new IconTheme ();
 
 		// Looks up an icon from the system's theme
@@ -98,7 +97,7 @@ namespace SparkleShare {
 		}
 
 		public static bool IsGitUrl (string Url) {
-			return Regex.Match (Url, @"[a-z]+://.+(/|:).+").Success;
+			return Regex.Match (Url, @"[a-z]+://(.)+").Success;
 		}
 
 	}
