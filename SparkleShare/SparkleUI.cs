@@ -44,18 +44,18 @@ namespace SparkleShare {
 				Directory.CreateDirectory (SparklePath);
 				Console.WriteLine ("[Config] Created '" + SparklePath + "'");
 
-				// Linux/GNOME specific: Add a special icon to
-				// the SparkleShare folder
-				Process.StartInfo.FileName = "gvfs-set-attribute";
-				Process.StartInfo.Arguments = SparklePath +
-				                              " metadata::custom-icon " +
-					                           "file:///usr/share/icons/hicolor/" +
-					                           "48x48/places/" +
-					                           "folder-sparkleshare.png";
-				Process.Start();
-
-				// Add the SparkleShare folder to the bookmarks
 				if (SparklePlatform.Name.Equals ("GNOME")) {
+					
+					// Add a special icon to the SparkleShare folder
+					Process.StartInfo.FileName = "gvfs-set-attribute";
+					Process.StartInfo.Arguments = SparklePath +
+						                           " metadata::custom-icon " +
+							                        "file:///usr/share/icons/hicolor/" +
+							                        "48x48/places/" +
+							                        "folder-sparkleshare.png";
+					Process.Start();
+
+					// Add the SparkleShare folder to the bookmarks
 					string BookmarksFileName =
 						Path.Combine (SparklePaths.HomePath, ".gtk-bookmarks");
 					if (File.Exists (BookmarksFileName)) {
@@ -63,6 +63,7 @@ namespace SparkleShare {
 						TextWriter.WriteLine ("file://" + SparklePath + " SparkleShare");
 						TextWriter.Close();
 					}
+
 				}
 
 			}
@@ -77,12 +78,14 @@ namespace SparkleShare {
 				Repositories [i] = new SparkleRepo (Folder);
 				i++;
 
-				// Linux/GNOME only: attach emblems
-				Process.StartInfo.FileName = "gvfs-set-attribute";
-				Process.StartInfo.Arguments = " file://" + Folder + 
-				                              " metadata::emblems " +
-														"[synced]";
-				Process.Start();				
+				// Attach emblems
+				if (SparklePlatform.Name.Equals ("GNOME")) {
+					Process.StartInfo.FileName = "gvfs-set-attribute";
+					Process.StartInfo.Arguments = " file://" + Folder + 
+						                           " metadata::emblems " +
+															"[synced]";
+					Process.Start();				
+				}
 
 			}
 
