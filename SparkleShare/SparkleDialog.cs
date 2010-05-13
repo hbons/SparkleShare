@@ -131,9 +131,8 @@ namespace SparkleShare {
 
 			Process.StartInfo.Arguments =
 				"clone " + SparkleHelpers.CombineMore (RepoRemoteUrl, RepoName);
-			Console.WriteLine	(Process.StartInfo.Arguments);
 
-//			Process.Start ();
+			Process.Start ();
 			Process.Exited += delegate {
 				Directory.Move (
 					SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
