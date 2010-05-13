@@ -20,6 +20,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SparkleShare {
 	
@@ -97,7 +98,7 @@ namespace SparkleShare {
 		}
 
 		public static bool IsGitUrl (string Url) {
-			return false;
+			return Regex.Match (Url, @"^(ssh://|git://)*(/|:)*").Success;
 		}
 
 	}
