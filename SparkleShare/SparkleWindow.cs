@@ -31,10 +31,11 @@ namespace SparkleShare {
 		private VBox LayoutVerticalRight;
 		private HBox LayoutHorizontal;
 
-		private Notebook Notebook;
+		public Notebook Notebook;
 		private TreeView ReposView;
 		private ListStore ReposStore;
 		private SparkleRepo [] Repositories;
+		private SparkleDialog SparkleDialog;
 
 		public SparkleWindow (SparkleRepo [] R) : base ("SparkleShare")  {
 
@@ -50,7 +51,11 @@ namespace SparkleShare {
 
 				NoFoldersBubble.IconName = "folder-sparkleshare";
 				NoFoldersBubble.AddAction ("", "Set up a folder", 
-				                           delegate { CreateAddDialog (); } );
+				                           delegate {
+				                           	SparkleDialog =
+				                           		new SparkleDialog (this);
+				                           	SparkleDialog.ShowAll ();
+				                           } );
 
 			} else CreateWindow ();
 
@@ -192,7 +197,8 @@ namespace SparkleShare {
 				Button AddButton = new Button ("Add...");
 
 				AddButton.Clicked += delegate {
-					CreateAddDialog ();
+					SparkleDialog = new SparkleDialog (this);
+					SparkleDialog.ShowAll ();
 				};
 
 
@@ -436,127 +442,7 @@ namespace SparkleShare {
 
 		}
 
-		public void CreateAddDialog () {
-		
-			Window AddDialog = new Window ("");
-			AddDialog.SetPosition (WindowPosition.Center);
-			AddDialog.Modal = true;
-			AddDialog.TransientFor = this;
-			AddDialog.BorderWidth = 6;
-			AddDialog.IconName = "folder-sparkleshare";
-		
-			VBox VBox = new VBox (false, 0);
-
-				Label NameLabel = new Label ("Folder Name:   ");
-				Entry NameEntry = new Entry ();
-				Label NameExample = new Label ("<span size='small'><i>Example: ‘Project’.</i></span>");
-				NameExample.UseMarkup = true;
-				NameExample.SetAlignment (0, 0);
-				NameLabel.Xalign = 1;
-		
-				Label RemoteUrlLabel = new Label ("Remote address:   ");
-
-				string [] DefaultUrls = new string [4] { "ssh://git@github.com/",
-						                                   "ssh://git@git.gnome.org/",
-						                                   "ssh://git@fedorahosted.org/",
-						                                   "ssh://git@gitorious.org/" };
-
-				ComboBoxEntry RemoteUrlCombo = new ComboBoxEntry (DefaultUrls);
-
-				Label RemoteUrlExample = new Label ("<span size='small'><i>Example: ‘ssh://git@github.com/’.</i></span>");
-				RemoteUrlExample.UseMarkup = true;
-				RemoteUrlExample.SetAlignment (0, 0);
-				RemoteUrlLabel.Xalign = 1;
-
-						// NameEntry.Text;
-
-				HButtonBox ButtonBox = new HButtonBox ();
-				ButtonBox.Layout = ButtonBoxStyle.End;
-				ButtonBox.Spacing = 6;
-				ButtonBox.BorderWidth = 6;
-
-					Button AddButton = new Button (Stock.Add);
-					Button CancelButton = new Button (Stock.Cancel);
-
-					CancelButton.Clicked += delegate {
-						AddDialog.Destroy ();
-					};
-
-					AddButton.State = StateType.Insensitive;
-					AddButton.Clicked += delegate {
-				RemoteUrlCombo.Entry.Changed += delegate {
-					if (SparkleHelpers.IsGitUrl (RemoteUrlCombo.Entry.Text))
-						AddButton.State = StateType.Normal;
-				};
-				
-				RemoteUrlCombo.Entry.Changed += delegate {
-					if (RemoteUrlCombo.Entry.Text.Length > 0)
-						AddButton.State = StateType.Normal;
-				};
-
-						AddDialog.Remove (AddDialog.Child);
-							VBox Box = new VBox (false, 24);
-							SparkleSpinner Spinner = new SparkleSpinner ();
-							Label Label = new Label ("Downloading files,\n" + 
-							                         "this may take a while...");
-							Box.PackStart (Spinner, false, false, 0);
-							Box.PackStart (Label, false, false, 0);
-						AddDialog.BorderWidth = 30;
-						AddDialog.Add (Box);
-						AddDialog.ShowAll ();
-
-						string RepoRemoteUrl = RemoteUrlCombo.Entry.Text;
-						string RepoName = NameEntry.Text;
-
-						Process Process = new Process();
-						Process.EnableRaisingEvents = true; 
-						Process.StartInfo.RedirectStandardOutput = true;
-						Process.StartInfo.UseShellExecute = false;
-						Process.StartInfo.FileName = "git";
-						Process.StartInfo.WorkingDirectory =
-							SparklePaths.SparkleTmpPath;
-
-						Process.StartInfo.Arguments = "clone " +
-						                               RepoRemoteUrl + " " +
-						                               RepoName;
-
-						Process.Start ();
-						Process.Exited += delegate {
-							Directory.Move (
-								SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
-								                            RepoName),
-								SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-								                            RepoName)
-							);
-							AddDialog.Destroy ();
-							ToggleVisibility ();
-							Notebook.CurrentPage = 1;
-						};
-						
-					};
-
-				ButtonBox.Add (CancelButton);
-				ButtonBox.Add (AddButton);
-
-				Table Table = new Table(4, 2, false);
-				Table.RowSpacing = 6;
-				Table.BorderWidth = 6;
-				Table.Attach (NameLabel, 0, 1, 0, 1);
-		
-				Table.Attach (NameEntry, 1, 2, 0, 1);
-				Table.Attach (NameExample, 1, 2, 1, 2);
-				Table.Attach (RemoteUrlLabel, 0, 1, 3, 4);
-				Table.Attach (RemoteUrlCombo, 1, 2, 3, 4);
-				Table.Attach (RemoteUrlExample, 1, 2, 4, 5);
-
-			VBox.PackStart (Table, false, false, 0);
-			VBox.PackStart (ButtonBox, false, false, 0);
-
-			AddDialog.Add (VBox);
-			AddDialog.ShowAll ();
-		
-		}
-
+		// Shows or hides the window
 		public void ToggleVisibility() {
 			if (Repositories.Length > 0) {
 				Present ();
@@ -566,9 +452,10 @@ namespace SparkleShare {
 				} else {
 					ShowAll ();
 				}
-			} else CreateAddDialog ();
+			} else SparkleDialog = new SparkleDialog (this);
 		}
 
+		// Quits the program
 		public void Quit (object o, EventArgs args) {
 			File.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath +
 			                                         "sparkleshare.pid"));

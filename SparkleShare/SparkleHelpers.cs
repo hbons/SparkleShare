@@ -98,7 +98,7 @@ namespace SparkleShare {
 		}
 
 		public static bool IsGitUrl (string Url) {
-			return Regex.Match (Url, @"^(ssh://|git://)*(/|:)*").Success;
+			return Regex.Match (Url, @"[a-z]+://.+(/|:).+").Success;
 		}
 
 	}
