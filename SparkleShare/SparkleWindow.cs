@@ -455,13 +455,6 @@ namespace SparkleShare {
 			} else SparkleDialog = new SparkleDialog (this);
 		}
 
-		// Quits the program
-		public void Quit (object o, EventArgs args) {
-			File.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath +
-			                                         "sparkleshare.pid"));
-			Application.Quit ();
-		}
-
 	}
 
 }
