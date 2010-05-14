@@ -130,6 +130,13 @@ namespace SparkleShare {
 		public void StartMonitoring () {	}
 		public void StopMonitoring () { }
 
+		// Quits the program
+		public void Quit (object o, EventArgs args) {
+			File.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath +
+			                                         "sparkleshare.pid"));
+			Application.Quit ();
+		}
+
 	}
 
 }
