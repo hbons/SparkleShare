@@ -8,6 +8,7 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>SparkleShare</AssemblyName>
     <SchemaVersion>2.0</SchemaVersion>
+    <RootNamespace>SparkleShare</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
