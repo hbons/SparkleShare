@@ -263,6 +263,13 @@ namespace SparkleShare {
 			                                        
 			if (File.Exists (NotifyFileName))
 				NotifyCheckButton.Active = true;
+				
+			NotifyCheckButton.Toggled += delegate {
+				if (File.Exists (NotifyFileName))
+					File.Delete (NotifyFileName);
+				else
+					File.Create (NotifyFileName);
+			};
 
 			CheckButton SyncCheckButton = 
 				new CheckButton ("Synchronize my changes");
@@ -274,6 +281,12 @@ namespace SparkleShare {
 			if (File.Exists (SyncFileName))
 				SyncCheckButton.Active = true;
 
+			SyncCheckButton.Toggled += delegate {
+				if (File.Exists (SyncFileName))
+					File.Delete (SyncFileName);
+				else
+					File.Create (SyncFileName);
+			};
 
 			VBox VBox = new VBox (false, 0);
 
