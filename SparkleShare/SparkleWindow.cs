@@ -193,7 +193,7 @@ namespace SparkleShare {
 			};
 
 
-				Button AddButton = new Button ("Add…");
+				Button AddButton = new Button ("Add a Folder…");
 
 				AddButton.Clicked += delegate {
 					SparkleDialog = new SparkleDialog (this);
