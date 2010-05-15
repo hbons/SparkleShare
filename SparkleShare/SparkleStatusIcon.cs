@@ -30,13 +30,13 @@ namespace SparkleShare {
 		}
 
 		public void SetSyncingState () {
-			IconName = "folder-syncing";
-			Tooltip = "SparkleShare, updating files...";
+//			IconName = "folder-syncing";
+//			Tooltip = "SparkleShare, updating files...";
 		}
 
 		public void SetErrorState () {
-			IconName = "folder-sync-error";
-			Tooltip = "SparkleShare, something went wrong";
+//			IconName = "folder-sync-error";
+//			Tooltip = "SparkleShare, something went wrong";
 		}
 
 	}
