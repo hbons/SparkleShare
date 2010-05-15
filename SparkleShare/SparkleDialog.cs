@@ -39,7 +39,7 @@ namespace SparkleShare {
 			Modal = true;
 			Resizable = false;
 			SetPosition (WindowPosition.Center);
-			Title = "Add Folder";
+			Title = "Add a Folder";
 			TransientFor = ParentSparkleWindow;
 
 			VBox VBox = new VBox (false, 0);
