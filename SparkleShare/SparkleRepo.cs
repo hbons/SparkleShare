@@ -156,6 +156,7 @@ namespace SparkleShare {
 					               "Waiting for more changes...");
 
 				BufferTimer.Start();
+
 			} else {
 
 				// Extend the delay when something changes
