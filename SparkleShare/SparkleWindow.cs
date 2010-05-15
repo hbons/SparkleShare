@@ -372,6 +372,7 @@ namespace SparkleShare {
 
 			TreeView LogView = new TreeView (LogStore); 
 			LogView.HeadersVisible = false;
+			LogView.RowSpacing = 30;
 
 			CellRendererText TextCellRight = new Gtk.CellRendererText ();
 			TextCellRight.Alignment = Pango.Alignment.Right;
