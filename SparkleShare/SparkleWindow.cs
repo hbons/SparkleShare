@@ -286,7 +286,7 @@ namespace SparkleShare {
 			VBox VBox = new VBox (false, 0);
 
 				Table Table = new Table(7, 2, false);
-				Table.RowSpacing = 6;
+				
 
 				Table.Attach (RemoteUrlBox, 0, 2, 0, 1);
 				Table.Attach (LocalPathBox, 0, 2, 1, 2);
@@ -372,7 +372,7 @@ namespace SparkleShare {
 
 			TreeView LogView = new TreeView (LogStore); 
 			LogView.HeadersVisible = false;
-			LogView.RowSpacing = 30;
+			
 
 			CellRendererText TextCellRight = new Gtk.CellRendererText ();
 			TextCellRight.Alignment = Pango.Alignment.Right;
