@@ -192,30 +192,19 @@ namespace SparkleShare {
 
 			};
 
-			HBox AddRemoveButtons = new HBox (false, 6);
 
-				Button AddButton = new Button ("Add...");
+				Button AddButton = new Button ("Add…");
 
 				AddButton.Clicked += delegate {
 					SparkleDialog = new SparkleDialog (this);
 					SparkleDialog.ShowAll ();
 				};
 
-
-			AddRemoveButtons.PackStart (AddButton, true, true, 0);
-
-			Image RemoveIcon = new Image (
-				SparkleHelpers.GetIcon ("document-removed", 16));
-
-			Button RemoveButton = new Button ();
-			RemoveButton.Add (RemoveIcon);
-			AddRemoveButtons.PackStart (RemoveButton, false, false, 0);
-
 			ScrolledWindow.AddWithViewport (ReposView);
 			ScrolledWindow.WidthRequest = 200;
 			VBox VBox = new VBox (false, 6);
 			VBox.PackStart (ScrolledWindow, true, true, 0);
-			VBox.PackStart (AddRemoveButtons, false, false, 0);
+			VBox.PackStart (AddButton, false, false, 0);
 
 			return VBox;
 
