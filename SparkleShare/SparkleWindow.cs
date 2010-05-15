@@ -254,38 +254,44 @@ namespace SparkleShare {
 			LocalPathBox.PackStart (Property2, false, false, 0);
 			LocalPathBox.PackStart (Value2, false, false, 0);
 
-			CheckButton NotifyCheckButton = 
+			CheckButton NotifyChangesCheckButton = 
 				new CheckButton ("Notify me when something changes");
 
-			string NotifyFileName =
+			string NotifyChangesFileName =
 				SparkleHelpers.CombineMore (SparkleRepo.LocalPath,
 				                            ".git", "sparkleshare.notify");
 			                                        
-			if (File.Exists (NotifyFileName))
-				NotifyCheckButton.Active = true;
+			if (File.Exists (NotifyChangesFileName))
+				NotifyChangesCheckButton.Active = true;
 				
-			NotifyCheckButton.Toggled += delegate {
-				if (File.Exists (NotifyFileName))
-					File.Delete (NotifyFileName);
-				else
-					File.Create (NotifyFileName);
+			NotifyChangesCheckButton.Toggled += delegate {
+				if (File.Exists (NotifyChangesFileName)) {
+					SparkleRepo.NotifyChanges = false;
+					File.Delete (NotifyChangesFileName);
+				} else {
+					SparkleRepo.NotifyChanges = true;
+					File.Create (NotifyChangesFileName);
+				}
 			};
 
-			CheckButton SyncCheckButton = 
+			CheckButton SyncChangesCheckButton = 
 				new CheckButton ("Synchronize my changes");
 
-			string SyncFileName =
+			string SyncChangesFileName =
 				SparkleHelpers.CombineMore (SparkleRepo.LocalPath,
 				                            ".git", "sparkleshare.sync");
 
-			if (File.Exists (SyncFileName))
-				SyncCheckButton.Active = true;
+			if (File.Exists (SyncChangesFileName))
+				SyncChangesCheckButton.Active = true;
 
-			SyncCheckButton.Toggled += delegate {
-				if (File.Exists (SyncFileName))
-					File.Delete (SyncFileName);
-				else
-					File.Create (SyncFileName);
+			SyncChangesCheckButton.Toggled += delegate {
+				if (File.Exists (SyncChangesFileName)) {
+					SparkleRepo.SyncChanges = false;
+					File.Delete (SyncChangesFileName);
+				} else {
+					SparkleRepo.SyncChanges = true;
+					File.Create (SyncChangesFileName);
+				}
 			};
 
 			VBox VBox = new VBox (false, 0);
@@ -295,8 +301,8 @@ namespace SparkleShare {
 
 				Table.Attach (RemoteUrlBox, 0, 2, 0, 1);
 				Table.Attach (LocalPathBox, 0, 2, 1, 2);
-				Table.Attach (NotifyCheckButton, 0, 2, 4, 5);
-				Table.Attach (SyncCheckButton, 0, 2, 5, 6);
+				Table.Attach (NotifyChangesCheckButton, 0, 2, 4, 5);
+				Table.Attach (SyncChangesCheckButton, 0, 2, 5, 6);
 
 				Label PeopleLabel =
 					new Label ("<span font_size='large'><b>Active users" +
