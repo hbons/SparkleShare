@@ -254,13 +254,26 @@ namespace SparkleShare {
 			LocalPathBox.PackStart (Property2, false, false, 0);
 			LocalPathBox.PackStart (Value2, false, false, 0);
 
-			CheckButton NotificationsCheckButton = 
+			CheckButton NotifyCheckButton = 
 				new CheckButton ("Notify me when something changes");
-			NotificationsCheckButton.Active = true;
 
-			CheckButton ChangesCheckButton = 
+			string NotifyFileName =
+				SparkleHelpers.CombineMore (SparkleRepo.LocalPath,
+				                            ".git", "sparkleshare.notify");
+			                                        
+			if (File.Exists (NotifyFileName))
+				NotifyCheckButton.Active = true;
+
+			CheckButton SyncCheckButton = 
 				new CheckButton ("Synchronize my changes");
-			ChangesCheckButton.Active = true;
+
+			string SyncFileName =
+				SparkleHelpers.CombineMore (SparkleRepo.LocalPath,
+				                            ".git", "sparkleshare.sync");
+
+			if (File.Exists (SyncFileName))
+				SyncCheckButton.Active = true;
+
 
 			VBox VBox = new VBox (false, 0);
 
@@ -269,8 +282,8 @@ namespace SparkleShare {
 
 				Table.Attach (RemoteUrlBox, 0, 2, 0, 1);
 				Table.Attach (LocalPathBox, 0, 2, 1, 2);
-				Table.Attach (NotificationsCheckButton, 0, 2, 4, 5);
-				Table.Attach (ChangesCheckButton, 0, 2, 5, 6);
+				Table.Attach (NotifyCheckButton, 0, 2, 4, 5);
+				Table.Attach (SyncCheckButton, 0, 2, 5, 6);
 
 				Label PeopleLabel =
 					new Label ("<span font_size='large'><b>Active users" +
