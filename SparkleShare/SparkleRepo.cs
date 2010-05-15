@@ -224,14 +224,14 @@ namespace SparkleShare {
 		// Fetches changes from the remote repo	
 		public void Fetch () {
 			FetchTimer.Stop ();
-			SparkleUI.NotificationIcon.SetSyncingState ();
+//			SparkleUI.NotificationIcon.SetSyncingState ();
 			Console.WriteLine ("[Git][" + Name + "] Fetching changes... ");
 			Process.StartInfo.Arguments = "fetch";
 			Process.Start();
 			Process.WaitForExit ();
 			Console.WriteLine ("[Git][" + Name + "] Changes fetched.");
 			Merge ();
-			SparkleUI.NotificationIcon.SetIdleState ();
+//			SparkleUI.NotificationIcon.SetIdleState ();
 			FetchTimer.Start ();
 		}
 
