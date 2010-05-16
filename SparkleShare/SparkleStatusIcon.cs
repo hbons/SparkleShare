@@ -31,7 +31,7 @@ Activate += delegate {
 			foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
 			ImageMenuItem Item = new ImageMenuItem (SparkleRepo.Name);
 				Item.Image = new Image (SparkleHelpers.GetIcon ("folder", 16));
-
+	
 			Item.Activated += delegate { SparkleWindow SparkleWindow = new SparkleWindow (SparkleRepo);
 			SparkleWindow.ShowAll ();Console.WriteLine (SparkleRepo.Name); };
 				popupMenu.Add(Item);
