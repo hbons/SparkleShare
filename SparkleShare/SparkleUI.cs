@@ -133,8 +133,6 @@ namespace SparkleShare {
 				                   " '" + args.Name + "'");
 				SparkleDialog SparkleDialog = new SparkleDialog ();
 				SparkleDialog.ShowAll ();
-//Window Window = new Window ("");
-//Window.ShowAll ();
 			};
 
 			// Create place to store configuration user's home folder
@@ -152,7 +150,6 @@ namespace SparkleShare {
 			}
 
 		}
-
 
 	}
 
