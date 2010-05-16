@@ -223,7 +223,7 @@ namespace SparkleShare {
 			FetchTimer.Stop ();
 //			SparkleUI.NotificationIcon.SetSyncingState ();
 			Console.WriteLine ("[Git][" + Name + "] Fetching changes... ");
-			Process.StartInfo.Arguments = "fetch";
+			Process.StartInfo.Arguments = "fetch -v"; // TODO: Only call merge when there are changes
 			Process.Start();
 			Process.WaitForExit ();
 			Console.WriteLine ("[Git][" + Name + "] Changes fetched.");
@@ -234,7 +234,7 @@ namespace SparkleShare {
 
 		// Merges the fetched changes
 		public void Merge () {
-			Watcher.EnableRaisingEvents = false;
+//			Watcher.EnableRaisingEvents = false;
 			Console.WriteLine ("[Git][" + Name + "] Merging fetched changes... ");
 			Process.StartInfo.Arguments = "merge origin/master";
 			Process.Start();
@@ -265,7 +265,7 @@ namespace SparkleShare {
 
 			}
 
-			Watcher.EnableRaisingEvents = true;
+//			Watcher.EnableRaisingEvents = true;
 			Console.WriteLine ("[Git][" + Name + "] Nothing going on... ");
 
 		}
