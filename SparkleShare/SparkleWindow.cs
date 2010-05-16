@@ -187,7 +187,8 @@ namespace SparkleShare {
 
 				Selection.GetSelected (out Iter);
 
-				SparkleRepo SparkleRepo = (SparkleRepo)ReposStore.GetValue (Iter, 2);
+				SparkleRepo SparkleRepo =
+					(SparkleRepo) ReposStore.GetValue (Iter, 2);
 			
 				LayoutHorizontal.Remove (LayoutVerticalRight);
 				LayoutVerticalRight = CreateDetailedView (SparkleRepo);
