@@ -45,18 +45,17 @@ namespace SparkleShare {
 
 				Menu.Add (new SeparatorMenuItem ());
 
+				MenuItem [] FolderItems =
+					new MenuItem [SparkleShare.Repositories.Length];
+				int i = 0;
 				foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
-
-					ImageMenuItem FolderItem = new ImageMenuItem (SparkleRepo.Name);
-					FolderItem.Image = new Image (SparkleHelpers.GetIcon ("folder", 16));
-	
-					FolderItem.Activated += delegate {
+					FolderItems [i] = new MenuItem (SparkleRepo.Name);
+					FolderItems [i].Activated += delegate {
 						SparkleWindow SparkleWindow = new SparkleWindow (SparkleRepo);
 						SparkleWindow.ShowAll ();
 					};
-
-					Menu.Add(FolderItem);
-	
+					Menu.Add(FolderItems [i]);
+					i++;
 				}
 
 				Menu.Add (new SeparatorMenuItem ());
