@@ -22,12 +22,8 @@ using System.IO;
 
 namespace SparkleShare {
 
-	// Holds the status icon, window and repository list
 	public class SparkleUI {
 
-		public SparkleRepo [] Repositories;
-
-		public SparkleWindow SparkleWindow;
 		public static SparkleStatusIcon NotificationIcon;
 
 		public SparkleUI (bool HideUI) {
@@ -81,7 +77,6 @@ namespace SparkleShare {
 				                                                  ".git"))) {
 					TmpRepos [i] = new SparkleRepo (Folder);
 					i++;
-			Console.WriteLine (Folder);
 
 					// Attach emblems
 					if (SparklePlatform.Name.Equals ("GNOME")) {
@@ -96,22 +91,34 @@ namespace SparkleShare {
 
 			}
 			
-			Repositories = new SparkleRepo [i];
-			Array.Copy (TmpRepos, Repositories, i);
+			SparkleShare.Repositories = new SparkleRepo [i];
+			Array.Copy (TmpRepos, SparkleShare.Repositories, i);
 
 			// Don't create the window and status 
 			// icon when --disable-gui was given
 			if (!HideUI) {
 
-				// Create the window
-				SparkleWindow = new SparkleWindow (Repositories);
-				SparkleWindow.DeleteEvent += CloseSparkleWindow;
-
 				// Create the status icon
 				NotificationIcon = new SparkleStatusIcon ();
-				NotificationIcon.Activate += delegate { 
-					SparkleWindow.ToggleVisibility ();
-				};
+				
+				// Show a notification if there are no folders yet
+				if (SparkleShare.Repositories.Length == 0) {
+
+					SparkleBubble NoFoldersBubble;
+					NoFoldersBubble = new SparkleBubble ("Welcome to SparkleShare!",
+					                                     "You don't have any " +
+					                                     "folders set up yet.\n" +
+					                                     "Please create some in " +
+					                                     "the SparkleShare folder.");
+
+					NoFoldersBubble.IconName = "folder-sparkleshare";
+					NoFoldersBubble.AddAction ("", "Open SparkleShare Folder", delegate {
+						Process.StartInfo.FileName = "xdg-open";
+						Process.StartInfo.Arguments = SparklePaths.SparklePath;
+						Process.Start();
+					} );
+
+				}
 
 			}
 			
@@ -146,21 +153,6 @@ namespace SparkleShare {
 
 		}
 
-		// Closes the window
-		public void CloseSparkleWindow (object o, DeleteEventArgs args) {
-			SparkleWindow = new SparkleWindow (Repositories);
-			SparkleWindow.DeleteEvent += CloseSparkleWindow;
-		}
-
-		public void StartMonitoring () {	}
-		public void StopMonitoring () { }
-
-		// Quits the program
-		public void Quit (object o, EventArgs args) {
-			File.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath +
-			                                         "sparkleshare.pid"));
-			Application.Quit ();
-		}
 
 	}
 
