@@ -216,9 +216,6 @@ namespace SparkleShare {
 			Process.Start();
 			Process.WaitForExit ();
 			Console.WriteLine ("[Git][" + Name + "] Changes commited.");
-			ShowEventBubble (UserName + " " + Message, 
-				              SparkleHelpers.GetAvatar (UserEmail, 48),
-				              true);
 		}
 
 		// Fetches changes from the remote repo	
@@ -247,7 +244,7 @@ namespace SparkleShare {
 			// Show notification if there are updates
 			if (!Output.Equals ("Already up-to-date.")) {
 
-				// Get the last commit message
+				// Get the last committer e-mail
 				Process.StartInfo.Arguments = "log --format=\"%ae\" -1";
 				Process.Start();
 				string LastCommitEmail = Process.StandardOutput.ReadToEnd().Trim ();
