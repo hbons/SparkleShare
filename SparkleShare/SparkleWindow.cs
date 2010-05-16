@@ -35,7 +35,6 @@ namespace SparkleShare {
 		private TreeView ReposView;
 		private ListStore ReposStore;
 		private SparkleRepo [] Repositories;
-		private SparkleDialog SparkleDialog;
 
 		public SparkleWindow (SparkleRepo [] R) : base ("SparkleShare")  {
 
@@ -47,14 +46,19 @@ namespace SparkleShare {
 				SparkleBubble NoFoldersBubble;
 				NoFoldersBubble = new SparkleBubble ("Welcome to SparkleShare!",
 				                                     "You don't have any " +
-						                               "folders set up yet.");
+						                               "folders set up yet.\n" +
+						                               "Please create some in " +
+						                               "the SparkleShare folder.");
 
 				NoFoldersBubble.IconName = "folder-sparkleshare";
-				NoFoldersBubble.AddAction ("", "Set up a folder", 
+				NoFoldersBubble.AddAction ("", "Open Folder", 
 				                           delegate {
-				                           	SparkleDialog =
-				                           		new SparkleDialog (this);
-				                           	SparkleDialog.ShowAll ();
+				                           	Process Process = new Process ();
+									               Process.StartInfo.FileName =
+									               	"xdg-open";
+					  	                     	Process.StartInfo.Arguments =
+					  	                     		SparklePaths.SparklePath;
+						 	                   	Process.Start();
 				                           } );
 
 			} else CreateWindow ();
@@ -193,18 +197,10 @@ namespace SparkleShare {
 			};
 
 
-				Button AddButton = new Button ("Add a Folder…");
-
-				AddButton.Clicked += delegate {
-					SparkleDialog = new SparkleDialog (this);
-					SparkleDialog.ShowAll ();
-				};
-
 			ScrolledWindow.AddWithViewport (ReposView);
 			ScrolledWindow.WidthRequest = 200;
 			VBox VBox = new VBox (false, 6);
 			VBox.PackStart (ScrolledWindow, true, true, 0);
-			VBox.PackStart (AddButton, false, false, 0);
 
 			return VBox;
 
@@ -474,7 +470,7 @@ namespace SparkleShare {
 				} else {
 					ShowAll ();
 				}
-			} else SparkleDialog = new SparkleDialog (this);
+			}
 		}
 
 	}
