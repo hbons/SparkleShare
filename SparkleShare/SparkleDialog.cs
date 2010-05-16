@@ -29,18 +29,15 @@ namespace SparkleShare {
 		private Button AddButton;
 		private ComboBoxEntry RemoteUrlCombo;
 		private Entry NameEntry;
-		private SparkleWindow ParentSparkleWindow;
 
-		public SparkleDialog (SparkleWindow Parent) : base ("")  {
+		public SparkleDialog () : base ("")  {
 		
-			ParentSparkleWindow = Parent;
 			BorderWidth = 6;
 			IconName = "folder-sparkleshare";
 			Modal = true;
 			Resizable = false;
 			SetPosition (WindowPosition.Center);
 			Title = "Add a Folder";
-			TransientFor = ParentSparkleWindow;
 
 			VBox VBox = new VBox (false, 0);
 
@@ -103,6 +100,7 @@ namespace SparkleShare {
 			VBox.PackStart (ButtonBox, false, false, 0);
 
 			Add (VBox);
+			ShowAll ();
 
 		}
 
@@ -141,8 +139,6 @@ namespace SparkleShare {
 					                            RepoName)
 				);
 				Destroy ();
-				ParentSparkleWindow.ToggleVisibility ();
-				ParentSparkleWindow.Notebook.CurrentPage = 1;
 			};
 		
 		}

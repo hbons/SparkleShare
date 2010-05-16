@@ -132,7 +132,7 @@ namespace SparkleShare {
 		public void OnFileActivity (object o, FileSystemEventArgs args) {
 		   WatcherChangeTypes wct = args.ChangeType;
 			 if (!ShouldIgnore (args.Name) && SyncChanges) {
-			  Console.WriteLine("[Event][" + Name + "] " + wct.ToString() + 
+			  Console.WriteLine ("[Event][" + Name + "] " + wct.ToString() + 
 					              " '" + args.Name + "'");
 				StartBufferTimer ();
 			}

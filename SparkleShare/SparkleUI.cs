@@ -15,6 +15,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
+using SparkleShare;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -69,25 +70,34 @@ namespace SparkleShare {
 			}
 
 			// Get all the repos in ~/SparkleShare
-			string [] Repos = Directory.GetDirectories (SparklePath);
-			Repositories = new SparkleRepo [Repos.Length];
+			SparkleRepo [] TmpRepos =
+				new SparkleRepo [Directory.GetDirectories (SparklePath).Length];
 
 			int i = 0;
-			foreach (string Folder in Repos) {
+			foreach (string Folder in Directory.GetDirectories (SparklePath)) {
 
-				Repositories [i] = new SparkleRepo (Folder);
-				i++;
+				// Check if the folder is a git repo
+				if (Directory.Exists (SparkleHelpers.CombineMore (Folder,
+				                                                  ".git"))) {
+					TmpRepos [i] = new SparkleRepo (Folder);
+					i++;
+			Console.WriteLine (Folder);
 
-				// Attach emblems
-				if (SparklePlatform.Name.Equals ("GNOME")) {
-					Process.StartInfo.FileName = "gvfs-set-attribute";
-					Process.StartInfo.Arguments = " file://" + Folder + 
-						                           " metadata::emblems " +
-															"[synced]";
-					Process.Start();				
+					// Attach emblems
+					if (SparklePlatform.Name.Equals ("GNOME")) {
+						Process.StartInfo.FileName = "gvfs-set-attribute";
+						Process.StartInfo.Arguments = " file://" + Folder + 
+								                        " metadata::emblems " +
+																"[synced]";
+						Process.Start();				
+					}
+				
 				}
 
 			}
+			
+			Repositories = new SparkleRepo [i];
+			Array.Copy (TmpRepos, Repositories, i);
 
 			// Don't create the window and status 
 			// icon when --disable-gui was given
@@ -104,6 +114,21 @@ namespace SparkleShare {
 				};
 
 			}
+			
+			// Watch the SparkleShare folder and pop up the 
+			// Add dialog when a new folder is created
+			FileSystemWatcher Watcher = new FileSystemWatcher (SparklePaths.SparklePath);
+			Watcher.IncludeSubdirectories = false;
+			Watcher.EnableRaisingEvents = true;
+			Watcher.Created += delegate (object o, FileSystemEventArgs args) {
+			   WatcherChangeTypes wct = args.ChangeType;
+				Console.WriteLine ("[Event][SparkleShare] " + wct.ToString() + 
+				                   " '" + args.Name + "'");
+				SparkleDialog SparkleDialog = new SparkleDialog ();
+				SparkleDialog.ShowAll ();
+//Window Window = new Window ("");
+//Window.ShowAll ();
+			};
 
 			// Create place to store configuration user's home folder
 			string ConfigPath = SparklePaths.SparkleConfigPath;
