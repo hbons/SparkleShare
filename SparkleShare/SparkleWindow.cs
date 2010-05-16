@@ -26,15 +26,11 @@ namespace SparkleShare {
 
 	public class SparkleWindow : Window {
 
-
-
 		private SparkleRepo SparkleRepo;
 
-
-
 		public SparkleWindow (SparkleRepo Repo) : base ("")  {
-		SparkleRepo = Repo;
 
+			SparkleRepo = Repo;
 			CreateWindow ();	
 
 		}
@@ -47,12 +43,11 @@ namespace SparkleShare {
 			Title = "Happenings in ‘" + SparkleRepo.Name + "’";
 			IconName = "folder-sparkleshare";
 
-				VBox LayoutVertical = new VBox (false, 0);
+			VBox LayoutVertical = new VBox (false, 0);
 
-
-				HBox HBox= new HBox (true, 6);
-				HBox.PackStart (CreatePeopleList());
-				HBox.PackStart (CreateEventLog());
+				HBox HBox = new HBox (true, 6);
+				HBox.PackStart (CreatePeopleList ());
+				HBox.PackStart (CreateEventLog ());
 
 				LayoutVertical.PackStart (HBox, true, true, 0);
 				LayoutVertical.PackStart (CreateDetailedView(), false, false, 0);
@@ -70,28 +65,27 @@ namespace SparkleShare {
 
 				LayoutVertical.PackStart (DialogButtons, false, false, 0);
 
+	/*			Timer RedrawTimer = new Timer ();
+				RedrawTimer.Interval = 5000;
+				RedrawTimer.Elapsed += delegate { 
 
-/*			Timer RedrawTimer = new Timer ();
-			RedrawTimer.Interval = 5000;
-			RedrawTimer.Elapsed += delegate { 
-
-				TreeSelection Selection = ReposView.Selection;;
-				TreeIter Iter = new TreeIter ();;
-				Selection.GetSelected (out Iter);
-				SparkleRepo SparkleRepo = (SparkleRepo)ReposStore.GetValue (Iter, 2);
-				Console.WriteLine(SparkleRepo.Name);									
+					TreeSelection Selection = ReposView.Selection;;
+					TreeIter Iter = new TreeIter ();;
+					Selection.GetSelected (out Iter);
+					SparkleRepo SparkleRepo = (SparkleRepo)ReposStore.GetValue (Iter, 2);
+					Console.WriteLine(SparkleRepo.Name);									
 			
-				LayoutHorizontal.Remove (LayoutVerticalRight);
+					LayoutHorizontal.Remove (LayoutVerticalRight);
 
-				LayoutVerticalRight = CreateDetailedView (SparkleRepo);
+					LayoutVerticalRight = CreateDetailedView (SparkleRepo);
 
-				LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
-				ShowAll ();
+					LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
+					ShowAll ();
 			
 			
-			};
+				};
 
-			RedrawTimer.Start();
+				RedrawTimer.Start();
 */
 			Add (LayoutVertical);		
 		
@@ -172,16 +166,16 @@ namespace SparkleShare {
 			};
 
 
-				Table Table = new Table(2, 2, true);
-				Table.RowSpacing = 3;
-				Table.ColumnSpacing = 12;
-				Table.BorderWidth = 9;
-				Table.Attach (RemoteUrlBox, 0, 1, 0, 1);
-				Table.Attach (LocalPathBox, 0, 1, 1, 2);
-				Table.Attach (NotifyChangesCheckButton, 1, 2, 0, 1);
-				Table.Attach (SyncChangesCheckButton, 1, 2, 1, 2);
+			Table Table = new Table(2, 2, true);
+			Table.RowSpacing = 3;
+			Table.ColumnSpacing = 12;
+			Table.BorderWidth = 9;
+			Table.Attach (RemoteUrlBox, 0, 1, 0, 1);
+			Table.Attach (LocalPathBox, 0, 1, 1, 2);
+			Table.Attach (NotifyChangesCheckButton, 1, 2, 0, 1);
+			Table.Attach (SyncChangesCheckButton, 1, 2, 1, 2);
 
-		return Table;
+			return Table;
 
 		}
 
@@ -316,7 +310,8 @@ namespace SparkleShare {
 					                      SparkleHelpers.GetAvatar (UserEmail , 32));
 					PeopleStore.SetValue (PeopleIter, 1,
 					                      "<b>" + UserName + "</b>\n" +
-					                      "<span font_size=\"smaller\">" + UserEmail + "</span>");
+					                      "<span font_size=\"smaller\">" +
+					                      UserEmail + "</span>");
 
 				}
 
