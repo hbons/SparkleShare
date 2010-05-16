@@ -23,6 +23,7 @@ namespace SparkleShare {
 	// This is SparkleShare!
 	public class SparkleShare {
 		
+		public static SparkleRepo [] Repositories;
 		public static SparkleUI SparkleUI;
 
 		public static void Main (string [] args) {
@@ -64,7 +65,6 @@ namespace SparkleShare {
 			Gtk.Application.Init ();
 
 			SparkleUI = new SparkleUI (HideUI);
-			SparkleUI.StartMonitoring ();
 
 			// The main loop
 			Gtk.Application.Run ();

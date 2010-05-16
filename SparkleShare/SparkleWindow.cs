@@ -26,80 +26,36 @@ namespace SparkleShare {
 
 	public class SparkleWindow : Window {
 
-		private bool Visibility;
-		private VBox LayoutVerticalLeft;
-		private VBox LayoutVerticalRight;
-		private HBox LayoutHorizontal;
 
-		public Notebook Notebook;
-		private TreeView ReposView;
-		private ListStore ReposStore;
-		private SparkleRepo [] Repositories;
 
-		public SparkleWindow (SparkleRepo [] R) : base ("SparkleShare")  {
+		private SparkleRepo SparkleRepo;
 
-			Repositories = R;
-			
-			// Show a notification if there are no folders yet
-			if (Repositories.Length == 0) {
 
-				SparkleBubble NoFoldersBubble;
-				NoFoldersBubble = new SparkleBubble ("Welcome to SparkleShare!",
-				                                     "You don't have any " +
-						                               "folders set up yet.\n" +
-						                               "Please create some in " +
-						                               "the SparkleShare folder.");
 
-				NoFoldersBubble.IconName = "folder-sparkleshare";
-				NoFoldersBubble.AddAction ("", "Open Folder", 
-				                           delegate {
-				                           	Process Process = new Process ();
-									               Process.StartInfo.FileName =
-									               	"xdg-open";
-					  	                     	Process.StartInfo.Arguments =
-					  	                     		SparklePaths.SparklePath;
-						 	                   	Process.Start();
-				                           } );
+		public SparkleWindow (SparkleRepo Repo) : base ("")  {
+		SparkleRepo = Repo;
 
-			} else CreateWindow ();
+			CreateWindow ();	
 
 		}
 
 		public void CreateWindow () {
 		
-			Visibility = false;
-			SetSizeRequest (720, 540);
+			SetSizeRequest (900, 540);
 	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 6;
+			Title = "Happenings in ‘" + SparkleRepo.Name + "’";
 			IconName = "folder-sparkleshare";
 
 				VBox LayoutVertical = new VBox (false, 0);
 
-					Notebook = new Notebook ();
-					Notebook.BorderWidth = 6;
 
-						LayoutHorizontal = new HBox (false, 0);
+				HBox HBox= new HBox (true, 6);
+				HBox.PackStart (CreatePeopleList());
+				HBox.PackStart (CreateEventLog());
 
-							ReposStore = new ListStore (typeof (Gdk.Pixbuf), 
-								                         typeof (string),
-								                         typeof (SparkleRepo));
-
-							LayoutVerticalLeft = CreateReposList ();
-							LayoutVerticalLeft.BorderWidth = 12;
-
-							LayoutVerticalRight =
-								CreateDetailedView (Repositories [0]);
-
-						LayoutHorizontal.PackStart (LayoutVerticalLeft,
-						                            false, false, 0);
-						                            
-						LayoutHorizontal.PackStart (LayoutVerticalRight,
-						                            true, true, 12);
-
-					Notebook.AppendPage (CreateEventLog (), new Label ("Events"));
-					Notebook.AppendPage (LayoutHorizontal, new Label ("Folders"));
-
-				LayoutVertical.PackStart (Notebook, true, true, 0);
+				LayoutVertical.PackStart (HBox, true, true, 0);
+				LayoutVertical.PackStart (CreateDetailedView(), false, false, 0);
 
 					HButtonBox DialogButtons = new HButtonBox ();
 					DialogButtons.Layout = ButtonBoxStyle.End;
@@ -107,8 +63,7 @@ namespace SparkleShare {
 
 						Button CloseButton = new Button (Stock.Close);
 						CloseButton.Clicked += delegate (object o, EventArgs args) {
-							Visibility = false;
-							HideAll ();
+							Destroy ();
 						};
 
 					DialogButtons.Add (CloseButton);
@@ -143,72 +98,8 @@ namespace SparkleShare {
 		}
 
 
-		// Creates a visual list of repositories
-		public VBox CreateReposList() {
-
-			Gdk.Pixbuf FolderIcon = SparkleHelpers.GetIcon ("folder", 32);
-				
-			TreeIter ReposIter;
-			foreach (SparkleRepo SparkleRepo in Repositories) {
-
-				ReposIter = ReposStore.Prepend ();
-
-				ReposStore.SetValue (ReposIter, 0, FolderIcon);
-
-				ReposStore.SetValue (ReposIter, 1, SparkleRepo.Name + "    \n" + 
-					                                SparkleRepo.Domain + "    ");
-
-				ReposStore.SetValue (ReposIter, 2, SparkleRepo);
-
-			}
-
-			ScrolledWindow ScrolledWindow = new ScrolledWindow ();
-
-			ReposView = new TreeView (ReposStore); 
-			ReposView.HeadersVisible = false;
-
-			ReposView.AppendColumn ("", new CellRendererPixbuf () , "pixbuf", 0);  
-			ReposView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
-
-			TreeViewColumn [] ReposViewColumns = ReposView.Columns;
-
-			ReposViewColumns [0].MinWidth = 48;
-
-			ReposStore.IterNthChild (out ReposIter, 0);
-			ReposView.ActivateRow (ReposStore.GetPath (ReposIter),
-			                       ReposViewColumns [1]);
-
-			// Update the detailed view when something
-			// gets selected in the folders list.
-			ReposView.CursorChanged += delegate {
-
-				TreeSelection Selection = ReposView.Selection;;
-				TreeIter Iter = new TreeIter ();;
-
-				Selection.GetSelected (out Iter);
-
-				SparkleRepo SparkleRepo =
-					(SparkleRepo) ReposStore.GetValue (Iter, 2);
-			
-				LayoutHorizontal.Remove (LayoutVerticalRight);
-				LayoutVerticalRight = CreateDetailedView (SparkleRepo);
-				LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
-				ShowAll ();
-
-			};
-
-
-			ScrolledWindow.AddWithViewport (ReposView);
-			ScrolledWindow.WidthRequest = 200;
-			VBox VBox = new VBox (false, 6);
-			VBox.PackStart (ScrolledWindow, true, true, 0);
-
-			return VBox;
-
-		}
-
 		// Creates the detailed view
-		public VBox CreateDetailedView (SparkleRepo SparkleRepo) {
+		public Table CreateDetailedView () {
 
 			// Create box layout for Remote Address
 			HBox RemoteUrlBox = new HBox (false, 0);
@@ -280,29 +171,17 @@ namespace SparkleShare {
 				}
 			};
 
-			VBox VBox = new VBox (false, 0);
 
-				Table Table = new Table(7, 2, false);
-				Table.RowSpacing = 6;
+				Table Table = new Table(2, 2, true);
+				Table.RowSpacing = 3;
+				Table.ColumnSpacing = 12;
+				Table.BorderWidth = 9;
+				Table.Attach (RemoteUrlBox, 0, 1, 0, 1);
+				Table.Attach (LocalPathBox, 0, 1, 1, 2);
+				Table.Attach (NotifyChangesCheckButton, 1, 2, 0, 1);
+				Table.Attach (SyncChangesCheckButton, 1, 2, 1, 2);
 
-				Table.Attach (RemoteUrlBox, 0, 2, 0, 1);
-				Table.Attach (LocalPathBox, 0, 2, 1, 2);
-				Table.Attach (NotifyChangesCheckButton, 0, 2, 4, 5);
-				Table.Attach (SyncChangesCheckButton, 0, 2, 5, 6);
-
-				Label PeopleLabel =
-					new Label ("<span font_size='large'><b>Active users" +
-						        "</b></span>");
-
-				PeopleLabel.UseMarkup = true;
-				PeopleLabel.SetAlignment (0, 0);
-
-			VBox.PackStart (Table, false, false, 12);
-
-			VBox.PackStart (PeopleLabel, false, false, 0);
-			VBox.PackStart (CreatePeopleList (SparkleRepo ), true, true, 12);
-
-			return VBox;
+		return Table;
 
 		}
 
@@ -319,11 +198,11 @@ namespace SparkleShare {
 			Process.StartInfo.FileName = "git";
 
 			string Output = "";
-			foreach (SparkleRepo SparkleRepo in Repositories) {
+			foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
 
 				// We're using the snowman here to separate messages :)
 				Process.StartInfo.Arguments =
-					"log --format=\"%at☃In ‘" + SparkleRepo.Name + "’, %an %s☃%cr\" -25";
+					"log --format=\"%at☃%an %s☃%cr\" -25";
 
 				Process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
 				Process.Start();
@@ -388,14 +267,13 @@ namespace SparkleShare {
 
 			ScrolledWindow ScrolledWindow = new ScrolledWindow ();
 			ScrolledWindow.AddWithViewport (LogView);
-			ScrolledWindow.BorderWidth = 12;
 
 			return ScrolledWindow;
 
 		}
 
 		// Creates a visual list of people working in the repo
-		public ScrolledWindow CreatePeopleList (SparkleRepo SparkleRepo) {
+		public ScrolledWindow CreatePeopleList () {
 
 			Process Process = new Process ();
 			Process.EnableRaisingEvents = false; 
@@ -458,19 +336,6 @@ namespace SparkleShare {
 
 			return ScrolledWindow;
 
-		}
-
-		// Shows or hides the window
-		public void ToggleVisibility() {
-			if (Repositories.Length > 0) {
-				Present ();
-				if (Visibility) {
-					if (HasFocus)
-						HideAll ();
-				} else {
-					ShowAll ();
-				}
-			}
 		}
 
 	}

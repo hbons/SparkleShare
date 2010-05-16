@@ -15,12 +15,42 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
+using SparkleShare;
+using System;
 
 namespace SparkleShare {
 	
 	public class SparkleStatusIcon : StatusIcon {
 
 		public SparkleStatusIcon () : base ()  {
+Activate += delegate {
+
+
+			Menu popupMenu = new Menu();
+
+			foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
+			ImageMenuItem Item = new ImageMenuItem (SparkleRepo.Name);
+				Item.Image = new Image (SparkleHelpers.GetIcon ("folder", 16));
+
+			Item.Activated += delegate { SparkleWindow SparkleWindow = new SparkleWindow (SparkleRepo);
+			SparkleWindow.ShowAll ();Console.WriteLine (SparkleRepo.Name); };
+				popupMenu.Add(Item);
+				
+
+		}
+			ImageMenuItem menuItemQuit = new ImageMenuItem ("Quit SparkleShare");
+			popupMenu.Add(menuItemQuit);
+			
+			
+			
+			
+			
+			// Quit the application when quit has been clicked.
+			menuItemQuit.Activated += delegate { Environment.Exit(0); };
+			popupMenu.ShowAll();
+			popupMenu.Popup();
+
+};
 			SetIdleState ();
 		}
 
@@ -37,6 +67,14 @@ namespace SparkleShare {
 		public void SetErrorState () {
 //			IconName = "folder-sync-error";
 //			Tooltip = "SparkleShare, something went wrong";
+		}
+		
+
+		// Quits the program
+		public void Quit (object o, EventArgs args) {
+			System.IO.File.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath +
+			                                         "sparkleshare.pid"));
+			Application.Quit ();
 		}
 
 	}
