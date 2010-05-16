@@ -17,58 +17,83 @@
 using Gtk;
 using SparkleShare;
 using System;
+using System.Diagnostics;
 
 namespace SparkleShare {
 	
 	public class SparkleStatusIcon : StatusIcon {
 
 		public SparkleStatusIcon () : base ()  {
-Activate += delegate {
 
+			Activate += delegate {
 
-			Menu popupMenu = new Menu();
+				Menu Menu = new Menu();
 
-			foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
-			ImageMenuItem Item = new ImageMenuItem (SparkleRepo.Name);
-				Item.Image = new Image (SparkleHelpers.GetIcon ("folder", 16));
+				MenuItem OpenFolderItem = new MenuItem ("Open Sharing Folder");
+				OpenFolderItem.Activated += delegate {
+							Process Process = new Process ();
+							Process.StartInfo.FileName = "xdg-open";
+							Process.StartInfo.Arguments = SparklePaths.SparklePath;
+							Process.Start();
+				};
+				Menu.Add (OpenFolderItem);
+		
+				Menu.Add (new SeparatorMenuItem ());
+				MenuItem StatusItem = new MenuItem ("Everything up to date");
+				StatusItem.Sensitive = false;
+				Menu.Add (StatusItem);
+
+				Menu.Add (new SeparatorMenuItem ());
+
+				foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
+
+					ImageMenuItem FolderItem = new ImageMenuItem (SparkleRepo.Name);
+					FolderItem.Image = new Image (SparkleHelpers.GetIcon ("folder", 16));
 	
-			Item.Activated += delegate { SparkleWindow SparkleWindow = new SparkleWindow (SparkleRepo);
-			SparkleWindow.ShowAll ();Console.WriteLine (SparkleRepo.Name); };
-				popupMenu.Add(Item);
-				
+					FolderItem.Activated += delegate {
+						SparkleWindow SparkleWindow = new SparkleWindow (SparkleRepo);
+						SparkleWindow.ShowAll ();
+					};
 
-		}
-			ImageMenuItem menuItemQuit = new ImageMenuItem ("Quit SparkleShare");
-			popupMenu.Add(menuItemQuit);
-			
-			
-			
-			
-			
-			// Quit the application when quit has been clicked.
-			menuItemQuit.Activated += delegate { Environment.Exit(0); };
-			popupMenu.ShowAll();
-			popupMenu.Popup();
+					Menu.Add(FolderItem);
+	
+				}
 
-};
+				Menu.Add (new SeparatorMenuItem ());
+				MenuItem AboutItem = new MenuItem ("About SparkleShare");
+				AboutItem.Activated += delegate {
+							Process Process = new Process ();
+							Process.StartInfo.FileName = "xdg-open";
+							Process.StartInfo.Arguments = "http://www.sparkleshare.org/";
+							Process.Start();
+				};
+				Menu.Add(AboutItem);
+
+				Menu.Add (new SeparatorMenuItem ());
+				MenuItem QuitItem = new MenuItem ("Quit");
+				QuitItem.Activated += delegate { Environment.Exit (0); };
+				Menu.Add(QuitItem);
+			
+				Menu.ShowAll();
+				Menu.Popup();
+
+			};
+
 			SetIdleState ();
+
 		}
 
 		public void SetIdleState () {
 			IconName = "folder-synced";
-			Tooltip = "SparkleShare, all up to date";
 		}
 
 		public void SetSyncingState () {
 //			IconName = "folder-syncing";
-//			Tooltip = "SparkleShare, updating files...";
 		}
 
 		public void SetErrorState () {
 //			IconName = "folder-sync-error";
-//			Tooltip = "SparkleShare, something went wrong";
 		}
-		
 
 		// Quits the program
 		public void Quit (object o, EventArgs args) {
