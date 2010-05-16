@@ -283,7 +283,7 @@ namespace SparkleShare {
 			VBox VBox = new VBox (false, 0);
 
 				Table Table = new Table(7, 2, false);
-				
+				Table.RowSpacing = 6;
 
 				Table.Attach (RemoteUrlBox, 0, 2, 0, 1);
 				Table.Attach (LocalPathBox, 0, 2, 1, 2);
@@ -436,7 +436,9 @@ namespace SparkleShare {
 					PeopleIter = PeopleStore.Prepend ();
 					PeopleStore.SetValue (PeopleIter, 0,
 					                      SparkleHelpers.GetAvatar (UserEmail , 32));
-					PeopleStore.SetValue (PeopleIter, 1, UserName + "\n" + UserEmail);
+					PeopleStore.SetValue (PeopleIter, 1,
+					                      "<b>" + UserName + "</b>\n" +
+					                      "<span font_size=\"smaller\">" + UserEmail + "</span>");
 
 				}
 
@@ -444,16 +446,13 @@ namespace SparkleShare {
 
 			}
 
-			TreeView PeopleView = new TreeView (PeopleStore); 
-			PeopleView.AppendColumn ("", new CellRendererPixbuf () , "pixbuf", 0);  
-			PeopleView.AppendColumn ("", new Gtk.CellRendererText (), "text", 1);
-			TreeViewColumn [] PeopleViewColumns = PeopleView.Columns;
-			PeopleViewColumns [0].MinWidth = 48;
-
-			PeopleViewColumns [1].Expand = true;
-
-			PeopleView.HeadersVisible = false;
-
+			IconView PeopleView = new IconView (PeopleStore); 
+			PeopleView.PixbufColumn = 0;
+			PeopleView.MarkupColumn = 1;
+			PeopleView.Columns = 2;
+			PeopleView.Spacing = 6;
+			PeopleView.ItemWidth = 200;
+			PeopleView.Orientation = Orientation.Horizontal;
 			ScrolledWindow ScrolledWindow = new ScrolledWindow ();
 			ScrolledWindow.AddWithViewport (PeopleView);
 
