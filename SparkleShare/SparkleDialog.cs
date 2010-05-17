@@ -138,6 +138,16 @@ namespace SparkleShare {
 					SparkleHelpers.CombineMore (SparklePaths.SparklePath,
 					                            RepoName)
 				);
+
+				// Enable notifications and synchronisation by default				
+				File.Create (SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+				                                         RepoName, ".git",
+				                                         "sparkleshare.notify"));
+
+				File.Create (SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+				                                         RepoName, ".git",
+				                                         "sparkleshare.sync"));
+
 				Destroy ();
 			};
 		
