@@ -37,7 +37,7 @@ namespace SparkleShare {
 
 		public void CreateWindow () {
 		
-			SetSizeRequest (900, 540);
+			SetSizeRequest (900, 480);
 	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 6;
 			Title = "Happenings in ‘" + SparkleRepo.Name + "’";
@@ -49,11 +49,10 @@ namespace SparkleShare {
 				HBox.PackStart (CreatePeopleList ());
 				HBox.PackStart (CreateEventLog ());
 
-				LayoutVertical.PackStart (HBox, true, true, 0);
-				LayoutVertical.PackStart (CreateDetailedView(), false, false, 0);
+				LayoutVertical.PackStart (HBox, true, true, 6);
 
 					HButtonBox DialogButtons = new HButtonBox ();
-					DialogButtons.Layout = ButtonBoxStyle.End;
+					DialogButtons.Layout = ButtonBoxStyle.Edge;
 					DialogButtons.BorderWidth = 6;
 
 						Button CloseButton = new Button (Stock.Close);
@@ -61,6 +60,13 @@ namespace SparkleShare {
 							Destroy ();
 						};
 
+						Button PreferencesButton = new Button (Stock.Preferences);
+						PreferencesButton.Clicked += delegate (object o, EventArgs args) {
+							SparklePreferencesDialog SparklePreferencesDialog =
+								new SparklePreferencesDialog (SparkleRepo);
+						};
+
+					DialogButtons.Add (PreferencesButton);
 					DialogButtons.Add (CloseButton);
 
 				LayoutVertical.PackStart (DialogButtons, false, false, 0);
@@ -89,94 +95,6 @@ namespace SparkleShare {
 */
 			Add (LayoutVertical);		
 		
-		}
-
-
-		// Creates the detailed view
-		public Table CreateDetailedView () {
-
-			// Create box layout for Remote Address
-			HBox RemoteUrlBox = new HBox (false, 0);
-
-				Label Property1 = new Label ("Remote address:");
-				Property1.WidthRequest = 120;
-				Property1.Xalign = 0;
-
-				Label Value1 = new Label
-					("<b>" + SparkleRepo.RemoteOriginUrl + "</b>");
-
-				Value1.UseMarkup = true;
-
-			RemoteUrlBox.PackStart (Property1, false, false, 0);
-			RemoteUrlBox.PackStart (Value1, false, false, 0);
-
-			// Create box layout for repository path
-			HBox LocalPathBox = new HBox (false, 0);
-
-				Label Property2 = new Label ("Local path:");
-				Property2.WidthRequest = 120;
-				Property2.Xalign = 0;
-
-				Label Value2 = new Label
-					("<b>" + SparkleRepo.LocalPath + "</b>");
-
-				Value2.UseMarkup = true;
-
-			LocalPathBox.PackStart (Property2, false, false, 0);
-			LocalPathBox.PackStart (Value2, false, false, 0);
-
-			CheckButton NotifyChangesCheckButton = 
-				new CheckButton ("Notify me when something changes");
-
-			string NotifyChangesFileName =
-				SparkleHelpers.CombineMore (SparkleRepo.LocalPath,
-				                            ".git", "sparkleshare.notify");
-			                                        
-			if (File.Exists (NotifyChangesFileName))
-				NotifyChangesCheckButton.Active = true;
-				
-			NotifyChangesCheckButton.Toggled += delegate {
-				if (File.Exists (NotifyChangesFileName)) {
-					SparkleRepo.NotifyChanges = false;
-					File.Delete (NotifyChangesFileName);
-				} else {
-					SparkleRepo.NotifyChanges = true;
-					File.Create (NotifyChangesFileName);
-				}
-			};
-
-			CheckButton SyncChangesCheckButton = 
-				new CheckButton ("Synchronize my changes");
-
-			string SyncChangesFileName =
-				SparkleHelpers.CombineMore (SparkleRepo.LocalPath,
-				                            ".git", "sparkleshare.sync");
-
-			if (File.Exists (SyncChangesFileName))
-				SyncChangesCheckButton.Active = true;
-
-			SyncChangesCheckButton.Toggled += delegate {
-				if (File.Exists (SyncChangesFileName)) {
-					SparkleRepo.SyncChanges = false;
-					File.Delete (SyncChangesFileName);
-				} else {
-					SparkleRepo.SyncChanges = true;
-					File.Create (SyncChangesFileName);
-				}
-			};
-
-
-			Table Table = new Table(2, 2, true);
-			Table.RowSpacing = 3;
-			Table.ColumnSpacing = 12;
-			Table.BorderWidth = 9;
-			Table.Attach (RemoteUrlBox, 0, 1, 0, 1);
-			Table.Attach (LocalPathBox, 0, 1, 1, 2);
-			Table.Attach (NotifyChangesCheckButton, 1, 2, 0, 1);
-			Table.Attach (SyncChangesCheckButton, 1, 2, 1, 2);
-
-			return Table;
-
 		}
 
 		public ScrolledWindow CreateEventLog() {
