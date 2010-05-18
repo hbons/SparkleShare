@@ -102,7 +102,6 @@ namespace SparkleShare {
 				Destroy ();
 			};
 			DialogButtons.Add (CloseButton);
-			SparkleWindow.Default = CloseButton;
 
 			LayoutVertical.PackStart (InfoLabel, false, false, 0);
 			LayoutVertical.PackStart (new Label (), false, false, 0);
