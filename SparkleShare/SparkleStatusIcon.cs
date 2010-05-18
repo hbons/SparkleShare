@@ -35,6 +35,26 @@ namespace SparkleShare {
 
 				Menu Menu = new Menu();
 
+				MenuItem StatusItem = new MenuItem (_("Everything is up to date"));
+				StatusItem.Sensitive = false;
+				Menu.Add (StatusItem);
+				Menu.Add (new SeparatorMenuItem ());
+		
+				MenuItem [] FolderItems =
+					new MenuItem [SparkleShare.Repositories.Length];
+
+				int i = 0;
+				foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
+					FolderItems [i] = new MenuItem (SparkleRepo.Name);
+					FolderItems [i].Activated += delegate {
+						SparkleWindow SparkleWindow = new SparkleWindow (SparkleRepo);
+						SparkleWindow.ShowAll ();
+					};
+					Menu.Add (FolderItems [i]);
+					i++;
+				}
+				Menu.Add (new SeparatorMenuItem ());
+
 				MenuItem OpenFolderItem = new MenuItem (_("Open Sharing Folder"));
 				OpenFolderItem.Activated += delegate {
 							Process Process = new Process ();
@@ -43,28 +63,7 @@ namespace SparkleShare {
 							Process.Start();
 				};
 				Menu.Add (OpenFolderItem);
-		
-				Menu.Add (new SeparatorMenuItem ());
-				MenuItem StatusItem = new MenuItem (_("Everything is up to date"));
-				StatusItem.Sensitive = false;
-				Menu.Add (StatusItem);
 
-				Menu.Add (new SeparatorMenuItem ());
-
-				MenuItem [] FolderItems =
-					new MenuItem [SparkleShare.Repositories.Length];
-				int i = 0;
-				foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
-					FolderItems [i] = new MenuItem (SparkleRepo.Name);
-					FolderItems [i].Activated += delegate {
-						SparkleWindow SparkleWindow = new SparkleWindow (SparkleRepo);
-						SparkleWindow.ShowAll ();
-					};
-					Menu.Add(FolderItems [i]);
-					i++;
-				}
-
-				Menu.Add (new SeparatorMenuItem ());
 				MenuItem AboutItem = new MenuItem (_("About SparkleShare"));
 				AboutItem.Activated += delegate {
 							Process Process = new Process ();
@@ -72,15 +71,15 @@ namespace SparkleShare {
 							Process.StartInfo.Arguments = "http://www.sparkleshare.org/";
 							Process.Start();
 				};
-				Menu.Add(AboutItem);
+				Menu.Add (AboutItem);
 
 				Menu.Add (new SeparatorMenuItem ());
-				MenuItem QuitItem = new MenuItem (Gtk.Stock.Quit);
+				MenuItem QuitItem = new MenuItem ("Quit");
 				QuitItem.Activated += delegate { Environment.Exit (0); };
-				Menu.Add(QuitItem);
+				Menu.Add (QuitItem);
 			
-				Menu.ShowAll();
-				Menu.Popup();
+				Menu.ShowAll ();
+				Menu.Popup ();
 
 			};
 
