@@ -33,6 +33,8 @@ namespace SparkleShare {
 		}
 
 		private SparkleRepo SparkleRepo;
+		private HBox LayoutHorizontal;
+		private ScrolledWindow LogScrolledWindow;
 
 		public SparkleWindow (SparkleRepo Repo) : base ("")  {
 
@@ -51,11 +53,11 @@ namespace SparkleShare {
 
 			VBox LayoutVertical = new VBox (false, 0);
 
-				HBox HBox = new HBox (true, 6);
-				HBox.PackStart (CreatePeopleList ());
-				HBox.PackStart (CreateEventLog ());
+				LayoutHorizontal = new HBox (true, 6);
+				LayoutHorizontal.PackStart (CreatePeopleList ());
+				LayoutHorizontal.PackStart (CreateEventLog (""));
 
-				LayoutVertical.PackStart (HBox, true, true, 6);
+				LayoutVertical.PackStart (LayoutHorizontal, true, true, 6);
 
 					HButtonBox DialogButtons = new HButtonBox ();
 					DialogButtons.Layout = ButtonBoxStyle.Edge;
@@ -104,7 +106,14 @@ namespace SparkleShare {
 		
 		}
 
-		public ScrolledWindow CreateEventLog() {
+		public void UpdateEventLog (string UserEmail) {
+			LayoutHorizontal.Remove (LogScrolledWindow);
+			LogScrolledWindow = CreateEventLog (UserEmail);
+			LayoutHorizontal.Add (LogScrolledWindow);
+			ShowAll ();
+		}
+
+		public ScrolledWindow CreateEventLog(string UserEmail) {
 
 			ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf),
 				                                 typeof (string),
@@ -117,16 +126,14 @@ namespace SparkleShare {
 			Process.StartInfo.FileName = "git";
 
 			string Output = "";
-			foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
 
-				// We're using the snowman here to separate messages :)
-				Process.StartInfo.Arguments =
-					"log --format=\"%at☃%an %s☃%cr\" -25";
+			Process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
+			// We're using the snowman here to separate messages :)
+			Process.StartInfo.Arguments =
+				"log --format=\"%at☃%an %s☃%cr☃%ae\" -25";
+			Process.Start();
 
-				Process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
-				Process.Start();
-				Output += "\n" + Process.StandardOutput.ReadToEnd().Trim ();
-			}
+			Output += "\n" + Process.StandardOutput.ReadToEnd().Trim ();
 
 			Output = Output.TrimStart ("\n".ToCharArray ());
 			string [] Lines = Regex.Split (Output, "\n");
@@ -140,28 +147,32 @@ namespace SparkleShare {
 			TreeIter Iter;
 			foreach (string Line in LastTwentyFive) {
 
-				// Look for the snowman!
-				string [] Parts = Regex.Split (Line, "☃");
-				string Message = Parts [1];
-				string TimeAgo = Parts [2];
+				if (Line.Contains (UserEmail)) {
+				Console.WriteLine ("!!!");
+					// Look for the snowman!
+					string [] Parts = Regex.Split (Line, "☃");
+					string Message = Parts [1];
+					string TimeAgo = Parts [2];
 
-				string IconFile = "document-edited";		
+					string IconFile = "document-edited";		
 
-				if (Message.IndexOf (" added ‘") > -1)
-					IconFile = "document-added";
+					if (Message.IndexOf (" added ‘") > -1)
+						IconFile = "document-added";
 
-				if (Message.IndexOf (" deleted ‘") > -1)
-					IconFile = "document-removed";
+					if (Message.IndexOf (" deleted ‘") > -1)
+						IconFile = "document-removed";
 
-				if (Message.IndexOf (" moved ‘") > -1 || 
-					Message.IndexOf (" renamed ‘") > -1)
-					IconFile = "document-moved";
+					if (Message.IndexOf (" moved ‘") > -1 || 
+						Message.IndexOf (" renamed ‘") > -1)
+						IconFile = "document-moved";
 
-				Gdk.Pixbuf ChangeIcon = SparkleHelpers.GetIcon (IconFile, 16);
-				Iter = LogStore.Append ();
-				LogStore.SetValue (Iter, 0, ChangeIcon);
-				LogStore.SetValue (Iter, 1, Message);
-				LogStore.SetValue (Iter, 2, " " + TimeAgo);
+					Gdk.Pixbuf ChangeIcon = SparkleHelpers.GetIcon (IconFile, 16);
+					Iter = LogStore.Append ();
+					LogStore.SetValue (Iter, 0, ChangeIcon);
+					LogStore.SetValue (Iter, 1, Message);
+					LogStore.SetValue (Iter, 2, " " + TimeAgo);
+
+				}
 
 			}
 
@@ -184,10 +195,10 @@ namespace SparkleShare {
 			Columns [1].Expand = true;
 			Columns [1].MaxWidth = 150;
 
-			ScrolledWindow ScrolledWindow = new ScrolledWindow ();
-			ScrolledWindow.AddWithViewport (LogView);
+			LogScrolledWindow = new ScrolledWindow ();
+			LogScrolledWindow.AddWithViewport (LogView);
 
-			return ScrolledWindow;
+			return LogScrolledWindow;
 
 		}
 
@@ -210,7 +221,8 @@ namespace SparkleShare {
 			string [] Lines = Regex.Split (Output, "\n");
 
 			ListStore PeopleStore = new ListStore (typeof (Gdk.Pixbuf),
-				                                   typeof (string));
+				                                    typeof (string),
+				                                    typeof (string));
 
 			int i = 0;
 			TreeIter PeopleIter;
@@ -237,6 +249,7 @@ namespace SparkleShare {
 					                      "<b>" + UserName + "</b>\n" +
 					                      "<span font_size=\"smaller\">" +
 					                      UserEmail + "</span>");
+					PeopleStore.SetValue (PeopleIter, 2, UserEmail);
 
 				}
 
@@ -251,6 +264,16 @@ namespace SparkleShare {
 			PeopleView.Spacing = 6;
 			PeopleView.ItemWidth = 200;
 			PeopleView.Orientation = Orientation.Horizontal;
+			PeopleView.SelectionMode = SelectionMode.Single;
+			
+			PeopleView.SelectionChanged += delegate (object o, EventArgs args) {
+				if (PeopleView.SelectedItems.Length > 0) {
+					TreeIter Iter;
+					PeopleStore.GetIter (out Iter, PeopleView.SelectedItems [0]);
+					UpdateEventLog ((string) PeopleStore.GetValue (Iter, 2));
+				} else UpdateEventLog ("");
+			};
+			
 			ScrolledWindow ScrolledWindow = new ScrolledWindow ();
 			ScrolledWindow.AddWithViewport (PeopleView);
 
