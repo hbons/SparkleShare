@@ -35,6 +35,7 @@ namespace SparkleShare {
 		private SparkleRepo SparkleRepo;
 		private HBox LayoutHorizontal;
 		private ScrolledWindow LogScrolledWindow;
+		private ScrolledWindow PeopleScrolledWindow;
 
 		public SparkleWindow (SparkleRepo Repo) : base ("")  {
 
@@ -54,7 +55,7 @@ namespace SparkleShare {
 			VBox LayoutVertical = new VBox (false, 0);
 
 				LayoutHorizontal = new HBox (true, 6);
-				LayoutHorizontal.PackStart (CreatePeopleList ());
+				LayoutHorizontal.PackStart (CreatePeopleList (""));
 				LayoutHorizontal.PackStart (CreateEventLog (""));
 
 				LayoutVertical.PackStart (LayoutHorizontal, true, true, 6);
@@ -106,16 +107,25 @@ namespace SparkleShare {
 		
 		}
 
-		public void UpdateEventLog (string UserEmail) {
+		public void UpdateEventLog (string SelectedEmail) {
 			LayoutHorizontal.Remove (LogScrolledWindow);
-			LogScrolledWindow = CreateEventLog (UserEmail);
+			LogScrolledWindow = CreateEventLog (SelectedEmail);
 			LayoutHorizontal.Add (LogScrolledWindow);
 			ShowAll ();
 		}
 
-		public ScrolledWindow CreateEventLog(string UserEmail) {
+		public void UpdatePeopleList (string SelectedEmail) {
+			LayoutHorizontal.Remove (PeopleScrolledWindow);
+			PeopleScrolledWindow = CreatePeopleList (SelectedEmail);
+			LayoutHorizontal.Add (PeopleScrolledWindow);
+			LayoutHorizontal.ReorderChild (PeopleScrolledWindow, 0);
+			ShowAll ();
+		}
+
+		public ScrolledWindow CreateEventLog(string SelectedEmail) {
 
 			ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf),
+				                                 typeof (string),
 				                                 typeof (string),
 				                                 typeof (string));
 
@@ -147,12 +157,13 @@ namespace SparkleShare {
 			TreeIter Iter;
 			foreach (string Line in LastTwentyFive) {
 
-				if (Line.Contains (UserEmail)) {
-				Console.WriteLine ("!!!");
+				if (Line.Contains (SelectedEmail)) {
+
 					// Look for the snowman!
 					string [] Parts = Regex.Split (Line, "☃");
 					string Message = Parts [1];
 					string TimeAgo = Parts [2];
+					string UserEmail = Parts [3];
 
 					string IconFile = "document-edited";		
 
@@ -171,6 +182,10 @@ namespace SparkleShare {
 					LogStore.SetValue (Iter, 0, ChangeIcon);
 					LogStore.SetValue (Iter, 1, Message);
 					LogStore.SetValue (Iter, 2, " " + TimeAgo);
+					// We're not showing e-mail, it's only 
+					// there for lookup purposes
+					LogStore.SetValue (Iter, 3, UserEmail);
+					Console.WriteLine (UserEmail);
 
 				}
 
@@ -179,7 +194,6 @@ namespace SparkleShare {
 			TreeView LogView = new TreeView (LogStore); 
 			LogView.HeadersVisible = false;
 			
-
 			CellRendererText TextCellRight = new Gtk.CellRendererText ();
 			TextCellRight.Alignment = Pango.Alignment.Right;
 
@@ -195,6 +209,14 @@ namespace SparkleShare {
 			Columns [1].Expand = true;
 			Columns [1].MaxWidth = 150;
 
+			LogView.CursorChanged += delegate(object o, EventArgs args) {
+			TreeModel model;
+				if (LogView.Selection.GetSelected (out model, out Iter)) {
+					UpdatePeopleList ((string) LogStore.GetValue (Iter, 3));
+				}
+			};
+
+
 			LogScrolledWindow = new ScrolledWindow ();
 			LogScrolledWindow.AddWithViewport (LogView);
 
@@ -203,7 +225,7 @@ namespace SparkleShare {
 		}
 
 		// Creates a visual list of people working in the repo
-		public ScrolledWindow CreatePeopleList () {
+		public ScrolledWindow CreatePeopleList (string SelectedEmail) {
 
 			Process Process = new Process ();
 			Process.EnableRaisingEvents = false; 
@@ -225,7 +247,8 @@ namespace SparkleShare {
 				                                    typeof (string));
 
 			int i = 0;
-			TreeIter PeopleIter;
+			TreeIter Iter;
+			TreePath TreePath = new TreePath ();
 			foreach (string Line in Lines) {
 
 				// Only add name if it isn't there already
@@ -238,18 +261,23 @@ namespace SparkleShare {
 					string UserEmail = Parts [1];
 
 					// Do something special if the person is you
-					if (UserName.Equals (SparkleRepo.UserName))
+					if (UserEmail.Equals (SparkleRepo.UserEmail))
 						UserName += _(" (that’s you!)");
 
 					// Actually add to the list
-					PeopleIter = PeopleStore.Prepend ();
-					PeopleStore.SetValue (PeopleIter, 0,
+					Iter = PeopleStore.Prepend ();
+					PeopleStore.SetValue (Iter, 0,
 					                      SparkleHelpers.GetAvatar (UserEmail , 32));
-					PeopleStore.SetValue (PeopleIter, 1,
+					PeopleStore.SetValue (Iter, 1,
 					                      "<b>" + UserName + "</b>\n" +
 					                      "<span font_size=\"smaller\">" +
 					                      UserEmail + "</span>");
-					PeopleStore.SetValue (PeopleIter, 2, UserEmail);
+					PeopleStore.SetValue (Iter, 2, UserEmail);
+
+					if (UserEmail.Equals (SelectedEmail)) {
+						TreePath = PeopleStore.GetPath (Iter);
+						Console.WriteLine (TreePath.Indices [0]);
+					}
 
 				}
 
@@ -265,19 +293,22 @@ namespace SparkleShare {
 			PeopleView.ItemWidth = 200;
 			PeopleView.Orientation = Orientation.Horizontal;
 			PeopleView.SelectionMode = SelectionMode.Single;
+
+			// TODO: doesn't work. Always seems to select the
+			// first row :(
+			PeopleView.SelectPath (TreePath);
 			
 			PeopleView.SelectionChanged += delegate (object o, EventArgs args) {
 				if (PeopleView.SelectedItems.Length > 0) {
-					TreeIter Iter;
 					PeopleStore.GetIter (out Iter, PeopleView.SelectedItems [0]);
 					UpdateEventLog ((string) PeopleStore.GetValue (Iter, 2));
 				} else UpdateEventLog ("");
 			};
 			
-			ScrolledWindow ScrolledWindow = new ScrolledWindow ();
-			ScrolledWindow.AddWithViewport (PeopleView);
+			PeopleScrolledWindow = new ScrolledWindow ();
+			PeopleScrolledWindow.AddWithViewport (PeopleView);
 
-			return ScrolledWindow;
+			return PeopleScrolledWindow;
 
 		}
 
