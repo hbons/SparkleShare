@@ -223,11 +223,13 @@ namespace SparkleShare {
 			FetchTimer.Stop ();
 //			SparkleUI.NotificationIcon.SetSyncingState ();
 			Console.WriteLine ("[Git][" + Name + "] Fetching changes... ");
-			Process.StartInfo.Arguments = "fetch -v"; // TODO: Only call merge when there are changes
+			Process.StartInfo.Arguments = "fetch -v";
 			Process.Start();
+			string Output = Process.StandardOutput.ReadToEnd().Trim (); // TODO: This doesn't work :(
 			Process.WaitForExit ();
 			Console.WriteLine ("[Git][" + Name + "] Changes fetched.");
-			Merge ();
+			if (!Output.Contains ("up to date"))
+				Merge ();
 //			SparkleUI.NotificationIcon.SetIdleState ();
 			FetchTimer.Start ();
 		}
