@@ -39,7 +39,7 @@ namespace SparkleShare {
 			VBox LayoutVertical = new VBox (false, 0);
 
 			Label InfoLabel = new Label ();
-			InfoLabel.Text = "The folder" +
+			InfoLabel.Text = "The folder " +
 			                 "<b>" + SparkleRepo.LocalPath + "</b>" +
 			                 "\nis linked to " +
 			                 "<b>" + SparkleRepo.RemoteOriginUrl + "</b>";
