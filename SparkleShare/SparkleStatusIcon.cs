@@ -43,6 +43,8 @@ namespace SparkleShare {
 				MenuItem [] FolderItems =
 					new MenuItem [SparkleShare.Repositories.Length];
 
+				// TODO: For some strange reason both entries
+				// open the same repo...
 				int i = 0;
 				foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
 					FolderItems [i] = new MenuItem (SparkleRepo.Name);
