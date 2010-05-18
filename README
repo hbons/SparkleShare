@@ -66,6 +66,7 @@ You can build and install SparkleShare like this:
    $ make
    $ sudo make install
 
+
 Frequently Asked Question
 =========================
 

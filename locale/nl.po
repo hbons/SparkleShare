@@ -1,0 +1,762 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: SparkleShare/SparkleDialog.cs:39 SparkleShare/SparkleHelpers.cs:78
+#: SparkleShare/SparkleHelpers.cs:84
+#: SparkleShare/SparklePreferencesDialog.cs:36 SparkleShare/SparkleRepo.cs:202
+#: SparkleShare/SparkleRepo.cs:332 SparkleShare/SparkleRepo.cs:336
+#: SparkleShare/SparkleRepo.cs:345 SparkleShare/SparkleRepo.cs:349
+#: SparkleShare/SparkleRepo.cs:358 SparkleShare/SparkleRepo.cs:362
+#: SparkleShare/SparkleRepo.cs:371 SparkleShare/SparkleRepo.cs:376
+#: SparkleShare/SparkleRepo.cs:383 SparkleShare/SparkleRepo.cs:393
+#: SparkleShare/SparkleRepo.cs:398 SparkleShare/SparkleUI.cs:115
+#: SparkleShare/SparkleWindow.cs:37 SparkleShare/SparkleWindow.cs:119
+#: SparkleShare/SparkleWindow.cs:178 SparkleShare/SparkleWindow.cs:179
+#: SparkleShare/SparkleWindow.cs:180
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-05-18 19:36+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: SparkleShare/SparkleDialog.cs:42
+#: SparkleShare/SparklePreferencesDialog.cs:39 SparkleShare/SparkleUI.cs:114
+#: SparkleShare/SparkleWindow.cs:50
+msgid "folder-sparkleshare"
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:46
+msgid "Add a Folder"
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:50
+msgid "Folder Name:   "
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:52
+msgid "<span size='small'><i>Example: ‘Project’.</i></span>"
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:58
+msgid "Remote address:   "
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:60
+msgid "ssh://git@github.com"
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:61
+msgid "ssh://git@git.gnome.org"
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:62
+msgid "ssh://git@fedorahosted.org"
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:63
+msgid "ssh://git@gitorious.org"
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:67
+msgid "<span size='small'><i>Example: ‘ssh://git@github.com’.</i></span>"
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:118
+msgid ""
+"Downloading files,\n"
+"this may take a while..."
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:132 SparkleShare/SparkleRepo.cs:70
+#: SparkleShare/SparkleRepo.cs:77 SparkleShare/SparkleRepo.cs:83
+#: SparkleShare/SparkleRepo.cs:100 SparkleShare/SparkleRepo.cs:403
+#: SparkleShare/SparkleShare.cs:42 SparkleShare/SparkleWindow.cs:117
+#: SparkleShare/SparkleWindow.cs:203
+msgid "git"
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:137 SparkleShare/SparkleRepo.cs:182
+msgid "clone "
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:150 SparkleShare/SparkleDialog.cs:154
+#: SparkleShare/SparklePreferencesDialog.cs:61
+#: SparkleShare/SparklePreferencesDialog.cs:81 SparkleShare/SparkleRepo.cs:58
+#: SparkleShare/SparkleRepo.cs:62 SparkleShare/SparkleRepo.cs:287
+#: SparkleShare/SparkleUI.cs:77
+msgid ".git"
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:151
+#: SparkleShare/SparklePreferencesDialog.cs:61 SparkleShare/SparkleRepo.cs:59
+msgid "sparkleshare.notify"
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:155
+#: SparkleShare/SparklePreferencesDialog.cs:81 SparkleShare/SparkleRepo.cs:63
+msgid "sparkleshare.sync"
+msgstr ""
+
+#: SparkleShare/SparkleHelpers.cs:32
+msgid "x"
+msgstr ""
+
+#: SparkleShare/SparkleHelpers.cs:36 SparkleShare/SparkleUI.cs:42
+#: SparkleShare/SparkleUI.cs:144 SparkleShare/SparkleUI.cs:148
+msgid "[Config] Created '"
+msgstr ""
+
+#: SparkleShare/SparkleHelpers.cs:36 SparkleShare/SparkleRepo.cs:136
+#: SparkleShare/SparkleUI.cs:42 SparkleShare/SparkleUI.cs:133
+#: SparkleShare/SparkleUI.cs:144
+msgid "'"
+msgstr ""
+
+#: SparkleShare/SparkleHelpers.cs:47
+msgid "http://www.gravatar.com/avatar/"
+msgstr ""
+
+#: SparkleShare/SparkleHelpers.cs:48
+msgid ".jpg?s="
+msgstr ""
+
+#: SparkleShare/SparkleHelpers.cs:48
+msgid "&d=404"
+msgstr ""
+
+#: SparkleShare/SparkleHelpers.cs:67
+msgid "avatar-default"
+msgstr ""
+
+#: SparkleShare/SparkleHelpers.cs:78
+msgid "-"
+msgstr ""
+
+#: SparkleShare/SparkleHelpers.cs:100
+msgid "[a-z]+://(.)+"
+msgstr ""
+
+#: SparkleShare/SparklePaths.cs:24
+msgid "/tmp/sparkleshare"
+msgstr ""
+
+#: SparkleShare/SparklePaths.cs:27
+msgid "HOME"
+msgstr ""
+
+#: SparkleShare/SparklePaths.cs:29
+msgid "SparkleShare"
+msgstr ""
+
+#: SparkleShare/SparklePaths.cs:32
+msgid ".config"
+msgstr ""
+
+#: SparkleShare/SparklePaths.cs:32 SparkleShare/SparklePaths.cs:35
+msgid "sparkleshare"
+msgstr ""
+
+#: SparkleShare/SparklePaths.cs:35
+msgid "usr"
+msgstr ""
+
+#: SparkleShare/SparklePaths.cs:35
+msgid "share"
+msgstr ""
+
+#: SparkleShare/SparklePaths.cs:36
+msgid "icons"
+msgstr ""
+
+#: SparkleShare/SparklePaths.cs:36
+msgid "hicolor"
+msgstr ""
+
+#: SparkleShare/SparklePaths.cs:39
+msgid "avatars"
+msgstr ""
+
+#: SparkleShare/SparklePaths.cs:41
+msgid "/usr/share/icons/hicolor"
+msgstr ""
+
+#: SparkleShare/SparklePlatform.cs:24 SparkleShare/SparkleUI.cs:44
+#: SparkleShare/SparkleUI.cs:82
+msgid "GNOME"
+msgstr ""
+
+#: SparkleShare/SparklePreferencesDialog.cs:42
+msgid "Preferences"
+msgstr ""
+
+#: SparkleShare/SparklePreferencesDialog.cs:48
+msgid "The folder <b>"
+msgstr ""
+
+#: SparkleShare/SparklePreferencesDialog.cs:49
+msgid ""
+"</b>\n"
+"is linked to <b>"
+msgstr ""
+
+#: SparkleShare/SparklePreferencesDialog.cs:51
+msgid "</b>"
+msgstr ""
+
+#: SparkleShare/SparklePreferencesDialog.cs:57
+msgid "Notify me when something changes"
+msgstr ""
+
+#: SparkleShare/SparklePreferencesDialog.cs:77
+msgid "Synchronize my changes"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:69
+msgid "Anonymous"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:71
+msgid "config --get user.name"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:76
+msgid "not.set@git-scm.com"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:78
+msgid "config --get user.email"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:84
+msgid "config --get remote.origin.url"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:93
+msgid "@"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:94 SparkleShare/SparkleRepo.cs:95
+msgid ":"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:97
+msgid "/"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:101
+msgid "rev-list --max-count=1 HEAD"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:109
+msgid "*"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:127 SparkleShare/SparkleRepo.cs:195
+#: SparkleShare/SparkleRepo.cs:199 SparkleShare/SparkleRepo.cs:214
+#: SparkleShare/SparkleRepo.cs:218 SparkleShare/SparkleRepo.cs:225
+#: SparkleShare/SparkleRepo.cs:229 SparkleShare/SparkleRepo.cs:238
+#: SparkleShare/SparkleRepo.cs:242 SparkleShare/SparkleRepo.cs:269
+#: SparkleShare/SparkleRepo.cs:275 SparkleShare/SparkleRepo.cs:279
+msgid "[Git]["
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:127
+msgid "] Nothing going on..."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:135
+msgid "[Event]["
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:135 SparkleShare/SparkleRepo.cs:213
+msgid "] "
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:136 SparkleShare/SparkleUI.cs:133
+msgid " '"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:152 SparkleShare/SparkleRepo.cs:155
+#: SparkleShare/SparkleRepo.cs:167 SparkleShare/SparkleRepo.cs:173
+msgid "[Buffer]["
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:152 SparkleShare/SparkleRepo.cs:167
+msgid "] Done waiting."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:155 SparkleShare/SparkleRepo.cs:173
+msgid "] Waiting for more changes..."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:186
+msgid ".gitignore"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:187
+msgid "*~"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:188
+msgid ".*.sw?"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:195
+msgid "] Staging changes..."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:196
+msgid "add --all"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:199
+msgid "] Changed staged."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:213
+msgid "[Commit]["
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:214
+msgid "] Commiting changes..."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:215
+msgid "commit -m \""
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:215
+msgid "\""
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:218
+msgid "] Changes commited."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:225
+msgid "] Fetching changes... "
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:226
+msgid "fetch -v"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:229
+msgid "] Changes fetched."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:238
+msgid "] Merging fetched changes... "
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:239
+msgid "merge origin/master"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:242
+msgid "] Changes merged."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:245
+msgid "Already up-to-date."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:248
+msgid "log --format=\"%ae\" -1"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:253
+msgid "log --format=\"%s\" -1"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:258
+msgid "log --format=\"%an\" -1"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:262 SparkleShare/SparkleShare.cs:86
+#: SparkleShare/SparkleShare.cs:90 SparkleShare/SparkleShare.cs:92
+#: SparkleShare/SparkleShare.cs:95 SparkleShare/SparkleShare.cs:99
+#: SparkleShare/SparkleWindow.cs:164
+msgid " "
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:269
+msgid "] Nothing going on... "
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:275
+msgid "] Pushing changes..."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:276
+msgid "push"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:279
+msgid "] Changes pushed."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:285
+msgid "."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:286
+msgid ".lock"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:288
+msgid "/."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:292
+msgid ".swp"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:309
+msgid "status"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:313 SparkleShare/SparkleRepo.cs:324
+#: SparkleShare/SparkleWindow.cs:128 SparkleShare/SparkleWindow.cs:131
+#: SparkleShare/SparkleWindow.cs:132 SparkleShare/SparkleWindow.cs:210
+msgid "\n"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:314 SparkleShare/SparkleRepo.cs:328
+msgid "new file:"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:316 SparkleShare/SparkleRepo.cs:341
+msgid "modified:"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:318 SparkleShare/SparkleRepo.cs:367
+msgid "renamed:"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:320 SparkleShare/SparkleRepo.cs:354
+msgid "deleted:"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:331 SparkleShare/SparkleRepo.cs:335
+msgid "added ‘"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:332 SparkleShare/SparkleRepo.cs:336
+msgid "#\tnew file:"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:333 SparkleShare/SparkleRepo.cs:346
+#: SparkleShare/SparkleRepo.cs:359 SparkleShare/SparkleRepo.cs:372
+msgid "’ and "
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:333 SparkleShare/SparkleRepo.cs:346
+#: SparkleShare/SparkleRepo.cs:359 SparkleShare/SparkleRepo.cs:373
+msgid " more."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:336 SparkleShare/SparkleRepo.cs:349
+#: SparkleShare/SparkleRepo.cs:362 SparkleShare/SparkleRepo.cs:377
+msgid "’."
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:344 SparkleShare/SparkleRepo.cs:348
+msgid "edited ‘"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:345 SparkleShare/SparkleRepo.cs:349
+msgid "#\tmodified:"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:357 SparkleShare/SparkleRepo.cs:361
+msgid "deleted ‘"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:358 SparkleShare/SparkleRepo.cs:362
+msgid "#\tdeleted:"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:370 SparkleShare/SparkleRepo.cs:375
+msgid "renamed ‘"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:371 SparkleShare/SparkleRepo.cs:376
+msgid "#\trenamed:"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:372 SparkleShare/SparkleRepo.cs:377
+msgid " -> "
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:372 SparkleShare/SparkleRepo.cs:377
+msgid "’ to ‘"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:398
+msgid "Open Folder"
+msgstr ""
+
+#: SparkleShare/SparkleRepo.cs:400 SparkleShare/SparkleStatusIcon.cs:41
+#: SparkleShare/SparkleStatusIcon.cs:71 SparkleShare/SparkleUI.cs:116
+msgid "xdg-open"
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:38
+msgid "i18n"
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:38
+msgid "locale"
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:47
+msgid "version"
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:48
+msgid "Git wasn't found."
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:49
+msgid "You can get Git from http://git-scm.com/."
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:54
+msgid "whoami"
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:56
+msgid "root"
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:57
+msgid "Sorry, you can't run SparkleShare with these permissions."
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:58
+msgid "Things will go utterly wrong."
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:66
+msgid "--disable-gui"
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:66
+msgid "-d"
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:68
+msgid "--help"
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:68
+msgid "-h"
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:85
+msgid "SparkleShare Copyright (C) 2010 Hylke Bons"
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:87
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:88
+msgid "This is free software, and you are welcome to redistribute it "
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:89
+msgid "under certain conditions. Please read the GNU GPLv3 for details."
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:91
+msgid "SparkleShare syncs the ~/SparkleShare folder with remote repositories."
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:93
+msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:94
+msgid "Sync SparkleShare folder with remote repositories."
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:96
+msgid "Arguments:"
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:97
+msgid "\t -d, --disable-gui\tDon't show the notification icon."
+msgstr ""
+
+#: SparkleShare/SparkleShare.cs:98
+msgid "\t -h, --help\t\tDisplay this help text."
+msgstr ""
+
+#: SparkleShare/SparkleSpinner.cs:40
+msgid "process-working"
+msgstr ""
+
+#: SparkleShare/SparkleStatusIcon.cs:38
+msgid "Open Sharing Folder"
+msgstr ""
+
+#: SparkleShare/SparkleStatusIcon.cs:48
+msgid "Everything is up to date"
+msgstr ""
+
+#: SparkleShare/SparkleStatusIcon.cs:68
+msgid "About SparkleShare"
+msgstr ""
+
+#: SparkleShare/SparkleStatusIcon.cs:72
+msgid "http://www.sparkleshare.org/"
+msgstr ""
+
+#: SparkleShare/SparkleStatusIcon.cs:92
+msgid "folder-synced"
+msgstr ""
+
+#: SparkleShare/SparkleStatusIcon.cs:106
+msgid "sparkleshare.pid"
+msgstr ""
+
+#: SparkleShare/SparkleUI.cs:47 SparkleShare/SparkleUI.cs:83
+msgid "gvfs-set-attribute"
+msgstr ""
+
+#: SparkleShare/SparkleUI.cs:49
+msgid ""
+" metadata::custom-icon file:///usr/share/icons/hicolor/48x48/places/folder-"
+"sparkleshare.png"
+msgstr ""
+
+#: SparkleShare/SparkleUI.cs:57
+msgid ".gtk-bookmarks"
+msgstr ""
+
+#: SparkleShare/SparkleUI.cs:60
+msgid "file://"
+msgstr ""
+
+#: SparkleShare/SparkleUI.cs:60
+msgid " SparkleShare"
+msgstr ""
+
+#: SparkleShare/SparkleUI.cs:84
+msgid " file://"
+msgstr ""
+
+#: SparkleShare/SparkleUI.cs:85
+msgid " metadata::emblems [synced]"
+msgstr ""
+
+#: SparkleShare/SparkleUI.cs:108
+msgid "Welcome to SparkleShare!"
+msgstr ""
+
+#: SparkleShare/SparkleUI.cs:109
+msgid ""
+"You don't have any folders set up yet.\n"
+"Please create some in the SparkleShare folder."
+msgstr ""
+
+#: SparkleShare/SparkleUI.cs:115
+msgid "Open SparkleShare Folder"
+msgstr ""
+
+#: SparkleShare/SparkleUI.cs:132
+msgid "[Event][SparkleShare] "
+msgstr ""
+
+#: SparkleShare/SparkleUI.cs:148
+msgid "avatars'"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:49
+msgid "Happenings in ‘"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:49
+msgid "’"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:124
+msgid "log --format=\"%at☃%an %s☃%cr\" -25"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:144 SparkleShare/SparkleWindow.cs:223
+msgid "☃"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:148
+msgid "document-edited"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:150
+msgid " added ‘"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:151
+msgid "document-added"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:153
+msgid " deleted ‘"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:154
+msgid "document-removed"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:156
+msgid " moved ‘"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:157
+msgid " renamed ‘"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:158
+msgid "document-moved"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:178
+msgid "pixbuf"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:179 SparkleShare/SparkleWindow.cs:180
+msgid "text"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:204
+msgid "log --format=\"%an☃%ae\" -50"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:230
+msgid " (that’s you!)"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:237
+msgid "<b>"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:237
+msgid ""
+"</b>\n"
+"<span font_size=\"smaller\">"
+msgstr ""
+
+#: SparkleShare/SparkleWindow.cs:239
+msgid "</span>"
+msgstr ""
