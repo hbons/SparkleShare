@@ -26,48 +26,26 @@ namespace SparkleShare {
 	// name and url to sync changes with
 	public class SparklePreferencesDialog : Window {
 
-		private Button AddButton;
-		private ComboBoxEntry RemoteUrlCombo;
-		private Entry NameEntry;
+		public SparklePreferencesDialog (SparkleWindow SparkleWindow,
+		                                 SparkleRepo SparkleRepo) : base ("")  {
 
-		public SparklePreferencesDialog (SparkleRepo SparkleRepo) : base ("")  {
-		
-			BorderWidth = 6;
+			BorderWidth = 12;
 			IconName = "folder-sparkleshare";
-			Modal = true;
 			Resizable = false;
 			SetPosition (WindowPosition.Center);
 			Title = "Preferences";
+			TransientFor = SparkleWindow;
 
-			// Create box layout for Remote Address
-			HBox RemoteUrlBox = new HBox (false, 0);
+			VBox LayoutVertical = new VBox (false, 0);
 
-				Label Property1 = new Label ("Remote address:");
-				Property1.WidthRequest = 120;
-				Property1.Xalign = 0;
+			Label InfoLabel = new Label ();
+			InfoLabel.Text = "The folder" +
+			                 "<b>" + SparkleRepo.LocalPath + "</b>" +
+			                 "\nis linked to " +
+			                 "<b>" + SparkleRepo.RemoteOriginUrl + "</b>";
 
-				Label Value1 = new Label
-					("<b>" + SparkleRepo.RemoteOriginUrl + "</b>");
-
-				Value1.UseMarkup = true;
-
-			RemoteUrlBox.PackStart (Property1, false, false, 0);
-			RemoteUrlBox.PackStart (Value1, false, false, 0);
-
-			// Create box layout for repository path
-			HBox LocalPathBox = new HBox (false, 0);
-
-				Label Property2 = new Label ("Local path:");
-				Property2.WidthRequest = 120;
-				Property2.Xalign = 0;
-
-				Label Value2 = new Label
-					("<b>" + SparkleRepo.LocalPath + "</b>");
-
-				Value2.UseMarkup = true;
-
-			LocalPathBox.PackStart (Property2, false, false, 0);
-			LocalPathBox.PackStart (Value2, false, false, 0);
+			InfoLabel.Xalign = 0;
+			InfoLabel.UseMarkup = true;
 
 			CheckButton NotifyChangesCheckButton = 
 				new CheckButton ("Notify me when something changes");
@@ -109,19 +87,25 @@ namespace SparkleShare {
 				}
 			};
 
+			HButtonBox DialogButtons = new HButtonBox ();
+			DialogButtons.Layout = ButtonBoxStyle.End;
+			DialogButtons.BorderWidth = 0;
 
-			Table Table = new Table(2, 2, true);
-			Table.RowSpacing = 3;
-			Table.ColumnSpacing = 12;
-			Table.BorderWidth = 9;
-			Table.Attach (RemoteUrlBox, 0, 1, 0, 1);
-			Table.Attach (LocalPathBox, 0, 1, 1, 2);
-			Table.Attach (NotifyChangesCheckButton, 1, 2, 0, 1);
-			Table.Attach (SyncChangesCheckButton, 1, 2, 1, 2);
+			Button CloseButton = new Button (Stock.Close);
+			CloseButton.Clicked += delegate (object o, EventArgs args) {
+				Destroy ();
+			};
+			DialogButtons.Add (CloseButton);
+			SparkleWindow.Default = CloseButton;
 
-			Add (Table);
+			LayoutVertical.PackStart (InfoLabel, false, false, 0);
+			LayoutVertical.PackStart (new Label (), false, false, 0);
+			LayoutVertical.PackStart (NotifyChangesCheckButton, false, false, 0);
+			LayoutVertical.PackStart (SyncChangesCheckButton, false, false, 3);
+			LayoutVertical.PackStart (new Label (), false, false, 0);
+			LayoutVertical.PackStart (DialogButtons, false, false, 0);
 
-			ShowAll ();
+			Add (LayoutVertical);
 
 		}
 

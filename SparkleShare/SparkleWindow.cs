@@ -63,7 +63,8 @@ namespace SparkleShare {
 						Button PreferencesButton = new Button (Stock.Preferences);
 						PreferencesButton.Clicked += delegate (object o, EventArgs args) {
 							SparklePreferencesDialog SparklePreferencesDialog =
-								new SparklePreferencesDialog (SparkleRepo);
+								new SparklePreferencesDialog (this, SparkleRepo);
+							SparklePreferencesDialog.ShowAll ();
 						};
 
 					DialogButtons.Add (PreferencesButton);
