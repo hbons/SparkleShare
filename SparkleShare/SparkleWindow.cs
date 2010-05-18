@@ -58,10 +58,11 @@ namespace SparkleShare {
 			VBox LayoutVertical = new VBox (false, 0);
 
 				LayoutHorizontal = new HBox (true, 6);
+				LayoutHorizontal.BorderWidth = 6;
 				LayoutHorizontal.PackStart (CreatePeopleList ());
 				LayoutHorizontal.PackStart (CreateEventLog ());
 
-				LayoutVertical.PackStart (LayoutHorizontal, true, true, 6);
+				LayoutVertical.PackStart (LayoutHorizontal, true, true, 0);
 
 					HButtonBox DialogButtons = new HButtonBox ();
 					DialogButtons.Layout = ButtonBoxStyle.Edge;
