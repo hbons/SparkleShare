@@ -55,6 +55,13 @@ namespace SparkleShare {
 					Menu.Add (FolderItems [i]);
 					i++;
 				}
+				
+				MenuItem AddItem = new MenuItem (_("Add a Folder…"));
+				AddItem.Activated += delegate {
+					SparkleDialog SparkleDialog = new SparkleDialog ();
+					SparkleDialog.ShowAll ();
+				};
+				Menu.Add (AddItem);
 				Menu.Add (new SeparatorMenuItem ());
 
 				MenuItem OpenFolderItem = new MenuItem (_("Open Sharing Folder"));
@@ -66,7 +73,7 @@ namespace SparkleShare {
 				};
 				Menu.Add (OpenFolderItem);
 
-				MenuItem AboutItem = new MenuItem (_("About SparkleShare"));
+				MenuItem AboutItem = new MenuItem (_("Visit SparkleShare Website"));
 				AboutItem.Activated += delegate {
 							Process Process = new Process ();
 							Process.StartInfo.FileName = "xdg-open";
