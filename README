@@ -66,6 +66,12 @@ You can build and install SparkleShare like this:
    $ make
    $ sudo make install
 
+Frequently Asked Question
+=========================
+
+Q: Why is it written in Mono/C#?
+A: Because.
+
 
 Info
 ====
