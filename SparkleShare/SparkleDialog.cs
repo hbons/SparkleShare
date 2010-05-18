@@ -15,6 +15,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
+using Mono.Unix;
 using SparkleShare;
 using System;
 using System.Diagnostics;
@@ -25,6 +26,11 @@ namespace SparkleShare {
 	// A dialog where the user can enter a folder
 	// name and url to sync changes with
 	public class SparkleDialog : Window {
+
+		// Short alias for the translations
+		public static string _ (string s) {
+			return Catalog.GetString (s);
+		}
 
 		private Button AddButton;
 		private ComboBoxEntry RemoteUrlCombo;
@@ -37,19 +43,19 @@ namespace SparkleShare {
 			Modal = true;
 			Resizable = false;
 			SetPosition (WindowPosition.Center);
-			Title = "Add a Folder";
+			Title = _("Add a Folder");
 
 			VBox VBox = new VBox (false, 0);
 
-				Label NameLabel = new Label ("Folder Name:   ");
+				Label NameLabel = new Label (_("Folder Name:   "));
 				NameEntry = new Entry ();
-				Label NameExample = new Label ("<span size='small'><i>Example: " +
-				                               "‘Project’.</i></span>");
+				Label NameExample = new Label (_("<span size='small'><i>Example: ") +
+				                               _("‘Project’.</i></span>"));
 				NameExample.UseMarkup = true;
 				NameExample.SetAlignment (0, 0);
 				NameLabel.Xalign = 1;
 		
-				Label RemoteUrlLabel = new Label ("Remote address:   ");
+				Label RemoteUrlLabel = new Label (_("Remote address:   "));
 
 				string [] DefaultUrls = new string [4] { "ssh://git@github.com",
 						                                   "ssh://git@git.gnome.org",
@@ -58,8 +64,8 @@ namespace SparkleShare {
 
 				RemoteUrlCombo = new ComboBoxEntry (DefaultUrls);
 
-				Label RemoteUrlExample = new Label ("<span size='small'><i>Example: " +
-				                                    "‘ssh://git@github.com’.</i></span>");
+				Label RemoteUrlExample = new Label (_("<span size='small'><i>Example: ") +
+				                                    _("‘ssh://git@github.com’.</i></span>"));
 				RemoteUrlExample.UseMarkup = true;
 				RemoteUrlExample.SetAlignment (0, 0);
 				RemoteUrlLabel.Xalign = 1;
@@ -109,8 +115,8 @@ namespace SparkleShare {
 			Remove (Child);
 				VBox Box = new VBox (false, 24);
 				SparkleSpinner Spinner = new SparkleSpinner ();
-				Label Label = new Label ("Downloading files,\n" + 
-				                         "this may take a while...");
+				Label Label = new Label (_("Downloading files,\n") + 
+				                         _("this may take a while..."));
 				Box.PackStart (Spinner, false, false, 0);
 				Box.PackStart (Label, false, false, 0);
 			BorderWidth = 30;
