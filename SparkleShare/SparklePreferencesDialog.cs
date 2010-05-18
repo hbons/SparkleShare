@@ -15,6 +15,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
+using Mono.Unix;
 using SparkleShare;
 using System;
 using System.Diagnostics;
@@ -26,6 +27,11 @@ namespace SparkleShare {
 	// name and url to sync changes with
 	public class SparklePreferencesDialog : Window {
 
+		// Short alias for the translations
+		public static string _ (string s) {
+			return Catalog.GetString (s);
+		}
+
 		public SparklePreferencesDialog (SparkleWindow SparkleWindow,
 		                                 SparkleRepo SparkleRepo) : base ("")  {
 
@@ -33,22 +39,22 @@ namespace SparkleShare {
 			IconName = "folder-sparkleshare";
 			Resizable = false;
 			SetPosition (WindowPosition.Center);
-			Title = "Preferences";
+			Title = _("Preferences");
 			TransientFor = SparkleWindow;
 
 			VBox LayoutVertical = new VBox (false, 0);
 
 			Label InfoLabel = new Label ();
-			InfoLabel.Text = "The folder " +
+			InfoLabel.Text = _("The folder ") +
 			                 "<b>" + SparkleRepo.LocalPath + "</b>" +
-			                 "\nis linked to " +
+			                 _("\nis linked to ") +
 			                 "<b>" + SparkleRepo.RemoteOriginUrl + "</b>";
 
 			InfoLabel.Xalign = 0;
 			InfoLabel.UseMarkup = true;
 
 			CheckButton NotifyChangesCheckButton = 
-				new CheckButton ("Notify me when something changes");
+				new CheckButton (_("Notify me when something changes"));
 
 			string NotifyChangesFileName =
 				SparkleHelpers.CombineMore (SparkleRepo.LocalPath,
@@ -68,7 +74,7 @@ namespace SparkleShare {
 			};
 
 			CheckButton SyncChangesCheckButton = 
-				new CheckButton ("Synchronize my changes");
+				new CheckButton (_("Synchronize my changes"));
 
 			string SyncChangesFileName =
 				SparkleHelpers.CombineMore (SparkleRepo.LocalPath,

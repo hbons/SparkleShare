@@ -15,6 +15,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
+using Mono.Unix;
 using System;
 using System.Diagnostics;
 
@@ -22,11 +23,19 @@ namespace SparkleShare {
 
 	// This is SparkleShare!
 	public class SparkleShare {
+
+		// Short alias for the translations
+		public static string _ (string s) {
+			return Catalog.GetString (s);
+		}
 		
 		public static SparkleRepo [] Repositories;
 		public static SparkleUI SparkleUI;
 
 		public static void Main (string [] args) {
+
+			// Use translations
+			Catalog.Init ("i18n", "locale");
 
 			// Check if git is installed
 			Process Process = new Process();
@@ -36,8 +45,8 @@ namespace SparkleShare {
 			Process.Start();
 
 			if (Process.StandardOutput.ReadToEnd().IndexOf ("version") == -1) {
-				Console.WriteLine ("Git wasn't found.");
-				Console.WriteLine ("You can get it from http://git-scm.com/.");
+				Console.WriteLine (_("Git wasn't found."));
+				Console.WriteLine (_("You can get Git from http://git-scm.com/."));
 				Environment.Exit (0);
 			}
 
@@ -45,8 +54,8 @@ namespace SparkleShare {
 			Process.StartInfo.FileName = "whoami";
 			Process.Start();
 			if (Process.StandardOutput.ReadToEnd().Trim ().Equals ("root")) {
-				Console.WriteLine ("Sorry, you can't run SparkleShare as root.");
-				Console.WriteLine ("Things will go utterly wrong."); 
+				Console.WriteLine (_("Sorry, you can't run SparkleShare with these permissions."));
+				Console.WriteLine (_("Things will go utterly wrong.")); 
 				Environment.Exit (0);
 			}
 
@@ -73,21 +82,21 @@ namespace SparkleShare {
 
 		// Prints the help output
 		public static void ShowHelp () {
-			Console.WriteLine ("SparkleShare Copyright (C) 2010 Hylke Bons");
-			Console.WriteLine ("");
-			Console.WriteLine ("This program comes with ABSOLUTELY NO WARRANTY.");
-			Console.WriteLine ("This is free software, and you are welcome to redistribute it ");
-			Console.WriteLine ("under certain conditions. Please read the GNU GPLv3 for details.");
-			Console.WriteLine ("");
-			Console.WriteLine ("SparkleShare syncs the ~/SparkleShare folder with remote repositories.");
-			Console.WriteLine ("");
-			Console.WriteLine ("Usage: sparkleshare [start|stop|restart] [OPTION]...");
-			Console.WriteLine ("Sync SparkleShare folder with remote repositories.");
-			Console.WriteLine ("");
-			Console.WriteLine ("Arguments:");
-			Console.WriteLine ("\t -d, --disable-gui\tDon't show the notification icon.");
-			Console.WriteLine ("\t -h, --help\t\tDisplay this help text.");
-			Console.WriteLine ("");
+			Console.WriteLine (_("SparkleShare Copyright (C) 2010 Hylke Bons"));
+			Console.WriteLine (" ");
+			Console.WriteLine (_("This program comes with ABSOLUTELY NO WARRANTY."));
+			Console.WriteLine (_("This is free software, and you are welcome to redistribute it "));
+			Console.WriteLine (_("under certain conditions. Please read the GNU GPLv3 for details."));
+			Console.WriteLine (" ");
+			Console.WriteLine (_("SparkleShare syncs the ~/SparkleShare folder with remote repositories."));
+			Console.WriteLine (" ");
+			Console.WriteLine (_("Usage: sparkleshare [start|stop|restart] [OPTION]..."));
+			Console.WriteLine (_("Sync SparkleShare folder with remote repositories."));
+			Console.WriteLine (" ");
+			Console.WriteLine (_("Arguments:"));
+			Console.WriteLine (_("\t -d, --disable-gui\tDon't show the notification icon."));
+			Console.WriteLine (_("\t -h, --help\t\tDisplay this help text."));
+			Console.WriteLine (" ");
 			Environment.Exit (0);
 		}
 

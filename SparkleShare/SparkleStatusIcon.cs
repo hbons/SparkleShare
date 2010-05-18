@@ -15,13 +15,19 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
+using Mono.Unix;
 using SparkleShare;
 using System;
 using System.Diagnostics;
 
 namespace SparkleShare {
-	
+
 	public class SparkleStatusIcon : StatusIcon {
+
+		// Short alias for the translations
+		public static string _ (string s) {
+			return Catalog.GetString (s);
+		}
 
 		public SparkleStatusIcon () : base ()  {
 
@@ -29,7 +35,7 @@ namespace SparkleShare {
 
 				Menu Menu = new Menu();
 
-				MenuItem OpenFolderItem = new MenuItem ("Open Sharing Folder");
+				MenuItem OpenFolderItem = new MenuItem (_("Open Sharing Folder"));
 				OpenFolderItem.Activated += delegate {
 							Process Process = new Process ();
 							Process.StartInfo.FileName = "xdg-open";
@@ -39,7 +45,7 @@ namespace SparkleShare {
 				Menu.Add (OpenFolderItem);
 		
 				Menu.Add (new SeparatorMenuItem ());
-				MenuItem StatusItem = new MenuItem ("Everything up to date");
+				MenuItem StatusItem = new MenuItem (_("Everything is up to date"));
 				StatusItem.Sensitive = false;
 				Menu.Add (StatusItem);
 
@@ -59,7 +65,7 @@ namespace SparkleShare {
 				}
 
 				Menu.Add (new SeparatorMenuItem ());
-				MenuItem AboutItem = new MenuItem ("About SparkleShare");
+				MenuItem AboutItem = new MenuItem (_("About SparkleShare"));
 				AboutItem.Activated += delegate {
 							Process Process = new Process ();
 							Process.StartInfo.FileName = "xdg-open";
@@ -69,7 +75,7 @@ namespace SparkleShare {
 				Menu.Add(AboutItem);
 
 				Menu.Add (new SeparatorMenuItem ());
-				MenuItem QuitItem = new MenuItem ("Quit");
+				MenuItem QuitItem = new MenuItem (Gtk.Stock.Quit);
 				QuitItem.Activated += delegate { Environment.Exit (0); };
 				Menu.Add(QuitItem);
 			

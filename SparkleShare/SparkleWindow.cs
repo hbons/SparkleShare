@@ -15,6 +15,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
+using Mono.Unix;
 using SparkleShare;
 using System;
 using System.Diagnostics;
@@ -25,6 +26,11 @@ using System.Timers;
 namespace SparkleShare {
 
 	public class SparkleWindow : Window {
+
+		// Short alias for the translations
+		public static string _ (string s) {
+			return Catalog.GetString (s);
+		}
 
 		private SparkleRepo SparkleRepo;
 
@@ -40,7 +46,7 @@ namespace SparkleShare {
 			SetSizeRequest (900, 480);
 	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 6;
-			Title = "Happenings in ‘" + SparkleRepo.Name + "’";
+			Title = _("Happenings in ‘" + SparkleRepo.Name + "’");
 			IconName = "folder-sparkleshare";
 
 			VBox LayoutVertical = new VBox (false, 0);
@@ -221,7 +227,7 @@ namespace SparkleShare {
 
 					// Do something special if the person is you
 					if (UserName.Equals (SparkleRepo.UserName))
-						UserName += " (that’s you!)";
+						UserName += _(" (that’s you!)");
 
 					// Actually add to the list
 					PeopleIter = PeopleStore.Prepend ();
