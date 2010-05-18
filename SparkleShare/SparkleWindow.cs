@@ -36,6 +36,7 @@ namespace SparkleShare {
 		private HBox LayoutHorizontal;
 		private ScrolledWindow LogScrolledWindow;
 		private ScrolledWindow PeopleScrolledWindow;
+		private string SelectedEmail;
 
 		public SparkleWindow (SparkleRepo Repo) : base ("")  {
 
@@ -45,18 +46,20 @@ namespace SparkleShare {
 		}
 
 		public void CreateWindow () {
-		
+
 			SetSizeRequest (900, 480);
 	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 6;
 			Title = _("Happenings in ‘" + SparkleRepo.Name + "’");
 			IconName = "folder-sparkleshare";
 
+			SelectedEmail = "";
+
 			VBox LayoutVertical = new VBox (false, 0);
 
 				LayoutHorizontal = new HBox (true, 6);
-				LayoutHorizontal.PackStart (CreatePeopleList (""));
-				LayoutHorizontal.PackStart (CreateEventLog (""));
+				LayoutHorizontal.PackStart (CreatePeopleList ());
+				LayoutHorizontal.PackStart (CreateEventLog ());
 
 				LayoutVertical.PackStart (LayoutHorizontal, true, true, 6);
 
@@ -81,23 +84,13 @@ namespace SparkleShare {
 
 				LayoutVertical.PackStart (DialogButtons, false, false, 0);
 
-	/*			Timer RedrawTimer = new Timer ();
+/*				Timer RedrawTimer = new Timer ();
 				RedrawTimer.Interval = 5000;
 				RedrawTimer.Elapsed += delegate { 
 
-					TreeSelection Selection = ReposView.Selection;;
-					TreeIter Iter = new TreeIter ();;
-					Selection.GetSelected (out Iter);
-					SparkleRepo SparkleRepo = (SparkleRepo)ReposStore.GetValue (Iter, 2);
-					Console.WriteLine(SparkleRepo.Name);									
-			
-					LayoutHorizontal.Remove (LayoutVerticalRight);
 
-					LayoutVerticalRight = CreateDetailedView (SparkleRepo);
-
-					LayoutHorizontal.PackStart (LayoutVerticalRight, true, true, 12);
-					ShowAll ();
-			
+					UpdatePeopleList ("");
+					UpdateEventLog ("");			
 			
 				};
 
@@ -107,22 +100,22 @@ namespace SparkleShare {
 		
 		}
 
-		public void UpdateEventLog (string SelectedEmail) {
+		public void UpdateEventLog () {
 			LayoutHorizontal.Remove (LogScrolledWindow);
-			LogScrolledWindow = CreateEventLog (SelectedEmail);
+			LogScrolledWindow = CreateEventLog ();
 			LayoutHorizontal.Add (LogScrolledWindow);
 			ShowAll ();
 		}
 
-		public void UpdatePeopleList (string SelectedEmail) {
+		public void UpdatePeopleList () {
 			LayoutHorizontal.Remove (PeopleScrolledWindow);
-			PeopleScrolledWindow = CreatePeopleList (SelectedEmail);
+			PeopleScrolledWindow = CreatePeopleList ();
 			LayoutHorizontal.Add (PeopleScrolledWindow);
 			LayoutHorizontal.ReorderChild (PeopleScrolledWindow, 0);
 			ShowAll ();
 		}
 
-		public ScrolledWindow CreateEventLog(string SelectedEmail) {
+		public ScrolledWindow CreateEventLog () {
 
 			ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf),
 				                                 typeof (string),
@@ -182,10 +175,10 @@ namespace SparkleShare {
 					LogStore.SetValue (Iter, 0, ChangeIcon);
 					LogStore.SetValue (Iter, 1, Message);
 					LogStore.SetValue (Iter, 2, " " + TimeAgo);
+
 					// We're not showing e-mail, it's only 
 					// there for lookup purposes
 					LogStore.SetValue (Iter, 3, UserEmail);
-					Console.WriteLine (UserEmail);
 
 				}
 
@@ -212,10 +205,10 @@ namespace SparkleShare {
 			LogView.CursorChanged += delegate(object o, EventArgs args) {
 			TreeModel model;
 				if (LogView.Selection.GetSelected (out model, out Iter)) {
-					UpdatePeopleList ((string) LogStore.GetValue (Iter, 3));
+					SelectedEmail = (string) LogStore.GetValue (Iter, 3);
+					UpdatePeopleList ();
 				}
 			};
-
 
 			LogScrolledWindow = new ScrolledWindow ();
 			LogScrolledWindow.AddWithViewport (LogView);
@@ -225,7 +218,7 @@ namespace SparkleShare {
 		}
 
 		// Creates a visual list of people working in the repo
-		public ScrolledWindow CreatePeopleList (string SelectedEmail) {
+		public ScrolledWindow CreatePeopleList () {
 
 			Process Process = new Process ();
 			Process.EnableRaisingEvents = false; 
@@ -276,7 +269,6 @@ namespace SparkleShare {
 
 					if (UserEmail.Equals (SelectedEmail)) {
 						TreePath = PeopleStore.GetPath (Iter);
-						Console.WriteLine (TreePath.Indices [0]);
 					}
 
 				}
@@ -301,8 +293,9 @@ namespace SparkleShare {
 			PeopleView.SelectionChanged += delegate (object o, EventArgs args) {
 				if (PeopleView.SelectedItems.Length > 0) {
 					PeopleStore.GetIter (out Iter, PeopleView.SelectedItems [0]);
-					UpdateEventLog ((string) PeopleStore.GetValue (Iter, 2));
-				} else UpdateEventLog ("");
+					SelectedEmail = (string) PeopleStore.GetValue (Iter, 2);
+				}
+				UpdateEventLog ();
 			};
 			
 			PeopleScrolledWindow = new ScrolledWindow ();
