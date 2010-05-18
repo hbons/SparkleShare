@@ -81,7 +81,7 @@ namespace SparkleShare {
 		// Makes it possible to combine more than
 		// two paths at once.
 		public static string CombineMore (params string [] Parts) {
-			string NewPath = "";
+			string NewPath = " ";
 			foreach (string Part in Parts)
 				NewPath = Path.Combine (NewPath, Part);
 			return NewPath;
