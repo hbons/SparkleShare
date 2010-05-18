@@ -89,7 +89,7 @@ namespace SparkleShare {
 		}
 
 		public void SetIdleState () {
-			IconName = "folder-synced";
+			IconName = "folder-sparkleshare";
 		}
 
 		public void SetSyncingState () {

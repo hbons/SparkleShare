@@ -294,7 +294,7 @@ namespace SparkleShare {
 				if (PeopleView.SelectedItems.Length > 0) {
 					PeopleStore.GetIter (out Iter, PeopleView.SelectedItems [0]);
 					SelectedEmail = (string) PeopleStore.GetValue (Iter, 2);
-				}
+				} else SelectedEmail = "";
 				UpdateEventLog ();
 			};
 			
