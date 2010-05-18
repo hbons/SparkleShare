@@ -4,7 +4,6 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #: SparkleShare/SparkleDialog.cs:39 SparkleShare/SparkleHelpers.cs:78
-#: SparkleShare/SparkleHelpers.cs:84
 #: SparkleShare/SparklePreferencesDialog.cs:36 SparkleShare/SparkleRepo.cs:202
 #: SparkleShare/SparkleRepo.cs:332 SparkleShare/SparkleRepo.cs:336
 #: SparkleShare/SparkleRepo.cs:345 SparkleShare/SparkleRepo.cs:349
@@ -20,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-18 19:36+0100\n"
+"POT-Creation-Date: 2010-05-18 19:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,8 +41,12 @@ msgstr ""
 msgid "Folder Name:   "
 msgstr ""
 
-#: SparkleShare/SparkleDialog.cs:52
-msgid "<span size='small'><i>Example: ‘Project’.</i></span>"
+#: SparkleShare/SparkleDialog.cs:52 SparkleShare/SparkleDialog.cs:67
+msgid "<span size='small'><i>Example: "
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:53
+msgid "‘Project’.</i></span>"
 msgstr ""
 
 #: SparkleShare/SparkleDialog.cs:58
@@ -66,14 +69,16 @@ msgstr ""
 msgid "ssh://git@gitorious.org"
 msgstr ""
 
-#: SparkleShare/SparkleDialog.cs:67
-msgid "<span size='small'><i>Example: ‘ssh://git@github.com’.</i></span>"
+#: SparkleShare/SparkleDialog.cs:68
+msgid "‘ssh://git@github.com’.</i></span>"
 msgstr ""
 
 #: SparkleShare/SparkleDialog.cs:118
-msgid ""
-"Downloading files,\n"
-"this may take a while..."
+msgid "Downloading files,\n"
+msgstr ""
+
+#: SparkleShare/SparkleDialog.cs:119
+msgid "this may take a while..."
 msgstr ""
 
 #: SparkleShare/SparkleDialog.cs:132 SparkleShare/SparkleRepo.cs:70
@@ -141,6 +146,13 @@ msgstr ""
 msgid "-"
 msgstr ""
 
+#: SparkleShare/SparkleHelpers.cs:84 SparkleShare/SparkleRepo.cs:262
+#: SparkleShare/SparkleShare.cs:86 SparkleShare/SparkleShare.cs:90
+#: SparkleShare/SparkleShare.cs:92 SparkleShare/SparkleShare.cs:95
+#: SparkleShare/SparkleShare.cs:99 SparkleShare/SparkleWindow.cs:164
+msgid " "
+msgstr ""
+
 #: SparkleShare/SparkleHelpers.cs:100
 msgid "[a-z]+://(.)+"
 msgstr ""
@@ -199,17 +211,24 @@ msgid "Preferences"
 msgstr ""
 
 #: SparkleShare/SparklePreferencesDialog.cs:48
-msgid "The folder <b>"
+msgid "The folder "
 msgstr ""
 
 #: SparkleShare/SparklePreferencesDialog.cs:49
-msgid ""
-"</b>\n"
-"is linked to <b>"
+#: SparkleShare/SparklePreferencesDialog.cs:51
+#: SparkleShare/SparkleWindow.cs:237
+msgid "<b>"
 msgstr ""
 
+#: SparkleShare/SparklePreferencesDialog.cs:49
 #: SparkleShare/SparklePreferencesDialog.cs:51
 msgid "</b>"
+msgstr ""
+
+#: SparkleShare/SparklePreferencesDialog.cs:50
+msgid ""
+"\n"
+"is linked to "
 msgstr ""
 
 #: SparkleShare/SparklePreferencesDialog.cs:57
@@ -380,13 +399,6 @@ msgstr ""
 
 #: SparkleShare/SparkleRepo.cs:258
 msgid "log --format=\"%an\" -1"
-msgstr ""
-
-#: SparkleShare/SparkleRepo.cs:262 SparkleShare/SparkleShare.cs:86
-#: SparkleShare/SparkleShare.cs:90 SparkleShare/SparkleShare.cs:92
-#: SparkleShare/SparkleShare.cs:95 SparkleShare/SparkleShare.cs:99
-#: SparkleShare/SparkleWindow.cs:164
-msgid " "
 msgstr ""
 
 #: SparkleShare/SparkleRepo.cs:269
@@ -745,10 +757,6 @@ msgstr ""
 
 #: SparkleShare/SparkleWindow.cs:230
 msgid " (that’s you!)"
-msgstr ""
-
-#: SparkleShare/SparkleWindow.cs:237
-msgid "<b>"
 msgstr ""
 
 #: SparkleShare/SparkleWindow.cs:237
