@@ -33,7 +33,7 @@ namespace SparkleShare {
 		}
 
 		private SparkleRepo SparkleRepo;
-		private HBox LayoutHorizontal;
+		private VBox LayoutHorizontal;
 		private ScrolledWindow LogScrolledWindow;
 		private ScrolledWindow PeopleScrolledWindow;
 		private string SelectedEmail;
@@ -41,26 +41,20 @@ namespace SparkleShare {
 		public SparkleWindow (SparkleRepo Repo) : base ("")  {
 
 			SparkleRepo = Repo;
-			CreateWindow ();	
+			SelectedEmail = "";
 
-		}
-
-		public void CreateWindow () {
-
-			SetSizeRequest (900, 480);
+			SetSizeRequest (720, 540);
 	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 6;
 			Title = _("Happenings in ‘" + SparkleRepo.Name + "’");
 			IconName = "folder-sparkleshare";
 
-			SelectedEmail = "";
-
 			VBox LayoutVertical = new VBox (false, 0);
 
-				LayoutHorizontal = new HBox (true, 6);
+				LayoutHorizontal = new VBox (false, 6);
 				LayoutHorizontal.BorderWidth = 6;
-				LayoutHorizontal.PackStart (CreatePeopleList ());
-				LayoutHorizontal.PackStart (CreateEventLog ());
+				LayoutHorizontal.PackStart (CreatePeopleList (), false, false, 0);
+				LayoutHorizontal.PackStart (CreateEventLog (), true, true, 0);
 
 				LayoutVertical.PackStart (LayoutHorizontal, true, true, 0);
 
@@ -281,7 +275,7 @@ namespace SparkleShare {
 			IconView PeopleView = new IconView (PeopleStore); 
 			PeopleView.PixbufColumn = 0;
 			PeopleView.MarkupColumn = 1;
-			PeopleView.Columns = 2;
+			PeopleView.Columns = 3;
 			PeopleView.Spacing = 6;
 			PeopleView.ItemWidth = 200;
 			PeopleView.Orientation = Orientation.Horizontal;
@@ -301,6 +295,7 @@ namespace SparkleShare {
 			
 			PeopleScrolledWindow = new ScrolledWindow ();
 			PeopleScrolledWindow.AddWithViewport (PeopleView);
+			PeopleScrolledWindow.HeightRequest = 200;
 
 			return PeopleScrolledWindow;
 
