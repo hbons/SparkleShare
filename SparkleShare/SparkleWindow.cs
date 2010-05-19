@@ -46,7 +46,7 @@ namespace SparkleShare {
 			SetSizeRequest (720, 540);
 	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 6;
-			Title = _("Happenings in ‘" + SparkleRepo.Name + "’");
+			Title = _("‘" + SparkleRepo.Name + "’ on " + SparkleRepo.RemoteOriginUrl);
 			IconName = "folder-sparkleshare";
 
 			VBox LayoutVertical = new VBox (false, 0);
@@ -59,7 +59,7 @@ namespace SparkleShare {
 				LayoutVertical.PackStart (LayoutHorizontal, true, true, 0);
 
 					HButtonBox DialogButtons = new HButtonBox ();
-					DialogButtons.Layout = ButtonBoxStyle.Edge;
+					DialogButtons.Layout = ButtonBoxStyle.End;
 					DialogButtons.BorderWidth = 6;
 
 						Button CloseButton = new Button (Stock.Close);
@@ -67,14 +67,6 @@ namespace SparkleShare {
 							Destroy ();
 						};
 
-						Button PreferencesButton = new Button (Stock.Preferences);
-						PreferencesButton.Clicked += delegate (object o, EventArgs args) {
-							SparklePreferencesDialog SparklePreferencesDialog =
-								new SparklePreferencesDialog (this, SparkleRepo);
-								SparklePreferencesDialog.ShowAll ();
-						};
-
-					DialogButtons.Add (PreferencesButton);
 					DialogButtons.Add (CloseButton);
 
 				LayoutVertical.PackStart (DialogButtons, false, false, 0);
@@ -283,7 +275,12 @@ namespace SparkleShare {
 			PeopleView.SelectionChanged += delegate (object o, EventArgs args) {
 				if (PeopleView.SelectedItems.Length > 0) {
 					PeopleStore.GetIter (out Iter, PeopleView.SelectedItems [0]);
-					SelectedEmail = (string) PeopleStore.GetValue (Iter, 2);
+					string NewSelectedEmail = (string) PeopleStore.GetValue (Iter, 2);
+					if (NewSelectedEmail.Equals (SelectedEmail)) {
+						SelectedEmail = "";
+						PeopleView.UnselectAll ();
+					} else
+						SelectedEmail = NewSelectedEmail;
 				} else SelectedEmail = "";
 				UpdateEventLog ();
 			};
