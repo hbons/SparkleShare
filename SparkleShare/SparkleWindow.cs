@@ -137,7 +137,7 @@ namespace SparkleShare {
 			Array.Reverse (Lines);
 
 			TreeIter Iter;
-			for (int i = 0; i < 25; i++) {
+			for (int i = 0; i < 25 && i < Lines.Length; i++) {
 
 				string Line = Lines [i];
 				if (Line.Contains (SelectedEmail)) {
