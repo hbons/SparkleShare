@@ -113,7 +113,7 @@ namespace SparkleShare {
 		public void CloneRepo (object o, EventArgs args) {
 
 			Remove (Child);
-				VBox Box = new VBox (false, 24);
+			VBox Box = new VBox (false, 24);
 				SparkleSpinner Spinner = new SparkleSpinner ();
 				Label Label = new Label (_("Downloading files,\n") + 
 				                         _("this may take a while..."));
@@ -154,7 +154,6 @@ namespace SparkleShare {
 				File.Create (SparkleHelpers.CombineMore (SparklePaths.SparklePath,
 				                                         RepoName, ".git",
 				                                         "sparkleshare.sync"));
-
 				Destroy ();
 			};
 		
