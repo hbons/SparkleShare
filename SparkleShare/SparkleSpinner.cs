@@ -35,7 +35,7 @@ namespace SparkleShare {
 
 			CycleDuration = 750;
 			CurrentStep = 0;
-			Size = 48;			
+			Size = 24;			
 
 			Gdk.Pixbuf SpinnerGallery = SparkleHelpers.GetIcon ("process-working",
 			                                                    Size);

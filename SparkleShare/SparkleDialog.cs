@@ -34,6 +34,7 @@ namespace SparkleShare {
 
 		private Button AddButton;
 		private ComboBoxEntry RemoteUrlCombo;
+		private Table Table;
 
 		public SparkleDialog () : base ("")  {
 		
@@ -83,7 +84,7 @@ namespace SparkleShare {
 				ButtonBox.Add (CancelButton);
 				ButtonBox.Add (AddButton);
 
-				Table Table = new Table(3, 2, false);
+				Table = new Table(3, 2, false);
 				Table.RowSpacing = 6;
 				Table.BorderWidth = 6;
 		
