@@ -39,7 +39,7 @@ namespace SparkleShare {
 				StatusItem.Sensitive = false;
 				Menu.Add (StatusItem);
 				Menu.Add (new SeparatorMenuItem ());
-		
+
 				MenuItem [] FolderItems =
 					new MenuItem [SparkleShare.Repositories.Length];
 
@@ -63,6 +63,33 @@ namespace SparkleShare {
 				};
 				Menu.Add (AddItem);
 				Menu.Add (new SeparatorMenuItem ());
+
+				CheckMenuItem NotifyCheckMenuItem =
+					new CheckMenuItem (_("Show notifications"));
+				Menu.Add (NotifyCheckMenuItem);
+				Menu.Add (new SeparatorMenuItem ());
+
+/*
+
+			string NotifyChangesFileName =
+				SparkleHelpers.CombineMore (SparkleRepo.LocalPath,
+				                            ".git", "sparkleshare.notify");
+			                                        
+			if (File.Exists (NotifyChangesFileName))
+				NotifyChangesCheckButton.Active = true;
+				
+			NotifyChangesCheckButton.Toggled += delegate {
+				if (File.Exists (NotifyChangesFileName)) {
+					SparkleRepo.NotifyChanges = false;
+					File.Delete (NotifyChangesFileName);
+				} else {
+					SparkleRepo.NotifyChanges = true;
+					File.Create (NotifyChangesFileName);
+				}
+			};
+
+
+*/
 
 				MenuItem OpenFolderItem = new MenuItem (_("Open Sharing Folder"));
 				OpenFolderItem.Activated += delegate {

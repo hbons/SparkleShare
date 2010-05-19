@@ -39,7 +39,6 @@
     <Compile Include="SparkleHelpers.cs" />
     <Compile Include="SparklePaths.cs" />
     <Compile Include="SparklePlatform.cs" />
-    <Compile Include="SparklePreferencesDialog.cs" />
     <Compile Include="SparkleRepo.cs" />
     <Compile Include="SparkleShare.cs" />
     <Compile Include="SparkleSpinner.cs" />
