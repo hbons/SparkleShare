@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Create a directory to save the pid to
+mkdir -p /tmp/sparkleshare/
+
+if [[ "$1" == "start" ]]; then
+	if [ -e "/tmp/sparkleshare/sparkleshare.pid" ]; then
+		echo "SparkleShare is already running."
+	else
+		echo -n "Starting SparkleShare..."
+
+		# Start SparkleShare in the background and save the pid
+		mono /usr/local/share/sparkleshare/SparkleShare.exe $2 &
+		PID=$!
+		echo $PID > /tmp/sparkleshare/sparkleshare.pid
+		echo " Done."
+	fi
+fi
+
+if [[ "$1" == "stop" ]]; then
+	if [ -e "/tmp/sparkleshare/sparkleshare.pid" ]; then
+		echo -n "Stopping SparkleShare..."
+		kill `cat /tmp/sparkleshare/sparkleshare.pid` 
+		rm -f /tmp/sparkleshare/sparkleshare.pid
+		echo " Done."
+	else
+		echo "SparkleShare isn't running."
+	fi
+fi
+
+if [[ "$1" == "restart" ]]; then
+	if [ -e "/tmp/sparkleshare/sparkleshare.pid" ]; then
+		echo -n "Stopping SparkleShare..."
+		kill `cat /tmp/sparkleshare/sparkleshare.pid` 
+		rm -f /tmp/sparkleshare/sparkleshare.pid
+		echo " Done."
+	else
+		echo "SparkleShare isn't running."
+	fi
+
+	if [ -e "/tmp/sparkleshare/sparkleshare.pid" ]; then
+		echo "SparkleShare is already running."
+	else
+		echo -n "Starting SparkleShare..."
+
+		# Start SparkleShare in the background and save the pid
+		mono /usr/local/share/sparkleshare/SparkleShare.exe $2 &
+		PID=$!
+		echo $PID > /tmp/sparkleshare/sparkleshare.pid
+		echo " Done."
+	fi
+fi
+
+if [[ "$1" == "--help" ]]; then
+		mono /usr/local/share/sparkleshare/SparkleShare.exe --help
+fi
