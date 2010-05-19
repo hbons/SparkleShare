@@ -196,7 +196,7 @@ namespace SparkleShare {
 			Process.StartInfo.Arguments = "add --all";
 			Process.Start();
 			Process.WaitForExit ();
-			Console.WriteLine ("[Git][" + Name + "] Changed staged.");
+			Console.WriteLine ("[Git][" + Name + "] Changes staged.");
 //			SparkleUI.NotificationIcon.SetSyncingState ();
 			string Message = FormatCommitMessage ();
 			if (!Message.Equals ("")) {
