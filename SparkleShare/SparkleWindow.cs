@@ -135,12 +135,11 @@ namespace SparkleShare {
 			// Sort by time and get the last 25
 			Array.Sort (Lines);
 			Array.Reverse (Lines);
-			string [] LastTwentyFive = new string [25];
-			Array.Copy (Lines, 0, LastTwentyFive, 0, 25);
 
 			TreeIter Iter;
-			foreach (string Line in LastTwentyFive) {
+			for (int i = 0; i < 25; i++) {
 
+				string Line = Lines [i];
 				if (Line.Contains (SelectedEmail)) {
 
 					// Look for the snowman!
