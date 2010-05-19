@@ -46,7 +46,9 @@ namespace SparkleShare {
 			SetSizeRequest (720, 540);
 	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 6;
-			Title = _("‘" + SparkleRepo.Name + "’ on " + SparkleRepo.RemoteOriginUrl);
+			Title = _("‘" + SparkleRepo.Name + "’ on " + 
+			          SparkleRepo.RemoteOriginUrl
+			          .TrimEnd (("/" + SparkleRepo.Name).ToCharArray ()));
 			IconName = "folder-sparkleshare";
 
 			VBox LayoutVertical = new VBox (false, 0);
