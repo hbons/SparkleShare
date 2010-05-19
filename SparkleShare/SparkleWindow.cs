@@ -82,13 +82,9 @@ namespace SparkleShare {
 /*				Timer RedrawTimer = new Timer ();
 				RedrawTimer.Interval = 5000;
 				RedrawTimer.Elapsed += delegate { 
-
-
-					UpdatePeopleList ("");
-					UpdateEventLog ("");			
-			
+					UpdatePeopleList ();
+					UpdateEventLog ();			
 				};
-
 				RedrawTimer.Start();
 */
 			Add (LayoutVertical);		
@@ -98,7 +94,7 @@ namespace SparkleShare {
 		public void UpdateEventLog () {
 			LayoutHorizontal.Remove (LogScrolledWindow);
 			LogScrolledWindow = CreateEventLog ();
-			LayoutHorizontal.PackStart (LogScrolledWindow), true, true, 0);
+			LayoutHorizontal.PackStart (LogScrolledWindow, true, true, 0);
 			ShowAll ();
 		}
 
