@@ -34,7 +34,6 @@ namespace SparkleShare {
 
 		private Button AddButton;
 		private ComboBoxEntry RemoteUrlCombo;
-		private Entry NameEntry;
 
 		public SparkleDialog () : base ("")  {
 		
@@ -47,15 +46,8 @@ namespace SparkleShare {
 
 			VBox VBox = new VBox (false, 0);
 
-				Label NameLabel = new Label (_("Folder Name:   "));
-				NameEntry = new Entry ();
-				Label NameExample = new Label (_("<span size='small'><i>Example: ") +
-				                               _("‘Project’.</i></span>"));
-				NameExample.UseMarkup = true;
-				NameExample.SetAlignment (0, 0);
-				NameLabel.Xalign = 1;
-		
-				Label RemoteUrlLabel = new Label (_("Remote address:   "));
+
+				Label RemoteUrlLabel = new Label (_("Address:   "));
 
 				string [] DefaultUrls = new string [4] { "ssh://git@github.com",
 						                                   "ssh://git@git.gnome.org",
@@ -64,8 +56,8 @@ namespace SparkleShare {
 
 				RemoteUrlCombo = new ComboBoxEntry (DefaultUrls);
 
-				Label RemoteUrlExample = new Label (_("<span size='small'><i>Example: ") +
-				                                    _("‘ssh://git@github.com’.</i></span>"));
+				Label RemoteUrlExample = new Label (_("<span size='small'><i>These usually look something like this:\n ") +
+				                                    _("‘ssh://git@github.com/hbons/SparkleShare’.</i></span>"));
 				RemoteUrlExample.UseMarkup = true;
 				RemoteUrlExample.SetAlignment (0, 0);
 				RemoteUrlLabel.Xalign = 1;
@@ -83,7 +75,7 @@ namespace SparkleShare {
 					};
 
 				RemoteUrlCombo.Entry.Changed += CheckFields;
-				NameEntry.Changed += CheckFields;
+				RemoteUrlCombo.WidthRequest = 320;
 
 					AddButton.Sensitive = false;
 					AddButton.Clicked += CloneRepo;
@@ -91,16 +83,13 @@ namespace SparkleShare {
 				ButtonBox.Add (CancelButton);
 				ButtonBox.Add (AddButton);
 
-				Table Table = new Table(4, 2, false);
+				Table Table = new Table(3, 2, false);
 				Table.RowSpacing = 6;
 				Table.BorderWidth = 6;
-				Table.Attach (NameLabel, 0, 1, 0, 1);
 		
-				Table.Attach (NameEntry, 1, 2, 0, 1);
-				Table.Attach (NameExample, 1, 2, 1, 2);
-				Table.Attach (RemoteUrlLabel, 0, 1, 3, 4);
-				Table.Attach (RemoteUrlCombo, 1, 2, 3, 4);
-				Table.Attach (RemoteUrlExample, 1, 2, 4, 5);
+				Table.Attach (RemoteUrlLabel, 0, 1, 0, 1);
+				Table.Attach (RemoteUrlCombo, 1, 2, 0, 1);
+				Table.Attach (RemoteUrlExample, 1, 2, 1, 2);
 
 			VBox.PackStart (Table, false, false, 0);
 			VBox.PackStart (ButtonBox, false, false, 0);
@@ -123,7 +112,8 @@ namespace SparkleShare {
 			Add (Box);
 
 			string RepoRemoteUrl = RemoteUrlCombo.Entry.Text;
-			string RepoName = NameEntry.Text;
+			string RepoName =
+				RepoRemoteUrl.Substring (RepoRemoteUrl.LastIndexOf ("/") + 1);
 
 			Process Process = new Process();
 			Process.EnableRaisingEvents = true; 
@@ -162,8 +152,7 @@ namespace SparkleShare {
 		// Enables the Add button when the fields are
 		// filled in correctly		
 		public void CheckFields (object o, EventArgs args) {
-			if (SparkleHelpers.IsGitUrl (RemoteUrlCombo.Entry.Text)
-			    && NameEntry.Text.Length > 0)
+			if (SparkleHelpers.IsGitUrl (RemoteUrlCombo.Entry.Text))
 				AddButton.Sensitive = true;
 			else
 				AddButton.Sensitive = false;

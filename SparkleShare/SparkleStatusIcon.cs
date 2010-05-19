@@ -70,24 +70,20 @@ namespace SparkleShare {
 				Menu.Add (NotifyCheckMenuItem);
 				Menu.Add (new SeparatorMenuItem ());
 
-
-
-			string NotifyChangesFileName =
-				SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
-				                            "sparkleshare.notify");
-			                                        
-			if (System.IO.File.Exists (NotifyChangesFileName))
-				NotifyCheckMenuItem.Active = true;
+				string NotifyChangesFileName =
+					SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
+						                         "sparkleshare.notify");
+					                                     
+				if (System.IO.File.Exists (NotifyChangesFileName))
+					NotifyCheckMenuItem.Active = true;
 				
-			NotifyCheckMenuItem.Toggled += delegate {
-				if (System.IO.File.Exists (NotifyChangesFileName)) {
-					File.Delete (NotifyChangesFileName);
-				} else {
-					System.IO.File.Create (NotifyChangesFileName);
-				}
-			};
-
-
+				NotifyCheckMenuItem.Toggled += delegate {
+					if (System.IO.File.Exists (NotifyChangesFileName)) {
+						File.Delete (NotifyChangesFileName);
+					} else {
+						System.IO.File.Create (NotifyChangesFileName);
+					}
+				};
 
 				MenuItem OpenFolderItem = new MenuItem (_("Open Sharing Folder"));
 				OpenFolderItem.Activated += delegate {

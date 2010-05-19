@@ -266,7 +266,7 @@ namespace SparkleShare {
 			PeopleView.MarkupColumn = 1;
 			PeopleView.Columns = 3;
 			PeopleView.Spacing = 6;
-			PeopleView.ItemWidth = 200;
+			PeopleView.ItemWidth = 210;
 			PeopleView.Orientation = Orientation.Horizontal;
 			PeopleView.SelectionMode = SelectionMode.Single;
 

@@ -51,7 +51,6 @@ if [[ "$1" == "restart" ]]; then
 	fi
 fi
 
-
 if [[ "$1" == "--help" ]]; then
 		mono /usr/local/share/sparkleshare/SparkleShare.exe --help
 fi
