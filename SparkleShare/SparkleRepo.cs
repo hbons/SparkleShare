@@ -40,8 +40,6 @@ namespace SparkleShare {
 
 		public string UserEmail;
 		public string UserName;
-		public bool NotifyChanges;
-		public bool SyncChanges;
 
 		public SparkleRepo (string RepoPath) {
 
@@ -53,17 +51,6 @@ namespace SparkleShare {
 			// Get the repository's path, example: "/home/user/SparkleShare/repo"
 			LocalPath = RepoPath;
 			Process.StartInfo.WorkingDirectory = LocalPath;
-
-			string NotifyChangesFileName =
-				SparkleHelpers.CombineMore (LocalPath, ".git",
-				                            "sparkleshare.notify");
-
-			string SyncChangesFileName =
-				SparkleHelpers.CombineMore (LocalPath, ".git",
-				                            "sparkleshare.sync");
-
-			NotifyChanges = File.Exists (NotifyChangesFileName);
-			SyncChanges = File.Exists (SyncChangesFileName);
 
 			// Get user.name, example: "User Name"
 			UserName = "Anonymous";
@@ -131,7 +118,7 @@ namespace SparkleShare {
 		// Starts a time buffer when something changes
 		public void OnFileActivity (object o, FileSystemEventArgs args) {
 		   WatcherChangeTypes wct = args.ChangeType;
-			 if (!ShouldIgnore (args.Name) && SyncChanges) {
+			 if (!ShouldIgnore (args.Name)) {
 			  Console.WriteLine ("[Event][" + Name + "] " + wct.ToString() + 
 					              " '" + args.Name + "'");
 				StartBufferTimer ();
@@ -261,9 +248,14 @@ namespace SparkleShare {
 				Process.Start();
 				string LastCommitUserName = Process.StandardOutput.ReadToEnd().Trim ();
 
-				ShowEventBubble (LastCommitUserName + " " + LastCommitMessage, 
-				                 SparkleHelpers.GetAvatar (LastCommitEmail, 48),
-				                 true);
+				string NotifySettingFile =
+					SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
+					                            "sparkleshare.notify");
+
+				if (File.Exists (NotifySettingFile))
+					ShowEventBubble (LastCommitUserName + " " + LastCommitMessage, 
+						              SparkleHelpers.GetAvatar (LastCommitEmail, 48),
+						              true);
 
 			}
 
@@ -391,20 +383,18 @@ namespace SparkleShare {
 			                          Gdk.Pixbuf Avatar, 
 			                          bool ShowButtons) {
 
-			if (NotifyChanges) {
 				SparkleBubble StuffChangedBubble = new SparkleBubble (Title, "");
 				StuffChangedBubble.Icon = Avatar;
 
 				// Add a button to open the folder where the changed file is
 				if (ShowButtons)
 					StuffChangedBubble.AddAction ("", "Open Folder", 
-								                delegate {
-									               Process.StartInfo.FileName = "xdg-open";
+									             delegate {
+										            Process.StartInfo.FileName = "xdg-open";
 					  	                     	Process.StartInfo.Arguments = LocalPath;
 						 	                   	Process.Start();
 					  	                     	Process.StartInfo.FileName = "git";
-									             } );
-			}
+										          } );
 
 		}
 
