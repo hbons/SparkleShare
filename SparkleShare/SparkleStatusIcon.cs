@@ -18,6 +18,7 @@ using Gtk;
 using Mono.Unix;
 using SparkleShare;
 using System;
+using System.IO;
 using System.Diagnostics;
 
 namespace SparkleShare {
@@ -69,27 +70,24 @@ namespace SparkleShare {
 				Menu.Add (NotifyCheckMenuItem);
 				Menu.Add (new SeparatorMenuItem ());
 
-/*
+
 
 			string NotifyChangesFileName =
-				SparkleHelpers.CombineMore (SparkleRepo.LocalPath,
-				                            ".git", "sparkleshare.notify");
+				SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
+				                            "sparkleshare.notify");
 			                                        
-			if (File.Exists (NotifyChangesFileName))
-				NotifyChangesCheckButton.Active = true;
+			if (System.IO.File.Exists (NotifyChangesFileName))
+				NotifyCheckMenuItem.Active = true;
 				
-			NotifyChangesCheckButton.Toggled += delegate {
-				if (File.Exists (NotifyChangesFileName)) {
-					SparkleRepo.NotifyChanges = false;
+			NotifyCheckMenuItem.Toggled += delegate {
+				if (System.IO.File.Exists (NotifyChangesFileName)) {
 					File.Delete (NotifyChangesFileName);
 				} else {
-					SparkleRepo.NotifyChanges = true;
-					File.Create (NotifyChangesFileName);
+					System.IO.File.Create (NotifyChangesFileName);
 				}
 			};
 
 
-*/
 
 				MenuItem OpenFolderItem = new MenuItem (_("Open Sharing Folder"));
 				OpenFolderItem.Activated += delegate {
