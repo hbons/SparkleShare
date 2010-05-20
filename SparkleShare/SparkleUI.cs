@@ -138,6 +138,7 @@ namespace SparkleShare {
 			// Create place to store configuration user's home folder
 			string ConfigPath = SparklePaths.SparkleConfigPath;
 			string AvatarPath = SparklePaths.SparkleAvatarPath;
+
 			if (!Directory.Exists (ConfigPath)) {
 
 				Directory.CreateDirectory (ConfigPath);
@@ -148,6 +149,15 @@ namespace SparkleShare {
 				Console.WriteLine ("[Config] Created '" + AvatarPath + "avatars'");
 
 			}
+			
+			string NotifySettingFile =
+				SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
+					                         "sparkleshare.notify");
+
+			// Enable notifications by default				
+			if (!File.Exists (NotifySettingFile))
+				File.Create (NotifySettingFile);
+
 
 		}
 
