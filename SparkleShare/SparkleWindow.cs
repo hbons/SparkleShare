@@ -186,7 +186,7 @@ namespace SparkleShare {
 			LogView.AppendColumn ("", TextCellRight, "text", 3);
 
 			TreeViewColumn [] Columns = LogView.Columns;
-			Columns [0].MinWidth = 32;
+			Columns [0].MinWidth = 28;
 			Columns [1].Expand = true;
 			Columns [2].Expand = true;
 			Columns [1].MinWidth = 300;
@@ -275,11 +275,16 @@ namespace SparkleShare {
 			// Compose an e-mail when an item is activated
 			PeopleView.ItemActivated +=
 				delegate (object o, ItemActivatedArgs Args) {
-					if (SparklePlatform.Name.Equals ("GNOME")) {
-						Process.StartInfo.FileName = "xdg-open";
-						Process.StartInfo.Arguments = "mailto:" + SelectedEmail;
-						Process.Start ();
+					switch (SparklePlatform.Name) {
+						case "GNOME":
+							Process.StartInfo.FileName = "xdg-open";
+							break;
+						case "OSX":
+							Process.StartInfo.FileName = "open";
+							break;						
 					}
+					Process.StartInfo.Arguments = "mailto:" + SelectedEmail;
+					Process.Start ();
 			};
 
 			// Select the person matching with the committer event list
