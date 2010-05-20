@@ -137,14 +137,10 @@ namespace SparkleShare {
 					                            RepoName)
 				);
 
-				// Enable notifications and synchronisation by default				
-				File.Create (SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-				                                         RepoName, ".git",
-				                                         "sparkleshare.notify"));
-
-				File.Create (SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-				                                         RepoName, ".git",
-				                                         "sparkleshare.sync"));
+				// Enable notifications by default				
+				File.Create (
+					SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
+				                               "sparkleshare.notify"));
 				Destroy ();
 			};
 		
