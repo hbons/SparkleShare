@@ -105,6 +105,7 @@ namespace SparkleShare {
 			ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf),
 				                                 typeof (string),
 				                                 typeof (string),
+				                                 typeof (string),
 				                                 typeof (string));
 
 			Process Process = new Process();
@@ -118,7 +119,7 @@ namespace SparkleShare {
 			Process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
 			// We're using the snowman here to separate messages :)
 			Process.StartInfo.Arguments =
-				"log --format=\"%at☃%an %s☃%cr☃%ae\" -25";
+				"log --format=\"%at☃%s☃%an☃%cr☃%ae\" -25";
 			Process.Start();
 
 			Output += "\n" + Process.StandardOutput.ReadToEnd().Trim ();
@@ -139,30 +140,32 @@ namespace SparkleShare {
 					// Look for the snowman!
 					string [] Parts = Regex.Split (Line, "☃");
 					string Message = Parts [1];
-					string TimeAgo = Parts [2];
-					string UserEmail = Parts [3];
+					string UserName = Parts [2];
+					string TimeAgo = Parts [3];
+					string UserEmail = Parts [4];
 
 					string IconFile = "document-edited";		
 
-					if (Message.IndexOf (" added ‘") > -1)
+					if (Message.IndexOf ("added ‘") > -1)
 						IconFile = "document-added";
 
-					if (Message.IndexOf (" deleted ‘") > -1)
+					if (Message.IndexOf ("deleted ‘") > -1)
 						IconFile = "document-removed";
 
-					if (Message.IndexOf (" moved ‘") > -1 || 
-						Message.IndexOf (" renamed ‘") > -1)
+					if (Message.IndexOf ("moved ‘") > -1 || 
+						Message.IndexOf ("renamed ‘") > -1)
 						IconFile = "document-moved";
 
 					Gdk.Pixbuf ChangeIcon = SparkleHelpers.GetIcon (IconFile, 16);
 					Iter = LogStore.Append ();
 					LogStore.SetValue (Iter, 0, ChangeIcon);
 					LogStore.SetValue (Iter, 1, Message);
-					LogStore.SetValue (Iter, 2, " " + TimeAgo);
+					LogStore.SetValue (Iter, 2, UserName);
+					LogStore.SetValue (Iter, 3, TimeAgo);
 
 					// We're not showing e-mail, it's only 
 					// there for lookup purposes
-					LogStore.SetValue (Iter, 3, UserEmail);
+					LogStore.SetValue (Iter, 4, UserEmail);
 
 				}
 
@@ -179,17 +182,19 @@ namespace SparkleShare {
 
 			LogView.AppendColumn ("", new Gtk.CellRendererPixbuf (), "pixbuf", 0);
 			LogView.AppendColumn ("", TextCellMiddle, "text", 1);
-			LogView.AppendColumn ("", TextCellRight, "text", 2);
+			LogView.AppendColumn ("", TextCellMiddle, "text", 2);
+			LogView.AppendColumn ("", TextCellRight, "text", 3);
 
 			TreeViewColumn [] Columns = LogView.Columns;
 			Columns [0].MinWidth = 32;
 			Columns [1].Expand = true;
-			Columns [1].MaxWidth = 150;
+			Columns [2].Expand = true;
+			Columns [1].MinWidth = 300;
 
 			LogView.CursorChanged += delegate(object o, EventArgs args) {
 			TreeModel Model;
 				if (LogView.Selection.GetSelected (out Model, out Iter)) {
-					SelectedEmail = (string) Model.GetValue (Iter, 3);
+					SelectedEmail = (string) Model.GetValue (Iter, 4);
 					UpdatePeopleList ();
 				}
 			};
@@ -266,6 +271,16 @@ namespace SparkleShare {
 			PeopleView.ItemWidth = 210;
 			PeopleView.Orientation = Orientation.Horizontal;
 			PeopleView.SelectionMode = SelectionMode.Single;
+
+			// Compose an e-mail when an item is activated
+			PeopleView.ItemActivated +=
+				delegate (object o, ItemActivatedArgs Args) {
+					if (SparklePlatform.Name.Equals ("GNOME")) {
+						Process.StartInfo.FileName = "xdg-open";
+						Process.StartInfo.Arguments = "mailto:" + SelectedEmail;
+						Process.Start ();
+					}
+			};
 
 			// Select the person matching with the committer event list
 			i = 0;
