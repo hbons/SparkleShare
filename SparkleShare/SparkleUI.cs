@@ -107,15 +107,16 @@ namespace SparkleShare {
 					SparkleBubble NoFoldersBubble;
 					NoFoldersBubble = new SparkleBubble ("Welcome to SparkleShare!",
 					                                     "You don't have any " +
-					                                     "folders set up yet.\n" +
-					                                     "Please create some in " +
-					                                     "the SparkleShare folder.");
+					                                     "folders set up yet.");
 
 					NoFoldersBubble.IconName = "folder-sparkleshare";
-					NoFoldersBubble.AddAction ("", "Open SparkleShare Folder", delegate {
-						Process.StartInfo.FileName = "xdg-open";
+					NoFoldersBubble.AddAction ("", "Add a Folder…", delegate {
+						SparkleDialog SparkleDialog = new SparkleDialog ();
+						SparkleDialog.ShowAll ();
+/*						Process.StartInfo.FileName = "xdg-open";
 						Process.StartInfo.Arguments = SparklePaths.SparklePath;
 						Process.Start();
+*/
 					} );
 
 				}
