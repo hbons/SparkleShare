@@ -124,11 +124,13 @@ namespace SparkleShare {
 			Process.StartInfo.WorkingDirectory =
 				SparklePaths.SparkleTmpPath;
 
-			Process.StartInfo.Arguments =
-				"clone " + SparkleHelpers.CombineMore (RepoRemoteUrl, RepoName)
-				           .Substring (2);
+			Process.StartInfo.Arguments =	"clone ";
+			Process.StartInfo.Arguments +=
+				SparkleHelpers.CombineMore (RepoRemoteUrl, RepoName).Substring (2);
 
 			Process.Start ();
+
+			// Move the folder to the SparkleShare folder when done cloning
 			Process.Exited += delegate {
 				Directory.Move (
 					SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
@@ -137,10 +139,6 @@ namespace SparkleShare {
 					                            RepoName)
 				);
 
-				// Enable notifications by default				
-				File.Create (
-					SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
-				                               "sparkleshare.notify"));
 				Destroy ();
 			};
 		
