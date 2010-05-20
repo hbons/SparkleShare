@@ -245,7 +245,7 @@ namespace SparkleShare {
 
 					// Do something special if the person is you
 					if (UserEmail.Equals (SparkleRepo.UserEmail))
-						UserName += _(" (that’s you!)");
+						UserEmail = _("That’s you!");
 
 					// Actually add to the list
 					Iter = PeopleStore.Prepend ();
@@ -293,6 +293,7 @@ namespace SparkleShare {
 				i++;
 			}
 
+			// Update the event log when a person is clicked
 			PeopleView.SelectionChanged += delegate (object o, EventArgs args) {
 				if (PeopleView.SelectedItems.Length > 0) {
 					PeopleStore.GetIter (out Iter, PeopleView.SelectedItems [0]);
