@@ -175,7 +175,7 @@ namespace SparkleShare {
 			LogView.HeadersVisible = false;
 			
 			CellRendererText TextCellRight = new Gtk.CellRendererText ();
-			TextCellRight.Alignment = Pango.Alignment.Right;
+			TextCellRight.Xalign = 1;
 
 			CellRendererText TextCellMiddle = new Gtk.CellRendererText ();
 			TextCellMiddle.Ellipsize = Pango.EllipsizeMode.End;
