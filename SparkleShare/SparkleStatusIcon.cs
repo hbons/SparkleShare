@@ -30,6 +30,13 @@ namespace SparkleShare {
 			return Catalog.GetString (s);
 		}
 
+		public EventHandler CreateWindowDelegate (SparkleRepo SparkleRepo) {
+			return delegate { 
+				SparkleWindow SparkleWindow = new SparkleWindow (SparkleRepo);
+				SparkleWindow.ShowAll ();
+			};
+		}
+
 		public SparkleStatusIcon () : base ()  {
 
 			Activate += delegate {
@@ -44,15 +51,10 @@ namespace SparkleShare {
 				MenuItem [] FolderItems =
 					new MenuItem [SparkleShare.Repositories.Length];
 
-				// TODO: For some strange reason both entries
-				// open the same repo...
 				int i = 0;
 				foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
 					FolderItems [i] = new MenuItem (SparkleRepo.Name);
-					FolderItems [i].Activated += delegate {
-						SparkleWindow SparkleWindow = new SparkleWindow (SparkleRepo);
-						SparkleWindow.ShowAll ();
-					};
+					FolderItems [i].Activated += CreateWindowDelegate (SparkleRepo);
 					Menu.Add (FolderItems [i]);
 					i++;
 				}
