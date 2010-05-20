@@ -124,7 +124,8 @@ namespace SparkleShare {
 			
 			// Watch the SparkleShare folder and pop up the 
 			// Add dialog when a new folder is created
-			FileSystemWatcher Watcher = new FileSystemWatcher (SparklePaths.SparklePath);
+			// TODO: This crashes
+/*			FileSystemWatcher Watcher = new FileSystemWatcher (SparklePaths.SparklePath);
 			Watcher.IncludeSubdirectories = false;
 			Watcher.EnableRaisingEvents = true;
 			Watcher.Created += delegate (object o, FileSystemEventArgs args) {
@@ -134,6 +135,7 @@ namespace SparkleShare {
 				SparkleDialog SparkleDialog = new SparkleDialog ();
 				SparkleDialog.ShowAll ();
 			};
+*/
 
 			// Create place to store configuration user's home folder
 			string ConfigPath = SparklePaths.SparkleConfigPath;
@@ -157,7 +159,6 @@ namespace SparkleShare {
 			// Enable notifications by default				
 			if (!File.Exists (NotifySettingFile))
 				File.Create (NotifySettingFile);
-
 
 		}
 
