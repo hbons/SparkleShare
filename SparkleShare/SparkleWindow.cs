@@ -187,9 +187,9 @@ namespace SparkleShare {
 			Columns [1].MaxWidth = 150;
 
 			LogView.CursorChanged += delegate(object o, EventArgs args) {
-			TreeModel model;
-				if (LogView.Selection.GetSelected (out model, out Iter)) {
-					SelectedEmail = (string) LogStore.GetValue (Iter, 3);
+			TreeModel Model;
+				if (LogView.Selection.GetSelected (out Model, out Iter)) {
+					SelectedEmail = (string) Model.GetValue (Iter, 3);
 					UpdatePeopleList ();
 				}
 			};
@@ -223,9 +223,10 @@ namespace SparkleShare {
 				                                    typeof (string),
 				                                    typeof (string));
 
+
 			int i = 0;
 			TreeIter Iter;
-			TreePath TreePath = new TreePath ();
+			TreePath TreePath;
 			foreach (string Line in Lines) {
 
 				// Only add name if it isn't there already
@@ -251,10 +252,6 @@ namespace SparkleShare {
 					                      UserEmail + "</span>");
 					PeopleStore.SetValue (Iter, 2, UserEmail);
 
-					if (UserEmail.Equals (SelectedEmail)) {
-						TreePath = PeopleStore.GetPath (Iter);
-					}
-
 				}
 
 				i++;
@@ -270,10 +267,17 @@ namespace SparkleShare {
 			PeopleView.Orientation = Orientation.Horizontal;
 			PeopleView.SelectionMode = SelectionMode.Single;
 
-			// TODO: doesn't work. Always seems to select the
-			// first row :(
-			PeopleView.SelectPath (TreePath);
-			
+			// Select the person matching with the committer event list
+			i = 0;
+			foreach (object [] Row in PeopleStore) {
+				string UserEmail = (string) Row [2];
+				if (UserEmail.Equals (SelectedEmail)) {
+					TreePath = new TreePath (new int [1] {i});
+					PeopleView.SelectPath (TreePath);
+				}
+				i++;
+			}
+
 			PeopleView.SelectionChanged += delegate (object o, EventArgs args) {
 				if (PeopleView.SelectedItems.Length > 0) {
 					PeopleStore.GetIter (out Iter, PeopleView.SelectedItems [0]);
