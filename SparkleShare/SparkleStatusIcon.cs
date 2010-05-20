@@ -89,19 +89,33 @@ namespace SparkleShare {
 
 				MenuItem OpenFolderItem = new MenuItem (_("Open SparkleShare Folder"));
 				OpenFolderItem.Activated += delegate {
-							Process Process = new Process ();
+					Process Process = new Process ();
+					switch (SparklePlatform.Name) {
+						case "GNOME":
 							Process.StartInfo.FileName = "xdg-open";
-							Process.StartInfo.Arguments = SparklePaths.SparklePath;
-							Process.Start();
+							break;
+						case "OSX":
+							Process.StartInfo.FileName = "open";
+							break;						
+					}
+					Process.StartInfo.Arguments = SparklePaths.SparklePath;
+					Process.Start();
 				};
 				Menu.Add (OpenFolderItem);
 
 				MenuItem AboutItem = new MenuItem (_("About SparkleShare"));
 				AboutItem.Activated += delegate {
-							Process Process = new Process ();
+					Process Process = new Process ();
+					switch (SparklePlatform.Name) {
+						case "GNOME":
 							Process.StartInfo.FileName = "xdg-open";
-							Process.StartInfo.Arguments = "http://www.sparkleshare.org/";
-							Process.Start();
+							break;
+						case "OSX":
+							Process.StartInfo.FileName = "open";
+							break;						
+					}
+					Process.StartInfo.Arguments = "http://www.sparkleshare.org/";
+					Process.Start ();
 				};
 				Menu.Add (AboutItem);
 
@@ -133,8 +147,9 @@ namespace SparkleShare {
 
 		// Quits the program
 		public void Quit (object o, EventArgs args) {
-			System.IO.File.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath +
-			                                         "sparkleshare.pid"));
+			System.IO.File.Delete
+				(SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath +
+                                        "sparkleshare.pid"));
 			Application.Quit ();
 		}
 
