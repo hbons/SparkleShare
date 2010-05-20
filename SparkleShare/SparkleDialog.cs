@@ -50,10 +50,10 @@ namespace SparkleShare {
 
 				Label RemoteUrlLabel = new Label (_("Address:   "));
 
-				string [] DefaultUrls = new string [4] { "ssh://git@github.com",
-						                                   "ssh://git@git.gnome.org",
-						                                   "ssh://git@fedorahosted.org",
-						                                   "ssh://git@gitorious.org" };
+				string [] DefaultUrls = new string [4] { "ssh://git@github.com/",
+						                                   "ssh://git@git.gnome.org/",
+						                                   "ssh://git@fedorahosted.org/",
+						                                   "ssh://git@gitorious.org/" };
 
 				RemoteUrlCombo = new ComboBoxEntry (DefaultUrls);
 
