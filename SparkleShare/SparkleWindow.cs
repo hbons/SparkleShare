@@ -48,7 +48,7 @@ namespace SparkleShare {
 			BorderWidth = 6;
 			Title = _("‘" + SparkleRepo.Name + "’ on " + 
 			          SparkleRepo.RemoteOriginUrl
-			          .TrimEnd (("/" + SparkleRepo.Name).ToCharArray ()));
+			          .TrimEnd (("/" + SparkleRepo.Name + ".git").ToCharArray ()));
 			IconName = "folder-sparkleshare";
 
 			VBox LayoutVertical = new VBox (false, 0);
