@@ -2,7 +2,7 @@
 
 mkdir -p locale
 if [ $# -ne 1 ]; then
-	echo "Usage: ./create-po-file [LOCALE].po"
+	echo "Usage: ./create-po-file [LOCALE].pot"
 else
 	xgettext -a --from-code=UTF-8 SparkleShare/*.cs -o locale/$1
 	echo "Created locale/$1."
