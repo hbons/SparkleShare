@@ -102,15 +102,7 @@ namespace SparkleShare {
 
 		public void CloneRepo (object o, EventArgs args) {
 
-			Remove (Child);
-			VBox Box = new VBox (false, 24);
-				SparkleSpinner Spinner = new SparkleSpinner ();
-				Label Label = new Label (_("Downloading files,\n") + 
-				                         _("this may take a while..."));
-				Box.PackStart (Spinner, false, false, 0);
-				Box.PackStart (Label, false, false, 0);
-			BorderWidth = 30;
-			Add (Box);
+			Destroy ();
 
 			string RepoRemoteUrl = RemoteUrlCombo.Entry.Text;
 			string RepoName =
@@ -121,14 +113,17 @@ namespace SparkleShare {
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
 			Process.StartInfo.FileName = "git";
-			Process.StartInfo.WorkingDirectory =
-				SparklePaths.SparkleTmpPath;
+			Process.StartInfo.WorkingDirectory = SparklePaths.SparkleTmpPath;
 
 			Process.StartInfo.Arguments =	"clone ";
 			Process.StartInfo.Arguments +=
 				SparkleHelpers.CombineMore (RepoRemoteUrl, RepoName).Substring (2);
 
 			Process.Start ();
+
+			SparkleBubble SparkleBubble =
+				new SparkleBubble ("Downloading ‘" + RepoName + "’",
+			                      "You will be notified when this is done");
 
 			// Move the folder to the SparkleShare folder when done cloning
 			Process.Exited += delegate {
@@ -138,8 +133,21 @@ namespace SparkleShare {
 					SparkleHelpers.CombineMore (SparklePaths.SparklePath,
 					                            RepoName)
 				);
+								
+				SparkleBubble =
+					new SparkleBubble ("Successfully added the folder" +
+					                   " ‘" + RepoName + "’",
+				                      "Now make great stuff happen!");
 
-				Destroy ();
+				SparkleBubble.AddAction ("", "Open Folder", 
+				                         delegate {
+									          	Process.StartInfo.FileName = "xdg-open";
+				  	                      	Process.StartInfo.Arguments = 
+				  	                      		SparkleHelpers.CombineMore (
+				  	                      			SparklePaths.SparklePath, RepoName);
+					 	                   	Process.Start();
+									          } );
+
 			};
 		
 		}

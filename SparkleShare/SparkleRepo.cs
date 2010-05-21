@@ -388,13 +388,21 @@ namespace SparkleShare {
 
 				// Add a button to open the folder where the changed file is
 				if (ShowButtons)
-					StuffChangedBubble.AddAction ("", "Open Folder", 
-									             delegate {
-										            Process.StartInfo.FileName = "xdg-open";
-					  	                     	Process.StartInfo.Arguments = LocalPath;
-						 	                   	Process.Start();
-					  	                     	Process.StartInfo.FileName = "git";
-										          } );
+					StuffChangedBubble.AddAction
+						("", "Open Folder", 
+  						 delegate {
+						 	switch (SparklePlatform.Name) {
+								case "GNOME":
+					            Process.StartInfo.FileName = "xdg-open";
+									break;
+								case "OSX":
+					            Process.StartInfo.FileName = "open";
+									break;
+							}
+				     	   Process.StartInfo.Arguments = LocalPath;
+		            	Process.Start();
+      		      	Process.StartInfo.FileName = "git";
+			         } );
 
 		}
 

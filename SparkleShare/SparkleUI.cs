@@ -38,29 +38,36 @@ namespace SparkleShare {
 			// Create 'SparkleShare' folder in the user's home folder
 			// if it's not there already
 			if (!Directory.Exists (SparklePath)) {
+
 				Directory.CreateDirectory (SparklePath);
 				Console.WriteLine ("[Config] Created '" + SparklePath + "'");
-
-				if (SparklePlatform.Name.Equals ("GNOME")) {
 					
-					// Add a special icon to the SparkleShare folder
-					Process.StartInfo.FileName = "gvfs-set-attribute";
-					Process.StartInfo.Arguments = SparklePath +
-						                           " metadata::custom-icon " +
-							                        "file:///usr/share/icons/hicolor/" +
-							                        "48x48/places/" +
-							                        "folder-sparkleshare.png";
-					Process.Start();
+				// Add a special icon to the SparkleShare folder
+				switch (SparklePlatform.Name) {
+					case "GNOME":
+						Process.StartInfo.FileName = "gvfs-set-attribute";
+						Process.StartInfo.Arguments = SparklePath +
+									                     " metadata::custom-icon " +
+										                  "file:///usr/share/icons/hicolor/" +
+										                  "48x48/places/" +
+										                  "folder-sparkleshare.png";
+						break;
+				}
+				Process.Start();
 
-					// Add the SparkleShare folder to the bookmarks
-					string BookmarksFileName =
-						Path.Combine (SparklePaths.HomePath, ".gtk-bookmarks");
-					if (File.Exists (BookmarksFileName)) {
-						TextWriter TextWriter = File.AppendText (BookmarksFileName);
-						TextWriter.WriteLine ("file://" + SparklePath + " SparkleShare");
-						TextWriter.Close();
-					}
+				// Add the SparkleShare folder to the bookmarks
+				switch (SparklePlatform.Name) {
+					case "GNOME":
 
+						string BookmarksFileName =
+							Path.Combine (SparklePaths.HomePath, ".gtk-bookmarks");
+						if (File.Exists (BookmarksFileName)) {
+							TextWriter TextWriter = File.AppendText (BookmarksFileName);
+							TextWriter.WriteLine ("file://" + SparklePath + " SparkleShare");
+							TextWriter.Close();
+						}
+
+						break;
 				}
 
 			}
@@ -79,14 +86,16 @@ namespace SparkleShare {
 					i++;
 
 					// Attach emblems
-					if (SparklePlatform.Name.Equals ("GNOME")) {
-						Process.StartInfo.FileName = "gvfs-set-attribute";
-						Process.StartInfo.Arguments = " file://" + Folder + 
-								                        " metadata::emblems " +
-																"[synced]";
-						Process.Start();				
+					switch (SparklePlatform.Name) {
+						case "GNOME":
+							Process.StartInfo.FileName = "gvfs-set-attribute";
+							Process.StartInfo.Arguments = " file://" + Folder + 
+											                  " metadata::emblems " +
+																	"[synced]";
+						break;
 					}
-				
+					Process.Start();				
+
 				}
 
 			}
