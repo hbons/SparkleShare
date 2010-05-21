@@ -160,7 +160,12 @@ namespace SparkleShare {
 					Iter = LogStore.Append ();
 					LogStore.SetValue (Iter, 0, ChangeIcon);
 					LogStore.SetValue (Iter, 1, Message);
-					LogStore.SetValue (Iter, 2, UserName);
+
+					if (SparkleRepo.UserEmail.Equals (UserEmail))
+						LogStore.SetValue (Iter, 2, "You");
+					else
+						LogStore.SetValue (Iter, 2, UserName);
+
 					LogStore.SetValue (Iter, 3, TimeAgo);
 
 					// We're not showing e-mail, it's only 
