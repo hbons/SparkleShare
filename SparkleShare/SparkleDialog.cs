@@ -75,7 +75,7 @@ namespace SparkleShare {
 				Defaults.AppendValues ("ssh://git@fedorahosted.org/",
 				                       SparkleHelpers.GetIcon ("fedorahosted", 16));
 				Defaults.AppendValues ("ssh://git@gitorious.org/",
-				                       null);
+				                       SparkleHelpers.GetIcon ("gitorious", 16));
 
 				Label RemoteUrlExample = new Label (_("These usually look something like this:\n ") +
 				                                    _("‘git://git@gnome.org/project’."));
