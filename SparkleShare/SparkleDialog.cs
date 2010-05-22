@@ -49,16 +49,23 @@ namespace SparkleShare {
 
 
 				Label RemoteUrlLabel = new Label (_("Address:   "));
+				
+				RemoteUrlCombo = new ComboBoxEntry ();
 
-				string [] DefaultUrls = new string [4] { "ssh://git@github.com/",
-						                                   "ssh://git@git.gnome.org/",
-						                                   "ssh://git@fedorahosted.org/",
-						                                   "ssh://git@gitorious.org/" };
+				ListStore Defaults = new ListStore (typeof (string));
 
-				RemoteUrlCombo = new ComboBoxEntry (DefaultUrls);
+				Defaults.AppendValues ("ssh://git@github.com/");
+				Defaults.AppendValues ("ssh://git@git.gnome.org/");
+				Defaults.AppendValues ("ssh://git@fedorahosted.org/");
+				Defaults.AppendValues ("ssh://git@gitorious.org/");
+				
+				RemoteUrlCombo.Entry.Completion = new EntryCompletion ();
+				RemoteUrlCombo.Entry.Completion.Model = Defaults;
+				RemoteUrlCombo.Entry.Completion.TextColumn = 0;
 
 				Label RemoteUrlExample = new Label (_("These usually look something like this:\n ") +
-				                                    _("‘ssh://git@github.com/hbons/SparkleShare’."));
+				                                    _("‘sparkle://sparkleshare.org/SparkleShare’."));
+
 				RemoteUrlExample.UseMarkup = true;
 				RemoteUrlExample.SetAlignment (0, 0);
 				RemoteUrlLabel.Xalign = 1;
