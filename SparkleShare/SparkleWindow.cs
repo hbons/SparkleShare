@@ -49,7 +49,7 @@ namespace SparkleShare {
 			Title = _("‘" + SparkleRepo.Name + "’ on " + 
 			          SparkleRepo.RemoteOriginUrl
 			          .TrimEnd (("/" + SparkleRepo.Name + ".git").ToCharArray ()));
-			IconName = "folder-sparkleshare";
+			IconName = "folder";
 
 			VBox LayoutVertical = new VBox (false, 0);
 
@@ -73,14 +73,6 @@ namespace SparkleShare {
 
 				LayoutVertical.PackStart (DialogButtons, false, false, 0);
 
-/*				Timer RedrawTimer = new Timer ();
-				RedrawTimer.Interval = 5000;
-				RedrawTimer.Elapsed += delegate { 
-					UpdatePeopleList ();
-					UpdateEventLog ();			
-				};
-				RedrawTimer.Start();
-*/
 			Add (LayoutVertical);		
 		
 		}
@@ -194,7 +186,7 @@ namespace SparkleShare {
 			Columns [0].MinWidth = 28;
 			Columns [1].Expand = true;
 			Columns [2].Expand = true;
-			Columns [1].MinWidth = 300;
+			Columns [1].MinWidth = 350;
 
 			LogView.CursorChanged += delegate(object o, EventArgs args) {
 			TreeModel Model;

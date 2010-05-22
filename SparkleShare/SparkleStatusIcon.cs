@@ -48,14 +48,32 @@ namespace SparkleShare {
 				Menu.Add (StatusItem);
 				Menu.Add (new SeparatorMenuItem ());
 
-				MenuItem [] FolderItems =
-					new MenuItem [SparkleShare.Repositories.Length];
+				MenuItem OpenFolderItem = new MenuItem (_("SparkleShare Folder"));
+				OpenFolderItem.Activated += delegate {
+					Process Process = new Process ();
+					switch (SparklePlatform.Name) {
+						case "GNOME":
+							Process.StartInfo.FileName = "xdg-open";
+							break;
+						case "OSX":
+							Process.StartInfo.FileName = "open";
+							break;						
+					}
+					Process.StartInfo.Arguments = SparklePaths.SparklePath;
+					Process.Start();
+				};
+				Menu.Add (OpenFolderItem);
 
+				Action [] FolderItems =
+					new Action [SparkleShare.Repositories.Length];
+				
 				int i = 0;
 				foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
-					FolderItems [i] = new MenuItem (SparkleRepo.Name);
+					FolderItems [i] = new Action("", SparkleRepo.Name);
+					FolderItems [i].IconName = "folder";
+					FolderItems [i].IsImportant = true;
 					FolderItems [i].Activated += CreateWindowDelegate (SparkleRepo);
-					Menu.Add (FolderItems [i]);
+					Menu.Add (FolderItems [i].CreateMenuItem ());
 					i++;
 				}
 				
@@ -87,22 +105,6 @@ namespace SparkleShare {
 					}
 				};
 
-				MenuItem OpenFolderItem = new MenuItem (_("Open SparkleShare Folder"));
-				OpenFolderItem.Activated += delegate {
-					Process Process = new Process ();
-					switch (SparklePlatform.Name) {
-						case "GNOME":
-							Process.StartInfo.FileName = "xdg-open";
-							break;
-						case "OSX":
-							Process.StartInfo.FileName = "open";
-							break;						
-					}
-					Process.StartInfo.Arguments = SparklePaths.SparklePath;
-					Process.Start();
-				};
-				Menu.Add (OpenFolderItem);
-
 				MenuItem AboutItem = new MenuItem (_("About SparkleShare"));
 				AboutItem.Activated += delegate {
 					Process Process = new Process ();
@@ -123,10 +125,9 @@ namespace SparkleShare {
 				MenuItem QuitItem = new MenuItem ("Quit");
 				QuitItem.Activated += delegate { Environment.Exit (0); };
 				Menu.Add (QuitItem);
-			
 				Menu.ShowAll ();
 				Menu.Popup ();
-
+				// TODO: Make sure the menu never overlaps the status icon
 			};
 
 			SetIdleState ();

@@ -14,9 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using Gtk;
 using Notifications;
-using SparkleShare;
 
 namespace SparkleShare {
 	
@@ -26,9 +24,7 @@ namespace SparkleShare {
 				Timeout = 4500;
 				Urgency = Urgency.Low;
 				Show ();
-				
-				// TODO: Doesn't work for some reason
-				AttachToStatusIcon (SparkleUI.NotificationIcon);
+//				StatusIcon = SparkleUI.NotificationIcon; // Doesn't work for some reason :(
 		}
 
 	}
