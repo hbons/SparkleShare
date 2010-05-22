@@ -52,19 +52,33 @@ namespace SparkleShare {
 				
 				RemoteUrlCombo = new ComboBoxEntry ();
 
-				ListStore Defaults = new ListStore (typeof (string));
+				ListStore Defaults = new ListStore (typeof (string),
+				                                    typeof (Gdk.Pixbuf));
 
-				Defaults.AppendValues ("ssh://git@github.com/");
-				Defaults.AppendValues ("ssh://git@git.gnome.org/");
-				Defaults.AppendValues ("ssh://git@fedorahosted.org/");
-				Defaults.AppendValues ("ssh://git@gitorious.org/");
-				
+
+
+
 				RemoteUrlCombo.Entry.Completion = new EntryCompletion ();
+
+				CellRendererPixbuf CellRendererPixbuf = new CellRendererPixbuf ();
 				RemoteUrlCombo.Entry.Completion.Model = Defaults;
+				RemoteUrlCombo.Entry.Completion.PackStart (CellRendererPixbuf, false);
+				RemoteUrlCombo.Entry.Completion.AddAttribute (CellRendererPixbuf, "pixbuf", 1);
+				RemoteUrlCombo.Entry.Completion.InlineCompletion = true;
+				RemoteUrlCombo.Entry.Completion.PopupCompletion = true;;
 				RemoteUrlCombo.Entry.Completion.TextColumn = 0;
 
+				Defaults.AppendValues ("ssh://git@github.com/",
+				                       SparkleHelpers.GetIcon ("github", 16));
+				Defaults.AppendValues ("ssh://git@git.gnome.org/",
+				                       SparkleHelpers.GetIcon ("gnome", 16));
+				Defaults.AppendValues ("ssh://git@fedorahosted.org/",
+				                       SparkleHelpers.GetIcon ("fedorahosted", 16));
+				Defaults.AppendValues ("ssh://git@gitorious.org/",
+				                       null);
+
 				Label RemoteUrlExample = new Label (_("These usually look something like this:\n ") +
-				                                    _("‘sparkle://sparkleshare.org/SparkleShare’."));
+				                                    _("‘git://git@gnome.org/project’."));
 
 				RemoteUrlExample.UseMarkup = true;
 				RemoteUrlExample.SetAlignment (0, 0);
