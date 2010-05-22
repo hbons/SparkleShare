@@ -57,8 +57,8 @@ namespace SparkleShare {
 
 				RemoteUrlCombo = new ComboBoxEntry (DefaultUrls);
 
-				Label RemoteUrlExample = new Label (_("<span size='small'><i>These usually look something like this:\n ") +
-				                                    _("‘ssh://git@github.com/hbons/SparkleShare’.</i></span>"));
+				Label RemoteUrlExample = new Label (_("These usually look something like this:\n ") +
+				                                    _("‘ssh://git@github.com/hbons/SparkleShare’."));
 				RemoteUrlExample.UseMarkup = true;
 				RemoteUrlExample.SetAlignment (0, 0);
 				RemoteUrlLabel.Xalign = 1;
