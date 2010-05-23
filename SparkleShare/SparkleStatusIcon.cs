@@ -146,8 +146,7 @@ namespace SparkleShare {
 
 		public void SetSyncingState () {
 
-		// TODO: Animate statusicon when syncing
-/*			int CycleDuration = 250;
+			int CycleDuration = 250;
 			int CurrentStep = 0;
 			int Size = 24;			
 
@@ -179,7 +178,7 @@ namespace SparkleShare {
 				Pixbuf = Images [CurrentStep];
 			};
 			Timer.Start ();
-*/
+
 		}
 
 		public void SetErrorState () {
