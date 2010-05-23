@@ -224,7 +224,9 @@ namespace SparkleShare {
 
 		// Merges the fetched changes
 		public void Rebase () {
+
 			Watcher.EnableRaisingEvents = false;
+
 			Console.WriteLine ("[Git][" + Name + "] Rebasing fetched changes... ");
 			Process.StartInfo.Arguments = "rebase origin";
 			Process.WaitForExit ();
@@ -242,8 +244,7 @@ namespace SparkleShare {
 					Process.StartInfo.Arguments = "status";
 					Process.WaitForExit ();
 					Process.Start();
-
-					Watcher.EnableRaisingEvents = false;
+					Output = Process.StandardOutput.ReadToEnd().Trim ();
 
 					foreach (string Line in Regex.Split (Output, "\n")) {
 
@@ -287,8 +288,6 @@ namespace SparkleShare {
 					Process.WaitForExit ();
 					Process.Start();
 					Console.WriteLine ("[Git][" + Name + "] Conflict resolved.");
-
-					Watcher.EnableRaisingEvents = true;
 
 					Push ();
 					Fetch ();
