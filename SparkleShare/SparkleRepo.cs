@@ -268,6 +268,12 @@ namespace SparkleShare {
 							Process.WaitForExit ();
 							Process.Start();
 
+							ShowEventBubble ("A mid-air collision happened!\n" +
+							                 "SparkleShare made a copy of your file.",
+										        SparkleHelpers.GetIcon
+										        ("folder-sparkleshare", 48),
+										        true);
+
 						}
 
 					}
