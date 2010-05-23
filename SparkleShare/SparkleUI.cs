@@ -91,6 +91,7 @@ namespace SparkleShare {
 					i++;
 
 					// Attach emblems
+					// TODO: emblems don't work in nautilus
 					switch (SparklePlatform.Name) {
 						case "GNOME":
 							Process.StartInfo.FileName = "gvfs-set-attribute";
