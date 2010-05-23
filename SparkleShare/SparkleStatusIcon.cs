@@ -144,6 +144,8 @@ namespace SparkleShare {
 			Pixbuf = SparkleHelpers.GetIcon ("folder-sparkleshare", 24);
 		}
 
+		// TODO: There are UI freezes when switching back and forth
+		// bewteen syncing and idle state
 		public void SetSyncingState () {
 
 			int CycleDuration = 250;
