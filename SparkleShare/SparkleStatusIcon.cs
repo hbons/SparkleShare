@@ -18,12 +18,15 @@ using Gtk;
 using Mono.Unix;
 using SparkleShare;
 using System;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
+using System.Timers;
 
 namespace SparkleShare {
 
 	public class SparkleStatusIcon : StatusIcon {
+
+		private Timer Timer;
 
 		// Short alias for the translations
 		public static string _ (string s) {
@@ -38,6 +41,8 @@ namespace SparkleShare {
 		}
 
 		public SparkleStatusIcon () : base ()  {
+
+			Timer = new Timer ();
 
 			Activate += delegate {
 
@@ -135,11 +140,46 @@ namespace SparkleShare {
 		}
 
 		public void SetIdleState () {
-			IconName = "folder-sparkleshare";
+			Timer.Stop ();
+			Pixbuf = SparkleHelpers.GetIcon ("folder-sparkleshare", 24);
 		}
 
 		public void SetSyncingState () {
-//			IconName = "folder-syncing";
+
+		// TODO: Animate statusicon when syncing
+/*			int CycleDuration = 250;
+			int CurrentStep = 0;
+			int Size = 24;			
+
+			Gdk.Pixbuf SpinnerGallery = SparkleHelpers.GetIcon ("process-syncing-sparkleshare",
+			                                                    Size);
+
+			int FramesInWidth = SpinnerGallery.Width / Size;
+			int FramesInHeight = SpinnerGallery.Height / Size;
+			int NumSteps = FramesInWidth * FramesInHeight;
+			Gdk.Pixbuf [] Images = new Gdk.Pixbuf [NumSteps - 1];
+
+			int i = 0;
+			for (int y = 0; y < FramesInHeight; y++) {
+				for (int x = 0; x < FramesInWidth; x++) {
+					if (!(y == 0 && x == 0)) {
+						Images [i] = new Gdk.Pixbuf (SpinnerGallery,
+						                             x * Size, y * Size, Size, Size);
+						i++;
+					}
+				}
+			}
+
+			Timer.Interval = CycleDuration / NumSteps;
+			Timer.Elapsed += delegate {
+				if (CurrentStep < NumSteps)
+					CurrentStep++;
+				else
+					CurrentStep = 0;
+				Pixbuf = Images [CurrentStep];
+			};
+			Timer.Start ();
+*/
 		}
 
 		public void SetErrorState () {

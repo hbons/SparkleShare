@@ -193,6 +193,7 @@ namespace SparkleShare {
 				// Push again in case of a conflict
 				Push ();
 			}
+//			SparkleUI.NotificationIcon.SetIdleState ();
 		}
 
 		// Commits the made changes
