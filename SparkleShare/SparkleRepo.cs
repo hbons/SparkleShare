@@ -243,6 +243,8 @@ namespace SparkleShare {
 					Process.WaitForExit ();
 					Process.Start();
 
+					Watcher.EnableRaisingEvents = false;
+
 					foreach (string Line in Regex.Split (Output, "\n")) {
 
 						if (Line.Contains ("needs merge")) {
@@ -261,7 +263,7 @@ namespace SparkleShare {
 							
 							File.Move (ProblemFileName,
 							           ProblemFileName + " (" + UserName  + " - " +
-							           TimeStamp);
+							           TimeStamp + ")");
 							           
 							Process.StartInfo.Arguments
 								= "checkout --theirs " + ProblemFileName;
@@ -285,6 +287,8 @@ namespace SparkleShare {
 					Process.WaitForExit ();
 					Process.Start();
 					Console.WriteLine ("[Git][" + Name + "] Conflict resolved.");
+
+					Watcher.EnableRaisingEvents = true;
 
 					Push ();
 					Fetch ();
