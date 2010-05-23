@@ -153,13 +153,21 @@ namespace SparkleShare {
 				BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
 					Console.WriteLine ("[Buffer][" + Name + "] Done waiting.");
 					Add ();
+					string Message = FormatCommitMessage ();
+					if (!Message.Equals ("")) {
+						Commit (Message);
+						Push ();
+						Fetch ();
+						// Push again in case of a conflict
+						Push ();
+					}
 				};
+
 				FetchTimer.Start ();
 
 				BufferTimer.Start();
 				Console.WriteLine ("[Buffer][" + Name + "] " + 
 					               "Waiting for more changes...");
-
 			}
 
 		}
@@ -185,14 +193,6 @@ namespace SparkleShare {
 			Process.WaitForExit ();
 			Console.WriteLine ("[Git][" + Name + "] Changes staged.");
 //			SparkleUI.NotificationIcon.SetSyncingState ();
-			string Message = FormatCommitMessage ();
-			if (!Message.Equals ("")) {
-				Commit (Message);
-				Push ();
-				Fetch ();
-				// Push again in case of a conflict
-				Push ();
-			}
 //			SparkleUI.NotificationIcon.SetIdleState ();
 		}
 
@@ -231,8 +231,59 @@ namespace SparkleShare {
 			Process.Start();
 			Console.WriteLine ("[Git][" + Name + "] Changes rebased.");
 			string Output = Process.StandardOutput.ReadToEnd().Trim ();
+
 			// Show notification if there are updates
 			if (!Output.Contains ("up to date")) {
+
+				if (Output.Contains ("Failed to merge")) {
+
+					Console.WriteLine ("[Git][" + Name + "] Resolving conflict... ");
+
+					Process.StartInfo.Arguments = "status";
+					Process.WaitForExit ();
+					Process.Start();
+
+					foreach (string Line in Regex.Split (Output, "\n")) {
+
+						if (Line.Contains ("needs merge")) {
+
+							string ProblemFileName =
+								Line.Substring (Line.IndexOf (": needs merge"));
+
+							Process.StartInfo.Arguments
+								= "checkout --ours " + ProblemFileName;
+							Process.WaitForExit ();
+							Process.Start();
+							
+							DateTime DateTime = new DateTime ();
+							string TimeStamp =
+								String.Format("{0:H:mm, d MMM yyyy}", DateTime);
+							
+							File.Move (ProblemFileName,
+							           ProblemFileName + " (" + UserName  + " - " +
+							           TimeStamp);
+							           
+							Process.StartInfo.Arguments
+								= "checkout --theirs " + ProblemFileName;
+							Process.WaitForExit ();
+							Process.Start();
+
+						}
+
+					}
+
+					Add ();
+					
+					Process.StartInfo.Arguments
+						= "rebase --continue";
+					Process.WaitForExit ();
+					Process.Start();
+					Console.WriteLine ("[Git][" + Name + "] Conflict resolved.");
+
+					Push ();
+					Fetch ();
+			
+				}
 
 				// Get the last committer e-mail
 				Process.StartInfo.Arguments = "log --format=\"%ae\" -1";
@@ -260,7 +311,6 @@ namespace SparkleShare {
 						              SparkleHelpers.GetAvatar (LastCommitEmail, 48),
 						              true);
 						              
-
 			}
 
 			Watcher.EnableRaisingEvents = true;
