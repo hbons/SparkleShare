@@ -216,22 +216,22 @@ namespace SparkleShare {
 			Process.WaitForExit ();
 			Console.WriteLine ("[Git][" + Name + "] Changes fetched.");
 			if (!Output.Contains ("up to date"))
-				Merge ();
+				Rebase ();
 //			SparkleUI.NotificationIcon.SetIdleState ();
 			FetchTimer.Start ();
 		}
 
 		// Merges the fetched changes
-		public void Merge () {
-//			Watcher.EnableRaisingEvents = false;
-			Console.WriteLine ("[Git][" + Name + "] Merging fetched changes... ");
-			Process.StartInfo.Arguments = "merge origin/master";
-			Process.Start();
+		public void Rebase () {
+			Watcher.EnableRaisingEvents = false;
+			Console.WriteLine ("[Git][" + Name + "] Rebasing fetched changes... ");
+			Process.StartInfo.Arguments = "rebase origin";
 			Process.WaitForExit ();
-			Console.WriteLine ("[Git][" + Name + "] Changes merged.");
+			Process.Start();
+			Console.WriteLine ("[Git][" + Name + "] Changes rebased.");
 			string Output = Process.StandardOutput.ReadToEnd().Trim ();
 			// Show notification if there are updates
-			if (!Output.Equals ("Already up-to-date.")) {
+			if (!Output.Contains ("up to date")) {
 
 				// Get the last committer e-mail
 				Process.StartInfo.Arguments = "log --format=\"%ae\" -1";
@@ -252,14 +252,17 @@ namespace SparkleShare {
 					SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
 					                            "sparkleshare.notify");
 
+				Console.WriteLine ("[Git][" + Name + "] Showing notification.");
+
 				if (File.Exists (NotifySettingFile))
 					ShowEventBubble (LastCommitUserName + " " + LastCommitMessage, 
 						              SparkleHelpers.GetAvatar (LastCommitEmail, 48),
 						              true);
+						              
 
 			}
 
-//			Watcher.EnableRaisingEvents = true;
+			Watcher.EnableRaisingEvents = true;
 			Console.WriteLine ("[Git][" + Name + "] Nothing going on... ");
 
 		}
