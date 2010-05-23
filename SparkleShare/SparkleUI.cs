@@ -72,6 +72,11 @@ namespace SparkleShare {
 
 			}
 
+			if (!HideUI) {
+				// Create the status icon
+				NotificationIcon = new SparkleStatusIcon ();
+			}
+
 			// Get all the repos in ~/SparkleShare
 			SparkleRepo [] TmpRepos =
 				new SparkleRepo [Directory.GetDirectories (SparklePath).Length];
@@ -106,9 +111,6 @@ namespace SparkleShare {
 			// Don't create the window and status 
 			// icon when --disable-gui was given
 			if (!HideUI) {
-
-				// Create the status icon
-				NotificationIcon = new SparkleStatusIcon ();
 				
 				// Show a notification if there are no folders yet
 				if (SparkleShare.Repositories.Length == 0) {
