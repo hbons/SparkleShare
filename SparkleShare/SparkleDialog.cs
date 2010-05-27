@@ -47,16 +47,12 @@ namespace SparkleShare {
 
 			VBox VBox = new VBox (false, 0);
 
-
 				Label RemoteUrlLabel = new Label (_("Address:   "));
 				
 				RemoteUrlCombo = new ComboBoxEntry ();
 
 				ListStore Defaults = new ListStore (typeof (string),
 				                                    typeof (Gdk.Pixbuf));
-
-
-
 
 				RemoteUrlCombo.Entry.Completion = new EntryCompletion ();
 
@@ -123,8 +119,6 @@ namespace SparkleShare {
 
 		public void CloneRepo (object o, EventArgs args) {
 
-			Destroy ();
-
 			string RepoRemoteUrl = RemoteUrlCombo.Entry.Text;
 			string RepoName =
 				RepoRemoteUrl.Substring (RepoRemoteUrl.LastIndexOf ("/") + 1);
@@ -140,11 +134,16 @@ namespace SparkleShare {
 			Process.StartInfo.Arguments +=
 				SparkleHelpers.CombineMore (RepoRemoteUrl, RepoName).Substring (2);
 
+			SparkleBubble SparkleBubble =
+				new SparkleBubble (_("Syncing ‘") + RepoName + "’",
+			                      _("SparkleShare will notify you when this is done."));
+
+			SparkleBubble.IconName = "folder-sparkleshare";
+
+			Hide ();
+
 			Process.Start ();
 
-			SparkleBubble SparkleBubble =
-				new SparkleBubble ("Downloading ‘" + RepoName + "’",
-			                      "You will be notified when this is done");
 
 			// Move the folder to the SparkleShare folder when done cloning
 			Process.Exited += delegate {
@@ -154,7 +153,7 @@ namespace SparkleShare {
 					SparkleHelpers.CombineMore (SparklePaths.SparklePath,
 					                            RepoName)
 				);
-								
+
 				SparkleBubble =
 					new SparkleBubble ("Successfully added the folder" +
 					                   " ‘" + RepoName + "’",
@@ -163,11 +162,13 @@ namespace SparkleShare {
 				SparkleBubble.AddAction ("", "Open Folder", 
 				                         delegate {
 									          	Process.StartInfo.FileName = "xdg-open";
-				  	                      	Process.StartInfo.Arguments = 
+				  	                      	Process.StartInfo.Arguments =
 				  	                      		SparkleHelpers.CombineMore (
 				  	                      			SparklePaths.SparklePath, RepoName);
 					 	                   	Process.Start();
 									          } );
+									          
+				Destroy ();
 
 			};
 		
