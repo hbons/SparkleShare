@@ -156,7 +156,6 @@ namespace SparkleShare {
 			string Output = Process.StandardOutput.ReadToEnd ();
 
 			if (Output.Contains ("fatal")) {
-				Console.WriteLine ("SOMETHING WENT WRONG!!!");
 
 				SparkleBubble =
 					new SparkleBubble ("Something went wrong while syncing " +
