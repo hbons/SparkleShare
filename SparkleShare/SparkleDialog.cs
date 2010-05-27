@@ -121,12 +121,11 @@ namespace SparkleShare {
 
 			string RepoRemoteUrl = RemoteUrlCombo.Entry.Text;
 
-			// Check wheter a "/" or ":" is used to separate the 
-			// repo name from the domain.
-
 			int SlashPos = RepoRemoteUrl.LastIndexOf ("/");
 			int ColumnPos = RepoRemoteUrl.LastIndexOf (":");
 
+			// Check wheter a "/" or ":" is used to separate the 
+			// repo name from the domain.
 			string RepoName;
 			if (SlashPos > ColumnPos)
 				RepoName = RepoRemoteUrl.Substring (SlashPos + 1);
@@ -145,15 +144,20 @@ namespace SparkleShare {
 				SparkleHelpers.CombineMore (RepoRemoteUrl, RepoName).Substring (2);
 
 			SparkleBubble SparkleBubble =
-				new SparkleBubble (_("Syncing ‘") + RepoName + "’",
+				new SparkleBubble (_("Syncing folder ‘") + RepoName + "’",
 			                      _("SparkleShare will notify you when this is done."));
 
 			SparkleBubble.IconName = "folder-sparkleshare";
 
 			Hide ();
 
+			Process.WaitForExit ();
 			Process.Start ();
+			string Output = Process.StandardOutput.ReadToEnd ();
 
+			if (Output.Contains ("fatal")) {
+				Console.WriteLine ("SOMETHING WENT WRONG!!!");
+			}
 
 			// Move the folder to the SparkleShare folder when done cloning
 			Process.Exited += delegate {
@@ -165,7 +169,7 @@ namespace SparkleShare {
 				);
 
 				SparkleBubble =
-					new SparkleBubble ("Successfully added the folder" +
+					new SparkleBubble ("Successfully synced the folder" +
 					                   " ‘" + RepoName + "’",
 				                      "Now make great stuff happen!");
 
@@ -176,8 +180,7 @@ namespace SparkleShare {
 				  	                      		SparkleHelpers.CombineMore (
 				  	                      			SparklePaths.SparklePath, RepoName);
 					 	                   	Process.Start();
-									          } );
-									          
+									          } );									          
 				Destroy ();
 
 			};
