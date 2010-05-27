@@ -100,7 +100,7 @@ namespace SparkleShare {
 		}
 
 		public static bool IsGitUrl (string Url) {
-			return Regex.Match (Url, @"[a-z]+://(.)+").Success;
+			return Regex.Match (Url, @"[a-z]+://(.)+/(.)+").Success;
 		}
 
 	}
