@@ -36,7 +36,7 @@ namespace SparkleShare {
 		private ComboBoxEntry RemoteUrlCombo;
 		private Table Table;
 
-		public SparkleDialog () : base ("")  {
+		public SparkleDialog (string Url) : base ("")  {
 		
 			BorderWidth = 6;
 			IconName = "folder-sparkleshare";
@@ -50,6 +50,7 @@ namespace SparkleShare {
 				Label RemoteUrlLabel = new Label (_("Address:   "));
 				
 				RemoteUrlCombo = new ComboBoxEntry ();
+				RemoteUrlCombo.Entry.Text = Url;
 
 				ListStore Defaults = new ListStore (typeof (string),
 				                                    typeof (Gdk.Pixbuf));
@@ -157,6 +158,27 @@ namespace SparkleShare {
 
 			if (Output.Contains ("fatal")) {
 				Console.WriteLine ("SOMETHING WENT WRONG!!!");
+
+				SparkleBubble =
+					new SparkleBubble ("Something went wrong while syncing " +
+					                   " ‘" + RepoName + "’",
+				                      "Please double check your address and\n" +
+				                      "network connection.");
+
+				SparkleBubble.AddAction ("", _("Try Again…"), 
+				                         delegate {
+									          	Process.StartInfo.FileName = "xdg-open";
+				  	                      	Process.StartInfo.Arguments =
+				  	                      		SparkleHelpers.CombineMore (
+				  	                      			SparklePaths.SparklePath, RepoName);
+					 	                   	Process.Start();
+									          } );
+
+				SparkleDialog SparkleDialog = new SparkleDialog (RepoRemoteUrl);
+				SparkleDialog.ShowAll ();
+				
+				Destroy ();
+
 			}
 
 			// Move the folder to the SparkleShare folder when done cloning
