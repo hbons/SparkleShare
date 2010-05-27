@@ -23,10 +23,12 @@ namespace SparkleShare {
 	public class SparkleBubble : Notification {
 
 		public SparkleBubble (string Title, string Subtext) : base (Title, Subtext)  {
+
 				Timeout = 4500;
 				Urgency = Urgency.Low;
 				Show ();
-				
+				IconName = "folder-sparkleshare";
+
 				// TODO: Doesn't work for some reason
 				AttachToStatusIcon (SparkleUI.NotificationIcon);
 		}

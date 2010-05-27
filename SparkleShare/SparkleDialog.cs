@@ -148,8 +148,6 @@ namespace SparkleShare {
 				new SparkleBubble (_("Syncing folder ‘") + RepoName + "’",
 			                      _("SparkleShare will notify you when this is done."));
 
-			SparkleBubble.IconName = "folder-sparkleshare";
-
 			Hide ();
 
 			Process.WaitForExit ();
