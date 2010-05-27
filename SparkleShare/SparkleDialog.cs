@@ -120,8 +120,18 @@ namespace SparkleShare {
 		public void CloneRepo (object o, EventArgs args) {
 
 			string RepoRemoteUrl = RemoteUrlCombo.Entry.Text;
-			string RepoName =
-				RepoRemoteUrl.Substring (RepoRemoteUrl.LastIndexOf ("/") + 1);
+
+			// Check wheter a "/" or ":" is used to separate the 
+			// repo name from the domain.
+
+			int SlashPos = RepoRemoteUrl.LastIndexOf ("/");
+			int ColumnPos = RepoRemoteUrl.LastIndexOf (":");
+
+			string RepoName;
+			if (SlashPos > ColumnPos)
+				RepoName = RepoRemoteUrl.Substring (SlashPos + 1);
+			else
+				RepoName = RepoRemoteUrl.Substring (ColumnPos + 1);
 
 			Process Process = new Process();
 			Process.EnableRaisingEvents = true; 
