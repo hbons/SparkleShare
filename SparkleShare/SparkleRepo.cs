@@ -57,20 +57,20 @@ namespace SparkleShare {
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.Arguments = "config --get user.name";
 			Process.Start();
-			UserName = Process.StandardOutput.ReadToEnd().Trim ();
+			UserName = Process.StandardOutput.ReadToEnd ().Trim ();
 
 			// Get user.email, example: "user@github.com"
 			UserEmail = "not.set@git-scm.com";
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.Arguments = "config --get user.email";
 			Process.Start();
-			UserEmail = Process.StandardOutput.ReadToEnd().Trim ();
+			UserEmail = Process.StandardOutput.ReadToEnd ().Trim ();
 
 			// Get remote.origin.url, example: "ssh://git@github.com/user/repo"
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.Arguments = "config --get remote.origin.url";
 			Process.Start();
-			RemoteOriginUrl = Process.StandardOutput.ReadToEnd().Trim ();
+			RemoteOriginUrl = Process.StandardOutput.ReadToEnd ().Trim ();
 
 			// Get the repository name, example: "Project"
 			Name = Path.GetFileName (LocalPath);
@@ -87,7 +87,7 @@ namespace SparkleShare {
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.Arguments = "rev-list --max-count=1 HEAD";
 			Process.Start();
-			CurrentHash = Process.StandardOutput.ReadToEnd().Trim ();
+			CurrentHash = Process.StandardOutput.ReadToEnd ().Trim ();
 
 			// Watch the repository's folder
 			Watcher = new FileSystemWatcher (LocalPath);
@@ -213,7 +213,7 @@ namespace SparkleShare {
 			Console.WriteLine ("[Git][" + Name + "] Fetching changes... ");
 			Process.StartInfo.Arguments = "fetch -v";
 			Process.Start();
-			string Output = Process.StandardOutput.ReadToEnd().Trim (); // TODO: This doesn't work :(
+			string Output = Process.StandardOutput.ReadToEnd ().Trim (); // TODO: This doesn't work :(
 			Process.WaitForExit ();
 			Console.WriteLine ("[Git][" + Name + "] Changes fetched.");
 			if (!Output.Contains ("up to date"))
@@ -232,7 +232,7 @@ namespace SparkleShare {
 			Process.WaitForExit ();
 			Process.Start();
 			Console.WriteLine ("[Git][" + Name + "] Changes rebased.");
-			string Output = Process.StandardOutput.ReadToEnd().Trim ();
+			string Output = Process.StandardOutput.ReadToEnd ().Trim ();
 
 			// Show notification if there are updates
 			if (!Output.Contains ("up to date")) {
@@ -244,7 +244,7 @@ namespace SparkleShare {
 					Process.StartInfo.Arguments = "status";
 					Process.WaitForExit ();
 					Process.Start();
-					Output = Process.StandardOutput.ReadToEnd().Trim ();
+					Output = Process.StandardOutput.ReadToEnd ().Trim ();
 
 					foreach (string Line in Regex.Split (Output, "\n")) {
 
@@ -297,17 +297,20 @@ namespace SparkleShare {
 				// Get the last committer e-mail
 				Process.StartInfo.Arguments = "log --format=\"%ae\" -1";
 				Process.Start();
-				string LastCommitEmail = Process.StandardOutput.ReadToEnd().Trim ();
+				string LastCommitEmail =
+					Process.StandardOutput.ReadToEnd ().Trim ();
 
 				// Get the last commit message
 				Process.StartInfo.Arguments = "log --format=\"%s\" -1";
 				Process.Start();
-				string LastCommitMessage = Process.StandardOutput.ReadToEnd().Trim ();
+				string LastCommitMessage =
+					Process.StandardOutput.ReadToEnd ().Trim ();
 
 				// Get the last commiter
 				Process.StartInfo.Arguments = "log --format=\"%an\" -1";
 				Process.Start();
-				string LastCommitUserName = Process.StandardOutput.ReadToEnd().Trim ();
+				string LastCommitUserName =
+					Process.StandardOutput.ReadToEnd ().Trim ();
 
 				string NotifySettingFile =
 					SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
@@ -365,7 +368,7 @@ namespace SparkleShare {
 
 			Process.StartInfo.Arguments = "status";
 			Process.Start();
-			string Output = Process.StandardOutput.ReadToEnd();
+			string Output = Process.StandardOutput.ReadToEnd ();
 
 			foreach (string Line in Regex.Split (Output, "\n")) {
 				if (Line.IndexOf ("new file:") > -1)
