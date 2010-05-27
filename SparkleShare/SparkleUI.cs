@@ -123,7 +123,7 @@ namespace SparkleShare {
 
 					NoFoldersBubble.IconName = "folder-sparkleshare";
 					NoFoldersBubble.AddAction ("", "Add a Folder…", delegate {
-						SparkleDialog SparkleDialog = new SparkleDialog ();
+						SparkleDialog SparkleDialog = new SparkleDialog ("");
 						SparkleDialog.ShowAll ();
 /*						Process.StartInfo.FileName = "xdg-open";
 						Process.StartInfo.Arguments = SparklePaths.SparklePath;

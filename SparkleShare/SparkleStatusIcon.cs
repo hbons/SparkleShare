@@ -84,7 +84,7 @@ namespace SparkleShare {
 				
 				MenuItem AddItem = new MenuItem (_("Add a Folder…"));
 				AddItem.Activated += delegate {
-					SparkleDialog SparkleDialog = new SparkleDialog ();
+					SparkleDialog SparkleDialog = new SparkleDialog ("");
 					SparkleDialog.ShowAll ();
 				};
 				Menu.Add (AddItem);
