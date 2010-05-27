@@ -137,9 +137,10 @@ namespace SparkleShare {
 			Process.EnableRaisingEvents = true; 
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
+
+			// Clone into the system's temporary folder
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.WorkingDirectory = SparklePaths.SparkleTmpPath;
-
 			Process.StartInfo.Arguments =	"clone ";
 			Process.StartInfo.Arguments +=
 				SparkleHelpers.CombineMore (RepoRemoteUrl, RepoName).Substring (2);
@@ -181,6 +182,9 @@ namespace SparkleShare {
 
 			// Move the folder to the SparkleShare folder when done cloning
 			Process.Exited += delegate {
+
+				// Move the repo from the temporary folder
+				// to the SparkleShare folder
 				Directory.Move (
 					SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
 					                            RepoName),
@@ -189,11 +193,11 @@ namespace SparkleShare {
 				);
 
 				SparkleBubble =
-					new SparkleBubble ("Successfully synced the folder" +
+					new SparkleBubble (_("Successfully synced the folder") +
 					                   " ‘" + RepoName + "’",
-				                      "Now make great stuff happen!");
+				                      _("Now make great stuff happen!"));
 
-				SparkleBubble.AddAction ("", "Open Folder", 
+				SparkleBubble.AddAction ("", _("Open Folder"), 
 				                         delegate {
 									          	Process.StartInfo.FileName = "xdg-open";
 				  	                      	Process.StartInfo.Arguments =
