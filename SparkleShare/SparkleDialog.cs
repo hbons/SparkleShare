@@ -205,6 +205,7 @@ namespace SparkleShare {
 					 	                   	Process.Start();
 									          } );									          
 				Destroy ();
+				SparkleShare.SparkleUI = new SparkleUI (true);
 
 			};
 		
