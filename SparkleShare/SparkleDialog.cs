@@ -61,6 +61,7 @@ namespace SparkleShare {
 				RemoteUrlCombo.Entry.Completion.Model = Defaults;
 				RemoteUrlCombo.Entry.Completion.PackStart (CellRendererPixbuf, false);
 				RemoteUrlCombo.Entry.Completion.AddAttribute (CellRendererPixbuf, "pixbuf", 1);
+				// TODO: The combobox arrow should be clickable
 				RemoteUrlCombo.Entry.Completion.InlineCompletion = true;
 				RemoteUrlCombo.Entry.Completion.PopupCompletion = true;;
 				RemoteUrlCombo.Entry.Completion.TextColumn = 0;
@@ -97,8 +98,9 @@ namespace SparkleShare {
 				RemoteUrlCombo.Entry.Changed += CheckFields;
 				RemoteUrlCombo.WidthRequest = 320;
 
-					AddButton.Sensitive = false;
+					// TODO: This freezes the UI
 					AddButton.Clicked += CloneRepo;
+					AddButton.Sensitive = false;
 
 				ButtonBox.Add (CancelButton);
 				ButtonBox.Add (AddButton);
