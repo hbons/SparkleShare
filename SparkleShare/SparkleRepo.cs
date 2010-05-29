@@ -100,7 +100,7 @@ namespace SparkleShare {
 
 			// Fetch remote changes every 20 seconds
 			FetchTimer = new Timer ();
-			FetchTimer.Interval = 17500;
+			FetchTimer.Interval = 20000;
 			FetchTimer.Elapsed += delegate { 
 				Fetch ();
 			};
@@ -111,6 +111,7 @@ namespace SparkleShare {
 			// Add everything that changed 
 			// since SparkleShare was stopped
 			Add ();
+
 			Console.WriteLine ("[Git][" + Name + "] Nothing going on...");
 
 		}
@@ -156,9 +157,7 @@ namespace SparkleShare {
 					string Message = FormatCommitMessage ();
 					if (!Message.Equals ("")) {
 						Commit (Message);
-						Push ();
 						Fetch ();
-						// Push again in case of a conflict
 						Push ();
 					}
 				};
