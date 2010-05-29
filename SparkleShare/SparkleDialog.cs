@@ -204,7 +204,10 @@ namespace SparkleShare {
 				  	                      			SparklePaths.SparklePath, RepoName);
 					 	                   	Process.Start();
 									          } );									          
+				// Destroy the Add dialog
 				Destroy ();
+
+				// Refresh the UI
 				SparkleShare.SparkleUI = new SparkleUI (true);
 
 			};
