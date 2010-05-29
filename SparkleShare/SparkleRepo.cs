@@ -108,6 +108,18 @@ namespace SparkleShare {
 			FetchTimer.Start();
 			BufferTimer = new Timer ();
 
+			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
+				Console.WriteLine ("[Buffer][" + Name + "] Done waiting.");
+				Add ();
+				string Message = FormatCommitMessage ();
+				if (!Message.Equals ("")) {
+					Commit (Message);
+					Fetch ();
+					Push ();
+				}
+			};
+
+
 			// Add everything that changed 
 			// since SparkleShare was stopped
 			Add ();
@@ -151,16 +163,6 @@ namespace SparkleShare {
 				BufferTimer.Close ();
 				BufferTimer = new Timer ();
 				BufferTimer.Interval = Interval;
-				BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
-					Console.WriteLine ("[Buffer][" + Name + "] Done waiting.");
-					Add ();
-					string Message = FormatCommitMessage ();
-					if (!Message.Equals ("")) {
-						Commit (Message);
-						Fetch ();
-						Push ();
-					}
-				};
 
 				FetchTimer.Start ();
 
