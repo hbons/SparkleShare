@@ -277,15 +277,13 @@ namespace SparkleShare {
 										        SparkleHelpers.GetIcon
 										        ("folder-sparkleshare", 48),
 										        true);
-
 						}
 
 					}
 
 					Add ();
 					
-					Process.StartInfo.Arguments
-						= "rebase --continue";
+					Process.StartInfo.Arguments = "rebase --continue";
 					Process.WaitForExit ();
 					Process.Start();
 					Console.WriteLine ("[Git][" + Name + "] Conflict resolved.");

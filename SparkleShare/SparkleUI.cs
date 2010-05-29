@@ -135,6 +135,8 @@ namespace SparkleShare {
 
 			}
 			
+			// TODO: When a repo folder is deleted, don't sync and update the UI
+			
 			// Watch the SparkleShare folder and pop up the 
 			// Add dialog when a new folder is created
 			// TODO: This crashes
