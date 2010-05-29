@@ -64,6 +64,7 @@ namespace SparkleShare {
 				RemoteUrlCombo.Entry.Completion.InlineCompletion = true;
 				RemoteUrlCombo.Entry.Completion.PopupCompletion = true;;
 				RemoteUrlCombo.Entry.Completion.TextColumn = 0;
+				RemoteUrlCombo.TextColumn = 0;
 
 				Defaults.AppendValues ("ssh://git@github.com/",
 				                       SparkleHelpers.GetIcon ("github", 16));
@@ -133,6 +134,12 @@ namespace SparkleShare {
 			else
 				RepoName = RepoRemoteUrl.Substring (ColumnPos + 1);
 
+			SparkleBubble SparkleBubble =
+				new SparkleBubble (_("Syncing folder ‘") + RepoName + "’",
+			                      _("SparkleShare will notify you when this is done."));
+
+			HideAll ();
+
 			Process Process = new Process();
 			Process.EnableRaisingEvents = true; 
 			Process.StartInfo.RedirectStandardOutput = true;
@@ -142,14 +149,7 @@ namespace SparkleShare {
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.WorkingDirectory = SparklePaths.SparkleTmpPath;
 			Process.StartInfo.Arguments =	"clone ";
-			Process.StartInfo.Arguments +=
-				SparkleHelpers.CombineMore (RepoRemoteUrl, RepoName).Substring (2);
-
-			SparkleBubble SparkleBubble =
-				new SparkleBubble (_("Syncing folder ‘") + RepoName + "’",
-			                      _("SparkleShare will notify you when this is done."));
-
-			Hide ();
+			Process.StartInfo.Arguments += RepoRemoteUrl;
 
 			Process.WaitForExit ();
 			Process.Start ();
