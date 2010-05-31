@@ -43,9 +43,10 @@ namespace SparkleShare {
 
 		public SparkleStatusIcon () : base ()  {
 
+			Timer = new Timer ();
 			Activate += ShowMenu;
-			StateText = "Everything is up to date";
-			SetSyncingState ();
+			StateText = _("Everything is up to date");
+			SetIdleState ();
 
 		}
 
@@ -135,7 +136,7 @@ namespace SparkleShare {
 				Menu.Add (AboutItem);
 
 				Menu.Add (new SeparatorMenuItem ());
-				MenuItem QuitItem = new MenuItem ("Quit");
+				MenuItem QuitItem = new MenuItem (_("Quit"));
 				QuitItem.Activated += delegate { Environment.Exit (0); };
 				Menu.Add (QuitItem);
 				Menu.ShowAll ();
@@ -147,7 +148,7 @@ namespace SparkleShare {
 		public void SetIdleState () {
 			Timer.Stop ();
 			Pixbuf = SparkleHelpers.GetIcon ("folder-sparkleshare", 24);
-			StateText = "Everything is up to date";
+			StateText = _("Everything is up to date");
 		}
 
 		// Changes the status icon to the suncing antimation
@@ -155,7 +156,7 @@ namespace SparkleShare {
 		// bewteen syncing and idle state
 		public void SetSyncingState () {
 
-			StateText = "Syncing…";
+			StateText = _("Syncing…");
 
 			int CycleDuration = 250;
 			int CurrentStep = 0;
@@ -196,7 +197,7 @@ namespace SparkleShare {
 		// Changes the status icon to the error icon
 		public void SetErrorState () {
 			IconName = "folder-sync-error";
-			StateText = "Error syncing";
+			StateText = _("Error syncing");
 		}
 
 		// Quits the program
