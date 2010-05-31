@@ -33,53 +33,46 @@ namespace SparkleShare {
 		}
 
 		private Button AddButton;
-		private Entry UserNameEntry;
-		private Entry UserEmailEntry;
 		private ComboBoxEntry RemoteUrlCombo;
 
 		public SparkleDialog (string Url) : base ("")  {
 		
 			BorderWidth = 12;
 			IconName = "folder-sparkleshare";
-			Modal = true;
+			WidthRequest = 320;
+			Title = "SparkleShare";
 
 			SetPosition (WindowPosition.Center);
-			Title = "";
 
-			VBox VBox = new VBox (false, 6);
+			VBox VBox = new VBox (false, 0);
 
 				Label RemoteUrlLabel =
-					new Label (_("Remote SparkleShare address:"));
-				
-				RemoteUrlCombo = new ComboBoxEntry ();
-				RemoteUrlCombo.Entry.Text = Url;
+					new Label (_("Address of remote SparkleShare folder:"));
 
-				ListStore Defaults = new ListStore (typeof (string),
-				                                    typeof (Gdk.Pixbuf));
+				ListStore Defaults = new ListStore (typeof (string));
+
+				RemoteUrlCombo = new ComboBoxEntry (Defaults, 0);
+				if (Url.Equals (""))
+					RemoteUrlCombo.Entry.Text = "ssh://";
+				else
+					RemoteUrlCombo.Entry.Text = Url;
 
 				RemoteUrlCombo.Entry.Completion = new EntryCompletion ();
-
-				CellRendererPixbuf CellRendererPixbuf = new CellRendererPixbuf ();
 				RemoteUrlCombo.Entry.Completion.Model = Defaults;
-				RemoteUrlCombo.Entry.Completion.PackStart (CellRendererPixbuf, false);
-				RemoteUrlCombo.Entry.Completion.AddAttribute (CellRendererPixbuf, "pixbuf", 1);
-				// TODO: The combobox arrow should be clickable
-				RemoteUrlCombo.Entry.Completion.InlineCompletion = false;
+
+				RemoteUrlCombo.Entry.Completion.InlineCompletion = true;
 				RemoteUrlCombo.Entry.Completion.PopupCompletion = true;
 				RemoteUrlCombo.Entry.Completion.TextColumn = 0;
-				RemoteUrlCombo.TextColumn = 0;
+				RemoteUrlCombo.Entry.Changed += CheckFields;
 
-				Defaults.AppendValues ("ssh://git@github.com/",
-				                       SparkleHelpers.GetIcon ("github", 16));
-				Defaults.AppendValues ("ssh://git@git.gnome.org/",
-				                       SparkleHelpers.GetIcon ("gnome", 16));
-				Defaults.AppendValues ("ssh://git@fedorahosted.org/",
-				                       SparkleHelpers.GetIcon ("fedorahosted", 16));
-				Defaults.AppendValues ("ssh://git@gitorious.org/",
-				                       SparkleHelpers.GetIcon ("gitorious", 16));
+				Defaults.AppendValues ("ssh://git@github.com/");
+				Defaults.AppendValues ("ssh://git@git.gnome.org/");
+				Defaults.AppendValues ("ssh://git@fedorahosted.org/");
+				Defaults.AppendValues ("ssh://git@gitorious.org/");
 
-				Label RemoteUrlExample = new Label (_("These usually look something like this:\n ") +
-				                                    _("‘git://git@gnome.org/project’."));
+				Label RemoteUrlExample =
+					new Label (_("These usually look something like this:\n ") +
+					           _("‘git://git@gnome.org/project’."));
 
 				RemoteUrlExample.UseMarkup = true;
 				RemoteUrlExample.SetAlignment (0, 0);
@@ -91,41 +84,25 @@ namespace SparkleShare {
 				ButtonBox.BorderWidth = 0;
 
 					AddButton = new Button (_("Add Folder"));
+					// TODO: This freezes the UI
+					AddButton.Clicked += CloneRepo;
+					AddButton.Sensitive = false;
+
 					Button CancelButton = new Button (Stock.Cancel);
 
 					CancelButton.Clicked += delegate {
 						Destroy ();
 					};
 
-				RemoteUrlCombo.Entry.Changed += CheckFields;
-//				RemoteUrlCombo.WidthRequest = 300;
-
-					// TODO: This freezes the UI
-					AddButton.Clicked += CloneRepo;
-					AddButton.Sensitive = false;
-
 				ButtonBox.Add (CancelButton);
 				ButtonBox.Add (AddButton);
-
-				UserNameEntry = new Entry ();
-				Label UserNameLabel = new Label (_("Your name:"));
-				UserNameLabel.Xalign = 0;
-				
-				UserEmailEntry = new Entry ();
-				Label UserEmailLabel = new Label (_("Your e-mail address:"));
-				UserEmailLabel.Xalign = 0;
 		
-
 			VBox.PackStart (RemoteUrlLabel, false, false, 0);
-			VBox.PackStart (RemoteUrlCombo, false, false, 0);
-			VBox.PackStart (UserNameLabel, false, false, 0);
-			VBox.PackStart (UserNameEntry, false, false, 0);
-			VBox.PackStart (UserEmailLabel, false, false, 0);
-			VBox.PackStart (UserEmailEntry, false, false, 0);
-
+			VBox.PackStart (RemoteUrlCombo, false, false, 12);
 			VBox.PackStart (ButtonBox, false, false, 0);
 
 			Add (VBox);
+
 			ShowAll ();
 
 		}
