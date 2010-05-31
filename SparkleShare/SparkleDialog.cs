@@ -33,21 +33,23 @@ namespace SparkleShare {
 		}
 
 		private Button AddButton;
+		private Entry UserNameEntry;
+		private Entry UserEmailEntry;
 		private ComboBoxEntry RemoteUrlCombo;
-		private Table Table;
 
 		public SparkleDialog (string Url) : base ("")  {
 		
-			BorderWidth = 6;
+			BorderWidth = 12;
 			IconName = "folder-sparkleshare";
 			Modal = true;
-			Resizable = false;
+
 			SetPosition (WindowPosition.Center);
-			Title = _("Add a Folder");
+			Title = "";
 
-			VBox VBox = new VBox (false, 0);
+			VBox VBox = new VBox (false, 6);
 
-				Label RemoteUrlLabel = new Label (_("Address:   "));
+				Label RemoteUrlLabel =
+					new Label (_("Remote SparkleShare address:"));
 				
 				RemoteUrlCombo = new ComboBoxEntry ();
 				RemoteUrlCombo.Entry.Text = Url;
@@ -62,8 +64,8 @@ namespace SparkleShare {
 				RemoteUrlCombo.Entry.Completion.PackStart (CellRendererPixbuf, false);
 				RemoteUrlCombo.Entry.Completion.AddAttribute (CellRendererPixbuf, "pixbuf", 1);
 				// TODO: The combobox arrow should be clickable
-				RemoteUrlCombo.Entry.Completion.InlineCompletion = true;
-				RemoteUrlCombo.Entry.Completion.PopupCompletion = true;;
+				RemoteUrlCombo.Entry.Completion.InlineCompletion = false;
+				RemoteUrlCombo.Entry.Completion.PopupCompletion = true;
 				RemoteUrlCombo.Entry.Completion.TextColumn = 0;
 				RemoteUrlCombo.TextColumn = 0;
 
@@ -81,14 +83,14 @@ namespace SparkleShare {
 
 				RemoteUrlExample.UseMarkup = true;
 				RemoteUrlExample.SetAlignment (0, 0);
-				RemoteUrlLabel.Xalign = 1;
+				RemoteUrlLabel.Xalign = 0;
 
 				HButtonBox ButtonBox = new HButtonBox ();
 				ButtonBox.Layout = ButtonBoxStyle.End;
 				ButtonBox.Spacing = 6;
-				ButtonBox.BorderWidth = 6;
+				ButtonBox.BorderWidth = 0;
 
-					AddButton = new Button (Stock.Add);
+					AddButton = new Button (_("Add Folder"));
 					Button CancelButton = new Button (Stock.Cancel);
 
 					CancelButton.Clicked += delegate {
@@ -96,7 +98,7 @@ namespace SparkleShare {
 					};
 
 				RemoteUrlCombo.Entry.Changed += CheckFields;
-				RemoteUrlCombo.WidthRequest = 320;
+//				RemoteUrlCombo.WidthRequest = 300;
 
 					// TODO: This freezes the UI
 					AddButton.Clicked += CloneRepo;
@@ -105,15 +107,22 @@ namespace SparkleShare {
 				ButtonBox.Add (CancelButton);
 				ButtonBox.Add (AddButton);
 
-				Table = new Table(3, 2, false);
-				Table.RowSpacing = 6;
-				Table.BorderWidth = 6;
+				UserNameEntry = new Entry ();
+				Label UserNameLabel = new Label (_("Your name:"));
+				UserNameLabel.Xalign = 0;
+				
+				UserEmailEntry = new Entry ();
+				Label UserEmailLabel = new Label (_("Your e-mail address:"));
+				UserEmailLabel.Xalign = 0;
 		
-				Table.Attach (RemoteUrlLabel, 0, 1, 0, 1);
-				Table.Attach (RemoteUrlCombo, 1, 2, 0, 1);
-				Table.Attach (RemoteUrlExample, 1, 2, 1, 2);
 
-			VBox.PackStart (Table, false, false, 0);
+			VBox.PackStart (RemoteUrlLabel, false, false, 0);
+			VBox.PackStart (RemoteUrlCombo, false, false, 0);
+			VBox.PackStart (UserNameLabel, false, false, 0);
+			VBox.PackStart (UserNameEntry, false, false, 0);
+			VBox.PackStart (UserEmailLabel, false, false, 0);
+			VBox.PackStart (UserEmailEntry, false, false, 0);
+
 			VBox.PackStart (ButtonBox, false, false, 0);
 
 			Add (VBox);

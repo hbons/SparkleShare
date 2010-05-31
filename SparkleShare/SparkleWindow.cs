@@ -62,7 +62,7 @@ namespace SparkleShare {
 
 					HButtonBox DialogButtons = new HButtonBox ();
 					DialogButtons.Layout = ButtonBoxStyle.End;
-					DialogButtons.BorderWidth = 6;
+					DialogButtons.BorderWidth = 0;
 
 						Button CloseButton = new Button (Stock.Close);
 						CloseButton.Clicked += delegate (object o, EventArgs args) {
@@ -261,7 +261,7 @@ namespace SparkleShare {
 
 			}
 
-			IconView PeopleView = new IconView (PeopleStore); 
+			IconView PeopleView = new IconView (PeopleStore);
 			PeopleView.PixbufColumn = 0;
 			PeopleView.MarkupColumn = 1;
 			PeopleView.Columns = 3;
