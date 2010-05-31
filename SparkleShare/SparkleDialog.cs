@@ -123,7 +123,7 @@ namespace SparkleShare {
 				new SparkleBubble (_("Syncing folder ‘") + RepoName + "’",
 			                     _("SparkleShare will notify you when this is done."));
 
-			Process Process = new Process();
+			Process Process = new Process ();
 			Process.EnableRaisingEvents = true; 
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
@@ -152,7 +152,7 @@ namespace SparkleShare {
 				                         	Process.StartInfo.Arguments =
 				                         	SparkleHelpers.CombineMore
 				                         		(SparklePaths.SparklePath, RepoName);
-				                         	Process.Start();
+				                         	Process.Start ();
 				                         }
 				                        );
 
@@ -185,7 +185,7 @@ namespace SparkleShare {
 				  	                     	Process.StartInfo.Arguments =
 				  	                     		SparkleHelpers.CombineMore (
 				  	                     	SparklePaths.SparklePath, RepoName);
-					 	                     	Process.Start();
+					 	                     	Process.Start ();
 									               }
 									              );								          
 

@@ -28,7 +28,7 @@ namespace SparkleShare {
 
 		public SparkleUI (bool HideUI) {
 
-			Process Process = new Process();
+			Process Process = new Process ();
 			Process.EnableRaisingEvents = false;
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
@@ -53,7 +53,7 @@ namespace SparkleShare {
 										                  "folder-sparkleshare.png";
 						break;
 				}
-				Process.Start();
+				Process.Start ();
 
 				// Add the SparkleShare folder to the bookmarks
 				switch (SparklePlatform.Name) {
@@ -64,7 +64,7 @@ namespace SparkleShare {
 						if (File.Exists (BookmarksFileName)) {
 							TextWriter TextWriter = File.AppendText (BookmarksFileName);
 							TextWriter.WriteLine ("file://" + SparklePath + " SparkleShare");
-							TextWriter.Close();
+							TextWriter.Close ();
 						}
 
 						break;
@@ -100,7 +100,7 @@ namespace SparkleShare {
 																	"[synced]";
 						break;
 					}
-					Process.Start();				
+					Process.Start ();				
 
 				}
 
@@ -127,7 +127,7 @@ namespace SparkleShare {
 						SparkleDialog.ShowAll ();
 /*						Process.StartInfo.FileName = "xdg-open";
 						Process.StartInfo.Arguments = SparklePaths.SparklePath;
-						Process.Start();
+						Process.Start ();
 */
 					} );
 
@@ -145,7 +145,7 @@ namespace SparkleShare {
 			Watcher.EnableRaisingEvents = true;
 			Watcher.Created += delegate (object o, FileSystemEventArgs args) {
 			   WatcherChangeTypes wct = args.ChangeType;
-				Console.WriteLine ("[Event][SparkleShare] " + wct.ToString() + 
+				Console.WriteLine ("[Event][SparkleShare] " + wct.ToString () + 
 				                   " '" + args.Name + "'");
 				SparkleDialog SparkleDialog = new SparkleDialog ();
 				SparkleDialog.ShowAll ();
