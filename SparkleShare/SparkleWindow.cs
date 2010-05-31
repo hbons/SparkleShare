@@ -151,7 +151,8 @@ namespace SparkleShare {
 					Gdk.Pixbuf ChangeIcon = SparkleHelpers.GetIcon (IconFile, 16);
 					Iter = LogStore.Append ();
 					LogStore.SetValue (Iter, 0, ChangeIcon);
-					LogStore.SetValue (Iter, 1, Message);
+					LogStore.SetValue (Iter, 1,
+					                   Message.Replace ("/", " → "));
 
 					if (SparkleRepo.UserEmail.Equals (UserEmail))
 						LogStore.SetValue (Iter, 2, "You");
