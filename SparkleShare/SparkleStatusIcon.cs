@@ -27,6 +27,7 @@ namespace SparkleShare {
 	public class SparkleStatusIcon : StatusIcon {
 
 		private Timer Timer;
+		private string StateText;
 
 		// Short alias for the translations
 		public static string _ (string s) {
@@ -42,15 +43,20 @@ namespace SparkleShare {
 
 		public SparkleStatusIcon () : base ()  {
 
-			Timer = new Timer ();
+			Activate += ShowMenu;
+			StateText = "Everything is up to date";
+			SetSyncingState ();
 
-			Activate += delegate {
+		}
+
+		public void ShowMenu (object o, EventArgs Args) {
 
 				Menu Menu = new Menu ();
 
-				MenuItem StatusItem = new MenuItem (_("Everything is up to date"));
-				StatusItem.Sensitive = false;
-				Menu.Add (StatusItem);
+				MenuItem StatusMenuItem = new MenuItem (StateText);
+				StatusMenuItem.Sensitive = false;
+
+				Menu.Add (StatusMenuItem);
 				Menu.Add (new SeparatorMenuItem ());
 
 				Action FolderAction = new Action ("", "SparkleShare Folder");
@@ -133,29 +139,30 @@ namespace SparkleShare {
 				QuitItem.Activated += delegate { Environment.Exit (0); };
 				Menu.Add (QuitItem);
 				Menu.ShowAll ();
-				Menu.Popup ();
 				// TODO: Make sure the menu never overlaps the status icon
-			};
-
-			SetIdleState ();
+				Menu.Popup ();
 
 		}
 
 		public void SetIdleState () {
 			Timer.Stop ();
 			Pixbuf = SparkleHelpers.GetIcon ("folder-sparkleshare", 24);
+			StateText = "Everything is up to date";
 		}
 
+		// Changes the status icon to the suncing antimation
 		// TODO: There are UI freezes when switching back and forth
 		// bewteen syncing and idle state
 		public void SetSyncingState () {
+
+			StateText = "Syncing…";
 
 			int CycleDuration = 250;
 			int CurrentStep = 0;
 			int Size = 24;			
 
-			Gdk.Pixbuf SpinnerGallery = SparkleHelpers.GetIcon ("process-syncing-sparkleshare",
-			                                                    Size);
+			Gdk.Pixbuf SpinnerGallery =
+				SparkleHelpers.GetIcon ("process-syncing-sparkleshare", Size);
 
 			int FramesInWidth = SpinnerGallery.Width / Size;
 			int FramesInHeight = SpinnerGallery.Height / Size;
@@ -173,6 +180,7 @@ namespace SparkleShare {
 				}
 			}
 
+			Timer = new Timer ();
 			Timer.Interval = CycleDuration / NumSteps;
 			Timer.Elapsed += delegate {
 				if (CurrentStep < NumSteps)
@@ -185,8 +193,10 @@ namespace SparkleShare {
 
 		}
 
+		// Changes the status icon to the error icon
 		public void SetErrorState () {
-//			IconName = "folder-sync-error";
+			IconName = "folder-sync-error";
+			StateText = "Error syncing";
 		}
 
 		// Quits the program
