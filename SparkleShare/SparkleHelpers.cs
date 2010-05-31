@@ -75,7 +75,7 @@ namespace SparkleShare {
 		  MD5 md5 = new MD5CryptoServiceProvider ();
 		  Byte[] Bytes = ASCIIEncoding.Default.GetBytes (s);
 		  Byte[] EncodedBytes = md5.ComputeHash (Bytes);
-		  return BitConverter.ToString(EncodedBytes).ToLower ().Replace ("-", "");
+		  return BitConverter.ToString (EncodedBytes).ToLower ().Replace ("-", "");
 		}
 		
 		// Makes it possible to combine more than
