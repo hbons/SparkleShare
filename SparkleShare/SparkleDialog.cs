@@ -48,10 +48,12 @@ namespace SparkleShare {
 
 				Label RemoteUrlLabel =
 					new Label (_("Address of remote SparkleShare folder:"));
+				RemoteUrlLabel.Xalign = 0;
 
 				ListStore Defaults = new ListStore (typeof (string));
 
 				RemoteUrlCombo = new ComboBoxEntry (Defaults, 0);
+
 				if (Url.Equals (""))
 					RemoteUrlCombo.Entry.Text = "ssh://";
 				else
@@ -65,18 +67,11 @@ namespace SparkleShare {
 				RemoteUrlCombo.Entry.Completion.TextColumn = 0;
 				RemoteUrlCombo.Entry.Changed += CheckFields;
 
+				// Add some preset addresses
 				Defaults.AppendValues ("ssh://git@github.com/");
 				Defaults.AppendValues ("ssh://git@git.gnome.org/");
 				Defaults.AppendValues ("ssh://git@fedorahosted.org/");
 				Defaults.AppendValues ("ssh://git@gitorious.org/");
-
-				Label RemoteUrlExample =
-					new Label (_("These usually look something like this:\n ") +
-					           _("‘git://git@gnome.org/project’."));
-
-				RemoteUrlExample.UseMarkup = true;
-				RemoteUrlExample.SetAlignment (0, 0);
-				RemoteUrlLabel.Xalign = 0;
 
 				HButtonBox ButtonBox = new HButtonBox ();
 				ButtonBox.Layout = ButtonBoxStyle.End;
@@ -84,7 +79,6 @@ namespace SparkleShare {
 				ButtonBox.BorderWidth = 0;
 
 					AddButton = new Button (_("Add Folder"));
-					// TODO: This freezes the UI
 					AddButton.Clicked += CloneRepo;
 					AddButton.Sensitive = false;
 
@@ -107,14 +101,17 @@ namespace SparkleShare {
 
 		}
 
+		// Clones a remote repo
 		public void CloneRepo (object o, EventArgs args) {
+
+			HideAll ();
 
 			string RepoRemoteUrl = RemoteUrlCombo.Entry.Text;
 
 			int SlashPos = RepoRemoteUrl.LastIndexOf ("/");
 			int ColumnPos = RepoRemoteUrl.LastIndexOf (":");
 
-			// Check wheter a "/" or ":" is used to separate the 
+			// Check whether a "/" or ":" is used to separate the 
 			// repo name from the domain.
 			string RepoName;
 			if (SlashPos > ColumnPos)
@@ -124,9 +121,7 @@ namespace SparkleShare {
 
 			SparkleBubble SparkleBubble =
 				new SparkleBubble (_("Syncing folder ‘") + RepoName + "’",
-			                      _("SparkleShare will notify you when this is done."));
-
-			HideAll ();
+			                     _("SparkleShare will notify you when this is done."));
 
 			Process Process = new Process();
 			Process.EnableRaisingEvents = true; 
@@ -148,17 +143,18 @@ namespace SparkleShare {
 				SparkleBubble =
 					new SparkleBubble ("Something went wrong while syncing " +
 					                   " ‘" + RepoName + "’",
-				                      "Please double check your address and\n" +
+				                      "Please double check the address and\n" +
 				                      "network connection.");
 
 				SparkleBubble.AddAction ("", _("Try Again…"), 
 				                         delegate {
-									          	Process.StartInfo.FileName = "xdg-open";
-				  	                      	Process.StartInfo.Arguments =
-				  	                      		SparkleHelpers.CombineMore (
-				  	                      			SparklePaths.SparklePath, RepoName);
-					 	                   	Process.Start();
-									          } );
+				                         	Process.StartInfo.FileName = "xdg-open";
+				                         	Process.StartInfo.Arguments =
+				                         	SparkleHelpers.CombineMore
+				                         		(SparklePaths.SparklePath, RepoName);
+				                         	Process.Start();
+				                         }
+				                        );
 
 				SparkleDialog SparkleDialog = new SparkleDialog (RepoRemoteUrl);
 				SparkleDialog.ShowAll ();
@@ -170,8 +166,6 @@ namespace SparkleShare {
 			// Move the folder to the SparkleShare folder when done cloning
 			Process.Exited += delegate {
 
-				// Move the repo from the temporary folder
-				// to the SparkleShare folder
 				Directory.Move (
 					SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
 					                            RepoName),
@@ -179,19 +173,22 @@ namespace SparkleShare {
 					                            RepoName)
 				);
 
+				// Show a confirmation notification
 				SparkleBubble =
-					new SparkleBubble (_("Successfully synced the folder") +
-					                   " ‘" + RepoName + "’",
+					new SparkleBubble (_("Successfully synced the folder ") +
+					                   "‘" + RepoName + "’",
 				                      _("Now make great stuff happen!"));
 
 				SparkleBubble.AddAction ("", _("Open Folder"), 
 				                         delegate {
-									          	Process.StartInfo.FileName = "xdg-open";
-				  	                      	Process.StartInfo.Arguments =
-				  	                      		SparkleHelpers.CombineMore (
-				  	                      			SparklePaths.SparklePath, RepoName);
-					 	                   	Process.Start();
-									          } );									          
+				                         	Process.StartInfo.FileName = "xdg-open";
+				  	                     	Process.StartInfo.Arguments =
+				  	                     		SparkleHelpers.CombineMore (
+				  	                     	SparklePaths.SparklePath, RepoName);
+					 	                     	Process.Start();
+									               }
+									              );								          
+
 				// Destroy the Add dialog
 				Destroy ();
 
