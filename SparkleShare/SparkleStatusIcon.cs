@@ -53,8 +53,10 @@ namespace SparkleShare {
 				Menu.Add (StatusItem);
 				Menu.Add (new SeparatorMenuItem ());
 
-				MenuItem OpenFolderItem = new MenuItem (_("SparkleShare Folder"));
-				OpenFolderItem.Activated += delegate {
+				Action FolderAction = new Action("", "SparkleShare Folder");
+				FolderAction.IconName = "folder-sparkleshare";
+				FolderAction.IsImportant = true;
+				FolderAction.Activated += delegate {
 					Process Process = new Process ();
 					switch (SparklePlatform.Name) {
 						case "GNOME":
@@ -67,7 +69,7 @@ namespace SparkleShare {
 					Process.StartInfo.Arguments = SparklePaths.SparklePath;
 					Process.Start();
 				};
-				Menu.Add (OpenFolderItem);
+				Menu.Add (FolderAction.CreateMenuItem ());
 
 				Action [] FolderItems =
 					new Action [SparkleShare.Repositories.Length];
