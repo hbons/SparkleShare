@@ -46,14 +46,14 @@ namespace SparkleShare {
 
 			Activate += delegate {
 
-				Menu Menu = new Menu();
+				Menu Menu = new Menu ();
 
 				MenuItem StatusItem = new MenuItem (_("Everything is up to date"));
 				StatusItem.Sensitive = false;
 				Menu.Add (StatusItem);
 				Menu.Add (new SeparatorMenuItem ());
 
-				Action FolderAction = new Action("", "SparkleShare Folder");
+				Action FolderAction = new Action ("", "SparkleShare Folder");
 				FolderAction.IconName = "folder-sparkleshare";
 				FolderAction.IsImportant = true;
 				FolderAction.Activated += delegate {
@@ -67,7 +67,7 @@ namespace SparkleShare {
 							break;						
 					}
 					Process.StartInfo.Arguments = SparklePaths.SparklePath;
-					Process.Start();
+					Process.Start ();
 				};
 				Menu.Add (FolderAction.CreateMenuItem ());
 
@@ -76,7 +76,7 @@ namespace SparkleShare {
 				
 				int i = 0;
 				foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
-					FolderItems [i] = new Action("", SparkleRepo.Name);
+					FolderItems [i] = new Action ("", SparkleRepo.Name);
 					FolderItems [i].IconName = "folder";
 					FolderItems [i].IsImportant = true;
 					FolderItems [i].Activated += CreateWindowDelegate (SparkleRepo);

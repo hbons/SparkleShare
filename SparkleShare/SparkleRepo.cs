@@ -43,7 +43,7 @@ namespace SparkleShare {
 
 		public SparkleRepo (string RepoPath) {
 
-			Process = new Process();
+			Process = new Process ();
 			Process.EnableRaisingEvents = false; 
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
@@ -56,20 +56,20 @@ namespace SparkleShare {
 			UserName = "Anonymous";
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.Arguments = "config --get user.name";
-			Process.Start();
+			Process.Start ();
 			UserName = Process.StandardOutput.ReadToEnd ().Trim ();
 
 			// Get user.email, example: "user@github.com"
 			UserEmail = "not.set@git-scm.com";
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.Arguments = "config --get user.email";
-			Process.Start();
+			Process.Start ();
 			UserEmail = Process.StandardOutput.ReadToEnd ().Trim ();
 
 			// Get remote.origin.url, example: "ssh://git@github.com/user/repo"
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.Arguments = "config --get remote.origin.url";
-			Process.Start();
+			Process.Start ();
 			RemoteOriginUrl = Process.StandardOutput.ReadToEnd ().Trim ();
 
 			// Get the repository name, example: "Project"
@@ -86,7 +86,7 @@ namespace SparkleShare {
 			// Get hash of the current commit
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.Arguments = "rev-list --max-count=1 HEAD";
-			Process.Start();
+			Process.Start ();
 			CurrentHash = Process.StandardOutput.ReadToEnd ().Trim ();
 
 			// Watch the repository's folder
@@ -94,9 +94,9 @@ namespace SparkleShare {
 			Watcher.IncludeSubdirectories = true;
 			Watcher.EnableRaisingEvents = true;
 			Watcher.Filter = "*";
-			Watcher.Changed += new FileSystemEventHandler(OnFileActivity);
-			Watcher.Created += new FileSystemEventHandler(OnFileActivity);
-			Watcher.Deleted += new FileSystemEventHandler(OnFileActivity);
+			Watcher.Changed += new FileSystemEventHandler (OnFileActivity);
+			Watcher.Created += new FileSystemEventHandler (OnFileActivity);
+			Watcher.Deleted += new FileSystemEventHandler (OnFileActivity);
 
 			// Fetch remote changes every 20 seconds
 			FetchTimer = new Timer ();
@@ -105,7 +105,7 @@ namespace SparkleShare {
 				Fetch ();
 			};
 
-			FetchTimer.Start();
+			FetchTimer.Start ();
 			BufferTimer = new Timer ();
 
 			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
@@ -132,7 +132,7 @@ namespace SparkleShare {
 		public void OnFileActivity (object o, FileSystemEventArgs args) {
 		   WatcherChangeTypes wct = args.ChangeType;
 			 if (!ShouldIgnore (args.Name)) {
-			  Console.WriteLine ("[Event][" + Name + "] " + wct.ToString() + 
+			  Console.WriteLine ("[Event][" + Name + "] " + wct.ToString () + 
 					              " '" + args.Name + "'");
 				StartBufferTimer ();
 			}
@@ -155,7 +155,7 @@ namespace SparkleShare {
 				Console.WriteLine ("[Buffer][" + Name + "] " + 
 					               "Waiting for more changes...");
 
-				BufferTimer.Start();
+				BufferTimer.Start ();
 
 			} else {
 
@@ -166,7 +166,7 @@ namespace SparkleShare {
 
 				FetchTimer.Start ();
 
-				BufferTimer.Start();
+				BufferTimer.Start ();
 				Console.WriteLine ("[Buffer][" + Name + "] " + 
 					               "Waiting for more changes...");
 			}
@@ -176,13 +176,13 @@ namespace SparkleShare {
 		// Clones a remote repo
 		public void Clone () {
 			Process.StartInfo.Arguments = "clone " + RemoteOriginUrl;
-			Process.Start();
+			Process.Start ();
 
 			// Add a gitignore file
-		  TextWriter Writer = new StreamWriter(LocalPath + ".gitignore");
-		  Writer.WriteLine("*~"); // Ignore gedit swap files
-		  Writer.WriteLine(".*.sw?"); // Ignore vi swap files
-		  Writer.Close();
+		  TextWriter Writer = new StreamWriter (LocalPath + ".gitignore");
+		  Writer.WriteLine ("*~"); // Ignore gedit swap files
+		  Writer.WriteLine (".*.sw?"); // Ignore vi swap files
+		  Writer.Close ();
 		}
 
 		// Stages the made changes
@@ -190,7 +190,7 @@ namespace SparkleShare {
 			BufferTimer.Stop ();
 			Console.WriteLine ("[Git][" + Name + "] Staging changes...");
 			Process.StartInfo.Arguments = "add --all";
-			Process.Start();
+			Process.Start ();
 			Process.WaitForExit ();
 			Console.WriteLine ("[Git][" + Name + "] Changes staged.");
 //			SparkleUI.NotificationIcon.SetSyncingState ();
@@ -202,7 +202,7 @@ namespace SparkleShare {
 			Console.WriteLine ("[Commit][" + Name + "] " + Message);
 			Console.WriteLine ("[Git][" + Name + "] Commiting changes...");
 			Process.StartInfo.Arguments = "commit -m \"" + Message + "\"";
-			Process.Start();
+			Process.Start ();
 			Process.WaitForExit ();
 			Console.WriteLine ("[Git][" + Name + "] Changes commited.");
 		}
@@ -213,7 +213,7 @@ namespace SparkleShare {
 //			SparkleUI.NotificationIcon.SetSyncingState ();
 			Console.WriteLine ("[Git][" + Name + "] Fetching changes... ");
 			Process.StartInfo.Arguments = "fetch -v";
-			Process.Start();
+			Process.Start ();
 			string Output = Process.StandardOutput.ReadToEnd ().Trim (); // TODO: This doesn't work :(
 			Process.WaitForExit ();
 			Console.WriteLine ("[Git][" + Name + "] Changes fetched.");
@@ -231,7 +231,7 @@ namespace SparkleShare {
 			Console.WriteLine ("[Git][" + Name + "] Rebasing fetched changes... ");
 			Process.StartInfo.Arguments = "rebase origin";
 			Process.WaitForExit ();
-			Process.Start();
+			Process.Start ();
 			Console.WriteLine ("[Git][" + Name + "] Changes rebased.");
 			string Output = Process.StandardOutput.ReadToEnd ().Trim ();
 
@@ -244,7 +244,7 @@ namespace SparkleShare {
 
 					Process.StartInfo.Arguments = "status";
 					Process.WaitForExit ();
-					Process.Start();
+					Process.Start ();
 					Output = Process.StandardOutput.ReadToEnd ().Trim ();
 
 					foreach (string Line in Regex.Split (Output, "\n")) {
@@ -257,11 +257,11 @@ namespace SparkleShare {
 							Process.StartInfo.Arguments
 								= "checkout --ours " + ProblemFileName;
 							Process.WaitForExit ();
-							Process.Start();
+							Process.Start ();
 							
 							DateTime DateTime = new DateTime ();
 							string TimeStamp =
-								String.Format("{0:H:mm, d MMM yyyy}", DateTime);
+								String.Format ("{0:H:mm, d MMM yyyy}", DateTime);
 							
 							File.Move (ProblemFileName,
 							           ProblemFileName + " (" + UserName  + " - " +
@@ -270,7 +270,7 @@ namespace SparkleShare {
 							Process.StartInfo.Arguments
 								= "checkout --theirs " + ProblemFileName;
 							Process.WaitForExit ();
-							Process.Start();
+							Process.Start ();
 
 							ShowEventBubble ("A mid-air collision happened!\n" +
 							                 "SparkleShare made a copy of your file.",
@@ -285,7 +285,7 @@ namespace SparkleShare {
 					
 					Process.StartInfo.Arguments = "rebase --continue";
 					Process.WaitForExit ();
-					Process.Start();
+					Process.Start ();
 					Console.WriteLine ("[Git][" + Name + "] Conflict resolved.");
 
 					Push ();
@@ -295,19 +295,19 @@ namespace SparkleShare {
 
 				// Get the last committer e-mail
 				Process.StartInfo.Arguments = "log --format=\"%ae\" -1";
-				Process.Start();
+				Process.Start ();
 				string LastCommitEmail =
 					Process.StandardOutput.ReadToEnd ().Trim ();
 
 				// Get the last commit message
 				Process.StartInfo.Arguments = "log --format=\"%s\" -1";
-				Process.Start();
+				Process.Start ();
 				string LastCommitMessage =
 					Process.StandardOutput.ReadToEnd ().Trim ();
 
 				// Get the last commiter
 				Process.StartInfo.Arguments = "log --format=\"%an\" -1";
-				Process.Start();
+				Process.Start ();
 				string LastCommitUserName =
 					Process.StandardOutput.ReadToEnd ().Trim ();
 
@@ -333,7 +333,7 @@ namespace SparkleShare {
 		public void Push () {
 			Console.WriteLine ("[Git][" + Name + "] Pushing changes...");
 			Process.StartInfo.Arguments = "push";
-			Process.Start();
+			Process.Start ();
 			Process.WaitForExit ();
 			Console.WriteLine ("[Git][" + Name + "] Changes pushed.");
 //			SparkleUI.NotificationIcon.SetIdleState ();
@@ -366,7 +366,7 @@ namespace SparkleShare {
 			int FilesDeleted = 0;
 
 			Process.StartInfo.Arguments = "status";
-			Process.Start();
+			Process.Start ();
 			string Output = Process.StandardOutput.ReadToEnd ();
 
 			foreach (string Line in Regex.Split (Output, "\n")) {
@@ -465,7 +465,7 @@ namespace SparkleShare {
 									break;
 							}
 				     	   Process.StartInfo.Arguments = LocalPath;
-		            	Process.Start();
+		            	Process.Start ();
       		      	Process.StartInfo.FileName = "git";
 			         } );
 

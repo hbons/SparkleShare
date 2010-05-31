@@ -24,7 +24,7 @@ namespace SparkleShare {
 		public static string SparkleTmpPath = "/tmp/sparkleshare";
 
 		public static string HomePath =
-			Environment.GetEnvironmentVariable("HOME");
+			Environment.GetEnvironmentVariable ("HOME");
 			
 		public static string SparklePath = Path.Combine (HomePath ,"SparkleShare");
 

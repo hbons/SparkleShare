@@ -100,7 +100,7 @@ namespace SparkleShare {
 				                                 typeof (string),
 				                                 typeof (string));
 
-			Process Process = new Process();
+			Process Process = new Process ();
 			Process.EnableRaisingEvents = false; 
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
@@ -112,9 +112,9 @@ namespace SparkleShare {
 			// We're using the snowman here to separate messages :)
 			Process.StartInfo.Arguments =
 				"log --format=\"%at☃%s☃%an☃%cr☃%ae\" -25";
-			Process.Start();
+			Process.Start ();
 
-			Output += "\n" + Process.StandardOutput.ReadToEnd().Trim ();
+			Output += "\n" + Process.StandardOutput.ReadToEnd ().Trim ();
 
 			Output = Output.TrimStart ("\n".ToCharArray ());
 			string [] Lines = Regex.Split (Output, "\n");
@@ -189,7 +189,7 @@ namespace SparkleShare {
 			Columns [2].Expand = true;
 			Columns [1].MinWidth = 350;
 
-			LogView.CursorChanged += delegate(object o, EventArgs args) {
+			LogView.CursorChanged += delegate (object o, EventArgs args) {
 			TreeModel Model;
 				if (LogView.Selection.GetSelected (out Model, out Iter)) {
 					SelectedEmail = (string) Model.GetValue (Iter, 4);
@@ -216,9 +216,9 @@ namespace SparkleShare {
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.Arguments = "log --format=\"%an☃%ae\" -50";
 			Process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
-			Process.Start();
+			Process.Start ();
 
-			string Output = Process.StandardOutput.ReadToEnd().Trim ();
+			string Output = Process.StandardOutput.ReadToEnd ().Trim ();
 			string [] People = new string [50];
 			string [] Lines = Regex.Split (Output, "\n");
 

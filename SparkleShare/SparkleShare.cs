@@ -38,13 +38,13 @@ namespace SparkleShare {
 			Catalog.Init ("i18n", "locale");
 
 			// Check if git is installed
-			Process Process = new Process();
+			Process Process = new Process ();
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
-			Process.Start();
+			Process.Start ();
 
-			if (Process.StandardOutput.ReadToEnd().IndexOf ("version") == -1) {
+			if (Process.StandardOutput.ReadToEnd ().IndexOf ("version") == -1) {
 				Console.WriteLine (_("Git wasn't found."));
 				Console.WriteLine (_("You can get Git from http://git-scm.com/."));
 				Environment.Exit (0);
@@ -52,8 +52,8 @@ namespace SparkleShare {
 
 			// Don't allow running as root
 			Process.StartInfo.FileName = "whoami";
-			Process.Start();
-			if (Process.StandardOutput.ReadToEnd().Trim ().Equals ("root")) {
+			Process.Start ();
+			if (Process.StandardOutput.ReadToEnd ().Trim ().Equals ("root")) {
 				Console.WriteLine (_("Sorry, you can't run SparkleShare with these permissions."));
 				Console.WriteLine (_("Things will go utterly wrong.")); 
 				Environment.Exit (0);
