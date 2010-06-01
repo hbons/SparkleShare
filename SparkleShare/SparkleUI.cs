@@ -46,14 +46,14 @@ namespace SparkleShare {
 				switch (SparklePlatform.Name) {
 					case "GNOME":
 						Process.StartInfo.FileName = "gvfs-set-attribute";
-						Process.StartInfo.Arguments = SparklePath +
-									                     " metadata::custom-icon " +
-										                  "file:///usr/share/icons/hicolor/" +
-										                  "48x48/places/" +
-										                  "folder-sparkleshare.png";
+						Process.StartInfo.Arguments =
+							SparklePath + " metadata::custom-icon " +
+	                  "file:///usr/share/icons/hicolor/48x48/places/" +
+	                  "folder-sparkleshare.png";
+						Process.Start ();
 						break;
 				}
-				Process.Start ();
+
 
 				// Add the SparkleShare folder to the bookmarks
 				switch (SparklePlatform.Name) {
@@ -95,12 +95,12 @@ namespace SparkleShare {
 					switch (SparklePlatform.Name) {
 						case "GNOME":
 							Process.StartInfo.FileName = "gvfs-set-attribute";
-							Process.StartInfo.Arguments = " file://" + Folder + 
-											                  " metadata::emblems " +
-																	"[synced]";
+							Process.StartInfo.Arguments =
+								Folder + " metadata::emblems [synced]";
+							Console.WriteLine (Process.StartInfo.FileName + " " + Process.StartInfo.Arguments);
+							Process.Start ();
 						break;
 					}
-					Process.Start ();				
 
 				}
 
