@@ -119,9 +119,18 @@ namespace SparkleShare {
 			else
 				RepoName = RepoRemoteUrl.Substring (ColumnPos + 1);
 
-			SparkleBubble SparkleBubble =
+			SparkleBubble SyncingBubble =
 				new SparkleBubble (_("Syncing folder ‘") + RepoName + "’",
-			                     _("SparkleShare will notify you when this is done."));
+			                      _("SparkleShare will notify you ") +
+			                      _("when this is done."));
+
+			SyncingBubble.AddAction ("", _("Dismiss"), 
+			                       delegate {
+			                       	SyncingBubble.Close ();
+			                       }
+			                      );
+
+			SyncingBubble.Show ();
 
 			Process Process = new Process ();
 			Process.EnableRaisingEvents = true; 
@@ -138,62 +147,71 @@ namespace SparkleShare {
 			Process.Start ();
 			string Output = Process.StandardOutput.ReadToEnd ();
 
-			if (Output.Contains ("fatal")) {
-
-				SparkleBubble =
-					new SparkleBubble ("Something went wrong while syncing " +
-					                   " ‘" + RepoName + "’",
-				                      "Please double check the address and\n" +
-				                      "network connection.");
-
-				SparkleBubble.AddAction ("", _("Try Again…"), 
-				                         delegate {
-				                         	Process.StartInfo.FileName = "xdg-open";
-				                         	Process.StartInfo.Arguments =
-				                         	SparkleHelpers.CombineMore
-				                         		(SparklePaths.SparklePath, RepoName);
-				                         	Process.Start ();
-				                         }
-				                        );
-
-				SparkleDialog SparkleDialog = new SparkleDialog (RepoRemoteUrl);
-				SparkleDialog.ShowAll ();
-				
-				Destroy ();
-
-			}
+			Console.WriteLine ("[Git][" + RepoName + "] Cloning repository...");
 
 			// Move the folder to the SparkleShare folder when done cloning
 			Process.Exited += delegate {
 
-				Directory.Move (
-					SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
-					                            RepoName),
-					SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-					                            RepoName)
-				);
+				if (Output.Contains ("fatal:")) {
 
-				// Show a confirmation notification
-				SparkleBubble =
-					new SparkleBubble (_("Successfully synced the folder ") +
-					                   "‘" + RepoName + "’",
-				                      _("Now make great stuff happen!"));
+					SparkleBubble ErrorBubble =
+						new SparkleBubble ("Something went wrong while syncing " +
+							                " ‘" + RepoName + "’",
+						                   "Please double check the address and\n" +
+						                   "network connection.");
 
-				SparkleBubble.AddAction ("", _("Open Folder"), 
-				                         delegate {
-				                         	Process.StartInfo.FileName = "xdg-open";
-				  	                     	Process.StartInfo.Arguments =
-				  	                     		SparkleHelpers.CombineMore (
-				  	                     	SparklePaths.SparklePath, RepoName);
-					 	                     	Process.Start ();
-									               }
-									              );								          
+					ErrorBubble.AddAction ("", _("Try Again…"), 
+						                      delegate {
+						                      	Process.StartInfo.FileName = "xdg-open";
+						                      	Process.StartInfo.Arguments =
+						                      	SparkleHelpers.CombineMore
+						                      		(SparklePaths.SparklePath, RepoName);
+						                      	Process.Start ();
+						                      }
+						                     );
 
-				// Destroy the Add dialog
-				Destroy ();
+					ErrorBubble.Show ();
 
-				// Refresh the UI
-				SparkleShare.SparkleUI = new SparkleUI (true);
+					SparkleDialog SparkleDialog = new SparkleDialog (RepoRemoteUrl);
+					SparkleDialog.ShowAll ();
+				
+					Destroy ();
+
+				} else {
+
+					Directory.Move (
+						SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
+							                         RepoName),
+						SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+							                         RepoName)
+					);
+
+					Console.WriteLine ("[Git][" + RepoName + "] Repository cloned");
+
+					// Show a confirmation notification
+					SparkleBubble FinishedBubble =
+						new SparkleBubble (_("Successfully synced folder ") +
+							                "‘" + RepoName + "’",
+						                   _("Now make great stuff happen!"));
+
+					FinishedBubble.AddAction ("", _("Open Folder"), 
+						                      delegate {
+						                      	Process.StartInfo.FileName = "xdg-open";
+					  	                     	Process.StartInfo.Arguments =
+					  	                     		SparkleHelpers.CombineMore (
+					  	                     		SparklePaths.SparklePath, RepoName);
+						 	                     	Process.Start ();
+											            }
+										           );
+					FinishedBubble.Show ();
+
+					// Destroy the Add dialog
+					Destroy ();
+
+					// Refresh the UI
+					SparkleShare.SparkleUI = new SparkleUI (true);
+
+				}
 
 			};
 		
