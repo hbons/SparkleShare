@@ -60,7 +60,7 @@ namespace SparkleShare {
 				Menu.Add (StatusMenuItem);
 				Menu.Add (new SeparatorMenuItem ());
 
-				Action FolderAction = new Action ("", "SparkleShare Folder");
+				Action FolderAction = new Action ("", "SparkleShare");
 				FolderAction.IconName = "folder-sparkleshare";
 				FolderAction.IsImportant = true;
 				FolderAction.Activated += delegate {
@@ -71,7 +71,7 @@ namespace SparkleShare {
 							break;
 						case "OSX":
 							Process.StartInfo.FileName = "open";
-							break;						
+							break;
 					}
 					Process.StartInfo.Arguments = SparklePaths.SparklePath;
 					Process.Start ();
@@ -119,7 +119,7 @@ namespace SparkleShare {
 					}
 				};
 
-				MenuItem AboutItem = new MenuItem (_("About SparkleShare"));
+				MenuItem AboutItem = new MenuItem (_("Visit Website"));
 				AboutItem.Activated += delegate {
 					Process Process = new Process ();
 					switch (SparklePlatform.Name) {
@@ -141,8 +141,7 @@ namespace SparkleShare {
 				Menu.Add (QuitItem);
 				Menu.ShowAll ();
 				// TODO: Make sure the menu never overlaps the status icon
-				Menu.Popup ();
-
+				Menu.Popup (null, null, SetPosition, 0, 0);
 		}
 
 		public void SetIdleState () {
@@ -198,6 +197,13 @@ namespace SparkleShare {
 		public void SetErrorState () {
 			IconName = "folder-sync-error";
 			StateText = _("Error syncing");
+		}
+
+		// TODO: menu should not dissappear on mouse up
+		public void SetPosition (Menu menu,
+		                         out int x, out int y,
+		                         out bool push_in) {
+			PositionMenu (menu, out x, out y, out push_in, Handle);
 		}
 
 		// Quits the program
