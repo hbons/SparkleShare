@@ -1,7 +1,10 @@
-SparkleShare Version 0.0.14
-===========================
+SparkleShare Version 0.2 Beta 1
+===============================
 
 SparkleShare is a file sharing and collaboration tool inspired by Dropbox. 
+
+SparkleShare currently only works on Linux/GNOME.
+Windows and OSX ports are planned for the future.
 
 SparkleShare isn't just a piece of software, it's part of your workflow. It's 
 designed to make sharing documents and collaboration easier, and to make peers 
@@ -11,10 +14,7 @@ support this goal. Though SparkleShare is not made to be a graphical frontend
 for git or a backup tool, it may be useful for other kinds of purposes as well, 
 like backing up small files or monitoring your favourite project. In contrast 
 to the projects name, we will very likely refuse to implement your personal 
-ponies. :)
-
-SparkleShare currently only works on Linux/GNOME.
-Windows and OSX ports are planned for the future.
+ponies.
 
 
 License
@@ -35,6 +35,7 @@ SparkleShare currently requires:
    - mono-core >= 2.2
    - ndesk-dbus >= 0.6
    - notify-sharp >= 0.4.0
+   - openssh
 
 Run the service:
 
@@ -70,7 +71,7 @@ Frequently Asked Question
 =========================
 
 Q: Why is it written in Mono/C#?
-A: Because. And I hate freedom too.
+A: Because I hate freedom.
 
 
 Info
