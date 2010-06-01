@@ -140,7 +140,6 @@ namespace SparkleShare {
 				QuitItem.Activated += delegate { Environment.Exit (0); };
 				Menu.Add (QuitItem);
 				Menu.ShowAll ();
-				// TODO: Make sure the menu never overlaps the status icon
 				Menu.Popup (null, null, SetPosition, 0, 0);
 		}
 
@@ -200,10 +199,11 @@ namespace SparkleShare {
 		}
 
 		// TODO: menu should not dissappear on mouse up
-		public void SetPosition (Menu menu,
-		                         out int x, out int y,
-		                         out bool push_in) {
+		public void SetPosition
+			(Menu menu, out int x, out int y, out bool push_in) {
+
 			PositionMenu (menu, out x, out y, out push_in, Handle);
+
 		}
 
 		// Quits the program
