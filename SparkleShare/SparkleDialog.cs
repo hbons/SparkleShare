@@ -104,6 +104,8 @@ namespace SparkleShare {
 		// Clones a remote repo
 		public void CloneRepo (object o, EventArgs args) {
 
+//			SparkleUI.NotificationIcon.SetSyncingState ();
+
 			HideAll ();
 
 			string RepoRemoteUrl = RemoteUrlCombo.Entry.Text;
@@ -221,6 +223,9 @@ namespace SparkleShare {
 					SparkleShare.SparkleUI = new SparkleUI (true);
 
 				}
+
+//			SparkleUI.NotificationIcon.SetIdleState ();
+
 
 			};
 		
