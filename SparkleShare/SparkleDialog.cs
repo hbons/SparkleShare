@@ -226,7 +226,6 @@ namespace SparkleShare {
 
 //			SparkleUI.NotificationIcon.SetIdleState ();
 
-
 			};
 		
 		}
