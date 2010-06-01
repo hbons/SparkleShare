@@ -131,6 +131,8 @@ namespace SparkleShare {
 						Process.Start ();
 */
 					} );
+					
+					NoFoldersBubble.Show ();
 
 				}
 
