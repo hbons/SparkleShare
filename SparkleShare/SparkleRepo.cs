@@ -469,6 +469,8 @@ namespace SparkleShare {
       		      	Process.StartInfo.FileName = "git";
 			         } );
 
+			StuffChangedBubble.Show ();
+
 		}
 
 	}
