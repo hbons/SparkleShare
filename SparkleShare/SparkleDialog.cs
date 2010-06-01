@@ -119,6 +119,7 @@ namespace SparkleShare {
 			else
 				RepoName = RepoRemoteUrl.Substring (ColumnPos + 1);
 
+
 			SparkleBubble SyncingBubble =
 				new SparkleBubble (_("Syncing folder ‘") + RepoName + "’",
 			                      _("SparkleShare will notify you ") +
@@ -179,12 +180,20 @@ namespace SparkleShare {
 
 				} else {
 
-					Directory.Move (
+					string OldPath =
 						SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
-							                         RepoName),
+						                            RepoName);
+
+					string NewPath =
 						SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-							                         RepoName)
-					);
+							                         RepoName);
+
+					if (Directory.Exists (NewPath))
+						NewPath += " (2)";
+				
+					// Move the cloned repository from the temporary
+					// folder to the SparkleShare folder
+					Directory.Move (OldPath, NewPath);
 
 					Console.WriteLine ("[Git][" + RepoName + "] Repository cloned");
 
@@ -201,8 +210,8 @@ namespace SparkleShare {
 					  	                     		SparkleHelpers.CombineMore (
 					  	                     		SparklePaths.SparklePath, RepoName);
 						 	                     	Process.Start ();
-											            }
-										           );
+											        } );
+
 					FinishedBubble.Show ();
 
 					// Destroy the Add dialog
