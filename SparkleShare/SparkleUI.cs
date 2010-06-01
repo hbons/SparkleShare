@@ -54,13 +54,13 @@ namespace SparkleShare {
 						break;
 				}
 
-
 				// Add the SparkleShare folder to the bookmarks
 				switch (SparklePlatform.Name) {
 					case "GNOME":
 
 						string BookmarksFileName =
 							Path.Combine (SparklePaths.HomePath, ".gtk-bookmarks");
+
 						if (File.Exists (BookmarksFileName)) {
 							TextWriter TextWriter = File.AppendText (BookmarksFileName);
 							TextWriter.WriteLine ("file://" + SparklePath + " SparkleShare");
@@ -68,6 +68,7 @@ namespace SparkleShare {
 						}
 
 						break;
+
 				}
 
 			}
