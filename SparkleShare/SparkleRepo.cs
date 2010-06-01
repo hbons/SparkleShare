@@ -15,6 +15,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
+using Mono.Unix;
 using SparkleShare;
 using System;
 using System.Diagnostics;
@@ -54,10 +55,12 @@ namespace SparkleShare {
 
 			// Get user.name, example: "User Name"
 			UserName = "Anonymous";
+			UnixUserInfo UnixUserInfo =
+				new UnixUserInfo (UnixEnvironment.UserName);
+			UserName = UnixUserInfo.RealName;
 			Process.StartInfo.FileName = "git";
-			Process.StartInfo.Arguments = "config --get user.name";
+			Process.StartInfo.Arguments = "config user.name " + UserName;
 			Process.Start ();
-			UserName = Process.StandardOutput.ReadToEnd ().Trim ();
 
 			// Get user.email, example: "user@github.com"
 			UserEmail = "not.set@git-scm.com";
