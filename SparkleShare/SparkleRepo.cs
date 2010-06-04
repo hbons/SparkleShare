@@ -45,7 +45,7 @@ namespace SparkleShare {
 		public SparkleRepo (string RepoPath) {
 
 			Process = new Process ();
-			Process.EnableRaisingEvents = false; 
+			Process.EnableRaisingEvents = true;
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
 

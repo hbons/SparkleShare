@@ -29,7 +29,7 @@ namespace SparkleShare {
 		public SparkleUI (bool HideUI) {
 
 			Process Process = new Process ();
-			Process.EnableRaisingEvents = false;
+			Process.EnableRaisingEvents = true;
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
 
