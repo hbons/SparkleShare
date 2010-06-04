@@ -98,7 +98,7 @@ namespace SparkleShare {
 						case "GNOME":
 							Process.StartInfo.FileName = "gvfs-set-attribute";
 							Process.StartInfo.Arguments =
-								Folder + " metadata::emblems [synced]";
+								"-t string " + Folder + " metadata::emblems [synced]";
 							Process.Start ();
 						break;
 					}

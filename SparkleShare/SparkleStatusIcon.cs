@@ -100,7 +100,7 @@ namespace SparkleShare {
 				Menu.Add (new SeparatorMenuItem ());
 
 				CheckMenuItem NotifyCheckMenuItem =
-					new CheckMenuItem (_("Show notifications"));
+					new CheckMenuItem (_("Show Notifications"));
 				Menu.Add (NotifyCheckMenuItem);
 				Menu.Add (new SeparatorMenuItem ());
 

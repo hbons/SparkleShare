@@ -49,7 +49,7 @@ namespace SparkleShare {
 				WebClient WebClient = new WebClient ();
 				Uri GravatarUri = new Uri ("http://www.gravatar.com/avatar/" + 
 				                   GetMD5 (Email) + ".jpg?s=" + Size + "&d=404");
-
+				// TODO: Clean paths
 				string TmpFile = SparklePaths.SparkleTmpPath + Email + Size;
 
 				if (!File.Exists (TmpFile)) {
