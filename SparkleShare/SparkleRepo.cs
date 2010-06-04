@@ -112,7 +112,7 @@ namespace SparkleShare {
 			BufferTimer = new Timer ();
 
 			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
-				Console.WriteLine ("[Buffer][" + Name + "] Done waiting.");
+				SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Done waiting.");
 				Add ();
 				string Message = FormatCommitMessage ();
 				if (!Message.Equals ("")) {
@@ -127,16 +127,17 @@ namespace SparkleShare {
 			// since SparkleShare was stopped
 			Add ();
 
-			Console.WriteLine ("[Git][" + Name + "] Nothing going on...");
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Nothing going on...");
 
 		}
 
 		// Starts a time buffer when something changes
 		public void OnFileActivity (object o, FileSystemEventArgs args) {
 		   WatcherChangeTypes wct = args.ChangeType;
-			 if (!ShouldIgnore (args.Name)) {
-			  Console.WriteLine ("[Event][" + Name + "] " + wct.ToString () + 
-					              " '" + args.Name + "'");
+			if (!ShouldIgnore (args.Name)) {
+				SparkleHelpers.DebugInfo ("Event", "[" + Name + "] "
+				                          + wct.ToString () +
+			                             " '" + args.Name + "'");
 				StartBufferTimer ();
 			}
 		}
@@ -152,11 +153,14 @@ namespace SparkleShare {
 				// Delay for a few seconds to see if more files change
 				BufferTimer.Interval = Interval; 
 				BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
-					Console.WriteLine ("[Buffer][" + Name + "] Done waiting.");
+					SparkleHelpers.DebugInfo ("Buffer",
+					                          "[" + Name + "] Done waiting.");
 					Add ();
 				};
-				Console.WriteLine ("[Buffer][" + Name + "] " + 
-					               "Waiting for more changes...");
+
+				SparkleHelpers.DebugInfo ("Buffer",
+				                          "[" + Name + "] " +
+				                          "Waiting for more changes...");
 
 				BufferTimer.Start ();
 
@@ -170,8 +174,9 @@ namespace SparkleShare {
 				FetchTimer.Start ();
 
 				BufferTimer.Start ();
-				Console.WriteLine ("[Buffer][" + Name + "] " + 
-					               "Waiting for more changes...");
+				SparkleHelpers.DebugInfo ("Buffer",
+				                          "[" + Name + "] " +
+				                          "Waiting for more changes...");
 			}
 
 		}
@@ -192,11 +197,11 @@ namespace SparkleShare {
 		public void Add () {
 			BufferTimer.Stop ();
 			FetchTimer.Stop ();
-			Console.WriteLine ("[Git][" + Name + "] Staging changes...");
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Staging changes...");
 			Process.StartInfo.Arguments = "add --all";
 			Process.Start ();
 			Process.WaitForExit ();
-			Console.WriteLine ("[Git][" + Name + "] Changes staged.");
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes staged.");
 //			SparkleUI.NotificationIcon.SetSyncingState ();
 //			SparkleUI.NotificationIcon.SetIdleState ();
 			FetchTimer.Start ();
@@ -204,24 +209,23 @@ namespace SparkleShare {
 
 		// Commits the made changes
 		public void Commit (string Message) {
-			Console.WriteLine ("[Commit][" + Name + "] " + Message);
-			Console.WriteLine ("[Git][" + Name + "] Commiting changes...");
+			SparkleHelpers.DebugInfo ("Commit",
+			                          "[" + Name + "] " + Message);
 			Process.StartInfo.Arguments = "commit -m \"" + Message + "\"";
 			Process.Start ();
 			Process.WaitForExit ();
-			Console.WriteLine ("[Git][" + Name + "] Changes commited.");
 		}
 
 		// Fetches changes from the remote repo	
 		public void Fetch () {
 			FetchTimer.Stop ();
 //			SparkleUI.NotificationIcon.SetSyncingState ();
-			Console.WriteLine ("[Git][" + Name + "] Fetching changes... ");
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
 			Process.StartInfo.Arguments = "fetch -v";
 			Process.Start ();
 			string Output = Process.StandardOutput.ReadToEnd ().Trim (); // TODO: This doesn't work :(
 			Process.WaitForExit ();
-			Console.WriteLine ("[Git][" + Name + "] Changes fetched.");
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
 			if (!Output.Contains ("up to date"))
 				Rebase ();
 //			SparkleUI.NotificationIcon.SetIdleState ();
@@ -233,11 +237,11 @@ namespace SparkleShare {
 
 			Watcher.EnableRaisingEvents = false;
 
-			Console.WriteLine ("[Git][" + Name + "] Rebasing fetched changes... ");
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Rebasing changes...");
 			Process.StartInfo.Arguments = "rebase origin";
 			Process.WaitForExit ();
 			Process.Start ();
-			Console.WriteLine ("[Git][" + Name + "] Changes rebased.");
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes rebased.");
 			string Output = Process.StandardOutput.ReadToEnd ().Trim ();
 
 			// Show notification if there are updates
@@ -245,7 +249,8 @@ namespace SparkleShare {
 
 				if (Output.Contains ("Failed to merge")) {
 
-					Console.WriteLine ("[Git][" + Name + "] Resolving conflict... ");
+					SparkleHelpers.DebugInfo ("Git",
+					                          "[" + Name + "] Resolving conflict...");
 
 					Process.StartInfo.Arguments = "status";
 					Process.WaitForExit ();
@@ -266,8 +271,8 @@ namespace SparkleShare {
 							
 							DateTime DateTime = new DateTime ();
 							string TimeStamp =
-								String.Format ("{0:H:mm, d MMM yyyy}", DateTime);
-							
+								DateTime.Now.ToString ("H:mm, d MMM yyyy");
+
 							File.Move (ProblemFileName,
 							           ProblemFileName + " (" + UserName  + " - " +
 							           TimeStamp + ")");
@@ -291,8 +296,8 @@ namespace SparkleShare {
 					Process.StartInfo.Arguments = "rebase --continue";
 					Process.WaitForExit ();
 					Process.Start ();
-					Console.WriteLine ("[Git][" + Name + "] Conflict resolved.");
-
+					SparkleHelpers.DebugInfo ("Git",
+					                          "[" + Name + "] Conflict resolved.");
 					Push ();
 					Fetch ();
 			
@@ -320,27 +325,28 @@ namespace SparkleShare {
 					SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
 					                            "sparkleshare.notify");
 
-				Console.WriteLine ("[Git][" + Name + "] Showing notification.");
-
-				if (File.Exists (NotifySettingFile))
+				if (File.Exists (NotifySettingFile)) {
+					SparkleHelpers.DebugInfo ("Notification",
+					                          "[" + Name + "] Showing message...");
 					ShowEventBubble (LastCommitUserName + " " + LastCommitMessage, 
 						              SparkleHelpers.GetAvatar (LastCommitEmail, 48),
 						              true);
+				}
 						              
 			}
 
 			Watcher.EnableRaisingEvents = true;
-			Console.WriteLine ("[Git][" + Name + "] Nothing going on... ");
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Nothing going on...");
 
 		}
 
 		// Pushes the changes to the remote repo
 		public void Push () {
-			Console.WriteLine ("[Git][" + Name + "] Pushing changes...");
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing changes...");
 			Process.StartInfo.Arguments = "push";
 			Process.Start ();
 			Process.WaitForExit ();
-			Console.WriteLine ("[Git][" + Name + "] Changes pushed.");
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes pushed.");
 //			SparkleUI.NotificationIcon.SetIdleState ();
 		}
 
