@@ -26,6 +26,8 @@ namespace SparkleShare {
 	
 	public static class SparkleHelpers {
 
+		public static bool ShowDebugInfo = true;
+
 		public static Gdk.Pixbuf GetAvatar (string Email, int Size) {
 
 			string AvatarPath = Path.Combine (SparklePaths.SparkleAvatarPath, 
@@ -101,6 +103,15 @@ namespace SparkleShare {
 
 		public static bool IsGitUrl (string Url) {
 			return Regex.Match (Url, @"[a-z]+://(.)+(/|:)(.)+").Success;
+		}
+
+		public static void DebugInfo (string Type, string Message) {
+			if (ShowDebugInfo) {
+				DateTime DateTime = new DateTime ();					
+					string TimeStamp = DateTime.Now.ToString ("HH:mm:ss");
+				Console.WriteLine ("[" + TimeStamp + "]" + 
+				                   "[" + Type + "]" + Message);
+			}
 		}
 
 	}
