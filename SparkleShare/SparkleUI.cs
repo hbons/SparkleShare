@@ -40,7 +40,8 @@ namespace SparkleShare {
 			if (!Directory.Exists (SparklePath)) {
 
 				Directory.CreateDirectory (SparklePath);
-				Console.WriteLine ("[Config] Created '" + SparklePath + "'");
+				SparkleHelpers.DebugInfo ("Config",
+				                          "Created '" + SparklePath + "'");
 					
 				// Add a special icon to the SparkleShare folder
 				switch (SparklePlatform.Name) {
@@ -98,7 +99,6 @@ namespace SparkleShare {
 							Process.StartInfo.FileName = "gvfs-set-attribute";
 							Process.StartInfo.Arguments =
 								Folder + " metadata::emblems [synced]";
-//							Console.WriteLine (Process.StartInfo.FileName + " " + Process.StartInfo.Arguments);
 							Process.Start ();
 						break;
 					}
@@ -148,8 +148,9 @@ namespace SparkleShare {
 			Watcher.EnableRaisingEvents = true;
 			Watcher.Created += delegate (object o, FileSystemEventArgs args) {
 			   WatcherChangeTypes wct = args.ChangeType;
-				Console.WriteLine ("[Event][SparkleShare] " + wct.ToString () + 
-				                   " '" + args.Name + "'");
+				SparkleHelpers.DebugInfo ("Event",
+				                          wct.ToString () + 
+				                          " '" + args.Name + "'");
 				SparkleDialog SparkleDialog = new SparkleDialog ();
 				SparkleDialog.ShowAll ();
 			};
@@ -162,11 +163,13 @@ namespace SparkleShare {
 			if (!Directory.Exists (ConfigPath)) {
 
 				Directory.CreateDirectory (ConfigPath);
-				Console.WriteLine ("[Config] Created '" + ConfigPath + "'");
+				SparkleHelpers.DebugInfo ("Config",
+				                          "Created '" + ConfigPath + "'");
 
 				// Create a place to store the avatars
 				Directory.CreateDirectory (AvatarPath);
-				Console.WriteLine ("[Config] Created '" + AvatarPath + "avatars'");
+				SparkleHelpers.DebugInfo ("Config",
+				                          "Created '" + AvatarPath + "'");
 
 			}
 			
