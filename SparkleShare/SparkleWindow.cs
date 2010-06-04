@@ -101,7 +101,7 @@ namespace SparkleShare {
 				                                 typeof (string));
 
 			Process Process = new Process ();
-			Process.EnableRaisingEvents = false; 
+			Process.EnableRaisingEvents = true; 
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
 			Process.StartInfo.FileName = "git";
@@ -208,7 +208,7 @@ namespace SparkleShare {
 		public ScrolledWindow CreatePeopleList () {
 
 			Process Process = new Process ();
-			Process.EnableRaisingEvents = false; 
+			Process.EnableRaisingEvents = true; 
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
 
