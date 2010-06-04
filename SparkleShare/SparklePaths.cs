@@ -41,7 +41,8 @@ namespace SparkleShare {
 		public static string SparkleAvatarPath =
 			Path.Combine (SparkleConfigPath, "avatars");
 			                                   
-		public static string SparkleIconPath = "/usr/share/icons/hicolor";
+		public static string SparkleIconPath =
+			SparkleHelpers.CombineMore ("usr", "share", "icons", "hicolor");
 
 	}
 
