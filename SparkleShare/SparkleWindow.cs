@@ -226,7 +226,6 @@ namespace SparkleShare {
 				                                    typeof (string),
 				                                    typeof (string));
 
-
 			int i = 0;
 			TreeIter Iter;
 			TreePath TreePath;
@@ -241,14 +240,15 @@ namespace SparkleShare {
 					string UserName  = Parts [0];
 					string UserEmail = Parts [1];
 
-					// Do something special if the person is you
-					if (UserEmail.Equals (SparkleRepo.UserEmail))
-						UserEmail = _("That’s you!");
-
 					// Actually add to the list
 					Iter = PeopleStore.Prepend ();
 					PeopleStore.SetValue (Iter, 0,
 					                      SparkleHelpers.GetAvatar (UserEmail , 32));
+
+					// Do something special if the person is you
+					if (UserEmail.Equals (SparkleRepo.UserEmail))
+						UserEmail = _("That’s you!");
+
 					PeopleStore.SetValue (Iter, 1,
 					                      "<b>" + UserName + "</b>\n" +
 					                      "<span font_size=\"smaller\">" +

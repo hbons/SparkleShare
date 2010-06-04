@@ -23,7 +23,8 @@ namespace SparkleShare {
 	public static class SparklePaths {
 
 		public static string SparkleTmpPath =
-			Path.Combine ("tmp", "sparkleshare");
+			SparkleHelpers.CombineMore (Path.VolumeSeparatorChar.ToString (),
+			                            "tmp", "sparkleshare");
 
 		private static UnixUserInfo UnixUserInfo =
 			new UnixUserInfo (UnixEnvironment.UserName);
