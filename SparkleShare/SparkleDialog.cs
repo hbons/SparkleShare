@@ -140,7 +140,8 @@ namespace SparkleShare {
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
 
-			Console.WriteLine ("[Git][" + RepoName + "] Cloning repository...");
+			SparkleHelpers.DebugInfo ("Config",
+			                          "[" + RepoName + "] Cloning repository...");
 
 			// Clone into the system's temporary folder
 			Process.StartInfo.FileName = "git";
@@ -198,7 +199,8 @@ namespace SparkleShare {
 					// folder to the SparkleShare folder
 					Directory.Move (OldPath, NewPath);
 
-					Console.WriteLine ("[Git][" + RepoName + "] Repository cloned");
+					SparkleHelpers.DebugInfo ("Git",
+						                       "[" + RepoName + "] Repository cloned");
 
 					// Show a confirmation notification
 					SparkleBubble FinishedBubble =
