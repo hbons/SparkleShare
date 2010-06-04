@@ -191,6 +191,7 @@ namespace SparkleShare {
 		// Stages the made changes
 		public void Add () {
 			BufferTimer.Stop ();
+			FetchTimer.Stop ();
 			Console.WriteLine ("[Git][" + Name + "] Staging changes...");
 			Process.StartInfo.Arguments = "add --all";
 			Process.Start ();
@@ -198,6 +199,7 @@ namespace SparkleShare {
 			Console.WriteLine ("[Git][" + Name + "] Changes staged.");
 //			SparkleUI.NotificationIcon.SetSyncingState ();
 //			SparkleUI.NotificationIcon.SetIdleState ();
+			FetchTimer.Start ();
 		}
 
 		// Commits the made changes

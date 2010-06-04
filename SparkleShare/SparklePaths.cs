@@ -14,6 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using Mono.Unix;
 using System;
 using System.IO;
 
@@ -23,8 +24,9 @@ namespace SparkleShare {
 
 		public static string SparkleTmpPath = "/tmp/sparkleshare";
 
-		public static string HomePath =
-			Environment.GetEnvironmentVariable ("HOME");
+		private static UnixUserInfo UnixUserInfo =
+			new UnixUserInfo (UnixEnvironment.UserName);
+		public static string HomePath = UnixUserInfo.HomeDirectory;
 			
 		public static string SparklePath = Path.Combine (HomePath ,"SparkleShare");
 
