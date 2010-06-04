@@ -22,7 +22,8 @@ namespace SparkleShare {
 	
 	public static class SparklePaths {
 
-		public static string SparkleTmpPath = "/tmp/sparkleshare";
+		public static string SparkleTmpPath =
+			Path.Combine ("tmp", "sparkleshare");
 
 		private static UnixUserInfo UnixUserInfo =
 			new UnixUserInfo (UnixEnvironment.UserName);
