@@ -28,6 +28,10 @@ namespace SparkleShare {
 	// SparkleRepo class holds repository information and timers
 	public class SparkleRepo {
 
+		public static string _ (string s) {
+			return Catalog.GetString (s);
+		}
+
 		private Process Process;
 		private Timer FetchTimer;
 		private Timer BufferTimer;
@@ -465,7 +469,7 @@ namespace SparkleShare {
 				// Add a button to open the folder where the changed file is
 				if (ShowButtons)
 					StuffChangedBubble.AddAction
-						("", "Open Folder", 
+						("", _("Open Folder"), 
   						 delegate {
 						 	switch (SparklePlatform.Name) {
 								case "GNOME":

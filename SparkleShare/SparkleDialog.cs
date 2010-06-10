@@ -123,7 +123,7 @@ namespace SparkleShare {
 
 
 			SparkleBubble SyncingBubble =
-				new SparkleBubble (_("Syncing folder ‘") + RepoName + "’",
+				new SparkleBubble (String.Format(_("Syncing folder ‘{0}’"), RepoName),
 			                      _("SparkleShare will notify you ") +
 			                      _("when this is done."));
 
@@ -160,8 +160,7 @@ namespace SparkleShare {
 				if (Output.Contains ("fatal:")) {
 
 					SparkleBubble ErrorBubble =
-						new SparkleBubble ("Something went wrong while syncing " +
-							                " ‘" + RepoName + "’",
+						new SparkleBubble (String.Format(_("Something went wrong while syncing ‘{0}’"), RepoName),
 						                   "Please double check the address and\n" +
 						                   "network connection.");
 
@@ -204,11 +203,10 @@ namespace SparkleShare {
 
 					// Show a confirmation notification
 					SparkleBubble FinishedBubble =
-						new SparkleBubble (_("Successfully synced folder ") +
-							                "‘" + RepoName + "’",
+						new SparkleBubble (String.Format(_("Successfully synced folder ‘{0}’"), RepoName),
 						                   _("Now make great stuff happen!"));
 
-					FinishedBubble.AddAction ("", _("Open Folder"), 
+					FinishedBubble.AddAction ("", _("Open Folder"),
 						                      delegate {
 						                      	Process.StartInfo.FileName = "xdg-open";
 					  	                     	Process.StartInfo.Arguments =
