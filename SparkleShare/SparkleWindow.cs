@@ -46,8 +46,7 @@ namespace SparkleShare {
 			SetSizeRequest (720, 540);
 	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 6;
-			Title = _("‘" + SparkleRepo.Name + "’ on " + 
-			          SparkleRepo.RemoteOriginUrl
+			Title = String.Format(_("‘{0}’ on {1}"), SparkleRepo.Name, SparkleRepo.RemoteOriginUrl
 			          .TrimEnd (("/" + SparkleRepo.Name + ".git").ToCharArray ()));
 			IconName = "folder";
 

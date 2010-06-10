@@ -15,6 +15,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
+using Mono.Unix;
 using SparkleShare;
 using System;
 using System.Diagnostics;
@@ -23,6 +24,11 @@ using System.IO;
 namespace SparkleShare {
 
 	public class SparkleUI {
+
+		// Short alias for the translations
+		public static string _ (string s) {
+			return Catalog.GetString (s);
+		}
 
 		public static SparkleStatusIcon NotificationIcon;
 
@@ -118,12 +124,11 @@ namespace SparkleShare {
 				if (SparkleShare.Repositories.Length == 0) {
 
 					SparkleBubble NoFoldersBubble;
-					NoFoldersBubble = new SparkleBubble ("Welcome to SparkleShare!",
-					                                     "You don't have any " +
-					                                     "folders set up yet.");
+					NoFoldersBubble = new SparkleBubble (_("Welcome to SparkleShare!"),
+					                                     _("You don't have any folders set up yet."));
 
 					NoFoldersBubble.IconName = "folder-sparkleshare";
-					NoFoldersBubble.AddAction ("", "Add a Folder…", delegate {
+					NoFoldersBubble.AddAction ("", _("Add a Folder…"), delegate {
 						SparkleDialog SparkleDialog = new SparkleDialog ("");
 						SparkleDialog.ShowAll ();
 /*						Process.StartInfo.FileName = "xdg-open";
