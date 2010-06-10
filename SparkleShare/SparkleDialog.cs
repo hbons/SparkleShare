@@ -124,8 +124,7 @@ namespace SparkleShare {
 
 			SparkleBubble SyncingBubble =
 				new SparkleBubble (String.Format(_("Syncing folder ‘{0}’"), RepoName),
-			                      _("SparkleShare will notify you ") +
-			                      _("when this is done."));
+			                      _("SparkleShare will notify you when this is done."));
 
 			SyncingBubble.AddAction ("", _("Dismiss"), 
 			                       delegate {
