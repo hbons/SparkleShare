@@ -1,0 +1,178 @@
+# Polish translation of SparkleShare.
+# Copyright (C) 2010 by SparkleShare developers
+# This file is distributed under the same license as the SparkleShare package.
+# Łukasz Jernaś <deejay1@srem.org>, 2010.
+#
+# Please note that this translation is neither sponsored nor endorsed by Aviary.pl
+# The mailing list is provided for reference and contact only.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-06-11 21:12+0200\n"
+"PO-Revision-Date: 2010-06-11 21:59+0200\n"
+"Last-Translator: Łukasz Jernaś <deejay1@srem.org>\n"
+"Language-Team: Polish <gnomepl@aviary.pl>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Virtaal 0.5.2\n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-Country: Poland\n"
+
+#: SparkleShare/SparkleDialog.cs:50
+msgid "Address of remote SparkleShare folder:"
+msgstr "Adres zdalnego katalogu SparkleShare:"
+
+#: SparkleShare/SparkleDialog.cs:81
+msgid "Add Folder"
+msgstr "Dodaj katalog"
+
+#: SparkleShare/SparkleDialog.cs:126
+#, csharp-format
+msgid "Syncing folder ‘{0}’"
+msgstr "Synchronizowanie katalogu „{0}”"
+
+#: SparkleShare/SparkleDialog.cs:127
+msgid "SparkleShare will notify you when this is done."
+msgstr "Zostanie wyświetlone powiadomienie w momencie zakończenia."
+
+#: SparkleShare/SparkleDialog.cs:129
+msgid "Dismiss"
+msgstr "Porzuć"
+
+#: SparkleShare/SparkleDialog.cs:162
+#, csharp-format
+msgid "Something went wrong while syncing ‘{0}’"
+msgstr "Wystąpił błąd w trakcie synchronizowania „{0}”"
+
+#: SparkleShare/SparkleDialog.cs:166
+msgid "Try Again…"
+msgstr "Spróbuj ponownie…"
+
+#: SparkleShare/SparkleDialog.cs:205
+#, csharp-format
+msgid "Successfully synced folder ‘{0}’"
+msgstr "Poprawnie zsynchronizowano katalog „{0}”"
+
+#: SparkleShare/SparkleDialog.cs:206
+msgid "Now make great stuff happen!"
+msgstr "Teraz możesz zacząć czynić wielkie rzeczy!"
+
+#: SparkleShare/SparkleDialog.cs:208 SparkleShare/SparkleRepo.cs:472
+msgid "Open Folder"
+msgstr "Otwórz katalog"
+
+#: SparkleShare/SparkleShare.cs:48
+msgid "Git wasn't found."
+msgstr "Nie znaleziono programu Git."
+
+#: SparkleShare/SparkleShare.cs:49
+msgid "You can get Git from http://git-scm.com/."
+msgstr "Można go pobrać ze strony http://git-scm.com/."
+
+#: SparkleShare/SparkleShare.cs:57
+msgid "Sorry, you can't run SparkleShare with these permissions."
+msgstr ""
+"Przepraszamy, nie można uruchomić programu SparkleShare z bieżącymi "
+"uprawnieniami."
+
+#: SparkleShare/SparkleShare.cs:58
+msgid "Things will go utterly wrong."
+msgstr "Może to spowodować nieprzewidziane skutki."
+
+#: SparkleShare/SparkleShare.cs:85
+msgid "SparkleShare Copyright (C) 2010 Hylke Bons"
+msgstr "SparkleShare Copyright (C) 2010 Hylke Bons"
+
+#: SparkleShare/SparkleShare.cs:87
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr "Niniejszy program dostarczany jest BEZ JAKIEJKOLWIEK GWARANCJI."
+
+#: SparkleShare/SparkleShare.cs:88
+msgid "This is free software, and you are welcome to redistribute it "
+msgstr ""
+"Niniejszy program jest wolnym oprogramowanie, można go rozprowadzać dalej "
+"pod pewnymi warunkami."
+
+#: SparkleShare/SparkleShare.cs:89
+msgid "under certain conditions. Please read the GNU GPLv3 for details."
+msgstr ""
+"Aby uzyskać więcej informacji, proszę zapoznać się z tekstem licencji GNU "
+"GPLv3."
+
+#: SparkleShare/SparkleShare.cs:91
+msgid "SparkleShare syncs the ~/SparkleShare folder with remote repositories."
+msgstr ""
+"Program SparkleShare synchronizuje zawartość katalogu ~/SparkleShare ze "
+"zdalnymi repozytoriami."
+
+#: SparkleShare/SparkleShare.cs:93
+msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
+msgstr "Użycie: sparkleshare [start|stop|restart] [OPCJA]..."
+
+#: SparkleShare/SparkleShare.cs:94
+msgid "Sync SparkleShare folder with remote repositories."
+msgstr "Synchronizuj zawartość katalogu SparkleShare ze zdalnymi repozytoriami."
+
+#: SparkleShare/SparkleShare.cs:96
+msgid "Arguments:"
+msgstr "Parametry:"
+
+#: SparkleShare/SparkleShare.cs:97
+msgid "\t -d, --disable-gui\tDon't show the notification icon."
+msgstr ""
+"\t -d, --disable-gui\tWyłączenie wyświetlania ikony w obszarze powiadamiania."
+
+#: SparkleShare/SparkleShare.cs:98
+msgid "\t -h, --help\t\tDisplay this help text."
+msgstr "\t -h, --help\t\tWyświetla opcje pomocy."
+
+#: SparkleShare/SparkleStatusIcon.cs:48 SparkleShare/SparkleStatusIcon.cs:149
+msgid "Everything is up to date"
+msgstr "Wszystko jest aktualne"
+
+#: SparkleShare/SparkleStatusIcon.cs:94 SparkleShare/SparkleUI.cs:131
+msgid "Add a Folder…"
+msgstr "Dodaj katalog…"
+
+#: SparkleShare/SparkleStatusIcon.cs:103
+msgid "Show Notifications"
+msgstr "Wyświetlanie powiadomień"
+
+#: SparkleShare/SparkleStatusIcon.cs:122
+msgid "Visit Website"
+msgstr "Odwiedź stronę domową"
+
+#: SparkleShare/SparkleStatusIcon.cs:139
+msgid "Quit"
+msgstr "Zakończ"
+
+#: SparkleShare/SparkleStatusIcon.cs:157
+msgid "Syncing…"
+msgstr "Synchronizowanie…"
+
+#: SparkleShare/SparkleStatusIcon.cs:198
+msgid "Error syncing"
+msgstr "Błąd w trakcie synchronizacji"
+
+#: SparkleShare/SparkleUI.cs:127
+msgid "Welcome to SparkleShare!"
+msgstr "Witamy w programie SparkleShare!"
+
+#: SparkleShare/SparkleUI.cs:128
+msgid "You don't have any folders set up yet."
+msgstr "Nie ustawiono żadnych katalogów."
+
+#: SparkleShare/SparkleWindow.cs:49
+#, csharp-format
+msgid "‘{0}’ on {1}"
+msgstr "„{0}” na {1}"
+
+#: SparkleShare/SparkleWindow.cs:249
+msgid "That’s you!"
+msgstr "To ty!"
