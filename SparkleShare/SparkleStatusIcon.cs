@@ -140,7 +140,7 @@ namespace SparkleShare {
 				QuitItem.Activated += Quit;
 				Menu.Add (QuitItem);
 				Menu.ShowAll ();
-				Menu.Popup (null, null, SetPosition, 0, 0);
+				Menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
 		}
 
 		public void SetIdleState () {
