@@ -21,16 +21,13 @@ using System.IO;
 namespace SparkleShare {
 	
 	public static class SparklePaths {
-
-		public static string SparkleTmpPath =
-			SparkleHelpers.CombineMore (Path.VolumeSeparatorChar.ToString (),
-			                            "tmp", "sparkleshare");
-
 		private static UnixUserInfo UnixUserInfo =
 			new UnixUserInfo (UnixEnvironment.UserName);
 		public static string HomePath = UnixUserInfo.HomeDirectory;
 			
 		public static string SparklePath = Path.Combine (HomePath ,"SparkleShare");
+
+		public static string SparkleTmpPath = Path.Combine (SparklePath, ".tmp");
 
 		public static string SparkleConfigPath =
 			SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
