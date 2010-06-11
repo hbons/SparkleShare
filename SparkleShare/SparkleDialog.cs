@@ -145,8 +145,9 @@ namespace SparkleShare {
 			// Clone into the system's temporary folder
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.WorkingDirectory = SparklePaths.SparkleTmpPath;
-			Process.StartInfo.Arguments =	"clone ";
-			Process.StartInfo.Arguments += RepoRemoteUrl;
+			Process.StartInfo.Arguments = String.Format ("clone {0} {1}",
+			                                             RepoRemoteUrl,
+			                                             RepoName);
 
 			Process.WaitForExit ();
 			Process.Start ();
