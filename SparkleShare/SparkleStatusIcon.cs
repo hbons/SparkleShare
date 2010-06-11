@@ -137,7 +137,7 @@ namespace SparkleShare {
 
 				Menu.Add (new SeparatorMenuItem ());
 				MenuItem QuitItem = new MenuItem (_("Quit"));
-				QuitItem.Activated += delegate { Environment.Exit (0); };
+				QuitItem.Activated += Quit;
 				Menu.Add (QuitItem);
 				Menu.ShowAll ();
 				Menu.Popup (null, null, SetPosition, 0, 0);
