@@ -28,9 +28,10 @@ namespace SparkleShare {
 
 		public static bool ShowDebugInfo = true;
 
+		// Get's the avatar for a specific email address and size
 		public static Gdk.Pixbuf GetAvatar (string Email, int Size) {
 
-			string AvatarPath = Path.Combine (SparklePaths.SparkleAvatarPath, 
+			string AvatarPath = CombineMore (SparklePaths.SparkleAvatarPath, 
 			                    Size + "x" + Size);
 
 			if (!Directory.Exists (AvatarPath)) {
@@ -39,7 +40,7 @@ namespace SparkleShare {
 				                          "Created '" + AvatarPath + "'");
 			}
 			
-			string AvatarFilePath = AvatarPath + Email;
+			string AvatarFilePath = CombineMore (AvatarPath, Email);
 
 			if (File.Exists (AvatarFilePath))
 				return new Gdk.Pixbuf (AvatarFilePath);
@@ -49,23 +50,25 @@ namespace SparkleShare {
 				WebClient WebClient = new WebClient ();
 				Uri GravatarUri = new Uri ("http://www.gravatar.com/avatar/" + 
 				                   GetMD5 (Email) + ".jpg?s=" + Size + "&d=404");
-				// TODO: Clean paths
-				string TmpFile = SparklePaths.SparkleTmpPath + Email + Size;
+
+				string TmpFile = 
+					CombineMore (SparklePaths.SparkleTmpPath, Email + Size);
 
 				if (!File.Exists (TmpFile)) {
 
 					WebClient.DownloadFileAsync (GravatarUri, TmpFile);
 					WebClient.DownloadFileCompleted += delegate {
-						File.Delete (AvatarPath + Email);
+						File.Delete (AvatarFilePath);
 						FileInfo TmpFileInfo = new FileInfo (TmpFile);
 						if (TmpFileInfo.Length > 255)
-							File.Move (TmpFile, AvatarPath + Email);
+							File.Move (TmpFile, AvatarFilePath);
 					};
 
 				}
 
-				if (File.Exists (AvatarPath + Email))
-					return new Gdk.Pixbuf (AvatarPath + Email);
+				// Fall back to a generic icon if there is no gravatar
+				if (File.Exists (AvatarFilePath))
+					return new Gdk.Pixbuf (AvatarFilePath);
 				else
 					return GetIcon ("avatar-default", Size);
 
