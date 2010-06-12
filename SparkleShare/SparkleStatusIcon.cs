@@ -109,7 +109,7 @@ namespace SparkleShare {
 					i++;
 				}
 				
-				MenuItem AddItem = new MenuItem (_("Add a Folder…"));
+				MenuItem AddItem = new MenuItem (_("Add a Remote Folder…"));
 				AddItem.Activated += delegate {
 					SparkleDialog SparkleDialog = new SparkleDialog ("");
 					SparkleDialog.ShowAll ();
