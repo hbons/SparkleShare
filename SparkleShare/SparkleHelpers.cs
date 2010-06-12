@@ -78,10 +78,11 @@ namespace SparkleShare {
 
 		// Creates an MD5 hash
 		public static string GetMD5 (string s) {
-		  MD5 md5 = new MD5CryptoServiceProvider ();
-		  Byte[] Bytes = ASCIIEncoding.Default.GetBytes (s);
-		  Byte[] EncodedBytes = md5.ComputeHash (Bytes);
-		  return BitConverter.ToString (EncodedBytes).ToLower ().Replace ("-", "");
+			MD5 md5 = new MD5CryptoServiceProvider ();
+			Byte[] Bytes = ASCIIEncoding.Default.GetBytes (s);
+			Byte[] EncodedBytes = md5.ComputeHash (Bytes);
+			return BitConverter.ToString
+				(EncodedBytes).ToLower ().Replace ("-", "");
 		}
 		
 		// Makes it possible to combine more than
