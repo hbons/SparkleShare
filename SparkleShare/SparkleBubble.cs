@@ -29,10 +29,15 @@ namespace SparkleShare {
 				AttachToStatusIcon (SparkleUI.NotificationIcon);
 		}
 
-		new public void AddAction (string action, string label, ActionHandler handler) {
-				if (System.Array.IndexOf (Notifications.Global.Capabilities, "actions") > -1) {
-					base.AddAction(action, label, handler);
-				}
+		new public void AddAction (string Action, string Label,
+		                           ActionHandler Handler) {
+
+			bool CanHaveButtons =
+				(System.Array.IndexOf (Notifications.Global.Capabilities,
+				                          "actions") > -1);
+			if (CanHaveButtons)
+				base.AddAction(Action, Label, Handler);
+
 		}
 
 	}
