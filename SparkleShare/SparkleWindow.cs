@@ -77,18 +77,22 @@ namespace SparkleShare {
 		}
 
 		public void UpdateEventLog () {
+
 			LayoutHorizontal.Remove (LogScrolledWindow);
 			LogScrolledWindow = CreateEventLog ();
 			LayoutHorizontal.PackStart (LogScrolledWindow, true, true, 0);
 			ShowAll ();
+
 		}
 
 		public void UpdatePeopleList () {
+
 			LayoutHorizontal.Remove (PeopleScrolledWindow);
 			PeopleScrolledWindow = CreatePeopleList ();
 			LayoutHorizontal.PackStart (PeopleScrolledWindow, false, false, 0);
 			LayoutHorizontal.ReorderChild (PeopleScrolledWindow, 0);
 			ShowAll ();
+
 		}
 
 		public ScrolledWindow CreateEventLog () {
