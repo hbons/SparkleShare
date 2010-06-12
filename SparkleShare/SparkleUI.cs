@@ -92,22 +92,22 @@ namespace SparkleShare {
 			SparkleRepo [] TmpRepos =
 				new SparkleRepo [Directory.GetDirectories (SparklePath).Length];
 
-			int i = 0;
+			int FolderCount = 0;
 			foreach (string Folder in Directory.GetDirectories (SparklePath)) {
 
 				// Check if the folder is a git repo
 				if (Directory.Exists (SparkleHelpers.CombineMore (Folder,
 				                                                  ".git"))) {
-					TmpRepos [i] = new SparkleRepo (Folder);
-					i++;
+					TmpRepos [FolderCount] = new SparkleRepo (Folder);
+					FolderCount++;
 
-					// Attach emblems
 					// TODO: emblems don't work in nautilus
+					// Attach emblems
 					switch (SparklePlatform.Name) {
 						case "GNOME":
 							Process.StartInfo.FileName = "gvfs-set-attribute";
 							Process.StartInfo.Arguments =
-								"-t string " + Folder + " metadata::emblems [synced]";
+								"-t string \"" + Folder + "\" metadata::emblems [synced]";
 							Process.Start ();
 						break;
 					}
@@ -116,8 +116,8 @@ namespace SparkleShare {
 
 			}
 			
-			SparkleShare.Repositories = new SparkleRepo [i];
-			Array.Copy (TmpRepos, SparkleShare.Repositories, i);
+			SparkleShare.Repositories = new SparkleRepo [FolderCount];
+			Array.Copy (TmpRepos, SparkleShare.Repositories, FolderCount);
 
 			// Don't create the window and status 
 			// icon when --disable-gui was given
