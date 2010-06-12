@@ -3,9 +3,6 @@ SparkleShare Version 0.2 Beta 1
 
 SparkleShare is a file sharing and collaboration tool inspired by Dropbox. 
 
-SparkleShare currently only works on Linux/GNOME.
-Windows and OSX ports are planned for the future.
-
 SparkleShare isn't just a piece of software, it's part of your workflow. It's 
 designed to make sharing documents and collaboration easier, and to make peers 
 aware of what you are doing. It allows you to instantly sync with any Git 
@@ -15,6 +12,9 @@ for git or a backup tool, it may be useful for other kinds of purposes as well,
 like backing up small files or monitoring your favourite project. In contrast 
 to the projects name, we will very likely refuse to implement your personal 
 ponies.
+
+SparkleShare currently only works on Linux/GNOME.
+Windows and OSX ports are planned for the future.
 
 
 License
@@ -77,10 +77,14 @@ A: Because I hate freedom.
 Info
 ====
 
-The official website is:
+Official website:
 http://www.sparkleshare.org/
 
-Community resources can be found at
-http://www.github.com/hbons/SparkleShare
+Project page:
+http://gitorious.org/sparkleshare
+
+Wiki:
+http://gitorious.org/sparkleshare/pages/Home
+
 
 Now have fun and create cool things together! :)
