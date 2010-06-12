@@ -80,6 +80,9 @@ namespace SparkleShare {
 
 			}
 
+			if (!Directory.Exists (SparklePaths.SparkleTmpPath))
+				Directory.CreateDirectory (SparklePaths.SparkleTmpPath);
+
 			if (!HideUI) {
 				// Create the status icon
 				NotificationIcon = new SparkleStatusIcon ();

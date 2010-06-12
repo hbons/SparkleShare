@@ -2,3 +2,8 @@
 *.exe
 *.exe.mdb
 *.userprefs
+*.pidb
+/SparkleShare/bin
+/SparkleShare/obj
+/notify-sharp/bin
+/notify-sharp/obj
