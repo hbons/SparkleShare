@@ -110,8 +110,8 @@ namespace SparkleShare {
 			if (ShowDebugInfo) {
 				DateTime DateTime = new DateTime ();					
 					string TimeStamp = DateTime.Now.ToString ("HH:mm:ss");
-				Console.WriteLine ("[" + TimeStamp + "] " + 
-				                   "[" + Type + "] " + Message);
+				Console.WriteLine ("[" + TimeStamp + "]" + 
+				                   "[" + Type + "]" + Message);
 			}
 		}
 
