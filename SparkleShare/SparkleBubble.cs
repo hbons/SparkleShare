@@ -29,6 +29,8 @@ namespace SparkleShare {
 				AttachToStatusIcon (SparkleUI.NotificationIcon);
 		}
 
+		// Checks whether the system allows adding buttons to a notification,
+		// prevents error messages in Ubuntu.
 		new public void AddAction (string Action, string Label,
 		                           ActionHandler Handler) {
 
