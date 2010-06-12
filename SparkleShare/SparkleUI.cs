@@ -145,13 +145,15 @@ namespace SparkleShare {
 				}
 
 			}
-			
-			// TODO: When a repo folder is deleted, don't sync and update the UI
-			
+						
+
+			// TODO: This crashes
+/*
+
 			// Watch the SparkleShare folder and pop up the 
 			// Add dialog when a new folder is created
-			// TODO: This crashes
-/*			FileSystemWatcher Watcher = new FileSystemWatcher (SparklePaths.SparklePath);
+
+			FileSystemWatcher Watcher = new FileSystemWatcher (SparklePaths.SparklePath);
 			Watcher.IncludeSubdirectories = false;
 			Watcher.EnableRaisingEvents = true;
 			Watcher.Created += delegate (object o, FileSystemEventArgs args) {
@@ -161,6 +163,16 @@ namespace SparkleShare {
 				                          " '" + args.Name + "'");
 				SparkleDialog SparkleDialog = new SparkleDialog ();
 				SparkleDialog.ShowAll ();
+			};
+
+			// When a repo folder is deleted, don't sync and update the UI
+			Watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
+			   WatcherChangeTypes wct = args.ChangeType;
+				SparkleHelpers.DebugInfo ("Event",
+				                          wct.ToString () + 
+				                          " '" + args.Name + "'");
+				SparkleUI SparkleUI = new SparkleUI ();
+				SparkleUI.ShowAll ();
 			};
 */
 
