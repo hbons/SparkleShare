@@ -23,10 +23,25 @@ namespace SparkleShare {
 	public class SparkleBubble : Notification {
 
 		public SparkleBubble (string Title, string Subtext) : base (Title, Subtext)  {
-				Timeout = 4500;
-				Urgency = Urgency.Low;
-				IconName = "folder-sparkleshare";
-				AttachToStatusIcon (SparkleUI.NotificationIcon);
+
+			Timeout = 4500;
+			Urgency = Urgency.Low;
+			IconName = "folder-sparkleshare";
+			AttachToStatusIcon (SparkleUI.NotificationIcon);
+
+		}
+
+		// Checks whether the system allows adding buttons to a notification,
+		// prevents error messages in Ubuntu.
+		new public void AddAction (string Action, string Label,
+		                           ActionHandler Handler) {
+
+			bool CanHaveButtons =
+				(System.Array.IndexOf (Notifications.Global.Capabilities,
+				                       "actions") > -1);
+			if (CanHaveButtons)
+				base.AddAction(Action, Label, Handler);
+
 		}
 
 	}
