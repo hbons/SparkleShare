@@ -5,6 +5,8 @@ install:
 	mkdir -p /usr/local/share/sparkleshare
 	cp SparkleShare/bin/Debug/SparkleShare.exe /usr/local/share/sparkleshare/
 	cp SparkleShare/bin/Debug/SparkleShare.exe.mdb /usr/local/share/sparkleshare/
+	cp SparkleShare/bin/Debug/notify-sharp.dll /usr/local/share/sparkleshare/
+	cp SparkleShare/bin/Debug/notify-sharp.dll.mdb /usr/local/share/sparkleshare/
 	chmod 755 /usr/local/share/sparkleshare/SparkleShare.exe
 	cp sparkleshare /usr/local/bin/
 	chmod 755 /usr/local/bin/sparkleshare
@@ -17,9 +19,7 @@ install:
 
 uninstall:
 	rm /usr/local/bin/sparkleshare
-	rm /usr/local/share/sparkleshare/SparkleShare.exe
-	rm /usr/local/share/sparkleshare/SparkleShare.exe.mdb
-	rmdir /usr/local/share/sparkleshare
+	rm -rf /usr/local/share/sparkleshare
 	rm /usr/share/icons/hicolor/*x*/places/folder-sparkleshare.png
 	rm /usr/share/icons/hicolor/*x*/places/folder-sync*.png
 	rm /usr/share/icons/hicolor/*x*/status/document-*ed.png
@@ -29,5 +29,5 @@ uninstall:
 	rm ~/.config/autostart/sparkleshare.desktop
 
 clean:
-	rm SparkleShare/bin/Debug/SparkleShare.exe
-	rm SparkleShare/bin/Debug/SparkleShare.exe.mdb
+	rm -rf SparkleShare/bin
+	rm -rf notify-sharp/bin

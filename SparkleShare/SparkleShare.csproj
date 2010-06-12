@@ -31,7 +31,6 @@
     <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="notify-sharp, Version=0.4.0.0, Culture=neutral, PublicKeyToken=2df29c54e245917a" />
     <Reference Include="System" />
     <Reference Include="Mono.Posix" />
   </ItemGroup>
@@ -47,5 +46,11 @@
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUI.cs" />
     <Compile Include="SparkleWindow.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\notify-sharp\notify-sharp.csproj">
+      <Project>{005CCA8E-DFBF-464A-B6DA-452C62D4589C}</Project>
+      <Name>notify-sharp</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
