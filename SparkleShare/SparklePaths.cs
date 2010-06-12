@@ -21,8 +21,10 @@ using System.IO;
 namespace SparkleShare {
 	
 	public static class SparklePaths {
+
 		private static UnixUserInfo UnixUserInfo =
 			new UnixUserInfo (UnixEnvironment.UserName);
+
 		public static string HomePath = UnixUserInfo.HomeDirectory;
 			
 		public static string SparklePath = Path.Combine (HomePath ,"SparkleShare");
