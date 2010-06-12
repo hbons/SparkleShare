@@ -38,8 +38,16 @@ namespace SparkleShare {
 			SparkleHelpers.CombineMore ("usr", "share", "sparkleshare",
 			                            "icons", "hicolor");
 
-		public static string SparkleAvatarPath =
-			Path.Combine (SparkleConfigPath, "avatars");
+		public static string SparkleAvatarPath {
+			get {
+				string XDG_CACHE_HOME = Environment.GetEnvironmentVariable("XDG_CACHE_HOME");
+				if (XDG_CACHE_HOME != null) {
+					return Path.Combine (XDG_CACHE_HOME, "sparkleshare");
+				} else {
+					return SparkleHelpers.CombineMore (HomePath, ".cache", "sparkleshare");
+				}
+			}
+		}
 			                                   
 		public static string SparkleIconPath =
 			SparkleHelpers.CombineMore ("usr", "share", "icons", "hicolor");
