@@ -39,6 +39,7 @@ namespace SparkleShare {
 			                            "icons", "hicolor");
 
 		public static string SparkleAvatarPath {
+
 			get {
 
 				string XDG_CACHE_HOME =
@@ -49,8 +50,8 @@ namespace SparkleShare {
 				else
 					return SparkleHelpers.CombineMore
 					       	(HomePath, ".cache", "sparkleshare");
-
 			}
+
 		}
 			                                   
 		public static string SparkleIconPath =
