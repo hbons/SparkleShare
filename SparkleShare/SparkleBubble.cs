@@ -34,7 +34,7 @@ namespace SparkleShare {
 
 			bool CanHaveButtons =
 				(System.Array.IndexOf (Notifications.Global.Capabilities,
-				                          "actions") > -1);
+				                       "actions") > -1);
 			if (CanHaveButtons)
 				base.AddAction(Action, Label, Handler);
 
