@@ -40,12 +40,16 @@ namespace SparkleShare {
 
 		public static string SparkleAvatarPath {
 			get {
-				string XDG_CACHE_HOME = Environment.GetEnvironmentVariable("XDG_CACHE_HOME");
-				if (XDG_CACHE_HOME != null) {
+
+				string XDG_CACHE_HOME =
+					Environment.GetEnvironmentVariable ("XDG_CACHE_HOME");
+
+				if (XDG_CACHE_HOME != null)
 					return Path.Combine (XDG_CACHE_HOME, "sparkleshare");
-				} else {
-					return SparkleHelpers.CombineMore (HomePath, ".cache", "sparkleshare");
-				}
+				else
+					return SparkleHelpers.CombineMore
+					       	(HomePath, ".cache", "sparkleshare");
+
 			}
 		}
 			                                   
