@@ -286,11 +286,16 @@ namespace SparkleShare {
 							Process.WaitForExit ();
 							Process.Start ();
 
-							ShowEventBubble ("A mid-air collision happened!\n" +
-							                 "SparkleShare made a copy of your file.",
-										        SparkleHelpers.GetIcon
-										        ("folder-sparkleshare", 48),
-										        true);
+							string ConflictTitle = "A mid-air collision happened!\n";
+							string ConflictSubtext = 
+								@"Don't worry, SparkleShare made\n
+							     a copies of the conflicting files.";
+
+							SparkleBubble ConflictBubble =
+								new  SparkleBubble(_(ConflictTitle), _(ConflictSubtext));
+
+							ConflictBubble.Show ();
+
 						}
 
 					}
@@ -459,8 +464,8 @@ namespace SparkleShare {
 		}
 
 		// Shows a notification with text and image
-		public void ShowEventBubble (string Title, 
-			                          Gdk.Pixbuf Avatar, 
+		public void ShowEventBubble (string Title,
+			                          Gdk.Pixbuf Avatar,
 			                          bool ShowButtons) {
 
 				SparkleBubble StuffChangedBubble = new SparkleBubble (Title, "");
