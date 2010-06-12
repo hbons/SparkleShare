@@ -198,9 +198,8 @@ namespace SparkleShare {
 			StateText = _("Error syncing");
 		}
 
-		// TODO: menu should not dissappear on mouse up
-		public void SetPosition
-			(Menu menu, out int x, out int y, out bool push_in) {
+		public void SetPosition (Menu menu, out int x, out int y,
+		                         out bool push_in) {
 
 			PositionMenu (menu, out x, out y, out push_in, Handle);
 
@@ -210,7 +209,7 @@ namespace SparkleShare {
 		public void Quit (object o, EventArgs args) {
 			System.IO.File.Delete
 				(SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath +
-                                        "sparkleshare.pid"));
+                                 "sparkleshare.pid"));
 			Application.Quit ();
 		}
 
