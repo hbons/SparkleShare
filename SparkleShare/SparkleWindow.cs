@@ -33,9 +33,8 @@ namespace SparkleShare {
 		}
 
 		private SparkleRepo SparkleRepo;
-		private VBox LayoutHorizontal;
+		private VBox LayoutVertical;
 		private ScrolledWindow LogScrolledWindow;
-		private ScrolledWindow PeopleScrolledWindow;
 		private string SelectedEmail;
 
 		public SparkleWindow (SparkleRepo Repo) : base ("")  {
@@ -43,62 +42,60 @@ namespace SparkleShare {
 			SparkleRepo = Repo;
 			SelectedEmail = "";
 
-			SetSizeRequest (720, 540);
+			SetSizeRequest (640, 480);
 	 		SetPosition (WindowPosition.Center);
-			BorderWidth = 6;
+			BorderWidth = 12;
 			Title = String.Format(_("‘{0}’ on {1}"), SparkleRepo.Name, SparkleRepo.RemoteOriginUrl
 			          .TrimEnd (("/" + SparkleRepo.Name + ".git").ToCharArray ()));
 			IconName = "folder";
 
-			VBox LayoutVertical = new VBox (false, 0);
+			LayoutVertical = new VBox (false, 12);
 
-				LayoutHorizontal = new VBox (false, 6);
-				LayoutHorizontal.BorderWidth = 6;
-				LayoutHorizontal.PackStart (CreatePeopleList (), false, false, 0);
-				LayoutHorizontal.PackStart (CreateEventLog (), true, true, 0);
+			LayoutVertical.PackStart (CreateEventLog (), true, true, 0);
 
-				LayoutVertical.PackStart (LayoutHorizontal, true, true, 0);
+				HButtonBox DialogButtons = new HButtonBox ();
+				DialogButtons.Layout = ButtonBoxStyle.Edge;
+				DialogButtons.BorderWidth = 0;
 
-					HButtonBox DialogButtons = new HButtonBox ();
-					DialogButtons.Layout = ButtonBoxStyle.End;
-					DialogButtons.BorderWidth = 6;
+					Button OpenFolderButton = new Button (_("Open Folder"));
+					OpenFolderButton.Clicked += delegate (object o, EventArgs args) {
+						Process Process = new Process ();
+						Process.StartInfo.FileName = "xdg-open";
+						Process.StartInfo.Arguments =
+							SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+								                            SparkleRepo.Name);
+						Process.Start ();
+						Destroy ();
+					};
 
-						Button CloseButton = new Button (Stock.Close);
-						CloseButton.Clicked += delegate (object o, EventArgs args) {
-							Destroy ();
-						};
+					Button CloseButton = new Button (Stock.Close);
+					CloseButton.Clicked += delegate (object o, EventArgs args) {
+						Destroy ();
+					};
 
-					DialogButtons.Add (CloseButton);
+				DialogButtons.Add (OpenFolderButton);
+				DialogButtons.Add (CloseButton);
 
-				LayoutVertical.PackStart (DialogButtons, false, false, 0);
+			LayoutVertical.PackStart (DialogButtons, false, false, 0);
 
 			Add (LayoutVertical);		
 		
 		}
 
+
 		public void UpdateEventLog () {
 
-			LayoutHorizontal.Remove (LogScrolledWindow);
+			LayoutVertical.Remove (LogScrolledWindow);
 			LogScrolledWindow = CreateEventLog ();
-			LayoutHorizontal.PackStart (LogScrolledWindow, true, true, 0);
+			LayoutVertical.PackStart (LogScrolledWindow, true, true, 0);
 			ShowAll ();
 
 		}
 
-		public void UpdatePeopleList () {
-
-			LayoutHorizontal.Remove (PeopleScrolledWindow);
-			PeopleScrolledWindow = CreatePeopleList ();
-			LayoutHorizontal.PackStart (PeopleScrolledWindow, false, false, 0);
-			LayoutHorizontal.ReorderChild (PeopleScrolledWindow, 0);
-			ShowAll ();
-
-		}
 
 		public ScrolledWindow CreateEventLog () {
 
 			ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf),
-				                                 typeof (string),
 				                                 typeof (string),
 				                                 typeof (string),
 				                                 typeof (string));
@@ -139,34 +136,29 @@ namespace SparkleShare {
 					string TimeAgo = Parts [3];
 					string UserEmail = Parts [4];
 
-					string IconFile = "document-edited";		
-
-					if (Message.IndexOf ("added ‘") > -1)
-						IconFile = "document-added";
-
-					if (Message.IndexOf ("deleted ‘") > -1)
-						IconFile = "document-removed";
-
-					if (Message.IndexOf ("moved ‘") > -1 || 
-						Message.IndexOf ("renamed ‘") > -1)
-						IconFile = "document-moved";
-
-					Gdk.Pixbuf ChangeIcon = SparkleHelpers.GetIcon (IconFile, 16);
 					Iter = LogStore.Append ();
-					LogStore.SetValue (Iter, 0, ChangeIcon);
-					LogStore.SetValue (Iter, 1,
-					                   Message.Replace ("/", " → "));
 
-					if (SparkleRepo.UserEmail.Equals (UserEmail))
-						LogStore.SetValue (Iter, 2, "You");
-					else
-						LogStore.SetValue (Iter, 2, UserName);
+					LogStore.SetValue (Iter, 0,
+					                   SparkleHelpers.GetAvatar (UserEmail, 32));
 
-					LogStore.SetValue (Iter, 3, TimeAgo);
+					if (SparkleRepo.UserEmail.Equals (UserEmail)) {
 
-					// We're not showing e-mail, it's only 
+						LogStore.SetValue (Iter, 1,
+							                "<b>You</b>\n" +
+							                Message.Replace ("/", " → "));
+
+					} else {
+
+						LogStore.SetValue (Iter, 1,
+							                "<b>" + UserName + "</b>\n" +
+							                Message.Replace ("/", " → "));					
+					}
+
+					LogStore.SetValue (Iter, 2, TimeAgo + "  ");
+
+					// We're not showing email, it's only 
 					// there for lookup purposes
-					LogStore.SetValue (Iter, 4, UserEmail);
+					LogStore.SetValue (Iter, 3, UserEmail);
 
 				}
 
@@ -174,108 +166,41 @@ namespace SparkleShare {
 
 			TreeView LogView = new TreeView (LogStore); 
 			LogView.HeadersVisible = false;
-			
+
 			CellRendererText TextCellRight = new Gtk.CellRendererText ();
 			TextCellRight.Xalign = 1;
 
-			CellRendererText TextCellMiddle = new Gtk.CellRendererText ();
-			TextCellMiddle.Ellipsize = Pango.EllipsizeMode.End;
-
 			LogView.AppendColumn ("", new Gtk.CellRendererPixbuf (), "pixbuf", 0);
-			LogView.AppendColumn ("", TextCellMiddle, "text", 1);
-			LogView.AppendColumn ("", TextCellMiddle, "text", 2);
-			LogView.AppendColumn ("", TextCellRight, "text", 3);
+
+			CellRendererText CellRendererMarkup = new CellRendererText ();
+			TreeViewColumn ColumnMarkup = new TreeViewColumn ();
+			ColumnMarkup.PackStart (CellRendererMarkup, true);
+			LogView.AppendColumn (ColumnMarkup);
+
+			ColumnMarkup.SetCellDataFunc (CellRendererMarkup,
+			                              new Gtk.TreeCellDataFunc (RenderRow));
+
+			LogView.AppendColumn (ColumnMarkup);
+			LogView.AppendColumn ("", TextCellRight, "text", 2);
 
 			TreeViewColumn [] Columns = LogView.Columns;
-			Columns [0].MinWidth = 28;
+			Columns [0].MinWidth = 42;
 			Columns [1].Expand = true;
 			Columns [2].Expand = true;
 			Columns [1].MinWidth = 350;
+			Columns [2].MinWidth = 50;
 
+			Columns [2].Spacing = 200;
 			LogView.CursorChanged += delegate (object o, EventArgs args) {
 			TreeModel Model;
 				if (LogView.Selection.GetSelected (out Model, out Iter)) {
-					SelectedEmail = (string) Model.GetValue (Iter, 4);
-					UpdatePeopleList ();
+					SelectedEmail = (string) Model.GetValue (Iter, 3);
 				}
 			};
 
-			LogScrolledWindow = new ScrolledWindow ();
-			LogScrolledWindow.AddWithViewport (LogView);
-
-			return LogScrolledWindow;
-
-		}
-
-		// Creates a visual list of people working in the repo
-		public ScrolledWindow CreatePeopleList () {
-
-			Process Process = new Process ();
-			Process.EnableRaisingEvents = true; 
-			Process.StartInfo.RedirectStandardOutput = true;
-			Process.StartInfo.UseShellExecute = false;
-
-			// Get a log of commits, example: "Hylke Bons☃added 'file'."
-			Process.StartInfo.FileName = "git";
-			Process.StartInfo.Arguments = "log --format=\"%an☃%ae\" -50";
-			Process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
-			Process.Start ();
-
-			string Output = Process.StandardOutput.ReadToEnd ().Trim ();
-			string [] People = new string [50];
-			string [] Lines = Regex.Split (Output, "\n");
-
-			ListStore PeopleStore = new ListStore (typeof (Gdk.Pixbuf),
-				                                    typeof (string),
-				                                    typeof (string));
-
-			int i = 0;
-			TreeIter Iter;
-			TreePath TreePath;
-			foreach (string Line in Lines) {
-
-				// Only add name if it isn't there already
-				if (Array.IndexOf (People, Line) == -1) {
-
-					People [i]      = Line;
-					string [] Parts = Regex.Split (Line, "☃");
-
-					string UserName  = Parts [0];
-					string UserEmail = Parts [1];
-
-					// Actually add to the list
-					Iter = PeopleStore.Prepend ();
-					PeopleStore.SetValue (Iter, 0,
-					                      SparkleHelpers.GetAvatar (UserEmail , 32));
-
-					// Do something special if the person is you
-					if (UserEmail.Equals (SparkleRepo.UserEmail))
-						UserEmail = _("That’s you!");
-
-					PeopleStore.SetValue (Iter, 1,
-					                      "<b>" + UserName + "</b>\n" +
-					                      "<span font_size=\"smaller\">" +
-					                      UserEmail + "</span>");
-					PeopleStore.SetValue (Iter, 2, UserEmail);
-
-				}
-
-				i++;
-
-			}
-
-			IconView PeopleView = new IconView (PeopleStore); 
-			PeopleView.PixbufColumn = 0;
-			PeopleView.MarkupColumn = 1;
-			PeopleView.Columns = 3;
-			PeopleView.Spacing = 6;
-			PeopleView.ItemWidth = 210;
-			PeopleView.Orientation = Orientation.Horizontal;
-			PeopleView.SelectionMode = SelectionMode.Single;
-
-			// Compose an e-mail when an item is activated
-			PeopleView.ItemActivated +=
-				delegate (object o, ItemActivatedArgs Args) {
+			// Compose an e-mail when a row is activated
+			LogView.RowActivated +=
+				delegate (object o, RowActivatedArgs Args) {
 					switch (SparklePlatform.Name) {
 						case "GNOME":
 							Process.StartInfo.FileName = "xdg-open";
@@ -288,38 +213,22 @@ namespace SparkleShare {
 					Process.Start ();
 			};
 
-			// Select the person matching with the committer event list
-			i = 0;
-			foreach (object [] Row in PeopleStore) {
-				string UserEmail = (string) Row [2];
-				if (UserEmail.Equals (SelectedEmail)) {
-					TreePath = new TreePath (new int [1] {i});
-					PeopleView.SelectPath (TreePath);
-				}
-				i++;
-			}
+			LogScrolledWindow = new ScrolledWindow ();
+			LogScrolledWindow.AddWithViewport (LogView);
 
-			// Update the event log when a person is clicked
-			PeopleView.SelectionChanged += delegate (object o, EventArgs args) {
-				if (PeopleView.SelectedItems.Length > 0) {
-					PeopleStore.GetIter (out Iter, PeopleView.SelectedItems [0]);
-					string NewSelectedEmail = (string) PeopleStore.GetValue (Iter, 2);
-					if (NewSelectedEmail.Equals (SelectedEmail)) {
-						SelectedEmail = "";
-						PeopleView.UnselectAll ();
-					} else
-						SelectedEmail = NewSelectedEmail;
-				} else SelectedEmail = "";
-				UpdateEventLog ();
-			};
-			
-			PeopleScrolledWindow = new ScrolledWindow ();
-			PeopleScrolledWindow.AddWithViewport (PeopleView);
-			PeopleScrolledWindow.HeightRequest = 200;
-
-			return PeopleScrolledWindow;
+			return LogScrolledWindow;
 
 		}
+
+		// Renders a row with custom markup
+		private void RenderRow (TreeViewColumn Column, CellRenderer Cell,
+		                        TreeModel Model, TreeIter Iter) {
+
+			string Item = (string) Model.GetValue (Iter, 1);
+			(Cell as CellRendererText).Markup  = Item;
+
+		}
+
 
 	}
 
