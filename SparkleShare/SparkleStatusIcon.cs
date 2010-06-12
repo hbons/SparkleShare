@@ -27,7 +27,7 @@ namespace SparkleShare {
 	public class SparkleStatusIcon : StatusIcon {
 
 		private Timer Timer;
-		private string StateText;
+		private int SyncingState;
 
 		// Short alias for the translations
 		public static string _ (string s) {
@@ -45,7 +45,12 @@ namespace SparkleShare {
 
 			Timer = new Timer ();
 			Activate += ShowMenu;
-			StateText = _("Everything is up to date");
+
+			//  0 = Everything up to date
+			//  1 = Syncing in progress
+			// -1 = Error syncing
+			SyncingState = 0;
+
 			SetIdleState ();
 
 		}
@@ -53,6 +58,19 @@ namespace SparkleShare {
 		public void ShowMenu (object o, EventArgs Args) {
 
 				Menu Menu = new Menu ();
+
+				string StateText = "";
+				switch (SyncingState) {
+					case -1:
+						StateText = _("Error syncing");
+						break;
+					case 0:
+						StateText = _("Everything is up to date");
+						break;
+					case 1:
+						StateText = _("Syncing…");
+						break;
+				}
 
 				MenuItem StatusMenuItem = new MenuItem (StateText);
 				StatusMenuItem.Sensitive = false;
@@ -146,15 +164,15 @@ namespace SparkleShare {
 		public void SetIdleState () {
 			Timer.Stop ();
 			Pixbuf = SparkleHelpers.GetIcon ("folder-sparkleshare", 24);
-			StateText = _("Everything is up to date");
+			SyncingState = 0;
 		}
 
-		// Changes the status icon to the suncing antimation
+		// Changes the status icon to the syncing animation
 		// TODO: There are UI freezes when switching back and forth
 		// bewteen syncing and idle state
 		public void SetSyncingState () {
 
-			StateText = _("Syncing…");
+			SyncingState = 1;
 
 			int CycleDuration = 250;
 			int CurrentStep = 0;
@@ -195,7 +213,7 @@ namespace SparkleShare {
 		// Changes the status icon to the error icon
 		public void SetErrorState () {
 			IconName = "folder-sync-error";
-			StateText = _("Error syncing");
+			SyncingState = -1;
 		}
 
 		public void SetPosition (Menu menu, out int x, out int y,
