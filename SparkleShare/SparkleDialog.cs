@@ -165,19 +165,14 @@ namespace SparkleShare {
 						                   "network connection.");
 
 					ErrorBubble.AddAction ("", _("Try Again…"), 
-						                      delegate {
-						                      	Process.StartInfo.FileName = "xdg-open";
-						                      	Process.StartInfo.Arguments =
-						                      	SparkleHelpers.CombineMore
-						                      		(SparklePaths.SparklePath, RepoName);
-						                      	Process.Start ();
-						                      }
-						                     );
+						                       delegate {
+					                          	SparkleDialog SparkleDialog =
+					                          		new SparkleDialog (RepoRemoteUrl);
+					                          	SparkleDialog.ShowAll ();
+						                       }
+						                   );
 
 					ErrorBubble.Show ();
-
-					SparkleDialog SparkleDialog = new SparkleDialog (RepoRemoteUrl);
-					SparkleDialog.ShowAll ();
 				
 					Destroy ();
 
