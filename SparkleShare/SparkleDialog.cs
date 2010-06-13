@@ -170,6 +170,8 @@ namespace SparkleShare {
 			
 			} else {
 
+				SparkleShare.SparkleUI.UpdateRepositories ();
+
 				SparkleHelpers.DebugInfo ("Git",
 					                       "[" + RepoName + "] Repository cloned");
 				// Show a confirmation notification
