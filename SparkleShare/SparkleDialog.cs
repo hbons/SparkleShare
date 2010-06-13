@@ -144,86 +144,50 @@ namespace SparkleShare {
 
 			// Clone into the system's temporary folder
 			Process.StartInfo.FileName = "git";
-			Process.StartInfo.WorkingDirectory = SparklePaths.SparkleTmpPath;
+			Process.StartInfo.WorkingDirectory = SparklePaths.SparklePath;
 			Process.StartInfo.Arguments = String.Format ("clone {0} {1}",
 			                                             RepoRemoteUrl,
 			                                             RepoName);
 
-			Process.WaitForExit ();
 			Process.Start ();
-			string Output = Process.StandardOutput.ReadToEnd ();
+			Process.WaitForExit ();
 
+			if (Process.ExitCode != 0) {
 
-			// Move the folder to the SparkleShare folder when done cloning
-			Process.Exited += delegate {
+				SparkleBubble ErrorBubble =
+					new SparkleBubble (String.Format(_("Something went wrong while syncing ‘{0}’"), RepoName),
+					                   "Please double check the address and\n" +
+					                   "network connection.");
 
-				if (Output.Contains ("fatal:")) {
+				ErrorBubble.AddAction ("", _("Try Again…"), 
+					                       delegate {
+				                          	SparkleDialog SparkleDialog =
+				                          		new SparkleDialog (RepoRemoteUrl);
+				                          	SparkleDialog.ShowAll ();
+					                       }
+					                   );
+				ErrorBubble.Show ();
+			
+			} else {
 
-					SparkleBubble ErrorBubble =
-						new SparkleBubble (String.Format(_("Something went wrong while syncing ‘{0}’"), RepoName),
-						                   "Please double check the address and\n" +
-						                   "network connection.");
+				SparkleHelpers.DebugInfo ("Git",
+					                       "[" + RepoName + "] Repository cloned");
+				// Show a confirmation notification
+				SparkleBubble FinishedBubble =
+					new SparkleBubble (String.Format(_("Successfully synced folder ‘{0}’"), RepoName),
+					                   _("Now make great stuff happen!"));
 
-					ErrorBubble.AddAction ("", _("Try Again…"), 
-						                       delegate {
-					                          	SparkleDialog SparkleDialog =
-					                          		new SparkleDialog (RepoRemoteUrl);
-					                          	SparkleDialog.ShowAll ();
-						                       }
-						                   );
-
-					ErrorBubble.Show ();
+				FinishedBubble.AddAction ("", _("Open Folder"),
+					                      delegate {
+					                      	Process.StartInfo.FileName = "xdg-open";
+				  	                     	Process.StartInfo.Arguments =
+				  	                     		SparkleHelpers.CombineMore (
+				  	                     		SparklePaths.SparklePath, RepoName);
+					 	                     	Process.Start ();
+										        } );
+				FinishedBubble.Show ();
+			}
 				
-					Destroy ();
-
-				} else {
-
-					string OldPath =
-						SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
-						                            RepoName);
-
-					string NewPath =
-						SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-							                         RepoName);
-
-					if (Directory.Exists (NewPath))
-						NewPath += " (2)";
-				
-					// Move the cloned repository from the temporary
-					// folder to the SparkleShare folder
-					Directory.Move (OldPath, NewPath);
-
-					SparkleHelpers.DebugInfo ("Git",
-						                       "[" + RepoName + "] Repository cloned");
-
-					// Show a confirmation notification
-					SparkleBubble FinishedBubble =
-						new SparkleBubble (String.Format(_("Successfully synced folder ‘{0}’"), RepoName),
-						                   _("Now make great stuff happen!"));
-
-					FinishedBubble.AddAction ("", _("Open Folder"),
-						                      delegate {
-						                      	Process.StartInfo.FileName = "xdg-open";
-					  	                     	Process.StartInfo.Arguments =
-					  	                     		SparkleHelpers.CombineMore (
-					  	                     		SparklePaths.SparklePath, RepoName);
-						 	                     	Process.Start ();
-											        } );
-
-					FinishedBubble.Show ();
-
-					// Destroy the Add dialog
-					Destroy ();
-
-					// Refresh the UI
-					SparkleShare.SparkleUI = new SparkleUI (true);
-
-				}
-
-//			SparkleUI.NotificationIcon.SetIdleState ();
-
-			};
-		
 		}
 
 		// Enables the Add button when the fields are
