@@ -184,7 +184,7 @@ namespace SparkleShare {
 				  	                     		SparkleHelpers.CombineMore (
 				  	                     		SparklePaths.SparklePath, RepoName);
 					 	                     	Process.Start ();
-										        } );
+				                              } );
 				FinishedBubble.Show ();
 			}
 				
