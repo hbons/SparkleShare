@@ -156,6 +156,8 @@ namespace SparkleShare {
 					"Please double check the address and\n" +
 					"network connection.");
 
+				Directory.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, RepoName));
+
 				ErrorBubble.AddAction ("", _("Try Again…"), 
 					delegate {
 						SparkleDialog SparkleDialog = new SparkleDialog (RepoRemoteUrl);
@@ -167,6 +169,9 @@ namespace SparkleShare {
 
 				SparkleHelpers.DebugInfo ("Git", "[" + RepoName + "] Repository cloned");
 				SparkleShare.SparkleUI.UpdateRepositories ();
+
+				Directory.Move (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, RepoName),
+					SparkleHelpers.CombineMore (SparklePaths.SparklePath, RepoName));
 
 				// Show a confirmation notification
 				SparkleBubble FinishedBubble;
