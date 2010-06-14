@@ -33,6 +33,8 @@ namespace SparkleShare {
 		private Timer FetchTimer;
 		private Timer BufferTimer;
 		private FileSystemWatcher Watcher;
+		private bool HasChanged = false;
+		private DateTime LastChange;
 
 		public string Name;
 		public string Domain;
@@ -118,18 +120,31 @@ namespace SparkleShare {
 			};
 
 			FetchTimer.Start ();
-			BufferTimer = new Timer ();
 
+			BufferTimer = new Timer ();
+			BufferTimer.Interval = 4000;
 			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
-				SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Done waiting.");
-				Add ();
-				string Message = FormatCommitMessage ();
-				if (!Message.Equals ("")) {
-					Commit (Message);
-					Fetch ();
-					Push ();
+				SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Checking for changes.");
+
+				if (HasChanged) {
+					SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes found, checking if settled.");
+					DateTime now = DateTime.UtcNow;
+					TimeSpan changed = new TimeSpan (now.Ticks - LastChange.Ticks);
+					if (changed.TotalMilliseconds > 5000) {
+						HasChanged = false;
+						SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes have settled, adding.");
+						Add ();
+						string Message = FormatCommitMessage ();
+						if (!Message.Equals ("")) {
+							Commit (Message);
+							Fetch ();
+							Push ();
+						}
+					}
 				}
 			};
+
+			BufferTimer.Start ();
 
 			// Add everything that changed 
 			// since SparkleShare was stopped
@@ -145,42 +160,10 @@ namespace SparkleShare {
 		   WatcherChangeTypes wct = args.ChangeType;
 			if (!ShouldIgnore (args.Name)) {
 				SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + args.Name + "'");
-				StartBufferTimer ();
+				FetchTimer.Stop ();
+				LastChange = DateTime.UtcNow;
+				HasChanged = true;
 			}
-		}
-
-		// A buffer that will fetch changes after 
-		// file activity has settles down
-		public void StartBufferTimer ()
-		{
-
-			FetchTimer.Stop ();
-			int Interval = 4000;
-			if (!BufferTimer.Enabled) {	
-
-				// Delay for a few seconds to see if more files change
-				BufferTimer.Interval = Interval; 
-				BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
-					SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Done waiting.");
-					Add ();
-				};
-
-				SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] " + "Waiting for more changes...");
-				BufferTimer.Start ();
-
-			} else {
-
-				// Extend the delay when something changes
-				BufferTimer.Close ();
-				BufferTimer = new Timer ();
-				BufferTimer.Interval = Interval;
-
-				FetchTimer.Start ();
-
-				BufferTimer.Start ();
-				SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] " + "Waiting for more changes...");
-			}
-
 		}
 
 		// Clones a remote repo
@@ -209,6 +192,7 @@ namespace SparkleShare {
 //			SparkleUI.NotificationIcon.SetSyncingState ();
 //			SparkleUI.NotificationIcon.SetIdleState ();
 			FetchTimer.Start ();
+			BufferTimer.Start ();
 		}
 
 		// Commits the made changes
