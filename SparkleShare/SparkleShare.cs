@@ -51,9 +51,8 @@ namespace SparkleShare {
 			}
 
 			// Don't allow running as root
-			Process.StartInfo.FileName = "whoami";
-			Process.Start ();
-			if (Process.StandardOutput.ReadToEnd ().Trim ().Equals ("root")) {
+			UnixUserInfo UnixUserInfo =	new UnixUserInfo (UnixEnvironment.UserName);
+			if (UnixUserInfo.UserId == 0) {
 				Console.WriteLine (_("Sorry, you can't run SparkleShare with these permissions."));
 				Console.WriteLine (_("Things will go utterly wrong.")); 
 				Environment.Exit (0);
