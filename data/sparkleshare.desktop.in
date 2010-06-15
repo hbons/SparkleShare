@@ -1,6 +1,0 @@
-[Desktop Entry]
-Name=SparkleShare
-Exec=sparkleshare start
-Icon=folder-sparkleshare
-Terminal=false
-X-GNOME-Autostart-enabled=true
