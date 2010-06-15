@@ -11,10 +11,6 @@ install:
 	cp sparkleshare /usr/local/bin/
 	chmod 755 /usr/local/bin/sparkleshare
 	cp data/icons /usr/share/ -R
-	mkdir -p ~/.config/autostart
-# TODO: doesn't start on login
-	cp data/sparkleshare.desktop.in ~/.config/autostart/sparkleshare.desktop
-	chmod 775 ~/.config/autostart/sparkleshare.desktop
 	gtk-update-icon-cache /usr/share/icons/hicolor -f
 
 uninstall:
