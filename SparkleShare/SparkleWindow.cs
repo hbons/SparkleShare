@@ -140,7 +140,7 @@ namespace SparkleShare {
 
 					Iter = LogStore.Append ();
 
-					LogStore.SetValue (Iter, 0, SparkleHelpers.GetAvatar (UserEmail, 32));
+					LogStore.SetValue (Iter, 0, SparkleHelpers.GetAvatar (UserEmail, 24));
 
 					if (SparkleRepo.UserEmail.Equals (UserEmail)) {
 
