@@ -25,10 +25,12 @@ using System.Timers;
 
 namespace SparkleShare {
 
-	public class SparkleWindow : Window {
+	public class SparkleWindow : Window
+	{
 
 		// Short alias for the translations
-		public static string _ (string s) {
+		public static string _ (string s)
+		{
 			return Catalog.GetString (s);
 		}
 
@@ -37,16 +39,16 @@ namespace SparkleShare {
 		private ScrolledWindow LogScrolledWindow;
 		private string SelectedEmail;
 
-		public SparkleWindow (SparkleRepo Repo) : base ("")  {
+		public SparkleWindow (SparkleRepo Repo) : base ("")
+		{
 
 			SparkleRepo = Repo;
 			SelectedEmail = "";
-
 			SetSizeRequest (640, 480);
 	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 12;
-			Title = String.Format(_("‘{0}’ on {1}"), SparkleRepo.Name, SparkleRepo.RemoteOriginUrl
-			          .TrimEnd (("/" + SparkleRepo.Name + ".git").ToCharArray ()));
+			Title = String.Format(_("‘{0}’ on {1}"), SparkleRepo.Name,
+				SparkleRepo.RemoteOriginUrl.TrimEnd (("/" + SparkleRepo.Name + ".git").ToCharArray ()));
 			IconName = "folder";
 
 			LayoutVertical = new VBox (false, 12);
@@ -62,8 +64,7 @@ namespace SparkleShare {
 						Process Process = new Process ();
 						Process.StartInfo.FileName = "xdg-open";
 						Process.StartInfo.Arguments =
-							SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-								                            SparkleRepo.Name);
+							SparkleHelpers.CombineMore (SparklePaths.SparklePath, SparkleRepo.Name);
 						Process.Start ();
 						Destroy ();
 					};
@@ -83,7 +84,8 @@ namespace SparkleShare {
 		}
 
 
-		public void UpdateEventLog () {
+		public void UpdateEventLog ()
+		{
 
 			LayoutVertical.Remove (LogScrolledWindow);
 			LogScrolledWindow = CreateEventLog ();
@@ -93,12 +95,13 @@ namespace SparkleShare {
 		}
 
 
-		public ScrolledWindow CreateEventLog () {
+		public ScrolledWindow CreateEventLog ()
+		{
 
 			ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf),
-				                                 typeof (string),
-				                                 typeof (string),
-				                                 typeof (string));
+				                                typeof (string),
+				                                typeof (string),
+				                                typeof (string));
 
 			Process Process = new Process ();
 			Process.EnableRaisingEvents = true; 
@@ -110,8 +113,7 @@ namespace SparkleShare {
 
 			Process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
 			// We're using the snowman here to separate messages :)
-			Process.StartInfo.Arguments =
-				"log --format=\"%at☃%s☃%an☃%cr☃%ae\" -25";
+			Process.StartInfo.Arguments = "log --format=\"%at☃%s☃%an☃%cr☃%ae\" -25";
 			Process.Start ();
 
 			Output += "\n" + Process.StandardOutput.ReadToEnd ().Trim ();
@@ -138,20 +140,15 @@ namespace SparkleShare {
 
 					Iter = LogStore.Append ();
 
-					LogStore.SetValue (Iter, 0,
-					                   SparkleHelpers.GetAvatar (UserEmail, 32));
+					LogStore.SetValue (Iter, 0, SparkleHelpers.GetAvatar (UserEmail, 32));
 
 					if (SparkleRepo.UserEmail.Equals (UserEmail)) {
 
-						LogStore.SetValue (Iter, 1,
-							                "<b>You</b>\n" +
-							                Message.Replace ("/", " → "));
+						LogStore.SetValue (Iter, 1, "<b>You</b>\n" + Message.Replace ("/", " → "));
 
 					} else {
 
-						LogStore.SetValue (Iter, 1,
-							                "<b>" + UserName + "</b>\n" +
-							                Message.Replace ("/", " → "));					
+						LogStore.SetValue (Iter, 1, "<b>" + UserName + "</b>\n" + Message.Replace ("/", " → "));					
 					}
 
 					LogStore.SetValue (Iter, 2, TimeAgo + "  ");
@@ -177,8 +174,7 @@ namespace SparkleShare {
 			ColumnMarkup.PackStart (CellRendererMarkup, true);
 			LogView.AppendColumn (ColumnMarkup);
 
-			ColumnMarkup.SetCellDataFunc (CellRendererMarkup,
-			                              new Gtk.TreeCellDataFunc (RenderRow));
+			ColumnMarkup.SetCellDataFunc (CellRendererMarkup, new Gtk.TreeCellDataFunc (RenderRow));
 
 			LogView.AppendColumn (ColumnMarkup);
 			LogView.AppendColumn ("", TextCellRight, "text", 2);
@@ -221,14 +217,13 @@ namespace SparkleShare {
 		}
 
 		// Renders a row with custom markup
-		private void RenderRow (TreeViewColumn Column, CellRenderer Cell,
-		                        TreeModel Model, TreeIter Iter) {
+		private void RenderRow (TreeViewColumn Column, CellRenderer Cell, TreeModel Model, TreeIter Iter)
+		{
 
 			string Item = (string) Model.GetValue (Iter, 1);
 			(Cell as CellRendererText).Markup  = Item;
 
 		}
-
 
 	}
 
