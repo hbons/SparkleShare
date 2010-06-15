@@ -23,18 +23,21 @@ using System.IO;
 
 namespace SparkleShare {
 
-	public class SparkleUI {
+	public class SparkleUI
+	{
 		
 		private Process Process;
 
 		// Short alias for the translations
-		public static string _ (string s) {
+		public static string _ (string s)
+		{
 			return Catalog.GetString (s);
 		}
 
 		public static SparkleStatusIcon NotificationIcon;
 
-		public SparkleUI (bool HideUI) {
+		public SparkleUI (bool HideUI)
+		{
 
 			Process = new Process ();
 			Process.EnableRaisingEvents = true;
@@ -43,24 +46,53 @@ namespace SparkleShare {
 
 			string SparklePath = SparklePaths.SparklePath;
 
+
+			// Create .desktop entry in autostart folder to
+			// start SparkleShare on each login
+			switch (SparklePlatform.Name) {
+				case "GNOME":
+
+				string autostart_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".config", "autostart");
+				string desktopfile_path = SparkleHelpers.CombineMore (autostart_path, "sparkleshare.desktop");
+
+				if (!File.Exists (desktopfile_path)) {
+					if (!Directory.Exists (autostart_path))
+						Directory.CreateDirectory (autostart_path);
+					TextWriter writer = new StreamWriter (desktopfile_path);
+					writer.WriteLine ("[Desktop Entry]\n" +
+						"Name=SparkleShare\n" +
+						"Exec=sparkleshare start\n" +
+						"Icon=folder-sparkleshare\n" +
+						"Terminal=false\n" +
+						"X-GNOME-Autostart-enabled=true");
+					writer.Close ();
+					SparkleHelpers.DebugInfo ("Config", " Created '" + desktopfile_path + "'");
+				}
+
+				break;
+
+			}
+
+
 			// Create 'SparkleShare' folder in the user's home folder
 			// if it's not there already
 			if (!Directory.Exists (SparklePath)) {
 
 				Directory.CreateDirectory (SparklePath);
-				SparkleHelpers.DebugInfo ("Config",
-				                          "Created '" + SparklePath + "'");
+				SparkleHelpers.DebugInfo ("Config", " Created '" + SparklePath + "'");
 					
 				// Add a special icon to the SparkleShare folder
 				switch (SparklePlatform.Name) {
 					case "GNOME":
+
 						Process.StartInfo.FileName = "gvfs-set-attribute";
-						Process.StartInfo.Arguments =
-							SparklePath + " metadata::custom-icon " +
-	                  "file:///usr/share/icons/hicolor/48x48/places/" +
-	                  "folder-sparkleshare.png";
+						Process.StartInfo.Arguments = SparklePath + " metadata::custom-icon " +
+							"file:///usr/share/icons/hicolor/48x48/places/" +
+							"folder-sparkleshare.png";
 						Process.Start ();
+
 						break;
+
 				}
 
 				// Add the SparkleShare folder to the bookmarks
@@ -82,13 +114,12 @@ namespace SparkleShare {
 
 			}
 
+			// Create a directory to store temporary files in
 			if (!Directory.Exists (SparklePaths.SparkleTmpPath))
 				Directory.CreateDirectory (SparklePaths.SparkleTmpPath);
 
-			if (!HideUI) {
-				// Create the status icon
+			if (!HideUI)
 				NotificationIcon = new SparkleStatusIcon ();
-			}
 
 			UpdateRepositories ();
 
@@ -156,56 +187,61 @@ namespace SparkleShare {
 			if (!Directory.Exists (ConfigPath)) {
 
 				Directory.CreateDirectory (ConfigPath);
-				SparkleHelpers.DebugInfo ("Config",
-				                          "Created '" + ConfigPath + "'");
+				SparkleHelpers.DebugInfo ("Config", " Created '" + ConfigPath + "'");
 
 				// Create a place to store the avatars
 				Directory.CreateDirectory (AvatarPath);
-				SparkleHelpers.DebugInfo ("Config",
-				                          "Created '" + AvatarPath + "'");
+				SparkleHelpers.DebugInfo ("Config", " Created '" + AvatarPath + "'");
 
 			}
 			
-			string NotifySettingFile =
-				SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
-					                         "sparkleshare.notify");
+			string NotifySettingFile = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
+				"sparkleshare.notify");
 
 			// Enable notifications by default				
 			if (!File.Exists (NotifySettingFile))
 				File.Create (NotifySettingFile);
 
 		}
-		public void UpdateRepositories () {
+
+
+		public void UpdateRepositories ()
+		{
+
 			string SparklePath = SparklePaths.SparklePath;
 			// Get all the repos in ~/SparkleShare
-			SparkleRepo [] TmpRepos =
-				new SparkleRepo [Directory.GetDirectories (SparklePath).Length];
+			SparkleRepo [] TmpRepos = new SparkleRepo [Directory.GetDirectories (SparklePath).Length];
 			
 			int FolderCount = 0;
 			foreach (string Folder in Directory.GetDirectories (SparklePath)) {
 
 				// Check if the folder is a git repo
-				if (Directory.Exists (SparkleHelpers.CombineMore (Folder,
-				                                                  ".git"))) {
+				if (Directory.Exists (SparkleHelpers.CombineMore (Folder, ".git"))) {
+
 					TmpRepos [FolderCount] = new SparkleRepo (Folder);
 					FolderCount++;
 
-					// TODO: emblems don't work in nautilus
+					// TODO: emblems don't show up in nautilus
 					// Attach emblems
 					switch (SparklePlatform.Name) {
 						case "GNOME":
+
 							Process.StartInfo.FileName = "gvfs-set-attribute";
-							Process.StartInfo.Arguments =
-								"-t string \"" + Folder + "\" metadata::emblems [synced]";
+							Process.StartInfo.Arguments = "-t string \"" + Folder +
+								"\" metadata::emblems [synced]";
 							Process.Start ();
+
 						break;
+
 					}
 
 				}
 
 			}
+
 			SparkleShare.Repositories = new SparkleRepo [FolderCount];
 			Array.Copy (TmpRepos, SparkleShare.Repositories, FolderCount);
+
 		}
 
 	}
