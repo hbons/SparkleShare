@@ -325,9 +325,30 @@ namespace SparkleShare {
 					"sparkleshare.notify");
 
 				if (File.Exists (NotifySettingFile)) {
+
 					SparkleHelpers.DebugInfo ("Notification", "[" + Name + "] Showing message...");
-					ShowEventBubble (LastCommitUserName + " " + LastCommitMessage, 
-						SparkleHelpers.GetAvatar (LastCommitEmail, 48), true);
+
+					SparkleBubble StuffChangedBubble = new SparkleBubble (LastCommitUserName, LastCommitMessage);
+					StuffChangedBubble.Icon = SparkleHelpers.GetAvatar (LastCommitEmail, 48);
+
+						// Add a button to open the folder where the changed file is
+						StuffChangedBubble.AddAction ("", _("Open Folder"),
+	  						delegate {
+								switch (SparklePlatform.Name) {
+									case "GNOME":
+								        Process.StartInfo.FileName = "xdg-open";
+										break;
+									case "OSX":
+								        Process.StartInfo.FileName = "open";
+										break;
+								}
+								Process.StartInfo.Arguments = LocalPath;
+								Process.Start ();
+				  		      	Process.StartInfo.FileName = "git";
+					    	} );
+
+					StuffChangedBubble.Show ();
+
 				}
 						              
 			}
@@ -449,35 +470,6 @@ namespace SparkleShare {
 
 			// Nothing happened:
 			return "";
-
-		}
-
-		// Shows a notification with text and image
-		public void ShowEventBubble (string Title,
-		                             Gdk.Pixbuf Avatar,
-		                             bool ShowButtons) {
-
-				SparkleBubble StuffChangedBubble = new SparkleBubble (Title, "");
-				StuffChangedBubble.Icon = Avatar;
-
-				// Add a button to open the folder where the changed file is
-				if (ShowButtons)
-					StuffChangedBubble.AddAction ("", _("Open Folder"), 
-  						delegate {
-							switch (SparklePlatform.Name) {
-								case "GNOME":
-						            Process.StartInfo.FileName = "xdg-open";
-									break;
-								case "OSX":
-						            Process.StartInfo.FileName = "open";
-									break;
-							}
-							Process.StartInfo.Arguments = LocalPath;
-						    Process.Start ();
-			  		      	Process.StartInfo.FileName = "git";
-			        	} );
-
-			StuffChangedBubble.Show ();
 
 		}
 
