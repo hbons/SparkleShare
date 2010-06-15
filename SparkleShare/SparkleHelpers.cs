@@ -24,20 +24,18 @@ using System.Text.RegularExpressions;
 
 namespace SparkleShare {
 	
-	public static class SparkleHelpers {
-
-		public static bool ShowDebugInfo = true;
+	public static class SparkleHelpers
+	{
 
 		// Get's the avatar for a specific email address and size
-		public static Gdk.Pixbuf GetAvatar (string Email, int Size) {
+		public static Gdk.Pixbuf GetAvatar (string Email, int Size)
+		{
 
-			string AvatarPath = CombineMore (SparklePaths.SparkleAvatarPath, 
-			                    Size + "x" + Size);
+			string AvatarPath = CombineMore (SparklePaths.SparkleAvatarPath, Size + "x" + Size);
 
 			if (!Directory.Exists (AvatarPath)) {
 				Directory.CreateDirectory (AvatarPath);
-				SparkleHelpers.DebugInfo ("Config",
-				                          "Created '" + AvatarPath + "'");
+				SparkleHelpers.DebugInfo ("Config", "Created '" + AvatarPath + "'");
 			}
 			
 			string AvatarFilePath = CombineMore (AvatarPath, Email);
@@ -48,11 +46,10 @@ namespace SparkleShare {
 
 				// Let's try to get the person's gravatar for next time
 				WebClient WebClient = new WebClient ();
-				Uri GravatarUri = new Uri ("http://www.gravatar.com/avatar/" + 
-				                   GetMD5 (Email) + ".jpg?s=" + Size + "&d=404");
+				Uri GravatarUri = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (Email) +
+					".jpg?s=" + Size + "&d=404");
 
-				string TmpFile = 
-					CombineMore (SparklePaths.SparkleTmpPath, Email + Size);
+				string TmpFile = CombineMore (SparklePaths.SparkleTmpPath, Email + Size);
 
 				if (!File.Exists (TmpFile)) {
 
@@ -76,47 +73,56 @@ namespace SparkleShare {
 
 		}
 
-		// Creates an MD5 hash
-		public static string GetMD5 (string s) {
+
+		// Creates an MD5 hash of input
+		public static string GetMD5 (string s)
+		{
 			MD5 md5 = new MD5CryptoServiceProvider ();
 			Byte[] Bytes = ASCIIEncoding.Default.GetBytes (s);
 			Byte[] EncodedBytes = md5.ComputeHash (Bytes);
-			return BitConverter.ToString
-				(EncodedBytes).ToLower ().Replace ("-", "");
+			return BitConverter.ToString (EncodedBytes).ToLower ().Replace ("-", "");
 		}
+
 		
 		// Makes it possible to combine more than
 		// two paths at once.
-		public static string CombineMore (params string [] Parts) {
+		public static string CombineMore (params string [] Parts)
+		{
 			string NewPath = " ";
 			foreach (string Part in Parts)
 				NewPath = Path.Combine (NewPath, Part);
 			return NewPath;
 		}
 
+
 		public static IconTheme SparkleTheme = new IconTheme ();
 
 		// Looks up an icon from the system's theme
-		public static Gdk.Pixbuf GetIcon (string Name, int Size) {
-
-			SparkleTheme.AppendSearchPath
-				(CombineMore (SparklePaths.SparkleInstallPath, "icons"));
-
-			return SparkleTheme.LoadIcon (Name, Size,
-			                              IconLookupFlags.GenericFallback);
+		public static Gdk.Pixbuf GetIcon (string Name, int Size)
+		{
+			SparkleTheme.AppendSearchPath (CombineMore (SparklePaths.SparkleInstallPath, "icons"));
+			return SparkleTheme.LoadIcon (Name, Size, IconLookupFlags.GenericFallback);
 		}
 
-		public static bool IsGitUrl (string Url) {
+
+		// Checks if a url is a valid git url
+		public static bool IsGitUrl (string Url)
+		{
 			return Regex.Match (Url, @"(.)+(/|:)(.)+").Success;
 		}
 
-		public static void DebugInfo (string Type, string Message) {
+
+		public static bool ShowDebugInfo = true;
+
+		// Show debug info if needed
+		public static void DebugInfo (string Type, string Message)
+		{
 			if (ShowDebugInfo) {
 				DateTime DateTime = new DateTime ();					
-					string TimeStamp = DateTime.Now.ToString ("HH:mm:ss");
-				Console.WriteLine ("[" + TimeStamp + "]" + 
-				                   "[" + Type + "]" + Message);
+				string TimeStamp = DateTime.Now.ToString ("HH:mm:ss");
+				Console.WriteLine ("[" + TimeStamp + "]" + "[" + Type + "]" + Message);
 			}
+
 		}
 
 	}

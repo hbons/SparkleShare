@@ -20,10 +20,10 @@ using System.IO;
 
 namespace SparkleShare {
 	
-	public static class SparklePaths {
+	public static class SparklePaths
+	{
 
-		private static UnixUserInfo UnixUserInfo =
-			new UnixUserInfo (UnixEnvironment.UserName);
+		private static UnixUserInfo UnixUserInfo = new UnixUserInfo (UnixEnvironment.UserName);
 
 		public static string HomePath = UnixUserInfo.HomeDirectory;
 			
@@ -31,31 +31,26 @@ namespace SparkleShare {
 
 		public static string SparkleTmpPath = Path.Combine (SparklePath, ".tmp");
 
-		public static string SparkleConfigPath =
-			SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
+		public static string SparkleConfigPath = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
 			
-		public static string SparkleInstallPath =
-			SparkleHelpers.CombineMore ("usr", "share", "sparkleshare",
-			                            "icons", "hicolor");
+		public static string SparkleInstallPath = SparkleHelpers.CombineMore ("usr", "share",
+			"sparkleshare",	"icons", "hicolor");
 
 		public static string SparkleAvatarPath {
 
 			get {
 
-				string XDG_CACHE_HOME =
-					Environment.GetEnvironmentVariable ("XDG_CACHE_HOME");
+				string XDG_CACHE_HOME = Environment.GetEnvironmentVariable ("XDG_CACHE_HOME");
 
 				if (XDG_CACHE_HOME != null)
 					return Path.Combine (XDG_CACHE_HOME, "sparkleshare");
 				else
-					return SparkleHelpers.CombineMore
-					       	(HomePath, ".cache", "sparkleshare");
+					return SparkleHelpers.CombineMore (HomePath, ".cache", "sparkleshare");
 			}
 
 		}
 			                                   
-		public static string SparkleIconPath =
-			SparkleHelpers.CombineMore ("usr", "share", "icons", "hicolor");
+		public static string SparkleIconPath = SparkleHelpers.CombineMore ("usr", "share", "icons", "hicolor");
 
 	}
 
