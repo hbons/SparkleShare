@@ -26,11 +26,8 @@ using System.Timers;
 namespace SparkleShare {
 
 	// SparkleRepo class holds repository information and timers
-	public class SparkleRepo {
-
-		public static string _ (string s) {
-			return Catalog.GetString (s);
-		}
+	public class SparkleRepo
+	{
 
 		private Process Process;
 		private Timer FetchTimer;
@@ -46,7 +43,13 @@ namespace SparkleShare {
 		public string UserEmail;
 		public string UserName;
 
-		public SparkleRepo (string RepoPath) {
+		public static string _ (string s)
+		{
+			return Catalog.GetString (s);
+		}
+
+		public SparkleRepo (string RepoPath)
+		{
 
 			Process = new Process ();
 			Process.EnableRaisingEvents = true;
@@ -58,10 +61,12 @@ namespace SparkleShare {
 			Process.StartInfo.WorkingDirectory = LocalPath;
 
 			// Get user.name, example: "User Name"
-			UserName = "Anonymous";
-			UnixUserInfo UnixUserInfo =
-				new UnixUserInfo (UnixEnvironment.UserName);
-			UserName = UnixUserInfo.RealName;
+			UnixUserInfo UnixUserInfo = new UnixUserInfo (UnixEnvironment.UserName);
+			if (UserName.Equals (""))
+				UserName = "Anonymous";
+			else
+				UserName = UnixUserInfo.RealName;
+
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.Arguments = "config user.name " + UserName;
 			Process.Start ();
@@ -126,7 +131,6 @@ namespace SparkleShare {
 				}
 			};
 
-
 			// Add everything that changed 
 			// since SparkleShare was stopped
 			Add ();
@@ -136,19 +140,19 @@ namespace SparkleShare {
 		}
 
 		// Starts a time buffer when something changes
-		public void OnFileActivity (object o, FileSystemEventArgs args) {
+		public void OnFileActivity (object o, FileSystemEventArgs args)
+		{
 		   WatcherChangeTypes wct = args.ChangeType;
 			if (!ShouldIgnore (args.Name)) {
-				SparkleHelpers.DebugInfo ("Event", "[" + Name + "] "
-				                          + wct.ToString () +
-			                             " '" + args.Name + "'");
+				SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + args.Name + "'");
 				StartBufferTimer ();
 			}
 		}
 
 		// A buffer that will fetch changes after 
 		// file activity has settles down
-		public void StartBufferTimer () {
+		public void StartBufferTimer ()
+		{
 
 			FetchTimer.Stop ();
 			int Interval = 4000;
@@ -157,15 +161,11 @@ namespace SparkleShare {
 				// Delay for a few seconds to see if more files change
 				BufferTimer.Interval = Interval; 
 				BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
-					SparkleHelpers.DebugInfo ("Buffer",
-					                          "[" + Name + "] Done waiting.");
+					SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Done waiting.");
 					Add ();
 				};
 
-				SparkleHelpers.DebugInfo ("Buffer",
-				                          "[" + Name + "] " +
-				                          "Waiting for more changes...");
-
+				SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] " + "Waiting for more changes...");
 				BufferTimer.Start ();
 
 			} else {
@@ -178,27 +178,27 @@ namespace SparkleShare {
 				FetchTimer.Start ();
 
 				BufferTimer.Start ();
-				SparkleHelpers.DebugInfo ("Buffer",
-				                          "[" + Name + "] " +
-				                          "Waiting for more changes...");
+				SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] " + "Waiting for more changes...");
 			}
 
 		}
 
 		// Clones a remote repo
-		public void Clone () {
+		public void Clone ()
+		{
 			Process.StartInfo.Arguments = "clone " + RemoteOriginUrl;
 			Process.Start ();
 
 			// Add a gitignore file
-		  TextWriter Writer = new StreamWriter (LocalPath + ".gitignore");
-		  Writer.WriteLine ("*~"); // Ignore gedit swap files
-		  Writer.WriteLine (".*.sw?"); // Ignore vi swap files
-		  Writer.Close ();
+			TextWriter Writer = new StreamWriter (LocalPath + ".gitignore");
+			Writer.WriteLine ("*~"); // Ignore gedit swap files
+			Writer.WriteLine (".*.sw?"); // Ignore vi swap files
+			Writer.Close ();
 		}
 
 		// Stages the made changes
-		public void Add () {
+		public void Add ()
+		{
 			BufferTimer.Stop ();
 			FetchTimer.Stop ();
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Staging changes...");
@@ -212,16 +212,17 @@ namespace SparkleShare {
 		}
 
 		// Commits the made changes
-		public void Commit (string Message) {
-			SparkleHelpers.DebugInfo ("Commit",
-			                          "[" + Name + "] " + Message);
+		public void Commit (string Message)
+		{
+			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + Message);
 			Process.StartInfo.Arguments = "commit -m \"" + Message + "\"";
 			Process.Start ();
 			Process.WaitForExit ();
 		}
 
 		// Fetches changes from the remote repo	
-		public void Fetch () {
+		public void Fetch ()
+		{
 			FetchTimer.Stop ();
 //			SparkleUI.NotificationIcon.SetSyncingState ();
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
@@ -237,7 +238,8 @@ namespace SparkleShare {
 		}
 
 		// Merges the fetched changes
-		public void Rebase () {
+		public void Rebase ()
+		{
 
 			Watcher.EnableRaisingEvents = false;
 
@@ -253,8 +255,7 @@ namespace SparkleShare {
 
 				if (Output.Contains ("Failed to merge")) {
 
-					SparkleHelpers.DebugInfo ("Git",
-					                          "[" + Name + "] Resolving conflict...");
+					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Resolving conflict...");
 
 					Process.StartInfo.Arguments = "status";
 					Process.WaitForExit ();
@@ -265,21 +266,17 @@ namespace SparkleShare {
 
 						if (Line.Contains ("needs merge")) {
 
-							string ProblemFileName =
-								Line.Substring (Line.IndexOf (": needs merge"));
+							string ProblemFileName = Line.Substring (Line.IndexOf (": needs merge"));
 
-							Process.StartInfo.Arguments
-								= "checkout --ours " + ProblemFileName;
+							Process.StartInfo.Arguments = "checkout --ours " + ProblemFileName;
 							Process.WaitForExit ();
 							Process.Start ();
 							
 							DateTime DateTime = new DateTime ();
-							string TimeStamp =
-								DateTime.Now.ToString ("H:mm, d MMM yyyy");
+							string TimeStamp = DateTime.Now.ToString ("H:mm, d MMM yyyy");
 
 							File.Move (ProblemFileName,
-							           ProblemFileName + " (" + UserName  + " - " +
-							           TimeStamp + ")");
+								ProblemFileName + " (" + UserName  + " - " + TimeStamp + ")");
 							           
 							Process.StartInfo.Arguments
 								= "checkout --theirs " + ProblemFileName;
@@ -287,9 +284,7 @@ namespace SparkleShare {
 							Process.Start ();
 
 							string ConflictTitle = "A mid-air collision happened!\n";
-							string ConflictSubtext = 
-								@"Don't worry, SparkleShare made\n
-							     a copies of the conflicting files.";
+							string ConflictSubtext = "Don't worry, SparkleShare made\na copy of the conflicting files.";
 
 							SparkleBubble ConflictBubble =
 								new  SparkleBubble(_(ConflictTitle), _(ConflictSubtext));
@@ -305,8 +300,7 @@ namespace SparkleShare {
 					Process.StartInfo.Arguments = "rebase --continue";
 					Process.WaitForExit ();
 					Process.Start ();
-					SparkleHelpers.DebugInfo ("Git",
-					                          "[" + Name + "] Conflict resolved.");
+					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
 					Push ();
 					Fetch ();
 			
@@ -315,31 +309,25 @@ namespace SparkleShare {
 				// Get the last committer e-mail
 				Process.StartInfo.Arguments = "log --format=\"%ae\" -1";
 				Process.Start ();
-				string LastCommitEmail =
-					Process.StandardOutput.ReadToEnd ().Trim ();
+				string LastCommitEmail = Process.StandardOutput.ReadToEnd ().Trim ();
 
 				// Get the last commit message
 				Process.StartInfo.Arguments = "log --format=\"%s\" -1";
 				Process.Start ();
-				string LastCommitMessage =
-					Process.StandardOutput.ReadToEnd ().Trim ();
+				string LastCommitMessage = Process.StandardOutput.ReadToEnd ().Trim ();
 
 				// Get the last commiter
 				Process.StartInfo.Arguments = "log --format=\"%an\" -1";
 				Process.Start ();
-				string LastCommitUserName =
-					Process.StandardOutput.ReadToEnd ().Trim ();
+				string LastCommitUserName = Process.StandardOutput.ReadToEnd ().Trim ();
 
-				string NotifySettingFile =
-					SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
-					                            "sparkleshare.notify");
+				string NotifySettingFile = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
+					"sparkleshare.notify");
 
 				if (File.Exists (NotifySettingFile)) {
-					SparkleHelpers.DebugInfo ("Notification",
-					                          "[" + Name + "] Showing message...");
+					SparkleHelpers.DebugInfo ("Notification", "[" + Name + "] Showing message...");
 					ShowEventBubble (LastCommitUserName + " " + LastCommitMessage, 
-						              SparkleHelpers.GetAvatar (LastCommitEmail, 48),
-						              true);
+						SparkleHelpers.GetAvatar (LastCommitEmail, 48), true);
 				}
 						              
 			}
@@ -350,7 +338,8 @@ namespace SparkleShare {
 		}
 
 		// Pushes the changes to the remote repo
-		public void Push () {
+		public void Push ()
+		{
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing changes...");
 			Process.StartInfo.Arguments = "push";
 			Process.Start ();
@@ -367,14 +356,14 @@ namespace SparkleShare {
 				 FileName.Contains ("/.") ||
 				 Directory.Exists (LocalPath + FileName))
 				return true; // Yes, ignore it.
-			else if (FileName.Length > 3 &&
-				     FileName.Substring (FileName.Length - 4).Equals (".swp"))
+			else if (FileName.Length > 3 && FileName.Substring (FileName.Length - 4).Equals (".swp"))
 				return true;
 			else return false;
 		}
 
 		// Creates a pretty commit message based on what has changed
-		public string FormatCommitMessage () {
+		public string FormatCommitMessage ()
+		{
 
 			bool DoneAddCommit = false;
 			bool DoneEditCommit = false;
@@ -408,11 +397,11 @@ namespace SparkleShare {
 					DoneAddCommit = true;
 					if (FilesAdded > 1)
 						return "added ‘" + 
-								  Line.Replace ("#\tnew file:", "").Trim () + 
-							    "’ and " + (FilesAdded - 1) + " more.";
+							Line.Replace ("#\tnew file:", "").Trim () + 
+							"’ and " + (FilesAdded - 1) + " more.";
 					else
 						return "added ‘" + 
-								  Line.Replace ("#\tnew file:", "").Trim () + "’.";
+							Line.Replace ("#\tnew file:", "").Trim () + "’.";
 				}
 
 				// Format message for when files are edited,
@@ -421,11 +410,11 @@ namespace SparkleShare {
 					DoneEditCommit = true;
 					if (FilesEdited > 1)
 						return "edited ‘" + 
-								  Line.Replace ("#\tmodified:", "").Trim () + 
-							    "’ and " + (FilesEdited - 1) + " more.";
+							Line.Replace ("#\tmodified:", "").Trim () + 
+							"’ and " + (FilesEdited - 1) + " more.";
 					else
 						return "edited ‘" + 
-								  Line.Replace ("#\tmodified:", "").Trim () + "’.";
+							Line.Replace ("#\tmodified:", "").Trim () + "’.";
 				}
 
 				// Format message for when files are edited,
@@ -434,11 +423,11 @@ namespace SparkleShare {
 					DoneDeleteCommit = true;
 					if (FilesDeleted > 1)
 						return "deleted ‘" + 
-								  Line.Replace ("#\tdeleted:", "").Trim () + 
-							    "’ and " + (FilesDeleted - 1) + " more.";
+							Line.Replace ("#\tdeleted:", "").Trim () + 
+							"’ and " + (FilesDeleted - 1) + " more.";
 					else
 						return "deleted ‘" + 
-								  Line.Replace ("#\tdeleted:", "").Trim () + "’.";
+							Line.Replace ("#\tdeleted:", "").Trim () + "’.";
 				}
 
 				// Format message for when files are renamed,
@@ -447,13 +436,13 @@ namespace SparkleShare {
 					DoneDeleteCommit = true;
 					if (FilesRenamed > 1)
 						return "renamed ‘" + 
-								  Line.Replace ("#\trenamed:", "").Trim ().Replace
-							    (" -> ", "’ to ‘") + "’ and " + (FilesDeleted - 1) + 
-							    " more.";
+							Line.Replace ("#\trenamed:", "").Trim ().Replace
+							(" -> ", "’ to ‘") + "’ and " + (FilesDeleted - 1) + 
+							" more.";
 					else
 						return "renamed ‘" + 
-								  Line.Replace ("#\trenamed:", "").Trim ().Replace
-							    (" -> ", "’ to ‘") + "’.";
+							Line.Replace ("#\trenamed:", "").Trim ().Replace
+							(" -> ", "’ to ‘") + "’.";
 				}
 
 			}
@@ -465,29 +454,28 @@ namespace SparkleShare {
 
 		// Shows a notification with text and image
 		public void ShowEventBubble (string Title,
-			                          Gdk.Pixbuf Avatar,
-			                          bool ShowButtons) {
+		                             Gdk.Pixbuf Avatar,
+		                             bool ShowButtons) {
 
 				SparkleBubble StuffChangedBubble = new SparkleBubble (Title, "");
 				StuffChangedBubble.Icon = Avatar;
 
 				// Add a button to open the folder where the changed file is
 				if (ShowButtons)
-					StuffChangedBubble.AddAction
-						("", _("Open Folder"), 
-  						 delegate {
-						 	switch (SparklePlatform.Name) {
+					StuffChangedBubble.AddAction ("", _("Open Folder"), 
+  						delegate {
+							switch (SparklePlatform.Name) {
 								case "GNOME":
-					            Process.StartInfo.FileName = "xdg-open";
+						            Process.StartInfo.FileName = "xdg-open";
 									break;
 								case "OSX":
-					            Process.StartInfo.FileName = "open";
+						            Process.StartInfo.FileName = "open";
 									break;
 							}
-				     	   Process.StartInfo.Arguments = LocalPath;
-		            	Process.Start ();
-      		      	Process.StartInfo.FileName = "git";
-			         } );
+							Process.StartInfo.Arguments = LocalPath;
+						    Process.Start ();
+			  		      	Process.StartInfo.FileName = "git";
+			        	} );
 
 			StuffChangedBubble.Show ();
 
