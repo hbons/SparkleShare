@@ -61,8 +61,8 @@ namespace SparkleShare {
 			Process.StartInfo.WorkingDirectory = LocalPath;
 
 			// Get user.name, example: "User Name"
-			UnixUserInfo UnixUserInfo = new UnixUserInfo (UnixEnvironment.UserName);
-			if (UserName.Equals (""))
+			UnixUserInfo UnixUserInfo = new UnixUserInfo (UnixEnvironment.UserName);			
+			if (UnixUserInfo.RealName.Equals (""))
 				UserName = "Anonymous";
 			else
 				UserName = UnixUserInfo.RealName;
