@@ -133,13 +133,7 @@ namespace SparkleShare {
 					if (changed.TotalMilliseconds > 5000) {
 						HasChanged = false;
 						SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes have settled, adding.");
-						Add ();
-						string Message = FormatCommitMessage ();
-						if (!Message.Equals ("")) {
-							Commit (Message);
-							Fetch ();
-							Push ();
-						}
+						AddCommitAndPush ();
 					}
 				}
 			};
@@ -148,7 +142,7 @@ namespace SparkleShare {
 
 			// Add everything that changed 
 			// since SparkleShare was stopped
-			Add ();
+			AddCommitAndPush ();
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Nothing going on...");
 
@@ -179,11 +173,28 @@ namespace SparkleShare {
 			Writer.Close ();
 		}
 
-		// Stages the made changes
-		public void Add ()
+		// When there are changes we generally want to Add, Commit and Push
+		// so this method does them all with appropriate timers, etc switched off
+		public void AddCommitAndPush ()
 		{
 			BufferTimer.Stop ();
 			FetchTimer.Stop ();
+
+			Add ();
+			string Message = FormatCommitMessage ();
+			if (!Message.Equals ("")) {
+				Commit (Message);
+				Fetch ();
+				Push ();
+			}
+
+			FetchTimer.Start ();
+			BufferTimer.Start ();
+		}
+		
+		// Stages the made changes
+		private void Add ()
+		{
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Staging changes...");
 			Process.StartInfo.Arguments = "add --all";
 			Process.Start ();
@@ -191,8 +202,6 @@ namespace SparkleShare {
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes staged.");
 //			SparkleUI.NotificationIcon.SetSyncingState ();
 //			SparkleUI.NotificationIcon.SetIdleState ();
-			FetchTimer.Start ();
-			BufferTimer.Start ();
 		}
 
 		// Commits the made changes
