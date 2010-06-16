@@ -321,7 +321,7 @@ namespace SparkleShare {
 					SparkleHelpers.DebugInfo ("Notification", "[" + Name + "] Showing message...");
 
 					SparkleBubble StuffChangedBubble = new SparkleBubble (LastCommitUserName, LastCommitMessage);
-					StuffChangedBubble.Icon = SparkleHelpers.GetAvatar (LastCommitEmail, 48);
+					StuffChangedBubble.Icon = SparkleHelpers.GetAvatar (LastCommitEmail, 32);
 
 						// Add a button to open the folder where the changed file is
 						StuffChangedBubble.AddAction ("", _("Open Folder"),
