@@ -134,9 +134,9 @@ namespace SparkleShare {
 			// Add everything that changed 
 			// since SparkleShare was stopped
 			Add ();
-			string Message = FormatCommitMessage ();
-			if (!Message.Equals ("")) {
-				Commit (Message);
+			string commit_message = FormatCommitMessage ();
+			if (!commit_message.Equals ("")) {
+				Commit (commit_message);
 				Fetch ();
 				Push ();
 			}

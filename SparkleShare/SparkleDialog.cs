@@ -174,7 +174,8 @@ namespace SparkleShare {
 					SparkleHelpers.CombineMore (SparklePaths.SparklePath, RepoName));
 
 				// Add a .gitignore file to the repo
-				TextWriter Writer = new StreamWriter (LocalPath + ".gitignore");
+				TextWriter Writer = new StreamWriter (SparkleHelpers.CombineMore (SparklePaths.SparklePath, RepoName,
+					".gitignore"));
 				Writer.WriteLine ("*~"); // Ignore gedit swap files
 				Writer.WriteLine (".*.sw?"); // Ignore vi swap files
 				Writer.Close ();
