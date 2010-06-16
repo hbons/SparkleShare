@@ -160,19 +160,6 @@ namespace SparkleShare {
 			}
 		}
 
-		// Clones a remote repo
-		public void Clone ()
-		{
-			Process.StartInfo.Arguments = "clone " + RemoteOriginUrl;
-			Process.Start ();
-
-			// Add a gitignore file
-			TextWriter Writer = new StreamWriter (LocalPath + ".gitignore");
-			Writer.WriteLine ("*~"); // Ignore gedit swap files
-			Writer.WriteLine (".*.sw?"); // Ignore vi swap files
-			Writer.Close ();
-		}
-
 		// When there are changes we generally want to Add, Commit and Push
 		// so this method does them all with appropriate timers, etc switched off
 		public void AddCommitAndPush ()
