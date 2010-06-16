@@ -168,10 +168,11 @@ namespace SparkleShare {
 			} else {
 
 				SparkleHelpers.DebugInfo ("Git", "[" + RepoName + "] Repository cloned");
-				SparkleShare.SparkleUI.UpdateRepositories ();
 
 				Directory.Move (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, RepoName),
 					SparkleHelpers.CombineMore (SparklePaths.SparklePath, RepoName));
+
+				SparkleShare.SparkleUI.UpdateRepositories ();
 
 				// Show a confirmation notification
 				SparkleBubble FinishedBubble;
