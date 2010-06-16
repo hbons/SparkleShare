@@ -134,6 +134,12 @@ namespace SparkleShare {
 			// Add everything that changed 
 			// since SparkleShare was stopped
 			Add ();
+			string Message = FormatCommitMessage ();
+			if (!Message.Equals ("")) {
+				Commit (Message);
+				Fetch ();
+				Push ();
+			}
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Nothing going on...");
 
