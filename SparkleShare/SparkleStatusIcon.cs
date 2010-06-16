@@ -24,7 +24,8 @@ using System.Timers;
 
 namespace SparkleShare {
 
-	public class SparkleStatusIcon : StatusIcon {
+	public class SparkleStatusIcon : StatusIcon
+	{
 
 		private Timer Timer;
 		private int SyncingState;
@@ -34,14 +35,16 @@ namespace SparkleShare {
 			return Catalog.GetString (s);
 		}
 
-		public EventHandler CreateWindowDelegate (SparkleRepo SparkleRepo) {
+		public EventHandler CreateWindowDelegate (SparkleRepo SparkleRepo)
+		{
 			return delegate { 
 				SparkleWindow SparkleWindow = new SparkleWindow (SparkleRepo);
 				SparkleWindow.ShowAll ();
 			};
 		}
 
-		public SparkleStatusIcon () : base ()  {
+		public SparkleStatusIcon () : base ()
+		{
 
 			Timer = new Timer ();
 			Activate += ShowMenu;
@@ -55,7 +58,8 @@ namespace SparkleShare {
 
 		}
 
-		public void ShowMenu (object o, EventArgs Args) {
+		public void ShowMenu (object o, EventArgs Args)
+		{
 
 				Menu Menu = new Menu ();
 
@@ -117,14 +121,12 @@ namespace SparkleShare {
 				Menu.Add (AddItem);
 				Menu.Add (new SeparatorMenuItem ());
 
-				CheckMenuItem NotifyCheckMenuItem =
-					new CheckMenuItem (_("Show Notifications"));
+				CheckMenuItem NotifyCheckMenuItem =	new CheckMenuItem (_("Show Notifications"));
 				Menu.Add (NotifyCheckMenuItem);
 				Menu.Add (new SeparatorMenuItem ());
 
-				string NotifyChangesFileName =
-					SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
-						                         "sparkleshare.notify");
+				string NotifyChangesFileName = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
+					"sparkleshare.notify");
 					                                     
 				if (System.IO.File.Exists (NotifyChangesFileName))
 					NotifyCheckMenuItem.Active = true;
@@ -161,7 +163,8 @@ namespace SparkleShare {
 				Menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
 		}
 
-		public void SetIdleState () {
+		public void SetIdleState ()
+		{
 			Timer.Stop ();
 			Pixbuf = SparkleHelpers.GetIcon ("folder-sparkleshare", 24);
 			SyncingState = 0;
@@ -170,7 +173,8 @@ namespace SparkleShare {
 		// Changes the status icon to the syncing animation
 		// TODO: There are UI freezes when switching back and forth
 		// bewteen syncing and idle state
-		public void SetSyncingState () {
+		public void SetSyncingState ()
+		{
 
 			SyncingState = 1;
 
@@ -178,8 +182,7 @@ namespace SparkleShare {
 			int CurrentStep = 0;
 			int Size = 24;			
 
-			Gdk.Pixbuf SpinnerGallery =
-				SparkleHelpers.GetIcon ("process-syncing-sparkleshare", Size);
+			Gdk.Pixbuf SpinnerGallery = SparkleHelpers.GetIcon ("process-syncing-sparkleshare", Size);
 
 			int FramesInWidth = SpinnerGallery.Width / Size;
 			int FramesInHeight = SpinnerGallery.Height / Size;
@@ -190,8 +193,7 @@ namespace SparkleShare {
 			for (int y = 0; y < FramesInHeight; y++) {
 				for (int x = 0; x < FramesInWidth; x++) {
 					if (!(y == 0 && x == 0)) {
-						Images [i] = new Gdk.Pixbuf (SpinnerGallery,
-						                             x * Size, y * Size, Size, Size);
+						Images [i] = new Gdk.Pixbuf (SpinnerGallery, x * Size, y * Size, Size, Size);
 						i++;
 					}
 				}
@@ -211,23 +213,21 @@ namespace SparkleShare {
 		}
 
 		// Changes the status icon to the error icon
-		public void SetErrorState () {
+		public void SetErrorState ()
+		{
 			IconName = "folder-sync-error";
 			SyncingState = -1;
 		}
 
-		public void SetPosition (Menu menu, out int x, out int y,
-		                         out bool push_in) {
-
+		public void SetPosition (Menu menu, out int x, out int y, out bool push_in)
+		{
 			PositionMenu (menu, out x, out y, out push_in, Handle);
-
 		}
 
 		// Quits the program
-		public void Quit (object o, EventArgs args) {
-			System.IO.File.Delete
-				(SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath +
-                                 "sparkleshare.pid"));
+		public void Quit (object o, EventArgs args)
+		{
+			System.IO.File.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "sparkleshare.pid"));
 			Application.Quit ();
 		}
 
