@@ -146,7 +146,7 @@ namespace SparkleShare {
 		}
 
 		// Starts a time buffer when something changes
-		public void OnFileActivity (object o, FileSystemEventArgs args)
+		private void OnFileActivity (object o, FileSystemEventArgs args)
 		{
 		   WatcherChangeTypes wct = args.ChangeType;
 			if (!ShouldIgnore (args.Name)) {
@@ -157,7 +157,7 @@ namespace SparkleShare {
 
 		// A buffer that will fetch changes after 
 		// file activity has settles down
-		public void StartBufferTimer ()
+		private void StartBufferTimer ()
 		{
 
 			FetchTimer.Stop ();
@@ -362,7 +362,7 @@ namespace SparkleShare {
 		}
 
 		// Ignores Repos, dotfiles, swap files and the like.
-		public bool ShouldIgnore (string FileName) {
+		private bool ShouldIgnore (string FileName) {
 			if (FileName.Substring (0, 1).Equals (".") ||
 				 FileName.Contains (".lock") ||
 				 FileName.Contains (".git") ||
@@ -375,7 +375,7 @@ namespace SparkleShare {
 		}
 
 		// Creates a pretty commit message based on what has changed
-		public string FormatCommitMessage ()
+		private string FormatCommitMessage ()
 		{
 
 			bool DoneAddCommit = false;
