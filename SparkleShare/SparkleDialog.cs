@@ -173,6 +173,12 @@ namespace SparkleShare {
 				Directory.Move (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, RepoName),
 					SparkleHelpers.CombineMore (SparklePaths.SparklePath, RepoName));
 
+				// Add a .gitignore file to the repo
+				TextWriter Writer = new StreamWriter (LocalPath + ".gitignore");
+				Writer.WriteLine ("*~"); // Ignore gedit swap files
+				Writer.WriteLine (".*.sw?"); // Ignore vi swap files
+				Writer.Close ();
+
 				// Show a confirmation notification
 				SparkleBubble FinishedBubble;
 				FinishedBubble = new SparkleBubble (String.Format(_("Successfully synced folder ‘{0}’"), RepoName),
