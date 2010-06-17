@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" "$@"
