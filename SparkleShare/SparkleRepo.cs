@@ -411,7 +411,7 @@ namespace SparkleShare {
 					if (FilesAdded > 1)
 						return "added ‘" + 
 							Line.Replace ("#\tnew file:", "").Trim () + 
-							"’ and " + (FilesAdded - 1) + " more.";
+							"’\nand " + (FilesAdded - 1) + " more.";
 					else
 						return "added ‘" + 
 							Line.Replace ("#\tnew file:", "").Trim () + "’.";
@@ -424,7 +424,7 @@ namespace SparkleShare {
 					if (FilesEdited > 1)
 						return "edited ‘" + 
 							Line.Replace ("#\tmodified:", "").Trim () + 
-							"’ and " + (FilesEdited - 1) + " more.";
+							"’\nand " + (FilesEdited - 1) + " more.";
 					else
 						return "edited ‘" + 
 							Line.Replace ("#\tmodified:", "").Trim () + "’.";
@@ -437,7 +437,7 @@ namespace SparkleShare {
 					if (FilesDeleted > 1)
 						return "deleted ‘" + 
 							Line.Replace ("#\tdeleted:", "").Trim () + 
-							"’ and " + (FilesDeleted - 1) + " more.";
+							"’\nand " + (FilesDeleted - 1) + " more.";
 					else
 						return "deleted ‘" + 
 							Line.Replace ("#\tdeleted:", "").Trim () + "’.";

@@ -133,7 +133,7 @@ namespace SparkleShare {
 
 					// Look for the snowman!
 					string [] Parts = Regex.Split (Line, "☃");
-					string Message = Parts [1];
+					string Message = Parts [1].Replace ("\n", " ");;
 					string UserName = Parts [2];
 					string TimeAgo = Parts [3];
 					string UserEmail = Parts [4];
@@ -142,15 +142,11 @@ namespace SparkleShare {
 
 					LogStore.SetValue (Iter, 0, SparkleHelpers.GetAvatar (UserEmail, 24));
 
-					if (SparkleRepo.UserEmail.Equals (UserEmail)) {
-
+					if (SparkleRepo.UserEmail.Equals (UserEmail))
 						LogStore.SetValue (Iter, 1, "<b>You</b>\n" + Message.Replace ("/", " → "));
-
-					} else {
-
+					else
 						LogStore.SetValue (Iter, 1, "<b>" + UserName + "</b>\n" + Message.Replace ("/", " → "));					
-					}
-
+					
 					LogStore.SetValue (Iter, 2, TimeAgo + "  ");
 
 					// We're not showing email, it's only 
