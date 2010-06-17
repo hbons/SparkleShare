@@ -14,7 +14,7 @@ fi
 AC_SUBST([ACLOCAL_AMFLAGS], ["-I build/m4/sparkleshare -I build/m4/shamrock -I build/m4/shave \${ACLOCAL_FLAGS}"])
 
 dnl i18n
-IT_PROG_INTLTOOL([0.41.0])
+IT_PROG_INTLTOOL([0.40.6])
 GETTEXT_PACKAGE=sparkleshare
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package])
