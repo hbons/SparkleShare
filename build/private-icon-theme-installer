@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+mkinstalldirs=$1; shift
+install_data=$1; shift
+action=$1; shift
+dest_dir=$1; shift
+src_dir=$1; shift
+
+for icon in $@; do
+	dest_dir_build="${dest_dir}/icons/hicolor/$(dirname ${icon})"
+	if [[ ${action} == "-i" || ${action} == "-il" ]]; then
+		src_file="${src_dir}/ThemeIcons/${icon}"
+		$mkinstalldirs "${dest_dir_build}" &>/dev/null
+		if [[ ${action} == "-i" ]]; then 
+			echo "Installing private icon theme icon: ${icon}"
+		fi
+		$install_data "${src_file}" "${dest_dir_build}"
+	else
+		echo "Uninstalling private icon theme icon: ${icon}"
+		rm -f "${dest_dir_build}/$(basename ${icon})"
+	fi
+done
+
