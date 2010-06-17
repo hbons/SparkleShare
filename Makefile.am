@@ -1,7 +1,8 @@
 SUBDIRS =	\
 	build	\
 	notify-sharp \
-	SparkleShare
+	SparkleShare \
+	po
 
 DISTCLEANFILES = \
 	intltool-extract        \

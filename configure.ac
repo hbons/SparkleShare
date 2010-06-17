@@ -82,9 +82,9 @@ AC_OUTPUT([
 build/Makefile
 build/m4/Makefile
 notify-sharp/Makefile
-src/sparkleshare
-src/AssemblyInfo.cs
-src/Makefile
+SparkleShare/sparkleshare
+SparkleShare/AssemblyInfo.cs
+SparkleShare/Makefile
 po/Makefile.in
 Makefile
 
