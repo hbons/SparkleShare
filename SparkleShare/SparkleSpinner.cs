@@ -20,7 +20,8 @@ using System.Timers;
 namespace SparkleShare {
 		
 	// This is a close implementation of GtkSpinner
-	public class SparkleSpinner : Image {
+	public class SparkleSpinner : Image
+	{
 
 		public bool Active;
 
@@ -31,14 +32,14 @@ namespace SparkleShare {
 		private int NumSteps;
 		private int Size;
 
-		public SparkleSpinner () : base ()  {
+		public SparkleSpinner () : base ()
+		{
 
 			CycleDuration = 750;
 			CurrentStep = 0;
 			Size = 24;			
 
-			Gdk.Pixbuf SpinnerGallery = SparkleHelpers.GetIcon ("process-working",
-			                                                    Size);
+			Gdk.Pixbuf SpinnerGallery = SparkleHelpers.GetIcon ("process-working", Size);
 
 			int FramesInWidth = SpinnerGallery.Width / Size;
 			int FramesInHeight = SpinnerGallery.Height / Size;
@@ -49,8 +50,7 @@ namespace SparkleShare {
 			for (int y = 0; y < FramesInHeight; y++) {
 				for (int x = 0; x < FramesInWidth; x++) {
 					if (!(y == 0 && x == 0)) {
-						Images [i] = new Gdk.Pixbuf (SpinnerGallery,
-						                             x * Size, y * Size, Size, Size);
+						Images [i] = new Gdk.Pixbuf (SpinnerGallery, x * Size, y * Size, Size, Size);
 						i++;
 					}
 				}
@@ -58,12 +58,15 @@ namespace SparkleShare {
 
 			Timer = new Timer ();
 			Timer.Interval = CycleDuration / NumSteps;
-			Timer.Elapsed += delegate { NextImage (); };
+			Timer.Elapsed += delegate {
+				NextImage ();
+			};
 			Start ();
 
 		}
 
-		private void NextImage () {
+		private void NextImage ()
+		{
 			if (CurrentStep < NumSteps)
 				CurrentStep++;
 			else
@@ -71,17 +74,20 @@ namespace SparkleShare {
 			Pixbuf = Images [CurrentStep];
 		}
 						
-		public bool IsActive () {
+		public bool IsActive ()
+		{
 			return Active;
 		}
 
-		public void Start () {
+		public void Start ()
+		{
 			CurrentStep = 0;
 			Active = true;
 			Timer.Start ();
 		}
 
-		public void Stop () {
+		public void Stop ()
+		{
 			Active = false;
 			Timer.Stop ();
 		}
