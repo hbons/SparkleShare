@@ -3,7 +3,13 @@
 *.exe.mdb
 *.userprefs
 *.pidb
+*.gmo
 /SparkleShare/bin
 /SparkleShare/obj
 /notify-sharp/bin
 /notify-sharp/obj
+po/POTFILES
+Makefile.in
+Makefile
+
+Defines.cs
