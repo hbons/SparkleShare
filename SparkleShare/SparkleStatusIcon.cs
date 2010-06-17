@@ -82,7 +82,7 @@ namespace SparkleShare {
 				Menu.Add (StatusMenuItem);
 				Menu.Add (new SeparatorMenuItem ());
 
-				Action FolderAction = new Action ("", "SparkleShare");
+				Gtk.Action FolderAction = new Gtk.Action ("", "SparkleShare");
 				FolderAction.IconName = "folder-sparkleshare";
 				FolderAction.IsImportant = true;
 				FolderAction.Activated += delegate {
@@ -100,12 +100,12 @@ namespace SparkleShare {
 				};
 				Menu.Add (FolderAction.CreateMenuItem ());
 
-				Action [] FolderItems =
-					new Action [SparkleShare.Repositories.Length];
+				Gtk.Action [] FolderItems =
+					new Gtk.Action [SparkleShare.Repositories.Length];
 				
 				int i = 0;
 				foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
-					FolderItems [i] = new Action ("", SparkleRepo.Name);
+					FolderItems [i] = new Gtk.Action ("", SparkleRepo.Name);
 					FolderItems [i].IconName = "folder";
 					FolderItems [i].IsImportant = true;
 					FolderItems [i].Activated += CreateWindowDelegate (SparkleRepo);
