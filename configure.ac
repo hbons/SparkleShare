@@ -83,6 +83,7 @@ build/Makefile
 build/m4/Makefile
 notify-sharp/Makefile
 SparkleShare/sparkleshare
+SparkleShare/Defines.cs
 SparkleShare/AssemblyInfo.cs
 SparkleShare/Makefile
 po/Makefile.in
