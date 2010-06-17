@@ -133,20 +133,20 @@ namespace SparkleShare {
 
 					// Look for the snowman!
 					string [] Parts = Regex.Split (Line, "☃");
-					string Message = Parts [1].Replace ("\n", " ");;
-					string UserName = Parts [2];
-					string TimeAgo = Parts [3];
+
+					string Message   = Parts [1];
+					string UserName  = Parts [2];
+					string TimeAgo   = Parts [3];
 					string UserEmail = Parts [4];
+
+					Message = Message.Replace ("/", " → ");
+					Message = Message.Replace ("\n", " ");
 
 					Iter = LogStore.Append ();
 
 					LogStore.SetValue (Iter, 0, SparkleHelpers.GetAvatar (UserEmail, 24));
-
-					if (SparkleRepo.UserEmail.Equals (UserEmail))
-						LogStore.SetValue (Iter, 1, "<b>You</b>\n" + Message.Replace ("/", " → "));
-					else
-						LogStore.SetValue (Iter, 1, "<b>" + UserName + "</b>\n" + Message.Replace ("/", " → "));					
-					
+					LogStore.SetValue (Iter, 1, "<b>" + UserName + "</b>\n" + Message);
+					// TODO Blend text color with treeview color instead of hardcoding it
 					LogStore.SetValue (Iter, 2, "<span fgcolor='grey'>" + TimeAgo + "</span>  ");
 
 					// We're not showing email, it's only 
