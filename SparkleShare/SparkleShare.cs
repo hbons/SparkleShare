@@ -25,14 +25,16 @@ namespace SparkleShare {
 	public class SparkleShare {
 
 		// Short alias for the translations
-		public static string _ (string s) {
+		public static string _ (string s)
+		{
 			return Catalog.GetString (s);
 		}
 		
 		public static SparkleRepo [] Repositories;
 		public static SparkleUI SparkleUI;
 
-		public static void Main (string [] args) {
+		public static void Main (string [] args)
+		{
 
 			// Use translations
 			Catalog.Init ("i18n", "locale");
@@ -80,7 +82,8 @@ namespace SparkleShare {
 		}
 
 		// Prints the help output
-		public static void ShowHelp () {
+		public static void ShowHelp ()
+		{
 			Console.WriteLine (_("SparkleShare Copyright (C) 2010 Hylke Bons"));
 			Console.WriteLine (" ");
 			Console.WriteLine (_("This program comes with ABSOLUTELY NO WARRANTY."));
