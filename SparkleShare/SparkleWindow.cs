@@ -172,7 +172,6 @@ namespace SparkleShare {
 
 			ColumnMarkup.SetCellDataFunc (CellRendererMarkup, new Gtk.TreeCellDataFunc (RenderRow));
 
-			LogView.AppendColumn (ColumnMarkup);
 			LogView.AppendColumn ("", TextCellRight, "text", 2);
 
 			TreeViewColumn [] Columns = LogView.Columns;
