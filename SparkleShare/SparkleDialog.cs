@@ -156,7 +156,11 @@ namespace SparkleShare {
 					"Please double check the address and\n" +
 					"network connection.");
 
-				Directory.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, RepoName));
+				try {
+					Directory.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, RepoName));
+				} catch (System.IO.DirectoryNotFoundException) {
+					SparkleHelpers.DebugInfo ("Config", "[" + RepoName + "] Temporary directory did not exist...");
+				}
 
 				ErrorBubble.AddAction ("", _("Try Again…"), 
 					delegate {
