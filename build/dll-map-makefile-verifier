@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if [ -f $2 ]; then
+	# Lame, but better than nothing
+	grep $(basename $2) $1 | grep module_SCRIPTS &>/dev/null || {
+		echo "Assembly has corresponding .config file, but it was not found in module_SCRIPTS in Makefile.am" 2>&1
+		exit 1
+	}
+fi
+
