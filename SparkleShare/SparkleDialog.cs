@@ -172,10 +172,10 @@ namespace SparkleShare {
 			} else {
 
 				SparkleHelpers.DebugInfo ("Git", "[" + RepoName + "] Repository cloned");
-				SparkleShare.SparkleUI.UpdateRepositories ();
 
 				Directory.Move (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, RepoName),
 					SparkleHelpers.CombineMore (SparklePaths.SparklePath, RepoName));
+
 
 				// Add a .gitignore file to the repo
 				TextWriter Writer = new StreamWriter (SparkleHelpers.CombineMore (SparklePaths.SparklePath, RepoName,
@@ -183,6 +183,8 @@ namespace SparkleShare {
 				Writer.WriteLine ("*~"); // Ignore gedit swap files
 				Writer.WriteLine (".*.sw?"); // Ignore vi swap files
 				Writer.Close ();
+
+				SparkleShare.SparkleUI.UpdateRepositories ();
 
 				// Show a confirmation notification
 				SparkleBubble FinishedBubble;
