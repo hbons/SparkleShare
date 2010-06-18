@@ -182,6 +182,7 @@ namespace SparkleShare {
 					".gitignore"));
 				Writer.WriteLine ("*~"); // Ignore gedit swap files
 				Writer.WriteLine (".*.sw?"); // Ignore vi swap files
+				Writer.WriteLine (".DS_store"); // Ignore OSX's invisible directories
 				Writer.Close ();
 
 				SparkleShare.SparkleUI.UpdateRepositories ();
