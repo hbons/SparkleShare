@@ -75,21 +75,22 @@ SHAMROCK_CHECK_MONO_2_0_GAC_ASSEMBLIES([
     Mono.Posix
 ])
 
-
+SHAVE_INIT([build/m4/shave], [enable])
 
 
 AC_OUTPUT([
 build/Makefile
 build/m4/Makefile
+build/m4/shave/shave
+build/m4/shave/shave-libtool
+data/Makefile
+data/icons/Makefile
 notify-sharp/Makefile
 SparkleShare/sparkleshare
 SparkleShare/Defines.cs
 SparkleShare/AssemblyInfo.cs
 SparkleShare/Makefile
-data/Makefile
-data/icons/Makefile
 po/Makefile.in
 Makefile
-
 ])
 
