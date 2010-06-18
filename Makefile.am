@@ -2,6 +2,7 @@ SUBDIRS =	\
 	build	\
 	notify-sharp \
 	SparkleShare \
+	data \
 	po
 
 DISTCLEANFILES = \

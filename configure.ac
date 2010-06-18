@@ -86,6 +86,8 @@ SparkleShare/sparkleshare
 SparkleShare/Defines.cs
 SparkleShare/AssemblyInfo.cs
 SparkleShare/Makefile
+data/Makefile
+data/icons/Makefile
 po/Makefile.in
 Makefile
 
