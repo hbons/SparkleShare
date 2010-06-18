@@ -33,6 +33,8 @@ namespace SparkleShare {
 		private Timer FetchTimer;
 		private Timer BufferTimer;
 		private FileSystemWatcher Watcher;
+		private bool HasChanged = false;
+		private DateTime LastChange;
 
 		public string Name;
 		public string Domain;
@@ -118,28 +120,30 @@ namespace SparkleShare {
 			};
 
 			FetchTimer.Start ();
-			BufferTimer = new Timer ();
 
+			BufferTimer = new Timer ();
+			BufferTimer.Interval = 4000;
 			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
-				SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Done waiting.");
-				Add ();
-				string Message = FormatCommitMessage ();
-				if (!Message.Equals ("")) {
-					Commit (Message);
-					Fetch ();
-					Push ();
+				SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Checking for changes.");
+
+				if (HasChanged) {
+					SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes found, checking if settled.");
+					DateTime now = DateTime.UtcNow;
+					TimeSpan changed = new TimeSpan (now.Ticks - LastChange.Ticks);
+					if (changed.TotalMilliseconds > 5000) {
+						HasChanged = false;
+						SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes have settled, adding.");
+						AddCommitAndPush ();
+					}
 				}
 			};
 
+			BufferTimer.Start ();
+
 			// Add everything that changed 
 			// since SparkleShare was stopped
-			Add ();
-			string commit_message = FormatCommitMessage ();
-			if (!commit_message.Equals ("")) {
-				Commit (commit_message);
-				Fetch ();
-				Push ();
-			}
+
+			AddCommitAndPush ();
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Nothing going on...");
 
@@ -151,48 +155,34 @@ namespace SparkleShare {
 		   WatcherChangeTypes wct = args.ChangeType;
 			if (!ShouldIgnore (args.Name)) {
 				SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + args.Name + "'");
-				StartBufferTimer ();
+				FetchTimer.Stop ();
+				LastChange = DateTime.UtcNow;
+				HasChanged = true;
 			}
 		}
 
-		// A buffer that will fetch changes after 
-		// file activity has settles down
-		private void StartBufferTimer ()
-		{
-
-			FetchTimer.Stop ();
-			int Interval = 4000;
-			if (!BufferTimer.Enabled) {	
-
-				// Delay for a few seconds to see if more files change
-				BufferTimer.Interval = Interval; 
-				BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
-					SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Done waiting.");
-					Add ();
-				};
-
-				SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] " + "Waiting for more changes...");
-				BufferTimer.Start ();
-
-			} else {
-
-				// Extend the delay when something changes
-				BufferTimer.Close ();
-				BufferTimer = new Timer ();
-				BufferTimer.Interval = Interval;
-
-				FetchTimer.Start ();
-
-				BufferTimer.Start ();
-				SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] " + "Waiting for more changes...");
-			}
-
-		}
-
-		public void Add ()
+		// When there are changes we generally want to Add, Commit and Push
+		// so this method does them all with appropriate timers, etc switched off
+		public void AddCommitAndPush ()
 		{
 			BufferTimer.Stop ();
 			FetchTimer.Stop ();
+
+			Add ();
+			string Message = FormatCommitMessage ();
+			if (!Message.Equals ("")) {
+				Commit (Message);
+				Fetch ();
+				Push ();
+			}
+
+			FetchTimer.Start ();
+			BufferTimer.Start ();
+		}
+		
+		// Stages the made changes
+		private void Add ()
+		{
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Staging changes...");
 			Process.StartInfo.Arguments = "add --all";
 			Process.Start ();
@@ -200,7 +190,6 @@ namespace SparkleShare {
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes staged.");
 //			SparkleUI.NotificationIcon.SetSyncingState ();
 //			SparkleUI.NotificationIcon.SetIdleState ();
-			FetchTimer.Start ();
 		}
 
 		// Commits the made changes
