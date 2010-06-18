@@ -1,5 +1,8 @@
+# List of source files containing translatable strings.
+# Please keep this file in alphabetical order; run ./sort-potfiles
+# after adding files here.
+[encoding: UTF-8]
 SparkleShare/SparkleBubble.cs
-SparkleShare/SparkleBubble.osx.cs
 SparkleShare/SparkleDialog.cs
 SparkleShare/SparkleHelpers.cs
 SparkleShare/SparklePaths.cs
@@ -10,4 +13,3 @@ SparkleShare/SparkleSpinner.cs
 SparkleShare/SparkleStatusIcon.cs
 SparkleShare/SparkleUI.cs
 SparkleShare/SparkleWindow.cs
-
