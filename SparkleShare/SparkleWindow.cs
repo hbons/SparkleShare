@@ -95,7 +95,7 @@ namespace SparkleShare {
 		}
 
 
-		public ScrolledWindow CreateEventLog ()
+		private ScrolledWindow CreateEventLog ()
 		{
 
 			ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf),
@@ -133,25 +133,21 @@ namespace SparkleShare {
 
 					// Look for the snowman!
 					string [] Parts = Regex.Split (Line, "☃");
-					string Message = Parts [1];
-					string UserName = Parts [2];
-					string TimeAgo = Parts [3];
+
+					string Message   = Parts [1];
+					string UserName  = Parts [2];
+					string TimeAgo   = Parts [3];
 					string UserEmail = Parts [4];
+
+					Message = Message.Replace ("/", " → ");
+					Message = Message.Replace ("\n", " ");
 
 					Iter = LogStore.Append ();
 
 					LogStore.SetValue (Iter, 0, SparkleHelpers.GetAvatar (UserEmail, 24));
-
-					if (SparkleRepo.UserEmail.Equals (UserEmail)) {
-
-						LogStore.SetValue (Iter, 1, "<b>You</b>\n" + Message.Replace ("/", " → "));
-
-					} else {
-
-						LogStore.SetValue (Iter, 1, "<b>" + UserName + "</b>\n" + Message.Replace ("/", " → "));					
-					}
-
-					LogStore.SetValue (Iter, 2, TimeAgo + "  ");
+					LogStore.SetValue (Iter, 1, "<b>" + UserName + "</b>\n" + Message);
+					// TODO Blend text color with treeview color instead of hardcoding it
+					LogStore.SetValue (Iter, 2, "<span fgcolor='grey'>" + TimeAgo + "</span>  ");
 
 					// We're not showing email, it's only 
 					// there for lookup purposes
@@ -164,33 +160,38 @@ namespace SparkleShare {
 			TreeView LogView = new TreeView (LogStore); 
 			LogView.HeadersVisible = false;
 
-			CellRendererText TextCellRight = new Gtk.CellRendererText ();
-			TextCellRight.Xalign = 1;
+			LogView.AppendColumn ("", new CellRendererPixbuf (), "pixbuf", 0);
 
-			LogView.AppendColumn ("", new Gtk.CellRendererPixbuf (), "pixbuf", 0);
+			CellRendererText MessageCellRenderer = new CellRendererText ();
+			TreeViewColumn MessageColumn = new TreeViewColumn ();
+			MessageColumn.PackStart (MessageCellRenderer, true);
+			MessageColumn.SetCellDataFunc (MessageCellRenderer, new Gtk.TreeCellDataFunc (RenderMessageRow));
+			LogView.AppendColumn (MessageColumn);
 
-			CellRendererText CellRendererMarkup = new CellRendererText ();
-			TreeViewColumn ColumnMarkup = new TreeViewColumn ();
-			ColumnMarkup.PackStart (CellRendererMarkup, true);
-			LogView.AppendColumn (ColumnMarkup);
-
-			ColumnMarkup.SetCellDataFunc (CellRendererMarkup, new Gtk.TreeCellDataFunc (RenderRow));
-
-			LogView.AppendColumn (ColumnMarkup);
-			LogView.AppendColumn ("", TextCellRight, "text", 2);
+			CellRendererText TimeAgoCellRenderer = new CellRendererText ();
+			TreeViewColumn TimeAgoColumn = new TreeViewColumn ();
+			TimeAgoColumn.PackStart (TimeAgoCellRenderer, true);
+			TimeAgoColumn.SetCellDataFunc (TimeAgoCellRenderer, new Gtk.TreeCellDataFunc (RenderTimeAgoRow));
+			TimeAgoCellRenderer.Xalign = 1;
+			LogView.AppendColumn (TimeAgoColumn);
 
 			TreeViewColumn [] Columns = LogView.Columns;
+
 			Columns [0].MinWidth = 42;
+
 			Columns [1].Expand = true;
-			Columns [2].Expand = true;
 			Columns [1].MinWidth = 350;
+
+			Columns [2].Expand = true;
 			Columns [2].MinWidth = 50;
 
-			Columns [2].Spacing = 200;
+			// Get the email address of the selected log message each
+			// time the cursor changes
 			LogView.CursorChanged += delegate (object o, EventArgs args) {
-			TreeModel Model;
-				if (LogView.Selection.GetSelected (out Model, out Iter)) {
-					SelectedEmail = (string) Model.GetValue (Iter, 3);
+				TreeModel model;
+				TreeIter iter;
+				if (LogView.Selection.GetSelected (out model, out iter)) {
+					SelectedEmail = (string) model.GetValue (iter, 3);
 				}
 			};
 
@@ -217,12 +218,16 @@ namespace SparkleShare {
 		}
 
 		// Renders a row with custom markup
-		private void RenderRow (TreeViewColumn Column, CellRenderer Cell, TreeModel Model, TreeIter Iter)
+		private void RenderMessageRow (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
 		{
+			string item = (string) model.GetValue (iter, 1);
+			(cell as CellRendererText).Markup  = item;
+		}
 
-			string Item = (string) Model.GetValue (Iter, 1);
-			(Cell as CellRendererText).Markup  = Item;
-
+		private void RenderTimeAgoRow (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
+		{
+			string item = (string) model.GetValue (iter, 2);
+			(cell as CellRendererText).Markup  = item;
 		}
 
 	}
