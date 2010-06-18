@@ -33,7 +33,7 @@ namespace SparkleShare {
 
 		public static string SparkleConfigPath = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
 			
-		public static string SparkleInstallPath = SparkleHelpers.CombineMore ("usr", "share",
+		public static string SparkleInstallPath = SparkleHelpers.CombineMore (Defines.PREFIX,
 			"sparkleshare",	"icons", "hicolor");
 
 		public static string SparkleAvatarPath {

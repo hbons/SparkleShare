@@ -19,7 +19,7 @@ if [[ "$1" == "start" ]]; then
 	echo -n "Starting SparkleShare..."
 	mkdir -p /tmp/sparkleshare/
 	# Start SparkleShare in the background and save the pid
-	mono /usr/local/share/sparkleshare/SparkleShare.exe $2 &
+	mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
 	PID=$!
 	echo $PID > /tmp/sparkleshare/sparkleshare.pid
 	echo " Done."
@@ -52,7 +52,7 @@ if [[ "$1" == "restart" ]]; then
 		echo -n "Starting SparkleShare..."
 
 		# Start SparkleShare in the background and save the pid
-		mono /usr/local/share/sparkleshare/SparkleShare.exe $2 &
+		mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
 		PID=$!
 		echo $PID > /tmp/sparkleshare/sparkleshare.pid
 		echo " Done."
@@ -60,5 +60,5 @@ if [[ "$1" == "restart" ]]; then
 fi
 
 if [[ "$1" == "--help" ]]; then
-		mono /usr/local/share/sparkleshare/SparkleShare.exe --help
+		mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" --help
 fi

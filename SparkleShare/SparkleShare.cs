@@ -37,7 +37,7 @@ namespace SparkleShare {
 		{
 
 			// Use translations
-			Catalog.Init ("i18n", "locale");
+			Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
 			// Check if git is installed
 			Process Process = new Process ();
