@@ -185,6 +185,9 @@ namespace SparkleShare {
 				Writer.WriteLine (".DS_store"); // Ignore OSX's invisible directories
 				Writer.Close ();
 
+				File.Create (SparkleHelpers.CombineMore (SparklePaths.SparklePath, RepoName,
+					".emblems"));
+
 				SparkleShare.SparkleUI.UpdateRepositories ();
 
 				// Show a confirmation notification
