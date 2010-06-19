@@ -109,6 +109,7 @@ namespace SparkleShare {
 			HideAll ();
 
 			string RepoRemoteUrl = RemoteUrlCombo.Entry.Text;
+			RepoRemoteUrl = SparkleHelpers.SparkleToGitUrl (RepoRemoteUrl);
 
 			int SlashPos = RepoRemoteUrl.LastIndexOf ("/");
 			int ColumnPos = RepoRemoteUrl.LastIndexOf (":");
