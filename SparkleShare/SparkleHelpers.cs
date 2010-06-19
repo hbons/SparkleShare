@@ -83,6 +83,23 @@ namespace SparkleShare {
 			return BitConverter.ToString (EncodedBytes).ToLower ().Replace ("-", "");
 		}
 
+		// Convert the more human readable sparkle:// url to
+		// something Git can use
+		// Example: sparkle://gitorious.org/sparkleshare
+		// to ssh://git@
+		public static string SparkleToGitUrl (string Url)
+		{
+			if (Url.Substring (0, 9).Equals ("sparkle://"))
+				Url = Url.Replace ("sparkle://", "ssh://git@");
+
+			// Usually don't need the ".git" at the end.
+			// It looks ugly as a folder too.
+			if (Url.Substring (Url.Length - 4, 4).Equals (".git"))
+				Url = Url.Substring (0, Url.Length - 4);
+
+			return Url;
+		}
+
 		
 		// Makes it possible to combine more than
 		// two paths at once.
