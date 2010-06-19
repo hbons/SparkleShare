@@ -36,3 +36,5 @@ build/m4/shave/shave
 build/m4/*.m4
 build/m4/shave/shave-libtool
 Defines.cs
+SparkleShare/sparkleshare
+po/sparkleshare.pot
