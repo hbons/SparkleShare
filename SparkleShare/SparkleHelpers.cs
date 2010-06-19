@@ -112,13 +112,12 @@ namespace SparkleShare {
 		}
 
 
-		public static IconTheme SparkleTheme = new IconTheme ();
-
 		// Looks up an icon from the system's theme
 		public static Gdk.Pixbuf GetIcon (string Name, int Size)
 		{
-			SparkleTheme.AppendSearchPath (CombineMore (SparklePaths.SparkleInstallPath, "icons"));
-			return SparkleTheme.LoadIcon (Name, Size, IconLookupFlags.GenericFallback);
+			IconTheme IconTheme = new IconTheme ();
+			IconTheme.AppendSearchPath (CombineMore (SparklePaths.SparkleInstallPath, "icons"));
+			return IconTheme.LoadIcon (Name, Size, IconLookupFlags.GenericFallback);
 		}
 
 
