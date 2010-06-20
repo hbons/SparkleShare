@@ -66,7 +66,7 @@ namespace SparkleShare {
 						"Terminal=false\n" +
 						"X-GNOME-Autostart-enabled=true");
 					writer.Close ();
-					SparkleHelpers.DebugInfo ("Config", " Created '" + desktopfile_path + "'");
+					SparkleHelpers.DebugInfo ("Config", "Created '" + desktopfile_path + "'");
 				}
 
 				break;
@@ -79,7 +79,7 @@ namespace SparkleShare {
 			if (!Directory.Exists (SparklePath)) {
 
 				Directory.CreateDirectory (SparklePath);
-				SparkleHelpers.DebugInfo ("Config", " Created '" + SparklePath + "'");
+				SparkleHelpers.DebugInfo ("Config", "Created '" + SparklePath + "'");
 					
 				// Add a special icon to the SparkleShare folder
 				switch (SparklePlatform.Name) {
@@ -187,11 +187,11 @@ namespace SparkleShare {
 			if (!Directory.Exists (ConfigPath)) {
 
 				Directory.CreateDirectory (ConfigPath);
-				SparkleHelpers.DebugInfo ("Config", " Created '" + ConfigPath + "'");
+				SparkleHelpers.DebugInfo ("Config", "Created '" + ConfigPath + "'");
 
 				// Create a place to store the avatars
 				Directory.CreateDirectory (AvatarPath);
-				SparkleHelpers.DebugInfo ("Config", " Created '" + AvatarPath + "'");
+				SparkleHelpers.DebugInfo ("Config", "Created '" + AvatarPath + "'");
 
 			}
 			
