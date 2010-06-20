@@ -140,6 +140,7 @@ namespace SparkleShare {
 
 			SparkleHelpers.DebugInfo ("Config", "[" + RepoName + "] Cloning repository...");
 
+			// TODO: don't freeze the UI while cloning a repo
 			// Clone into the system's temporary folder
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.WorkingDirectory = SparklePaths.SparkleTmpPath;
