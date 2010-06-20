@@ -2,13 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-19 10:38+0100\n"
+"POT-Creation-Date: 2010-06-20 18:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,42 +23,42 @@ msgstr "Adres van de externe SparkleShare map:"
 msgid "Add Folder"
 msgstr "Map toevoegen"
 
-#: ../SparkleShare/SparkleDialog.cs:125
+#: ../SparkleShare/SparkleDialog.cs:126
 #, csharp-format
 msgid "Syncing folder ‘{0}’"
 msgstr "Map {0} aan het synchroniseren"
 
-#: ../SparkleShare/SparkleDialog.cs:126
+#: ../SparkleShare/SparkleDialog.cs:127
 msgid "SparkleShare will notify you when this is done."
 msgstr "SparkleShare zal je vertellen wanneer dit gedaan is"
 
-#: ../SparkleShare/SparkleDialog.cs:128
+#: ../SparkleShare/SparkleDialog.cs:129
 msgid "Dismiss"
 msgstr "Sluiten"
 
-#: ../SparkleShare/SparkleDialog.cs:155
+#: ../SparkleShare/SparkleDialog.cs:156
 #, csharp-format
 msgid "Something went wrong while syncing ‘{0}’"
 msgstr "Probleem bij het synchroniseren van {0}"
 
-#: ../SparkleShare/SparkleDialog.cs:165
+#: ../SparkleShare/SparkleDialog.cs:166
 msgid "Try Again…"
 msgstr "Opnieuw proberen…"
 
-#: ../SparkleShare/SparkleDialog.cs:192
+#: ../SparkleShare/SparkleDialog.cs:196
 #, csharp-format
 msgid "Successfully synced folder ‘{0}’"
 msgstr "Map {0} succesvol gesynchroniseerd"
 
-#: ../SparkleShare/SparkleDialog.cs:193
+#: ../SparkleShare/SparkleDialog.cs:197
 msgid "Now make great stuff happen!"
 msgstr "Laat nu mooie dingen gebeuren!"
 
 #. Add a button to open the folder where the changed file is
-#: ../SparkleShare/SparkleDialog.cs:195 ../SparkleShare/SparkleRepo.cs:316
+#: ../SparkleShare/SparkleDialog.cs:199 ../SparkleShare/SparkleRepo.cs:316
 #: ../SparkleShare/SparkleWindow.cs:62
 msgid "Open Folder"
-msgstr "Open map"
+msgstr "Map openen"
 
 #: ../SparkleShare/SparkleShare.cs:50
 msgid "Git wasn't found."
