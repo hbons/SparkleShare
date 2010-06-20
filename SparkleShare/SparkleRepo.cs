@@ -178,6 +178,9 @@ namespace SparkleShare {
 
 			FetchTimer.Start ();
 			BufferTimer.Start ();
+			
+			SparkleHelpers.CheckForUnicorns (Message);
+
 		}
 		
 		// Stages the made changes

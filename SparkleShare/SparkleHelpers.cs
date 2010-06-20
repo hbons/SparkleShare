@@ -15,6 +15,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
+using Mono.Unix;
 using System;
 using System.IO;
 using System.Net;
@@ -26,6 +27,11 @@ namespace SparkleShare {
 	
 	public static class SparkleHelpers
 	{
+
+		public static string _ (string s)
+		{
+			return Catalog.GetString (s);
+		}
 
 		// Get's the avatar for a specific email address and size
 		public static Gdk.Pixbuf GetAvatar (string Email, int Size)
@@ -151,52 +157,65 @@ namespace SparkleShare {
 
 			if (time_span <= TimeSpan.FromSeconds (60)) {
 				if (time_span.Seconds > 1)			
-					return string.Format ("{0} seconds ago", time_span.Seconds);
+					return string.Format (_("{0} seconds ago"), time_span.Seconds);
 				else
 					return "a second ago";
 			}
 
 			if (time_span <= TimeSpan.FromSeconds (60)) {
 				if (time_span.Minutes > 1)			
-					return string.Format ("about {0} minutes ago", time_span.Minutes);
+					return string.Format (_("about {0} minutes ago"), time_span.Minutes);
 				else
 					return "a minute ago";
 			}
 
 			if (time_span <= TimeSpan.FromHours(24)) {
 				if (time_span.Hours > 1)			
-					return string.Format ("about {0} minutes ago", time_span.Hours);
+					return string.Format (_("about {0} minutes ago"), time_span.Hours);
 				else
 					return "about an hour ago";
 			}
 
 			if (time_span <= TimeSpan.FromDays(30)) {
 				if (time_span.Days > 1)	
-					return string.Format ("{0} days ago", time_span.Days);
+					return string.Format (_("{0} days ago"), time_span.Days);
 				else
 					return "yesterday";
 			}
 
 			if (time_span <= TimeSpan.FromDays(365)) {
 				if (time_span.Days > 1)	
-					return string.Format ("{0} months ago", (int) time_span.Days / 30);
+					return string.Format (_("{0} months ago"), (int) time_span.Days / 30);
 				else
 					return "a month ago";
 			}
 
 			if (time_span <= TimeSpan.FromDays(365)) {
 				if (time_span.Days > 1)	
-					return string.Format ("{0} months ago", (int) time_span.Days / 365);
+					return string.Format (_("{0} months ago"), (int) time_span.Days / 365);
 				else
 					return "a month ago";
 			}
 
 			if (time_span.Days > 365)
-				return string.Format ("{0} months ago", (int) time_span.Days / 365);
+				return string.Format (_("{0} months ago"), (int) time_span.Days / 365);
 			else
 				return "a year ago";
 
-		}		
+		}
+
+		// Checks for unicorns
+		public static void CheckForUnicorns (string s) {
+			s = s.ToLower ();
+			if (s.Contains ("unicorn") && (s.Contains (".png") || s.Contains (".jpg"))) {
+				string title   = _("Hold your ponies!");
+				string subtext = _("SparkleShare is known to be insanely fast with \n" +
+				                  "pictures of unicorns. Please make sure your internets\n" +
+				                  "are upgraded to the latest version to avoid problems.");
+				SparkleBubble unicorn_bubble = new SparkleBubble (title, subtext);
+				unicorn_bubble.Show ();
+			}
+		}
 
 	}
 
