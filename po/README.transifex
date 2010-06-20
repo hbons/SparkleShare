@@ -4,8 +4,8 @@ Transifex.net Token Verification
 The list of tokens bellow guarantee the respective users to be able to enable 
 submission on components using the following repository url:
 
-git://gitorious.org/sparkleshare/sparkleshare.git
+git@gitorious.org:sparkleshare/sparkleshare.git
 
 Tokens:
 
-D7KuHsnRswCAV4tWMZGgWCZJXH7G4LQJ / hbons
+AkNvJ9GmsC73D3hUQGH3yYZsBNRaF5hj / hbons
