@@ -86,7 +86,7 @@ namespace SparkleShare {
 		// Convert the more human readable sparkle:// url to
 		// something Git can use
 		// Example: sparkle://gitorious.org/sparkleshare
-		// to ssh://git@
+		// to ssh://git@gitorious.org/sparkleshare
 		public static string SparkleToGitUrl (string Url)
 		{
 			if (Url.Substring (0, 10).Equals ("sparkle://"))
@@ -94,7 +94,7 @@ namespace SparkleShare {
 
 			// Usually don't need the ".git" at the end.
 			// It looks ugly as a folder too.
-			if (Url.Substring (Url.Length - 4, 4).Equals (".git"))
+			if (Url.Substring (-4).Equals (".git"))
 				Url = Url.Substring (0, Url.Length - 4);
 
 			return Url;
@@ -136,7 +136,7 @@ namespace SparkleShare {
 			if (ShowDebugInfo) {
 				DateTime DateTime = new DateTime ();					
 				string TimeStamp = DateTime.Now.ToString ("HH:mm:ss");
-				Console.WriteLine ("[" + TimeStamp + "]" + "[" + Type + "]" + Message);
+				Console.WriteLine ("[" + TimeStamp + "]" + "[" + Type + "] " + Message);
 			}
 
 		}
