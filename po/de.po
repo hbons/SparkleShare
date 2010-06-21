@@ -20,36 +20,35 @@ msgid "Address of remote SparkleShare folder:"
 msgstr "Adresse des entfernten SparkleShare-Verzeichnis:"
 
 #: ../SparkleShare/SparkleDialog.cs:81
-#, fuzzy
 msgid "Add Folder"
-msgstr "Ordner hinzufügen"
+msgstr "Verzeichnis hinzufügen"
 
 #: ../SparkleShare/SparkleDialog.cs:126
 #, csharp-format
 msgid "Syncing folder ‘{0}’"
-msgstr ""
+msgstr "Verzeichnis »{0}« wird synchronisiert"
 
 #: ../SparkleShare/SparkleDialog.cs:127
 msgid "SparkleShare will notify you when this is done."
-msgstr ""
+msgstr "SparkleShare wird Sie benachrichtigen sobald diese Aktion abgeschlossen ist."
 
 #: ../SparkleShare/SparkleDialog.cs:129
 msgid "Dismiss"
-msgstr ""
+msgstr "Schließen"
 
 #: ../SparkleShare/SparkleDialog.cs:156
 #, csharp-format
 msgid "Something went wrong while syncing ‘{0}’"
-msgstr ""
+msgstr "Bei der Synchronisierung von »{0}« ist ein Fehler aufgetreten"
 
 #: ../SparkleShare/SparkleDialog.cs:166
 msgid "Try Again…"
-msgstr ""
+msgstr "Erneut versuchen …"
 
 #: ../SparkleShare/SparkleDialog.cs:196
 #, csharp-format
 msgid "Successfully synced folder ‘{0}’"
-msgstr ""
+msgstr "Verzeichnis »{0}« erfolgreich synchronisiert"
 
 #: ../SparkleShare/SparkleDialog.cs:197
 msgid "Now make great stuff happen!"
@@ -78,28 +77,29 @@ msgid "Things will go utterly wrong."
 msgstr "Die Dinge werden völlig daneben gehen."
 
 #: ../SparkleShare/SparkleShare.cs:87
+#, fuzzy
 msgid "SparkleShare Copyright (C) 2010 Hylke Bons"
-msgstr ""
+msgstr "SparkleShare Copyright (C) 2010 Hylke Bons"
 
 #: ../SparkleShare/SparkleShare.cs:89
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
-msgstr ""
+msgstr "Diese Anwendung wird OHNE IRGENDEINE GARANTIE veröffentlicht."
 
 #: ../SparkleShare/SparkleShare.cs:90
 msgid "This is free software, and you are welcome to redistribute it "
-msgstr ""
+msgstr "Dies ist freie Software. Sie können es weitergeben und/oder modifizieren"
 
 #: ../SparkleShare/SparkleShare.cs:91
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
-msgstr ""
+msgstr "unter bestimmten Bedingungen. Bitte lesen Sie dazu die GNU GPLv3 für weitere  Details."
 
 #: ../SparkleShare/SparkleShare.cs:93
 msgid "SparkleShare syncs the ~/SparkleShare folder with remote repositories."
-msgstr ""
+msgstr "SparkleShare synchronisiert das Verzeichnis ~/SparkleShare mit entfernten Verzeichnissen"
 
 #: ../SparkleShare/SparkleShare.cs:95
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
-msgstr ""
+msgstr "Verwendung: sparkleshare [start|stop|restart] [OPTION]..."
 
 #: ../SparkleShare/SparkleShare.cs:96
 msgid "Sync SparkleShare folder with remote repositories."
@@ -107,19 +107,19 @@ msgstr "Synchronisiere SparkleShare Ordner mit entfernten Repositories."
 
 #: ../SparkleShare/SparkleShare.cs:98
 msgid "Arguments:"
-msgstr ""
+msgstr "Parameter:"
 
 #: ../SparkleShare/SparkleShare.cs:99
 msgid "\t -d, --disable-gui\tDon't show the notification icon."
-msgstr ""
+msgstr "\t -d, --disable-gui\tBenachrichtigungs-Symbol nicht anzeigen."
 
 #: ../SparkleShare/SparkleShare.cs:100
 msgid "\t -h, --help\t\tDisplay this help text."
-msgstr ""
+msgstr "\t -h, --help\t\tDiesen Hilfe-Text nicht anzeigen."
 
 #: ../SparkleShare/SparkleStatusIcon.cs:69
 msgid "Error syncing"
-msgstr ""
+msgstr "Fehler bei der Synchronisierung"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:72
 msgid "Everything is up to date"
@@ -127,12 +127,11 @@ msgstr "Alles ist am aktuellsten Stand"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:75
 msgid "Syncing…"
-msgstr ""
+msgstr "Synchronisieren …"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:116
-#, fuzzy
 msgid "Add a Remote Folder…"
-msgstr "Ordner hinzufügen"
+msgstr "Ein entferntes Verzeichnis hinzufügen"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:124
 msgid "Show Notifications"
