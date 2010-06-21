@@ -77,7 +77,6 @@ msgid "Things will go utterly wrong."
 msgstr "Die Dinge werden völlig daneben gehen."
 
 #: ../SparkleShare/SparkleShare.cs:87
-#, fuzzy
 msgid "SparkleShare Copyright (C) 2010 Hylke Bons"
 msgstr "SparkleShare Copyright (C) 2010 Hylke Bons"
 
@@ -135,36 +134,32 @@ msgstr "Ein entferntes Verzeichnis hinzufügen"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:124
 msgid "Show Notifications"
-msgstr ""
+msgstr "Benachrichtigungen anzeigen"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:142
 msgid "Visit Website"
-msgstr ""
+msgstr "Website besuchen"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:159
 msgid "Quit"
-msgstr ""
+msgstr "Beenden"
 
 #: ../SparkleShare/SparkleUI.cs:134
 msgid "Welcome to SparkleShare!"
 msgstr "Wilkommen bei SparkleShare!"
 
 #: ../SparkleShare/SparkleUI.cs:135
-#, fuzzy
 msgid "You don't have any folders set up yet."
-msgstr ""
-"Bis jetyt sind keine Ordner angelegt.\n"
-"Bitte erstelle welche im SparkleShare Ordner."
+msgstr "Sie haben noch keine Verzeichnisse konfiguriert."
 
 #: ../SparkleShare/SparkleUI.cs:138
-#, fuzzy
 msgid "Add a Folder…"
-msgstr "Ordner hinzufügen"
+msgstr "Ein Verzeichnis hinzufügen …"
 
 #: ../SparkleShare/SparkleWindow.cs:50
 #, csharp-format
 msgid "‘{0}’ on {1}"
-msgstr ""
+msgstr "»{0}« an {1}"
 
 #~ msgid "folder-sparkleshare"
 #~ msgstr "ordner-sparkleshare"
