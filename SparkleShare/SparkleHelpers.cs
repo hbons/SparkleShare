@@ -156,52 +156,30 @@ namespace SparkleShare {
 			time_span = DateTime.Now - date_time;
 
 			if (time_span <= TimeSpan.FromSeconds (60)) {
-				if (time_span.Seconds > 1)			
-					return string.Format (_("{0} seconds ago"), time_span.Seconds);
-				else
-					return "a second ago";
+				return string.Format (Catalog.GetPluralString ("a second ago", "{0} seconds ago", time_span.Seconds), time_span.Seconds);
 			}
 
 			if (time_span <= TimeSpan.FromSeconds (60)) {
-				if (time_span.Minutes > 1)			
-					return string.Format (_("about {0} minutes ago"), time_span.Minutes);
-				else
-					return "a minute ago";
+				return string.Format (Catalog.GetPluralString ("a minute ago", "about {0} minutes ago", time_span.Minutes), time_span.Minutes);
 			}
 
 			if (time_span <= TimeSpan.FromHours(24)) {
-				if (time_span.Hours > 1)			
-					return string.Format (_("about {0} minutes ago"), time_span.Hours);
-				else
-					return "about an hour ago";
+				return string.Format (Catalog.GetPluralString ("about an hour ago", "about {0} minutes ago", time_span.Hours), time_span.Hours);
 			}
 
 			if (time_span <= TimeSpan.FromDays(30)) {
-				if (time_span.Days > 1)	
-					return string.Format (_("{0} days ago"), time_span.Days);
-				else
-					return "yesterday";
+				return string.Format (Catalog.GetPluralString ("yesterday", "{0} days ago", time_span.Days), time_span.Days);
 			}
 
 			if (time_span <= TimeSpan.FromDays(365)) {
-				if (time_span.Days > 1)	
-					return string.Format (_("{0} months ago"), (int) time_span.Days / 30);
-				else
-					return "a month ago";
+					return string.Format (Catalog.GetPluralString ("a month ago", "{0} months ago", time_span.Days), (int) time_span.Days / 30);
 			}
 
 			if (time_span <= TimeSpan.FromDays(365)) {
-				if (time_span.Days > 1)	
-					return string.Format (_("{0} months ago"), (int) time_span.Days / 365);
-				else
-					return "a month ago";
+				return string.Format (Catalog.GetPluralString ("a month ago", "{0} months ago", time_span.Days), (int) time_span.Days / 365);
 			}
 
-			if (time_span.Days > 365)
-				return string.Format (_("{0} months ago"), (int) time_span.Days / 365);
-			else
-				return "a year ago";
-
+			return string.Format (Catalog.GetPluralString ("a year ago", "{0} years ago", (int) time_span.Days / 365), (int) time_span.Days / 365);
 		}
 
 		// Checks for unicorns
