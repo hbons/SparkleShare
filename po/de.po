@@ -58,23 +58,23 @@ msgstr ""
 #: ../SparkleShare/SparkleDialog.cs:199 ../SparkleShare/SparkleRepo.cs:316
 #: ../SparkleShare/SparkleWindow.cs:62
 msgid "Open Folder"
-msgstr "Öffne Ordner"
+msgstr "Verzeichnis öffnen"
 
 #: ../SparkleShare/SparkleShare.cs:50
 msgid "Git wasn't found."
-msgstr "Git nicht gefunden."
+msgstr "Git konnte nicht gefunden werden."
 
 #: ../SparkleShare/SparkleShare.cs:51
 msgid "You can get Git from http://git-scm.com/."
-msgstr "Git ist auf http://git-scm.com/ verfügbar."
+msgstr "Sie können Git auf http://git-scm.com/ herunterladen."
 
 #: ../SparkleShare/SparkleShare.cs:58
 msgid "Sorry, you can't run SparkleShare with these permissions."
-msgstr "SparkleShare kann leider nicht mit diesen Rechten laufen."
+msgstr "Entschuldigung, SparkleShare kann mit diesen Rechten nicht ausgeführt werden."
 
 #: ../SparkleShare/SparkleShare.cs:59
 msgid "Things will go utterly wrong."
-msgstr "Die Dinge werden völlig daneben gehen."
+msgstr "Vieles würde nicht richtig funktionieren."
 
 #: ../SparkleShare/SparkleShare.cs:87
 msgid "SparkleShare Copyright (C) 2010 Hylke Bons"
