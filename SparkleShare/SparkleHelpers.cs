@@ -209,6 +209,63 @@ namespace SparkleShare {
 			}
 		}
 
+
+		// Formats a timestamp to a relative date compared to the current time
+		// Example: "about 5 hours ago"
+		public static string ToRelativeDate (DateTime date_time)
+		{
+			TimeSpan time_span = new TimeSpan (0);
+			time_span = DateTime.Now - date_time;
+
+			if (time_span <= TimeSpan.FromSeconds (60)) {
+				if (time_span.Seconds > 1)			
+					return string.Format ("{0} seconds ago", time_span.Seconds);
+				else
+					return "a second ago";
+			}
+
+			if (time_span <= TimeSpan.FromSeconds (60)) {
+				if (time_span.Minutes > 1)			
+					return string.Format ("about {0} minutes ago", time_span.Minutes);
+				else
+					return "a minute ago";
+			}
+
+			if (time_span <= TimeSpan.FromHours(24)) {
+				if (time_span.Hours > 1)			
+					return string.Format ("about {0} minutes ago", time_span.Hours);
+				else
+					return "about an hour ago";
+			}
+
+			if (time_span <= TimeSpan.FromDays(30)) {
+				if (time_span.Days > 1)	
+					return string.Format ("{0} days ago", time_span.Days);
+				else
+					return "yesterday";
+			}
+
+			if (time_span <= TimeSpan.FromDays(365)) {
+				if (time_span.Days > 1)	
+					return string.Format ("{0} months ago", (int) time_span.Days / 30);
+				else
+					return "a month ago";
+			}
+
+			if (time_span <= TimeSpan.FromDays(365)) {
+				if (time_span.Days > 1)	
+					return string.Format ("{0} months ago", (int) time_span.Days / 365);
+				else
+					return "a month ago";
+			}
+
+			if (time_span.Days > 365)
+				return string.Format ("{0} months ago", (int) time_span.Days / 365);
+			else
+				return "a year ago";
+
+		}		
+
 	}
 
 }
