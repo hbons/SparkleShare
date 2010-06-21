@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-21 14:13+0000\n"
+"POT-Creation-Date: 2010-06-21 15:09+0000\n"
 "PO-Revision-Date: 2010-06-11 21:59+0200\n"
 "Last-Translator: Łukasz Jernaś <deejay1@srem.org>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
@@ -88,9 +88,9 @@ msgstr[2] "około {0} minut temu"
 #, csharp-format
 msgid "about an hour ago"
 msgid_plural "about {0} minutes ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "około godzinę temu"
+msgstr[1] "około {0} godziny temu"
+msgstr[2] "około {0} godzin temu"
 
 #: ../SparkleShare/SparkleHelpers.cs:177
 #, csharp-format
@@ -118,7 +118,7 @@ msgstr[2] "{0} lat temu"
 
 #: ../SparkleShare/SparkleHelpers.cs:203
 msgid "Hold your ponies!"
-msgstr ""
+msgstr "Wstrzymaj konie!"
 
 #: ../SparkleShare/SparkleHelpers.cs:204
 msgid ""
@@ -126,6 +126,11 @@ msgid ""
 "pictures of unicorns. Please make sure your internets\n"
 "are upgraded to the latest version to avoid problems."
 msgstr ""
+"Program SparkleShare jest znany z niesamowitej szybkośc\n"
+"\r\n"
+"przy wysyłaniu obrazków z jednorożcami.\n"
+"\r\n"
+"Dopilnuj, by Twój internet był w najnowszej wersji, aby uniknąć problemów."
 
 #: ../SparkleShare/SparkleShare.cs:50
 msgid "Git wasn't found."
