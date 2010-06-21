@@ -168,7 +168,7 @@ namespace SparkleShare {
 			}
 
 			if (time_span <= TimeSpan.FromHours(24)) {
-				return string.Format (Catalog.GetPluralString ("about an hour ago", "about {0} minutes ago",
+				return string.Format (Catalog.GetPluralString ("about an hour ago", "about {0} hours ago",
 				                                               time_span.Hours),
 				                      time_span.Hours);
 			}
@@ -181,14 +181,8 @@ namespace SparkleShare {
 
 			if (time_span <= TimeSpan.FromDays(365)) {
 				return string.Format (Catalog.GetPluralString ("a month ago", "{0} months ago",
-					                                           time_span.Days),
+					                                           (int) time_span.Days / 30),
 					                  (int) time_span.Days / 30);
-			}
-
-			if (time_span <= TimeSpan.FromDays(365)) {
-				return string.Format (Catalog.GetPluralString ("a month ago", "{0} months ago",
-				                                               time_span.Days),
-				                      (int) time_span.Days / 365);
 			}
 
 			return string.Format (Catalog.GetPluralString ("a year ago", "{0} years ago",
