@@ -3,7 +3,8 @@
 pidfile=/tmp/sparkleshare/sparkleshare.pid
 
 # Create a directory to save the pid to
-if [[ "$1" == "start" ]]; then
+case $1 in
+  start)
 	if [ -e "${pidfile}" ]; then
 		sparklepid=`cat ${pidfile}`
 		if [ -n "`ps -p ${sparklepid} | grep ${sparklepid}`" ]
@@ -23,9 +24,9 @@ if [[ "$1" == "start" ]]; then
 	PID=$!
 	echo $PID > /tmp/sparkleshare/sparkleshare.pid
 	echo " Done."
-fi
+  ;;
 
-if [[ "$1" == "stop" ]]; then
+  stop)
 	if [ -e "/tmp/sparkleshare/sparkleshare.pid" ]; then
 		echo -n "Stopping SparkleShare..."
 		kill `cat /tmp/sparkleshare/sparkleshare.pid` 
@@ -34,9 +35,9 @@ if [[ "$1" == "stop" ]]; then
 	else
 		echo "SparkleShare isn't running."
 	fi
-fi
+  ;;
 
-if [[ "$1" == "restart" ]]; then
+  restart)
 	if [ -e "/tmp/sparkleshare/sparkleshare.pid" ]; then
 		echo -n "Stopping SparkleShare..."
 		kill `cat /tmp/sparkleshare/sparkleshare.pid` 
@@ -57,8 +58,13 @@ if [[ "$1" == "restart" ]]; then
 		echo $PID > /tmp/sparkleshare/sparkleshare.pid
 		echo " Done."
 	fi
-fi
+  ;;
 
-if [[ "$1" == "--help" ]]; then
+  --help | help)
 		mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" --help
-fi
+  ;;
+
+  *)
+		echo "Usage: sparkleshare {start|stop|restart|help}"
+  ;;
+esac
