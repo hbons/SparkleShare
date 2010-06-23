@@ -1,9 +1,0 @@
-#!/bin/bash
-
-mkdir -p locale
-if [ $# -ne 1 ]; then
-	echo "Usage: ./create-po-file [LOCALE].po"
-else
-	xgettext --language=C# --keyword=_ --from-code=UTF-8 SparkleShare/*.cs -o locale/$1
-	echo "Created locale/$1."
-fi
