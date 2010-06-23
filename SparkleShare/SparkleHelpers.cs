@@ -95,12 +95,12 @@ namespace SparkleShare {
 		// to ssh://git@gitorious.org/sparkleshare
 		public static string SparkleToGitUrl (string Url)
 		{
-			if (Url.Substring (0, 10).Equals ("sparkle://"))
+			if (Url.StartsWith ("sparkle://"))
 				Url = Url.Replace ("sparkle://", "ssh://git@");
 
 			// Usually don't need the ".git" at the end.
 			// It looks ugly as a folder too.
-			if (Url.Substring (-4).Equals (".git"))
+			if (Url.EndsWith (".git"))
 				Url = Url.Substring (0, Url.Length - 4);
 
 			return Url;
