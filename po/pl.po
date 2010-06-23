@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-21 15:09+0000\n"
+"POT-Creation-Date: 2010-06-23 06:09+0000\n"
 "PO-Revision-Date: 2010-06-11 21:59+0200\n"
 "Last-Translator: Łukasz Jernaś <deejay1@srem.org>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
@@ -182,7 +182,7 @@ msgstr "Parametry:"
 
 #: ../SparkleShare/SparkleShare.cs:99
 msgid "\t -d, --disable-gui\tDon't show the notification icon."
-msgstr "\t -d, --disable-gui\tWyłączenie wyświetlania ikony w obszarze powiadamiania."
+msgstr "\t -d, --disable-gui\tWyłącza wyświetlanie ikony w obszarze powiadamiania."
 
 #: ../SparkleShare/SparkleShare.cs:100
 msgid "\t -h, --help\t\tDisplay this help text."
