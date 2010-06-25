@@ -14,7 +14,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http:#www.gnu.org/licenses/>.
 
-
+import time
 import gio
 import nautilus
 import os
@@ -25,38 +25,50 @@ class SparkleShareExtension (nautilus.MenuProvider):
 
     def __init__ (self):
 
-        name = 'Loaded Nautilus SparkleShareExtension.'		
+        name = "Loaded Nautilus SparkleShareExtension."
 
+    def checkout_file (commit)
+        return
 
     def get_file_items (self, window, files):
 
-        # Only work when one file is selected
+		# Only work when one file is selected
         if len (files) != 1:
             return
 
-        # Get info about the selected file
         file_reference = gio.File (files [0].get_uri ())
 
-		# Only work if in a SparkleShare repo
-        if file_reference.get_path () [:len(SPARKLESHARE_DIR)] != SPARKLESHARE_DIR:
+		# Only work if we're in a SparkleShare repo
+        if file_reference.get_path () [:len (SPARKLESHARE_DIR)] != SPARKLESHARE_DIR:
             return
 
-        submenu = nautilus.Menu ()
+        item = nautilus.MenuItem ("Nautilus::OpenOlderVersion", "Get Earlier Version",
+                                  "Make a copy of an earlier version in this folder")
 
-        # Create the submenu for the nautilus context menu
-        item = nautilus.MenuItem ('Nautilus::OpenOlderVersion', 'Open Older Version',
-                                  'Make a copy of an older version of this document in SparkleShare')
+        submenu = nautilus.Menu ()
         item.set_submenu (submenu)
 
+        timestamps = array ([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+
         os.chdir (file_reference.get_parent ().get_path ())
-        command = os.popen ("git log --pretty=oneline")
+        time_command   = os.popen ("git log -10 --format='%at' " + file_reference.get_path ())
+        author_command = os.popen ("git log -10 --format='%an' " + file_reference.get_path ())
 
-        for line in command.readlines ():
-            submenu.append_item (nautilus.MenuItem ('Nautilus::Version', line,
-                                                    'Select to open a copy of this version'))
+        i = 0
+        for line in time_command.readlines ():
+            timestamps [i] = line
+            i += 1
 
-        item_open_log = nautilus.MenuItem ('Nautilus::OpenEventLog', 'Open Event Log' + file_reference.get_path (),
-                                           'Open the event log for this document to see more versions')
+        i = 0
+        for line in author_command.readlines ():
+            timestamp = time.strftime ("%a, %d %b %Y %H:%M", time.localtime (timestamps [i]))
+            submenu.append_item (nautilus.MenuItem ("Nautilus::Version" + timestamps [i], timestamp +
+                                                    " " + line.strip ("\n"),
+                                                    "Select to get a copy of this version"))
+            i += 1
+
+        item_open_log = nautilus.MenuItem ("Nautilus::s", "Open Event Log" + file_reference.get_path (),
+                                           "Open the event log to see more versions")
 		
         submenu.append_item(item_open_log)
 
