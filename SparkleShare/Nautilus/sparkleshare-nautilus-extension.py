@@ -12,64 +12,121 @@
 #   GNU General Public License for more details.
 #
 #   You should have received a copy of the GNU General Public License
-#   along with this program.  If not, see <http:#www.gnu.org/licenses/>.
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import shutil
 import time
+
 import gio
 import nautilus
-import os
 
-SPARKLESHARE_DIR = os.path.expanduser ('~') + '/SparkleShare'
+SPARKLESHARE_PATH = os.path.join (os.path.expanduser ('~'), "SparkleShare")
 
 class SparkleShareExtension (nautilus.MenuProvider):
 
+
     def __init__ (self):
 
-        name = "Loaded Nautilus SparkleShareExtension."
+        debug = "Loaded Nautilus SparkleShare Extension."
 
-    def checkout_file (commit)
+
+    def checkout_version (self, menu, file_reference, commit_hash, username, timestamp):
+
+        file_name = file_reference.get_basename ().replace (" ", "\ ").replace ("(", "\(").replace (")", "\)")
+        file_path = file_reference.get_path ().replace (" ", "\ ").replace ("(", "\(").replace (")", "\)")
+        tmp_file_path = os.path.join (SPARKLESHARE_PATH, ".tmp", file_reference.get_basename ())
+
+        # Move the current version to a temporary path
+        shutil.move (file_reference.get_path (), tmp_file_path)
+
+        # Check out the earlier version
+        os.chdir (file_reference.get_parent ().get_path ())
+        os.popen ("git checkout " + commit_hash + " " + file_name
+            .replace (" ", "\ ").replace ("(", "\(").replace (")", "\)"))
+
+        new_tmp_file_name = file_name + " (" + username + ", "
+        new_tmp_file_name += time.strftime ("%H:%M %d %b %Y", timestamp).replace (" 0", " ") + ") "
+
+        # Rename the checked out file
+        shutil.move (file_name, new_tmp_file_name)
+
+        # Move the original file back
+        shutil.move (tmp_file_path, file_path)
+
+        return True
+
+
+    def compare_versions (self, menu, file_reference):
         return
+
 
     def get_file_items (self, window, files):
 
-		# Only work when one file is selected
+		# Only work if one file is selected
         if len (files) != 1:
             return
 
         file_reference = gio.File (files [0].get_uri ())
 
-		# Only work if we're in a SparkleShare repo
-        if file_reference.get_path () [:len (SPARKLESHARE_DIR)] != SPARKLESHARE_DIR:
+		# Only work if we're in a SparkleShare repository folder
+        if not (file_reference.get_path ().startswith (SPARKLESHARE_PATH)):
             return
 
-        item = nautilus.MenuItem ("Nautilus::OpenOlderVersion", "Get Earlier Version",
-                                  "Make a copy of an earlier version in this folder")
-
-        submenu = nautilus.Menu ()
-        item.set_submenu (submenu)
-
-        timestamps = array ([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        epochs        = ["", "", "", "", "", "", "", "", "", ""]
+        commit_hashes = ["", "", "", "", "", "", "", "", "", ""]
 
         os.chdir (file_reference.get_parent ().get_path ())
-        time_command   = os.popen ("git log -10 --format='%at' " + file_reference.get_path ())
-        author_command = os.popen ("git log -10 --format='%an' " + file_reference.get_path ())
+
+        time_command   = os.popen ("git log -10 --format='%at' " + file_reference.get_path ()
+            .replace (" ", "\ ").replace ("(", "\(").replace (")", "\)"))
+
+        author_command = os.popen ("git log -10 --format='%an' " + file_reference.get_path ()
+            .replace (" ", "\ ").replace ("(", "\(").replace (")", "\)"))
+
+        hash_command = os.popen ("git log -10 --format='%H' " + file_reference.get_path ()
+            .replace (" ", "\ ").replace ("(", "\(").replace (")", "\)"))
 
         i = 0
         for line in time_command.readlines ():
-            timestamps [i] = line
+            epochs [i] = line.strip ("\n")
             i += 1
+
+        if i < 2:
+            return
+
+        i = 0
+        for line in hash_command.readlines ():
+            commit_hashes [i] = line.strip ("\n")
+            i += 1
+
+        earlier_version_menu_item = nautilus.MenuItem ("Nautilus::OpenOlderVersion", "Get Earlier Version",
+                                                       "Make a copy of an earlier version in this folder")
+        submenu = nautilus.Menu ()
 
         i = 0
         for line in author_command.readlines ():
-            timestamp = time.strftime ("%a, %d %b %Y %H:%M", time.localtime (timestamps [i]))
-            submenu.append_item (nautilus.MenuItem ("Nautilus::Version" + timestamps [i], timestamp +
-                                                    " " + line.strip ("\n"),
-                                                    "Select to get a copy of this version"))
+
+            if i > 0:
+
+                timestamp = time.strftime ("%d %b\t%H:%M", time.localtime (float (epochs [i])))
+                username = line.strip ("\n")
+
+                menu_item = nautilus.MenuItem ("Nautilus::Version" + epochs [i],
+                                           timestamp + "\t" + username,
+                                           "Select to get a copy of this version")
+
+                menu_item.connect ("activate", self.checkout_version, file_reference, commit_hashes [i],
+                                   username, time.localtime (float (epochs [i])))
+                submenu.append_item (menu_item)
+
             i += 1
 
-        item_open_log = nautilus.MenuItem ("Nautilus::s", "Open Event Log" + file_reference.get_path (),
-                                           "Open the event log to see more versions")
-		
-        submenu.append_item(item_open_log)
+        earlier_version_menu_item.set_submenu (submenu)
 
-        return item,
+#        compare_versions_menu_item = nautilus.MenuItem ("Nautilus::CompareVersions", "Compare Versions",
+#                                                        "Compare two versions of this document at any point in time")
+
+#        compare_versions_menu_item = menu_item.connect ("activate", self.compare_versions, file_reference)
+
+        return earlier_version_menu_item,
