@@ -257,10 +257,10 @@ namespace SparkleShare {
 							Process.Start ();
 							
 							DateTime DateTime = new DateTime ();
-							string TimeStamp = DateTime.Now.ToString ("H:mm, d MMM yyyy");
+							string TimeStamp = DateTime.Now.ToString ("H:mm d MMM yyyy");
 
 							File.Move (ProblemFileName,
-								ProblemFileName + " (" + UserName  + " - " + TimeStamp + ")");
+								ProblemFileName + " (" + UserName  + ", " + TimeStamp + ")");
 							           
 							Process.StartInfo.Arguments
 								= "checkout --theirs " + ProblemFileName;
