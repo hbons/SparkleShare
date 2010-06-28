@@ -43,7 +43,7 @@ theme_icons =						\
 	status,folder-syncing-22.png			\
 	status,folder-syncing-24.png
 
-install_icon_exec = $(top_srcdir)/icon-theme-installer \
+install_icon_exec = $(top_srcdir)/build/icon-theme-installer \
 	-t "$(theme)" \
 	-s "$(srcdir)" \
 	-d "x$(DESTDIR)" \
