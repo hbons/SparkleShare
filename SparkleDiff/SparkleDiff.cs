@@ -109,6 +109,9 @@ namespace SparkleShare {
 						ViewLeft.SetImage (revision_image);
 
 						HookUpViews ();
+						
+						ViewLeft.ScrolledWindow.Hadjustment = ViewRight.ScrolledWindow.Hadjustment;
+						ViewLeft.ScrolledWindow.Vadjustment = ViewRight.ScrolledWindow.Vadjustment;
 
 					};
 
@@ -119,6 +122,9 @@ namespace SparkleShare {
 						ViewRight.SetImage (revision_image);
 
 						HookUpViews ();
+
+						ViewRight.ScrolledWindow.Hadjustment = ViewLeft.ScrolledWindow.Hadjustment;
+						ViewRight.ScrolledWindow.Vadjustment = ViewLeft.ScrolledWindow.Vadjustment;
 
 					};
 
