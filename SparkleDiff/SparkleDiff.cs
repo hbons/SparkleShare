@@ -194,6 +194,7 @@ namespace SparkleShare {
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 
+			// TODO: Nice commit summary and "Current Revision"
 			process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName (file_path);
 			process.StartInfo.FileName = "git";
 			process.StartInfo.Arguments = "log --format=\"%H\" " + file_name;
@@ -301,8 +302,6 @@ namespace SparkleShare {
 			PackStart (controls, false, false, 0);
 
 			UpdateControls ();
-
-			ShowAll ();
 
 		}
 
