@@ -77,7 +77,7 @@ namespace SparkleShare {
 
 			string file_name = System.IO.Path.GetFileName (file_path);
 
-			SetSizeRequest (1024, 600);
+			SetSizeRequest (800, 540);
 	 		SetPosition (WindowPosition.Center);
 
 			BorderWidth = 12;
@@ -92,9 +92,45 @@ namespace SparkleShare {
 			VBox layout_vertical = new VBox (false, 12);
 
 				HBox layout_horizontal = new HBox (false, 12);
-				
-					ViewLeft  = new RevisionView (Revisions);
-					ViewRight = new RevisionView (Revisions);
+
+					Process process = new Process ();
+					process.EnableRaisingEvents = true; 
+					process.StartInfo.RedirectStandardOutput = true;
+					process.StartInfo.UseShellExecute = false;
+
+					// TODO: Nice commit summary and "Current Revision"
+					process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName (file_path);
+					process.StartInfo.FileName = "git";
+					process.StartInfo.Arguments = "log --format=\"%ct\t%an\" " + file_name;
+					process.Start ();
+
+					string output = process.StandardOutput.ReadToEnd ();
+
+					string [] revisions_info = Regex.Split (output.Trim (), "\n");
+
+					int i = 0;
+					foreach (string revision_info in revisions_info) {
+
+						string [] parts = Regex.Split (revision_info.Trim (), "\t");
+
+						int timestamp = int.Parse (parts [0]);
+						string author = parts [1];
+
+						if (i == 0)
+							revisions_info [i] = "Current Revision" + "\t" + author;
+						else
+							revisions_info [i] = UnixTimestampToDateTime (timestamp).ToString ("d MMM\tH:mm") +
+								"\t" + author;
+						
+						i++;
+
+					}
+
+					ViewLeft  = new RevisionView (revisions_info);
+					ViewRight = new RevisionView (revisions_info);
+					
+					ViewLeft.ComboBox.Active  = 1;
+					ViewRight.ComboBox.Active = 0;
 
 					RevisionImage revision_image_left  = new RevisionImage (file_path, Revisions [1]);
 					RevisionImage revision_image_right = new RevisionImage (file_path, Revisions [0]);
@@ -112,6 +148,8 @@ namespace SparkleShare {
 						
 						ViewLeft.ScrolledWindow.Hadjustment = ViewRight.ScrolledWindow.Hadjustment;
 						ViewLeft.ScrolledWindow.Vadjustment = ViewRight.ScrolledWindow.Vadjustment;
+						
+						ViewLeft.UpdateControls ();
 
 					};
 
@@ -125,6 +163,8 @@ namespace SparkleShare {
 
 						ViewRight.ScrolledWindow.Hadjustment = ViewLeft.ScrolledWindow.Hadjustment;
 						ViewRight.ScrolledWindow.Vadjustment = ViewLeft.ScrolledWindow.Vadjustment;
+
+						ViewRight.UpdateControls ();
 
 					};
 
@@ -213,6 +253,14 @@ namespace SparkleShare {
 		}
 
 
+		// Converts a UNIX timestamp to a more usable time object
+		public DateTime UnixTimestampToDateTime (int timestamp)
+		{
+			DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
+			return unix_epoch.AddSeconds (timestamp);
+		}
+
+
 		// Quits the program		
 		private void Quit (object o, EventArgs args) {
 
@@ -276,7 +324,7 @@ namespace SparkleShare {
 			ScrolledWindow.AddWithViewport (Image);
 			PackStart (ScrolledWindow, true, true, 0);
 
-			HBox controls = new HBox ();
+			HBox controls = new HBox (false, 6);
 			controls.BorderWidth = 0;
 
 				Image image_previous = new Image ();
@@ -301,9 +349,9 @@ namespace SparkleShare {
 				ButtonNext = new Button (image_next);
 				ButtonNext.Clicked += NextInComboBox;
 
-			controls.Add (ButtonPrevious);
-			controls.Add (ComboBox);
-			controls.Add (ButtonNext);	
+//			controls.PackStart (ButtonPrevious, false, false, 0);
+			controls.PackStart (ComboBox, false, false, 0);
+//			controls.PackStart (ButtonNext, false, false, 0);
 
 			PackStart (controls, false, false, 0);
 
@@ -314,21 +362,21 @@ namespace SparkleShare {
 
 		public void NextInComboBox (object o, EventArgs args) {
 
-			if (ComboBox.Active > 0)
+/*			if (ComboBox.Active > 0)
 				ComboBox.Active--;
 
 			UpdateControls ();
-
+*/
 		}
 	
 
 		public void PreviousInComboBox (object o, EventArgs args) {
 
-			if (ComboBox.Active + 1 < ValueCount)
+/*			if (ComboBox.Active + 1 < ValueCount)
 				ComboBox.Active++;
 
 			UpdateControls ();
-
+*/
 		}
 
 
@@ -350,7 +398,7 @@ namespace SparkleShare {
 		public void UpdateControls () {
 
 			// TODO: Doesn't work yet. Sleepy -.-
-			ButtonPrevious.State = StateType.Normal;
+/*			ButtonPrevious.State = StateType.Normal;
 			ButtonNext.State = StateType.Normal;
 
 			if (ComboBox.Active == 0)
@@ -358,6 +406,7 @@ namespace SparkleShare {
 
 			if (ComboBox.Active + 1 == ValueCount)
 				ButtonPrevious.State = StateType.Insensitive;
+*/
 
 		}
 
