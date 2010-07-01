@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-23 06:09+0000\n"
+"POT-Creation-Date: 2010-07-01 06:14+0000\n"
 "PO-Revision-Date: 2010-06-11 21:59+0200\n"
 "Last-Translator: Łukasz Jernaś <deejay1@srem.org>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
@@ -87,7 +87,7 @@ msgstr[2] "około {0} minut temu"
 #: ../SparkleShare/SparkleHelpers.cs:171
 #, csharp-format
 msgid "about an hour ago"
-msgid_plural "about {0} minutes ago"
+msgid_plural "about {0} hours ago"
 msgstr[0] "około godzinę temu"
 msgstr[1] "około {0} godziny temu"
 msgstr[2] "około {0} godzin temu"
@@ -100,7 +100,7 @@ msgstr[0] "wczoraj"
 msgstr[1] "{0} dni temu"
 msgstr[2] "{0} dni temu"
 
-#: ../SparkleShare/SparkleHelpers.cs:183 ../SparkleShare/SparkleHelpers.cs:189
+#: ../SparkleShare/SparkleHelpers.cs:183
 #, csharp-format
 msgid "a month ago"
 msgid_plural "{0} months ago"
@@ -108,7 +108,7 @@ msgstr[0] "miesiąc temu"
 msgstr[1] "{0} miesiące temu"
 msgstr[2] "{0} miesięcy temu"
 
-#: ../SparkleShare/SparkleHelpers.cs:194
+#: ../SparkleShare/SparkleHelpers.cs:188
 #, csharp-format
 msgid "a year ago"
 msgid_plural "{0} years ago"
@@ -116,20 +116,18 @@ msgstr[0] "rok temu"
 msgstr[1] "{0} lata temu"
 msgstr[2] "{0} lat temu"
 
-#: ../SparkleShare/SparkleHelpers.cs:203
+#: ../SparkleShare/SparkleHelpers.cs:197
 msgid "Hold your ponies!"
 msgstr "Wstrzymaj konie!"
 
-#: ../SparkleShare/SparkleHelpers.cs:204
+#: ../SparkleShare/SparkleHelpers.cs:198
 msgid ""
 "SparkleShare is known to be insanely fast with \n"
 "pictures of unicorns. Please make sure your internets\n"
 "are upgraded to the latest version to avoid problems."
 msgstr ""
-"Program SparkleShare jest znany z niesamowitej szybkośc\n"
-"\r\n"
-"przy wysyłaniu obrazków z jednorożcami.\n"
-"\r\n"
+"Program SparkleShare jest znany z niesamowitej szybkości \n"
+" przy wysyłaniu obrazków z jednorożcami.\n"
 "Dopilnuj, by Twój internet był w najnowszej wersji, aby uniknąć problemów."
 
 #: ../SparkleShare/SparkleShare.cs:50
