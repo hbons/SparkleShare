@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-07-01 06:14+0000\n"
-"PO-Revision-Date: 2010-07-02 15:17+0800\n"
+"PO-Revision-Date: 2010-07-02 16:27+0800\n"
 "Last-Translator: Misha Shnurapet <shnurapet@fedoraproject.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -147,15 +147,15 @@ msgstr "Авторское право SparkleShare © 2010 Hylke Bons"
 
 #: ../SparkleShare/SparkleShare.cs:89
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
-msgstr ""
+msgstr "Эта программа поставляется БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ."
 
 #: ../SparkleShare/SparkleShare.cs:90
 msgid "This is free software, and you are welcome to redistribute it "
-msgstr ""
+msgstr "Эта программа является свободной, ее распространение разрешено "
 
 #: ../SparkleShare/SparkleShare.cs:91
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
-msgstr ""
+msgstr "при соблюдении требований лицензии GNU GPLv3."
 
 #: ../SparkleShare/SparkleShare.cs:93
 msgid "SparkleShare syncs the ~/SparkleShare folder with remote repositories."
