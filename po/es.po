@@ -16,7 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../SparkleShare/SparkleDialog.cs:50
-#, fuzzy
 msgid "Address of remote SparkleShare folder:"
 msgstr "Dirección de la carpeta SparkleShare remoto:"
 
