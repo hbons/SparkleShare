@@ -78,7 +78,7 @@ msgstr[0] "vor einer Minute"
 msgstr[1] "vor {0} Minuten"
 
 #: ../SparkleShare/SparkleHelpers.cs:171
-#, fuzzy, csharp-format
+#, csharp-format
 msgid "about an hour ago"
 msgid_plural "about {0} hours ago"
 msgstr[0] "vor einer Stunde"
