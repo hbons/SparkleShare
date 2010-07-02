@@ -1,0 +1,214 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: sparkleshare 简体中文\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-07-01 06:14+0000\n"
+"PO-Revision-Date: 2010-07-02 12:41+0700\n"
+"Last-Translator: 甘露(Gan Lu) <rhythm.gan@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1 plural=0;\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: CHINA\n"
+"X-Poedit-SourceCharset: zh_CN\n"
+
+#: ../SparkleShare/SparkleDialog.cs:50
+msgid "Address of remote SparkleShare folder:"
+msgstr "远端 SparkleShare 文件夹的地址："
+
+#: ../SparkleShare/SparkleDialog.cs:81
+msgid "Add Folder"
+msgstr "添加文件夹"
+
+#: ../SparkleShare/SparkleDialog.cs:126
+#, csharp-format
+msgid "Syncing folder ‘{0}’"
+msgstr "正在同步文件夹 ‘{0}’"
+
+#: ../SparkleShare/SparkleDialog.cs:127
+msgid "SparkleShare will notify you when this is done."
+msgstr "完成时 SparkleShare 将通知您"
+
+#: ../SparkleShare/SparkleDialog.cs:129
+msgid "Dismiss"
+msgstr ""
+
+#: ../SparkleShare/SparkleDialog.cs:157
+#, csharp-format
+msgid "Something went wrong while syncing ‘{0}’"
+msgstr "同步 ‘{0}’ 时发生错误"
+
+#: ../SparkleShare/SparkleDialog.cs:167
+msgid "Try Again…"
+msgstr "重试..."
+
+#: ../SparkleShare/SparkleDialog.cs:197
+#, csharp-format
+msgid "Successfully synced folder ‘{0}’"
+msgstr "成功同步文件夹 ‘{0}’"
+
+#: ../SparkleShare/SparkleDialog.cs:198
+msgid "Now make great stuff happen!"
+msgstr "就让伟大一刻现在发生吧！"
+
+#. Add a button to open the folder where the changed file is
+#: ../SparkleShare/SparkleDialog.cs:200
+#: ../SparkleShare/SparkleRepo.cs:319
+#: ../SparkleShare/SparkleWindow.cs:62
+msgid "Open Folder"
+msgstr "打开文件夹"
+
+#: ../SparkleShare/SparkleHelpers.cs:159
+#, csharp-format
+msgid "a second ago"
+msgid_plural "{0} seconds ago"
+msgstr[0] "{0} 秒钟前"
+
+#: ../SparkleShare/SparkleHelpers.cs:165
+#, csharp-format
+msgid "a minute ago"
+msgid_plural "about {0} minutes ago"
+msgstr[0] "{0} 分钟前"
+
+#: ../SparkleShare/SparkleHelpers.cs:171
+#, csharp-format
+msgid "about an hour ago"
+msgid_plural "about {0} hours ago"
+msgstr[0] "约 {0} 小时前"
+
+#: ../SparkleShare/SparkleHelpers.cs:177
+#, csharp-format
+msgid "yesterday"
+msgid_plural "{0} days ago"
+msgstr[0] "{0} 天前"
+
+#: ../SparkleShare/SparkleHelpers.cs:183
+#, csharp-format
+msgid "a month ago"
+msgid_plural "{0} months ago"
+msgstr[0] "{0} 个月前"
+
+#: ../SparkleShare/SparkleHelpers.cs:188
+#, csharp-format
+msgid "a year ago"
+msgid_plural "{0} years ago"
+msgstr[0] "{0} 年前"
+
+#: ../SparkleShare/SparkleHelpers.cs:197
+msgid "Hold your ponies!"
+msgstr ""
+
+#: ../SparkleShare/SparkleHelpers.cs:198
+msgid ""
+"SparkleShare is known to be insanely fast with \n"
+"pictures of unicorns. Please make sure your internets\n"
+"are upgraded to the latest version to avoid problems."
+msgstr ""
+
+#: ../SparkleShare/SparkleShare.cs:50
+msgid "Git wasn't found."
+msgstr "Git 没有找到"
+
+#: ../SparkleShare/SparkleShare.cs:51
+msgid "You can get Git from http://git-scm.com/."
+msgstr "您可以从 http://git-scm.com/ 处获得 Git。"
+
+#: ../SparkleShare/SparkleShare.cs:58
+msgid "Sorry, you can't run SparkleShare with these permissions."
+msgstr "对不起，您不能在这些许可下运行 SparkleShare。"
+
+#: ../SparkleShare/SparkleShare.cs:59
+msgid "Things will go utterly wrong."
+msgstr ""
+
+#: ../SparkleShare/SparkleShare.cs:87
+msgid "SparkleShare Copyright (C) 2010 Hylke Bons"
+msgstr "SparkleShare 版权所有 (C) 2010 Hylke Bons"
+
+#: ../SparkleShare/SparkleShare.cs:89
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr ""
+
+#: ../SparkleShare/SparkleShare.cs:90
+msgid "This is free software, and you are welcome to redistribute it "
+msgstr "这是自由软件，欢迎您再次分发。"
+
+#: ../SparkleShare/SparkleShare.cs:91
+msgid "under certain conditions. Please read the GNU GPLv3 for details."
+msgstr "在某种条件下。详情请参见 GNU GPLv3。"
+
+#: ../SparkleShare/SparkleShare.cs:93
+msgid "SparkleShare syncs the ~/SparkleShare folder with remote repositories."
+msgstr ""
+
+#: ../SparkleShare/SparkleShare.cs:95
+msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
+msgstr "用法：sparkleshare [start|stop|restart] [OPTION]..."
+
+#: ../SparkleShare/SparkleShare.cs:96
+msgid "Sync SparkleShare folder with remote repositories."
+msgstr ""
+
+#: ../SparkleShare/SparkleShare.cs:98
+msgid "Arguments:"
+msgstr "参数："
+
+#: ../SparkleShare/SparkleShare.cs:99
+msgid "\t -d, --disable-gui\tDon't show the notification icon."
+msgstr "\t -d, --disable-gui\t 不显示通知图标。"
+
+#: ../SparkleShare/SparkleShare.cs:100
+msgid "\t -h, --help\t\tDisplay this help text."
+msgstr "\t -h, --help\t\t 显示本帮助文本。"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:69
+msgid "Error syncing"
+msgstr "同步错误"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:72
+msgid "Everything is up to date"
+msgstr "全部已经为最新"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:75
+msgid "Syncing…"
+msgstr "同步中..."
+
+#: ../SparkleShare/SparkleStatusIcon.cs:116
+msgid "Add a Remote Folder…"
+msgstr "添加远端文件夹..."
+
+#: ../SparkleShare/SparkleStatusIcon.cs:124
+msgid "Show Notifications"
+msgstr "显示通知"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:142
+msgid "Visit Website"
+msgstr "访问网站"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:159
+msgid "Quit"
+msgstr "退出"
+
+#: ../SparkleShare/SparkleUI.cs:134
+msgid "Welcome to SparkleShare!"
+msgstr "欢迎使用 SparkleShare！"
+
+#: ../SparkleShare/SparkleUI.cs:135
+msgid "You don't have any folders set up yet."
+msgstr "您还没有设置文件夹。"
+
+#: ../SparkleShare/SparkleUI.cs:138
+msgid "Add a Folder…"
+msgstr "添加文件夹..."
+
+#: ../SparkleShare/SparkleWindow.cs:50
+#, csharp-format
+msgid "‘{0}’ on {1}"
+msgstr ""
+
