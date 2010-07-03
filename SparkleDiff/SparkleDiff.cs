@@ -28,6 +28,7 @@ namespace SparkleShare {
 
 		public static void Main (string [] args)
 		{
+			Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
 			if (args.Length > 0) {
 
@@ -85,6 +86,7 @@ namespace SparkleShare {
 			DeleteEvent += Quit;
 
 			IconName = "image-x-generic";
+			// TRANSLATORS: The parameter is a filename
 			Title = String.Format(_("Comparing Revisions of ‘{0}’"), file_name);
 			
 			Revisions = GetRevisionsForFile (file_path);
@@ -117,9 +119,10 @@ namespace SparkleShare {
 						string author = parts [1];
 
 						if (i == 0)
-							revisions_info [i] = "Current Revision" + "\t" + author;
+							revisions_info [i] = _("Current Revision") + "\t" + author;
 						else
-							revisions_info [i] = UnixTimestampToDateTime (timestamp).ToString ("d MMM\tH:mm") +
+							// TRANSLATORS: This is a format specifier according to System.Globalization.DateTimeFormatInfo
+							revisions_info [i] = UnixTimestampToDateTime (timestamp).ToString (_("d MMM\tH:mm")) +
 								"\t" + author;
 						
 						i++;
