@@ -1,3 +1,6 @@
+SUBDIRS =	\
+	Nautilus
+
 ASSEMBLY = SparkleShare
 TARGET = exe
 
