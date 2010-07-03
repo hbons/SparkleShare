@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-01 06:14+0000\n"
+"POT-Creation-Date: 2010-07-03 19:41+0000\n"
 "PO-Revision-Date: 2010-06-11 21:59+0200\n"
 "Last-Translator: Łukasz Jernaś <deejay1@srem.org>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
@@ -22,6 +22,22 @@ msgstr ""
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: Poland\n"
 "X-Generator: Virtaal 0.5.2\n"
+
+#. TRANSLATORS: The parameter is a filename
+#: ../SparkleDiff/SparkleDiff.cs:90
+#, csharp-format
+msgid "Comparing Revisions of ‘{0}’"
+msgstr ""
+
+#: ../SparkleDiff/SparkleDiff.cs:122
+msgid "Current Revision"
+msgstr "Bieżąca rewizja"
+
+#. TRANSLATORS: This is a format specifier according to
+#. System.Globalization.DateTimeFormatInfo
+#: ../SparkleDiff/SparkleDiff.cs:125
+msgid "d MMM\tH:mm"
+msgstr ""
 
 #: ../SparkleShare/SparkleDialog.cs:50
 msgid "Address of remote SparkleShare folder:"
