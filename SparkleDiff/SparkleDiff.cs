@@ -137,6 +137,7 @@ namespace SparkleShare {
 			DeleteEvent += Quit;
 
 			IconName = "image-x-generic";
+
 			// TRANSLATORS: The parameter is a filename
 			Title = String.Format(_("Comparing Revisions of ‘{0}’"), file_name);
 			
@@ -151,7 +152,6 @@ namespace SparkleShare {
 					process.StartInfo.RedirectStandardOutput = true;
 					process.StartInfo.UseShellExecute = false;
 
-					// TODO: Nice commit summary and "Current Revision"
 					process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName (file_path);
 					process.StartInfo.FileName = "git";
 					process.StartInfo.Arguments = "log --format=\"%ct\t%an\" " + file_name;
@@ -172,10 +172,11 @@ namespace SparkleShare {
 						if (i == 0)
 							revisions_info [i] = _("Current Revision") + "\t" + author;
 						else
+
 							// TRANSLATORS: This is a format specifier according to System.Globalization.DateTimeFormatInfo
 							revisions_info [i] = UnixTimestampToDateTime (timestamp).ToString (_("d MMM\tH:mm")) +
-								"\t" + author;
-						
+							"\t" + author;
+
 						i++;
 
 					}
@@ -185,6 +186,9 @@ namespace SparkleShare {
 					
 					ViewLeft.ComboBox.Active  = 1;
 					ViewRight.ComboBox.Active = 0;
+					
+					ViewLeft.ScrolledWindow.Placement = CornerType.BottomRight;
+					ViewRight.ScrolledWindow.Placement = CornerType.BottomLeft;
 
 					RevisionImage revision_image_left  = new RevisionImage (file_path, Revisions [1]);
 					RevisionImage revision_image_right = new RevisionImage (file_path, Revisions [0]);
@@ -398,7 +402,7 @@ namespace SparkleShare {
 				ComboBox.Active = 0;
 				
 //				ValueCount = revisions.Length;
-// TODO Widget width from heigh
+
 				Arrow arrow_right = new Arrow (ArrowType.Right, ShadowType.None);
 				ButtonNext = new Button ();
 				ButtonNext.Add (arrow_right);
