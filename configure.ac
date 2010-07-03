@@ -75,6 +75,9 @@ SHAMROCK_CHECK_MONO_2_0_GAC_ASSEMBLIES([
     Mono.Posix
 ])
 
+dnl Get nautilus extensions directory
+SPARKLESHARE_NAUTILUS_PYTHON
+
 SHAVE_INIT([build/m4/shave], [enable])
 
 
@@ -90,6 +93,7 @@ SparkleShare/sparkleshare
 SparkleShare/Defines.cs
 SparkleShare/AssemblyInfo.cs
 SparkleShare/Makefile
+SparkleShare/Nautilus/Makefile
 po/Makefile.in
 Makefile
 ])
