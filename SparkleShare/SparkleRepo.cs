@@ -35,6 +35,7 @@ namespace SparkleShare {
 		private FileSystemWatcher Watcher;
 		private bool HasChanged = false;
 		private DateTime LastChange;
+		private System.Object ChangeLock = new System.Object();
 
 		public string Name;
 		public string Domain;
@@ -126,14 +127,16 @@ namespace SparkleShare {
 			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
 				SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Checking for changes.");
 
-				if (HasChanged) {
-					SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes found, checking if settled.");
-					DateTime now = DateTime.UtcNow;
-					TimeSpan changed = new TimeSpan (now.Ticks - LastChange.Ticks);
-					if (changed.TotalMilliseconds > 5000) {
-						HasChanged = false;
-						SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes have settled, adding.");
-						AddCommitAndPush ();
+				lock(ChangeLock) {
+					if (HasChanged) {
+						SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes found, checking if settled.");
+						DateTime now = DateTime.UtcNow;
+						TimeSpan changed = new TimeSpan (now.Ticks - LastChange.Ticks);
+						if (changed.TotalMilliseconds > 5000) {
+							HasChanged = false;
+							SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes have settled, adding.");
+							AddCommitAndPush ();
+						}
 					}
 				}
 			};
@@ -156,8 +159,10 @@ namespace SparkleShare {
 			if (!ShouldIgnore (args.Name)) {
 				SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + args.Name + "'");
 				FetchTimer.Stop ();
-				LastChange = DateTime.UtcNow;
-				HasChanged = true;
+				lock(ChangeLock) {
+					LastChange = DateTime.UtcNow;
+					HasChanged = true;
+				}
 			}
 		}
 
@@ -165,22 +170,23 @@ namespace SparkleShare {
 		// so this method does them all with appropriate timers, etc switched off
 		public void AddCommitAndPush ()
 		{
-			BufferTimer.Stop ();
-			FetchTimer.Stop ();
-
-			Add ();
-			string Message = FormatCommitMessage ();
-			if (!Message.Equals ("")) {
-				Commit (Message);
-				Fetch ();
-				Push ();
+			try {
+				BufferTimer.Stop ();
+				FetchTimer.Stop ();
+	
+				Add ();
+				string Message = FormatCommitMessage ();
+				if (!Message.Equals ("")) {
+					Commit (Message);
+					Fetch ();
+					Push ();
+					SparkleHelpers.CheckForUnicorns (Message);
+				}
 			}
-
-			FetchTimer.Start ();
-			BufferTimer.Start ();
-			
-			SparkleHelpers.CheckForUnicorns (Message);
-
+			finally {
+				FetchTimer.Start ();
+				BufferTimer.Start ();
+			}
 		}
 		
 		// Stages the made changes
@@ -207,18 +213,22 @@ namespace SparkleShare {
 		// Fetches changes from the remote repo	
 		public void Fetch ()
 		{
-			FetchTimer.Stop ();
-//			SparkleUI.NotificationIcon.SetSyncingState ();
-			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
-			Process.StartInfo.Arguments = "fetch -v";
-			Process.Start ();
-			string Output = Process.StandardOutput.ReadToEnd ().Trim (); // TODO: This doesn't work :(
-			Process.WaitForExit ();
-			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
-			if (!Output.Contains ("up to date"))
-				Rebase ();
-//			SparkleUI.NotificationIcon.SetIdleState ();
-			FetchTimer.Start ();
+			try {
+				FetchTimer.Stop ();
+//				SparkleUI.NotificationIcon.SetSyncingState ();
+				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
+				Process.StartInfo.Arguments = "fetch -v";
+				Process.Start ();
+				string Output = Process.StandardOutput.ReadToEnd ().Trim (); // TODO: This doesn't work :(
+				Process.WaitForExit ();
+				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
+				if (!Output.Contains ("up to date"))
+					Rebase ();
+//				SparkleUI.NotificationIcon.SetIdleState ();
+			}
+			finally {
+				FetchTimer.Start ();
+			}
 		}
 
 		// Merges the fetched changes
