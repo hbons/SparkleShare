@@ -1,0 +1,220 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-07-03 08:06+0000\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Samuel Thollander <samuel.thollander@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sb\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Poedit-Language: Swedish\n"
+
+
+#: ../SparkleShare/SparkleDialog.cs:50
+msgid "Address of remote SparkleShare folder:"
+msgstr "Adress till SparkleShare fjärrmapp"
+
+#: ../SparkleShare/SparkleDialog.cs:81
+msgid "Add Folder"
+msgstr "Lägg till mapp"
+
+#: ../SparkleShare/SparkleDialog.cs:126
+#, csharp-format
+msgid "Syncing folder ‘{0}’"
+msgstr "Synkroniserar mappen ‘{0}’"
+
+#: ../SparkleShare/SparkleDialog.cs:127
+msgid "SparkleShare will notify you when this is done."
+msgstr "SparkleShare kommer meddela dig när detta är färdigt."
+
+#: ../SparkleShare/SparkleDialog.cs:129
+msgid "Dismiss"
+msgstr "Stäng"
+
+#: ../SparkleShare/SparkleDialog.cs:157
+#, csharp-format
+msgid "Something went wrong while syncing ‘{0}’"
+msgstr "Något blev fel med synkroniseringen av ‘{0}’"
+
+#: ../SparkleShare/SparkleDialog.cs:167
+msgid "Try Again…"
+msgstr "Försök igen..."
+
+#: ../SparkleShare/SparkleDialog.cs:197
+#, csharp-format
+msgid "Successfully synced folder ‘{0}’"
+msgstr "Lyckad synkronisering av mappen ‘{0}’"
+
+#: ../SparkleShare/SparkleDialog.cs:198
+msgid "Now make great stuff happen!"
+msgstr "Nu kommer häftiga saker att hända"
+
+#. Add a button to open the folder where the changed file is
+#: ../SparkleShare/SparkleDialog.cs:200
+#: ../SparkleShare/SparkleRepo.cs:319
+#: ../SparkleShare/SparkleWindow.cs:62
+msgid "Open Folder"
+msgstr "Öppna mapp"
+
+#: ../SparkleShare/SparkleHelpers.cs:159
+#, csharp-format
+msgid "a second ago"
+msgid_plural "{0} seconds ago"
+msgstr[0] "en sekund sedan"
+msgstr[1] "{0} sekunder sedan"
+
+#: ../SparkleShare/SparkleHelpers.cs:165
+#, csharp-format
+msgid "a minute ago"
+msgid_plural "about {0} minutes ago"
+msgstr[0] "en minut sedan"
+msgstr[1] "{0} minuter sedan"
+
+#: ../SparkleShare/SparkleHelpers.cs:171
+#, csharp-format
+msgid "about an hour ago"
+msgid_plural "about {0} hours ago"
+msgstr[0] "ungefär en timme sedan"
+msgstr[1] "ungefär {0} timmar sedan"
+
+#: ../SparkleShare/SparkleHelpers.cs:177
+#, csharp-format
+msgid "yesterday"
+msgid_plural "{0} days ago"
+msgstr[0] "igår"
+msgstr[1] "{0} dagar sedan"
+
+#: ../SparkleShare/SparkleHelpers.cs:183
+#, csharp-format
+msgid "a month ago"
+msgid_plural "{0} months ago"
+msgstr[0] "en månad sedan"
+msgstr[1] "{0} månader sedan"
+
+#: ../SparkleShare/SparkleHelpers.cs:188
+#, csharp-format
+msgid "a year ago"
+msgid_plural "{0} years ago"
+msgstr[0] "ett år sedan"
+msgstr[1] "{0} år sedan"
+
+#: ../SparkleShare/SparkleHelpers.cs:197
+msgid "Hold your ponies!"
+msgstr "Håll in dina ponnyer!"
+
+#: ../SparkleShare/SparkleHelpers.cs:198
+msgid ""
+"SparkleShare is known to be insanely fast with \n"
+"pictures of unicorns. Please make sure your internets\n"
+"are upgraded to the latest version to avoid problems."
+msgstr ""
+"SparkleShare är känt för att vara snabbt med \n"
+"bilder på enhörningar. Vänligen säkerställ att dina internet\n"
+"är uppgraderade till den senaste versionen för att slippa problem."
+
+#: ../SparkleShare/SparkleShare.cs:50
+msgid "Git wasn't found."
+msgstr "Git hittades inte."
+
+#: ../SparkleShare/SparkleShare.cs:51
+msgid "You can get Git from http://git-scm.com/."
+msgstr "Du kan skaffa Git från http://git-scm.com/."
+
+#: ../SparkleShare/SparkleShare.cs:58
+msgid "Sorry, you can't run SparkleShare with these permissions."
+msgstr "Ledsen, men du kan inte köra SparkleShare med dessa rättigheter."
+
+#: ../SparkleShare/SparkleShare.cs:59
+msgid "Things will go utterly wrong."
+msgstr "Saker och ting kommer gå åt skogen."
+
+#: ../SparkleShare/SparkleShare.cs:87
+msgid "SparkleShare Copyright (C) 2010 Hylke Bons"
+msgstr "SparkleShare Copyright (C) 2010 Hylke Bons"
+
+#: ../SparkleShare/SparkleShare.cs:89
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr "Detta program kommer utan några som helst garantier."
+
+#: ../SparkleShare/SparkleShare.cs:90
+msgid "This is free software, and you are welcome to redistribute it "
+msgstr "Detta är fri programvara och du är välkommen att distribuera det "
+
+#: ../SparkleShare/SparkleShare.cs:91
+msgid "under certain conditions. Please read the GNU GPLv3 for details."
+msgstr "under vissa förhållanden. Vänligen läs GNU GPL v3 för detaljer."
+
+#: ../SparkleShare/SparkleShare.cs:93
+msgid "SparkleShare syncs the ~/SparkleShare folder with remote repositories."
+msgstr "SparkleShare synkroniserar ~/SparkleShare mappen med fjärrmappar."
+
+#: ../SparkleShare/SparkleShare.cs:95
+msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
+msgstr "Användning: sparkleshare [start|stop|restart] [INSTÄLLNING]"
+
+#: ../SparkleShare/SparkleShare.cs:96
+msgid "Sync SparkleShare folder with remote repositories."
+msgstr "Synkronisera SparkleShare mappen med fjärrmappar."
+
+#: ../SparkleShare/SparkleShare.cs:98
+msgid "Arguments:"
+msgstr "Argument:"
+
+#: ../SparkleShare/SparkleShare.cs:99
+msgid "\t -d, --disable-gui\tDon't show the notification icon."
+msgstr "\t -d, --disable-gui\tVisa inte meddelandeikonen."
+
+#: ../SparkleShare/SparkleShare.cs:100
+msgid "\t -h, --help\t\tDisplay this help text."
+msgstr "\t -h, --help\t\tVisa denna hjälptext."
+
+#: ../SparkleShare/SparkleStatusIcon.cs:69
+msgid "Error syncing"
+msgstr "Synkroniseringsfel"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:72
+msgid "Everything is up to date"
+msgstr "Allt är av senaste versionen"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:75
+msgid "Syncing…"
+msgstr "Synkroniserar…"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:116
+msgid "Add a Remote Folder…"
+msgstr "Lägg till en fjärrmapp…"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:124
+msgid "Show Notifications"
+msgstr "Visa meddelanderutor"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:142
+msgid "Visit Website"
+msgstr "Besök hemsidan"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:159
+msgid "Quit"
+msgstr "Avsluta"
+
+#: ../SparkleShare/SparkleUI.cs:134
+msgid "Welcome to SparkleShare!"
+msgstr "Välkommen till SparkleShare"
+
+#: ../SparkleShare/SparkleUI.cs:135
+msgid "You don't have any folders set up yet."
+msgstr "Du har inga mappar inställda ännu."
+
+#: ../SparkleShare/SparkleUI.cs:138
+msgid "Add a Folder…"
+msgstr "Lägg till en mapp…"
+
+#: ../SparkleShare/SparkleWindow.cs:50
+#, csharp-format
+msgid "‘{0}’ on {1}"
+msgstr "{0}’ på {1}"
+
