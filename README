@@ -34,10 +34,10 @@ SparkleShare currently requires:
    - gtk-sharp2 >= 2.12.7
    - mono-core >= 2.2
    - ndesk-dbus >= 0.6
-   - notify-sharp >= 0.4.0
    - openssh
    - gvfs >= 1.3
    - intltool
+   - nautilus-python
 
 Run the service:
 
@@ -63,7 +63,6 @@ To build SparkleShare you need:
    - monodevelop >= 2.0
    - ndesk-dbus-devel >= 0.6
    - ndesk-dbus-glib-devel >= 0.6
-   - notify-sharp-devel >= 0.4.0
 
 You can build and install SparkleShare like this:
 

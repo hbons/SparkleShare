@@ -2,6 +2,7 @@
 # Please keep this file in alphabetical order; run ./sort-potfiles
 # after adding files here.
 [encoding: UTF-8]
+SparkleDiff/SparkleDiff.cs
 SparkleShare/SparkleBubble.cs
 SparkleShare/SparkleDialog.cs
 SparkleShare/SparkleHelpers.cs
