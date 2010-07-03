@@ -380,11 +380,12 @@ namespace SparkleShare {
 
 			HBox controls = new HBox (false, 6);
 			controls.BorderWidth = 0;
-
-				Image image_previous = new Image ();
-				image_previous.IconName = "go-previous";
-				ButtonPrevious = new Button (image_previous);
+				
+				Arrow arrow_left = new Arrow (ArrowType.Left, ShadowType.None);
+				ButtonPrevious = new Button ();
+				ButtonPrevious.Add (arrow_left);
 				ButtonPrevious.Clicked += PreviousInComboBox;
+				ButtonPrevious.ExposeEvent += EqualizeSizes;
 
 //				ValueCount = 0;
 
@@ -397,22 +398,32 @@ namespace SparkleShare {
 				ComboBox.Active = 0;
 				
 //				ValueCount = revisions.Length;
-
-				Image image_next = new Image ();
-				image_next.IconName = "go-next";
-				ButtonNext = new Button (image_next);
+// TODO Widget width from heigh
+				Arrow arrow_right = new Arrow (ArrowType.Right, ShadowType.None);
+				ButtonNext = new Button ();
+				ButtonNext.Add (arrow_right);
 				ButtonNext.Clicked += NextInComboBox;
+				ButtonNext.ExposeEvent += EqualizeSizes;
 
-//			controls.PackStart (ButtonPrevious, false, false, 0);
+			controls.PackStart (new Label (""), true, false, 0);
+			controls.PackStart (ButtonPrevious, false, false, 0);
 			controls.PackStart (ComboBox, false, false, 0);
-//			controls.PackStart (ButtonNext, false, false, 0);
+			controls.PackStart (ButtonNext, false, false, 0);
+			controls.PackStart (new Label (""), true, false, 0);
 
 			PackStart (controls, false, false, 0);
 
 			UpdateControls ();
 
 		}
+		
 
+		// Equalizes the height and width of a button when it's exposed
+		private void EqualizeSizes (object o, ExposeEventArgs args) {
+			Button button = (Button) o;
+			button.WidthRequest = button.Allocation.Height;
+		}
+		
 
 		public void NextInComboBox (object o, EventArgs args) {
 
