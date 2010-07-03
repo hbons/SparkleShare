@@ -1,28 +1,29 @@
-# SPANISH TRANSLATION
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Jorge Bianquetti <jbianquetti@gmail.com>, 2010
-# 
+# Veeven <veeven@gmail.com>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-02 06:01+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2010-07-01 06:14+0000\n"
+"PO-Revision-Date: 2010-07-02 09:13+0530\n"
+"Last-Translator: Veeven <veeven@gmail.com>\n"
+"Language-Team: e-Telugu Localization Team\n"
+"Language: te\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.5.2\n"
 
 #: ../SparkleShare/SparkleDialog.cs:50
 msgid "Address of remote SparkleShare folder:"
-msgstr "Dirección de la carpeta SparkleShare remoto:"
+msgstr ""
 
 #: ../SparkleShare/SparkleDialog.cs:81
-#, fuzzy
 msgid "Add Folder"
-msgstr "Añade una Carpeta"
+msgstr "సంచయాన్ని చేర్చు"
 
 #: ../SparkleShare/SparkleDialog.cs:126
 #, csharp-format
@@ -44,7 +45,7 @@ msgstr ""
 
 #: ../SparkleShare/SparkleDialog.cs:167
 msgid "Try Again…"
-msgstr ""
+msgstr "మళ్ళీ ప్రయత్నించండి…"
 
 #: ../SparkleShare/SparkleDialog.cs:197
 #, csharp-format
@@ -53,55 +54,55 @@ msgstr ""
 
 #: ../SparkleShare/SparkleDialog.cs:198
 msgid "Now make great stuff happen!"
-msgstr ""
+msgstr "ఇప్పుడు అద్భుతాలని సృష్టించండి!"
 
 #. Add a button to open the folder where the changed file is
 #: ../SparkleShare/SparkleDialog.cs:200 ../SparkleShare/SparkleRepo.cs:319
 #: ../SparkleShare/SparkleWindow.cs:62
 msgid "Open Folder"
-msgstr "Abrir Carpeta"
+msgstr "సంచయాన్ని తెరువు"
 
 #: ../SparkleShare/SparkleHelpers.cs:159
 #, csharp-format
 msgid "a second ago"
 msgid_plural "{0} seconds ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ఒక క్షణం క్రితం"
+msgstr[1] "{0} క్షణాల క్రితం"
 
 #: ../SparkleShare/SparkleHelpers.cs:165
 #, csharp-format
 msgid "a minute ago"
 msgid_plural "about {0} minutes ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ఒక నిమిషం క్రితం"
+msgstr[1] "దాదాపు {0} నిమిషాల క్రితం"
 
 #: ../SparkleShare/SparkleHelpers.cs:171
 #, csharp-format
 msgid "about an hour ago"
 msgid_plural "about {0} hours ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "దాదాపు ఒక గంట క్రితం"
+msgstr[1] "దాదాపు {0} గంటల క్రితం"
 
 #: ../SparkleShare/SparkleHelpers.cs:177
 #, csharp-format
 msgid "yesterday"
 msgid_plural "{0} days ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "నిన్న"
+msgstr[1] "{0} రోజుల క్రితం"
 
 #: ../SparkleShare/SparkleHelpers.cs:183
 #, csharp-format
 msgid "a month ago"
 msgid_plural "{0} months ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ఒక నెల క్రితం"
+msgstr[1] "{0} నెలల క్రితం"
 
 #: ../SparkleShare/SparkleHelpers.cs:188
 #, csharp-format
 msgid "a year ago"
 msgid_plural "{0} years ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ఒక సంవత్సరం క్రితం"
+msgstr[1] "{0} సంవత్సరాల క్రితం"
 
 #: ../SparkleShare/SparkleHelpers.cs:197
 msgid "Hold your ponies!"
@@ -116,23 +117,23 @@ msgstr ""
 
 #: ../SparkleShare/SparkleShare.cs:50
 msgid "Git wasn't found."
-msgstr "No se ha encontrado Git."
+msgstr ""
 
 #: ../SparkleShare/SparkleShare.cs:51
 msgid "You can get Git from http://git-scm.com/."
-msgstr "Puedes obtener Git en http://git-scm.com/."
+msgstr ""
 
 #: ../SparkleShare/SparkleShare.cs:58
 msgid "Sorry, you can't run SparkleShare with these permissions."
-msgstr "No se puede ejecutar SparkleShare con estos permisos."
+msgstr ""
 
 #: ../SparkleShare/SparkleShare.cs:59
 msgid "Things will go utterly wrong."
-msgstr "Algo va a ir mal."
+msgstr ""
 
 #: ../SparkleShare/SparkleShare.cs:87
 msgid "SparkleShare Copyright (C) 2010 Hylke Bons"
-msgstr ""
+msgstr "స్పార్కిల్‌షేర్ కాహీహక్కులు (C) 2010 హైల్క్ బాన్స్"
 
 #: ../SparkleShare/SparkleShare.cs:89
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
@@ -183,9 +184,8 @@ msgid "Syncing…"
 msgstr ""
 
 #: ../SparkleShare/SparkleStatusIcon.cs:116
-#, fuzzy
 msgid "Add a Remote Folder…"
-msgstr "Añade una Carpeta"
+msgstr ""
 
 #: ../SparkleShare/SparkleStatusIcon.cs:124
 msgid "Show Notifications"
@@ -193,137 +193,25 @@ msgstr ""
 
 #: ../SparkleShare/SparkleStatusIcon.cs:142
 msgid "Visit Website"
-msgstr ""
+msgstr "వెబ్‌సైటుని సందర్శించండి"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:159
 msgid "Quit"
-msgstr ""
+msgstr "చాలించు"
 
 #: ../SparkleShare/SparkleUI.cs:134
 msgid "Welcome to SparkleShare!"
-msgstr "Bienvenido a SparkleShare!"
+msgstr "స్పార్కిల్‌షేర్‌కి స్వాగతం!"
 
 #: ../SparkleShare/SparkleUI.cs:135
 msgid "You don't have any folders set up yet."
 msgstr ""
 
 #: ../SparkleShare/SparkleUI.cs:138
-#, fuzzy
 msgid "Add a Folder…"
-msgstr "Añade una Carpeta"
+msgstr "ఒక సంచయాన్ని చేర్చండి…"
 
 #: ../SparkleShare/SparkleWindow.cs:50
 #, csharp-format
 msgid "‘{0}’ on {1}"
-msgstr ""
-
-#~ msgid "folder-sparkleshare"
-#~ msgstr "Carpeta-sparkleshare"
-
-#~ msgid "Folder Name:   "
-#~ msgstr "Nombre de Carpeta:   "
-
-#~ msgid "<span size='small'><i>Example: "
-#~ msgstr "<span size='small'><i>Ejemplo: "
-
-#~ msgid "‘Project’.</i></span>"
-#~ msgstr "‘Proyecto’.</i></span>"
-
-#~ msgid "Remote address:   "
-#~ msgstr "Dirección remota:   "
-
-#~ msgid "Downloading files,\n"
-#~ msgstr "Descargando archivos,\n"
-
-#~ msgid "this may take a while..."
-#~ msgstr "esto puede tardar un rato..."
-
-#~ msgid "[Config] Created '"
-#~ msgstr "[Config] Creado '"
-
-#~ msgid "Preferences"
-#~ msgstr "Preferencias"
-
-#~ msgid "The folder "
-#~ msgstr "La carpeta"
-
-#~ msgid "Notify me when something changes"
-#~ msgstr "Notificarme los cambios"
-
-#~ msgid "Synchronize my changes"
-#~ msgstr "Sincronizar mis cambios"
-
-#~ msgid "Anonymous"
-#~ msgstr "Anónimo"
-
-#~ msgid "] Nothing going on..."
-#~ msgstr "] No sucede nada..."
-
-#~ msgid "] Waiting for more changes..."
-#~ msgstr "] Esperando más cambios..."
-
-#~ msgid "] Changed staged."
-#~ msgstr "] Estado cambiado."
-
-#~ msgid "] Commiting changes..."
-#~ msgstr "] Aplicando los cambios..."
-
-#~ msgid "] Changes commited."
-#~ msgstr "] Cambios aplicados."
-
-#~ msgid "] Fetching changes... "
-#~ msgstr "] Recibiendo cambios..."
-
-#~ msgid "] Changes fetched."
-#~ msgstr "] Cambios recibidos."
-
-#~ msgid "] Merging fetched changes... "
-#~ msgstr "] Uniendo cambios recibidos..."
-
-#~ msgid "Already up-to-date."
-#~ msgstr "Ya se encuentra en la última versión"
-
-#~ msgid "new file:"
-#~ msgstr "nuevo archivo:"
-
-#~ msgid "modified:"
-#~ msgstr "modificado:"
-
-#~ msgid "renamed:"
-#~ msgstr "renombrado:"
-
-#~ msgid "deleted:"
-#~ msgstr "borrado:"
-
-#~ msgid "added ‘"
-#~ msgstr "añadido "
-
-#~ msgid "#\tnew file:"
-#~ msgstr "#\tnew file:"
-
-#~ msgid "’ and "
-#~ msgstr "’ y "
-
-#~ msgid " more."
-#~ msgstr " más."
-
-#~ msgid "edited ‘"
-#~ msgstr "editado ‘"
-
-#~ msgid "#\tmodified:"
-#~ msgstr "#\tmodificado:"
-
-#~ msgid "deleted ‘"
-#~ msgstr "borrado ‘"
-
-#~ msgid "#\tdeleted:"
-#~ msgstr "#\tborrado:"
-
-#~ msgid "renamed ‘"
-#~ msgstr "renombrado ‘"
-
-#~ msgid "#\trenamed:"
-#~ msgstr "#\trenombrado:"
-
-#~ msgid "’ to ‘"
-#~ msgstr "‘ a ‘"
+msgstr "{1} పై ‘{0}’"
