@@ -39,7 +39,7 @@ namespace SparkleShare {
 			// Use translations
 			Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
-			// Check if git is installed
+			// Check whether git is installed
 			Process Process = new Process ();
 			Process.StartInfo.FileName = "git";
 			Process.StartInfo.RedirectStandardOutput = true;
@@ -56,7 +56,7 @@ namespace SparkleShare {
 			UnixUserInfo UnixUserInfo =	new UnixUserInfo (UnixEnvironment.UserName);
 			if (UnixUserInfo.UserId == 0) {
 				Console.WriteLine (_("Sorry, you can't run SparkleShare with these permissions."));
-				Console.WriteLine (_("Things will go utterly wrong.")); 
+				Console.WriteLine (_("Things would go utterly wrong.")); 
 				Environment.Exit (0);
 			}
 
@@ -68,6 +68,7 @@ namespace SparkleShare {
 						HideUI = true;
 					if (Argument.Equals ("--help") || Argument.Equals ("-h")) {
 						ShowHelp ();
+						Environment.Exit (0);
 					}
 				}
 			}
@@ -99,7 +100,6 @@ namespace SparkleShare {
 			Console.WriteLine (_("\t -d, --disable-gui\tDon't show the notification icon."));
 			Console.WriteLine (_("\t -h, --help\t\tDisplay this help text."));
 			Console.WriteLine (" ");
-			Environment.Exit (0);
 		}
 
 	}
