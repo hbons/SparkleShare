@@ -115,8 +115,6 @@ namespace SparkleShare {
 		}
 
 
-
-
 		// Prints the help output
 		public static void ShowHelp ()
 		{
@@ -135,9 +133,6 @@ namespace SparkleShare {
 			Console.WriteLine (_("\t -h, --help\t\tDisplay this help text."));
 			Console.WriteLine (" ");
 		}
-
-	
-
 
 	}
 
