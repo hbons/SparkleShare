@@ -40,6 +40,12 @@ namespace SparkleShare {
 		public SparkleDiffWindow (string file_path) : base ("")
 		{
 
+			Revisions = GetRevisionsForFilePath (file_path);
+			
+			if (Revisions.Length < 2) {
+				Console.WriteLine ("SparkleDiff: " + file_path + ": File has no history.");
+			}
+
 			string file_name = System.IO.Path.GetFileName (file_path);
 
 			SetSizeRequest (800, 540);
@@ -53,8 +59,6 @@ namespace SparkleShare {
 
 			// TRANSLATORS: The parameter is a filename
 			Title = String.Format(_("Comparing Revisions of ‘{0}’"), file_name);
-			
-			Revisions = GetRevisionsForFilePath (file_path);
 
 			VBox layout_vertical = new VBox (false, 12);
 
@@ -96,7 +100,7 @@ namespace SparkleShare {
 					ViewLeft  = new LeftRevisionView  (revisions_info);
 					ViewRight = new RightRevisionView (revisions_info);
 
-					ViewLeft.SetImage  (new RevisionImage (file_path, Revisions [1]));
+					ViewLeft.SetImage  (new RevisionImage (file_path, Revisions [0]));
 					ViewRight.SetImage (new RevisionImage (file_path, Revisions [0]));
 					
 					ViewLeft.ComboBox.Changed += delegate {
@@ -200,17 +204,15 @@ namespace SparkleShare {
 		private string [] GetRevisionsForFilePath (string file_path)
 		{
 
-			string file_name = System.IO.Path.GetFileName (file_path);
-
 			Process process = new Process ();
 			process.EnableRaisingEvents = true; 
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 
-			// TODO: Nice commit summary and "Current Revision"
-			process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName (file_path);
+			process.StartInfo.WorkingDirectory = SparkleDiff.GetGitRoot (file_path);
 			process.StartInfo.FileName = "git";
-			process.StartInfo.Arguments = "log --format=\"%H\" " + file_name;
+			process.StartInfo.Arguments = "log --format=\"%H\" " + SparkleDiff.GetPathFromGitRoot (file_path);
+
 			process.Start ();
 
 			string output = process.StandardOutput.ReadToEnd ();

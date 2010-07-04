@@ -13,8 +13,9 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+using System;
 using Gtk;
+using SparkleShare;
 using System.Diagnostics;
 
 namespace SparkleShare {
@@ -37,9 +38,9 @@ namespace SparkleShare {
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 
-			process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName (FilePath);
+			process.StartInfo.WorkingDirectory = SparkleDiff.GetGitRoot (file_path);
 			process.StartInfo.FileName = "git";
-			process.StartInfo.Arguments = "show " + Revision + ":" + System.IO.Path.GetFileName (FilePath);
+			process.StartInfo.Arguments = "show " + Revision + ":" + SparkleDiff.GetPathFromGitRoot (FilePath);
 			process.Start ();
 
 			Pixbuf = new Gdk.Pixbuf ((System.IO.Stream) process.StandardOutput.BaseStream);
