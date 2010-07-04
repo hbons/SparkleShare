@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-03 08:06+0000\n"
+"POT-Creation-Date: 2010-07-04 17:28+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Samuel Thollander <samuel.thollander@gmail.com>\n"
 "Language-Team: \n"
@@ -14,6 +14,20 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Language: Swedish\n"
 
+#. TRANSLATORS: The parameter is a filename
+#: ../SparkleDiff/SparkleDiff.cs:90
+#, csharp-format
+msgid "Comparing Revisions of ‘{0}’"
+msgstr "Jämför versioner av ‘{0}’"
+
+#: ../SparkleDiff/SparkleDiff.cs:122
+msgid "Current Revision"
+msgstr "Nuvarande revision"
+
+#. TRANSLATORS: This is a format specifier according to System.Globalization.DateTimeFormatInfo
+#: ../SparkleDiff/SparkleDiff.cs:125
+msgid "d MMM\tH:mm"
+msgstr "d MMM\tH:mm"
 
 #: ../SparkleShare/SparkleDialog.cs:50
 msgid "Address of remote SparkleShare folder:"
@@ -55,8 +69,7 @@ msgid "Now make great stuff happen!"
 msgstr "Nu kommer häftiga saker att hända"
 
 #. Add a button to open the folder where the changed file is
-#: ../SparkleShare/SparkleDialog.cs:200
-#: ../SparkleShare/SparkleRepo.cs:319
+#: ../SparkleShare/SparkleDialog.cs:200 ../SparkleShare/SparkleRepo.cs:319
 #: ../SparkleShare/SparkleWindow.cs:62
 msgid "Open Folder"
 msgstr "Öppna mapp"
@@ -217,4 +230,3 @@ msgstr "Lägg till en mapp…"
 #, csharp-format
 msgid "‘{0}’ on {1}"
 msgstr "{0}’ på {1}"
-
