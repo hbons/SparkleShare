@@ -1,7 +1,8 @@
 SUBDIRS =	\
 	build	\
-	notify-sharp \
+	NotifySharp \
 	SparkleShare \
+	SparkleDiff \
 	data \
 	po
 

@@ -18,22 +18,25 @@ using Gtk;
 using Mono.Unix;
 using System;
 using System.Diagnostics;
-using System.IO;
 
 namespace SparkleShare {
 
-	public class SparkleDiff
-	{
+	// This is SparkleShare!
+	public class SparkleShare {
 
 		// Short alias for the translations
 		public static string _ (string s)
 		{
 			return Catalog.GetString (s);
 		}
+		
+		public static SparkleRepo [] Repositories;
+		public static SparkleUI SparkleUI;
 
 		public static void Main (string [] args)
 		{
 
+			// Use translations
 			Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
 			// Check whether git is installed
@@ -57,55 +60,48 @@ namespace SparkleShare {
 				Environment.Exit (0);
 			}
 
+			// Parse the command line arguments
+			bool HideUI = false;
 			if (args.Length > 0) {
-				if (args [0].Equals ("--help") || args [0].Equals ("-h")) {
-					ShowHelp ();
-					Environment.Exit (0);
+				foreach (string Argument in args) {
+					if (Argument.Equals ("--disable-gui") || Argument.Equals ("-d"))
+						HideUI = true;
+					if (Argument.Equals ("--help") || Argument.Equals ("-h")) {
+						ShowHelp ();
+						Environment.Exit (0);
+					}
 				}
-
-				string file_path = args [0];
-
-				if (File.Exists (file_path)) {
-
-					Gtk.Application.Init ();
-
-					SparkleDiffWindow sparkle_diff_window;
-					sparkle_diff_window = new SparkleDiffWindow (file_path);
-					sparkle_diff_window.ShowAll ();
-
-					// The main loop
-					Gtk.Application.Run ();
-
-				} else {
-
-					Console.WriteLine ("SparkleDiff: " + file_path + ": No such file or directory.");
-					Environment.Exit (0);
-
-				}
-				
 			}
+
+			Gtk.Application.Init ();
+
+			SparkleUI = new SparkleUI (HideUI);
+
+			// The main loop
+			Gtk.Application.Run ();
 
 		}
 
 		// Prints the help output
 		public static void ShowHelp ()
 		{
-			Console.WriteLine (_("SparkleDiff Copyright (C) 2010 Hylke Bons"));
+			Console.WriteLine (_("SparkleShare Copyright (C) 2010 Hylke Bons"));
 			Console.WriteLine (" ");
 			Console.WriteLine (_("This program comes with ABSOLUTELY NO WARRANTY."));
 			Console.WriteLine (_("This is free software, and you are welcome to redistribute it "));
 			Console.WriteLine (_("under certain conditions. Please read the GNU GPLv3 for details."));
 			Console.WriteLine (" ");
-			Console.WriteLine (_("SparkleDiff let's you compare revisions of an image file side by side."));
+			Console.WriteLine (_("SparkleShare syncs the ~/SparkleShare folder with remote repositories."));
 			Console.WriteLine (" ");
-			Console.WriteLine (_("Usage: sparklediff [FILE]"));
-			Console.WriteLine (_("Open an image file to show its revisions"));
+			Console.WriteLine (_("Usage: sparkleshare [start|stop|restart] [OPTION]..."));
+			Console.WriteLine (_("Sync SparkleShare folder with remote repositories."));
 			Console.WriteLine (" ");
 			Console.WriteLine (_("Arguments:"));
+			Console.WriteLine (_("\t -d, --disable-gui\tDon't show the notification icon."));
 			Console.WriteLine (_("\t -h, --help\t\tDisplay this help text."));
 			Console.WriteLine (" ");
 		}
 
 	}
-
+	
 }

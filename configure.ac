@@ -88,7 +88,8 @@ build/m4/shave/shave
 build/m4/shave/shave-libtool
 data/Makefile
 data/icons/Makefile
-notify-sharp/Makefile
+NotifySharp/Makefile
+SparkleDiff/Makefile
 SparkleShare/sparkleshare
 SparkleShare/Defines.cs
 SparkleShare/AssemblyInfo.cs
