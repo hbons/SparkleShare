@@ -187,7 +187,28 @@ namespace SparkleShare {
 
 				}
 
-				Label date_label = new Label ("<b>" + activity_day.DateTime.ToString ("ddd MMM d, yyyy") + "</b>");
+				Label date_label = new Label ();
+
+					DateTime today = DateTime.Now;
+					DateTime yesterday = DateTime.Now.AddDays (-1);
+
+					if (today.Day   == activity_day.DateTime.Day &&
+					    today.Month == activity_day.DateTime.Month && 
+					    today.Year  == activity_day.DateTime.Year) {
+
+						date_label.Text = "<b>Today</b>";
+
+					} else if (yesterday.Day   == activity_day.DateTime.Day &&
+					           yesterday.Month == activity_day.DateTime.Month && 
+					           yesterday.Year  == activity_day.DateTime.Year) {
+
+						date_label.Text = "<b>Yesterday</b>";
+
+					} else {
+	
+						date_label.Text = "<b>" + activity_day.DateTime.ToString ("ddd MMM d, yyyy") + "</b>";
+
+					}
 
 					date_label.UseMarkup = true;
 					date_label.Xalign = 0;
