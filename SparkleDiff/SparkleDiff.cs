@@ -141,7 +141,7 @@ namespace SparkleShare {
 			// TRANSLATORS: The parameter is a filename
 			Title = String.Format(_("Comparing Revisions of ‘{0}’"), file_name);
 			
-			Revisions = GetRevisionsForFile (file_path);
+			Revisions = GetRevisionsForFilePath (file_path);
 
 			VBox layout_vertical = new VBox (false, 12);
 
@@ -158,7 +158,6 @@ namespace SparkleShare {
 					process.Start ();
 
 					string output = process.StandardOutput.ReadToEnd ();
-
 					string [] revisions_info = Regex.Split (output.Trim (), "\n");
 
 					int i = 0;
@@ -181,20 +180,11 @@ namespace SparkleShare {
 
 					}
 
-					ViewLeft  = new RevisionView (revisions_info);
-					ViewRight = new RevisionView (revisions_info);
-					
-					ViewLeft.ComboBox.Active  = 1;
-					ViewRight.ComboBox.Active = 0;
-					
-					ViewLeft.ScrolledWindow.Placement = CornerType.BottomRight;
-					ViewRight.ScrolledWindow.Placement = CornerType.BottomLeft;
+					ViewLeft  = new LeftRevisionView  (revisions_info);
+					ViewRight = new RightRevisionView (revisions_info);
 
-					RevisionImage revision_image_left  = new RevisionImage (file_path, Revisions [1]);
-					RevisionImage revision_image_right = new RevisionImage (file_path, Revisions [0]);
-
-					ViewLeft.SetImage (revision_image_left);
-					ViewRight.SetImage (revision_image_right);
+					ViewLeft.SetImage  (new RevisionImage (file_path, Revisions [1]));
+					ViewRight.SetImage (new RevisionImage (file_path, Revisions [0]));
 					
 					ViewLeft.ComboBox.Changed += delegate {
 
@@ -226,8 +216,14 @@ namespace SparkleShare {
 
 					};
 
+
 				layout_horizontal.PackStart (ViewLeft);
 				layout_horizontal.PackStart (ViewRight);
+
+				// Order time view according to the user's reading direction
+				if (Direction == Gtk.TextDirection.Rtl) // See Deejay1? I can do i18n too! :P				
+					layout_horizontal.ReorderChild (ViewLeft, 1);
+
 
 				HookUpViews ();
 
@@ -250,7 +246,7 @@ namespace SparkleShare {
 		}
 
 
-		// Hooks up two views so they will be kept in sync
+		// Hooks up two views so their scrollbars will be kept in sync
 		private void HookUpViews () {
 
 			ViewLeft.ScrolledWindow.Hadjustment.ValueChanged  += SyncViewsHorizontally;
@@ -288,7 +284,7 @@ namespace SparkleShare {
 
 
 		// Gets a list of all earlier revisions of this file
-		private string [] GetRevisionsForFile (string file_path)
+		private string [] GetRevisionsForFilePath (string file_path)
 		{
 
 			string file_name = System.IO.Path.GetFileName (file_path);
@@ -305,8 +301,9 @@ namespace SparkleShare {
 			process.Start ();
 
 			string output = process.StandardOutput.ReadToEnd ();
+			string [] revisions = Regex.Split (output.Trim (), "\n");
 
-			return Regex.Split (output.Trim (), "\n");
+			return revisions;
 
 		}
 
@@ -370,7 +367,7 @@ namespace SparkleShare {
 		public Button ButtonPrevious;
 		public Button ButtonNext;
 		
-//		private int ValueCount;
+		private int ValueCount;
 		private Image Image;
 
 		public RevisionView (string [] revisions) : base (false, 6) 
@@ -379,10 +376,10 @@ namespace SparkleShare {
 			Image = new Image ();
 
 			ScrolledWindow = new ScrolledWindow ();
-			ScrolledWindow.AddWithViewport (Image);
-			PackStart (ScrolledWindow, true, true, 0);
 
-			HBox controls = new HBox (false, 6);
+			ScrolledWindow.AddWithViewport (Image);
+
+			HBox controls = new HBox (false, 3);
 			controls.BorderWidth = 0;
 				
 				Arrow arrow_left = new Arrow (ArrowType.Left, ShadowType.None);
@@ -391,7 +388,7 @@ namespace SparkleShare {
 				ButtonPrevious.Clicked += PreviousInComboBox;
 				ButtonPrevious.ExposeEvent += EqualizeSizes;
 
-//				ValueCount = 0;
+				ValueCount = 0;
 
 				ComboBox = ComboBox.NewText ();
 
@@ -401,7 +398,7 @@ namespace SparkleShare {
 
 				ComboBox.Active = 0;
 				
-//				ValueCount = revisions.Length;
+				ValueCount = revisions.Length;
 
 				Arrow arrow_right = new Arrow (ArrowType.Right, ShadowType.None);
 				ButtonNext = new Button ();
@@ -411,41 +408,55 @@ namespace SparkleShare {
 
 			controls.PackStart (new Label (""), true, false, 0);
 			controls.PackStart (ButtonPrevious, false, false, 0);
-			controls.PackStart (ComboBox, false, false, 0);
 			controls.PackStart (ButtonNext, false, false, 0);
+			controls.PackStart (ComboBox, false, false, 9);
 			controls.PackStart (new Label (""), true, false, 0);
 
 			PackStart (controls, false, false, 0);
+			PackStart (ScrolledWindow, true, true, 0);
 
 			UpdateControls ();
 
 		}
-		
 
-		// Equalizes the height and width of a button when it's exposed
+
+		// Equalizes the height and width of a button when exposed
 		private void EqualizeSizes (object o, ExposeEventArgs args) {
+
 			Button button = (Button) o;
 			button.WidthRequest = button.Allocation.Height;
+
 		}
 		
 
 		public void NextInComboBox (object o, EventArgs args) {
 
-/*			if (ComboBox.Active > 0)
+			if (ComboBox.Active - 1 >= 0)
 				ComboBox.Active--;
 
 			UpdateControls ();
-*/
+
 		}
 	
 
 		public void PreviousInComboBox (object o, EventArgs args) {
 
-/*			if (ComboBox.Active + 1 < ValueCount)
+			if (ComboBox.Active + 1 < ValueCount)
 				ComboBox.Active++;
 
 			UpdateControls ();
-*/
+
+		}
+
+
+		// Updates the buttons to be disabled or enabled when needed
+		public void UpdateControls () {
+
+			ButtonPrevious.State = StateType.Normal;
+			ButtonNext.State     = StateType.Normal;
+
+			// TODO: Disable Next or Previous buttons when at the first or last value of the combobox
+
 		}
 
 
@@ -457,28 +468,42 @@ namespace SparkleShare {
 			ScrolledWindow = new ScrolledWindow ();
 			ScrolledWindow.AddWithViewport (Image);
 			Add (ScrolledWindow);
-			ReorderChild (ScrolledWindow, 0);
 			ShowAll ();
 
 		}
 
+	}
 
-		// Updates the buttons to be disabled or enabled when needed
-		public void UpdateControls () {
+	
+	public class LeftRevisionView : RevisionView {
+	
+		public LeftRevisionView (string [] revisions) : base (revisions) {
 
-			// TODO: Doesn't work yet. Sleepy -.-
-/*			ButtonPrevious.State = StateType.Normal;
-			ButtonNext.State = StateType.Normal;
+			ComboBox.Active  = 1;
 
-			if (ComboBox.Active == 0)
-				ButtonNext.State = StateType.Insensitive;
-
-			if (ComboBox.Active + 1 == ValueCount)
-				ButtonPrevious.State = StateType.Insensitive;
-*/
+			if (Direction == Gtk.TextDirection.Ltr)
+				ScrolledWindow.Placement = CornerType.TopRight;
+			else
+				ScrolledWindow.Placement = CornerType.TopLeft;
 
 		}
+	
+	}
 
+
+	public class RightRevisionView : RevisionView {
+	
+		public RightRevisionView (string [] revisions) : base (revisions) {
+
+			ComboBox.Active  = 0;
+
+			if (Direction == Gtk.TextDirection.Ltr)
+				ScrolledWindow.Placement = CornerType.TopLeft;
+			else
+				ScrolledWindow.Placement = CornerType.TopRight;
+
+		}
+	
 	}
 
 }
