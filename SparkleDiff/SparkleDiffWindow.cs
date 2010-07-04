@@ -48,6 +48,7 @@ namespace SparkleShare {
 
 			string file_name = System.IO.Path.GetFileName (file_path);
 
+			// TODO: Adjust the size of the window to the images
 			SetSizeRequest (800, 540);
 	 		SetPosition (WindowPosition.Center);
 
