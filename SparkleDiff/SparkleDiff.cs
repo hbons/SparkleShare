@@ -415,7 +415,9 @@ namespace SparkleShare {
 			PackStart (controls, false, false, 0);
 			PackStart (ScrolledWindow, true, true, 0);
 
-			UpdateControls ();
+			Shown += delegate {
+				UpdateControls ();
+			};
 
 		}
 
@@ -434,7 +436,7 @@ namespace SparkleShare {
 			if (ComboBox.Active - 1 >= 0)
 				ComboBox.Active--;
 
-			UpdateControls ();
+//			UpdateControls ();
 
 		}
 	
@@ -444,7 +446,7 @@ namespace SparkleShare {
 			if (ComboBox.Active + 1 < ValueCount)
 				ComboBox.Active++;
 
-			UpdateControls ();
+//			UpdateControls ();
 
 		}
 
@@ -456,6 +458,19 @@ namespace SparkleShare {
 			ButtonNext.State     = StateType.Normal;
 
 			// TODO: Disable Next or Previous buttons when at the first or last value of the combobox
+			// I can't get this to work! >:(
+
+			if (ComboBox.Active == ValueCount - 1) {
+				ButtonPrevious.State = StateType.Insensitive;
+				Console.WriteLine ("BEGINNING REACHED");
+			}
+
+			// FAULT IS HERE
+			if (ComboBox.Active == 0) {
+				Console.WriteLine ("END REACHED");
+				ButtonNext.State = StateType.Insensitive;
+			}
+
 
 		}
 
