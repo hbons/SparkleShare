@@ -101,7 +101,7 @@ namespace SparkleShare {
 					ViewLeft  = new LeftRevisionView  (revisions_info);
 					ViewRight = new RightRevisionView (revisions_info);
 
-					ViewLeft.SetImage  (new RevisionImage (file_path, Revisions [0]));
+					ViewLeft.SetImage  (new RevisionImage (file_path, Revisions [1]));
 					ViewRight.SetImage (new RevisionImage (file_path, Revisions [0]));
 					
 					ViewLeft.ComboBox.Changed += delegate {
