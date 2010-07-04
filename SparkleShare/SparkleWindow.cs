@@ -1,0 +1,264 @@
+//   SparkleShare, an instant update workflow to Git.
+//   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
+//
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+using Gtk;
+using Mono.Unix;
+using SparkleShare;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Timers;
+
+namespace SparkleShare {
+
+	public class SparkleWindow : Window
+	{
+
+		// Short alias for the translations
+		public static string _ (string s)
+		{
+			return Catalog.GetString (s);
+		}
+
+		private SparkleRepo SparkleRepo;
+		private VBox LayoutVertical;
+		private ScrolledWindow ScrolledWindow;
+
+		public SparkleWindow (SparkleRepo sparkle_repo) : base ("")
+		{
+
+			SparkleRepo = sparkle_repo;
+			SetSizeRequest (640, 480);
+	 		SetPosition (WindowPosition.Center);
+			BorderWidth = 12;
+			
+			// TRANSLATORS: {0} is a folder name, and {1} is a server address
+			Title = String.Format(_("‘{0}’ on {1}"), SparkleRepo.Name,
+				SparkleRepo.RemoteOriginUrl);
+			IconName = "folder";
+
+			LayoutVertical = new VBox (false, 12);
+
+			LayoutVertical.PackStart (CreateEventLog (), true, true, 0);
+
+				HButtonBox dialog_buttons = new HButtonBox ();
+				dialog_buttons.Layout = ButtonBoxStyle.Edge;
+				dialog_buttons.BorderWidth = 0;
+
+					Button open_folder_button = new Button (_("Open Folder"));
+					open_folder_button.Clicked += delegate (object o, EventArgs args) {
+						Process process = new Process ();
+						process.StartInfo.FileName = "xdg-open";
+						process.StartInfo.Arguments = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+							SparkleRepo.Name);
+						process.Start ();
+						Destroy ();
+					};
+
+					Button close_button = new Button (Stock.Close);
+					close_button.Clicked += delegate (object o, EventArgs args) {
+						Destroy ();
+					};
+
+				dialog_buttons.Add (open_folder_button);
+				dialog_buttons.Add (close_button);
+
+			LayoutVertical.PackStart (dialog_buttons, false, false, 0);
+
+			Add (LayoutVertical);		
+		
+		}
+
+
+		public void UpdateEventLog ()
+		{
+
+			LayoutVertical.Remove (ScrolledWindow);
+			ScrolledWindow = CreateEventLog ();
+			LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
+			LayoutVertical.ReorderChild (ScrolledWindow, 0);
+			ShowAll ();
+
+		}
+
+
+		private ScrolledWindow CreateEventLog ()
+		{
+
+			Process process = new Process ();
+			process.EnableRaisingEvents = true; 
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
+			process.StartInfo.FileName = "git";
+			process.StartInfo.Arguments = "log --format=\"%at☃%an☃%ae☃%s\" -25";
+
+			string output = "";
+
+			process.Start ();
+
+			output += "\n" + process.StandardOutput.ReadToEnd ().Trim ();
+
+			output = output.TrimStart ("\n".ToCharArray ());
+			string [] lines = Regex.Split (output, "\n");
+
+			// Sort by time and get the last 25
+			Array.Sort (lines);
+			Array.Reverse (lines);
+
+			List <ActivityDay> activity_days = new List <ActivityDay> ();
+
+			for (int i = 0; i < 25 && i < lines.Length; i++) {
+
+					string line = lines [i];
+
+					// Look for the snowman!
+					string [] parts = Regex.Split (line, "☃");
+
+					int unix_timestamp     = int.Parse (parts [0]);
+					string user_name  = parts [1];
+					string user_email = parts [2];
+					string message    = parts [3];
+
+					DateTime date_time = UnixTimestampToDateTime (unix_timestamp);
+
+					message = message.Replace ("/", " → ");
+					message = message.Replace ("\n", " ");
+
+					ChangeSet change_set = new ChangeSet (user_name, user_email, message, date_time);
+
+					bool change_set_inserted = false;
+					foreach (ActivityDay stored_activity_day in activity_days) {
+
+						if (stored_activity_day.DateTime.Year  == change_set.DateTime.Year &&
+						    stored_activity_day.DateTime.Month == change_set.DateTime.Month &&
+						    stored_activity_day.DateTime.Day   == change_set.DateTime.Day) {
+
+						    stored_activity_day.Add (change_set);
+						    change_set_inserted = true;
+						    break;
+
+						}
+
+					}
+					
+					if (!change_set_inserted) {
+
+							ActivityDay activity_day = new ActivityDay (change_set.DateTime);
+							activity_day.Add (change_set);
+							activity_days.Add (activity_day);
+						
+					}
+
+			}
+
+
+			VBox layout_vertical = new VBox (false, 0);
+
+			foreach (ActivityDay activity_day in activity_days) {
+
+				TreeIter iter = new TreeIter ();
+				ListStore list_store = new ListStore (typeof (Gdk.Pixbuf),
+				                                      typeof (string),
+				                                      typeof (string));
+
+				foreach (ChangeSet change_set in activity_day) {
+
+					iter = list_store.Append ();
+					list_store.SetValue (iter, 0, SparkleHelpers.GetAvatar (change_set.UserEmail , 32));
+					list_store.SetValue (iter, 1, "<b>" + change_set.UserName + "</b>\n" +
+					                              "<span fgcolor='#777'>" + change_set.Message + "</span>");
+					list_store.SetValue (iter, 2, change_set.UserEmail);
+
+				}
+
+				Label date_label = new Label ("<b>" + activity_day.DateTime.ToString ("ddd MMM d, yyyy") + "</b>");
+
+					date_label.UseMarkup = true;
+					date_label.Xalign = 0;
+					date_label.Xpad = 9;
+					date_label.Ypad = 9;
+
+				layout_vertical.PackStart (date_label, true, true, 0);
+
+				IconView icon_view = new IconView (list_store);
+
+					icon_view.PixbufColumn = 0;
+					icon_view.MarkupColumn = 1;
+				
+					icon_view.Orientation = Orientation.Horizontal;
+					icon_view.ItemWidth = 550;
+					icon_view.Spacing = 9;
+
+				layout_vertical.PackStart (icon_view);
+
+
+			}
+
+			ScrolledWindow = new ScrolledWindow ();
+			ScrolledWindow.AddWithViewport (layout_vertical);
+
+			return ScrolledWindow;
+
+		}
+
+
+		// Converts a UNIX timestamp to a more usable time object
+		public DateTime UnixTimestampToDateTime (int timestamp)
+		{
+			DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
+			return unix_epoch.AddSeconds (timestamp);
+		}
+
+
+	}
+
+	
+	public class ActivityDay : List <ChangeSet>
+	{
+
+		public DateTime DateTime;
+
+		public ActivityDay (DateTime date_time)
+		{
+			DateTime = date_time;
+			DateTime = new DateTime (DateTime.Year, DateTime.Month, DateTime.Day);
+		}
+
+	}
+
+	
+	public class ChangeSet
+	{
+	
+		public string UserName;
+		public string UserEmail;
+		public string Message;
+		public DateTime DateTime;
+	
+		public ChangeSet (string user_name, string user_email, string message, DateTime date_time)
+		{
+			UserName  = user_name;
+			UserEmail = user_email;
+			Message   = message;
+			DateTime  = date_time;
+		}
+	
+	}
+
+}
