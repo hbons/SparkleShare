@@ -90,7 +90,6 @@ data/Makefile
 data/icons/Makefile
 notify-sharp/Makefile
 SparkleDiff/Makefile
-SparkleDiff/Defines.cs
 SparkleShare/sparkleshare
 SparkleShare/Defines.cs
 SparkleShare/AssemblyInfo.cs
