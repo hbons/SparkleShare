@@ -5,6 +5,11 @@ LINK = $(REF_SPARKLEDIFF)
 
 SOURCES = \
 $(top_srcdir)/SparkleShare/Defines.cs \
-SparkleDiff.cs
+SparkleDiff.cs \
+SparkleDiffWindow.cs \
+RevisionView.cs \
+RevisionImage.cs \
+LeftRevisionView.cs \
+RightRevisionView.cs
 
 include $(top_srcdir)/build/build.mk
