@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Simon Haller <simon.haller@uibk.ac.at>, 2010
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-21 14:13+0000\n"
+"POT-Creation-Date: 2010-07-02 06:01+0000\n"
 "PO-Revision-Date: 2010-06-21 16:26+0100\n"
 "Last-Translator: Martin Lettner <m.lettner@gmail.com>\n"
 "Language-Team: \n"
@@ -29,7 +29,7 @@ msgstr "Verzeichnis hinzufügen"
 #: ../SparkleShare/SparkleDialog.cs:126
 #, csharp-format
 msgid "Syncing folder ‘{0}’"
-msgstr "Verzeichnis »{0}« wird synchronisiert"
+msgstr "Verzeichnis »{0}« wird abgeglichen"
 
 #: ../SparkleShare/SparkleDialog.cs:127
 msgid "SparkleShare will notify you when this is done."
@@ -42,7 +42,7 @@ msgstr "Schließen"
 #: ../SparkleShare/SparkleDialog.cs:157
 #, csharp-format
 msgid "Something went wrong while syncing ‘{0}’"
-msgstr "Bei der Synchronisierung von »{0}« ist ein Fehler aufgetreten"
+msgstr "Beim Datenabgleich von »{0}« ist ein Fehler aufgetreten"
 
 #: ../SparkleShare/SparkleDialog.cs:167
 msgid "Try Again…"
@@ -51,15 +51,14 @@ msgstr "Erneut versuchen …"
 #: ../SparkleShare/SparkleDialog.cs:197
 #, csharp-format
 msgid "Successfully synced folder ‘{0}’"
-msgstr "Verzeichnis »{0}« erfolgreich synchronisiert"
+msgstr "Verzeichnis »{0}« erfolgreich abgeglichen"
 
 #: ../SparkleShare/SparkleDialog.cs:198
 msgid "Now make great stuff happen!"
 msgstr ""
 
 #. Add a button to open the folder where the changed file is
-#: ../SparkleShare/SparkleDialog.cs:200
-#: ../SparkleShare/SparkleRepo.cs:319
+#: ../SparkleShare/SparkleDialog.cs:200 ../SparkleShare/SparkleRepo.cs:319
 #: ../SparkleShare/SparkleWindow.cs:62
 msgid "Open Folder"
 msgstr "Verzeichnis öffnen"
@@ -81,7 +80,7 @@ msgstr[1] "vor {0} Minuten"
 #: ../SparkleShare/SparkleHelpers.cs:171
 #, csharp-format
 msgid "about an hour ago"
-msgid_plural "about {0} minutes ago"
+msgid_plural "about {0} hours ago"
 msgstr[0] "vor einer Stunde"
 msgstr[1] "vor {0} Stunden"
 
@@ -93,25 +92,24 @@ msgstr[0] "gestern"
 msgstr[1] "vor {0} Tagen"
 
 #: ../SparkleShare/SparkleHelpers.cs:183
-#: ../SparkleShare/SparkleHelpers.cs:189
 #, csharp-format
 msgid "a month ago"
 msgid_plural "{0} months ago"
 msgstr[0] "vor einem Monat"
 msgstr[1] "vor {0} Monaten"
 
-#: ../SparkleShare/SparkleHelpers.cs:194
+#: ../SparkleShare/SparkleHelpers.cs:188
 #, csharp-format
 msgid "a year ago"
 msgid_plural "{0} years ago"
-msgstr[0] "vor einem Jahren"
+msgstr[0] "vor einem Jahr"
 msgstr[1] "vor {0} Jahren"
 
-#: ../SparkleShare/SparkleHelpers.cs:203
+#: ../SparkleShare/SparkleHelpers.cs:197
 msgid "Hold your ponies!"
 msgstr ""
 
-#: ../SparkleShare/SparkleHelpers.cs:204
+#: ../SparkleShare/SparkleHelpers.cs:198
 msgid ""
 "SparkleShare is known to be insanely fast with \n"
 "pictures of unicorns. Please make sure your internets\n"
@@ -148,11 +146,11 @@ msgstr "Dies ist freie Software. Sie können es weitergeben und/oder modifiziere
 
 #: ../SparkleShare/SparkleShare.cs:91
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
-msgstr "unter bestimmten Bedingungen. Bitte lesen Sie dazu die GNU GPLv3 für weitere  Details."
+msgstr "unter bestimmten Bedingungen. Bitte lesen Sie dazu die GNU GPLv3 für weitere Details."
 
 #: ../SparkleShare/SparkleShare.cs:93
 msgid "SparkleShare syncs the ~/SparkleShare folder with remote repositories."
-msgstr "SparkleShare synchronisiert das Verzeichnis ~/SparkleShare mit entfernten Verzeichnissen"
+msgstr "SparkleShare gleicht das Verzeichnis ~/SparkleShare mit entfernten Verzeichnissen ab"
 
 #: ../SparkleShare/SparkleShare.cs:95
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
@@ -160,7 +158,7 @@ msgstr "Verwendung: sparkleshare [start|stop|restart] [OPTION]..."
 
 #: ../SparkleShare/SparkleShare.cs:96
 msgid "Sync SparkleShare folder with remote repositories."
-msgstr "Synchronisiere SparkleShare Ordner mit entfernten Repositories."
+msgstr "SparkleShare Ordner mit entfernten Repositories abgleichen."
 
 #: ../SparkleShare/SparkleShare.cs:98
 msgid "Arguments:"
@@ -176,19 +174,19 @@ msgstr "\t -h, --help\t\tDiesen Hilfe-Text nicht anzeigen."
 
 #: ../SparkleShare/SparkleStatusIcon.cs:69
 msgid "Error syncing"
-msgstr "Fehler bei der Synchronisierung"
+msgstr "Fehler beim Datenabgleich"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:72
 msgid "Everything is up to date"
-msgstr "Alles ist am aktuellsten Stand"
+msgstr "Alles ist auf dem aktuellsten Stand"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:75
 msgid "Syncing…"
-msgstr "Synchronisieren …"
+msgstr "Abgleichen …"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:116
 msgid "Add a Remote Folder…"
-msgstr "Ein entferntes Verzeichnis hinzufügen"
+msgstr "Ein entferntes Verzeichnis hinzufügen …"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:124
 msgid "Show Notifications"
@@ -217,118 +215,170 @@ msgstr "Ein Verzeichnis hinzufügen …"
 #: ../SparkleShare/SparkleWindow.cs:50
 #, csharp-format
 msgid "‘{0}’ on {1}"
-msgstr "»{0}« an {1}"
+msgstr "»{0}« auf {1}"
 
 #~ msgid "folder-sparkleshare"
 #~ msgstr "ordner-sparkleshare"
+
 #~ msgid "Folder Name:   "
 #~ msgstr "Ordner Name:   "
+
 #~ msgid "<span size='small'><i>Example: "
 #~ msgstr "<span size='small'><i>Beispiel: "
+
 #~ msgid "‘Project’.</i></span>"
 #~ msgstr "‘Projekt’.</i></span>"
+
 #~ msgid "Remote address:   "
 #~ msgstr "Remote-Adresse:   "
+
 #~ msgid "Downloading files,\n"
 #~ msgstr "Herunterladen von Dateien,\n"
+
 #~ msgid "this may take a while..."
 #~ msgstr "Dies kann eine Weile dauern..."
+
 #~ msgid "[Config] Created '"
 #~ msgstr "[Config] erstellt '"
+
 #~ msgid "Preferences"
 #~ msgstr "Preferencias"
+
 #~ msgid "The folder "
 #~ msgstr "Der Ordner "
+
 #~ msgid ""
 #~ "\n"
 #~ "is linked to "
 #~ msgstr ""
 #~ "\n"
 #~ "ist verknüpft mit "
+
 #~ msgid "Notify me when something changes"
 #~ msgstr "Benachrichtige mich, wenn sich etwas ändert"
+
 #~ msgid "Synchronize my changes"
 #~ msgstr "Synchronisiere meine Änderungen"
+
 #~ msgid "Anonymous"
 #~ msgstr "Anonym"
+
 #~ msgid "] Nothing going on..."
 #~ msgstr "] Es passiert nichts..."
+
 #~ msgid "] Done waiting."
 #~ msgstr "] warten beendet."
+
 #~ msgid "] Waiting for more changes..."
 #~ msgstr "] Warten auf weitere Änderungen..."
+
 #~ msgid "] Staging changes..."
 #~ msgstr "] Zustand ändert sich. "
+
 #~ msgid "] Changed staged."
 #~ msgstr "] Zustand geändert."
+
 #~ msgid "] Commiting changes..."
 #~ msgstr "] Änderungen einbringen..."
+
 #~ msgid "] Changes commited."
 #~ msgstr "] Änderungen eingebracht."
+
 #~ msgid "] Fetching changes... "
 #~ msgstr "] Hole Änderungen..."
+
 #~ msgid "] Changes fetched."
 #~ msgstr "] Änderungen geholt."
+
 #~ msgid "] Merging fetched changes... "
 #~ msgstr "] Geholte Änderungen zusammenführen..."
+
 #~ msgid "] Changes merged."
 #~ msgstr "] Änderungen zusammengeführt."
+
 #~ msgid "Already up-to-date."
 #~ msgstr "Schon am aktuellsten Stand."
+
 #~ msgid "] Nothing going on... "
 #~ msgstr "] Nichts passiert... "
+
 #~ msgid "] Pushing changes..."
 #~ msgstr "] übergebe Änderungen..."
+
 #~ msgid "] Changes pushed."
 #~ msgstr "] Änderungen übergeben."
+
 #~ msgid "new file:"
 #~ msgstr "neue Datei:"
+
 #~ msgid "modified:"
 #~ msgstr "geändert:"
+
 #~ msgid "renamed:"
 #~ msgstr "umbenannt:"
+
 #~ msgid "deleted:"
 #~ msgstr "gelöscht:"
+
 #~ msgid "added ‘"
 #~ msgstr "hinzugefügt "
+
 #~ msgid "#\tnew file:"
 #~ msgstr "#\tneue Datei:"
+
 #~ msgid "’ and "
 #~ msgstr "’ und "
+
 #~ msgid " more."
 #~ msgstr " mehr."
+
 #~ msgid "edited ‘"
 #~ msgstr "editiert ‘"
+
 #~ msgid "#\tmodified:"
 #~ msgstr "#\tmodifiziert:"
+
 #~ msgid "deleted ‘"
 #~ msgstr "gelöscht ‘"
+
 #~ msgid "#\tdeleted:"
 #~ msgstr "#\tgelöscht:"
+
 #~ msgid "renamed ‘"
 #~ msgstr "umbenannt ‘"
+
 #~ msgid "#\trenamed:"
 #~ msgstr "#\tumbenannt:"
+
 #~ msgid "’ to ‘"
 #~ msgstr "‘ zu ‘"
+
 #~ msgid "Open Sharing Folder"
 #~ msgstr "Öffne gemeinsamen Ornder"
+
 #~ msgid "Happenings in ‘"
 #~ msgstr "Ereignis in ‘"
+
 #~ msgid "document-edited"
 #~ msgstr "Dokument editiert"
+
 #~ msgid " added ‘"
 #~ msgstr " hinzugefügt ‘"
+
 #~ msgid "document-added"
 #~ msgstr "Dokument hinzugefügt"
+
 #~ msgid " deleted ‘"
 #~ msgstr " gelöscht ‘"
+
 #~ msgid "document-removed"
 #~ msgstr "Dokument gelöscht"
+
 #~ msgid " moved ‘"
 #~ msgstr " verschoben ‘"
+
 #~ msgid " renamed ‘"
 #~ msgstr " umbenannt ‘"
+
 #~ msgid "document-moved"
 #~ msgstr "Dokument verschoben"
-
