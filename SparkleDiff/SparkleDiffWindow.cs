@@ -48,8 +48,6 @@ namespace SparkleShare {
 
 			string file_name = System.IO.Path.GetFileName (file_path);
 
-			// TODO: Adjust the size of the window to the images
-			SetSizeRequest (800, 540);
 	 		SetPosition (WindowPosition.Center);
 
 			BorderWidth = 12;
@@ -138,6 +136,8 @@ namespace SparkleShare {
 				layout_horizontal.PackStart (ViewLeft);
 				layout_horizontal.PackStart (ViewRight);
 
+				ResizeToViews ();
+
 				// Order time view according to the user's reading direction
 				if (Direction == Gtk.TextDirection.Rtl) // See Deejay1? I can do i18n too! :P				
 					layout_horizontal.ReorderChild (ViewLeft, 1);
@@ -163,6 +163,23 @@ namespace SparkleShare {
 
 		}
 
+
+		private void ResizeToViews () {
+
+			int new_width  = ViewLeft.GetImage ().Pixbuf.Width + ViewRight.GetImage ().Pixbuf.Width + 100;
+			int new_height = 200;
+
+			if (ViewLeft.GetImage ().Pixbuf.Height > ViewRight.GetImage ().Pixbuf.Height)
+				new_height += ViewLeft.GetImage ().Pixbuf.Height;
+			else
+				new_height += ViewRight.GetImage ().Pixbuf.Height;
+
+			if (new_width >= Screen.Width || new_height >= Screen.Height)
+				Maximize ();
+			else
+				SetSizeRequest (new_width, new_height);
+			
+		}
 
 		// Hooks up two views so their scrollbars will be kept in sync
 		private void HookUpViews () {
