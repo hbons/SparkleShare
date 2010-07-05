@@ -40,9 +40,14 @@ namespace SparkleShare {
 		public SparkleDiffWindow (string file_path) : base ("")
 		{
 
+			Revisions = GetRevisionsForFilePath (file_path);
+			
+			if (Revisions.Length < 2) {
+				Console.WriteLine ("SparkleDiff: " + file_path + ": File has no history.");
+			}
+
 			string file_name = System.IO.Path.GetFileName (file_path);
 
-			SetSizeRequest (800, 540);
 	 		SetPosition (WindowPosition.Center);
 
 			BorderWidth = 12;
@@ -53,8 +58,6 @@ namespace SparkleShare {
 
 			// TRANSLATORS: The parameter is a filename
 			Title = String.Format(_("Comparing Revisions of ‘{0}’"), file_name);
-			
-			Revisions = GetRevisionsForFilePath (file_path);
 
 			VBox layout_vertical = new VBox (false, 12);
 
@@ -133,6 +136,8 @@ namespace SparkleShare {
 				layout_horizontal.PackStart (ViewLeft);
 				layout_horizontal.PackStart (ViewRight);
 
+				ResizeToViews ();
+
 				// Order time view according to the user's reading direction
 				if (Direction == Gtk.TextDirection.Rtl) // See Deejay1? I can do i18n too! :P				
 					layout_horizontal.ReorderChild (ViewLeft, 1);
@@ -158,6 +163,23 @@ namespace SparkleShare {
 
 		}
 
+
+		private void ResizeToViews () {
+
+			int new_width  = ViewLeft.GetImage ().Pixbuf.Width + ViewRight.GetImage ().Pixbuf.Width + 100;
+			int new_height = 200;
+
+			if (ViewLeft.GetImage ().Pixbuf.Height > ViewRight.GetImage ().Pixbuf.Height)
+				new_height += ViewLeft.GetImage ().Pixbuf.Height;
+			else
+				new_height += ViewRight.GetImage ().Pixbuf.Height;
+
+			if (new_width >= Screen.Width || new_height >= Screen.Height)
+				Maximize ();
+			else
+				SetSizeRequest (new_width, new_height);
+			
+		}
 
 		// Hooks up two views so their scrollbars will be kept in sync
 		private void HookUpViews () {
@@ -200,17 +222,15 @@ namespace SparkleShare {
 		private string [] GetRevisionsForFilePath (string file_path)
 		{
 
-			string file_name = System.IO.Path.GetFileName (file_path);
-
 			Process process = new Process ();
 			process.EnableRaisingEvents = true; 
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 
-			// TODO: Nice commit summary and "Current Revision"
-			process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName (file_path);
+			process.StartInfo.WorkingDirectory = SparkleDiff.GetGitRoot (file_path);
 			process.StartInfo.FileName = "git";
-			process.StartInfo.Arguments = "log --format=\"%H\" " + file_name;
+			process.StartInfo.Arguments = "log --format=\"%H\" " + SparkleDiff.GetPathFromGitRoot (file_path);
+
 			process.Start ();
 
 			string output = process.StandardOutput.ReadToEnd ();
