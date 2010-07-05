@@ -31,6 +31,33 @@ namespace SparkleShare {
 			return Catalog.GetString (s);
 		}
 
+
+		// Finds out the path relative to the Git root directory
+		public static string GetPathFromGitRoot (string file_path)
+		{
+			return file_path.TrimStart (GetGitRoot (file_path).ToCharArray ());
+		}
+
+
+		// Finds out the path relative to the Git root directory
+		public static string GetGitRoot (string file_path)
+		{
+
+			file_path = System.IO.Path.GetDirectoryName (file_path);
+
+			while (file_path != null) {
+
+				if (Directory.Exists (System.IO.Path.Combine (file_path, ".git")))
+					return file_path;
+
+				file_path = Directory.GetParent (file_path).FullName;
+
+			}
+
+			return null;
+			
+		}
+
 		public static void Main (string [] args)
 		{
 
@@ -86,6 +113,7 @@ namespace SparkleShare {
 			}
 
 		}
+
 
 		// Prints the help output
 		public static void ShowHelp ()
