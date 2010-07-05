@@ -145,6 +145,12 @@ namespace SparkleShare {
 			ShowAll ();
 
 		}
+		
+		public Image GetImage () {
+
+			return Image;
+
+		}
 
 	}
 
