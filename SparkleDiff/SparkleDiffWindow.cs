@@ -37,24 +37,18 @@ namespace SparkleShare {
 
 		private string [] Revisions;
 
-		public SparkleDiffWindow (string file_path) : base ("")
+		// TODO: Make the 2nd argument an array of strings
+		public SparkleDiffWindow (string file_path, string [] revisions) : base ("")
 		{
 
-			Revisions = GetRevisionsForFilePath (file_path);
-			
-			if (Revisions.Length < 2) {
-				Console.WriteLine ("SparkleDiff: " + file_path + ": File has no history.");
-			}
-
 			string file_name = System.IO.Path.GetFileName (file_path);
+			Revisions = revisions;
 
 	 		SetPosition (WindowPosition.Center);
-
 			BorderWidth = 12;
+			IconName = "image-x-generic";
 
 			DeleteEvent += Quit;
-
-			IconName = "image-x-generic";
 
 			// TRANSLATORS: The parameter is a filename
 			Title = String.Format(_("Comparing Revisions of ‘{0}’"), file_name);
@@ -164,7 +158,8 @@ namespace SparkleShare {
 		}
 
 
-		private void ResizeToViews () {
+		private void ResizeToViews ()
+		{
 
 			int new_width  = ViewLeft.GetImage ().Pixbuf.Width + ViewRight.GetImage ().Pixbuf.Width + 100;
 			int new_height = 200;
@@ -182,7 +177,8 @@ namespace SparkleShare {
 		}
 
 		// Hooks up two views so their scrollbars will be kept in sync
-		private void HookUpViews () {
+		private void HookUpViews ()
+		{
 
 			ViewLeft.ScrolledWindow.Hadjustment.ValueChanged  += SyncViewsHorizontally;
 			ViewLeft.ScrolledWindow.Vadjustment.ValueChanged  += SyncViewsVertically;
@@ -193,7 +189,8 @@ namespace SparkleShare {
 
 
 		// Keeps the two image views in sync horizontally
-		private void SyncViewsHorizontally (object o, EventArgs args) {
+		private void SyncViewsHorizontally (object o, EventArgs args)
+		{
 
 			Adjustment source_adjustment = (Adjustment) o;
 			
@@ -206,7 +203,8 @@ namespace SparkleShare {
 
 
 		// Keeps the two image views in sync vertically
-		private void SyncViewsVertically (object o, EventArgs args) {
+		private void SyncViewsVertically (object o, EventArgs args)
+		{
 
 			Adjustment source_adjustment = (Adjustment) o;
 
@@ -214,29 +212,6 @@ namespace SparkleShare {
 				ViewRight.ScrolledWindow.Vadjustment = source_adjustment;
 			else
 				ViewLeft.ScrolledWindow.Vadjustment = source_adjustment;			
-
-		}
-
-
-		// Gets a list of all earlier revisions of this file
-		private string [] GetRevisionsForFilePath (string file_path)
-		{
-
-			Process process = new Process ();
-			process.EnableRaisingEvents = true; 
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-
-			process.StartInfo.WorkingDirectory = SparkleDiff.GetGitRoot (file_path);
-			process.StartInfo.FileName = "git";
-			process.StartInfo.Arguments = "log --format=\"%H\" " + SparkleDiff.GetPathFromGitRoot (file_path);
-
-			process.Start ();
-
-			string output = process.StandardOutput.ReadToEnd ();
-			string [] revisions = Regex.Split (output.Trim (), "\n");
-
-			return revisions;
 
 		}
 
@@ -250,10 +225,9 @@ namespace SparkleShare {
 
 
 		// Quits the program		
-		private void Quit (object o, EventArgs args) {
-
+		private void Quit (object o, EventArgs args)
+		{
 			Environment.Exit (0);
-
 		}
 
 	}
