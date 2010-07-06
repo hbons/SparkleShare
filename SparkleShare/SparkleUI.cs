@@ -16,6 +16,7 @@
 
 using Gtk;
 using Mono.Unix;
+using Mono.Unix.Native;
 using SparkleShare;
 using System;
 using System.Diagnostics;
@@ -56,17 +57,27 @@ namespace SparkleShare {
 				string desktopfile_path = SparkleHelpers.CombineMore (autostart_path, "sparkleshare.desktop");
 
 				if (!File.Exists (desktopfile_path)) {
+
 					if (!Directory.Exists (autostart_path))
 						Directory.CreateDirectory (autostart_path);
+
 					TextWriter writer = new StreamWriter (desktopfile_path);
+
 					writer.WriteLine ("[Desktop Entry]\n" +
+						"Type=Application\n" +
 						"Name=SparkleShare\n" +
 						"Exec=sparkleshare start\n" +
 						"Icon=folder-sparkleshare\n" +
 						"Terminal=false\n" +
 						"X-GNOME-Autostart-enabled=true");
+
 					writer.Close ();
+
+					// Give the launcher the right permissions so it can be launched by the user
+					Syscall.chmod (desktopfile_path, FilePermissions.S_IRWXU);
+
 					SparkleHelpers.DebugInfo ("Config", "Created '" + desktopfile_path + "'");
+
 				}
 
 				break;
