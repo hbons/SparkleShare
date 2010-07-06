@@ -22,7 +22,7 @@ using System.Text.RegularExpressions;
 
 namespace SparkleShare {
 
-	// The main window of SparkleDiff
+	// The main window for SparkleDiff
 	public class SparkleDiffWindow : Window
 	{
 
@@ -37,7 +37,6 @@ namespace SparkleShare {
 
 		private string [] Revisions;
 
-		// TODO: Make the 2nd argument an array of strings
 		public SparkleDiffWindow (string file_path, string [] revisions) : base ("")
 		{
 
