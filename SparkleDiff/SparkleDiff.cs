@@ -19,6 +19,7 @@ using Mono.Unix;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace SparkleShare {
 
@@ -85,6 +86,7 @@ namespace SparkleShare {
 			}
 
 			if (args.Length > 0) {
+
 				if (args [0].Equals ("--help") || args [0].Equals ("-h")) {
 					ShowHelp ();
 					Environment.Exit (0);
@@ -95,9 +97,17 @@ namespace SparkleShare {
 				if (File.Exists (file_path)) {
 
 					Gtk.Application.Init ();
+					
+					string [] revisions = GetRevisionsForFilePath (file_path);
+
+					// Quit if the given file doesn't have any history
+					if (revisions.Length < 2) {
+						Console.WriteLine ("SparkleDiff: " + file_path + ": File has no history.");
+						Environment.Exit (-1);
+					}
 
 					SparkleDiffWindow sparkle_diff_window;
-					sparkle_diff_window = new SparkleDiffWindow (file_path);
+					sparkle_diff_window = new SparkleDiffWindow (file_path, revisions);
 					sparkle_diff_window.ShowAll ();
 
 					// The main loop
@@ -106,13 +116,38 @@ namespace SparkleShare {
 				} else {
 
 					Console.WriteLine ("SparkleDiff: " + file_path + ": No such file or directory.");
-					Environment.Exit (0);
+					Environment.Exit (-1);
 
 				}
 				
 			}
 
+
+
 		}
+
+		// Gets a list of all earlier revisions of this file
+		public static string [] GetRevisionsForFilePath (string file_path)
+		{
+
+			Process process = new Process ();
+			process.EnableRaisingEvents = true; 
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute = false;
+
+			process.StartInfo.WorkingDirectory = SparkleDiff.GetGitRoot (file_path);
+			process.StartInfo.FileName = "git";
+			process.StartInfo.Arguments = "log --format=\"%H\" " + SparkleDiff.GetPathFromGitRoot (file_path);
+
+			process.Start ();
+
+			string output = process.StandardOutput.ReadToEnd ();
+			string [] revisions = Regex.Split (output.Trim (), "\n");
+
+			return revisions;
+
+		}
+
 
 
 		// Prints the help output
