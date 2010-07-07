@@ -2,12 +2,12 @@
 # Copyright (C) Hylke Bons
 # This file is distributed under the same license as the SparkleShare package.
 # Magnun Leno <magnun.leno@gmail.com>, 2010.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-02 06:01+0000\n"
+"POT-Creation-Date: 2010-07-06 09:20+0000\n"
 "PO-Revision-Date: 2010-07-05 13:01-0300\n"
 "Last-Translator: Magnun Leno <magnun.leno@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -17,8 +17,60 @@ msgstr ""
 "Language: pt-BR\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
 "X-Poedit-Language: Portuguese\n"
-"X-Poedit-Country: BRAZIL\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Country: BRAZIL\n"
+
+#: ../SparkleDiff/SparkleDiff.cs:75 ../SparkleShare/SparkleShare.cs:50
+msgid "Git wasn't found."
+msgstr "Git não foi encontrado."
+
+#: ../SparkleDiff/SparkleDiff.cs:76 ../SparkleShare/SparkleShare.cs:51
+msgid "You can get Git from http://git-scm.com/."
+msgstr "Você pode obter o Git no site http://git-scm.com/."
+
+#: ../SparkleDiff/SparkleDiff.cs:83 ../SparkleShare/SparkleShare.cs:58
+msgid "Sorry, you can't run SparkleShare with these permissions."
+msgstr "Descuple, você não pode rodar o SparkleShare sem essas permissões."
+
+#: ../SparkleDiff/SparkleDiff.cs:84 ../SparkleShare/SparkleShare.cs:59
+msgid "Things would go utterly wrong."
+msgstr "As coisas vão dar completamente errado."
+
+#: ../SparkleDiff/SparkleDiff.cs:156
+msgid "SparkleDiff Copyright (C) 2010 Hylke Bons"
+msgstr "Direitos Autorais SparkleShare (C) 2010 Hylke Bons"
+
+#: ../SparkleDiff/SparkleDiff.cs:158 ../SparkleShare/SparkleShare.cs:90
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr "Este programa vem com ABSOLUTAMENTE NENHUMA GARANTIA."
+
+#: ../SparkleDiff/SparkleDiff.cs:159 ../SparkleShare/SparkleShare.cs:91
+msgid "This is free software, and you are welcome to redistribute it "
+msgstr "Este é um software livre, e você é incentivado a distribuí-lo "
+
+#: ../SparkleDiff/SparkleDiff.cs:160 ../SparkleShare/SparkleShare.cs:92
+msgid "under certain conditions. Please read the GNU GPLv3 for details."
+msgstr "sob certas condições. Por favor leia a licença GNU GPLv3 para mais detalhes."
+
+#: ../SparkleDiff/SparkleDiff.cs:162
+msgid "SparkleDiff let's you compare revisions of an image file side by side."
+msgstr "O SparkleDiff permite que você compare lado a lado revisões de uma imagem."
+
+#: ../SparkleDiff/SparkleDiff.cs:164
+msgid "Usage: sparklediff [FILE]"
+msgstr "Utilização: sparklediff [ARQUIVO]"
+
+#: ../SparkleDiff/SparkleDiff.cs:165
+msgid "Open an image file to show its revisions"
+msgstr "Abre um arquivo de imagem e mostra suas revisões"
+
+#: ../SparkleDiff/SparkleDiff.cs:167 ../SparkleShare/SparkleShare.cs:99
+msgid "Arguments:"
+msgstr "Argumentos:"
+
+#: ../SparkleDiff/SparkleDiff.cs:168 ../SparkleShare/SparkleShare.cs:101
+msgid "\t -h, --help\t\tDisplay this help text."
+msgstr "\t -h, --help\t\tMostra esse texto de ajuda."
 
 #: ../SparkleShare/SparkleDialog.cs:50
 msgid "Address of remote SparkleShare folder:"
@@ -60,59 +112,58 @@ msgid "Now make great stuff happen!"
 msgstr "Agora faça grandes coisas acontecerem!"
 
 #. Add a button to open the folder where the changed file is
-#: ../SparkleShare/SparkleDialog.cs:200
-#: ../SparkleShare/SparkleRepo.cs:319
-#: ../SparkleShare/SparkleWindow.cs:62
+#: ../SparkleShare/SparkleDialog.cs:200 ../SparkleShare/SparkleRepo.cs:319
+#: ../SparkleShare/SparkleWindow.cs:63
 msgid "Open Folder"
 msgstr "Abrir Pasta"
 
-#: ../SparkleShare/SparkleHelpers.cs:159
+#: ../SparkleShare/SparkleHelpers.cs:164
 #, csharp-format
 msgid "a second ago"
 msgid_plural "{0} seconds ago"
 msgstr[0] "há um segundo"
 msgstr[1] "há {0} segundos"
 
-#: ../SparkleShare/SparkleHelpers.cs:165
+#: ../SparkleShare/SparkleHelpers.cs:170
 #, csharp-format
 msgid "a minute ago"
 msgid_plural "about {0} minutes ago"
 msgstr[0] "há um minuto"
 msgstr[1] "há quase {0} minutos"
 
-#: ../SparkleShare/SparkleHelpers.cs:171
+#: ../SparkleShare/SparkleHelpers.cs:176
 #, csharp-format
 msgid "about an hour ago"
 msgid_plural "about {0} hours ago"
 msgstr[0] "há quase uma hora"
 msgstr[1] "há quase {0} horas"
 
-#: ../SparkleShare/SparkleHelpers.cs:177
+#: ../SparkleShare/SparkleHelpers.cs:182
 #, csharp-format
 msgid "yesterday"
 msgid_plural "{0} days ago"
 msgstr[0] "ontem"
 msgstr[1] "há {0} dias"
 
-#: ../SparkleShare/SparkleHelpers.cs:183
+#: ../SparkleShare/SparkleHelpers.cs:188
 #, csharp-format
 msgid "a month ago"
 msgid_plural "{0} months ago"
 msgstr[0] "há um mês"
 msgstr[1] "há {0} meses"
 
-#: ../SparkleShare/SparkleHelpers.cs:188
+#: ../SparkleShare/SparkleHelpers.cs:193
 #, csharp-format
 msgid "a year ago"
 msgid_plural "{0} years ago"
 msgstr[0] "há um ano"
 msgstr[1] "há {0} anos"
 
-#: ../SparkleShare/SparkleHelpers.cs:197
+#: ../SparkleShare/SparkleHelpers.cs:205
 msgid "Hold your ponies!"
 msgstr "Segure seus pôneis!"
 
-#: ../SparkleShare/SparkleHelpers.cs:198
+#: ../SparkleShare/SparkleHelpers.cs:206
 msgid ""
 "SparkleShare is known to be insanely fast with \n"
 "pictures of unicorns. Please make sure your internets\n"
@@ -123,61 +174,25 @@ msgstr ""
 "verifique se sua internet foi atualizada para a versão\n"
 "mais recente."
 
-#: ../SparkleShare/SparkleShare.cs:50
-msgid "Git wasn't found."
-msgstr "Git não foi encontrado."
-
-#: ../SparkleShare/SparkleShare.cs:51
-msgid "You can get Git from http://git-scm.com/."
-msgstr "Você pode obter o Git no site http://git-scm.com/."
-
-#: ../SparkleShare/SparkleShare.cs:58
-msgid "Sorry, you can't run SparkleShare with these permissions."
-msgstr "Descuple, você não pode rodar o SparkleShare sem essas permissões."
-
-#: ../SparkleShare/SparkleShare.cs:59
-msgid "Things will go utterly wrong."
-msgstr "As coisas vão dar completamente errado."
-
-#: ../SparkleShare/SparkleShare.cs:87
+#: ../SparkleShare/SparkleShare.cs:88
 msgid "SparkleShare Copyright (C) 2010 Hylke Bons"
 msgstr "Diretos Autorais do SparkleShare (C) 2010 Hylke Bons"
 
-#: ../SparkleShare/SparkleShare.cs:89
-msgid "This program comes with ABSOLUTELY NO WARRANTY."
-msgstr "Este programa vem com ABSOLUTAMENTE NENHUMA GARANTIA."
-
-#: ../SparkleShare/SparkleShare.cs:90
-msgid "This is free software, and you are welcome to redistribute it "
-msgstr "Este é um software livre, e você é incentivado a distribuí-lo "
-
-#: ../SparkleShare/SparkleShare.cs:91
-msgid "under certain conditions. Please read the GNU GPLv3 for details."
-msgstr "sob certas condições. Por favor leia a licença GNU GPLv3 para mais detalhes."
-
-#: ../SparkleShare/SparkleShare.cs:93
+#: ../SparkleShare/SparkleShare.cs:94
 msgid "SparkleShare syncs the ~/SparkleShare folder with remote repositories."
 msgstr "SparkleShare sincroniza a pasta ~/SparkleShare com repositórios remotos."
 
-#: ../SparkleShare/SparkleShare.cs:95
+#: ../SparkleShare/SparkleShare.cs:96
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
 msgstr "Utilização: sparkleshare [start|stop|restart] [OPTION]..."
 
-#: ../SparkleShare/SparkleShare.cs:96
+#: ../SparkleShare/SparkleShare.cs:97
 msgid "Sync SparkleShare folder with remote repositories."
 msgstr "Sincroniza a pasta SparkleShare com repositórios remotos."
 
-#: ../SparkleShare/SparkleShare.cs:98
-msgid "Arguments:"
-msgstr "Argumentos:"
-
-#: ../SparkleShare/SparkleShare.cs:99
+#: ../SparkleShare/SparkleShare.cs:100
 msgid "\t -d, --disable-gui\tDon't show the notification icon."
 msgstr "\t -d, --disable-gui\tNão mostra o ícone de notificação."
-
-#: ../SparkleShare/SparkleShare.cs:100
-msgid "\t -h, --help\t\tDisplay this help text."
-msgstr "\t -h, --help\t\tMostra esse texto de ajuda."
 
 #: ../SparkleShare/SparkleStatusIcon.cs:69
 msgid "Error syncing"
@@ -219,8 +234,8 @@ msgstr "Você ainda não possui nenhuma pasta configurada."
 msgid "Add a Folder…"
 msgstr "Adicionar uma Pasta…"
 
-#: ../SparkleShare/SparkleWindow.cs:50
+#. TRANSLATORS: {0} is a folder name, and {1} is a server address
+#: ../SparkleShare/SparkleWindow.cs:51
 #, csharp-format
 msgid "‘{0}’ on {1}"
 msgstr "‘{0}’ de {1}"
-
