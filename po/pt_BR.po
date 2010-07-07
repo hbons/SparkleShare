@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-06 09:20+0000\n"
+"POT-Creation-Date: 2010-07-07 17:44+0000\n"
 "PO-Revision-Date: 2010-07-05 13:01-0300\n"
 "Last-Translator: Magnun Leno <magnun.leno@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -20,57 +20,73 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Country: BRAZIL\n"
 
-#: ../SparkleDiff/SparkleDiff.cs:75 ../SparkleShare/SparkleShare.cs:50
+#: ../SparkleDiff/SparkleDiff.cs:77 ../SparkleShare/SparkleShare.cs:50
 msgid "Git wasn't found."
 msgstr "Git não foi encontrado."
 
-#: ../SparkleDiff/SparkleDiff.cs:76 ../SparkleShare/SparkleShare.cs:51
+#: ../SparkleDiff/SparkleDiff.cs:78 ../SparkleShare/SparkleShare.cs:51
 msgid "You can get Git from http://git-scm.com/."
 msgstr "Você pode obter o Git no site http://git-scm.com/."
 
-#: ../SparkleDiff/SparkleDiff.cs:83 ../SparkleShare/SparkleShare.cs:58
+#: ../SparkleDiff/SparkleDiff.cs:86 ../SparkleShare/SparkleShare.cs:58
 msgid "Sorry, you can't run SparkleShare with these permissions."
 msgstr "Descuple, você não pode rodar o SparkleShare sem essas permissões."
 
-#: ../SparkleDiff/SparkleDiff.cs:84 ../SparkleShare/SparkleShare.cs:59
+#: ../SparkleDiff/SparkleDiff.cs:87 ../SparkleShare/SparkleShare.cs:59
 msgid "Things would go utterly wrong."
 msgstr "As coisas vão dar completamente errado."
 
-#: ../SparkleDiff/SparkleDiff.cs:156
+#: ../SparkleDiff/SparkleDiff.cs:157
 msgid "SparkleDiff Copyright (C) 2010 Hylke Bons"
 msgstr "Direitos Autorais SparkleShare (C) 2010 Hylke Bons"
 
-#: ../SparkleDiff/SparkleDiff.cs:158 ../SparkleShare/SparkleShare.cs:90
+#: ../SparkleDiff/SparkleDiff.cs:159 ../SparkleShare/SparkleShare.cs:90
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
 msgstr "Este programa vem com ABSOLUTAMENTE NENHUMA GARANTIA."
 
-#: ../SparkleDiff/SparkleDiff.cs:159 ../SparkleShare/SparkleShare.cs:91
+#: ../SparkleDiff/SparkleDiff.cs:160 ../SparkleShare/SparkleShare.cs:91
 msgid "This is free software, and you are welcome to redistribute it "
 msgstr "Este é um software livre, e você é incentivado a distribuí-lo "
 
-#: ../SparkleDiff/SparkleDiff.cs:160 ../SparkleShare/SparkleShare.cs:92
+#: ../SparkleDiff/SparkleDiff.cs:161 ../SparkleShare/SparkleShare.cs:92
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
 msgstr "sob certas condições. Por favor leia a licença GNU GPLv3 para mais detalhes."
 
-#: ../SparkleDiff/SparkleDiff.cs:162
+#: ../SparkleDiff/SparkleDiff.cs:163
 msgid "SparkleDiff let's you compare revisions of an image file side by side."
 msgstr "O SparkleDiff permite que você compare lado a lado revisões de uma imagem."
 
-#: ../SparkleDiff/SparkleDiff.cs:164
+#: ../SparkleDiff/SparkleDiff.cs:165
 msgid "Usage: sparklediff [FILE]"
 msgstr "Utilização: sparklediff [ARQUIVO]"
 
-#: ../SparkleDiff/SparkleDiff.cs:165
+#: ../SparkleDiff/SparkleDiff.cs:166
 msgid "Open an image file to show its revisions"
 msgstr "Abre um arquivo de imagem e mostra suas revisões"
 
-#: ../SparkleDiff/SparkleDiff.cs:167 ../SparkleShare/SparkleShare.cs:99
+#: ../SparkleDiff/SparkleDiff.cs:168 ../SparkleShare/SparkleShare.cs:99
 msgid "Arguments:"
 msgstr "Argumentos:"
 
-#: ../SparkleDiff/SparkleDiff.cs:168 ../SparkleShare/SparkleShare.cs:101
+#: ../SparkleDiff/SparkleDiff.cs:169 ../SparkleShare/SparkleShare.cs:101
 msgid "\t -h, --help\t\tDisplay this help text."
 msgstr "\t -h, --help\t\tMostra esse texto de ajuda."
+
+#. TRANSLATORS: The parameter is a filename
+#: ../SparkleDiff/SparkleDiffWindow.cs:53
+#, csharp-format
+msgid "Comparing Revisions of ‘{0}’"
+msgstr "Comparando revisões de '{0}'"
+
+#: ../SparkleDiff/SparkleDiffWindow.cs:81
+msgid "Current Revision"
+msgstr "Revisão Atual"
+
+#. TRANSLATORS: This is a format specifier according to
+#. System.Globalization.DateTimeFormatInfo
+#: ../SparkleDiff/SparkleDiffWindow.cs:85
+msgid "d MMM\tH:mm"
+msgstr ""
 
 #: ../SparkleShare/SparkleDialog.cs:50
 msgid "Address of remote SparkleShare folder:"
@@ -222,15 +238,15 @@ msgstr "Visitar o Website"
 msgid "Quit"
 msgstr "Sair"
 
-#: ../SparkleShare/SparkleUI.cs:134
+#: ../SparkleShare/SparkleUI.cs:145
 msgid "Welcome to SparkleShare!"
 msgstr "Bem vindo ao SparkleShare"
 
-#: ../SparkleShare/SparkleUI.cs:135
+#: ../SparkleShare/SparkleUI.cs:146
 msgid "You don't have any folders set up yet."
 msgstr "Você ainda não possui nenhuma pasta configurada."
 
-#: ../SparkleShare/SparkleUI.cs:138
+#: ../SparkleShare/SparkleUI.cs:149
 msgid "Add a Folder…"
 msgstr "Adicionar uma Pasta…"
 
