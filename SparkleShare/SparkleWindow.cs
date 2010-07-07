@@ -18,6 +18,7 @@ using Gtk;
 using Mono.Unix;
 using SparkleShare;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -36,48 +37,48 @@ namespace SparkleShare {
 
 		private SparkleRepo SparkleRepo;
 		private VBox LayoutVertical;
-		private ScrolledWindow LogScrolledWindow;
-		private string SelectedEmail;
+		private ScrolledWindow ScrolledWindow;
 
-		public SparkleWindow (SparkleRepo Repo) : base ("")
+		public SparkleWindow (SparkleRepo sparkle_repo) : base ("")
 		{
 
-			SparkleRepo = Repo;
-			SelectedEmail = "";
+			SparkleRepo = sparkle_repo;
 			SetSizeRequest (640, 480);
 	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 12;
+			
+			// TRANSLATORS: {0} is a folder name, and {1} is a server address
 			Title = String.Format(_("‘{0}’ on {1}"), SparkleRepo.Name,
-				SparkleRepo.RemoteOriginUrl.TrimEnd (("/" + SparkleRepo.Name + ".git").ToCharArray ()));
+				SparkleRepo.RemoteOriginUrl);
 			IconName = "folder";
 
 			LayoutVertical = new VBox (false, 12);
 
 			LayoutVertical.PackStart (CreateEventLog (), true, true, 0);
 
-				HButtonBox DialogButtons = new HButtonBox ();
-				DialogButtons.Layout = ButtonBoxStyle.Edge;
-				DialogButtons.BorderWidth = 0;
+				HButtonBox dialog_buttons = new HButtonBox ();
+				dialog_buttons.Layout = ButtonBoxStyle.Edge;
+				dialog_buttons.BorderWidth = 0;
 
-					Button OpenFolderButton = new Button (_("Open Folder"));
-					OpenFolderButton.Clicked += delegate (object o, EventArgs args) {
-						Process Process = new Process ();
-						Process.StartInfo.FileName = "xdg-open";
-						Process.StartInfo.Arguments =
-							SparkleHelpers.CombineMore (SparklePaths.SparklePath, SparkleRepo.Name);
-						Process.Start ();
+					Button open_folder_button = new Button (_("Open Folder"));
+					open_folder_button.Clicked += delegate (object o, EventArgs args) {
+						Process process = new Process ();
+						process.StartInfo.FileName = "xdg-open";
+						process.StartInfo.Arguments = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+							SparkleRepo.Name);
+						process.Start ();
 						Destroy ();
 					};
 
-					Button CloseButton = new Button (Stock.Close);
-					CloseButton.Clicked += delegate (object o, EventArgs args) {
+					Button close_button = new Button (Stock.Close);
+					close_button.Clicked += delegate (object o, EventArgs args) {
 						Destroy ();
 					};
 
-				DialogButtons.Add (OpenFolderButton);
-				DialogButtons.Add (CloseButton);
+				dialog_buttons.Add (open_folder_button);
+				dialog_buttons.Add (close_button);
 
-			LayoutVertical.PackStart (DialogButtons, false, false, 0);
+			LayoutVertical.PackStart (dialog_buttons, false, false, 0);
 
 			Add (LayoutVertical);		
 		
@@ -87,9 +88,10 @@ namespace SparkleShare {
 		public void UpdateEventLog ()
 		{
 
-			LayoutVertical.Remove (LogScrolledWindow);
-			LogScrolledWindow = CreateEventLog ();
-			LayoutVertical.PackStart (LogScrolledWindow, true, true, 0);
+			LayoutVertical.Remove (ScrolledWindow);
+			ScrolledWindow = CreateEventLog ();
+			LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
+			LayoutVertical.ReorderChild (ScrolledWindow, 0);
 			ShowAll ();
 
 		}
@@ -98,138 +100,186 @@ namespace SparkleShare {
 		private ScrolledWindow CreateEventLog ()
 		{
 
-			ListStore LogStore = new ListStore (typeof (Gdk.Pixbuf),
-				                                typeof (string),
-				                                typeof (string),
-				                                typeof (string));
+			Process process = new Process ();
+			process.EnableRaisingEvents = true; 
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
+			process.StartInfo.FileName = "git";
+			process.StartInfo.Arguments = "log --format=\"%at☃%an☃%ae☃%s\" -25";
 
-			Process Process = new Process ();
-			Process.EnableRaisingEvents = true; 
-			Process.StartInfo.RedirectStandardOutput = true;
-			Process.StartInfo.UseShellExecute = false;
-			Process.StartInfo.FileName = "git";
+			string output = "";
 
-			string Output = "";
+			process.Start ();
 
-			Process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
-			// We're using the snowman here to separate messages :)
-			Process.StartInfo.Arguments = "log --format=\"%at☃%s☃%an☃%cr☃%ae\" -25";
-			Process.Start ();
+			output += "\n" + process.StandardOutput.ReadToEnd ().Trim ();
 
-			Output += "\n" + Process.StandardOutput.ReadToEnd ().Trim ();
-
-			Output = Output.TrimStart ("\n".ToCharArray ());
-			string [] Lines = Regex.Split (Output, "\n");
+			output = output.TrimStart ("\n".ToCharArray ());
+			string [] lines = Regex.Split (output, "\n");
 
 			// Sort by time and get the last 25
-			Array.Sort (Lines);
-			Array.Reverse (Lines);
+			Array.Sort (lines);
+			Array.Reverse (lines);
 
-			TreeIter Iter;
-			for (int i = 0; i < 25 && i < Lines.Length; i++) {
+			List <ActivityDay> activity_days = new List <ActivityDay> ();
 
-				string Line = Lines [i];
-				if (Line.Contains (SelectedEmail)) {
+			for (int i = 0; i < 25 && i < lines.Length; i++) {
+
+					string line = lines [i];
 
 					// Look for the snowman!
-					string [] Parts = Regex.Split (Line, "☃");
+					string [] parts = Regex.Split (line, "☃");
 
-					string Message   = Parts [1];
-					string UserName  = Parts [2];
-					string TimeAgo   = Parts [3];
-					string UserEmail = Parts [4];
+					int unix_timestamp     = int.Parse (parts [0]);
+					string user_name  = parts [1];
+					string user_email = parts [2];
+					string message    = parts [3];
 
-					Message = Message.Replace ("/", " → ");
-					Message = Message.Replace ("\n", " ");
+					DateTime date_time = UnixTimestampToDateTime (unix_timestamp);
 
-					Iter = LogStore.Append ();
+					message = message.Replace ("/", " → ");
+					message = message.Replace ("\n", " ");
 
-					LogStore.SetValue (Iter, 0, SparkleHelpers.GetAvatar (UserEmail, 24));
-					LogStore.SetValue (Iter, 1, "<b>" + UserName + "</b>\n" + Message);
-					// TODO Blend text color with treeview color instead of hardcoding it
-					LogStore.SetValue (Iter, 2, "<span fgcolor='grey'>" + TimeAgo + "</span>  ");
+					ChangeSet change_set = new ChangeSet (user_name, user_email, message, date_time);
 
-					// We're not showing email, it's only 
-					// there for lookup purposes
-					LogStore.SetValue (Iter, 3, UserEmail);
+					bool change_set_inserted = false;
+					foreach (ActivityDay stored_activity_day in activity_days) {
 
-				}
+						if (stored_activity_day.DateTime.Year  == change_set.DateTime.Year &&
+						    stored_activity_day.DateTime.Month == change_set.DateTime.Month &&
+						    stored_activity_day.DateTime.Day   == change_set.DateTime.Day) {
+
+						    stored_activity_day.Add (change_set);
+						    change_set_inserted = true;
+						    break;
+
+						}
+
+					}
+					
+					if (!change_set_inserted) {
+
+							ActivityDay activity_day = new ActivityDay (change_set.DateTime);
+							activity_day.Add (change_set);
+							activity_days.Add (activity_day);
+						
+					}
 
 			}
 
-			TreeView LogView = new TreeView (LogStore); 
-			LogView.HeadersVisible = false;
 
-			LogView.AppendColumn ("", new CellRendererPixbuf (), "pixbuf", 0);
+			VBox layout_vertical = new VBox (false, 0);
 
-			CellRendererText MessageCellRenderer = new CellRendererText ();
-			TreeViewColumn MessageColumn = new TreeViewColumn ();
-			MessageColumn.PackStart (MessageCellRenderer, true);
-			MessageColumn.SetCellDataFunc (MessageCellRenderer, new Gtk.TreeCellDataFunc (RenderMessageRow));
-			LogView.AppendColumn (MessageColumn);
+			foreach (ActivityDay activity_day in activity_days) {
 
-			CellRendererText TimeAgoCellRenderer = new CellRendererText ();
-			TreeViewColumn TimeAgoColumn = new TreeViewColumn ();
-			TimeAgoColumn.PackStart (TimeAgoCellRenderer, true);
-			TimeAgoColumn.SetCellDataFunc (TimeAgoCellRenderer, new Gtk.TreeCellDataFunc (RenderTimeAgoRow));
-			TimeAgoCellRenderer.Xalign = 1;
-			LogView.AppendColumn (TimeAgoColumn);
+				TreeIter iter = new TreeIter ();
+				ListStore list_store = new ListStore (typeof (Gdk.Pixbuf),
+				                                      typeof (string),
+				                                      typeof (string));
 
-			TreeViewColumn [] Columns = LogView.Columns;
+				foreach (ChangeSet change_set in activity_day) {
 
-			Columns [0].MinWidth = 42;
+					iter = list_store.Append ();
+					list_store.SetValue (iter, 0, SparkleHelpers.GetAvatar (change_set.UserEmail , 32));
+					list_store.SetValue (iter, 1, "<b>" + change_set.UserName + "</b>\n" +
+					                              "<span fgcolor='#777'>" + change_set.Message + "</span>");
+					list_store.SetValue (iter, 2, change_set.UserEmail);
 
-			Columns [1].Expand = true;
-			Columns [1].MinWidth = 350;
-
-			Columns [2].Expand = true;
-			Columns [2].MinWidth = 50;
-
-			// Get the email address of the selected log message each
-			// time the cursor changes
-			LogView.CursorChanged += delegate (object o, EventArgs args) {
-				TreeModel model;
-				TreeIter iter;
-				if (LogView.Selection.GetSelected (out model, out iter)) {
-					SelectedEmail = (string) model.GetValue (iter, 3);
 				}
-			};
 
-			// Compose an e-mail when a row is activated
-			LogView.RowActivated +=
-				delegate (object o, RowActivatedArgs Args) {
-					switch (SparklePlatform.Name) {
-						case "GNOME":
-							Process.StartInfo.FileName = "xdg-open";
-							break;
-						case "OSX":
-							Process.StartInfo.FileName = "open";
-							break;						
+				Label date_label = new Label ();
+
+					DateTime today = DateTime.Now;
+					DateTime yesterday = DateTime.Now.AddDays (-1);
+
+					if (today.Day   == activity_day.DateTime.Day &&
+					    today.Month == activity_day.DateTime.Month && 
+					    today.Year  == activity_day.DateTime.Year) {
+
+						date_label.Text = "<b>Today</b>";
+
+					} else if (yesterday.Day   == activity_day.DateTime.Day &&
+					           yesterday.Month == activity_day.DateTime.Month && 
+					           yesterday.Year  == activity_day.DateTime.Year) {
+
+						date_label.Text = "<b>Yesterday</b>";
+
+					} else {
+	
+						date_label.Text = "<b>" + activity_day.DateTime.ToString ("ddd MMM d, yyyy") + "</b>";
+
 					}
-					Process.StartInfo.Arguments = "mailto:" + SelectedEmail;
-					Process.Start ();
-			};
 
-			LogScrolledWindow = new ScrolledWindow ();
-			LogScrolledWindow.AddWithViewport (LogView);
+					date_label.UseMarkup = true;
+					date_label.Xalign = 0;
+					date_label.Xpad = 9;
+					date_label.Ypad = 9;
 
-			return LogScrolledWindow;
+				layout_vertical.PackStart (date_label, true, true, 0);
+
+				IconView icon_view = new IconView (list_store);
+
+					icon_view.PixbufColumn = 0;
+					icon_view.MarkupColumn = 1;
+				
+					icon_view.Orientation = Orientation.Horizontal;
+					icon_view.ItemWidth = 550;
+					icon_view.Spacing = 9;
+
+				layout_vertical.PackStart (icon_view);
+
+
+			}
+
+			ScrolledWindow = new ScrolledWindow ();
+			ScrolledWindow.AddWithViewport (layout_vertical);
+
+			return ScrolledWindow;
 
 		}
 
-		// Renders a row with custom markup
-		private void RenderMessageRow (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
+
+		// Converts a UNIX timestamp to a more usable time object
+		public DateTime UnixTimestampToDateTime (int timestamp)
 		{
-			string item = (string) model.GetValue (iter, 1);
-			(cell as CellRendererText).Markup  = item;
+			DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
+			return unix_epoch.AddSeconds (timestamp);
 		}
 
-		private void RenderTimeAgoRow (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
+
+	}
+
+	
+	public class ActivityDay : List <ChangeSet>
+	{
+
+		public DateTime DateTime;
+
+		public ActivityDay (DateTime date_time)
 		{
-			string item = (string) model.GetValue (iter, 2);
-			(cell as CellRendererText).Markup  = item;
+			DateTime = date_time;
+			DateTime = new DateTime (DateTime.Year, DateTime.Month, DateTime.Day);
 		}
 
+	}
+
+	
+	public class ChangeSet
+	{
+	
+		public string UserName;
+		public string UserEmail;
+		public string Message;
+		public DateTime DateTime;
+	
+		public ChangeSet (string user_name, string user_email, string message, DateTime date_time)
+		{
+			UserName  = user_name;
+			UserEmail = user_email;
+			Message   = message;
+			DateTime  = date_time;
+		}
+	
 	}
 
 }
