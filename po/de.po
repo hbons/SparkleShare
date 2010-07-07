@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-02 06:01+0000\n"
+"POT-Creation-Date: 2010-07-05 06:00+0000\n"
 "PO-Revision-Date: 2010-06-21 16:26+0100\n"
 "Last-Translator: Martin Lettner <m.lettner@gmail.com>\n"
 "Language-Team: \n"
@@ -17,6 +17,63 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
+
+#: ../SparkleDiff/SparkleDiff.cs:47 ../SparkleShare/SparkleShare.cs:50
+msgid "Git wasn't found."
+msgstr "Git konnte nicht gefunden werden."
+
+#: ../SparkleDiff/SparkleDiff.cs:48 ../SparkleShare/SparkleShare.cs:51
+msgid "You can get Git from http://git-scm.com/."
+msgstr "Sie können Git auf http://git-scm.com/ herunterladen."
+
+#: ../SparkleDiff/SparkleDiff.cs:55 ../SparkleShare/SparkleShare.cs:58
+msgid "Sorry, you can't run SparkleShare with these permissions."
+msgstr "Entschuldigung, SparkleShare kann mit diesen Rechten nicht ausgeführt werden."
+
+#: ../SparkleDiff/SparkleDiff.cs:56 ../SparkleShare/SparkleShare.cs:59
+#, fuzzy
+msgid "Things would go utterly wrong."
+msgstr "Vieles würde nicht richtig funktionieren."
+
+#: ../SparkleDiff/SparkleDiff.cs:93
+#, fuzzy
+msgid "SparkleDiff Copyright (C) 2010 Hylke Bons"
+msgstr "SparkleShare Copyright (C) 2010 Hylke Bons"
+
+#: ../SparkleDiff/SparkleDiff.cs:95 ../SparkleShare/SparkleShare.cs:90
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr "Diese Anwendung wird OHNE IRGENDEINE GARANTIE veröffentlicht."
+
+#: ../SparkleDiff/SparkleDiff.cs:96 ../SparkleShare/SparkleShare.cs:91
+msgid "This is free software, and you are welcome to redistribute it "
+msgstr "Dies ist freie Software. Sie können es weitergeben und/oder modifizieren"
+
+#: ../SparkleDiff/SparkleDiff.cs:97 ../SparkleShare/SparkleShare.cs:92
+msgid "under certain conditions. Please read the GNU GPLv3 for details."
+msgstr "unter bestimmten Bedingungen. Bitte lesen Sie dazu die GNU GPLv3 für weitere Details."
+
+#: ../SparkleDiff/SparkleDiff.cs:99
+#, fuzzy
+msgid "SparkleDiff let's you compare revisions of an image file side by side."
+msgstr "SparkleDiff lässt Sie Versionen einer Bilddatei nebeneinander vergleichen."
+
+#: ../SparkleDiff/SparkleDiff.cs:101
+#, fuzzy
+msgid "Usage: sparklediff [FILE]"
+msgstr "Verwendung: sparklediff [Datei]"
+
+#: ../SparkleDiff/SparkleDiff.cs:102
+#, fuzzy
+msgid "Open an image file to show its revisions"
+msgstr "Öffnet eine Bilddatei um ihre Versionen anzuzeigen"
+
+#: ../SparkleDiff/SparkleDiff.cs:104 ../SparkleShare/SparkleShare.cs:99
+msgid "Arguments:"
+msgstr "Parameter:"
+
+#: ../SparkleDiff/SparkleDiff.cs:105 ../SparkleShare/SparkleShare.cs:101
+msgid "\t -h, --help\t\tDisplay this help text."
+msgstr "\t -h, --help\t\tDiesen Hilfe-Text nicht anzeigen."
 
 #: ../SparkleShare/SparkleDialog.cs:50
 msgid "Address of remote SparkleShare folder:"
@@ -54,12 +111,13 @@ msgid "Successfully synced folder ‘{0}’"
 msgstr "Verzeichnis »{0}« erfolgreich abgeglichen"
 
 #: ../SparkleShare/SparkleDialog.cs:198
+#, fuzzy
 msgid "Now make great stuff happen!"
-msgstr ""
+msgstr "Und jetzt, tu etwas großartiges!"
 
 #. Add a button to open the folder where the changed file is
 #: ../SparkleShare/SparkleDialog.cs:200 ../SparkleShare/SparkleRepo.cs:319
-#: ../SparkleShare/SparkleWindow.cs:62
+#: ../SparkleShare/SparkleWindow.cs:63
 msgid "Open Folder"
 msgstr "Verzeichnis öffnen"
 
@@ -106,71 +164,44 @@ msgstr[0] "vor einem Jahr"
 msgstr[1] "vor {0} Jahren"
 
 #: ../SparkleShare/SparkleHelpers.cs:197
+#, fuzzy
 msgid "Hold your ponies!"
-msgstr ""
+msgstr "Immer langsam mit den jungen Pferden!"
 
 #: ../SparkleShare/SparkleHelpers.cs:198
+#, fuzzy
 msgid ""
 "SparkleShare is known to be insanely fast with \n"
 "pictures of unicorns. Please make sure your internets\n"
 "are upgraded to the latest version to avoid problems."
 msgstr ""
+"SparkleShare ist bekannt dafür, Bilder von Einhörnern\n"
+"\r\n"
+"wahnsinnig schnell zu bearbeiten. Bitte stellen Sie sicher,\n"
+"\r\n"
+"dass Sie die neuest Version des Internets installiert haben,\n"
+"\r\n"
+"um Probleme zu vermeiden."
 
-#: ../SparkleShare/SparkleShare.cs:50
-msgid "Git wasn't found."
-msgstr "Git konnte nicht gefunden werden."
-
-#: ../SparkleShare/SparkleShare.cs:51
-msgid "You can get Git from http://git-scm.com/."
-msgstr "Sie können Git auf http://git-scm.com/ herunterladen."
-
-#: ../SparkleShare/SparkleShare.cs:58
-msgid "Sorry, you can't run SparkleShare with these permissions."
-msgstr "Entschuldigung, SparkleShare kann mit diesen Rechten nicht ausgeführt werden."
-
-#: ../SparkleShare/SparkleShare.cs:59
-msgid "Things will go utterly wrong."
-msgstr "Vieles würde nicht richtig funktionieren."
-
-#: ../SparkleShare/SparkleShare.cs:87
+#: ../SparkleShare/SparkleShare.cs:88
 msgid "SparkleShare Copyright (C) 2010 Hylke Bons"
 msgstr "SparkleShare Copyright (C) 2010 Hylke Bons"
 
-#: ../SparkleShare/SparkleShare.cs:89
-msgid "This program comes with ABSOLUTELY NO WARRANTY."
-msgstr "Diese Anwendung wird OHNE IRGENDEINE GARANTIE veröffentlicht."
-
-#: ../SparkleShare/SparkleShare.cs:90
-msgid "This is free software, and you are welcome to redistribute it "
-msgstr "Dies ist freie Software. Sie können es weitergeben und/oder modifizieren"
-
-#: ../SparkleShare/SparkleShare.cs:91
-msgid "under certain conditions. Please read the GNU GPLv3 for details."
-msgstr "unter bestimmten Bedingungen. Bitte lesen Sie dazu die GNU GPLv3 für weitere Details."
-
-#: ../SparkleShare/SparkleShare.cs:93
+#: ../SparkleShare/SparkleShare.cs:94
 msgid "SparkleShare syncs the ~/SparkleShare folder with remote repositories."
 msgstr "SparkleShare gleicht das Verzeichnis ~/SparkleShare mit entfernten Verzeichnissen ab"
 
-#: ../SparkleShare/SparkleShare.cs:95
+#: ../SparkleShare/SparkleShare.cs:96
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
 msgstr "Verwendung: sparkleshare [start|stop|restart] [OPTION]..."
 
-#: ../SparkleShare/SparkleShare.cs:96
+#: ../SparkleShare/SparkleShare.cs:97
 msgid "Sync SparkleShare folder with remote repositories."
 msgstr "SparkleShare Ordner mit entfernten Repositories abgleichen."
 
-#: ../SparkleShare/SparkleShare.cs:98
-msgid "Arguments:"
-msgstr "Parameter:"
-
-#: ../SparkleShare/SparkleShare.cs:99
+#: ../SparkleShare/SparkleShare.cs:100
 msgid "\t -d, --disable-gui\tDon't show the notification icon."
 msgstr "\t -d, --disable-gui\tBenachrichtigungs-Symbol nicht anzeigen."
-
-#: ../SparkleShare/SparkleShare.cs:100
-msgid "\t -h, --help\t\tDisplay this help text."
-msgstr "\t -h, --help\t\tDiesen Hilfe-Text nicht anzeigen."
 
 #: ../SparkleShare/SparkleStatusIcon.cs:69
 msgid "Error syncing"
@@ -212,7 +243,8 @@ msgstr "Sie haben noch keine Verzeichnisse konfiguriert."
 msgid "Add a Folder…"
 msgstr "Ein Verzeichnis hinzufügen …"
 
-#: ../SparkleShare/SparkleWindow.cs:50
+#. TRANSLATORS: {0} is a folder name, and {1} is a server address
+#: ../SparkleShare/SparkleWindow.cs:51
 #, csharp-format
 msgid "‘{0}’ on {1}"
 msgstr "»{0}« auf {1}"

@@ -145,7 +145,47 @@ namespace SparkleShare {
 			ShowAll ();
 
 		}
+		
+		public Image GetImage ()
+		{
+			return Image;
+		}
 
 	}
+
+
+	// Derived class for the image view on the left
+	public class LeftRevisionView : RevisionView {
+	
+		public LeftRevisionView (string [] revisions) : base (revisions) {
+
+			ComboBox.Active  = 1;
+
+			if (Direction == Gtk.TextDirection.Ltr)
+				ScrolledWindow.Placement = CornerType.TopRight;
+			else
+				ScrolledWindow.Placement = CornerType.TopLeft;
+
+		}
+	
+	}
+
+
+	// Derived class for the image view on the right
+	public class RightRevisionView : RevisionView {
+	
+		public RightRevisionView (string [] revisions) : base (revisions) {
+
+			ComboBox.Active  = 0;
+
+			if (Direction == Gtk.TextDirection.Ltr)
+				ScrolledWindow.Placement = CornerType.TopLeft;
+			else
+				ScrolledWindow.Placement = CornerType.TopRight;
+
+		}
+	
+	}
+
 
 }

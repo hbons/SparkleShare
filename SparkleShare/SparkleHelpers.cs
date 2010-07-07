@@ -33,6 +33,7 @@ namespace SparkleShare {
 			return Catalog.GetString (s);
 		}
 
+
 		// Get's the avatar for a specific email address and size
 		public static Gdk.Pixbuf GetAvatar (string Email, int Size)
 		{
@@ -89,6 +90,7 @@ namespace SparkleShare {
 			return BitConverter.ToString (EncodedBytes).ToLower ().Replace ("-", "");
 		}
 
+
 		// Convert the more human readable sparkle:// url to
 		// something Git can use
 		// Example: sparkle://gitorious.org/sparkleshare
@@ -136,9 +138,11 @@ namespace SparkleShare {
 
 		public static bool ShowDebugInfo = true;
 
+
 		// Show debug info if needed
 		public static void DebugInfo (string Type, string Message)
 		{
+
 			if (ShowDebugInfo) {
 				DateTime DateTime = new DateTime ();					
 				string TimeStamp = DateTime.Now.ToString ("HH:mm:ss");
@@ -152,6 +156,7 @@ namespace SparkleShare {
 		// Example: "about 5 hours ago"
 		public static string ToRelativeDate (DateTime date_time)
 		{
+
 			TimeSpan time_span = new TimeSpan (0);
 			time_span = DateTime.Now - date_time;
 
@@ -167,19 +172,19 @@ namespace SparkleShare {
 				                      time_span.Minutes);
 			}
 
-			if (time_span <= TimeSpan.FromHours(24)) {
+			if (time_span <= TimeSpan.FromHours (24)) {
 				return string.Format (Catalog.GetPluralString ("about an hour ago", "about {0} hours ago",
 				                                               time_span.Hours),
 				                      time_span.Hours);
 			}
 
-			if (time_span <= TimeSpan.FromDays(30)) {
+			if (time_span <= TimeSpan.FromDays (30)) {
 				return string.Format (Catalog.GetPluralString ("yesterday", "{0} days ago",
 				                                               time_span.Days),
 				                      time_span.Days);
 			}
 
-			if (time_span <= TimeSpan.FromDays(365)) {
+			if (time_span <= TimeSpan.FromDays (365)) {
 				return string.Format (Catalog.GetPluralString ("a month ago", "{0} months ago",
 					                                           (int) time_span.Days / 30),
 					                  (int) time_span.Days / 30);
@@ -188,10 +193,13 @@ namespace SparkleShare {
 			return string.Format (Catalog.GetPluralString ("a year ago", "{0} years ago",
 			                                               (int) time_span.Days / 365),
 			                      (int) time_span.Days / 365);
+
 		}
+
 
 		// Checks for unicorns
 		public static void CheckForUnicorns (string s) {
+
 			s = s.ToLower ();
 			if (s.Contains ("unicorn") && (s.Contains (".png") || s.Contains (".jpg"))) {
 				string title   = _("Hold your ponies!");
@@ -201,6 +209,7 @@ namespace SparkleShare {
 				SparkleBubble unicorn_bubble = new SparkleBubble (title, subtext);
 				unicorn_bubble.Show ();
 			}
+
 		}
 
 	}
