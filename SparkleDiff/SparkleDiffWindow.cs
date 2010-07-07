@@ -161,7 +161,7 @@ namespace SparkleShare {
 		private void ResizeToViews ()
 		{
 
-			int new_width  = ViewLeft.GetImage ().Pixbuf.Width + ViewRight.GetImage ().Pixbuf.Width + 100;
+			int new_width  = ViewLeft.GetImage ().Pixbuf.Width + ViewRight.GetImage ().Pixbuf.Width + 200;
 			int new_height = 200;
 
 			if (ViewLeft.GetImage ().Pixbuf.Height > ViewRight.GetImage ().Pixbuf.Height)
