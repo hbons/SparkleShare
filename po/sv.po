@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-04 17:28+0000\n"
+"POT-Creation-Date: 2010-07-06 06:09+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Samuel Thollander <samuel.thollander@gmail.com>\n"
 "Language-Team: \n"
@@ -14,20 +14,59 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Language: Swedish\n"
 
-#. TRANSLATORS: The parameter is a filename
-#: ../SparkleDiff/SparkleDiff.cs:90
-#, csharp-format
-msgid "Comparing Revisions of ‘{0}’"
-msgstr "Jämför versioner av ‘{0}’"
+#: ../SparkleDiff/SparkleDiff.cs:74 ../SparkleShare/SparkleShare.cs:50
+msgid "Git wasn't found."
+msgstr "Git hittades inte."
 
-#: ../SparkleDiff/SparkleDiff.cs:122
-msgid "Current Revision"
-msgstr "Nuvarande revision"
+#: ../SparkleDiff/SparkleDiff.cs:75 ../SparkleShare/SparkleShare.cs:51
+msgid "You can get Git from http://git-scm.com/."
+msgstr "Du kan skaffa Git från http://git-scm.com/."
 
-#. TRANSLATORS: This is a format specifier according to System.Globalization.DateTimeFormatInfo
-#: ../SparkleDiff/SparkleDiff.cs:125
-msgid "d MMM\tH:mm"
-msgstr "d MMM\tH:mm"
+#: ../SparkleDiff/SparkleDiff.cs:82 ../SparkleShare/SparkleShare.cs:58
+msgid "Sorry, you can't run SparkleShare with these permissions."
+msgstr "Ledsen, men du kan inte köra SparkleShare med dessa rättigheter."
+
+#: ../SparkleDiff/SparkleDiff.cs:83 ../SparkleShare/SparkleShare.cs:59
+#, fuzzy
+msgid "Things would go utterly wrong."
+msgstr "Saker och ting kommer gå åt skogen."
+
+#: ../SparkleDiff/SparkleDiff.cs:121
+#, fuzzy
+msgid "SparkleDiff Copyright (C) 2010 Hylke Bons"
+msgstr "SparkleShare Copyright (C) 2010 Hylke Bons"
+
+#: ../SparkleDiff/SparkleDiff.cs:123 ../SparkleShare/SparkleShare.cs:90
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr "Detta program kommer utan några som helst garantier."
+
+#: ../SparkleDiff/SparkleDiff.cs:124 ../SparkleShare/SparkleShare.cs:91
+msgid "This is free software, and you are welcome to redistribute it "
+msgstr "Detta är fri programvara och du är välkommen att distribuera det "
+
+#: ../SparkleDiff/SparkleDiff.cs:125 ../SparkleShare/SparkleShare.cs:92
+msgid "under certain conditions. Please read the GNU GPLv3 for details."
+msgstr "under vissa förhållanden. Vänligen läs GNU GPL v3 för detaljer."
+
+#: ../SparkleDiff/SparkleDiff.cs:127
+msgid "SparkleDiff let's you compare revisions of an image file side by side."
+msgstr "SparkleDiff visar skillnaderna mellan två versioner av samma bild sida vid sida."
+
+#: ../SparkleDiff/SparkleDiff.cs:129
+msgid "Usage: sparklediff [FILE]"
+msgstr "Användning: sparklediff [FIL]"
+
+#: ../SparkleDiff/SparkleDiff.cs:130
+msgid "Open an image file to show its revisions"
+msgstr "Öppna en fil för att se dess versioner"
+
+#: ../SparkleDiff/SparkleDiff.cs:132 ../SparkleShare/SparkleShare.cs:99
+msgid "Arguments:"
+msgstr "Argument:"
+
+#: ../SparkleDiff/SparkleDiff.cs:133 ../SparkleShare/SparkleShare.cs:101
+msgid "\t -h, --help\t\tDisplay this help text."
+msgstr "\t -h, --help\t\tVisa denna hjälptext."
 
 #: ../SparkleShare/SparkleDialog.cs:50
 msgid "Address of remote SparkleShare folder:"
@@ -70,57 +109,57 @@ msgstr "Nu kommer häftiga saker att hända"
 
 #. Add a button to open the folder where the changed file is
 #: ../SparkleShare/SparkleDialog.cs:200 ../SparkleShare/SparkleRepo.cs:319
-#: ../SparkleShare/SparkleWindow.cs:62
+#: ../SparkleShare/SparkleWindow.cs:63
 msgid "Open Folder"
 msgstr "Öppna mapp"
 
-#: ../SparkleShare/SparkleHelpers.cs:159
+#: ../SparkleShare/SparkleHelpers.cs:164
 #, csharp-format
 msgid "a second ago"
 msgid_plural "{0} seconds ago"
 msgstr[0] "en sekund sedan"
 msgstr[1] "{0} sekunder sedan"
 
-#: ../SparkleShare/SparkleHelpers.cs:165
+#: ../SparkleShare/SparkleHelpers.cs:170
 #, csharp-format
 msgid "a minute ago"
 msgid_plural "about {0} minutes ago"
 msgstr[0] "en minut sedan"
 msgstr[1] "{0} minuter sedan"
 
-#: ../SparkleShare/SparkleHelpers.cs:171
+#: ../SparkleShare/SparkleHelpers.cs:176
 #, csharp-format
 msgid "about an hour ago"
 msgid_plural "about {0} hours ago"
 msgstr[0] "ungefär en timme sedan"
 msgstr[1] "ungefär {0} timmar sedan"
 
-#: ../SparkleShare/SparkleHelpers.cs:177
+#: ../SparkleShare/SparkleHelpers.cs:182
 #, csharp-format
 msgid "yesterday"
 msgid_plural "{0} days ago"
 msgstr[0] "igår"
 msgstr[1] "{0} dagar sedan"
 
-#: ../SparkleShare/SparkleHelpers.cs:183
+#: ../SparkleShare/SparkleHelpers.cs:188
 #, csharp-format
 msgid "a month ago"
 msgid_plural "{0} months ago"
 msgstr[0] "en månad sedan"
 msgstr[1] "{0} månader sedan"
 
-#: ../SparkleShare/SparkleHelpers.cs:188
+#: ../SparkleShare/SparkleHelpers.cs:193
 #, csharp-format
 msgid "a year ago"
 msgid_plural "{0} years ago"
 msgstr[0] "ett år sedan"
 msgstr[1] "{0} år sedan"
 
-#: ../SparkleShare/SparkleHelpers.cs:197
+#: ../SparkleShare/SparkleHelpers.cs:205
 msgid "Hold your ponies!"
 msgstr "Håll in dina ponnyer!"
 
-#: ../SparkleShare/SparkleHelpers.cs:198
+#: ../SparkleShare/SparkleHelpers.cs:206
 msgid ""
 "SparkleShare is known to be insanely fast with \n"
 "pictures of unicorns. Please make sure your internets\n"
@@ -130,61 +169,25 @@ msgstr ""
 "bilder på enhörningar. Vänligen säkerställ att dina internet\n"
 "är uppgraderade till den senaste versionen för att slippa problem."
 
-#: ../SparkleShare/SparkleShare.cs:50
-msgid "Git wasn't found."
-msgstr "Git hittades inte."
-
-#: ../SparkleShare/SparkleShare.cs:51
-msgid "You can get Git from http://git-scm.com/."
-msgstr "Du kan skaffa Git från http://git-scm.com/."
-
-#: ../SparkleShare/SparkleShare.cs:58
-msgid "Sorry, you can't run SparkleShare with these permissions."
-msgstr "Ledsen, men du kan inte köra SparkleShare med dessa rättigheter."
-
-#: ../SparkleShare/SparkleShare.cs:59
-msgid "Things will go utterly wrong."
-msgstr "Saker och ting kommer gå åt skogen."
-
-#: ../SparkleShare/SparkleShare.cs:87
+#: ../SparkleShare/SparkleShare.cs:88
 msgid "SparkleShare Copyright (C) 2010 Hylke Bons"
 msgstr "SparkleShare Copyright (C) 2010 Hylke Bons"
 
-#: ../SparkleShare/SparkleShare.cs:89
-msgid "This program comes with ABSOLUTELY NO WARRANTY."
-msgstr "Detta program kommer utan några som helst garantier."
-
-#: ../SparkleShare/SparkleShare.cs:90
-msgid "This is free software, and you are welcome to redistribute it "
-msgstr "Detta är fri programvara och du är välkommen att distribuera det "
-
-#: ../SparkleShare/SparkleShare.cs:91
-msgid "under certain conditions. Please read the GNU GPLv3 for details."
-msgstr "under vissa förhållanden. Vänligen läs GNU GPL v3 för detaljer."
-
-#: ../SparkleShare/SparkleShare.cs:93
+#: ../SparkleShare/SparkleShare.cs:94
 msgid "SparkleShare syncs the ~/SparkleShare folder with remote repositories."
 msgstr "SparkleShare synkroniserar ~/SparkleShare mappen med fjärrmappar."
 
-#: ../SparkleShare/SparkleShare.cs:95
+#: ../SparkleShare/SparkleShare.cs:96
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
 msgstr "Användning: sparkleshare [start|stop|restart] [INSTÄLLNING]"
 
-#: ../SparkleShare/SparkleShare.cs:96
+#: ../SparkleShare/SparkleShare.cs:97
 msgid "Sync SparkleShare folder with remote repositories."
 msgstr "Synkronisera SparkleShare mappen med fjärrmappar."
 
-#: ../SparkleShare/SparkleShare.cs:98
-msgid "Arguments:"
-msgstr "Argument:"
-
-#: ../SparkleShare/SparkleShare.cs:99
+#: ../SparkleShare/SparkleShare.cs:100
 msgid "\t -d, --disable-gui\tDon't show the notification icon."
 msgstr "\t -d, --disable-gui\tVisa inte meddelandeikonen."
-
-#: ../SparkleShare/SparkleShare.cs:100
-msgid "\t -h, --help\t\tDisplay this help text."
-msgstr "\t -h, --help\t\tVisa denna hjälptext."
 
 #: ../SparkleShare/SparkleStatusIcon.cs:69
 msgid "Error syncing"
@@ -226,7 +229,17 @@ msgstr "Du har inga mappar inställda ännu."
 msgid "Add a Folder…"
 msgstr "Lägg till en mapp…"
 
-#: ../SparkleShare/SparkleWindow.cs:50
+#. TRANSLATORS: {0} is a folder name, and {1} is a server address
+#: ../SparkleShare/SparkleWindow.cs:51
 #, csharp-format
 msgid "‘{0}’ on {1}"
 msgstr "{0}’ på {1}"
+
+#~ msgid "Comparing Revisions of ‘{0}’"
+#~ msgstr "Jämför versioner av ‘{0}’"
+
+#~ msgid "Current Revision"
+#~ msgstr "Nuvarande revision"
+
+#~ msgid "d MMM\tH:mm"
+#~ msgstr "d MMM\tH:mm"
