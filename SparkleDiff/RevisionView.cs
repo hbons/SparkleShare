@@ -68,11 +68,10 @@ namespace SparkleShare {
 				ButtonNext.Clicked += NextInComboBox;
 				ButtonNext.ExposeEvent += EqualizeSizes;
 
-			controls.PackStart (new Label (""), true, false, 0);
 			controls.PackStart (ButtonPrevious, false, false, 0);
 			controls.PackStart (ButtonNext, false, false, 0);
-			controls.PackStart (ComboBox, false, false, 9);
 			controls.PackStart (new Label (""), true, false, 0);
+			controls.PackStart (ComboBox, false, false, 0);
 
 			PackStart (controls, false, false, 0);
 			PackStart (ScrolledWindow, true, true, 0);
