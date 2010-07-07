@@ -94,40 +94,41 @@ namespace SparkleShare {
 
 					ViewLeft.SetImage  (new RevisionImage (file_path, Revisions [1]));
 					ViewRight.SetImage (new RevisionImage (file_path, Revisions [0]));
-					
-					ViewLeft.ComboBox.Changed += delegate {
-
-						RevisionImage revision_image;
-						revision_image = new RevisionImage (file_path, Revisions [ViewLeft.ComboBox.Active]);
-						ViewLeft.SetImage (revision_image);
-
-						HookUpViews ();
-						
-						ViewLeft.ScrolledWindow.Hadjustment = ViewRight.ScrolledWindow.Hadjustment;
-						ViewLeft.ScrolledWindow.Vadjustment = ViewRight.ScrolledWindow.Vadjustment;
-						
-						ViewLeft.UpdateControls ();
-
-					};
-
-					ViewRight.ComboBox.Changed += delegate {
-
-						RevisionImage revision_image;
-						revision_image = new RevisionImage (file_path, Revisions [ViewRight.ComboBox.Active]);
-						ViewRight.SetImage (revision_image);
-
-						HookUpViews ();
-
-						ViewRight.ScrolledWindow.Hadjustment = ViewLeft.ScrolledWindow.Hadjustment;
-						ViewRight.ScrolledWindow.Vadjustment = ViewLeft.ScrolledWindow.Vadjustment;
-
-						ViewRight.UpdateControls ();
-
-					};
-
 
 				layout_horizontal.PackStart (ViewLeft);
 				layout_horizontal.PackStart (ViewRight);
+
+
+				ViewLeft.ComboBox.Changed += delegate {
+
+					RevisionImage revision_image;
+					revision_image = new RevisionImage (file_path, Revisions [ViewLeft.ComboBox.Active]);
+					ViewLeft.SetImage (revision_image);
+
+					HookUpViews ();
+					
+					ViewLeft.ScrolledWindow.Hadjustment = ViewRight.ScrolledWindow.Hadjustment;
+					ViewLeft.ScrolledWindow.Vadjustment = ViewRight.ScrolledWindow.Vadjustment;
+					
+					ViewLeft.UpdateControls ();
+
+				};
+
+				ViewRight.ComboBox.Changed += delegate {
+
+					RevisionImage revision_image;
+					revision_image = new RevisionImage (file_path, Revisions [ViewRight.ComboBox.Active]);
+					ViewRight.SetImage (revision_image);
+
+					HookUpViews ();
+
+					ViewRight.ScrolledWindow.Hadjustment = ViewLeft.ScrolledWindow.Hadjustment;
+					ViewRight.ScrolledWindow.Vadjustment = ViewLeft.ScrolledWindow.Vadjustment;
+
+					ViewRight.UpdateControls ();
+
+				};
+
 
 				ResizeToViews ();
 
