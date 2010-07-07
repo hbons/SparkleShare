@@ -36,7 +36,8 @@ namespace SparkleShare {
 		// Finds out the path relative to the Git root directory
 		public static string GetPathFromGitRoot (string file_path)
 		{
-			return file_path.TrimStart (GetGitRoot (file_path).ToCharArray ());
+			string git_root = GetGitRoot (file_path);
+			return file_path.Substring (git_root.Length + 1);
 		}
 
 
@@ -59,6 +60,7 @@ namespace SparkleShare {
 			
 		}
 
+
 		public static void Main (string [] args)
 		{
 
@@ -77,8 +79,9 @@ namespace SparkleShare {
 				Environment.Exit (0);
 			}
 
-			// Don't allow running as root
 			UnixUserInfo UnixUserInfo =	new UnixUserInfo (UnixEnvironment.UserName);
+
+			// Don't allow running as root
 			if (UnixUserInfo.UserId == 0) {
 				Console.WriteLine (_("Sorry, you can't run SparkleShare with these permissions."));
 				Console.WriteLine (_("Things would go utterly wrong.")); 
@@ -122,9 +125,8 @@ namespace SparkleShare {
 				
 			}
 
-
-
 		}
+
 
 		// Gets a list of all earlier revisions of this file
 		public static string [] GetRevisionsForFilePath (string file_path)
@@ -147,7 +149,6 @@ namespace SparkleShare {
 			return revisions;
 
 		}
-
 
 
 		// Prints the help output
