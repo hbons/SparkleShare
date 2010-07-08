@@ -123,6 +123,10 @@ namespace SparkleShare {
 
 				}
 				
+			} else {
+
+			 	ShowHelp ();
+
 			}
 
 		}
@@ -162,7 +166,7 @@ namespace SparkleShare {
 			Console.WriteLine (" ");
 			Console.WriteLine (_("SparkleDiff let's you compare revisions of an image file side by side."));
 			Console.WriteLine (" ");
-			Console.WriteLine (_("Usage: sparklediff [FILE]"));
+			Console.WriteLine (_("Usage: sparklediff [PATH]"));
 			Console.WriteLine (_("Open an image file to show its revisions"));
 			Console.WriteLine (" ");
 			Console.WriteLine (_("Arguments:"));
