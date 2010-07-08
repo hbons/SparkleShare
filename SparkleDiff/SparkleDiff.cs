@@ -95,7 +95,7 @@ namespace SparkleShare {
 					Environment.Exit (0);
 				}
 
-				string file_path = args [0];
+				string file_path = System.IO.Path.GetFullPath (args [0]);
 
 				if (File.Exists (file_path)) {
 
@@ -166,7 +166,7 @@ namespace SparkleShare {
 			Console.WriteLine (" ");
 			Console.WriteLine (_("SparkleDiff let's you compare revisions of an image file side by side."));
 			Console.WriteLine (" ");
-			Console.WriteLine (_("Usage: sparklediff [PATH]"));
+			Console.WriteLine (_("Usage: sparklediff [FILE]"));
 			Console.WriteLine (_("Open an image file to show its revisions"));
 			Console.WriteLine (" ");
 			Console.WriteLine (_("Arguments:"));
