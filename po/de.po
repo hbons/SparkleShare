@@ -176,7 +176,6 @@ msgstr[0] "vor einem Jahr"
 msgstr[1] "vor {0} Jahren"
 
 #: ../SparkleShare/SparkleHelpers.cs:205
-#, fuzzy
 msgid "Hold your ponies!"
 msgstr "Immer langsam mit den jungen Pferden!"
 
@@ -187,11 +186,8 @@ msgid ""
 "are upgraded to the latest version to avoid problems."
 msgstr ""
 "SparkleShare ist bekannt dafür, Bilder von Einhörnern\n"
-"\r\n"
-"wahnsinnig schnell zu bearbeiten. Bitte stelle sicher,\n"
-"\r\n"
-"dass du die neuest Version des Internets installiert hast,\n"
-"\r\n"
+"wahnsinnig schnell zu bearbeiten. Bitte stellen Sie sicher,\n"
+"dass Sie die neueste Version des Internets installiert haben,\n"
 "um Probleme zu vermeiden."
 
 #: ../SparkleShare/SparkleShare.cs:88
