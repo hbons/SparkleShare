@@ -36,7 +36,6 @@ msgid "Things would go utterly wrong."
 msgstr "Vieles würde nicht richtig funktionieren."
 
 #: ../SparkleDiff/SparkleDiff.cs:157
-#, fuzzy
 msgid "SparkleDiff Copyright (C) 2010 Hylke Bons"
 msgstr "SparkleShare Copyright (C) 2010 Hylke Bons"
 
@@ -57,14 +56,12 @@ msgid "SparkleDiff let's you compare revisions of an image file side by side."
 msgstr "SparkleDiff lässt dich Versionen einer Bilddatei nebeneinander vergleichen."
 
 #: ../SparkleDiff/SparkleDiff.cs:165
-#, fuzzy
 msgid "Usage: sparklediff [FILE]"
 msgstr "Verwendung: sparklediff [Datei]"
 
 #: ../SparkleDiff/SparkleDiff.cs:166
-#, fuzzy
 msgid "Open an image file to show its revisions"
-msgstr "Öffnet eine Bilddatei um ihre Versionen anzuzeigen"
+msgstr "Öffnet eine Bilddatei zur Anzeige ihrer Versionen"
 
 #: ../SparkleDiff/SparkleDiff.cs:168 ../SparkleShare/SparkleShare.cs:99
 msgid "Arguments:"
@@ -128,7 +125,7 @@ msgstr "Verzeichnis »{0}« erfolgreich abgeglichen"
 #: ../SparkleShare/SparkleDialog.cs:198
 #, fuzzy
 msgid "Now make great stuff happen!"
-msgstr "Und jetzt, tu etwas großartiges!"
+msgstr "Und jetzt, tue etwas großartiges!"
 
 #. Add a button to open the folder where the changed file is
 #: ../SparkleShare/SparkleDialog.cs:200 ../SparkleShare/SparkleRepo.cs:319
