@@ -57,7 +57,7 @@ msgstr "SparkleDiff lässt dich Versionen einer Bilddatei nebeneinander vergleic
 
 #: ../SparkleDiff/SparkleDiff.cs:165
 msgid "Usage: sparklediff [FILE]"
-msgstr "Verwendung: sparklediff [Datei]"
+msgstr "Verwendung: sparklediff [DATEI]"
 
 #: ../SparkleDiff/SparkleDiff.cs:166
 msgid "Open an image file to show its revisions"
@@ -69,13 +69,13 @@ msgstr "Parameter:"
 
 #: ../SparkleDiff/SparkleDiff.cs:169 ../SparkleShare/SparkleShare.cs:101
 msgid "\t -h, --help\t\tDisplay this help text."
-msgstr "\t -h, --help\t\tDiesen Hilfe-Text nicht anzeigen."
+msgstr "\t -h, --help\t\tDiesen Hilfe-Text anzeigen."
 
 #. TRANSLATORS: The parameter is a filename
 #: ../SparkleDiff/SparkleDiffWindow.cs:53
 #, csharp-format
 msgid "Comparing Revisions of ‘{0}’"
-msgstr "Vergleiche die Versionen aus ‘{0}’"
+msgstr "Versionen von »{0}« vergleichen"
 
 #: ../SparkleDiff/SparkleDiffWindow.cs:81
 msgid "Current Revision"
