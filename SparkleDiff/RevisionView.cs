@@ -14,7 +14,11 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+// TODO: Hand cursor when hovering icon view items
+// TODO: Use theme colours
+
 using Gtk;
+using Mono.Unix;
 using System;
 
 namespace SparkleShare {
@@ -24,142 +28,224 @@ namespace SparkleShare {
 	public class RevisionView : VBox
 	{
 
-		public ScrolledWindow ScrolledWindow;
-		public ComboBox ComboBox;
-		public Button ButtonPrevious;
-		public Button ButtonNext;
-		
-		private int ValueCount;
-		private Image Image;
+		// Short alias for the translations
+		public static string _ (string s)
+		{
+			return Catalog.GetString (s);
+		}
 
-		public RevisionView (string [] revisions) : base (false, 6) 
+
+		public ScrolledWindow ScrolledWindow;
+		public IconView IconView;
+		
+		private ToggleButton ToggleButton;
+		private Viewport Viewport;
+		private ListStore Store;
+		private Image Image;
+		private int Selected;
+		private int Count;
+
+
+		public RevisionView () : base (false, 0) 
 		{
 
-			Image = new Image ();
+			Count = 0;
+			Selected = 0;
+
+			ToggleButton = new ToggleButton ();
+			ToggleButton.Clicked += ToggleView;
+			ToggleButton.Relief = ReliefStyle.None;
 
 			ScrolledWindow = new ScrolledWindow ();
 
-			ScrolledWindow.AddWithViewport (Image);
+			Viewport = new Viewport ();
+			Viewport.Add (new Label (""));
 
-			HBox controls = new HBox (false, 3);
-			controls.BorderWidth = 0;
-				
-				Arrow arrow_left = new Arrow (ArrowType.Left, ShadowType.None);
-				ButtonPrevious = new Button ();
-				ButtonPrevious.Add (arrow_left);
-				ButtonPrevious.Clicked += PreviousInComboBox;
-				ButtonPrevious.ExposeEvent += EqualizeSizes;
+			Store = new ListStore(typeof (Gdk.Pixbuf),
+			                      typeof (string),
+			                      typeof (int));
 
-				ValueCount = 0;
+			IconView = new IconView (Store);
+			IconView.SelectionChanged += ChangeSelection;
+			IconView.MarkupColumn = 1;
+			IconView.Margin       = 12;
+			IconView.Orientation  = Orientation.Horizontal;
+			IconView.PixbufColumn = 0;
+			IconView.Spacing      = 12;
+			
+			Image = new Image ();
 
-				ComboBox = ComboBox.NewText ();
-
-				foreach (string revision in revisions) {
-					ComboBox.AppendText (revision);
-				}
-
-				ComboBox.Active = 0;
-				
-				ValueCount = revisions.Length;
-
-				Arrow arrow_right = new Arrow (ArrowType.Right, ShadowType.None);
-				ButtonNext = new Button ();
-				ButtonNext.Add (arrow_right);
-				ButtonNext.Clicked += NextInComboBox;
-				ButtonNext.ExposeEvent += EqualizeSizes;
-
-			controls.PackStart (ButtonPrevious, false, false, 0);
-			controls.PackStart (ButtonNext, false, false, 0);
-			controls.PackStart (new Label (""), true, false, 0);
-			controls.PackStart (ComboBox, false, false, 0);
-
-			PackStart (controls, false, false, 0);
+			ScrolledWindow.Add (Viewport);
 			PackStart (ScrolledWindow, true, true, 0);
-
-			Shown += delegate {
-				UpdateControls ();
-			};
-
-		}
-
-
-		// Equalizes the height and width of a button when exposed
-		private void EqualizeSizes (object o, ExposeEventArgs args) {
-
-			Button button = (Button) o;
-			button.WidthRequest = button.Allocation.Height;
 
 		}
 		
 
-		public void NextInComboBox (object o, EventArgs args) {
+		// Changes the selection and enforces a policy of always having something selected
+		public void ChangeSelection (object o, EventArgs args)
+		{
 
-			if (ComboBox.Active - 1 >= 0)
-				ComboBox.Active--;
+			if (IconView.SelectedItems.Length > 0) {
 
-//			UpdateControls ();
+				TreeIter iter;
+				Store.GetIter (out iter, IconView.SelectedItems [0]);
+				SetSelected ((int) Store.GetValue (iter, 2));
 
-		}
+			} else {
+
+				IconView.SelectPath (new TreePath (GetSelected ().ToString()));
+
+			}
 	
+		}
 
-		public void PreviousInComboBox (object o, EventArgs args) {
 
-			if (ComboBox.Active + 1 < ValueCount)
-				ComboBox.Active++;
+		// Makes sure everything is in place before showing the widget
+		new public void ShowAll ()
+		{
 
-//			UpdateControls ();
+			if (Children.Length == 2) {
+
+				ToggleButton = (ToggleButton) Children [0];
+				ToggleButton.Remove (ToggleButton.Child);
+
+			} else {
+
+				ToggleButton = new ToggleButton ();
+				ToggleButton.Relief = ReliefStyle.None;
+				ToggleButton.Clicked += ToggleView;
+				PackStart (ToggleButton, false, false, 6);
+
+			}
+			
+			HBox layout_horizontal = new HBox (false, 12);
+			layout_horizontal.BorderWidth = 6;
+
+				TreeIter iter;
+				Store.GetIter (out iter, new TreePath (GetSelected ().ToString()));
+
+				string text = (string) Store.GetValue (iter, 1);
+				Gdk.Pixbuf pixbuf = (Gdk.Pixbuf) Store.GetValue (iter, 0);
+
+				Label label = new Label (text);
+				label.UseMarkup = true;
+
+				Arrow arrow_down = new Arrow (ArrowType.Down, ShadowType.None);
+
+			layout_horizontal.PackStart (new Image (pixbuf), false, false, 0);
+			layout_horizontal.PackStart (label, false, false, 0);
+			layout_horizontal.PackStart (new Label (""), true, true, 0);
+			layout_horizontal.PackStart (arrow_down, false, false, 0);
+
+			ToggleButton.Add (layout_horizontal);
+			ReorderChild (ToggleButton, 0);
+
+			TreePath path = new TreePath (Selected.ToString());
+			IconView.SelectPath (path);
+
+			base.ShowAll ();
 
 		}
 
 
-		// Updates the buttons to be disabled or enabled when needed
-		public void UpdateControls () {
+		// Adds a revision to the combobox
+		public void AddRow (Gdk.Pixbuf pixbuf, string header, string subtext)
+		{
 
-			ButtonPrevious.State = StateType.Normal;
-			ButtonNext.State     = StateType.Normal;
+			Store.AppendValues (pixbuf, "<b>" + header + "</b>\n<span fgcolor='#777'>" + subtext + "</span>", Count);
+			IconView.Model = Store;
+			Count++;
 
-			// TODO: Disable Next or Previous buttons when at the first or last value of the combobox
-			// I can't get this to work! >:(
+		}
 
-			if (ComboBox.Active == ValueCount - 1) {
-				ButtonPrevious.State = StateType.Insensitive;
+
+		// Toggles between a displayed image and a list of revisions		
+		public void ToggleView (object o, EventArgs args)
+		{
+
+			Viewport.Remove (Viewport.Child);
+
+			if (ToggleButton.Active) {
+			
+				Viewport.Add (IconView);
+				TreePath path = new TreePath (GetSelected ().ToString());
+
+				IconView.ScrollToPath (path, (float) 0.5, (float) 0.5);
+
+			} else {
+
+				Viewport.Add (Image);
+
 			}
-
-			if (ComboBox.Active == 0) {
-				ButtonNext.State = StateType.Insensitive;
-			}
-
+			
+			ShowAll ();
 
 		}
 
 
 		// Changes the image that is viewed
-		public void SetImage (Image image) {
+		public void SetImage (Image image)
+		{
 
 			Image = image;
-			Remove (ScrolledWindow);
-			ScrolledWindow = new ScrolledWindow ();
-			ScrolledWindow.AddWithViewport (Image);
-			Add (ScrolledWindow);
+			Viewport.Remove (Viewport.Child);
+			Viewport.Add (Image);
+			ToggleButton.Active = false;
 			ShowAll ();
 
 		}
-		
+
+
+		// Returns the image that is currently viewed
 		public Image GetImage ()
 		{
 			return Image;
+		}
+		
+
+		// Selects an item by number
+		public bool SetSelected (int i)
+		{
+
+			if (i > -1 && i <= Count) {
+				Selected = i;
+				return true;
+			}
+
+			return false;
+
+		}
+
+
+		// Returns the number of the currently selected item
+		public int GetSelected ()
+		{
+			return Selected;
+		}
+
+
+		// Looks up an icon from the system's theme
+		public Gdk.Pixbuf GetIcon (string name, int size)
+		{
+			IconTheme icon_theme = new IconTheme ();
+			icon_theme.AppendSearchPath (System.IO.Path.Combine ("/usr/share/sparkleshare", "icons"));
+			return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
 		}
 
 	}
 
 
 	// Derived class for the image view on the left
-	public class LeftRevisionView : RevisionView {
-	
-		public LeftRevisionView (string [] revisions) : base (revisions) {
+	public class LeftRevisionView : RevisionView
+	{
 
-			ComboBox.Active  = 1;
+		public LeftRevisionView () : base ()
+		{
 
+			// Select the second revision
+			SetSelected (1);
+
+			// Take reading direction for time into account
 			if (Direction == Gtk.TextDirection.Ltr)
 				ScrolledWindow.Placement = CornerType.TopRight;
 			else
@@ -171,12 +257,15 @@ namespace SparkleShare {
 
 
 	// Derived class for the image view on the right
-	public class RightRevisionView : RevisionView {
-	
-		public RightRevisionView (string [] revisions) : base (revisions) {
+	public class RightRevisionView : RevisionView
+	{
 
-			ComboBox.Active  = 0;
+		public RightRevisionView () : base ()
+		{
 
+			SetSelected (0);
+
+			// Take reading direction for time into account
 			if (Direction == Gtk.TextDirection.Ltr)
 				ScrolledWindow.Placement = CornerType.TopLeft;
 			else
@@ -185,6 +274,5 @@ namespace SparkleShare {
 		}
 	
 	}
-
 
 }
