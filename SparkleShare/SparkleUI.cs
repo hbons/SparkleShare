@@ -137,7 +137,8 @@ namespace SparkleShare {
 			// Don't create the window and status 
 			// icon when --disable-gui was given
 			if (!HideUI) {
-				
+				SparkleIntro intro = new SparkleIntro ();
+				intro.ShowAll ();
 				// Show a notification if there are no folders yet
 				if (SparkleShare.Repositories.Length == 0) {
 
@@ -193,7 +194,7 @@ namespace SparkleShare {
 
 			// Create place to store configuration user's home folder
 			string ConfigPath = SparklePaths.SparkleConfigPath;
-			string AvatarPath = SparklePaths.SparkleAvatarPath;
+			string LocalIconPath = SparklePaths.SparkleLocalIconPath;
 
 			if (!Directory.Exists (ConfigPath)) {
 
@@ -201,8 +202,8 @@ namespace SparkleShare {
 				SparkleHelpers.DebugInfo ("Config", "Created '" + ConfigPath + "'");
 
 				// Create a place to store the avatars
-				Directory.CreateDirectory (AvatarPath);
-				SparkleHelpers.DebugInfo ("Config", "Created '" + AvatarPath + "'");
+				Directory.CreateDirectory (LocalIconPath);
+				SparkleHelpers.DebugInfo ("Config", "Created '" + LocalIconPath + "'");
 
 			}
 			

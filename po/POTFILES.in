@@ -3,6 +3,7 @@
 # after adding files here.
 [encoding: UTF-8]
 SparkleDiff/SparkleDiff.cs
+SparkleDiff/SparkleDiffWindow.cs
 SparkleShare/SparkleBubble.cs
 SparkleShare/SparkleDialog.cs
 SparkleShare/SparkleHelpers.cs
