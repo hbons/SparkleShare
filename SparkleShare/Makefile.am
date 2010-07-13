@@ -12,6 +12,7 @@ Defines.cs \
 SparkleBubble.cs \
 SparkleDialog.cs \
 SparkleHelpers.cs \
+SparkleIntro.cs \
 SparklePaths.cs \
 SparklePlatform.cs \
 SparkleRepo.cs \

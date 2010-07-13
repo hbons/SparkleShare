@@ -34,18 +34,18 @@ namespace SparkleShare {
 		}
 
 
-		// Get's the avatar for a specific email address and size
+		// Gets the avatar for a specific email address and size
 		public static Gdk.Pixbuf GetAvatar (string Email, int Size)
 		{
 
-			string AvatarPath = CombineMore (SparklePaths.SparkleAvatarPath, Size + "x" + Size);
+			string AvatarPath = CombineMore (SparklePaths.SparkleLocalIconPath, Size + "x" + Size, "status");
 
 			if (!Directory.Exists (AvatarPath)) {
 				Directory.CreateDirectory (AvatarPath);
 				SparkleHelpers.DebugInfo ("Config", "Created '" + AvatarPath + "'");
 			}
 			
-			string AvatarFilePath = CombineMore (AvatarPath, Email);
+			string AvatarFilePath = CombineMore (AvatarPath, "avatar-" + Email);
 
 			if (File.Exists (AvatarFilePath))
 				return new Gdk.Pixbuf (AvatarFilePath);
@@ -85,9 +85,9 @@ namespace SparkleShare {
 		public static string GetMD5 (string s)
 		{
 			MD5 md5 = new MD5CryptoServiceProvider ();
-			Byte[] Bytes = ASCIIEncoding.Default.GetBytes (s);
-			Byte[] EncodedBytes = md5.ComputeHash (Bytes);
-			return BitConverter.ToString (EncodedBytes).ToLower ().Replace ("-", "");
+			Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+			Byte[] encodedBytes = md5.ComputeHash (bytes);
+			return BitConverter.ToString (encodedBytes).ToLower ().Replace ("-", "");
 		}
 
 
@@ -124,7 +124,8 @@ namespace SparkleShare {
 		public static Gdk.Pixbuf GetIcon (string Name, int Size)
 		{
 			IconTheme IconTheme = new IconTheme ();
-			IconTheme.AppendSearchPath (CombineMore (SparklePaths.SparkleInstallPath, "icons"));
+			IconTheme.AppendSearchPath (SparklePaths.SparkleIconPath);
+			IconTheme.AppendSearchPath (SparklePaths.SparkleLocalIconPath);
 			return IconTheme.LoadIcon (Name, Size, IconLookupFlags.GenericFallback);
 		}
 
