@@ -37,12 +37,12 @@ namespace SparkleShare {
 
 		public ScrolledWindow ScrolledWindow;
 		public IconView IconView;
+		public int Selected;
 		
 		private ToggleButton ToggleButton;
 		private Viewport Viewport;
 		private ListStore Store;
 		private Image Image;
-		private int Selected;
 		private int Count;
 
 
@@ -208,7 +208,7 @@ namespace SparkleShare {
 		{
 
 			if (i > -1 && i <= Count) {
-				Selected = i;
+				Selected = i;Console.WriteLine ("selected: " + i);
 				return true;
 			}
 
@@ -243,7 +243,7 @@ namespace SparkleShare {
 		{
 
 			// Select the second revision
-			SetSelected (1);
+			Selected = 1;
 
 			// Take reading direction for time into account
 			if (Direction == Gtk.TextDirection.Ltr)
@@ -262,8 +262,6 @@ namespace SparkleShare {
 
 		public RightRevisionView () : base ()
 		{
-
-			SetSelected (0);
 
 			// Take reading direction for time into account
 			if (Direction == Gtk.TextDirection.Ltr)
