@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-07-13 06:01+0000\n"
-"PO-Revision-Date: 2010-07-13 15:54+0800\n"
+"PO-Revision-Date: 2010-07-13 16:07+0800\n"
 "Last-Translator: Fabien Basmaison <fabien@arkhi.org>\n"
 "Language-Team: French (France)\n"
 "MIME-Version: 1.0\n"
@@ -59,7 +59,7 @@ msgstr "SparkleDiff vous permet de comparer les versions d’une image côte à 
 
 #: ../SparkleDiff/SparkleDiff.cs:165
 msgid "Usage: sparklediff [FILE]"
-msgstr "Utilisation: sparklediff [FICHIER]"
+msgstr "Utilisation : sparklediff [FICHIER]"
 
 #: ../SparkleDiff/SparkleDiff.cs:166
 msgid "Open an image file to show its revisions"
