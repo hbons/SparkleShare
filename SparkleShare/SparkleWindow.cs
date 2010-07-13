@@ -48,7 +48,7 @@ namespace SparkleShare {
 			BorderWidth = 12;
 			
 			// TRANSLATORS: {0} is a folder name, and {1} is a server address
-			Title = String.Format(_("‘{0}’ on {1}"), SparkleRepo.Name,
+			Title = String.Format(_("Recent Events in ‘{0}’ on {1}"), SparkleRepo.Name,
 				SparkleRepo.RemoteOriginUrl);
 			IconName = "folder";
 
@@ -232,6 +232,7 @@ namespace SparkleShare {
 			}
 
 			ScrolledWindow = new ScrolledWindow ();
+			ScrolledWindow.ShadowType = ShadowType.None;
 			ScrolledWindow.AddWithViewport (layout_vertical);
 
 			return ScrolledWindow;

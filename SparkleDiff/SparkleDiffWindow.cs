@@ -20,6 +20,11 @@ using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
+using System.IO;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
+
 namespace SparkleShare {
 
 	// The main window for SparkleDiff
@@ -54,7 +59,7 @@ namespace SparkleShare {
 
 			VBox layout_vertical = new VBox (false, 12);
 
-				HBox layout_horizontal = new HBox (false, 12);
+				HBox layout_horizontal = new HBox (true, 6);
 
 					Process process = new Process ();
 					process.EnableRaisingEvents = true; 
@@ -63,8 +68,11 @@ namespace SparkleShare {
 
 					process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName (file_path);
 					process.StartInfo.FileName = "git";
-					process.StartInfo.Arguments = "log --format=\"%ct\t%an\" " + file_name;
+					process.StartInfo.Arguments = "log --format=\"%ct\t%an\t%ae\" " + file_name;
 					process.Start ();
+
+					ViewLeft  = new LeftRevisionView  ();
+					ViewRight = new RightRevisionView ();
 
 					string output = process.StandardOutput.ReadToEnd ();
 					string [] revisions_info = Regex.Split (output.Trim (), "\n");
@@ -76,58 +84,53 @@ namespace SparkleShare {
 
 						int timestamp = int.Parse (parts [0]);
 						string author = parts [1];
+						string email  = parts [2];
 
+						string date;
+						// TRANSLATORS: This is a format specifier according to System.Globalization.DateTimeFormatInfo	
 						if (i == 0)
-							revisions_info [i] = _("Current Revision") + "\t" + author;
+							date = "Latest Revision";
 						else
+							date = String.Format (_("{0} at {1}"),
+							       UnixTimestampToDateTime (timestamp).ToString (_("ddd MMM d, yyyy")),
+							       UnixTimestampToDateTime (timestamp).ToString (_("H:mm")));
 
-							// TRANSLATORS: This is a format specifier according to System.Globalization.DateTimeFormatInfo
-							revisions_info [i] = UnixTimestampToDateTime (timestamp).ToString (_("d MMM\tH:mm")) +
-							"\t" + author;
-
+						ViewLeft.AddRow  (GetAvatar (email, 32), author, date);
+						ViewRight.AddRow (GetAvatar (email, 32), author, date);
+						
 						i++;
 
 					}
 
-					ViewLeft  = new LeftRevisionView  (revisions_info);
-					ViewRight = new RightRevisionView (revisions_info);
 
 					ViewLeft.SetImage  (new RevisionImage (file_path, Revisions [1]));
 					ViewRight.SetImage (new RevisionImage (file_path, Revisions [0]));
+					
+					ViewLeft.IconView.SelectionChanged += delegate {
+					
+						ViewLeft.SetImage  (new RevisionImage (file_path, Revisions [ViewLeft.GetSelected ()]));
+
+						ViewLeft.ScrolledWindow.Hadjustment = ViewRight.ScrolledWindow.Hadjustment;
+						ViewLeft.ScrolledWindow.Vadjustment = ViewRight.ScrolledWindow.Vadjustment;
+						
+						HookUpViews ();
+
+					};
+
+					ViewRight.IconView.SelectionChanged += delegate {
+					
+						ViewRight.SetImage  (new RevisionImage (file_path, Revisions [ViewRight.GetSelected ()]));
+
+						ViewRight.ScrolledWindow.Hadjustment = ViewLeft.ScrolledWindow.Hadjustment;
+						ViewRight.ScrolledWindow.Vadjustment = ViewLeft.ScrolledWindow.Vadjustment;
+						
+						HookUpViews ();
+
+					};
 
 				layout_horizontal.PackStart (ViewLeft);
 				layout_horizontal.PackStart (ViewRight);
 
-
-				ViewLeft.ComboBox.Changed += delegate {
-
-					RevisionImage revision_image;
-					revision_image = new RevisionImage (file_path, Revisions [ViewLeft.ComboBox.Active]);
-					ViewLeft.SetImage (revision_image);
-
-					HookUpViews ();
-					
-					ViewLeft.ScrolledWindow.Hadjustment = ViewRight.ScrolledWindow.Hadjustment;
-					ViewLeft.ScrolledWindow.Vadjustment = ViewRight.ScrolledWindow.Vadjustment;
-					
-					ViewLeft.UpdateControls ();
-
-				};
-
-				ViewRight.ComboBox.Changed += delegate {
-
-					RevisionImage revision_image;
-					revision_image = new RevisionImage (file_path, Revisions [ViewRight.ComboBox.Active]);
-					ViewRight.SetImage (revision_image);
-
-					HookUpViews ();
-
-					ViewRight.ScrolledWindow.Hadjustment = ViewLeft.ScrolledWindow.Hadjustment;
-					ViewRight.ScrolledWindow.Vadjustment = ViewLeft.ScrolledWindow.Vadjustment;
-
-					ViewRight.UpdateControls ();
-
-				};
 
 
 				ResizeToViews ();
@@ -155,6 +158,22 @@ namespace SparkleShare {
 
 			Add (layout_vertical);
 
+		}
+		
+		// Converts a UNIX timestamp to a more usable time object
+		public DateTime UnixTimestampToDateTime (int timestamp)
+		{
+			DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
+			return unix_epoch.AddSeconds (timestamp);
+		}
+
+
+		// Looks up an icon from the system's theme
+		public Gdk.Pixbuf GetIcon (string name, int size)
+		{
+			IconTheme icon_theme = new IconTheme ();
+			icon_theme.AppendSearchPath (System.IO.Path.Combine ("/usr/share/sparkleshare", "icons"));
+			return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
 		}
 
 
@@ -216,13 +235,79 @@ namespace SparkleShare {
 		}
 
 
-		// Converts a UNIX timestamp to a more usable time object
-		public DateTime UnixTimestampToDateTime (int timestamp)
+		public string CombineMore (params string [] Parts)
 		{
-			DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
-			return unix_epoch.AddSeconds (timestamp);
+			string NewPath = " ";
+			foreach (string Part in Parts)
+				NewPath = System.IO.Path.Combine (NewPath, Part);
+			return NewPath;
 		}
 
+
+		// Creates an MD5 hash of input
+		public static string GetMD5 (string s)
+		{
+			MD5 md5 = new MD5CryptoServiceProvider ();
+			Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+			Byte[] encodedBytes = md5.ComputeHash (bytes);
+			return BitConverter.ToString (encodedBytes).ToLower ().Replace ("-", "");
+		}
+
+
+		// TODO: Turn this into an avatar fetching library
+		// TODO: This should be included from SparkleHelpers, but I don't know how to do that
+		// Gets the avatar for a specific email address and size
+		public Gdk.Pixbuf GetAvatar (string Email, int Size)
+		{
+
+
+			UnixUserInfo UnixUserInfo = new UnixUserInfo (UnixEnvironment.UserName);
+
+			string HomePath = UnixUserInfo.HomeDirectory;
+
+			string SparkleLocalIconPath = CombineMore (HomePath + "/.icons", "sparkleshare");
+	
+			string AvatarPath = CombineMore (SparkleLocalIconPath, Size + "x" + Size, "status");
+
+			if (!Directory.Exists (AvatarPath)) {
+				Directory.CreateDirectory (AvatarPath);
+//				SparkleHelpers.DebugInfo ("Config", "Created '" + AvatarPath + "'");
+			}
+			
+			string AvatarFilePath = CombineMore (AvatarPath, Email);
+
+			if (File.Exists (AvatarFilePath))
+				return new Gdk.Pixbuf (AvatarFilePath);
+			else {
+
+				// Let's try to get the person's gravatar for next time
+				WebClient WebClient = new WebClient ();
+				Uri GravatarUri = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (Email) +
+					".jpg?s=" + Size + "&d=404");
+
+				string TmpFile = CombineMore ("/home/hbons/dsfdsf.jpg");
+
+				if (!File.Exists (TmpFile)) {
+
+					WebClient.DownloadFileAsync (GravatarUri, TmpFile);
+					WebClient.DownloadFileCompleted += delegate {
+//						File.Delete (AvatarFilePath);
+						FileInfo TmpFileInfo = new FileInfo (TmpFile);
+						if (TmpFileInfo.Length > 255)
+							File.Move (TmpFile, AvatarFilePath);
+					};
+
+				}
+
+				// Fall back to a generic icon if there is no gravatar
+				if (File.Exists (AvatarFilePath))
+					return new Gdk.Pixbuf (AvatarFilePath);
+				else
+					return GetIcon ("avatar-default", Size);
+
+			}
+
+		}
 
 		// Quits the program		
 		private void Quit (object o, EventArgs args)
