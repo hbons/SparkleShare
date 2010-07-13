@@ -265,7 +265,7 @@ namespace SparkleShare {
 
 			string HomePath = UnixUserInfo.HomeDirectory;
 
-			string SparkleLocalIconPath = CombineMore (HomePath + "/.icons", "sparkleshare");
+			string SparkleLocalIconPath = CombineMore (HomePath, ".icons", "sparkleshare");
 	
 			string AvatarPath = CombineMore (SparkleLocalIconPath, Size + "x" + Size, "status");
 
@@ -285,16 +285,17 @@ namespace SparkleShare {
 				Uri GravatarUri = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (Email) +
 					".jpg?s=" + Size + "&d=404");
 
-				string TmpFile = CombineMore ("/home/hbons/dsfdsf.jpg");
+				string TmpFile = CombineMore (HomePath, "SparkleShare", ".tmp", Email + Size);
 
 				if (!File.Exists (TmpFile)) {
 
 					WebClient.DownloadFileAsync (GravatarUri, TmpFile);
 					WebClient.DownloadFileCompleted += delegate {
-//						File.Delete (AvatarFilePath);
+						File.Delete (AvatarFilePath);
 						FileInfo TmpFileInfo = new FileInfo (TmpFile);
 						if (TmpFileInfo.Length > 255)
 							File.Move (TmpFile, AvatarFilePath);
+				Console.WriteLine ("AAAAAAA");
 					};
 
 				}
