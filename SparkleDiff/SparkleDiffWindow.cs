@@ -136,7 +136,7 @@ namespace SparkleShare {
 				ResizeToViews ();
 
 				// Order time view according to the user's reading direction
-				if (Direction == Gtk.TextDirection.Rtl) // See Deejay1? I can do i18n too! :P				
+				if (Direction == Gtk.TextDirection.Rtl)
 					layout_horizontal.ReorderChild (ViewLeft, 1);
 
 
@@ -146,12 +146,12 @@ namespace SparkleShare {
 				dialog_buttons.Layout      = ButtonBoxStyle.End;
 				dialog_buttons.BorderWidth = 0;
 
-					Button CloseButton = new Button (Stock.Close);
-					CloseButton.Clicked += delegate (object o, EventArgs args) {
+					Button close_button = new Button (Stock.Close);
+					close_button.Clicked += delegate (object o, EventArgs args) {
 						Environment.Exit (0);
 					};
-
-				dialog_buttons.Add (CloseButton);
+					
+				dialog_buttons.Add (close_button);
 
 			layout_vertical.PackStart (layout_horizontal, true, true, 0);
 			layout_vertical.PackStart (dialog_buttons, false, false, 0);

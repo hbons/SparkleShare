@@ -171,6 +171,7 @@ namespace SparkleShare {
 				TreePath path = new TreePath (GetSelected ().ToString());
 
 				IconView.ScrollToPath (path, (float) 0.5, (float) 0.5);
+				IconView.GrabFocus ();
 
 			} else {
 
@@ -208,7 +209,7 @@ namespace SparkleShare {
 		{
 
 			if (i > -1 && i <= Count) {
-				Selected = i;Console.WriteLine ("selected: " + i);
+				Selected = i;
 				return true;
 			}
 
