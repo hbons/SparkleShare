@@ -39,7 +39,7 @@ namespace SparkleShare {
 		{
 
 			BorderWidth = 0;
-			SetSizeRequest (600, 400);
+			SetSizeRequest (640, 400);
 			Resizable = false;
 			IconName = "folder-sparkleshare";
 
@@ -55,13 +55,14 @@ namespace SparkleShare {
 			
 			VBox layout_vertical = new VBox (false, 0);
 			
-				Label introduction = new Label ("<span size='xx-large'><b>Welcome to SparkleShare!</b></span>");
+				Label introduction = new Label ("<span size='x-large'><b>Welcome to SparkleShare!</b></span>");
 				introduction.UseMarkup = true;
 				introduction.Xalign = 0;
 				
-				Label information = new Label ("Before we can create a SparkleShare folder on this \n" +
+				Label information = new Label ("Before we can create a SparkleShare folder on this " +
 				                               "computer, we need a few bits of information from you.");
 				information.Xalign = 0;
+				information.Wrap = true;
 				
 
 					Entry name_entry = new Entry ("");
@@ -113,7 +114,21 @@ namespace SparkleShare {
 				
 			HButtonBox controls = new HButtonBox ();
 			controls.Layout = ButtonBoxStyle.End;
-			Button done_button = new Button ("Next");
+
+			Button done_button = new Button (_("Next"));
+			
+			done_button.Clicked += delegate (object o, EventArgs args) {
+				done_button.Remove (done_button.Child);
+				HBox hbox = new HBox ();
+				hbox.Add (new SparkleSpinner ());
+				hbox.Add (new Label ("Configuring…"));
+				done_button.Add (hbox);
+				done_button.Sensitive = false;
+				table.Sensitive = false;
+				done_button.ShowAll ();
+				ShowStepTwo ();
+			};
+			
 			controls.Add (done_button);
 
 			layout_vertical.PackStart (introduction, false, false, 0);
@@ -130,6 +145,70 @@ namespace SparkleShare {
 			Add (layout_horizontal);
 			ShowAll ();
 
+		}
+		
+		
+		public void ShowStepTwo ()
+		{
+		
+			Remove (Child);
+
+			HBox layout_horizontal = new HBox (false, 6);
+
+				Image side_splash = new Image ("/home/hbons/github/SparkleShare/data/side-splash.png");
+
+			layout_horizontal.PackStart (side_splash, false, false, 0);
+			
+			VBox wrapper = new VBox (false, 0);
+			
+			VBox layout_vertical = new VBox (false, 0);
+			layout_vertical.BorderWidth = 30;
+
+			Label introduction;
+			introduction = new Label ("<span size='x-large'><b>SparkleShare ready to go!</b></span>");
+
+			introduction.UseMarkup = true;
+			introduction.Xalign = 0;
+
+			Label information;
+			information = new Label ("You can now start accepting invitations from others. " +
+                                     "Just click on invitations you get by email and " +
+                                     "we'll take care of the rest.");
+                                     
+            information.UseMarkup = true;
+            information.Wrap = true;
+			information.Xalign = 0;
+
+			HBox link_wrapper = new HBox (false, 0);
+			LinkButton link = new LinkButton ("http://www.sparkleshare.org/",
+				_("Learn how to host your own SparkleSpace"));
+
+			link_wrapper.PackStart (link, false, false, 0);
+
+			layout_vertical.PackStart (introduction, false, false, 0);
+			layout_vertical.PackStart (information, false, false, 21);
+			layout_vertical.PackStart (link_wrapper, false, false, 0);
+
+			HButtonBox controls = new HButtonBox ();
+			controls.Layout = ButtonBoxStyle.End;
+			controls.BorderWidth = 12;
+
+				Button finish_button = new Button (_("Finish"));
+
+				finish_button.Clicked += delegate (object o, EventArgs args) {
+					Destroy ();
+				};
+
+			controls.Add (finish_button);
+
+			wrapper.PackStart (layout_vertical, true, true, 0);
+			wrapper.PackStart (controls, false, false, 0);
+
+			layout_horizontal.Add (wrapper);
+
+			Add (layout_horizontal);
+			ShowAll ();
+		
 		}
 
 	}
