@@ -179,7 +179,7 @@ namespace SparkleShare {
 			FetchTimer.Start ();
 			BufferTimer.Start ();
 			
-			SparkleHelpers.CheckForUnicorns (Message);
+			CheckForUnicorns (Message);
 
 		}
 		
@@ -454,6 +454,22 @@ namespace SparkleShare {
 
 			// Nothing happened:
 			return "";
+
+		}
+
+
+		// Checks for unicorns
+		public static void CheckForUnicorns (string s) {
+
+			s = s.ToLower ();
+			if (s.Contains ("unicorn") && (s.Contains (".png") || s.Contains (".jpg"))) {
+				string title   = _("Hold your ponies!");
+				string subtext = _("SparkleShare is known to be insanely fast with \n" +
+				                  "pictures of unicorns. Please make sure your internets\n" +
+				                  "are upgraded to the latest version to avoid problems.");
+				SparkleBubble unicorn_bubble = new SparkleBubble (title, subtext);
+				unicorn_bubble.Show ();
+			}
 
 		}
 
