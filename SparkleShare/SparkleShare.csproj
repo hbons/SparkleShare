@@ -4,11 +4,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
+    <ProjectGuid>{728483AA-E34B-4441-BF2C-C8BC2901E4E0}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>SparkleShare</AssemblyName>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{005CCA8E-DFBF-464A-B6DA-452C62D4589C}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>notifysharp</RootNamespace>
-    <AssemblyName>notify-sharp</AssemblyName>
+    <RootNamespace>SparkleShare</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,16 +26,31 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="Global.cs" />
-    <Compile Include="Notification.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="NDesk.DBus, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f6716e4f9b2ed099" />
-    <Reference Include="NDesk.DBus.GLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f6716e4f9b2ed099" />
-    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="System" />
+    <Reference Include="Mono.Posix" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SparkleBubble.cs" />
+    <Compile Include="SparkleDialog.cs" />
+    <Compile Include="SparkleHelpers.cs" />
+    <Compile Include="SparklePaths.cs" />
+    <Compile Include="SparklePlatform.cs" />
+    <Compile Include="SparkleRepo.cs" />
+    <Compile Include="SparkleShare.cs" />
+    <Compile Include="SparkleSpinner.cs" />
+    <Compile Include="SparkleStatusIcon.cs" />
+    <Compile Include="SparkleUI.cs" />
+    <Compile Include="SparkleWindow.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NotifySharp\NotifySharp.csproj">
+      <Project>{005CCA8E-DFBF-464A-B6DA-452C62D4589C}</Project>
+      <Name>NotifySharp</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
