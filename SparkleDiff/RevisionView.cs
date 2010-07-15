@@ -14,9 +14,6 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// TODO: Hand cursor when hovering icon view items
-// TODO: Use theme colours
-
 using Gtk;
 using Mono.Unix;
 using System;
@@ -39,11 +36,13 @@ namespace SparkleShare {
 		public IconView IconView;
 		public int Selected;
 		
-		private ToggleButton ToggleButton;
+		public ToggleButton ToggleButton;
 		private Viewport Viewport;
 		private ListStore Store;
 		private Image Image;
 		private int Count;
+		private string SecondaryTextColor;
+		private string SelectedTextColor;
 
 
 		public RevisionView () : base (false, 0) 
@@ -51,6 +50,12 @@ namespace SparkleShare {
 
 			Count = 0;
 			Selected = 0;
+
+			TreeView treeview = new TreeView ();
+			SelectedTextColor  = GdkColorToHex (treeview.Style.Foreground (StateType.Selected));
+
+			Window window = new Window ("");
+			SecondaryTextColor = GdkColorToHex (window.Style.Foreground (StateType.Insensitive));
 
 			ToggleButton = new ToggleButton ();
 			ToggleButton.Clicked += ToggleView;
@@ -85,18 +90,37 @@ namespace SparkleShare {
 		public void ChangeSelection (object o, EventArgs args)
 		{
 
+			TreeIter iter;
+			Store.GetIter (out iter, new TreePath (GetSelected ().ToString ()));
+			string text = (string) Store.GetValue (iter, 1);
+			Store.SetValue (iter, 1, text.Replace (SelectedTextColor, SecondaryTextColor));
+
 			if (IconView.SelectedItems.Length > 0) {
 
-				TreeIter iter;
 				Store.GetIter (out iter, IconView.SelectedItems [0]);
 				SetSelected ((int) Store.GetValue (iter, 2));
+
+				text = (string) Store.GetValue (iter, 1);
+				text = text.Replace (SecondaryTextColor, SelectedTextColor);
+				Store.SetValue (iter, 1, text);
 
 			} else {
 
 				IconView.SelectPath (new TreePath (GetSelected ().ToString()));
 
 			}
-	
+			
+		}
+		
+		
+		// Converts a Gdk RGB color to a hex value.
+		// Example: from "rgb:0,0,0" to "#000000"
+		public string GdkColorToHex (Gdk.Color color)
+		{
+			return String.Format("#{0:X2}{1:X2}{2:X2}",
+				(int) Math.Truncate(color.Red   / 256.00),
+				(int) Math.Truncate(color.Green / 256.00),
+				(int) Math.Truncate(color.Blue  / 256.00));
 		}
 
 
@@ -126,8 +150,8 @@ namespace SparkleShare {
 
 				string text = (string) Store.GetValue (iter, 1);
 				Gdk.Pixbuf pixbuf = (Gdk.Pixbuf) Store.GetValue (iter, 0);
-
-				Label label = new Label (text);
+				
+				Label label = new Label (text.Replace (SelectedTextColor, SecondaryTextColor));
 				label.UseMarkup = true;
 
 				Arrow arrow_down = new Arrow (ArrowType.Down, ShadowType.None);
@@ -152,14 +176,17 @@ namespace SparkleShare {
 		public void AddRow (Gdk.Pixbuf pixbuf, string header, string subtext)
 		{
 
-			Store.AppendValues (pixbuf, "<b>" + header + "</b>\n<span fgcolor='#777'>" + subtext + "</span>", Count);
+			Store.AppendValues (pixbuf, "<b>" + header + "</b>\n" +
+			                            "<span fgcolor='" + SecondaryTextColor + "'>" + subtext + "</span>",
+				Count);
+
 			IconView.Model = Store;
 			Count++;
 
 		}
 
 
-		// Toggles between a displayed image and a list of revisions		
+		// Toggles between a displayed image and a list of revisions
 		public void ToggleView (object o, EventArgs args)
 		{
 
