@@ -20,6 +20,7 @@ using SparkleShare;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace SparkleShare {
 
@@ -109,7 +110,7 @@ namespace SparkleShare {
 			HideAll ();
 
 			string RepoRemoteUrl = RemoteUrlCombo.Entry.Text;
-			RepoRemoteUrl = SparkleHelpers.SparkleToGitUrl (RepoRemoteUrl);
+			RepoRemoteUrl = SparkleToGitUrl (RepoRemoteUrl);
 
 			int SlashPos = RepoRemoteUrl.LastIndexOf ("/");
 			int ColumnPos = RepoRemoteUrl.LastIndexOf (":");
@@ -212,10 +213,33 @@ namespace SparkleShare {
 		// Enables the Add button when the fields are
 		// filled in correctly		
 		public void CheckFields (object o, EventArgs args) {
-			if (SparkleHelpers.IsGitUrl (RemoteUrlCombo.Entry.Text))
+			if (IsGitUrl (RemoteUrlCombo.Entry.Text))
 				AddButton.Sensitive = true;
 			else
 				AddButton.Sensitive = false;
+		}
+
+
+		// Convert the more human readable sparkle:// url to something Git can use.
+		// Example: sparkle://gitorious.org/sparkleshare ssh://git@gitorious.org/sparkleshare
+		public static string SparkleToGitUrl (string Url)
+		{
+			if (Url.StartsWith ("sparkle://"))
+				Url = Url.Replace ("sparkle://", "ssh://git@");
+
+			// Usually don't need the ".git" at the end.
+			// It looks ugly as a folder too.
+			if (Url.EndsWith (".git"))
+				Url = Url.Substring (0, Url.Length - 4);
+
+			return Url;
+		}
+
+		
+		// Checks if a url is a valid git url
+		public static bool IsGitUrl (string Url)
+		{
+			return Regex.Match (Url, @"(.)+(/|:)(.)+").Success;
 		}
 
 	}

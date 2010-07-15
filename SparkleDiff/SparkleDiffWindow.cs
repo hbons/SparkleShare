@@ -54,8 +54,7 @@ namespace SparkleShare {
 
 			DeleteEvent += Quit;
 
-			// TRANSLATORS: The parameter is a filename
-			Title = String.Format(_("Comparing Revisions of ‘{0}’"), file_name);
+			Title = file_name;
 
 			VBox layout_vertical = new VBox (false, 12);
 
@@ -127,18 +126,29 @@ namespace SparkleShare {
 						HookUpViews ();
 
 					};
+					
+					ViewLeft.ToggleButton.Clicked += delegate {
+						if (ViewLeft.ToggleButton.Active)
+							DetachViews ();
+						else
+							HookUpViews ();
+					};
+					
+					ViewRight.ToggleButton.Clicked += delegate {
+						if (ViewLeft.ToggleButton.Active)
+							DetachViews ();
+						else
+							HookUpViews ();
+					};
 
 				layout_horizontal.PackStart (ViewLeft);
 				layout_horizontal.PackStart (ViewRight);
-
-
 
 				ResizeToViews ();
 
 				// Order time view according to the user's reading direction
 				if (Direction == Gtk.TextDirection.Rtl)
 					layout_horizontal.ReorderChild (ViewLeft, 1);
-
 
 				HookUpViews ();
 
@@ -159,24 +169,9 @@ namespace SparkleShare {
 			Add (layout_vertical);
 
 		}
-		
-		// Converts a UNIX timestamp to a more usable time object
-		public DateTime UnixTimestampToDateTime (int timestamp)
-		{
-			DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
-			return unix_epoch.AddSeconds (timestamp);
-		}
 
 
-		// Looks up an icon from the system's theme
-		public Gdk.Pixbuf GetIcon (string name, int size)
-		{
-			IconTheme icon_theme = new IconTheme ();
-			icon_theme.AppendSearchPath (System.IO.Path.Combine ("/usr/share/sparkleshare", "icons"));
-			return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
-		}
-
-
+		// Resizes the window so it will fit the content in the best possible way
 		private void ResizeToViews ()
 		{
 
@@ -195,6 +190,7 @@ namespace SparkleShare {
 			
 		}
 
+
 		// Hooks up two views so their scrollbars will be kept in sync
 		private void HookUpViews ()
 		{
@@ -203,6 +199,18 @@ namespace SparkleShare {
 			ViewLeft.ScrolledWindow.Vadjustment.ValueChanged  += SyncViewsVertically;
 			ViewRight.ScrolledWindow.Hadjustment.ValueChanged += SyncViewsHorizontally;
 			ViewRight.ScrolledWindow.Vadjustment.ValueChanged += SyncViewsVertically;
+		
+		}
+		
+
+		// Detach the two views from each other so they don't try to sync anymore
+		private void DetachViews ()
+		{
+
+			ViewLeft.ScrolledWindow.Hadjustment.ValueChanged  -= SyncViewsHorizontally;
+			ViewLeft.ScrolledWindow.Vadjustment.ValueChanged  -= SyncViewsVertically;
+			ViewRight.ScrolledWindow.Hadjustment.ValueChanged -= SyncViewsHorizontally;
+			ViewRight.ScrolledWindow.Vadjustment.ValueChanged -= SyncViewsVertically;
 		
 		}
 
@@ -244,6 +252,23 @@ namespace SparkleShare {
 		}
 
 
+		// Converts a UNIX timestamp to a more usable time object
+		public DateTime UnixTimestampToDateTime (int timestamp)
+		{
+			DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
+			return unix_epoch.AddSeconds (timestamp);
+		}
+
+
+		// Looks up an icon from the system's theme
+		public Gdk.Pixbuf GetIcon (string name, int size)
+		{
+			IconTheme icon_theme = new IconTheme ();
+			icon_theme.AppendSearchPath (System.IO.Path.Combine ("/usr/share/sparkleshare", "icons"));
+			return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
+		}
+
+
 		// Creates an MD5 hash of input
 		public static string GetMD5 (string s)
 		{
@@ -255,11 +280,9 @@ namespace SparkleShare {
 
 
 		// TODO: Turn this into an avatar fetching library
-		// TODO: This should be included from SparkleHelpers, but I don't know how to do that
 		// Gets the avatar for a specific email address and size
 		public Gdk.Pixbuf GetAvatar (string Email, int Size)
 		{
-
 
 			UnixUserInfo UnixUserInfo = new UnixUserInfo (UnixEnvironment.UserName);
 
@@ -271,7 +294,6 @@ namespace SparkleShare {
 
 			if (!Directory.Exists (AvatarPath)) {
 				Directory.CreateDirectory (AvatarPath);
-//				SparkleHelpers.DebugInfo ("Config", "Created '" + AvatarPath + "'");
 			}
 			
 			string AvatarFilePath = CombineMore (AvatarPath, Email);
@@ -295,7 +317,6 @@ namespace SparkleShare {
 						FileInfo TmpFileInfo = new FileInfo (TmpFile);
 						if (TmpFileInfo.Length > 255)
 							File.Move (TmpFile, AvatarFilePath);
-				Console.WriteLine ("AAAAAAA");
 					};
 
 				}
@@ -309,6 +330,7 @@ namespace SparkleShare {
 			}
 
 		}
+
 
 		// Quits the program		
 		private void Quit (object o, EventArgs args)

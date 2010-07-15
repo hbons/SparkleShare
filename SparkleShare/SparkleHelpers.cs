@@ -21,18 +21,12 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
+
 
 namespace SparkleShare {
 	
 	public static class SparkleHelpers
 	{
-
-		public static string _ (string s)
-		{
-			return Catalog.GetString (s);
-		}
-
 
 		// Gets the avatar for a specific email address and size
 		public static Gdk.Pixbuf GetAvatar (string Email, int Size)
@@ -89,28 +83,9 @@ namespace SparkleShare {
 			Byte[] encodedBytes = md5.ComputeHash (bytes);
 			return BitConverter.ToString (encodedBytes).ToLower ().Replace ("-", "");
 		}
-
-
-		// Convert the more human readable sparkle:// url to
-		// something Git can use
-		// Example: sparkle://gitorious.org/sparkleshare
-		// to ssh://git@gitorious.org/sparkleshare
-		public static string SparkleToGitUrl (string Url)
-		{
-			if (Url.StartsWith ("sparkle://"))
-				Url = Url.Replace ("sparkle://", "ssh://git@");
-
-			// Usually don't need the ".git" at the end.
-			// It looks ugly as a folder too.
-			if (Url.EndsWith (".git"))
-				Url = Url.Substring (0, Url.Length - 4);
-
-			return Url;
-		}
-
 		
 		// Makes it possible to combine more than
-		// two paths at once.
+		// two paths at once
 		public static string CombineMore (params string [] Parts)
 		{
 			string NewPath = " ";
@@ -127,13 +102,6 @@ namespace SparkleShare {
 			IconTheme.AppendSearchPath (SparklePaths.SparkleIconPath);
 			IconTheme.AppendSearchPath (SparklePaths.SparkleLocalIconPath);
 			return IconTheme.LoadIcon (Name, Size, IconLookupFlags.GenericFallback);
-		}
-
-
-		// Checks if a url is a valid git url
-		public static bool IsGitUrl (string Url)
-		{
-			return Regex.Match (Url, @"(.)+(/|:)(.)+").Success;
 		}
 
 
@@ -197,21 +165,6 @@ namespace SparkleShare {
 
 		}
 
-
-		// Checks for unicorns
-		public static void CheckForUnicorns (string s) {
-
-			s = s.ToLower ();
-			if (s.Contains ("unicorn") && (s.Contains (".png") || s.Contains (".jpg"))) {
-				string title   = _("Hold your ponies!");
-				string subtext = _("SparkleShare is known to be insanely fast with \n" +
-				                  "pictures of unicorns. Please make sure your internets\n" +
-				                  "are upgraded to the latest version to avoid problems.");
-				SparkleBubble unicorn_bubble = new SparkleBubble (title, subtext);
-				unicorn_bubble.Show ();
-			}
-
-		}
 
 	}
 
