@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-12 05:53+0000\n"
+"POT-Creation-Date: 2010-07-15 05:54+0000\n"
 "PO-Revision-Date: 2010-06-21 16:26+0100\n"
 "Last-Translator: Martin Lettner <m.lettner@gmail.com>\n"
 "Language-Team: \n"
@@ -37,13 +37,14 @@ msgstr "Vieles würde nicht richtig funktionieren."
 
 #: ../SparkleDiff/SparkleDiff.cs:157
 msgid "SparkleDiff Copyright (C) 2010 Hylke Bons"
-msgstr "SparkleShare Copyright (C) 2010 Hylke Bons"
+msgstr "SparkleDiff Copyright (C) 2010 Hylke Bons"
 
 #: ../SparkleDiff/SparkleDiff.cs:159 ../SparkleShare/SparkleShare.cs:90
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
-msgstr "Diese Anwendung wird OHNE IRGENDEINE GARANTIE veröffentlicht."
+msgstr "Diese Anwendung kommt OHNE IRGENDEINE GARANTIE."
 
 #: ../SparkleDiff/SparkleDiff.cs:160 ../SparkleShare/SparkleShare.cs:91
+#, fuzzy
 msgid "This is free software, and you are welcome to redistribute it "
 msgstr "Dies ist freie Software. Sie können es weitergeben und/oder modifizieren"
 
@@ -106,7 +107,7 @@ msgstr "SparkleShare wird Sie benachrichtigen sobald diese Aktion abgeschlossen 
 
 #: ../SparkleShare/SparkleDialog.cs:129
 msgid "Dismiss"
-msgstr "Schließen"
+msgstr "Verwerfen"
 
 #: ../SparkleShare/SparkleDialog.cs:157
 #, csharp-format
@@ -240,7 +241,7 @@ msgstr "Beenden"
 
 #: ../SparkleShare/SparkleUI.cs:145
 msgid "Welcome to SparkleShare!"
-msgstr "Wilkommen bei SparkleShare!"
+msgstr "Willkommen bei SparkleShare!"
 
 #: ../SparkleShare/SparkleUI.cs:146
 msgid "You don't have any folders set up yet."
