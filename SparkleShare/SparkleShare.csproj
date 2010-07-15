@@ -48,9 +48,9 @@
     <Compile Include="SparkleWindow.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\notify-sharp\notify-sharp.csproj">
+    <ProjectReference Include="..\NotifySharp\NotifySharp.csproj">
       <Project>{005CCA8E-DFBF-464A-B6DA-452C62D4589C}</Project>
-      <Name>notify-sharp</Name>
+      <Name>NotifySharp</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
