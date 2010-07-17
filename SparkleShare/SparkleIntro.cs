@@ -23,11 +23,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Timers;
+using System.Security.Cryptography;
 
 namespace SparkleShare {
 
-	public class SparkleIntro : Window
-	{
+	public class SparkleIntro : Window {
 
 		// Short alias for the translations
 		public static string _ (string s)
@@ -38,15 +38,29 @@ namespace SparkleShare {
 		public SparkleIntro () : base ("")
 		{
 
+			using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
+			{
+			  File.WriteAllText ("PublicKeyOnly.xml", rsa.ToXmlString (false));
+			  File.WriteAllText ("PublicPrivate.xml", rsa.ToXmlString (true));
+			}
+
 			BorderWidth = 0;
 			SetSizeRequest (640, 400);
 			Resizable = false;
 			IconName = "folder-sparkleshare";
 
 			WindowPosition = WindowPosition.Center;
+			
+			ShowStepOne ();
+
+		}
+		
+		public void ShowStepOne ()
+		{
 
 			HBox layout_horizontal = new HBox (false, 6);
 
+				// TODO: Fix the path
 				Image side_splash = new Image ("/home/hbons/github/SparkleShare/data/side-splash.png");
 
 			layout_horizontal.PackStart (side_splash, false, false, 0);
@@ -143,10 +157,10 @@ namespace SparkleShare {
 			layout_horizontal.PackStart (wrapper, true, true, 0);
 
 			Add (layout_horizontal);
-			ShowAll ();
 
-		}
+			ShowAll ();
 		
+		}
 		
 		public void ShowStepTwo ()
 		{
@@ -165,7 +179,7 @@ namespace SparkleShare {
 			layout_vertical.BorderWidth = 30;
 
 			Label introduction;
-			introduction = new Label ("<span size='x-large'><b>SparkleShare ready to go!</b></span>");
+			introduction = new Label ("<span size='x-large'><b>SparkleShare is ready to go!</b></span>");
 
 			introduction.UseMarkup = true;
 			introduction.Xalign = 0;
@@ -173,7 +187,7 @@ namespace SparkleShare {
 			Label information;
 			information = new Label ("You can now start accepting invitations from others. " +
                                      "Just click on invitations you get by email and " +
-                                     "we'll take care of the rest.");
+                                     "we will take care of the rest.");
                                      
             information.UseMarkup = true;
             information.Wrap = true;
@@ -207,6 +221,7 @@ namespace SparkleShare {
 			layout_horizontal.Add (wrapper);
 
 			Add (layout_horizontal);
+
 			ShowAll ();
 		
 		}

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotifySharp", "NotifySharp\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSSH", "SharpSSH\SharpSSH.csproj", "{BB50B7E2-4622-4D8B-B7FF-5E5D8F02D91F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendFace", "FriendFace\FriendFace.csproj", "{3BA434AF-494F-4F5D-9D21-B7BD24FD67AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{005CCA8E-DFBF-464A-B6DA-452C62D4589C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{005CCA8E-DFBF-464A-B6DA-452C62D4589C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{005CCA8E-DFBF-464A-B6DA-452C62D4589C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BA434AF-494F-4F5D-9D21-B7BD24FD67AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BA434AF-494F-4F5D-9D21-B7BD24FD67AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BA434AF-494F-4F5D-9D21-B7BD24FD67AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BA434AF-494F-4F5D-9D21-B7BD24FD67AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{728483AA-E34B-4441-BF2C-C8BC2901E4E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{728483AA-E34B-4441-BF2C-C8BC2901E4E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{728483AA-E34B-4441-BF2C-C8BC2901E4E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
