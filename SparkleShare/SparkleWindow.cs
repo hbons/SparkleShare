@@ -26,8 +26,7 @@ using System.Timers;
 
 namespace SparkleShare {
 
-	public class SparkleWindow : Window
-	{
+	public class SparkleWindow : Window	{
 
 		// Short alias for the translations
 		public static string _ (string s)
@@ -137,7 +136,7 @@ namespace SparkleShare {
 
 					DateTime date_time = UnixTimestampToDateTime (unix_timestamp);
 
-					message = message.Replace ("/", " → ");
+					message = message.Replace ("/", " ‣ ");
 					message = message.Replace ("\n", " ");
 
 					ChangeSet change_set = new ChangeSet (user_name, user_email, message, date_time);
