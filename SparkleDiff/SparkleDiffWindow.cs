@@ -14,16 +14,12 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using FriendFace;
 using Gtk;
 using Mono.Unix;
 using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-
-using System.IO;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace SparkleShare {
 
@@ -52,6 +48,9 @@ namespace SparkleShare {
 			BorderWidth = 12;
 			IconName = "image-x-generic";
 
+			FaceCollection face_collection = new FaceCollection ();
+			face_collection.UseGravatar = true;
+			
 			DeleteEvent += Quit;
 
 			Title = file_name;
@@ -94,8 +93,10 @@ namespace SparkleShare {
 							       UnixTimestampToDateTime (timestamp).ToString (_("ddd MMM d, yyyy")),
 							       UnixTimestampToDateTime (timestamp).ToString (_("H:mm")));
 
-						ViewLeft.AddRow  (GetAvatar (email, 32), author, date);
-						ViewRight.AddRow (GetAvatar (email, 32), author, date);
+						face_collection.AddFace (email);
+
+						ViewLeft.AddRow  (face_collection.GetFace (email, 32), author, date);
+						ViewRight.AddRow (face_collection.GetFace (email, 32), author, date);
 						
 						i++;
 
@@ -243,92 +244,11 @@ namespace SparkleShare {
 		}
 
 
-		public string CombineMore (params string [] Parts)
-		{
-			string NewPath = " ";
-			foreach (string Part in Parts)
-				NewPath = System.IO.Path.Combine (NewPath, Part);
-			return NewPath;
-		}
-
-
 		// Converts a UNIX timestamp to a more usable time object
 		public DateTime UnixTimestampToDateTime (int timestamp)
 		{
 			DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
 			return unix_epoch.AddSeconds (timestamp);
-		}
-
-
-		// Looks up an icon from the system's theme
-		public Gdk.Pixbuf GetIcon (string name, int size)
-		{
-			IconTheme icon_theme = new IconTheme ();
-			icon_theme.AppendSearchPath (System.IO.Path.Combine ("/usr/share/sparkleshare", "icons"));
-			return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
-		}
-
-
-		// Creates an MD5 hash of input
-		public static string GetMD5 (string s)
-		{
-			MD5 md5 = new MD5CryptoServiceProvider ();
-			Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
-			Byte[] encodedBytes = md5.ComputeHash (bytes);
-			return BitConverter.ToString (encodedBytes).ToLower ().Replace ("-", "");
-		}
-
-
-		// TODO: Turn this into an avatar fetching library
-		// Gets the avatar for a specific email address and size
-		public Gdk.Pixbuf GetAvatar (string Email, int Size)
-		{
-
-			UnixUserInfo UnixUserInfo = new UnixUserInfo (UnixEnvironment.UserName);
-
-			string HomePath = UnixUserInfo.HomeDirectory;
-
-			string SparkleLocalIconPath = CombineMore (HomePath, ".icons", "sparkleshare");
-	
-			string AvatarPath = CombineMore (SparkleLocalIconPath, Size + "x" + Size, "status");
-
-			if (!Directory.Exists (AvatarPath)) {
-				Directory.CreateDirectory (AvatarPath);
-			}
-			
-			string AvatarFilePath = CombineMore (AvatarPath, Email);
-
-			if (File.Exists (AvatarFilePath))
-				return new Gdk.Pixbuf (AvatarFilePath);
-			else {
-
-				// Let's try to get the person's gravatar for next time
-				WebClient WebClient = new WebClient ();
-				Uri GravatarUri = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (Email) +
-					".jpg?s=" + Size + "&d=404");
-
-				string TmpFile = CombineMore (HomePath, "SparkleShare", ".tmp", Email + Size);
-
-				if (!File.Exists (TmpFile)) {
-
-					WebClient.DownloadFileAsync (GravatarUri, TmpFile);
-					WebClient.DownloadFileCompleted += delegate {
-						File.Delete (AvatarFilePath);
-						FileInfo TmpFileInfo = new FileInfo (TmpFile);
-						if (TmpFileInfo.Length > 255)
-							File.Move (TmpFile, AvatarFilePath);
-					};
-
-				}
-
-				// Fall back to a generic icon if there is no gravatar
-				if (File.Exists (AvatarFilePath))
-					return new Gdk.Pixbuf (AvatarFilePath);
-				else
-					return GetIcon ("avatar-default", Size);
-
-			}
-
 		}
 
 

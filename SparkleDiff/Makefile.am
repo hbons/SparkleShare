@@ -5,6 +5,9 @@ LINK = $(REF_SPARKLEDIFF)
 
 SOURCES = \
 $(top_srcdir)/SparkleShare/Defines.cs \
+$(top_srcdir)/FriendFace/FriendFace.cs \
+$(top_srcdir)/FriendFace/IconProvider.cs \
+$(top_srcdir)/FriendFace/GravatarIconProvider.cs \
 SparkleDiff.cs \
 SparkleDiffWindow.cs \
 RevisionView.cs \
