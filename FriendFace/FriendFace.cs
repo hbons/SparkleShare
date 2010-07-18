@@ -15,88 +15,137 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
+using Mono.Unix;
 using System;
+using System.IO;
 
-namespace FriendFace
-{
+namespace FriendFace {
 
-	public class FaceCollection : IconTheme
-	{
+	public class FaceCollection : IconTheme	{
 		
-		private string Path;
-		
-		public bool UseTwitter;
+		public bool UseFlickr;
 		public bool UseGravatar;
 		public bool UseIdentica;
-		public bool UseSystem;
-		public bool UseFlickr;
-
-		public bool UseAllServices;
+		public bool UseTwitter;
 		
-		private string IconThemePath;
+		private string Path;
 
 		public FaceCollection ()
 		{
 
-			Path = "";
-
-			UseTwitter     = false;
-			UseGravatar    = false;
-			UseIdentica    = false;
-			UseSystem      = false;
-			UseFlickr      = false;
-			UseAllServices = false;
+			UnixUserInfo unix_user_info = new UnixUserInfo (UnixEnvironment.UserName);
+			string default_theme_path = CombineMore (unix_user_info.HomeDirectory, ".icons");
+			new FaceCollection (default_theme_path);
 
 		}
+
 		
 		public FaceCollection (string path)
 		{
-		
-			UnixUserInfo unix_user_info = new UnixUserInfo (UnixEnvironment.UserName);
-			string home_path = unix_user_info.HomeDirectory;
-
-			string IconThemePath = CombineMore (home_path, ".icons");
-			SetThemePath (IconThemePath);
-
-			if (!Directory.Exists (theme_path))
-				Directory.CreateDirectory (theme_path);
-				
-				Directory.CreateDirectory (CombineMore (ThemePath));
-
-			
+			CustomTheme = "FriendFace";
+			SetThemePath (path);
 		}
-		
+
+
 		public void SetThemePath (string path)
 		{
-			string IconThemePath = path;
+
+			Path = path;
+
+			if (!Directory.Exists (Path))
+				Directory.CreateDirectory (Path);
+
+			AppendSearchPath (path);
+
+			Refresh ();
+
 		}
+
 
 		public string GetThemePath ()
 		{
-		
+			return Path;
 		}
 
-		
-		public Gdk.Pixbuf GetFace (string identifier)
+
+		public Gdk.Pixbuf GetFace (string identifier, int size)
 		{
-			return null;
+			return LoadIcon ("avatar-default-" + identifier, size, IconLookupFlags.GenericFallback);
 		}
-		
+
+
+		public void Refresh ()
+		{foreach (string i in SearchPath) {Console.WriteLine (i);}
+
+			IconProvider provider = new IconProvider ("");
+			string folder = provider.GetTargetFolderPath ();
+			string [] files = Directory.GetFiles (folder);
+			
+			int [] sizes = {16, 24, 32, 48};
+
+			foreach (string file_path in files) {
+
+				Gdk.Pixbuf pixbuf = new Gdk.Pixbuf (file_path);
+				
+				FileInfo file_info = new FileInfo (file_path);
+
+				// Delete the icon if it turns out to be empty
+				if (file_info.Length == 0) {
+					File.Delete (file_path);
+					Console.WriteLine ("Deleted: " + file_path);
+				}
+
+				for (int i = 0; i < 4; i++) {
+				
+					int size = sizes [i];
+
+					Gdk.Pixbuf pixbuf_copy = pixbuf.Copy ();
+
+					if (pixbuf.Width != size || pixbuf.Height != size)
+						pixbuf_copy = pixbuf.ScaleSimple (size, size, Gdk.InterpType.Hyper);
+
+					string size_folder_path = CombineMore (Path, size + "x" + size, "status");
+					string size_file_path = CombineMore (size_folder_path, System.IO.Path.GetFileName (file_path));
+					
+					Directory.CreateDirectory (size_folder_path);
+
+					if (File.Exists (size_file_path))
+						File.Delete (size_file_path);
+
+					pixbuf_copy.Save (size_file_path, "png");
+
+				}
+	
+				File.Delete (file_path);
+
+			}
+
+			RescanIfNeeded ();
+
+		}
+
+
 		public bool AddFace (string identifier)
 		{
-			// avatar-twitter-hbons
-			// 16, 24, 32, 48
-			Gdk.Pixbuf gravatar_icon;
-			if (UseGravatar)
-				gravatar_icon = new GravatarIcon (identifier);
+
+			if (UseGravatar) {
+				GravatarIconProvider provider = new GravatarIconProvider (identifier);
+				provider.RetrieveIcon ();
+			}
 
 			return true;
-			
+	
 		}
-		
-		public bool Refresh ()
+
+
+		// Makes it possible to combine more than
+		// two paths at once
+		private string CombineMore (params string [] parts)
 		{
-			return true;	
+			string new_path = "";
+			foreach (string part in parts)
+				new_path = System.IO.Path.Combine (new_path, part);
+			return new_path;
 		}
 
 	}
