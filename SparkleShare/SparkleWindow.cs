@@ -47,8 +47,7 @@ namespace SparkleShare {
 			BorderWidth = 12;
 			
 			// TRANSLATORS: {0} is a folder name, and {1} is a server address
-			Title = String.Format(_("Recent Events in ‘{0}’ on {1}"), SparkleRepo.Name,
-				SparkleRepo.RemoteOriginUrl);
+			Title = String.Format(_("Recent Events in ‘{0}’"), SparkleRepo.Name);
 			IconName = "folder";
 
 			LayoutVertical = new VBox (false, 12);
