@@ -38,11 +38,11 @@ namespace SparkleShare {
 		public SparkleIntro () : base ("")
 		{
 
-			using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
-			{
-			  File.WriteAllText ("PublicKeyOnly.xml", rsa.ToXmlString (false));
-			  File.WriteAllText ("PublicPrivate.xml", rsa.ToXmlString (true));
-			}
+//			using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
+	//		{
+		//	  File.WriteAllText ("PublicKeyOnly.xml", rsa.ToXmlString (false));
+			//  File.WriteAllText ("PublicPrivate.xml", rsa.ToXmlString (true));
+			//}
 
 			BorderWidth = 0;
 			SetSizeRequest (640, 400);
@@ -140,7 +140,24 @@ namespace SparkleShare {
 				done_button.Sensitive = false;
 				table.Sensitive = false;
 				done_button.ShowAll ();
+
+				string user_name  = name_entry.Text;
+				string user_email = email_entry.Text;
+
+				string config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, ".gitconfig");
+
+				TextWriter writer = new StreamWriter (config_file_path);
+
+				writer.WriteLine ("[user]\n" +
+					"\tname = " + user_name + "\n" +
+					"\temail = " + user_email + "\n");
+
+				writer.Close ();
+
+				SparkleHelpers.DebugInfo ("Config", "Created '" + config_file_path + "'");
+
 				ShowStepTwo ();
+
 			};
 			
 			controls.Add (done_button);
