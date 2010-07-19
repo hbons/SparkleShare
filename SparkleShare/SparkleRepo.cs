@@ -70,10 +70,6 @@ namespace SparkleShare {
 			else
 				UserName = UnixUserInfo.RealName;
 
-			Process.StartInfo.FileName = "git";
-			Process.StartInfo.Arguments = "config user.name " + UserName;
-			Process.Start ();
-
 			// Get user.email, example: "user@github.com"
 			UserEmail = "not.set@git-scm.com";
 			Process.StartInfo.FileName = "git";
