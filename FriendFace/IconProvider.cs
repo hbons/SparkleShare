@@ -41,7 +41,8 @@ namespace FriendFace {
 			if (XDG_CACHE_HOME != null)
 				SetTargetFolderPath (CombineMore (XDG_CACHE_HOME, "friendface"));
 			else
-				SetTargetFolderPath (CombineMore (System.IO.Path.DirectorySeparatorChar.ToString (), "tmp", "friendface"));
+				SetTargetFolderPath (CombineMore (System.IO.Path.DirectorySeparatorChar.ToString (),
+					"tmp", "friendface"));
 
 			string file_name = "avatar-default-" + Identifier;
 			TargetFilePath = CombineMore (TargetFolderPath, file_name);
