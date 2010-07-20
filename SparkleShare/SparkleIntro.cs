@@ -69,34 +69,37 @@ namespace SparkleShare {
 			
 			VBox layout_vertical = new VBox (false, 0);
 			
-				Label introduction = new Label ("<span size='x-large'><b>Welcome to SparkleShare!</b></span>");
-				introduction.UseMarkup = true;
-				introduction.Xalign = 0;
+				Label introduction = new Label ("<span size='x-large'><b>Welcome to SparkleShare!</b></span>") {
+					UseMarkup = true,
+					Xalign = 0
+				};
 				
 				Label information = new Label ("Before we can create a SparkleShare folder on this " +
-				                               "computer, we need a few bits of information from you.");
-				information.Xalign = 0;
-				information.Wrap = true;
-				
+				                               "computer, we need a few bits of information from you.") {
+					Xalign = 0,
+					Wrap   = true
+				};
 
-					Entry name_entry = new Entry ("");
-					Label name_label = new Label (_("<b>Full Name:</b>"));
-					
 					UnixUserInfo unix_user_info = new UnixUserInfo (UnixEnvironment.UserName);			
 
-					name_entry.Text = unix_user_info.RealName;
-					name_label.UseMarkup = true;
-					name_label.Xalign = 0;
+					Label name_label = new Label (_("<b>Full Name:</b>")) {
+						Text      = unix_user_info.RealName,
+						UseMarkup = true,
+						Xalign    = 0
+					};
 
+					Entry name_entry = new Entry ("");
 				
-				Table table = new Table (6, 2, true);
-				table.RowSpacing = 6;
+				Table table = new Table (6, 2, true) {
+					RowSpacing = 6
+				};
 				
 
 					Entry email_entry = new Entry ("");
-					Label email_label = new Label (_("<b>Email:</b>"));
-					email_label.UseMarkup = true;
-					email_label.Xalign = 0;
+					Label email_label = new Label (_("<b>Email:</b>")) {
+						UseMarkup = true,
+						Xalign    = 0
+					};
 
 					Entry server_entry = new Entry ("ssh://gitorious.org/sparkleshare");
 					Label server_label = new Label (_("<b>Folder Address:</b>"));
