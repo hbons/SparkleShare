@@ -42,7 +42,6 @@ namespace SparkleShare {
 		public string LocalPath;
 		public string RemoteOriginUrl;
 		public string CurrentHash;
-
 		public string UserEmail;
 		public string UserName;
 
@@ -51,181 +50,314 @@ namespace SparkleShare {
 			return Catalog.GetString (s);
 		}
 
-		public SparkleRepo (string RepoPath)
+		public SparkleRepo (string path)
 		{
+
+			LocalPath = path;
+			Name = Path.GetFileName (LocalPath);
 
 			Process = new Process ();
 			Process.EnableRaisingEvents = true;
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
-
-			// Get the repository's path, example: "/home/user/SparkleShare/repo"
-			LocalPath = RepoPath;
+			Process.StartInfo.FileName = "git";
 			Process.StartInfo.WorkingDirectory = LocalPath;
 
-			// Get user.name, example: "User Name"
-			UnixUserInfo UnixUserInfo = new UnixUserInfo (UnixEnvironment.UserName);			
-			if (UnixUserInfo.RealName.Equals (""))
-				UserName = "Anonymous";
-			else
-				UserName = UnixUserInfo.RealName;
-
-			// Get user.email, example: "user@github.com"
-			UserEmail = "not.set@git-scm.com";
-			Process.StartInfo.FileName = "git";
-			Process.StartInfo.Arguments = "config --get user.email";
-			Process.Start ();
-			UserEmail = Process.StandardOutput.ReadToEnd ().Trim ();
-
-			// Get remote.origin.url, example: "ssh://git@github.com/user/repo"
-			Process.StartInfo.FileName = "git";
-			Process.StartInfo.Arguments = "config --get remote.origin.url";
-			Process.Start ();
-			RemoteOriginUrl = Process.StandardOutput.ReadToEnd ().Trim ();
-
-			// Get the repository name, example: "Project"
-			Name = Path.GetFileName (LocalPath);
-
-			// Get the domain, example: "github.com" 
-			Domain = RemoteOriginUrl; 
-			Domain = Domain.Substring (Domain.IndexOf ("@") + 1);
-			if (Domain.IndexOf (":") > -1)
-				Domain = Domain.Substring (0, Domain.IndexOf (":"));
-			else
-				Domain = Domain.Substring (0, Domain.IndexOf ("/"));
-
-			// Get hash of the current commit
-			Process.StartInfo.FileName = "git";
-			Process.StartInfo.Arguments = "rev-list --max-count=1 HEAD";
-			Process.Start ();
-			CurrentHash = Process.StandardOutput.ReadToEnd ().Trim ();
+			UserName        = GetUserName ();
+			UserEmail       = GetUserEmail ();
+			RemoteOriginUrl = GetRemoteOriginUrl ();
+			CurrentHash     = GetCurrentHash ();
+			Domain          = GetDomain (RemoteOriginUrl);
 
 			// Watch the repository's folder
-			Watcher = new FileSystemWatcher (LocalPath);
-			Watcher.IncludeSubdirectories = true;
-			Watcher.EnableRaisingEvents = true;
-			Watcher.Filter = "*";
+			Watcher = new FileSystemWatcher (LocalPath) {
+				IncludeSubdirectories = true,
+				EnableRaisingEvents   = true,
+				Filter                = "*"
+			};
+
 			Watcher.Changed += new FileSystemEventHandler (OnFileActivity);
 			Watcher.Created += new FileSystemEventHandler (OnFileActivity);
 			Watcher.Deleted += new FileSystemEventHandler (OnFileActivity);
 
 			// Fetch remote changes every 20 seconds
-			FetchTimer = new Timer ();
-			FetchTimer.Interval = 20000;
+			FetchTimer = new Timer () {
+				Interval = 20000
+			};
+
 			FetchTimer.Elapsed += delegate { 
 				Fetch ();
 			};
 
-			FetchTimer.Start ();
-
-			BufferTimer = new Timer ();
-			BufferTimer.Interval = 4000;
-			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
-				SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Checking for changes.");
-
-				lock(ChangeLock) {
-					if (HasChanged) {
-						SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes found, checking if settled.");
-						DateTime now = DateTime.UtcNow;
-						TimeSpan changed = new TimeSpan (now.Ticks - LastChange.Ticks);
-						if (changed.TotalMilliseconds > 5000) {
-							HasChanged = false;
-							SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes have settled, adding.");
-							AddCommitAndPush ();
-						}
-					}
-				}
+			// Keep a buffer that checks if there are changes and
+			// whether they have settled
+			BufferTimer = new Timer () {
+				Interval = 4000
 			};
 
+			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
+				CheckForChanges ();
+			};
+
+			FetchTimer.Start ();
 			BufferTimer.Start ();
 
 			// Add everything that changed 
 			// since SparkleShare was stopped
-
 			AddCommitAndPush ();
 
-			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Nothing going on...");
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Idling...");
 
 		}
+		
+
+		public string GetDomain (string url)
+		{
+
+			string domain;
+
+			domain = url.Substring (RemoteOriginUrl.IndexOf ("@") + 1);
+			if (domain.IndexOf (":") > -1)
+				domain = domain.Substring (0, domain.IndexOf (":"));
+			else
+				domain = domain.Substring (0, domain.IndexOf ("/"));
+
+			return domain;
+
+		}
+
+
+		// Gets hash of the current commit
+		public string GetCurrentHash ()
+		{
+
+			string current_hash;
+
+			Process process = new Process ();
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.FileName = "git";
+			process.StartInfo.Arguments = "rev-list --max-count=1 HEAD";
+			process.Start ();
+
+			current_hash = process.StandardOutput.ReadToEnd ().Trim ();
+			
+			return current_hash;
+
+		}
+
+
+		// Gets the user's name, example: "User Name"
+		public string GetUserName ()
+		{
+
+			string user_name;
+
+			Process process = new Process ();
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.FileName = "git";
+			process.StartInfo.Arguments = "config --get user.name";
+			process.Start ();
+
+			user_name = process.StandardOutput.ReadToEnd ().Trim ();
+
+			if (user_name.Equals ("")) {
+
+				UnixUserInfo unix_user_info = new UnixUserInfo (UnixEnvironment.UserName);
+
+				if (unix_user_info.RealName.Equals (""))
+					user_name = "???";
+				else
+					user_name = unix_user_info.RealName;
+
+			}
+
+			return user_name;
+
+		}
+
+
+		// Gets the user's email, example: "person@gnome.org"
+		public string GetUserEmail ()
+		{
+
+			string user_email;
+
+			Process process = new Process ();
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.FileName = "git";
+			process.StartInfo.Arguments = "config --get user.email";
+			process.Start ();
+			user_email = process.StandardOutput.ReadToEnd ().Trim ();
+
+			return user_email;
+
+		}
+
+
+		// Gets the url of the remote repo, example: "ssh://git@git.gnome.org/project"
+		public string GetRemoteOriginUrl ()
+		{
+
+				string remote_origin_url;
+
+				Process process = new Process ();
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.FileName = "git";
+				process.StartInfo.Arguments = "config --get remote.origin.url";
+				process.Start ();
+
+				remote_origin_url = process.StandardOutput.ReadToEnd ().Trim ();
+
+				return remote_origin_url;
+
+		}
+
+
+		private void CheckForChanges ()
+		{
+
+			SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Checking for changes.");
+
+			lock (ChangeLock) {
+
+				if (HasChanged) {
+
+					SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes found, checking if settled.");
+
+					DateTime now     = DateTime.UtcNow;
+					TimeSpan changed = new TimeSpan (now.Ticks - LastChange.Ticks);
+
+					if (changed.TotalMilliseconds > 5000) {
+						HasChanged = false;
+						SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes have settled, adding files...");
+						AddCommitAndPush ();
+					}
+
+				}
+
+			}
+
+		}
+
 
 		// Starts a time buffer when something changes
 		private void OnFileActivity (object o, FileSystemEventArgs args)
 		{
+
 		   WatcherChangeTypes wct = args.ChangeType;
+
 			if (!ShouldIgnore (args.Name)) {
+
 				SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + args.Name + "'");
+
 				FetchTimer.Stop ();
-				lock(ChangeLock) {
+
+				lock (ChangeLock) {
 					LastChange = DateTime.UtcNow;
 					HasChanged = true;
 				}
+
 			}
+
 		}
 
+
 		// When there are changes we generally want to Add, Commit and Push
-		// so this method does them all with appropriate timers, etc switched off
+		// so this method does them all with appropriate timers, etc. switched off
 		public void AddCommitAndPush ()
 		{
+
 			try {
+
 				BufferTimer.Stop ();
 				FetchTimer.Stop ();
 	
 				Add ();
-				string Message = FormatCommitMessage ();
-				if (!Message.Equals ("")) {
-					Commit (Message);
+				string message = FormatCommitMessage ();
+
+				if (!message.Equals ("")) {
+					Commit (message);
 					Fetch ();
 					Push ();
-//					SparkleHelpers.CheckForUnicorns (Message);
+					CheckForUnicorns (message);
 				}
-			}
-			finally {
+
+			} finally {
+
 				FetchTimer.Start ();
 				BufferTimer.Start ();
+
 			}
 
 		}
-		
+
+
 		// Stages the made changes
 		private void Add ()
 		{
+
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Staging changes...");
+
 			Process.StartInfo.Arguments = "add --all";
 			Process.Start ();
 			Process.WaitForExit ();
+
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes staged.");
+
 //			SparkleUI.NotificationIcon.SetSyncingState ();
 //			SparkleUI.NotificationIcon.SetIdleState ();
+
 		}
+
 
 		// Commits the made changes
 		public void Commit (string Message)
 		{
+
 			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + Message);
+
 			Process.StartInfo.Arguments = "commit -m \"" + Message + "\"";
 			Process.Start ();
 			Process.WaitForExit ();
+
 		}
+
 
 		// Fetches changes from the remote repo	
 		public void Fetch ()
 		{
+
 			try {
+
 				FetchTimer.Stop ();
+
 //				SparkleUI.NotificationIcon.SetSyncingState ();
+
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
+
 				Process.StartInfo.Arguments = "fetch -v";
 				Process.Start ();
-				string Output = Process.StandardOutput.ReadToEnd ().Trim (); // TODO: This doesn't work :(
 				Process.WaitForExit ();
+
+				string Output = Process.StandardOutput.ReadToEnd ().Trim (); // TODO: This doesn't work :(
+
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
+
 				if (!Output.Contains ("up to date"))
 					Rebase ();
+
 //				SparkleUI.NotificationIcon.SetIdleState ();
-			}
-			finally {
+
+			} finally {
+
 				FetchTimer.Start ();
+
 			}
+
 		}
 
 		// Merges the fetched changes
@@ -235,47 +367,50 @@ namespace SparkleShare {
 			Watcher.EnableRaisingEvents = false;
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Rebasing changes...");
+
 			Process.StartInfo.Arguments = "rebase origin";
 			Process.WaitForExit ();
 			Process.Start ();
+
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes rebased.");
-			string Output = Process.StandardOutput.ReadToEnd ().Trim ();
+
+			string output = Process.StandardOutput.ReadToEnd ().Trim ();
 
 			// Show notification if there are updates
-			if (!Output.Contains ("up to date")) {
+			if (!output.Contains ("up to date")) {
 
-				if (Output.Contains ("Failed to merge")) {
+				if (output.Contains ("Failed to merge")) {
 
 					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Resolving conflict...");
 
 					Process.StartInfo.Arguments = "status";
 					Process.WaitForExit ();
 					Process.Start ();
-					Output = Process.StandardOutput.ReadToEnd ().Trim ();
+					output = Process.StandardOutput.ReadToEnd ().Trim ();
+					string [] lines = Regex.Split (output, "\n");
 
-					foreach (string Line in Regex.Split (Output, "\n")) {
+					foreach (string line in lines) {
 
-						if (Line.Contains ("needs merge")) {
+						if (line.Contains ("needs merge")) {
 
-							string ProblemFileName = Line.Substring (Line.IndexOf (": needs merge"));
+							string problem_file_name = line.Substring (line.IndexOf (": needs merge"));
 
-							Process.StartInfo.Arguments = "checkout --ours " + ProblemFileName;
+							Process.StartInfo.Arguments = "checkout --ours " + problem_file_name;
 							Process.WaitForExit ();
 							Process.Start ();
 							
-							DateTime DateTime = new DateTime ();
 							string TimeStamp = DateTime.Now.ToString ("H:mm d MMM yyyy");
 
-							File.Move (ProblemFileName,
-								ProblemFileName + " (" + UserName  + ", " + TimeStamp + ")");
+							File.Move (problem_file_name,
+								problem_file_name + " (" + UserName  + ", " + TimeStamp + ")");
 							           
 							Process.StartInfo.Arguments
-								= "checkout --theirs " + ProblemFileName;
+								= "checkout --theirs " + problem_file_name;
 							Process.WaitForExit ();
 							Process.Start ();
 
-							string ConflictTitle = "A mid-air collision happened!\n";
-							string ConflictSubtext = "Don't worry, SparkleShare made\na copy of the conflicting files.";
+							string conflict_title   = "A mid-air collision happened!\n";
+							string conflict_subtext = "Don't worry, SparkleShare made\na copy of the conflicting files.";
 
 //							SparkleBubble ConflictBubble =
 	//							new  SparkleBubble(_(ConflictTitle), _(ConflictSubtext));
@@ -291,7 +426,9 @@ namespace SparkleShare {
 					Process.StartInfo.Arguments = "rebase --continue";
 					Process.WaitForExit ();
 					Process.Start ();
+
 					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
+
 					Push ();
 					Fetch ();
 			
@@ -345,33 +482,51 @@ namespace SparkleShare {
 			}
 
 			Watcher.EnableRaisingEvents = true;
-			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Nothing going on...");
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Idling...");
 
 		}
 
 		// Pushes the changes to the remote repo
 		public void Push ()
 		{
+
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing changes...");
+
 			Process.StartInfo.Arguments = "push";
 			Process.Start ();
 			Process.WaitForExit ();
+
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes pushed.");
+
 //			SparkleUI.NotificationIcon.SetIdleState ();
+
 		}
 
-		// Ignores Repos, dotfiles, swap files and the like.
-		private bool ShouldIgnore (string FileName) {
-			if (FileName.Substring (0, 1).Equals (".") ||
-				 FileName.Contains (".lock") ||
-				 FileName.Contains (".git") ||
-				 FileName.Contains ("/.") ||
-				 Directory.Exists (LocalPath + FileName))
+
+		// Ignores repos, dotfiles, swap files and the like.
+		private bool ShouldIgnore (string file_name) {
+
+			if (file_name.Substring (0, 1).Equals (".") ||
+			    file_name.Contains (".lock") ||
+			    file_name.Contains (".git") ||
+			    file_name.Contains ("/.") ||
+			    Directory.Exists (LocalPath + file_name)) {
+
 				return true; // Yes, ignore it.
-			else if (FileName.Length > 3 && FileName.Substring (FileName.Length - 4).Equals (".swp"))
-				return true;
-			else return false;
+
+			} else if (file_name.Length > 3 &&
+			           file_name.Substring (file_name.Length - 4).Equals (".swp")) {
+
+				return true; // Yes, ignore it.
+
+			} else {
+
+				return false;
+				
+			}
+
 		}
+
 
 		// Creates a pretty commit message based on what has changed
 		private string FormatCommitMessage ()
@@ -390,70 +545,70 @@ namespace SparkleShare {
 			Process.Start ();
 			string Output = Process.StandardOutput.ReadToEnd ();
 
-			foreach (string Line in Regex.Split (Output, "\n")) {
-				if (Line.IndexOf ("new file:") > -1)
+			foreach (string line in Regex.Split (Output, "\n")) {
+				if (line.IndexOf ("new file:") > -1)
 					FilesAdded++;
-				if (Line.IndexOf ("modified:") > -1)
+				if (line.IndexOf ("modified:") > -1)
 					FilesEdited++;
-				if (Line.IndexOf ("renamed:") > -1)
+				if (line.IndexOf ("renamed:") > -1)
 					FilesRenamed++;
-				if (Line.IndexOf ("deleted:") > -1)
+				if (line.IndexOf ("deleted:") > -1)
 					FilesDeleted++;
 			}
 
-			foreach (string Line in Regex.Split (Output, "\n")) {
+			foreach (string line in Regex.Split (Output, "\n")) {
 
 				// Format message for when files are added,
 				// example: "added 'file' and 3 more."
-				if (Line.IndexOf ("new file:") > -1 && !DoneAddCommit) {
+				if (line.IndexOf ("new file:") > -1 && !DoneAddCommit) {
 					DoneAddCommit = true;
 					if (FilesAdded > 1)
 						return "added ‘" + 
-							Line.Replace ("#\tnew file:", "").Trim () + 
+							line.Replace ("#\tnew file:", "").Trim () + 
 							"’\nand " + (FilesAdded - 1) + " more.";
 					else
 						return "added ‘" + 
-							Line.Replace ("#\tnew file:", "").Trim () + "’.";
+							line.Replace ("#\tnew file:", "").Trim () + "’.";
 				}
 
 				// Format message for when files are edited,
 				// example: "edited 'file'."
-				if (Line.IndexOf ("modified:") > -1 && !DoneEditCommit) {
+				if (line.IndexOf ("modified:") > -1 && !DoneEditCommit) {
 					DoneEditCommit = true;
 					if (FilesEdited > 1)
 						return "edited ‘" + 
-							Line.Replace ("#\tmodified:", "").Trim () + 
+							line.Replace ("#\tmodified:", "").Trim () + 
 							"’\nand " + (FilesEdited - 1) + " more.";
 					else
 						return "edited ‘" + 
-							Line.Replace ("#\tmodified:", "").Trim () + "’.";
+							line.Replace ("#\tmodified:", "").Trim () + "’.";
 				}
 
 				// Format message for when files are edited,
 				// example: "deleted 'file'."
-				if (Line.IndexOf ("deleted:") > -1 && !DoneDeleteCommit) {
+				if (line.IndexOf ("deleted:") > -1 && !DoneDeleteCommit) {
 					DoneDeleteCommit = true;
 					if (FilesDeleted > 1)
 						return "deleted ‘" + 
-							Line.Replace ("#\tdeleted:", "").Trim () + 
+							line.Replace ("#\tdeleted:", "").Trim () + 
 							"’\nand " + (FilesDeleted - 1) + " more.";
 					else
 						return "deleted ‘" + 
-							Line.Replace ("#\tdeleted:", "").Trim () + "’.";
+							line.Replace ("#\tdeleted:", "").Trim () + "’.";
 				}
 
 				// Format message for when files are renamed,
 				// example: "renamed 'file' to 'new name'."
-				if (Line.IndexOf ("renamed:") > -1 && !DoneRenameCommit) {
+				if (line.IndexOf ("renamed:") > -1 && !DoneRenameCommit) {
 					DoneDeleteCommit = true;
 					if (FilesRenamed > 1)
 						return "renamed ‘" + 
-							Line.Replace ("#\trenamed:", "").Trim ().Replace
+							line.Replace ("#\trenamed:", "").Trim ().Replace
 							(" -> ", "’ to ‘") + "’ and " + (FilesDeleted - 1) + 
 							" more.";
 					else
 						return "renamed ‘" + 
-							Line.Replace ("#\trenamed:", "").Trim ().Replace
+							line.Replace ("#\trenamed:", "").Trim ().Replace
 							(" -> ", "’ to ‘") + "’.";
 				}
 
