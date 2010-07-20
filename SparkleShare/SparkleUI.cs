@@ -24,13 +24,12 @@ using System.IO;
 
 namespace SparkleShare {
 
-	public class SparkleUI
-	{
+	public class SparkleUI {
 		
 		private Process Process;
 
 		// Short alias for the translations
-		public static string _ (string s)
+		public static string _(string s)
 		{
 			return Catalog.GetString (s);
 		}
@@ -217,6 +216,10 @@ namespace SparkleShare {
 		}
 
 
+		public void Test (object o, SparkleEventArgs args) {
+			Console.WriteLine ("AAAAAAAAAAAAAAAAAA");
+		}
+
 		public void UpdateRepositories ()
 		{
 
@@ -251,11 +254,31 @@ namespace SparkleShare {
 
 			}
 
+					SparkleRepo a = TmpRepos [0];
+					a.Added += new SparkleRepo.AddedEventHandler (Test);
+
+
 			SparkleShare.Repositories = new SparkleRepo [FolderCount];
 			Array.Copy (TmpRepos, SparkleShare.Repositories, FolderCount);
 
-		}
 
 	}
+}	
+	public class SparkleEventArgs : System.EventArgs {
+        
+    private string message;
+		
+
+    public SparkleEventArgs (string s)
+    {
+        this.message = s;
+    }
+
+    public string Message ()
+    {
+        return message;
+    }
+
+}
 
 }
