@@ -45,6 +45,11 @@ namespace SparkleShare {
 		public string UserEmail;
 		public string UserName;
 
+
+		public delegate void AddedEventHandler (object o, SparkleEventArgs args);
+		public event AddedEventHandler Added; 
+
+
 		public static string _ (string s)
 		{
 			return Catalog.GetString (s);
@@ -310,6 +315,10 @@ namespace SparkleShare {
 
 //			SparkleUI.NotificationIcon.SetSyncingState ();
 //			SparkleUI.NotificationIcon.SetIdleState ();
+
+			SparkleEventArgs args = new SparkleEventArgs ("add test");
+			if (Added != null)
+	            Added (this, args); 
 
 		}
 
@@ -637,4 +646,15 @@ namespace SparkleShare {
 
 	}
 
+
+
+
+
+
+
+
 }
+
+
+
+
