@@ -102,11 +102,11 @@ namespace SparkleShare {
 					};
 
 					Entry server_entry = new Entry ("ssh://gitorious.org/sparkleshare");
-					Label server_label = new Label (_("<b>Folder Address:</b>"));
-					server_label.UseMarkup = true;
-					server_label.Xalign = 0;
-					server_label.Sensitive = false;
-					server_entry.Sensitive = false;
+					Label server_label = new Label (_("<b>Folder Address:</b>")) {
+						UseMarkup = true,
+						Xalign = 0,
+						Sensitive = false
+					};
 					
 					CheckButton check_button = new CheckButton ("I already have an existing folder on a SparkleShare server");
 					check_button.Clicked += delegate {
