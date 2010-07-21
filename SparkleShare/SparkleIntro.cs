@@ -67,28 +67,32 @@ namespace SparkleShare {
 			
 			VBox wrapper = new VBox (false, 0);
 			
-			VBox layout_vertical = new VBox (false, 0);
+			VBox layout_vertical = new VBox (false, 0) {
+				BorderWidth = 30
+			};
 			
-				Label introduction = new Label ("<span size='x-large'><b>Welcome to SparkleShare!</b></span>") {
+				Label introduction = new Label ("<span size='x-large'><b>" +
+				                                _("Welcome to SparkleShare!") +
+				                                "</b></span>") {
 					UseMarkup = true,
 					Xalign = 0
 				};
 				
-				Label information = new Label ("Before we can create a SparkleShare folder on this " +
-				                               "computer, we need a few bits of information from you.") {
+				Label information = new Label (_("Before we can create a SparkleShare folder on this " +
+				                                 "computer, we need a few bits of information from you.")) {
 					Xalign = 0,
 					Wrap   = true
 				};
 
 					UnixUserInfo unix_user_info = new UnixUserInfo (UnixEnvironment.UserName);			
 
-					Label name_label = new Label (_("<b>Full Name:</b>")) {
-						Text      = unix_user_info.RealName,
+					Label name_label = new Label ("<b>" + _("Full Name:") + "</b>") {
 						UseMarkup = true,
 						Xalign    = 0
 					};
 
-					Entry name_entry = new Entry ("");
+					Entry name_entry = new Entry (unix_user_info.RealName);
+
 				
 				Table table = new Table (6, 2, true) {
 					RowSpacing = 6
@@ -96,29 +100,42 @@ namespace SparkleShare {
 				
 
 					Entry email_entry = new Entry ("");
-					Label email_label = new Label (_("<b>Email:</b>")) {
+					Label email_label = new Label ("<b>" + _("Email:") + "</b>") {
 						UseMarkup = true,
 						Xalign    = 0
 					};
 
-					Entry server_entry = new Entry ("ssh://gitorious.org/sparkleshare");
-					Label server_label = new Label (_("<b>Folder Address:</b>")) {
+					Entry server_entry = new Entry ("ssh://gitorious.org/sparkleshare") {
+						Sensitive = false
+					};
+
+					Label server_label = new Label ("<b>" + _("Folder Address:") + "</b>") {
 						UseMarkup = true,
 						Xalign = 0,
 						Sensitive = false
 					};
 					
-					CheckButton check_button = new CheckButton ("I already have an existing folder on a SparkleShare server");
+					CheckButton check_button;
+					check_button = new CheckButton (_("I already have access to an existing " +
+					                                  "folder on a SparkleShare server"));
+
 					check_button.Clicked += delegate {
+
 						if (check_button.Active) {
+
 							server_label.Sensitive = true;
 							server_entry.Sensitive = true;
 							server_entry.HasFocus = true;
+
 						} else {
+
 							server_label.Sensitive = false;
 							server_entry.Sensitive = false;					
+
 						}
+
 						ShowAll ();
+
 					};
 
 				table.Attach (name_label, 0, 1, 0, 1);
@@ -129,19 +146,27 @@ namespace SparkleShare {
 				table.Attach (server_label, 0, 1, 4, 5);
 				table.Attach (server_entry, 1, 2, 4, 5);
 				
-			HButtonBox controls = new HButtonBox ();
-			controls.Layout = ButtonBoxStyle.End;
+			HButtonBox controls = new HButtonBox () {
+				BorderWidth = 12,
+				Layout      = ButtonBoxStyle.End
+			};
 
 			Button done_button = new Button (_("Next"));
 			
 			done_button.Clicked += delegate (object o, EventArgs args) {
+
 				done_button.Remove (done_button.Child);
+
 				HBox hbox = new HBox ();
+
 				hbox.Add (new SparkleSpinner ());
-				hbox.Add (new Label ("Configuring…"));
+				hbox.Add (new Label (_("Configuring…")));
+
 				done_button.Add (hbox);
+
 				done_button.Sensitive = false;
-				table.Sensitive = false;
+				table.Sensitive       = false;
+
 				done_button.ShowAll ();
 
 				string user_name  = name_entry.Text;
@@ -150,11 +175,9 @@ namespace SparkleShare {
 				string config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, ".gitconfig");
 
 				TextWriter writer = new StreamWriter (config_file_path);
-
 				writer.WriteLine ("[user]\n" +
-					"\tname = " + user_name + "\n" +
+					"\tname  = " + user_name + "\n" +
 					"\temail = " + user_email + "\n");
-
 				writer.Close ();
 
 				SparkleHelpers.DebugInfo ("Config", "Created '" + config_file_path + "'");
@@ -171,8 +194,7 @@ namespace SparkleShare {
 			layout_vertical.PackStart (table, false, false, 0);
 
 			wrapper.PackStart (layout_vertical, true, true, 0);
-			layout_vertical.BorderWidth = 30;
-			controls.BorderWidth = 12;
+
 			wrapper.PackStart (controls, false, true, 0);
 			layout_horizontal.PackStart (wrapper, true, true, 0);
 
@@ -195,37 +217,39 @@ namespace SparkleShare {
 			
 			VBox wrapper = new VBox (false, 0);
 			
-			VBox layout_vertical = new VBox (false, 0);
-			layout_vertical.BorderWidth = 30;
+			VBox layout_vertical = new VBox (false, 0) {
+				BorderWidth = 30
+			};
 
-			Label introduction;
-			introduction = new Label ("<span size='x-large'><b>SparkleShare is ready to go!</b></span>");
+			Label introduction = new Label ("<span size='x-large'><b>" +
+			                                _("SparkleShare is ready to go!") +
+			                                "</b></span>") {
+				UseMarkup = true,
+				Xalign = 0
+			};
 
-			introduction.UseMarkup = true;
-			introduction.Xalign = 0;
+			Label information = new Label (_("Now you can start accepting invitations from others. " +
+                                             "Just click on invitations you get by email and " +
+                                             "we will take care of the rest.")) {
+            	UseMarkup = true,
+            	Wrap      = true,
+				Xalign    = 0
+			};
 
-			Label information;
-			information = new Label ("You can now start accepting invitations from others. " +
-                                     "Just click on invitations you get by email and " +
-                                     "we will take care of the rest.");
-                                     
-            information.UseMarkup = true;
-            information.Wrap = true;
-			information.Xalign = 0;
 
 			HBox link_wrapper = new HBox (false, 0);
 			LinkButton link = new LinkButton ("http://www.sparkleshare.org/",
-				_("Learn how to host your own SparkleSpace"));
-
+				_("Learn how to host your own SparkleServer"));
 			link_wrapper.PackStart (link, false, false, 0);
 
 			layout_vertical.PackStart (introduction, false, false, 0);
 			layout_vertical.PackStart (information, false, false, 21);
 			layout_vertical.PackStart (link_wrapper, false, false, 0);
 
-			HButtonBox controls = new HButtonBox ();
-			controls.Layout = ButtonBoxStyle.End;
-			controls.BorderWidth = 12;
+			HButtonBox controls = new HButtonBox () {
+				Layout      = ButtonBoxStyle.End,
+				BorderWidth = 12
+			};
 
 				Button finish_button = new Button (_("Finish"));
 
