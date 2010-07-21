@@ -6,5 +6,5 @@ NAUTILUS_PYTHON_INSTALL_DIR=$(subst $(NAUTILUS_LIBDIR),${libdir},$(NAUTILUS_PYTH
 extensiondir = $(NAUTILUS_PYTHON_INSTALL_DIR)
 extension_SCRIPTS = $(addprefix $(srcdir)/, $(SOURCES))
 else
-EXTRA_DIST = $(SOURCES)
+EXTRA_DIST = $(SOURCES) sparkleshare-nautilus-extension.py.in
 endif
