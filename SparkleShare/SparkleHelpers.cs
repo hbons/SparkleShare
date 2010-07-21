@@ -38,7 +38,7 @@ namespace SparkleShare {
 				Directory.CreateDirectory (AvatarPath);
 				SparkleHelpers.DebugInfo ("Config", "Created '" + AvatarPath + "'");
 			}
-			
+
 			string AvatarFilePath = CombineMore (AvatarPath, "avatar-" + Email);
 
 			if (File.Exists (AvatarFilePath))
@@ -115,7 +115,10 @@ namespace SparkleShare {
 			if (ShowDebugInfo) {
 				DateTime DateTime = new DateTime ();					
 				string TimeStamp = DateTime.Now.ToString ("HH:mm:ss");
-				Console.WriteLine ("[" + TimeStamp + "]" + "[" + Type + "] " + Message);
+				if (Message.StartsWith ("["))
+					Console.WriteLine ("[" + TimeStamp + "]" + "[" + Type + "]" + Message);
+				else
+					Console.WriteLine ("[" + TimeStamp + "]" + "[" + Type + "] " + Message);
 			}
 
 		}
