@@ -15,3 +15,4 @@ SparkleShare/SparkleSpinner.cs
 SparkleShare/SparkleStatusIcon.cs
 SparkleShare/SparkleUI.cs
 SparkleShare/SparkleWindow.cs
+SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in
