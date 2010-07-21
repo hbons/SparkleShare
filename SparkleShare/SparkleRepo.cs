@@ -49,6 +49,15 @@ namespace SparkleShare {
 		public delegate void AddedEventHandler (object o, SparkleEventArgs args);
 		public event AddedEventHandler Added; 
 
+		public delegate void CommitedEventHandler (object o, SparkleEventArgs args);
+		public event CommitedEventHandler Commited; 
+
+		public delegate void PushedEventHandler (object o, SparkleEventArgs args);
+		public event PushedEventHandler Pushed;
+
+		public delegate void FetchedEventHandler (object o, SparkleEventArgs args);
+		public event FetchedEventHandler Fetched;
+
 
 		public static string _ (string s)
 		{
@@ -74,6 +83,7 @@ namespace SparkleShare {
 			CurrentHash     = GetCurrentHash ();
 			Domain          = GetDomain (RemoteOriginUrl);
 
+
 			// Watch the repository's folder
 			Watcher = new FileSystemWatcher (LocalPath) {
 				IncludeSubdirectories = true,
@@ -85,6 +95,7 @@ namespace SparkleShare {
 			Watcher.Created += new FileSystemEventHandler (OnFileActivity);
 			Watcher.Deleted += new FileSystemEventHandler (OnFileActivity);
 
+
 			// Fetch remote changes every 20 seconds
 			FetchTimer = new Timer () {
 				Interval = 20000
@@ -93,6 +104,7 @@ namespace SparkleShare {
 			FetchTimer.Elapsed += delegate { 
 				Fetch ();
 			};
+
 
 			// Keep a buffer that checks if there are changes and
 			// whether they have settled
@@ -104,120 +116,16 @@ namespace SparkleShare {
 				CheckForChanges ();
 			};
 
+
 			FetchTimer.Start ();
 			BufferTimer.Start ();
+
 
 			// Add everything that changed 
 			// since SparkleShare was stopped
 			AddCommitAndPush ();
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Idling...");
-
-		}
-		
-
-		public string GetDomain (string url)
-		{
-
-			string domain;
-
-			domain = url.Substring (RemoteOriginUrl.IndexOf ("@") + 1);
-			if (domain.IndexOf (":") > -1)
-				domain = domain.Substring (0, domain.IndexOf (":"));
-			else
-				domain = domain.Substring (0, domain.IndexOf ("/"));
-
-			return domain;
-
-		}
-
-
-		// Gets hash of the current commit
-		public string GetCurrentHash ()
-		{
-
-			string current_hash;
-
-			Process process = new Process ();
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.FileName = "git";
-			process.StartInfo.Arguments = "rev-list --max-count=1 HEAD";
-			process.Start ();
-
-			current_hash = process.StandardOutput.ReadToEnd ().Trim ();
-			
-			return current_hash;
-
-		}
-
-
-		// Gets the user's name, example: "User Name"
-		public string GetUserName ()
-		{
-
-			string user_name;
-
-			Process process = new Process ();
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.FileName = "git";
-			process.StartInfo.Arguments = "config --get user.name";
-			process.Start ();
-
-			user_name = process.StandardOutput.ReadToEnd ().Trim ();
-
-			if (user_name.Equals ("")) {
-
-				UnixUserInfo unix_user_info = new UnixUserInfo (UnixEnvironment.UserName);
-
-				if (unix_user_info.RealName.Equals (""))
-					user_name = "???";
-				else
-					user_name = unix_user_info.RealName;
-
-			}
-
-			return user_name;
-
-		}
-
-
-		// Gets the user's email, example: "person@gnome.org"
-		public string GetUserEmail ()
-		{
-
-			string user_email;
-
-			Process process = new Process ();
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.FileName = "git";
-			process.StartInfo.Arguments = "config --get user.email";
-			process.Start ();
-			user_email = process.StandardOutput.ReadToEnd ().Trim ();
-
-			return user_email;
-
-		}
-
-
-		// Gets the url of the remote repo, example: "ssh://git@git.gnome.org/project"
-		public string GetRemoteOriginUrl ()
-		{
-
-				string remote_origin_url;
-
-				Process process = new Process ();
-				process.StartInfo.UseShellExecute = false;
-				process.StartInfo.RedirectStandardOutput = true;
-				process.StartInfo.FileName = "git";
-				process.StartInfo.Arguments = "config --get remote.origin.url";
-				process.Start ();
-
-				remote_origin_url = process.StandardOutput.ReadToEnd ().Trim ();
-
-				return remote_origin_url;
 
 		}
 
@@ -316,7 +224,8 @@ namespace SparkleShare {
 //			SparkleUI.NotificationIcon.SetSyncingState ();
 //			SparkleUI.NotificationIcon.SetIdleState ();
 
-			SparkleEventArgs args = new SparkleEventArgs ("add test");
+			SparkleEventArgs args = new SparkleEventArgs ("Added");
+
 			if (Added != null)
 	            Added (this, args); 
 
@@ -332,6 +241,11 @@ namespace SparkleShare {
 			Process.StartInfo.Arguments = "commit -m \"" + Message + "\"";
 			Process.Start ();
 			Process.WaitForExit ();
+
+			SparkleEventArgs args = new SparkleEventArgs ("Commited");
+
+			if (Commited != null)
+	            Commited (this, args); 
 
 		}
 
@@ -356,6 +270,11 @@ namespace SparkleShare {
 
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
 
+				SparkleEventArgs args = new SparkleEventArgs ("Fetched");
+
+				if (Fetched != null)
+			        Fetched (this, args); 
+
 				if (!Output.Contains ("up to date"))
 					Rebase ();
 
@@ -368,6 +287,7 @@ namespace SparkleShare {
 			}
 
 		}
+
 
 		// Merges the fetched changes
 		public void Rebase ()
@@ -495,6 +415,7 @@ namespace SparkleShare {
 
 		}
 
+
 		// Pushes the changes to the remote repo
 		public void Push ()
 		{
@@ -506,6 +427,11 @@ namespace SparkleShare {
 			Process.WaitForExit ();
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes pushed.");
+
+			SparkleEventArgs args = new SparkleEventArgs ("Pushed");
+
+			if (Pushed != null)
+	            Pushed (this, args); 
 
 //			SparkleUI.NotificationIcon.SetIdleState ();
 
@@ -533,6 +459,112 @@ namespace SparkleShare {
 				return false;
 				
 			}
+
+		}
+
+
+		public string GetDomain (string url)
+		{
+
+			string domain;
+
+			domain = url.Substring (RemoteOriginUrl.IndexOf ("@") + 1);
+			if (domain.IndexOf (":") > -1)
+				domain = domain.Substring (0, domain.IndexOf (":"));
+			else
+				domain = domain.Substring (0, domain.IndexOf ("/"));
+
+			return domain;
+
+		}
+
+
+		// Gets hash of the current commit
+		public string GetCurrentHash ()
+		{
+
+			string current_hash;
+
+			Process process = new Process ();
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.FileName = "git";
+			process.StartInfo.Arguments = "rev-list --max-count=1 HEAD";
+			process.Start ();
+
+			current_hash = process.StandardOutput.ReadToEnd ().Trim ();
+			
+			return current_hash;
+
+		}
+
+
+		// Gets the user's name, example: "User Name"
+		public string GetUserName ()
+		{
+
+			string user_name;
+
+			Process process = new Process ();
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.FileName = "git";
+			process.StartInfo.Arguments = "config --get user.name";
+			process.Start ();
+
+			user_name = process.StandardOutput.ReadToEnd ().Trim ();
+
+			if (user_name.Equals ("")) {
+
+				UnixUserInfo unix_user_info = new UnixUserInfo (UnixEnvironment.UserName);
+
+				if (unix_user_info.RealName.Equals (""))
+					user_name = "???";
+				else
+					user_name = unix_user_info.RealName;
+
+			}
+
+			return user_name;
+
+		}
+
+
+		// Gets the user's email, example: "person@gnome.org"
+		public string GetUserEmail ()
+		{
+
+			string user_email;
+
+			Process process = new Process ();
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.FileName = "git";
+			process.StartInfo.Arguments = "config --get user.email";
+			process.Start ();
+			user_email = process.StandardOutput.ReadToEnd ().Trim ();
+
+			return user_email;
+
+		}
+
+
+		// Gets the url of the remote repo, example: "ssh://git@git.gnome.org/project"
+		public string GetRemoteOriginUrl ()
+		{
+
+				string remote_origin_url;
+
+				Process process = new Process ();
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.FileName = "git";
+				process.StartInfo.Arguments = "config --get remote.origin.url";
+				process.Start ();
+
+				remote_origin_url = process.StandardOutput.ReadToEnd ().Trim ();
+
+				return remote_origin_url;
 
 		}
 
