@@ -647,11 +647,16 @@ namespace SparkleShare {
 	}
 
 
+	public class SparkleEventArgs : System.EventArgs {
+        
+	    public string Message;
 
+	    public SparkleEventArgs (string s)
+    	{
+	        Message = s;
+	    }
 
-
-
-
+	}
 
 }
 
