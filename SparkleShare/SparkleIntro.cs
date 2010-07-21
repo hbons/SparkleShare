@@ -2,36 +2,34 @@
 //   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
 //
 //   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
+//   it under the terms of the GNU General private License as published by
 //   the Free Software Foundation, either version 3 of the License, or
 //   (at your option) any later version.
 //
 //   This program is distributed in the hope that it will be useful,
 //   but WITHOUT ANY WARRANTY; without even the implied warranty of
 //   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
+//   GNU General private License for more details.
 //
-//   You should have received a copy of the GNU General Public License
+//   You should have received a copy of the GNU General private License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
 using Mono.Unix;
 using SparkleShare;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Timers;
-using System.Security.Cryptography;
 
 namespace SparkleShare {
 
 	public class SparkleIntro : Window {
 
-		public Entry NameEntry;
-		public Entry EmailEntry;
-		public Entry ServerEntry;
+		private Entry NameEntry;
+		private Entry EmailEntry;
+		private Entry ServerEntry;
+		private Button NextButton;
 
 		// Short alias for the translations
 		public static string _ (string s)
@@ -55,7 +53,7 @@ namespace SparkleShare {
 		}
 
 
-		public void ShowStepOne ()
+		private void ShowStepOne ()
 		{
 
 			HBox layout_horizontal = new HBox (false, 6);
@@ -82,6 +80,10 @@ namespace SparkleShare {
 							Wrap   = true
 						};
 
+						Table table = new Table (6, 2, true) {
+							RowSpacing = 6
+						};
+
 							UnixUserInfo unix_user_info = new UnixUserInfo (UnixEnvironment.UserName);			
 
 							Label name_label = new Label ("<b>" + _("Full Name:") + "</b>") {
@@ -90,19 +92,22 @@ namespace SparkleShare {
 							};
 
 							NameEntry = new Entry (unix_user_info.RealName);
+							NameEntry.Changed += delegate {
+								CheckFields ();
+							};
 
-				
-						Table table = new Table (6, 2, true) {
-							RowSpacing = 6
-						};
 
-							EmailEntry = new Entry ("");
+							EmailEntry = new Entry (GetUserEmail ());
+							EmailEntry.Changed += delegate {
+								CheckFields ();
+							};
+
 							Label email_label = new Label ("<b>" + _("Email:") + "</b>") {
 								UseMarkup = true,
 								Xalign    = 0
 							};
 
-							Entry server_entry = new Entry ("ssh://gitorious.org/sparkleshare") {
+							ServerEntry = new Entry ("ssh://gitorious.org/sparkleshare") {
 								Sensitive = false
 							};
 
@@ -113,7 +118,7 @@ namespace SparkleShare {
 							};
 					
 							CheckButton check_button;
-							check_button = new CheckButton (_("I already subscribed to an existing " +
+							check_button = new CheckButton (_("I'm already subscribed to an existing " +
 									                          "folder on a SparkleShare server"));
 
 							check_button.Clicked += delegate {
@@ -121,13 +126,13 @@ namespace SparkleShare {
 								if (check_button.Active) {
 
 									server_label.Sensitive = true;
-									server_entry.Sensitive = true;
-									server_entry.HasFocus = true;
+									ServerEntry.Sensitive = true;
+									ServerEntry.HasFocus = true;
 
 								} else {
 
 									server_label.Sensitive = false;
-									server_entry.Sensitive = false;					
+									ServerEntry.Sensitive = false;					
 
 								}
 
@@ -141,38 +146,38 @@ namespace SparkleShare {
 						table.Attach (EmailEntry, 1, 2, 1, 2);
 						table.Attach (check_button, 0, 2, 3, 4);
 						table.Attach (server_label, 0, 1, 4, 5);
-						table.Attach (server_entry, 1, 2, 4, 5);
+						table.Attach (ServerEntry, 1, 2, 4, 5);
 				
 						HButtonBox controls = new HButtonBox () {
 							BorderWidth = 12,
 							Layout      = ButtonBoxStyle.End
 						};
 
-							Button done_button = new Button (_("Next"));
+							NextButton = new Button (_("Next")) {
+								Sensitive = false
+							};
 			
-							done_button.Clicked += delegate (object o, EventArgs args) {
+							NextButton.Clicked += delegate (object o, EventArgs args) {
 
-								done_button.Remove (done_button.Child);
+								NextButton.Remove (NextButton.Child);
 
 								HBox hbox = new HBox ();
 
 								hbox.Add (new SparkleSpinner ());
 								hbox.Add (new Label (_("Configuring…")));
 
-								done_button.Add (hbox);
+								NextButton.Add (hbox);
 
-								done_button.Sensitive = false;
+								NextButton.Sensitive = false;
 								table.Sensitive       = false;
 
-								done_button.ShowAll ();
+								NextButton.ShowAll ();
 
 								Configure ();
 
-								ShowStepTwo ();
-
 							};
 			
-						controls.Add (done_button);
+						controls.Add (NextButton);
 
 					layout_vertical.PackStart (introduction, false, false, 0);
 					layout_vertical.PackStart (information, false, false, 21);
@@ -188,12 +193,14 @@ namespace SparkleShare {
 
 			Add (layout_horizontal);
 
+			CheckFields ();
+
 			ShowAll ();
 		
 		}
 
 
-		public void ShowStepTwo ()
+		private void ShowStepTwo ()
 		{
 		
 			Remove (Child);
@@ -261,8 +268,25 @@ namespace SparkleShare {
 		}
 
 
+		private void CheckFields ()
+		{
+
+			if (NameEntry.Text.Length > 0 &&
+			    IsValidEmail (EmailEntry.Text)) {
+
+				NextButton.Sensitive = true;
+
+			} else {
+
+				NextButton.Sensitive = false;
+				
+			}
+
+		}
+
+
 		// Configure SparkleShare with the user's information
-		public void Configure ()
+		private void Configure ()
 		{
 
 			string config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, ".gitconfig");
@@ -275,14 +299,83 @@ namespace SparkleShare {
 
 			GenerateKeyPair ();
 
+			ShowStepTwo ();
+
 			SparkleHelpers.DebugInfo ("Config", "Created '" + config_file_path + "'");
 
 		}
 
 
-		// Generates an RSA keypair to identify this system
-		public void GenerateKeyPair ()
+		private string GetUserEmail ()
 		{
+
+			string user_email = "";
+			string keys_path = System.IO.Path.Combine (SparklePaths.HomePath, ".ssh");
+
+			if (!Directory.Exists (keys_path))
+				return "";
+
+			foreach (string file_path in Directory.GetFiles (keys_path)) {
+
+				string file_name = System.IO.Path.GetFileName (file_path);
+
+				if (file_name.StartsWith ("sparkleshare.") && file_name.EndsWith (".key")) {
+
+					user_email = file_name.Substring (file_name.IndexOf (".") + 1);
+					user_email = user_email.Substring (0, user_email.LastIndexOf ("."));
+
+					return user_email;
+
+				}
+
+			}
+			
+			return "";
+
+		}
+
+
+		// Generates and installs an RSA keypair to identify this system
+		private void GenerateKeyPair ()
+		{
+
+			string user_email = EmailEntry.Text;
+			string keys_path = System.IO.Path.Combine (SparklePaths.HomePath, ".ssh");
+			string key_file_name = "sparkleshare." + user_email + ".key";
+
+			Process process = new Process () {
+				EnableRaisingEvents = true
+			};
+			
+			if (!Directory.Exists (keys_path))
+				Directory.CreateDirectory (keys_path);
+
+			if (!File.Exists (key_file_name)) {
+
+				process.StartInfo.WorkingDirectory = keys_path;
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.FileName = "ssh-keygen";
+				process.StartInfo.Arguments = "-t rsa -P " + user_email + " -f " + key_file_name;
+
+				process.WaitForExit ();
+				process.Start ();
+
+				process.Exited += delegate {
+					SparkleHelpers.DebugInfo ("Config", "Created key '" + key_file_name + "'");
+					SparkleHelpers.DebugInfo ("Config", "Created key '" + key_file_name + ".pub'");
+				};
+
+			}
+
+		}
+
+
+		private bool IsValidEmail(string email)
+		{
+
+			Regex regex = new Regex(@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$", RegexOptions.IgnoreCase);
+			return regex.IsMatch (email);
 
 		}
 
