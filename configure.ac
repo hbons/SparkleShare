@@ -95,6 +95,7 @@ SparkleShare/Defines.cs
 SparkleShare/AssemblyInfo.cs
 SparkleShare/Makefile
 SparkleShare/Nautilus/Makefile
+SparkleShare/Nautilus/sparkleshare-nautilus-extension.py
 po/Makefile.in
 Makefile
 ])

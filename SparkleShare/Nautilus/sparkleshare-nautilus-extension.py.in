@@ -23,6 +23,11 @@ import nautilus
 
 SPARKLESHARE_PATH = os.path.join (os.path.expanduser ('~'), "SparkleShare")
 
+import gettext
+gettext.bindtextdomain('sparkleshare', '@prefix@/share/locale')
+gettext.textdomain('sparkleshare')
+_ = gettext.gettext
+
 class SparkleShareExtension (nautilus.MenuProvider):
 
 
@@ -100,8 +105,8 @@ class SparkleShareExtension (nautilus.MenuProvider):
             commit_hashes [i] = line.strip ("\n")
             i += 1
 
-        earlier_version_menu_item = nautilus.MenuItem ("Nautilus::OpenOlderVersion", "Get Earlier Version",
-                                                       "Make a copy of an earlier version in this folder")
+        earlier_version_menu_item = nautilus.MenuItem ("Nautilus::OpenOlderVersion", _("Get Earlier Version"),
+                                                       _("Make a copy of an earlier version in this folder"))
         submenu = nautilus.Menu ()
 
         i = 0
@@ -114,7 +119,7 @@ class SparkleShareExtension (nautilus.MenuProvider):
 
                 menu_item = nautilus.MenuItem ("Nautilus::Version" + epochs [i],
                                            timestamp + "\t" + username,
-                                           "Select to get a copy of this version")
+                                           _("Select to get a copy of this version"))
 
                 menu_item.connect ("activate", self.checkout_version, file_reference, commit_hashes [i],
                                    username, time.localtime (float (epochs [i])))
