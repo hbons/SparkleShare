@@ -118,8 +118,8 @@ namespace SparkleShare {
 							};
 					
 							CheckButton check_button;
-							check_button = new CheckButton (_("I'm already subscribed to an existing " +
-									                          "folder on a SparkleShare server"));
+							check_button = new CheckButton (_("I'm already subscribed to a " +
+									                          "folder on a SparkleServer"));
 
 							check_button.Clicked += delegate {
 
@@ -268,6 +268,8 @@ namespace SparkleShare {
 		}
 
 
+		// Enables or disables the "Next" button depending on the 
+		// entries filled in by the user
 		private void CheckFields ()
 		{
 
@@ -285,7 +287,7 @@ namespace SparkleShare {
 		}
 
 
-		// Configure SparkleShare with the user's information
+		// Configures SparkleShare with the user's information
 		private void Configure ()
 		{
 
@@ -297,15 +299,16 @@ namespace SparkleShare {
 			                  "\temail = " + EmailEntry.Text + "\n");
 			writer.Close ();
 
+			SparkleHelpers.DebugInfo ("Config", "Created '" + config_file_path + "'");
+
 			GenerateKeyPair ();
 
 			ShowStepTwo ();
 
-			SparkleHelpers.DebugInfo ("Config", "Created '" + config_file_path + "'");
-
 		}
 
 
+		// Gets the email address if the user alreasy has a SparkleShare key installed
 		private string GetUserEmail ()
 		{
 
@@ -371,6 +374,7 @@ namespace SparkleShare {
 		}
 
 
+		// Checks to see if an email address is valid
 		private bool IsValidEmail(string email)
 		{
 
