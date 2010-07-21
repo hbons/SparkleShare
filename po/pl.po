@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-07 17:44+0000\n"
+"POT-Creation-Date: 2010-07-21 19:48+0000\n"
 "PO-Revision-Date: 2010-06-11 21:59+0200\n"
 "Last-Translator: Łukasz Jernaś <deejay1@srem.org>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
@@ -263,6 +263,18 @@ msgstr "Dodaj katalog…"
 #, csharp-format
 msgid "‘{0}’ on {1}"
 msgstr "„{0}” na {1}"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:108
+msgid "Get Earlier Version"
+msgstr "Pobierz wcześniejszą wersję"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:109
+msgid "Make a copy of an earlier version in this folder"
+msgstr "Tworzy kopię wcześniejszej wersji w tym katalogu"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:122
+msgid "Select to get a copy of this version"
+msgstr "Zaznacz, aby pobrać kopię tej wersji"
 
 #~ msgid "That’s you!"
 #~ msgstr "To ty!"
