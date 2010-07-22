@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-07 17:44+0000\n"
+"POT-Creation-Date: 2010-07-22 06:17+0000\n"
 "PO-Revision-Date: 2010-07-05 13:01-0300\n"
 "Last-Translator: Magnun Leno <magnun.leno@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -255,3 +255,15 @@ msgstr "Adicionar uma Pasta…"
 #, csharp-format
 msgid "‘{0}’ on {1}"
 msgstr "‘{0}’ de {1}"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:108
+msgid "Get Earlier Version"
+msgstr "Obter Versão Mais Recente"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:109
+msgid "Make a copy of an earlier version in this folder"
+msgstr "Fazer uma cópia de uma anterior nesta pasta"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:122
+msgid "Select to get a copy of this version"
+msgstr "Selecione para obter uma cópia dessa versão"
