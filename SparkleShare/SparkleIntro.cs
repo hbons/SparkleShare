@@ -12,7 +12,7 @@
 //   GNU General private License for more details.
 //
 //   You should have received a copy of the GNU General private License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
 using Mono.Unix;
@@ -268,7 +268,7 @@ namespace SparkleShare {
 		}
 
 
-		// Enables or disables the "Next" button depending on the 
+		// Enables or disables the 'Next' button depending on the 
 		// entries filled in by the user
 		private void CheckFields ()
 		{
@@ -361,7 +361,6 @@ namespace SparkleShare {
 				process.StartInfo.FileName = "ssh-keygen";
 				process.StartInfo.Arguments = "-t rsa -P " + user_email + " -f " + key_file_name;
 
-				process.WaitForExit ();
 				process.Start ();
 
 				process.Exited += delegate {

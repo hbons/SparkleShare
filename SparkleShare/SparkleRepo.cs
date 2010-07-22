@@ -12,7 +12,7 @@
 //   GNU General Public License for more details.
 //
 //   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
 using Mono.Unix;
@@ -25,7 +25,7 @@ using System.Timers;
 
 namespace SparkleShare {
 
-	// SparkleRepo class holds repository information and timers
+	// Holds repository information and timers
 	public class SparkleRepo
 	{
 
@@ -55,8 +55,14 @@ namespace SparkleShare {
 		public delegate void PushedEventHandler (object o, SparkleEventArgs args);
 		public event PushedEventHandler Pushed;
 
-		public delegate void FetchedEventHandler (object o, SparkleEventArgs args);
-		public event FetchedEventHandler Fetched;
+		public delegate void FetchingStartedEventHandler (object o, SparkleEventArgs args);
+		public event FetchingStartedEventHandler FetchingStarted;
+
+		public delegate void FetchingFinishedEventHandler (object o, SparkleEventArgs args);
+		public event FetchingFinishedEventHandler FetchingFinished;
+
+		public delegate void NewCommitEventHandler (object o, SparkleEventArgs args);
+		public event NewCommitEventHandler NewCommit;
 
 
 		public static string _ (string s)
@@ -221,9 +227,6 @@ namespace SparkleShare {
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes staged.");
 
-//			SparkleUI.NotificationIcon.SetSyncingState ();
-//			SparkleUI.NotificationIcon.SetIdleState ();
-
 			SparkleEventArgs args = new SparkleEventArgs ("Added");
 
 			if (Added != null)
@@ -258,7 +261,11 @@ namespace SparkleShare {
 
 				FetchTimer.Stop ();
 
-//				SparkleUI.NotificationIcon.SetSyncingState ();
+				SparkleEventArgs args;
+				args = new SparkleEventArgs ("FetchingStarted");
+
+				if (FetchingStarted != null)
+			        FetchingStarted (this, args); 
 
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
 
@@ -270,15 +277,14 @@ namespace SparkleShare {
 
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
 
-				SparkleEventArgs args = new SparkleEventArgs ("Fetched");
+				args = new SparkleEventArgs ("FetchingFinished");
 
-				if (Fetched != null)
-			        Fetched (this, args); 
+				if (FetchingFinished != null)
+			        FetchingFinished (this, args); 
 
+				// Rebase if there are changes
 				if (!Output.Contains ("up to date"))
 					Rebase ();
-
-//				SparkleUI.NotificationIcon.SetIdleState ();
 
 			} finally {
 
@@ -297,7 +303,7 @@ namespace SparkleShare {
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Rebasing changes...");
 
-			Process.StartInfo.Arguments = "rebase origin";
+			Process.StartInfo.Arguments = "rebase -v master";
 			Process.WaitForExit ();
 			Process.Start ();
 
@@ -339,7 +345,7 @@ namespace SparkleShare {
 							Process.Start ();
 
 							string conflict_title   = "A mid-air collision happened!\n";
-							string conflict_subtext = "Don't worry, SparkleShare made\na copy of the conflicting files.";
+							string conflict_subtext = "Don't worry, SparkleShare made\na copy of each conflicting file.";
 
 //							SparkleBubble ConflictBubble =
 	//							new  SparkleBubble(_(ConflictTitle), _(ConflictSubtext));
@@ -384,6 +390,11 @@ namespace SparkleShare {
 				if (File.Exists (NotifySettingFile)) {
 
 					SparkleHelpers.DebugInfo ("Notification", "[" + Name + "] Showing message...");
+
+					SparkleEventArgs args = new SparkleEventArgs ("NewCommit");
+					
+					if (NewCommit != null)
+				        NewCommit (this, args);
 
 //					SparkleBubble StuffChangedBubble = new SparkleBubble (LastCommitUserName, LastCommitMessage);
 	//				StuffChangedBubble.Icon = SparkleHelpers.GetAvatar (LastCommitEmail, 32);
