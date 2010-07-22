@@ -19,6 +19,7 @@ using Mono.Unix;
 using Mono.Unix.Native;
 using SparkleShare;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -27,7 +28,7 @@ namespace SparkleShare {
 	public class SparkleUI {
 		
 		private Process Process;
-		public static SparkleRepo [] Repositories;
+		public static List <SparkleRepo> Repositories;
 
 		// Short alias for the translations
 		public static string _(string s)
@@ -39,6 +40,8 @@ namespace SparkleShare {
 
 		public SparkleUI (bool HideUI)
 		{
+
+			Repositories = new List <SparkleRepo> ();
 
 			Process = new Process ();
 			Process.EnableRaisingEvents = true;
@@ -65,7 +68,7 @@ namespace SparkleShare {
 
 				NotificationIcon = new SparkleStatusIcon ();
 				// Show a notification if there are no folders yet
-				if (Repositories.Length == 0) {
+				if (Repositories.Count == 0) {
 
 					SparkleBubble NoFoldersBubble;
 					NoFoldersBubble = new SparkleBubble (_("Welcome to SparkleShare!"),
@@ -240,7 +243,9 @@ namespace SparkleShare {
 
 
 		public void ShowNewCommitBubble (object o, SparkleEventArgs args) {
-			Console.WriteLine ("AAAAAAAAAAAAAAAAAA");
+
+			// Show bubble
+
 		}
 
 
@@ -259,37 +264,32 @@ namespace SparkleShare {
 		}
 
 
-		// TODO: Make this a List instead of an array
+		// Updates the list of repositories with all the
+		// folders in the SparkleShare folder
 		public void UpdateRepositories ()
 		{
 
-			string SparklePath = SparklePaths.SparklePath;
-			// Get all the repos in ~/SparkleShare
-			SparkleRepo [] TmpRepos = new SparkleRepo [Directory.GetDirectories (SparklePath).Length];
-			
-			int FolderCount = 0;
-			foreach (string folder in Directory.GetDirectories (SparklePath)) {
+			Repositories = new List <SparkleRepo> ();
+
+			foreach (string folder in Directory.GetDirectories (SparklePaths.SparklePath)) {
 
 				// Check if the folder is a git repo
 				if (Directory.Exists (SparkleHelpers.CombineMore (folder, ".git"))) {
 
-					TmpRepos [FolderCount] = new SparkleRepo (folder);
-					TmpRepos [FolderCount].NewCommit += ShowNewCommitBubble;
-					TmpRepos [FolderCount].FetchingStarted += UpdateStatusIcon;
-					TmpRepos [FolderCount].FetchingFinished += UpdateStatusIcon;
-					FolderCount++;
+					SparkleRepo repo = new SparkleRepo (folder);
+
+					repo.NewCommit        += ShowNewCommitBubble;
+					repo.FetchingStarted  += UpdateStatusIcon;
+					repo.FetchingFinished += UpdateStatusIcon;
+
+					Repositories.Add (repo);
 
 				}
 
 			}
 
-
-			Repositories = new SparkleRepo [FolderCount];
-			Array.Copy (TmpRepos, Repositories, FolderCount);
-
+		}
 
 	}
-}	
-
 
 }

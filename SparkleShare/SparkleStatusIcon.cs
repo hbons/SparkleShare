@@ -97,8 +97,7 @@ namespace SparkleShare {
 				};
 				Menu.Add (FolderAction.CreateMenuItem ());
 
-				Gtk.Action [] FolderItems =
-					new Gtk.Action [SparkleUI.Repositories.Length];
+				Gtk.Action [] FolderItems =	new Gtk.Action [SparkleUI.Repositories.Count];
 				
 				int i = 0;
 				foreach (SparkleRepo SparkleRepo in SparkleUI.Repositories) {
@@ -202,7 +201,6 @@ namespace SparkleShare {
 		}
 
 		// Changes the status icon to the syncing animation
-		// TODO: There are UI freezes when switching back and forth
 		// bewteen syncing and idle state
 		public void SetSyncingState ()
 		{
