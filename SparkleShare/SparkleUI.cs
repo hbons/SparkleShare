@@ -12,7 +12,7 @@
 //   GNU General Public License for more details.
 //
 //   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
 using Mono.Unix;
@@ -27,6 +27,7 @@ namespace SparkleShare {
 	public class SparkleUI {
 		
 		private Process Process;
+		public static SparkleRepo [] Repositories;
 
 		// Short alias for the translations
 		public static string _(string s)
@@ -64,7 +65,7 @@ namespace SparkleShare {
 
 				NotificationIcon = new SparkleStatusIcon ();
 				// Show a notification if there are no folders yet
-				if (SparkleShare.Repositories.Length == 0) {
+				if (Repositories.Length == 0) {
 
 					SparkleBubble NoFoldersBubble;
 					NoFoldersBubble = new SparkleBubble (_("Welcome to SparkleShare!"),
@@ -238,11 +239,27 @@ namespace SparkleShare {
 		}
 
 
-		public void Test (object o, SparkleEventArgs args) {
+		public void ShowNewCommitBubble (object o, SparkleEventArgs args) {
 			Console.WriteLine ("AAAAAAAAAAAAAAAAAA");
 		}
 
 
+		public void UpdateStatusIcon (object o, SparkleEventArgs args) {
+
+			if (args.Message.Equals ("FetchingStarted")) {
+				NotificationIcon.SyncingReposCount++;
+				NotificationIcon.UpdateState ();
+			}
+
+			if (args.Message.Equals ("FetchingFinished")) {
+				NotificationIcon.SyncingReposCount--;
+				NotificationIcon.UpdateState ();
+			}
+
+		}
+
+
+		// TODO: Make this a List instead of an array
 		public void UpdateRepositories ()
 		{
 
@@ -257,32 +274,18 @@ namespace SparkleShare {
 				if (Directory.Exists (SparkleHelpers.CombineMore (folder, ".git"))) {
 
 					TmpRepos [FolderCount] = new SparkleRepo (folder);
+					TmpRepos [FolderCount].NewCommit += ShowNewCommitBubble;
+					TmpRepos [FolderCount].FetchingStarted += UpdateStatusIcon;
+					TmpRepos [FolderCount].FetchingFinished += UpdateStatusIcon;
 					FolderCount++;
-
-					// TODO: emblems don't show up in nautilus
-					// Attach emblems
-					switch (SparklePlatform.Name) {
-						case "GNOME":
-
-							Process.StartInfo.FileName = "gvfs-set-attribute";
-							Process.StartInfo.Arguments = "-t string \"" + folder +
-								"\" metadata::emblems [synced]";
-							Process.Start ();
-
-						break;
-
-					}
 
 				}
 
 			}
 
-					SparkleRepo a = TmpRepos [0];
-					a.Added += Test;
 
-
-			SparkleShare.Repositories = new SparkleRepo [FolderCount];
-			Array.Copy (TmpRepos, SparkleShare.Repositories, FolderCount);
+			Repositories = new SparkleRepo [FolderCount];
+			Array.Copy (TmpRepos, Repositories, FolderCount);
 
 
 	}
