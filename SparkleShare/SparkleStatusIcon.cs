@@ -27,15 +27,37 @@ namespace SparkleShare {
 	public class SparkleStatusIcon : StatusIcon
 	{
 
-		private Timer Timer;
-		private int SyncingState;
+//		private Timer Timer;
 
 		public int SyncingReposCount;
+
+		private Menu Menu;
+		private MenuItem StatusMenuItem;
+		private string StateText;
 
 		// Short alias for the translations
 		public static string _ (string s) {
 			return Catalog.GetString (s);
 		}
+
+
+		public SparkleStatusIcon () : base ()
+		{
+
+//			Timer = new Timer ();
+
+			StateText = "";
+			StatusMenuItem = new MenuItem (StateText);
+			SyncingReposCount = 0;
+
+			CreateMenu ();
+			Activate += ShowMenu;
+
+			SetIdleState ();
+			ShowState ();
+
+		}
+
 
 		public EventHandler CreateWindowDelegate (SparkleRepo SparkleRepo)
 		{
@@ -45,42 +67,13 @@ namespace SparkleShare {
 			};
 		}
 
-		public SparkleStatusIcon () : base ()
+
+		private void CreateMenu ()
 		{
 
-			Timer = new Timer ();
-			Activate += ShowMenu;
+				Menu = new Menu ();
 
-			SyncingReposCount = 0;
-
-			//  0 = Everything up to date
-			//  1 = Syncing in progress
-			// -1 = Error syncing
-			SyncingState = 0;
-
-			SetIdleState ();
-
-		}
-
-		public void ShowMenu (object o, EventArgs Args)
-		{
-
-				Menu Menu = new Menu ();
-
-				string StateText = "";
-				switch (SyncingState) {
-					case -1:
-						StateText = _("Error syncing");
-						break;
-					case 0:
-						StateText = _("Everything is up to date");
-						break;
-					case 1:
-						StateText = _("Syncing…");
-						break;
-				}
-
-				MenuItem StatusMenuItem = new MenuItem (StateText);
+				StatusMenuItem = new MenuItem (StateText);
 				StatusMenuItem.Sensitive = false;
 
 				Menu.Add (StatusMenuItem);
@@ -163,12 +156,30 @@ namespace SparkleShare {
 				MenuItem QuitItem = new MenuItem (_("Quit"));
 				QuitItem.Activated += Quit;
 				Menu.Add (QuitItem);
-				Menu.ShowAll ();
-				Menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
+
 		}
 
 
-		public void UpdateState ()
+		private void ShowMenu (object o, EventArgs args)
+		{
+
+			Menu.ShowAll ();
+			Menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
+
+		}
+
+
+		private void UpdateStatusMenuItem ()
+		{
+
+			Label label = (Label) StatusMenuItem.Children [0];
+			label.Text = StateText;
+
+			Menu.ShowAll ();
+
+		}
+
+		public void ShowState ()
 		{
 
 			if (SyncingReposCount > 0)
@@ -176,14 +187,18 @@ namespace SparkleShare {
 			else
 				SetIdleState ();
 
+			UpdateStatusMenuItem ();
+
 		}
 		
 
 		public void SetIdleState ()
 		{
-			Timer.Stop ();
-			IconName = "folder-sparkleshare";
-			SyncingState = 0;
+//			Timer.Stop ();
+
+			IconName  = "folder-sparkleshare";
+			StateText = _("Everything is up to date");
+
 		}
 
 		// Changes the status icon to the syncing animation
@@ -193,8 +208,7 @@ namespace SparkleShare {
 		{
 
 			IconName = "view-refresh";
-
-			SyncingState = 1;
+			StateText = _("Syncing…");
 
 /*			int CycleDuration = 250;
 			int CurrentStep = 0;
@@ -233,8 +247,10 @@ namespace SparkleShare {
 		// Changes the status icon to the error icon
 		public void SetErrorState ()
 		{
+
 			IconName = "folder-sync-error";
-			SyncingState = -1;
+			StateText = _("Error syncing");
+
 		}
 
 		public void SetPosition (Menu menu, out int x, out int y, out bool push_in)

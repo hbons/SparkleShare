@@ -248,12 +248,12 @@ namespace SparkleShare {
 
 			if (args.Message.Equals ("FetchingStarted")) {
 				NotificationIcon.SyncingReposCount++;
-				NotificationIcon.UpdateState ();
+				NotificationIcon.ShowState ();
 			}
 
 			if (args.Message.Equals ("FetchingFinished")) {
 				NotificationIcon.SyncingReposCount--;
-				NotificationIcon.UpdateState ();
+				NotificationIcon.ShowState ();
 			}
 
 		}
