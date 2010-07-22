@@ -99,13 +99,15 @@ namespace SparkleShare {
 		private ScrolledWindow CreateEventLog ()
 		{
 
+			int number_of_events = 50;
+
 			Process process = new Process ();
 			process.EnableRaisingEvents = true; 
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
 			process.StartInfo.FileName = "git";
-			process.StartInfo.Arguments = "log --format=\"%at☃%an☃%ae☃%s\" -50";
+			process.StartInfo.Arguments = "log --format=\"%at☃%an☃%ae☃%s\" -" + number_of_events;
 
 			string output = "";
 
@@ -122,7 +124,7 @@ namespace SparkleShare {
 
 			List <ActivityDay> activity_days = new List <ActivityDay> ();
 
-			for (int i = 0; i < 25 && i < lines.Length; i++) {
+			for (int i = 0; i < number_of_events && i < lines.Length; i++) {
 
 					string line = lines [i];
 
@@ -214,7 +216,7 @@ namespace SparkleShare {
 
 					}
 
-				layout_vertical.PackStart (date_label, true, true, 0);
+				layout_vertical.PackStart (date_label, false, false, 0);
 
 				IconView icon_view = new IconView (list_store) {
 					ItemWidth    = 480,
@@ -224,7 +226,7 @@ namespace SparkleShare {
 					Spacing      = 9
 				};
 
-				layout_vertical.PackStart (icon_view);
+				layout_vertical.PackStart (icon_view, false, false, 0);
 
 			}
 

@@ -30,7 +30,6 @@ namespace SparkleShare {
 			return Catalog.GetString (s);
 		}
 		
-		public static SparkleRepo [] Repositories;
 		public static SparkleUI SparkleUI;
 
 		public static void Main (string [] args)
