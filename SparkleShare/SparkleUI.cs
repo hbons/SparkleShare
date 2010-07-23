@@ -135,15 +135,16 @@ namespace SparkleShare {
 
 			}
 			
-			string NotifySettingFile = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
+			string notify_setting_file = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
 				"sparkleshare.notify");
 
 			// Enable notifications by default				
-			if (!File.Exists (NotifySettingFile))
-				File.Create (NotifySettingFile);
+			if (!File.Exists (notify_setting_file))
+				File.Create (notify_setting_file);
 
 		}
-		
+
+
 		// Creates .desktop entry in autostart folder to
 		// start SparkleShare automnatically at login
 		public void EnableSystemAutostart ()
@@ -187,6 +188,8 @@ namespace SparkleShare {
 		}
 		
 
+		// Adds the SparkleShare folder to the user's
+		// list of bookmarked folders
 		public void AddToBookmarks ()
 		{
 		
@@ -210,7 +213,7 @@ namespace SparkleShare {
 		}
 
 
-		// Creates the 'SparkleShare' folder in the user's home folder if
+		// Creates the SparkleShare folder in the user's home folder if
 		// it's not already there
 		public void CreateSparkleShareFolder ()
 		{
