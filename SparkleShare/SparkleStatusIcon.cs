@@ -12,7 +12,7 @@
 //   GNU General Public License for more details.
 //
 //   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
 using Mono.Unix;
@@ -27,13 +27,37 @@ namespace SparkleShare {
 	public class SparkleStatusIcon : StatusIcon
 	{
 
-		private Timer Timer;
-		private int SyncingState;
+//		private Timer Timer;
+
+		public int SyncingReposCount;
+
+		private Menu Menu;
+		private MenuItem StatusMenuItem;
+		private string StateText;
 
 		// Short alias for the translations
 		public static string _ (string s) {
 			return Catalog.GetString (s);
 		}
+
+
+		public SparkleStatusIcon () : base ()
+		{
+
+//			Timer = new Timer ();
+
+			StateText = "";
+			StatusMenuItem = new MenuItem (StateText);
+			SyncingReposCount = 0;
+
+			CreateMenu ();
+			Activate += ShowMenu;
+
+			SetIdleState ();
+			ShowState ();
+
+		}
+
 
 		public EventHandler CreateWindowDelegate (SparkleRepo SparkleRepo)
 		{
@@ -43,46 +67,19 @@ namespace SparkleShare {
 			};
 		}
 
-		public SparkleStatusIcon () : base ()
+
+		private void CreateMenu ()
 		{
 
-			Timer = new Timer ();
-			Activate += ShowMenu;
+				Menu = new Menu ();
 
-			//  0 = Everything up to date
-			//  1 = Syncing in progress
-			// -1 = Error syncing
-			SyncingState = 0;
-
-			SetIdleState ();
-
-		}
-
-		public void ShowMenu (object o, EventArgs Args)
-		{
-
-				Menu Menu = new Menu ();
-
-				string StateText = "";
-				switch (SyncingState) {
-					case -1:
-						StateText = _("Error syncing");
-						break;
-					case 0:
-						StateText = _("Everything is up to date");
-						break;
-					case 1:
-						StateText = _("Syncing…");
-						break;
-				}
-
-				MenuItem StatusMenuItem = new MenuItem (StateText);
+				StatusMenuItem = new MenuItem (StateText);
 				StatusMenuItem.Sensitive = false;
 
 				Menu.Add (StatusMenuItem);
 				Menu.Add (new SeparatorMenuItem ());
 
-				Gtk.Action FolderAction = new Gtk.Action ("", "SparkleShare");
+				Gtk.Action FolderAction = new Gtk.Action ("", "SparkleShare Folder");
 				FolderAction.IconName = "folder-sparkleshare";
 				FolderAction.IsImportant = true;
 				FolderAction.Activated += delegate {
@@ -100,11 +97,10 @@ namespace SparkleShare {
 				};
 				Menu.Add (FolderAction.CreateMenuItem ());
 
-				Gtk.Action [] FolderItems =
-					new Gtk.Action [SparkleShare.Repositories.Length];
+				Gtk.Action [] FolderItems =	new Gtk.Action [SparkleUI.Repositories.Count];
 				
 				int i = 0;
-				foreach (SparkleRepo SparkleRepo in SparkleShare.Repositories) {
+				foreach (SparkleRepo SparkleRepo in SparkleUI.Repositories) {
 					FolderItems [i] = new Gtk.Action ("", SparkleRepo.Name);
 					FolderItems [i].IconName = "folder";
 					FolderItems [i].IsImportant = true;
@@ -113,7 +109,7 @@ namespace SparkleShare {
 					i++;
 				}
 				
-				MenuItem AddItem = new MenuItem (_("Add a Remote Folder…"));
+				MenuItem AddItem = new MenuItem (_("Add Remote Folder…"));
 				AddItem.Activated += delegate {
 					SparkleDialog SparkleDialog = new SparkleDialog ("");
 					SparkleDialog.ShowAll ();
@@ -139,7 +135,7 @@ namespace SparkleShare {
 					}
 				};
 
-				MenuItem AboutItem = new MenuItem (_("Visit Website"));
+				MenuItem AboutItem = new MenuItem (_("About"));
 				AboutItem.Activated += delegate {
 					Process Process = new Process ();
 					switch (SparklePlatform.Name) {
@@ -159,26 +155,60 @@ namespace SparkleShare {
 				MenuItem QuitItem = new MenuItem (_("Quit"));
 				QuitItem.Activated += Quit;
 				Menu.Add (QuitItem);
-				Menu.ShowAll ();
-				Menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
+
 		}
+
+
+		private void ShowMenu (object o, EventArgs args)
+		{
+
+			Menu.ShowAll ();
+			Menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
+
+		}
+
+
+		private void UpdateStatusMenuItem ()
+		{
+
+			Label label = (Label) StatusMenuItem.Children [0];
+			label.Text = StateText;
+
+			Menu.ShowAll ();
+
+		}
+
+		public void ShowState ()
+		{
+
+			if (SyncingReposCount > 0)
+				SetSyncingState ();
+			else
+				SetIdleState ();
+
+			UpdateStatusMenuItem ();
+
+		}
+		
 
 		public void SetIdleState ()
 		{
-			Timer.Stop ();
-			Pixbuf = SparkleHelpers.GetIcon ("folder-sparkleshare", 24);
-			SyncingState = 0;
+//			Timer.Stop ();
+
+			IconName  = "folder-sparkleshare";
+			StateText = _("Everything is up to date");
+
 		}
 
 		// Changes the status icon to the syncing animation
-		// TODO: There are UI freezes when switching back and forth
 		// bewteen syncing and idle state
 		public void SetSyncingState ()
 		{
 
-			SyncingState = 1;
+			IconName = "view-refresh";
+			StateText = _("Syncing…");
 
-			int CycleDuration = 250;
+/*			int CycleDuration = 250;
 			int CurrentStep = 0;
 			int Size = 24;			
 
@@ -209,14 +239,16 @@ namespace SparkleShare {
 				Pixbuf = Images [CurrentStep];
 			};
 			Timer.Start ();
-
+*/
 		}
 
 		// Changes the status icon to the error icon
 		public void SetErrorState ()
 		{
+
 			IconName = "folder-sync-error";
-			SyncingState = -1;
+			StateText = _("Error syncing");
+
 		}
 
 		public void SetPosition (Menu menu, out int x, out int y, out bool push_in)

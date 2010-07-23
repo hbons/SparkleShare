@@ -1,0 +1,167 @@
+<Project name="SharpSSH" fileversion="2.0" DefaultNamespace="Tamir.SharpSsh" language="C#" targetFramework="3.5" ctype="DotNetProject">
+  <Configurations>
+    <Configuration name="Debug" ctype="DotNetProjectConfiguration">
+      <Output directory="../bin/Debug/" assembly="Tamir.SharpSSH" />
+      <Build debugmode="True" target="Library" />
+      <Execution consolepause="True" runwithwarnings="False" runtime="MsNet" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="False" unsafecodeallowed="False" generateoverflowchecks="False" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+    </Configuration>
+    <Configuration name="Release" ctype="DotNetProjectConfiguration">
+      <Output directory="../bin/Release/" assembly="Tamir.SharpSSH" />
+      <Build debugmode="False" target="Library" />
+      <Execution consolepause="True" runwithwarnings="False" runtime="MsNet" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="False" unsafecodeallowed="False" generateoverflowchecks="False" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+    </Configuration>
+  </Configurations>
+  <Contents>
+    <File subtype="Code" buildaction="Exclude" name="App.ico" />
+    <File subtype="Code" buildaction="Compile" name="AssemblyInfo.cs" />
+    <File subtype="Code" buildaction="Compile" name="ITransferProtocol.cs" />
+    <File subtype="Code" buildaction="Compile" name="Scp.cs" />
+    <File subtype="Code" buildaction="Compile" name="Sftp.cs" />
+    <File subtype="Code" buildaction="Compile" name="SshBase.cs" />
+    <File subtype="Code" buildaction="Compile" name="SshExe.cs" />
+    <File subtype="Code" buildaction="Compile" name="SshShell.cs" />
+    <File subtype="Code" buildaction="Compile" name="SshStream.cs" />
+    <File subtype="Code" buildaction="Compile" name="SshTransferException.cs" />
+    <File subtype="Code" buildaction="Compile" name="SshTransferProtocolBase.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/Exception.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/Platform.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/RuntimeException.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/String.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/System.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/io/File.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/io/FileInputStream.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/io/FileOutputStream.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/io/InputStream.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/io/InputStreamWrapper.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/io/JStream.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/io/OutputStream.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/lang/Class.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/lang/Integer.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/lang/Runnable.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/lang/StringBuffer.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/lang/Thread.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/net/InetAddress.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/net/ServerSocket.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/net/Socket.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/util/Arrays.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/util/Enumeration.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/util/Hashtable.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/util/JavaString.cs" />
+    <File subtype="Code" buildaction="Compile" name="java/util/Vector.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/Buffer.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/Channel.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/Channel.old.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/ChannelDirectTCPIP.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/ChannelExec.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/ChannelForwardedTCPIP.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/ChannelSession.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/ChannelSftp.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/ChannelSftpStreamGet.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/ChannelSftpStreamPut.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/ChannelShell.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/ChannelSubsystem.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/ChannelX11.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/Cipher.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/Compression.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/DH.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/DHG1.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/DHGEX.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/ForwardedTCPIPDaemon.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/HASH.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/HostKey.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/HostKeyRepository.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/Identity.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/IdentityFile.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/IO.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/JSch.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/JSchAuthCancelException.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/JSchException.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/JSchPartialAuthException.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/KeyExchange.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/KeyPair.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/KeyPairDSA.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/KeyPairGenDSA.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/KeyPairGenRSA.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/KeyPairRSA.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/KnownHosts.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/MAC.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/Packet.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/PortWatcher.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/Proxy.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/ProxyHTTP.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/Random.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/Request.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/RequestExec.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/RequestPtyReq.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/RequestSftp.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/RequestShell.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/RequestSignal.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/RequestSubsystem.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/RequestWindowChange.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/RequestX11.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/ServerSocketFactory.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/Session.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/SftpATTRS.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/SftpException.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/SftpProgressMonitor.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/SignatureDSA.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/SignatureRSA.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/SocketFactory.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/UIKeyboardInteractive.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/UserAuth.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/UserAuthKeyboardInteractive.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/UserAuthNone.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/UserAuthPassword.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/UserAuthPublicKey.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/UserInfo.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/Util.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/examples/AES.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/examples/ChangePassphrase.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/examples/KeyGen.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/examples/KnownHosts.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/examples/PortForwardingL.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/examples/PortForwardingR.cs" />
+    <File subtype="Code" buildaction="Exclude" name="jsch/examples/README.txt" />
+    <File subtype="Code" buildaction="Compile" name="jsch/examples/ScpFrom.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/examples/ScpTo.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/examples/Sftp.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/examples/Shell.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/examples/StreamForwarding.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/examples/UserAuthPubKey.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/examples/util/ConsoleProgressBar.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/examples/util/InputForm.cs" />
+    <File subtype="Code" buildaction="EmbedAsResource" name="jsch/examples/util/InputForm.resx" dependson="/home/hbons/github/SparkleShare/SharpSSH/jsch/examples/util/InputForm.cs" resource_id="Tamir.SharpSsh.jsch.examples.util.InputForm.resources" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/AES128CBC.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/BlowfishCBC.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/DH.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/HMACMD5.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/HMACMD596.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/HMACSHA1.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/HMACSHA196.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/KeyPairGenDSA.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/KeyPairGenRSA.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/MD5.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/Random.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/SHA1.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/SignatureDSA.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/SignatureRSA.cs" />
+    <File subtype="Code" buildaction="Compile" name="jsch/jce/TripleDESCBC.cs" />
+    <File subtype="Code" buildaction="Compile" name="Streams/CombinedStream.cs" />
+    <File subtype="Code" buildaction="Compile" name="Streams/InputStream.cs" />
+    <File subtype="Code" buildaction="Compile" name="Streams/OutputStream.cs" />
+    <File subtype="Code" buildaction="Compile" name="Streams/PipedInputStream.cs" />
+    <File subtype="Code" buildaction="Compile" name="Streams/PipedOutputStream.cs" />
+    <File subtype="Code" buildaction="Compile" name="Streams/ProtectedConsoleStream.cs" />
+  </Contents>
+  <References>
+    <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Gac" localcopy="True" refto="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Gac" localcopy="True" refto="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Gac" localcopy="True" refto="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Gac" localcopy="True" refto="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <ProjectReference type="Assembly" localcopy="True" specificVersion="False" refto="lib/DiffieHellman.dll" />
+    <ProjectReference type="Assembly" localcopy="True" specificVersion="False" refto="lib/Org.Mentalis.Security.dll" />
+  </References>
+</Project>

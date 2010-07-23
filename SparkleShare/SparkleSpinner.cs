@@ -37,20 +37,20 @@ namespace SparkleShare {
 
 			CycleDuration = 750;
 			CurrentStep = 0;
-			Size = 24;			
+			Size = 16;
 
-			Gdk.Pixbuf SpinnerGallery = SparkleHelpers.GetIcon ("process-working", Size);
+			Gdk.Pixbuf spinner_gallery = SparkleHelpers.GetIcon ("process-working", Size);
 
-			int FramesInWidth = SpinnerGallery.Width / Size;
-			int FramesInHeight = SpinnerGallery.Height / Size;
-			NumSteps = FramesInWidth * FramesInHeight;
+			int frames_in_width = spinner_gallery.Width / Size;
+			int frames_in_height = spinner_gallery.Height / Size;
+			NumSteps = frames_in_width * frames_in_height;
 			Images = new Gdk.Pixbuf [NumSteps - 1];
 
 			int i = 0;
-			for (int y = 0; y < FramesInHeight; y++) {
-				for (int x = 0; x < FramesInWidth; x++) {
+			for (int y = 0; y < frames_in_height; y++) {
+				for (int x = 0; x < frames_in_width; x++) {
 					if (!(y == 0 && x == 0)) {
-						Images [i] = new Gdk.Pixbuf (SpinnerGallery, x * Size, y * Size, Size, Size);
+						Images [i] = new Gdk.Pixbuf (spinner_gallery, x * Size, y * Size, Size, Size);
 						i++;
 					}
 				}

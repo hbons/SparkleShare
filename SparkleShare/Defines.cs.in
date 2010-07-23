@@ -12,17 +12,19 @@
 //   GNU General Public License for more details.
 //
 //   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 
-namespace SparkleShare
-{
-	public class Defines
-	{
-		public const string VERSION = "@VERSION@";
-		public const string LOCALE_DIR = "@prefix@/share/locale";
+namespace SparkleShare {
+
+	public class Defines {
+
+		public const string VERSION         = "@VERSION@";
+		public const string LOCALE_DIR      = "@prefix@/share/locale";
 		public const string GETTEXT_PACKAGE = "@GETTEXT_PACKAGE@";
-		public const string PREFIX = "@prefix@";
+		public const string PREFIX          = "@prefix@";
+
 	}
+
 }

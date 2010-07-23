@@ -26,31 +26,19 @@ namespace SparkleShare {
 		private static UnixUserInfo UnixUserInfo = new UnixUserInfo (UnixEnvironment.UserName);
 
 		public static string HomePath = UnixUserInfo.HomeDirectory;
-			
+
 		public static string SparklePath = Path.Combine (HomePath ,"SparkleShare");
 
 		public static string SparkleTmpPath = Path.Combine (SparklePath, ".tmp");
 
 		public static string SparkleConfigPath = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
-			
-		public static string SparkleInstallPath = SparkleHelpers.CombineMore (Defines.PREFIX,
+
+		public static string SparkleInstallPath = SparkleHelpers.CombineMore (Defines.PREFIX, "sparkleshare");
+
+		public static string SparkleLocalIconPath = SparkleHelpers.CombineMore (HomePath, ".icons", "sparkleshare");
+
+		public static string SparkleIconPath = SparkleHelpers.CombineMore (Defines.PREFIX,
 			"sparkleshare",	"icons", "hicolor");
-
-		public static string SparkleAvatarPath {
-
-			get {
-
-				string XDG_CACHE_HOME = Environment.GetEnvironmentVariable ("XDG_CACHE_HOME");
-
-				if (XDG_CACHE_HOME != null)
-					return Path.Combine (XDG_CACHE_HOME, "sparkleshare");
-				else
-					return SparkleHelpers.CombineMore (HomePath, ".cache", "sparkleshare");
-			}
-
-		}
-			                                   
-		public static string SparkleIconPath = SparkleHelpers.CombineMore ("usr", "share", "icons", "hicolor");
 
 	}
 
