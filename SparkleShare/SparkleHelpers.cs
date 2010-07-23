@@ -21,31 +21,25 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
+
 
 namespace SparkleShare {
 	
 	public static class SparkleHelpers
 	{
 
-		public static string _ (string s)
-		{
-			return Catalog.GetString (s);
-		}
-
-
-		// Get's the avatar for a specific email address and size
+		// Gets the avatar for a specific email address and size
 		public static Gdk.Pixbuf GetAvatar (string Email, int Size)
 		{
 
-			string AvatarPath = CombineMore (SparklePaths.SparkleAvatarPath, Size + "x" + Size);
+			string AvatarPath = CombineMore (SparklePaths.SparkleLocalIconPath, Size + "x" + Size, "status");
 
 			if (!Directory.Exists (AvatarPath)) {
 				Directory.CreateDirectory (AvatarPath);
 				SparkleHelpers.DebugInfo ("Config", "Created '" + AvatarPath + "'");
 			}
-			
-			string AvatarFilePath = CombineMore (AvatarPath, Email);
+
+			string AvatarFilePath = CombineMore (AvatarPath, "avatar-" + Email);
 
 			if (File.Exists (AvatarFilePath))
 				return new Gdk.Pixbuf (AvatarFilePath);
@@ -85,32 +79,13 @@ namespace SparkleShare {
 		public static string GetMD5 (string s)
 		{
 			MD5 md5 = new MD5CryptoServiceProvider ();
-			Byte[] Bytes = ASCIIEncoding.Default.GetBytes (s);
-			Byte[] EncodedBytes = md5.ComputeHash (Bytes);
-			return BitConverter.ToString (EncodedBytes).ToLower ().Replace ("-", "");
+			Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+			Byte[] encodedBytes = md5.ComputeHash (bytes);
+			return BitConverter.ToString (encodedBytes).ToLower ().Replace ("-", "");
 		}
-
-
-		// Convert the more human readable sparkle:// url to
-		// something Git can use
-		// Example: sparkle://gitorious.org/sparkleshare
-		// to ssh://git@gitorious.org/sparkleshare
-		public static string SparkleToGitUrl (string Url)
-		{
-			if (Url.StartsWith ("sparkle://"))
-				Url = Url.Replace ("sparkle://", "ssh://git@");
-
-			// Usually don't need the ".git" at the end.
-			// It looks ugly as a folder too.
-			if (Url.EndsWith (".git"))
-				Url = Url.Substring (0, Url.Length - 4);
-
-			return Url;
-		}
-
 		
 		// Makes it possible to combine more than
-		// two paths at once.
+		// two paths at once
 		public static string CombineMore (params string [] Parts)
 		{
 			string NewPath = " ";
@@ -124,15 +99,9 @@ namespace SparkleShare {
 		public static Gdk.Pixbuf GetIcon (string Name, int Size)
 		{
 			IconTheme IconTheme = new IconTheme ();
-			IconTheme.AppendSearchPath (CombineMore (SparklePaths.SparkleInstallPath, "icons"));
+			IconTheme.AppendSearchPath (SparklePaths.SparkleIconPath);
+			IconTheme.AppendSearchPath (SparklePaths.SparkleLocalIconPath);
 			return IconTheme.LoadIcon (Name, Size, IconLookupFlags.GenericFallback);
-		}
-
-
-		// Checks if a url is a valid git url
-		public static bool IsGitUrl (string Url)
-		{
-			return Regex.Match (Url, @"(.)+(/|:)(.)+").Success;
 		}
 
 
@@ -146,7 +115,10 @@ namespace SparkleShare {
 			if (ShowDebugInfo) {
 				DateTime DateTime = new DateTime ();					
 				string TimeStamp = DateTime.Now.ToString ("HH:mm:ss");
-				Console.WriteLine ("[" + TimeStamp + "]" + "[" + Type + "] " + Message);
+				if (Message.StartsWith ("["))
+					Console.WriteLine ("[" + TimeStamp + "]" + "[" + Type + "]" + Message);
+				else
+					Console.WriteLine ("[" + TimeStamp + "]" + "[" + Type + "] " + Message);
 			}
 
 		}
@@ -196,21 +168,6 @@ namespace SparkleShare {
 
 		}
 
-
-		// Checks for unicorns
-		public static void CheckForUnicorns (string s) {
-
-			s = s.ToLower ();
-			if (s.Contains ("unicorn") && (s.Contains (".png") || s.Contains (".jpg"))) {
-				string title   = _("Hold your ponies!");
-				string subtext = _("SparkleShare is known to be insanely fast with \n" +
-				                  "pictures of unicorns. Please make sure your internets\n" +
-				                  "are upgraded to the latest version to avoid problems.");
-				SparkleBubble unicorn_bubble = new SparkleBubble (title, subtext);
-				unicorn_bubble.Show ();
-			}
-
-		}
 
 	}
 

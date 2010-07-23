@@ -95,7 +95,7 @@ namespace SparkleShare {
 					Environment.Exit (0);
 				}
 
-				string file_path = args [0];
+				string file_path = System.IO.Path.GetFullPath (args [0]);
 
 				if (File.Exists (file_path)) {
 
@@ -123,6 +123,10 @@ namespace SparkleShare {
 
 				}
 				
+			} else {
+
+			 	ShowHelp ();
+
 			}
 
 		}

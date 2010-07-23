@@ -26,8 +26,7 @@ using System.Timers;
 
 namespace SparkleShare {
 
-	public class SparkleWindow : Window
-	{
+	public class SparkleWindow : Window	{
 
 		// Short alias for the translations
 		public static string _ (string s)
@@ -43,22 +42,22 @@ namespace SparkleShare {
 		{
 
 			SparkleRepo = sparkle_repo;
-			SetSizeRequest (640, 480);
+			SetSizeRequest (550, 720);
 	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 12;
 			
 			// TRANSLATORS: {0} is a folder name, and {1} is a server address
-			Title = String.Format(_("‘{0}’ on {1}"), SparkleRepo.Name,
-				SparkleRepo.RemoteOriginUrl);
+			Title = String.Format(_("Recent Events in ‘{0}’"), SparkleRepo.Name);
 			IconName = "folder";
 
 			LayoutVertical = new VBox (false, 12);
 
 			LayoutVertical.PackStart (CreateEventLog (), true, true, 0);
 
-				HButtonBox dialog_buttons = new HButtonBox ();
-				dialog_buttons.Layout = ButtonBoxStyle.Edge;
-				dialog_buttons.BorderWidth = 0;
+				HButtonBox dialog_buttons = new HButtonBox {
+					Layout = ButtonBoxStyle.Edge,
+					BorderWidth = 0
+				};
 
 					Button open_folder_button = new Button (_("Open Folder"));
 					open_folder_button.Clicked += delegate (object o, EventArgs args) {
@@ -81,7 +80,7 @@ namespace SparkleShare {
 			LayoutVertical.PackStart (dialog_buttons, false, false, 0);
 
 			Add (LayoutVertical);		
-		
+
 		}
 
 
@@ -100,13 +99,15 @@ namespace SparkleShare {
 		private ScrolledWindow CreateEventLog ()
 		{
 
+			int number_of_events = 50;
+
 			Process process = new Process ();
 			process.EnableRaisingEvents = true; 
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
 			process.StartInfo.FileName = "git";
-			process.StartInfo.Arguments = "log --format=\"%at☃%an☃%ae☃%s\" -25";
+			process.StartInfo.Arguments = "log --format=\"%at☃%an☃%ae☃%s\" -" + number_of_events;
 
 			string output = "";
 
@@ -123,7 +124,7 @@ namespace SparkleShare {
 
 			List <ActivityDay> activity_days = new List <ActivityDay> ();
 
-			for (int i = 0; i < 25 && i < lines.Length; i++) {
+			for (int i = 0; i < number_of_events && i < lines.Length; i++) {
 
 					string line = lines [i];
 
@@ -137,7 +138,7 @@ namespace SparkleShare {
 
 					DateTime date_time = UnixTimestampToDateTime (unix_timestamp);
 
-					message = message.Replace ("/", " → ");
+					message = message.Replace ("/", " ‣ ");
 					message = message.Replace ("\n", " ");
 
 					ChangeSet change_set = new ChangeSet (user_name, user_email, message, date_time);
@@ -187,7 +188,12 @@ namespace SparkleShare {
 
 				}
 
-				Label date_label = new Label ();
+				Label date_label = new Label ("") {
+					UseMarkup = true,
+					Xalign = 0,
+					Xpad = 9,
+					Ypad = 9
+				};
 
 					DateTime today = DateTime.Now;
 					DateTime yesterday = DateTime.Now.AddDays (-1);
@@ -196,42 +202,40 @@ namespace SparkleShare {
 					    today.Month == activity_day.DateTime.Month && 
 					    today.Year  == activity_day.DateTime.Year) {
 
-						date_label.Text = "<b>Today</b>";
+						date_label.Markup = "<b>Today</b>";
 
 					} else if (yesterday.Day   == activity_day.DateTime.Day &&
 					           yesterday.Month == activity_day.DateTime.Month && 
 					           yesterday.Year  == activity_day.DateTime.Year) {
 
-						date_label.Text = "<b>Yesterday</b>";
+						date_label.Markup = "<b>Yesterday</b>";
 
 					} else {
 	
-						date_label.Text = "<b>" + activity_day.DateTime.ToString ("ddd MMM d, yyyy") + "</b>";
+						date_label.Markup = "<b>" + activity_day.DateTime.ToString ("ddd MMM d, yyyy") + "</b>";
 
 					}
 
-					date_label.UseMarkup = true;
-					date_label.Xalign = 0;
-					date_label.Xpad = 9;
-					date_label.Ypad = 9;
+				layout_vertical.PackStart (date_label, false, false, 0);
 
-				layout_vertical.PackStart (date_label, true, true, 0);
+				IconView icon_view = new IconView (list_store) {
+					ItemWidth    = 480,
+					MarkupColumn = 1,
+					Orientation  = Orientation.Horizontal,
+					PixbufColumn = 0,
+					Spacing      = 9
+				};
 
-				IconView icon_view = new IconView (list_store);
+				icon_view.SelectionChanged += delegate {
+					icon_view.UnselectAll ();
+				};
 
-					icon_view.PixbufColumn = 0;
-					icon_view.MarkupColumn = 1;
-				
-					icon_view.Orientation = Orientation.Horizontal;
-					icon_view.ItemWidth = 550;
-					icon_view.Spacing = 9;
-
-				layout_vertical.PackStart (icon_view);
-
+				layout_vertical.PackStart (icon_view, false, false, 0);
 
 			}
 
 			ScrolledWindow = new ScrolledWindow ();
+			ScrolledWindow.ShadowType = ShadowType.None;
 			ScrolledWindow.AddWithViewport (layout_vertical);
 
 			return ScrolledWindow;
