@@ -226,6 +226,10 @@ namespace SparkleShare {
 					Spacing      = 9
 				};
 
+				icon_view.SelectionChanged += delegate {
+					icon_view.UnselectAll ();
+				};
+
 				layout_vertical.PackStart (icon_view, false, false, 0);
 
 			}
