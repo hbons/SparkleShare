@@ -251,6 +251,7 @@ namespace SparkleShare {
 				Button finish_button = new Button (_("Finish"));
 
 				finish_button.Clicked += delegate (object o, EventArgs args) {
+					SparkleUI.NotificationIcon = new SparkleStatusIcon ();
 					Destroy ();
 				};
 
