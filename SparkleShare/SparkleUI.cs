@@ -59,32 +59,20 @@ namespace SparkleShare {
 
 			UpdateRepositories ();
 
+
 			// Don't create the window and status 
 			// icon when --disable-gui was given
 			if (!HideUI) {
 
-				SparkleIntro intro = new SparkleIntro ();
-				intro.ShowAll ();
-
-				NotificationIcon = new SparkleStatusIcon ();
-				// Show a notification if there are no folders yet
+				// Show the intro screen if there are no folders
 				if (Repositories.Count == 0) {
 
-					SparkleBubble NoFoldersBubble;
-					NoFoldersBubble = new SparkleBubble (_("Welcome to SparkleShare!"),
-					                                     _("You don't have any folders set up yet."));
+					SparkleIntro intro = new SparkleIntro ();
+					intro.ShowAll ();
 
-					NoFoldersBubble.IconName = "folder-sparkleshare";
-					NoFoldersBubble.AddAction ("", _("Add a Folder…"), delegate {
-						SparkleDialog SparkleDialog = new SparkleDialog ("");
-						SparkleDialog.ShowAll ();
-/*						Process.StartInfo.FileName = "xdg-open";
-						Process.StartInfo.Arguments = SparklePaths.SparklePath;
-						Process.Start ();
-*/
-					} );
-					
-					NoFoldersBubble.Show ();
+				} else {
+
+					NotificationIcon = new SparkleStatusIcon ();
 
 				}
 
@@ -247,7 +235,7 @@ namespace SparkleShare {
 
 		public void ShowNewCommitBubble (object o, SparkleEventArgs args) {
 
-			// Show bubble
+			// TODO: Show bubble
 
 		}
 
