@@ -14,6 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using FriendFace;
 using Gtk;
 using Mono.Unix;
 using System;
@@ -47,14 +48,16 @@ namespace SparkleShare {
 			BorderWidth = 12;
 			IconName = "image-x-generic";
 
+			FaceCollection face_collection = new FaceCollection ();
+			face_collection.UseGravatar = true;
+			
 			DeleteEvent += Quit;
 
-			// TRANSLATORS: The parameter is a filename
-			Title = String.Format(_("Comparing Revisions of ‘{0}’"), file_name);
+			Title = file_name;
 
 			VBox layout_vertical = new VBox (false, 12);
 
-				HBox layout_horizontal = new HBox (false, 12);
+				HBox layout_horizontal = new HBox (true, 6);
 
 					Process process = new Process ();
 					process.EnableRaisingEvents = true; 
@@ -63,8 +66,11 @@ namespace SparkleShare {
 
 					process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName (file_path);
 					process.StartInfo.FileName = "git";
-					process.StartInfo.Arguments = "log --format=\"%ct\t%an\" " + file_name;
+					process.StartInfo.Arguments = "log --format=\"%ct\t%an\t%ae\" " + file_name;
 					process.Start ();
+
+					ViewLeft  = new LeftRevisionView  ();
+					ViewRight = new RightRevisionView ();
 
 					string output = process.StandardOutput.ReadToEnd ();
 					string [] revisions_info = Regex.Split (output.Trim (), "\n");
@@ -76,66 +82,74 @@ namespace SparkleShare {
 
 						int timestamp = int.Parse (parts [0]);
 						string author = parts [1];
+						string email  = parts [2];
 
+						string date;
+						// TRANSLATORS: This is a format specifier according to System.Globalization.DateTimeFormatInfo	
 						if (i == 0)
-							revisions_info [i] = _("Current Revision") + "\t" + author;
+							date = "Latest Revision";
 						else
+							date = String.Format (_("{0} at {1}"),
+							       UnixTimestampToDateTime (timestamp).ToString (_("ddd MMM d, yyyy")),
+							       UnixTimestampToDateTime (timestamp).ToString (_("H:mm")));
 
-							// TRANSLATORS: This is a format specifier according to System.Globalization.DateTimeFormatInfo
-							revisions_info [i] = UnixTimestampToDateTime (timestamp).ToString (_("d MMM\tH:mm")) +
-							"\t" + author;
+						face_collection.AddFace (email);
 
+						ViewLeft.AddRow  (face_collection.GetFace (email, 32), author, date);
+						ViewRight.AddRow (face_collection.GetFace (email, 32), author, date);
+						
 						i++;
 
 					}
 
-					ViewLeft  = new LeftRevisionView  (revisions_info);
-					ViewRight = new RightRevisionView (revisions_info);
 
 					ViewLeft.SetImage  (new RevisionImage (file_path, Revisions [1]));
 					ViewRight.SetImage (new RevisionImage (file_path, Revisions [0]));
+					
+					ViewLeft.IconView.SelectionChanged += delegate {
+					
+						ViewLeft.SetImage  (new RevisionImage (file_path, Revisions [ViewLeft.GetSelected ()]));
+
+						ViewLeft.ScrolledWindow.Hadjustment = ViewRight.ScrolledWindow.Hadjustment;
+						ViewLeft.ScrolledWindow.Vadjustment = ViewRight.ScrolledWindow.Vadjustment;
+						
+						HookUpViews ();
+
+					};
+
+					ViewRight.IconView.SelectionChanged += delegate {
+					
+						ViewRight.SetImage  (new RevisionImage (file_path, Revisions [ViewRight.GetSelected ()]));
+
+						ViewRight.ScrolledWindow.Hadjustment = ViewLeft.ScrolledWindow.Hadjustment;
+						ViewRight.ScrolledWindow.Vadjustment = ViewLeft.ScrolledWindow.Vadjustment;
+						
+						HookUpViews ();
+
+					};
+					
+					ViewLeft.ToggleButton.Clicked += delegate {
+						if (ViewLeft.ToggleButton.Active)
+							DetachViews ();
+						else
+							HookUpViews ();
+					};
+					
+					ViewRight.ToggleButton.Clicked += delegate {
+						if (ViewLeft.ToggleButton.Active)
+							DetachViews ();
+						else
+							HookUpViews ();
+					};
 
 				layout_horizontal.PackStart (ViewLeft);
 				layout_horizontal.PackStart (ViewRight);
 
-
-				ViewLeft.ComboBox.Changed += delegate {
-
-					RevisionImage revision_image;
-					revision_image = new RevisionImage (file_path, Revisions [ViewLeft.ComboBox.Active]);
-					ViewLeft.SetImage (revision_image);
-
-					HookUpViews ();
-					
-					ViewLeft.ScrolledWindow.Hadjustment = ViewRight.ScrolledWindow.Hadjustment;
-					ViewLeft.ScrolledWindow.Vadjustment = ViewRight.ScrolledWindow.Vadjustment;
-					
-					ViewLeft.UpdateControls ();
-
-				};
-
-				ViewRight.ComboBox.Changed += delegate {
-
-					RevisionImage revision_image;
-					revision_image = new RevisionImage (file_path, Revisions [ViewRight.ComboBox.Active]);
-					ViewRight.SetImage (revision_image);
-
-					HookUpViews ();
-
-					ViewRight.ScrolledWindow.Hadjustment = ViewLeft.ScrolledWindow.Hadjustment;
-					ViewRight.ScrolledWindow.Vadjustment = ViewLeft.ScrolledWindow.Vadjustment;
-
-					ViewRight.UpdateControls ();
-
-				};
-
-
 				ResizeToViews ();
 
 				// Order time view according to the user's reading direction
-				if (Direction == Gtk.TextDirection.Rtl) // See Deejay1? I can do i18n too! :P				
+				if (Direction == Gtk.TextDirection.Rtl)
 					layout_horizontal.ReorderChild (ViewLeft, 1);
-
 
 				HookUpViews ();
 
@@ -143,12 +157,12 @@ namespace SparkleShare {
 				dialog_buttons.Layout      = ButtonBoxStyle.End;
 				dialog_buttons.BorderWidth = 0;
 
-					Button CloseButton = new Button (Stock.Close);
-					CloseButton.Clicked += delegate (object o, EventArgs args) {
+					Button close_button = new Button (Stock.Close);
+					close_button.Clicked += delegate (object o, EventArgs args) {
 						Environment.Exit (0);
 					};
-
-				dialog_buttons.Add (CloseButton);
+					
+				dialog_buttons.Add (close_button);
 
 			layout_vertical.PackStart (layout_horizontal, true, true, 0);
 			layout_vertical.PackStart (dialog_buttons, false, false, 0);
@@ -158,10 +172,11 @@ namespace SparkleShare {
 		}
 
 
+		// Resizes the window so it will fit the content in the best possible way
 		private void ResizeToViews ()
 		{
 
-			int new_width  = ViewLeft.GetImage ().Pixbuf.Width + ViewRight.GetImage ().Pixbuf.Width + 100;
+			int new_width  = ViewLeft.GetImage ().Pixbuf.Width + ViewRight.GetImage ().Pixbuf.Width + 200;
 			int new_height = 200;
 
 			if (ViewLeft.GetImage ().Pixbuf.Height > ViewRight.GetImage ().Pixbuf.Height)
@@ -176,6 +191,7 @@ namespace SparkleShare {
 			
 		}
 
+
 		// Hooks up two views so their scrollbars will be kept in sync
 		private void HookUpViews ()
 		{
@@ -184,6 +200,18 @@ namespace SparkleShare {
 			ViewLeft.ScrolledWindow.Vadjustment.ValueChanged  += SyncViewsVertically;
 			ViewRight.ScrolledWindow.Hadjustment.ValueChanged += SyncViewsHorizontally;
 			ViewRight.ScrolledWindow.Vadjustment.ValueChanged += SyncViewsVertically;
+		
+		}
+		
+
+		// Detach the two views from each other so they don't try to sync anymore
+		private void DetachViews ()
+		{
+
+			ViewLeft.ScrolledWindow.Hadjustment.ValueChanged  -= SyncViewsHorizontally;
+			ViewLeft.ScrolledWindow.Vadjustment.ValueChanged  -= SyncViewsVertically;
+			ViewRight.ScrolledWindow.Hadjustment.ValueChanged -= SyncViewsHorizontally;
+			ViewRight.ScrolledWindow.Vadjustment.ValueChanged -= SyncViewsVertically;
 		
 		}
 
