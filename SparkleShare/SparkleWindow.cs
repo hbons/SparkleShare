@@ -42,7 +42,7 @@ namespace SparkleShare {
 		{
 
 			SparkleRepo = sparkle_repo;
-			SetSizeRequest (550, 720);
+			SetSizeRequest (540, 640);
 	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 12;
 			
@@ -219,7 +219,7 @@ namespace SparkleShare {
 				layout_vertical.PackStart (date_label, false, false, 0);
 
 				IconView icon_view = new IconView (list_store) {
-					ItemWidth    = 480,
+					ItemWidth    = 470,
 					MarkupColumn = 1,
 					Orientation  = Orientation.Horizontal,
 					PixbufColumn = 0,
