@@ -27,8 +27,11 @@ namespace SparkleShare {
 
 	public class SparkleUI {
 		
-		private Process Process;
+		public static SparkleStatusIcon NotificationIcon;
 		public static List <SparkleRepo> Repositories;
+
+		private Process Process;
+
 
 		// Short alias for the translations
 		public static string _(string s)
@@ -36,30 +39,35 @@ namespace SparkleShare {
 			return Catalog.GetString (s);
 		}
 
-		public static SparkleStatusIcon NotificationIcon;
 
 		public SparkleUI (bool HideUI)
 		{
 
 			Repositories = new List <SparkleRepo> ();
 
-			Process = new Process ();
-			Process.EnableRaisingEvents = true;
+			Process = new Process () {
+				EnableRaisingEvents = true
+			};
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
 
-			string SparklePath = SparklePaths.SparklePath;
-
 			EnableSystemAutostart ();
 			InstallLauncher ();
-			CreateSparkleShareFolder ();
+
+			// Create the SparkleShare folder and add it to the bookmarks
+			if (!Directory.Exists (SparklePaths.SparklePath)) {
+
+				CreateSparkleShareFolder ();
+				AddToBookmarks ();
+
+			}
 
 			// Create a directory to store temporary files in
 			if (!Directory.Exists (SparklePaths.SparkleTmpPath))
 				Directory.CreateDirectory (SparklePaths.SparkleTmpPath);
 
+			CreateConfigurationFolders ();
 			UpdateRepositories ();
-
 
 			// Don't create the window and status 
 			// icon when --disable-gui was given
@@ -78,58 +86,34 @@ namespace SparkleShare {
 				}
 
 			}
-						
 
-			// TODO: This crashes
-/*
+		}
 
-			// Watch the SparkleShare folder and pop up the 
-			// Add dialog when a new folder is created
 
-			FileSystemWatcher Watcher = new FileSystemWatcher (SparklePaths.SparklePath);
-			Watcher.IncludeSubdirectories = false;
-			Watcher.EnableRaisingEvents = true;
-			Watcher.Created += delegate (object o, FileSystemEventArgs args) {
-			   WatcherChangeTypes wct = args.ChangeType;
-				SparkleHelpers.DebugInfo ("Event",
-				                          wct.ToString () + 
-				                          " '" + args.Name + "'");
-				SparkleDialog SparkleDialog = new SparkleDialog ();
-				SparkleDialog.ShowAll ();
-			};
+		// Creates a folder in the user's home folder to store configuration
+		public void CreateConfigurationFolders ()
+		{
 
-			// When a repo folder is deleted, don't sync and update the UI
-			Watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
-			   WatcherChangeTypes wct = args.ChangeType;
-				SparkleHelpers.DebugInfo ("Event",
-				                          wct.ToString () + 
-				                          " '" + args.Name + "'");
-				SparkleUI SparkleUI = new SparkleUI ();
-				SparkleUI.ShowAll ();
-			};
-*/
+			string config_path     = SparklePaths.SparkleConfigPath;
+			string local_icon_path = SparklePaths.SparkleLocalIconPath;
 
-			// Create place to store configuration user's home folder
-			string ConfigPath = SparklePaths.SparkleConfigPath;
-			string LocalIconPath = SparklePaths.SparkleLocalIconPath;
+			if (!Directory.Exists (config_path)) {
 
-			if (!Directory.Exists (ConfigPath)) {
+				// Create a folder to store settings
+				Directory.CreateDirectory (config_path);
+				SparkleHelpers.DebugInfo ("Config", "Created '" + config_path + "'");
 
-				Directory.CreateDirectory (ConfigPath);
-				SparkleHelpers.DebugInfo ("Config", "Created '" + ConfigPath + "'");
+				// Create a folder to store the avatars
+				Directory.CreateDirectory (local_icon_path);
+				SparkleHelpers.DebugInfo ("Config", "Created '" + local_icon_path + "'");
 
-				// Create a place to store the avatars
-				Directory.CreateDirectory (LocalIconPath);
-				SparkleHelpers.DebugInfo ("Config", "Created '" + LocalIconPath + "'");
+				string notify_setting_file = SparkleHelpers.CombineMore (config_path, "sparkleshare.notify");
+
+				// Enable notifications by default				
+				if (!File.Exists (notify_setting_file))
+					File.Create (notify_setting_file);
 
 			}
-			
-			string notify_setting_file = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
-				"sparkleshare.notify");
-
-			// Enable notifications by default				
-			if (!File.Exists (notify_setting_file))
-				File.Create (notify_setting_file);
 
 		}
 
@@ -168,6 +152,8 @@ namespace SparkleShare {
 		}
 		
 
+		// Installs a launcher so the user can launch SparkleShare
+		// from the Internet category if needed
 		public void InstallLauncher ()
 		{
 		
@@ -204,21 +190,14 @@ namespace SparkleShare {
 		// list of bookmarked folders
 		public void AddToBookmarks ()
 		{
-		
-			// Add the SparkleShare folder to the bookmarks
-			switch (SparklePlatform.Name) {
 
-				case "GNOME":
+			string bookmarks_file_name = Path.Combine (SparklePaths.HomePath, ".gtk-bookmarks");
 
-					string bookmarks_file_name = Path.Combine (SparklePaths.HomePath, ".gtk-bookmarks");
+			if (File.Exists (bookmarks_file_name)) {
 
-					if (File.Exists (bookmarks_file_name)) {
-						TextWriter writer = File.AppendText (bookmarks_file_name);
-						writer.WriteLine ("file://" + SparklePaths.SparklePath + " SparkleShare");
-						writer.Close ();
-					}
-
-					break;
+				TextWriter writer = File.AppendText (bookmarks_file_name);
+				writer.WriteLine ("file://" + SparklePaths.SparklePath + " SparkleShare");
+				writer.Close ();
 
 			}
 
@@ -230,33 +209,21 @@ namespace SparkleShare {
 		public void CreateSparkleShareFolder ()
 		{
 		
-			if (!Directory.Exists (SparklePaths.SparklePath)) {
-
-				Directory.CreateDirectory (SparklePaths.SparklePath);
-				SparkleHelpers.DebugInfo ("Config", "Created '" + SparklePaths.SparklePath + "'");
-					
-				// Add a special icon to the SparkleShare folder
-				switch (SparklePlatform.Name) {
-
-					case "GNOME":
-
-						Process.StartInfo.FileName = "gvfs-set-attribute";
-						Process.StartInfo.Arguments = SparklePaths.SparklePath + " metadata::custom-icon " +
-							"file:///usr/share/icons/hicolor/48x48/places/" +
-							"folder-sparkleshare.png";
-						Process.Start ();
-
-						break;
-
-				}
-
-				AddToBookmarks ();
-
-			}
+			Directory.CreateDirectory (SparklePaths.SparklePath);
+			SparkleHelpers.DebugInfo ("Config", "Created '" + SparklePaths.SparklePath + "'");
+				
+			// Add a special icon to the SparkleShare folder
+			Process.StartInfo.FileName = "gvfs-set-attribute";
+			Process.StartInfo.Arguments = SparklePaths.SparklePath + " metadata::custom-icon " +
+			                              "file:///usr/share/icons/hicolor/48x48/places/" +
+			                              "folder-sparkleshare.png";
+			Process.Start ();
 		
 		}
 
 
+		// Shows a notification bubble when someone
+		// made a change to the repository
 		public void ShowNewCommitBubble (string author, string email, string message) {
 
 			string notify_settings_file = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
@@ -273,6 +240,20 @@ namespace SparkleShare {
 		}
 
 
+		// Shows a notification bubble when there
+		// was a conflict
+		public void ShowConflictBubble (object o, EventArgs args) {
+
+			string title   = _("Ouch! Mid-air collision!");
+			string subtext = _("Don't worry, SparkleShare made a copy of each conflicting file.");
+
+			SparkleBubble bubble = new SparkleBubble(title, subtext);
+			bubble.Show ();
+
+		}
+
+
+		// Updates the statusicon to the syncing state
 		public void UpdateStatusIconSyncing (object o, EventArgs args)
 		{
 
@@ -282,6 +263,7 @@ namespace SparkleShare {
 		}
 
 
+		// Updates the syncing icon to the idle state
 		public void UpdateStatusIconIdle (object o, EventArgs args)
 		{
 
@@ -309,25 +291,53 @@ namespace SparkleShare {
 						Application.Invoke (delegate { ShowNewCommitBubble (args.Author, args.Email, args.Message); });
 					};
 
-					repo.FetchingStarted  += delegate {
+					repo.Commited += delegate (object o, SparkleEventArgs args) {
+						Application.Invoke (delegate { CheckForUnicorns (args.Message); });
+					};
+
+					repo.FetchingStarted += delegate {
 						Application.Invoke (UpdateStatusIconSyncing);
 					};
 
-					repo.FetchingFinished  += delegate {
+					repo.FetchingFinished += delegate {
 						Application.Invoke (UpdateStatusIconIdle);
 					};
 
-					repo.PushingStarted  += delegate {
+					repo.PushingStarted += delegate {
 						Application.Invoke (UpdateStatusIconSyncing);
 					};
 
-					repo.PushingFinished  += delegate {
+					repo.PushingFinished += delegate {
 						Application.Invoke (UpdateStatusIconIdle);
+					};
+
+					repo.ConflictDetected += delegate {
+						Application.Invoke (ShowConflictBubble);
 					};
 
 					Repositories.Add (repo);
 
 				}
+
+			}
+
+		}
+
+
+		// Warns the user implicitly that unicorns are actually lethal creatures
+		public static void CheckForUnicorns (string message) {
+
+			message = message.ToLower ();
+
+			if (message.Contains ("unicorn") && (message.Contains (".png") || message.Contains (".jpg"))) {
+
+				string title   = _("Hold your ponies!");
+				string subtext = _("SparkleShare is known to be insanely fast with " +
+				                   "pictures of unicorns. Please make sure your internets " +
+				                   "are upgraded to the latest version to avoid any problems.");
+
+				SparkleBubble bubble = new SparkleBubble (title, subtext);
+				bubble.Show ();
 
 			}
 
