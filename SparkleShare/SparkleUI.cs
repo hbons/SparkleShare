@@ -51,6 +51,7 @@ namespace SparkleShare {
 			string SparklePath = SparklePaths.SparklePath;
 
 			EnableSystemAutostart ();
+			InstallLauncher ();
 			CreateSparkleShareFolder ();
 
 			// Create a directory to store temporary files in
@@ -138,43 +139,66 @@ namespace SparkleShare {
 		public void EnableSystemAutostart ()
 		{
 		
-			switch (SparklePlatform.Name) {
+			string autostart_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".config", "autostart");
+			string desktopfile_path = SparkleHelpers.CombineMore (autostart_path, "sparkleshare.desktop");
 
-				case "GNOME":
+			if (!File.Exists (desktopfile_path)) {
 
-					string autostart_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".config", "autostart");
-					string desktopfile_path = SparkleHelpers.CombineMore (autostart_path, "sparkleshare.desktop");
+				if (!Directory.Exists (autostart_path))
+					Directory.CreateDirectory (autostart_path);
 
-					if (!File.Exists (desktopfile_path)) {
+					TextWriter writer = new StreamWriter (desktopfile_path);
+					writer.WriteLine ("[Desktop Entry]\n" +
+					                  "Type=Application\n" +
+					                  "Name=SparkleShare\n" +
+					                  "Exec=sparkleshare start\n" +
+					                  "Icon=folder-sparkleshare\n" +
+					                  "Terminal=false\n" +
+					                  "X-GNOME-Autostart-enabled=true\n" +
+					                  "Categories=Network");
+					writer.Close ();
 
-						if (!Directory.Exists (autostart_path))
-							Directory.CreateDirectory (autostart_path);
+					// Give the launcher the right permissions so it can be launched by the user
+					Syscall.chmod (desktopfile_path, FilePermissions.S_IRWXU);
 
-						TextWriter writer = new StreamWriter (desktopfile_path);
+					SparkleHelpers.DebugInfo ("Config", "Created '" + desktopfile_path + "'");
 
-						writer.WriteLine ("[Desktop Entry]\n" +
-						                  "Type=Application\n" +
-						                  "Name=SparkleShare\n" +
-						                  "Exec=sparkleshare start\n" +
-						                  "Icon=folder-sparkleshare\n" +
-						                  "Terminal=false\n" +
-						                  "X-GNOME-Autostart-enabled=true");
+				}
 
-						writer.Close ();
-
-						// Give the launcher the right permissions so it can be launched by the user
-						Syscall.chmod (desktopfile_path, FilePermissions.S_IRWXU);
-
-						SparkleHelpers.DebugInfo ("Config", "Created '" + desktopfile_path + "'");
-
-					}
-
-				break;
-
-			}
-		
 		}
 		
+
+		public void InstallLauncher ()
+		{
+		
+			string apps_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".local", "share", "applications");
+			string desktopfile_path = SparkleHelpers.CombineMore (apps_path, "sparkleshare.desktop");
+
+			if (!File.Exists (desktopfile_path)) {
+
+				if (!Directory.Exists (apps_path))
+					Directory.CreateDirectory (apps_path);
+
+					TextWriter writer = new StreamWriter (desktopfile_path);
+					writer.WriteLine ("[Desktop Entry]\n" +
+					                  "Type=Application\n" +
+					                  "Name=SparkleShare\n" +
+					                  "Comment=Share documents\n" +
+					                  "Exec=sparkleshare start\n" +
+					                  "Icon=folder-sparkleshare\n" +
+					                  "Terminal=false\n" +
+					                  "Categories=Network");
+					writer.Close ();
+
+					// Give the launcher the right permissions so it can be launched by the user
+					Syscall.chmod (desktopfile_path, FilePermissions.S_IRWXU);
+
+					SparkleHelpers.DebugInfo ("Config", "Created '" + desktopfile_path + "'");
+
+				}
+		
+		}
+
 
 		// Adds the SparkleShare folder to the user's
 		// list of bookmarked folders
@@ -233,24 +257,36 @@ namespace SparkleShare {
 		}
 
 
-		public void ShowNewCommitBubble (object o, SparkleEventArgs args) {
+		public void ShowNewCommitBubble (string author, string email, string message) {
 
-			// TODO: Show bubble
+			string notify_settings_file = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
+				"sparkleshare.notify");
+
+			if (File.Exists (notify_settings_file)) {
+
+				SparkleBubble bubble= new SparkleBubble (author, message);
+				bubble.Icon = SparkleHelpers.GetAvatar (email, 32);
+				bubble.Show ();
+
+			}
 
 		}
 
 
-		public void UpdateStatusIcon (object o, SparkleEventArgs args) {
+		public void UpdateStatusIconSyncing (object o, EventArgs args)
+		{
 
-			if (args.Message.Equals ("FetchingStarted")) {
 				NotificationIcon.SyncingReposCount++;
 				NotificationIcon.ShowState ();
-			}
 
-			if (args.Message.Equals ("FetchingFinished")) {
+		}
+
+
+		public void UpdateStatusIconIdle (object o, EventArgs args)
+		{
+
 				NotificationIcon.SyncingReposCount--;
 				NotificationIcon.ShowState ();
-			}
 
 		}
 
@@ -269,9 +305,25 @@ namespace SparkleShare {
 
 					SparkleRepo repo = new SparkleRepo (folder);
 
-					repo.NewCommit        += ShowNewCommitBubble;
-					repo.FetchingStarted  += UpdateStatusIcon;
-					repo.FetchingFinished += UpdateStatusIcon;
+					repo.NewCommit += delegate (object o, NewCommitArgs args) {
+						Application.Invoke (delegate { ShowNewCommitBubble (args.Author, args.Email, args.Message); });
+					};
+
+					repo.FetchingStarted  += delegate {
+						Application.Invoke (UpdateStatusIconSyncing);
+					};
+
+					repo.FetchingFinished  += delegate {
+						Application.Invoke (UpdateStatusIconIdle);
+					};
+
+					repo.PushingStarted  += delegate {
+						Application.Invoke (UpdateStatusIconSyncing);
+					};
+
+					repo.PushingFinished  += delegate {
+						Application.Invoke (UpdateStatusIconIdle);
+					};
 
 					Repositories.Add (repo);
 

@@ -59,7 +59,8 @@ namespace SparkleShare {
 			HBox layout_horizontal = new HBox (false, 6);
 
 				// TODO: Fix the path
-				Image side_splash = new Image ("/home/hbons/github/SparkleShare/data/side-splash.png");
+				Image side_splash = new Image (SparkleHelpers.CombineMore (Defines.PREFIX, "share", "sparkleshare",
+					"pixmaps", "side-splash.png"));
 
 				VBox wrapper = new VBox (false, 0);
 			

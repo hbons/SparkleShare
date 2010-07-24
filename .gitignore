@@ -38,3 +38,4 @@ build/m4/shave/shave-libtool
 Defines.cs
 SparkleShare/sparkleshare
 po/sparkleshare.pot
+SparkleShare/Nautilus/sparkleshare-nautilus-extension.py
