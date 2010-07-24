@@ -25,7 +25,6 @@ using System.Timers;
 
 namespace SparkleShare {
 
-	// Holds repository information and timers
 	public class SparkleRepo
 	{
 
@@ -45,33 +44,24 @@ namespace SparkleShare {
 		public string UserEmail;
 		public string UserName;
 
-
 		public delegate void AddedEventHandler (object o, SparkleEventArgs args);
-		public event AddedEventHandler Added; 
-
 		public delegate void CommitedEventHandler (object o, SparkleEventArgs args);
-		public event CommitedEventHandler Commited; 
-
 		public delegate void PushingStartedEventHandler (object o, SparkleEventArgs args);
-		public event PushingStartedEventHandler PushingStarted;
-
 		public delegate void PushingFinishedEventHandler (object o, SparkleEventArgs args);
-		public event PushingFinishedEventHandler PushingFinished;
-
 		public delegate void FetchingStartedEventHandler (object o, SparkleEventArgs args);
-		public event FetchingStartedEventHandler FetchingStarted;
-
 		public delegate void FetchingFinishedEventHandler (object o, SparkleEventArgs args);
-		public event FetchingFinishedEventHandler FetchingFinished;
-
 		public delegate void NewCommitEventHandler (object o, NewCommitArgs args);
+		public delegate void ConflictDetectedEventHandler (object o, SparkleEventArgs args);
+
+		public event AddedEventHandler Added; 
+		public event CommitedEventHandler Commited; 
+		public event PushingStartedEventHandler PushingStarted;
+		public event PushingFinishedEventHandler PushingFinished;
+		public event FetchingStartedEventHandler FetchingStarted;
+		public event FetchingFinishedEventHandler FetchingFinished;
 		public event NewCommitEventHandler NewCommit;
+		public event ConflictDetectedEventHandler ConflictDetected;
 
-
-		public static string _ (string s)
-		{
-			return Catalog.GetString (s);
-		}
 
 		public SparkleRepo (string path)
 		{
@@ -177,8 +167,10 @@ namespace SparkleShare {
 				FetchTimer.Stop ();
 
 				lock (ChangeLock) {
+
 					LastChange = DateTime.UtcNow;
 					HasChanged = true;
+
 				}
 
 			}
@@ -197,13 +189,15 @@ namespace SparkleShare {
 				FetchTimer.Stop ();
 	
 				Add ();
+
 				string message = FormatCommitMessage ();
 
 				if (!message.Equals ("")) {
+
 					Commit (message);
 					Fetch ();
 					Push ();
-					CheckForUnicorns (message);
+
 				}
 
 			} finally {
@@ -237,19 +231,20 @@ namespace SparkleShare {
 
 
 		// Commits the made changes
-		public void Commit (string Message)
+		public void Commit (string message)
 		{
 
-			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + Message);
+			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message);
 
-			Process.StartInfo.Arguments = "commit -m \"" + Message + "\"";
+			Process.StartInfo.Arguments = "commit -m \"" + message + "\"";
 			Process.Start ();
 			Process.WaitForExit ();
 
 			SparkleEventArgs args = new SparkleEventArgs ("Commited");
+			args.Message = message;
 
 			if (Commited != null)
-	            Commited (this, args); 
+	            Commited (this, args);
 
 		}
 
@@ -335,23 +330,18 @@ namespace SparkleShare {
 							Process.WaitForExit ();
 							Process.Start ();
 							
-							string TimeStamp = DateTime.Now.ToString ("H:mm d MMM yyyy");
+							string timestamp = DateTime.Now.ToString ("H:mm d MMM yyyy");
 
-							File.Move (problem_file_name,
-								problem_file_name + " (" + UserName  + ", " + TimeStamp + ")");
+							File.Move (problem_file_name, problem_file_name + " (" + UserName  + ", " + timestamp + ")");
 							           
-							Process.StartInfo.Arguments
-								= "checkout --theirs " + problem_file_name;
+							Process.StartInfo.Arguments = "checkout --theirs " + problem_file_name;
 							Process.WaitForExit ();
 							Process.Start ();
 
-							string conflict_title   = "A mid-air collision happened!\n";
-							string conflict_subtext = "Don't worry, SparkleShare made\na copy of each conflicting file.";
+							SparkleEventArgs args = new SparkleEventArgs ("ConflictDetected");
 
-//							SparkleBubble ConflictBubble =
-	//							new  SparkleBubble(_(ConflictTitle), _(ConflictSubtext));
-
-		//					ConflictBubble.Show ();
+							if (ConflictDetected != null)
+								ConflictDetected (this, args); 
 
 						}
 
@@ -385,10 +375,10 @@ namespace SparkleShare {
 				Process.Start ();
 				string message = Process.StandardOutput.ReadToEnd ().Trim ();
 
-				NewCommitArgs args = new NewCommitArgs (author, email, message);
+				NewCommitArgs new_commit_args = new NewCommitArgs (author, email, message);
 
 				if (NewCommit != null)
-			        NewCommit (this, args);
+			        NewCommit (this, new_commit_args);
 						              
 			}
 
@@ -649,32 +639,17 @@ namespace SparkleShare {
 
 		}
 
-
-		// Checks for unicorns
-		public static void CheckForUnicorns (string s) {
-
-			s = s.ToLower ();
-			if (s.Contains ("unicorn") && (s.Contains (".png") || s.Contains (".jpg"))) {
-				string title   = _("Hold your ponies!");
-				string subtext = _("SparkleShare is known to be insanely fast with \n" +
-				                  "pictures of unicorns. Please make sure your internets\n" +
-				                  "are upgraded to the latest version to avoid problems.");
-//				SparkleBubble unicorn_bubble = new SparkleBubble (title, subtext);
-	//			unicorn_bubble.Show ();
-			}
-
-		}
-
 	}
 
 
 	public class SparkleEventArgs : System.EventArgs {
         
+	    public string Type;
 	    public string Message;
 
-	    public SparkleEventArgs (string s)
+	    public SparkleEventArgs (string type)
     	{
-	        Message = s;
+	        Type = type;
 	    }
 
 	}
