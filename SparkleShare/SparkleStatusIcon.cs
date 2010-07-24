@@ -27,13 +27,15 @@ namespace SparkleShare {
 	public class SparkleStatusIcon : StatusIcon
 	{
 
-//		private Timer Timer;
-
 		public int SyncingReposCount;
 
+		private Timer Timer;
 		private Menu Menu;
 		private MenuItem StatusMenuItem;
 		private string StateText;
+		private Gdk.Pixbuf [] AnimationFrames;
+		private int FrameNumber;
+
 
 		// Short alias for the translations
 		public static string _ (string s) {
@@ -44,11 +46,13 @@ namespace SparkleShare {
 		public SparkleStatusIcon () : base ()
 		{
 
-//			Timer = new Timer ();
+			CreateAnimationFrames ();
+			CreateTimer ();
+
+			SyncingReposCount = 0;
 
 			StateText = "";
-			StatusMenuItem = new MenuItem (StateText);
-			SyncingReposCount = 0;
+			StatusMenuItem = new MenuItem ();
 
 			CreateMenu ();
 			Activate += ShowMenu;
@@ -59,102 +63,167 @@ namespace SparkleShare {
 		}
 
 
-		public EventHandler CreateWindowDelegate (SparkleRepo SparkleRepo)
+		private void CreateAnimationFrames ()
 		{
-			return delegate { 
-				SparkleWindow SparkleWindow = new SparkleWindow (SparkleRepo);
-				SparkleWindow.ShowAll ();
-			};
+
+			FrameNumber = 0;
+
+			AnimationFrames = new Gdk.Pixbuf [5];
+			Gdk.Pixbuf frames_pixbuf = SparkleHelpers.GetIcon ("process-syncing-sparkleshare", 24);
+			
+			for (int i = 0; i < AnimationFrames.Length; i++)
+				AnimationFrames [i] = new Gdk.Pixbuf (frames_pixbuf, (i * 24), 0, 24, 24);
+
 		}
 
 
+		// Creates the timer that handles the syncing animation
+		private void CreateTimer ()
+		{
+
+			Timer = new Timer () {
+				Interval = 35
+			};
+
+			Timer.Elapsed += delegate {
+
+				if (FrameNumber < AnimationFrames.Length - 1)
+					FrameNumber++;
+				else
+					FrameNumber = 0;
+
+				Application.Invoke (delegate { SetPixbuf (AnimationFrames [FrameNumber]); });
+
+			};
+
+		}
+
+
+		private EventHandler CreateWindowDelegate (SparkleRepo repo)
+		{
+
+			return delegate { 
+
+				SparkleWindow SparkleWindow = new SparkleWindow (repo);
+				SparkleWindow.ShowAll ();
+
+			};
+
+		}
+
+
+		// Creates the menu that is popped up when the
+		// user clicks the statusicon
 		private void CreateMenu ()
 		{
 
 				Menu = new Menu ();
 
-				StatusMenuItem = new MenuItem (StateText);
-				StatusMenuItem.Sensitive = false;
+					StatusMenuItem = new MenuItem (StateText) {
+						Sensitive = false
+					};
 
 				Menu.Add (StatusMenuItem);
+
 				Menu.Add (new SeparatorMenuItem ());
 
-				Gtk.Action FolderAction = new Gtk.Action ("", "SparkleShare Folder");
-				FolderAction.IconName = "folder-sparkleshare";
-				FolderAction.IsImportant = true;
-				FolderAction.Activated += delegate {
-					Process Process = new Process ();
-					switch (SparklePlatform.Name) {
-						case "GNOME":
-							Process.StartInfo.FileName = "xdg-open";
-							break;
-						case "OSX":
-							Process.StartInfo.FileName = "open";
-							break;
-					}
-					Process.StartInfo.Arguments = SparklePaths.SparklePath;
-					Process.Start ();
-				};
-				Menu.Add (FolderAction.CreateMenuItem ());
+					Gtk.Action folder_action = new Gtk.Action ("", _("SparkleShare Folder")) {
+						IconName    = "folder-sparkleshare",
+						IsImportant = true
+					};
 
-				Gtk.Action [] FolderItems =	new Gtk.Action [SparkleUI.Repositories.Count];
-				
-				int i = 0;
-				foreach (SparkleRepo SparkleRepo in SparkleUI.Repositories) {
-					FolderItems [i] = new Gtk.Action ("", SparkleRepo.Name);
-					FolderItems [i].IconName = "folder";
-					FolderItems [i].IsImportant = true;
-					FolderItems [i].Activated += CreateWindowDelegate (SparkleRepo);
-					Menu.Add (FolderItems [i].CreateMenuItem ());
-					i++;
+					folder_action.Activated += delegate {
+
+						Process process = new Process ();
+						process.StartInfo.FileName = "xdg-open";
+						process.StartInfo.Arguments = SparklePaths.SparklePath;
+						process.Start ();
+
+					};
+
+				Menu.Add (folder_action.CreateMenuItem ());
+
+				if (SparkleUI.Repositories.Count > 0) {
+
+					foreach (SparkleRepo SparkleRepo in SparkleUI.Repositories) {
+
+						folder_action = new Gtk.Action ("", SparkleRepo.Name) {
+							IconName    = "folder",
+							IsImportant = true
+						};
+
+						folder_action.Activated += CreateWindowDelegate (SparkleRepo);
+
+						Menu.Add (folder_action.CreateMenuItem ());
+
+					}
+
+				} else {
+
+					MenuItem no_folders_item = new MenuItem (_("No Shared Folders Yet")) {
+						Sensitive   = false
+					};
+
+					Menu.Add (no_folders_item);
+
 				}
+
+				MenuItem add_item = new MenuItem (_("Add Remote Folder…"));
+
+					add_item.Activated += delegate {
+
+						SparkleDialog dialog = new SparkleDialog ("");
+						dialog.ShowAll ();
+
+					};
+
+				Menu.Add (add_item);
+
+				Menu.Add (new SeparatorMenuItem ());
+
+				CheckMenuItem notify_item =	new CheckMenuItem (_("Show Notifications"));
+
+					string notify_setting = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
+						"sparkleshare.notify");
+							                                 
+					if (File.Exists (notify_setting))
+						notify_item.Active = true;
 				
-				MenuItem AddItem = new MenuItem (_("Add Remote Folder…"));
-				AddItem.Activated += delegate {
-					SparkleDialog SparkleDialog = new SparkleDialog ("");
-					SparkleDialog.ShowAll ();
-				};
-				Menu.Add (AddItem);
-				Menu.Add (new SeparatorMenuItem ());
+					notify_item.Toggled += delegate {
 
-				CheckMenuItem NotifyCheckMenuItem =	new CheckMenuItem (_("Show Notifications"));
-				Menu.Add (NotifyCheckMenuItem);
-				Menu.Add (new SeparatorMenuItem ());
-
-				string NotifyChangesFileName = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
-					"sparkleshare.notify");
-					                                     
-				if (System.IO.File.Exists (NotifyChangesFileName))
-					NotifyCheckMenuItem.Active = true;
+						if (File.Exists (notify_setting))
+							File.Delete (notify_setting);
+						else
+							File.Create (notify_setting);
 				
-				NotifyCheckMenuItem.Toggled += delegate {
-					if (System.IO.File.Exists (NotifyChangesFileName)) {
-						File.Delete (NotifyChangesFileName);
-					} else {
-						System.IO.File.Create (NotifyChangesFileName);
-					}
-				};
+					};
 
-				MenuItem AboutItem = new MenuItem (_("About"));
-				AboutItem.Activated += delegate {
-					Process Process = new Process ();
-					switch (SparklePlatform.Name) {
-						case "GNOME":
-							Process.StartInfo.FileName = "xdg-open";
-							break;
-						case "OSX":
-							Process.StartInfo.FileName = "open";
-							break;						
-					}
-					Process.StartInfo.Arguments = "http://www.sparkleshare.org/";
-					Process.Start ();
-				};
-				Menu.Add (AboutItem);
+				Menu.Add (notify_item);
 
 				Menu.Add (new SeparatorMenuItem ());
-				MenuItem QuitItem = new MenuItem (_("Quit"));
-				QuitItem.Activated += Quit;
-				Menu.Add (QuitItem);
+
+				MenuItem about_item = new MenuItem (_("About"));
+
+					about_item.Activated += delegate {
+
+						Process process = new Process ();
+
+						process.StartInfo.FileName  = "xdg-open";
+						process.StartInfo.Arguments = "http://www.sparkleshare.org/";
+
+						process.Start ();
+
+					};
+
+				Menu.Add (about_item);
+
+				Menu.Add (new SeparatorMenuItem ());
+
+				MenuItem quit_item = new MenuItem (_("Quit"));
+
+					quit_item.Activated += Quit;
+
+				Menu.Add (quit_item);
 
 		}
 
@@ -172,11 +241,12 @@ namespace SparkleShare {
 		{
 
 			Label label = (Label) StatusMenuItem.Children [0];
-			label.Text = StateText;
+			label.Text  = StateText;
 
 			Menu.ShowAll ();
 
 		}
+
 
 		public void ShowState ()
 		{
@@ -191,76 +261,53 @@ namespace SparkleShare {
 		}
 		
 
-		public void SetIdleState ()
+		// Changes the state to idle for when there's no syncing going on
+		private void SetIdleState ()
 		{
-//			Timer.Stop ();
 
-			IconName  = "folder-sparkleshare";
-			StateText = _("Everything is up to date");
+			Timer.Stop ();
+
+			Pixbuf  = SparkleHelpers.GetIcon ("folder-sparkleshare", 24);
+			StateText = _("All up to date");
 
 		}
+
 
 		// Changes the status icon to the syncing animation
-		// bewteen syncing and idle state
-		public void SetSyncingState ()
+		private void SetSyncingState ()
 		{
 
-			IconName = "view-refresh";
 			StateText = _("Syncing…");
-
-/*			int CycleDuration = 250;
-			int CurrentStep = 0;
-			int Size = 24;			
-
-			Gdk.Pixbuf SpinnerGallery = SparkleHelpers.GetIcon ("process-syncing-sparkleshare", Size);
-
-			int FramesInWidth = SpinnerGallery.Width / Size;
-			int FramesInHeight = SpinnerGallery.Height / Size;
-			int NumSteps = FramesInWidth * FramesInHeight;
-			Gdk.Pixbuf [] Images = new Gdk.Pixbuf [NumSteps - 1];
-
-			int i = 0;
-			for (int y = 0; y < FramesInHeight; y++) {
-				for (int x = 0; x < FramesInWidth; x++) {
-					if (!(y == 0 && x == 0)) {
-						Images [i] = new Gdk.Pixbuf (SpinnerGallery, x * Size, y * Size, Size, Size);
-						i++;
-					}
-				}
-			}
-
-			Timer = new Timer ();
-			Timer.Interval = CycleDuration / NumSteps;
-			Timer.Elapsed += delegate {
-				if (CurrentStep < NumSteps)
-					CurrentStep++;
-				else
-					CurrentStep = 0;
-				Pixbuf = Images [CurrentStep];
-			};
 			Timer.Start ();
-*/
-		}
-
-		// Changes the status icon to the error icon
-		public void SetErrorState ()
-		{
-
-			IconName = "folder-sync-error";
-			StateText = _("Error syncing");
 
 		}
 
-		public void SetPosition (Menu menu, out int x, out int y, out bool push_in)
+
+		// Updates the icon used for the statusicon
+		private void SetPixbuf (Gdk.Pixbuf pixbuf)
 		{
+
+			Pixbuf = pixbuf;
+		
+		}
+
+
+		// Makes sure the menu pops up in the right position
+		private void SetPosition (Menu menu, out int x, out int y, out bool push_in)
+		{
+
 			PositionMenu (menu, out x, out y, out push_in, Handle);
+
 		}
+
 
 		// Quits the program
-		public void Quit (object o, EventArgs args)
+		private void Quit (object o, EventArgs args)
 		{
-			System.IO.File.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "sparkleshare.pid"));
+
+			File.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "sparkleshare.pid"));
 			Application.Quit ();
+
 		}
 
 	}

@@ -95,9 +95,9 @@ namespace SparkleShare {
 			Watcher.Deleted += new FileSystemEventHandler (OnFileActivity);
 
 
-			// Fetch remote changes every 20 seconds
+			// Fetch remote changes every minute
 			FetchTimer = new Timer () {
-				Interval = 20000
+				Interval = 10000
 			};
 
 			FetchTimer.Elapsed += delegate { 
@@ -114,7 +114,6 @@ namespace SparkleShare {
 			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
 				CheckForChanges ();
 			};
-
 
 			FetchTimer.Start ();
 			BufferTimer.Start ();
@@ -249,7 +248,7 @@ namespace SparkleShare {
 		}
 
 
-		// Fetches changes from the remote repo	
+		// Fetches changes from the remote repository
 		public void Fetch ()
 		{
 
@@ -269,7 +268,7 @@ namespace SparkleShare {
 				Process.WaitForExit ();
 				Process.Start ();
 
-				string Output = Process.StandardOutput.ReadToEnd ().Trim (); // TODO: This doesn't work :(
+				string output = Process.StandardOutput.ReadToEnd ().Trim (); // TODO: This doesn't work :(
 
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
 
@@ -279,7 +278,7 @@ namespace SparkleShare {
 			        FetchingFinished (this, args); 
 
 				// Rebase if there are changes
-				if (!Output.Contains ("up to date"))
+				if (!output.Contains ("up to date"))
 					Rebase ();
 
 			} finally {
@@ -307,7 +306,6 @@ namespace SparkleShare {
 
 			string output = Process.StandardOutput.ReadToEnd ().Trim ();
 
-			// Show notification if there are updates
 			if (!output.Contains ("up to date")) {
 
 				if (output.Contains ("Failed to merge")) {
@@ -420,7 +418,7 @@ namespace SparkleShare {
 		// Ignores repos, dotfiles, swap files and the like.
 		private bool ShouldIgnore (string file_name) {
 
-			if (file_name.Substring (0, 1).Equals (".") ||
+			if (file_name [0].Equals (".") ||
 			    file_name.Contains (".lock") ||
 			    file_name.Contains (".git") ||
 			    file_name.Contains ("/.") ||
@@ -442,12 +440,12 @@ namespace SparkleShare {
 		}
 
 
+		// Gets the domain name of a given URL
 		public string GetDomain (string url)
 		{
 
-			string domain;
+			string domain = url.Substring (RemoteOriginUrl.IndexOf ("@") + 1);
 
-			domain = url.Substring (RemoteOriginUrl.IndexOf ("@") + 1);
 			if (domain.IndexOf (":") > -1)
 				domain = domain.Substring (0, domain.IndexOf (":"));
 			else
@@ -641,7 +639,7 @@ namespace SparkleShare {
 
 	}
 
-
+	// Arguments for most events
 	public class SparkleEventArgs : System.EventArgs {
         
 	    public string Type;
@@ -649,12 +647,15 @@ namespace SparkleShare {
 
 	    public SparkleEventArgs (string type)
     	{
+
 	        Type = type;
+
 	    }
 
 	}
 
 
+	// Arguments for the NewCommit event
 	public class NewCommitArgs : System.EventArgs {
         
 	    public string Author;
@@ -663,9 +664,11 @@ namespace SparkleShare {
 
 	    public NewCommitArgs (string author, string email, string message)
     	{
+
     		Author  = author;
     		Email   = email;
 	        Message = message;
+
 	    }
 
 	}
