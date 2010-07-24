@@ -52,8 +52,11 @@ namespace SparkleShare {
 		public delegate void CommitedEventHandler (object o, SparkleEventArgs args);
 		public event CommitedEventHandler Commited; 
 
-		public delegate void PushedEventHandler (object o, SparkleEventArgs args);
-		public event PushedEventHandler Pushed;
+		public delegate void PushingStartedEventHandler (object o, SparkleEventArgs args);
+		public event PushingStartedEventHandler PushingStarted;
+
+		public delegate void PushingFinishedEventHandler (object o, SparkleEventArgs args);
+		public event PushingFinishedEventHandler PushingFinished;
 
 		public delegate void FetchingStartedEventHandler (object o, SparkleEventArgs args);
 		public event FetchingStartedEventHandler FetchingStarted;
@@ -61,7 +64,7 @@ namespace SparkleShare {
 		public delegate void FetchingFinishedEventHandler (object o, SparkleEventArgs args);
 		public event FetchingFinishedEventHandler FetchingFinished;
 
-		public delegate void NewCommitEventHandler (object o, SparkleEventArgs args);
+		public delegate void NewCommitEventHandler (object o, NewCommitArgs args);
 		public event NewCommitEventHandler NewCommit;
 
 
@@ -138,8 +141,6 @@ namespace SparkleShare {
 
 		private void CheckForChanges ()
 		{
-
-			SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Checking for changes.");
 
 			lock (ChangeLock) {
 
@@ -270,8 +271,8 @@ namespace SparkleShare {
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
 
 				Process.StartInfo.Arguments = "fetch -v";
-				Process.Start ();
 				Process.WaitForExit ();
+				Process.Start ();
 
 				string Output = Process.StandardOutput.ReadToEnd ().Trim (); // TODO: This doesn't work :(
 
@@ -369,55 +370,25 @@ namespace SparkleShare {
 			
 				}
 
+				// Get the last commiter
+				Process.StartInfo.Arguments = "log --format=\"%an\" -1";
+				Process.Start ();
+				string author = Process.StandardOutput.ReadToEnd ().Trim ();
+
 				// Get the last committer e-mail
 				Process.StartInfo.Arguments = "log --format=\"%ae\" -1";
 				Process.Start ();
-				string LastCommitEmail = Process.StandardOutput.ReadToEnd ().Trim ();
+				string email = Process.StandardOutput.ReadToEnd ().Trim ();
 
 				// Get the last commit message
 				Process.StartInfo.Arguments = "log --format=\"%s\" -1";
 				Process.Start ();
-				string LastCommitMessage = Process.StandardOutput.ReadToEnd ().Trim ();
+				string message = Process.StandardOutput.ReadToEnd ().Trim ();
 
-				// Get the last commiter
-				Process.StartInfo.Arguments = "log --format=\"%an\" -1";
-				Process.Start ();
-				string LastCommitUserName = Process.StandardOutput.ReadToEnd ().Trim ();
+				NewCommitArgs args = new NewCommitArgs (author, email, message);
 
-				string NotifySettingFile = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
-					"sparkleshare.notify");
-
-				if (File.Exists (NotifySettingFile)) {
-
-					SparkleHelpers.DebugInfo ("Notification", "[" + Name + "] Showing message...");
-
-					SparkleEventArgs args = new SparkleEventArgs ("NewCommit");
-					
-					if (NewCommit != null)
-				        NewCommit (this, args);
-
-//					SparkleBubble StuffChangedBubble = new SparkleBubble (LastCommitUserName, LastCommitMessage);
-	//				StuffChangedBubble.Icon = SparkleHelpers.GetAvatar (LastCommitEmail, 32);
-
-						// Add a button to open the folder where the changed file is
-		/*				StuffChangedBubble.AddAction ("", _("Open Folder"),
-	  						delegate {
-								switch (SparklePlatform.Name) {
-									case "GNOME":
-								        Process.StartInfo.FileName = "xdg-open";
-										break;
-									case "OSX":
-								        Process.StartInfo.FileName = "open";
-										break;
-								}
-								Process.StartInfo.Arguments = LocalPath;
-								Process.Start ();
-				  		      	Process.StartInfo.FileName = "git";
-					    	} );
-
-					StuffChangedBubble.Show ();
-*/
-				}
+				if (NewCommit != null)
+			        NewCommit (this, args);
 						              
 			}
 
@@ -431,20 +402,27 @@ namespace SparkleShare {
 		public void Push ()
 		{
 
+			SparkleEventArgs args = new SparkleEventArgs ("PushingStarted");
+
+			if (PushingStarted != null)
+	            PushingStarted (this, args); 
+
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing changes...");
 
 			Process.StartInfo.Arguments = "push";
 			Process.Start ();
 			Process.WaitForExit ();
 
-			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes pushed.");
+			Process.Exited += delegate {
+			
+				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes pushed.");
 
-			SparkleEventArgs args = new SparkleEventArgs ("Pushed");
+				args = new SparkleEventArgs ("PushingFinished");
 
-			if (Pushed != null)
-	            Pushed (this, args); 
+				if (PushingFinished != null)
+			        PushingFinished (this, args); 
 
-//			SparkleUI.NotificationIcon.SetIdleState ();
+			};
 
 		}
 
@@ -701,8 +679,20 @@ namespace SparkleShare {
 
 	}
 
+
+	public class NewCommitArgs : System.EventArgs {
+        
+	    public string Author;
+	    public string Email;
+	    public string Message;
+
+	    public NewCommitArgs (string author, string email, string message)
+    	{
+    		Author  = author;
+    		Email   = email;
+	        Message = message;
+	    }
+
+	}
+
 }
-
-
-
-
