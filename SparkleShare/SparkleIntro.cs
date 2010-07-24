@@ -59,8 +59,8 @@ namespace SparkleShare {
 			HBox layout_horizontal = new HBox (false, 6);
 
 				// TODO: Fix the path
-				Image side_splash = new Image (SparkleHelpers.CombineMore (Defines.PREFIX, "share", "sparkleshare",
-					"pixmaps", "side-splash.png"));
+				Image side_splash = new Image (SparkleHelpers.CombineMore (Defines.PREFIX, "share", "pixmaps",
+					"side-splash.png"));
 
 				VBox wrapper = new VBox (false, 0);
 			
@@ -186,7 +186,6 @@ namespace SparkleShare {
 					layout_vertical.PackStart (table, false, false, 0);
 
 				wrapper.PackStart (layout_vertical, true, true, 0);
-
 				wrapper.PackStart (controls, false, true, 0);
 
 			layout_horizontal.PackStart (side_splash, false, false, 0);
@@ -208,60 +207,60 @@ namespace SparkleShare {
 
 			HBox layout_horizontal = new HBox (false, 6);
 
-				Image side_splash = new Image ("/home/hbons/github/SparkleShare/data/side-splash.png");
+				Image side_splash = new Image (SparkleHelpers.CombineMore (Defines.PREFIX, "share", "pixmaps",
+					"side-splash.png"));
 
-			layout_horizontal.PackStart (side_splash, false, false, 0);
+				VBox wrapper = new VBox (false, 0);
 			
-			VBox wrapper = new VBox (false, 0);
-			
-			VBox layout_vertical = new VBox (false, 0) {
-				BorderWidth = 30
-			};
-
-			Label introduction = new Label ("<span size='x-large'><b>" +
-			                                _("SparkleShare is ready to go!") +
-			                                "</b></span>") {
-				UseMarkup = true,
-				Xalign = 0
-			};
-
-			Label information = new Label (_("Now you can start accepting invitations from others. " +
-                                             "Just click on invitations you get by email and " +
-                                             "we will take care of the rest.")) {
-            	UseMarkup = true,
-            	Wrap      = true,
-				Xalign    = 0
-			};
-
-
-			HBox link_wrapper = new HBox (false, 0);
-			LinkButton link = new LinkButton ("http://www.sparkleshare.org/",
-				_("Learn how to host your own SparkleServer"));
-
-			link_wrapper.PackStart (link, false, false, 0);
-
-			layout_vertical.PackStart (introduction, false, false, 0);
-			layout_vertical.PackStart (information, false, false, 21);
-			layout_vertical.PackStart (link_wrapper, false, false, 0);
-
-			HButtonBox controls = new HButtonBox () {
-				Layout      = ButtonBoxStyle.End,
-				BorderWidth = 12
-			};
-
-				Button finish_button = new Button (_("Finish"));
-
-				finish_button.Clicked += delegate (object o, EventArgs args) {
-					SparkleUI.NotificationIcon = new SparkleStatusIcon ();
-					Destroy ();
+				VBox layout_vertical = new VBox (false, 0) {
+					BorderWidth = 30
 				};
 
-			controls.Add (finish_button);
+				Label introduction = new Label ("<span size='x-large'><b>" +
+					                            _("SparkleShare is ready to go!") +
+					                            "</b></span>") {
+					UseMarkup = true,
+					Xalign = 0
+				};
 
-			wrapper.PackStart (layout_vertical, true, true, 0);
-			wrapper.PackStart (controls, false, false, 0);
+				Label information = new Label (_("Now you can start accepting invitations from others. " +
+		                                         "Just click on invitations you get by email and " +
+		                                         "we will take care of the rest.")) {
+		        	UseMarkup = true,
+		        	Wrap      = true,
+					Xalign    = 0
+				};
 
-			layout_horizontal.Add (wrapper);
+
+				HBox link_wrapper = new HBox (false, 0);
+				LinkButton link = new LinkButton ("http://www.sparkleshare.org/",
+					_("Learn how to host your own SparkleServer"));
+
+				link_wrapper.PackStart (link, false, false, 0);
+
+				layout_vertical.PackStart (introduction, false, false, 0);
+				layout_vertical.PackStart (information, false, false, 21);
+				layout_vertical.PackStart (link_wrapper, false, false, 0);
+
+				HButtonBox controls = new HButtonBox () {
+					Layout      = ButtonBoxStyle.End,
+					BorderWidth = 12
+				};
+
+					Button finish_button = new Button (_("Finish"));
+
+					finish_button.Clicked += delegate (object o, EventArgs args) {
+						SparkleUI.NotificationIcon = new SparkleStatusIcon ();
+						Destroy ();
+					};
+
+				controls.Add (finish_button);
+
+				wrapper.PackStart (layout_vertical, true, true, 0);
+				wrapper.PackStart (controls, false, false, 0);
+
+			layout_horizontal.PackStart (side_splash, false, false, 0);
+			layout_horizontal.PackStart (wrapper, true, true, 0);
 
 			Add (layout_horizontal);
 
