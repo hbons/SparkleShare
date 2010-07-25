@@ -2,12 +2,12 @@
 # Copyright (C) 2010
 # This file is distributed under the same license as the SPARKLESHARE package.
 # Yann HERMANS <chezyann@gmail.com>, 2010.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-13 06:01+0000\n"
+"POT-Creation-Date: 2010-07-25 06:12+0000\n"
 "PO-Revision-Date: 2010-07-13 16:07+0800\n"
 "Last-Translator: Fabien Basmaison <fabien@arkhi.org>\n"
 "Language-Team: French (France)\n"
@@ -19,7 +19,6 @@ msgstr ""
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Country: FRANCE\n"
-
 
 #: ../SparkleDiff/SparkleDiff.cs:77 ../SparkleShare/SparkleShare.cs:50
 msgid "Git wasn't found."
@@ -83,7 +82,8 @@ msgstr "Compare les versions de « {0} »"
 msgid "Current Revision"
 msgstr "Version actuelle"
 
-#. TRANSLATORS: This is a format specifier according to System.Globalization.DateTimeFormatInfo
+#. TRANSLATORS: This is a format specifier according to
+#. System.Globalization.DateTimeFormatInfo
 #: ../SparkleDiff/SparkleDiffWindow.cs:85
 msgid "d MMM\tH:mm"
 msgstr "d MMM\tH:mm"
@@ -254,3 +254,15 @@ msgstr "Ajouter un dossier…"
 #, csharp-format
 msgid "‘{0}’ on {1}"
 msgstr "« {0} » sur {1}"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:108
+msgid "Get Earlier Version"
+msgstr "Obtenir une version antérieure"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:109
+msgid "Make a copy of an earlier version in this folder"
+msgstr "Créer une copie d'une version antérieure de ce dossier"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:122
+msgid "Select to get a copy of this version"
+msgstr "Sélectionner pour obtenir une copie de cette version"
