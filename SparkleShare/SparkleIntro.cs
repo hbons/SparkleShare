@@ -29,7 +29,10 @@ namespace SparkleShare {
 		private Entry NameEntry;
 		private Entry EmailEntry;
 		private Entry ServerEntry;
+		private Entry FolderEntry;
 		private Button NextButton;
+		private Button AddButton;
+
 
 		// Short alias for the translations
 		public static string _ (string s)
@@ -46,7 +49,7 @@ namespace SparkleShare {
 			Resizable      = false;
 			WindowPosition = WindowPosition.Center;
 
-			SetSizeRequest (640, 400);
+			SetSizeRequest (640, 440);
 
 			ShowStepOne ();
 
@@ -55,6 +58,8 @@ namespace SparkleShare {
 
 		private void ShowStepOne ()
 		{
+
+			Title = _("Welcome!");
 
 			HBox layout_horizontal = new HBox (false, 6);
 
@@ -81,7 +86,7 @@ namespace SparkleShare {
 							Wrap   = true
 						};
 
-						Table table = new Table (6, 2, true) {
+						Table table = new Table (4, 2, true) {
 							RowSpacing = 6
 						};
 
@@ -94,13 +99,13 @@ namespace SparkleShare {
 
 							NameEntry = new Entry (unix_user_info.RealName);
 							NameEntry.Changed += delegate {
-								CheckFields ();
+								CheckStepOneFields ();
 							};
 
 
 							EmailEntry = new Entry (GetUserEmail ());
 							EmailEntry.Changed += delegate {
-								CheckFields ();
+								CheckStepOneFields ();
 							};
 
 							Label email_label = new Label ("<b>" + _("Email:") + "</b>") {
@@ -108,46 +113,11 @@ namespace SparkleShare {
 								Xalign    = 0
 							};
 
-							ServerEntry = new Entry ("ssh://gitorious.org/sparkleshare") {
-								Sensitive = false
-							};
-
-							Label server_label = new Label ("<b>" + _("Folder Address:") + "</b>") {
-								UseMarkup = true,
-								Xalign = 0,
-								Sensitive = false
-							};
-					
-							CheckButton check_button;
-							check_button = new CheckButton (_("I'm already subscribed to a " +
-									                          "folder on a SparkleServer"));
-
-							check_button.Clicked += delegate {
-
-								if (check_button.Active) {
-
-									server_label.Sensitive = true;
-									ServerEntry.Sensitive = true;
-									ServerEntry.HasFocus = true;
-
-								} else {
-
-									server_label.Sensitive = false;
-									ServerEntry.Sensitive = false;					
-
-								}
-
-								ShowAll ();
-
-							};
 
 						table.Attach (name_label, 0, 1, 0, 1);
 						table.Attach (NameEntry, 1, 2, 0, 1);
 						table.Attach (email_label, 0, 1, 1, 2);
 						table.Attach (EmailEntry, 1, 2, 1, 2);
-						table.Attach (check_button, 0, 2, 3, 4);
-						table.Attach (server_label, 0, 1, 4, 5);
-						table.Attach (ServerEntry, 1, 2, 4, 5);
 				
 						HButtonBox controls = new HButtonBox () {
 							BorderWidth = 12,
@@ -161,13 +131,7 @@ namespace SparkleShare {
 							NextButton.Clicked += delegate (object o, EventArgs args) {
 
 								NextButton.Remove (NextButton.Child);
-
-								HBox hbox = new HBox ();
-
-								hbox.Add (new SparkleSpinner ());
-								hbox.Add (new Label (_("Configuring…")));
-
-								NextButton.Add (hbox);
+								NextButton.Add (new Label (_("Configuring…")));
 
 								NextButton.Sensitive = false;
 								table.Sensitive       = false;
@@ -175,6 +139,7 @@ namespace SparkleShare {
 								NextButton.ShowAll ();
 
 								Configure ();
+								ShowStepTwo ();
 
 							};
 			
@@ -184,6 +149,8 @@ namespace SparkleShare {
 					layout_vertical.PackStart (information, false, false, 21);
 					layout_vertical.PackStart (new Label (""), false, false, 0);
 					layout_vertical.PackStart (table, false, false, 0);
+//					layout_vertical.PackStart (check_button, false, false, 0);
+
 
 				wrapper.PackStart (layout_vertical, true, true, 0);
 				wrapper.PackStart (controls, false, true, 0);
@@ -193,7 +160,7 @@ namespace SparkleShare {
 
 			Add (layout_horizontal);
 
-			CheckFields ();
+			CheckStepOneFields ();
 
 			ShowAll ();
 		
@@ -202,6 +169,150 @@ namespace SparkleShare {
 
 		private void ShowStepTwo ()
 		{
+
+			Title = _("Add Remote Folder");
+
+			Remove (Child);
+
+			HBox layout_horizontal = new HBox (false, 6);
+
+				// TODO: Fix the path
+				Image side_splash = new Image (SparkleHelpers.CombineMore (Defines.PREFIX, "share", "pixmaps",
+					"side-splash.png"));
+
+				VBox wrapper = new VBox (false, 0);
+			
+					VBox layout_vertical = new VBox (false, 0) {
+						BorderWidth = 30
+					};
+			
+						Label introduction = new Label ("<span size='x-large'><b>" +
+								                        _("Where does your remote folder reside?") +
+								                        "</b></span>") {
+							UseMarkup = true,
+							Xalign = 0
+						};
+
+						Table table = new Table (7, 2, false) {
+							RowSpacing = 12
+						};
+
+							HBox layout_server = new HBox (true, 0);
+
+								ServerEntry = new Entry ("ssh://gitorious.org/sparkleshare");
+
+								RadioButton radio_button = new RadioButton ("<b>" + _("On my own server:") + "</b>") {
+									Xalign    = 0
+								};
+
+							layout_server.Add (radio_button);							
+							layout_server.Add (ServerEntry);
+							
+
+							RadioButton radio_button_github = new RadioButton (radio_button, "<b>" + _("Github") + "</b>\n" +
+								"<span fgcolor='#777'><small>Github provides free hosting for Open Source projects, " + 
+								"but also has paid accounts for extra space and bandwidth.</small></span>") {
+								Xalign    = 0
+							};
+							
+							(radio_button_github.Child as Label).UseMarkup = true;
+							(radio_button_github.Child as Label).Wrap      = true;
+
+							RadioButton radio_button_gnome = new RadioButton (radio_button, "<b>" + _("The GNOME Project") + "</b>\n" +
+								"<span fgcolor='#777'><small>GNOME is an easy to understand interface to your computer. Select this option if you’re a developer or designer working on GNOME.</small></span>") {
+								Xalign    = 0
+							};
+							
+							(radio_button_gnome.Child as Label).UseMarkup = true;
+							(radio_button_gnome.Child as Label).Wrap      = true;
+
+							RadioButton radio_button_gitorious = new RadioButton (radio_button, "<b>" + _("Gitorious") + "</b>\n" +
+								"<span fgcolor='#777'><small>Gitorious provides a completely Free and Open Source infrastructure for hosting Open Source projects.</small></span>") {
+								Xalign    = 0
+							};
+							
+							(radio_button_gitorious.Child as Label).UseMarkup = true;
+							(radio_button_gitorious.Child as Label).Wrap      = true;
+
+							radio_button.Toggled += delegate {
+
+								if (radio_button.Active)
+									ServerEntry.Sensitive = true;
+								else
+									ServerEntry.Sensitive = false;
+								
+								ShowAll ();
+
+							};
+
+						table.Attach (layout_server,          0, 2, 1, 2);
+						table.Attach (radio_button_github,    0, 2, 2, 3);
+						table.Attach (radio_button_gitorious, 0, 2, 3, 4);
+						table.Attach (radio_button_gnome,     0, 2, 4, 5);
+
+						HBox layout_folder = new HBox (true, 0);
+
+							FolderEntry = new Entry ("my-project");
+
+							Label folder_label = new Label ("<b>" + _("Folder Name:") + "</b>") {
+								UseMarkup = true,
+								Xalign    = 1
+							};
+
+						(radio_button.Child as Label).UseMarkup = true;
+
+						layout_folder.PackStart (folder_label, true, true, 12);
+						layout_folder.PackStart (FolderEntry, true, true, 0);
+
+				
+						HButtonBox controls = new HButtonBox () {
+							BorderWidth = 12,
+							Layout      = ButtonBoxStyle.End,
+							Spacing     = 6
+						};
+
+							AddButton = new Button (_("Add")) {
+								Sensitive = false
+							};
+			
+							AddButton.Clicked += delegate {
+
+
+							};
+
+							Button skip_button = new Button (_("Skip"));
+
+							skip_button.Clicked += delegate {
+								ShowStepThree ();
+							};
+
+						controls.Add (skip_button);
+						controls.Add (AddButton);
+
+					layout_vertical.PackStart (introduction, false, false, 0);
+					layout_vertical.PackStart (new Label (""), false, false, 3);
+					layout_vertical.PackStart (table, false, false, 0);
+					layout_vertical.PackStart (layout_folder, false, false, 6);
+
+				wrapper.PackStart (layout_vertical, true, true, 0);
+				wrapper.PackStart (controls, false, true, 0);
+
+			layout_horizontal.PackStart (side_splash, false, false, 0);
+			layout_horizontal.PackStart (wrapper, true, true, 0);
+
+			Add (layout_horizontal);
+
+			CheckStepOneFields ();
+
+			ShowAll ();
+		
+		}
+
+
+		private void ShowStepThree ()
+		{
+
+			Title = _("Done!");
 		
 			Remove (Child);
 
@@ -271,7 +382,7 @@ namespace SparkleShare {
 
 		// Enables or disables the 'Next' button depending on the 
 		// entries filled in by the user
-		private void CheckFields ()
+		private void CheckStepOneFields ()
 		{
 
 			if (NameEntry.Text.Length > 0 &&
@@ -284,6 +395,19 @@ namespace SparkleShare {
 				NextButton.Sensitive = false;
 				
 			}
+
+		}
+
+
+		// Enables the Add button when the fields are
+		// filled in correctly
+		public void CheckStepTwoFields (object o, EventArgs args)
+		{
+
+			if (IsGitUrl (ServerEntry.Text))
+				AddButton.Sensitive = true;
+			else
+				AddButton.Sensitive = false;
 
 		}
 
@@ -303,8 +427,6 @@ namespace SparkleShare {
 			SparkleHelpers.DebugInfo ("Config", "Created '" + config_file_path + "'");
 
 			GenerateKeyPair ();
-
-			ShowStepTwo ();
 
 		}
 
@@ -373,7 +495,6 @@ namespace SparkleShare {
 
 		}
 
-
 		// Checks to see if an email address is valid
 		private bool IsValidEmail(string email)
 		{
@@ -383,6 +504,30 @@ namespace SparkleShare {
 
 		}
 
+		// Checks if a url is a valid git url
+		private static bool IsGitUrl (string url)
+		{
+			
+			return Regex.Match (url, @"(.)+(/|:)(.)+").Success;
+
+		}
+
+
+		// Convert the more human readable sparkle:// url to something Git can use.
+		// Example: sparkle://gitorious.org/sparkleshare ssh://git@gitorious.org/sparkleshare
+		public static string SparkleToGitUrl (string url)
+		{
+			if (url.StartsWith ("sparkle://"))
+				url = url.Replace ("sparkle://", "ssh://git@");
+
+			// Usually don't need the ".git" at the end.
+			// It looks ugly as a folder too.
+			if (url.EndsWith (".git"))
+				url = url.Substring (0, url.Length - 4);
+
+			return url;
+		
+		}
 	}
 
 }

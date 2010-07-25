@@ -74,7 +74,7 @@ namespace SparkleShare {
 			if (!HideUI) {
 
 				// Show the intro screen if there are no folders
-				if (Repositories.Count == 0) {
+				if (Repositories.Count != 0) { //TODO: CHANGE THIS BACK LATER
 
 					SparkleIntro intro = new SparkleIntro ();
 					intro.ShowAll ();
