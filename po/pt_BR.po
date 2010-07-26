@@ -212,7 +212,7 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:237
 msgid "Learn how to host your own SparkleServer"
-msgstr ""
+msgstr "Aprenda como hospedar o seu próprio SparkleServer"
 
 #: ../SparkleShare/SparkleIntro.cs:250
 msgid "Finish"
@@ -295,7 +295,7 @@ msgstr ""
 #: ../SparkleShare/SparkleWindow.cs:50
 #, csharp-format
 msgid "Recent Events in ‘{0}’"
-msgstr ""
+msgstr "Eventos Recentes em '{0}'"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:108
 msgid "Get Earlier Version"
