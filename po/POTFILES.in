@@ -7,6 +7,7 @@ SparkleDiff/SparkleDiffWindow.cs
 SparkleShare/SparkleBubble.cs
 SparkleShare/SparkleDialog.cs
 SparkleShare/SparkleHelpers.cs
+SparkleShare/SparkleIntro.cs
 SparkleShare/SparklePaths.cs
 SparkleShare/SparklePlatform.cs
 SparkleShare/SparkleRepo.cs
