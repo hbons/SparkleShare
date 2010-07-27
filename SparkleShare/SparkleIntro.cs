@@ -167,7 +167,7 @@ namespace SparkleShare {
 		}
 
 
-		private void ShowStepTwo ()
+		public void ShowStepTwo ()
 		{
 
 			Title = _("Add Remote Folder");
@@ -199,35 +199,41 @@ namespace SparkleShare {
 
 							HBox layout_server = new HBox (true, 0);
 
-								ServerEntry = new Entry ("ssh://gitorious.org/sparkleshare");
+								ServerEntry = new Entry ("ssh://server.org/");
 
-								RadioButton radio_button = new RadioButton ("<b>" + _("On my own server:") + "</b>") {
-									Xalign    = 0
-								};
-
+								RadioButton radio_button = new RadioButton ("<b>" + _("On my own server:") + "</b>");
 							layout_server.Add (radio_button);							
 							layout_server.Add (ServerEntry);
 							
+							string github_text = "<b>" + "Github" + "</b>\n" +
+								  "<span fgcolor='#777' size='small'>" +
+								_("Github provides free hosting for Open Source projects, ") + 
+								_("but also has paid accounts for extra space and bandwidth.") +
+								  "</span>";
 
-							RadioButton radio_button_github = new RadioButton (radio_button, "<b>" + _("Github") + "</b>\n" +
-								"<span fgcolor='#777'><small>Github provides free hosting for Open Source projects, " + 
-								"but also has paid accounts for extra space and bandwidth.</small></span>") {
-								Xalign    = 0
-							};
+							RadioButton radio_button_github = new RadioButton (radio_button, github_text);
 							
 							(radio_button_github.Child as Label).UseMarkup = true;
 							(radio_button_github.Child as Label).Wrap      = true;
 
-							RadioButton radio_button_gnome = new RadioButton (radio_button, "<b>" + _("The GNOME Project") + "</b>\n" +
-								"<span fgcolor='#777'><small>GNOME is an easy to understand interface to your computer. Select this option if you’re a developer or designer working on GNOME.</small></span>") {
-								Xalign    = 0
-							};
-							
+							string gnome_text = "<b>" + _("The GNOME Project") + "</b>\n" +
+								  "<span fgcolor='#777' size='small'>" +
+								_("GNOME is an easy to understand interface to your computer.") +
+								_("Select this option if you’re a developer or designer working on GNOME.") +
+								  "</span>";
+
+							RadioButton radio_button_gnome = new RadioButton (radio_button, gnome_text);
+
 							(radio_button_gnome.Child as Label).UseMarkup = true;
 							(radio_button_gnome.Child as Label).Wrap      = true;
 
-							RadioButton radio_button_gitorious = new RadioButton (radio_button, "<b>" + _("Gitorious") + "</b>\n" +
-								"<span fgcolor='#777'><small>Gitorious provides a completely Free and Open Source infrastructure for hosting Open Source projects.</small></span>") {
+							string gitorious_text = "<b>" + _("Gitorious") + "</b>\n" +
+								  "<span fgcolor='#777' size='small'>" +
+								_("Gitorious provides a completely Free and Open Source infrastructure ") +
+								_("for hosting Open Source projects.") +
+								  "</span>";
+
+							RadioButton radio_button_gitorious = new RadioButton (radio_button, gitorious_text) {
 								Xalign    = 0
 							};
 							
@@ -495,6 +501,7 @@ namespace SparkleShare {
 
 		}
 
+
 		// Checks to see if an email address is valid
 		private bool IsValidEmail(string email)
 		{
@@ -503,6 +510,7 @@ namespace SparkleShare {
 			return regex.IsMatch (email);
 
 		}
+
 
 		// Checks if a url is a valid git url
 		private static bool IsGitUrl (string url)
@@ -528,6 +536,7 @@ namespace SparkleShare {
 			return url;
 		
 		}
+
 	}
 
 }
