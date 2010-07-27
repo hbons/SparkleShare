@@ -199,10 +199,13 @@ namespace SparkleShare {
 
 							HBox layout_server = new HBox (true, 0);
 
-								ServerEntry = new Entry ("ssh://server.org/");
+								ServerEntry = new Entry (_("ssh://address-to-my-server/"));
+								
+								ServerEntry.Changed += CheckStepTwoFields;
 
 								RadioButton radio_button = new RadioButton ("<b>" + _("On my own server:") + "</b>");
-							layout_server.Add (radio_button);							
+
+							layout_server.Add (radio_button);
 							layout_server.Add (ServerEntry);
 							
 							string github_text = "<b>" + "Github" + "</b>\n" +
@@ -242,11 +245,20 @@ namespace SparkleShare {
 
 							radio_button.Toggled += delegate {
 
-								if (radio_button.Active)
+								if (radio_button.Active) {
+
 									ServerEntry.Sensitive = true;
-								else
+
+									CheckStepTwoFields ();
+
+								} else {
+
 									ServerEntry.Sensitive = false;
-								
+
+									CheckStepTwoFields ();
+
+								}
+
 								ShowAll ();
 
 							};
@@ -259,6 +271,8 @@ namespace SparkleShare {
 						HBox layout_folder = new HBox (true, 0);
 
 							FolderEntry = new Entry ("my-project");
+							
+							FolderEntry.Changed += CheckStepTwoFields;
 
 							Label folder_label = new Label ("<b>" + _("Folder Name:") + "</b>") {
 								UseMarkup = true,
@@ -277,12 +291,11 @@ namespace SparkleShare {
 							Spacing     = 6
 						};
 
-							AddButton = new Button (_("Add")) {
-								Sensitive = false
-							};
+							AddButton = new Button (_("Add"));
 			
 							AddButton.Clicked += delegate {
 
+								// TODO
 
 							};
 
@@ -409,11 +422,28 @@ namespace SparkleShare {
 		// filled in correctly
 		public void CheckStepTwoFields (object o, EventArgs args)
 		{
+			CheckStepTwoFields ();
+		}
 
-			if (IsGitUrl (ServerEntry.Text))
-				AddButton.Sensitive = true;
-			else
-				AddButton.Sensitive = false;
+
+		// Enables the Add button when the fields are
+		// filled in correctly
+		public void CheckStepTwoFields ()
+		{
+
+			AddButton.Sensitive = false;
+			bool IsFolder = !FolderEntry.Text.Trim ().Equals ("");
+
+			if (ServerEntry.Sensitive == true) {
+			
+				if (IsGitUrl (ServerEntry.Text) && IsFolder)
+					AddButton.Sensitive = true;
+
+			} else if (IsFolder) {
+
+					AddButton.Sensitive = true;
+
+			}
 
 		}
 
@@ -516,7 +546,7 @@ namespace SparkleShare {
 		private static bool IsGitUrl (string url)
 		{
 			
-			return Regex.Match (url, @"(.)+(/|:)(.)+").Success;
+			return Regex.Match (url, @"ssh://(.)+").Success;
 
 		}
 

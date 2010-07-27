@@ -69,11 +69,13 @@ namespace SparkleShare {
 			LocalPath = path;
 			Name = Path.GetFileName (LocalPath);
 
-			Process = new Process ();
-			Process.EnableRaisingEvents = true;
+			Process = new Process () {
+				EnableRaisingEvents = true
+			};
+
+			Process.StartInfo.FileName = "git";
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
-			Process.StartInfo.FileName = "git";
 			Process.StartInfo.WorkingDirectory = LocalPath;
 
 			UserName        = GetUserName ();
@@ -269,8 +271,6 @@ namespace SparkleShare {
 				Process.WaitForExit ();
 				Process.Start ();
 
-				string output = Process.StandardOutput.ReadToEnd ().Trim (); // TODO: This doesn't work :(
-
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
 
 				args = new SparkleEventArgs ("FetchingFinished");
@@ -278,9 +278,7 @@ namespace SparkleShare {
 				if (FetchingFinished != null)
 			        FetchingFinished (this, args); 
 
-				// Rebase if there are changes
-				if (!output.Contains ("up to date"))
-					Rebase ();
+				Rebase ();
 
 			} finally {
 
