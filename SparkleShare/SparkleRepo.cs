@@ -265,6 +265,7 @@ namespace SparkleShare {
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
 
 				Process.StartInfo.Arguments = "fetch -v";
+
 				Process.WaitForExit ();
 				Process.Start ();
 
