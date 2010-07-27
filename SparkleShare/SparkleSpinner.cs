@@ -15,6 +15,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
+using System;
 using System.Timers;
 
 namespace SparkleShare {
@@ -32,12 +33,13 @@ namespace SparkleShare {
 		private int NumSteps;
 		private int Size;
 
-		public SparkleSpinner () : base ()
+		public SparkleSpinner (int size) : base ()
 		{
+
+			Size = size;
 
 			CycleDuration = 750;
 			CurrentStep = 0;
-			Size = 16;
 
 			Gdk.Pixbuf spinner_gallery = SparkleHelpers.GetIcon ("process-working", Size);
 
@@ -67,11 +69,22 @@ namespace SparkleShare {
 
 		private void NextImage ()
 		{
-			if (CurrentStep < NumSteps)
+
+			if (CurrentStep < NumSteps - 2)
 				CurrentStep++;
 			else
 				CurrentStep = 0;
+
+			Application.Invoke (delegate { SetImage (); });
+
+		}
+
+		private void SetImage ()
+		{
+
+			Console.WriteLine (CurrentStep);
 			Pixbuf = Images [CurrentStep];
+
 		}
 						
 		public bool IsActive ()
