@@ -32,7 +32,7 @@ namespace SparkleShare {
 		private Entry FolderEntry;
 		private Button NextButton;
 		private Button AddButton;
-
+		private bool StepTwoOnly;
 
 		// Short alias for the translations
 		public static string _ (string s)
@@ -48,6 +48,8 @@ namespace SparkleShare {
 			IconName       = "folder-sparkleshare";
 			Resizable      = false;
 			WindowPosition = WindowPosition.Center;
+
+			StepTwoOnly = false;
 
 			SetSizeRequest (640, 440);
 
@@ -167,6 +169,14 @@ namespace SparkleShare {
 		}
 
 
+		public void ShowStepTwo (bool step_two_only)
+		{
+
+			StepTwoOnly = step_two_only;
+			ShowStepTwo ();
+
+		}
+
 		public void ShowStepTwo ()
 		{
 
@@ -270,7 +280,7 @@ namespace SparkleShare {
 
 						HBox layout_folder = new HBox (true, 0);
 
-							FolderEntry = new Entry ("my-project");
+							FolderEntry = new Entry ();
 							
 							FolderEntry.Changed += CheckStepTwoFields;
 
@@ -305,7 +315,9 @@ namespace SparkleShare {
 								ShowStepThree ();
 							};
 
-						controls.Add (skip_button);
+						if (!StepTwoOnly)
+							controls.Add (skip_button);
+
 						controls.Add (AddButton);
 
 					layout_vertical.PackStart (introduction, false, false, 0);
@@ -422,7 +434,9 @@ namespace SparkleShare {
 		// filled in correctly
 		public void CheckStepTwoFields (object o, EventArgs args)
 		{
+
 			CheckStepTwoFields ();
+
 		}
 
 
@@ -553,8 +567,9 @@ namespace SparkleShare {
 
 		// Convert the more human readable sparkle:// url to something Git can use.
 		// Example: sparkle://gitorious.org/sparkleshare ssh://git@gitorious.org/sparkleshare
-		public static string SparkleToGitUrl (string url)
+		private static string SparkleToGitUrl (string url)
 		{
+
 			if (url.StartsWith ("sparkle://"))
 				url = url.Replace ("sparkle://", "ssh://git@");
 
