@@ -172,8 +172,9 @@ namespace SparkleShare {
 
 					add_item.Activated += delegate {
 
-//						SparkleDialog dialog = new SparkleDialog ("");
-//						dialog.ShowAll ();
+						SparkleIntro intro = new SparkleIntro ();
+						intro.ShowStepTwo ();
+						intro.ShowAll ();
 
 					};
 
