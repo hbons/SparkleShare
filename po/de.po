@@ -14,9 +14,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Country: GERMANY\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
 
 #: ../SparkleDiff/SparkleDiff.cs:77 ../SparkleShare/SparkleShare.cs:49
 msgid "Git wasn't found."
@@ -52,7 +52,7 @@ msgstr "unter bestimmten Bedingungen. Bitte lesen Sie dazu die GNU GPLv3 für we
 
 #: ../SparkleDiff/SparkleDiff.cs:167
 msgid "SparkleDiff let's you compare revisions of an image file side by side."
-msgstr "SparkleDiff lässt dich Versionen einer Bilddatei nebeneinander vergleichen."
+msgstr "SparkleDiff lässt dich Revisionen einer Bilddatei nebeneinander vergleichen."
 
 #: ../SparkleDiff/SparkleDiff.cs:169
 msgid "Usage: sparklediff [FILE]"
@@ -60,7 +60,7 @@ msgstr "Verwendung: sparklediff [DATEI]"
 
 #: ../SparkleDiff/SparkleDiff.cs:170
 msgid "Open an image file to show its revisions"
-msgstr "Öffnet eine Bilddatei zur Anzeige ihrer Versionen"
+msgstr "Öffnet eine Bilddatei zur Anzeige ihrer Revisionen"
 
 #: ../SparkleDiff/SparkleDiff.cs:172 ../SparkleShare/SparkleShare.cs:98
 msgid "Arguments:"
@@ -87,20 +87,20 @@ msgstr "H:mm"
 
 #: ../SparkleShare/SparkleDialog.cs:51
 msgid "Address of remote SparkleShare folder:"
-msgstr "Adresse des entfernten SparkleShare-Verzeichnis:"
+msgstr "Adresse des entfernten SparkleShare-Ordners:"
 
 #: ../SparkleShare/SparkleDialog.cs:82
 msgid "Add Folder"
-msgstr "Verzeichnis hinzufügen"
+msgstr "Ordner hinzufügen"
 
 #: ../SparkleShare/SparkleDialog.cs:127
 #, csharp-format
 msgid "Syncing folder ‘{0}’"
-msgstr "Verzeichnis »{0}« wird abgeglichen"
+msgstr "Ordner »{0}« wird abgeglichen"
 
 #: ../SparkleShare/SparkleDialog.cs:128
 msgid "SparkleShare will notify you when this is done."
-msgstr "SparkleShare wird Sie benachrichtigen sobald diese Aktion abgeschlossen ist."
+msgstr "SparkleShare wird Sie benachrichtigen, sobald diese Aktion abgeschlossen ist."
 
 #: ../SparkleShare/SparkleDialog.cs:130
 msgid "Dismiss"
@@ -109,7 +109,7 @@ msgstr "Verwerfen"
 #: ../SparkleShare/SparkleDialog.cs:158
 #, csharp-format
 msgid "Something went wrong while syncing ‘{0}’"
-msgstr "Beim Datenabgleich von »{0}« ist ein Fehler aufgetreten"
+msgstr "Beim Synchronisieren von »{0}« ist ein Fehler aufgetreten"
 
 #: ../SparkleShare/SparkleDialog.cs:168
 msgid "Try Again…"
@@ -118,7 +118,7 @@ msgstr "Erneut versuchen …"
 #: ../SparkleShare/SparkleDialog.cs:198
 #, csharp-format
 msgid "Successfully synced folder ‘{0}’"
-msgstr "Verzeichnis »{0}« erfolgreich abgeglichen"
+msgstr "Ordner »{0}« erfolgreich abgeglichen"
 
 #: ../SparkleShare/SparkleDialog.cs:199
 msgid "Now make great stuff happen!"
@@ -126,7 +126,7 @@ msgstr "Und jetzt, tue etwas großartiges!"
 
 #: ../SparkleShare/SparkleDialog.cs:201 ../SparkleShare/SparkleWindow.cs:62
 msgid "Open Folder"
-msgstr "Verzeichnis öffnen"
+msgstr "Ordner öffnen"
 
 #: ../SparkleShare/SparkleHelpers.cs:136
 #, csharp-format
@@ -176,7 +176,7 @@ msgstr "Willkommen bei SparkleShare!"
 
 #: ../SparkleShare/SparkleIntro.cs:78
 msgid "Before we can create a SparkleShare folder on this computer, we need a few bits of information from you."
-msgstr "Bevor wird einen SparkleShare-Ordner auf diesem Computer einrichten können, benötigen wir ein paar Informationen von Ihnen."
+msgstr "Bevor wir einen SparkleShare-Ordner auf diesem Computer einrichten können, benötigen wir ein paar Informationen von Ihnen."
 
 #: ../SparkleShare/SparkleIntro.cs:90
 msgid "Full Name:"
@@ -208,7 +208,7 @@ msgstr "SparkleShare ist bereit zum Loslegen!"
 
 #: ../SparkleShare/SparkleIntro.cs:226
 msgid "Now you can start accepting invitations from others. Just click on invitations you get by email and we will take care of the rest."
-msgstr "Sie können nun Einladungen Anderer annehmen. Klicken Sie einfach auf Einladungen, die Sie per Email erhalten und wir kümmern uns um den Rest."
+msgstr "Sie können nun Einladungen annehmen. Klicken Sie einfach auf Einladungen, die Sie per Email erhalten und wir kümmern uns um den Rest."
 
 #: ../SparkleShare/SparkleIntro.cs:237
 msgid "Learn how to host your own SparkleServer"
@@ -224,7 +224,7 @@ msgstr "SparkleShare Copyright (C) 2010 Hylke Bons"
 
 #: ../SparkleShare/SparkleShare.cs:93
 msgid "SparkleShare syncs the ~/SparkleShare folder with remote repositories."
-msgstr "SparkleShare gleicht das Verzeichnis ~/SparkleShare mit entfernten Verzeichnissen ab"
+msgstr "SparkleShare synchronisiert den Ordner ~/SparkleShare mit dem Remote-Repository."
 
 #: ../SparkleShare/SparkleShare.cs:95
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
@@ -232,7 +232,7 @@ msgstr "Verwendung: sparkleshare [start|stop|restart] [OPTION]..."
 
 #: ../SparkleShare/SparkleShare.cs:96
 msgid "Sync SparkleShare folder with remote repositories."
-msgstr "SparkleShare Ordner mit entfernten Repositories abgleichen."
+msgstr "SparkleShare Ordner mit dem Remote-Repository synchronisieren."
 
 #: ../SparkleShare/SparkleShare.cs:99
 msgid "\t -d, --disable-gui\tDon't show the notification icon."
@@ -271,8 +271,9 @@ msgid "Syncing…"
 msgstr "Abgleichen …"
 
 #: ../SparkleShare/SparkleUI.cs:247
+#, fuzzy
 msgid "Ouch! Mid-air collision!"
-msgstr "Autsch! Zusammenstoß im Flug!"
+msgstr "Autsch! Zusammenstoß in der Luft!"
 
 #: ../SparkleShare/SparkleUI.cs:248
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
@@ -299,7 +300,7 @@ msgstr "Letzte Ereignisse in ‘{0}’"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:108
 msgid "Get Earlier Version"
-msgstr "Holen einer früheren Version"
+msgstr "Frühere Version abrufen"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:109
 msgid "Make a copy of an earlier version in this folder"
@@ -307,7 +308,7 @@ msgstr "Erstelle eine Kopie einer früheren Version in diesem Verzeichnis"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:122
 msgid "Select to get a copy of this version"
-msgstr "Wählen Sie eine Kopie dieser Version"
+msgstr "Selektieren, um eine Kopie dieser Version abzurufen"
 
 #~ msgid "Comparing Revisions of ‘{0}’"
 #~ msgstr "Versionen von »{0}« vergleichen"
