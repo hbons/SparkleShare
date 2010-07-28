@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-27 08:24+0000\n"
+"POT-Creation-Date: 2010-07-28 08:26+0000\n"
 "PO-Revision-Date: 2010-06-21 16:26+0100\n"
 "Last-Translator: Martin Lettner <m.lettner@gmail.com>\n"
 "Language-Team: \n"
@@ -44,15 +44,15 @@ msgstr "Diese Anwendung kommt OHNE IRGENDEINE GARANTIE."
 
 #: ../SparkleDiff/SparkleDiff.cs:164 ../SparkleShare/SparkleShare.cs:90
 msgid "This is free software, and you are welcome to redistribute it "
-msgstr "Dies ist freie Software, die sie gerne weitergeben dürfen"
+msgstr "Dies ist freie Software, die Sie gerne weitergeben dürfen"
 
 #: ../SparkleDiff/SparkleDiff.cs:165 ../SparkleShare/SparkleShare.cs:91
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
-msgstr "unter bestimmten Bedingungen. Bitte lesen Sie dazu die GNU GPLv3 für weitere Details."
+msgstr "unter bestimmten Bedingungen. Bitte lesen Sie die GNU GPLv3 für weitere Details."
 
 #: ../SparkleDiff/SparkleDiff.cs:167
 msgid "SparkleDiff let's you compare revisions of an image file side by side."
-msgstr "SparkleDiff lässt dich Revisionen einer Bilddatei nebeneinander vergleichen."
+msgstr "Mit SparkleDiff können Sie Revisionen einer Bilddatei nebeneinander vergleichen."
 
 #: ../SparkleDiff/SparkleDiff.cs:169
 msgid "Usage: sparklediff [FILE]"
@@ -60,7 +60,7 @@ msgstr "Verwendung: sparklediff [DATEI]"
 
 #: ../SparkleDiff/SparkleDiff.cs:170
 msgid "Open an image file to show its revisions"
-msgstr "Öffnet eine Bilddatei zur Anzeige ihrer Revisionen"
+msgstr "Öffnet eine Bilddatei zur Anzeige Ihrer Revisionen"
 
 #: ../SparkleDiff/SparkleDiff.cs:172 ../SparkleShare/SparkleShare.cs:98
 msgid "Arguments:"
