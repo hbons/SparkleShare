@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-26 08:25+0000\n"
+"POT-Creation-Date: 2010-07-28 08:26+0000\n"
 "PO-Revision-Date: 2010-07-05 13:01-0300\n"
 "Last-Translator: Magnun Leno <magnun.leno@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -208,7 +208,7 @@ msgstr "SparkleShare está pronto!"
 
 #: ../SparkleShare/SparkleIntro.cs:226
 msgid "Now you can start accepting invitations from others. Just click on invitations you get by email and we will take care of the rest."
-msgstr ""
+msgstr "Agora você pode aceitar convites. Simplesmente clique nos convites que você recebeu por e-mail e nós tomaremos conta do resto."
 
 #: ../SparkleShare/SparkleIntro.cs:237
 msgid "Learn how to host your own SparkleServer"
@@ -276,20 +276,15 @@ msgstr "Ops! Colisão em pleno ar!"
 
 #: ../SparkleShare/SparkleUI.cs:248
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
-msgstr ""
+msgstr "Não se preocupe, SparkleShare fez uma cópia de cada arquivo conflitante."
 
 #: ../SparkleShare/SparkleUI.cs:334
 msgid "Hold your ponies!"
 msgstr "Segure seus pôneis!"
 
 #: ../SparkleShare/SparkleUI.cs:335
-#, fuzzy
 msgid "SparkleShare is known to be insanely fast with pictures of unicorns. Please make sure your internets are upgraded to the latest version to avoid any problems."
-msgstr ""
-"SparkleShare é conhecido por ser insanamente rápido com\n"
-"imagens de unicórnios. Para evitar problemas, por favor\n"
-"verifique se sua internet foi atualizada para a versão\n"
-"mais recente."
+msgstr "SparkleShare é conhecido por ser insanamente rápido com imagens de unicórnios. Para evitar problemas, por favor verifique se sua internet foi atualizada para a versão mais recente."
 
 #. TRANSLATORS: {0} is a folder name, and {1} is a server address
 #: ../SparkleShare/SparkleWindow.cs:50
