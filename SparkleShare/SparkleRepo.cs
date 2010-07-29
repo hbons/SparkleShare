@@ -66,6 +66,8 @@ namespace SparkleShare {
 		public SparkleRepo (string path)
 		{
 
+//			if (Directory.Exists)
+
 			LocalPath = path;
 			Name = Path.GetFileName (LocalPath);
 
@@ -127,6 +129,14 @@ namespace SparkleShare {
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Idling...");
 
+		}
+
+
+		public void Init ()
+		{
+		
+		
+		
 		}
 
 

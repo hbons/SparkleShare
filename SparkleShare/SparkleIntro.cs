@@ -303,6 +303,8 @@ namespace SparkleShare {
 			
 							AddButton.Clicked += delegate {
 
+								ShowStepTwoAndAHalf ();
+
 								// TODO
 
 							};
@@ -331,10 +333,103 @@ namespace SparkleShare {
 
 			Add (layout_horizontal);
 
-			CheckStepOneFields ();
+			CheckStepTwoFields ();
 
 			ShowAll ();
 		
+		}
+
+
+		private void ShowStepTwoAndAHalf ()
+		{
+
+			Title = _("Add Remote Folder");
+
+			Remove (Child);
+
+			HBox layout_horizontal = new HBox (false, 6);
+
+				Image side_splash = new Image (SparkleHelpers.CombineMore (Defines.PREFIX, "share", "pixmaps",
+					"side-splash.png"));
+
+				VBox wrapper = new VBox (false, 0);
+			
+					VBox layout_vertical = new VBox (false, 0) {
+						BorderWidth = 30
+					};
+
+						Label introduction = new Label ("<span size='x-large'><b>" +
+								                        String.Format (_("Retrieving folder ‘{0}’…"), FolderEntry.Text) +
+								                        "</b></span>") {
+							UseMarkup = true,
+							Xalign = 0
+						};
+
+						Label information = new Label ("<span fgcolor='#777'>" + 
+						                             _("This may take a while.\n") +
+						                             _("You sure it’s not coffee o-clock?" +
+						                               "</span>")) {
+							UseMarkup = true,
+							Xalign = 0
+						};
+
+						HButtonBox controls = new HButtonBox () {
+							BorderWidth = 12,
+							Layout      = ButtonBoxStyle.End,
+							Spacing     = 6
+						};
+
+							Button button = new Button ("") {
+								Sensitive = false
+							};
+			
+							if (StepTwoOnly) {
+
+								button.Label = _("Finish");
+								button.Clicked += delegate {
+									Destroy ();
+								};
+
+							} else {
+
+								button.Label = _("Next");
+								button.Clicked += delegate {
+									ShowStepThree ();
+								};
+
+							}
+
+						controls.Add (button);
+
+						SparkleSpinner spinner = new SparkleSpinner (22);
+
+					Table table = new Table (2, 2, false) {
+						RowSpacing    = 12,
+						ColumnSpacing = 9
+					};
+
+					HBox box = new HBox (false, 0);
+
+					table.Attach (spinner,      0, 1, 0, 1);
+					table.Attach (introduction, 1, 2, 0, 1);
+					table.Attach (information,  1, 2, 1, 2);
+
+					box.PackStart (table, false, false, 0);
+
+					layout_vertical.PackStart (box, false, false, 0);
+
+				wrapper.PackStart (layout_vertical, true, true, 0);
+				wrapper.PackStart (controls, false, true, 0);
+
+			layout_horizontal.PackStart (side_splash, false, false, 0);
+			layout_horizontal.PackStart (wrapper, true, true, 0);
+
+			Add (layout_horizontal);
+
+			CheckStepTwoFields ();
+
+			ShowAll ();
+
 		}
 
 

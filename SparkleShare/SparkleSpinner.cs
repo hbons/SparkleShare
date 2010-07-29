@@ -15,7 +15,6 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
-using System;
 using System.Timers;
 
 namespace SparkleShare {
@@ -38,31 +37,42 @@ namespace SparkleShare {
 
 			Size = size;
 
-			CycleDuration = 750;
+			CycleDuration = 600;
 			CurrentStep = 0;
 
 			Gdk.Pixbuf spinner_gallery = SparkleHelpers.GetIcon ("process-working", Size);
 
-			int frames_in_width = spinner_gallery.Width / Size;
+			int frames_in_width  = spinner_gallery.Width / Size;
 			int frames_in_height = spinner_gallery.Height / Size;
+
 			NumSteps = frames_in_width * frames_in_height;
-			Images = new Gdk.Pixbuf [NumSteps - 1];
+			Images   = new Gdk.Pixbuf [NumSteps - 1];
 
 			int i = 0;
+
 			for (int y = 0; y < frames_in_height; y++) {
+
 				for (int x = 0; x < frames_in_width; x++) {
+
 					if (!(y == 0 && x == 0)) {
+						
 						Images [i] = new Gdk.Pixbuf (spinner_gallery, x * Size, y * Size, Size, Size);
 						i++;
+
 					}
+
 				}
+
 			}
 
-			Timer = new Timer ();
-			Timer.Interval = CycleDuration / NumSteps;
+			Timer = new Timer () {
+				Interval = CycleDuration / NumSteps
+			};
+
 			Timer.Elapsed += delegate {
 				NextImage ();
 			};
+
 			Start ();
 
 		}
@@ -82,27 +92,32 @@ namespace SparkleShare {
 		private void SetImage ()
 		{
 
-			Console.WriteLine (CurrentStep);
 			Pixbuf = Images [CurrentStep];
 
 		}
 						
 		public bool IsActive ()
 		{
+
 			return Active;
+
 		}
 
 		public void Start ()
 		{
+
 			CurrentStep = 0;
 			Active = true;
 			Timer.Start ();
+
 		}
 
 		public void Stop ()
 		{
+
 			Active = false;
 			Timer.Stop ();
+
 		}
 
 	}
