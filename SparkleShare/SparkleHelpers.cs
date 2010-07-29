@@ -101,7 +101,8 @@ namespace SparkleShare {
 			IconTheme IconTheme = new IconTheme ();
 			IconTheme.AppendSearchPath (SparklePaths.SparkleIconPath);
 			IconTheme.AppendSearchPath (SparklePaths.SparkleLocalIconPath);
-			return IconTheme.LoadIcon (Name, Size, IconLookupFlags.GenericFallback);
+			IconInfo info = IconTheme.LookupIcon(Name, Size, IconLookupFlags.GenericFallback);
+			return new Gdk.Pixbuf(info.Filename);
 		}
 
 
