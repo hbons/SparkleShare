@@ -4,6 +4,7 @@ hicolordir = $(DESTDIR)$(datadir)/icons/hicolor
 
 theme_icons =						\
 	animations,process-syncing-sparkleshare-24.png	\
+	animations,process-working-22.png	\
 	places,folder-16.png				\
 	places,folder-22.png				\
 	places,folder-24.png				\
