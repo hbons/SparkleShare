@@ -115,24 +115,6 @@ namespace SparkleShare {
 			int SlashPos = RepoRemoteUrl.LastIndexOf ("/");
 			int ColumnPos = RepoRemoteUrl.LastIndexOf (":");
 
-			// Check whether a "/" or ":" is used to separate the 
-			// repo name from the domain.
-			string RepoName;
-			if (SlashPos > ColumnPos)
-				RepoName = RepoRemoteUrl.Substring (SlashPos + 1);
-			else
-				RepoName = RepoRemoteUrl.Substring (ColumnPos + 1);
-
-			SparkleBubble SyncingBubble;
-			SyncingBubble = new SparkleBubble (String.Format(_("Syncing folder ‘{0}’"), RepoName),
-				_("SparkleShare will notify you when this is done."));
-
-			SyncingBubble.AddAction ("", _("Dismiss"), 
-				delegate {
-					SyncingBubble.Close ();
-				});
-
-			SyncingBubble.Show ();
 
 			Process Process = new Process ();
 			Process.EnableRaisingEvents = true; 
@@ -154,23 +136,13 @@ namespace SparkleShare {
 
 			if (Process.ExitCode != 0) {
 
-				SparkleBubble ErrorBubble;
-				ErrorBubble = new SparkleBubble (String.Format(_("Something went wrong while syncing ‘{0}’"), RepoName),
-					"Please double check the address and\n" +
-					"network connection.");
+				// error
 
 				try {
 					Directory.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, RepoName));
 				} catch (System.IO.DirectoryNotFoundException) {
 					SparkleHelpers.DebugInfo ("Config", "[" + RepoName + "] Temporary directory did not exist...");
 				}
-
-				ErrorBubble.AddAction ("", _("Try Again…"), 
-					delegate {
-						SparkleDialog SparkleDialog = new SparkleDialog (RepoRemoteUrl);
-						SparkleDialog.ShowAll ();
-					});
-				ErrorBubble.Show ();
 			
 			} else {
 
@@ -187,6 +159,8 @@ namespace SparkleShare {
 				Writer.WriteLine (".*.sw?"); // Ignore vi swap files
 				Writer.WriteLine (".DS_store"); // Ignore OSX's invisible directories
 				Writer.Close ();
+
+				// TODO: Install username and email from global file
 
 				File.Create (SparkleHelpers.CombineMore (SparklePaths.SparklePath, RepoName,
 					".emblems"));
