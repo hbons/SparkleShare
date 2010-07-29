@@ -96,13 +96,30 @@ namespace SparkleShare {
 
 
 		// Looks up an icon from the system's theme
-		public static Gdk.Pixbuf GetIcon (string Name, int Size)
+		public static Gdk.Pixbuf GetIcon (string name, int size)
 		{
 
 			IconTheme IconTheme = new IconTheme ();
 			IconTheme.AppendSearchPath (SparklePaths.SparkleIconPath);
 			IconTheme.AppendSearchPath (SparklePaths.SparkleLocalIconPath);
-			return IconTheme.LoadIcon (Name, Size, IconLookupFlags.GenericFallback);
+
+			try {
+
+				return IconTheme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
+
+			} catch {
+
+				try {
+
+					return IconTheme.LoadIcon ("gtk-missing-image", size, IconLookupFlags.GenericFallback);
+
+				} catch {
+
+					return null;
+
+				}
+
+			}
 
 		}
 
