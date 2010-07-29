@@ -132,11 +132,67 @@ namespace SparkleShare {
 		}
 
 
-		public void Init ()
+		public void Clone ()
 		{
-		
-		
-		
+
+			Process process = new Process () {	
+				EnableRaisingEvents = true
+			};
+
+			// Cloning started event
+
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.WorkingDirectory = SparklePaths.SparkleTmpPath;
+			process.StartInfo.Arguments = String.Format ("clone {0} {1}", RemoteOriginUrl, Name);
+
+			process.Start ();
+
+			process.Exited += delegate {
+				// Cloning finished event
+
+
+
+			if (Process.ExitCode != 0) {
+
+				// Cloning failed event
+
+				try {
+					Directory.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, Name));
+				} catch (System.IO.DirectoryNotFoundException) {
+					SparkleHelpers.DebugInfo ("Config", "[" + Name + "] Temporary directory did not exist...");
+				}
+			
+			} else {
+
+				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Repository cloned");
+
+				Directory.Move (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, Name),
+					SparkleHelpers.CombineMore (SparklePaths.SparklePath, Name));
+
+
+				// Add a .gitignore file to the repo
+				TextWriter Writer = new StreamWriter (SparkleHelpers.CombineMore (SparklePaths.SparklePath, Name,
+					".gitignore"));
+				Writer.WriteLine ("*~"); // Ignore gedit swap files
+				Writer.WriteLine (".*.sw?"); // Ignore vi swap files
+				Writer.WriteLine (".DS_store"); // Ignore OSX's invisible directories
+				Writer.Close ();
+
+				// TODO: write gitignore rules in repo/.git/info/exclude
+
+				// TODO: Install username and email from global file
+
+
+			}
+
+
+
+
+
+			};
+
+
 		}
 
 
