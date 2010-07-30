@@ -43,6 +43,8 @@ namespace SparkleShare {
 		public SparkleUI (bool HideUI)
 		{
 
+			Gtk.Application.Init ();
+
 			Repositories = new List <SparkleRepo> ();
 
 			Process = new Process () {
@@ -86,6 +88,9 @@ namespace SparkleShare {
 				}
 
 			}
+
+			// The main loop
+			Gtk.Application.Run ();
 
 		}
 
@@ -254,7 +259,7 @@ namespace SparkleShare {
 
 
 		// Updates the statusicon to the syncing state
-		public void UpdateStatusIconSyncing (object o, EventArgs args)
+		public void UpdateStatusIconToSyncing (object o, EventArgs args)
 		{
 
 				NotificationIcon.SyncingReposCount++;
@@ -264,7 +269,7 @@ namespace SparkleShare {
 
 
 		// Updates the syncing icon to the idle state
-		public void UpdateStatusIconIdle (object o, EventArgs args)
+		public void UpdateStatusIconToIdle (object o, EventArgs args)
 		{
 
 				NotificationIcon.SyncingReposCount--;
@@ -296,19 +301,31 @@ namespace SparkleShare {
 					};
 
 					repo.FetchingStarted += delegate {
-						Application.Invoke (UpdateStatusIconSyncing);
+						Application.Invoke (UpdateStatusIconToSyncing);
 					};
 
 					repo.FetchingFinished += delegate {
-						Application.Invoke (UpdateStatusIconIdle);
+						Application.Invoke (UpdateStatusIconToIdle);
+					};
+
+					repo.CloningStarted += delegate {
+						Application.Invoke (UpdateStatusIconToSyncing);
+					};
+
+					repo.CloningFinished += delegate {
+						Application.Invoke (UpdateStatusIconToIdle);
+					};
+
+					repo.CloningFailed += delegate {
+						Application.Invoke (UpdateStatusIconToIdle);
 					};
 
 					repo.PushingStarted += delegate {
-						Application.Invoke (UpdateStatusIconSyncing);
+						Application.Invoke (UpdateStatusIconToSyncing);
 					};
 
 					repo.PushingFinished += delegate {
-						Application.Invoke (UpdateStatusIconIdle);
+						Application.Invoke (UpdateStatusIconToIdle);
 					};
 
 					repo.ConflictDetected += delegate {

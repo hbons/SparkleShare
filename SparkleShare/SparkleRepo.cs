@@ -32,7 +32,7 @@ namespace SparkleShare {
 		private Timer FetchTimer;
 		private Timer BufferTimer;
 		private FileSystemWatcher Watcher;
-		private bool HasChanged = false;
+		private bool HasChanged;
 		private DateTime LastChange;
 		private System.Object ChangeLock = new System.Object();
 
@@ -52,6 +52,9 @@ namespace SparkleShare {
 		public delegate void FetchingFinishedEventHandler (object o, SparkleEventArgs args);
 		public delegate void NewCommitEventHandler (object o, NewCommitArgs args);
 		public delegate void ConflictDetectedEventHandler (object o, SparkleEventArgs args);
+		public delegate void CloningStartedEventHandler (object o, SparkleEventArgs args);
+		public delegate void CloningFinishedEventHandler (object o, SparkleEventArgs args);
+		public delegate void CloningFailedEventHandler (object o, SparkleEventArgs args);
 
 		public event AddedEventHandler Added; 
 		public event CommitedEventHandler Commited; 
@@ -61,6 +64,9 @@ namespace SparkleShare {
 		public event FetchingFinishedEventHandler FetchingFinished;
 		public event NewCommitEventHandler NewCommit;
 		public event ConflictDetectedEventHandler ConflictDetected;
+		public event CloningStartedEventHandler CloningStarted;
+		public event CloningFinishedEventHandler CloningFinished;
+		public event CloningFailedEventHandler CloningFailed;
 
 
 		public SparkleRepo (string path)
@@ -86,6 +92,8 @@ namespace SparkleShare {
 			CurrentHash     = GetCurrentHash ();
 			Domain          = GetDomain (RemoteOriginUrl);
 
+
+			HasChanged = false;
 
 			// Watch the repository's folder
 			Watcher = new FileSystemWatcher (LocalPath) {
@@ -135,11 +143,15 @@ namespace SparkleShare {
 		public void Clone ()
 		{
 
+			SparkleEventArgs args = new SparkleEventArgs ("CloningStarted");
+
+			if (CloningStarted != null)
+	            CloningStarted (this, args); 
+
+
 			Process process = new Process () {	
 				EnableRaisingEvents = true
 			};
-
-			// Cloning started event
 
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
@@ -149,49 +161,49 @@ namespace SparkleShare {
 			process.Start ();
 
 			process.Exited += delegate {
-				// Cloning finished event
+
+				if (Process.ExitCode != 0) {
+
+					args = new SparkleEventArgs ("CloningFailed");
+
+					if (CloningFailed != null)
+					    CloningFailed (this, args); 
 
 
-
-			if (Process.ExitCode != 0) {
-
-				// Cloning failed event
-
-				try {
-					Directory.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, Name));
-				} catch (System.IO.DirectoryNotFoundException) {
-					SparkleHelpers.DebugInfo ("Config", "[" + Name + "] Temporary directory did not exist...");
-				}
+					try {
+						Directory.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, Name));
+					} catch (System.IO.DirectoryNotFoundException) {
+						SparkleHelpers.DebugInfo ("Config", "[" + Name + "] Temporary directory did not exist...");
+					}
 			
-			} else {
+				} else {
 
-				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Repository cloned");
+					args = new SparkleEventArgs ("CloningFinished");
 
-				Directory.Move (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, Name),
-					SparkleHelpers.CombineMore (SparklePaths.SparklePath, Name));
-
-
-				// Add a .gitignore file to the repo
-				TextWriter Writer = new StreamWriter (SparkleHelpers.CombineMore (SparklePaths.SparklePath, Name,
-					".gitignore"));
-				Writer.WriteLine ("*~"); // Ignore gedit swap files
-				Writer.WriteLine (".*.sw?"); // Ignore vi swap files
-				Writer.WriteLine (".DS_store"); // Ignore OSX's invisible directories
-				Writer.Close ();
-
-				// TODO: write gitignore rules in repo/.git/info/exclude
-
-				// TODO: Install username and email from global file
+					if (CloningFinished != null)
+					    CloningFinished (this, args); 
 
 
-			}
+					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Repository cloned");
 
+					Directory.Move (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, Name),
+						SparkleHelpers.CombineMore (SparklePaths.SparklePath, Name));
 
+					// Add a .gitignore file to the repo
+					TextWriter writer = new StreamWriter (SparkleHelpers.CombineMore (SparklePaths.SparklePath, Name,
+						".git/info/exclude"));
 
+					writer.WriteLine ("*~"); // Ignore gedit swap files
+					writer.WriteLine (".*.sw?"); // Ignore vi swap files
+					writer.WriteLine (".DS_store"); // Ignore OSX's invisible directories
 
+					writer.Close ();
+
+					// TODO: Install username and email from global file
+
+				}
 
 			};
-
 
 		}
 

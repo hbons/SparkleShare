@@ -379,7 +379,7 @@ namespace SparkleShare {
 							Spacing     = 6
 						};
 
-							Button button = new Button ("") {
+							Button button = new Button () {
 								Sensitive = false
 							};
 			
@@ -660,7 +660,7 @@ namespace SparkleShare {
 
 		// Convert the more human readable sparkle:// url to something Git can use.
 		// Example: sparkle://gitorious.org/sparkleshare ssh://git@gitorious.org/sparkleshare
-		private static string SparkleToGitUrl (string url)
+/*		private static string SparkleToGitUrl (string url)
 		{
 
 			if (url.StartsWith ("sparkle://"))
@@ -674,7 +674,7 @@ namespace SparkleShare {
 			return url;
 		
 		}
-
+*/
 	}
 
 }

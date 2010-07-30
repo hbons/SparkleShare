@@ -72,12 +72,7 @@ namespace SparkleShare {
 				}
 			}
 
-			Gtk.Application.Init ();
-
 			SparkleUI = new SparkleUI (HideUI);
-
-			// The main loop
-			Gtk.Application.Run ();
 
 		}
 
