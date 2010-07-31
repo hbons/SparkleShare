@@ -308,18 +308,6 @@ namespace SparkleShare {
 						Application.Invoke (UpdateStatusIconToIdle);
 					};
 
-					repo.CloningStarted += delegate {
-						Application.Invoke (UpdateStatusIconToSyncing);
-					};
-
-					repo.CloningFinished += delegate {
-						Application.Invoke (UpdateStatusIconToIdle);
-					};
-
-					repo.CloningFailed += delegate {
-						Application.Invoke (UpdateStatusIconToIdle);
-					};
-
 					repo.PushingStarted += delegate {
 						Application.Invoke (UpdateStatusIconToSyncing);
 					};
