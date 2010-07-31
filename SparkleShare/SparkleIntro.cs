@@ -74,7 +74,7 @@ namespace SparkleShare {
 						BorderWidth = 30
 					};
 			
-						Label introduction = new Label ("<span size='x-large'><b>" +
+						Label header = new Label ("<span size='x-large'><b>" +
 								                        _("Welcome to SparkleShare!") +
 								                        "</b></span>") {
 							UseMarkup = true,
@@ -146,7 +146,7 @@ namespace SparkleShare {
 			
 						controls.Add (NextButton);
 
-					layout_vertical.PackStart (introduction, false, false, 0);
+					layout_vertical.PackStart (header, false, false, 0);
 					layout_vertical.PackStart (information, false, false, 21);
 					layout_vertical.PackStart (new Label (""), false, false, 0);
 					layout_vertical.PackStart (table, false, false, 0);
@@ -176,6 +176,7 @@ namespace SparkleShare {
 
 		}
 
+
 		public void ShowStepTwo ()
 		{
 
@@ -194,7 +195,7 @@ namespace SparkleShare {
 						BorderWidth = 30
 					};
 			
-						Label introduction = new Label ("<span size='x-large'><b>" +
+						Label header = new Label ("<span size='x-large'><b>" +
 								                        _("Where does your remote folder reside?") +
 								                        "</b></span>") {
 							UseMarkup = true,
@@ -223,13 +224,13 @@ namespace SparkleShare {
 								  "</span>";
 
 							RadioButton radio_button_github = new RadioButton (radio_button, github_text);
-							
+
 							(radio_button_github.Child as Label).UseMarkup = true;
 							(radio_button_github.Child as Label).Wrap      = true;
 
 							string gnome_text = "<b>" + _("The GNOME Project") + "</b>\n" +
 								  "<span fgcolor='#777' size='small'>" +
-								_("GNOME is an easy to understand interface to your computer.") +
+								_("GNOME is an easy to understand interface to your computer.") + " " +
 								_("Select this option if you’re a developer or designer working on GNOME.") +
 								  "</span>";
 
@@ -245,7 +246,7 @@ namespace SparkleShare {
 								  "</span>";
 
 							RadioButton radio_button_gitorious = new RadioButton (radio_button, gitorious_text) {
-								Xalign    = 0
+								Xalign = 0
 							};
 							
 							(radio_button_gitorious.Child as Label).UseMarkup = true;
@@ -292,7 +293,7 @@ namespace SparkleShare {
 						layout_folder.PackStart (folder_label, true, true, 12);
 						layout_folder.PackStart (FolderEntry, true, true, 0);
 
-				
+
 						HButtonBox controls = new HButtonBox () {
 							BorderWidth = 12,
 							Layout      = ButtonBoxStyle.End,
@@ -303,9 +304,87 @@ namespace SparkleShare {
 			
 							AddButton.Clicked += delegate {
 
-								ShowStepTwoAndAHalf ();
+								string server = "";
 
-								// TODO
+								if (radio_button.Active) {
+
+									server = ServerEntry.Text;
+
+									// Remove the trailing slash if there is one
+									if (server.EndsWith ("/"))
+										server = server.Trim ("/".ToCharArray ());
+
+								}
+
+								if (radio_button_gitorious.Active)
+									server = "ssh://git@gitorious.org";
+
+								if (radio_button_github.Active)
+									server = "ssh://git@github.com";
+
+								if (radio_button_gnome.Active)
+									server = "ssh://git@gnome.org";
+
+
+								string name = FolderEntry.Text;
+
+								// Remove the starting slash if there is one
+								if (name.StartsWith ("/"))
+									name = name.Substring (1);
+
+
+								string url  = server + "/" + name;
+								string tmp_folder = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, name);
+
+								SparkleFetcher fetcher = new SparkleFetcher (url, tmp_folder);
+
+								Console.WriteLine (url);
+
+								fetcher.CloningStarted += delegate {
+
+									SparkleHelpers.DebugInfo ("Git", "[" + name + "] Cloning Repository");
+
+								};
+
+
+								fetcher.CloningFinished += delegate {
+
+									Console.WriteLine ("CLONING FINISHED");
+
+									SparkleHelpers.DebugInfo ("Git", "[" + name + "] Repository cloned");
+
+									Directory.Move (tmp_folder,
+										SparkleHelpers.CombineMore (SparklePaths.SparklePath, name));
+
+									// Install username and email from global file
+
+									ShowFinishedStep ();
+
+								};
+
+
+								fetcher.CloningFailed += delegate {
+
+									SparkleHelpers.DebugInfo ("Git", "[" + name + "] Cloning failed");
+
+									try {
+
+										Directory.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
+											name));
+
+										SparkleHelpers.DebugInfo ("Config",
+											"[" + name + "] Deleted temporary directory");
+
+									} catch (System.IO.DirectoryNotFoundException) {
+
+										ShowErrorStep ();
+
+									}
+
+								};
+
+								ShowStepTwoAndAHalf ();
+								fetcher.Clone ();
 
 							};
 
@@ -315,12 +394,13 @@ namespace SparkleShare {
 								ShowStepThree ();
 							};
 
+
 						if (!StepTwoOnly)
 							controls.Add (skip_button);
 
 						controls.Add (AddButton);
 
-					layout_vertical.PackStart (introduction, false, false, 0);
+					layout_vertical.PackStart (header, false, false, 0);
 					layout_vertical.PackStart (new Label (""), false, false, 3);
 					layout_vertical.PackStart (table, false, false, 0);
 					layout_vertical.PackStart (layout_folder, false, false, 6);
@@ -334,6 +414,133 @@ namespace SparkleShare {
 			Add (layout_horizontal);
 
 			CheckStepTwoFields ();
+
+			ShowAll ();
+		
+		}
+
+
+		private void ShowErrorStep ()
+		{
+
+			Remove (Child);
+
+			Title = _("Error adding folder");
+
+			HBox layout_horizontal = new HBox (false, 6);
+
+				Image side_splash = new Image (SparkleHelpers.CombineMore (Defines.PREFIX, "share", "pixmaps",
+					"side-splash.png"));
+
+				VBox wrapper = new VBox (false, 0);
+			
+					VBox layout_vertical = new VBox (false, 0) {
+						BorderWidth = 30
+					};
+			
+						Label header = new Label ("<span size='x-large'><b>" +
+								                        _("Something went wrong…") +
+								                        "</b></span>") {
+							UseMarkup = true,
+							Xalign = 0
+						};
+				
+						Label information = new Label (_("Hey, it's an Alpha!")) {
+							Xalign = 0,
+							Wrap   = true
+						};
+
+				
+						HButtonBox controls = new HButtonBox () {
+							BorderWidth = 12,
+							Layout      = ButtonBoxStyle.End
+						};
+
+							Button try_again_button = new Button (_("Try again…")) {
+								Sensitive = true
+							};
+			
+							try_again_button.Clicked += delegate (object o, EventArgs args) {
+
+								ShowStepTwo ();
+
+							};
+			
+						controls.Add (try_again_button);
+
+					layout_vertical.PackStart (header, false, false, 0);
+					layout_vertical.PackStart (information, false, false, 0);
+
+				wrapper.PackStart (layout_vertical, true, true, 0);
+				wrapper.PackStart (controls, false, true, 0);
+
+			layout_horizontal.PackStart (side_splash, false, false, 0);
+			layout_horizontal.PackStart (wrapper, true, true, 0);
+
+			Add (layout_horizontal);
+
+			ShowAll ();
+		
+		}
+
+
+		private void ShowFinishedStep ()
+		{
+
+			Remove (Child);
+
+			Title = _("Folder Added Successfully");
+
+			HBox layout_horizontal = new HBox (false, 6);
+
+				Image side_splash = new Image (SparkleHelpers.CombineMore (Defines.PREFIX, "share", "pixmaps",
+					"side-splash.png"));
+
+				VBox wrapper = new VBox (false, 0);
+			
+					VBox layout_vertical = new VBox (false, 0) {
+						BorderWidth = 30
+					};
+			
+						Label header = new Label ("<span size='x-large'><b>" +
+								                        _("Done!") +
+								                        "</b></span>") {
+							UseMarkup = true,
+							Xalign = 0
+						};
+				
+						Label information = new Label (_("Looks like the stars are aligned right for you!")) {
+							Xalign = 0,
+							Wrap   = true
+						};
+
+				
+						HButtonBox controls = new HButtonBox () {
+							BorderWidth = 12,
+							Layout      = ButtonBoxStyle.End
+						};
+
+							Button finish_button = new Button (_("Finish"));
+			
+							finish_button.Clicked += delegate (object o, EventArgs args) {
+
+								SparkleShare.SparkleUI.UpdateRepositories ();
+								Destroy ();
+
+							};
+			
+						controls.Add (finish_button);
+
+					layout_vertical.PackStart (header, false, false, 0);
+					layout_vertical.PackStart (information, false, false, 0);
+
+				wrapper.PackStart (layout_vertical, true, true, 0);
+				wrapper.PackStart (controls, false, true, 0);
+
+			layout_horizontal.PackStart (side_splash, false, false, 0);
+			layout_horizontal.PackStart (wrapper, true, true, 0);
+
+			Add (layout_horizontal);
 
 			ShowAll ();
 		
@@ -358,11 +565,12 @@ namespace SparkleShare {
 						BorderWidth = 30
 					};
 
-						Label introduction = new Label ("<span size='x-large'><b>" +
+						Label header = new Label ("<span size='x-large'><b>" +
 								                        String.Format (_("Retrieving folder ‘{0}’…"), FolderEntry.Text) +
 								                        "</b></span>") {
 							UseMarkup = true,
-							Xalign = 0
+							Xalign    = 0,
+							Wrap      = true
 						};
 
 						Label information = new Label ("<span fgcolor='#777'>" + 
@@ -411,7 +619,7 @@ namespace SparkleShare {
 					HBox box = new HBox (false, 0);
 
 					table.Attach (spinner,      0, 1, 0, 1);
-					table.Attach (introduction, 1, 2, 0, 1);
+					table.Attach (header, 1, 2, 0, 1);
 					table.Attach (information,  1, 2, 1, 2);
 
 					box.PackStart (table, false, false, 0);
@@ -451,7 +659,7 @@ namespace SparkleShare {
 					BorderWidth = 30
 				};
 
-				Label introduction = new Label ("<span size='x-large'><b>" +
+				Label header = new Label ("<span size='x-large'><b>" +
 					                            _("SparkleShare is ready to go!") +
 					                            "</b></span>") {
 					UseMarkup = true,
@@ -473,7 +681,7 @@ namespace SparkleShare {
 
 				link_wrapper.PackStart (link, false, false, 0);
 
-				layout_vertical.PackStart (introduction, false, false, 0);
+				layout_vertical.PackStart (header, false, false, 0);
 				layout_vertical.PackStart (information, false, false, 21);
 				layout_vertical.PackStart (link_wrapper, false, false, 0);
 
