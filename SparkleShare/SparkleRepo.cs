@@ -52,9 +52,6 @@ namespace SparkleShare {
 		public delegate void FetchingFinishedEventHandler (object o, SparkleEventArgs args);
 		public delegate void NewCommitEventHandler (object o, NewCommitArgs args);
 		public delegate void ConflictDetectedEventHandler (object o, SparkleEventArgs args);
-		public delegate void CloningStartedEventHandler (object o, SparkleEventArgs args);
-		public delegate void CloningFinishedEventHandler (object o, SparkleEventArgs args);
-		public delegate void CloningFailedEventHandler (object o, SparkleEventArgs args);
 
 		public event AddedEventHandler Added; 
 		public event CommitedEventHandler Commited; 
@@ -64,15 +61,13 @@ namespace SparkleShare {
 		public event FetchingFinishedEventHandler FetchingFinished;
 		public event NewCommitEventHandler NewCommit;
 		public event ConflictDetectedEventHandler ConflictDetected;
-		public event CloningStartedEventHandler CloningStarted;
-		public event CloningFinishedEventHandler CloningFinished;
-		public event CloningFailedEventHandler CloningFailed;
 
 
 		public SparkleRepo (string path)
 		{
 
-//			if (Directory.Exists)
+			if (!Directory.Exists (path))
+				Directory.CreateDirectory (path);
 
 			LocalPath = path;
 			Name = Path.GetFileName (LocalPath);
@@ -136,74 +131,6 @@ namespace SparkleShare {
 			AddCommitAndPush ();
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Idling...");
-
-		}
-
-
-		public void Clone ()
-		{
-
-			SparkleEventArgs args = new SparkleEventArgs ("CloningStarted");
-
-			if (CloningStarted != null)
-	            CloningStarted (this, args); 
-
-
-			Process process = new Process () {	
-				EnableRaisingEvents = true
-			};
-
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.WorkingDirectory = SparklePaths.SparkleTmpPath;
-			process.StartInfo.Arguments = String.Format ("clone {0} {1}", RemoteOriginUrl, Name);
-
-			process.Start ();
-
-			process.Exited += delegate {
-
-				if (Process.ExitCode != 0) {
-
-					args = new SparkleEventArgs ("CloningFailed");
-
-					if (CloningFailed != null)
-					    CloningFailed (this, args); 
-
-
-					try {
-						Directory.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, Name));
-					} catch (System.IO.DirectoryNotFoundException) {
-						SparkleHelpers.DebugInfo ("Config", "[" + Name + "] Temporary directory did not exist...");
-					}
-			
-				} else {
-
-					args = new SparkleEventArgs ("CloningFinished");
-
-					if (CloningFinished != null)
-					    CloningFinished (this, args); 
-
-
-					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Repository cloned");
-
-					Directory.Move (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, Name),
-						SparkleHelpers.CombineMore (SparklePaths.SparklePath, Name));
-
-					// Add a .gitignore file to the repo
-					TextWriter writer = new StreamWriter (SparkleHelpers.CombineMore (SparklePaths.SparklePath, Name,
-						".git/info/exclude"));
-
-					writer.WriteLine ("*~"); // Ignore gedit swap files
-					writer.WriteLine (".*.sw?"); // Ignore vi swap files
-					writer.WriteLine (".DS_store"); // Ignore OSX's invisible directories
-
-					writer.Close ();
-
-					// TODO: Install username and email from global file
-
-				}
-
-			};
 
 		}
 
