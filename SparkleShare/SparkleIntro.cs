@@ -386,7 +386,7 @@ namespace SparkleShare {
 
 									}
 
-									ShowFinishedStep ();
+									Application.Invoke (delegate { ShowFinishedStep (); });
 
 								};
 
@@ -405,7 +405,7 @@ namespace SparkleShare {
 
 									}
 
-									ShowErrorStep ();
+									Application.Invoke (delegate { ShowErrorStep (); });
 
 								};
 
@@ -486,15 +486,18 @@ namespace SparkleShare {
 					};
 			
 						Label header = new Label ("<span size='x-large'><b>" +
-								                        _("Something went wrong…") +
-								                        "</b></span>\n") {
+								                _("Something went wrong…") +
+								                  "</b></span>\n") {
 							UseMarkup = true,
 							Xalign = 0
 						};
 				
-						Label information = new Label (_("Hey, it's an Alpha!")) {
+						Label information = new Label ("<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
+						                             _("Hey, it's an Alpha!") +
+						                               "</span>") {
 							Xalign = 0,
-							Wrap   = true
+							Wrap   = true,
+							UseMarkup = true
 						};
 
 				
@@ -516,7 +519,7 @@ namespace SparkleShare {
 						controls.Add (try_again_button);
 
 					layout_vertical.PackStart (header, false, false, 0);
-					layout_vertical.PackStart (information, false, false, 0);
+					layout_vertical.PackStart (information, false, false, 6);
 
 				wrapper.PackStart (layout_vertical, true, true, 0);
 				wrapper.PackStart (controls, false, true, 0);
@@ -550,15 +553,18 @@ namespace SparkleShare {
 					};
 			
 						Label header = new Label ("<span size='x-large'><b>" +
-								                        _("Done!") +
-								                        "</b></span>") {
+								                _("Folder successfully retrieved!") +
+								                  "</b></span>") {
 							UseMarkup = true,
 							Xalign = 0
 						};
 				
-						Label information = new Label (_("Looks like the stars are aligned right for you!")) {
+						Label information = new Label ("<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
+						                             _("Buy a lottery ticket!") +
+						                               "</span>") {
 							Xalign = 0,
-							Wrap   = true
+							Wrap   = true,
+							UseMarkup = true
 						};
 
 				
@@ -579,7 +585,7 @@ namespace SparkleShare {
 						controls.Add (finish_button);
 
 					layout_vertical.PackStart (header, false, false, 0);
-					layout_vertical.PackStart (information, false, false, 0);
+					layout_vertical.PackStart (information, false, false, 6);
 
 				wrapper.PackStart (layout_vertical, true, true, 0);
 				wrapper.PackStart (controls, false, true, 0);
