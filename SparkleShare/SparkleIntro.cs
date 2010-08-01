@@ -804,7 +804,7 @@ namespace SparkleShare {
 			TextWriter writer = new StreamWriter (config_file_path);
 			writer.WriteLine ("[user]\n" +
 			                  "\tname  = " + NameEntry.Text + "\n" +
-			                  "\temail = " + EmailEntry.Text + "\n");
+			                  "\temail = " + EmailEntry.Text);
 			writer.Close ();
 
 			SparkleHelpers.DebugInfo ("Config", "Created '" + config_file_path + "'");
