@@ -31,14 +31,14 @@ namespace SparkleShare {
 		public event CloningFinishedEventHandler CloningFinished;
 		public event CloningFailedEventHandler CloningFailed;
 
-		private string Folder;
+		private string TargetFolder;
 		private string RemoteOriginUrl;
 
 		
 		public SparkleFetcher (string url, string folder)
 		{
 
-			Folder = folder;
+			TargetFolder = folder;
 			RemoteOriginUrl = url;
 
 		}
@@ -46,6 +46,9 @@ namespace SparkleShare {
 
 		public void Clone ()
 		{
+
+			if (Directory.Exists (TargetFolder))
+				Directory.Delete (TargetFolder, true);
 
 			SparkleEventArgs args = new SparkleEventArgs ("CloningStarted");
 
@@ -59,11 +62,7 @@ namespace SparkleShare {
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.FileName = "git";
-			process.StartInfo.Arguments = "clone " + RemoteOriginUrl + " " + Folder;
-
-			Console.WriteLine (Folder);
-
-			Console.WriteLine (process.StartInfo.FileName + " " + process.StartInfo.Arguments);
+			process.StartInfo.Arguments = "clone " + RemoteOriginUrl + " " + TargetFolder;
 
 			process.Exited += delegate {
 
@@ -96,10 +95,34 @@ namespace SparkleShare {
 		}
 
 
+		// Install the user's name and email into
+		// the newly cloned repository
 		private void InstallUserInfo ()
 		{
 
-			// TODO: Install username and email from global file
+			string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
+
+			if (File.Exists (global_config_file_path)) {
+
+				StreamReader reader = new StreamReader (global_config_file_path);
+				string user_info = reader.ReadToEnd ();
+				reader.Close ();
+
+				string repo_config_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "config");
+
+				reader = new StreamReader (repo_config_file_path);
+				string repo_info = reader.ReadToEnd ();
+				reader.Close ();
+
+				string new_repo_info = repo_info + "\n" + user_info;
+
+				TextWriter writer = new StreamWriter (repo_config_file_path);
+				writer.WriteLine (new_repo_info);
+				writer.Close ();
+
+				SparkleHelpers.DebugInfo ("Config", "Added user info to '" + repo_config_file_path + "'");
+
+			}
 
 		}
 
@@ -108,7 +131,7 @@ namespace SparkleShare {
 		private void InstallExcludeRules ()
 		{
 
-			TextWriter writer = new StreamWriter (SparkleHelpers.CombineMore (Folder, ".git/info/exclude"));
+			TextWriter writer = new StreamWriter (SparkleHelpers.CombineMore (TargetFolder, ".git/info/exclude"));
 
 			writer.WriteLine ("*~"); // Ignore gedit swap files
 			writer.WriteLine (".*.sw?"); // Ignore vi swap files
