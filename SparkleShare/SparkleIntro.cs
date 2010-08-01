@@ -498,7 +498,7 @@ namespace SparkleShare {
 						controls.Add (try_again_button);
 
 					layout_vertical.PackStart (header, false, false, 0);
-					layout_vertical.PackStart (information, false, false, 3);
+					layout_vertical.PackStart (information, false, false, 0);
 
 				wrapper.PackStart (layout_vertical, true, true, 0);
 				wrapper.PackStart (controls, false, true, 0);
@@ -564,7 +564,7 @@ namespace SparkleShare {
 						controls.Add (finish_button);
 
 					layout_vertical.PackStart (header, false, false, 0);
-					layout_vertical.PackStart (information, false, false, 3);
+					layout_vertical.PackStart (information, false, false, 0);
 
 				wrapper.PackStart (layout_vertical, true, true, 0);
 				wrapper.PackStart (controls, false, true, 0);
