@@ -446,27 +446,6 @@ namespace SparkleShare {
 		}
 
 
-		// Recursively sets access rights of a folder to 'Normal'
-		private void ClearAttributes (string path)
-		{
-
-			if (Directory .Exists (path)) {
-
-				string [] folders = Directory .GetDirectories (path);
-
-				foreach (string folder in folders)
-					ClearAttributes (folder);
-
-				string [] files = Directory .GetFiles(path);
-
-				foreach (string file in files)
-					File.SetAttributes (file, FileAttributes.Normal);
-
-			}
-
-		}
-
-
 		private void ShowErrorStep ()
 		{
 
@@ -915,6 +894,27 @@ namespace SparkleShare {
 		{
 			
 			return Regex.Match (url, @"ssh://(.)+").Success;
+
+		}
+
+
+		// Recursively sets access rights of a folder to 'Normal'
+		private void ClearAttributes (string path)
+		{
+
+			if (Directory.Exists (path)) {
+
+				string [] folders = Directory .GetDirectories (path);
+
+				foreach (string folder in folders)
+					ClearAttributes (folder);
+
+				string [] files = Directory .GetFiles(path);
+
+				foreach (string file in files)
+					File.SetAttributes (file, FileAttributes.Normal);
+
+			}
 
 		}
 
