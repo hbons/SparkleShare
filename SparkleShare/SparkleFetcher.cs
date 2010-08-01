@@ -33,13 +33,11 @@ namespace SparkleShare {
 
 		private string Folder;
 		private string RemoteOriginUrl;
-		private string RepoName;
 
 		
 		public SparkleFetcher (string url, string folder)
 		{
 
-			RepoName = Path.GetDirectoryName (folder);
 			Folder = folder;
 			RemoteOriginUrl = url;
 
@@ -81,16 +79,13 @@ namespace SparkleShare {
 
 				} else {
 
+					InstallUserInfo ();
 					InstallExcludeRules ();
 
 					args = new SparkleEventArgs ("CloningFinished");
 
-						Console.WriteLine ("FINISHED");
-
-					if (CloningFinished != null) {
-						Console.WriteLine ("EVENT FIRED");
+					if (CloningFinished != null)
 					    CloningFinished (this, args);
-					}
 
 				}
 
@@ -101,13 +96,19 @@ namespace SparkleShare {
 		}
 
 
+		private void InstallUserInfo ()
+		{
+
+			// Install username and email from global file
+
+		}
+
+
 		// Add a .gitignore file to the repo
 		private void InstallExcludeRules ()
 		{
 
-			TextWriter writer;
-			writer = new StreamWriter (SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-				RepoName, ".git/info/exclude"));
+			TextWriter writer = new StreamWriter (SparkleHelpers.CombineMore (Folder, ".git/info/exclude"));
 
 			writer.WriteLine ("*~"); // Ignore gedit swap files
 			writer.WriteLine (".*.sw?"); // Ignore vi swap files
