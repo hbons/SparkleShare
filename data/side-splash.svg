@@ -26,14 +26,14 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
+     inkscape:zoom="1"
      inkscape:cx="276.72576"
-     inkscape:cy="160.37847"
+     inkscape:cy="159.36832"
      inkscape:document-units="px"
      inkscape:current-layer="g8506"
      showgrid="false"
      inkscape:window-width="1440"
-     inkscape:window-height="842"
+     inkscape:window-height="844"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1" />
@@ -576,7 +576,7 @@
        x2="15.142853"
        y1="385.79074"
        x1="-17.857147"
-       gradientTransform="matrix(0.93600978,0,0,1,1.5716112,0)"
+       gradientTransform="matrix(0.93600978,0,0,1,1.5716112,5.089059e-7)"
        gradientUnits="userSpaceOnUse"
        id="linearGradient8586"
        xlink:href="#linearGradient8492"
@@ -593,6 +593,36 @@
          offset="1"
          style="stop-color:#2e3436;stop-opacity:0;" />
     </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient8492"
+       id="linearGradient2958"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.93600979,0,0,1,1.5716112,5.089059e-7)"
+       x1="-17.857147"
+       y1="385.79074"
+       x2="15.142853"
+       y2="385.79074" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient8492"
+       id="linearGradient3734"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.54207039,0,0,1,-5.4630223,5.089059e-7)"
+       x1="-17.857147"
+       y1="385.79074"
+       x2="15.142853"
+       y2="385.79074" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient8492"
+       id="linearGradient3738"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.20873706,0,0,1,-11.415405,5.089059e-7)"
+       x1="-17.857147"
+       y1="385.79074"
+       x2="15.142853"
+       y2="385.79074" />
   </defs>
   <metadata
      id="metadata8768">
@@ -602,7 +632,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -927,9 +957,25 @@
          style="opacity:0.2;color:#000000;fill:url(#linearGradient8586);fill-opacity:1;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          id="rect8488"
          width="30.888323"
-         height="400"
+         height="440.4061"
          x="-15.142853"
-         y="185.79074"
+         y="145.38464"
+         transform="scale(-1,1)" />
+      <rect
+         transform="scale(-1,1)"
+         y="145.38464"
+         x="-15.142853"
+         height="440.4061"
+         width="17.888323"
+         id="rect3732"
+         style="opacity:0.2;color:#000000;fill:url(#linearGradient3734);fill-opacity:1;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <rect
+         style="opacity:0.2;color:#000000;fill:url(#linearGradient3738);fill-opacity:1;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3736"
+         width="6.8883228"
+         height="440.4061"
+         x="-15.142853"
+         y="145.38464"
          transform="scale(-1,1)" />
     </g>
   </g>
