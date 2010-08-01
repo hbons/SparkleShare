@@ -312,7 +312,7 @@ namespace SparkleShare {
 
 								if (radio_button.Active) {
 
-									server = ServerEntry.Text;
+									server = SparkleToGitUrl (ServerEntry.Text);
 
 									// Remove the trailing slash if there is one
 									if (server.EndsWith ("/"))
@@ -870,8 +870,10 @@ namespace SparkleShare {
 				process.Start ();
 
 				process.Exited += delegate {
+
 					SparkleHelpers.DebugInfo ("Config", "Created key '" + key_file_name + "'");
 					SparkleHelpers.DebugInfo ("Config", "Created key '" + key_file_name + ".pub'");
+
 				};
 
 			}
@@ -924,30 +926,26 @@ namespace SparkleShare {
 		public string GdkColorToHex (Gdk.Color color)
 		{
 
-			return String.Format("#{0:X2}{1:X2}{2:X2}",
-				(int) Math.Truncate(color.Red   / 256.00),
-				(int) Math.Truncate(color.Green / 256.00),
-				(int) Math.Truncate(color.Blue  / 256.00));
+			return String.Format ("#{0:X2}{1:X2}{2:X2}",
+				(int) Math.Truncate (color.Red   / 256.00),
+				(int) Math.Truncate (color.Green / 256.00),
+				(int) Math.Truncate (color.Blue  / 256.00));
 
 		}
 
+
 		// Convert the more human readable sparkle:// url to something Git can use.
 		// Example: sparkle://gitorious.org/sparkleshare ssh://git@gitorious.org/sparkleshare
-/*		private static string SparkleToGitUrl (string url)
+		private static string SparkleToGitUrl (string url)
 		{
 
 			if (url.StartsWith ("sparkle://"))
 				url = url.Replace ("sparkle://", "ssh://git@");
 
-			// Usually don't need the ".git" at the end.
-			// It looks ugly as a folder too.
-			if (url.EndsWith (".git"))
-				url = url.Substring (0, url.Length - 4);
-
 			return url;
 		
 		}
-*/
+
 	}
 
 }
