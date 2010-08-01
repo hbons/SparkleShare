@@ -66,8 +66,7 @@ namespace SparkleShare {
 
 			process.Exited += delegate {
 
-				Console.WriteLine (process.ExitTime.ToString ());
-				Console.WriteLine (process.ExitCode);
+				SparkleHelpers.DebugInfo ("Git", "Exit code " + process.ExitCode.ToString ());
 
 				if (process.ExitCode != 0) {
 
@@ -110,16 +109,8 @@ namespace SparkleShare {
 
 				string repo_config_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "config");
 
-				reader = new StreamReader (repo_config_file_path);
-				string repo_info = reader.ReadToEnd ();
-				reader.Close ();
-
-				File.Delete (repo_config_file_path);
-
-				string new_repo_info = repo_info + "\n" + user_info;
-
-				TextWriter writer = new StreamWriter (repo_config_file_path);
-				writer.WriteLine (new_repo_info);
+				TextWriter writer = File.AppendText (repo_config_file_path);
+				writer.WriteLine (user_info);
 				writer.Close ();
 
 				SparkleHelpers.DebugInfo ("Config", "Added user info to '" + repo_config_file_path + "'");
