@@ -799,7 +799,7 @@ namespace SparkleShare {
 		private void Configure ()
 		{
 
-			string config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, ".gitconfig");
+			string config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
 
 			TextWriter writer = new StreamWriter (config_file_path);
 			writer.WriteLine ("[user]\n" +
