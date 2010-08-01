@@ -168,6 +168,7 @@ namespace SparkleShare {
 			if (!File.Exists (desktopfile_path)) {
 
 				if (!Directory.Exists (apps_path))
+
 					Directory.CreateDirectory (apps_path);
 
 					TextWriter writer = new StreamWriter (desktopfile_path);
