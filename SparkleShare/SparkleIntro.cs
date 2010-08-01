@@ -33,6 +33,7 @@ namespace SparkleShare {
 		private Button NextButton;
 		private Button AddButton;
 		private bool StepTwoOnly;
+		private string SecondaryTextColor;
 
 		// Short alias for the translations
 		public static string _ (string s)
@@ -52,6 +53,9 @@ namespace SparkleShare {
 			StepTwoOnly = false;
 
 			SetSizeRequest (640, 440);
+
+			Window window = new Window ("");
+			SecondaryTextColor = GdkColorToHex (window.Style.Foreground (StateType.Insensitive));
 
 			ShowStepOne ();
 
@@ -218,7 +222,7 @@ namespace SparkleShare {
 							layout_server.Add (ServerEntry);
 							
 							string github_text = "<b>" + "Github" + "</b>\n" +
-								  "<span fgcolor='#777' size='small'>" +
+								  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
 								_("Github provides free hosting for Open Source projects, ") + 
 								_("but also has paid accounts for extra space and bandwidth.") +
 								  "</span>";
@@ -229,7 +233,7 @@ namespace SparkleShare {
 							(radio_button_github.Child as Label).Wrap      = true;
 
 							string gnome_text = "<b>" + _("The GNOME Project") + "</b>\n" +
-								  "<span fgcolor='#777' size='small'>" +
+								  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
 								_("GNOME is an easy to understand interface to your computer.") + " " +
 								_("Select this option if you’re a developer or designer working on GNOME.") +
 								  "</span>";
@@ -240,7 +244,7 @@ namespace SparkleShare {
 							(radio_button_gnome.Child as Label).Wrap      = true;
 
 							string gitorious_text = "<b>" + _("Gitorious") + "</b>\n" +
-								  "<span fgcolor='#777' size='small'>" +
+								  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
 								_("Gitorious provides a completely Free and Open Source infrastructure ") +
 								_("for hosting Open Source projects.") +
 								  "</span>";
@@ -616,7 +620,7 @@ namespace SparkleShare {
 							Wrap      = true
 						};
 
-						Label information = new Label ("<span fgcolor='#777'>" + 
+						Label information = new Label ("<span fgcolor='" + SecondaryTextColor + "'>" + 
 						                             _("This may take a while.\n") +
 						                             _("You sure it’s not coffee o-clock?" +
 						                               "</span>")) {
@@ -908,6 +912,18 @@ namespace SparkleShare {
 
 		}
 
+
+		// Converts a Gdk RGB color to a hex value.
+		// Example: from "rgb:0,0,0" to "#000000"
+		public string GdkColorToHex (Gdk.Color color)
+		{
+
+			return String.Format("#{0:X2}{1:X2}{2:X2}",
+				(int) Math.Truncate(color.Red   / 256.00),
+				(int) Math.Truncate(color.Green / 256.00),
+				(int) Math.Truncate(color.Blue  / 256.00));
+
+		}
 
 		// Convert the more human readable sparkle:// url to something Git can use.
 		// Example: sparkle://gitorious.org/sparkleshare ssh://git@gitorious.org/sparkleshare
