@@ -332,12 +332,11 @@ namespace SparkleShare {
 								if (name.StartsWith ("/"))
 									name = name.Substring (1);
 
-										// TODO: remove .git suffic for folders in Sparkleshare
-										// TODO: Add '... (2)' if folder already exists
+								string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
 
 								string url  = server + "/" + name;
 								string tmp_folder = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
-									System.IO.Path.GetFileNameWithoutExtension (name));
+									canonical_name);
 
 								SparkleFetcher fetcher = new SparkleFetcher (url, tmp_folder);
 
@@ -345,22 +344,36 @@ namespace SparkleShare {
 
 								fetcher.CloningStarted += delegate {
 
-									SparkleHelpers.DebugInfo ("Git", "[" + name + "] Cloning Repository");
+									SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning Repository");
 
 								};
 
 
 								fetcher.CloningFinished += delegate {
 
-									SparkleHelpers.DebugInfo ("Git", "[" + name + "] Repository cloned");
+									SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Repository cloned");
 
 									ClearAttributes (tmp_folder);
 
 									try {
 
+										bool folder_exists = Directory.Exists (
+											SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name));
+
+										int i = 1;
+										while (folder_exists) {
+
+											i++;
+											folder_exists = Directory.Exists (
+												SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+													canonical_name + " (" + i + ")"));
+
+										}
+
+										string target_folder_name = canonical_name + " (" + i + ")";
+
 										Directory.Move (tmp_folder,
-											SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-												System.IO.Path.GetFileNameWithoutExtension (name)));
+											SparkleHelpers.CombineMore (SparklePaths.SparklePath, target_folder_name));
 
 									} catch (Exception e) {
 
@@ -376,7 +389,7 @@ namespace SparkleShare {
 
 								fetcher.CloningFailed += delegate {
 
-									SparkleHelpers.DebugInfo ("Git", "[" + name + "] Cloning failed");
+									SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning failed");
 
 									if (Directory.Exists (tmp_folder)) {
 
