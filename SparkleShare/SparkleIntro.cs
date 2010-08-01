@@ -471,7 +471,7 @@ namespace SparkleShare {
 							Xalign = 0
 						};
 				
-						Label information = new Label ("<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
+						Label information = new Label ("<span fgcolor='" + SecondaryTextColor + "'>" +
 						                             _("Hey, it's an Alpha!") +
 						                               "</span>") {
 							Xalign = 0,
@@ -498,7 +498,7 @@ namespace SparkleShare {
 						controls.Add (try_again_button);
 
 					layout_vertical.PackStart (header, false, false, 0);
-					layout_vertical.PackStart (information, false, false, 6);
+					layout_vertical.PackStart (information, false, false, 3);
 
 				wrapper.PackStart (layout_vertical, true, true, 0);
 				wrapper.PackStart (controls, false, true, 0);
@@ -538,7 +538,7 @@ namespace SparkleShare {
 							Xalign = 0
 						};
 				
-						Label information = new Label ("<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
+						Label information = new Label ("<span fgcolor='" + SecondaryTextColor + "'>" +
 						                             _("Buy a lottery ticket!") +
 						                               "</span>") {
 							Xalign = 0,
@@ -564,7 +564,7 @@ namespace SparkleShare {
 						controls.Add (finish_button);
 
 					layout_vertical.PackStart (header, false, false, 0);
-					layout_vertical.PackStart (information, false, false, 6);
+					layout_vertical.PackStart (information, false, false, 3);
 
 				wrapper.PackStart (layout_vertical, true, true, 0);
 				wrapper.PackStart (controls, false, true, 0);
