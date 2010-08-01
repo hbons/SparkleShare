@@ -39,13 +39,6 @@
      inkscape:window-maximized="1" />
   <defs
      id="defs8765">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 220 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="150.00002 : 220 : 1"
-       inkscape:persp3d-origin="75.000008 : 146.66667 : 1"
-       id="perspective152" />
     <radialGradient
        r="73.079796"
        fy="423.06143"
@@ -593,16 +586,6 @@
          offset="1"
          style="stop-color:#2e3436;stop-opacity:0;" />
     </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient8492"
-       id="linearGradient2958"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.93600979,0,0,1,1.5716112,5.089059e-7)"
-       x1="-17.857147"
-       y1="385.79074"
-       x2="15.142853"
-       y2="385.79074" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient8492"
