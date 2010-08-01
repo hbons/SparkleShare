@@ -334,7 +334,8 @@ namespace SparkleShare {
 
 
 								string url  = server + "/" + name;
-								string tmp_folder = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, name);
+								string tmp_folder = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
+									System.IO.Path.GetFileNameWithoutExtension (name));
 
 								SparkleFetcher fetcher = new SparkleFetcher (url, tmp_folder);
 
@@ -349,14 +350,11 @@ namespace SparkleShare {
 
 								fetcher.CloningFinished += delegate {
 
-									Console.WriteLine ("CLONING FINISHED");
-
 									SparkleHelpers.DebugInfo ("Git", "[" + name + "] Repository cloned");
 
-									Directory.Move (tmp_folder,
-										SparkleHelpers.CombineMore (SparklePaths.SparklePath, name));
+									ClearAttributes (tmp_folder);
 
-									// Install username and email from global file
+									Directory.Move (tmp_folder, SparklePaths.SparklePath);
 
 									ShowFinishedStep ();
 
@@ -367,19 +365,17 @@ namespace SparkleShare {
 
 									SparkleHelpers.DebugInfo ("Git", "[" + name + "] Cloning failed");
 
-									try {
+									if (Directory.Exists (tmp_folder)) {
 
-										Directory.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
-											name));
+										ClearAttributes (tmp_folder);
+										Directory.Delete (tmp_folder, true);
 
 										SparkleHelpers.DebugInfo ("Config",
 											"[" + name + "] Deleted temporary directory");
 
-									} catch (System.IO.DirectoryNotFoundException) {
-
-										ShowErrorStep ();
-
 									}
+
+									ShowErrorStep ();
 
 								};
 
@@ -420,6 +416,27 @@ namespace SparkleShare {
 		}
 
 
+		// Recursively sets access rights of a folder to 'Normal'
+		private void ClearAttributes (string path)
+		{
+
+			if (Directory .Exists (path)) {
+
+				string [] folders = Directory .GetDirectories (path);
+
+				foreach (string folder in folders)
+					ClearAttributes (folder);
+
+				string [] files = Directory .GetFiles(path);
+
+				foreach (string file in files)
+					File.SetAttributes (file, FileAttributes.Normal);
+
+			}
+
+		}
+
+
 		private void ShowErrorStep ()
 		{
 
@@ -440,7 +457,7 @@ namespace SparkleShare {
 			
 						Label header = new Label ("<span size='x-large'><b>" +
 								                        _("Something went wrong…") +
-								                        "</b></span>") {
+								                        "</b></span>\n") {
 							UseMarkup = true,
 							Xalign = 0
 						};

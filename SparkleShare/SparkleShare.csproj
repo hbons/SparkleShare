@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SparkleBubble.cs" />
+    <Compile Include="SparkleFetcher.cs" />
     <Compile Include="SparkleIntro.cs" />
     <Compile Include="SparkleHelpers.cs" />
     <Compile Include="SparklePaths.cs" />
