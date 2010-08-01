@@ -114,6 +114,8 @@ namespace SparkleShare {
 				string repo_info = reader.ReadToEnd ();
 				reader.Close ();
 
+				File.Delete (repo_config_file_path);
+
 				string new_repo_info = repo_info + "\n" + user_info;
 
 				TextWriter writer = new StreamWriter (repo_config_file_path);
