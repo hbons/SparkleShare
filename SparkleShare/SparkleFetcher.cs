@@ -99,7 +99,7 @@ namespace SparkleShare {
 		private void InstallUserInfo ()
 		{
 
-			// Install username and email from global file
+			// TODO: Install username and email from global file
 
 		}
 
