@@ -332,6 +332,8 @@ namespace SparkleShare {
 								if (name.StartsWith ("/"))
 									name = name.Substring (1);
 
+										// TODO: remove .git suffic for folders in Sparkleshare
+										// TODO: Add '... (2)' if folder already exists
 
 								string url  = server + "/" + name;
 								string tmp_folder = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
@@ -354,7 +356,18 @@ namespace SparkleShare {
 
 									ClearAttributes (tmp_folder);
 
-									Directory.Move (tmp_folder, SparklePaths.SparklePath);
+									try {
+
+										Directory.Move (tmp_folder,
+											SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+												System.IO.Path.GetFileNameWithoutExtension (name)));
+
+									} catch (Exception e) {
+
+										SparkleHelpers.DebugInfo ("Git",
+											"[" + name + "] Error moving folder: " + e.Message);
+
+									}
 
 									ShowFinishedStep ();
 
@@ -542,7 +555,7 @@ namespace SparkleShare {
 							finish_button.Clicked += delegate (object o, EventArgs args) {
 
 								SparkleShare.SparkleUI.UpdateRepositories ();
-								Destroy ();
+//								Destroy ();
 
 							};
 			
