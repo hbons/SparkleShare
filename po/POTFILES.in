@@ -7,11 +7,11 @@ SparkleDiff/SparkleDiffWindow.cs
 SparkleLib/SparkleFetcher.cs
 SparkleLib/SparkleHelpers.cs
 SparkleLib/SparklePaths.cs
+SparkleLib/SparklePlatform.cs
 SparkleLib/SparkleRepo.cs
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in
 SparkleShare/SparkleBubble.cs
 SparkleShare/SparkleIntro.cs
-SparkleShare/SparklePlatform.cs
 SparkleShare/SparkleShare.cs
 SparkleShare/SparkleSpinner.cs
 SparkleShare/SparkleStatusIcon.cs

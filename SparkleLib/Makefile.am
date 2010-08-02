@@ -8,6 +8,7 @@ SOURCES =  \
 	SparkleFetcher.cs \
 	SparkleHelpers.cs \
 	SparklePaths.cs \
+	SparklePlatform.cs \
 	SparkleRepo.cs
 
 include $(top_srcdir)/build/build.mk
