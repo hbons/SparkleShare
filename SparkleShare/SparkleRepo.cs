@@ -71,7 +71,6 @@ namespace SparkleShare {
 
 			LocalPath = path;
 			Name = Path.GetFileName (LocalPath);
-			System.Console.WriteLine("New repo in {0}", LocalPath);
 
 			Process = new Process () {
 				EnableRaisingEvents = true
@@ -471,7 +470,6 @@ namespace SparkleShare {
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.FileName = "git";
-			process.StartInfo.WorkingDirectory = LocalPath;
 			process.StartInfo.Arguments = "rev-list --max-count=1 HEAD";
 			process.Start ();
 
@@ -492,7 +490,6 @@ namespace SparkleShare {
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.FileName = "git";
-			process.StartInfo.WorkingDirectory = LocalPath;
 			process.StartInfo.Arguments = "config --get user.name";
 			process.Start ();
 
@@ -524,7 +521,6 @@ namespace SparkleShare {
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.FileName = "git";
-			process.StartInfo.WorkingDirectory = LocalPath;
 			process.StartInfo.Arguments = "config --get user.email";
 			process.Start ();
 			user_email = process.StandardOutput.ReadToEnd ().Trim ();
@@ -544,7 +540,6 @@ namespace SparkleShare {
 				process.StartInfo.UseShellExecute = false;
 				process.StartInfo.RedirectStandardOutput = true;
 				process.StartInfo.FileName = "git";
-				process.StartInfo.WorkingDirectory = LocalPath;
 				process.StartInfo.Arguments = "config --get remote.origin.url";
 				process.Start ();
 
