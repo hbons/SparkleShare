@@ -17,7 +17,7 @@
 using Gtk;
 using Mono.Unix;
 using Mono.Unix.Native;
-using SparkleShare;
+using SparkleLib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

@@ -4,11 +4,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
-    <ProjectGuid>{728483AA-E34B-4441-BF2C-C8BC2901E4E0}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <AssemblyName>SparkleShare</AssemblyName>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>SparkleShare</RootNamespace>
+    <ProjectGuid>{2C914413-B31C-4362-93C7-1AE34F09112A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>SparkleLib</RootNamespace>
+    <AssemblyName>SparkleLib</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -18,6 +18,7 @@
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -25,42 +26,23 @@
     <OutputPath>..\bin</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Package>gtk-sharp-2.0</Package>
     </Reference>
-    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-      <Package>gtk-sharp-2.0</Package>
-    </Reference>
-    <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-      <Package>gtk-sharp-2.0</Package>
-    </Reference>
-    <Reference Include="System" />
     <Reference Include="Mono.Posix" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SparkleBubble.cs" />
-    <Compile Include="SparkleIntro.cs" />
-    <Compile Include="SparklePlatform.cs" />
-    <Compile Include="SparkleShare.cs" />
-    <Compile Include="SparkleSpinner.cs" />
-    <Compile Include="SparkleStatusIcon.cs" />
-    <Compile Include="SparkleUI.cs" />
-    <Compile Include="SparkleWindow.cs" />
-    <Compile Include="SparkleIntro.cs" />
+    <Compile Include="SparkleRepo.cs" />
+    <Compile Include="SparkleFetcher.cs" />
+    <Compile Include="Defines.cs" />
+    <Compile Include="SparkleHelpers.cs" />
+    <Compile Include="SparklePaths.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NotifySharp\NotifySharp.csproj">
-      <Project>{005CCA8E-DFBF-464A-B6DA-452C62D4589C}</Project>
-      <Name>NotifySharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SparkleLib\SparkleLib.csproj">
-      <Project>{2C914413-B31C-4362-93C7-1AE34F09112A}</Project>
-      <Name>SparkleLib</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>
       <Properties InternalTargetFrameworkVersion="3.5">
