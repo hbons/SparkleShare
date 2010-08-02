@@ -1,6 +1,7 @@
 SUBDIRS =	\
 	build	\
 	NotifySharp \
+	SparkleLib \
 	SparkleShare \
 	SparkleDiff \
 	data \

@@ -90,9 +90,10 @@ data/Makefile
 data/icons/Makefile
 NotifySharp/Makefile
 SparkleDiff/Makefile
+SparkleLib/AssemblyInfo.cs
+SparkleLib/Defines.cs
+SparkleLib/Makefile
 SparkleShare/sparkleshare
-SparkleShare/Defines.cs
-SparkleShare/AssemblyInfo.cs
 SparkleShare/Makefile
 SparkleShare/Nautilus/Makefile
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py
