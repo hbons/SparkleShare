@@ -4,14 +4,14 @@
 [encoding: UTF-8]
 SparkleDiff/SparkleDiff.cs
 SparkleDiff/SparkleDiffWindow.cs
+SparkleLib/SparkleFetcher.cs
+SparkleLib/SparkleHelpers.cs
+SparkleLib/SparklePaths.cs
+SparkleLib/SparkleRepo.cs
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in
 SparkleShare/SparkleBubble.cs
-SparkleShare/SparkleFetcher.cs
-SparkleShare/SparkleHelpers.cs
 SparkleShare/SparkleIntro.cs
-SparkleShare/SparklePaths.cs
 SparkleShare/SparklePlatform.cs
-SparkleShare/SparkleRepo.cs
 SparkleShare/SparkleShare.cs
 SparkleShare/SparkleSpinner.cs
 SparkleShare/SparkleStatusIcon.cs
