@@ -26,3 +26,5 @@ include $(top_srcdir)/build/build.mk
 
 bin_SCRIPTS = sparkleshare
 
+Applicationsdir = $(datadir)/applications
+dist_Applications_DATA = sparkleshare.desktop
