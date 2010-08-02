@@ -32,7 +32,7 @@ namespace SparkleShare {
 		private Timer FetchTimer;
 		private Timer BufferTimer;
 		private FileSystemWatcher Watcher;
-		private bool HasChanged = false;
+		private bool HasChanged;
 		private DateTime LastChange;
 		private System.Object ChangeLock = new System.Object();
 
@@ -66,14 +66,19 @@ namespace SparkleShare {
 		public SparkleRepo (string path)
 		{
 
+			if (!Directory.Exists (path))
+				Directory.CreateDirectory (path);
+
 			LocalPath = path;
 			Name = Path.GetFileName (LocalPath);
 
-			Process = new Process ();
-			Process.EnableRaisingEvents = true;
+			Process = new Process () {
+				EnableRaisingEvents = true
+			};
+
+			Process.StartInfo.FileName = "git";
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
-			Process.StartInfo.FileName = "git";
 			Process.StartInfo.WorkingDirectory = LocalPath;
 
 			UserName        = GetUserName ();
@@ -82,6 +87,8 @@ namespace SparkleShare {
 			CurrentHash     = GetCurrentHash ();
 			Domain          = GetDomain (RemoteOriginUrl);
 
+
+			HasChanged = false;
 
 			// Watch the repository's folder
 			Watcher = new FileSystemWatcher (LocalPath) {
@@ -97,7 +104,7 @@ namespace SparkleShare {
 
 			// Fetch remote changes every minute
 			FetchTimer = new Timer () {
-				Interval = 30000
+				Interval = 5000
 			};
 
 			FetchTimer.Elapsed += delegate { 
@@ -265,10 +272,9 @@ namespace SparkleShare {
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
 
 				Process.StartInfo.Arguments = "fetch -v";
+
 				Process.WaitForExit ();
 				Process.Start ();
-
-				string output = Process.StandardOutput.ReadToEnd ().Trim (); // TODO: This doesn't work :(
 
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
 
@@ -277,9 +283,7 @@ namespace SparkleShare {
 				if (FetchingFinished != null)
 			        FetchingFinished (this, args); 
 
-				// Rebase if there are changes
-				if (!output.Contains ("up to date"))
-					Rebase ();
+				Rebase ();
 
 			} finally {
 
