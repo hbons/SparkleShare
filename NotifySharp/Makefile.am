@@ -4,7 +4,7 @@ TARGET = library
 
 LINK = $(REF_NOTIFY_SHARP)
 
-SOURCES = \
+SOURCES =  \
 	Global.cs \
 	Notification.cs
 
