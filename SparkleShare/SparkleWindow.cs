@@ -110,14 +110,15 @@ namespace SparkleShare {
 			process.StartInfo.FileName = "git";
 			process.StartInfo.Arguments = "log --format=\"%at☃%an☃%ae☃%s\" -" + number_of_events;
 
-			string output = "";
-
 			process.Start ();
 
-			output += "\n" + process.StandardOutput.ReadToEnd ().Trim ();
+			string output = process.StandardOutput.ReadToEnd ().Trim ();
 
 			output = output.TrimStart ("\n".ToCharArray ());
 			string [] lines = Regex.Split (output, "\n");
+			int linesLength = lines.Length;
+			if (output == "")
+				linesLength = 0;
 
 			// Sort by time and get the last 25
 			Array.Sort (lines);
@@ -125,7 +126,7 @@ namespace SparkleShare {
 
 			List <ActivityDay> activity_days = new List <ActivityDay> ();
 
-			for (int i = 0; i < number_of_events && i < lines.Length; i++) {
+			for (int i = 0; i < number_of_events && i < linesLength; i++) {
 
 					string line = lines [i];
 
