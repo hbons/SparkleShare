@@ -12,7 +12,7 @@
 //   GNU General Public License for more details.
 //
 //   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Gtk;
 using Mono.Unix;
@@ -72,12 +72,7 @@ namespace SparkleShare {
 				}
 			}
 
-			Gtk.Application.Init ();
-
 			SparkleUI = new SparkleUI (HideUI);
-
-			// The main loop
-			Gtk.Application.Run ();
 
 		}
 

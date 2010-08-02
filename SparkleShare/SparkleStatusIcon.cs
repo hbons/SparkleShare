@@ -127,6 +127,7 @@ namespace SparkleShare {
 
 				Menu.Add (new SeparatorMenuItem ());
 
+					// TODO: Append folder size in secondary text color
 					Gtk.Action folder_action = new Gtk.Action ("", _("SparkleShare Folder")) {
 						IconName    = "folder-sparkleshare",
 						IsImportant = true
@@ -172,8 +173,9 @@ namespace SparkleShare {
 
 					add_item.Activated += delegate {
 
-						SparkleDialog dialog = new SparkleDialog ("");
-						dialog.ShowAll ();
+						SparkleIntro intro = new SparkleIntro ();
+						intro.ShowStepTwo (true);
+						intro.ShowAll ();
 
 					};
 
