@@ -81,13 +81,15 @@ namespace SparkleShare {
 					SparkleIntro intro = new SparkleIntro ();
 					intro.ShowAll ();
 
-				} else {
-
-					NotificationIcon = new SparkleStatusIcon ();
-
 				}
 
+				NotificationIcon = new SparkleStatusIcon ();
+
 			}
+		}
+
+		public void Run()
+		{
 
 			// The main loop
 			Gtk.Application.Run ();
