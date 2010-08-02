@@ -73,7 +73,7 @@ namespace SparkleShare {
 			}
 
 			SparkleUI = new SparkleUI (HideUI);
-
+			SparkleUI.Run();
 		}
 
 		// Prints the help output
