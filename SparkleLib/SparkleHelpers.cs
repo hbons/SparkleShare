@@ -23,7 +23,7 @@ using System.Security.Cryptography;
 using System.Text;
 
 
-namespace SparkleShare {
+namespace SparkleLib {
 	
 	public static class SparkleHelpers
 	{

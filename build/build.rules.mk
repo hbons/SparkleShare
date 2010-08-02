@@ -9,7 +9,7 @@ ASSEMBLY_INFO_SOURCE_REAL = \
 	then \
 		echo "$(addprefix $(srcdir)/, $(ASSEMBLY_INFO_SOURCE))"; \
 	else \
-		echo "$(top_srcdir)/SparkleShare/AssemblyInfo.cs"; \
+		echo "$(top_srcdir)/SparkleLib/AssemblyInfo.cs"; \
 	fi)
 
 SOURCES_BUILD = $(addprefix $(srcdir)/, $(SOURCES))
