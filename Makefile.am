@@ -1,6 +1,7 @@
 SUBDIRS =	\
 	build	\
 	NotifySharp \
+	FriendFace \
 	SparkleLib \
 	SparkleShare \
 	SparkleDiff \
