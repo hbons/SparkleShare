@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="SparkleBubble.cs" />
     <Compile Include="SparkleIntro.cs" />
-    <Compile Include="SparklePlatform.cs" />
     <Compile Include="SparkleShare.cs" />
     <Compile Include="SparkleSpinner.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
