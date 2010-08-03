@@ -102,7 +102,7 @@ namespace SparkleLib {
 
 			// Fetch remote changes every minute
 			FetchTimer = new Timer () {
-				Interval = 5000
+				Interval = 60000
 			};
 
 			FetchTimer.Elapsed += delegate { 
