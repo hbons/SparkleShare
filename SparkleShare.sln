@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotifySharp", "NotifySharp\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendFace", "FriendFace\FriendFace.csproj", "{3BA434AF-494F-4F5D-9D21-B7BD24FD67AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleDiff", "SparkleDiff\SparkleDiff.csproj", "{17BF02CB-852A-4756-BA05-EC454643C428}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleLib", "SparkleLib\SparkleLib.csproj", "{2C914413-B31C-4362-93C7-1AE34F09112A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +21,14 @@ Global
 		{005CCA8E-DFBF-464A-B6DA-452C62D4589C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{005CCA8E-DFBF-464A-B6DA-452C62D4589C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{005CCA8E-DFBF-464A-B6DA-452C62D4589C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17BF02CB-852A-4756-BA05-EC454643C428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17BF02CB-852A-4756-BA05-EC454643C428}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17BF02CB-852A-4756-BA05-EC454643C428}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17BF02CB-852A-4756-BA05-EC454643C428}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C914413-B31C-4362-93C7-1AE34F09112A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C914413-B31C-4362-93C7-1AE34F09112A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C914413-B31C-4362-93C7-1AE34F09112A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C914413-B31C-4362-93C7-1AE34F09112A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3BA434AF-494F-4F5D-9D21-B7BD24FD67AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3BA434AF-494F-4F5D-9D21-B7BD24FD67AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BA434AF-494F-4F5D-9D21-B7BD24FD67AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
