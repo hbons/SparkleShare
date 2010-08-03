@@ -8,14 +8,8 @@ LINK = $(REF_SPARKLESHARE)
 
 
 SOURCES =  \
-	Defines.cs \
 	SparkleBubble.cs \
-	SparkleFetcher.cs \
-	SparkleHelpers.cs \
 	SparkleIntro.cs \
-	SparklePaths.cs \
-	SparklePlatform.cs \
-	SparkleRepo.cs \
 	SparkleShare.cs \
 	SparkleSpinner.cs \
 	SparkleStatusIcon.cs \

@@ -18,6 +18,7 @@ using Gtk;
 using Mono.Unix;
 using System;
 using System.Diagnostics;
+using SparkleLib;
 
 namespace SparkleShare {
 
