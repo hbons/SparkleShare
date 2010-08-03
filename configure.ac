@@ -88,11 +88,13 @@ build/m4/shave/shave
 build/m4/shave/shave-libtool
 data/Makefile
 data/icons/Makefile
+FriendFace/Makefile
 NotifySharp/Makefile
 SparkleDiff/Makefile
+SparkleLib/AssemblyInfo.cs
+SparkleLib/Defines.cs
+SparkleLib/Makefile
 SparkleShare/sparkleshare
-SparkleShare/Defines.cs
-SparkleShare/AssemblyInfo.cs
 SparkleShare/Makefile
 SparkleShare/Nautilus/Makefile
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py

@@ -4,10 +4,6 @@
 *.userprefs
 *.pidb
 *.gmo
-/SparkleShare/bin
-/SparkleShare/obj
-/notify-sharp/bin
-/notify-sharp/obj
 po/POTFILES
 Makefile.in
 Makefile
@@ -31,7 +27,7 @@ missing
 po/.intltool-merge-cache
 po/Makefile.in.in
 po/stamp-it
-SparkleShare/AssemblyInfo.cs
+SparkleLib/AssemblyInfo.cs
 build/m4/shave/shave
 build/m4/*.m4
 build/m4/shave/shave-libtool
