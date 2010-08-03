@@ -1,9 +1,17 @@
-dnl Warning: This is an automatically generated file, do not edit!
 dnl Process this file with autoconf to produce a configure script.
+m4_define([sparkleshare_version],
+	[0.2-alpha1])
+
+m4_define([sparkleshare_asm_version],
+	[0.2])
+
 AC_PREREQ([2.54])
-AC_INIT([SparkleShare], [0.1])
+AC_INIT([SparkleShare], sparkleshare_version)
 AM_INIT_AUTOMAKE([1.11 dist-bzip2 dist-zip foreign])
 AM_MAINTAINER_MODE
+
+dnl Export Version Info
+AC_SUBST([ASM_VERSION], [sparkleshare_asm_version])
 
 dnl pkg-config
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
