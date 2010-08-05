@@ -223,8 +223,8 @@ namespace SparkleShare {
 			// Add a special icon to the SparkleShare folder
 			Process.StartInfo.FileName = "gvfs-set-attribute";
 			Process.StartInfo.Arguments = SparklePaths.SparklePath + " metadata::custom-icon " +
-			                              "file:///usr/share/icons/hicolor/48x48/places/" +
-			                              "folder-sparkleshare.png";
+			                              "file://" + SparkleHelpers.CombineMore (Defines.PREFIX, "share", "icons",
+			                              	"hicolor", "48x48", "places", "folder-sparkleshare.png");
 			Process.Start ();
 		
 		}
