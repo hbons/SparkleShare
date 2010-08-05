@@ -181,7 +181,7 @@ namespace SparkleShare {
 					                  "Exec=sparkleshare start\n" +
 					                  "Icon=folder-sparkleshare\n" +
 					                  "Terminal=false\n" +
-					                  "Categories=Network");
+					                  "Categories=Network;");
 					writer.Close ();
 
 					// Give the launcher the right permissions so it can be launched by the user
@@ -198,6 +198,8 @@ namespace SparkleShare {
 		// list of bookmarked folders
 		public void AddToBookmarks ()
 		{
+
+			// TODO: don't add when the bookmark is already there
 
 			string bookmarks_file_name = Path.Combine (SparklePaths.HomePath, ".gtk-bookmarks");
 
@@ -326,6 +328,10 @@ namespace SparkleShare {
 					Repositories.Add (repo);
 
 				}
+
+				// Update the list in the statusicon
+				if (NotificationIcon != null)
+					NotificationIcon.CreateMenu ();
 
 			}
 
