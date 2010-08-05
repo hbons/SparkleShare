@@ -259,40 +259,45 @@ namespace SparkleLib {
 		public void Fetch ()
 		{
 
-			try {
+			FetchTimer.Stop ();
 
-				FetchTimer.Stop ();
+			Process process = new Process () {
+				EnableRaisingEvents = true
+			};
 
-				SparkleEventArgs args;
-				args = new SparkleEventArgs ("FetchingStarted");
+			process.StartInfo.FileName               = "git";
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute        = false;
+			process.StartInfo.WorkingDirectory       = LocalPath;
 
-				if (FetchingStarted != null)
-			        FetchingStarted (this, args); 
+			SparkleEventArgs args;
+			args = new SparkleEventArgs ("FetchingStarted");
 
-				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
+			if (FetchingStarted != null)
+		        FetchingStarted (this, args); 
 
-				Process.StartInfo.Arguments = "fetch";
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
 
-				Process.Start ();
+			process.StartInfo.Arguments = "fetch";
 
-				Process.Exited += delegate {
+			process.Start ();
 
-					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
+			process.Exited += delegate {
 
-					args = new SparkleEventArgs ("FetchingFinished");
+				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
 
-					if (FetchingFinished != null)
-					    FetchingFinished (this, args); 
+				// TODO: this doesn't exit sometimes
 
-					Rebase ();
+				args = new SparkleEventArgs ("FetchingFinished");
 
-				};
+				if (FetchingFinished != null)
+				    FetchingFinished (this, args); 
 
-			} finally {
+				Rebase ();
 
 				FetchTimer.Start ();
 
-			}
+			};
 
 		}
 
