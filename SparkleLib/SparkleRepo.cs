@@ -218,6 +218,8 @@ namespace SparkleLib {
 		private void Add ()
 		{
 
+			// TODO: Check whether adding files is neccassary
+
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Staging changes...");
 
 			Process.StartInfo.Arguments = "add --all";
@@ -271,17 +273,20 @@ namespace SparkleLib {
 
 				Process.StartInfo.Arguments = "fetch";
 
-				Process.WaitForExit ();
 				Process.Start ();
 
-				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
+				Process.Exited += delegate {
 
-				args = new SparkleEventArgs ("FetchingFinished");
+					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
 
-				if (FetchingFinished != null)
-			        FetchingFinished (this, args); 
+					args = new SparkleEventArgs ("FetchingFinished");
 
-				Rebase ();
+					if (FetchingFinished != null)
+					    FetchingFinished (this, args); 
+
+					Rebase ();
+
+				};
 
 			} finally {
 
