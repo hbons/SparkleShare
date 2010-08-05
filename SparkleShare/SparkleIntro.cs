@@ -558,6 +558,7 @@ namespace SparkleShare {
 							Button finish_button = new Button (_("Finish"));
 			
 							finish_button.Clicked += delegate (object o, EventArgs args) {
+
 								if(SparkleShare.SparkleUI != null)
 									SparkleShare.SparkleUI.UpdateRepositories ();
 
@@ -729,8 +730,12 @@ namespace SparkleShare {
 					Button finish_button = new Button (_("Finish"));
 
 					finish_button.Clicked += delegate (object o, EventArgs args) {
-						SparkleUI.NotificationIcon = new SparkleStatusIcon ();
+
+						if (SparkleUI.NotificationIcon == null)
+							SparkleUI.NotificationIcon = new SparkleStatusIcon ();
+
 						Destroy ();
+
 					};
 
 				controls.Add (finish_button);
