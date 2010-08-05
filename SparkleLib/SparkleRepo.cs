@@ -125,7 +125,7 @@ namespace SparkleLib {
 
 
 			// Add everything that changed 
-			// since SparkleShare was stopped
+			// since SparkleShare was stopped TODO: Push if there are changes
 			AddCommitAndPush ();
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Idling...");
@@ -269,7 +269,7 @@ namespace SparkleLib {
 
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
 
-				Process.StartInfo.Arguments = "fetch -v";
+				Process.StartInfo.Arguments = "fetch";
 
 				Process.WaitForExit ();
 				Process.Start ();
@@ -300,7 +300,7 @@ namespace SparkleLib {
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Rebasing changes...");
 
-			Process.StartInfo.Arguments = "rebase -v master";
+			Process.StartInfo.Arguments = "rebase -v origin/master";
 			Process.WaitForExit ();
 			Process.Start ();
 

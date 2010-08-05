@@ -374,7 +374,10 @@ namespace SparkleShare {
 
 										}
 
-										string target_folder_name = canonical_name + " (" + i + ")";
+										string target_folder_name = canonical_name;
+
+										if (i > 1)
+											target_folder_name += " (" + i + ")";
 
 										Directory.Move (tmp_folder,
 											SparkleHelpers.CombineMore (SparklePaths.SparklePath, target_folder_name));
