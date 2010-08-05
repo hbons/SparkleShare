@@ -35,6 +35,8 @@ namespace SparkleShare {
 		private string StateText;
 		private Gdk.Pixbuf [] AnimationFrames;
 		private int FrameNumber;
+		private Gtk.Action FolderAction;
+		private double FolderSize;
 
 
 		// Short alias for the translations
@@ -45,6 +47,8 @@ namespace SparkleShare {
 
 		public SparkleStatusIcon () : base ()
 		{
+
+			FolderSize = GetFolderSize (new DirectoryInfo (SparklePaths.SparklePath));
 
 			CreateAnimationFrames ();
 			CreateTimer ();
@@ -112,9 +116,48 @@ namespace SparkleShare {
 		}
 
 
+		private double GetFolderSize (DirectoryInfo parent)
+		{
+
+			double size = 0;
+
+			FileInfo [] files = parent.GetFiles();
+
+			foreach (FileInfo file in files)
+				size += file.Length;
+
+			foreach (DirectoryInfo directory in parent.GetDirectories())
+				size += GetFolderSize (directory);
+
+		    return size;
+    
+		}
+
+
+        private string GetSize (double byte_count)
+        {
+
+			string size = "";
+
+			if (byte_count >= 1099511627776)
+				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1099511627776, 1)) + " TB";
+			else if (byte_count >= 1073741824)
+				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1073741824, 1)) + " GB";
+            else if (byte_count >= 1048576)
+				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1048576, 1)) + " MB";
+			else if (byte_count >= 1024)
+				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1024, 1)) + " KB";
+			else
+				size = byte_count.ToString () + " bytes";
+
+            return size;
+
+        }
+
+
 		// Creates the menu that is popped up when the
 		// user clicks the statusicon
-		private void CreateMenu ()
+		public void CreateMenu ()
 		{
 
 				Menu = new Menu ();
@@ -127,13 +170,12 @@ namespace SparkleShare {
 
 				Menu.Add (new SeparatorMenuItem ());
 
-					// TODO: Append folder size in secondary text color
-					Gtk.Action folder_action = new Gtk.Action ("", _("SparkleShare Folder")) {
+					FolderAction = new Gtk.Action ("", "SparkleShare Folder (" + GetSize (FolderSize) + ")") {
 						IconName    = "folder-sparkleshare",
 						IsImportant = true
 					};
 
-					folder_action.Activated += delegate {
+					FolderAction.Activated += delegate {
 
 						Process process = new Process ();
 						process.StartInfo.FileName = "xdg-open";
@@ -142,20 +184,20 @@ namespace SparkleShare {
 
 					};
 
-				Menu.Add (folder_action.CreateMenuItem ());
+				Menu.Add (FolderAction.CreateMenuItem ());
 
 				if (SparkleUI.Repositories.Count > 0) {
 
 					foreach (SparkleRepo SparkleRepo in SparkleUI.Repositories) {
 
-						folder_action = new Gtk.Action ("", SparkleRepo.Name) {
+						FolderAction = new Gtk.Action ("", SparkleRepo.Name) {
 							IconName    = "folder",
 							IsImportant = true
 						};
 
-						folder_action.Activated += CreateWindowDelegate (SparkleRepo);
+						FolderAction.Activated += CreateWindowDelegate (SparkleRepo);
 
-						Menu.Add (folder_action.CreateMenuItem ());
+						Menu.Add (FolderAction.CreateMenuItem ());
 
 					}
 
@@ -259,6 +301,8 @@ namespace SparkleShare {
 				SetIdleState ();
 
 			UpdateStatusMenuItem ();
+			
+			Console.WriteLine ("Number of repos syncing: " + SyncingReposCount);
 
 		}
 		

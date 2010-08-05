@@ -5,4 +5,4 @@ Exec=sparkleshare start
 Icon=folder-sparkleshare
 Terminal=false
 X-GNOME-Autostart-enabled=true
-Categories=Network
+Categories=Network;
