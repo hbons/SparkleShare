@@ -199,13 +199,26 @@ namespace SparkleShare {
 		public void AddToBookmarks ()
 		{
 
-			// TODO: don't add when the bookmark is already there
+			string bookmarks_file_path   = Path.Combine (SparklePaths.HomePath, ".gtk-bookmarks");
+			string sparkleshare_bookmark = "file://" + SparklePaths.SparklePath + " SparkleShare";
 
-			string bookmarks_file_name = Path.Combine (SparklePaths.HomePath, ".gtk-bookmarks");
+			if (File.Exists (bookmarks_file_path)) {
 
-			if (File.Exists (bookmarks_file_name)) {
+				StreamReader reader = new StreamReader (bookmarks_file_path);
+				string bookmarks = reader.ReadToEnd ();
+				reader.Close ();
 
-				TextWriter writer = File.AppendText (bookmarks_file_name);
+				if (!bookmarks.Contains (sparkleshare_bookmark)) {
+
+					TextWriter writer = File.AppendText (bookmarks_file_path);
+					writer.WriteLine ("file://" + SparklePaths.SparklePath + " SparkleShare");
+					writer.Close ();
+
+				}
+
+			} else {
+
+				StreamWriter writer = new StreamWriter (bookmarks_file_path);
 				writer.WriteLine ("file://" + SparklePaths.SparklePath + " SparkleShare");
 				writer.Close ();
 
