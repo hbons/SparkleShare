@@ -134,19 +134,19 @@ namespace SparkleShare {
 		}
 
 
-        private string GetSize (double byte_count)
+        private string GetSizeFormat (double byte_count)
         {
 
 			string size = "";
 
 			if (byte_count >= 1099511627776)
-				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1099511627776, 1)) + " TB";
+				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1099511627776, 1)) + " ᴛʙ";
 			else if (byte_count >= 1073741824)
-				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1073741824, 1)) + " GB";
+				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1073741824, 1)) + " ɢʙ";
             else if (byte_count >= 1048576)
-				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1048576, 1)) + " MB";
+				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1048576, 1)) + " ᴍʙ";
 			else if (byte_count >= 1024)
-				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1024, 1)) + " KB";
+				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1024, 1)) + " ᴋʙ";
 			else
 				size = byte_count.ToString () + " bytes";
 
@@ -170,7 +170,7 @@ namespace SparkleShare {
 
 				Menu.Add (new SeparatorMenuItem ());
 
-					FolderAction = new Gtk.Action ("", "SparkleShare (" + GetSize (FolderSize) + ")") {
+					FolderAction = new Gtk.Action ("", "SparkleShare") {
 						IconName    = "folder-sparkleshare",
 						IsImportant = true
 					};
@@ -314,7 +314,7 @@ namespace SparkleShare {
 			Timer.Stop ();
 
 			Pixbuf  = SparkleHelpers.GetIcon ("folder-sparkleshare", 24);
-			StateText = _("All up to date");
+			StateText = _("All up to date") + "  (" + GetSizeFormat (FolderSize) + ")";
 
 		}
 
