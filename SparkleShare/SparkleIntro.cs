@@ -328,6 +328,12 @@ namespace SparkleShare {
 			
 							AddButton.Clicked += delegate {
 
+								string name = FolderEntry.Text;
+
+								// Remove the starting slash if there is one
+								if (name.StartsWith ("/"))
+									name = name.Substring (1);
+
 								string server = "";
 
 								if (radio_button.Active) {
@@ -349,12 +355,8 @@ namespace SparkleShare {
 								if (radio_button_gnome.Active)
 									server = "ssh://git@gnome.org";
 
-
-								string name = FolderEntry.Text;
-
-								// Remove the starting slash if there is one
-								if (name.StartsWith ("/"))
-									name = name.Substring (1);
+								if (!name.EndsWith (".git"))
+									name += ".git";
 
 								string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
 
