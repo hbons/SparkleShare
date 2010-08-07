@@ -47,12 +47,12 @@ namespace SparkleShare {
 
 			BorderWidth    = 0;
 			IconName       = "folder-sparkleshare";
-			Resizable      = false;
+			Resizable      = true;
 			WindowPosition = WindowPosition.Center;
 
 			StepTwoOnly = false;
 
-			SetSizeRequest (640, 440);
+			SetDefaultSize (640, 480);
 
 			Window window = new Window ("");
 			SecondaryTextColor = GdkColorToHex (window.Style.Foreground (StateType.Insensitive));
@@ -71,18 +71,18 @@ namespace SparkleShare {
 					"side-splash.png"));
 
 				VBox wrapper = new VBox (false, 0);
-			
+
 					VBox layout_vertical = new VBox (false, 0) {
 						BorderWidth = 30
 					};
-			
+
 						Label header = new Label ("<span size='x-large'><b>" +
 								                        _("Welcome to SparkleShare!") +
 								                        "</b></span>") {
 							UseMarkup = true,
 							Xalign = 0
 						};
-				
+
 						Label information = new Label (_("Before we can create a SparkleShare folder on this " +
 								                         "computer, we need a few bits of information from you.")) {
 							Xalign = 0,
@@ -221,7 +221,7 @@ namespace SparkleShare {
 							
 							string github_text = "<b>" + "Github" + "</b>\n" +
 								  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
-								_("Free hosting for Free and Open Source Software projects. ") + 
+								_("Free hosting for Free and Open Source Software projects.") + "\n" + 
 								_("Also has paid accounts for extra private space and bandwidth.") +
 								  "</span>";
 
@@ -232,7 +232,7 @@ namespace SparkleShare {
 
 							string gnome_text = "<b>" + _("The GNOME Project") + "</b>\n" +
 								  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
-								_("GNOME is an easy to understand interface to your computer.") + " " +
+								_("GNOME is an easy to understand interface to your computer.") + "\n" +
 								_("Select this option if you’re a developer or designer working on GNOME.") +
 								  "</span>";
 
@@ -243,10 +243,9 @@ namespace SparkleShare {
 
 							string gitorious_text = "<b>" + _("Gitorious") + "</b>\n" +
 								  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
-								_("Completely Free and Open Source infrastructure for hosting ") +
-								_("Free and Open Source Software projects.") +
+								_("Completely Free as in Freedom infrastructure.") + "\n" +
+								_("Free accounts for Free and Open Source projects.") +
 								  "</span>";
-
 							RadioButton radio_button_gitorious = new RadioButton (radio_button, gitorious_text) {
 								Xalign = 0
 							};
@@ -716,7 +715,7 @@ namespace SparkleShare {
 					Xalign = 0
 				};
 
-				Label information = new Label (_("Now you can start accepting invitations from others. " +
+				Label information = new Label (_("Now you can start accepting invitations from others. " + "\n" +
 		                                         "Just click on invitations you get by email and " +
 		                                         "we will take care of the rest.")) {
 		        	UseMarkup = true,
