@@ -211,7 +211,7 @@ namespace SparkleShare {
 
 				}
 
-				MenuItem add_item = new MenuItem (_("Add Remote Folder…"));
+				MenuItem add_item = new MenuItem (_("Sync Remote Folder…"));
 
 					add_item.Activated += delegate {
 
@@ -314,7 +314,7 @@ namespace SparkleShare {
 			Timer.Stop ();
 
 			Pixbuf  = SparkleHelpers.GetIcon ("folder-sparkleshare", 24);
-			StateText = _("All up to date") + "  (" + GetSizeFormat (FolderSize) + ")";
+			StateText = _("Up to date") + "  (" + GetSizeFormat (FolderSize) + ")";
 
 		}
 

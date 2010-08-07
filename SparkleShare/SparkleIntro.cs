@@ -324,7 +324,7 @@ namespace SparkleShare {
 							Spacing     = 6
 						};
 
-							AddButton = new Button (_("Add"));
+							AddButton = new Button (_("Sync"));
 			
 							AddButton.Clicked += delegate {
 
