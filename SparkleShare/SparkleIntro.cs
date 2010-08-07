@@ -65,8 +65,6 @@ namespace SparkleShare {
 		private void ShowStepOne ()
 		{
 
-			Title = _("Welcome!");
-
 			HBox layout_horizontal = new HBox (false, 6);
 
 				Image side_splash = new Image (SparkleHelpers.CombineMore (Defines.PREFIX, "share", "pixmaps",
@@ -184,8 +182,6 @@ namespace SparkleShare {
 		public void ShowStepTwo ()
 		{
 
-			Title = _("Add Remote Folder");
-
 			Remove (Child);
 
 			HBox layout_horizontal = new HBox (false, 6);
@@ -200,7 +196,7 @@ namespace SparkleShare {
 					};
 			
 						Label header = new Label ("<span size='x-large'><b>" +
-								                        _("Where does your remote folder reside?") +
+								                        _("Where is your remote folder?") +
 								                        "</b></span>") {
 							UseMarkup = true,
 							Xalign = 0
@@ -223,8 +219,8 @@ namespace SparkleShare {
 							
 							string github_text = "<b>" + "Github" + "</b>\n" +
 								  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
-								_("Github provides free hosting for Open Source projects, ") + 
-								_("but also has paid accounts for extra space and bandwidth.") +
+								_("Free hosting for Free and Open Source Software projects. ") + 
+								_("Also has paid accounts for extra private space and bandwidth.") +
 								  "</span>";
 
 							RadioButton radio_button_github = new RadioButton (radio_button, github_text);
@@ -245,8 +241,8 @@ namespace SparkleShare {
 
 							string gitorious_text = "<b>" + _("Gitorious") + "</b>\n" +
 								  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
-								_("Gitorious provides a completely Free and Open Source infrastructure ") +
-								_("for hosting Open Source projects.") +
+								_("Completely Free and Open Source infrastructure for hosting ") +
+								_("Free and Open Source Software projects.") +
 								  "</span>";
 
 							RadioButton radio_button_gitorious = new RadioButton (radio_button, gitorious_text) {
@@ -454,8 +450,6 @@ namespace SparkleShare {
 
 			Remove (Child);
 
-			Title = _("Error adding folder");
-
 			HBox layout_horizontal = new HBox (false, 6);
 
 				Image side_splash = new Image (SparkleHelpers.CombineMore (Defines.PREFIX, "share", "pixmaps",
@@ -521,8 +515,6 @@ namespace SparkleShare {
 
 			Remove (Child);
 
-			Title = _("Folder Added Successfully");
-
 			HBox layout_horizontal = new HBox (false, 6);
 
 				Image side_splash = new Image (SparkleHelpers.CombineMore (Defines.PREFIX, "share", "pixmaps",
@@ -586,8 +578,6 @@ namespace SparkleShare {
 
 		private void ShowStepTwoAndAHalf ()
 		{
-
-			Title = _("Add Remote Folder");
 
 			Remove (Child);
 
@@ -681,8 +671,6 @@ namespace SparkleShare {
 		private void ShowStepThree ()
 		{
 
-			Title = _("Done!");
-		
 			Remove (Child);
 
 			HBox layout_horizontal = new HBox (false, 6);
