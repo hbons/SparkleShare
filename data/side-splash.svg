@@ -11,7 +11,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="150.00002"
-   height="440"
+   height="480"
    id="svg8763"
    version="1.1"
    inkscape:version="0.47 r22583"
@@ -28,12 +28,12 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1"
      inkscape:cx="276.72576"
-     inkscape:cy="159.36832"
+     inkscape:cy="237.36832"
      inkscape:document-units="px"
      inkscape:current-layer="g8506"
      showgrid="false"
      inkscape:window-width="1440"
-     inkscape:window-height="844"
+     inkscape:window-height="841"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1" />
@@ -45,7 +45,7 @@
        fx="138.22266"
        cy="423.06143"
        cx="138.22266"
-       gradientTransform="matrix(2.7535912,-4.7723707e-7,4.9956873e-7,2.7367344,-440.46603,-670.01595)"
+       gradientTransform="matrix(2.7535912,-5.2275014e-7,4.9956873e-7,2.9977309,-440.46603,-789.77953)"
        gradientUnits="userSpaceOnUse"
        id="radialGradient8554"
        xlink:href="#linearGradient7605"
@@ -236,7 +236,7 @@
     </filter>
     <pattern
        id="pattern2719"
-       patternTransform="translate(-523,-333)"
+       patternTransform="translate(-512.45088,-372.16007)"
        height="256"
        width="256"
        patternUnits="userSpaceOnUse">
@@ -291,7 +291,7 @@
          style="stop-color:#ce5c00;stop-opacity:1" />
     </linearGradient>
     <pattern
-       patternTransform="translate(-523,-583)"
+       patternTransform="translate(-512.45088,-622.16007)"
        id="pattern4229-8"
        xlink:href="#pattern2719-8"
        inkscape:collect="always" />
@@ -620,7 +620,7 @@
     </rdf:RDF>
   </metadata>
   <g
-     transform="translate(-239.28571,-243.79075)"
+     transform="translate(-239.28571,-203.79075)"
      id="layer1"
      inkscape:groupmode="layer"
      inkscape:label="Layer 1">
@@ -628,9 +628,9 @@
        transform="translate(374.14287,98.00001)"
        id="g8506">
       <rect
-         y="145.39075"
+         y="103.39075"
          x="-134.85715"
-         height="440.39999"
+         height="482.39999"
          width="150"
          id="rect8343"
          style="color:#000000;fill:url(#radialGradient8554);fill-opacity:1;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
