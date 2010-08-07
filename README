@@ -66,7 +66,7 @@ To build SparkleShare you need:
 
 You can build and install SparkleShare like this:
 
-   $ ./autogen.sh
+   $ ./configure (or ./autogen if you got SparkleShare from the repository)
    $ make
    $ sudo make install
 
