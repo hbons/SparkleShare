@@ -28,8 +28,8 @@ namespace SparkleShare {
 
 		private Entry NameEntry;
 		private Entry EmailEntry;
-		private Entry ServerEntry;
-		private Entry FolderEntry;
+		private SparkleEntry ServerEntry;
+		private SparkleEntry FolderEntry;
 		private Button NextButton;
 		private Button AddButton;
 		private bool StepTwoOnly;
@@ -208,7 +208,9 @@ namespace SparkleShare {
 
 							HBox layout_server = new HBox (true, 0);
 
-								ServerEntry = new Entry (_("ssh://address-to-my-server/"));
+								ServerEntry = new SparkleEntry () {
+									ExampleText = _("ssh://address-to-my-server/")
+								};
 								
 								ServerEntry.Changed += CheckStepTwoFields;
 
@@ -252,18 +254,39 @@ namespace SparkleShare {
 							(radio_button_gitorious.Child as Label).UseMarkup = true;
 							(radio_button_gitorious.Child as Label).Wrap      = true;
 
+							radio_button_github.Toggled += delegate {
+
+								if (radio_button_github.Active)
+									FolderEntry.ExampleText = "Username/Folder";
+
+							};
+
+							radio_button_gitorious.Toggled += delegate {
+
+								if (radio_button_gitorious.Active)
+									FolderEntry.ExampleText = "Project/Folder";
+
+							};
+
+							radio_button_gnome.Toggled += delegate {
+
+								if (radio_button_gnome.Active)
+									FolderEntry.ExampleText = "Project";
+
+							};
+
+
 							radio_button.Toggled += delegate {
 
 								if (radio_button.Active) {
 
-									ServerEntry.Sensitive = true;
-
+									FolderEntry.ExampleText = "Folder";
+									ServerEntry.Sensitive   = true;
 									CheckStepTwoFields ();
 
 								} else {
 
 									ServerEntry.Sensitive = false;
-
 									CheckStepTwoFields ();
 
 								}
@@ -279,7 +302,9 @@ namespace SparkleShare {
 
 						HBox layout_folder = new HBox (true, 0);
 
-							FolderEntry = new Entry ();
+							FolderEntry = new SparkleEntry () {
+								ExampleText = "Folder"
+							};
 							
 							FolderEntry.Changed += CheckStepTwoFields;
 
