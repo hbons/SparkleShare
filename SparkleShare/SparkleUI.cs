@@ -88,7 +88,8 @@ namespace SparkleShare {
 			}
 		}
 
-		public void Run()
+
+		public void Run ()
 		{
 
 			// The main loop
@@ -239,7 +240,7 @@ namespace SparkleShare {
 			Process.StartInfo.FileName = "gvfs-set-attribute";
 			Process.StartInfo.Arguments = SparklePaths.SparklePath + " metadata::custom-icon " +
 			                              "file://" + SparkleHelpers.CombineMore (Defines.PREFIX, "share", "icons",
-			                              	"hicolor", "48x48", "places", "folder-sparkleshare.png");
+			                              	"hicolor", "48x48", "apps", "folder-sparkleshare.png");
 			Process.Start ();
 		
 		}
