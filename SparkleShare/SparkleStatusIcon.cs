@@ -170,7 +170,7 @@ namespace SparkleShare {
 
 				Menu.Add (new SeparatorMenuItem ());
 
-					FolderAction = new Gtk.Action ("", "SparkleShare Folder (" + GetSize (FolderSize) + ")") {
+					FolderAction = new Gtk.Action ("", "SparkleShare (" + GetSize (FolderSize) + ")") {
 						IconName    = "folder-sparkleshare",
 						IsImportant = true
 					};

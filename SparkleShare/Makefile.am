@@ -9,6 +9,7 @@ LINK = $(REF_SPARKLESHARE)
 
 SOURCES =  \
 	SparkleBubble.cs \
+	SparkleEntry.cs \
 	SparkleIntro.cs \
 	SparkleShare.cs \
 	SparkleSpinner.cs \

@@ -66,9 +66,9 @@ namespace SparkleShare {
 			Viewport = new Viewport ();
 			Viewport.Add (new Label (""));
 
-			Store = new ListStore(typeof (Gdk.Pixbuf),
-			                      typeof (string),
-			                      typeof (int));
+			Store = new ListStore (typeof (Gdk.Pixbuf),
+			                       typeof (string),
+			                       typeof (int));
 
 			IconView = new IconView (Store);
 			IconView.SelectionChanged += ChangeSelection;
