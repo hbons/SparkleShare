@@ -36,7 +36,6 @@ namespace SparkleShare {
 					ExampleTextActive = false;
 					Text = "";	
 					UseNormalTextColor ();
-//					ShowAll ();
 
 				}
 			
@@ -86,7 +85,6 @@ namespace SparkleShare {
 
 			Text = pExampleText;
 			UseSecondaryTextColor ();
-//			ShowAll ();
 
 		}
 
