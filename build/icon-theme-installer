@@ -59,10 +59,10 @@
 # -i         : Install
 # -u         : Uninstall
 # -t <theme> : Theme name (hicolor)
-# -b <dir>   : Theme installation dest directory [x$(DESTDIR)] - Always prefix
+# -d <dir>   : Theme installation dest directory [x$(DESTDIR)] - Always prefix
 #              this argument with x; it will be stripped but will act as a
 #              placeholder for zero $DESTDIRs (only set by packagers)
-# -d <dir>   : Theme installation directory [$(hicolordir)]
+# -b <dir>   : Theme installation directory [$(hicolordir)]
 # -s <dir>   : Source directory [$(srcdir)]
 # -m <exec>  : Command to exec for directory creation [$(mkinstalldirs)]
 # -x <exec>  : Command to exec for single file installation [$(INSTALL_DATA)]
@@ -97,7 +97,7 @@ if test -z "$THEME_NAME"; then
 fi
 
 if test -z "$INSTALL_BASE_DIR"; then
-	echo "Base theme directory required [-d \$(hicolordir)]"
+	echo "Base theme directory required [-b \$(hicolordir)]"
 	exit 1
 fi
 
