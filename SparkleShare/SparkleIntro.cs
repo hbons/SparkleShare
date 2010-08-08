@@ -359,6 +359,7 @@ namespace SparkleShare {
 									name += ".git";
 
 								string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
+								FolderEntry.Text = canonical_name;
 
 								string url  = server + "/" + name;
 								string tmp_folder = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
@@ -553,7 +554,7 @@ namespace SparkleShare {
 					};
 			
 						Label header = new Label ("<span size='x-large'><b>" +
-								                _("Folder successfully retrieved!") +
+								                _("Folder synced successfully!") +
 								                  "</b></span>") {
 							UseMarkup = true,
 							Xalign = 0
@@ -619,7 +620,7 @@ namespace SparkleShare {
 					};
 
 						Label header = new Label ("<span size='x-large'><b>" +
-								                        String.Format (_("Retrieving folder ‘{0}’…"), FolderEntry.Text) +
+								                        String.Format (_("Syncing folder ‘{0}’…"), FolderEntry.Text) +
 								                        "</b></span>") {
 							UseMarkup = true,
 							Xalign    = 0,
