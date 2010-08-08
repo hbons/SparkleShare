@@ -75,18 +75,17 @@ namespace SparkleShare {
 				Filter                = "*"
 			};
 
-			watcher.Deleted += delegate  {
+			watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
 
-				foreach (SparkleRepo repo in Repositories)
-					repo.Stop ();
-
-				Application.Invoke (delegate { UpdateRepositories (); } );
+				RemoveRepository (args.FullPath);
+				Application.Invoke (delegate { NotificationIcon.CreateMenu (); });
 
 			};
 
-			watcher.Created += delegate  {
+			watcher.Created += delegate (object o, FileSystemEventArgs args) {
 
-				Application.Invoke (delegate {UpdateRepositories (); } );
+				AddRepository (args.FullPath);
+				Application.Invoke (delegate { NotificationIcon.CreateMenu (); });
 
 			};
 
@@ -323,6 +322,65 @@ namespace SparkleShare {
 		}
 
 
+		public void AddRepository (string folder_path) {
+		
+			// Check if the folder is a git repo
+			if (!Directory.Exists (SparkleHelpers.CombineMore (folder_path, ".git")))
+				return;
+
+			SparkleRepo repo = new SparkleRepo (folder_path);
+
+			repo.NewCommit += delegate (object o, NewCommitArgs args) {
+				Application.Invoke (delegate { ShowNewCommitBubble (args.Author, args.Email, args.Message); });
+			};
+
+			repo.Commited += delegate (object o, SparkleEventArgs args) {
+				Application.Invoke (delegate { CheckForUnicorns (args.Message); });
+			};
+
+			repo.FetchingStarted += delegate {
+				Application.Invoke (UpdateStatusIconToSyncing);
+			};
+
+			repo.FetchingFinished += delegate {
+				Application.Invoke (UpdateStatusIconToIdle);
+			};
+
+			repo.PushingStarted += delegate {
+				Application.Invoke (UpdateStatusIconToSyncing);
+			};
+
+			repo.PushingFinished += delegate {
+				Application.Invoke (UpdateStatusIconToIdle);
+			};
+
+			repo.ConflictDetected += delegate {
+				Application.Invoke (ShowConflictBubble);
+			};
+
+			Repositories.Add (repo);
+
+		}
+
+
+		public void RemoveRepository (string folder_path) {
+
+			string repo_name = Path.GetFileName (folder_path);
+
+			foreach (SparkleRepo repo in Repositories) {
+
+				if (repo.Name.Equals (repo_name)) {
+
+					repo.Stop ();
+					Repositories.Remove (repo);
+					break;
+
+				}
+
+			}
+
+		}
+
 		// Updates the list of repositories with all the
 		// folders in the SparkleShare folder
 		public void UpdateRepositories ()
@@ -330,50 +388,15 @@ namespace SparkleShare {
 
 			Repositories = new List <SparkleRepo> ();
 
-			foreach (string folder in Directory.GetDirectories (SparklePaths.SparklePath)) {
+			foreach (string folder_path in Directory.GetDirectories (SparklePaths.SparklePath)) {
 
-				// Check if the folder is a git repo
-				if (Directory.Exists (SparkleHelpers.CombineMore (folder, ".git"))) {
-
-					SparkleRepo repo = new SparkleRepo (folder);
-
-					repo.NewCommit += delegate (object o, NewCommitArgs args) {
-						Application.Invoke (delegate { ShowNewCommitBubble (args.Author, args.Email, args.Message); });
-					};
-
-					repo.Commited += delegate (object o, SparkleEventArgs args) {
-						Application.Invoke (delegate { CheckForUnicorns (args.Message); });
-					};
-
-					repo.FetchingStarted += delegate {
-						Application.Invoke (UpdateStatusIconToSyncing);
-					};
-
-					repo.FetchingFinished += delegate {
-						Application.Invoke (UpdateStatusIconToIdle);
-					};
-
-					repo.PushingStarted += delegate {
-						Application.Invoke (UpdateStatusIconToSyncing);
-					};
-
-					repo.PushingFinished += delegate {
-						Application.Invoke (UpdateStatusIconToIdle);
-					};
-
-					repo.ConflictDetected += delegate {
-						Application.Invoke (ShowConflictBubble);
-					};
-
-					Repositories.Add (repo);
-
-				}
-
-				// Update the list in the statusicon
-				if (NotificationIcon != null)
-					NotificationIcon.CreateMenu ();
+				AddRepository (folder_path);
 
 			}
+
+			// Update the list in the statusicon
+			if (NotificationIcon != null)
+				NotificationIcon.CreateMenu ();
 
 		}
 
