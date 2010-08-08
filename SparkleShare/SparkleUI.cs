@@ -89,7 +89,7 @@ namespace SparkleShare {
 
 
 			CreateConfigurationFolders ();
-			UpdateRepositories ();
+			PopulateRepositories ();
 
 			// Don't create the window and status 
 			// icon when --disable-gui was given
@@ -358,7 +358,8 @@ namespace SparkleShare {
 
 			Repositories.Add (repo);
 
-			Application.Invoke (delegate { NotificationIcon.CreateMenu (); });
+			if (NotificationIcon != null)
+				Application.Invoke (delegate { NotificationIcon.CreateMenu (); });
 
 		}
 
@@ -379,26 +380,21 @@ namespace SparkleShare {
 
 			}
 
-			Application.Invoke (delegate { NotificationIcon.CreateMenu (); });
+			if (NotificationIcon != null)
+				Application.Invoke (delegate { NotificationIcon.CreateMenu (); });
 
 		}
 
+
 		// Updates the list of repositories with all the
 		// folders in the SparkleShare folder
-		public void UpdateRepositories ()
+		public void PopulateRepositories ()
 		{
 
 			Repositories = new List <SparkleRepo> ();
 
-			foreach (string folder_path in Directory.GetDirectories (SparklePaths.SparklePath)) {
-
+			foreach (string folder_path in Directory.GetDirectories (SparklePaths.SparklePath))
 				AddRepository (folder_path);
-
-			}
-
-			// Update the list in the statusicon
-			if (NotificationIcon != null)
-				NotificationIcon.CreateMenu ();
 
 		}
 
