@@ -629,8 +629,8 @@ namespace SparkleShare {
 
 						Label information = new Label ("<span fgcolor='" + SecondaryTextColor + "'>" + 
 						                             _("This may take a while.\n") +
-						                             _("You sure it’s not coffee o-clock?" +
-						                               "</span>")) {
+						                             _("You sure it’s not coffee o-clock?") +
+						                               "</span>") {
 							UseMarkup = true,
 							Xalign = 0
 						};
