@@ -402,8 +402,11 @@ namespace SparkleShare {
 										if (i > 1)
 											target_folder_name += " (" + i + ")";
 
-										Directory.Move (tmp_folder,
-											SparkleHelpers.CombineMore (SparklePaths.SparklePath, target_folder_name));
+										string target_folder_path;
+										target_folder_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+											target_folder_name);
+
+										Directory.Move (tmp_folder, target_folder_path);
 
 									} catch (Exception e) {
 
@@ -577,12 +580,7 @@ namespace SparkleShare {
 							Button finish_button = new Button (_("Finish"));
 			
 							finish_button.Clicked += delegate (object o, EventArgs args) {
-
-								if(SparkleShare.SparkleUI != null)
-									SparkleShare.SparkleUI.UpdateRepositories ();
-
 								Destroy ();
-
 							};
 			
 						controls.Add (finish_button);
