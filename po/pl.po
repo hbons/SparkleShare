@@ -10,18 +10,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-26 00:04+0000\n"
+"POT-Creation-Date: 2010-08-08 06:23+0000\n"
 "PO-Revision-Date: 2010-06-11 21:59+0200\n"
 "Last-Translator: Łukasz Jernaś <deejay1@srem.org>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Country: Poland\n"
 "Language: pl\n"
-"X-Generator: Virtaal 0.5.2\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Language: Polish\n"
+"X-Poedit-Country: Poland\n"
+"X-Generator: Virtaal 0.5.2\n"
 
 #: ../SparkleDiff/SparkleDiff.cs:77 ../SparkleShare/SparkleShare.cs:49
 msgid "Git wasn't found."
@@ -81,11 +81,11 @@ msgid "{0} at {1}"
 msgstr "{0} na {1}"
 
 #: ../SparkleDiff/SparkleDiffWindow.cs:93
+#, fuzzy
 msgid "ddd MMM d, yyyy"
-msgstr ""
+msgstr "ddd MMM d, yyyy"
 
 #: ../SparkleDiff/SparkleDiffWindow.cs:94
-#, fuzzy
 msgid "H:mm"
 msgstr "H:mm"
 
@@ -186,20 +186,19 @@ msgstr "Witamy w programie SparkleShare!"
 
 #: ../SparkleShare/SparkleIntro.cs:78
 msgid "Before we can create a SparkleShare folder on this computer, we need a few bits of information from you."
-msgstr ""
+msgstr "Program SparkleShare wymaga podania kilku informacji, nim możliwe będzie utworzenie katalogu na tym komputerze."
 
 #: ../SparkleShare/SparkleIntro.cs:90
 msgid "Full Name:"
-msgstr ""
+msgstr "Imię i nazwisko:"
 
 #: ../SparkleShare/SparkleIntro.cs:106
-#, fuzzy
 msgid "Email:"
 msgstr "Email:"
 
 #: ../SparkleShare/SparkleIntro.cs:115
 msgid "Folder Address:"
-msgstr ""
+msgstr "Adres katalogu:"
 
 #: ../SparkleShare/SparkleIntro.cs:122
 msgid "I'm already subscribed to a folder on a SparkleServer"
@@ -207,15 +206,15 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:157
 msgid "Next"
-msgstr ""
+msgstr "Następny"
 
 #: ../SparkleShare/SparkleIntro.cs:168
 msgid "Configuring…"
-msgstr ""
+msgstr "Trwa konfigurowanie…"
 
 #: ../SparkleShare/SparkleIntro.cs:220
 msgid "SparkleShare is ready to go!"
-msgstr ""
+msgstr "Program SparkleShare jest gotowy do pracy."
 
 #: ../SparkleShare/SparkleIntro.cs:226
 msgid "Now you can start accepting invitations from others. Just click on invitations you get by email and we will take care of the rest."
@@ -223,11 +222,11 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:237
 msgid "Learn how to host your own SparkleServer"
-msgstr ""
+msgstr "Dowiedz się, jak postawić własny SparkleServer"
 
 #: ../SparkleShare/SparkleIntro.cs:250
 msgid "Finish"
-msgstr ""
+msgstr "Zakończ"
 
 #: ../SparkleShare/SparkleShare.cs:87
 msgid "SparkleShare Copyright (C) 2010 Hylke Bons"
@@ -250,9 +249,8 @@ msgid "\t -d, --disable-gui\tDon't show the notification icon."
 msgstr "\t -d, --disable-gui\tWyłącza wyświetlanie ikony w obszarze powiadamiania."
 
 #: ../SparkleShare/SparkleStatusIcon.cs:130
-#, fuzzy
 msgid "SparkleShare Folder"
-msgstr "Adres zdalnego katalogu SparkleShare:"
+msgstr "Katalogu programu SparkleShare"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:163
 msgid "No Shared Folders Yet"
@@ -276,7 +274,7 @@ msgstr "Zakończ"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:271
 msgid "All up to date"
-msgstr ""
+msgstr "Wszystko jest aktualne"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:280
 msgid "Syncing…"
@@ -284,11 +282,11 @@ msgstr "Synchronizowanie…"
 
 #: ../SparkleShare/SparkleUI.cs:247
 msgid "Ouch! Mid-air collision!"
-msgstr ""
+msgstr "Ups! Nastąpiło czołowe zderzenie! "
 
 #: ../SparkleShare/SparkleUI.cs:248
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
-msgstr ""
+msgstr "Bez obaw, program SparkleShare wykonał kopię skonfliktowanych plików."
 
 #: ../SparkleShare/SparkleUI.cs:334
 msgid "Hold your ponies!"
@@ -302,7 +300,7 @@ msgstr "Program SparkleShare jest znany z niesamowitej szybkości przy wysyłani
 #: ../SparkleShare/SparkleWindow.cs:50
 #, csharp-format
 msgid "Recent Events in ‘{0}’"
-msgstr ""
+msgstr "Ostatnie zdarzenia w „{0}”"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:108
 msgid "Get Earlier Version"
