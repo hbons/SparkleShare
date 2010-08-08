@@ -295,6 +295,9 @@ namespace SparkleShare {
 		public void ShowState ()
 		{
 
+			if (SyncingReposCount < 0)
+				SyncingReposCount = 0;
+
 			if (SyncingReposCount > 0)
 				SetSyncingState ();
 			else
