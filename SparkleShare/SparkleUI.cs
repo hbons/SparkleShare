@@ -78,14 +78,12 @@ namespace SparkleShare {
 			watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
 
 				RemoveRepository (args.FullPath);
-				Application.Invoke (delegate { NotificationIcon.CreateMenu (); });
 
 			};
 
 			watcher.Created += delegate (object o, FileSystemEventArgs args) {
 
 				AddRepository (args.FullPath);
-				Application.Invoke (delegate { NotificationIcon.CreateMenu (); });
 
 			};
 
@@ -360,6 +358,8 @@ namespace SparkleShare {
 
 			Repositories.Add (repo);
 
+			Application.Invoke (delegate { NotificationIcon.CreateMenu (); });
+
 		}
 
 
@@ -378,6 +378,8 @@ namespace SparkleShare {
 				}
 
 			}
+
+			Application.Invoke (delegate { NotificationIcon.CreateMenu (); });
 
 		}
 
