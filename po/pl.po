@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-06 06:23+0000\n"
+"POT-Creation-Date: 2010-08-08 06:23+0000\n"
 "PO-Revision-Date: 2010-06-11 21:59+0200\n"
 "Last-Translator: Łukasz Jernaś <deejay1@srem.org>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
@@ -282,11 +282,11 @@ msgstr "Synchronizowanie…"
 
 #: ../SparkleShare/SparkleUI.cs:247
 msgid "Ouch! Mid-air collision!"
-msgstr ""
+msgstr "Ups! Nastąpiło czołowe zderzenie! "
 
 #: ../SparkleShare/SparkleUI.cs:248
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
-msgstr ""
+msgstr "Bez obaw, program SparkleShare wykonał kopię skonfliktowanych plików."
 
 #: ../SparkleShare/SparkleUI.cs:334
 msgid "Hold your ponies!"
