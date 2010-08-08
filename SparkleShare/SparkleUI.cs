@@ -17,6 +17,7 @@
 using Gtk;
 using Mono.Unix;
 using Mono.Unix.Native;
+using NDesk.DBus;
 using SparkleLib;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,7 @@ namespace SparkleShare {
 		public SparkleUI (bool HideUI)
 		{
 
+			BusG.Init ();
 			Gtk.Application.Init ();
 
 			Repositories = new List <SparkleRepo> ();
@@ -64,9 +66,20 @@ namespace SparkleShare {
 
 			}
 
-			// Create a directory to store temporary files in
-			if (!Directory.Exists (SparklePaths.SparkleTmpPath))
-				Directory.CreateDirectory (SparklePaths.SparkleTmpPath);
+
+			// Watch the SparkleShare folder and update the repo list
+			// when a deletion occurs.
+
+			FileSystemWatcher watcher = new FileSystemWatcher (SparklePaths.SparklePath) {
+				IncludeSubdirectories = false,
+				EnableRaisingEvents   = true,
+				Filter                = "*"
+			};
+
+			watcher.Deleted += delegate  {
+				Application.Invoke (delegate { UpdateRepositories (); } );
+			};
+
 
 			CreateConfigurationFolders ();
 			UpdateRepositories ();
@@ -101,6 +114,9 @@ namespace SparkleShare {
 		// Creates a folder in the user's home folder to store configuration
 		public void CreateConfigurationFolders ()
 		{
+
+			if (!Directory.Exists (SparklePaths.SparkleTmpPath))
+				Directory.CreateDirectory (SparklePaths.SparkleTmpPath);
 
 			string config_path     = SparklePaths.SparkleConfigPath;
 			string local_icon_path = SparklePaths.SparkleLocalIconPath;
