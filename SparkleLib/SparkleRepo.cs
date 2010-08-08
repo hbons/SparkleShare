@@ -125,7 +125,7 @@ namespace SparkleLib {
 
 
 			// Add everything that changed 
-			// since SparkleShare was stopped TODO: Push if there are changes
+			// since SparkleShare was stopped
 			AddCommitAndPush ();
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Idling...");
@@ -427,8 +427,18 @@ namespace SparkleLib {
 		}
 
 
+		public void Stop ()
+		{
+
+			FetchTimer.Stop ();
+			BufferTimer.Stop ();
+
+		}
+
+
 		// Ignores repos, dotfiles, swap files and the like.
-		private bool ShouldIgnore (string file_name) {
+		private bool ShouldIgnore (string file_name)
+		{
 
 			if (file_name [0].Equals (".") ||
 			    file_name.Contains (".lock") ||

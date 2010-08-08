@@ -69,7 +69,6 @@ namespace SparkleShare {
 
 			// Watch the SparkleShare folder and update the repo list
 			// when a deletion occurs.
-
 			FileSystemWatcher watcher = new FileSystemWatcher (SparklePaths.SparklePath) {
 				IncludeSubdirectories = false,
 				EnableRaisingEvents   = true,
@@ -77,7 +76,18 @@ namespace SparkleShare {
 			};
 
 			watcher.Deleted += delegate  {
+
+				foreach (SparkleRepo repo in Repositories)
+					repo.Stop ();
+
 				Application.Invoke (delegate { UpdateRepositories (); } );
+
+			};
+
+			watcher.Created += delegate  {
+
+				Application.Invoke (delegate {UpdateRepositories (); } );
+
 			};
 
 
