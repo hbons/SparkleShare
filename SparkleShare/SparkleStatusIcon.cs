@@ -29,12 +29,14 @@ namespace SparkleShare {
 
 		public int SyncingReposCount;
 
-		private Timer Timer;
 		private Menu Menu;
 		private MenuItem StatusMenuItem;
 		private string StateText;
+
+		private Timer Timer;
 		private Gdk.Pixbuf [] AnimationFrames;
 		private int FrameNumber;
+
 		private Gtk.Action FolderAction;
 		private double FolderSize;
 
@@ -134,7 +136,15 @@ namespace SparkleShare {
 		}
 
 
-        private string GetSizeFormat (double byte_count)
+		private void UpdateFolderSize ()
+		{
+
+			FolderSize = GetFolderSize (new DirectoryInfo (SparklePaths.SparklePath));
+
+		}
+
+
+        private string FormatFileSize (double byte_count)
         {
 
 			string size = "";
@@ -295,6 +305,8 @@ namespace SparkleShare {
 		public void ShowState ()
 		{
 
+			UpdateFolderSize ();
+
 			if (SyncingReposCount < 0)
 				SyncingReposCount = 0;
 
@@ -308,7 +320,7 @@ namespace SparkleShare {
 
 			UpdateStatusMenuItem ();
 			
-			Console.WriteLine ("Number of repos syncing: " + SyncingReposCount);
+			SparkleHelpers.DebugInfo ("Status", "Number of repos syncing: " + SyncingReposCount);
 
 		}
 		
@@ -319,8 +331,8 @@ namespace SparkleShare {
 
 			Timer.Stop ();
 
-			Pixbuf  = SparkleHelpers.GetIcon ("folder-sparkleshare", 24);
-			StateText = _("Up to date") + "  (" + GetSizeFormat (FolderSize) + ")";
+			Pixbuf    = SparkleHelpers.GetIcon ("folder-sparkleshare", 24);
+			StateText = _("Up to date") + "  (" + FormatFileSize (FolderSize) + ")";
 
 		}
 
