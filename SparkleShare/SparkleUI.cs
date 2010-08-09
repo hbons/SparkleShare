@@ -23,6 +23,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace SparkleShare {
 
@@ -46,6 +48,8 @@ namespace SparkleShare {
 
 			BusG.Init ();
 			Gtk.Application.Init ();
+
+			SetProcessName ("sparkleshare");
 
 			Repositories = new List <SparkleRepo> ();
 
@@ -106,6 +110,7 @@ namespace SparkleShare {
 				NotificationIcon = new SparkleStatusIcon ();
 
 			}
+
 		}
 
 
@@ -415,6 +420,27 @@ namespace SparkleShare {
 				bubble.Show ();
 
 			}
+
+		}
+
+
+		[DllImport ("libc")]
+		private static extern int prctl (int option, byte [] arg2, IntPtr arg3,	IntPtr arg4, IntPtr arg5);
+
+
+		private void SetProcessName (string name)
+		{
+
+			try {
+
+				if (prctl (15, Encoding.ASCII.GetBytes (name + "\0"), IntPtr.Zero, IntPtr.Zero, IntPtr.Zero) != 0) {
+
+					throw new ApplicationException ("Error setting process name: " +
+						Mono.Unix.Native.Stdlib.GetLastError ());
+
+				}
+
+			} catch (EntryPointNotFoundException) {}
 
 		}
 

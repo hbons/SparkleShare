@@ -256,7 +256,7 @@ namespace SparkleShare {
 
 				Menu.Add (new SeparatorMenuItem ());
 
-				MenuItem about_item = new MenuItem (_("About"));
+				MenuItem about_item = new MenuItem (_("Visit Website"));
 
 					about_item.Activated += delegate {
 
@@ -331,7 +331,7 @@ namespace SparkleShare {
 
 			Timer.Stop ();
 
-			Pixbuf    = SparkleHelpers.GetIcon ("folder-sparkleshare", 24);
+			Pixbuf    = AnimationFrames [0];
 			StateText = _("Up to date") + "  (" + FormatFileSize (FolderSize) + ")";
 
 		}

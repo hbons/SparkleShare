@@ -98,6 +98,7 @@ namespace SparkleLib {
 		private void InstallUserInfo ()
 		{
 
+			// TODO: Use TargetFolder and move SparklePaths out of SparkleLib
 			string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
 
 			if (File.Exists (global_config_file_path)) {
