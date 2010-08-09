@@ -298,6 +298,9 @@ namespace SparkleShare {
 			if (SyncingReposCount < 0)
 				SyncingReposCount = 0;
 
+			if (SyncingReposCount > SparkleUI.Repositories.Count)
+				SyncingReposCount = SparkleUI.Repositories.Count;
+
 			if (SyncingReposCount > 0)
 				SetSyncingState ();
 			else
