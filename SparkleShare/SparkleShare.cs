@@ -100,13 +100,17 @@ namespace SparkleShare {
 		public static void ShowHelp ()
 		{
 
-			Console.WriteLine (_("SparkleShare Copyright (C) 2010 Hylke Bons"));
+			Console.WriteLine (" ");
+			Console.WriteLine (_("SparkleShare, an instant update workflow to Git."));
+			Console.WriteLine (_("Copyright (C) 2010 Hylke Bons"));
 			Console.WriteLine (" ");
 			Console.WriteLine (_("This program comes with ABSOLUTELY NO WARRANTY."));
+			Console.WriteLine (" ");
 			Console.WriteLine (_("This is free software, and you are welcome to redistribute it "));
 			Console.WriteLine (_("under certain conditions. Please read the GNU GPLv3 for details."));
 			Console.WriteLine (" ");
-			Console.WriteLine (_("SparkleShare syncs the ~/SparkleShare folder with remote repositories."));
+			Console.WriteLine (_("SparkleShare automatically syncs Git repositories in "));
+			Console.WriteLine (_("the ~/SparkleShare folder with their remote origins."));
 			Console.WriteLine (" ");
 			Console.WriteLine (_("Usage: sparkleshare [start|stop|restart] [OPTION]..."));
 			Console.WriteLine (_("Sync SparkleShare folder with remote repositories."));
