@@ -443,15 +443,30 @@ namespace SparkleShare {
 
 							};
 
+
+						if (StepTwoOnly) {
+
+							Button cancel_button = new Button (_("Cancel"));
+
+							cancel_button.Clicked += delegate {
+								Destroy ();
+							};
+
+							controls.Add (cancel_button);
+
+
+						} else {
+
 							Button skip_button = new Button (_("Skip"));
 
 							skip_button.Clicked += delegate {
 								ShowStepThree ();
 							};
 
-
-						if (!StepTwoOnly)
 							controls.Add (skip_button);
+
+						}
+
 
 						controls.Add (AddButton);
 
