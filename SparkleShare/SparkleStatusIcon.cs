@@ -125,8 +125,14 @@ namespace SparkleShare {
 
 			FileInfo [] files = parent.GetFiles();
 
-			foreach (FileInfo file in files)
+			foreach (FileInfo file in files) {
+
+				if (!file.Exists)
+					return 0;
+
 				size += file.Length;
+
+			}
 
 			foreach (DirectoryInfo directory in parent.GetDirectories())
 				size += GetFolderSize (directory);
