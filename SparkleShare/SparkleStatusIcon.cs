@@ -52,8 +52,9 @@ namespace SparkleShare {
 
 			FolderSize = GetFolderSize (new DirectoryInfo (SparklePaths.SparklePath));
 
-			CreateAnimationFrames ();
-			CreateTimer ();
+			FrameNumber = 0;
+			AnimationFrames = CreateAnimationFrames ();
+			Timer = CreateTimer ();
 
 			SyncingReposCount = 0;
 
@@ -61,7 +62,11 @@ namespace SparkleShare {
 			StatusMenuItem = new MenuItem ();
 
 			CreateMenu ();
+
+			// Primary mouse button
 			Activate += ShowMenu;
+
+			// Secondary mouse button
 			PopupMenu += ShowMenu;
 
 			SetIdleState ();
@@ -70,29 +75,29 @@ namespace SparkleShare {
 		}
 
 
-		private void CreateAnimationFrames ()
+		private Gdk.Pixbuf [] CreateAnimationFrames ()
 		{
 
-			FrameNumber = 0;
-
-			AnimationFrames = new Gdk.Pixbuf [5];
+			Gdk.Pixbuf [] animation_frames = new Gdk.Pixbuf [5];
 			Gdk.Pixbuf frames_pixbuf = SparkleHelpers.GetIcon ("process-syncing-sparkleshare", 24);
 			
-			for (int i = 0; i < AnimationFrames.Length; i++)
-				AnimationFrames [i] = new Gdk.Pixbuf (frames_pixbuf, (i * 24), 0, 24, 24);
+			for (int i = 0; i < animation_frames.Length; i++)
+				animation_frames [i] = new Gdk.Pixbuf (frames_pixbuf, (i * 24), 0, 24, 24);
+
+			return animation_frames;
 
 		}
 
 
 		// Creates the timer that handles the syncing animation
-		private void CreateTimer ()
+		private Timer CreateTimer ()
 		{
 
-			Timer = new Timer () {
+			Timer timer = new Timer () {
 				Interval = 35
 			};
 
-			Timer.Elapsed += delegate {
+			timer.Elapsed += delegate {
 
 				if (FrameNumber < AnimationFrames.Length - 1)
 					FrameNumber++;
@@ -102,6 +107,8 @@ namespace SparkleShare {
 				Application.Invoke (delegate { SetPixbuf (AnimationFrames [FrameNumber]); });
 
 			};
+
+			return timer;
 
 		}
 
