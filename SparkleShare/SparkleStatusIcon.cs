@@ -339,7 +339,7 @@ namespace SparkleShare {
 
 			Timer.Stop ();
 
-			Pixbuf    = AnimationFrames [0];
+			Application.Invoke (delegate { SetPixbuf (AnimationFrames [0]); });
 			StateText = _("Up to date") + "  (" + FormatFileSize (FolderSize) + ")";
 
 		}
