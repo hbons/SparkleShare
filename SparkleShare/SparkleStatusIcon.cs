@@ -62,6 +62,7 @@ namespace SparkleShare {
 
 			CreateMenu ();
 			Activate += ShowMenu;
+			PopupMenu += ShowMenu;
 
 			SetIdleState ();
 			ShowState ();
