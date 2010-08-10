@@ -150,19 +150,21 @@ namespace SparkleShare {
 		}
 
 
+		// Format a file size nicely.
+		// Example: 1048576 becomes "1 ᴍʙ"
         private string FormatFileSize (double byte_count)
         {
 
 			string size = "";
 
 			if (byte_count >= 1099511627776)
-				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1099511627776, 1)) + " ᴛʙ";
+				size = String.Format (_("{0:##.##} ᴛʙ"), Math.Round (byte_count / 1099511627776, 1));
 			else if (byte_count >= 1073741824)
-				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1073741824, 1)) + " ɢʙ";
+				size = String.Format (_("{0:##.##} ɢʙ"), Math.Round (byte_count / 1073741824, 1));
             else if (byte_count >= 1048576)
-				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1048576, 1)) + " ᴍʙ";
+				size = String.Format (_("{0:##.##} ᴍʙ"), Math.Round (byte_count / 1048576, 1));
 			else if (byte_count >= 1024)
-				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1024, 1)) + " ᴋʙ";
+				size = String.Format (_("{0:##.##} ᴋʙ"), Math.Round (byte_count / 1024, 1));
 			else
 				size = byte_count.ToString () + " bytes";
 
