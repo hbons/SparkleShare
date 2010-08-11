@@ -131,9 +131,10 @@ namespace SparkleShare {
 
 			double size = 0;
 
-			FileInfo [] files = parent.GetFiles();
+			if (!parent.Name.Equals ("rebase-apply"))
+				return 0;
 
-			foreach (FileInfo file in files) {
+			foreach (FileInfo file in parent.GetFiles()) {
 
 				if (!file.Exists)
 					return 0;

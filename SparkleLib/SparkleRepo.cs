@@ -311,6 +311,8 @@ namespace SparkleLib {
 		public void Rebase ()
 		{
 
+			Add (); // TODO: Experiment for the "You have unstaged changes" bug
+
 			Watcher.EnableRaisingEvents = false;
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Rebasing changes...");
