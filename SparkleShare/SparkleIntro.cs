@@ -336,27 +336,34 @@ namespace SparkleShare {
 
 								string server = "";
 
+								if (name.EndsWith ("/"))
+									name = name.TrimEnd ("/".ToCharArray ());
+
 								if (radio_button.Active) {
 
 									server = SparkleToGitUrl (ServerEntry.Text);
 
 									// Remove the trailing slash if there is one
 									if (server.EndsWith ("/"))
-										server = server.Trim ("/".ToCharArray ());
+										server = server.TrimEnd ("/".ToCharArray ());
 
 								}
 
-								if (radio_button_gitorious.Active)
+
+								if (radio_button_gitorious.Active) {
+
 									server = "ssh://git@gitorious.org";
+
+									if (!name.EndsWith (".git"))
+										name += ".git";
+
+								}
 
 								if (radio_button_github.Active)
 									server = "ssh://git@github.com";
 
 								if (radio_button_gnome.Active)
-									server = "ssh://git@gnome.org";
-
-								if (!name.EndsWith (".git"))
-									name += ".git";
+									server = "ssh://git@gnome.org/git/";
 
 								string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
 								FolderEntry.Text = canonical_name;
