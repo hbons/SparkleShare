@@ -23,8 +23,7 @@ using System.Timers;
 
 namespace SparkleLib {
 
-	public class SparkleRepo
-	{
+	public class SparkleRepo {
 
 		private Process Process;
 		private Timer FetchTimer;
