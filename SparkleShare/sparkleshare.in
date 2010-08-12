@@ -27,11 +27,17 @@ case $1 in
   ;;
 
   stop)
-	if [ -e "/tmp/sparkleshare/sparkleshare.pid" ]; then
-		echo -n "Stopping SparkleShare..."
-		kill `cat /tmp/sparkleshare/sparkleshare.pid` 
-		rm -f /tmp/sparkleshare/sparkleshare.pid
-		echo " Done."
+	if [ -e "${pidfile}" ]; then
+		sparklepid=`cat ${pidfile}`
+		if [ -n "`ps -p ${sparklepid} | grep ${sparklepid}`" ]; then
+			echo -n "Stopping SparkleShare..."
+			kill ${sparklepid}
+			rm -f ${pidfile}
+			echo " Done."
+		else
+			echo "SparkleShare isn't running, removing stale pid file"
+			rm -f ${pidfile}
+		fi
 	else
 		echo "SparkleShare isn't running."
 	fi
@@ -67,4 +73,5 @@ case $1 in
   *)
 		echo "Usage: sparkleshare {start|stop|restart|help}"
   ;;
+
 esac
