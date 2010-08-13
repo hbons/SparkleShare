@@ -10,18 +10,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-08 17:34+0000\n"
+"POT-Creation-Date: 2010-08-12 06:23+0000\n"
 "PO-Revision-Date: 2010-06-11 21:59+0200\n"
 "Last-Translator: Łukasz Jernaś <deejay1@srem.org>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Country: Poland\n"
 "Language: pl\n"
-"X-Generator: Virtaal 0.5.2\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Language: Polish\n"
+"X-Poedit-Country: Poland\n"
+"X-Generator: Virtaal 0.5.2\n"
 
 #: ../SparkleDiff/SparkleDiff.cs:78 ../SparkleShare/SparkleShare.cs:50
 msgid "Git wasn't found."
@@ -199,11 +199,11 @@ msgstr "Projekt GNOME"
 
 #: ../SparkleShare/SparkleIntro.cs:235
 msgid "GNOME is an easy to understand interface to your computer."
-msgstr ""
+msgstr "Środowisko GNOME jest łatwym w użyciu interfejsem dla twojego komputera."
 
 #: ../SparkleShare/SparkleIntro.cs:236
 msgid "Select this option if you’re a developer or designer working on GNOME."
-msgstr ""
+msgstr "Zaznacz tą opcję, jeśli programujesz lub projektujesz dla projektu GNOME."
 
 #: ../SparkleShare/SparkleIntro.cs:244
 msgid "Gitorious"
@@ -215,7 +215,7 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:247
 msgid "Free accounts for Free and Open Source projects."
-msgstr ""
+msgstr "Wolne konta dla projektów Wolnych i Otwartych projektów."
 
 #: ../SparkleShare/SparkleIntro.cs:310
 msgid "Folder Name:"
@@ -223,7 +223,7 @@ msgstr "Nazwa folderu:"
 
 #: ../SparkleShare/SparkleIntro.cs:327
 msgid "Sync"
-msgstr ""
+msgstr "Synchronizuj"
 
 #: ../SparkleShare/SparkleIntro.cs:443
 msgid "Skip"
