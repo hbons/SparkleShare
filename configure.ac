@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_define([sparkleshare_version],
-	[0.2-alpha1])
+	[0.2-alpha2])
 
 m4_define([sparkleshare_asm_version],
 	[0.2])
