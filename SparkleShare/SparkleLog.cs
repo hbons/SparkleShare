@@ -20,13 +20,16 @@ using SparkleLib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Text.RegularExpressions;
-using System.Timers;
 
 namespace SparkleShare {
 
 	public class SparkleLog : Window	{
+
+		private SparkleRepo SparkleRepo;
+		private VBox LayoutVertical;
+		private ScrolledWindow ScrolledWindow;
+
 
 		// Short alias for the translations
 		public static string _ (string s)
@@ -34,9 +37,6 @@ namespace SparkleShare {
 			return Catalog.GetString (s);
 		}
 
-		private SparkleRepo SparkleRepo;
-		private VBox LayoutVertical;
-		private ScrolledWindow ScrolledWindow;
 
 		public SparkleLog (SparkleRepo sparkle_repo) : base ("")
 		{
@@ -60,17 +60,22 @@ namespace SparkleShare {
 				};
 
 					Button open_folder_button = new Button (_("Open Folder"));
+
 					open_folder_button.Clicked += delegate (object o, EventArgs args) {
+
+						string path = SparkleHelpers.CombineMore (SparklePaths.SparklePath, SparkleRepo.Name);
+
 						Process process = new Process ();
-						process.StartInfo.FileName = "xdg-open";
-						string path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-							SparkleRepo.Name);
-						process.StartInfo.Arguments = path.Replace(" ", "\\ ");
+						process.StartInfo.FileName  = "xdg-open";
+						process.StartInfo.Arguments = path.Replace(" ", "\\ "); // Escape space-characters
 						process.Start ();
+
 						Destroy ();
+
 					};
 
 					Button close_button = new Button (Stock.Close);
+
 					close_button.Clicked += delegate (object o, EventArgs args) {
 						Destroy ();
 					};
@@ -102,8 +107,10 @@ namespace SparkleShare {
 
 			int number_of_events = 50;
 
-			Process process = new Process ();
-			process.EnableRaisingEvents = true; 
+			Process process = new Process () {
+				EnableRaisingEvents = true
+			};
+
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
@@ -140,7 +147,6 @@ namespace SparkleShare {
 
 					DateTime date_time = UnixTimestampToDateTime (unix_timestamp);
 
-					message = message.Replace ("/", " ‣ ");
 					message = message.Replace ("\n", " ");
 
 					ChangeSet change_set = new ChangeSet (user_name, user_email, message, date_time);
@@ -180,12 +186,21 @@ namespace SparkleShare {
 				                                      typeof (string),
 				                                      typeof (string));
 
+				Gdk.Color color = Style.Foreground (StateType.Insensitive);
+				string secondary_text_color = GdkColorToHex (color);
+
 				foreach (ChangeSet change_set in activity_day) {
 
 					iter = list_store.Append ();
+
 					list_store.SetValue (iter, 0, SparkleHelpers.GetAvatar (change_set.UserEmail , 32));
+
 					list_store.SetValue (iter, 1, "<b>" + change_set.UserName + "</b>\n" +
-					                              "<span fgcolor='#777'>" + change_set.Message + "</span>");
+					                              "<span fgcolor='" + secondary_text_color +"'>" + 
+					                              change_set.Message + "\n" +
+					                              "<small>" + change_set.DateTime.ToString ("HH:mm") + "</small>" +
+					                              "</span>");
+
 					list_store.SetValue (iter, 2, change_set.UserEmail);
 
 				}
@@ -252,6 +267,18 @@ namespace SparkleShare {
 			return unix_epoch.AddSeconds (timestamp);
 		}
 
+
+		// Converts a Gdk RGB color to a hex value.
+		// Example: from "rgb:0,0,0" to "#000000"
+		public string GdkColorToHex (Gdk.Color color)
+		{
+
+			return String.Format ("#{0:X2}{1:X2}{2:X2}",
+				(int) Math.Truncate (color.Red   / 256.00),
+				(int) Math.Truncate (color.Green / 256.00),
+				(int) Math.Truncate (color.Blue  / 256.00));
+
+		}
 
 	}
 

@@ -244,7 +244,6 @@ namespace SparkleShare {
 
 						SparkleIntro intro = new SparkleIntro ();
 						intro.ShowServerForm (true);
-						intro.ShowAll ();
 
 					};
 
