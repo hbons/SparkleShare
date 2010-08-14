@@ -20,7 +20,7 @@ namespace SparkleShare {
 
 	public class SparkleEntry : Entry {
 
-		private bool ExampleTextActive;
+		public bool ExampleTextActive;
 		private string pExampleText;
 
 

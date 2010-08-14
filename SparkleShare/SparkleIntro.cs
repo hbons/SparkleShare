@@ -321,88 +321,10 @@ namespace SparkleShare {
 						if (radio_button_gnome.Active)
 							server = "ssh://git@gnome.org/git/";
 
-						string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
-						FolderEntry.Text = canonical_name;
-
 						string url  = server + "/" + name;
-						string tmp_folder = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath,
-							canonical_name);
-
-						SparkleFetcher fetcher = new SparkleFetcher (url, tmp_folder);
-
 						SparkleHelpers.DebugInfo ("Git", "[" + name + "] Formed URL: " + url);
 
-						fetcher.CloningStarted += delegate {
-
-							SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning Repository");
-
-						};
-
-
-						fetcher.CloningFinished += delegate {
-
-							SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Repository cloned");
-
-							ClearAttributes (tmp_folder);
-
-							try {
-
-								bool folder_exists = Directory.Exists (
-									SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name));
-
-								int i = 1;
-								while (folder_exists) {
-
-									i++;
-									folder_exists = Directory.Exists (
-										SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-											canonical_name + " (" + i + ")"));
-
-								}
-
-								string target_folder_name = canonical_name;
-
-								if (i > 1)
-									target_folder_name += " (" + i + ")";
-
-								string target_folder_path;
-								target_folder_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-									target_folder_name);
-
-								Directory.Move (tmp_folder, target_folder_path);
-
-							} catch (Exception e) {
-
-								SparkleHelpers.DebugInfo ("Git",
-									"[" + name + "] Error moving folder: " + e.Message);
-
-							}
-
-							Application.Invoke (delegate { ShowSuccessPage (); });
-
-						};
-
-
-						fetcher.CloningFailed += delegate {
-
-							SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning failed");
-
-							if (Directory.Exists (tmp_folder)) {
-
-								ClearAttributes (tmp_folder);
-								Directory.Delete (tmp_folder, true);
-
-								SparkleHelpers.DebugInfo ("Config",
-									"[" + name + "] Deleted temporary directory");
-
-							}
-
-							Application.Invoke (delegate { ShowErrorPage (); });
-
-						};
-
-						ShowSyncingPage ();
-						fetcher.Clone ();
+						FetchFolder (url, name);
 
 					};
 
@@ -459,16 +381,8 @@ namespace SparkleShare {
 					UseMarkup = true,
 					Xalign = 0
 				};
-		
-				Label information = new Label ("<span fgcolor='" + SecondaryTextColor + "'>" +
-				                             _("Hey, it's an Alpha!") +
-				                               "</span>") {
-					Xalign = 0,
-					Wrap   = true,
-					UseMarkup = true
-				};
 
-					Button try_again_button = new Button (_("Try again…")) {
+					Button try_again_button = new Button (_("Try Again")) {
 						Sensitive = true
 					};
 	
@@ -481,7 +395,6 @@ namespace SparkleShare {
 				AddButton (try_again_button);
 
 			layout_vertical.PackStart (header, false, false, 0);
-			layout_vertical.PackStart (information, false, false, 0);
 
 			Add (layout_vertical);
 
@@ -490,7 +403,7 @@ namespace SparkleShare {
 		}
 
 
-		private void ShowSuccessPage ()
+		private void ShowSuccessPage (string name)
 		{
 
 			Reset ();
@@ -504,13 +417,28 @@ namespace SparkleShare {
 							Xalign = 0
 						};
 				
-						Label information = new Label ("<span fgcolor='" + SecondaryTextColor + "'>" +
-						                             _("Buy a lottery ticket!") +
-						                               "</span>") {
+						Label information = new Label (_("Now you can access the synced files from ‘" + name + "’ " + 
+						                                 "in your SparkleShare folder.")) {
 							Xalign = 0,
 							Wrap   = true,
 							UseMarkup = true
 						};
+
+							Button open_folder_button = new Button (_("Open Folder"));
+
+							open_folder_button.Clicked += delegate (object o, EventArgs args) {
+
+								string path = SparkleHelpers.CombineMore (SparklePaths.SparklePath, name);
+
+								Process process = new Process ();
+								process.StartInfo.FileName  = "xdg-open";
+								process.StartInfo.Arguments = path.Replace (" ", "\\ "); // Escape space-characters
+								process.Start ();
+
+								if (ServerFormOnly)
+									Destroy ();
+
+							};
 
 							Button finish_button = new Button (_("Finish"));
 			
@@ -518,10 +446,11 @@ namespace SparkleShare {
 								Destroy ();
 							};
 			
+						AddButton (open_folder_button);
 						AddButton (finish_button);
 
 					layout_vertical.PackStart (header, false, false, 0);
-					layout_vertical.PackStart (information, false, false, 0);
+					layout_vertical.PackStart (information, false, false, 21);
 
 			Add (layout_vertical);
 
@@ -530,7 +459,7 @@ namespace SparkleShare {
 		}
 
 
-		private void ShowSyncingPage ()
+		private void ShowSyncingPage (string name)
 		{
 
 			Reset ();
@@ -538,17 +467,15 @@ namespace SparkleShare {
 					VBox layout_vertical = new VBox (false, 0);
 
 						Label header = new Label ("<span size='x-large'><b>" +
-								                        String.Format (_("Syncing folder ‘{0}’…"), FolderEntry.Text) +
+								                        String.Format (_("Syncing folder ‘{0}’…"), name) +
 								                        "</b></span>") {
 							UseMarkup = true,
 							Xalign    = 0,
 							Wrap      = true
 						};
 
-						Label information = new Label ("<span fgcolor='" + SecondaryTextColor + "'>" + 
-						                             _("This may take a while.\n") +
-						                             _("You sure it’s not coffee o-clock?") +
-						                               "</span>") {
+						Label information = new Label (_("This may take a while.\n") +
+						                               _("You sure it’s not coffee o-clock?")) {
 							UseMarkup = true,
 							Xalign = 0
 						};
@@ -653,6 +580,88 @@ namespace SparkleShare {
 		}
 
 
+		private void FetchFolder (string url, string name)
+		{
+
+			string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
+
+			string tmp_folder = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, canonical_name);
+
+			SparkleFetcher fetcher = new SparkleFetcher (url, tmp_folder);
+
+
+			fetcher.CloningStarted += delegate {
+
+				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning Repository");
+
+			};
+
+
+			fetcher.CloningFinished += delegate {
+
+				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Repository cloned");
+
+				ClearAttributes (tmp_folder);
+
+				try {
+
+					bool folder_exists = Directory.Exists (
+						SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name));
+
+					int i = 1;
+					while (folder_exists) {
+
+						i++;
+						folder_exists = Directory.Exists (
+							SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name + " (" + i + ")"));
+
+					}
+
+					string target_folder_name = canonical_name;
+
+					if (i > 1)
+						target_folder_name += " (" + i + ")";
+
+					string target_folder_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+						target_folder_name);
+
+					Directory.Move (tmp_folder, target_folder_path);
+
+				} catch (Exception e) {
+
+					SparkleHelpers.DebugInfo ("Git", "[" + name + "] Error moving folder: " + e.Message);
+
+				}
+
+				Application.Invoke (delegate { ShowSuccessPage (canonical_name); });
+
+			};
+
+
+			fetcher.CloningFailed += delegate {
+
+				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning failed");
+
+				if (Directory.Exists (tmp_folder)) {
+
+					ClearAttributes (tmp_folder);
+					Directory.Delete (tmp_folder, true);
+
+					SparkleHelpers.DebugInfo ("Config", "[" + name + "] Deleted temporary directory");
+
+				}
+
+				Application.Invoke (delegate { ShowErrorPage (); });
+
+			};
+
+			ShowSyncingPage (canonical_name);
+
+			fetcher.Clone ();
+
+		}
+
+
 		// Enables or disables the 'Next' button depending on the 
 		// entries filled in by the user
 		private void CheckAccountForm ()
@@ -688,6 +697,11 @@ namespace SparkleShare {
 		{
 
 			SyncButton.Sensitive = false;
+
+			if (FolderEntry.ExampleTextActive ||
+			    (ServerEntry.Sensitive && ServerEntry.ExampleTextActive))
+				return;
+
 			bool IsFolder = !FolderEntry.Text.Trim ().Equals ("");
 
 			if (ServerEntry.Sensitive == true) {
