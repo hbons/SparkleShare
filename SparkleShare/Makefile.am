@@ -11,6 +11,8 @@ SOURCES =  \
 	SparkleBubble.cs \
 	SparkleEntry.cs \
 	SparkleIntro.cs \
+	SparkleInvitation.cs \
+	SparkleLog.cs \
 	SparkleShare.cs \
 	SparkleSpinner.cs \
 	SparkleStatusIcon.cs \

@@ -29,12 +29,14 @@ namespace SparkleShare {
 
 		public int SyncingReposCount;
 
-		private Timer Timer;
 		private Menu Menu;
 		private MenuItem StatusMenuItem;
 		private string StateText;
+
+		private Timer Timer;
 		private Gdk.Pixbuf [] AnimationFrames;
 		private int FrameNumber;
+
 		private Gtk.Action FolderAction;
 		private double FolderSize;
 
@@ -50,8 +52,9 @@ namespace SparkleShare {
 
 			FolderSize = GetFolderSize (new DirectoryInfo (SparklePaths.SparklePath));
 
-			CreateAnimationFrames ();
-			CreateTimer ();
+			FrameNumber = 0;
+			AnimationFrames = CreateAnimationFrames ();
+			Timer = CreateTimer ();
 
 			SyncingReposCount = 0;
 
@@ -59,7 +62,12 @@ namespace SparkleShare {
 			StatusMenuItem = new MenuItem ();
 
 			CreateMenu ();
+
+			// Primary mouse button
 			Activate += ShowMenu;
+
+			// Secondary mouse button
+			PopupMenu += ShowMenu;
 
 			SetIdleState ();
 			ShowState ();
@@ -67,29 +75,29 @@ namespace SparkleShare {
 		}
 
 
-		private void CreateAnimationFrames ()
+		private Gdk.Pixbuf [] CreateAnimationFrames ()
 		{
 
-			FrameNumber = 0;
-
-			AnimationFrames = new Gdk.Pixbuf [5];
+			Gdk.Pixbuf [] animation_frames = new Gdk.Pixbuf [5];
 			Gdk.Pixbuf frames_pixbuf = SparkleHelpers.GetIcon ("process-syncing-sparkleshare", 24);
 			
-			for (int i = 0; i < AnimationFrames.Length; i++)
-				AnimationFrames [i] = new Gdk.Pixbuf (frames_pixbuf, (i * 24), 0, 24, 24);
+			for (int i = 0; i < animation_frames.Length; i++)
+				animation_frames [i] = new Gdk.Pixbuf (frames_pixbuf, (i * 24), 0, 24, 24);
+
+			return animation_frames;
 
 		}
 
 
 		// Creates the timer that handles the syncing animation
-		private void CreateTimer ()
+		private Timer CreateTimer ()
 		{
 
-			Timer = new Timer () {
+			Timer timer = new Timer () {
 				Interval = 35
 			};
 
-			Timer.Elapsed += delegate {
+			timer.Elapsed += delegate {
 
 				if (FrameNumber < AnimationFrames.Length - 1)
 					FrameNumber++;
@@ -100,6 +108,8 @@ namespace SparkleShare {
 
 			};
 
+			return timer;
+
 		}
 
 
@@ -108,8 +118,8 @@ namespace SparkleShare {
 
 			return delegate { 
 
-				SparkleWindow SparkleWindow = new SparkleWindow (repo);
-				SparkleWindow.ShowAll ();
+				SparkleLog log = new SparkleLog (repo);
+				log.ShowAll ();
 
 			};
 
@@ -121,10 +131,17 @@ namespace SparkleShare {
 
 			double size = 0;
 
-			FileInfo [] files = parent.GetFiles();
+			if (parent.Name.Equals ("rebase-apply"))
+				return 0;
 
-			foreach (FileInfo file in files)
+			foreach (FileInfo file in parent.GetFiles()) {
+
+				if (!file.Exists)
+					return 0;
+
 				size += file.Length;
+
+			}
 
 			foreach (DirectoryInfo directory in parent.GetDirectories())
 				size += GetFolderSize (directory);
@@ -134,19 +151,29 @@ namespace SparkleShare {
 		}
 
 
-        private string GetSizeFormat (double byte_count)
+		private void UpdateFolderSize ()
+		{
+
+			FolderSize = GetFolderSize (new DirectoryInfo (SparklePaths.SparklePath));
+
+		}
+
+
+		// Format a file size nicely.
+		// Example: 1048576 becomes "1 ᴍʙ"
+        private string FormatFileSize (double byte_count)
         {
 
 			string size = "";
 
 			if (byte_count >= 1099511627776)
-				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1099511627776, 1)) + " ᴛʙ";
+				size = String.Format (_("{0:##.##} ᴛʙ"), Math.Round (byte_count / 1099511627776, 1));
 			else if (byte_count >= 1073741824)
-				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1073741824, 1)) + " ɢʙ";
+				size = String.Format (_("{0:##.##} ɢʙ"), Math.Round (byte_count / 1073741824, 1));
             else if (byte_count >= 1048576)
-				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1048576, 1)) + " ᴍʙ";
+				size = String.Format (_("{0:##.##} ᴍʙ"), Math.Round (byte_count / 1048576, 1));
 			else if (byte_count >= 1024)
-				size = String.Format ("{0:##.##}", Math.Round (byte_count / 1024, 1)) + " ᴋʙ";
+				size = String.Format (_("{0:##.##} ᴋʙ"), Math.Round (byte_count / 1024, 1));
 			else
 				size = byte_count.ToString () + " bytes";
 
@@ -216,8 +243,7 @@ namespace SparkleShare {
 					add_item.Activated += delegate {
 
 						SparkleIntro intro = new SparkleIntro ();
-						intro.ShowStepTwo (true);
-						intro.ShowAll ();
+						intro.ShowServerForm (true);
 
 					};
 
@@ -246,7 +272,7 @@ namespace SparkleShare {
 
 				Menu.Add (new SeparatorMenuItem ());
 
-				MenuItem about_item = new MenuItem (_("About"));
+				MenuItem about_item = new MenuItem (_("Visit Website"));
 
 					about_item.Activated += delegate {
 
@@ -295,6 +321,14 @@ namespace SparkleShare {
 		public void ShowState ()
 		{
 
+			UpdateFolderSize ();
+
+			if (SyncingReposCount < 0)
+				SyncingReposCount = 0;
+
+			if (SyncingReposCount > SparkleUI.Repositories.Count)
+				SyncingReposCount = SparkleUI.Repositories.Count;
+
 			if (SyncingReposCount > 0)
 				SetSyncingState ();
 			else
@@ -302,7 +336,7 @@ namespace SparkleShare {
 
 			UpdateStatusMenuItem ();
 			
-			Console.WriteLine ("Number of repos syncing: " + SyncingReposCount);
+			SparkleHelpers.DebugInfo ("Status", "Number of repos syncing: " + SyncingReposCount);
 
 		}
 		
@@ -313,8 +347,8 @@ namespace SparkleShare {
 
 			Timer.Stop ();
 
-			Pixbuf  = SparkleHelpers.GetIcon ("folder-sparkleshare", 24);
-			StateText = _("Up to date") + "  (" + GetSizeFormat (FolderSize) + ")";
+			Application.Invoke (delegate { SetPixbuf (AnimationFrames [0]); });
+			StateText = _("Up to date") + "  (" + FormatFileSize (FolderSize) + ")";
 
 		}
 
