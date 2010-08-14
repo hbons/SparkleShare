@@ -67,7 +67,7 @@ namespace SparkleShare {
 
 						Process process = new Process ();
 						process.StartInfo.FileName  = "xdg-open";
-						process.StartInfo.Arguments = path.Replace(" ", "\\ "); // Escape space-characters
+						process.StartInfo.Arguments = path.Replace (" ", "\\ "); // Escape space-characters
 						process.Start ();
 
 						Destroy ();
