@@ -282,7 +282,7 @@ namespace SparkleLib {
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
 
-			process.StartInfo.Arguments = "fetch origin master";
+			process.StartInfo.Arguments = "fetch -v origin master";
 
 			process.Start ();
 
@@ -316,7 +316,7 @@ namespace SparkleLib {
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Rebasing changes...");
 
-			Process.StartInfo.Arguments = "rebase -v origin/master";
+			Process.StartInfo.Arguments = "rebase -v FETCH_HEAD";
 			Process.WaitForExit ();
 			Process.Start ();
 

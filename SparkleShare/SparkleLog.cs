@@ -26,7 +26,7 @@ using System.Timers;
 
 namespace SparkleShare {
 
-	public class SparkleWindow : Window	{
+	public class SparkleLog : Window	{
 
 		// Short alias for the translations
 		public static string _ (string s)
@@ -38,7 +38,7 @@ namespace SparkleShare {
 		private VBox LayoutVertical;
 		private ScrolledWindow ScrolledWindow;
 
-		public SparkleWindow (SparkleRepo sparkle_repo) : base ("")
+		public SparkleLog (SparkleRepo sparkle_repo) : base ("")
 		{
 
 			SparkleRepo = sparkle_repo;
@@ -255,5 +255,37 @@ namespace SparkleShare {
 
 	}
 
+	
+	public class ActivityDay : List <ChangeSet>
+	{
+
+		public DateTime DateTime;
+
+		public ActivityDay (DateTime date_time)
+		{
+			DateTime = date_time;
+			DateTime = new DateTime (DateTime.Year, DateTime.Month, DateTime.Day);
+		}
+
+	}
+
+	
+	public class ChangeSet
+	{
+	
+		public string UserName;
+		public string UserEmail;
+		public string Message;
+		public DateTime DateTime;
+	
+		public ChangeSet (string user_name, string user_email, string message, DateTime date_time)
+		{
+			UserName  = user_name;
+			UserEmail = user_email;
+			Message   = message;
+			DateTime  = date_time;
+		}
+	
+	}
 
 }
