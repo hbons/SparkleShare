@@ -23,8 +23,7 @@ using System.Timers;
 
 namespace SparkleLib {
 
-	public class SparkleRepo
-	{
+	public class SparkleRepo {
 
 		private Process Process;
 		private Timer FetchTimer;
@@ -85,6 +84,8 @@ namespace SparkleLib {
 			CurrentHash     = GetCurrentHash ();
 			Domain          = GetDomain (RemoteOriginUrl);
 
+			if (CurrentHash == null)
+				CreateInitialCommit ();
 
 			HasChanged = false;
 
@@ -127,6 +128,9 @@ namespace SparkleLib {
 			// Add everything that changed 
 			// since SparkleShare was stopped
 			AddCommitAndPush ();
+
+			if (CurrentHash == null)
+				CurrentHash = GetCurrentHash ();
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Idling...");
 
@@ -278,7 +282,7 @@ namespace SparkleLib {
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
 
-			process.StartInfo.Arguments = "fetch";
+			process.StartInfo.Arguments = "fetch -v origin master";
 
 			process.Start ();
 
@@ -306,11 +310,13 @@ namespace SparkleLib {
 		public void Rebase ()
 		{
 
+			Add (); // TODO: Experiment for the "You have unstaged changes" bug
+
 			Watcher.EnableRaisingEvents = false;
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Rebasing changes...");
 
-			Process.StartInfo.Arguments = "rebase -v origin/master";
+			Process.StartInfo.Arguments = "rebase -v FETCH_HEAD";
 			Process.WaitForExit ();
 			Process.Start ();
 
@@ -409,7 +415,7 @@ namespace SparkleLib {
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing changes...");
 
-			Process.StartInfo.Arguments = "push";
+			Process.StartInfo.Arguments = "push origin master";
 			Process.Start ();
 			Process.WaitForExit ();
 
@@ -466,6 +472,9 @@ namespace SparkleLib {
 		public string GetDomain (string url)
 		{
 
+			if (RemoteOriginUrl.Equals (""))
+				return "";
+
 			string domain = url.Substring (RemoteOriginUrl.IndexOf ("@") + 1);
 
 			if (domain.IndexOf (":") > -1)
@@ -482,19 +491,25 @@ namespace SparkleLib {
 		public string GetCurrentHash ()
 		{
 
-			string current_hash;
+			Process process = new Process () {
+				EnableRaisingEvents = true
+			};
 
-			Process process = new Process ();
 			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.FileName = "git";
-			process.StartInfo.WorkingDirectory = LocalPath;
-			process.StartInfo.Arguments = "rev-list --max-count=1 HEAD";
-			process.Start ();
+			process.StartInfo.UseShellExecute        = false;
+			process.StartInfo.FileName               = "git";
+			process.StartInfo.WorkingDirectory       = LocalPath;
+			process.StartInfo.Arguments              = "rev-list --max-count=1 HEAD";
 
-			current_hash = process.StandardOutput.ReadToEnd ().Trim ();
-			
-			return current_hash;
+			process.Start ();
+			process.WaitForExit ();
+
+			string current_hash = process.StandardOutput.ReadToEnd ().Trim ();
+
+			if (process.ExitCode != 0)
+				return null;
+			else
+				return current_hash;
 
 		}
 
@@ -547,6 +562,18 @@ namespace SparkleLib {
 			user_email = process.StandardOutput.ReadToEnd ().Trim ();
 
 			return user_email;
+
+		}
+
+
+		// Create a first commit in case the user has cloned
+		// an empty repository
+		private void CreateInitialCommit ()
+		{
+
+			TextWriter writer = new StreamWriter (Path.Combine (LocalPath, "SparkleShare.txt"));
+			writer.WriteLine (":)");
+			writer.Close ();
 
 		}
 

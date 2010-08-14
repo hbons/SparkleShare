@@ -25,13 +25,15 @@ namespace SparkleShare {
 	// This is SparkleShare!
 	public class SparkleShare {
 
+		public static SparkleUI SparkleUI;
+
+
 		// Short alias for the translations
 		public static string _ (string s)
 		{
 			return Catalog.GetString (s);
 		}
 		
-		public static SparkleUI SparkleUI;
 
 		public static void Main (string [] args)
 		{
@@ -60,41 +62,74 @@ namespace SparkleShare {
 				Environment.Exit (0);
 			}
 
-			// Parse the command line arguments
 			bool HideUI = false;
+
+			// Parse the command line arguments
 			if (args.Length > 0) {
+
 				foreach (string Argument in args) {
+
 					if (Argument.Equals ("--disable-gui") || Argument.Equals ("-d"))
 						HideUI = true;
+
+					if (Argument.Equals ("--version") || Argument.Equals ("-v")) {
+
+						PrintVersion ();
+						Environment.Exit (0);
+
+					}
+
 					if (Argument.Equals ("--help") || Argument.Equals ("-h")) {
+
 						ShowHelp ();
 						Environment.Exit (0);
+
 					}
+
 				}
+
 			}
 
 			SparkleUI = new SparkleUI (HideUI);
 			SparkleUI.Run();
+
 		}
+
 
 		// Prints the help output
 		public static void ShowHelp ()
 		{
-			Console.WriteLine (_("SparkleShare Copyright (C) 2010 Hylke Bons"));
+
+			Console.WriteLine (" ");
+			Console.WriteLine (_("SparkleShare, an instant update workflow to Git."));
+			Console.WriteLine (_("Copyright (C) 2010 Hylke Bons"));
 			Console.WriteLine (" ");
 			Console.WriteLine (_("This program comes with ABSOLUTELY NO WARRANTY."));
+			Console.WriteLine (" ");
 			Console.WriteLine (_("This is free software, and you are welcome to redistribute it "));
 			Console.WriteLine (_("under certain conditions. Please read the GNU GPLv3 for details."));
 			Console.WriteLine (" ");
-			Console.WriteLine (_("SparkleShare syncs the ~/SparkleShare folder with remote repositories."));
+			Console.WriteLine (_("SparkleShare automatically syncs Git repositories in "));
+			Console.WriteLine (_("the ~/SparkleShare folder with their remote origins."));
 			Console.WriteLine (" ");
 			Console.WriteLine (_("Usage: sparkleshare [start|stop|restart] [OPTION]..."));
 			Console.WriteLine (_("Sync SparkleShare folder with remote repositories."));
 			Console.WriteLine (" ");
 			Console.WriteLine (_("Arguments:"));
 			Console.WriteLine (_("\t -d, --disable-gui\tDon't show the notification icon."));
-			Console.WriteLine (_("\t -h, --help\t\tDisplay this help text."));
+			Console.WriteLine (_("\t -h, --help\t\tShow this help text."));
+			Console.WriteLine (_("\t -v, --version\t\tPrint version information."));
 			Console.WriteLine (" ");
+
+		}
+
+
+		// Prints the version information
+		public static void PrintVersion ()
+		{
+
+			Console.WriteLine (_("SparkleShare " + Defines.VERSION));
+
 		}
 
 	}
