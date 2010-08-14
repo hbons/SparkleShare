@@ -118,8 +118,8 @@ namespace SparkleShare {
 
 			return delegate { 
 
-				SparkleWindow SparkleWindow = new SparkleWindow (repo);
-				SparkleWindow.ShowAll ();
+				SparkleLog log = new SparkleLog (repo);
+				log.ShowAll ();
 
 			};
 
