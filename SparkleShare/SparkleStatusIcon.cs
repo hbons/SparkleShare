@@ -215,16 +215,23 @@ namespace SparkleShare {
 
 				if (SparkleUI.Repositories.Count > 0) {
 
-					foreach (SparkleRepo SparkleRepo in SparkleUI.Repositories) {
+					foreach (SparkleRepo repo in SparkleUI.Repositories) {
 
-						FolderAction = new Gtk.Action ("", SparkleRepo.Name) {
+						FolderAction = new Gtk.Action ("", repo.Name) {
 							IconName    = "folder",
 							IsImportant = true
 						};
 
-						FolderAction.Activated += CreateWindowDelegate (SparkleRepo);
+						FolderAction.Activated += CreateWindowDelegate (repo);
 
-						Menu.Add (FolderAction.CreateMenuItem ());
+						MenuItem menu_item = (MenuItem) FolderAction.CreateMenuItem ();
+
+						if (repo.Description != null)
+							menu_item.TooltipText = repo.Description;
+						else
+							menu_item.TooltipText = _("No description");
+
+						Menu.Add (menu_item);
 
 					}
 
