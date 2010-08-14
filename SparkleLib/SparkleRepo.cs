@@ -35,6 +35,7 @@ namespace SparkleLib {
 
 		public string Name;
 		public string Domain;
+		public string Description;
 		public string LocalPath;
 		public string RemoteOriginUrl;
 		public string CurrentHash;
@@ -83,6 +84,7 @@ namespace SparkleLib {
 			RemoteOriginUrl = GetRemoteOriginUrl ();
 			CurrentHash     = GetCurrentHash ();
 			Domain          = GetDomain (RemoteOriginUrl);
+			Description     = GetDescription ();
 
 			if (CurrentHash == null)
 				CreateInitialCommit ();
@@ -483,6 +485,27 @@ namespace SparkleLib {
 				domain = domain.Substring (0, domain.IndexOf ("/"));
 
 			return domain;
+
+		}
+
+
+		// Gets the repository's description
+		public string GetDescription ()
+		{
+
+			string description_file_path = SparkleHelpers.CombineMore (LocalPath, ".git", "description");
+
+			if (!File.Exists (description_file_path))
+				return null;
+
+			StreamReader reader = new StreamReader (description_file_path);
+			string description = reader.ReadToEnd ();
+			reader.Close ();
+
+			if (description.StartsWith ("Unnamed"))
+				description = null;
+
+			return description;
 
 		}
 
