@@ -49,8 +49,6 @@ namespace SparkleShare {
 			BusG.Init ();
 			Gtk.Application.Init ();
 
-//			SparkleInvitation i = new SparkleInvitation ("/home/hbons/SparkleShare/sparkleshare.invitation");
-
 			SetProcessName ("sparkleshare");
 
 			Repositories = new List <SparkleRepo> ();
@@ -89,7 +87,18 @@ namespace SparkleShare {
 
 			watcher.Created += delegate (object o, FileSystemEventArgs args) {
 
-				AddRepository (args.FullPath);
+				if (args.Name.EndsWith ("sparkleshare.invitation")) {
+
+					SparkleInvitation invitation;
+					invitation = new SparkleInvitation (args.FullPath);
+
+					invitation.Activate ();
+
+				} else if (Directory.Exists (args.FullPath)) {
+
+					AddRepository (args.FullPath);
+
+				}
 
 			};
 

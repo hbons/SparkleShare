@@ -22,8 +22,16 @@ namespace SparkleShare {
 
 	class SparkleInvitation {
 
+		public string Server;
+		public string Repository;
+		public string Key;
+
+
 		public SparkleInvitation (string file_path)
 		{
+
+			if (!File.Exists (file_path))
+				return;
 
 			XmlDocument xml_doc = new XmlDocument (); 
 			xml_doc.Load (file_path);
@@ -32,9 +40,18 @@ namespace SparkleShare {
 			XmlNodeList repository_xml = xml_doc.GetElementsByTagName ("repository");
 			XmlNodeList key_xml        = xml_doc.GetElementsByTagName ("key");
 
-			string server     = server_xml [0].InnerText;
-			string repository = repository_xml [0].InnerText;
-			string key        = key_xml [0].InnerText;
+			Server     = server_xml [0].InnerText;
+			Repository = repository_xml [0].InnerText;
+			Key        = key_xml [0].InnerText;
+
+		}
+
+
+		public void Activate ()
+		{
+
+			string url = "http://" + Server + "/repo=" + Repository + "&key=" + Key;
+			Console.WriteLine (url);
 
 		}
 
