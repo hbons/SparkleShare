@@ -49,7 +49,7 @@ namespace SparkleShare {
 			BusG.Init ();
 			Gtk.Application.Init ();
 
-			SparkleInvitation i = new SparkleInvitation ("/home/hbons/SparkleShare/sparkleshare.invitation");
+//			SparkleInvitation i = new SparkleInvitation ("/home/hbons/SparkleShare/sparkleshare.invitation");
 
 			SetProcessName ("sparkleshare");
 

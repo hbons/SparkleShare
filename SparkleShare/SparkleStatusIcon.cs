@@ -243,7 +243,7 @@ namespace SparkleShare {
 					add_item.Activated += delegate {
 
 						SparkleIntro intro = new SparkleIntro ();
-						intro.ShowStepTwo (true);
+						intro.ShowServerForm (true);
 						intro.ShowAll ();
 
 					};
