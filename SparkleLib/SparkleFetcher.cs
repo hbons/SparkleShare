@@ -20,6 +20,8 @@ using System.Diagnostics;
 
 namespace SparkleLib {
 
+	// A helper class that fetches and and configures 
+	// a remote repository
 	public class SparkleFetcher {
 
 		public delegate void CloningStartedEventHandler (object o, SparkleEventArgs args);
@@ -98,7 +100,6 @@ namespace SparkleLib {
 		private void InstallUserInfo ()
 		{
 
-			// TODO: Use TargetFolder and move SparklePaths out of SparkleLib
 			string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
 
 			if (File.Exists (global_config_file_path)) {
@@ -124,11 +125,18 @@ namespace SparkleLib {
 		private void InstallExcludeRules ()
 		{
 
-			TextWriter writer = new StreamWriter (SparkleHelpers.CombineMore (TargetFolder, ".git/info/exclude"));
+			string exlude_rules_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "info", "exclude");
 
-			writer.WriteLine ("*~"); // Ignore gedit swap files
-			writer.WriteLine (".*.sw?"); // Ignore vi swap files
-			writer.WriteLine (".DS_store"); // Ignore OSX's invisible directories
+			TextWriter writer = new StreamWriter (exlude_rules_file_path);
+
+			// Ignore gedit swap files
+			writer.WriteLine ("*~");
+
+			// Ignore vi swap files
+			writer.WriteLine (".*.sw?");
+
+			// Ignore OSX's invisible directories
+			writer.WriteLine (".DS_store");
 
 			writer.Close ();
 
