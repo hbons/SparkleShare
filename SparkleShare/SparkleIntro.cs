@@ -724,13 +724,21 @@ namespace SparkleShare {
 
 			string config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
 
+			string name  = NameEntry.Text;
+			string email = EmailEntry.Text;
+
+			// Write the user's information to a text file
 			TextWriter writer = new StreamWriter (config_file_path);
 			writer.WriteLine ("[user]\n" +
-			                  "\tname  = " + NameEntry.Text + "\n" +
-			                  "\temail = " + EmailEntry.Text);
+			                  "\tname  = " + name + "\n" +
+			                  "\temail = " + email);
 			writer.Close ();
 
 			SparkleHelpers.DebugInfo ("Config", "Created '" + config_file_path + "'");
+
+			// Set the user's name and email globally
+			SparkleShare.UserName  = name;
+			SparkleShare.UserEmail = email;
 
 			GenerateKeyPair ();
 

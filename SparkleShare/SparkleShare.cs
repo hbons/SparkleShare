@@ -18,6 +18,7 @@ using Gtk;
 using Mono.Unix;
 using System;
 using System.Diagnostics;
+using System.IO;
 using SparkleLib;
 
 namespace SparkleShare {
@@ -26,6 +27,8 @@ namespace SparkleShare {
 	public class SparkleShare {
 
 		public static SparkleUI SparkleUI;
+		public static string UserName;
+		public static string UserEmail;
 
 
 		// Short alias for the translations
@@ -42,25 +45,38 @@ namespace SparkleShare {
 			Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
 			// Check whether git is installed
-			Process Process = new Process ();
-			Process.StartInfo.FileName = "git";
-			Process.StartInfo.RedirectStandardOutput = true;
-			Process.StartInfo.UseShellExecute = false;
-			Process.Start ();
+			Process process = new Process ();
+			process.StartInfo.FileName = "git";
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute = false;
+			process.Start ();
 
-			if (Process.StandardOutput.ReadToEnd ().IndexOf ("version") == -1) {
+			if (process.StandardOutput.ReadToEnd ().IndexOf ("version") == -1) {
+
 				Console.WriteLine (_("Git wasn't found."));
 				Console.WriteLine (_("You can get Git from http://git-scm.com/."));
+
 				Environment.Exit (0);
+
 			}
 
+
+			UnixUserInfo user_info = new UnixUserInfo (UnixEnvironment.UserName);
+
 			// Don't allow running as root
-			UnixUserInfo UnixUserInfo =	new UnixUserInfo (UnixEnvironment.UserName);
-			if (UnixUserInfo.UserId == 0) {
+			if (user_info.UserId == 0) {
+
 				Console.WriteLine (_("Sorry, you can't run SparkleShare with these permissions."));
 				Console.WriteLine (_("Things would go utterly wrong.")); 
+
 				Environment.Exit (0);
+
 			}
+
+
+			UserName  = GetUserName ();
+			UserEmail = GetUserEmail ();
+
 
 			bool HideUI = false;
 
@@ -129,6 +145,49 @@ namespace SparkleShare {
 		{
 
 			Console.WriteLine (_("SparkleShare " + Defines.VERSION));
+
+		}
+
+
+		// Looks up the user's name from the global configuration
+		public static string GetUserName ()
+		{
+
+			string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
+
+			StreamReader reader = new StreamReader (global_config_file_path);
+
+			// Discard the first line
+			reader.ReadLine ();
+
+			string line = reader.ReadLine ();
+			reader.Close ();
+
+			string name = line.Substring (line.IndexOf ("=") + 2);
+
+			return name;
+
+		}
+
+
+		// Looks up the user's email from the global configuration
+		public static string GetUserEmail ()
+		{
+
+			string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
+
+			StreamReader reader = new StreamReader (global_config_file_path);
+
+			// Discard the first two lines
+			reader.ReadLine ();
+			reader.ReadLine ();
+
+			string line = reader.ReadLine ();
+			reader.Close ();
+
+			string email = line.Substring (line.IndexOf ("=") + 2);
+
+			return email;
 
 		}
 

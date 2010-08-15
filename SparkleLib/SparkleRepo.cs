@@ -558,7 +558,7 @@ namespace SparkleLib {
 				UnixUserInfo unix_user_info = new UnixUserInfo (UnixEnvironment.UserName);
 
 				if (unix_user_info.RealName.Equals (""))
-					user_name = "???";
+					user_name = "Mysterious Stranger";
 				else
 					user_name = unix_user_info.RealName;
 
@@ -582,7 +582,11 @@ namespace SparkleLib {
 			process.StartInfo.WorkingDirectory = LocalPath;
 			process.StartInfo.Arguments = "config --get user.email";
 			process.Start ();
+
 			user_email = process.StandardOutput.ReadToEnd ().Trim ();
+
+			if (user_email.Equals (""))
+				user_email = "Unknown Email";
 
 			return user_email;
 

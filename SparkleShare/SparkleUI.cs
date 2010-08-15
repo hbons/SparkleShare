@@ -30,10 +30,8 @@ namespace SparkleShare {
 
 	public class SparkleUI {
 		
-		public static SparkleStatusIcon NotificationIcon;
 		public static List <SparkleRepo> Repositories;
-
-		private Process Process;
+		public static SparkleStatusIcon NotificationIcon;
 
 
 		// Short alias for the translations
@@ -51,16 +49,12 @@ namespace SparkleShare {
 
 			SetProcessName ("sparkleshare");
 
+			// The list of repositories
 			Repositories = new List <SparkleRepo> ();
-
-			Process = new Process () {
-				EnableRaisingEvents = true
-			};
-			Process.StartInfo.RedirectStandardOutput = true;
-			Process.StartInfo.UseShellExecute = false;
 
 			EnableSystemAutostart ();
 			InstallLauncher ();
+
 
 			// Create the SparkleShare folder and add it to the bookmarks
 			if (!Directory.Exists (SparklePaths.SparklePath)) {
@@ -79,20 +73,25 @@ namespace SparkleShare {
 				Filter                = "*"
 			};
 
+
+			// Remove the repository when a delete event occurs
 			watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
 
 				RemoveRepository (args.FullPath);
 
 			};
 
+			// Add the repository when a create event occurs
 			watcher.Created += delegate (object o, FileSystemEventArgs args) {
 
+				// Handle invitations when the user saves an
+				// invitation into the SparkleShare folder
 				if (args.Name.EndsWith ("sparkleshare.invitation")) {
 
 					SparkleInvitation invitation;
 					invitation = new SparkleInvitation (args.FullPath);
 
-					invitation.Activate ();
+					Application.Invoke (delegate { invitation.PresentInvitation (); });
 
 				} else if (Directory.Exists (args.FullPath)) {
 
@@ -106,18 +105,22 @@ namespace SparkleShare {
 			CreateConfigurationFolders ();
 			PopulateRepositories ();
 
-			// Don't create the window and status 
-			// icon when --disable-gui was given
+
+			// Don't create the window and status icon when
+			// the --disable-gui command line argument was given
 			if (!HideUI) {
 
-				// Show the intro screen if there are no folders
-				if (Repositories.Count == 0) {
+				string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
+
+				// Show the introduction screen if SparkleShare isn't configured
+				if (!File.Exists (global_config_file_path)) {
 
 					SparkleIntro intro = new SparkleIntro ();
 					intro.ShowAll ();
 
 				}
 
+				// Create the statusicon
 				NotificationIcon = new SparkleStatusIcon ();
 
 			}
@@ -125,10 +128,10 @@ namespace SparkleShare {
 		}
 
 
+		// Runs the main loop
 		public void Run ()
 		{
 
-			// The main loop
 			Gtk.Application.Run ();
 
 		}
@@ -165,8 +168,8 @@ namespace SparkleShare {
 		}
 
 
-		// Creates .desktop entry in autostart folder to
-		// start SparkleShare automnatically at login
+		// Creates a .desktop entry in autostart folder to
+		// start SparkleShare automatically at login
 		public void EnableSystemAutostart ()
 		{
 		
@@ -235,7 +238,7 @@ namespace SparkleShare {
 
 
 		// Adds the SparkleShare folder to the user's
-		// list of bookmarked folders
+		// list of bookmarked places
 		public void AddToBookmarks ()
 		{
 
@@ -267,20 +270,26 @@ namespace SparkleShare {
 		}
 
 
-		// Creates the SparkleShare folder in the user's home folder if
-		// it's not already there
+		// Creates the SparkleShare folder in the user's home folder
 		public void CreateSparkleShareFolder ()
 		{
 		
 			Directory.CreateDirectory (SparklePaths.SparklePath);
 			SparkleHelpers.DebugInfo ("Config", "Created '" + SparklePaths.SparklePath + "'");
-				
+
+			string icon_file_path = SparkleHelpers.CombineMore (Defines.PREFIX, "share", "icons", "hicolor", "48x48",
+				"apps", "folder-sparkleshare.png");
+
+			Process process = new Process ();
+
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute = false;
+
 			// Add a special icon to the SparkleShare folder
-			Process.StartInfo.FileName = "gvfs-set-attribute";
-			Process.StartInfo.Arguments = SparklePaths.SparklePath + " metadata::custom-icon " +
-			                              "file://" + SparkleHelpers.CombineMore (Defines.PREFIX, "share", "icons",
-			                              	"hicolor", "48x48", "apps", "folder-sparkleshare.png");
-			Process.Start ();
+			process.StartInfo.FileName  = "gvfs-set-attribute";
+			process.StartInfo.Arguments = SparklePaths.SparklePath + " metadata::custom-icon " +
+			                              "file://" + icon_file_path;
+			process.Start ();
 		
 		}
 
@@ -305,7 +314,8 @@ namespace SparkleShare {
 
 		// Shows a notification bubble when there
 		// was a conflict
-		public void ShowConflictBubble (object o, EventArgs args) {
+		public void ShowConflictBubble (object o, EventArgs args)
+		{
 
 			string title   = _("Ouch! Mid-air collision!");
 			string subtext = _("Don't worry, SparkleShare made a copy of each conflicting file.");
@@ -336,7 +346,10 @@ namespace SparkleShare {
 		}
 
 
-		public void AddRepository (string folder_path) {
+		// Adds a repository to the list of repositories and
+		// updates the statusicon menu
+		public void AddRepository (string folder_path)
+		{
 		
 			// Check if the folder is a git repo
 			if (!Directory.Exists (SparkleHelpers.CombineMore (folder_path, ".git")))
@@ -380,7 +393,10 @@ namespace SparkleShare {
 		}
 
 
-		public void RemoveRepository (string folder_path) {
+		// Removes a repository from the list of repositories and
+		// updates the statusicon menu
+		public void RemoveRepository (string folder_path)
+		{
 
 			string repo_name = Path.GetFileName (folder_path);
 
@@ -435,10 +451,7 @@ namespace SparkleShare {
 		}
 
 
-		[DllImport ("libc")]
-		private static extern int prctl (int option, byte [] arg2, IntPtr arg3,	IntPtr arg4, IntPtr arg5);
-
-
+		// Method to set the unix process name to 'sparkleshare' instead of 'mono'
 		private void SetProcessName (string name)
 		{
 
@@ -451,9 +464,18 @@ namespace SparkleShare {
 
 				}
 
-			} catch (EntryPointNotFoundException) {}
+			} catch (EntryPointNotFoundException) {
+
+				Console.WriteLine ("SetProcessName: Entry point not found");
+
+			}
 
 		}
+
+
+		// Strange magic needed by SetProcessName
+		[DllImport ("libc")]
+		private static extern int prctl (int option, byte [] arg2, IntPtr arg3,	IntPtr arg4, IntPtr arg5);
 
 	}
 
