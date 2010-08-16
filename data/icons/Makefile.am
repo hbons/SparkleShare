@@ -12,13 +12,7 @@ system_theme_icons =					\
 
 app_theme_icons =					\
 	animations,process-syncing-sparkleshare-24.png	\
-	animations,process-working-22.png	\
-	places,folder-16.png				\
-	places,folder-22.png				\
-	places,folder-24.png				\
-	places,folder-256.png				\
-	places,folder-32.png				\
-	places,folder-48.png				\
+	animations,process-working-22.png		\
 	places,folder-sparkleshare-16.png		\
 	places,folder-sparkleshare-22.png		\
 	places,folder-sparkleshare-24.png		\
