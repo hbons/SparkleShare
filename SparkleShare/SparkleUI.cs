@@ -118,6 +118,11 @@ namespace SparkleShare {
 					SparkleIntro intro = new SparkleIntro ();
 					intro.ShowAll ();
 
+				} else {
+
+					SparkleShare.UserName  = SparkleShare.GetUserName ();
+					SparkleShare.UserEmail = SparkleShare.GetUserEmail ();
+
 				}
 
 				// Create the statusicon

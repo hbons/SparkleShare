@@ -74,10 +74,6 @@ namespace SparkleShare {
 			}
 
 
-			UserName  = GetUserName ();
-			UserEmail = GetUserEmail ();
-
-
 			bool HideUI = false;
 
 			// Parse the command line arguments
