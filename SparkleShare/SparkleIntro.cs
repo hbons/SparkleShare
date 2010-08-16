@@ -387,9 +387,7 @@ namespace SparkleShare {
 					};
 	
 					try_again_button.Clicked += delegate (object o, EventArgs args) {
-
 						ShowServerForm ();
-
 					};
 	
 				AddButton (try_again_button);
@@ -482,24 +480,13 @@ namespace SparkleShare {
 
 
 							Button button = new Button () {
-								Sensitive = false
+								Sensitive = false,
+								Label = _("Finish")
 							};
 			
-							if (ServerFormOnly) {
-
-								button.Label = _("Finish");
-								button.Clicked += delegate {
-									Destroy ();
-								};
-
-							} else {
-
-								button.Label = _("Next");
-								button.Clicked += delegate {
-									ShowCompletedPage ();
-								};
-
-							}
+							button.Clicked += delegate {
+								Destroy ();
+							};
 
 						AddButton (button);
 
@@ -584,7 +571,6 @@ namespace SparkleShare {
 		{
 
 			string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
-
 			string tmp_folder = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, canonical_name);
 
 			SparkleFetcher fetcher = new SparkleFetcher (url, tmp_folder);
@@ -601,7 +587,7 @@ namespace SparkleShare {
 
 				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Repository cloned");
 
-				ClearAttributes (tmp_folder);
+				SparkleHelpers.ClearAttributes (tmp_folder);
 
 				try {
 
@@ -644,7 +630,7 @@ namespace SparkleShare {
 
 				if (Directory.Exists (tmp_folder)) {
 
-					ClearAttributes (tmp_folder);
+					SparkleHelpers.ClearAttributes (tmp_folder);
 					Directory.Delete (tmp_folder, true);
 
 					SparkleHelpers.DebugInfo ("Config", "[" + name + "] Deleted temporary directory");
@@ -827,27 +813,6 @@ namespace SparkleShare {
 		{
 			
 			return Regex.Match (url, @"ssh://(.)+").Success;
-
-		}
-
-
-		// Recursively sets access rights of a folder to 'Normal'
-		private void ClearAttributes (string path)
-		{
-
-			if (Directory.Exists (path)) {
-
-				string [] folders = Directory .GetDirectories (path);
-
-				foreach (string folder in folders)
-					ClearAttributes (folder);
-
-				string [] files = Directory .GetFiles(path);
-
-				foreach (string file in files)
-					File.SetAttributes (file, FileAttributes.Normal);
-
-			}
 
 		}
 
