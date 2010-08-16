@@ -188,6 +188,26 @@ namespace SparkleLib {
 		}
 
 
+		// Recursively sets access rights of a folder to 'Normal'
+		public static void ClearAttributes (string path)
+		{
+
+			if (Directory.Exists (path)) {
+
+				string [] folders = Directory .GetDirectories (path);
+
+				foreach (string folder in folders)
+					ClearAttributes (folder);
+
+				string [] files = Directory .GetFiles(path);
+
+				foreach (string file in files)
+					File.SetAttributes (file, FileAttributes.Normal);
+
+			}
+
+		}
+
 	}
 
 }
