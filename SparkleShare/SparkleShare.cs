@@ -17,9 +17,11 @@
 using Gtk;
 using Mono.Unix;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using SparkleLib;
+using Mono.Options;
 
 namespace SparkleShare {
 
@@ -75,32 +77,25 @@ namespace SparkleShare {
 
 
 			bool HideUI = false;
+			bool ShowHelp = false;
+			var p = new OptionSet () {
+				{ "d|disable-gui", _("Don't show the notification icon"), v => HideUI = v != null },
+				{ "v|version", _("Show this help text."), v => { PrintVersion (); Environment.Exit (0); } },
+				{ "h|help", _("Print version information."), v=> ShowHelp = v != null }
+			};
 
-			// Parse the command line arguments
-			if (args.Length > 0) {
-
-				foreach (string Argument in args) {
-
-					if (Argument.Equals ("--disable-gui") || Argument.Equals ("-d"))
-						HideUI = true;
-
-					if (Argument.Equals ("--version") || Argument.Equals ("-v")) {
-
-						PrintVersion ();
-						Environment.Exit (0);
-
-					}
-
-					if (Argument.Equals ("--help") || Argument.Equals ("-h")) {
-
-						ShowHelp ();
-						Environment.Exit (0);
-
-					}
-
-				}
-
+			List<string> extra;
+			try {
+				extra = p.Parse (args);
 			}
+			catch (OptionException e) {
+				Console.Write ("SparkleShare: ");
+				Console.WriteLine (e.Message);
+				Console.WriteLine ("Try `sparkleshare --help' for more information.");
+			}
+
+			if (ShowHelp)
+				DisplayHelp(p);
 
 			SparkleUI = new SparkleUI (HideUI);
 			SparkleUI.Run();
@@ -109,9 +104,8 @@ namespace SparkleShare {
 
 
 		// Prints the help output
-		public static void ShowHelp ()
+		public static void DisplayHelp (OptionSet p)
 		{
-
 			Console.WriteLine (" ");
 			Console.WriteLine (_("SparkleShare, an instant update workflow to Git."));
 			Console.WriteLine (_("Copyright (C) 2010 Hylke Bons"));
@@ -128,11 +122,8 @@ namespace SparkleShare {
 			Console.WriteLine (_("Sync SparkleShare folder with remote repositories."));
 			Console.WriteLine (" ");
 			Console.WriteLine (_("Arguments:"));
-			Console.WriteLine (_("\t -d, --disable-gui\tDon't show the notification icon."));
-			Console.WriteLine (_("\t -h, --help\t\tShow this help text."));
-			Console.WriteLine (_("\t -v, --version\t\tPrint version information."));
-			Console.WriteLine (" ");
-
+			p.WriteOptionDescriptions (Console.Out);
+			Environment.Exit (0);
 		}
 
 
