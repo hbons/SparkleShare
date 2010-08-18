@@ -80,8 +80,8 @@ namespace SparkleShare {
 			bool ShowHelp = false;
 			var p = new OptionSet () {
 				{ "d|disable-gui", _("Don't show the notification icon"), v => HideUI = v != null },
-				{ "v|version", _("Show this help text."), v => { PrintVersion (); Environment.Exit (0); } },
-				{ "h|help", _("Print version information."), v=> ShowHelp = v != null }
+				{ "v|version", _("Show this help text"), v => { PrintVersion (); Environment.Exit (0); } },
+				{ "h|help", _("Print version information"), v=> ShowHelp = v != null }
 			};
 
 			try {
