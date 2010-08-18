@@ -146,7 +146,7 @@ using NDesk.Options;
 #if NDESK_OPTIONS
 namespace NDesk.Options
 #else
-namespace Mono.Options
+namespace SparkleLib.Options
 #endif
 {
 	public class OptionValueCollection : IList, IList<string> {

@@ -5,7 +5,7 @@ LINK = $(REF_SPARKLELIB)
 
 SOURCES =  \
 	Defines.cs \
-	MonoOptions.cs \
+	SparkleOptions.cs \
 	SparkleFetcher.cs \
 	SparkleHelpers.cs \
 	SparklePaths.cs \

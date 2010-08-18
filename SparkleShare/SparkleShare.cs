@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using SparkleLib;
-using Mono.Options;
+using SparkleLib.Options;
 
 namespace SparkleShare {
 
@@ -84,9 +84,8 @@ namespace SparkleShare {
 				{ "h|help", _("Print version information."), v=> ShowHelp = v != null }
 			};
 
-			List<string> extra;
 			try {
-				extra = p.Parse (args);
+				p.Parse (args);
 			}
 			catch (OptionException e) {
 				Console.Write ("SparkleShare: ");
