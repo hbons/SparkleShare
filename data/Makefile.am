@@ -2,7 +2,9 @@ SUBDIRS = \
 	icons
 
 EXTRA_DIST = \
-	sparkleshare.svg \
+	sparkleshare-gnome.svg \
+	sparkleshare-mist.svg \
+	work-status-icons.svg \
 	side-splash.png
 
 MAINTAINERCLEANFILES = \

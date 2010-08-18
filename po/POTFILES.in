@@ -12,6 +12,7 @@ SparkleLib/SparkleRepo.cs
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in
 SparkleShare/SparkleBubble.cs
 SparkleShare/SparkleIntro.cs
+SparkleShare/SparkleInvitation.cs
 SparkleShare/SparkleLog.cs
 SparkleShare/SparkleShare.cs
 SparkleShare/SparkleSpinner.cs
