@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pidfile=/tmp/sparkleshare/sparkleshare.pid
+pidfile=${HOME}/SparkleShare/.tmp/sparkleshare.pid
 
 start() {
   if [ -e "${pidfile}" ]; then
