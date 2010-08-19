@@ -301,15 +301,26 @@ namespace SparkleShare {
 
 		// Shows a notification bubble when someone
 		// made a change to the repository
-		public void ShowNewCommitBubble (string author, string email, string message) {
+		public void ShowNewCommitBubble (string author, string email, string message, string repository_name) {
 
 			string notify_settings_file = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
 				"sparkleshare.notify");
 
 			if (File.Exists (notify_settings_file)) {
 
-				SparkleBubble bubble= new SparkleBubble (author, message);
-				bubble.Icon = SparkleHelpers.GetAvatar (email, 32);
+				SparkleBubble bubble = new SparkleBubble (author, message) {
+					Icon = SparkleHelpers.GetAvatar (email, 32)				
+				};
+
+				bubble.AddAction ("ShowDetails", "Show Events", delegate {
+				
+					string path = SparkleHelpers.CombineMore (SparklePaths.SparklePath, repository_name);
+
+					SparkleLog log = new SparkleLog (path);
+					log.ShowAll ();
+				
+				});
+
 				bubble.Show ();
 
 			}
@@ -363,7 +374,8 @@ namespace SparkleShare {
 			SparkleRepo repo = new SparkleRepo (folder_path);
 
 			repo.NewCommit += delegate (object o, NewCommitArgs args) {
-				Application.Invoke (delegate { ShowNewCommitBubble (args.Author, args.Email, args.Message); });
+				Application.Invoke (delegate { ShowNewCommitBubble (args.Author, args.Email, args.Message,
+					args.RepositoryName); });
 			};
 
 			repo.Commited += delegate (object o, SparkleEventArgs args) {
