@@ -393,7 +393,7 @@ namespace SparkleLib {
 				Process.Start ();
 				string message = Process.StandardOutput.ReadToEnd ().Trim ();
 
-				NewCommitArgs new_commit_args = new NewCommitArgs (author, email, message);
+				NewCommitArgs new_commit_args = new NewCommitArgs (author, email, message, Name);
 
 				if (NewCommit != null)
 			        NewCommit (this, new_commit_args);
@@ -741,13 +741,15 @@ namespace SparkleLib {
 	    public string Author;
 	    public string Email;
 	    public string Message;
+	    public string RepositoryName;
 
-	    public NewCommitArgs (string author, string email, string message)
+	    public NewCommitArgs (string author, string email, string message, string repository_name)
     	{
 
     		Author  = author;
     		Email   = email;
 	        Message = message;
+	        RepositoryName = repository_name;
 
 	    }
 

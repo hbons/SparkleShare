@@ -113,12 +113,12 @@ namespace SparkleShare {
 		}
 
 
-		private EventHandler CreateWindowDelegate (SparkleRepo repo)
+		private EventHandler CreateWindowDelegate (string path)
 		{
 
 			return delegate { 
 
-				SparkleLog log = new SparkleLog (repo);
+				SparkleLog log = new SparkleLog (path);
 				log.ShowAll ();
 
 			};
@@ -222,7 +222,7 @@ namespace SparkleShare {
 							IsImportant = true
 						};
 
-						FolderAction.Activated += CreateWindowDelegate (repo);
+						FolderAction.Activated += CreateWindowDelegate (repo.LocalPath);
 
 						MenuItem menu_item = (MenuItem) FolderAction.CreateMenuItem ();
 
