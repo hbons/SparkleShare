@@ -24,9 +24,9 @@ using System.Text.RegularExpressions;
 
 namespace SparkleShare {
 
-	public class SparkleLog : Window	{
+	public class SparkleLog : Window {
 
-		private SparkleRepo SparkleRepo;
+		private string LocalPath;
 		private VBox LayoutVertical;
 		private ScrolledWindow ScrolledWindow;
 
@@ -38,16 +38,18 @@ namespace SparkleShare {
 		}
 
 
-		public SparkleLog (SparkleRepo sparkle_repo) : base ("")
+		public SparkleLog (string path) : base ("")
 		{
 
-			SparkleRepo = sparkle_repo;
+			LocalPath = path;
+			
+			string name = System.IO.Path.GetFileName (LocalPath);
 			SetSizeRequest (540, 640);
 	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 12;
 			
 			// TRANSLATORS: {0} is a folder name, and {1} is a server address
-			Title = String.Format(_("Recent Events in ‘{0}’"), SparkleRepo.Name);
+			Title = String.Format(_("Recent Events in ‘{0}’"), name);
 			IconName = "folder";
 
 			LayoutVertical = new VBox (false, 12);
@@ -63,11 +65,9 @@ namespace SparkleShare {
 
 					open_folder_button.Clicked += delegate (object o, EventArgs args) {
 
-						string path = SparkleHelpers.CombineMore (SparklePaths.SparklePath, SparkleRepo.Name);
-
 						Process process = new Process ();
 						process.StartInfo.FileName  = "xdg-open";
-						process.StartInfo.Arguments = path.Replace (" ", "\\ "); // Escape space-characters
+						process.StartInfo.Arguments = LocalPath.Replace (" ", "\\ "); // Escape space-characters
 						process.Start ();
 
 						Destroy ();
@@ -113,7 +113,7 @@ namespace SparkleShare {
 
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.WorkingDirectory = SparkleRepo.LocalPath;
+			process.StartInfo.WorkingDirectory = LocalPath;
 			process.StartInfo.FileName = "git";
 			process.StartInfo.Arguments = "log --format=\"%at☃%an☃%ae☃%s\" -" + number_of_events;
 
