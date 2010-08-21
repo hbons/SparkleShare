@@ -553,6 +553,8 @@ namespace SparkleShare {
 
 						if (SparkleUI.NotificationIcon == null)
 							SparkleUI.NotificationIcon = new SparkleStatusIcon ();
+						else
+							SparkleUI.NotificationIcon.CreateMenu ();
 
 						Destroy ();
 
