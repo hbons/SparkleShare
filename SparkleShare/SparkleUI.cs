@@ -312,7 +312,7 @@ namespace SparkleShare {
 					Icon = SparkleHelpers.GetAvatar (email, 32)				
 				};
 
-				bubble.AddAction ("ShowDetails", "Show Events", delegate {
+				bubble.AddAction ("", "Show Events", delegate {
 				
 					string path = SparkleHelpers.CombineMore (SparklePaths.SparklePath, repository_name);
 

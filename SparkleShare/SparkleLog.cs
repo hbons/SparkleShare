@@ -50,7 +50,7 @@ namespace SparkleShare {
 			
 			// TRANSLATORS: {0} is a folder name, and {1} is a server address
 			Title = String.Format(_("Recent Events in ‘{0}’"), name);
-			IconName = "folder";
+			IconName = "folder-sparkleshare";
 
 			LayoutVertical = new VBox (false, 12);
 
@@ -105,7 +105,7 @@ namespace SparkleShare {
 		private ScrolledWindow CreateEventLog ()
 		{
 
-			int number_of_events = 50;
+			int number_of_events = 40;
 
 			Process process = new Process () {
 				EnableRaisingEvents = true
@@ -115,7 +115,7 @@ namespace SparkleShare {
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = LocalPath;
 			process.StartInfo.FileName = "git";
-			process.StartInfo.Arguments = "log --format=\"%at☃%an☃%ae☃%s\" -" + number_of_events;
+			process.StartInfo.Arguments = "log --format=\"%at☃%an☃%ae☃%s☃%H\" -" + number_of_events;
 
 			process.Start ();
 
@@ -144,12 +144,41 @@ namespace SparkleShare {
 					string user_name  = parts [1];
 					string user_email = parts [2];
 					string message    = parts [3];
+					string hash       = parts [4];
 
 					DateTime date_time = UnixTimestampToDateTime (unix_timestamp);
 
 					message = message.Replace ("\n", " ");
 
-					ChangeSet change_set = new ChangeSet (user_name, user_email, message, date_time);
+					ChangeSet change_set = new ChangeSet (user_name, user_email, message, date_time, hash);
+
+					process.StartInfo.Arguments = "show " + hash + " --name-status";
+					process.Start ();
+
+
+					output = process.StandardOutput.ReadToEnd ().Trim ();
+
+					output = output.TrimStart ("\n".ToCharArray ());
+					string [] file_lines = Regex.Split (output, "\n");
+
+					foreach (string file_line in file_lines) {
+
+						string file_path = "";
+
+						if (file_line.Length > 1)
+							file_path = file_line.Substring (2);
+
+						if (file_line.StartsWith ("M\t"))
+							change_set.Edited.Add (file_path);
+
+						if (file_line.StartsWith ("A\t"))
+							change_set.Added.Add (file_path);
+
+						if (file_line.StartsWith ("D\t"))
+							change_set.Deleted.Add (file_path);
+			
+					}
+
 
 					bool change_set_inserted = false;
 					foreach (ActivityDay stored_activity_day in activity_days) {
@@ -193,14 +222,49 @@ namespace SparkleShare {
 
 					iter = list_store.Append ();
 
+
+					string edited_files = "";
+					foreach (string file_path in change_set.Edited)
+						edited_files += "\n" + file_path;
+
+					string added_files = "";
+					foreach (string file_path in change_set.Added)
+						added_files += "\n" + file_path;
+
+					string deleted_files = "";
+					foreach (string file_path in change_set.Deleted)
+						deleted_files += "\n" + file_path;
+
+
+					string log_entry = "<b>" + change_set.UserName + "</b>\n" +
+					                   "<span fgcolor='" + secondary_text_color +"'><small>" +
+					                   "at " + change_set.DateTime.ToString ("HH:mm") +
+					                   "</small></span>";
+					                   
+					if (!edited_files.Equals ("")) {
+
+						log_entry += "\n\n<span fgcolor='" + secondary_text_color +"'><small>Edited</small></span>" +
+						             edited_files;
+
+					}
+
+					if (!added_files.Equals ("")) {
+
+						log_entry += "\n\n<span fgcolor='" + secondary_text_color +"'><small>Added</small></span>" +
+						             added_files;
+
+					}
+
+					if (!deleted_files.Equals ("")) {
+
+						log_entry += "\n\n<span fgcolor='" + secondary_text_color +"'><small>Deleted</small></span>" +
+						             deleted_files;
+
+					}
+
+
 					list_store.SetValue (iter, 0, SparkleHelpers.GetAvatar (change_set.UserEmail , 32));
-
-					list_store.SetValue (iter, 1, "<b>" + change_set.UserName + "</b>\n" +
-					                              "<span fgcolor='" + secondary_text_color +"'>" + 
-					                              change_set.Message + "\n" +
-					                              "<small>" + change_set.DateTime.ToString ("HH:mm") + "</small>" +
-					                              "</span>");
-
+					list_store.SetValue (iter, 1, log_entry);
 					list_store.SetValue (iter, 2, change_set.UserEmail);
 
 				}
@@ -303,14 +367,25 @@ namespace SparkleShare {
 		public string UserName;
 		public string UserEmail;
 		public string Message;
+		public List <string> Added;
+		public List <string> Deleted;
+		public List <string> Edited;
 		public DateTime DateTime;
+		public string Hash;
 	
-		public ChangeSet (string user_name, string user_email, string message, DateTime date_time)
+		public ChangeSet (string user_name, string user_email, string message, DateTime date_time, string hash)
 		{
+
 			UserName  = user_name;
 			UserEmail = user_email;
 			Message   = message;
 			DateTime  = date_time;
+			Hash      = hash;
+
+			Edited  = new List <string> ();
+			Added   = new List <string> ();
+			Deleted = new List <string> ();
+
 		}
 	
 	}
