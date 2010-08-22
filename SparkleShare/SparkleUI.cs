@@ -123,6 +123,8 @@ namespace SparkleShare {
 					SparkleShare.UserName  = SparkleShare.GetUserName ();
 					SparkleShare.UserEmail = SparkleShare.GetUserEmail ();
 
+					SparkleShare.AddKey ();
+
 				}
 
 				// Create the statusicon
@@ -468,7 +470,7 @@ namespace SparkleShare {
 		}
 
 
-		// Method to set the unix process name to 'sparkleshare' instead of 'mono'
+		// Sets the unix process name to 'sparkleshare' instead of 'mono'
 		private void SetProcessName (string name)
 		{
 
