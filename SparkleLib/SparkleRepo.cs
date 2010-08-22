@@ -26,8 +26,8 @@ namespace SparkleLib {
 	public class SparkleRepo {
 
 		private Process Process;
-		private Timer FetchTimer;
-		private Timer BufferTimer;
+		private Timer RemoteTimer;
+		private Timer LocalTimer;
 		private FileSystemWatcher Watcher;
 		private bool HasChanged;
 		private DateTime LastChange;
@@ -104,27 +104,27 @@ namespace SparkleLib {
 
 
 			// Fetch remote changes every minute
-			FetchTimer = new Timer () {
-				Interval = 60000
+			RemoteTimer = new Timer () {
+				Interval = 10000
 			};
 
-			FetchTimer.Elapsed += delegate { 
-				Fetch ();
+			RemoteTimer.Elapsed += delegate { 
+				CheckForRemoteChanges ();
 			};
 
 
-			// Keep a buffer that checks if there are changes and
+			// Keep a Local that checks if there are changes and
 			// whether they have settled
-			BufferTimer = new Timer () {
+			LocalTimer = new Timer () {
 				Interval = 4000
 			};
 
-			BufferTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
+			LocalTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
 				CheckForChanges ();
 			};
 
-			FetchTimer.Start ();
-			BufferTimer.Start ();
+			RemoteTimer.Start ();
+			LocalTimer.Start ();
 
 
 			// Add everything that changed 
@@ -139,6 +139,38 @@ namespace SparkleLib {
 		}
 
 
+		private void CheckForRemoteChanges ()
+		{
+
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Checking for remote changes...");
+
+			Process process = new Process () {
+				EnableRaisingEvents = true
+			};
+
+			process.StartInfo.FileName               = "git";
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute        = false;
+			process.StartInfo.WorkingDirectory       = LocalPath;
+			process.StartInfo.Arguments = "ls-remote origin master";
+			process.Start ();
+
+			process.Exited += delegate {
+
+			string remote_hash = process.StandardOutput.ReadToEnd ();
+
+				if (!remote_hash.StartsWith (CurrentHash)) {
+
+					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found.");
+					Fetch ();
+
+				}
+
+			};
+
+		}
+
+
 		private void CheckForChanges ()
 		{
 
@@ -146,14 +178,14 @@ namespace SparkleLib {
 
 				if (HasChanged) {
 
-					SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes found, checking if settled.");
+					SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes found, checking if settled.");
 
 					DateTime now     = DateTime.UtcNow;
 					TimeSpan changed = new TimeSpan (now.Ticks - LastChange.Ticks);
 
 					if (changed.TotalMilliseconds > 5000) {
 						HasChanged = false;
-						SparkleHelpers.DebugInfo ("Buffer", "[" + Name + "] Changes have settled, adding files...");
+						SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled, adding files...");
 						AddCommitAndPush ();
 					}
 
@@ -164,7 +196,7 @@ namespace SparkleLib {
 		}
 
 
-		// Starts a time buffer when something changes
+		// Starts a time Local when something changes
 		private void OnFileActivity (object o, FileSystemEventArgs args)
 		{
 
@@ -174,7 +206,7 @@ namespace SparkleLib {
 
 				SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + args.Name + "'");
 
-				FetchTimer.Stop ();
+				RemoteTimer.Stop ();
 
 				lock (ChangeLock) {
 
@@ -195,8 +227,8 @@ namespace SparkleLib {
 
 			try {
 
-				BufferTimer.Stop ();
-				FetchTimer.Stop ();
+				LocalTimer.Stop ();
+				RemoteTimer.Stop ();
 	
 				Add ();
 
@@ -205,15 +237,15 @@ namespace SparkleLib {
 				if (!message.Equals ("")) {
 
 					Commit (message);
-					Fetch ();
+					CheckForRemoteChanges ();
 					Push ();
 
 				}
 
 			} finally {
 
-				FetchTimer.Start ();
-				BufferTimer.Start ();
+				RemoteTimer.Start ();
+				LocalTimer.Start ();
 
 			}
 
@@ -223,8 +255,6 @@ namespace SparkleLib {
 		// Stages the made changes
 		private void Add ()
 		{
-
-			// TODO: Check whether adding files is neccassary
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Staging changes...");
 
@@ -265,7 +295,7 @@ namespace SparkleLib {
 		public void Fetch ()
 		{
 
-			FetchTimer.Stop ();
+			RemoteTimer.Stop ();
 
 			Process process = new Process () {
 				EnableRaisingEvents = true
@@ -292,8 +322,6 @@ namespace SparkleLib {
 
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
 
-				// TODO: this doesn't exit sometimes
-
 				args = new SparkleEventArgs ("FetchingFinished");
 
 				if (FetchingFinished != null)
@@ -301,7 +329,9 @@ namespace SparkleLib {
 
 				Rebase ();
 
-				FetchTimer.Start ();
+				RemoteTimer.Start ();
+
+				CurrentHash = GetCurrentHash ();
 
 			};
 
@@ -312,7 +342,7 @@ namespace SparkleLib {
 		public void Rebase ()
 		{
 
-			Add (); // TODO: Experiment for the "You have unstaged changes" bug
+			Add ();
 
 			Watcher.EnableRaisingEvents = false;
 
@@ -374,7 +404,6 @@ namespace SparkleLib {
 					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
 
 					Push ();
-					Fetch ();
 			
 				}
 
@@ -438,8 +467,8 @@ namespace SparkleLib {
 		public void Stop ()
 		{
 
-			FetchTimer.Stop ();
-			BufferTimer.Stop ();
+			RemoteTimer.Stop ();
+			LocalTimer.Stop ();
 
 		}
 
