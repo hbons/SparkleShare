@@ -304,7 +304,8 @@ namespace SparkleShare {
 					MarkupColumn = 1,
 					Orientation  = Orientation.Horizontal,
 					PixbufColumn = 0,
-					Spacing      = 9
+					Spacing      = 9,
+					Columns      = 1
 				};
 
 				icon_view.SelectionChanged += delegate {

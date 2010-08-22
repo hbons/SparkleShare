@@ -177,6 +177,24 @@ namespace SparkleShare {
 
 		}
 
+
+		// Adds the user's SparkleShare key to the ssh-agent,
+		// so all activity is done with this key
+		public static void AddKey ()
+		{
+
+			string keys_path = Path.Combine (SparklePaths.HomePath, ".ssh");
+			string key_file_name = "sparkleshare." + UserEmail + ".key";
+
+			Process process = new Process ();
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute        = false;
+			process.StartInfo.FileName               = "ssh-add";
+			process.StartInfo.Arguments              = Path.Combine (keys_path, key_file_name);
+			process.Start ();
+
+		}
+
 	}
 	
 }

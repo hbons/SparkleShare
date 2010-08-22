@@ -729,6 +729,7 @@ namespace SparkleShare {
 			SparkleShare.UserEmail = email;
 
 			GenerateKeyPair ();
+			SparkleShare.AddKey ();
 
 		}
 
@@ -784,7 +785,11 @@ namespace SparkleShare {
 				process.StartInfo.UseShellExecute = false;
 				process.StartInfo.RedirectStandardOutput = true;
 				process.StartInfo.FileName = "ssh-keygen";
-				process.StartInfo.Arguments = "-t rsa -P " + user_email + " -f " + key_file_name;
+				
+				// -t is the crypto type
+				// -P is the password (none)
+				// -f is the file name to store the private key in
+				process.StartInfo.Arguments = "-t rsa -P \"\" -f " + key_file_name;
 
 				process.Start ();
 
