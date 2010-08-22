@@ -51,6 +51,11 @@ For help:
 
    $ sparkleshare --help
 
+Note:
+
+	SparkleShare creates its own RSA keypair in ~/.ssh and uses that for authentication.
+	Please mind this if you're planning to set up your own server by hand.
+
 
 Build
 =====
@@ -89,6 +94,9 @@ http://gitorious.org/sparkleshare
 
 Wiki:
 http://gitorious.org/sparkleshare/pages/Home
+
+Bugtracker:
+http://bugzilla.gnome.org/
 
 
 Now have fun and create cool things together! :)
