@@ -156,8 +156,11 @@ namespace SparkleLib {
 			process.Start ();
 
 			process.Exited += delegate {
+			
+				if (process.ExitCode != 0)
+					return;
 
-			string remote_hash = process.StandardOutput.ReadToEnd ();
+				string remote_hash = process.StandardOutput.ReadToEnd ();
 
 				if (!remote_hash.StartsWith (CurrentHash)) {
 
