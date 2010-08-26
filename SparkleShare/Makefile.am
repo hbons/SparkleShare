@@ -12,6 +12,7 @@ SOURCES =  \
 	SparkleEntry.cs \
 	SparkleIntro.cs \
 	SparkleInvitation.cs \
+	SparkleLink.cs \
 	SparkleLog.cs \
 	SparkleShare.cs \
 	SparkleSpinner.cs \
