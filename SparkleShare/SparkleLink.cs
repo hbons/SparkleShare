@@ -35,7 +35,7 @@ namespace SparkleShare {
 			Add (label);
 
 			// Only make links for files that exist
-			if (!File.Exists (url))
+			if (!url.StartsWith ("http://") && !File.Exists (url))
 				return;
 
 			// Use Tango blue for the links
@@ -44,10 +44,10 @@ namespace SparkleShare {
 			label.ModifyFg (StateType.Normal, color);
 
 			// Open the URL when it is clicked
-			ButtonPressEvent += delegate {
+			ButtonReleaseEvent += delegate {
 
 				Process process = new Process ();
-				process.StartInfo.FileName  = "xdg-open";
+				process.StartInfo.FileName  = "gnome-open";
 				process.StartInfo.Arguments = url.Replace (" ", "\\ "); // Escape space-characters
 				process.Start ();
 
