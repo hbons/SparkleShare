@@ -6,6 +6,7 @@ SparkleDiff/SparkleDiff.cs
 SparkleDiff/SparkleDiffWindow.cs
 SparkleLib/SparkleFetcher.cs
 SparkleLib/SparkleHelpers.cs
+SparkleLib/SparkleOptions.cs
 SparkleLib/SparklePaths.cs
 SparkleLib/SparklePlatform.cs
 SparkleLib/SparkleRepo.cs
