@@ -208,20 +208,12 @@ namespace SparkleShare {
 
 			}
 
-
-
-
 			VBox layout_vertical = new VBox (false, 0);
 
+			TreeView tree_view = new TreeView ();
+			Gdk.Color background_color = tree_view.Style.Base (StateType.Normal);
 
-
-
-
-											TreeView tree_view = new TreeView ();
 			foreach (ActivityDay activity_day in activity_days) {
-
-
-
 
 				Label date_label = new Label ("") {
 					UseMarkup = true,
@@ -252,71 +244,122 @@ namespace SparkleShare {
 
 				layout_vertical.PackStart (date_label, true, true, 0);
 
-
-
 				Gdk.Color color = Style.Foreground (StateType.Insensitive);
 				string secondary_text_color = GdkColorToHex (color);
 
 				foreach (ChangeSet change_set in activity_day) {
-
-
 
 					VBox log_entry = new VBox (false, 0);
 					VBox deleted_files = new VBox (false, 0);
 					VBox edited_files  = new VBox (false, 0);
 					VBox added_files   = new VBox (false, 0);
 
+					foreach (string file_path in change_set.Edited) {
 
-					foreach (string file_path in change_set.Edited){
-					SparkleLink link = new SparkleLink (file_path, SparkleHelpers.CombineMore (LocalPath, file_path));
+						SparkleLink link = new SparkleLink (file_path,
+							SparkleHelpers.CombineMore (LocalPath, file_path));
+
+						link.ModifyBg (StateType.Normal, background_color);
+
+						link.ButtonPressEvent += delegate {
+							Destroy ();
+						};
+
 						edited_files.PackStart (link, false, false, 0);
-						
-						link.ModifyBg (StateType.Normal, tree_view.Style.Base (StateType.Normal));
-						
-						}
-// TODO: add close delegate
-					foreach (string file_path in change_set.Added)
-						added_files.PackStart (new SparkleLink (file_path, SparkleHelpers.CombineMore (LocalPath, file_path)), false, false, 0);
 
-					foreach (string file_path in change_set.Deleted)
-						deleted_files.PackStart (new SparkleLink (file_path, SparkleHelpers.CombineMore (LocalPath, file_path)), false, false, 0);
+					}
 
 
-					log_entry.PackStart(new Label ("<b>" + change_set.UserName + "</b>\n" +
-					                   "<span fgcolor='" + secondary_text_color +"'><small>" +
-					                   "at " + change_set.DateTime.ToString ("HH:mm") +
-					                   "</small></span>") { UseMarkup = true, Xalign = 0});
+					foreach (string file_path in change_set.Added) {
+
+						SparkleLink link = new SparkleLink (file_path,
+							SparkleHelpers.CombineMore (LocalPath, file_path));
+
+						link.ModifyBg (StateType.Normal, background_color);
+
+						link.ButtonPressEvent += delegate {
+							Destroy ();
+						};
+
+						added_files.PackStart (link, false, false, 0);
+
+					}
+
+
+					foreach (string file_path in change_set.Deleted) {
+
+						SparkleLink link = new SparkleLink (file_path,
+							SparkleHelpers.CombineMore (LocalPath, file_path));
+
+						link.ModifyBg (StateType.Normal, background_color);
+
+						link.ButtonPressEvent += delegate {
+							Destroy ();
+						};
+
+						deleted_files.PackStart (link, false, false, 0);
+
+					}
+
+
+					log_entry.PackStart (new Label ("<b>" + change_set.UserName + "</b>\n" +
+					                     "<span fgcolor='" + secondary_text_color +"'><small>" +
+					                     "at " + change_set.DateTime.ToString ("HH:mm") +
+					                     "</small></span>") { UseMarkup = true, Xalign = 0 });
 					                   
 					if (edited_files.Children.Length > 0) {
 
-						log_entry.PackStart (new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>Edited</small></span>") { UseMarkup=true, Xalign = 0}, false, false, 0);
+						Label edited_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
+						                                "Edited" +
+						                                "</small></span>") {
+							UseMarkup=true,
+							Xalign = 0
+						};
+
+						log_entry.PackStart (edited_label, false, false, 0);
 						log_entry.PackStart (edited_files, false, false, 0);
 
 					}
 
 					if (added_files.Children.Length > 0) {
 
-						log_entry.PackStart (new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>Added</small></span>") { UseMarkup=true, Xalign = 0}, false, false, 0);
+						Label added_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
+						                                "Added" +
+						                                "</small></span>") {
+							UseMarkup=true,
+							Xalign = 0
+						};
+
+						log_entry.PackStart (added_label, false, false, 0);
 						log_entry.PackStart (added_files, false, false, 0);
+
 					}
 
 					if (deleted_files.Children.Length > 0) {
 
-						log_entry.PackStart (new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>Deleted</small></span>") { UseMarkup=true, Xalign = 0}, false, false, 0);
-						log_entry.PackStart (deleted_files, false, false, 0);
-					}
+						Label deleted_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
+						                                "Edited" +
+						                                "</small></span>") {
+							UseMarkup=true,
+							Xalign = 0
+						};
 
+						log_entry.PackStart (deleted_label, false, false, 0);
+						log_entry.PackStart (deleted_files, false, false, 0);
+
+					}
 
 					HBox hbox = new HBox (false, 0);
 
-					Image i = new Image (SparkleHelpers.GetAvatar (change_set.UserEmail, 32)) {
+					Image avatar = new Image (SparkleHelpers.GetAvatar (change_set.UserEmail, 32)) {
 						Yalign = 0
 					};
 
-					hbox.PackStart (i, false, false, 18);
-					VBox vbox = new VBox (false, 0);
+					hbox.PackStart (avatar, false, false, 18);
 
-					vbox.PackStart (log_entry, true, true, 0);
+						VBox vbox = new VBox (false, 0);
+						vbox.PackStart (log_entry, true, true, 0);
+
 					hbox.PackStart (vbox, true, true, 0);
 					hbox.PackStart (new Label (""), false, false, 12);
 					
@@ -324,19 +367,15 @@ namespace SparkleShare {
 
 				}
 
-
-
-
-//				layout_vertical.PackStart (icon_view, false, false, 0);
-
-
 			}
 
 			ScrolledWindow = new ScrolledWindow ();
 			ScrolledWindow.ShadowType = ShadowType.None;
-								EventBox wrapper = new EventBox ();
-					wrapper.ModifyBg (StateType.Normal, tree_view.Style.Base (StateType.Normal));
-wrapper.Add (layout_vertical);
+
+				EventBox wrapper = new EventBox ();
+				wrapper.ModifyBg (StateType.Normal, background_color);
+				wrapper.Add (layout_vertical);
+
 			ScrolledWindow.AddWithViewport (wrapper);
 
 			return ScrolledWindow;
