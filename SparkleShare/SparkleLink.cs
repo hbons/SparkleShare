@@ -52,12 +52,14 @@ namespace SparkleShare {
 				process.Start ();
 
 			};
-
+ 
 			// Add underline when hovering the link with the cursor
 			EnterNotifyEvent += delegate {
 
 				label.Markup = "<u>" + title + "</u>";
 				ShowAll ();
+				Realize ();
+				GdkWindow.Cursor = new Gdk.Cursor (Gdk.CursorType.Hand2);
 
 			};
 
@@ -66,6 +68,8 @@ namespace SparkleShare {
 
 				label.Markup = title;
 				ShowAll ();
+				Realize ();
+				GdkWindow.Cursor = new Gdk.Cursor (Gdk.CursorType.Arrow);
 
 			};
 
