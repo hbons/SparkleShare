@@ -160,20 +160,51 @@ namespace SparkleShare {
 		public static string GetUserEmail ()
 		{
 
+			string email = "";
 			string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
 
-			StreamReader reader = new StreamReader (global_config_file_path);
+			// Look in the global config file first
+			if (File.Exists (global_config_file_path)) {
 
-			// Discard the first two lines
-			reader.ReadLine ();
-			reader.ReadLine ();
+				StreamReader reader = new StreamReader (global_config_file_path);
 
-			string line = reader.ReadLine ();
-			reader.Close ();
+				// Discard the first two lines
+				reader.ReadLine ();
+				reader.ReadLine ();
 
-			string email = line.Substring (line.IndexOf ("=") + 2);
+				string line = reader.ReadLine ();
+				reader.Close ();
 
-			return email;
+				email = line.Substring (line.IndexOf ("=") + 2);
+
+				return email;
+
+			// Secondly, look at the user's private key file name
+			} else {
+
+				string keys_path = SparklePaths.SparkleKeysPath;
+
+				if (!Directory.Exists (keys_path))
+					return "";
+
+				foreach (string file_path in Directory.GetFiles (keys_path)) {
+
+					string file_name = System.IO.Path.GetFileName (file_path);
+
+					if (file_name.StartsWith ("sparkleshare.") && file_name.EndsWith (".key")) {
+
+						email = file_name.Substring (file_name.IndexOf (".") + 1);
+						email = email.Substring (0, email.LastIndexOf ("."));
+
+						return email;
+
+					}
+
+				}
+
+				return "";
+
+			}
 
 		}
 
@@ -183,7 +214,7 @@ namespace SparkleShare {
 		public static void AddKey ()
 		{
 
-			string keys_path = Path.Combine (SparklePaths.HomePath, ".ssh");
+			string keys_path = SparklePaths.SparkleKeysPath;
 			string key_file_name = "sparkleshare." + UserEmail + ".key";
 
 			Process process = new Process ();

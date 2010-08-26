@@ -91,7 +91,7 @@ namespace SparkleShare {
 					};
 
 
-					EmailEntry = new Entry (GetUserEmail ());
+					EmailEntry = new Entry (SparkleShare.UserEmail);
 					EmailEntry.Changed += delegate {
 						CheckAccountForm ();
 					};
@@ -734,42 +734,12 @@ namespace SparkleShare {
 		}
 
 
-		// Gets the email address if the user alreasy has a SparkleShare key installed
-		private string GetUserEmail ()
-		{
-
-			string user_email = "";
-			string keys_path = System.IO.Path.Combine (SparklePaths.HomePath, ".ssh");
-
-			if (!Directory.Exists (keys_path))
-				return "";
-
-			foreach (string file_path in Directory.GetFiles (keys_path)) {
-
-				string file_name = System.IO.Path.GetFileName (file_path);
-
-				if (file_name.StartsWith ("sparkleshare.") && file_name.EndsWith (".key")) {
-
-					user_email = file_name.Substring (file_name.IndexOf (".") + 1);
-					user_email = user_email.Substring (0, user_email.LastIndexOf ("."));
-
-					return user_email;
-
-				}
-
-			}
-			
-			return "";
-
-		}
-
-
 		// Generates and installs an RSA keypair to identify this system
 		private void GenerateKeyPair ()
 		{
 
 			string user_email = EmailEntry.Text;
-			string keys_path = System.IO.Path.Combine (SparklePaths.HomePath, ".ssh");
+			string keys_path = SparklePaths.SparkleKeysPath;
 			string key_file_name = "sparkleshare." + user_email + ".key";
 
 			Process process = new Process () {
