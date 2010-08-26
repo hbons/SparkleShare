@@ -19,29 +19,31 @@ using System.IO;
 using System.Diagnostics;
 
 namespace SparkleShare {
-	
-	public class SparkleLink : EventBox {
 
-		private Label Label;
+	// A clickable link that corresponds to a local file	
+	public class SparkleLink : EventBox {
 
 		public SparkleLink (string title, string url) : base ()
 		{
 
-			Label = new Label (title) {
+			Label label = new Label (title) {
 				Ellipsize = Pango.EllipsizeMode.Middle,
 				UseMarkup = true,
 				Xalign    = 0
 			};
 
-			Add (Label);
+			Add (label);
 
+			// Only make links for files that exist
 			if (!File.Exists (url))
 				return;
 
+			// Use Tango blue for the links
 			Gdk.Color color = new Gdk.Color ();
 			Gdk.Color.Parse ("#3465a4", ref color);
-			Label.ModifyFg (StateType.Normal, color);
+			label.ModifyFg (StateType.Normal, color);
 
+			// Open the URL when it is clicked
 			ButtonPressEvent += delegate {
 
 				Process process = new Process ();
@@ -51,16 +53,18 @@ namespace SparkleShare {
 
 			};
 
+			// Add underline when hovering the link with the cursor
 			EnterNotifyEvent += delegate {
 
-				Label.Markup = "<u>" + title + "</u>";
+				label.Markup = "<u>" + title + "</u>";
 				ShowAll ();
 
 			};
 
+			// Remove underline when leaving the link with the cursor
 			LeaveNotifyEvent += delegate {
 
-				Label.Markup = title;
+				label.Markup = title;
 				ShowAll ();
 
 			};
