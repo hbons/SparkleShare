@@ -120,6 +120,7 @@ namespace SparkleShare {
 
 				SparkleLog log = new SparkleLog (path);
 				log.ShowAll ();
+				log.Present ();
 
 			};
 
@@ -228,9 +229,6 @@ namespace SparkleShare {
 
 						if (repo.Description != null)
 							menu_item.TooltipText = repo.Description;
-						else
-
-						menu_item.TooltipText = _("No description");
 
 						Menu.Add (menu_item);
 

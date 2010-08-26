@@ -658,6 +658,7 @@ namespace SparkleLib {
 		}
 
 
+		// TODO: this is ugly. refactor.
 		// Creates a pretty commit message based on what has changed
 		private string FormatCommitMessage ()
 		{
@@ -673,9 +674,9 @@ namespace SparkleLib {
 
 			Process.StartInfo.Arguments = "status";
 			Process.Start ();
-			string Output = Process.StandardOutput.ReadToEnd ();
+			string output = Process.StandardOutput.ReadToEnd ();
 
-			foreach (string line in Regex.Split (Output, "\n")) {
+			foreach (string line in Regex.Split (output, "\n")) {
 				if (line.IndexOf ("new file:") > -1)
 					FilesAdded++;
 				if (line.IndexOf ("modified:") > -1)
@@ -686,7 +687,7 @@ namespace SparkleLib {
 					FilesDeleted++;
 			}
 
-			foreach (string line in Regex.Split (Output, "\n")) {
+			foreach (string line in Regex.Split (output, "\n")) {
 
 				// Format message for when files are added,
 				// example: "added 'file' and 3 more."

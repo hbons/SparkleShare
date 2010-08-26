@@ -32,6 +32,8 @@ namespace SparkleLib {
 		public static string SparkleTmpPath = Path.Combine (SparklePath, ".tmp");
 
 		public static string SparkleConfigPath = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
+		
+		public static string SparkleKeysPath = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
 
 		public static string SparkleInstallPath = SparkleHelpers.CombineMore (Defines.PREFIX, "sparkleshare");
 

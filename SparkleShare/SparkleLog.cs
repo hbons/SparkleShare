@@ -45,6 +45,7 @@ namespace SparkleShare {
 			
 			string name = System.IO.Path.GetFileName (LocalPath);
 			SetSizeRequest (540, 640);
+
 	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 12;
 			
@@ -61,7 +62,9 @@ namespace SparkleShare {
 					BorderWidth = 0
 				};
 
-					Button open_folder_button = new Button (_("Open Folder"));
+					Button open_folder_button = new Button (_("_Open Folder")) {
+						UseUnderline = true
+					};
 
 					open_folder_button.Clicked += delegate (object o, EventArgs args) {
 
@@ -206,72 +209,22 @@ namespace SparkleShare {
 			}
 
 
+
+
 			VBox layout_vertical = new VBox (false, 0);
 
+
+
+
+
+											TreeView tree_view = new TreeView ();
 			foreach (ActivityDay activity_day in activity_days) {
 
-				TreeIter iter = new TreeIter ();
-				ListStore list_store = new ListStore (typeof (Gdk.Pixbuf),
-				                                      typeof (string),
-				                                      typeof (string));
-
-				Gdk.Color color = Style.Foreground (StateType.Insensitive);
-				string secondary_text_color = GdkColorToHex (color);
-
-				foreach (ChangeSet change_set in activity_day) {
-
-					iter = list_store.Append ();
 
 
-					string edited_files = "";
-					foreach (string file_path in change_set.Edited)
-						edited_files += "\n" + file_path;
-
-					string added_files = "";
-					foreach (string file_path in change_set.Added)
-						added_files += "\n" + file_path;
-
-					string deleted_files = "";
-					foreach (string file_path in change_set.Deleted)
-						deleted_files += "\n" + file_path;
-
-
-					string log_entry = "<b>" + change_set.UserName + "</b>\n" +
-					                   "<span fgcolor='" + secondary_text_color +"'><small>" +
-					                   "at " + change_set.DateTime.ToString ("HH:mm") +
-					                   "</small></span>";
-					                   
-					if (!edited_files.Equals ("")) {
-
-						log_entry += "\n\n<span fgcolor='" + secondary_text_color +"'><small>Edited</small></span>" +
-						             edited_files;
-
-					}
-
-					if (!added_files.Equals ("")) {
-
-						log_entry += "\n\n<span fgcolor='" + secondary_text_color +"'><small>Added</small></span>" +
-						             added_files;
-
-					}
-
-					if (!deleted_files.Equals ("")) {
-
-						log_entry += "\n\n<span fgcolor='" + secondary_text_color +"'><small>Deleted</small></span>" +
-						             deleted_files;
-
-					}
-
-
-					list_store.SetValue (iter, 0, SparkleHelpers.GetAvatar (change_set.UserEmail , 32));
-					list_store.SetValue (iter, 1, log_entry);
-					list_store.SetValue (iter, 2, change_set.UserEmail);
-
-				}
 
 				Label date_label = new Label ("") {
 					UseMarkup = true,
-					Xalign = 0,
 					Xpad = 9,
 					Ypad = 9
 				};
@@ -297,28 +250,94 @@ namespace SparkleShare {
 
 					}
 
-				layout_vertical.PackStart (date_label, false, false, 0);
+				layout_vertical.PackStart (date_label, true, true, 0);
 
-				IconView icon_view = new IconView (list_store) {
-					ItemWidth    = 470,
-					MarkupColumn = 1,
-					Orientation  = Orientation.Horizontal,
-					PixbufColumn = 0,
-					Spacing      = 9,
-					Columns      = 1
-				};
 
-				icon_view.SelectionChanged += delegate {
-					icon_view.UnselectAll ();
-				};
 
-				layout_vertical.PackStart (icon_view, false, false, 0);
+				Gdk.Color color = Style.Foreground (StateType.Insensitive);
+				string secondary_text_color = GdkColorToHex (color);
+
+				foreach (ChangeSet change_set in activity_day) {
+
+
+
+					VBox log_entry = new VBox (false, 0);
+					VBox deleted_files = new VBox (false, 0);
+					VBox edited_files  = new VBox (false, 0);
+					VBox added_files   = new VBox (false, 0);
+
+
+					foreach (string file_path in change_set.Edited){
+					SparkleLink link = new SparkleLink (file_path, SparkleHelpers.CombineMore (LocalPath, file_path));
+						edited_files.PackStart (link, false, false, 0);
+						
+						link.ModifyBg (StateType.Normal, tree_view.Style.Base (StateType.Normal));
+						
+						}
+// TODO: add close delegate
+					foreach (string file_path in change_set.Added)
+						added_files.PackStart (new SparkleLink (file_path, SparkleHelpers.CombineMore (LocalPath, file_path)), false, false, 0);
+
+					foreach (string file_path in change_set.Deleted)
+						deleted_files.PackStart (new SparkleLink (file_path, SparkleHelpers.CombineMore (LocalPath, file_path)), false, false, 0);
+
+
+					log_entry.PackStart(new Label ("<b>" + change_set.UserName + "</b>\n" +
+					                   "<span fgcolor='" + secondary_text_color +"'><small>" +
+					                   "at " + change_set.DateTime.ToString ("HH:mm") +
+					                   "</small></span>") { UseMarkup = true, Xalign = 0});
+					                   
+					if (edited_files.Children.Length > 0) {
+
+						log_entry.PackStart (new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>Edited</small></span>") { UseMarkup=true, Xalign = 0}, false, false, 0);
+						log_entry.PackStart (edited_files, false, false, 0);
+
+					}
+
+					if (added_files.Children.Length > 0) {
+
+						log_entry.PackStart (new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>Added</small></span>") { UseMarkup=true, Xalign = 0}, false, false, 0);
+						log_entry.PackStart (added_files, false, false, 0);
+					}
+
+					if (deleted_files.Children.Length > 0) {
+
+						log_entry.PackStart (new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>Deleted</small></span>") { UseMarkup=true, Xalign = 0}, false, false, 0);
+						log_entry.PackStart (deleted_files, false, false, 0);
+					}
+
+
+					HBox hbox = new HBox (false, 0);
+
+					Image i = new Image (SparkleHelpers.GetAvatar (change_set.UserEmail, 32)) {
+						Yalign = 0
+					};
+
+					hbox.PackStart (i, false, false, 18);
+					VBox vbox = new VBox (false, 0);
+
+					vbox.PackStart (log_entry, true, true, 0);
+					hbox.PackStart (vbox, true, true, 0);
+					hbox.PackStart (new Label (""), false, false, 12);
+					
+					layout_vertical.PackStart (hbox, true, true, 24);
+
+				}
+
+
+
+
+//				layout_vertical.PackStart (icon_view, false, false, 0);
+
 
 			}
 
 			ScrolledWindow = new ScrolledWindow ();
 			ScrolledWindow.ShadowType = ShadowType.None;
-			ScrolledWindow.AddWithViewport (layout_vertical);
+								EventBox wrapper = new EventBox ();
+					wrapper.ModifyBg (StateType.Normal, tree_view.Style.Base (StateType.Normal));
+wrapper.Add (layout_vertical);
+			ScrolledWindow.AddWithViewport (wrapper);
 
 			return ScrolledWindow;
 
