@@ -127,11 +127,15 @@ namespace SparkleShare {
 		}
 
 
+		// Recursively gets a folder's size in bytes
 		private double GetFolderSize (DirectoryInfo parent)
 		{
 
 			double size = 0;
 
+			// Ignore the temporary rebase-apply directory.
+			// This prevents potential crashes when files are being
+			// queried whilst the files have already been deleted.
 			if (parent.Name.Equals ("rebase-apply"))
 				return 0;
 

@@ -215,8 +215,11 @@ namespace SparkleShare {
 
 			foreach (ActivityDay activity_day in activity_days) {
 
+				EventBox box = new EventBox ();
+
 				Label date_label = new Label ("") {
 					UseMarkup = true,
+					Xalign = 0,
 					Xpad = 9,
 					Ypad = 9
 				};
@@ -242,7 +245,8 @@ namespace SparkleShare {
 
 					}
 
-				layout_vertical.PackStart (date_label, true, true, 0);
+				box.Add (date_label);
+				layout_vertical.PackStart (box, true, true, 0);
 
 				Gdk.Color color = Style.Foreground (StateType.Insensitive);
 				string secondary_text_color = GdkColorToHex (color);
@@ -261,7 +265,7 @@ namespace SparkleShare {
 
 						link.ModifyBg (StateType.Normal, background_color);
 
-						link.ButtonPressEvent += delegate {
+						link.ButtonReleaseEvent += delegate {
 							Destroy ();
 						};
 
