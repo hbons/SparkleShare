@@ -34,19 +34,25 @@ namespace SparkleShare {
 
 			Add (label);
 
+			Gdk.Color color = new Gdk.Color ();
+
 			// Only make links for files that exist
-			if (!url.StartsWith ("http://") && !File.Exists (url))
+			if (!url.StartsWith ("http://") && !File.Exists (url)) {
+
+				// Use Tango Aluminium for the links
+				Gdk.Color.Parse ("#2e3436", ref color);
+				label.ModifyFg (StateType.Normal, color);
 				return;
 
-			// Use Tango blue for the links
-			Gdk.Color color = new Gdk.Color ();
+			}
+
+			// Use Tango Sky Blue for the links
 			Gdk.Color.Parse ("#3465a4", ref color);
 			label.ModifyFg (StateType.Normal, color);
 
 			// Open the URL when it is clicked
 			ButtonReleaseEvent += delegate {
 
-Console.WriteLine ("DDDDDDDDD");
 				Process process = new Process ();
 				process.StartInfo.FileName  = "gnome-open";
 				process.StartInfo.Arguments = url.Replace (" ", "\\ "); // Escape space-characters
