@@ -14,6 +14,9 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+// TODO: Repush changes when reconnected
+// use hash
+
 using Mono.Unix;
 using System;
 using System.Diagnostics;
@@ -32,6 +35,7 @@ namespace SparkleLib {
 		private bool HasChanged;
 		private DateTime LastChange;
 		private System.Object ChangeLock = new System.Object();
+		private bool HasUnsyncedChanges;
 
 		public string Name;
 		public string Domain;
@@ -46,19 +50,23 @@ namespace SparkleLib {
 		public delegate void CommitedEventHandler (object o, SparkleEventArgs args);
 		public delegate void PushingStartedEventHandler (object o, SparkleEventArgs args);
 		public delegate void PushingFinishedEventHandler (object o, SparkleEventArgs args);
+		public delegate void PushingFailedEventHandler (object o, SparkleEventArgs args);
 		public delegate void FetchingStartedEventHandler (object o, SparkleEventArgs args);
 		public delegate void FetchingFinishedEventHandler (object o, SparkleEventArgs args);
 		public delegate void NewCommitEventHandler (object o, NewCommitArgs args);
 		public delegate void ConflictDetectedEventHandler (object o, SparkleEventArgs args);
+		public delegate void ChangesDetectedEventHandler (object o, SparkleEventArgs args);
 
 		public event AddedEventHandler Added; 
 		public event CommitedEventHandler Commited; 
 		public event PushingStartedEventHandler PushingStarted;
 		public event PushingFinishedEventHandler PushingFinished;
+		public event PushingFailedEventHandler PushingFailed;
 		public event FetchingStartedEventHandler FetchingStarted;
 		public event FetchingFinishedEventHandler FetchingFinished;
 		public event NewCommitEventHandler NewCommit;
 		public event ConflictDetectedEventHandler ConflictDetected;
+		public event ChangesDetectedEventHandler ChangesDetected;
 
 
 		public SparkleRepo (string path)
@@ -79,12 +87,13 @@ namespace SparkleLib {
 			Process.StartInfo.UseShellExecute = false;
 			Process.StartInfo.WorkingDirectory = LocalPath;
 
-			UserName        = GetUserName ();
-			UserEmail       = GetUserEmail ();
-			RemoteOriginUrl = GetRemoteOriginUrl ();
-			CurrentHash     = GetCurrentHash ();
-			Domain          = GetDomain (RemoteOriginUrl);
-			Description     = GetDescription ();
+			UserName           = GetUserName ();
+			UserEmail          = GetUserEmail ();
+			RemoteOriginUrl    = GetRemoteOriginUrl ();
+			CurrentHash        = GetCurrentHash ();
+			Domain             = GetDomain (RemoteOriginUrl);
+			Description        = GetDescription ();
+			HasUnsyncedChanges = false;
 
 			if (CurrentHash == null)
 				CreateInitialCommit ();
@@ -110,6 +119,8 @@ namespace SparkleLib {
 
 			RemoteTimer.Elapsed += delegate { 
 				CheckForRemoteChanges ();
+				if (HasUnsyncedChanges)
+					Push ();
 			};
 
 
@@ -199,15 +210,26 @@ namespace SparkleLib {
 		}
 
 
-		// Starts a time Local when something changes
-		private void OnFileActivity (object o, FileSystemEventArgs args)
+		// Starts a timerwhen something changes
+		private void OnFileActivity (object o, FileSystemEventArgs fse_args)
 		{
 
-		   WatcherChangeTypes wct = args.ChangeType;
+			WatcherChangeTypes wct = fse_args.ChangeType;
 
-			if (!ShouldIgnore (args.Name)) {
+			if (!ShouldIgnore (fse_args.Name)) {
 
-				SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + args.Name + "'");
+				// Only fire the event if the timer has been stopped.
+				// This prevents multiple events from being raised whilst "buffering".
+				if (!HasChanged) {
+
+					SparkleEventArgs args = new SparkleEventArgs ("ChangesDetected");
+Console.WriteLine ("test");
+					if (ChangesDetected != null)
+					    ChangesDetected (this, args);
+
+				}
+
+				SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + fse_args.Name + "'");
 
 				RemoteTimer.Stop ();
 
@@ -454,13 +476,30 @@ namespace SparkleLib {
 			Process.WaitForExit ();
 
 			Process.Exited += delegate {
-			
-				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes pushed.");
 
-				args = new SparkleEventArgs ("PushingFinished");
+				if (Process.ExitCode != 0) {
 
-				if (PushingFinished != null)
-			        PushingFinished (this, args); 
+					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing failed.");
+
+					HasUnsyncedChanges = true;
+
+					args = new SparkleEventArgs ("PushingFailed");
+
+					if (PushingFailed != null)
+					    PushingFailed (this, args); 
+
+				} else {
+
+					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes pushed.");
+
+					args = new SparkleEventArgs ("PushingFinished");
+
+					HasUnsyncedChanges = false;
+
+					if (PushingFinished != null)
+					    PushingFinished (this, args); 
+
+				}
 
 			};
 

@@ -373,6 +373,20 @@ namespace SparkleShare {
 		}
 
 
+		// Changes the state to indicate there was an error syncing
+		public void ShowErrorState ()
+		{
+
+			Pixbuf = SparkleHelpers.GetIcon ("image-missing", 24);
+			StateText = _("Failed to sync your changes");
+
+			UpdateStatusMenuItem ();
+			
+			SparkleHelpers.DebugInfo ("Status", "Number of repos syncing: " + SyncingReposCount);
+
+		}
+
+
 		// Updates the icon used for the statusicon
 		private void SetPixbuf (Gdk.Pixbuf pixbuf)
 		{
