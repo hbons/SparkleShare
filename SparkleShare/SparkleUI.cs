@@ -359,7 +359,7 @@ namespace SparkleShare {
 		{
 
 				NotificationIcon.SyncingReposCount--;
-				NotificationIcon.ShowErrorState ();
+				NotificationIcon.ShowState (true);
 
 		}
 
@@ -407,6 +407,10 @@ namespace SparkleShare {
 			};
 
 			repo.PushingFinished += delegate {
+				Application.Invoke (UpdateStatusIconToIdle);
+			};
+
+			repo.CommitEndedUpEmpty += delegate {
 				Application.Invoke (UpdateStatusIconToIdle);
 			};
 
