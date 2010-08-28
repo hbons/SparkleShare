@@ -103,8 +103,6 @@ namespace SparkleShare {
 
 
 			CreateConfigurationFolders ();
-			PopulateRepositories ();
-
 
 			// Don't create the window and status icon when
 			// the --disable-gui command line argument was given
@@ -131,6 +129,8 @@ namespace SparkleShare {
 				NotificationIcon = new SparkleStatusIcon ();
 
 			}
+
+			PopulateRepositories ();
 
 		}
 
@@ -354,6 +354,16 @@ namespace SparkleShare {
 		}
 
 
+		// Updates the statusicon to the error state
+		public void UpdateStatusIconToError (object o, EventArgs args)
+		{
+
+				NotificationIcon.SyncingReposCount--;
+				NotificationIcon.ShowErrorState ();
+
+		}
+
+
 		// Updates the syncing icon to the idle state
 		public void UpdateStatusIconToIdle (object o, EventArgs args)
 		{
@@ -392,12 +402,16 @@ namespace SparkleShare {
 				Application.Invoke (UpdateStatusIconToIdle);
 			};
 
-			repo.PushingStarted += delegate {
+			repo.ChangesDetected += delegate {
 				Application.Invoke (UpdateStatusIconToSyncing);
 			};
 
 			repo.PushingFinished += delegate {
 				Application.Invoke (UpdateStatusIconToIdle);
+			};
+
+			repo.PushingFailed += delegate {
+				Application.Invoke (UpdateStatusIconToError);
 			};
 
 			repo.ConflictDetected += delegate {

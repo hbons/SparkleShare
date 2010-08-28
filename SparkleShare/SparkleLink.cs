@@ -17,7 +17,7 @@
 using Gtk;
 using System.IO;
 using System.Diagnostics;
-
+using System; //dfsf
 namespace SparkleShare {
 
 	// A clickable link that corresponds to a local file	
@@ -46,6 +46,7 @@ namespace SparkleShare {
 			// Open the URL when it is clicked
 			ButtonReleaseEvent += delegate {
 
+Console.WriteLine ("DDDDDDDDD");
 				Process process = new Process ();
 				process.StartInfo.FileName  = "gnome-open";
 				process.StartInfo.Arguments = url.Replace (" ", "\\ "); // Escape space-characters

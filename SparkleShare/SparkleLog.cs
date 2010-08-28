@@ -265,10 +265,6 @@ namespace SparkleShare {
 
 						link.ModifyBg (StateType.Normal, background_color);
 
-						link.ButtonReleaseEvent += delegate {
-							Destroy ();
-						};
-
 						edited_files.PackStart (link, false, false, 0);
 
 					}
