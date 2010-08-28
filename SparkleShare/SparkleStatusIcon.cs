@@ -331,6 +331,14 @@ namespace SparkleShare {
 		public void ShowState ()
 		{
 
+			ShowState (false);
+
+		}
+
+
+		public void ShowState (bool error)
+		{
+
 			UpdateFolderSize ();
 
 			if (SyncingReposCount < 0)
@@ -339,10 +347,18 @@ namespace SparkleShare {
 			if (SyncingReposCount > SparkleUI.Repositories.Count)
 				SyncingReposCount = SparkleUI.Repositories.Count;
 
-			if (SyncingReposCount > 0)
-				SetSyncingState ();
-			else
-				SetIdleState ();
+			if (error) {
+
+				SetErrorState ();
+
+			} else {
+
+				if (SyncingReposCount > 0)
+					SetSyncingState ();
+				else
+					SetIdleState ();
+
+			}
 
 			UpdateStatusMenuItem ();
 			
@@ -374,15 +390,12 @@ namespace SparkleShare {
 
 
 		// Changes the state to indicate there was an error syncing
-		public void ShowErrorState ()
+		public void SetErrorState ()
 		{
 
-			Pixbuf = SparkleHelpers.GetIcon ("image-missing", 24);
-			StateText = _("Failed to sync your changes");
-
-			UpdateStatusMenuItem ();
-			
-			SparkleHelpers.DebugInfo ("Status", "Number of repos syncing: " + SyncingReposCount);
+			Timer.Stop ();
+			Application.Invoke (delegate { Pixbuf = SparkleHelpers.GetIcon ("sparkleshare-syncing-error", 24); });
+			StateText = _("Failed to sync changes");
 
 		}
 

@@ -56,6 +56,7 @@ namespace SparkleLib {
 		public delegate void NewCommitEventHandler (object o, NewCommitArgs args);
 		public delegate void ConflictDetectedEventHandler (object o, SparkleEventArgs args);
 		public delegate void ChangesDetectedEventHandler (object o, SparkleEventArgs args);
+		public delegate void CommitEndedUpEmptyEventHandler (object o, SparkleEventArgs args);
 
 		public event AddedEventHandler Added; 
 		public event CommitedEventHandler Commited; 
@@ -67,6 +68,7 @@ namespace SparkleLib {
 		public event NewCommitEventHandler NewCommit;
 		public event ConflictDetectedEventHandler ConflictDetected;
 		public event ChangesDetectedEventHandler ChangesDetected;
+		public event CommitEndedUpEmptyEventHandler CommitEndedUpEmpty;
 
 
 		public SparkleRepo (string path)
@@ -198,9 +200,12 @@ namespace SparkleLib {
 					TimeSpan changed = new TimeSpan (now.Ticks - LastChange.Ticks);
 
 					if (changed.TotalMilliseconds > 5000) {
-						HasChanged = false;
+
 						SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled, adding files...");
+
+						HasChanged = false;
 						AddCommitAndPush ();
+
 					}
 
 				}
@@ -223,7 +228,7 @@ namespace SparkleLib {
 				if (!HasChanged) {
 
 					SparkleEventArgs args = new SparkleEventArgs ("ChangesDetected");
-Console.WriteLine ("test");
+
 					if (ChangesDetected != null)
 					    ChangesDetected (this, args);
 
@@ -245,7 +250,7 @@ Console.WriteLine ("test");
 		}
 
 
-		// When there are changes we generally want to Add, Commit and Push
+		// When there are changes we generally want to Add, Commit and Push,
 		// so this method does them all with appropriate timers, etc. switched off
 		public void AddCommitAndPush ()
 		{
@@ -264,6 +269,13 @@ Console.WriteLine ("test");
 					Commit (message);
 					CheckForRemoteChanges ();
 					Push ();
+
+				} else {
+
+					SparkleEventArgs args = new SparkleEventArgs ("CommitEndedUpEmpty");
+
+					if (CommitEndedUpEmpty != null)
+					    CommitEndedUpEmpty (this, args); 
 
 				}
 
