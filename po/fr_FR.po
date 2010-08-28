@@ -339,7 +339,7 @@ msgstr "Masquer l’icône de notification."
 
 #: ../SparkleShare/SparkleShare.cs:83
 msgid "Show this help text"
-msgstr "Affiche ce texte d’aide."
+msgstr "Afficher ce texte d’aide."
 
 #: ../SparkleShare/SparkleShare.cs:84
 msgid "Print version information"
