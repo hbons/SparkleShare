@@ -338,7 +338,7 @@ namespace SparkleShare {
 					if (deleted_files.Children.Length > 0) {
 
 						Label deleted_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
-						                                "Edited" +
+						                                "Deleted" +
 						                                "</small></span>") {
 							UseMarkup=true,
 							Xalign = 0
