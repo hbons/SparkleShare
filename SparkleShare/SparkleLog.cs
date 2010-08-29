@@ -190,9 +190,6 @@ namespace SparkleShare {
 							change_set.MovedFrom.Add (paths [0]);
 							change_set.MovedTo.Add (paths [1]);
 
-							Console.WriteLine (paths [0]);
-							Console.WriteLine (paths [1]);
-
 						}
 
 					}
