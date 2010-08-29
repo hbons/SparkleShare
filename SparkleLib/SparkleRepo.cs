@@ -315,10 +315,8 @@ namespace SparkleLib {
 			Process.Start ();
 			Process.WaitForExit ();
 
-			if (Process.StandardOutput.ReadToEnd ().TrimEnd ("\n".ToCharArray ()).Equals ("")) {
-				Console.WriteLine ("NO CHANGES!!");
+			if (Process.StandardOutput.ReadToEnd ().TrimEnd ("\n".ToCharArray ()).Equals (""))
 				return;
-			}
 
 			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message);
 
