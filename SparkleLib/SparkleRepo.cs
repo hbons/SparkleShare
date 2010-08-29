@@ -757,7 +757,7 @@ namespace SparkleLib {
 
 				if (line.StartsWith ("R")) {
 
-					file_action = "renamed";
+					file_action = "moved";
 					message     = file_action + " ‘" + line.Substring (3).Replace (" -> ", "’ to\n‘") + "’";
 
 				}

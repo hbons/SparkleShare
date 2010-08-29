@@ -155,7 +155,9 @@ namespace SparkleShare {
 
 					ChangeSet change_set = new ChangeSet (user_name, user_email, message, date_time, hash);
 
-					process.StartInfo.Arguments = "show " + hash + " --name-status";
+					// --name-status lists affected files with the modification type,
+					// -C detects renames
+					process.StartInfo.Arguments = "show " + hash + " --name-status -C";
 					process.Start ();
 
 
@@ -179,7 +181,20 @@ namespace SparkleShare {
 
 						if (file_line.StartsWith ("D\t"))
 							change_set.Deleted.Add (file_path);
-			
+
+						if (file_line.StartsWith ("R")) {
+
+							file_path = file_line.Substring (5);
+							string [] paths = Regex.Split (file_path, "\t");
+
+							change_set.MovedFrom.Add (paths [0]);
+							change_set.MovedTo.Add (paths [1]);
+
+							Console.WriteLine (paths [0]);
+							Console.WriteLine (paths [1]);
+
+						}
+
 					}
 
 
@@ -253,10 +268,12 @@ namespace SparkleShare {
 
 				foreach (ChangeSet change_set in activity_day) {
 
-					VBox log_entry = new VBox (false, 0);
+					VBox log_entry     = new VBox (false, 0);
 					VBox deleted_files = new VBox (false, 0);
 					VBox edited_files  = new VBox (false, 0);
 					VBox added_files   = new VBox (false, 0);
+					VBox moved_files   = new VBox (false, 0);
+
 
 					foreach (string file_path in change_set.Edited) {
 
@@ -268,7 +285,6 @@ namespace SparkleShare {
 						edited_files.PackStart (link, false, false, 0);
 
 					}
-
 
 					foreach (string file_path in change_set.Added) {
 
@@ -301,11 +317,52 @@ namespace SparkleShare {
 
 					}
 
+					for (int i = 0; i < change_set.MovedFrom.Count; i++) {
 
-					log_entry.PackStart (new Label ("<b>" + change_set.UserName + "</b>\n" +
-					                     "<span fgcolor='" + secondary_text_color +"'><small>" +
-					                     "at " + change_set.DateTime.ToString ("HH:mm") +
-					                     "</small></span>") { UseMarkup = true, Xalign = 0 });
+						SparkleLink from_link = new SparkleLink (change_set.MovedFrom [i],
+							SparkleHelpers.CombineMore (LocalPath, change_set.MovedFrom [i]));
+
+						from_link.ModifyBg (StateType.Normal, background_color);
+
+						from_link.ButtonPressEvent += delegate {
+							Destroy ();
+						};
+
+						SparkleLink to_link = new SparkleLink (change_set.MovedTo [i],
+							SparkleHelpers.CombineMore (LocalPath, change_set.MovedTo [i]));
+
+						to_link.ModifyBg (StateType.Normal, background_color);
+
+						to_link.ButtonPressEvent += delegate {
+							Destroy ();
+						};
+
+						Label to_label = new Label ("<span fgcolor='" + secondary_text_color +"'>" +
+						                            "<small>to</small></span> ") {
+					    	UseMarkup = true,
+					    	Xalign = 0
+					    };
+
+						HBox link_wrapper = new HBox (false, 0);
+						link_wrapper.PackStart (to_label, false, false, 0);
+						link_wrapper.PackStart (to_link, true, true, 0);
+
+
+						moved_files.PackStart (from_link, false, false, 0);
+						moved_files.PackStart (link_wrapper, false, false, 0);
+						moved_files.PackStart (new Label (""), false, false, 0);
+
+					}
+
+					Label change_set_info = new Label ("<b>" + change_set.UserName + "</b>\n" +
+					                                   "<span fgcolor='" + secondary_text_color +"'><small>" +
+					                                   "at " + change_set.DateTime.ToString ("HH:mm") +
+					                                   "</small></span>") {
+						UseMarkup = true,
+						Xalign = 0
+					};
+
+					log_entry.PackStart (change_set_info);
 					                   
 					if (edited_files.Children.Length > 0) {
 
@@ -346,6 +403,20 @@ namespace SparkleShare {
 
 						log_entry.PackStart (deleted_label, false, false, 0);
 						log_entry.PackStart (deleted_files, false, false, 0);
+
+					}
+
+					if (moved_files.Children.Length > 0) {
+
+						Label moved_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
+						                                 "Moved" +
+						                                 "</small></span>") {
+							UseMarkup=true,
+							Xalign = 0
+						};
+
+						log_entry.PackStart (moved_label, false, false, 0);
+						log_entry.PackStart (moved_files, false, false, 0);
 
 					}
 
@@ -429,6 +500,8 @@ namespace SparkleShare {
 		public List <string> Added;
 		public List <string> Deleted;
 		public List <string> Edited;
+		public List <string> MovedFrom;
+		public List <string> MovedTo;
 		public DateTime DateTime;
 		public string Hash;
 	
@@ -441,9 +514,11 @@ namespace SparkleShare {
 			DateTime  = date_time;
 			Hash      = hash;
 
-			Edited  = new List <string> ();
-			Added   = new List <string> ();
-			Deleted = new List <string> ();
+			Edited      = new List <string> ();
+			Added       = new List <string> ();
+			Deleted     = new List <string> ();
+			MovedFrom = new List <string> ();
+			MovedTo   = new List <string> ();
 
 		}
 	
