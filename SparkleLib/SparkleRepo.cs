@@ -14,9 +14,6 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-// TODO: Repush changes when reconnected
-// use hash
-
 using Mono.Unix;
 using System;
 using System.Diagnostics;
@@ -714,7 +711,6 @@ namespace SparkleLib {
 		}
 
 
-		// TODO: this is ugly. refactor.
 		// Creates a pretty commit message based on what has changed
 		private string FormatCommitMessage ()
 		{
