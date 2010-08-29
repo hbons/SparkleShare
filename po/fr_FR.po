@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-28 06:25+0000\n"
+"POT-Creation-Date: 2010-08-29 12:35+0000\n"
 "PO-Revision-Date: 2010-07-13 16:07+0800\n"
 "Last-Translator: Yann Hermans <chezyann@gmail.com>\n"
 "Language-Team: French (France)\n"
@@ -373,53 +373,57 @@ msgstr "Synchroniser le dossier SparkleShare avec les dépôts distants."
 msgid "SparkleShare "
 msgstr "SparkleShare "
 
-#: ../SparkleShare/SparkleStatusIcon.cs:171
+#: ../SparkleShare/SparkleStatusIcon.cs:175
 #, csharp-format
 msgid "{0:##.##} ᴛʙ"
 msgstr "{0:##.##} To"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:173
+#: ../SparkleShare/SparkleStatusIcon.cs:177
 #, csharp-format
 msgid "{0:##.##} ɢʙ"
 msgstr "{0:##.##} Go"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:175
+#: ../SparkleShare/SparkleStatusIcon.cs:179
 #, csharp-format
 msgid "{0:##.##} ᴍʙ"
 msgstr "{0:##.##} Mo"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:177
+#: ../SparkleShare/SparkleStatusIcon.cs:181
 #, csharp-format
 msgid "{0:##.##} ᴋʙ"
 msgstr "{0:##.##} Ko"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:239
+#: ../SparkleShare/SparkleStatusIcon.cs:243
 msgid "No Shared Folders Yet"
 msgstr "Encore aucun dossier de partagé"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:247
+#: ../SparkleShare/SparkleStatusIcon.cs:251
 msgid "Sync Remote Folder…"
 msgstr "Synchroniser le dossier distant..."
 
-#: ../SparkleShare/SparkleStatusIcon.cs:260
+#: ../SparkleShare/SparkleStatusIcon.cs:264
 msgid "Show Notifications"
 msgstr "Montrer les notifications"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:281
+#: ../SparkleShare/SparkleStatusIcon.cs:285
 msgid "Visit Website"
 msgstr "Visiter le site web"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:298
+#: ../SparkleShare/SparkleStatusIcon.cs:302
 msgid "Quit"
 msgstr "Quitter"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:357
+#: ../SparkleShare/SparkleStatusIcon.cs:377
 msgid "Up to date"
 msgstr "A jour"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:366
+#: ../SparkleShare/SparkleStatusIcon.cs:386
 msgid "Syncing…"
 msgstr "Synchronisation en cours…"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:398
+msgid "Failed to sync changes"
+msgstr "La synchronisation des modifications a échouée"
 
 #: ../SparkleShare/SparkleUI.cs:338
 msgid "Ouch! Mid-air collision!"
@@ -429,11 +433,11 @@ msgstr "Outch! Collision en plein ciel!"
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
 msgstr "Ne vous inquiétez pas, SparkleShare à effectué une copie de chacun des fichiers en conflit."
 
-#: ../SparkleShare/SparkleUI.cs:460
+#: ../SparkleShare/SparkleUI.cs:478
 msgid "Hold your ponies!"
 msgstr "Restons calme !"
 
-#: ../SparkleShare/SparkleUI.cs:461
+#: ../SparkleShare/SparkleUI.cs:479
 msgid "SparkleShare is known to be insanely fast with pictures of unicorns. Please make sure your internets are upgraded to the latest version to avoid any problems."
 msgstr "SparkleShare est réputé pour son hallucinante rapidité concernant les images de licornes. Merci de vérifier que votre navigateur est à jour pour éviter tout problème."
 
