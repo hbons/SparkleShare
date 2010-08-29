@@ -112,6 +112,7 @@ namespace SparkleLib {
 			Watcher.Changed += new FileSystemEventHandler (OnFileActivity);
 			Watcher.Created += new FileSystemEventHandler (OnFileActivity);
 			Watcher.Deleted += new FileSystemEventHandler (OnFileActivity);
+			Watcher.Renamed += new RenamedEventHandler (OnFileActivity);
 
 
 			// Fetch remote changes every minute
@@ -221,7 +222,7 @@ namespace SparkleLib {
 
 			WatcherChangeTypes wct = fse_args.ChangeType;
 
-			if (!ShouldIgnore (fse_args.Name)) {
+			if (!ShouldIgnore (fse_args.FullPath)) {
 
 				// Only fire the event if the timer has been stopped.
 				// This prevents multiple events from being raised whilst "buffering".
@@ -264,7 +265,7 @@ namespace SparkleLib {
 
 				string message = FormatCommitMessage ();
 
-				if (!message.Equals ("")) {
+				if (message != null) {
 
 					Commit (message);
 					CheckForRemoteChanges ();
@@ -312,6 +313,15 @@ namespace SparkleLib {
 		// Commits the made changes
 		public void Commit (string message)
 		{
+
+			Process.StartInfo.Arguments = "status --porcelain";
+			Process.Start ();
+			Process.WaitForExit ();
+
+			if (Process.StandardOutput.ReadToEnd ().TrimEnd ("\n".ToCharArray ()).Equals ("")) {
+				Console.WriteLine ("NO CHANGES!!");
+				return;
+			}
 
 			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message);
 
@@ -527,22 +537,17 @@ namespace SparkleLib {
 		}
 
 
-		// Ignores repos, dotfiles, swap files and the like.
-		private bool ShouldIgnore (string file_name)
+		// Ignores repos, dotfiles, swap files and the like
+		private bool ShouldIgnore (string file_path)
 		{
 
-			if (file_name [0].Equals (".") ||
-			    file_name.Contains (".lock") ||
-			    file_name.Contains (".git") ||
-			    file_name.Contains ("/.") ||
-			    Directory.Exists (LocalPath + file_name)) {
+			if (file_path.EndsWith (".lock") ||
+			    file_path.Contains (".git") ||
+			    file_path.Contains ("/.") ||
+			    file_path.EndsWith (".swp") ||
+			    Directory.Exists (LocalPath + file_path)) {
 
-				return true; // Yes, ignore it.
-
-			} else if (file_name.Length > 3 &&
-			           file_name.Substring (file_name.Length - 4).Equals (".swp")) {
-
-				return true; // Yes, ignore it.
+				return true; // Yes, ignore it
 
 			} else {
 
@@ -714,90 +719,62 @@ namespace SparkleLib {
 		private string FormatCommitMessage ()
 		{
 
-			bool DoneAddCommit = false;
-			bool DoneEditCommit = false;
-			bool DoneRenameCommit = false;
-			bool DoneDeleteCommit = false;
-			int FilesAdded = 0;
-			int FilesEdited = 0;
-			int FilesRenamed = 0;
-			int FilesDeleted = 0;
-
-			Process.StartInfo.Arguments = "status";
+			Process.StartInfo.Arguments = "status --porcelain";
 			Process.Start ();
-			string output = Process.StandardOutput.ReadToEnd ();
 
-			foreach (string line in Regex.Split (output, "\n")) {
-				if (line.IndexOf ("new file:") > -1)
-					FilesAdded++;
-				if (line.IndexOf ("modified:") > -1)
-					FilesEdited++;
-				if (line.IndexOf ("renamed:") > -1)
-					FilesRenamed++;
-				if (line.IndexOf ("deleted:") > -1)
-					FilesDeleted++;
-			}
+			string output = Process.StandardOutput.ReadToEnd ().TrimEnd ();
+			string [] lines = Regex.Split (output, "\n");
 
-			foreach (string line in Regex.Split (output, "\n")) {
+			string file_name;
+			string file_action;
+			string message = null;
 
-				// Format message for when files are added,
-				// example: "added 'file' and 3 more."
-				if (line.IndexOf ("new file:") > -1 && !DoneAddCommit) {
-					DoneAddCommit = true;
-					if (FilesAdded > 1)
-						return "added ‘" + 
-							line.Replace ("#\tnew file:", "").Trim () + 
-							"’\nand " + (FilesAdded - 1) + " more.";
-					else
-						return "added ‘" + 
-							line.Replace ("#\tnew file:", "").Trim () + "’.";
+			foreach (string line in lines) {
+
+				if (line.StartsWith ("A")) {
+
+					file_action = "added";
+					file_name   = line.Substring (3);
+					message     = file_action + " ‘" + file_name + "’";
+
 				}
 
-				// Format message for when files are edited,
-				// example: "edited 'file'."
-				if (line.IndexOf ("modified:") > -1 && !DoneEditCommit) {
-					DoneEditCommit = true;
-					if (FilesEdited > 1)
-						return "edited ‘" + 
-							line.Replace ("#\tmodified:", "").Trim () + 
-							"’\nand " + (FilesEdited - 1) + " more.";
-					else
-						return "edited ‘" + 
-							line.Replace ("#\tmodified:", "").Trim () + "’.";
+				if (line.StartsWith ("M")) {
+
+					file_action = "edited";
+					file_name   = line.Substring (3);
+					message     = file_action + " ‘" + file_name + "’";
+
 				}
 
-				// Format message for when files are edited,
-				// example: "deleted 'file'."
-				if (line.IndexOf ("deleted:") > -1 && !DoneDeleteCommit) {
-					DoneDeleteCommit = true;
-					if (FilesDeleted > 1)
-						return "deleted ‘" + 
-							line.Replace ("#\tdeleted:", "").Trim () + 
-							"’\nand " + (FilesDeleted - 1) + " more.";
-					else
-						return "deleted ‘" + 
-							line.Replace ("#\tdeleted:", "").Trim () + "’.";
+				if (line.StartsWith ("D")) {
+
+					file_action = "deleted";
+					file_name   = line.Substring (3);
+					message     = file_action + " ‘" + file_name + "’";
+
 				}
 
-				// Format message for when files are renamed,
-				// example: "renamed 'file' to 'new name'."
-				if (line.IndexOf ("renamed:") > -1 && !DoneRenameCommit) {
-					DoneDeleteCommit = true;
-					if (FilesRenamed > 1)
-						return "renamed ‘" + 
-							line.Replace ("#\trenamed:", "").Trim ().Replace
-							(" -> ", "’ to ‘") + "’ and " + (FilesDeleted - 1) + 
-							" more.";
-					else
-						return "renamed ‘" + 
-							line.Replace ("#\trenamed:", "").Trim ().Replace
-							(" -> ", "’ to ‘") + "’.";
+				if (line.StartsWith ("R")) {
+
+					file_action = "renamed";
+					message     = file_action + " ‘" + line.Substring (3).Replace (" -> ", "’ to\n‘") + "’";
+
+				}
+
+				if (line.StartsWith ("C")) {
+
+					file_action = "copied";
+					file_name   = line.Substring (3);
+
 				}
 
 			}
 
-			// Nothing happened:
-			return "";
+			if (lines.Length > 1)
+				message += " and " + (lines.Length - 1) + " more";
+
+			return message;
 
 		}
 
