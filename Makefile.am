@@ -1,5 +1,6 @@
 SUBDIRS =	\
 	build	\
+	help	\
 	NotifySharp \
 	FriendFace \
 	SparkleLib \
@@ -8,8 +9,11 @@ SUBDIRS =	\
 	data \
 	po
 
+EXTRA_DIST = gnome-doc-utils.make
+
 DISTCLEANFILES = \
 	intltool-extract        \
 	intltool-merge          \
-	intltool-update
+	intltool-update		\
+	gnome-doc-utils.make
 

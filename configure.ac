@@ -31,6 +31,9 @@ SHAMROCK_EXPAND_LIBDIR
 SHAMROCK_EXPAND_BINDIR
 SHAMROCK_EXPAND_DATADIR
 
+dnl Help files
+SHAMROCK_CHECK_GNOME_DOC_UTILS(0.17.3)
+
 AC_PROG_INSTALL
 
 AC_PATH_PROG(GMCS, gmcs, no)
@@ -96,6 +99,7 @@ build/m4/shave/shave
 build/m4/shave/shave-libtool
 data/Makefile
 data/icons/Makefile
+help/Makefile
 FriendFace/Makefile
 NotifySharp/Makefile
 SparkleDiff/Makefile
@@ -109,4 +113,14 @@ SparkleShare/Nautilus/sparkleshare-nautilus-extension.py
 po/Makefile.in
 Makefile
 ])
+
+echo "
+SparkleShare ${VERSION}
+
+Configuration:
+       Prefix              : ${prefix}
+       Nautilus plugin     : ${have_nautilus_python}
+       User Help           : ${enable_user_help} (requires gnome-doc-utils >= 0.17.3)
+
+"
 
