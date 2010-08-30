@@ -1,0 +1,32 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:e="http://projectmallard.org/experimental/"
+      type="topic" style="task"
+      id="accounts">
+
+  <info>
+    <link type="guide" xref="index#account"/>
+    <link type="seealso" xref=""/>
+    <desc>Add the location of your remote folders.</desc>
+    <revision pkgversion="0.1" version="0.1" date="2010-08-9" status="stub"/>
+    <credit type="author">
+      <name>Paul Cutler</name>
+      <email>pcutler@gnome.org</email>
+    </credit>    
+<!--
+    <copyright>
+      <year>2010</year>
+      <name>GNOME Documentation Project</name>
+    </copyright>
+-->
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Account Setup</title>    
+  
+  <p>Insert how to setup your accounts here)
+  </p>
+  
+  <p>Insert more help here, if needed.
+  </p>
+	
+</page>
