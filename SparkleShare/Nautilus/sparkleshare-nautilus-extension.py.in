@@ -21,6 +21,10 @@ import time
 import gio
 import nautilus
 
+import pygtk
+pygtk.require('2.0')
+import gtk
+
 SPARKLESHARE_PATH = os.path.join (os.path.expanduser ('~'), "SparkleShare")
 
 import gettext
@@ -62,7 +66,33 @@ class SparkleShareExtension (nautilus.MenuProvider):
         return True
 
 
-    def compare_versions (self, menu, file_reference):
+    def copy_web_link (self, menu, file_reference):
+
+        path = file_reference.get_path ()
+
+        # Get the remote url used for the repo
+        url_command = os.popen ("git config --get remote.origin.url")
+        url = url_command.readline ().strip ()
+
+        # Strip the unneeded parts
+        url = url.lstrip ("ssh://git")
+        url = url.lstrip ("@")
+        url = url.rstrip (".git")
+
+        # Format the right web url depending on the service
+        relative_path = path.lstrip (SPARKLESHARE_PATH)
+        repo_name = relative_path [:relative_path.find ("/")]
+        relative_path = relative_path.lstrip (repo_name)
+
+        if "gitorious.org" in url:
+	        url = "http://" + url + "/blobs/master" + relative_path
+        if "github.com" in url:
+	        url = "http://" + url + "/blobs/master" + relative_path
+
+        clipboard = gtk.clipboard_get ()
+        clipboard.set_text (url)
+        clipboard.store ()
+
         return
 
 
@@ -77,6 +107,12 @@ class SparkleShareExtension (nautilus.MenuProvider):
 		# Only work if we're in a SparkleShare repository folder
         if not (file_reference.get_path ().startswith (SPARKLESHARE_PATH)):
             return
+
+        web_link_menu_item = nautilus.MenuItem ("Nautilus::CopyWebLink", _("Copy Web Link"),
+                                                _("Copy the web address of this file to the clipboard"))
+
+        web_link_menu_item.connect ("activate", self.copy_web_link, file_reference)
+
 
         epochs        = ["", "", "", "", "", "", "", "", "", ""]
         commit_hashes = ["", "", "", "", "", "", "", "", "", ""]
@@ -97,8 +133,9 @@ class SparkleShareExtension (nautilus.MenuProvider):
             epochs [i] = line.strip ("\n")
             i += 1
 
+        # Only work if there is history
         if i < 2:
-            return
+            return web_link_menu_item,
 
         i = 0
         for line in hash_command.readlines ():
@@ -129,9 +166,5 @@ class SparkleShareExtension (nautilus.MenuProvider):
 
         earlier_version_menu_item.set_submenu (submenu)
 
-#        compare_versions_menu_item = nautilus.MenuItem ("Nautilus::CompareVersions", "Compare Versions",
-#                                                        "Compare two versions of this document at any point in time")
 
-#        compare_versions_menu_item = menu_item.connect ("activate", self.compare_versions, file_reference)
-
-        return earlier_version_menu_item,
+        return earlier_version_menu_item, web_link_menu_item
