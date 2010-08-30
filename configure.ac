@@ -110,3 +110,11 @@ po/Makefile.in
 Makefile
 ])
 
+echo "
+SparkleShare ${VERSION}
+
+Configuration:
+       Prefix              : ${prefix}
+       Nautilus plugin     : ${have_nautilus_python}
+"
+
