@@ -1,0 +1,40 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:e="http://projectmallard.org/experimental/"
+      type="guide"
+      id="index">
+
+  <info>
+    <revision pkgversion="0.1" version="0.1" date="2010-08-29"
+     status="incomplete"/>
+    <credit type="author">
+      <name>Paul Cutler</name>
+      <email>pcutler@gnome.org</email>
+    </credit>
+<!--    
+    <copyright>
+      <year>2010</year>
+      <name>GNOME Documentation Project</name>
+    </copyright>
+-->    
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude" />
+  </info>
+
+  <title>SparkleShare</title>
+
+  <section id="account" style="2column">
+    <title>Account Setup</title>
+  </section>
+
+  <section id="share" style="2column">
+    <title>Sync and Share Files</title>
+  </section>
+    
+  <section id="advanced" style="2column">
+	<title>Advanced options and help</title>
+  </section>
+
+  <section id="problems">
+    <title>Common Problems</title>
+  </section>
+
+</page>

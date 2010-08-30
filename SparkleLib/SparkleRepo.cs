@@ -315,10 +315,8 @@ namespace SparkleLib {
 			Process.Start ();
 			Process.WaitForExit ();
 
-			if (Process.StandardOutput.ReadToEnd ().TrimEnd ("\n".ToCharArray ()).Equals ("")) {
-				Console.WriteLine ("NO CHANGES!!");
+			if (Process.StandardOutput.ReadToEnd ().TrimEnd ("\n".ToCharArray ()).Equals (""))
 				return;
-			}
 
 			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message);
 
@@ -539,9 +537,10 @@ namespace SparkleLib {
 		{
 
 			if (file_path.EndsWith (".lock") ||
-			    file_path.Contains (".git") ||
-			    file_path.Contains ("/.") ||
-			    file_path.EndsWith (".swp") ||
+			    file_path.EndsWith ("~")     ||
+			    file_path.Contains (".git")  ||
+			    file_path.Contains ("/.")    ||
+			    file_path.EndsWith (".swp")  ||
 			    Directory.Exists (LocalPath + file_path)) {
 
 				return true; // Yes, ignore it

@@ -364,7 +364,7 @@ namespace SparkleShare {
 					if (edited_files.Children.Length > 0) {
 
 						Label edited_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
-						                                "Edited" +
+						                                _("Edited") +
 						                                "</small></span>") {
 							UseMarkup=true,
 							Xalign = 0
@@ -378,7 +378,7 @@ namespace SparkleShare {
 					if (added_files.Children.Length > 0) {
 
 						Label added_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
-						                                "Added" +
+						                                _("Added") +
 						                                "</small></span>") {
 							UseMarkup=true,
 							Xalign = 0
@@ -392,7 +392,7 @@ namespace SparkleShare {
 					if (deleted_files.Children.Length > 0) {
 
 						Label deleted_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
-						                                "Deleted" +
+						                                _("Deleted") +
 						                                "</small></span>") {
 							UseMarkup=true,
 							Xalign = 0
@@ -406,7 +406,7 @@ namespace SparkleShare {
 					if (moved_files.Children.Length > 0) {
 
 						Label moved_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
-						                                 "Moved" +
+						                                 _("Moved") +
 						                                 "</small></span>") {
 							UseMarkup=true,
 							Xalign = 0
