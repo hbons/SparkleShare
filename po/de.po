@@ -14,9 +14,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Country: GERMANY\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-Language: German\n"
-"X-Poedit-Country: GERMANY\n"
 
 #: ../SparkleDiff/SparkleDiff.cs:78 ../SparkleShare/SparkleShare.cs:58
 msgid "Git wasn't found."
@@ -129,7 +129,7 @@ msgstr[1] "vor {0} Jahren"
 
 #: ../SparkleLib/SparkleOptions.cs:486
 msgid "OptionName"
-msgstr ""
+msgstr "Optionsname"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:111
 msgid "Copy Web Link"
@@ -177,7 +177,7 @@ msgstr "Konfiguriere..."
 
 #: ../SparkleShare/SparkleIntro.cs:162
 msgid "Where is your remote folder?"
-msgstr ""
+msgstr "In welchem Pfad liegt ihr Remote-Verzeichnis?"
 
 #: ../SparkleShare/SparkleIntro.cs:175
 msgid "ssh://address-to-my-server/"
@@ -197,15 +197,15 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:196
 msgid "The GNOME Project"
-msgstr ""
+msgstr "Das GNOME Project"
 
 #: ../SparkleShare/SparkleIntro.cs:198
 msgid "GNOME is an easy to understand interface to your computer."
-msgstr ""
+msgstr "GNOME ist ein einfach verständliches Interface zu Ihrem Computer"
 
 #: ../SparkleShare/SparkleIntro.cs:199
 msgid "Select this option if you’re a developer or designer working on GNOME."
-msgstr ""
+msgstr "Wählen Sie diese Option, wenn sie Entwickler oder Designer sind, der mit GNOME arbeitet."
 
 #: ../SparkleShare/SparkleIntro.cs:207
 msgid "Gitorious"
@@ -234,13 +234,12 @@ msgstr "Abbrechen"
 
 #: ../SparkleShare/SparkleIntro.cs:345
 msgid "Skip"
-msgstr ""
+msgstr "Überspringen"
 
 #: ../SparkleShare/SparkleIntro.cs:379
 #: ../SparkleShare/SparkleInvitation.cs:277
-#, fuzzy
 msgid "Something went wrong…"
-msgstr "Beim Synchronisieren von »{0}« ist ein Fehler aufgetreten"
+msgstr "Ein Fehler ist aufgetreten..."
 
 #: ../SparkleShare/SparkleIntro.cs:385
 msgid "Try Again"
@@ -282,7 +281,7 @@ msgstr "Dies kann eine Weile dauern.\n"
 #: ../SparkleShare/SparkleIntro.cs:476
 #: ../SparkleShare/SparkleInvitation.cs:373
 msgid "You sure it’s not coffee o-clock?"
-msgstr ""
+msgstr "Zeit für eine Kaffeepasue?"
 
 #: ../SparkleShare/SparkleIntro.cs:525
 msgid "SparkleShare is ready to go!"
