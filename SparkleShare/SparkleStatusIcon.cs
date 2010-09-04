@@ -33,7 +33,7 @@ namespace SparkleShare {
 		private MenuItem StatusMenuItem;
 		private string StateText;
 
-		private Timer Timer;
+		private Timer Animation;
 		private Gdk.Pixbuf [] AnimationFrames;
 		private int FrameNumber;
 
@@ -53,7 +53,7 @@ namespace SparkleShare {
 
 			FrameNumber = 0;
 			AnimationFrames = CreateAnimationFrames ();
-			Timer = CreateTimer ();
+			Animation = CreateAnimation ();
 
 			SyncingReposCount = 0;
 
@@ -62,10 +62,10 @@ namespace SparkleShare {
 
 			CreateMenu ();
 
-			// Primary mouse button
+			// Primary mouse button click
 			Activate += ShowMenu;
 
-			// Secondary mouse button
+			// Secondary mouse button click
 			PopupMenu += ShowMenu;
 
 			SetIdleState ();
@@ -74,6 +74,8 @@ namespace SparkleShare {
 		}
 
 
+		// Slices up the graphic that contains the
+		// animation frames.
 		private Gdk.Pixbuf [] CreateAnimationFrames ()
 		{
 
@@ -88,15 +90,15 @@ namespace SparkleShare {
 		}
 
 
-		// Creates the timer that handles the syncing animation
-		private Timer CreateTimer ()
+		// Creates the Animation that handles the syncing animation.
+		private Timer CreateAnimation ()
 		{
 
-			Timer timer = new Timer () {
+			Timer Animation = new Timer () {
 				Interval = 35
 			};
 
-			timer.Elapsed += delegate {
+			Animation.Elapsed += delegate {
 
 				if (FrameNumber < AnimationFrames.Length - 1)
 					FrameNumber++;
@@ -107,12 +109,15 @@ namespace SparkleShare {
 
 			};
 
-			return timer;
+			return Animation;
 
 		}
 
 
-		private EventHandler CreateWindowDelegate (string path)
+		// A method reference that makes sure that
+		// opening the event log for each repository
+		// works correctly.
+		private EventHandler OpenLogDelegate (string path)
 		{
 
 			return delegate { 
@@ -132,7 +137,7 @@ namespace SparkleShare {
 
 			double size = 0;
 
-			// Ignore the temporary 'rebase-apply' directory
+			// Ignore the temporary 'rebase-apply' directory.
 			// This prevents potential crashes when files are being
 			// queried whilst the files have already been deleted.
 			if (parent.Name.Equals ("rebase-apply"))
@@ -226,7 +231,7 @@ namespace SparkleShare {
 
 				if (SparkleUI.Repositories.Count > 0) {
 
-					// Creates a menu item for each repository with a link to them
+					// Creates a menu item for each repository with a link to their logs
 					foreach (SparkleRepo repo in SparkleUI.Repositories) {
 
 						folder_action = new Gtk.Action ("", repo.Name) {
@@ -234,7 +239,7 @@ namespace SparkleShare {
 							IsImportant = true
 						};
 
-						folder_action.Activated += CreateWindowDelegate (repo.LocalPath);
+						folder_action.Activated += OpenLogDelegate (repo.LocalPath);
 
 						MenuItem menu_item = (MenuItem) folder_action.CreateMenuItem ();
 
@@ -255,11 +260,14 @@ namespace SparkleShare {
 
 				}
 
+				// Opens the wizard to add a new remote folder
 				MenuItem add_item = new MenuItem (_("Sync Remote Folder…"));
 
 					add_item.Activated += delegate {
 
 						SparkleIntro intro = new SparkleIntro ();
+
+						// Only show the server form in the wizard
 						intro.ShowServerForm (true);
 
 					};
@@ -267,27 +275,29 @@ namespace SparkleShare {
 				Menu.Add (add_item);
 				Menu.Add (new SeparatorMenuItem ());
 
+				// A checkbutton to toggle whether or not to show notifications
 				CheckMenuItem notify_item =	new CheckMenuItem (_("Show Notifications"));
 
-					string notify_setting = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
+					// Whether notifications are shown depends existence of this file 
+					string notify_setting_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
 						"sparkleshare.notify");
 							                                 
-					if (File.Exists (notify_setting))
+					if (File.Exists (notify_setting_file_path))
 						notify_item.Active = true;
-				
+
 					notify_item.Toggled += delegate {
 
-						if (File.Exists (notify_setting))
-							File.Delete (notify_setting);
+						if (File.Exists (notify_setting_file_path))
+							File.Delete (notify_setting_file_path);
 						else
-							File.Create (notify_setting);
+							File.Create (notify_setting_file_path);
 				
 					};
 
 				Menu.Add (notify_item);
-
 				Menu.Add (new SeparatorMenuItem ());
 
+				// A menu item that takes the use to sparkleshare.org
 				MenuItem about_item = new MenuItem (_("Visit Website"));
 
 					about_item.Activated += delegate {
@@ -304,6 +314,7 @@ namespace SparkleShare {
 				Menu.Add (about_item);
 				Menu.Add (new SeparatorMenuItem ());
 
+					// A menu item that quits the application
 					MenuItem quit_item = new MenuItem (_("Quit"));
 					quit_item.Activated += Quit;
 
@@ -317,15 +328,6 @@ namespace SparkleShare {
 
 			Menu.ShowAll ();
 			Menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
-
-		}
-
-
-		private void UpdateStatusMenuItem ()
-		{
-
-			(StatusMenuItem.Children [0] as Label).Text  = StateText;
-			Menu.ShowAll ();
 
 		}
 
@@ -344,9 +346,14 @@ namespace SparkleShare {
 
 			UpdateFolderSize ();
 
+			// Make sure the number of syncing repositories doesn't
+			// go below zero. This can happen in some circumstances.
 			if (SyncingReposCount < 0)
 				SyncingReposCount = 0;
 
+			// Make sure the number of syncing repositories doesn't
+			// go above the number of existing repositories. This can
+			// happen in some circumstances.
 			if (SyncingReposCount > SparkleUI.Repositories.Count)
 				SyncingReposCount = SparkleUI.Repositories.Count;
 
@@ -363,8 +370,10 @@ namespace SparkleShare {
 
 			}
 
-			UpdateStatusMenuItem ();
-			
+			// Use the new status text
+			(StatusMenuItem.Children [0] as Label).Text  = StateText;
+			Menu.ShowAll ();
+
 			SparkleHelpers.DebugInfo ("Status", "Number of repos syncing: " + SyncingReposCount);
 
 		}
@@ -374,8 +383,9 @@ namespace SparkleShare {
 		private void SetIdleState ()
 		{
 
-			Timer.Stop ();
+			Animation.Stop ();
 
+			// The first frame is the idle icon
 			Application.Invoke (delegate { SetPixbuf (AnimationFrames [0]); });
 			StateText = _("Up to date") + "  (" + FormatFileSize (FolderSize) + ")";
 
@@ -387,7 +397,7 @@ namespace SparkleShare {
 		{
 
 			StateText = _("Syncing…");
-			Timer.Start ();
+			Animation.Start ();
 
 		}
 
@@ -396,7 +406,7 @@ namespace SparkleShare {
 		public void SetErrorState ()
 		{
 
-			Timer.Stop ();
+			Animation.Stop ();
 			Application.Invoke (delegate { Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24); });
 			StateText = _("Failed to sync changes");
 
@@ -425,6 +435,7 @@ namespace SparkleShare {
 		private void Quit (object o, EventArgs args)
 		{
 
+			// Remove the process id file
 			File.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "sparkleshare.pid"));
 			Application.Quit ();
 
