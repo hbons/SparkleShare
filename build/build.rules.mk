@@ -68,6 +68,7 @@ $(ASSEMBLY_FILE): $(SOURCES_BUILD) $(RESOURCES_EXPANDED) $(DEP_LINK)
 	$(MCS) \
 		$(GMCS_FLAGS) \
 		$(ASSEMBLY_BUILD_FLAGS) \
+		-codepage:utf8 \
 		-nowarn:0278 -nowarn:0078 $$warn \
 		-define:HAVE_GTK_2_10 -define:NET_2_0 \
 		-debug -target:$(TARGET) -out:$@ \
