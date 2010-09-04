@@ -53,6 +53,10 @@ namespace SparkleShare {
 			Title = String.Format(_("Recent Events in ‘{0}’"), name);
 			IconName = "folder-sparkleshare";
 
+			DeleteEvent += delegate {
+				Close ();
+			};
+
 			LayoutVertical = new VBox (false, 12);
 
 			LayoutVertical.PackStart (CreateEventLog (), true, true, 0);
@@ -73,14 +77,14 @@ namespace SparkleShare {
 						process.StartInfo.Arguments = LocalPath.Replace (" ", "\\ "); // Escape space-characters
 						process.Start ();
 
-						Destroy ();
+						Close ();
 
 					};
 
 					Button close_button = new Button (Stock.Close);
 
 					close_button.Clicked += delegate (object o, EventArgs args) {
-						Destroy ();
+						Close ();
 					};
 
 				dialog_buttons.Add (open_folder_button);
@@ -93,14 +97,37 @@ namespace SparkleShare {
 		}
 
 
+		public void Close ()
+		{
+
+			foreach (SparkleRepo repo in SparkleUI.Repositories) {
+
+				// Get commits from the repository
+				if (repo.LocalPath.Equals (LocalPath)) {
+
+					repo.NewCommit -= UpdateEventLog;
+					repo.PushingStarted -= UpdateEventLog;
+
+				}
+
+			}
+
+			Destroy ();
+
+		}
+
 		public void UpdateEventLog (object o, EventArgs args)
 		{
 
-			LayoutVertical.Remove (ScrolledWindow);
-			ScrolledWindow = CreateEventLog ();
-			LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
-			LayoutVertical.ReorderChild (ScrolledWindow, 0);
-			ShowAll ();
+			Application.Invoke (delegate {
+
+				LayoutVertical.Remove (ScrolledWindow);
+				ScrolledWindow = CreateEventLog ();
+				LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
+				LayoutVertical.ReorderChild (ScrolledWindow, 0);
+				ShowAll ();
+
+			});
 
 		}
 
@@ -118,14 +145,10 @@ namespace SparkleShare {
 					commits = repo.GetCommits (25);
 
 					// Update the log when there are new remote changes
-					repo.NewCommit += delegate {
-						Application.Invoke (UpdateEventLog);
-					};
+					repo.NewCommit += UpdateEventLog;
 
 					// Update the log when changes are being sent
-					repo.PushingStarted += delegate {
-						Application.Invoke (UpdateEventLog);
-					};
+					repo.PushingStarted += UpdateEventLog;
 
 					break;
 
