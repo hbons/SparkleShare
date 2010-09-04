@@ -78,6 +78,16 @@ namespace SparkleLib {
 
 		}
 
+
+		// Converts a UNIX timestamp to a more usable time object
+		public static DateTime UnixTimestampToDateTime (int timestamp)
+		{
+
+			DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
+			return unix_epoch.AddSeconds (timestamp);
+
+		}
+
 	}
 
 }

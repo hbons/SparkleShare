@@ -16,6 +16,7 @@
 
 using Mono.Unix;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -706,6 +707,98 @@ namespace SparkleLib {
 				remote_origin_url = process.StandardOutput.ReadToEnd ().Trim ();
 
 				return remote_origin_url;
+
+		}
+
+
+		// Returns a list of latest commits
+		public List <SparkleCommit> GetCommits (int count)
+		{
+
+			if (count < 0)
+				return null;
+
+			List <SparkleCommit> commits = new List <SparkleCommit> ();
+
+			Process process = new Process () {
+				EnableRaisingEvents = true
+			};
+
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.WorkingDirectory = LocalPath;
+			process.StartInfo.FileName  = "git";
+			process.StartInfo.Arguments = "log --format=\"%at\t%an\t%ae\t%H\" -" + count;
+
+			process.Start ();
+			process.WaitForExit ();
+
+			string output = process.StandardOutput.ReadToEnd ().Trim ();
+			output = output.TrimStart ("\n".ToCharArray ());
+
+			string [] lines = Regex.Split (output, "\n");
+
+			Array.Sort (lines);
+			Array.Reverse (lines);
+
+			foreach (string line in lines) {
+
+				string [] parts = Regex.Split (line, "\t");
+
+				int unix_timestamp = int.Parse (parts [0]);
+				string user_name   = parts [1];
+				string user_email  = parts [2];
+				string hash        = parts [3];
+
+				DateTime date_time = SparkleHelpers.UnixTimestampToDateTime (unix_timestamp);
+
+				SparkleCommit commit = new SparkleCommit (user_name, user_email, date_time, hash);
+
+				// Find out what has changed in the commit.
+				// --name-status lists affected files with the modification type,
+				// -C detects renames
+				process.StartInfo.Arguments = "show " + hash + " --name-status -C";
+				process.Start ();
+				process.WaitForExit ();
+
+				output = process.StandardOutput.ReadToEnd ().Trim ();
+				output = output.TrimStart ("\n".ToCharArray ());
+
+				string [] file_lines = Regex.Split (output, "\n");
+
+				foreach (string file_line in file_lines) {
+
+					string file_path = "";
+
+					if (file_line.Length > 1)
+						file_path = file_line.Substring (2);
+
+					if (file_line.StartsWith ("M\t"))
+						commit.Edited.Add (file_path);
+
+					if (file_line.StartsWith ("A\t"))
+						commit.Added.Add (file_path);
+
+					if (file_line.StartsWith ("D\t"))
+						commit.Deleted.Add (file_path);
+
+					if (file_line.StartsWith ("R")) {
+
+						file_path = file_line.Substring (5);
+						string [] paths = Regex.Split (file_path, "\t");
+
+						commit.MovedFrom.Add (paths [0]);
+						commit.MovedTo.Add (paths [1]);
+
+					}
+
+				}
+
+				commits.Add (commit);
+
+			}
+
+			return commits;
 
 		}
 
