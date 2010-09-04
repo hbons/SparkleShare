@@ -290,10 +290,6 @@ namespace SparkleShare {
 
 						link.ModifyBg (StateType.Normal, background_color);
 
-						link.ButtonPressEvent += delegate {
-							Destroy ();
-						};
-
 						added_files.PackStart (link, false, false, 0);
 
 					}
@@ -306,10 +302,6 @@ namespace SparkleShare {
 
 						link.ModifyBg (StateType.Normal, background_color);
 
-						link.ButtonPressEvent += delegate {
-							Destroy ();
-						};
-
 						deleted_files.PackStart (link, false, false, 0);
 
 					}
@@ -321,18 +313,10 @@ namespace SparkleShare {
 
 						from_link.ModifyBg (StateType.Normal, background_color);
 
-						from_link.ButtonPressEvent += delegate {
-							Destroy ();
-						};
-
 						SparkleLink to_link = new SparkleLink (change_set.MovedTo [i],
 							SparkleHelpers.CombineMore (LocalPath, change_set.MovedTo [i]));
 
 						to_link.ModifyBg (StateType.Normal, background_color);
-
-						to_link.ButtonPressEvent += delegate {
-							Destroy ();
-						};
 
 						Label to_label = new Label ("<span fgcolor='" + secondary_text_color +"'>" +
 						                            "<small>to</small></span> ") {
@@ -344,10 +328,11 @@ namespace SparkleShare {
 						link_wrapper.PackStart (to_label, false, false, 0);
 						link_wrapper.PackStart (to_link, true, true, 0);
 
-
 						moved_files.PackStart (from_link, false, false, 0);
 						moved_files.PackStart (link_wrapper, false, false, 0);
-						moved_files.PackStart (new Label (""), false, false, 0);
+
+						if (change_set.MovedFrom.Count > 1)
+							moved_files.PackStart (new Label (""), false, false, 0);
 
 					}
 
@@ -419,7 +404,7 @@ namespace SparkleShare {
 
 					HBox hbox = new HBox (false, 0);
 
-					Image avatar = new Image (SparkleHelpers.GetAvatar (change_set.UserEmail, 32)) {
+					Image avatar = new Image (SparkleUIHelpers.GetAvatar (change_set.UserEmail, 32)) {
 						Yalign = 0
 					};
 
@@ -452,7 +437,7 @@ namespace SparkleShare {
 
 
 		// Converts a UNIX timestamp to a more usable time object
-		public DateTime UnixTimestampToDateTime (int timestamp)
+		public static DateTime UnixTimestampToDateTime (int timestamp)
 		{
 			DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
 			return unix_epoch.AddSeconds (timestamp);
@@ -461,7 +446,7 @@ namespace SparkleShare {
 
 		// Converts a Gdk RGB color to a hex value.
 		// Example: from "rgb:0,0,0" to "#000000"
-		public string GdkColorToHex (Gdk.Color color)
+		public static string GdkColorToHex (Gdk.Color color)
 		{
 
 			return String.Format ("#{0:X2}{1:X2}{2:X2}",
@@ -481,16 +466,18 @@ namespace SparkleShare {
 
 		public ActivityDay (DateTime date_time)
 		{
+
 			DateTime = date_time;
 			DateTime = new DateTime (DateTime.Year, DateTime.Month, DateTime.Day);
+
 		}
 
 	}
 
-	
+	// TODO: Move this to the repo
 	public class ChangeSet
 	{
-	
+
 		public string UserName;
 		public string UserEmail;
 		public string Message;
@@ -501,7 +488,7 @@ namespace SparkleShare {
 		public List <string> MovedTo;
 		public DateTime DateTime;
 		public string Hash;
-	
+
 		public ChangeSet (string user_name, string user_email, string message, DateTime date_time, string hash)
 		{
 
@@ -511,9 +498,9 @@ namespace SparkleShare {
 			DateTime  = date_time;
 			Hash      = hash;
 
-			Edited      = new List <string> ();
-			Added       = new List <string> ();
-			Deleted     = new List <string> ();
+			Edited    = new List <string> ();
+			Added     = new List <string> ();
+			Deleted   = new List <string> ();
 			MovedFrom = new List <string> ();
 			MovedTo   = new List <string> ();
 
