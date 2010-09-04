@@ -108,115 +108,46 @@ namespace SparkleShare {
 		private ScrolledWindow CreateEventLog ()
 		{
 
-			int number_of_events = 40;
+			List <SparkleCommit> commits = new List <SparkleCommit> ();
 
-			Process process = new Process () {
-				EnableRaisingEvents = true
-			};
+			foreach (SparkleRepo repo in SparkleUI.Repositories) {
 
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.WorkingDirectory = LocalPath;
-			process.StartInfo.FileName = "git";
-			process.StartInfo.Arguments = "log --format=\"%at☃%an☃%ae☃%s☃%H\" -" + number_of_events;
+				if (repo.LocalPath.Equals (LocalPath)) {
 
-			process.Start ();
+					commits = repo.GetCommits (40);
+					break;
 
-			string output = process.StandardOutput.ReadToEnd ().Trim ();
+				}
 
-			output = output.TrimStart ("\n".ToCharArray ());
-			string [] lines = Regex.Split (output, "\n");
-			int linesLength = lines.Length;
-			if (output == "")
-				linesLength = 0;
+			}
 
-			// Sort by time and get the last 25
-			Array.Sort (lines);
-			Array.Reverse (lines);
 
 			List <ActivityDay> activity_days = new List <ActivityDay> ();
 
-			for (int i = 0; i < number_of_events && i < linesLength; i++) {
+			foreach (SparkleCommit commit in commits) {
 
-					string line = lines [i];
+				bool commit_inserted = false;
+				foreach (ActivityDay stored_activity_day in activity_days) {
 
-					// Look for the snowman!
-					string [] parts = Regex.Split (line, "☃");
+					if (stored_activity_day.DateTime.Year  == commit.DateTime.Year &&
+					    stored_activity_day.DateTime.Month == commit.DateTime.Month &&
+					    stored_activity_day.DateTime.Day   == commit.DateTime.Day) {
 
-					int unix_timestamp     = int.Parse (parts [0]);
-					string user_name  = parts [1];
-					string user_email = parts [2];
-					string message    = parts [3];
-					string hash       = parts [4];
-
-					DateTime date_time = UnixTimestampToDateTime (unix_timestamp);
-
-					message = message.Replace ("\n", " ");
-
-					ChangeSet change_set = new ChangeSet (user_name, user_email, message, date_time, hash);
-
-					// --name-status lists affected files with the modification type,
-					// -C detects renames
-					process.StartInfo.Arguments = "show " + hash + " --name-status -C";
-					process.Start ();
-
-
-					output = process.StandardOutput.ReadToEnd ().Trim ();
-
-					output = output.TrimStart ("\n".ToCharArray ());
-					string [] file_lines = Regex.Split (output, "\n");
-
-					foreach (string file_line in file_lines) {
-
-						string file_path = "";
-
-						if (file_line.Length > 1)
-							file_path = file_line.Substring (2);
-
-						if (file_line.StartsWith ("M\t"))
-							change_set.Edited.Add (file_path);
-
-						if (file_line.StartsWith ("A\t"))
-							change_set.Added.Add (file_path);
-
-						if (file_line.StartsWith ("D\t"))
-							change_set.Deleted.Add (file_path);
-
-						if (file_line.StartsWith ("R")) {
-
-							file_path = file_line.Substring (5);
-							string [] paths = Regex.Split (file_path, "\t");
-
-							change_set.MovedFrom.Add (paths [0]);
-							change_set.MovedTo.Add (paths [1]);
-
-						}
+					    stored_activity_day.Add (commit);
+					    commit_inserted = true;
+					    break;
 
 					}
 
+				}
+				
+				if (!commit_inserted) {
 
-					bool change_set_inserted = false;
-					foreach (ActivityDay stored_activity_day in activity_days) {
-
-						if (stored_activity_day.DateTime.Year  == change_set.DateTime.Year &&
-						    stored_activity_day.DateTime.Month == change_set.DateTime.Month &&
-						    stored_activity_day.DateTime.Day   == change_set.DateTime.Day) {
-
-						    stored_activity_day.Add (change_set);
-						    change_set_inserted = true;
-						    break;
-
-						}
-
-					}
+						ActivityDay activity_day = new ActivityDay (commit.DateTime);
+						activity_day.Add (commit);
+						activity_days.Add (activity_day);
 					
-					if (!change_set_inserted) {
-
-							ActivityDay activity_day = new ActivityDay (change_set.DateTime);
-							activity_day.Add (change_set);
-							activity_days.Add (activity_day);
-						
-					}
+				}
 
 			}
 
@@ -263,7 +194,7 @@ namespace SparkleShare {
 				Gdk.Color color = Style.Foreground (StateType.Insensitive);
 				string secondary_text_color = GdkColorToHex (color);
 
-				foreach (ChangeSet change_set in activity_day) {
+				foreach (SparkleCommit change_set in activity_day) {
 
 					VBox log_entry     = new VBox (false, 0);
 					VBox deleted_files = new VBox (false, 0);
@@ -436,14 +367,6 @@ namespace SparkleShare {
 		}
 
 
-		// Converts a UNIX timestamp to a more usable time object
-		public static DateTime UnixTimestampToDateTime (int timestamp)
-		{
-			DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
-			return unix_epoch.AddSeconds (timestamp);
-		}
-
-
 		// Converts a Gdk RGB color to a hex value.
 		// Example: from "rgb:0,0,0" to "#000000"
 		public static string GdkColorToHex (Gdk.Color color)
@@ -459,7 +382,7 @@ namespace SparkleShare {
 	}
 
 	
-	public class ActivityDay : List <ChangeSet>
+	public class ActivityDay : List <SparkleCommit>
 	{
 
 		public DateTime DateTime;
@@ -472,40 +395,6 @@ namespace SparkleShare {
 
 		}
 
-	}
-
-	// TODO: Move this to the repo
-	public class ChangeSet
-	{
-
-		public string UserName;
-		public string UserEmail;
-		public string Message;
-		public List <string> Added;
-		public List <string> Deleted;
-		public List <string> Edited;
-		public List <string> MovedFrom;
-		public List <string> MovedTo;
-		public DateTime DateTime;
-		public string Hash;
-
-		public ChangeSet (string user_name, string user_email, string message, DateTime date_time, string hash)
-		{
-
-			UserName  = user_name;
-			UserEmail = user_email;
-			Message   = message;
-			DateTime  = date_time;
-			Hash      = hash;
-
-			Edited    = new List <string> ();
-			Added     = new List <string> ();
-			Deleted   = new List <string> ();
-			MovedFrom = new List <string> ();
-			MovedTo   = new List <string> ();
-
-		}
-	
 	}
 
 }

@@ -76,8 +76,9 @@ namespace SparkleShare {
 			}
 
 
-			bool HideUI = false;
+			bool HideUI   = false;
 			bool ShowHelp = false;
+
 			var p = new OptionSet () {
 				{ "d|disable-gui", _("Don't show the notification icon"), v => HideUI = v != null },
 				{ "v|version", _("Show this help text"), v => { PrintVersion (); Environment.Exit (0); } },
@@ -85,12 +86,15 @@ namespace SparkleShare {
 			};
 
 			try {
+
 				p.Parse (args);
-			}
-			catch (OptionException e) {
+
+			} catch (OptionException e) {
+
 				Console.Write ("SparkleShare: ");
 				Console.WriteLine (e.Message);
 				Console.WriteLine ("Try `sparkleshare --help' for more information.");
+
 			}
 
 			if (ShowHelp)
