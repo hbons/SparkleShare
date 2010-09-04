@@ -1,0 +1,8 @@
+0.2-beta1 (Sun Sep 5, 2010):
+
+	Hylke: Aside from the usual bug fixes and behind the scenes work I mainly
+	added features that increase productivity in the event logs. Not only does
+	it look a lot prettier, each entry in an event log now has a clickable link
+	for easy access to files. It refreshes automatically on new events as well.
+	The Nautilus plugin now	has the "Copy Web Link" context	menu item, which
+	makes sharing links a whole lot easier.
