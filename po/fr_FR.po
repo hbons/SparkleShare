@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-29 12:35+0000\n"
+"POT-Creation-Date: 2010-08-31 06:30+0000\n"
 "PO-Revision-Date: 2010-07-13 16:07+0800\n"
 "Last-Translator: Yann Hermans <chezyann@gmail.com>\n"
 "Language-Team: French (France)\n"
@@ -131,15 +131,23 @@ msgstr[1] "il y a {0} ans"
 msgid "OptionName"
 msgstr "Nom de l'option"
 
-#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:108
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:111
+msgid "Copy Web Link"
+msgstr "Copier le lien internet"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:112
+msgid "Copy the web address of this file to the clipboard"
+msgstr "Copie l'adresse internet de ce fichier dans le presse-papier"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:145
 msgid "Get Earlier Version"
 msgstr "Obtenir une version antérieure"
 
-#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:109
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:146
 msgid "Make a copy of an earlier version in this folder"
 msgstr "Créer une copie d'une version antérieure de ce dossier"
 
-#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:122
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:159
 msgid "Select to get a copy of this version"
 msgstr "Sélectionner pour obtenir une copie de cette version"
 
@@ -332,6 +340,22 @@ msgstr "Derniers événements dans « {0} »"
 #: ../SparkleShare/SparkleLog.cs:65
 msgid "_Open Folder"
 msgstr "_Ouvrir le dossier"
+
+#: ../SparkleShare/SparkleLog.cs:367
+msgid "Edited"
+msgstr "Edité le"
+
+#: ../SparkleShare/SparkleLog.cs:381
+msgid "Added"
+msgstr "Ajouté le"
+
+#: ../SparkleShare/SparkleLog.cs:395
+msgid "Deleted"
+msgstr "Supprimé le"
+
+#: ../SparkleShare/SparkleLog.cs:409
+msgid "Moved"
+msgstr "Déplacé le"
 
 #: ../SparkleShare/SparkleShare.cs:82
 msgid "Don't show the notification icon"
