@@ -93,7 +93,7 @@ namespace SparkleShare {
 		}
 
 
-		public void UpdateEventLog ()
+		public void UpdateEventLog (object o, EventArgs args)
 		{
 
 			LayoutVertical.Remove (ScrolledWindow);
@@ -112,9 +112,21 @@ namespace SparkleShare {
 
 			foreach (SparkleRepo repo in SparkleUI.Repositories) {
 
+				// Get commits from the repository
 				if (repo.LocalPath.Equals (LocalPath)) {
 
-					commits = repo.GetCommits (40);
+					commits = repo.GetCommits (25);
+
+					// Update the log when there are new remote changes
+					repo.NewCommit += delegate {
+						Application.Invoke (UpdateEventLog);
+					};
+
+					// Update the log when changes are being sent
+					repo.PushingStarted += delegate {
+						Application.Invoke (UpdateEventLog);
+					};
+
 					break;
 
 				}
