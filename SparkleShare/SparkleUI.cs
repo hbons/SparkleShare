@@ -311,7 +311,7 @@ namespace SparkleShare {
 			if (File.Exists (notify_settings_file)) {
 
 				SparkleBubble bubble = new SparkleBubble (author, message) {
-					Icon = SparkleHelpers.GetAvatar (email, 32)				
+					Icon = SparkleUIHelpers.GetAvatar (email, 32)				
 				};
 
 				bubble.AddAction ("", "Show Events", delegate {

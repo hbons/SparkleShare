@@ -37,7 +37,6 @@ namespace SparkleShare {
 		private Gdk.Pixbuf [] AnimationFrames;
 		private int FrameNumber;
 
-		private Gtk.Action FolderAction;
 		private double FolderSize;
 
 
@@ -79,7 +78,7 @@ namespace SparkleShare {
 		{
 
 			Gdk.Pixbuf [] animation_frames = new Gdk.Pixbuf [5];
-			Gdk.Pixbuf frames_pixbuf = SparkleHelpers.GetIcon ("process-syncing-sparkleshare", 24);
+			Gdk.Pixbuf frames_pixbuf = SparkleUIHelpers.GetIcon ("process-syncing-sparkleshare", 24);
 			
 			for (int i = 0; i < animation_frames.Length; i++)
 				animation_frames [i] = new Gdk.Pixbuf (frames_pixbuf, (i * 24), 0, 24, 24);
@@ -133,7 +132,7 @@ namespace SparkleShare {
 
 			double size = 0;
 
-			// Ignore the temporary rebase-apply directory.
+			// Ignore the temporary 'rebase-apply' directory
 			// This prevents potential crashes when files are being
 			// queried whilst the files have already been deleted.
 			if (parent.Name.Equals ("rebase-apply"))
@@ -164,25 +163,30 @@ namespace SparkleShare {
 		}
 
 
-		// Format a file size nicely.
+		// Format a file size nicely with small caps.
 		// Example: 1048576 becomes "1 ᴍʙ"
         private string FormatFileSize (double byte_count)
         {
 
-			string size = "";
-
 			if (byte_count >= 1099511627776)
-				size = String.Format (_("{0:##.##} ᴛʙ"), Math.Round (byte_count / 1099511627776, 1));
-			else if (byte_count >= 1073741824)
-				size = String.Format (_("{0:##.##} ɢʙ"), Math.Round (byte_count / 1073741824, 1));
-            else if (byte_count >= 1048576)
-				size = String.Format (_("{0:##.##} ᴍʙ"), Math.Round (byte_count / 1048576, 1));
-			else if (byte_count >= 1024)
-				size = String.Format (_("{0:##.##} ᴋʙ"), Math.Round (byte_count / 1024, 1));
-			else
-				size = byte_count.ToString () + " bytes";
 
-            return size;
+				return String.Format ("{0:##.##}  ᴛʙ", Math.Round (byte_count / 1099511627776, 1));
+
+			else if (byte_count >= 1073741824)
+
+				return String.Format ("{0:##.##} ɢʙ", Math.Round (byte_count / 1073741824, 1));
+
+            else if (byte_count >= 1048576)
+
+				return String.Format ("{0:##.##} ᴍʙ", Math.Round (byte_count / 1048576, 1));
+
+			else if (byte_count >= 1024)
+
+				return String.Format ("{0:##.##} ᴋʙ", Math.Round (byte_count / 1024, 1));
+
+			else
+
+				return byte_count.ToString () + " bytes";
 
         }
 
@@ -194,20 +198,21 @@ namespace SparkleShare {
 
 				Menu = new Menu ();
 
+					// The menu item showing the status and size of the SparkleShare folder
 					StatusMenuItem = new MenuItem (StateText) {
 						Sensitive = false
 					};
 
 				Menu.Add (StatusMenuItem);
-
 				Menu.Add (new SeparatorMenuItem ());
 
-					FolderAction = new Gtk.Action ("", "SparkleShare") {
+					// A menu item that provides a link to the SparkleShare folder
+					Gtk.Action folder_action = new Gtk.Action ("", "SparkleShare") {
 						IconName    = "folder-sparkleshare",
 						IsImportant = true
 					};
 
-					FolderAction.Activated += delegate {
+					folder_action.Activated += delegate {
 
 						Process process = new Process ();
 						process.StartInfo.FileName = "xdg-open";
@@ -216,20 +221,22 @@ namespace SparkleShare {
 
 					};
 
-				Menu.Add (FolderAction.CreateMenuItem ());
+				Menu.Add (folder_action.CreateMenuItem ());
+
 
 				if (SparkleUI.Repositories.Count > 0) {
 
+					// Creates a menu item for each repository with a link to them
 					foreach (SparkleRepo repo in SparkleUI.Repositories) {
 
-						FolderAction = new Gtk.Action ("", repo.Name) {
+						folder_action = new Gtk.Action ("", repo.Name) {
 							IconName    = "folder",
 							IsImportant = true
 						};
 
-						FolderAction.Activated += CreateWindowDelegate (repo.LocalPath);
+						folder_action.Activated += CreateWindowDelegate (repo.LocalPath);
 
-						MenuItem menu_item = (MenuItem) FolderAction.CreateMenuItem ();
+						MenuItem menu_item = (MenuItem) folder_action.CreateMenuItem ();
 
 						if (repo.Description != null)
 							menu_item.TooltipText = repo.Description;
@@ -258,7 +265,6 @@ namespace SparkleShare {
 					};
 
 				Menu.Add (add_item);
-
 				Menu.Add (new SeparatorMenuItem ());
 
 				CheckMenuItem notify_item =	new CheckMenuItem (_("Show Notifications"));
@@ -296,11 +302,9 @@ namespace SparkleShare {
 					};
 
 				Menu.Add (about_item);
-
 				Menu.Add (new SeparatorMenuItem ());
 
-				MenuItem quit_item = new MenuItem (_("Quit"));
-
+					MenuItem quit_item = new MenuItem (_("Quit"));
 					quit_item.Activated += Quit;
 
 				Menu.Add (quit_item);
@@ -320,9 +324,7 @@ namespace SparkleShare {
 		private void UpdateStatusMenuItem ()
 		{
 
-			Label label = (Label) StatusMenuItem.Children [0];
-			label.Text  = StateText;
-
+			(StatusMenuItem.Children [0] as Label).Text  = StateText;
 			Menu.ShowAll ();
 
 		}
@@ -336,6 +338,7 @@ namespace SparkleShare {
 		}
 
 
+		// Shows the state and keeps the number of syncing repositories in mind
 		public void ShowState (bool error)
 		{
 
@@ -394,7 +397,7 @@ namespace SparkleShare {
 		{
 
 			Timer.Stop ();
-			Application.Invoke (delegate { Pixbuf = SparkleHelpers.GetIcon ("sparkleshare-syncing-error", 24); });
+			Application.Invoke (delegate { Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24); });
 			StateText = _("Failed to sync changes");
 
 		}
