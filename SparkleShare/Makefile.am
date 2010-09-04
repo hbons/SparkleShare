@@ -18,6 +18,7 @@ SOURCES =  \
 	SparkleSpinner.cs \
 	SparkleStatusIcon.cs \
 	SparkleUI.cs \
+	SparkleUIHelpers.cs \
 	SparkleWindow.cs
 
 include $(top_srcdir)/build/build.mk

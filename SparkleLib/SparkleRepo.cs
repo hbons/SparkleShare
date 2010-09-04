@@ -775,40 +775,4 @@ namespace SparkleLib {
 
 	}
 
-	// Arguments for most events
-	public class SparkleEventArgs : System.EventArgs {
-        
-	    public string Type;
-	    public string Message;
-
-	    public SparkleEventArgs (string type)
-    	{
-
-	        Type = type;
-
-	    }
-
-	}
-
-
-	// Arguments for the NewCommit event
-	public class NewCommitArgs : System.EventArgs {
-        
-	    public string Author;
-	    public string Email;
-	    public string Message;
-	    public string RepositoryName;
-
-	    public NewCommitArgs (string author, string email, string message, string repository_name)
-    	{
-
-    		Author  = author;
-    		Email   = email;
-	        Message = message;
-	        RepositoryName = repository_name;
-
-	    }
-
-	}
-
 }

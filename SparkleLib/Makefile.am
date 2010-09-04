@@ -5,9 +5,10 @@ LINK = $(REF_SPARKLELIB)
 
 SOURCES =  \
 	Defines.cs \
-	SparkleOptions.cs \
+	SparkleEvents.cs \
 	SparkleFetcher.cs \
 	SparkleHelpers.cs \
+	SparkleOptions.cs \
 	SparklePaths.cs \
 	SparklePlatform.cs \
 	SparkleRepo.cs

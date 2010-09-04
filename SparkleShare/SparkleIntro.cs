@@ -172,7 +172,7 @@ namespace SparkleShare {
 					HBox layout_server = new HBox (true, 0);
 
 						ServerEntry = new SparkleEntry () {
-							ExampleText = _("ssh://address-to-my-server/")
+							ExampleText = _("address-to-server.com")
 						};
 						
 						ServerEntry.Changed += CheckServerForm;
@@ -295,9 +295,18 @@ namespace SparkleShare {
 						if (name.EndsWith ("/"))
 							name = name.TrimEnd ("/".ToCharArray ());
 
+						if (name.StartsWith ("/"))
+							name = name.TrimStart ("/".ToCharArray ());
+
 						if (radio_button.Active) {
 
-							server = SparkleToGitUrl (ServerEntry.Text);
+							// Use the default user 'git' if no username is specified
+							if (!server.Contains ("@"))
+								server = "git@" + server;
+
+							// Prepend the Secure Shell protocol when it isn't specified
+							if (!server.StartsWith ("ssh://"))
+								server = "ssh://" + server;
 
 							// Remove the trailing slash if there is one
 							if (server.EndsWith ("/"))
@@ -368,6 +377,7 @@ namespace SparkleShare {
 		}
 
 
+		// The page shown when syncing has failed
 		private void ShowErrorPage ()
 		{
 
@@ -401,54 +411,56 @@ namespace SparkleShare {
 		}
 
 
+		// The page shown when syncing has succeeded
 		private void ShowSuccessPage (string name)
 		{
 
 			Reset ();
 
-					VBox layout_vertical = new VBox (false, 0);
+				VBox layout_vertical = new VBox (false, 0);
 
-						Label header = new Label ("<span size='x-large'><b>" +
-								                _("Folder synced successfully!") +
-								                  "</b></span>") {
-							UseMarkup = true,
-							Xalign = 0
-						};
-				
-						Label information = new Label (_("Now you can access the synced files from ‘" + name + "’ " + 
-						                                 "in your SparkleShare folder.")) {
-							Xalign = 0,
-							Wrap   = true,
-							UseMarkup = true
-						};
+					Label header = new Label ("<span size='x-large'><b>" +
+								            _("Folder synced successfully!") +
+								              "</b></span>") {
+						UseMarkup = true,
+						Xalign = 0
+					};
+		
+					Label information = new Label (_("Now you can access the synced files from ‘" + name + "’ " + 
+						                             "in your SparkleShare folder.")) {
+						Xalign = 0,
+						Wrap   = true,
+						UseMarkup = true
+					};
 
-							Button open_folder_button = new Button (_("Open Folder"));
+						// A button that opens the synced folder
+						Button open_folder_button = new Button (_("Open Folder"));
 
-							open_folder_button.Clicked += delegate (object o, EventArgs args) {
+						open_folder_button.Clicked += delegate (object o, EventArgs args) {
 
-								string path = SparkleHelpers.CombineMore (SparklePaths.SparklePath, name);
+							string path = SparkleHelpers.CombineMore (SparklePaths.SparklePath, name);
 
-								Process process = new Process ();
-								process.StartInfo.FileName  = "xdg-open";
-								process.StartInfo.Arguments = path.Replace (" ", "\\ "); // Escape space-characters
-								process.Start ();
+							Process process = new Process ();
+							process.StartInfo.FileName  = "xdg-open";
+							process.StartInfo.Arguments = path.Replace (" ", "\\ "); // Escape space-characters
+							process.Start ();
 
-								if (ServerFormOnly)
-									Destroy ();
-
-							};
-
-							Button finish_button = new Button (_("Finish"));
-			
-							finish_button.Clicked += delegate (object o, EventArgs args) {
+							if (ServerFormOnly)
 								Destroy ();
-							};
-			
-						AddButton (open_folder_button);
-						AddButton (finish_button);
 
-					layout_vertical.PackStart (header, false, false, 0);
-					layout_vertical.PackStart (information, false, false, 21);
+						};
+
+						Button finish_button = new Button (_("Finish"));
+	
+						finish_button.Clicked += delegate (object o, EventArgs args) {
+							Destroy ();
+						};
+	
+					AddButton (open_folder_button);
+					AddButton (finish_button);
+
+				layout_vertical.PackStart (header, false, false, 0);
+				layout_vertical.PackStart (information, false, false, 21);
 
 			Add (layout_vertical);
 
@@ -457,55 +469,56 @@ namespace SparkleShare {
 		}
 
 
+		// The page shown whilst syncing
 		private void ShowSyncingPage (string name)
 		{
 
 			Reset ();
 			
-					VBox layout_vertical = new VBox (false, 0);
+				VBox layout_vertical = new VBox (false, 0);
 
-						Label header = new Label ("<span size='x-large'><b>" +
-								                        String.Format (_("Syncing folder ‘{0}’…"), name) +
-								                        "</b></span>") {
-							UseMarkup = true,
-							Xalign    = 0,
-							Wrap      = true
-						};
-
-						Label information = new Label (_("This may take a while.\n") +
-						                               _("You sure it’s not coffee o-clock?")) {
-							UseMarkup = true,
-							Xalign = 0
-						};
-
-
-							Button button = new Button () {
-								Sensitive = false,
-								Label = _("Finish")
-							};
-			
-							button.Clicked += delegate {
-								Destroy ();
-							};
-
-						AddButton (button);
-
-						SparkleSpinner spinner = new SparkleSpinner (22);
-
-					Table table = new Table (2, 2, false) {
-						RowSpacing    = 12,
-						ColumnSpacing = 9
+					Label header = new Label ("<span size='x-large'><b>" +
+							                        String.Format (_("Syncing folder ‘{0}’…"), name) +
+							                        "</b></span>") {
+						UseMarkup = true,
+						Xalign    = 0,
+						Wrap      = true
 					};
 
-					HBox box = new HBox (false, 0);
+					Label information = new Label (_("This may take a while.\n") +
+					                               _("You sure it’s not coffee o-clock?")) {
+						UseMarkup = true,
+						Xalign = 0
+					};
 
-					table.Attach (spinner,      0, 1, 0, 1);
-					table.Attach (header, 1, 2, 0, 1);
-					table.Attach (information,  1, 2, 1, 2);
 
-					box.PackStart (table, false, false, 0);
+						Button button = new Button () {
+							Sensitive = false,
+							Label = _("Finish")
+						};
+		
+						button.Clicked += delegate {
+							Destroy ();
+						};
 
-					layout_vertical.PackStart (box, false, false, 0);
+					AddButton (button);
+
+					SparkleSpinner spinner = new SparkleSpinner (22);
+
+				Table table = new Table (2, 2, false) {
+					RowSpacing    = 12,
+					ColumnSpacing = 9
+				};
+
+				HBox box = new HBox (false, 0);
+
+				table.Attach (spinner,      0, 1, 0, 1);
+				table.Attach (header, 1, 2, 0, 1);
+				table.Attach (information,  1, 2, 1, 2);
+
+				box.PackStart (table, false, false, 0);
+
+				layout_vertical.PackStart (box, false, false, 0);
 
 			Add (layout_vertical);
 
@@ -514,6 +527,7 @@ namespace SparkleShare {
 		}
 
 
+		// The page shown when the setup has been completed
 		private void ShowCompletedPage ()
 		{
 
@@ -572,9 +586,11 @@ namespace SparkleShare {
 		private void FetchFolder (string url, string name)
 		{
 
+			// Strip the '.git' from the name
 			string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
 			string tmp_folder = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, canonical_name);
 
+			ShowSyncingPage (canonical_name);
 			SparkleFetcher fetcher = new SparkleFetcher (url, tmp_folder);
 
 
@@ -642,8 +658,6 @@ namespace SparkleShare {
 				Application.Invoke (delegate { ShowErrorPage (); });
 
 			};
-
-			ShowSyncingPage (canonical_name);
 
 			fetcher.Clone ();
 
@@ -804,19 +818,6 @@ namespace SparkleShare {
 				(int) Math.Truncate (color.Green / 256.00),
 				(int) Math.Truncate (color.Blue  / 256.00));
 
-		}
-
-
-		// Convert the more human readable sparkle:// url to something Git can use.
-		// Example: sparkle://gitorious.org/sparkleshare ssh://git@gitorious.org/sparkleshare
-		private static string SparkleToGitUrl (string url)
-		{
-
-			if (url.StartsWith ("sparkle://"))
-				url = url.Replace ("sparkle://", "ssh://git@");
-
-			return url;
-		
 		}
 
 	}
