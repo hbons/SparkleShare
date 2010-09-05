@@ -290,13 +290,16 @@ namespace SparkleShare {
 						if (name.StartsWith ("/"))
 							name = name.Substring (1);
 
-						string server = "";
+						string server = ServerEntry.Text;
 
 						if (name.EndsWith ("/"))
 							name = name.TrimEnd ("/".ToCharArray ());
 
 						if (name.StartsWith ("/"))
 							name = name.TrimStart ("/".ToCharArray ());
+
+						if (server.StartsWith ("ssh://"))
+							server = server.Substring (6);
 
 						if (radio_button.Active) {
 
@@ -313,7 +316,7 @@ namespace SparkleShare {
 								server = server.TrimEnd ("/".ToCharArray ());
 
 						}
-
+						Console.WriteLine (server);
 
 						if (radio_button_gitorious.Active) {
 
@@ -803,7 +806,7 @@ namespace SparkleShare {
 		private static bool IsGitUrl (string url)
 		{
 			
-			return Regex.Match (url, @"ssh://(.)+").Success;
+			return true;
 
 		}
 
