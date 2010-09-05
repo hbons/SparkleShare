@@ -105,7 +105,11 @@ namespace SparkleShare {
 				else
 					FrameNumber = 0;
 
-				Application.Invoke (delegate { SetPixbuf (AnimationFrames [FrameNumber]); });
+				Application.Invoke (delegate {
+
+					SetPixbuf (AnimationFrames [FrameNumber]);
+
+				});
 
 			};
 
