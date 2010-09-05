@@ -316,7 +316,6 @@ namespace SparkleShare {
 								server = server.TrimEnd ("/".ToCharArray ());
 
 						}
-						Console.WriteLine (server);
 
 						if (radio_button_gitorious.Active) {
 
