@@ -14,9 +14,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Country: GERMANY\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
 
 #: ../SparkleDiff/SparkleDiff.cs:78 ../SparkleShare/SparkleShare.cs:58
 msgid "Git wasn't found."
@@ -71,17 +71,15 @@ msgid "\t -h, --help\t\tDisplay this help text."
 msgstr "\t -h, --help\t\tDiesen Hilfe-Text anzeigen."
 
 #: ../SparkleDiff/SparkleDiffWindow.cs:92
-#, fuzzy, csharp-format
+#, csharp-format
 msgid "{0} at {1}"
 msgstr "»{0}« auf {1}"
 
 #: ../SparkleDiff/SparkleDiffWindow.cs:93
-#, fuzzy
 msgid "ddd MMM d, yyyy"
 msgstr "ddd MMM d, yyyy"
 
 #: ../SparkleDiff/SparkleDiffWindow.cs:94
-#, fuzzy
 msgid "H:mm"
 msgstr "H:mm"
 
@@ -213,7 +211,7 @@ msgstr "Gitorious"
 
 #: ../SparkleShare/SparkleIntro.cs:209
 msgid "Completely Free as in Freedom infrastructure."
-msgstr ""
+msgstr "Vollkommen frei wie in »Infrastruktur der Freiheit«."
 
 #: ../SparkleShare/SparkleIntro.cs:210
 msgid "Free accounts for Free and Open Source projects."
@@ -253,7 +251,7 @@ msgstr "Verzeichnis erfolgreich synchronisiert."
 #: ../SparkleShare/SparkleIntro.cs:418
 #: ../SparkleShare/SparkleInvitation.cs:316
 msgid "Now you can access the synced files from ‘"
-msgstr ""
+msgstr "Sie können die abgeglichenen Dateien erreichen unter ‘"
 
 #: ../SparkleShare/SparkleIntro.cs:425
 #: ../SparkleShare/SparkleInvitation.cs:323
@@ -368,9 +366,8 @@ msgid "Print version information"
 msgstr "Versionsinformationen anzeigen"
 
 #: ../SparkleShare/SparkleShare.cs:109
-#, fuzzy
 msgid "SparkleShare, an instant update workflow to Git."
-msgstr "SparkleShare, ein laufend aktualisierender Workflow für Git."
+msgstr "SparkleShare, ein laufend aktualisierender Dienst für Git."
 
 #: ../SparkleShare/SparkleShare.cs:110
 msgid "Copyright (C) 2010 Hylke Bons"
@@ -381,9 +378,8 @@ msgid "SparkleShare automatically syncs Git repositories in "
 msgstr "SparkleShare synchronisiert sich automatisch mit Git Repositories"
 
 #: ../SparkleShare/SparkleShare.cs:118
-#, fuzzy
 msgid "the ~/SparkleShare folder with their remote origins."
-msgstr "SparkleShare Ordner mit dem Remote-Repository synchronisieren."
+msgstr "den SparkleShare-Ordner mit den entfernten Quellen."
 
 #: ../SparkleShare/SparkleShare.cs:120
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
@@ -462,13 +458,8 @@ msgid "Hold your ponies!"
 msgstr "Immer langsam mit den jungen Pferden!"
 
 #: ../SparkleShare/SparkleUI.cs:479
-#, fuzzy
 msgid "SparkleShare is known to be insanely fast with pictures of unicorns. Please make sure your internets are upgraded to the latest version to avoid any problems."
-msgstr ""
-"SparkleShare ist bekannt dafür, Bilder von Einhörnern\n"
-"wahnsinnig schnell zu bearbeiten. Bitte stellen Sie sicher,\n"
-"dass Sie die neueste Version des Internets installiert haben,\n"
-"um Probleme zu vermeiden."
+msgstr "SparkleShare ist bekannt dafür, wahnsinning schnell mit Bildern von Einhörnern zu sein. Bitte stellen Sie sicher, dass Sie die neueste Version des Internets installiert haben, um Probleme zu vermeiden."
 
 #~ msgid "Address of remote SparkleShare folder:"
 #~ msgstr "Adresse des entfernten SparkleShare-Ordners:"
