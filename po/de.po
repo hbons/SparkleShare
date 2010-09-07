@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-31 06:30+0000\n"
+"POT-Creation-Date: 2010-09-07 06:35+0000\n"
 "PO-Revision-Date: 2010-06-21 16:26+0100\n"
 "Last-Translator: Martin Lettner <m.lettner@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Country: GERMANY\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
 
 #: ../SparkleDiff/SparkleDiff.cs:78 ../SparkleShare/SparkleShare.cs:58
 msgid "Git wasn't found."
@@ -189,11 +189,11 @@ msgstr "Auf meinem eigenen Server"
 
 #: ../SparkleShare/SparkleIntro.cs:187
 msgid "Free hosting for Free and Open Source Software projects."
-msgstr ""
+msgstr "Kostenloses Hosting für Freie und Open Source Software Projekte."
 
 #: ../SparkleShare/SparkleIntro.cs:188
 msgid "Also has paid accounts for extra private space and bandwidth."
-msgstr ""
+msgstr "Weiter gibt es kostenpflichtige Accounts für zusätzlichen privaten Speicherplatz und Bandbreite."
 
 #: ../SparkleShare/SparkleIntro.cs:196
 msgid "The GNOME Project"
@@ -217,7 +217,7 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:210
 msgid "Free accounts for Free and Open Source projects."
-msgstr ""
+msgstr "Gratis Accounts für Freie und Open Source Projekte."
 
 #: ../SparkleShare/SparkleIntro.cs:273
 #: ../SparkleShare/SparkleInvitation.cs:134
@@ -288,11 +288,10 @@ msgid "SparkleShare is ready to go!"
 msgstr "SparkleShare ist bereit zum Loslegen!"
 
 #: ../SparkleShare/SparkleIntro.cs:531
-#, fuzzy
 msgid ""
 "Now you can start accepting invitations from others. \n"
 "Just click on invitations you get by email and we will take care of the rest."
-msgstr "Sie können nun Einladungen annehmen. Klicken Sie einfach auf Einladungen, die Sie per Email erhalten und wir kümmern uns um den Rest."
+msgstr "Sie können nun Einladungen annehmen. Klicken Sie einfach auf Einladungen, die Sie per E-Mail erhalten und wir kümmern uns um den Rest."
 
 #: ../SparkleShare/SparkleIntro.cs:542
 msgid "Learn how to host your own SparkleServer"
@@ -369,8 +368,9 @@ msgid "Print version information"
 msgstr "Versionsinformationen anzeigen"
 
 #: ../SparkleShare/SparkleShare.cs:109
+#, fuzzy
 msgid "SparkleShare, an instant update workflow to Git."
-msgstr ""
+msgstr "SparkleShare, ein laufend aktualisierender Workflow für Git."
 
 #: ../SparkleShare/SparkleShare.cs:110
 msgid "Copyright (C) 2010 Hylke Bons"
@@ -422,9 +422,8 @@ msgid "No Shared Folders Yet"
 msgstr "Noch keine freigegebenen Ordner"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:251
-#, fuzzy
 msgid "Sync Remote Folder…"
-msgstr "Remote-Ordner hinzufügen …"
+msgstr "Remote-Ordner synchronisieren…"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:264
 msgid "Show Notifications"
@@ -451,9 +450,8 @@ msgid "Failed to sync changes"
 msgstr "Änderungen konnten nicht synchronisiert werden"
 
 #: ../SparkleShare/SparkleUI.cs:338
-#, fuzzy
 msgid "Ouch! Mid-air collision!"
-msgstr "Autsch! Zusammenstoß in der Luft!"
+msgstr "Autsch! Kollision in der Luft!"
 
 #: ../SparkleShare/SparkleUI.cs:339
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
