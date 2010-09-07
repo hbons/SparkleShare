@@ -14,9 +14,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Country: GERMANY\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-Language: German\n"
-"X-Poedit-Country: GERMANY\n"
 
 #: ../SparkleDiff/SparkleDiff.cs:78 ../SparkleShare/SparkleShare.cs:58
 msgid "Git wasn't found."
@@ -165,7 +165,7 @@ msgstr "Vollständiger Name:   "
 
 #: ../SparkleShare/SparkleIntro.cs:99
 msgid "Email:"
-msgstr "Email:"
+msgstr "E-Mail:"
 
 #: ../SparkleShare/SparkleIntro.cs:110
 msgid "Next"
@@ -248,7 +248,7 @@ msgstr "Erneut versuchen"
 #: ../SparkleShare/SparkleIntro.cs:412
 #: ../SparkleShare/SparkleInvitation.cs:310
 msgid "Folder synced successfully!"
-msgstr "Verzeichnis erfolgreich synchronisiert"
+msgstr "Verzeichnis erfolgreich synchronisiert."
 
 #: ../SparkleShare/SparkleIntro.cs:418
 #: ../SparkleShare/SparkleInvitation.cs:316
@@ -307,7 +307,7 @@ msgid ""
 "We're ready to hook you up immediately if you wish."
 msgstr ""
 "Sie haben eine Einladung zu einem freigegebenen Verzeichnis erhalten. \n"
-" Wir sind bereit die Verbindung direkt herzustellen, wenn Sie das wünschen."
+"Wir sind bereit die Verbindung direkt herzustellen, wenn Sie das wünschen."
 
 #: ../SparkleShare/SparkleInvitation.cs:116
 msgid "Do you accept this invitation?"
@@ -323,7 +323,7 @@ msgstr "Ablehnen"
 
 #: ../SparkleShare/SparkleInvitation.cs:149
 msgid "Accept and Sync"
-msgstr "Akzpetieren und Synchronisieren"
+msgstr "Akzeptieren und Synchronisieren"
 
 #: ../SparkleShare/SparkleInvitation.cs:283
 msgid "Close"
@@ -378,7 +378,7 @@ msgstr "Copyright (C) 2010 Hylke Bons"
 
 #: ../SparkleShare/SparkleShare.cs:117
 msgid "SparkleShare automatically syncs Git repositories in "
-msgstr "SparkleShare synchronisert  sich automatisch mit Git Repositories"
+msgstr "SparkleShare synchronisiert sich automatisch mit Git Repositories"
 
 #: ../SparkleShare/SparkleShare.cs:118
 #, fuzzy
@@ -395,7 +395,7 @@ msgstr "SparkleShare Ordner mit dem Remote-Repository synchronisieren."
 
 #: ../SparkleShare/SparkleShare.cs:133
 msgid "SparkleShare "
-msgstr "SparkleShare-"
+msgstr "SparkleShare"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:175
 #, csharp-format
