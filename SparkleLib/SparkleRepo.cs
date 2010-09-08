@@ -727,6 +727,26 @@ namespace SparkleLib {
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = LocalPath;
+
+			// Get the user's timezone
+			process.StartInfo.FileName  = "date";
+			process.StartInfo.Arguments = "+%z";
+
+
+			process.Start ();
+			process.WaitForExit ();
+
+			string timezone = process.StandardOutput.ReadToEnd ().Trim ();
+			int unix_timestamp = 0;
+
+			// Add the timezone difference in hours when in a positive timezone
+			if (timezone.StartsWith ("+"))
+				unix_timestamp = 3600 * System.Convert.ToInt32 (timezone.Substring (1, 2));
+
+			// Remove the timezone difference in hours when in a negative timezone
+			if (timezone.StartsWith ("-"))
+				unix_timestamp = -3600 * System.Convert.ToInt32 (timezone.Substring (1, 2));
+
 			process.StartInfo.FileName  = "git";
 			process.StartInfo.Arguments = "log --format=\"%at\t%an\t%ae\t%H\t%ad\" -" + count;
 
@@ -745,19 +765,11 @@ namespace SparkleLib {
 
 				string [] parts = Regex.Split (line, "\t");
 
-				int unix_timestamp = int.Parse (parts [0]);
+				unix_timestamp += int.Parse (parts [0]);
+
 				string user_name   = parts [1];
 				string user_email  = parts [2];
 				string hash        = parts [3];
-				string timezone    = parts [4].Substring (parts [4].Length - 5);
-
-				// Add the timezone difference in hours when in a positive timezone
-				if (timezone.StartsWith ("+"))
-					unix_timestamp += 3600 * System.Convert.ToInt32 (timezone.Substring (1, 2));
-
-				// Remove the timezone difference in hours when in a negative timezone
-				if (timezone.StartsWith ("-"))
-					unix_timestamp -= 3600 * System.Convert.ToInt32 (timezone.Substring (1, 2));
 
 				DateTime date_time = SparkleHelpers.UnixTimestampToDateTime (unix_timestamp);
 
