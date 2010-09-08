@@ -43,6 +43,8 @@ namespace SparkleLib {
 		public string CurrentHash;
 		public string UserEmail;
 		public string UserName;
+		public bool IsSyncing;
+		public bool IsBuffering;
 
 		public delegate void AddedEventHandler (object o, SparkleEventArgs args);
 		public delegate void CommitedEventHandler (object o, SparkleEventArgs args);
@@ -94,6 +96,8 @@ namespace SparkleLib {
 			Domain             = GetDomain (RemoteOriginUrl);
 			Description        = GetDescription ();
 			HasUnsyncedChanges = false;
+			IsSyncing          = false;
+			IsBuffering        = false;
 
 			if (CurrentHash == null)
 				CreateInitialCommit ();
@@ -202,6 +206,8 @@ namespace SparkleLib {
 
 						SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled, adding files...");
 
+						IsBuffering = false;
+
 						HasChanged = false;
 						AddCommitAndPush ();
 
@@ -221,6 +227,8 @@ namespace SparkleLib {
 			WatcherChangeTypes wct = fse_args.ChangeType;
 
 			if (!ShouldIgnore (fse_args.FullPath)) {
+
+				IsBuffering = true;
 
 				// Only fire the event if the timer has been stopped.
 				// This prevents multiple events from being raised whilst "buffering".
@@ -338,6 +346,8 @@ namespace SparkleLib {
 		public void Fetch ()
 		{
 
+			IsSyncing = true;
+
 			RemoteTimer.Stop ();
 
 			Process process = new Process () {
@@ -360,6 +370,7 @@ namespace SparkleLib {
 			process.StartInfo.Arguments = "fetch -v origin master";
 
 			process.Start ();
+			process.WaitForExit ();
 
 			process.Exited += delegate {
 
@@ -375,6 +386,8 @@ namespace SparkleLib {
 				RemoteTimer.Start ();
 
 				CurrentHash = GetCurrentHash ();
+
+				IsSyncing = false;
 
 			};
 
@@ -482,6 +495,8 @@ namespace SparkleLib {
 		public void Push ()
 		{
 
+			IsSyncing = true;
+
 			SparkleEventArgs args = new SparkleEventArgs ("PushingStarted");
 
 			if (PushingStarted != null)
@@ -490,6 +505,7 @@ namespace SparkleLib {
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing changes...");
 
 			Process.StartInfo.Arguments = "push origin master";
+
 			Process.Start ();
 			Process.WaitForExit ();
 
@@ -518,6 +534,8 @@ namespace SparkleLib {
 					    PushingFinished (this, args); 
 
 				}
+
+				IsSyncing = false;
 
 			};
 

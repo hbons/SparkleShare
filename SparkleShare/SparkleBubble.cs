@@ -29,7 +29,7 @@ namespace SparkleShare {
 			Timeout  = 4500;
 			Urgency  = Urgency.Low;
 
-			AttachToStatusIcon (SparkleUI.NotificationIcon);
+			AttachToStatusIcon (SparkleUI.StatusIcon);
 
 		}
 
