@@ -567,10 +567,10 @@ namespace SparkleShare {
 
 					finish_button.Clicked += delegate (object o, EventArgs args) {
 
-						if (SparkleUI.NotificationIcon == null)
-							SparkleUI.NotificationIcon = new SparkleStatusIcon ();
+						if (SparkleUI.StatusIcon == null)
+							SparkleUI.StatusIcon = new SparkleStatusIcon ();
 						else
-							SparkleUI.NotificationIcon.CreateMenu ();
+							SparkleUI.StatusIcon.CreateMenu ();
 
 						Destroy ();
 

@@ -30,8 +30,6 @@ namespace SparkleShare {
 
 		private List <SparkleLog> OpenLogs;
 
-		public int SyncingReposCount;
-
 		private Menu Menu;
 		private MenuItem StatusMenuItem;
 		private string StateText;
@@ -59,8 +57,6 @@ namespace SparkleShare {
 			FrameNumber = 0;
 			AnimationFrames = CreateAnimationFrames ();
 			Animation = CreateAnimation ();
-
-			SyncingReposCount = 0;
 
 			StateText = "";
 			StatusMenuItem = new MenuItem ();
@@ -372,35 +368,30 @@ namespace SparkleShare {
 
 			UpdateFolderSize ();
 
-			// Make sure the number of syncing repositories doesn't
-			// go below zero. This can happen in some circumstances.
-			if (SyncingReposCount < 0)
-				SyncingReposCount = 0;
-
-			// Make sure the number of syncing repositories doesn't
-			// go above the number of existing repositories. This can
-			// happen in some circumstances.
-			if (SyncingReposCount > SparkleUI.Repositories.Count)
-				SyncingReposCount = SparkleUI.Repositories.Count;
-
 			if (error) {
 
 				SetErrorState ();
 
 			} else {
 
-				if (SyncingReposCount > 0)
+				foreach (SparkleRepo repo in SparkleUI.Repositories)
+
+				if (repo.IsSyncing || repo.IsBuffering) {
+
 					SetSyncingState ();
-				else
+					break;
+
+				} else {
+
 					SetIdleState ();
+
+				}
 
 			}
 
 			// Use the new status text
 			(StatusMenuItem.Children [0] as Label).Text  = StateText;
 			Menu.ShowAll ();
-
-			SparkleHelpers.DebugInfo ("Status", "Number of repos syncing: " + SyncingReposCount);
 
 		}
 		
