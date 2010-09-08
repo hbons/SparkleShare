@@ -728,7 +728,7 @@ namespace SparkleLib {
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = LocalPath;
 			process.StartInfo.FileName  = "git";
-			process.StartInfo.Arguments = "log --format=\"%at\t%an\t%ae\t%H\" -" + count;
+			process.StartInfo.Arguments = "log --format=\"%at\t%an\t%ae\t%H\t%ad\" -" + count;
 
 			process.Start ();
 			process.WaitForExit ();
@@ -749,6 +749,15 @@ namespace SparkleLib {
 				string user_name   = parts [1];
 				string user_email  = parts [2];
 				string hash        = parts [3];
+				string timezone    = parts [4].Substring (parts [4].Length - 5);
+
+				// Add the timezone difference in hours when in a positive timezone
+				if (timezone.StartsWith ("+"))
+					unix_timestamp += 3600 * System.Convert.ToInt32 (timezone.Substring (1, 2));
+
+				// Remove the timezone difference in hours when in a negative timezone
+				if (timezone.StartsWith ("-"))
+					unix_timestamp -= 3600 * System.Convert.ToInt32 (timezone.Substring (1, 2));
 
 				DateTime date_time = SparkleHelpers.UnixTimestampToDateTime (unix_timestamp);
 
