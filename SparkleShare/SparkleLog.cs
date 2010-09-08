@@ -26,7 +26,7 @@ namespace SparkleShare {
 
 	public class SparkleLog : Window {
 
-		private string LocalPath;
+		public readonly string LocalPath;
 		private VBox LayoutVertical;
 		private ScrolledWindow ScrolledWindow;
 
@@ -83,7 +83,7 @@ namespace SparkleShare {
 
 					Button close_button = new Button (Stock.Close);
 
-					close_button.Clicked += delegate (object o, EventArgs args) {
+					close_button.Clicked += delegate {
 						Close ();
 					};
 
@@ -105,6 +105,7 @@ namespace SparkleShare {
 				// Get commits from the repository
 				if (repo.LocalPath.Equals (LocalPath)) {
 
+					// Remove the eventhooks
 					repo.NewCommit -= UpdateEventLog;
 					repo.PushingStarted -= UpdateEventLog;
 
@@ -112,7 +113,7 @@ namespace SparkleShare {
 
 			}
 
-			Destroy ();
+			HideAll ();
 
 		}
 
