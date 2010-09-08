@@ -31,7 +31,7 @@ namespace SparkleShare {
 	public class SparkleUI {
 		
 		public static List <SparkleRepo> Repositories;
-		public static SparkleStatusIcon NotificationIcon;
+		public static SparkleStatusIcon StatusIcon;
 
 
 		// Short alias for the translations
@@ -126,7 +126,7 @@ namespace SparkleShare {
 				}
 
 				// Create the statusicon
-				NotificationIcon = new SparkleStatusIcon ();
+				StatusIcon = new SparkleStatusIcon ();
 
 			}
 
@@ -344,12 +344,11 @@ namespace SparkleShare {
 		}
 
 
-		// Updates the statusicon to the syncing state
-		public void UpdateStatusIconToSyncing (object o, EventArgs args)
+		// Tells the statusicon to update its state
+		public void UpdateStatusIcon (object o, EventArgs args)
 		{
 
-				NotificationIcon.SyncingReposCount++;
-				NotificationIcon.ShowState ();
+				StatusIcon.ShowState ();
 
 		}
 
@@ -358,18 +357,7 @@ namespace SparkleShare {
 		public void UpdateStatusIconToError (object o, EventArgs args)
 		{
 
-				NotificationIcon.SyncingReposCount--;
-				NotificationIcon.ShowState (true);
-
-		}
-
-
-		// Updates the syncing icon to the idle state
-		public void UpdateStatusIconToIdle (object o, EventArgs args)
-		{
-
-				NotificationIcon.SyncingReposCount--;
-				NotificationIcon.ShowState ();
+				StatusIcon.ShowState (true);
 
 		}
 
@@ -395,23 +383,27 @@ namespace SparkleShare {
 			};
 
 			repo.FetchingStarted += delegate {
-				Application.Invoke (UpdateStatusIconToSyncing);
+				Application.Invoke (UpdateStatusIcon);
 			};
 
 			repo.FetchingFinished += delegate {
-				Application.Invoke (UpdateStatusIconToIdle);
+				Application.Invoke (UpdateStatusIcon);
 			};
 
 			repo.ChangesDetected += delegate {
-				Application.Invoke (UpdateStatusIconToSyncing);
+				Application.Invoke (UpdateStatusIcon);
+			};
+
+			repo.PushingStarted += delegate {
+				Application.Invoke (UpdateStatusIcon);
 			};
 
 			repo.PushingFinished += delegate {
-				Application.Invoke (UpdateStatusIconToIdle);
+				Application.Invoke (UpdateStatusIcon);
 			};
 
 			repo.CommitEndedUpEmpty += delegate {
-				Application.Invoke (UpdateStatusIconToIdle);
+				Application.Invoke (UpdateStatusIcon);
 			};
 
 			repo.PushingFailed += delegate {
@@ -424,8 +416,8 @@ namespace SparkleShare {
 
 			Repositories.Add (repo);
 
-			if (NotificationIcon != null)
-				Application.Invoke (delegate { NotificationIcon.CreateMenu (); });
+			if (StatusIcon != null)
+				Application.Invoke (delegate { StatusIcon.CreateMenu (); });
 
 		}
 
@@ -449,8 +441,8 @@ namespace SparkleShare {
 
 			}
 
-			if (NotificationIcon != null)
-				Application.Invoke (delegate { NotificationIcon.CreateMenu (); });
+			if (StatusIcon != null)
+				Application.Invoke (delegate { StatusIcon.CreateMenu (); });
 
 		}
 
