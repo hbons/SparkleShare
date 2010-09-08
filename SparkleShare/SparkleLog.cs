@@ -304,7 +304,7 @@ namespace SparkleShare {
 
 					Label change_set_info = new Label ("<b>" + change_set.UserName + "</b>\n" +
 					                                   "<span fgcolor='" + secondary_text_color +"'><small>" +
-					                                   "at " + change_set.DateTime.ToString ("HH:mm") +
+					                                   "at " + change_set.DateTime.ToString ("H:mm") +
 					                                   "</small></span>") {
 						UseMarkup = true,
 						Xalign = 0

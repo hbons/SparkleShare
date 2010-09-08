@@ -741,11 +741,11 @@ namespace SparkleLib {
 
 			// Add the timezone difference in hours when in a positive timezone
 			if (timezone.StartsWith ("+"))
-				unix_timestamp = 3600 * System.Convert.ToInt32 (timezone.Substring (1, 2));
+				unix_timestamp = 3600 * int.Parse (timezone.Substring (1, 2));
 
 			// Remove the timezone difference in hours when in a negative timezone
 			if (timezone.StartsWith ("-"))
-				unix_timestamp = -3600 * System.Convert.ToInt32 (timezone.Substring (1, 2));
+				unix_timestamp = -3600 * int.Parse (timezone.Substring (1, 2));
 
 			process.StartInfo.FileName  = "git";
 			process.StartInfo.Arguments = "log --format=\"%at\t%an\t%ae\t%H\t%ad\" -" + count;
@@ -765,13 +765,13 @@ namespace SparkleLib {
 
 				string [] parts = Regex.Split (line, "\t");
 
-				unix_timestamp += int.Parse (parts [0]);
+				int local_timestamp = unix_timestamp + int.Parse (parts [0]);
 
 				string user_name   = parts [1];
 				string user_email  = parts [2];
 				string hash        = parts [3];
 
-				DateTime date_time = SparkleHelpers.UnixTimestampToDateTime (unix_timestamp);
+				DateTime date_time = SparkleHelpers.UnixTimestampToDateTime (local_timestamp);
 
 				SparkleCommit commit = new SparkleCommit (user_name, user_email, date_time, hash);
 
@@ -816,6 +816,8 @@ namespace SparkleLib {
 				}
 
 				commits.Add (commit);
+
+				unix_timestamp = 0;
 
 			}
 
