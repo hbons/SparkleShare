@@ -18,6 +18,7 @@ using Gtk;
 using Mono.Unix;
 using SparkleLib;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Timers;
@@ -26,6 +27,8 @@ namespace SparkleShare {
 
 	public class SparkleStatusIcon : StatusIcon
 	{
+
+		private List <SparkleLog> OpenLogs;
 
 		public int SyncingReposCount;
 
@@ -48,6 +51,8 @@ namespace SparkleShare {
 
 		public SparkleStatusIcon () : base ()
 		{
+
+			OpenLogs = new List <SparkleLog> ();
 
 			FolderSize = GetFolderSize (new DirectoryInfo (SparklePaths.SparklePath));
 
@@ -126,7 +131,24 @@ namespace SparkleShare {
 
 			return delegate { 
 
-				SparkleLog log = new SparkleLog (path);
+				SparkleLog log = OpenLogs.Find (delegate (SparkleLog l) { return l.LocalPath.Equals (path); });
+
+				// Check whether the log is already open,
+				// create a new one if that's not the case or
+				// present it to the user if it is
+				if (log == null) {
+
+					log = new SparkleLog (path);
+
+					log.Hidden += delegate {
+						OpenLogs.Remove (log);
+						log = null;
+					};
+
+					OpenLogs.Add (log);
+
+				}
+
 				log.ShowAll ();
 				log.Present ();
 
