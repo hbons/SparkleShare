@@ -139,7 +139,7 @@ msgstr "Où se trouve votre dossier distant?"
 
 #: ../SparkleShare/SparkleIntro.cs:175
 msgid "address-to-server.com"
-msgstr "addresse-du-serveur.com"
+msgstr "adresse-du-serveur.com"
 
 #: ../SparkleShare/SparkleIntro.cs:180
 msgid "On my own server:"
