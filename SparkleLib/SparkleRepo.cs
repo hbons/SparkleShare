@@ -378,6 +378,8 @@ namespace SparkleLib {
 
 				args = new SparkleEventArgs ("FetchingFinished");
 
+				IsSyncing = false;
+
 				if (FetchingFinished != null)
 				    FetchingFinished (this, args); 
 
@@ -386,8 +388,6 @@ namespace SparkleLib {
 				RemoteTimer.Start ();
 
 				CurrentHash = GetCurrentHash ();
-
-				IsSyncing = false;
 
 			};
 
@@ -766,7 +766,7 @@ namespace SparkleLib {
 				unix_timestamp = -3600 * int.Parse (timezone.Substring (1, 2));
 
 			process.StartInfo.FileName  = "git";
-			process.StartInfo.Arguments = "log --format=\"%at\t%an\t%ae\t%H\t%ad\" -" + count;
+			process.StartInfo.Arguments = "log --format=\"%at\t%an\t%ae\t%H\" -" + count;
 
 			process.Start ();
 			process.WaitForExit ();
@@ -784,10 +784,9 @@ namespace SparkleLib {
 				string [] parts = Regex.Split (line, "\t");
 
 				int local_timestamp = unix_timestamp + int.Parse (parts [0]);
-
-				string user_name   = parts [1];
-				string user_email  = parts [2];
-				string hash        = parts [3];
+				string user_name    = parts [1];
+				string user_email   = parts [2];
+				string hash         = parts [3];
 
 				DateTime date_time = SparkleHelpers.UnixTimestampToDateTime (local_timestamp);
 
