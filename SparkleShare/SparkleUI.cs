@@ -416,8 +416,14 @@ namespace SparkleShare {
 
 			Repositories.Add (repo);
 
-			if (StatusIcon != null)
-				Application.Invoke (delegate { StatusIcon.CreateMenu (); });
+			if (StatusIcon != null) {
+
+				Application.Invoke (delegate {
+					StatusIcon.CreateMenu ();
+					StatusIcon.ShowState ();
+				});
+
+			}
 
 		}
 
@@ -441,8 +447,14 @@ namespace SparkleShare {
 
 			}
 
-			if (StatusIcon != null)
-				Application.Invoke (delegate { StatusIcon.CreateMenu (); });
+			if (StatusIcon != null) {
+
+				Application.Invoke (delegate {
+					StatusIcon.CreateMenu ();
+					StatusIcon.ShowState ();
+				});
+
+			}
 
 		}
 
@@ -457,7 +469,8 @@ namespace SparkleShare {
 			foreach (string folder_path in Directory.GetDirectories (SparklePaths.SparklePath))
 				AddRepository (folder_path);
 
-			StatusIcon.ShowState ();
+			if (StatusIcon != null)
+				StatusIcon.ShowState ();
 
 		}
 
