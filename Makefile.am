@@ -10,6 +10,9 @@ SUBDIRS =	\
 	data \
 	po
 
+clean-local:
+	rm -rf $(top_builddir)/bin
+
 EXTRA_DIST = gnome-doc-utils.make
 
 DISTCLEANFILES = \
