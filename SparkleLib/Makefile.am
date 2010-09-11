@@ -9,6 +9,7 @@ SOURCES =  \
 	SparkleEvents.cs \
 	SparkleFetcher.cs \
 	SparkleHelpers.cs \
+	SparkleListener.cs \
 	SparkleOptions.cs \
 	SparklePaths.cs \
 	SparklePlatform.cs \
