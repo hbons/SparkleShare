@@ -457,6 +457,8 @@ namespace SparkleShare {
 			foreach (string folder_path in Directory.GetDirectories (SparklePaths.SparklePath))
 				AddRepository (folder_path);
 
+			StatusIcon.ShowState ();
+
 		}
 
 

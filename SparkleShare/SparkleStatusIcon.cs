@@ -274,7 +274,7 @@ namespace SparkleShare {
 
 				} else {
 
-					MenuItem no_folders_item = new MenuItem (_("No Shared Folders Yet")) {
+					MenuItem no_folders_item = new MenuItem (_("No Remote Folders Yet")) {
 						Sensitive   = false
 					};
 
@@ -404,7 +404,11 @@ namespace SparkleShare {
 
 			// The first frame is the idle icon
 			Application.Invoke (delegate { SetPixbuf (AnimationFrames [0]); });
-			StateText = _("Up to date") + "  (" + FormatFileSize (FolderSize) + ")";
+
+			if (SparkleUI.Repositories.Count > 0)
+				StateText = _("Up to date") + "  (" + FormatFileSize (FolderSize) + ")";
+			else			
+				StateText += _("Welcome to SparkleShare!");
 
 		}
 

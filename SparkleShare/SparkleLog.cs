@@ -383,9 +383,11 @@ namespace SparkleShare {
 					hbox.PackStart (vbox, true, true, 0);
 					hbox.PackStart (new Label (""), false, false, 12);
 					
-					layout_vertical.PackStart (hbox, true, true, 24);
+					layout_vertical.PackStart (hbox, true, true, 18);
 
 				}
+
+					layout_vertical.PackStart (new Label (""), true, true, 3);
 
 			}
 
