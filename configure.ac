@@ -7,7 +7,7 @@ m4_define([sparkleshare_asm_version],
 
 AC_PREREQ([2.54])
 AC_INIT([SparkleShare], sparkleshare_version)
-AM_INIT_AUTOMAKE([1.11 dist-bzip2 dist-zip foreign])
+AM_INIT_AUTOMAKE([1.11 dist-bzip2 dist-zip foreign tar-ustar])
 AM_MAINTAINER_MODE
 
 dnl Export Version Info
@@ -73,7 +73,7 @@ AC_SUBST(NDESK_DBUS_GLIB_LIBS)
 
 SPARKLESHARE_CHECK_GTK_SHARP
 #SPARKLESHARE_CHECK_NOTIFY_SHARP
-SPARKLESHARE_CHECK_SMARTIRC4NET
+SPARKLESHARE_SMARTIRC4NET
 
 SHAMROCK_CHECK_NUNIT
 
