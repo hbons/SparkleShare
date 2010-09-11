@@ -17,7 +17,6 @@
 using Gtk;
 using Mono.Unix;
 using Mono.Unix.Native;
-using NDesk.DBus;
 using SparkleLib;
 using System;
 using System.Collections.Generic;
@@ -25,6 +24,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 
 namespace SparkleShare {
 
@@ -44,7 +44,6 @@ namespace SparkleShare {
 		public SparkleUI (bool HideUI)
 		{
 
-			BusG.Init ();
 			Gtk.Application.Init ();
 
 			SetProcessName ("sparkleshare");
@@ -130,7 +129,12 @@ namespace SparkleShare {
 
 			}
 
-			PopulateRepositories ();
+
+			Thread thread = new Thread (
+				new ThreadStart (PopulateRepositories)
+			);
+
+			thread.Start ();
 
 		}
 
@@ -470,7 +474,7 @@ namespace SparkleShare {
 				AddRepository (folder_path);
 
 			if (StatusIcon != null)
-				StatusIcon.ShowState ();
+				Application.Invoke (delegate { StatusIcon.ShowState (); });
 
 		}
 
