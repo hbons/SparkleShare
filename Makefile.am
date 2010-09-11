@@ -3,6 +3,7 @@ SUBDIRS =	\
 	help	\
 	NotifySharp \
 	FriendFace \
+	SmartIrc4net \
 	SparkleLib \
 	SparkleShare \
 	SparkleDiff \
