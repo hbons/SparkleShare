@@ -74,8 +74,8 @@ namespace SparkleLib {
 		public SparkleRepo (string path)
 		{
 
-			if (!Directory.Exists (path))
-				Directory.CreateDirectory (path);
+			SparkleListener listener = new SparkleListener ();
+			
 
 			LocalPath = path;
 			Name = Path.GetFileName (LocalPath);
