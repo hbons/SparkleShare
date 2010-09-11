@@ -18,17 +18,69 @@ using Meebey.SmartIrc4net;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace SparkleLib {
 
-	public class SparkleListener : IrcClient
+	public class SparkleListener
 	{
 
-		public SparkleListener () : base () {
+		public SparkleListener () {
 
-//			IrcConnection i = new IrcConnection ();
+			IrcClient irc_client = new IrcClient ();
+
+//irc_client.OnRawMessage += HandleRawMessage;
+
+			string [] server  = new string [] {"irc.gnome.org"};
+			int port       = 6667;
+			string channel = "#sparkletest";
+
+			irc_client.OnConnected += delegate {
+				Console.WriteLine ("!!!!!!!!!!11");
+			};	
+
+			irc_client.OnChannelMessage += delegate {
+				Console.WriteLine ("!!!22222222222!!!!!!!11");
+			};
+
+try{
+			irc_client.Connect (server, port);
+
+} catch (Exception e) {
+
+                                Console.WriteLine("Error occured. Lawldongs!");
+                                Console.WriteLine(e);
+
+                        }
+
+
+			irc_client.Login("SmartIRC", "Stupid Bot");
+            irc_client.RfcJoin(channel);
+
+            irc_client.SendMessage(SendType.Message, channel, "HEllo");
+
+
+Thread thread = new Thread(new ThreadStart(delegate {
+
+			irc_client.Listen ();
+
+}));
+thread.Start();
+
+
 
 		}
+
+
+      void HandleRawMessage (object sender, IrcEventArgs args)
+
+                {
+
+                        System.Console.WriteLine(args.Data.Nick+": "+args.Data.Message);
+
+                }
+
+                
 
 	}
 
