@@ -48,6 +48,11 @@
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUI.cs" />
     <Compile Include="SparkleWindow.cs" />
+    <Compile Include="SparkleEntry.cs" />
+    <Compile Include="SparkleInvitation.cs" />
+    <Compile Include="SparkleLink.cs" />
+    <Compile Include="SparkleLog.cs" />
+    <Compile Include="SparkleUIHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NotifySharp\NotifySharp.csproj">
