@@ -31,9 +31,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Mono.Posix" />
-    <Reference Include="Meebey.SmartIrc4net, Version=0.4.5.0, Culture=neutral, PublicKeyToken=7868485fbf407e0f">
-      <Package>smartirc4net</Package>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SparkleRepo.cs" />
