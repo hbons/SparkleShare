@@ -21,10 +21,14 @@ using System.Text;
 
 namespace SparkleLib {
 
-	public class SparkleListener
+	public class SparkleListener : IrcClient
 	{
 
+		public SparkleListener () : base () {
 
+//			IrcConnection i = new IrcConnection ();
+
+		}
 
 	}
 
