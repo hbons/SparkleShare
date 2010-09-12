@@ -162,12 +162,13 @@ namespace SparkleLib {
 
 			};
 
+			// TODO: Change to OnTopicChange. The topic will contain the latest hash
 			// Fetch changes when there is a message in the irc channel
-			Listener.Client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
+			Listener.Client.OnChannelMessage += delegate (object o, IrcEventArgs args) { // TODO: TopicChangeEventArgs
 
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Was notified of a remote change.");
 
-				if (!args.Data.Message.Equals (CurrentHash)) {
+				if (!args.Data.Message.Equals (CurrentHash)) { //TODO: args.Data.NewTopic
 
 					FetchRequests++;
 
@@ -909,8 +910,6 @@ namespace SparkleLib {
 				}
 
 				commits.Add (commit);
-
-				unix_timestamp = 0;
 
 			}
 
