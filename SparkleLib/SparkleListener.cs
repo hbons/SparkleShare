@@ -26,6 +26,7 @@ namespace SparkleLib {
 	{
 
 		public IrcClient Client;
+		public Thread Thread;
 		public string Server;
 		public string Channel;
 		public string Nick;
@@ -61,7 +62,7 @@ namespace SparkleLib {
 
 			try {
 
-				Thread thread = new Thread (
+				Thread = new Thread (
 					new ThreadStart (delegate {
 
 						// Connect to the server
@@ -80,7 +81,7 @@ namespace SparkleLib {
 					})
 				);
 
-				thread.Start ();
+				Thread.Start ();
 
 			} catch (Exception e) {
 
