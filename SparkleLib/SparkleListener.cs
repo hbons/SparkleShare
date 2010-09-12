@@ -45,7 +45,7 @@ namespace SparkleLib {
 
 			// TODO: Remove these hardcoded values
 			Channel = "#sparkletest";
-			Server  = "irc.gnome.org";
+			Server  = "irc.gnome.orgf";
 
 			Client = new IrcClient ();
 
@@ -60,10 +60,10 @@ namespace SparkleLib {
 		public void Listen ()
 		{
 
-			try {
+			Thread = new Thread (
+				new ThreadStart (delegate {
 
-				Thread = new Thread (
-					new ThreadStart (delegate {
+					try {
 
 						// Connect to the server
 						Client.Connect (new string [] {Server}, Port);
@@ -78,16 +78,16 @@ namespace SparkleLib {
 
 						Client.Disconnect ();
 
-					})
-				);
+					} catch ( Meebey.SmartIrc4net.ConnectionException e) {
 
-				Thread.Start ();
+						Console.WriteLine ("Could not connect: " + e.Message);
 
-			} catch (Exception e) {
+					}
 
-				Console.WriteLine ("Could not connect: " + e.Message);
+				})
+			);
 
-			}
+			Thread.Start ();
 	
 		}
 
