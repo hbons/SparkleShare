@@ -45,7 +45,7 @@ namespace SparkleLib {
 
 			// TODO: Remove these hardcoded values
 			Channel = "#sparkletest";
-			Server  = "irc.gnome.orgf";
+			Server  = "irc.gnome.org";
 
 			Client = new IrcClient ();
 
