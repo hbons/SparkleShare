@@ -14,6 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using Meebey.SmartIrc4net;
 using Mono.Unix;
 using System;
 using System.Collections.Generic;
@@ -32,10 +33,11 @@ namespace SparkleLib {
 		private FileSystemWatcher Watcher;
 		private bool HasChanged;
 		private DateTime LastChange;
-		private System.Object ChangeLock = new System.Object();
-		private bool HasUnsyncedChanges;
+		private System.Object ChangeLock;
+		private int FetchRequests;
 
 		public string Name;
+		public string RemoteName;
 		public string Domain;
 		public string Description;
 		public string LocalPath;
@@ -45,6 +47,9 @@ namespace SparkleLib {
 		public string UserName;
 		public bool IsSyncing;
 		public bool IsBuffering;
+		public bool IsPolling;
+		public bool IsFetching;
+		public bool HasUnsyncedChanges;
 
 		public delegate void AddedEventHandler (object o, SparkleEventArgs args);
 		public delegate void CommitedEventHandler (object o, SparkleEventArgs args);
@@ -74,9 +79,6 @@ namespace SparkleLib {
 		public SparkleRepo (string path)
 		{
 
-			SparkleListener listener = new SparkleListener ();
-			
-
 			LocalPath = path;
 			Name = Path.GetFileName (LocalPath);
 
@@ -94,15 +96,21 @@ namespace SparkleLib {
 			RemoteOriginUrl    = GetRemoteOriginUrl ();
 			CurrentHash        = GetCurrentHash ();
 			Domain             = GetDomain (RemoteOriginUrl);
+			RemoteName         = Path.GetFileNameWithoutExtension (RemoteOriginUrl);
 			Description        = GetDescription ();
 			HasUnsyncedChanges = false;
 			IsSyncing          = false;
 			IsBuffering        = false;
+			IsPolling          = true;
+			IsFetching         = false;
 
 			if (CurrentHash == null)
 				CreateInitialCommit ();
 
 			HasChanged = false;
+			ChangeLock = new System.Object ();
+			FetchRequests = 0;
+
 
 			// Watch the repository's folder
 			Watcher = new FileSystemWatcher (LocalPath) {
@@ -116,20 +124,79 @@ namespace SparkleLib {
 			Watcher.Deleted += new FileSystemEventHandler (OnFileActivity);
 			Watcher.Renamed += new RenamedEventHandler (OnFileActivity);
 
-
 			// Fetch remote changes every minute
 			RemoteTimer = new Timer () {
 				Interval = 60000
 			};
 
 			RemoteTimer.Elapsed += delegate { 
+
 				CheckForRemoteChanges ();
+
 				if (HasUnsyncedChanges)
 					Push ();
+
 			};
 
+			// Listen to the irc channel on the server
+			SparkleListener listener = new SparkleListener (Domain, "#" + RemoteName, UserEmail);
 
-			// Keep a Local that checks if there are changes and
+			// Stop polling when the connection to the irc channel is succesful
+			listener.Client.OnConnected += delegate {
+
+				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Connected. Now listening...");
+
+				RemoteTimer.Stop ();
+				IsPolling = false;
+
+			};
+
+			// Start polling when the connection to the irc channel is lost
+			listener.Client.OnDisconnected += delegate {
+
+				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Lost connection. Falling back to polling...");
+
+				RemoteTimer.Start ();
+				IsPolling = true;
+
+			};
+
+			// Fetch changes when there is a message in the irc channel
+			listener.Client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
+
+				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Was notified of a remote change.");
+
+				if (!args.Data.Message.Equals (CurrentHash)) {
+
+					FetchRequests++;
+
+					if (!IsFetching) {
+
+						while (FetchRequests > 0) {
+
+							Fetch ();
+							FetchRequests--;
+
+						}
+
+						Rebase ();
+
+					}
+
+				} else {
+
+					SparkleHelpers.DebugInfo ("Irc",
+						"[" + Name + "] False alarm, already up to date. (" + CurrentHash + ")");
+
+				}
+
+			};
+
+			// Start listening
+			listener.Listen ();
+
+
+			// Keep a timer that checks if there are changes and
 			// whether they have settled
 			LocalTimer = new Timer () {
 				Interval = 4000
@@ -139,7 +206,10 @@ namespace SparkleLib {
 				CheckForChanges ();
 			};
 
-			RemoteTimer.Start ();
+
+			if (IsPolling)
+				RemoteTimer.Start ();
+
 			LocalTimer.Start ();
 
 
@@ -149,8 +219,6 @@ namespace SparkleLib {
 
 			if (CurrentHash == null)
 				CurrentHash = GetCurrentHash ();
-
-			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Idling...");
 
 		}
 
@@ -182,6 +250,7 @@ namespace SparkleLib {
 
 					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found.");
 					Fetch ();
+					Rebase ();
 
 				}
 
@@ -220,7 +289,7 @@ namespace SparkleLib {
 		}
 
 
-		// Starts a timerwhen something changes
+		// Starts a timer when something changes
 		private void OnFileActivity (object o, FileSystemEventArgs fse_args)
 		{
 
@@ -288,7 +357,9 @@ namespace SparkleLib {
 
 			} finally {
 
-				RemoteTimer.Start ();
+				if (IsPolling)
+					RemoteTimer.Start ();
+
 				LocalTimer.Start ();
 
 			}
@@ -346,7 +417,8 @@ namespace SparkleLib {
 		public void Fetch ()
 		{
 
-			IsSyncing = true;
+			IsSyncing  = true;
+			IsFetching = true;
 
 			RemoteTimer.Stop ();
 
@@ -378,14 +450,14 @@ namespace SparkleLib {
 
 				args = new SparkleEventArgs ("FetchingFinished");
 
-				IsSyncing = false;
+				IsSyncing  = false;
+				IsFetching = false;
 
 				if (FetchingFinished != null)
 				    FetchingFinished (this, args); 
 
-				Rebase ();
-
-				RemoteTimer.Start ();
+				if (IsPolling)
+					RemoteTimer.Start ();
 
 				CurrentHash = GetCurrentHash ();
 
@@ -486,7 +558,6 @@ namespace SparkleLib {
 			}
 
 			Watcher.EnableRaisingEvents = true;
-			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Idling...");
 
 		}
 
