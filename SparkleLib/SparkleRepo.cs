@@ -212,6 +212,7 @@ namespace SparkleLib {
 
 			LocalTimer.Start ();
 
+			CheckForRemoteChanges ();
 
 			// Add everything that changed 
 			// since SparkleShare was stopped
