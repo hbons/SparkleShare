@@ -39,6 +39,9 @@ namespace SparkleLib {
 			Nick    = nick.Replace ("@", "_at_").Replace (".", "_dot_");
 			Port    = 6667;
 
+			if (Nick.Length > 9)
+				Nick = Nick.Substring (0, 9);
+
 			// TODO: Remove these hardcoded values
 			Channel = "#sparkletest";
 			Server  = "irc.gnome.org";
@@ -58,18 +61,22 @@ namespace SparkleLib {
 
 			try {
 
-				// Connect to the server
-				Client.Connect (new string [] {Server}, Port);
-
-				// Login to the server
-				Client.Login (Nick, Nick);
-
-				// Join the channel
-		        Client.RfcJoin (Channel);
-
 				Thread thread = new Thread (
 					new ThreadStart (delegate {
+
+						// Connect to the server
+						Client.Connect (new string [] {Server}, Port);
+
+						// Login to the server
+						Client.Login (Nick, Nick);
+
+						// Join the channel
+						Client.RfcJoin (Channel);
+
 						Client.Listen ();
+
+						Client.Disconnect ();
+
 					})
 				);
 
