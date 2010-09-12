@@ -456,6 +456,10 @@ namespace SparkleShare {
 		private void Quit (object o, EventArgs args)
 		{
 
+			foreach (SparkleRepo repo in SparkleUI.Repositories)
+				repo.Stop ();
+
+
 			// Remove the process id file
 			File.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "sparkleshare.pid"));
 			Application.Quit ();

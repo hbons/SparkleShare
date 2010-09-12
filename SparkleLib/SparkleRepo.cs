@@ -35,6 +35,7 @@ namespace SparkleLib {
 		private DateTime LastChange;
 		private System.Object ChangeLock;
 		private int FetchRequests;
+		private SparkleListener Listener;
 
 		public string Name;
 		public string RemoteName;
@@ -139,10 +140,10 @@ namespace SparkleLib {
 			};
 
 			// Listen to the irc channel on the server
-			SparkleListener listener = new SparkleListener (Domain, "#" + RemoteName, UserEmail);
+			Listener = new SparkleListener (Domain, "#" + RemoteName, UserEmail);
 
 			// Stop polling when the connection to the irc channel is succesful
-			listener.Client.OnConnected += delegate {
+			Listener.Client.OnConnected += delegate {
 
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Connected. Now listening...");
 
@@ -152,7 +153,7 @@ namespace SparkleLib {
 			};
 
 			// Start polling when the connection to the irc channel is lost
-			listener.Client.OnDisconnected += delegate {
+			Listener.Client.OnDisconnected += delegate {
 
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Lost connection. Falling back to polling...");
 
@@ -162,7 +163,7 @@ namespace SparkleLib {
 			};
 
 			// Fetch changes when there is a message in the irc channel
-			listener.Client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
+			Listener.Client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
 
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Was notified of a remote change.");
 
@@ -193,7 +194,7 @@ namespace SparkleLib {
 			};
 
 			// Start listening
-			listener.Listen ();
+			Listener.Listen ();
 
 
 			// Keep a timer that checks if there are changes and
@@ -617,8 +618,11 @@ namespace SparkleLib {
 		public void Stop ()
 		{
 
-			RemoteTimer.Stop ();
-			LocalTimer.Stop ();
+			RemoteTimer.Dispose ();
+			LocalTimer.Dispose ();
+
+			Listener.Thread.Abort ();
+			Listener.Thread.Join ();
 
 		}
 
