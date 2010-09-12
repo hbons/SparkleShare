@@ -25,62 +25,63 @@ namespace SparkleLib {
 	public class SparkleListener
 	{
 
-		public SparkleListener () {
+		public IrcClient Client;
+		public string Server;
+		public string Channel;
+		public string Nick;
+		public int Port;
 
-			IrcClient irc_client = new IrcClient ();
+		public SparkleListener (string server, string channel, string nick)
+		{
 
-//irc_client.OnRawMessage += HandleRawMessage;
+			Server  = server;
+			Channel = channel;
+			Nick    = nick.Replace ("@", "_at_").Replace (".", "_dot_");
+			Port    = 6667;
 
-			string [] server  = new string [] {"irc.gnome.org"};
-			int port       = 6667;
-			string channel = "#sparkletest";
+			// TODO: Remove these hardcoded values
+			Channel = "#sparkletest";
+			Server  = "irc.gnome.org";
 
-			irc_client.OnConnected += delegate {
-				Console.WriteLine ("!!!!!!!!!!11");
-			};	
+			Client = new IrcClient ();
 
-			irc_client.OnChannelMessage += delegate {
-				Console.WriteLine ("!!!22222222222!!!!!!!11");
-			};
-
-try{
-			irc_client.Connect (server, port);
-
-} catch (Exception e) {
-
-                                Console.WriteLine("Error occured. Lawldongs!");
-                                Console.WriteLine(e);
-
-                        }
-
-
-			irc_client.Login("SmartIRC", "Stupid Bot");
-            irc_client.RfcJoin(channel);
-
-            irc_client.SendMessage(SendType.Message, channel, "HEllo");
-
-
-Thread thread = new Thread(new ThreadStart(delegate {
-
-			irc_client.Listen ();
-
-}));
-thread.Start();
-
-
+			Client.AutoRejoin  = true;
+			Client.AutoRetry   = true;
+			Client.AutoRelogin = true;
 
 		}
 
 
-      void HandleRawMessage (object sender, IrcEventArgs args)
+		// Starts a new thread and listens to the channel
+		public void Listen ()
+		{
 
-                {
+			try {
 
-                        System.Console.WriteLine(args.Data.Nick+": "+args.Data.Message);
+				// Connect to the server
+				Client.Connect (new string [] {Server}, Port);
 
-                }
+				// Login to the server
+				Client.Login (Nick, Nick);
 
-                
+				// Join the channel
+		        Client.RfcJoin (Channel);
+
+				Thread thread = new Thread (
+					new ThreadStart (delegate {
+						Client.Listen ();
+					})
+				);
+
+				thread.Start ();
+
+			} catch (Exception e) {
+
+				Console.WriteLine ("Could not connect: " + e.Message);
+
+			}
+	
+		}
 
 	}
 
