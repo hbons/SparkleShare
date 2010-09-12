@@ -439,12 +439,15 @@ namespace SparkleShare {
 
 			string repo_name = Path.GetFileName (folder_path);
 
-			foreach (SparkleRepo repo in Repositories) {
+			for (int i = 0; i < Repositories.Count; i++) {
+
+				SparkleRepo repo = Repositories [i];
 
 				if (repo.Name.Equals (repo_name)) {
 
 					repo.Stop ();
 					Repositories.Remove (repo);
+					repo = null;
 					break;
 
 				}
