@@ -445,7 +445,7 @@ namespace SparkleShare {
 
 				if (repo.Name.Equals (repo_name)) {
 
-					repo.Stop ();
+					repo.Dispose ();
 					Repositories.Remove (repo);
 					repo = null;
 					break;

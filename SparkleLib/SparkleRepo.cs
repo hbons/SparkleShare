@@ -37,31 +37,196 @@ namespace SparkleLib {
 		private int FetchRequests;
 		private SparkleListener Listener;
 
-		public string Name;
-		public string RemoteName;
-		public string Domain;
-		public string Description;
-		public string LocalPath;
-		public string RemoteOriginUrl;
-		public string CurrentHash;
-		public string UserEmail;
-		public string UserName;
-		public bool IsSyncing;
-		public bool IsBuffering;
-		public bool IsPolling;
-		public bool IsFetching;
-		public bool HasUnsyncedChanges;
+		/// <summary>
+		/// The folder name the repository resides in locally
+		/// </summary>
+		public readonly string Name;
 
+		/// <summary>
+		/// The folder name the repository resides in remotely
+		/// </summary>
+		public readonly string RemoteName;
+
+		/// <summary>
+		/// The domain the remote repository is on
+		/// </summary>
+		public readonly string Domain;
+
+		/// <summary>
+		/// The repository's description
+		/// </summary>
+		public readonly string Description;
+
+		/// <summary>
+		/// The path where the repository resides locally
+		/// </summary>
+		public readonly string LocalPath;
+
+		/// <summary>
+		/// The raw url used to sync with.
+		/// </summary>
+		public readonly string RemoteOriginUrl;
+
+		private string _CurrentHash;
+		private string _UserEmail;
+		private string _UserName;
+		private bool _IsSyncing;
+		private bool _IsBuffering;
+		private bool _IsPolling;
+		private bool _IsFetching;
+		private bool _IsPushing;
+		private bool _HasUnsyncedChanges;
+
+
+		/// <summary>
+		/// The hash of the last commit done in the repository
+		/// </summary>
+		public string CurrentHash {
+			get {
+				return _CurrentHash;
+			}
+		}
+
+		/// <summary>
+		/// The name of the user
+		/// </summary>
+		public string UserName {
+			get {
+				return _UserName;
+			}
+			set {
+				SetUserName (value);
+			}
+		}
+
+
+		/// <summary>
+		/// The name of the user
+		/// </summary>
+		public string UserEmail {
+			get {
+				return _UserEmail;
+			}
+			set {
+				SetUserEmail (value);
+			}
+		}
+
+
+		/// <summary>
+		/// Indicates whether the repository is currently waiting for local changes to settle
+		/// </summary>
+		public bool IsBuffering {
+			get {
+				return _IsBuffering;
+			}
+		}
+
+
+		/// <summary>
+		/// Indicates whether the repository is currently pushing changes
+		/// </summary>
+		public bool IsPushing {
+			get {
+				return _IsPushing;
+			}
+		}
+
+
+		/// <summary>
+		/// Indicates whether the repository has fallen back to polling the remote repository,
+		/// instead of receiving instant notifications
+		/// </summary>
+		public bool IsPolling {
+			get {
+				return _IsPolling;
+			}
+		}
+
+
+		/// <summary>
+		/// Indicates whether the repository is currently fetching and/or pushing changes
+		/// </summary>
+		public bool IsSyncing {
+			get {
+				return _IsSyncing;
+			}
+		}
+
+
+		/// <summary>
+		/// Indicates whether the repository is currently fetching remote changes
+		/// </summary>
+		public bool IsFetching {
+			get {
+				return _IsFetching;
+			}
+		}
+
+
+		/// <summary>
+		/// Indicates whether the repository has local changes that aren't pushed remotely yet
+		/// </summary>
+		public bool HasUnsyncedChanges {
+			get {
+				return _HasUnsyncedChanges;
+			}
+		}
+
+		/// <event cref="Added">
+		/// Raised when local files have been added to the repository's staging area
+		/// </event>
 		public delegate void AddedEventHandler (object o, SparkleEventArgs args);
+
+		/// <event cref="Commited">
+		/// Raised when local files have been added to the repository's index
+		/// </event>
 		public delegate void CommitedEventHandler (object o, SparkleEventArgs args);
+
+		/// <event cref="PushingStarted">
+		/// Raised when the repository has started pushing changes
+		/// </event>
 		public delegate void PushingStartedEventHandler (object o, SparkleEventArgs args);
+
+		/// <event cref="PushingFinished">
+		/// Raised when the repository has finished pushing changes
+		/// </event>
 		public delegate void PushingFinishedEventHandler (object o, SparkleEventArgs args);
+
+		/// <event cref="PushingFailed">
+		/// Raised when pushing changes has failed
+		/// </event>
 		public delegate void PushingFailedEventHandler (object o, SparkleEventArgs args);
+
+		/// <event cref="FetchingStarted">
+		/// Raised when when the repository has started fetching remote changes
+		/// </event>
 		public delegate void FetchingStartedEventHandler (object o, SparkleEventArgs args);
+
+		/// <event cref="FetchingFinished">
+		/// Raised when when the repository has finished fetching remote changes
+		/// </event>
 		public delegate void FetchingFinishedEventHandler (object o, SparkleEventArgs args);
+
+		/// <event cref="NewCommit">
+		/// Raised when the repository has received one or multiple new remote commits
+		/// </event>
 		public delegate void NewCommitEventHandler (object o, NewCommitArgs args);
+
+		/// <event cref="ConflictDetected">
+		/// Raised when the newly fetched commits are conflicting with local changes
+		/// </event>
 		public delegate void ConflictDetectedEventHandler (object o, SparkleEventArgs args);
+
+		/// <event cref="ChangesDetected">
+		/// Raised when local files have changed in the repository's folder
+		/// </event>
 		public delegate void ChangesDetectedEventHandler (object o, SparkleEventArgs args);
+
+		/// <event cref="CommitEndedUpEmpty">
+		/// Raised when there were changes made to local files, but the net result after changes have settled 
+		/// ended up the same as before the changes were made.
+		/// </event>
 		public delegate void CommitEndedUpEmptyEventHandler (object o, SparkleEventArgs args);
 
 		public event AddedEventHandler Added; 
@@ -80,9 +245,6 @@ namespace SparkleLib {
 		public SparkleRepo (string path)
 		{
 
-			LocalPath = path;
-			Name = Path.GetFileName (LocalPath);
-
 			Process = new Process () {
 				EnableRaisingEvents = true
 			};
@@ -92,20 +254,24 @@ namespace SparkleLib {
 			Process.StartInfo.UseShellExecute = false;
 			Process.StartInfo.WorkingDirectory = LocalPath;
 
-			UserName           = GetUserName ();
-			UserEmail          = GetUserEmail ();
-			RemoteOriginUrl    = GetRemoteOriginUrl ();
-			CurrentHash        = GetCurrentHash ();
-			Domain             = GetDomain (RemoteOriginUrl);
-			RemoteName         = Path.GetFileNameWithoutExtension (RemoteOriginUrl);
-			Description        = GetDescription ();
-			HasUnsyncedChanges = false;
-			IsSyncing          = false;
-			IsBuffering        = false;
-			IsPolling          = true;
-			IsFetching         = false;
+			LocalPath = path;
+			Name = Path.GetFileName (LocalPath);
+			RemoteName          = Path.GetFileNameWithoutExtension (RemoteOriginUrl);
+			RemoteOriginUrl     = GetRemoteOriginUrl ();
+			Domain              = GetDomain (RemoteOriginUrl);
+			Description         = GetDescription ();
 
-			if (CurrentHash == null)
+			_UserName           = GetUserName ();
+			_UserEmail          = GetUserEmail ();
+			_CurrentHash         = GetCurrentHash ();
+			_HasUnsyncedChanges = false;
+			_IsSyncing          = false;
+			_IsBuffering        = false;
+			_IsPolling          = true;
+			_IsFetching         = false;
+			_IsPushing          = false;
+
+			if (_CurrentHash == null)
 				CreateInitialCommit ();
 
 			HasChanged = false;
@@ -134,13 +300,13 @@ namespace SparkleLib {
 
 				CheckForRemoteChanges ();
 
-				if (HasUnsyncedChanges)
+				if (_HasUnsyncedChanges)
 					Push ();
 
 			};
 
 			// Listen to the irc channel on the server
-			Listener = new SparkleListener (Domain, "#" + RemoteName, UserEmail);
+			Listener = new SparkleListener (Domain, "#" + RemoteName, _UserEmail);
 
 			// Stop polling when the connection to the irc channel is succesful
 			Listener.Client.OnConnected += delegate {
@@ -148,7 +314,7 @@ namespace SparkleLib {
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Connected. Now listening...");
 
 				RemoteTimer.Stop ();
-				IsPolling = false;
+				_IsPolling = false;
 
 			};
 
@@ -158,7 +324,7 @@ namespace SparkleLib {
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Lost connection. Falling back to polling...");
 
 				RemoteTimer.Start ();
-				IsPolling = true;
+				_IsPolling = true;
 
 			};
 
@@ -168,11 +334,11 @@ namespace SparkleLib {
 
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Was notified of a remote change.");
 
-				if (!args.Data.Message.Equals (CurrentHash)) { //TODO: args.Data.NewTopic
+				if (!args.Data.Message.Equals (_CurrentHash)) { //TODO: args.Data.NewTopic
 
 					FetchRequests++;
 
-					if (!IsFetching) {
+					if (!_IsFetching) {
 
 						while (FetchRequests > 0) {
 
@@ -188,14 +354,14 @@ namespace SparkleLib {
 				} else {
 
 					SparkleHelpers.DebugInfo ("Irc",
-						"[" + Name + "] False alarm, already up to date. (" + CurrentHash + ")");
+						"[" + Name + "] False alarm, already up to date. (" + _CurrentHash + ")");
 
 				}
 
 			};
 
 			// Start listening
-			Listener.Listen ();
+			Listener.ListenForChanges ();
 
 
 			// Keep a timer that checks if there are changes and
@@ -209,7 +375,7 @@ namespace SparkleLib {
 			};
 
 
-			if (IsPolling)
+			if (_IsPolling)
 				RemoteTimer.Start ();
 
 			LocalTimer.Start ();
@@ -220,8 +386,8 @@ namespace SparkleLib {
 			// since SparkleShare was stopped
 			AddCommitAndPush ();
 
-			if (CurrentHash == null)
-				CurrentHash = GetCurrentHash ();
+			if (_CurrentHash == null)
+				_CurrentHash = GetCurrentHash ();
 
 		}
 
@@ -249,7 +415,7 @@ namespace SparkleLib {
 
 				string remote_hash = process.StandardOutput.ReadToEnd ();
 
-				if (!remote_hash.StartsWith (CurrentHash)) {
+				if (!remote_hash.StartsWith (_CurrentHash)) {
 
 					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found.");
 					Fetch ();
@@ -278,7 +444,7 @@ namespace SparkleLib {
 
 						SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled, adding files...");
 
-						IsBuffering = false;
+						_IsBuffering = false;
 
 						HasChanged = false;
 						AddCommitAndPush ();
@@ -300,7 +466,7 @@ namespace SparkleLib {
 
 			if (!ShouldIgnore (fse_args.FullPath)) {
 
-				IsBuffering = true;
+				_IsBuffering = true;
 
 				// Only fire the event if the timer has been stopped.
 				// This prevents multiple events from being raised whilst "buffering".
@@ -360,7 +526,7 @@ namespace SparkleLib {
 
 			} finally {
 
-				if (IsPolling)
+				if (_IsPolling)
 					RemoteTimer.Start ();
 
 				LocalTimer.Start ();
@@ -420,8 +586,8 @@ namespace SparkleLib {
 		public void Fetch ()
 		{
 
-			IsSyncing  = true;
-			IsFetching = true;
+			_IsSyncing  = true;
+			_IsFetching = true;
 
 			RemoteTimer.Stop ();
 
@@ -453,16 +619,16 @@ namespace SparkleLib {
 
 				args = new SparkleEventArgs ("FetchingFinished");
 
-				IsSyncing  = false;
-				IsFetching = false;
+				_IsSyncing  = false;
+				_IsFetching = false;
 
 				if (FetchingFinished != null)
 				    FetchingFinished (this, args); 
 
-				if (IsPolling)
+				if (_IsPolling)
 					RemoteTimer.Start ();
 
-				CurrentHash = GetCurrentHash ();
+				_CurrentHash = GetCurrentHash ();
 
 			};
 
@@ -511,7 +677,7 @@ namespace SparkleLib {
 							
 							string timestamp = DateTime.Now.ToString ("H:mm d MMM yyyy");
 
-							File.Move (problem_file_name, problem_file_name + " (" + UserName  + ", " + timestamp + ")");
+							File.Move (problem_file_name, problem_file_name + " (" + _UserName  + ", " + timestamp + ")");
 							           
 							Process.StartInfo.Arguments = "checkout --theirs " + problem_file_name;
 							Process.WaitForExit ();
@@ -569,7 +735,8 @@ namespace SparkleLib {
 		public void Push ()
 		{
 
-			IsSyncing = true;
+			_IsSyncing = true;
+			_IsPushing = true;
 
 			SparkleEventArgs args = new SparkleEventArgs ("PushingStarted");
 
@@ -585,11 +752,14 @@ namespace SparkleLib {
 
 			Process.Exited += delegate {
 
+				_IsSyncing = false;
+				_IsPushing = false;
+
 				if (Process.ExitCode != 0) {
 
 					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing failed.");
 
-					HasUnsyncedChanges = true;
+					_HasUnsyncedChanges = true;
 
 					args = new SparkleEventArgs ("PushingFailed");
 
@@ -602,28 +772,24 @@ namespace SparkleLib {
 
 					args = new SparkleEventArgs ("PushingFinished");
 
-					HasUnsyncedChanges = false;
+					_HasUnsyncedChanges = false;
 
 					if (PushingFinished != null)
 					    PushingFinished (this, args); 
 
 				}
 
-				IsSyncing = false;
-
 			};
 
 		}
 
 
-		public void Stop ()
+		public void Dispose ()
 		{
 
 			RemoteTimer.Dispose ();
 			LocalTimer.Dispose ();
-
-			Listener.Thread.Abort ();
-			Listener.Thread.Join ();
+			Listener.Dispose ();
 
 		}
 
@@ -654,10 +820,10 @@ namespace SparkleLib {
 		public string GetDomain (string url)
 		{
 
-			if (RemoteOriginUrl.Equals (""))
+			if (url.Equals (""))
 				return "";
 
-			string domain = url.Substring (RemoteOriginUrl.IndexOf ("@") + 1);
+			string domain = url.Substring (url.IndexOf ("@") + 1);
 
 			if (domain.IndexOf (":") > -1)
 				domain = domain.Substring (0, domain.IndexOf (":"));
@@ -749,8 +915,25 @@ namespace SparkleLib {
 		}
 
 
+		// Gets the user's name, example: "User Name"
+		private void SetUserName (string user_name)
+		{
+
+			Process process = new Process ();
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.FileName = "git";
+			process.StartInfo.WorkingDirectory = LocalPath;
+			process.StartInfo.Arguments = "config --set user.name \"" + user_name + "\"";
+			process.Start ();
+
+			_UserName = user_name;
+
+		}
+
+
 		// Gets the user's email, example: "person@gnome.org"
-		public string GetUserEmail ()
+		private string GetUserEmail ()
 		{
 
 			string user_email;
@@ -769,6 +952,23 @@ namespace SparkleLib {
 				user_email = "Unknown Email";
 
 			return user_email;
+
+		}
+
+
+		// Gets the user's name, example: "User Name"
+		private void SetUserEmail (string user_email)
+		{
+
+			Process process = new Process ();
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.FileName = "git";
+			process.StartInfo.WorkingDirectory = LocalPath;
+			process.StartInfo.Arguments = "config --set user.email \"" + user_email + "\"";
+			process.Start ();
+
+			_UserEmail = user_email;
 
 		}
 

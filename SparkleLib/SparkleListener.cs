@@ -26,11 +26,11 @@ namespace SparkleLib {
 	{
 
 		public IrcClient Client;
-		public Thread Thread;
-		public string Server;
-		public string Channel;
-		public string Nick;
-		public int Port;
+		private Thread Thread;
+		public readonly string Server;
+		public readonly string Channel;
+		public readonly string Nick;
+
 
 		public SparkleListener (string server, string channel, string nick)
 		{
@@ -38,7 +38,6 @@ namespace SparkleLib {
 			Server  = server;
 			Channel = channel;
 			Nick    = nick.Replace ("@", "_at_").Replace (".", "_dot_");
-			Port    = 6667;
 
 			if (Nick.Length > 9)
 				Nick = Nick.Substring (0, 9);
@@ -49,15 +48,14 @@ namespace SparkleLib {
 
 			Client = new IrcClient ();
 
-			Client.AutoRejoin  = true;
-			Client.AutoRetry   = true;
-			Client.AutoRelogin = true;
+//			PingTimeout = 90;
+//			SocketSendTimeout = 90;
 
 		}
 
 
 		// Starts a new thread and listens to the channel
-		public void Listen ()
+		public void ListenForChanges ()
 		{
 
 			Thread = new Thread (
@@ -66,7 +64,7 @@ namespace SparkleLib {
 					try {
 
 						// Connect to the server
-						Client.Connect (new string [] {Server}, Port);
+						Client.Connect (new string [] {Server}, 6667);
 
 						// Login to the server
 						Client.Login (Nick, Nick);
@@ -78,7 +76,7 @@ namespace SparkleLib {
 
 						Client.Disconnect ();
 
-					} catch ( Meebey.SmartIrc4net.ConnectionException e) {
+					} catch (Meebey.SmartIrc4net.ConnectionException e) {
 
 						Console.WriteLine ("Could not connect: " + e.Message);
 
@@ -89,6 +87,15 @@ namespace SparkleLib {
 
 			Thread.Start ();
 	
+		}
+
+
+		public void Dispose ()
+		{
+
+			Thread.Abort ();
+			Thread.Join ();
+
 		}
 
 	}
