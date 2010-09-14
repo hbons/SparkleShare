@@ -113,9 +113,10 @@ namespace SparkleShare {
 
 			}
 
-			HideAll ();
+			HideAll (); // TODO: destroy it
 
 		}
+
 
 		public void UpdateEventLog (object o, EventArgs args)
 		{
