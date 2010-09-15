@@ -136,9 +136,8 @@ msgid "Where is your remote folder?"
 msgstr "¿Dónde está su carpeta remota?"
 
 #: ../SparkleShare/SparkleIntro.cs:175
-#, fuzzy
 msgid "address-to-server.com"
-msgstr "ssh://direccion-a-mi-servidor/"
+msgstr "dirección-del-servidor.com"
 
 #: ../SparkleShare/SparkleIntro.cs:180
 msgid "On my own server:"
