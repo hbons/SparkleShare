@@ -2,8 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -22,7 +21,7 @@ msgstr "Δε βρέθηκε το Git."
 
 #: ../SparkleDiff/SparkleDiff.cs:79 ../SparkleShare/SparkleShare.cs:59
 msgid "You can get Git from http://git-scm.com/."
-msgstr ""
+msgstr "Μπορείτε να λάβετε το Git από το http://git-scm.com/."
 
 #: ../SparkleDiff/SparkleDiff.cs:87 ../SparkleShare/SparkleShare.cs:71
 msgid "Sorry, you can't run SparkleShare with these permissions."
@@ -30,11 +29,12 @@ msgstr ""
 
 #: ../SparkleDiff/SparkleDiff.cs:88 ../SparkleShare/SparkleShare.cs:72
 msgid "Things would go utterly wrong."
-msgstr ""
+msgstr "Τα πράγματα θα πάνε πολύ άσχημα."
 
 #: ../SparkleDiff/SparkleDiff.cs:162
+#, fuzzy
 msgid "SparkleDiff Copyright (C) 2010 Hylke Bons"
-msgstr ""
+msgstr "SparkleDiff Copyright (C) 2010 Hylke Bons"
 
 #: ../SparkleDiff/SparkleDiff.cs:164 ../SparkleShare/SparkleShare.cs:116
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
@@ -110,9 +110,7 @@ msgid "Welcome to SparkleShare!"
 msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:71
-msgid ""
-"Before we can create a SparkleShare folder on this computer, we need a few "
-"bits of information from you."
+msgid "Before we can create a SparkleShare folder on this computer, we need a few bits of information from you."
 msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:83
@@ -208,8 +206,7 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:431
 #, csharp-format
-msgid ""
-"Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
+msgid "Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
 msgstr ""
 
 #. A button that opens the synced folder
@@ -404,8 +401,5 @@ msgid "Hold your ponies!"
 msgstr ""
 
 #: ../SparkleShare/SparkleUI.cs:473
-msgid ""
-"SparkleShare is known to be insanely fast with pictures of unicorns. Please "
-"make sure your internets are upgraded to the latest version to avoid any "
-"problems."
+msgid "SparkleShare is known to be insanely fast with pictures of unicorns. Please make sure your internets are upgraded to the latest version to avoid any problems."
 msgstr ""
