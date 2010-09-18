@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-09 06:33+0000\n"
+"POT-Creation-Date: 2010-09-18 06:41+0000\n"
 "PO-Revision-Date: 2010-07-13 16:07+0800\n"
 "Last-Translator: Yann Hermans <chezyann@gmail.com>\n"
 "Language-Team: French (France)\n"
@@ -109,7 +109,7 @@ msgstr "Créer une copie d'une version antérieure de ce dossier"
 msgid "Select to get a copy of this version"
 msgstr "Sélectionner pour obtenir une copie de cette version"
 
-#: ../SparkleShare/SparkleIntro.cs:65
+#: ../SparkleShare/SparkleIntro.cs:65 ../SparkleShare/SparkleStatusIcon.cs:411
 msgid "Welcome to SparkleShare!"
 msgstr "Bienvenue sur SparkleShare !"
 
@@ -209,9 +209,9 @@ msgid "Folder synced successfully!"
 msgstr "Le dossier a été synchronisé avec succès!"
 
 #: ../SparkleShare/SparkleIntro.cs:431
-#: ../SparkleShare/SparkleInvitation.cs:316
-msgid "Now you can access the synced files from ‘"
-msgstr "Vous pouvez à présent accéder au fichiers synchronisés depuis ‘"
+#, csharp-format
+msgid "Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
+msgstr "Vous pouvez à présent accéder au fichiers synchronisés sur ‘{0}’ depuis votre dossier SparkleShare."
 
 #. A button that opens the synced folder
 #: ../SparkleShare/SparkleIntro.cs:439
@@ -290,6 +290,10 @@ msgstr "Accepter et synchronisez"
 msgid "Close"
 msgstr "Fermer"
 
+#: ../SparkleShare/SparkleInvitation.cs:316
+msgid "Now you can access the synced files from ‘"
+msgstr "Vous pouvez à présent accéder au fichiers synchronisés depuis ‘"
+
 #. TRANSLATORS: {0} is a folder name, and {1} is a server address
 #: ../SparkleShare/SparkleLog.cs:53
 #, csharp-format
@@ -300,19 +304,19 @@ msgstr "Derniers événements dans « {0} »"
 msgid "_Open Folder"
 msgstr "_Ouvrir le dossier"
 
-#: ../SparkleShare/SparkleLog.cs:318
+#: ../SparkleShare/SparkleLog.cs:319
 msgid "Edited"
 msgstr "Edité le"
 
-#: ../SparkleShare/SparkleLog.cs:332
+#: ../SparkleShare/SparkleLog.cs:333
 msgid "Added"
 msgstr "Ajouté le"
 
-#: ../SparkleShare/SparkleLog.cs:346
+#: ../SparkleShare/SparkleLog.cs:347
 msgid "Deleted"
 msgstr "Supprimé le"
 
-#: ../SparkleShare/SparkleLog.cs:360
+#: ../SparkleShare/SparkleLog.cs:361
 msgid "Moved"
 msgstr "Déplacé le"
 
@@ -356,39 +360,39 @@ msgstr "Synchroniser le dossier SparkleShare avec les dépôts distants."
 msgid "SparkleShare "
 msgstr "SparkleShare "
 
-#: ../SparkleShare/SparkleStatusIcon.cs:259
-msgid "No Shared Folders Yet"
-msgstr "Encore aucun dossier de partagé"
+#: ../SparkleShare/SparkleStatusIcon.cs:277
+msgid "No Remote Folders Yet"
+msgstr "Encore aucun dossier distant"
 
 #. Opens the wizard to add a new remote folder
-#: ../SparkleShare/SparkleStatusIcon.cs:268
+#: ../SparkleShare/SparkleStatusIcon.cs:286
 msgid "Sync Remote Folder…"
 msgstr "Synchroniser le dossier distant..."
 
 #. A checkbutton to toggle whether or not to show notifications
-#: ../SparkleShare/SparkleStatusIcon.cs:283
+#: ../SparkleShare/SparkleStatusIcon.cs:301
 msgid "Show Notifications"
 msgstr "Montrer les notifications"
 
 #. A menu item that takes the use to sparkleshare.org
-#: ../SparkleShare/SparkleStatusIcon.cs:305
+#: ../SparkleShare/SparkleStatusIcon.cs:323
 msgid "Visit Website"
 msgstr "Visiter le site web"
 
 #. A menu item that quits the application
-#: ../SparkleShare/SparkleStatusIcon.cs:322
+#: ../SparkleShare/SparkleStatusIcon.cs:340
 msgid "Quit"
 msgstr "Quitter"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:394
+#: ../SparkleShare/SparkleStatusIcon.cs:409
 msgid "Up to date"
 msgstr "A jour"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:403
+#: ../SparkleShare/SparkleStatusIcon.cs:420
 msgid "Syncing…"
 msgstr "Synchronisation en cours…"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:415
+#: ../SparkleShare/SparkleStatusIcon.cs:432
 msgid "Failed to sync changes"
 msgstr "La synchronisation des modifications a échouée"
 
@@ -400,11 +404,11 @@ msgstr "Outch! Collision en plein ciel!"
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
 msgstr "Ne vous inquiétez pas, SparkleShare à effectué une copie de chacun des fichiers en conflit."
 
-#: ../SparkleShare/SparkleUI.cs:478
+#: ../SparkleShare/SparkleUI.cs:472
 msgid "Hold your ponies!"
 msgstr "Restons calme !"
 
-#: ../SparkleShare/SparkleUI.cs:479
+#: ../SparkleShare/SparkleUI.cs:473
 msgid "SparkleShare is known to be insanely fast with pictures of unicorns. Please make sure your internets are upgraded to the latest version to avoid any problems."
 msgstr "SparkleShare est réputé pour son hallucinante rapidité concernant les images de licornes. Merci de vérifier que votre navigateur est à jour pour éviter tout problème."
 
