@@ -245,6 +245,9 @@ namespace SparkleLib {
 		public SparkleRepo (string path)
 		{
 
+			LocalPath = path;
+			Name = Path.GetFileName (LocalPath);
+
 			Process = new Process () {
 				EnableRaisingEvents = true
 			};
@@ -254,8 +257,6 @@ namespace SparkleLib {
 			Process.StartInfo.UseShellExecute = false;
 			Process.StartInfo.WorkingDirectory = LocalPath;
 
-			LocalPath = path;
-			Name = Path.GetFileName (LocalPath);
 			RemoteName          = Path.GetFileNameWithoutExtension (RemoteOriginUrl);
 			RemoteOriginUrl     = GetRemoteOriginUrl ();
 			Domain              = GetDomain (RemoteOriginUrl);
@@ -328,13 +329,12 @@ namespace SparkleLib {
 
 			};
 
-			// TODO: Change to OnTopicChange. The topic will contain the latest hash
 			// Fetch changes when there is a message in the irc channel
-			Listener.Client.OnChannelMessage += delegate (object o, IrcEventArgs args) { // TODO: TopicChangeEventArgs
+			Listener.Client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
 
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Was notified of a remote change.");
 
-				if (!args.Data.Message.Equals (_CurrentHash)) { //TODO: args.Data.NewTopic
+				if (!args.Data.Message.Equals (_CurrentHash)) {
 
 					FetchRequests++;
 
