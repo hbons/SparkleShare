@@ -50,15 +50,44 @@ namespace SparkleShare {
 			BorderWidth = 12;
 			
 			// TRANSLATORS: {0} is a folder name, and {1} is a server address
-			Title = String.Format(_("Recent Events in ‘{0}’"), name);
+			Title = String.Format(_("Recent Events in1 ‘{0}’"), name);
 			IconName = "folder-sparkleshare";
 
 			DeleteEvent += delegate {
 				Close ();
 			};
-
+			
+			// ****************cordoval@gmail.com***************************
+			// adds hidden menu bar and File top menu item >> Close menu subitem
+			MenuBar mb = new MenuBar ();
+	        Menu filemenu = new Menu ();
+			MenuItem file = new MenuItem ("File");
+			file.Submenu = filemenu;
+			MenuItem exit1 = new MenuItem ("Close1");
+			MenuItem exit2 = new MenuItem ("Close2");
+			
+			// adds specific Ctrl+W and Esc key accelerators to Log Window
+			AccelGroup agr = new AccelGroup ();
+        	AddAccelGroup (agr);
+			exit1.AddAccelerator ("activate", agr, new AccelKey(Gdk.Key.W, Gdk.ModifierType.ControlMask, AccelFlags.Visible));
+			exit2.AddAccelerator ("activate", agr, new AccelKey(Gdk.Key.Escape, Gdk.ModifierType.None, AccelFlags.Visible));
+			
+			exit1.Activated += delegate { Close (); };
+			exit2.Activated += delegate { Close (); };
+			
+			filemenu.Append (exit1);
+			filemenu.Append (exit2);
+			mb.Append (file);
+			
+			// *******************************************
+			
+			
 			LayoutVertical = new VBox (false, 12);
-
+			
+			
+			LayoutVertical.PackStart(mb, false, false, 0);
+			//mb.Hide(); //it does not hide it -- TODO please make sure it hides the menu bar
+			
 			LayoutVertical.PackStart (CreateEventLog (), true, true, 0);
 
 				HButtonBox dialog_buttons = new HButtonBox {
@@ -92,7 +121,7 @@ namespace SparkleShare {
 
 			LayoutVertical.PackStart (dialog_buttons, false, false, 0);
 
-			Add (LayoutVertical);		
+			Add (LayoutVertical);
 
 		}
 

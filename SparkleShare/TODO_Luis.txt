@@ -1,0 +1,3 @@
+so, i would like to be able to close the Event Log windows with ESC and CTRL+W
+i think it can be done wit GtkAccelletor or in that area
+GtkAccellerator
