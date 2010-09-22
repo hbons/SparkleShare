@@ -1,116 +1,113 @@
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Gang Chen <chen.gang1983@gmail.com>, 2010.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: sparkleshare 简体中文\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-22 06:45+0000\n"
-"PO-Revision-Date: 2010-07-02 12:41+0700\n"
-"Last-Translator: 陈钢<chen.gang1983@gmail.com>\n"
-"Language-Team: \n"
+"POT-Creation-Date: 2010-09-17 06:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1 plural=0;\n"
-"X-Poedit-Language: Chinese\n"
-"X-Poedit-SourceCharset: zh_CN\n"
-"X-Poedit-Country: CHINA\n"
 
 #: ../SparkleDiff/SparkleDiff.cs:78 ../SparkleShare/SparkleShare.cs:58
 msgid "Git wasn't found."
-msgstr "没有找到 Git"
+msgstr "Δε βρέθηκε το Git."
 
 #: ../SparkleDiff/SparkleDiff.cs:79 ../SparkleShare/SparkleShare.cs:59
 msgid "You can get Git from http://git-scm.com/."
-msgstr "您可以从 http://git-scm.com/ 处获得 Git。"
+msgstr "Μπορείτε να λάβετε το Git από το http://git-scm.com/."
 
 #: ../SparkleDiff/SparkleDiff.cs:87 ../SparkleShare/SparkleShare.cs:71
 msgid "Sorry, you can't run SparkleShare with these permissions."
-msgstr "对不起，您不能在这些许可下运行 SparkleShare。"
+msgstr ""
 
 #: ../SparkleDiff/SparkleDiff.cs:88 ../SparkleShare/SparkleShare.cs:72
 msgid "Things would go utterly wrong."
-msgstr "出现严重错误"
+msgstr "Τα πράγματα θα πάνε πολύ άσχημα."
 
 #: ../SparkleDiff/SparkleDiff.cs:162
 #, fuzzy
 msgid "SparkleDiff Copyright (C) 2010 Hylke Bons"
-msgstr "SparkleShare 版权所有 (C) 2010 Hylke Bons"
+msgstr "SparkleDiff Copyright (C) 2010 Hylke Bons"
 
 #: ../SparkleDiff/SparkleDiff.cs:164 ../SparkleShare/SparkleShare.cs:116
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
-msgstr "本程序不提供任何质量保证"
+msgstr ""
 
 #: ../SparkleDiff/SparkleDiff.cs:165 ../SparkleShare/SparkleShare.cs:118
 msgid "This is free software, and you are welcome to redistribute it "
-msgstr "这是自由软件，欢迎您再次分发。"
+msgstr ""
 
 #: ../SparkleDiff/SparkleDiff.cs:166 ../SparkleShare/SparkleShare.cs:119
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
-msgstr "在某种条件下。详情请参见 GNU GPLv3。"
+msgstr ""
 
 #: ../SparkleDiff/SparkleDiff.cs:168
 msgid "SparkleDiff let's you compare revisions of an image file side by side."
-msgstr "SparkleDiff让用户比较并列表图像文件的不同版本"
+msgstr ""
 
 #: ../SparkleDiff/SparkleDiff.cs:170
 msgid "Usage: sparklediff [FILE]"
-msgstr "使用方法：sparklediff [文件]"
+msgstr ""
 
 #: ../SparkleDiff/SparkleDiff.cs:171
 msgid "Open an image file to show its revisions"
-msgstr "打开图像文件以显示其版本"
+msgstr ""
 
 #: ../SparkleDiff/SparkleDiff.cs:173 ../SparkleShare/SparkleShare.cs:127
 msgid "Arguments:"
-msgstr "参数："
+msgstr ""
 
 #: ../SparkleDiff/SparkleDiff.cs:174
 msgid "\t -h, --help\t\tDisplay this help text."
-msgstr "\t -h, --help\t\t 显示本帮助文本。"
+msgstr ""
 
 #: ../SparkleDiff/SparkleDiffWindow.cs:92
 #, csharp-format
 msgid "{0} at {1}"
-msgstr "{0} at {1}"
+msgstr ""
 
 #: ../SparkleDiff/SparkleDiffWindow.cs:93
 msgid "ddd MMM d, yyyy"
-msgstr "ddd MMM d, yyyy"
+msgstr ""
 
 #: ../SparkleDiff/SparkleDiffWindow.cs:94
 msgid "H:mm"
-msgstr "H:mm"
+msgstr ""
 
 #: ../SparkleLib/SparkleOptions.cs:486
 msgid "OptionName"
-msgstr "选项名称"
+msgstr ""
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
 msgid "Copy Web Link"
-msgstr "复制Web链接"
+msgstr ""
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
 msgid "Copy the web address of this file to the clipboard"
-msgstr "复制该文件的Web地址到剪贴板"
+msgstr ""
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
 msgid "Get Earlier Version"
-msgstr "获取较早的版本"
+msgstr ""
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
 msgid "Make a copy of an earlier version in this folder"
-msgstr "在本目录中制作一个较早的版本"
+msgstr ""
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:161
 msgid "Select to get a copy of this version"
-msgstr "获取该版本的复制"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:65 ../SparkleShare/SparkleStatusIcon.cs:411
 msgid "Welcome to SparkleShare!"
-msgstr "欢迎使用 SparkleShare！"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:71
 msgid "Before we can create a SparkleShare folder on this computer, we need a few bits of information from you."
@@ -118,31 +115,31 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:83
 msgid "Full Name:"
-msgstr "全名："
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:99
 msgid "Email:"
-msgstr "电子邮件"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:110
 msgid "Next"
-msgstr "下一步"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:117
 msgid "Configuring…"
-msgstr "正在配置"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:162
 msgid "Where is your remote folder?"
-msgstr "远程文件夹在什么地方？"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:175
 msgid "address-to-server.com"
-msgstr "address-to-server.com"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:180
 msgid "On my own server:"
-msgstr "在我自己的服务器上："
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:187
 msgid "Free hosting for Free and Open Source Software projects."
@@ -154,11 +151,11 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:196
 msgid "The GNOME Project"
-msgstr "GMOME项目"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:198
 msgid "GNOME is an easy to understand interface to your computer."
-msgstr "GNOME是一个简单易懂的计算机使用界面"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:199
 msgid "Select this option if you’re a developer or designer working on GNOME."
@@ -166,7 +163,7 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:207
 msgid "Gitorious"
-msgstr "Gitorious"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:209
 msgid "Completely Free as in Freedom infrastructure."
@@ -179,35 +176,33 @@ msgstr ""
 #: ../SparkleShare/SparkleIntro.cs:273
 #: ../SparkleShare/SparkleInvitation.cs:134
 msgid "Folder Name:"
-msgstr "文件夹名称："
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:283
 msgid "Sync"
-msgstr "同步"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:345
 msgid "Cancel"
-msgstr "取消"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:356
 msgid "Skip"
-msgstr "跳过"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:391
 #: ../SparkleShare/SparkleInvitation.cs:277
-#, fuzzy
 msgid "Something went wrong…"
-msgstr "同步 ‘{0}’ 时发生错误"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:397
-#, fuzzy
 msgid "Try Again"
-msgstr "重试..."
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:425
 #: ../SparkleShare/SparkleInvitation.cs:310
 msgid "Folder synced successfully!"
-msgstr "文件夹同步成功"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:431
 #, csharp-format
@@ -218,25 +213,25 @@ msgstr ""
 #: ../SparkleShare/SparkleIntro.cs:439
 #: ../SparkleShare/SparkleInvitation.cs:323
 msgid "Open Folder"
-msgstr "打开文件夹"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:455 ../SparkleShare/SparkleIntro.cs:499
 #: ../SparkleShare/SparkleIntro.cs:566
 #: ../SparkleShare/SparkleInvitation.cs:338
 #: ../SparkleShare/SparkleInvitation.cs:381
 msgid "Finish"
-msgstr "完成"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:483
 #: ../SparkleShare/SparkleInvitation.cs:365
-#, fuzzy, csharp-format
+#, csharp-format
 msgid "Syncing folder ‘{0}’…"
-msgstr "正在同步文件夹 ‘{0}’"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:490
 #: ../SparkleShare/SparkleInvitation.cs:372
 msgid "This may take a while.\n"
-msgstr "请稍等。\n"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:491
 #: ../SparkleShare/SparkleInvitation.cs:373
@@ -245,7 +240,7 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:541
 msgid "SparkleShare is ready to go!"
-msgstr "SparkleShare准备完毕！"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:547
 msgid ""
@@ -255,11 +250,11 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:558
 msgid "Learn how to host your own SparkleServer"
-msgstr "学习如何设置自己的SparkleServer"
+msgstr ""
 
 #: ../SparkleShare/SparkleInvitation.cs:104
 msgid "Invitation received!"
-msgstr "收到邀请"
+msgstr ""
 
 #: ../SparkleShare/SparkleInvitation.cs:110
 msgid ""
@@ -298,9 +293,8 @@ msgid "Recent Events in ‘{0}’"
 msgstr ""
 
 #: ../SparkleShare/SparkleLog.cs:69
-#, fuzzy
 msgid "_Open Folder"
-msgstr "打开文件夹"
+msgstr ""
 
 #: ../SparkleShare/SparkleLog.cs:319
 msgid "Edited"
@@ -319,9 +313,8 @@ msgid "Moved"
 msgstr ""
 
 #: ../SparkleShare/SparkleShare.cs:83
-#, fuzzy
 msgid "Don't show the notification icon"
-msgstr "\t -d, --disable-gui\t 不显示通知图标。"
+msgstr ""
 
 #: ../SparkleShare/SparkleShare.cs:84
 msgid "Show this help text"
@@ -336,9 +329,8 @@ msgid "SparkleShare, an instant update workflow to Git."
 msgstr ""
 
 #: ../SparkleShare/SparkleShare.cs:114
-#, fuzzy
 msgid "Copyright (C) 2010 Hylke Bons"
-msgstr "SparkleShare 版权所有 (C) 2010 Hylke Bons"
+msgstr ""
 
 #: ../SparkleShare/SparkleShare.cs:121
 msgid "SparkleShare automatically syncs Git repositories in "
@@ -350,42 +342,39 @@ msgstr ""
 
 #: ../SparkleShare/SparkleShare.cs:124
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
-msgstr "用法：sparkleshare [start|stop|restart] [OPTION]..."
+msgstr ""
 
 #: ../SparkleShare/SparkleShare.cs:125
 msgid "Sync SparkleShare folder with remote repositories."
 msgstr ""
 
 #: ../SparkleShare/SparkleShare.cs:137
-#, fuzzy
 msgid "SparkleShare "
-msgstr "欢迎使用 SparkleShare！"
+msgstr ""
 
 #: ../SparkleShare/SparkleStatusIcon.cs:277
-#, fuzzy
 msgid "No Remote Folders Yet"
-msgstr "添加远端文件夹..."
+msgstr ""
 
 #. Opens the wizard to add a new remote folder
 #: ../SparkleShare/SparkleStatusIcon.cs:286
-#, fuzzy
 msgid "Sync Remote Folder…"
-msgstr "添加远端文件夹..."
+msgstr ""
 
 #. A checkbutton to toggle whether or not to show notifications
 #: ../SparkleShare/SparkleStatusIcon.cs:301
 msgid "Show Notifications"
-msgstr "显示通知"
+msgstr ""
 
 #. A menu item that takes the use to sparkleshare.org
 #: ../SparkleShare/SparkleStatusIcon.cs:323
 msgid "Visit Website"
-msgstr "访问网站"
+msgstr ""
 
 #. A menu item that quits the application
 #: ../SparkleShare/SparkleStatusIcon.cs:340
 msgid "Quit"
-msgstr "退出"
+msgstr ""
 
 #: ../SparkleShare/SparkleStatusIcon.cs:409
 msgid "Up to date"
@@ -393,7 +382,7 @@ msgstr ""
 
 #: ../SparkleShare/SparkleStatusIcon.cs:420
 msgid "Syncing…"
-msgstr "同步中..."
+msgstr ""
 
 #: ../SparkleShare/SparkleStatusIcon.cs:432
 msgid "Failed to sync changes"
@@ -414,54 +403,3 @@ msgstr ""
 #: ../SparkleShare/SparkleUI.cs:473
 msgid "SparkleShare is known to be insanely fast with pictures of unicorns. Please make sure your internets are upgraded to the latest version to avoid any problems."
 msgstr ""
-
-#~ msgid "Address of remote SparkleShare folder:"
-#~ msgstr "远端 SparkleShare 文件夹的地址："
-
-#~ msgid "Add Folder"
-#~ msgstr "添加文件夹"
-
-#~ msgid "SparkleShare will notify you when this is done."
-#~ msgstr "完成时 SparkleShare 将通知您"
-
-#~ msgid "Successfully synced folder ‘{0}’"
-#~ msgstr "成功同步文件夹 ‘{0}’"
-
-#~ msgid "Now make great stuff happen!"
-#~ msgstr "就让伟大一刻现在发生吧！"
-
-#~ msgid "a second ago"
-#~ msgid_plural "{0} seconds ago"
-#~ msgstr[0] "{0} 秒钟前"
-
-#~ msgid "a minute ago"
-#~ msgid_plural "about {0} minutes ago"
-#~ msgstr[0] "{0} 分钟前"
-
-#~ msgid "about an hour ago"
-#~ msgid_plural "about {0} hours ago"
-#~ msgstr[0] "约 {0} 小时前"
-
-#~ msgid "yesterday"
-#~ msgid_plural "{0} days ago"
-#~ msgstr[0] "{0} 天前"
-
-#~ msgid "a month ago"
-#~ msgid_plural "{0} months ago"
-#~ msgstr[0] "{0} 个月前"
-
-#~ msgid "a year ago"
-#~ msgid_plural "{0} years ago"
-#~ msgstr[0] "{0} 年前"
-
-#~ msgid "Error syncing"
-#~ msgstr "同步错误"
-
-#~ msgid "Everything is up to date"
-#~ msgstr "全部已经为最新"
-
-#~ msgid "You don't have any folders set up yet."
-#~ msgstr "您还没有设置文件夹。"
-
-#~ msgid "Add a Folder…"
-#~ msgstr "添加文件夹..."
