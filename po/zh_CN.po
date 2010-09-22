@@ -1,7 +1,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Gang Chen <chen.gang1983@gmail.com>, 2010.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: sparkleshare 简体中文\n"
@@ -15,8 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1 plural=0;\n"
 "X-Poedit-Language: Chinese\n"
-"X-Poedit-Country: CHINA\n"
 "X-Poedit-SourceCharset: zh_CN\n"
+"X-Poedit-Country: CHINA\n"
 
 #: ../SparkleDiff/SparkleDiff.cs:78 ../SparkleShare/SparkleShare.cs:58
 msgid "Git wasn't found."
@@ -113,9 +113,7 @@ msgid "Welcome to SparkleShare!"
 msgstr "欢迎使用 SparkleShare！"
 
 #: ../SparkleShare/SparkleIntro.cs:71
-msgid ""
-"Before we can create a SparkleShare folder on this computer, we need a few "
-"bits of information from you."
+msgid "Before we can create a SparkleShare folder on this computer, we need a few bits of information from you."
 msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:83
@@ -156,11 +154,11 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:196
 msgid "The GNOME Project"
-msgstr ""
+msgstr "GMOME项目"
 
 #: ../SparkleShare/SparkleIntro.cs:198
 msgid "GNOME is an easy to understand interface to your computer."
-msgstr ""
+msgstr "GNOME是一个简单易懂的计算机使用界面"
 
 #: ../SparkleShare/SparkleIntro.cs:199
 msgid "Select this option if you’re a developer or designer working on GNOME."
@@ -168,7 +166,7 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:207
 msgid "Gitorious"
-msgstr ""
+msgstr "Gitorious"
 
 #: ../SparkleShare/SparkleIntro.cs:209
 msgid "Completely Free as in Freedom infrastructure."
@@ -213,8 +211,7 @@ msgstr "文件夹同步成功"
 
 #: ../SparkleShare/SparkleIntro.cs:431
 #, csharp-format
-msgid ""
-"Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
+msgid "Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
 msgstr ""
 
 #. A button that opens the synced folder
@@ -239,7 +236,7 @@ msgstr "正在同步文件夹 ‘{0}’"
 #: ../SparkleShare/SparkleIntro.cs:490
 #: ../SparkleShare/SparkleInvitation.cs:372
 msgid "This may take a while.\n"
-msgstr ""
+msgstr "请稍等。\n"
 
 #: ../SparkleShare/SparkleIntro.cs:491
 #: ../SparkleShare/SparkleInvitation.cs:373
@@ -248,7 +245,7 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:541
 msgid "SparkleShare is ready to go!"
-msgstr ""
+msgstr "SparkleShare准备完毕！"
 
 #: ../SparkleShare/SparkleIntro.cs:547
 msgid ""
@@ -258,11 +255,11 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:558
 msgid "Learn how to host your own SparkleServer"
-msgstr ""
+msgstr "学习如何设置自己的SparkleServer"
 
 #: ../SparkleShare/SparkleInvitation.cs:104
 msgid "Invitation received!"
-msgstr ""
+msgstr "收到邀请"
 
 #: ../SparkleShare/SparkleInvitation.cs:110
 msgid ""
@@ -415,10 +412,7 @@ msgid "Hold your ponies!"
 msgstr ""
 
 #: ../SparkleShare/SparkleUI.cs:473
-msgid ""
-"SparkleShare is known to be insanely fast with pictures of unicorns. Please "
-"make sure your internets are upgraded to the latest version to avoid any "
-"problems."
+msgid "SparkleShare is known to be insanely fast with pictures of unicorns. Please make sure your internets are upgraded to the latest version to avoid any problems."
 msgstr ""
 
 #~ msgid "Address of remote SparkleShare folder:"
