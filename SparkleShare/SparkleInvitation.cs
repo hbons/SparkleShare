@@ -313,8 +313,8 @@ namespace SparkleShare {
 							Xalign = 0
 						};
 				
-						Label information = new Label (_("Now you can access the synced files from ‘" + name + "’ " + 
-						                                 "in your SparkleShare folder.")) {
+						Label information = new Label (String.Format(_("Now you can access the synced files from ‘{0}’ in your SparkleShare folder."),
+					                                             name)) {
 							Xalign = 0,
 							Wrap   = true,
 							UseMarkup = true
