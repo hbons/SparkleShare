@@ -50,7 +50,7 @@ namespace SparkleShare {
 			BorderWidth = 12;
 			
 			// TRANSLATORS: {0} is a folder name, and {1} is a server address
-			Title = String.Format(_("Recent Events in1 ‘{0}’"), name);
+			Title = String.Format(_("Recent Events in ‘{0}’"), name);
 			IconName = "folder-sparkleshare";
 
 			DeleteEvent += delegate {
