@@ -29,7 +29,7 @@ namespace SparkleShare {
 		public readonly string LocalPath;
 		private VBox LayoutVertical;
 		private ScrolledWindow ScrolledWindow;
-
+		private MenuBar MenuBar;
 
 		// Short alias for the translations
 		public static string _ (string s)
@@ -57,36 +57,46 @@ namespace SparkleShare {
 				Close ();
 			};
 			
-			// ****************cordoval@gmail.com***************************
-			// adds hidden menu bar and File top menu item >> Close menu subitem
-			MenuBar mb = new MenuBar ();
-	        Menu filemenu = new Menu ();
-			MenuItem file = new MenuItem ("File");
-			file.Submenu = filemenu;
-			MenuItem exit1 = new MenuItem ("Close1");
-			MenuItem exit2 = new MenuItem ("Close2");
+
+			// Adds a hidden menubar that contains to enable keyboard
+			// shortcuts to close the log
+			MenuBar = new MenuBar ();
+
+				MenuItem file_item = new MenuItem ("File");
+
+				    Menu file_menu = new Menu ();
+
+						MenuItem close_1 = new MenuItem ("Close1");
+						MenuItem close_2 = new MenuItem ("Close2");
+		
+						// adds specific Ctrl+W and Esc key accelerators to Log Window
+						AccelGroup accel_group = new AccelGroup ();
+						AddAccelGroup (accel_group);
+
+						// Close on Esc
+						close_1.AddAccelerator ("activate", accel_group, new AccelKey (Gdk.Key.W, Gdk.ModifierType.ControlMask,
+							AccelFlags.Visible));
+
+						close_1.Activated += delegate { Close (); };
+
+						// Close on Ctrl+W
+						close_2.AddAccelerator ("activate", accel_group, new AccelKey (Gdk.Key.Escape, Gdk.ModifierType.None,
+							AccelFlags.Visible));
+						close_2.Activated += delegate { Close (); };
+
+					file_menu.Append (close_1);
+					file_menu.Append (close_2);
+
+				file_item.Submenu = file_menu;
+
+			MenuBar.Append (file_item);
+
+			// Hacky way to hide the menubar, but the accellerators
+			// will simply be disabled when using Hide ()
+			MenuBar.HeightRequest = 1;
+			MenuBar.ModifyBg (StateType.Normal, Style.Background (StateType.Normal));
 			
-			// adds specific Ctrl+W and Esc key accelerators to Log Window
-			AccelGroup agr = new AccelGroup ();
-        	AddAccelGroup (agr);
-			exit1.AddAccelerator ("activate", agr, new AccelKey(Gdk.Key.W, Gdk.ModifierType.ControlMask, AccelFlags.Visible));
-			exit2.AddAccelerator ("activate", agr, new AccelKey(Gdk.Key.Escape, Gdk.ModifierType.None, AccelFlags.Visible));
-			
-			exit1.Activated += delegate { Close (); };
-			exit2.Activated += delegate { Close (); };
-			
-			filemenu.Append (exit1);
-			filemenu.Append (exit2);
-			mb.Append (file);
-			
-			// *******************************************
-			
-			
-			LayoutVertical = new VBox (false, 12);
-			
-			
-			LayoutVertical.PackStart(mb, false, false, 0);
-			//mb.Hide(); //it does not hide it -- TODO please make sure it hides the menu bar
+			LayoutVertical = new VBox (false, 0);
 			
 			LayoutVertical.PackStart (CreateEventLog (), true, true, 0);
 
@@ -98,7 +108,7 @@ namespace SparkleShare {
 					Button open_folder_button = new Button (_("_Open Folder")) {
 						UseUnderline = true
 					};
-
+ 
 					open_folder_button.Clicked += delegate (object o, EventArgs args) {
 
 						Process process = new Process ();
@@ -119,6 +129,8 @@ namespace SparkleShare {
 				dialog_buttons.Add (open_folder_button);
 				dialog_buttons.Add (close_button);
 
+			// We have to hide the menubar somewhere...
+			LayoutVertical.PackStart (MenuBar, false, false, 6);
 			LayoutVertical.PackStart (dialog_buttons, false, false, 0);
 
 			Add (LayoutVertical);
