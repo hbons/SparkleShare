@@ -25,6 +25,8 @@ namespace SparkleLib {
 	public class SparkleListener
 	{
 
+		// FIXME: The irc client is a public property because
+		// extending it causes crashes
 		public IrcClient Client;
 		private Thread Thread;
 		public readonly string Server;
@@ -46,10 +48,11 @@ namespace SparkleLib {
 			Channel = "#sparkletest";
 			Server  = "irc.gnome.org";
 
-			Client = new IrcClient ();
-
-//			PingTimeout = 90;
-//			SocketSendTimeout = 90;
+			Client = new IrcClient () {
+				PingTimeout = 90,
+				SocketSendTimeout = 90,
+				SocketReceiveTimeout = 90
+			};
 
 		}
 
