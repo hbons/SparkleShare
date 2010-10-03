@@ -16,8 +16,11 @@ start() {
 
   echo -n "Starting SparkleShare... "
   mkdir -p /tmp/sparkleshare/
-  # Start SparkleShare with an agent in the background and save the pid
-  ssh-agent mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
+  if [ -n "$SSH_AUTH_SOCK" ]; then
+    mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
+  else
+    ssh-agent mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
+  fi
   echo $! > ${pidfile}
   echo "Done."
 }
