@@ -22,10 +22,12 @@ using System.Threading;
 
 namespace SparkleLib {
 
+	// A persistent connection to the server that
+	// listens for change notifications
 	public class SparkleListener
 	{
 
-		// FIXME: The irc client is a public property because
+		// FIXME: The IrcClient is a public property because
 		// extending it causes crashes
 		public IrcClient Client;
 		private Thread Thread;
@@ -49,9 +51,12 @@ namespace SparkleLib {
 			Server  = "irc.gnome.org";
 
 			Client = new IrcClient () {
-				PingTimeout = 90,
-				SocketSendTimeout = 90,
-				SocketReceiveTimeout = 90
+				PingTimeout          = 60,
+				SocketSendTimeout    = 60,
+				SocketReceiveTimeout = 60,
+				AutoRetry            = true,
+				AutoReconnect        = true,
+				AutoRejoin           = true
 			};
 
 		}
@@ -93,6 +98,7 @@ namespace SparkleLib {
 		}
 
 
+		// Frees all resources for this Listener
 		public void Dispose ()
 		{
 
