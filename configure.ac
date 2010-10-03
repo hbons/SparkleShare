@@ -101,9 +101,7 @@ build/m4/shave/shave-libtool
 data/Makefile
 data/icons/Makefile
 help/Makefile
-FriendFace/Makefile
 NotifySharp/Makefile
-SparkleDiff/Makefile
 SparkleLib/AssemblyInfo.cs
 SparkleLib/Defines.cs
 SparkleLib/Makefile

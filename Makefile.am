@@ -2,11 +2,9 @@ SUBDIRS =	\
 	build	\
 	help	\
 	NotifySharp \
-	FriendFace \
 	SmartIrc4net \
 	SparkleLib \
 	SparkleShare \
-	SparkleDiff \
 	data \
 	po
 
