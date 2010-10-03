@@ -54,8 +54,8 @@ For help:
 
 Note:
 
-	SparkleShare creates its own RSA keypair in ~/.ssh and uses that for authentication.
-	Please mind this if you're planning to set up your own server by hand.
+   SparkleShare creates its own RSA keypair in ~/.ssh and uses that for authentication.
+   Please mind this if you're planning to set up your own server by hand.
 
 
 Build
@@ -73,10 +73,13 @@ To build SparkleShare you need:
 
 You can build and install SparkleShare like this:
 
-   $ ./configure (or ./autogen if you got SparkleShare from the repository,
-     append --prefix=/usr if you want the Nautilus extension to work)
+   $ ./configure (or ./autogen if you got SparkleShare from the repository)
    $ make
    $ sudo make install
+
+Note:
+
+   Use './configure --prefix=/usr' if you want the Nautilus extension to work.
 
 
 Frequently Asked Question
