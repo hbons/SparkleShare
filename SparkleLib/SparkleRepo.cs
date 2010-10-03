@@ -264,7 +264,7 @@ namespace SparkleLib {
 
 			_UserName           = GetUserName ();
 			_UserEmail          = GetUserEmail ();
-			_CurrentHash         = GetCurrentHash ();
+			_CurrentHash        = GetCurrentHash ();
 			_HasUnsyncedChanges = false;
 			_IsSyncing          = false;
 			_IsBuffering        = false;
@@ -297,6 +297,10 @@ namespace SparkleLib {
 				Interval = 60000
 			};
 
+
+			// Listen to the irc channel on the server
+			Listener = new SparkleListener (Domain, "#" + RemoteName, _UserEmail);
+
 			RemoteTimer.Elapsed += delegate { 
 
 				CheckForRemoteChanges ();
@@ -304,10 +308,14 @@ namespace SparkleLib {
 				if (_HasUnsyncedChanges)
 					Push ();
 
-			};
+				if (!Listener.Client.IsConnected) {
 
-			// Listen to the irc channel on the server
-			Listener = new SparkleListener (Domain, "#" + RemoteName, _UserEmail);
+					SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Trying to reconnect...");
+					Listener.Client.Reconnect (true, true);
+
+				}
+
+			};
 
 			// Stop polling when the connection to the irc channel is succesful
 			Listener.Client.OnConnected += delegate {
