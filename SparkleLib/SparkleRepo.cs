@@ -578,6 +578,7 @@ namespace SparkleLib {
 			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message);
 
 			Process.StartInfo.Arguments = "commit -m \"" + message + "\"";
+
 			Process.Start ();
 			Process.WaitForExit ();
 
@@ -1145,7 +1146,7 @@ namespace SparkleLib {
 				if (line.StartsWith ("A")) {
 
 					file_action = "added";
-					file_name   = line.Substring (3);
+					file_name   = line.Substring (3).Trim ("\"".ToCharArray ());
 					message     = file_action + " ‘" + file_name + "’";
 
 				}
@@ -1153,7 +1154,7 @@ namespace SparkleLib {
 				if (line.StartsWith ("M")) {
 
 					file_action = "edited";
-					file_name   = line.Substring (3);
+					file_name   = line.Substring (3).Trim ("\"".ToCharArray ());
 					message     = file_action + " ‘" + file_name + "’";
 
 				}
@@ -1161,7 +1162,7 @@ namespace SparkleLib {
 				if (line.StartsWith ("D")) {
 
 					file_action = "deleted";
-					file_name   = line.Substring (3);
+					file_name   = line.Substring (3).Trim ("\"".ToCharArray ());
 					message     = file_action + " ‘" + file_name + "’";
 
 				}
@@ -1169,14 +1170,17 @@ namespace SparkleLib {
 				if (line.StartsWith ("R")) {
 
 					file_action = "moved";
-					message     = file_action + " ‘" + line.Substring (3).Replace (" -> ", "’ to\n‘") + "’";
+					message     = file_action + " ‘" + line.Substring (3).Trim ("\"".ToCharArray ())
+						.Replace (" -> ", "’ to\n‘")
+						.Replace ("\"’", "’")
+						.Replace ("‘\"", "‘");
 
 				}
 
 				if (line.StartsWith ("C")) {
 
 					file_action = "copied";
-					file_name   = line.Substring (3);
+					file_name   = line.Substring (3).Trim ("\"".ToCharArray ());
 
 				}
 
