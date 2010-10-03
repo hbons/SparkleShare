@@ -25,6 +25,8 @@ using System.Timers;
 
 namespace SparkleShare {
 
+	// The statusicon that stays in the
+	// user's notification area
 	public class SparkleStatusIcon : StatusIcon
 	{
 
