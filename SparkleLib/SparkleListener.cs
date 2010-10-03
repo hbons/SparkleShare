@@ -43,6 +43,7 @@ namespace SparkleLib {
 			Channel = channel;
 			Nick    = nick.Replace ("@", "_at_").Replace (".", "_dot_");
 
+			// Keep the nick short
 			if (Nick.Length > 9)
 				Nick = Nick.Substring (0, 9);
 
@@ -51,9 +52,9 @@ namespace SparkleLib {
 			Server  = "irc.gnome.org";
 
 			Client = new IrcClient () {
-				PingTimeout          = 60,
-				SocketSendTimeout    = 60,
-				SocketReceiveTimeout = 60,
+				PingTimeout          = 90,
+				SocketSendTimeout    = 90,
+				SocketReceiveTimeout = 90,
 				AutoRetry            = true,
 				AutoReconnect        = true,
 				AutoRejoin           = true
