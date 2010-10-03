@@ -73,7 +73,8 @@ To build SparkleShare you need:
 
 You can build and install SparkleShare like this:
 
-   $ ./configure (or ./autogen if you got SparkleShare from the repository)
+   $ ./configure (or ./autogen if you got SparkleShare from the repository,
+     append --prefix=/usr if you want the Nautilus extension to work)
    $ make
    $ sudo make install
 
