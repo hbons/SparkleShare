@@ -63,7 +63,7 @@ namespace SparkleLib {
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.FileName = "git";
-			process.StartInfo.Arguments = "clone " + RemoteOriginUrl + " " + TargetFolder;
+			process.StartInfo.Arguments = "clone --depth=1 " + RemoteOriginUrl + " " + TargetFolder;
 
 			process.Exited += delegate {
 
