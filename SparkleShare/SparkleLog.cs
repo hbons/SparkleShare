@@ -267,7 +267,7 @@ namespace SparkleShare {
 					}
 
 				box.Add (date_label);
-				layout_vertical.PackStart (box, true, true, 0);
+				layout_vertical.PackStart (box, false, false, 0);
 
 				Gdk.Color color = Style.Foreground (StateType.Insensitive);
 				string secondary_text_color = GdkColorToHex (color);
@@ -353,14 +353,14 @@ namespace SparkleShare {
 						Xalign = 0
 					};
 
-					log_entry.PackStart (change_set_info);
+					log_entry.PackStart (change_set_info, false, false, 0);
 					                   
 					if (edited_files.Children.Length > 0) {
 
 						Label edited_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
 						                                _("Edited") +
 						                                "</small></span>") {
-							UseMarkup=true,
+							UseMarkup = true,
 							Xalign = 0
 						};
 
@@ -374,7 +374,7 @@ namespace SparkleShare {
 						Label added_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
 						                                _("Added") +
 						                                "</small></span>") {
-							UseMarkup=true,
+							UseMarkup = true,
 							Xalign = 0
 						};
 
@@ -388,7 +388,7 @@ namespace SparkleShare {
 						Label deleted_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
 						                                _("Deleted") +
 						                                "</small></span>") {
-							UseMarkup=true,
+							UseMarkup = true,
 							Xalign = 0
 						};
 
@@ -402,7 +402,7 @@ namespace SparkleShare {
 						Label moved_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
 						                                 _("Moved") +
 						                                 "</small></span>") {
-							UseMarkup=true,
+							UseMarkup = true,
 							Xalign = 0
 						};
 
@@ -420,16 +420,16 @@ namespace SparkleShare {
 					hbox.PackStart (avatar, false, false, 18);
 
 						VBox vbox = new VBox (false, 0);
-						vbox.PackStart (log_entry, true, true, 0);
+						vbox.PackStart (log_entry, false, false, 0);
 
 					hbox.PackStart (vbox, true, true, 0);
 					hbox.PackStart (new Label (""), false, false, 12);
 					
-					layout_vertical.PackStart (hbox, true, true, 18);
+					layout_vertical.PackStart (hbox, false, false, 18);
 
 				}
 
-					layout_vertical.PackStart (new Label (""), true, true, 3);
+				layout_vertical.PackStart (new Label (""), false, false, 3);
 
 			}
 
