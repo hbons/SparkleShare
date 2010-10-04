@@ -332,6 +332,8 @@ namespace SparkleLib {
 
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Lost connection. Falling back to polling...");
 
+				CheckForRemoteChanges ();
+
 				RemoteTimer.Start ();
 				_IsPolling = true;
 
