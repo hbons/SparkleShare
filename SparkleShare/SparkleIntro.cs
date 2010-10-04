@@ -321,8 +321,14 @@ namespace SparkleShare {
 
 							server = "ssh://git@gitorious.org";
 
-							if (!name.EndsWith (".git"))
+							if (!name.EndsWith (".git")) {
+
+								if (!name.Contains ("/"))
+									name = name + "/" + name;
+
 								name += ".git";
+
+							}
 
 						}
 
