@@ -159,6 +159,9 @@ namespace SparkleShare {
 		private double GetFolderSize (DirectoryInfo parent)
 		{
 
+			if (!Directory.Exists (parent.ToString ()))
+				return 0;
+
 			double size = 0;
 
 			// Ignore the temporary 'rebase-apply' directory.
