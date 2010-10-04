@@ -26,9 +26,10 @@ namespace SparkleShare {
 		public SparkleLink (string title, string url) : base ()
 		{
 
-			Label label = new Label (title) {
+			Label label = new Label () {
 				Ellipsize = Pango.EllipsizeMode.Middle,
 				UseMarkup = true,
+				Markup = title,
 				Xalign    = 0
 			};
 
