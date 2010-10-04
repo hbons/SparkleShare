@@ -52,9 +52,9 @@ namespace SparkleLib {
 			Server  = "irc.gnome.org";
 
 			Client = new IrcClient () {
-				PingTimeout          = 90,
-				SocketSendTimeout    = 90,
-				SocketReceiveTimeout = 90,
+				PingTimeout          = 120,
+				SocketSendTimeout    = 120,
+				SocketReceiveTimeout = 120,
 				AutoRetry            = true,
 				AutoReconnect        = true,
 				AutoRejoin           = true
