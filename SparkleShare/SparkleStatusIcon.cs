@@ -164,10 +164,11 @@ namespace SparkleShare {
 
 			double size = 0;
 
-			// Ignore the temporary 'rebase-apply' directory.
+			// Ignore the temporary 'rebase-apply' and '.tmp' directories.
 			// This prevents potential crashes when files are being
 			// queried whilst the files have already been deleted.
-			if (parent.Name.Equals ("rebase-apply"))
+			if (parent.Name.Equals ("rebase-apply") ||
+			    parent.Name.Equals (".tmp"))
 				return 0;
 
 			foreach (FileInfo file in parent.GetFiles()) {
