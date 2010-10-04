@@ -414,7 +414,7 @@ namespace SparkleShare {
 
 
 		// The page shown when syncing has succeeded
-		private void ShowSuccessPage (string name)
+		private void ShowSuccessPage (string folder_name)
 		{
 
 			Reset ();
@@ -428,8 +428,9 @@ namespace SparkleShare {
 						Xalign = 0
 					};
 		
-					Label information = new Label (String.Format(_("Now you can access the synced files from ‘{0}’ in your SparkleShare folder."),
-					                                             name)) {
+					Label information = new Label (
+						String.Format(_("Now you can access the synced files from ‘{0}’ in your SparkleShare folder."),
+							folder_name)) {
 						Xalign = 0,
 						Wrap   = true,
 						UseMarkup = true
@@ -440,7 +441,7 @@ namespace SparkleShare {
 
 						open_folder_button.Clicked += delegate (object o, EventArgs args) {
 
-							string path = SparkleHelpers.CombineMore (SparklePaths.SparklePath, name);
+							string path = SparkleHelpers.CombineMore (SparklePaths.SparklePath, folder_name);
 
 							Process process = new Process ();
 							process.StartInfo.FileName  = "xdg-open";
@@ -596,6 +597,24 @@ namespace SparkleShare {
 			SparkleFetcher fetcher = new SparkleFetcher (url, tmp_folder);
 
 
+			bool folder_exists = Directory.Exists (
+				SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name));
+
+			int i = 1;
+			while (folder_exists) {
+
+				i++;
+				folder_exists = Directory.Exists (
+					SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name + " (" + i + ")"));
+
+			}
+
+			string target_folder_name = canonical_name;
+
+			if (i > 1)
+				target_folder_name += " (" + i + ")";
+
+
 			fetcher.CloningStarted += delegate {
 
 				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning Repository");
@@ -611,23 +630,6 @@ namespace SparkleShare {
 
 				try {
 
-					bool folder_exists = Directory.Exists (
-						SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name));
-
-					int i = 1;
-					while (folder_exists) {
-
-						i++;
-						folder_exists = Directory.Exists (
-							SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name + " (" + i + ")"));
-
-					}
-
-					string target_folder_name = canonical_name;
-
-					if (i > 1)
-						target_folder_name += " (" + i + ")";
-
 					string target_folder_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
 						target_folder_name);
 
@@ -639,7 +641,7 @@ namespace SparkleShare {
 
 				}
 
-				Application.Invoke (delegate { ShowSuccessPage (canonical_name); });
+				Application.Invoke (delegate { ShowSuccessPage (target_folder_name); });
 
 			};
 
