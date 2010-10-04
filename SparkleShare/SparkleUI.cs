@@ -85,12 +85,14 @@ namespace SparkleShare {
 
 				// Handle invitations when the user saves an
 				// invitation into the SparkleShare folder
-				if (args.Name.EndsWith ("sparkleshare.invitation")) {
+				if (args.Name.EndsWith (".invitation")) {
 
-					SparkleInvitation invitation;
-					invitation = new SparkleInvitation (args.FullPath);
+					Application.Invoke (delegate {
 
-					Application.Invoke (delegate { invitation.PresentInvitation (); });
+						SparkleInvitation invitation = new SparkleInvitation (args.FullPath);
+						invitation.Present ();
+					
+					});
 
 				} else if (Directory.Exists (args.FullPath)) {
 

@@ -53,7 +53,7 @@ namespace SparkleShare {
 
 			XmlNodeList server_xml     = xml_doc.GetElementsByTagName ("server");
 			XmlNodeList folder_xml     = xml_doc.GetElementsByTagName ("folder");
-			XmlNodeList invite_key_xml = xml_doc.GetElementsByTagName ("invitekey");
+			XmlNodeList invite_key_xml = xml_doc.GetElementsByTagName ("invite_key");
 
 			Server    = server_xml [0].InnerText;
 			Folder    = folder_xml [0].InnerText;
@@ -95,7 +95,7 @@ namespace SparkleShare {
 		}
 
 
-		public void PresentInvitation ()
+		new public void Present ()
 		{
 
 			VBox layout_vertical = new VBox (false, 0);
@@ -159,7 +159,7 @@ namespace SparkleShare {
 
 					accept_button.Clicked += delegate {
 
-						string url  = "ssh://git@" + Server + "/projects/" + Folder;
+						string url  = "ssh://git@" + Server + "/" + Folder;
 						SparkleHelpers.DebugInfo ("Git", "[" + Folder + "] Formed URL: " + url);
 
 						FetchFolder (url, Folder);
@@ -180,7 +180,7 @@ namespace SparkleShare {
 
 			ShowAll ();
 
-			Present ();
+			base.Present ();
 
 		}
 
@@ -190,6 +190,24 @@ namespace SparkleShare {
 
 			string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
 			string tmp_folder = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, canonical_name);
+
+			bool folder_exists = Directory.Exists (
+				SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name));
+
+			int i = 1;
+			while (folder_exists) {
+
+				i++;
+				folder_exists = Directory.Exists (
+					SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name + " (" + i + ")"));
+
+			}
+
+			string target_folder_name = canonical_name;
+
+			if (i > 1)
+				target_folder_name += " (" + i + ")";
+
 
 			SparkleFetcher fetcher = new SparkleFetcher (url, tmp_folder);
 
@@ -209,23 +227,6 @@ namespace SparkleShare {
 
 				try {
 
-					bool folder_exists = Directory.Exists (
-						SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name));
-
-					int i = 1;
-					while (folder_exists) {
-
-						i++;
-						folder_exists = Directory.Exists (
-							SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name + " (" + i + ")"));
-
-					}
-
-					string target_folder_name = canonical_name;
-
-					if (i > 1)
-						target_folder_name += " (" + i + ")";
-
 					string target_folder_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
 						target_folder_name);
 
@@ -237,7 +238,7 @@ namespace SparkleShare {
 
 				}
 
-				Application.Invoke (delegate { ShowSuccessPage (canonical_name); });
+				Application.Invoke (delegate { ShowSuccessPage (target_folder_name); });
 
 			};
 
