@@ -118,7 +118,7 @@ namespace SparkleShare {
 					Wrap   = true
 				};
 
-				Table table = new Table (2, 2, true) {
+				Table table = new Table (2, 2, false) {
 					RowSpacing = 6
 				};
 
