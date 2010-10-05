@@ -154,7 +154,7 @@ namespace SparkleShare {
 
 			}
 
-			HideAll (); // TODO: destroy it
+			HideAll ();
 
 		}
 

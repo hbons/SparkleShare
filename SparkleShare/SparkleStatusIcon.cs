@@ -30,8 +30,6 @@ namespace SparkleShare {
 	public class SparkleStatusIcon : StatusIcon
 	{
 
-		private List <SparkleLog> OpenLogs;
-
 		private Menu Menu;
 		private MenuItem StatusMenuItem;
 		private string StateText;
@@ -52,7 +50,7 @@ namespace SparkleShare {
 		public SparkleStatusIcon () : base ()
 		{
 
-			OpenLogs = new List <SparkleLog> ();
+			SparkleUI.OpenLogs = new List <SparkleLog> ();
 
 			FolderSize = GetFolderSize (new DirectoryInfo (SparklePaths.SparklePath));
 
@@ -129,7 +127,7 @@ namespace SparkleShare {
 
 			return delegate { 
 
-				SparkleLog log = OpenLogs.Find (delegate (SparkleLog l) { return l.LocalPath.Equals (path); });
+				SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) { return l.LocalPath.Equals (path); });
 
 				// Check whether the log is already open,
 				// create a new one if that's not the case or
@@ -139,11 +137,13 @@ namespace SparkleShare {
 					log = new SparkleLog (path);
 
 					log.Hidden += delegate {
-						OpenLogs.Remove (log);
-						log = null;
+
+						SparkleUI.OpenLogs.Remove (log);
+						log.Destroy ();
+
 					};
 
-					OpenLogs.Add (log);
+					SparkleUI.OpenLogs.Add (log);
 
 				}
 
@@ -227,8 +227,10 @@ namespace SparkleShare {
 		// Creates the menu that is popped up when the
 		// user clicks the statusicon
 		public void CreateMenu ()
-		{
-
+		{int i = 0;
+foreach (SparkleLog logi in SparkleUI.OpenLogs){i++;
+Console.WriteLine (i + ": " + logi.LocalPath);
+}
 				Menu = new Menu ();
 
 					// The menu item showing the status and size of the SparkleShare folder
@@ -267,6 +269,10 @@ namespace SparkleShare {
 							IsImportant = true
 						};
 
+						if (repo.HasUnsyncedChanges){
+							folder_action.IconName = "dialog-warning";
+							Console.WriteLine ("FFFFFFFFFFFFFFFFFFFF");
+}
 						folder_action.Activated += OpenLogDelegate (repo.LocalPath);
 
 						MenuItem menu_item = (MenuItem) folder_action.CreateMenuItem ();
@@ -354,6 +360,7 @@ namespace SparkleShare {
 		private void ShowMenu (object o, EventArgs args)
 		{
 
+			CreateMenu ();
 			Menu.ShowAll ();
 			Menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
 
