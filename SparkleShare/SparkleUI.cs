@@ -32,7 +32,7 @@ namespace SparkleShare {
 		
 		public static List <SparkleRepo> Repositories;
 		public static SparkleStatusIcon StatusIcon;
-
+		public static List <SparkleLog> OpenLogs;
 
 		// Short alias for the translations
 		public static string _(string s)
