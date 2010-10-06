@@ -265,12 +265,20 @@ namespace SparkleLib {
 			_UserName           = GetUserName ();
 			_UserEmail          = GetUserEmail ();
 			_CurrentHash        = GetCurrentHash ();
-			_HasUnsyncedChanges = false;
 			_IsSyncing          = false;
 			_IsBuffering        = false;
 			_IsPolling          = true;
 			_IsFetching         = false;
 			_IsPushing          = false;
+
+			string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath ,
+				".git", "has_unsynced_changes");
+
+			if (File.Exists (unsynced_file_path))
+				_HasUnsyncedChanges = true;
+			else
+				_HasUnsyncedChanges = false;
+
 
 			if (_CurrentHash == null)
 				CreateInitialCommit ();
@@ -770,6 +778,12 @@ namespace SparkleLib {
 
 					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing failed.");
 
+					string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath ,
+						".git", "has_unsynced_changes");
+
+					if (!File.Exists (unsynced_file_path))
+						File.Create (unsynced_file_path);
+
 					_HasUnsyncedChanges = true;
 
 					args = new SparkleEventArgs ("PushingFailed");
@@ -782,6 +796,12 @@ namespace SparkleLib {
 					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes pushed.");
 
 					args = new SparkleEventArgs ("PushingFinished");
+
+					string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath ,
+						".git", "has_unsynced_changes");
+
+					if (File.Exists (unsynced_file_path))
+						File.Delete (unsynced_file_path);
 
 					_HasUnsyncedChanges = false;
 

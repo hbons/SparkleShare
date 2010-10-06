@@ -227,10 +227,8 @@ namespace SparkleShare {
 		// Creates the menu that is popped up when the
 		// user clicks the statusicon
 		public void CreateMenu ()
-		{int i = 0;
-foreach (SparkleLog logi in SparkleUI.OpenLogs){i++;
-Console.WriteLine (i + ": " + logi.LocalPath);
-}
+		{
+
 				Menu = new Menu ();
 
 					// The menu item showing the status and size of the SparkleShare folder
@@ -269,10 +267,9 @@ Console.WriteLine (i + ": " + logi.LocalPath);
 							IsImportant = true
 						};
 
-						if (repo.HasUnsyncedChanges){
+						if (repo.HasUnsyncedChanges)
 							folder_action.IconName = "dialog-warning";
-							Console.WriteLine ("FFFFFFFFFFFFFFFFFFFF");
-}
+
 						folder_action.Activated += OpenLogDelegate (repo.LocalPath);
 
 						MenuItem menu_item = (MenuItem) folder_action.CreateMenuItem ();
