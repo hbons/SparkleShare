@@ -97,7 +97,9 @@ namespace SparkleShare {
 			MenuBar.ModifyBg (StateType.Normal, Style.Background (StateType.Normal));
 			
 			LayoutVertical = new VBox (false, 0);
-			
+
+
+
 			LayoutVertical.PackStart (CreateEventLog (), true, true, 0);
 
 				HButtonBox dialog_buttons = new HButtonBox {
@@ -143,7 +145,6 @@ namespace SparkleShare {
 
 			foreach (SparkleRepo repo in SparkleUI.Repositories) {
 
-				// Get commits from the repository
 				if (repo.LocalPath.Equals (LocalPath)) {
 
 					// Remove the eventhooks
@@ -230,6 +231,37 @@ namespace SparkleShare {
 			}
 
 			VBox layout_vertical = new VBox (false, 0);
+
+
+			if ((SparkleUI.Repositories.Find (delegate (SparkleRepo r)
+				{ return r.LocalPath.Equals (LocalPath); }) as SparkleRepo).HasUnsyncedChanges == true) {
+
+				Window window = new Window (WindowType.Popup) {
+					Name = "gtk-tooltip"
+				};
+
+				window.EnsureStyle ();
+
+				EventBox warning_box = new EventBox () {
+					Style = window.Style
+				};
+
+				Label label = new Label () {
+					Markup = "<b>" + _("This folder has unsynced changes") + "</b>\n" +
+						     _("We will sync these once connected again")
+				};
+
+				HBox warning_hbox = new HBox (false, 12) {
+					BorderWidth = 12
+				};
+				warning_hbox.PackStart (new Image (SparkleUIHelpers.GetIcon ("dialog-warning", 24)), false, false, 0);
+
+				warning_hbox.PackStart (label, false, false, 0);
+				warning_box.Add (warning_hbox);
+
+				layout_vertical.PackStart (warning_box, false, false, 0);
+
+			}
 
 			TreeView tree_view = new TreeView ();
 			Gdk.Color background_color = tree_view.Style.Base (StateType.Normal);
