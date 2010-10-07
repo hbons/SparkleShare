@@ -81,8 +81,8 @@ namespace SparkleShare {
 
 			var p = new OptionSet () {
 				{ "d|disable-gui", _("Don't show the notification icon"), v => HideUI = v != null },
-				{ "v|version", _("Show this help text"), v => { PrintVersion (); Environment.Exit (0); } },
-				{ "h|help", _("Print version information"), v=> ShowHelp = v != null }
+				{ "v|version", _("Show this help text"), v => { PrintVersion (); } },
+				{ "h|help", _("Print version information"), v => ShowHelp = v != null }
 			};
 
 			try {
@@ -98,17 +98,18 @@ namespace SparkleShare {
 			}
 
 			if (ShowHelp)
-				DisplayHelp(p);
+				DisplayHelp (p);
 
 			SparkleUI = new SparkleUI (HideUI);
-			SparkleUI.Run();
+			SparkleUI.Run ();
 
 		}
 
 
 		// Prints the help output
-		public static void DisplayHelp (OptionSet p)
+		public static void DisplayHelp (OptionSet option_set)
 		{
+
 			Console.WriteLine (" ");
 			Console.WriteLine (_("SparkleShare, an instant update workflow to Git."));
 			Console.WriteLine (_("Copyright (C) 2010 Hylke Bons"));
@@ -125,8 +126,10 @@ namespace SparkleShare {
 			Console.WriteLine (_("Sync SparkleShare folder with remote repositories."));
 			Console.WriteLine (" ");
 			Console.WriteLine (_("Arguments:"));
-			p.WriteOptionDescriptions (Console.Out);
+
+			option_set.WriteOptionDescriptions (Console.Out);
 			Environment.Exit (0);
+
 		}
 
 
@@ -135,6 +138,7 @@ namespace SparkleShare {
 		{
 
 			Console.WriteLine (_("SparkleShare " + Defines.VERSION));
+			Environment.Exit (0);
 
 		}
 
