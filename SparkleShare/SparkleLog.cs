@@ -149,7 +149,7 @@ namespace SparkleShare {
 
 					// Remove the eventhooks
 					repo.NewCommit -= UpdateEventLog;
-					repo.PushingStarted -= UpdateEventLog;
+					repo.PushingFinished -= UpdateEventLog;
 
 				}
 
@@ -192,7 +192,7 @@ namespace SparkleShare {
 					repo.NewCommit += UpdateEventLog;
 
 					// Update the log when changes are being sent
-					repo.PushingStarted += UpdateEventLog;
+					repo.PushingFinished += UpdateEventLog;
 
 					break;
 

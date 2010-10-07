@@ -328,6 +328,13 @@ namespace SparkleLib {
 			// Stop polling when the connection to the irc channel is succesful
 			Listener.Client.OnConnected += delegate {
 
+				// Check for changes manually one more time
+				CheckForRemoteChanges ();
+
+				// Push changes that were made since the last disconnect
+				if (_HasUnsyncedChanges)
+					Push ();
+
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Connected. Now listening...");
 
 				RemoteTimer.Stop ();
@@ -397,8 +404,6 @@ namespace SparkleLib {
 				RemoteTimer.Start ();
 
 			LocalTimer.Start ();
-
-			CheckForRemoteChanges ();
 
 			// Add everything that changed 
 			// since SparkleShare was stopped
