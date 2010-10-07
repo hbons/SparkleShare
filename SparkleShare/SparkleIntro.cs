@@ -47,7 +47,7 @@ namespace SparkleShare {
 		{
 
 			ServerFormOnly = false;
-			SecondaryTextColor = GdkColorToHex (Style.Foreground (StateType.Insensitive));
+			SecondaryTextColor = SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive));
 
 			ShowAccountForm ();
 
@@ -814,19 +814,6 @@ namespace SparkleShare {
 		{
 			
 			return true;
-
-		}
-
-
-		// Converts a Gdk RGB color to a hex value.
-		// Example: from "rgb:0,0,0" to "#000000"
-		public string GdkColorToHex (Gdk.Color color)
-		{
-
-			return String.Format ("#{0:X2}{1:X2}{2:X2}",
-				(int) Math.Truncate (color.Red   / 256.00),
-				(int) Math.Truncate (color.Green / 256.00),
-				(int) Math.Truncate (color.Blue  / 256.00));
 
 		}
 
