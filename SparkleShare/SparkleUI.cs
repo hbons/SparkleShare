@@ -44,34 +44,29 @@ namespace SparkleShare {
 		public SparkleUI (bool HideUI)
 		{
 
+			// Initialize the application
 			Gtk.Application.Init ();
 
+			// Set the process name to something differen than 'mono'
 			SetProcessName ("sparkleshare");
 
 			// The list of repositories
 			Repositories = new List <SparkleRepo> ();
 
-			EnableSystemAutostart ();
 			InstallLauncher ();
-
+			EnableSystemAutostart ();
 
 			// Create the SparkleShare folder and add it to the bookmarks
-			if (!Directory.Exists (SparklePaths.SparklePath)) {
-
-				CreateSparkleShareFolder ();
+			if (CreateSparkleShareFolder ())
 				AddToBookmarks ();
 
-			}
 
-
-			// Watch the SparkleShare folder and update the repo list
-			// when a deletion occurs.
+			// Watch the SparkleShare folder
 			FileSystemWatcher watcher = new FileSystemWatcher (SparklePaths.SparklePath) {
 				IncludeSubdirectories = false,
 				EnableRaisingEvents   = true,
 				Filter                = "*"
 			};
-
 
 			// Remove the repository when a delete event occurs
 			watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
@@ -141,7 +136,7 @@ namespace SparkleShare {
 		}
 
 
-		// Runs the main loop
+		// Runs the application
 		public void Run ()
 		{
 
@@ -151,7 +146,7 @@ namespace SparkleShare {
 
 
 		// Creates a folder in the user's home folder to store configuration
-		public void CreateConfigurationFolders ()
+		private void CreateConfigurationFolders ()
 		{
 
 			if (!Directory.Exists (SparklePaths.SparkleTmpPath))
@@ -183,7 +178,7 @@ namespace SparkleShare {
 
 		// Creates a .desktop entry in autostart folder to
 		// start SparkleShare automatically at login
-		public void EnableSystemAutostart ()
+		private void EnableSystemAutostart ()
 		{
 		
 			string autostart_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".config", "autostart");
@@ -217,7 +212,7 @@ namespace SparkleShare {
 
 		// Installs a launcher so the user can launch SparkleShare
 		// from the Internet category if needed
-		public void InstallLauncher ()
+		private void InstallLauncher ()
 		{
 		
 			string apps_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".local", "share", "applications");
@@ -252,7 +247,7 @@ namespace SparkleShare {
 
 		// Adds the SparkleShare folder to the user's
 		// list of bookmarked places
-		public void AddToBookmarks ()
+		private void AddToBookmarks ()
 		{
 
 			string bookmarks_file_path   = Path.Combine (SparklePaths.HomePath, ".gtk-bookmarks");
@@ -284,32 +279,40 @@ namespace SparkleShare {
 
 
 		// Creates the SparkleShare folder in the user's home folder
-		public void CreateSparkleShareFolder ()
+		private bool CreateSparkleShareFolder ()
 		{
+
+			if (!Directory.Exists (SparklePaths.SparklePath)) {
 		
-			Directory.CreateDirectory (SparklePaths.SparklePath);
-			SparkleHelpers.DebugInfo ("Config", "Created '" + SparklePaths.SparklePath + "'");
+				Directory.CreateDirectory (SparklePaths.SparklePath);
+				SparkleHelpers.DebugInfo ("Config", "Created '" + SparklePaths.SparklePath + "'");
 
-			string icon_file_path = SparkleHelpers.CombineMore (Defines.PREFIX, "share", "icons", "hicolor", "48x48",
-				"apps", "folder-sparkleshare.png");
+				string icon_file_path = SparkleHelpers.CombineMore (Defines.PREFIX, "share", "icons", "hicolor",
+					"48x48", "apps", "folder-sparkleshare.png");
 
-			Process process = new Process ();
+				Process process = new Process ();
 
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.UseShellExecute = false;
 
-			// Add a special icon to the SparkleShare folder
-			process.StartInfo.FileName  = "gvfs-set-attribute";
-			process.StartInfo.Arguments = SparklePaths.SparklePath + " metadata::custom-icon " +
-			                              "file://" + icon_file_path;
-			process.Start ();
-		
+				// Add a special icon to the SparkleShare folder
+				process.StartInfo.FileName  = "gvfs-set-attribute";
+				process.StartInfo.Arguments = SparklePaths.SparklePath + " metadata::custom-icon " +
+					                          "file://" + icon_file_path;
+				process.Start ();
+
+				return true;
+
+			}
+
+			return false;
+
 		}
 
 
 		// Shows a notification bubble when someone
 		// made a change to the repository
-		public void ShowNewCommitBubble (string author, string email, string message, string repository_name) {
+		private void ShowNewCommitBubble (string author, string email, string message, string repository_name) {
 
 			string notify_settings_file = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
 				"sparkleshare.notify");
@@ -338,7 +341,7 @@ namespace SparkleShare {
 
 		// Shows a notification bubble when there
 		// was a conflict
-		public void ShowConflictBubble (object o, EventArgs args)
+		private void ShowConflictBubble (object o, EventArgs args)
 		{
 
 			string title   = _("Ouch! Mid-air collision!");
@@ -351,7 +354,7 @@ namespace SparkleShare {
 
 
 		// Tells the statusicon to update its state
-		public void UpdateStatusIcon (object o, EventArgs args)
+		private void UpdateStatusIcon (object o, EventArgs args)
 		{
 
 				StatusIcon.ShowState ();
@@ -360,7 +363,7 @@ namespace SparkleShare {
 
 
 		// Updates the statusicon to the error state
-		public void UpdateStatusIconToError (object o, EventArgs args)
+		private void UpdateStatusIconToError (object o, EventArgs args)
 		{
 
 				StatusIcon.ShowState (true);
@@ -370,7 +373,7 @@ namespace SparkleShare {
 
 		// Adds a repository to the list of repositories and
 		// updates the statusicon menu
-		public void AddRepository (string folder_path)
+		private void AddRepository (string folder_path)
 		{
 		
 			// Check if the folder is a git repo
@@ -412,7 +415,7 @@ namespace SparkleShare {
 				Application.Invoke (UpdateStatusIcon);
 			};
 
-			repo.PushingFailed += delegate {
+			repo.PushingFailed += delegate { // TODO: use UpdateStatusIcon and check for HasUnsyncedChanges in SparkleStatusIcon
 				Application.Invoke (UpdateStatusIconToError);
 			};
 
@@ -436,7 +439,7 @@ namespace SparkleShare {
 
 		// Removes a repository from the list of repositories and
 		// updates the statusicon menu
-		public void RemoveRepository (string folder_path)
+		private void RemoveRepository (string folder_path)
 		{
 
 			string repo_name = Path.GetFileName (folder_path);
@@ -470,7 +473,7 @@ namespace SparkleShare {
 
 		// Updates the list of repositories with all the
 		// folders in the SparkleShare folder
-		public void PopulateRepositories ()
+		private void PopulateRepositories ()
 		{
 
 			Repositories = new List <SparkleRepo> ();
@@ -485,7 +488,7 @@ namespace SparkleShare {
 
 
 		// Warns the user implicitly that unicorns are actually lethal creatures
-		public static void CheckForUnicorns (string message) {
+		private static void CheckForUnicorns (string message) {
 
 			message = message.ToLower ();
 
