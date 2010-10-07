@@ -390,6 +390,10 @@ namespace SparkleShare {
 				Application.Invoke (UpdateStatusIcon);
 			};
 
+			repo.FetchingFailed += delegate {
+				Application.Invoke (UpdateStatusIcon);
+			};
+
 			repo.ChangesDetected += delegate {
 				Application.Invoke (UpdateStatusIcon);
 			};
@@ -406,7 +410,7 @@ namespace SparkleShare {
 				Application.Invoke (UpdateStatusIcon);
 			};
 
-			repo.PushingFailed += delegate { // TODO: use UpdateStatusIcon and check for HasUnsyncedChanges in SparkleStatusIcon
+			repo.PushingFailed += delegate {
 				Application.Invoke (UpdateStatusIcon);
 			};
 

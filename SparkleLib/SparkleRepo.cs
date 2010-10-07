@@ -221,6 +221,11 @@ namespace SparkleLib {
 		/// </event>
 		public delegate void FetchingFinishedEventHandler (object o, SparkleEventArgs args);
 
+		/// <event cref="FetchingFailed">
+		/// Raised when when fetching from the remote repository has failed
+		/// </event>
+		public delegate void FetchingFailedEventHandler (object o, SparkleEventArgs args);
+
 		/// <event cref="NewCommit">
 		/// Raised when the repository has received one or multiple new remote commits
 		/// </event>
@@ -249,6 +254,7 @@ namespace SparkleLib {
 		public event PushingFailedEventHandler PushingFailed;
 		public event FetchingStartedEventHandler FetchingStarted;
 		public event FetchingFinishedEventHandler FetchingFinished;
+		public event FetchingFailedEventHandler FetchingFailed;
 		public event NewCommitEventHandler NewCommit;
 		public event ConflictDetectedEventHandler ConflictDetected;
 		public event ChangesDetectedEventHandler ChangesDetected;
@@ -660,18 +666,26 @@ namespace SparkleLib {
 				_IsSyncing  = false;
 				_IsFetching = false;
 
-				if (FetchingFinished != null)
-				    FetchingFinished (this, args); 
-
 				if (_IsPolling)
 					RemoteTimer.Start ();
 
 				_CurrentHash = GetCurrentHash ();
 
-				if (process.ExitCode != 0)
+				if (process.ExitCode != 0) {
+
 					_ServerOnline = false;
-				else
+
+					if (FetchingFailed != null)
+						FetchingFailed (this, args); 
+
+				} else {
+
 					_ServerOnline = true;
+
+					if (FetchingFinished != null)
+						FetchingFinished (this, args);
+
+				}
 
 			};
 
