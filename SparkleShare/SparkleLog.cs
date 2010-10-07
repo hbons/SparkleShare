@@ -150,6 +150,8 @@ namespace SparkleShare {
 					// Remove the eventhooks
 					repo.NewCommit -= UpdateEventLog;
 					repo.PushingFinished -= UpdateEventLog;
+					repo.PushingFailed -= UpdateEventLog;
+					repo.FetchingFinished -= UpdateEventLog;
 
 				}
 
@@ -193,6 +195,9 @@ namespace SparkleShare {
 
 					// Update the log when changes are being sent
 					repo.PushingFinished += UpdateEventLog;
+					repo.PushingFailed += UpdateEventLog;
+
+					repo.FetchingFinished += UpdateEventLog;
 
 					break;
 
@@ -232,16 +237,33 @@ namespace SparkleShare {
 
 			VBox layout_vertical = new VBox (false, 0);
 
-
-			if ((SparkleUI.Repositories.Find (delegate (SparkleRepo r)
-				{ return r.LocalPath.Equals (LocalPath); }) as SparkleRepo).HasUnsyncedChanges == true) {
+			if (SparkleUI.Repositories.Find (
+					delegate (SparkleRepo r)
+						{ return r.LocalPath.Equals (LocalPath) && r.HasUnsyncedChanges; }
+				) != null) {
 
 				string title = _("This folder has unsynced changes");
-				string text  = _("We will sync these once connected again");
+				string text  = _("We will sync these once we’re connected again");
 
 				SparkleInfobar infobar = new SparkleInfobar ("dialog-error", title, text);
 
 				layout_vertical.PackStart (infobar, false, false, 0);
+
+			} else {
+
+				if (SparkleUI.Repositories.Find (
+					delegate (SparkleRepo r)
+						{ return r.LocalPath.Equals (LocalPath) && r.HasUnsyncedChanges; }
+					) != null) {
+
+						string title = _("Could not sync with the remote folder");
+						string text  = _("Is the you and the server online?");
+
+						SparkleInfobar infobar = new SparkleInfobar ("dialog-error", title, text);
+
+						layout_vertical.PackStart (infobar, false, false, 0);
+
+				}
 
 			}
 
