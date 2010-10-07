@@ -152,6 +152,7 @@ namespace SparkleShare {
 					repo.PushingFinished -= UpdateEventLog;
 					repo.PushingFailed -= UpdateEventLog;
 					repo.FetchingFinished -= UpdateEventLog;
+					repo.FetchingFailed -= UpdateEventLog;
 
 				}
 
@@ -198,6 +199,7 @@ namespace SparkleShare {
 					repo.PushingFailed += UpdateEventLog;
 
 					repo.FetchingFinished += UpdateEventLog;
+					repo.FetchingFailed += UpdateEventLog;
 
 					break;
 

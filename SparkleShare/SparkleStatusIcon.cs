@@ -417,7 +417,7 @@ namespace SparkleShare {
 
 				if (SparkleUI.Repositories.Count > 0)
 					StateText = _("Up to date") + "  (" + FormatFileSize (FolderSize) + ")";
-				else			
+				else
 					StateText = _("Welcome to SparkleShare!");
 
 			}
