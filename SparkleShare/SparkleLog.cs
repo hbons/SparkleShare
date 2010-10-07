@@ -236,30 +236,12 @@ namespace SparkleShare {
 			if ((SparkleUI.Repositories.Find (delegate (SparkleRepo r)
 				{ return r.LocalPath.Equals (LocalPath); }) as SparkleRepo).HasUnsyncedChanges == true) {
 
-				Window window = new Window (WindowType.Popup) {
-					Name = "gtk-tooltip"
-				};
+				string title = _("This folder has unsynced changes");
+				string text  = _("We will sync these once connected again");
 
-				window.EnsureStyle ();
+				SparkleInfobar infobar = new SparkleInfobar ("dialog-warning", title, text);
 
-				EventBox warning_box = new EventBox () {
-					Style = window.Style
-				};
-
-				Label label = new Label () {
-					Markup = "<b>" + _("This folder has unsynced changes") + "</b>\n" +
-						     _("We will sync these once connected again")
-				};
-
-				HBox warning_hbox = new HBox (false, 12) {
-					BorderWidth = 12
-				};
-				warning_hbox.PackStart (new Image (SparkleUIHelpers.GetIcon ("dialog-warning", 24)), false, false, 0);
-
-				warning_hbox.PackStart (label, false, false, 0);
-				warning_box.Add (warning_hbox);
-
-				layout_vertical.PackStart (warning_box, false, false, 0);
+				layout_vertical.PackStart (infobar, false, false, 0);
 
 			}
 
@@ -302,7 +284,7 @@ namespace SparkleShare {
 				layout_vertical.PackStart (box, false, false, 0);
 
 				Gdk.Color color = Style.Foreground (StateType.Insensitive);
-				string secondary_text_color = GdkColorToHex (color);
+				string secondary_text_color = SparkleUIHelpers.GdkColorToHex (color);
 
 				foreach (SparkleCommit change_set in activity_day) {
 
@@ -456,7 +438,7 @@ namespace SparkleShare {
 
 					hbox.PackStart (vbox, true, true, 0);
 					hbox.PackStart (new Label (""), false, false, 12);
-					
+
 					layout_vertical.PackStart (hbox, false, false, 18);
 
 				}
@@ -478,22 +460,10 @@ namespace SparkleShare {
 
 		}
 
-
-		// Converts a Gdk RGB color to a hex value.
-		// Example: from "rgb:0,0,0" to "#000000"
-		public static string GdkColorToHex (Gdk.Color color)
-		{
-
-			return String.Format ("#{0:X2}{1:X2}{2:X2}",
-				(int) Math.Truncate (color.Red   / 256.00),
-				(int) Math.Truncate (color.Green / 256.00),
-				(int) Math.Truncate (color.Blue  / 256.00));
-
-		}
-
 	}
 
-	
+
+	// All commits that happened on a day	
 	public class ActivityDay : List <SparkleCommit>
 	{
 
