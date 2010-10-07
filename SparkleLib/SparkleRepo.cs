@@ -76,6 +76,7 @@ namespace SparkleLib {
 		private bool _IsFetching;
 		private bool _IsPushing;
 		private bool _HasUnsyncedChanges;
+		private bool _ServerOnline;
 
 
 		/// <summary>
@@ -172,6 +173,18 @@ namespace SparkleLib {
 				return _HasUnsyncedChanges;
 			}
 		}
+
+
+		/// <summary>
+		/// Indicates whether the remote repository is online, 
+		/// this is based on the result of the Fetch method
+		/// </summary>
+		public bool ServerOnline {
+			get {
+				return _ServerOnline;
+			}
+		}
+
 
 		/// <event cref="Added">
 		/// Raised when local files have been added to the repository's staging area
@@ -270,6 +283,7 @@ namespace SparkleLib {
 			_IsPolling          = true;
 			_IsFetching         = false;
 			_IsPushing          = false;
+			_ServerOnline       = true;
 
 			string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath ,
 				".git", "has_unsynced_changes");
@@ -654,6 +668,11 @@ namespace SparkleLib {
 
 				_CurrentHash = GetCurrentHash ();
 
+				if (process.ExitCode != 0)
+					_ServerOnline = false;
+				else
+					_ServerOnline = true;
+
 			};
 
 		}
@@ -805,10 +824,10 @@ namespace SparkleLib {
 					string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath ,
 						".git", "has_unsynced_changes");
 
-//					if (File.Exists (unsynced_file_path))
-	//					File.Delete (unsynced_file_path); TODO: restore
+					if (File.Exists (unsynced_file_path))
+						File.Delete (unsynced_file_path);
 
-//					_HasUnsyncedChanges = false;TODO
+					_HasUnsyncedChanges = false;
 
 					if (PushingFinished != null)
 					    PushingFinished (this, args); 
