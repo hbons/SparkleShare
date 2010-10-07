@@ -16,7 +16,7 @@ start() {
 
   echo -n "Starting SparkleShare... "
   mkdir -p /tmp/sparkleshare/
-  if [ -n "$SSH_AUTH_SOCK" ]; then
+  if [ -n "$SSH_AUTH_PID" ]; then
     mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
   else
     ssh-agent mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
