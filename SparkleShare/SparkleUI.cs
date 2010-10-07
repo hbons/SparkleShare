@@ -362,15 +362,6 @@ namespace SparkleShare {
 		}
 
 
-		// Updates the statusicon to the error state
-		private void UpdateStatusIconToError (object o, EventArgs args)
-		{
-
-				StatusIcon.ShowState (true);
-
-		}
-
-
 		// Adds a repository to the list of repositories and
 		// updates the statusicon menu
 		private void AddRepository (string folder_path)
@@ -416,7 +407,7 @@ namespace SparkleShare {
 			};
 
 			repo.PushingFailed += delegate { // TODO: use UpdateStatusIcon and check for HasUnsyncedChanges in SparkleStatusIcon
-				Application.Invoke (UpdateStatusIconToError);
+				Application.Invoke (UpdateStatusIcon);
 			};
 
 			repo.ConflictDetected += delegate {

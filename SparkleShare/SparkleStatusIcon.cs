@@ -268,7 +268,7 @@ namespace SparkleShare {
 						};
 
 						if (repo.HasUnsyncedChanges)
-							folder_action.IconName = "dialog-warning";
+							folder_action.IconName = "dialog-error";
 
 						folder_action.Activated += OpenLogDelegate (repo.LocalPath);
 
@@ -364,38 +364,22 @@ namespace SparkleShare {
 		}
 
 
-		public void ShowState ()
-		{
-
-			ShowState (false);
-
-		}
-
-
 		// Shows the state and keeps the number of syncing repositories in mind
-		public void ShowState (bool error)
+		public void ShowState ()
 		{
 
 			UpdateFolderSize ();
 
-			if (error) {
+			foreach (SparkleRepo repo in SparkleUI.Repositories)
 
-				SetErrorState ();
+			if (repo.IsSyncing || repo.IsBuffering) {
+
+				SetSyncingState ();
+				break;
 
 			} else {
 
-				foreach (SparkleRepo repo in SparkleUI.Repositories)
-
-				if (repo.IsSyncing || repo.IsBuffering) {
-
-					SetSyncingState ();
-					break;
-
-				} else {
-
-					SetIdleState ();
-
-				}
+				SetIdleState ();
 
 			}
 
@@ -412,13 +396,31 @@ namespace SparkleShare {
 
 			Animation.Stop ();
 
-			// The first frame is the idle icon
-			Application.Invoke (delegate { SetPixbuf (AnimationFrames [0]); });
+			int unsynced_repo_count = 0;
+			foreach (SparkleRepo repo in SparkleUI.Repositories) {
+				if (repo.HasUnsyncedChanges)
+					unsynced_repo_count++;
+			}
 
-			if (SparkleUI.Repositories.Count > 0)
-				StateText = _("Up to date") + "  (" + FormatFileSize (FolderSize) + ")";
-			else			
-				StateText += _("Welcome to SparkleShare!");
+			if (unsynced_repo_count > 0) {
+
+				Application.Invoke (delegate { SetPixbuf (SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24)); });
+
+				if (unsynced_repo_count == 1)
+					StateText = _("One of your folders failed to sync");
+				else
+					StateText = _("Some folders failed to sync");
+
+			} else {
+
+				Application.Invoke (delegate { SetPixbuf (AnimationFrames [0]); });
+
+				if (SparkleUI.Repositories.Count > 0)
+					StateText = _("Up to date") + "  (" + FormatFileSize (FolderSize) + ")";
+				else			
+					StateText = _("Welcome to SparkleShare!");
+
+			}
 
 		}
 
@@ -429,17 +431,6 @@ namespace SparkleShare {
 
 			StateText = _("Syncing…");
 			Animation.Start ();
-
-		}
-
-
-		// Changes the state to indicate there was an error syncing
-		public void SetErrorState ()
-		{
-
-			Animation.Stop ();
-			Application.Invoke (delegate { Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24); });
-			StateText = _("Failed to sync changes");
 
 		}
 
