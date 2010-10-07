@@ -239,7 +239,7 @@ namespace SparkleShare {
 				string title = _("This folder has unsynced changes");
 				string text  = _("We will sync these once connected again");
 
-				SparkleInfobar infobar = new SparkleInfobar ("dialog-warning", title, text);
+				SparkleInfobar infobar = new SparkleInfobar ("dialog-error", title, text);
 
 				layout_vertical.PackStart (infobar, false, false, 0);
 

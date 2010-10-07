@@ -805,10 +805,10 @@ namespace SparkleLib {
 					string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath ,
 						".git", "has_unsynced_changes");
 
-					if (File.Exists (unsynced_file_path))
-						File.Delete (unsynced_file_path);
+//					if (File.Exists (unsynced_file_path))
+	//					File.Delete (unsynced_file_path); TODO: restore
 
-					_HasUnsyncedChanges = false;
+//					_HasUnsyncedChanges = false;TODO
 
 					if (PushingFinished != null)
 					    PushingFinished (this, args); 
