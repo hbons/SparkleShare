@@ -333,7 +333,7 @@ namespace SparkleLib {
 
 				CheckForRemoteChanges ();
 
-				if (_HasUnsyncedChanges)
+				if (_HasUnsyncedChanges) // TODO: A PushTimer is needed
 					Push ();
 
 				if (!Listener.Client.IsConnected) {
