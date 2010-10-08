@@ -29,29 +29,32 @@ namespace SparkleShare {
 
 			ExampleTextActive = true;
 
-			FocusGrabbed += delegate {
-
-				if (ExampleTextActive) {
-
-					ExampleTextActive = false;
-					Text = "";	
-					UseNormalTextColor ();
-
-				}
-			
-			};
+			FocusGrabbed += delegate { OnEntered (); };
+			ClipboardPasted += delegate { OnEntered (); };
 			
 			FocusOutEvent += delegate {
 
-				if (Text.Equals ("") || Text == null) {
+				if (Text.Equals ("") || Text == null)
 					ExampleTextActive = true;
-
-				}
 
 				if (ExampleTextActive)
 					UseExampleText ();
 
 			};
+
+		}
+
+
+		private void OnEntered ()
+		{
+
+			if (ExampleTextActive) {
+
+				ExampleTextActive = false;
+				Text = "";	
+				UseNormalTextColor ();
+
+			}
 
 		}
 
