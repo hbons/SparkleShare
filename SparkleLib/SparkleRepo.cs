@@ -331,9 +331,10 @@ namespace SparkleLib {
 
 			RemoteTimer.Elapsed += delegate { 
 
-				CheckForRemoteChanges ();
+				if (_IsPolling)
+					CheckForRemoteChanges ();
 
-				if (_HasUnsyncedChanges) // TODO: A PushTimer is needed
+				if (_HasUnsyncedChanges)
 					Push ();
 
 				if (!Listener.Client.IsConnected) {
@@ -357,7 +358,6 @@ namespace SparkleLib {
 
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Connected. Now listening...");
 
-				RemoteTimer.Stop ();
 				_IsPolling = false;
 
 			};
@@ -369,7 +369,6 @@ namespace SparkleLib {
 
 				CheckForRemoteChanges ();
 
-				RemoteTimer.Start ();
 				_IsPolling = true;
 
 			};
