@@ -995,7 +995,7 @@ namespace SparkleLib {
 
 
 		// Returns a list of latest commits
-		public List <SparkleCommit> GetCommits (int count)
+		public List <SparkleCommit> GetCommits (int count) // TODO: Port to HashSet because it is quicker
 		{
 
 			if (count < 0)
@@ -1110,63 +1110,50 @@ namespace SparkleLib {
 		private string FormatCommitMessage ()
 		{
 
-			Process.StartInfo.Arguments = "status --porcelain";
-			Process.Start ();
+			RepositoryStatus status = Index.Status;
 
-			string output = Process.StandardOutput.ReadToEnd ().TrimEnd ();
-			string [] lines = Regex.Split (output, "\n");
-
-			string file_name;
-			string file_action;
+			string file_name = "";
 			string message = null;
 
-			foreach (string line in lines) {
+			if (status.Added.Count > 0) {
 
-				if (line.StartsWith ("A")) {
-
-					file_action = "added";
-					file_name   = line.Substring (3).Trim ("\"".ToCharArray ());
-					message     = file_action + " ‘" + file_name + "’";
-
+				foreach (string added in status.Added) {
+					file_name = added;
+					break;
 				}
 
-				if (line.StartsWith ("M")) {
-
-					file_action = "edited";
-					file_name   = line.Substring (3).Trim ("\"".ToCharArray ());
-					message     = file_action + " ‘" + file_name + "’";
-
-				}
-
-				if (line.StartsWith ("D")) {
-
-					file_action = "deleted";
-					file_name   = line.Substring (3).Trim ("\"".ToCharArray ());
-					message     = file_action + " ‘" + file_name + "’";
-
-				}
-
-				if (line.StartsWith ("R")) {
-
-					file_action = "moved";
-					message     = file_action + " ‘" + line.Substring (3).Trim ("\"".ToCharArray ())
-						.Replace (" -> ", "’ to\n‘")
-						.Replace ("\"’", "’")
-						.Replace ("‘\"", "‘");
-
-				}
-
-				if (line.StartsWith ("C")) {
-
-					file_action = "copied";
-					file_name   = line.Substring (3).Trim ("\"".ToCharArray ());
-
-				}
+				message     = "added ‘" + file_name + "’";
 
 			}
 
-			if (lines.Length > 1)
-				message += " and " + (lines.Length - 1) + " more";
+			if (status.Modified.Count > 0) {
+
+				foreach (string modified in status.Modified) {
+					file_name = modified;
+					break;
+				}
+
+				message     = "edited ‘" + file_name + "’";
+
+			}
+
+			if (status.Removed.Count > 0) {
+
+				foreach (string removed in status.Removed) {
+					file_name = removed;
+					break;
+				}
+
+				message     = "deleted ‘" + file_name + "’";
+
+			}
+
+			int changes_count = (status.Added.Count +
+			                     status.Modified.Count +
+			                     status.Removed.Count);
+
+			if (changes_count > 1)
+				message += " and " + (changes_count - 1) + " more";
 
 			return message;
 
