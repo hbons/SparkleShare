@@ -5,11 +5,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleShare", "SparkleShar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotifySharp", "NotifySharp\NotifySharp.csproj", "{005CCA8E-DFBF-464A-B6DA-452C62D4589C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendFace", "FriendFace\FriendFace.csproj", "{3BA434AF-494F-4F5D-9D21-B7BD24FD67AF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleDiff", "SparkleDiff\SparkleDiff.csproj", "{17BF02CB-852A-4756-BA05-EC454643C428}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleLib", "SparkleLib\SparkleLib.csproj", "{2C914413-B31C-4362-93C7-1AE34F09112A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitSharp", "GitSharp", "{E3C59A13-2E21-4547-856C-BFD295C9E156}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitSharp.Core", "GitSharp\GitSharp.Core\GitSharp.Core.csproj", "{C46EDD61-C202-465A-93F1-ADE20A83BB59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitSharp", "GitSharp\GitSharp\GitSharp.csproj", "{7311850F-619A-4241-B09F-157792C75FBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,22 +23,26 @@ Global
 		{005CCA8E-DFBF-464A-B6DA-452C62D4589C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{005CCA8E-DFBF-464A-B6DA-452C62D4589C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{005CCA8E-DFBF-464A-B6DA-452C62D4589C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17BF02CB-852A-4756-BA05-EC454643C428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17BF02CB-852A-4756-BA05-EC454643C428}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17BF02CB-852A-4756-BA05-EC454643C428}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17BF02CB-852A-4756-BA05-EC454643C428}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2C914413-B31C-4362-93C7-1AE34F09112A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2C914413-B31C-4362-93C7-1AE34F09112A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C914413-B31C-4362-93C7-1AE34F09112A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C914413-B31C-4362-93C7-1AE34F09112A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3BA434AF-494F-4F5D-9D21-B7BD24FD67AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3BA434AF-494F-4F5D-9D21-B7BD24FD67AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3BA434AF-494F-4F5D-9D21-B7BD24FD67AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3BA434AF-494F-4F5D-9D21-B7BD24FD67AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{728483AA-E34B-4441-BF2C-C8BC2901E4E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{728483AA-E34B-4441-BF2C-C8BC2901E4E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{728483AA-E34B-4441-BF2C-C8BC2901E4E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{728483AA-E34B-4441-BF2C-C8BC2901E4E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7311850F-619A-4241-B09F-157792C75FBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7311850F-619A-4241-B09F-157792C75FBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7311850F-619A-4241-B09F-157792C75FBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7311850F-619A-4241-B09F-157792C75FBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C46EDD61-C202-465A-93F1-ADE20A83BB59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C46EDD61-C202-465A-93F1-ADE20A83BB59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C46EDD61-C202-465A-93F1-ADE20A83BB59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C46EDD61-C202-465A-93F1-ADE20A83BB59}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C46EDD61-C202-465A-93F1-ADE20A83BB59} = {E3C59A13-2E21-4547-856C-BFD295C9E156}
+		{7311850F-619A-4241-B09F-157792C75FBA} = {E3C59A13-2E21-4547-856C-BFD295C9E156}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = SparkleShare\SparkleShare.csproj
