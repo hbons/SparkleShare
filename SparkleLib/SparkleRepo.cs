@@ -269,7 +269,7 @@ namespace SparkleLib {
 
 			UserName            = Config ["user.name"];
 			UserEmail           = Config ["user.email"];
-			_CurrentHash        = GetCurrentHash ();
+			_CurrentHash        = Head.CurrentCommit.Hash;
 			_IsSyncing          = false;
 			_IsBuffering        = false;
 			_IsPolling          = true;
@@ -415,7 +415,7 @@ namespace SparkleLib {
 			AddCommitAndPush ();
 
 			if (_CurrentHash == null)
-				_CurrentHash = GetCurrentHash ();
+				_CurrentHash = Head.CurrentCommit.Hash;
 
 		}
 
@@ -674,7 +674,7 @@ namespace SparkleLib {
 				if (_IsPolling)
 					RemoteTimer.Start ();
 
-				_CurrentHash = GetCurrentHash ();
+				_CurrentHash = Head.CurrentCommit.Hash;
 
 				if (process.ExitCode != 0) {
 
@@ -930,35 +930,6 @@ namespace SparkleLib {
 			return description;
 
 		}
-
-
-		// Gets hash of the current commit
-		public string GetCurrentHash ()
-		{
-
-			Process process = new Process () {
-				EnableRaisingEvents = true
-			};
-
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute        = false;
-			process.StartInfo.FileName               = "git";
-			process.StartInfo.WorkingDirectory       = LocalPath;
-			process.StartInfo.Arguments              = "rev-list --max-count=1 HEAD";
-
-			process.Start ();
-			process.WaitForExit ();
-
-			string current_hash = process.StandardOutput.ReadToEnd ().Trim ();
-
-			if (process.ExitCode != 0)
-				return null;
-			else
-				return current_hash;
-
-		}
-
-
 
 
 		// Create a first commit in case the user has cloned
