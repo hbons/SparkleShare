@@ -20,7 +20,7 @@ using System.Diagnostics;
 
 namespace SparkleLib {
 
-	// A helper class that fetches and and configures 
+	// A helper class that fetches and configures 
 	// a remote repository
 	public class SparkleFetcher {
 
@@ -45,6 +45,7 @@ namespace SparkleLib {
 		}
 
 
+		// Clones the remote repository
 		public void Clone ()
 		{
 
