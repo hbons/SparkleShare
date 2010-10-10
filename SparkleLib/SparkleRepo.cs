@@ -14,6 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using GitSharp;
 using Meebey.SmartIrc4net;
 using Mono.Unix;
 using System;
@@ -25,7 +26,7 @@ using System.Timers;
 
 namespace SparkleLib {
 
-	public class SparkleRepo {
+	public class SparkleRepo : Repository {
 
 		private Process Process;
 		private Timer RemoteTimer;
@@ -261,7 +262,7 @@ namespace SparkleLib {
 		public event CommitEndedUpEmptyEventHandler CommitEndedUpEmpty;
 
 
-		public SparkleRepo (string path)
+		public SparkleRepo (string path) : base (path)
 		{
 
 			LocalPath = path;
@@ -599,22 +600,15 @@ namespace SparkleLib {
 
 
 		// Commits the made changes
-		public void Commit (string message)
+		new public void Commit (string message)
 		{
 
-			Process.StartInfo.Arguments = "status --porcelain";
-			Process.Start ();
-			Process.WaitForExit ();
-
-			if (Process.StandardOutput.ReadToEnd ().TrimEnd ("\n".ToCharArray ()).Equals (""))
+			if (!Status.AnyDifferences)
 				return;
 
+			base.Commit (message);
+
 			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message);
-
-			Process.StartInfo.Arguments = "commit -m \"" + message + "\"";
-
-			Process.Start ();
-			Process.WaitForExit ();
 
 			SparkleEventArgs args = new SparkleEventArgs ("Commited");
 			args.Message = message;
@@ -852,12 +846,14 @@ namespace SparkleLib {
 		}
 
 
-		public void Dispose ()
+		new public void Dispose ()
 		{
 
 			RemoteTimer.Dispose ();
 			LocalTimer.Dispose ();
 			Listener.Dispose ();
+
+			base.Dispose ();
 
 		}
 
@@ -871,7 +867,7 @@ namespace SparkleLib {
 			    file_path.Contains (".git")  ||
 			    file_path.Contains ("/.")    ||
 			    file_path.EndsWith (".swp")  ||
-			    Directory.Exists (LocalPath + file_path)) {
+			    System.IO.Directory.Exists (LocalPath + file_path)) {
 
 				return true; // Yes, ignore it
 
