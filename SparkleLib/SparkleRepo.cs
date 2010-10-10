@@ -16,6 +16,7 @@
 
 using GitSharp;
 using GitSharp.Commands;
+using GitSharp.Core.Transport;
 using Meebey.SmartIrc4net;
 using Mono.Unix;
 using System;
@@ -640,6 +641,24 @@ namespace SparkleLib {
 
 			RemoteTimer.Stop ();
 
+
+/* FIXME: SSH transport doesn't work with GitSharp
+			try {
+
+				FetchCommand fetch_command = new FetchCommand () {
+					Remote = "origin",
+					Repository = this
+				};
+
+				fetch_command.Execute ();
+
+			} catch (GitSharp.Core.Exceptions.TransportException e) {
+
+				Console.WriteLine ("Nothing to fetch: " + e.Message);
+			
+			}
+*/
+
 			Process process = new Process () {
 				EnableRaisingEvents = true
 			};
@@ -893,7 +912,7 @@ namespace SparkleLib {
 
 
 		// Gets the domain name of a given URL
-		public string GetDomain (string url)
+		private string GetDomain (string url)
 		{
 
 			if (url.Equals (""))
@@ -912,10 +931,10 @@ namespace SparkleLib {
 
 
 		// Gets the repository's description
-		public string GetDescription ()
+		private string GetDescription ()
 		{
 
-			string description_file_path = SparkleHelpers.CombineMore (LocalPath, ".git", "description");
+			string description_file_path = SparkleHelpers.CombineMore (Directory, "description");
 
 			if (!File.Exists (description_file_path))
 				return null;
@@ -945,7 +964,7 @@ namespace SparkleLib {
 
 
 		// Returns a list of latest commits
-		public List <SparkleCommit> GetCommits (int count) // TODO: Port to HashSet because it is quicker
+		public List <SparkleCommit> GetCommits (int count)
 		{
 
 			if (count < 0)
@@ -961,24 +980,25 @@ namespace SparkleLib {
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = LocalPath;
 
-			// Get the user's timezone
-			process.StartInfo.FileName  = "date";
-			process.StartInfo.Arguments = "+%z";
+			TimeZone current_time_zone = TimeZone.CurrentTimeZone;
+			DateTime current_date = DateTime.Now;
 
+			TimeSpan current_offset = current_time_zone.GetUtcOffset (current_date);
+			string utc_offset = current_offset.ToString ();
 
-			process.Start ();
-			process.WaitForExit ();
-
-			string timezone = process.StandardOutput.ReadToEnd ().Trim ();
 			int unix_timestamp = 0;
 
-			// Add the timezone difference in hours when in a positive timezone
-			if (timezone.StartsWith ("+"))
-				unix_timestamp = 3600 * int.Parse (timezone.Substring (1, 2));
+			if (utc_offset.StartsWith ("-")) {
 
-			// Remove the timezone difference in hours when in a negative timezone
-			if (timezone.StartsWith ("-"))
-				unix_timestamp = -3600 * int.Parse (timezone.Substring (1, 2));
+				// Add the timezone difference in hours when in a positive timezone
+				unix_timestamp = -3600 * int.Parse (utc_offset.Substring (1, 2));
+
+			} else {
+
+				// Remove the timezone difference in hours when in a negative timezone
+				unix_timestamp = 3600 * int.Parse (utc_offset.Substring (0, 2));
+
+			}
 
 			process.StartInfo.FileName  = "git";
 			process.StartInfo.Arguments = "log --format=\"%at\t%an\t%ae\t%H\" -" + count;
