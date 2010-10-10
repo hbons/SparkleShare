@@ -785,22 +785,11 @@ namespace SparkleLib {
 			
 				}
 
-				// Get the last commiter
-				Process.StartInfo.Arguments = "log --format=\"%an\" -1";
-				Process.Start ();
-				string author = Process.StandardOutput.ReadToEnd ().Trim ();
 
-				// Get the last committer e-mail
-				Process.StartInfo.Arguments = "log --format=\"%ae\" -1";
-				Process.Start ();
-				string email = Process.StandardOutput.ReadToEnd ().Trim ();
+				Commit commit = Head.CurrentCommit;
 
-				// Get the last commit message
-				Process.StartInfo.Arguments = "log --format=\"%s\" -1";
-				Process.Start ();
-				string message = Process.StandardOutput.ReadToEnd ().Trim ();
-
-				NewCommitArgs new_commit_args = new NewCommitArgs (author, email, message, Name);
+				NewCommitArgs new_commit_args = new NewCommitArgs (commit.Author.Name, commit.Author.EmailAddress,
+					commit.Message, Name);
 
 				if (NewCommit != null)
 			        NewCommit (this, new_commit_args);
@@ -825,6 +814,23 @@ namespace SparkleLib {
 	            PushingStarted (this, args); 
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing changes...");
+
+/* FIXME: SSH transport doesn't work with GitSharp
+			try {
+
+				PushCommand push_command = new PushCommand () {
+					Remote = "origin",
+					Repository = this
+				};
+
+				push_command.Execute ();
+
+			} catch (GitSharp.Core.Exceptions.TransportException e) {
+
+				Console.WriteLine (e.Message);
+			
+			}
+*/
 
 			Process.StartInfo.Arguments = "push origin master";
 
@@ -877,18 +883,6 @@ namespace SparkleLib {
 		}
 
 
-		new public void Dispose ()
-		{
-
-			RemoteTimer.Dispose ();
-			LocalTimer.Dispose ();
-			Listener.Dispose ();
-
-			base.Dispose ();
-
-		}
-
-
 		// Ignores repos, dotfiles, swap files and the like
 		private bool ShouldIgnore (string file_path)
 		{
@@ -916,7 +910,7 @@ namespace SparkleLib {
 		{
 
 			if (url.Equals (""))
-				return "";
+				return null;
 
 			string domain = url.Substring (url.IndexOf ("@") + 1);
 
@@ -1004,7 +998,7 @@ namespace SparkleLib {
 			} catch (System.NullReferenceException) {
 
 				// FIXME: Doesn't show the first commit because it throws
-				// this exception before getting to it.
+				// this exception before getting to it. Seems to be a bug in GitSharp
 
 			}
 
@@ -1029,7 +1023,7 @@ namespace SparkleLib {
 					break;
 				}
 
-				message     = "added ‘" + file_name + "’";
+				message = "added ‘" + file_name + "’";
 
 			}
 
@@ -1040,7 +1034,7 @@ namespace SparkleLib {
 					break;
 				}
 
-				message     = "edited ‘" + file_name + "’";
+				message = "edited ‘" + file_name + "’";
 
 			}
 
@@ -1051,7 +1045,7 @@ namespace SparkleLib {
 					break;
 				}
 
-				message     = "deleted ‘" + file_name + "’";
+				message = "deleted ‘" + file_name + "’";
 
 			}
 
@@ -1063,6 +1057,19 @@ namespace SparkleLib {
 				message += " and " + (changes_count - 1) + " more";
 
 			return message;
+
+		}
+
+
+		// Disposes all resourses of this object
+		new public void Dispose ()
+		{
+
+			RemoteTimer.Dispose ();
+			LocalTimer.Dispose ();
+			Listener.Dispose ();
+
+			base.Dispose ();
 
 		}
 
