@@ -453,6 +453,31 @@ namespace SparkleLib {
 
 			};
 
+/* FIXME: LsRemoteCommand is not yet implemented by GitSharp
+
+			LsRemoteCommand ls_remote = new LsRemoteCommand () {
+				Repository = this
+			};
+
+			ls_remote.Execute ();
+
+			using (StreamReader reader = new StreamReader (ls_remote.OutputStream.BaseStream))
+			{
+
+				string remote_hash = reader.ReadLine ());
+
+				if (!remote_hash.StartsWith (_CurrentHash)) {
+
+					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found.");
+
+					Fetch ();
+					Rebase ();
+
+				}
+
+			}
+*/
+
 		}
 
 
@@ -570,6 +595,8 @@ namespace SparkleLib {
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Staging changes...");
 
+			// FIXME: this GitSharp method seems to block...
+			// Index.AddAll ();
 			Process.StartInfo.Arguments = "add --all";
 			Process.Start ();
 			Process.WaitForExit ();
