@@ -967,107 +967,44 @@ namespace SparkleLib {
 		public List <SparkleCommit> GetCommits (int count)
 		{
 
-			if (count < 0)
+			if (count <= 0)
 				return null;
 
 			List <SparkleCommit> commits = new List <SparkleCommit> ();
 
-			Process process = new Process () {
-				EnableRaisingEvents = true
-			};
+			string commit_ref = "HEAD";
 
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.WorkingDirectory = LocalPath;
+			try {
 
-			TimeZone current_time_zone = TimeZone.CurrentTimeZone;
-			DateTime current_date = DateTime.Now;
+				for (int i = 0; i < count; i++) {
 
-			TimeSpan current_offset = current_time_zone.GetUtcOffset (current_date);
-			string utc_offset = current_offset.ToString ();
+					Commit commit = new Commit (this, commit_ref);
 
-			int unix_timestamp = 0;
+					SparkleCommit sparkle_commit = new SparkleCommit (commit.Author.Name, commit.Author.EmailAddress,
+						commit.CommitDate.DateTime, commit.Hash);
 
-			if (utc_offset.StartsWith ("-")) {
+					foreach (Change change in commit.Changes) {
 
-				// Add the timezone difference in hours when in a positive timezone
-				unix_timestamp = -3600 * int.Parse (utc_offset.Substring (1, 2));
+						if (change.ChangeType.ToString ().Equals ("Added"))
+							sparkle_commit.Added.Add (change.Path);
 
-			} else {
+						if (change.ChangeType.ToString ().Equals ("Modified"))
+							sparkle_commit.Edited.Add (change.Path);
 
-				// Remove the timezone difference in hours when in a negative timezone
-				unix_timestamp = 3600 * int.Parse (utc_offset.Substring (0, 2));
-
-			}
-
-			process.StartInfo.FileName  = "git";
-			process.StartInfo.Arguments = "log --format=\"%at\t%an\t%ae\t%H\" -" + count;
-
-			process.Start ();
-			process.WaitForExit ();
-
-			string output = process.StandardOutput.ReadToEnd ().Trim ();
-			output = output.TrimStart ("\n".ToCharArray ());
-
-			string [] lines = Regex.Split (output, "\n");
-
-			Array.Sort (lines);
-			Array.Reverse (lines);
-
-			foreach (string line in lines) {
-
-				string [] parts = Regex.Split (line, "\t");
-
-				int local_timestamp = unix_timestamp + int.Parse (parts [0]);
-				string user_name    = parts [1];
-				string user_email   = parts [2];
-				string hash         = parts [3];
-
-				DateTime date_time = SparkleHelpers.UnixTimestampToDateTime (local_timestamp);
-
-				SparkleCommit commit = new SparkleCommit (user_name, user_email, date_time, hash);
-
-				// Find out what has changed in the commit.
-				// --name-status lists affected files with the modification type,
-				// -C detects renames
-				process.StartInfo.Arguments = "show " + hash + " --name-status -C";
-				process.Start ();
-				process.WaitForExit ();
-
-				output = process.StandardOutput.ReadToEnd ().Trim ();
-				output = output.TrimStart ("\n".ToCharArray ());
-
-				string [] file_lines = Regex.Split (output, "\n");
-
-				foreach (string file_line in file_lines) {
-
-					string file_path = "";
-
-					if (file_line.Length > 1)
-						file_path = file_line.Substring (2);
-
-					if (file_line.StartsWith ("M\t"))
-						commit.Edited.Add (file_path);
-
-					if (file_line.StartsWith ("A\t"))
-						commit.Added.Add (file_path);
-
-					if (file_line.StartsWith ("D\t"))
-						commit.Deleted.Add (file_path);
-
-					if (file_line.StartsWith ("R")) {
-
-						file_path = file_line.Substring (5);
-						string [] paths = Regex.Split (file_path, "\t");
-
-						commit.MovedFrom.Add (paths [0]);
-						commit.MovedTo.Add (paths [1]);
+						if (change.ChangeType.ToString ().Equals ("Deleted"))
+							sparkle_commit.Deleted.Add (change.Path);
 
 					}
 
+					commits.Add (sparkle_commit);
+					commit_ref += "^";
+
 				}
 
-				commits.Add (commit);
+			} catch (System.NullReferenceException) {
+
+				// FIXME: Doesn't show the first commit because it throws
+				// this exception before getting to it.
 
 			}
 
