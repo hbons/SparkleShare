@@ -430,7 +430,9 @@ namespace SparkleShare {
 		{
 
 			StateText = _("Syncing…");
-			Animation.Start ();
+
+			if (!Animation.Enabled)
+				Animation.Start ();
 
 		}
 
