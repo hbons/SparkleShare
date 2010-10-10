@@ -15,6 +15,7 @@
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using GitSharp;
+using GitSharp.Commands;
 using Meebey.SmartIrc4net;
 using Mono.Unix;
 using System;
@@ -69,8 +70,6 @@ namespace SparkleLib {
 		public readonly string RemoteOriginUrl;
 
 		private string _CurrentHash;
-		private string _UserEmail;
-		private string _UserName;
 		private bool _IsSyncing;
 		private bool _IsBuffering;
 		private bool _IsPolling;
@@ -92,27 +91,13 @@ namespace SparkleLib {
 		/// <summary>
 		/// The name of the user
 		/// </summary>
-		public string UserName {
-			get {
-				return _UserName;
-			}
-			set {
-				SetUserName (value);
-			}
-		}
+		public readonly string UserName;
 
 
 		/// <summary>
 		/// The name of the user
 		/// </summary>
-		public string UserEmail {
-			get {
-				return _UserEmail;
-			}
-			set {
-				SetUserEmail (value);
-			}
-		}
+		public readonly string UserEmail;
 
 
 		/// <summary>
@@ -282,8 +267,8 @@ namespace SparkleLib {
 			Domain              = GetDomain (RemoteOriginUrl);
 			Description         = GetDescription ();
 
-			_UserName           = GetUserName ();
-			_UserEmail          = GetUserEmail ();
+			UserName            = Config ["user.name"];
+			UserEmail           = Config ["user.email"];
 			_CurrentHash        = GetCurrentHash ();
 			_IsSyncing          = false;
 			_IsBuffering        = false;
@@ -328,7 +313,7 @@ namespace SparkleLib {
 
 
 			// Listen to the irc channel on the server
-			Listener = new SparkleListener (Domain, "#" + RemoteName, _UserEmail);
+			Listener = new SparkleListener (Domain, "#" + RemoteName, UserEmail);
 
 			RemoteTimer.Elapsed += delegate { 
 
@@ -727,7 +712,7 @@ namespace SparkleLib {
 							
 							string timestamp = DateTime.Now.ToString ("H:mm d MMM yyyy");
 
-							File.Move (problem_file_name, problem_file_name + " (" + _UserName  + ", " + timestamp + ")");
+							File.Move (problem_file_name, problem_file_name + " (" + UserName  + ", " + timestamp + ")");
 							           
 							Process.StartInfo.Arguments = "checkout --theirs " + problem_file_name;
 							Process.WaitForExit ();
@@ -947,94 +932,6 @@ namespace SparkleLib {
 		}
 
 
-		// Gets the user's name, example: "User Name"
-		public string GetUserName ()
-		{
-
-			string user_name;
-
-			Process process = new Process ();
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.FileName = "git";
-			process.StartInfo.WorkingDirectory = LocalPath;
-			process.StartInfo.Arguments = "config --get user.name";
-			process.Start ();
-
-			user_name = process.StandardOutput.ReadToEnd ().Trim ();
-
-			if (user_name.Equals ("")) {
-
-				UnixUserInfo unix_user_info = new UnixUserInfo (UnixEnvironment.UserName);
-
-				if (unix_user_info.RealName.Equals (""))
-					user_name = "Mysterious Stranger";
-				else
-					user_name = unix_user_info.RealName;
-
-			}
-
-			return user_name;
-
-		}
-
-
-		// Gets the user's name, example: "User Name"
-		private void SetUserName (string user_name)
-		{
-
-			Process process = new Process ();
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.FileName = "git";
-			process.StartInfo.WorkingDirectory = LocalPath;
-			process.StartInfo.Arguments = "config --set user.name \"" + user_name + "\"";
-			process.Start ();
-
-			_UserName = user_name;
-
-		}
-
-
-		// Gets the user's email, example: "person@gnome.org"
-		private string GetUserEmail ()
-		{
-
-			string user_email;
-
-			Process process = new Process ();
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.FileName = "git";
-			process.StartInfo.WorkingDirectory = LocalPath;
-			process.StartInfo.Arguments = "config --get user.email";
-			process.Start ();
-
-			user_email = process.StandardOutput.ReadToEnd ().Trim ();
-
-			if (user_email.Equals (""))
-				user_email = "Unknown Email";
-
-			return user_email;
-
-		}
-
-
-		// Gets the user's name, example: "User Name"
-		private void SetUserEmail (string user_email)
-		{
-
-			Process process = new Process ();
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.FileName = "git";
-			process.StartInfo.WorkingDirectory = LocalPath;
-			process.StartInfo.Arguments = "config --set user.email \"" + user_email + "\"";
-			process.Start ();
-
-			_UserEmail = user_email;
-
-		}
 
 
 		// Create a first commit in case the user has cloned
