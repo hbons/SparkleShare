@@ -263,7 +263,7 @@ namespace SparkleLib {
 			Process.StartInfo.WorkingDirectory = LocalPath;
 
 			RemoteName          = Path.GetFileNameWithoutExtension (RemoteOriginUrl);
-			RemoteOriginUrl     = GetRemoteOriginUrl ();
+			RemoteOriginUrl     = Config ["remote.origin.url"];
 			Domain              = GetDomain (RemoteOriginUrl);
 			Description         = GetDescription ();
 
@@ -969,27 +969,6 @@ namespace SparkleLib {
 			TextWriter writer = new StreamWriter (Path.Combine (LocalPath, "SparkleShare.txt"));
 			writer.WriteLine (":)");
 			writer.Close ();
-
-		}
-
-
-		// Gets the url of the remote repo, example: "ssh://git@git.gnome.org/project"
-		public string GetRemoteOriginUrl ()
-		{
-
-				string remote_origin_url;
-
-				Process process = new Process ();
-				process.StartInfo.UseShellExecute = false;
-				process.StartInfo.RedirectStandardOutput = true;
-				process.StartInfo.FileName = "git";
-				process.StartInfo.WorkingDirectory = LocalPath;
-				process.StartInfo.Arguments = "config --get remote.origin.url";
-				process.Start ();
-
-				remote_origin_url = process.StandardOutput.ReadToEnd ().Trim ();
-
-				return remote_origin_url;
 
 		}
 
