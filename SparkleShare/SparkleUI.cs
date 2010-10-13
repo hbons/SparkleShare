@@ -290,16 +290,23 @@ namespace SparkleShare {
 				string icon_file_path = SparkleHelpers.CombineMore (Defines.PREFIX, "share", "icons", "hicolor",
 					"48x48", "apps", "folder-sparkleshare.png");
 
-				Process process = new Process ();
-
-				process.StartInfo.RedirectStandardOutput = true;
-				process.StartInfo.UseShellExecute = false;
+				string gvfs_command_path = SparkleHelpers.CombineMore (Path.VolumeSeparatorChar.ToString (),
+					"usr", "bin", "gvfs-set-attribute");
 
 				// Add a special icon to the SparkleShare folder
-				process.StartInfo.FileName  = "gvfs-set-attribute";
-				process.StartInfo.Arguments = SparklePaths.SparklePath + " metadata::custom-icon " +
-					                          "file://" + icon_file_path;
-				process.Start ();
+				if (File.Exists (gvfs_command_path)) {
+
+					Process process = new Process ();
+
+					process.StartInfo.RedirectStandardOutput = true;
+					process.StartInfo.UseShellExecute = false;
+
+					process.StartInfo.FileName  = "gvfs-set-attribute";
+					process.StartInfo.Arguments = SparklePaths.SparklePath + " metadata::custom-icon " +
+							                      "file://" + icon_file_path;
+					process.Start ();
+
+				}
 
 				return true;
 
