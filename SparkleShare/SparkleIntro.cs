@@ -270,7 +270,7 @@ namespace SparkleShare {
 					
 					FolderEntry.Changed += CheckServerForm;
 
-					Label folder_label = new Label ("<b>" + _("Folder Name:") + "</b>") {
+					Label folder_label = new Label ("<b>" + _("Remote Folder Name:") + "</b>") {
 						UseMarkup = true,
 						Xalign    = 1
 					};
@@ -577,7 +577,7 @@ namespace SparkleShare {
 						if (SparkleUI.StatusIcon == null)
 							SparkleUI.StatusIcon = new SparkleStatusIcon ();
 						else
-							SparkleUI.StatusIcon.CreateMenu ();
+							SparkleUI.StatusIcon.UpdateMenu ();
 
 						Destroy ();
 

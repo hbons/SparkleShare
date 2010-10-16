@@ -24,6 +24,7 @@ namespace SparkleLib {
 		public const string LOCALE_DIR      = "@prefix@/share/locale";
 		public const string GETTEXT_PACKAGE = "@GETTEXT_PACKAGE@";
 		public const string PREFIX          = "@prefix@";
+		public const string OPEN_COMMAND    = "xdg-open";
 
 	}
 

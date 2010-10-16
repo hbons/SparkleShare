@@ -789,7 +789,7 @@ namespace SparkleLib {
 				Commit commit = Head.CurrentCommit;
 
 				NewCommitArgs new_commit_args = new NewCommitArgs (commit.Author.Name, commit.Author.EmailAddress,
-					commit.Message, Name);
+					commit.Message, LocalPath);
 
 				if (NewCommit != null)
 			        NewCommit (this, new_commit_args);
