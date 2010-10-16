@@ -114,7 +114,7 @@ namespace SparkleShare {
 					open_folder_button.Clicked += delegate (object o, EventArgs args) {
 
 						Process process = new Process ();
-						process.StartInfo.FileName  = "xdg-open";
+						process.StartInfo.FileName  = Defines.OPEN_COMMAND;
 						process.StartInfo.Arguments = LocalPath.Replace (" ", "\\ "); // Escape space-characters
 						process.Start ();
 
@@ -143,7 +143,7 @@ namespace SparkleShare {
 		public void Close ()
 		{
 
-			foreach (SparkleRepo repo in SparkleUI.Repositories) {
+			foreach (SparkleRepo repo in SparkleShare.Controller.Repositories) {
 
 				if (repo.LocalPath.Equals (LocalPath)) {
 
@@ -184,7 +184,7 @@ namespace SparkleShare {
 
 			List <SparkleCommit> commits = new List <SparkleCommit> ();
 
-			foreach (SparkleRepo repo in SparkleUI.Repositories) {
+			foreach (SparkleRepo repo in SparkleShare.Controller.Repositories) {
 
 				// Get commits from the repository
 				if (repo.LocalPath.Equals (LocalPath)) {
@@ -239,7 +239,7 @@ namespace SparkleShare {
 
 			VBox layout_vertical = new VBox (false, 0);
 
-			if (SparkleUI.Repositories.Find (
+			if (SparkleShare.Controller.Repositories.Find (
 					delegate (SparkleRepo r)
 						{ return r.LocalPath.Equals (LocalPath) && r.HasUnsyncedChanges; }
 				) != null) {
@@ -253,7 +253,7 @@ namespace SparkleShare {
 
 			} else {
 
-				if (SparkleUI.Repositories.Find (
+				if (SparkleShare.Controller.Repositories.Find (
 					delegate (SparkleRepo r)
 						{ return r.LocalPath.Equals (LocalPath) && r.HasUnsyncedChanges; }
 					) != null) {

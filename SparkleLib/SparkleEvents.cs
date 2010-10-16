@@ -42,15 +42,15 @@ namespace SparkleLib {
 	    public string Author;
 	    public string Email;
 	    public string Message;
-	    public string RepositoryName;
+	    public string RepositoryPath;
 
-	    public NewCommitArgs (string author, string email, string message, string repository_name)
+	    public NewCommitArgs (string author, string email, string message, string repository_path)
     	{
 
     		Author  = author;
     		Email   = email;
 	        Message = message;
-	        RepositoryName = repository_name;
+	        RepositoryPath = repository_path;
 
 	    }
 
