@@ -28,7 +28,8 @@ namespace SparkleShare {
 	// This is SparkleShare!
 	public class SparkleShare {
 
-		public static SparkleUI SparkleUI;
+		public static SparkleController Controller;
+		public static SparkleUI UI;
 		public static string UserName;
 		public static string UserEmail;
 
@@ -46,23 +47,6 @@ namespace SparkleShare {
 			// Use translations
 			Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
-			// Check whether git is installed
-			Process process = new Process ();
-			process.StartInfo.FileName = "git";
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-			process.Start ();
-
-			if (process.StandardOutput.ReadToEnd ().IndexOf ("version") == -1) {
-
-				Console.WriteLine (_("Git wasn't found."));
-				Console.WriteLine (_("You can get Git from http://git-scm.com/."));
-
-				Environment.Exit (0);
-
-			}
-
-
 			UnixUserInfo user_info = new UnixUserInfo (UnixEnvironment.UserName);
 
 			// Don't allow running as root
@@ -76,13 +60,13 @@ namespace SparkleShare {
 			}
 
 
-			bool HideUI   = false;
-			bool ShowHelp = false;
+			bool hide_ui   = false;
+			bool show_help = false;
 
 			var p = new OptionSet () {
-				{ "d|disable-gui", _("Don't show the notification icon"), v => HideUI = v != null },
+				{ "d|disable-gui", _("Don't show the notification icon"), v => hide_ui = v != null },
 				{ "v|version", _("Show this help text"), v => { PrintVersion (); } },
-				{ "h|help", _("Print version information"), v => ShowHelp = v != null }
+				{ "h|help", _("Print version information"), v => show_help = v != null }
 			};
 
 			try {
@@ -97,17 +81,19 @@ namespace SparkleShare {
 
 			}
 
-			if (ShowHelp)
-				DisplayHelp (p);
+			if (show_help)
+				ShowHelp (p);
 
-			SparkleUI = new SparkleUI (HideUI);
-			SparkleUI.Run ();
-
+			Controller = new SparkleController ();
+if (!hide_ui){
+			UI = new SparkleUI ();
+UI.Run ();
+}
 		}
 
 
 		// Prints the help output
-		public static void DisplayHelp (OptionSet option_set)
+		public static void ShowHelp (OptionSet option_set)
 		{
 
 			Console.WriteLine (" ");
