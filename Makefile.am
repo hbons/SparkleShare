@@ -9,19 +9,6 @@ SUBDIRS =	\
 	data \
 	po
 
-ASSEMBLY = GitSharp.dll
-ASSEMBLY_FILE = $(top_builddir)/bin/$(ASSEMBLY)
-
-all-local: $(ASSEMBLY_FILE)
-
-$(ASSEMBLY_FILE):
-	@pushd GitSharp; \
-	$(MONO) tools/nant/NAnt.exe -buildfile:GitSharp.build -D:path.build.output=$(top_builddir)/../bin compile-gitsharp; \
-	popd;
-
-clean-local:
-	rm -rf $(top_builddir)/bin
-
 EXTRA_DIST = gnome-doc-utils.make
 
 DISTCLEANFILES = \
@@ -30,3 +17,7 @@ DISTCLEANFILES = \
 	intltool-update		\
 	gnome-doc-utils.make
 
+clean-local: clean-gitsharp
+	rm -rf $(top_builddir)/bin
+
+include $(top_srcdir)/build/gitsharp.mk
