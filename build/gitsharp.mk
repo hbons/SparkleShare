@@ -503,5 +503,10 @@ $(ASSEMBLY_FILE): $(SOURCES_BUILD)
 clean-gitsharp:
 	rm -rf $(top_builddir)/GitSharp/bin
 
+# GitSharp writes to its source tree during compilation,
+# so we need to make it writable during distcheck
+distcheck-hook:
+	chmod -R u+w $(distdir)/GitSharp
+
 EXTRA_DIST += $(SOURCES_BUILD) $(RESOURCES_EXPANDED) $(BUNDLE_EXPANDED)
 
