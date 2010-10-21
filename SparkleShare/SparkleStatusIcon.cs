@@ -25,6 +25,8 @@ using System.Timers;
 
 namespace SparkleShare {
 
+	// TODO: Menu doesn't update anymore
+
 	// The statusicon that stays in the
 	// user's notification area
 	public class SparkleStatusIcon : StatusIcon	{
@@ -224,14 +226,12 @@ namespace SparkleShare {
 			Menu.Add (new SeparatorMenuItem ());
 
 				// A menu item that takes the user to http://www.sparkleshare.org/
-				MenuItem about_item = new MenuItem (_("Visit Website"));
+				MenuItem about_item = new MenuItem (_("About"));
 
 				about_item.Activated += delegate {
 
-					Process process = new Process ();
-					process.StartInfo.FileName = "xdg-open";
-					process.StartInfo.Arguments = "http://www.sparkleshare.org/";
-					process.Start ();
+					SparkleDialog dialog = new SparkleDialog ();
+					dialog.ShowAll ();
 
 				};
 
