@@ -16,16 +16,17 @@ SOURCES =  \
 	SparkleRepo.cs
 
 SMARTIRC4NET_FILES_EXPANDED = $(foreach file, $(SMARTIRC4NET_FILES), $(top_builddir)/$(file))
+GITSHARP_FILES_EXPANDED = $(foreach file, $(GITSHARP_FILES), $(top_builddir)/$(file))
 
-EXTRA_BUNDLE = $(SMARTIRC4NET_FILES_EXPANDED)
+EXTRA_BUNDLE = $(SMARTIRC4NET_FILES_EXPANDED) $(GITSHARP_FILES_EXPANDED)
 
 install-data-hook:
-	for ASM in $(SMARTIRC4NET_FILES_EXPANDED); do \
+	for ASM in $(EXTRA_BUNDLE); do \
 		$(INSTALL) -m 0755 $$ASM $(DESTDIR)$(moduledir); \
 	done;
 
 uninstall-hook:
-	for ASM in $(SMARTIRC4NET_FILES_EXPANDED); do \
+	for ASM in $(EXTRA_BUNDLE); do \
 		rm -f $(DESTDIR)$(moduledir)/`basename $$ASM`; \
 	done;
 
