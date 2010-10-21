@@ -25,8 +25,6 @@ using System.Timers;
 
 namespace SparkleShare {
 
-	// TODO: Menu doesn't update anymore
-
 	// The statusicon that stays in the
 	// user's notification area
 	public class SparkleStatusIcon : StatusIcon	{
@@ -55,7 +53,7 @@ namespace SparkleShare {
 			PopupMenu += ShowMenu; // Secondary mouse button click
 
 			SetNormalState ();
-			UpdateMenu ();
+			CreateMenu ();
 
 
 			SparkleShare.Controller.FolderSizeChanged += delegate {
@@ -67,7 +65,7 @@ namespace SparkleShare {
 			SparkleShare.Controller.RepositoryListChanged += delegate {
 				Application.Invoke (delegate {
 					SetNormalState ();
-					UpdateMenu ();
+					CreateMenu ();
 				});
 			};
 
@@ -139,7 +137,7 @@ namespace SparkleShare {
 
 		// Creates the menu that is popped up when the
 		// user clicks the status icon
-		public void UpdateMenu ()
+		public void CreateMenu ()
 		{
 
 			Menu = new Menu ();
@@ -285,6 +283,22 @@ namespace SparkleShare {
 
 		}
 
+
+		public void UpdateMenu ()
+		{
+
+			Menu.Remove (Menu.Children [0]);
+
+				MenuItem status_menu_item = new MenuItem (StateText) {
+					Sensitive = false
+				};
+
+			Menu.Add (status_menu_item);
+			Menu.ReorderChild (status_menu_item, 0);
+
+			Menu.ShowAll ();
+
+		}
 
 		// Makes the menu visible
 		private void ShowMenu (object o, EventArgs args)
