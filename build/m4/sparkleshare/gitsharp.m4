@@ -15,9 +15,10 @@ AC_DEFUN([SPARKLESHARE_GITSHARP],
 		[[ -r "$asm.mdb" ]] && GITSHARP_FILES="$GITSHARP_FILES $asm.mdb"
 	done
 	# Additional dependencies that we need to install
-	GITSHARP_FILES="$GITSHARP_FILES GitSharp/lib/DiffieHellman.dll GitSharp/lib/Org.Mentalis.Security.dll"
+	GITSHARP_DEPS="GitSharp/lib/DiffieHellman.dll GitSharp/lib/Org.Mentalis.Security.dll"
 
 	AC_SUBST([GITSHARP_ASSEMBLIES])
 	AC_SUBST([GITSHARP_FILES])
+	AC_SUBST([GITSHARP_DEPS])
 ])
 
