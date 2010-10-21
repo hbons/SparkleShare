@@ -70,6 +70,7 @@ To build SparkleShare you need:
    - ndesk-dbus-devel >= 0.6
    - ndesk-dbus-glib-devel >= 0.6
    - nautilus-python-devel
+   - nant
 
 You can build and install SparkleShare like this:
 
