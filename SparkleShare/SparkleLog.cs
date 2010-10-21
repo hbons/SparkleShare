@@ -47,7 +47,7 @@ namespace SparkleShare {
 			SetSizeRequest (540, 640);
 
 	 		SetPosition (WindowPosition.Center);
-			BorderWidth = 12;
+			BorderWidth = 0;
 			
 			// TRANSLATORS: {0} is a folder name, and {1} is a server address
 			Title = String.Format(_("Recent Events in ‘{0}’"), name);
@@ -98,13 +98,11 @@ namespace SparkleShare {
 			
 			LayoutVertical = new VBox (false, 0);
 
-
-
 			LayoutVertical.PackStart (CreateEventLog (), true, true, 0);
 
 				HButtonBox dialog_buttons = new HButtonBox {
 					Layout = ButtonBoxStyle.Edge,
-					BorderWidth = 0
+					BorderWidth = 12
 				};
 
 					Button open_folder_button = new Button (_("_Open Folder")) {
@@ -132,7 +130,7 @@ namespace SparkleShare {
 				dialog_buttons.Add (close_button);
 
 			// We have to hide the menubar somewhere...
-			LayoutVertical.PackStart (MenuBar, false, false, 6);
+			LayoutVertical.PackStart (MenuBar, false, false, 0);
 			LayoutVertical.PackStart (dialog_buttons, false, false, 0);
 
 			Add (LayoutVertical);
@@ -472,13 +470,13 @@ namespace SparkleShare {
 			}
 
 			ScrolledWindow = new ScrolledWindow ();
-			ScrolledWindow.ShadowType = ShadowType.None;
 
 				EventBox wrapper = new EventBox ();
 				wrapper.ModifyBg (StateType.Normal, background_color);
 				wrapper.Add (layout_vertical);
 
 			ScrolledWindow.AddWithViewport (wrapper);
+			(ScrolledWindow.Child as Viewport).ShadowType = ShadowType.None;
 
 			return ScrolledWindow;
 
