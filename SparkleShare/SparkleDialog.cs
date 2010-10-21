@@ -92,10 +92,10 @@ Contributors:
 	Steven Harms (sharms@ubuntu.com)
 	Vincent Untz (vuntz@gnome.org)
 
-Thanks very much!
+Thanks very much!";
 
 
-Git# is Copyright © 2007-2009 by the Git Development Community
+/* Git# is Copyright © 2007-2009 by the Git Development Community
 See source file headers for specific contributor copyrights.
 
 All rights reserved.
@@ -144,7 +144,7 @@ version 2.1 of the License, or (at your option) any later version.
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU Lesser General Public License for more details.";
+GNU Lesser General Public License for more details."; */
 
 			VBox wrapper = new VBox (false, 0);
 

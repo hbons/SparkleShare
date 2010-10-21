@@ -129,6 +129,7 @@ namespace SparkleShare {
 				dialog_buttons.Add (open_folder_button);
 				dialog_buttons.Add (close_button);
 
+			LayoutVertical.PackStart (new HSeparator (), false, false, 0);
 			// We have to hide the menubar somewhere...
 			LayoutVertical.PackStart (MenuBar, false, false, 0);
 			LayoutVertical.PackStart (dialog_buttons, false, false, 0);
@@ -381,15 +382,24 @@ namespace SparkleShare {
 
 					}
 
-					Label change_set_info = new Label ("<b>" + change_set.UserName + "</b>\n" +
-					                                   "<span fgcolor='" + secondary_text_color +"'><small>" +
-					                                   "at " + change_set.DateTime.ToString ("H:mm") +
-					                                   "</small></span>") {
-						UseMarkup = true,
-						Xalign = 0
-					};
+					HBox change_set_info_hbox = new HBox (false, 0);
 
-					log_entry.PackStart (change_set_info, false, false, 0);
+						Label change_set_info = new Label ("<b>" + change_set.UserName + "</b>") {
+							UseMarkup = true,
+							Xalign = 0
+						};
+					
+						Label change_set_time = new Label ("<span fgcolor='" + secondary_text_color +"'><small>" +
+							                               change_set.DateTime.ToString ("H:mm") +
+							                               "</small></span>") {
+							Xalign = 1,
+							UseMarkup = true
+						};
+
+					change_set_info_hbox.PackStart (change_set_info, true, true, 0);
+					change_set_info_hbox.PackStart (change_set_time, false, false, 0);
+
+					log_entry.PackStart (change_set_info_hbox, false, false, 0);
 					                   
 					if (edited_files.Children.Length > 0) {
 
