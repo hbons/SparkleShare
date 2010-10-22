@@ -1,0 +1,407 @@
+# Bulgarian translation of SparkleShare po-file.
+# Copyright (C) 2010 Alexander Shopov <ash@kambanaria.org>.
+# This file is distributed under the same license as the SparkleShare package.
+# Alexander Shopov <ash@kambanaria.org>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: SparkleShare master\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-10-22 11:13+0300\n"
+"PO-Revision-Date: 2010-10-22 08:10+0300\n"
+"Last-Translator: Alexander Shopov <ash@kambanaria.org>\n"
+"Language-Team: Bulgarian <dict@fsa-bg.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: ../SparkleLib/SparkleOptions.cs:486
+msgid "OptionName"
+msgstr "ИмеНаОпция"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
+msgid "Copy Web Link"
+msgstr "Копиране на адреса"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
+msgid "Copy the web address of this file to the clipboard"
+msgstr "Копиране в буфера на адреса на връзката към този файл"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
+msgid "Get Earlier Version"
+msgstr "Предишна версия"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
+msgid "Make a copy of an earlier version in this folder"
+msgstr "Копие в тази папка на по-ранна версия"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:161
+msgid "Select to get a copy of this version"
+msgstr "Изберете за копие на версията"
+
+#: ../SparkleShare/SparkleDialog.cs:177
+msgid "_Visit Website"
+msgstr "_Към уеб сайта"
+
+#: ../SparkleShare/SparkleIntro.cs:65
+msgid "Welcome to SparkleShare!"
+msgstr "Здравейте в SparkleShare!"
+
+#: ../SparkleShare/SparkleIntro.cs:71
+msgid ""
+"Before we can create a SparkleShare folder on this computer, we need a few "
+"bits of information from you."
+msgstr ""
+"Трябва да попълните някои данни за себе си, преди да се създаде папка на "
+"компютъра, ползваща SparkleShare."
+
+#: ../SparkleShare/SparkleIntro.cs:83
+msgid "Full Name:"
+msgstr "Лично име:"
+
+#: ../SparkleShare/SparkleIntro.cs:99
+msgid "Email:"
+msgstr "Е-поща:"
+
+#: ../SparkleShare/SparkleIntro.cs:110
+msgid "Next"
+msgstr "Нататък"
+
+#: ../SparkleShare/SparkleIntro.cs:117
+msgid "Configuring…"
+msgstr "Настройване…"
+
+#: ../SparkleShare/SparkleIntro.cs:162
+msgid "Where is your remote folder?"
+msgstr "Къде е отдалечената папка?"
+
+#: ../SparkleShare/SparkleIntro.cs:175
+msgid "address-to-server.com"
+msgstr "адрес.на.сървъра.com"
+
+#: ../SparkleShare/SparkleIntro.cs:180
+msgid "On my own server:"
+msgstr "На основния сървър:"
+
+#: ../SparkleShare/SparkleIntro.cs:187
+msgid "Free hosting for Free and Open Source Software projects."
+msgstr "Безплатен хостинг за свободни проекти и такива с отворен код."
+
+#: ../SparkleShare/SparkleIntro.cs:188
+msgid "Also has paid accounts for extra private space and bandwidth."
+msgstr "За непублично пространство и допълнителни ресурси се плаща."
+
+#: ../SparkleShare/SparkleIntro.cs:196
+msgid "The GNOME Project"
+msgstr "Проектът GNOME"
+
+#: ../SparkleShare/SparkleIntro.cs:198
+msgid "GNOME is an easy to understand interface to your computer."
+msgstr "GNOME е разбираем интерфейс за компютъра ви."
+
+#: ../SparkleShare/SparkleIntro.cs:199
+msgid "Select this option if you’re a developer or designer working on GNOME."
+msgstr "Ако работите по GNOME, изберете тази версия."
+
+#: ../SparkleShare/SparkleIntro.cs:207
+msgid "Gitorious"
+msgstr "Gitorious"
+
+#: ../SparkleShare/SparkleIntro.cs:209
+msgid "Completely Free as in Freedom infrastructure."
+msgstr "Свободен като инфраструктурата на свободата."
+
+#: ../SparkleShare/SparkleIntro.cs:210
+msgid "Free accounts for Free and Open Source projects."
+msgstr "Безплатно за свободни проекти и такива с отворен код."
+
+#: ../SparkleShare/SparkleIntro.cs:273
+msgid "Remote Folder Name:"
+msgstr "Име на отдалечената папка:"
+
+#: ../SparkleShare/SparkleIntro.cs:283
+msgid "Sync"
+msgstr "Синхронизиране"
+
+#: ../SparkleShare/SparkleIntro.cs:351
+msgid "Cancel"
+msgstr "Отказване"
+
+#: ../SparkleShare/SparkleIntro.cs:362
+msgid "Skip"
+msgstr "Прескачане"
+
+#: ../SparkleShare/SparkleIntro.cs:397
+#: ../SparkleShare/SparkleInvitation.cs:278
+msgid "Something went wrong…"
+msgstr "Получи се грешка…"
+
+#: ../SparkleShare/SparkleIntro.cs:403
+msgid "Try Again"
+msgstr "Опитайте отново"
+
+#: ../SparkleShare/SparkleIntro.cs:431
+#: ../SparkleShare/SparkleInvitation.cs:311
+msgid "Folder synced successfully!"
+msgstr "Папката е успешно синхронизирана!"
+
+#: ../SparkleShare/SparkleIntro.cs:438
+#: ../SparkleShare/SparkleInvitation.cs:317
+#, csharp-format
+msgid ""
+"Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
+msgstr ""
+"Можете да достъпите синхронизираните файлове от „{0}“ в папката ви за "
+"SparkleShare."
+
+#. A button that opens the synced folder
+#: ../SparkleShare/SparkleIntro.cs:446
+#: ../SparkleShare/SparkleInvitation.cs:324
+msgid "Open Folder"
+msgstr "Отваряне на папката"
+
+#: ../SparkleShare/SparkleIntro.cs:462 ../SparkleShare/SparkleIntro.cs:506
+#: ../SparkleShare/SparkleIntro.cs:573
+#: ../SparkleShare/SparkleInvitation.cs:339
+#: ../SparkleShare/SparkleInvitation.cs:382
+msgid "Finish"
+msgstr "Завършване"
+
+#: ../SparkleShare/SparkleIntro.cs:490
+#: ../SparkleShare/SparkleInvitation.cs:366
+#, csharp-format
+msgid "Syncing folder ‘{0}’…"
+msgstr "Синхронизиране на папка „{0}“…"
+
+#: ../SparkleShare/SparkleIntro.cs:497
+#: ../SparkleShare/SparkleInvitation.cs:373
+msgid "This may take a while.\n"
+msgstr "Това може да отнеме малко време.\n"
+
+#: ../SparkleShare/SparkleIntro.cs:498
+#: ../SparkleShare/SparkleInvitation.cs:374
+msgid "You sure it’s not coffee o-clock?"
+msgstr "Не е ли време за кафенце?"
+
+#: ../SparkleShare/SparkleIntro.cs:548
+msgid "SparkleShare is ready to go!"
+msgstr "SparkleShare е готов!"
+
+#: ../SparkleShare/SparkleIntro.cs:554
+msgid ""
+"Now you can start accepting invitations from others. \n"
+"Just click on invitations you get by email and we will take care of the rest."
+msgstr ""
+"Можете да приемате покани от други хора. \n"
+"Когато ги получите по е-пощата, просто натиснете върху връзката. "
+"SparkleShare се грижи за останалото."
+
+#: ../SparkleShare/SparkleIntro.cs:565
+msgid "Learn how to host your own SparkleServer"
+msgstr "Научете как да създадете свой сървър за SparkleServer"
+
+#: ../SparkleShare/SparkleInvitation.cs:104
+msgid "Invitation received!"
+msgstr "Поканата е приета!"
+
+#: ../SparkleShare/SparkleInvitation.cs:110
+msgid ""
+"You've received an invitation to join a shared folder.\n"
+"We're ready to hook you up immediately if you wish."
+msgstr ""
+"Получихте покана за споделена папка. Ако искате,\n"
+"можете да я приемете, за да започне синхронизирането."
+
+#: ../SparkleShare/SparkleInvitation.cs:116
+msgid "Do you accept this invitation?"
+msgstr "Приемате ли поканата?"
+
+#: ../SparkleShare/SparkleInvitation.cs:125
+msgid "Server Address:"
+msgstr "Адрес на сървър:"
+
+#: ../SparkleShare/SparkleInvitation.cs:134
+msgid "Folder Name:"
+msgstr "Име на папка:"
+
+#: ../SparkleShare/SparkleInvitation.cs:148
+msgid "Reject"
+msgstr "Отхвърляне"
+
+#: ../SparkleShare/SparkleInvitation.cs:149
+msgid "Accept and Sync"
+msgstr "Приемане и синхронизиране"
+
+#: ../SparkleShare/SparkleInvitation.cs:284
+msgid "Close"
+msgstr "Затваряне"
+
+#. TRANSLATORS: {0} is a folder name, and {1} is a server address
+#: ../SparkleShare/SparkleLog.cs:53
+#, csharp-format
+msgid "Recent Events in ‘{0}’"
+msgstr "Последни събития в „{0}“"
+
+#: ../SparkleShare/SparkleLog.cs:108
+msgid "_Open Folder"
+msgstr "_Отваряне на папка"
+
+#: ../SparkleShare/SparkleLog.cs:246
+msgid "This folder has unsynced changes"
+msgstr "В папката има несинхронизирани промени "
+
+#: ../SparkleShare/SparkleLog.cs:247
+msgid "We will sync these once we’re connected again"
+msgstr "При наличие на връзка към Интернет, тя ще бъде синхронизирана"
+
+#: ../SparkleShare/SparkleLog.cs:260
+msgid "Could not sync with the remote folder"
+msgstr "Папката не може да се синхронизира"
+
+#: ../SparkleShare/SparkleLog.cs:261
+msgid "Is the you and the server online?"
+msgstr "Дали има връзка през Интернет към отдалечения сървър?"
+
+#: ../SparkleShare/SparkleLog.cs:407
+msgid "Edited"
+msgstr "Редактиран"
+
+#: ../SparkleShare/SparkleLog.cs:421
+msgid "Added"
+msgstr "Добавен"
+
+#: ../SparkleShare/SparkleLog.cs:435
+msgid "Deleted"
+msgstr "Изтрит"
+
+#: ../SparkleShare/SparkleLog.cs:449
+msgid "Moved"
+msgstr "Преместен"
+
+#: ../SparkleShare/SparkleShare.cs:55
+msgid "Sorry, you can't run SparkleShare with these permissions."
+msgstr "С настоящите права не може да стартирате SparkleShare."
+
+#: ../SparkleShare/SparkleShare.cs:56
+msgid "Things would go utterly wrong."
+msgstr "Нещата могат изцяло да се объркат."
+
+#: ../SparkleShare/SparkleShare.cs:67
+msgid "Don't show the notification icon"
+msgstr "Без икона в областта за уведомяване"
+
+#: ../SparkleShare/SparkleShare.cs:68
+msgid "Show this help text"
+msgstr "Показване на този помощен текст"
+
+#: ../SparkleShare/SparkleShare.cs:69
+msgid "Print version information"
+msgstr "Извеждане на информация за версията"
+
+#: ../SparkleShare/SparkleShare.cs:100
+msgid "SparkleShare, an instant update workflow to Git."
+msgstr "SparkleShare, лесен интерфейс към Git."
+
+#: ../SparkleShare/SparkleShare.cs:101
+msgid "Copyright (C) 2010 Hylke Bons"
+msgstr "Авторски права: © 2010 Hylke Bons"
+
+#: ../SparkleShare/SparkleShare.cs:103
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr "Тази програма идва БЕЗ НИКАКВИ ГАРАНЦИИ."
+
+#: ../SparkleShare/SparkleShare.cs:105
+msgid "This is free software, and you are welcome to redistribute it "
+msgstr ""
+"Това е свободен софтуер, можете да го разпространявате при определени "
+"условия."
+
+#: ../SparkleShare/SparkleShare.cs:106
+msgid "under certain conditions. Please read the GNU GPLv3 for details."
+msgstr "За повече информация вижте Общия публичен лиценз на GNU, версия 3."
+
+#: ../SparkleShare/SparkleShare.cs:108
+msgid "SparkleShare automatically syncs Git repositories in "
+msgstr "SparkleShare автоматично синхронизира хранилища на Git"
+
+#: ../SparkleShare/SparkleShare.cs:109
+msgid "the ~/SparkleShare folder with their remote origins."
+msgstr "в папката ~/SparkleShare с отдалечените им източници."
+
+#: ../SparkleShare/SparkleShare.cs:111
+msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
+msgstr "Употреба: sparkleshare [start|stop|restart] [ОПЦИЯ]…"
+
+#: ../SparkleShare/SparkleShare.cs:112
+msgid "Sync SparkleShare folder with remote repositories."
+msgstr "Синхронизиране на папката ви за SparkleShare с отдалечените източници."
+
+#: ../SparkleShare/SparkleShare.cs:114
+msgid "Arguments:"
+msgstr "Аргументи:"
+
+#: ../SparkleShare/SparkleShare.cs:126
+msgid "SparkleShare "
+msgstr "SparkleShare "
+
+#: ../SparkleShare/SparkleStatusIcon.cs:190
+msgid "No Remote Folders Yet"
+msgstr "Все още няма отдалечени папки"
+
+#. Opens the wizard to add a new remote folder
+#: ../SparkleShare/SparkleStatusIcon.cs:199
+msgid "Sync Remote Folder…"
+msgstr "Синхронизиране на отдалечена папка…"
+
+#. A checkbutton to toggle whether or not to show notifications
+#: ../SparkleShare/SparkleStatusIcon.cs:214
+msgid "Show Notifications"
+msgstr "Показване на уведомления"
+
+#. A menu item that takes the user to http://www.sparkleshare.org/
+#: ../SparkleShare/SparkleStatusIcon.cs:227
+msgid "About"
+msgstr "Относно"
+
+#. A menu item that quits the application
+#: ../SparkleShare/SparkleStatusIcon.cs:240
+msgid "Quit"
+msgstr "Спиране на програмата"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:338
+msgid "No folders yet"
+msgstr "Все още няма папки"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:345
+msgid "Not everything is synced"
+msgstr "Синхронизирането не е приключило"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:350
+msgid "Up to date"
+msgstr "Обновено"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:364
+msgid "Syncing…"
+msgstr "Синхронизиране…"
+
+#: ../SparkleShare/SparkleUI.cs:100
+msgid "Ouch! Mid-air collision!"
+msgstr "Опс, конфликт на версии!"
+
+#: ../SparkleShare/SparkleUI.cs:101
+msgid "Don't worry, SparkleShare made a copy of each conflicting file."
+msgstr "Без паника! SparkleShare е създал копие на всеки файл в конфликт."
+
+#~ msgid "Username/Folder"
+#~ msgstr "Потребител/Папка"
+
+#~ msgid "Project/Folder"
+#~ msgstr "Проект/Папка"
+
+#~ msgid "Project"
+#~ msgstr "Проект"
+
+#~ msgid "Folder"
+#~ msgstr "Папка"
