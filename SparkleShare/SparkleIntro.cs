@@ -219,21 +219,21 @@ namespace SparkleShare {
 					radio_button_github.Toggled += delegate {
 
 						if (radio_button_github.Active)
-							FolderEntry.ExampleText = "Username/Folder";
+							FolderEntry.ExampleText = _("Username/Folder");
 
 					};
 
 					radio_button_gitorious.Toggled += delegate {
 
 						if (radio_button_gitorious.Active)
-							FolderEntry.ExampleText = "Project/Folder";
+							FolderEntry.ExampleText = _("Project/Folder");
 
 					};
 
 					radio_button_gnome.Toggled += delegate {
 
 						if (radio_button_gnome.Active)
-							FolderEntry.ExampleText = "Project";
+							FolderEntry.ExampleText = _("Project");
 
 					};
 
@@ -242,7 +242,7 @@ namespace SparkleShare {
 
 						if (radio_button.Active) {
 
-							FolderEntry.ExampleText = "Folder";
+							FolderEntry.ExampleText = _("Folder");
 							ServerEntry.Sensitive   = true;
 							CheckServerForm ();
 
@@ -265,7 +265,7 @@ namespace SparkleShare {
 				HBox layout_folder = new HBox (true, 0);
 
 					FolderEntry = new SparkleEntry () {
-						ExampleText = "Folder"
+						ExampleText = _("Folder")
 					};
 					
 					FolderEntry.Changed += CheckServerForm;
