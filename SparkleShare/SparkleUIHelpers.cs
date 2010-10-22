@@ -24,8 +24,7 @@ using System.Text;
 
 namespace SparkleShare {
 	
-	public static class SparkleUIHelpers
-	{
+	public static class SparkleUIHelpers {
 
 		// Creates an MD5 hash of input
 		public static string GetMD5 (string s)

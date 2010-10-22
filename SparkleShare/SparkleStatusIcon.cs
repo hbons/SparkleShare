@@ -300,6 +300,7 @@ namespace SparkleShare {
 
 		}
 
+
 		// Makes the menu visible
 		private void ShowMenu (object o, EventArgs args)
 		{
@@ -336,19 +337,25 @@ namespace SparkleShare {
 			if (SparkleShare.Controller.Repositories.Count == 0) {
 
 				StateText = _("No folders yet");
-				Pixbuf = AnimationFrames [0];						
+				Application.Invoke (delegate {
+					Pixbuf = AnimationFrames [0];
+				});
 
 			} else {
 			
 				if (error) {
 
 					StateText = _("Not everything is synced");
-					Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
+					Application.Invoke (delegate {
+						Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
+					});
 
 				} else {
 
 					StateText = _("Up to date") + "  (" + SparkleShare.Controller.FolderSize + ")";
-					Pixbuf = AnimationFrames [0];
+					Application.Invoke (delegate {
+						Pixbuf = AnimationFrames [0];
+					});
 
 				}
 
