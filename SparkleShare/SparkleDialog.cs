@@ -191,6 +191,7 @@ GNU Lesser General Public License for more details."; */
 					button_bar.Add (close_button);
 
 				vbox.PackStart (scrolled_window, true, true, 0);
+				vbox.PackStart (new HSeparator (), false, false, 0);
 				vbox.PackStart (button_bar, false, false, 0);
 
 					string image_path = SparkleHelpers.CombineMore (Defines.PREFIX, "share", "pixmaps",
