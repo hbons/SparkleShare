@@ -202,7 +202,7 @@ namespace SparkleShare {
 					Application.Invoke (delegate {
 
 						SparkleIntro intro = new SparkleIntro ();
-						intro.ShowServerForm ();
+						intro.ShowServerForm (true);
 
 					});
 				};

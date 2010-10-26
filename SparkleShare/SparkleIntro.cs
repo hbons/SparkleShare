@@ -142,6 +142,16 @@ namespace SparkleShare {
 		}
 
 
+		private void PreventClose (object o, DeleteEventArgs e)
+		{
+
+			// Cancel closing when the "Close"
+			// button of the window is pressed
+			e.RetVal = true;
+
+		}
+
+
 		public void ShowServerForm (bool server_form_only)
 		{
 
@@ -155,7 +165,7 @@ namespace SparkleShare {
 		{
 
 			Reset ();
-			
+
 			VBox layout_vertical = new VBox (false, 0);
 
 				Label header = new Label ("<span size='x-large'><b>" +
@@ -270,7 +280,7 @@ namespace SparkleShare {
 					
 					FolderEntry.Changed += CheckServerForm;
 
-					Label folder_label = new Label ("<b>" + _("Remote Folder Name:") + "</b>") {
+					Label folder_label = new Label ("<b>" + _("Folder Name:") + "</b>") {
 						UseMarkup = true,
 						Xalign    = 1
 					};
@@ -483,7 +493,7 @@ namespace SparkleShare {
 		{
 
 			Reset ();
-			
+
 				VBox layout_vertical = new VBox (false, 0);
 
 					Label header = new Label ("<span size='x-large'><b>" +
@@ -623,12 +633,16 @@ namespace SparkleShare {
 
 			fetcher.CloningStarted += delegate {
 
+				DeleteEvent += PreventClose;
+
 				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning Repository");
 
 			};
 
 
 			fetcher.CloningFinished += delegate {
+
+				DeleteEvent -= PreventClose;
 
 				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Repository cloned");
 
@@ -653,6 +667,8 @@ namespace SparkleShare {
 
 
 			fetcher.CloningFailed += delegate {
+
+				DeleteEvent -= PreventClose;
 
 				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning failed");
 
