@@ -17,6 +17,7 @@
 using System;
 using System.IO;
 using System.Diagnostics;
+using System.Timers;
 
 namespace SparkleLib {
 
@@ -34,13 +35,15 @@ namespace SparkleLib {
 
 		private string TargetFolder;
 		private string RemoteOriginUrl;
+		public SparkleProgress Progress;
 
-		
+
 		public SparkleFetcher (string url, string folder)
 		{
 
 			TargetFolder = folder;
 			RemoteOriginUrl = url;
+			Progress = new SparkleProgress ();
 
 		}
 
@@ -52,19 +55,34 @@ namespace SparkleLib {
 			if (Directory.Exists (TargetFolder))
 				Directory.Delete (TargetFolder, true);
 
-			SparkleEventArgs args = new SparkleEventArgs ("CloningStarted");
-
 			if (CloningStarted != null)
-	            CloningStarted (this, args); 
+	            CloningStarted (this, new SparkleEventArgs ("CloningStarted")); 
 
 			Process process = new Process () {	
 				EnableRaisingEvents = true
 			};
 
 			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.RedirectStandardError = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.FileName = "git";
-			process.StartInfo.Arguments = "clone --depth=1 " + RemoteOriginUrl + " " + TargetFolder;
+			process.StartInfo.Arguments = "clone --progress " +
+			                              "\"" + RemoteOriginUrl + "\" " + "\"" + TargetFolder + "\"";
+
+Timer timer = new Timer () {
+Interval = 1000
+};
+timer.Elapsed += delegate {
+Console.WriteLine ("ppppppppppppppp");
+				Console.WriteLine (process.StandardError.ReadToEnd ());
+				
+};
+			process.ErrorDataReceived += delegate (object o, DataReceivedEventArgs args) {
+				Console.WriteLine (">>>>>>>>>" + args.Data);
+				Progress.Speed = "";
+				Progress.Fraction = 0;
+			};
+
 
 			process.Exited += delegate {
 
@@ -72,26 +90,23 @@ namespace SparkleLib {
 
 				if (process.ExitCode != 0) {
 
-					args = new SparkleEventArgs ("CloningFailed");
-
 					if (CloningFailed != null)
-					    CloningFailed (this, args); 
+					    CloningFailed (this, new SparkleEventArgs ("CloningFailed")); 
 
 				} else {
 
 					InstallUserInfo ();
 					InstallExcludeRules ();
 
-					args = new SparkleEventArgs ("CloningFinished");
-
 					if (CloningFinished != null)
-					    CloningFinished (this, args);
+					    CloningFinished (this, new SparkleEventArgs ("CloningFinished"));
 
 				}
 
 			};
-
+timer.Start();
 			process.Start ();
+			process.BeginErrorReadLine ();
 
 		}
 
@@ -145,4 +160,65 @@ namespace SparkleLib {
 
 	}
 
+
+	public class SparkleProgress {
+
+		public string _Speed;
+		public int _Fraction;
+
+		public delegate void ProgressChangedEventHandler ();
+		public event ProgressChangedEventHandler ProgressChanged;
+
+
+		public SparkleProgress ()
+		{
+
+			_Speed      = "0 B/s";
+			_Fraction = 0;
+
+		}
+
+
+		public string Speed
+		{
+
+			get {
+
+				return _Speed;
+
+			}
+
+			set {
+
+				_Speed = value;
+
+				if (ProgressChanged != null)
+					ProgressChanged ();
+
+			}
+
+		}
+
+		public int Fraction
+		{
+
+			get {
+
+				return _Fraction;
+
+			}
+
+			set {
+
+				_Fraction = value;
+
+				if (ProgressChanged != null)
+					ProgressChanged ();
+
+			}
+
+		}
+
+	}
+	
 }
