@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-30 21:33+0000\n"
+"POT-Creation-Date: 2010-10-31 07:38+0000\n"
 "PO-Revision-Date: 2010-06-11 21:59+0200\n"
 "Last-Translator: Łukasz Jernaś <deejay1@srem.org>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
@@ -48,9 +48,8 @@ msgid "Select to get a copy of this version"
 msgstr "Zaznacz, aby pobrać kopię tej wersji"
 
 #: ../SparkleShare/SparkleDialog.cs:177
-#, fuzzy
 msgid "_Visit Website"
-msgstr "Odwiedź stronę domową"
+msgstr "_Odwiedź stronę domową"
 
 #: ../SparkleShare/SparkleIntro.cs:65
 msgid "Welcome to SparkleShare!"
