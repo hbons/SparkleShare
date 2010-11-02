@@ -216,7 +216,7 @@ namespace SparkleLib {
 		/// <event cref="NewCommit">
 		/// Raised when the repository has received one or multiple new remote commits
 		/// </event>
-		public delegate void NewCommitEventHandler (object o, NewCommitArgs args);
+		public delegate void NewCommitEventHandler (SparkleCommit commit, string repository_path);
 
 		/// <event cref="ConflictDetected">
 		/// Raised when the newly fetched commits are conflicting with local changes
@@ -786,13 +786,10 @@ namespace SparkleLib {
 				}
 
 
-				Commit commit = Head.CurrentCommit;
-
-				NewCommitArgs new_commit_args = new NewCommitArgs (commit.Author.Name, commit.Author.EmailAddress,
-					commit.Message, LocalPath);
+				List <SparkleCommit> commits = GetCommits (1);
 
 				if (NewCommit != null)
-			        NewCommit (this, new_commit_args);
+			        NewCommit (commits [0], LocalPath);
 						              
 			}
 
@@ -1023,7 +1020,7 @@ namespace SparkleLib {
 					break;
 				}
 
-				message = "added ‘" + file_name + "’";
+				message = "+ ‘" + file_name + "’";
 
 			}
 
@@ -1034,7 +1031,7 @@ namespace SparkleLib {
 					break;
 				}
 
-				message = "edited ‘" + file_name + "’";
+				message = "/ ‘" + file_name + "’";
 
 			}
 
@@ -1045,7 +1042,7 @@ namespace SparkleLib {
 					break;
 				}
 
-				message = "deleted ‘" + file_name + "’";
+				message = "- ‘" + file_name + "’";
 
 			}
 
@@ -1054,7 +1051,7 @@ namespace SparkleLib {
 			                     status.Removed.Count);
 
 			if (changes_count > 1)
-				message += " and " + (changes_count - 1) + " more";
+				message += " + " + (changes_count - 1);
 
 			return message;
 
