@@ -487,12 +487,16 @@ namespace SparkleShare {
 		
 		}
 
-
+		private ProgressBar ProgressBar;
 		// The page shown whilst syncing
 		private void ShowSyncingPage (string name)
 		{
 
 			Reset ();
+
+				ProgressBar = new ProgressBar () {
+					Fraction = 0
+				};
 
 				VBox layout_vertical = new VBox (false, 0);
 
@@ -524,7 +528,7 @@ namespace SparkleShare {
 
 					SparkleSpinner spinner = new SparkleSpinner (22);
 
-				Table table = new Table (2, 2, false) {
+				Table table = new Table (3, 2, false) {
 					RowSpacing    = 12,
 					ColumnSpacing = 9
 				};
@@ -534,6 +538,7 @@ namespace SparkleShare {
 				table.Attach (spinner,      0, 1, 0, 1);
 				table.Attach (header, 1, 2, 0, 1);
 				table.Attach (information,  1, 2, 1, 2);
+				table.Attach (ProgressBar,  2, 3, 0, 2);
 
 				box.PackStart (table, false, false, 0);
 
@@ -637,6 +642,14 @@ namespace SparkleShare {
 
 				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning Repository");
 
+			};
+
+
+			fetcher.Progress.ProgressChanged += delegate {
+				Application.Invoke (delegate { ProgressBar.Fraction = fetcher.Progress.Fraction;
+				ProgressBar.ShowAll ();
+				});
+				Console.WriteLine ("!!!!!!!!!!!UPDATED BAR!!!!!!!!1");
 			};
 
 

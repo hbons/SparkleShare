@@ -58,8 +58,7 @@ namespace SparkleShare {
 		public delegate void ConflictNotificationRaisedEventHandler ();
 
 		public event NotificationRaisedEventHandler NotificationRaised;
-		public delegate void NotificationRaisedEventHandler (string author, string email, string message,
-			string repository_path);
+		public delegate void NotificationRaisedEventHandler (SparkleCommit commit, string repository_path);
 
 
 		public SparkleController ()
@@ -356,9 +355,11 @@ namespace SparkleShare {
 
 			SparkleRepo repo = new SparkleRepo (folder_path);
 
-			repo.NewCommit += delegate (object o, NewCommitArgs args) {
+			repo.NewCommit += delegate (SparkleCommit commit, string repository_path) {
+
 				if (NotificationsEnabled && NotificationRaised != null)
-					NotificationRaised (args.Author, args.Email, args.Message, args.RepositoryPath);
+					NotificationRaised (commit, repository_path);
+
 			};
 
 			repo.FetchingStarted += delegate {
