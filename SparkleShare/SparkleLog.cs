@@ -146,12 +146,12 @@ namespace SparkleShare {
 
 				if (repo.LocalPath.Equals (LocalPath)) {
 
-					// Remove the eventhooks
+/*				// Remove the eventhooks
 					repo.NewCommit -= UpdateEventLog;
 					repo.PushingFinished -= UpdateEventLog;
-					repo.PushingFailed -= UpdateEventLog;
+					repo.PushingFailed -= UpdateEventLog;    TODO: Move to controller
 					repo.FetchingFinished -= UpdateEventLog;
-					repo.FetchingFailed -= UpdateEventLog;
+					repo.FetchingFailed -= UpdateEventLog;*/
 
 				}
 
@@ -162,7 +162,7 @@ namespace SparkleShare {
 		}
 
 
-		public void UpdateEventLog (object o, EventArgs args)
+		public void UpdateEventLog (SparkleCommit commit, string repository_path)
 		{
 
 			Application.Invoke (delegate {
@@ -190,16 +190,16 @@ namespace SparkleShare {
 
 					commits = repo.GetCommits (25);
 
-					// Update the log when there are new remote changes
+/*					// Update the log when there are new remote changes
 					repo.NewCommit += UpdateEventLog;
 
 					// Update the log when changes are being sent
 					repo.PushingFinished += UpdateEventLog;
 					repo.PushingFailed += UpdateEventLog;
 
-					repo.FetchingFinished += UpdateEventLog;
+					repo.FetchingFinished += UpdateEventLog;   TODO: Move to controller
 					repo.FetchingFailed += UpdateEventLog;
-
+*/
 					break;
 
 				}
