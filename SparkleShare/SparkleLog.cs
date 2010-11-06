@@ -20,6 +20,7 @@ using SparkleLib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text.RegularExpressions;
 using WebKit;
 
@@ -482,13 +483,23 @@ namespace SparkleShare {
 			}
 
 
+			StreamReader reader = new StreamReader ("/home/hbons/github/SparkleShare/data/html/event-log.html");
+
+			string html = reader.ReadToEnd ();
+
+
+			reader.Close ();
+
+
+
 			WebView        = new WebView ();
 			ScrolledWindow = new ScrolledWindow ();
 
 				EventBox wrapper = new EventBox ();
 				wrapper.ModifyBg (StateType.Normal, background_color);
 				wrapper.Add (layout_vertical);
-				WebView.LoadHtmlString ("<b>test</b>", "");
+				WebView.LoadHtmlString (html, "");
+				WebView.HoveringOverLink += delegate {};
 
 			ScrolledWindow.AddWithViewport (WebView);
 			(ScrolledWindow.Child as Viewport).ShadowType = ShadowType.None;
