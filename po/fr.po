@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-30 21:33+0000\n"
+"POT-Creation-Date: 2010-11-05 07:03+0000\n"
 "PO-Revision-Date: 2010-07-13 16:07+0800\n"
 "Last-Translator: Yann Hermans <chezyann@gmail.com>\n"
 "Language-Team: French (France)\n"
@@ -175,34 +175,34 @@ msgstr "Vous pouvez à présent accéder au fichiers synchronisés sur ‘{0}’
 msgid "Open Folder"
 msgstr "Ouvrir le dossier"
 
-#: ../SparkleShare/SparkleIntro.cs:472 ../SparkleShare/SparkleIntro.cs:516
-#: ../SparkleShare/SparkleIntro.cs:583
+#: ../SparkleShare/SparkleIntro.cs:472 ../SparkleShare/SparkleIntro.cs:520
+#: ../SparkleShare/SparkleIntro.cs:588
 #: ../SparkleShare/SparkleInvitation.cs:339
 #: ../SparkleShare/SparkleInvitation.cs:382
 msgid "Finish"
 msgstr "Terminer"
 
-#: ../SparkleShare/SparkleIntro.cs:500
+#: ../SparkleShare/SparkleIntro.cs:504
 #: ../SparkleShare/SparkleInvitation.cs:366
 #, csharp-format
 msgid "Syncing folder ‘{0}’…"
 msgstr "Synchronise le dossier ‘{0}’..."
 
-#: ../SparkleShare/SparkleIntro.cs:507
+#: ../SparkleShare/SparkleIntro.cs:511
 #: ../SparkleShare/SparkleInvitation.cs:373
 msgid "This may take a while.\n"
 msgstr "Cette opération peut durer un moment.\n"
 
-#: ../SparkleShare/SparkleIntro.cs:508
+#: ../SparkleShare/SparkleIntro.cs:512
 #: ../SparkleShare/SparkleInvitation.cs:374
 msgid "You sure it’s not coffee o-clock?"
 msgstr "Êtes vous certain qu'il ne serait pas le moment de prendre un café?"
 
-#: ../SparkleShare/SparkleIntro.cs:558
+#: ../SparkleShare/SparkleIntro.cs:563
 msgid "SparkleShare is ready to go!"
 msgstr "SparkleShare est opérationnel!"
 
-#: ../SparkleShare/SparkleIntro.cs:564
+#: ../SparkleShare/SparkleIntro.cs:569
 msgid ""
 "Now you can start accepting invitations from others. \n"
 "Just click on invitations you get by email and we will take care of the rest."
@@ -210,7 +210,7 @@ msgstr ""
 "Vous pouvez désormais accepter des invitations. \n"
 "Pour cela, il vous suffira de cliquer sur les invitations que vous aurez reçues par mail et nous nous occuperons du reste."
 
-#: ../SparkleShare/SparkleIntro.cs:575
+#: ../SparkleShare/SparkleIntro.cs:580
 msgid "Learn how to host your own SparkleServer"
 msgstr "Apprendre à héberger son propre serveur SparkleServer"
 
@@ -392,11 +392,26 @@ msgstr "A jour"
 msgid "Syncing…"
 msgstr "Synchronisation en cours…"
 
-#: ../SparkleShare/SparkleUI.cs:100
+#: ../SparkleShare/SparkleUI.cs:87
+#, csharp-format
+msgid "added ‘{0}’"
+msgstr "Ajouté: « {0} »"
+
+#: ../SparkleShare/SparkleUI.cs:98
+#, csharp-format
+msgid "edited ‘{0}’"
+msgstr "Edité: « {0} »"
+
+#: ../SparkleShare/SparkleUI.cs:109
+#, csharp-format
+msgid "deleted ‘{0}’"
+msgstr "Supprimé: « {0} »"
+
+#: ../SparkleShare/SparkleUI.cs:144
 msgid "Ouch! Mid-air collision!"
 msgstr "Outch! Collision en plein ciel!"
 
-#: ../SparkleShare/SparkleUI.cs:101
+#: ../SparkleShare/SparkleUI.cs:145
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
 msgstr "Ne vous inquiétez pas, SparkleShare à effectué une copie de chacun des fichiers en conflit."
 
