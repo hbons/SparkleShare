@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using WebKit;
 
 namespace SparkleShare {
 
@@ -30,6 +31,7 @@ namespace SparkleShare {
 		private VBox LayoutVertical;
 		private ScrolledWindow ScrolledWindow;
 		private MenuBar MenuBar;
+		private WebView WebView;
 
 		// Short alias for the translations
 		public static string _ (string s)
@@ -184,7 +186,7 @@ namespace SparkleShare {
 			List <SparkleCommit> commits = new List <SparkleCommit> ();
 
 			foreach (SparkleRepo repo in SparkleShare.Controller.Repositories) {
-
+// Controller.GetCommits (LocalPath);
 				// Get commits from the repository
 				if (repo.LocalPath.Equals (LocalPath)) {
 
@@ -479,13 +481,16 @@ namespace SparkleShare {
 
 			}
 
+
+			WebView        = new WebView ();
 			ScrolledWindow = new ScrolledWindow ();
 
 				EventBox wrapper = new EventBox ();
 				wrapper.ModifyBg (StateType.Normal, background_color);
 				wrapper.Add (layout_vertical);
+				WebView.LoadHtmlString ("<b>test</b>", "");
 
-			ScrolledWindow.AddWithViewport (wrapper);
+			ScrolledWindow.AddWithViewport (WebView);
 			(ScrolledWindow.Child as Viewport).ShadowType = ShadowType.None;
 
 			return ScrolledWindow;

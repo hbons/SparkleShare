@@ -39,6 +39,8 @@ SparkleShare currently requires:
    - intltool
    - nautilus-python
    - pygtk
+   - webkitgtk
+   - webkit-sharp
 
 Run the service:
 
@@ -54,8 +56,9 @@ For help:
 
 Note:
 
-   SparkleShare creates its own RSA keypair in ~/.ssh and uses that for authentication.
-   Please mind this if you're planning to set up your own server by hand.
+   SparkleShare creates its own RSA keypair in ~/.ssh and uses that for
+   authentication. Please mind this if you're planning to set up your own server 
+   by hand.
 
 
 Build
@@ -71,6 +74,7 @@ To build SparkleShare you need:
    - ndesk-dbus-glib-devel >= 0.6
    - nautilus-python-devel
    - nant
+   - webkit-sharp-devel
 
 You can build and install SparkleShare like this:
 
