@@ -95,6 +95,7 @@ build/m4/shave/shave
 build/m4/shave/shave-libtool
 data/Makefile
 data/icons/Makefile
+data/html/Makefile
 help/Makefile
 NotifySharp/Makefile
 SparkleLib/AssemblyInfo.cs
