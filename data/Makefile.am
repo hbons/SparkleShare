@@ -1,5 +1,6 @@
 SUBDIRS = \
-	icons
+	icons \
+	html
 
 EXTRA_DIST = \
 	sparkleshare-gnome.svg \
@@ -11,10 +12,10 @@ MAINTAINERCLEANFILES = \
 	Makefile.in
 
 install-data-local:
-	$(mkinstalldirs) $(DESTDIR)$(datadir)/pixmaps
-	$(INSTALL_DATA) $(srcdir)/side-splash.png $(DESTDIR)$(datadir)/pixmaps/side-splash.png
-	$(INSTALL_DATA) $(srcdir)/sparkleshare-about.png $(DESTDIR)$(datadir)/pixmaps/sparkleshare-about.png
+	$(mkinstalldirs) $(pkgdatadir)/pixmaps
+	$(INSTALL_DATA) $(srcdir)/side-splash.png $(pkgdatadir)/pixmaps/side-splash.png
+	$(INSTALL_DATA) $(srcdir)/sparkleshare-about.png $(pkgdatadir)/pixmaps/sparkleshare-about.png
 	
 uninstall-hook:
-	rm -f $(DESTDIR)$(datadir)/pixmaps/side-splash.png
-	rm -f $(DESTDIR)$(datadir)/pixmaps/sparkleshare-about.png
+	rm -f $(pkgdatadir)/pixmaps/side-splash.png
+	rm -f $(pkgdatadir)/pixmaps/sparkleshare-about.png
