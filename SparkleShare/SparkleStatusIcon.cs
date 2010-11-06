@@ -55,6 +55,7 @@ namespace SparkleShare {
 			SetNormalState ();
 			CreateMenu ();
 
+			// TODO: Move all event hookups to SparkleUI
 
 			SparkleShare.Controller.FolderSizeChanged += delegate {
 				Application.Invoke (delegate {
@@ -295,6 +296,8 @@ namespace SparkleShare {
 
 			Menu.Add (status_menu_item);
 			Menu.ReorderChild (status_menu_item, 0);
+
+			// TODO: relist the folders as well
 
 			Menu.ShowAll ();
 
