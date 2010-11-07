@@ -60,8 +60,54 @@ namespace SparkleShare {
 				Close ();
 			};
 			
+			LayoutVertical = new VBox (false, 0);
 
-			// Adds a hidden menubar that contains to enable keyboard
+			LayoutVertical.PackStart (CreateEventLog (), true, true, 0);
+
+				HButtonBox dialog_buttons = new HButtonBox {
+					Layout = ButtonBoxStyle.Edge,
+					BorderWidth = 12
+				};
+
+					Button open_folder_button = new Button (_("_Open Folder")) {
+						UseUnderline = true
+					};
+ 
+					open_folder_button.Clicked += delegate (object o, EventArgs args) {
+
+						Process process = new Process ();
+						process.StartInfo.FileName  = Defines.OPEN_COMMAND;
+						process.StartInfo.Arguments = LocalPath.Replace (" ", "\\ "); // Escape space-characters
+						process.Start ();
+
+						Close ();
+
+					};
+
+					Button close_button = new Button (Stock.Close);
+
+					close_button.Clicked += delegate {
+						Close ();
+					};
+
+				dialog_buttons.Add (open_folder_button);
+				dialog_buttons.Add (close_button);
+
+			LayoutVertical.PackStart (new HSeparator (), false, false, 0);
+
+			// We have to hide the menubar somewhere...
+			LayoutVertical.PackStart (EnableKeyboardShortcuts (), false, false, 0);
+			LayoutVertical.PackStart (dialog_buttons, false, false, 0);
+
+			Add (LayoutVertical);
+
+		}
+
+
+		private MenuBar EnableKeyboardShortcuts ()
+		{
+
+			// Adds a hidden menubar that to enable keyboard
 			// shortcuts to close the log
 			MenuBar = new MenuBar ();
 
@@ -98,46 +144,8 @@ namespace SparkleShare {
 			// will simply be disabled when using Hide ()
 			MenuBar.HeightRequest = 1;
 			MenuBar.ModifyBg (StateType.Normal, Style.Background (StateType.Normal));
-			
-			LayoutVertical = new VBox (false, 0);
 
-			LayoutVertical.PackStart (CreateEventLog (), true, true, 0);
-
-				HButtonBox dialog_buttons = new HButtonBox {
-					Layout = ButtonBoxStyle.Edge,
-					BorderWidth = 12
-				};
-
-					Button open_folder_button = new Button (_("_Open Folder")) {
-						UseUnderline = true
-					};
- 
-					open_folder_button.Clicked += delegate (object o, EventArgs args) {
-
-						Process process = new Process ();
-						process.StartInfo.FileName  = Defines.OPEN_COMMAND;
-						process.StartInfo.Arguments = LocalPath.Replace (" ", "\\ "); // Escape space-characters
-						process.Start ();
-
-						Close ();
-
-					};
-
-					Button close_button = new Button (Stock.Close);
-
-					close_button.Clicked += delegate {
-						Close ();
-					};
-
-				dialog_buttons.Add (open_folder_button);
-				dialog_buttons.Add (close_button);
-
-			LayoutVertical.PackStart (new HSeparator (), false, false, 0);
-			// We have to hide the menubar somewhere...
-			LayoutVertical.PackStart (MenuBar, false, false, 0);
-			LayoutVertical.PackStart (dialog_buttons, false, false, 0);
-
-			Add (LayoutVertical);
+			return MenuBar;
 
 		}
 
@@ -239,7 +247,23 @@ namespace SparkleShare {
 
 			}
 
-			VBox layout_vertical = new VBox (false, 0);
+
+
+
+			StreamReader reader;
+
+			reader = new StreamReader (Defines.PREFIX + "/share/sparkleshare/html/event-log.html");
+			string event_log_html = reader.ReadToEnd ();
+			reader.Close ();
+
+			reader = new StreamReader (Defines.PREFIX + "/share/sparkleshare/html/day-entry.html");
+			string day_entry_html = reader.ReadToEnd ();
+			reader.Close ();
+
+			reader = new StreamReader (Defines.PREFIX + "/share/sparkleshare/html/event-entry.html");
+			string event_entry_html = reader.ReadToEnd ();
+			reader.Close ();
+
 
 			if (SparkleShare.Controller.Repositories.Find (
 					delegate (SparkleRepo r)
@@ -251,7 +275,7 @@ namespace SparkleShare {
 
 				SparkleInfobar infobar = new SparkleInfobar ("dialog-error", title, text);
 
-				layout_vertical.PackStart (infobar, false, false, 0);
+				LayoutVertical.PackStart (infobar, false, false, 0);
 
 			} else {
 
@@ -265,239 +289,162 @@ namespace SparkleShare {
 
 						SparkleInfobar infobar = new SparkleInfobar ("dialog-error", title, text);
 
-						layout_vertical.PackStart (infobar, false, false, 0);
+						LayoutVertical.PackStart (infobar, false, false, 0);
 
 				}
 
 			}
 
-			TreeView tree_view = new TreeView ();
-			Gdk.Color background_color = tree_view.Style.Base (StateType.Normal);
+			string event_log = "";
 
 			foreach (ActivityDay activity_day in activity_days) {
 
-				EventBox box = new EventBox ();
-
-				Label date_label = new Label ("") {
-					UseMarkup = true,
-					Xalign = 0,
-					Xpad = 9,
-					Ypad = 9
-				};
-
-					DateTime today = DateTime.Now;
-					DateTime yesterday = DateTime.Now.AddDays (-1);
-
-					if (today.Day   == activity_day.DateTime.Day &&
-					    today.Month == activity_day.DateTime.Month && 
-					    today.Year  == activity_day.DateTime.Year) {
-
-						date_label.Markup = "<b>Today</b>";
-
-					} else if (yesterday.Day   == activity_day.DateTime.Day &&
-					           yesterday.Month == activity_day.DateTime.Month && 
-					           yesterday.Year  == activity_day.DateTime.Year) {
-
-						date_label.Markup = "<b>Yesterday</b>";
-
-					} else {
-	
-						date_label.Markup = "<b>" + activity_day.DateTime.ToString ("ddd MMM d, yyyy") + "</b>";
-
-					}
-
-				box.Add (date_label);
-				layout_vertical.PackStart (box, false, false, 0);
-
-				Gdk.Color color = Style.Foreground (StateType.Insensitive);
-				string secondary_text_color = SparkleUIHelpers.GdkColorToHex (color);
+				string event_entries = "";
 
 				foreach (SparkleCommit change_set in activity_day) {
 
-					VBox log_entry     = new VBox (false, 0);
-					VBox deleted_files = new VBox (false, 0);
-					VBox edited_files  = new VBox (false, 0);
-					VBox added_files   = new VBox (false, 0);
-					VBox moved_files   = new VBox (false, 0);
+					string event_entry = "<dl>";
 
+					if (change_set.Edited.Count > 0) {
 
-					foreach (string file_path in change_set.Edited) {
+						event_entry += "<dt>Edited</dt>";
 
-						SparkleLink link = new SparkleLink (file_path,
-							SparkleHelpers.CombineMore (LocalPath, file_path));
+						foreach (string file_path in change_set.Edited) {
 
-						link.ModifyBg (StateType.Normal, background_color);
+							if (File.Exists (SparkleHelpers.CombineMore (LocalPath, file_path))) {
 
-						edited_files.PackStart (link, false, false, 0);
+								event_entry += "<dd><a href='#'>" + file_path + "</a></dd>";
 
-					}
+							} else {
 
-					foreach (string file_path in change_set.Added) {
+								event_entry += "<dd>" + SparkleHelpers.CombineMore (LocalPath, file_path) + "</dd>";
 
-						SparkleLink link = new SparkleLink (file_path,
-							SparkleHelpers.CombineMore (LocalPath, file_path));
+							}
 
-						link.ModifyBg (StateType.Normal, background_color);
-
-						added_files.PackStart (link, false, false, 0);
+						}
 
 					}
 
 
-					foreach (string file_path in change_set.Deleted) {
+					if (change_set.Added.Count > 0) {
 
-						SparkleLink link = new SparkleLink (file_path,
-							SparkleHelpers.CombineMore (LocalPath, file_path));
+						event_entry += "<dt>Added</dt>";
 
-						link.ModifyBg (StateType.Normal, background_color);
+						foreach (string file_path in change_set.Added) {
 
-						deleted_files.PackStart (link, false, false, 0);
+							if (File.Exists (SparkleHelpers.CombineMore (LocalPath, file_path))) {
 
-					}
+								event_entry += "<dd><a href='#'>" + file_path + "</a></dd>";
 
-					for (int i = 0; i < change_set.MovedFrom.Count; i++) {
+							} else {
 
-						SparkleLink from_link = new SparkleLink (change_set.MovedFrom [i],
-							SparkleHelpers.CombineMore (LocalPath, change_set.MovedFrom [i]));
+								event_entry += "<dd>" + SparkleHelpers.CombineMore (LocalPath, file_path) + "</dd>";
 
-						from_link.ModifyBg (StateType.Normal, background_color);
+							}
 
-						SparkleLink to_link = new SparkleLink (change_set.MovedTo [i],
-							SparkleHelpers.CombineMore (LocalPath, change_set.MovedTo [i]));
-
-						to_link.ModifyBg (StateType.Normal, background_color);
-
-						Label to_label = new Label ("<span fgcolor='" + secondary_text_color +"'>" +
-						                            "<small>to</small></span> ") {
-					    	UseMarkup = true,
-					    	Xalign = 0
-					    };
-
-						HBox link_wrapper = new HBox (false, 0);
-						link_wrapper.PackStart (to_label, false, false, 0);
-						link_wrapper.PackStart (to_link, true, true, 0);
-
-						moved_files.PackStart (from_link, false, false, 0);
-						moved_files.PackStart (link_wrapper, false, false, 0);
-
-						if (change_set.MovedFrom.Count > 1)
-							moved_files.PackStart (new Label (""), false, false, 0);
+						}
 
 					}
 
-					HBox change_set_info_hbox = new HBox (false, 0);
+					if (change_set.Deleted.Count > 0) {
 
-						Label change_set_info = new Label ("<b>" + change_set.UserName + "</b>") {
-							UseMarkup = true,
-							Xalign = 0
-						};
-					
-						Label change_set_time = new Label ("<span fgcolor='" + secondary_text_color +"'><small>" +
-							                               change_set.DateTime.ToString ("H:mm") +
-							                               "</small></span>") {
-							Xalign = 1,
-							UseMarkup = true
-						};
+						event_entry += "<dt>Deleted</dt>";
 
-					change_set_info_hbox.PackStart (change_set_info, true, true, 0);
-					change_set_info_hbox.PackStart (change_set_time, false, false, 0);
+						foreach (string file_path in change_set.Deleted) {
 
-					log_entry.PackStart (change_set_info_hbox, false, false, 0);
-					                   
-					if (edited_files.Children.Length > 0) {
+							if (File.Exists (SparkleHelpers.CombineMore (LocalPath, file_path))) {
 
-						Label edited_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
-						                                _("Edited") +
-						                                "</small></span>") {
-							UseMarkup = true,
-							Xalign = 0
-						};
+								event_entry += "<dd><a href='#'>" + file_path + "</a></dd>";
 
-						log_entry.PackStart (edited_label, false, false, 0);
-						log_entry.PackStart (edited_files, false, false, 0);
+							} else {
+
+								event_entry += "<dd>" + SparkleHelpers.CombineMore (LocalPath, file_path) + "</dd>";
+
+							}
+
+						}
 
 					}
 
-					if (added_files.Children.Length > 0) {
-
-						Label added_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
-						                                _("Added") +
-						                                "</small></span>") {
-							UseMarkup = true,
-							Xalign = 0
-						};
-
-						log_entry.PackStart (added_label, false, false, 0);
-						log_entry.PackStart (added_files, false, false, 0);
-
-					}
-
-					if (deleted_files.Children.Length > 0) {
-
-						Label deleted_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
-						                                _("Deleted") +
-						                                "</small></span>") {
-							UseMarkup = true,
-							Xalign = 0
-						};
-
-						log_entry.PackStart (deleted_label, false, false, 0);
-						log_entry.PackStart (deleted_files, false, false, 0);
-
-					}
-
-					if (moved_files.Children.Length > 0) {
-
-						Label moved_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
-						                                 _("Moved") +
-						                                 "</small></span>") {
-							UseMarkup = true,
-							Xalign = 0
-						};
-
-						log_entry.PackStart (moved_label, false, false, 0);
-						log_entry.PackStart (moved_files, false, false, 0);
-
-					}
-
-					HBox hbox = new HBox (false, 0);
-
-					Image avatar = new Image (SparkleUIHelpers.GetAvatar (change_set.UserEmail, 32)) {
-						Yalign = 0
-					};
-
-					hbox.PackStart (avatar, false, false, 18);
-
-						VBox vbox = new VBox (false, 0);
-						vbox.PackStart (log_entry, false, false, 0);
-
-					hbox.PackStart (vbox, true, true, 0);
-					hbox.PackStart (new Label (""), false, false, 12);
-
-					layout_vertical.PackStart (hbox, false, false, 18);
+					event_entry += "</dl>";
+					event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
+						.Replace ("<!-- $event-user-name -->", change_set.UserName)
+						.Replace ("<!-- $event-time -->", change_set.DateTime.ToString ("H:mm"));
 
 				}
 
-				layout_vertical.PackStart (new Label (""), false, false, 3);
+
+
+				string day_entry = "";
+
+				DateTime today = DateTime.Now;
+				DateTime yesterday = DateTime.Now.AddDays (-1);
+
+				if (today.Day   == activity_day.DateTime.Day &&
+				    today.Month == activity_day.DateTime.Month && 
+				    today.Year  == activity_day.DateTime.Year) {
+
+					day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "<b>Today</b>");
+
+				} else if (yesterday.Day   == activity_day.DateTime.Day &&
+				           yesterday.Month == activity_day.DateTime.Month &&
+				           yesterday.Year  == activity_day.DateTime.Year) {
+
+					day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "<b>Yesterday</b>");
+
+				} else {
+
+					day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
+						"<b>" + activity_day.DateTime.ToString ("ddd MMM d, yyyy") + "</b>");
+
+				}
+
+				event_log += day_entry.Replace ("<!-- $day-entry-content -->", event_entries);
+
 
 			}
 
-
-			StreamReader reader = new StreamReader ("/home/hbons/github/SparkleShare/data/html/event-log.html");
-
-			string html = reader.ReadToEnd ();
+			string html = event_log_html.Replace ("<!-- $event-log-content -->", event_log);
 
 
-			reader.Close ();
+			// Style the html page like the GTK theme
+			html = html.Replace ("<!-- $body-font-size -->", (Style.FontDescription.Size / 1024 + 0.5) + "pt");
+			html = html.Replace ("<!-- $body-font-family -->", "\"" + Style.FontDescription.Family + "\"");
+			html = html.Replace ("<!-- $body-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Normal)));
+			html = html.Replace ("<!-- $body-background-color -->", SparkleUIHelpers.GdkColorToHex (new TreeView ().Style.Base (StateType.Normal)));
 
 
+			html = html.Replace ("<!-- $day-entry-header-background-color -->", SparkleUIHelpers.GdkColorToHex (Style.Background (StateType.Normal)));
+			html = html.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
 
-			WebView        = new WebView ();
-			ScrolledWindow = new ScrolledWindow ();
+Console.WriteLine (Style.FontDescription.Family);
 
-				EventBox wrapper = new EventBox ();
-				wrapper.ModifyBg (StateType.Normal, background_color);
-				wrapper.Add (layout_vertical);
+			WebView = new WebView () {
+				Editable = false
+			};
+			
+			
+			 WebView.HoveringOverLink += delegate (object o, WebKit.HoveringOverLinkArgs args) {
+        Status = args.Link;
+        };
+WebView.NavigationRequested += delegate (object o, WebKit.NavigationRequestedArgs args) {
+        // FIXME: There's currently no way to tell the difference 
+        // between a link being clicked and another navigation event.
+        // This is a temporary workaround.
+        Console.WriteLine ("CLICKED!" + args.Request.Uri);
+        
+        if (args.Request.Uri == Status) {
+        
+Console.WriteLine ("CLICKED!:" + Status);
+            }
+            };
+			ScrolledWindow = new ScrolledWindow () {
+				HscrollbarPolicy = PolicyType.Never
+			};
+
+
+//				wrapper.ModifyBg (StateType.Normal, background_color);
+
 				WebView.LoadHtmlString (html, "");
 				WebView.HoveringOverLink += delegate {};
 
@@ -507,11 +454,11 @@ namespace SparkleShare {
 			return ScrolledWindow;
 
 		}
+public string Status = null;
 
 	}
 
-
-	// All commits that happened on a day	
+	// All commits that happened on a day
 	public class ActivityDay : List <SparkleCommit>
 	{
 
