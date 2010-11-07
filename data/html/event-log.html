@@ -4,7 +4,6 @@
 	<head>
 
 		<title>Event Log</title>
-		<link rel="stylesheet" media="screen" href="style.css" />
 
 		<style>
 
@@ -12,6 +11,9 @@
 				background-color: <!-- $body-background-color -->;
 				color:            <!-- $body-color -->;
 				font-size:        <!-- $body-font-size -->;
+				font-family:      <!-- $body-font-family -->;
+				margin:           0;
+				padding:          0;
 			}
 
 			small {
@@ -21,6 +23,15 @@
 
 			.day-entry-header {
 				background-color: <!-- $day-entry-header-background-color -->;
+				padding:          9px;
+			}
+			
+			.day-entry-content {
+				padding:          12px;
+			}
+			
+			.dd {
+				text-overflow: ellipsis;
 			}
 
 			a {
@@ -32,12 +43,21 @@
 				text-decoration: underline;
 			}
 
+			td {
+				vertical-align: top;
+			}
+
+			.event-time, dt {
+				font-size: 80%;
+				color:     <!-- $secondary-font-color -->;
+			}
+
 		</style>
 
 	</head>
 
-	<body>
-		<!-- $log-->
+	<body onDragStart='return false'>
+		<!-- $event-log-content -->
 	</body>
 
 </html>
