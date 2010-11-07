@@ -37,7 +37,7 @@ namespace SparkleShare {
 
 
 		// Gets the avatar for a specific email address and size
-		public static Gdk.Pixbuf GetAvatar (string email, int size)
+		public static string GetAvatar (string email, int size)
 		{
 
 			string avatar_path = SparkleHelpers.CombineMore (SparklePaths.SparkleLocalIconPath,
@@ -54,12 +54,12 @@ namespace SparkleShare {
 
 			if (File.Exists (avatar_file_path)) {
 
-				return new Gdk.Pixbuf (avatar_file_path);
+				return avatar_file_path;
 
 			} else {
 
 				// Let's try to get the person's gravatar for next time
-				WebClient WebClient = new WebClient ();
+				WebClient web_client = new WebClient ();
 				Uri uri = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (email) +
 					".jpg?s=" + size + "&d=404");
 
@@ -67,11 +67,13 @@ namespace SparkleShare {
 
 				if (!File.Exists (tmp_file_path)) {
 
-					WebClient.DownloadFileAsync (uri, tmp_file_path);
+					web_client.DownloadFileAsync (uri, tmp_file_path);
 
-					WebClient.DownloadFileCompleted += delegate {
+					web_client.DownloadFileCompleted += delegate {
 
-						File.Delete (avatar_file_path);
+						if (File.Exists (avatar_file_path))
+							File.Delete (avatar_file_path);
+
 						FileInfo tmp_file_info = new FileInfo (tmp_file_path);
 
 						if (tmp_file_info.Length > 255)
@@ -83,9 +85,9 @@ namespace SparkleShare {
 
 				// Fall back to a generic icon if there is no gravatar
 				if (File.Exists (avatar_file_path))
-					return new Gdk.Pixbuf (avatar_file_path);
+					return avatar_file_path;
 				else
-					return GetIcon ("avatar-default", size);
+					return null;
 
 			}
 

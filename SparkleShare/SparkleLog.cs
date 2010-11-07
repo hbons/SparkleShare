@@ -222,6 +222,8 @@ namespace SparkleShare {
 
 			foreach (SparkleCommit commit in commits) {
 
+				SparkleUIHelpers.GetAvatar (commit.UserEmail, 32);
+
 				bool commit_inserted = false;
 				foreach (ActivityDay stored_activity_day in activity_days) {
 
@@ -365,10 +367,11 @@ namespace SparkleShare {
 						}
 
 					}
-
+Console.WriteLine(SparkleUIHelpers.GetAvatar (change_set.UserEmail, 32));
 					event_entry += "</dl>";
 					event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
 						.Replace ("<!-- $event-user-name -->", change_set.UserName)
+						.Replace ("<!-- $event-avatar-url -->", "file://" + SparkleUIHelpers.GetAvatar (change_set.UserEmail, 32))
 						.Replace ("<!-- $event-time -->", change_set.DateTime.ToString ("H:mm"));
 
 				}
@@ -445,7 +448,7 @@ Console.WriteLine ("CLICKED!:" + Status);
 
 //				wrapper.ModifyBg (StateType.Normal, background_color);
 
-				WebView.LoadHtmlString (html, "");
+				WebView.LoadHtmlString (html, "file://");
 				WebView.HoveringOverLink += delegate {};
 
 			ScrolledWindow.AddWithViewport (WebView);
