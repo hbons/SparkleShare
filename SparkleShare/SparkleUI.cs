@@ -120,9 +120,14 @@ namespace SparkleShare {
 
 				Application.Invoke (delegate {
 
-					SparkleBubble bubble = new SparkleBubble (commit.UserName, message) {
-						Icon = SparkleUIHelpers.GetAvatar (commit.UserEmail, 32)				
-					};
+					SparkleBubble bubble = new SparkleBubble (commit.UserName, message);
+
+					string avatar_file_path = SparkleUIHelpers.GetAvatar (commit.UserEmail, 32);
+
+					if (avatar_file_path != null)
+						bubble.Icon = new Gdk.Pixbuf (avatar_file_path);
+					else
+						bubble.Icon = SparkleUIHelpers.GetIcon ("avatar-default", 32);
 
 					bubble.AddAction ("", "Show Events", delegate {
 				
