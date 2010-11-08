@@ -1,0 +1,410 @@
+# Copyright (C) 2010 The sparkleshare Project (msgids)
+# This file is distributed under the same license as the sparkleshare package.
+# Gang Chen <chen.gang1983@gmail.com>, 2010.
+# Wei-Lun Chao <chaoweilun@gmail.com>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: sparkleshare 0.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-10-25 07:40+0000\n"
+"PO-Revision-Date: 2010-11-07 23:55+0800\n"
+"Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
+"Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../SparkleDiff/SparkleDiff.cs:78 ../SparkleShare/SparkleShare.cs:58
+msgid "Git wasn't found."
+msgstr "找不到 Git。"
+
+#: ../SparkleDiff/SparkleDiff.cs:79 ../SparkleShare/SparkleShare.cs:59
+msgid "You can get Git from http://git-scm.com/."
+msgstr "您可以從 http://git-scm.com/ 處獲得 Git。"
+
+#: ../SparkleDiff/SparkleDiff.cs:87 ../SparkleShare/SparkleShare.cs:71
+msgid "Sorry, you can't run SparkleShare with these permissions."
+msgstr "抱歉，您不能以此權限執行 SparkleShare。"
+
+#: ../SparkleDiff/SparkleDiff.cs:88 ../SparkleShare/SparkleShare.cs:72
+msgid "Things would go utterly wrong."
+msgstr "會出現嚴重錯誤"
+
+#: ../SparkleDiff/SparkleDiff.cs:162
+msgid "SparkleDiff Copyright (C) 2010 Hylke Bons"
+msgstr "SparkleDiff 著作權©2010 Hylke Bons"
+
+#: ../SparkleDiff/SparkleDiff.cs:164 ../SparkleShare/SparkleShare.cs:116
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr "本程式不提供任何擔保"
+
+#: ../SparkleDiff/SparkleDiff.cs:165 ../SparkleShare/SparkleShare.cs:118
+msgid "This is free software, and you are welcome to redistribute it "
+msgstr "這是自由軟體，歡迎您在某些條件之下"
+
+#: ../SparkleDiff/SparkleDiff.cs:166 ../SparkleShare/SparkleShare.cs:119
+msgid "under certain conditions. Please read the GNU GPLv3 for details."
+msgstr "繼續散布它。詳情請參見 GNU GPLv3。"
+
+#: ../SparkleDiff/SparkleDiff.cs:168
+msgid "SparkleDiff let's you compare revisions of an image file side by side."
+msgstr "SparkleDiff 讓您並列比較圖像檔案的各個修訂版本。"
+
+#: ../SparkleDiff/SparkleDiff.cs:170
+msgid "Usage: sparklediff [FILE]"
+msgstr "用法：sparklediff [檔案]"
+
+#: ../SparkleDiff/SparkleDiff.cs:171
+msgid "Open an image file to show its revisions"
+msgstr "開啟圖像檔案以顯示其版本"
+
+#: ../SparkleDiff/SparkleDiff.cs:173 ../SparkleShare/SparkleShare.cs:127
+msgid "Arguments:"
+msgstr "引數："
+
+#: ../SparkleDiff/SparkleDiff.cs:174
+msgid "\t -h, --help\t\tDisplay this help text."
+msgstr "\t -h, --help\t\t顯示本說明文字。"
+
+#: ../SparkleDiff/SparkleDiffWindow.cs:92
+#, csharp-format
+msgid "{0} at {1}"
+msgstr "{0} 於 {1}"
+
+#: ../SparkleDiff/SparkleDiffWindow.cs:93
+msgid "ddd MMM d, yyyy"
+msgstr "ddd MMM d, yyyy"
+
+#: ../SparkleDiff/SparkleDiffWindow.cs:94
+msgid "H:mm"
+msgstr "H:mm"
+
+#: ../SparkleLib/SparkleOptions.cs:486
+msgid "OptionName"
+msgstr "選項名稱"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
+msgid "Copy Web Link"
+msgstr "複製網頁鏈結"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
+msgid "Copy the web address of this file to the clipboard"
+msgstr "複製該檔案的網址到剪貼簿"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
+msgid "Get Earlier Version"
+msgstr "取得較早的版本"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
+msgid "Make a copy of an earlier version in this folder"
+msgstr "在本資料夾中製作一個較早的版本"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:161
+msgid "Select to get a copy of this version"
+msgstr "選擇以取得該版本的複本"
+
+#: ../SparkleShare/SparkleIntro.cs:65 ../SparkleShare/SparkleStatusIcon.cs:411
+msgid "Welcome to SparkleShare!"
+msgstr "歡迎使用 SparkleShare！"
+
+#: ../SparkleShare/SparkleIntro.cs:71
+msgid "Before we can create a SparkleShare folder on this computer, we need a few bits of information from you."
+msgstr "我們在這臺電腦中可以建立 SparkleShare 資料夾之前，我們需要您的幾點資訊。"
+
+#: ../SparkleShare/SparkleIntro.cs:83
+msgid "Full Name:"
+msgstr "全名："
+
+#: ../SparkleShare/SparkleIntro.cs:99
+msgid "Email:"
+msgstr "電子郵件："
+
+#: ../SparkleShare/SparkleIntro.cs:110
+msgid "Next"
+msgstr "下一步"
+
+#: ../SparkleShare/SparkleIntro.cs:117
+msgid "Configuring…"
+msgstr "設定中…"
+
+#: ../SparkleShare/SparkleIntro.cs:162
+msgid "Where is your remote folder?"
+msgstr "遠端資料夾在什麼地方？"
+
+#: ../SparkleShare/SparkleIntro.cs:175
+msgid "address-to-server.com"
+msgstr "address-to-server.com"
+
+#: ../SparkleShare/SparkleIntro.cs:180
+msgid "On my own server:"
+msgstr "在我自己的伺服器上："
+
+#: ../SparkleShare/SparkleIntro.cs:187
+msgid "Free hosting for Free and Open Source Software projects."
+msgstr "提供給自由和開放原始碼軟體專案的免費主機。"
+
+#: ../SparkleShare/SparkleIntro.cs:188
+msgid "Also has paid accounts for extra private space and bandwidth."
+msgstr "也有付款帳號可提供額外私人空間和頻寬。"
+
+#: ../SparkleShare/SparkleIntro.cs:196
+msgid "The GNOME Project"
+msgstr "GNOME 專案"
+
+#: ../SparkleShare/SparkleIntro.cs:198
+msgid "GNOME is an easy to understand interface to your computer."
+msgstr "GNOME 是一個簡單易懂的電腦使用介面"
+
+#: ../SparkleShare/SparkleIntro.cs:199
+msgid "Select this option if you’re a developer or designer working on GNOME."
+msgstr "如果您是 GNOME 開發人員或設計者就選取這個選項。"
+
+#: ../SparkleShare/SparkleIntro.cs:207
+msgid "Gitorious"
+msgstr "Gitorious"
+
+#: ../SparkleShare/SparkleIntro.cs:209
+msgid "Completely Free as in Freedom infrastructure."
+msgstr "如同在自由基礎架構中的完全自由。"
+
+#: ../SparkleShare/SparkleIntro.cs:210
+msgid "Free accounts for Free and Open Source projects."
+msgstr "提供給自由和開放原始碼專案的免費帳號。"
+
+#: ../SparkleShare/SparkleIntro.cs:273
+#: ../SparkleShare/SparkleInvitation.cs:134
+msgid "Folder Name:"
+msgstr "資料夾名稱："
+
+#: ../SparkleShare/SparkleIntro.cs:283
+msgid "Sync"
+msgstr "同步"
+
+#: ../SparkleShare/SparkleIntro.cs:345
+msgid "Cancel"
+msgstr "取消"
+
+#: ../SparkleShare/SparkleIntro.cs:356
+msgid "Skip"
+msgstr "跳過"
+
+#: ../SparkleShare/SparkleIntro.cs:391
+#: ../SparkleShare/SparkleInvitation.cs:277
+msgid "Something went wrong…"
+msgstr "有些地方發生了錯誤…"
+
+#: ../SparkleShare/SparkleIntro.cs:397
+msgid "Try Again"
+msgstr "再試一次"
+
+#: ../SparkleShare/SparkleIntro.cs:425
+#: ../SparkleShare/SparkleInvitation.cs:310
+msgid "Folder synced successfully!"
+msgstr "資料夾同步成功！"
+
+#: ../SparkleShare/SparkleIntro.cs:431
+#: ../SparkleShare/SparkleInvitation.cs:316
+#, csharp-format
+msgid "Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
+msgstr "現在您可以在 SparkleShare 資料夾中「{0}」存取同步的檔案。"
+
+#. A button that opens the synced folder
+#: ../SparkleShare/SparkleIntro.cs:439
+#: ../SparkleShare/SparkleInvitation.cs:323
+msgid "Open Folder"
+msgstr "開啟資料夾"
+
+#: ../SparkleShare/SparkleIntro.cs:455 ../SparkleShare/SparkleIntro.cs:499
+#: ../SparkleShare/SparkleIntro.cs:566
+#: ../SparkleShare/SparkleInvitation.cs:338
+#: ../SparkleShare/SparkleInvitation.cs:381
+msgid "Finish"
+msgstr "完成"
+
+#: ../SparkleShare/SparkleIntro.cs:483
+#: ../SparkleShare/SparkleInvitation.cs:365
+#, csharp-format
+msgid "Syncing folder ‘{0}’…"
+msgstr "正在同步資料夾「{0}」…"
+
+#: ../SparkleShare/SparkleIntro.cs:490
+#: ../SparkleShare/SparkleInvitation.cs:372
+msgid "This may take a while.\n"
+msgstr "這也許會花費一點時間。\n"
+
+#: ../SparkleShare/SparkleIntro.cs:491
+#: ../SparkleShare/SparkleInvitation.cs:373
+msgid "You sure it’s not coffee o-clock?"
+msgstr "您是不是應該來杯咖啡？"
+
+#: ../SparkleShare/SparkleIntro.cs:541
+msgid "SparkleShare is ready to go!"
+msgstr "SparkleShare 準備啟用！"
+
+#: ../SparkleShare/SparkleIntro.cs:547
+msgid ""
+"Now you can start accepting invitations from others. \n"
+"Just click on invitations you get by email and we will take care of the rest."
+msgstr ""
+"現在您可以開始接受其他人的邀請。\n"
+"只要在您的電子郵件邀請上按一下，我們就會做好其餘的工作。"
+
+#: ../SparkleShare/SparkleIntro.cs:558
+msgid "Learn how to host your own SparkleServer"
+msgstr "學習如何照料自己的 SparkleServer"
+
+#: ../SparkleShare/SparkleInvitation.cs:104
+msgid "Invitation received!"
+msgstr "收到邀請！"
+
+#: ../SparkleShare/SparkleInvitation.cs:110
+msgid ""
+"You've received an invitation to join a shared folder.\n"
+"We're ready to hook you up immediately if you wish."
+msgstr ""
+"您已收到加入共享資料夾的邀請。\n"
+"如果您願意的話，我們可以立刻將您聯結。"
+
+#: ../SparkleShare/SparkleInvitation.cs:116
+msgid "Do you accept this invitation?"
+msgstr "您接受這個邀請嗎？"
+
+#: ../SparkleShare/SparkleInvitation.cs:125
+msgid "Server Address:"
+msgstr "伺服器位址："
+
+#: ../SparkleShare/SparkleInvitation.cs:148
+msgid "Reject"
+msgstr "拒絕"
+
+#: ../SparkleShare/SparkleInvitation.cs:149
+msgid "Accept and Sync"
+msgstr "接受並同步"
+
+#: ../SparkleShare/SparkleInvitation.cs:283
+msgid "Close"
+msgstr "關閉"
+
+#. TRANSLATORS: {0} is a folder name
+#: ../SparkleShare/SparkleLog.cs:53
+#, csharp-format
+msgid "Recent Events in ‘{0}’"
+msgstr "最近在「{0}」發生的事件"
+
+#: ../SparkleShare/SparkleLog.cs:108
+msgid "_Open Folder"
+msgstr "開啟資料夾(_O)"
+
+#: ../SparkleShare/SparkleLog.cs:361
+msgid "Edited"
+msgstr "已編輯"
+
+#: ../SparkleShare/SparkleLog.cs:375
+msgid "Added"
+msgstr "已加入"
+
+#: ../SparkleShare/SparkleLog.cs:389
+msgid "Deleted"
+msgstr "已刪除"
+
+#: ../SparkleShare/SparkleLog.cs:403
+msgid "Moved"
+msgstr "已搬移"
+
+#: ../SparkleShare/SparkleShare.cs:83
+msgid "Don't show the notification icon"
+msgstr "不顯示通知圖示"
+
+#: ../SparkleShare/SparkleShare.cs:84
+msgid "Show this help text"
+msgstr "顯示這份說明文字"
+
+#: ../SparkleShare/SparkleShare.cs:85
+msgid "Print version information"
+msgstr "列印版本資訊"
+
+#: ../SparkleShare/SparkleShare.cs:113
+msgid "SparkleShare, an instant update workflow to Git."
+msgstr "SparkleShare，用於 Git 的即時更新工作流程。"
+
+#: ../SparkleShare/SparkleShare.cs:114
+msgid "Copyright (C) 2010 Hylke Bons"
+msgstr "著作權©2010 Hylke Bons"
+
+#: ../SparkleShare/SparkleShare.cs:121
+msgid "SparkleShare automatically syncs Git repositories in "
+msgstr "SparkleShare 自動同步 Git 儲存庫於 "
+
+#: ../SparkleShare/SparkleShare.cs:122
+msgid "the ~/SparkleShare folder with their remote origins."
+msgstr "~/SparkleShare 資料夾與它們的遠端來源。"
+
+#: ../SparkleShare/SparkleShare.cs:124
+msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
+msgstr "用法：sparkleshare [start|stop|restart] [選項]…"
+
+#: ../SparkleShare/SparkleShare.cs:125
+msgid "Sync SparkleShare folder with remote repositories."
+msgstr "同步 SparkleShare 資料夾與遠端儲存庫。"
+
+#: ../SparkleShare/SparkleShare.cs:137
+msgid "SparkleShare "
+msgstr "SparkleShare "
+
+#: ../SparkleShare/SparkleStatusIcon.cs:277
+msgid "No Remote Folders Yet"
+msgstr "尚無遠端資料夾"
+
+#. Opens the wizard to add a new remote folder
+#: ../SparkleShare/SparkleStatusIcon.cs:286
+msgid "Sync Remote Folder…"
+msgstr "同步遠端資料夾…"
+
+#. A checkbutton to toggle whether or not to show notifications
+#: ../SparkleShare/SparkleStatusIcon.cs:301
+msgid "Show Notifications"
+msgstr "顯示通知"
+
+#. A menu item that takes the use to sparkleshare.org
+#: ../SparkleShare/SparkleStatusIcon.cs:323
+msgid "Visit Website"
+msgstr "造訪網站"
+
+#. A menu item that quits the application
+#: ../SparkleShare/SparkleStatusIcon.cs:340
+msgid "Quit"
+msgstr "離開"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:409
+msgid "Up to date"
+msgstr "更新"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:420
+msgid "Syncing…"
+msgstr "同步中…"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:432
+msgid "Failed to sync changes"
+msgstr "同步變更時失敗"
+
+#: ../SparkleShare/SparkleUI.cs:321
+msgid "Show Events"
+msgstr "顯示事件"
+
+#: ../SparkleShare/SparkleUI.cs:342
+msgid "Ouch! Mid-air collision!"
+msgstr "噢！半空中相撞！"
+
+#: ../SparkleShare/SparkleUI.cs:343
+msgid "Don't worry, SparkleShare made a copy of each conflicting file."
+msgstr "別擔心，SparkleShare 對每個衝突檔案都會製作複本。"
+
+#: ../SparkleShare/SparkleUI.cs:492
+msgid "Hold your ponies!"
+msgstr "請暫停一下腳步！"
+
+#: ../SparkleShare/SparkleUI.cs:493
+msgid "SparkleShare is known to be insanely fast with pictures of unicorns. Please make sure your internets are upgraded to the latest version to avoid any problems."
+msgstr "SparkleShare 是以無比的速度處理獨角獸圖片而著稱。請確定您的網際網路已經升級到最新版本以避免任何問題。"
