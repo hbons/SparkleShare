@@ -69,10 +69,10 @@ fi
 
 
 dnl package checks, common for all configs
-PKG_CHECK_MODULES([NDESK_DBUS], [ndesk-dbus-1.0])
-AC_SUBST(NDESK_DBUS_LIBS)
-PKG_CHECK_MODULES([NDESK_DBUS_GLIB], [ndesk-dbus-glib-1.0])
-AC_SUBST(NDESK_DBUS_GLIB_LIBS)
+#PKG_CHECK_MODULES([NDESK_DBUS], [ndesk-dbus-1.0])
+#AC_SUBST(NDESK_DBUS_LIBS)
+#PKG_CHECK_MODULES([NDESK_DBUS_GLIB], [ndesk-dbus-glib-1.0])
+#AC_SUBST(NDESK_DBUS_GLIB_LIBS)
 
 
 SPARKLESHARE_CHECK_GTK_SHARP
@@ -97,7 +97,6 @@ data/Makefile
 data/icons/Makefile
 data/html/Makefile
 help/Makefile
-NotifySharp/Makefile
 SparkleLib/AssemblyInfo.cs
 SparkleLib/Defines.cs
 SparkleLib/Makefile
