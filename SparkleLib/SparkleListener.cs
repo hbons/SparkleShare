@@ -41,7 +41,7 @@ namespace SparkleLib {
 
 			Server  = server;
 			Channel = channel;
-			Nick    = nick.Replace ("@", "_at_").Replace (".", "_dot_");
+			Nick    = "test"; //nick.Replace ("@", "_at_").Replace (".", "_dot_");
 
 			// Keep the nick short
 			if (Nick.Length > 9)

@@ -1,7 +1,6 @@
 SUBDIRS =	\
 	build	\
 	help	\
-	NotifySharp \
 	SmartIrc4net \
 	. \
 	SparkleLib \

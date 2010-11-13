@@ -87,6 +87,13 @@ Note:
    Use './configure --prefix=/usr' if you want the Nautilus extension to work.
 
 
+Build on OSX:
+=============
+
+Get the Mono Framework, Monodevelop, and MacPorts.
+Install git-core, automake and intltool using 'port install'.
+
+
 Frequently Asked Question
 =========================
 

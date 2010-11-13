@@ -129,14 +129,14 @@ namespace SparkleShare {
 					else
 						bubble.Icon = SparkleUIHelpers.GetIcon ("avatar-default", 32);
 
-					bubble.AddAction ("", "Show Events", delegate {
+//					bubble.AddAction ("", "Show Events", delegate {
 				
-						SparkleLog log = new SparkleLog (repository_path);
-						log.ShowAll ();
+//						SparkleLog log = new SparkleLog (repository_path);
+//						log.ShowAll ();
 				
-					});
+//					});
 
-						bubble.Show ();
+//					bubble.Show ();
 
 				});
 
@@ -150,7 +150,7 @@ namespace SparkleShare {
 					string subtext = _("Don't worry, SparkleShare made a copy of each conflicting file.");
 
 					SparkleBubble bubble = new SparkleBubble(title, subtext);
-					bubble.Show ();
+//					bubble.Show ();
 
 				});
 			};
