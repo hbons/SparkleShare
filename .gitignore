@@ -1,7 +1,9 @@
 *~
+.DS_Store
 *.exe
 *.exe.mdb
 *.userprefs
+*.app
 *.pidb
 *.gmo
 po/POTFILES
