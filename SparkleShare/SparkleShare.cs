@@ -84,11 +84,23 @@ namespace SparkleShare {
 			if (show_help)
 				ShowHelp (p);
 
-			Controller = new SparkleController ();
-if (!hide_ui){
-			UI = new SparkleUI ();
-UI.Run ();
-}
+			// TODO: Detect this properly
+			string Platform = "Lin";
+			
+			if (Platform.Equals ("Lin"))
+				Controller = new SparkleLinController ();
+//			else if (Platform.Equals ("Mac"))
+//			    Controller = new SparkleMacController ();
+//			else if (Platform.Equals ("Win"))
+//			    Controller = new SparkleWinController ();
+			    
+			if (!hide_ui) {
+
+				UI = new SparkleUI ();
+				UI.Run ();
+
+			}
+
 		}
 
 
