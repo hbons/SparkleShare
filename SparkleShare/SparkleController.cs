@@ -63,7 +63,7 @@ namespace SparkleShare {
 
 		public SparkleController ()
 		{
-
+			Console.WriteLine (SparkleShare.UserName + "<<<<<<");
 			SetProcessName ("sparkleshare");
 
 			InstallLauncher ();
