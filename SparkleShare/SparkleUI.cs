@@ -50,7 +50,7 @@ namespace SparkleShare {
 			// Create the statusicon
 			StatusIcon = new SparkleStatusIcon ();
 			
-			// Keep track of event logs are open
+			// Keep track of which event logs are open
 			SparkleUI.OpenLogs = new List <SparkleLog> ();
 
 			SparkleShare.Controller.OnFirstRun += delegate {
