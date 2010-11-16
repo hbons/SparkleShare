@@ -10,12 +10,12 @@ LINK = $(REF_SPARKLESHARE)
 SOURCES =  \
 	SparkleBubble.cs \
 	SparkleController.cs \
-	SparkleLinController.cs \
 	SparkleDialog.cs \
 	SparkleEntry.cs \
 	SparkleInfobar.cs \
 	SparkleIntro.cs \
 	SparkleInvitation.cs \
+	SparkleLinController.cs \
 	SparkleLink.cs \
 	SparkleLog.cs \
 	SparkleShare.cs \
