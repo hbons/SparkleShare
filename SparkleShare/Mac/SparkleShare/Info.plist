@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>LSEnvironment</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/local/bin</string>
+	</dict>
 	<key>CFBundleIdentifier</key>
 	<string>com.yourcompany.SparkleShare</string>
 	<key>CFBundleName</key>
