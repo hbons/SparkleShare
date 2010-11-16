@@ -3,6 +3,7 @@ using System.Drawing;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
+using SparkleLib;
 
 namespace SparkleShare
 {
@@ -21,7 +22,7 @@ namespace SparkleShare
 			
 			//			SparkleStatusIcon = new SparkleStatusIcon ();
 
-			
+			SparkleRepo repo = new SparkleRepo ("/Users/hbons/SparkleShare/SparkleShare-Test");
 									var statusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (32);
 
 				statusItem.Enabled = true;
