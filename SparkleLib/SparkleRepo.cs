@@ -658,7 +658,7 @@ namespace SparkleLib {
 			
 			}
 */
-
+			
 			Process process = new Process () {
 				EnableRaisingEvents = true
 			};
