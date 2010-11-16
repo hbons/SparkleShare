@@ -30,8 +30,8 @@ namespace SparkleShare {
 
 		public static SparkleController Controller;
 		public static SparkleUI UI;
-		public static string UserName;
-		public static string UserEmail;
+		public static string UserName  = "";
+		public static string UserEmail = "";
 
 
 		// Short alias for the translations
@@ -174,6 +174,7 @@ namespace SparkleShare {
 
 				StreamReader reader = new StreamReader (global_config_file_path);
 
+				// TODO: Properly look at the variable name
 				// Discard the first two lines
 				reader.ReadLine ();
 				reader.ReadLine ();
