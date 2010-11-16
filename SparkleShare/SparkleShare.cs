@@ -30,6 +30,8 @@ namespace SparkleShare {
 
 		public static SparkleController Controller;
 		public static SparkleUI UI;
+		
+		// TODO: Move to Controller
 		public static string UserName  = "";
 		public static string UserEmail = "";
 

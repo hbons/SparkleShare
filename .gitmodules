@@ -5,8 +5,8 @@
 	path = GitSharp
 	url = http://github.com/henon/GitSharp.git
 [submodule "MonoMac"]
-	path = lib/MonoMac
+	path = lib/monomac
 	url = https://github.com/mono/monomac.git
 [submodule "MacCore"]
-	path = lib/MacCore
+	path = lib/maccore
 	url = https://github.com/mono/monomac.git	
