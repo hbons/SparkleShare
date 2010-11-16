@@ -258,7 +258,7 @@ namespace SparkleLib {
 				EnableRaisingEvents = true
 			};
 
-			Process.StartInfo.FileName = "git";
+			Process.StartInfo.FileName = "/opt/local/bin/git";
 			Process.StartInfo.RedirectStandardOutput = true;
 			Process.StartInfo.UseShellExecute = false;
 			Process.StartInfo.WorkingDirectory = LocalPath;
@@ -430,7 +430,7 @@ namespace SparkleLib {
 				EnableRaisingEvents = true
 			};
 
-			process.StartInfo.FileName               = "git";
+			process.StartInfo.FileName               = "/opt/local/bin/git";
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute        = false;
 			process.StartInfo.WorkingDirectory       = LocalPath;
@@ -663,7 +663,7 @@ namespace SparkleLib {
 				EnableRaisingEvents = true
 			};
 
-			process.StartInfo.FileName               = "git";
+			process.StartInfo.FileName               = "/opt/local/bin/git";
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute        = false;
 			process.StartInfo.WorkingDirectory       = LocalPath;
