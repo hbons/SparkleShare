@@ -10,7 +10,13 @@ namespace SparkleShare
 	public partial class AppDelegate : NSApplicationDelegate
 	{
 		MainWindowController mainWindowController;
-
+		NSStatusItem statusItem;
+		
+		NSMenu menu;
+		NSMenuItem item;
+		
+		
+		
 		public AppDelegate ()
 		{
 		}
@@ -23,7 +29,7 @@ namespace SparkleShare
 			//			SparkleStatusIcon = new SparkleStatusIcon ();
 
 			SparkleRepo repo = new SparkleRepo ("/Users/hbons/SparkleShare/SparkleShare-Test");
-									var statusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (32);
+									statusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (32);
 
 				statusItem.Enabled = true;
 
@@ -32,11 +38,11 @@ namespace SparkleShare
 							statusItem.Image.Size = new SizeF (16, 16);	
 				statusItem.AlternateImage.Size = new SizeF (16, 16);	
 
-			NSMenu menu = new NSMenu() {};
-			menu.AddItem (new NSMenuItem () { Title="Up to date (102 MB)", Enabled = true });
-			menu.AddItem (NSMenuItem.SeparatorItem);
+			menu = new NSMenu() {};
+//			menu.AddItem (new NSMenuItem () { Title="Up to date (102 MB)", Enabled = true });
+//			menu.AddItem (NSMenuItem.SeparatorItem);
 			
-			var item = new NSMenuItem () {
+			 item = new NSMenuItem () {
 				Title="SparkleShare", Enabled = true,
 				Action = new Selector ("ddd")
 			};
@@ -50,7 +56,7 @@ namespace SparkleShare
 
 			menu.AddItem (item);
 
-			var tmp = new NSMenuItem () {
+/*			var tmp = new NSMenuItem () {
 				Title="gnome-design", Enabled = true,
 				Action = new Selector ("ddd")
 			};
@@ -116,7 +122,7 @@ namespace SparkleShare
 			
 			menu.AddItem (quit_menu_item);			
 
-			
+						 */
 
 				statusItem.Menu = menu;
 				statusItem.HighlightMode = true;
