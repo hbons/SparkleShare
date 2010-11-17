@@ -1,128 +1,171 @@
-using System;
-using System.Drawing;
-using MonoMac.Foundation;
-using MonoMac.AppKit;
-using MonoMac.ObjCRuntime;
+//   SparkleShare, an instant update workflow to Git.
+//   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
+//
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//
+//   You should have received a copy of the GNU General Public License
+//   along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+using Gtk;
+using Mono.Unix;
+using Mono.Unix.Native;
 using SparkleLib;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
 
-namespace SparkleShare
-{
-	
-		[MonoMac.Foundation.Register("AppDelegate")]
-	public class SparkleUI : NSApplicationDelegate
-	{
-		public void Run () {
-			NSApplication.Main (new string [1] {""});
+namespace SparkleShare {
+
+	public class SparkleUI {
+		
+		public static SparkleStatusIcon StatusIcon;
+		public static List <SparkleLog> OpenLogs;
+
+
+		// Short alias for the translations
+		public static string _(string s)
+		{
+			return Catalog.GetString (s);
 		}
-public SparkleUI () {NSApplication.Init ();
 
-			Console.WriteLine("HI!2");
-	//		SparkleFetcher fetch = new SparkleFetcher ("", "");
-			//SparkleRepo repo = new SparkleRepo ("/Users/hbons/Code/SparkleShare");
 
-			//			SparkleStatusIcon = new SparkleStatusIcon ();
+		public SparkleUI ()
+		{
 
+			// Initialize the application
+			Application.Init ();
+
+			// Create the statusicon
+			StatusIcon = new SparkleStatusIcon ();
 			
-									var statusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (32);
+			// Keep track of which event logs are open
+			SparkleUI.OpenLogs = new List <SparkleLog> ();
 
-				statusItem.Enabled = true;
+			SparkleShare.Controller.OnFirstRun += delegate {
+				Application.Invoke (delegate {
 
-				statusItem.Image = NSImage.ImageNamed ("sparkleshare-idle.png");
-				statusItem.AlternateImage = NSImage.ImageNamed ("sparkleshare-idle-focus.png");
-							statusItem.Image.Size = new SizeF (16, 16);	
-				statusItem.AlternateImage.Size = new SizeF (16, 16);	
+					SparkleIntro intro = new SparkleIntro ();
+					intro.ShowAll ();
 
-			NSMenu menu = new NSMenu() {};
-			menu.AddItem (new NSMenuItem () { Title="Up to date (102 MB)", Enabled = true });
-			menu.AddItem (NSMenuItem.SeparatorItem);
-			
-			var item = new NSMenuItem () {
-				Title="SparkleShare", Enabled = true,
-				Action = new Selector ("ddd")
-			};
-			
-				item.Activated += delegate {
-					Console.WriteLine ("DDDD");	
-				};
-			
-				item.Image = NSImage.ImageNamed ("NSFolder");
-				item.Image.Size = new SizeF (16, 16);	
-
-			menu.AddItem (item);
-
-			var tmp = new NSMenuItem () {
-				Title="gnome-design", Enabled = true,
-				Action = new Selector ("ddd")
-			};
-			
-				tmp.Activated += delegate {
-					Console.WriteLine ("DDDD");	
-				};
-			
-				tmp.Image = NSImage.ImageNamed ("NSFolder");
-				tmp.Image.Size = new SizeF (16, 16);	
-
-			menu.AddItem (tmp);
-			menu.AddItem (NSMenuItem.SeparatorItem);
-
-			Console.WriteLine (item.Action.Name);
-			
-			NSMenuItem sync_menu_item = new NSMenuItem () {
-				Title = "Sync Remote Folder..."
+				});
 			};
 
-				sync_menu_item.Activated += delegate {
-					Console.WriteLine ("DDDD");	
-				};
+			SparkleShare.Controller.OnInvitation += delegate (string invitation_file_path) {
+				Application.Invoke (delegate {
 
-			menu.AddItem (sync_menu_item);
-			menu.AddItem (NSMenuItem.SeparatorItem);
+					SparkleInvitation invitation = new SparkleInvitation (invitation_file_path);
+					invitation.Present ();				
 
-			NSMenuItem notifications_menu_item = new NSMenuItem () {
-				Title = "Show Notifications",
-				State = NSCellStateValue.On
+				});
 			};
 
-				notifications_menu_item.Activated += delegate {
-								statusItem.Image = NSImage.ImageNamed ("NSComputer");
-				if (notifications_menu_item.State == NSCellStateValue.On)
-					notifications_menu_item.State = NSCellStateValue.Off;
-				else
-					notifications_menu_item.State = NSCellStateValue.On;
-				};
+			// Show a bubble when there are new changes
+			SparkleShare.Controller.NotificationRaised += delegate (SparkleCommit commit, string repository_path) {
 
-			menu.AddItem (notifications_menu_item);
-			menu.AddItem (NSMenuItem.SeparatorItem);
+				string file_name = "";
+				string message = null;
 
-			NSMenuItem about_menu_item = new NSMenuItem () {
-				Title = "About"
+				if (commit.Added.Count > 0) {
+
+					foreach (string added in commit.Added) {
+						file_name = added;
+						break;
+					}
+
+					message = String.Format (_("added ‘{0}’"), file_name);
+
+				}
+
+				if (commit.Edited.Count > 0) {
+
+					foreach (string modified in commit.Edited) {
+						file_name = modified;
+						break;
+					}
+
+					message = String.Format (_("edited ‘{0}’"), file_name);
+
+				}
+
+				if (commit.Deleted.Count > 0) {
+
+					foreach (string removed in commit.Deleted) {
+						file_name = removed;
+						break;
+					}
+
+					message = String.Format (_("deleted ‘{0}’"), file_name);
+
+				}
+
+				int changes_count = (commit.Added.Count +
+						             commit.Edited.Count +
+						             commit.Deleted.Count);
+
+				if (changes_count > 1)
+					message += " + " + (changes_count - 1);
+
+
+				Application.Invoke (delegate {
+
+					SparkleBubble bubble = new SparkleBubble (commit.UserName, message);
+
+					string avatar_file_path = SparkleUIHelpers.GetAvatar (commit.UserEmail, 32);
+
+					if (avatar_file_path != null)
+						bubble.Icon = new Gdk.Pixbuf (avatar_file_path);
+					else
+						bubble.Icon = SparkleUIHelpers.GetIcon ("avatar-default", 32);
+
+//					bubble.AddAction ("", "Show Events", delegate {
+				
+//						SparkleLog log = new SparkleLog (repository_path);
+//						log.ShowAll ();
+				
+//					});
+
+//					bubble.Show ();
+
+				});
+
 			};
 
-				about_menu_item.Activated += delegate {
-					Console.WriteLine ("DDDD");	
-					statusItem.Title = "bla";
-				};
+			// Show a bubble when there was a conflict
+			SparkleShare.Controller.ConflictNotificationRaised += delegate {
+				Application.Invoke (delegate {
 
-			menu.AddItem (about_menu_item);
-			menu.AddItem (NSMenuItem.SeparatorItem);
+					string title   = _("Ouch! Mid-air collision!");
+					string subtext = _("Don't worry, SparkleShare made a copy of each conflicting file.");
 
-			NSMenuItem quit_menu_item = new NSMenuItem () {
-				Title = "Quit"
+					SparkleBubble bubble = new SparkleBubble(title, subtext);
+//					bubble.Show ();
+
+				});
 			};
-				quit_menu_item.Activated += delegate {
-					Console.WriteLine ("DDDD");	
-					Environment.Exit (0);
-				};
-			
-			menu.AddItem (quit_menu_item);			
 
-			
-
-				statusItem.Menu = menu;
-				statusItem.HighlightMode = true;
 		}
+
+
+		// Runs the application
+		public void Run ()
+		{
+
+			Application.Run ();
+
+		}
+
 	}
+
 }
-
-
-

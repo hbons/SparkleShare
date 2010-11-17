@@ -23,7 +23,7 @@
     <ConsolePause>false</ConsolePause>
     <EnvironmentVariables>
       <EnvironmentVariables>
-        <Variable name="PATH" value="" />
+        <Variable name="PATH" value="/opt/local/bin" />
       </EnvironmentVariables>
     </EnvironmentVariables>
   </PropertyGroup>
