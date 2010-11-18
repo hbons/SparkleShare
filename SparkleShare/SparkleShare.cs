@@ -30,10 +30,6 @@ namespace SparkleShare {
 
 		public static SparkleController Controller;
 		public static SparkleUI UI;
-		
-		// TODO: Move to Controller
-		public static string UserName  = "";
-		public static string UserEmail = "";
 
 
 		// Short alias for the translations
@@ -139,99 +135,6 @@ namespace SparkleShare {
 
 			Console.WriteLine (_("SparkleShare " + Defines.VERSION));
 			Environment.Exit (0);
-
-		}
-
-
-		// Looks up the user's name from the global configuration
-		public static string GetUserName ()
-		{
-
-			string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
-
-			StreamReader reader = new StreamReader (global_config_file_path);
-
-			// Discard the first line
-			reader.ReadLine ();
-
-			string line = reader.ReadLine ();
-			reader.Close ();
-
-			string name = line.Substring (line.IndexOf ("=") + 2);
-
-			return name;
-
-		}
-
-
-		// Looks up the user's email from the global configuration
-		public static string GetUserEmail ()
-		{
-
-			string email = "";
-			string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
-
-			// Look in the global config file first
-			if (File.Exists (global_config_file_path)) {
-
-				StreamReader reader = new StreamReader (global_config_file_path);
-
-				// TODO: Properly look at the variable name
-				// Discard the first two lines
-				reader.ReadLine ();
-				reader.ReadLine ();
-
-				string line = reader.ReadLine ();
-				reader.Close ();
-
-				email = line.Substring (line.IndexOf ("=") + 2);
-
-				return email;
-
-			// Secondly, look at the user's private key file name
-			} else {
-
-				string keys_path = SparklePaths.SparkleKeysPath;
-
-				if (!Directory.Exists (keys_path))
-					return "";
-
-				foreach (string file_path in Directory.GetFiles (keys_path)) {
-
-					string file_name = System.IO.Path.GetFileName (file_path);
-
-					if (file_name.StartsWith ("sparkleshare.") && file_name.EndsWith (".key")) {
-
-						email = file_name.Substring (file_name.IndexOf (".") + 1);
-						email = email.Substring (0, email.LastIndexOf ("."));
-
-						return email;
-
-					}
-
-				}
-
-				return "";
-
-			}
-
-		}
-
-
-		// Adds the user's SparkleShare key to the ssh-agent,
-		// so all activity is done with this key
-		public static void AddKey ()
-		{
-
-			string keys_path = SparklePaths.SparkleKeysPath;
-			string key_file_name = "sparkleshare." + UserEmail + ".key";
-
-			Process process = new Process ();
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute        = false;
-			process.StartInfo.FileName               = "ssh-add";
-			process.StartInfo.Arguments              = Path.Combine (keys_path, key_file_name);
-			process.Start ();
 
 		}
 
