@@ -16,12 +16,15 @@
 
 using Gtk;
 using Mono.Unix;
+using Mono.Unix.Native;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using SparkleLib;
 using SparkleLib.Options;
+using System.Text;
 
 namespace SparkleShare {
 
@@ -41,7 +44,9 @@ namespace SparkleShare {
 
 		public static void Main (string [] args)
 		{
-
+			
+			SetProcessName ("sparkleshare");
+	
 			// Use translations
 			Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
@@ -138,6 +143,33 @@ namespace SparkleShare {
 
 		}
 
+		
+		// Sets the unix process name to 'sparkleshare' instead of 'mono'
+		private static void SetProcessName (string name)
+		{
+
+			try {
+
+				if (prctl (15, Encoding.ASCII.GetBytes (name + "\0"), IntPtr.Zero, IntPtr.Zero, IntPtr.Zero) != 0) {
+
+					throw new ApplicationException ("Error setting process name: " +
+						Mono.Unix.Native.Stdlib.GetLastError ());
+
+				}
+
+			} catch (EntryPointNotFoundException) {
+
+				Console.WriteLine ("SetProcessName: Entry point not found");
+
+			}
+
+		}
+
+
+		// Strange magic needed by SetProcessName
+		[DllImport ("libc")]
+		private static extern int prctl (int option, byte [] arg2, IntPtr arg3,	IntPtr arg4, IntPtr arg5);
+		
 	}
 	
 }
