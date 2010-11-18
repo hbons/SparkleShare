@@ -63,7 +63,10 @@ namespace SparkleShare {
 
 		public SparkleController ()
 		{
-			Console.WriteLine (SparkleShare.UserName + "<<<<<<");
+
+			UserName  = "";
+			UserEmail = "";
+			
 			SetProcessName ("sparkleshare");
 
 			InstallLauncher ();
@@ -120,10 +123,7 @@ namespace SparkleShare {
 
 			} else {
 
-				SparkleShare.UserName  = SparkleShare.GetUserName ();
-				SparkleShare.UserEmail = SparkleShare.GetUserEmail ();
-
-				SparkleShare.AddKey ();
+				AddKey ();
 
 			}
 
@@ -455,7 +455,176 @@ namespace SparkleShare {
 
 		}
 
+		
+		// Adds the user's SparkleShare key to the ssh-agent,
+		// so all activity is done with this key
+		public void AddKey ()
+		{
 
+			string keys_path = SparklePaths.SparkleKeysPath;
+			string key_file_name = "sparkleshare." + UserEmail + ".key";
+
+			Process process = new Process ();
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute        = false;
+			process.StartInfo.FileName               = "ssh-add";
+			process.StartInfo.Arguments              = Path.Combine (keys_path, key_file_name);
+			process.Start ();
+
+		}
+
+
+		// Looks up the user's name from the global configuration
+		public string UserName
+		{
+
+			get {
+
+				string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
+	
+				if (!File.Exists (global_config_file_path))
+				    return "";
+
+				StreamReader reader = new StreamReader (global_config_file_path);
+	
+				// Discard the first line
+				reader.ReadLine ();
+	
+				string line = reader.ReadLine ();
+				reader.Close ();
+	
+				return line.Substring (line.IndexOf ("=") + 2);
+			
+			}
+
+			set {
+				
+				WriteUserInfo (value, UserEmail);
+					
+			}
+
+		}
+
+
+		// Looks up the user's email from the global configuration
+		public string UserEmail
+		{
+					
+			get { 
+						
+				string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
+	
+				// Look in the global config file first
+				if (File.Exists (global_config_file_path)) {
+	
+					StreamReader reader = new StreamReader (global_config_file_path);
+	
+					// TODO: Properly look at the variable name
+					// Discard the first two lines
+					reader.ReadLine ();
+					reader.ReadLine ();
+	
+					string line = reader.ReadLine ();
+					reader.Close ();
+	
+					return line.Substring (line.IndexOf ("=") + 2);
+	
+				} else { // Secondly, look at the user's private key file name
+	
+					string keys_path = SparklePaths.SparkleKeysPath;
+	
+					if (!Directory.Exists (keys_path))
+						return "";
+	
+					foreach (string file_path in Directory.GetFiles (keys_path)) {
+	
+						string file_name = System.IO.Path.GetFileName (file_path);
+	
+						if (file_name.StartsWith ("sparkleshare.") && file_name.EndsWith (".key")) {
+									
+							string email = "";
+	
+							email = file_name.Substring (file_name.IndexOf (".") + 1);
+							email = email.Substring (0, email.LastIndexOf ("."));
+	
+							return email;
+	
+						}
+	
+					}
+	
+					return "";
+	
+				}
+
+			}
+					
+			set {
+			
+				WriteUserInfo (UserName, value);
+						
+			}
+						
+		}
+		
+		
+		private void WriteUserInfo (string user_name, string user_email)
+		{
+			
+			string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
+
+			// Write the user's information to a text file
+			TextWriter writer = new StreamWriter (global_config_file_path);
+			writer.WriteLine ("[user]\n" +
+			                  "\tname  = " + user_name + "\n" +
+			                  "\temail = " + user_email);
+			writer.Close ();
+
+			SparkleHelpers.DebugInfo ("Config", "Created '" + global_config_file_path + "'");
+			
+		}
+
+
+		// Generates and installs an RSA keypair to identify this system
+		public void GenerateKeyPair ()
+		{
+
+			string keys_path = SparklePaths.SparkleKeysPath;
+			string key_file_name = "sparkleshare." + UserEmail + ".key";
+
+			Process process = new Process () {
+				EnableRaisingEvents = true
+			};
+			
+			if (!Directory.Exists (keys_path))
+				Directory.CreateDirectory (keys_path);
+
+			if (!File.Exists (key_file_name)) {
+
+				process.StartInfo.WorkingDirectory = keys_path;
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.FileName = "ssh-keygen";
+				
+				// -t is the crypto type
+				// -P is the password (none)
+				// -f is the file name to store the private key in
+				process.StartInfo.Arguments = "-t rsa -P \"\" -f " + key_file_name;
+
+				process.Start ();
+
+				process.Exited += delegate {
+
+					SparkleHelpers.DebugInfo ("Config", "Created key '" + key_file_name + "'");
+					SparkleHelpers.DebugInfo ("Config", "Created key '" + key_file_name + ".pub'");
+
+				};
+
+			}
+
+		}
+
+		
 		// Sets the unix process name to 'sparkleshare' instead of 'mono'
 		private void SetProcessName (string name)
 		{
