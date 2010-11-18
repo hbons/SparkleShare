@@ -91,7 +91,7 @@ namespace SparkleShare {
 					};
 
 
-					EmailEntry = new Entry (SparkleShare.UserEmail);
+					EmailEntry = new Entry (SparkleShare.Controller.UserEmail);
 					EmailEntry.Changed += delegate {
 						CheckAccountForm ();
 					};
@@ -121,7 +121,14 @@ namespace SparkleShare {
 
 						NextButton.ShowAll ();
 
-						Configure ();
+				
+						SparkleShare.Controller.UserName  = NameEntry.Text;
+						SparkleShare.Controller.UserEmail = EmailEntry.Text;
+
+						SparkleShare.Controller.GenerateKeyPair ();
+						SparkleShare.Controller.AddKey ();
+				
+				
 						ShowServerForm ();
 
 					};
@@ -759,73 +766,6 @@ namespace SparkleShare {
 		}
 
 
-		// Configures SparkleShare with the user's information
-		private void Configure ()
-		{
-
-			string config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
-
-			string name  = NameEntry.Text;
-			string email = EmailEntry.Text;
-
-			// Write the user's information to a text file
-			TextWriter writer = new StreamWriter (config_file_path);
-			writer.WriteLine ("[user]\n" +
-			                  "\tname  = " + name + "\n" +
-			                  "\temail = " + email);
-			writer.Close ();
-
-			SparkleHelpers.DebugInfo ("Config", "Created '" + config_file_path + "'");
-
-			// Set the user's name and email globally
-			SparkleShare.UserName  = name;
-			SparkleShare.UserEmail = email;
-
-			GenerateKeyPair ();
-			SparkleShare.AddKey ();
-
-		}
-
-
-		// Generates and installs an RSA keypair to identify this system
-		private void GenerateKeyPair ()
-		{
-
-			string user_email = EmailEntry.Text;
-			string keys_path = SparklePaths.SparkleKeysPath;
-			string key_file_name = "sparkleshare." + user_email + ".key";
-
-			Process process = new Process () {
-				EnableRaisingEvents = true
-			};
-			
-			if (!Directory.Exists (keys_path))
-				Directory.CreateDirectory (keys_path);
-
-			if (!File.Exists (key_file_name)) {
-
-				process.StartInfo.WorkingDirectory = keys_path;
-				process.StartInfo.UseShellExecute = false;
-				process.StartInfo.RedirectStandardOutput = true;
-				process.StartInfo.FileName = "ssh-keygen";
-				
-				// -t is the crypto type
-				// -P is the password (none)
-				// -f is the file name to store the private key in
-				process.StartInfo.Arguments = "-t rsa -P \"\" -f " + key_file_name;
-
-				process.Start ();
-
-				process.Exited += delegate {
-
-					SparkleHelpers.DebugInfo ("Config", "Created key '" + key_file_name + "'");
-					SparkleHelpers.DebugInfo ("Config", "Created key '" + key_file_name + ".pub'");
-
-				};
-
-			}
-
-		}
 
 
 		// Checks to see if an email address is valid
