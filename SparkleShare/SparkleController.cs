@@ -63,9 +63,6 @@ namespace SparkleShare {
 
 		public SparkleController ()
 		{
-
-			UserName  = "";
-			UserEmail = "";
 			
 			SetProcessName ("sparkleshare");
 
