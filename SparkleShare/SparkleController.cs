@@ -15,14 +15,11 @@
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Mono.Unix;
-using Mono.Unix.Native;
 using SparkleLib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 
 namespace SparkleShare {
@@ -63,8 +60,6 @@ namespace SparkleShare {
 
 		public SparkleController ()
 		{
-			
-			SetProcessName ("sparkleshare");
 
 			InstallLauncher ();
 			EnableSystemAutostart ();
@@ -621,32 +616,6 @@ namespace SparkleShare {
 
 		}
 
-		
-		// Sets the unix process name to 'sparkleshare' instead of 'mono'
-		private void SetProcessName (string name)
-		{
-
-			try {
-
-				if (prctl (15, Encoding.ASCII.GetBytes (name + "\0"), IntPtr.Zero, IntPtr.Zero, IntPtr.Zero) != 0) {
-
-					throw new ApplicationException ("Error setting process name: " +
-						Mono.Unix.Native.Stdlib.GetLastError ());
-
-				}
-
-			} catch (EntryPointNotFoundException) {
-
-				Console.WriteLine ("SetProcessName: Entry point not found");
-
-			}
-
-		}
-
-
-		// Strange magic needed by SetProcessName
-		[DllImport ("libc")]
-		private static extern int prctl (int option, byte [] arg2, IntPtr arg3,	IntPtr arg4, IntPtr arg5);
 
 		// Quits the program
 		public void Quit ()
