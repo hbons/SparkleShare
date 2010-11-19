@@ -61,6 +61,10 @@ namespace SparkleShare {
 
 				});
 			};
+			
+			SparkleShare.Controller.OnQuitWhileSyncing += delegate {
+				// TODO: Pop up a warning when quitting whilst syncing	
+			};
 
 			SparkleShare.Controller.OnInvitation += delegate (string invitation_file_path) {
 				Application.Invoke (delegate {
