@@ -488,17 +488,9 @@ namespace SparkleShare {
 						// A button that opens the synced folder
 						Button open_folder_button = new Button (_("Open Folder"));
 
-						open_folder_button.Clicked += delegate (object o, EventArgs args) {
+						open_folder_button.Clicked += delegate {
 
-							string path = SparkleHelpers.CombineMore (SparklePaths.SparklePath, folder_name);
-
-							Process process = new Process ();
-							process.StartInfo.FileName  = "xdg-open";
-							process.StartInfo.Arguments = path.Replace (" ", "\\ "); // Escape space-characters
-							process.Start ();
-
-							if (ServerFormOnly)
-								Destroy ();
+							SparkleShare.Controller.OpenSparkleShareFolder (folder_name);
 
 						};
 
@@ -622,6 +614,8 @@ namespace SparkleShare {
 
 					finish_button.Clicked += delegate (object o, EventArgs args) {
 
+						// TODO: This can probably go away as we're
+						// now always showing the status icon even without folders
 						if (SparkleUI.StatusIcon == null)
 							SparkleUI.StatusIcon = new SparkleStatusIcon ();
 						else
@@ -708,7 +702,7 @@ namespace SparkleShare {
 		}
 
 
-		// Checks if a url is a valid git url
+		// Checks if a url is a valid git url TODO: broken
 		private static bool IsGitUrl (string url)
 		{
 			
