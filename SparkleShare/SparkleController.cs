@@ -31,6 +31,9 @@ namespace SparkleShare {
 		public string FolderSize;
 
 
+		public event OnQuitWhileSyncingEventHandler OnQuitWhileSyncing;
+		public delegate void OnQuitWhileSyncingEventHandler ();
+
 		public event FolderFetchedEventHandler FolderFetched;
 		public delegate void FolderFetchedEventHandler ();
 		
@@ -723,16 +726,38 @@ namespace SparkleShare {
 
 		
 		// Quits the program
+		public void TryQuit ()
+		{
+
+			foreach (SparkleRepo repo in Repositories) {	
+
+				if (repo.IsSyncing) {
+				
+					if (OnQuitWhileSyncing != null)
+						OnQuitWhileSyncing ();
+					
+					return;
+	
+				}
+			
+			}
+			
+			Quit ();
+			
+		}
+		
+		
 		public void Quit ()
 		{
 
-			// TODO: Pop up a warning when quitting whilst syncing
-			
 			foreach (SparkleRepo repo in Repositories)
 				repo.Dispose ();
 
+			string pid_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "sparkleshare.pid");
+			
 			// Remove the process ID file
-			File.Delete (SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "sparkleshare.pid"));
+			if (File.Exists (pid_file_path))
+				File.Delete (pid_file_path);
 
 			Environment.Exit (0);
 
