@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace SparkleShare {
 
@@ -489,16 +490,17 @@ namespace SparkleShare {
 	
 				if (!File.Exists (global_config_file_path))
 				    return "";
-
+				
 				StreamReader reader = new StreamReader (global_config_file_path);
+				string global_config_file = reader.ReadToEnd ();
+				
+				Regex regex = new Regex (@"name.+= (.+)");
+				Match match = regex.Match (global_config_file);
 	
-				// Discard the first line
-				reader.ReadLine ();
-	
-				string line = reader.ReadLine ();
-				reader.Close ();
-	
-				return line.Substring (line.IndexOf ("=") + 2);
+				if (match.Success)
+					return match.Groups [1].Value;
+				else
+					return "";
 			
 			}
 
@@ -523,16 +525,15 @@ namespace SparkleShare {
 				if (File.Exists (global_config_file_path)) {
 	
 					StreamReader reader = new StreamReader (global_config_file_path);
+					string global_config_file = reader.ReadToEnd ();
+					
+					Regex regex = new Regex (@"email.+= (.+)");
+					Match match = regex.Match (global_config_file);
 	
-					// TODO: Properly look at the variable name
-					// Discard the first two lines
-					reader.ReadLine ();
-					reader.ReadLine ();
-	
-					string line = reader.ReadLine ();
-					reader.Close ();
-	
-					return line.Substring (line.IndexOf ("=") + 2);
+					if (match.Success)
+						return match.Groups [1].Value;
+					else
+						return "";
 	
 				} else { // Secondly, look at the user's private key file name
 	
@@ -547,19 +548,20 @@ namespace SparkleShare {
 	
 						if (file_name.StartsWith ("sparkleshare.") && file_name.EndsWith (".key")) {
 									
-							string email = "";
+							Regex regex = new Regex (@"^sparkleshare\.(*)\.key$");
+							Match match = regex.Match (file_name);
 	
-							email = file_name.Substring (file_name.IndexOf (".") + 1);
-							email = email.Substring (0, email.LastIndexOf ("."));
-	
-							return email;
-	
+							if (match.Success)
+								return match.Groups [1].Value;
+							else
+								return "";
+		
 						}
 	
 					}
 	
 					return "";
-	
+					
 				}
 
 			}
