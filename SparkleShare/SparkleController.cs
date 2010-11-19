@@ -30,6 +30,12 @@ namespace SparkleShare {
 		public string FolderSize;
 
 
+		public event FolderFetchedEventHandler FolderFetched;
+		public delegate void FolderFetchedEventHandler ();
+		
+		public event FolderFetchErrorEventHandler FolderFetchError;
+		public delegate void FolderFetchErrorEventHandler ();
+		
 		public event RepositoryListChangedEventHandler RepositoryListChanged;
 		public delegate void RepositoryListChangedEventHandler ();
 
@@ -617,6 +623,96 @@ namespace SparkleShare {
 		}
 
 
+		public void FetchFolder (string url, string name)
+		{
+
+			// Strip the '.git' from the name
+			string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
+			string tmp_folder = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, canonical_name);
+
+			SparkleFetcher fetcher = new SparkleFetcher (url, tmp_folder);
+
+
+			bool folder_exists = Directory.Exists (
+				SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name));
+
+			// Add a numbered suffix to the nameif a folder with the same name
+			// already exists. Example: "Folder (2)"
+			int i = 1;
+			while (folder_exists) {
+
+				i++;
+				folder_exists = Directory.Exists (
+					SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name + " (" + i + ")"));
+
+			}
+
+			string target_folder_name = canonical_name;
+
+			if (i > 1)
+				target_folder_name += " (" + i + ")";
+
+
+			fetcher.CloningStarted += delegate {
+				
+				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning Repository");
+
+			};
+
+
+			fetcher.CloningFinished += delegate {
+
+				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Repository cloned");
+
+				SparkleHelpers.ClearAttributes (tmp_folder);
+
+				try {
+
+					string target_folder_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+						target_folder_name);
+
+					Directory.Move (tmp_folder, target_folder_path);
+
+				} catch (Exception e) {
+
+					SparkleHelpers.DebugInfo ("Git", "[" + name + "] Error moving folder: " + e.Message);
+
+				}
+
+				
+				if (FolderFetched != null)
+					FolderFetched ();
+				
+				if (RepositoryListChanged != null)
+					RepositoryListChanged ();		
+
+			};
+
+
+			fetcher.CloningFailed += delegate {
+
+				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning failed");
+
+				if (Directory.Exists (tmp_folder)) {
+
+					SparkleHelpers.ClearAttributes (tmp_folder);
+					Directory.Delete (tmp_folder, true);
+
+					SparkleHelpers.DebugInfo ("Config", "[" + name + "] Deleted temporary directory");
+
+				}
+
+					
+				if (FolderFetchError != null)
+					FolderFetchError ();
+
+			};
+
+			fetcher.Clone ();
+
+		}
+
+		
 		// Quits the program
 		public void Quit ()
 		{
