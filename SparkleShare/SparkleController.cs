@@ -421,12 +421,19 @@ namespace SparkleShare {
 
         }
 
-
 		public void OpenSparkleShareFolder ()
 		{
+		
+			OpenSparkleShareFolder ("");
+			
+		}
 
+		public void OpenSparkleShareFolder (string subfolder)
+		{
+			
 			Process process = new Process ();
-			process.StartInfo.Arguments = SparklePaths.SparklePath;
+			process.StartInfo.Arguments = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+				subfolder).Replace (" ", "\\ "); // Escape space-characters
 
 			string open_command_path = SparkleHelpers.CombineMore (Path.VolumeSeparatorChar.ToString (),
 				"usr", "bin");
@@ -717,6 +724,8 @@ namespace SparkleShare {
 		public void Quit ()
 		{
 
+			// TODO: Pop up a warning when quitting whilst syncing
+			
 			foreach (SparkleRepo repo in Repositories)
 				repo.Dispose ();
 
