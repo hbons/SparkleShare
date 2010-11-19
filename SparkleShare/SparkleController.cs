@@ -29,6 +29,7 @@ namespace SparkleShare {
 
 		public List <SparkleRepo> Repositories;
 		public string FolderSize;
+		public bool FirstRun;
 
 
 		public event OnQuitWhileSyncingEventHandler OnQuitWhileSyncing;
@@ -120,11 +121,11 @@ namespace SparkleShare {
 			// Show the introduction screen if SparkleShare isn't configured
 			if (!File.Exists (global_config_file_path)) {
 
-				if (OnFirstRun != null)
-					OnFirstRun ();
+				FirstRun = true;
 
 			} else {
 
+				FirstRun = false;
 				AddKey ();
 
 			}
@@ -136,8 +137,8 @@ namespace SparkleShare {
 			thread.Start ();
 
 		}
-
-
+		
+		
 		// Creates a folder in the user's home folder to store configuration
 		private void CreateConfigurationFolders ()
 		{
@@ -720,12 +721,13 @@ namespace SparkleShare {
 
 			};
 
-			fetcher.Clone ();
+			fetcher.Start ();
 
 		}
 
 		
-		// Quits the program
+		// Checks whether there are any folders syncing and
+		// quits if safe
 		public void TryQuit ()
 		{
 
@@ -747,6 +749,7 @@ namespace SparkleShare {
 		}
 		
 		
+		// Quits the program
 		public void Quit ()
 		{
 
