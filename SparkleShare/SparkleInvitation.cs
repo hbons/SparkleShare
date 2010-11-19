@@ -67,6 +67,8 @@ namespace SparkleShare {
 		public void Configure ()
 		{
 
+			// TODO: Move to controller
+			
 			// The location of the user's public key for SparkleShare
 			string public_key_file_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".ssh",
 				"sparkleshare." + SparkleShare.Controller.UserEmail + ".key.pub");
@@ -84,7 +86,7 @@ namespace SparkleShare {
 
 			SparkleHelpers.DebugInfo ("WebRequest", url);
 
-			HttpWebRequest request = (HttpWebRequest) WebRequest.Create (url);
+			HttpWebRequest request   = (HttpWebRequest) WebRequest.Create (url);
 			HttpWebResponse response = (HttpWebResponse) request.GetResponse();
 
 			if (response.StatusCode == HttpStatusCode.OK)
@@ -184,7 +186,8 @@ namespace SparkleShare {
 
 		}
 
-
+		// TODO: Use Controller.FetchFolder for this
+		// (careful, because it's a bit different from the Intro one)
 		private void FetchFolder (string url, string name)
 		{
 
@@ -354,7 +357,8 @@ namespace SparkleShare {
 		
 		}
 
-
+		// TODO: These pages are identical to the intro ones,
+		// find a way to remove duplication
 		private void ShowSyncingPage (string name)
 		{
 
