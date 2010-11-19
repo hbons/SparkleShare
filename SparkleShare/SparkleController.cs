@@ -497,6 +497,7 @@ namespace SparkleShare {
 				
 				StreamReader reader = new StreamReader (global_config_file_path);
 				string global_config_file = reader.ReadToEnd ();
+				reader.Close ();
 				
 				Regex regex = new Regex (@"name.+= (.+)");
 				Match match = regex.Match (global_config_file);
@@ -530,6 +531,7 @@ namespace SparkleShare {
 	
 					StreamReader reader = new StreamReader (global_config_file_path);
 					string global_config_file = reader.ReadToEnd ();
+					reader.Close ();
 					
 					Regex regex = new Regex (@"email.+= (.+)");
 					Match match = regex.Match (global_config_file);
