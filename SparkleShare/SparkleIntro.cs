@@ -614,13 +614,6 @@ namespace SparkleShare {
 
 					finish_button.Clicked += delegate (object o, EventArgs args) {
 
-						// TODO: This can probably go away as we're
-						// now always showing the status icon even without folders
-						if (SparkleUI.StatusIcon == null)
-							SparkleUI.StatusIcon = new SparkleStatusIcon ();
-						else
-							SparkleUI.StatusIcon.UpdateMenu ();
-
 						Destroy ();
 
 					};
