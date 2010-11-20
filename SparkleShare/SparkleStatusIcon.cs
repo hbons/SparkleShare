@@ -192,6 +192,9 @@ namespace SparkleShare {
 
 				// Opens the wizard to add a new remote folder
 				MenuItem sync_item = new MenuItem (_("Sync Remote Folder…"));
+			
+				if (SparkleShare.Controller.FirstRun)
+					sync_item.Sensitive = false;
 
 				sync_item.Activated += delegate {
 					Application.Invoke (delegate {
