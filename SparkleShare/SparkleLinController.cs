@@ -62,7 +62,7 @@ namespace SparkleShare {
 					// Give the launcher the right permissions so it can be launched by the user
 					Syscall.chmod (desktopfile_path, FilePermissions.S_IRWXU);
 
-					SparkleHelpers.DebugInfo ("Config", "Created '" + desktopfile_path + "'");
+					SparkleHelpers.DebugInfo ("Controller", "Created: " + desktopfile_path);
 
 				}
 
@@ -97,7 +97,7 @@ namespace SparkleShare {
 					// Give the launcher the right permissions so it can be launched by the user
 					Syscall.chmod (desktopfile_path, FilePermissions.S_IRWXU);
 
-					SparkleHelpers.DebugInfo ("Config", "Created '" + desktopfile_path + "'");
+					SparkleHelpers.DebugInfo ("Controller", "Created '" + desktopfile_path + "'");
 
 				}
 
@@ -144,7 +144,7 @@ namespace SparkleShare {
 			if (!Directory.Exists (SparklePaths.SparklePath)) {
 		
 				Directory.CreateDirectory (SparklePaths.SparklePath);
-				SparkleHelpers.DebugInfo ("Config", "Created '" + SparklePaths.SparklePath + "'");
+				SparkleHelpers.DebugInfo ("Controller", "Created '" + SparklePaths.SparklePath + "'");
 
 				string icon_file_path = SparkleHelpers.CombineMore (Defines.PREFIX, "share", "icons", "hicolor",
 					"48x48", "apps", "folder-sparkleshare.png");
