@@ -152,9 +152,6 @@ namespace SparkleShare {
 
 					reject_button.Clicked += delegate {
 
-						// Delete the invitation
-						File.Delete (FilePath);
-
 						Destroy ();
 
 					};
@@ -164,7 +161,24 @@ namespace SparkleShare {
 						string url  = "ssh://git@" + Server + "/" + Folder;
 						SparkleHelpers.DebugInfo ("Git", "[" + Folder + "] Formed URL: " + url);
 
-						FetchFolder (url, Folder);
+
+				
+						SparkleShare.Controller.FolderFetched += delegate {
+		
+							Application.Invoke (delegate {
+								ShowSuccessPage (Folder);
+							});
+					
+						};
+				
+						SparkleShare.Controller.FolderFetchError += delegate {
+							
+							Application.Invoke (delegate { ShowErrorPage (); });	
+				
+						};
+		
+				
+						SparkleShare.Controller.FetchFolder (url, Folder);
 
 					};
 
@@ -183,89 +197,6 @@ namespace SparkleShare {
 			ShowAll ();
 
 			base.Present ();
-
-		}
-
-		// TODO: Use Controller.FetchFolder for this
-		// (careful, because it's a bit different from the Intro one)
-		private void FetchFolder (string url, string name)
-		{
-
-			string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
-			string tmp_folder = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, canonical_name);
-
-			bool folder_exists = Directory.Exists (
-				SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name));
-
-			int i = 1;
-			while (folder_exists) {
-
-				i++;
-				folder_exists = Directory.Exists (
-					SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name + " (" + i + ")"));
-
-			}
-
-			string target_folder_name = canonical_name;
-
-			if (i > 1)
-				target_folder_name += " (" + i + ")";
-
-
-			SparkleFetcher fetcher = new SparkleFetcher (url, tmp_folder);
-
-
-			fetcher.CloningStarted += delegate {
-
-				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning Repository");
-
-			};
-
-
-			fetcher.CloningFinished += delegate {
-
-				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Repository cloned");
-
-				SparkleHelpers.ClearAttributes (tmp_folder);
-
-				try {
-
-					string target_folder_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-						target_folder_name);
-
-					Directory.Move (tmp_folder, target_folder_path);
-
-				} catch (Exception e) {
-
-					SparkleHelpers.DebugInfo ("Git", "[" + name + "] Error moving folder: " + e.Message);
-
-				}
-
-				Application.Invoke (delegate { ShowSuccessPage (target_folder_name); });
-
-			};
-
-
-			fetcher.CloningFailed += delegate {
-
-				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning failed");
-
-				if (Directory.Exists (tmp_folder)) {
-
-					SparkleHelpers.ClearAttributes (tmp_folder);
-					Directory.Delete (tmp_folder, true);
-
-					SparkleHelpers.DebugInfo ("Config", "[" + name + "] Deleted temporary directory");
-
-				}
-
-				Application.Invoke (delegate { ShowErrorPage (); });
-
-			};
-
-			ShowSyncingPage (canonical_name);
-
-			fetcher.Clone ();
 
 		}
 
