@@ -49,12 +49,14 @@ namespace SparkleLib {
 
 
 		// Clones the remote repository
-		public void Clone ()
+		public void Start ()
 		{
 
 			if (Directory.Exists (TargetFolder))
 				Directory.Delete (TargetFolder, true);
-
+			
+			SparkleHelpers.DebugInfo ("Git", "[" + TargetFolder + "] Cloning Repository");
+			
 			if (CloningStarted != null)
 	            CloningStarted (this, new SparkleEventArgs ("CloningStarted")); 
 
@@ -89,6 +91,8 @@ Console.WriteLine ("ppppppppppppppp");
 				SparkleHelpers.DebugInfo ("Git", "Exit code " + process.ExitCode.ToString ());
 
 				if (process.ExitCode != 0) {
+					
+					SparkleHelpers.DebugInfo ("Git", "[" + TargetFolder + "] Cloning failed");
 
 					if (CloningFailed != null)
 					    CloningFailed (this, new SparkleEventArgs ("CloningFailed")); 
@@ -97,6 +101,8 @@ Console.WriteLine ("ppppppppppppppp");
 
 					InstallUserInfo ();
 					InstallExcludeRules ();
+					
+					SparkleHelpers.DebugInfo ("Git", "[" + TargetFolder + "] Repository cloned");
 
 					if (CloningFinished != null)
 					    CloningFinished (this, new SparkleEventArgs ("CloningFinished"));
