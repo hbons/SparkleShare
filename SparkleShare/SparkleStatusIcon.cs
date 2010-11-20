@@ -16,11 +16,7 @@
 
 using Gtk;
 using Mono.Unix;
-using SparkleLib;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Timers;
 
 namespace SparkleShare {
@@ -162,30 +158,27 @@ namespace SparkleShare {
 			Menu.Add (new SeparatorMenuItem ());
 			Menu.Add (folder_action.CreateMenuItem ());
 
-				if (SparkleShare.Controller.Repositories.Count > 0) {
-
+				if (SparkleShare.Controller.Folders.Count > 0) {
+			
 					// Creates a menu item for each repository with a link to their logs
-					foreach (SparkleRepo repo in SparkleShare.Controller.Repositories) {
+					foreach (string path in SparkleShare.Controller.Folders) {
 
-						folder_action = new Gtk.Action ("", repo.Name) {
+						folder_action = new Gtk.Action ("", path) {
 							IconName    = "folder",
 							IsImportant = true
 						};
 
-						if (repo.HasUnsyncedChanges)
-							folder_action.IconName = "dialog-error";
+//						if (repo.HasUnsyncedChanges)
+//							folder_action.IconName = "dialog-error";
 
-						folder_action.Activated += OpenEventLogDelegate (repo.LocalPath);
+						folder_action.Activated += OpenEventLogDelegate (path);
 
 						MenuItem menu_item = (MenuItem) folder_action.CreateMenuItem ();
 
-						if (repo.Description != null)
-							menu_item.TooltipText = repo.Description;
-
 						Menu.Add (menu_item);
-
+				
 					}
-
+				
 				} else {
 
 					MenuItem no_folders_item = new MenuItem (_("No Remote Folders Yet")) {
@@ -337,7 +330,7 @@ namespace SparkleShare {
 
 			Animation.Stop ();
 
-			if (SparkleShare.Controller.Repositories.Count == 0) {
+			if (SparkleShare.Controller.Folders.Count == 0) {
 
 				StateText = _("No folders yet");
 				Application.Invoke (delegate {
