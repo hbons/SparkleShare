@@ -56,9 +56,6 @@ namespace SparkleShare {
 		public event OnErrorEventHandler OnError;
 		public delegate void OnErrorEventHandler ();
 
-		public event OnFirstRunEventHandler OnFirstRun;
-		public delegate void OnFirstRunEventHandler ();
-
 		public event OnInvitationEventHandler OnInvitation;
 		public delegate void OnInvitationEventHandler (string invitation_file_path);
 
@@ -136,6 +133,23 @@ namespace SparkleShare {
 
 			thread.Start ();
 
+		}
+
+		
+		public List <string> Folders
+		{
+			
+			get
+			{
+				List <string> folders = new List <string> ();
+				
+				foreach (SparkleRepo repo in Repositories)
+					folders.Add (repo.LocalPath);
+
+				return folders;
+				
+			}
+			
 		}
 		
 		
@@ -668,16 +682,7 @@ namespace SparkleShare {
 				target_folder_name += " (" + i + ")";
 
 
-			fetcher.CloningStarted += delegate {
-				
-				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning Repository");
-
-			};
-
-
 			fetcher.CloningFinished += delegate {
-
-				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Repository cloned");
 
 				SparkleHelpers.ClearAttributes (tmp_folder);
 
@@ -690,7 +695,7 @@ namespace SparkleShare {
 
 				} catch (Exception e) {
 
-					SparkleHelpers.DebugInfo ("Git", "[" + name + "] Error moving folder: " + e.Message);
+					SparkleHelpers.DebugInfo ("Controller", "Error moving folder: " + e.Message);
 
 				}
 
@@ -706,14 +711,12 @@ namespace SparkleShare {
 
 			fetcher.CloningFailed += delegate {
 
-				SparkleHelpers.DebugInfo ("Git", "[" + canonical_name + "] Cloning failed");
-
 				if (Directory.Exists (tmp_folder)) {
 
 					SparkleHelpers.ClearAttributes (tmp_folder);
 					Directory.Delete (tmp_folder, true);
 
-					SparkleHelpers.DebugInfo ("Config", "[" + name + "] Deleted temporary directory");
+					SparkleHelpers.DebugInfo ("Config", "Deleted temporary directory: " + tmp_folder);
 
 				}
 
