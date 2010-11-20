@@ -16,7 +16,6 @@
 
 using Gtk;
 using Mono.Unix;
-using SparkleLib;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -60,6 +59,8 @@ namespace SparkleShare {
 			Reset ();
 
 			VBox layout_vertical = new VBox (false, 0);
+			
+				DeleteEvent += PreventClose;
 
 				Label header = new Label ("<span size='x-large'><b>" +
 						                _("Welcome to SparkleShare!") +
@@ -120,15 +121,14 @@ namespace SparkleShare {
 						table.Sensitive       = false;
 
 						NextButton.ShowAll ();
-
-				
+			
 						SparkleShare.Controller.UserName  = NameEntry.Text;
 						SparkleShare.Controller.UserEmail = EmailEntry.Text;
 
 						SparkleShare.Controller.GenerateKeyPair ();
 						SparkleShare.Controller.AddKey ();
 				
-				
+						DeleteEvent += PreventClose;
 						ShowServerForm ();
 
 					};
@@ -356,7 +356,7 @@ namespace SparkleShare {
 							server = "ssh://git@gnome.org/git/";
 
 						string url  = server + "/" + name;
-						SparkleHelpers.DebugInfo ("Git", "[" + name + "] Formed URL: " + url);
+						Console.WriteLine ("View", "[" + name + "] Formed URL: " + url);
 
 						string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
 
