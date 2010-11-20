@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparklesShare 0.2 Alpha\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-30 21:33+0000\n"
+"POT-Creation-Date: 2010-10-31 07:38+0000\n"
 "PO-Revision-Date: 2010-08-30 10:41-0300\n"
 "Last-Translator: Claudio Rodrigo Pereyra Diaz <claudiorodrigo@pereyradiaz.com.ar>\n"
 "Language-Team: Spanish\n"
@@ -116,23 +116,20 @@ msgid "Free accounts for Free and Open Source projects."
 msgstr "Cuentas gratis para proyectos Libres y de Código Abierto."
 
 #: ../SparkleShare/SparkleIntro.cs:232
-#, fuzzy
 msgid "Username/Folder"
-msgstr "Abrir carpeta"
+msgstr "Usuario/Carpeta"
 
 #: ../SparkleShare/SparkleIntro.cs:239
 msgid "Project/Folder"
 msgstr "Proyecto/carpeta"
 
 #: ../SparkleShare/SparkleIntro.cs:246
-#, fuzzy
 msgid "Project"
-msgstr "Rechazar"
+msgstr "Proyecto"
 
 #: ../SparkleShare/SparkleIntro.cs:255 ../SparkleShare/SparkleIntro.cs:278
-#, fuzzy
 msgid "Folder"
-msgstr "Añade una Carpeta"
+msgstr "Carpeta"
 
 #: ../SparkleShare/SparkleIntro.cs:283
 #: ../SparkleShare/SparkleInvitation.cs:134
@@ -259,9 +256,8 @@ msgid "_Open Folder"
 msgstr "_Abrir Carpeta"
 
 #: ../SparkleShare/SparkleLog.cs:246
-#, fuzzy
 msgid "This folder has unsynced changes"
-msgstr "Fallo al sincronizar cambios"
+msgstr "Esta carpeta no se ha sincronizado"
 
 #: ../SparkleShare/SparkleLog.cs:247
 msgid "We will sync these once we’re connected again"
@@ -380,9 +376,8 @@ msgid "Quit"
 msgstr "Salir"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:339
-#, fuzzy
 msgid "No folders yet"
-msgstr "Todavía no hay carpetas compartidas"
+msgstr "Todavía no hay carpetas"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:348
 msgid "Not everything is synced"
