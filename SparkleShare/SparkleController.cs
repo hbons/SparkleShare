@@ -139,8 +139,8 @@ namespace SparkleShare {
 		public List <string> Folders
 		{
 			
-			get
-			{
+			get	{
+			
 				List <string> folders = new List <string> ();
 				
 				foreach (SparkleRepo repo in Repositories)
@@ -568,7 +568,7 @@ namespace SparkleShare {
 	
 						if (file_name.StartsWith ("sparkleshare.") && file_name.EndsWith (".key")) {
 									
-							Regex regex = new Regex (@"^sparkleshare\.(*)\.key$");
+							Regex regex = new Regex (@"sparkleshare\.(.+)\.key");
 							Match match = regex.Match (file_name);
 	
 							if (match.Success)
