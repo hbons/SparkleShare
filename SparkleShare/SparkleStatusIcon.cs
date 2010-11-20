@@ -17,6 +17,7 @@
 using Gtk;
 using Mono.Unix;
 using System;
+using System.IO;
 using System.Timers;
 
 namespace SparkleShare {
@@ -41,7 +42,6 @@ namespace SparkleShare {
 		public SparkleStatusIcon () : base ()
 		{
 
-			FrameNumber = 0;
 			AnimationFrames = CreateAnimationFrames ();
 			Animation = CreateAnimation ();
 
@@ -51,7 +51,6 @@ namespace SparkleShare {
 			SetNormalState ();
 			CreateMenu ();
 
-			// TODO: Move all event hookups to SparkleUI
 
 			SparkleShare.Controller.FolderSizeChanged += delegate {
 				Application.Invoke (delegate {
@@ -59,7 +58,7 @@ namespace SparkleShare {
 				});
 			};
 			
-			SparkleShare.Controller.RepositoryListChanged += delegate {
+			SparkleShare.Controller.FolderListChanged += delegate {
 				Application.Invoke (delegate {
 					SetNormalState ();
 					CreateMenu ();
@@ -109,6 +108,8 @@ namespace SparkleShare {
 		// Creates the Animation that handles the syncing animation
 		private Timer CreateAnimation ()
 		{
+
+			FrameNumber = 0;
 
 			Timer Animation = new Timer () {
 				Interval = 35
@@ -163,7 +164,7 @@ namespace SparkleShare {
 					// Creates a menu item for each repository with a link to their logs
 					foreach (string path in SparkleShare.Controller.Folders) {
 
-						folder_action = new Gtk.Action ("", path) {
+						folder_action = new Gtk.Action ("", Path.GetFileName (path)) {
 							IconName    = "folder",
 							IsImportant = true
 						};
@@ -239,7 +240,9 @@ namespace SparkleShare {
 
 			Menu.Add (quit_item);
 
-			Menu.ShowAll ();
+
+			Menu.ShowAll ();			
+			
 
 		}
 
@@ -290,8 +293,6 @@ namespace SparkleShare {
 			Menu.Add (status_menu_item);
 			Menu.ReorderChild (status_menu_item, 0);
 
-			// TODO: relist the folders as well
-
 			Menu.ShowAll ();
 
 		}
@@ -332,7 +333,7 @@ namespace SparkleShare {
 
 			if (SparkleShare.Controller.Folders.Count == 0) {
 
-				StateText = _("No folders yet");
+				StateText = _("Welcome to SparkleShare!");
 				Application.Invoke (delegate {
 					Pixbuf = AnimationFrames [0];
 				});

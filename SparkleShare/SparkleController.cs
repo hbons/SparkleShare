@@ -41,8 +41,8 @@ namespace SparkleShare {
 		public event FolderFetchErrorEventHandler FolderFetchError;
 		public delegate void FolderFetchErrorEventHandler ();
 		
-		public event RepositoryListChangedEventHandler RepositoryListChanged;
-		public delegate void RepositoryListChangedEventHandler ();
+		public event FolderListChangedEventHandler FolderListChanged;
+		public delegate void FolderListChangedEventHandler ();
 
 		public event FolderSizeChangedEventHandler FolderSizeChanged;
 		public delegate void FolderSizeChangedEventHandler (string folder_size);
@@ -294,8 +294,8 @@ namespace SparkleShare {
 			Repositories.Add (repo);
 
 
-			if (RepositoryListChanged != null)
-				RepositoryListChanged ();
+			if (FolderListChanged != null)
+				FolderListChanged ();
 
 		}
 
@@ -323,8 +323,8 @@ namespace SparkleShare {
 			}
 
 
-			if (RepositoryListChanged != null)
-				RepositoryListChanged ();
+			if (FolderListChanged != null)
+				FolderListChanged ();
 
 		}
 
@@ -339,8 +339,8 @@ namespace SparkleShare {
 			foreach (string folder_path in Directory.GetDirectories (SparklePaths.SparklePath))
 				AddRepository (folder_path);
 
-			if (RepositoryListChanged != null)
-				RepositoryListChanged ();
+			if (FolderListChanged != null)
+				FolderListChanged ();
 
 		}
 
@@ -703,8 +703,8 @@ namespace SparkleShare {
 				if (FolderFetched != null)
 					FolderFetched ();
 				
-				if (RepositoryListChanged != null)
-					RepositoryListChanged ();		
+				if (FolderListChanged != null)
+					FolderListChanged ();		
 
 			};
 
