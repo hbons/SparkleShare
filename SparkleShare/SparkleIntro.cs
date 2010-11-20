@@ -668,10 +668,11 @@ namespace SparkleShare {
 				return;
 
 			bool IsFolder = !FolderEntry.Text.Trim ().Equals ("");
+			bool IsServer = !ServerEntry.Text.Trim ().Equals ("");
 
 			if (ServerEntry.Sensitive == true) {
 			
-				if (IsGitUrl (ServerEntry.Text) && IsFolder)
+				if (IsServer && IsFolder)
 					SyncButton.Sensitive = true;
 
 			} else if (IsFolder) {
@@ -683,23 +684,12 @@ namespace SparkleShare {
 		}
 
 
-
-
 		// Checks to see if an email address is valid
 		private bool IsValidEmail (string email)
 		{
 
 			Regex regex = new Regex (@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$", RegexOptions.IgnoreCase);
 			return regex.IsMatch (email);
-
-		}
-
-
-		// Checks if a url is a valid git url TODO: broken
-		private static bool IsGitUrl (string url)
-		{
-			
-			return true;
 
 		}
 
