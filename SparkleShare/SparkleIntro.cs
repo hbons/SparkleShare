@@ -128,6 +128,8 @@ namespace SparkleShare {
 						SparkleShare.Controller.GenerateKeyPair ();
 						SparkleShare.Controller.AddKey ();
 				
+						SparkleShare.Controller.FirstRun = false;
+				
 						DeleteEvent += PreventClose;
 						ShowServerForm ();
 
