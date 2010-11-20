@@ -14,7 +14,6 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using Gtk;
 using Mono.Unix;
 using Mono.Unix.Native;
 using System;
@@ -44,8 +43,6 @@ namespace SparkleShare {
 
 		public static void Main (string [] args)
 		{
-			
-			SetProcessName ("sparkleshare");
 	
 			// Use translations
 			Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
@@ -87,16 +84,25 @@ namespace SparkleShare {
 			if (show_help)
 				ShowHelp (p);
 
-			// TODO: Detect this properly
-			string Platform = "Lin";
 			
-			if (Platform.Equals ("Lin"))
-				Controller = new SparkleLinController ();
-//			else if (Platform.Equals ("Mac"))
-//			    Controller = new SparkleMacController ();
-//			else if (Platform.Equals ("Win"))
-//			    Controller = new SparkleWinController ();
-			    
+			switch (Environment.OSVersion.Platform) {
+
+				case PlatformID.Unix:
+					SetProcessName ("sparkleshare");
+					Controller = new SparkleLinController ();
+				break;
+
+				case PlatformID.MacOSX:
+					//Controller = new SparkleMacController ();
+				break;
+				
+				case PlatformID.Win32NT:
+					//Controller = new SparkleWinController ();
+				break;
+
+			}
+
+			
 			if (!hide_ui) {
 
 				UI = new SparkleUI ();
@@ -144,7 +150,7 @@ namespace SparkleShare {
 		}
 
 		
-		// Sets the unix process name to 'sparkleshare' instead of 'mono'
+		// Sets the Unix process name to 'sparkleshare' instead of 'mono'
 		private static void SetProcessName (string name)
 		{
 
