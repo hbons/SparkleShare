@@ -41,12 +41,12 @@ namespace SparkleLib {
 
 			Server  = server;
 			Channel = channel;
+			Nick    = nick;
 			
-			//TODO: check why nick is sometimes null
-			if (Nick != null)
-			Nick    = nick.Replace ("@", "_at_").Replace (".", "_dot_");
+			if (!Nick.Equals (""))
+				Nick = nick.Replace ("@", "_at_").Replace (".", "_dot_");
 			else
-				Nick = "oops";
+				Nick = "anonymous";
 			
 			// Keep the nick short
 			if (Nick.Length > 9)
