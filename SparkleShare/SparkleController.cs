@@ -59,7 +59,7 @@ namespace SparkleShare {
 		public delegate void OnErrorEventHandler ();
 
 		public event OnInvitationEventHandler OnInvitation;
-		public delegate void OnInvitationEventHandler (string invitation_file_path);
+		public delegate void OnInvitationEventHandler (string server, string name, string token);
 
 		public event ConflictNotificationRaisedEventHandler ConflictNotificationRaised;
 		public delegate void ConflictNotificationRaisedEventHandler ();
@@ -80,43 +80,7 @@ namespace SparkleShare {
 
 			FolderSize = GetFolderSize ();
 
-			// Watch the SparkleShare folder
-			FileSystemWatcher watcher = new FileSystemWatcher (SparklePaths.SparklePath) {
-				IncludeSubdirectories = false,
-				EnableRaisingEvents   = true,
-				Filter                = "*"
-			};
-
-			// Remove the repository when a delete event occurs
-			watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
-
-				RemoveRepository (args.FullPath);
-
-			};
-
-			// Add the repository when a create event occurs
-			watcher.Created += delegate (object o, FileSystemEventArgs args) {
-
-				// Handle invitations when the user saves an
-				// invitation into the SparkleShare folder
-				if (args.Name.EndsWith (".sparkle")) {
-
-					Console.WriteLine ("YYYYYYYYYYYQQ!!!!!!!");
-					
-					if (OnInvitation != null)
-						OnInvitation (args.FullPath);
-
-				} else if (Directory.Exists (Path.Combine (args.FullPath, ".git"))) {
-
-					AddRepository (args.FullPath);
-
-				}
-
-			};
-
-
-			CreateConfigurationFolders ();
-
+			
 			string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
 
 			// Show the introduction screen if SparkleShare isn't configured
@@ -130,6 +94,51 @@ namespace SparkleShare {
 				AddKey ();
 
 			}
+			
+			
+			// Watch the SparkleShare folder
+			FileSystemWatcher watcher = new FileSystemWatcher (SparklePaths.SparklePath) {
+				IncludeSubdirectories = false,
+				EnableRaisingEvents   = true,
+				Filter                = "*"
+			};
+
+			// Remove the repository when a delete event occurs
+			watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
+
+				if (Directory.Exists (args.FullPath))
+					RemoveRepository (args.FullPath);
+
+			};
+
+			// Add the repository when a create event occurs
+			watcher.Created += delegate (object o, FileSystemEventArgs args) {
+				
+				// Handle invitations when the user saves an
+				// invitation into the SparkleShare folder
+				if (args.FullPath.StartsWith (".sparkle")) {
+				
+					XmlDocument xml_doc = new XmlDocument (); 
+					xml_doc.Load (args.Name);
+
+					string server = xml_doc.GetElementsByTagName ("server") [0].InnerText;
+					string folder = xml_doc.GetElementsByTagName ("folder") [0].InnerText;
+					string token  = xml_doc.GetElementsByTagName ("token") [0].InnerText;
+					
+					if (OnInvitation != null)
+						OnInvitation (server, folder, token);
+										
+
+				} else if (Directory.Exists (Path.Combine (args.FullPath, ".git"))) {
+
+					AddRepository (args.FullPath);
+
+				}
+
+			};
+
+
+			CreateConfigurationFolders ();
 
 			Thread thread = new Thread (
 				new ThreadStart (PopulateRepositories)
@@ -139,7 +148,45 @@ namespace SparkleShare {
 
 		}
 
-		
+
+		// Uploads the user's public key to the server
+		public bool AcceptInvitation (string server, string folder, string token)
+		{
+			
+			// The location of the user's public key for SparkleShare
+			string public_key_file_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".ssh",
+				"sparkleshare." + SparkleShare.Controller.UserEmail + ".key.pub");
+
+			if (!File.Exists (public_key_file_path))
+				return false;
+
+			StreamReader reader = new StreamReader (public_key_file_path);
+			string public_key = reader.ReadToEnd ();
+			reader.Close ();
+
+			string url = "https://" + server + "/?folder=" + folder +
+			             "&token=" + token + "&pubkey=" + public_key;
+
+			SparkleHelpers.DebugInfo ("WebRequest", url);
+
+			HttpWebRequest request   = (HttpWebRequest) WebRequest.Create (url);
+			HttpWebResponse response = (HttpWebResponse) request.GetResponse();
+
+			if (response.StatusCode == HttpStatusCode.OK) {
+				
+				response.Close ();
+				return true;
+				
+			} else {
+				
+				response.Close ();
+				return false;
+				
+			}
+			
+		}
+
+
 		public List <string> Folders
 		{
 			
@@ -309,13 +356,13 @@ namespace SparkleShare {
 		private void RemoveRepository (string folder_path)
 		{
 
-			string repo_name = Path.GetFileName (folder_path);
+			string folder_name = Path.GetFileName (folder_path);
 
 			for (int i = 0; i < Repositories.Count; i++) {
 
 				SparkleRepo repo = Repositories [i];
 
-				if (repo.Name.Equals (repo_name)) {
+				if (repo.Name.Equals (folder_name)) {
 
 					Repositories.Remove (repo);
 					repo.Dispose ();
@@ -658,6 +705,8 @@ namespace SparkleShare {
 
 		public void FetchFolder (string url, string name)
 		{
+
+			SparkleHelpers.DebugInfo ("Controller", "Formed URL: " + url);
 
 			// Strip the '.git' from the name
 			string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);

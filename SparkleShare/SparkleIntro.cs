@@ -48,12 +48,10 @@ namespace SparkleShare {
 			ServerFormOnly = false;
 			SecondaryTextColor = SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive));
 
-			ShowAccountForm ();
-
 		}
 
-
-		private void ShowAccountForm ()
+		
+		public void ShowAccountForm ()
 		{
 
 			Reset ();
@@ -430,6 +428,105 @@ namespace SparkleShare {
 		}
 
 
+		public void ShowInvitationPage (string server, string folder, string token)
+		{
+
+			VBox layout_vertical = new VBox (false, 0);
+
+				Label header = new Label ("<span size='x-large'><b>" +
+						                _("Invitation received!") +
+						                  "</b></span>") {
+					UseMarkup = true,
+					Xalign = 0
+				};
+
+				Label information = new Label (_("You've received an invitation to join a shared folder.\n" +
+						                         "We're ready to hook you up immediately if you wish.")) {
+					Xalign = 0,
+					Wrap   = true
+				};
+
+				Label question = new Label (_("Do you accept this invitation?")) {
+					Xalign = 0,
+					Wrap   = true
+				};
+
+				Table table = new Table (2, 2, false) {
+					RowSpacing = 6
+				};
+
+					Label server_label = new Label (_("Server Address:")) {
+						Xalign    = 0
+					};
+
+					Label server_text = new Label ("<b>" + server + "</b>") {
+						UseMarkup = true,
+						Xalign    = 0
+					};
+
+					Label folder_label = new Label (_("Folder Name:")) {
+						Xalign    = 0
+					};
+
+					Label folder_text = new Label ("<b>" + folder + "</b>") {
+						UseMarkup = true,
+						Xalign    = 0
+					};
+
+				table.Attach (folder_label, 0, 1, 0, 1);
+				table.Attach (folder_text, 1, 2, 0, 1);
+				table.Attach (server_label, 0, 1, 1, 2);
+				table.Attach (server_text, 1, 2, 1, 2);
+
+				Button reject_button = new Button (_("Reject"));
+				Button accept_button = new Button (_("Accept and Sync"));
+
+					reject_button.Clicked += delegate {
+
+						Destroy ();
+
+					};
+
+					accept_button.Clicked += delegate {
+
+						string url  = "ssh://git@" + server + "/" + folder;		
+				
+						SparkleShare.Controller.FolderFetched += delegate {
+		
+							Application.Invoke (delegate {
+								ShowSuccessPage (folder);
+							});
+					
+						};
+				
+						SparkleShare.Controller.FolderFetchError += delegate {
+							
+							Application.Invoke (delegate { ShowErrorPage (); });
+				
+						};
+		
+				
+						SparkleShare.Controller.FetchFolder (url, folder);
+
+					};
+
+				AddButton (reject_button);
+				AddButton (accept_button);
+
+			layout_vertical.PackStart (header, false, false, 0);
+			layout_vertical.PackStart (information, false, false, 21);
+			layout_vertical.PackStart (new Label (""), false, false, 0);
+			layout_vertical.PackStart (table, false, false, 0);
+			layout_vertical.PackStart (new Label (""), false, false, 0);
+			layout_vertical.PackStart (question, false, false, 21);
+
+			Add (layout_vertical);
+
+			ShowAll ();
+
+		}
+		
+		
 		// The page shown when syncing has failed
 		private void ShowErrorPage ()
 		{

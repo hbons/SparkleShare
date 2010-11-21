@@ -55,22 +55,22 @@ namespace SparkleShare {
 
 			if (SparkleShare.Controller.FirstRun) {
 
-					SparkleIntro intro = new SparkleIntro ();
-					intro.ShowAll ();
-					intro.Present ();
+				SparkleIntro intro = new SparkleIntro ();
+				intro.ShowAccountForm ();
 
 			}
 			
 			SparkleShare.Controller.OnQuitWhileSyncing += delegate {
+				
 				// TODO: Pop up a warning when quitting whilst syncing	
+
 			};
 
-			SparkleShare.Controller.OnInvitation += delegate (string invitation_file_path) {
+			SparkleShare.Controller.OnInvitation += delegate (string server, string folder, string token) {
 				Application.Invoke (delegate {
-
-					Console.WriteLine ("INVITATION RECEIVED!!!!1");
-					SparkleInvitation invitation = new SparkleInvitation (invitation_file_path);
-					invitation.Present ();				
+					
+					SparkleIntro intro = new SparkleIntro ();
+					intro.ShowInvitationPage (server, folder, token);
 
 				});
 			};
