@@ -37,6 +37,7 @@ SparkleShare currently requires:
    - openssh
    - gvfs >= 1.3
    - intltool
+   - libnotify
    - nautilus-python
    - pygtk
    - webkitgtk
@@ -74,6 +75,7 @@ To build SparkleShare you need:
    - ndesk-dbus-glib-devel >= 0.6
    - nautilus-python-devel
    - nant
+   - notify-sharp-devel
    - webkit-sharp-devel
 
 You can build and install SparkleShare like this:
