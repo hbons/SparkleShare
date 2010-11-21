@@ -9,123 +9,146 @@ namespace SparkleShare
 {
 	public partial class AppDelegate : NSApplicationDelegate
 	{
+		
 		MainWindowController mainWindowController;
-		NSStatusItem statusItem;
+		NSStatusItem StatusItem;
 		
-		NSMenu menu;
-		NSMenuItem item;
-		
-		
-		
+		NSMenu Menu;
+		NSMenuItem FolderMenuItem;
+		NSMenuItem [] FolderMenuItems;
+		NSMenuItem SyncMenuItem;
+		NSMenuItem NotificationsMenuItem;
+		NSMenuItem AboutMenuItem;
+		NSMenuItem QuitMenuItem;
+
+			
 		public AppDelegate ()
 		{
 		}
 
 		public override void FinishedLaunching (NSObject notification)
 		{
-			mainWindowController = new MainWindowController ();
-			mainWindowController.Window.MakeKeyAndOrderFront (this);
+
+			//	mainWindowController = new MainWindowController ();
+			//	mainWindowController.Window.MakeKeyAndOrderFront (this);
 			
 			//			SparkleStatusIcon = new SparkleStatusIcon ();
 
-			SparkleRepo repo = new SparkleRepo ("/Users/hbons/SparkleShare/SparkleShare-Test");
-									statusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (32);
+			//		SparkleRepo repo = new SparkleRepo ("/Users/hbons/SparkleShare/SparkleShare-Test");
 
-				statusItem.Enabled = true;
-
-				statusItem.Image = NSImage.ImageNamed ("sparkleshare-idle.png");
-				statusItem.AlternateImage = NSImage.ImageNamed ("sparkleshare-idle-focus.png");
-							statusItem.Image.Size = new SizeF (16, 16);	
-				statusItem.AlternateImage.Size = new SizeF (16, 16);	
-
-			menu = new NSMenu() {};
-//			menu.AddItem (new NSMenuItem () { Title="Up to date (102 MB)", Enabled = true });
-//			menu.AddItem (NSMenuItem.SeparatorItem);
+			StatusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (32);
 			
-			 item = new NSMenuItem () {
+			StatusItem.Enabled             = true;
+			StatusItem.Image               = NSImage.ImageNamed ("sparkleshare-idle.png");
+			StatusItem.AlternateImage      = NSImage.ImageNamed ("sparkleshare-idle-focus.png");
+			StatusItem.Image.Size          = new SizeF (13, 13);	
+			StatusItem.AlternateImage.Size = new SizeF (13, 13);	
+			StatusItem.HighlightMode = true;
+
+			Menu = new NSMenu ();
+	
+			
+			Menu.AddItem (new NSMenuItem () { Title="Up to date (102 ᴍʙ)", Enabled = true });			
+			Menu.AddItem (NSMenuItem.SeparatorItem);
+			
+			
+			FolderMenuItem = new NSMenuItem () {
 				Title="SparkleShare", Enabled = true,
 				Action = new Selector ("ddd")
 			};
 			
-				item.Activated += delegate {
+				FolderMenuItem.Activated += delegate {
 					Console.WriteLine ("DDDD");	
 				};
 			
-				item.Image = NSImage.ImageNamed ("NSFolder");
-				item.Image.Size = new SizeF (16, 16);	
+				FolderMenuItem.Image = NSImage.ImageNamed ("NSFolder");
+				FolderMenuItem.Image.Size = new SizeF (16, 16);	
 
-			menu.AddItem (item);
-
-/*			var tmp = new NSMenuItem () {
-				Title="gnome-design", Enabled = true,
-				Action = new Selector ("ddd")
+			Menu.AddItem (FolderMenuItem);
+			
+			FolderMenuItems = new NSMenuItem [2] {
+				new NSMenuItem () { Title = "gnome-design" },
+				new NSMenuItem () { Title = "tango-icons" }	
 			};
 			
-				tmp.Activated += delegate {
-					Console.WriteLine ("DDDD");	
+			foreach (NSMenuItem item in FolderMenuItems) {
+				
+				item.Activated += delegate {
+						
 				};
-			
-				tmp.Image = NSImage.ImageNamed ("NSFolder");
-				tmp.Image.Size = new SizeF (16, 16);	
+				
+				item.Image = NSImage.ImageNamed ("NSFolder");
+				Menu.AddItem (item);	
+			};
+		
 
-			menu.AddItem (tmp);
-			menu.AddItem (NSMenuItem.SeparatorItem);
+			Menu.AddItem (NSMenuItem.SeparatorItem);
 
-			Console.WriteLine (item.Action.Name);
 			
-			NSMenuItem sync_menu_item = new NSMenuItem () {
+			SyncMenuItem = new NSMenuItem () {
 				Title = "Sync Remote Folder..."
 			};
-
-				sync_menu_item.Activated += delegate {
-					Console.WriteLine ("DDDD");	
+			
+				SyncMenuItem.Activated += delegate {
+				
 				};
+			
+			Menu.AddItem (SyncMenuItem);
 
-			menu.AddItem (sync_menu_item);
-			menu.AddItem (NSMenuItem.SeparatorItem);
+			
+			Menu.AddItem (NSMenuItem.SeparatorItem);
+			
 
-			NSMenuItem notifications_menu_item = new NSMenuItem () {
+			NotificationsMenuItem = new NSMenuItem () {
 				Title = "Show Notifications",
 				State = NSCellStateValue.On
 			};
 
-				notifications_menu_item.Activated += delegate {
-								statusItem.Image = NSImage.ImageNamed ("NSComputer");
-				if (notifications_menu_item.State == NSCellStateValue.On)
-					notifications_menu_item.State = NSCellStateValue.Off;
+				NotificationsMenuItem.Activated += delegate {
+					
+					//StatusItem.Image = NSImage.ImageNamed ("NSComputer");
+				if (NotificationsMenuItem.State == NSCellStateValue.On)
+	
+					NotificationsMenuItem.State = NSCellStateValue.Off;
+				
 				else
-					notifications_menu_item.State = NSCellStateValue.On;
+
+					NotificationsMenuItem.State = NSCellStateValue.On;
+
 				};
 
-			menu.AddItem (notifications_menu_item);
-			menu.AddItem (NSMenuItem.SeparatorItem);
-
-			NSMenuItem about_menu_item = new NSMenuItem () {
+			Menu.AddItem (NotificationsMenuItem);
+			
+			
+			Menu.AddItem (NSMenuItem.SeparatorItem);
+			
+			
+			AboutMenuItem = new NSMenuItem () {
 				Title = "About"
 			};
 
-				about_menu_item.Activated += delegate {
-					Console.WriteLine ("DDDD");	
-					statusItem.Title = "bla";
+				AboutMenuItem.Activated += delegate {
+	
 				};
 
-			menu.AddItem (about_menu_item);
-			menu.AddItem (NSMenuItem.SeparatorItem);
+			Menu.AddItem (AboutMenuItem);
 
-			NSMenuItem quit_menu_item = new NSMenuItem () {
+			
+			Menu.AddItem (NSMenuItem.SeparatorItem);
+
+			
+			QuitMenuItem = new NSMenuItem () {
 				Title = "Quit"
 			};
-				quit_menu_item.Activated += delegate {
-					Console.WriteLine ("DDDD");	
+	
+				QuitMenuItem.Activated += delegate {
 					Environment.Exit (0);
 				};
 			
-			menu.AddItem (quit_menu_item);			
+			Menu.AddItem (QuitMenuItem);									 
 
-						 */
+			StatusItem.Menu = Menu;
 
-				statusItem.Menu = menu;
-				statusItem.HighlightMode = true;
 		}
 	}
 }
