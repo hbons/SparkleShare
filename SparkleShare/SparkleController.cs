@@ -20,8 +20,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Threading;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace SparkleShare {
 
@@ -97,8 +99,10 @@ namespace SparkleShare {
 
 				// Handle invitations when the user saves an
 				// invitation into the SparkleShare folder
-				if (args.Name.EndsWith (".invitation")) {
+				if (args.Name.EndsWith (".sparkle")) {
 
+					Console.WriteLine ("YYYYYYYYYYYQQ!!!!!!!");
+					
 					if (OnInvitation != null)
 						OnInvitation (args.FullPath);
 

@@ -68,6 +68,7 @@ namespace SparkleShare {
 			SparkleShare.Controller.OnInvitation += delegate (string invitation_file_path) {
 				Application.Invoke (delegate {
 
+					Console.WriteLine ("INVITATION RECEIVED!!!!1");
 					SparkleInvitation invitation = new SparkleInvitation (invitation_file_path);
 					invitation.Present ();				
 
