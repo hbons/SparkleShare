@@ -59,7 +59,7 @@ namespace SparkleShare {
 		public delegate void OnErrorEventHandler ();
 
 		public event OnInvitationEventHandler OnInvitation;
-		public delegate void OnInvitationEventHandler (string server, string name, string token);
+		public delegate void OnInvitationEventHandler (string server, string folder, string token);
 
 		public event ConflictNotificationRaisedEventHandler ConflictNotificationRaised;
 		public delegate void ConflictNotificationRaisedEventHandler ();
@@ -116,18 +116,18 @@ namespace SparkleShare {
 				
 				// Handle invitations when the user saves an
 				// invitation into the SparkleShare folder
-				if (args.FullPath.EndsWith (".sparkle")) {
-				
+				if (args.Name.EndsWith (".sparkle")) {
+
 					XmlDocument xml_doc = new XmlDocument (); 
 					xml_doc.Load (args.Name);
 
 					string server = xml_doc.GetElementsByTagName ("server") [0].InnerText;
 					string folder = xml_doc.GetElementsByTagName ("folder") [0].InnerText;
 					string token  = xml_doc.GetElementsByTagName ("token") [0].InnerText;
-					
+			
+					// TODO: this is broken :\
 					if (OnInvitation != null)
 						OnInvitation (server, folder, token);
-										
 
 				} else if (Directory.Exists (Path.Combine (args.FullPath, ".git"))) {
 
