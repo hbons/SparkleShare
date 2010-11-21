@@ -116,7 +116,7 @@ namespace SparkleShare {
 				
 				// Handle invitations when the user saves an
 				// invitation into the SparkleShare folder
-				if (args.FullPath.StartsWith (".sparkle")) {
+				if (args.FullPath.EndsWith (".sparkle")) {
 				
 					XmlDocument xml_doc = new XmlDocument (); 
 					xml_doc.Load (args.Name);
