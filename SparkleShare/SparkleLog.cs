@@ -31,6 +31,7 @@ namespace SparkleShare {
 		private ScrolledWindow ScrolledWindow;
 		private MenuBar MenuBar;
 
+
 		// Short alias for the translations
 		public static string _ (string s)
 		{
@@ -142,27 +143,12 @@ namespace SparkleShare {
 		public void Close ()
 		{
 
-			foreach (SparkleRepo repo in SparkleShare.Controller.Repositories) {
-
-				if (repo.LocalPath.Equals (LocalPath)) {
-
-/*				// Remove the eventhooks
-					repo.NewCommit -= UpdateEventLog;
-					repo.PushingFinished -= UpdateEventLog;
-					repo.PushingFailed -= UpdateEventLog;    TODO: Move to controller
-					repo.FetchingFinished -= UpdateEventLog;
-					repo.FetchingFailed -= UpdateEventLog;*/
-
-				}
-
-			}
-
-			HideAll ();
+			Destroy ();
 
 		}
 
 
-		public void UpdateEventLog (SparkleCommit commit, string repository_path)
+		public void Update ()
 		{
 
 			Application.Invoke (delegate {
@@ -189,17 +175,6 @@ namespace SparkleShare {
 				if (repo.LocalPath.Equals (LocalPath)) {
 
 					commits = repo.GetCommits (25);
-
-/*					// Update the log when there are new remote changes
-					repo.NewCommit += UpdateEventLog;
-
-					// Update the log when changes are being sent
-					repo.PushingFinished += UpdateEventLog;
-					repo.PushingFailed += UpdateEventLog;
-
-					repo.FetchingFinished += UpdateEventLog;   TODO: Move to controller
-					repo.FetchingFailed += UpdateEventLog;
-*/
 					break;
 
 				}
