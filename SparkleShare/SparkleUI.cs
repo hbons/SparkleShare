@@ -132,6 +132,10 @@ namespace SparkleShare {
 						bubble.Icon = new Gdk.Pixbuf (avatar_file_path);
 					else
 						bubble.Icon = SparkleUIHelpers.GetIcon ("avatar-default", 32);
+					
+					foreach (SparkleLog log in OpenLogs)
+						if (log.LocalPath.Equals (repository_path))
+							log.Update ();
 
 //					bubble.AddAction ("", "Show Events", delegate {
 				
