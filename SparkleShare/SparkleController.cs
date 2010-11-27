@@ -275,6 +275,9 @@ namespace SparkleShare {
 		// Creates the SparkleShare folder in the user's home folder
 		public abstract bool CreateSparkleShareFolder ();
 
+		// Opens the SparkleShare folder or an (optional) subfolder
+		public abstract void OpenSparkleShareFolder (string subfolder);
+
 
 		// Fires events for the current syncing state
 		private void UpdateState ()
@@ -523,7 +526,6 @@ namespace SparkleShare {
 			
 		}
 
-		public abstract void OpenSparkleShareFolder (string subfolder);
 		
 		// Adds the user's SparkleShare key to the ssh-agent,
 		// so all activity is done with this key
