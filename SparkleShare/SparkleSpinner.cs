@@ -16,7 +16,6 @@
 
 using Gtk;
 using System.Timers;
-using SparkleLib;
 
 namespace SparkleShare {
 		
