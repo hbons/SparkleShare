@@ -174,6 +174,25 @@ namespace SparkleShare {
 			return false;
 
 		}
+		
+		
+		public override void OpenSparkleShareFolder (string subfolder)
+		{
+
+			string open_command_path = SparkleHelpers.CombineMore (Path.VolumeSeparatorChar.ToString (),
+				"usr", "bin", "xdg-open");
+
+			if (!File.Exists (open_command_path))
+				return;
+
+			string folder = SparkleHelpers.CombineMore (SparklePaths.SparklePath, subfolder);
+
+			Process process = new Process ();
+			process.StartInfo.Arguments = folder.Replace (" ", "\\ "); // Escape space-characters
+			process.StartInfo.FileName  = "xdg-open";
+			process.Start ();
+			
+		}
 
 	}
 
