@@ -33,13 +33,8 @@ namespace SparkleLib {
 		public List <string> MovedFrom;
 		public List <string> MovedTo;
 
-		public SparkleCommit (string user_name, string user_email, DateTime date_time, string hash)
+		public SparkleCommit ()
 		{
-
-			UserName  = user_name;
-			UserEmail = user_email;
-			DateTime  = date_time;
-			Hash      = hash;
 
 			Edited    = new List <string> ();
 			Added     = new List <string> ();
