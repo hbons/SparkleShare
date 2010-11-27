@@ -1012,15 +1012,15 @@ namespace SparkleLib {
 		private string FormatCommitMessage ()
 		{
 
-			/// RepositoryStatus contains the following properties (all HashSet<string>)
-			/// * Added ---> added and staged
+			/// RepositoryStatus contains the following properties (all HashSet <string>)
+			/// * Added         ---> added and staged
 			/// * MergeConflict --->
-			/// * Missing ---> removed but not staged
-			/// * Modified ---> modified but not staged
-			/// * Removed ---> removed and staged
-			/// * Staged ---> modified and staged
-			/// * Untracked ---> added but not staged
-			/// Because we create the commitmessage, we only need to consider the staged changes
+			/// * Missing       ---> removed but not staged
+			/// * Modified      ---> modified but not staged
+			/// * Removed       ---> removed and staged
+			/// * Staged        ---> modified and staged
+			/// * Untracked     ---> added but not staged
+			/// Because we create the commit message, we only need to consider the staged changes
 			RepositoryStatus status = Index.Status;
 
 			string file_name = "";
