@@ -47,10 +47,9 @@ namespace SparkleShare {
 			// Use translations
 			Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
-			UnixUserInfo user_info = new UnixUserInfo (UnixEnvironment.UserName);
-
+			
 			// Don't allow running as root
-			if (user_info.UserId == 0) {
+			if (new UnixUserInfo (UnixEnvironment.UserName).UserId == 0) {
 
 				Console.WriteLine (_("Sorry, you can't run SparkleShare with these permissions."));
 				Console.WriteLine (_("Things would go utterly wrong.")); 
