@@ -204,6 +204,31 @@ namespace SparkleShare {
 		}
 		
 		
+		public List <ChangeSet> GetLog (string path)
+		{
+			
+			int log_size = 30;
+			
+			List <ChangeSet> list = new List <ChangeSet> ();
+			
+			foreach (SparkleRepo repo in Repositories) {
+			
+				if (repo.LocalPath.Equals (path)) {
+				
+					foreach (SparkleCommit commit in repo.GetCommits (log_size))
+						list.Add ((ChangeSet) commit);
+				
+					return list;
+					
+				}
+				
+			}
+			
+			return null;
+			
+		}
+		
+		
 		// Creates a folder in the user's home folder to store configuration
 		private void CreateConfigurationFolders ()
 		{
@@ -823,6 +848,11 @@ namespace SparkleShare {
 			Environment.Exit (0);
 
 		}
+
+	}
+
+
+	public class ChangeSet : SparkleCommit {
 
 	}
 
