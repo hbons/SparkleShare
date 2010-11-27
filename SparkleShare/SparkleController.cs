@@ -523,38 +523,7 @@ namespace SparkleShare {
 			
 		}
 
-		public void OpenSparkleShareFolder (string subfolder)
-		{
-			
-			Process process = new Process ();
-			process.StartInfo.Arguments = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-				subfolder).Replace (" ", "\\ "); // Escape space-characters
-
-			string open_command_path = SparkleHelpers.CombineMore (Path.VolumeSeparatorChar.ToString (),
-				"usr", "bin");
-
-			if (File.Exists (Path.Combine (open_command_path, "xdg-open"))) {
-
-				process.StartInfo.FileName = "xdg-open";
-
-			} else if (File.Exists (Path.Combine (open_command_path, "gnome-open"))) {
-
-				process.StartInfo.FileName = "gnome-open";
-
-			} else if (File.Exists (Path.Combine (open_command_path, "open"))) {
-
-				process.StartInfo.FileName = "open";
-
-			} else {
-
-				return;
-
-			}
-
-			process.Start ();
-
-		}
-
+		public abstract void OpenSparkleShareFolder (string subfolder);
 		
 		// Adds the user's SparkleShare key to the ssh-agent,
 		// so all activity is done with this key
