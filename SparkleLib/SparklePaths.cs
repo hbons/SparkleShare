@@ -15,6 +15,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using Mono.Unix;
 
@@ -22,10 +23,10 @@ namespace SparkleLib {
 	
 	public static class SparklePaths
 	{
+		
+		public static string GitPath = GetGitPath ();
 
-		private static UnixUserInfo UnixUserInfo = new UnixUserInfo (UnixEnvironment.UserName);
-
-		public static string HomePath = UnixUserInfo.HomeDirectory;
+		public static string HomePath = new UnixUserInfo (UnixEnvironment.UserName).HomeDirectory;
 
 		public static string SparklePath = Path.Combine (HomePath ,"SparkleShare");
 
@@ -41,6 +42,27 @@ namespace SparkleLib {
 
 		public static string SparkleIconPath = SparkleHelpers.CombineMore (Defines.PREFIX, "share", "sparkleshare",
 			"icons");
+
+		
+		private static string GetGitPath ()
+		{
+		
+			Process process = new Process ();
+			
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute        = false;
+			process.StartInfo.FileName               = "which";
+			process.StartInfo.Arguments              = "git";
+			process.Start ();
+			
+			string git_path = process.StandardOutput.ReadToEnd ().Trim ();
+
+			if (!string.IsNullOrEmpty (git_path))
+				return git_path;
+			else
+				return null;
+		
+		}
 
 	}
 
