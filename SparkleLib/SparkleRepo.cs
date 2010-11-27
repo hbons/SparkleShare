@@ -971,9 +971,13 @@ namespace SparkleLib {
 
 					Commit commit = new Commit (this, commit_ref);
 
-					SparkleCommit sparkle_commit = new SparkleCommit (commit.Author.Name, commit.Author.EmailAddress,
-						commit.CommitDate.DateTime, commit.Hash);
+					SparkleCommit sparkle_commit = new SparkleCommit ();
 
+					sparkle_commit.UserName  = commit.Author.Name;
+					sparkle_commit.UserEmail = commit.Author.EmailAddress;
+					sparkle_commit.DateTime  = commit.CommitDate.DateTime;
+					sparkle_commit.Hash      = commit.Hash;
+					
 					foreach (Change change in commit.Changes) {
 
 						if (change.ChangeType.ToString ().Equals ("Added"))
