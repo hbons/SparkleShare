@@ -889,7 +889,7 @@ namespace SparkleLib {
 			    file_path.Contains (".git")  ||
 			    file_path.Contains ("/.")    ||
 			    file_path.EndsWith (".swp")  ||
-			    System.IO.Directory.Exists (LocalPath + file_path)) {
+			    System.IO.Directory.Exists (Path.Combine (LocalPath, file_path))) {
 
 				return true; // Yes, ignore it
 
