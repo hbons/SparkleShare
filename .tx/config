@@ -1,0 +1,8 @@
+[main]
+host = http://www.transifex.net
+
+[sparkleshare.UI]
+file_filter = po/<lang>.po
+source_file = po/sparkleshare.pot
+source_lang = en
+
