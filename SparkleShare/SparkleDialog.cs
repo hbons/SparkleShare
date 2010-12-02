@@ -194,9 +194,9 @@ GNU Lesser General Public License for more details."; */
 				vbox.PackStart (new HSeparator (), false, false, 0);
 				vbox.PackStart (button_bar, false, false, 0);
 
-					string image_path = SparkleHelpers.CombineMore (Defines.PREFIX, "share", "pixmaps",
-						"sparkleshare-about.png");
-
+					string image_path = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare",
+						"pixmaps", "sparkleshare-about.png");
+				System.Console.WriteLine(image_path);
 				wrapper.PackStart (new Image (image_path), false, false, 0);
 				wrapper.PackStart (vbox, true, true, 0);
 
