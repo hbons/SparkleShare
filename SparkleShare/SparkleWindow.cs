@@ -48,7 +48,7 @@ namespace SparkleShare {
 
 			HBox = new HBox (false, 6);
 
-				string image_path = SparkleHelpers.CombineMore (Defines.PREFIX, "share", "sparkleshare",
+				string image_path = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare",
 			    	"pixmaps", "side-splash.png");
 
 				Image side_splash = new Image (image_path);
