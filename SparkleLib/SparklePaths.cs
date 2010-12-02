@@ -40,7 +40,7 @@ namespace SparkleLib {
 
 		public static string SparkleLocalIconPath = SparkleHelpers.CombineMore (SparkleConfigPath, "icons", "hicolor");
 
-		public static string SparkleIconPath = SparkleHelpers.CombineMore (Defines.PREFIX, "share", "sparkleshare",
+		public static string SparkleIconPath = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare",
 			"icons");
 
 		
