@@ -103,6 +103,7 @@ SparkleLib/Defines.cs
 SparkleLib/Makefile
 SparkleShare/sparkleshare
 SparkleShare/Makefile
+SparkleShare/SparkleShare.exe.config
 SparkleShare/Nautilus/Makefile
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py
 po/Makefile.in

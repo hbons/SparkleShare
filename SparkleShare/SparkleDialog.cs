@@ -18,6 +18,7 @@ using Gtk;
 using SparkleLib;
 using Mono.Unix;
 using System.Diagnostics;
+using System.Configuration;
 
 namespace SparkleShare {
 
@@ -194,7 +195,7 @@ GNU Lesser General Public License for more details."; */
 				vbox.PackStart (new HSeparator (), false, false, 0);
 				vbox.PackStart (button_bar, false, false, 0);
 
-					string image_path = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare",
+					string image_path = SparkleHelpers.CombineMore (ConfigurationManager.AppSettings["DATAROOTDIR"], "sparkleshare",
 						"pixmaps", "sparkleshare-about.png");
 				System.Console.WriteLine(image_path);
 				wrapper.PackStart (new Image (image_path), false, false, 0);

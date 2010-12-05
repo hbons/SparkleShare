@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<appSettings>
+		<add key="PREFIX" value="@prefix@" />
+		<add key="DATAROOTDIR" value="@expanded_datadir@" />
+		<add key="LOCALE_DIR" value="@prefix@/share/locale" />
+	</appSettings>
+</configuration>

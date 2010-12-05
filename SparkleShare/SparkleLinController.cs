@@ -24,6 +24,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Configuration;
 
 namespace SparkleShare {
 
@@ -146,7 +147,7 @@ namespace SparkleShare {
 				Directory.CreateDirectory (SparklePaths.SparklePath);
 				SparkleHelpers.DebugInfo ("Controller", "Created '" + SparklePaths.SparklePath + "'");
 
-				string icon_file_path = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "icons", "hicolor",
+				string icon_file_path = SparkleHelpers.CombineMore (ConfigurationManager.AppSettings["DATAROOTDIR"], "icons", "hicolor",
 					"48x48", "apps", "folder-sparkleshare.png");
 
 				string gvfs_command_path = SparkleHelpers.CombineMore (Path.VolumeSeparatorChar.ToString (),

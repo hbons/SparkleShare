@@ -23,6 +23,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Timers;
+using System.Configuration;
 
 namespace SparkleShare {
 
@@ -48,7 +49,7 @@ namespace SparkleShare {
 
 			HBox = new HBox (false, 6);
 
-				string image_path = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare",
+				string image_path = SparkleHelpers.CombineMore (ConfigurationManager.AppSettings["DATAROOTDIR"], "sparkleshare",
 			    	"pixmaps", "side-splash.png");
 
 				Image side_splash = new Image (image_path);

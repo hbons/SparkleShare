@@ -18,6 +18,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Mono.Unix;
+using System.Configuration;
 
 namespace SparkleLib {
 	
@@ -36,11 +37,11 @@ namespace SparkleLib {
 		
 		public static string SparkleKeysPath = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
 
-		public static string SparkleInstallPath = SparkleHelpers.CombineMore (Defines.PREFIX, "sparkleshare");
+		public static string SparkleInstallPath = SparkleHelpers.CombineMore (ConfigurationManager.AppSettings["PREFIX"], "sparkleshare");
 
 		public static string SparkleLocalIconPath = SparkleHelpers.CombineMore (SparkleConfigPath, "icons", "hicolor");
 
-		public static string SparkleIconPath = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare",
+		public static string SparkleIconPath = SparkleHelpers.CombineMore (ConfigurationManager.AppSettings["DATAROOTDIR"], "sparkleshare",
 			"icons");
 
 		
