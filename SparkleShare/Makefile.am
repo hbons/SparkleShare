@@ -32,3 +32,5 @@ dist_man_MANS = $(top_srcdir)/man/sparkleshare.1
 
 Applicationsdir = $(datadir)/applications
 dist_Applications_DATA = sparkleshare.desktop
+
+module_SCRIPTS += SparkleShare.exe.config
