@@ -46,25 +46,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainWindow.cs">
-      <DependentUpon>MainWindow.xib</DependentUpon>
-    </Compile>
-    <Compile Include="MainWindowController.cs">
-      <DependentUpon>MainWindow.xib</DependentUpon>
-    </Compile>
-    <Compile Include="MainWindow.xib.designer.cs">
-      <DependentUpon>MainWindow.xib</DependentUpon>
-    </Compile>
     <Compile Include="Main.cs" />
-    <Compile Include="AppDelegate.cs">
-      <DependentUpon>MainMenu.xib</DependentUpon>
-    </Compile>
     <Compile Include="MainMenu.xib.designer.cs">
       <DependentUpon>MainMenu.xib</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="MainWindow.xib" />
     <Page Include="MainMenu.xib" />
   </ItemGroup>
   <ItemGroup>
