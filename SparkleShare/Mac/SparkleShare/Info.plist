@@ -8,7 +8,7 @@
 		<string>/opt/local/bin</string>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.SparkleShare</string>
+	<string>org.sparkleshare.sparkleshare</string>
 	<key>CFBundleName</key>
 	<string>SparkleShare</string>
 	<key>CFBundleVersion</key>
@@ -19,5 +19,7 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>LSBackgroundOnly</key>
+	<true/>
 </dict>
 </plist>
