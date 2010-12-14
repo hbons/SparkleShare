@@ -3,6 +3,7 @@ using System.Drawing;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
+using MonoMac.WebKit;
 
 namespace SparkleShare
 {
@@ -11,6 +12,7 @@ namespace SparkleShare
 		static void Main (string[] args)
 		{
 			NSApplication.Init ();
+			NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
 			NSApplication.Main (args);
 		}
 	}
@@ -31,13 +33,24 @@ namespace SparkleShare
 		NSMenuItem AboutMenuItem;
 		NSMenuItem QuitMenuItem;
 
-			
+		NSTextField text;
+		NSWindow window;
+		NSButton button;
+		NSButton button2;
+		
+		WebView web_view;
+		
+		
 		public AppDelegate ()
 		{
 		}
 
 		public override void FinishedLaunching (NSObject notification)
 		{
+			
+		
+		
+			
 
 			//	mainWindowController = new MainWindowController ();
 			//	mainWindowController.Window.MakeKeyAndOrderFront (this);
@@ -84,7 +97,54 @@ namespace SparkleShare
 			foreach (NSMenuItem item in FolderMenuItems) {
 				
 				item.Activated += delegate {
-						
+					
+					
+					
+					
+		button = new NSButton (new RectangleF (16, 12, 120, 31)) {
+			Title = "Open Folder",
+			BezelStyle = NSBezelStyle.Rounded
+					
+		};
+					
+				button2 = new NSButton (new RectangleF (480 - 120 - 16, 12, 120, 31)) {
+			Title = "Close",
+			BezelStyle = NSBezelStyle.Rounded
+					
+		};
+
+		window = new NSWindow (new RectangleF (0, 0, 480, 640), (NSWindowStyle) (1 | (1 << 1) | (1 << 2) | (1 << 3)), 0, false);
+	
+					bool minimizeBox = true;
+					bool maximizeBox = false;
+window.StyleMask = (NSWindowStyle)(1 | (1 << 1) | (minimizeBox ? 4 : 1) | (maximizeBox ? 8 : 1));
+					
+					
+		web_view = new WebView (new RectangleF (0, 12 + 31 + 16, 480, 640 - (12 + 31 + 16)), "", "");			
+					web_view.MainFrameUrl = "http://www.google.nl/";
+					
+					
+		window.ContentView.AddSubview (button);
+		window.ContentView.AddSubview (button2);
+				window.ContentView.AddSubview (web_view);
+					
+		window.MaxSize = new SizeF (480, 640);
+		window.MinSize = new SizeF (480, 640);
+					
+					window.Title = "Recent Events in 'gnome-design'";
+
+		window.HasShadow = true;	
+
+		window.BackingType = NSBackingStore.Buffered;
+
+					
+					
+					
+	window.MakeKeyAndOrderFront (this);
+					window.Center ();
+					
+					
+					
 				};
 				
 				item.Image = NSImage.ImageNamed ("NSFolder");
