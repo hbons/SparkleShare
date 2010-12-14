@@ -113,11 +113,16 @@ namespace SparkleShare
 					
 		};
 
-		window = new NSWindow (new RectangleF (0, 0, 480, 640), (NSWindowStyle) (1 | (1 << 1) | (1 << 2) | (1 << 3)), 0, false);
-	
-					bool minimizeBox = true;
+					
+	bool minimizeBox = true;
 					bool maximizeBox = false;
-window.StyleMask = (NSWindowStyle)(1 | (1 << 1) | (minimizeBox ? 4 : 1) | (maximizeBox ? 8 : 1));
+NSWindowStyle style = (NSWindowStyle)(1 | (1 << 1) | (minimizeBox ? 4 : 1) | (maximizeBox ? 8 : 1));
+					
+					
+window = new NSWindow (new RectangleF (0, 0, 480, 640),
+					        style, 0, false);
+	
+					
 					
 					
 		web_view = new WebView (new RectangleF (0, 12 + 31 + 16, 480, 640 - (12 + 31 + 16)), "", "");			
@@ -134,7 +139,7 @@ window.StyleMask = (NSWindowStyle)(1 | (1 << 1) | (minimizeBox ? 4 : 1) | (maxim
 					window.Title = "Recent Events in 'gnome-design'";
 
 		window.HasShadow = true;	
-
+					window.DefaultButtonCell = button2.Cell;
 		window.BackingType = NSBackingStore.Buffered;
 
 					
