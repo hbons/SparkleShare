@@ -1,9 +1,11 @@
 using System;
 using System.Drawing;
+using System.Timers;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
 using MonoMac.WebKit;
+using MonoMac.Growl;
 
 namespace SparkleShare
 {
@@ -13,15 +15,16 @@ namespace SparkleShare
 		{
 			NSApplication.Init ();
 			NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+			NSApplication.SharedApplication.applicationIconImage = NSImage.ImageNamed ("sparkleshare.icns");
 			NSApplication.Main (args);
 		}
 	}
 	
 	
-		[MonoMac.Foundation.Register("AppDelegate")]
+
 	public partial class AppDelegate : NSApplicationDelegate
 	{
-		
+	
 		//MainWindowController mainWindowController;
 		NSStatusItem StatusItem;
 		
@@ -33,25 +36,37 @@ namespace SparkleShare
 		NSMenuItem AboutMenuItem;
 		NSMenuItem QuitMenuItem;
 
-		NSTextField text;
+	
 		NSWindow window;
 		NSButton button;
 		NSButton button2;
 		
 		WebView web_view;
+		NSDockTile tile;
+		int i = 0;
 		
 		
+	/*	public override NSMenu ApplicationDockMenu (NSApplication app)
+		{
+			
+			return (NSMenu) Menu;	
+			
+		}
+	*/	
 		public AppDelegate ()
 		{
 		}
 
+
+	
+
 		public override void FinishedLaunching (NSObject notification)
 		{
 			
-		
-		
-			
-
+	/*	tile = NSApplication.SharedApplication.DockTile;
+			tile.BadgeLabel = "!";
+tile.Display ();		
+	*/		
 			//	mainWindowController = new MainWindowController ();
 			//	mainWindowController.Window.MakeKeyAndOrderFront (this);
 			
@@ -59,7 +74,7 @@ namespace SparkleShare
 
 			//		SparkleRepo repo = new SparkleRepo ("/Users/hbons/SparkleShare/SparkleShare-Test");
 
-			StatusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (32);
+			StatusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
 			
 			StatusItem.Enabled             = true;
 			StatusItem.Image               = NSImage.ImageNamed ("sparkleshare-idle.png");
@@ -75,11 +90,33 @@ namespace SparkleShare
 			Menu.AddItem (NSMenuItem.SeparatorItem);
 			
 			
+			Timer timer = new Timer () {
+				Interval = 500
+			};
+			
+			
+				
 			FolderMenuItem = new NSMenuItem () {
 				Title="SparkleShare", Enabled = true,
 				Action = new Selector ("ddd")
 			};
+
 			
+						timer.Elapsed += delegate {
+			FolderMenuItem.InvokeOnMainThread (delegate {
+					
+					if (i == 0){
+					StatusItem.Image = NSImage.ImageNamed ("sparkleshare-idle-focus.png");
+						i = 1;
+					}else{
+					StatusItem.Image = NSImage.ImageNamed ("sparkleshare-idle.png");	
+					i = 0;	
+					}
+					
+					/*FolderMenuItem.Title+="Z";Menu.Update ();*/});	
+			};
+			
+			timer.Start ();
 				FolderMenuItem.Activated += delegate {
 					Console.WriteLine ("DDDD");	
 				};
@@ -90,7 +127,7 @@ namespace SparkleShare
 			Menu.AddItem (FolderMenuItem);
 			
 			FolderMenuItems = new NSMenuItem [2] {
-				new NSMenuItem () { Title = "gnome-design" },
+				new NSMenuItem () { Title = "gnome-design (2)" },
 				new NSMenuItem () { Title = "tango-icons" }	
 			};
 			
@@ -139,14 +176,16 @@ window = new NSWindow (new RectangleF (0, 0, 480, 640),
 					window.Title = "Recent Events in 'gnome-design'";
 
 		window.HasShadow = true;	
-					window.DefaultButtonCell = button2.Cell;
+					//window.DefaultButtonCell = button2.Cell;
 		window.BackingType = NSBackingStore.Buffered;
 
 					
-					
+					NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
 					
 	window.MakeKeyAndOrderFront (this);
 					window.Center ();
+					
+					
 					
 					
 					
@@ -156,12 +195,17 @@ window = new NSWindow (new RectangleF (0, 0, 480, 640),
 				Menu.AddItem (item);	
 			};
 		
+                                                                           
+			
+				
+			
+			
 
 			Menu.AddItem (NSMenuItem.SeparatorItem);
 
 			
 			SyncMenuItem = new NSMenuItem () {
-				Title = "Sync Remote Folder..."
+				Title = "Add Remote Folder..."
 			};
 			
 				SyncMenuItem.Activated += delegate {
@@ -209,7 +253,7 @@ window = new NSWindow (new RectangleF (0, 0, 480, 640),
 			Menu.AddItem (AboutMenuItem);
 
 			
-			Menu.AddItem (NSMenuItem.SeparatorItem);
+	//		Menu.AddItem (NSMenuItem.SeparatorItem);
 
 			
 			QuitMenuItem = new NSMenuItem () {
@@ -220,11 +264,20 @@ window = new NSWindow (new RectangleF (0, 0, 480, 640),
 					Environment.Exit (0);
 				};
 			
-			Menu.AddItem (QuitMenuItem);									 
+			//Menu.AddItem (QuitMenuItem);								 
 
 			StatusItem.Menu = Menu;
-
+			
+			
+			
+			NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+			
+			
 		}
+		
+		
+		
+		
 	}
 	
 }
