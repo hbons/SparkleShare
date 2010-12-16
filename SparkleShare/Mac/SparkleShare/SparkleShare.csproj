@@ -50,6 +50,7 @@
     <Compile Include="MainMenu.xib.designer.cs">
       <DependentUpon>MainMenu.xib</DependentUpon>
     </Compile>
+    <Compile Include="Layout.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
@@ -62,6 +63,7 @@
   <ItemGroup>
     <Content Include="sparkleshare-idle-focus.png" />
     <Content Include="sparkleshare-idle.png" />
+    <Content Include="sparkleshare.icns" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\SparkleLib\SparkleLib.csproj">
