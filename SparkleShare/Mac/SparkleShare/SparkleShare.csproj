@@ -52,6 +52,7 @@
     </Compile>
     <Compile Include="Layout.cs" />
     <Compile Include="SparkleLog.cs" />
+    <Compile Include="SparkleStatusIcon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
