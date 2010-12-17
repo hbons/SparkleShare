@@ -54,9 +54,13 @@ namespace SparkleShare {
 			Animation = CreateAnimation ();
 
 			StatusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
+			StatusItem.HighlightMode = true;
+			
 			
 			SetNormalState ();
 			CreateMenu ();
+			
+
 			
 /*			SparkleShare.Controller.FolderSizeChanged += delegate {
 				Application.Invoke (delegate {
