@@ -51,6 +51,7 @@
       <DependentUpon>MainMenu.xib</DependentUpon>
     </Compile>
     <Compile Include="Layout.cs" />
+    <Compile Include="SparkleLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
@@ -64,6 +65,13 @@
     <Content Include="sparkleshare-idle-focus.png" />
     <Content Include="sparkleshare-idle.png" />
     <Content Include="sparkleshare.icns" />
+    <Content Include="idle-active.png" />
+    <Content Include="idle.png" />
+    <Content Include="idle0.png" />
+    <Content Include="idle1.png" />
+    <Content Include="idle2.png" />
+    <Content Include="idle3.png" />
+    <Content Include="idle4.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\SparkleLib\SparkleLib.csproj">
