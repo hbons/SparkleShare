@@ -94,7 +94,7 @@ Build on OSX:
 
 Get the Mono Framework, Monodevelop, and MacPorts.
 Install git-core, automake and intltool using 'port install'.
-
+Make sure that git or a symbolic link to git is in /usr/bin.
 
 Frequently Asked Question
 =========================
