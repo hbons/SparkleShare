@@ -17,8 +17,6 @@
 
 using System;
 using System.Drawing;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
@@ -39,22 +37,22 @@ namespace SparkleShare {
 		{
 			
 			LocalPath = path;
-			
-						
-	bool minimizeBox = true;
-					bool maximizeBox = false;
 	
 			
 			SetFrame (new RectangleF (0, 0, 480, 640), true);
 			
-			StyleMask   = (NSWindowStyle)(1 | (1 << 1) | (minimizeBox ? 4 : 1) | (maximizeBox ? 8 : 1));
+			Center ();
+			
+			StyleMask = (NSWindowStyle.Closable |
+			             NSWindowStyle.Miniaturizable |
+			             NSWindowStyle.Titled);
+
 			MaxSize     = new SizeF (480, 640);
 			MinSize     = new SizeF (480, 640);
 			HasShadow   = true;			
 			BackingType = NSBackingStore.Buffered;
-			
-			Center ();
-		
+
+
 			ContentView.AddSubview (CreateEventLog ());
 			
 			OpenFolderButton = new NSButton (new RectangleF (16, 12, 120, 31)) {
