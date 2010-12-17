@@ -35,6 +35,8 @@ namespace SparkleShare
 		NSMenuItem NotificationsMenuItem;
 		NSMenuItem AboutMenuItem;
 		NSMenuItem QuitMenuItem;
+		
+		SparkleLog Log;
 
 	
 		NSWindow window;
@@ -77,10 +79,10 @@ tile.Display ();
 			StatusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
 			
 			StatusItem.Enabled             = true;
-			StatusItem.Image               = NSImage.ImageNamed ("sparkleshare-idle.png");
-			StatusItem.AlternateImage      = NSImage.ImageNamed ("sparkleshare-idle-focus.png");
-			StatusItem.Image.Size          = new SizeF (13, 13);	
-			StatusItem.AlternateImage.Size = new SizeF (13, 13);	
+			StatusItem.Image               = NSImage.ImageNamed ("idle.png");
+			StatusItem.AlternateImage      = NSImage.ImageNamed ("idle-active.png");
+			StatusItem.Image.Size          = new SizeF (16 , 16);	
+			StatusItem.AlternateImage.Size = new SizeF (16, 16);	
 			StatusItem.HighlightMode = true;
 
 			Menu = new NSMenu ();
@@ -91,7 +93,7 @@ tile.Display ();
 			
 			
 			Timer timer = new Timer () {
-				Interval = 500
+				Interval = 60
 			};
 			
 			
@@ -104,13 +106,19 @@ tile.Display ();
 			
 						timer.Elapsed += delegate {
 			FolderMenuItem.InvokeOnMainThread (delegate {
+						
+					StatusItem.Image = NSImage.ImageNamed ("idle" + i + ".png");
+					StatusItem.Image.Size          = new SizeF (16 , 16);
 					
-					if (i == 0){
-					StatusItem.Image = NSImage.ImageNamed ("sparkleshare-idle-focus.png");
-						i = 1;
+					StatusItem.AlternateImage = NSImage.ImageNamed ("idle" + i + ".png");
+					StatusItem.AlternateImage.Size          = new SizeF (16 , 16);
+					
+					if (i < 4){
+						i++;
 					}else{
-					StatusItem.Image = NSImage.ImageNamed ("sparkleshare-idle.png");	
-					i = 0;	
+						
+				//	StatusItem.Image = NSImage.ImageNamed ("sparkleshare-idle.png");	
+					i = 0;
 					}
 					
 					/*FolderMenuItem.Title+="Z";Menu.Update ();*/});	
@@ -121,7 +129,7 @@ tile.Display ();
 					Console.WriteLine ("DDDD");	
 				};
 			
-				FolderMenuItem.Image = NSImage.ImageNamed ("NSFolder");
+				FolderMenuItem.Image = NSImage.ImageNamed ("sparkleshare.icns");
 				FolderMenuItem.Image.Size = new SizeF (16, 16);	
 
 			Menu.AddItem (FolderMenuItem);
@@ -133,73 +141,15 @@ tile.Display ();
 			
 			foreach (NSMenuItem item in FolderMenuItems) {
 				
-				item.Activated += delegate {
-					
-					
-					
-					
-		button = new NSButton (new RectangleF (16, 12, 120, 31)) {
-			Title = "Open Folder",
-			BezelStyle = NSBezelStyle.Rounded
-					
-		};
-					
-				button2 = new NSButton (new RectangleF (480 - 120 - 16, 12, 120, 31)) {
-			Title = "Close",
-			BezelStyle = NSBezelStyle.Rounded
-					
-		};
-
-					
-	bool minimizeBox = true;
-					bool maximizeBox = false;
-NSWindowStyle style = (NSWindowStyle)(1 | (1 << 1) | (minimizeBox ? 4 : 1) | (maximizeBox ? 8 : 1));
-					
-					
-window = new NSWindow (new RectangleF (0, 0, 480, 640),
-					        style, 0, false);
-	
-					
-					
-					
-		web_view = new WebView (new RectangleF (0, 12 + 31 + 16, 480, 640 - (12 + 31 + 16)), "", "");			
-					web_view.MainFrameUrl = "http://www.google.nl/";
-					
-					
-		window.ContentView.AddSubview (button);
-		window.ContentView.AddSubview (button2);
-				window.ContentView.AddSubview (web_view);
-					
-		window.MaxSize = new SizeF (480, 640);
-		window.MinSize = new SizeF (480, 640);
-					
-					window.Title = "Recent Events in 'gnome-design'";
-
-		window.HasShadow = true;	
-					//window.DefaultButtonCell = button2.Cell;
-		window.BackingType = NSBackingStore.Buffered;
-
-					
-					NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-					
-	window.MakeKeyAndOrderFront (this);
-					window.Center ();
-					
-					
-					
-					
-					
-				};
+				
 				
 				item.Image = NSImage.ImageNamed ("NSFolder");
+				item.Image.Size = new SizeF (16, 16);	
 				Menu.AddItem (item);	
 			};
 		
                                                                            
-			
-				
-			
-			
+	Log = new SparkleLog ("bla");
 
 			Menu.AddItem (NSMenuItem.SeparatorItem);
 
