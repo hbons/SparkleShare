@@ -15,6 +15,7 @@
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
+using SparkleLib;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -66,7 +67,12 @@ namespace SparkleShare {
 		public override void OpenSparkleShareFolder (string subfolder)
 		{
 		
-			
+			string folder = Path.Combine (SparklePaths.SparklePath, subfolder);
+
+			Process process = new Process ();
+			process.StartInfo.Arguments = folder.Replace (" ", "\\ "); // Escape space-characters
+			process.StartInfo.FileName  = "open";
+			process.Start ();
 			
 		}
 
