@@ -14,47 +14,62 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-	
+
 using System;
-using System.Drawing;
-using System.Timers;
-using MonoMac.Foundation;
-using MonoMac.AppKit;
-using MonoMac.ObjCRuntime;
-using MonoMac.WebKit;
+using System.Diagnostics;
+using System.IO;
 
 namespace SparkleShare {
 
-	public partial class AppDelegate : NSApplicationDelegate {
-		// Workaround to be able to work with SparkleUI as the main class
-	}
+	public class SparkleMacController : SparkleController {
 
-	
-	public class SparkleUI : AppDelegate
-	{
-	
-		public SparkleStatusIcon StatusIcon;
-		
-		
-		public SparkleUI ()
+		// Creates a .desktop entry in autostart folder to
+		// start SparkleShare automatically at login
+		public override void EnableSystemAutostart ()
 		{
-
-			NSApplication.Init ();
-			//NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-			//NSApplication.SharedApplication.applicationIconImage = NSImage.ImageNamed ("sparkleshare.icns");
+		
 			
-			//StatusIcon = new SparkleStatusIcon ();
-
+			
 		}
 
 		
-		public void Run ()
+		// Installs a launcher so the user can launch SparkleShare
+		// from the Internet category if needed
+		public override void InstallLauncher ()
 		{
+
 			
-			NSApplication.Main (new string [0]);
 			
 		}
+
 		
+		// Adds the SparkleShare folder to the user's
+		// list of bookmarked places
+		public override void AddToBookmarks ()
+		{
+			
+		
+		
+		}
+		
+
+		// Creates the SparkleShare folder in the user's home folder
+		public override bool CreateSparkleShareFolder ()
+		{
+			
+			return true;
+			
+		}
+
+		
+		// Opens the SparkleShare folder or an (optional) subfolder
+		public override void OpenSparkleShareFolder (string subfolder)
+		{
+		
+			
+			
+		}
+
 	}
-	
+
 }
