@@ -85,7 +85,7 @@ namespace SparkleShare {
 				ShowHelp (p);
 
 
-			switch (SparkleShare.Platform ()) {
+			switch (SparkleShare.Platform) {
 
 				case PlatformID.Unix:
 					SetProcessName ("sparkleshare");
@@ -180,30 +180,36 @@ namespace SparkleShare {
 		// Strange magic needed by Platform ()
 		[DllImport ("libc")]
 		static extern int uname (IntPtr buf);
-		
-		
-		static PlatformID Platform () {
-		
-			IntPtr buf = IntPtr.Zero;
-		
-			try {
-		        
-				buf = Marshal.AllocHGlobal (8192);
-		       
-		    	if (uname (buf) == 0 && Marshal.PtrToStringAnsi (buf) == "Darwin")
-					return PlatformID.MacOSX;
-		      
-		    } catch {
-				
-			} finally {
-		      
-				if (buf != IntPtr.Zero)
-					Marshal.FreeHGlobal (buf);
 
+
+		// This fixes the PlatformID enumeration for MacOSX in Environment.OSVersion.Platform,
+		// which is intentionally broken in Mono for hystorical reasons
+		static PlatformID Platform {
+			
+			get {
+		
+				IntPtr buf = IntPtr.Zero;
+			
+				try {
+			        
+					buf = Marshal.AllocHGlobal (8192);
+			       
+					if (uname (buf) == 0 && Marshal.PtrToStringAnsi (buf) == "Darwin")
+						return PlatformID.MacOSX;
+			      
+				} catch {
+					
+				} finally {
+			      
+					if (buf != IntPtr.Zero)
+						Marshal.FreeHGlobal (buf);
+	
+				}
+			
+				return Environment.OSVersion.Platform;
+	
 			}
 		
-			return Environment.OSVersion.Platform;
-				
 		}
 			
 	}
