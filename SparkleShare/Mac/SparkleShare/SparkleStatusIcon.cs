@@ -20,6 +20,7 @@ using System.Timers;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
+using Mono.Unix;
 
 namespace SparkleShare {
 
@@ -39,12 +40,12 @@ namespace SparkleShare {
 		private NSMenuItem SyncMenuItem;
 		private NSMenuItem NotificationsMenuItem;
 		private NSMenuItem AboutMenuItem;
-		private NSMenuItem QuitMenuItem;
 
 		
-		public string _ (string s)
+		// Short alias for the translations
+		public static string _ (string s)
 		{
-			return s;
+			return Catalog.GetString (s);
 		}
 
 		
@@ -57,7 +58,7 @@ namespace SparkleShare {
 			StatusItem.HighlightMode = true;
 			
 			
-			SetNormalState ();
+			SetAnimationState ();
 			CreateMenu ();
 			
 
