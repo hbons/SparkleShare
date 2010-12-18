@@ -58,45 +58,45 @@ namespace SparkleShare {
 			StatusItem.HighlightMode = true;
 			
 			
-			SetAnimationState ();
+			SetNormalState ();
 			CreateMenu ();
 			
 
 			
-/*			SparkleShare.Controller.FolderSizeChanged += delegate {
-				Application.Invoke (delegate {
+			SparkleShare.Controller.FolderSizeChanged += delegate {
+				InvokeOnMainThread (delegate {
 					UpdateMenu ();
 				});
 			};
 			
 			SparkleShare.Controller.FolderListChanged += delegate {
-				Application.Invoke (delegate {
+				InvokeOnMainThread (delegate {
 					SetNormalState ();
 					CreateMenu ();
 				});
 			};
 
 			SparkleShare.Controller.OnIdle += delegate {
-				Application.Invoke (delegate {
+				InvokeOnMainThread (delegate {
 					SetNormalState ();
 					UpdateMenu ();
 				});
 			};
 
 			SparkleShare.Controller.OnSyncing += delegate {
-				Application.Invoke (delegate {
+				InvokeOnMainThread (delegate {
 					SetAnimationState ();
 					UpdateMenu ();
 				});
 			};
 
 			SparkleShare.Controller.OnError += delegate {
-				Application.Invoke (delegate {
+				 InvokeOnMainThread (delegate {
 					SetNormalState (true);
 					UpdateMenu ();
 				});
 			};
-*/
+
 		}
 
 
@@ -119,10 +119,10 @@ namespace SparkleShare {
 
 				InvokeOnMainThread (delegate {
 					
-					StatusItem.AlternateImage      = NSImage.ImageNamed ("idle" + FrameNumber + ".png");
+					StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle" + FrameNumber + ".png");
 					StatusItem.AlternateImage.Size = new SizeF (16, 16);
 					
-					StatusItem.Image      = NSImage.ImageNamed ("idle" + FrameNumber + ".png");
+					StatusItem.Image      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle" + FrameNumber + ".png");
 					StatusItem.Image.Size = new SizeF (16, 16);
 					
 				});
@@ -138,7 +138,7 @@ namespace SparkleShare {
 		// user clicks the status icon
 		public void CreateMenu ()
 		{
-
+			
 			Menu = new NSMenu ();
 			
 			StateMenuItem = new NSMenuItem () {
@@ -154,49 +154,49 @@ namespace SparkleShare {
 			};
 
 				FolderMenuItem.Activated += delegate {
-					// SparkleShare.Controller.OpenSparkleShareFolder ();
+					SparkleShare.Controller.OpenSparkleShareFolder ();
 				};
 			
-				FolderMenuItem.Image = NSImage.ImageNamed ("sparkleshare.icns");
+				//FolderMenuItem.Image = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/sparkleshare.icns");
+				FolderMenuItem.Image = NSImage.ImageNamed ("NSFolder");
 				FolderMenuItem.Image.Size = new SizeF (16, 16);	
 			
 			Menu.AddItem (FolderMenuItem);
 			
-
-			FolderMenuItems = new NSMenuItem [2] {
-				new NSMenuItem () { Title = "gnome-design" },
-				new NSMenuItem () { Title = "tango-icons" }	
-			};
 			
-			
-//			if (SparkleShare.Controller.Folders.Count > 0) {
-			
+			if (SparkleShare.Controller.Folders.Count > 0) {
 				
-//				foreach (string path in SparkleShare.Controller.Folders) {
-			
-				foreach (NSMenuItem item in FolderMenuItems) {	
+				FolderMenuItems = new NSMenuItem [SparkleShare.Controller.Folders.Count];
+				Tasks = new EventHandler [SparkleShare.Controller.Folders.Count];
+				
+				int i = 0;
+				
+				foreach (string path in SparkleShare.Controller.Folders) {	
 				
 //					if (repo.HasUnsyncedChanges)
 //						folder_action.IconName = "dialog-error";
-						
+					
+					NSMenuItem item = new NSMenuItem ();
+					
+					item.Title      = System.IO.Path.GetFileName (path);
 					item.Image      = NSImage.ImageNamed ("NSFolder");
 					item.Image.Size = new SizeF (16, 16);
+
+					Tasks [i] = OpenEventLogDelegate(item.Title);
+			
+					FolderMenuItems [i] = item;
+					FolderMenuItems [i].Activated += Tasks [i];
+					Menu.AddItem (FolderMenuItems [i]);
 					
-					item.Activated += delegate {
-						
-					};
-					
-					item.Activated += OpenEventLogDelegate (item.Title);
-					
-					Menu.AddItem (item);
+					i++;
 			
 				};
 		
-			// } else {
+			} else {
 		
 				// TODO: No Remote Folders Yet
 		
-			// }
+			}
 					
 			Menu.AddItem (NSMenuItem.SeparatorItem);
 
@@ -205,11 +205,11 @@ namespace SparkleShare {
 				Title = "Add Remote Folder..."
 			};
 			
-//				if (SparkleShare.Controller.FirstRun)
-//					SyncMenuItem.Enabled = false;
+				if (SparkleShare.Controller.FirstRun)
+					SyncMenuItem.Enabled = false;
 			
 				SyncMenuItem.Activated += delegate {
-					// TODO
+					SparkleWindow w = new SparkleWindow ();
 				};
 			
 			Menu.AddItem (SyncMenuItem);
@@ -219,16 +219,21 @@ namespace SparkleShare {
 			
 
 			NotificationsMenuItem = new NSMenuItem () {
-				Title = "Show Notifications",
-				State = NSCellStateValue.On
+				Title = "Show Notifications"
 			};
 			
-//				if (SparkleShare.Controller.NotificationsEnabled)
-//					NotificationsMenuItem.State = NSCellStateValue.On;
-//				else
-//					NotificationsMenuItem.State = NSCellStateValue.On;
+				if (SparkleShare.Controller.NotificationsEnabled)
+					NotificationsMenuItem.State = NSCellStateValue.On;
+
 				NotificationsMenuItem.Activated += delegate {
-//					SparkleShare.Controller.ToggleNotifications ();
+			
+					SparkleShare.Controller.ToggleNotifications ();
+				
+					if (SparkleShare.Controller.NotificationsEnabled)
+						NotificationsMenuItem.State = NSCellStateValue.On;
+					else
+						NotificationsMenuItem.State = NSCellStateValue.Off;
+			
 				};
 
 			Menu.AddItem (NotificationsMenuItem);
@@ -248,33 +253,30 @@ namespace SparkleShare {
 			Menu.AddItem (AboutMenuItem);
 										 
 			StatusItem.Menu = Menu;
+			StatusItem.Menu.Update ();
+			Console.WriteLine ("MENU UPDATED");
 
 		}
 
-
+		
+		public delegate void Task();
+		EventHandler [] Tasks;
+		
 		// A method reference that makes sure that opening the
 		// event log for each repository works correctly
 		private EventHandler OpenEventLogDelegate (string path)
 		{
 
+			
 			return delegate { 
 
-				SparkleLog log = null; //SparkleUI.OpenLogs.Find (delegate (SparkleLog l) { return l.LocalPath.Equals (path); });
+				SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) { return l.LocalPath.Equals (path); });
 
 				// Check whether the log is already open, create a new one if
-				//that's not the case or present it to the user if it is
+				// that's not the case or present it to the user if it is
 				if (log == null) {
 
-					log = new SparkleLog (path);
-
-					/*log.Hidden += delegate {
-
-					SparkleUI.OpenLogs.Remove (log);
-					log.Destroy ();
-
-					};
-
-					SparkleUI.OpenLogs.Add (log);*/
+					SparkleUI.OpenLogs.Add (new SparkleLog (path));
 
 				}
 
@@ -306,15 +308,15 @@ namespace SparkleShare {
 
 			Animation.Stop ();
 			
-			if (false /* SparkleShare.Controller.Folders.Count == 0 */) {
+			if (SparkleShare.Controller.Folders.Count == 0) {
 
 				StateText = _("Welcome to SparkleShare!");
 				InvokeOnMainThread (delegate {
 
-					StatusItem.Image      = NSImage.ImageNamed ("idle.png");
+					StatusItem.Image      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle.png");
 					StatusItem.Image.Size = new SizeF (16, 16);
 						
-					StatusItem.AlternateImage      = NSImage.ImageNamed ("idle-active.png");
+					StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle-active.png");
 					StatusItem.AlternateImage.Size = new SizeF (16, 16);
 					
 				});
@@ -330,13 +332,13 @@ namespace SparkleShare {
 
 				} else {
 					
-					StateText = _("Up to date") + "  ("/* + SparkleShare.Controller.FolderSize + ")" */;
+					StateText = _("Up to date") + " (" + SparkleShare.Controller.FolderSize + ")";
 					InvokeOnMainThread (delegate {
 						
-						StatusItem.Image      = NSImage.ImageNamed ("idle.png");
+						StatusItem.Image      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle.png");
 						StatusItem.Image.Size = new SizeF (16, 16);
 						
-						StatusItem.AlternateImage      = NSImage.ImageNamed ("idle-active.png");
+						StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle-active.png");
 						StatusItem.AlternateImage.Size = new SizeF (16, 16);
 						
 					});

@@ -61,7 +61,7 @@ namespace SparkleShare {
 			};
 
 				OpenFolderButton.Activated += delegate {
-					// SparkleShare.Controller.OpenSparkleShareFolder (LocalPath);
+					SparkleShare.Controller.OpenSparkleShareFolder (LocalPath);
 				};
 
 			ContentView.AddSubview (OpenFolderButton);
@@ -73,7 +73,7 @@ namespace SparkleShare {
 			};
 					
 				CloseButton.Activated += delegate {
-					Close ();
+					PerformClose (this);
 				};
 								
 			ContentView.AddSubview (CloseButton);
@@ -87,14 +87,16 @@ namespace SparkleShare {
 			
 		}
 
-
-		new public void Close ()
+		
+		public override void PerformClose (NSObject sender)
 		{
-
-			InvokeOnMainThread (delegate {                  
-				base.Close ();
+			
+			InvokeOnMainThread (delegate {
+				Console.WriteLine ("!!!!!!!!!!");
+				SparkleUI.OpenLogs.Remove ((SparkleLog) this);
+				base.PerformClose (this);
 			});
-
+		
 		}
 
 
