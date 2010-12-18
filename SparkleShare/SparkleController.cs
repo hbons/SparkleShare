@@ -106,8 +106,7 @@ namespace SparkleShare {
 			// Remove the repository when a delete event occurs
 			watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
 
-				if (Directory.Exists (args.FullPath))
-					RemoveRepository (args.FullPath);
+				RemoveRepository (args.FullPath);
 
 			};
 
