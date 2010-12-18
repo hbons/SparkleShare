@@ -47,7 +47,6 @@
     <Reference Include="Mono.Posix" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
     <Compile Include="MainMenu.xib.designer.cs">
       <DependentUpon>MainMenu.xib</DependentUpon>
     </Compile>
@@ -61,6 +60,8 @@
       <Link>SparkleController.cs</Link>
     </Compile>
     <Compile Include="SparkleMacController.cs" />
+    <Compile Include="SparkleUI.cs" />
+    <Compile Include="SparkleWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
@@ -80,6 +81,9 @@
     <Content Include="Pixmaps\idle3.png" />
     <Content Include="Pixmaps\sparkleshare-idle.png" />
     <Content Include="Pixmaps\sparkleshare-idle-focus.png" />
+    <Content Include="..\..\..\data\side-splash.png">
+      <Link>Pixmaps\side-splash.png</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\SparkleLib\SparkleLib.csproj">

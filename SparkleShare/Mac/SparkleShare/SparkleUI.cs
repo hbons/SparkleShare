@@ -8,164 +8,59 @@
 //
 //   This program is distributed in the hope that it will be useful,
 //   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //   GNU General Public License for more details.
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using Gtk;
-using Mono.Unix;
-using Mono.Unix.Native;
-using SparkleLib;
+	
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
+using System.Drawing;
+using System.Timers;
+using MonoMac.Foundation;
+using MonoMac.AppKit;
+using MonoMac.ObjCRuntime;
+using MonoMac.WebKit;
 
 namespace SparkleShare {
 
-	public class SparkleUI {
-		
+	public partial class AppDelegate : NSApplicationDelegate {
+		// Workaround to be able to work with SparkleUI as the main class
+	}
+
+	
+	public class SparkleUI : AppDelegate
+	{
+	
 		public static SparkleStatusIcon StatusIcon;
 		public static List <SparkleLog> OpenLogs;
-
-
-		// Short alias for the translations
-		public static string _(string s)
-		{
-			return Catalog.GetString (s);
-		}
-
-
+		
+		
 		public SparkleUI ()
 		{
 
-			// Initialize the application
-			Application.Init ();
-
-			// Create the statusicon
+			NSApplication.Init ();
+			NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+		//NSApplication.SharedApplication.applicationIconImage = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/sparkeshare.icns");
+			
+			OpenLogs = new List <SparkleLog> ();
 			StatusIcon = new SparkleStatusIcon ();
 			
-			// Keep track of which event logs are open
-			SparkleUI.OpenLogs = new List <SparkleLog> ();
-
-			SparkleShare.Controller.OnFirstRun += delegate {
-				Application.Invoke (delegate {
-
-					SparkleIntro intro = new SparkleIntro ();
-					intro.ShowAll ();
-
-				});
-			};
-
-			SparkleShare.Controller.OnInvitation += delegate (string invitation_file_path) {
-				Application.Invoke (delegate {
-
-					SparkleInvitation invitation = new SparkleInvitation (invitation_file_path);
-					invitation.Present ();				
-
-				});
-			};
-
-			// Show a bubble when there are new changes
-			SparkleShare.Controller.NotificationRaised += delegate (SparkleCommit commit, string repository_path) {
-
-				string file_name = "";
-				string message = null;
-
-				if (commit.Added.Count > 0) {
-
-					foreach (string added in commit.Added) {
-						file_name = added;
-						break;
-					}
-
-					message = String.Format (_("added ‘{0}’"), file_name);
-
-				}
-
-				if (commit.Edited.Count > 0) {
-
-					foreach (string modified in commit.Edited) {
-						file_name = modified;
-						break;
-					}
-
-					message = String.Format (_("edited ‘{0}’"), file_name);
-
-				}
-
-				if (commit.Deleted.Count > 0) {
-
-					foreach (string removed in commit.Deleted) {
-						file_name = removed;
-						break;
-					}
-
-					message = String.Format (_("deleted ‘{0}’"), file_name);
-
-				}
-
-				int changes_count = (commit.Added.Count +
-						             commit.Edited.Count +
-						             commit.Deleted.Count);
-
-				if (changes_count > 1)
-					message += " + " + (changes_count - 1);
-
-
-				Application.Invoke (delegate {
-
-					SparkleBubble bubble = new SparkleBubble (commit.UserName, message);
-
-					string avatar_file_path = SparkleUIHelpers.GetAvatar (commit.UserEmail, 32);
-
-					if (avatar_file_path != null)
-						bubble.Icon = new Gdk.Pixbuf (avatar_file_path);
-					else
-						bubble.Icon = SparkleUIHelpers.GetIcon ("avatar-default", 32);
-
-//					bubble.AddAction ("", "Show Events", delegate {
-				
-//						SparkleLog log = new SparkleLog (repository_path);
-//						log.ShowAll ();
-				
-//					});
-
-//					bubble.Show ();
-
-				});
-
-			};
-
-			// Show a bubble when there was a conflict
-			SparkleShare.Controller.ConflictNotificationRaised += delegate {
-				Application.Invoke (delegate {
-
-					string title   = _("Ouch! Mid-air collision!");
-					string subtext = _("Don't worry, SparkleShare made a copy of each conflicting file.");
-
-					SparkleBubble bubble = new SparkleBubble(title, subtext);
-//					bubble.Show ();
-
-				});
-			};
+			
+			
 
 		}
 
-
-		// Runs the application
+		
 		public void Run ()
 		{
-
-			Application.Run ();
-
+			
+			NSApplication.Main (new string [0]);
+			
 		}
-
+		
 	}
-
+	
 }
