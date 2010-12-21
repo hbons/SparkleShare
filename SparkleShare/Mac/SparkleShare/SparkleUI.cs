@@ -42,14 +42,11 @@ namespace SparkleShare {
 		{
 
 			NSApplication.Init ();
-			NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-		NSApplication.SharedApplication.applicationIconImage = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/sparkeshare.icns");
+
+			NSApplication.SharedApplication.applicationIconImage = NSImage.ImageNamed ("sparkleshare.icns");
 			
-			OpenLogs = new List <SparkleLog> ();
+			OpenLogs   = new List <SparkleLog> ();
 			StatusIcon = new SparkleStatusIcon ();
-			
-			
-			
 
 		}
 
