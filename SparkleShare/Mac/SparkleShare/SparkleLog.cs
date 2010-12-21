@@ -32,7 +32,8 @@ namespace SparkleShare {
 		private NSButton CloseButton;
 		private NSButton OpenFolderButton;
 
-
+		public SparkleLog (IntPtr handle) : base (handle) { } 
+		
 		public SparkleLog (string path) : base ()
 		{
 			
@@ -109,17 +110,17 @@ namespace SparkleShare {
 		}
 
 	}
-	
-	
+
+
 	public class LogDelegate : NSWindowDelegate {
 		
 		public override void WillClose (NSNotification notification)
 		{
 			
-			Console.WriteLine ("CLOSING " + (notification.Object as SparkleLog).LocalPath);
-	
-			SparkleUI.OpenLogs.Remove ((SparkleLog) notification.Object);
-			
+			InvokeOnMainThread (delegate {
+				SparkleUI.OpenLogs.Remove ((SparkleLog) notification.Object);
+			});
+		
 		}
 
 	}
