@@ -40,6 +40,9 @@ namespace SparkleShare {
 		private NSMenuItem SyncMenuItem;
 		private NSMenuItem NotificationsMenuItem;
 		private NSMenuItem AboutMenuItem;
+		
+		private delegate void Task ();
+		private EventHandler [] Tasks;
 
 		
 		// Short alias for the translations
@@ -51,7 +54,7 @@ namespace SparkleShare {
 		
 		public SparkleStatusIcon () : base ()
 		{
-
+			
 			Animation = CreateAnimation ();
 
 			StatusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
@@ -61,7 +64,8 @@ namespace SparkleShare {
 			SetNormalState ();
 			CreateMenu ();
 			
-
+			Menu.Delegate = new SparkleStatusIconMenuDelegate ();
+			
 			
 			SparkleShare.Controller.FolderSizeChanged += delegate {
 				InvokeOnMainThread (delegate {
@@ -259,15 +263,11 @@ namespace SparkleShare {
 		}
 
 		
-		public delegate void Task();
-		EventHandler [] Tasks;
-		
 		// A method reference that makes sure that opening the
 		// event log for each repository works correctly
 		private EventHandler OpenEventLogDelegate (string path)
 		{
 
-			
 			return delegate { 
 
 				SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
@@ -276,10 +276,19 @@ namespace SparkleShare {
 	
 				// Check whether the log is already open, create a new one if
 				// that's not the case or present it to the user if it is
-				if (log == null)
-					SparkleUI.OpenLogs.Add (new SparkleLog (path));
-				else
-					log.OrderFrontRegardless ();
+				if (log == null) {
+					
+					InvokeOnMainThread (delegate {
+						SparkleUI.OpenLogs.Add (new SparkleLog (path));
+					});
+					
+				} else {
+
+					InvokeOnMainThread (delegate {
+						log.OrderFrontRegardless ();
+					});
+				
+				}
 
 			};
 
@@ -362,6 +371,27 @@ namespace SparkleShare {
 
 		}
 
+	}
+	
+	
+	public class SparkleStatusIconMenuDelegate : NSMenuDelegate {
+		
+		public override void MenuWillHighlightItem (NSMenu menu, NSMenuItem item) { }
+	
+		public override void MenuWillOpen (NSMenu menu)
+		{
+		
+			Console.WriteLine ("OPENED");
+			
+			InvokeOnMainThread (delegate {
+
+				foreach (SparkleLog log in SparkleUI.OpenLogs)
+					log.OrderFrontRegardless ();
+
+			});
+
+		}
+		
 	}
 
 }
