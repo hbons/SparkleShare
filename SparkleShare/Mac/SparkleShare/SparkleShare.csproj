@@ -81,6 +81,7 @@
     <Content Include="Pixmaps\idle3.png" />
     <Content Include="Pixmaps\sparkleshare-idle.png" />
     <Content Include="Pixmaps\sparkleshare-idle-focus.png" />
+    <Content Include="Pixmaps\sparkleshare.icns" />
     <Content Include="..\..\..\data\side-splash.png">
       <Link>Pixmaps\side-splash.png</Link>
     </Content>
@@ -93,8 +94,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pixmaps\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Pixmaps\sparkleshare.icns" />
   </ItemGroup>
 </Project>
