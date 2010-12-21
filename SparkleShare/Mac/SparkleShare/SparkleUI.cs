@@ -36,6 +36,7 @@ namespace SparkleShare {
 	
 		public static SparkleStatusIcon StatusIcon;
 		public static List <SparkleLog> OpenLogs;
+
 		
 		
 		public SparkleUI ()
@@ -43,8 +44,9 @@ namespace SparkleShare {
 
 			NSApplication.Init ();
 
-			NSApplication.SharedApplication.applicationIconImage = NSImage.ImageNamed ("sparkleshare.icns");
-			
+			NSApplication.SharedApplication.applicationIconImage
+				= NSImage.ImageNamed ("sparkleshare.icns");
+
 			OpenLogs   = new List <SparkleLog> ();
 			StatusIcon = new SparkleStatusIcon ();
 
@@ -59,5 +61,5 @@ namespace SparkleShare {
 		}
 		
 	}
-	
+
 }
