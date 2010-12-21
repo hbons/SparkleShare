@@ -15,6 +15,9 @@
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
+using MonoMac.Foundation;
+using MonoMac.AppKit;
+using MonoMac.ObjCRuntime;
 using SparkleLib;
 using System;
 using System.Diagnostics;
@@ -24,12 +27,10 @@ namespace SparkleShare {
 
 	public class SparkleMacController : SparkleController {
 
-		// Creates a .desktop entry in autostart folder to
-		// start SparkleShare automatically at login
 		public override void EnableSystemAutostart ()
 		{
 		
-			
+			// N/A
 			
 		}
 
@@ -39,7 +40,7 @@ namespace SparkleShare {
 		public override void InstallLauncher ()
 		{
 
-			
+			// N/A
 			
 		}
 
@@ -58,8 +59,21 @@ namespace SparkleShare {
 		public override bool CreateSparkleShareFolder ()
 		{
 			
-			return true;
+			if (!Directory.Exists (SparklePaths.SparklePath)) {
+				
+				Directory.CreateDirectory (SparklePaths.SparklePath);
+	
+				NSWorkspace.SharedWorkspace.SetIconforFile (NSImage.ImageNamed ("sparkleshare.icns"),
+					SparklePaths.SparklePath, 0);
+				
+				return true;
 			
+			} else {
+			
+				return false;
+			
+			}
+				
 		}
 
 		
