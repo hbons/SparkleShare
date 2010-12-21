@@ -270,15 +270,16 @@ namespace SparkleShare {
 			
 			return delegate { 
 
-				SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) { return l.LocalPath.Equals (path); });
-
+				SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
+					return l.LocalPath.Equals (path);
+				});
+	
 				// Check whether the log is already open, create a new one if
 				// that's not the case or present it to the user if it is
-				if (log == null) {
-
+				if (log == null)
 					SparkleUI.OpenLogs.Add (new SparkleLog (path));
-
-				}
+				else
+					log.OrderFrontRegardless ();
 
 			};
 

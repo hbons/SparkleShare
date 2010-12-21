@@ -32,12 +32,13 @@ namespace SparkleShare {
 		private NSButton CloseButton;
 		private NSButton OpenFolderButton;
 
-		
+
 		public SparkleLog (string path) : base ()
 		{
 			
 			LocalPath = path;
 	
+			Delegate = new LogDelegate ();
 			
 			SetFrame (new RectangleF (0, 0, 480, 640), true);
 			
@@ -73,7 +74,9 @@ namespace SparkleShare {
 			};
 					
 				CloseButton.Activated += delegate {
-					PerformClose (this);
+					InvokeOnMainThread (delegate {	
+						PerformClose (this);
+					});
 				};
 								
 			ContentView.AddSubview (CloseButton);
@@ -82,21 +85,8 @@ namespace SparkleShare {
 			string name = System.IO.Path.GetFileName (LocalPath);
 			Title = String.Format ("Recent Events in ‘{0}’", name);
 
-			NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-			MakeKeyAndOrderFront (this);
+			OrderFrontRegardless ();
 			
-		}
-
-		
-		public override void PerformClose (NSObject sender)
-		{
-			
-			InvokeOnMainThread (delegate {
-				Console.WriteLine ("!!!!!!!!!!");
-				SparkleUI.OpenLogs.Remove ((SparkleLog) this);
-				base.PerformClose (this);
-			});
-		
 		}
 
 
@@ -116,6 +106,20 @@ namespace SparkleShare {
 
 			return WebView;
 
+		}
+
+	}
+	
+	
+	public class LogDelegate : NSWindowDelegate {
+		
+		public override void WillClose (NSNotification notification)
+		{
+			
+			Console.WriteLine ("CLOSING " + (notification.Object as SparkleLog).LocalPath);
+	
+			SparkleUI.OpenLogs.Remove ((SparkleLog) notification.Object);
+			
 		}
 
 	}
