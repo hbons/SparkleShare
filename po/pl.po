@@ -1,31 +1,53 @@
-# Polish translation of SparkleShare.
-# Copyright (C) 2010 by SparkleShare developers
-# This file is distributed under the same license as the SparkleShare package.
-# Łukasz Jernaś <deejay1@srem.org>, 2010.
-# 
-# Please note that this translation is neither sponsored nor endorsed by Aviary.pl
-# The mailing list is provided for reference and contact only.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-31 07:38+0000\n"
-"PO-Revision-Date: 2010-06-11 21:59+0200\n"
-"Last-Translator: Łukasz Jernaś <deejay1@srem.org>\n"
-"Language-Team: Polish <gnomepl@aviary.pl>\n"
+"POT-Creation-Date: 2010-12-22 23:07+0100\n"
+"PO-Revision-Date: 2010-12-22 22:10+0000\n"
+"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pl\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Poedit-Language: Polish\n"
-"X-Poedit-Country: Poland\n"
-"X-Generator: Virtaal 0.5.2\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
-#: ../SparkleLib/SparkleOptions.cs:486
+#: ../MacCore/src/Options.cs:497 ../SparkleLib/SparkleOptions.cs:486
 msgid "OptionName"
 msgstr "Opcja"
+
+#: ../SparkleShare/Mac/SparkleShare/SparkleUI.cs:87
+#: ../SparkleShare/SparkleUI.cs:91
+#, csharp-format
+msgid "added ‘{0}’"
+msgstr "dodano „{0}”"
+
+#: ../SparkleShare/Mac/SparkleShare/SparkleUI.cs:98
+#: ../SparkleShare/SparkleUI.cs:102
+#, csharp-format
+msgid "edited ‘{0}’"
+msgstr "edytowano „{0}”"
+
+#: ../SparkleShare/Mac/SparkleShare/SparkleUI.cs:109
+#: ../SparkleShare/SparkleUI.cs:113
+#, csharp-format
+msgid "deleted ‘{0}’"
+msgstr "usunięto „{0}”"
+
+#: ../SparkleShare/Mac/SparkleShare/SparkleUI.cs:149
+#: ../SparkleShare/SparkleUI.cs:157
+msgid "Ouch! Mid-air collision!"
+msgstr "Ups! Nastąpiło czołowe zderzenie! "
+
+#: ../SparkleShare/Mac/SparkleShare/SparkleUI.cs:150
+#: ../SparkleShare/SparkleUI.cs:158
+msgid "Don't worry, SparkleShare made a copy of each conflicting file."
+msgstr "Bez obaw, program SparkleShare wykonał kopię skonfliktowanych plików."
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
 msgid "Copy Web Link"
@@ -51,177 +73,111 @@ msgstr "Zaznacz, aby pobrać kopię tej wersji"
 msgid "_Visit Website"
 msgstr "_Odwiedź stronę domową"
 
-#: ../SparkleShare/SparkleIntro.cs:65
+#: ../SparkleShare/SparkleIntro.cs:64 ../SparkleShare/SparkleStatusIcon.cs:339
 msgid "Welcome to SparkleShare!"
 msgstr "Witamy w programie SparkleShare!"
 
-#: ../SparkleShare/SparkleIntro.cs:71
+#: ../SparkleShare/SparkleIntro.cs:70
 msgid "Before we can create a SparkleShare folder on this computer, we need a few bits of information from you."
 msgstr "Program SparkleShare wymaga podania kilku informacji, nim możliwe będzie utworzenie katalogu na tym komputerze."
 
-#: ../SparkleShare/SparkleIntro.cs:83
+#: ../SparkleShare/SparkleIntro.cs:82
 msgid "Full Name:"
 msgstr "Imię i nazwisko:"
 
-#: ../SparkleShare/SparkleIntro.cs:99
+#: ../SparkleShare/SparkleIntro.cs:98
 msgid "Email:"
 msgstr "Email:"
 
-#: ../SparkleShare/SparkleIntro.cs:110
+#: ../SparkleShare/SparkleIntro.cs:109
 msgid "Next"
 msgstr "Następny"
 
-#: ../SparkleShare/SparkleIntro.cs:117
+#: ../SparkleShare/SparkleIntro.cs:116
 msgid "Configuring…"
 msgstr "Trwa konfigurowanie…"
 
-#: ../SparkleShare/SparkleIntro.cs:172
+#: ../SparkleShare/SparkleIntro.cs:179
 msgid "Where is your remote folder?"
 msgstr "Gdzie znajduje się zdalny folder?"
 
-#: ../SparkleShare/SparkleIntro.cs:185
+#: ../SparkleShare/SparkleIntro.cs:192
 msgid "address-to-server.com"
 msgstr "serwer.pl"
 
-#: ../SparkleShare/SparkleIntro.cs:190
+#: ../SparkleShare/SparkleIntro.cs:197
 msgid "On my own server:"
 msgstr "Na własnym serwerze:"
 
-#: ../SparkleShare/SparkleIntro.cs:197
+#: ../SparkleShare/SparkleIntro.cs:204
 msgid "Free hosting for Free and Open Source Software projects."
 msgstr "Darmowy hosting Wolnych i Otwartych projektów."
 
-#: ../SparkleShare/SparkleIntro.cs:198
+#: ../SparkleShare/SparkleIntro.cs:205
 msgid "Also has paid accounts for extra private space and bandwidth."
 msgstr "Posiada również płatne konta zwiększające dostępną przestrzeń oraz pasmo."
 
-#: ../SparkleShare/SparkleIntro.cs:206
+#: ../SparkleShare/SparkleIntro.cs:213
 msgid "The GNOME Project"
 msgstr "Projekt GNOME"
 
-#: ../SparkleShare/SparkleIntro.cs:208
+#: ../SparkleShare/SparkleIntro.cs:215
 msgid "GNOME is an easy to understand interface to your computer."
 msgstr "Środowisko GNOME jest łatwym w użyciu interfejsem dla twojego komputera."
 
-#: ../SparkleShare/SparkleIntro.cs:209
+#: ../SparkleShare/SparkleIntro.cs:216
 msgid "Select this option if you’re a developer or designer working on GNOME."
 msgstr "Zaznacz tą opcję, jeśli programujesz lub projektujesz dla projektu GNOME."
 
-#: ../SparkleShare/SparkleIntro.cs:217
+#: ../SparkleShare/SparkleIntro.cs:224
 msgid "Gitorious"
 msgstr "Gitorious"
 
-#: ../SparkleShare/SparkleIntro.cs:219
+#: ../SparkleShare/SparkleIntro.cs:226
 msgid "Completely Free as in Freedom infrastructure."
 msgstr "W pełni wolny, jak w wyrażeniu wolna infrastruktura."
 
-#: ../SparkleShare/SparkleIntro.cs:220
+#: ../SparkleShare/SparkleIntro.cs:227
 msgid "Free accounts for Free and Open Source projects."
 msgstr "Wolne konta dla projektów Wolnych i Otwartych projektów."
 
-#: ../SparkleShare/SparkleIntro.cs:232
+#: ../SparkleShare/SparkleIntro.cs:239
 msgid "Username/Folder"
 msgstr "Nazwa użytkownika/katalog"
 
-#: ../SparkleShare/SparkleIntro.cs:239
+#: ../SparkleShare/SparkleIntro.cs:246
 msgid "Project/Folder"
 msgstr "Projekt/Katalog"
 
-#: ../SparkleShare/SparkleIntro.cs:246
+#: ../SparkleShare/SparkleIntro.cs:253
 msgid "Project"
 msgstr "Projekt"
 
-#: ../SparkleShare/SparkleIntro.cs:255 ../SparkleShare/SparkleIntro.cs:278
+#: ../SparkleShare/SparkleIntro.cs:262 ../SparkleShare/SparkleIntro.cs:285
 msgid "Folder"
 msgstr "Katalog"
 
-#: ../SparkleShare/SparkleIntro.cs:283
-#: ../SparkleShare/SparkleInvitation.cs:134
+#: ../SparkleShare/SparkleIntro.cs:290 ../SparkleShare/SparkleIntro.cs:467
 msgid "Folder Name:"
 msgstr "Nazwa folderu:"
 
-#: ../SparkleShare/SparkleIntro.cs:293
+#: ../SparkleShare/SparkleIntro.cs:300
 msgid "Sync"
 msgstr "Synchronizuj"
 
-#: ../SparkleShare/SparkleIntro.cs:361
+#: ../SparkleShare/SparkleIntro.cs:394
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: ../SparkleShare/SparkleIntro.cs:372
+#: ../SparkleShare/SparkleIntro.cs:405
 msgid "Skip"
 msgstr "Pomiń"
 
-#: ../SparkleShare/SparkleIntro.cs:407
-#: ../SparkleShare/SparkleInvitation.cs:278
-msgid "Something went wrong…"
-msgstr "Coś poszło nie tak..."
-
-#: ../SparkleShare/SparkleIntro.cs:413
-msgid "Try Again"
-msgstr "Spróbuj ponownie"
-
-#: ../SparkleShare/SparkleIntro.cs:441
-#: ../SparkleShare/SparkleInvitation.cs:311
-msgid "Folder synced successfully!"
-msgstr "Poprawnie zsynchronizowano folder"
-
-#: ../SparkleShare/SparkleIntro.cs:448
-#: ../SparkleShare/SparkleInvitation.cs:317
-#, csharp-format
-msgid "Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
-msgstr "Pliki synchronizowane z „{0}” znajdują się z katalogu SparkleShare."
-
-#. A button that opens the synced folder
-#: ../SparkleShare/SparkleIntro.cs:456
-#: ../SparkleShare/SparkleInvitation.cs:324
-msgid "Open Folder"
-msgstr "Otwórz katalog"
-
-#: ../SparkleShare/SparkleIntro.cs:472 ../SparkleShare/SparkleIntro.cs:516
-#: ../SparkleShare/SparkleIntro.cs:583
-#: ../SparkleShare/SparkleInvitation.cs:339
-#: ../SparkleShare/SparkleInvitation.cs:382
-msgid "Finish"
-msgstr "Zakończ"
-
-#: ../SparkleShare/SparkleIntro.cs:500
-#: ../SparkleShare/SparkleInvitation.cs:366
-#, csharp-format
-msgid "Syncing folder ‘{0}’…"
-msgstr "Synchronizowanie katalogu „{0}”"
-
-#: ../SparkleShare/SparkleIntro.cs:507
-#: ../SparkleShare/SparkleInvitation.cs:373
-msgid "This may take a while.\n"
-msgstr "Proces może chwilę potrwać.\n"
-
-#: ../SparkleShare/SparkleIntro.cs:508
-#: ../SparkleShare/SparkleInvitation.cs:374
-msgid "You sure it’s not coffee o-clock?"
-msgstr "Jesteś pewien, że to nie pora na kawę?"
-
-#: ../SparkleShare/SparkleIntro.cs:558
-msgid "SparkleShare is ready to go!"
-msgstr "Program SparkleShare jest gotowy do pracy."
-
-#: ../SparkleShare/SparkleIntro.cs:564
-msgid ""
-"Now you can start accepting invitations from others. \n"
-"Just click on invitations you get by email and we will take care of the rest."
-msgstr ""
-"Można teraz  przyjmować zaproszenia od innych osób. \n"
-" Wystarczy kliknąć na zaproszenie otrzymane w emailu, a program SparkleShare zajmie się resztą."
-
-#: ../SparkleShare/SparkleIntro.cs:575
-msgid "Learn how to host your own SparkleServer"
-msgstr "Dowiedz się, jak postawić własny SparkleServer"
-
-#: ../SparkleShare/SparkleInvitation.cs:104
+#: ../SparkleShare/SparkleIntro.cs:437
 msgid "Invitation received!"
 msgstr "Otrzymano zaproszenie."
 
-#: ../SparkleShare/SparkleInvitation.cs:110
+#: ../SparkleShare/SparkleIntro.cs:443
 msgid ""
 "You've received an invitation to join a shared folder.\n"
 "We're ready to hook you up immediately if you wish."
@@ -229,164 +185,211 @@ msgstr ""
 "Otrzymano zaproszenie do współpracy. \n"
 " Program SparkleShare jest gotowy, by rozpocząć współpracę, jeśli tylko sobie tego życzysz."
 
-#: ../SparkleShare/SparkleInvitation.cs:116
+#: ../SparkleShare/SparkleIntro.cs:449
 msgid "Do you accept this invitation?"
 msgstr "Przyjąć zaproszenie?"
 
-#: ../SparkleShare/SparkleInvitation.cs:125
+#: ../SparkleShare/SparkleIntro.cs:458
 msgid "Server Address:"
 msgstr "Adres serwera:"
 
-#: ../SparkleShare/SparkleInvitation.cs:148
+#: ../SparkleShare/SparkleIntro.cs:481
 msgid "Reject"
 msgstr "Odrzuć"
 
-#: ../SparkleShare/SparkleInvitation.cs:149
+#: ../SparkleShare/SparkleIntro.cs:482
 msgid "Accept and Sync"
 msgstr "Przyjmij i zsynchronizuj"
 
-#: ../SparkleShare/SparkleInvitation.cs:284
-msgid "Close"
-msgstr "Zamknij"
+#: ../SparkleShare/SparkleIntro.cs:539
+msgid "Something went wrong…"
+msgstr "Coś poszło nie tak..."
+
+#: ../SparkleShare/SparkleIntro.cs:545
+msgid "Try Again"
+msgstr "Spróbuj ponownie"
+
+#: ../SparkleShare/SparkleIntro.cs:573
+msgid "Folder synced successfully!"
+msgstr "Poprawnie zsynchronizowano folder"
+
+#: ../SparkleShare/SparkleIntro.cs:580
+#, csharp-format
+msgid "Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
+msgstr "Pliki synchronizowane z „{0}” znajdują się z katalogu SparkleShare."
+
+#. A button that opens the synced folder
+#: ../SparkleShare/SparkleIntro.cs:588
+msgid "Open Folder"
+msgstr "Otwórz katalog"
+
+#: ../SparkleShare/SparkleIntro.cs:596 ../SparkleShare/SparkleIntro.cs:644
+#: ../SparkleShare/SparkleIntro.cs:712
+msgid "Finish"
+msgstr "Zakończ"
+
+#: ../SparkleShare/SparkleIntro.cs:628
+#, csharp-format
+msgid "Syncing folder ‘{0}’…"
+msgstr "Synchronizowanie katalogu „{0}”"
+
+#: ../SparkleShare/SparkleIntro.cs:635
+msgid "This may take a while.\n"
+msgstr "Proces może chwilę potrwać.\n"
+
+#: ../SparkleShare/SparkleIntro.cs:636
+msgid "You sure it’s not coffee o-clock?"
+msgstr "Jesteś pewien, że to nie pora na kawę?"
+
+#: ../SparkleShare/SparkleIntro.cs:687
+msgid "SparkleShare is ready to go!"
+msgstr "Program SparkleShare jest gotowy do pracy."
+
+#: ../SparkleShare/SparkleIntro.cs:693
+msgid ""
+"Now you can start accepting invitations from others. \n"
+"Just click on invitations you get by email and we will take care of the rest."
+msgstr ""
+"Można teraz  przyjmować zaproszenia od innych osób. \n"
+" Wystarczy kliknąć na zaproszenie otrzymane w emailu, a program SparkleShare zajmie się resztą."
+
+#: ../SparkleShare/SparkleIntro.cs:704
+msgid "Learn how to host your own SparkleServer"
+msgstr "Dowiedz się, jak postawić własny SparkleServer"
 
 #. TRANSLATORS: {0} is a folder name, and {1} is a server address
-#: ../SparkleShare/SparkleLog.cs:53
+#: ../SparkleShare/SparkleLog.cs:54
 #, csharp-format
 msgid "Recent Events in ‘{0}’"
 msgstr "Ostatnie zdarzenia w „{0}”"
 
-#: ../SparkleShare/SparkleLog.cs:108
+#: ../SparkleShare/SparkleLog.cs:109
 msgid "_Open Folder"
 msgstr "_Otwórz katalog"
 
-#: ../SparkleShare/SparkleLog.cs:246
-#, fuzzy
+#: ../SparkleShare/SparkleLog.cs:221
 msgid "This folder has unsynced changes"
-msgstr "Nie udało się zsynchronizować zmian"
+msgstr "Ten katalog zawiera niezsynchronizowane zmiany"
 
-#: ../SparkleShare/SparkleLog.cs:247
+#: ../SparkleShare/SparkleLog.cs:222
 msgid "We will sync these once we’re connected again"
-msgstr ""
+msgstr "Zmiany zostaną zsynchronizowane w momencie połączenia z siecią."
 
-#: ../SparkleShare/SparkleLog.cs:260
+#: ../SparkleShare/SparkleLog.cs:235
 msgid "Could not sync with the remote folder"
-msgstr ""
+msgstr "Nie można zsynchronizować ze zdalnym katalogiem"
 
-#: ../SparkleShare/SparkleLog.cs:261
+#: ../SparkleShare/SparkleLog.cs:236
 msgid "Is the you and the server online?"
-msgstr ""
+msgstr "Czy Ty i Twój serwer jesteście online?"
 
-#: ../SparkleShare/SparkleLog.cs:407
+#: ../SparkleShare/SparkleLog.cs:382
 msgid "Edited"
 msgstr "Edytowano"
 
-#: ../SparkleShare/SparkleLog.cs:421
+#: ../SparkleShare/SparkleLog.cs:396
 msgid "Added"
 msgstr "Dodano"
 
-#: ../SparkleShare/SparkleLog.cs:435
+#: ../SparkleShare/SparkleLog.cs:410
 msgid "Deleted"
 msgstr "Usunięto"
 
-#: ../SparkleShare/SparkleLog.cs:449
+#: ../SparkleShare/SparkleLog.cs:424
 msgid "Moved"
 msgstr "Przesunięto"
 
-#: ../SparkleShare/SparkleShare.cs:55
+#: ../SparkleShare/SparkleShare.cs:54
 msgid "Sorry, you can't run SparkleShare with these permissions."
 msgstr "Przepraszamy, nie można uruchomić programu SparkleShare z bieżącymi uprawnieniami."
 
-#: ../SparkleShare/SparkleShare.cs:56
+#: ../SparkleShare/SparkleShare.cs:55
 msgid "Things would go utterly wrong."
 msgstr "Może to spowodować nieprzewidziane skutki."
 
-#: ../SparkleShare/SparkleShare.cs:67
+#: ../SparkleShare/SparkleShare.cs:66
 msgid "Don't show the notification icon"
 msgstr "Wyłącza wyświetlanie ikony w obszarze powiadamiania"
 
-#: ../SparkleShare/SparkleShare.cs:68
+#: ../SparkleShare/SparkleShare.cs:67
 msgid "Show this help text"
 msgstr "Wyświetla opcje pomocy"
 
-#: ../SparkleShare/SparkleShare.cs:69
+#: ../SparkleShare/SparkleShare.cs:68
 msgid "Print version information"
 msgstr "Wyświetla informacje o wersji"
 
-#: ../SparkleShare/SparkleShare.cs:100
+#: ../SparkleShare/SparkleShare.cs:120
 msgid "SparkleShare, an instant update workflow to Git."
 msgstr ""
 
-#: ../SparkleShare/SparkleShare.cs:101
+#: ../SparkleShare/SparkleShare.cs:121
 msgid "Copyright (C) 2010 Hylke Bons"
 msgstr "Copyright (C) 2010 Hylke Bons"
 
-#: ../SparkleShare/SparkleShare.cs:103
+#: ../SparkleShare/SparkleShare.cs:123
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
 msgstr "Niniejszy program dostarczany jest BEZ JAKIEJKOLWIEK GWARANCJI."
 
-#: ../SparkleShare/SparkleShare.cs:105
+#: ../SparkleShare/SparkleShare.cs:125
 msgid "This is free software, and you are welcome to redistribute it "
 msgstr "Niniejszy program jest wolnym oprogramowanie, można go rozprowadzać dalej pod pewnymi warunkami."
 
-#: ../SparkleShare/SparkleShare.cs:106
+#: ../SparkleShare/SparkleShare.cs:126
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
 msgstr "Aby uzyskać więcej informacji, proszę zapoznać się z tekstem licencji GNU GPLv3."
 
-#: ../SparkleShare/SparkleShare.cs:108
+#: ../SparkleShare/SparkleShare.cs:128
 msgid "SparkleShare automatically syncs Git repositories in "
 msgstr "Program SparkleShare automatycznie synchronizuje reozytoria Git znajdujące się"
 
-#: ../SparkleShare/SparkleShare.cs:109
+#: ../SparkleShare/SparkleShare.cs:129
 msgid "the ~/SparkleShare folder with their remote origins."
 msgstr "w katalogu ~/SparkleShare z ich zdalnymi gałęziami."
 
-#: ../SparkleShare/SparkleShare.cs:111
+#: ../SparkleShare/SparkleShare.cs:131
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
 msgstr "Użycie: sparkleshare [start|stop|restart] [OPCJA]..."
 
-#: ../SparkleShare/SparkleShare.cs:112
+#: ../SparkleShare/SparkleShare.cs:132
 msgid "Sync SparkleShare folder with remote repositories."
 msgstr "Synchronizuj zawartość katalogu SparkleShare ze zdalnymi repozytoriami."
 
-#: ../SparkleShare/SparkleShare.cs:114
+#: ../SparkleShare/SparkleShare.cs:134
 msgid "Arguments:"
 msgstr "Parametry:"
 
-#: ../SparkleShare/SparkleShare.cs:126
+#: ../SparkleShare/SparkleShare.cs:146
 msgid "SparkleShare "
 msgstr "SparkleShare"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:190
+#: ../SparkleShare/SparkleStatusIcon.cs:185
 msgid "No Remote Folders Yet"
 msgstr "Nie ustawiono jeszcze zdalnych katalogów"
 
 #. Opens the wizard to add a new remote folder
-#: ../SparkleShare/SparkleStatusIcon.cs:199
+#: ../SparkleShare/SparkleStatusIcon.cs:194
 msgid "Sync Remote Folder…"
 msgstr "Synchronizuj zdalny folder..."
 
 #. A checkbutton to toggle whether or not to show notifications
-#: ../SparkleShare/SparkleStatusIcon.cs:214
+#: ../SparkleShare/SparkleStatusIcon.cs:212
 msgid "Show Notifications"
 msgstr "Wyświetlanie powiadomień"
 
 #. A menu item that takes the user to http://www.sparkleshare.org/
-#: ../SparkleShare/SparkleStatusIcon.cs:227
+#: ../SparkleShare/SparkleStatusIcon.cs:225
 msgid "About"
 msgstr "O programie"
 
 #. A menu item that quits the application
-#: ../SparkleShare/SparkleStatusIcon.cs:240
+#: ../SparkleShare/SparkleStatusIcon.cs:238
 msgid "Quit"
 msgstr "Zakończ"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:339
-msgid "No folders yet"
-msgstr "Nie ustawiono katalogów"
-
 #: ../SparkleShare/SparkleStatusIcon.cs:348
 msgid "Not everything is synced"
-msgstr ""
+msgstr "Nie wszystko zostało zsynchronizowane"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:355
 msgid "Up to date"
@@ -395,146 +398,3 @@ msgstr "Wszystko jest aktualne"
 #: ../SparkleShare/SparkleStatusIcon.cs:371
 msgid "Syncing…"
 msgstr "Synchronizowanie…"
-
-#: ../SparkleShare/SparkleUI.cs:100
-msgid "Ouch! Mid-air collision!"
-msgstr "Ups! Nastąpiło czołowe zderzenie! "
-
-#: ../SparkleShare/SparkleUI.cs:101
-msgid "Don't worry, SparkleShare made a copy of each conflicting file."
-msgstr "Bez obaw, program SparkleShare wykonał kopię skonfliktowanych plików."
-
-#~ msgid "Git wasn't found."
-#~ msgstr "Nie znaleziono programu Git."
-
-#~ msgid "You can get Git from http://git-scm.com/."
-#~ msgstr "Można go pobrać ze strony http://git-scm.com/."
-
-#~ msgid "SparkleDiff Copyright (C) 2010 Hylke Bons"
-#~ msgstr "SparkleDiff Copyright (C) 2010 Hylke Bons"
-
-#~ msgid "SparkleDiff let's you compare revisions of an image file side by side."
-#~ msgstr "Program SparkleDiff pozwala na porównywanie różnych rewizji pliku graficznego obok siebie."
-
-#~ msgid "Usage: sparklediff [FILE]"
-#~ msgstr "Sposób użycia: sparklediff [PLIK]"
-
-#~ msgid "Open an image file to show its revisions"
-#~ msgstr "Otwiera plik graficzny z możliwością porównywania jego rewizji"
-
-#~ msgid "\t -h, --help\t\tDisplay this help text."
-#~ msgstr "\t -h, --help\t\tWyświetla opcje pomocy."
-
-#~ msgid "{0} at {1}"
-#~ msgstr "{0} na {1}"
-
-#~ msgid "ddd MMM d, yyyy"
-#~ msgstr "ddd, d MMM yyyy"
-
-#~ msgid "H:mm"
-#~ msgstr "H:mm"
-
-#~ msgid "Hold your ponies!"
-#~ msgstr "Wstrzymaj konie!"
-
-#~ msgid "SparkleShare is known to be insanely fast with pictures of unicorns. Please make sure your internets are upgraded to the latest version to avoid any problems."
-#~ msgstr "Program SparkleShare jest znany z niesamowitej szybkości przy wysyłaniu obrazków z jednorożcami. Dopilnuj, by Twój internet był w najnowszej wersji, aby uniknąć problemów."
-
-#~ msgid "a second ago"
-#~ msgid_plural "{0} seconds ago"
-#~ msgstr[0] "sekundę temu"
-#~ msgstr[1] "{0} sekundy temu"
-#~ msgstr[2] "{0} sekund temu"
-
-#~ msgid "a minute ago"
-#~ msgid_plural "about {0} minutes ago"
-#~ msgstr[0] "minutę temu"
-#~ msgstr[1] "około {0} minuty temu"
-#~ msgstr[2] "około {0} minut temu"
-
-#~ msgid "about an hour ago"
-#~ msgid_plural "about {0} hours ago"
-#~ msgstr[0] "około godzinę temu"
-#~ msgstr[1] "około {0} godziny temu"
-#~ msgstr[2] "około {0} godzin temu"
-
-#~ msgid "yesterday"
-#~ msgid_plural "{0} days ago"
-#~ msgstr[0] "wczoraj"
-#~ msgstr[1] "{0} dni temu"
-#~ msgstr[2] "{0} dni temu"
-
-#~ msgid "a month ago"
-#~ msgid_plural "{0} months ago"
-#~ msgstr[0] "miesiąc temu"
-#~ msgstr[1] "{0} miesiące temu"
-#~ msgstr[2] "{0} miesięcy temu"
-
-#~ msgid "a year ago"
-#~ msgid_plural "{0} years ago"
-#~ msgstr[0] "rok temu"
-#~ msgstr[1] "{0} lata temu"
-#~ msgstr[2] "{0} lat temu"
-
-#~ msgid "{0:##.##} ᴛʙ"
-#~ msgstr "{0:##.##} ᴛʙ"
-
-#~ msgid "{0:##.##} ɢʙ"
-#~ msgstr "{0:##.##} ɢʙ"
-
-#~ msgid "{0:##.##} ᴍʙ"
-#~ msgstr "{0:##.##} ᴍʙ"
-
-#~ msgid "{0:##.##} ᴋʙ"
-#~ msgstr "{0:##.##} ᴋʙ"
-
-#~ msgid "Hey, it's an Alpha!"
-#~ msgstr "Hej, przecież to wersja Alfa!"
-
-#~ msgid "Buy a lottery ticket!"
-#~ msgstr "Kup los na loterię"
-
-#~ msgid "SparkleShare Copyright (C) 2010 Hylke Bons"
-#~ msgstr "SparkleShare Copyright (C) 2010 Hylke Bons"
-
-#~ msgid "SparkleShare syncs the ~/SparkleShare folder with remote repositories."
-#~ msgstr "Program SparkleShare synchronizuje zawartość katalogu ~/SparkleShare ze zdalnymi repozytoriami."
-
-#~ msgid "Address of remote SparkleShare folder:"
-#~ msgstr "Adres zdalnego katalogu SparkleShare:"
-
-#~ msgid "SparkleShare will notify you when this is done."
-#~ msgstr "Zostanie wyświetlone powiadomienie w momencie zakończenia."
-
-#~ msgid "Dismiss"
-#~ msgstr "Porzuć"
-
-#~ msgid "Successfully synced folder ‘{0}’"
-#~ msgstr "Poprawnie zsynchronizowano katalog „{0}”"
-
-#~ msgid "Now make great stuff happen!"
-#~ msgstr "Teraz możesz zacząć czynić wielkie rzeczy!"
-
-#~ msgid "Comparing Revisions of ‘{0}’"
-#~ msgstr "Porównywanie rewizji pliku „{0}”"
-
-#~ msgid "Current Revision"
-#~ msgstr "Bieżąca rewizja"
-
-#~ msgid "d MMM\tH:mm"
-#~ msgstr "d MMM\tH:mm"
-
-#~ msgid "Error syncing"
-#~ msgstr "Błąd w trakcie synchronizacji"
-
-#~ msgid "Everything is up to date"
-#~ msgstr "Wszystko jest aktualne"
-
-#~ msgid "You don't have any folders set up yet."
-#~ msgstr "Nie ustawiono żadnych katalogów."
-
-#~ msgid "Add a Folder…"
-#~ msgstr "Dodaj katalog…"
-
-#~ msgid "That’s you!"
-#~ msgstr "To ty!"
