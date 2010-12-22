@@ -14,6 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
 using Mono.Unix;
 using SparkleLib;
 using System;
@@ -24,6 +25,10 @@ using System.Net;
 using System.Threading;
 using System.Text.RegularExpressions;
 using System.Xml;
+
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SparkleShare {
 
@@ -106,8 +111,7 @@ namespace SparkleShare {
 			// Remove the repository when a delete event occurs
 			watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
 
-				if (Directory.Exists (args.FullPath))
-					RemoveRepository (args.FullPath);
+				RemoveRepository (args.FullPath);
 
 			};
 
@@ -204,20 +208,21 @@ namespace SparkleShare {
 		}
 		
 		
-		public List <ChangeSet> GetLog (string path)
+		public List <SparkleCommit> GetLog (string name)
 		{
 			
+			string path = Path.Combine (SparklePaths.SparklePath, name);
 			int log_size = 30;
 			
-			List <ChangeSet> list = new List <ChangeSet> ();
+			List <SparkleCommit> list = new List <SparkleCommit> ();
 			
 			foreach (SparkleRepo repo in Repositories) {
 			
 				if (repo.LocalPath.Equals (path)) {
 				
 					foreach (SparkleCommit commit in repo.GetCommits (log_size))
-						list.Add ((ChangeSet) commit);
-				
+						list.Add (commit);
+					
 					return list;
 					
 				}
@@ -225,6 +230,179 @@ namespace SparkleShare {
 			}
 			
 			return null;
+			
+		}
+		
+		
+		public string GetHTMLLog (string name)
+		{
+		
+			List <SparkleCommit> commits = GetLog (name);
+			
+						List <ActivityDay> activity_days = new List <ActivityDay> ();
+
+			foreach (SparkleCommit commit in commits) {
+
+				GetAvatar (commit.UserEmail, 32);
+
+				bool commit_inserted = false;
+				foreach (ActivityDay stored_activity_day in activity_days) {
+
+					if (stored_activity_day.DateTime.Year  == commit.DateTime.Year &&
+					    stored_activity_day.DateTime.Month == commit.DateTime.Month &&
+					    stored_activity_day.DateTime.Day   == commit.DateTime.Day) {
+
+					    stored_activity_day.Add (commit);
+					    commit_inserted = true;
+					    break;
+
+					}
+
+				}
+				
+				if (!commit_inserted) {
+
+						ActivityDay activity_day = new ActivityDay (commit.DateTime);
+						activity_day.Add (commit);
+						activity_days.Add (activity_day);
+					
+				}
+
+			}
+
+
+
+
+			StreamReader reader;
+
+			reader = new StreamReader (Defines.PREFIX + "/share/sparkleshare/html/event-log.html");
+			string event_log_html = reader.ReadToEnd ();
+			reader.Close ();
+
+			reader = new StreamReader (Defines.PREFIX + "/share/sparkleshare/html/day-entry.html");
+			string day_entry_html = reader.ReadToEnd ();
+			reader.Close ();
+
+			reader = new StreamReader (Defines.PREFIX + "/share/sparkleshare/html/event-entry.html");
+			string event_entry_html = reader.ReadToEnd ();
+			reader.Close ();
+
+
+			
+
+			string event_log = "";
+
+			foreach (ActivityDay activity_day in activity_days) {
+
+				string event_entries = "";
+
+				foreach (SparkleCommit change_set in activity_day) {
+
+					string event_entry = "<dl>";
+
+					if (change_set.Edited.Count > 0) {
+
+						event_entry += "<dt>Edited</dt>";
+
+						foreach (string file_path in change_set.Edited) {
+
+							if (File.Exists (SparkleHelpers.CombineMore (SparklePaths.SparklePath ,name , file_path))) {
+
+								event_entry += "<dd><a href='#'>" + file_path + "</a></dd>";
+
+							} else {
+
+								event_entry += "<dd>" + SparkleHelpers.CombineMore (SparklePaths.SparklePath, name, file_path) + "</dd>";
+
+							}
+
+						}
+
+					}
+
+
+					if (change_set.Added.Count > 0) {
+
+						event_entry += "<dt>Added</dt>";
+
+						foreach (string file_path in change_set.Added) {
+
+							if (File.Exists (SparkleHelpers.CombineMore (SparklePaths.SparklePath ,name , file_path))) {
+
+								event_entry += "<dd><a href='#'>" + file_path + "</a></dd>";
+
+							} else {
+
+								event_entry += "<dd>" + SparkleHelpers.CombineMore (SparklePaths.SparklePath ,name , file_path) + "</dd>";
+
+							}
+
+						}
+
+					}
+
+					if (change_set.Deleted.Count > 0) {
+
+						event_entry += "<dt>Deleted</dt>";
+
+						foreach (string file_path in change_set.Deleted) {
+
+							if (File.Exists (SparkleHelpers.CombineMore (SparklePaths.SparklePath ,name , file_path))) {
+
+								event_entry += "<dd><a href='#'>" + file_path + "</a></dd>";
+
+							} else {
+
+								event_entry += "<dd>" + SparkleHelpers.CombineMore (SparklePaths.SparklePath ,name , file_path) + "</dd>";
+
+							}
+
+						}
+
+					}
+Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
+					event_entry += "</dl>";
+					event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
+						.Replace ("<!-- $event-user-name -->", change_set.UserName)
+						.Replace ("<!-- $event-avatar-url -->", "file://" +GetAvatar (change_set.UserEmail, 32) )
+						.Replace ("<!-- $event-time -->", change_set.DateTime.ToString ("H:mm"));
+
+				}
+
+
+
+				string day_entry = "";
+
+				DateTime today = DateTime.Now;
+				DateTime yesterday = DateTime.Now.AddDays (-1);
+
+				if (today.Day   == activity_day.DateTime.Day &&
+				    today.Month == activity_day.DateTime.Month && 
+				    today.Year  == activity_day.DateTime.Year) {
+
+					day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "<b>Today</b>");
+
+				} else if (yesterday.Day   == activity_day.DateTime.Day &&
+				           yesterday.Month == activity_day.DateTime.Month &&
+				           yesterday.Year  == activity_day.DateTime.Year) {
+
+					day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "<b>Yesterday</b>");
+
+				} else {
+
+					day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
+						"<b>" + activity_day.DateTime.ToString ("ddd MMM d, yyyy") + "</b>");
+
+				}
+
+				event_log += day_entry.Replace ("<!-- $day-entry-content -->", event_entries);
+
+
+			}
+
+			string html = event_log_html.Replace ("<!-- $event-log-content -->", event_log);
+
+			return html;
 			
 		}
 		
@@ -820,6 +998,76 @@ namespace SparkleShare {
 
 		}
 
+		
+		
+		// Gets the avatar for a specific email address and size
+		public static string GetAvatar (string email, int size)
+		{
+
+			string avatar_path = SparkleHelpers.CombineMore (SparklePaths.SparkleLocalIconPath,
+				size + "x" + size, "status");
+
+			if (!Directory.Exists (avatar_path)) {
+
+				Directory.CreateDirectory (avatar_path);
+				SparkleHelpers.DebugInfo ("Config", "Created '" + avatar_path + "'");
+
+			}
+
+			string avatar_file_path = SparkleHelpers.CombineMore (avatar_path, "avatar-" + email);
+
+			if (File.Exists (avatar_file_path)) {
+
+				return avatar_file_path;
+
+			} else {
+
+				// Let's try to get the person's gravatar for next time
+				WebClient web_client = new WebClient ();
+				Uri uri = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (email) +
+					".jpg?s=" + size + "&d=404");
+
+				string tmp_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, email + size);
+
+				if (!File.Exists (tmp_file_path)) {
+
+					web_client.DownloadFileAsync (uri, tmp_file_path);
+
+					web_client.DownloadFileCompleted += delegate {
+
+						if (File.Exists (avatar_file_path))
+							File.Delete (avatar_file_path);
+
+						FileInfo tmp_file_info = new FileInfo (tmp_file_path);
+
+						if (tmp_file_info.Length > 255)
+							File.Move (tmp_file_path, avatar_file_path);
+
+					};
+
+				}
+
+				// Fall back to a generic icon if there is no gravatar
+				if (File.Exists (avatar_file_path))
+					return avatar_file_path;
+				else
+					return null;
+
+			}
+
+		}
+		
+		
+		// Creates an MD5 hash of input
+		public static string GetMD5 (string s)
+		{
+			MD5 md5 = new MD5CryptoServiceProvider ();
+			Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+			Byte[] encodedBytes = md5.ComputeHash (bytes);
+			return BitConverter.ToString (encodedBytes).ToLower ().Replace ("-", "");
+		}
+		
+		
 	}
 
 
@@ -827,4 +1075,21 @@ namespace SparkleShare {
 
 	}
 
+	
+	// All commits that happened on a day
+	public class ActivityDay : List <SparkleCommit>
+	{
+
+		public DateTime DateTime;
+
+		public ActivityDay (DateTime date_time)
+		{
+
+			DateTime = date_time;
+			DateTime = new DateTime (DateTime.Year, DateTime.Month, DateTime.Day);
+
+		}
+
+	}
+	
 }

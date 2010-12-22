@@ -2,13 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleIconFile</key>
+	<string>sparkleshare.icns</string>
 	<key>LSEnvironment</key>
 	<dict>
 		<key>PATH</key>
 		<string>/opt/local/bin</string>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.SparkleShare</string>
+	<string>org.sparkleshare.sparkleshare</string>
 	<key>CFBundleName</key>
 	<string>SparkleShare</string>
 	<key>CFBundleVersion</key>
@@ -19,5 +21,7 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>LSBackgroundOnly</key>
+	<false/>
 </dict>
 </plist>
