@@ -28,10 +28,6 @@ namespace SparkleShare {
 
 		public readonly string LocalPath;
 		
-		private WebView WebView;		
-		private NSButton CloseButton;
-		private NSButton OpenFolderButton;
-
 		private NSImage SideSplash;
 		
 		public SparkleWindow () : base ()
