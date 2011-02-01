@@ -589,7 +589,7 @@ namespace SparkleShare {
 
 						open_folder_button.Clicked += delegate {
 
-							SparkleShare.Controller.OpenSparkleShareFolder (folder_name);
+							SparkleShare.Controller.OpenSparkleShareFolder (System.IO.Path.GetFileNameWithoutExtension(folder_name));
 
 						};
 
