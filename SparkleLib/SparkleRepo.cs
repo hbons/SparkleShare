@@ -270,7 +270,12 @@ namespace SparkleLib {
 
 			UserName            = Config ["user.name"];
 			UserEmail           = Config ["user.email"];
-			_CurrentHash        = Head.CurrentCommit.Hash;
+
+            if (Head.CurrentCommit == null)
+                _CurrentHash    = null;
+            else
+    			_CurrentHash    = Head.CurrentCommit.Hash;
+
 			_IsSyncing          = false;
 			_IsBuffering        = false;
 			_IsPolling          = true;
