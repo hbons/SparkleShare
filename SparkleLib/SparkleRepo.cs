@@ -440,7 +440,6 @@ namespace SparkleLib {
 			process.StartInfo.UseShellExecute        = false;
 			process.StartInfo.WorkingDirectory       = LocalPath;
 			process.StartInfo.Arguments = "ls-remote origin master";
-			process.Start ();
 
 			process.Exited += delegate {
 			
@@ -458,6 +457,8 @@ namespace SparkleLib {
 				}
 
 			};
+
+			process.Start ();
 
 /* FIXME: LsRemoteCommand is not yet implemented by GitSharp
 
@@ -683,9 +684,6 @@ namespace SparkleLib {
 
 			process.StartInfo.Arguments = "fetch -v origin master";
 
-			process.Start ();
-			process.WaitForExit ();
-
 			process.Exited += delegate {
 
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
@@ -717,6 +715,9 @@ namespace SparkleLib {
 				}
 
 			};
+
+			process.Start ();
+			process.WaitForExit ();
 
 		}
 
@@ -837,7 +838,6 @@ namespace SparkleLib {
 			Process.StartInfo.Arguments = "push origin master";
 
 			Process.WaitForExit ();
-			Process.Start ();
 			
 			Process.Exited += delegate {
 
@@ -881,6 +881,7 @@ namespace SparkleLib {
 				}
 
 			};
+			Process.Start ();
 
 		}
 
