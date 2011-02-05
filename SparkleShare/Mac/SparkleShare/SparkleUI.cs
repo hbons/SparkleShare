@@ -44,7 +44,7 @@ namespace SparkleShare {
 
 			NSApplication.Init ();
 
-			NSApplication.SharedApplication.applicationIconImage
+			NSApplication.SharedApplication.ApplicationIconImage
 				= NSImage.ImageNamed ("sparkleshare.icns");
 
 			OpenLogs   = new List <SparkleLog> ();
