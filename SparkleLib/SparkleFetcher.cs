@@ -134,14 +134,17 @@ namespace SparkleLib {
 
 			TextWriter writer = new StreamWriter (exlude_rules_file_path);
 
-			// Ignore gedit swap files
-			writer.WriteLine ("*~");
+				// Ignore gedit swap files
+				writer.WriteLine ("*~");
 
-			// Ignore vi swap files
-			writer.WriteLine (".*.sw?");
-
-			// Ignore OSX's invisible directories
-			writer.WriteLine (".DS_store");
+				// Ignore vi swap files
+				writer.WriteLine (".*.sw?");
+	
+				// Ignore OSX's invisible directories
+				writer.WriteLine (".DS_Store");
+				
+				// Ignore Windows cache files
+				writer.WriteLine ("Thumbs.db");
 
 			writer.Close ();
 
