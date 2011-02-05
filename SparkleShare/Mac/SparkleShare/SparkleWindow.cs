@@ -56,6 +56,7 @@ namespace SparkleShare {
 			
 			ContentView.AddSubview (new NSImageView (new RectangleF (0, 0, 150, 480)) { Image = SideSplash});
 			ContentView.AddSubview (new NSTextField (new RectangleF (200, 100, 128, 31)) { BezelStyle = NSTextFieldBezelStyle.Rounded});
+			ContentView.AddSubview (tv);
 			
 			
 			
