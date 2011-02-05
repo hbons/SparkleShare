@@ -65,8 +65,8 @@ namespace SparkleShare {
 
 			var p = new OptionSet () {
 				{ "d|disable-gui", _("Don't show the notification icon"), v => hide_ui = v != null },
-				{ "v|version", _("Show this help text"), v => { PrintVersion (); } },
-				{ "h|help", _("Print version information"), v => show_help = v != null }
+				{ "v|version", _("Print version information"), v => { PrintVersion (); } },
+				{ "h|help", _("Show this help text"), v => show_help = v != null }
 			};
 
 			try {
