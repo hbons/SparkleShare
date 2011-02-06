@@ -36,8 +36,8 @@ namespace SparkleShare {
 	
 		public static SparkleStatusIcon StatusIcon;
 		public static List <SparkleLog> OpenLogs;
+		public static int NewEvents;
 
-		
 		
 		public SparkleUI ()
 		{
@@ -49,9 +49,22 @@ namespace SparkleShare {
 
 			OpenLogs   = new List <SparkleLog> ();
 			StatusIcon = new SparkleStatusIcon ();
+			
+			NewEvents = 0;
+			
+			SparkleShare.Controller.NotificationRaised += delegate {
+				
+				InvokeOnMainThread (delegate {
+				
+					NewEvents++;
+					NSApplication.SharedApplication.DockTile.BadgeLabel = NewEvents.ToString ();
+					
+				});
+				
+			};
 
 		}
-
+	
 		
 		public void Run ()
 		{
