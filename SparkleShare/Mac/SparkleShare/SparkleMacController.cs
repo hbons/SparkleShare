@@ -49,8 +49,8 @@ namespace SparkleShare {
 		// list of bookmarked places
 		public override void AddToBookmarks ()
 		{
-			
 		
+			// TODO
 		
 		}
 		
@@ -89,7 +89,67 @@ namespace SparkleShare {
 			process.Start ();
 			
 		}
+		
+		
+		public override string EventLogHTML
+		{
+			
+			get {
+			
+				string resource_path = NSBundle.MainBundle.ResourcePath;
 
+				string html_path = Path.Combine (resource_path, "HTML", "event-log.html");
+				
+				StreamReader reader = new StreamReader (html_path);
+				string html = reader.ReadToEnd ();
+				reader.Close ();
+				
+				return html;
+
+			}
+			
+		}
+
+		
+		public override string DayEntryHTML
+		{
+			
+			get {
+			
+				string resource_path = NSBundle.MainBundle.ResourcePath;
+
+				string html_path = Path.Combine (resource_path, "HTML", "day-entry.html");
+				
+				StreamReader reader = new StreamReader (html_path);
+				string html = reader.ReadToEnd ();
+				reader.Close ();
+				
+				return html;
+				
+			}
+			
+		}
+		
+	
+		public override string EventEntryHTML
+		{
+			
+			get {
+			
+				string resource_path = NSBundle.MainBundle.ResourcePath;
+
+				string html_path = Path.Combine (resource_path, "HTML", "event-entry.html");
+				
+				StreamReader reader = new StreamReader (html_path);
+				string html = reader.ReadToEnd ();
+				reader.Close ();
+				
+				return html;
+				
+			}
+			
+		}
+		
 	}
 
 }

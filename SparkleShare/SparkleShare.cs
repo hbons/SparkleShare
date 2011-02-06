@@ -89,11 +89,11 @@ namespace SparkleShare {
 
 				case PlatformID.Unix:
 					SetProcessName ("sparkleshare");
-					Controller = new SparkleLinController ();
+					//Controller = new SparkleLinController ();
 				break;
 
 				case PlatformID.MacOSX:
-					//Controller = new SparkleMacController ();
+					Controller = new SparkleMacController ();
 				break;
 				
 				case PlatformID.Win32NT:
