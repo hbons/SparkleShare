@@ -917,7 +917,7 @@ namespace SparkleLib {
 
 			string domain = url.Substring (url.IndexOf ("@") + 1);
 
-			if (domain.IndexOf (":") > -1)
+			if (domain.Contains (":"))
 				domain = domain.Substring (0, domain.IndexOf (":"));
 			else
 				domain = domain.Substring (0, domain.IndexOf ("/"));
