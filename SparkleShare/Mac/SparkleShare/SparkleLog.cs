@@ -22,6 +22,8 @@ using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
 using MonoMac.WebKit;
 
+using System.IO;
+
 namespace SparkleShare {
 
 	public class SparkleLog : NSWindow {
@@ -83,7 +85,7 @@ namespace SparkleShare {
 			ContentView.AddSubview (CloseButton);
 						
 
-			string name = System.IO.Path.GetFileName (LocalPath);
+			string name = Path.GetFileName (LocalPath);
 			Title = String.Format ("Recent Events in ‘{0}’", name);
 
 			OrderFrontRegardless ();
@@ -100,10 +102,19 @@ namespace SparkleShare {
 		private WebView CreateEventLog ()
 		{
 			
-			RectangleF frame = new RectangleF (0, 12 + 31 + 16, 480, 640 - (12 + 31 + 16));
+			RectangleF frame = new RectangleF (0, (12 + 31 + 16), 480, 618 - (12 + 31 + 16));
 			
-			WebView = new WebView (frame, "", "");			
-			WebView.MainFrameUrl = "http://www.google.nl/";
+			string folder_name = Path.GetFileName (LocalPath);
+			string html = SparkleShare.Controller.GetHTMLLog (folder_name);
+			
+			html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
+			html = html.Replace ("<!-- $body-font-size -->", "10pt");
+			html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
+			html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
+			html = html.Replace ("<!-- $a-color -->", "#0085cf");
+
+			WebView = new WebView (frame, "", "");
+			WebView.MainFrame.LoadHtmlString (html, new NSUrl (""));
 
 			return WebView;
 
