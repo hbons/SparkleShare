@@ -233,12 +233,16 @@ namespace SparkleShare {
 		}
 		
 		
+		public abstract string EventLogHTML { get; }
+		public abstract string DayEntryHTML { get; }
+		public abstract string EventEntryHTML { get; }
+		
+		
 		public string GetHTMLLog (string name)
 		{
 		
-			List <SparkleCommit> commits = GetLog (name);
-			
-						List <ActivityDay> activity_days = new List <ActivityDay> ();
+			List <SparkleCommit> commits     = GetLog (name);
+			List <ActivityDay> activity_days = new List <ActivityDay> ();
 
 			foreach (SparkleCommit commit in commits) {
 
@@ -261,34 +265,20 @@ namespace SparkleShare {
 				
 				if (!commit_inserted) {
 
-						ActivityDay activity_day = new ActivityDay (commit.DateTime);
-						activity_day.Add (commit);
-						activity_days.Add (activity_day);
+					ActivityDay activity_day = new ActivityDay (commit.DateTime);
+					activity_day.Add (commit);
+					activity_days.Add (activity_day);
 					
 				}
 
 			}
 
 
-
-
-			StreamReader reader;
-
-			reader = new StreamReader (Defines.PREFIX + "/share/sparkleshare/html/event-log.html");
-			string event_log_html = reader.ReadToEnd ();
-			reader.Close ();
-
-			reader = new StreamReader (Defines.PREFIX + "/share/sparkleshare/html/day-entry.html");
-			string day_entry_html = reader.ReadToEnd ();
-			reader.Close ();
-
-			reader = new StreamReader (Defines.PREFIX + "/share/sparkleshare/html/event-entry.html");
-			string event_entry_html = reader.ReadToEnd ();
-			reader.Close ();
-
-
+			string event_log_html   = EventLogHTML;
+			string day_entry_html   = DayEntryHTML;
+			string event_entry_html = EventEntryHTML;
 			
-
+			
 			string event_log = "";
 
 			foreach (ActivityDay activity_day in activity_days) {
@@ -305,13 +295,13 @@ namespace SparkleShare {
 
 						foreach (string file_path in change_set.Edited) {
 
-							if (File.Exists (SparkleHelpers.CombineMore (SparklePaths.SparklePath ,name , file_path))) {
+							if (File.Exists (SparkleHelpers.CombineMore (SparklePaths.SparklePath, name, file_path))) {
 
 								event_entry += "<dd><a href='#'>" + file_path + "</a></dd>";
 
 							} else {
 
-								event_entry += "<dd>" + SparkleHelpers.CombineMore (SparklePaths.SparklePath, name, file_path) + "</dd>";
+								event_entry += "<dd>" + file_path + "</dd>";
 
 							}
 
@@ -326,13 +316,13 @@ namespace SparkleShare {
 
 						foreach (string file_path in change_set.Added) {
 
-							if (File.Exists (SparkleHelpers.CombineMore (SparklePaths.SparklePath ,name , file_path))) {
+							if (File.Exists (SparkleHelpers.CombineMore (SparklePaths.SparklePath, name, file_path))) {
 
 								event_entry += "<dd><a href='#'>" + file_path + "</a></dd>";
 
 							} else {
 
-								event_entry += "<dd>" + SparkleHelpers.CombineMore (SparklePaths.SparklePath ,name , file_path) + "</dd>";
+								event_entry += "<dd>" + file_path + "</dd>";
 
 							}
 
@@ -346,33 +336,33 @@ namespace SparkleShare {
 
 						foreach (string file_path in change_set.Deleted) {
 
-							if (File.Exists (SparkleHelpers.CombineMore (SparklePaths.SparklePath ,name , file_path))) {
+							if (File.Exists (SparkleHelpers.CombineMore (SparklePaths.SparklePath, name, file_path))) {
 
 								event_entry += "<dd><a href='#'>" + file_path + "</a></dd>";
 
 							} else {
 
-								event_entry += "<dd>" + SparkleHelpers.CombineMore (SparklePaths.SparklePath ,name , file_path) + "</dd>";
+								event_entry += "<dd>" + file_path + "</dd>";
 
 							}
 
 						}
 
 					}
-Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
+
 					event_entry += "</dl>";
+					
 					event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
 						.Replace ("<!-- $event-user-name -->", change_set.UserName)
-						.Replace ("<!-- $event-avatar-url -->", "file://" +GetAvatar (change_set.UserEmail, 32) )
+						.Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (change_set.UserEmail, 32) )
 						.Replace ("<!-- $event-time -->", change_set.DateTime.ToString ("H:mm"));
-
+					
 				}
-
-
-
+				
+				
 				string day_entry = "";
 
-				DateTime today = DateTime.Now;
+				DateTime today     = DateTime.Now;
 				DateTime yesterday = DateTime.Now.AddDays (-1);
 
 				if (today.Day   == activity_day.DateTime.Day &&
@@ -398,7 +388,8 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 
 
 			}
-
+			
+			
 			string html = event_log_html.Replace ("<!-- $event-log-content -->", event_log);
 
 			return html;

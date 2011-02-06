@@ -48,16 +48,41 @@ namespace SparkleShare {
 
 			SideSplash = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/side-splash.png");
 			SideSplash.Size = new SizeF (150, 480);
+
+
 			
 			
-			NSText tv = new NSText (new RectangleF (200, 200, 200, 200)) {
-				Value = "TEST"	
+			
+			NSButtonCell proto = new NSButtonCell {
+			Title = " Github"	
 			};
 			
-			ContentView.AddSubview (new NSImageView (new RectangleF (0, 0, 150, 480)) { Image = SideSplash});
-			ContentView.AddSubview (new NSTextField (new RectangleF (200, 100, 128, 31)) { BezelStyle = NSTextFieldBezelStyle.Rounded});
-			ContentView.AddSubview (tv);
+			NSText text = new NSText (new RectangleF (150,150,350,300)) {
+				Value = "DDDDDDDD"
+			};
 			
+			proto.SetButtonType (NSButtonType.Radio) ;
+			
+			NSButton button = new NSButton (new RectangleF (150, 0, 350, 300)) {
+			Cell = proto,
+				Font = NSFontManager.SharedFontManager.FontWithFamily ("Lucida Grande",
+				                                                       NSFontTraitMask.Bold,
+				                                                       0, 14)
+			};
+			
+			NSMatrix matrix = new NSMatrix (new RectangleF (300, 00, 300, 300), NSMatrixMode.Radio, proto, 4, 1);
+			
+
+			
+			matrix.Cells [0].Title = "My own server:";
+			matrix.Cells [1].Title = "Github\nFree hosting";
+			matrix.Cells [2].Title = "Gitorious";
+			matrix.Cells [3].Title = "The GNOME Project";
+			
+			ContentView.AddSubview (new NSImageView (new RectangleF (0, 0, 150, 480)) { Image = SideSplash});
+			ContentView.AddSubview (new NSTextField (new RectangleF (200, 100, 128, 25)) { BezelStyle = NSTextFieldBezelStyle.Square, Editable=false});
+			ContentView.AddSubview (button);
+			ContentView.AddSubview (text);
 			
 			
 			NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
