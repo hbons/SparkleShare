@@ -876,6 +876,25 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 		}
 
 
+		// getter: returns a string matching the public key
+		// setter: don't know, is there any field we'd like to update?
+		public string PublicKey
+		{
+			get
+			{
+				string key_file_name = SparklePaths.SparkleKeysPath + "/sparkleshare." + SparkleShare.Controller.UserEmail + ".key.pub";
+				if (!File.Exists (key_file_name))
+				{
+					return null;
+				}
+
+				TextReader pubkeyReader = new StreamReader(key_file_name);
+				return pubkeyReader.ReadLine();
+			}
+
+		}
+
+
 		public void FetchFolder (string url, string name)
 		{
 
