@@ -294,10 +294,13 @@ namespace SparkleShare {
 						event_entry += "<dt>Edited</dt>";
 
 						foreach (string file_path in change_set.Edited) {
+							
+							string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+								name, file_path);
+							
+							if (File.Exists (absolute_file_path)) {
 
-							if (File.Exists (SparkleHelpers.CombineMore (SparklePaths.SparklePath, name, file_path))) {
-
-								event_entry += "<dd><a href='#'>" + file_path + "</a></dd>";
+								event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
 
 							} else {
 
@@ -315,11 +318,13 @@ namespace SparkleShare {
 						event_entry += "<dt>Added</dt>";
 
 						foreach (string file_path in change_set.Added) {
+							string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+								name, file_path);
+							
+							if (File.Exists (absolute_file_path)) {
 
-							if (File.Exists (SparkleHelpers.CombineMore (SparklePaths.SparklePath, name, file_path))) {
-
-								event_entry += "<dd><a href='#'>" + file_path + "</a></dd>";
-
+								event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+								
 							} else {
 
 								event_entry += "<dd>" + file_path + "</dd>";
@@ -336,10 +341,13 @@ namespace SparkleShare {
 
 						foreach (string file_path in change_set.Deleted) {
 
-							if (File.Exists (SparkleHelpers.CombineMore (SparklePaths.SparklePath, name, file_path))) {
+							string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+								name, file_path);
+							
+							if (File.Exists (absolute_file_path)) {
 
-								event_entry += "<dd><a href='#'>" + file_path + "</a></dd>";
-
+								event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+								
 							} else {
 
 								event_entry += "<dd>" + file_path + "</dd>";
