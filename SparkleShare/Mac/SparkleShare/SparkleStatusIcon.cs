@@ -380,13 +380,14 @@ namespace SparkleShare {
 	
 		public override void MenuWillOpen (NSMenu menu)
 		{
-		
-			Console.WriteLine ("OPENED");
-			
+
 			InvokeOnMainThread (delegate {
 
 				foreach (SparkleLog log in SparkleUI.OpenLogs)
 					log.OrderFrontRegardless ();
+				
+				SparkleUI.NewEvents = 0;
+				NSApplication.SharedApplication.DockTile.BadgeLabel = null;
 
 			});
 
