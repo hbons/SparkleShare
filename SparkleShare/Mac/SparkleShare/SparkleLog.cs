@@ -115,6 +115,7 @@ namespace SparkleShare {
 
 			WebView = new WebView (frame, "", "");
 			WebView.MainFrame.LoadHtmlString (html, new NSUrl (""));
+			WebView.PolicyDelegate = new SparkleWebPolicyDelegate ();
 
 			return WebView;
 
@@ -134,6 +135,21 @@ namespace SparkleShare {
 		
 		}
 
+	}
+	
+	
+	public class SparkleWebPolicyDelegate : WebPolicyDelegate {
+		
+		public override void DecidePolicyForNavigation (WebView web_view, NSDictionary action_info,
+			NSUrlRequest request, WebFrame frame, NSObject decision_token) {
+		
+			string file_path = request.Url.ToString ();
+			file_path = file_path.Replace ("%20", "\\ ");
+			
+			NSWorkspace.SharedWorkspace.OpenFile (file_path);
+
+		}
+		
 	}
 
 }
