@@ -100,11 +100,40 @@ namespace SparkleShare {
 						Xalign    = 0
 					};
 
+					Label ssh_key_label = new Label ("<b>" + _("SSH Key:") + "</b>") {
+						UseMarkup = true,
+						Xalign = 0
+					};
+
+					ComboBox ssh_key_chooser = new ComboBox ();
+					CellRendererText ssh_key_cell = new CellRendererText ();
+					ListStore ssh_key_list = new ListStore (typeof (string));
+					string ssh_keys_path = unix_user_info.HomeDirectory + "/.ssh";
+
+					ssh_key_chooser.Clear ();
+					ssh_key_chooser.PackStart (ssh_key_cell, false);
+					ssh_key_chooser.AddAttribute (ssh_key_cell, "text", 0);
+					ssh_key_chooser.Model = ssh_key_list;
+
+					ssh_key_list.AppendValues ("Generate a new one..");
+
+					if (Directory.Exists (ssh_keys_path))
+					{
+						DirectoryInfo ssh_dir = new DirectoryInfo(ssh_keys_path);
+						FileInfo[] ssh_keys_fi = ssh_dir.GetFiles("*.pub");
+						foreach (FileInfo i in ssh_keys_fi)
+							ssh_key_list.AppendValues (i.Name);
+					}
+
+					ssh_key_chooser.Active = 0;
+
 
 				table.Attach (name_label, 0, 1, 0, 1);
 				table.Attach (NameEntry, 1, 2, 0, 1);
 				table.Attach (email_label, 0, 1, 1, 2);
 				table.Attach (EmailEntry, 1, 2, 1, 2);
+				table.Attach (ssh_key_label, 0, 1, 2, 3);
+				table.Attach (ssh_key_chooser, 1, 2, 2, 3);
 		
 					NextButton = new Button (_("Next")) {
 						Sensitive = false
@@ -123,9 +152,18 @@ namespace SparkleShare {
 						SparkleShare.Controller.UserName  = NameEntry.Text;
 						SparkleShare.Controller.UserEmail = EmailEntry.Text;
 
-						SparkleShare.Controller.GenerateKeyPair ();
-						SparkleShare.Controller.AddKey ();
-				
+						if (ssh_key_chooser.Active == 0)
+						{
+							SparkleShare.Controller.GenerateKeyPair ();
+							SparkleShare.Controller.AddKey ();
+						}
+
+						else
+						{
+							SparkleShare.Controller.GetUserKey (ssh_key_chooser.ActiveText);
+							SparkleShare.Controller.AddKey ();
+						}
+
 						SparkleShare.Controller.FirstRun = false;
 				
 						DeleteEvent += PreventClose;

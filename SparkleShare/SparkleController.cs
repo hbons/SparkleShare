@@ -835,6 +835,18 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 			
 		}
 
+		// Copies the user's public key into the SparkleShare config dir
+		public void GetUserKey (string path)
+		{
+			string keys_path = SparklePaths.SparkleKeysPath;
+			string key_file_name = "sparkleshare." + UserEmail + ".key";
+			string origin_key_pub = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".ssh", path);
+			string origin_key_priv = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".ssh", path.Remove(path.Length - 4, 4));
+			SparkleHelpers.DebugInfo ("Config", "Fetching user's public key " + origin_key_pub);
+			SparkleHelpers.DebugInfo ("Config", "Fetching user's private key " + origin_key_priv);
+			File.Copy (origin_key_pub, keys_path + "/" + key_file_name + ".pub");
+			File.Copy (origin_key_priv, keys_path + "/" + key_file_name);
+		}
 
 		// Generates and installs an RSA keypair to identify this system
 		public void GenerateKeyPair ()
@@ -879,7 +891,7 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 		private void DisableHostKeyCheckingForHost (string host)
 		{
 
-			string ssh_config_file_path = Path.Combine (SparklePaths.HomePath, ".ssh", "config");
+			string ssh_config_file_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".ssh", "config");
 			string ssh_config = "Host " + host + "\n\tStrictHostKeyChecking no";
 
 			if (File.Exists (ssh_config_file_path)) {
@@ -902,7 +914,7 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 		private void EnableHostKeyCheckingForHost (string host)
 		{
 
-			string ssh_config_file_path = Path.Combine (SparklePaths.HomePath, ".ssh", "config");
+			string ssh_config_file_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".ssh", "config");
 			string ssh_config = "Host " + host + "\n\tStrictHostKeyChecking no";
 
 			if (File.Exists (ssh_config_file_path)) {
@@ -1164,6 +1176,7 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 
 
 	// All commits that happened on a day
+	/*
 	public class ActivityDay : List <SparkleCommit> {
 
 		public DateTime DateTime;
@@ -1177,5 +1190,6 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 		}
 
 	}
+	*/
 	
 }
