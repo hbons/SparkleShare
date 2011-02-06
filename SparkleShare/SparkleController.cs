@@ -875,11 +875,78 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 
 		}
 
+		
+		private void DisableHostKeyCheckingForHost (string host)
+		{
+
+			string ssh_config_file_path = Path.Combine (SparklePaths.HomePath, ".ssh", "config");
+			string ssh_config = "Host " + host + "\n\tStrictHostKeyChecking no";
+
+			if (File.Exists (ssh_config_file_path)) {
+
+				TextWriter writer = File.AppendText (ssh_config_file_path);
+				writer.WriteLine ("\n" + ssh_config);
+				writer.Close ();
+
+			} else {
+
+  				TextWriter writer = new StreamWriter (ssh_config_file_path);
+				writer.WriteLine (ssh_config);
+				writer.Close ();
+  
+			}
+
+		}
+		
+
+		private void EnableHostKeyCheckingForHost (string host)
+		{
+
+			string ssh_config_file_path = Path.Combine (SparklePaths.HomePath, ".ssh", "config");
+			string ssh_config = "Host " + host + "\n\tStrictHostKeyChecking no";
+
+			if (File.Exists (ssh_config_file_path)) {
+
+				StreamReader reader = new StreamReader (ssh_config_file_path);
+				string current_ssh_config = reader.ReadToEnd ();
+				reader.Close ();
+				
+				if (current_ssh_config.Equals (ssh_config)) {
+				
+  					File.Delete (ssh_config_file_path);
+				
+				} else {
+  				
+   					current_ssh_config = current_ssh_config.Remove (current_ssh_config.IndexOf (ssh_config),
+   						ssh_config.Length);
+     		
+					TextWriter writer = new StreamWriter (ssh_config_file_path);
+					writer.WriteLine (current_ssh_config);
+					writer.Close ();
+
+				}
+
+			}
+
+		}
+
 
 		public void FetchFolder (string url, string name)
 		{
 
 			SparkleHelpers.DebugInfo ("Controller", "Formed URL: " + url);
+
+
+			string host = url.Substring (url.IndexOf ("@") + 1);
+
+			if (host.Contains (":"))
+				host = host.Substring (0, host.IndexOf (":"));
+			else
+				host = host.Substring (0, host.IndexOf ("/"));
+
+
+			DisableHostKeyCheckingForHost (host);
+			
 
 			// Strip the '.git' from the name
 			string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
@@ -910,6 +977,8 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 
 			fetcher.CloningFinished += delegate {
 
+				EnableHostKeyCheckingForHost (host);
+
 				SparkleHelpers.ClearAttributes (tmp_folder);
 
 				try {
@@ -937,6 +1006,8 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 
 			fetcher.CloningFailed += delegate {
 
+				EnableHostKeyCheckingForHost (host);
+
 				if (Directory.Exists (tmp_folder)) {
 
 					SparkleHelpers.ClearAttributes (tmp_folder);
@@ -951,52 +1022,11 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 					FolderFetchError ();
 
 			};
+			
 
 			fetcher.Start ();
 
 		}
-
-		
-		// Checks whether there are any folders syncing and
-		// quits if safe
-		public void TryQuit ()
-		{
-
-			foreach (SparkleRepo repo in Repositories) {	
-
-				if (repo.IsSyncing) {
-				
-					if (OnQuitWhileSyncing != null)
-						OnQuitWhileSyncing ();
-					
-					return;
-	
-				}
-			
-			}
-			
-			Quit ();
-			
-		}
-		
-		
-		// Quits the program
-		public void Quit ()
-		{
-
-			foreach (SparkleRepo repo in Repositories)
-				repo.Dispose ();
-
-			string pid_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "sparkleshare.pid");
-			
-			// Remove the process ID file
-			if (File.Exists (pid_file_path))
-				File.Delete (pid_file_path);
-
-			Environment.Exit (0);
-
-		}
-
 		
 		
 		// Gets the avatar for a specific email address and size
@@ -1066,7 +1096,46 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 			return BitConverter.ToString (encodedBytes).ToLower ().Replace ("-", "");
 		}
 		
+
+		// Checks whether there are any folders syncing and
+		// quits if safe
+		public void TryQuit ()
+		{
+
+			foreach (SparkleRepo repo in Repositories) {	
+
+				if (repo.IsSyncing) {
+				
+					if (OnQuitWhileSyncing != null)
+						OnQuitWhileSyncing ();
+					
+					return;
+	
+				}
+			
+			}
+			
+			Quit ();
+			
+		}
 		
+
+		public void Quit ()
+		{
+
+			foreach (SparkleRepo repo in Repositories)
+				repo.Dispose ();
+
+			string pid_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "sparkleshare.pid");
+			
+			// Remove the process ID file
+			if (File.Exists (pid_file_path))
+				File.Delete (pid_file_path);
+
+			Environment.Exit (0);
+
+		}		
+	
 	}
 
 
@@ -1074,4 +1143,20 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 
 	}
 
+
+	// All commits that happened on a day
+	public class ActivityDay : List <SparkleCommit> {
+
+		public DateTime DateTime;
+
+		public ActivityDay (DateTime date_time)
+		{
+
+			DateTime = date_time;
+			DateTime = new DateTime (DateTime.Year, DateTime.Month, DateTime.Day);
+
+		}
+
+	}
+	
 }
