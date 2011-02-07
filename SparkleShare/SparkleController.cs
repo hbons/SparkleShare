@@ -52,6 +52,9 @@ namespace SparkleShare {
 
 		public event FolderSizeChangedEventHandler FolderSizeChanged;
 		public delegate void FolderSizeChangedEventHandler (string folder_size);
+		
+		public event AvatarFetchedEventHandler AvatarFetched;
+		public delegate void AvatarFetchedEventHandler ();
 
 		public event OnIdleEventHandler OnIdle;
 		public delegate void OnIdleEventHandler ();
@@ -999,7 +1002,7 @@ namespace SparkleShare {
 		
 		
 		// Gets the avatar for a specific email address and size
-		public static string GetAvatar (string email, int size)
+		public string GetAvatar (string email, int size)
 		{
 
 			string avatar_path = SparkleHelpers.CombineMore (SparklePaths.SparkleLocalIconPath,
@@ -1040,6 +1043,9 @@ namespace SparkleShare {
 
 						if (tmp_file_info.Length > 255)
 							File.Move (tmp_file_path, avatar_file_path);
+						
+						if (AvatarFetched != null)
+							AvatarFetched ();
 
 					};
 
