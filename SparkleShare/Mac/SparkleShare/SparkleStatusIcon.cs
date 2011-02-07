@@ -293,7 +293,7 @@ namespace SparkleShare {
 				} else {
 
 					InvokeOnMainThread (delegate {
-						log.OrderFront (this);
+						log.OrderFrontRegardless ();
 					});
 					
 				}
