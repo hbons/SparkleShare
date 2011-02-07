@@ -194,7 +194,8 @@ namespace SparkleShare {
 				int i = 0;
 				
 				foreach (string path in SparkleShare.Controller.Folders) {	
-				
+
+					// TODO
 //					if (repo.HasUnsyncedChanges)
 //						folder_action.IconName = "dialog-error";
 					
@@ -246,21 +247,25 @@ namespace SparkleShare {
 			Menu.AddItem (NSMenuItem.SeparatorItem);
 			
 
-			NotificationsMenuItem = new NSMenuItem () {
-				Title = "Show Notifications"
-			};
+			NotificationsMenuItem = new NSMenuItem ();
 			
 				if (SparkleShare.Controller.NotificationsEnabled)
-					NotificationsMenuItem.State = NSCellStateValue.On;
-
+					NotificationsMenuItem.Title = "Turn Notifications Off";
+				else
+					NotificationsMenuItem.Title = "Turn Notifications On";
+								
 				NotificationsMenuItem.Activated += delegate {
 			
 					SparkleShare.Controller.ToggleNotifications ();
+								
+					InvokeOnMainThread (delegate {
 				
-					if (SparkleShare.Controller.NotificationsEnabled)
-						NotificationsMenuItem.State = NSCellStateValue.On;
-					else
-						NotificationsMenuItem.State = NSCellStateValue.Off;
+						if (SparkleShare.Controller.NotificationsEnabled)
+							NotificationsMenuItem.Title = "Turn Notifications Off";
+						else
+							NotificationsMenuItem.Title = "Turn Notifications On";
+													
+					});
 			
 				};
 
