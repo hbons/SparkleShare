@@ -63,16 +63,6 @@ namespace SparkleShare {
 				
 				Directory.CreateDirectory (SparklePaths.SparklePath);	
 
-
-				string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-						"Pixmaps", "sparkleshare-folder.icns");
-	
-				NSImage folder_icon = new NSImage (folder_icon_path);
-						
-				NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon,
-					SparklePaths.SparklePath, 0);
-				
-				
 				return true;
 			
 			} else {

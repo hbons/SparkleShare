@@ -16,6 +16,7 @@
 
 using System;
 using System.Drawing;
+using System.IO;
 using System.Timers;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
@@ -69,7 +70,12 @@ namespace SparkleShare {
 			
 			SparkleShare.Controller.FolderSizeChanged += delegate {
 				InvokeOnMainThread (delegate {
+					
+					if (!Animation.Enabled)
+						SetNormalState ();
+							
 					UpdateMenu ();
+					
 				});
 			};
 			
@@ -160,8 +166,12 @@ namespace SparkleShare {
 				FolderMenuItem.Activated += delegate {
 					SparkleShare.Controller.OpenSparkleShareFolder ();
 				};
+
 			
-				FolderMenuItem.Image = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/sparkleshare-mac-16.png");
+				string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
+				"sparkleshare.icns");
+			
+				FolderMenuItem.Image = new NSImage (folder_icon_path);
 				FolderMenuItem.Image.Size = new SizeF (16, 16);	
 			
 			Menu.AddItem (FolderMenuItem);
