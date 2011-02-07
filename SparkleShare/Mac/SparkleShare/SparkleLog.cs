@@ -89,10 +89,15 @@ namespace SparkleShare {
 
 			string name = Path.GetFileName (LocalPath);
 			Title = String.Format ("Recent Events in ‘{0}’", name);
-
-			OrderFrontRegardless ();
 			
-
+			NSBox box = new NSBox (new RectangleF (0, 58, 480, 1)) {
+				BorderColor = NSColor.LightGray,
+				BoxType = NSBoxType.NSBoxCustom
+			};
+			
+			ContentView.AddSubview (box);
+			
+			OrderFrontRegardless ();
 			
 		}
 
