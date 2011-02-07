@@ -246,7 +246,7 @@ namespace SparkleShare {
 
 			foreach (SparkleCommit commit in commits) {
 
-				GetAvatar (commit.UserEmail, 32);
+				GetAvatar (commit.UserEmail, 36);
 
 				bool commit_inserted = false;
 				foreach (ActivityDay stored_activity_day in activity_days) {
@@ -362,7 +362,7 @@ namespace SparkleShare {
 					
 					event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
 						.Replace ("<!-- $event-user-name -->", change_set.UserName)
-						.Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (change_set.UserEmail, 32) )
+						.Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (change_set.UserEmail, 36) )
 						.Replace ("<!-- $event-time -->", change_set.DateTime.ToString ("H:mm"));
 					
 				}
