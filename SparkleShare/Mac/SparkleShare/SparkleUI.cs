@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Timers;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
@@ -44,9 +45,12 @@ namespace SparkleShare {
 
 			NSApplication.Init ();
 
+			
+			// TODO: Getting crashes when I remove this
 			NSApplication.SharedApplication.ApplicationIconImage
 				= NSImage.ImageNamed ("sparkleshare.icns");
 
+			
 			OpenLogs   = new List <SparkleLog> ();
 			StatusIcon = new SparkleStatusIcon ();
 			

@@ -40,7 +40,7 @@ namespace SparkleShare {
 		{
 			
 			LocalPath = path;
-	
+
 			Delegate = new LogDelegate ();
 			
 			SetFrame (new RectangleF (0, 0, 480, 640), true);
@@ -56,8 +56,10 @@ namespace SparkleShare {
 			HasShadow   = true;			
 			BackingType = NSBackingStore.Buffered;
 
-
-			ContentView.AddSubview (CreateEventLog ());
+			CreateEventLog ();
+			UpdateEventLog ();
+			
+			ContentView.AddSubview (WebView);
 			
 			OpenFolderButton = new NSButton (new RectangleF (16, 12, 120, 31)) {
 				Title = "Open Folder",
@@ -90,20 +92,14 @@ namespace SparkleShare {
 
 			OrderFrontRegardless ();
 			
+
+			
 		}
 
 
 		public void UpdateEventLog ()
 		{
 
-		}
-
-
-		private WebView CreateEventLog ()
-		{
-			
-			RectangleF frame = new RectangleF (0, (12 + 31 + 16), 480, 618 - (12 + 31 + 16));
-			
 			string folder_name = Path.GetFileName (LocalPath);
 			string html = SparkleShare.Controller.GetHTMLLog (folder_name);
 			
@@ -112,11 +108,19 @@ namespace SparkleShare {
 			html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
 			html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
 			html = html.Replace ("<!-- $a-color -->", "#0085cf");
-
-			WebView = new WebView (frame, "", "");
+			
 			WebView.MainFrame.LoadHtmlString (html, new NSUrl (""));
-			WebView.PolicyDelegate = new SparkleWebPolicyDelegate ();
 
+		}
+
+
+		private WebView CreateEventLog ()
+		{
+
+			WebView = new WebView (new RectangleF (0, 59, 480, 559), "", ""){
+				PolicyDelegate = new SparkleWebPolicyDelegate ()
+			};
+			
 			return WebView;
 
 		}
@@ -126,13 +130,12 @@ namespace SparkleShare {
 
 	public class LogDelegate : NSWindowDelegate {
 		
-		public override void WillClose (NSNotification notification)
+		public override bool WindowShouldClose (NSObject sender)
 		{
+
+			(sender as SparkleLog).OrderOut (this);
+			return false;
 			
-			InvokeOnMainThread (delegate {
-				SparkleUI.OpenLogs.Remove ((SparkleLog) notification.Object);
-			});
-		
 		}
 
 	}
@@ -141,7 +144,8 @@ namespace SparkleShare {
 	public class SparkleWebPolicyDelegate : WebPolicyDelegate {
 		
 		public override void DecidePolicyForNavigation (WebView web_view, NSDictionary action_info,
-			NSUrlRequest request, WebFrame frame, NSObject decision_token) {
+			NSUrlRequest request, WebFrame frame, NSObject decision_token)
+		{
 		
 			string file_path = request.Url.ToString ();
 			file_path = file_path.Replace ("%20", "\\ ");
