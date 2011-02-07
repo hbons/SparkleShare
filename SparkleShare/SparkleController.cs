@@ -36,6 +36,8 @@ namespace SparkleShare {
 		public List <SparkleRepo> Repositories;
 		public string FolderSize;
 		public bool FirstRun;
+		
+		public readonly string SparklePath;
 
 
 		public event OnQuitWhileSyncingEventHandler OnQuitWhileSyncing;
@@ -86,7 +88,9 @@ namespace SparkleShare {
 				AddToBookmarks ();
 
 			FolderSize = GetFolderSize ();
-
+			
+			
+			SparklePath = SparklePaths.SparklePath;
 			
 			string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
 
@@ -555,6 +559,12 @@ namespace SparkleShare {
 			if (FolderListChanged != null)
 				FolderListChanged ();
 
+			
+			FolderSize = GetFolderSize ();
+
+			if (FolderSizeChanged != null)
+				FolderSizeChanged (FolderSize);
+
 		}
 
 
@@ -583,6 +593,12 @@ namespace SparkleShare {
 
 			if (FolderListChanged != null)
 				FolderListChanged ();
+
+			
+			FolderSize = GetFolderSize ();
+
+			if (FolderSizeChanged != null)
+				FolderSizeChanged (FolderSize);
 
 		}
 

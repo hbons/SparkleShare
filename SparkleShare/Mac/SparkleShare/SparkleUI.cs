@@ -44,7 +44,8 @@ namespace SparkleShare {
 		{
 
 			NSApplication.Init ();
-
+			
+			SetSparkleIcon ();
 			
 			// TODO: Getting crashes when I remove this
 			NSApplication.SharedApplication.ApplicationIconImage
@@ -92,7 +93,21 @@ namespace SparkleShare {
 				});
 		
 			};
+			
+		}
+	
+		
+		public void SetSparkleIcon ()
+		{
+		
+			string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
+				"sparkleshare.icns");
 
+			NSImage folder_icon = new NSImage (folder_icon_path);
+						
+			NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon,
+				SparkleShare.Controller.SparklePath, 0);
+			
 		}
 	
 		
