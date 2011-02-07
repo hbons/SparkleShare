@@ -63,8 +63,23 @@ namespace SparkleShare {
 					NewEvents++;
 					NSApplication.SharedApplication.DockTile.BadgeLabel = NewEvents.ToString ();
 					
+					foreach (SparkleLog log in SparkleUI.OpenLogs)
+						log.UpdateEventLog ();
+					
 				});
 				
+			};
+			
+			
+			SparkleShare.Controller.AvatarFetched += delegate {
+			
+				InvokeOnMainThread (delegate {
+					
+					foreach (SparkleLog log in SparkleUI.OpenLogs)
+						log.UpdateEventLog ();
+					
+				});
+		
 			};
 
 		}

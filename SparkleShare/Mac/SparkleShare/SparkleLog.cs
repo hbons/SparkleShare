@@ -110,6 +110,8 @@ namespace SparkleShare {
 			html = html.Replace ("<!-- $a-color -->", "#0085cf");
 			
 			WebView.MainFrame.LoadHtmlString (html, new NSUrl (""));
+			
+			Update ();
 
 		}
 
