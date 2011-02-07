@@ -61,10 +61,17 @@ namespace SparkleShare {
 			
 			if (!Directory.Exists (SparklePaths.SparklePath)) {
 				
-				Directory.CreateDirectory (SparklePaths.SparklePath);
+				Directory.CreateDirectory (SparklePaths.SparklePath);	
+
+
+				string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
+						"Pixmaps", "sparkleshare-folder.icns");
 	
-				NSWorkspace.SharedWorkspace.SetIconforFile (NSImage.ImageNamed ("sparkleshare.icns"),
+				NSImage folder_icon = new NSImage (folder_icon_path);
+						
+				NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon,
 					SparklePaths.SparklePath, 0);
+				
 				
 				return true;
 			
@@ -82,11 +89,9 @@ namespace SparkleShare {
 		{
 		
 			string folder = Path.Combine (SparklePaths.SparklePath, subfolder);
-
-			Process process = new Process ();
-			process.StartInfo.Arguments = folder.Replace (" ", "\\ "); // Escape space-characters
-			process.StartInfo.FileName  = "open";
-			process.Start ();
+			folder.Replace (" ", "\\ "); // Escape space-characters			
+			
+			NSWorkspace.SharedWorkspace.OpenFile (folder);
 			
 		}
 		
