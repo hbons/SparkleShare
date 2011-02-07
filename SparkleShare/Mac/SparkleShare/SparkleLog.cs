@@ -165,7 +165,7 @@ namespace SparkleShare {
 		{
 		
 			string file_path = request.Url.ToString ();
-			file_path = file_path.Replace ("%20", "\\ ");
+			file_path = file_path.Replace ("%20", " ");
 			
 			NSWorkspace.SharedWorkspace.OpenFile (file_path);
 
