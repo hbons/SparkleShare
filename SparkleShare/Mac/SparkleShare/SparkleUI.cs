@@ -81,6 +81,17 @@ namespace SparkleShare {
 				});
 		
 			};
+			
+			SparkleShare.Controller.OnIdle += delegate {
+			
+				InvokeOnMainThread (delegate {
+					
+					foreach (SparkleLog log in SparkleUI.OpenLogs)
+						log.UpdateEventLog ();
+					
+				});
+		
+			};
 
 		}
 	
