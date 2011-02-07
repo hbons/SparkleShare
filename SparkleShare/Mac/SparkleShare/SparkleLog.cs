@@ -33,6 +33,7 @@ namespace SparkleShare {
 		private WebView WebView;		
 		private NSButton CloseButton;
 		private NSButton OpenFolderButton;
+		private NSBox Separator;
 
 		public SparkleLog (IntPtr handle) : base (handle) { } 
 		
@@ -44,8 +45,17 @@ namespace SparkleShare {
 			Delegate = new LogDelegate ();
 			
 			SetFrame (new RectangleF (0, 0, 480, 640), true);
-			
 			Center ();
+			
+			// Open slightly off center for each consecutive window
+			if (SparkleUI.OpenLogs.Count > 0) {
+			
+				RectangleF offset = new RectangleF (Frame.X + (SparkleUI.OpenLogs.Count * 20),
+					Frame.Y - (SparkleUI.OpenLogs.Count * 20), Frame.Width, Frame.Height);
+			
+				SetFrame (offset, true);
+
+			}
 			
 			StyleMask = (NSWindowStyle.Closable |
 			             NSWindowStyle.Miniaturizable |
@@ -90,12 +100,12 @@ namespace SparkleShare {
 			string name = Path.GetFileName (LocalPath);
 			Title = String.Format ("Recent Events in ‘{0}’", name);
 			
-			NSBox box = new NSBox (new RectangleF (0, 58, 480, 1)) {
+			Separator = new NSBox (new RectangleF (0, 58, 480, 1)) {
 				BorderColor = NSColor.LightGray,
 				BoxType = NSBoxType.NSBoxCustom
 			};
 			
-			ContentView.AddSubview (box);
+			ContentView.AddSubview (Separator);
 			
 			OrderFrontRegardless ();
 			
@@ -106,7 +116,7 @@ namespace SparkleShare {
 		{
 
 			string folder_name = Path.GetFileName (LocalPath);
-			string html = SparkleShare.Controller.GetHTMLLog (folder_name);
+			string html        = SparkleShare.Controller.GetHTMLLog (folder_name);
 			
 			html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
 			html = html.Replace ("<!-- $body-font-size -->", "10pt");
