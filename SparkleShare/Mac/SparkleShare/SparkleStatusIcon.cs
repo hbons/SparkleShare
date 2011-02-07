@@ -129,11 +129,20 @@ namespace SparkleShare {
 
 				InvokeOnMainThread (delegate {
 					
-					StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle" + FrameNumber + ".png");
-					StatusItem.AlternateImage.Size = new SizeF (16, 16);
+					string image_path =
+						Path.Combine (NSBundle.MainBundle.ResourcePath,
+							"Pixmaps", "idle" + FrameNumber + ".png");					
 					
-					StatusItem.Image      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle" + FrameNumber + ".png");
+					StatusItem.Image      = new NSImage (image_path);
 					StatusItem.Image.Size = new SizeF (16, 16);
+
+					
+					string alternate_image_path =
+						Path.Combine (NSBundle.MainBundle.ResourcePath,
+							"Pixmaps", "idle" + FrameNumber + ".png");
+					
+					StatusItem.AlternateImage      = new NSImage (alternate_image_path);
+					StatusItem.AlternateImage.Size = new SizeF (16, 16);
 					
 				});
 
