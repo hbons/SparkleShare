@@ -53,7 +53,7 @@ namespace SparkleShare {
 
 		
 		public SparkleStatusIcon () : base ()
-		{
+		{			
 			
 			Animation = CreateAnimation ();
 
@@ -161,15 +161,14 @@ namespace SparkleShare {
 					SparkleShare.Controller.OpenSparkleShareFolder ();
 				};
 			
-				//FolderMenuItem.Image = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/sparkleshare.icns");
-				FolderMenuItem.Image = NSImage.ImageNamed ("NSFolder");
+				FolderMenuItem.Image = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/sparkleshare-mac-16.png");
 				FolderMenuItem.Image.Size = new SizeF (16, 16);	
 			
 			Menu.AddItem (FolderMenuItem);
 			
 			
 			if (SparkleShare.Controller.Folders.Count > 0) {
-				
+
 				FolderMenuItems = new NSMenuItem [SparkleShare.Controller.Folders.Count];
 				Tasks = new EventHandler [SparkleShare.Controller.Folders.Count];
 				
@@ -198,7 +197,13 @@ namespace SparkleShare {
 		
 			} else {
 		
-				// TODO: No Remote Folders Yet
+				FolderMenuItems = new NSMenuItem [1];
+
+				FolderMenuItems [0] = new NSMenuItem () {	
+					Title = "No Remote Folders Yet"
+				};
+				
+				Menu.AddItem (FolderMenuItems [0]);
 		
 			}
 					
@@ -251,7 +256,10 @@ namespace SparkleShare {
 			};
 
 				AboutMenuItem.Activated += delegate {
-					// TODO
+					
+					NSUrl url = new NSUrl ("http://www.sparkleshare.org/");
+					NSWorkspace.SharedWorkspace.OpenUrl (url);
+				
 				};
 
 			Menu.AddItem (AboutMenuItem);
@@ -269,7 +277,7 @@ namespace SparkleShare {
 		{
 
 			return delegate { 
-
+				
 				SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
 					return l.LocalPath.Equals (path);
 				});
@@ -281,13 +289,13 @@ namespace SparkleShare {
 					InvokeOnMainThread (delegate {
 						SparkleUI.OpenLogs.Add (new SparkleLog (path));
 					});
-					
+			
 				} else {
 
 					InvokeOnMainThread (delegate {
-						log.OrderFrontRegardless ();
+						log.OrderFront (this);
 					});
-				
+					
 				}
 
 			};
@@ -382,9 +390,6 @@ namespace SparkleShare {
 		{
 
 			InvokeOnMainThread (delegate {
-
-				foreach (SparkleLog log in SparkleUI.OpenLogs)
-					log.OrderFrontRegardless ();
 				
 				SparkleUI.NewEvents = 0;
 				NSApplication.SharedApplication.DockTile.BadgeLabel = null;
