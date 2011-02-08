@@ -30,18 +30,25 @@ namespace SparkleShare {
 		
 		private NSButton NextButton;
 		private NSButton SyncButton;
+		private NSButton TryAgainButton;
+		private NSButton CancelButton;
+		private NSButton SkipButton;
+		private NSButton OpenFolderButton;
+		private NSButton FinishButton;
 		private NSForm UserInfoForm;
 		
+		private bool ServerFormOnly;
 
+		
 		public SparkleIntro () : base ()
 		{
 			
-			ShowUserForm ();
+			ServerFormOnly = false;
 			
 		}
 		
 		
-		public void ShowUserForm ()
+		public void ShowAccountForm ()
 		{
 		
 			Reset ();
@@ -56,24 +63,26 @@ namespace SparkleShare {
 				UserInfoForm.AddEntry ("Email Address:");
 				UserInfoForm.CellSize = new SizeF (280, 22);
 			
-				string login_name = UnixUserInfo.GetLoginName ();
-				string full_name  = new UnixUserInfo (login_name).RealName;
+				string full_name  = new UnixUserInfo (UnixEnvironment.UserName).RealName;
 				UserInfoForm.Cells [0].StringValue = full_name;
+				UserInfoForm.Cells [1].StringValue = SparkleShare.Controller.UserEmail;
 			
 
 				NextButton = new NSButton () {
 					Title = "Next",
 					Enabled = false
 				};
-			
+
 				NextButton.Activated += delegate {
 					
 					SparkleShare.Controller.UserName  = UserInfoForm.Cells [0].StringValue.Trim ();
 					SparkleShare.Controller.UserEmail = UserInfoForm.Cells [1].StringValue.Trim ();
-					
-					SparkleShare.Controller.GenerateKeyPair ();
-
-					ShowServerForm ();
+					SparkleShare.Controller.GenerateKeyPair ();				
+					SparkleShare.Controller.FirstRun = false;
+				
+					InvokeOnMainThread (delegate {
+						ShowServerForm ();
+					});
 				
 				};
 			
@@ -101,13 +110,22 @@ namespace SparkleShare {
 			
 				timer.Start ();
 
-			ContentView.AddSubview (UserInfoForm);
-			Buttons.Add (NextButton);
+				ContentView.AddSubview (UserInfoForm);
+				Buttons.Add (NextButton);
 
 			ShowAll ();
 
 		}
+
 		
+		public void ShowServerForm (bool server_form_only)
+		{
+
+			ServerFormOnly = server_form_only;
+			ShowServerForm ();
+
+		}
+
 
 		public void ShowServerForm ()
 		{
@@ -123,21 +141,131 @@ namespace SparkleShare {
 					Enabled = false
 				};
 			
+				Buttons.Add (SyncButton);
+			
+			
+				if (ServerFormOnly) {
+				
+					CancelButton = new NSButton () {
+						Title = "Cancel"
+					};
+				
+					CancelButton.Activated += delegate {
+						PerformClose (this);
+					};
 
-			Buttons.Add (SyncButton);
+					Buttons.Add (CancelButton);
+				
+				} else {
+				
+					SkipButton = new NSButton () {
+						Title = "Skip"
+					};
+				
+					SkipButton.Activated += delegate {
+						ShowCompletedPage ();
+					};
 
+					Buttons.Add (SkipButton);
+				
+				}
+		
 			ShowAll ();
 
 		}
 
+
+		public void ShowErrorPage ()
+		{
+
+			Reset ();
+
+				Header      = "Something went wrong…";
+				Description = "";
+			
+	
+				TryAgainButton = new NSButton () {
+					Title = "Try again…"
+				};
+	
+				TryAgainButton.Activated += delegate {
+					ShowServerForm ();
+				};
+
+
+				Buttons.Add (TryAgainButton);
+
+			ShowAll ();
+
+		}
+		
+
+		private void ShowSuccessPage (string folder_name)
+		{
+
+			Reset ();
+
+				Header      = "Folder synced succesfully!";	
+				Description = "Now you can access the synced files from ‘" + folder_name + "’ in " +
+				              "your SparkleShare folder.";
+
+
+				FinishButton = new NSButton () {
+					Title = "Finish"
+				};
+
+				FinishButton.Activated += delegate {
+					Close ();
+				};
+
+			
+				OpenFolderButton = new NSButton () {
+					Title = "Open Folder"
+				};
+
+				OpenFolderButton.Activated += delegate {
+					SparkleShare.Controller.OpenSparkleShareFolder (folder_name);
+				};
+
+
+				Buttons.Add (FinishButton);
+				Buttons.Add (OpenFolderButton);
+
+			ShowAll ();
+		
+		}
+
+
+		private void ShowCompletedPage ()
+		{
+
+			Reset ();
+
+				Header      = "SparkleShare is ready to go!";
+				Description = "Now you can start accepting invitations from others. " +
+				              "Just click on invitations you get by email and " +
+					          "we will take care of the rest.";
+
+
+				FinishButton = new NSButton () {
+					Title = "Finish"
+				};
+
+				FinishButton.Activated += delegate {
+				Console.WriteLine ("ffffffff");
+					Close ();
+				};			
+				
+				Buttons.Add (FinishButton);
+			
+			ShowAll ();
+
+		}
+		
 	}
 		
 }
 
-
-
-
-			
 		//	proto.SetButtonType (NSButtonType.Radio) ;
 			
 	//		NSButton button = new NSButton (new RectangleF (150, 0, 350, 300)) {

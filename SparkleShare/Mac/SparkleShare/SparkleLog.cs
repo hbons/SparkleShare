@@ -42,7 +42,7 @@ namespace SparkleShare {
 
 			LocalPath = path;
 
-			Delegate = new LogDelegate ();
+			Delegate = new SparkleLogDelegate ();
 			
 			SetFrame (new RectangleF (0, 0, 480, 640), true);
 			Center ();
@@ -145,7 +145,7 @@ namespace SparkleShare {
 	}
 
 
-	public class LogDelegate : NSWindowDelegate {
+	public class SparkleLogDelegate : NSWindowDelegate {
 		
 		public override bool WindowShouldClose (NSObject sender)
 		{
