@@ -46,6 +46,7 @@ namespace SparkleShare {
 		public static SparkleStatusIcon StatusIcon;
 		public static List <SparkleLog> OpenLogs;
 		public static int NewEvents;
+		public static SparkleIntro Intro;
 
 		
 		public SparkleUI ()
