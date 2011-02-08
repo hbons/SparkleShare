@@ -16,23 +16,33 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
 using MonoMac.WebKit;
+using Mono.Unix;
 
 namespace SparkleShare {
 
 	public class SparkleWindow : NSWindow {
-
-		public readonly string LocalPath;
 		
 		private NSImage SideSplash;
+		private NSImageView SideSplashView;
+
+		public List <NSButton> Buttons;
+		public string Header;
+		public string Description;
+		
+		private NSTextField HeaderTextField;
+		private NSTextField DescriptionTextField;
+
 		
 		public SparkleWindow () : base ()
 		{
-		
+
 			SetFrame (new RectangleF (0, 0, 640, 480), true);
 			
 			Center ();
@@ -46,50 +56,85 @@ namespace SparkleShare {
 			HasShadow   = true;	
 			BackingType = NSBackingStore.Buffered;
 
-			SideSplash = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/side-splash.png");
-			SideSplash.Size = new SizeF (150, 480);
+			
+			string side_splash_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
+				"Pixmaps", "side-splash.png");
+
+			SideSplash = new NSImage (side_splash_path) {
+				Size = new SizeF (150, 480)
+			};
+
+			SideSplashView = new NSImageView () {
+				Image = SideSplash,
+				Frame = new RectangleF (0, 0, 150, 480)
+			};
 
 
-			
-			
-			
-			NSButtonCell proto = new NSButtonCell {
-			Title = " Github"	
-			};
-			
-			NSText text = new NSText (new RectangleF (150,150,350,300)) {
-				Value = "DDDDDDDD"
-			};
-			
-			proto.SetButtonType (NSButtonType.Radio) ;
-			
-			NSButton button = new NSButton (new RectangleF (150, 0, 350, 300)) {
-			Cell = proto,
-				Font = NSFontManager.SharedFontManager.FontWithFamily ("Lucida Grande",
-				                                                       NSFontTraitMask.Bold,
-				                                                       0, 14)
-			};
-			
-			NSMatrix matrix = new NSMatrix (new RectangleF (300, 00, 300, 300), NSMatrixMode.Radio, proto, 4, 1);
-			
+			Buttons = new List <NSButton> ();
 
 			
-			matrix.Cells [0].Title = "My own server:";
-			matrix.Cells [1].Title = "Github\nFree hosting";
-			matrix.Cells [2].Title = "Gitorious";
-			matrix.Cells [3].Title = "The GNOME Project";
+			HeaderTextField = new NSTextField (new RectangleF (200, Frame.Height - 100, 350, 48)) {
+				BackgroundColor = NSColor.WindowBackground,
+				Bordered    = false,
+				Editable    = false,
+				Font        = NSFontManager.SharedFontManager.FontWithFamily
+					("Lucida Grande", NSFontTraitMask.Bold, 0, 18)
+			};
 			
-			ContentView.AddSubview (new NSImageView (new RectangleF (0, 0, 150, 480)) { Image = SideSplash});
-			ContentView.AddSubview (new NSTextField (new RectangleF (200, 100, 128, 25)) { BezelStyle = NSTextFieldBezelStyle.Square, Editable=false});
-			ContentView.AddSubview (button);
-			ContentView.AddSubview (text);
-			
+			DescriptionTextField = new NSTextField (new RectangleF (200, Frame.Height - 155 , 350, 64)) {
+				BackgroundColor = NSColor.WindowBackground,
+				Bordered        = false,
+				Editable        = false
+			};
+
 			
 			NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
 			MakeKeyAndOrderFront (this);
+
+		}
+		
+		
+		public void Reset () {
+		
+			ContentView.Subviews = new NSView [0];
+			Buttons = new List <NSButton> ();
+			
+			Header      = "";
+			Description = "";
 			
 		}
 
+
+		public void ShowAll () {
+			
+			HeaderTextField.StringValue      = Header;
+			DescriptionTextField.StringValue = Description;
+			
+			ContentView.AddSubview (HeaderTextField);
+			ContentView.AddSubview (DescriptionTextField);
+			
+			ContentView.AddSubview (SideSplashView);
+			
+			int i = 0;
+			
+			if (Buttons.Count > 0) {
+
+				DefaultButtonCell = Buttons [0].Cell;
+				
+				foreach (NSButton button in Buttons) {
+					
+					button.BezelStyle = NSBezelStyle.Rounded;
+					button.Frame = new RectangleF (Frame.Width - 20 - (120 * (i + 1)) - (4 * i), 12, 120, 31);		
+					ContentView.AddSubview (button);
+					
+					i++;
+				
+				}
+			
+			}
+	
+		}
+		
 	}
 		
 }
