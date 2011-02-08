@@ -36,6 +36,7 @@ namespace SparkleShare {
 		private NSButton OpenFolderButton;
 		private NSButton FinishButton;
 		private NSForm UserInfoForm;
+		private NSProgressIndicator ProgressIndicator;
 		
 		private bool ServerFormOnly;
 
@@ -69,7 +70,7 @@ namespace SparkleShare {
 			
 
 				NextButton = new NSButton () {
-					Title = "Next",
+					Title    = "Next",
 					Enabled = false
 				};
 
@@ -99,8 +100,8 @@ namespace SparkleShare {
 						bool name_is_correct =
 							!UserInfoForm.Cells [0].StringValue.Trim ().Equals ("");
 					
-						bool email_is_correct =
-							!UserInfoForm.Cells [1].StringValue.Trim ().Equals ("");
+						bool email_is_correct = SparkleShare.Controller.IsValidEmail
+							(UserInfoForm.Cells [1].StringValue.Trim ());
 	
 						NextButton.Enabled = (name_is_correct && email_is_correct);
 				 
@@ -137,8 +138,8 @@ namespace SparkleShare {
 
 
 				SyncButton = new NSButton () {
-					Title = "Sync",
-					Enabled = false
+					Title = "Sync"
+					//Enabled = false TODO
 				};
 			
 				Buttons.Add (SyncButton);
@@ -151,7 +152,7 @@ namespace SparkleShare {
 					};
 				
 					CancelButton.Activated += delegate {
-						PerformClose (this);
+						Close ();
 					};
 
 					Buttons.Add (CancelButton);
@@ -200,6 +201,37 @@ namespace SparkleShare {
 		}
 		
 
+		private void ShowSyncingPage (string name)
+		{
+
+			Reset ();
+
+				Header      = "Syncing folder ‘" + name + "’…";
+				Description = "This may take a while.\n" +
+				              "You sure it’s not coffee o-clock?";
+			
+
+				ProgressIndicator = new NSProgressIndicator (new RectangleF (200, 230, 390, 20)) {
+					Style = NSProgressIndicatorStyle.Bar
+				};
+
+				ProgressIndicator.StartAnimation (this); 			
+
+				ContentView.AddSubview (ProgressIndicator);
+
+
+				FinishButton = new NSButton () {
+					Title = "Finish",
+					Enabled = false
+				};
+	
+				Buttons.Add (FinishButton);
+
+			ShowAll ();
+
+		}
+		
+
 		private void ShowSuccessPage (string folder_name)
 		{
 
@@ -232,6 +264,9 @@ namespace SparkleShare {
 				Buttons.Add (OpenFolderButton);
 
 			ShowAll ();
+
+			NSApplication.SharedApplication.RequestUserAttention
+				(NSRequestUserAttentionType.CriticalRequest);
 		
 		}
 
