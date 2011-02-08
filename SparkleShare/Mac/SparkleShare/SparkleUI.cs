@@ -67,6 +67,9 @@ namespace SparkleShare {
 					foreach (SparkleLog log in SparkleUI.OpenLogs)
 						log.UpdateEventLog ();
 					
+					NSApplication.SharedApplication.RequestUserAttention
+						(NSRequestUserAttentionType.InformationalRequest);
+					
 				});
 				
 			};
@@ -93,6 +96,8 @@ namespace SparkleShare {
 				});
 		
 			};
+			
+			
 			
 		}
 	
