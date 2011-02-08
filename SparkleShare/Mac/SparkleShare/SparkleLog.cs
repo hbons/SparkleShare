@@ -39,7 +39,7 @@ namespace SparkleShare {
 		
 		public SparkleLog (string path) : base ()
 		{
-			
+
 			LocalPath = path;
 
 			Delegate = new LogDelegate ();
