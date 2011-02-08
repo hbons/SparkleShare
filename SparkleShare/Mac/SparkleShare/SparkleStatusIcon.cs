@@ -238,7 +238,7 @@ namespace SparkleShare {
 					SyncMenuItem.Enabled = false;
 			
 				SyncMenuItem.Activated += delegate {
-					new SparkleWindow ();
+					new SparkleIntro ();
 				};
 			
 			Menu.AddItem (SyncMenuItem);

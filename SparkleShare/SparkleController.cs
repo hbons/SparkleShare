@@ -849,7 +849,7 @@ namespace SparkleShare {
 			                  "\temail = " + user_email);
 			writer.Close ();
 
-			SparkleHelpers.DebugInfo ("Config", "Created '" + global_config_file_path + "'");
+			SparkleHelpers.DebugInfo ("Config", "Updated '" + global_config_file_path + "'");
 			
 		}
 
@@ -858,18 +858,29 @@ namespace SparkleShare {
 		public void GenerateKeyPair ()
 		{
 
-			string keys_path = SparklePaths.SparkleKeysPath;
+			string keys_path     = SparklePaths.SparkleKeysPath;
 			string key_file_name = "sparkleshare." + UserEmail + ".key";
+			string key_file_path = Path.Combine (keys_path, key_file_name);
 
-			Process process = new Process () {
-				EnableRaisingEvents = true
-			};
+
+			if (File.Exists (key_file_path)) {
+
+				SparkleHelpers.DebugInfo ("Config", "Key already exists (" + key_file_name + "), " +
+				                          "leaving it untouched");
+				return;
+
+			}
+
 			
 			if (!Directory.Exists (keys_path))
 				Directory.CreateDirectory (keys_path);
 
 			if (!File.Exists (key_file_name)) {
 
+				Process process = new Process () {
+					EnableRaisingEvents = true
+				};
+				
 				process.StartInfo.WorkingDirectory = keys_path;
 				process.StartInfo.UseShellExecute = false;
 				process.StartInfo.RedirectStandardOutput = true;
@@ -884,8 +895,8 @@ namespace SparkleShare {
 
 				process.Exited += delegate {
 
-					SparkleHelpers.DebugInfo ("Config", "Created key '" + key_file_name + "'");
-					SparkleHelpers.DebugInfo ("Config", "Created key '" + key_file_name + ".pub'");
+					SparkleHelpers.DebugInfo ("Config", "Created private key '" + key_file_name + "'");
+					SparkleHelpers.DebugInfo ("Config", "Created public key  '" + key_file_name + ".pub'");
 
 				};
 
