@@ -47,16 +47,16 @@ namespace SparkleShare {
 			
 			Center ();
 			
-			StyleMask = (NSWindowStyle.Closable |
-			             NSWindowStyle.Miniaturizable |
+			StyleMask = (
+			             
 			             NSWindowStyle.Titled);
 
 			MaxSize     = new SizeF (640, 480);
 			MinSize     = new SizeF (640, 480);
 			HasShadow   = true;	
 			BackingType = NSBackingStore.Buffered;
-
 			
+
 			string side_splash_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
 				"Pixmaps", "side-splash.png");
 
@@ -92,7 +92,7 @@ namespace SparkleShare {
 			MakeKeyAndOrderFront (this);
 
 		}
-		
+
 		
 		public void Reset () {
 		
@@ -135,6 +135,15 @@ namespace SparkleShare {
 	
 		}
 		
-	}
 		
+		public override void Close ()
+		{
+		
+			OrderOut (this);
+			return;
+			
+		}
+		
+	}
+
 }

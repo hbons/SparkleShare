@@ -865,7 +865,7 @@ namespace SparkleShare {
 
 			if (File.Exists (key_file_path)) {
 
-				SparkleHelpers.DebugInfo ("Config", "Key already exists (" + key_file_name + "), " +
+				SparkleHelpers.DebugInfo ("Config", "Key already exists ('" + key_file_name + "'), " +
 				                          "leaving it untouched");
 				return;
 
