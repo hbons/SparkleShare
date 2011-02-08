@@ -226,7 +226,7 @@ namespace SparkleShare {
 				Menu.AddItem (FolderMenuItems [0]);
 		
 			}
-					
+				
 			Menu.AddItem (NSMenuItem.SeparatorItem);
 
 			
@@ -238,7 +238,25 @@ namespace SparkleShare {
 					SyncMenuItem.Enabled = false;
 			
 				SyncMenuItem.Activated += delegate {
-					new SparkleIntro ();
+				
+					InvokeOnMainThread (delegate {
+
+						NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+					
+						if (SparkleUI.Intro == null) {
+						
+							SparkleUI.Intro = new SparkleIntro ();
+							SparkleUI.Intro.ShowServerForm (true);
+	
+						}
+		
+						if (!SparkleUI.Intro.IsVisible)
+							SparkleUI.Intro.ShowServerForm (true);
+	
+						SparkleUI.Intro.OrderFrontRegardless ();
+					
+					});
+				
 				};
 			
 			Menu.AddItem (SyncMenuItem);
@@ -300,31 +318,31 @@ namespace SparkleShare {
 		{
 
 			return delegate { 
-				
-				NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-				
-				SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
-					return l.LocalPath.Equals (path);
-				});
+						
+				InvokeOnMainThread (delegate {
 	
-				// Check whether the log is already open, create a new one if
-				// that's not the case or present it to the user if it is
-				if (log == null) {
+					NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
 					
-					InvokeOnMainThread (delegate {
+					SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
+						return l.LocalPath.Equals (path);
+					});
+		
+					// Check whether the log is already open, create a new one if
+					// that's not the case or present it to the user if it is
+					if (log == null) {
+						
 						SparkleUI.OpenLogs.Add (new SparkleLog (path));
 						SparkleUI.OpenLogs [SparkleUI.OpenLogs.Count - 1].MakeKeyAndOrderFront (this);
-					});
-			
-				} else {
-
-					InvokeOnMainThread (delegate {
+				
+					} else {
+	
 						log.OrderFrontRegardless ();
 						log.MakeKeyAndOrderFront (this);
-					});
-					
-				}
-
+						
+					}
+							
+				});
+				
 			};
 
 		}
