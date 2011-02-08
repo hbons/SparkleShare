@@ -28,7 +28,15 @@ using MonoMac.WebKit;
 namespace SparkleShare {
 
 	public partial class AppDelegate : NSApplicationDelegate {
-		// Workaround to be able to work with SparkleUI as the main class
+		
+		public override void WillBecomeActive (NSNotification notification)
+		{
+		
+			SparkleUI.NewEvents = 0;
+			NSApplication.SharedApplication.DockTile.BadgeLabel = null;
+			
+		}
+		
 	}
 
 	
@@ -42,7 +50,7 @@ namespace SparkleShare {
 		
 		public SparkleUI ()
 		{
-
+			
 			NSApplication.Init ();
 			
 			SetSparkleIcon ();
