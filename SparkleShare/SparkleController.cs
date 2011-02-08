@@ -1099,6 +1099,15 @@ namespace SparkleShare {
 		}
 		
 		
+		// Checks to see if an email address is valid
+		public bool IsValidEmail (string email)
+		{
+
+			Regex regex = new Regex (@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$", RegexOptions.IgnoreCase);
+			return regex.IsMatch (email);
+
+		}
+	
 	}
 
 
