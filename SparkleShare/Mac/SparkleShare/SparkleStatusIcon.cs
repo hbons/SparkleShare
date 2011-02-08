@@ -231,7 +231,7 @@ namespace SparkleShare {
 
 			
 			SyncMenuItem = new NSMenuItem () {
-				Title = "Add Remote Folder..."
+				Title = "Add Remote Folder…"
 			};
 			
 				if (SparkleShare.Controller.FirstRun)
@@ -276,7 +276,7 @@ namespace SparkleShare {
 			
 			
 			AboutMenuItem = new NSMenuItem () {
-				Title = "About"
+				Title = "Visit Website"
 			};
 
 				AboutMenuItem.Activated += delegate {
@@ -290,7 +290,6 @@ namespace SparkleShare {
 										 
 			StatusItem.Menu = Menu;
 			StatusItem.Menu.Update ();
-			Console.WriteLine ("MENU UPDATED");
 
 		}
 
@@ -302,6 +301,8 @@ namespace SparkleShare {
 
 			return delegate { 
 				
+				NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+				
 				SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
 					return l.LocalPath.Equals (path);
 				});
@@ -312,12 +313,14 @@ namespace SparkleShare {
 					
 					InvokeOnMainThread (delegate {
 						SparkleUI.OpenLogs.Add (new SparkleLog (path));
+						SparkleUI.OpenLogs [SparkleUI.OpenLogs.Count - 1].MakeKeyAndOrderFront (this);
 					});
 			
 				} else {
 
 					InvokeOnMainThread (delegate {
 						log.OrderFrontRegardless ();
+						log.MakeKeyAndOrderFront (this);
 					});
 					
 				}
