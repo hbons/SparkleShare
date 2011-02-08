@@ -42,15 +42,14 @@ namespace SparkleShare {
 		
 		public SparkleWindow () : base ()
 		{
+			
+//			Title = "SparkleShare Configuration";
 
 			SetFrame (new RectangleF (0, 0, 640, 480), true);
 			
 			Center ();
 			
-			StyleMask = (
-			             
-			             NSWindowStyle.Titled);
-
+			StyleMask   =  NSWindowStyle.Titled;
 			MaxSize     = new SizeF (640, 480);
 			MinSize     = new SizeF (640, 480);
 			HasShadow   = true;	
@@ -124,7 +123,7 @@ namespace SparkleShare {
 				foreach (NSButton button in Buttons) {
 					
 					button.BezelStyle = NSBezelStyle.Rounded;
-					button.Frame = new RectangleF (Frame.Width - 20 - (120 * (i + 1)) - (4 * i), 12, 120, 31);		
+					button.Frame = new RectangleF (Frame.Width - 15 - (105 * (i + 1)) , 12, 105, 31);		
 					ContentView.AddSubview (button);
 					
 					i++;
