@@ -254,7 +254,8 @@ namespace SparkleShare {
 							SparkleUI.Intro.ShowServerForm (true);
 	
 						SparkleUI.Intro.OrderFrontRegardless ();
-					
+						SparkleUI.Intro.MakeKeyAndOrderFront (this);
+
 					});
 				
 				};
