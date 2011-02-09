@@ -45,16 +45,15 @@ namespace SparkleShare {
 			
 //			Title = "SparkleShare Configuration";
 
-			SetFrame (new RectangleF (0, 0, 640, 480), true);
+			SetFrame (new RectangleF (0, 0, 640, 380), true);
 			
-			Center ();
-			
-			StyleMask   =  NSWindowStyle.Titled;
-			MaxSize     = new SizeF (640, 480);
-			MinSize     = new SizeF (640, 480);
+			StyleMask   = NSWindowStyle.Titled;
+			MaxSize     = new SizeF (640, 380);
+			MinSize     = new SizeF (640, 380);
 			HasShadow   = true;	
 			BackingType = NSBackingStore.Buffered;
-			
+
+			Center ();
 
 			string side_splash_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
 				"Pixmaps", "side-splash.png");
@@ -72,18 +71,19 @@ namespace SparkleShare {
 			Buttons = new List <NSButton> ();
 
 			
-			HeaderTextField = new NSTextField (new RectangleF (200, Frame.Height - 100, 350, 48)) {
+			HeaderTextField = new NSTextField (new RectangleF (190, Frame.Height - 100, 318, 48)) {
 				BackgroundColor = NSColor.WindowBackground,
 				Bordered    = false,
 				Editable    = false,
 				Font        = NSFontManager.SharedFontManager.FontWithFamily
-					("Lucida Grande", NSFontTraitMask.Bold, 0, 18)
+					("Lucida Grande", NSFontTraitMask.Bold, 0, 15)
 			};
 			
-			DescriptionTextField = new NSTextField (new RectangleF (200, Frame.Height - 155 , 350, 64)) {
+			DescriptionTextField = new NSTextField (new RectangleF (190, Frame.Height - 155 , 640 - 240, 64)) {
 				BackgroundColor = NSColor.WindowBackground,
 				Bordered        = false,
-				Editable        = false
+				Editable        = false,
+				Font            = SparkleUI.Font
 			};
 
 			
@@ -110,11 +110,13 @@ namespace SparkleShare {
 			DescriptionTextField.StringValue = Description;
 			
 			ContentView.AddSubview (HeaderTextField);
-			ContentView.AddSubview (DescriptionTextField);
+
+			if (!Description.Equals (""))
+				ContentView.AddSubview (DescriptionTextField);
 			
 			ContentView.AddSubview (SideSplashView);
 			
-			int i = 0;
+			int i = 1;
 			
 			if (Buttons.Count > 0) {
 
@@ -123,7 +125,13 @@ namespace SparkleShare {
 				foreach (NSButton button in Buttons) {
 					
 					button.BezelStyle = NSBezelStyle.Rounded;
-					button.Frame = new RectangleF (Frame.Width - 15 - (105 * (i + 1)) , 12, 105, 31);		
+					button.Frame = new RectangleF (Frame.Width - 15 - (105 * i) , 12, 105, 32);
+					
+					if (button.Title.Contains (" "))
+						button.Frame = new RectangleF (Frame.Width - 30 - (105 * i) , 12, 120, 32);
+					
+					button.Font = SparkleUI.Font;
+					
 					ContentView.AddSubview (button);
 					
 					i++;
