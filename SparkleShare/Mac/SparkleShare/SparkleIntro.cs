@@ -17,6 +17,7 @@
 
 using System;
 using System.Drawing;
+using System.IO;
 using System.Timers;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
@@ -28,7 +29,7 @@ namespace SparkleShare {
 
 	public class SparkleIntro : SparkleWindow {
 		
-		private NSButton NextButton;
+		private NSButton ContinueButton;
 		private NSButton SyncButton;
 		private NSButton TryAgainButton;
 		private NSButton CancelButton;
@@ -37,6 +38,15 @@ namespace SparkleShare {
 		private NSButton FinishButton;
 		private NSForm UserInfoForm;
 		private NSProgressIndicator ProgressIndicator;
+		private NSTextField AddressTextField;
+		private NSTextField FolderNameTextField;
+		private NSTextField ServerTypeLabel;
+		private NSTextField AddressLabel;
+		private NSTextField FolderNameLabel;
+		private NSTextField FolderNameHelpLabel;
+		private NSButtonCell ButtonCellProto;
+		private NSMatrix Matrix;
+		private int ServerType;
 		
 		private bool ServerFormOnly;
 
@@ -55,26 +65,27 @@ namespace SparkleShare {
 			Reset ();
 
 				Header       = "Welcome to SparkleShare!";
-				Description  = "Before we can create a SparkleShare folder on this\n" +
-				               "computer, we need a few bits of information from you.";
+				Description  = "Before we can create a SparkleShare folder on this " +
+				               "computer, we need some information from you.";
 				
 
-				UserInfoForm = new NSForm (new RectangleF (250, 190, 350, 64));
+				UserInfoForm = new NSForm (new RectangleF (250, 115, 350, 64));
 				UserInfoForm.AddEntry ("Full Name:");
 				UserInfoForm.AddEntry ("Email Address:");
 				UserInfoForm.CellSize = new SizeF (280, 22);
+				UserInfoForm.IntercellSpacing = new SizeF (4, 4);
 			
 				string full_name  = new UnixUserInfo (UnixEnvironment.UserName).RealName;
 				UserInfoForm.Cells [0].StringValue = full_name;
 				UserInfoForm.Cells [1].StringValue = SparkleShare.Controller.UserEmail;
 			
 
-				NextButton = new NSButton () {
-					Title    = "Next",
+				ContinueButton = new NSButton () {
+					Title    = "Continue",
 					Enabled = false
 				};
 
-				NextButton.Activated += delegate {
+				ContinueButton.Activated += delegate {
 					
 					SparkleShare.Controller.UserName  = UserInfoForm.Cells [0].StringValue.Trim ();
 					SparkleShare.Controller.UserEmail = UserInfoForm.Cells [1].StringValue.Trim ();
@@ -90,7 +101,7 @@ namespace SparkleShare {
 
 				// TODO: Ugly hack, do properly with events
 				Timer timer = new Timer () {
-					Interval = 500
+					Interval = 50
 				};
 
 				timer.Elapsed += delegate {
@@ -103,7 +114,7 @@ namespace SparkleShare {
 						bool email_is_correct = SparkleShare.Controller.IsValidEmail
 							(UserInfoForm.Cells [1].StringValue.Trim ());
 	
-						NextButton.Enabled = (name_is_correct && email_is_correct);
+						ContinueButton.Enabled = (name_is_correct && email_is_correct);
 				 
 					});
 				
@@ -112,7 +123,7 @@ namespace SparkleShare {
 				timer.Start ();
 
 				ContentView.AddSubview (UserInfoForm);
-				Buttons.Add (NextButton);
+				Buttons.Add (ContinueButton);
 
 			ShowAll ();
 
@@ -135,12 +146,243 @@ namespace SparkleShare {
 
 				Header       = "Where is your remote folder?";
 				Description  = "";
+			
+			
+				ServerTypeLabel	 = new NSTextField () {
+					Alignment       = (uint) NSTextAlignment.Right,
+					BackgroundColor = NSColor.WindowBackground,
+					Bordered        = false,
+					Editable        = false,
+					Frame           = new RectangleF (150, Frame.Height - 139 , 160, 17),
+					StringValue     = "Server Type:",
+					Font            = SparkleUI.Font
+				};
+				
+				AddressLabel = new NSTextField () {
+					Alignment       = (uint) NSTextAlignment.Right,
+					BackgroundColor = NSColor.WindowBackground,
+					Bordered        = false,
+					Editable        = false,
+					Frame           = new RectangleF (150, Frame.Height - 237 , 160, 17),
+					StringValue     = "Address:",
+					Font            = SparkleUI.Font
+				};
+				
+				FolderNameLabel = new NSTextField () {
+					Alignment       = (uint) NSTextAlignment.Right,
+					BackgroundColor = NSColor.WindowBackground,
+					Bordered        = false,
+					Editable        = false,
+					Frame           = new RectangleF (150, Frame.Height - 264 , 160, 17),
+					StringValue     = "Folder Name:",
+					Font            = SparkleUI.Font
+				};
 
+
+				AddressTextField = new NSTextField () {
+					Frame       = new RectangleF (320, Frame.Height - 240 , 256, 22),
+					Font        = SparkleUI.Font
+				};
+
+				FolderNameTextField = new NSTextField () {
+					Frame           = new RectangleF (320, Frame.Height - (240 + 22 + 4) , 256, 22),
+					StringValue     = ""
+				};
+
+
+				FolderNameHelpLabel = new NSTextField () {
+					BackgroundColor = NSColor.WindowBackground,
+					Bordered        = false,
+					TextColor       = NSColor.DisabledControlText,
+					Editable        = false,
+					Frame           = new RectangleF (320, Frame.Height - 285 , 200, 17),
+					StringValue     = "e.g. ‘rupert/website-design’"
+				};
+				
+	
+				ServerType = 0;
+
+				ButtonCellProto = new NSButtonCell ();
+				ButtonCellProto.SetButtonType (NSButtonType.Radio) ;
+	
+				Matrix = new NSMatrix (new RectangleF (315, 180, 256, 78),
+			     	NSMatrixMode.Radio, ButtonCellProto, 4, 1);
+				
+				Matrix.CellSize = new SizeF (256, 18);
+				
+				Matrix.Cells [0].Title = "My own server";
+				Matrix.Cells [1].Title = "Github";
+				Matrix.Cells [2].Title = "Gitorious";
+				Matrix.Cells [3].Title = "The GNOME Project";
+			
+				foreach (NSCell cell in Matrix.Cells)
+					cell.Font = SparkleUI.Font;
+
+				// TODO: Ugly hack, do properly with events
+				Timer timer = new Timer () {
+					Interval = 50
+				};
+
+				timer.Elapsed += delegate {
+				
+					InvokeOnMainThread (delegate {
+				
+						if (Matrix.SelectedRow != ServerType) {
+							ServerType = Matrix.SelectedRow;
+					
+							AddressTextField.Enabled = (ServerType == 0);
+
+							switch (ServerType) {
+	
+								case 0:
+									AddressTextField.StringValue = "";
+									FolderNameHelpLabel.StringValue = "e.g. ‘rupert/website-design’";
+								break;
+							
+								case 1:
+									AddressTextField.StringValue = "ssh://git@github.com/";
+									FolderNameHelpLabel.StringValue = "e.g. ‘rupert/website-design’";
+								break;
+							
+								case 2:
+									AddressTextField.StringValue = "ssh://git@gitorious.org/";
+									FolderNameHelpLabel.StringValue = "e.g. ‘project/website-design’";
+								break;
+							
+								case 3:
+									AddressTextField.StringValue = "ssh://git@gnome.org/git/";
+									FolderNameHelpLabel.StringValue = "e.g. ‘gnome-icon-theme’";
+								break;
+							
+							}
+						
+						}
+					
+					
+						if (ServerType == 0 && !AddressTextField.StringValue.Trim ().Equals ("")
+					        && !FolderNameTextField.StringValue.Trim ().Equals ("")) {
+						
+							SyncButton.Enabled = true;
+						
+						} else if (ServerType != 0 &&
+					               !FolderNameTextField.StringValue.Trim ().Equals ("")) {
+							
+							SyncButton.Enabled = true;
+						
+						} else { 
+						
+							SyncButton.Enabled = false;
+						
+						}
+
+					});
+				
+				};
+			
+				timer.Start ();
+
+				
+				ContentView.AddSubview (ServerTypeLabel);
+				ContentView.AddSubview (Matrix);
+	
+				ContentView.AddSubview (AddressLabel);
+				ContentView.AddSubview (AddressTextField);
+				
+				ContentView.AddSubview (FolderNameLabel);
+				ContentView.AddSubview (FolderNameTextField);
+				ContentView.AddSubview (FolderNameHelpLabel);
+			
 
 				SyncButton = new NSButton () {
-					Title = "Sync"
-					//Enabled = false TODO
+					Title = "Sync",
+					Enabled = false
 				};
+
+			
+					SyncButton.Activated += delegate {
+
+						string name = FolderNameTextField.StringValue;
+
+						// Remove the starting slash if there is one
+						if (name.StartsWith ("/"))
+							name = name.Substring (1);
+
+						string server = AddressTextField.StringValue;
+
+						if (name.EndsWith ("/"))
+							name = name.TrimEnd ("/".ToCharArray ());
+
+						if (name.StartsWith ("/"))
+							name = name.TrimStart ("/".ToCharArray ());
+
+						if (server.StartsWith ("ssh://"))
+							server = server.Substring (6);
+
+						if (ServerType == 0) {
+
+							// Use the default user 'git' if no username is specified
+							if (!server.Contains ("@"))
+								server = "git@" + server;
+
+							// Prepend the Secure Shell protocol when it isn't specified
+							if (!server.StartsWith ("ssh://"))
+								server = "ssh://" + server;
+
+							// Remove the trailing slash if there is one
+							if (server.EndsWith ("/"))
+								server = server.TrimEnd ("/".ToCharArray ());
+
+						}
+
+						if (ServerType == 2) {
+
+							server = "ssh://git@gitorious.org";
+
+							if (!name.EndsWith (".git")) {
+
+								if (!name.Contains ("/"))
+									name = name + "/" + name;
+
+								name += ".git";
+
+							}
+
+						}
+
+						if (ServerType == 1)
+							server = "ssh://git@github.com";
+
+						if (ServerType == 3)
+							server = "ssh://git@gnome.org/git/";
+
+						string url  = server + "/" + name;
+						string canonical_name = Path.GetFileNameWithoutExtension (name);
+
+
+						ShowSyncingPage (canonical_name);
+
+	
+						SparkleShare.Controller.FolderFetched += delegate {
+					
+							InvokeOnMainThread (delegate {
+								ShowSuccessPage (canonical_name);
+							});
+					
+						};
+				
+						SparkleShare.Controller.FolderFetchError += delegate {
+	
+							InvokeOnMainThread (delegate {
+								ShowErrorPage ();
+							});	
+				
+						};
+		
+				
+						SparkleShare.Controller.FetchFolder (url, name);
+				
+					};
+
 			
 				Buttons.Add (SyncButton);
 			
@@ -199,8 +441,8 @@ namespace SparkleShare {
 			ShowAll ();
 
 		}
-		
 
+		
 		private void ShowSyncingPage (string name)
 		{
 
@@ -209,9 +451,10 @@ namespace SparkleShare {
 				Header      = "Syncing folder ‘" + name + "’…";
 				Description = "This may take a while.\n" +
 				              "You sure it’s not coffee o-clock?";
-			
 
-				ProgressIndicator = new NSProgressIndicator (new RectangleF (200, 230, 390, 20)) {
+
+				ProgressIndicator = new NSProgressIndicator () {
+					Frame = new RectangleF (190, Frame.Height - 200, 640 - 150 - 80, 20),
 					Style = NSProgressIndicatorStyle.Bar
 				};
 
@@ -232,7 +475,7 @@ namespace SparkleShare {
 		}
 		
 
-		private void ShowSuccessPage (string folder_name)
+		public void ShowSuccessPage (string folder_name)
 		{
 
 			Reset ();
@@ -247,6 +490,7 @@ namespace SparkleShare {
 				};
 
 				FinishButton.Activated += delegate {
+					SparkleUI.StatusIcon.CreateMenu ();
 					Close ();
 				};
 
@@ -287,7 +531,7 @@ namespace SparkleShare {
 				};
 
 				FinishButton.Activated += delegate {
-				Console.WriteLine ("ffffffff");
+					SparkleUI.StatusIcon.CreateMenu ();
 					Close ();
 				};			
 				
@@ -298,25 +542,6 @@ namespace SparkleShare {
 		}
 		
 	}
+	
 		
 }
-
-		//	proto.SetButtonType (NSButtonType.Radio) ;
-			
-	//		NSButton button = new NSButton (new RectangleF (150, 0, 350, 300)) {
-	//		Cell = proto,
-	//			Font = NSFontManager.SharedFontManager.FontWithFamily ("Lucida Grande",
-	//			                                                       NSFontTraitMask.Bold,
-	//			                                                       0, 14)
-	//		};
-			
-	//		NSMatrix matrix = new NSMatrix (new RectangleF (300, 00, 300, 300), NSMatrixMode.Radio, proto, 4, 1);
-			
-
-			
-	//		matrix.Cells [0].Title = "My own server:";
-	//		matrix.Cells [1].Title = "Github\nFree hosting";
-	//		matrix.Cells [2].Title = "Gitorious";
-	//		matrix.Cells [3].Title = "The GNOME Project";
-			
-

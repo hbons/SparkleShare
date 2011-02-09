@@ -71,9 +71,10 @@ namespace SparkleShare {
 			
 			ContentView.AddSubview (WebView);
 			
-			OpenFolderButton = new NSButton (new RectangleF (16, 12, 120, 31)) {
+			OpenFolderButton = new NSButton (new RectangleF (16, 12, 120, 32)) {
 				Title = "Open Folder",
-				BezelStyle = NSBezelStyle.Rounded	
+				BezelStyle = NSBezelStyle.Rounded	,
+				Font = SparkleUI.Font
 			};
 
 				OpenFolderButton.Activated += delegate {
@@ -83,9 +84,10 @@ namespace SparkleShare {
 			ContentView.AddSubview (OpenFolderButton);
 
 
-			CloseButton = new NSButton (new RectangleF (480 - 120 - 16, 12, 120, 31)) {
+			CloseButton = new NSButton (new RectangleF (480 - 120 - 16, 12, 120, 32)) {
 				Title = "Close",
-				BezelStyle = NSBezelStyle.Rounded	
+				BezelStyle = NSBezelStyle.Rounded,
+				Font = SparkleUI.Font
 			};
 					
 				CloseButton.Activated += delegate {
@@ -98,7 +100,7 @@ namespace SparkleShare {
 						
 
 			string name = Path.GetFileName (LocalPath);
-			Title = String.Format ("Recent Events in ‘{0}’", name);
+			Title = String.Format ("Events in ‘{0}’", name);
 			
 			Separator = new NSBox (new RectangleF (0, 58, 480, 1)) {
 				BorderColor = NSColor.LightGray,
@@ -119,7 +121,7 @@ namespace SparkleShare {
 			string html        = SparkleShare.Controller.GetHTMLLog (folder_name);
 			
 			html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
-			html = html.Replace ("<!-- $body-font-size -->", "10pt");
+			html = html.Replace ("<!-- $body-font-size -->", "10.1pt");
 			html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
 			html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
 			html = html.Replace ("<!-- $a-color -->", "#0085cf");
