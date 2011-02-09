@@ -234,32 +234,33 @@ namespace SparkleShare {
 				Title = "Add Remote Folder…"
 			};
 			
-				if (SparkleShare.Controller.FirstRun)
-					SyncMenuItem.Enabled = false;
+				if (!SparkleShare.Controller.FirstRun) {
 			
-				SyncMenuItem.Activated += delegate {
-				
-					InvokeOnMainThread (delegate {
-
-						NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+					SyncMenuItem.Activated += delegate {
 					
-						if (SparkleUI.Intro == null) {
+						InvokeOnMainThread (delegate {
+	
+							NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
 						
-							SparkleUI.Intro = new SparkleIntro ();
-							SparkleUI.Intro.ShowServerForm (true);
-	
-						}
+							if (SparkleUI.Intro == null) {
+							
+								SparkleUI.Intro = new SparkleIntro ();
+								SparkleUI.Intro.ShowServerForm (true);
 		
-						if (!SparkleUI.Intro.IsVisible)
-							SparkleUI.Intro.ShowServerForm (true);
-	
-						SparkleUI.Intro.OrderFrontRegardless ();
-						SparkleUI.Intro.MakeKeyAndOrderFront (this);
-
-					});
-				
-				};
+							}
 			
+							if (!SparkleUI.Intro.IsVisible)
+								SparkleUI.Intro.ShowServerForm (true);
+		
+							SparkleUI.Intro.OrderFrontRegardless ();
+							SparkleUI.Intro.MakeKeyAndOrderFront (this);
+	
+						});
+					
+					};
+				
+				}
+
 			Menu.AddItem (SyncMenuItem);
 
 			
