@@ -618,6 +618,21 @@ namespace SparkleLib {
 		}
 
 
+		// Removes unneeded objects
+		private void CollectGarbage ()
+		{
+
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Collecting garbage...");
+
+			Process.StartInfo.Arguments = "gc";
+			Process.Start ();
+			Process.WaitForExit ();
+
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Garbage collected..");
+
+		}
+
+
 		// Commits the made changes
 		new public void Commit (string message)
 		{
@@ -629,11 +644,16 @@ namespace SparkleLib {
 
 			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message);
 
-			SparkleEventArgs args = new SparkleEventArgs ("Commited");
-			args.Message = message;
+			SparkleEventArgs args = new SparkleEventArgs ("Commited") {
+				Message = message
+			};
 
 			if (Commited != null)
 	            Commited (this, args);
+			
+			// Collect garbage pseudo-randomly
+			if (DateTime.Now.Second == 0)
+				CollectGarbage ();
 
 		}
 
@@ -889,7 +909,8 @@ namespace SparkleLib {
 		// Ignores repos, dotfiles, swap files and the like
 		private bool ShouldIgnore (string file_path)
 		{
-
+			
+			// TODO: check against .git/info/exclude
 			if (file_path.EndsWith (".lock") ||
 			    file_path.EndsWith ("~")     ||
 			    file_path.Contains (".git")  ||
