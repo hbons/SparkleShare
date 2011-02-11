@@ -652,7 +652,7 @@ namespace SparkleLib {
 	            Commited (this, args);
 			
 			// Collect garbage pseudo-randomly
-			if (DateTime.Now.Second == 0)
+			if (DateTime.Now.Second % 10 == 0)
 				CollectGarbage ();
 
 		}

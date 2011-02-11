@@ -121,11 +121,15 @@ namespace SparkleShare {
 			string html        = SparkleShare.Controller.GetHTMLLog (folder_name);
 			
 			html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
-			html = html.Replace ("<!-- $body-font-size -->", "10.1pt");
+			html = html.Replace ("<!-- $body-font-size -->", "13.4px");
 			html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
+			html = html.Replace ("<!-- $small-color -->", "#ddd");
 			html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
 			html = html.Replace ("<!-- $a-color -->", "#0085cf");
+			html = html.Replace ("<!-- $no-buddy-icon-background-image -->",
+				"file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "avatar-default.png"));
 			
+			Console.WriteLine (html);
 			WebView.MainFrame.LoadHtmlString (html, new NSUrl (""));
 			
 			Update ();
