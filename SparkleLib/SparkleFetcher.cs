@@ -130,7 +130,8 @@ namespace SparkleLib {
 		private void InstallExcludeRules ()
 		{
 
-			string exlude_rules_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "info", "exclude");
+			string exlude_rules_file_path = SparkleHelpers.CombineMore
+				(TargetFolder, ".git", "info", "exclude");
 
 			TextWriter writer = new StreamWriter (exlude_rules_file_path);
 
@@ -158,7 +159,7 @@ namespace SparkleLib {
 				writer.WriteLine ("Desktop.ini");
 
 				// CVS
-				writer.WriteLine ("*/CVS/*")
+				writer.WriteLine ("*/CVS/*");
 				writer.WriteLine (".cvsignore");
 				writer.WriteLine ("*/.cvsignore");
 				

@@ -394,7 +394,9 @@ namespace SparkleShare {
 					};
 				
 					CancelButton.Activated += delegate {
-						Close ();
+						InvokeOnMainThread (delegate {
+							Close ();
+						});
 					};
 
 					Buttons.Add (CancelButton);
@@ -406,7 +408,9 @@ namespace SparkleShare {
 					};
 				
 					SkipButton.Activated += delegate {
-						ShowCompletedPage ();
+						InvokeOnMainThread (delegate {
+							ShowCompletedPage ();
+						});
 					};
 
 					Buttons.Add (SkipButton);
@@ -432,7 +436,9 @@ namespace SparkleShare {
 				};
 	
 				TryAgainButton.Activated += delegate {
-					ShowServerForm ();
+					InvokeOnMainThread (delegate {
+						ShowServerForm ();
+					});
 				};
 
 
@@ -490,8 +496,10 @@ namespace SparkleShare {
 				};
 
 				FinishButton.Activated += delegate {
-					SparkleUI.StatusIcon.CreateMenu ();
-					Close ();
+					InvokeOnMainThread (delegate {
+						SparkleUI.StatusIcon.CreateMenu ();
+						Close ();
+					});
 				};
 
 			
@@ -531,8 +539,11 @@ namespace SparkleShare {
 				};
 
 				FinishButton.Activated += delegate {
-					SparkleUI.StatusIcon.CreateMenu ();
-					Close ();
+					InvokeOnMainThread (delegate {
+						SparkleUI.StatusIcon.CreateMenu ();
+						Close ();
+					});
+				
 				};			
 				
 				Buttons.Add (FinishButton);
