@@ -1142,5 +1142,22 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 	public class ChangeSet : SparkleCommit {
 
 	}
+
+	
+	// All commits that happened on a day	
+	public class ActivityDay : List <SparkleCommit>
+	{
+
+		public DateTime DateTime;
+
+		public ActivityDay (DateTime date_time)
+		{
+
+			DateTime = date_time;
+			DateTime = new DateTime (DateTime.Year, DateTime.Month, DateTime.Day);
+
+		}
+
+	}
 	
 }
