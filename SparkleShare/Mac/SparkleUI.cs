@@ -126,7 +126,7 @@ namespace SparkleShare {
 		{
 		
 			string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-				"sparkleshare.icns");
+				"sparkleshare-mac.icns");
 
 			NSImage folder_icon = new NSImage (folder_icon_path);
 						
