@@ -178,7 +178,7 @@ namespace SparkleShare {
 
 			
 				string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-				"sparkleshare.icns");
+					"sparkleshare-mac.icns");
 			
 				FolderMenuItem.Image = new NSImage (folder_icon_path);
 				FolderMenuItem.Image.Size = new SizeF (16, 16);	
