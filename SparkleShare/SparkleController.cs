@@ -908,7 +908,7 @@ namespace SparkleShare {
 		private void DisableHostKeyCheckingForHost (string host)
 		{
 			
-			string ssh_config_file_path = Path.Combine
+			string ssh_config_file_path = SparkleHelpers.CombineMore
 				(SparklePaths.HomePath, ".ssh", "config");
 			
 			string ssh_config = "Host " + host + "\n" +
@@ -934,7 +934,7 @@ namespace SparkleShare {
 		private void EnableHostKeyCheckingForHost (string host)
 		{
 
-			string ssh_config_file_path = Path.Combine
+			string ssh_config_file_path = SparkleHelpers.CombineMore
 				(SparklePaths.HomePath, ".ssh", "config");
 			
 			string ssh_config = "Host " + host + "\n" +
