@@ -879,7 +879,7 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 		private void DisableHostKeyCheckingForHost (string host)
 		{
 
-			string ssh_config_file_path = Path.Combine (SparklePaths.HomePath, ".ssh", "config");
+			string ssh_config_file_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".ssh", "config");
 			string ssh_config = "Host " + host + "\n\tStrictHostKeyChecking no";
 
 			if (File.Exists (ssh_config_file_path)) {
@@ -902,7 +902,7 @@ Console.WriteLine(GetAvatar (change_set.UserEmail, 32));
 		private void EnableHostKeyCheckingForHost (string host)
 		{
 
-			string ssh_config_file_path = Path.Combine (SparklePaths.HomePath, ".ssh", "config");
+			string ssh_config_file_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".ssh", "config");
 			string ssh_config = "Host " + host + "\n\tStrictHostKeyChecking no";
 
 			if (File.Exists (ssh_config_file_path)) {
