@@ -1,3 +1,11 @@
+0.2-beta2 for Mac (Sat Feb, 2011):
+
+	Hylke: Mac version! Massive restructure of the code to an MVC-like model
+	to make building different front-ends easier. Ported the event logs to
+	Webkit, so users can style it to their liking. It also reduces the amount
+	of UI-porting that needs to be done between toolkits.
+
+
 0.2-beta1 (Sun Sep 5, 2010):
 
 	Hylke: Aside from the usual bug fixes and behind the scenes work I mainly
