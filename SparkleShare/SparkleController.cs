@@ -165,7 +165,7 @@ namespace SparkleShare {
 			
 			// The location of the user's public key for SparkleShare
 			string public_key_file_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".ssh",
-				"sparkleshare." + SparkleShare.Controller.UserEmail + ".key.pub");
+				"sparkleshare." + UserEmail + ".key.pub");
 
 			if (!File.Exists (public_key_file_path))
 				return false;
