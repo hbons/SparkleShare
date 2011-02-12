@@ -52,9 +52,10 @@ namespace SparkleLib {
 			if (Nick.Length > 9)
 				Nick = Nick.Substring (0, 9);
 
-			// TODO: Remove these hardcoded values
-			Channel = "#sparkletest";
-			Server  = "irc.gnome.org";
+			// Channel = "#sparkletest";
+			// Server  = "irc.gnome.org";
+			Channel = channel;
+			Server  = server;
 
 			Client = new IrcClient () {
 				PingTimeout          = 120,
