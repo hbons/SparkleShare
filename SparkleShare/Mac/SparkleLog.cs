@@ -128,8 +128,7 @@ namespace SparkleShare {
 			html = html.Replace ("<!-- $a-color -->", "#0085cf");
 			html = html.Replace ("<!-- $no-buddy-icon-background-image -->",
 				"file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "avatar-default.png"));
-			
-			Console.WriteLine (html);
+
 			WebView.MainFrame.LoadHtmlString (html, new NSUrl (""));
 			
 			Update ();
