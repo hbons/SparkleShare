@@ -832,6 +832,15 @@ namespace SparkleLib {
 			_IsPushing = true;
 
 			SparkleEventArgs args = new SparkleEventArgs ("PushingStarted");
+			
+			Process process = new Process () {
+				EnableRaisingEvents = true
+			};
+
+			process.StartInfo.FileName               = SparklePaths.GitPath;
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.UseShellExecute        = false;
+			process.StartInfo.WorkingDirectory       = LocalPath;
 
 			if (PushingStarted != null)
 	            PushingStarted (this, args); 
@@ -855,16 +864,16 @@ namespace SparkleLib {
 			}
 */
 
-			Process.StartInfo.Arguments = "push origin master";
+			process.StartInfo.Arguments = "push origin master";
 
-			Process.WaitForExit ();
+
 			
-			Process.Exited += delegate {
+			process.Exited += delegate {
 
 				_IsSyncing = false;
 				_IsPushing = false;
 
-				if (Process.ExitCode != 0) {
+				if (process.ExitCode != 0) {
 
 					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing failed.");
 
@@ -901,7 +910,9 @@ namespace SparkleLib {
 				}
 
 			};
-			Process.Start ();
+			
+			process.Start ();
+			process.WaitForExit ();
 
 		}
 
