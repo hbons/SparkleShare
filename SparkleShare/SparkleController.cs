@@ -158,7 +158,7 @@ namespace SparkleShare {
 
 		}
 
-
+		
 		// Uploads the user's public key to the server
 		public bool AcceptInvitation (string server, string folder, string token)
 		{
@@ -960,6 +960,67 @@ namespace SparkleShare {
 
 			}
 
+		}			
+
+		
+		// Gets the avatar for a specific email address and size
+		public string GetAvatar (string email, int size)
+		{
+
+			string avatar_path = SparkleHelpers.CombineMore (SparklePaths.SparkleLocalIconPath,
+				size + "x" + size, "status");
+
+			if (!Directory.Exists (avatar_path)) {
+
+				Directory.CreateDirectory (avatar_path);
+				SparkleHelpers.DebugInfo ("Config", "Created '" + avatar_path + "'");
+
+			}
+
+			string avatar_file_path = SparkleHelpers.CombineMore (avatar_path, "avatar-" + email);
+
+			if (File.Exists (avatar_file_path)) {
+
+				return avatar_file_path;
+
+			} else {
+
+				// Let's try to get the person's gravatar for next time
+				WebClient web_client = new WebClient ();
+				Uri uri = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (email) +
+					".jpg?s=" + size + "&d=404");
+
+				string tmp_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, email + size);
+
+				if (!File.Exists (tmp_file_path)) {
+
+					web_client.DownloadFileAsync (uri, tmp_file_path);
+
+					web_client.DownloadFileCompleted += delegate {
+
+						if (File.Exists (avatar_file_path))
+							File.Delete (avatar_file_path);
+
+						FileInfo tmp_file_info = new FileInfo (tmp_file_path);
+
+						if (tmp_file_info.Length > 255)
+							File.Move (tmp_file_path, avatar_file_path);
+						
+						if (AvatarFetched != null)
+							AvatarFetched ();
+
+					};
+
+				}
+
+				// Fall back to a generic icon if there is no gravatar
+				if (File.Exists (avatar_file_path))
+					return avatar_file_path;
+				else
+					return null;
+
+			}
+
 		}
 
 
@@ -1055,70 +1116,9 @@ namespace SparkleShare {
 					FolderFetchError ();
 
 			};
-
+			
 
 			fetcher.Start ();
-
-		}
-		
-		
-		// Gets the avatar for a specific email address and size
-		public string GetAvatar (string email, int size)
-		{
-
-			string avatar_path = SparkleHelpers.CombineMore (SparklePaths.SparkleLocalIconPath,
-				size + "x" + size, "status");
-
-			if (!Directory.Exists (avatar_path)) {
-
-				Directory.CreateDirectory (avatar_path);
-				SparkleHelpers.DebugInfo ("Config", "Created '" + avatar_path + "'");
-
-			}
-
-			string avatar_file_path = SparkleHelpers.CombineMore (avatar_path, "avatar-" + email);
-
-			if (File.Exists (avatar_file_path)) {
-
-				return avatar_file_path;
-
-			} else {
-
-				// Let's try to get the person's gravatar for next time
-				WebClient web_client = new WebClient ();
-				Uri uri = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (email) +
-					".jpg?s=" + size + "&d=404");
-
-				string tmp_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, email + size);
-
-				if (!File.Exists (tmp_file_path)) {
-
-					web_client.DownloadFileAsync (uri, tmp_file_path);
-
-					web_client.DownloadFileCompleted += delegate {
-
-						if (File.Exists (avatar_file_path))
-							File.Delete (avatar_file_path);
-
-						FileInfo tmp_file_info = new FileInfo (tmp_file_path);
-
-						if (tmp_file_info.Length > 255)
-							File.Move (tmp_file_path, avatar_file_path);
-						
-						if (AvatarFetched != null)
-							AvatarFetched ();
-
-					};
-
-				}
-
-				// Fall back to a generic icon if there is no gravatar
-				if (File.Exists (avatar_file_path))
-					return avatar_file_path;
-				else
-					return null;
-
-			}
 
 		}
 		
@@ -1171,7 +1171,7 @@ namespace SparkleShare {
 			Environment.Exit (0);
 
 		}
-
+	
 
 		// Checks to see if an email address is valid
 		public bool IsValidEmail (string email)
@@ -1181,7 +1181,6 @@ namespace SparkleShare {
 			return regex.IsMatch (email);
 
 		}
-
 	
 	}
 
@@ -1205,6 +1204,6 @@ namespace SparkleShare {
 
 		}
 
-	}
-	
+	}	
+
 }
