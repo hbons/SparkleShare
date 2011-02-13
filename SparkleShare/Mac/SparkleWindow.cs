@@ -42,8 +42,6 @@ namespace SparkleShare {
 		
 		public SparkleWindow () : base ()
 		{
-			
-//			Title = "SparkleShare Configuration";
 
 			SetFrame (new RectangleF (0, 0, 640, 380), true);
 			
@@ -71,15 +69,17 @@ namespace SparkleShare {
 			Buttons = new List <NSButton> ();
 
 			
-			HeaderTextField = new NSTextField (new RectangleF (190, Frame.Height - 100, 318, 48)) {
+			HeaderTextField = new NSTextField () {
+				Frame           = new RectangleF (190, Frame.Height - 100, 318, 48),
 				BackgroundColor = NSColor.WindowBackground,
-				Bordered    = false,
-				Editable    = false,
-				Font        = NSFontManager.SharedFontManager.FontWithFamily
+				Bordered        = false,
+				Editable        = false,
+				Font            = NSFontManager.SharedFontManager.FontWithFamily
 					("Lucida Grande", NSFontTraitMask.Bold, 0, 15)
 			};
 			
-			DescriptionTextField = new NSTextField (new RectangleF (190, Frame.Height - 155 , 640 - 240, 64)) {
+			DescriptionTextField = new NSTextField () {
+				Frame           = new RectangleF (190, Frame.Height - 155 , 640 - 240, 64),
 				BackgroundColor = NSColor.WindowBackground,
 				Bordered        = false,
 				Editable        = false,
@@ -89,6 +89,8 @@ namespace SparkleShare {
 			
 			NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
 			MakeKeyAndOrderFront (this);
+			
+			NSApplication.SharedApplication.AddWindowsItem (this, "SparkleShare Setup", false);
 
 		}
 
@@ -147,6 +149,7 @@ namespace SparkleShare {
 		{
 		
 			OrderOut (this);
+			NSApplication.SharedApplication.RemoveWindowsItem (this);
 			return;
 			
 		}

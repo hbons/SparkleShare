@@ -840,7 +840,7 @@ namespace SparkleShare {
 		private void WriteUserInfo (string user_name, string user_email)
 		{
 			
-			string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
+			string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config");
 
 			// Write the user's information to a text file
 			TextWriter writer = new StreamWriter (global_config_file_path);
