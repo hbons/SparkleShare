@@ -90,7 +90,7 @@ namespace SparkleShare {
 			NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
 			MakeKeyAndOrderFront (this);
 			
-			NSApplication.SharedApplication.AddWindowsItem (this, "SparkleShare Setup", false);
+			OrderFrontRegardless ();
 
 		}
 
@@ -143,8 +143,17 @@ namespace SparkleShare {
 			}
 	
 		}
-		
-		
+
+
+		public override void OrderFrontRegardless ()
+		{
+			
+			NSApplication.SharedApplication.AddWindowsItem (this, "SparkleShare Setup", false);
+			base.OrderFrontRegardless ();
+			
+		}
+
+
 		public override void Close ()
 		{
 		
