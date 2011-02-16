@@ -633,7 +633,7 @@ namespace SparkleShare {
 					};
 
 					Label information = new Label (_("This may take a while.\n") +
-					                               _("You sure it’s not coffee o-clock?")) {
+					                               _("Are you sure it’s not coffee o'clock?")) {
 						UseMarkup = true,
 						Xalign = 0
 					};
