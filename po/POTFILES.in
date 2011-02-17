@@ -9,8 +9,8 @@ SparkleLib/SparkleOptions.cs
 SparkleLib/SparklePaths.cs
 SparkleLib/SparklePlatform.cs
 SparkleLib/SparkleRepo.cs
-SparkleShare/Mac/SparkleShare/SparkleStatusIcon.cs
-SparkleShare/Mac/SparkleShare/SparkleUI.cs
+SparkleShare/Mac/SparkleStatusIcon.cs
+SparkleShare/Mac/SparkleUI.cs
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in
 SparkleShare/SparkleBubble.cs
 SparkleShare/SparkleDialog.cs
