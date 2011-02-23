@@ -113,10 +113,13 @@ Make sure that git or a symbolic link to git is in /usr/bin.
 Note:
 
    You may need to adjust some environment variables to find mono:
-
+   
+   $ export PATH=/Library/Frameworks/Mono.framework/Versions/Current/bin:$PATH
    $ export PKG_CONFIG=/Library/Frameworks/Mono.framework/Versions/Current/bin/pkg-config
    $ export PKG_CONFIG_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
+   $ ./autogen.sh
 
+The last step will give you some errors, but you only need the libraries to be compiled.
 Open 'SparkleShare/Mac/SparkleShare.sln' in MonoDevelop and start the build.
 
 
