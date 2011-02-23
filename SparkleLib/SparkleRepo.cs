@@ -749,7 +749,9 @@ namespace SparkleLib {
 			if (RepositoryStatus.AnyDifferences) {
 				
 				Add ();
-				Commit ();
+				
+				string commit_message = FormatCommitMessage ();
+				Commit (commit_message);
 
 			}
 			
