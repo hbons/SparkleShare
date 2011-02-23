@@ -14,6 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
 using GitSharp;
 using GitSharp.Commands;
 using GitSharp.Core.Transport;
@@ -565,7 +566,7 @@ namespace SparkleLib {
 				LocalTimer.Stop ();
 				RemoteTimer.Stop ();
 	
-				if (RepositoryStatus.AnyDifferences) {
+				if (Status.AnyDifferences) {
 					
 					Add ();
 					
@@ -746,7 +747,7 @@ namespace SparkleLib {
 		public void Rebase ()
 		{
 			
-			if (RepositoryStatus.AnyDifferences) {
+			if (Status.AnyDifferences) {
 				
 				Add ();
 				
