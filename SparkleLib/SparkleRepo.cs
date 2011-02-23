@@ -565,13 +565,13 @@ namespace SparkleLib {
 				LocalTimer.Stop ();
 				RemoteTimer.Stop ();
 	
-				Add ();
-
-				string message = FormatCommitMessage ();
-
-				if (message != null) {
-
+				if (RepositoryStatus.AnyDifferences) {
+					
+					Add ();
+					
+					string message = FormatCommitMessage ();
 					Commit (message);
+
 					CheckForRemoteChanges ();
 					Push ();
 
@@ -745,9 +745,14 @@ namespace SparkleLib {
 		// Merges the fetched changes
 		public void Rebase ()
 		{
+			
+			if (RepositoryStatus.AnyDifferences) {
+				
+				Add ();
+				Commit ();
 
-			Add ();
-
+			}
+			
 			Watcher.EnableRaisingEvents = false;
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Rebasing changes...");
