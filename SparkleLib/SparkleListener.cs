@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Security.Cryptography;
 
 namespace SparkleLib {
 
@@ -36,26 +37,23 @@ namespace SparkleLib {
 		public readonly string Nick;
 
 
-		public SparkleListener (string server, string channel, string nick)
+		public SparkleListener (string server, string folder_name, string user_email)
 		{
 
 			Server  = server;
-			Channel = channel;
-			Nick    = nick;
-			
-			if (!Nick.Equals (""))
-				Nick = nick.Replace ("@", "_at_").Replace (".", "_dot_");
-			else
-				Nick = "anonymous";
-			
-			// Keep the nick short
-			if (Nick.Length > 9)
-				Nick = Nick.Substring (0, 9);
+			//Channel = GetSHA1 (folder_name);
+			Channel = folder_name;
 
-			// Channel = "#sparkletest";
-			// Server  = "irc.gnome.org";
-			Channel = channel;
-			Server  = server;
+			if (!user_email.Equals ("") && user_email != null)
+				Nick = GetSHA1 (user_email + "sparkles");
+			else
+				Nick = GetSHA1 (DateTime.Now.ToString () + "sparkles");
+
+			Nick = "s" + Nick.Substring (0, 7);
+			
+			// TODO: remove
+			Channel = "#sparkletest";
+			Server  = "irc.gnome.org";
 
 			Client = new IrcClient () {
 				PingTimeout          = 120,
@@ -114,6 +112,16 @@ namespace SparkleLib {
 
 		}
 
+		
+		// Creates an SHA-1 hash of input
+		public static string GetSHA1 (string s)
+		{
+			SHA1 sha1 = new SHA1CryptoServiceProvider ();
+			Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+			Byte[] encoded_bytes = sha1.ComputeHash (bytes);
+			return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");
+		}
+		
 	}
 
 }
