@@ -359,10 +359,9 @@ namespace SparkleLib {
 			Listener.Client.OnDisconnected += delegate {
 
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Lost connection. Falling back to polling...");
-
-				CheckForRemoteChanges ();
-
+				
 				_IsPolling = true;
+				CheckForRemoteChanges ();
 
 			};
 
