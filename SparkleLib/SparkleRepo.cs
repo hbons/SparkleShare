@@ -31,7 +31,6 @@ namespace SparkleLib {
 
 	public class SparkleRepo : Repository {
 
-		private Process Process;
 		private Timer RemoteTimer;
 		private Timer LocalTimer;
 		private FileSystemWatcher Watcher;
@@ -482,8 +481,12 @@ namespace SparkleLib {
 		{
 
 			WatcherChangeTypes wct = fse_args.ChangeType;
-
-			if (!ShouldIgnore (fse_args.FullPath)) {
+			
+			int number_of_changes = Status.Untracked.Count +
+				                    Status.Missing.Count +
+				                    Status.Modified.Count;
+			
+			if (number_of_changes > 0) {
 
 				_IsBuffering = true;
 
@@ -702,7 +705,7 @@ namespace SparkleLib {
 			git.Exited += delegate {
 				
 				if (Status.MergeConflict.Count > 0) {
-				
+				Console.WriteLine ("CONFLICT");
 					foreach (string problem_file_name in Status.MergeConflict) {
 					
 						SparkleGit git_ours = new SparkleGit (LocalPath,
@@ -821,29 +824,6 @@ namespace SparkleLib {
 			
 			git.Start ();
 			git.WaitForExit ();
-
-		}
-
-
-		// Ignores repos, dotfiles, swap files and the like
-		private bool ShouldIgnore (string file_path)
-		{
-			
-			// TODO: check against .git/info/exclude
-			if (file_path.EndsWith (".lock") ||
-			    file_path.EndsWith ("~")     ||
-			    file_path.Contains (".git")  ||
-			    file_path.Contains ("/.")    ||
-			    file_path.EndsWith (".swp")  ||
-			    System.IO.Directory.Exists (Path.Combine (LocalPath, file_path))) {
-
-				return true; // Yes, ignore it
-
-			} else {
-
-				return false;
-				
-			}
 
 		}
 
