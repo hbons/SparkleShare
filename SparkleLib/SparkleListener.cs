@@ -14,6 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
 using Meebey.SmartIrc4net;
 using System;
 using System.Collections.Generic;
@@ -25,8 +26,7 @@ namespace SparkleLib {
 
 	// A persistent connection to the server that
 	// listens for change notifications
-	public class SparkleListener
-	{
+	public class SparkleListener {
 
 		// FIXME: The IrcClient is a public property because
 		// extending it causes crashes
