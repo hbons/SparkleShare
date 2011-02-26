@@ -34,11 +34,12 @@ namespace SparkleLib {
 		private Timer RemoteTimer;
 		private Timer LocalTimer;
 		private FileSystemWatcher Watcher;
-		private bool HasChanged;
-		private DateTime LastChange;
 		private System.Object ChangeLock;
 		private int FetchRequests;
 		private SparkleListener Listener;
+		private bool HasChanged;
+		private List <double> SizeBuffer;
+
 
 		/// <summary>
 		/// The folder name the repository resides in locally
@@ -389,12 +390,14 @@ namespace SparkleLib {
 
 			// Start listening
 			Listener.ListenForChanges ();
+			
 
+			SizeBuffer = new List <double> ();
 
 			// Keep a timer that checks if there are changes and
 			// whether they have settled
 			LocalTimer = new Timer () {
-				Interval = 4000
+				Interval = 250
 			};
 
 			LocalTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
@@ -442,6 +445,7 @@ namespace SparkleLib {
 				
 
 			git.Start ();
+			git.WaitForExit ();
 
 		}
 
@@ -452,15 +456,18 @@ namespace SparkleLib {
 			lock (ChangeLock) {
 
 				if (HasChanged) {
+					
+					if (SizeBuffer.Count >= 4)
+						SizeBuffer.RemoveAt (0);
+						
+					DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
+					SizeBuffer.Add (CalculateFolderSize (dir_info));
 
-					SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes found, checking if settled.");
+					if (SizeBuffer [0].Equals (SizeBuffer [1]) &&
+					    SizeBuffer [1].Equals (SizeBuffer [2]) &&
+					    SizeBuffer [2].Equals (SizeBuffer [3])) {
 
-					DateTime now     = DateTime.UtcNow;
-					TimeSpan changed = new TimeSpan (now.Ticks - LastChange.Ticks);
-
-					if (changed.TotalMilliseconds > 5000) {
-
-						SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled, adding files...");
+						SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled.");
 
 						_IsBuffering = false;
 
@@ -502,12 +509,12 @@ namespace SparkleLib {
 				}
 
 				SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + fse_args.Name + "'");
-
+				SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes found, checking if settled.");
+				
 				RemoteTimer.Stop ();
 
 				lock (ChangeLock) {
 
-					LastChange = DateTime.UtcNow;
 					HasChanged = true;
 
 				}
@@ -705,7 +712,9 @@ namespace SparkleLib {
 			git.Exited += delegate {
 				
 				if (Status.MergeConflict.Count > 0) {
-				Console.WriteLine ("CONFLICT");
+					
+					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected...");
+
 					foreach (string problem_file_name in Status.MergeConflict) {
 					
 						SparkleGit git_ours = new SparkleGit (LocalPath,
@@ -865,6 +874,37 @@ namespace SparkleLib {
 
 			return description;
 
+		}
+		
+
+		// Recursively gets a folder's size in bytes
+		private double CalculateFolderSize (DirectoryInfo parent)
+		{
+
+			if (!System.IO.Directory.Exists (parent.ToString ()))
+				return 0;
+
+			double size = 0;
+
+			// Ignore the temporary 'rebase-apply' directory. This prevents potential
+			// crashes when files are being queried whilst the files have already been deleted.
+			if (parent.Name.Equals ("rebase-apply"))
+				return 0;
+
+			foreach (FileInfo file in parent.GetFiles()) {
+
+				if (!file.Exists)
+					return 0;
+
+				size += file.Length;
+
+			}
+
+			foreach (DirectoryInfo directory in parent.GetDirectories())
+				size += CalculateFolderSize (directory);
+
+		    return size;
+    
 		}
 
 
