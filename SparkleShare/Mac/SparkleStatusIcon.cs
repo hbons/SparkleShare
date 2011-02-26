@@ -40,7 +40,6 @@ namespace SparkleShare {
 		private NSMenuItem [] FolderMenuItems;
 		private NSMenuItem SyncMenuItem;
 		private NSMenuItem NotificationsMenuItem;
-		private NSMenuItem AboutMenuItem;
 		
 		private delegate void Task ();
 		private EventHandler [] Tasks;
@@ -290,23 +289,6 @@ namespace SparkleShare {
 				};
 
 			Menu.AddItem (NotificationsMenuItem);
-			
-			
-			Menu.AddItem (NSMenuItem.SeparatorItem);
-			
-			
-			AboutMenuItem = new NSMenuItem () {
-				Title = "Visit Website"
-			};
-
-				AboutMenuItem.Activated += delegate {
-					
-					NSUrl url = new NSUrl ("http://www.sparkleshare.org/");
-					NSWorkspace.SharedWorkspace.OpenUrl (url);
-				
-				};
-
-			Menu.AddItem (AboutMenuItem);
 										 
 			StatusItem.Menu = Menu;
 			StatusItem.Menu.Update ();
