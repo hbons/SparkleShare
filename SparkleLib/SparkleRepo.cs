@@ -390,7 +390,7 @@ namespace SparkleLib {
 			};
 
 			// Start listening
-			Listener.ListenForChanges ();
+			Listener.Listen ();
 			
 
 			SizeBuffer = new List <double> ();
@@ -830,7 +830,7 @@ namespace SparkleLib {
 					    PushingFinished (this, args); 
 					
 					if (!_IsPolling)
-						Listener.Client.SendMessage (SendType.Message, Listener.Channel, _CurrentHash);
+						Listener.Announce (_CurrentHash);
 
 				}
 

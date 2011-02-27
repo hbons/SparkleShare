@@ -68,7 +68,7 @@ namespace SparkleLib {
 
 
 		// Starts a new thread and listens to the channel
-		public void ListenForChanges ()
+		public void Listen ()
 		{
 
 			Thread = new Thread (
@@ -101,6 +101,14 @@ namespace SparkleLib {
 			Thread.Start ();
 	
 		}
+		
+		
+		public void Announce (string message)
+		{
+				
+			Client.SendMessage (SendType.Message, Channel, message);
+			
+		}
 
 
 		// Frees all resources for this Listener
@@ -114,7 +122,7 @@ namespace SparkleLib {
 
 		
 		// Creates an SHA-1 hash of input
-		public static string GetSHA1 (string s)
+		private static string GetSHA1 (string s)
 		{
 			SHA1 sha1 = new SHA1CryptoServiceProvider ();
 			Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
