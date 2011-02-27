@@ -930,49 +930,91 @@ namespace SparkleLib {
 		public List <SparkleCommit> GetCommits (int count)
 		{
 
-			if (count <= 0)
-				return null;
-
+			if (count < 1)
+				count = 30;
+			
 			List <SparkleCommit> commits = new List <SparkleCommit> ();
 
-			string commit_ref = "HEAD";
+			SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw --date=iso");
+			git_log.Start ();
+			git_log.WaitForExit ();
+			
+			string output = git_log.StandardOutput.ReadToEnd ();
+			string [] lines = output.Split ("\n".ToCharArray ());
+						
+			List <string> entries = new List <string> ();
 
-			try {
-
-				for (int i = 0; i < count; i++) {
-
-					Commit commit = new Commit (this, commit_ref);
-
-					SparkleCommit sparkle_commit = new SparkleCommit ();
-
-					sparkle_commit.UserName  = commit.Author.Name;
-					sparkle_commit.UserEmail = commit.Author.EmailAddress;
-					sparkle_commit.DateTime  = commit.CommitDate.DateTime;
-					sparkle_commit.Hash      = commit.Hash;
+			int j = 0;
+			string entry = "";
+			foreach (string line in lines) {
+				
+				if (line.StartsWith ("commit") && j > 0) {
 					
-					foreach (Change change in commit.Changes) {
+					entries.Add (entry);
+					entry = "";
+					
+				} 
+				
+				entry += line + "\n";
+				j++;
 
-						if (change.ChangeType.ToString ().Equals ("Added"))
-							sparkle_commit.Added.Add (change.Path);
+			}
+			
 
-						if (change.ChangeType.ToString ().Equals ("Modified"))
-							sparkle_commit.Edited.Add (change.Path);
+			foreach (string log_entry in entries) {
 
-						if (change.ChangeType.ToString ().Equals ("Deleted"))
-							sparkle_commit.Deleted.Add (change.Path);
+				Regex regex = new Regex (@"^commit ([a-z0-9]+)\n" +
+				                          "Author: (.+) <(.+)>\n" +
+				                          "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
+				                          "([0-9]{2}):([0-9]{2}):([0-9]{2}) \\+([0-9]{4})\n" +
+				                          "*");
+				
+				Match match = regex.Match (log_entry);
 
+				if (match.Success) {
+
+					SparkleCommit commit = new SparkleCommit ();
+					
+					commit.Hash = match.Groups [1].Value;
+					commit.UserName = match.Groups [2].Value;
+					commit.UserEmail = match.Groups [3].Value;
+
+					commit.DateTime = new DateTime (int.Parse (match.Groups [4].Value),
+						int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
+					    int.Parse (match.Groups [7].Value), int.Parse (match.Groups [8].Value),
+					    int.Parse (match.Groups [9].Value));
+					                    
+					string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
+					foreach (string entry_line in entry_lines) {
+
+						if (entry_line.StartsWith (":")) {
+							
+							string change_type = entry_line.Substring (37, 1);
+							string file_path   = entry_line.Substring (39, entry_line.Length - 39);
+							
+							if (change_type.Equals ("A")) {
+								
+								commit.Added.Add (file_path);
+								
+							} else if (change_type.Equals ("M")) {
+							
+								commit.Edited.Add (file_path);
+								
+							} else if (change_type.Equals ("D")) {
+								
+								commit.Deleted.Add (file_path);
+								
+							}
+							
+							
+						}
+							
 					}
-
-					commits.Add (sparkle_commit);
-					commit_ref += "^";
-
-				}
-
-			} catch (System.NullReferenceException) {
-
-				// FIXME: Doesn't show the first commit because it throws
-				// this exception before getting to it. Seems to be a bug in GitSharp
-
+	
+					commits.Add (commit);
+					
+				}	
+				
 			}
 
 			return commits;
