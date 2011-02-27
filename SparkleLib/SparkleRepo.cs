@@ -380,7 +380,8 @@ namespace SparkleLib {
 					}
 
 				} else {
-
+					
+					// Not really needed as we won't be notified about our own messages
 					SparkleHelpers.DebugInfo ("Irc",
 						"[" + Name + "] False alarm, already up to date. (" + _CurrentHash + ")");
 
@@ -541,7 +542,6 @@ namespace SparkleLib {
 					string message = FormatCommitMessage ();
 					Commit (message);
 
-					CheckForRemoteChanges ();
 					Push ();
 
 				} else {
@@ -611,8 +611,9 @@ namespace SparkleLib {
 				return;
 
 			base.Commit (message);
-
-			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message);
+			_CurrentHash = Head.CurrentCommit.Hash;
+			
+			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message + " (" + _CurrentHash);
 
 			SparkleEventArgs args = new SparkleEventArgs ("Commited") {
 				Message = message
@@ -807,7 +808,9 @@ namespace SparkleLib {
 					args = new SparkleEventArgs ("PushingFailed");
 
 					if (PushingFailed != null)
-					    PushingFailed (this, args); 
+					    PushingFailed (this, args);
+					
+					CheckForChanges ();
 
 				} else {
 
@@ -825,6 +828,9 @@ namespace SparkleLib {
 
 					if (PushingFinished != null)
 					    PushingFinished (this, args); 
+					
+					if (!_IsPolling)
+						Listener.Client.SendMessage (SendType.Message, Listener.Channel, _CurrentHash);
 
 				}
 
