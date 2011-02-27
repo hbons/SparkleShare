@@ -41,7 +41,7 @@ namespace SparkleLib {
 		{
 
 			Server  = server;
-			//Channel = GetSHA1 (folder_name);
+			//Channel = GetSHA1 (server + folder_name);
 			Channel = folder_name;
 
 			if (!user_email.Equals ("") && user_email != null)
