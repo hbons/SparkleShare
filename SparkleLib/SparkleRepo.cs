@@ -308,32 +308,37 @@ namespace SparkleLib {
 			// Listen to the irc channel on the server...
 			Listener = new SparkleListener (Domain, "#" + RemoteName, UserEmail);
 
-			// ...fetch remote changes every 90 seconds if that fails
+			// ...fetch remote changes every 60 seconds if that fails
 			RemoteTimer = new Timer () {
-				Interval = 90000
+				Interval = 60000
 			};
 
 		
 			RemoteTimer.Elapsed += delegate { 
-
-				if (_IsPolling)
+				
+				if (_IsPolling) {
+					
 					CheckForRemoteChanges ();
+					
+					if (!Listener.Client.IsConnected) {
+					
+						SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Trying to reconnect...");
+						Listener.Listen ();
+	
+					}
+					
+				}
 
 				if (_HasUnsyncedChanges)
 					Push ();
-
-				if (!Listener.Client.IsConnected) {
-
-					SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Trying to reconnect...");
-					Listener.Client.Reconnect (true, true);
-
-				}
 
 			};
 
 			// Stop polling when the connection to the irc channel is succesful
 			Listener.Client.OnConnected += delegate {
-
+				
+				_IsPolling = false;
+				
 				// Check for changes manually one more time
 				CheckForRemoteChanges ();
 
@@ -341,19 +346,23 @@ namespace SparkleLib {
 				if (_HasUnsyncedChanges)
 					Push ();
 
-				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Connected. Now listening...");
-
-				_IsPolling = false;
+				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Connected. Now listening... (" + Listener.Server + ")");
 
 			};
 
 			// Start polling when the connection to the irc channel is lost
+			Listener.Client.OnConnectionError += delegate {
+
+				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Lost connection. Falling back to polling...");
+				_IsPolling = true;
+
+			};
+			
+			// Start polling when the connection to the irc channel is lost
 			Listener.Client.OnDisconnected += delegate {
 
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Lost connection. Falling back to polling...");
-				
 				_IsPolling = true;
-				CheckForRemoteChanges ();
 
 			};
 
@@ -361,8 +370,9 @@ namespace SparkleLib {
 			Listener.Client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
 
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Was notified of a remote change.");
-
-				if (!args.Data.Message.Equals (_CurrentHash)) {
+				string message = args.Data.Message.Trim ();
+				
+				if (!message.Equals (_CurrentHash) && message.Length == 40) {
 
 					FetchRequests++;
 
@@ -406,9 +416,7 @@ namespace SparkleLib {
 			};
 
 
-			if (_IsPolling)
-				RemoteTimer.Start ();
-
+			RemoteTimer.Start ();
 			LocalTimer.Start ();
 
 			// Add everything that changed 
@@ -555,9 +563,7 @@ namespace SparkleLib {
 
 			} finally {
 
-				if (_IsPolling)
-					RemoteTimer.Start ();
-
+				RemoteTimer.Start ();
 				LocalTimer.Start ();
 
 			}
@@ -678,9 +684,7 @@ namespace SparkleLib {
 
 				}
 
-
-				if (_IsPolling)
-					RemoteTimer.Start ();
+				RemoteTimer.Start ();
 
 			};
 
@@ -989,8 +993,8 @@ namespace SparkleLib {
 
 						if (entry_line.StartsWith (":")) {
 							
-							string change_type = entry_line.Substring (37, 1);
-							string file_path   = entry_line.Substring (39, entry_line.Length - 39);
+							string change_type = entry_line [37].ToString ();
+							string file_path   = entry_line.Substring (39);
 							
 							if (change_type.Equals ("A")) {
 								

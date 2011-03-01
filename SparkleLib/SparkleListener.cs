@@ -40,28 +40,26 @@ namespace SparkleLib {
 		public SparkleListener (string server, string folder_name, string user_email)
 		{
 
-			Server  = server;
-			//Channel = GetSHA1 (server + folder_name);
-			Channel = folder_name;
+			// This is SparkleShare's centralized notification service.
+			// Don't worry, we only use this server as a backup if you 
+			// don't have your own. All data needed to connect is hashed and
+			// we don't store any personal information ever.
+		//	Server = "204.62.14.135";
 
 			if (!user_email.Equals ("") && user_email != null)
-				Nick = GetSHA1 (user_email + "sparkles");
+				Nick = GetSHA1 (folder_name + user_email + "sparkles");
 			else
 				Nick = GetSHA1 (DateTime.Now.ToString () + "sparkles");
-
-			Nick = "s" + Nick.Substring (0, 7);
 			
-			// TODO: remove
+			Nick    = "s" + Nick.Substring (0, 7);
+		//	Channel = "#" + GetSHA1 (server + folder_name);
+			
+			Server = "irc.gnome.org";
 			Channel = "#sparkletest";
-			Server  = "irc.gnome.org";
-
+			
 			Client = new IrcClient () {
-				PingTimeout          = 120,
-				SocketSendTimeout    = 120,
-				SocketReceiveTimeout = 120,
-				AutoRetry            = true,
-				AutoReconnect        = true,
-				AutoRejoin           = true
+				PingTimeout          = 180,
+				PingInterval         = 90
 			};
 
 		}
