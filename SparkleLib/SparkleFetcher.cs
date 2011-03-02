@@ -130,21 +130,42 @@ namespace SparkleLib {
 		private void InstallExcludeRules ()
 		{
 
-			string exlude_rules_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "info", "exclude");
+			string exlude_rules_file_path = SparkleHelpers.CombineMore
+				(TargetFolder, ".git", "info", "exclude");
 
 			TextWriter writer = new StreamWriter (exlude_rules_file_path);
 
-				// Ignore gedit swap files
+				// gedit and emacs
 				writer.WriteLine ("*~");
 
-				// Ignore vi swap files
-				writer.WriteLine (".*.sw?");
-	
-				// Ignore OSX's invisible directories
-				writer.WriteLine (".DS_Store");
+				// vi(m)
+				writer.WriteLine (".*.sw[a-z]");
+				writer.WriteLine ("*.un~");
+				writer.WriteLine ("*.swp");
+				writer.WriteLine ("*.swo");
 				
-				// Ignore Windows cache files
+				// KDE
+				writer.WriteLine (".directory");
+	
+				// Mac OSX
+				writer.WriteLine (".DS_Store");
+				writer.WriteLine ("Icon?");
+				writer.WriteLine ("._*");
+				writer.WriteLine (".Spotlight-V100");
+				writer.WriteLine (".Trashes");
+				
+				// Windows
 				writer.WriteLine ("Thumbs.db");
+				writer.WriteLine ("Desktop.ini");
+
+				// CVS
+				writer.WriteLine ("*/CVS/*");
+				writer.WriteLine (".cvsignore");
+				writer.WriteLine ("*/.cvsignore");
+				
+				// Subversion
+				writer.WriteLine ("/.svn/*");
+				writer.WriteLine ("*/.svn/*");
 
 			writer.Close ();
 

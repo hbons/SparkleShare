@@ -14,62 +14,60 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
 using Meebey.SmartIrc4net;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Security.Cryptography;
 
 namespace SparkleLib {
 
 	// A persistent connection to the server that
 	// listens for change notifications
-	public class SparkleListener
-	{
+	public class SparkleListener {
 
 		// FIXME: The IrcClient is a public property because
 		// extending it causes crashes
 		public IrcClient Client;
 		private Thread Thread;
 		public readonly string Server;
+		public readonly string FallbackServer;
 		public readonly string Channel;
 		public readonly string Nick;
 
 
-		public SparkleListener (string server, string channel, string nick)
+		public SparkleListener (string server, string folder_name, string user_email)
 		{
 
-			Server  = server;
-			Channel = channel;
-			Nick    = nick;
-			
-			if (!Nick.Equals (""))
-				Nick = nick.Replace ("@", "_at_").Replace (".", "_dot_");
+			// This is SparkleShare's centralized notification service.
+			// Don't worry, we only use this server as a backup if you 
+			// don't have your own. All data needed to connect is hashed and
+			// we don't store any personal information ever.
+		//	Server = "204.62.14.135";
+
+			if (!user_email.Equals ("") && user_email != null)
+				Nick = GetSHA1 (folder_name + user_email + "sparkles");
 			else
-				Nick = "anonymous";
+				Nick = GetSHA1 (DateTime.Now.ToString () + "sparkles");
 			
-			// Keep the nick short
-			if (Nick.Length > 9)
-				Nick = Nick.Substring (0, 9);
-
-			// TODO: Remove these hardcoded values
+			Nick    = "s" + Nick.Substring (0, 7);
+		//	Channel = "#" + GetSHA1 (server + folder_name);
+			
+			Server = "irc.gnome.org";
 			Channel = "#sparkletest";
-			Server  = "irc.gnome.org";
-
+			
 			Client = new IrcClient () {
-				PingTimeout          = 120,
-				SocketSendTimeout    = 120,
-				SocketReceiveTimeout = 120,
-				AutoRetry            = true,
-				AutoReconnect        = true,
-				AutoRejoin           = true
+				PingTimeout          = 180,
+				PingInterval         = 90
 			};
 
 		}
 
 
 		// Starts a new thread and listens to the channel
-		public void ListenForChanges ()
+		public void Listen ()
 		{
 
 			Thread = new Thread (
@@ -102,6 +100,14 @@ namespace SparkleLib {
 			Thread.Start ();
 	
 		}
+		
+		
+		public void Announce (string message)
+		{
+				
+			Client.SendMessage (SendType.Message, Channel, message);
+			
+		}
 
 
 		// Frees all resources for this Listener
@@ -113,6 +119,16 @@ namespace SparkleLib {
 
 		}
 
+		
+		// Creates an SHA-1 hash of input
+		private static string GetSHA1 (string s)
+		{
+			SHA1 sha1 = new SHA1CryptoServiceProvider ();
+			Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+			Byte[] encoded_bytes = sha1.ComputeHash (bytes);
+			return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");
+		}
+		
 	}
 
 }

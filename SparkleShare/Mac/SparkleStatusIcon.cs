@@ -16,6 +16,7 @@
 
 using System;
 using System.Drawing;
+using System.IO;
 using System.Timers;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
@@ -39,7 +40,6 @@ namespace SparkleShare {
 		private NSMenuItem [] FolderMenuItems;
 		private NSMenuItem SyncMenuItem;
 		private NSMenuItem NotificationsMenuItem;
-		private NSMenuItem AboutMenuItem;
 		
 		private delegate void Task ();
 		private EventHandler [] Tasks;
@@ -53,7 +53,7 @@ namespace SparkleShare {
 
 		
 		public SparkleStatusIcon () : base ()
-		{
+		{			
 			
 			Animation = CreateAnimation ();
 
@@ -69,7 +69,12 @@ namespace SparkleShare {
 			
 			SparkleShare.Controller.FolderSizeChanged += delegate {
 				InvokeOnMainThread (delegate {
+					
+					if (!Animation.Enabled)
+						SetNormalState ();
+							
 					UpdateMenu ();
+					
 				});
 			};
 			
@@ -123,11 +128,20 @@ namespace SparkleShare {
 
 				InvokeOnMainThread (delegate {
 					
-					StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle" + FrameNumber + ".png");
-					StatusItem.AlternateImage.Size = new SizeF (16, 16);
+					string image_path =
+						Path.Combine (NSBundle.MainBundle.ResourcePath,
+							"Pixmaps", "idle" + FrameNumber + ".png");					
 					
-					StatusItem.Image      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle" + FrameNumber + ".png");
+					StatusItem.Image      = new NSImage (image_path);
 					StatusItem.Image.Size = new SizeF (16, 16);
+
+					
+					string alternate_image_path =
+						Path.Combine (NSBundle.MainBundle.ResourcePath,
+							"Pixmaps", "idle" + FrameNumber + ".png");
+					
+					StatusItem.AlternateImage      = new NSImage (alternate_image_path);
+					StatusItem.AlternateImage.Size = new SizeF (16, 16);
 					
 				});
 
@@ -160,23 +174,27 @@ namespace SparkleShare {
 				FolderMenuItem.Activated += delegate {
 					SparkleShare.Controller.OpenSparkleShareFolder ();
 				};
+
 			
-				//FolderMenuItem.Image = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/sparkleshare.icns");
-				FolderMenuItem.Image = NSImage.ImageNamed ("NSFolder");
+				string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
+					"sparkleshare-mac.icns");
+			
+				FolderMenuItem.Image = new NSImage (folder_icon_path);
 				FolderMenuItem.Image.Size = new SizeF (16, 16);	
 			
 			Menu.AddItem (FolderMenuItem);
 			
 			
 			if (SparkleShare.Controller.Folders.Count > 0) {
-				
+
 				FolderMenuItems = new NSMenuItem [SparkleShare.Controller.Folders.Count];
 				Tasks = new EventHandler [SparkleShare.Controller.Folders.Count];
 				
 				int i = 0;
 				
 				foreach (string path in SparkleShare.Controller.Folders) {	
-				
+
+					// TODO
 //					if (repo.HasUnsyncedChanges)
 //						folder_action.IconName = "dialog-error";
 					
@@ -198,67 +216,82 @@ namespace SparkleShare {
 		
 			} else {
 		
-				// TODO: No Remote Folders Yet
+				FolderMenuItems = new NSMenuItem [1];
+
+				FolderMenuItems [0] = new NSMenuItem () {	
+					Title = "No Remote Folders Yet"
+				};
+				
+				Menu.AddItem (FolderMenuItems [0]);
 		
 			}
-					
+				
 			Menu.AddItem (NSMenuItem.SeparatorItem);
 
 			
 			SyncMenuItem = new NSMenuItem () {
-				Title = "Add Remote Folder..."
+				Title = "Add Remote Folder…"
 			};
 			
-				if (SparkleShare.Controller.FirstRun)
-					SyncMenuItem.Enabled = false;
+				if (!SparkleShare.Controller.FirstRun) {
 			
-				SyncMenuItem.Activated += delegate {
-					new SparkleWindow ();
-				};
+					SyncMenuItem.Activated += delegate {
+					
+						InvokeOnMainThread (delegate {
+	
+							NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+						
+							if (SparkleUI.Intro == null) {
+							
+								SparkleUI.Intro = new SparkleIntro ();
+								SparkleUI.Intro.ShowServerForm (true);
+		
+							}
 			
+							if (!SparkleUI.Intro.IsVisible)
+								SparkleUI.Intro.ShowServerForm (true);
+		
+							SparkleUI.Intro.OrderFrontRegardless ();
+							SparkleUI.Intro.MakeKeyAndOrderFront (this);
+	
+						});
+					
+					};
+				
+				}
+
 			Menu.AddItem (SyncMenuItem);
 
 			
 			Menu.AddItem (NSMenuItem.SeparatorItem);
 			
 
-			NotificationsMenuItem = new NSMenuItem () {
-				Title = "Show Notifications"
-			};
+			NotificationsMenuItem = new NSMenuItem ();
 			
 				if (SparkleShare.Controller.NotificationsEnabled)
-					NotificationsMenuItem.State = NSCellStateValue.On;
-
+					NotificationsMenuItem.Title = "Turn Notifications Off";
+				else
+					NotificationsMenuItem.Title = "Turn Notifications On";
+								
 				NotificationsMenuItem.Activated += delegate {
 			
 					SparkleShare.Controller.ToggleNotifications ();
+								
+					InvokeOnMainThread (delegate {
 				
-					if (SparkleShare.Controller.NotificationsEnabled)
-						NotificationsMenuItem.State = NSCellStateValue.On;
-					else
-						NotificationsMenuItem.State = NSCellStateValue.Off;
+						if (SparkleShare.Controller.NotificationsEnabled)
+							NotificationsMenuItem.Title = "Turn Notifications Off";
+						else
+							NotificationsMenuItem.Title = "Turn Notifications On";
+													
+					});
 			
 				};
 
 			Menu.AddItem (NotificationsMenuItem);
-			
-			
-			Menu.AddItem (NSMenuItem.SeparatorItem);
-			
-			
-			AboutMenuItem = new NSMenuItem () {
-				Title = "About"
-			};
-
-				AboutMenuItem.Activated += delegate {
-					// TODO
-				};
-
-			Menu.AddItem (AboutMenuItem);
 										 
 			StatusItem.Menu = Menu;
 			StatusItem.Menu.Update ();
-			Console.WriteLine ("MENU UPDATED");
 
 		}
 
@@ -269,27 +302,31 @@ namespace SparkleShare {
 		{
 
 			return delegate { 
-
-				SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
-					return l.LocalPath.Equals (path);
-				});
+						
+				InvokeOnMainThread (delegate {
 	
-				// Check whether the log is already open, create a new one if
-				// that's not the case or present it to the user if it is
-				if (log == null) {
+					NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
 					
-					InvokeOnMainThread (delegate {
+					SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
+						return l.LocalPath.Equals (path);
+					});
+		
+					// Check whether the log is already open, create a new one if
+					// that's not the case or present it to the user if it is
+					if (log == null) {
+						
 						SparkleUI.OpenLogs.Add (new SparkleLog (path));
-					});
-					
-				} else {
-
-					InvokeOnMainThread (delegate {
-						log.OrderFrontRegardless ();
-					});
+						SparkleUI.OpenLogs [SparkleUI.OpenLogs.Count - 1].MakeKeyAndOrderFront (this);
 				
-				}
-
+					} else {
+	
+						log.OrderFrontRegardless ();
+						log.MakeKeyAndOrderFront (this);
+						
+					}
+							
+				});
+				
 			};
 
 		}
@@ -380,13 +417,11 @@ namespace SparkleShare {
 	
 		public override void MenuWillOpen (NSMenu menu)
 		{
-		
-			Console.WriteLine ("OPENED");
-			
-			InvokeOnMainThread (delegate {
 
-				foreach (SparkleLog log in SparkleUI.OpenLogs)
-					log.OrderFrontRegardless ();
+			InvokeOnMainThread (delegate {
+				
+				SparkleUI.NewEvents = 0;
+				NSApplication.SharedApplication.DockTile.BadgeLabel = null;
 
 			});
 
