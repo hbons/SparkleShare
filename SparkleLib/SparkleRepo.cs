@@ -698,6 +698,8 @@ namespace SparkleLib {
 		// Merges the fetched changes
 		public void Rebase ()
 		{
+
+			Watcher.EnableRaisingEvents = false;
 			
 			if (Status.AnyDifferences) {
 				
@@ -707,15 +709,12 @@ namespace SparkleLib {
 				Commit (commit_message);
 
 			}
-			
-			Watcher.EnableRaisingEvents = false;
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Rebasing changes...");
 			SparkleGit git = new SparkleGit (LocalPath, "rebase -v FETCH_HEAD");
 
 			git.Exited += delegate {
 
-				Console.WriteLine ("EXITED");
 				if (Status.MergeConflict.Count > 0) {
 					
 					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected...");
@@ -966,7 +965,7 @@ namespace SparkleLib {
 
 			foreach (string log_entry in entries) {
 
-				Regex regex = new Regex (@"commit ([a-z0-9]+)\n" +
+				Regex regex = new Regex (@"commit ([a-z0-9]{40})\n" +
 				                          "Author: (.+) <(.+)>\n" +
 				                          "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
 				                          "([0-9]{2}):([0-9]{2}):([0-9]{2}) \\+([0-9]{4})\n" +
