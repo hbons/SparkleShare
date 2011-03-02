@@ -33,6 +33,7 @@ namespace SparkleLib {
 		public IrcClient Client;
 		private Thread Thread;
 		public readonly string Server;
+		public readonly string FallbackServer;
 		public readonly string Channel;
 		public readonly string Nick;
 
