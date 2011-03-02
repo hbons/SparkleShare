@@ -175,7 +175,43 @@ namespace SparkleShare {
 
 		}
 		
+
+		public override string EventLogHTML {
+			
+			get {
+				
+				return SparkleHelpers.CombineMore (Defines.PREFIX,
+					"sparkleshare", "html", "event-log.html");
+			
+			}
+			
+		}
+
 		
+		public override string DayEntryHTML {
+			
+			get {
+				
+				return SparkleHelpers.CombineMore (Defines.PREFIX,
+					"sparkleshare", "html", "day-entry.html");
+			
+			}
+			
+		}
+
+		
+		public override string EventEntryHTML {
+			
+			get {
+				
+				return SparkleHelpers.CombineMore (Defines.PREFIX,
+					"sparkleshare", "html", "event-entry.html");
+			
+			}
+			
+		}
+
+			
 		public override void OpenSparkleShareFolder (string subfolder)
 		{
 
