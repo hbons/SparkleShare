@@ -14,49 +14,24 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-	
+
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Timers;
-using MonoMac.Foundation;
-using MonoMac.AppKit;
-using MonoMac.ObjCRuntime;
-using MonoMac.WebKit;
+using System.Diagnostics;
 
-namespace SparkleShare {
+namespace SparkleLib {
 
-	public partial class AppDelegate : NSApplicationDelegate {
-		// Workaround to be able to work with SparkleUI as the main class
-	}
+	public class SparkleGit : Process {
 
-	
-	public class SparkleUI : AppDelegate
-	{
-	
-		public static SparkleStatusIcon StatusIcon;
-		public static List <SparkleLog> OpenLogs;
-
-		
-		
-		public SparkleUI ()
-		{
-
-			NSApplication.Init ();
-
-			NSApplication.SharedApplication.ApplicationIconImage
-				= NSImage.ImageNamed ("sparkleshare.icns");
-
-			OpenLogs   = new List <SparkleLog> ();
-			StatusIcon = new SparkleStatusIcon ();
-
-		}
-
-		
-		public void Run ()
+		public SparkleGit (string path, string args) : base ()
 		{
 			
-			NSApplication.Main (new string [0]);
+			EnableRaisingEvents = true;
+			
+			StartInfo.FileName               = SparklePaths.GitPath;
+			StartInfo.Arguments              = args;
+			StartInfo.RedirectStandardOutput = true;
+			StartInfo.UseShellExecute        = false;
+			StartInfo.WorkingDirectory       = path;
 			
 		}
 		

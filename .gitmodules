@@ -4,9 +4,3 @@
 [submodule "GitSharp"]
 	path = GitSharp
 	url = http://github.com/henon/GitSharp.git
-[submodule "MonoMac"]
-	path = MonoMac
-	url = https://github.com/mono/monomac.git
-[submodule "MacCore"]
-	path = MacCore
-	url = https://github.com/mono/maccore.git	

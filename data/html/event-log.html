@@ -8,12 +8,13 @@
 		<style>
 
 			body {
-				background-color: <!-- $body-background-color -->;
+				background-color: #f1f1f1;
 				color:            <!-- $body-color -->;
 				font-size:        <!-- $body-font-size -->;
 				font-family:      <!-- $body-font-family -->;
 				margin:           0;
 				padding:          0;
+				margin-top:       20px;
 			}
 
 			small {
@@ -22,18 +23,39 @@
 			}
 
 			.day-entry-header {
-				background-color: <!-- $day-entry-header-background-color -->;
-				padding:          9px;
+				background-color:      #ccc;
+				color:                 #fff;
+				padding:               3px;
+				text-align:            center;
+				margin-left:           auto;
+				margin-right:          auto;
+				-webkit-border-radius: 25px;
+				width:                 128px;
+				font-weight:           lighter;
+				-webkit-box-shadow:    0px 1px 0px #aaa;
 			}
 			
 			.day-entry-content {
-				padding:          12px;
+				padding:          9px;
 			}
 			
-			.dd {
+			dl {
+				padding: 0;
+				margin: 0;
+				padding-bottom: 15px;
+			}
+			
+			dt {
+				padding-bottom: 9px;
+				padding-top:    9px;
+			}
+			
+			dd {
+				padding-left: 0;
+				margin-left: 12px;
 				text-overflow: ellipsis;
 			}
-
+			
 			a {
 				color:           <!-- $a-color -->;
 				text-decoration: none;
@@ -50,6 +72,28 @@
 			.event-time, dt {
 				font-size: 80%;
 				color:     <!-- $secondary-font-color -->;
+			}
+
+			.no-buddy-icon {
+				margin-right:        12px;
+				width:               36px;
+				height:              36px;
+				background-image:    url('<!-- $no-buddy-icon-background-image -->');
+				background-repeat:   no-repeat;
+				background-position: center; 
+			}
+
+			.buddy-icon {
+				width:            36px;
+				height:           36px;
+			}
+
+			.event-entry-content {
+				background-color:      #fff;
+				margin:                12px;
+				padding:               12px;
+				-webkit-border-radius: 6px;
+				border:                <!-- $small-color --> 1px solid;
 			}
 
 		</style>

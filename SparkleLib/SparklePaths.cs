@@ -24,7 +24,7 @@ namespace SparkleLib {
 	public static class SparklePaths
 	{
 		
-		public static string GitPath = "/usr/bin/git"; // TODO: Don't hardcode this
+		public static string GitPath = SystemGitPath;
 
 		public static string HomePath = new UnixUserInfo (UnixEnvironment.UserName).HomeDirectory;
 
@@ -44,24 +44,37 @@ namespace SparkleLib {
 			"icons");
 
 		
-		private static string GetGitPath ()
+		private static string SystemGitPath
 		{
-		
-			Process process = new Process ();
 			
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute        = false;
-			process.StartInfo.FileName               = "which";
-			process.StartInfo.Arguments              = "git";
-			process.Start ();
-			
-			string git_path = process.StandardOutput.ReadToEnd ().Trim ();
+			get {
 
-			if (!string.IsNullOrEmpty (git_path))
-				return git_path;
-			else
-				return null;
-		
+				Process process = new Process ();
+	
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.UseShellExecute        = false;
+				process.StartInfo.FileName               = "which";
+				process.StartInfo.Arguments              = "git";
+				process.Start ();
+				
+				string git_path = process.StandardOutput.ReadToEnd ();
+				git_path = git_path.Trim ();
+
+				if (!string.IsNullOrEmpty (git_path)) {
+
+					return git_path;
+				
+				} else {
+					
+					Console.WriteLine ("Sorry, SparkleShare needs Git to run, but it wasn't found.");
+					Environment.Exit (-1);
+
+					return null;
+				
+				}
+				
+			}
+			
 		}
 
 	}
