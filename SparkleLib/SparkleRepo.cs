@@ -251,7 +251,7 @@ namespace SparkleLib {
 
 		public SparkleRepo (string path) : base (path)
 		{
-
+			
 			LocalPath       = path;
 			Name            = Path.GetFileName (LocalPath);
 
@@ -773,7 +773,7 @@ namespace SparkleLib {
 			_CurrentHash = Head.CurrentCommit.Hash;
 
 			if (NewCommit != null)
-				NewCommit (GetCommits (2) [0], LocalPath); // FIXME: GetCommits doesn't like 1
+				NewCommit (GetCommits (1) [0], LocalPath);
 				
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes rebased.");
 
@@ -941,6 +941,7 @@ namespace SparkleLib {
 
 			if (count < 1)
 				count = 30;
+
 			
 			List <SparkleCommit> commits = new List <SparkleCommit> ();
 
@@ -954,7 +955,7 @@ namespace SparkleLib {
 			List <string> entries = new List <string> ();
 
 			int j = 0;
-			string entry = "";
+			string entry = "", last_entry = "";
 			foreach (string line in lines) {
 				
 				if (line.StartsWith ("commit") && j > 0) {
@@ -966,9 +967,13 @@ namespace SparkleLib {
 				
 				entry += line + "\n";
 				j++;
+				
+				last_entry = entry;
 
 			}
 			
+			entries.Add (last_entry);
+
 
 			foreach (string log_entry in entries) {
 
