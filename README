@@ -1,4 +1,4 @@
-SparkleShare 0.2 Beta 1
+SparkleShare 0.2 Beta 2
 =======================
 
 SparkleShare is a file sharing and collaboration tool inspired by Dropbox. 
@@ -25,8 +25,8 @@ to change and redistribute it under certain conditions. For more information
 see the LICENSE file or visit http://www.gnu.org/licenses/gpl-3.0.html
 
 
-Run
-===
+Run on Linux:
+=============
 
 SparkleShare currently requires:
 
@@ -43,7 +43,7 @@ SparkleShare currently requires:
    - webkitgtk
    - webkit-sharp
 
-Run the service:
+Run the service, either click the SparkleShare launcher or:
 
    $ sparkleshare start
 
@@ -62,8 +62,8 @@ Note:
    by hand.
 
 
-Build
-=====
+Build on Linux:
+===============
 
 To build SparkleShare you need:
 
@@ -97,12 +97,39 @@ Note:
    Use './configure --prefix=/usr' if you want the Nautilus extension to work.
 
 
-Build on OSX:
+Run on Mac:
+===========
+
+You will need to have the Mac version of git installed.
+
+SparkleShare will look for git in /usr/bin, so you may need to create a symbolic
+link to git, depending on where it was installed:
+
+   $ sudo ln -s /path/to/your/git /usr/bin/git
+
+Now just double-click the SparkleShare.app.
+
+
+Build on Mac:
 =============
 
-Get the Mono Framework, Monodevelop, and MacPorts.
+Install the Mono Framework, Monodevelop (plus the MonoMac plugin), and MacPorts.
+
 Install git-core, automake and intltool using 'port install'.
 Make sure that git or a symbolic link to git is in /usr/bin.
+
+Note:
+
+   You may need to adjust some environment variables to find mono:
+   
+   $ export PATH=/Library/Frameworks/Mono.framework/Versions/Current/bin:$PATH
+   $ export PKG_CONFIG=/Library/Frameworks/Mono.framework/Versions/Current/bin/pkg-config
+   $ export PKG_CONFIG_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
+   $ ./autogen.sh
+
+The last step will give you some errors, but you only need the libraries to be compiled.
+Open 'SparkleShare/Mac/SparkleShare.sln' in MonoDevelop and start the build.
+
 
 Frequently Asked Question
 =========================
@@ -118,18 +145,19 @@ Official website:
 http://www.sparkleshare.org/
 
 Project page:
-http://github.com/SparkleShare
+http://github.com/SparkleShare/
 
 IRC Channel:
 #sparkleshare on irc.gnome.org
 
 Wiki:
-http://github.com/hbons/SparkleShare/wiki
+http://github.com/hbons/SparkleShare/wiki/
 
 Issue tracker:
-http://github.com/hbons/SparkleShare/issues
+http://github.com/hbons/SparkleShare/issues/
 
 Translation project:
 http://www.transifex.net/projects/p/sparkleshare/
+
 
 Now have fun and create cool things together! :)

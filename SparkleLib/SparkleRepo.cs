@@ -14,6 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
 using GitSharp;
 using GitSharp.Commands;
 using GitSharp.Core.Transport;
@@ -30,15 +31,15 @@ namespace SparkleLib {
 
 	public class SparkleRepo : Repository {
 
-		private Process Process;
 		private Timer RemoteTimer;
 		private Timer LocalTimer;
 		private FileSystemWatcher Watcher;
-		private bool HasChanged;
-		private DateTime LastChange;
 		private System.Object ChangeLock;
 		private int FetchRequests;
 		private SparkleListener Listener;
+		private bool HasChanged;
+		private List <double> SizeBuffer;
+
 
 		/// <summary>
 		/// The folder name the repository resides in locally
@@ -251,37 +252,32 @@ namespace SparkleLib {
 		public SparkleRepo (string path) : base (path)
 		{
 
-			LocalPath = path;
-			Name = Path.GetFileName (LocalPath);
+			LocalPath       = path;
+			Name            = Path.GetFileName (LocalPath);
 
-			Process = new Process () {
-				EnableRaisingEvents = true
-			};
-
-			Process.StartInfo.FileName = SparklePaths.GitPath;
-			Process.StartInfo.RedirectStandardOutput = true;
-			Process.StartInfo.UseShellExecute = false;
-			Process.StartInfo.WorkingDirectory = LocalPath;
-
-			RemoteName          = Path.GetFileNameWithoutExtension (RemoteOriginUrl);
-			RemoteOriginUrl     = Config ["remote.origin.url"];
-			Domain              = GetDomain (RemoteOriginUrl);
-			Description         = GetDescription ();
-
-			UserName            = Config ["user.name"];
-			UserEmail           = Config ["user.email"];
+			RemoteName      = Path.GetFileNameWithoutExtension (RemoteOriginUrl);
+			RemoteOriginUrl = Config ["remote.origin.url"];
+			Domain          = GetDomain (RemoteOriginUrl);
+			Description     = GetDescription ();
+			UserName        = Config ["user.name"];
+			UserEmail       = Config ["user.email"];
 
 			if (Head.CurrentCommit == null)
-				_CurrentHash    = null;
+				_CurrentHash = null;
 			else
-				_CurrentHash    = Head.CurrentCommit.Hash;
+				_CurrentHash = Head.CurrentCommit.Hash;
 
-			_IsSyncing          = false;
-			_IsBuffering        = false;
-			_IsPolling          = true;
-			_IsFetching         = false;
-			_IsPushing          = false;
-			_ServerOnline       = true;
+			_IsSyncing     = false;
+			_IsBuffering   = false;
+			_IsPolling     = true;
+			_IsFetching    = false;
+			_IsPushing     = false;
+			_ServerOnline  = true;
+			
+			HasChanged     = false;
+			ChangeLock     = new Object ();
+			FetchRequests  = 0;
+			
 
 			string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath ,
 				".git", "has_unsynced_changes");
@@ -294,10 +290,6 @@ namespace SparkleLib {
 
 			if (_CurrentHash == null)
 				CreateInitialCommit ();
-
-			HasChanged = false;
-			ChangeLock = new System.Object ();
-			FetchRequests = 0;
 
 
 			// Watch the repository's folder
@@ -312,35 +304,41 @@ namespace SparkleLib {
 			Watcher.Deleted += new FileSystemEventHandler (OnFileActivity);
 			Watcher.Renamed += new RenamedEventHandler (OnFileActivity);
 
-			// Fetch remote changes every minute
+
+			// Listen to the irc channel on the server...
+			Listener = new SparkleListener (Domain, "#" + RemoteName, UserEmail);
+
+			// ...fetch remote changes every 60 seconds if that fails
 			RemoteTimer = new Timer () {
 				Interval = 60000
 			};
 
-
-			// Listen to the irc channel on the server
-			Listener = new SparkleListener (Domain, "#" + RemoteName, UserEmail);
-
+		
 			RemoteTimer.Elapsed += delegate { 
-
-				if (_IsPolling)
+				
+				if (_IsPolling) {
+					
 					CheckForRemoteChanges ();
+					
+					if (!Listener.Client.IsConnected) {
+					
+						SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Trying to reconnect...");
+						Listener.Listen ();
+	
+					}
+					
+				}
 
 				if (_HasUnsyncedChanges)
 					Push ();
-
-				if (!Listener.Client.IsConnected) {
-
-					SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Trying to reconnect...");
-					Listener.Client.Reconnect (true, true);
-
-				}
 
 			};
 
 			// Stop polling when the connection to the irc channel is succesful
 			Listener.Client.OnConnected += delegate {
-
+				
+				_IsPolling = false;
+				
 				// Check for changes manually one more time
 				CheckForRemoteChanges ();
 
@@ -348,19 +346,22 @@ namespace SparkleLib {
 				if (_HasUnsyncedChanges)
 					Push ();
 
-				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Connected. Now listening...");
-
-				_IsPolling = false;
+				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Connected. Now listening... (" + Listener.Server + ")");
 
 			};
 
 			// Start polling when the connection to the irc channel is lost
+			Listener.Client.OnConnectionError += delegate {
+
+				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Lost connection. Falling back to polling...");
+				_IsPolling = true;
+
+			};
+			
+			// Start polling when the connection to the irc channel is lost
 			Listener.Client.OnDisconnected += delegate {
 
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Lost connection. Falling back to polling...");
-
-				CheckForRemoteChanges ();
-
 				_IsPolling = true;
 
 			};
@@ -369,8 +370,9 @@ namespace SparkleLib {
 			Listener.Client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
 
 				SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Was notified of a remote change.");
-
-				if (!args.Data.Message.Equals (_CurrentHash)) {
+				string message = args.Data.Message.Trim ();
+				
+				if (!message.Equals (_CurrentHash) && message.Length == 40) {
 
 					FetchRequests++;
 
@@ -388,7 +390,8 @@ namespace SparkleLib {
 					}
 
 				} else {
-
+					
+					// Not really needed as we won't be notified about our own messages
 					SparkleHelpers.DebugInfo ("Irc",
 						"[" + Name + "] False alarm, already up to date. (" + _CurrentHash + ")");
 
@@ -397,13 +400,15 @@ namespace SparkleLib {
 			};
 
 			// Start listening
-			Listener.ListenForChanges ();
+			Listener.Listen ();
+			
 
+			SizeBuffer = new List <double> ();
 
 			// Keep a timer that checks if there are changes and
 			// whether they have settled
 			LocalTimer = new Timer () {
-				Interval = 4000
+				Interval = 250
 			};
 
 			LocalTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
@@ -411,9 +416,7 @@ namespace SparkleLib {
 			};
 
 
-			if (_IsPolling)
-				RemoteTimer.Start ();
-
+			RemoteTimer.Start ();
 			LocalTimer.Start ();
 
 			// Add everything that changed 
@@ -430,23 +433,14 @@ namespace SparkleLib {
 		{
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Checking for remote changes...");
-
-			Process process = new Process () {
-				EnableRaisingEvents = true
-			};
-
-			process.StartInfo.FileName               = SparklePaths.GitPath;
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute        = false;
-			process.StartInfo.WorkingDirectory       = LocalPath;
-			process.StartInfo.Arguments = "ls-remote origin master";
-
-			process.Exited += delegate {
+			SparkleGit git = new SparkleGit (LocalPath, "ls-remote origin master");
+		
+			git.Exited += delegate {
 			
-				if (process.ExitCode != 0)
+				if (git.ExitCode != 0)
 					return;
 
-				string remote_hash = process.StandardOutput.ReadToEnd ();
+				string remote_hash = git.StandardOutput.ReadToEnd ();
 
 				if (!remote_hash.StartsWith (_CurrentHash)) {
 
@@ -457,33 +451,10 @@ namespace SparkleLib {
 				}
 
 			};
+				
 
-			process.Start ();
-
-/* FIXME: LsRemoteCommand is not yet implemented by GitSharp
-
-			LsRemoteCommand ls_remote = new LsRemoteCommand () {
-				Repository = this
-			};
-
-			ls_remote.Execute ();
-
-			using (StreamReader reader = new StreamReader (ls_remote.OutputStream.BaseStream))
-			{
-
-				string remote_hash = reader.ReadLine ());
-
-				if (!remote_hash.StartsWith (_CurrentHash)) {
-
-					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found.");
-
-					Fetch ();
-					Rebase ();
-
-				}
-
-			}
-*/
+			git.Start ();
+			git.WaitForExit ();
 
 		}
 
@@ -494,15 +465,18 @@ namespace SparkleLib {
 			lock (ChangeLock) {
 
 				if (HasChanged) {
+					
+					if (SizeBuffer.Count >= 4)
+						SizeBuffer.RemoveAt (0);
+						
+					DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
+					SizeBuffer.Add (CalculateFolderSize (dir_info));
 
-					SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes found, checking if settled.");
+					if (SizeBuffer [0].Equals (SizeBuffer [1]) &&
+					    SizeBuffer [1].Equals (SizeBuffer [2]) &&
+					    SizeBuffer [2].Equals (SizeBuffer [3])) {
 
-					DateTime now     = DateTime.UtcNow;
-					TimeSpan changed = new TimeSpan (now.Ticks - LastChange.Ticks);
-
-					if (changed.TotalMilliseconds > 5000) {
-
-						SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled, adding files...");
+						SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled.");
 
 						_IsBuffering = false;
 
@@ -523,8 +497,12 @@ namespace SparkleLib {
 		{
 
 			WatcherChangeTypes wct = fse_args.ChangeType;
-
-			if (!ShouldIgnore (fse_args.FullPath)) {
+			
+			int number_of_changes = Status.Untracked.Count +
+				                    Status.Missing.Count +
+				                    Status.Modified.Count;
+			
+			if (number_of_changes > 0) {
 
 				_IsBuffering = true;
 
@@ -540,12 +518,12 @@ namespace SparkleLib {
 				}
 
 				SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + fse_args.Name + "'");
-
+				SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes found, checking if settled.");
+				
 				RemoteTimer.Stop ();
 
 				lock (ChangeLock) {
 
-					LastChange = DateTime.UtcNow;
 					HasChanged = true;
 
 				}
@@ -565,14 +543,13 @@ namespace SparkleLib {
 				LocalTimer.Stop ();
 				RemoteTimer.Stop ();
 	
-				Add ();
-
-				string message = FormatCommitMessage ();
-
-				if (message != null) {
-
+				if (Status.AnyDifferences) {
+					
+					Add ();
+					
+					string message = FormatCommitMessage ();
 					Commit (message);
-					CheckForRemoteChanges ();
+
 					Push ();
 
 				} else {
@@ -586,9 +563,7 @@ namespace SparkleLib {
 
 			} finally {
 
-				if (_IsPolling)
-					RemoteTimer.Start ();
-
+				RemoteTimer.Start ();
 				LocalTimer.Start ();
 
 			}
@@ -604,9 +579,10 @@ namespace SparkleLib {
 
 			// FIXME: this GitSharp method seems to block...
 			// Index.AddAll ();
-			Process.StartInfo.Arguments = "add --all";
-			Process.Start ();
-			Process.WaitForExit ();
+
+			SparkleGit git = new SparkleGit (LocalPath, "add --all");
+			git.Start ();
+			git.WaitForExit ();
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes staged.");
 
@@ -614,6 +590,21 @@ namespace SparkleLib {
 
 			if (Added != null)
 	            Added (this, args); 
+
+		}
+
+
+		// Removes unneeded objects
+		private void CollectGarbage ()
+		{
+
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Collecting garbage...");
+
+			SparkleGit git = new SparkleGit (LocalPath, "gc");
+			git.Start ();
+			git.WaitForExit ();
+
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Garbage collected..");
 
 		}
 
@@ -626,14 +617,20 @@ namespace SparkleLib {
 				return;
 
 			base.Commit (message);
+			_CurrentHash = Head.CurrentCommit.Hash;
+			
+			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message + " (" + _CurrentHash);
 
-			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message);
-
-			SparkleEventArgs args = new SparkleEventArgs ("Commited");
-			args.Message = message;
+			SparkleEventArgs args = new SparkleEventArgs ("Commited") {
+				Message = message
+			};
 
 			if (Commited != null)
 	            Commited (this, args);
+			
+			// Collect garbage pseudo-randomly
+			if (DateTime.Now.Second % 10 == 0)
+				CollectGarbage ();
 
 		}
 
@@ -647,32 +644,9 @@ namespace SparkleLib {
 
 			RemoteTimer.Stop ();
 
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
 
-/* FIXME: SSH transport doesn't work with GitSharp
-			try {
-
-				FetchCommand fetch_command = new FetchCommand () {
-					Remote = "origin",
-					Repository = this
-				};
-
-				fetch_command.Execute ();
-
-			} catch (GitSharp.Core.Exceptions.TransportException e) {
-
-				Console.WriteLine ("Nothing to fetch: " + e.Message);
-			
-			}
-*/
-			
-			Process process = new Process () {
-				EnableRaisingEvents = true
-			};
-
-			process.StartInfo.FileName               = SparklePaths.GitPath;
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute        = false;
-			process.StartInfo.WorkingDirectory       = LocalPath;
+			SparkleGit git = new SparkleGit (LocalPath, "fetch -v origin master");
 
 			SparkleEventArgs args;
 			args = new SparkleEventArgs ("FetchingStarted");
@@ -680,44 +654,43 @@ namespace SparkleLib {
 			if (FetchingStarted != null)
 		        FetchingStarted (this, args); 
 
-			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
 
-			process.StartInfo.Arguments = "fetch -v origin master";
-
-			process.Exited += delegate {
+			git.Exited += delegate {
 
 				SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
-
-				args = new SparkleEventArgs ("FetchingFinished");
 
 				_IsSyncing  = false;
 				_IsFetching = false;
 
-				if (_IsPolling)
-					RemoteTimer.Start ();
-
 				_CurrentHash = Head.CurrentCommit.Hash;
 
-				if (process.ExitCode != 0) {
+				if (git.ExitCode != 0) {
 
 					_ServerOnline = false;
-
+					
+					args = new SparkleEventArgs ("FetchingFailed");
+					
 					if (FetchingFailed != null)
 						FetchingFailed (this, args); 
 
 				} else {
 
 					_ServerOnline = true;
+					
+					args = new SparkleEventArgs ("FetchingFinished");
 
 					if (FetchingFinished != null)
 						FetchingFinished (this, args);
 
 				}
 
+				RemoteTimer.Start ();
+
 			};
 
-			process.Start ();
-			process.WaitForExit ();
+
+			git.Start ();
+			git.WaitForExit ();
 
 		}
 
@@ -726,79 +699,75 @@ namespace SparkleLib {
 		public void Rebase ()
 		{
 
-			Add ();
-
 			Watcher.EnableRaisingEvents = false;
-
-			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Rebasing changes...");
-
-			Process.StartInfo.Arguments = "rebase -v FETCH_HEAD";
-			Process.WaitForExit ();
-			Process.Start ();
-
-			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes rebased.");
-
-			string output = Process.StandardOutput.ReadToEnd ().Trim ();
-
-			if (!output.Contains ("up to date")) {
-
-				if (output.Contains ("Failed to merge")) {
-
-					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Resolving conflict...");
-
-					Process.StartInfo.Arguments = "status";
-					Process.WaitForExit ();
-					Process.Start ();
-					output = Process.StandardOutput.ReadToEnd ().Trim ();
-					string [] lines = Regex.Split (output, "\n");
-
-					foreach (string line in lines) {
-
-						if (line.Contains ("needs merge")) {
-
-							string problem_file_name = line.Substring (line.IndexOf (": needs merge"));
-
-							Process.StartInfo.Arguments = "checkout --ours " + problem_file_name;
-							Process.WaitForExit ();
-							Process.Start ();
-							
-							string timestamp = DateTime.Now.ToString ("H:mm d MMM yyyy");
-
-							File.Move (problem_file_name, problem_file_name + " (" + UserName  + ", " + timestamp + ")");
-							           
-							Process.StartInfo.Arguments = "checkout --theirs " + problem_file_name;
-							Process.WaitForExit ();
-							Process.Start ();
-
-							SparkleEventArgs args = new SparkleEventArgs ("ConflictDetected");
-
-							if (ConflictDetected != null)
-								ConflictDetected (this, args); 
-
-						}
-
-					}
-
-					Add ();
-					
-					Process.StartInfo.Arguments = "rebase --continue";
-					Process.WaitForExit ();
-					Process.Start ();
-
-					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
-
-					Push ();
 			
-				}
+			if (Status.AnyDifferences) {
+				
+				Add ();
+				
+				string commit_message = FormatCommitMessage ();
+				Commit (commit_message);
 
-
-				List <SparkleCommit> commits = GetCommits (1);
-
-				if (NewCommit != null)
-			        NewCommit (commits [0], LocalPath);
-						              
 			}
 
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Rebasing changes...");
+			SparkleGit git = new SparkleGit (LocalPath, "rebase -v FETCH_HEAD");
+
+			git.Exited += delegate {
+
+				if (Status.MergeConflict.Count > 0) {
+					
+					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected...");
+
+					foreach (string problem_file_name in Status.MergeConflict) {
+					
+						SparkleGit git_ours = new SparkleGit (LocalPath,
+					    	"checkout --ours " + problem_file_name);
+						git_ours.Start ();
+						git_ours.WaitForExit ();
+	
+						string timestamp = DateTime.Now.ToString ("H:mm d MMM");
+	
+						string new_file_name = problem_file_name + " (" + UserName  + ", " + timestamp + ")";
+						File.Move (problem_file_name, new_file_name);
+								           
+						SparkleGit git_theirs = new SparkleGit (LocalPath,
+					    	"checkout --theirs " + problem_file_name);
+						git_theirs.Start ();
+						git_theirs.WaitForExit ();
+					
+						SparkleEventArgs args = new SparkleEventArgs ("ConflictDetected");
+	
+						if (ConflictDetected != null)
+							ConflictDetected (this, args);
+	
+					}
+	
+					Add ();
+						
+					SparkleGit git_continue = new SparkleGit (LocalPath, "rebase --continue");
+					git_continue.Start ();
+					git_continue.WaitForExit ();
+
+					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
+	
+					Push ();
+						              
+				}
+				
+			};
+
+
+			git.Start ();
+			git.WaitForExit ();
+
+			_CurrentHash = Head.CurrentCommit.Hash;
+
+			if (NewCommit != null)
+				NewCommit (GetCommits (2) [0], LocalPath); // FIXME: GetCommits doesn't like 1
+				
+			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes rebased.");
+			
 			Watcher.EnableRaisingEvents = true;
 
 		}
@@ -810,41 +779,23 @@ namespace SparkleLib {
 
 			_IsSyncing = true;
 			_IsPushing = true;
-
-			SparkleEventArgs args = new SparkleEventArgs ("PushingStarted");
-
-			if (PushingStarted != null)
-	            PushingStarted (this, args); 
+			
+			SparkleGit git = new SparkleGit (LocalPath, "push origin master");
 
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing changes...");
 
-/* FIXME: SSH transport doesn't work with GitSharp
-			try {
-
-				PushCommand push_command = new PushCommand () {
-					Remote = "origin",
-					Repository = this
-				};
-
-				push_command.Execute ();
-
-			} catch (GitSharp.Core.Exceptions.TransportException e) {
-
-				Console.WriteLine (e.Message);
+			SparkleEventArgs args = new SparkleEventArgs ("PushingStarted");
 			
-			}
-*/
+			if (PushingStarted != null)
+	            PushingStarted (this, args); 
 
-			Process.StartInfo.Arguments = "push origin master";
-
-			Process.WaitForExit ();
-			
-			Process.Exited += delegate {
+	
+			git.Exited += delegate {
 
 				_IsSyncing = false;
 				_IsPushing = false;
 
-				if (Process.ExitCode != 0) {
+				if (git.ExitCode != 0) {
 
 					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing failed.");
 
@@ -859,7 +810,9 @@ namespace SparkleLib {
 					args = new SparkleEventArgs ("PushingFailed");
 
 					if (PushingFailed != null)
-					    PushingFailed (this, args); 
+					    PushingFailed (this, args);
+					
+					CheckForChanges ();
 
 				} else {
 
@@ -877,33 +830,17 @@ namespace SparkleLib {
 
 					if (PushingFinished != null)
 					    PushingFinished (this, args); 
+					
+					if (!_IsPolling)
+						Listener.Announce (_CurrentHash);
 
 				}
 
 			};
-			Process.Start ();
 
-		}
-
-
-		// Ignores repos, dotfiles, swap files and the like
-		private bool ShouldIgnore (string file_path)
-		{
-
-			if (file_path.EndsWith (".lock") ||
-			    file_path.EndsWith ("~")     ||
-			    file_path.Contains (".git")  ||
-			    file_path.Contains ("/.")    ||
-			    file_path.EndsWith (".swp")  ||
-			    System.IO.Directory.Exists (Path.Combine (LocalPath, file_path))) {
-
-				return true; // Yes, ignore it
-
-			} else {
-
-				return false;
-				
-			}
+			
+			git.Start ();
+			git.WaitForExit ();
 
 		}
 
@@ -946,6 +883,37 @@ namespace SparkleLib {
 			return description;
 
 		}
+		
+
+		// Recursively gets a folder's size in bytes
+		private double CalculateFolderSize (DirectoryInfo parent)
+		{
+
+			if (!System.IO.Directory.Exists (parent.ToString ()))
+				return 0;
+
+			double size = 0;
+
+			// Ignore the temporary 'rebase-apply' directory. This prevents potential
+			// crashes when files are being queried whilst the files have already been deleted.
+			if (parent.Name.Equals ("rebase-apply"))
+				return 0;
+
+			foreach (FileInfo file in parent.GetFiles()) {
+
+				if (!file.Exists)
+					return 0;
+
+				size += file.Length;
+
+			}
+
+			foreach (DirectoryInfo directory in parent.GetDirectories())
+				size += CalculateFolderSize (directory);
+
+		    return size;
+    
+		}
 
 
 		// Create a first commit in case the user has cloned
@@ -964,49 +932,91 @@ namespace SparkleLib {
 		public List <SparkleCommit> GetCommits (int count)
 		{
 
-			if (count <= 0)
-				return null;
-
+			if (count < 1)
+				count = 30;
+			
 			List <SparkleCommit> commits = new List <SparkleCommit> ();
 
-			string commit_ref = "HEAD";
+			SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw --date=iso");
+			git_log.Start ();
+			git_log.WaitForExit ();
+			
+			string output = git_log.StandardOutput.ReadToEnd ();
+			string [] lines = output.Split ("\n".ToCharArray ());
+						
+			List <string> entries = new List <string> ();
 
-			try {
-
-				for (int i = 0; i < count; i++) {
-
-					Commit commit = new Commit (this, commit_ref);
-
-					SparkleCommit sparkle_commit = new SparkleCommit ();
-
-					sparkle_commit.UserName  = commit.Author.Name;
-					sparkle_commit.UserEmail = commit.Author.EmailAddress;
-					sparkle_commit.DateTime  = commit.CommitDate.DateTime;
-					sparkle_commit.Hash      = commit.Hash;
+			int j = 0;
+			string entry = "";
+			foreach (string line in lines) {
+				
+				if (line.StartsWith ("commit") && j > 0) {
 					
-					foreach (Change change in commit.Changes) {
+					entries.Add (entry);
+					entry = "";
+					
+				} 
+				
+				entry += line + "\n";
+				j++;
 
-						if (change.ChangeType.ToString ().Equals ("Added"))
-							sparkle_commit.Added.Add (change.Path);
+			}
+			
 
-						if (change.ChangeType.ToString ().Equals ("Modified"))
-							sparkle_commit.Edited.Add (change.Path);
+			foreach (string log_entry in entries) {
 
-						if (change.ChangeType.ToString ().Equals ("Deleted"))
-							sparkle_commit.Deleted.Add (change.Path);
+				Regex regex = new Regex (@"commit ([a-z0-9]{40})\n" +
+				                          "Author: (.+) <(.+)>\n" +
+				                          "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
+				                          "([0-9]{2}):([0-9]{2}):([0-9]{2}) \\+([0-9]{4})\n" +
+				                          "*");
+				
+				Match match = regex.Match (log_entry);
 
+				if (match.Success) {
+
+					SparkleCommit commit = new SparkleCommit ();
+					
+					commit.Hash = match.Groups [1].Value;
+					commit.UserName = match.Groups [2].Value;
+					commit.UserEmail = match.Groups [3].Value;
+
+					commit.DateTime = new DateTime (int.Parse (match.Groups [4].Value),
+						int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
+					    int.Parse (match.Groups [7].Value), int.Parse (match.Groups [8].Value),
+					    int.Parse (match.Groups [9].Value));
+					                    
+					string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
+					foreach (string entry_line in entry_lines) {
+
+						if (entry_line.StartsWith (":")) {
+							
+							string change_type = entry_line [37].ToString ();
+							string file_path   = entry_line.Substring (39);
+							
+							if (change_type.Equals ("A")) {
+								
+								commit.Added.Add (file_path);
+								
+							} else if (change_type.Equals ("M")) {
+							
+								commit.Edited.Add (file_path);
+								
+							} else if (change_type.Equals ("D")) {
+								
+								commit.Deleted.Add (file_path);
+								
+							}
+							
+							
+						}
+							
 					}
-
-					commits.Add (sparkle_commit);
-					commit_ref += "^";
-
-				}
-
-			} catch (System.NullReferenceException) {
-
-				// FIXME: Doesn't show the first commit because it throws
-				// this exception before getting to it. Seems to be a bug in GitSharp
-
+	
+					commits.Add (commit);
+					
+				}	
+				
 			}
 
 			return commits;

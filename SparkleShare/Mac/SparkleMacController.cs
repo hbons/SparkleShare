@@ -49,8 +49,8 @@ namespace SparkleShare {
 		// list of bookmarked places
 		public override void AddToBookmarks ()
 		{
-			
 		
+			// TODO
 		
 		}
 		
@@ -61,11 +61,8 @@ namespace SparkleShare {
 			
 			if (!Directory.Exists (SparklePaths.SparklePath)) {
 				
-				Directory.CreateDirectory (SparklePaths.SparklePath);
-	
-				NSWorkspace.SharedWorkspace.SetIconforFile (NSImage.ImageNamed ("sparkleshare.icns"),
-					SparklePaths.SparklePath, 0);
-				
+				Directory.CreateDirectory (SparklePaths.SparklePath);	
+
 				return true;
 			
 			} else {
@@ -82,14 +79,72 @@ namespace SparkleShare {
 		{
 		
 			string folder = Path.Combine (SparklePaths.SparklePath, subfolder);
+			folder.Replace (" ", "\\ "); // Escape space-characters			
+			
+			NSWorkspace.SharedWorkspace.OpenFile (folder);
+			
+		}
+		
+		
+		public override string EventLogHTML
+		{
+			
+			get {
+			
+				string resource_path = NSBundle.MainBundle.ResourcePath;
 
-			Process process = new Process ();
-			process.StartInfo.Arguments = folder.Replace (" ", "\\ "); // Escape space-characters
-			process.StartInfo.FileName  = "open";
-			process.Start ();
+				string html_path = Path.Combine (resource_path, "HTML", "event-log.html");
+				
+				StreamReader reader = new StreamReader (html_path);
+				string html = reader.ReadToEnd ();
+				reader.Close ();
+				
+				return html;
+
+			}
 			
 		}
 
+		
+		public override string DayEntryHTML
+		{
+			
+			get {
+			
+				string resource_path = NSBundle.MainBundle.ResourcePath;
+
+				string html_path = Path.Combine (resource_path, "HTML", "day-entry.html");
+				
+				StreamReader reader = new StreamReader (html_path);
+				string html = reader.ReadToEnd ();
+				reader.Close ();
+				
+				return html;
+				
+			}
+			
+		}
+		
+	
+		public override string EventEntryHTML
+		{
+			
+			get {
+			
+				string resource_path = NSBundle.MainBundle.ResourcePath;
+
+				string html_path = Path.Combine (resource_path, "HTML", "event-entry.html");
+				
+				StreamReader reader = new StreamReader (html_path);
+				string html = reader.ReadToEnd ();
+				reader.Close ();
+				
+				return html;
+				
+			}
+			
+		}
+		
 	}
 
 }
