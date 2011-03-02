@@ -384,8 +384,10 @@ namespace SparkleLib {
 							FetchRequests--;
 
 						}
-
+						
+						Watcher.EnableRaisingEvents = false;
 						Rebase ();
+						Watcher.EnableRaisingEvents = true;
 
 					}
 
@@ -446,7 +448,10 @@ namespace SparkleLib {
 
 					SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found.");
 					Fetch ();
+					
+					Watcher.EnableRaisingEvents = false;
 					Rebase ();
+					Watcher.EnableRaisingEvents = true;
 
 				}
 
@@ -479,9 +484,15 @@ namespace SparkleLib {
 						SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled.");
 
 						_IsBuffering = false;
-
-						HasChanged = false;
-						AddCommitAndPush ();
+						HasChanged   = false;
+						
+						while (Status.AnyDifferences) {
+							
+							Watcher.EnableRaisingEvents = false;
+							AddCommitAndPush ();
+							Watcher.EnableRaisingEvents = true;
+						
+						}
 
 					}
 
@@ -698,8 +709,6 @@ namespace SparkleLib {
 		// Merges the fetched changes
 		public void Rebase ()
 		{
-
-			Watcher.EnableRaisingEvents = false;
 			
 			if (Status.AnyDifferences) {
 				
@@ -767,8 +776,6 @@ namespace SparkleLib {
 				NewCommit (GetCommits (2) [0], LocalPath); // FIXME: GetCommits doesn't like 1
 				
 			SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes rebased.");
-			
-			Watcher.EnableRaisingEvents = true;
 
 		}
 
