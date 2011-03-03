@@ -771,7 +771,7 @@ namespace SparkleLib {
 			git.WaitForExit ();
 
 			_CurrentHash = Head.CurrentCommit.Hash;
-			Console.WriteLine ("!!!!" + LocalPath + ": " + GetCommits (1).Count);
+
 			if (NewCommit != null)
 				NewCommit (GetCommits (1) [0], LocalPath);
 				
