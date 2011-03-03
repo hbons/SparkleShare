@@ -51,7 +51,7 @@ namespace SparkleShare {
 			StatusIcon = new SparkleStatusIcon ();
 			
 			// Keep track of which event logs are open
-			SparkleUI.OpenLogs = new List <SparkleLog> ();
+			OpenLogs = new List <SparkleLog> ();
 
 			if (SparkleShare.Controller.FirstRun) {
 

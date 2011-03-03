@@ -26,6 +26,7 @@ namespace SparkleLib {
 		public string UserEmail;
 		public DateTime DateTime;
 		public string Hash;
+		public bool IsMerge;
 		
 		public List <string> Added;
 		public List <string> Deleted;

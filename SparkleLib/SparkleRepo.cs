@@ -771,7 +771,7 @@ namespace SparkleLib {
 			git.WaitForExit ();
 
 			_CurrentHash = Head.CurrentCommit.Hash;
-
+			Console.WriteLine ("!!!!" + LocalPath + ": " + GetCommits (1).Count);
 			if (NewCommit != null)
 				NewCommit (GetCommits (1) [0], LocalPath);
 				
@@ -976,12 +976,30 @@ namespace SparkleLib {
 
 
 			foreach (string log_entry in entries) {
+				
+				Regex regex;
+				bool is_merge_commit = false;
+				
+				if (log_entry.Contains ("\nMerge: ")) {
+				
+					regex = new Regex (@"commit ([a-z0-9]{40})\n" +
+					                          "Merge: .+ .+\n" +
+						                      "Author: (.+) <(.+)>\n" +
+						                      "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
+						                      "([0-9]{2}):([0-9]{2}):([0-9]{2}) \\+([0-9]{4})\n" +
+						                      "*");
+					
+					is_merge_commit = true;
 
-				Regex regex = new Regex (@"commit ([a-z0-9]{40})\n" +
-				                          "Author: (.+) <(.+)>\n" +
-				                          "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
-				                          "([0-9]{2}):([0-9]{2}):([0-9]{2}) \\+([0-9]{4})\n" +
-				                          "*");
+				} else {
+
+					regex = new Regex (@"commit ([a-z0-9]{40})\n" +
+					                          "Author: (.+) <(.+)>\n" +
+					                          "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
+					                          "([0-9]{2}):([0-9]{2}):([0-9]{2}) \\+([0-9]{4})\n" +
+					                          "*");
+
+				}
 				
 				Match match = regex.Match (log_entry);
 
@@ -989,9 +1007,10 @@ namespace SparkleLib {
 
 					SparkleCommit commit = new SparkleCommit ();
 					
-					commit.Hash = match.Groups [1].Value;
-					commit.UserName = match.Groups [2].Value;
-					commit.UserEmail = match.Groups [3].Value;
+					commit.Hash        = match.Groups [1].Value;
+					commit.UserName    = match.Groups [2].Value;
+					commit.UserEmail   = match.Groups [3].Value;
+					commit.IsMerge = is_merge_commit;
 
 					commit.DateTime = new DateTime (int.Parse (match.Groups [4].Value),
 						int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),

@@ -103,7 +103,7 @@ namespace SparkleShare {
 			}
 
 			
-			if (!hide_ui) {
+			if (Controller != null) {
 
 				UI = new SparkleUI ();
 				UI.Run ();
