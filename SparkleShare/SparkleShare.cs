@@ -83,27 +83,36 @@ namespace SparkleShare {
 
 			if (show_help)
 				ShowHelp (p);
+			
 
-
+			string controller_name;
 			switch (SparkleShare.Platform) {
 
 				case PlatformID.Unix:
 					SetProcessName ("sparkleshare");
-					//Controller = new SparkleLinController ();
+					controller_name = "Lin";
 				break;
 
 				case PlatformID.MacOSX:
-					Controller = new SparkleMacController ();
+					controller_name = "Mac";
+					
 				break;
 				
 				case PlatformID.Win32NT:
-					//Controller = new SparkleWinController ();
+					controller_name = "Win";
+				break;
+				
+				default:
+					controller_name = "Lin";
 				break;
 
 			}
 
 			
-			if (Controller != null) {
+			Controller = (SparkleController) Activator.CreateInstance (
+				Type.GetType ("SparkleShare.Sparkle" + controller_name + "Controller"));
+		
+			if (Controller != null && !hide_ui) {
 
 				UI = new SparkleUI ();
 				UI.Run ();
