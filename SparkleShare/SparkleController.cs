@@ -317,7 +317,9 @@ namespace SparkleShare {
 						}
 
 					}
-
+					
+					if (change_set.IsMerge)
+						event_entry += "<dt>Merged a branch</dt>";
 
 					if (change_set.Added.Count > 0) {
 
