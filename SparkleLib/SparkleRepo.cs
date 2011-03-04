@@ -958,18 +958,20 @@ namespace SparkleLib {
 		// Returns a list of latest commits
 		public List <SparkleCommit> GetCommits (int count)
 		{
-
+			
 			if (count < 1)
 				count = 30;
-
 			
 			List <SparkleCommit> commits = new List <SparkleCommit> ();
 
-			SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw --date=iso");
+			SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw  --date=iso");
 			git_log.Start ();
-			git_log.WaitForExit ();
 			
+			// Reading the standard output HAS to go before
+			// WaitForExit, or it will hang forever on output > 4096 bytes
 			string output = git_log.StandardOutput.ReadToEnd ();
+			git_log.WaitForExit ();
+
 			string [] lines = output.Split ("\n".ToCharArray ());
 						
 			List <string> entries = new List <string> ();
@@ -977,7 +979,7 @@ namespace SparkleLib {
 			int j = 0;
 			string entry = "", last_entry = "";
 			foreach (string line in lines) {
-				
+
 				if (line.StartsWith ("commit") && j > 0) {
 					
 					entries.Add (entry);
@@ -994,7 +996,7 @@ namespace SparkleLib {
 			
 			entries.Add (last_entry);
 
-
+			
 			foreach (string log_entry in entries) {
 				
 				Regex regex;
@@ -1038,10 +1040,11 @@ namespace SparkleLib {
 					    int.Parse (match.Groups [9].Value));
 					                    
 					string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
+					int change_count = 0;
 					foreach (string entry_line in entry_lines) {
 
 						if (entry_line.StartsWith (":")) {
-							
+														
 							string change_type = entry_line [37].ToString ();
 							string file_path   = entry_line.Substring (39);
 							
@@ -1059,6 +1062,18 @@ namespace SparkleLib {
 								
 							}
 							
+							change_count++;
+							
+							if (change_count > 50) {
+								
+								commit.Added.Clear ();
+								commit.Edited.Clear ();
+								commit.Deleted.Clear ();
+								
+								commit.IsFileDump = true;
+								break;
+								
+							}
 							
 						}
 							
