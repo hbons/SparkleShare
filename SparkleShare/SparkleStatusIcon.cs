@@ -226,7 +226,7 @@ namespace SparkleShare {
 			Menu.Add (new SeparatorMenuItem ());
 
 				// A menu item that takes the user to http://www.sparkleshare.org/
-				MenuItem about_item = new MenuItem (_("About"));
+				MenuItem about_item = new MenuItem (_("About SparkleShare"));
 
 				about_item.Activated += delegate {
 
