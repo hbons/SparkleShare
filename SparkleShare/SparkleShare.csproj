@@ -29,13 +29,10 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-      <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-      <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-      <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="System" />
     <Reference Include="Mono.Posix" />
@@ -49,17 +46,15 @@
     <Compile Include="SparkleUI.cs" />
     <Compile Include="SparkleWindow.cs" />
     <Compile Include="SparkleEntry.cs" />
-    <Compile Include="SparkleInvitation.cs" />
     <Compile Include="SparkleLink.cs" />
     <Compile Include="SparkleLog.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
     <Compile Include="SparkleInfobar.cs" />
+    <Compile Include="SparkleController.cs" />
+    <Compile Include="SparkleDialog.cs" />
+    <Compile Include="SparkleLinController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NotifySharp\NotifySharp.csproj">
-      <Project>{005CCA8E-DFBF-464A-B6DA-452C62D4589C}</Project>
-      <Name>NotifySharp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SparkleLib\SparkleLib.csproj">
       <Project>{2C914413-B31C-4362-93C7-1AE34F09112A}</Project>
       <Name>SparkleLib</Name>
