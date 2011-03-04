@@ -191,7 +191,7 @@ namespace SparkleShare {
 				}
 
 				// Opens the wizard to add a new remote folder
-				MenuItem sync_item = new MenuItem (_("Sync Remote Folder…"));
+				MenuItem sync_item = new MenuItem (_("Add Remote Folder…"));
 			
 				if (SparkleShare.Controller.FirstRun)
 					sync_item.Sensitive = false;
@@ -208,14 +208,18 @@ namespace SparkleShare {
 			Menu.Add (sync_item);
 			Menu.Add (new SeparatorMenuItem ());
 
-				// A checkbutton to toggle whether or not to show notifications
-				CheckMenuItem notify_item =	new CheckMenuItem (_("Show Notifications"));
+				MenuItem notify_item;
 								                             
 				if (SparkleShare.Controller.NotificationsEnabled)
-					notify_item.Active = true;
+					notify_item = new MenuItem (_("Turn Notifications Off"));
+				else
+					notify_item = new MenuItem (_("Turn Notifications On"));
 
-				notify_item.Toggled += delegate {
+				notify_item.Activated += delegate {
+				
 					SparkleShare.Controller.ToggleNotifications ();
+					CreateMenu ();
+				
 				};
 
 			Menu.Add (notify_item);
