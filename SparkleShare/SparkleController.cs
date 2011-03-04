@@ -905,7 +905,7 @@ namespace SparkleShare {
 					SparkleHelpers.DebugInfo ("Config", "Created public key  '" + key_file_name + ".pub'");
 					
 					File.Copy (key_file_path + ".pub",
-						Path.Combine (SparklePath, "Your key.txt"));
+						Path.Combine (SparklePath, UserName + "'s key.txt"));
 
 				};
 
