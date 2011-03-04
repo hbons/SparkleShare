@@ -59,7 +59,8 @@ namespace SparkleShare {
 
 			}
 
-
+			
+			// Parse the command line options
 			bool hide_ui   = false;
 			bool show_help = false;
 
@@ -84,7 +85,8 @@ namespace SparkleShare {
 			if (show_help)
 				ShowHelp (p);
 			
-
+			
+			// Load the right controller for the OS
 			string controller_name;
 			switch (SparkleShare.Platform) {
 
@@ -95,7 +97,6 @@ namespace SparkleShare {
 
 				case PlatformID.MacOSX:
 					controller_name = "Mac";
-					
 				break;
 				
 				case PlatformID.Win32NT:
@@ -108,7 +109,9 @@ namespace SparkleShare {
 
 			}
 
-			
+			controller_name="Lin";
+			// Initialize the controller this way so that
+			// there aren't any exceptions in the OS specific UI's
 			Controller = (SparkleController) Activator.CreateInstance (
 				Type.GetType ("SparkleShare.Sparkle" + controller_name + "Controller"));
 		
