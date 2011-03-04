@@ -996,7 +996,7 @@ namespace SparkleLib {
 			
 			entries.Add (last_entry);
 
-			
+			// TODO: Need to optimise for speed
 			foreach (string log_entry in entries) {
 				
 				Regex regex;
