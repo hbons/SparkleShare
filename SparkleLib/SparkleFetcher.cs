@@ -14,6 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
 using System;
 using System.IO;
 using System.Diagnostics;
@@ -153,7 +154,10 @@ namespace SparkleLib {
 				writer.WriteLine ("._*");
 				writer.WriteLine (".Spotlight-V100");
 				writer.WriteLine (".Trashes");
-				
+
+				// Mac OSX
+				writer.WriteLine ("*(Autosaved).graffle");
+			
 				// Windows
 				writer.WriteLine ("Thumbs.db");
 				writer.WriteLine ("Desktop.ini");
