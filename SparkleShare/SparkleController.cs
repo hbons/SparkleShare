@@ -290,77 +290,86 @@ namespace SparkleShare {
 
 					string event_entry = "<dl>";
 					
-					if (change_set.IsMerge)
+					if (change_set.IsMerge) {
+						
 						event_entry += "<dt>Merged a branch</dt>";
+					
+					} else if (change_set.IsFileDump) {
+						
+						event_entry += "<dt>Dumped a lot of files</dt>";
+						
+					} else {
 
-					if (change_set.Edited.Count > 0) {
-
-						event_entry += "<dt>Edited</dt>";
-
-						foreach (string file_path in change_set.Edited) {
-							
-							string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-								name, file_path);
-							
-							if (File.Exists (absolute_file_path)) {
-
-								event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
-
-							} else {
-
-								event_entry += "<dd>" + file_path + "</dd>";
-
-							}
-
-						}
-
-					}
-
-					if (change_set.Added.Count > 0) {
-
-						event_entry += "<dt>Added</dt>";
-
-						foreach (string file_path in change_set.Added) {
-							string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-								name, file_path);
-							
-							if (File.Exists (absolute_file_path)) {
-
-								event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+						if (change_set.Edited.Count > 0) {
+	
+							event_entry += "<dt>Edited</dt>";
+	
+							foreach (string file_path in change_set.Edited) {
 								
-							} else {
-
-								event_entry += "<dd>" + file_path + "</dd>";
-
-							}
-
-						}
-
-					}
-
-					if (change_set.Deleted.Count > 0) {
-
-						event_entry += "<dt>Deleted</dt>";
-
-						foreach (string file_path in change_set.Deleted) {
-
-							string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-								name, file_path);
-							
-							if (File.Exists (absolute_file_path)) {
-
-								event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+								string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+									name, file_path);
 								
-							} else {
-
-								event_entry += "<dd>" + file_path + "</dd>";
-
+								if (File.Exists (absolute_file_path)) {
+	
+									event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+	
+								} else {
+	
+									event_entry += "<dd>" + file_path + "</dd>";
+	
+								}
+	
 							}
-
+	
 						}
-
+	
+						if (change_set.Added.Count > 0) {
+	
+							event_entry += "<dt>Added</dt>";
+	
+							foreach (string file_path in change_set.Added) {
+								string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+									name, file_path);
+								
+								if (File.Exists (absolute_file_path)) {
+	
+									event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+									
+								} else {
+	
+									event_entry += "<dd>" + file_path + "</dd>";
+	
+								}
+	
+							}
+	
+						}
+	
+						if (change_set.Deleted.Count > 0) {
+	
+							event_entry += "<dt>Deleted</dt>";
+	
+							foreach (string file_path in change_set.Deleted) {
+	
+								string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+									name, file_path);
+								
+								if (File.Exists (absolute_file_path)) {
+	
+									event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+									
+								} else {
+	
+									event_entry += "<dd>" + file_path + "</dd>";
+	
+								}
+	
+							}
+	
+						}
+						
 					}
-
+						
 					event_entry += "</dl>";
 					
 					event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
