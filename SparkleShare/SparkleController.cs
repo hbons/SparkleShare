@@ -219,21 +219,13 @@ namespace SparkleShare {
 			string path = Path.Combine (SparklePaths.SparklePath, name);
 			int log_size = 30;
 			
-			List <SparkleCommit> list = new List <SparkleCommit> ();
-			
 			foreach (SparkleRepo repo in Repositories) {
 			
-				if (repo.LocalPath.Equals (path)) {
-				
-					foreach (SparkleCommit commit in repo.GetCommits (log_size))
-						list.Add (commit);
-					
-					return list;
-					
-				}
-				
-			}
+				if (repo.LocalPath.Equals (path))			
+					return repo.GetCommits (log_size);
 			
+			}
+
 			return null;
 			
 		}
@@ -294,6 +286,9 @@ namespace SparkleShare {
 				foreach (SparkleCommit change_set in activity_day) {
 
 					string event_entry = "<dl>";
+					
+					if (change_set.IsMerge)
+						event_entry += "<dt>Merged a branch</dt>";
 
 					if (change_set.Edited.Count > 0) {
 
@@ -317,9 +312,6 @@ namespace SparkleShare {
 						}
 
 					}
-					
-					if (change_set.IsMerge)
-						event_entry += "<dt>Merged a branch</dt>";
 
 					if (change_set.Added.Count > 0) {
 
