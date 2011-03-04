@@ -45,7 +45,7 @@ namespace SparkleLib {
 			// Don't worry, we only use this server as a backup if you 
 			// don't have your own. All data needed to connect is hashed and
 			// we don't store any personal information ever.
-		//	Server = "204.62.14.135";
+			Server = "204.62.14.135";
 
 			if (!user_email.Equals ("") && user_email != null)
 				Nick = GetSHA1 (folder_name + user_email + "sparkles");
@@ -53,10 +53,7 @@ namespace SparkleLib {
 				Nick = GetSHA1 (DateTime.Now.ToString () + "sparkles");
 			
 			Nick    = "s" + Nick.Substring (0, 7);
-		//	Channel = "#" + GetSHA1 (server + folder_name);
-			
-			Server = "irc.gnome.org";
-			Channel = "#sparkletest";
+			Channel = "#" + GetSHA1 (server + folder_name);
 			
 			Client = new IrcClient () {
 				PingTimeout          = 180,
