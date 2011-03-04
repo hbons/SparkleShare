@@ -486,7 +486,7 @@ namespace SparkleLib {
 						_IsBuffering = false;
 						HasChanged   = false;
 						
-						while (Status.AnyDifferences) {
+						while (AnyDifferences) {
 							
 							Watcher.EnableRaisingEvents = false;
 							AddCommitAndPush ();
@@ -554,7 +554,7 @@ namespace SparkleLib {
 				LocalTimer.Stop ();
 				RemoteTimer.Stop ();
 	
-				if (Status.AnyDifferences) {
+				if (AnyDifferences) {
 					
 					Add ();
 					
@@ -579,6 +579,26 @@ namespace SparkleLib {
 
 			}
 
+		}
+		
+		
+		public bool AnyDifferences {
+		
+			get {
+			
+				SparkleGit git = new SparkleGit (LocalPath, "status --porcelain");
+				git.Start ();
+				git.WaitForExit ();
+				
+				string output = git.StandardOutput.ReadToEnd ().Trim ();
+				
+				if (output.Length > 0)
+					return true;
+				else
+					return false;
+				
+			}
+			
 		}
 
 
@@ -624,7 +644,7 @@ namespace SparkleLib {
 		new public void Commit (string message)
 		{
 
-			if (!Status.AnyDifferences)
+			if (!AnyDifferences)
 				return;
 
 			base.Commit (message);
@@ -710,7 +730,7 @@ namespace SparkleLib {
 		public void Rebase ()
 		{
 			
-			if (Status.AnyDifferences) {
+			if (AnyDifferences) {
 				
 				Add ();
 				

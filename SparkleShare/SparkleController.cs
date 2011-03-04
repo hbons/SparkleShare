@@ -241,6 +241,9 @@ namespace SparkleShare {
 		
 			List <SparkleCommit> commits     = GetLog (name);
 			List <ActivityDay> activity_days = new List <ActivityDay> ();
+			
+			if (commits.Count == 0)
+				return null;
 
 			foreach (SparkleCommit commit in commits) {
 
