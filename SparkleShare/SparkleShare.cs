@@ -109,7 +109,7 @@ namespace SparkleShare {
 
 			}
 
-			controller_name="Lin";
+
 			// Initialize the controller this way so that
 			// there aren't any exceptions in the OS specific UI's
 			Controller = (SparkleController) Activator.CreateInstance (

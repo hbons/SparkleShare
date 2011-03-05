@@ -917,13 +917,16 @@ namespace SparkleShare {
 		private void DisableHostKeyCheckingForHost (string host)
 		{
 
-			string ssh_config_file_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".ssh", "config");
-			string ssh_config = "Host " + host + "\n\tStrictHostKeyChecking no";
+			string ssh_config_file_path = SparkleHelpers.CombineMore (
+				SparklePaths.HomePath, ".ssh", "config");
+			
+			string ssh_config = Environment.NewLine + "Host " + host + 
+				                Environment.NewLine + "\tStrictHostKeyChecking no";
 
 			if (File.Exists (ssh_config_file_path)) {
 
 				TextWriter writer = File.AppendText (ssh_config_file_path);
-				writer.WriteLine ("\n" + ssh_config);
+				writer.WriteLine (ssh_config);
 				writer.Close ();
 
 			} else {
@@ -940,11 +943,11 @@ namespace SparkleShare {
 		private void EnableHostKeyCheckingForHost (string host)
 		{
 
-			string ssh_config_file_path = SparkleHelpers.CombineMore
-				(SparklePaths.HomePath, ".ssh", "config");
+			string ssh_config_file_path = SparkleHelpers.CombineMore (
+				SparklePaths.HomePath, ".ssh", "config");
 			
-			string ssh_config = "Host " + host + "\n" +
-			                    "\tStrictHostKeyChecking no";
+			string ssh_config = Environment.NewLine + "Host " + host + 
+				                Environment.NewLine + "\tStrictHostKeyChecking no";
 
 			if (File.Exists (ssh_config_file_path)) {
 
@@ -952,10 +955,11 @@ namespace SparkleShare {
 				string current_ssh_config = reader.ReadToEnd ();
 				reader.Close ();
   				
-   				current_ssh_config = current_ssh_config.Remove (current_ssh_config.IndexOf (ssh_config),
-   					ssh_config.Length);
+   				current_ssh_config = current_ssh_config.Remove (
+					current_ssh_config.IndexOf (ssh_config), ssh_config.Length);
 
-				if (current_ssh_config.Trim ().Equals ("")) {
+				bool has_some_config = new Regex (@"[a-z]").IsMatch (current_ssh_config);
+				if (!has_some_config) {
 	
 					File.Delete (ssh_config_file_path);
 				
@@ -964,6 +968,8 @@ namespace SparkleShare {
 					TextWriter writer = new StreamWriter (ssh_config_file_path);
 					writer.WriteLine (current_ssh_config);
 					writer.Close ();
+					
+					//Syscall.chmod (ssh_config_file_path, FilePermissions.S_IRWXU);
 					
 				}
 
