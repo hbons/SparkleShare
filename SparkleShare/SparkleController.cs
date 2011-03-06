@@ -936,6 +936,9 @@ namespace SparkleShare {
 				writer.Close ();
 
 			}
+			
+			UnixFileInfo file_info = new UnixFileInfo (ssh_config_file_path);
+			file_info.Create (FileAccessPermissions.UserRead | FileAccessPermissions.UserWrite);
 
 		}
 		
@@ -958,8 +961,8 @@ namespace SparkleShare {
    				current_ssh_config = current_ssh_config.Remove (
 					current_ssh_config.IndexOf (ssh_config), ssh_config.Length);
 
-				bool has_some_config = new Regex (@"[a-z]").IsMatch (current_ssh_config);
-				if (!has_some_config) {
+				bool has_some_ssh_config = new Regex (@"[a-z]").IsMatch (current_ssh_config);
+				if (!has_some_ssh_config) {
 	
 					File.Delete (ssh_config_file_path);
 				
@@ -969,7 +972,8 @@ namespace SparkleShare {
 					writer.WriteLine (current_ssh_config);
 					writer.Close ();
 					
-					//Syscall.chmod (ssh_config_file_path, FilePermissions.S_IRWXU);
+					UnixFileInfo file_info = new UnixFileInfo (ssh_config_file_path);
+					file_info.Create (FileAccessPermissions.UserRead | FileAccessPermissions.UserWrite);
 					
 				}
 
