@@ -972,7 +972,7 @@ namespace SparkleShare {
 				bool has_some_ssh_config = new Regex (@"[a-z]").IsMatch (current_ssh_config);
 				if (!has_some_ssh_config) {
 
-//					File.Delete (ssh_config_file_path);
+					File.Delete (ssh_config_file_path);
 
 				} else {
 
