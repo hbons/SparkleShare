@@ -937,8 +937,16 @@ namespace SparkleShare {
 
 			}
 			
-			UnixFileInfo file_info = new UnixFileInfo (ssh_config_file_path);
-			file_info.Create (FileAccessPermissions.UserRead | FileAccessPermissions.UserWrite);
+			Process process = new Process ();
+			process.StartInfo.FileName         = "chmod";
+			process.StartInfo.Arguments        = "600 " + ssh_config_file_path;
+			process.StartInfo.UseShellExecute  = false;
+			process.Start ();
+			process.WaitForExit ();
+			
+			// FIXME: Doesn't work and destroys file content
+			//UnixFileInfo file_info = new UnixFileInfo (ssh_config_file_path);
+			//file_info.Create (FileAccessPermissions.UserRead | FileAccessPermissions.UserWrite);
 
 		}
 		
@@ -948,32 +956,40 @@ namespace SparkleShare {
 
 			string ssh_config_file_path = SparkleHelpers.CombineMore (
 				SparklePaths.HomePath, ".ssh", "config");
-			
+
 			string ssh_config = Environment.NewLine + "Host " + host + 
-				                Environment.NewLine + "\tStrictHostKeyChecking no";
+			                    Environment.NewLine + "\tStrictHostKeyChecking no";
 
 			if (File.Exists (ssh_config_file_path)) {
 
 				StreamReader reader = new StreamReader (ssh_config_file_path);
 				string current_ssh_config = reader.ReadToEnd ();
 				reader.Close ();
-  				
-   				current_ssh_config = current_ssh_config.Remove (
+
+				current_ssh_config = current_ssh_config.Remove (
 					current_ssh_config.IndexOf (ssh_config), ssh_config.Length);
 
 				bool has_some_ssh_config = new Regex (@"[a-z]").IsMatch (current_ssh_config);
 				if (!has_some_ssh_config) {
-	
-					File.Delete (ssh_config_file_path);
-				
+
+//					File.Delete (ssh_config_file_path);
+
 				} else {
-	
+
 					TextWriter writer = new StreamWriter (ssh_config_file_path);
 					writer.WriteLine (current_ssh_config);
 					writer.Close ();
 					
-					UnixFileInfo file_info = new UnixFileInfo (ssh_config_file_path);
-					file_info.Create (FileAccessPermissions.UserRead | FileAccessPermissions.UserWrite);
+					Process process = new Process ();
+					process.StartInfo.FileName         = "chmod";
+					process.StartInfo.Arguments        = "600 " + ssh_config_file_path;
+					process.StartInfo.UseShellExecute  = false;
+					process.Start ();
+					process.WaitForExit ();
+													
+					//FIXME: Doesn't work and destroys file content
+					//UnixFileInfo file_info = new UnixFileInfo (ssh_config_file_path);
+					//file_info.Create (FileAccessPermissions.UserRead | FileAccessPermissions.UserWrite);
 					
 				}
 
