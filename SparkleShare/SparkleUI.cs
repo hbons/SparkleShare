@@ -157,8 +157,7 @@ namespace SparkleShare {
 					string title   = _("Ouch! Mid-air collision!");
 					string subtext = _("Don't worry, SparkleShare made a copy of each conflicting file.");
 
-					SparkleBubble bubble = new SparkleBubble(title, subtext);
-//					bubble.Show ();
+					new SparkleBubble(title, subtext).Show ();
 
 				});
 			};
