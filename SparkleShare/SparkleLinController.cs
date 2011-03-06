@@ -15,7 +15,6 @@
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Mono.Unix;
-using Mono.Unix.Native;
 using SparkleLib;
 using System;
 using System.Collections.Generic;
@@ -60,7 +59,8 @@ namespace SparkleShare {
 					writer.Close ();
 
 					// Give the launcher the right permissions so it can be launched by the user
-					Syscall.chmod (desktopfile_path, FilePermissions.S_IRWXU);
+					UnixFileInfo file_info = new UnixFileInfo (desktopfile_path);
+					file_info.Create (FileAccessPermissions.UserReadWriteExecute);
 
 					SparkleHelpers.DebugInfo ("Controller", "Created: " + desktopfile_path);
 
@@ -80,26 +80,26 @@ namespace SparkleShare {
 			if (!File.Exists (desktopfile_path)) {
 
 				if (!Directory.Exists (apps_path))
-
 					Directory.CreateDirectory (apps_path);
 
-					TextWriter writer = new StreamWriter (desktopfile_path);
-					writer.WriteLine ("[Desktop Entry]\n" +
-					                  "Type=Application\n" +
-					                  "Name=SparkleShare\n" +
-					                  "Comment=Share documents\n" +
-					                  "Exec=sparkleshare start\n" +
-					                  "Icon=folder-sparkleshare\n" +
-					                  "Terminal=false\n" +
-					                  "Categories=Network;");
-					writer.Close ();
+				TextWriter writer = new StreamWriter (desktopfile_path);
+				writer.WriteLine ("[Desktop Entry]\n" +
+				                  "Type=Application\n" +
+				                  "Name=SparkleShare\n" +
+				                  "Comment=Share documents\n" +
+				                  "Exec=sparkleshare start\n" +
+				                  "Icon=folder-sparkleshare\n" +
+				                  "Terminal=false\n" +
+				                  "Categories=Network;");
+				writer.Close ();
 
-					// Give the launcher the right permissions so it can be launched by the user
-					Syscall.chmod (desktopfile_path, FilePermissions.S_IRWXU);
+				// Give the launcher the right permissions so it can be launched by the user
+				UnixFileInfo file_info = new UnixFileInfo (desktopfile_path);
+				file_info.Create (FileAccessPermissions.UserReadWriteExecute);
 
-					SparkleHelpers.DebugInfo ("Controller", "Created '" + desktopfile_path + "'");
+				SparkleHelpers.DebugInfo ("Controller", "Created '" + desktopfile_path + "'");
 
-				}
+			}
 
 		}
 
