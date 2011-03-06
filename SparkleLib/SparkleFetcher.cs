@@ -37,6 +37,7 @@ namespace SparkleLib {
 		private string TargetFolder;
 		private string RemoteOriginUrl;
 
+		private string Command_Error;
 
 		public SparkleFetcher (string url, string folder)
 		{
@@ -70,12 +71,16 @@ namespace SparkleLib {
 			process.StartInfo.Arguments = "clone --progress " +
 			                              "\"" + RemoteOriginUrl + "\" " + "\"" + TargetFolder + "\"";
 
+			SparkleHelpers.DebugInfo ("Cmd", "git clone --progress " +
+			                              "\"" + RemoteOriginUrl + "\" " + "\"" + TargetFolder + "\"");
+
 			process.Exited += delegate {
 
 				SparkleHelpers.DebugInfo ("Git", "Exit code " + process.ExitCode.ToString ());
 
 				if (process.ExitCode != 0) {
 					
+					SparkleHelpers.DebugInfo ("Git", "Error: " + Command_Error);
 					SparkleHelpers.DebugInfo ("Git", "[" + TargetFolder + "] Cloning failed");
 
 					if (CloningFailed != null)
@@ -96,8 +101,8 @@ namespace SparkleLib {
 			};
 
 			process.Start ();
-			process.BeginErrorReadLine ();
-
+			Command_Error = process.StandardError.ReadToEnd ();
+			process.WaitForExit ();
 		}
 
 
