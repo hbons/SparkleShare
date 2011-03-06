@@ -32,11 +32,11 @@ namespace SparkleShare {
 			Timeout  = 4500;
 //			Urgency  = Urgency.Low;
 
-//			AttachToStatusIcon (SparkleUI.StatusIcon);
+			//Show ();
 
 		}
 
-
+		public void Show () {}
 		// Checks whether the system allows adding buttons to a notification,
 		// prevents error messages in Ubuntu.
 //		new public void AddAction (string action, string label, ActionHandler handler)
