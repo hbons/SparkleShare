@@ -126,6 +126,7 @@ namespace SparkleShare {
 			html = html.Replace ("<!-- $small-color -->", "#ddd");
 			html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
 			html = html.Replace ("<!-- $a-color -->", "#0085cf");
+            html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
 			html = html.Replace ("<!-- $no-buddy-icon-background-image -->",
 				"file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "avatar-default.png"));
 
