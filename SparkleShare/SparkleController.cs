@@ -937,16 +937,9 @@ namespace SparkleShare {
 
 			}
 			
-			Process process = new Process ();
-			process.StartInfo.FileName         = "chmod";
-			process.StartInfo.Arguments        = "600 " + ssh_config_file_path;
-			process.StartInfo.UseShellExecute  = false;
-			process.Start ();
-			process.WaitForExit ();
-			
-			// FIXME: Doesn't work and destroys file content
-			//UnixFileInfo file_info = new UnixFileInfo (ssh_config_file_path);
-			//file_info.Create (FileAccessPermissions.UserRead | FileAccessPermissions.UserWrite);
+			UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
+			file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
+			                                   FileAccessPermissions.UserWrite);
 
 		}
 		
@@ -980,16 +973,9 @@ namespace SparkleShare {
 					writer.WriteLine (current_ssh_config);
 					writer.Close ();
 					
-					Process process = new Process ();
-					process.StartInfo.FileName         = "chmod";
-					process.StartInfo.Arguments        = "600 " + ssh_config_file_path;
-					process.StartInfo.UseShellExecute  = false;
-					process.Start ();
-					process.WaitForExit ();
-													
-					//FIXME: Doesn't work and destroys file content
-					//UnixFileInfo file_info = new UnixFileInfo (ssh_config_file_path);
-					//file_info.Create (FileAccessPermissions.UserRead | FileAccessPermissions.UserWrite);
+					UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
+					file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
+					                                   FileAccessPermissions.UserWrite);
 					
 				}
 
