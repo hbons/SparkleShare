@@ -51,7 +51,7 @@ namespace SparkleShare {
 			BorderWidth = 0;
 			
 			// TRANSLATORS: {0} is a folder name, and {1} is a server address
-			Title = String.Format(_("Recent Events in ‘{0}’"), name);
+			Title = String.Format(_("Events in ‘{0}’"), name);
 			IconName = "folder-sparkleshare";
 
 			DeleteEvent += delegate {
@@ -143,7 +143,7 @@ namespace SparkleShare {
 		public void Close ()
 		{
 
-			Destroy ();
+			Destroy (); // TODO: keep logs in memory like Mac UI
 
 		}
 
@@ -153,6 +153,7 @@ namespace SparkleShare {
 
 			Application.Invoke (delegate {
 
+                // TODO Only update the html instead of the whole widget
 				LayoutVertical.Remove (ScrolledWindow);
 				ScrolledWindow = CreateEventLog ();
 				LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
@@ -174,7 +175,7 @@ namespace SparkleShare {
 				// Get commits from the repository
 				if (repo.LocalPath.Equals (LocalPath)) {
 
-					commits = repo.GetCommits (25);
+					commits = repo.GetCommits (30);
 					break;
 
 				}
