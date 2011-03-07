@@ -171,7 +171,9 @@ namespace SparkleShare {
 
 //						if (repo.HasUnsyncedChanges)
 //							folder_action.IconName = "dialog-error";
-
+					
+						// TODO Open each window with a little position offset
+						// so they stack nicely
 						folder_action.Activated += OpenEventLogDelegate (path);
 
 						MenuItem menu_item = (MenuItem) folder_action.CreateMenuItem ();
