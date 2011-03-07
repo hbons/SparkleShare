@@ -95,7 +95,7 @@ namespace SparkleShare {
 
 				// Give the launcher the right permissions so it can be launched by the user
 				UnixFileInfo file_info = new UnixFileInfo (desktopfile_path);
-				file_info.Create (FileAccessPermissions.UserReadWriteExecute);
+				file_info.FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute;
 
 				SparkleHelpers.DebugInfo ("Controller", "Created '" + desktopfile_path + "'");
 
