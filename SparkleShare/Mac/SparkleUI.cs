@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Timers;
+
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
@@ -28,35 +29,27 @@ using MonoMac.WebKit;
 namespace SparkleShare {
 
 	public partial class AppDelegate : NSApplicationDelegate {
-		
-		public override void WillBecomeActive (NSNotification notification)
-		{
-		
-			SparkleUI.NewEvents = 0;
-			NSApplication.SharedApplication.DockTile.BadgeLabel = null;
-			
-		}
-		
+
 	}
 
-	
+
 	public class SparkleUI : AppDelegate
 	{
-	
+
 		public static SparkleStatusIcon StatusIcon;
 		public static List <SparkleLog> OpenLogs;
 		public static int NewEvents;
 		public static SparkleIntro Intro;
 		public static NSFont Font;
+        public SparkleAbout About;
 
-		
 		public SparkleUI ()
 		{
-			
+
 			NSApplication.Init ();
 			
 			SetSparkleIcon ();
-			
+
 			// TODO: Getting crashes when I remove this
 			NSApplication.SharedApplication.ApplicationIconImage
 				= NSImage.ImageNamed ("sparkleshare.icns");
@@ -64,17 +57,18 @@ namespace SparkleShare {
 			
 			Font = NSFontManager.SharedFontManager.FontWithFamily
 				("Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
-			
+
 			
 			OpenLogs   = new List <SparkleLog> ();
 			StatusIcon = new SparkleStatusIcon ();
-			
+
 			NewEvents = 0;
-			
+
+
 			SparkleShare.Controller.NotificationRaised += delegate {
-				
+
 				InvokeOnMainThread (delegate {
-				
+
 					NewEvents++;
 					NSApplication.SharedApplication.DockTile.BadgeLabel = NewEvents.ToString ();
 					
@@ -124,7 +118,7 @@ namespace SparkleShare {
 		
 		public void SetSparkleIcon ()
 		{
-		
+
 			string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
 				"sparkleshare-mac.icns");
 
@@ -132,17 +126,34 @@ namespace SparkleShare {
 						
 			NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon,
 				SparkleShare.Controller.SparklePath, 0);
-			
+
 		}
-	
-		
+
+
 		public void Run ()
 		{
-			
-			NSApplication.Main (new string [0]);
-			
+
+            NSApplication.Main (new string [0]);
+
 		}
-		
+
+
+        public override void WillBecomeActive (NSNotification notification)
+        {
+
+            NewEvents = 0;
+            NSApplication.SharedApplication.DockTile.BadgeLabel = null;
+
+        }
+
+        public override void OrderFrontStandardAboutPanel (NSObject sender)
+        {
+
+            // FIXME: Doesn't work
+            About = new SparkleAbout ();
+
+        }
+
 	}
 
 }
