@@ -17,12 +17,12 @@
 
 using System;
 using System.Drawing;
+using System.IO;
+
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
 using MonoMac.WebKit;
-
-using System.IO;
 
 namespace SparkleShare {
 

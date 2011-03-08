@@ -15,17 +15,18 @@
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-using GitSharp;
-using GitSharp.Commands;
-using GitSharp.Core.Transport;
-using Meebey.SmartIrc4net;
-using Mono.Unix;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Timers;
+
+using GitSharp;
+using GitSharp.Commands;
+using GitSharp.Core.Transport;
+using Meebey.SmartIrc4net;
+using Mono.Unix;
 
 namespace SparkleLib {
 
