@@ -16,7 +16,11 @@ start() {
 
   echo -n "Starting SparkleShare... "
   mkdir -p /tmp/sparkleshare/
-  if [ -n "$SSH_AGENT_PID" ]; then
+
+  # Use a new ssh-agent if the user doesn't have any unlocked keys added
+  # already. This prevents password prompts of various kinds from appearing.
+  ssh-add -l > /dev/null
+  if [ $? == 0 ]; then
     mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
   else
     ssh-agent mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
@@ -60,4 +64,3 @@ case $1 in
     echo "Usage: sparkleshare {start|stop|restart|help}"
     ;;
 esac
-
