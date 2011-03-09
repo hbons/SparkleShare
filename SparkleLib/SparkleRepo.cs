@@ -840,7 +840,8 @@ namespace SparkleLib {
 					if (PushingFailed != null)
 					    PushingFailed (this, args);
 					
-					CheckForChanges ();
+					CheckForRemoteChanges ();
+					Push ();
 
 				} else {
 
