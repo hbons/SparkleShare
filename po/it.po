@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-14 06:37+0000\n"
 "PO-Revision-Date: 2010-08-16 16:34+0000\n"
-"Last-Translator: Lapo Calamandrei <calamandrei@gmail.com>\n"
+"Last-Translator: Massimo Gengarelli <gengarel@cs.unibo.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,12 +13,12 @@ msgstr ""
 
 #: ../SparkleDiff/SparkleDiff.cs:78 ../SparkleShare/SparkleShare.cs:58
 msgid "Git wasn't found."
-msgstr "Git Non trovato"
+msgstr "Git non trovato"
 
 #: ../SparkleDiff/SparkleDiff.cs:79 ../SparkleShare/SparkleShare.cs:59
 #, fuzzy
 msgid "You can get Git from http://git-scm.com/."
-msgstr "È possibile ottenere dal Git http://git-scm.com/."
+msgstr "È possibile ottenere Git da http://git-scm.com/."
 
 #: ../SparkleDiff/SparkleDiff.cs:87 ../SparkleShare/SparkleShare.cs:71
 #, fuzzy
@@ -27,7 +27,7 @@ msgstr "Siamo spiacenti, non è possibile eseguire SparkleShare con queste autor
 
 #: ../SparkleDiff/SparkleDiff.cs:88 ../SparkleShare/SparkleShare.cs:72
 msgid "Things would go utterly wrong."
-msgstr "Le cose stanno andando male"
+msgstr "Le cose potrebbero andare estremamente male."
 
 #: ../SparkleDiff/SparkleDiff.cs:162
 #, fuzzy
@@ -81,12 +81,12 @@ msgstr "(0) a (1)"
 #: ../SparkleDiff/SparkleDiffWindow.cs:93
 #, fuzzy
 msgid "ddd MMM d, yyyy"
-msgstr "ddd d MMM, aaaa"
+msgstr "dddd MMM, aaaa"
 
 #: ../SparkleDiff/SparkleDiffWindow.cs:94
 #, fuzzy
 msgid "H:mm"
-msgstr "H: mm"
+msgstr "H:mm"
 
 #: ../SparkleLib/SparkleOptions.cs:486
 msgid "OptionName"
@@ -153,7 +153,7 @@ msgstr "Dov'è la tua cartella remota?"
 #: ../SparkleShare/SparkleIntro.cs:175
 #, fuzzy
 msgid "address-to-server.com"
-msgstr "ssh: / / indirizzo-del-mio-server /"
+msgstr "indirizzo-del-server.com"
 
 #: ../SparkleShare/SparkleIntro.cs:180
 #, fuzzy
@@ -167,7 +167,7 @@ msgstr "Hosting gratuito per Libero e Open Source progetti software."
 
 #: ../SparkleShare/SparkleIntro.cs:188
 msgid "Also has paid accounts for extra private space and bandwidth."
-msgstr "Ho un account a pagamento per una maggiore larghezza di banda e spazio privato."
+msgstr "Ha anche account a pagamento per una maggiore larghezza di banda e spazio privato."
 
 #: ../SparkleShare/SparkleIntro.cs:196
 #, fuzzy
@@ -262,7 +262,7 @@ msgstr "Questo può richiedere del tempo. \\ N"
 #: ../SparkleShare/SparkleIntro.cs:491
 #: ../SparkleShare/SparkleInvitation.cs:373
 msgid "You sure it’s not coffee o-clock?"
-msgstr "Sei sicuro che non è tempo per un caffè "
+msgstr "Sei sicuro che non sia l'ora di un caffè?"
 
 #: ../SparkleShare/SparkleIntro.cs:541
 msgid "SparkleShare is ready to go!"
@@ -383,7 +383,7 @@ msgstr "SparkleShare sincronizza automaticamente i repository Git nella"
 
 #: ../SparkleShare/SparkleShare.cs:122
 msgid "the ~/SparkleShare folder with their remote origins."
-msgstr "cartella ~ / SparkleShare con le loro  origini."
+msgstr "cartella ~/.SparkleShare con le loro origini."
 
 #: ../SparkleShare/SparkleShare.cs:124
 #, fuzzy
@@ -448,7 +448,7 @@ msgstr "Ouch! Collisione a mezz'aria!"
 #: ../SparkleShare/SparkleUI.cs:339
 #, fuzzy
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
-msgstr "Non ti preoccupare, SparkleShare fatto una copia di ogni file in conflitto."
+msgstr "Non ti preoccupare, SparkleShare ha fatto una copia di ogni file in conflitto."
 
 #: ../SparkleShare/SparkleUI.cs:472
 msgid "Hold your ponies!"
@@ -456,7 +456,7 @@ msgstr "Restate Calmi!"
 
 #: ../SparkleShare/SparkleUI.cs:473
 msgid "SparkleShare is known to be insanely fast with pictures of unicorns. Please make sure your internets are upgraded to the latest version to avoid any problems."
-msgstr "SparkleShare è conosciuto per essere follemente veloce con le immagini di unicorni. Assicurati che la tua internet sia aggiornata alla versione più recente di evitare eventuali problemi."
+msgstr "SparkleShare è conosciuto per essere follemente veloce con le immagini di unicorni. Assicurati che la tua internet sia aggiornata alla versione più recente per evitare eventuali problemi."
 
 #~ msgid "a second ago"
 #~ msgid_plural "{0} seconds ago"
