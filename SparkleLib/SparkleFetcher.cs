@@ -107,37 +107,34 @@ namespace SparkleLib {
 		}
 
 
-		// Install the user's name and email into
+		// Install the user's name and email and some config into
 		// the newly cloned repository
 		private void InstallConfiguration ()
 		{
 
-			string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
+            string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
 
-			if (File.Exists (global_config_file_path)) {
+            if (File.Exists (global_config_file_path)) {
 
-				StreamReader reader = new StreamReader (global_config_file_path);
-				string user_info = reader.ReadToEnd ();
-				reader.Close ();
+                StreamReader reader = new StreamReader (global_config_file_path);
+                string user_info = reader.ReadToEnd ();
+                reader.Close ();
 
-				string repo_config_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "config");
+                string repo_config_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "config");
 
-				TextWriter writer = File.AppendText (repo_config_file_path);
+                string config = String.Join ("\n", File.ReadAllLines (repo_config_file_path));
+                config = config.Replace ("ignorecase = true", "ignorecase = false");
+                config += Environment.NewLine + user_info;
 
-                    // User info
-                    writer.WriteLine (user_info);
-    
-                    // Config option to enable case sensitivity
-                    writer.WriteLine ("[core]");
-                    writer.WriteLine ("\tignorecase = false");
-
+                TextWriter writer = new StreamWriter (repo_config_file_path);
+                writer.WriteLine (config);
                 writer.Close ();
 
-				SparkleHelpers.DebugInfo ("Config", "Added configuration to '" + repo_config_file_path + "'");
+                SparkleHelpers.DebugInfo ("Config", "Added configuration to '" + repo_config_file_path + "'");
 
-			}
+            }
 
-		}
+        }
 
 
 		// Add a .gitignore file to the repo
