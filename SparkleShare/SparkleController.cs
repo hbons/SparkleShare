@@ -138,7 +138,7 @@ namespace SparkleShare {
 					if (OnInvitation != null)
 						OnInvitation (server, folder, token);
 
-				} else if (Directory.Exists (Path.Combine (args.FullPath, ".git"))) {
+				} else if (SparkleRepo.IsRepo (args.FullPath)) {
 
 					AddRepository (args.FullPath);
 
@@ -509,7 +509,7 @@ namespace SparkleShare {
 		{
 		
 			// Check if the folder is a Git repository
-			if (!Directory.Exists (SparkleHelpers.CombineMore (folder_path, ".git")))
+			if (!SparkleRepo.IsRepo (folder_path))
 				return;
 
 			SparkleRepo repo = new SparkleRepo (folder_path);
