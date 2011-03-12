@@ -1153,6 +1153,13 @@ namespace SparkleLib {
 		}
 
 
+        public static bool IsRepo (string path) {
+
+            return System.IO.Directory.Exists (Path.Combine (path, ".git"));
+
+        }
+
+
 		// Disposes all resourses of this object
 		new public void Dispose ()
 		{
