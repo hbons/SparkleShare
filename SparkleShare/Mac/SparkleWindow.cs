@@ -70,7 +70,7 @@ namespace SparkleShare {
 
 			
 			HeaderTextField = new NSTextField () {
-				Frame           = new RectangleF (190, Frame.Height - 100, 318, 48),
+				Frame           = new RectangleF (190, Frame.Height - 100, Frame.Width, 48),
 				BackgroundColor = NSColor.WindowBackground,
 				Bordered        = false,
 				Editable        = false,
