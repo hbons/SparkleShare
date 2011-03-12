@@ -83,7 +83,7 @@ namespace SparkleLib {
 
 				} else {
 
-					InstallUserInfo ();
+					InstallConfiguration ();
 					InstallExcludeRules ();
 					
 					SparkleHelpers.DebugInfo ("Git", "[" + TargetFolder + "] Repository cloned");
@@ -103,7 +103,7 @@ namespace SparkleLib {
 
 		// Install the user's name and email into
 		// the newly cloned repository
-		private void InstallUserInfo ()
+		private void InstallConfiguration ()
 		{
 
 			string global_config_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath, "config");
@@ -117,10 +117,17 @@ namespace SparkleLib {
 				string repo_config_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "config");
 
 				TextWriter writer = File.AppendText (repo_config_file_path);
-				writer.WriteLine (user_info);
-				writer.Close ();
 
-				SparkleHelpers.DebugInfo ("Config", "Added user info to '" + repo_config_file_path + "'");
+                    // User info
+                    writer.WriteLine (user_info);
+    
+                    // Config option to enable case sensitivity
+                    writer.WriteLine ("[core]");
+                    writer.WriteLine ("\tignorecase = false");
+
+                writer.Close ();
+
+				SparkleHelpers.DebugInfo ("Config", "Added configuration to '" + repo_config_file_path + "'");
 
 			}
 
