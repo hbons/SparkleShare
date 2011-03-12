@@ -59,29 +59,15 @@ namespace SparkleLib {
 			if (CloningStarted != null)
 	            CloningStarted (this, new SparkleEventArgs ("CloningStarted")); 
 
-			Process process = new Process () {	
-				EnableRaisingEvents = true
-			};
+			SparkleGit git = new SparkleGit (SparklePaths.SparkleTmpPath,
+                "clone \"" + RemoteOriginUrl + "\" " + "\"" + TargetFolder + "\"");
 
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.RedirectStandardError = true;
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.FileName = SparklePaths.GitPath;
-			process.StartInfo.Arguments = "clone --progress " +
-			                              "\"" + RemoteOriginUrl + "\" " + "\"" + TargetFolder + "\"";
+			git.Exited += delegate {
 
-			SparkleHelpers.DebugInfo ("Cmd", "git clone --progress " +
-			                              "\"" + RemoteOriginUrl + "\" " + "\"" + TargetFolder + "\"");
+				SparkleHelpers.DebugInfo ("Git", "Exit code " + git.ExitCode.ToString ());
 
-			process.Exited += delegate {
+				if (git.ExitCode != 0) {
 
-				SparkleHelpers.DebugInfo ("Git", "Exit code " + process.ExitCode.ToString ());
-
-				if (process.ExitCode != 0) {
-
-                    string error = process.StandardError.ReadToEnd ();
-					
-					SparkleHelpers.DebugInfo ("Git", "Error: " + error);
 					SparkleHelpers.DebugInfo ("Git", "[" + TargetFolder + "] Cloning failed");
 
 					if (CloningFailed != null)
@@ -101,8 +87,7 @@ namespace SparkleLib {
 
 			};
 
-			process.Start ();
-			process.WaitForExit ();
+	    	git.Start ();
 
 		}
 
