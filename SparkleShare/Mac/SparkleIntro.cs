@@ -19,6 +19,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Timers;
+
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
@@ -456,7 +457,7 @@ namespace SparkleShare {
 
 				Header      = "Syncing folder ‘" + name + "’…";
 				Description = "This may take a while.\n" +
-				              "You sure it’s not coffee o-clock?";
+				              "Are you sure it’s not coffee o'clock?";
 
 
 				ProgressIndicator = new NSProgressIndicator () {
