@@ -958,6 +958,7 @@ namespace SparkleLib {
 
 
 		// Returns a list of latest commits
+        // TODO: Method needs to be made a lot faster
 		public List <SparkleCommit> GetCommits (int count)
 		{
 			
