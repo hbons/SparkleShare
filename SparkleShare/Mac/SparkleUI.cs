@@ -52,7 +52,6 @@ namespace SparkleShare {
 
 		public static SparkleStatusIcon StatusIcon;
 		public static List <SparkleLog> OpenLogs;
-		public static int NewEvents;
 		public static SparkleIntro Intro;
 		public static NSFont Font;
 
@@ -86,8 +85,7 @@ namespace SparkleShare {
 			
 			OpenLogs   = new List <SparkleLog> ();
 			StatusIcon = new SparkleStatusIcon ();
-
-			NewEvents = 0;
+            
 
 			SparkleShare.Controller.NotificationRaised += delegate {
 
