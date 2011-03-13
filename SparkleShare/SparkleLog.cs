@@ -14,22 +14,28 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using Gtk;
-using Mono.Unix;
-using SparkleLib;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+
+using Gtk;
+using Mono.Unix;
+using SparkleLib;
+using WebKit;
 
 namespace SparkleShare {
 
 	public class SparkleLog : Window {
 
 		public readonly string LocalPath;
+
 		private VBox LayoutVertical;
 		private ScrolledWindow ScrolledWindow;
 		private MenuBar MenuBar;
+		private WebView WebView;
+		private string LinkStatus;
 
 
 		// Short alias for the translations
@@ -58,6 +64,119 @@ namespace SparkleShare {
 				Close ();
 			};
 			
+			CreateEventLog ();
+			UpdateEventLog ();
+			
+			LayoutVertical = new VBox (false, 0);
+
+			ScrolledWindow = new ScrolledWindow ();
+
+			ScrolledWindow.AddWithViewport (WebView);
+			(ScrolledWindow.Child as Viewport).ShadowType = ShadowType.None;
+
+			LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
+
+				HButtonBox dialog_buttons = new HButtonBox {
+					Layout = ButtonBoxStyle.Edge,
+					BorderWidth = 12
+				};
+
+					Button open_folder_button = new Button (_("_Open Folder")) {
+						UseUnderline = true
+					};
+ 
+					open_folder_button.Clicked += delegate (object o, EventArgs args) {
+
+						Process process = new Process ();
+						process.StartInfo.FileName  = Defines.OPEN_COMMAND;
+						process.StartInfo.Arguments = LocalPath.Replace (" ", "\\ "); // Escape space-characters
+						process.Start ();
+
+						Close ();
+
+					};
+
+					Button close_button = new Button (Stock.Close);
+
+					close_button.Clicked += delegate {
+						Close ();
+					};
+
+				dialog_buttons.Add (open_folder_button);
+				dialog_buttons.Add (close_button);
+
+			LayoutVertical.PackStart (new HSeparator (), false, false, 0);
+
+			// We have to hide the menubar somewhere...
+			LayoutVertical.PackStart (CreateShortcutsBar (), false, false, 0);
+			LayoutVertical.PackStart (dialog_buttons, false, false, 0);
+
+			Add (LayoutVertical);
+
+			CreateEventLog ();
+			UpdateEventLog ();
+
+		}
+
+
+		public void CreateEventLog () {
+
+			WebView = new WebView () {
+				Editable = false
+			};
+
+			WebView.HoveringOverLink += delegate (object o, WebKit.HoveringOverLinkArgs args) {
+				LinkStatus = args.Link;
+			};
+
+			WebView.NavigationRequested += delegate (object o, WebKit.NavigationRequestedArgs args) {
+
+				if (args.Request.Uri == LinkStatus) {
+
+					Process process = new Process ();
+					process.StartInfo.FileName = "xdg-open";
+					process.StartInfo.Arguments = args.Request.Uri.Replace (" ", "\\ "); // Escape space-characters
+					process.Start ();
+
+				}
+
+				// TODO: Don't close window afterwards
+
+			};
+
+		}
+
+
+		public void UpdateEventLog ()
+		{
+
+			string html = SparkleShare.Controller.GetHTMLLog (System.IO.Path.GetFileName (LocalPath));
+
+			html = html.Replace ("<!-- $body-font-size -->", (Style.FontDescription.Size / 1024 + 0.5) + "pt");
+			html = html.Replace ("<!-- $body-font-family -->", "\"" + Style.FontDescription.Family + "\"");
+			html = html.Replace ("<!-- $body-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Normal)));
+			html = html.Replace ("<!-- $body-background-color -->", SparkleUIHelpers.GdkColorToHex (new TreeView ().Style.Base (StateType.Normal)));
+			html = html.Replace ("<!-- $day-entry-header-background-color -->", SparkleUIHelpers.GdkColorToHex (Style.Background (StateType.Normal)));
+			html = html.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
+			html = html.Replace ("<!-- $small-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));	
+			html = html.Replace ("<!-- $no-buddy-icon-background-image -->", "file://" +
+					SparkleHelpers.CombineMore (Defines.PREFIX, "share", "sparkleshare", "icons", 
+						"hicolor", "32x32", "status", "avatar-default.png"));
+
+			WebView.LoadHtmlString (html, "file://");
+
+		}
+
+
+		public void Close ()
+		{
+
+			Destroy (); // TODO: keep logs in memory like Mac UI
+
+		}
+
+
+		private MenuBar CreateShortcutsBar () {
 
 			// Adds a hidden menubar that contains to enable keyboard
 			// shortcuts to close the log
@@ -96,379 +215,12 @@ namespace SparkleShare {
 			// will simply be disabled when using Hide ()
 			MenuBar.HeightRequest = 1;
 			MenuBar.ModifyBg (StateType.Normal, Style.Background (StateType.Normal));
-			
-			LayoutVertical = new VBox (false, 0);
 
-			LayoutVertical.PackStart (CreateEventLog (), true, true, 0);
-
-				HButtonBox dialog_buttons = new HButtonBox {
-					Layout = ButtonBoxStyle.Edge,
-					BorderWidth = 12
-				};
-
-					Button open_folder_button = new Button (_("_Open Folder")) {
-						UseUnderline = true
-					};
- 
-					open_folder_button.Clicked += delegate (object o, EventArgs args) {
-
-						Process process = new Process ();
-						process.StartInfo.FileName  = Defines.OPEN_COMMAND;
-						process.StartInfo.Arguments = LocalPath.Replace (" ", "\\ "); // Escape space-characters
-						process.Start ();
-
-						Close ();
-
-					};
-
-					Button close_button = new Button (Stock.Close);
-
-					close_button.Clicked += delegate {
-						Close ();
-					};
-
-				dialog_buttons.Add (open_folder_button);
-				dialog_buttons.Add (close_button);
-
-			LayoutVertical.PackStart (new HSeparator (), false, false, 0);
-			// We have to hide the menubar somewhere...
-			LayoutVertical.PackStart (MenuBar, false, false, 0);
-			LayoutVertical.PackStart (dialog_buttons, false, false, 0);
-
-			Add (LayoutVertical);
-
-		}
-
-
-		public void Close ()
-		{
-
-			Destroy (); // TODO: keep logs in memory like Mac UI
-
-		}
-
-
-		public void Update ()
-		{
-
-			Application.Invoke (delegate {
-
-                // TODO Only update the html instead of the whole widget
-				LayoutVertical.Remove (ScrolledWindow);
-				ScrolledWindow = CreateEventLog ();
-				LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
-				LayoutVertical.ReorderChild (ScrolledWindow, 0);
-				ShowAll ();
-
-			});
-
-		}
-
-
-		private ScrolledWindow CreateEventLog ()
-		{
-
-			List <SparkleCommit> commits = new List <SparkleCommit> ();
-
-			foreach (SparkleRepo repo in SparkleShare.Controller.Repositories) {
-
-				// Get commits from the repository
-				if (repo.LocalPath.Equals (LocalPath)) {
-
-					commits = repo.GetCommits (30);
-					break;
-
-				}
-
-			}
-
-
-			List <ActivityDay> activity_days = new List <ActivityDay> ();
-
-			foreach (SparkleCommit commit in commits) {
-
-				bool commit_inserted = false;
-				foreach (ActivityDay stored_activity_day in activity_days) {
-
-					if (stored_activity_day.DateTime.Year  == commit.DateTime.Year &&
-					    stored_activity_day.DateTime.Month == commit.DateTime.Month &&
-					    stored_activity_day.DateTime.Day   == commit.DateTime.Day) {
-
-					    stored_activity_day.Add (commit);
-					    commit_inserted = true;
-					    break;
-
-					}
-
-				}
-				
-				if (!commit_inserted) {
-
-						ActivityDay activity_day = new ActivityDay (commit.DateTime);
-						activity_day.Add (commit);
-						activity_days.Add (activity_day);
-					
-				}
-
-			}
-
-			VBox layout_vertical = new VBox (false, 0);
-
-			if (SparkleShare.Controller.Repositories.Find (
-					delegate (SparkleRepo r)
-						{ return r.LocalPath.Equals (LocalPath) && r.HasUnsyncedChanges; }
-				) != null) {
-
-				string title = _("This folder has unsynced changes");
-				string text  = _("We will sync these once we’re connected again");
-
-				SparkleInfobar infobar = new SparkleInfobar ("dialog-error", title, text);
-
-				layout_vertical.PackStart (infobar, false, false, 0);
-
-			} else {
-
-				if (SparkleShare.Controller.Repositories.Find (
-					delegate (SparkleRepo r)
-						{ return r.LocalPath.Equals (LocalPath) && r.HasUnsyncedChanges; }
-					) != null) {
-
-						string title = _("Could not sync with the remote folder");
-						string text  = _("Is the you and the server online?");
-
-						SparkleInfobar infobar = new SparkleInfobar ("dialog-error", title, text);
-
-						layout_vertical.PackStart (infobar, false, false, 0);
-
-				}
-
-			}
-
-			TreeView tree_view = new TreeView ();
-			Gdk.Color background_color = tree_view.Style.Base (StateType.Normal);
-
-			foreach (ActivityDay activity_day in activity_days) {
-
-				EventBox box = new EventBox ();
-
-				Label date_label = new Label ("") {
-					UseMarkup = true,
-					Xalign = 0,
-					Xpad = 9,
-					Ypad = 9
-				};
-
-					DateTime today = DateTime.Now;
-					DateTime yesterday = DateTime.Now.AddDays (-1);
-
-					if (today.Day   == activity_day.DateTime.Day &&
-					    today.Month == activity_day.DateTime.Month && 
-					    today.Year  == activity_day.DateTime.Year) {
-
-						date_label.Markup = "<b>Today</b>";
-
-					} else if (yesterday.Day   == activity_day.DateTime.Day &&
-					           yesterday.Month == activity_day.DateTime.Month && 
-					           yesterday.Year  == activity_day.DateTime.Year) {
-
-						date_label.Markup = "<b>Yesterday</b>";
-
-					} else {
-	
-						date_label.Markup = "<b>" + activity_day.DateTime.ToString ("ddd MMM d, yyyy") + "</b>";
-
-					}
-
-				box.Add (date_label);
-				layout_vertical.PackStart (box, false, false, 0);
-
-				Gdk.Color color = Style.Foreground (StateType.Insensitive);
-				string secondary_text_color = SparkleUIHelpers.GdkColorToHex (color);
-
-				foreach (SparkleCommit change_set in activity_day) {
-
-					VBox log_entry     = new VBox (false, 0);
-					VBox deleted_files = new VBox (false, 0);
-					VBox edited_files  = new VBox (false, 0);
-					VBox added_files   = new VBox (false, 0);
-					VBox moved_files   = new VBox (false, 0);
-
-
-					foreach (string file_path in change_set.Edited) {
-
-						SparkleLink link = new SparkleLink (file_path,
-							SparkleHelpers.CombineMore (LocalPath, file_path));
-
-						link.ModifyBg (StateType.Normal, background_color);
-
-						edited_files.PackStart (link, false, false, 0);
-
-					}
-
-					foreach (string file_path in change_set.Added) {
-
-						SparkleLink link = new SparkleLink (file_path,
-							SparkleHelpers.CombineMore (LocalPath, file_path));
-
-						link.ModifyBg (StateType.Normal, background_color);
-
-						added_files.PackStart (link, false, false, 0);
-
-					}
-
-
-					foreach (string file_path in change_set.Deleted) {
-
-						SparkleLink link = new SparkleLink (file_path,
-							SparkleHelpers.CombineMore (LocalPath, file_path));
-
-						link.ModifyBg (StateType.Normal, background_color);
-
-						deleted_files.PackStart (link, false, false, 0);
-
-					}
-
-					for (int i = 0; i < change_set.MovedFrom.Count; i++) {
-
-						SparkleLink from_link = new SparkleLink (change_set.MovedFrom [i],
-							SparkleHelpers.CombineMore (LocalPath, change_set.MovedFrom [i]));
-
-						from_link.ModifyBg (StateType.Normal, background_color);
-
-						SparkleLink to_link = new SparkleLink (change_set.MovedTo [i],
-							SparkleHelpers.CombineMore (LocalPath, change_set.MovedTo [i]));
-
-						to_link.ModifyBg (StateType.Normal, background_color);
-
-						Label to_label = new Label ("<span fgcolor='" + secondary_text_color +"'>" +
-						                            "<small>to</small></span> ") {
-					    	UseMarkup = true,
-					    	Xalign = 0
-					    };
-
-						HBox link_wrapper = new HBox (false, 0);
-						link_wrapper.PackStart (to_label, false, false, 0);
-						link_wrapper.PackStart (to_link, true, true, 0);
-
-						moved_files.PackStart (from_link, false, false, 0);
-						moved_files.PackStart (link_wrapper, false, false, 0);
-
-						if (change_set.MovedFrom.Count > 1)
-							moved_files.PackStart (new Label (""), false, false, 0);
-
-					}
-
-					HBox change_set_info_hbox = new HBox (false, 0);
-
-						Label change_set_info = new Label ("<b>" + change_set.UserName + "</b>") {
-							UseMarkup = true,
-							Xalign = 0
-						};
-					
-						Label change_set_time = new Label ("<span fgcolor='" + secondary_text_color +"'><small>" +
-							                               change_set.DateTime.ToString ("H:mm") +
-							                               "</small></span>") {
-							Xalign = 1,
-							UseMarkup = true
-						};
-
-					change_set_info_hbox.PackStart (change_set_info, true, true, 0);
-					change_set_info_hbox.PackStart (change_set_time, false, false, 0);
-
-					log_entry.PackStart (change_set_info_hbox, false, false, 0);
-					                   
-					if (edited_files.Children.Length > 0) {
-
-						Label edited_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
-						                                _("Edited") +
-						                                "</small></span>") {
-							UseMarkup = true,
-							Xalign = 0
-						};
-
-						log_entry.PackStart (edited_label, false, false, 0);
-						log_entry.PackStart (edited_files, false, false, 0);
-
-					}
-
-					if (added_files.Children.Length > 0) {
-
-						Label added_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
-						                                _("Added") +
-						                                "</small></span>") {
-							UseMarkup = true,
-							Xalign = 0
-						};
-
-						log_entry.PackStart (added_label, false, false, 0);
-						log_entry.PackStart (added_files, false, false, 0);
-
-					}
-
-					if (deleted_files.Children.Length > 0) {
-
-						Label deleted_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
-						                                _("Deleted") +
-						                                "</small></span>") {
-							UseMarkup = true,
-							Xalign = 0
-						};
-
-						log_entry.PackStart (deleted_label, false, false, 0);
-						log_entry.PackStart (deleted_files, false, false, 0);
-
-					}
-
-					if (moved_files.Children.Length > 0) {
-
-						Label moved_label = new Label ("\n<span fgcolor='" + secondary_text_color +"'><small>" +
-						                                 _("Moved") +
-						                                 "</small></span>") {
-							UseMarkup = true,
-							Xalign = 0
-						};
-
-						log_entry.PackStart (moved_label, false, false, 0);
-						log_entry.PackStart (moved_files, false, false, 0);
-
-					}
-
-					HBox hbox = new HBox (false, 0);
-
-					Image avatar = new Image (SparkleUIHelpers.GetAvatar (change_set.UserEmail, 32)) {
-						Yalign = 0
-					};
-
-					hbox.PackStart (avatar, false, false, 18);
-
-						VBox vbox = new VBox (false, 0);
-						vbox.PackStart (log_entry, false, false, 0);
-
-					hbox.PackStart (vbox, true, true, 0);
-					hbox.PackStart (new Label (""), false, false, 12);
-
-					layout_vertical.PackStart (hbox, false, false, 18);
-
-				}
-
-				layout_vertical.PackStart (new Label (""), false, false, 3);
-
-			}
-
-			ScrolledWindow = new ScrolledWindow ();
-
-				EventBox wrapper = new EventBox ();
-				wrapper.ModifyBg (StateType.Normal, background_color);
-				wrapper.Add (layout_vertical);
-
-			ScrolledWindow.AddWithViewport (wrapper);
-			(ScrolledWindow.Child as Viewport).ShadowType = ShadowType.None;
-
-			return ScrolledWindow;
+			return MenuBar;
 
 		}
 
 	}
 
-
 }
+
