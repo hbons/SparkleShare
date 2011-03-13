@@ -100,14 +100,7 @@ Note:
 Run on Mac:
 ===========
 
-You will need to have the Mac version of git installed.
-
-SparkleShare will look for git in /usr/bin, so you may need to create a symbolic
-link to git, depending on where it was installed:
-
-   $ sudo ln -s /path/to/your/git /usr/bin/git
-
-Now just double-click the SparkleShare.app.
+Just double-click the SparkleShare.app.
 
 
 Build on Mac:
@@ -126,6 +119,7 @@ Note:
    $ export PKG_CONFIG=/Library/Frameworks/Mono.framework/Versions/Current/bin/pkg-config
    $ export PKG_CONFIG_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
    $ ./autogen.sh
+   $ make
 
 The last step will give you some errors, but you only need the libraries to be compiled.
 Open 'SparkleShare/Mac/SparkleShare.sln' in MonoDevelop and start the build.

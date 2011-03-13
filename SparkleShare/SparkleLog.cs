@@ -88,11 +88,9 @@ namespace SparkleShare {
 					open_folder_button.Clicked += delegate (object o, EventArgs args) {
 
 						Process process = new Process ();
-						process.StartInfo.FileName  = Defines.OPEN_COMMAND;
+						process.StartInfo.FileName  = "xdg-open";
 						process.StartInfo.Arguments = LocalPath.Replace (" ", "\\ "); // Escape space-characters
 						process.Start ();
-
-						Close ();
 
 					};
 
