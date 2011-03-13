@@ -50,13 +50,8 @@ namespace SparkleShare {
             };
 
             Buttons [1].Activated += delegate {
-
-                (Window as NSWindow).OrderOut (this);
                 Environment.Exit (-1);
-
             };
-
-            RunModal ();
 
         }
 

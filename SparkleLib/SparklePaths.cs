@@ -86,7 +86,7 @@ namespace SparkleLib {
 		public static string SparkleTmpPath       = Path.Combine (SparklePath, ".tmp");
 		public static string SparkleConfigPath    = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
 		public static string SparkleKeysPath      = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
-		public static string SparkleInstallPath   = SparkleHelpers.CombineMore (Defines.PREFIX, "sparkleshare");
+		public static string SparkleInstallPath   = Path.Combine (Defines.PREFIX, "sparkleshare");
 		public static string SparkleLocalIconPath = SparkleHelpers.CombineMore (SparkleConfigPath, "icons", "hicolor");
 		public static string SparkleIconPath      = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare", "icons");
 

@@ -138,7 +138,7 @@ namespace SparkleShare {
 					
 					string alternate_image_path =
 						Path.Combine (NSBundle.MainBundle.ResourcePath,
-							"Pixmaps", "idle" + FrameNumber + ".png");
+							"Pixmaps", "idle" + FrameNumber + "-active.png");
 					
 					StatusItem.AlternateImage      = new NSImage (alternate_image_path);
 					StatusItem.AlternateImage.Size = new SizeF (16, 16);
@@ -360,10 +360,10 @@ namespace SparkleShare {
 				StateText = _("Welcome to SparkleShare!");
 				InvokeOnMainThread (delegate {
 
-					StatusItem.Image      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle.png");
+					StatusItem.Image      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0.png");
 					StatusItem.Image.Size = new SizeF (16, 16);
 						
-					StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle-active.png");
+					StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0-active.png");
 					StatusItem.AlternateImage.Size = new SizeF (16, 16);
 					
 				});
@@ -382,10 +382,10 @@ namespace SparkleShare {
 					StateText = _("Up to date") + " (" + SparkleShare.Controller.FolderSize + ")";
 					InvokeOnMainThread (delegate {
 						
-						StatusItem.Image      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle.png");
+						StatusItem.Image      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0.png");
 						StatusItem.Image.Size = new SizeF (16, 16);
 						
-						StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle-active.png");
+						StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0-active.png");
 						StatusItem.AlternateImage.Size = new SizeF (16, 16);
 						
 					});

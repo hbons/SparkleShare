@@ -60,6 +60,7 @@ namespace SparkleShare {
             if (!SparkleShare.Controller.BackendIsPresent) {
 
                 Alert = new SparkleAlert ();
+                Alert.RunModal ();
                 return;
 
             }
@@ -159,6 +160,7 @@ namespace SparkleShare {
 
             // FIXME: Doesn't work
             About = new SparkleAbout ();
+            About.Update ();
 
         }
 
