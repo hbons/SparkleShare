@@ -20,62 +20,75 @@ using System.IO;
 using Mono.Unix;
 
 namespace SparkleLib {
+
+    public static class Backend {
+
+        public static string Name = "Git";
+
+        public static string Path {
+
+            get {
+
+                Process process                          = new Process ();
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.UseShellExecute        = false;
+                process.StartInfo.FileName               = "which";
+                process.StartInfo.Arguments              = Backend.Name.ToLower ();
+                process.Start ();
+
+                string path = process.StandardOutput.ReadToEnd ();
+                path = path.Trim ();
+
+                if (!string.IsNullOrEmpty (path)) {
+
+                    return path;
+
+                } else {
+
+                    Console.WriteLine ("Sorry, SparkleShare needs " + Backend.Name + " to run, but it wasn't found.");
+                    return null;
+
+                }
+
+            }
+
+        }
+
+
+        public static bool IsPresent {
+
+            get {
+
+                Process process                          = new Process ();
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.UseShellExecute        = false;
+                process.StartInfo.FileName               = "which";
+                process.StartInfo.Arguments              = Backend.Name.ToLower ();
+                process.Start ();
+
+                string path = process.StandardOutput.ReadToEnd ();
+                path = path.Trim ();
+
+                return !string.IsNullOrEmpty (path);
+
+            }
+
+        }
+
+    }
+
 	
-	public static class SparklePaths
-	{
+	public static class SparklePaths {
 		
-		public static string GitPath = SystemGitPath;
-
-		public static string HomePath = new UnixUserInfo (UnixEnvironment.UserName).HomeDirectory;
-
-		public static string SparklePath = Path.Combine (HomePath ,"SparkleShare");
-
-		public static string SparkleTmpPath = Path.Combine (SparklePath, ".tmp");
-
-		public static string SparkleConfigPath = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
-		
-		public static string SparkleKeysPath = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
-
-		public static string SparkleInstallPath = SparkleHelpers.CombineMore (Defines.PREFIX, "sparkleshare");
-
+		public static string GitPath              = Backend.Path;
+		public static string HomePath             = new UnixUserInfo (UnixEnvironment.UserName).HomeDirectory;
+		public static string SparklePath          = Path.Combine (HomePath ,"SparkleShare");
+		public static string SparkleTmpPath       = Path.Combine (SparklePath, ".tmp");
+		public static string SparkleConfigPath    = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
+		public static string SparkleKeysPath      = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
+		public static string SparkleInstallPath   = SparkleHelpers.CombineMore (Defines.PREFIX, "sparkleshare");
 		public static string SparkleLocalIconPath = SparkleHelpers.CombineMore (SparkleConfigPath, "icons", "hicolor");
-
-		public static string SparkleIconPath = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare",
-			"icons");
-
-		
-		private static string SystemGitPath
-		{
-			
-			get {
-
-				Process process = new Process ();
-	
-				process.StartInfo.RedirectStandardOutput = true;
-				process.StartInfo.UseShellExecute        = false;
-				process.StartInfo.FileName               = "which";
-				process.StartInfo.Arguments              = "git";
-				process.Start ();
-				
-				string git_path = process.StandardOutput.ReadToEnd ();
-				git_path = git_path.Trim ();
-
-				if (!string.IsNullOrEmpty (git_path)) {
-
-					return git_path;
-				
-				} else {
-					
-					Console.WriteLine ("Sorry, SparkleShare needs Git to run, but it wasn't found.");
-					Environment.Exit (-1);
-
-					return null;
-				
-				}
-				
-			}
-			
-		}
+		public static string SparkleIconPath      = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare", "icons");
 
 	}
 
