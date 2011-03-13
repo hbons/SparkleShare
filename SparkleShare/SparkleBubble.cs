@@ -14,38 +14,34 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
+using System;
+
 using Gtk;
-using SparkleShare;
+using Notifications;
 
 namespace SparkleShare {
 	
-	public class SparkleBubble {
+	public class SparkleBubble : Notification {
 
-		public int Timeout;
-		public string IconName;
-		public Gdk.Pixbuf Icon;
-
-		public SparkleBubble (string title, string subtext)
+		public SparkleBubble (string title, string subtext) : base (title, subtext)
 		{
 
 			IconName = "folder-sparkleshare";
 			Timeout  = 4500;
-//			Urgency  = Urgency.Low;
-
-			//Show ();
+			Urgency  = Urgency.Low;
 
 		}
 
-		public void Show () {}
 		// Checks whether the system allows adding buttons to a notification,
 		// prevents error messages in Ubuntu.
-//		new public void AddAction (string action, string label, ActionHandler handler)
-//		{
+		new public void AddAction (string action, string label, ActionHandler handler)
+		{
 
-//			if (System.Array.IndexOf (Notifications.Global.Capabilities, "actions") > -1)
-//				base.AddAction (action, label, handler);
+			if (Array.IndexOf (Notifications.Global.Capabilities, "actions") > -1)
+				base.AddAction (action, label, handler);
 
-//		}
+		}
 
 	}
 
