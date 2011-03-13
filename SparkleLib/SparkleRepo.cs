@@ -256,8 +256,8 @@ namespace SparkleLib {
 			LocalPath       = path;
 			Name            = Path.GetFileName (LocalPath);
 
-			RemoteName      = Path.GetFileNameWithoutExtension (RemoteOriginUrl);
 			RemoteOriginUrl = Config ["remote.origin.url"];
+            RemoteName      = Path.GetFileNameWithoutExtension (RemoteOriginUrl);
 			Domain          = GetDomain (RemoteOriginUrl);
 			Description     = GetDescription ();
 			UserName        = Config ["user.name"];
@@ -307,7 +307,7 @@ namespace SparkleLib {
 
 
 			// Listen to the irc channel on the server...
-			Listener = new SparkleListener (Domain, "#" + RemoteName, UserEmail);
+			Listener = new SparkleListener (Domain, RemoteName, UserEmail);
 
 			// ...fetch remote changes every 60 seconds if that fails
 			RemoteTimer = new Timer () {
