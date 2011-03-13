@@ -53,8 +53,8 @@ namespace SparkleLib {
 				Nick = GetSHA1 (DateTime.Now.ToString () + "sparkles");
 			
 			Nick    = "s" + Nick.Substring (0, 7);
-			Channel = "#" + GetSHA1 (server + folder_name);
-			
+			Channel = "#" + GetSHA1 (server + folder_name + "sparkles");
+
 			Client = new IrcClient () {
 				PingTimeout          = 180,
 				PingInterval         = 90

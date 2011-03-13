@@ -30,11 +30,25 @@ namespace SparkleShare {
 
 	public partial class AppDelegate : NSApplicationDelegate {
 
+        public override void WillBecomeActive (NSNotification notification)
+        {
+
+            NSApplication.SharedApplication.DockTile.BadgeLabel = null;
+
+        }
+
+        public override void OrderFrontStandardAboutPanel (NSObject sender)
+        {
+
+            // FIXME: Doesn't work
+            new SparkleAbout ();
+
+        }
+
 	}
 
 
-	public class SparkleUI : AppDelegate
-	{
+	public class SparkleUI : AppDelegate {
 
 		public static SparkleStatusIcon StatusIcon;
 		public static List <SparkleLog> OpenLogs;
@@ -44,6 +58,7 @@ namespace SparkleShare {
 
         private SparkleAbout About;
         private NSAlert Alert;
+
 
 		public SparkleUI ()
 		{
@@ -78,8 +93,11 @@ namespace SparkleShare {
 
 				InvokeOnMainThread (delegate {
 
-					NewEvents++;
-					NSApplication.SharedApplication.DockTile.BadgeLabel = NewEvents.ToString ();
+                    if (NSApplication.SharedApplication.DockTile.BadgeLabel == null)
+                        NSApplication.SharedApplication.DockTile.BadgeLabel = "1";
+                    else
+					    NSApplication.SharedApplication.DockTile.BadgeLabel =
+                            (int.Parse (NSApplication.SharedApplication.DockTile.BadgeLabel) + 1).ToString ();
 					
 					foreach (SparkleLog log in SparkleUI.OpenLogs)
 						log.UpdateEventLog ();
@@ -147,22 +165,7 @@ namespace SparkleShare {
 		}
 
 
-        public override void WillBecomeActive (NSNotification notification)
-        {
 
-            NewEvents = 0;
-            NSApplication.SharedApplication.DockTile.BadgeLabel = null;
-
-        }
-
-        public override void OrderFrontStandardAboutPanel (NSObject sender)
-        {
-
-            // FIXME: Doesn't work
-            About = new SparkleAbout ();
-            About.Update ();
-
-        }
 
 	}
 
