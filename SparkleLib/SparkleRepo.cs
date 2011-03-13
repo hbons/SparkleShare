@@ -507,6 +507,9 @@ namespace SparkleLib {
 		// Starts a timer when something changes
 		private void OnFileActivity (object o, FileSystemEventArgs fse_args)
 		{
+			
+			if (fse_args.Name.StartsWith (".git/"))
+				return;
 
 			WatcherChangeTypes wct = fse_args.ChangeType;
 			
