@@ -1,16 +1,16 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# This file is distributed under the same license as the Sparkleshare package.
+# 
+# WARNING: Due to the nature of Transifex all translation file headers were lost
+# we apologise for any incovenience this may have caused and we hope to bring them
+# back in the future.
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-22 23:22+0100\n"
-"PO-Revision-Date: 2011-02-10 12:08+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2011-03-13 17:07+0100\n"
+"PO-Revision-Date: 2011-03-10 17:31+0000\n"
+"Last-Translator: deejay1 <deejay1@srem.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,23 +21,23 @@ msgstr ""
 msgid "OptionName"
 msgstr "選項名稱"
 
-#: ../SparkleShare/Mac/SparkleShare/SparkleStatusIcon.cs:323
-#: ../SparkleShare/SparkleIntro.cs:64 ../SparkleShare/SparkleStatusIcon.cs:339
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:360
+#: ../SparkleShare/SparkleIntro.cs:64 ../SparkleShare/SparkleStatusIcon.cs:345
 msgid "Welcome to SparkleShare!"
 msgstr "歡迎使用 SparkleShare！"
 
-#: ../SparkleShare/Mac/SparkleShare/SparkleStatusIcon.cs:338
-#: ../SparkleShare/SparkleStatusIcon.cs:348
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:375
+#: ../SparkleShare/SparkleStatusIcon.cs:354
 msgid "Not everything is synced"
 msgstr ""
 
-#: ../SparkleShare/Mac/SparkleShare/SparkleStatusIcon.cs:345
-#: ../SparkleShare/SparkleStatusIcon.cs:355
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:382
+#: ../SparkleShare/SparkleStatusIcon.cs:361
 msgid "Up to date"
 msgstr "更新"
 
-#: ../SparkleShare/Mac/SparkleShare/SparkleStatusIcon.cs:367
-#: ../SparkleShare/SparkleStatusIcon.cs:371
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:404
+#: ../SparkleShare/SparkleStatusIcon.cs:377
 msgid "Syncing…"
 msgstr "同步中…"
 
@@ -66,7 +66,9 @@ msgid "_Visit Website"
 msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:70
-msgid "Before we can create a SparkleShare folder on this computer, we need a few bits of information from you."
+msgid ""
+"Before we can create a SparkleShare folder on this computer, we need a few "
+"bits of information from you."
 msgstr "我們在這臺電腦中可以建立 SparkleShare 資料夾之前，我們需要您的幾點資訊。"
 
 #: ../SparkleShare/SparkleIntro.cs:82
@@ -203,7 +205,8 @@ msgstr "資料夾同步成功！"
 
 #: ../SparkleShare/SparkleIntro.cs:580
 #, csharp-format
-msgid "Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
+msgid ""
+"Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
 msgstr "現在您可以在 SparkleShare 資料夾中「{0}」存取同步的檔案。"
 
 #. A button that opens the synced folder
@@ -226,8 +229,8 @@ msgid "This may take a while.\n"
 msgstr "這也許會花費一點時間。\n"
 
 #: ../SparkleShare/SparkleIntro.cs:636
-msgid "You sure it’s not coffee o-clock?"
-msgstr "您是不是應該來杯咖啡？"
+msgid "Are you sure it’s not coffee o'clock?"
+msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:687
 msgid "SparkleShare is ready to go!"
@@ -248,42 +251,42 @@ msgstr "學習如何照料自己的 SparkleServer"
 #. TRANSLATORS: {0} is a folder name, and {1} is a server address
 #: ../SparkleShare/SparkleLog.cs:54
 #, csharp-format
-msgid "Recent Events in ‘{0}’"
-msgstr "最近在「{0}」發生的事件"
+msgid "Events in ‘{0}’"
+msgstr ""
 
 #: ../SparkleShare/SparkleLog.cs:109
 msgid "_Open Folder"
 msgstr "開啟資料夾(_O)"
 
-#: ../SparkleShare/SparkleLog.cs:221
+#: ../SparkleShare/SparkleLog.cs:222
 msgid "This folder has unsynced changes"
 msgstr ""
 
-#: ../SparkleShare/SparkleLog.cs:222
+#: ../SparkleShare/SparkleLog.cs:223
 msgid "We will sync these once we’re connected again"
 msgstr ""
 
-#: ../SparkleShare/SparkleLog.cs:235
+#: ../SparkleShare/SparkleLog.cs:236
 msgid "Could not sync with the remote folder"
 msgstr ""
 
-#: ../SparkleShare/SparkleLog.cs:236
+#: ../SparkleShare/SparkleLog.cs:237
 msgid "Is the you and the server online?"
 msgstr ""
 
-#: ../SparkleShare/SparkleLog.cs:382
+#: ../SparkleShare/SparkleLog.cs:383
 msgid "Edited"
 msgstr "已編輯"
 
-#: ../SparkleShare/SparkleLog.cs:396
+#: ../SparkleShare/SparkleLog.cs:397
 msgid "Added"
 msgstr "已加入"
 
-#: ../SparkleShare/SparkleLog.cs:410
+#: ../SparkleShare/SparkleLog.cs:411
 msgid "Deleted"
 msgstr "已刪除"
 
-#: ../SparkleShare/SparkleLog.cs:424
+#: ../SparkleShare/SparkleLog.cs:425
 msgid "Moved"
 msgstr "已搬移"
 
@@ -295,83 +298,86 @@ msgstr "抱歉，您不能以此權限執行 SparkleShare。"
 msgid "Things would go utterly wrong."
 msgstr "會出現嚴重錯誤"
 
-#: ../SparkleShare/SparkleShare.cs:67
+#: ../SparkleShare/SparkleShare.cs:68
 msgid "Don't show the notification icon"
 msgstr "不顯示通知圖示"
-
-#: ../SparkleShare/SparkleShare.cs:68
-msgid "Show this help text"
-msgstr "顯示這份說明文字"
 
 #: ../SparkleShare/SparkleShare.cs:69
 msgid "Print version information"
 msgstr "列印版本資訊"
 
-#: ../SparkleShare/SparkleShare.cs:121
+#: ../SparkleShare/SparkleShare.cs:70
+msgid "Show this help text"
+msgstr "顯示這份說明文字"
+
+#: ../SparkleShare/SparkleShare.cs:133
 msgid "SparkleShare, an instant update workflow to Git."
 msgstr "SparkleShare，用於 Git 的即時更新工作流程。"
 
-#: ../SparkleShare/SparkleShare.cs:122
+#: ../SparkleShare/SparkleShare.cs:134
 msgid "Copyright (C) 2010 Hylke Bons"
 msgstr "著作權©2010 Hylke Bons"
 
-#: ../SparkleShare/SparkleShare.cs:124
+#: ../SparkleShare/SparkleShare.cs:136
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
 msgstr "本程式不提供任何擔保"
 
-#: ../SparkleShare/SparkleShare.cs:126
+#: ../SparkleShare/SparkleShare.cs:138
 msgid "This is free software, and you are welcome to redistribute it "
 msgstr "這是自由軟體，歡迎您在某些條件之下"
 
-#: ../SparkleShare/SparkleShare.cs:127
+#: ../SparkleShare/SparkleShare.cs:139
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
 msgstr "繼續散布它。詳情請參見 GNU GPLv3。"
 
-#: ../SparkleShare/SparkleShare.cs:129
+#: ../SparkleShare/SparkleShare.cs:141
 msgid "SparkleShare automatically syncs Git repositories in "
 msgstr "SparkleShare 自動同步 Git 儲存庫於 "
 
-#: ../SparkleShare/SparkleShare.cs:130
+#: ../SparkleShare/SparkleShare.cs:142
 msgid "the ~/SparkleShare folder with their remote origins."
 msgstr "~/SparkleShare 資料夾與它們的遠端來源。"
 
-#: ../SparkleShare/SparkleShare.cs:132
+#: ../SparkleShare/SparkleShare.cs:144
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
 msgstr "用法：sparkleshare [start|stop|restart] [選項]…"
 
-#: ../SparkleShare/SparkleShare.cs:133
+#: ../SparkleShare/SparkleShare.cs:145
 msgid "Sync SparkleShare folder with remote repositories."
 msgstr "同步 SparkleShare 資料夾與遠端儲存庫。"
 
-#: ../SparkleShare/SparkleShare.cs:135
+#: ../SparkleShare/SparkleShare.cs:147
 msgid "Arguments:"
 msgstr "引數："
 
-#: ../SparkleShare/SparkleShare.cs:147
+#: ../SparkleShare/SparkleShare.cs:159
 msgid "SparkleShare "
 msgstr "SparkleShare "
 
-#: ../SparkleShare/SparkleStatusIcon.cs:185
+#: ../SparkleShare/SparkleStatusIcon.cs:187
 msgid "No Remote Folders Yet"
 msgstr "尚無遠端資料夾"
 
 #. Opens the wizard to add a new remote folder
-#: ../SparkleShare/SparkleStatusIcon.cs:194
-msgid "Sync Remote Folder…"
-msgstr "同步遠端資料夾…"
+#: ../SparkleShare/SparkleStatusIcon.cs:196
+msgid "Add Remote Folder…"
+msgstr ""
 
-#. A checkbutton to toggle whether or not to show notifications
-#: ../SparkleShare/SparkleStatusIcon.cs:212
-msgid "Show Notifications"
-msgstr "顯示通知"
+#: ../SparkleShare/SparkleStatusIcon.cs:216
+msgid "Turn Notifications Off"
+msgstr ""
+
+#: ../SparkleShare/SparkleStatusIcon.cs:218
+msgid "Turn Notifications On"
+msgstr ""
 
 #. A menu item that takes the user to http://www.sparkleshare.org/
-#: ../SparkleShare/SparkleStatusIcon.cs:225
-msgid "About"
+#: ../SparkleShare/SparkleStatusIcon.cs:231
+msgid "About SparkleShare"
 msgstr ""
 
 #. A menu item that quits the application
-#: ../SparkleShare/SparkleStatusIcon.cs:238
+#: ../SparkleShare/SparkleStatusIcon.cs:244
 msgid "Quit"
 msgstr "離開"
 
