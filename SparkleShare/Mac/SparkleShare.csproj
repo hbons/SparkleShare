@@ -134,25 +134,34 @@
     <Content Include="..\..\data\sparkleshare.icns">
       <Link>sparkleshare.icns</Link>
     </Content>
-    <Content Include="..\..\data\idle-active.png">
-      <Link>Pixmaps\idle-active.png</Link>
+    <Content Include="..\..\data\icons\idle0-active.png">
+      <Link>Pixmaps\idle0-active.png</Link>
     </Content>
-    <Content Include="..\..\data\idle.png">
-      <Link>Pixmaps\idle.png</Link>
-    </Content>
-    <Content Include="..\..\data\idle0.png">
+    <Content Include="..\..\data\icons\idle0.png">
       <Link>Pixmaps\idle0.png</Link>
     </Content>
-    <Content Include="..\..\data\idle1.png">
+    <Content Include="..\..\data\icons\idle1-active.png">
+      <Link>Pixmaps\idle1-active.png</Link>
+    </Content>
+    <Content Include="..\..\data\icons\idle1.png">
       <Link>Pixmaps\idle1.png</Link>
     </Content>
-    <Content Include="..\..\data\idle2.png">
+    <Content Include="..\..\data\icons\idle2-active.png">
+      <Link>Pixmaps\idle2-active.png</Link>
+    </Content>
+    <Content Include="..\..\data\icons\idle2.png">
       <Link>Pixmaps\idle2.png</Link>
     </Content>
-    <Content Include="..\..\data\idle3.png">
+    <Content Include="..\..\data\icons\idle3-active.png">
+      <Link>Pixmaps\idle3-active.png</Link>
+    </Content>
+    <Content Include="..\..\data\icons\idle3.png">
       <Link>Pixmaps\idle3.png</Link>
     </Content>
-    <Content Include="..\..\data\idle4.png">
+    <Content Include="..\..\data\icons\idle4-active.png">
+      <Link>Pixmaps\idle4-active.png</Link>
+    </Content>
+    <Content Include="..\..\data\icons\idle4.png">
       <Link>Pixmaps\idle4.png</Link>
     </Content>
   </ItemGroup>
