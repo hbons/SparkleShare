@@ -419,10 +419,7 @@ namespace SparkleShare {
 		{
 
 			InvokeOnMainThread (delegate {
-				
-				SparkleUI.NewEvents = 0;
 				NSApplication.SharedApplication.DockTile.BadgeLabel = null;
-
 			});
 
 		}
