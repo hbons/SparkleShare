@@ -516,7 +516,7 @@ namespace SparkleShare {
 
 			repo.NewCommit += delegate (SparkleCommit commit, string repository_path) {
 
-				if (NotificationsEnabled && NotificationRaised != null)
+				if (NotificationRaised != null)
 					NotificationRaised (commit, repository_path);
 
 			};

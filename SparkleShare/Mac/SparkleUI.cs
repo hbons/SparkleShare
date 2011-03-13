@@ -55,7 +55,6 @@ namespace SparkleShare {
 		public static SparkleIntro Intro;
 		public static NSFont Font;
 
-        private SparkleAbout About;
         private NSAlert Alert;
 
 
@@ -91,18 +90,22 @@ namespace SparkleShare {
 
 				InvokeOnMainThread (delegate {
 
-                    if (NSApplication.SharedApplication.DockTile.BadgeLabel == null)
-                        NSApplication.SharedApplication.DockTile.BadgeLabel = "1";
-                    else
-					    NSApplication.SharedApplication.DockTile.BadgeLabel =
-                            (int.Parse (NSApplication.SharedApplication.DockTile.BadgeLabel) + 1).ToString ();
-					
-					foreach (SparkleLog log in SparkleUI.OpenLogs)
-						log.UpdateEventLog ();
-					
-					NSApplication.SharedApplication.RequestUserAttention
-						(NSRequestUserAttentionType.InformationalRequest);
-					
+                    foreach (SparkleLog log in SparkleUI.OpenLogs)
+                        log.UpdateEventLog ();
+
+                    if (SparkleShare.Controller.NotificationsEnabled) {
+
+                        if (NSApplication.SharedApplication.DockTile.BadgeLabel == null)
+                            NSApplication.SharedApplication.DockTile.BadgeLabel = "1";
+                        else
+    					    NSApplication.SharedApplication.DockTile.BadgeLabel =
+                                (int.Parse (NSApplication.SharedApplication.DockTile.BadgeLabel) + 1).ToString ();
+
+    					NSApplication.SharedApplication.RequestUserAttention
+    						(NSRequestUserAttentionType.InformationalRequest);
+
+                    }
+
 				});
 				
 			};
