@@ -1,26 +1,45 @@
-# Hebrew translation for SparkleShare pot file.
-# Copyright (C) 2010
-# This file is distributed under the same license as the SparkleShare package.
-# Eran Cohen <realaddress@gmail.com>, 2010.
+# This file is distributed under the same license as the Sparkleshare package.
+# 
+# WARNING: Due to the nature of Transifex all translation file headers were lost
+# we apologise for any incovenience this may have caused and we hope to bring them
+# back in the future.
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-22 07:06+0000\n"
-"PO-Revision-Date: 2010-11-22 07:08+0000\n"
-"Last-Translator: Eran Cohen <realaddress@gmail.com>\n"
-"Language-Team: Hebrew (Israel)\n"
+"POT-Creation-Date: 2011-03-13 17:07+0100\n"
+"PO-Revision-Date: 2011-03-10 17:31+0000\n"
+"Last-Translator: deejay1 <deejay1@srem.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: he_IL\n"
-"X-Poedit-Language: Hebrew\n"
-"X-Poedit-Country: ISRAEL\n"
+"Language: he\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: ../SparkleLib/SparkleOptions.cs:486
+#: ../MacCore/src/Options.cs:497 ../SparkleLib/SparkleOptions.cs:486
 msgid "OptionName"
 msgstr "שם אופציה"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:360
+#: ../SparkleShare/SparkleIntro.cs:64 ../SparkleShare/SparkleStatusIcon.cs:345
+msgid "Welcome to SparkleShare!"
+msgstr "ברוכים הבאים לספארקלשר!"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:375
+#: ../SparkleShare/SparkleStatusIcon.cs:354
+msgid "Not everything is synced"
+msgstr "לא הכל מסונכרן"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:382
+#: ../SparkleShare/SparkleStatusIcon.cs:361
+msgid "Up to date"
+msgstr "מעודכן"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:404
+#: ../SparkleShare/SparkleStatusIcon.cs:377
+msgid "Syncing…"
+msgstr "מסנכרן..."
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
 msgid "Copy Web Link"
@@ -46,175 +65,110 @@ msgstr "בחר כדי לקבל העתק של גרסה זו"
 msgid "_Visit Website"
 msgstr "_בקר באתר"
 
-#: ../SparkleShare/SparkleIntro.cs:65
-msgid "Welcome to SparkleShare!"
-msgstr "ברוכים הבאים לספארקלשר!"
+#: ../SparkleShare/SparkleIntro.cs:70
+msgid ""
+"Before we can create a SparkleShare folder on this computer, we need a few "
+"bits of information from you."
+msgstr ""
+"לפני שנוכל ליצור תקיית ספארקלשר על מחשב זה, אנו צריכים כמה פיסות מידע ממך."
 
-#: ../SparkleShare/SparkleIntro.cs:71
-msgid "Before we can create a SparkleShare folder on this computer, we need a few bits of information from you."
-msgstr "לפני שנוכל ליצור תקיית ספארקלשר על מחשב זה, אנו צריכים כמה פיסות מידע ממך."
-
-#: ../SparkleShare/SparkleIntro.cs:83
+#: ../SparkleShare/SparkleIntro.cs:82
 msgid "Full Name:"
 msgstr "שם מלא:"
 
-#: ../SparkleShare/SparkleIntro.cs:99
+#: ../SparkleShare/SparkleIntro.cs:98
 msgid "Email:"
 msgstr "דוא\"ל"
 
-#: ../SparkleShare/SparkleIntro.cs:110
+#: ../SparkleShare/SparkleIntro.cs:109
 msgid "Next"
 msgstr "הבא"
 
-#: ../SparkleShare/SparkleIntro.cs:117
+#: ../SparkleShare/SparkleIntro.cs:116
 msgid "Configuring…"
 msgstr "קובע הגדרות..."
 
-#: ../SparkleShare/SparkleIntro.cs:172
+#: ../SparkleShare/SparkleIntro.cs:179
 msgid "Where is your remote folder?"
 msgstr "היכן נמצאת תקייתך המרוחקת?"
 
-#: ../SparkleShare/SparkleIntro.cs:185
+#: ../SparkleShare/SparkleIntro.cs:192
 msgid "address-to-server.com"
 msgstr "כתובת-שרת.קום"
 
-#: ../SparkleShare/SparkleIntro.cs:190
+#: ../SparkleShare/SparkleIntro.cs:197
 msgid "On my own server:"
 msgstr "על השרת שלי:"
 
-#: ../SparkleShare/SparkleIntro.cs:197
+#: ../SparkleShare/SparkleIntro.cs:204
 msgid "Free hosting for Free and Open Source Software projects."
 msgstr "שירותי אחסון חינמיים לפרוייקטי קוד פתוח חופשיים."
 
-#: ../SparkleShare/SparkleIntro.cs:198
+#: ../SparkleShare/SparkleIntro.cs:205
 msgid "Also has paid accounts for extra private space and bandwidth."
 msgstr "מציעים גם חשבונות בתשלום עם מקום אחסון אישי ותעבורה גדולים."
 
-#: ../SparkleShare/SparkleIntro.cs:206
+#: ../SparkleShare/SparkleIntro.cs:213
 msgid "The GNOME Project"
 msgstr "פרוייקט גנום"
 
-#: ../SparkleShare/SparkleIntro.cs:208
+#: ../SparkleShare/SparkleIntro.cs:215
 msgid "GNOME is an easy to understand interface to your computer."
 msgstr "פרוייקט גנום הינו ממשק קל ונוח למחשבך"
 
-#: ../SparkleShare/SparkleIntro.cs:209
+#: ../SparkleShare/SparkleIntro.cs:216
 msgid "Select this option if you’re a developer or designer working on GNOME."
 msgstr "בחר באפשרות זו אם אתה מתכנת או מעצב העובד על פרוייקט גנום."
 
-#: ../SparkleShare/SparkleIntro.cs:217
+#: ../SparkleShare/SparkleIntro.cs:224
 msgid "Gitorious"
 msgstr "גיטוריוס"
 
-#: ../SparkleShare/SparkleIntro.cs:219
+#: ../SparkleShare/SparkleIntro.cs:226
 msgid "Completely Free as in Freedom infrastructure."
 msgstr "חופשי לגמרי כבתשתית חופשית."
 
-#: ../SparkleShare/SparkleIntro.cs:220
+#: ../SparkleShare/SparkleIntro.cs:227
 msgid "Free accounts for Free and Open Source projects."
 msgstr "חשבונות חינמיים לפרוייקטי קוד חופשי ופתוח."
 
-#: ../SparkleShare/SparkleIntro.cs:232
+#: ../SparkleShare/SparkleIntro.cs:239
 msgid "Username/Folder"
 msgstr "שם משתמש\\תקייה"
 
-#: ../SparkleShare/SparkleIntro.cs:239
+#: ../SparkleShare/SparkleIntro.cs:246
 msgid "Project/Folder"
 msgstr "פרוייקט\\תקייה"
 
-#: ../SparkleShare/SparkleIntro.cs:246
+#: ../SparkleShare/SparkleIntro.cs:253
 msgid "Project"
 msgstr "פרוייקט"
 
-#: ../SparkleShare/SparkleIntro.cs:255 ../SparkleShare/SparkleIntro.cs:278
+#: ../SparkleShare/SparkleIntro.cs:262 ../SparkleShare/SparkleIntro.cs:285
 msgid "Folder"
 msgstr "תקייה"
 
-#: ../SparkleShare/SparkleIntro.cs:283
-#: ../SparkleShare/SparkleInvitation.cs:134
+#: ../SparkleShare/SparkleIntro.cs:290 ../SparkleShare/SparkleIntro.cs:467
 msgid "Folder Name:"
 msgstr "שם תקייה:"
 
-#: ../SparkleShare/SparkleIntro.cs:293
+#: ../SparkleShare/SparkleIntro.cs:300
 msgid "Sync"
 msgstr "סנכרן"
 
-#: ../SparkleShare/SparkleIntro.cs:361
+#: ../SparkleShare/SparkleIntro.cs:394
 msgid "Cancel"
 msgstr "בטל"
 
-#: ../SparkleShare/SparkleIntro.cs:372
+#: ../SparkleShare/SparkleIntro.cs:405
 msgid "Skip"
 msgstr "דלג"
 
-#: ../SparkleShare/SparkleIntro.cs:407
-#: ../SparkleShare/SparkleInvitation.cs:278
-msgid "Something went wrong…"
-msgstr "משהו לא הלך כשורה..."
-
-#: ../SparkleShare/SparkleIntro.cs:413
-msgid "Try Again"
-msgstr "נסה שוב"
-
-#: ../SparkleShare/SparkleIntro.cs:441
-#: ../SparkleShare/SparkleInvitation.cs:311
-msgid "Folder synced successfully!"
-msgstr "התקייה סונכרנה בהצלחה!"
-
-#: ../SparkleShare/SparkleIntro.cs:448
-#: ../SparkleShare/SparkleInvitation.cs:317
-#, csharp-format
-msgid "Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
-msgstr "אפשר כעת לגשת לקבצים שסונכרנו מ-‘{0}’ בתיקיית ספארקלשר שלך."
-
-#. A button that opens the synced folder
-#: ../SparkleShare/SparkleIntro.cs:456
-#: ../SparkleShare/SparkleInvitation.cs:324
-msgid "Open Folder"
-msgstr "פתח תקייה"
-
-#: ../SparkleShare/SparkleIntro.cs:472 ../SparkleShare/SparkleIntro.cs:520
-#: ../SparkleShare/SparkleIntro.cs:588
-#: ../SparkleShare/SparkleInvitation.cs:339
-#: ../SparkleShare/SparkleInvitation.cs:382
-msgid "Finish"
-msgstr "סיים"
-
-#: ../SparkleShare/SparkleIntro.cs:504
-#: ../SparkleShare/SparkleInvitation.cs:366
-#, csharp-format
-msgid "Syncing folder ‘{0}’…"
-msgstr "מסנכרן תיקייה ‘{0}’..."
-
-#: ../SparkleShare/SparkleIntro.cs:511
-#: ../SparkleShare/SparkleInvitation.cs:373
-msgid "This may take a while.\n"
-msgstr "דבר זה יכול לקחת זמן.\n"
-
-#: ../SparkleShare/SparkleIntro.cs:512
-#: ../SparkleShare/SparkleInvitation.cs:374
-msgid "You sure it’s not coffee o-clock?"
-msgstr ""
-
-#: ../SparkleShare/SparkleIntro.cs:563
-msgid "SparkleShare is ready to go!"
-msgstr "ספארקלשר מוכן!"
-
-#: ../SparkleShare/SparkleIntro.cs:569
-msgid ""
-"Now you can start accepting invitations from others. \n"
-"Just click on invitations you get by email and we will take care of the rest."
-msgstr "הנך יכול עתה לקבל הזמנות מאחרים.פשוט לחץ על הזמנות שאתה מקבל."
-
-#: ../SparkleShare/SparkleIntro.cs:580
-msgid "Learn how to host your own SparkleServer"
-msgstr "למד איך להקים שרת אכסון, ספארקלסרבר (SparkleServer), של ספארקלשר משלך"
-
-#: ../SparkleShare/SparkleInvitation.cs:104
+#: ../SparkleShare/SparkleIntro.cs:437
 msgid "Invitation received!"
 msgstr "ההזמנה התקבלה!"
 
-#: ../SparkleShare/SparkleInvitation.cs:110
+#: ../SparkleShare/SparkleIntro.cs:443
 msgid ""
 "You've received an invitation to join a shared folder.\n"
 "We're ready to hook you up immediately if you wish."
@@ -222,194 +176,229 @@ msgstr ""
 "קיבלת הזמנה להצטרף תקייה משותפת.\n"
 "אנו מוכנים לחבר אותך ברגע זה אם תרצה."
 
-#: ../SparkleShare/SparkleInvitation.cs:116
+#: ../SparkleShare/SparkleIntro.cs:449
 msgid "Do you accept this invitation?"
 msgstr "האם אתה מקבל את ההזמנה הזו?"
 
-#: ../SparkleShare/SparkleInvitation.cs:125
+#: ../SparkleShare/SparkleIntro.cs:458
 msgid "Server Address:"
 msgstr "כתובת שרת:"
 
-#: ../SparkleShare/SparkleInvitation.cs:148
+#: ../SparkleShare/SparkleIntro.cs:481
 msgid "Reject"
 msgstr "דחה"
 
-#: ../SparkleShare/SparkleInvitation.cs:149
+#: ../SparkleShare/SparkleIntro.cs:482
 msgid "Accept and Sync"
 msgstr "אשר וסנכרן"
 
-#: ../SparkleShare/SparkleInvitation.cs:284
-msgid "Close"
-msgstr "סגור"
+#: ../SparkleShare/SparkleIntro.cs:539
+msgid "Something went wrong…"
+msgstr "משהו לא הלך כשורה..."
+
+#: ../SparkleShare/SparkleIntro.cs:545
+msgid "Try Again"
+msgstr "נסה שוב"
+
+#: ../SparkleShare/SparkleIntro.cs:573
+msgid "Folder synced successfully!"
+msgstr "התקייה סונכרנה בהצלחה!"
+
+#: ../SparkleShare/SparkleIntro.cs:580
+#, csharp-format
+msgid ""
+"Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
+msgstr "אפשר כעת לגשת לקבצים שסונכרנו מ-‘{0}’ בתיקיית ספארקלשר שלך."
+
+#. A button that opens the synced folder
+#: ../SparkleShare/SparkleIntro.cs:588
+msgid "Open Folder"
+msgstr "פתח תקייה"
+
+#: ../SparkleShare/SparkleIntro.cs:596 ../SparkleShare/SparkleIntro.cs:644
+#: ../SparkleShare/SparkleIntro.cs:712
+msgid "Finish"
+msgstr "סיים"
+
+#: ../SparkleShare/SparkleIntro.cs:628
+#, csharp-format
+msgid "Syncing folder ‘{0}’…"
+msgstr "מסנכרן תיקייה ‘{0}’..."
+
+#: ../SparkleShare/SparkleIntro.cs:635
+msgid "This may take a while.\n"
+msgstr "דבר זה יכול לקחת זמן.\n"
+
+#: ../SparkleShare/SparkleIntro.cs:636
+msgid "Are you sure it’s not coffee o'clock?"
+msgstr ""
+
+#: ../SparkleShare/SparkleIntro.cs:687
+msgid "SparkleShare is ready to go!"
+msgstr "ספארקלשר מוכן!"
+
+#: ../SparkleShare/SparkleIntro.cs:693
+msgid ""
+"Now you can start accepting invitations from others. \n"
+"Just click on invitations you get by email and we will take care of the rest."
+msgstr "הנך יכול עתה לקבל הזמנות מאחרים.פשוט לחץ על הזמנות שאתה מקבל."
+
+#: ../SparkleShare/SparkleIntro.cs:704
+msgid "Learn how to host your own SparkleServer"
+msgstr "למד איך להקים שרת אכסון, ספארקלסרבר (SparkleServer), של ספארקלשר משלך"
 
 #. TRANSLATORS: {0} is a folder name, and {1} is a server address
-#: ../SparkleShare/SparkleLog.cs:53
+#: ../SparkleShare/SparkleLog.cs:54
 #, csharp-format
-msgid "Recent Events in ‘{0}’"
-msgstr "אירועים אחרונים ב-‘{0}’"
+msgid "Events in ‘{0}’"
+msgstr ""
 
-#: ../SparkleShare/SparkleLog.cs:108
+#: ../SparkleShare/SparkleLog.cs:109
 msgid "_Open Folder"
 msgstr "_פתח תקייה"
 
-#: ../SparkleShare/SparkleLog.cs:246
+#: ../SparkleShare/SparkleLog.cs:222
 msgid "This folder has unsynced changes"
 msgstr "תקייה זו מכילה שינויים שלא סונכרנו"
 
-#: ../SparkleShare/SparkleLog.cs:247
+#: ../SparkleShare/SparkleLog.cs:223
 msgid "We will sync these once we’re connected again"
 msgstr "נסנכרן אותם כאשר נהיה מחוברים שוב"
 
-#: ../SparkleShare/SparkleLog.cs:260
+#: ../SparkleShare/SparkleLog.cs:236
 msgid "Could not sync with the remote folder"
 msgstr "הסנכרון עם התקייה המרוחקת לא צלח."
 
-#: ../SparkleShare/SparkleLog.cs:261
-#, fuzzy
+#: ../SparkleShare/SparkleLog.cs:237
 msgid "Is the you and the server online?"
-msgstr "האם האתה והשרת מחוברים לרשת?"
+msgstr ""
 
-#: ../SparkleShare/SparkleLog.cs:407
+#: ../SparkleShare/SparkleLog.cs:383
 msgid "Edited"
 msgstr ""
 
-#: ../SparkleShare/SparkleLog.cs:421
+#: ../SparkleShare/SparkleLog.cs:397
 msgid "Added"
 msgstr ""
 
-#: ../SparkleShare/SparkleLog.cs:435
+#: ../SparkleShare/SparkleLog.cs:411
 msgid "Deleted"
 msgstr ""
 
-#: ../SparkleShare/SparkleLog.cs:449
+#: ../SparkleShare/SparkleLog.cs:425
 msgid "Moved"
 msgstr ""
 
-#: ../SparkleShare/SparkleShare.cs:57
+#: ../SparkleShare/SparkleShare.cs:55
 msgid "Sorry, you can't run SparkleShare with these permissions."
 msgstr "מצטערים, אך אינך יכול להריץ ספארקלשר עם ההרשאות האלה."
 
-#: ../SparkleShare/SparkleShare.cs:58
+#: ../SparkleShare/SparkleShare.cs:56
 msgid "Things would go utterly wrong."
 msgstr "דברים בלתי תקינים עשויים לקרות."
 
-#: ../SparkleShare/SparkleShare.cs:69
+#: ../SparkleShare/SparkleShare.cs:68
 msgid "Don't show the notification icon"
 msgstr "אל תראה את סמל ההתרעה"
+
+#: ../SparkleShare/SparkleShare.cs:69
+msgid "Print version information"
+msgstr "מידע גרסת ההדפסה"
 
 #: ../SparkleShare/SparkleShare.cs:70
 msgid "Show this help text"
 msgstr "הראה את מלל העזרה"
 
-#: ../SparkleShare/SparkleShare.cs:71
-msgid "Print version information"
-msgstr "מידע גרסת ההדפסה"
-
-#: ../SparkleShare/SparkleShare.cs:114
+#: ../SparkleShare/SparkleShare.cs:133
 msgid "SparkleShare, an instant update workflow to Git."
 msgstr "ספארקלשר, עדכון מיידי של רצף העבודה אל גיט (Git)."
 
-#: ../SparkleShare/SparkleShare.cs:115
+#: ../SparkleShare/SparkleShare.cs:134
 msgid "Copyright (C) 2010 Hylke Bons"
 msgstr "זכויות שמורות (C) 2010 Hylke Bons"
 
-#: ../SparkleShare/SparkleShare.cs:117
+#: ../SparkleShare/SparkleShare.cs:136
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
 msgstr "תוכנה זו באה ללא כל אחריות."
 
-#: ../SparkleShare/SparkleShare.cs:119
+#: ../SparkleShare/SparkleShare.cs:138
 msgid "This is free software, and you are welcome to redistribute it "
 msgstr "תוכנה זו הינה חופשית ואתם מוזמנים להפיצה"
 
-#: ../SparkleShare/SparkleShare.cs:120
+#: ../SparkleShare/SparkleShare.cs:139
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
 msgstr "תחת תנאים מסויימים. אנא קראו את רשיון GNU GPLv3 לקבלת פרטים."
 
-#: ../SparkleShare/SparkleShare.cs:122
-#, fuzzy
+#: ../SparkleShare/SparkleShare.cs:141
 msgid "SparkleShare automatically syncs Git repositories in "
-msgstr "ספארקלשר מסנכרן מאגרי גיט (Git) אוטומטית ב..."
+msgstr ""
 
-#: ../SparkleShare/SparkleShare.cs:123
-#, fuzzy
+#: ../SparkleShare/SparkleShare.cs:142
 msgid "the ~/SparkleShare folder with their remote origins."
-msgstr "תקיית ~/SparkleShare עם מקורם המרוחקים."
+msgstr ""
 
-#: ../SparkleShare/SparkleShare.cs:125
+#: ../SparkleShare/SparkleShare.cs:144
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
 msgstr "שימוש: sparkleshare [start|stop|restart] [אפשרויות]..."
 
-#: ../SparkleShare/SparkleShare.cs:126
+#: ../SparkleShare/SparkleShare.cs:145
 msgid "Sync SparkleShare folder with remote repositories."
 msgstr "סנכרן תקיית ספארקלשר עם מאגרים מרוחקים."
 
-#: ../SparkleShare/SparkleShare.cs:128
+#: ../SparkleShare/SparkleShare.cs:147
 msgid "Arguments:"
 msgstr "ארגומנטים:"
 
-#: ../SparkleShare/SparkleShare.cs:140
+#: ../SparkleShare/SparkleShare.cs:159
 msgid "SparkleShare "
 msgstr "ספארקלשר"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:191
+#: ../SparkleShare/SparkleStatusIcon.cs:187
 msgid "No Remote Folders Yet"
 msgstr "עדיין אין תיקיות מרוחקות"
 
 #. Opens the wizard to add a new remote folder
-#: ../SparkleShare/SparkleStatusIcon.cs:200
-msgid "Sync Remote Folder…"
-msgstr "סנכרן תקייה מרוחקת..."
+#: ../SparkleShare/SparkleStatusIcon.cs:196
+msgid "Add Remote Folder…"
+msgstr ""
 
-#. A checkbutton to toggle whether or not to show notifications
-#: ../SparkleShare/SparkleStatusIcon.cs:215
-msgid "Show Notifications"
-msgstr "הראה הודעות"
+#: ../SparkleShare/SparkleStatusIcon.cs:216
+msgid "Turn Notifications Off"
+msgstr ""
+
+#: ../SparkleShare/SparkleStatusIcon.cs:218
+msgid "Turn Notifications On"
+msgstr ""
 
 #. A menu item that takes the user to http://www.sparkleshare.org/
-#: ../SparkleShare/SparkleStatusIcon.cs:228
-msgid "About"
-msgstr "אודות"
+#: ../SparkleShare/SparkleStatusIcon.cs:231
+msgid "About SparkleShare"
+msgstr ""
 
 #. A menu item that quits the application
-#: ../SparkleShare/SparkleStatusIcon.cs:241
+#: ../SparkleShare/SparkleStatusIcon.cs:244
 msgid "Quit"
 msgstr "צא"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:342
-msgid "No folders yet"
-msgstr "עדיין אין תיקיות"
-
-#: ../SparkleShare/SparkleStatusIcon.cs:351
-msgid "Not everything is synced"
-msgstr "לא הכל מסונכרן"
-
-#: ../SparkleShare/SparkleStatusIcon.cs:358
-msgid "Up to date"
-msgstr "מעודכן"
-
-#: ../SparkleShare/SparkleStatusIcon.cs:374
-msgid "Syncing…"
-msgstr "מסנכרן..."
-
-#: ../SparkleShare/SparkleUI.cs:87
+#: ../SparkleShare/SparkleUI.cs:91
 #, csharp-format
 msgid "added ‘{0}’"
 msgstr "הוסף ‘{0}’"
 
-#: ../SparkleShare/SparkleUI.cs:98
+#: ../SparkleShare/SparkleUI.cs:102
 #, csharp-format
 msgid "edited ‘{0}’"
 msgstr "נערך ‘{0}’"
 
-#: ../SparkleShare/SparkleUI.cs:109
+#: ../SparkleShare/SparkleUI.cs:113
 #, csharp-format
 msgid "deleted ‘{0}’"
 msgstr "נמחק ‘{0}’"
 
-#: ../SparkleShare/SparkleUI.cs:149
+#: ../SparkleShare/SparkleUI.cs:157
 msgid "Ouch! Mid-air collision!"
 msgstr "איה! התנגשות באמצע ההעברה!"
 
-#: ../SparkleShare/SparkleUI.cs:150
+#: ../SparkleShare/SparkleUI.cs:158
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
 msgstr "אל דאגה, ספארקלשר יצר העתק של כל אחד מהקבצים הסותרים (השונים)"
