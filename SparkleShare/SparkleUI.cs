@@ -135,7 +135,7 @@ namespace SparkleShare {
 					
 					foreach (SparkleLog log in OpenLogs)
 						if (log.LocalPath.Equals (repository_path))
-							log.Update ();
+							log.UpdateEventLog ();
 
 //					bubble.AddAction ("", "Show Events", delegate {
 				

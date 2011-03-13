@@ -180,9 +180,11 @@ namespace SparkleShare {
 			
 			get {
 				
-				return SparkleHelpers.CombineMore (Defines.PREFIX,
-					"sparkleshare", "html", "event-log.html");
+				string path = SparkleHelpers.CombineMore (Defines.PREFIX,
+					"share", "sparkleshare", "html", "event-log.html");
 			
+				return String.Join (Environment.NewLine, File.ReadAllLines (path));
+
 			}
 			
 		}
@@ -192,8 +194,10 @@ namespace SparkleShare {
 			
 			get {
 				
-				return SparkleHelpers.CombineMore (Defines.PREFIX,
-					"sparkleshare", "html", "day-entry.html");
+				string path = SparkleHelpers.CombineMore (Defines.PREFIX,
+					"share", "sparkleshare", "html", "day-entry.html");
+			
+				return String.Join (Environment.NewLine, File.ReadAllLines (path));
 			
 			}
 			
@@ -204,8 +208,10 @@ namespace SparkleShare {
 			
 			get {
 				
-				return SparkleHelpers.CombineMore (Defines.PREFIX,
-					"sparkleshare", "html", "event-entry.html");
+				string path = SparkleHelpers.CombineMore (Defines.PREFIX,
+					"share", "sparkleshare", "html", "event-entry.html");
+			
+				return String.Join (Environment.NewLine, File.ReadAllLines (path));
 			
 			}
 			
