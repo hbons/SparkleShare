@@ -102,6 +102,7 @@
       <Link>SparkleShare.cs</Link>
     </Compile>
     <Compile Include="SparkleAbout.cs" />
+    <Compile Include="SparkleAlert.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />

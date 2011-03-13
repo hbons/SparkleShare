@@ -41,7 +41,9 @@ namespace SparkleShare {
 		public static int NewEvents;
 		public static SparkleIntro Intro;
 		public static NSFont Font;
-        public SparkleAbout About;
+
+        private SparkleAbout About;
+        private NSAlert Alert;
 
 		public SparkleUI ()
 		{
@@ -53,17 +55,23 @@ namespace SparkleShare {
 			// TODO: Getting crashes when I remove this
 			NSApplication.SharedApplication.ApplicationIconImage
 				= NSImage.ImageNamed ("sparkleshare.icns");
-			
+
+
+            if (!SparkleShare.Controller.BackendIsPresent) {
+
+                Alert = new SparkleAlert ();
+                return;
+
+            }
+
 			
 			Font = NSFontManager.SharedFontManager.FontWithFamily
 				("Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
-
 			
 			OpenLogs   = new List <SparkleLog> ();
 			StatusIcon = new SparkleStatusIcon ();
 
 			NewEvents = 0;
-
 
 			SparkleShare.Controller.NotificationRaised += delegate {
 
