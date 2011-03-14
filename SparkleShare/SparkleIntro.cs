@@ -149,12 +149,12 @@ namespace SparkleShare {
 		}
 
 
-		private void PreventClose (object o, DeleteEventArgs e)
+		private void PreventClose (object o, DeleteEventArgs args)
 		{
 
 			// Cancel closing when the "Close"
 			// button of the window is pressed
-			e.RetVal = true;
+			args.RetVal = true;
 
 		}
 
@@ -611,16 +611,16 @@ namespace SparkleShare {
 		
 		}
 
-		private ProgressBar ProgressBar;
+//		private ProgressBar ProgressBar;
 		// The page shown whilst syncing
 		private void ShowSyncingPage (string name)
 		{
 
 			Reset ();
 
-				ProgressBar = new ProgressBar () {
-					Fraction = 0
-				};
+//				ProgressBar = new ProgressBar () {
+//					Fraction = 0
+//				};
 
 				VBox layout_vertical = new VBox (false, 0);
 
@@ -662,7 +662,7 @@ namespace SparkleShare {
 				table.Attach (spinner,      0, 1, 0, 1);
 				table.Attach (header, 1, 2, 0, 1);
 				table.Attach (information,  1, 2, 1, 2);
-				table.Attach (ProgressBar,  2, 3, 0, 2);
+				//table.Attach (ProgressBar,  2, 3, 0, 2);
 
 				box.PackStart (table, false, false, 0);
 
@@ -712,9 +712,7 @@ namespace SparkleShare {
 					Button finish_button = new Button (_("Finish"));
 
 					finish_button.Clicked += delegate (object o, EventArgs args) {
-
 						Destroy ();
-
 					};
 
 				AddButton (finish_button);

@@ -69,9 +69,7 @@ namespace SparkleShare {
 			Title = String.Format(_("Events in ‘{0}’"), name);
 			IconName = "folder-sparkleshare";
 
-			DeleteEvent += delegate {
-				Close ();
-			};
+			DeleteEvent += Close;
 			
 			LayoutVertical = new VBox (false, 0);
 
@@ -102,7 +100,7 @@ namespace SparkleShare {
 					Button close_button = new Button (Stock.Close);
 
 					close_button.Clicked += delegate {
-						Close ();
+						HideAll ();
 					};
 
 				dialog_buttons.Add (open_folder_button);
@@ -138,7 +136,7 @@ namespace SparkleShare {
 
 				}
 
-				// TODO: Don't close window afterwards
+				// FIXME: webview should stay on the same page
 
 			};
 
@@ -175,15 +173,17 @@ namespace SparkleShare {
 			LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
 			LayoutVertical.ReorderChild (ScrolledWindow, 0);
 
-			ShowAll ();
+			LayoutVertical.ShowAll ();
 
 		}
 
 
-		public void Close ()
+		public void Close (object o, DeleteEventArgs args)
 		{
 
-			Destroy (); // TODO: keep logs in memory like Mac UI
+			HideAll ();
+			args.RetVal = true;
+			// FIXME: window positions aren't saved
 
 		}
 
@@ -209,12 +209,12 @@ namespace SparkleShare {
 						close_1.AddAccelerator ("activate", accel_group, new AccelKey (Gdk.Key.W, Gdk.ModifierType.ControlMask,
 							AccelFlags.Visible));
 
-						close_1.Activated += delegate { Close (); };
+						close_1.Activated += delegate { HideAll (); };
 
 						// Close on Ctrl+W
 						close_2.AddAccelerator ("activate", accel_group, new AccelKey (Gdk.Key.Escape, Gdk.ModifierType.None,
 							AccelFlags.Visible));
-						close_2.Activated += delegate { Close (); };
+						close_2.Activated += delegate { HideAll (); };
 
 					file_menu.Append (close_1);
 					file_menu.Append (close_2);
