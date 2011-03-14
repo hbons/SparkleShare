@@ -153,7 +153,7 @@ namespace SparkleShare {
 				// A menu item that provides a link to the SparkleShare folder
 				Gtk.Action folder_action = new Gtk.Action ("", "SparkleShare") {
 					IconName    = "folder-sparkleshare",
-					IsImportant = true
+					IsImportant = true // FIXME: doesn't shot the icon on Fedora
 				};
 
 				folder_action.Activated += delegate {
@@ -177,8 +177,7 @@ namespace SparkleShare {
 //						if (repo.HasUnsyncedChanges)
 //							folder_action.IconName = "dialog-error";
 					
-						// TODO Open each window with a little position offset
-						// so they stack nicely
+
 						folder_action.Activated += OpenEventLogDelegate (path);
 
 						MenuItem menu_item = (MenuItem) folder_action.CreateMenuItem ();
@@ -254,9 +253,7 @@ namespace SparkleShare {
 
 			Menu.Add (quit_item);
 
-
 			Menu.ShowAll ();			
-			
 
 		}
 
@@ -268,27 +265,24 @@ namespace SparkleShare {
 
 			return delegate { 
 
-				SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) { return l.LocalPath.Equals (path); });
+				SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
+					return l.LocalPath.Equals (path);
+				});
 
 				// Check whether the log is already open, create a new one if
-				//that's not the case or present it to the user if it is
+				// that's not the case or present it to the user if it is
 				if (log == null) {
 
-					log = new SparkleLog (path);
+					SparkleUI.OpenLogs.Add (new SparkleLog (path));
+					SparkleUI.OpenLogs [SparkleUI.OpenLogs.Count - 1].ShowAll ();
+					SparkleUI.OpenLogs [SparkleUI.OpenLogs.Count - 1].Present ();
 
-					log.Hidden += delegate {
+				} else {
 
-					SparkleUI.OpenLogs.Remove (log);
-					log.Destroy ();
-
-					};
-
-					SparkleUI.OpenLogs.Add (log);
+					log.ShowAll ();
+					log.Present ();
 
 				}
-
-				log.ShowAll ();
-				log.Present ();
 
 			};
 
