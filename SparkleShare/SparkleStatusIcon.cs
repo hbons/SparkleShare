@@ -54,7 +54,12 @@ namespace SparkleShare {
 
 			SparkleShare.Controller.FolderSizeChanged += delegate {
 				Application.Invoke (delegate {
+
+					if (!Animation.Enabled)
+						SetNormalState ();
+
 					UpdateMenu ();
+
 				});
 			};
 			

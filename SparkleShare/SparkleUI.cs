@@ -80,6 +80,13 @@ namespace SparkleShare {
 			// Show a bubble when there are new changes
 			SparkleShare.Controller.NotificationRaised += delegate (SparkleCommit commit, string repository_path) {
 
+				foreach (SparkleLog log in OpenLogs)
+					if (log.LocalPath.Equals (repository_path))
+						log.UpdateEventLog ();
+
+				if (!SparkleShare.Controller.NotificationsEnabled)
+					return;
+
 				string file_name = "";
 				string message = null;
 
@@ -134,10 +141,6 @@ namespace SparkleShare {
 						bubble.Icon = new Gdk.Pixbuf (avatar_file_path);
 					else
 						bubble.Icon = SparkleUIHelpers.GetIcon ("avatar-default", 32);
-					
-					foreach (SparkleLog log in OpenLogs)
-						if (log.LocalPath.Equals (repository_path))
-							log.UpdateEventLog ();
 
 					bubble.AddAction ("", "Show Events", delegate {
 				
@@ -152,6 +155,7 @@ namespace SparkleShare {
 
 			};
 
+
 			// Show a bubble when there was a conflict
 			SparkleShare.Controller.ConflictNotificationRaised += delegate {
 				Application.Invoke (delegate {
@@ -162,6 +166,30 @@ namespace SparkleShare {
 					new SparkleBubble (title, subtext).Show ();
 
 				});
+			};
+
+
+			SparkleShare.Controller.AvatarFetched += delegate {
+			
+				Application.Invoke (delegate {
+					
+					foreach (SparkleLog log in OpenLogs)
+						log.UpdateEventLog ();
+					
+				});
+		
+			};
+
+
+			SparkleShare.Controller.OnIdle += delegate {
+			
+				Application.Invoke (delegate {
+					
+					foreach (SparkleLog log in OpenLogs)
+						log.UpdateEventLog ();
+					
+				});
+		
 			};
 
 		}
