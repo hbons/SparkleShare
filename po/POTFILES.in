@@ -2,7 +2,6 @@
 # Please keep this file in alphabetical order; run ./sort-potfiles
 # after adding files here.
 [encoding: UTF-8]
-MacCore/src/Options.cs
 SparkleLib/SparkleFetcher.cs
 SparkleLib/SparkleHelpers.cs
 SparkleLib/SparkleOptions.cs
@@ -12,8 +11,8 @@ SparkleLib/SparkleRepo.cs
 SparkleShare/Mac/SparkleStatusIcon.cs
 SparkleShare/Mac/SparkleUI.cs
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in
+SparkleShare/SparkleAbout.cs
 SparkleShare/SparkleBubble.cs
-SparkleShare/SparkleDialog.cs
 SparkleShare/SparkleIntro.cs
 SparkleShare/SparkleInvitation.cs
 SparkleShare/SparkleLog.cs
