@@ -85,7 +85,7 @@ namespace SparkleShare {
 					BorderWidth = 12
 				};
 
-				Button credits_button = new Button ("_Show Credits") {
+				Button credits_button = new Button (_("_Show Credits")) {
 					UseUnderline = true
 				};
 
