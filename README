@@ -76,6 +76,7 @@ To build SparkleShare you need:
    - nautilus-python-devel
    - nant
    - notify-sharp-devel
+   - webkit-gtk-devel
    - webkit-sharp-devel
 
 
