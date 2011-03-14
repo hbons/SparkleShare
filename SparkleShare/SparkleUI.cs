@@ -80,9 +80,14 @@ namespace SparkleShare {
 			// Show a bubble when there are new changes
 			SparkleShare.Controller.NotificationRaised += delegate (SparkleCommit commit, string repository_path) {
 
-				foreach (SparkleLog log in OpenLogs)
-					if (log.LocalPath.Equals (repository_path))
-						log.UpdateEventLog ();
+				foreach (SparkleLog log in OpenLogs) {
+					if (log.LocalPath.Equals (repository_path)) {
+						Application.Invoke (delegate {
+							log.UpdateEventLog ();
+						});
+					}				
+				}
+
 
 				if (!SparkleShare.Controller.NotificationsEnabled)
 					return;
