@@ -51,7 +51,7 @@
     <Compile Include="SparkleUIHelpers.cs" />
     <Compile Include="SparkleInfobar.cs" />
     <Compile Include="SparkleController.cs" />
-    <Compile Include="SparkleDialog.cs" />
+    <Compile Include="SparkleAbout.cs" />
     <Compile Include="SparkleLinController.cs" />
   </ItemGroup>
   <ItemGroup>

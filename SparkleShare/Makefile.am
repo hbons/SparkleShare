@@ -10,7 +10,7 @@ LINK = $(REF_SPARKLESHARE) $(NOTIFY_SHARP_LIBS) $(WEBKIT_SHARP_LIBS)
 SOURCES =  \
 	SparkleBubble.cs \
 	SparkleController.cs \
-	SparkleDialog.cs \
+	SparkleAbout.cs \
 	SparkleEntry.cs \
 	SparkleInfobar.cs \
 	SparkleIntro.cs \
