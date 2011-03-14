@@ -1,5 +1,6 @@
 SUBDIRS =	\
-	Nautilus
+	Nautilus \
+	Mac
 
 ASSEMBLY = SparkleShare
 TARGET = exe
@@ -14,6 +15,7 @@ SOURCES =  \
 	SparkleEntry.cs \
 	SparkleInfobar.cs \
 	SparkleIntro.cs \
+  SparkleInvitation.cs \
 	SparkleLinController.cs \
 	SparkleLink.cs \
 	SparkleLog.cs \
