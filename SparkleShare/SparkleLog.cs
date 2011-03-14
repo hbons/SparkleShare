@@ -53,8 +53,17 @@ namespace SparkleShare {
 			string name = System.IO.Path.GetFileName (LocalPath);
 			SetDefaultSize (480, 640);
 
-	 		SetPosition (WindowPosition.Center);
 			BorderWidth = 0;
+	 		SetPosition (WindowPosition.Center);
+
+			// Open slightly off center for each consecutive window
+			if (SparkleUI.OpenLogs.Count > 0) {
+
+				int x, y;
+				GetPosition (out x, out y);
+				Move (x + SparkleUI.OpenLogs.Count * 20, y + SparkleUI.OpenLogs.Count * 20);
+
+			}
 			
 			// TRANSLATORS: {0} is a folder name, and {1} is a server address
 			Title = String.Format(_("Events in ‘{0}’"), name);
@@ -64,17 +73,13 @@ namespace SparkleShare {
 				Close ();
 			};
 			
-			CreateEventLog ();
-			UpdateEventLog ();
-			
 			LayoutVertical = new VBox (false, 0);
 
-			ScrolledWindow = new ScrolledWindow ();
-
-			ScrolledWindow.AddWithViewport (WebView);
-			(ScrolledWindow.Child as Viewport).ShadowType = ShadowType.None;
+			CreateEventLog ();
 
 			LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
+
+				UpdateEventLog ();
 
 				HButtonBox dialog_buttons = new HButtonBox {
 					Layout = ButtonBoxStyle.Edge,
@@ -103,16 +108,11 @@ namespace SparkleShare {
 				dialog_buttons.Add (open_folder_button);
 				dialog_buttons.Add (close_button);
 
-			LayoutVertical.PackStart (new HSeparator (), false, false, 0);
-
 			// We have to hide the menubar somewhere...
 			LayoutVertical.PackStart (CreateShortcutsBar (), false, false, 0);
 			LayoutVertical.PackStart (dialog_buttons, false, false, 0);
 
 			Add (LayoutVertical);
-
-			CreateEventLog ();
-			UpdateEventLog ();
 
 		}
 
@@ -142,6 +142,9 @@ namespace SparkleShare {
 
 			};
 
+			ScrolledWindow = new ScrolledWindow ();
+			ScrolledWindow.AddWithViewport (WebView);
+
 		}
 
 
@@ -161,7 +164,18 @@ namespace SparkleShare {
 					SparkleHelpers.CombineMore (Defines.PREFIX, "share", "sparkleshare", "icons", 
 						"hicolor", "32x32", "status", "avatar-default.png"));
 
-			WebView.LoadHtmlString (html, "file://");
+			WebView.LoadString (html, null, null, "file://");
+
+			LayoutVertical.Remove (ScrolledWindow);
+			ScrolledWindow = new ScrolledWindow ();
+			Viewport viewport = new Viewport ();
+			WebView.Reparent (viewport);
+			ScrolledWindow.Add (viewport);
+			(ScrolledWindow.Child as Viewport).ShadowType = ShadowType.None;
+			LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
+			LayoutVertical.ReorderChild (ScrolledWindow, 0);
+
+			ShowAll ();
 
 		}
 
