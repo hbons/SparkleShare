@@ -122,6 +122,7 @@ namespace SparkleShare {
 		
 			};
 			
+
 			SparkleShare.Controller.OnIdle += delegate {
 			
 				InvokeOnMainThread (delegate {
