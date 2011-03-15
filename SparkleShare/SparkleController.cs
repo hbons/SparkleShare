@@ -1191,15 +1191,14 @@ namespace SparkleShare {
 		public void Quit ()
 		{
 
-			foreach (SparkleRepo repo in Repositories)
-				repo.Dispose ();
+			// FIXME: this blocks
+//			foreach (SparkleRepo repo in Repositories)
+//				repo.Dispose ();
 
-			string pid_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "sparkleshare.pid");
-			
-			// Remove the process ID file
-			if (File.Exists (pid_file_path))
-				File.Delete (pid_file_path);
+			if (Directory.Exists (SparklePaths.SparkleTmpPath))
+				Directory.Delete (SparklePaths.SparkleTmpPath, true);
 
+			// FIXME: Never exits
 			Environment.Exit (0);
 
 		}
