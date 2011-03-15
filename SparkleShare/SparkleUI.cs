@@ -88,7 +88,8 @@ namespace SparkleShare {
 					}				
 				}
 
-
+				// TODO: move to controller and do translation here
+				
 				if (!SparkleShare.Controller.NotificationsEnabled)
 					return;
 
