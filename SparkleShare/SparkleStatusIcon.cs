@@ -150,39 +150,37 @@ namespace SparkleShare {
 					Sensitive = false
 				};
 
-				// A menu item that provides a link to the SparkleShare folder
-				Gtk.Action folder_action = new Gtk.Action ("", "SparkleShare") {
-					IconName    = "folder-sparkleshare",
-					IsImportant = true // FIXME: doesn't shot the icon on Fedora
-				};
-
-				folder_action.Activated += delegate {
-					SparkleShare.Controller.OpenSparkleShareFolder ();
-				};
-
 			Menu.Add (status_menu_item);
 			Menu.Add (new SeparatorMenuItem ());
-			Menu.Add (folder_action.CreateMenuItem ());
+
+				ImageMenuItem folder_item = new SparkleMenuItem ("SparkleShare"){
+					Image = new Image (SparkleUIHelpers.GetIcon ("folder-sparkleshare", 16))
+				};
+
+				folder_item.Activated += delegate {
+					SparkleShare.Controller.OpenSparkleShareFolder ();
+				};
+				
+			Menu.Add (folder_item);
 
 				if (SparkleShare.Controller.Folders.Count > 0) {
 			
 					// Creates a menu item for each repository with a link to their logs
 					foreach (string path in SparkleShare.Controller.Folders) {
 
-						folder_action = new Gtk.Action ("", Path.GetFileName (path)) {
-							IconName    = "folder",
-							IsImportant = true
+						Gdk.Pixbuf folder_icon = IconTheme.Default.LoadIcon ("folder", 16,
+							IconLookupFlags.GenericFallback);
+						
+						ImageMenuItem subfolder_item = new SparkleMenuItem (Path.GetFileName (path)) {
+							Image = new Image (folder_icon)
 						};
 
 //						if (repo.HasUnsyncedChanges)
 //							folder_action.IconName = "dialog-error";
 					
+						subfolder_item.Activated += OpenEventLogDelegate (path);
 
-						folder_action.Activated += OpenEventLogDelegate (path);
-
-						MenuItem menu_item = (MenuItem) folder_action.CreateMenuItem ();
-
-						Menu.Add (menu_item);
+						Menu.Add (subfolder_item);
 				
 					}
 				
@@ -377,6 +375,17 @@ namespace SparkleShare {
 
 			if (!Animation.Enabled)
 				Animation.Start ();
+
+		}
+
+	}
+
+	class SparkleMenuItem : ImageMenuItem {
+
+		public SparkleMenuItem (string text) : base (text)
+		{
+
+			SetProperty ("always-show-image", new GLib.Value (true));
 
 		}
 
