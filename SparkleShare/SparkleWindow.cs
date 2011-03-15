@@ -42,16 +42,9 @@ namespace SparkleShare {
 			Resizable      = true;
 			WindowPosition = WindowPosition.Center;
 
-			SetDefaultSize (640, 480);
-
-			Buttons = CreateButtonBox ();
+			SetDefaultSize (640, 425);
 
 			HBox = new HBox (false, 6);
-
-				string image_path = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare",
-			    	"pixmaps", "side-splash.png");
-
-				Image side_splash = new Image (image_path);
 
 				VBox = new VBox (false, 0);
 
@@ -59,10 +52,26 @@ namespace SparkleShare {
 						BorderWidth = 30
 					};
 
+					Buttons = CreateButtonBox ();
+
 				VBox.PackStart (Wrapper, true, true, 0);
 				VBox.PackStart (Buttons, false, false, 0);
 
-			HBox.PackStart (side_splash, false, false, 0);
+				EventBox box = new EventBox ();
+				Gdk.Color bg_color = new Gdk.Color ();
+				Gdk.Color.Parse ("#2e3336", ref bg_color);
+				box.ModifyBg (StateType.Normal, bg_color);
+
+					string image_path = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare",
+						"pixmaps", "side-splash.png");
+
+					Image side_splash = new Image (image_path) {
+						Yalign = 1
+					};
+
+				box.Add (side_splash);
+
+			HBox.PackStart (box, true, true, 0);
 			HBox.PackStart (VBox, true, true, 0);
 
 			base.Add (HBox);

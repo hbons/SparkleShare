@@ -14,12 +14,15 @@
 //   You should have received a copy of the GNU General private License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using Gtk;
-using Mono.Unix;
+
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Timers;
+
+using Gtk;
+using Mono.Unix;
 
 namespace SparkleShare {
 
@@ -287,7 +290,7 @@ namespace SparkleShare {
 					
 					FolderEntry.Changed += CheckServerForm;
 
-					Label folder_label = new Label ("<b>" + _("Folder Name:") + "</b>") {
+					Label folder_label = new Label (_("Folder Name:")) {
 						UseMarkup = true,
 						Xalign    = 1
 					};
@@ -611,16 +614,12 @@ namespace SparkleShare {
 		
 		}
 
-//		private ProgressBar ProgressBar;
+
 		// The page shown whilst syncing
 		private void ShowSyncingPage (string name)
 		{
 
 			Reset ();
-
-//				ProgressBar = new ProgressBar () {
-//					Fraction = 0
-//				};
 
 				VBox layout_vertical = new VBox (false, 0);
 
@@ -662,11 +661,25 @@ namespace SparkleShare {
 				table.Attach (spinner,      0, 1, 0, 1);
 				table.Attach (header, 1, 2, 0, 1);
 				table.Attach (information,  1, 2, 1, 2);
-				//table.Attach (ProgressBar,  2, 3, 0, 2);
 
 				box.PackStart (table, false, false, 0);
 
+				ProgressBar progress_bar = new ProgressBar () {
+
+				};
+
+				Timer timer = new Timer () {
+					Interval = 100
+				};
+
+				timer.Elapsed += delegate {
+					progress_bar.Pulse ();
+				};
+
 				layout_vertical.PackStart (box, false, false, 0);
+				layout_vertical.PackStart (progress_bar, true, false, 0);
+
+				timer.Start ();
 
 			Add (layout_vertical);
 
