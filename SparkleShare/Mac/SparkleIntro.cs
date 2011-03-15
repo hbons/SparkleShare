@@ -48,7 +48,6 @@ namespace SparkleShare {
 		private NSButtonCell ButtonCellProto;
 		private NSMatrix Matrix;
 		private int ServerType;
-		
 		private bool ServerFormOnly;
 
 		
