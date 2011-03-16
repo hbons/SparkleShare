@@ -150,10 +150,7 @@ namespace SparkleShare {
 						bubble.Icon = SparkleUIHelpers.GetIcon ("avatar-default", 32);
 
 					bubble.AddAction ("", "Show Events", delegate {
-				
-						SparkleLog log = new SparkleLog (repository_path);
-						log.ShowAll ();
-				
+						AddEventLog (repository_path);				
 					});
 
 					bubble.Show ();
@@ -201,6 +198,31 @@ namespace SparkleShare {
 
 		}
 
+
+		public void AddEventLog (string path)
+		{
+
+			SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
+				return l.LocalPath.Equals (path);
+			});
+
+			// Check whether the log is already open, create a new one if
+			// that's not the case or present it to the user if it is
+			if (log == null) {
+
+				OpenLogs.Add (new SparkleLog (path));
+				OpenLogs [OpenLogs.Count - 1].ShowAll ();
+				OpenLogs [OpenLogs.Count - 1].Present ();
+
+			} else {
+
+				log.ShowAll ();
+				log.Present ();
+
+			}
+
+		}
+		
 
 		// Runs the application
 		public void Run ()
