@@ -48,6 +48,8 @@ namespace SparkleShare {
             StyleMask = (NSWindowStyle.Closable |
                          NSWindowStyle.Titled);
 
+            Title = "About SparkleShare";
+
             MaxSize     = new SizeF (360, 260);
             MinSize     = new SizeF (360, 260);
             HasShadow   = true;
