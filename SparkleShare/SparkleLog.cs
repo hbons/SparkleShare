@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 using Gtk;
 using Mono.Unix;
@@ -36,6 +37,8 @@ namespace SparkleShare {
 		private MenuBar MenuBar;
 		private WebView WebView;
 		private string LinkStatus;
+		private SparkleSpinner Spinner;
+		private string HTML;
 
 
 		// Short alias for the translations
@@ -69,11 +72,43 @@ namespace SparkleShare {
 			Title = String.Format(_("Events in ‘{0}’"), name);
 			IconName = "folder-sparkleshare";
 
-			DeleteEvent += Close;
-			
-			LayoutVertical = new VBox (false, 0);
+			DeleteEvent += Close;			
 
 			CreateEventLog ();
+
+		}
+
+
+		private void CreateEventLog () {
+
+			LayoutVertical = new VBox (false, 0);
+
+				ScrolledWindow = new ScrolledWindow ();
+
+					WebView = new WebView () {
+						Editable = false
+					};
+
+					WebView.HoveringOverLink += delegate (object o, WebKit.HoveringOverLinkArgs args) {
+						LinkStatus = args.Link;
+					};
+
+					WebView.NavigationRequested += delegate (object o, WebKit.NavigationRequestedArgs args) {
+
+						if (args.Request.Uri == LinkStatus) {
+
+							Process process = new Process ();
+							process.StartInfo.FileName = "xdg-open";
+							process.StartInfo.Arguments = args.Request.Uri.Replace (" ", "\\ "); // Escape space-characters
+							process.Start ();
+
+						}
+
+						// FIXME: webview should stay on the same page
+
+					};
+
+				ScrolledWindow.AddWithViewport (WebView);
 
 			LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
 
@@ -115,65 +150,76 @@ namespace SparkleShare {
 		}
 
 
-		public void CreateEventLog () {
+		public void UpdateEventLog ()
+		{
 
-			WebView = new WebView () {
-				Editable = false
-			};
+			if (HTML == null) {
 
-			WebView.HoveringOverLink += delegate (object o, WebKit.HoveringOverLinkArgs args) {
-				LinkStatus = args.Link;
-			};
+				LayoutVertical.Remove (ScrolledWindow);
+				Spinner = new SparkleSpinner (22);
+				LayoutVertical.PackStart (Spinner, true, true, 0);
 
-			WebView.NavigationRequested += delegate (object o, WebKit.NavigationRequestedArgs args) {
+			}
 
-				if (args.Request.Uri == LinkStatus) {
+			Thread thread = new Thread (new ThreadStart (delegate {
 
-					Process process = new Process ();
-					process.StartInfo.FileName = "xdg-open";
-					process.StartInfo.Arguments = args.Request.Uri.Replace (" ", "\\ "); // Escape space-characters
-					process.Start ();
+				GenerateHTML ();
+				AddHTML ();
 
-				}
+			}));
 
-				// FIXME: webview should stay on the same page
-
-			};
-
-			ScrolledWindow = new ScrolledWindow ();
-			ScrolledWindow.AddWithViewport (WebView);
+			thread.Start ();
 
 		}
 
 
-		public void UpdateEventLog ()
-		{
+		private void GenerateHTML () {
 
-			string html = SparkleShare.Controller.GetHTMLLog (System.IO.Path.GetFileName (LocalPath));
+			HTML = SparkleShare.Controller.GetHTMLLog (System.IO.Path.GetFileName (LocalPath));
 
-			html = html.Replace ("<!-- $body-font-size -->", (Style.FontDescription.Size / 1024 + 0.5) + "pt");
-			html = html.Replace ("<!-- $body-font-family -->", "\"" + Style.FontDescription.Family + "\"");
-			html = html.Replace ("<!-- $body-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Normal)));
-			html = html.Replace ("<!-- $body-background-color -->", SparkleUIHelpers.GdkColorToHex (new TreeView ().Style.Base (StateType.Normal)));
-			html = html.Replace ("<!-- $day-entry-header-background-color -->", SparkleUIHelpers.GdkColorToHex (Style.Background (StateType.Normal)));
-			html = html.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
-			html = html.Replace ("<!-- $small-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));	
-			html = html.Replace ("<!-- $no-buddy-icon-background-image -->", "file://" +
+			HTML = HTML.Replace ("<!-- $body-font-size -->", (Style.FontDescription.Size / 1024 + 0.5) + "pt");
+			HTML = HTML.Replace ("<!-- $body-font-family -->", "\"" + Style.FontDescription.Family + "\"");
+			HTML = HTML.Replace ("<!-- $body-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Normal)));
+			HTML = HTML.Replace ("<!-- $body-background-color -->", SparkleUIHelpers.GdkColorToHex (new TreeView ().Style.Base (StateType.Normal)));
+			HTML = HTML.Replace ("<!-- $day-entry-header-background-color -->", SparkleUIHelpers.GdkColorToHex (Style.Background (StateType.Normal)));
+			HTML = HTML.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
+			HTML = HTML.Replace ("<!-- $small-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));	
+			HTML = HTML.Replace ("<!-- $no-buddy-icon-background-image -->", "file://" +
 					SparkleHelpers.CombineMore (Defines.PREFIX, "share", "sparkleshare", "icons", 
 						"hicolor", "32x32", "status", "avatar-default.png"));
 
-			WebView.LoadString (html, null, null, "file://");
+		}
 
-			LayoutVertical.Remove (ScrolledWindow);
-			ScrolledWindow = new ScrolledWindow ();
-			Viewport viewport = new Viewport ();
-			WebView.Reparent (viewport);
-			ScrolledWindow.Add (viewport);
-			(ScrolledWindow.Child as Viewport).ShadowType = ShadowType.None;
-			LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
-			LayoutVertical.ReorderChild (ScrolledWindow, 0);
 
-			LayoutVertical.ShowAll ();
+		private void AddHTML ()
+		{
+
+			Application.Invoke (delegate {
+
+				WebView.LoadString (HTML, null, null, "file://");
+
+				if (Spinner.Active) {
+
+					LayoutVertical.Remove (Spinner);
+					Spinner.Stop ();
+
+				} else {
+
+					LayoutVertical.Remove (ScrolledWindow);
+
+				}
+
+				ScrolledWindow = new ScrolledWindow ();
+				Viewport viewport = new Viewport ();
+				WebView.Reparent (viewport);
+				ScrolledWindow.Add (viewport);
+				(ScrolledWindow.Child as Viewport).ShadowType = ShadowType.None;
+				LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
+				LayoutVertical.ReorderChild (ScrolledWindow, 0);
+
+				LayoutVertical.ShowAll ();
+
+			});
 
 		}
 

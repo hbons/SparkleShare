@@ -85,7 +85,7 @@ namespace SparkleShare {
 			else
 				CurrentStep = 0;
 
-//			Application.Invoke (delegate { SetImage (); });
+			Application.Invoke (delegate { SetImage (); });
 
 		}
 
