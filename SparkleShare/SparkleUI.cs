@@ -34,6 +34,7 @@ namespace SparkleShare {
 		
 		public static SparkleStatusIcon StatusIcon;
 		public static List <SparkleLog> OpenLogs;
+		public static SparkleIntro Intro;
 
 
 		// Short alias for the translations
@@ -57,8 +58,8 @@ namespace SparkleShare {
 
 			if (SparkleShare.Controller.FirstRun) {
 
-				SparkleIntro intro = new SparkleIntro ();
-				intro.ShowAccountForm ();
+				Intro = new SparkleIntro ();
+				Intro.ShowAccountForm ();
 
 			}
 			
