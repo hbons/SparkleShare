@@ -18,6 +18,7 @@
 using System;
 using System.Drawing;
 using System.IO;
+using System.Threading;
 
 using MonoMac.Foundation;
 using MonoMac.AppKit;
@@ -34,6 +35,9 @@ namespace SparkleShare {
 		private NSButton CloseButton;
 		private NSButton OpenFolderButton;
 		private NSBox Separator;
+        private string HTML;
+        private NSProgressIndicator ProgressIndicator;
+
 
 		public SparkleLog (IntPtr handle) : base (handle) { } 
 		
@@ -43,7 +47,7 @@ namespace SparkleShare {
 			LocalPath = path;
 
 			Delegate = new SparkleLogDelegate ();
-			
+
 			SetFrame (new RectangleF (0, 0, 480, 640), true);
 			Center ();
 			
@@ -69,84 +73,128 @@ namespace SparkleShare {
 			CreateEventLog ();
 			UpdateEventLog ();
 			
-			ContentView.AddSubview (WebView);
-			
-			OpenFolderButton = new NSButton (new RectangleF (16, 12, 120, 32)) {
-				Title = "Open Folder",
-				BezelStyle = NSBezelStyle.Rounded	,
-				Font = SparkleUI.Font
-			};
-
-				OpenFolderButton.Activated += delegate {
-					SparkleShare.Controller.OpenSparkleShareFolder (LocalPath);
-				};
-
-			ContentView.AddSubview (OpenFolderButton);
-
-
-			CloseButton = new NSButton (new RectangleF (480 - 120 - 16, 12, 120, 32)) {
-				Title = "Close",
-				BezelStyle = NSBezelStyle.Rounded,
-				Font = SparkleUI.Font
-			};
-					
-				CloseButton.Activated += delegate {
-					InvokeOnMainThread (delegate {	
-						PerformClose (this);
-					});
-				};
-								
-			ContentView.AddSubview (CloseButton);
-						
-
-			string name = Path.GetFileName (LocalPath);
-			Title = String.Format ("Events in ‘{0}’", name);
-			
-			Separator = new NSBox (new RectangleF (0, 58, 480, 1)) {
-				BorderColor = NSColor.LightGray,
-				BoxType = NSBoxType.NSBoxCustom
-			};
-			
-			ContentView.AddSubview (Separator);
-			
 			OrderFrontRegardless ();
 			
 		}
 
 
+        private void CreateEventLog ()
+        {
+
+            OpenFolderButton = new NSButton (new RectangleF (16, 12, 120, 32)) {
+                Title = "Open Folder",
+                BezelStyle = NSBezelStyle.Rounded   ,
+                Font = SparkleUI.Font
+            };
+
+                OpenFolderButton.Activated += delegate {
+                    SparkleShare.Controller.OpenSparkleShareFolder (LocalPath);
+                };
+
+            ContentView.AddSubview (OpenFolderButton);
+
+
+            CloseButton = new NSButton (new RectangleF (480 - 120 - 16, 12, 120, 32)) {
+                Title = "Close",
+                BezelStyle = NSBezelStyle.Rounded,
+                Font = SparkleUI.Font
+            };
+
+                CloseButton.Activated += delegate {
+                    InvokeOnMainThread (delegate {
+                        PerformClose (this);
+                    });
+                };
+
+            ContentView.AddSubview (CloseButton);
+
+
+            string name = Path.GetFileName (LocalPath);
+            Title = String.Format ("Events in ‘{0}’", name);
+
+            Separator = new NSBox (new RectangleF (0, 58, 480, 1)) {
+                BorderColor = NSColor.LightGray,
+                BoxType = NSBoxType.NSBoxCustom
+            };
+
+            ContentView.AddSubview (Separator);
+
+
+            ProgressIndicator = new NSProgressIndicator () {
+                Style = NSProgressIndicatorStyle.Spinning,
+                Frame = new RectangleF (Frame.Width / 2 - 10, Frame.Height / 2 + 10, 20, 20)
+            };
+
+            ProgressIndicator.StartAnimation (this);
+
+            WebView = new WebView (new RectangleF (0, 59, 480, 559), "", ""){
+                PolicyDelegate = new SparkleWebPolicyDelegate ()
+            };
+
+            Update ();
+
+        }
+
+
 		public void UpdateEventLog ()
 		{
 
-			string folder_name = Path.GetFileName (LocalPath);
-			string html        = SparkleShare.Controller.GetHTMLLog (folder_name);
-			
-			html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
-			html = html.Replace ("<!-- $body-font-size -->", "13.4px");
-			html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
-			html = html.Replace ("<!-- $small-color -->", "#ddd");
-			html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
-			html = html.Replace ("<!-- $a-color -->", "#0085cf");
-            html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
-			html = html.Replace ("<!-- $no-buddy-icon-background-image -->",
-				"file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "avatar-default.png"));
+            InvokeOnMainThread (delegate {
 
-			WebView.MainFrame.LoadHtmlString (html, new NSUrl (""));
-			
-			Update ();
+                if (HTML == null)
+                    ContentView.AddSubview (ProgressIndicator);
 
-		}
+            });
 
 
-		private WebView CreateEventLog ()
-		{
+            Thread thread = new Thread (new ThreadStart (delegate {
 
-			WebView = new WebView (new RectangleF (0, 59, 480, 559), "", ""){
-				PolicyDelegate = new SparkleWebPolicyDelegate ()
-			};
-			
-			return WebView;
+                GenerateHTML ();
+                AddHTML ();
+
+            }));
+
+            thread.Start ();
 
 		}
+
+
+        private void GenerateHTML ()
+        {
+
+
+            string folder_name = Path.GetFileName (LocalPath);
+            HTML               = SparkleShare.Controller.GetHTMLLog (folder_name);
+
+            HTML = HTML.Replace ("<!-- $body-font-family -->", "Lucida Grande");
+            HTML = HTML.Replace ("<!-- $body-font-size -->", "13.4px");
+            HTML = HTML.Replace ("<!-- $secondary-font-color -->", "#bbb");
+            HTML = HTML.Replace ("<!-- $small-color -->", "#ddd");
+            HTML = HTML.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
+            HTML = HTML.Replace ("<!-- $a-color -->", "#0085cf");
+            HTML = HTML.Replace ("<!-- $a-hover-color -->", "#009ff8");
+            HTML = HTML.Replace ("<!-- $no-buddy-icon-background-image -->",
+                "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "avatar-default.png"));
+
+        }
+
+
+        private void AddHTML ()
+        {
+
+            InvokeOnMainThread (delegate {
+
+                if (ProgressIndicator.Superview == ContentView)
+                    ProgressIndicator.RemoveFromSuperview ();
+    
+                WebView.MainFrame.LoadHtmlString (HTML, new NSUrl (""));
+    
+                ContentView.AddSubview (WebView);
+                Update ();
+
+            });
+
+        }
 
 	}
 
