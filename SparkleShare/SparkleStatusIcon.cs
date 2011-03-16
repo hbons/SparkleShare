@@ -203,8 +203,18 @@ namespace SparkleShare {
 				sync_item.Activated += delegate {
 					Application.Invoke (delegate {
 
-						SparkleIntro intro = new SparkleIntro ();
-						intro.ShowServerForm (true);
+						if (SparkleUI.Intro == null) {
+						
+							SparkleUI.Intro = new SparkleIntro ();
+							SparkleUI.Intro.ShowServerForm (true);
+
+						}
+		
+						if (!SparkleUI.Intro.Visible)
+							SparkleUI.Intro.ShowServerForm (true);
+
+						SparkleUI.Intro.ShowAll ();
+						SparkleUI.Intro.Present ();
 
 					});
 				};

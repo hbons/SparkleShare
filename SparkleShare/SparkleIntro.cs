@@ -61,7 +61,7 @@ namespace SparkleShare {
 
 			VBox layout_vertical = new VBox (false, 0);
 			
-				DeleteEvent += PreventClose;
+				Deletable = false;
 
 				Label header = new Label ("<span size='x-large'><b>" +
 						                _("Welcome to SparkleShare!") +
@@ -131,7 +131,7 @@ namespace SparkleShare {
 				
 						SparkleShare.Controller.FirstRun = false;
 				
-						DeleteEvent += PreventClose;
+						Deletable = false;
 						ShowServerForm ();
 
 					};
@@ -149,16 +149,6 @@ namespace SparkleShare {
 
 			ShowAll ();
 		
-		}
-
-
-		private void PreventClose (object o, DeleteEventArgs args)
-		{
-
-			// Cancel closing when the "Close"
-			// button of the window is pressed
-			args.RetVal = true;
-
 		}
 
 
@@ -364,13 +354,13 @@ namespace SparkleShare {
 						string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
 
 				
-						DeleteEvent += PreventClose;
+						Deletable = false;
 						ShowSyncingPage (canonical_name);
 
 				
 						SparkleShare.Controller.FolderFetched += delegate {
 		
-							DeleteEvent -= PreventClose;
+							Deletable = true;
 					
 							Application.Invoke (delegate {
 								ShowSuccessPage (name);
@@ -380,7 +370,7 @@ namespace SparkleShare {
 				
 						SparkleShare.Controller.FolderFetchError += delegate {
 				
-							DeleteEvent -= PreventClose;
+							Deletable = true;
 				
 							Application.Invoke (delegate { ShowErrorPage (); });	
 				
@@ -397,7 +387,7 @@ namespace SparkleShare {
 					Button cancel_button = new Button (_("Cancel"));
 
 					cancel_button.Clicked += delegate {
-						Destroy ();
+						Close ();
 					};
 
 					AddButton (cancel_button);
@@ -485,9 +475,7 @@ namespace SparkleShare {
 				Button accept_button = new Button (_("Accept and Sync"));
 
 					reject_button.Clicked += delegate {
-
-						Destroy ();
-
+						Close ();
 					};
 
 					accept_button.Clicked += delegate {
@@ -599,7 +587,7 @@ namespace SparkleShare {
 						Button finish_button = new Button (_("Finish"));
 	
 						finish_button.Clicked += delegate (object o, EventArgs args) {
-							Destroy ();
+							Close ();
 						};
 	
 					AddButton (open_folder_button);
@@ -644,7 +632,7 @@ namespace SparkleShare {
 						};
 		
 						button.Clicked += delegate {
-							Destroy ();
+							Close ();
 						};
 
 					AddButton (button);
@@ -658,28 +646,13 @@ namespace SparkleShare {
 
 				HBox box = new HBox (false, 0);
 
-				table.Attach (spinner,      0, 1, 0, 1);
+				table.Attach (spinner, 0, 1, 0, 1);
 				table.Attach (header, 1, 2, 0, 1);
 				table.Attach (information,  1, 2, 1, 2);
 
 				box.PackStart (table, false, false, 0);
 
-				ProgressBar progress_bar = new ProgressBar () {
-
-				};
-
-				Timer timer = new Timer () {
-					Interval = 100
-				};
-
-				timer.Elapsed += delegate {
-					progress_bar.Pulse ();
-				};
-
 				layout_vertical.PackStart (box, false, false, 0);
-				layout_vertical.PackStart (progress_bar, true, false, 0);
-
-				timer.Start ();
 
 			Add (layout_vertical);
 
@@ -725,7 +698,7 @@ namespace SparkleShare {
 					Button finish_button = new Button (_("Finish"));
 
 					finish_button.Clicked += delegate (object o, EventArgs args) {
-						Destroy ();
+						Close ();
 					};
 
 				AddButton (finish_button);

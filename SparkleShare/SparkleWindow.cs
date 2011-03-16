@@ -39,10 +39,17 @@ namespace SparkleShare {
 
 			BorderWidth    = 0;
 			IconName       = "folder-sparkleshare";
-			Resizable      = true;
-			WindowPosition = WindowPosition.Center;
+			Resizable      = false;
+			WindowPosition = WindowPosition.Center; // FIXME: seems to have broken
 
-			SetDefaultSize (640, 425);
+			SetSizeRequest (680, 440);
+
+			DeleteEvent += delegate (object o, DeleteEventArgs args) {
+
+				args.RetVal = true;
+				Close ();
+
+			};
 
 			HBox = new HBox (false, 6);
 
@@ -71,7 +78,7 @@ namespace SparkleShare {
 
 				box.Add (side_splash);
 
-			HBox.PackStart (box, true, true, 0);
+			HBox.PackStart (box, false, false, 0);
 			HBox.PackStart (VBox, true, true, 0);
 
 			base.Add (HBox);
@@ -128,6 +135,13 @@ namespace SparkleShare {
 			Present ();
 			base.ShowAll ();
 		
+		}
+
+		public void Close ()
+		{
+
+			HideAll ();
+
 		}
 
 	}
