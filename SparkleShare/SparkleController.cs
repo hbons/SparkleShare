@@ -15,8 +15,6 @@
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-using Mono.Unix;
-using SparkleLib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,6 +25,9 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Security.Cryptography;
 using System.Text;
+
+using Mono.Unix;
+using SparkleLib;
 
 namespace SparkleShare {
 
@@ -74,6 +75,13 @@ namespace SparkleShare {
 
 		public event NotificationRaisedEventHandler NotificationRaised;
 		public delegate void NotificationRaisedEventHandler (SparkleCommit commit, string repository_path);
+
+
+        // Short alias for the translations
+        public static string _ (string s)
+        {
+            return Catalog.GetString (s);
+        }
 
 
 		public SparkleController ()
@@ -399,8 +407,19 @@ namespace SparkleShare {
 
 				} else {
 
-					day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
-						"<b>" + activity_day.DateTime.ToString ("ddd MMM d, yyyy") + "</b>");
+                    if (activity_day.DateTime.Year != DateTime.Now.Year) {
+
+                        // TRANSLATORS: This is the date in the event logs
+                        day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
+    						"<b>" + activity_day.DateTime.ToString (_("ddd MMM d, yyyy")) + "</b>");
+
+                    } else {
+
+                        // TRANSLATORS: This is the date in the event logs, without the year
+                        day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
+                            "<b>" + activity_day.DateTime.ToString (_("ddd MMM d")) + "</b>");
+
+                    }
 
 				}
 
