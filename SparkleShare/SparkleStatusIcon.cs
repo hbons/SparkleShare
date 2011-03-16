@@ -273,24 +273,7 @@ namespace SparkleShare {
 
 			return delegate { 
 
-				SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
-					return l.LocalPath.Equals (path);
-				});
-
-				// Check whether the log is already open, create a new one if
-				// that's not the case or present it to the user if it is
-				if (log == null) {
-
-					SparkleUI.OpenLogs.Add (new SparkleLog (path));
-					SparkleUI.OpenLogs [SparkleUI.OpenLogs.Count - 1].ShowAll ();
-					SparkleUI.OpenLogs [SparkleUI.OpenLogs.Count - 1].Present ();
-
-				} else {
-
-					log.ShowAll ();
-					log.Present ();
-
-				}
+				SparkleShare.UI.AddEventLog (path);
 
 			};
 
@@ -390,7 +373,7 @@ namespace SparkleShare {
 
 	}
 
-	class SparkleMenuItem : ImageMenuItem {
+	public class SparkleMenuItem : ImageMenuItem {
 
 		public SparkleMenuItem (string text) : base (text)
 		{
