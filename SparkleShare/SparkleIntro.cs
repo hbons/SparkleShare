@@ -363,7 +363,7 @@ namespace SparkleShare {
 							Deletable = true;
 					
 							Application.Invoke (delegate {
-								ShowSuccessPage (name);
+								ShowSuccessPage (name); // FIXME: doesn't always get called on big repos
 							});
 					
 						};
@@ -371,7 +371,6 @@ namespace SparkleShare {
 						SparkleShare.Controller.FolderFetchError += delegate {
 				
 							Deletable = true;
-				
 							Application.Invoke (delegate { ShowErrorPage (); });	
 				
 						};
@@ -637,7 +636,7 @@ namespace SparkleShare {
 
 					AddButton (button);
 
-					SparkleSpinner spinner = new SparkleSpinner (22);
+//					SparkleSpinner spinner = new SparkleSpinner (22);
 
 				Table table = new Table (3, 2, false) {
 					RowSpacing    = 12,
@@ -646,7 +645,7 @@ namespace SparkleShare {
 
 				HBox box = new HBox (false, 0);
 
-				table.Attach (spinner, 0, 1, 0, 1);
+//				table.Attach (spinner, 0, 1, 0, 1);
 				table.Attach (header, 1, 2, 0, 1);
 				table.Attach (information,  1, 2, 1, 2);
 

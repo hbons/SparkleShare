@@ -15,12 +15,13 @@
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-using Meebey.SmartIrc4net;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Security.Cryptography;
+
+using Meebey.SmartIrc4net;
 
 namespace SparkleLib {
 
