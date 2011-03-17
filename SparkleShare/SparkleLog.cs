@@ -177,7 +177,9 @@ namespace SparkleShare {
 
 			HTML = SparkleShare.Controller.GetHTMLLog (System.IO.Path.GetFileName (LocalPath));
 
-			HTML = HTML.Replace ("<!-- $body-font-size -->", (Style.FontDescription.Size / 1024 + 0.5) + "pt");
+            HTML = HTML.Replace ("<!-- $body-font-size -->", (Style.FontDescription.Size / 1024 + 0.5) + "pt");
+            HTML = HTML.Replace ("<!-- $a-color -->", "#0085cf");
+            HTML = HTML.Replace ("<!-- $a-hover-color -->", "#009ff8");
 			HTML = HTML.Replace ("<!-- $body-font-family -->", "\"" + Style.FontDescription.Family + "\"");
 			HTML = HTML.Replace ("<!-- $body-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Normal)));
 			HTML = HTML.Replace ("<!-- $body-background-color -->", SparkleUIHelpers.GdkColorToHex (new TreeView ().Style.Base (StateType.Normal)));
