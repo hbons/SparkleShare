@@ -54,7 +54,9 @@ namespace SparkleShare {
 			LocalPath = path;
 			
 			string name = System.IO.Path.GetFileName (LocalPath);
-			SetDefaultSize (480, 640);
+			SetSizeRequest (480, 640);
+
+            Resizable = false;
 
 			BorderWidth = 0;
 	 		SetPosition (WindowPosition.Center);
