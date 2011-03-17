@@ -216,7 +216,10 @@ namespace SparkleShare {
 
 				}
 
-				ScrolledWindow = new ScrolledWindow ();
+				ScrolledWindow = new ScrolledWindow () {
+					HscrollbarPolicy = PolicyType.Never
+				};
+				
 				Viewport viewport = new Viewport ();
 				WebView.Reparent (viewport);
 				ScrolledWindow.Add (viewport);
