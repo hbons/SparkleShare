@@ -23,37 +23,18 @@
 			}
 
 			.day-entry-header {
-                font-size: <!-- $day-entry-header-font-size -->;         
-				color:        #babdb6;
-				text-align:   center;
-				margin-left:  auto;
-				margin-right: auto;
-				width:        90%;
-                text-shadow:  0  1px 0 rgba(255, 255, 255, 1.0);
+                font-size:     <!-- $day-entry-header-font-size -->;         
+				color:         #babdb6;
+				text-align:    center;
+				width:         90%;
+                text-shadow:   0  1px 0 rgba(255, 255, 255, 1.0);
+				margin-bottom: 9px;
 			}
 			
 			.day-entry-content {
 				padding:          9px;
 			}
-			
-			dl {
-				padding: 0;
-				margin: 0;
-				padding-bottom: 15px;
-			}
-			
-			dt {
-				padding-bottom: 9px;
-				padding-top:    9px;
-			}
-			
-			dd {
-			width: 100px;
-				padding-left: 0;
-				margin-left: 12px;
-				text-overflow: ellipsis;
-			}
-			
+						
 			a {
 				color:           <!-- $a-color -->;
 				text-decoration: none;
@@ -63,22 +44,54 @@
 				color: <!-- $a-hover-color -->;
 			}
 
-			td {
-				vertical-align: top;
+			.event-time {
+				font-size:     80%;
+				color:         <!-- $secondary-font-color -->;
+				float:         right;
 			}
 
-			.event-time, dt {
-				font-size: 80%;
-				color:     <!-- $secondary-font-color -->;
+			.event-entry-content {
+				display:               block;
+				width:                 400px;
+				background-color:      #fff;
+				margin-left:           auto;
+				margin-right:          auto;
+				margin-bottom:         9px;
+				padding:               18px;
+				-webkit-border-radius: 6px;
+				border:                #ddd 1px solid;
 			}
+			
+			dl {
+				padding: 0;
+				margin: 0;
+				padding-bottom: 15px;
+			}
+			
+			dt {
+				padding-bottom: 12px;
+				padding-top:    12px;
+				font-size:     80%;
+				color:         <!-- $secondary-font-color -->;
+			}
+			
+			dd {
+				width:          300px;
+				overflow:       hidden;
+				padding-left:   0;
+				margin-left:    12px;
+				text-overflow:  ellipsis;
+				padding-bottom: 9px;
+			}
+
 
 			.no-buddy-icon {
+				float:               left;
 				margin-right:        12px;
 				width:               36px;
-				height:              36px;
 				background-image:    url('<!-- $no-buddy-icon-background-image -->');
 				background-repeat:   no-repeat;
-				background-position: center; 
+				background-position: top center; 
 			}
 
 			.buddy-icon {
@@ -86,19 +99,15 @@
 				height:           36px;
 			}
 
-			.event-entry-content {
-				background-color:      #fff;
-				margin:                12px;
-				padding:               12px;
-				-webkit-border-radius: 6px;
-				border:                #ddd 1px solid;
+			.event-info {
+				float: left;
 			}
 
 		</style>
 
 	</head>
 
-	<body onDragStart='return false'>
+	<body onDragStart='return false;'>
 		<!-- $event-log-content -->
 	</body>
 
