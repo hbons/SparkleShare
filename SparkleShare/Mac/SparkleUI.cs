@@ -45,6 +45,13 @@ namespace SparkleShare {
 
         }
 
+        public override void WillTerminate (NSNotification notification)
+        {
+
+            SparkleShare.Controller.Quit ();
+
+        }
+
 	}
 
 
