@@ -178,6 +178,7 @@ namespace SparkleShare {
 			HTML = SparkleShare.Controller.GetHTMLLog (System.IO.Path.GetFileName (LocalPath));
 
             HTML = HTML.Replace ("<!-- $body-font-size -->", (Style.FontDescription.Size / 1024 + 0.5) + "pt");
+            HTML = HTML.Replace ("<!-- $day-entry-header-font-size -->", (Style.FontDescription.Size / 1024 + 0.6) + "pt");
             HTML = HTML.Replace ("<!-- $a-color -->", "#0085cf");
             HTML = HTML.Replace ("<!-- $a-hover-color -->", "#009ff8");
 			HTML = HTML.Replace ("<!-- $body-font-family -->", "\"" + Style.FontDescription.Family + "\"");
