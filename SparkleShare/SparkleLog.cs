@@ -104,11 +104,11 @@ namespace SparkleShare {
 							process.StartInfo.Arguments = args.Request.Uri.Replace (" ", "\\ "); // Escape space-characters
 							process.Start ();
 
+							// FIXME: Use the right event, waiting for newer webkit bindings
+
                             UpdateEventLog ();
 
 						}
-
-						// FIXME: webview should stay on the same page
 
 					};
 
@@ -181,8 +181,8 @@ namespace SparkleShare {
 
 			HTML = SparkleShare.Controller.GetHTMLLog (System.IO.Path.GetFileName (LocalPath));
 
-            HTML = HTML.Replace ("<!-- $body-font-size -->", (Style.FontDescription.Size / 1024 + 0.5) + "pt");
-            HTML = HTML.Replace ("<!-- $day-entry-header-font-size -->", (Style.FontDescription.Size / 1024 + 0.6) + "pt");
+            HTML = HTML.Replace ("<!-- $body-font-size -->", (double) (Style.FontDescription.Size / 1024 + 3) + "px");
+            HTML = HTML.Replace ("<!-- $day-entry-header-font-size -->", (Style.FontDescription.Size / 1024 + 3) + "px");
             HTML = HTML.Replace ("<!-- $a-color -->", "#0085cf");
             HTML = HTML.Replace ("<!-- $a-hover-color -->", "#009ff8");
 			HTML = HTML.Replace ("<!-- $body-font-family -->", "\"" + Style.FontDescription.Family + "\"");
@@ -202,8 +202,6 @@ namespace SparkleShare {
 		{
 
 			Application.Invoke (delegate {
-
-				WebView.LoadString (HTML, null, null, "file://");
 
 				if (Spinner.Active) {
 
@@ -226,6 +224,8 @@ namespace SparkleShare {
 				(ScrolledWindow.Child as Viewport).ShadowType = ShadowType.None;
 				LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
 				LayoutVertical.ReorderChild (ScrolledWindow, 0);
+
+				WebView.LoadString (HTML, null, null, "file://");
 
 				LayoutVertical.ShowAll ();
 
