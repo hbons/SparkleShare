@@ -2,20 +2,18 @@
 
 	<div class='event-entry-content'>
 
-		<table>
-			<tr>
-				<td>
-					<div class='no-buddy-icon'>
-						<div class='buddy-icon' style='background-image: url("<!-- $event-avatar-url -->")'></div>
-					</div>
-				</td>
-				<td width='100%'>
-					<b><!-- $event-user-name --></b><br>
-					<!-- $event-entry-content -->
-				</td>
-				<td class='event-time'><!-- $event-time --></td>
-			</tr>
-		</table>
+		<div class='no-buddy-icon'>
+			<div class='buddy-icon' style='background-image: url("<!-- $event-avatar-url -->");'></div>
+		</div>
+
+		<div class='event-info'>
+			<b><!-- $event-user-name --></b>
+			<!-- $event-entry-content -->
+		</div>
+				
+		<div class='event-time'><!-- $event-time --></div>
+
+		<div style='clear: both'></div>
 
 	</div>
 
