@@ -167,6 +167,7 @@ namespace SparkleShare {
             HTML               = SparkleShare.Controller.GetHTMLLog (folder_name);
 
             HTML = HTML.Replace ("<!-- $body-font-family -->", "Lucida Grande");
+            HTML = HTML.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
             HTML = HTML.Replace ("<!-- $body-font-size -->", "13.4px");
             HTML = HTML.Replace ("<!-- $secondary-font-color -->", "#bbb");
             HTML = HTML.Replace ("<!-- $small-color -->", "#ddd");
