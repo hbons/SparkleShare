@@ -102,6 +102,8 @@ namespace SparkleShare {
 							process.StartInfo.Arguments = args.Request.Uri.Replace (" ", "\\ "); // Escape space-characters
 							process.Start ();
 
+                            WebView.GoBack ();
+
 						}
 
 						// FIXME: webview should stay on the same page
