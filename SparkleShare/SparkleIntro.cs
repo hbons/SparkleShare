@@ -80,14 +80,15 @@ namespace SparkleShare {
 					RowSpacing = 6
 				};
 
-					UnixUserInfo unix_user_info = new UnixUserInfo (UnixEnvironment.UserName);			
+					string full_name  = new UnixUserInfo (UnixEnvironment.UserName).RealName;
+                    full_name.TrimEnd (",".ToCharArray());
 
 					Label name_label = new Label ("<b>" + _("Full Name:") + "</b>") {
 						UseMarkup = true,
 						Xalign    = 0
 					};
 
-					NameEntry = new Entry (unix_user_info.RealName);
+					NameEntry = new Entry (full_name);
 					NameEntry.Changed += delegate {
 						CheckAccountForm ();
 					};
