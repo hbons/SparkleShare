@@ -361,10 +361,11 @@ namespace SparkleShare {
 				
 						SparkleShare.Controller.FolderFetched += delegate {
 		
-							Deletable = true;
-					
 							Application.Invoke (delegate {
-								ShowSuccessPage (name); // FIXME: doesn't always get called on big repos
+
+								Deletable = true;
+								ShowErrorPage ();
+
 							});
 					
 						};
