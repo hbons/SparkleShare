@@ -372,8 +372,12 @@ namespace SparkleShare {
 				
 						SparkleShare.Controller.FolderFetchError += delegate {
 				
-							Deletable = true;
-							Application.Invoke (delegate { ShowErrorPage (); });	
+							Application.Invoke (delegate {
+
+								Deletable = true;
+								ShowErrorPage ();
+
+							});	
 				
 						};
 		
