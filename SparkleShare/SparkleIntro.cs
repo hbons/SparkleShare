@@ -364,7 +364,7 @@ namespace SparkleShare {
 							Application.Invoke (delegate {
 
 								Deletable = true;
-								ShowSuccesPage (name);
+								ShowSuccessPage (name);
 								
 							});
 					
