@@ -1046,38 +1046,30 @@ namespace SparkleLib {
 					    int.Parse (match.Groups [9].Value));
 					                    
 					string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
-					
-					if (entry_lines.Length > 60) {
-						
-						commit.IsFileDump = true;
-						
-					} else {
-									
-						foreach (string entry_line in entry_lines) {
-	
-							if (entry_line.StartsWith (":")) {
-															
-								string change_type = entry_line [37].ToString ();
-								string file_path   = entry_line.Substring (39);
+														
+					foreach (string entry_line in entry_lines) {
+
+						if (entry_line.StartsWith (":")) {
+														
+							string change_type = entry_line [37].ToString ();
+							string file_path   = entry_line.Substring (39);
+							
+							if (change_type.Equals ("A")) {
 								
-								if (change_type.Equals ("A")) {
-									
-									commit.Added.Add (file_path);
-									
-								} else if (change_type.Equals ("M")) {
+								commit.Added.Add (file_path);
 								
-									commit.Edited.Add (file_path);
-									
-								} else if (change_type.Equals ("D")) {
-									
-									commit.Deleted.Add (file_path);
-									
-								}
+							} else if (change_type.Equals ("M")) {
+							
+								commit.Edited.Add (file_path);
+								
+							} else if (change_type.Equals ("D")) {
+								
+								commit.Deleted.Add (file_path);
 								
 							}
-								
+							
 						}
-						
+							
 					}
 	
 					commits.Add (commit);

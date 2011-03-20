@@ -79,7 +79,8 @@ namespace SparkleShare {
 			};
 
 			// Show a bubble when there are new changes
-			SparkleShare.Controller.NotificationRaised += delegate (SparkleCommit commit, string repository_path) {
+			SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
+			                                                        string message, string repository_path) {
 
 				foreach (SparkleLog log in OpenLogs) {
 					if (log.LocalPath.Equals (repository_path)) {
@@ -94,55 +95,11 @@ namespace SparkleShare {
 				if (!SparkleShare.Controller.NotificationsEnabled)
 					return;
 
-				string file_name = "";
-				string message = null;
-
-				if (commit.Added.Count > 0) {
-
-					foreach (string added in commit.Added) {
-						file_name = added;
-						break;
-					}
-
-					message = String.Format (_("added ‘{0}’"), file_name);
-
-				}
-
-				if (commit.Edited.Count > 0) {
-
-					foreach (string modified in commit.Edited) {
-						file_name = modified;
-						break;
-					}
-
-					message = String.Format (_("edited ‘{0}’"), file_name);
-
-				}
-
-				if (commit.Deleted.Count > 0) {
-
-					foreach (string removed in commit.Deleted) {
-						file_name = removed;
-						break;
-					}
-
-					message = String.Format (_("deleted ‘{0}’"), file_name);
-
-				}
-
-				int changes_count = (commit.Added.Count +
-						             commit.Edited.Count +
-						             commit.Deleted.Count);
-
-				if (changes_count > 1)
-					message += " + " + (changes_count - 1);
-
-
 				Application.Invoke (delegate {
 
-					SparkleBubble bubble = new SparkleBubble (commit.UserName, message);
+					SparkleBubble bubble = new SparkleBubble (user_name, message);
 
-					string avatar_file_path = SparkleUIHelpers.GetAvatar (commit.UserEmail, 32);
+					string avatar_file_path = SparkleUIHelpers.GetAvatar (user_email, 32);
 
 					if (avatar_file_path != null)
 						bubble.Icon = new Gdk.Pixbuf (avatar_file_path);

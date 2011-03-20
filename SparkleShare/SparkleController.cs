@@ -74,7 +74,8 @@ namespace SparkleShare {
 		public delegate void ConflictNotificationRaisedEventHandler ();
 
 		public event NotificationRaisedEventHandler NotificationRaised;
-		public delegate void NotificationRaisedEventHandler (SparkleCommit commit, string repository_path);
+		public delegate void NotificationRaisedEventHandler (string user_name, string user_email,
+		                                                     string message, string repository_path);
 
 
         // Short alias for the translations
@@ -301,10 +302,6 @@ namespace SparkleShare {
 					if (change_set.IsMerge) {
 						
 						event_entry += "<dt>Merged a branch</dt>";
-					
-					} else if (change_set.IsFileDump) {
-						
-						event_entry += "<dt>Dumped a lot of files</dt>";
 						
 					} else {
 
@@ -535,8 +532,10 @@ namespace SparkleShare {
 
 			repo.NewCommit += delegate (SparkleCommit commit, string repository_path) {
 
+				string message = FormatMessage (commit);
+
 				if (NotificationRaised != null)
-					NotificationRaised (commit, repository_path);
+					NotificationRaised (commit.UserName, commit.UserEmail, message, repository_path);
 
 			};
 
@@ -676,6 +675,57 @@ namespace SparkleShare {
 
 			double folder_size = CalculateFolderSize (new DirectoryInfo (SparklePaths.SparklePath));
 			return FormatFolderSize (folder_size);
+
+		}
+
+
+		private string FormatMessage (SparkleCommit commit)
+		{
+
+			string file_name = "";
+			string message = null;
+
+			if (commit.Added.Count > 0) {
+
+				foreach (string added in commit.Added) {
+					file_name = added;
+					break;
+				}
+
+				message = String.Format (_("added ‘{0}’"), file_name);
+
+			}
+
+			if (commit.Edited.Count > 0) {
+
+				foreach (string modified in commit.Edited) {
+					file_name = modified;
+					break;
+				}
+
+				message = String.Format (_("edited ‘{0}’"), file_name);
+
+			}
+
+			if (commit.Deleted.Count > 0) {
+
+				foreach (string removed in commit.Deleted) {
+					file_name = removed;
+					break;
+				}
+
+				message = String.Format (_("deleted ‘{0}’"), file_name);
+
+			}
+
+			int changes_count = (commit.Added.Count +
+						         commit.Edited.Count +
+						         commit.Deleted.Count) - 1;
+
+			if (changes_count > 0)
+				message += "" + String.Format ("and {0} more", changes_count);
+
+			return message;
 
 		}
 
