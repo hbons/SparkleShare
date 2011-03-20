@@ -157,7 +157,7 @@ namespace SparkleShare {
 		public void UpdateEventLog ()
 		{
 
-			if (HTML == null) {
+			if (HTML == null) { // TODO: there may be a race condition here
 
 				LayoutVertical.Remove (ScrolledWindow);
 				Spinner = new SparkleSpinner (22);
@@ -203,10 +203,11 @@ namespace SparkleShare {
 
 			Application.Invoke (delegate {
 
-				if (Spinner.Active) {
+				Spinner.Stop ();
+
+				if (Spinner.Parent == LayoutVertical) {
 
 					LayoutVertical.Remove (Spinner);
-					Spinner.Stop ();
 
 				} else {
 
@@ -227,7 +228,7 @@ namespace SparkleShare {
 
 				WebView.LoadString (HTML, null, null, "file://");
 
-				LayoutVertical.ShowAll ();
+				ShowAll ();
 
 			});
 

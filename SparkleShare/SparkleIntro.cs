@@ -354,10 +354,7 @@ namespace SparkleShare {
 
 						string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
 
-				
-						Deletable = false;
 						ShowSyncingPage (canonical_name);
-
 				
 						SparkleShare.Controller.FolderFetched += delegate {
 		
@@ -613,6 +610,8 @@ namespace SparkleShare {
 		{
 
 			Reset ();
+
+				Deletable = false;
 
 				VBox layout_vertical = new VBox (false, 0);
 
