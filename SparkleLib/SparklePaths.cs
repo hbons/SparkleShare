@@ -29,6 +29,12 @@ namespace SparkleLib {
 
             get {
 
+                // QUICK RC1 HACK FIX
+                if (File.Exists ("/usr/local/git/bin/git"))
+                    return "/usr/local/git/bin/git";
+                else if (File.Exists ("/usr/bin/git"))
+                    return "/usr/bin/git";
+
                 Process process                          = new Process ();
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.UseShellExecute        = false;
