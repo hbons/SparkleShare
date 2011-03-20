@@ -151,6 +151,7 @@ namespace SparkleShare {
 					if (OnInvitation != null)
 						OnInvitation (server, folder, token);
 
+                // FIXME: big repos seem to often fail because they don't pass this test
 				} else if (SparkleRepo.IsRepo (args.FullPath)) {
 
 					AddRepository (args.FullPath);
