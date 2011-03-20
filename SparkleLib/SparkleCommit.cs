@@ -27,7 +27,6 @@ namespace SparkleLib {
 		public DateTime DateTime;
 		public string Hash;
 		public bool IsMerge;
-		public bool IsFileDump;
 		
 		public List <string> Added;
 		public List <string> Deleted;
@@ -45,7 +44,6 @@ namespace SparkleLib {
 			MovedTo   = new List <string> ();
 			
 			IsMerge    = false;
-			IsFileDump = false;
 
 		}
 	

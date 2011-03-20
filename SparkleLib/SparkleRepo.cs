@@ -1035,10 +1035,10 @@ namespace SparkleLib {
 
 					SparkleCommit commit = new SparkleCommit ();
 					
-					commit.Hash        = match.Groups [1].Value;
-					commit.UserName    = match.Groups [2].Value;
-					commit.UserEmail   = match.Groups [3].Value;
-					commit.IsMerge = is_merge_commit;
+					commit.Hash      = match.Groups [1].Value;
+					commit.UserName  = match.Groups [2].Value;
+					commit.UserEmail = match.Groups [3].Value;
+					commit.IsMerge   = is_merge_commit;
 
 					commit.DateTime = new DateTime (int.Parse (match.Groups [4].Value),
 						int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
