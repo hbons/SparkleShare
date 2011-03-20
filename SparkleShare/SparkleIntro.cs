@@ -63,7 +63,7 @@ namespace SparkleShare {
 			
 				Deletable = false;
 
-				Label header = new Label ("<span size='x-large'><b>" +
+				Label header = new Label ("<span size='large'><b>" +
 						                _("Welcome to SparkleShare!") +
 						                  "</b></span>") {
 					UseMarkup = true,
@@ -169,7 +169,7 @@ namespace SparkleShare {
 
 			VBox layout_vertical = new VBox (false, 0);
 
-				Label header = new Label ("<span size='x-large'><b>" +
+				Label header = new Label ("<span size='large'><b>" +
 						                        _("Where is your remote folder?") +
 						                        "</b></span>") {
 					UseMarkup = true,
@@ -431,7 +431,7 @@ namespace SparkleShare {
 
 			VBox layout_vertical = new VBox (false, 0);
 
-				Label header = new Label ("<span size='x-large'><b>" +
+				Label header = new Label ("<span size='large'><b>" +
 						                _("Invitation received!") +
 						                  "</b></span>") {
 					UseMarkup = true,
@@ -531,7 +531,7 @@ namespace SparkleShare {
 			
 			VBox layout_vertical = new VBox (false, 0);
 	
-				Label header = new Label ("<span size='x-large'><b>" +
+				Label header = new Label ("<span size='large'><b>" +
 						                _("Something went wrong…") +
 						                  "</b></span>\n") {
 					UseMarkup = true,
@@ -565,7 +565,7 @@ namespace SparkleShare {
 
 				VBox layout_vertical = new VBox (false, 0);
 
-					Label header = new Label ("<span size='x-large'><b>" +
+					Label header = new Label ("<span size='large'><b>" +
 								            _("Folder synced successfully!") +
 								              "</b></span>") {
 						UseMarkup = true,
@@ -616,7 +616,7 @@ namespace SparkleShare {
 
 				VBox layout_vertical = new VBox (false, 0);
 
-					Label header = new Label ("<span size='x-large'><b>" +
+					Label header = new Label ("<span size='large'><b>" +
 							                        String.Format (_("Syncing folder ‘{0}’…"), name) +
 							                        "</b></span>") {
 						UseMarkup = true,
@@ -674,7 +674,7 @@ namespace SparkleShare {
 
 				VBox layout_vertical = new VBox (false, 0);
 
-				Label header = new Label ("<span size='x-large'><b>" +
+				Label header = new Label ("<span size='large'><b>" +
 					                            _("SparkleShare is ready to go!") +
 					                            "</b></span>") {
 					UseMarkup = true,
