@@ -88,6 +88,10 @@ namespace SparkleShare {
 		public SparkleController ()
 		{
 
+            // Remove temporary file
+            if (Directory.Exists (SparklePaths.SparkleTmpPath))
+                Directory.Delete (SparklePaths.SparkleTmpPath, true);
+
 			InstallLauncher ();
 			EnableSystemAutostart ();
 
@@ -1264,14 +1268,11 @@ namespace SparkleShare {
 //			foreach (SparkleRepo repo in Repositories)
 //				repo.Dispose ();
 
-			if (Directory.Exists (SparklePaths.SparkleTmpPath))
-				Directory.Delete (SparklePaths.SparkleTmpPath, true);
-
 			// FIXME: Never exits
 			Environment.Exit (0);
 
 		}
-	
+
 
 		// Checks to see if an email address is valid
 		public bool IsValidEmail (string email)
