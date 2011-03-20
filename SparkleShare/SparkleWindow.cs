@@ -40,7 +40,7 @@ namespace SparkleShare {
 			BorderWidth    = 0;
 			IconName       = "folder-sparkleshare";
 			Resizable      = false;
-			WindowPosition = WindowPosition.Center; // FIXME: seems to have broken
+			WindowPosition = WindowPosition.Center;
 
 			SetSizeRequest (680, 440);
 
