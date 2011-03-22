@@ -32,13 +32,13 @@ namespace SparkleShare {
 
 		public readonly string LocalPath;
 
-		private VBox LayoutVertical;
 		private ScrolledWindow ScrolledWindow;
 		private MenuBar MenuBar;
 		private WebView WebView;
 		private string LinkStatus;
 		private SparkleSpinner Spinner;
 		private string HTML;
+		private EventBox LogContent;
 
 
 		// Short alias for the translations
@@ -77,13 +77,15 @@ namespace SparkleShare {
 			DeleteEvent += Close;			
 
 			CreateEventLog ();
+			UpdateEventLog ();
 
 		}
 
 
 		private void CreateEventLog () {
 
-			LayoutVertical = new VBox (false, 0);
+			LogContent           = new EventBox ();
+			VBox layout_vertical = new VBox (false, 0);
 
 				ScrolledWindow = new ScrolledWindow ();
 
@@ -113,10 +115,10 @@ namespace SparkleShare {
 					};
 
 				ScrolledWindow.AddWithViewport (WebView);
+				LogContent.Add (ScrolledWindow);
 
-			LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
+			layout_vertical.PackStart (LogContent, true, true, 0);
 
-				UpdateEventLog ();
 
 				HButtonBox dialog_buttons = new HButtonBox {
 					Layout = ButtonBoxStyle.Edge,
@@ -146,10 +148,14 @@ namespace SparkleShare {
 				dialog_buttons.Add (close_button);
 
 			// We have to hide the menubar somewhere...
-			LayoutVertical.PackStart (CreateShortcutsBar (), false, false, 0);
-			LayoutVertical.PackStart (dialog_buttons, false, false, 0);
+			layout_vertical.PackStart (CreateShortcutsBar (), false, false, 0);
+			layout_vertical.PackStart (dialog_buttons, false, false, 0);
 
-			Add (LayoutVertical);
+			Add (layout_vertical);
+
+			ShowAll ();
+
+
 
 		}
 
@@ -159,9 +165,10 @@ namespace SparkleShare {
 
 			if (HTML == null) { // TODO: there may be a race condition here
 
-				LayoutVertical.Remove (ScrolledWindow);
+				LogContent.Remove (LogContent.Child);
 				Spinner = new SparkleSpinner (22);
-				LayoutVertical.PackStart (Spinner, true, true, 0);
+				LogContent.Add (Spinner);
+				LogContent.ShowAll ();
 
 			}
 
@@ -204,31 +211,24 @@ namespace SparkleShare {
 			Application.Invoke (delegate {
 
 				Spinner.Stop ();
-
-				if (Spinner.Parent == LayoutVertical) {
-
-					LayoutVertical.Remove (Spinner);
-
-				} else {
-
-					LayoutVertical.Remove (ScrolledWindow);
-
-				}
+				LogContent.Remove (LogContent.Child);
 
 				ScrolledWindow = new ScrolledWindow () {
 					HscrollbarPolicy = PolicyType.Never
 				};
 				
-				Viewport viewport = new Viewport ();
+				Viewport viewport = new Viewport () {
+					ShadowType = ShadowType.None
+				};
+
 				WebView.Reparent (viewport);
 				ScrolledWindow.Add (viewport);
-				(ScrolledWindow.Child as Viewport).ShadowType = ShadowType.None;
-				LayoutVertical.PackStart (ScrolledWindow, true, true, 0);
-				LayoutVertical.ReorderChild (ScrolledWindow, 0);
 
 				WebView.LoadString (HTML, null, null, "file://");
 
-				ShowAll ();
+				LogContent.Add (ScrolledWindow);
+				LogContent.ShowAll ();
+
 
 			});
 
