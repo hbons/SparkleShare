@@ -307,7 +307,11 @@ namespace SparkleLib {
 
 
 			// Listen to the irc channel on the server...
-			Listener = new SparkleListener (Domain, RemoteName, UserEmail);
+			if (UsesNotificationCenter)
+				Listener = new SparkleListener (Domain, RemoteName, UserEmail, NotificationServerType.Central);
+			else
+				Listener = new SparkleListener (Domain, RemoteName, UserEmail, NotificationServerType.Own);
+
 
 			// ...fetch remote changes every 60 seconds if that fails
 			RemoteTimer = new Timer () {
@@ -1149,11 +1153,25 @@ namespace SparkleLib {
 		}
 
 
-        public static bool IsRepo (string path) {
+        public static bool IsRepo (string path)
+        {
 
             return System.IO.Directory.Exists (Path.Combine (path, ".git"));
 
         }
+
+
+        public bool UsesNotificationCenter
+        {
+
+			get {
+
+				string file_path = SparkleHelpers.CombineMore (LocalPath, ".git", "disable_notification_center");
+	            return !File.Exists (file_path);
+
+			}
+
+		}
 
 
 		// Disposes all resourses of this object
