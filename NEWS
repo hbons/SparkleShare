@@ -1,4 +1,12 @@
-0.2-beta2 for Mac (Sat Feb, 2011):
+0.2-rc1 for Linux and Mac (Sun Mar 20, 2011)
+
+	Hylke: A lot of fixes and optimisations across the backend. Less memory 
+	usage, less crashes. Instant notifications of new changes instead of polling.
+	Refreshed event log HTML theme. Keeping logs in memory for faster reopening and
+	loads more goodness.
+
+
+0.2-beta2 for Mac (Sat Feb 12, 2011):
 
 	Hylke: Mac version! Massive restructure of the code to an MVC-like model
 	to make building different front-ends easier. Ported the event logs to
