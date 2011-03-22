@@ -25,6 +25,15 @@ using Meebey.SmartIrc4net;
 
 namespace SparkleLib {
 
+	public enum NotificationServerType
+	{
+
+		Own,
+		Central
+
+	}
+
+
 	// A persistent connection to the server that
 	// listens for change notifications
 	public class SparkleListener {
@@ -39,14 +48,23 @@ namespace SparkleLib {
 		public readonly string Nick;
 
 
-		public SparkleListener (string server, string folder_name, string user_email)
+		public SparkleListener (string server, string folder_name,
+		                        string user_email, NotificationServerType type)
 		{
 
-			// This is SparkleShare's centralized notification service.
-			// Don't worry, we only use this server as a backup if you 
-			// don't have your own. All data needed to connect is hashed and
-			// we don't store any personal information ever.
-			Server = "204.62.14.135";
+			if (type == NotificationServerType.Own) {
+
+				Server = server;
+
+			} else {
+
+				// This is SparkleShare's centralized notification service.
+				// Don't worry, we only use this server as a backup if you 
+				// don't have your own. All data needed to connect is hashed and
+				// we don't store any personal information ever.
+				Server = "204.62.14.135";
+
+			}
 
 			if (!user_email.Equals ("") && user_email != null)
 				Nick = GetSHA1 (folder_name + user_email + "sparkles");
