@@ -17,6 +17,8 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Net;
 
 using Gtk;
 using SparkleLib;
@@ -24,7 +26,10 @@ using Mono.Unix;
 
 namespace SparkleShare {
 
-	public class SparkleDialog : Window	{
+	public class SparkleAbout : Window	{
+
+		private Label Version;
+
 
 		// Short alias for the translations
 		public static string _(string s)
@@ -33,7 +38,7 @@ namespace SparkleShare {
 		}
 
 
-		public SparkleDialog () : base ("")
+		public SparkleAbout () : base ("")
 		{
 
 			DefaultSize = new Gdk.Size (360, 260);
@@ -61,6 +66,13 @@ namespace SparkleShare {
 				};
 
 			box.Add (header);
+
+			Version = new Label () {
+				Markup = "<small>Checking for updates...</small>",
+				Xalign = 0,
+				Xpad   = 18,
+				Ypad   = 22,
+			};
 
 			Label license = new Label () {
 				Xalign = 0,
@@ -115,10 +127,54 @@ namespace SparkleShare {
 				button_bar.Add (credits_button);
 
 			vbox.PackStart (box, true, true, 0);
+			vbox.PackStart (Version, false, false, 0);
 			vbox.PackStart (license, true, true, 0);
 			vbox.PackStart (button_bar, false, false, 0);
 
 			Add (vbox);
+
+		}
+
+
+		// TODO: Move to controller
+		private void CheckForNewVersion ()
+		{
+
+			string new_version_file_path = System.IO.Path.Combine (SparklePaths.SparkleTmpPath,
+				"version");
+
+			if (File.Exists (new_version_file_path))
+				File.Delete (new_version_file_path);
+
+			WebClient web_client = new WebClient ();
+			Uri uri = new Uri ("http://www.sparkleshare.org/version");
+
+			web_client.DownloadFileCompleted += delegate {
+
+				if (new FileInfo (new_version_file_path).Length > 0) {
+
+					StreamReader reader = new StreamReader (new_version_file_path);
+					string downloaded_version_number = reader.ReadToEnd ().Trim ();
+
+					if (!Defines.VERSION.Equals (downloaded_version_number)) {
+
+						Application.Invoke (delegate {
+
+					
+						
+						});
+
+					} else {
+
+
+
+					}
+
+				}
+
+			};
+
+			web_client.DownloadFileAsync (uri, new_version_file_path);
 
 		}
 
