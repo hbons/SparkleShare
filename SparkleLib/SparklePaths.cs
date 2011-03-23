@@ -29,32 +29,15 @@ namespace SparkleLib {
 
             get {
 
-                // QUICK RC1 HACK FIX
-                if (File.Exists ("/usr/local/git/bin/git"))
-                    return "/usr/local/git/bin/git";
-                else if (File.Exists ("/usr/bin/git"))
-                    return "/usr/bin/git";
+                string [] possible_git_paths = {"/usr/bin/git",
+                                                "/usr/local/git/bin/git",
+                                                "/usr/local/bin/git"};
 
-                Process process                          = new Process ();
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.UseShellExecute        = false;
-                process.StartInfo.FileName               = "which";
-                process.StartInfo.Arguments              = Backend.Name.ToLower ();
-                process.Start ();
+                foreach (string git_path in possible_git_paths)
+                    if (File.Exists (git_path))
+                        return git_path;
 
-                string path = process.StandardOutput.ReadToEnd ();
-                path = path.Trim ();
-
-                if (!string.IsNullOrEmpty (path)) {
-
-                    return path;
-
-                } else {
-
-                    Console.WriteLine ("Sorry, SparkleShare needs " + Backend.Name + " to run, but it wasn't found.");
-                    return null;
-
-                }
+                return null;
 
             }
 
@@ -65,17 +48,7 @@ namespace SparkleLib {
 
             get {
 
-                Process process                          = new Process ();
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.UseShellExecute        = false;
-                process.StartInfo.FileName               = "which";
-                process.StartInfo.Arguments              = Backend.Name.ToLower ();
-                process.Start ();
-
-                string path = process.StandardOutput.ReadToEnd ();
-                path = path.Trim ();
-
-                return !string.IsNullOrEmpty (path);
+                return (Path != null);
 
             }
 
