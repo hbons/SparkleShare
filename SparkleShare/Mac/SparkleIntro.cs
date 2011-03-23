@@ -149,7 +149,7 @@ namespace SparkleShare {
 			
 			
 				ServerTypeLabel	 = new NSTextField () {
-					Alignment       = (uint) NSTextAlignment.Right,
+					Alignment       = NSTextAlignment.Right,
 					BackgroundColor = NSColor.WindowBackground,
 					Bordered        = false,
 					Editable        = false,
@@ -159,7 +159,7 @@ namespace SparkleShare {
 				};
 				
 				AddressLabel = new NSTextField () {
-					Alignment       = (uint) NSTextAlignment.Right,
+					Alignment       = NSTextAlignment.Right,
 					BackgroundColor = NSColor.WindowBackground,
 					Bordered        = false,
 					Editable        = false,
@@ -169,7 +169,7 @@ namespace SparkleShare {
 				};
 				
 				FolderNameLabel = new NSTextField () {
-					Alignment       = (uint) NSTextAlignment.Right,
+					Alignment       = NSTextAlignment.Right,
 					BackgroundColor = NSColor.WindowBackground,
 					Bordered        = false,
 					Editable        = false,
@@ -395,7 +395,7 @@ namespace SparkleShare {
 				
 					CancelButton.Activated += delegate {
 						InvokeOnMainThread (delegate {
-							Close ();
+							PerformClose (this);
 						});
 					};
 
@@ -498,7 +498,7 @@ namespace SparkleShare {
 				FinishButton.Activated += delegate {
 					InvokeOnMainThread (delegate {
 						SparkleUI.StatusIcon.CreateMenu ();
-						Close ();
+						PerformClose (this);
 					});
 				};
 
@@ -541,7 +541,7 @@ namespace SparkleShare {
 				FinishButton.Activated += delegate {
 					InvokeOnMainThread (delegate {
 						SparkleUI.StatusIcon.CreateMenu ();
-						Close ();
+						PerformClose (this);
 					});
 				
 				};			
