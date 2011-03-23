@@ -244,8 +244,8 @@ namespace SparkleShare {
 
 				about_item.Activated += delegate {
 
-					SparkleDialog dialog = new SparkleDialog ();
-					dialog.ShowAll ();
+					SparkleAbout about = new SparkleAbout ();
+					about.ShowAll ();
 
 				};
 
