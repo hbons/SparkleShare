@@ -130,7 +130,7 @@ namespace SparkleShare {
 				
 						SparkleShare.Controller.FirstRun = false;
 				
-						Deletable = false;
+						Deletable = true;
 						ShowServerForm ();
 
 					};
