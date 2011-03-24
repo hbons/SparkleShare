@@ -82,23 +82,18 @@ namespace SparkleShare {
 			SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
 			                                                        string message, string repository_path) {
 
-				foreach (SparkleLog log in OpenLogs) {
-					if (log.LocalPath.Equals (repository_path)) {
-						Application.Invoke (delegate {
-							log.UpdateEventLog ();
-						});
-					}				
-				}
+                Application.Invoke (delegate {
 
-				// TODO: move to controller and do translation here
-				
-				if (!SparkleShare.Controller.NotificationsEnabled)
-					return;
+    				foreach (SparkleLog log in OpenLogs) {
+    					if (log.LocalPath.Equals (repository_path))
+    							log.UpdateEventLog ();
+    				}
+    				
+    				if (!SparkleShare.Controller.NotificationsEnabled)
+    					return;
 
-				Application.Invoke (delegate {
 
-					SparkleBubble bubble = new SparkleBubble (user_name, message);
-
+					SparkleBubble bubble    = new SparkleBubble (user_name, message);
 					string avatar_file_path = SparkleUIHelpers.GetAvatar (user_email, 32);
 
 					if (avatar_file_path != null)

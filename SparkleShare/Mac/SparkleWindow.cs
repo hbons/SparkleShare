@@ -155,7 +155,7 @@ namespace SparkleShare {
 		}
 
 
-		public override void Close ()
+		public override void PerformClose (NSObject sender)
 		{
 		
 			OrderOut (this);

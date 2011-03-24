@@ -635,15 +635,11 @@ namespace SparkleShare {
 		// folders in the SparkleShare folder
 		private void PopulateRepositories ()
 		{
-			
-			// FIXME: Opening a log from the menu whilst populating crashes SparkleShare
+
 			Repositories = new List <SparkleRepo> ();
 
 			foreach (string folder_path in Directory.GetDirectories (SparklePaths.SparklePath))
 				AddRepository (folder_path);
-
-			if (FolderListChanged != null)
-				FolderListChanged ();
 
 		}
 
