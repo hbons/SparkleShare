@@ -93,12 +93,18 @@ namespace SparkleShare {
 			StatusIcon = new SparkleStatusIcon ();
             
 
-			SparkleShare.Controller.NotificationRaised += delegate {
+			SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
+                                                                    string message, string repository_path) {
 
 				InvokeOnMainThread (delegate {
 
-                    foreach (SparkleLog log in SparkleUI.OpenLogs)
-                        log.UpdateEventLog ();
+                    foreach (SparkleLog log in OpenLogs) {
+                        Console.WriteLine (log.LocalPath + " " +repository_path);
+                        if (log.LocalPath.Equals (repository_path)) {
+    Console.WriteLine ("UPDATING " + repository_path);
+                                log.UpdateEventLog ();
+                        }
+                    }
 
                     if (SparkleShare.Controller.NotificationsEnabled) {
 
