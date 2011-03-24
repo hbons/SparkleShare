@@ -1,0 +1,394 @@
+# This file is distributed under the same license as the Sparkleshare package.
+# 
+# WARNING: Due to the nature of Transifex all translation file headers were lost
+# we apologise for any incovenience this may have caused and we hope to bring them
+# back in the future.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: SparkleShare\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-03-24 18:54+0100\n"
+"PO-Revision-Date: 2011-03-24 17:55+0000\n"
+"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs_CZ\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
+
+#: ../SparkleLib/SparkleOptions.cs:486
+msgid "OptionName"
+msgstr "Název volby"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:360
+#: ../SparkleShare/SparkleIntro.cs:67 ../SparkleShare/SparkleStatusIcon.cs:335
+msgid "Welcome to SparkleShare!"
+msgstr "Vítejte ve SparkleShare!"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:375
+#: ../SparkleShare/SparkleStatusIcon.cs:344
+msgid "Not everything is synced"
+msgstr "Něco není synchronizováno"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:382
+#: ../SparkleShare/SparkleStatusIcon.cs:351
+msgid "Up to date"
+msgstr "Aktuální"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:404
+#: ../SparkleShare/SparkleStatusIcon.cs:367
+msgid "Syncing…"
+msgstr "Synchronizuji…"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
+msgid "Copy Web Link"
+msgstr "Zkopírovat odkaz"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
+msgid "Copy the web address of this file to the clipboard"
+msgstr "Zkopírovat webovou adresu tohoto souboru do schránky"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
+msgid "Get Earlier Version"
+msgstr "Získat dřívější verzi"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
+msgid "Make a copy of an earlier version in this folder"
+msgstr "Vytvořit kopii dřívější verze souboru v tomto adresáři"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:161
+msgid "Select to get a copy of this version"
+msgstr "Vyberte pro získání kopie této verze"
+
+#: ../SparkleShare/SparkleAbout.cs:88
+msgid "_Show Credits"
+msgstr "_Zásluhy"
+
+#: ../SparkleShare/SparkleAbout.cs:101
+msgid "_Visit Website"
+msgstr "_Navštívit domovskou stránku"
+
+#: ../SparkleShare/SparkleController.cs:416
+msgid "ddd MMM d, yyyy"
+msgstr ""
+
+#: ../SparkleShare/SparkleController.cs:422
+msgid "ddd MMM d"
+msgstr ""
+
+#: ../SparkleShare/SparkleController.cs:696
+#, csharp-format
+msgid "added ‘{0}’"
+msgstr "přidal(a) ‘{0}’"
+
+#: ../SparkleShare/SparkleController.cs:707
+#, csharp-format
+msgid "edited ‘{0}’"
+msgstr "upravil(a) ‘{0}’"
+
+#: ../SparkleShare/SparkleController.cs:718
+#, csharp-format
+msgid "deleted ‘{0}’"
+msgstr "smazal(a) ‘{0}’"
+
+#: ../SparkleShare/SparkleIntro.cs:73
+msgid ""
+"Before we can create a SparkleShare folder on this computer, we need a few "
+"bits of information from you."
+msgstr ""
+"Než vytvoříme SparkeShare složku v tomto počítači, potřebujeme od Vás pár "
+"drobných informací."
+
+#: ../SparkleShare/SparkleIntro.cs:84
+msgid "Full Name:"
+msgstr "Celé jméno:"
+
+#: ../SparkleShare/SparkleIntro.cs:100
+msgid "Email:"
+msgstr "Email:"
+
+#: ../SparkleShare/SparkleIntro.cs:111
+msgid "Next"
+msgstr "Další"
+
+#: ../SparkleShare/SparkleIntro.cs:118
+msgid "Configuring…"
+msgstr "Nastavuji…"
+
+#: ../SparkleShare/SparkleIntro.cs:171
+msgid "Where is your remote folder?"
+msgstr "Kde je vaše vzdálená složka?"
+
+#: ../SparkleShare/SparkleIntro.cs:184
+msgid "address-to-server.com"
+msgstr "adresa-k-serveru.com"
+
+#: ../SparkleShare/SparkleIntro.cs:189
+msgid "On my own server:"
+msgstr "Na mém vlastním serveru:"
+
+#: ../SparkleShare/SparkleIntro.cs:196
+msgid "Free hosting for Free and Open Source Software projects."
+msgstr "Hosting zdarma pro Free a Open Source softwarové projekty."
+
+#: ../SparkleShare/SparkleIntro.cs:197
+msgid "Also has paid accounts for extra private space and bandwidth."
+msgstr ""
+"Nabízí také placené účty pro extra soukromý prostor a rychlost připojení."
+
+#: ../SparkleShare/SparkleIntro.cs:205
+msgid "The GNOME Project"
+msgstr "Projekt GNOME"
+
+#: ../SparkleShare/SparkleIntro.cs:207
+msgid "GNOME is an easy to understand interface to your computer."
+msgstr "GNOME je jednoduše pochopitelné rozhraní pro váš počítač."
+
+#: ../SparkleShare/SparkleIntro.cs:208
+msgid "Select this option if you’re a developer or designer working on GNOME."
+msgstr ""
+"Vyberte tuto možnost, pokud jste vývojář nebo designer pracujíci na GNOME."
+
+#: ../SparkleShare/SparkleIntro.cs:216
+msgid "Gitorious"
+msgstr "Gitorious"
+
+#: ../SparkleShare/SparkleIntro.cs:218
+msgid "Completely Free as in Freedom infrastructure."
+msgstr "Zcela svobodný, jako ve výrazu svobodná infrastruktura."
+
+#: ../SparkleShare/SparkleIntro.cs:219
+msgid "Free accounts for Free and Open Source projects."
+msgstr "Účty zdarma pro Free a Open Source projekty."
+
+#: ../SparkleShare/SparkleIntro.cs:231
+msgid "Username/Folder"
+msgstr "Uživatel/Složka"
+
+#: ../SparkleShare/SparkleIntro.cs:238
+msgid "Project/Folder"
+msgstr "Projekt/Složka"
+
+#: ../SparkleShare/SparkleIntro.cs:245
+msgid "Project"
+msgstr "Projekt"
+
+#: ../SparkleShare/SparkleIntro.cs:254 ../SparkleShare/SparkleIntro.cs:277
+msgid "Folder"
+msgstr "Složka"
+
+#: ../SparkleShare/SparkleIntro.cs:282 ../SparkleShare/SparkleIntro.cs:460
+msgid "Folder Name:"
+msgstr "Název složky:"
+
+#: ../SparkleShare/SparkleIntro.cs:292
+msgid "Sync"
+msgstr "Synchronizovat"
+
+#: ../SparkleShare/SparkleIntro.cs:387
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: ../SparkleShare/SparkleIntro.cs:398
+msgid "Skip"
+msgstr "Přeskočit"
+
+#: ../SparkleShare/SparkleIntro.cs:430
+msgid "Invitation received!"
+msgstr "Obdržená pozvánka!"
+
+#: ../SparkleShare/SparkleIntro.cs:436
+msgid ""
+"You've received an invitation to join a shared folder.\n"
+"We're ready to hook you up immediately if you wish."
+msgstr ""
+"Přišla vám pozvánka ke sdílené složce.\n"
+"Můžeme vás rovnou zapojit, jestli chcete."
+
+#: ../SparkleShare/SparkleIntro.cs:442
+msgid "Do you accept this invitation?"
+msgstr "Přijímáte tuto pozvánku?"
+
+#: ../SparkleShare/SparkleIntro.cs:451
+msgid "Server Address:"
+msgstr "Adresa serveru?"
+
+#: ../SparkleShare/SparkleIntro.cs:474
+msgid "Reject"
+msgstr "Odmítnout"
+
+#: ../SparkleShare/SparkleIntro.cs:475
+msgid "Accept and Sync"
+msgstr "Přijmout a synchronizovat"
+
+#: ../SparkleShare/SparkleIntro.cs:530
+msgid "Something went wrong…"
+msgstr "Něco se pokazilo..."
+
+#: ../SparkleShare/SparkleIntro.cs:536
+msgid "Try Again"
+msgstr "Zkusit znova"
+
+#: ../SparkleShare/SparkleIntro.cs:564
+msgid "Folder synced successfully!"
+msgstr "Složka úspěšně synchronizována!"
+
+#: ../SparkleShare/SparkleIntro.cs:571
+#, csharp-format
+msgid ""
+"Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
+msgstr ""
+"Nyní můžete přistoupit k synchronizovaným souborům z ‘{0}’ ve své složce "
+"SparkeShare."
+
+#. A button that opens the synced folder
+#: ../SparkleShare/SparkleIntro.cs:579
+msgid "Open Folder"
+msgstr "Otevřít složku"
+
+#: ../SparkleShare/SparkleIntro.cs:587 ../SparkleShare/SparkleIntro.cs:633
+#: ../SparkleShare/SparkleIntro.cs:700
+msgid "Finish"
+msgstr "Dokončit"
+
+#: ../SparkleShare/SparkleIntro.cs:617
+#, csharp-format
+msgid "Syncing folder ‘{0}’…"
+msgstr "Synchronizuji složku ‘{0}’…"
+
+#: ../SparkleShare/SparkleIntro.cs:624
+msgid "This may take a while.\n"
+msgstr "Toto může chvíli trvat.\n"
+
+#: ../SparkleShare/SparkleIntro.cs:625
+msgid "Are you sure it’s not coffee o'clock?"
+msgstr "Jste si jistí, že není čas na kafe?"
+
+#: ../SparkleShare/SparkleIntro.cs:675
+msgid "SparkleShare is ready to go!"
+msgstr "SparkleShare je připraven vyrazit!"
+
+#: ../SparkleShare/SparkleIntro.cs:681
+msgid ""
+"Now you can start accepting invitations from others. \n"
+"Just click on invitations you get by email and we will take care of the rest."
+msgstr ""
+"Nyní můžete začít přijímat pozvánky od ostatních. \n"
+"Stačí kliknout na pozvánky, které získáte emailem, a o zbytek se už postaráme."
+
+#: ../SparkleShare/SparkleIntro.cs:692
+msgid "Learn how to host your own SparkleServer"
+msgstr "Zjistěte jak připravit svůj vlastní SparkleServer"
+
+#. TRANSLATORS: {0} is a folder name, and {1} is a server address
+#: ../SparkleShare/SparkleLog.cs:74
+#, csharp-format
+msgid "Events in ‘{0}’"
+msgstr "Události v ‘{0}’"
+
+#: ../SparkleShare/SparkleLog.cs:128
+msgid "_Open Folder"
+msgstr "_Otevřít složku"
+
+#: ../SparkleShare/SparkleShare.cs:55
+msgid "Sorry, you can't run SparkleShare with these permissions."
+msgstr ""
+"Je nám líto, ale nemůžete spouštět SparkleShare s těmito přístupovými právy."
+
+#: ../SparkleShare/SparkleShare.cs:56
+msgid "Things would go utterly wrong."
+msgstr "Věci by se mohly příšerně pokazit."
+
+#: ../SparkleShare/SparkleShare.cs:68
+msgid "Don't show the notification icon"
+msgstr "Nezobrazovat oznamovací ikonu"
+
+#: ../SparkleShare/SparkleShare.cs:69
+msgid "Print version information"
+msgstr "Vypíše informace o verzi"
+
+#: ../SparkleShare/SparkleShare.cs:70
+msgid "Show this help text"
+msgstr "Zobrazit tuto nápovědu"
+
+#: ../SparkleShare/SparkleShare.cs:133
+msgid "SparkleShare, an instant update workflow to Git."
+msgstr "SparkleShare, workflow pro Git s okamžitou aktualizací."
+
+#: ../SparkleShare/SparkleShare.cs:134
+msgid "Copyright (C) 2010 Hylke Bons"
+msgstr "Všechna práva vyhrazena (C) 2010 Hylke Bons"
+
+#: ../SparkleShare/SparkleShare.cs:136
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr "Tento program je ABSOLUTNĚ BEZ ZÁRUKY."
+
+#: ../SparkleShare/SparkleShare.cs:138
+msgid "This is free software, and you are welcome to redistribute it "
+msgstr "Toto je svobodný software a můžete jej dále šířit."
+
+#: ../SparkleShare/SparkleShare.cs:139
+msgid "under certain conditions. Please read the GNU GPLv3 for details."
+msgstr ""
+"za jistých podmínek. Prosím, přečtěte si GNU GPLv3 pro více informací."
+
+#: ../SparkleShare/SparkleShare.cs:141
+msgid "SparkleShare automatically syncs Git repositories in "
+msgstr "SparkleShare automaticky synchronizuje repozitáře Git v "
+
+#: ../SparkleShare/SparkleShare.cs:142
+msgid "the ~/SparkleShare folder with their remote origins."
+msgstr "složce ~/SparkleShare s jejich vzdálenými protistranami."
+
+#: ../SparkleShare/SparkleShare.cs:144
+msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
+msgstr "Použití: sparkleshare [start|stop|restart] [VOLBY]..."
+
+#: ../SparkleShare/SparkleShare.cs:145
+msgid "Sync SparkleShare folder with remote repositories."
+msgstr "Synchronizovat složku SparkleShare se vzdálenými repozitáři."
+
+#: ../SparkleShare/SparkleShare.cs:147
+msgid "Arguments:"
+msgstr "Argumenty:"
+
+#: ../SparkleShare/SparkleShare.cs:159
+msgid "SparkleShare "
+msgstr "SparkleShare "
+
+#: ../SparkleShare/SparkleStatusIcon.cs:189
+msgid "No Remote Folders Yet"
+msgstr "Žádné vzdálené složky"
+
+#. Opens the wizard to add a new remote folder
+#: ../SparkleShare/SparkleStatusIcon.cs:198
+msgid "Add Remote Folder…"
+msgstr "Přidat vzdálenou složku…"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:228
+msgid "Turn Notifications Off"
+msgstr "Vypnout upozornění"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:230
+msgid "Turn Notifications On"
+msgstr "Zapnout upozornění"
+
+#. A menu item that takes the user to http://www.sparkleshare.org/
+#: ../SparkleShare/SparkleStatusIcon.cs:243
+msgid "About SparkleShare"
+msgstr "O SparkleShare"
+
+#. A menu item that quits the application
+#: ../SparkleShare/SparkleStatusIcon.cs:256
+msgid "Quit"
+msgstr "Ukončit"
+
+#: ../SparkleShare/SparkleUI.cs:119
+msgid "Ouch! Mid-air collision!"
+msgstr "Au! Nehoda na cestě!"
+
+#: ../SparkleShare/SparkleUI.cs:120
+msgid "Don't worry, SparkleShare made a copy of each conflicting file."
+msgstr ""
+"Nemějte strach, SparkleShare udělal kopie každého konfliktního souboru."
