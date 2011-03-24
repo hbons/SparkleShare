@@ -99,11 +99,8 @@ namespace SparkleShare {
 				InvokeOnMainThread (delegate {
 
                     foreach (SparkleLog log in OpenLogs) {
-                        Console.WriteLine (log.LocalPath + " " +repository_path);
-                        if (log.LocalPath.Equals (repository_path)) {
-    Console.WriteLine ("UPDATING " + repository_path);
+                        if (log.LocalPath.Equals (repository_path))
                                 log.UpdateEventLog ();
-                        }
                     }
 
                     if (SparkleShare.Controller.NotificationsEnabled) {
