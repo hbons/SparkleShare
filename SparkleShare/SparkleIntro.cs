@@ -81,14 +81,12 @@ namespace SparkleShare {
 				};
 
 					string full_name  = new UnixUserInfo (UnixEnvironment.UserName).RealName;
-                    full_name.TrimEnd (",".ToCharArray());
-
 					Label name_label = new Label ("<b>" + _("Full Name:") + "</b>") {
 						UseMarkup = true,
 						Xalign    = 0
 					};
 
-					NameEntry = new Entry (full_name);
+					NameEntry = new Entry (full_name.TrimEnd (",".ToCharArray()));
 					NameEntry.Changed += delegate {
 						CheckAccountForm ();
 					};
@@ -132,7 +130,7 @@ namespace SparkleShare {
 				
 						SparkleShare.Controller.FirstRun = false;
 				
-						Deletable = false;
+						Deletable = true;
 						ShowServerForm ();
 
 					};

@@ -204,7 +204,7 @@ namespace SparkleShare {
 					item.Image      = NSImage.ImageNamed ("NSFolder");
 					item.Image.Size = new SizeF (16, 16);
 
-					Tasks [i] = OpenEventLogDelegate(item.Title);
+					Tasks [i] = OpenEventLogDelegate (path);
 			
 					FolderMenuItems [i] = item;
 					FolderMenuItems [i].Activated += Tasks [i];
