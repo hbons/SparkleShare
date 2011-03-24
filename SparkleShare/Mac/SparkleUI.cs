@@ -85,10 +85,11 @@ namespace SparkleShare {
 
             }
 
-			
 			Font = NSFontManager.SharedFontManager.FontWithFamily
 				("Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
-			
+
+//            new SparkleAbout ();
+
 			OpenLogs   = new List <SparkleLog> ();
 			StatusIcon = new SparkleStatusIcon ();
             
