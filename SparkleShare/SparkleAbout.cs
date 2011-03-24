@@ -45,138 +45,114 @@ namespace SparkleShare {
 
 			BorderWidth    = 0;
 			IconName       = "folder-sparkleshare";
-			Resizable      = true;
 			WindowPosition = WindowPosition.Center;
 			Title          = "About SparkleShare";
 			Resizable      = false;
 
-			Gdk.Color color = Style.Foreground (StateType.Insensitive);
-			string secondary_text_color = SparkleUIHelpers.GdkColorToHex (color);
+            CreateAbout ();
+
+            SparkleShare.Controller.CheckForNewVersion ();
+            SparkleShare.Controller.NewVersionAvailable += delegate (string new_version) {
+
+                ApplicationId.Invoke (delegate {
+
+                    Version.Markup = "<small><span fgcolor='#f57900'>A newer version (" + new_version + ") is available!</span></small>";
+                    Version.ShowAll ();
+
+                });
+
+            };
+
+		}
 
 
-			EventBox box = new EventBox ();
-			box.ModifyBg (StateType.Normal, new TreeView ().Style.Base (StateType.Normal));
+        private void CreateAbout ()
+        {
 
-				Label header = new Label () {
-					Markup = "<span font_size='xx-large'>SparkleShare</span>\n<span fgcolor='" + secondary_text_color + "'><small>" + Defines.VERSION + "</small></span>",
-					Xalign = 0,
-					Xpad = 18,
-					Ypad = 18
+            Gdk.Color color = Style.Foreground (StateType.Insensitive);
+            string secondary_text_color = SparkleUIHelpers.GdkColorToHex (color);
 
-				};
 
-			box.Add (header);
+            EventBox box = new EventBox ();
+            box.ModifyBg (StateType.Normal, new TreeView ().Style.Base (StateType.Normal));
 
-			Version = new Label () {
-				Markup = "<small>Checking for updates...</small>",
-				Xalign = 0,
-				Xpad   = 18,
-				Ypad   = 22,
-			};
+                Label header = new Label () {
+                    Markup = "<span font_size='xx-large'>SparkleShare</span>\n<span fgcolor='" + secondary_text_color + "'><small>" + Defines.VERSION + "</small></span>",
+                    Xalign = 0,
+                    Xpad = 18,
+                    Ypad = 18
 
-			Label license = new Label () {
-				Xalign = 0,
-				Xpad   = 18,
-				Ypad   = 22,
-		        LineWrap     = true,
-		        Wrap         = true,
-		        LineWrapMode = Pango.WrapMode.Word,
+                };
 
-				Markup = "<small>Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others\n" +
+            box.Add (header);
+
+            Version = new Label () {
+                Markup = "<small>Checking for updates...</small>",
+                Xalign = 0,
+                Xpad   = 18,
+                Ypad   = 22,
+            };
+
+            Label license = new Label () {
+                Xalign = 0,
+                Xpad   = 18,
+                Ypad   = 22,
+                LineWrap     = true,
+                Wrap         = true,
+                LineWrapMode = Pango.WrapMode.Word,
+
+                Markup = "<small>Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others\n" +
                          "\n" +
                          "SparkleShare is Free and Open Source Software. " +
                          "You are free to use, modify, and redistribute it " +
                          "under the terms of the GNU General Public License version 3 or later.</small>"
-			};
+            };
 
-			VBox vbox = new VBox (false, 0) {
-				BorderWidth = 0
-			};
+            VBox vbox = new VBox (false, 0) {
+                BorderWidth = 0
+            };
 
-				HButtonBox button_bar = new HButtonBox () {
-					BorderWidth = 12
-				};
+                HButtonBox button_bar = new HButtonBox () {
+                    BorderWidth = 12
+                };
 
-				Button credits_button = new Button (_("_Show Credits")) {
-					UseUnderline = true
-				};
+                Button credits_button = new Button (_("_Show Credits")) {
+                    UseUnderline = true
+                };
 
-					credits_button.Clicked += delegate {
-					
-						Process process             = new Process ();
-						process.StartInfo.FileName  = "xdg-open";
-						process.StartInfo.Arguments = "http://www.sparkleshare.org/credits";
-						process.Start ();
+                    credits_button.Clicked += delegate {
 
-					};
+                        Process process             = new Process ();
+                        process.StartInfo.FileName  = "xdg-open";
+                        process.StartInfo.Arguments = "http://www.sparkleshare.org/credits";
+                        process.Start ();
 
-					Button website_button = new Button (_("_Visit Website")) {
-						UseUnderline = true
-					};
-		
-					website_button.Clicked += delegate {
+                    };
 
-						Process process = new Process ();
-						process.StartInfo.FileName = "xdg-open";
-						process.StartInfo.Arguments = "http://www.sparkleshare.org/";
-						process.Start ();
+                    Button website_button = new Button (_("_Visit Website")) {
+                        UseUnderline = true
+                    };
 
-					};
+                    website_button.Clicked += delegate {
 
-				button_bar.Add (website_button);
-				button_bar.Add (credits_button);
+                        Process process = new Process ();
+                        process.StartInfo.FileName = "xdg-open";
+                        process.StartInfo.Arguments = "http://www.sparkleshare.org/";
+                        process.Start ();
 
-			vbox.PackStart (box, true, true, 0);
-			vbox.PackStart (Version, false, false, 0);
-			vbox.PackStart (license, true, true, 0);
-			vbox.PackStart (button_bar, false, false, 0);
+                    };
 
-			Add (vbox);
+                button_bar.Add (website_button);
+                button_bar.Add (credits_button);
 
-		}
+            vbox.PackStart (box, true, true, 0);
+            vbox.PackStart (Version, false, false, 0);
+            vbox.PackStart (license, true, true, 0);
+            vbox.PackStart (button_bar, false, false, 0);
 
+            Add (vbox);
 
-		// TODO: Move to controller
-		private void CheckForNewVersion ()
-		{
-
-			string new_version_file_path = System.IO.Path.Combine (SparklePaths.SparkleTmpPath,
-				"version");
-
-			if (File.Exists (new_version_file_path))
-				File.Delete (new_version_file_path);
-
-			WebClient web_client = new WebClient ();
-			Uri uri = new Uri ("http://www.sparkleshare.org/version");
-
-			web_client.DownloadFileCompleted += delegate {
-
-				if (new FileInfo (new_version_file_path).Length > 0) {
-
-					StreamReader reader = new StreamReader (new_version_file_path);
-					string downloaded_version_number = reader.ReadToEnd ().Trim ();
-
-					if (!Defines.VERSION.Equals (downloaded_version_number)) {
-
-						Application.Invoke (delegate {
-
-					
-						
-						});
-
-					} else {
-
-
-
-					}
-
-				}
-
-			};
-
-			web_client.DownloadFileAsync (uri, new_version_file_path);
-
-		}
+        }
 
 	}
 
