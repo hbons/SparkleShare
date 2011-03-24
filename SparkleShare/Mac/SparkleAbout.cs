@@ -34,6 +34,7 @@ namespace SparkleShare {
         private NSBox Box;
         private NSTextField HeaderTextField;
         private NSTextField VersionTextField;
+        private NSTextField UpdatesTextField;
         private NSTextField CreditsTextField;
 
 
@@ -41,20 +42,37 @@ namespace SparkleShare {
 
         public SparkleAbout () : base ()
         {
-
-            SetFrame (new RectangleF (0, 0, 360, 260), true);
+            SetFrame (new RectangleF (0, 0, 360, 288), true);
             Center ();
             
-            StyleMask = (NSWindowStyle.Closable |
-                         NSWindowStyle.Titled);
-
-            Title = "About SparkleShare";
-
-            MaxSize     = new SizeF (360, 260);
-            MinSize     = new SizeF (360, 260);
+            StyleMask   = (NSWindowStyle.Closable | NSWindowStyle.Titled);
+            Title       = "About SparkleShare";
+            MaxSize     = new SizeF (360, 288);
+            MinSize     = new SizeF (360, 288);
             HasShadow   = true;
             BackingType = NSBackingStore.Buffered;
 
+            CreateAbout ();
+            MakeKeyAndOrderFront (this);
+
+            SparkleShare.Controller.NewVersionAvailable += delegate (string new_version) {
+                InvokeOnMainThread (delegate {
+                    UpdatesTextField.StringValue = "A newer version (" + new_version + ") is available!";
+                    UpdatesTextField.TextColor   = NSColor.FromCalibratedRgba (0.96f, 0.47f, 0.0f, 1.0f); // Tango Orange #2
+                });
+            };
+
+            SparkleShare.Controller.VersionUpToDate += delegate {
+                InvokeOnMainThread (delegate {
+                    UpdatesTextField.StringValue = "You are running the latest version.";
+                    UpdatesTextField.TextColor   = NSColor.FromCalibratedRgba (0.45f, 0.82f, 0.09f, 1.0f); // Tango Chameleon #2
+                });
+            };
+        }
+
+
+        private void CreateAbout ()
+        {
             Box = new NSBox () {
                 FillColor = NSColor.White,
                 Frame = new RectangleF (-1, Frame.Height - 105, Frame.Width + 2, 105),
@@ -82,13 +100,24 @@ namespace SparkleShare {
                 TextColor       = NSColor.DisabledControlText
             };
 
+            UpdatesTextField = new NSTextField () {
+                StringValue     = "Checking for updates...",
+                Frame           = new RectangleF (22, Frame.Height - 222, 318, 98),
+                BackgroundColor = NSColor.WindowBackground,
+                Bordered        = false,
+                Editable        = false,
+                Font            = NSFontManager.SharedFontManager.FontWithFamily
+                    ("Lucida Grande", NSFontTraitMask.Unbold, 0, 11),
+                TextColor       = NSColor.DisabledControlText
+            };
+
             CreditsTextField = new NSTextField () {
                 StringValue     = @"Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others" +
                                    "\n" +
                                    "\n" +
                                    "SparkleShare is Free and Open Source Software. You are free to use, modify, and redistribute it " +
                                    "under the GNU General Public License version 3 or later.",
-                Frame           = new RectangleF (22, Frame.Height - 222, 318, 98),
+                Frame           = new RectangleF (22, Frame.Height - 250, 318, 98),
                 BackgroundColor = NSColor.WindowBackground,
                 Bordered        = false,
                 Editable        = false,
@@ -127,12 +156,10 @@ namespace SparkleShare {
             ContentView.AddSubview (Box);
             ContentView.AddSubview (HeaderTextField);
             ContentView.AddSubview (VersionTextField);
+            ContentView.AddSubview (UpdatesTextField);
             ContentView.AddSubview (CreditsTextField);
             ContentView.AddSubview (CreditsButton);
             ContentView.AddSubview (WebsiteButton);
-
-            MakeKeyAndOrderFront (this);
-
         }
 
     }

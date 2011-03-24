@@ -50,13 +50,25 @@ namespace SparkleShare {
 			Resizable      = false;
 
             CreateAbout ();
-
             SparkleShare.Controller.CheckForNewVersion ();
+
             SparkleShare.Controller.NewVersionAvailable += delegate (string new_version) {
 
-                ApplicationId.Invoke (delegate {
+                Application.Invoke (delegate {
 
                     Version.Markup = "<small><span fgcolor='#f57900'>A newer version (" + new_version + ") is available!</span></small>";
+                    Version.ShowAll ();
+
+                });
+
+            };
+
+
+            SparkleShare.Controller.VersionUpToDate += delegate {
+
+                Application.Invoke (delegate {
+
+                    Version.Markup = "<small><span fgcolor='#73d216'>You are running the latest version.</span></small>";
                     Version.ShowAll ();
 
                 });
@@ -81,7 +93,6 @@ namespace SparkleShare {
                     Xalign = 0,
                     Xpad = 18,
                     Ypad = 18
-
                 };
 
             box.Add (header);
