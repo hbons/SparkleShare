@@ -77,7 +77,13 @@ namespace SparkleShare {
 		public delegate void NotificationRaisedEventHandler (string user_name, string user_email,
 		                                                     string message, string repository_path);
 
+        public event NewVersionAvailableEventHandler NewVersionAvailable;
+        public delegate void NewVersionAvailableEventHandler (string new_version);
 
+        public event VersionUpToDateEventHandler VersionUpToDate;
+        public delegate void VersionUpToDateEventHandler ();
+
+        
         // Short alias for the translations
         public static string _ (string s)
         {
@@ -1279,7 +1285,47 @@ namespace SparkleShare {
 			return regex.IsMatch (email);
 
 		}
-	
+
+
+        private void CheckForNewVersion ()
+        {
+
+            string new_version_file_path = System.IO.Path.Combine (SparklePaths.SparkleTmpPath,
+                "version");
+
+            if (File.Exists (new_version_file_path))
+                File.Delete (new_version_file_path);
+
+            WebClient web_client = new WebClient ();
+            Uri uri = new Uri ("http://www.sparkleshare.org/version");
+
+            web_client.DownloadFileCompleted += delegate {
+
+                if (new FileInfo (new_version_file_path).Length > 0) {
+
+                    StreamReader reader = new StreamReader (new_version_file_path);
+                    string downloaded_version_number = reader.ReadToEnd ().Trim ();
+
+                    if (!Defines.VERSION.Equals (downloaded_version_number)) {
+
+                        if (NewVersionAvailable != null)
+                            NewVersionAvailable (downloaded_version_number);
+
+                    } else {
+
+                        if (VersionUpToDate != null)
+                            VersionUpToDate ();
+
+                    }
+
+                }
+
+            };
+
+            web_client.DownloadFileAsync (uri, new_version_file_path);
+
+        }
+
 	}
 
 
