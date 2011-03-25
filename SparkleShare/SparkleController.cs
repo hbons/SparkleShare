@@ -131,11 +131,22 @@ namespace SparkleShare {
 
 				RemoveRepository (args.FullPath);
 
+                if (FolderListChanged != null)
+                    FolderListChanged ();
+
+
+                FolderSize = GetFolderSize ();
+
+                if (FolderSizeChanged != null)
+                    FolderSizeChanged (FolderSize);
+
 			};
 
 			// Add the repository when a create event occurs
 			watcher.Created += delegate (object o, FileSystemEventArgs args) {
-				
+
+                // TODO: Needs to wait until the copying over is done
+
 				// Handle invitations when the user saves an
 				// invitation into the SparkleShare folder
 				if (args.Name.EndsWith (".sparkle") && !FirstRun) {
@@ -147,14 +158,21 @@ namespace SparkleShare {
 					string folder = xml_doc.GetElementsByTagName ("folder") [0].InnerText;
 					string token  = xml_doc.GetElementsByTagName ("token") [0].InnerText;
 			
-					// TODO: this is broken :\
+					// FIXME: this is broken :\
 					if (OnInvitation != null)
 						OnInvitation (server, folder, token);
 
-                // FIXME: big repos seem to often fail because they don't pass this test
 				} else if (SparkleRepo.IsRepo (args.FullPath)) {
 
 					AddRepository (args.FullPath);
+
+                    if (FolderListChanged != null)
+                        FolderListChanged ();
+
+                    FolderSize = GetFolderSize ();
+
+                    if (FolderSizeChanged != null)
+                        FolderSizeChanged (FolderSize);
 
 				}
 
@@ -583,16 +601,6 @@ namespace SparkleShare {
 
 			Repositories.Add (repo);
 
-
-			if (FolderListChanged != null)
-				FolderListChanged ();
-
-			
-			FolderSize = GetFolderSize ();
-
-			if (FolderSizeChanged != null)
-				FolderSizeChanged (FolderSize);
-
 		}
 
 
@@ -618,16 +626,6 @@ namespace SparkleShare {
 
 			}
 
-
-			if (FolderListChanged != null)
-				FolderListChanged ();
-
-			
-			FolderSize = GetFolderSize ();
-
-			if (FolderSizeChanged != null)
-				FolderSizeChanged (FolderSize);
-
 		}
 
 
@@ -640,6 +638,15 @@ namespace SparkleShare {
 
 			foreach (string folder_path in Directory.GetDirectories (SparklePaths.SparklePath))
 				AddRepository (folder_path);
+
+            if (FolderListChanged != null)
+                FolderListChanged ();
+
+            
+            FolderSize = GetFolderSize ();
+
+            if (FolderSizeChanged != null)
+                FolderSizeChanged (FolderSize);
 
 		}
 
