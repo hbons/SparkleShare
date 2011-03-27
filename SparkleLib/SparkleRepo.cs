@@ -1182,7 +1182,7 @@ namespace SparkleLib {
 			LocalTimer.Dispose ();
 			Listener.Dispose ();
 
-			base.Dispose ();
+			//base.Dispose ();
 
 		}
 

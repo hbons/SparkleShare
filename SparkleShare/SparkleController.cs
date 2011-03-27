@@ -1268,11 +1268,9 @@ namespace SparkleShare {
 		public void Quit ()
 		{
 
-			// FIXME: this blocks
-//			foreach (SparkleRepo repo in Repositories)
-//				repo.Dispose ();
+			foreach (SparkleRepo repo in Repositories)
+				repo.Dispose ();
 
-			// FIXME: Never exits
 			Environment.Exit (0);
 
 		}
