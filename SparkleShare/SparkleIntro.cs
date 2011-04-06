@@ -81,6 +81,9 @@ namespace SparkleShare {
 				};
 
 					string full_name  = new UnixUserInfo (UnixEnvironment.UserName).RealName;
+                                        if (string.IsNullOrEmpty (full_name))
+						full_name = "";
+
 					Label name_label = new Label ("<b>" + _("Full Name:") + "</b>") {
 						UseMarkup = true,
 						Xalign    = 0
