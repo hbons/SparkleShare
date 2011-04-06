@@ -76,6 +76,9 @@ namespace SparkleShare {
 				UserInfoForm.IntercellSpacing = new SizeF (4, 4);
 			
 				string full_name  = new UnixUserInfo (UnixEnvironment.UserName).RealName;
+                                if (string.IsNullOrEmpty (full_name))
+					full_name = "";
+
 				UserInfoForm.Cells [0].StringValue = full_name.TrimEnd (",".ToCharArray());;
 				UserInfoForm.Cells [1].StringValue = SparkleShare.Controller.UserEmail;
 			
