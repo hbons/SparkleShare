@@ -334,8 +334,10 @@ namespace SparkleLib {
 					
 				}
 
-				if (_HasUnsyncedChanges)
+				if (_HasUnsyncedChanges) {
+                    CheckForRemoteChanges ();
 					Push ();
+                };
 
 			};
 
@@ -846,9 +848,6 @@ namespace SparkleLib {
 
 					if (PushingFailed != null)
 					    PushingFailed (this, args);
-					
-					CheckForRemoteChanges ();
-					Push ();
 
 				} else {
 
