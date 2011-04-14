@@ -1,6 +1,10 @@
 #!/bin/bash
 
-pidfile=${HOME}/SparkleShare/.tmp/sparkleshare.pid
+if [ "$XDG_RUNTIME_DIR" ]; then
+  pidfile=${XDG_RUNTIME_DIR}/sparkleshare.pid
+else
+  pidfile=/tmp/sparkleshare-${USER}.pid
+fi
 
 start() {
   if [ -e "${pidfile}" ]; then
@@ -15,9 +19,8 @@ start() {
   fi
 
   echo -n "Starting SparkleShare... "
-  mkdir -p /tmp/sparkleshare/
   ssh-agent mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
-  echo $! > ${pidfile}
+  ( umask 066; echo $! > ${pidfile} )
   echo "Done."
 }
 
