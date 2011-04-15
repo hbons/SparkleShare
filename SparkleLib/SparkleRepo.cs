@@ -334,10 +334,8 @@ namespace SparkleLib {
 					
 				}
 
-				if (_HasUnsyncedChanges) {
-                    CheckForRemoteChanges ();
-					Push ();
-                };
+				if (_HasUnsyncedChanges)
+                    FetchRebaseAndPush ();
 
 			};
 
@@ -590,7 +588,14 @@ namespace SparkleLib {
 			}
 
 		}
-		
+
+
+        public void FetchRebaseAndPush ()
+        {
+            CheckForRemoteChanges ();
+            Push ();
+        }
+
 		
 		public bool AnyDifferences {
 		
@@ -848,6 +853,8 @@ namespace SparkleLib {
 
 					if (PushingFailed != null)
 					    PushingFailed (this, args);
+
+                    FetchRebaseAndPush ();
 
 				} else {
 
