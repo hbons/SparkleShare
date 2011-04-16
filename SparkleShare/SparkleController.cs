@@ -819,6 +819,7 @@ namespace SparkleShare {
 			process.StartInfo.FileName               = "ssh-add";
 			process.StartInfo.Arguments              = Path.Combine (keys_path, key_file_name);
 			process.Start ();
+			process.WaitForExit ();
 
 		}
 
