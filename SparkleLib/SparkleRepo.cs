@@ -266,7 +266,7 @@ namespace SparkleLib {
 			if (Head.CurrentCommit == null)
 				_CurrentHash = null;
 			else
-				_CurrentHash = Head.CurrentCommit.Hash;
+				_CurrentHash = GetCurrentHash ();
 
 			_IsSyncing     = false;
 			_IsBuffering   = false;
@@ -431,7 +431,7 @@ namespace SparkleLib {
 			AddCommitAndPush ();
 
 			if (_CurrentHash == null)
-				_CurrentHash = Head.CurrentCommit.Hash;
+				_CurrentHash = GetCurrentHash ();
 
 		}
 
@@ -617,6 +617,16 @@ namespace SparkleLib {
 		}
 
 
+        private string GetCurrentHash ()
+        {
+            SparkleGit git = new SparkleGit (LocalPath, "log -1 --format=%H");
+            git.Start ();
+            git.WaitForExit ();
+            string output = git.StandardOutput.ReadToEnd ();
+            return output.Trim ();
+        }
+
+
 		// Stages the made changes
 		private void Add ()
 		{
@@ -663,7 +673,7 @@ namespace SparkleLib {
 				return;
 
 			base.Commit (message);
-			_CurrentHash = Head.CurrentCommit.Hash;
+			_CurrentHash = GetCurrentHash ()
 			
 			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message + " (" + _CurrentHash);
 
@@ -708,7 +718,7 @@ namespace SparkleLib {
 				_IsSyncing  = false;
 				_IsFetching = false;
 
-				_CurrentHash = Head.CurrentCommit.Hash;
+				_CurrentHash = GetCurrentCommit ();
 
 				if (git.ExitCode != 0) {
 
@@ -805,7 +815,7 @@ namespace SparkleLib {
 			git.Start ();
 			git.WaitForExit ();
 
-			_CurrentHash = Head.CurrentCommit.Hash;
+			_CurrentHash = GetCurrentHash ();
 
 			if (NewCommit != null)
 				NewCommit (GetCommits (1) [0], LocalPath);
