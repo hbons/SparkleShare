@@ -668,12 +668,14 @@ namespace SparkleLib {
 		// Commits the made changes
 		new public void Commit (string message)
 		{
-
 			if (!AnyDifferences)
 				return;
 
-			base.Commit (message);
-			_CurrentHash = GetCurrentHash ()
+			SparkleGit git = new SparkleGit (LocalPath, "commit -m '" + message + "'");
+            git.Start ();
+            git.WaitForExit ();
+
+			_CurrentHash = GetCurrentHash ();
 			
 			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message + " (" + _CurrentHash);
 
@@ -718,7 +720,7 @@ namespace SparkleLib {
 				_IsSyncing  = false;
 				_IsFetching = false;
 
-				_CurrentHash = GetCurrentCommit ();
+				_CurrentHash = GetCurrentHash ();
 
 				if (git.ExitCode != 0) {
 
