@@ -55,10 +55,8 @@ namespace SparkleShare {
             SparkleShare.Controller.NewVersionAvailable += delegate (string new_version) {
 
                 Application.Invoke (delegate {
-
                     Version.Markup = "<small><span fgcolor='#f57900'>A newer version (" + new_version + ") is available!</span></small>";
                     Version.ShowAll ();
-
                 });
 
             };
@@ -96,6 +94,7 @@ namespace SparkleShare {
                 };
 
             box.Add (header);
+
 
             Version = new Label () {
                 Markup = "<small>Checking for updates...</small>",
