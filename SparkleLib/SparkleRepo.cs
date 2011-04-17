@@ -676,7 +676,6 @@ namespace SparkleLib {
             git.WaitForExit ();
 
 			_CurrentHash = GetCurrentHash ();
-			
 			SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message + " (" + _CurrentHash);
 
 			SparkleEventArgs args = new SparkleEventArgs ("Commited") {
@@ -689,7 +688,6 @@ namespace SparkleLib {
 			// Collect garbage pseudo-randomly
 			if (DateTime.Now.Second % 10 == 0)
 				CollectGarbage ();
-
 		}
 
 
