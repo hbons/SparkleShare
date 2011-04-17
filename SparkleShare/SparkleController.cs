@@ -1293,9 +1293,8 @@ namespace SparkleShare {
 		}
 
 
-        private void CheckForNewVersion ()
+        public void CheckForNewVersion ()
         {
-
             string new_version_file_path = System.IO.Path.Combine (SparklePaths.SparkleTmpPath,
                 "version");
 
@@ -1308,22 +1307,18 @@ namespace SparkleShare {
             web_client.DownloadFileCompleted += delegate {
 
                 if (new FileInfo (new_version_file_path).Length > 0) {
-
                     StreamReader reader = new StreamReader (new_version_file_path);
                     string downloaded_version_number = reader.ReadToEnd ().Trim ();
 
-                    if (!Defines.VERSION.Equals (downloaded_version_number)) {
-
-                        if (NewVersionAvailable != null)
-                            NewVersionAvailable (downloaded_version_number);
-
-                    } else {
+                    if (Defines.VERSION.Equals (downloaded_version_number)) {
 
                         if (VersionUpToDate != null)
                             VersionUpToDate ();
+                    } else {
 
+                        if (NewVersionAvailable != null)
+                            NewVersionAvailable (downloaded_version_number);
                     }
-
                 }
 
             };

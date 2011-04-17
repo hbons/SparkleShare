@@ -67,9 +67,11 @@ namespace SparkleShare {
                 InvokeOnMainThread (delegate {
                     UpdatesTextField.StringValue = "You are running the latest version.";
                     UpdatesTextField.TextColor   =
-                        NSColor.FromCalibratedRgba (0.45f, 0.82f, 0.09f, 1.0f); // Tango Chameleon #2
+                        NSColor.FromCalibratedRgba (0.31f, 0.60f, 0.02f, 1.0f); // Tango Chameleon #3
                 });
             };
+
+            SparkleShare.Controller.CheckForNewVersion ();
         }
 
 
