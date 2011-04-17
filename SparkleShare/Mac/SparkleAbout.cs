@@ -58,14 +58,16 @@ namespace SparkleShare {
             SparkleShare.Controller.NewVersionAvailable += delegate (string new_version) {
                 InvokeOnMainThread (delegate {
                     UpdatesTextField.StringValue = "A newer version (" + new_version + ") is available!";
-                    UpdatesTextField.TextColor   = NSColor.FromCalibratedRgba (0.96f, 0.47f, 0.0f, 1.0f); // Tango Orange #2
+                    UpdatesTextField.TextColor   =
+                        NSColor.FromCalibratedRgba (0.96f, 0.47f, 0.0f, 1.0f); // Tango Orange #2
                 });
             };
 
             SparkleShare.Controller.VersionUpToDate += delegate {
                 InvokeOnMainThread (delegate {
                     UpdatesTextField.StringValue = "You are running the latest version.";
-                    UpdatesTextField.TextColor   = NSColor.FromCalibratedRgba (0.45f, 0.82f, 0.09f, 1.0f); // Tango Chameleon #2
+                    UpdatesTextField.TextColor   =
+                        NSColor.FromCalibratedRgba (0.45f, 0.82f, 0.09f, 1.0f); // Tango Chameleon #2
                 });
             };
         }
