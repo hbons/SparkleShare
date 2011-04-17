@@ -40,9 +40,7 @@ namespace SparkleShare {
 
 		public SparkleAbout () : base ("")
 		{
-
-			DefaultSize = new Gdk.Size (360, 260);
-
+			DefaultSize    = new Gdk.Size (360, 260);
 			BorderWidth    = 0;
 			IconName       = "folder-sparkleshare";
 			WindowPosition = WindowPosition.Center;
@@ -50,29 +48,22 @@ namespace SparkleShare {
 			Resizable      = false;
 
             CreateAbout ();
-            SparkleShare.Controller.CheckForNewVersion ();
 
             SparkleShare.Controller.NewVersionAvailable += delegate (string new_version) {
-
                 Application.Invoke (delegate {
                     Version.Markup = "<small><span fgcolor='#f57900'>A newer version (" + new_version + ") is available!</span></small>";
                     Version.ShowAll ();
                 });
-
             };
-
 
             SparkleShare.Controller.VersionUpToDate += delegate {
-
                 Application.Invoke (delegate {
-
-                    Version.Markup = "<small><span fgcolor='#73d216'>You are running the latest version.</span></small>";
+                    Version.Markup = "<small><span fgcolor='#4e9a06'>You are running the latest version.</span></small>";
                     Version.ShowAll ();
-
                 });
-
             };
 
+            SparkleShare.Controller.CheckForNewVersion ();
 		}
 
 
