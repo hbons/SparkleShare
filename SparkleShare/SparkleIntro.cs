@@ -23,6 +23,7 @@ using System.Timers;
 
 using Gtk;
 using Mono.Unix;
+using Notifications;
 
 namespace SparkleShare {
 
@@ -527,26 +528,28 @@ namespace SparkleShare {
 
 			Reset ();
 			
-			VBox layout_vertical = new VBox (false, 0);
-	
-				Label header = new Label ("<span size='large'><b>" +
-						                _("Something went wrong…") +
-						                  "</b></span>\n") {
-					UseMarkup = true,
-					Xalign = 0
-				};
+                UrgencyHint = true;
 
-					Button try_again_button = new Button (_("Try Again")) {
-						Sensitive = true
-					};
-	
-					try_again_button.Clicked += delegate (object o, EventArgs args) {
-						ShowServerForm ();
-					};
-	
-				AddButton (try_again_button);
-
-			layout_vertical.PackStart (header, false, false, 0);
+                VBox layout_vertical = new VBox (false, 0);
+    	
+    				Label header = new Label ("<span size='large'><b>" +
+    						                _("Something went wrong…") +
+    						                  "</b></span>\n") {
+    					UseMarkup = true,
+    					Xalign = 0
+    				};
+    
+    					Button try_again_button = new Button (_("Try Again")) {
+    						Sensitive = true
+    					};
+    	
+    					try_again_button.Clicked += delegate (object o, EventArgs args) {
+    						ShowServerForm ();
+    					};
+    	
+    				AddButton (try_again_button);
+    
+    			layout_vertical.PackStart (header, false, false, 0);
 
 			Add (layout_vertical);
 
@@ -561,6 +564,17 @@ namespace SparkleShare {
 
 			Reset ();
 
+                UrgencyHint = true;
+
+                if (!HasTopLevelFocus) {
+
+                    string title   = String.Format (_("‘{0}’ has been successfully added", folder_name));
+                    string subtext = _("");
+
+                    new SparkleBubble (title, subtext).Show ();
+
+                }
+
 				VBox layout_vertical = new VBox (false, 0);
 
 					Label header = new Label ("<span size='large'><b>" +
@@ -571,7 +585,7 @@ namespace SparkleShare {
 					};
 		
 					Label information = new Label (
-						String.Format(_("Now you can access the synced files from ‘{0}’ in your SparkleShare folder."),
+						String.Format (_("Now you can access the synced files from ‘{0}’ in your SparkleShare folder."),
 							folder_name)) {
 						Xalign = 0,
 						Wrap   = true,
