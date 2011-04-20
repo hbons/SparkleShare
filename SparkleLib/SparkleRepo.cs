@@ -145,6 +145,7 @@ namespace SparkleLib {
             UserName        = GetUserName ();
             UserEmail       = GetUserEmail ();
 
+            // TODO: replace this with a check on the number of objects in .git/objects/ (empty if 2)
             if (Head.CurrentCommit == null)
                 _CurrentHash = null;
             else
