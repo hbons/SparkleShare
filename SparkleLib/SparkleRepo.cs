@@ -138,12 +138,12 @@ namespace SparkleLib {
             LocalPath       = path;
             Name            = Path.GetFileName (LocalPath);
 
-            RemoteOriginUrl = Config ["remote.origin.url"];
+            RemoteOriginUrl = GetRemoteOriginUrl ();
             RemoteName      = Path.GetFileNameWithoutExtension (RemoteOriginUrl);
             Domain          = GetDomain (RemoteOriginUrl);
             Description     = GetDescription ();
-            UserName        = Config ["user.name"];
-            UserEmail       = Config ["user.email"];
+            UserName        = GetUserName ();
+            UserEmail       = GetUserEmail ();
 
             if (Head.CurrentCommit == null)
                 _CurrentHash = null;
@@ -704,7 +704,46 @@ namespace SparkleLib {
 
             return description;
         }
-        
+
+
+        private string GetRemoteOriginUrl ()
+        {
+            SparkleGit git = new SparkleGit (LocalPath, "config --get remote.origin.url");
+            git.Start ();
+            git.WaitForExit ();
+
+            string output = git.StandardOutput.ReadToEnd ();
+            string url    = output.Trim ();
+
+            return url;
+        }
+
+
+        private string GetUserName ()
+        {
+            SparkleGit git = new SparkleGit (LocalPath, "config --get user.name");
+            git.Start ();
+            git.WaitForExit ();
+
+            string output = git.StandardOutput.ReadToEnd ();
+            string user_name   = output.Trim ();
+
+            return user_name;
+        }
+
+
+        private string GetUserEmail ()
+        {
+            SparkleGit git = new SparkleGit (LocalPath, "config --get user.email");
+            git.Start ();
+            git.WaitForExit ();
+
+            string output = git.StandardOutput.ReadToEnd ();
+            string user_email   = output.Trim ();
+
+            return user_email;
+        }
+
 
         // Recursively gets a folder's size in bytes
         private double CalculateFolderSize (DirectoryInfo parent)
