@@ -690,7 +690,7 @@ namespace SparkleLib {
         // Gets the repository's description
         private string GetDescription ()
         {
-            string description_file_path = SparkleHelpers.CombineMore (Directory, "description");
+            string description_file_path = SparkleHelpers.CombineMore (LocalPath, ".git", "description");
 
             if (!File.Exists (description_file_path))
                 return null;
