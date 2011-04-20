@@ -23,8 +23,6 @@ using System.Text.RegularExpressions;
 using System.Timers;
 
 using GitSharp;
-using GitSharp.Commands;
-using GitSharp.Core.Transport;
 using Meebey.SmartIrc4net;
 using Mono.Unix;
 
