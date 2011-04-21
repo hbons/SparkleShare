@@ -22,13 +22,12 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Timers;
 
-using GitSharp;
 using Meebey.SmartIrc4net;
 using Mono.Unix;
 
 namespace SparkleLib {
 
-    public class SparkleRepo : Repository {
+    public class SparkleRepo {
 
         private Timer RemoteTimer;
         private Timer LocalTimer;
@@ -113,7 +112,7 @@ namespace SparkleLib {
         public delegate void FetchingFinishedEventHandler (object o, SparkleEventArgs args);
         public delegate void FetchingFailedEventHandler (object o, SparkleEventArgs args);
         public delegate void NewCommitEventHandler (SparkleCommit commit, string repository_path);
-        public delegate void ConflictDetectedEventHandler (object o, SparkleEventArgs args);
+//        public delegate void ConflictDetectedEventHandler (object o, SparkleEventArgs args);
         public delegate void ChangesDetectedEventHandler (object o, SparkleEventArgs args);
         public delegate void CommitEndedUpEmptyEventHandler (object o, SparkleEventArgs args);
 
@@ -126,12 +125,12 @@ namespace SparkleLib {
         public event FetchingFinishedEventHandler FetchingFinished;
         public event FetchingFailedEventHandler FetchingFailed;
         public event NewCommitEventHandler NewCommit;
-        public event ConflictDetectedEventHandler ConflictDetected;
+//        public event ConflictDetectedEventHandler ConflictDetected;
         public event ChangesDetectedEventHandler ChangesDetected;
         public event CommitEndedUpEmptyEventHandler CommitEndedUpEmpty;
 
 
-        public SparkleRepo (string path) : base (path)
+        public SparkleRepo (string path)
         {
             LocalPath       = path;
             Name            = Path.GetFileName (LocalPath);
@@ -144,9 +143,9 @@ namespace SparkleLib {
             UserEmail       = GetUserEmail ();
 
             // TODO: replace this with a check on the number of objects in .git/objects/ (empty if 2)
-            if (Head.CurrentCommit == null)
-                _CurrentHash = null;
-            else
+  //          if (Head.CurrentCommit == null)
+    //            _CurrentHash = null;
+      //      else
                 _CurrentHash = GetCurrentHash ();
 
             _IsSyncing     = false;
@@ -347,11 +346,8 @@ namespace SparkleLib {
                 return;
 
             WatcherChangeTypes wct = fse_args.ChangeType;
-            int number_of_changes  = Status.Untracked.Count +
-                                     Status.Missing.Count +
-                                     Status.Modified.Count;
 
-            if (number_of_changes > 0) {
+            if (AnyDifferences) {
                 _IsBuffering = true;
 
                 // Only fire the event if the timer has been stopped.
@@ -418,12 +414,15 @@ namespace SparkleLib {
                 git.Start ();
                 git.WaitForExit ();
 
-                string output = git.StandardOutput.ReadToEnd ().Trim ();
-                
-                if (output.Length > 0)
-                    return true;
-                else
-                    return false;
+                string output = git.StandardOutput.ReadToEnd ().TrimEnd ();
+                string [] lines = output.Split ("\n".ToCharArray ());
+
+                foreach (string line in lines) {
+                    if (line.Length > 1 &&!line [1].Equals (" "))
+                        return true;
+                }
+
+                return false;
             }
         }
 
@@ -472,7 +471,7 @@ namespace SparkleLib {
 
 
         // Commits the made changes
-        new public void Commit (string message)
+        public void Commit (string message)
         {
             if (!AnyDifferences)
                 return;
@@ -558,7 +557,7 @@ namespace SparkleLib {
             SparkleGit git = new SparkleGit (LocalPath, "rebase -v FETCH_HEAD");
 
             git.Exited += delegate {
-                if (Status.MergeConflict.Count > 0) {
+/*                if (Status.MergeConflict.Count > 0) {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected...");
 
                     foreach (string problem_file_name in Status.MergeConflict) {
@@ -590,9 +589,10 @@ namespace SparkleLib {
                     git_continue.WaitForExit ();
 
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
-    
-                    Push ();
-                }
+*/
+                    _CurrentHash = GetCurrentHash ();
+//                    Push ();
+//                }
             };
 
             git.Start ();
@@ -893,7 +893,7 @@ namespace SparkleLib {
 
             // Reading the standard output HAS to go before
             // WaitForExit, or it will hang forever on output > 4096 bytes
-            string output = git_status.StandardOutput.ReadToEnd ();
+            string output = git_status.StandardOutput.ReadToEnd ().Trim ("\n".ToCharArray ());
             git_status.WaitForExit ();
 
             string [] lines = output.Split ("\n".ToCharArray ());
@@ -960,12 +960,11 @@ namespace SparkleLib {
 
 
         // Disposes all resourses of this object
-        new public void Dispose ()
+        public void Dispose ()
         {
             RemoteTimer.Dispose ();
             LocalTimer.Dispose ();
             Listener.Dispose ();
-            //base.Dispose ();
         }
     }
 }
