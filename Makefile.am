@@ -2,7 +2,6 @@ SUBDIRS =	\
 	build	\
 	help	\
 	SmartIrc4net \
-	. \
 	SparkleLib \
 	SparkleShare \
 	data \
@@ -16,7 +15,5 @@ DISTCLEANFILES = \
 	intltool-update		\
 	gnome-doc-utils.make
 
-clean-local: clean-gitsharp
+clean-local:
 	rm -rf $(top_builddir)/bin
-
-include $(top_srcdir)/build/gitsharp.mk

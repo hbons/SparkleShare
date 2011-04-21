@@ -31,34 +31,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Mono.Posix" />
-    <Reference Include="DiffieHellman, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\GitSharp\lib\DiffieHellman.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.4.369, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\GitSharp\lib\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="Org.Mentalis.Security, Version=1.0.13.715, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\GitSharp\lib\Org.Mentalis.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Tamir.SharpSSH, Version=1.1.1.13, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\GitSharp\lib\Tamir.SharpSSH.dll</HintPath>
-    </Reference>
-    <Reference Include="Winterdom.IO.FileMap, Version=2.0.2.0, Culture=neutral, PublicKeyToken=4982617362e1edb5">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\GitSharp\lib\Winterdom.IO.FileMap.dll</HintPath>
-    </Reference>
-    <Reference Include="GitSharp.Core, Version=0.3.0.0, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\GitSharp.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="GitSharp, Version=0.3.0.0, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\GitSharp.dll</HintPath>
-    </Reference>
     <Reference Include="Meebey.SmartIrc4net, Version=0.4.5.0, Culture=neutral, PublicKeyToken=7868485fbf407e0f">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\Meebey.SmartIrc4net.dll</HintPath>

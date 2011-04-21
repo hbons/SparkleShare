@@ -79,7 +79,6 @@ dnl package checks, common for all configs
 
 SPARKLESHARE_CHECK_GTK_SHARP
 SPARKLESHARE_SMARTIRC4NET
-SPARKLESHARE_GITSHARP
 
 dnl check for webkit-sharp
 PKG_CHECK_MODULES(WEBKIT_SHARP, webkit-sharp-1.0, have_webkit_sharp=yes, have_webkit_sharp=no)

@@ -53,6 +53,7 @@
     <Compile Include="SparkleController.cs" />
     <Compile Include="SparkleAbout.cs" />
     <Compile Include="SparkleLinController.cs" />
+    <Compile Include="SparkleInvitation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SparkleLib\SparkleLib.csproj">
