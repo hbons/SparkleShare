@@ -1,6 +1,3 @@
 [submodule "SmartIrc4net"]
 	path = SmartIrc4net
 	url = git://git.qnetp.net/smartirc4net.git
-[submodule "GitSharp"]
-	path = GitSharp
-	url = http://github.com/henon/GitSharp.git
