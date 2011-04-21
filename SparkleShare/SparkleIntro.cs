@@ -566,9 +566,9 @@ namespace SparkleShare {
 
                 UrgencyHint = true;
 
-                if (!HasTopLevelFocus) {
+                if (!HasToplevelFocus) {
 
-                    string title   = String.Format (_("‘{0}’ has been successfully added", folder_name));
+                    string title   = String.Format (_("‘{0}’ has been successfully added"), folder_name);
                     string subtext = _("");
 
                     new SparkleBubble (title, subtext).Show ();
