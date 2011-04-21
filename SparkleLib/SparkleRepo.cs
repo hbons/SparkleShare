@@ -112,7 +112,7 @@ namespace SparkleLib {
         public delegate void FetchingFinishedEventHandler (object o, SparkleEventArgs args);
         public delegate void FetchingFailedEventHandler (object o, SparkleEventArgs args);
         public delegate void NewCommitEventHandler (SparkleCommit commit, string repository_path);
-//        public delegate void ConflictDetectedEventHandler (object o, SparkleEventArgs args);
+        public delegate void ConflictDetectedEventHandler (object o, SparkleEventArgs args);
         public delegate void ChangesDetectedEventHandler (object o, SparkleEventArgs args);
         public delegate void CommitEndedUpEmptyEventHandler (object o, SparkleEventArgs args);
 
@@ -125,7 +125,7 @@ namespace SparkleLib {
         public event FetchingFinishedEventHandler FetchingFinished;
         public event FetchingFailedEventHandler FetchingFailed;
         public event NewCommitEventHandler NewCommit;
-//        public event ConflictDetectedEventHandler ConflictDetected;
+        public event ConflictDetectedEventHandler ConflictDetected;
         public event ChangesDetectedEventHandler ChangesDetected;
         public event CommitEndedUpEmptyEventHandler CommitEndedUpEmpty;
 
