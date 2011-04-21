@@ -57,29 +57,9 @@
     <Reference Include="Mono.Posix">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="DiffieHellman, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\DiffieHellman.dll</HintPath>
-    </Reference>
-    <Reference Include="GitSharp.Core, Version=0.3.0.0, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\GitSharp.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="GitSharp, Version=0.3.0.0, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\GitSharp.dll</HintPath>
-    </Reference>
     <Reference Include="Meebey.SmartIrc4net, Version=0.4.5.0, Culture=neutral, PublicKeyToken=7868485fbf407e0f">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Meebey.SmartIrc4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Org.Mentalis.Security, Version=1.0.13.715, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\Org.Mentalis.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Tamir.SharpSSH, Version=1.1.1.13, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\Tamir.SharpSSH.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
