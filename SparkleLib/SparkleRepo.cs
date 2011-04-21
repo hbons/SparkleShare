@@ -482,7 +482,7 @@ namespace SparkleLib {
             git.WaitForExit ();
 
             _CurrentHash = GetCurrentHash ();
-            SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message + " (" + _CurrentHash);
+            SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message + " (" + _CurrentHash + ")");
 
             SparkleEventArgs args = new SparkleEventArgs ("Commited") {
                 Message = message
@@ -562,7 +562,6 @@ namespace SparkleLib {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected...");
 
                     foreach (string problem_file_name in Status.MergeConflict) {
-
                         SparkleGit git_ours = new SparkleGit (LocalPath,
                             "checkout --ours " + problem_file_name);
                         git_ours.Start ();
@@ -883,24 +882,32 @@ namespace SparkleLib {
         // Creates a pretty commit message based on what has changed
         private string FormatCommitMessage ()
         {
-            // RepositoryStatus contains the following properties (all HashSet <string>)
-            // 
-            // * Added         ---> added and staged
-            // * MergeConflict --->
-            // * Missing       ---> removed but not staged
-            // * Modified      ---> modified but not staged
-            // * Removed       ---> removed and staged
-            // * Staged        ---> modified and staged
-            // * Untracked     ---> added but not staged
-            //
-            // Because we create the commit message, we only need to consider the staged changes
-            RepositoryStatus status = Index.Status;
+            List<string> Added    = new List<string> ();
+            List<string> Modified = new List<string> ();
+            List<string> Removed  = new List<string> ();
+            string file_name      = "";
+            string message        = null;
 
-            string file_name = "";
-            string message = null;
+            SparkleGit git_status = new SparkleGit (LocalPath, "status --porcelain");
+            git_status.Start ();
 
-            if (status.Added.Count > 0) {
-                foreach (string added in status.Added) {
+            // Reading the standard output HAS to go before
+            // WaitForExit, or it will hang forever on output > 4096 bytes
+            string output = git_status.StandardOutput.ReadToEnd ();
+            git_status.WaitForExit ();
+
+            string [] lines = output.Split ("\n".ToCharArray ());
+            foreach (string line in lines) {
+                if (line.StartsWith ("A"))
+                    Added.Add (line.Substring (2));
+                else if (line.StartsWith ("M"))
+                    Modified.Add (line.Substring (2));
+                else if (line.StartsWith ("D"))
+                    Removed.Add (line.Substring (2));
+            }
+
+            if (Added.Count > 0) {
+                foreach (string added in Added) {
                     file_name = added;
                     break;
                 }
@@ -908,8 +915,8 @@ namespace SparkleLib {
                 message = "+ ‘" + file_name + "’";
             }
 
-            if (status.Staged.Count > 0) {
-                foreach (string modified in status.Staged) {
+            if (Modified.Count > 0) {
+                foreach (string modified in Modified) {
                     file_name = modified;
                     break;
                 }
@@ -917,9 +924,8 @@ namespace SparkleLib {
                 message = "/ ‘" + file_name + "’";
             }
 
-            if (status.Removed.Count > 0) {
-
-                foreach (string removed in status.Removed) {
+            if (Removed.Count > 0) {
+                foreach (string removed in Removed) {
                     file_name = removed;
                     break;
                 }
@@ -927,9 +933,9 @@ namespace SparkleLib {
                 message = "- ‘" + file_name + "’";
             }
 
-            int changes_count = (status.Added.Count +
-                                 status.Staged.Count +
-                                 status.Removed.Count);
+            int changes_count = (Added.Count +
+                                 Modified.Count +
+                                 Removed.Count);
 
             if (changes_count > 1)
                 message += " + " + (changes_count - 1);
