@@ -141,13 +141,6 @@ namespace SparkleLib {
             Description     = GetDescription ();
             UserName        = GetUserName ();
             UserEmail       = GetUserEmail ();
-
-            // TODO: replace this with a check on the number of objects in .git/objects/ (empty if 2)
-  //          if (Head.CurrentCommit == null)
-    //            _CurrentHash = null;
-      //      else
-                _CurrentHash = GetCurrentHash ();
-
             _IsSyncing     = false;
             _IsBuffering   = false;
             _IsPolling     = true;
@@ -157,6 +150,11 @@ namespace SparkleLib {
             HasChanged     = false;
             ChangeLock     = new Object ();
             FetchRequests  = 0;
+
+            if (IsEmpty)
+                _CurrentHash = null;
+            else
+                _CurrentHash = GetCurrentHash ();
 
             string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath,
                 ".git", "has_unsynced_changes");
@@ -408,7 +406,7 @@ namespace SparkleLib {
         }
 
         
-        public bool AnyDifferences {
+        private bool AnyDifferences {
             get {
                 SparkleGit git = new SparkleGit (LocalPath, "status --porcelain");
                 git.Start ();
@@ -423,6 +421,17 @@ namespace SparkleLib {
                 }
 
                 return false;
+            }
+        }
+
+
+        private bool IsEmpty {
+            get {
+                SparkleGit git = new SparkleGit (LocalPath, "log -1");
+                git.Start ();
+                git.WaitForExit ();
+
+                return (git.ExitCode != 0);
             }
         }
 
