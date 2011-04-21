@@ -790,6 +790,7 @@ namespace SparkleLib {
             List <SparkleCommit> commits = new List <SparkleCommit> ();
 
             SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw  --date=iso");
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
             git_log.Start ();
             
             // Reading the standard output HAS to go before
