@@ -24,25 +24,19 @@ namespace SparkleLib {
 
 		public SparkleGit (string path, string args) : base ()
 		{
-			
 			EnableRaisingEvents              = true;
 			StartInfo.FileName               = SparklePaths.GitPath;
 			StartInfo.Arguments              = args;
 			StartInfo.RedirectStandardOutput = true;
 			StartInfo.UseShellExecute        = false;
 			StartInfo.WorkingDirectory       = path;
-			
 		}
 
 
         new public void Start ()
         {
-
             SparkleHelpers.DebugInfo ("Cmd", StartInfo.FileName + " " + StartInfo.Arguments);
             base.Start ();
-
         }
-		
 	}
-
 }
