@@ -33,7 +33,8 @@ namespace SparkleLib {
         private Timer LocalTimer;
         private FileSystemWatcher Watcher;
         private System.Object ChangeLock;
-        private int FetchRequests;
+        private int FetchQueue;
+        private int AnnounceQueue;
         private SparkleListener Listener;
         private List <double> SizeBuffer;
         private bool HasChanged;
@@ -134,22 +135,22 @@ namespace SparkleLib {
         {
             LocalPath       = path;
             Name            = Path.GetFileName (LocalPath);
-
             RemoteOriginUrl = GetRemoteOriginUrl ();
             RemoteName      = Path.GetFileNameWithoutExtension (RemoteOriginUrl);
             Domain          = GetDomain (RemoteOriginUrl);
             Description     = GetDescription ();
             UserName        = GetUserName ();
             UserEmail       = GetUserEmail ();
-            _IsSyncing     = false;
-            _IsBuffering   = false;
-            _IsPolling     = true;
-            _IsFetching    = false;
-            _IsPushing     = false;
-            _ServerOnline  = true;
-            HasChanged     = false;
-            ChangeLock     = new Object ();
-            FetchRequests  = 0;
+            _IsSyncing      = false;
+            _IsBuffering    = false;
+            _IsPolling      = true;
+            _IsFetching     = false;
+            _IsPushing      = false;
+            _ServerOnline   = true;
+            HasChanged      = false;
+            ChangeLock      = new Object ();
+            FetchQueue      = 0;
+            AnnounceQueue   = 0;
 
             if (IsEmpty)
                 _CurrentHash = null;
@@ -216,6 +217,12 @@ namespace SparkleLib {
                     Push ();
 
                 SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Connected. Now listening... (" + Listener.Server + ")");
+
+                if (AnnounceQueue > 0) {
+                    Listener.Announce (_CurrentHash);
+                    AnnounceQueue = 0;
+                    SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Queued messages delivered. (" + Listener.Server + ")");
+                }
             };
 
             // Start polling when the connection to the irc channel is lost
@@ -236,12 +243,12 @@ namespace SparkleLib {
                 string message = args.Data.Message.Trim ();
                 
                 if (!message.Equals (_CurrentHash) && message.Length == 40) {
-                    FetchRequests++;
+                    FetchQueue++;
 
                     if (!_IsFetching) {
-                        while (FetchRequests > 0) {
+                        while (FetchQueue > 0) {
                             Fetch ();
-                            FetchRequests--;
+                            FetchQueue--;
                         }
                         
                         Watcher.EnableRaisingEvents = false;
@@ -665,9 +672,13 @@ namespace SparkleLib {
 
                     if (PushingFinished != null)
                         PushingFinished (this, args); 
-                    
-                    if (!_IsPolling)
+
+                    if (Listener.Client.IsConnected) {
                         Listener.Announce (_CurrentHash);
+                    } else {
+                        AnnounceQueue++;
+                        SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Could not deliver notification, added it to the queue");
+                     }
                 }
 
             };
