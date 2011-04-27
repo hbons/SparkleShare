@@ -903,9 +903,9 @@ namespace SparkleLib {
         // Creates a pretty commit message based on what has changed
         private string FormatCommitMessage ()
         {
-            List<string> Added    = new List<string> ();
-            List<string> Modified = new List<string> ();
-            List<string> Removed  = new List<string> ();
+            List<string> Added        = new List<string> ();
+            List<string> Modified     = new List<string> ();
+            List<string> Removed      = new List<string> ();
             string file_name      = "";
             string message        = null;
 
@@ -925,11 +925,15 @@ namespace SparkleLib {
                     Modified.Add (line.Substring (2));
                 else if (line.StartsWith ("D"))
                     Removed.Add (line.Substring (2));
+                else if (line.StartsWith ("R")) {
+                    Removed.Add (line.Substring (3, (line.IndexOf (" -> ") - 3)));
+                    Added.Add (line.Substring (line.IndexOf (" -> ") + 4));
+                }
             }
 
             if (Added.Count > 0) {
                 foreach (string added in Added) {
-                    file_name = added;
+                    file_name = added.Trim ("\"".ToCharArray ());
                     break;
                 }
 
@@ -938,7 +942,7 @@ namespace SparkleLib {
 
             if (Modified.Count > 0) {
                 foreach (string modified in Modified) {
-                    file_name = modified;
+                    file_name = modified.Trim ("\"".ToCharArray ());
                     break;
                 }
 
@@ -947,7 +951,7 @@ namespace SparkleLib {
 
             if (Removed.Count > 0) {
                 foreach (string removed in Removed) {
-                    file_name = removed;
+                    file_name = removed.Trim ("\"".ToCharArray ());
                     break;
                 }
 
