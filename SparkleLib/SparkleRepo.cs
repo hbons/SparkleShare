@@ -239,13 +239,15 @@ namespace SparkleLib {
 
             // Fetch changes when there is a message in the irc channel
             Listener.Client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
-                SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Was notified of a remote change.");
+                SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Was notified of a remote change...");
                 string message = args.Data.Message.Trim ();
                 
                 if (!message.Equals (_CurrentHash) && message.Length == 40) {
                     FetchQueue++;
 
-                    if (!_IsFetching) {
+                    if (_IsBuffering) {
+                        SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] ...but we're busy adding files. We'll fetch them later.");
+                    } else if (!_IsFetching) {
                         while (FetchQueue > 0) {
                             Fetch ();
                             FetchQueue--;
@@ -903,9 +905,9 @@ namespace SparkleLib {
         // Creates a pretty commit message based on what has changed
         private string FormatCommitMessage ()
         {
-            List<string> Added        = new List<string> ();
-            List<string> Modified     = new List<string> ();
-            List<string> Removed      = new List<string> ();
+            List<string> Added    = new List<string> ();
+            List<string> Modified = new List<string> ();
+            List<string> Removed  = new List<string> ();
             string file_name      = "";
             string message        = null;
 
