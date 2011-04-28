@@ -303,7 +303,7 @@ namespace SparkleLib {
                 string remote_hash = git.StandardOutput.ReadToEnd ();
 
                 if (!remote_hash.StartsWith (_CurrentHash)) {
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found.");
+                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found." + _CurrentHash + " " + remote_hash);
                     Fetch ();
                     
                     Watcher.EnableRaisingEvents = false;
@@ -400,10 +400,8 @@ namespace SparkleLib {
                         CommitEndedUpEmpty (this, args);
                 }
             } finally {
-
                 RemoteTimer.Start ();
                 LocalTimer.Start ();
-
             }
         }
 
@@ -447,13 +445,19 @@ namespace SparkleLib {
 
         private string GetCurrentHash ()
         {
+            // Remove stale rebase-apply files because it
+            // makes the method return the wrong hashes.
+            string rebase_apply_file = SparkleHelpers.CombineMore (LocalPath, ".git", "rebase-apply");
+            if (File.Exists (rebase_apply_file))
+                File.Delete (rebase_apply_file);
+
             SparkleGit git = new SparkleGit (LocalPath, "log -1 --format=%H");
             git.Start ();
             git.WaitForExit ();
 
             string output = git.StandardOutput.ReadToEnd ();
             string hash   = output.Trim ();
-
+            Console.WriteLine (hash+"!!!!!!!!!!!!!!!!");
             return hash;
         }
 
@@ -575,42 +579,27 @@ namespace SparkleLib {
             SparkleGit git = new SparkleGit (LocalPath, "rebase -v FETCH_HEAD");
 
             git.Exited += delegate {
-/*                if (Status.MergeConflict.Count > 0) {
+                if (git.ExitCode != 0) {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected...");
 
-                    foreach (string problem_file_name in Status.MergeConflict) {
-                        SparkleGit git_ours = new SparkleGit (LocalPath,
-                            "checkout --ours " + problem_file_name);
-                        git_ours.Start ();
-                        git_ours.WaitForExit ();
-    
-                        string timestamp     = DateTime.Now.ToString ("H:mm d MMM");
-                        string new_file_name = problem_file_name + " (" + UserName  + ", " + timestamp + ")";
+                    while (AnyDifferences) {
+                        ResolveConflict ();
+                        Add ();
 
-                        File.Move (problem_file_name, new_file_name);
-                                           
-                        SparkleGit git_theirs = new SparkleGit (LocalPath,
-                            "checkout --theirs " + problem_file_name);
-                        git_theirs.Start ();
-                        git_theirs.WaitForExit ();
-                    
-                        SparkleEventArgs args = new SparkleEventArgs ("ConflictDetected");
-    
-                        if (ConflictDetected != null)
-                            ConflictDetected (this, args);
+                        SparkleGit git_continue = new SparkleGit (LocalPath, "rebase --continue");
+                        git_continue.Start ();
+                        git_continue.WaitForExit ();
                     }
 
-                    Add ();
-
-                    SparkleGit git_continue = new SparkleGit (LocalPath, "rebase --continue");
-                    git_continue.Start ();
-                    git_continue.WaitForExit ();
-
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
-*/
-                    _CurrentHash = GetCurrentHash ();
-//                    Push ();
-//                }
+
+                    SparkleEventArgs args = new SparkleEventArgs ("ConflictDetected");
+                    if (ConflictDetected != null)
+                        ConflictDetected (this, args);
+                }
+
+                _CurrentHash = GetCurrentHash ();
+                Push ();
             };
 
             git.Start ();
@@ -622,6 +611,44 @@ namespace SparkleLib {
                 NewCommit (GetCommits (1) [0], LocalPath);
                 
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes rebased.");
+        }
+
+
+        private void ResolveConflict ()
+        {
+            SparkleGit git_status = new SparkleGit (LocalPath, "status --porcelain");
+            git_status.Start ();
+            git_status.WaitForExit ();
+
+            string output = git_status.StandardOutput.ReadToEnd ().TrimEnd ();
+            string [] lines = output.Split ("\n".ToCharArray ());
+
+            // We're going to recover the two original versions of
+            // each conflicting path, and put a timestamp on our versions
+            foreach (string line in lines) {
+                if (line.StartsWith ("UU")) {
+                    string conflicting_path = line.Substring (3);
+
+                    File.Delete (conflicting_path);
+
+                    // Recover our version
+                    SparkleGit git_ours = new SparkleGit (LocalPath,
+                        "checkout --ours " + conflicting_path);
+                    git_ours.Start ();
+                    git_ours.WaitForExit ();
+
+                    // Append a timestamp to our version
+                    string timestamp     = DateTime.Now.ToString ("HH:mm d MMM");
+                    string our_path = conflicting_path + " (" + UserName  + ", " + timestamp + ")";
+                    File.Move (conflicting_path, our_path);
+
+                    // Recover the server's version
+                    SparkleGit git_theirs = new SparkleGit (LocalPath,
+                        "checkout --theirs " + conflicting_path);
+                    git_theirs.Start ();
+                    git_theirs.WaitForExit ();
+                }
+            }
         }
 
 
@@ -811,7 +838,7 @@ namespace SparkleLib {
             
             List <SparkleCommit> commits = new List <SparkleCommit> ();
 
-            SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw  --date=iso");
+            SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw -M --date=iso");
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             git_log.Start ();
             
@@ -883,6 +910,7 @@ namespace SparkleLib {
                                                         
                             string change_type = entry_line [37].ToString ();
                             string file_path   = entry_line.Substring (39);
+                            string to_file_path;
                             
                             if (change_type.Equals ("A")) {
                                 commit.Added.Add (file_path);
@@ -890,6 +918,13 @@ namespace SparkleLib {
                                 commit.Edited.Add (file_path);
                             } else if (change_type.Equals ("D")) {
                                 commit.Deleted.Add (file_path);
+                            } else if (change_type.Equals ("R")) {
+                                int tab_pos  = entry_line.LastIndexOf ("\t");
+                                file_path    = entry_line.Substring (42, tab_pos - 42);
+                                to_file_path = entry_line.Substring (tab_pos + 1);
+
+                                commit.MovedFrom.Add (file_path);
+                                commit.MovedTo.Add (to_file_path);
                             }
                         }
                     }
