@@ -379,29 +379,53 @@ namespace SparkleShare {
 	
 						}
 	
-						if (change_set.Deleted.Count > 0) {
-	
-							event_entry += "<dt>Deleted</dt>";
-	
-							foreach (string file_path in change_set.Deleted) {
-	
-								string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-									name, file_path);
-								
-								if (File.Exists (absolute_file_path)) {
-	
-									event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
-									
-								} else {
-	
-									event_entry += "<dd>" + file_path + "</dd>";
-	
-								}
-	
-							}
-	
-						}
-						
+                        if (change_set.Deleted.Count > 0) {
+    
+                            event_entry += "<dt>Deleted</dt>";
+    
+                            foreach (string file_path in change_set.Deleted) {
+    
+                                string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+                                    name, file_path);
+                                
+                                if (File.Exists (absolute_file_path)) {
+    
+                                    event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+                                    
+                                } else {
+    
+                                    event_entry += "<dd>" + file_path + "</dd>";
+    
+                                }
+    
+                            }
+    
+                        }
+
+                        if (change_set.MovedFrom.Count > 0) {
+                            event_entry += "<dt>Moved</dt>";
+
+                            int i = 0;
+                            foreach (string file_path in change_set.MovedFrom) {
+                                string to_file_path = change_set.MovedTo [i];
+                                string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+                                    name, file_path);
+                                string absolute_to_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
+                                    name, to_file_path);
+
+                                if (File.Exists (absolute_file_path))
+                                    event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a><br/><span class='moved-arrow'>&rarr;</span> ";
+                                else
+                                    event_entry += "<dd>" + file_path + "<br/><span class='moved-arrow'>&rarr;</span> ";
+
+                                if (File.Exists (absolute_to_file_path))
+                                    event_entry += "<a href='" + absolute_to_file_path + "'>" + to_file_path + "</a></dd>";
+                                else
+                                    event_entry += to_file_path + "</dd>";
+
+                                i++;
+                            }
+                        }
 					}
 						
 					event_entry += "</dl>";
