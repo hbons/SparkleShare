@@ -19,7 +19,11 @@ start() {
   fi
 
   echo -n "Starting SparkleShare... "
-  ssh-agent mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
+  if [ -n "${SSH_AGENT_PID}" -o -n "${SSH_AUTH_SOCK}" ] ; then
+    mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
+  else
+    ssh-agent mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
+  fi
   ( umask 066; echo $! > ${pidfile} )
   echo "Done."
 }
