@@ -423,7 +423,7 @@ namespace SparkleLib {
                 string [] lines = output.Split ("\n".ToCharArray ());
 
                 foreach (string line in lines) {
-                    if (line.Length > 1 &&!line [1].Equals (" "))
+                    if (line.Length > 1 && !line [1].Equals (" "))
                         return true;
                 }
 
@@ -582,14 +582,14 @@ namespace SparkleLib {
                 if (git.ExitCode != 0) {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected...");
 
-                    while (AnyDifferences) {
+                   // while (AnyDifferences) {
                         ResolveConflict ();
                         Add ();
 
                         SparkleGit git_continue = new SparkleGit (LocalPath, "rebase --continue");
                         git_continue.Start ();
                         git_continue.WaitForExit ();
-                    }
+                    //}
 
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
 
@@ -599,7 +599,7 @@ namespace SparkleLib {
                 }
 
                 _CurrentHash = GetCurrentHash ();
-                Push ();
+               // Push ();
             };
 
             git.Start ();
@@ -636,17 +636,23 @@ namespace SparkleLib {
                         "checkout --ours " + conflicting_path);
                     git_ours.Start ();
                     git_ours.WaitForExit ();
+                    Console.WriteLine ("1111111111111111111111");
 
                     // Append a timestamp to our version
                     string timestamp     = DateTime.Now.ToString ("HH:mm d MMM");
                     string our_path = conflicting_path + " (" + UserName  + ", " + timestamp + ")";
-                    File.Move (conflicting_path, our_path);
 
+                    string path1 = SparkleHelpers.CombineMore (LocalPath, conflicting_path);
+                    string path2 = SparkleHelpers.CombineMore (LocalPath, our_path);
+
+                    File.Move (path1, path2);
+                    Console.WriteLine ("2222222222222222222");
                     // Recover the server's version
                     SparkleGit git_theirs = new SparkleGit (LocalPath,
                         "checkout --theirs " + conflicting_path);
                     git_theirs.Start ();
                     git_theirs.WaitForExit ();
+                    Console.WriteLine ("33333333333333333333");
                 }
             }
         }
