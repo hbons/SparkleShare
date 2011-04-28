@@ -811,7 +811,7 @@ namespace SparkleLib {
             
             List <SparkleCommit> commits = new List <SparkleCommit> ();
 
-            SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw  --date=iso");
+            SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw -M --date=iso");
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             git_log.Start ();
             
@@ -883,6 +883,7 @@ namespace SparkleLib {
                                                         
                             string change_type = entry_line [37].ToString ();
                             string file_path   = entry_line.Substring (39);
+                            string to_file_path;
                             
                             if (change_type.Equals ("A")) {
                                 commit.Added.Add (file_path);
@@ -890,6 +891,13 @@ namespace SparkleLib {
                                 commit.Edited.Add (file_path);
                             } else if (change_type.Equals ("D")) {
                                 commit.Deleted.Add (file_path);
+                            } else if (change_type.Equals ("R")) {
+                                int tab_pos  = entry_line.LastIndexOf ("\t");
+                                file_path    = entry_line.Substring (42, tab_pos - 42);
+                                to_file_path = entry_line.Substring (tab_pos + 1);
+
+                                commit.MovedFrom.Add (file_path);
+                                commit.MovedTo.Add (to_file_path);
                             }
                         }
                     }
