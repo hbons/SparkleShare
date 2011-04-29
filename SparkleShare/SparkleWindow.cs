@@ -43,8 +43,6 @@ namespace SparkleShare {
 			Resizable      = false;
 			WindowPosition = WindowPosition.Center;
 
-			SetSizeRequest (680, 440);
-
 			DeleteEvent += delegate (object o, DeleteEventArgs args) {
 
 				args.RetVal = true;
