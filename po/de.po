@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-13 17:07+0100\n"
 "PO-Revision-Date: 2011-03-10 17:31+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"Last-Translator: deejay1 <deejay1@srem.org>\nthelightmaker <thelightmaker@gmail.com>"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: ../SparkleShare/SparkleIntro.cs:82
 msgid "Full Name:"
-msgstr "Vollständiger Name:   "
+msgstr "Vollständiger Name:"
 
 #: ../SparkleShare/SparkleIntro.cs:98
 msgid "Email:"
@@ -171,7 +171,7 @@ msgstr "Überspringen"
 
 #: ../SparkleShare/SparkleIntro.cs:437
 msgid "Invitation received!"
-msgstr "Einladung erhalten"
+msgstr "Einladung erhalten!"
 
 #: ../SparkleShare/SparkleIntro.cs:443
 msgid ""
@@ -238,7 +238,7 @@ msgstr "Dies kann eine Weile dauern.\n"
 
 #: ../SparkleShare/SparkleIntro.cs:636
 msgid "Are you sure it’s not coffee o'clock?"
-msgstr ""
+msgstr "Meinst Du nicht, dass es Kaffeezeit ist?"
 
 #: ../SparkleShare/SparkleIntro.cs:687
 msgid "SparkleShare is ready to go!"
@@ -260,7 +260,7 @@ msgstr "Lernen Sie, wie Sie Ihren eigenen SparkleServer betreiben können"
 #: ../SparkleShare/SparkleLog.cs:54
 #, csharp-format
 msgid "Events in ‘{0}’"
-msgstr ""
+msgstr "Ereignisse in ‘{0}’"
 
 #: ../SparkleShare/SparkleLog.cs:109
 msgid "_Open Folder"
@@ -280,7 +280,7 @@ msgstr "Konnte nicht mit dem Remote-Ordner synchronisieren"
 
 #: ../SparkleShare/SparkleLog.cs:237
 msgid "Is the you and the server online?"
-msgstr "Sind Sie und der Server on-line?"
+msgstr "Sind Sie und der Server online?"
 
 #: ../SparkleShare/SparkleLog.cs:383
 msgid "Edited"
@@ -373,20 +373,20 @@ msgstr "Es gibt noch keine Remote-Ordner"
 #. Opens the wizard to add a new remote folder
 #: ../SparkleShare/SparkleStatusIcon.cs:196
 msgid "Add Remote Folder…"
-msgstr ""
+msgstr "Remote-Ordner hinzufügen..."
 
 #: ../SparkleShare/SparkleStatusIcon.cs:216
 msgid "Turn Notifications Off"
-msgstr ""
+msgstr "Benachrichtigungen deaktivieren"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:218
 msgid "Turn Notifications On"
-msgstr ""
+msgstr "Benachrichtigungen aktivieren"
 
 #. A menu item that takes the user to http://www.sparkleshare.org/
 #: ../SparkleShare/SparkleStatusIcon.cs:231
 msgid "About SparkleShare"
-msgstr ""
+msgstr "Über SparkleShare"
 
 #. A menu item that quits the application
 #: ../SparkleShare/SparkleStatusIcon.cs:244
