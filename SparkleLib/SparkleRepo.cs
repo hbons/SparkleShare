@@ -303,7 +303,7 @@ namespace SparkleLib {
                 string remote_hash = git.StandardOutput.ReadToEnd ();
 
                 if (!remote_hash.StartsWith (_CurrentHash)) {
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found." + _CurrentHash + " " + remote_hash);
+                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found. (" + remote_hash + ")");
                     Fetch ();
                     
                     Watcher.EnableRaisingEvents = false;
@@ -457,7 +457,7 @@ namespace SparkleLib {
 
             string output = git.StandardOutput.ReadToEnd ();
             string hash   = output.Trim ();
-            Console.WriteLine (hash+"!!!!!!!!!!!!!!!!");
+
             return hash;
         }
 
@@ -580,18 +580,14 @@ namespace SparkleLib {
 
             git.Exited += delegate {
                 if (git.ExitCode != 0) {
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected...");
+                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected. Trying to get out...");
+                    Watcher.EnableRaisingEvents = false;
 
-                   // while (AnyDifferences) {
+                    while (AnyDifferences)
                         ResolveConflict ();
-                        Add ();
-
-                        SparkleGit git_continue = new SparkleGit (LocalPath, "rebase --continue");
-                        git_continue.Start ();
-                        git_continue.WaitForExit ();
-                    //}
 
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
+                    Watcher.EnableRaisingEvents = true;
 
                     SparkleEventArgs args = new SparkleEventArgs ("ConflictDetected");
                     if (ConflictDetected != null)
@@ -599,7 +595,6 @@ namespace SparkleLib {
                 }
 
                 _CurrentHash = GetCurrentHash ();
-               // Push ();
             };
 
             git.Start ();
@@ -616,43 +611,92 @@ namespace SparkleLib {
 
         private void ResolveConflict ()
         {
+            // This is al list of conflict status codes that Git uses, their
+            // meaning, and how SparkleShare should handle them.
+            //
+            // DD    unmerged, both deleted    -> Do nothing
+            // AU    unmerged, added by us     -> Use theirs, save ours as a timestamped copy
+            // UD    unmerged, deleted by them -> Use ours
+            // UA    unmerged, added by them   -> Use theirs, save ours as a timestamped copy
+            // DU    unmerged, deleted by us   -> Use theirs
+            // AA    unmerged, both added      -> Use theirs, save ours as a timestamped copy
+            // UU    unmerged, both modified   -> Use theirs, save ours as a timestamped copy
+            //
+            // Note that a rebase merge works by replaying each commit from the working branch on
+            // top of the upstream branch. Because of this, when a merge conflict happens the
+            // side reported as 'ours' is the so-far rebased series, starting with upstream,
+            // and 'theirs' is the working branch. In other words, the sides are swapped.
+            //
+            // So: 'ours' means the 'server's version' and 'theirs' means the 'local version'
+
             SparkleGit git_status = new SparkleGit (LocalPath, "status --porcelain");
             git_status.Start ();
             git_status.WaitForExit ();
 
-            string output = git_status.StandardOutput.ReadToEnd ().TrimEnd ();
+            string output   = git_status.StandardOutput.ReadToEnd ().TrimEnd ();
             string [] lines = output.Split ("\n".ToCharArray ());
 
-            // We're going to recover the two original versions of
-            // each conflicting path, and put a timestamp on our versions
             foreach (string line in lines) {
-                if (line.StartsWith ("UU")) {
-                    string conflicting_path = line.Substring (3);
+                string conflicting_path = line.Substring (3);
+                conflicting_path = conflicting_path.Trim ("\"".ToCharArray ());
 
-                    File.Delete (conflicting_path);
+                // Both the local and server version have been modified
+                if (line.StartsWith ("UU") || line.StartsWith ("AA") ||
+                    line.StartsWith ("AU") || line.StartsWith ("UA")) {
 
-                    // Recover our version
-                    SparkleGit git_ours = new SparkleGit (LocalPath,
-                        "checkout --ours " + conflicting_path);
-                    git_ours.Start ();
-                    git_ours.WaitForExit ();
-                    Console.WriteLine ("1111111111111111111111");
-
-                    // Append a timestamp to our version
-                    string timestamp     = DateTime.Now.ToString ("HH:mm d MMM");
-                    string our_path = conflicting_path + " (" + UserName  + ", " + timestamp + ")";
-
-                    string path1 = SparkleHelpers.CombineMore (LocalPath, conflicting_path);
-                    string path2 = SparkleHelpers.CombineMore (LocalPath, our_path);
-
-                    File.Move (path1, path2);
-                    Console.WriteLine ("2222222222222222222");
-                    // Recover the server's version
+                    // Recover local version
                     SparkleGit git_theirs = new SparkleGit (LocalPath,
-                        "checkout --theirs " + conflicting_path);
+                        "checkout --theirs \"" + conflicting_path + "\"");
                     git_theirs.Start ();
                     git_theirs.WaitForExit ();
-                    Console.WriteLine ("33333333333333333333");
+
+                    // Append a timestamp to local version
+                    string timestamp            = DateTime.Now.ToString ("HH:mm MMM d");
+                    string their_path           = conflicting_path + " (" + UserName  + ", " + timestamp + ")";
+                    string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
+                    string abs_their_path       = Path.Combine (LocalPath, their_path);
+
+                    File.Move (abs_conflicting_path, abs_their_path);
+
+                    // Recover server version
+                    SparkleGit git_ours = new SparkleGit (LocalPath,
+                        "checkout --ours \"" + conflicting_path + "\"");
+                    git_ours.Start ();
+                    git_ours.WaitForExit ();
+
+                    Add ();
+
+                    SparkleGit git_rebase_continue = new SparkleGit (LocalPath, "rebase --continue");
+                    git_rebase_continue.Start ();
+                    git_rebase_continue.WaitForExit ();
+                }
+
+                // The local version has been modified, but the server version was removed
+                if (line.StartsWith ("DU")) {
+
+                    // The modified local version is already in the
+                    // checkout, so it just needs to be added.
+                    //
+                    // We need to specifically mention the file, so
+                    // we can't reuse the Add () method
+                    SparkleGit git_add = new SparkleGit (LocalPath,
+                        "add " + conflicting_path);
+                    git_add.Start ();
+                    git_add.WaitForExit ();
+
+                    SparkleGit git_rebase_continue = new SparkleGit (LocalPath, "rebase --continue");
+                    git_rebase_continue.Start ();
+                    git_rebase_continue.WaitForExit ();
+                }
+
+                // The server version has been modified, but the local version was removed
+                if (line.StartsWith ("UD")) {
+
+                    // We can just skip here, the server version is
+                    // already in the checkout
+                    SparkleGit git_rebase_skip = new SparkleGit (LocalPath, "rebase --skip");
+                    git_rebase_skip.Start ();
+                    git_rebase_skip.WaitForExit ();
                 }
             }
         }
