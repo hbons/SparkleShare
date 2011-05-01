@@ -645,6 +645,7 @@ namespace SparkleShare {
 					};
 
 
+
 						Button button = new Button () {
 							Sensitive = false,
 							Label = _("Finish")
@@ -670,6 +671,16 @@ namespace SparkleShare {
 				table.Attach (information,  1, 2, 1, 2);
 
 				box.PackStart (table, false, false, 0);
+
+             Progressbar bar = new Progressbar ();
+                        box.PackStart (bar, true, true, 0);
+            Timer timer = new Timer () {
+                Interval = 500
+            };
+            timer.Elapsed += delegate {
+                bar.Pulse ();
+            };
+            timer.Start ();
 
 				layout_vertical.PackStart (box, false, false, 0);
 
