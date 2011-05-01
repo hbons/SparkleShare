@@ -1,20 +1,20 @@
 # This file is distributed under the same license as the Sparkleshare package.
-#
+# 
 # WARNING: Due to the nature of Transifex all translation file headers were lost
 # we apologise for any incovenience this may have caused and we hope to bring them
 # back in the future.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-17 22:07+0200\n"
-"PO-Revision-Date: 2011-03-30 15:36+0000\n"
-"Last-Translator: ojarva <olli@jarva.fi>\n"
-"Language: fi\n"
+"PO-Revision-Date: 2011-04-17 20:10+0000\n"
+"Last-Translator: deejay1 <deejay1@srem.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: ../SparkleLib/SparkleOptions.cs:486
@@ -61,33 +61,33 @@ msgstr "Tee kopio tämän hakemiston aikaisemmasta versiosta"
 msgid "Select to get a copy of this version"
 msgstr "Tee kopio tästä versiosta"
 
-#: ../SparkleShare/SparkleAbout.cs:129
+#: ../SparkleShare/SparkleAbout.cs:120
 msgid "_Show Credits"
 msgstr "_Näytä osallistujat"
 
-#: ../SparkleShare/SparkleAbout.cs:142
+#: ../SparkleShare/SparkleAbout.cs:133
 msgid "_Visit Website"
 msgstr "_Käy nettisivulla"
 
-#: ../SparkleShare/SparkleController.cs:440
+#: ../SparkleShare/SparkleController.cs:464
 msgid "ddd MMM d, yyyy"
 msgstr "ppp kkk d, vvvv"
 
-#: ../SparkleShare/SparkleController.cs:446
+#: ../SparkleShare/SparkleController.cs:470
 msgid "ddd MMM d"
 msgstr "ppp kkk d"
 
-#: ../SparkleShare/SparkleController.cs:709
+#: ../SparkleShare/SparkleController.cs:733
 #, csharp-format
 msgid "added ‘{0}’"
 msgstr "lisätty '{0}'"
 
-#: ../SparkleShare/SparkleController.cs:720
+#: ../SparkleShare/SparkleController.cs:744
 #, csharp-format
 msgid "edited ‘{0}’"
 msgstr "muokattu '{0}'"
 
-#: ../SparkleShare/SparkleController.cs:731
+#: ../SparkleShare/SparkleController.cs:755
 #, csharp-format
 msgid "deleted ‘{0}’"
 msgstr "poistettu '{0}'"
@@ -130,7 +130,7 @@ msgstr "Omalle palvelimelleni:"
 
 #: ../SparkleShare/SparkleIntro.cs:200
 msgid "Free hosting for Free and Open Source Software projects."
-msgstr "Ilmainen palvelintila vapaan lähdekoodin projekteille."
+msgstr "Ilmainen palvelintila vapaan lähdekoodin projekteille.\n"
 
 #: ../SparkleShare/SparkleIntro.cs:201
 msgid "Also has paid accounts for extra private space and bandwidth."
@@ -261,7 +261,7 @@ msgstr "Synkronoidaan hakemistoa '{0}'..."
 
 #: ../SparkleShare/SparkleIntro.cs:641
 msgid "This may take a while.\n"
-msgstr "Tämä voi kestää hetken.\n"
+msgstr "Tämä voi kestää hetken."
 
 #: ../SparkleShare/SparkleIntro.cs:642
 msgid "Are you sure it’s not coffee o'clock?"
