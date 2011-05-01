@@ -130,7 +130,7 @@ msgstr "Omalle palvelimelleni:"
 
 #: ../SparkleShare/SparkleIntro.cs:200
 msgid "Free hosting for Free and Open Source Software projects."
-msgstr "Ilmainen palvelintila vapaan lähdekoodin projekteille.\n"
+msgstr "Ilmainen palvelintila vapaan lähdekoodin projekteille."
 
 #: ../SparkleShare/SparkleIntro.cs:201
 msgid "Also has paid accounts for extra private space and bandwidth."
@@ -261,7 +261,7 @@ msgstr "Synkronoidaan hakemistoa '{0}'..."
 
 #: ../SparkleShare/SparkleIntro.cs:641
 msgid "This may take a while.\n"
-msgstr "Tämä voi kestää hetken."
+msgstr "Tämä voi kestää hetken.\n"
 
 #: ../SparkleShare/SparkleIntro.cs:642
 msgid "Are you sure it’s not coffee o'clock?"
