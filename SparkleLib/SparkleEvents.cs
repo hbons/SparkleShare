@@ -19,26 +19,21 @@ using System;
 namespace SparkleLib {
 
 	// Arguments for most events
-	public class SparkleEventArgs : System.EventArgs {
-        
+	public class SparkleEventArgs : EventArgs {
+
 	    public string Type;
 	    public string Message;
 
-
 	    public SparkleEventArgs (string type)
     	{
-
 	        Type = type;
-
 	    }
-
 	}
 
 
 	// Arguments for the NewCommit event
-	public class NewCommitArgs : System.EventArgs {
+	public class NewCommitArgs : EventArgs {
 
-        
 	    public string Author;
 	    public string Email;
 	    public string Message;
@@ -46,14 +41,10 @@ namespace SparkleLib {
 
 	    public NewCommitArgs (string author, string email, string message, string repository_path)
     	{
-
     		Author  = author;
     		Email   = email;
 	        Message = message;
 	        RepositoryPath = repository_path;
-
 	    }
-
 	}
-
 }

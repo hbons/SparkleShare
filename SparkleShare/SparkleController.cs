@@ -682,29 +682,23 @@ namespace SparkleShare {
 
 
 		public bool NotificationsEnabled {
-
 			get {
-
-				string notify_setting_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
+				string notify_setting_file_path = Path.Combine (SparklePaths.SparkleConfigPath,
 					"sparkleshare.notify");
 
 				return File.Exists (notify_setting_file_path);
-
 			}
-
 		} 
 
 
 		public void ToggleNotifications () {
-		
-			string notify_setting_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleConfigPath,
+			string notify_setting_file_path = Path.Combine (SparklePaths.SparkleConfigPath,
 				"sparkleshare.notify");
 					                                 
 			if (File.Exists (notify_setting_file_path))
 				File.Delete (notify_setting_file_path);
 			else
 				File.Create (notify_setting_file_path);
-
 		}
 
 

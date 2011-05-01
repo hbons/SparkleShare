@@ -14,39 +14,24 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
 using System;
 using System.Collections.Generic;
 
 namespace SparkleLib {
 
-	public class SparkleCommit
-	{
+    public class SparkleCommit {
 
-		public string UserName;
-		public string UserEmail;
-		public DateTime DateTime;
-		public string Hash;
-		public bool IsMerge;
-		
-		public List <string> Added;
-		public List <string> Deleted;
-		public List <string> Edited;
-		public List <string> MovedFrom;
-		public List <string> MovedTo;
+        public string UserName;
+        public string UserEmail;
+        public string Hash;
+        public DateTime DateTime;
+        public bool IsMerge           = false;
+        public List<string> Added     = new List<string> ();
+        public List<string> Deleted   = new List<string> ();
+        public List<string> Edited    = new List<string> ();
+        public List<string> MovedFrom = new List<string> ();
+        public List<string> MovedTo   = new List<string> ();
 
-		public SparkleCommit ()
-		{
-
-			Edited    = new List <string> ();
-			Added     = new List <string> ();
-			Deleted   = new List <string> ();
-			MovedFrom = new List <string> ();
-			MovedTo   = new List <string> ();
-			
-			IsMerge    = false;
-
-		}
-	
-	}
-
+    }
 }
