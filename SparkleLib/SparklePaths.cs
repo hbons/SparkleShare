@@ -26,9 +26,7 @@ namespace SparkleLib {
         public static string Name = "Git";
 
         public static string Path {
-
             get {
-
                 string [] possible_git_paths = {"/usr/bin/git",
                                                 "/usr/local/git/bin/git",
                                                 "/usr/local/bin/git"};
@@ -38,37 +36,29 @@ namespace SparkleLib {
                         return git_path;
 
                 return null;
-
             }
-
         }
 
 
         public static bool IsPresent {
-
             get {
-
                 return (Path != null);
-
             }
-
         }
-
     }
 
-	
-	public static class SparklePaths {
-		
-		public static string GitPath              = Backend.Path;
-		public static string HomePath             = new UnixUserInfo (UnixEnvironment.UserName).HomeDirectory;
-		public static string SparklePath          = Path.Combine (HomePath ,"SparkleShare");
-		public static string SparkleTmpPath       = Path.Combine (SparklePath, ".tmp");
-		public static string SparkleConfigPath    = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
-		public static string SparkleKeysPath      = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
-		public static string SparkleInstallPath   = Path.Combine (Defines.PREFIX, "sparkleshare");
-		public static string SparkleLocalIconPath = SparkleHelpers.CombineMore (SparkleConfigPath, "icons");
-		public static string SparkleIconPath      = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare", "icons");
 
-	}
+    public static class SparklePaths {
 
+        public static string GitPath              = Backend.Path;
+        public static string HomePath             = new UnixUserInfo (UnixEnvironment.UserName).HomeDirectory;
+        public static string SparklePath          = Path.Combine (HomePath ,"SparkleShare");
+        public static string SparkleTmpPath       = Path.Combine (SparklePath, ".tmp");
+        public static string SparkleConfigPath    = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
+        public static string SparkleKeysPath      = SparkleHelpers.CombineMore (HomePath, ".config", "sparkleshare");
+        public static string SparkleInstallPath   = Path.Combine (Defines.PREFIX, "sparkleshare");
+        public static string SparkleLocalIconPath = SparkleHelpers.CombineMore (SparkleConfigPath, "icons");
+        public static string SparkleIconPath      = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare", "icons");
+
+    }
 }

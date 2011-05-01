@@ -20,17 +20,17 @@ using System.Diagnostics;
 
 namespace SparkleLib {
 
-	public class SparkleGit : Process {
+    public class SparkleGit : Process {
 
-		public SparkleGit (string path, string args) : base ()
-		{
-			EnableRaisingEvents              = true;
-			StartInfo.FileName               = SparklePaths.GitPath;
-			StartInfo.Arguments              = args;
-			StartInfo.RedirectStandardOutput = true;
-			StartInfo.UseShellExecute        = false;
-			StartInfo.WorkingDirectory       = path;
-		}
+        public SparkleGit (string path, string args) : base ()
+        {
+            EnableRaisingEvents              = true;
+            StartInfo.FileName               = SparklePaths.GitPath;
+            StartInfo.Arguments              = args;
+            StartInfo.RedirectStandardOutput = true;
+            StartInfo.UseShellExecute        = false;
+            StartInfo.WorkingDirectory       = path;
+        }
 
 
         new public void Start ()
@@ -38,5 +38,5 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Cmd", StartInfo.FileName + " " + StartInfo.Arguments);
             base.Start ();
         }
-	}
+    }
 }
