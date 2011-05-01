@@ -99,6 +99,11 @@ namespace SparkleLib {
 
                 // Be case sensitive explicitly to work on Mac
                 config = config.Replace ("ignorecase = true", "ignorecase = false");
+
+                // Ignore permission changes
+                config = config.Replace ("filemode = true", "filemode = false");
+
+                // Add user info
                 config += Environment.NewLine + user_info;
 
                 TextWriter writer = new StreamWriter (repo_config_file_path);
