@@ -1,4 +1,9 @@
-0.2-rc1 for Linux and Mac (Sun Mar 20, 2011)
+0.2 for Linux and Mac (...)
+
+	...
+
+
+0.2-rc1 for Linux and Mac (Sun Mar 20, 2011):
 
 	Hylke: A lot of fixes and optimisations across the backend. Less memory 
 	usage, less crashes. Instant notifications of new changes instead of polling.
