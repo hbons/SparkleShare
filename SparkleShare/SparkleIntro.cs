@@ -38,6 +38,32 @@ namespace SparkleShare {
 		private bool ServerFormOnly;
 		private string SecondaryTextColor;
 
+		private Notebook assistant;
+		
+		//
+		private RadioButton radio_button_server;
+		private RadioButton radio_button_github;
+		private RadioButton radio_button_gnome ;
+		private RadioButton radio_button_gitorious;
+		
+		//
+		private Label success_information;
+		private Button open_folder_button;
+		private Button success_finish_button;
+				
+		private Label syncing_page_header;
+		
+		private Button finish_button;
+		
+		private Button try_again_button;
+
+		private Button reject_button;
+		private Button accept_button;
+
+		private Label server_text;
+		private Label folder_text;
+		
+		private Table account_form_table;
 
 		// Short alias for the translations
 		public static string _ (string s)
@@ -51,14 +77,67 @@ namespace SparkleShare {
 
 			ServerFormOnly = false;
 			SecondaryTextColor = SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive));
+			//TODO: add the assistant pages
+			assistant = new Notebook();
+			assistant.AppendPage( GetAccountForm(), new Label ( "GetAccountForm" ) );
+			assistant.AppendPage( GetCompletedPage( ), new Label ( "GetErrorPage" ) );
+			assistant.AppendPage( GetErrorPage( ), new Label ( "GetErrorPage" ) );
+			assistant.AppendPage( GetInvitationPage( ), new Label ( "GetInvitationPage" ) );
+			
+			assistant.AppendPage( GetServerForm(), new Label ( "GetServerForm" ) );
+			assistant.AppendPage( GetSuccessPage(  ), new Label ( "GetSuccessPage" ) );
+			assistant.AppendPage( GetSyncingPage( ), new Label ( "GetSyncingPage" ) );
+			assistant.ShowTabs = false;
+			assistant.ShowBorder = false;
+			Add(assistant);
+
+			finish_button = new Button (_("Finish"));
+
+			finish_button.Clicked += delegate (object o, EventArgs args) {
+				Close ();
+			};
 
 		}
 
-		
 		public void ShowAccountForm ()
 		{
+			ClearButtons();
+			
+			assistant.CurrentPage = 0;
+			
+			NextButton = new Button (_("Next")) {
+				Sensitive = false
+			};
 
-			Reset ();
+			NextButton.Clicked += delegate (object o, EventArgs args) {
+
+				NextButton.Remove (NextButton.Child);
+				NextButton.Add (new Label (_("Configuring…")));
+
+				NextButton.Sensitive = false;
+				//todo:!
+				account_form_table.Sensitive       = false;
+
+				NextButton.ShowAll ();
+	
+				SparkleShare.Controller.UserName  = NameEntry.Text;
+				SparkleShare.Controller.UserEmail = EmailEntry.Text;
+
+				SparkleShare.Controller.GenerateKeyPair ();
+				SparkleShare.Controller.AddKey ();
+		
+				SparkleShare.Controller.FirstRun = false;
+		
+				Deletable = true;
+				ShowServerForm ();
+
+			};
+
+			AddButton (NextButton);		
+			CheckAccountForm ();
+		}
+		public Widget GetAccountForm ()
+		{
 
 			VBox layout_vertical = new VBox (false, 0);
 			
@@ -77,7 +156,7 @@ namespace SparkleShare {
 					Wrap   = true
 				};
 
-				Table table = new Table (4, 2, true) {
+				account_form_table = new Table (2, 2, false) {
 					RowSpacing = 6
 				};
 
@@ -107,192 +186,28 @@ namespace SparkleShare {
 					};
 
 
-				table.Attach (name_label, 0, 1, 0, 1);
-				table.Attach (NameEntry, 1, 2, 0, 1);
-				table.Attach (email_label, 0, 1, 1, 2);
-				table.Attach (EmailEntry, 1, 2, 1, 2);
-		
-					NextButton = new Button (_("Next")) {
-						Sensitive = false
-					};
-	
-					NextButton.Clicked += delegate (object o, EventArgs args) {
-
-						NextButton.Remove (NextButton.Child);
-						NextButton.Add (new Label (_("Configuring…")));
-
-						NextButton.Sensitive = false;
-						table.Sensitive       = false;
-
-						NextButton.ShowAll ();
-			
-						SparkleShare.Controller.UserName  = NameEntry.Text;
-						SparkleShare.Controller.UserEmail = EmailEntry.Text;
-
-						SparkleShare.Controller.GenerateKeyPair ();
-						SparkleShare.Controller.AddKey ();
-				
-						SparkleShare.Controller.FirstRun = false;
-				
-						Deletable = true;
-						ShowServerForm ();
-
-					};
-	
-				AddButton (NextButton);
+				account_form_table.Attach (name_label, 0, 1, 0, 1);
+				account_form_table.Attach (NameEntry, 1, 2, 0, 1);
+				account_form_table.Attach (email_label, 0, 1, 1, 2);
+				account_form_table.Attach (EmailEntry, 1, 2, 1, 2);
 
 			layout_vertical.PackStart (header, false, false, 0);
 			layout_vertical.PackStart (information, false, false, 21);
 			layout_vertical.PackStart (new Label (""), false, false, 0);
-			layout_vertical.PackStart (table, false, false, 0);
+			layout_vertical.PackStart (account_form_table, false, false, 0);
 
-			Add (layout_vertical);
-
-			CheckAccountForm ();
-
-			ShowAll ();
+			return layout_vertical;
 		
 		}
-
-
 		public void ShowServerForm (bool server_form_only)
 		{
-
 			ServerFormOnly = server_form_only;
 			ShowServerForm ();
-
 		}
-
-
 		public void ShowServerForm ()
 		{
 
-			Reset ();
-
-			VBox layout_vertical = new VBox (false, 0);
-
-				Label header = new Label ("<span size='large'><b>" +
-						                        _("Where is your remote folder?") +
-						                        "</b></span>") {
-					UseMarkup = true,
-					Xalign = 0
-				};
-
-				Table table = new Table (7, 2, false) {
-					RowSpacing = 12
-				};
-
-					HBox layout_server = new HBox (true, 0);
-
-						ServerEntry = new SparkleEntry () {
-							ExampleText = _("address-to-server.com")
-						};
-						
-						ServerEntry.Changed += CheckServerForm;
-
-						RadioButton radio_button = new RadioButton ("<b>" + _("On my own server:") + "</b>");
-
-					layout_server.Add (radio_button);
-					layout_server.Add (ServerEntry);
-					
-					string github_text = "<b>" + "Github" + "</b>\n" +
-						  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
-						_("Free hosting for Free and Open Source Software projects.") + "\n" + 
-						_("Also has paid accounts for extra private space and bandwidth.") +
-						  "</span>";
-
-					RadioButton radio_button_github = new RadioButton (radio_button, github_text);
-
-					(radio_button_github.Child as Label).UseMarkup = true;
-					(radio_button_github.Child as Label).Wrap      = true;
-
-					string gnome_text = "<b>" + _("The GNOME Project") + "</b>\n" +
-						  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
-						_("GNOME is an easy to understand interface to your computer.") + "\n" +
-						_("Select this option if you’re a developer or designer working on GNOME.") +
-						  "</span>";
-
-					RadioButton radio_button_gnome = new RadioButton (radio_button, gnome_text);
-
-					(radio_button_gnome.Child as Label).UseMarkup = true;
-					(radio_button_gnome.Child as Label).Wrap      = true;
-
-					string gitorious_text = "<b>" + _("Gitorious") + "</b>\n" +
-						  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
-						_("Completely Free as in Freedom infrastructure.") + "\n" +
-						_("Free accounts for Free and Open Source projects.") +
-						  "</span>";
-					RadioButton radio_button_gitorious = new RadioButton (radio_button, gitorious_text) {
-						Xalign = 0
-					};
-
-					(radio_button_gitorious.Child as Label).UseMarkup = true;
-					(radio_button_gitorious.Child as Label).Wrap      = true;
-
-					radio_button_github.Toggled += delegate {
-
-						if (radio_button_github.Active)
-							FolderEntry.ExampleText = _("Username/Folder");
-
-					};
-
-					radio_button_gitorious.Toggled += delegate {
-
-						if (radio_button_gitorious.Active)
-							FolderEntry.ExampleText = _("Project/Folder");
-
-					};
-
-					radio_button_gnome.Toggled += delegate {
-
-						if (radio_button_gnome.Active)
-							FolderEntry.ExampleText = _("Project");
-
-					};
-
-
-					radio_button.Toggled += delegate {
-
-						if (radio_button.Active) {
-
-							FolderEntry.ExampleText = _("Folder");
-							ServerEntry.Sensitive   = true;
-							CheckServerForm ();
-
-						} else {
-
-							ServerEntry.Sensitive = false;
-							CheckServerForm ();
-
-						}
-
-						ShowAll ();
-
-					};
-
-				table.Attach (layout_server,          0, 2, 1, 2);
-				table.Attach (radio_button_github,    0, 2, 2, 3);
-				table.Attach (radio_button_gitorious, 0, 2, 3, 4);
-				table.Attach (radio_button_gnome,     0, 2, 4, 5);
-
-				HBox layout_folder = new HBox (true, 0);
-
-					FolderEntry = new SparkleEntry () {
-						ExampleText = _("Folder")
-					};
-					
-					FolderEntry.Changed += CheckServerForm;
-
-					Label folder_label = new Label (_("Folder Name:")) {
-						UseMarkup = true,
-						Xalign    = 1
-					};
-
-				(radio_button.Child as Label).UseMarkup = true;
-
-				layout_folder.PackStart (folder_label, true, true, 12);
-				layout_folder.PackStart (FolderEntry, true, true, 0);
-
+			ClearButtons();
 					SyncButton = new Button (_("Sync"));
 	
 					SyncButton.Clicked += delegate {
@@ -314,7 +229,7 @@ namespace SparkleShare {
 						if (server.StartsWith ("ssh://"))
 							server = server.Substring (6);
 
-						if (radio_button.Active) {
+						if (radio_button_server.Active) {
 
 							// Use the default user 'git' if no username is specified
 							if (!server.Contains ("@"))
@@ -386,6 +301,7 @@ namespace SparkleShare {
 					};
 
 
+
 				if (ServerFormOnly) {
 
 					Button cancel_button = new Button (_("Cancel"));
@@ -411,21 +327,193 @@ namespace SparkleShare {
 
 				AddButton (SyncButton);
 
+			
+			assistant.CurrentPage = 4;
+			CheckServerForm ();
+			
+		}
+		public Widget GetServerForm ()
+		{
+
+			VBox layout_vertical = new VBox (false, 0);
+
+				Label header = new Label ("<span size='large'><b>" +
+						                        _("Where is your remote folder?") +
+						                        "</b></span>") {
+					UseMarkup = true,
+					Xalign = 0
+				};
+
+				Table table = new Table (5, 2, false) {
+					RowSpacing = 12
+				};
+
+					HBox layout_server = new HBox (false, 0);
+
+						ServerEntry = new SparkleEntry () {
+							ExampleText = _("address-to-server.com")
+						};
+						
+						ServerEntry.Changed += CheckServerForm;
+
+						radio_button_server = new RadioButton ("<b>" + _("On my own server:") + "</b>");
+
+					layout_server.Add (radio_button_server);
+					layout_server.Add (ServerEntry);
+					
+					string github_text = "<b>" + "Github" + "</b>\n" +
+						  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
+						_("Free hosting for Free and Open Source Software projects.") + "\n" + 
+						_("Also has paid accounts for extra private space and bandwidth.") +
+						  "</span>";
+
+					radio_button_github = new RadioButton (radio_button_server, github_text);
+
+					(radio_button_github.Child as Label).UseMarkup = true;
+					(radio_button_github.Child as Label).Wrap      = true;
+
+					string gnome_text = "<b>" + _("The GNOME Project") + "</b>\n" +
+						  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
+						_("GNOME is an easy to understand interface to your computer.") + "\n" +
+						_("Select this option if you’re a developer or designer working on GNOME.") +
+						  "</span>";
+
+					radio_button_gnome = new RadioButton (radio_button_server, gnome_text);
+
+					(radio_button_gnome.Child as Label).UseMarkup = true;
+					(radio_button_gnome.Child as Label).Wrap      = true;
+
+					string gitorious_text = "<b>" + _("Gitorious") + "</b>\n" +
+						  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
+						_("Completely Free as in Freedom infrastructure.") + "\n" +
+						_("Free accounts for Free and Open Source projects.") +
+						  "</span>";
+					
+					radio_button_gitorious = new RadioButton (radio_button_server, gitorious_text) {
+						Xalign = 0
+					};
+
+					(radio_button_gitorious.Child as Label).UseMarkup = true;
+					(radio_button_gitorious.Child as Label).Wrap      = true;
+
+					radio_button_github.Toggled += delegate {
+
+						if (radio_button_github.Active)
+							FolderEntry.ExampleText = _("Username/Folder");
+
+					};
+
+					radio_button_gitorious.Toggled += delegate {
+
+						if (radio_button_gitorious.Active)
+							FolderEntry.ExampleText = _("Project/Folder");
+
+					};
+
+					radio_button_gnome.Toggled += delegate {
+
+						if (radio_button_gnome.Active)
+							FolderEntry.ExampleText = _("Project");
+
+					};
+
+
+					radio_button_server.Toggled += delegate {
+
+						if (radio_button_server.Active) {
+
+							FolderEntry.ExampleText = _("Folder");
+							ServerEntry.Sensitive   = true;
+							CheckServerForm ();
+
+						} else {
+
+							ServerEntry.Sensitive = false;
+							CheckServerForm ();
+
+						}
+
+						ShowAll ();
+
+					};
+
+				table.Attach (layout_server,          0, 2, 0, 1);
+				table.Attach (radio_button_github,    0, 2, 1, 2);
+				table.Attach (radio_button_gitorious, 0, 2, 2, 3);
+				table.Attach (radio_button_gnome,     0, 2, 3, 4);
+
+				HBox layout_folder = new HBox (true, 0);
+
+					FolderEntry = new SparkleEntry () {
+						ExampleText = _("Folder")
+					};
+					
+					FolderEntry.Changed += CheckServerForm;
+
+					Label folder_label = new Label (_("Folder Name:")) {
+						UseMarkup = true,
+						Xalign    = 1
+					};
+
+				(radio_button_server.Child as Label).UseMarkup = true;
+
+				layout_folder.PackStart (folder_label, true, true, 12);
+				layout_folder.PackStart (FolderEntry, true, true, 0);
+
+
+
 			layout_vertical.PackStart (header, false, false, 0);
 			layout_vertical.PackStart (new Label (""), false, false, 3);
 			layout_vertical.PackStart (table, false, false, 0);
 			layout_vertical.PackStart (layout_folder, false, false, 6);
 
-			Add (layout_vertical);
-
-			CheckServerForm ();
-
-			ShowAll ();
-		
+			
+			
+			return layout_vertical;
 		}
 
-
 		public void ShowInvitationPage (string server, string folder, string token)
+		{
+			ClearButtons();
+			
+			
+		folder_text.Markup = "<b>" + folder + "</b>";
+		server_text.Markup = "<b>" + server + "</b>";
+			assistant.CurrentPage = 3;
+			reject_button = new Button (_("Reject"));
+			accept_button = new Button (_("Accept and Sync"));
+
+				reject_button.Clicked += delegate {
+					Close ();
+				};
+
+				accept_button.Clicked += delegate {
+
+					string url  = "ssh://git@" + server + "/" + folder;		
+			
+					SparkleShare.Controller.FolderFetched += delegate {
+	
+						Application.Invoke (delegate {
+							ShowSuccessPage (folder);
+						});
+				
+					};
+			
+					SparkleShare.Controller.FolderFetchError += delegate {
+						
+						Application.Invoke (delegate { ShowErrorPage (); });
+			
+					};
+	
+			
+					SparkleShare.Controller.FetchFolder (url, folder);
+
+				};
+
+			AddButton (reject_button);
+			AddButton (accept_button);			
+		}
+		public Widget GetInvitationPage ( )
 		{
 
 			VBox layout_vertical = new VBox (false, 0);
@@ -456,7 +544,7 @@ namespace SparkleShare {
 						Xalign    = 0
 					};
 
-					Label server_text = new Label ("<b>" + server + "</b>") {
+					server_text = new Label ("<b></b>") {
 						UseMarkup = true,
 						Xalign    = 0
 					};
@@ -465,7 +553,7 @@ namespace SparkleShare {
 						Xalign    = 0
 					};
 
-					Label folder_text = new Label ("<b>" + folder + "</b>") {
+					folder_text = new Label ("<b></b>") {
 						UseMarkup = true,
 						Xalign    = 0
 					};
@@ -475,38 +563,6 @@ namespace SparkleShare {
 				table.Attach (server_label, 0, 1, 1, 2);
 				table.Attach (server_text, 1, 2, 1, 2);
 
-				Button reject_button = new Button (_("Reject"));
-				Button accept_button = new Button (_("Accept and Sync"));
-
-					reject_button.Clicked += delegate {
-						Close ();
-					};
-
-					accept_button.Clicked += delegate {
-
-						string url  = "ssh://git@" + server + "/" + folder;		
-				
-						SparkleShare.Controller.FolderFetched += delegate {
-		
-							Application.Invoke (delegate {
-								ShowSuccessPage (folder);
-							});
-					
-						};
-				
-						SparkleShare.Controller.FolderFetchError += delegate {
-							
-							Application.Invoke (delegate { ShowErrorPage (); });
-				
-						};
-		
-				
-						SparkleShare.Controller.FetchFolder (url, folder);
-
-					};
-
-				AddButton (reject_button);
-				AddButton (accept_button);
 
 			layout_vertical.PackStart (header, false, false, 0);
 			layout_vertical.PackStart (information, false, false, 21);
@@ -515,18 +571,29 @@ namespace SparkleShare {
 			layout_vertical.PackStart (new Label (""), false, false, 0);
 			layout_vertical.PackStart (question, false, false, 21);
 
-			Add (layout_vertical);
-
-			ShowAll ();
-
+			return layout_vertical;
 		}
 		
-		
-		// The page shown when syncing has failed
 		private void ShowErrorPage ()
 		{
+			ClearButtons();
+			assistant.CurrentPage = 2;
+    
+				try_again_button = new Button (_("Try Again")) {
+					Sensitive = true
+				};
+	
+				try_again_button.Clicked += delegate (object o, EventArgs args) {
+					ShowServerForm ();
+				};
+	
+			AddButton (try_again_button);			
+		}
+		// The page shown when syncing has failed
+		private Widget GetErrorPage ()
+		{
 
-			Reset ();
+			
 			
                 UrgencyHint = true;
 
@@ -538,43 +605,53 @@ namespace SparkleShare {
     					UseMarkup = true,
     					Xalign = 0
     				};
-    
-    					Button try_again_button = new Button (_("Try Again")) {
-    						Sensitive = true
-    					};
-    	
-    					try_again_button.Clicked += delegate (object o, EventArgs args) {
-    						ShowServerForm ();
-    					};
-    	
-    				AddButton (try_again_button);
+
     
     			layout_vertical.PackStart (header, false, false, 0);
-
-			Add (layout_vertical);
-
-			ShowAll ();
-
+			return layout_vertical;
 		}
 
+		
+		private void ShowSuccessPage (string folder_name) {
+			ClearButtons();
+            UrgencyHint = true;
+	        if (!HasToplevelFocus) {
 
-		// The page shown when syncing has succeeded
-		private void ShowSuccessPage (string folder_name)
+                string title   = String.Format (_("‘{0}’ has been successfully added"), folder_name);
+                string subtext = _("");
+
+                new SparkleBubble (title, subtext).Show ();
+
+            }
+			
+			assistant.CurrentPage = 5;
+
+			success_information.Markup = String.Format (_("Now you can access the synced files from ‘{0}’ in your SparkleShare folder."),
+							folder_name); 
+						// A button that opens the synced folder
+						open_folder_button = new Button (_("Open Folder"));
+
+						open_folder_button.Clicked += delegate {
+
+							SparkleShare.Controller.OpenSparkleShareFolder (System.IO.Path.GetFileNameWithoutExtension(folder_name));
+
+						};
+
+						success_finish_button = new Button (_("Finish"));
+	
+						success_finish_button.Clicked += delegate (object o, EventArgs args) {
+							Close ();
+						};
+	
+					AddButton (open_folder_button);
+					AddButton (success_finish_button);		
+
+		}
+			
+			// The page shown when syncing has succeeded
+		private Widget GetSuccessPage ()
 		{
-
-			Reset ();
-
-                UrgencyHint = true;
-
-                if (!HasToplevelFocus) {
-
-                    string title   = String.Format (_("‘{0}’ has been successfully added"), folder_name);
-                    string subtext = _("");
-
-                    new SparkleBubble (title, subtext).Show ();
-
-                }
-
+			string folder_name = "test";
 				VBox layout_vertical = new VBox (false, 0);
 
 					Label header = new Label ("<span size='large'><b>" +
@@ -584,55 +661,38 @@ namespace SparkleShare {
 						Xalign = 0
 					};
 		
-					Label information = new Label (
+					success_information = new Label (
 						String.Format (_("Now you can access the synced files from ‘{0}’ in your SparkleShare folder."),
-							folder_name)) {
+							folder_name
+			            )) {
 						Xalign = 0,
 						Wrap   = true,
 						UseMarkup = true
 					};
-
-						// A button that opens the synced folder
-						Button open_folder_button = new Button (_("Open Folder"));
-
-						open_folder_button.Clicked += delegate {
-
-							SparkleShare.Controller.OpenSparkleShareFolder (System.IO.Path.GetFileNameWithoutExtension(folder_name));
-
-						};
-
-						Button finish_button = new Button (_("Finish"));
-	
-						finish_button.Clicked += delegate (object o, EventArgs args) {
-							Close ();
-						};
-	
-					AddButton (open_folder_button);
-					AddButton (finish_button);
-
 				layout_vertical.PackStart (header, false, false, 0);
-				layout_vertical.PackStart (information, false, false, 21);
+				layout_vertical.PackStart (success_information, false, false, 21);
 
-			Add (layout_vertical);
-
-			ShowAll ();
-		
+			return (layout_vertical);
 		}
-
-
-		// The page shown whilst syncing
 		private void ShowSyncingPage (string name)
 		{
-
-			Reset ();
-
+			ClearButtons();
+			assistant.CurrentPage = 6;
+			syncing_page_header.Markup = "<span size='large'><b>" +
+							                        String.Format (_("Syncing folder ‘{0}’…"), name) +
+							                        "</b></span>";
+			finish_button.Sensitive = false;
+			AddButton(finish_button);
+		}
+		
+		// The page shown whilst syncing
+		private Widget GetSyncingPage ()
+		{
 				Deletable = false;
 
 				VBox layout_vertical = new VBox (false, 0);
 
-					Label header = new Label ("<span size='large'><b>" +
-							                        String.Format (_("Syncing folder ‘{0}’…"), name) +
-							                        "</b></span>") {
+					syncing_page_header = new Label ("") {
 						UseMarkup = true,
 						Xalign    = 0,
 						Wrap      = true
@@ -644,18 +704,6 @@ namespace SparkleShare {
 						Xalign = 0
 					};
 
-
-						Button button = new Button () {
-							Sensitive = false,
-							Label = _("Finish")
-						};
-		
-						button.Clicked += delegate {
-							Close ();
-						};
-
-					AddButton (button);
-
 //					SparkleSpinner spinner = new SparkleSpinner (22);
 
 				Table table = new Table (3, 2, false) {
@@ -666,25 +714,28 @@ namespace SparkleShare {
 				HBox box = new HBox (false, 0);
 
 //				table.Attach (spinner, 0, 1, 0, 1);
-				table.Attach (header, 1, 2, 0, 1);
+				table.Attach (syncing_page_header, 1, 2, 0, 1);
 				table.Attach (information,  1, 2, 1, 2);
 
 				box.PackStart (table, false, false, 0);
 
 				layout_vertical.PackStart (box, false, false, 0);
 
-			Add (layout_vertical);
-
-			ShowAll ();
-
+			return layout_vertical;
 		}
+		
 
-
-		// The page shown when the setup has been completed
 		private void ShowCompletedPage ()
 		{
-
-			Reset ();
+			ClearButtons();
+			assistant.CurrentPage = 1;	
+			
+			finish_button.Sensitive = true;
+			AddButton (finish_button);			
+		}
+			// The page shown when the setup has been completed
+		private Widget GetCompletedPage ()
+		{
 
 				VBox layout_vertical = new VBox (false, 0);
 
@@ -714,18 +765,8 @@ namespace SparkleShare {
 				layout_vertical.PackStart (information, false, false, 21);
 				layout_vertical.PackStart (link_wrapper, false, false, 0);
 
-					Button finish_button = new Button (_("Finish"));
+			return (layout_vertical);
 
-					finish_button.Clicked += delegate (object o, EventArgs args) {
-						Close ();
-					};
-
-				AddButton (finish_button);
-
-			Add (layout_vertical);
-
-			ShowAll ();
-		
 		}
 
 
