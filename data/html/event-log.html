@@ -1,23 +1,19 @@
 <!doctype html>
 <html>
+    <head>
+        <title>SparkleShare Event Log</title>
+        <style>
+            body {
+                background-color: #f0f0f0;
+                color:            <!-- $body-color -->;
+                font-size:        <!-- $body-font-size -->;
+                font-family:      <!-- $body-font-family -->;
+                margin:           0;
+                padding:          0;
+                margin-top:       20px;
+            }
 
-	<head>
-
-		<title>Event Log</title>
-
-		<style>
-
-			body {
-				background-color: #f0f0f0;
-				color:            <!-- $body-color -->;
-				font-size:        <!-- $body-font-size -->;
-				font-family:      <!-- $body-font-family -->;
-				margin:           0;
-				padding:          0;
-				margin-top:       20px;
-			}
-
-			small {
+            small {
                 font-size: <!-- $small-font-size -->;
                 color:     <!-- $small-color -->;
             }
@@ -26,96 +22,91 @@
                 color: <!-- $secondary-font-color -->;
             }
 
-			.day-entry-header {
+            .day-entry-header {
                 font-size:     <!-- $day-entry-header-font-size -->;         
-				color:         #babdb6;
-				text-align:    center;
-				width:         90%;
+                color:         #babdb6;
+                text-align:    center;
+                width:         90%;
                 text-shadow:   0  1px 0 rgba(255, 255, 255, 1.0);
-				margin-bottom: 9px;
+                margin-bottom: 9px;
                 margin-left:   auto;
                 margin-right:  auto;            
-			}
-			
-			.day-entry-content {
-				padding: 9px;
-			}
-						
-			a {
-				color:           <!-- $a-color -->;
-				text-decoration: none;
-			}
+            }
+            
+            .day-entry-content {
+                padding: 9px;
+            }
+                        
+            a {
+                color:           <!-- $a-color -->;
+                text-decoration: none;
+            }
 
-			a:hover {
-				color: <!-- $a-hover-color -->;
-			}
+            a:hover {
+                color: <!-- $a-hover-color -->;
+            }
 
-			.event-time {
-				font-size:     80%;
-				color:         <!-- $secondary-font-color -->;
-				float:         right;
-			}
+            .event-time {
+                font-size:     80%;
+                color:         <!-- $secondary-font-color -->;
+                float:         right;
+            }
 
-			.event-entry-content {
-				display:               block;
-				width:                 400px;
-				background-color:      #fff;
-				margin-left:           auto;
-				margin-right:          auto;
-				margin-bottom:         9px;
-				padding:               18px;
-				-webkit-border-radius: 6px;
-				border:                #ddd 1px solid;
-			}
-			
-			dl {
-				padding: 0;
-				margin: 0;
-				padding-bottom: 15px;
-			}
-			
-			dt {
-				padding-bottom: 12px;
-				padding-top:    12px;
-				font-size:     80%;
-				color:         <!-- $secondary-font-color -->;
-			}
-			
-			dd {
-				width:          300px;
-				overflow:       hidden;
-				padding-left:   0;
-				margin-left:    12px;
-				text-overflow:  ellipsis;
-				padding-bottom: 9px;
-			}
+            .event-entry-content {
+                display:               block;
+                width:                 400px;
+                background-color:      #fff;
+                margin-left:           auto;
+                margin-right:          auto;
+                margin-bottom:         9px;
+                padding:               18px;
+                -webkit-border-radius: 6px;
+                border:                #ddd 1px solid;
+            }
+            
+            dl {
+                padding: 0;
+                margin: 0;
+                padding-bottom: 15px;
+            }
+            
+            dt {
+                padding-bottom: 12px;
+                padding-top:    12px;
+                font-size:      80%;
+                color:          <!-- $secondary-font-color -->;
+            }
+            
+            dd {
+                width:          300px;
+                overflow:       hidden;
+                padding-left:   0;
+                margin-left:    12px;
+                text-overflow:  ellipsis;
+                padding-bottom: 9px;
+            }
 
+            .no-buddy-icon {
+                float:               left;
+                margin-right:        12px;
+                width:               36px;
+                background-image:    url('<!-- $no-buddy-icon-background-image -->');
+                background-repeat:   no-repeat;
+                background-position: top center; 
+            }
 
-			.no-buddy-icon {
-				float:               left;
-				margin-right:        12px;
-				width:               36px;
-				background-image:    url('<!-- $no-buddy-icon-background-image -->');
-				background-repeat:   no-repeat;
-				background-position: top center; 
-			}
-
-			.buddy-icon {
-				width:            36px;
-				height:           36px;
+            .buddy-icon {
+                width:            36px;
+                height:           36px;
                 background-color: #fff;
-			}
+            }
 
-			.event-info {
-				float: left;
-			}
-
-		</style>
-
-	</head>
-
-	<body onDragStart='return false;'>
-		<!-- $event-log-content -->
-	</body>
-
+            .event-info {
+                float: left;
+            }
+        </style>
+    </head>
+    <body onDragStart='return false;'>
+        <!-- $event-log-content -->
+    </body>
 </html>
