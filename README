@@ -84,6 +84,12 @@ Installing the build dependencies on Debian:
      libndesk-dbus1.0-cil-dev nant libnotify-cil-dev libgtk2.0-cil-dev \
      libwebkit-cil-dev intltool libtool python-nautilus libndesk-dbus-glib1.0-cil-dev
 
+Or on Fedora:
+
+   $ sudo yum install gtk-sharp2-devel mono-core mono-devel monodevelop \
+     ndesk-dbus-devel ndesk-dbus-glib-devel nautilus-python-devel nant \
+     notify-sharp-devel webkit-gtk-devel webkit-sharp-devel
+
 
 You can build and install SparkleShare like this:
 

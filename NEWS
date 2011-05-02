@@ -1,6 +1,8 @@
-0.2 for Linux and Mac (...)
+0.2 for Linux and Mac (...):
 
-	...
+	Hylke: Removed the dependancy on GitSharp. file rename detection support in
+	the event logs. Fixed all crashes reported in RC1. Fixed collision detection
+        and conflict resolving (use a copy of each version).
 
 
 0.2-rc1 for Linux and Mac (Sun Mar 20, 2011):
