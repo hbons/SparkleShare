@@ -1,28 +1,26 @@
-SparkleShare 0.2 Release Candidate 1
-====================================
+SparkleShare
+============
 
-SparkleShare is a file sharing and collaboration tool inspired by Dropbox. 
+SparkleShare is a collaboration and sharing tool that is designed to keep
+things simple and to stay out of your way. It allows you to instantly sync
+with any Git repository you have access to.
 
-SparkleShare isn't just a piece of software, it's part of your workflow. It's 
-designed to make sharing documents and collaboration easier, and to make peers 
-aware of what you are doing. It allows you to instantly sync with any Git 
-repository you have access to. The user interface and features are made to 
-support this goal. Though SparkleShare is not made to be a graphical frontend 
+Though SparkleShare is not made to be a graphical frontend 
 for git or a backup tool, it may be useful for other kinds of purposes as well, 
 like backing up small files or monitoring your favourite project. In contrast 
 to the projects name, we will very likely refuse to implement your personal 
 ponies.
 
-SparkleShare currently only works on Linux/GNOME.
-Windows and OSX ports are planned for the future.
+SparkleShare currently works on Linux and Mac. A Windows port and mobile
+device support are planned for the future.
 
 
 License
 =======
 
-SparkleShare is free software and licensed under the GNU GPLv3. You are welcome 
-to change and redistribute it under certain conditions. For more information 
-see the LICENSE file or visit http://www.gnu.org/licenses/gpl-3.0.html
+SparkleShare is free software and licensed under the GNU GPLv3 or later. You
+are welcome to change and redistribute it under certain conditions. For more
+information see the LICENSE file or visit http://www.gnu.org/licenses/gpl-3.0.html
 
 
 Run on Linux:
@@ -126,20 +124,13 @@ The last step will give you some errors, but you only need the libraries to be c
 Open 'SparkleShare/Mac/SparkleShare.sln' in MonoDevelop and start the build.
 
 
-Frequently Asked Question
-=========================
-
-Q: Why is it written in Mono/C#?
-A: Because I hate freedom.
-
-
 Info
 ====
 
 Official website:
 http://www.sparkleshare.org/
 
-Project page:
+Source code:
 http://github.com/SparkleShare/
 
 IRC Channel:
@@ -148,7 +139,7 @@ IRC Channel:
 Wiki:
 http://github.com/hbons/SparkleShare/wiki/
 
-Issue tracker:
+Report issues:
 http://github.com/hbons/SparkleShare/issues/
 
 Translation project:
@@ -156,3 +147,4 @@ http://www.transifex.net/projects/p/sparkleshare/
 
 
 Now have fun and create cool things together! :)
+
