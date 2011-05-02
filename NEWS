@@ -1,8 +1,9 @@
 0.2 for Linux and Mac (...):
 
-	Hylke: Removed the dependancy on GitSharp. file rename detection support in
-	the event logs. Fixed all crashes reported in RC1. Fixed collision detection
-        and conflict resolving (use a copy of each version).
+	Hylke: Removed the dependancy on GitSharp. file rename detection support
+	in the event logs. Fixed all crashes reported in RC1 and improved sync
+        algorithm. Redid collision detection and conflict resolving (use a copy
+	of each version). Improved about dialogs with version checking.
 
 
 0.2-rc1 for Linux and Mac (Sun Mar 20, 2011):
@@ -29,3 +30,4 @@
 	for easy access to files. It refreshes automatically on new events as well.
 	The Nautilus plugin now	has the "Copy Web Link" context	menu item, which
 	makes sharing links a whole lot easier.
+
