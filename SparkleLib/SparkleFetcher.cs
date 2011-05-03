@@ -26,13 +26,13 @@ namespace SparkleLib {
     public class SparkleFetcher {
 
         // TODO: remove 'cloning' prefix
-        public delegate void CloningStartedEventHandler (object o, SparkleEventArgs args);
-        public delegate void CloningFinishedEventHandler (object o, SparkleEventArgs args);
-        public delegate void CloningFailedEventHandler (object o, SparkleEventArgs args);
+        public delegate void StartedEventHandler (object o, SparkleEventArgs args);
+        public delegate void FinishedEventHandler (object o, SparkleEventArgs args);
+        public delegate void FailedEventHandler (object o, SparkleEventArgs args);
 
-        public event CloningStartedEventHandler CloningStarted;
-        public event CloningFinishedEventHandler CloningFinished;
-        public event CloningFailedEventHandler CloningFailed;
+        public event StartedEventHandler Started;
+        public event FinishedEventHandler Finished;
+        public event FailedEventHandler Failed;
 
         private string TargetFolder;
         private string RemoteOriginUrl;
@@ -54,8 +54,8 @@ namespace SparkleLib {
                 Directory.Delete (TargetFolder, true);
 
             
-            if (CloningStarted != null)
-                CloningStarted (this, new SparkleEventArgs ("CloningStarted")); 
+            if (Started != null)
+                Started (this, new SparkleEventArgs ("Started"));
 
             SparkleGit git = new SparkleGit (SparklePaths.SparkleTmpPath,
                 "clone \"" + RemoteOriginUrl + "\" " + "\"" + TargetFolder + "\"");
@@ -66,16 +66,16 @@ namespace SparkleLib {
                 if (git.ExitCode != 0) {
                     SparkleHelpers.DebugInfo ("Git", "[" + TargetFolder + "] Cloning failed");
 
-                    if (CloningFailed != null)
-                        CloningFailed (this, new SparkleEventArgs ("CloningFailed"));
+                    if (Failed != null)
+                        Failed (this, new SparkleEventArgs ("CloningFailed"));
                 } else {
                     InstallConfiguration ();
                     InstallExcludeRules ();
                     
                     SparkleHelpers.DebugInfo ("Git", "[" + TargetFolder + "] Repository cloned");
 
-                    if (CloningFinished != null)
-                        CloningFinished (this, new SparkleEventArgs ("CloningFinished"));
+                    if (Finished != null)
+                        Finished (this, new SparkleEventArgs ("Finished"));
                 }
             };
 
