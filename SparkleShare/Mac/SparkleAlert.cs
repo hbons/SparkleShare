@@ -24,7 +24,6 @@ using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
 using MonoMac.WebKit;
-using Mono.Unix;
 
 namespace SparkleShare {
 
@@ -32,7 +31,6 @@ namespace SparkleShare {
 
         public SparkleAlert () : base ()
         {
-
             MessageText     = "SparkleShare couldn't find Git on your system. Do you want to download it?";
             InformativeText = "Git is required to run SparkleShare.";
 
@@ -42,19 +40,14 @@ namespace SparkleShare {
             AddButton ("Cancel");
 
             Buttons [0].Activated += delegate {
-
                 NSUrl url = new NSUrl ("http://code.google.com/p/git-osx-installer/downloads/list");
                 NSWorkspace.SharedWorkspace.OpenUrl (url);
                 Environment.Exit (0);
-
             };
 
             Buttons [1].Activated += delegate {
                 Environment.Exit (-1);
             };
-
         }
-
     }
-
 }
