@@ -916,26 +916,29 @@ namespace SparkleLib {
             
             entries.Add (last_entry);
 
+            var merge_regex = new Regex (@"commit ([a-z0-9]{40})\n" +
+                                "Merge: .+ .+\n" +
+                                "Author: (.+) <(.+)>\n" +
+                                "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
+                                "([0-9]{2}):([0-9]{2}):([0-9]{2}) .([0-9]{4})\n" +
+                                "*", RegexOptions.Compiled);
+
+            var non_merge_regex = new Regex (@"commit ([a-z0-9]{40})\n" +
+                                "Author: (.+) <(.+)>\n" +
+                                "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
+                                "([0-9]{2}):([0-9]{2}):([0-9]{2}) .([0-9]{4})\n" +
+                                "*", RegexOptions.Compiled);
+
             // TODO: Need to optimise for speed
             foreach (string log_entry in entries) {
                 Regex regex;
                 bool is_merge_commit = false;
                 
                 if (log_entry.Contains ("\nMerge: ")) {
-                    regex = new Regex (@"commit ([a-z0-9]{40})\n" +
-                                        "Merge: .+ .+\n" +
-                                        "Author: (.+) <(.+)>\n" +
-                                        "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
-                                        "([0-9]{2}):([0-9]{2}):([0-9]{2}) .([0-9]{4})\n" +
-                                        "*");
-                    
+                    regex = merge_regex;
                     is_merge_commit = true;
                 } else {
-                    regex = new Regex (@"commit ([a-z0-9]{40})\n" +
-                                        "Author: (.+) <(.+)>\n" +
-                                        "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
-                                        "([0-9]{2}):([0-9]{2}):([0-9]{2}) .([0-9]{4})\n" +
-                                        "*");
+                    regex = non_merge_regex;
                 }
                 
                 Match match = regex.Match (log_entry);
