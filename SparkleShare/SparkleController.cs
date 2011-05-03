@@ -985,7 +985,7 @@ namespace SparkleShare {
             if (i > 1)
                 target_folder_name += " (" + i + ")";
 
-            fetcher.CloningFinished += delegate {
+            fetcher.Finished += delegate {
                 EnableHostKeyCheckingForHost (host);
 
                 // Needed to do the moving
@@ -1003,13 +1003,13 @@ namespace SparkleShare {
 
                 if (FolderFetched != null)
                     FolderFetched ();
-                
+
                 if (FolderListChanged != null)
                     FolderListChanged ();
             };
 
 
-            fetcher.CloningFailed += delegate {
+            fetcher.Failed += delegate {
                 EnableHostKeyCheckingForHost (host);
 
                 if (Directory.Exists (tmp_folder)) {
@@ -1023,12 +1023,12 @@ namespace SparkleShare {
                 if (FolderFetchError != null)
                     FolderFetchError ();
             };
-            
+
 
             fetcher.Start ();
         }
 
-        
+
         // Creates an MD5 hash of input
         public static string GetMD5 (string s)
         {
