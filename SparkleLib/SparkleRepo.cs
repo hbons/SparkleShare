@@ -640,6 +640,8 @@ namespace SparkleLib {
                 string conflicting_path = line.Substring (3);
                 conflicting_path = conflicting_path.Trim ("\"".ToCharArray ());
 
+                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict type: " + line);
+
                 // Both the local and server version have been modified
                 if (line.StartsWith ("UU") || line.StartsWith ("AA") ||
                     line.StartsWith ("AU") || line.StartsWith ("UA")) {
