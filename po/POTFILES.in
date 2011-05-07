@@ -6,7 +6,6 @@ SparkleLib/SparkleFetcher.cs
 SparkleLib/SparkleHelpers.cs
 SparkleLib/SparkleOptions.cs
 SparkleLib/SparklePaths.cs
-SparkleLib/SparklePlatform.cs
 SparkleLib/SparkleRepo.cs
 SparkleShare/Mac/SparkleStatusIcon.cs
 SparkleShare/Mac/SparkleUI.cs
