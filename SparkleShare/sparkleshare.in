@@ -52,8 +52,14 @@ case $1 in
     stop
     start
     ;;
-  help|--help)
+  help|--help|-h)
     mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" --help
+    ;;
+  -d|--disable-gui)
+    mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" --disable-gui
+    ;;
+  -v|--version)
+    mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" --version
     ;;
   *)
     echo "Usage: sparkleshare {start|stop|restart|help}"
