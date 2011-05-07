@@ -791,6 +791,7 @@ namespace SparkleShare {
         {
             string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config");
 
+            // TODO: Make XML based. don't forget to change the code in fetcher    
             // Write the user's information to a text file
             TextWriter writer = new StreamWriter (global_config_file_path);
             writer.WriteLine ("[user]\n" +
