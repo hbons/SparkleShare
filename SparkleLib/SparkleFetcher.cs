@@ -35,6 +35,7 @@ namespace SparkleLib {
 
         private string target_folder;
         private string remote_url;
+        private Thread thread;
 
 
         public SparkleFetcher (string remote_url, string target_folder)
@@ -55,7 +56,7 @@ namespace SparkleLib {
             if (Directory.Exists (this.target_folder))
                 Directory.Delete (this.target_folder, true);
 
-            Thread thread = new Thread (new ThreadStart (delegate {
+            this.thread = new Thread (new ThreadStart (delegate {
                 if (Fetch ()) {
                     SparkleHelpers.DebugInfo ("Fetcher", "[" + this.target_folder + "] Fetching finished");
 
@@ -69,7 +70,14 @@ namespace SparkleLib {
                 }
             }));
 
-            thread.Start ();
+            this.thread.Start ();
+        }
+
+
+        public void Dispose ()
+        {
+            this.thread.Abort ();
+            this.thread.Join ();
         }
 
 
