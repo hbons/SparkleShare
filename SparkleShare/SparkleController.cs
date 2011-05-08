@@ -1035,7 +1035,7 @@ namespace SparkleShare {
 
 
         // Creates an MD5 hash of input
-        public static string GetMD5 (string s)
+        private string GetMD5 (string s)
         {
             MD5 md5 = new MD5CryptoServiceProvider ();
             Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
