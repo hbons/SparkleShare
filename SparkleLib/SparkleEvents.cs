@@ -45,10 +45,10 @@ namespace SparkleLib {
         public NewCommitArgs (string user_name, string user_email,
                               string message, string local_path)
     	{
-    		UserName  = user_name;
-    		UserEmail = user_email;
-	        Message   = message;
-	        LocalPath = local_path;
+            UserName  = user_name;
+            UserEmail = user_email;
+            Message   = message;
+            LocalPath = local_path;
 	    }
 	}
 }
