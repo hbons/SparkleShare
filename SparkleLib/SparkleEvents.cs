@@ -19,36 +19,36 @@ using System;
 
 namespace SparkleLib {
 
-	// Arguments for most events
-	public class SparkleEventArgs : EventArgs {
+    // Arguments for most events
+    public class SparkleEventArgs : EventArgs {
 
-	    public string Type;
-	    public string Message;
-
-
-	    public SparkleEventArgs (string type)
-    	{
-	        Type = type;
-	    }
-	}
+        public string Type;
+        public string Message;
 
 
-	// Arguments for the NewCommit event
-	public class NewCommitArgs : EventArgs {
+        public SparkleEventArgs (string type)
+        {
+            Type = type;
+        }
+    }
 
-	    public string UserName;
-	    public string UserEmail;
-	    public string Message;
-	    public string LocalPath;
+
+    // Arguments for the NewCommit event
+    public class NewCommitArgs : EventArgs {
+
+        public string UserName;
+        public string UserEmail;
+        public string Message;
+        public string LocalPath;
 
 
         public NewCommitArgs (string user_name, string user_email,
                               string message, string local_path)
-    	{
+        {
             UserName  = user_name;
             UserEmail = user_email;
             Message   = message;
             LocalPath = local_path;
-	    }
-	}
+        }
+    }
 }
