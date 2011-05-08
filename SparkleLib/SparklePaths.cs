@@ -14,43 +14,17 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 using System;
 using System.Diagnostics;
 using System.IO;
+
 using Mono.Unix;
 
 namespace SparkleLib {
 
-    public static class Backend {
-
-        public static string Name = "Git";
-
-        public static string Path {
-            get {
-                string [] possible_git_paths = {"/usr/bin/git",
-                                                "/usr/local/git/bin/git",
-                                                "/usr/local/bin/git"};
-
-                foreach (string git_path in possible_git_paths)
-                    if (File.Exists (git_path))
-                        return git_path;
-
-                return null;
-            }
-        }
-
-
-        public static bool IsPresent {
-            get {
-                return (Path != null);
-            }
-        }
-    }
-
-
     public static class SparklePaths {
 
-        public static string GitPath              = Backend.Path;
         public static string HomePath             = new UnixUserInfo (UnixEnvironment.UserName).HomeDirectory;
         public static string SparklePath          = Path.Combine (HomePath ,"SparkleShare");
         public static string SparkleTmpPath       = Path.Combine (SparklePath, ".tmp");

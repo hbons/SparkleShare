@@ -12,31 +12,39 @@
 //   GNU General Public License for more details.
 //
 //   You should have received a copy of the GNU General Public License
-//   along with this program. If not, see <http://www.gnu.org/licenses/>.
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 using System;
-using System.Diagnostics;
+using System.IO;
 
 namespace SparkleLib {
 
-    public class SparkleGit : Process {
+    public class SparkleBackend {
 
-        public SparkleGit (string path, string args) : base ()
+        public static SparkleBackend DefaultBackend;
+
+        public string Name;
+        public string Path;
+
+
+        public SparkleBackend (string name, string [] paths)
         {
-            EnableRaisingEvents              = true;
-            StartInfo.FileName               = SparkleBackend.DefaultBackend.Path;
-            StartInfo.Arguments              = args;
-            StartInfo.RedirectStandardOutput = true;
-            StartInfo.UseShellExecute        = false;
-            StartInfo.WorkingDirectory       = path;
+            Name = name;
+
+            foreach (string path in paths) {
+                if (File.Exists (path)) {
+                    Path = path;
+                    break;
+                }
+            }
         }
 
 
-        new public void Start ()
-        {
-            SparkleHelpers.DebugInfo ("Cmd", StartInfo.FileName + " " + StartInfo.Arguments);
-            base.Start ();
+        public bool IsPresent {
+            get {
+               return (Path != null);
+            }
         }
     }
 }

@@ -76,6 +76,10 @@ namespace SparkleShare {
             if (show_help)
                 ShowHelp (p);
 
+            // Set the default backend for SparkleLib
+            string [] git_paths = new string [3] {"/usr/bin/git", "/usr/local/git/bin/git", "/usr/local/bin/git"};
+            SparkleBackend.DefaultBackend = new SparkleBackend ("Git", git_paths);
+
             // Load the right controller for the OS
             string controller_name;
             switch (SparkleShare.Platform) {

@@ -476,7 +476,7 @@ namespace SparkleShare {
             if (!SparkleRepo.IsRepo (folder_path))
                 return;
 
-            SparkleRepo repo = new SparkleRepo (folder_path);
+            SparkleRepo repo = new SparkleRepo (folder_path, SparkleBackend.DefaultBackend);
 
             repo.NewCommit += delegate (SparkleCommit commit, string repository_path) {
                 string message = FormatMessage (commit);
@@ -705,7 +705,7 @@ namespace SparkleShare {
 
         public bool BackendIsPresent {
             get {
-                return SparkleLib.Backend.IsPresent;
+                return SparkleBackend.DefaultBackend.IsPresent;
             }
         }
 
