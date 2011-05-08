@@ -18,14 +18,13 @@
 using System;
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
 
 namespace SparkleLib {
 
-    // A helper class that fetches and configures
-    // a remote repository
+    // Sets up a fetcher that can get remote folders
     public class SparkleFetcher {
 
-        // TODO: remove 'cloning' prefix
         public delegate void StartedEventHandler (object o, SparkleEventArgs args);
         public delegate void FinishedEventHandler (object o, SparkleEventArgs args);
         public delegate void FailedEventHandler (object o, SparkleEventArgs args);
@@ -34,52 +33,64 @@ namespace SparkleLib {
         public event FinishedEventHandler Finished;
         public event FailedEventHandler Failed;
 
-        private string TargetFolder;
-        private string RemoteOriginUrl;
+        private string target_folder;
+        private string remote_url;
 
 
-        public SparkleFetcher (string url, string folder)
+        public SparkleFetcher (string remote_url, string target_folder)
         {
-            TargetFolder = folder;
-            RemoteOriginUrl = url;
+            this.target_folder = target_folder;
+            this.remote_url    = remote_url;
         }
 
 
         // Clones the remote repository
         public void Start ()
         {
-            SparkleHelpers.DebugInfo ("Git", "[" + TargetFolder + "] Cloning Repository");
+            SparkleHelpers.DebugInfo ("Fetcher", "[" + this.target_folder + "] Fetching folder...");
 
-            if (Directory.Exists (TargetFolder))
-                Directory.Delete (TargetFolder, true);
-
-            
             if (Started != null)
                 Started (this, new SparkleEventArgs ("Started"));
 
-            SparkleGit git = new SparkleGit (SparklePaths.SparkleTmpPath,
-                "clone \"" + RemoteOriginUrl + "\" " + "\"" + TargetFolder + "\"");
+            if (Directory.Exists (this.target_folder))
+                Directory.Delete (this.target_folder, true);
 
-            git.Exited += delegate {
-                SparkleHelpers.DebugInfo ("Git", "Exit code " + git.ExitCode.ToString ());
-
-                if (git.ExitCode != 0) {
-                    SparkleHelpers.DebugInfo ("Git", "[" + TargetFolder + "] Cloning failed");
-
-                    if (Failed != null)
-                        Failed (this, new SparkleEventArgs ("CloningFailed"));
-                } else {
-                    InstallConfiguration ();
-                    InstallExcludeRules ();
-                    
-                    SparkleHelpers.DebugInfo ("Git", "[" + TargetFolder + "] Repository cloned");
+            Thread thread = new Thread (new ThreadStart (delegate {
+                if (Fetch ()) {
+                    SparkleHelpers.DebugInfo ("Fetcher", "[" + this.target_folder + "] Fetching finished");
 
                     if (Finished != null)
                         Finished (this, new SparkleEventArgs ("Finished"));
+                } else {
+                    SparkleHelpers.DebugInfo ("Fetcher", "[" + this.target_folder + "] Fetching failed");
+
+                    if (Failed != null)
+                        Failed (this, new SparkleEventArgs ("Failed"));
                 }
-            };
+            }));
+
+            thread.Start ();
+        }
+
+
+        // TODO: abstract -> override
+        public virtual bool Fetch ()
+        {
+            SparkleGit git = new SparkleGit (SparklePaths.SparkleTmpPath,
+                "clone \"" + this.remote_url + "\" " + "\"" + this.target_folder + "\"");
 
             git.Start ();
+            git.WaitForExit ();
+
+            SparkleHelpers.DebugInfo ("Git", "Exit code " + git.ExitCode.ToString ());
+
+            if (git.ExitCode != 0) {
+                return false;
+            } else {
+                InstallConfiguration ();
+                InstallExcludeRules ();
+                return true;
+            }
         }
 
 
@@ -94,7 +105,7 @@ namespace SparkleLib {
                 string user_info = reader.ReadToEnd ();
                 reader.Close ();
 
-                string repo_config_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "config");
+                string repo_config_file_path = SparkleHelpers.CombineMore (this.target_folder, ".git", "config");
                 string config = String.Join ("\n", File.ReadAllLines (repo_config_file_path));
 
                 // Be case sensitive explicitly to work on Mac
@@ -119,7 +130,7 @@ namespace SparkleLib {
         private void InstallExcludeRules ()
         {
             string exlude_rules_file_path = SparkleHelpers.CombineMore (
-                TargetFolder, ".git", "info", "exclude");
+                this.target_folder, ".git", "info", "exclude");
 
             TextWriter writer = new StreamWriter (exlude_rules_file_path);
 
