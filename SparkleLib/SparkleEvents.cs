@@ -14,6 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
 using System;
 
 namespace SparkleLib {
@@ -23,6 +24,7 @@ namespace SparkleLib {
 
 	    public string Type;
 	    public string Message;
+
 
 	    public SparkleEventArgs (string type)
     	{
@@ -34,17 +36,19 @@ namespace SparkleLib {
 	// Arguments for the NewCommit event
 	public class NewCommitArgs : EventArgs {
 
-	    public string Author;
-	    public string Email;
+	    public string UserName;
+	    public string UserEmail;
 	    public string Message;
-	    public string RepositoryPath;
+	    public string LocalPath;
 
-	    public NewCommitArgs (string author, string email, string message, string repository_path)
+
+        public NewCommitArgs (string user_name, string user_email,
+                              string message, string local_path)
     	{
-    		Author  = author;
-    		Email   = email;
-	        Message = message;
-	        RepositoryPath = repository_path;
+    		UserName  = user_name;
+    		UserEmail = user_email;
+	        Message   = message;
+	        LocalPath = local_path;
 	    }
 	}
 }
