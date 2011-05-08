@@ -48,6 +48,7 @@ namespace SparkleLib {
         private bool has_unsynced_changes;
         private bool server_online;
 
+        public readonly SparkleBackend Backend;
         public readonly string Name;
         public readonly string RemoteName;
         public readonly string Domain;
@@ -132,7 +133,7 @@ namespace SparkleLib {
         public event CommitEndedUpEmptyEventHandler CommitEndedUpEmpty;
 
 
-        public SparkleRepo (string path)
+        public SparkleRepo (string path, SparkleBackend backend)
         {
             LocalPath       = path;
             Name            = Path.GetFileName (LocalPath);
@@ -142,6 +143,7 @@ namespace SparkleLib {
             Description     = GetDescription ();
             UserName        = GetUserName ();
             UserEmail       = GetUserEmail ();
+            Backend         = backend;
 
             this.is_syncing     = false;
             this.is_buffering   = false;
