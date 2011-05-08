@@ -135,9 +135,11 @@ namespace SparkleShare {
                     FolderSizeChanged (FolderSize);
             };
 
+            // TODO: Only support removing because 1. removing causes crashes and 2. Backend will be determined in
+            // the Intro and added to a table with the repo type, so we wont' know what type will be added
+
             // Add the repository when a create event occurs
             watcher.Created += delegate (object o, FileSystemEventArgs args) {
-                // TODO: Needs to wait until the copying over is done
 
                 // Handle invitations when the user saves an
                 // invitation into the SparkleShare folder
@@ -472,9 +474,14 @@ namespace SparkleShare {
         // Adds a repository to the list of repositories
         private void AddRepository (string folder_path)
         {
-            // Check if the folder is a Git repository
+            // TODO: determine the backend type here
+            // need to keep track of a table with folder+backendtype
+            // and use GitBackend.IsValidFolder (string path);
+
+            // Check if the folder is a Git repository TODO: remove later
             if (!SparkleRepo.IsRepo (folder_path))
                 return;
+
 
             SparkleRepo repo = new SparkleRepo (folder_path, SparkleBackend.DefaultBackend);
 
