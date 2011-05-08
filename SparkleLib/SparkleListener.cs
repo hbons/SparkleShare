@@ -36,7 +36,7 @@ namespace SparkleLib {
     // listens for change notifications
     public class SparkleListener {
 
-        private Thread Thread;
+        private Thread thread;
 
         // FIXME: The IrcClient is a public property because
         // extending it causes crashes
@@ -48,7 +48,7 @@ namespace SparkleLib {
 
 
         public SparkleListener (string server, string folder_name,
-            string user_email, NotificationServerType type)
+                                string user_email, NotificationServerType type)
         {
             if (type == NotificationServerType.Own) {
                 Server = server;
@@ -79,7 +79,7 @@ namespace SparkleLib {
         // Starts a new thread and listens to the channel
         public void Listen ()
         {
-            Thread = new Thread (
+            this.thread = new Thread (
                 new ThreadStart (delegate {
                     try {
 
@@ -97,7 +97,7 @@ namespace SparkleLib {
                 })
             );
 
-            Thread.Start ();
+            this.thread.Start ();
         }
 
 
@@ -110,8 +110,8 @@ namespace SparkleLib {
         // Frees all resources for this Listener
         public void Dispose ()
         {
-            Thread.Abort ();
-            Thread.Join ();
+            this.thread.Abort ();
+            this.thread.Join ();
         }
 
 
