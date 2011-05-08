@@ -1007,6 +1007,8 @@ namespace SparkleShare {
 
                 if (FolderListChanged != null)
                     FolderListChanged ();
+
+                fetcher.Dispose ();
             };
 
 
@@ -1023,6 +1025,8 @@ namespace SparkleShare {
 
                 if (FolderFetchError != null)
                     FolderFetchError ();
+
+                fetcher.Dispose ();
             };
 
 
