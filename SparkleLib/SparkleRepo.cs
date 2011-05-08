@@ -29,23 +29,24 @@ namespace SparkleLib {
 
     public class SparkleRepo {
 
-        private Timer RemoteTimer;
-        private Timer LocalTimer;
-        private FileSystemWatcher Watcher;
-        private System.Object ChangeLock;
-        private int FetchQueue;
-        private int AnnounceQueue;
-        private SparkleListener Listener;
-        private List <double> SizeBuffer;
-        private bool HasChanged;
-        private string _CurrentHash;
-        private bool _IsSyncing;
-        private bool _IsBuffering;
-        private bool _IsPolling;
-        private bool _IsFetching;
-        private bool _IsPushing;
-        private bool _HasUnsyncedChanges;
-        private bool _ServerOnline;
+        private Timer remote_timer;
+        private Timer local_timer;
+        private FileSystemWatcher watcher;
+        private System.Object change_lock;
+        private int fetch_queue;
+        private int announce_queue;
+        private SparkleListener listener;
+        private List <double> sizebuffer;
+        private bool has_changed;
+
+        private string current_hash;
+        private bool is_syncing;
+        private bool is_buffering;
+        private bool is_polling;
+        private bool is_fetching;
+        private bool is_pushing;
+        private bool has_unsynced_changes;
+        private bool server_online;
 
         public readonly string Name;
         public readonly string RemoteName;
@@ -58,49 +59,49 @@ namespace SparkleLib {
 
         public string CurrentHash {
             get {
-                return _CurrentHash;
+                return this.current_hash;
             }
         }
 
         public bool IsBuffering {
             get {
-                return _IsBuffering;
+                return this.is_buffering;
             }
         }
 
         public bool IsPushing {
             get {
-                return _IsPushing;
+                return this.is_pushing;
             }
         }
 
         public bool IsPolling {
             get {
-                return _IsPolling;
+                return this.is_polling;
             }
         }
 
         public bool IsSyncing {
             get {
-                return _IsSyncing;
+                return this.is_syncing;
             }
         }
 
         public bool IsFetching {
             get {
-                return _IsFetching;
+                return this.is_fetching;
             }
         }
 
         public bool HasUnsyncedChanges {
             get {
-                return _HasUnsyncedChanges;
+                return this.has_unsynced_changes;
             }
         }
 
         public bool ServerOnline {
             get {
-                return _ServerOnline;
+                return this.server_online;
             }
         }
 
@@ -141,153 +142,154 @@ namespace SparkleLib {
             Description     = GetDescription ();
             UserName        = GetUserName ();
             UserEmail       = GetUserEmail ();
-            _IsSyncing      = false;
-            _IsBuffering    = false;
-            _IsPolling      = true;
-            _IsFetching     = false;
-            _IsPushing      = false;
-            _ServerOnline   = true;
-            HasChanged      = false;
-            ChangeLock      = new Object ();
-            FetchQueue      = 0;
-            AnnounceQueue   = 0;
+
+            this.is_syncing     = false;
+            this.is_buffering   = false;
+            this.is_polling     = true;
+            this.is_fetching    = false;
+            this.is_pushing     = false;
+            this.server_online  = true;
+            this.has_changed    = false;
+            this.change_lock    = new Object ();
+            this.fetch_queue    = 0;
+            this.announce_queue = 0;
 
             if (IsEmpty)
-                _CurrentHash = null;
+                this.current_hash = null;
             else
-                _CurrentHash = GetCurrentHash ();
+                this.current_hash = GetCurrentHash ();
 
             string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath,
                 ".git", "has_unsynced_changes");
 
             if (File.Exists (unsynced_file_path))
-                _HasUnsyncedChanges = true;
+                this.has_unsynced_changes = true;
             else
-                _HasUnsyncedChanges = false;
+                this.has_unsynced_changes = false;
 
-            if (_CurrentHash == null)
+            if (this.current_hash == null)
                 CreateInitialCommit ();
 
             // Watch the repository's folder
-            Watcher = new FileSystemWatcher (LocalPath) {
+            this.watcher = new FileSystemWatcher (LocalPath) {
                 IncludeSubdirectories = true,
                 EnableRaisingEvents   = true,
                 Filter                = "*"
             };
 
-            Watcher.Changed += new FileSystemEventHandler (OnFileActivity);
-            Watcher.Created += new FileSystemEventHandler (OnFileActivity);
-            Watcher.Deleted += new FileSystemEventHandler (OnFileActivity);
-            Watcher.Renamed += new RenamedEventHandler (OnFileActivity);
+            this.watcher.Changed += new FileSystemEventHandler (OnFileActivity);
+            this.watcher.Created += new FileSystemEventHandler (OnFileActivity);
+            this.watcher.Deleted += new FileSystemEventHandler (OnFileActivity);
+            this.watcher.Renamed += new RenamedEventHandler (OnFileActivity);
 
             // Listen to the irc channel on the server...
             if (UsesNotificationCenter)
-                Listener = new SparkleListener (Domain, RemoteName, UserEmail, NotificationServerType.Central);
+                this.listener = new SparkleListener (Domain, RemoteName, UserEmail, NotificationServerType.Central);
             else
-                Listener = new SparkleListener (Domain, RemoteName, UserEmail, NotificationServerType.Own);
+                this.listener = new SparkleListener (Domain, RemoteName, UserEmail, NotificationServerType.Own);
 
             // ...fetch remote changes every 60 seconds if that fails
-            RemoteTimer = new Timer () {
+            this.remote_timer = new Timer () {
                 Interval = 60000
             };
 
-            RemoteTimer.Elapsed += delegate {
-                if (_IsPolling) {
+            this.remote_timer.Elapsed += delegate {
+                if (this.is_polling) {
                     CheckForRemoteChanges ();
                     
-                    if (!Listener.Client.IsConnected) {
+                    if (!this.listener.Client.IsConnected) {
                         SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Trying to reconnect...");
-                        Listener.Listen ();
+                        this.listener.Listen ();
                     }
                 }
 
-                if (_HasUnsyncedChanges)
+                if (this.has_unsynced_changes)
                     FetchRebaseAndPush ();
             };
 
             // Stop polling when the connection to the irc channel is succesful
-            Listener.Client.OnConnected += delegate {
-                _IsPolling = false;
+            this.listener.Client.OnConnected += delegate {
+                this.is_polling = false;
 
                 // Check for changes manually one more time
                 CheckForRemoteChanges ();
 
                 // Push changes that were made since the last disconnect
-                if (_HasUnsyncedChanges)
+                if (this.has_unsynced_changes)
                     Push ();
 
-                SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Connected. Now listening... (" + Listener.Server + ")");
+                SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Connected. Now listening... (" + this.listener.Server + ")");
 
-                if (AnnounceQueue > 0) {
-                    Listener.Announce (_CurrentHash);
-                    AnnounceQueue = 0;
-                    SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Queued messages delivered. (" + Listener.Server + ")");
+                if (this.announce_queue > 0) {
+                    this.listener.Announce (this.current_hash);
+                    this.announce_queue = 0;
+                    SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Queued messages delivered. (" + this.listener.Server + ")");
                 }
             };
 
             // Start polling when the connection to the irc channel is lost
-            Listener.Client.OnConnectionError += delegate {
+            this.listener.Client.OnConnectionError += delegate {
                 SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Lost connection. Falling back to polling...");
-                _IsPolling = true;
+                this.is_polling = true;
             };
             
             // Start polling when the connection to the irc channel is lost
-            Listener.Client.OnDisconnected += delegate {
+            this.listener.Client.OnDisconnected += delegate {
                 SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Lost connection. Falling back to polling...");
-                _IsPolling = true;
+                this.is_polling = true;
             };
 
             // Fetch changes when there is a message in the irc channel
-            Listener.Client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
+            this.listener.Client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
                 SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Was notified of a remote change...");
                 string message = args.Data.Message.Trim ();
                 
-                if (!message.Equals (_CurrentHash) && message.Length == 40) {
-                    FetchQueue++;
+                if (!message.Equals (this.current_hash) && message.Length == 40) {
+                    this.fetch_queue++;
 
-                    if (_IsBuffering) {
+                    if (this.is_buffering) {
                         SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] ...but we're busy adding files. We'll fetch them later.");
-                    } else if (!_IsFetching) {
-                        while (FetchQueue > 0) {
+                    } else if (!this.is_fetching) {
+                        while (this.fetch_queue > 0) {
                             Fetch ();
-                            FetchQueue--;
+                            this.fetch_queue--;
                         }
                         
-                        Watcher.EnableRaisingEvents = false;
+                        this.watcher.EnableRaisingEvents = false;
                         Rebase ();
-                        Watcher.EnableRaisingEvents = true;
+                        this.watcher.EnableRaisingEvents = true;
                     }
                 } else {
                     // Not really needed as we won't be notified about our own messages
                     SparkleHelpers.DebugInfo ("Irc",
-                        "[" + Name + "] False alarm, already up to date. (" + _CurrentHash + ")");
+                        "[" + Name + "] False alarm, already up to date. (" + this.current_hash + ")");
                 }
             };
 
             // Start listening
-            Listener.Listen ();
+            this.listener.Listen ();
 
-            SizeBuffer = new List <double> ();
+             this.sizebuffer = new List <double> ();
 
             // Keep a timer that checks if there are changes and
             // whether they have settled
-            LocalTimer = new Timer () {
+            this.local_timer = new Timer () {
                 Interval = 250
             };
 
-            LocalTimer.Elapsed += delegate (object o, ElapsedEventArgs args) {
+            this.local_timer.Elapsed += delegate (object o, ElapsedEventArgs args) {
                 CheckForChanges ();
             };
 
-            RemoteTimer.Start ();
-            LocalTimer.Start ();
+            this.remote_timer.Start ();
+            this.local_timer.Start ();
 
             // Add everything that changed 
             // since SparkleShare was stopped
             AddCommitAndPush ();
 
-            if (_CurrentHash == null)
-                _CurrentHash = GetCurrentHash ();
+            if (this.current_hash == null)
+                this.current_hash = GetCurrentHash ();
         }
 
 
@@ -302,13 +304,13 @@ namespace SparkleLib {
 
                 string remote_hash = git.StandardOutput.ReadToEnd ();
 
-                if (!remote_hash.StartsWith (_CurrentHash)) {
+                if (!remote_hash.StartsWith (this.current_hash)) {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found. (" + remote_hash + ")");
                     Fetch ();
                     
-                    Watcher.EnableRaisingEvents = false;
+                    this.watcher.EnableRaisingEvents = false;
                     Rebase ();
-                    Watcher.EnableRaisingEvents = true;
+                    this.watcher.EnableRaisingEvents = true;
                 }
             };
 
@@ -319,26 +321,26 @@ namespace SparkleLib {
 
         private void CheckForChanges ()
         {
-            lock (ChangeLock) {
-                if (HasChanged) {
-                    if (SizeBuffer.Count >= 4)
-                        SizeBuffer.RemoveAt (0);
+            lock (this.change_lock) {
+                if (this.has_changed) {
+                    if ( this.sizebuffer.Count >= 4)
+                         this.sizebuffer.RemoveAt (0);
                         
                     DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
-                    SizeBuffer.Add (CalculateFolderSize (dir_info));
+                     this.sizebuffer.Add (CalculateFolderSize (dir_info));
 
-                    if (SizeBuffer [0].Equals (SizeBuffer [1]) &&
-                        SizeBuffer [1].Equals (SizeBuffer [2]) &&
-                        SizeBuffer [2].Equals (SizeBuffer [3])) {
+                    if ( this.sizebuffer [0].Equals ( this.sizebuffer [1]) &&
+                         this.sizebuffer [1].Equals ( this.sizebuffer [2]) &&
+                         this.sizebuffer [2].Equals ( this.sizebuffer [3])) {
 
                         SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled.");
-                        _IsBuffering = false;
-                        HasChanged   = false;
+                        this.is_buffering = false;
+                        this.has_changed   = false;
                         
                         while (AnyDifferences) {
-                            Watcher.EnableRaisingEvents = false;
+                            this.watcher.EnableRaisingEvents = false;
                             AddCommitAndPush ();
-                            Watcher.EnableRaisingEvents = true;
+                            this.watcher.EnableRaisingEvents = true;
                         }
                     }
                 }
@@ -355,11 +357,11 @@ namespace SparkleLib {
             WatcherChangeTypes wct = fse_args.ChangeType;
 
             if (AnyDifferences) {
-                _IsBuffering = true;
+                this.is_buffering = true;
 
                 // Only fire the event if the timer has been stopped.
                 // This prevents multiple events from being raised whilst "buffering".
-                if (!HasChanged) {
+                if (!this.has_changed) {
                     SparkleEventArgs args = new SparkleEventArgs ("ChangesDetected");
 
                     if (ChangesDetected != null)
@@ -369,10 +371,10 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + fse_args.Name + "'");
                 SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes found, checking if settled.");
                 
-                RemoteTimer.Stop ();
+                this.remote_timer.Stop ();
 
-                lock (ChangeLock) {
-                    HasChanged = true;
+                lock (this.change_lock) {
+                    this.has_changed = true;
                 }
             }
         }
@@ -383,8 +385,8 @@ namespace SparkleLib {
         public void AddCommitAndPush ()
         {
             try {
-                LocalTimer.Stop ();
-                RemoteTimer.Stop ();
+                this.local_timer.Stop ();
+                this.remote_timer.Stop ();
     
                 if (AnyDifferences) {
                     Add ();
@@ -400,8 +402,8 @@ namespace SparkleLib {
                         CommitEndedUpEmpty (this, args);
                 }
             } finally {
-                RemoteTimer.Start ();
-                LocalTimer.Start ();
+                this.remote_timer.Start ();
+                this.local_timer.Start ();
             }
         }
 
@@ -502,8 +504,8 @@ namespace SparkleLib {
             git.Start ();
             git.WaitForExit ();
 
-            _CurrentHash = GetCurrentHash ();
-            SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message + " (" + _CurrentHash + ")");
+            this.current_hash = GetCurrentHash ();
+            SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message + " (" + this.current_hash + ")");
 
             SparkleEventArgs args = new SparkleEventArgs ("Commited") {
                 Message = message
@@ -521,10 +523,10 @@ namespace SparkleLib {
         // Fetches changes from the remote repository
         public void Fetch ()
         {
-            _IsSyncing  = true;
-            _IsFetching = true;
+            this.is_syncing  = true;
+            this.is_fetching = true;
 
-            RemoteTimer.Stop ();
+            this.remote_timer.Stop ();
 
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
             SparkleGit git = new SparkleGit (LocalPath, "fetch -v origin master");
@@ -537,19 +539,19 @@ namespace SparkleLib {
             git.Exited += delegate {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
 
-                _IsSyncing   = false;
-                _IsFetching  = false;
-                _CurrentHash = GetCurrentHash ();
+                this.is_syncing   = false;
+                this.is_fetching  = false;
+                this.current_hash = GetCurrentHash ();
 
                 if (git.ExitCode != 0) {
-                    _ServerOnline = false;
+                    this.server_online = false;
 
                     args = new SparkleEventArgs ("FetchingFailed");
                     
                     if (FetchingFailed != null)
                         FetchingFailed (this, args);
                 } else {
-                    _ServerOnline = true;
+                    this.server_online = true;
                     
                     args = new SparkleEventArgs ("FetchingFinished");
 
@@ -557,7 +559,7 @@ namespace SparkleLib {
                         FetchingFinished (this, args);
                 }
 
-                RemoteTimer.Start ();
+                this.remote_timer.Start ();
             };
 
             git.Start ();
@@ -581,26 +583,26 @@ namespace SparkleLib {
             git.Exited += delegate {
                 if (git.ExitCode != 0) {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected. Trying to get out...");
-                    Watcher.EnableRaisingEvents = false;
+                    this.watcher.EnableRaisingEvents = false;
 
                     while (AnyDifferences)
                         ResolveConflict ();
 
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
-                    Watcher.EnableRaisingEvents = true;
+                    this.watcher.EnableRaisingEvents = true;
 
                     SparkleEventArgs args = new SparkleEventArgs ("ConflictDetected");
                     if (ConflictDetected != null)
                         ConflictDetected (this, args);
                 }
 
-                _CurrentHash = GetCurrentHash ();
+                this.current_hash = GetCurrentHash ();
             };
 
             git.Start ();
             git.WaitForExit ();
 
-            _CurrentHash = GetCurrentHash ();
+            this.current_hash = GetCurrentHash ();
 
             if (NewCommit != null)
                 NewCommit (GetCommits (1) [0], LocalPath);
@@ -707,8 +709,8 @@ namespace SparkleLib {
         // Pushes the changes to the remote repo
         public void Push ()
         {
-            _IsSyncing = true;
-            _IsPushing = true;
+            this.is_syncing = true;
+            this.is_pushing = true;
 
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing changes...");
             SparkleGit git = new SparkleGit (LocalPath, "push origin master");
@@ -719,8 +721,8 @@ namespace SparkleLib {
                 PushingStarted (this, args);
     
             git.Exited += delegate {
-                _IsSyncing = false;
-                _IsPushing = false;
+                this.is_syncing = false;
+                this.is_pushing = false;
 
                 if (git.ExitCode != 0) {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing failed.");
@@ -731,7 +733,7 @@ namespace SparkleLib {
                     if (!File.Exists (unsynced_file_path))
                         File.Create (unsynced_file_path);
 
-                    _HasUnsyncedChanges = true;
+                    this.has_unsynced_changes = true;
 
                     args = new SparkleEventArgs ("PushingFailed");
 
@@ -749,15 +751,15 @@ namespace SparkleLib {
                     if (File.Exists (unsynced_file_path))
                         File.Delete (unsynced_file_path);
 
-                    _HasUnsyncedChanges = false;
+                    this.has_unsynced_changes = false;
 
                     if (PushingFinished != null)
                         PushingFinished (this, args); 
 
-                    if (Listener.Client.IsConnected) {
-                        Listener.Announce (_CurrentHash);
+                    if (this.listener.Client.IsConnected) {
+                        this.listener.Announce (this.current_hash);
                     } else {
-                        AnnounceQueue++;
+                        this.announce_queue++;
                         SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Could not deliver notification, added it to the queue");
                      }
                 }
@@ -1079,9 +1081,9 @@ namespace SparkleLib {
         // Disposes all resourses of this object
         public void Dispose ()
         {
-            RemoteTimer.Dispose ();
-            LocalTimer.Dispose ();
-            Listener.Dispose ();
+            this.remote_timer.Dispose ();
+            this.local_timer.Dispose ();
+            this.listener.Dispose ();
         }
     }
 }
