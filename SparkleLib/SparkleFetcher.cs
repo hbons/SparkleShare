@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
+using System.Xml; // TODO: move to subclass later
 
 namespace SparkleLib {
 
@@ -106,15 +107,11 @@ namespace SparkleLib {
         // the newly cloned repository
         private void InstallConfiguration ()
         {
-            string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config");
+            string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
 
             if (File.Exists (global_config_file_path)) {
-                StreamReader reader = new StreamReader (global_config_file_path);
-                string user_info = reader.ReadToEnd ();
-                reader.Close ();
-
                 string repo_config_file_path = SparkleHelpers.CombineMore (this.target_folder, ".git", "config");
-                string config = String.Join ("\n", File.ReadAllLines (repo_config_file_path));
+                string config = String.Join (Environment.NewLine, File.ReadAllLines (repo_config_file_path));
 
                 // Be case sensitive explicitly to work on Mac
                 config = config.Replace ("ignorecase = true", "ignorecase = false");
@@ -123,8 +120,19 @@ namespace SparkleLib {
                 config = config.Replace ("filemode = true", "filemode = false");
 
                 // Add user info
-                config += Environment.NewLine + user_info;
+                string n        = Environment.NewLine;
+                XmlDocument xml = new XmlDocument();
+                xml.Load (global_config_file_path);
 
+                XmlNode node_name  = xml.SelectSingleNode ("//user/name/text()");
+                XmlNode node_email = xml.SelectSingleNode ("//user/email/text()");
+
+                config += n +
+                          "[user]" + n +
+                          "\tname  = " + node_name.Value + n +
+                          "\temail = " + node_email.Value + n;
+
+                // Write the config to the file
                 TextWriter writer = new StreamWriter (repo_config_file_path);
                 writer.WriteLine (config);
                 writer.Close ();

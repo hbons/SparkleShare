@@ -20,11 +20,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Threading;
-using System.Text.RegularExpressions;
-using System.Xml;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Xml;
 
 using Mono.Unix;
 using SparkleLib;
@@ -90,7 +90,9 @@ namespace SparkleShare {
 
 
         public SparkleController ()
-        {
+        {Console.WriteLine (UserName + " " + UserEmail);
+            SparklePath = SparklePaths.SparklePath;
+
             // Remove temporary file
             if (Directory.Exists (SparklePaths.SparkleTmpPath))
                 Directory.Delete (SparklePaths.SparkleTmpPath, true);
@@ -104,12 +106,17 @@ namespace SparkleShare {
 
             FolderSize = GetFolderSize ();
 
-            SparklePath = SparklePaths.SparklePath;
-            string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config");
+            string global_config_file_path     = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
+            string old_global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config");
 
             // Show the introduction screen if SparkleShare isn't configured
             if (!File.Exists (global_config_file_path)) {
-                FirstRun = true;
+                if (File.Exists (old_global_config_file_path)) {
+                    MigrateConfig ();
+                    FirstRun = false;
+                } else {
+                    FirstRun = true;
+                }
             } else {
                 FirstRun = false;
                 AddKey ();
@@ -172,7 +179,31 @@ namespace SparkleShare {
             new Thread (new ThreadStart (PopulateRepositories)).Start ();
         }
 
-        
+
+        // TODO: remove this later
+        private void MigrateConfig () {
+            string global_config_file_path     = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
+            string old_global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config");
+
+            StreamReader reader = new StreamReader (old_global_config_file_path);
+            string global_config_file = reader.ReadToEnd ();
+            reader.Close ();
+
+            Regex regex = new Regex (@"name.+= (.+)");
+            Match match = regex.Match (global_config_file);
+
+            string user_name = match.Groups [1].Value;
+
+            regex = new Regex (@"email.+= (.+)");
+            match = regex.Match (global_config_file);
+
+            string user_email = match.Groups [1].Value;
+
+            WriteUserInfo (user_name, user_email);
+            File.Delete (old_global_config_file_path);
+        }
+
+
         // Uploads the user's public key to the server
         public bool AcceptInvitation (string server, string folder, string token)
         {
@@ -721,22 +752,16 @@ namespace SparkleShare {
         public string UserName
         {
             get {
-                string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config");
+                string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
     
                 if (!File.Exists (global_config_file_path))
                     return "";
                 
-                StreamReader reader = new StreamReader (global_config_file_path);
-                string global_config_file = reader.ReadToEnd ();
-                reader.Close ();
-                
-                Regex regex = new Regex (@"name.+= (.+)");
-                Match match = regex.Match (global_config_file);
-    
-                if (match.Success)
-                    return match.Groups [1].Value;
-                else
-                    return "";
+                XmlDocument xml = new XmlDocument();
+                xml.Load (global_config_file_path);
+
+                XmlNode node = xml.SelectSingleNode("//user/name/text()");
+                return node.Value;
             }
 
             set {
@@ -749,43 +774,16 @@ namespace SparkleShare {
         public string UserEmail
         {
             get {
-                string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config");
-    
-                // Look in the global config file first
-                if (File.Exists (global_config_file_path)) {
-                    StreamReader reader = new StreamReader (global_config_file_path);
-                    string global_config_file = reader.ReadToEnd ();
-                    reader.Close ();
-                    
-                    Regex regex = new Regex (@"email.+= (.+)");
-                    Match match = regex.Match (global_config_file);
-    
-                    if (match.Success)
-                        return match.Groups [1].Value;
-                    else
-                        return "";
-                } else { // Secondly, look at the user's private key file name
-                    string keys_path = SparklePaths.SparkleKeysPath;
-    
-                    if (!Directory.Exists (keys_path))
-                        return "";
-    
-                    foreach (string file_path in Directory.GetFiles (keys_path)) {
-                        string file_name = System.IO.Path.GetFileName (file_path);
-    
-                        if (file_name.StartsWith ("sparkleshare.") && file_name.EndsWith (".key")) {
-                            Regex regex = new Regex (@"sparkleshare\.(.+)\.key");
-                            Match match = regex.Match (file_name);
-    
-                            if (match.Success)
-                                return match.Groups [1].Value;
-                            else
-                                return "";
-                        }
-                    }
-    
+                string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
+
+                if (!File.Exists (global_config_file_path))
                     return "";
-                }
+
+                XmlDocument xml = new XmlDocument();
+                xml.Load (global_config_file_path);
+
+                XmlNode node = xml.SelectSingleNode("//user/email/text()");
+                return node.Value;
             }
                     
             set {
@@ -796,14 +794,18 @@ namespace SparkleShare {
         
         private void WriteUserInfo (string user_name, string user_email)
         {
-            string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config");
+            string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
 
-            // TODO: Make XML based. don't forget to change the code in fetcher    
             // Write the user's information to a text file
             TextWriter writer = new StreamWriter (global_config_file_path);
-            writer.WriteLine ("[user]\n" +
-                              "\tname  = " + user_name + "\n" +
-                              "\temail = " + user_email);
+            string n          = Environment.NewLine;
+            writer.WriteLine ("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + n +
+                              "<sparkleshare>" + n +
+                              "  <user>" + n +
+                              "    <name>" + user_name + "</name>" + n +
+                              "    <email>" + user_email + "</email>" + n +
+                              "  </user>" + n +
+                              "</sparkleshare>" + n);
             writer.Close ();
 
             SparkleHelpers.DebugInfo ("Config", "Updated '" + global_config_file_path + "'");
