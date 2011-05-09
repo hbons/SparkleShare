@@ -90,7 +90,7 @@ namespace SparkleShare {
 
 
         public SparkleController ()
-        {Console.WriteLine (UserName + " " + UserEmail);
+        {
             SparklePath = SparklePaths.SparklePath;
 
             // Remove temporary file
