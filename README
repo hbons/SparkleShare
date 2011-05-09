@@ -112,22 +112,27 @@ Build on Mac:
 =============
 
 Install the Mono Framework, Monodevelop (plus the MonoMac plugin), and MacPorts.
+Install git, automake, and intltool:
 
-Install git-core, automake and intltool using 'port install'.
-Make sure that git or a symbolic link to git is in /usr/bin.
+   $ sudo port install git-core automake intltool
 
-Note:
-
-   You may need to adjust some environment variables to find mono:
+You may need to adjust some environment variables to find mono:
    
    $ export PATH=/Library/Frameworks/Mono.framework/Versions/Current/bin:$PATH
    $ export PKG_CONFIG=/Library/Frameworks/Mono.framework/Versions/Current/bin/pkg-config
    $ export PKG_CONFIG_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
+
+Start the first part of the build:
+
    $ ./autogen.sh
    $ make
 
-The last step will give you some errors, but you only need the libraries to be compiled.
-Open 'SparkleShare/Mac/SparkleShare.sln' in MonoDevelop and start the build.
+The last step will give you some errors in SparkleShare.exe, ignore these, you only
+need the libraries to be compiled. Now open 'SparkleShare/Mac/SparkleShare.sln' in 
+MonoDevelop and start the build.
+
+To create the SparkleShare.app, select Project from the menu bar and
+click "Create Mac Installer..."
 
 
 Info
