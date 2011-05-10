@@ -59,7 +59,7 @@ namespace SparkleShare {
 			if (SparkleShare.Controller.FirstRun) {
 
 				Intro = new SparkleIntro ();
-				Intro.ShowAccountForm ();
+				Intro.ShowAccountForm();
 
 			}
 			

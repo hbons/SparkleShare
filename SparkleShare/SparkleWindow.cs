@@ -43,8 +43,6 @@ namespace SparkleShare {
 			Resizable      = false;
 			WindowPosition = WindowPosition.Center;
 
-			SetSizeRequest (680, 440);
-
 			DeleteEvent += delegate (object o, DeleteEventArgs args) {
 
 				args.RetVal = true;
@@ -62,8 +60,9 @@ namespace SparkleShare {
 
 					Buttons = CreateButtonBox ();
 
-				VBox.PackStart (Wrapper, true, true, 0);
-				VBox.PackStart (Buttons, false, false, 0);
+				VBox.PackStart (Wrapper, false, true, 0);
+				VBox.PackStart (new Alignment(0,0,0,0),true,true,0);
+				VBox.PackStart (Buttons, false, true, 0);
 
 				EventBox box = new EventBox ();
 				Gdk.Color bg_color = new Gdk.Color ();
@@ -83,7 +82,7 @@ namespace SparkleShare {
 			HBox.PackStart (VBox, true, true, 0);
 
 			base.Add (HBox);
-
+			//base.SetSizeRequest (680, 140);	
 		}
 
 
@@ -107,12 +106,12 @@ namespace SparkleShare {
 
 		}
 
-
+		
 		new public void Add (Widget widget)
 		{
 
 			Wrapper.PackStart (widget, true, true, 0);
-			ShowAll ();
+		//	ShowAll ();
 
 		}
 
@@ -123,13 +122,15 @@ namespace SparkleShare {
 			if (Wrapper.Children.Length > 0)
 				Wrapper.Remove (Wrapper.Children [0]);
 
-			foreach (Button button in Buttons)
-				Buttons.Remove (button);
-
+			ClearButtons();
 			ShowAll ();
 
 		}
-		
+		public void ClearButtons()
+		{
+			foreach (Button button in Buttons)
+				Buttons.Remove (button);
+		}
 		new public void ShowAll ()
 		{
 		
