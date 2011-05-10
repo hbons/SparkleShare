@@ -776,14 +776,28 @@ namespace SparkleShare {
             get {
                 string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
 
-                if (!File.Exists (global_config_file_path))
+                if (File.Exists (global_config_file_path)) {
+                    XmlDocument xml = new XmlDocument();
+                    xml.Load (global_config_file_path);
+
+                    XmlNode node = xml.SelectSingleNode("//user/email/text()");
+                    return node.Value;
+                } else {
+                    string keys_path = SparklePaths.SparkleKeysPath;
+
+                    if (!Directory.Exists (keys_path))
+                        return "";
+
+                    foreach (string file_path in Directory.GetFiles (keys_path)) {
+                        Regex regex = new Regex (@"sparkleshare\.(.+)\.key");
+                        Match match = regex.Match (Path.GetFileName (file_path));
+
+                        if (match.Success)
+                            return match.Groups [1].Value;
+                    }
+
                     return "";
-
-                XmlDocument xml = new XmlDocument();
-                xml.Load (global_config_file_path);
-
-                XmlNode node = xml.SelectSingleNode("//user/email/text()");
-                return node.Value;
+                }
             }
                     
             set {
