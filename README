@@ -63,21 +63,6 @@ Note:
 Build on Linux:
 ===============
 
-To build SparkleShare you need:
-
-   - gtk-sharp2-devel >= 2.12.7
-   - mono-core >= 2.2
-   - mono-devel >= 2.2
-   - monodevelop >= 2.0
-   - ndesk-dbus-devel >= 0.6
-   - ndesk-dbus-glib-devel >= 0.6
-   - nautilus-python-devel
-   - nant
-   - notify-sharp-devel
-   - webkit-gtk-devel
-   - webkit-sharp-devel
-
-
 Installing the build dependencies on Debian:
 
    $ sudo apt-get install gtk-sharp2 mono-runtime mono-devel monodevelop \
