@@ -851,12 +851,11 @@ namespace SparkleShare {
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.FileName = "ssh-keygen";
-                
+
                 // -t is the crypto type
                 // -P is the password (none)
                 // -f is the file name to store the private key in
                 process.StartInfo.Arguments = "-t rsa -P \"\" -f " + key_file_name;
-                process.Start ();
 
                 process.Exited += delegate {
                     SparkleHelpers.DebugInfo ("Config", "Created private key '" + key_file_name + "'");
@@ -867,6 +866,9 @@ namespace SparkleShare {
                     File.Copy (key_file_path + ".pub",
                         Path.Combine (SparklePath, UserName + "'s key.txt"));
                 };
+                
+                process.Start ();
+                process.WaitForExit ();
             }
         }
 
