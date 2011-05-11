@@ -14,80 +14,67 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 using System;
 using System.IO;
 
 namespace SparkleLib {
-	
-	public static class SparkleHelpers
-	{
+    
+    public static class SparkleHelpers {
 
-		public static bool ShowDebugInfo = true;
-
-
-		// Show debug info if needed
-		public static void DebugInfo (string type, string message)
-		{
-
-			if (ShowDebugInfo) {
-
-				string timestamp = DateTime.Now.ToString ("HH:mm:ss");
-
-				if (message.StartsWith ("["))
-					Console.WriteLine ("[" + timestamp + "]" + "[" + type + "]" + message);
-				else
-					Console.WriteLine ("[" + timestamp + "]" + "[" + type + "] " + message);
-
-			}
-
-		}
+        public static bool ShowDebugInfo = true;
 
 
-		// Makes it possible to combine more than
-		// two paths at once
-		public static string CombineMore (params string [] parts)
-		{
+        // Show debug info if needed
+        public static void DebugInfo (string type, string message)
+        {
+            if (ShowDebugInfo) {
+                string timestamp = DateTime.Now.ToString ("HH:mm:ss");
 
-			string new_path = "";
+                if (!message.StartsWith ("["))
+                    message = " " + message;
 
-			foreach (string part in parts)
-				new_path = Path.Combine (new_path, part);
-
-			return new_path;
-
-		}
-
-
-		// Recursively sets access rights of a folder to 'Normal'
-		public static void ClearAttributes (string path)
-		{
-
-			if (Directory.Exists (path)) {
-
-				string [] folders = Directory .GetDirectories (path);
-
-				foreach (string folder in folders)
-					ClearAttributes (folder);
-
-				string [] files = Directory .GetFiles(path);
-
-				foreach (string file in files)
-					File.SetAttributes (file, FileAttributes.Normal);
-
-			}
-
-		}
+                // TODO: Write to a log
+                Console.WriteLine ("[" + timestamp + "]" + "[" + type + "]" + message);
+            }
+        }
 
 
-		// Converts a UNIX timestamp to a more usable time object
-		public static DateTime UnixTimestampToDateTime (int timestamp)
-		{
+        // Makes it possible to combine more than
+        // two paths at once
+        public static string CombineMore (params string [] parts)
+        {
+            string new_path = "";
 
-			DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
-			return unix_epoch.AddSeconds (timestamp);
+            foreach (string part in parts)
+                new_path = Path.Combine (new_path, part);
 
-		}
+            return new_path;
+        }
 
-	}
 
+        // Recursively sets access rights of a folder to 'Normal'
+        public static void ClearAttributes (string path)
+        {
+            if (Directory.Exists (path)) {
+                string [] folders = Directory .GetDirectories (path);
+
+                foreach (string folder in folders)
+                    ClearAttributes (folder);
+
+                string [] files = Directory .GetFiles(path);
+
+                foreach (string file in files)
+                    File.SetAttributes (file, FileAttributes.Normal);
+            }
+        }
+
+
+        // Converts a UNIX timestamp to a more usable time object
+        public static DateTime UnixTimestampToDateTime (int timestamp)
+        {
+            DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
+            return unix_epoch.AddSeconds (timestamp);
+        }
+    }
 }
