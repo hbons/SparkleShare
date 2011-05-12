@@ -145,7 +145,7 @@ namespace SparkleShare {
 
         // Strange magic needed by SetProcessName ()
         [DllImport ("libc")]
-        private static extern int prctl (int option, byte [] arg2, IntPtr arg3,    IntPtr arg4, IntPtr arg5);
+        private static extern int prctl (int option, byte [] arg2, IntPtr arg3, IntPtr arg4, IntPtr arg5);
         
         
         // Sets the Unix process name to 'sparkleshare' instead of 'mono'
