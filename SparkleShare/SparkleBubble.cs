@@ -22,27 +22,22 @@ using Notifications;
 
 namespace SparkleShare {
 	
-	public class SparkleBubble : Notification {
+    public class SparkleBubble : Notification {
 
-		public SparkleBubble (string title, string subtext) : base (title, subtext)
-		{
+        public SparkleBubble (string title, string subtext) : base (title, subtext)
+        {
+            IconName = "folder-sparkleshare";
+            Timeout  = 4500;
+            Urgency  = Urgency.Low;
+        }
 
-			IconName = "folder-sparkleshare";
-			Timeout  = 4500;
-			Urgency  = Urgency.Low;
 
-		}
-
-		// Checks whether the system allows adding buttons to a notification,
-		// prevents error messages in Ubuntu.
-		new public void AddAction (string action, string label, ActionHandler handler)
-		{
-
-			if (Array.IndexOf (Notifications.Global.Capabilities, "actions") > -1)
-				base.AddAction (action, label, handler);
-
-		}
-
-	}
-
+        // Checks whether the system allows adding buttons to a notification,
+        // prevents error messages in Ubuntu.
+        new public void AddAction (string action, string label, ActionHandler handler)
+        {
+            if (Array.IndexOf (Notifications.Global.Capabilities, "actions") > -1)
+                base.AddAction (action, label, handler);
+        }
+    }
 }
