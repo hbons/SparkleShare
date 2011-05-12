@@ -30,160 +30,124 @@ using SparkleLib;
 
 namespace SparkleShare {
 
-	public class SparkleUI {
-		
-		public static SparkleStatusIcon StatusIcon;
-		public static List <SparkleLog> OpenLogs;
-		public static SparkleIntro Intro;
+    public class SparkleUI {
+        
+        public static SparkleStatusIcon StatusIcon;
+        public static List <SparkleLog> OpenLogs;
+        public static SparkleIntro Intro;
 
 
-		// Short alias for the translations
-		public static string _(string s)
-		{
-			return Catalog.GetString (s);
-		}
+        // Short alias for the translations
+        public static string _(string s)
+        {
+            return Catalog.GetString (s);
+        }
 
 
-		public SparkleUI ()
-		{
+        public SparkleUI ()
+        {
+            // Initialize the application
+            Application.Init ();
 
-			// Initialize the application
-			Application.Init ();
+            // Create the statusicon
+            StatusIcon = new SparkleStatusIcon ();
+            
+            // Keep track of which event logs are open
+            OpenLogs = new List <SparkleLog> ();
 
-			// Create the statusicon
-			StatusIcon = new SparkleStatusIcon ();
-			
-			// Keep track of which event logs are open
-			OpenLogs = new List <SparkleLog> ();
+            if (SparkleShare.Controller.FirstRun) {
+                Intro = new SparkleIntro ();
+                Intro.ShowAccountForm ();
+            }
+            
+            SparkleShare.Controller.OnQuitWhileSyncing += delegate {
+                // TODO: Pop up a warning when quitting whilst syncing
+            };
 
-			if (SparkleShare.Controller.FirstRun) {
-
-				Intro = new SparkleIntro ();
-				Intro.ShowAccountForm ();
-
-			}
-			
-			SparkleShare.Controller.OnQuitWhileSyncing += delegate {
-				
-				// TODO: Pop up a warning when quitting whilst syncing	
-
-			};
-
-			SparkleShare.Controller.OnInvitation += delegate (string server, string folder, string token) {
-				Application.Invoke (delegate {
-					
-					SparkleIntro intro = new SparkleIntro ();
-					intro.ShowInvitationPage (server, folder, token);
-
-				});
-			};
-
-			// Show a bubble when there are new changes
-			SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
-			                                                        string message, string repository_path) {
-
+            SparkleShare.Controller.OnInvitation += delegate (string server, string folder, string token) {
                 Application.Invoke (delegate {
+                    SparkleIntro intro = new SparkleIntro ();
+                    intro.ShowInvitationPage (server, folder, token);
+                });
+            };
 
-    				foreach (SparkleLog log in OpenLogs) {
-    					if (log.LocalPath.Equals (repository_path))
-    							log.UpdateEventLog ();
-    				}
-    				
-    				if (!SparkleShare.Controller.NotificationsEnabled)
-    					return;
+            // Show a bubble when there are new changes
+            SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
+                                                                    string message, string repository_path) {
+                Application.Invoke (delegate {
+                    foreach (SparkleLog log in OpenLogs) {
+                        if (log.LocalPath.Equals (repository_path))
+                                log.UpdateEventLog ();
+                    }
+                    
+                    if (!SparkleShare.Controller.NotificationsEnabled)
+                        return;
 
+                    SparkleBubble bubble    = new SparkleBubble (user_name, message);
+                    string avatar_file_path = SparkleUIHelpers.GetAvatar (user_email, 32);
 
-					SparkleBubble bubble    = new SparkleBubble (user_name, message);
-					string avatar_file_path = SparkleUIHelpers.GetAvatar (user_email, 32);
+                    if (avatar_file_path != null)
+                        bubble.Icon = new Gdk.Pixbuf (avatar_file_path);
+                    else
+                        bubble.Icon = SparkleUIHelpers.GetIcon ("avatar-default", 32);
 
-					if (avatar_file_path != null)
-						bubble.Icon = new Gdk.Pixbuf (avatar_file_path);
-					else
-						bubble.Icon = SparkleUIHelpers.GetIcon ("avatar-default", 32);
+                    bubble.AddAction ("", "Show Events", delegate {
+                        AddEventLog (repository_path);                
+                    });
 
-					bubble.AddAction ("", "Show Events", delegate {
-						AddEventLog (repository_path);				
-					});
+                    bubble.Show ();
+                });
+            };
 
-					bubble.Show ();
+            // Show a bubble when there was a conflict
+            SparkleShare.Controller.ConflictNotificationRaised += delegate {
+                Application.Invoke (delegate {
+                    string title   = _("Ouch! Mid-air collision!");
+                    string subtext = _("Don't worry, SparkleShare made a copy of each conflicting file.");
 
-				});
+                    new SparkleBubble (title, subtext).Show ();
+                });
+            };
 
-			};
+            SparkleShare.Controller.AvatarFetched += delegate {
+                Application.Invoke (delegate {
+                    foreach (SparkleLog log in OpenLogs)
+                        log.UpdateEventLog ();
+                });
+            };
 
-
-			// Show a bubble when there was a conflict
-			SparkleShare.Controller.ConflictNotificationRaised += delegate {
-				Application.Invoke (delegate {
-
-					string title   = _("Ouch! Mid-air collision!");
-					string subtext = _("Don't worry, SparkleShare made a copy of each conflicting file.");
-
-					new SparkleBubble (title, subtext).Show ();
-
-				});
-			};
-
-
-			SparkleShare.Controller.AvatarFetched += delegate {
-			
-				Application.Invoke (delegate {
-					
-					foreach (SparkleLog log in OpenLogs)
-						log.UpdateEventLog ();
-					
-				});
-		
-			};
-
-
-			SparkleShare.Controller.OnIdle += delegate {
-			
-				Application.Invoke (delegate {
-					
-					foreach (SparkleLog log in OpenLogs)
-						log.UpdateEventLog ();
-					
-				});
-		
-			};
-
-		}
+            SparkleShare.Controller.OnIdle += delegate {
+                Application.Invoke (delegate {
+                    foreach (SparkleLog log in OpenLogs)
+                        log.UpdateEventLog ();
+                });
+            };
+        }
 
 
-		public void AddEventLog (string path)
-		{
+        public void AddEventLog (string path)
+        {
+            SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
+                return l.LocalPath.Equals (path);
+            });
 
-			SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
-				return l.LocalPath.Equals (path);
-			});
+            // Check whether the log is already open, create a new one if
+            // that's not the case or present it to the user if it is
+            if (log == null) {
+                OpenLogs.Add (new SparkleLog (path));
+                OpenLogs [OpenLogs.Count - 1].ShowAll ();
+                OpenLogs [OpenLogs.Count - 1].Present ();
+            } else {
+                log.ShowAll ();
+                log.Present ();
+            }
+        }
+        
 
-			// Check whether the log is already open, create a new one if
-			// that's not the case or present it to the user if it is
-			if (log == null) {
-
-				OpenLogs.Add (new SparkleLog (path));
-				OpenLogs [OpenLogs.Count - 1].ShowAll ();
-				OpenLogs [OpenLogs.Count - 1].Present ();
-
-			} else {
-
-				log.ShowAll ();
-				log.Present ();
-
-			}
-
-		}
-		
-
-		// Runs the application
-		public void Run ()
-		{
-
-			Application.Run ();
-
-		}
-
-	}
-
+        // Runs the application
+        public void Run ()
+        {
+            Application.Run ();
+        }
+    }
 }
