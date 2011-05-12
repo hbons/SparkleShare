@@ -182,7 +182,6 @@ namespace SparkleShare {
 
         // TODO: remove this later
         private void MigrateConfig () {
-            string global_config_file_path     = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
             string old_global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config");
 
             StreamReader reader = new StreamReader (old_global_config_file_path);

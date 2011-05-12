@@ -28,142 +28,122 @@ using Mono.Unix;
 
 namespace SparkleShare {
 
-	public class SparkleWindow : NSWindow {
-		
-		private NSImage SideSplash;
-		private NSImageView SideSplashView;
+    public class SparkleWindow : NSWindow {
 
-		public List <NSButton> Buttons;
-		public string Header;
-		public string Description;
-		
-		private NSTextField HeaderTextField;
-		private NSTextField DescriptionTextField;
+        public List <NSButton> Buttons;
+        public string Header;
+        public string Description;
 
-		
-		public SparkleWindow () : base ()
-		{
-
-			SetFrame (new RectangleF (0, 0, 640, 380), true);
-			
-			StyleMask   = NSWindowStyle.Titled;
-			MaxSize     = new SizeF (640, 380);
-			MinSize     = new SizeF (640, 380);
-			HasShadow   = true;	
-			BackingType = NSBackingStore.Buffered;
-
-			Center ();
-
-			string side_splash_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-				"Pixmaps", "side-splash.png");
-
-			SideSplash = new NSImage (side_splash_path) {
-				Size = new SizeF (150, 407)
-			};
-
-			SideSplashView = new NSImageView () {
-				Image = SideSplash,
-				Frame = new RectangleF (0, 0, 150, 407)
-			};
+        private NSImage SideSplash;
+        private NSImageView SideSplashView;
+        private NSTextField HeaderTextField;
+        private NSTextField DescriptionTextField;
 
 
-			Buttons = new List <NSButton> ();
+        public SparkleWindow () : base ()
+        {
+            SetFrame (new RectangleF (0, 0, 640, 380), true);
 
-			
-			HeaderTextField = new NSTextField () {
-				Frame           = new RectangleF (190, Frame.Height - 100, Frame.Width, 48),
-				BackgroundColor = NSColor.WindowBackground,
-				Bordered        = false,
-				Editable        = false,
-				Font            = NSFontManager.SharedFontManager.FontWithFamily
-					("Lucida Grande", NSFontTraitMask.Bold, 0, 15)
-			};
-			
-			DescriptionTextField = new NSTextField () {
-				Frame           = new RectangleF (190, Frame.Height - 155 , 640 - 240, 64),
-				BackgroundColor = NSColor.WindowBackground,
-				Bordered        = false,
-				Editable        = false,
-				Font            = SparkleUI.Font
-			};
+            StyleMask   = NSWindowStyle.Titled;
+            MaxSize     = new SizeF (640, 380);
+            MinSize     = new SizeF (640, 380);
+            HasShadow   = true;
+            BackingType = NSBackingStore.Buffered;
 
-			
-			NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-			MakeKeyAndOrderFront (this);
-			
-			OrderFrontRegardless ();
+            Center ();
 
-		}
+            string side_splash_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
+                "Pixmaps", "side-splash.png");
 
-		
-		public void Reset () {
-		
-			ContentView.Subviews = new NSView [0];
-			Buttons = new List <NSButton> ();
-			
-			Header      = "";
-			Description = "";
-			
-		}
+            SideSplash = new NSImage (side_splash_path) {
+                Size = new SizeF (150, 407)
+            };
 
+            SideSplashView = new NSImageView () {
+                Image = SideSplash,
+                Frame = new RectangleF (0, 0, 150, 407)
+            };
 
-		public void ShowAll () {
-			
-			HeaderTextField.StringValue      = Header;
-			DescriptionTextField.StringValue = Description;
-			
-			ContentView.AddSubview (HeaderTextField);
+            Buttons = new List <NSButton> ();
 
-			if (!Description.Equals (""))
-				ContentView.AddSubview (DescriptionTextField);
-			
-			ContentView.AddSubview (SideSplashView);
-			
-			int i = 1;
-			
-			if (Buttons.Count > 0) {
+            HeaderTextField = new NSTextField () {
+                Frame           = new RectangleF (190, Frame.Height - 100, Frame.Width, 48),
+                BackgroundColor = NSColor.WindowBackground,
+                Bordered        = false,
+                Editable        = false,
+                Font            = NSFontManager.SharedFontManager.FontWithFamily
+                    ("Lucida Grande", NSFontTraitMask.Bold, 0, 15)
+            };
+            
+            DescriptionTextField = new NSTextField () {
+                Frame           = new RectangleF (190, Frame.Height - 155 , 640 - 240, 64),
+                BackgroundColor = NSColor.WindowBackground,
+                Bordered        = false,
+                Editable        = false,
+                Font            = SparkleUI.Font
+            };
 
-				DefaultButtonCell = Buttons [0].Cell;
-				
-				foreach (NSButton button in Buttons) {
-					
-					button.BezelStyle = NSBezelStyle.Rounded;
-					button.Frame = new RectangleF (Frame.Width - 15 - (105 * i) , 12, 105, 32);
-					
-					if (button.Title.Contains (" "))
-						button.Frame = new RectangleF (Frame.Width - 30 - (105 * i) , 12, 120, 32);
-					
-					button.Font = SparkleUI.Font;
-					
-					ContentView.AddSubview (button);
-					
-					i++;
-				
-				}
-			
-			}
-	
-		}
+            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+            MakeKeyAndOrderFront (this);
+            
+            OrderFrontRegardless ();
+        }
+
+        
+        public void Reset ()
+        {
+            ContentView.Subviews = new NSView [0];
+            Buttons              = new List <NSButton> ();
+            Header               = "";
+            Description          = "";
+        }
 
 
-		public override void OrderFrontRegardless ()
-		{
-			
-			NSApplication.SharedApplication.AddWindowsItem (this, "SparkleShare Setup", false);
-			base.OrderFrontRegardless ();
-			
-		}
+        public void ShowAll ()
+        {
+            HeaderTextField.StringValue      = Header;
+            DescriptionTextField.StringValue = Description;
+            
+            ContentView.AddSubview (HeaderTextField);
+
+            if (!Description.Equals (""))
+                ContentView.AddSubview (DescriptionTextField);
+            
+            ContentView.AddSubview (SideSplashView);
+            
+            int i = 1;
+            if (Buttons.Count > 0) {
+                DefaultButtonCell = Buttons [0].Cell;
+                
+                foreach (NSButton button in Buttons) {
+                    button.BezelStyle = NSBezelStyle.Rounded;
+                    button.Frame = new RectangleF (Frame.Width - 15 - (105 * i), 12, 105, 32);
+
+                    // Make the button a bit wider if the text is
+                    // likely to be longer
+                    if (button.Title.Contains (" "))
+                        button.Frame = new RectangleF (Frame.Width - 30 - (105 * i), 12, 120, 32);
+                    
+                    button.Font = SparkleUI.Font;
+                    ContentView.AddSubview (button);
+                    i++;
+                }
+            }
+        }
 
 
-		public override void PerformClose (NSObject sender)
-		{
-		
-			OrderOut (this);
-			NSApplication.SharedApplication.RemoveWindowsItem (this);
-			return;
-			
-		}
-		
-	}
+        public override void OrderFrontRegardless ()
+        {
+            NSApplication.SharedApplication.AddWindowsItem (this, "SparkleShare Setup", false);
+            base.OrderFrontRegardless ();
+        }
 
+
+        public override void PerformClose (NSObject sender)
+        {
+            OrderOut (this);
+            NSApplication.SharedApplication.RemoveWindowsItem (this);
+            return;
+        }
+    }
 }
