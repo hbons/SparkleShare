@@ -14,42 +14,37 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
 using Gtk;
 
 namespace SparkleShare {
 
-	// An infobar
-	public class SparkleInfobar : EventBox
-	{
+    // An infobar
+    public class SparkleInfobar : EventBox {
 
-		public SparkleInfobar (string icon_name, string title, string text)
-		{
+        public SparkleInfobar (string icon_name, string title, string text)
+        {
+            Window window = new Window (WindowType.Popup) {
+                Name = "gtk-tooltip"
+            };
 
-			Window window = new Window (WindowType.Popup) {
-				Name = "gtk-tooltip"
-			};
+            window.EnsureStyle ();
+            Style = window.Style;
 
-			window.EnsureStyle ();
+            Label label = new Label () {
+                Markup = "<b>" + title + "</b>\n" + text
+            };
 
-			Style = window.Style;
+            HBox hbox = new HBox (false, 12) {
+                BorderWidth = 12
+            };
 
-			Label label = new Label () {
-				Markup = "<b>" + title + "</b>\n" + text
-			};
+            hbox.PackStart (new Image (SparkleUIHelpers.GetIcon (icon_name, 24)),
+                false, false, 0);
 
-			HBox hbox = new HBox (false, 12) {
-				BorderWidth = 12
-			};
+            hbox.PackStart (label, false, false, 0);
 
-			hbox.PackStart (new Image (SparkleUIHelpers.GetIcon (icon_name, 24)),
-				false, false, 0);
-
-			hbox.PackStart (label, false, false, 0);
-
-			Add (hbox);
-
-		}
-
-	}
-
+            Add (hbox);
+        }
+    }
 }
