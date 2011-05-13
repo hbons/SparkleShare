@@ -20,11 +20,11 @@ using System.Drawing;
 using System.IO;
 using System.Timers;
 
+using Mono.Unix;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
 using MonoMac.WebKit;
-using Mono.Unix;
 
 namespace SparkleShare {
 

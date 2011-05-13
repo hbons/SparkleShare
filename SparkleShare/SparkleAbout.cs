@@ -26,26 +26,26 @@ using Mono.Unix;
 
 namespace SparkleShare {
 
-	public class SparkleAbout : Window	{
+    public class SparkleAbout : Window {
 
-		private Label Version;
-
-
-		// Short alias for the translations
-		public static string _(string s)
-		{
-			return Catalog.GetString (s);
-		}
+        private Label Version;
 
 
-		public SparkleAbout () : base ("")
-		{
-			DefaultSize    = new Gdk.Size (360, 260);
-			BorderWidth    = 0;
-			IconName       = "folder-sparkleshare";
-			WindowPosition = WindowPosition.Center;
-			Title          = "About SparkleShare";
-			Resizable      = false;
+        // Short alias for the translations
+        public static string _(string s)
+        {
+            return Catalog.GetString (s);
+        }
+
+
+        public SparkleAbout () : base ("")
+        {
+            DefaultSize    = new Gdk.Size (360, 260);
+            BorderWidth    = 0;
+            IconName       = "folder-sparkleshare";
+            WindowPosition = WindowPosition.Center;
+            Title          = "About SparkleShare";
+            Resizable      = false;
 
             CreateAbout ();
 
@@ -64,15 +64,13 @@ namespace SparkleShare {
             };
 
             SparkleShare.Controller.CheckForNewVersion ();
-		}
+        }
 
 
         private void CreateAbout ()
         {
-
             Gdk.Color color = Style.Foreground (StateType.Insensitive);
             string secondary_text_color = SparkleUIHelpers.GdkColorToHex (color);
-
 
             EventBox box = new EventBox ();
             box.ModifyBg (StateType.Normal, new TreeView ().Style.Base (StateType.Normal));
@@ -85,7 +83,6 @@ namespace SparkleShare {
                 };
 
             box.Add (header);
-
 
             Version = new Label () {
                 Markup = "<small>Checking for updates...</small>",
@@ -152,10 +149,6 @@ namespace SparkleShare {
             vbox.PackStart (button_bar, false, false, 0);
 
             Add (vbox);
-
         }
-
-	}
-
+    }
 }
-
