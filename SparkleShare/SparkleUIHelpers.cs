@@ -23,118 +23,46 @@ using System.Security.Cryptography;
 using System.Text;
 
 namespace SparkleShare {
-	
-	public static class SparkleUIHelpers {
 
-		// Creates an MD5 hash of input
-		public static string GetMD5 (string s)
-		{
-			MD5 md5 = new MD5CryptoServiceProvider ();
-			Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
-			Byte[] encodedBytes = md5.ComputeHash (bytes);
-			return BitConverter.ToString (encodedBytes).ToLower ().Replace ("-", "");
-		}
+    public static class SparkleUIHelpers {
 
-
-		// Gets the avatar for a specific email address and size
-		public static string GetAvatar (string email, int size)
-		{
-
-			string avatar_path = SparkleHelpers.CombineMore (SparklePaths.SparkleLocalIconPath,
-				size + "x" + size, "status");
-
-			if (!Directory.Exists (avatar_path)) {
-
-				Directory.CreateDirectory (avatar_path);
-				SparkleHelpers.DebugInfo ("Config", "Created '" + avatar_path + "'");
-
-			}
-
-			string avatar_file_path = SparkleHelpers.CombineMore (avatar_path, "avatar-" + email);
-
-			if (File.Exists (avatar_file_path)) {
-
-				return avatar_file_path;
-
-			} else {
-
-				// Let's try to get the person's gravatar for next time
-				WebClient web_client = new WebClient ();
-				Uri uri = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (email) +
-					".jpg?s=" + size + "&d=404");
-
-				string tmp_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, email + size);
-
-				if (!File.Exists (tmp_file_path)) {
-
-					web_client.DownloadFileAsync (uri, tmp_file_path);
-
-					web_client.DownloadFileCompleted += delegate {
-
-						if (File.Exists (avatar_file_path))
-							File.Delete (avatar_file_path);
-
-						FileInfo tmp_file_info = new FileInfo (tmp_file_path);
-
-						if (tmp_file_info.Length > 255)
-							File.Move (tmp_file_path, avatar_file_path);
-
-					};
-
-				}
-
-				// Fall back to a generic icon if there is no gravatar
-				if (File.Exists (avatar_file_path))
-					return avatar_file_path;
-				else
-					return null;
-
-			}
-
-		}
+        // Creates an MD5 hash of input
+        public static string GetMD5 (string s)
+        {
+            MD5 md5 = new MD5CryptoServiceProvider ();
+            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+            Byte[] encodedBytes = md5.ComputeHash (bytes);
+            return BitConverter.ToString (encodedBytes).ToLower ().Replace ("-", "");
+        }
 
 
-		// Looks up an icon from the system's theme
-		public static Gdk.Pixbuf GetIcon (string name, int size)
-		{
+        // Looks up an icon from the system's theme
+        public static Gdk.Pixbuf GetIcon (string name, int size)
+        {
+            IconTheme icon_theme = new IconTheme ();
+            icon_theme.AppendSearchPath (SparklePaths.SparkleIconPath);
+            icon_theme.AppendSearchPath (SparklePaths.SparkleLocalIconPath);
 
-			IconTheme icon_theme = new IconTheme ();
-			icon_theme.AppendSearchPath (SparklePaths.SparkleIconPath);
-			icon_theme.AppendSearchPath (SparklePaths.SparkleLocalIconPath);
-
-			try {
-
-				return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
-
-			} catch {
-
-				try {
-
-					return icon_theme.LoadIcon ("gtk-missing-image", size, IconLookupFlags.GenericFallback);
-
-				} catch {
-
-					return null;
-
-				}
-
-			}
-
-		}
+            try {
+                return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
+            } catch {
+                try {
+                    return icon_theme.LoadIcon ("gtk-missing-image", size, IconLookupFlags.GenericFallback);
+                } catch {
+                    return null;
+                }
+            }
+        }
 
 
-		// Converts a Gdk RGB color to a hex value.
-		// Example: from "rgb:0,0,0" to "#000000"
-		public static string GdkColorToHex (Gdk.Color color)
-		{
-
-			return String.Format ("#{0:X2}{1:X2}{2:X2}",
-				(int) Math.Truncate (color.Red   / 256.00),
-				(int) Math.Truncate (color.Green / 256.00),
-				(int) Math.Truncate (color.Blue  / 256.00));
-
-		}
-
-	}
-
+        // Converts a Gdk RGB color to a hex value.
+        // Example: from "rgb:0,0,0" to "#000000"
+        public static string GdkColorToHex (Gdk.Color color)
+        {
+            return String.Format ("#{0:X2}{1:X2}{2:X2}",
+                (int) Math.Truncate (color.Red   / 256.00),
+                (int) Math.Truncate (color.Green / 256.00),
+                (int) Math.Truncate (color.Blue  / 256.00));
+        }
+    }
 }
