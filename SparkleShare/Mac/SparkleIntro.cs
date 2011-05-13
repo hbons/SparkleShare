@@ -53,21 +53,17 @@ namespace SparkleShare {
 		
 		public SparkleIntro () : base ()
 		{
-			
 			ServerFormOnly = false;
-			
 		}
 		
 		
 		public void ShowAccountForm ()
 		{
-		
 			Reset ();
 
 				Header       = "Welcome to SparkleShare!";
 				Description  = "Before we can create a SparkleShare folder on this " +
 				               "computer, we need some information from you.";
-				
 
 				UserInfoForm = new NSForm (new RectangleF (250, 115, 350, 64));
 				UserInfoForm.AddEntry ("Full Name:");
@@ -75,13 +71,12 @@ namespace SparkleShare {
 				UserInfoForm.CellSize = new SizeF (280, 22);
 				UserInfoForm.IntercellSpacing = new SizeF (4, 4);
 			
-				string full_name  = new UnixUserInfo (UnixEnvironment.UserName).RealName;
-                                if (string.IsNullOrEmpty (full_name))
-					full_name = "";
+				string full_name = new UnixUserInfo (UnixEnvironment.UserName).RealName;
+                if (string.IsNullOrEmpty (full_name))
+				    full_name = "";
 
 				UserInfoForm.Cells [0].StringValue = full_name.TrimEnd (",".ToCharArray());;
 				UserInfoForm.Cells [1].StringValue = SparkleShare.Controller.UserEmail;
-			
 
 				ContinueButton = new NSButton () {
 					Title    = "Continue",
@@ -89,7 +84,6 @@ namespace SparkleShare {
 				};
 
 				ContinueButton.Activated += delegate {
-					
 					SparkleShare.Controller.UserName  = UserInfoForm.Cells [0].StringValue.Trim ();
 					SparkleShare.Controller.UserEmail = UserInfoForm.Cells [1].StringValue.Trim ();
 					SparkleShare.Controller.GenerateKeyPair ();				
@@ -98,9 +92,7 @@ namespace SparkleShare {
 					InvokeOnMainThread (delegate {
 						ShowServerForm ();
 					});
-				
 				};
-			
 
 				// TODO: Ugly hack, do properly with events
 				Timer timer = new Timer () {
@@ -108,19 +100,15 @@ namespace SparkleShare {
 				};
 
 				timer.Elapsed += delegate {
-				
 					InvokeOnMainThread (delegate {
-				
 						bool name_is_correct =
 							!UserInfoForm.Cells [0].StringValue.Trim ().Equals ("");
 					
-						bool email_is_correct = SparkleShare.Controller.IsValidEmail
-							(UserInfoForm.Cells [1].StringValue.Trim ());
+						bool email_is_correct = SparkleShare.Controller.IsValidEmail (
+							UserInfoForm.Cells [1].StringValue.Trim ());
 	
 						ContinueButton.Enabled = (name_is_correct && email_is_correct);
-				 
 					});
-				
 				};
 			
 				timer.Start ();
@@ -129,27 +117,22 @@ namespace SparkleShare {
 				Buttons.Add (ContinueButton);
 
 			ShowAll ();
-
 		}
 
 		
 		public void ShowServerForm (bool server_form_only)
 		{
-
 			ServerFormOnly = server_form_only;
 			ShowServerForm ();
-
 		}
 
 
 		public void ShowServerForm ()
 		{
-			
 			Reset ();
 
 				Header       = "Where is your remote folder?";
 				Description  = "";
-			
 			
 				ServerTypeLabel	 = new NSTextField () {
 					Alignment       = NSTextAlignment.Right,
@@ -284,7 +267,6 @@ namespace SparkleShare {
 			
 				timer.Start ();
 
-				
 				ContentView.AddSubview (ServerTypeLabel);
 				ContentView.AddSubview (Matrix);
 	
@@ -294,16 +276,13 @@ namespace SparkleShare {
 				ContentView.AddSubview (FolderNameLabel);
 				ContentView.AddSubview (FolderNameTextField);
 				ContentView.AddSubview (FolderNameHelpLabel);
-			
 
 				SyncButton = new NSButton () {
 					Title = "Sync",
 					Enabled = false
 				};
 
-			
 					SyncButton.Activated += delegate {
-
 						string name = FolderNameTextField.StringValue;
 
 						// Remove the starting slash if there is one
@@ -334,22 +313,17 @@ namespace SparkleShare {
 							// Remove the trailing slash if there is one
 							if (server.EndsWith ("/"))
 								server = server.TrimEnd ("/".ToCharArray ());
-
 						}
 
 						if (ServerType == 2) {
-
 							server = "ssh://git@gitorious.org";
 
 							if (!name.EndsWith (".git")) {
-
 								if (!name.Contains ("/"))
 									name = name + "/" + name;
 
 								name += ".git";
-
 							}
-
 						}
 
 						if (ServerType == 1)
@@ -361,37 +335,26 @@ namespace SparkleShare {
 						string url  = server + "/" + name;
 						string canonical_name = Path.GetFileNameWithoutExtension (name);
 
-
 						ShowSyncingPage (canonical_name);
-
 	
 						SparkleShare.Controller.FolderFetched += delegate {
-					
 							InvokeOnMainThread (delegate {
 								ShowSuccessPage (canonical_name);
 							});
-					
 						};
 				
 						SparkleShare.Controller.FolderFetchError += delegate {
-	
 							InvokeOnMainThread (delegate {
 								ShowErrorPage ();
-							});	
-				
+							});
 						};
-		
-				
+
 						SparkleShare.Controller.FetchFolder (url, name);
-				
 					};
 
-			
 				Buttons.Add (SyncButton);
 			
-			
 				if (ServerFormOnly) {
-				
 					CancelButton = new NSButton () {
 						Title = "Cancel"
 					};
@@ -403,9 +366,7 @@ namespace SparkleShare {
 					};
 
 					Buttons.Add (CancelButton);
-				
 				} else {
-				
 					SkipButton = new NSButton () {
 						Title = "Skip"
 					};
@@ -417,22 +378,18 @@ namespace SparkleShare {
 					};
 
 					Buttons.Add (SkipButton);
-				
 				}
 		
 			ShowAll ();
-
 		}
 
 
 		public void ShowErrorPage ()
 		{
-
 			Reset ();
 
 				Header      = "Something went wrong…";
 				Description = "";
-			
 	
 				TryAgainButton = new NSButton () {
 					Title = "Try again…"
@@ -444,23 +401,19 @@ namespace SparkleShare {
 					});
 				};
 
-
 				Buttons.Add (TryAgainButton);
 
 			ShowAll ();
-
 		}
 
 		
 		private void ShowSyncingPage (string name)
 		{
-
 			Reset ();
 
 				Header      = "Syncing folder ‘" + name + "’…";
 				Description = "This may take a while.\n" +
 				              "Are you sure it’s not coffee o'clock?";
-
 
 				ProgressIndicator = new NSProgressIndicator () {
 					Frame = new RectangleF (190, Frame.Height - 200, 640 - 150 - 80, 20),
@@ -471,7 +424,6 @@ namespace SparkleShare {
 
 				ContentView.AddSubview (ProgressIndicator);
 
-
 				FinishButton = new NSButton () {
 					Title = "Finish",
 					Enabled = false
@@ -480,19 +432,16 @@ namespace SparkleShare {
 				Buttons.Add (FinishButton);
 
 			ShowAll ();
-
 		}
 		
 
 		public void ShowSuccessPage (string folder_name)
 		{
-
 			Reset ();
 
 				Header      = "Folder synced succesfully!";	
 				Description = "Now you can access the synced files from ‘" + folder_name + "’ in " +
 				              "your SparkleShare folder.";
-
 
 				FinishButton = new NSButton () {
 					Title = "Finish"
@@ -505,7 +454,6 @@ namespace SparkleShare {
 					});
 				};
 
-			
 				OpenFolderButton = new NSButton () {
 					Title = "Open Folder"
 				};
@@ -514,7 +462,6 @@ namespace SparkleShare {
 					SparkleShare.Controller.OpenSparkleShareFolder (folder_name);
 				};
 
-
 				Buttons.Add (FinishButton);
 				Buttons.Add (OpenFolderButton);
 
@@ -522,20 +469,17 @@ namespace SparkleShare {
 
 			NSApplication.SharedApplication.RequestUserAttention
 				(NSRequestUserAttentionType.CriticalRequest);
-		
 		}
 
 
 		private void ShowCompletedPage ()
 		{
-
 			Reset ();
 
 				Header      = "SparkleShare is ready to go!";
 				Description = "Now you can start accepting invitations from others. " +
 				              "Just click on invitations you get by email and " +
 					          "we will take care of the rest.";
-
 
 				FinishButton = new NSButton () {
 					Title = "Finish"
@@ -552,10 +496,6 @@ namespace SparkleShare {
 				Buttons.Add (FinishButton);
 			
 			ShowAll ();
-
 		}
-		
 	}
-	
-		
 }
