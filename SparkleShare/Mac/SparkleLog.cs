@@ -27,60 +27,55 @@ using MonoMac.WebKit;
 
 namespace SparkleShare {
 
-	public class SparkleLog : NSWindow {
+    public class SparkleLog : NSWindow {
 
-		public readonly string LocalPath;
-		
-		private WebView WebView;		
-		private NSButton CloseButton;
-		private NSButton OpenFolderButton;
-		private NSBox Separator;
+        public readonly string LocalPath;
+
+        private WebView WebView;
+        private NSButton CloseButton;
+        private NSButton OpenFolderButton;
+        private NSBox Separator;
         private string HTML;
         private NSProgressIndicator ProgressIndicator;
 
 
-		public SparkleLog (IntPtr handle) : base (handle) { } 
-		
-		public SparkleLog (string path) : base ()
-		{
+        public SparkleLog (IntPtr handle) : base (handle) { } 
+        
+        public SparkleLog (string path) : base ()
+        {
+            LocalPath = path;
 
-			LocalPath = path;
+            Delegate = new SparkleLogDelegate ();
 
-			Delegate = new SparkleLogDelegate ();
+            SetFrame (new RectangleF (0, 0, 480, 640), true);
+            Center ();
+            
+            // Open slightly off center for each consecutive window
+            if (SparkleUI.OpenLogs.Count > 0) {
+                RectangleF offset = new RectangleF (Frame.X + (SparkleUI.OpenLogs.Count * 20),
+                    Frame.Y - (SparkleUI.OpenLogs.Count * 20), Frame.Width, Frame.Height);
 
-			SetFrame (new RectangleF (0, 0, 480, 640), true);
-			Center ();
-			
-			// Open slightly off center for each consecutive window
-			if (SparkleUI.OpenLogs.Count > 0) {
-			
-				RectangleF offset = new RectangleF (Frame.X + (SparkleUI.OpenLogs.Count * 20),
-					Frame.Y - (SparkleUI.OpenLogs.Count * 20), Frame.Width, Frame.Height);
-			
-				SetFrame (offset, true);
+                SetFrame (offset, true);
+            }
+            
+            StyleMask = (NSWindowStyle.Closable |
+                         NSWindowStyle.Miniaturizable |
+                         NSWindowStyle.Titled);
 
-			}
-			
-			StyleMask = (NSWindowStyle.Closable |
-			             NSWindowStyle.Miniaturizable |
-			             NSWindowStyle.Titled);
+            MaxSize     = new SizeF (480, 640);
+            MinSize     = new SizeF (480, 640);
+            HasShadow   = true;            
+            BackingType = NSBackingStore.Buffered;
 
-			MaxSize     = new SizeF (480, 640);
-			MinSize     = new SizeF (480, 640);
-			HasShadow   = true;			
-			BackingType = NSBackingStore.Buffered;
-
-			CreateEventLog ();
-			UpdateEventLog ();
-			
-			OrderFrontRegardless ();
-			
-		}
+            CreateEventLog ();
+            UpdateEventLog ();
+            
+            OrderFrontRegardless ();
+        }
 
 
         private void CreateEventLog ()
         {
-
             OpenFolderButton = new NSButton (new RectangleF (16, 12, 120, 32)) {
                 Title = "Open Folder",
                 BezelStyle = NSBezelStyle.Rounded   ,
@@ -132,37 +127,27 @@ namespace SparkleShare {
             };
 
             Update ();
-
         }
 
 
-		public void UpdateEventLog ()
-		{
-
+        public void UpdateEventLog ()
+        {
             InvokeOnMainThread (delegate {
-
                 if (HTML == null)
                     ContentView.AddSubview (ProgressIndicator);
-
             });
 
-
             Thread thread = new Thread (new ThreadStart (delegate {
-
                 GenerateHTML ();
                 AddHTML ();
-
             }));
 
             thread.Start ();
-
-		}
+        }
 
 
         private void GenerateHTML ()
         {
-
-
             string folder_name = Path.GetFileName (LocalPath);
             HTML               = SparkleShare.Controller.GetHTMLLog (folder_name);
 
@@ -176,15 +161,12 @@ namespace SparkleShare {
             HTML = HTML.Replace ("<!-- $a-hover-color -->", "#009ff8");
             HTML = HTML.Replace ("<!-- $no-buddy-icon-background-image -->",
                 "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "avatar-default.png"));
-
         }
 
 
         private void AddHTML ()
         {
-
             InvokeOnMainThread (delegate {
-
                 if (ProgressIndicator.Superview == ContentView)
                     ProgressIndicator.RemoveFromSuperview ();
     
@@ -192,40 +174,30 @@ namespace SparkleShare {
     
                 ContentView.AddSubview (WebView);
                 Update ();
-
             });
-
         }
+    }
 
-	}
 
-
-	public class SparkleLogDelegate : NSWindowDelegate {
-		
-		public override bool WindowShouldClose (NSObject sender)
-		{
-
-			(sender as SparkleLog).OrderOut (this);
-			return false;
-			
-		}
-
-	}
-	
-	
-	public class SparkleWebPolicyDelegate : WebPolicyDelegate {
-		
-		public override void DecidePolicyForNavigation (WebView web_view, NSDictionary action_info,
-			NSUrlRequest request, WebFrame frame, NSObject decision_token)
-		{
-		
-			string file_path = request.Url.ToString ();
-			file_path = file_path.Replace ("%20", " ");
-			
-			NSWorkspace.SharedWorkspace.OpenFile (file_path);
-
-		}
-		
-	}
-
+    public class SparkleLogDelegate : NSWindowDelegate {
+        
+        public override bool WindowShouldClose (NSObject sender)
+        {
+            (sender as SparkleLog).OrderOut (this);
+            return false;
+        }
+    }
+    
+    
+    public class SparkleWebPolicyDelegate : WebPolicyDelegate {
+        
+        public override void DecidePolicyForNavigation (WebView web_view, NSDictionary action_info,
+                                                        NSUrlRequest request, WebFrame frame, NSObject decision_token)
+        {
+            string file_path = request.Url.ToString ();
+            file_path = file_path.Replace ("%20", " ");
+            
+            NSWorkspace.SharedWorkspace.OpenFile (file_path);
+        }
+    }
 }

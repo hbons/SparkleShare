@@ -165,7 +165,5 @@ namespace SparkleShare {
             ContentView.AddSubview (CreditsButton);
             ContentView.AddSubview (WebsiteButton);
         }
-
     }
-
 }
