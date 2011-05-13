@@ -14,99 +14,79 @@
 //   You should have received a copy of the GNU General private License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
 using Gtk;
 
 namespace SparkleShare {
 
-	public class SparkleEntry : Entry {
+    public class SparkleEntry : Entry {
 
-		public bool ExampleTextActive;
-		private string pExampleText;
-
-
-		public SparkleEntry ()
-		{
-
-			ExampleTextActive = true;
-
-			FocusGrabbed += delegate { OnEntered (); };
-			ClipboardPasted += delegate { OnEntered (); };
-			
-			FocusOutEvent += delegate {
-
-				if (Text.Equals ("") || Text == null)
-					ExampleTextActive = true;
-
-				if (ExampleTextActive)
-					UseExampleText ();
-
-			};
-
-		}
+        public bool ExampleTextActive;
+        private string pExampleText;
 
 
-		private void OnEntered ()
-		{
+        public SparkleEntry ()
+        {
+            ExampleTextActive = true;
 
-			if (ExampleTextActive) {
+            FocusGrabbed += delegate { OnEntered (); };
+            ClipboardPasted += delegate { OnEntered (); };
+            
+            FocusOutEvent += delegate {
 
-				ExampleTextActive = false;
-				Text = "";	
-				UseNormalTextColor ();
+                if (Text.Equals ("") || Text == null)
+                    ExampleTextActive = true;
 
-			}
-
-		}
-
-
-		public string ExampleText
-		{
-
-			get {
-
-				return pExampleText;
-
-			}
-
-			set {
-
-				pExampleText = value;
-
-				if (ExampleTextActive) {
-
-					UseExampleText ();
-
-				}
-
-			}
-
-		}
+                if (ExampleTextActive)
+                    UseExampleText ();
+            };
+        }
 
 
-		private void UseExampleText ()
-		{
-
-			Text = pExampleText;
-			UseSecondaryTextColor ();
-
-		}
-
-
-		private void UseSecondaryTextColor ()
-		{
-
-			ModifyText (StateType.Normal, Style.Foreground (StateType.Insensitive));
-
-		}
+        private void OnEntered ()
+        {
+            if (ExampleTextActive) {
+                ExampleTextActive = false;
+                Text = "";    
+                UseNormalTextColor ();
+            }
+        }
 
 
-		private void UseNormalTextColor ()
-		{
+        public string ExampleText
+        {
+            get {
+                return pExampleText;
+            }
 
-			ModifyText (StateType.Normal, Style.Foreground (StateType.Normal));
+            set {
+                pExampleText = value;
 
-		}
+                if (ExampleTextActive) {
 
-	}
+                    UseExampleText ();
 
+                }
+            }
+        }
+
+
+        private void UseExampleText ()
+        {
+            Text = pExampleText;
+            UseSecondaryTextColor ();
+        }
+
+
+        private void UseSecondaryTextColor ()
+        {
+            ModifyText (StateType.Normal, Style.Foreground (StateType.Insensitive));
+        }
+
+
+        private void UseNormalTextColor ()
+        {
+            ModifyText (StateType.Normal, Style.Foreground (StateType.Normal));
+        }
+    }
 }
