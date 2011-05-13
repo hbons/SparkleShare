@@ -666,7 +666,7 @@ namespace SparkleShare {
                                  commit.Deleted.Count) - 1;
 
             if (changes_count > 0)
-                message += "" + String.Format (" and {0} more", changes_count);
+                message += "" + String.Format (Catalog.GetPluralString(" and {0} more", " and {0} more",changes_count) , changes_count);
 
             return message;
         }
