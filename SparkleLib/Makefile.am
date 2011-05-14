@@ -11,7 +11,8 @@ SOURCES =  \
 	SparkleFetcher.cs \
 	SparkleGit.cs \
 	SparkleHelpers.cs \
-	SparkleListener.cs \
+	SparkleListenerBase.cs \
+	SparkleListenerIrc.cs \
 	SparkleOptions.cs \
 	SparklePaths.cs \
 	SparkleRepo.cs
