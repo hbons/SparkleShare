@@ -186,7 +186,7 @@ namespace SparkleLib {
             else
                 server_type = NotificationServerType.Own;
 
-            this.listener = new SparkleListenerIrc (Domain, RemoteName, server_type);
+            this.listener = new SparkleListenerIrc (Domain, Identifier, server_type);
 
             // ...fetch remote changes every 60 seconds if that fails
             this.remote_timer = new Timer () {
@@ -263,6 +263,22 @@ namespace SparkleLib {
 
             if (this.current_hash == null)
                 this.current_hash = GetCurrentHash ();
+        }
+
+
+        public string Identifier {
+            get {
+
+                // Because git computes a hash based on content,
+                // author, and timestamp; it is unique enough to
+                // use the hash of the first commit as an identifier
+                // for our folder
+                SparkleGit git = new SparkleGit (LocalPath, "log --reverse -1 --format=%H");
+                git.Start ();
+                git.WaitForExit ();
+
+                return git.StandardOutput.ReadToEnd ().Trim ();
+            }
         }
 
 
