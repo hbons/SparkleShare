@@ -21,7 +21,7 @@ using Gtk;
 using Notifications;
 
 namespace SparkleShare {
-	
+    
     public class SparkleBubble : Notification {
 
         public SparkleBubble (string title, string subtext) : base (title, subtext)
