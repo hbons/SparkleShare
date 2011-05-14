@@ -585,17 +585,19 @@ namespace SparkleLib {
             git.Exited += delegate {
                 if (git.ExitCode != 0) {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected. Trying to get out...");
-                    this.watcher.EnableRaisingEvents = false;
+                    DisableWatching ();
 
                     while (AnyDifferences)
                         ResolveConflict ();
 
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
-                    this.watcher.EnableRaisingEvents = true;
+                    EnableWatching ();
 
                     SparkleEventArgs args = new SparkleEventArgs ("ConflictDetected");
                     if (ConflictDetected != null)
                         ConflictDetected (this, args);
+
+                    Push ();
                 }
 
                 this.current_hash = GetCurrentHash ();
@@ -770,6 +772,18 @@ namespace SparkleLib {
 
             git.Start ();
             git.WaitForExit ();
+        }
+
+
+        public void DisableWatching ()
+        {
+            this.watcher.EnableRaisingEvents = false;
+        }
+
+
+        public void EnableWatching ()
+        {
+            this.watcher.EnableRaisingEvents = true;
         }
 
 
