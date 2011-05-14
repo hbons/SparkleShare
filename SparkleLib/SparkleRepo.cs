@@ -33,9 +33,7 @@ namespace SparkleLib {
         private Timer local_timer;
         private FileSystemWatcher watcher;
         private System.Object change_lock;
-        private int fetch_queue;
-        private int announce_queue;
-        private SparkleListener listener;
+        private SparkleListenerBase listener;
         private List <double> sizebuffer;
         private bool has_changed;
 
@@ -153,8 +151,6 @@ namespace SparkleLib {
             this.server_online  = true;
             this.has_changed    = false;
             this.change_lock    = new Object ();
-            this.fetch_queue    = 0;
-            this.announce_queue = 0;
 
             if (IsEmpty)
                 this.current_hash = null;
@@ -184,11 +180,13 @@ namespace SparkleLib {
             this.watcher.Deleted += new FileSystemEventHandler (OnFileActivity);
             this.watcher.Renamed += new RenamedEventHandler (OnFileActivity);
 
-            // Listen to the irc channel on the server...
+            NotificationServerType server_type;
             if (UsesNotificationCenter)
-                this.listener = new SparkleListener (Domain, RemoteName, UserEmail, NotificationServerType.Central);
+                server_type = NotificationServerType.Central;
             else
-                this.listener = new SparkleListener (Domain, RemoteName, UserEmail, NotificationServerType.Own);
+                server_type = NotificationServerType.Own;
+
+            this.listener = new SparkleListenerIrc (Domain, RemoteName, server_type);
 
             // ...fetch remote changes every 60 seconds if that fails
             this.remote_timer = new Timer () {
@@ -199,10 +197,8 @@ namespace SparkleLib {
                 if (this.is_polling) {
                     CheckForRemoteChanges ();
                     
-                    if (!this.listener.Client.IsConnected) {
-                        SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Trying to reconnect...");
-                        this.listener.Listen ();
-                    }
+                    if (!this.listener.IsConnected)
+                        this.listener.Connect ();
                 }
 
                 if (this.has_unsynced_changes)
@@ -210,7 +206,7 @@ namespace SparkleLib {
             };
 
             // Stop polling when the connection to the irc channel is succesful
-            this.listener.Client.OnConnected += delegate {
+            this.listener.Connected += delegate {
                 this.is_polling = false;
 
                 // Check for changes manually one more time
@@ -219,59 +215,34 @@ namespace SparkleLib {
                 // Push changes that were made since the last disconnect
                 if (this.has_unsynced_changes)
                     Push ();
-
-                SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Connected. Now listening... (" + this.listener.Server + ")");
-
-                if (this.announce_queue > 0) {
-                    this.listener.Announce (this.current_hash);
-                    this.announce_queue = 0;
-                    SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Queued messages delivered. (" + this.listener.Server + ")");
-                }
-            };
-
-            // Start polling when the connection to the irc channel is lost
-            this.listener.Client.OnConnectionError += delegate {
-                SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Lost connection. Falling back to polling...");
-                this.is_polling = true;
             };
             
             // Start polling when the connection to the irc channel is lost
-            this.listener.Client.OnDisconnected += delegate {
-                SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Lost connection. Falling back to polling...");
+            this.listener.Disconnected += delegate {
+                SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Falling back to polling");
                 this.is_polling = true;
             };
 
             // Fetch changes when there is a message in the irc channel
-            this.listener.Client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
-                SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Was notified of a remote change...");
-                string message = args.Data.Message.Trim ();
-                
-                if (!message.Equals (this.current_hash) && message.Length == 40) {
-                    this.fetch_queue++;
-
-                    if (this.is_buffering) {
-                        SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] ...but we're busy adding files. We'll fetch them later.");
-                    } else if (!this.is_fetching) {
-                        while (this.fetch_queue > 0) {
+            this.listener.RemoteChange += delegate (string change_id) {
+                if (!change_id.Equals (this.current_hash) && change_id.Length == 40) {
+                    if (!this.is_fetching && !this.is_buffering) {
+                        while (this.listener.ChangesQueue > 0) {
                             Fetch ();
-                            this.fetch_queue--;
+                            this.listener.DecrementChangesQueue ();
                         }
-                        
+
                         this.watcher.EnableRaisingEvents = false;
                         Rebase ();
                         this.watcher.EnableRaisingEvents = true;
                     }
-                } else {
-                    // Not really needed as we won't be notified about our own messages
-                    SparkleHelpers.DebugInfo ("Irc",
-                        "[" + Name + "] False alarm, already up to date. (" + this.current_hash + ")");
                 }
             };
 
             // Start listening
-            this.listener.Listen ();
+            this.listener.Connect ();
 
-             this.sizebuffer = new List <double> ();
+            this.sizebuffer = new List <double> ();
 
             // Keep a timer that checks if there are changes and
             // whether they have settled
@@ -304,7 +275,7 @@ namespace SparkleLib {
                 if (git.ExitCode != 0)
                     return;
 
-                string remote_hash = git.StandardOutput.ReadToEnd ();
+                string remote_hash = git.StandardOutput.ReadToEnd ().TrimEnd ();
 
                 if (!remote_hash.StartsWith (this.current_hash)) {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found. (" + remote_hash + ")");
@@ -760,12 +731,7 @@ namespace SparkleLib {
                     if (PushingFinished != null)
                         PushingFinished (this, args); 
 
-                    if (this.listener.Client.IsConnected) {
-                        this.listener.Announce (this.current_hash);
-                    } else {
-                        this.announce_queue++;
-                        SparkleHelpers.DebugInfo ("Irc", "[" + Name + "] Could not deliver notification, added it to the queue");
-                     }
+                    this.listener.Announce (this.current_hash);
                 }
 
             };
