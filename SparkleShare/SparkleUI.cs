@@ -95,6 +95,13 @@ namespace SparkleShare {
                         AddEventLog (repository_path);                
                     });
 
+                    Console.WriteLine ("***** ARGUMENTS: *****");
+                    Console.WriteLine ("[0]" + user_name);
+                    Console.WriteLine ("[0]" + user_email);
+                    Console.WriteLine ("[0]" + message);
+                    Console.WriteLine ("[0]" + repository_path);
+                    Console.WriteLine ("**********************");
+
                     bubble.Show ();
                 });
             };

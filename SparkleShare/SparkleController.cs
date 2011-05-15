@@ -518,6 +518,13 @@ namespace SparkleShare {
             repo.NewCommit += delegate (SparkleCommit commit, string repository_path) {
                 string message = FormatMessage (commit);
 
+                Console.WriteLine ("===== ARGUMENTS: =====");
+                Console.WriteLine ("[0]" + commit.UserName);
+                Console.WriteLine ("[0]" + commit.UserEmail);
+                Console.WriteLine ("[0]" + message);
+                Console.WriteLine ("[0]" + repository_path);
+                Console.WriteLine ("======================");
+
                 if (NotificationRaised != null)
                     NotificationRaised (commit.UserName, commit.UserEmail, message, repository_path);
             };
