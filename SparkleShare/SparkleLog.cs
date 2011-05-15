@@ -95,7 +95,7 @@ namespace SparkleShare {
                         LinkStatus = args.Link;
                     };
 
-                    // FIXME: Use the right event, waiting for newer webkit bindings
+                    // FIXME: Use the right event, waiting for newer webkit bindings: NavigationPolicyDecisionRequested
                     WebView.NavigationRequested += delegate (object o, WebKit.NavigationRequestedArgs args) {
                         if (args.Request.Uri == LinkStatus) {
                             Process process = new Process ();
