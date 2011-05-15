@@ -16,8 +16,6 @@
 
 
 using System;
-
-using Gtk;
 using Notifications;
 
 namespace SparkleShare {
