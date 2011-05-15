@@ -28,7 +28,7 @@ namespace SparkleShare {
 
     public class SparkleAbout : Window {
 
-        private Label Version;
+        private Label version;
 
 
         // Short alias for the translations
@@ -51,15 +51,15 @@ namespace SparkleShare {
 
             SparkleShare.Controller.NewVersionAvailable += delegate (string new_version) {
                 Application.Invoke (delegate {
-                    Version.Markup = "<small><span fgcolor='#f57900'>A newer version (" + new_version + ") is available!</span></small>";
-                    Version.ShowAll ();
+                    this.version.Markup = "<small><span fgcolor='#f57900'>A newer version (" + new_version + ") is available!</span></small>";
+                    this.version.ShowAll ();
                 });
             };
 
             SparkleShare.Controller.VersionUpToDate += delegate {
                 Application.Invoke (delegate {
-                    Version.Markup = "<small><span fgcolor='#4e9a06'>You are running the latest version.</span></small>";
-                    Version.ShowAll ();
+                    this.version.Markup = "<small><span fgcolor='#4e9a06'>You are running the latest version.</span></small>";
+                    this.version.ShowAll ();
                 });
             };
 
@@ -84,7 +84,7 @@ namespace SparkleShare {
 
             box.Add (header);
 
-            Version = new Label () {
+            this.version = new Label () {
                 Markup = "<small>Checking for updates...</small>",
                 Xalign = 0,
                 Xpad   = 18,
@@ -94,7 +94,7 @@ namespace SparkleShare {
             Label license = new Label () {
                 Xalign = 0,
                 Xpad   = 18,
-                Ypad   = 22,
+                Ypad   = 0,
                 LineWrap     = true,
                 Wrap         = true,
                 LineWrapMode = Pango.WrapMode.Word,
@@ -144,8 +144,9 @@ namespace SparkleShare {
                 button_bar.Add (credits_button);
 
             vbox.PackStart (box, true, true, 0);
-            vbox.PackStart (Version, false, false, 0);
+            vbox.PackStart (this.version, false, false, 0);
             vbox.PackStart (license, true, true, 0);
+            vbox.PackStart (new Label (""), true, true, 0);
             vbox.PackStart (button_bar, false, false, 0);
 
             Add (vbox);
