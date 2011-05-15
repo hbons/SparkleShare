@@ -73,7 +73,8 @@ Or on Fedora:
 
    $ sudo yum install gtk-sharp2-devel mono-core mono-devel monodevelop \
      ndesk-dbus-devel ndesk-dbus-glib-devel nautilus-python-devel nant \
-     notify-sharp-devel webkit-gtk-devel webkit-sharp-devel libtool intltool
+     notify-sharp-devel webkit-gtk-devel webkit-sharp-devel webkitgtk-devel \
+     libtool intltool
 
 
 You can build and install SparkleShare like this:
