@@ -158,4 +158,3 @@ namespace SparkleLib {
     }
 
 }
-

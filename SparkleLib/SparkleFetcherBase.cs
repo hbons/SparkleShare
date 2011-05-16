@@ -25,9 +25,9 @@ namespace SparkleLib {
     // Sets up a fetcher that can get remote folders
     public abstract class SparkleFetcherBase {
 
-        public delegate void StartedEventHandler (object o, SparkleEventArgs args);
-        public delegate void FinishedEventHandler (object o, SparkleEventArgs args);
-        public delegate void FailedEventHandler (object o, SparkleEventArgs args);
+        public delegate void StartedEventHandler ();
+        public delegate void FinishedEventHandler ();
+        public delegate void FailedEventHandler ();
 
         public event StartedEventHandler Started;
         public event FinishedEventHandler Finished;
@@ -51,7 +51,7 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Fetcher", "[" + this.target_folder + "] Fetching folder...");
 
             if (Started != null)
-                Started (this, new SparkleEventArgs ("Started"));
+                Started ();
 
             if (Directory.Exists (this.target_folder))
                 Directory.Delete (this.target_folder, true);
@@ -61,12 +61,12 @@ namespace SparkleLib {
                     SparkleHelpers.DebugInfo ("Fetcher", "[" + this.target_folder + "] Fetching finished");
 
                     if (Finished != null)
-                        Finished (this, new SparkleEventArgs ("Finished"));
+                        Finished ();
                 } else {
                     SparkleHelpers.DebugInfo ("Fetcher", "[" + this.target_folder + "] Fetching failed");
 
                     if (Failed != null)
-                        Failed (this, new SparkleEventArgs ("Failed"));
+                        Failed ();
                 }
             }));
 
