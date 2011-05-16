@@ -105,7 +105,6 @@ namespace SparkleLib {
         }
 
         public delegate void AddedEventHandler (object o, SparkleEventArgs args);
-        public delegate void CommitedEventHandler (object o, SparkleEventArgs args);
         public delegate void PushingStartedEventHandler (object o, SparkleEventArgs args);
         public delegate void PushingFinishedEventHandler (object o, SparkleEventArgs args);
         public delegate void PushingFailedEventHandler (object o, SparkleEventArgs args);
@@ -117,8 +116,7 @@ namespace SparkleLib {
         public delegate void ChangesDetectedEventHandler (object o, SparkleEventArgs args);
         public delegate void CommitEndedUpEmptyEventHandler (object o, SparkleEventArgs args);
 
-        public event AddedEventHandler Added; 
-        public event CommitedEventHandler Commited; 
+        public event AddedEventHandler Added;
         public event PushingStartedEventHandler PushingStarted;
         public event PushingFinishedEventHandler PushingFinished;
         public event PushingFailedEventHandler PushingFailed;
@@ -496,13 +494,6 @@ namespace SparkleLib {
             this.current_hash = GetCurrentHash ();
             SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message + " (" + this.current_hash + ")");
 
-            SparkleEventArgs args = new SparkleEventArgs ("Commited") {
-                Message = message
-            };
-
-            if (Commited != null)
-                Commited (this, args);
-            
             // Collect garbage pseudo-randomly
             if (DateTime.Now.Second % 10 == 0)
                 CollectGarbage ();
