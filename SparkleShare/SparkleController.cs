@@ -248,14 +248,14 @@ namespace SparkleShare {
         }
         
         
-        public List <SparkleCommit> GetLog (string name)
+        public List <SparkleChangeSet> GetLog (string name)
         {
             string path = Path.Combine (SparklePaths.SparklePath, name);
             int log_size = 30;
             
             foreach (SparkleRepo repo in Repositories) {
                 if (repo.LocalPath.Equals (path))            
-                    return repo.GetCommits (log_size);
+                    return repo.GetChangeSets (log_size);
             }
 
             return null;
@@ -269,30 +269,30 @@ namespace SparkleShare {
         
         public string GetHTMLLog (string name)
         {
-            List <SparkleCommit> commits     = GetLog (name);
-            List <ActivityDay> activity_days = new List <ActivityDay> ();
+            List <SparkleChangeSet> change_sets = GetLog (name);
+            List <ActivityDay> activity_days    = new List <ActivityDay> ();
             
-            if (commits.Count == 0)
+            if (change_sets.Count == 0)
                 return null;
 
-            foreach (SparkleCommit commit in commits) {
-                GetAvatar (commit.UserEmail, 36);
+            foreach (SparkleChangeSet change_set in change_sets) {
+                GetAvatar (change_set.UserEmail, 36);
 
-                bool commit_inserted = false;
+                bool change_set_inserted = false;
                 foreach (ActivityDay stored_activity_day in activity_days) {
-                    if (stored_activity_day.DateTime.Year  == commit.DateTime.Year &&
-                        stored_activity_day.DateTime.Month == commit.DateTime.Month &&
-                        stored_activity_day.DateTime.Day   == commit.DateTime.Day) {
+                    if (stored_activity_day.DateTime.Year  == change_set.DateTime.Year &&
+                        stored_activity_day.DateTime.Month == change_set.DateTime.Month &&
+                        stored_activity_day.DateTime.Day   == change_set.DateTime.Day) {
 
-                        stored_activity_day.Add (commit);
-                        commit_inserted = true;
+                        stored_activity_day.Add (change_set);
+                        change_set_inserted = true;
                         break;
                     }
                 }
                 
-                if (!commit_inserted) {
-                    ActivityDay activity_day = new ActivityDay (commit.DateTime);
-                    activity_day.Add (commit);
+                if (!change_set_inserted) {
+                    ActivityDay activity_day = new ActivityDay (change_set.DateTime);
+                    activity_day.Add (change_set);
                     activity_days.Add (activity_day);
                 }
             }
@@ -305,7 +305,7 @@ namespace SparkleShare {
             foreach (ActivityDay activity_day in activity_days) {
                 string event_entries = "";
 
-                foreach (SparkleCommit change_set in activity_day) {
+                foreach (SparkleChangeSet change_set in activity_day) {
                     string event_entry = "<dl>";
                     
                     if (change_set.IsMerge) {
@@ -514,24 +514,24 @@ namespace SparkleShare {
 
             SparkleRepo repo = new SparkleRepo (folder_path, SparkleBackend.DefaultBackend);
 
-            repo.NewCommit += delegate (SparkleCommit commit, string repository_path) {
-                string message = FormatMessage (commit);
+            repo.NewChangeSet += delegate (SparkleChangeSet change_set, string repository_path) {
+                string message = FormatMessage (change_set);
 
                 if (NotificationRaised != null)
-                    NotificationRaised (commit.UserName, commit.UserEmail, message, repository_path);
+                    NotificationRaised (change_set.UserName, change_set.UserEmail, message, repository_path);
             };
 
-            repo.ConflictDetected += delegate {
+            repo.ConflictResolved += delegate {
                 if (ConflictNotificationRaised != null)
                     ConflictNotificationRaised ();
             };
 
             repo.SyncStatusChanged += delegate (SyncStatus status) {
-                if (status == SyncStatus.SyncDownFailed ||
+                if (status == SyncStatus.SyncDownFailed   ||
                     status == SyncStatus.SyncDownFinished ||
-                    status == SyncStatus.SyncDownStarted ||
-                    status == SyncStatus.SyncUpFailed ||
-                    status == SyncStatus.SyncUpFinished ||
+                    status == SyncStatus.SyncDownStarted  ||
+                    status == SyncStatus.SyncUpFailed     ||
+                    status == SyncStatus.SyncUpFinished   ||
                     status == SyncStatus.SyncUpStarted) {
 
                     UpdateState ();
@@ -616,13 +616,13 @@ namespace SparkleShare {
         }
 
 
-        private string FormatMessage (SparkleCommit commit)
+        private string FormatMessage (SparkleChangeSet change_set)
         {
             string file_name = "";
-            string message = null;
+            string message   = "";
 
-            if (commit.Added.Count > 0) {
-                foreach (string added in commit.Added) {
+            if (change_set.Added.Count > 0) {
+                foreach (string added in change_set.Added) {
                     file_name = added;
                     break;
                 }
@@ -630,8 +630,8 @@ namespace SparkleShare {
                 message = String.Format (_("added ‘{0}’"), file_name);
             }
 
-            if (commit.Edited.Count > 0) {
-                foreach (string modified in commit.Edited) {
+            if (change_set.Edited.Count > 0) {
+                foreach (string modified in change_set.Edited) {
                     file_name = modified;
                     break;
                 }
@@ -639,8 +639,8 @@ namespace SparkleShare {
                 message = String.Format (_("edited ‘{0}’"), file_name);
             }
 
-            if (commit.Deleted.Count > 0) {
-                foreach (string removed in commit.Deleted) {
+            if (change_set.Deleted.Count > 0) {
+                foreach (string removed in change_set.Deleted) {
                     file_name = removed;
                     break;
                 }
@@ -648,12 +648,13 @@ namespace SparkleShare {
                 message = String.Format (_("deleted ‘{0}’"), file_name);
             }
 
-            int changes_count = (commit.Added.Count +
-                                 commit.Edited.Count +
-                                 commit.Deleted.Count) - 1;
+            int changes_count = (change_set.Added.Count +
+                                 change_set.Edited.Count +
+                                 change_set.Deleted.Count) - 1;
 
             if (changes_count > 0)
-                message += "" + String.Format (Catalog.GetPluralString(" and {0} more", " and {0} more",changes_count) , changes_count);
+                message += " " + String.Format (Catalog.GetPluralString ("and {0} more", "and {0} more", changes_count),
+                    changes_count);
 
             return message;
         }
@@ -1123,11 +1124,11 @@ namespace SparkleShare {
     }
 
 
-    public class ChangeSet : SparkleCommit { }
+    public class ChangeSet : SparkleChangeSet { }
     
     
-    // All commits that happened on a day    
-    public class ActivityDay : List <SparkleCommit>
+    // All change sets that happened on a day
+    public class ActivityDay : List <SparkleChangeSet>
     {
         public DateTime DateTime;
 
