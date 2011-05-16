@@ -8,7 +8,8 @@ SOURCES =  \
 	SparkleBackend.cs \
 	SparkleCommit.cs \
 	SparkleEvents.cs \
-	SparkleFetcher.cs \
+	SparkleFetcherBase.cs \
+	SparkleFetcherGit.cs \
 	SparkleGit.cs \
 	SparkleHelpers.cs \
 	SparkleListenerBase.cs \
