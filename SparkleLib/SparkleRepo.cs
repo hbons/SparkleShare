@@ -324,7 +324,7 @@ namespace SparkleLib {
 
                         SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled.");
                         this.is_buffering = false;
-                        this.has_changed   = false;
+                        this.has_changed  = false;
                         
                         while (AnyDifferences) {
                             this.watcher.EnableRaisingEvents = false;
@@ -770,6 +770,7 @@ namespace SparkleLib {
 
 
         // Gets the domain name of a given URL
+        // TODO: make this a regex
         private string GetDomain (string url)
         {
             if (url.Equals (""))

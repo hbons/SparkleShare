@@ -1001,8 +1001,10 @@ namespace SparkleShare {
             // Strip the '.git' from the name
             string canonical_name  = Path.GetFileNameWithoutExtension (name);
             string tmp_folder      = Path.Combine (SparklePaths.SparkleTmpPath, canonical_name);
-            SparkleFetcher fetcher = new SparkleFetcher (url, tmp_folder);
-            bool folder_exists     = Directory.Exists (Path.Combine (SparklePaths.SparklePath, canonical_name));
+
+            // TODO: backend detection
+            SparkleFetcherBase fetcher = new SparkleFetcherGit (url, tmp_folder);
+            bool folder_exists         = Directory.Exists (Path.Combine (SparklePaths.SparklePath, canonical_name));
 
             // Add a numbered suffix to the nameif a folder with the same name
             // already exists. Example: "Folder (2)"
