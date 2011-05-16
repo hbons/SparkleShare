@@ -104,7 +104,6 @@ namespace SparkleLib {
             }
         }
 
-        public delegate void AddedEventHandler (object o, SparkleEventArgs args);
         public delegate void PushingStartedEventHandler (object o, SparkleEventArgs args);
         public delegate void PushingFinishedEventHandler (object o, SparkleEventArgs args);
         public delegate void PushingFailedEventHandler (object o, SparkleEventArgs args);
@@ -116,7 +115,6 @@ namespace SparkleLib {
         public delegate void ChangesDetectedEventHandler (object o, SparkleEventArgs args);
         public delegate void CommitEndedUpEmptyEventHandler (object o, SparkleEventArgs args);
 
-        public event AddedEventHandler Added;
         public event PushingStartedEventHandler PushingStarted;
         public event PushingFinishedEventHandler PushingFinished;
         public event PushingFailedEventHandler PushingFailed;
@@ -461,10 +459,6 @@ namespace SparkleLib {
             git.WaitForExit ();
 
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes staged.");
-            SparkleEventArgs args = new SparkleEventArgs ("Added");
-
-            if (Added != null)
-                Added (this, args);
         }
 
 
