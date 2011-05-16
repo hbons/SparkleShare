@@ -6,7 +6,7 @@ LINK = $(REF_SPARKLELIB)
 SOURCES =  \
 	Defines.cs \
 	SparkleBackend.cs \
-	SparkleCommit.cs \
+	SparkleChangeSet.cs \
 	SparkleEvents.cs \
 	SparkleFetcherBase.cs \
 	SparkleFetcherGit.cs \

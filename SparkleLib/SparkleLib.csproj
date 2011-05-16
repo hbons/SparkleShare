@@ -46,7 +46,7 @@
     <Compile Include="SparklePlatform.cs" />
     <Compile Include="SparkleEvents.cs" />
     <Compile Include="SparkleOptions.cs" />
-    <Compile Include="SparkleCommit.cs" />
+    <Compile Include="SparkleChangeSet.cs" />
     <Compile Include="SparkleListenerBase.cs" />
     <Compile Include="SparkleListenerIrc.cs" />
     <Compile Include="SparkleGit.cs" />

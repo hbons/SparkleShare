@@ -117,15 +117,15 @@ namespace SparkleLib {
         public event SyncStatusChangedEventHandler SyncStatusChanged;
 
 
-        public delegate void NewCommitEventHandler (SparkleCommit commit, string repository_path);
-        public delegate void ConflictDetectedEventHandler (object o, SparkleEventArgs args);
-        public delegate void ChangesDetectedEventHandler (object o, SparkleEventArgs args);
-        public delegate void CommitEndedUpEmptyEventHandler (object o, SparkleEventArgs args);
+        public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set, string source_path);
+        public delegate void ConflictResolvedEventHandler ();
+        public delegate void ChangesDetectedEventHandler ();
+        public delegate void CommitEndedUpEmptyEventHandler ();
 
-        public event NewCommitEventHandler NewCommit;
-        public event ConflictDetectedEventHandler ConflictDetected;
+        public event NewChangeSetEventHandler NewChangeSet;
+        public event ConflictResolvedEventHandler ConflictResolved;
         public event ChangesDetectedEventHandler ChangesDetected;
-        public event CommitEndedUpEmptyEventHandler CommitEndedUpEmpty;
+        public event CommitEndedUpEmptyEventHandler CommitEndedUpEmpty; // TODO this thing may be obsolete because of AnyDifferences
 
 
         public SparkleRepo (string path, SparkleBackend backend)
@@ -348,10 +348,8 @@ namespace SparkleLib {
                 // Only fire the event if the timer has been stopped.
                 // This prevents multiple events from being raised whilst "buffering".
                 if (!this.has_changed) {
-                    SparkleEventArgs args = new SparkleEventArgs ("ChangesDetected");
-
                     if (ChangesDetected != null)
-                        ChangesDetected (this, args);
+                        ChangesDetected ();
                 }
 
                 SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + fse_args.Name + "'");
@@ -382,10 +380,8 @@ namespace SparkleLib {
 
                     Push ();
                 } else {
-                    SparkleEventArgs args = new SparkleEventArgs ("CommitEndedUpEmpty");
-
                     if (CommitEndedUpEmpty != null)
-                        CommitEndedUpEmpty (this, args);
+                        CommitEndedUpEmpty ();
                 }
             } finally {
                 this.remote_timer.Start ();
@@ -560,9 +556,8 @@ namespace SparkleLib {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
                     EnableWatching ();
 
-                    SparkleEventArgs args = new SparkleEventArgs ("ConflictDetected");
-                    if (ConflictDetected != null)
-                        ConflictDetected (this, args);
+                    if (ConflictResolved != null)
+                        ConflictResolved ();
 
                     Push ();
                 }
@@ -575,8 +570,8 @@ namespace SparkleLib {
 
             this.current_hash = GetCurrentHash ();
 
-            if (NewCommit != null)
-                NewCommit (GetCommits (1) [0], LocalPath);
+            if (NewChangeSet != null)
+                NewChangeSet (GetChangeSets (1) [0], LocalPath);
                 
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes rebased.");
         }
@@ -859,12 +854,12 @@ namespace SparkleLib {
 
         // Returns a list of latest commits
         // TODO: Method needs to be made a lot faster
-        public List <SparkleCommit> GetCommits (int count)
+        public List <SparkleChangeSet> GetChangeSets (int count)
         {
             if (count < 1)
                 count = 30;
             
-            List <SparkleCommit> commits = new List <SparkleCommit> ();
+            List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
 
             SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw -M --date=iso");
             Console.OutputEncoding = System.Text.Encoding.Unicode;
@@ -922,14 +917,14 @@ namespace SparkleLib {
                 Match match = regex.Match (log_entry);
 
                 if (match.Success) {
-                    SparkleCommit commit = new SparkleCommit ();
+                    SparkleChangeSet change_set = new SparkleChangeSet ();
                     
-                    commit.Hash      = match.Groups [1].Value;
-                    commit.UserName  = match.Groups [2].Value;
-                    commit.UserEmail = match.Groups [3].Value;
-                    commit.IsMerge   = is_merge_commit;
+                    change_set.Hash      = match.Groups [1].Value;
+                    change_set.UserName  = match.Groups [2].Value;
+                    change_set.UserEmail = match.Groups [3].Value;
+                    change_set.IsMerge   = is_merge_commit;
 
-                    commit.DateTime = new DateTime (int.Parse (match.Groups [4].Value),
+                    change_set.DateTime = new DateTime (int.Parse (match.Groups [4].Value),
                         int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
                         int.Parse (match.Groups [7].Value), int.Parse (match.Groups [8].Value),
                         int.Parse (match.Groups [9].Value));
@@ -944,27 +939,27 @@ namespace SparkleLib {
                             string to_file_path;
                             
                             if (change_type.Equals ("A")) {
-                                commit.Added.Add (file_path);
+                                change_set.Added.Add (file_path);
                             } else if (change_type.Equals ("M")) {
-                                commit.Edited.Add (file_path);
+                                change_set.Edited.Add (file_path);
                             } else if (change_type.Equals ("D")) {
-                                commit.Deleted.Add (file_path);
+                                change_set.Deleted.Add (file_path);
                             } else if (change_type.Equals ("R")) {
                                 int tab_pos  = entry_line.LastIndexOf ("\t");
                                 file_path    = entry_line.Substring (42, tab_pos - 42);
                                 to_file_path = entry_line.Substring (tab_pos + 1);
 
-                                commit.MovedFrom.Add (file_path);
-                                commit.MovedTo.Add (to_file_path);
+                                change_set.MovedFrom.Add (file_path);
+                                change_set.MovedTo.Add (to_file_path);
                             }
                         }
                     }
     
-                    commits.Add (commit);
+                    change_sets.Add (change_set);
                 }
             }
 
-            return commits;
+            return change_sets;
         }
 
 

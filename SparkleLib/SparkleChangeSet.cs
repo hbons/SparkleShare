@@ -20,7 +20,7 @@ using System.Collections.Generic;
 
 namespace SparkleLib {
 
-    public class SparkleCommit {
+    public class SparkleChangeSet {
 
         public string UserName;
         public string UserEmail;
