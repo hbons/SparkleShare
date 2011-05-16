@@ -18,7 +18,7 @@
 using System;
 using System.IO;
 using System.Diagnostics;
-using System.Xml; // TODO: move to subclass later
+using System.Xml;
 
 namespace SparkleLib {
 
