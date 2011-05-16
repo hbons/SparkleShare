@@ -27,6 +27,15 @@ using Mono.Unix;
 
 namespace SparkleLib {
 
+    public enum SyncStatus {
+        SyncUpStarted,
+        SyncUpFinished,
+        SyncUpFailed,
+        SyncDownStarted,
+        SyncDownFinished,
+        SyncDownFailed
+    }
+
     public class SparkleRepo {
 
         private Timer remote_timer;
@@ -104,23 +113,15 @@ namespace SparkleLib {
             }
         }
 
-        public delegate void PushingStartedEventHandler (object o, SparkleEventArgs args);
-        public delegate void PushingFinishedEventHandler (object o, SparkleEventArgs args);
-        public delegate void PushingFailedEventHandler (object o, SparkleEventArgs args);
-        public delegate void FetchingStartedEventHandler (object o, SparkleEventArgs args);
-        public delegate void FetchingFinishedEventHandler (object o, SparkleEventArgs args);
-        public delegate void FetchingFailedEventHandler (object o, SparkleEventArgs args);
+        public delegate void SyncStatusChangedEventHandler (SyncStatus status);
+        public event SyncStatusChangedEventHandler SyncStatusChanged;
+
+
         public delegate void NewCommitEventHandler (SparkleCommit commit, string repository_path);
         public delegate void ConflictDetectedEventHandler (object o, SparkleEventArgs args);
         public delegate void ChangesDetectedEventHandler (object o, SparkleEventArgs args);
         public delegate void CommitEndedUpEmptyEventHandler (object o, SparkleEventArgs args);
 
-        public event PushingStartedEventHandler PushingStarted;
-        public event PushingFinishedEventHandler PushingFinished;
-        public event PushingFailedEventHandler PushingFailed;
-        public event FetchingStartedEventHandler FetchingStarted;
-        public event FetchingFinishedEventHandler FetchingFinished;
-        public event FetchingFailedEventHandler FetchingFailed;
         public event NewCommitEventHandler NewCommit;
         public event ConflictDetectedEventHandler ConflictDetected;
         public event ChangesDetectedEventHandler ChangesDetected;
@@ -505,10 +506,8 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
             SparkleGit git = new SparkleGit (LocalPath, "fetch -v origin master");
 
-            SparkleEventArgs args = new SparkleEventArgs ("FetchingStarted");
-
-            if (FetchingStarted != null)
-                FetchingStarted (this, args); 
+            if (SyncStatusChanged != null)
+                SyncStatusChanged (SyncStatus.SyncDownStarted);
 
             git.Exited += delegate {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
@@ -520,17 +519,13 @@ namespace SparkleLib {
                 if (git.ExitCode != 0) {
                     this.server_online = false;
 
-                    args = new SparkleEventArgs ("FetchingFailed");
-                    
-                    if (FetchingFailed != null)
-                        FetchingFailed (this, args);
+                    if (SyncStatusChanged != null)
+                        SyncStatusChanged (SyncStatus.SyncDownFailed);
                 } else {
                     this.server_online = true;
-                    
-                    args = new SparkleEventArgs ("FetchingFinished");
 
-                    if (FetchingFinished != null)
-                        FetchingFinished (this, args);
+                    if (SyncStatusChanged != null)
+                        SyncStatusChanged (SyncStatus.SyncDownFinished);
                 }
 
                 this.remote_timer.Start ();
@@ -691,11 +686,9 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing changes...");
             SparkleGit git = new SparkleGit (LocalPath, "push origin master");
 
-            SparkleEventArgs args = new SparkleEventArgs ("PushingStarted");
-            
-            if (PushingStarted != null)
-                PushingStarted (this, args);
-    
+            if (SyncStatusChanged != null)
+                SyncStatusChanged (SyncStatus.SyncUpStarted);
+
             git.Exited += delegate {
                 this.is_syncing = false;
                 this.is_pushing = false;
@@ -711,15 +704,12 @@ namespace SparkleLib {
 
                     this.has_unsynced_changes = true;
 
-                    args = new SparkleEventArgs ("PushingFailed");
-
-                    if (PushingFailed != null)
-                        PushingFailed (this, args);
+                    if (SyncStatusChanged != null)
+                        SyncStatusChanged (SyncStatus.SyncUpFailed);
 
                     FetchRebaseAndPush ();
                 } else {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes pushed.");
-                    args = new SparkleEventArgs ("PushingFinished");
 
                     string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath ,
                         ".git", "has_unsynced_changes");
@@ -729,8 +719,8 @@ namespace SparkleLib {
 
                     this.has_unsynced_changes = false;
 
-                    if (PushingFinished != null)
-                        PushingFinished (this, args); 
+                    if (SyncStatusChanged != null)
+                        SyncStatusChanged (SyncStatus.SyncDownFinished);
 
                     this.listener.Announce (this.current_hash);
                 }

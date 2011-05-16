@@ -504,7 +504,7 @@ namespace SparkleShare {
         // Adds a repository to the list of repositories
         private void AddRepository (string folder_path)
         {
-            // TODO: determine the backend type here
+            // TODO: determine the backend type here.
             // need to keep track of a table with folder+backendtype
             // and use GitBackend.IsValidFolder (string path);
 
@@ -512,58 +512,38 @@ namespace SparkleShare {
             if (!SparkleRepo.IsRepo (folder_path))
                 return;
 
-
             SparkleRepo repo = new SparkleRepo (folder_path, SparkleBackend.DefaultBackend);
 
             repo.NewCommit += delegate (SparkleCommit commit, string repository_path) {
                 string message = FormatMessage (commit);
 
-                Console.WriteLine ("===== ARGUMENTS: =====");
-                Console.WriteLine ("[0]" + commit.UserName);
-                Console.WriteLine ("[0]" + commit.UserEmail);
-                Console.WriteLine ("[0]" + message);
-                Console.WriteLine ("[0]" + repository_path);
-                Console.WriteLine ("======================");
-
                 if (NotificationRaised != null)
                     NotificationRaised (commit.UserName, commit.UserEmail, message, repository_path);
             };
 
-            repo.FetchingStarted += delegate {
-                UpdateState ();
+            repo.ConflictDetected += delegate {
+                if (ConflictNotificationRaised != null)
+                    ConflictNotificationRaised ();
             };
 
-            repo.FetchingFinished += delegate {
-                UpdateState ();
-            };
+            repo.SyncStatusChanged += delegate (SyncStatus status) {
+                if (status == SyncStatus.SyncDownFailed ||
+                    status == SyncStatus.SyncDownFinished ||
+                    status == SyncStatus.SyncDownStarted ||
+                    status == SyncStatus.SyncUpFailed ||
+                    status == SyncStatus.SyncUpFinished ||
+                    status == SyncStatus.SyncUpStarted) {
 
-            repo.FetchingFailed += delegate {
-                UpdateState ();
+                    UpdateState ();
+                }
             };
 
             repo.ChangesDetected += delegate {
                 UpdateState ();
             };
 
-            repo.PushingStarted += delegate {
-                UpdateState ();
-            };
-
-            repo.PushingFinished += delegate {
-                UpdateState ();
-            };
-
             repo.CommitEndedUpEmpty += delegate {
                 UpdateState ();
-            };
-
-            repo.PushingFailed += delegate {
-                UpdateState ();
-            };
-
-            repo.ConflictDetected += delegate {
-                if (ConflictNotificationRaised != null)
-                    ConflictNotificationRaised ();
             };
 
             Repositories.Add (repo);
