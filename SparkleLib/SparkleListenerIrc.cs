@@ -35,14 +35,14 @@ namespace SparkleLib {
             NotificationServerType type) : base (server, folder_identifier, type)
         {
             if (type == NotificationServerType.Own) {
-                Server = server;
+                base.server = server;
             } else {
 
                 // This is SparkleShare's centralized notification service.
                 // Don't worry, we only use this server as a backup if you
                 // don't have your own. All data needed to connect is hashed and
                 // we don't store any personal information ever
-                Server = "204.62.14.135";
+                base.server = "204.62.14.135";
             }
 
             // Try to get a uniqueish nickname
@@ -54,7 +54,7 @@ namespace SparkleLib {
 
             // Hash and salt the folder identifier, so
             // nobody knows any possible folder details
-            Channel = "#" + SHA1 (folder_identifier + "sparkles");
+            base.channel = "#" + SHA1 (folder_identifier + "sparkles");
 
             this.client = new IrcClient () {
                 PingTimeout  = 180,
@@ -62,13 +62,13 @@ namespace SparkleLib {
             };
 
             this.client.OnConnected += delegate {
-                SparkleHelpers.DebugInfo ("ListenerIrc", "Connected to " + Channel + " on " + Server);
+                SparkleHelpers.DebugInfo ("ListenerIrc", "Connected to " + base.channel + " on " + base.server);
             
                 OnConnected ();
 
-                if (AnnounceQueue.Count > 0) {
-                    string message = AnnounceQueue [AnnounceQueue.Count - 1];
-                    AnnounceQueue  = new List<string> ();
+                if (base.announce_queue.Count > 0) {
+                    string message = base.announce_queue [base.announce_queue.Count - 1];
+                    base.announce_queue  = new List<string> ();
 
                     SparkleHelpers.DebugInfo ("ListenerIrc", "Delivering queued messages...");
                     Announce (message);
@@ -76,15 +76,15 @@ namespace SparkleLib {
             };
 
             this.client.OnDisconnected += delegate {
-                SparkleHelpers.DebugInfo ("ListenerIrc", "Disconnected from " + Channel + " on " + Server);
+                SparkleHelpers.DebugInfo ("ListenerIrc", "Disconnected from " + base.channel + " on " + base.server);
             
                 OnDisconnected ();
             };
 
             this.client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
-                SparkleHelpers.DebugInfo ("ListenerIrc", "Got message from " + Channel + " on " + Server);            
+                SparkleHelpers.DebugInfo ("ListenerIrc", "Got message from " + base.channel + " on " + base.server);
                 string message = args.Data.Message.Trim ();
-                ChangesQueue++;
+                base.changes_queue++;
 
                 OnRemoteChange (message);
             };
@@ -94,16 +94,16 @@ namespace SparkleLib {
         // Starts a new thread and listens to the channel
         public override void Connect ()
         {
-            SparkleHelpers.DebugInfo ("ListenerIrc", "Connecting to " + Channel + " on " + Server);
+            SparkleHelpers.DebugInfo ("ListenerIrc", "Connecting to " + base.channel + " on " + base.server);
         
             this.thread = new Thread (
                 new ThreadStart (delegate {
                     try {
 
                         // Connect, login, and join the channel
-                        this.client.Connect (new string [] {Server}, 6667);
+                        this.client.Connect (new string [] {base.server}, 6667);
                         this.client.Login (this.nick, this.nick);
-                        this.client.RfcJoin (Channel);
+                        this.client.RfcJoin (base.channel);
 
                         // List to the channel, this blocks the thread
                         this.client.Listen ();
@@ -123,11 +123,11 @@ namespace SparkleLib {
         public override void Announce (string message)
         {
             if (IsConnected) {
-              SparkleHelpers.DebugInfo ("ListenerIrc", "Announcing to " + Channel + " on " + Server);
-              this.client.SendMessage (SendType.Message, Channel, message);
+              SparkleHelpers.DebugInfo ("ListenerIrc", "Announcing to " + base.channel + " on " + base.server);
+              this.client.SendMessage (SendType.Message, base.channel, message);
             } else {
               SparkleHelpers.DebugInfo ("ListenerIrc", "Not connected. Queuing message");
-              AnnounceQueue.Add (message);
+              base.announce_queue.Add (message);
             }
         }
 

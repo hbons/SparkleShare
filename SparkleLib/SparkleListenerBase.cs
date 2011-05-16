@@ -60,21 +60,26 @@ namespace SparkleLib {
         public abstract void Dispose ();
 
         public abstract bool IsConnected { get; }
-        public string Server;
-        public string Channel;
-
         // Announcements that weren't sent off
         // because we were disconnected
-        public List<string> AnnounceQueue = new List<string> ();
+        protected List<string> announce_queue = new List<string> ();
 
         // Announcements of remote changes that we've received
-        public int ChangesQueue = 0;
+        public int ChangesQueue {
+            get {
+                return this.changes_queue;
+            }
+        }
+
+        protected string server;
+        protected string channel;
+        protected int changes_queue = 0;
 
         public SparkleListenerBase (string server, string folder_identifier, NotificationServerType type) { }
 
         public void DecrementChangesQueue ()
         {
-            ChangesQueue--;
+            this.changes_queue--;
         }
 
         public void OnConnected ()
