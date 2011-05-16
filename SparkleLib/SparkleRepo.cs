@@ -924,7 +924,7 @@ namespace SparkleLib {
                     change_set.UserEmail = match.Groups [3].Value;
                     change_set.IsMerge   = is_merge_commit;
 
-                    change_set.DateTime = new DateTime (int.Parse (match.Groups [4].Value),
+                    change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
                         int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
                         int.Parse (match.Groups [7].Value), int.Parse (match.Groups [8].Value),
                         int.Parse (match.Groups [9].Value));
