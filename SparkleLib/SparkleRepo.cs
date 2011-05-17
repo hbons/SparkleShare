@@ -50,8 +50,6 @@ namespace SparkleLib {
         private bool is_syncing;
         private bool is_buffering;
         private bool is_polling;
-        private bool is_fetching;
-        private bool is_pushing;
         private bool has_unsynced_changes;
         private bool server_online;
 
@@ -77,12 +75,6 @@ namespace SparkleLib {
             }
         }
 
-        public bool IsPushing {
-            get {
-                return this.is_pushing;
-            }
-        }
-
         public bool IsPolling {
             get {
                 return this.is_polling;
@@ -95,13 +87,7 @@ namespace SparkleLib {
             }
         }
 
-        public bool IsFetching {
-            get {
-                return this.is_fetching;
-            }
-        }
-
-        public bool HasUnsyncedChanges {
+        public bool HasUnsyncedChanges { // TODO: get/set this properly
             get {
                 return this.has_unsynced_changes;
             }
@@ -140,8 +126,6 @@ namespace SparkleLib {
             this.is_syncing     = false;
             this.is_buffering   = false;
             this.is_polling     = true;
-            this.is_fetching    = false;
-            this.is_pushing     = false;
             this.server_online  = true;
             this.has_changed    = false;
             this.change_lock    = new Object ();
@@ -220,7 +204,7 @@ namespace SparkleLib {
             // Fetch changes when there is a message in the irc channel
             this.listener.RemoteChange += delegate (string change_id) {
                 if (!change_id.Equals (this.revision) && change_id.Length == 40) {
-                    if (!this.is_fetching && !this.is_buffering) {
+                    if (!this.is_syncing && !this.is_buffering) {
                         while (this.listener.ChangesQueue > 0) {
                             Fetch ();
                             this.listener.DecrementChangesQueue ();
@@ -492,7 +476,6 @@ namespace SparkleLib {
         public void Fetch ()
         {
             this.is_syncing  = true;
-            this.is_fetching = true;
 
             this.remote_timer.Stop ();
 
@@ -506,7 +489,6 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
 
                 this.is_syncing   = false;
-                this.is_fetching  = false;
                 this.revision = GetRevision ();
 
                 if (git.ExitCode != 0) {
@@ -673,7 +655,6 @@ namespace SparkleLib {
         public void Push ()
         {
             this.is_syncing = true;
-            this.is_pushing = true;
 
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing changes...");
             SparkleGit git = new SparkleGit (LocalPath, "push origin master");
@@ -683,7 +664,6 @@ namespace SparkleLib {
 
             git.Exited += delegate {
                 this.is_syncing = false;
-                this.is_pushing = false;
 
                 if (git.ExitCode != 0) {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing failed.");
