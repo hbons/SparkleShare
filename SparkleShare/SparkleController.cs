@@ -280,9 +280,9 @@ namespace SparkleShare {
 
                 bool change_set_inserted = false;
                 foreach (ActivityDay stored_activity_day in activity_days) {
-                    if (stored_activity_day.DateTime.Year  == change_set.DateTime.Year &&
-                        stored_activity_day.DateTime.Month == change_set.DateTime.Month &&
-                        stored_activity_day.DateTime.Day   == change_set.DateTime.Day) {
+                    if (stored_activity_day.DateTime.Year  == change_set.Timestamp.Year &&
+                        stored_activity_day.DateTime.Month == change_set.Timestamp.Month &&
+                        stored_activity_day.DateTime.Day   == change_set.Timestamp.Day) {
 
                         stored_activity_day.Add (change_set);
                         change_set_inserted = true;
@@ -291,7 +291,7 @@ namespace SparkleShare {
                 }
                 
                 if (!change_set_inserted) {
-                    ActivityDay activity_day = new ActivityDay (change_set.DateTime);
+                    ActivityDay activity_day = new ActivityDay (change_set.Timestamp);
                     activity_day.Add (change_set);
                     activity_days.Add (activity_day);
                 }
@@ -385,7 +385,7 @@ namespace SparkleShare {
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.UserName)
                         .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (change_set.UserEmail, 36) )
-                        .Replace ("<!-- $event-time -->", change_set.DateTime.ToString ("H:mm"));
+                        .Replace ("<!-- $event-time -->", change_set.Timestamp.ToString ("H:mm"));
                 }
 
                 string day_entry   = "";
