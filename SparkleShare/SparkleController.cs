@@ -618,35 +618,29 @@ namespace SparkleShare {
             string message   = "";
 
             if (change_set.Added.Count > 0) {
-                foreach (string added in change_set.Added) {
-                    file_name = added;
-                    break;
-                }
-
+                file_name = change_set.Added [0];
                 message = String.Format (_("added ‘{0}’"), file_name);
             }
 
-            if (change_set.Edited.Count > 0) {
-                foreach (string modified in change_set.Edited) {
-                    file_name = modified;
-                    break;
-                }
+            if (change_set.MovedFrom.Count > 0) {
+                file_name = change_set.MovedFrom [0];
+                message = String.Format (_("moved ‘{0}’"), file_name);
+            }
 
+            if (change_set.Edited.Count > 0) {
+                file_name = change_set.Edited [0];
                 message = String.Format (_("edited ‘{0}’"), file_name);
             }
 
             if (change_set.Deleted.Count > 0) {
-                foreach (string removed in change_set.Deleted) {
-                    file_name = removed;
-                    break;
-                }
-
+                file_name = change_set.Deleted [0];
                 message = String.Format (_("deleted ‘{0}’"), file_name);
             }
 
             int changes_count = (change_set.Added.Count +
                                  change_set.Edited.Count +
-                                 change_set.Deleted.Count) - 1;
+                                 change_set.Deleted.Count +
+                                 change_set.MovedFrom.Count) - 1;
 
             if (changes_count > 0) {
                 string msg = Catalog.GetPluralString ("and {0} more", "and {0} more", changes_count);
