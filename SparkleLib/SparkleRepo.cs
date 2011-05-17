@@ -445,21 +445,17 @@ namespace SparkleLib {
         // Stages the made changes
         private void Add ()
         {
-            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Staging changes...");
-
             SparkleGit git = new SparkleGit (LocalPath, "add --all");
             git.Start ();
             git.WaitForExit ();
 
-            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes staged.");
+            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes staged");
         }
 
 
         // Removes unneeded objects
         private void CollectGarbage ()
         {
-            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Collecting garbage...");
-
             SparkleGit git = new SparkleGit (LocalPath, "gc");
             git.Start ();
             git.WaitForExit ();
@@ -494,24 +490,25 @@ namespace SparkleLib {
 
             this.remote_timer.Stop ();
 
-            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes...");
+            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes");
             SparkleGit git = new SparkleGit (LocalPath, "fetch -v origin master");
 
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.SyncDownStarted);
 
             git.Exited += delegate {
-                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched.");
 
                 this.is_syncing   = false;
                 this.revision = GetRevision ();
 
                 if (git.ExitCode != 0) {
+                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes not fetched");
                     this.server_online = false;
 
                     if (SyncStatusChanged != null)
                         SyncStatusChanged (SyncStatus.SyncDownFailed);
                 } else {
+                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched");
                     this.server_online = true;
 
                     if (SyncStatusChanged != null)
@@ -536,7 +533,6 @@ namespace SparkleLib {
                 Commit (commit_message);
             }
 
-            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Rebasing changes...");
             SparkleGit git = new SparkleGit (LocalPath, "rebase -v FETCH_HEAD");
 
             git.Exited += delegate {
@@ -566,8 +562,6 @@ namespace SparkleLib {
 
             if (NewChangeSet != null)
                 NewChangeSet (GetChangeSets (1) [0], LocalPath);
-                
-            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes rebased.");
         }
 
 
@@ -671,7 +665,7 @@ namespace SparkleLib {
         {
             this.is_syncing = true;
 
-            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing changes...");
+            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing changes");
             SparkleGit git = new SparkleGit (LocalPath, "push origin master");
 
             if (SyncStatusChanged != null)
@@ -681,7 +675,7 @@ namespace SparkleLib {
                 this.is_syncing = false;
 
                 if (git.ExitCode != 0) {
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing failed.");
+                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes not pushed");
 
                     string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath ,
                         ".git", "has_unsynced_changes");
@@ -696,7 +690,7 @@ namespace SparkleLib {
 
                     FetchRebaseAndPush ();
                 } else {
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes pushed.");
+                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes pushed");
 
                     string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath ,
                         ".git", "has_unsynced_changes");
@@ -975,11 +969,11 @@ namespace SparkleLib {
             string [] lines = output.Split ("\n".ToCharArray ());
             foreach (string line in lines) {
                 if (line.StartsWith ("A"))
-                    Added.Add (line.Substring (2));
+                    Added.Add (line.Substring (3));
                 else if (line.StartsWith ("M"))
-                    Modified.Add (line.Substring (2));
+                    Modified.Add (line.Substring (3));
                 else if (line.StartsWith ("D"))
-                    Removed.Add (line.Substring (2));
+                    Removed.Add (line.Substring (3));
                 else if (line.StartsWith ("R")) {
                     Removed.Add (line.Substring (3, (line.IndexOf (" -> ") - 3)));
                     Added.Add (line.Substring (line.IndexOf (" -> ") + 4));
