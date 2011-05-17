@@ -52,6 +52,7 @@ namespace SparkleLib {
         private bool is_polling;
         private bool has_unsynced_changes;
         private bool server_online;
+        private SyncStatus status;
 
         public readonly SparkleBackend Backend;
         public readonly string Name;
@@ -99,6 +100,12 @@ namespace SparkleLib {
             }
         }
 
+        public SyncStatus Status {
+            get {
+                return this.status;
+            }
+        }
+
         public delegate void SyncStatusChangedEventHandler (SyncStatus status);
         public event SyncStatusChangedEventHandler SyncStatusChanged;
 
@@ -129,6 +136,10 @@ namespace SparkleLib {
             this.server_online  = true;
             this.has_changed    = false;
             this.change_lock    = new Object ();
+
+            SyncStatusChanged += delegate (SyncStatus status) {
+                this.status = status;
+            };
 
             if (IsEmpty)
                 this.revision = null;
