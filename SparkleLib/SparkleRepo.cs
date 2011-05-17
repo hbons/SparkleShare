@@ -34,7 +34,7 @@ namespace SparkleLib {
         SyncDownStarted,
         SyncDownFinished,
         SyncDownFailed
-    }
+    } // TODO: Idle, Error, SyncingUp, SyncingDown
 
     public class SparkleRepo {
 
@@ -106,7 +106,7 @@ namespace SparkleLib {
             }
         }
 
-        public delegate void SyncStatusChangedEventHandler (SyncStatus status);
+        public delegate void SyncStatusChangedEventHandler (SyncStatus new_status);
         public event SyncStatusChangedEventHandler SyncStatusChanged;
 
 
@@ -280,10 +280,10 @@ namespace SparkleLib {
                 if (git.ExitCode != 0)
                     return;
 
-                string remote_hash = git.StandardOutput.ReadToEnd ().TrimEnd ();
+                string remote_revision = git.StandardOutput.ReadToEnd ().TrimEnd ();
 
-                if (!remote_hash.StartsWith (this.revision)) {
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found. (" + remote_hash + ")");
+                if (!remote_revision.StartsWith (this.revision)) {
+                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
                     Fetch ();
                     
                     this.watcher.EnableRaisingEvents = false;
@@ -431,10 +431,10 @@ namespace SparkleLib {
             git.Start ();
             git.WaitForExit ();
 
-            string output = git.StandardOutput.ReadToEnd ();
-            string hash   = output.Trim ();
+            string output   = git.StandardOutput.ReadToEnd ();
+            string revision = output.Trim ();
 
-            return hash;
+            return revision;
         }
 
 
@@ -907,7 +907,7 @@ namespace SparkleLib {
                 if (match.Success) {
                     SparkleChangeSet change_set = new SparkleChangeSet ();
                     
-                    change_set.Hash      = match.Groups [1].Value;
+                    change_set.Revision      = match.Groups [1].Value;
                     change_set.UserName  = match.Groups [2].Value;
                     change_set.UserEmail = match.Groups [3].Value;
                     change_set.IsMerge   = is_merge_commit;

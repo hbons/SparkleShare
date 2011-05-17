@@ -24,7 +24,7 @@ namespace SparkleLib {
 
         public string UserName;
         public string UserEmail;
-        public string Hash;
+        public string Revision;
         public DateTime Timestamp;
         public bool IsMerge           = false;
         public List<string> Added     = new List<string> ();
