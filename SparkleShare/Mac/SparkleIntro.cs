@@ -88,6 +88,7 @@ namespace SparkleShare {
 					SparkleShare.Controller.UserEmail = UserInfoForm.Cells [1].StringValue.Trim ();
 					SparkleShare.Controller.GenerateKeyPair ();				
 					SparkleShare.Controller.FirstRun = false;
+                    SparkleUI.StatusIcon.CreateMenu ();
 				
 					InvokeOnMainThread (delegate {
 						ShowServerForm ();

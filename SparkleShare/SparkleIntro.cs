@@ -129,7 +129,8 @@ namespace SparkleShare {
                         SparkleShare.Controller.AddKey ();
                 
                         SparkleShare.Controller.FirstRun = false;
-                
+                        SparkleUI.StatusIcon.CreateMenu ();
+
                         Deletable = true;
                         ShowServerForm ();
                     };
