@@ -46,7 +46,7 @@ namespace SparkleLib {
         private List <double> sizebuffer;
         private bool has_changed;
 
-        private string current_hash;
+        private string revision;
         private bool is_syncing;
         private bool is_buffering;
         private bool is_polling;
@@ -65,9 +65,9 @@ namespace SparkleLib {
         public readonly string UserName;
         public readonly string UserEmail;
 
-        public string CurrentHash {
+        public string Revision {
             get {
-                return this.current_hash;
+                return this.revision;
             }
         }
 
@@ -147,9 +147,9 @@ namespace SparkleLib {
             this.change_lock    = new Object ();
 
             if (IsEmpty)
-                this.current_hash = null;
+                this.revision = null;
             else
-                this.current_hash = GetCurrentHash ();
+                this.revision = GetRevision ();
 
             string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath,
                 ".git", "has_unsynced_changes");
@@ -159,7 +159,7 @@ namespace SparkleLib {
             else
                 this.has_unsynced_changes = false;
 
-            if (this.current_hash == null)
+            if (this.revision == null)
                 CreateInitialCommit ();
 
             // Watch the repository's folder
@@ -219,7 +219,7 @@ namespace SparkleLib {
 
             // Fetch changes when there is a message in the irc channel
             this.listener.RemoteChange += delegate (string change_id) {
-                if (!change_id.Equals (this.current_hash) && change_id.Length == 40) {
+                if (!change_id.Equals (this.revision) && change_id.Length == 40) {
                     if (!this.is_fetching && !this.is_buffering) {
                         while (this.listener.ChangesQueue > 0) {
                             Fetch ();
@@ -255,8 +255,8 @@ namespace SparkleLib {
             // since SparkleShare was stopped
             AddCommitAndPush ();
 
-            if (this.current_hash == null)
-                this.current_hash = GetCurrentHash ();
+            if (this.revision == null)
+                this.revision = GetRevision ();
         }
 
 
@@ -287,7 +287,7 @@ namespace SparkleLib {
 
                 string remote_hash = git.StandardOutput.ReadToEnd ().TrimEnd ();
 
-                if (!remote_hash.StartsWith (this.current_hash)) {
+                if (!remote_hash.StartsWith (this.revision)) {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found. (" + remote_hash + ")");
                     Fetch ();
                     
@@ -424,7 +424,7 @@ namespace SparkleLib {
         }
 
 
-        private string GetCurrentHash ()
+        private string GetRevision ()
         {
             // Remove stale rebase-apply files because it
             // makes the method return the wrong hashes.
@@ -479,8 +479,8 @@ namespace SparkleLib {
             git.Start ();
             git.WaitForExit ();
 
-            this.current_hash = GetCurrentHash ();
-            SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message + " (" + this.current_hash + ")");
+            this.revision = GetRevision ();
+            SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message + " (" + this.revision + ")");
 
             // Collect garbage pseudo-randomly
             if (DateTime.Now.Second % 10 == 0)
@@ -507,7 +507,7 @@ namespace SparkleLib {
 
                 this.is_syncing   = false;
                 this.is_fetching  = false;
-                this.current_hash = GetCurrentHash ();
+                this.revision = GetRevision ();
 
                 if (git.ExitCode != 0) {
                     this.server_online = false;
@@ -559,13 +559,13 @@ namespace SparkleLib {
                     Push ();
                 }
 
-                this.current_hash = GetCurrentHash ();
+                this.revision = GetRevision ();
             };
 
             git.Start ();
             git.WaitForExit ();
 
-            this.current_hash = GetCurrentHash ();
+            this.revision = GetRevision ();
 
             if (NewChangeSet != null)
                 NewChangeSet (GetChangeSets (1) [0], LocalPath);
@@ -714,7 +714,7 @@ namespace SparkleLib {
                     if (SyncStatusChanged != null)
                         SyncStatusChanged (SyncStatus.SyncDownFinished);
 
-                    this.listener.Announce (this.current_hash);
+                    this.listener.Announce (this.revision);
                 }
 
             };
