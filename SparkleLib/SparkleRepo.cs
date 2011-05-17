@@ -120,13 +120,10 @@ namespace SparkleLib {
         public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set, string source_path);
         public delegate void ConflictResolvedEventHandler ();
         public delegate void ChangesDetectedEventHandler ();
-        public delegate void CommitEndedUpEmptyEventHandler ();
 
         public event NewChangeSetEventHandler NewChangeSet;
         public event ConflictResolvedEventHandler ConflictResolved;
         public event ChangesDetectedEventHandler ChangesDetected;
-        public event CommitEndedUpEmptyEventHandler CommitEndedUpEmpty; // TODO this thing may be obsolete because of AnyDifferences
-
 
         public SparkleRepo (string path, SparkleBackend backend)
         {
@@ -380,8 +377,8 @@ namespace SparkleLib {
 
                     Push ();
                 } else {
-                    if (CommitEndedUpEmpty != null)
-                        CommitEndedUpEmpty ();
+                    if (SyncStatusChanged != null)
+                        SyncStatusChanged (SyncStatus.SyncUpFinished);
                 }
             } finally {
                 this.remote_timer.Start ();
