@@ -652,9 +652,12 @@ namespace SparkleShare {
                                  change_set.Edited.Count +
                                  change_set.Deleted.Count) - 1;
 
-            if (changes_count > 0)
-                message += " " + String.Format (Catalog.GetPluralString ("and {0} more", "and {0} more", changes_count),
-                    changes_count);
+            if (changes_count > 0) {
+                string msg = Catalog.GetPluralString ("and {0} more", "and {0} more", changes_count);
+                message += " " + String.Format (msg, changes_count);
+            } else {
+                message += _("did something magical");
+            }
 
             return message;
         }
