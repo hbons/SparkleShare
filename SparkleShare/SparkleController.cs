@@ -645,7 +645,7 @@ namespace SparkleShare {
             if (changes_count > 0) {
                 string msg = Catalog.GetPluralString ("and {0} more", "and {0} more", changes_count);
                 message += " " + String.Format (msg, changes_count);
-            } else {
+            } else if (changes_count < 0) {
                 message += _("did something magical");
             }
 
