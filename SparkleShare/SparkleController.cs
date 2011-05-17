@@ -542,10 +542,6 @@ namespace SparkleShare {
                 UpdateState ();
             };
 
-            repo.CommitEndedUpEmpty += delegate {
-                UpdateState ();
-            };
-
             Repositories.Add (repo);
         }
 
