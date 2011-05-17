@@ -262,11 +262,15 @@ namespace SparkleLib {
                 // author, and timestamp; it is unique enough to
                 // use the hash of the first commit as an identifier
                 // for our folder
-                SparkleGit git = new SparkleGit (LocalPath, "log --reverse -1 --format=%H");
+                SparkleGit git = new SparkleGit (LocalPath, "rev-list --reverse HEAD");
                 git.Start ();
+
+                // Reading the standard output HAS to go before
+                // WaitForExit, or it will hang forever on output > 4096 bytes
+                string output = git.StandardOutput.ReadToEnd ();
                 git.WaitForExit ();
 
-                return git.StandardOutput.ReadToEnd ().Trim ();
+                return output.Substring (0, 40);
             }
         }
 
@@ -907,7 +911,7 @@ namespace SparkleLib {
                 if (match.Success) {
                     SparkleChangeSet change_set = new SparkleChangeSet ();
                     
-                    change_set.Revision      = match.Groups [1].Value;
+                    change_set.Revision  = match.Groups [1].Value;
                     change_set.UserName  = match.Groups [2].Value;
                     change_set.UserEmail = match.Groups [3].Value;
                     change_set.IsMerge   = is_merge_commit;
@@ -958,7 +962,7 @@ namespace SparkleLib {
             List<string> Modified = new List<string> ();
             List<string> Removed  = new List<string> ();
             string file_name      = "";
-            string message        = null;
+            string message        = "";
 
             SparkleGit git_status = new SparkleGit (LocalPath, "status --porcelain");
             git_status.Start ();
