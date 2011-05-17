@@ -980,39 +980,45 @@ namespace SparkleLib {
                 }
             }
 
+            int count     = 0;
+            int max_count = 20;
+
+            string n = Environment.NewLine;
+
             if (Added.Count > 0) {
                 foreach (string added in Added) {
                     file_name = added.Trim ("\"".ToCharArray ());
-                    break;
+                    message += "+ ‘" + file_name + "’" + n;
+
+                    count++;
+                    if (count == max_count)
+                        return message + "...";
                 }
 
-                message = "+ ‘" + file_name + "’";
             }
 
             if (Modified.Count > 0) {
                 foreach (string modified in Modified) {
                     file_name = modified.Trim ("\"".ToCharArray ());
-                    break;
-                }
+                    message += "/ ‘" + file_name + "’" + n;
 
-                message = "/ ‘" + file_name + "’";
+                    count++;
+                    if (count == max_count)
+                        return message + "...";
+                }
             }
 
             if (Removed.Count > 0) {
                 foreach (string removed in Removed) {
                     file_name = removed.Trim ("\"".ToCharArray ());
-                    break;
+                    message += "- ‘" + file_name + "’" + n;
+
+                    count++;
+                    if (count == max_count)
+                        return message + "..." + n;
                 }
 
-                message = "- ‘" + file_name + "’";
             }
-
-            int changes_count = (Added.Count +
-                                 Modified.Count +
-                                 Removed.Count);
-
-            if (changes_count > 1)
-                message += " + " + (changes_count - 1);
 
             return message;
         }
