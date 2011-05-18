@@ -44,22 +44,49 @@ namespace SparkleLib {
         private SparkleListenerBase listener;
         private List <double> sizebuffer;
         private bool has_changed;
-
-        private string revision;
-        private bool is_buffering;
-        private bool is_polling;
-        private bool server_online;
         private SyncStatus status;
 
+
+        protected string revision;
+        protected bool is_buffering;
+        protected bool is_polling;
+        protected bool server_online;
+
         public readonly SparkleBackend Backend;
-        public readonly string Name;
-        public readonly string RemoteName;
-        public readonly string Domain;
-        public readonly string Description;
+
         public readonly string LocalPath;
-        public readonly string Url;
-        public readonly string UserName;
-        public readonly string UserEmail;
+        public readonly string Name;
+
+
+        // TODO: make this a regexp
+        public string Url {
+            get {
+                SparkleGit git = new SparkleGit (LocalPath, "config --get remote.origin.url");
+                git.Start ();
+                git.WaitForExit ();
+    
+                string output = git.StandardOutput.ReadToEnd ();
+                return output.TrimEnd ();
+            }
+        }
+
+        // TODO: make this a regexp
+        public string Domain {
+            get {
+                string domain = Url.Substring (Url.IndexOf ("@") + 1);
+
+                if (domain.Contains (":"))
+                    return domain = domain.Substring (0, domain.IndexOf (":"));
+                else
+                    return domain = domain.Substring (0, domain.IndexOf ("/"));
+            }
+        }
+
+        public string RemoteName {
+            get {
+                return Path.GetFileNameWithoutExtension (Url);
+            }
+        }
 
         public string Revision {
             get {
@@ -126,15 +153,9 @@ namespace SparkleLib {
 
         public SparkleRepo (string path, SparkleBackend backend)
         {
-            LocalPath       = path;
-            Name            = Path.GetFileName (LocalPath);
-            Url = GetUrl ();
-            RemoteName      = Path.GetFileNameWithoutExtension (Url);
-            Domain          = GetDomain (Url);
-            Description     = GetDescription ();
-            UserName        = GetUserName ();
-            UserEmail       = GetUserEmail ();
-            Backend         = backend;
+            LocalPath = path;
+            Name      = Path.GetFileName (LocalPath);
+            Backend   = backend;
 
             this.is_buffering   = false;
             this.is_polling     = true;
@@ -152,7 +173,7 @@ namespace SparkleLib {
                 this.revision = GetRevision ();
 
             if (this.revision == null)
-                CreateInitialCommit ();
+                CreateInitialChangeSet ();
 
             // Watch the repository's folder
             this.watcher = new FileSystemWatcher (LocalPath) {
@@ -607,7 +628,7 @@ namespace SparkleLib {
 
                     // Append a timestamp to local version
                     string timestamp            = DateTime.Now.ToString ("HH:mm MMM d");
-                    string their_path           = conflicting_path + " (" + UserName  + ", " + timestamp + ")";
+                    string their_path           = conflicting_path + " (" + GetConfigItem ("sparkleshare.user.name")  + ", " + timestamp + ")";
                     string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
                     string abs_their_path       = Path.Combine (LocalPath, their_path);
 
@@ -708,24 +729,6 @@ namespace SparkleLib {
         }
 
 
-        // Gets the domain name of a given URL
-        // TODO: make this a regex
-        private string GetDomain (string url)
-        {
-            if (url.Equals (""))
-                return null;
-
-            string domain = url.Substring (url.IndexOf ("@") + 1);
-
-            if (domain.Contains (":"))
-                domain = domain.Substring (0, domain.IndexOf (":"));
-            else
-                domain = domain.Substring (0, domain.IndexOf ("/"));
-
-            return domain;
-        }
-
-
         // Gets the repository's description
         private string GetDescription ()
         {
@@ -742,19 +745,6 @@ namespace SparkleLib {
                 description = null;
 
             return description;
-        }
-
-
-        private string GetUrl ()
-        {
-            SparkleGit git = new SparkleGit (LocalPath, "config --get remote.origin.url");
-            git.Start ();
-            git.WaitForExit ();
-
-            string output = git.StandardOutput.ReadToEnd ();
-            string url    = output.Trim ();
-
-            return url;
         }
 
 
@@ -811,19 +801,31 @@ namespace SparkleLib {
         }
 
 
-        // Create a first commit in case the user has cloned
-        // an empty repository
-        private void CreateInitialCommit ()
+        // Create an initial change set when the
+        // user has fetched an empty remote folder
+        protected virtual void CreateInitialChangeSet ()
         {
-            TextWriter writer = new StreamWriter (Path.Combine (LocalPath, "SparkleShare.txt"));
+            string file_path = Path.Combine (LocalPath, "SparkleShare.txt");
+            TextWriter writer = new StreamWriter (file_path);
             writer.WriteLine (":)");
             writer.Close ();
         }
 
 
-        // Returns a list of latest commits
+        public string GetConfigItem (string name)
+        {
+            if (String.Compare (name, "sparkleshare.user.name", true) == 0)
+                return GetUserName ();
+            else if (String.Compare (name, "sparkleshare.user.email", true) == 0)
+                return GetUserEmail ();
+            else
+                return null;
+        }
+
+
+        // Returns a list of the latest change sets
         // TODO: Method needs to be made a lot faster
-        public List <SparkleChangeSet> GetChangeSets (int count)
+        public virtual List <SparkleChangeSet> GetChangeSets (int count)
         {
             if (count < 1)
                 count = 30;
