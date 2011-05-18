@@ -37,13 +37,9 @@ namespace SparkleLib {
 
     public class SparkleRepo {
 
-        private Timer remote_timer;
-        private Timer local_timer;
-        private FileSystemWatcher watcher;
-        private SparkleListenerBase listener;
-        private List <double> sizebuffer;
-        private bool has_changed   = false;
-        private Object change_lock = new Object ();
+        public readonly SparkleBackend Backend;
+        public readonly string LocalPath;
+        public readonly string Name;
 
         protected SyncStatus status;
         protected string revision;
@@ -51,10 +47,13 @@ namespace SparkleLib {
         protected bool is_polling    = true;
         protected bool server_online = true;
 
-        public readonly SparkleBackend Backend;
-
-        public readonly string LocalPath;
-        public readonly string Name;
+        private Timer remote_timer;
+        private Timer local_timer;
+        private FileSystemWatcher watcher;
+        private SparkleListenerBase listener;
+        private List <double> sizebuffer;
+        private bool has_changed   = false;
+        private Object change_lock = new Object ();
 
 
         // TODO: make this a regexp
@@ -293,25 +292,23 @@ namespace SparkleLib {
         {
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Checking for remote changes...");
             SparkleGit git = new SparkleGit (LocalPath, "ls-remote origin master");
-        
-            git.Exited += delegate {
-                if (git.ExitCode != 0)
-                    return;
-
-                string remote_revision = git.StandardOutput.ReadToEnd ().TrimEnd ();
-
-                if (!remote_revision.StartsWith (this.revision)) {
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
-                    Fetch ();
-                    
-                    this.watcher.EnableRaisingEvents = false;
-                    Rebase ();
-                    this.watcher.EnableRaisingEvents = true;
-                }
-            };
 
             git.Start ();
             git.WaitForExit ();
+
+            if (git.ExitCode != 0)
+                return;
+
+            string remote_revision = git.StandardOutput.ReadToEnd ().TrimEnd ();
+
+            if (!remote_revision.StartsWith (this.revision)) {
+                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
+                Fetch ();
+
+                this.watcher.EnableRaisingEvents = false;
+                Rebase ();
+                this.watcher.EnableRaisingEvents = true;
+            }
         }
 
 
@@ -502,36 +499,33 @@ namespace SparkleLib {
         {
             this.remote_timer.Stop ();
 
-            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes");
-            SparkleGit git = new SparkleGit (LocalPath, "fetch -v origin master");
-
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.SyncDown);
 
-            git.Exited += delegate {
-
-                this.revision = GetRevision ();
-
-                if (git.ExitCode != 0) {
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes not fetched");
-                    this.server_online = false;
-
-                    if (SyncStatusChanged != null)
-                        SyncStatusChanged (SyncStatus.Error);
-                } else {
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched");
-                    this.server_online = true;
-
-                    if (SyncStatusChanged != null)
-                        SyncStatusChanged (SyncStatus.Idle);
-                }
-
-                this.remote_timer.Start ();
-            };
+            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes");
+            SparkleGit git = new SparkleGit (LocalPath, "fetch -v origin master");
 
             git.Start ();
             git.WaitForExit ();
+
+            if (git.ExitCode != 0) {
+                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes not fetched");
+                this.server_online = false;
+
+                if (SyncStatusChanged != null)
+                    SyncStatusChanged (SyncStatus.Error);
+            } else {
+                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched");
+                this.server_online = true;
+                this.revision      = GetRevision ();
+
+                if (SyncStatusChanged != null)
+                    SyncStatusChanged (SyncStatus.Idle);
+            }
+
+            this.remote_timer.Start ();
         }
+
 
 
         // Merges the fetched changes
@@ -546,28 +540,24 @@ namespace SparkleLib {
 
             SparkleGit git = new SparkleGit (LocalPath, "rebase -v FETCH_HEAD");
 
-            git.Exited += delegate {
-                if (git.ExitCode != 0) {
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected. Trying to get out...");
-                    DisableWatching ();
-
-                    while (AnyDifferences)
-                        ResolveConflict ();
-
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
-                    EnableWatching ();
-
-                    if (ConflictResolved != null)
-                        ConflictResolved ();
-
-                    Push ();
-                }
-
-                this.revision = GetRevision ();
-            };
-
             git.Start ();
             git.WaitForExit ();
+
+            if (git.ExitCode != 0) {
+                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected. Trying to get out...");
+                DisableWatching ();
+
+                while (AnyDifferences)
+                    ResolveConflict ();
+
+                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
+                EnableWatching ();
+
+                if (ConflictResolved != null)
+                    ConflictResolved ();
+
+                Push ();
+            }
 
             this.revision = GetRevision ();
 
@@ -680,33 +670,28 @@ namespace SparkleLib {
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.SyncUp);
 
-            git.Exited += delegate {
-                if (git.ExitCode != 0) {
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes not pushed");
-
-                    HasUnsyncedChanges = true;
-
-                    if (SyncStatusChanged != null)
-                        SyncStatusChanged (SyncStatus.Error);
-
-                    FetchRebaseAndPush ();
-                } else {
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes pushed");
-
-                    HasUnsyncedChanges = false;
-
-                    if (SyncStatusChanged != null)
-                        SyncStatusChanged (SyncStatus.Idle);
-
-                    this.listener.Announce (this.revision);
-                }
-
-            };
-
             git.Start ();
             git.WaitForExit ();
 
-            // TODO put exit events here instead of in a new Exited thread, for the oter methods too
+            if (git.ExitCode != 0) {
+                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes not pushed");
+
+                HasUnsyncedChanges = true;
+
+                if (SyncStatusChanged != null)
+                    SyncStatusChanged (SyncStatus.Error);
+
+                FetchRebaseAndPush ();
+            } else {
+                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes pushed");
+
+                HasUnsyncedChanges = false;
+
+                if (SyncStatusChanged != null)
+                    SyncStatusChanged (SyncStatus.Idle);
+
+                this.listener.Announce (this.revision);
+            }
         }
 
 
@@ -990,7 +975,7 @@ namespace SparkleLib {
                     return message + "..." + n;
             }
 
-            return message;
+            return message.TrimEnd ();
         }
 
 
