@@ -50,7 +50,6 @@ namespace SparkleLib {
         private bool is_syncing;
         private bool is_buffering;
         private bool is_polling;
-        private bool has_unsynced_changes;
         private bool server_online;
         private SyncStatus status;
 
@@ -88,9 +87,24 @@ namespace SparkleLib {
             }
         }
 
-        public bool HasUnsyncedChanges { // TODO: get/set this properly
+        public bool HasUnsyncedChanges {
             get {
-                return this.has_unsynced_changes;
+                string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath,
+                    ".git", "has_unsynced_changes");
+
+                return File.Exists (unsynced_file_path);
+            }
+
+            set {
+                string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath,
+                    ".git", "has_unsynced_changes");
+
+                if (value) {
+                    if (!File.Exists (unsynced_file_path))
+                        File.Create (unsynced_file_path);
+                } else {
+                    File.Delete (unsynced_file_path);
+                }
             }
         }
 
@@ -146,14 +160,6 @@ namespace SparkleLib {
             else
                 this.revision = GetRevision ();
 
-            string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath,
-                ".git", "has_unsynced_changes");
-
-            if (File.Exists (unsynced_file_path))
-                this.has_unsynced_changes = true;
-            else
-                this.has_unsynced_changes = false;
-
             if (this.revision == null)
                 CreateInitialCommit ();
 
@@ -190,7 +196,7 @@ namespace SparkleLib {
                         this.listener.Connect ();
                 }
 
-                if (this.has_unsynced_changes)
+                if (HasUnsyncedChanges)
                     FetchRebaseAndPush ();
             };
 
@@ -202,7 +208,7 @@ namespace SparkleLib {
                 CheckForRemoteChanges ();
 
                 // Push changes that were made since the last disconnect
-                if (this.has_unsynced_changes)
+                if (HasUnsyncedChanges)
                     Push ();
             };
             
@@ -677,13 +683,7 @@ namespace SparkleLib {
                 if (git.ExitCode != 0) {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes not pushed");
 
-                    string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath ,
-                        ".git", "has_unsynced_changes");
-
-                    if (!File.Exists (unsynced_file_path))
-                        File.Create (unsynced_file_path);
-
-                    this.has_unsynced_changes = true;
+                    HasUnsyncedChanges = true;
 
                     if (SyncStatusChanged != null)
                         SyncStatusChanged (SyncStatus.SyncUpFailed);
@@ -692,13 +692,7 @@ namespace SparkleLib {
                 } else {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes pushed");
 
-                    string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath ,
-                        ".git", "has_unsynced_changes");
-
-                    if (File.Exists (unsynced_file_path))
-                        File.Delete (unsynced_file_path);
-
-                    this.has_unsynced_changes = false;
+                    HasUnsyncedChanges = false;
 
                     if (SyncStatusChanged != null)
                         SyncStatusChanged (SyncStatus.SyncDownFinished);
@@ -985,39 +979,31 @@ namespace SparkleLib {
 
             string n = Environment.NewLine;
 
-            if (Added.Count > 0) {
-                foreach (string added in Added) {
-                    file_name = added.Trim ("\"".ToCharArray ());
-                    message += "+ ‘" + file_name + "’" + n;
+            foreach (string added in Added) {
+                file_name = added.Trim ("\"".ToCharArray ());
+                message += "+ ‘" + file_name + "’" + n;
 
-                    count++;
-                    if (count == max_count)
-                        return message + "...";
-                }
-
+                count++;
+                if (count == max_count)
+                    return message + "...";
             }
 
-            if (Modified.Count > 0) {
-                foreach (string modified in Modified) {
-                    file_name = modified.Trim ("\"".ToCharArray ());
-                    message += "/ ‘" + file_name + "’" + n;
+            foreach (string modified in Modified) {
+                file_name = modified.Trim ("\"".ToCharArray ());
+                message += "/ ‘" + file_name + "’" + n;
 
-                    count++;
-                    if (count == max_count)
-                        return message + "...";
-                }
+                count++;
+                if (count == max_count)
+                    return message + "...";
             }
 
-            if (Removed.Count > 0) {
-                foreach (string removed in Removed) {
-                    file_name = removed.Trim ("\"".ToCharArray ());
-                    message += "- ‘" + file_name + "’" + n;
+            foreach (string removed in Removed) {
+                file_name = removed.Trim ("\"".ToCharArray ());
+                message += "- ‘" + file_name + "’" + n;
 
-                    count++;
-                    if (count == max_count)
-                        return message + "..." + n;
-                }
-
+                count++;
+                if (count == max_count)
+                    return message + "..." + n;
             }
 
             return message;
