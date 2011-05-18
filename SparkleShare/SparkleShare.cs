@@ -1,4 +1,4 @@
-//   SparkleShare, an instant update workflow to Git.
+//   SparkleShare, a collaboration and sharing tool.
 //   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
 //
 //   This program is free software: you can redistribute it and/or modify
@@ -114,7 +114,7 @@ namespace SparkleShare {
         public static void ShowHelp (OptionSet option_set)
         {
             Console.WriteLine (" ");
-            Console.WriteLine (_("SparkleShare, an instant update workflow to Git."));
+            Console.WriteLine (_("SparkleShare, a collaboration and sharing tool."));
             Console.WriteLine (_("Copyright (C) 2010 Hylke Bons"));
             Console.WriteLine (" ");
             Console.WriteLine (_("This program comes with ABSOLUTELY NO WARRANTY."));
