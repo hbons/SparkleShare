@@ -230,13 +230,9 @@ namespace SparkleLib {
                         !this.is_buffering) {
 
                         while (this.listener.ChangesQueue > 0) {
-                            Fetch ();
+                            SyncDown ();
                             this.listener.DecrementChangesQueue ();
                         }
-
-                        this.watcher.EnableRaisingEvents = false;
-                        Rebase ();
-                        this.watcher.EnableRaisingEvents = true;
                     }
                 }
             };
@@ -303,11 +299,7 @@ namespace SparkleLib {
 
             if (!remote_revision.StartsWith (this.revision)) {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
-                Fetch ();
-
-                this.watcher.EnableRaisingEvents = false;
-                Rebase ();
-                this.watcher.EnableRaisingEvents = true;
+                SyncDown ();
             }
         }
 
@@ -476,7 +468,7 @@ namespace SparkleLib {
 
 
         // Commits the made changes
-        public void Commit (string message)
+        private void Commit (string message)
         {
             if (!AnyDifferences)
                 return;
@@ -493,44 +485,58 @@ namespace SparkleLib {
                 CollectGarbage ();
         }
 
-
-        // Fetches changes from the remote repository
-        public void Fetch ()
+        public virtual void SyncDownBase ()
         {
+            SparkleHelpers.DebugInfo ("Sync", "[" + Name + "] Initiated");
             this.remote_timer.Stop ();
 
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.SyncDown);
 
-            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes");
-            SparkleGit git = new SparkleGit (LocalPath, "fetch -v origin master");
-
-            git.Start ();
-            git.WaitForExit ();
-
-            if (git.ExitCode != 0) {
-                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes not fetched");
-                this.server_online = false;
-
-                if (SyncStatusChanged != null)
-                    SyncStatusChanged (SyncStatus.Error);
-            } else {
-                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched");
+            if (SyncDown ()) {
+                SparkleHelpers.DebugInfo ("Sync", "[" + Name + "] Done");
                 this.server_online = true;
                 this.revision      = GetRevision ();
 
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
+            } else {
+                SparkleHelpers.DebugInfo ("Sync", "[" + Name + "] Error");
+                this.server_online = false;
+
+                if (SyncStatusChanged != null)
+                    SyncStatusChanged (SyncStatus.Error);
             }
+
+            if (SyncStatusChanged != null)
+                SyncStatusChanged (SyncStatus.Idle);
 
             this.remote_timer.Start ();
         }
 
 
+        // Fetches changes from the remote repository
+        public bool SyncDown ()
+        {
+            SparkleGit git = new SparkleGit (LocalPath, "fetch -v origin master");
+
+            git.Start ();
+            git.WaitForExit ();
+
+            if (git.ExitCode == 0) {
+                Rebase ();
+                return true;
+            } else {
+                return false;
+            }
+        }
+
 
         // Merges the fetched changes
-        public void Rebase ()
+        private void Rebase ()
         {
+            DisableWatching ();
+
             if (AnyDifferences) {
                 Add ();
                 
@@ -563,6 +569,8 @@ namespace SparkleLib {
 
             if (NewChangeSet != null)
                 NewChangeSet (GetChangeSets (1) [0], LocalPath);
+
+            EnableWatching ();
         }
 
 
