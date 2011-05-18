@@ -57,7 +57,7 @@ namespace SparkleLib {
         public readonly string Domain;
         public readonly string Description;
         public readonly string LocalPath;
-        public readonly string RemoteOriginUrl;
+        public readonly string Url;
         public readonly string UserName;
         public readonly string UserEmail;
 
@@ -128,9 +128,9 @@ namespace SparkleLib {
         {
             LocalPath       = path;
             Name            = Path.GetFileName (LocalPath);
-            RemoteOriginUrl = GetRemoteOriginUrl ();
-            RemoteName      = Path.GetFileNameWithoutExtension (RemoteOriginUrl);
-            Domain          = GetDomain (RemoteOriginUrl);
+            Url = GetUrl ();
+            RemoteName      = Path.GetFileNameWithoutExtension (Url);
+            Domain          = GetDomain (Url);
             Description     = GetDescription ();
             UserName        = GetUserName ();
             UserEmail       = GetUserEmail ();
@@ -745,7 +745,7 @@ namespace SparkleLib {
         }
 
 
-        private string GetRemoteOriginUrl ()
+        private string GetUrl ()
         {
             SparkleGit git = new SparkleGit (LocalPath, "config --get remote.origin.url");
             git.Start ();
