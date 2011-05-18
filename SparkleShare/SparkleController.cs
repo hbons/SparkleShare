@@ -478,7 +478,10 @@ namespace SparkleShare {
         private void UpdateState ()
         {
             foreach (SparkleRepo repo in Repositories) {
-                if (repo.IsSyncing || repo.IsBuffering) {
+                if (repo.Status == SyncStatus.SyncDown ||
+                    repo.Status == SyncStatus.SyncUp   ||
+                    repo.IsBuffering) {
+
                     if (OnSyncing != null)
                         OnSyncing ();
 
@@ -527,12 +530,10 @@ namespace SparkleShare {
             };
 
             repo.SyncStatusChanged += delegate (SyncStatus status) {
-                if (status == SyncStatus.SyncDownFailed   ||
-                    status == SyncStatus.SyncDownFinished ||
-                    status == SyncStatus.SyncDownStarted  ||
-                    status == SyncStatus.SyncUpFailed     ||
-                    status == SyncStatus.SyncUpFinished   ||
-                    status == SyncStatus.SyncUpStarted) {
+                if (status == SyncStatus.Idle     ||
+                    status == SyncStatus.SyncUp   ||
+                    status == SyncStatus.SyncDown ||
+                    status == SyncStatus.Error) {
 
                     UpdateState ();
                 }
@@ -1056,7 +1057,10 @@ namespace SparkleShare {
         public void TryQuit ()
         {
             foreach (SparkleRepo repo in Repositories) {
-                if (repo.IsSyncing) {
+                if (repo.Status == SyncStatus.SyncUp   ||
+                    repo.Status == SyncStatus.SyncDown ||
+                    repo.IsBuffering) {
+
                     if (OnQuitWhileSyncing != null)
                         OnQuitWhileSyncing ();
                     

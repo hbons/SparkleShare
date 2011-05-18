@@ -28,13 +28,12 @@ using Mono.Unix;
 namespace SparkleLib {
 
     public enum SyncStatus {
-        SyncUpStarted,
-        SyncUpFinished,
-        SyncUpFailed,
-        SyncDownStarted,
-        SyncDownFinished,
-        SyncDownFailed
-    } // TODO: Idle, Error, SyncingUp, SyncingDown
+        Idle,
+        SyncUp,
+        SyncDown,
+        Error
+    }
+
 
     public class SparkleRepo {
 
@@ -47,7 +46,6 @@ namespace SparkleLib {
         private bool has_changed;
 
         private string revision;
-        private bool is_syncing;
         private bool is_buffering;
         private bool is_polling;
         private bool server_online;
@@ -78,12 +76,6 @@ namespace SparkleLib {
         public bool IsPolling {
             get {
                 return this.is_polling;
-            }
-        }
-
-        public bool IsSyncing {
-            get {
-                return this.is_syncing;
             }
         }
 
@@ -144,7 +136,6 @@ namespace SparkleLib {
             UserEmail       = GetUserEmail ();
             Backend         = backend;
 
-            this.is_syncing     = false;
             this.is_buffering   = false;
             this.is_polling     = true;
             this.server_online  = true;
@@ -221,7 +212,10 @@ namespace SparkleLib {
             // Fetch changes when there is a message in the irc channel
             this.listener.RemoteChange += delegate (string change_id) {
                 if (!change_id.Equals (this.revision) && change_id.Length == 40) {
-                    if (!this.is_syncing && !this.is_buffering) {
+                    if (Status != SyncStatus.SyncUp   &&
+                        Status != SyncStatus.SyncDown &&
+                        !this.is_buffering) {
+
                         while (this.listener.ChangesQueue > 0) {
                             Fetch ();
                             this.listener.DecrementChangesQueue ();
@@ -317,9 +311,9 @@ namespace SparkleLib {
                     DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
                      this.sizebuffer.Add (CalculateFolderSize (dir_info));
 
-                    if ( this.sizebuffer [0].Equals ( this.sizebuffer [1]) &&
-                         this.sizebuffer [1].Equals ( this.sizebuffer [2]) &&
-                         this.sizebuffer [2].Equals ( this.sizebuffer [3])) {
+                    if ( this.sizebuffer [0].Equals (this.sizebuffer [1]) &&
+                         this.sizebuffer [1].Equals (this.sizebuffer [2]) &&
+                         this.sizebuffer [2].Equals (this.sizebuffer [3])) {
 
                         SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled.");
                         this.is_buffering = false;
@@ -383,7 +377,7 @@ namespace SparkleLib {
                     Push ();
                 } else {
                     if (SyncStatusChanged != null)
-                        SyncStatusChanged (SyncStatus.SyncUpFinished);
+                        SyncStatusChanged (SyncStatus.Idle); // TODO: in checklocalforchanges
                 }
             } finally {
                 this.remote_timer.Start ();
@@ -492,19 +486,16 @@ namespace SparkleLib {
         // Fetches changes from the remote repository
         public void Fetch ()
         {
-            this.is_syncing  = true;
-
             this.remote_timer.Stop ();
 
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching changes");
             SparkleGit git = new SparkleGit (LocalPath, "fetch -v origin master");
 
             if (SyncStatusChanged != null)
-                SyncStatusChanged (SyncStatus.SyncDownStarted);
+                SyncStatusChanged (SyncStatus.SyncDown);
 
             git.Exited += delegate {
 
-                this.is_syncing   = false;
                 this.revision = GetRevision ();
 
                 if (git.ExitCode != 0) {
@@ -512,13 +503,13 @@ namespace SparkleLib {
                     this.server_online = false;
 
                     if (SyncStatusChanged != null)
-                        SyncStatusChanged (SyncStatus.SyncDownFailed);
+                        SyncStatusChanged (SyncStatus.Error);
                 } else {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes fetched");
                     this.server_online = true;
 
                     if (SyncStatusChanged != null)
-                        SyncStatusChanged (SyncStatus.SyncDownFinished);
+                        SyncStatusChanged (SyncStatus.Idle);
                 }
 
                 this.remote_timer.Start ();
@@ -669,24 +660,20 @@ namespace SparkleLib {
         // Pushes the changes to the remote repo
         public void Push ()
         {
-            this.is_syncing = true;
-
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing changes");
             SparkleGit git = new SparkleGit (LocalPath, "push origin master");
 
             if (SyncStatusChanged != null)
-                SyncStatusChanged (SyncStatus.SyncUpStarted);
+                SyncStatusChanged (SyncStatus.SyncUp);
 
             git.Exited += delegate {
-                this.is_syncing = false;
-
                 if (git.ExitCode != 0) {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes not pushed");
 
                     HasUnsyncedChanges = true;
 
                     if (SyncStatusChanged != null)
-                        SyncStatusChanged (SyncStatus.SyncUpFailed);
+                        SyncStatusChanged (SyncStatus.Error);
 
                     FetchRebaseAndPush ();
                 } else {
@@ -695,7 +682,7 @@ namespace SparkleLib {
                     HasUnsyncedChanges = false;
 
                     if (SyncStatusChanged != null)
-                        SyncStatusChanged (SyncStatus.SyncDownFinished);
+                        SyncStatusChanged (SyncStatus.Idle);
 
                     this.listener.Announce (this.revision);
                 }
@@ -704,6 +691,8 @@ namespace SparkleLib {
 
             git.Start ();
             git.WaitForExit ();
+
+            // TODO put exit events here instead of in a new Exited thread, for the oter methods too
         }
 
 
