@@ -40,17 +40,16 @@ namespace SparkleLib {
         private Timer remote_timer;
         private Timer local_timer;
         private FileSystemWatcher watcher;
-        private System.Object change_lock;
         private SparkleListenerBase listener;
         private List <double> sizebuffer;
-        private bool has_changed;
-        private SyncStatus status;
+        private bool has_changed   = false;
+        private Object change_lock = new Object ();
 
-
+        protected SyncStatus status;
         protected string revision;
-        protected bool is_buffering;
-        protected bool is_polling;
-        protected bool server_online;
+        protected bool is_buffering  = false;
+        protected bool is_polling    = true;
+        protected bool server_online = true;
 
         public readonly SparkleBackend Backend;
 
@@ -156,12 +155,6 @@ namespace SparkleLib {
             LocalPath = path;
             Name      = Path.GetFileName (LocalPath);
             Backend   = backend;
-
-            this.is_buffering   = false;
-            this.is_polling     = true;
-            this.server_online  = true;
-            this.has_changed    = false;
-            this.change_lock    = new Object ();
 
             SyncStatusChanged += delegate (SyncStatus status) {
                 this.status = status;
