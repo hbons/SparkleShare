@@ -17,11 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Security.Cryptography;
-
-using Meebey.SmartIrc4net;
 
 namespace SparkleLib {
 
