@@ -37,7 +37,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SparkleRepo.cs" />
+    <Compile Include="SparkleRepoBase.cs" />
+    <Compile Include="SparkleRepoGit.cs" />
     <Compile Include="SparkleFetcherBase.cs" />
     <Compile Include="SparkleFetcherGit.cs" />
     <Compile Include="Defines.cs" />
