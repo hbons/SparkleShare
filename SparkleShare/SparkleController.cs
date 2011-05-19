@@ -33,7 +33,7 @@ namespace SparkleShare {
 
     public abstract class SparkleController {
 
-        public List <SparkleRepo> Repositories;
+        public List <SparkleRepoBase> Repositories;
         public string FolderSize;
         public bool FirstRun;
         public readonly string SparklePath;
@@ -162,7 +162,7 @@ namespace SparkleShare {
                     // FIXME: this is broken :\
                     if (OnInvitation != null)
                         OnInvitation (server, folder, token);
-                } else if (SparkleRepo.IsRepo (args.FullPath)) {
+                } else if (SparkleRepoBase.IsRepo (args.FullPath)) {
                     AddRepository (args.FullPath);
 
                     if (FolderListChanged != null)
@@ -240,7 +240,7 @@ namespace SparkleShare {
             get    {
                 List <string> folders = new List <string> ();
                 
-                foreach (SparkleRepo repo in Repositories)
+                foreach (SparkleRepoBase repo in Repositories)
                     folders.Add (repo.LocalPath);
 
                 return folders;
@@ -253,7 +253,7 @@ namespace SparkleShare {
             string path = Path.Combine (SparklePaths.SparklePath, name);
             int log_size = 30;
             
-            foreach (SparkleRepo repo in Repositories) {
+            foreach (SparkleRepoBase repo in Repositories) {
                 if (repo.LocalPath.Equals (path))            
                     return repo.GetChangeSets (log_size);
             }
@@ -477,7 +477,7 @@ namespace SparkleShare {
         // Fires events for the current syncing state
         private void UpdateState ()
         {
-            foreach (SparkleRepo repo in Repositories) {
+            foreach (SparkleRepoBase repo in Repositories) {
                 if (repo.Status == SyncStatus.SyncDown ||
                     repo.Status == SyncStatus.SyncUp   ||
                     repo.IsBuffering) {
@@ -512,10 +512,11 @@ namespace SparkleShare {
             // and use GitBackend.IsValidFolder (string path);
 
             // Check if the folder is a Git repository TODO: remove later
-            if (!SparkleRepo.IsRepo (folder_path))
+            if (!SparkleRepoBase.IsRepo (folder_path))
                 return;
 
-            SparkleRepo repo = new SparkleRepo (folder_path, SparkleBackend.DefaultBackend);
+            //TODO
+            SparkleRepoBase repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set, string repository_path) {
                 string message = FormatMessage (change_set);
@@ -554,7 +555,7 @@ namespace SparkleShare {
             string folder_name = Path.GetFileName (folder_path);
 
             for (int i = 0; i < Repositories.Count; i++) {
-                SparkleRepo repo = Repositories [i];
+                SparkleRepoBase repo = Repositories [i];
 
                 if (repo.Name.Equals (folder_name)) {
                     Repositories.Remove (repo);
@@ -570,7 +571,7 @@ namespace SparkleShare {
         // folders in the SparkleShare folder
         private void PopulateRepositories ()
         {
-            Repositories = new List <SparkleRepo> ();
+            Repositories = new List <SparkleRepoBase> ();
 
             foreach (string folder_path in Directory.GetDirectories (SparklePaths.SparklePath))
                 AddRepository (folder_path);
@@ -1056,7 +1057,7 @@ namespace SparkleShare {
         // quits if safe
         public void TryQuit ()
         {
-            foreach (SparkleRepo repo in Repositories) {
+            foreach (SparkleRepoBase repo in Repositories) {
                 if (repo.Status == SyncStatus.SyncUp   ||
                     repo.Status == SyncStatus.SyncDown ||
                     repo.IsBuffering) {
@@ -1074,7 +1075,7 @@ namespace SparkleShare {
 
         public void Quit ()
         {
-            foreach (SparkleRepo repo in Repositories)
+            foreach (SparkleRepoBase repo in Repositories)
                 repo.Dispose ();
 
             Environment.Exit (0);
