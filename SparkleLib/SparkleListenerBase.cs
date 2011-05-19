@@ -60,6 +60,7 @@ namespace SparkleLib {
         public abstract void Dispose ();
 
         public abstract bool IsConnected { get; }
+
         // Announcements that weren't sent off
         // because we were disconnected
         protected List<string> announce_queue = new List<string> ();
