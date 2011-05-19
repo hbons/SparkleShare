@@ -52,6 +52,16 @@ namespace SparkleLib {
         // Starts listening for remote changes
         public abstract void Connect ();
 
+        private void AnnounceBase (string message) {
+            if (IsConnected) {
+              SparkleHelpers.DebugInfo ("Listener", "Announcing to " + this.channel + " on " + this.server);
+              Announce (message);
+            } else {
+              SparkleHelpers.DebugInfo ("Listener", "Not connected. Queuing message");
+              this.announce_queue.Add (message);
+            }
+        }
+
         // Announces to the channel that
         // we've pushed changes to the server
         public abstract void Announce (string message);
@@ -85,18 +95,34 @@ namespace SparkleLib {
 
         public void OnConnected ()
         {
+            SparkleHelpers.DebugInfo ("Listener", "Connected");
+
             if (Connected != null)
                 Connected ();
+
+            if (this.announce_queue.Count > 0) {
+                string message = this.announce_queue [this.announce_queue.Count - 1];
+                this.announce_queue  = new List<string> ();
+
+                SparkleHelpers.DebugInfo ("Listener", "Delivering queued messages...");
+                Announce (message);
+            }
         }
 
         public void OnDisconnected ()
         {
+            SparkleHelpers.DebugInfo ("Listener", "Disonnected");
+
             if (Disconnected != null)
                 Disconnected ();
         }
 
         public void OnRemoteChange (string change_id)
         {
+            SparkleHelpers.DebugInfo ("Listener", "Got message from " + this.channel + " on " + this.server);
+ 
+            this.changes_queue++;
+
             if (RemoteChange != null)
                 RemoteChange (change_id);
         }
