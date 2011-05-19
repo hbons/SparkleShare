@@ -54,11 +54,11 @@ namespace SparkleLib {
 
         private void AnnounceBase (string message) {
             if (IsConnected) {
-              SparkleHelpers.DebugInfo ("Listener", "Announcing to " + this.channel + " on " + this.server);
-              Announce (message);
+                SparkleHelpers.DebugInfo ("Listener", "Announcing to " + this.channel + " on " + this.server);
+                Announce (message);
             } else {
-              SparkleHelpers.DebugInfo ("Listener", "Not connected. Queuing message");
-              this.announce_queue.Add (message);
+                SparkleHelpers.DebugInfo ("Listener", "Not connected. Queuing message");
+                this.announce_queue.Add (message);
             }
         }
 
@@ -105,7 +105,7 @@ namespace SparkleLib {
                 this.announce_queue  = new List<string> ();
 
                 SparkleHelpers.DebugInfo ("Listener", "Delivering queued messages...");
-                Announce (message);
+                AnnounceBase (message);
             }
         }
 
