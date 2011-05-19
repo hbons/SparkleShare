@@ -31,6 +31,7 @@ namespace SparkleLib {
         private IrcClient client;
         private string nick;
 
+
         public SparkleListenerIrc (string server, string folder_identifier,
             NotificationServerType type) : base (server, folder_identifier, type)
         {
@@ -62,30 +63,15 @@ namespace SparkleLib {
             };
 
             this.client.OnConnected += delegate {
-                SparkleHelpers.DebugInfo ("ListenerIrc", "Connected to " + base.channel + " on " + base.server);
-            
                 OnConnected ();
-
-                if (base.announce_queue.Count > 0) {
-                    string message = base.announce_queue [base.announce_queue.Count - 1];
-                    base.announce_queue  = new List<string> ();
-
-                    SparkleHelpers.DebugInfo ("ListenerIrc", "Delivering queued messages...");
-                    Announce (message);
-                }
             };
 
             this.client.OnDisconnected += delegate {
-                SparkleHelpers.DebugInfo ("ListenerIrc", "Disconnected from " + base.channel + " on " + base.server);
-            
                 OnDisconnected ();
             };
 
             this.client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
-                SparkleHelpers.DebugInfo ("ListenerIrc", "Got message from " + base.channel + " on " + base.server);
                 string message = args.Data.Message.Trim ();
-                base.changes_queue++;
-
                 OnRemoteChange (message);
             };
         }
@@ -111,7 +97,7 @@ namespace SparkleLib {
                         // Disconnect when we time out
                         this.client.Disconnect ();
                     } catch (Meebey.SmartIrc4net.ConnectionException e) {
-                        Console.WriteLine ("Could not connect: " + e.Message);
+                        SparkleHelpers.DebugInfo ("ListenerIrc", "Could not connect to " + base.channel + " on " + base.server + ": " + e.Message);
                     }
                 })
             );
@@ -122,13 +108,7 @@ namespace SparkleLib {
 
         public override void Announce (string message)
         {
-            if (IsConnected) {
-              SparkleHelpers.DebugInfo ("ListenerIrc", "Announcing to " + base.channel + " on " + base.server);
-              this.client.SendMessage (SendType.Message, base.channel, message);
-            } else {
-              SparkleHelpers.DebugInfo ("ListenerIrc", "Not connected. Queuing message");
-              base.announce_queue.Add (message);
-            }
+            this.client.SendMessage (SendType.Message, base.channel, message);
         }
 
 
@@ -154,7 +134,5 @@ namespace SparkleLib {
             Byte[] encoded_bytes = sha1.ComputeHash (bytes);
             return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");
         }
-
     }
-
 }
