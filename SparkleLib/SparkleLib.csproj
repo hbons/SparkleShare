@@ -39,8 +39,10 @@
   <ItemGroup>
     <Compile Include="SparkleRepoBase.cs" />
     <Compile Include="SparkleRepoGit.cs" />
+    <Compile Include="SparkleRepoHg.cs" />
     <Compile Include="SparkleFetcherBase.cs" />
     <Compile Include="SparkleFetcherGit.cs" />
+    <Compile Include="SparkleFetcherHg.cs" />
     <Compile Include="Defines.cs" />
     <Compile Include="SparkleHelpers.cs" />
     <Compile Include="SparklePaths.cs" />
