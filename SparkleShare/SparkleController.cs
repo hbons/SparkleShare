@@ -511,12 +511,21 @@ namespace SparkleShare {
             // need to keep track of a table with folder+backendtype
             // and use GitBackend.IsValidFolder (string path);
 
-            // Check if the folder is a Git repository TODO: remove later
-            if (!SparkleRepoBase.IsRepo (folder_path))
+            if (folder_path.Equals (SparklePaths.SparkleTmpPath))
                 return;
 
-            //TODO
-            SparkleRepoBase repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
+            Console.WriteLine (folder_path);
+
+            SparkleRepoBase repo = null;
+            if (Directory.Exists (Path.Combine (folder_path, ".git"))) {
+                Console.WriteLine (folder_path + " == Git");
+                repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
+            } else if (Directory.Exists (Path.Combine (folder_path, ".hg"))) {
+
+                Console.WriteLine (folder_path + " == Hg");
+                SparkleBackend hg_backend = new SparkleBackend ("Hg", new string [] {"/opt/local/bin/hg"});
+                repo = new SparkleRepoMercurial (folder_path, hg_backend);
+            }
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set, string repository_path) {
                 string message = FormatMessage (change_set);
@@ -964,8 +973,7 @@ namespace SparkleShare {
         {
             SparkleHelpers.DebugInfo ("Controller", "Formed URL: " + url);
 
-            // TODO: This is all too git specific,
-            // The controller should be ignorant of git
+            // TODO: GetDomain method
             string host = url.Substring (url.IndexOf ("@") + 1);
             if (host.Contains (":"))
                 host = host.Substring (0, host.IndexOf (":"));
@@ -979,7 +987,7 @@ namespace SparkleShare {
             string tmp_folder      = Path.Combine (SparklePaths.SparkleTmpPath, canonical_name);
 
             // TODO: backend detection
-            SparkleFetcherBase fetcher = new SparkleFetcherGit (url, tmp_folder);
+            SparkleFetcherBase fetcher = new SparkleFetcherHg (url, tmp_folder);
             bool folder_exists         = Directory.Exists (Path.Combine (SparklePaths.SparklePath, canonical_name));
 
             // Add a numbered suffix to the nameif a folder with the same name
