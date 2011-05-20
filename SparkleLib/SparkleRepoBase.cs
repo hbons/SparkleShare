@@ -21,6 +21,7 @@ using System.Diagnostics; // remove
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Timers;
+using System.Xml;
 
 namespace SparkleLib {
 
@@ -53,11 +54,11 @@ namespace SparkleLib {
 
         public string Domain {
             get {
-                Regex regex = new Regex (@"*://(.+)(/|:)*");
+                Regex regex = new Regex (@"(@|://)([a-z0-9\.]+)/");
                 Match match = regex.Match (Url);
 
                 if (match.Success)
-                    return match.Groups [1].Value;
+                    return match.Groups [2].Value;
                 else
                     return null;
             }
@@ -69,42 +70,8 @@ namespace SparkleLib {
         public abstract string CurrentRevision { get; }
         public abstract bool SyncUp ();
         public abstract bool SyncDown ();
-
-        public virtual bool CheckForRemoteChanges () // HasRemoteChanges { get; } ?
-        {
-            return true;
-        }
-
-        public virtual List<SparkleChangeSet> GetChangeSets (int count) {
-            return null;
-        }
-
-        public virtual bool UsesNotificationCenter {
-            get {
-                return true;
-            }
-        }
-
-        public string RemoteName {
-            get {
-                return Path.GetFileNameWithoutExtension (Url);
-            }
-        }
-
-
-        public bool IsBuffering {
-            get {
-                return this.is_buffering;
-            }
-        }
-
-        public bool IsPolling {
-            get {
-                return this.is_polling;
-            }
-        }
-
         public abstract bool HasUnsyncedChanges { get; set; }
+
 
         public bool ServerOnline {
             get {
@@ -152,20 +119,8 @@ namespace SparkleLib {
                 SyncUpBase ();
             }
 
-            // Watch the repository's folder
-            this.watcher = new FileSystemWatcher (LocalPath) {
-                IncludeSubdirectories = true,
-                EnableRaisingEvents   = true,
-                Filter                = "*"
-            };
-
-            this.watcher.Changed += new FileSystemEventHandler (OnFileActivity);
-            this.watcher.Created += new FileSystemEventHandler (OnFileActivity);
-            this.watcher.Deleted += new FileSystemEventHandler (OnFileActivity);
-            this.watcher.Renamed += new RenamedEventHandler (OnFileActivity);
-
+            CreateWatcher ();
             CreateListener ();
-
 
             this.local_timer.Elapsed += delegate (object o, ElapsedEventArgs args) {
                 CheckForChanges ();
@@ -188,14 +143,95 @@ namespace SparkleLib {
             this.local_timer.Start ();
 
             // Sync up everything that changed
-            // since we've been off
-            DisableWatching ();
+            // since we've been offline
             if (AnyDifferences) {
+                DisableWatching ();
                 SyncUpBase ();
+
                 while (HasUnsyncedChanges)
                     SyncUpBase ();
+                EnableWatching ();
             }
-            EnableWatching ();
+        }
+
+
+        // Create an initial change set when the
+        // user has fetched an empty remote folder
+        public virtual void CreateInitialChangeSet ()
+        {
+            string file_path = Path.Combine (LocalPath, "SparkleShare.txt");
+            TextWriter writer = new StreamWriter (file_path);
+            writer.WriteLine (":)");
+            writer.Close ();
+        }
+
+
+        public virtual bool CheckForRemoteChanges () // HasRemoteChanges { get; } ?
+        {
+            return true;
+        }
+
+
+        public virtual List<SparkleChangeSet> GetChangeSets (int count) {
+            return null;
+        }
+
+
+        public virtual bool UsesNotificationCenter {
+            get {
+                return true;
+            }
+        }
+
+
+        public string RemoteName {
+            get {
+                return Path.GetFileNameWithoutExtension (Url);
+            }
+        }
+
+
+        public bool IsBuffering {
+            get {
+                return this.is_buffering;
+            }
+        }
+
+
+        public bool IsPolling {
+            get {
+                return this.is_polling;
+            }
+        }
+
+
+        public static bool IsRepo (string path)
+        {
+            return true; //TODO
+        }
+
+
+        // Disposes all resourses of this object
+        public void Dispose ()
+        {
+            this.remote_timer.Dispose ();
+            this.local_timer.Dispose ();
+            this.listener.Dispose ();
+        }
+
+
+        private void CreateWatcher ()
+        {
+            this.watcher = new FileSystemWatcher (LocalPath) {
+                IncludeSubdirectories = true,
+                EnableRaisingEvents   = true,
+                Filter                = "*"
+            };
+
+            this.watcher.Changed += new FileSystemEventHandler (OnFileActivity);
+            this.watcher.Created += new FileSystemEventHandler (OnFileActivity);
+            this.watcher.Deleted += new FileSystemEventHandler (OnFileActivity);
+            this.watcher.Renamed += new RenamedEventHandler (OnFileActivity);
         }
 
 
@@ -229,8 +265,7 @@ namespace SparkleLib {
             // Fetch changes when there is a message in the irc channel
             this.listener.RemoteChange += delegate (string change_id) {
                 if (!change_id.Equals (CurrentRevision) && change_id.Length == 40) {
-                    if (Status != SyncStatus.SyncUp   &&
-                        Status != SyncStatus.SyncDown &&
+                    if ((Status != SyncStatus.SyncUp) && (Status != SyncStatus.SyncDown) &&
                         !this.is_buffering) {
 
                         while (this.listener.ChangesQueue > 0) {
@@ -304,7 +339,7 @@ namespace SparkleLib {
         }
 
 
-        public void SyncUpBase ()
+        private void SyncUpBase ()
         {
             try {
                 this.local_timer.Stop ();
@@ -313,8 +348,8 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Initiated");
 
                 //if (AnyDifferences) {
-                    if (SyncStatusChanged != null)
-                        SyncStatusChanged (SyncStatus.SyncUp);
+                if (SyncStatusChanged != null)
+                    SyncStatusChanged (SyncStatus.SyncUp);
 
                 if (SyncUp ()) {
                     SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Done");
@@ -387,29 +422,37 @@ namespace SparkleLib {
         }
 
 
-        private string GetUserName () // TODO
+        protected string UserName
         {
-            SparkleGit git = new SparkleGit (LocalPath, "config --get user.name");
-            git.Start ();
-            git.WaitForExit ();
+            get {
+                string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
+    
+                if (!File.Exists (global_config_file_path))
+                    return "";
+                
+                XmlDocument xml = new XmlDocument();
+                xml.Load (global_config_file_path);
 
-            string output = git.StandardOutput.ReadToEnd ();
-            string user_name   = output.Trim ();
-
-            return user_name;
+                XmlNode node = xml.SelectSingleNode("//user/name/text()");
+                return node.Value;
+            }
         }
 
 
-        private string GetUserEmail ()
+        protected string UserEmail
         {
-            SparkleGit git = new SparkleGit (LocalPath, "config --get user.email");
-            git.Start ();
-            git.WaitForExit ();
+            get {
+                string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
 
-            string output = git.StandardOutput.ReadToEnd ();
-            string user_email   = output.Trim ();
+                if (!File.Exists (global_config_file_path))
+                    return "";
 
-            return user_email;
+                XmlDocument xml = new XmlDocument();
+                xml.Load (global_config_file_path);
+
+                XmlNode node = xml.SelectSingleNode("//user/email/text()");
+                return node.Value;
+            }
         }
 
 
@@ -437,43 +480,6 @@ namespace SparkleLib {
                 size += CalculateFolderSize (directory);
 
             return size;
-        }
-
-
-        // Create an initial change set when the
-        // user has fetched an empty remote folder
-        public virtual void CreateInitialChangeSet ()
-        {
-            string file_path = Path.Combine (LocalPath, "SparkleShare.txt");
-            TextWriter writer = new StreamWriter (file_path);
-            writer.WriteLine (":)");
-            writer.Close ();
-        }
-
-
-        public string GetConfigItem (string name)
-        {
-            if (String.Compare (name, "sparkleshare.user.name", true) == 0)
-                return GetUserName ();
-            else if (String.Compare (name, "sparkleshare.user.email", true) == 0)
-                return GetUserEmail ();
-            else
-                return null;
-        }
-
-
-        public static bool IsRepo (string path)
-        {
-            return System.IO.Directory.Exists (Path.Combine (path, ".git"));
-        }
-
-
-        // Disposes all resourses of this object
-        public void Dispose ()
-        {
-            this.remote_timer.Dispose ();
-            this.local_timer.Dispose ();
-            this.listener.Dispose ();
         }
     }
 }

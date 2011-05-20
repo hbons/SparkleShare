@@ -23,23 +23,23 @@ using System.Xml;
 namespace SparkleLib {
 
     // Sets up a fetcher that can get remote folders
-    public class SparkleFetcherGit : SparkleFetcherBase {
+    public class SparkleFetcherHg : SparkleFetcherBase {
 
-        public SparkleFetcherGit (string remote_url, string target_folder) :
+        public SparkleFetcherHg (string remote_url, string target_folder) :
             base (remote_url, target_folder) { }
 
 
         public override bool Fetch ()
         {
-            SparkleGit git = new SparkleGit (SparklePaths.SparkleTmpPath,
+            SparkleHg hg = new SparkleHg (SparklePaths.SparkleTmpPath,
                 "clone \"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
 
-            git.Start ();
-            git.WaitForExit ();
+            hg.Start ();
+            hg.WaitForExit ();
 
-            SparkleHelpers.DebugInfo ("Git", "Exit code " + git.ExitCode.ToString ());
+            SparkleHelpers.DebugInfo ("Hg", "Exit code " + hg.ExitCode.ToString ());
 
-            if (git.ExitCode != 0) {
+            if (hg.ExitCode != 0) {
                 return false;
             } else {
                 InstallConfiguration ();
@@ -58,14 +58,8 @@ namespace SparkleLib {
             if (!File.Exists (global_config_file_path))
                 return;
 
-            string repo_config_file_path = SparkleHelpers.CombineMore (base.target_folder, ".git", "config");
+            string repo_config_file_path = SparkleHelpers.CombineMore (base.target_folder, ".hg", "hgrc");
             string config = String.Join (Environment.NewLine, File.ReadAllLines (repo_config_file_path));
-
-            // Be case sensitive explicitly to work on Mac
-            config = config.Replace ("ignorecase = true", "ignorecase = false");
-
-            // Ignore permission changes
-            config = config.Replace ("filemode = true", "filemode = false");
 
             // Add user info
             string n        = Environment.NewLine;
@@ -75,11 +69,16 @@ namespace SparkleLib {
             XmlNode node_name  = xml.SelectSingleNode ("//user/name/text()");
             XmlNode node_email = xml.SelectSingleNode ("//user/email/text()");
 
-            // TODO: just use commands instead of messing with the config file
+             // TODO this ignore duplicate names (FolderName (2))
+            string ignore_file_path = base.target_folder.Replace (SparklePaths.SparkleTmpPath,
+                SparklePaths.SparklePath);
+
+            ignore_file_path = SparkleHelpers.CombineMore (ignore_file_path, ".hg", "hgignore");
+
             config += n +
-                      "[user]" + n +
-                      "\tname  = " + node_name.Value + n +
-                      "\temail = " + node_email.Value + n;
+                      "[ui]" + n +
+                      "username = " + node_name.Value + " <" + node_email.Value + ">" + n +
+                      "ignore = " + ignore_file_path + n;
 
             // Write the config to the file
             TextWriter writer = new StreamWriter (repo_config_file_path);
@@ -94,9 +93,11 @@ namespace SparkleLib {
         private void InstallExcludeRules ()
         {
             string exlude_rules_file_path = SparkleHelpers.CombineMore (
-                this.target_folder, ".git", "info", "exclude");
+                this.target_folder, ".hg", "hgignore");
 
             TextWriter writer = new StreamWriter (exlude_rules_file_path);
+
+                 writer.WriteLine ("syntax: glob");
 
                 // gedit and emacs
                 writer.WriteLine ("*~");
@@ -137,12 +138,13 @@ namespace SparkleLib {
         }
     }
 
-    public class SparkleGit : Process {
 
-        public SparkleGit (string path, string args) : base ()
+    public class SparkleHg : Process {
+
+        public SparkleHg (string path, string args) : base ()
         {
             EnableRaisingEvents              = true;
-            StartInfo.FileName               = SparkleBackend.DefaultBackend.Path;
+            StartInfo.FileName               = "/opt/local/bin/hg";
             StartInfo.Arguments              = args;
             StartInfo.RedirectStandardOutput = true;
             StartInfo.UseShellExecute        = false;
