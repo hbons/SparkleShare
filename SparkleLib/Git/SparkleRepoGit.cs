@@ -245,15 +245,14 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected. Trying to get out...");
                 DisableWatching ();
 
-                while (AnyDifferences)
+                while (AnyDifferences) {
                     ResolveConflict ();
 
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
                 EnableWatching ();
 
                 OnConflictResolved ();
-
-               //TODO Push ();
+                SyncUp ();
             }
 
             EnableWatching ();

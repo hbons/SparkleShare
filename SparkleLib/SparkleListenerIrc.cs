@@ -121,7 +121,7 @@ namespace SparkleLib {
             this.client.SendMessage (SendType.Message, channel, announcement.Message);
 
             // Also announce to ourselves for debugging purposes
-            OnRemoteChange (announcement);
+            //OnRemoteChange (announcement);
         }
 
 
