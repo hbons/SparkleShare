@@ -142,7 +142,7 @@ namespace SparkleShare {
                     FolderSizeChanged (FolderSize);
             };
 
-            // TODO: Only support removing because 1. removing causes crashes and 2. Backend will be determined in
+            // TODO: Only support removing because 1. adding causes crashes and 2. Backend will be determined in
             // the Intro and added to a table with the repo type, so we wont' know what type will be added
 
             // Add the repository when a create event occurs
@@ -235,9 +235,8 @@ namespace SparkleShare {
         }
 
 
-        public List <string> Folders
-        {
-            get    {
+        public List <string> Folders {
+            get {
                 List <string> folders = new List <string> ();
                 
                 foreach (SparkleRepoBase repo in Repositories)
@@ -310,6 +309,7 @@ namespace SparkleShare {
                     
                     if (change_set.IsMerge) {
                         event_entry += "<dt>Merged a branch</dt>";
+
                     } else {
                         if (change_set.Edited.Count > 0) {
                             event_entry += "<dt>Edited</dt>";
@@ -517,6 +517,7 @@ namespace SparkleShare {
             SparkleRepoBase repo = null;
             if (Directory.Exists (Path.Combine (folder_path, ".git"))) {
                 repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
+
             } else if (Directory.Exists (Path.Combine (folder_path, ".hg"))) {
                 SparkleBackend hg_backend = new SparkleBackend ("Hg", new string [] {"/opt/local/bin/hg", "/usr/bin/hg"});
                 repo = new SparkleRepoHg (folder_path, hg_backend);
@@ -562,9 +563,9 @@ namespace SparkleShare {
                 SparkleRepoBase repo = Repositories [i];
 
                 if (repo.Name.Equals (folder_name)) {
-                    Repositories.Remove (repo);
                     repo.Dispose ();
                     repo = null;
+                    Repositories.Remove (repo);
                     break;
                 }
             }
@@ -673,15 +674,20 @@ namespace SparkleShare {
                 parent.Name.Equals (".tmp"))
                 return 0;
 
-            foreach (FileInfo file in parent.GetFiles()) {
-                if (!file.Exists)
-                    return 0;
+            try {
+                foreach (FileInfo file in parent.GetFiles()) {
+                    if (!file.Exists)
+                        return 0;
 
-                size += file.Length;
+                    size += file.Length;
+                }
+
+                foreach (DirectoryInfo directory in parent.GetDirectories())
+                    size += CalculateFolderSize (directory);
+
+            } catch (DirectoryNotFoundException e) {
+                return 0;
             }
-
-            foreach (DirectoryInfo directory in parent.GetDirectories())
-                size += CalculateFolderSize (directory);
 
             return size;
         }
