@@ -216,9 +216,10 @@ namespace SparkleLib {
 
             SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message);
 
-            // Collect garbage pseudo-randomly
-            if (DateTime.Now.Second % 10 == 0)
-                CollectGarbage ();
+            // Collect garbage pseudo-randomly. Turn off for
+            // now: too resource heavy.
+            // if (DateTime.Now.Second % 10 == 0)
+            //     CollectGarbage ();
         }
 
 
