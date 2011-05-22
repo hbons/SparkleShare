@@ -518,8 +518,8 @@ namespace SparkleShare {
             if (Directory.Exists (Path.Combine (folder_path, ".git"))) {
                 repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
             } else if (Directory.Exists (Path.Combine (folder_path, ".hg"))) {
-                SparkleBackend hg_backend = new SparkleBackend ("Hg", new string [] {"/opt/local/bin/hg"});
-                repo = new SparkleRepoMercurial (folder_path, hg_backend);
+                SparkleBackend hg_backend = new SparkleBackend ("Hg", new string [] {"/opt/local/bin/hg", "/usr/bin/hg"});
+                repo = new SparkleRepoHg (folder_path, hg_backend);
             }
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set, string repository_path) {
