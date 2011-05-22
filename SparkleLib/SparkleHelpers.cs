@@ -35,7 +35,7 @@ namespace SparkleLib {
                     message = " " + message;
 
                 // TODO: Write to a log
-                Console.WriteLine ("[" + timestamp + "]" + "[" + type + "]" + message);
+                Console.WriteLine (timestamp + " " + "[" + type + "]" + message);
             }
         }
 
