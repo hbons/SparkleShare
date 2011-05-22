@@ -53,7 +53,7 @@ namespace SparkleLib {
 
         public string Domain {
             get {
-                Regex regex = new Regex (@"(@|://)([a-z0-9\.]+)/");
+                Regex regex = new Regex (@"(@|://)([a-z0-9\.]+)(/|:)");
                 Match match = regex.Match (Url);
 
                 if (match.Success)

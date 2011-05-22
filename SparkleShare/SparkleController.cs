@@ -968,12 +968,14 @@ namespace SparkleShare {
         {
             SparkleHelpers.DebugInfo ("Controller", "Formed URL: " + url);
 
-            // TODO: GetDomain method
-            string host = url.Substring (url.IndexOf ("@") + 1);
-            if (host.Contains (":"))
-                host = host.Substring (0, host.IndexOf (":"));
-            else
-                host = host.Substring (0, host.IndexOf ("/"));
+            string host = GetHost (url);
+
+            if (String.IsNullOrEmpty (host)) {
+                if (FolderFetchError != null)
+                    FolderFetchError ();
+
+                return;
+            }
 
             DisableHostKeyCheckingForHost (host);
 
@@ -1053,7 +1055,19 @@ namespace SparkleShare {
             Byte[] encoded_bytes = md5.ComputeHash (bytes);
             return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");
         }
-        
+
+
+        private string GetHost (string url)
+        {
+            Regex regex = new Regex (@"(@|://)([a-z0-9\.]+)(/|:)");
+            Match match = regex.Match (url);
+
+            if (match.Success)
+                return match.Groups [2].Value;
+            else
+                return null;
+        }
+
 
         // Checks whether there are any folders syncing and
         // quits if safe
