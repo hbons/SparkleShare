@@ -120,9 +120,9 @@ namespace SparkleLib {
 
             if (git.ExitCode == 0) {
                 return true;
-                //FetchRebaseAndPush ();TODO
             } else {
                 return false;
+                //FetchRebaseAndPush ();TODO
             }
         }
 
@@ -134,7 +134,7 @@ namespace SparkleLib {
             git.Start ();
             git.WaitForExit ();
 
-            if (git.ExitCode == 0) {Console.WriteLine ("REBASING");
+            if (git.ExitCode == 0) {
                 Rebase ();
                 return true;
             } else {

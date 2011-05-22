@@ -72,36 +72,18 @@ namespace SparkleLib {
         public abstract bool SyncDown ();
         public abstract bool HasUnsyncedChanges { get; set; }
 
-
-        public bool ServerOnline {
-            get {
-                return this.server_online;
-            }
-        }
-
-        public SyncStatus Status {
-            get {
-                return this.status;
-            }
-        }
-
         public delegate void SyncStatusChangedEventHandler (SyncStatus new_status);
         public event SyncStatusChangedEventHandler SyncStatusChanged;
 
-
         public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set, string source_path);
-        public delegate void ConflictResolvedEventHandler ();
-        public delegate void ChangesDetectedEventHandler ();
-
         public event NewChangeSetEventHandler NewChangeSet;
+
+        public delegate void ConflictResolvedEventHandler ();
         public event ConflictResolvedEventHandler ConflictResolved;
+
+        public delegate void ChangesDetectedEventHandler ();
         public event ChangesDetectedEventHandler ChangesDetected;
 
-        protected void OnConflictResolved ()
-        {
-            if (ConflictResolved != null)
-                ConflictResolved ();
-        }
 
         // TODO: constructor (path, url, backend)
         public SparkleRepoBase (string path, SparkleBackend backend)
@@ -132,7 +114,7 @@ namespace SparkleLib {
                         SyncDownBase ();
                 }
 
-                if (this.is_polling && !this.listener.IsConnected && !this.listener.IsConnecting)
+                if (this.is_polling && !this.listener.IsConnecting)
                     this.listener.Connect ();
 
                 if (HasUnsyncedChanges)
@@ -163,6 +145,26 @@ namespace SparkleLib {
             TextWriter writer = new StreamWriter (file_path);
             writer.WriteLine (":)");
             writer.Close ();
+        }
+
+
+        public bool ServerOnline {
+            get {
+                return this.server_online;
+            }
+        }
+
+
+        public SyncStatus Status {
+            get {
+                return this.status;
+            }
+        }
+
+        protected void OnConflictResolved ()
+        {
+            if (ConflictResolved != null)
+                ConflictResolved ();
         }
 
 
@@ -258,7 +260,7 @@ namespace SparkleLib {
 
             // Start polling when the connection to the irc channel is lost
             this.listener.Disconnected += delegate {
-                SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Falling back to polling");
+                SparkleHelpers.DebugInfo (Name, "Falling back to polling");
                 this.is_polling = true;
             };
 
@@ -304,7 +306,7 @@ namespace SparkleLib {
                         
                         DisableWatching ();
                         while (AnyDifferences)
-                            SyncUpBase ();//TODO look at algorithm
+                            SyncUpBase ();
                         EnableWatching ();
                     }
                 }
@@ -315,7 +317,7 @@ namespace SparkleLib {
         // Starts a timer when something changes
         private void OnFileActivity (object o, FileSystemEventArgs fse_args)
         {
-            if (fse_args.Name.StartsWith (".git/"))
+            if (fse_args.Name.StartsWith (".git/") || fse_args.Name.StartsWith (".hg/"))
                 return;
 
             WatcherChangeTypes wct = fse_args.ChangeType;
@@ -395,6 +397,9 @@ namespace SparkleLib {
 
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
+
+                if (HasUnsyncedChanges)
+                    SyncUp ();
             } else {
                 SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Error");
                 this.server_online = false;
