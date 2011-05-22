@@ -162,9 +162,6 @@ namespace SparkleLib {
         }
 
 
-
-
-
         public override bool HasUnsyncedChanges {
             get {
                 string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath,
@@ -545,7 +542,7 @@ namespace SparkleLib {
             Commit (message);
         }
 
-        
+
         new public static bool IsRepo (string path)
         {
             return System.IO.Directory.Exists (Path.Combine (path, ".git"));
