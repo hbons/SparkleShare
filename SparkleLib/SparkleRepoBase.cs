@@ -164,6 +164,8 @@ namespace SparkleLib {
 
         protected void OnConflictResolved ()
         {
+            HasUnsyncedChanges = true;
+
             if (ConflictResolved != null)
                 ConflictResolved ();
         }
@@ -346,13 +348,6 @@ namespace SparkleLib {
         }
 
 
-        protected void RequestStatus (SyncStatus requested_status)
-        {
-            if (requested_status == SyncStatus.SyncUp)
-                SyncUpBase ();
-        }
-
-
         private void SyncUpBase ()
         {
             try {
@@ -416,8 +411,11 @@ namespace SparkleLib {
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
 
+                // There could be changes from a
+                // resolved conflict
                 if (HasUnsyncedChanges)
                     SyncUp ();
+
             } else {
                 SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Error");
                 this.server_online = false;
