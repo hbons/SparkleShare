@@ -117,8 +117,10 @@ namespace SparkleLib {
                 if (this.is_polling && !this.listener.IsConnecting)
                     this.listener.Connect ();
 
-                if (HasUnsyncedChanges)
+                if (HasUnsyncedChanges){
+                    Console.WriteLine ("!!!!!!!!!!!!!!!!!!!!!!!!!");Console.WriteLine ("!!!!!!!!!!!!!!!!!!!!!!!!!");Console.WriteLine ("!!!!!!!!!!!!!!!!!!!!!!!!!");
                     SyncUpBase ();
+                }
             };
 
             this.remote_timer.Start ();
