@@ -252,7 +252,7 @@ namespace SparkleLib {
                 EnableWatching ();
 
                 OnConflictResolved ();
-                SyncUp ();
+                RequestStatus (SyncStatus.SyncUp);
             }
 
             EnableWatching ();

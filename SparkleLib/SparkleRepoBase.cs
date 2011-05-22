@@ -347,6 +347,13 @@ namespace SparkleLib {
         }
 
 
+        protected void RequestStatus (SyncStatus requested_status)
+        {
+            if (requested_status == SyncStatus.SyncUp)
+                SyncUpBase ();
+        }
+
+
         private void SyncUpBase ()
         {
             try {
@@ -355,7 +362,6 @@ namespace SparkleLib {
 
                 SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Initiated");
 
-                //if (AnyDifferences) {
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.SyncUp);
 
@@ -368,6 +374,7 @@ namespace SparkleLib {
                         SyncStatusChanged (SyncStatus.Idle);
 
                     this.listener.AnnounceBase (new SparkleAnnouncement (Identifier, CurrentRevision));
+
                 } else {
                     SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Error");
 
@@ -378,7 +385,7 @@ namespace SparkleLib {
 
                     SyncDownBase ();
                 }
-                //}
+
             } finally {
                 this.remote_timer.Start ();
                 this.local_timer.Start ();
