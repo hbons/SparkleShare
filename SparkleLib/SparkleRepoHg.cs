@@ -23,9 +23,9 @@ using System.Text.RegularExpressions;
 
 namespace SparkleLib {
 
-    public class SparkleRepoMercurial : SparkleRepoBase {
+    public class SparkleRepoHg : SparkleRepoBase {
 
-        public SparkleRepoMercurial (string path, SparkleBackend backend) :
+        public SparkleRepoHg (string path, SparkleBackend backend) :
             base (path, backend) { }
 
 
