@@ -85,6 +85,17 @@ namespace SparkleLib {
             writer.WriteLine (config);
             writer.Close ();
 
+            string style_file_path = SparkleHelpers.CombineMore (base.target_folder, ".hg", "log.style");
+
+            string style = "changeset = \"{file_mods}{file_adds}{file_dels}\"" + n +
+                           "file_add  = \"A {file_add}\\n\"" + n +
+                           "file_mod  = \"M {file_mod}\\n\"" + n +
+                           "file_del  = \"D {file_del}\\n\"" + n;
+
+            writer = new StreamWriter (style_file_path);
+            writer.WriteLine (style);
+            writer.Close ();
+
             SparkleHelpers.DebugInfo ("Config", "Added configuration to '" + repo_config_file_path + "'");
         }
 

@@ -134,7 +134,7 @@ namespace SparkleLib {
             git.Start ();
             git.WaitForExit ();
 
-            if (git.ExitCode == 0) {
+            if (git.ExitCode == 0) {Console.WriteLine ("REBASING");
                 Rebase ();
                 return true;
             } else {
@@ -187,11 +187,6 @@ namespace SparkleLib {
         }
 
 
-
-
-
-
-
         // Stages the made changes
         private void Add ()
         {
@@ -232,9 +227,6 @@ namespace SparkleLib {
         }
 
 
-
-
-
         // Merges the fetched changes
         private void Rebase ()
         {
@@ -269,8 +261,6 @@ namespace SparkleLib {
 
             EnableWatching ();
         }
-
-
 
 
         private void ResolveConflict ()

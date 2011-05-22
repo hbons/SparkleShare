@@ -31,19 +31,10 @@ namespace SparkleLib {
         private string nick;
 
 
-        public SparkleListenerIrc (string server, string folder_identifier,
-            NotificationServerType type) : base (server, folder_identifier, type)
+        public SparkleListenerIrc (string server, string folder_identifier, NotificationServerType type) :
+            base (server, folder_identifier, type)
         {
-            if (type == NotificationServerType.Own) {
-                base.server = server;
-            } else {
-
-                // This is SparkleShare's centralized notification service.
-                // Don't worry, we only use this server as a backup if you
-                // don't have your own. All data needed to connect is hashed and
-                // we don't store any personal information ever
-                base.server = "204.62.14.135";
-            }
+            base.server = server;
 
             // Try to get a uniqueish nickname
             this.nick = SHA1 (DateTime.Now.ToString ("ffffff") + "sparkles");
@@ -52,9 +43,7 @@ namespace SparkleLib {
             // with a number, so prefix an alphabetic character
             this.nick = "s" + this.nick.Substring (0, 7);
 
-            // Hash and salt the folder identifier, so
-            // nobody knows any possible folder details
-            base.channel = "#" + SHA1 (folder_identifier + "sparkles");
+            base.channels.Add ("#" + folder_identifier);
 
             this.client = new IrcClient () {
                 PingTimeout  = 180,
@@ -62,6 +51,7 @@ namespace SparkleLib {
             };
 
             this.client.OnConnected += delegate {
+                base.is_connecting = false;
                 OnConnected ();
             };
 
@@ -71,16 +61,26 @@ namespace SparkleLib {
 
             this.client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
                 string message = args.Data.Message.Trim ();
-                OnRemoteChange (message);
+                string folder_id = args.Data.Channel.Substring (1); // remove the #
+                OnRemoteChange (new SparkleAnnouncement (folder_id, message));
             };
+        }
+
+
+        public override bool IsConnected {
+            get {
+              return this.client.IsConnected;
+            }
         }
 
 
         // Starts a new thread and listens to the channel
         public override void Connect ()
         {
-            SparkleHelpers.DebugInfo ("ListenerIrc", "Connecting to " + base.channel + " on " + base.server);
-        
+            SparkleHelpers.DebugInfo ("ListenerIrc", "Connecting to " + Server);
+
+            base.is_connecting = true;
+
             this.thread = new Thread (
                 new ThreadStart (delegate {
                     try {
@@ -88,7 +88,9 @@ namespace SparkleLib {
                         // Connect, login, and join the channel
                         this.client.Connect (new string [] {base.server}, 6667);
                         this.client.Login (this.nick, this.nick);
-                        this.client.RfcJoin (base.channel);
+
+                        foreach (string channel in base.channels)
+                            this.client.RfcJoin (channel);
 
                         // List to the channel, this blocks the thread
                         this.client.Listen ();
@@ -96,7 +98,7 @@ namespace SparkleLib {
                         // Disconnect when we time out
                         this.client.Disconnect ();
                     } catch (Meebey.SmartIrc4net.ConnectionException e) {
-                        SparkleHelpers.DebugInfo ("ListenerIrc", "Could not connect to " + base.channel + " on " + base.server + ": " + e.Message);
+                        SparkleHelpers.DebugInfo ("ListenerIrc", "Could not connect to " + Server + ": " + e.Message);
                     }
                 })
             );
@@ -105,16 +107,21 @@ namespace SparkleLib {
         }
 
 
-        public override void Announce (string message)
+        public override void AlsoListenTo (string folder_identifier)
         {
-            this.client.SendMessage (SendType.Message, base.channel, message);
+            string channel = "#" + folder_identifier;
+            base.channels.Add (channel);
+            this.client.RfcJoin (channel);
         }
 
 
-        public override bool IsConnected {
-            get {
-              return this.client.IsConnected;
-            }
+        public override void Announce (SparkleAnnouncement announcement)
+        {
+            string channel = "#" + announcement.FolderIdentifier;
+            this.client.SendMessage (SendType.Message, channel, announcement.Message);
+
+            // Also announce to ourselves for debugging purposes
+            OnRemoteChange (announcement);
         }
 
 

@@ -202,22 +202,100 @@ namespace SparkleLib {
         // TODO: Method needs to be made a lot faster
         public override List<SparkleChangeSet> GetChangeSets (int count)
         {
+            if (count < 1)
+                count = 30;
+
+            List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
+
+            string style_file_path = SparkleHelpers.CombineMore (LocalPath, ".hg", "log.style");
+            SparkleHg hg_log = new SparkleHg (LocalPath, "log --limit " + count + " --style " + style_file_path);
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
+            hg_log.Start ();
+
+            // Reading the standard output HAS to go before
+            // WaitForExit, or it will hang forever on output > 4096 bytes
+            string output = hg_log.StandardOutput.ReadToEnd ();
+            hg_log.WaitForExit ();
+
+            string [] lines       = output.Split ("\n".ToCharArray ());
+            List <string> entries = new List <string> ();
+
+            int j = 0;
+            string entry = "", last_entry = "";
+            foreach (string line in lines) {
+                if (line.StartsWith ("changeset:") && j > 0) {
+                    entries.Add (entry);
+                    entry = "";
+                }
+
+                entry += line + "\n";
+                j++;
+
+                last_entry = entry;
+            }
+
+            entries.Add (last_entry);
+
+            Regex regex = new Regex (@"changeset: ([a-z0-9]{40})\n" +
+                                      "(.+) <(.+)>\n" +
+                                      "([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}) .([0-9]{4})\n" +
+                                      "", RegexOptions.Compiled);
+
+            // TODO: Need to optimise for speed
+            foreach (string log_entry in entries) {
+
+                bool is_merge_commit = false;
+
+                Match match = regex.Match (log_entry);
+
+                if (match.Success) {
                     SparkleChangeSet change_set = new SparkleChangeSet ();
 
-                    change_set.Revision  = "test";
-                    change_set.UserName  = "test";
-                    change_set.UserEmail = "test";
-                    change_set.IsMerge   = false;
+                    change_set.Revision  = match.Groups [1].Value;
+                    change_set.UserName  = match.Groups [2].Value;
+                    change_set.UserEmail = match.Groups [3].Value;
+                    change_set.IsMerge   = is_merge_commit;
 
-                    change_set.Timestamp = DateTime.Now;
-            List<SparkleChangeSet> change_sets = new List<SparkleChangeSet> ();
-            change_sets.Add (change_set);
+                    change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
+                        int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
+                        int.Parse (match.Groups [7].Value), int.Parse (match.Groups [8].Value), 0);
+
+                    string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
+
+                    foreach (string entry_line in entry_lines) {
+                        if (entry_line.StartsWith (":")) {
+
+                            string change_type = entry_line [37].ToString ();
+                            string file_path   = entry_line.Substring (39);
+                            string to_file_path;
+
+                            if (change_type.Equals ("A")) {
+                                change_set.Added.Add (file_path);
+                            } else if (change_type.Equals ("M")) {
+                                change_set.Edited.Add (file_path);
+                            } else if (change_type.Equals ("D")) {
+                                change_set.Deleted.Add (file_path);
+                            } else if (change_type.Equals ("R")) {
+                                int tab_pos  = entry_line.LastIndexOf ("\t");
+                                file_path    = entry_line.Substring (42, tab_pos - 42);
+                                to_file_path = entry_line.Substring (tab_pos + 1);
+
+                                change_set.MovedFrom.Add (file_path);
+                                change_set.MovedTo.Add (to_file_path);
+                            }
+                        }
+                    }
+
+                    change_sets.Add (change_set);
+                }
+            }
+
             return change_sets;
         }
 
 
         // Creates a pretty commit message based on what has changed
-        private string FormatCommitMessage ()
+        private string FormatCommitMessage () // TODO
         {
             return "SparkleShare Hg";
         }
