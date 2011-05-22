@@ -310,6 +310,7 @@ namespace SparkleLib {
             Commit (message);
         }
 
+
         new public static bool IsRepo (string path)
         {
             return System.IO.Directory.Exists (Path.Combine (path, ".hg"));
