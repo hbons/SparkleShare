@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics; // remove
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Timers;
@@ -117,10 +116,10 @@ namespace SparkleLib {
                 if (this.is_polling && !this.listener.IsConnecting)
                     this.listener.Connect ();
 
-                if (HasUnsyncedChanges){
-                    Console.WriteLine ("!!!!!!!!!!!!!!!!!!!!!!!!!");Console.WriteLine ("!!!!!!!!!!!!!!!!!!!!!!!!!");Console.WriteLine ("!!!!!!!!!!!!!!!!!!!!!!!!!");
+                // In the unlikely case that we haven't synced up our
+                // changes or the server was down, sync up again
+                if (HasUnsyncedChanges)
                     SyncUpBase ();
-                }
             };
 
             this.remote_timer.Start ();
@@ -269,16 +268,16 @@ namespace SparkleLib {
 
             // Fetch changes when there is a message in the irc channel
             this.listener.RemoteChange += delegate (SparkleAnnouncement announcement) {
-                if (announcement.FolderIdentifier == Identifier &&
+                string identifier = Identifier;
+
+                if (announcement.FolderIdentifier == identifier &&
                     !announcement.Message.Equals (CurrentRevision)) {
                     if ((Status != SyncStatus.SyncUp)   &&
                         (Status != SyncStatus.SyncDown) &&
                         !this.is_buffering) {
 
-                        while (this.listener.ChangesQueue > 0) {
+                        while (this.listener.HasQueueDownAnnouncement (identifier))
                             SyncDownBase ();
-                            this.listener.DecrementChangesQueue ();
-                        }
                     }
                 }
             };
