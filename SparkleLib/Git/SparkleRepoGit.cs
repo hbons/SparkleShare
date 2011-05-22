@@ -118,12 +118,10 @@ namespace SparkleLib {
             git.Start ();
             git.WaitForExit ();
 
-            if (git.ExitCode == 0) {
+            if (git.ExitCode == 0)
                 return true;
-            } else {
+            else
                 return false;
-                //FetchRebaseAndPush ();TODO
-            }
         }
 
 
@@ -252,7 +250,6 @@ namespace SparkleLib {
                 EnableWatching ();
 
                 OnConflictResolved ();
-                RequestStatus (SyncStatus.SyncUp);
             }
 
             EnableWatching ();
