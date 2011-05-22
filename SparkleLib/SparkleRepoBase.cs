@@ -251,7 +251,8 @@ namespace SparkleLib {
                 this.is_polling = false;
 
                 // Check for changes manually one more time
-                CheckForRemoteChanges ();
+                if (CheckForRemoteChanges ())
+                    SyncDownBase ();
 
                 // Push changes that were made since the last disconnect
                 if (HasUnsyncedChanges)
