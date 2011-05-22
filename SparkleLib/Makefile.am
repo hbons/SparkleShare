@@ -3,21 +3,21 @@ TARGET = library
 
 LINK = $(REF_SPARKLELIB)
 
+SUBDIRS =  \
+	Git \
+	Hg 
+
 SOURCES =  \
 	Defines.cs \
 	SparkleBackend.cs \
 	SparkleChangeSet.cs \
 	SparkleFetcherBase.cs \
-	SparkleFetcherGit.cs \
-	SparkleFetcherHg.cs \
 	SparkleHelpers.cs \
 	SparkleListenerBase.cs \
 	SparkleListenerIrc.cs \
 	SparkleOptions.cs \
 	SparklePaths.cs \
-	SparkleRepoBase.cs \
-	SparkleRepoGit.cs \
-	SparkleRepoHg.cs
+	SparkleRepoBase.cs
 
 
 SMARTIRC4NET_FILES_EXPANDED = $(foreach file, $(SMARTIRC4NET_FILES), $(top_builddir)/$(file))
