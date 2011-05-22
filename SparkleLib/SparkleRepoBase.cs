@@ -379,14 +379,20 @@ namespace SparkleLib {
                     SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Error");
 
                     HasUnsyncedChanges = true;
-
-                    if (SyncStatusChanged != null)
-                        SyncStatusChanged (SyncStatus.Error);
-
                     SyncDownBase ();
 
-                    if (SyncUp ())
+                    if (SyncUp ()) {
                         HasUnsyncedChanges = false;
+
+                        if (SyncStatusChanged != null)
+                            SyncStatusChanged (SyncStatus.Idle);
+
+                        this.listener.AnnounceBase (new SparkleAnnouncement (Identifier, CurrentRevision));
+
+                    } else {
+                        if (SyncStatusChanged != null)
+                            SyncStatusChanged (SyncStatus.Error);
+                    }
                 }
 
             } finally {
