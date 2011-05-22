@@ -100,10 +100,10 @@ namespace SparkleLib {
 
         // Announcements that weren't sent off
         // because we were disconnected
-        protected List<SparkleAnnouncement> announce_queue = new List<SparkleAnnouncement> ();
+        protected List<SparkleAnnouncement> queue_up   = new List<SparkleAnnouncement> ();
+        protected List<SparkleAnnouncement> queue_down = new List<SparkleAnnouncement> ();
         protected string server;
         protected List<string> channels = new List<string> ();
-        protected int changes_queue = 0;
         protected bool is_connecting;
 
 
@@ -113,14 +113,6 @@ namespace SparkleLib {
         public string Server {
             get {
                 return this.server;
-            }
-        }
-
-
-        // Announcements of remote changes that we've received
-        public int ChangesQueue {
-            get {
-                return this.changes_queue;
             }
         }
 
@@ -138,14 +130,21 @@ namespace SparkleLib {
                 Announce (announcement);
             } else {
                 SparkleHelpers.DebugInfo ("Listener", "Not connected to " + this.server + ". Queuing message");
-                this.announce_queue.Add (announcement);
+                this.queue_up.Add (announcement);
             }
         }
 
 
-        public void DecrementChangesQueue ()
+        public bool HasQueueDownAnnouncement (string folder_identifier)
         {
-            this.changes_queue--;
+            foreach (SparkleAnnouncement announcement in this.queue_down) {
+                if (announcement.FolderIdentifier.Equals (folder_identifier)) {
+                    this.queue_down.Remove (announcement);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
 
@@ -156,12 +155,12 @@ namespace SparkleLib {
             if (Connected != null)
                 Connected ();
 
-            if (this.announce_queue.Count > 0) {
+            if (this.queue_up.Count > 0) {
                 SparkleHelpers.DebugInfo ("Listener", "Delivering queued messages...");
-                foreach (SparkleAnnouncement announcement in this.announce_queue)
+                foreach (SparkleAnnouncement announcement in this.queue_up)
                     AnnounceBase (announcement);
 
-                this.announce_queue = new List<SparkleAnnouncement> ();
+                this.queue_up = new List<SparkleAnnouncement> ();
             }
         }
 
@@ -179,7 +178,7 @@ namespace SparkleLib {
         {
             SparkleHelpers.DebugInfo ("Listener", "Got message from " + announcement.FolderIdentifier + " on " + this.server);
  
-            this.changes_queue++;
+            this.queue_down.Add (announcement);
 
             if (RemoteChange != null)
                 RemoteChange (announcement);
