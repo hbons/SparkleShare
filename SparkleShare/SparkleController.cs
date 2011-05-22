@@ -114,9 +114,11 @@ namespace SparkleShare {
                 if (File.Exists (old_global_config_file_path)) {
                     MigrateConfig ();
                     FirstRun = false;
+
                 } else {
                     FirstRun = true;
                 }
+
             } else {
                 FirstRun = false;
                 AddKey ();
@@ -142,16 +144,12 @@ namespace SparkleShare {
                     FolderSizeChanged (FolderSize);
             };
 
-            // TODO: Only support removing because 1. adding causes crashes and 2. Backend will be determined in
-            // the Intro and added to a table with the repo type, so we wont' know what type will be added
 
-            // Add the repository when a create event occurs
             watcher.Created += delegate (object o, FileSystemEventArgs args) {
 
                 // Handle invitations when the user saves an
                 // invitation into the SparkleShare folder
                 if (args.Name.EndsWith (".sparkle") && !FirstRun) {
-
                     XmlDocument xml_doc = new XmlDocument (); 
                     xml_doc.Load (args.Name);
 
@@ -162,16 +160,6 @@ namespace SparkleShare {
                     // FIXME: this is broken :\
                     if (OnInvitation != null)
                         OnInvitation (server, folder, token);
-                } else if (SparkleRepoBase.IsRepo (args.FullPath)) {
-                    AddRepository (args.FullPath);
-
-                    if (FolderListChanged != null)
-                        FolderListChanged ();
-
-                    FolderSize = GetFolderSize ();
-
-                    if (FolderSizeChanged != null)
-                        FolderSizeChanged (FolderSize);
                 }
             };
 
@@ -228,6 +216,7 @@ namespace SparkleShare {
             if (response.StatusCode == HttpStatusCode.OK) {
                 response.Close ();
                 return true;
+
             } else {
                 response.Close ();
                 return false;
@@ -235,9 +224,9 @@ namespace SparkleShare {
         }
 
 
-        public List <string> Folders {
+        public List<string> Folders {
             get {
-                List <string> folders = new List <string> ();
+                List<string> folders = new List <string> ();
                 
                 foreach (SparkleRepoBase repo in Repositories)
                     folders.Add (repo.LocalPath);
@@ -405,14 +394,12 @@ namespace SparkleShare {
                     day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "<b>Yesterday</b>");
 
                 } else {
-
                     if (activity_day.DateTime.Year != DateTime.Now.Year) {
-
                         // TRANSLATORS: This is the date in the event logs
                         day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
                             "<b>" + activity_day.DateTime.ToString (_("ddd MMM d, yyyy")) + "</b>");
-                    } else {
 
+                    } else {
                         // TRANSLATORS: This is the date in the event logs, without the year
                         day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
                             "<b>" + activity_day.DateTime.ToString (_("ddd MMM d")) + "</b>");
@@ -486,6 +473,7 @@ namespace SparkleShare {
                         OnSyncing ();
 
                     return;
+
                 } else if (repo.HasUnsyncedChanges) {
                     if (OnError != null)
                         OnError ();
@@ -507,10 +495,6 @@ namespace SparkleShare {
         // Adds a repository to the list of repositories
         private void AddRepository (string folder_path)
         {
-            // TODO: determine the backend type here.
-            // need to keep track of a table with folder+backendtype
-            // and use GitBackend.IsValidFolder (string path);
-
             if (folder_path.Equals (SparklePaths.SparkleTmpPath))
                 return;
 
@@ -564,8 +548,8 @@ namespace SparkleShare {
 
                 if (repo.Name.Equals (folder_name)) {
                     repo.Dispose ();
-                    repo = null;
                     Repositories.Remove (repo);
+                    repo = null;
                     break;
                 }
             }
@@ -576,7 +560,7 @@ namespace SparkleShare {
         // folders in the SparkleShare folder
         private void PopulateRepositories ()
         {
-            Repositories = new List <SparkleRepoBase> ();
+            Repositories = new List<SparkleRepoBase> ();
 
             foreach (string folder_path in Directory.GetDirectories (SparklePaths.SparklePath))
                 AddRepository (folder_path);
@@ -774,6 +758,7 @@ namespace SparkleShare {
 
                     XmlNode node = xml.SelectSingleNode("//user/email/text()");
                     return node.Value;
+
                 } else {
                     string keys_path = SparklePaths.SparkleKeysPath;
 
@@ -877,6 +862,7 @@ namespace SparkleShare {
                 TextWriter writer = File.AppendText (ssh_config_file_path);
                 writer.WriteLine (ssh_config);
                 writer.Close ();
+
             } else {
                 TextWriter writer = new StreamWriter (ssh_config_file_path);
                 writer.WriteLine (ssh_config);
@@ -908,6 +894,7 @@ namespace SparkleShare {
                 bool has_some_ssh_config = new Regex (@"[a-z]").IsMatch (current_ssh_config);
                 if (!has_some_ssh_config) {
                     File.Delete (ssh_config_file_path);
+
                 } else {
                     TextWriter writer = new StreamWriter (ssh_config_file_path);
                     writer.WriteLine (current_ssh_config);
@@ -936,6 +923,7 @@ namespace SparkleShare {
 
             if (File.Exists (avatar_file_path)) {
                 return avatar_file_path;
+
             } else {
                 // Let's try to get the person's gravatar for next time
                 WebClient web_client = new WebClient ();
@@ -986,19 +974,26 @@ namespace SparkleShare {
             DisableHostKeyCheckingForHost (host);
 
             // Strip the '.git' from the name
-            string canonical_name  = Path.GetFileNameWithoutExtension (name);
-            string tmp_folder      = Path.Combine (SparklePaths.SparkleTmpPath, canonical_name);
+            string canonical_name = Path.GetFileNameWithoutExtension (name);
+            string tmp_folder     = Path.Combine (SparklePaths.SparkleTmpPath, canonical_name);
 
-            SparkleFetcherBase fetcher = new SparkleFetcherGit (url, tmp_folder);
-            bool folder_exists         = Directory.Exists (Path.Combine (SparklePaths.SparklePath, canonical_name));
+            SparkleFetcherBase fetcher;
+            if (url.EndsWith (".hg")) {
+                url = url.Substring (0, (url.Length - 3));
+                fetcher = new SparkleFetcherHg (url, tmp_folder);
+            } else {
+                fetcher = new SparkleFetcherGit (url, tmp_folder);
+            }
+
+            bool target_folder_exists = Directory.Exists (Path.Combine (SparklePaths.SparklePath, canonical_name));
 
             // Add a numbered suffix to the nameif a folder with the same name
             // already exists. Example: "Folder (2)"
             int i = 1;
-            while (folder_exists) {
+            while (target_folder_exists) {
                 i++;
-                folder_exists = Directory.Exists (
-                    SparkleHelpers.CombineMore (SparklePaths.SparklePath, canonical_name + " (" + i + ")"));
+                target_folder_exists = Directory.Exists (
+                    Path.Combine (SparklePaths.SparklePath, canonical_name + " (" + i + ")"));
             }
 
             string target_folder_name = canonical_name;
@@ -1016,6 +1011,16 @@ namespace SparkleShare {
                         target_folder_name);
 
                     Directory.Move (tmp_folder, target_folder_path);
+                    AddRepository (target_folder_path);
+
+                    if (FolderListChanged != null)
+                        FolderListChanged ();
+
+                    FolderSize = GetFolderSize ();
+
+                    if (FolderSizeChanged != null)
+                        FolderSizeChanged (FolderSize);
+
                 } catch (Exception e) {
                     SparkleHelpers.DebugInfo ("Controller", "Error moving folder: " + e.Message);
                 }
