@@ -104,8 +104,6 @@ help/Makefile
 SparkleLib/AssemblyInfo.cs
 SparkleLib/Defines.cs
 SparkleLib/Makefile
-SparkleLib/Git/Makefile
-SparkleLib/Hg/Makefile
 SparkleShare/sparkleshare
 SparkleShare/Makefile
 SparkleShare/Mac/Makefile
