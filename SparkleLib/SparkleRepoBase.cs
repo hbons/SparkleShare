@@ -132,7 +132,7 @@ namespace SparkleLib {
                         SyncDownBase ();
                 }
 
-                if (this.is_polling && !this.listener.IsConnected)
+                if (this.is_polling && !this.listener.IsConnected && !this.listener.IsConnecting)
                     this.listener.Connect ();
 
                 if (HasUnsyncedChanges)
@@ -242,7 +242,7 @@ namespace SparkleLib {
                 server_type = NotificationServerType.Central;
             else
                 server_type = NotificationServerType.Own;
-            this.listener = new SparkleListenerIrc (Domain, Identifier, server_type);////////////
+            this.listener = SparkleListenerFactory.CreateIrcListener (Domain, Identifier, server_type);
 
             // Stop polling when the connection to the irc channel is succesful
             this.listener.Connected += delegate {
@@ -263,9 +263,11 @@ namespace SparkleLib {
             };
 
             // Fetch changes when there is a message in the irc channel
-            this.listener.RemoteChange += delegate (string change_id) {
-                if (!change_id.Equals (CurrentRevision) && change_id.Length == 40) {
-                    if ((Status != SyncStatus.SyncUp) && (Status != SyncStatus.SyncDown) &&
+            this.listener.RemoteChange += delegate (SparkleAnnouncement announcement) {
+                if (announcement.FolderIdentifier == Identifier &&
+                    !announcement.Message.Equals (CurrentRevision)) {
+                    if ((Status != SyncStatus.SyncUp)   &&
+                        (Status != SyncStatus.SyncDown) &&
                         !this.is_buffering) {
 
                         while (this.listener.ChangesQueue > 0) {
@@ -277,7 +279,8 @@ namespace SparkleLib {
             };
 
             // Start listening
-            this.listener.Connect ();
+            if (!this.listener.IsConnected && !this.listener.IsConnecting)
+                this.listener.Connect ();
         }
 
 
@@ -359,7 +362,7 @@ namespace SparkleLib {
                     if (SyncStatusChanged != null)
                         SyncStatusChanged (SyncStatus.Idle);
 
-                    this.listener.Announce (CurrentRevision);
+                    this.listener.AnnounceBase (new SparkleAnnouncement (Identifier, CurrentRevision));
                 } else {
                     SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Error");
 

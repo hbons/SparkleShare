@@ -27,6 +27,52 @@ namespace SparkleLib {
     }
 
 
+    public class SparkleAnnouncement {
+
+        public readonly string FolderIdentifier;
+        public readonly string Message;
+
+
+        public SparkleAnnouncement (string folder_identifier, string message)
+        {
+            FolderIdentifier = folder_identifier;
+            Message          = message;
+        }
+    }
+
+
+    public static class SparkleListenerFactory {
+
+        private static List<SparkleListenerBase> listeners;
+
+        public static SparkleListenerIrc CreateIrcListener (string server, string folder_identifier,
+                                                            NotificationServerType type)
+        {
+            if (listeners == null)
+                listeners = new List<SparkleListenerBase> ();
+
+            // This is SparkleShare's centralized notification service.
+            // Don't worry, we only use this server as a backup if you
+            // don't have your own. All data needed to connect is hashed and
+            // we don't store any personal information ever
+            if (type == NotificationServerType.Central)
+                server = "204.62.14.135";
+
+            foreach (SparkleListenerBase listener in listeners) {
+                if (listener.Server.Equals (server)) {
+                    SparkleHelpers.DebugInfo ("ListenerFactory", "Refered to existing listener for " + server);
+                    listener.AlsoListenTo (folder_identifier);
+                    return (SparkleListenerIrc) listener;
+                }
+            }
+
+            SparkleHelpers.DebugInfo ("ListenerFactory", "Issued new listener for " + server);
+            listeners.Add (new SparkleListenerIrc (server, folder_identifier, type));
+            return (SparkleListenerIrc) listeners [listeners.Count - 1];
+        }
+    }
+
+
     // A persistent connection to the server that
     // listens for change notifications
     public abstract class SparkleListenerBase {
@@ -42,33 +88,34 @@ namespace SparkleLib {
         // We've been notified about a remote
         // change by the channel
         public event RemoteChangeEventHandler RemoteChange;
-        public delegate void RemoteChangeEventHandler (string change_id);
+        public delegate void RemoteChangeEventHandler (SparkleAnnouncement announcement);
 
-        // Starts listening for remote changes
+
         public abstract void Connect ();
-
-        private void AnnounceBase (string message) {
-            if (IsConnected) {
-                SparkleHelpers.DebugInfo ("Listener", "Announcing to " + this.channel + " on " + this.server);
-                Announce (message);
-            } else {
-                SparkleHelpers.DebugInfo ("Listener", "Not connected. Queuing message");
-                this.announce_queue.Add (message);
-            }
-        }
-
-        // Announces to the channel that
-        // we've pushed changes to the server
-        public abstract void Announce (string message);
-
-        // Release all resources
+        public abstract void Announce (SparkleAnnouncement announcent);
+        public abstract void AlsoListenTo (string folder_identifier);
         public abstract void Dispose ();
-
         public abstract bool IsConnected { get; }
+
 
         // Announcements that weren't sent off
         // because we were disconnected
-        protected List<string> announce_queue = new List<string> ();
+        protected List<SparkleAnnouncement> announce_queue = new List<SparkleAnnouncement> ();
+        protected string server;
+        protected List<string> channels = new List<string> ();
+        protected int changes_queue = 0;
+        protected bool is_connecting;
+
+
+        public SparkleListenerBase (string server, string folder_identifier, NotificationServerType type) { }
+
+
+        public string Server {
+            get {
+                return this.server;
+            }
+        }
+
 
         // Announcements of remote changes that we've received
         public int ChangesQueue {
@@ -77,32 +124,47 @@ namespace SparkleLib {
             }
         }
 
-        protected string server;
-        protected string channel;
-        protected int changes_queue = 0;
 
-        public SparkleListenerBase (string server, string folder_identifier, NotificationServerType type) { }
+        public bool IsConnecting {
+            get {
+               return this.is_connecting;
+            }
+        }
+
+
+        public void AnnounceBase (SparkleAnnouncement announcement) {
+            if (IsConnected) {
+                SparkleHelpers.DebugInfo ("Listener", "Announcing to " + announcement.FolderIdentifier + " on " + this.server);
+                Announce (announcement);
+            } else {
+                SparkleHelpers.DebugInfo ("Listener", "Not connected to " + this.server + ". Queuing message");
+                this.announce_queue.Add (announcement);
+            }
+        }
+
 
         public void DecrementChangesQueue ()
         {
             this.changes_queue--;
         }
 
+
         public void OnConnected ()
         {
-            SparkleHelpers.DebugInfo ("Listener", "Connected");
+            SparkleHelpers.DebugInfo ("Listener", "Connected to " + Server);
 
             if (Connected != null)
                 Connected ();
 
             if (this.announce_queue.Count > 0) {
-                string message = this.announce_queue [this.announce_queue.Count - 1];
-                this.announce_queue  = new List<string> ();
-
                 SparkleHelpers.DebugInfo ("Listener", "Delivering queued messages...");
-                AnnounceBase (message);
+                foreach (SparkleAnnouncement announcement in this.announce_queue)
+                    AnnounceBase (announcement);
+
+                this.announce_queue = new List<SparkleAnnouncement> ();
             }
         }
+
 
         public void OnDisconnected ()
         {
@@ -112,14 +174,15 @@ namespace SparkleLib {
                 Disconnected ();
         }
 
-        public void OnRemoteChange (string change_id)
+
+        public void OnRemoteChange (SparkleAnnouncement announcement)
         {
-            SparkleHelpers.DebugInfo ("Listener", "Got message from " + this.channel + " on " + this.server);
+            SparkleHelpers.DebugInfo ("Listener", "Got message from " + announcement.FolderIdentifier + " on " + this.server);
  
             this.changes_queue++;
 
             if (RemoteChange != null)
-                RemoteChange (change_id);
+                RemoteChange (announcement);
         }
     }
 }
