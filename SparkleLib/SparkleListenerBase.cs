@@ -98,36 +98,21 @@ namespace SparkleLib {
         public abstract bool IsConnected { get; }
 
 
-        // Announcements that weren't sent off
-        // because we were disconnected
+        protected List<string> channels                = new List<string> ();
         protected List<SparkleAnnouncement> queue_up   = new List<SparkleAnnouncement> ();
         protected List<SparkleAnnouncement> queue_down = new List<SparkleAnnouncement> ();
-        protected string server;
-        protected List<string> channels = new List<string> ();
         protected bool is_connecting;
+        protected string server;
 
 
         public SparkleListenerBase (string server, string folder_identifier, NotificationServerType type) { }
-
-
-        public string Server {
-            get {
-                return this.server;
-            }
-        }
-
-
-        public bool IsConnecting {
-            get {
-               return this.is_connecting;
-            }
-        }
 
 
         public void AnnounceBase (SparkleAnnouncement announcement) {
             if (IsConnected) {
                 SparkleHelpers.DebugInfo ("Listener", "Announcing to " + announcement.FolderIdentifier + " on " + this.server);
                 Announce (announcement);
+
             } else {
                 SparkleHelpers.DebugInfo ("Listener", "Not connected to " + this.server + ". Queuing message");
                 this.queue_up.Add (announcement);
@@ -182,6 +167,20 @@ namespace SparkleLib {
 
             if (RemoteChange != null)
                 RemoteChange (announcement);
+        }
+
+
+        public string Server {
+            get {
+                return this.server;
+            }
+        }
+
+
+        public bool IsConnecting {
+            get {
+               return this.is_connecting;
+            }
         }
     }
 }
