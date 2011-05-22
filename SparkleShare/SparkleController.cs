@@ -514,15 +514,10 @@ namespace SparkleShare {
             if (folder_path.Equals (SparklePaths.SparkleTmpPath))
                 return;
 
-            Console.WriteLine (folder_path);
-
             SparkleRepoBase repo = null;
             if (Directory.Exists (Path.Combine (folder_path, ".git"))) {
-                Console.WriteLine (folder_path + " == Git");
                 repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
             } else if (Directory.Exists (Path.Combine (folder_path, ".hg"))) {
-
-                Console.WriteLine (folder_path + " == Hg");
                 SparkleBackend hg_backend = new SparkleBackend ("Hg", new string [] {"/opt/local/bin/hg"});
                 repo = new SparkleRepoMercurial (folder_path, hg_backend);
             }
