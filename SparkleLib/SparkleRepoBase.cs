@@ -384,6 +384,9 @@ namespace SparkleLib {
                         SyncStatusChanged (SyncStatus.Error);
 
                     SyncDownBase ();
+
+                    if (SyncUp ())
+                        HasUnsyncedChanges = false;
                 }
 
             } finally {
