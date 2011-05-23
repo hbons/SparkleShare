@@ -239,8 +239,8 @@ namespace SparkleLib {
 
             entries.Add (last_entry);
 
-            Regex regex = new Regex (@"([0-9]{4})-([0-9]{2})-([0-9]{2}).*([0-9]{2}):([0-9]{2}).*.([0-9]{4}).*" +
-                                      "(.+).*<(.+)>.*([a-z0-9]{12})", RegexOptions.Compiled);
+            Regex regex = new Regex (@"([0-9]{4})-([0-9]{2})-([0-9]{2}).*([0-9]{2}):([0-9]{2}).*.([0-9]{4})" +
+                                      "(.+)<(.+)>.*.([a-z0-9]{12})", RegexOptions.Compiled);
 
             // TODO: Need to optimise for speed
             foreach (string log_entry in entries) {
@@ -249,52 +249,60 @@ namespace SparkleLib {
 
                 Match match = regex.Match (log_entry);
 
-                if (match.Success) {Console.WriteLine ("f!!!!!!!!!!!!!!!!!!!!!");
-                    SparkleChangeSet change_set = new SparkleChangeSet ();
+                if (!match.Success)
+                    continue;
 
-                    change_set.Revision  = match.Groups [9].Value;
-                    change_set.UserName  = match.Groups [7].Value;
-                    change_set.UserEmail = match.Groups [8].Value;
-                    change_set.IsMerge   = is_merge_commit;
+                SparkleChangeSet change_set = new SparkleChangeSet () {
+                    Revision  = match.Groups [9].Value,
+                    UserName  = match.Groups [7].Value.Trim (),
+                    UserEmail = match.Groups [8].Value,
+                    IsMerge   = is_merge_commit
+                };
 
-                    change_set.Timestamp = new DateTime (int.Parse (match.Groups [1].Value),
-                        int.Parse (match.Groups [2].Value), int.Parse (match.Groups [3].Value),
-                        int.Parse (match.Groups [4].Value), int.Parse (match.Groups [5].Value), 0);
+                change_set.Timestamp = new DateTime (int.Parse (match.Groups [1].Value),
+                    int.Parse (match.Groups [2].Value), int.Parse (match.Groups [3].Value),
+                    int.Parse (match.Groups [4].Value), int.Parse (match.Groups [5].Value), 0);
 
-                    string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
+                string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
 
-                    foreach (string entry_line in entry_lines) {
-                        if (entry_line.StartsWith ("\t* ")) {
+                foreach (string entry_line in entry_lines) {
+                    if (!entry_line.StartsWith ("\t* "))
+                        continue;
 
-                            if (entry_line.EndsWith ("new file.")) {
-                                string files = entry_line.Substring (3, entry_line.Length - 13);
-                                string [] added_files = files.Split (",".ToCharArray());
+                    if (entry_line.EndsWith ("new file.")) {
+                        string files = entry_line.Substring (3, entry_line.Length - 13);
+                        string [] added_files = files.Split (",".ToCharArray ());
 
-                                foreach (string added_file in added_files)
-                                    change_set.Added.Add (added_file.Trim().TrimEnd (":".ToCharArray()));
+                        foreach (string added_file in added_files) {
+                            string file = added_file.TrimEnd (": ".ToCharArray ());
+                            change_set.Added.Add (file);
+                        }
 
-                            } else if (entry_line.EndsWith ("deleted file.")) {
-                                string files = entry_line.Substring (3, entry_line.Length - 17);
-                                string [] deleted_files = files.Split (",".ToCharArray());
+                    } else if (entry_line.EndsWith ("deleted file.")) {
+                        string files = entry_line.Substring (3, entry_line.Length - 17);
+                        string [] deleted_files = files.Split (",".ToCharArray ());
 
-                                foreach (string deleted_file in deleted_files)
-                                    change_set.Deleted.Add (deleted_file.Trim().TrimEnd (":".ToCharArray()));
+                        foreach (string deleted_file in deleted_files) {
+                            string file = deleted_file.TrimEnd (": ".ToCharArray ());
+                            change_set.Deleted.Add (file);
+                        }
 
-                            } else {
-                                string files = entry_line.Substring (3);
-                                string [] edited_files = files.Split (",".ToCharArray());
-                                    foreach (string file in edited_files){
+                    } else if (!"".Equals (entry_line.Trim ())){
+                        string files = entry_line.Substring (3);
+                        files = files.TrimEnd (":".ToCharArray());
+                        string [] edited_files = files.Split (",".ToCharArray ());
 
-                                    string edited_file = file.Trim().TrimEnd (":".ToCharArray());
-                                    Console.WriteLine ("[" + edited_file + "]");
-                                    if (!change_set.Added.Contains (edited_file) && !change_set.Deleted.Contains (edited_file))
-                                        change_set.Edited.Add (edited_file);
-                                   }
+                        foreach (string edited_file in edited_files) {
+                            if (!change_set.Added.Contains (edited_file) &&
+                                !change_set.Deleted.Contains (edited_file)) {
+
+                                change_set.Edited.Add (edited_file);
                             }
                         }
                     }
-                    change_sets.Add (change_set);
                 }
+
+                change_sets.Add (change_set);
             }
 
             return change_sets;
