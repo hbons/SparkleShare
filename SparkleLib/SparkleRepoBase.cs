@@ -113,7 +113,7 @@ namespace SparkleLib {
                         SyncDownBase ();
                 }
 
-                if (this.is_polling && !this.listener.IsConnecting)
+                if (this.is_polling && !this.listener.IsConnecting && !this.listener.IsConnected)
                     this.listener.Connect ();
 
                 // In the unlikely case that we haven't synced up our
