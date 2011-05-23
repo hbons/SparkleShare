@@ -88,7 +88,6 @@ namespace SparkleLib {
 
             if (hg.ExitCode == 0) {
                 return true;
-                //FetchRebaseAndPush ();TODO
             } else {
                 return false;
             }
