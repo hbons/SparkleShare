@@ -97,7 +97,7 @@ namespace SparkleLib {
 
             if (CurrentRevision == null) {
                 CreateInitialChangeSet ();
-                SyncUpBase ();
+                HasUnsyncedChanges = true;
             }
 
             CreateWatcher ();
