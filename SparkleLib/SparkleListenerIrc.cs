@@ -61,7 +61,7 @@ namespace SparkleLib {
 
             this.client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
                 string message = args.Data.Message.Trim ();
-                string folder_id = args.Data.Channel.Substring (1); // remove the #
+                string folder_id = args.Data.Channel.Substring (1); // remove the starting hash
                 OnRemoteChange (new SparkleAnnouncement (folder_id, message));
             };
         }
