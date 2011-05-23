@@ -19,14 +19,11 @@ using System;
 namespace SparkleLib {
 
 	public class Defines {
-
 		public const string VERSION         = "@VERSION@";
 		public const string LOCALE_DIR      = "@prefix@/share/locale";
 		public const string DATAROOTDIR     = "@expanded_datadir@";
 		public const string GETTEXT_PACKAGE = "@GETTEXT_PACKAGE@";
 		public const string PREFIX          = "@prefix@";
-		public const string OPEN_COMMAND    = "xdg-open";
-
 	}
-
 }
+
