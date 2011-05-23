@@ -1005,29 +1005,23 @@ namespace SparkleShare {
 
                 // Needed to do the moving
                 SparkleHelpers.ClearAttributes (tmp_folder);
+                string target_folder_path = Path.Combine (SparklePaths.SparklePath, target_folder_name);
 
                 try {
-                    string target_folder_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-                        target_folder_name);
-
                     Directory.Move (tmp_folder, target_folder_path);
-                    AddRepository (target_folder_path);
-
-                    if (FolderListChanged != null)
-                        FolderListChanged ();
-
-                    FolderSize = GetFolderSize ();
-
-                    if (FolderSizeChanged != null)
-                        FolderSizeChanged (FolderSize);
-
                 } catch (Exception e) {
                     SparkleHelpers.DebugInfo ("Controller", "Error moving folder: " + e.Message);
                 }
 
+                AddRepository (target_folder_path);
 
                 if (FolderFetched != null)
                     FolderFetched ();
+
+                FolderSize = GetFolderSize ();
+
+                if (FolderSizeChanged != null)
+                    FolderSizeChanged (FolderSize);
 
                 if (FolderListChanged != null)
                     FolderListChanged ();

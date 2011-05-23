@@ -51,7 +51,7 @@ namespace SparkleLib {
                 SparkleHg hg = new SparkleHg (LocalPath, "log -r : --limit 1 --template \"{node}\"");
                 hg.Start ();
                 hg.WaitForExit ();
-
+                Console.WriteLine ("Identifier" + hg.StandardOutput.ReadToEnd ());
                 return hg.StandardOutput.ReadToEnd ();
             }
         }
@@ -63,7 +63,12 @@ namespace SparkleLib {
                 hg.Start ();
                 hg.WaitForExit ();
 
-                return hg.StandardOutput.ReadToEnd ();
+                string hash = hg.StandardOutput.ReadToEnd ().Trim ();
+                Console.WriteLine ("CurrentRevision" + hg.StandardOutput.ReadToEnd ());
+                if (hash.Length > 0)
+                    return hash;
+                else
+                    return null;
             }
         }
 
@@ -206,8 +211,7 @@ namespace SparkleLib {
 
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
 
-            string style_file_path = SparkleHelpers.CombineMore (LocalPath, ".hg", "log.style");
-            SparkleHg hg_log = new SparkleHg (LocalPath, "log --limit " + count + " --style " + style_file_path);
+            SparkleHg hg_log = new SparkleHg (LocalPath, "log --limit " + count + " --style changelog --verbose --stat");
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             hg_log.Start ();
 
@@ -222,7 +226,7 @@ namespace SparkleLib {
             int j = 0;
             string entry = "", last_entry = "";
             foreach (string line in lines) {
-                if (line.StartsWith ("changeset:") && j > 0) {
+                if (line.StartsWith ("2") && line.EndsWith (")") && j > 0) {
                     entries.Add (entry);
                     entry = "";
                 }
@@ -235,10 +239,8 @@ namespace SparkleLib {
 
             entries.Add (last_entry);
 
-            Regex regex = new Regex (@"changeset: ([a-z0-9]{40})\n" +
-                                      "(.+) <(.+)>\n" +
-                                      "([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}) .([0-9]{4})\n" +
-                                      "", RegexOptions.Compiled);
+            Regex regex = new Regex (@"([0-9]{4})-([0-9]{2})-([0-9]{2}).*([0-9]{2}):([0-9]{2}).*.([0-9]{4}).*" +
+                                      "(.+).*<(.+)>.*([a-z0-9]{12})", RegexOptions.Compiled);
 
             // TODO: Need to optimise for speed
             foreach (string log_entry in entries) {
@@ -247,44 +249,50 @@ namespace SparkleLib {
 
                 Match match = regex.Match (log_entry);
 
-                if (match.Success) {
+                if (match.Success) {Console.WriteLine ("f!!!!!!!!!!!!!!!!!!!!!");
                     SparkleChangeSet change_set = new SparkleChangeSet ();
 
-                    change_set.Revision  = match.Groups [1].Value;
-                    change_set.UserName  = match.Groups [2].Value;
-                    change_set.UserEmail = match.Groups [3].Value;
+                    change_set.Revision  = match.Groups [9].Value;
+                    change_set.UserName  = match.Groups [7].Value;
+                    change_set.UserEmail = match.Groups [8].Value;
                     change_set.IsMerge   = is_merge_commit;
 
-                    change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
-                        int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
-                        int.Parse (match.Groups [7].Value), int.Parse (match.Groups [8].Value), 0);
+                    change_set.Timestamp = new DateTime (int.Parse (match.Groups [1].Value),
+                        int.Parse (match.Groups [2].Value), int.Parse (match.Groups [3].Value),
+                        int.Parse (match.Groups [4].Value), int.Parse (match.Groups [5].Value), 0);
 
                     string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
 
                     foreach (string entry_line in entry_lines) {
-                        if (entry_line.StartsWith (":")) {
+                        if (entry_line.StartsWith ("\t* ")) {
 
-                            string change_type = entry_line [37].ToString ();
-                            string file_path   = entry_line.Substring (39);
-                            string to_file_path;
+                            if (entry_line.EndsWith ("new file.")) {
+                                string files = entry_line.Substring (3, entry_line.Length - 13);
+                                string [] added_files = files.Split (",".ToCharArray());
 
-                            if (change_type.Equals ("A")) {
-                                change_set.Added.Add (file_path);
-                            } else if (change_type.Equals ("M")) {
-                                change_set.Edited.Add (file_path);
-                            } else if (change_type.Equals ("D")) {
-                                change_set.Deleted.Add (file_path);
-                            } else if (change_type.Equals ("R")) {
-                                int tab_pos  = entry_line.LastIndexOf ("\t");
-                                file_path    = entry_line.Substring (42, tab_pos - 42);
-                                to_file_path = entry_line.Substring (tab_pos + 1);
+                                foreach (string added_file in added_files)
+                                    change_set.Added.Add (added_file.Trim().TrimEnd (":".ToCharArray()));
 
-                                change_set.MovedFrom.Add (file_path);
-                                change_set.MovedTo.Add (to_file_path);
+                            } else if (entry_line.EndsWith ("deleted file.")) {
+                                string files = entry_line.Substring (3, entry_line.Length - 17);
+                                string [] deleted_files = files.Split (",".ToCharArray());
+
+                                foreach (string deleted_file in deleted_files)
+                                    change_set.Deleted.Add (deleted_file.Trim().TrimEnd (":".ToCharArray()));
+
+                            } else {
+                                string files = entry_line.Substring (3);
+                                string [] edited_files = files.Split (",".ToCharArray());
+                                    foreach (string file in edited_files){
+
+                                    string edited_file = file.Trim().TrimEnd (":".ToCharArray());
+                                    Console.WriteLine ("[" + edited_file + "]");
+                                    if (!change_set.Added.Contains (edited_file) && !change_set.Deleted.Contains (edited_file))
+                                        change_set.Edited.Add (edited_file);
+                                   }
                             }
                         }
                     }
-
                     change_sets.Add (change_set);
                 }
             }
