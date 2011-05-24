@@ -8,6 +8,7 @@ SOURCES =  \
 	Defines.cs \
 	SparkleBackend.cs \
 	SparkleChangeSet.cs \
+	SparkleConfig.cs \
 	SparkleFetcherBase.cs \
 	SparkleHelpers.cs \
 	SparkleListenerBase.cs \
@@ -18,8 +19,9 @@ SOURCES =  \
 	Git/SparkleRepoGit.cs \
 	Git/SparkleFetcherGit.cs \
         Hg/SparkleRepoHg.cs \
-	Hg/SparkleFetcherHg.cs 
-
+	Hg/SparkleFetcherHg.cs \
+	Scp/SparkleFetcherScp.cs \
+	Scp/SparkleRepoScp.cs
 
 
 SMARTIRC4NET_FILES_EXPANDED = $(foreach file, $(SMARTIRC4NET_FILES), $(top_builddir)/$(file))
