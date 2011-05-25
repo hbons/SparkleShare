@@ -134,6 +134,7 @@ namespace SparkleShare {
             // Remove the repository when a delete event occurs
             watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
                 RemoveRepository (args.FullPath);
+                SparkleConfig.DefaultConfig.RemoveFolder (Path.GetFileName (args.Name));
 
                 if (FolderListChanged != null)
                     FolderListChanged ();
@@ -186,8 +187,8 @@ namespace SparkleShare {
 
             string user_email = match.Groups [1].Value;
 
-            UserName  = user_name;
-            UserEmail = UserEmail;
+            WriteDefaultConfig (user_name, user_email);
+
             File.Delete (old_global_config_file_path);
         }
 
@@ -499,17 +500,32 @@ namespace SparkleShare {
             if (folder_path.Equals (SparklePaths.SparkleTmpPath))
                 return;
 
+            string folder_name = Path.GetFileName (folder_path);
+            string backend = SparkleConfig.DefaultConfig.GetBackendForFolder (folder_name);
+
+            if (backend == null)
+                return;
+
+
             SparkleRepoBase repo = null;
-            if (Directory.Exists (Path.Combine (folder_path, ".git"))) {
+
+            if (backend.Equals ("Git")) { Console.WriteLine ("Git: " + folder_path);
                 repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
 
-            } else if (Directory.Exists (Path.Combine (folder_path, ".hg"))) {
-                SparkleBackend hg_backend = new SparkleBackend ("Hg", new string [] {"/opt/local/bin/hg", "/usr/bin/hg"});
+            } else if (backend.Equals ("Hg")) {
+                SparkleBackend hg_backend = new SparkleBackend ("Hg",
+                        new string [] {
+                            "/opt/local/bin/hg",
+                            "/usr/bin/hg"
+                    });
+
                 repo = new SparkleRepoHg (folder_path, hg_backend);
-            } else if (Directory.Exists (Path.Combine (folder_path, ".sparkleshare"))) {
+
+            } else if (backend.Equals ("Scp")) {
                 SparkleBackend scp_backend = new SparkleBackend ("Scp", new string [] {"/usr/bin/scp"});
                 repo = new SparkleRepoScp (folder_path, scp_backend);
             }
+
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set, string repository_path) {
                 string message = FormatMessage (change_set);
@@ -566,8 +582,14 @@ namespace SparkleShare {
         {
             Repositories = new List<SparkleRepoBase> ();
 
-            foreach (string folder_path in Directory.GetDirectories (SparklePaths.SparklePath))
-                AddRepository (folder_path);
+            foreach (string folder_name in SparkleConfig.DefaultConfig.Folders) {
+                string folder_path = Path.Combine (SparklePaths.SparklePath, folder_name);
+
+                if (Directory.Exists (folder_path))
+                    AddRepository (folder_path);
+                else
+                    SparkleConfig.DefaultConfig.RemoveFolder (folder_name);
+            }
 
             if (FolderListChanged != null)
                 FolderListChanged ();
@@ -972,15 +994,22 @@ namespace SparkleShare {
             string canonical_name = Path.GetFileNameWithoutExtension (name);
             string tmp_folder     = Path.Combine (SparklePaths.SparkleTmpPath, canonical_name);
 
-            SparkleFetcherBase fetcher;
+            SparkleFetcherBase fetcher = null;
+            string backend = null;
+
             if (url.EndsWith (".hg")) {
-                url = url.Substring (0, (url.Length - 3));
+                url     = url.Substring (0, (url.Length - 3));
                 fetcher = new SparkleFetcherHg (url, tmp_folder);
+                backend = "Hg";
+
             } else if (url.EndsWith (".scp")) {
-                url = url.Substring (0, (url.Length - 4));
+                url     = url.Substring (0, (url.Length - 4));
                 fetcher = new SparkleFetcherScp (url, tmp_folder);
+                backend = "Scp";
+
             } else {
                 fetcher = new SparkleFetcherGit (url, tmp_folder);
+                backend = "Git";
             }
 
             bool target_folder_exists = Directory.Exists (Path.Combine (SparklePaths.SparklePath, canonical_name));
@@ -1011,6 +1040,8 @@ namespace SparkleShare {
                     SparkleHelpers.DebugInfo ("Controller", "Error moving folder: " + e.Message);
                 }
 
+
+                SparkleConfig.DefaultConfig.AddFolder (target_folder_name, backend);
                 AddRepository (target_folder_path);
 
                 if (FolderFetched != null)
