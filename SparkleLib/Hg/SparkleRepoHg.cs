@@ -63,8 +63,9 @@ namespace SparkleLib {
                 hg.Start ();
                 hg.WaitForExit ();
 
+		string hash = hg.StandardOutput.ReadToEnd ().Trim ();
                 if (hash.Length > 0)
-                    return hg.StandardOutput.ReadToEnd ().Trim ();
+                    return hash;
                 else
                     return null;
             }
