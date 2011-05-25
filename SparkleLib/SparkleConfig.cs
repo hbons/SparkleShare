@@ -22,6 +22,9 @@ namespace SparkleLib {
 
     public class SparkleConfig : XmlDocument {
 
+        public static SparkleConfig DefaultConfig = new SparkleConfig (
+            System.IO.Path.Combine (SparklePaths.SparkleConfigPath, "config.xml"));
+
         public string Path;
 
 
@@ -43,7 +46,6 @@ namespace SparkleLib {
                 node.InnerText = value;
 
                 Save (Path);
-
             }
         }
 
