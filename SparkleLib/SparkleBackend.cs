@@ -20,8 +20,6 @@ using System.IO;
 
 namespace SparkleLib {
 
-    // An inheritable class that contains information
-    // about a backend
     public class SparkleBackend {
 
         public static SparkleBackend DefaultBackend;
@@ -43,14 +41,14 @@ namespace SparkleLib {
         }
 
 
-        virtual public bool IsPresent {
+        public bool IsPresent {
             get {
                return (Path != null);
             }
         }
 
 
-        virtual public bool IsUsablePath (string path)
+        public bool IsUsablePath (string path)
         {
             return (path.Length > 0);
         }
