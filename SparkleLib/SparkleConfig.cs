@@ -92,12 +92,10 @@ namespace SparkleLib {
         public void RemoveFolder (string name)
         {
             foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
-                if (node_folder ["name"].InnerText.Equals (name)) {
-                    Console.WriteLine (name + "FOUND!!!!!!!!!!! REMOVING.....");
+                if (node_folder ["name"].InnerText.Equals (name))
                     SelectSingleNode ("/sparkleshare").RemoveChild (node_folder);
-                }
             }
-            Console.Write ("SUCCESS");
+
             Save ();
         }
 
