@@ -22,7 +22,15 @@ namespace SparkleLib {
 
     public class SparkleBackend {
 
-        public static SparkleBackend DefaultBackend;
+        public static SparkleBackend DefaultBackend =
+            new SparkleBackend ("Git",
+                new string [4] {
+                    "/opt/local/bin/git",
+                    "/usr/bin/git",
+                    "/usr/local/bin/git",
+                    "/usr/local/git/bin/git"
+                }
+            );
 
         public string Name;
         public string Path;
