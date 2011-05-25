@@ -76,10 +76,6 @@ namespace SparkleShare {
             if (show_help)
                 ShowHelp (p);
 
-            // Set the default backend for SparkleLib
-            string [] git_paths = new string [3] {"/usr/bin/git", "/usr/local/git/bin/git", "/usr/local/bin/git"};
-            SparkleBackend.DefaultBackend = new SparkleBackend ("Git", git_paths);
-
             // Load the right controller for the OS
             string controller_name;
             switch (SparkleShare.Platform) {
@@ -172,11 +168,13 @@ namespace SparkleShare {
         static PlatformID Platform {
             get {
                 IntPtr buf = IntPtr.Zero;
+
                 try {
                     buf = Marshal.AllocHGlobal (8192);
 
                     if (uname (buf) == 0 && Marshal.PtrToStringAnsi (buf) == "Darwin")
                         return PlatformID.MacOSX;
+
                 } catch {
                 } finally {
                     if (buf != IntPtr.Zero)
