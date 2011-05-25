@@ -105,14 +105,14 @@ namespace SparkleLib {
             if (!File.Exists (Path))
                 throw new ConfigFileNotFoundException (Path + " does not exist");
 
-            base.Save (Path);
+            Save (Path);
         }
     }
 
 
     public class ConfigFileNotFoundException : Exception {
 
-        public ConfigFileNotFoundException (string message)
-            : base (message) { }
+        public ConfigFileNotFoundException (string message) :
+            base (message) { }
     }
 }
