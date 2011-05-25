@@ -186,7 +186,8 @@ namespace SparkleShare {
 
             string user_email = match.Groups [1].Value;
 
-            WriteUserInfo (user_name, user_email);
+            UserName  = user_name;
+            UserEmail = UserEmail;
             File.Delete (old_global_config_file_path);
         }
 
@@ -505,6 +506,9 @@ namespace SparkleShare {
             } else if (Directory.Exists (Path.Combine (folder_path, ".hg"))) {
                 SparkleBackend hg_backend = new SparkleBackend ("Hg", new string [] {"/opt/local/bin/hg", "/usr/bin/hg"});
                 repo = new SparkleRepoHg (folder_path, hg_backend);
+            } else if (Directory.Exists (Path.Combine (folder_path, ".sparkleshare"))) {
+                SparkleBackend scp_backend = new SparkleBackend ("Scp", new string [] {"/usr/bin/scp"});
+                repo = new SparkleRepoScp (folder_path, scp_backend);
             }
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set, string repository_path) {
@@ -728,20 +732,11 @@ namespace SparkleShare {
         public string UserName
         {
             get {
-                string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
-    
-                if (!File.Exists (global_config_file_path))
-                    return "";
-                
-                XmlDocument xml = new XmlDocument();
-                xml.Load (global_config_file_path);
-
-                XmlNode node = xml.SelectSingleNode("//user/name/text()");
-                return node.Value;
+                return SparkleConfig.DefaultConfig.UserName;
             }
 
             set {
-                WriteUserInfo (value, UserEmail);
+                SparkleConfig.DefaultConfig.UserName = value;
             }
         }
 
@@ -778,12 +773,12 @@ namespace SparkleShare {
             }
                     
             set {
-                WriteUserInfo (UserName, value);
+                SparkleConfig.DefaultConfig.UserEmail = value;
             }
         }
         
         
-        private void WriteUserInfo (string user_name, string user_email)
+        private void WriteDefaultConfig (string user_name, string user_email)
         {
             string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
 
@@ -981,6 +976,9 @@ namespace SparkleShare {
             if (url.EndsWith (".hg")) {
                 url = url.Substring (0, (url.Length - 3));
                 fetcher = new SparkleFetcherHg (url, tmp_folder);
+            } else if (url.EndsWith (".scp")) {
+                url = url.Substring (0, (url.Length - 4));
+                fetcher = new SparkleFetcherScp (url, tmp_folder);
             } else {
                 fetcher = new SparkleFetcherGit (url, tmp_folder);
             }
