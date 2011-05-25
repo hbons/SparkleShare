@@ -41,12 +41,12 @@ namespace SparkleLib {
 
         public string UserName {
             get {
-                XmlNode node = SelectSingleNode ("//user/name/text()");
+                XmlNode node = SelectSingleNode ("/sparkleshare/user/name/text()");
                 return node.Value;
             }
 
             set {
-                XmlNode node = SelectSingleNode ("//user/name/text()");
+                XmlNode node = SelectSingleNode ("/sparkleshare/user/name/text()");
                 node.InnerText = value;
 
                 Save ();
@@ -56,12 +56,12 @@ namespace SparkleLib {
 
         public string UserEmail {
             get {
-                XmlNode node = SelectSingleNode ("//user/name/email()");
+                XmlNode node = SelectSingleNode ("/sparkleshare/user/name/email()");
                 return node.Value;
             }
 
             set {
-                XmlNode node = SelectSingleNode ("//user/name/email()");
+                XmlNode node = SelectSingleNode ("/sparkleshare/user/name/email()");
                 node.InnerText = value;
 
                 Save ();
@@ -82,7 +82,7 @@ namespace SparkleLib {
             node_folder.AppendChild (node_name);
             node_folder.AppendChild (node_backend);
 
-            XmlNode node_root = SelectSingleNode ("/");
+            XmlNode node_root = SelectSingleNode ("/sparkleshare");
             node_root.AppendChild (node_folder);
 
             Save ();
@@ -91,11 +91,13 @@ namespace SparkleLib {
 
         public void RemoveFolder (string name)
         {
-            foreach (XmlNode node_folder in SelectNodes ("//folder")) {
-                if (node_folder ["name"].InnerText.Equals (name))
-                    SelectSingleNode ("/").RemoveChild (node_folder);
+            foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
+                if (node_folder ["name"].InnerText.Equals (name)) {
+                    Console.WriteLine (name + "FOUND!!!!!!!!!!! REMOVING.....");
+                    SelectSingleNode ("/sparkleshare").RemoveChild (node_folder);
+                }
             }
-
+            Console.Write ("SUCCESS");
             Save ();
         }
 
