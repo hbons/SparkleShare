@@ -49,7 +49,7 @@ namespace SparkleLib {
                 XmlNode node = SelectSingleNode ("//user/name/text()");
                 node.InnerText = value;
 
-                Save (Path);
+                Save ();
             }
         }
 
@@ -64,7 +64,7 @@ namespace SparkleLib {
                 XmlNode node = SelectSingleNode ("//user/name/email()");
                 node.InnerText = value;
 
-                Save (Path);
+                Save ();
             }
         }
 
@@ -85,7 +85,7 @@ namespace SparkleLib {
             XmlNode node_root = SelectSingleNode ("/");
             node_root.AppendChild (node_folder);
 
-            Save (Path);
+            Save ();
         }
 
 
@@ -96,7 +96,16 @@ namespace SparkleLib {
                     SelectSingleNode ("/").RemoveChild (node_folder);
             }
 
-            Save (Path);
+            Save ();
+        }
+
+
+        public void Save ()
+        {
+            if (!File.Exists (Path))
+                throw new ConfigFileNotFoundException (Path + " does not exist");
+
+            base.Save (Path);
         }
     }
 
