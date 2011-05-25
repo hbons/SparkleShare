@@ -51,7 +51,7 @@ namespace SparkleLib {
                 SparkleHg hg = new SparkleHg (LocalPath, "log -r : --limit 1 --template \"{node}\"");
                 hg.Start ();
                 hg.WaitForExit ();
-                Console.WriteLine ("Identifier" + hg.StandardOutput.ReadToEnd ());
+
                 return hg.StandardOutput.ReadToEnd ();
             }
         }
@@ -63,10 +63,8 @@ namespace SparkleLib {
                 hg.Start ();
                 hg.WaitForExit ();
 
-                string hash = hg.StandardOutput.ReadToEnd ().Trim ();
-                Console.WriteLine ("CurrentRevision" + hg.StandardOutput.ReadToEnd ());
                 if (hash.Length > 0)
-                    return hash;
+                    return hg.StandardOutput.ReadToEnd ().Trim ();
                 else
                     return null;
             }
