@@ -18,7 +18,7 @@ SOURCES =  \
 	SparkleRepoBase.cs \
 	Git/SparkleRepoGit.cs \
 	Git/SparkleFetcherGit.cs \
-        Hg/SparkleRepoHg.cs \
+	Hg/SparkleRepoHg.cs \
 	Hg/SparkleFetcherHg.cs \
 	Scp/SparkleFetcherScp.cs \
 	Scp/SparkleRepoScp.cs
