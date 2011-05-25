@@ -144,8 +144,13 @@ namespace SparkleShare {
                     process.StartInfo.RedirectStandardOutput = true;
                     process.StartInfo.UseShellExecute        = false;
                     process.StartInfo.FileName               = "gvfs-set-attribute";
-                    process.StartInfo.Arguments              = SparklePaths.SparklePath + " metadata::custom-icon " +
-                                                               "file://" + icon_file_path;
+
+                    // Clear the custom (legacy) icon path
+                    process.StartInfo.Arguments = SparklePaths.SparklePath + " metadata::custom-icon ''";                                                          "";
+                    process.Start ();
+
+                    // Give the SparkleShare folder an icon name, so that it scales
+                    process.StartInfo.Arguments = SparklePaths.SparklePath + " metadata::custom-icon-name 'folder-sparkleshare'";                                                          "";
                     process.Start ();
                 }
 
