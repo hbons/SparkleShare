@@ -16,6 +16,7 @@
 
 
 using System;
+using System.IO;
 using System.Xml;
 
 namespace SparkleLib {
@@ -30,6 +31,9 @@ namespace SparkleLib {
 
         public SparkleConfig (string path)
         {
+            if (!File.Exists (path))
+                throw new ConfigFileNotFoundException (path + " does not exist");
+
             Path = path;
             Load (Path);
         }
@@ -94,5 +98,12 @@ namespace SparkleLib {
 
             Save (Path);
         }
+    }
+
+
+    public class ConfigFileNotFoundException : Exception {
+
+        public ConfigFileNotFoundException (string message)
+            : base (message) { }
     }
 }
