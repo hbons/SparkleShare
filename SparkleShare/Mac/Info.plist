@@ -2,8 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleExecutable</key>
-	<string></string>
+	<key>LSEnvironment</key>
+	<dict>
+		<key>MONO_MANAGED_WATCHER</key>
+		<string>1</string>
+	</dict>
 	<key>CFBundleIconFile</key>
 	<string>sparkleshare</string>
 	<key>CFBundleIdentifier</key>
