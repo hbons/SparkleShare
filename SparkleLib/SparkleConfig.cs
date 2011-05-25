@@ -17,6 +17,7 @@
 
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Xml;
 
 namespace SparkleLib {
@@ -69,7 +70,19 @@ namespace SparkleLib {
         }
 
 
-        public void AddFolder (string name, SparkleBackend backend)
+        public string [] Folders {
+            get {
+                List<string> folders = new List<string> ();
+
+                foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder"))
+                    folders.Add (node_folder ["name"].InnerText);
+
+                return folders.ToArray ();
+            }
+        }
+
+
+        public void AddFolder (string name, string backend)
         {
             XmlNode node_folder = CreateNode (XmlNodeType.Element, "folder", null);
 
@@ -77,7 +90,7 @@ namespace SparkleLib {
             node_name.InnerText = name;
 
             XmlNode node_backend = CreateElement ("backend");
-            node_backend.InnerText = backend.Name;
+            node_backend.InnerText = backend;
 
             node_folder.AppendChild (node_name);
             node_folder.AppendChild (node_backend);
@@ -97,6 +110,28 @@ namespace SparkleLib {
             }
 
             Save ();
+        }
+
+
+        public bool FolderExists (string name)
+        {
+            foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
+                if (node_folder ["name"].InnerText.Equals (name))
+                    return true;
+            }
+
+            return false;
+        }
+
+
+        public string GetBackendForFolder (string name)
+        {
+            foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
+                if (node_folder ["name"].InnerText.Equals (name))
+                    return node_folder ["backend"].InnerText;
+            }
+
+            return null;
         }
 
 
