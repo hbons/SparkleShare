@@ -29,13 +29,6 @@ namespace SparkleLib {
             base (path, backend) { }
 
 
-        public override string Url {
-            get {
-                return "";
-            }
-        }
-
-
         public override string Identifier {
             get {
                 return "sparkles";

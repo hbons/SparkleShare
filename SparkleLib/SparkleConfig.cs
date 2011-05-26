@@ -121,17 +121,20 @@ namespace SparkleLib {
         }
 
 
-        public void AddFolder (string name, string backend)
+        public void AddFolder (string name, string url, string backend)
         {
-            XmlNode node_folder = CreateNode (XmlNodeType.Element, "folder", null);
-
             XmlNode node_name = CreateElement ("name");
             node_name.InnerText = name;
+
+            XmlNode node_url = CreateElement ("url");
+            node_url.InnerText = url;
 
             XmlNode node_backend = CreateElement ("backend");
             node_backend.InnerText = backend;
 
+            XmlNode node_folder = CreateNode (XmlNodeType.Element, "folder", null);
             node_folder.AppendChild (node_name);
+            node_folder.AppendChild (node_url);
             node_folder.AppendChild (node_backend);
 
             XmlNode node_root = SelectSingleNode ("/sparkleshare");
@@ -168,6 +171,17 @@ namespace SparkleLib {
             foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
                 if (node_folder ["name"].InnerText.Equals (name))
                     return node_folder ["backend"].InnerText;
+            }
+
+            return null;
+        }
+
+
+        public string GetUrlForFolder (string name)
+        {
+            foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
+                if (node_folder ["name"].InnerText.Equals (name))
+                    return node_folder ["url"].InnerText;
             }
 
             return null;
