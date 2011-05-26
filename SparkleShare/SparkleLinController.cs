@@ -131,9 +131,6 @@ namespace SparkleShare {
                 Directory.CreateDirectory (SparklePaths.SparklePath);
                 SparkleHelpers.DebugInfo ("Controller", "Created '" + SparklePaths.SparklePath + "'");
 
-                string icon_file_path = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "icons", "hicolor",
-                    "48x48", "apps", "folder-sparkleshare.png");
-
                 string gvfs_command_path = SparkleHelpers.CombineMore (Path.VolumeSeparatorChar.ToString (),
                     "usr", "bin", "gvfs-set-attribute");
 

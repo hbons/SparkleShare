@@ -78,22 +78,17 @@ namespace SparkleShare {
                     RowSpacing = 6
                 };
 
-                    string full_name  = new UnixUserInfo (UnixEnvironment.UserName).RealName;
-                    if (string.IsNullOrEmpty (full_name))
-                        full_name = "";
-
                     Label name_label = new Label ("<b>" + _("Full Name:") + "</b>") {
                         UseMarkup = true,
                         Xalign    = 0
                     };
 
-                    NameEntry = new Entry (full_name.TrimEnd (",".ToCharArray()));
+                    NameEntry = new Entry (SparkleShare.Controller.UserName);
                     NameEntry.Changed += delegate {
                         CheckAccountForm ();
                     };
 
-
-                    EmailEntry = new Entry (SparkleShare.Controller.UserEmail);
+                    EmailEntry = new Entry ();
                     EmailEntry.Changed += delegate {
                         CheckAccountForm ();
                     };
@@ -128,7 +123,6 @@ namespace SparkleShare {
                         SparkleShare.Controller.GenerateKeyPair ();
                         SparkleShare.Controller.AddKey ();
                 
-                        SparkleShare.Controller.FirstRun = false;
                         SparkleUI.StatusIcon.CreateMenu ();
 
                         Deletable = true;

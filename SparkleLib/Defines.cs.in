@@ -19,6 +19,7 @@ using System;
 namespace SparkleLib {
 
 	public class Defines {
+
 		public const string VERSION         = "@VERSION@";
 		public const string LOCALE_DIR      = "@prefix@/share/locale";
 		public const string DATAROOTDIR     = "@expanded_datadir@";

@@ -20,23 +20,62 @@ using System.IO;
 using System.Collections.Generic;
 using System.Xml;
 
+using Mono.Unix;
+
 namespace SparkleLib {
 
     public class SparkleConfig : XmlDocument {
 
         public static SparkleConfig DefaultConfig = new SparkleConfig (
-            System.IO.Path.Combine (SparklePaths.SparkleConfigPath, "config.xml"));
+            SparklePaths.SparkleConfigPath, "config.xml");
 
         public string Path;
 
 
-        public SparkleConfig (string path)
+        public SparkleConfig (string config_path, string config_file_name)
         {
-            if (!File.Exists (path))
-                throw new ConfigFileNotFoundException (path + " does not exist");
+            Path = System.IO.Path.Combine (config_path, config_file_name);
 
-            Path = path;
+            if (!Directory.Exists (config_path)) {
+                Directory.CreateDirectory (config_path);
+                SparkleHelpers.DebugInfo ("Config", "Created \"" + config_path + "\"");
+            }
+
+            string icons_path = System.IO.Path.Combine (config_path, "icons");
+            if (!Directory.Exists (icons_path)) {
+                Directory.CreateDirectory (icons_path);
+                SparkleHelpers.DebugInfo ("Config", "Created '" + icons_path + "'");
+            }
+
+            if (!File.Exists (Path))
+                CreateInitialConfig ();
+
             Load (Path);
+        }
+
+
+        private void CreateInitialConfig ()
+        {
+            string user_name  = new UnixUserInfo (UnixEnvironment.UserName).RealName;
+
+            if (string.IsNullOrEmpty (user_name))
+                user_name = "";
+            else
+                user_name = user_name.TrimEnd (",".ToCharArray());
+
+            TextWriter writer = new StreamWriter (Path);
+            string n          = Environment.NewLine;
+
+            writer.Write ("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + n +
+                          "<sparkleshare>" + n +
+                          "  <user>" + n +
+                          "    <name>" + user_name + "</name>" + n +
+                          "    <email>Unknown</email>" + n +
+                          "  </user>" + n +
+                          "</sparkleshare>");
+            writer.Close ();
+
+            SparkleHelpers.DebugInfo ("Config", "Created \"" + Path + "\"");
         }
 
 
@@ -57,12 +96,12 @@ namespace SparkleLib {
 
         public string UserEmail {
             get {
-                XmlNode node = SelectSingleNode ("/sparkleshare/user/name/email()");
+                XmlNode node = SelectSingleNode ("/sparkleshare/user/email/text()");
                 return node.Value;
             }
 
             set {
-                XmlNode node = SelectSingleNode ("/sparkleshare/user/name/email()");
+                XmlNode node = SelectSingleNode ("/sparkleshare/user/email/text()");
                 node.InnerText = value;
 
                 Save ();
@@ -70,14 +109,14 @@ namespace SparkleLib {
         }
 
 
-        public string [] Folders {
+        public List<string> Folders {
             get {
                 List<string> folders = new List<string> ();
 
                 foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder"))
                     folders.Add (node_folder ["name"].InnerText);
 
-                return folders.ToArray ();
+                return folders;
             }
         }
 
@@ -135,12 +174,44 @@ namespace SparkleLib {
         }
 
 
+        public string GetConfigOption (string name)
+        {
+            XmlNode node = SelectSingleNode ("/sparkleshare/" + name);
+
+            if (node != null)
+                return node.InnerText;
+            else
+                return null;
+        }
+
+
+        public void SetConfigOption (string name, string content)
+        {
+            XmlNode node = SelectSingleNode ("/sparkleshare/" + name);
+
+            if (node != null) {
+                node.InnerText = content;
+
+            } else {
+                node           = CreateElement (name);
+                node.InnerText = content;
+
+                XmlNode node_root = SelectSingleNode ("/sparkleshare");
+                node_root.AppendChild (node);
+            }
+
+            SparkleHelpers.DebugInfo ("Config", "Updated " + name + ":" + content);
+            Save ();
+        }
+
+
         public void Save ()
         {
             if (!File.Exists (Path))
                 throw new ConfigFileNotFoundException (Path + " does not exist");
 
             Save (Path);
+            SparkleHelpers.DebugInfo ("Config", "Updated \"" + Path + "\"");
         }
     }
 
