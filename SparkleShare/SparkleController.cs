@@ -475,7 +475,7 @@ namespace SparkleShare {
 
             SparkleRepoBase repo = null;
 
-            if (backend.Equals ("Git")) { Console.WriteLine ("Git: " + folder_path);
+            if (backend.Equals ("Git")) {
                 repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
 
             } else if (backend.Equals ("Hg")) {
