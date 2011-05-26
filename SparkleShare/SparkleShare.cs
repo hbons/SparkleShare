@@ -67,6 +67,7 @@ namespace SparkleShare {
 
             try {
                 p.Parse (args);
+
             } catch (OptionException e) {
                 Console.Write ("SparkleShare: ");
                 Console.WriteLine (e.Message);
@@ -148,10 +149,10 @@ namespace SparkleShare {
         private static void SetProcessName (string name)
         {
             try {
-                if (prctl (15, Encoding.ASCII.GetBytes (name + "\0"), IntPtr.Zero, IntPtr.Zero, IntPtr.Zero) != 0) {
+                if (prctl (15, Encoding.ASCII.GetBytes (name + "\0"), IntPtr.Zero, IntPtr.Zero, IntPtr.Zero) != 0)
                     throw new ApplicationException ("Error setting process name: " +
-                        Mono.Unix.Native.Stdlib.GetLastError ());
-                }
+                                                    Mono.Unix.Native.Stdlib.GetLastError ());
+
             } catch (EntryPointNotFoundException) {
                 Console.WriteLine ("SetProcessName: Entry point not found");
             }
@@ -164,7 +165,7 @@ namespace SparkleShare {
 
 
         // This fixes the PlatformID enumeration for MacOSX in Environment.OSVersion.Platform,
-        // which is intentionally broken in Mono for hystorical reasons
+        // which is intentionally broken in Mono for historical reasons
         static PlatformID Platform {
             get {
                 IntPtr buf = IntPtr.Zero;
