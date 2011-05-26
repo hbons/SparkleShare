@@ -35,7 +35,6 @@ namespace SparkleShare {
 
         public List <SparkleRepoBase> Repositories;
         public string FolderSize;
-        public bool FirstRun;
         public readonly string SparklePath;
 
         public event OnQuitWhileSyncingEventHandler OnQuitWhileSyncing;
@@ -106,22 +105,14 @@ namespace SparkleShare {
 
             FolderSize = GetFolderSize ();
 
-            string global_config_file_path     = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
+            // TODO: Legacy. Remove at some later point
             string old_global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config");
+            if (File.Exists (old_global_config_file_path))
+                MigrateConfig ();
 
-            // Show the introduction screen if SparkleShare isn't configured
-            if (!File.Exists (global_config_file_path)) {
-                if (File.Exists (old_global_config_file_path)) {
-                    MigrateConfig ();
-                    FirstRun = false;
-
-                } else {
-                    WriteDefaultConfig ("Unknown", "");
-                    FirstRun = true;
-                }
-
+            if (FirstRun) {
+                SparkleConfig.DefaultConfig.SetConfigOption ("notifications", bool.TrueString);
             } else {
-                FirstRun = false;
                 AddKey ();
             }
 
@@ -165,13 +156,19 @@ namespace SparkleShare {
                 }
             };
 
-            CreateConfigurationFolders ();
             new Thread (new ThreadStart (PopulateRepositories)).Start ();
         }
 
 
-        // TODO: remove this later
-        private void MigrateConfig () {
+        public bool FirstRun {
+            get {
+                return SparkleConfig.DefaultConfig.UserEmail.Equals ("Unknown");
+            }
+        }
+
+
+         private void MigrateConfig ()
+         {
             string old_global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config");
 
             StreamReader reader = new StreamReader (old_global_config_file_path);
@@ -188,7 +185,8 @@ namespace SparkleShare {
 
             string user_email = match.Groups [1].Value;
 
-            WriteDefaultConfig (user_name, user_email);
+            SparkleConfig.DefaultConfig.UserName  = user_name;
+            SparkleConfig.DefaultConfig.UserEmail = user_email;
 
             File.Delete (old_global_config_file_path);
         }
@@ -229,12 +227,7 @@ namespace SparkleShare {
 
         public List<string> Folders {
             get {
-                List<string> folders = new List <string> ();
-                
-                foreach (SparkleRepoBase repo in Repositories)
-                    folders.Add (repo.LocalPath);
-
-                return folders;
+                return SparkleConfig.DefaultConfig.Folders;
             }
         }
         
@@ -415,34 +408,6 @@ namespace SparkleShare {
             string html = event_log_html.Replace ("<!-- $event-log-content -->", event_log);
             return html;
         }
-        
-        
-        // Creates a folder in the user's home folder to store configuration
-        private void CreateConfigurationFolders ()
-        {
-            if (!Directory.Exists (SparklePaths.SparkleTmpPath))
-                Directory.CreateDirectory (SparklePaths.SparkleTmpPath);
-
-            string config_path     = SparklePaths.SparkleConfigPath;
-            string local_icon_path = SparklePaths.SparkleLocalIconPath;
-
-            if (!Directory.Exists (config_path)) {
-
-                // Create a folder to store settings
-                Directory.CreateDirectory (config_path);
-                SparkleHelpers.DebugInfo ("Config", "Created '" + config_path + "'");
-
-                // Create a folder to store the avatars
-                Directory.CreateDirectory (local_icon_path);
-                SparkleHelpers.DebugInfo ("Config", "Created '" + local_icon_path + "'");
-
-                string notify_setting_file = SparkleHelpers.CombineMore (config_path, "sparkleshare.notify");
-
-                // Enable notifications by default                
-                if (!File.Exists (notify_setting_file))
-                    File.Create (notify_setting_file);
-            }
-        }
 
 
         // Creates a .desktop entry in autostart folder to
@@ -604,22 +569,29 @@ namespace SparkleShare {
 
         public bool NotificationsEnabled {
             get {
-                string notify_setting_file_path = Path.Combine (SparklePaths.SparkleConfigPath,
-                    "sparkleshare.notify");
+                string notifications_enabled =
+                    SparkleConfig.DefaultConfig.GetConfigOption ("notifications");
 
-                return File.Exists (notify_setting_file_path);
+                if (String.IsNullOrEmpty (notifications_enabled)) {
+                    SparkleConfig.DefaultConfig.SetConfigOption ("notifications", bool.TrueString);
+                    return true;
+
+                } else {
+                    return notifications_enabled.Equals (bool.TrueString);
+                }
             }
         } 
 
 
         public void ToggleNotifications () {
-            string notify_setting_file_path = Path.Combine (SparklePaths.SparkleConfigPath,
-                "sparkleshare.notify");
-                                                     
-            if (File.Exists (notify_setting_file_path))
-                File.Delete (notify_setting_file_path);
+            bool notifications_enabled =
+                SparkleConfig.DefaultConfig.GetConfigOption ("notifications")
+                    .Equals (bool.TrueString);
+
+            if (notifications_enabled)
+                SparkleConfig.DefaultConfig.SetConfigOption ("notifications", bool.FalseString);
             else
-                File.Create (notify_setting_file_path);
+                SparkleConfig.DefaultConfig.SetConfigOption ("notifications", bool.TrueString);
         }
 
 
@@ -768,31 +740,7 @@ namespace SparkleShare {
         public string UserEmail
         {
             get {
-                string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
-
-                if (File.Exists (global_config_file_path)) {
-                    XmlDocument xml = new XmlDocument();
-                    xml.Load (global_config_file_path);
-
-                    XmlNode node = xml.SelectSingleNode("//user/email/text()");
-                    return node.Value;
-
-                } else {
-                    string keys_path = SparklePaths.SparkleKeysPath;
-
-                    if (!Directory.Exists (keys_path))
-                        return "";
-
-                    foreach (string file_path in Directory.GetFiles (keys_path)) {
-                        Regex regex = new Regex (@"sparkleshare\.(.+)\.key");
-                        Match match = regex.Match (Path.GetFileName (file_path));
-
-                        if (match.Success)
-                            return match.Groups [1].Value;
-                    }
-
-                    return "";
-                }
+                return SparkleConfig.DefaultConfig.UserEmail;
             }
                     
             set {
@@ -800,26 +748,6 @@ namespace SparkleShare {
             }
         }
         
-        
-        private void WriteDefaultConfig (string user_name, string user_email)
-        {
-            string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
-
-            // Write the user's information to a text file
-            TextWriter writer = new StreamWriter (global_config_file_path);
-            string n          = Environment.NewLine;
-            writer.WriteLine ("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + n +
-                              "<sparkleshare>" + n +
-                              "  <user>" + n +
-                              "    <name>" + user_name + "</name>" + n +
-                              "    <email>" + user_email + "</email>" + n +
-                              "  </user>" + n +
-                              "</sparkleshare>" + n);
-            writer.Close ();
-
-            SparkleHelpers.DebugInfo ("Config", "Updated '" + global_config_file_path + "'");
-        }
-
 
         // Generates and installs an RSA keypair to identify this system
         public void GenerateKeyPair ()

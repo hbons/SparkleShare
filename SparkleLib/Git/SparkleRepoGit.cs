@@ -302,7 +302,7 @@ namespace SparkleLib {
 
                     // Append a timestamp to local version
                     string timestamp            = DateTime.Now.ToString ("HH:mm MMM d");
-                    string their_path           = conflicting_path + " (" + UserName + ", " + timestamp + ")";
+                    string their_path           = conflicting_path + " (" + SparkleConfig.DefaultConfig.UserName + ", " + timestamp + ")";
                     string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
                     string abs_their_path       = Path.Combine (LocalPath, their_path);
 
