@@ -340,7 +340,7 @@ namespace SparkleShare {
 	
 						SparkleShare.Controller.FolderFetched += delegate {
 							InvokeOnMainThread (delegate {
-								ShowSuccessPage (name);
+								ShowSuccessPage (canonical_name);
 							});
 						};
 				
