@@ -71,13 +71,7 @@ namespace SparkleShare {
 				UserInfoForm.CellSize = new SizeF (280, 22);
 				UserInfoForm.IntercellSpacing = new SizeF (4, 4);
 
-
-                // TODO: Move to Controller.WriteDefaultConfig
-				string full_name = new UnixUserInfo (UnixEnvironment.UserName).RealName;
-                if (string.IsNullOrEmpty (full_name))
-				    full_name = "";
-
-				UserInfoForm.Cells [0].StringValue = full_name.TrimEnd (",".ToCharArray());;
+				UserInfoForm.Cells [0].StringValue = SparkleShare.Controller.UserName;
 				UserInfoForm.Cells [1].StringValue = SparkleShare.Controller.UserEmail;
 
 				ContinueButton = new NSButton () {
@@ -88,8 +82,7 @@ namespace SparkleShare {
 				ContinueButton.Activated += delegate {
 					SparkleShare.Controller.UserName  = UserInfoForm.Cells [0].StringValue.Trim ();
 					SparkleShare.Controller.UserEmail = UserInfoForm.Cells [1].StringValue.Trim ();
-					SparkleShare.Controller.GenerateKeyPair ();				
-					SparkleShare.Controller.FirstRun = false;
+					SparkleShare.Controller.GenerateKeyPair ();
                     SparkleUI.StatusIcon.CreateMenu ();
 				
 					InvokeOnMainThread (delegate {
