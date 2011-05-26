@@ -29,18 +29,6 @@ namespace SparkleLib {
             base (path, backend) { }
 
 
-        public override string Url {
-            get {
-                SparkleGit git = new SparkleGit (LocalPath, "config --get remote.origin.url");
-                git.Start ();
-                git.WaitForExit ();
-
-                string output = git.StandardOutput.ReadToEnd ();
-                return output.TrimEnd ();
-            }
-        }
-
-
         public override string Identifier {
             get {
 

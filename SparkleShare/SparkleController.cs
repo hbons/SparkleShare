@@ -970,7 +970,7 @@ namespace SparkleShare {
                 }
 
 
-                SparkleConfig.DefaultConfig.AddFolder (target_folder_name, backend);
+                SparkleConfig.DefaultConfig.AddFolder (target_folder_name, url, backend);
                 AddRepository (target_folder_path);
 
                 if (FolderFetched != null)

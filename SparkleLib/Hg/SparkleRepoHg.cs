@@ -29,23 +29,6 @@ namespace SparkleLib {
             base (path, backend) { }
 
 
-        public override string Url {
-            get {
-                string repo_config_file_path = SparkleHelpers.CombineMore (LocalPath, ".hg", "hgrc");
-                Regex regex = new Regex (@"default = (.+)");
-
-                foreach (string line in File.ReadAllLines (repo_config_file_path)) {
-                    Match match = regex.Match (line);
-
-                    if (match.Success)
-                        return match.Groups [1].Value.TrimEnd ();
-                }
-
-                return null;
-            }
-        }
-
-
         public override string Identifier {
             get {
                 SparkleHg hg = new SparkleHg (LocalPath, "log -r : --limit 1 --template \"{node}\"");

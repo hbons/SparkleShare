@@ -51,7 +51,6 @@ namespace SparkleLib {
         private bool has_changed   = false;
         private Object change_lock = new Object ();
 
-        public abstract string Url { get; }
         public abstract bool AnyDifferences { get; }
         public abstract string Identifier { get; }
         public abstract string CurrentRevision { get; }
@@ -72,7 +71,6 @@ namespace SparkleLib {
         public event ChangesDetectedEventHandler ChangesDetected;
 
 
-        // TODO: constructor (path, url, backend)
         public SparkleRepoBase (string path, SparkleBackend backend)
         {
             LocalPath = path;
@@ -154,7 +152,7 @@ namespace SparkleLib {
         public string Domain {
             get {
                 Regex regex = new Regex (@"(@|://)([a-z0-9\.]+)(/|:)");
-                Match match = regex.Match (Url);
+                Match match = regex.Match (SparkleConfig.DefaultConfig.GetUrlForFolder (Name));
 
                 if (match.Success)
                     return match.Groups [2].Value;
@@ -193,7 +191,8 @@ namespace SparkleLib {
 
         public string RemoteName {
             get {
-                return Path.GetFileNameWithoutExtension (Url);
+                string url = SparkleConfig.DefaultConfig.GetUrlForFolder (Name);
+                return Path.GetFileNameWithoutExtension (url);
             }
         }
 
