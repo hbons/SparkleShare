@@ -451,22 +451,6 @@ namespace SparkleLib {
         }
 
 
-        protected string UserName
-        {
-            get {
-                return SparkleConfig.DefaultConfig.UserName;
-            }
-        }
-
-
-        protected string UserEmail
-        {
-            get {
-                return SparkleConfig.DefaultConfig.UserEmail;
-            }
-        }
-
-
         // Recursively gets a folder's size in bytes
         private double CalculateFolderSize (DirectoryInfo parent)
         {
