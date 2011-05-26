@@ -332,7 +332,7 @@ namespace SparkleShare {
                         SparkleShare.Controller.FolderFetched += delegate {
                             Application.Invoke (delegate {
                                 Deletable = true;
-                                ShowSuccessPage (name);
+                                ShowSuccessPage (canonical_name);
                             });
                         };
                 
@@ -534,7 +534,7 @@ namespace SparkleShare {
                         Button open_folder_button = new Button (_("Open Folder"));
 
                         open_folder_button.Clicked += delegate {
-                            SparkleShare.Controller.OpenSparkleShareFolder (System.IO.Path.GetFileNameWithoutExtension(folder_name));
+                            SparkleShare.Controller.OpenSparkleShareFolder (folder_name);
                         };
 
                         Button finish_button = new Button (_("Finish"));
