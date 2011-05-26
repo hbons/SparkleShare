@@ -116,6 +116,7 @@ namespace SparkleShare {
                     FirstRun = false;
 
                 } else {
+                    WriteDefaultConfig ("Unknown", "");
                     FirstRun = true;
                 }
 
