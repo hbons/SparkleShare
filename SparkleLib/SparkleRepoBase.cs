@@ -452,16 +452,7 @@ namespace SparkleLib {
         protected string UserName
         {
             get {
-                string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
-    
-                if (!File.Exists (global_config_file_path))
-                    return "";
-                
-                XmlDocument xml = new XmlDocument();
-                xml.Load (global_config_file_path);
-
-                XmlNode node = xml.SelectSingleNode("//user/name/text()");
-                return node.Value;
+                return SparkleConfig.DefaultConfig.UserName;
             }
         }
 
@@ -469,16 +460,7 @@ namespace SparkleLib {
         protected string UserEmail
         {
             get {
-                string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
-
-                if (!File.Exists (global_config_file_path))
-                    return "";
-
-                XmlDocument xml = new XmlDocument();
-                xml.Load (global_config_file_path);
-
-                XmlNode node = xml.SelectSingleNode("//user/email/text()");
-                return node.Value;
+                return SparkleConfig.DefaultConfig.UserEmail;
             }
         }
 
