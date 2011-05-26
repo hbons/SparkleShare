@@ -93,6 +93,7 @@ namespace SparkleShare {
             SparklePath = SparklePaths.SparklePath;
 
             // Remove temporary file
+            SparkleHelpers.ClearAttributes (SparklePaths.SparkleTmpPath);
             if (Directory.Exists (SparklePaths.SparkleTmpPath))
                 Directory.Delete (SparklePaths.SparkleTmpPath, true);
 
