@@ -801,8 +801,8 @@ namespace SparkleShare {
         {
             string ssh_config_file_path = SparkleHelpers.CombineMore (
                 SparklePaths.HomePath, ".ssh", "config");
-            
-            string ssh_config = Environment.NewLine + "Host " + host + 
+
+            string ssh_config = Environment.NewLine + "Host " + host +
                                 Environment.NewLine + "\tStrictHostKeyChecking no";
 
             if (File.Exists (ssh_config_file_path)) {
@@ -815,10 +815,12 @@ namespace SparkleShare {
                 writer.WriteLine (ssh_config);
                 writer.Close ();
             }
-            
+
             UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
             file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
                                                FileAccessPermissions.UserWrite);
+
+            SparkleHelpers.DebugInfo ("Controller", "Disabled host key checking");
         }
         
 
@@ -827,7 +829,7 @@ namespace SparkleShare {
             string ssh_config_file_path = SparkleHelpers.CombineMore (
                 SparklePaths.HomePath, ".ssh", "config");
 
-            string ssh_config = Environment.NewLine + "Host " + host + 
+            string ssh_config = Environment.NewLine + "Host " + host +
                                 Environment.NewLine + "\tStrictHostKeyChecking no";
 
             if (File.Exists (ssh_config_file_path)) {
@@ -846,15 +848,17 @@ namespace SparkleShare {
                     TextWriter writer = new StreamWriter (ssh_config_file_path);
                     writer.WriteLine (current_ssh_config);
                     writer.Close ();
-                    
+
                     UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
                     file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
                                                        FileAccessPermissions.UserWrite);
                 }
             }
-        }            
 
-        
+            SparkleHelpers.DebugInfo ("Controller", "Enabled host key checking");
+        }
+
+
         // Gets the avatar for a specific email address and size
         public string GetAvatar (string email, int size)
         {
