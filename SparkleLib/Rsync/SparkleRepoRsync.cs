@@ -42,7 +42,7 @@ namespace SparkleLib {
             }
         }
 
-
+		//need to see if there is a way to pass the changes detected later to avoid checking twice
         public override bool CheckForRemoteChanges ()
         {
 			SparkleRsync rsync = new SparkleRsync (SparklePaths.SparkleTmpPath,
@@ -64,19 +64,48 @@ namespace SparkleLib {
 
         public override bool SyncUp ()
         {
-            return true;
+			SparkleRsync rsync = new SparkleRsync (SparklePaths.SparkleTmpPath,
+                "-aizvP \"" + base.target_folder + "\" " + "\"" + base.remote_url + "\"");
+
+            rsync.Start ();
+            rsync.WaitForExit ();
+
+            if (rsync.ExitCode == 0)
+                return true;
+            else
+                return false;
         }
 
 
         public override bool SyncDown ()
         {
-            return true;
+			SparkleRsync rsync = new SparkleRsync (SparklePaths.SparkleTmpPath,
+                "-aizvPn \"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
+
+            rsync.Start ();
+            rsync.WaitForExit ();
+
+            if (rsync.ExitCode == 0)
+                return true;
+            else
+                return false;
         }
 
 
         public override bool AnyDifferences {
             get {
-                return false;
+                SparkleRsync rsync = new SparkleRsync (SparklePaths.SparkleTmpPath,
+                	"-aizvPn \"" + base.target_folder + "\" " + "\"" + base.remote_url + "\"");
+
+	            rsync.Start ();
+	            rsync.WaitForExit ();
+	
+	            string remote_revision = rsync.StandardOutput.ReadToEnd ().TrimEnd ();
+	
+	            if (CountLinesInString(remote_revision) > 4) 
+	                return true;
+	             else 
+	                return false;
             }
         }
 

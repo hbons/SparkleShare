@@ -33,7 +33,7 @@ namespace SparkleLib {
         {
 			//need to figure out to use option -e ‘ssh -p port′ (hbons: forge from url)
             SparkleRsync rsync = new SparkleRsync (SparklePaths.SparkleTmpPath,
-                "-azvP \"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
+                "-azviP \"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
