@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-28 17:46+0200\n"
-"PO-Revision-Date: 2011-05-28 15:48+0000\n"
+"PO-Revision-Date: 2011-05-28 16:15+0000\n"
 "Last-Translator: deejay1 <deejay1@srem.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -69,11 +69,11 @@ msgstr "_Odwiedź stronę domową"
 
 #: ../SparkleShare/SparkleController.cs:397
 msgid "ddd MMM d, yyyy"
-msgstr ""
+msgstr "ddd, d MMM yyyy"
 
 #: ../SparkleShare/SparkleController.cs:402
 msgid "ddd MMM d"
-msgstr ""
+msgstr "ddd, d MMM"
 
 #: ../SparkleShare/SparkleController.cs:613
 #, csharp-format
@@ -83,7 +83,7 @@ msgstr "dodano „{0}”"
 #: ../SparkleShare/SparkleController.cs:618
 #, csharp-format
 msgid "moved ‘{0}’"
-msgstr ""
+msgstr "przesunięto \"{0}\""
 
 #: ../SparkleShare/SparkleController.cs:623
 #, csharp-format
@@ -99,13 +99,13 @@ msgstr "usunięto „{0}”"
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "oraz {0} więcej"
+msgstr[1] "oraz {0} więcej"
+msgstr[2] "oraz {0} więcej"
 
 #: ../SparkleShare/SparkleController.cs:640
 msgid "did something magical"
-msgstr ""
+msgstr "wydarzyło się coś magicznego"
 
 #: ../SparkleShare/SparkleIntro.cs:71
 msgid ""
@@ -334,7 +334,7 @@ msgstr "Wyświetla opcje pomocy"
 
 #: ../SparkleShare/SparkleShare.cs:114
 msgid "SparkleShare, a collaboration and sharing tool."
-msgstr ""
+msgstr "SparkleShare ‒ narzędzie wspomagające współpracę."
 
 #: ../SparkleShare/SparkleShare.cs:115
 msgid "Copyright (C) 2010 Hylke Bons"
