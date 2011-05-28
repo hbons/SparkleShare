@@ -45,8 +45,8 @@ namespace SparkleLib {
 		//need to see if there is a way to pass the changes detected later to avoid checking twice
         public override bool CheckForRemoteChanges ()
         {
-			SparkleRsync rsync = new SparkleRsync (SparklePaths.SparkleTmpPath,
-                "-aizvPn \"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
+			SparkleRsync rsync = new SparkleRsync (LocalPath,
+                "-aizvPn \"" + base.remote_url + "\" " + "\".\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -64,8 +64,8 @@ namespace SparkleLib {
 
         public override bool SyncUp ()
         {
-			SparkleRsync rsync = new SparkleRsync (SparklePaths.SparkleTmpPath,
-                "-aizvP \"" + base.target_folder + "\" " + "\"" + base.remote_url + "\"");
+			SparkleRsync rsync = new SparkleRsync (LocalPath,
+                "-aizvP \".\" " + "\"" + base.remote_url + "\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -79,8 +79,8 @@ namespace SparkleLib {
 
         public override bool SyncDown ()
         {
-			SparkleRsync rsync = new SparkleRsync (SparklePaths.SparkleTmpPath,
-                "-aizvPn \"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
+			SparkleRsync rsync = new SparkleRsync (LocalPath,
+                "-aizvPn \"" + base.remote_url + "\" " + "\".\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -94,8 +94,8 @@ namespace SparkleLib {
 
         public override bool AnyDifferences {
             get {
-                SparkleRsync rsync = new SparkleRsync (SparklePaths.SparkleTmpPath,
-                	"-aizvPn \"" + base.target_folder + "\" " + "\"" + base.remote_url + "\"");
+                SparkleRsync rsync = new SparkleRsync (LocalPath,
+                	"-aizvPn \".\" " + "\"" + base.remote_url + "\"");
 
 	            rsync.Start ();
 	            rsync.WaitForExit ();
