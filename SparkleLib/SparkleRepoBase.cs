@@ -99,9 +99,6 @@ namespace SparkleLib {
                         SyncDownBase ();
                 }
 
-                if (this.is_polling && !this.listener.IsConnecting && !this.listener.IsConnected)
-                    this.listener.Connect ();
-
                 // In the unlikely case that we haven't synced up our
                 // changes or the server was down, sync up again
                 if (HasUnsyncedChanges)
@@ -121,17 +118,6 @@ namespace SparkleLib {
                     SyncUpBase ();
                 EnableWatching ();
             }
-        }
-
-
-        // Create an initial change set when the
-        // user has fetched an empty remote folder
-        public virtual void CreateInitialChangeSet ()
-        {
-            string file_path = Path.Combine (LocalPath, "SparkleShare.txt");
-            TextWriter writer = new StreamWriter (file_path);
-            writer.WriteLine (":)");
-            writer.Close ();
         }
 
 
@@ -211,9 +197,6 @@ namespace SparkleLib {
         }
 
 
-
-
-
         // Disposes all resourses of this object
         public void Dispose ()
         {
@@ -268,7 +251,7 @@ namespace SparkleLib {
             };
 
             // Fetch changes when there is a message in the irc channel
-            this.listener.RemoteChange += delegate (SparkleAnnouncement announcement) {
+            this.listener.Announcement += delegate (SparkleAnnouncement announcement) {
                 string identifier = Identifier;
 
                 if (announcement.FolderIdentifier == identifier &&
@@ -295,15 +278,15 @@ namespace SparkleLib {
         {
             lock (this.change_lock) {
                 if (this.has_changed) {
-                    if ( this.sizebuffer.Count >= 4)
-                         this.sizebuffer.RemoveAt (0);
+                    if (this.sizebuffer.Count >= 4)
+                        this.sizebuffer.RemoveAt (0);
                         
                     DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
                      this.sizebuffer.Add (CalculateFolderSize (dir_info));
 
-                    if ( this.sizebuffer [0].Equals (this.sizebuffer [1]) &&
-                         this.sizebuffer [1].Equals (this.sizebuffer [2]) &&
-                         this.sizebuffer [2].Equals (this.sizebuffer [3])) {
+                    if (this.sizebuffer [0].Equals (this.sizebuffer [1]) &&
+                        this.sizebuffer [1].Equals (this.sizebuffer [2]) &&
+                        this.sizebuffer [2].Equals (this.sizebuffer [3])) {
 
                         SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled.");
                         this.is_buffering = false;
@@ -444,6 +427,17 @@ namespace SparkleLib {
         public void EnableWatching ()
         {
             this.watcher.EnableRaisingEvents = true;
+        }
+
+
+        // Create an initial change set when the
+        // user has fetched an empty remote folder
+        public virtual void CreateInitialChangeSet ()
+        {
+            string file_path = Path.Combine (LocalPath, "SparkleShare.txt");
+            TextWriter writer = new StreamWriter (file_path);
+            writer.WriteLine (":)");
+            writer.Close ();
         }
 
 
