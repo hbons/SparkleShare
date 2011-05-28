@@ -59,7 +59,7 @@ namespace SparkleLib {
             string user_name  = new UnixUserInfo (UnixEnvironment.UserName).RealName;
 
             if (string.IsNullOrEmpty (user_name))
-                user_name = "";
+                user_name = "Unknown";
             else
                 user_name = user_name.TrimEnd (",".ToCharArray());
 
