@@ -61,14 +61,14 @@ namespace SparkleLib {
             }
         }
 
-
+		//need to figure out how to make it append to the log and not overwrite depending on what is the default behaviour
         public override bool SyncUp ()
         {
 			//the option --inplace is good if your server uses block level snapshots (ex. ZFS) but it increases network throughput
 			//maybe make a config file option?
 			//Windows<->Solaris will want to use -A to preserve ACL
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvP \".\" " + "\"" + base.remote_url + "\"");
+                "-aizvP --log-file=./.rlog \".\" " + "\"" + base.remote_url + "\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -79,11 +79,10 @@ namespace SparkleLib {
                 return false;
         }
 
-
         public override bool SyncDown ()
         {
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvP \"" + base.remote_url + "\" " + "\".\"");
+                "-aizvP --log-file=./.rlog \"" + base.remote_url + "\" " + "\".\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
