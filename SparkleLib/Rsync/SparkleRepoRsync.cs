@@ -80,7 +80,7 @@ namespace SparkleLib {
         public override bool SyncDown ()
         {
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvPn \"" + base.remote_url + "\" " + "\".\"");
+                "-aizvP \"" + base.remote_url + "\" " + "\".\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
