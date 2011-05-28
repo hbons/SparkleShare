@@ -38,7 +38,7 @@ namespace SparkleShare {
 
         public SparkleWindow () : base ("")
         {
-            Title          = "SparkleShare Setup";
+            Title          = Catalog.GetString ("SparkleShare Setup");
             BorderWidth    = 0;
             IconName       = "folder-sparkleshare";
             Resizable      = false;
