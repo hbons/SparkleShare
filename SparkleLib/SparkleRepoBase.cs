@@ -211,10 +211,7 @@ namespace SparkleLib {
         }
 
 
-        public static bool IsRepo (string path)
-        {
-            return true; //TODO
-        }
+
 
 
         // Disposes all resourses of this object

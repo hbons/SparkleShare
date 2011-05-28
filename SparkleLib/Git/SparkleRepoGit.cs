@@ -528,12 +528,6 @@ namespace SparkleLib {
         }
 
 
-        new public static bool IsRepo (string path)
-        {
-            return System.IO.Directory.Exists (Path.Combine (path, ".git"));
-        }
-
-
         public override bool UsesNotificationCenter
         {
             get {
