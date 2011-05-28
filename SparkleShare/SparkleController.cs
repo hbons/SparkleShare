@@ -106,11 +106,10 @@ namespace SparkleShare {
             if (File.Exists (old_global_config_file_path))
                 MigrateConfig ();
 
-            if (FirstRun) {
+            if (FirstRun)
                 SparkleConfig.DefaultConfig.SetConfigOption ("notifications", bool.TrueString);
-            } else {
+            else
                 AddKey ();
-            }
 
             // Watch the SparkleShare folder
             FileSystemWatcher watcher = new FileSystemWatcher (SparklePaths.SparklePath) {
@@ -401,8 +400,7 @@ namespace SparkleShare {
                 event_log += day_entry.Replace ("<!-- $day-entry-content -->", event_entries);
             }
 
-            string html = event_log_html.Replace ("<!-- $event-log-content -->", event_log);
-            return html;
+            return event_log_html.Replace ("<!-- $event-log-content -->", event_log);
         }
 
 
@@ -468,25 +466,17 @@ namespace SparkleShare {
             if (backend == null)
                 return;
 
-
+            
             SparkleRepoBase repo = null;
 
-            if (backend.Equals ("Git")) {
-                repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
+            if (backend.Equals ("Hg"))
+                repo = new SparkleRepoHg (folder_path, new SparkleBackendHg ());
 
-            } else if (backend.Equals ("Hg")) {
-                SparkleBackend hg_backend = new SparkleBackend ("Hg",
-                        new string [] {
-                            "/opt/local/bin/hg",
-                            "/usr/bin/hg"
-                    });
+            else if (backend.Equals ("Scp"))
+                repo = new SparkleRepoScp (folder_path, new SparkleBackendScp ());
 
-                repo = new SparkleRepoHg (folder_path, hg_backend);
-
-            } else if (backend.Equals ("Scp")) {
-                SparkleBackend scp_backend = new SparkleBackend ("Scp", new string [] {"/usr/bin/scp"});
-                repo = new SparkleRepoScp (folder_path, scp_backend);
-            }
+            else
+               repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
 
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set, string repository_path) {
@@ -631,6 +621,7 @@ namespace SparkleShare {
             if (changes_count > 0) {
                 string msg = Catalog.GetPluralString ("and {0} more", "and {0} more", changes_count);
                 message += " " + String.Format (msg, changes_count);
+
             } else if (changes_count < 0) {
                 message += _("did something magical");
             }

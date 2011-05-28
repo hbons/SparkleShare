@@ -22,15 +22,7 @@ namespace SparkleLib {
 
     public class SparkleBackend {
 
-        public static SparkleBackend DefaultBackend =
-            new SparkleBackend ("Git",
-                new string [4] {
-                    "/opt/local/bin/git",
-                    "/usr/bin/git",
-                    "/usr/local/bin/git",
-                    "/usr/local/git/bin/git"
-                }
-            );
+        public static SparkleBackend DefaultBackend = new SparkleBackendGit ();
 
         public string Name;
         public string Path;
@@ -60,5 +52,45 @@ namespace SparkleLib {
         {
             return (path.Length > 0);
         }
+    }
+
+
+    public class SparkleBackendGit : SparkleBackend {
+
+        private static string name     = "Git";
+        private static string [] paths = new string [] {
+            "/opt/local/bin/git",
+            "/usr/bin/git",
+            "/usr/local/bin/git",
+            "/usr/local/git/bin/git"
+        };
+
+        public SparkleBackendGit () : base (name, paths) { }
+
+    }
+
+
+    public class SparkleBackendHg : SparkleBackend {
+
+        private static string name     = "Hg";
+        private static string [] paths = new string [] {
+            "/opt/local/bin/hg",
+            "/usr/bin/hg"
+        };
+
+        public SparkleBackendHg () : base (name, paths) { }
+
+    }
+
+
+    public class SparkleBackendScp : SparkleBackend {
+
+        private static string name     = "Scp";
+        private static string [] paths = new string [] {
+            "/usr/bin/scp"
+        };
+
+        public SparkleBackendScp () : base (name, paths) { }
+
     }
 }
