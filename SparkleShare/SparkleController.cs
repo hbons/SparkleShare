@@ -92,11 +92,6 @@ namespace SparkleShare {
         {
             SparklePath = SparklePaths.SparklePath;
 
-            // Remove temporary file
-            SparkleHelpers.ClearAttributes (SparklePaths.SparkleTmpPath);
-            if (Directory.Exists (SparklePaths.SparkleTmpPath))
-                Directory.Delete (SparklePaths.SparkleTmpPath, true);
-
             InstallLauncher ();
             EnableSystemAutostart ();
 
@@ -911,6 +906,9 @@ namespace SparkleShare {
 
         public void FetchFolder (string url, string name)
         {
+            if (!Directory.Exists (SparklePaths.SparkleTmpPath))
+                Directory.CreateDirectory (SparklePaths.SparkleTmpPath);
+
             SparkleHelpers.DebugInfo ("Controller", "Formed URL: " + url);
 
             string host = GetHost (url);
@@ -974,7 +972,6 @@ namespace SparkleShare {
                     SparkleHelpers.DebugInfo ("Controller", "Error moving folder: " + e.Message);
                 }
 
-
                 SparkleConfig.DefaultConfig.AddFolder (target_folder_name, url, backend);
                 AddRepository (target_folder_path);
 
@@ -990,24 +987,22 @@ namespace SparkleShare {
                     FolderListChanged ();
 
                 fetcher.Dispose ();
+
+                if (Directory.Exists (SparklePaths.SparkleTmpPath))
+                    Directory.Delete (SparklePaths.SparkleTmpPath, true);
             };
 
 
             fetcher.Failed += delegate {
                 EnableHostKeyCheckingForHost (host);
 
-                if (Directory.Exists (tmp_folder)) {
-                    SparkleHelpers.ClearAttributes (tmp_folder);
-                    Directory.Delete (tmp_folder, true);
-
-                    SparkleHelpers.DebugInfo ("Config",
-                        "Deleted temporary directory: " + tmp_folder);
-                }
-
                 if (FolderFetchError != null)
                     FolderFetchError ();
 
                 fetcher.Dispose ();
+
+                if (Directory.Exists (SparklePaths.SparkleTmpPath))
+                    Directory.Delete (SparklePaths.SparkleTmpPath, true);
             };
 
 
