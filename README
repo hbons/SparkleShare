@@ -93,33 +93,68 @@ Run on Mac:
 
 Just double-click the SparkleShare.app.
 
-
 Build on Mac:
 =============
 
-Install the Mono Framework, Monodevelop (plus the MonoMac plugin), and MacPorts.
-Install git, automake, and intltool:
+Install the Mono Framework, MonoDevelop and the MonoMac plugin (you find it in Add-in Manager).
 
-   $ sudo port install git-core automake intltool
-
-You may need to adjust some environment variables to find mono:
+You may need to adjust some environment variables to let the make tools find mono:
    
    $ export PATH=/Library/Frameworks/Mono.framework/Versions/Current/bin:$PATH
    $ export PKG_CONFIG=/Library/Frameworks/Mono.framework/Versions/Current/bin/pkg-config
    $ export PKG_CONFIG_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
+
+Then you need either MacPorts or Homebrew. Go on and choose one of the next two sections.
+
+Using MacPorts
+--------------
+
+Install git, automake, and intltool:
+
+   $ sudo port install git-core automake intltool
 
 Start the first part of the build:
 
    $ ./autogen.sh
    $ make
 
-The last step will give you some errors in SparkleShare.exe, ignore these, you only
-need the libraries to be compiled. Now open 'SparkleShare/Mac/SparkleShare.sln' in 
+The last step will give you some errors in SparkleShare.exe, ignore these and go on to the
+MonoDevelop section.
+
+Using Homebrew
+--------------
+
+Because there are old versions of autoconf and automake installed on OS X,
+they are not in the official master branch. It's easy to create the formulas.
+Just do a 'brew create $url' and then install them.
+You can have a look at this branch where I created the Formulas:
+https://github.com/toabi/homebrew/commits/sparkleshare
+
+You also have to comment out the 'keg_only' in gettext and remove it if you already
+installed it.
+
+If you created the formulas install them:
+
+	$ brew install git autoconf automake intltool gettext
+
+Now start the first part of the build:
+
+	$ export ACLOCAL_FLAGS="-I /usr/local/share/aclocal"
+	$ cd SmartIrc4net
+	$ ./autogen.sh
+	$ cd ..
+	$ ./autogen.sh
+	$ make
+
+Ignore the error and continue to the MonoDevelop-part.
+
+Building the real thing in MonoDevelop
+--------------------------------------
+
+You now have compiled the libraries. Now open 'SparkleShare/Mac/SparkleShare.sln' in
 MonoDevelop and start the build.
 
-To create the SparkleShare.app, select Project from the menu bar and
-click "Create Mac Installer..."
-
+To create the SparkleShare.app, select Project from the menu bar and click "Create Mac Installer..."
 
 Info
 ====
