@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Timers;
 
 namespace SparkleLib {
 
@@ -87,8 +88,8 @@ namespace SparkleLib {
 
         // We've been notified about a remote
         // change by the channel
-        public event RemoteChangeEventHandler RemoteChange;
-        public delegate void RemoteChangeEventHandler (SparkleAnnouncement announcement);
+        public event AnnouncementEventHandler Announcement;
+        public delegate void AnnouncementEventHandler (SparkleAnnouncement announcement);
 
 
         public abstract void Connect ();
@@ -103,9 +104,16 @@ namespace SparkleLib {
         protected List<SparkleAnnouncement> queue_down = new List<SparkleAnnouncement> ();
         protected bool is_connecting;
         protected string server;
+        protected Timer reconnect_timer = new Timer { Interval = 60 * 1000};
 
+        public SparkleListenerBase (string server, string folder_identifier, NotificationServerType type) {
+           this.reconnect_timer.Elapsed += delegate {
+                if (!IsConnected && !IsConnecting)
+                    Reconnect ();
+           };
 
-        public SparkleListenerBase (string server, string folder_identifier, NotificationServerType type) { }
+           this.reconnect_timer.Start ();
+        }
 
 
         public void AnnounceBase (SparkleAnnouncement announcement) {
@@ -133,6 +141,13 @@ namespace SparkleLib {
         }
 
 
+        public void Reconnect ()
+        {
+            SparkleHelpers.DebugInfo ("Listener", "Trying to reconnect to " + this.server);
+            Connect ();
+        }
+
+
         public void OnConnected ()
         {
             SparkleHelpers.DebugInfo ("Listener", "Connected to " + Server);
@@ -142,10 +157,10 @@ namespace SparkleLib {
 
             if (this.queue_up.Count > 0) {
                 SparkleHelpers.DebugInfo ("Listener", "Delivering queued messages...");
-                foreach (SparkleAnnouncement announcement in this.queue_up)
+                foreach (SparkleAnnouncement announcement in this.queue_up) {
                     AnnounceBase (announcement);
-
-                this.queue_up = new List<SparkleAnnouncement> ();
+                    this.queue_up.Remove (announcement);
+                }
             }
         }
 
@@ -159,14 +174,14 @@ namespace SparkleLib {
         }
 
 
-        public void OnRemoteChange (SparkleAnnouncement announcement)
+        public void OnAnnouncement (SparkleAnnouncement announcement)
         {
             SparkleHelpers.DebugInfo ("Listener", "Got message from " + announcement.FolderIdentifier + " on " + this.server);
  
             this.queue_down.Add (announcement);
 
-            if (RemoteChange != null)
-                RemoteChange (announcement);
+            if (Announcement != null)
+                Announcement (announcement);
         }
 
 

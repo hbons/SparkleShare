@@ -46,8 +46,8 @@ namespace SparkleLib {
             base.channels.Add ("#" + folder_identifier);
 
             this.client = new IrcClient () {
-                PingTimeout  = 180,
-                PingInterval = 90
+                PingTimeout  = 130,
+                PingInterval = 60
             };
 
             this.client.OnConnected += delegate {
@@ -59,10 +59,14 @@ namespace SparkleLib {
                 OnDisconnected ();
             };
 
+            this.client.OnError += delegate {
+                OnDisconnected ();
+            };
+
             this.client.OnChannelMessage += delegate (object o, IrcEventArgs args) {
                 string message = args.Data.Message.Trim ();
                 string folder_id = args.Data.Channel.Substring (1); // remove the starting hash
-                OnRemoteChange (new SparkleAnnouncement (folder_id, message));
+                OnAnnouncement (new SparkleAnnouncement (folder_id, message));
             };
         }
 
@@ -89,15 +93,18 @@ namespace SparkleLib {
                         this.client.Connect (new string [] {base.server}, 6667);
                         this.client.Login (this.nick, this.nick);
 
-                        foreach (string channel in base.channels)
+                        foreach (string channel in base.channels) {
+                            SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
                             this.client.RfcJoin (channel);
+                        }
 
                         // List to the channel, this blocks the thread
                         this.client.Listen ();
 
                         // Disconnect when we time out
                         this.client.Disconnect ();
-                    } catch (Meebey.SmartIrc4net.ConnectionException e) {
+
+                    } catch (ConnectionException e) {
                         SparkleHelpers.DebugInfo ("ListenerIrc", "Could not connect to " + Server + ": " + e.Message);
                     }
                 })
@@ -110,6 +117,7 @@ namespace SparkleLib {
         public override void AlsoListenTo (string folder_identifier)
         {
             string channel = "#" + folder_identifier;
+            SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
             base.channels.Add (channel);
             this.client.RfcJoin (channel);
         }
