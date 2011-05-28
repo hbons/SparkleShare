@@ -44,21 +44,21 @@ namespace SparkleShare {
             BorderWidth    = 0;
             IconName       = "folder-sparkleshare";
             WindowPosition = WindowPosition.Center;
-            Title          = "About SparkleShare";
+            Title          = _("About SparkleShare");
             Resizable      = false;
 
             CreateAbout ();
 
             SparkleShare.Controller.NewVersionAvailable += delegate (string new_version) {
                 Application.Invoke (delegate {
-                    this.version.Markup = "<small><span fgcolor='#f57900'>A newer version (" + new_version + ") is available!</span></small>";
+                    this.version.Markup = String.Format ("<small><span fgcolor='#f57900'>{0}: {1}</span></small>", _("A newer version is available"), new_version);
                     this.version.ShowAll ();
                 });
             };
 
             SparkleShare.Controller.VersionUpToDate += delegate {
                 Application.Invoke (delegate {
-                    this.version.Markup = "<small><span fgcolor='#4e9a06'>You are running the latest version.</span></small>";
+                    this.version.Markup = String.Format ("<small><span fgcolor='#4e9a06'>{0}</span></small>", _("You are running the latest version."));
                     this.version.ShowAll ();
                 });
             };
@@ -85,7 +85,7 @@ namespace SparkleShare {
             box.Add (header);
 
             this.version = new Label () {
-                Markup = "<small>Checking for updates...</small>",
+                Markup = String.Format ("<small>{0}</small>", _("Checking for updates...")),
                 Xalign = 0,
                 Xpad   = 18,
                 Ypad   = 22,
