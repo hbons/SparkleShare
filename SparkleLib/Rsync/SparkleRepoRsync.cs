@@ -127,14 +127,14 @@ namespace SparkleLib {
 		
 		private long CountLinesInString(string s)
 	    {
-		long count = 1;
-		int start = 0;
-		while ((start = s.IndexOf('\n', start)) != -1)
-		{
-		    count++;
-		    start++;
-		}
-		return count;
+			long count = 1;
+			int start = 0;
+			while ((start = s.IndexOf('\n', start)) != -1)
+			{
+			    count++;
+			    start++;
+			}
+			return count;
 	    }
 	}
 }
