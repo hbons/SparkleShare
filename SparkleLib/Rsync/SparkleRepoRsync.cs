@@ -64,6 +64,9 @@ namespace SparkleLib {
 
         public override bool SyncUp ()
         {
+			//the option --inplace is good if your server uses block level snapshots (ex. ZFS) but it increases network throughput
+			//maybe make a config file option?
+			//Windows<->Solaris will want to use -A to preserve ACL
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
                 "-aizvP \".\" " + "\"" + base.remote_url + "\"");
 
@@ -131,7 +134,8 @@ namespace SparkleLib {
             }
         }
 
-
+		//http://samba.anu.edu.au/ftp/rsync/rsync.html
+		//see entry for -i (--itemize) this describes how rsync reports changes
         public override List <SparkleChangeSet> GetChangeSets (int count)
         {
             var l = new List<SparkleChangeSet> ();
