@@ -32,26 +32,19 @@ namespace SparkleShare {
 
         public override void WillBecomeActive (NSNotification notification)
         {
-
             NSApplication.SharedApplication.DockTile.BadgeLabel = null;
-
         }
 
         public override void OrderFrontStandardAboutPanel (NSObject sender)
         {
-
             // FIXME: Doesn't work
             new SparkleAbout ();
-
         }
 
         public override void WillTerminate (NSNotification notification)
         {
-
             SparkleShare.Controller.Quit ();
-
         }
-
 	}
 
 
@@ -62,50 +55,42 @@ namespace SparkleShare {
 		public static SparkleIntro Intro;
 		public static NSFont Font;
 
-        private NSAlert Alert;
+        private NSAlert alert;
 
 
 		public SparkleUI ()
 		{
-
 			NSApplication.Init ();
-			
-			SetSparkleIcon ();
 
-			// TODO: Getting crashes when I remove this
-			NSApplication.SharedApplication.ApplicationIconImage
-				= NSImage.ImageNamed ("sparkleshare.icns");
+			using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
+    			SetSparkleIcon ();
+    
+    			// TODO: Getting crashes when I remove this
+    			NSApplication.SharedApplication.ApplicationIconImage
+    				= NSImage.ImageNamed ("sparkleshare.icns");
+    
+                if (!SparkleShare.Controller.BackendIsPresent) {
+                    this.alert = new SparkleAlert ();
+                    this.alert.RunModal ();
+                    return;
+                }
+    
+                Font = NSFontManager.SharedFontManager.FontWithFamily
+                    ("Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
 
-
-            if (!SparkleShare.Controller.BackendIsPresent) {
-
-                Alert = new SparkleAlert ();
-                Alert.RunModal ();
-                return;
-
+                OpenLogs   = new List <SparkleLog> ();
+                StatusIcon = new SparkleStatusIcon ();
             }
 
-			Font = NSFontManager.SharedFontManager.FontWithFamily
-				("Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
-
-//            new SparkleAbout ();
-
-			OpenLogs   = new List <SparkleLog> ();
-			StatusIcon = new SparkleStatusIcon ();
-            
-
-			SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
+            SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
                                                                     string message, string repository_path) {
-
 				InvokeOnMainThread (delegate {
-
                     foreach (SparkleLog log in OpenLogs) {
                         if (log.LocalPath.Equals (repository_path))
                                 log.UpdateEventLog ();
                     }
 
                     if (SparkleShare.Controller.NotificationsEnabled) {
-
                         if (NSApplication.SharedApplication.DockTile.BadgeLabel == null)
                             NSApplication.SharedApplication.DockTile.BadgeLabel = "1";
                         else
@@ -114,51 +99,36 @@ namespace SparkleShare {
 
     					NSApplication.SharedApplication.RequestUserAttention
     						(NSRequestUserAttentionType.InformationalRequest);
-
                     }
-
 				});
-				
 			};
 			
 			
 			SparkleShare.Controller.AvatarFetched += delegate {
-			
 				InvokeOnMainThread (delegate {
-					
 					foreach (SparkleLog log in SparkleUI.OpenLogs)
 						log.UpdateEventLog ();
-					
 				});
-		
 			};
 			
 
 			SparkleShare.Controller.OnIdle += delegate {
-			
 				InvokeOnMainThread (delegate {
-					
 					foreach (SparkleLog log in SparkleUI.OpenLogs)
 						log.UpdateEventLog ();
-					
 				});
-		
 			};
 			
 			
 			if (SparkleShare.Controller.FirstRun) {
-			
 				Intro = new SparkleIntro ();
 				Intro.ShowAccountForm ();
-				
 			}
-			
 		}
 	
-		
+
 		public void SetSparkleIcon ()
 		{
-
 			string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
 				"sparkleshare-mac.icns");
 
@@ -166,20 +136,12 @@ namespace SparkleShare {
 						
 			NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon,
 				SparkleShare.Controller.SparklePath, 0);
-
 		}
 
 
 		public void Run ()
 		{
-
             NSApplication.Main (new string [0]);
-
 		}
-
-
-
-
 	}
-
 }
