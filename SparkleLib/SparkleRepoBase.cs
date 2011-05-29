@@ -303,12 +303,12 @@ namespace SparkleLib {
 
 
         // Starts a timer when something changes
-        private void OnFileActivity (object o, FileSystemEventArgs fse_args)
+        private void OnFileActivity (object o, FileSystemEventArgs args)
         {
-            if (fse_args.Name.StartsWith (".git/") || fse_args.Name.StartsWith (".hg/"))
+            if (args.FullPath.Contains ("/.git") || args.FullPath.Contains ("/.hg"))
                 return;
 
-            WatcherChangeTypes wct = fse_args.ChangeType;
+            WatcherChangeTypes wct = args.ChangeType;
 
             if (AnyDifferences) {
                 this.is_buffering = true;
@@ -320,8 +320,8 @@ namespace SparkleLib {
                         ChangesDetected ();
                 }
 
-                SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + fse_args.Name + "'");
-                SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes found, checking if settled.");
+                SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + args.Name + "'");
+                SparkleHelpers.DebugInfo ("Event", "[" + Name + "] Changes found, checking if settled.");
                 
                 this.remote_timer.Stop ();
 
