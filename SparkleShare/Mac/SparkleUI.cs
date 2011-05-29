@@ -123,7 +123,15 @@ namespace SparkleShare {
 				});
 			};
 			
-			
+
+            SparkleShare.Controller.ConflictNotificationRaised += delegate {
+                    string title   = "Ouch! Mid-air collision!";
+                    string subtext = "Don't worry, SparkleShare made a copy of each conflicting file.";
+
+                    new SparkleBubble (title, subtext).Show ();
+            };
+
+
 			SparkleShare.Controller.AvatarFetched += delegate {
 				InvokeOnMainThread (delegate {
 					foreach (SparkleLog log in SparkleUI.OpenLogs)
