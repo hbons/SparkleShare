@@ -114,9 +114,6 @@ namespace SparkleLib {
                 // Subversion
                 writer.WriteLine ("/.svn/*");
                 writer.WriteLine ("*/.svn/*");
-			
-				// Rsync -- ignore the ignore file
-                writer.WriteLine (".rsyncignore");
 
             writer.Close ();
         }

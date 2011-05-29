@@ -42,11 +42,12 @@ namespace SparkleLib {
             }
         }
 
-		//need to see if there is a way to pass the changes detected later to avoid checking twice
+		//need to see if there is a way to pass the changes detected when syncing avoid checking twice
+		//also the conflict management also needs to know the changes to be made
         public override bool CheckForRemoteChanges ()
         {
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvPn --exclude-from=.rsyncignore \"" + base.remote_url + "\" " + ".");
+                "-aizvPn --delete --exclude-from=.sparkleshare \"" + base.remote_url + "\" " + ".");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -60,15 +61,15 @@ namespace SparkleLib {
                 return false;
             }
         }
-
-		//need to figure out how to make it append to the log and not overwrite depending on what is the default behaviour
+		
+		//the option --inplace is good if your server uses block level snapshots (ex. ZFS) but it increases network throughput
+		//maybe make a config file option?
+		//Windows<->Solaris will want to use -A to preserve ACLs
+		//--delete will delete files on the server that were deleted locally (need to make sure that the server copy wasnt modified...)
         public override bool SyncUp ()
         {
-			//the option --inplace is good if your server uses block level snapshots (ex. ZFS) but it increases network throughput
-			//maybe make a config file option?
-			//Windows<->Solaris will want to use -A to preserve ACL
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvP --exclude-from=.rsyncignore --log-file=.rlog . " + "\"" + base.remote_url + "\"");
+                "-aizvP --delete --delete-during --exclude-from=.sparkleshare --log-file=.rsynclog . " + "\"" + base.remote_url + "\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -82,7 +83,7 @@ namespace SparkleLib {
         public override bool SyncDown ()
         {
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvP --exclude-from=.rsyncignore --log-file=.rlog \"" + base.remote_url + "\" " + ".");
+                "-aizvP --delete --delete-during --exclude-from=.sparkleshare --log-file=.rsynclog \"" + base.remote_url + "\" " + ".");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -97,7 +98,7 @@ namespace SparkleLib {
         public override bool AnyDifferences {
             get {
                 SparkleRsync rsync = new SparkleRsync (LocalPath,
-                	"-aizvPn --exclude-from=.rsyncignore ." + "\"" + base.remote_url + "\"");
+                	"-aizvPn --delete --exclude-from=.sparkleshare ." + "\"" + base.remote_url + "\"");
 
 	            rsync.Start ();
 	            rsync.WaitForExit ();
@@ -137,10 +138,50 @@ namespace SparkleLib {
 		//see entry for -i (--itemize) this describes how rsync reports changes
         public override List <SparkleChangeSet> GetChangeSets (int count)
         {
+			//parse the rsync log here?
             var l = new List<SparkleChangeSet> ();
             l.Add (new SparkleChangeSet () { UserName = "test", UserEmail = "test", Revision = "test", Timestamp = DateTime.Now });
             return l;
         }
+		
+		private void ResolveConflict ()
+        { 
+			//create a function that compares the serverside changes to the clientside changes
+			//check for files that are changed on both sides
+			//rename the conflicting files
+			//don't think the rsync backup/suffix commands will work here
+			
+			//this is going to be repeating the checking since the CheckForRemoteChanges and AnyDifferences commands do the same things...
+			
+			//local changes
+			SparkleRsync rsync = new SparkleRsync (LocalPath,
+            	"-aizvPn --delete --exclude-from=.sparkleshare ." + "\"" + base.remote_url + "\"");
+
+            rsync.Start ();
+            rsync.WaitForExit ();
+
+            string local_changes = rsync.StandardOutput.ReadToEnd ().TrimEnd ();
+			
+			//remote changes
+			SparkleRsync rsync = new SparkleRsync (LocalPath,
+                "-aizvPn --delete --exclude-from=.sparkleshare \"" + base.remote_url + "\" " + ".");
+
+            rsync.Start ();
+            rsync.WaitForExit ();
+
+            string remote_changes = rsync.StandardOutput.ReadToEnd ().TrimEnd ();
+			
+			//need to compare local_changes with remote_changes to check for overlapping files
+			
+			// Append a timestamp to local version
+            string timestamp = DateTime.Now.ToString ("HH:mm MMM d");
+			
+			//need to deal with the case where The local version has been modified, but the server version was removed
+			//and the opposite, where the local version was deleted and the server version was modified
+			
+			//the output from the rsync command can inform if the file was deleted
+			//see: http://samba.anu.edu.au/ftp/rsync/rsync.html section on itemize changes
+		}
 
 
         public override void CreateInitialChangeSet ()
