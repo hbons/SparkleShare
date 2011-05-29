@@ -37,6 +37,8 @@ namespace SparkleShare {
         private Button SyncButton;
         private bool ServerFormOnly;
         private string SecondaryTextColor;
+        private ProgressBar progress_bar = new ProgressBar () { PulseStep = 0.01 };
+        private Timer progress_bar_pulse_timer = new Timer () { Interval = 25, Enabled = true };
 
 
         // Short alias for the translations
@@ -433,12 +435,16 @@ namespace SparkleShare {
                 
                         SparkleShare.Controller.FolderFetched += delegate {
                             Application.Invoke (delegate {
+                                this.progress_bar_pulse_timer.Stop ();
                                 ShowSuccessPage (folder);
                             });
                         };
                 
                         SparkleShare.Controller.FolderFetchError += delegate {
-                            Application.Invoke (delegate { ShowErrorPage (); });
+                            Application.Invoke (delegate {
+                                this.progress_bar_pulse_timer.Stop ();
+                                ShowErrorPage ();
+                            });
                         };
         
                 
@@ -582,22 +588,16 @@ namespace SparkleShare {
 
                     AddButton (button);
 
-//                    SparkleSpinner spinner = new SparkleSpinner (22);
+                layout_vertical.PackStart (header, false, false, 0);
+                layout_vertical.PackStart (information, false, false, 21);
 
-                Table table = new Table (3, 2, false) {
-                    RowSpacing    = 12,
-                    ColumnSpacing = 9
+                this.progress_bar_pulse_timer.Elapsed += delegate {
+                    Application.Invoke (delegate {
+                        progress_bar.Pulse ();
+                    });
                 };
 
-                HBox box = new HBox (false, 0);
-
-//                table.Attach (spinner, 0, 1, 0, 1);
-                table.Attach (header, 1, 2, 0, 1);
-                table.Attach (information,  1, 2, 1, 2);
-
-                box.PackStart (table, false, false, 0);
-
-                layout_vertical.PackStart (box, false, false, 0);
+                layout_vertical.PackStart (this.progress_bar, false, false, 54);
 
             Add (layout_vertical);
             ShowAll ();
