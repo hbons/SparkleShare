@@ -387,7 +387,7 @@ namespace SparkleLib {
             Regex non_merge_regex = new Regex (@"commit ([a-z0-9]{40})\n" +
                                 "Author: (.+) <(.+)>\n" +
                                 "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
-                                "([0-9]{2}):([0-9]{2}):([0-9]{2}) .([0-9]{4})\n" +
+                                "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
                                 "*", RegexOptions.Compiled);
 
             // TODO: Need to optimise for speed
@@ -412,10 +412,29 @@ namespace SparkleLib {
                     change_set.UserEmail = match.Groups [3].Value;
                     change_set.IsMerge   = is_merge_commit;
 
+
                     change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
                         int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
                         int.Parse (match.Groups [7].Value), int.Parse (match.Groups [8].Value),
                         int.Parse (match.Groups [9].Value));
+
+
+                    string time_zone = match.Groups [10].Value;
+                    int our_offset   = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
+                    int their_offset = int.Parse (time_zone.Substring (1, 2));
+
+                    // Convert their timestamp to UTC timezone
+                    if (their_offset > 0)
+                       change_set.Timestamp = change_set.Timestamp.AddHours (their_offset * -1);
+                    else
+                       change_set.Timestamp = change_set.Timestamp.AddHours (their_offset);
+
+                    // Convert the UTC timestamp into our timezone
+                    if (our_offset > 0)
+                       change_set.Timestamp = change_set.Timestamp.AddHours (our_offset);
+                    else
+                       change_set.Timestamp = change_set.Timestamp.AddHours (our_offset * -1);
+
 
                     string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
 
