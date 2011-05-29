@@ -32,6 +32,7 @@ namespace SparkleLib {
         public override bool Fetch ()
         {
 			//need to figure out to use option -e ‘ssh -p port′ (hbons: forge from url)
+			//probably want to implement the log file here somehow
             SparkleRsync rsync = new SparkleRsync (SparklePaths.SparkleTmpPath,
                 "-azviP \"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
 
@@ -72,7 +73,6 @@ namespace SparkleLib {
 
 
         // Add a .gitignore file to the repo
-		// should be something based on rsync filters
         private void InstallExcludeRules ()
         {
             string exlude_rules_file_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "exclude");
@@ -114,6 +114,9 @@ namespace SparkleLib {
                 // Subversion
                 writer.WriteLine ("/.svn/*");
                 writer.WriteLine ("*/.svn/*");
+			
+				// Rsync -- ignore the ignore file
+                writer.WriteLine (".rsyncignore");
 
             writer.Close ();
         }

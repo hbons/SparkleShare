@@ -46,7 +46,7 @@ namespace SparkleLib {
         public override bool CheckForRemoteChanges ()
         {
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvPn \"" + base.remote_url + "\" " + "\".\"");
+                "-aizvPn --exclude-from=.rsyncignore \"" + base.remote_url + "\" " + ".");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -68,7 +68,7 @@ namespace SparkleLib {
 			//maybe make a config file option?
 			//Windows<->Solaris will want to use -A to preserve ACL
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvP --log-file=./.rlog \".\" " + "\"" + base.remote_url + "\"");
+                "-aizvP --exclude-from=.rsyncignore --log-file=.rlog . " + "\"" + base.remote_url + "\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -82,7 +82,7 @@ namespace SparkleLib {
         public override bool SyncDown ()
         {
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvP --log-file=./.rlog \"" + base.remote_url + "\" " + "\".\"");
+                "-aizvP --exclude-from=.rsyncignore --log-file=.rlog \"" + base.remote_url + "\" " + ".");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -97,7 +97,7 @@ namespace SparkleLib {
         public override bool AnyDifferences {
             get {
                 SparkleRsync rsync = new SparkleRsync (LocalPath,
-                	"-aizvPn \".\" " + "\"" + base.remote_url + "\"");
+                	"-aizvPn --exclude-from=.rsyncignore ." + "\"" + base.remote_url + "\"");
 
 	            rsync.Start ();
 	            rsync.WaitForExit ();
