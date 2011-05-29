@@ -22,6 +22,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r /Users/hbons/Code/SparkleShare/SparkleShare/Mac/Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks" externalConsole="true" />
+      </CustomCommands>
+    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -83,6 +88,7 @@
     </Compile>
     <Compile Include="SparkleAbout.cs" />
     <Compile Include="SparkleAlert.cs" />
+    <Compile Include="SparkleBubble.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
@@ -144,6 +150,7 @@
     <Content Include="..\..\data\icons\idle4.png">
       <Link>Pixmaps\idle4.png</Link>
     </Content>
+    <Content Include="Growl.plist" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pixmaps\" />
