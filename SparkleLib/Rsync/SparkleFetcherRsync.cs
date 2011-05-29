@@ -33,6 +33,7 @@ namespace SparkleLib {
         {
 			//need to figure out to use option -e ‘ssh -p port′ (hbons: forge from url)
 			//probably want to implement the log file here somehow
+			//not sure if/where logging should be done here
             SparkleRsync rsync = new SparkleRsync (SparklePaths.SparkleTmpPath,
                 "-azviP \"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
 

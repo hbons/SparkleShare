@@ -46,14 +46,8 @@ namespace SparkleLib {
 		//also the conflict management also needs to know the changes to be made
         public override bool CheckForRemoteChanges ()
         {
-			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvPn --delete --exclude-from=.sparkleshare \"" + base.remote_url + "\" " + ".");
-
-            rsync.Start ();
-            rsync.WaitForExit ();
-
-            string remote_revision = rsync.StandardOutput.ReadToEnd ().TrimEnd ();
-
+			remote_revision = RemoteChanges ();
+			
             if (CountLinesInString(remote_revision) > 4) {
                 SparkleHelpers.DebugInfo ("Rsync", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
                 return true;
@@ -97,13 +91,8 @@ namespace SparkleLib {
 
         public override bool AnyDifferences {
             get {
-                SparkleRsync rsync = new SparkleRsync (LocalPath,
-                	"-aizvPn --delete --exclude-from=.sparkleshare ." + "\"" + base.remote_url + "\"");
 
-	            rsync.Start ();
-	            rsync.WaitForExit ();
-	
-	            string remote_revision = rsync.StandardOutput.ReadToEnd ().TrimEnd ();
+				remote_revision = LocalChanges ();
 	
 	            if (CountLinesInString(remote_revision) > 4) 
 	                return true;
@@ -172,15 +161,15 @@ namespace SparkleLib {
             string remote_changes = rsync.StandardOutput.ReadToEnd ().TrimEnd ();
 			
 			//need to compare local_changes with remote_changes to check for overlapping files
-			
-			// Append a timestamp to local version
-            string timestamp = DateTime.Now.ToString ("HH:mm MMM d");
-			
-			//need to deal with the case where The local version has been modified, but the server version was removed
+			//look at each overlap and see if they are both modified or:
+			//it the local version has been modified, but the server version was removed
 			//and the opposite, where the local version was deleted and the server version was modified
 			
 			//the output from the rsync command can inform if the file was deleted
 			//see: http://samba.anu.edu.au/ftp/rsync/rsync.html section on itemize changes
+			
+			// Append a timestamp to local version
+            string timestamp = DateTime.Now.ToString ("HH:mm MMM d");
 		}
 
 
@@ -197,6 +186,32 @@ namespace SparkleLib {
                 return !File.Exists (file_path);
             }
         }
+		
+		private string RemoteChanges ()
+		{
+			SparkleRsync rsync = new SparkleRsync (LocalPath,
+                "-aizvPn --delete --exclude-from=.sparkleshare \"" + base.remote_url + "\" " + ".");
+
+            rsync.Start ();
+            rsync.WaitForExit ();
+
+            string remote_revision = rsync.StandardOutput.ReadToEnd ().TrimEnd ();
+			
+			return remote_revision ;
+		}
+		
+		private string LocalChanges ()
+		{
+		  	SparkleRsync rsync = new SparkleRsync (LocalPath,
+            	"-aizvPn --delete --exclude-from=.sparkleshare ." + "\"" + base.remote_url + "\"");
+
+            rsync.Start ();
+            rsync.WaitForExit ();
+
+            string remote_revision = rsync.StandardOutput.ReadToEnd ().TrimEnd ();
+			
+			return remote_revision;
+		}
 		
 		private long CountLinesInString(string s)
 	    {
