@@ -97,7 +97,7 @@ namespace SparkleShare {
 
                 CloseButton.Activated += delegate {
                     InvokeOnMainThread (delegate {
-                        PerformClose (this);
+                            PerformClose (this);
                     });
                 };
 
@@ -133,13 +133,16 @@ namespace SparkleShare {
         public void UpdateEventLog ()
         {
             InvokeOnMainThread (delegate {
-                if (HTML == null)
-                    ContentView.AddSubview (ProgressIndicator);
+
+                    if (HTML == null)
+                        ContentView.AddSubview (ProgressIndicator);
             });
 
             Thread thread = new Thread (new ThreadStart (delegate {
-                GenerateHTML ();
-                AddHTML ();
+                using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
+                    GenerateHTML ();
+                    AddHTML ();
+                }
             }));
 
             thread.Start ();
@@ -167,13 +170,14 @@ namespace SparkleShare {
         private void AddHTML ()
         {
             InvokeOnMainThread (delegate {
-                if (ProgressIndicator.Superview == ContentView)
-                    ProgressIndicator.RemoveFromSuperview ();
-    
-                WebView.MainFrame.LoadHtmlString (HTML, new NSUrl (""));
-    
-                ContentView.AddSubview (WebView);
-                Update ();
+                    if (ProgressIndicator.Superview == ContentView)
+                        ProgressIndicator.RemoveFromSuperview ();
+        
+                    WebView.MainFrame.LoadHtmlString (HTML, new NSUrl (""));
+        
+                    ContentView.AddSubview (WebView);
+                    Update ();
+
             });
         }
     }
