@@ -95,7 +95,6 @@ namespace SparkleLib {
         public abstract void Connect ();
         public abstract void Announce (SparkleAnnouncement announcent);
         public abstract void AlsoListenTo (string folder_identifier);
-        public abstract void Dispose ();
         public abstract bool IsConnected { get; }
 
 
@@ -104,11 +103,11 @@ namespace SparkleLib {
         protected List<SparkleAnnouncement> queue_down = new List<SparkleAnnouncement> ();
         protected bool is_connecting;
         protected string server;
-        protected Timer reconnect_timer = new Timer { Interval = 60 * 1000};
+        protected Timer reconnect_timer = new Timer { Interval = 60 * 1000, Enabled = true };
 
         public SparkleListenerBase (string server, string folder_identifier, NotificationServerType type) {
            this.reconnect_timer.Elapsed += delegate {
-                if (!IsConnected && !IsConnecting)
+                if (!IsConnected && !this.is_connecting)
                     Reconnect ();
            };
 
@@ -182,6 +181,12 @@ namespace SparkleLib {
 
             if (Announcement != null)
                 Announcement (announcement);
+        }
+
+
+        public virtual void Dispose ()
+        {
+            this.reconnect_timer.Dispose ();
         }
 
 

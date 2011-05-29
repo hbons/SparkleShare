@@ -137,6 +137,7 @@ namespace SparkleLib {
         {
             this.thread.Abort ();
             this.thread.Join ();
+            base.Dispose ();
         }
 
 
