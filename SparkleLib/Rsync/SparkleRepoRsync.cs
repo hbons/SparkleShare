@@ -135,6 +135,8 @@ namespace SparkleLib {
 		
 		private void ResolveConflict ()
         { 
+			//some conflict resolution code in python: http://sujitpal.blogspot.com/2009/12/unison-replacement-with-rsync.html
+			
 			//create a function that compares the serverside changes to the clientside changes
 			//check for files that are changed on both sides
 			//rename the conflicting files
