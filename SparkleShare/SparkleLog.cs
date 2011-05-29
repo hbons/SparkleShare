@@ -122,10 +122,7 @@ namespace SparkleShare {
                     };
  
                     open_folder_button.Clicked += delegate (object o, EventArgs args) {
-                        Process process = new Process ();
-                        process.StartInfo.FileName  = "xdg-open";
-                        process.StartInfo.Arguments = LocalPath.Replace (" ", "\\ "); // Escape space-characters
-                        process.Start ();
+                        SparkleShare.Controller.OpenSparkleShareFolder (LocalPath);
                     };
 
                     Button close_button = new Button (Stock.Close);
