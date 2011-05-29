@@ -63,7 +63,7 @@ namespace SparkleLib {
         public override bool SyncUp ()
         {
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvP --delete --delete-during --exclude-from=.sparkleshare --log-file=.rsynclog . " + "\"" + base.remote_url + "\"");
+                "-aizvP --update --delete --delete-during --exclude-from=.sparkleshare --log-file=.rsynclog . " + "\"" + base.remote_url + "\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -77,7 +77,7 @@ namespace SparkleLib {
         public override bool SyncDown ()
         {
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvP --delete --delete-during --exclude-from=.sparkleshare --log-file=.rsynclog \"" + base.remote_url + "\" " + ".");
+                "-aizvP --update --delete --delete-during --exclude-from=.sparkleshare --log-file=.rsynclog \"" + base.remote_url + "\" " + ".");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -144,7 +144,7 @@ namespace SparkleLib {
 			
 			//local changes
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-            	"-aizvPn --delete --exclude-from=.sparkleshare ." + "\"" + base.remote_url + "\"");
+            	"-aizvPn --update --delete --exclude-from=.sparkleshare ." + "\"" + base.remote_url + "\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -153,7 +153,7 @@ namespace SparkleLib {
 			
 			//remote changes
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvPn --delete --exclude-from=.sparkleshare \"" + base.remote_url + "\" " + ".");
+                "-aizvPn --update --delete --exclude-from=.sparkleshare \"" + base.remote_url + "\" " + ".");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -190,7 +190,7 @@ namespace SparkleLib {
 		private string RemoteChanges ()
 		{
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvPn --delete --exclude-from=.sparkleshare \"" + base.remote_url + "\" " + ".");
+                "-aizvPn --update --delete --exclude-from=.sparkleshare \"" + base.remote_url + "\" " + ".");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -203,7 +203,7 @@ namespace SparkleLib {
 		private string LocalChanges ()
 		{
 		  	SparkleRsync rsync = new SparkleRsync (LocalPath,
-            	"-aizvPn --delete --exclude-from=.sparkleshare ." + "\"" + base.remote_url + "\"");
+            	"-aizvPn --update --delete --exclude-from=.sparkleshare ." + "\"" + base.remote_url + "\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
