@@ -199,7 +199,6 @@ namespace SparkleShare {
                 return;
 
             string folder = SparkleHelpers.CombineMore (SparklePaths.SparklePath, subfolder);
-
             Process process = new Process ();
             process.StartInfo.Arguments = folder.Replace (" ", "\\ "); // Escape space-characters
             process.StartInfo.FileName  = "xdg-open";
