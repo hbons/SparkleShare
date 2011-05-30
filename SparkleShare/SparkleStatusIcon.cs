@@ -88,7 +88,6 @@ namespace SparkleShare {
                     UpdateMenu ();
                 });
             };
-
         }
 
 
@@ -173,6 +172,7 @@ namespace SparkleShare {
 
                         Menu.Add (subfolder_item);
                     }
+
                 } else {
                     MenuItem no_folders_item = new MenuItem (_("No Remote Folders Yet")) {
                         Sensitive   = false
@@ -328,6 +328,7 @@ namespace SparkleShare {
         }
     }
 
+    
     public class SparkleMenuItem : ImageMenuItem {
 
         public SparkleMenuItem (string text) : base (text)
