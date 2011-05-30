@@ -178,6 +178,8 @@ namespace SparkleLib {
 			//for files that are deleted on the server, then if they were modified copy them to the server with a suffix
 			//otherwise delete them locally...
 			
+			//alternatively rsync can be instructed to keep backups on the server but this might make it more complicated
+			
 			//the rsync dry run will report which files are scheduled for deletion in the upcoming sync
 			
 			//the output from the rsync command can inform if the file was deleted
