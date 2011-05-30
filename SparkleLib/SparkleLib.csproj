@@ -54,8 +54,6 @@
     <Compile Include="Hg\SparkleFetcherHg.cs" />
     <Compile Include="Scp\SparkleFetcherScp.cs" />
     <Compile Include="Scp\SparkleRepoScp.cs" />
-    <Compile Include="Rsync\SparkleRepoRsync.cs" />
-    <Compile Include="Rsync\SparkleFetcherRsync.cs" />
     <Compile Include="Unison\SparkleFetcherUnison.cs" />
     <Compile Include="Unison\SparkleRepoUnison.cs" />
   </ItemGroup>

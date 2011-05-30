@@ -10,8 +10,6 @@ SOURCES =  \
 	Git/SparkleRepoGit.cs \
 	Hg/SparkleFetcherHg.cs \
 	Hg/SparkleRepoHg.cs \
-	Rsync/SparkleFetcherRsync.cs \
-	Rsync/SparkleRepoRsync.cs \
 	Scp/SparkleFetcherScp.cs \
 	Scp/SparkleRepoScp.cs \
 	SparkleBackend.cs \

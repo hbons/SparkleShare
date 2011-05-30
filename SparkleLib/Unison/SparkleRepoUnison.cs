@@ -41,10 +41,10 @@ namespace SparkleLib {
                 return "";
             }
         }
-
-		private override bool CheckForChangesBothWays ()
+		
+		private override string ListUnisonChanges ()
 		{
-			 SparkleUnison unison = new SparkleUnison (LocalPath,
+			SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text sparkleshare . \"" + base.remote_url);
 			//unison doesn't seem to want to look for profiles in non-standard locations
 
@@ -61,9 +61,15 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
 			
 			string remote_revision = unison.StandardOutput.ReadToEnd ().TrimEnd ();
-			//need to properly trim the output to keep only the stuff between the 'L' press and the 'q'
 			
-            if (!remote_revision.EndsWith ("Nothing to do: replicas have not changed since last sync.")) {
+			return remote_revision;
+		}
+
+		private override bool CheckForChangesBothWays ()
+		{			
+            remote_revision = ListUnisonChanges ();
+			
+			if (!remote_revision.EndsWith ("Nothing to do: replicas have not changed since last sync.")) {
                 SparkleHelpers.DebugInfo ("Unison", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
                 return true;
             } else {
@@ -139,9 +145,15 @@ namespace SparkleLib {
 
 		private void ResolveConflict ()
 		{
-			remote_revision = CheckForChangesBothWays ();
-			//parse remote_revision to check for conflicts
-			//they are represented by <-?->
+			remote_revision = ListUnisonChanges ();
+			
+			//need to remove first 6 lines and last 2 lines
+			
+			//then look for "<-?->" these represent conflicts
+			//lines look like this:
+			//changed  <-?-> changed -- changed on the server and locally
+			//deleted  <-?-> changed -- deleted locally, changed on server
+			//changed  <-?-> deleted -- changed locally, deleted on server
 			
 			//when conflicts are identified copy/rename the neccesary files
 			//append timestamp
