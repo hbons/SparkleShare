@@ -45,10 +45,14 @@ namespace SparkleLib {
 		private override string CheckForChangesBothWays ()
 		{
 			 SparkleUnison unison = new SparkleUnison (LocalPath,
-                "-auto -ui text -logfile .unisonlog . \"" + base.remote_url);
+                "-ui text checkprofile . \"" + base.remote_url);
+			//unison doesn't seem to want to look for profiles in non-standard locations
 
             unison.Start ();
-			unison.StandardInput.Write("q"); //quit unison without making the recommended changes
+			unison.StandardInput.Write("L"); //list changes
+			unison.StandardInput.Flush();
+			unison.StandardInput.Close();
+			unison.StandardInput.Write("l"); //quit unison
 			unison.StandardInput.Flush();
 			unison.StandardInput.Close();
             unison.WaitForExit ();
@@ -56,6 +60,7 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
 			
 			string remote_revision = unison.StandardOutput.ReadToEnd ().TrimEnd ();
+			//need to properly trim the output to keep the stuff between the 'l' press and the 'q'
 			
 			return remote_revision;
 		}
@@ -72,7 +77,7 @@ namespace SparkleLib {
 		private override bool SyncBothWays ()
 		{
            SparkleUnison unison = new SparkleUnison (LocalPath,
-                "-auto -batch -ui text -logfile .unisonlog . \"" + base.remote_url);
+                "-auto -batch -contactquietly -ui text -logfile .unisonlog . \"" + base.remote_url);
 
             unison.Start ();
             unison.WaitForExit ();
