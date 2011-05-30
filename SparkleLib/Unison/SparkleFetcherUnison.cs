@@ -45,8 +45,7 @@ namespace SparkleLib {
                 return false;
             } else {
                 InstallConfiguration ();
-                InstallExcludeRules ();
-				InstallUnisonProfiles ();
+				InstallUnisonProfile ();
                 return true;
             }
         }
@@ -76,7 +75,7 @@ namespace SparkleLib {
 		//install unison profile
 		//need to specify the needed options, the local and server address, the logfile location
 		//need to run export UNISON=./.sparkleshare/ on the client so unison looks for the profiles in the .sparkleshare directory
-        private void InstallUnisonProfiles ()
+        private void InstallUnisonProfile ()
         {
             string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "sparkleshare.prf");
             File.Create (unison_profile);
@@ -89,58 +88,50 @@ namespace SparkleLib {
 			writer.WriteLine ("logfile = .sparkleshare/log");
 			writer.WriteLine ("contactquietly = true");
 			writer.WriteLine ("rsrc = false");
+			
+			//ignore rules added here
+			// gedit and emacs
+            writer.WriteLine ("ignore = Name *~");
+
+            // vi(m)
+            writer.WriteLine ("ignore = Name .*.sw[a-z]");
+            writer.WriteLine ("ignore = Name *.un~");
+            writer.WriteLine ("ignore = Name *.swp");
+            writer.WriteLine ("ignore = Name *.swo");
+            
+            // KDE
+            writer.WriteLine ("ignore = Name .directory");
+
+            // Mac OSX
+            writer.WriteLine ("ignore = Name .DS_Store");
+            writer.WriteLine ("ignore = Name Icon?");
+            writer.WriteLine ("ignore = Name ._*");
+            writer.WriteLine ("ignore = Name .Spotlight-V100");
+            writer.WriteLine ("ignore = Name .Trashes");
+
+            // Mac OSX
+            writer.WriteLine ("ignore = Name *(Autosaved).graffle");
+        
+            // Windows
+            writer.WriteLine ("ignore = Name Thumbs.db");
+            writer.WriteLine ("ignore = Name Desktop.ini");
+
+            // CVS
+            writer.WriteLine ("ignore = Name */CVS/*");
+            writer.WriteLine ("ignore = Name .cvsignore");
+            writer.WriteLine ("ignore = Path */.cvsignore");
+            
+            // Subversion
+            writer.WriteLine ("ignore = Path /.svn/*");
+            writer.WriteLine ("ignore = Path */.svn/*");
+			
+			// Sparkleshare
+            writer.WriteLine ("ignore = Path */.sparkleshare");
             writer.Close ();
 			
-			SparkleHelpers.DebugInfo ("Unison Profile", "Added configuration to '" + unison_check_profile + "'");
-		
+			SparkleHelpers.DebugInfo ("Unison Profile", "Added configuration to '" + unison_check_profile + "'");	
         }		
 
-        // Add a .gitignore file to the repo
-        private void InstallExcludeRules ()
-        {
-            string exlude_rules_file_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "exclude");
-            File.Create (exlude_rules_file_path);
-
-            TextWriter writer = new StreamWriter (exlude_rules_file_path);
-
-                // gedit and emacs
-                writer.WriteLine ("*~");
-
-                // vi(m)
-                writer.WriteLine (".*.sw[a-z]");
-                writer.WriteLine ("*.un~");
-                writer.WriteLine ("*.swp");
-                writer.WriteLine ("*.swo");
-                
-                // KDE
-                writer.WriteLine (".directory");
-    
-                // Mac OSX
-                writer.WriteLine (".DS_Store");
-                writer.WriteLine ("Icon?");
-                writer.WriteLine ("._*");
-                writer.WriteLine (".Spotlight-V100");
-                writer.WriteLine (".Trashes");
-
-                // Mac OSX
-                writer.WriteLine ("*(Autosaved).graffle");
-            
-                // Windows
-                writer.WriteLine ("Thumbs.db");
-                writer.WriteLine ("Desktop.ini");
-
-                // CVS
-                writer.WriteLine ("*/CVS/*");
-                writer.WriteLine (".cvsignore");
-                writer.WriteLine ("*/.cvsignore");
-                
-                // Subversion
-                writer.WriteLine ("/.svn/*");
-                writer.WriteLine ("*/.svn/*");
-
-            writer.Close ();
-        }
-    }
 
     public class SparkleUnison : Process {
 
