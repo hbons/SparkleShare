@@ -21,13 +21,6 @@ using System.Timers;
 
 namespace SparkleLib {
 
-    public enum NotificationServerType
-    {
-        Own,
-        Central
-    }
-
-
     public class SparkleAnnouncement {
 
         public readonly string FolderIdentifier;
@@ -47,7 +40,7 @@ namespace SparkleLib {
         private static List<SparkleListenerBase> listeners;
 
         public static SparkleListenerIrc CreateIrcListener (string server, string folder_identifier,
-                                                            NotificationServerType type)
+                                                            string announcements)
         {
             if (listeners == null)
                 listeners = new List<SparkleListenerBase> ();
@@ -56,8 +49,10 @@ namespace SparkleLib {
             // Don't worry, we only use this server as a backup if you
             // don't have your own. All data needed to connect is hashed and
             // we don't store any personal information ever
-            if (type == NotificationServerType.Central)
+            if (announcements == null)
                 server = "204.62.14.135";
+            else
+                server = announcements;
 
             foreach (SparkleListenerBase listener in listeners) {
                 if (listener.Server.Equals (server)) {
@@ -68,7 +63,7 @@ namespace SparkleLib {
             }
 
             SparkleHelpers.DebugInfo ("ListenerFactory", "Issued new listener for " + server);
-            listeners.Add (new SparkleListenerIrc (server, folder_identifier, type));
+            listeners.Add (new SparkleListenerIrc (server, folder_identifier, announcements));
             return (SparkleListenerIrc) listeners [listeners.Count - 1];
         }
     }
@@ -105,7 +100,7 @@ namespace SparkleLib {
         protected string server;
         protected Timer reconnect_timer = new Timer { Interval = 60 * 1000, Enabled = true };
 
-        public SparkleListenerBase (string server, string folder_identifier, NotificationServerType type) {
+        public SparkleListenerBase (string server, string folder_identifier, string announcements) {
            this.reconnect_timer.Elapsed += delegate {
                 if (!IsConnected && !this.is_connecting)
                     Reconnect ();

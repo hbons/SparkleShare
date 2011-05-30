@@ -31,8 +31,8 @@ namespace SparkleLib {
         private string nick;
 
 
-        public SparkleListenerIrc (string server, string folder_identifier, NotificationServerType type) :
-            base (server, folder_identifier, type)
+        public SparkleListenerIrc (string server, string folder_identifier, string announcements) :
+            base (server, folder_identifier, announcements)
         {
             base.server = server;
 
@@ -129,7 +129,7 @@ namespace SparkleLib {
             this.client.SendMessage (SendType.Message, channel, announcement.Message);
 
             // Also announce to ourselves for debugging purposes
-            //OnRemoteChange (announcement);
+            base.OnAnnouncement (announcement);
         }
 
 

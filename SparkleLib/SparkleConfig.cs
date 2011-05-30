@@ -188,6 +188,20 @@ namespace SparkleLib {
         }
 
 
+        public string GetAnnouncementsForFolder (string name)
+        {
+            foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
+                if (node_folder ["name"].InnerText.Equals (name) &&
+                    node_folder ["announcements"] != null) {
+
+                    return node_folder ["announcements"].InnerText;
+                }
+            }
+
+            return null;
+        }
+
+
         public string GetConfigOption (string name)
         {
             XmlNode node = SelectSingleNode ("/sparkleshare/" + name);
