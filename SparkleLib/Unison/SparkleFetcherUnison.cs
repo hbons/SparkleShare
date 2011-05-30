@@ -31,8 +31,10 @@ namespace SparkleLib {
 
         public override bool Fetch ()
         {
+			//unison needs an extra \ to specify the absolute path just like Hg
+			//this can't easily be added here
             SparkleUnison unison = new SparkleUnison (SparklePaths.SparkleTmpPath,
-                "\"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
+                "-auto -batch -ui text \"" + base.target_folder + "\" " + "\"" + base.remote_url + "\"");
 
             unison.Start ();
             unison.WaitForExit ();

@@ -34,7 +34,7 @@ namespace SparkleLib {
                 return "sparkles";
             }
         }
-
+		
 
         public override string CurrentRevision {
             get {
@@ -42,27 +42,67 @@ namespace SparkleLib {
             }
         }
 
+		private override string CheckForChangesBothWays ()
+		{
+			 SparkleUnison unison = new SparkleUnison (LocalPath,
+                "-auto -ui text -logfile .unisonlog . \"" + base.remote_url);
 
+            unison.Start ();
+			unison.StandardInput.Write("q"); //quit unison without making the recommended changes
+			unison.StandardInput.Flush();
+			unison.StandardInput.Close();
+            unison.WaitForExit ();
+
+            SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
+			
+			string remote_revision = unison.StandardOutput.ReadToEnd ().TrimEnd ();
+			
+			return remote_revision;
+		}
+		
+		
         public override bool CheckForRemoteChanges ()
         {
-             return true;
+			remote_revision = CheckForChangesBothWays ();
+			//parse remote_revision to check for remote changes
+            return true;
         }
+		
+		
+		private override bool SyncBothWays ()
+		{
+           SparkleUnison unison = new SparkleUnison (LocalPath,
+                "-auto -batch -ui text -logfile .unisonlog . \"" + base.remote_url);
 
+            unison.Start ();
+            unison.WaitForExit ();
 
+            SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
+
+            if (unison.ExitCode != 0)
+                return false;
+            else 
+                return true;     
+		}
+
+		//not really a distiction between syncing up or down 
         public override bool SyncUp ()
         {
-            return true;
+            return SyncBothWays ();
         }
 
 
         public override bool SyncDown ()
         {
-            return true;
+            return SyncBothWays ();
         }
 
 
         public override bool AnyDifferences {
             get {
+				remote_revision = CheckForChangesBothWays ();
+				//parse remote_revision to check for remote changes
+		        return true;
                 return false;
             }
         }
@@ -89,10 +129,24 @@ namespace SparkleLib {
             }
         }
 
+		private void ResolveConflict ()
+		{
+			remote_revision = CheckForChangesBothWays ();
+			//parse remote_revision to check for conflicts
+			//they are represented by <-?->
+			
+			//append timestamp
+			string timestamp = DateTime.Now.ToString ("HH:mm MMM d");
+			
+			//append username to the local copy then transfer it
+			SparkleConfig.DefaultConfig.UserName
+		}
+		
 
         public override List <SparkleChangeSet> GetChangeSets (int count)
         {
-            var l = new List<SparkleChangeSet> ();
+            //parse the unison log (.unisonlog)
+			var l = new List<SparkleChangeSet> ();
             l.Add (new SparkleChangeSet () { UserName = "test", UserEmail = "test", Revision = "test", Timestamp = DateTime.Now });
             return l;
         }
