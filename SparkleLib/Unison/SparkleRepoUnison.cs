@@ -65,8 +65,7 @@ namespace SparkleLib {
 			return remote_revision;
 		}
 
-		//make private?
-		public bool CheckForChangesBothWays ()
+		private bool CheckForChangesBothWays ()
 		{			
             string remote_revision = ListUnisonChanges ();
 			
@@ -85,8 +84,7 @@ namespace SparkleLib {
         }
 		
 		
-		//make private
-		public bool SyncBothWays ()
+		private bool SyncBothWays ()
 		{
 			//check for conflicts here first! -- ResolveConflict ()
 			
