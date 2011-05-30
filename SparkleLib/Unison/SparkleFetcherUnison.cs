@@ -73,44 +73,26 @@ namespace SparkleLib {
         }
 
 		
-		//install 2 unison profiles, one to use to check for changes and another to actually do the sync
+		//install unison profile
 		//need to specify the needed options, the local and server address, the logfile location
+		//need to run export UNISON=./.sparkleshare/ on the client so unison looks for the profiles in the .sparkleshare directory
         private void InstallUnisonProfiles ()
         {
-            string unison_check_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "checkprofile.prf");
-            File.Create (unison_check_profile);
+            string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "sparkleshare.prf");
+            File.Create (unison_profile);
 
-            string unison_sync_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "syncprofile.prf");
-            File.Create (unison_sync_profile);
-
-            // Write the check profile to the file
-            TextWriter writer = new StreamWriter (unison_check_profile);
+            // Write the profile to the file
+            TextWriter writer = new StreamWriter (unison_profile);
             writer.WriteLine ("root = .");
 			writer.WriteLine ("root = " + base.remote_url);
 			writer.WriteLine ("log = true");
 			writer.WriteLine ("logfile = .sparkleshare/log");
 			writer.WriteLine ("contactquietly = true");
 			writer.WriteLine ("rsrc = false");
-			writer.WriteLine ("path = current");
             writer.Close ();
 			
-			SparkleHelpers.DebugInfo ("Unison Check Profile", "Added configuration to '" + unison_check_profile + "'");
-			
-			// Write the sync profile to the file
-            TextWriter writer = new StreamWriter (unison_sync_profile);
-			writer.WriteLine ("root = .");
-			writer.WriteLine ("root = " + base.remote_url);
-			writer.WriteLine ("log = true");
-			writer.WriteLine ("logfile = .sparkleshare/log");
-			writer.WriteLine ("contactquietly = true");
-			writer.WriteLine ("rsrc = false");
-			writer.WriteLine ("path = current");
-			//extra lines to actually sync
-			writer.WriteLine ("auto = true");
-			writer.WriteLine ("batch = true");
-			writer.Close ();
-
-            SparkleHelpers.DebugInfo ("Unison Sync Profile", "Added configuration to '" + unison_sync_profile + "'");
+			SparkleHelpers.DebugInfo ("Unison Profile", "Added configuration to '" + unison_check_profile + "'");
+		
         }		
 
         // Add a .gitignore file to the repo

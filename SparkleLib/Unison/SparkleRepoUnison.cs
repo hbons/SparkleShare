@@ -45,7 +45,7 @@ namespace SparkleLib {
 		private override string CheckForChangesBothWays ()
 		{
 			 SparkleUnison unison = new SparkleUnison (LocalPath,
-                "-ui text checkprofile . \"" + base.remote_url);
+                "-ui text sparkleshare . \"" + base.remote_url);
 			//unison doesn't seem to want to look for profiles in non-standard locations
 
             unison.Start ();
@@ -77,7 +77,7 @@ namespace SparkleLib {
 		private override bool SyncBothWays ()
 		{
            SparkleUnison unison = new SparkleUnison (LocalPath,
-                "-auto -batch -contactquietly -ui text -logfile .unisonlog . \"" + base.remote_url);
+                "-ui text -auto -batch sparkleshare . \"" + base.remote_url);
 
             unison.Start ();
             unison.WaitForExit ();
