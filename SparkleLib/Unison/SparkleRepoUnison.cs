@@ -45,7 +45,7 @@ namespace SparkleLib {
 		private string ListUnisonChanges ()
 		{
 			SparkleUnison unison = new SparkleUnison (LocalPath,
-                "-ui text sparkleshare . ");
+                "-ui text sparkleshare");
 			//unison doesn't seem to want to look for profiles in non-standard locations
 
             unison.Start ();
@@ -70,6 +70,8 @@ namespace SparkleLib {
             string remote_revision = ListUnisonChanges ();
 			
 			if (!remote_revision.EndsWith ("Nothing to do: replicas have not changed since last sync.")) {
+				//might want to parse between the L and q if there are changes for the debug output
+				//basically just need to remove first 6 lines and last 2 lines
                 SparkleHelpers.DebugInfo ("Unison", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
                 return true;
             } else {
@@ -90,7 +92,7 @@ namespace SparkleLib {
 			
 			//sync both folders now!
             SparkleUnison unison = new SparkleUnison (LocalPath,
-                "-ui text -auto -batch sparkleshare . ");
+                "-ui text -auto -batch sparkleshare");
 
             unison.Start ();
             unison.WaitForExit ();
