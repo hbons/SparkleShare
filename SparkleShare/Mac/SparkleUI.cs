@@ -24,7 +24,7 @@ using System.Timers;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
-using MonoMac.WebKit;
+using MonoMac.Growl;
 
 namespace SparkleShare {
 
@@ -60,11 +60,22 @@ namespace SparkleShare {
 
 		public SparkleUI ()
 		{
-			NSApplication.Init ();
+            string content_path = Directory.GetParent (
+                System.AppDomain.CurrentDomain.BaseDirectory).ToString ();
+            string app_path     = Directory.GetParent (content_path).ToString ();
+            string growl_path   = Path.Combine (app_path, "Frameworks", "Growl.framework", "Growl");
 
-			using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
-    			SetSparkleIcon ();
-    
+            // Needed for Growl
+            Dlfcn.dlopen (growl_path, 0);
+            NSApplication.Init ();
+
+            using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
+
+                // Needed for Growl
+                GrowlApplicationBridge.WeakDelegate = this;
+
+                SetSparkleIcon ();
+
     			// TODO: Getting crashes when I remove this
     			NSApplication.SharedApplication.ApplicationIconImage
     				= NSImage.ImageNamed ("sparkleshare.icns");
@@ -97,13 +108,30 @@ namespace SparkleShare {
     					    NSApplication.SharedApplication.DockTile.BadgeLabel =
                                 (int.Parse (NSApplication.SharedApplication.DockTile.BadgeLabel) + 1).ToString ();
 
-    					NSApplication.SharedApplication.RequestUserAttention
-    						(NSRequestUserAttentionType.InformationalRequest);
+                        if (GrowlApplicationBridge.IsGrowlRunning ()) {
+                            SparkleBubble bubble = new SparkleBubble (user_name, message) {
+                                ImagePath = SparkleShare.Controller.GetAvatar (user_email, 36)
+                            };
+
+                            bubble.Show ();
+
+                        } else {
+        					NSApplication.SharedApplication.RequestUserAttention
+        						(NSRequestUserAttentionType.InformationalRequest);
+                        }
                     }
 				});
 			};
 			
-			
+
+            SparkleShare.Controller.ConflictNotificationRaised += delegate {
+                    string title   = "Ouch! Mid-air collision!";
+                    string subtext = "Don't worry, SparkleShare made a copy of each conflicting file.";
+
+                    new SparkleBubble (title, subtext).Show ();
+            };
+
+
 			SparkleShare.Controller.AvatarFetched += delegate {
 				InvokeOnMainThread (delegate {
 					foreach (SparkleLog log in SparkleUI.OpenLogs)
@@ -143,5 +171,13 @@ namespace SparkleShare {
 		{
             NSApplication.Main (new string [0]);
 		}
+
+
+        [Export("registrationDictionaryForGrowl")]
+        NSDictionary RegistrationDictionaryForGrowl ()
+        {
+            string path = NSBundle.MainBundle.PathForResource ("Growl", "plist");
+            return NSDictionary.FromFile (path);
+        }
 	}
 }
