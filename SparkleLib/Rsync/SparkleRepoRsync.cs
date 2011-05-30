@@ -64,7 +64,7 @@ namespace SparkleLib {
         {
 			//delete can cause problems -- see comments in the conflict code
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvP --update --delete --delete-during --exclude-from=.sparkleshare --log-file=.rsynclog . " + "\"" + base.remote_url + "\"");
+                "--archive --itemize --compress --partial --delete --delete-during --exclude-from=.sparkleshare --log-file=.rsynclog . " + "\"" + base.remote_url + "\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -78,7 +78,7 @@ namespace SparkleLib {
         public override bool SyncDown ()
         {
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvP --update --delete --delete-during --exclude-from=.sparkleshare --log-file=.rsynclog \"" + base.remote_url + "\" " + ".");
+                "--archive --itemize --compress --partial --delete --delete-during --exclude-from=.sparkleshare --log-file=.rsynclog \"" + base.remote_url + "\" " + ".");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -144,10 +144,13 @@ namespace SparkleLib {
 			//don't think the rsync backup/suffix commands will work here
 			
 			//this is going to be repeating the checking since the CheckForRemoteChanges and AnyDifferences commands do the same things...
+			//rsync --update uses only timestamps and can lead to local changes being clobbered
+			//without update it is not clear if there is a conflict since there is no record of local editing
+			//need to create a way of knowing about local changes -- storing MD5 hashes seems like a good idea			
 			
 			//local changes
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-            	"-aizvPn --update --delete --exclude-from=.sparkleshare ." + "\"" + base.remote_url + "\"");
+            	"--archive --itemize --compress --dry-run --partial --delete --exclude-from=.sparkleshare ." + "\"" + base.remote_url + "\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -156,7 +159,7 @@ namespace SparkleLib {
 			
 			//remote changes
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvPn --update --delete --exclude-from=.sparkleshare \"" + base.remote_url + "\" " + ".");
+                "--archive --itemize --compress --dry-run --partial --delete --exclude-from=.sparkleshare \"" + base.remote_url + "\" " + ".");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -177,8 +180,6 @@ namespace SparkleLib {
 			//might need to compare the modification-timestamp of the local files to the time of last sync (from the log)
 			//for files that are deleted on the server, then if they were modified copy them to the server with a suffix
 			//otherwise delete them locally...
-			
-			//alternatively rsync can be instructed to keep backups on the server but this might make it more complicated
 			
 			//the rsync dry run will report which files are scheduled for deletion in the upcoming sync
 			
@@ -207,7 +208,7 @@ namespace SparkleLib {
 		private string RemoteChanges ()
 		{
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
-                "-aizvPn --update --delete --exclude-from=.sparkleshare \"" + base.remote_url + "\" " + ".");
+                "--archive --itemize --compress --dry-run --partial --delete --exclude-from=.sparkleshare \"" + base.remote_url + "\" " + ".");
 
             rsync.Start ();
             rsync.WaitForExit ();
@@ -220,7 +221,7 @@ namespace SparkleLib {
 		private string LocalChanges ()
 		{
 		  	SparkleRsync rsync = new SparkleRsync (LocalPath,
-            	"-aizvPn --update --delete --exclude-from=.sparkleshare ." + "\"" + base.remote_url + "\"");
+            	"--archive --itemize --compress --dry-run --partial --delete --exclude-from=.sparkleshare ." + "\"" + base.remote_url + "\"");
 
             rsync.Start ();
             rsync.WaitForExit ();
