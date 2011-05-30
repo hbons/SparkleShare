@@ -48,6 +48,7 @@ namespace SparkleLib {
         {
 			remote_revision = RemoteChanges ();
 			
+			//counting lines won't really work since rsync doesn't know if the changes were made locally or on the server...
             if (CountLinesInString(remote_revision) > 4) {
                 SparkleHelpers.DebugInfo ("Rsync", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
                 return true;
@@ -94,7 +95,7 @@ namespace SparkleLib {
             get {
 
 				remote_revision = LocalChanges ();
-	
+
 	            if (CountLinesInString(remote_revision) > 4) 
 	                return true;
 	             else 
@@ -136,17 +137,7 @@ namespace SparkleLib {
 		
 		private void ResolveConflict ()
         { 
-			//some conflict resolution code in python: http://sujitpal.blogspot.com/2009/12/unison-replacement-with-rsync.html
-			
-			//create a function that compares the serverside changes to the clientside changes
-			//check for files that are changed on both sides
-			//rename the conflicting files
-			//don't think the rsync backup/suffix commands will work here
-			
-			//this is going to be repeating the checking since the CheckForRemoteChanges and AnyDifferences commands do the same things...
-			//rsync --update uses only timestamps and can lead to local changes being clobbered
-			//without update it is not clear if there is a conflict since there is no record of local editing
-			//need to create a way of knowing about local changes -- storing MD5 hashes seems like a good idea			
+			//some conflict resolution code in python: http://sujitpal.blogspot.com/2009/12/unison-replacement-with-rsync.htm	
 			
 			//local changes
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
