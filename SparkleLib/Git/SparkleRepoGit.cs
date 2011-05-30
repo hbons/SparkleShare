@@ -230,13 +230,11 @@ namespace SparkleLib {
 
             if (git.ExitCode != 0) {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected. Trying to get out...");
-                DisableWatching ();
 
                 while (AnyDifferences)
                     ResolveConflict ();
 
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
-                EnableWatching ();
 
                 OnConflictResolved ();
             }
