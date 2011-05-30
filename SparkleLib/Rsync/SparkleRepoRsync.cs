@@ -62,6 +62,7 @@ namespace SparkleLib {
 		//--delete will delete files on the server that were deleted locally (need to make sure that the server copy wasnt modified...)
         public override bool SyncUp ()
         {
+			//delete can cause problems -- see comments in the conflict code
 			SparkleRsync rsync = new SparkleRsync (LocalPath,
                 "-aizvP --update --delete --delete-during --exclude-from=.sparkleshare --log-file=.rsynclog . " + "\"" + base.remote_url + "\"");
 
@@ -166,6 +167,18 @@ namespace SparkleLib {
 			//look at each overlap and see if they are both modified or:
 			//it the local version has been modified, but the server version was removed
 			//and the opposite, where the local version was deleted and the server version was modified
+			//for simple conflicts where the local and server version were both modified
+			//(need to look at timestamps and rsync log since rsync doesn't have a record of modifications)
+			//just apply a suffix (usernames + timestamps) and keep both files
+			
+			//**DELETED FILES** 
+			//there is a complexity that arrises when a file is locally modified by one person after being deleted on the server by someone else
+			//since there is no record of if the file was actually locally modified other than the timestamp
+			//might need to compare the modification-timestamp of the local files to the time of last sync (from the log)
+			//for files that are deleted on the server, then if they were modified copy them to the server with a suffix
+			//otherwise delete them locally...
+			
+			//the rsync dry run will report which files are scheduled for deletion in the upcoming sync
 			
 			//the output from the rsync command can inform if the file was deleted
 			//see: http://samba.anu.edu.au/ftp/rsync/rsync.html section on itemize changes
