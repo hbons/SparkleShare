@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-28 17:46+0200\n"
-"PO-Revision-Date: 2011-05-28 16:15+0000\n"
+"POT-Creation-Date: 2011-05-28 19:48+0200\n"
+"PO-Revision-Date: 2011-05-28 17:48+0000\n"
 "Last-Translator: deejay1 <deejay1@srem.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -59,6 +59,23 @@ msgstr "Tworzy kopię wcześniejszej wersji w tym katalogu"
 msgid "Select to get a copy of this version"
 msgstr "Zaznacz, aby pobrać kopię tej wersji"
 
+#. A menu item that takes the user to http://www.sparkleshare.org/
+#: ../SparkleShare/SparkleAbout.cs:47 ../SparkleShare/SparkleStatusIcon.cs:225
+msgid "About SparkleShare"
+msgstr "Informacje o"
+
+#: ../SparkleShare/SparkleAbout.cs:54
+msgid "A newer version is available"
+msgstr ""
+
+#: ../SparkleShare/SparkleAbout.cs:61
+msgid "You are running the latest version."
+msgstr ""
+
+#: ../SparkleShare/SparkleAbout.cs:88
+msgid "Checking for updates..."
+msgstr ""
+
 #: ../SparkleShare/SparkleAbout.cs:117
 msgid "_Show Credits"
 msgstr "Za_sługi"
@@ -67,35 +84,35 @@ msgstr "Za_sługi"
 msgid "_Visit Website"
 msgstr "_Odwiedź stronę domową"
 
-#: ../SparkleShare/SparkleController.cs:397
+#: ../SparkleShare/SparkleController.cs:392
 msgid "ddd MMM d, yyyy"
 msgstr "ddd, d MMM yyyy"
 
-#: ../SparkleShare/SparkleController.cs:402
+#: ../SparkleShare/SparkleController.cs:397
 msgid "ddd MMM d"
 msgstr "ddd, d MMM"
 
-#: ../SparkleShare/SparkleController.cs:613
+#: ../SparkleShare/SparkleController.cs:608
 #, csharp-format
 msgid "added ‘{0}’"
 msgstr "dodano „{0}”"
 
-#: ../SparkleShare/SparkleController.cs:618
+#: ../SparkleShare/SparkleController.cs:613
 #, csharp-format
 msgid "moved ‘{0}’"
 msgstr "przesunięto \"{0}\""
 
-#: ../SparkleShare/SparkleController.cs:623
+#: ../SparkleShare/SparkleController.cs:618
 #, csharp-format
 msgid "edited ‘{0}’"
 msgstr "edytowano „{0}”"
 
-#: ../SparkleShare/SparkleController.cs:628
+#: ../SparkleShare/SparkleController.cs:623
 #, csharp-format
 msgid "deleted ‘{0}’"
 msgstr "usunięto „{0}”"
 
-#: ../SparkleShare/SparkleController.cs:637
+#: ../SparkleShare/SparkleController.cs:632
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
@@ -103,7 +120,7 @@ msgstr[0] "oraz {0} więcej"
 msgstr[1] "oraz {0} więcej"
 msgstr[2] "oraz {0} więcej"
 
-#: ../SparkleShare/SparkleController.cs:640
+#: ../SparkleShare/SparkleController.cs:635
 msgid "did something magical"
 msgstr "wydarzyło się coś magicznego"
 
@@ -400,11 +417,6 @@ msgstr "Wyłącz powiadomienia"
 msgid "Turn Notifications On"
 msgstr "Włącz powiadomienia"
 
-#. A menu item that takes the user to http://www.sparkleshare.org/
-#: ../SparkleShare/SparkleStatusIcon.cs:225
-msgid "About SparkleShare"
-msgstr "Informacje o"
-
 #. A menu item that quits the application
 #: ../SparkleShare/SparkleStatusIcon.cs:236
 msgid "Quit"
@@ -417,5 +429,9 @@ msgstr "Ups! Nastąpiło czołowe zderzenie! "
 #: ../SparkleShare/SparkleUI.cs:106
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
 msgstr "Bez obaw, program SparkleShare wykonał kopię skonfliktowanych plików."
+
+#: ../SparkleShare/SparkleWindow.cs:41
+msgid "SparkleShare Setup"
+msgstr ""
 
 
