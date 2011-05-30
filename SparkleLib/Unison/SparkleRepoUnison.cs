@@ -144,7 +144,7 @@ namespace SparkleLib {
 			string timestamp = DateTime.Now.ToString ("HH:mm MMM d");
 			
 			//append username to the local copy then transfer it
-			SparkleConfig.DefaultConfig.UserName
+			SparkleConfig.DefaultConfig.UserName;
 		}
 		
 

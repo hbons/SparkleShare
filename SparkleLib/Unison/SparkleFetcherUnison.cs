@@ -32,9 +32,8 @@ namespace SparkleLib {
         public override bool Fetch ()
         {
 			//unison needs an extra / to specify the absolute path just like Hg
-			//this can't easily be added here
             SparkleUnison unison = new SparkleUnison (SparklePaths.SparkleTmpPath,
-                "-auto -batch -contactquietly -ui text \"" + base.target_folder + "\" " + "\"" + base.remote_url + "\"");
+                "-auto -batch -ui text \"" + base.target_folder + "\" " + "\"" + base.remote_url + "\"");
 
             unison.Start ();
             unison.WaitForExit ();
@@ -45,7 +44,7 @@ namespace SparkleLib {
                 return false;
             } else {
                 InstallConfiguration ();
-				InstallUnisonProfile ();
+				InstallUnisonProfile (); //ignore list included in the profile
                 return true;
             }
         }
@@ -82,12 +81,12 @@ namespace SparkleLib {
 
             // Write the profile to the file
             TextWriter writer = new StreamWriter (unison_profile);
-            writer.WriteLine ("root = .");
-			writer.WriteLine ("root = " + base.remote_url);
+            writer.WriteLine ("root = ."); //local root
+			writer.WriteLine ("root = " + base.remote_url); //remote server - needs an extra /
 			writer.WriteLine ("log = true");
-			writer.WriteLine ("logfile = .sparkleshare/log");
+			writer.WriteLine ("logfile = log"); //goes in the .sparkleshare directory
 			writer.WriteLine ("contactquietly = true");
-			writer.WriteLine ("rsrc = false");
+			writer.WriteLine ("rsrc = false"); //something for Mac OS X
 			
 			//ignore rules added here
 			// gedit and emacs
@@ -126,10 +125,10 @@ namespace SparkleLib {
             writer.WriteLine ("ignore = Path */.svn/*");
 			
 			// Sparkleshare
-            writer.WriteLine ("ignore = Path */.sparkleshare");
+            writer.WriteLine ("ignore = Path */.sparkleshare"); //don't sync this since it has the archive file in it
             writer.Close ();
 			
-			SparkleHelpers.DebugInfo ("Unison Profile", "Added configuration to '" + unison_check_profile + "'");	
+			SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");	
         }		
 
 
