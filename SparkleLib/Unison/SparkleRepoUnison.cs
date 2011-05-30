@@ -42,17 +42,18 @@ namespace SparkleLib {
             }
         }
 
-		private override string CheckForChangesBothWays ()
+		private override bool CheckForChangesBothWays ()
 		{
 			 SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text sparkleshare . \"" + base.remote_url);
 			//unison doesn't seem to want to look for profiles in non-standard locations
 
             unison.Start ();
-			unison.StandardInput.Write("L"); //list changes
+			unison.StandardInput.Write("L"); //list changes (low verbosity)
+			//what happens if there are no changes but you still press L and q? -- does it break
 			unison.StandardInput.Flush();
 			unison.StandardInput.Close();
-			unison.StandardInput.Write("l"); //quit unison
+			unison.StandardInput.Write("q"); //quit unison
 			unison.StandardInput.Flush();
 			unison.StandardInput.Close();
             unison.WaitForExit ();
@@ -60,23 +61,29 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
 			
 			string remote_revision = unison.StandardOutput.ReadToEnd ().TrimEnd ();
-			//need to properly trim the output to keep the stuff between the 'l' press and the 'q'
+			//need to properly trim the output to keep only the stuff between the 'L' press and the 'q'
 			
-			return remote_revision;
+            if (!remote_revision.EndsWith ("Nothing to do: replicas have not changed since last sync.")) {
+                SparkleHelpers.DebugInfo ("Unison", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
+                return true;
+            } else {
+                return false;
+            }
 		}
 		
 		
         public override bool CheckForRemoteChanges ()
         {
-			remote_revision = CheckForChangesBothWays ();
-			//parse remote_revision to check for remote changes
-            return true;
+			return CheckForChangesBothWays ();
         }
 		
 		
 		private override bool SyncBothWays ()
 		{
-           SparkleUnison unison = new SparkleUnison (LocalPath,
+			//check for conflicts here first! -- ResolveConflict ()
+			
+			//sync both folders now!
+            SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text -auto -batch sparkleshare . \"" + base.remote_url);
 
             unison.Start ();
@@ -90,7 +97,6 @@ namespace SparkleLib {
                 return true;     
 		}
 
-		//not really a distiction between syncing up or down 
         public override bool SyncUp ()
         {
             return SyncBothWays ();
@@ -105,10 +111,7 @@ namespace SparkleLib {
 
         public override bool AnyDifferences {
             get {
-				remote_revision = CheckForChangesBothWays ();
-				//parse remote_revision to check for remote changes
-		        return true;
-                return false;
+				return CheckForChangesBothWays ();
             }
         }
 
@@ -140,6 +143,7 @@ namespace SparkleLib {
 			//parse remote_revision to check for conflicts
 			//they are represented by <-?->
 			
+			//when conflicts are identified copy/rename the neccesary files
 			//append timestamp
 			string timestamp = DateTime.Now.ToString ("HH:mm MMM d");
 			

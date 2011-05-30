@@ -84,7 +84,7 @@ namespace SparkleLib {
             writer.WriteLine ("root = ."); //local root
 			writer.WriteLine ("root = " + base.remote_url); //remote server - needs an extra /
 			writer.WriteLine ("log = true");
-			writer.WriteLine ("logfile = log"); //goes in the .sparkleshare directory
+			writer.WriteLine ("logfile = ./.sparklehshare/log"); //goes in the .sparkleshare directory
 			writer.WriteLine ("contactquietly = true");
 			writer.WriteLine ("rsrc = false"); //something for Mac OS X
 			
