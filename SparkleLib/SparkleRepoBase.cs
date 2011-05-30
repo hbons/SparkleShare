@@ -223,13 +223,8 @@ namespace SparkleLib {
 
         private void CreateListener ()
         {
-            NotificationServerType server_type;
-            if (UsesNotificationCenter)
-                server_type = NotificationServerType.Central;
-            else
-                server_type = NotificationServerType.Own;
-
-            this.listener = SparkleListenerFactory.CreateIrcListener (Domain, Identifier, server_type);
+            this.listener = SparkleListenerFactory.CreateIrcListener (Domain, Identifier,
+                SparkleConfig.DefaultConfig.GetAnnouncementsForFolder (Name));
 
             // Stop polling when the connection to the irc channel is succesful
             this.listener.Connected += delegate {
