@@ -42,7 +42,7 @@ namespace SparkleLib {
             }
         }
 		
-		public string ListUnisonChanges ()
+		private string ListUnisonChanges ()
 		{
 			SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text sparkleshare . ");
