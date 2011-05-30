@@ -129,7 +129,8 @@ namespace SparkleLib {
             writer.Close ();
 			
 			SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");	
-        }		
+        }
+	}
 
 
     public class SparkleUnison : Process {

@@ -42,10 +42,10 @@ namespace SparkleLib {
             }
         }
 		
-		private override string ListUnisonChanges ()
+		public string ListUnisonChanges ()
 		{
 			SparkleUnison unison = new SparkleUnison (LocalPath,
-                "-ui text sparkleshare . \"" + base.remote_url);
+                "-ui text sparkleshare . ");
 			//unison doesn't seem to want to look for profiles in non-standard locations
 
             unison.Start ();
@@ -65,9 +65,10 @@ namespace SparkleLib {
 			return remote_revision;
 		}
 
-		private override bool CheckForChangesBothWays ()
+		//make private?
+		public bool CheckForChangesBothWays ()
 		{			
-            remote_revision = ListUnisonChanges ();
+            string remote_revision = ListUnisonChanges ();
 			
 			if (!remote_revision.EndsWith ("Nothing to do: replicas have not changed since last sync.")) {
                 SparkleHelpers.DebugInfo ("Unison", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
@@ -84,13 +85,14 @@ namespace SparkleLib {
         }
 		
 		
-		private override bool SyncBothWays ()
+		//make private
+		public bool SyncBothWays ()
 		{
 			//check for conflicts here first! -- ResolveConflict ()
 			
 			//sync both folders now!
             SparkleUnison unison = new SparkleUnison (LocalPath,
-                "-ui text -auto -batch sparkleshare . \"" + base.remote_url);
+                "-ui text -auto -batch sparkleshare . ");
 
             unison.Start ();
             unison.WaitForExit ();
@@ -145,11 +147,11 @@ namespace SparkleLib {
 
 		private void ResolveConflict ()
 		{
-			remote_revision = ListUnisonChanges ();
+			string remote_revision = ListUnisonChanges ();
 			
 			//need to remove first 6 lines and last 2 lines
 			
-			//then look for "<-?->" these represent conflicts
+			//then look for <-?-> these represent conflicts
 			//lines look like this:
 			//changed  <-?-> changed -- changed on the server and locally
 			//deleted  <-?-> changed -- deleted locally, changed on server
@@ -160,7 +162,7 @@ namespace SparkleLib {
 			string timestamp = DateTime.Now.ToString ("HH:mm MMM d");
 			
 			//append username to the local copy then transfer it
-			SparkleConfig.DefaultConfig.UserName;
+			//SparkleConfig.DefaultConfig.UserName;
 		}
 		
 
