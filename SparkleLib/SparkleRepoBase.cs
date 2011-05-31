@@ -298,9 +298,9 @@ namespace SparkleLib {
 
 
         // Starts a timer when something changes
-        private void OnFileActivity (object o, FileSystemEventArgs args)
+        public void OnFileActivity (object o, FileSystemEventArgs args)
         {
-            if (args.FullPath.Contains ("/.git") || args.FullPath.Contains ("/.hg"))
+            if (args.FullPath.Contains ("/."))
                 return;
 
             WatcherChangeTypes wct = args.ChangeType;
