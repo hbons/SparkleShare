@@ -28,6 +28,33 @@ namespace SparkleShare {
 
 	public class SparkleMacController : SparkleController {
 
+        // We have to use our own custom made folder watcher, as
+        // System.IO.FileSystemWatcher fails watching subfolders on Mac
+        private SparkleMacWatcher watcher = new SparkleMacWatcher (SparklePaths.SparklePath);
+
+
+        public SparkleMacController () : base ()
+        {
+            watcher.Changed += delegate (string path) {
+                string repo_name;
+
+                if (path.Contains ("/"))
+                    repo_name = path.Substring (0, path.IndexOf ("/"));
+                else
+                    repo_name = path;
+
+                repo_name = repo_name.Trim ("/".ToCharArray ());
+                FileSystemEventArgs args = new FileSystemEventArgs (WatcherChangeTypes.Changed,
+                    Path.Combine (SparklePaths.SparklePath, path), Path.GetFileName (path));
+
+                foreach (SparkleRepoBase repo in Repositories) {
+                    if (repo.Name.Equals (repo_name))
+                        repo.OnFileActivity (this, args);
+                }
+            };
+        }
+
+
 		public override void EnableSystemAutostart ()
 		{
 			// N/A
