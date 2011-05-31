@@ -192,16 +192,11 @@ namespace SparkleShare {
             
         public override void OpenSparkleShareFolder (string subfolder)
         {
-            string open_command_path = SparkleHelpers.CombineMore (Path.VolumeSeparatorChar.ToString (),
-                "usr", "bin", "xdg-open");
+            string folder = Path.Combine (SparklePaths.SparklePath, subfolder);
 
-            if (!File.Exists (open_command_path))
-                return;
-
-            string folder = SparkleHelpers.CombineMore (SparklePaths.SparklePath, subfolder);
             Process process = new Process ();
-            process.StartInfo.Arguments = folder.Replace (" ", "\\ "); // Escape space-characters
             process.StartInfo.FileName  = "xdg-open";
+            process.StartInfo.Arguments = "\"" + folder + "\"";
             process.Start ();
         }
     }
