@@ -269,59 +269,18 @@ namespace SparkleShare {
                     SyncButton = new Button (_("Sync"));
     
                     SyncButton.Clicked += delegate {
-                        string name = FolderEntry.Text;
-
-                        // Remove the starting slash if there is one
-                        if (name.StartsWith ("/"))
-                            name = name.Substring (1);
-
-                        string server = ServerEntry.Text;
-
-                        if (name.EndsWith ("/"))
-                            name = name.TrimEnd ("/".ToCharArray ());
-
-                        if (name.StartsWith ("/"))
-                            name = name.TrimStart ("/".ToCharArray ());
-
-                        if (server.StartsWith ("ssh://"))
-                            server = server.Substring (6);
-
-                        if (radio_button.Active) {
-
-                            // Use the default user 'git' if no username is specified
-                            if (!server.Contains ("@"))
-                                server = "git@" + server;
-
-                            // Prepend the Secure Shell protocol when it isn't specified
-                            if (!server.StartsWith ("ssh://"))
-                                server = "ssh://" + server;
-
-                            // Remove the trailing slash if there is one
-                            if (server.EndsWith ("/"))
-                                server = server.TrimEnd ("/".ToCharArray ());
-                        }
+                        string folder_name    = FolderEntry.Text;
+                        string server         = ServerEntry.Text;
+                        string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
 
                         if (radio_button_gitorious.Active) {
-                            server = "ssh://git@gitorious.org";
-
-                            if (!name.EndsWith (".git")) {
-                                if (!name.Contains ("/"))
-                                    name = name + "/" + name;
-
-                                name += ".git";
-                            }
-                        }
+                            server = "gitorious.org";
 
                         if (radio_button_github.Active)
-                            server = "ssh://git@github.com";
+                            server = "github.com";
 
                         if (radio_button_gnome.Active)
-                            server = "ssh://git@gnome.org/git/";
-
-                        string url  = server + "/" + name;
-                        Console.WriteLine ("View", "[" + name + "] Formed URL: " + url);
-
-                        string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
+                            server = "gnome.org";
 
                         ShowSyncingPage (canonical_name);
                 
@@ -339,7 +298,7 @@ namespace SparkleShare {
                             });
                         };
 
-                        SparkleShare.Controller.FetchFolder (url, name);
+                        SparkleShare.Controller.FetchFolder (server, folder_name);
                     };
 
 
