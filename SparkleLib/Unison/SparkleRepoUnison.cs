@@ -88,7 +88,8 @@ namespace SparkleLib {
 		
 		private bool SyncBothWays ()
 		{
-			//check for conflicts here first! -- ResolveConflict ()
+			//check for conflicts before syncing
+			ResolveConflicts ();
 			
 			//sync both folders now!
             SparkleUnison unison = new SparkleUnison (LocalPath,
@@ -145,17 +146,30 @@ namespace SparkleLib {
             }
         }
 
-		private void ResolveConflict ()
+		private void ResolveConflicts ()
 		{
-			string remote_revision = ListUnisonChanges ();
-			
-			//need to remove first 6 lines and last 2 lines
+			//from SparkleRepoGit
+			// This is al list of conflict status codes that Git uses, their
+            // meaning, and how SparkleShare should handle them.
+            //
+            // DD    unmerged, both deleted    -> Do nothing
+            // AU    unmerged, added by us     -> Use theirs, save ours as a timestamped copy
+            // UD    unmerged, deleted by them -> Use ours
+            // UA    unmerged, added by them   -> Use theirs, save ours as a timestamped copy
+            // DU    unmerged, deleted by us   -> Use theirs
+            // AA    unmerged, both added      -> Use theirs, save ours as a timestamped copy
+            // UU    unmerged, both modified   -> Use theirs, save ours as a timestamped copy
+            //
+            // So: 'ours' means the 'server's version' and 'theirs' means the 'local version'
 			
 			//then look for <-?-> these represent conflicts
 			//lines look like this:
 			//changed  <-?-> changed -- changed on the server and locally
 			//deleted  <-?-> changed -- deleted locally, changed on server
 			//changed  <-?-> deleted -- changed locally, deleted on server
+			//new file <-?-> new file -- new file on the server and a new file locally
+			
+			string remote_revision = ListUnisonChanges ();			
 			
 			//when conflicts are identified copy/rename the neccesary files
 			//append timestamp
