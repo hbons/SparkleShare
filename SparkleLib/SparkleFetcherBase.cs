@@ -18,7 +18,10 @@
 using System;
 using System.IO;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading;
+
+using Mono.Unix;
 
 namespace SparkleLib {
 
@@ -38,17 +41,17 @@ namespace SparkleLib {
         private Thread thread;
 
 
-        public SparkleFetcherBase (string remote_url, string target_folder)
+        public SparkleFetcherBase (string server, string remote_folder, string target_folder)
         {
             this.target_folder = target_folder;
-            this.remote_url    = remote_url;
+            this.remote_url    = server + "/" + remote_folder;
         }
 
 
         // Clones the remote repository
         public void Start ()
         {
-            SparkleHelpers.DebugInfo ("Fetcher", "[" + this.target_folder + "] Fetching folder...");
+            SparkleHelpers.DebugInfo ("Fetcher", "[" + this.target_folder + "] Fetching folder: " + this.remote_url);
 
             if (Started != null)
                 Started ();
@@ -56,14 +59,30 @@ namespace SparkleLib {
             if (Directory.Exists (this.target_folder))
                 Directory.Delete (this.target_folder, true);
 
+            string host = GetHost (this.remote_url);
+
+            if (String.IsNullOrEmpty (host)) {
+                if (Failed != null)
+                    Failed ();
+
+                return;
+            }
+
+            DisableHostKeyCheckingForHost (host);
+
             this.thread = new Thread (new ThreadStart (delegate {
                 if (Fetch ()) {
-                    SparkleHelpers.DebugInfo ("Fetcher", "[" + this.target_folder + "] Fetching finished");
+                    SparkleHelpers.DebugInfo ("Fetcher", "Finished");
+
+                    EnableHostKeyCheckingForHost (host);
 
                     if (Finished != null)
                         Finished ();
+
                 } else {
-                    SparkleHelpers.DebugInfo ("Fetcher", "[" + this.target_folder + "] Fetching failed");
+                    SparkleHelpers.DebugInfo ("Fetcher", "Failed");
+
+                    EnableHostKeyCheckingForHost (host);
 
                     if (Failed != null)
                         Failed ();
@@ -71,6 +90,13 @@ namespace SparkleLib {
             }));
 
             this.thread.Start ();
+        }
+
+
+        public string RemoteUrl {
+            get {
+                return this.remote_url;
+            }
         }
 
 
@@ -82,5 +108,79 @@ namespace SparkleLib {
 
 
         public abstract bool Fetch ();
+
+
+        private void DisableHostKeyCheckingForHost (string host)
+        {
+            string ssh_config_file_path = SparkleHelpers.CombineMore (
+                SparklePaths.HomePath, ".ssh", "config");
+
+            string ssh_config = Environment.NewLine + "Host " + host +
+                                Environment.NewLine + "\tStrictHostKeyChecking no";
+
+            if (File.Exists (ssh_config_file_path)) {
+                TextWriter writer = File.AppendText (ssh_config_file_path);
+                writer.WriteLine (ssh_config);
+                writer.Close ();
+
+            } else {
+                TextWriter writer = new StreamWriter (ssh_config_file_path);
+                writer.WriteLine (ssh_config);
+                writer.Close ();
+            }
+
+            UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
+            file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
+                                               FileAccessPermissions.UserWrite);
+
+            SparkleHelpers.DebugInfo ("Fetcher", "Disabled host key checking");
+        }
+        
+
+        private void EnableHostKeyCheckingForHost (string host)
+        {
+            string ssh_config_file_path = SparkleHelpers.CombineMore (
+                SparklePaths.HomePath, ".ssh", "config");
+
+            string ssh_config = Environment.NewLine + "Host " + host +
+                                Environment.NewLine + "\tStrictHostKeyChecking no";
+
+            if (File.Exists (ssh_config_file_path)) {
+                StreamReader reader = new StreamReader (ssh_config_file_path);
+                string current_ssh_config = reader.ReadToEnd ();
+                reader.Close ();
+
+                current_ssh_config = current_ssh_config.Remove (
+                    current_ssh_config.IndexOf (ssh_config), ssh_config.Length);
+
+                bool has_some_ssh_config = new Regex (@"[a-z]").IsMatch (current_ssh_config);
+                if (!has_some_ssh_config) {
+                    File.Delete (ssh_config_file_path);
+
+                } else {
+                    TextWriter writer = new StreamWriter (ssh_config_file_path);
+                    writer.WriteLine (current_ssh_config);
+                    writer.Close ();
+
+                    UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
+                    file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
+                                                       FileAccessPermissions.UserWrite);
+                }
+            }
+
+            SparkleHelpers.DebugInfo ("Fetcher", "Enabled host key checking");
+        }
+
+
+        private string GetHost (string url)
+        {
+            Regex regex = new Regex (@"(@|://)([a-z0-9\.]+)(/|:)");
+            Match match = regex.Match (url);
+
+            if (match.Success)
+                return match.Groups [2].Value;
+            else
+                return null;
+        }
     }
 }

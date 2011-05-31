@@ -279,57 +279,9 @@ namespace SparkleShare {
 				};
 
 					SyncButton.Activated += delegate {
-						string name = FolderNameTextField.StringValue;
-
-						// Remove the starting slash if there is one
-						if (name.StartsWith ("/"))
-							name = name.Substring (1);
-
-						string server = AddressTextField.StringValue;
-
-						if (name.EndsWith ("/"))
-							name = name.TrimEnd ("/".ToCharArray ());
-
-						if (name.StartsWith ("/"))
-							name = name.TrimStart ("/".ToCharArray ());
-
-						if (server.StartsWith ("ssh://"))
-							server = server.Substring (6);
-
-						if (ServerType == 0) {
-
-							// Use the default user 'git' if no username is specified
-							if (!server.Contains ("@"))
-								server = "git@" + server;
-
-							// Prepend the Secure Shell protocol when it isn't specified
-							if (!server.StartsWith ("ssh://"))
-								server = "ssh://" + server;
-
-							// Remove the trailing slash if there is one
-							if (server.EndsWith ("/"))
-								server = server.TrimEnd ("/".ToCharArray ());
-						}
-
-						if (ServerType == 2) {
-							server = "ssh://git@gitorious.org";
-
-							if (!name.EndsWith (".git")) {
-								if (!name.Contains ("/"))
-									name = name + "/" + name;
-
-								name += ".git";
-							}
-						}
-
-						if (ServerType == 1)
-							server = "ssh://git@github.com";
-
-						if (ServerType == 3)
-							server = "ssh://git@gnome.org/git/";
-
-						string url  = server + "/" + name;
-						string canonical_name = Path.GetFileNameWithoutExtension (name);
+						string folder_name    = FolderNameTextField.StringValue;
+						string server         = AddressTextField.StringValue;
+						string canonical_name = Path.GetFileNameWithoutExtension (folder_name);
 
 						ShowSyncingPage (canonical_name);
 	
@@ -345,7 +297,7 @@ namespace SparkleShare {
 							});
 						};
 
-						SparkleShare.Controller.FetchFolder (url, name);
+						SparkleShare.Controller.FetchFolder (server, folder_name);
 					};
 
 				Buttons.Add (SyncButton);
