@@ -50,7 +50,7 @@ namespace SparkleLib {
 
             unison.Start ();
 			unison.StandardInput.Write("L"); //list changes (low verbosity)
-			//what happens if there are no changes but you still press L and q? -- does it break
+			//what happens if there are no changes but it still presses L and q? -- does it break?
 			unison.StandardInput.Flush();
 			unison.StandardInput.Close();
 			unison.StandardInput.Write("q"); //quit unison
@@ -89,7 +89,10 @@ namespace SparkleLib {
 		private bool SyncBothWays ()
 		{
 			//check for conflicts before syncing
-			ResolveConflicts ();
+			string remote_revision = ListUnisonChanges ();
+			
+			if (remote_revision.Contains ("<-?->") = True)
+			    ResolveConflicts (remote_revision);
 			
 			//sync both folders now!
             SparkleUnison unison = new SparkleUnison (LocalPath,
@@ -146,37 +149,36 @@ namespace SparkleLib {
             }
         }
 
-		private void ResolveConflicts ()
+		private void ResolveConflicts (string remote_revision)
 		{
-			//from SparkleRepoGit
-			// This is al list of conflict status codes that Git uses, their
-            // meaning, and how SparkleShare should handle them.
-            //
-            // DD    unmerged, both deleted    -> Do nothing
-            // AU    unmerged, added by us     -> Use theirs, save ours as a timestamped copy
-            // UD    unmerged, deleted by them -> Use ours
-            // UA    unmerged, added by them   -> Use theirs, save ours as a timestamped copy
-            // DU    unmerged, deleted by us   -> Use theirs
-            // AA    unmerged, both added      -> Use theirs, save ours as a timestamped copy
-            // UU    unmerged, both modified   -> Use theirs, save ours as a timestamped copy
-            //
-            // So: 'ours' means the 'server's version' and 'theirs' means the 'local version'
-			
-			//then look for <-?-> these represent conflicts
-			//lines look like this:
+			//unison output lines look like this when they are conflicts:
 			//changed  <-?-> changed -- changed on the server and locally
 			//deleted  <-?-> changed -- deleted locally, changed on server
 			//changed  <-?-> deleted -- changed locally, deleted on server
 			//new file <-?-> new file -- new file on the server and a new file locally
 			
-			string remote_revision = ListUnisonChanges ();			
-			
-			//when conflicts are identified copy/rename the neccesary files
-			//append timestamp
-			string timestamp = DateTime.Now.ToString ("HH:mm MMM d");
-			
-			//append username to the local copy then transfer it
-			//SparkleConfig.DefaultConfig.UserName;
+            //split lines and trim space
+            string [] lines = remote_revision.Split ("\n".ToCharArray ());
+			foreach (string line in lines) 
+			{
+				//check to see if the line contains a conflict
+				if (line.Contains ("<-?->"))
+				{
+					string conflict = line.Trim ();
+					
+					//how to deal with spaces in filename?
+				
+					//when conflicts are identified copy/rename the neccesary files
+					
+		            // Append a timestamp to local version
+		            string timestamp            = DateTime.Now.ToString ("HH:mm MMM d");
+		            string their_path           = conflicting_path + " (" + SparkleConfig.DefaultConfig.UserName + ", " + timestamp + ")";
+		            string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
+		            string abs_their_path       = Path.Combine (LocalPath, their_path);
+		
+		            File.Move (abs_conflicting_path, abs_their_path);
+				}
+			}
 		}
 		
 

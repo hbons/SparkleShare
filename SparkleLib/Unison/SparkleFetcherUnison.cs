@@ -99,7 +99,7 @@ namespace SparkleLib {
             // Write the profile to the file
             TextWriter writer = new StreamWriter (unison_profile);
             writer.WriteLine ("root = ."); //local folder
-			writer.WriteLine ("root = " + base.remote_url); //remote server
+			writer.WriteLine ("root = " + "\"" + base.remote_url + "\""); //remote server
 			writer.WriteLine ("log = true");
 			writer.WriteLine ("logfile = ./.sparklehshare/log"); //goes in the .sparkleshare directory
 			writer.WriteLine ("contactquietly = true"); //supress some useless output
