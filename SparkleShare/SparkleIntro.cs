@@ -271,9 +271,9 @@ namespace SparkleShare {
                     SyncButton.Clicked += delegate {
                         string folder_name    = FolderEntry.Text;
                         string server         = ServerEntry.Text;
-                        string canonical_name = System.IO.Path.GetFileNameWithoutExtension (name);
+                        string canonical_name = System.IO.Path.GetFileNameWithoutExtension (folder_name);
 
-                        if (radio_button_gitorious.Active) {
+                        if (radio_button_gitorious.Active)
                             server = "gitorious.org";
 
                         if (radio_button_github.Active)
