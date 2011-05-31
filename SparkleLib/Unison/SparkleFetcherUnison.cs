@@ -48,8 +48,8 @@ namespace SparkleLib {
 
         public override bool Fetch ()
         {
-			//unison needs an extra / to specify the absolute path just like Hg
-            SparkleUnison unison = new SparkleUnison (SparklePaths.SparkleTmpPath,
+            //not sure where the log file ends up at the moment
+			SparkleUnison unison = new SparkleUnison (SparklePaths.SparkleTmpPath,
                 "-auto -batch -ui text \"" + base.target_folder + "\" " + "\"" + base.remote_url + "\"");
 
             unison.Start ();
@@ -98,11 +98,11 @@ namespace SparkleLib {
 
             // Write the profile to the file
             TextWriter writer = new StreamWriter (unison_profile);
-            writer.WriteLine ("root = ."); //local root
-			writer.WriteLine ("root = " + base.remote_url); //remote server - needs an extra /
+            writer.WriteLine ("root = ."); //local folder
+			writer.WriteLine ("root = " + base.remote_url); //remote server
 			writer.WriteLine ("log = true");
 			writer.WriteLine ("logfile = ./.sparklehshare/log"); //goes in the .sparkleshare directory
-			writer.WriteLine ("contactquietly = true");
+			writer.WriteLine ("contactquietly = true"); //supress some useless output
 			writer.WriteLine ("rsrc = false"); //something for Mac OS X
 			
 			//ignore rules added here

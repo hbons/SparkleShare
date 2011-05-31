@@ -182,7 +182,7 @@ namespace SparkleLib {
 
         public override List <SparkleChangeSet> GetChangeSets (int count)
         {
-            //parse the unison log (.unisonlog)
+            //parse the unison log (.sparkleshare/log)
 			var l = new List<SparkleChangeSet> ();
             l.Add (new SparkleChangeSet () { UserName = "test", UserEmail = "test", Revision = "test", Timestamp = DateTime.Now });
             return l;
@@ -191,6 +191,7 @@ namespace SparkleLib {
 
         public override void CreateInitialChangeSet ()
         {
+			//?
             base.CreateInitialChangeSet ();
         }
 
