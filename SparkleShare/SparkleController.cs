@@ -782,68 +782,6 @@ namespace SparkleShare {
             }
         }
 
-        
-        private void DisableHostKeyCheckingForHost (string host)
-        {
-            string ssh_config_file_path = SparkleHelpers.CombineMore (
-                SparklePaths.HomePath, ".ssh", "config");
-
-            string ssh_config = Environment.NewLine + "Host " + host +
-                                Environment.NewLine + "\tStrictHostKeyChecking no";
-
-            if (File.Exists (ssh_config_file_path)) {
-                TextWriter writer = File.AppendText (ssh_config_file_path);
-                writer.WriteLine (ssh_config);
-                writer.Close ();
-
-            } else {
-                TextWriter writer = new StreamWriter (ssh_config_file_path);
-                writer.WriteLine (ssh_config);
-                writer.Close ();
-            }
-
-            UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
-            file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
-                                               FileAccessPermissions.UserWrite);
-
-            SparkleHelpers.DebugInfo ("Controller", "Disabled host key checking");
-        }
-        
-
-        private void EnableHostKeyCheckingForHost (string host)
-        {
-            string ssh_config_file_path = SparkleHelpers.CombineMore (
-                SparklePaths.HomePath, ".ssh", "config");
-
-            string ssh_config = Environment.NewLine + "Host " + host +
-                                Environment.NewLine + "\tStrictHostKeyChecking no";
-
-            if (File.Exists (ssh_config_file_path)) {
-                StreamReader reader = new StreamReader (ssh_config_file_path);
-                string current_ssh_config = reader.ReadToEnd ();
-                reader.Close ();
-
-                current_ssh_config = current_ssh_config.Remove (
-                    current_ssh_config.IndexOf (ssh_config), ssh_config.Length);
-
-                bool has_some_ssh_config = new Regex (@"[a-z]").IsMatch (current_ssh_config);
-                if (!has_some_ssh_config) {
-                    File.Delete (ssh_config_file_path);
-
-                } else {
-                    TextWriter writer = new StreamWriter (ssh_config_file_path);
-                    writer.WriteLine (current_ssh_config);
-                    writer.Close ();
-
-                    UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
-                    file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
-                                                       FileAccessPermissions.UserWrite);
-                }
-            }
-
-            SparkleHelpers.DebugInfo ("Controller", "Enabled host key checking");
-        }
-
 
         // Gets the avatar for a specific email address and size
         public string GetAvatar (string email, int size)
@@ -895,43 +833,30 @@ namespace SparkleShare {
         }
 
 
-        public void FetchFolder (string url, string name)
+        public void FetchFolder (string server, string remote_folder)
         {
             if (!Directory.Exists (SparklePaths.SparkleTmpPath))
                 Directory.CreateDirectory (SparklePaths.SparkleTmpPath);
 
-            SparkleHelpers.DebugInfo ("Controller", "Formed URL: " + url);
-
-            string host = GetHost (url);
-
-            if (String.IsNullOrEmpty (host)) {
-                if (FolderFetchError != null)
-                    FolderFetchError ();
-
-                return;
-            }
-
-            DisableHostKeyCheckingForHost (host);
-
             // Strip the '.git' from the name
-            string canonical_name = Path.GetFileNameWithoutExtension (name);
+            string canonical_name = Path.GetFileNameWithoutExtension (remote_folder);
             string tmp_folder     = Path.Combine (SparklePaths.SparkleTmpPath, canonical_name);
 
             SparkleFetcherBase fetcher = null;
             string backend = null;
 
-            if (url.EndsWith (".hg")) {
-                url     = url.Substring (0, (url.Length - 3));
-                fetcher = new SparkleFetcherHg (url, tmp_folder);
-                backend = "Hg";
+            if (remote_folder.EndsWith (".hg")) {
+                remote_folder = remote_folder.Substring (0, (remote_folder.Length - 3));
+                fetcher       = new SparkleFetcherHg (server, remote_folder, tmp_folder);
+                backend       = "Hg";
 
-            } else if (url.EndsWith (".scp")) {
-                url     = url.Substring (0, (url.Length - 4));
-                fetcher = new SparkleFetcherScp (url, tmp_folder);
+            } else if (remote_folder.EndsWith (".scp")) {
+                remote_folder = remote_folder.Substring (0, (remote_folder.Length - 4));
+                fetcher = new SparkleFetcherScp (server, remote_folder, tmp_folder);
                 backend = "Scp";
 
             } else {
-                fetcher = new SparkleFetcherGit (url, tmp_folder);
+                fetcher = new SparkleFetcherGit (server, remote_folder, tmp_folder);
                 backend = "Git";
             }
 
@@ -951,7 +876,6 @@ namespace SparkleShare {
                 target_folder_name += " (" + i + ")";
 
             fetcher.Finished += delegate {
-                EnableHostKeyCheckingForHost (host);
 
                 // Needed to do the moving
                 SparkleHelpers.ClearAttributes (tmp_folder);
@@ -963,7 +887,7 @@ namespace SparkleShare {
                     SparkleHelpers.DebugInfo ("Controller", "Error moving folder: " + e.Message);
                 }
 
-                SparkleConfig.DefaultConfig.AddFolder (target_folder_name, url, backend);
+                SparkleConfig.DefaultConfig.AddFolder (target_folder_name, fetcher.RemoteUrl, backend);
                 AddRepository (target_folder_path);
 
                 if (FolderFetched != null)
@@ -985,7 +909,6 @@ namespace SparkleShare {
 
 
             fetcher.Failed += delegate {
-                EnableHostKeyCheckingForHost (host);
 
                 if (FolderFetchError != null)
                     FolderFetchError ();
@@ -1008,18 +931,6 @@ namespace SparkleShare {
             Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
             Byte[] encoded_bytes = md5.ComputeHash (bytes);
             return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");
-        }
-
-
-        private string GetHost (string url)
-        {
-            Regex regex = new Regex (@"(@|://)([a-z0-9\.]+)(/|:)");
-            Match match = regex.Match (url);
-
-            if (match.Success)
-                return match.Groups [2].Value;
-            else
-                return null;
         }
 
 

@@ -25,8 +25,8 @@ namespace SparkleLib {
     // Sets up a fetcher that can get remote folders
     public class SparkleFetcherScp : SparkleFetcherBase {
 
-        public SparkleFetcherScp (string remote_url, string target_folder) :
-            base (remote_url, target_folder) { }
+        public SparkleFetcherScp (string server, string remote_folder, string target_folder) :
+            base (server, remote_folder, target_folder) { }
 
 
         public override bool Fetch ()
