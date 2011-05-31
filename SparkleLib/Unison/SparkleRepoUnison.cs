@@ -91,7 +91,7 @@ namespace SparkleLib {
 			//check for conflicts before syncing
 			string remote_revision = ListUnisonChanges ();
 			
-			if (remote_revision.Contains ("<-?->") = True)
+			if (remote_revision.Contains ("<-?->"))
 			    ResolveConflicts (remote_revision);
 			
 			//sync both folders now!
@@ -165,6 +165,7 @@ namespace SparkleLib {
 				if (line.Contains ("<-?->"))
 				{
 					string conflict = line.Trim ();
+					string conflicting_path = "";
 					
 					//how to deal with spaces in filename?
 				
