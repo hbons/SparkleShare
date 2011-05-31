@@ -25,8 +25,44 @@ namespace SparkleLib {
     // Sets up a fetcher that can get remote folders
     public class SparkleFetcherGit : SparkleFetcherBase {
 
-        public SparkleFetcherGit (string remote_url, string target_folder) :
-            base (remote_url, target_folder) { }
+        public SparkleFetcherGit (string server, string remote_folder, string target_folder) :
+            base (server, remote_folder, target_folder)
+        {
+            remote_folder = remote_folder.Trim ("/".ToCharArray ());
+
+            // Gitorious formatting
+            if (server.Contains ("gitorious.org")) {
+                server = "ssh://git@gitorious.org";
+
+                if (!remote_folder.EndsWith (".git")) {
+
+                    if (!remote_folder.Contains ("/"))
+                        remote_folder = remote_folder + "/" + remote_folder;
+
+                    remote_folder += ".git";
+                }
+
+            } else if (server.Contains ("github.com")) {
+                server = "ssh://git@github.com";
+
+            } else if (server.Contains ("gnome.org")) {
+                server = "ssh://git@gnome.org/git";
+
+            } else {
+                server = server.TrimEnd ("/".ToCharArray ());
+
+                if (server.StartsWith ("ssh://"))
+                    server = server.Substring (6);
+
+                if (!server.StartsWith ("@"))
+                    server = "git@" + server;
+
+                server = "ssh://" + server;
+            }
+
+            base.target_folder = target_folder;
+            base.remote_url    = server + "/" + remote_folder;
+        }
 
 
         public override bool Fetch ()
