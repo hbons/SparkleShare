@@ -117,9 +117,11 @@ namespace SparkleLib {
         public override void AlsoListenTo (string folder_identifier)
         {
             string channel = "#" + folder_identifier;
-            SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
-            base.channels.Add (channel);
-            this.client.RfcJoin (channel);
+            if (!base.channels.Contains (channel)) {
+                SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
+                base.channels.Add (channel);
+                this.client.RfcJoin (channel);
+            }
         }
 
 
