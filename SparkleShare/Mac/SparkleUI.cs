@@ -1,4 +1,4 @@
-//   SparkleShare, an instant update workflow to Git.
+//   SparkleShare, a collaboration and sharing tool.
 //   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
 //
 //   This program is free software: you can redistribute it and/or modify
@@ -74,12 +74,11 @@ namespace SparkleShare {
                 // Needed for Growl
                 GrowlApplicationBridge.WeakDelegate = this;
 
-                SetSparkleIcon ();
+                NSApplication.SharedApplication.ApplicationIconImage
+                    = NSImage.ImageNamed ("sparkleshare.icns");
 
-    			// TODO: Getting crashes when I remove this
-    			NSApplication.SharedApplication.ApplicationIconImage
-    				= NSImage.ImageNamed ("sparkleshare.icns");
-    
+                SetFolderIcon ();
+
                 if (!SparkleShare.Controller.BackendIsPresent) {
                     this.alert = new SparkleAlert ();
                     this.alert.RunModal ();
@@ -155,7 +154,7 @@ namespace SparkleShare {
 		}
 	
 
-		public void SetSparkleIcon ()
+		public void SetFolderIcon ()
 		{
 			string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
 				"sparkleshare-mac.icns");
