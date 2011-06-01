@@ -90,7 +90,20 @@ namespace SparkleLib {
             "/usr/bin/scp"
         };
 
-        public SparkleBackendScp () : base (name, paths) { }
+    	public SparkleBackendScp () : base (name, paths) { }
+
+    }
+	
+	public class SparkleBackendUnison : SparkleBackend {
+
+        private static string name     = "Unison";
+        private static string [] paths = new string [] {
+            "/usr/bin/unison",
+			"/usr/local/bin/unison",
+			"/opt/local/bin/unison"
+        };
+
+        public SparkleBackendUnison () : base (name, paths) { }
 
     }
 }

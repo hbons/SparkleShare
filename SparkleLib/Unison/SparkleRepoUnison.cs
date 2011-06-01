@@ -70,8 +70,6 @@ namespace SparkleLib {
             string remote_revision = ListUnisonChanges ();
 			
 			if (!remote_revision.EndsWith ("Nothing to do: replicas have not changed since last sync.")) {
-				//might want to parse between the L and q if there are changes for the debug output
-				//basically just need to remove first 6 lines and last 2 lines
                 SparkleHelpers.DebugInfo ("Unison", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
                 return true;
             } else {
@@ -161,8 +159,8 @@ namespace SparkleLib {
             string [] lines = remote_revision.Split ("\n".ToCharArray ());
 			foreach (string line in lines) 
 			{
-				//check to see if the line contains a conflict
-				if (line.Contains ("<-?->"))
+				//check to see if the line describes a conflict
+				if ( line.Contains ("<-?->") )
 				{
 					string conflict = line.Trim ();
 					string conflicting_path = "";

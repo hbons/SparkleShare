@@ -103,7 +103,13 @@ namespace SparkleLib {
 			writer.WriteLine ("log = true");
 			writer.WriteLine ("logfile = ./.sparklehshare/log"); //goes in the .sparkleshare directory
 			writer.WriteLine ("contactquietly = true"); //supress some useless output
-			writer.WriteLine ("rsrc = false"); //something for Mac OS X
+			writer.WriteLine ("confirmbigdel = false"); //don't confirm wiping the repo
+			writer.WriteLine ("retry = 2");
+			//if you have rsync installed (probably linux and mac os do then the next three can be enabled
+			//faster than using unison for big files
+			writer.WriteLine ("copyprog = rsync --inplace --compress");
+			writer.WriteLine ("copyprogrest = rsync --partial --inplace --compress");
+			writer.WriteLine ("copythreshold = 10000"); //use rsync for files larger than 10MB (10000 kB)
 			
 			//ignore rules added here
 			// gedit and emacs
