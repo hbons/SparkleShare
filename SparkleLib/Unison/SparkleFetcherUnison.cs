@@ -161,7 +161,7 @@ namespace SparkleLib {
         public SparkleUnison (string path, string args) : base ()
         {
             EnableRaisingEvents              = true;
-            StartInfo.FileName               = SparkleBackend.DefaultBackend.Path;
+            StartInfo.FileName               = "/usr/bin/unison";
             StartInfo.Arguments              = args;
             StartInfo.RedirectStandardOutput = true;
             StartInfo.UseShellExecute        = false;
