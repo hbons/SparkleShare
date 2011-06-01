@@ -44,12 +44,7 @@ namespace SparkleLib {
 
 
         public override bool Fetch ()
-        {
-			//need to create the .sparkleshare folder first
-			//create folder .sparkleshare
-			string dotfolder_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare");
-			Directory.CreateDirectory(dotfolder_path);
-			
+        {	
 			//set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
 			Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
 			
@@ -60,7 +55,7 @@ namespace SparkleLib {
                 "-confirmbigdel=false " +
                 "-ui text " +
 			    "-log " +
-			    "-logfile log " +			                                          
+			    "-logfile log " + 
 			    "-ignorearchives " + //dangerous for the future but it might be needed here
                 "-force " 	+ "\"" + base.remote_url 	+ "\" " +	//don't make changes on the server here, just get the repo
 			    "-root " 	+ "\"" + base.target_folder + "\" " + 	//root1: localhost
@@ -88,7 +83,12 @@ namespace SparkleLib {
         // the newly cloned repository
         private void InstallConfiguration ()
         {	
-            //move the log file to .sparkleshare
+			//need to create the .sparkleshare folder first
+			//create folder .sparkleshare
+			string dotfolder_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare");
+			Directory.CreateDirectory(dotfolder_path);
+			
+            //move the log file to from .tmp to .sparkleshare
 			string log_file_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "log");
 			string log_file_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "log");
 			File.Move (log_file_old_path, log_file_new_path);            
@@ -169,7 +169,7 @@ namespace SparkleLib {
             writer.WriteLine ("ignore = Path */.svn/*");
 			
 			// Sparkleshare
-            writer.WriteLine ("ignore = Path */.sparkleshare"); //don't sync this since it has the archive file in it
+            writer.WriteLine ("ignore = Path */.sparkleshare"); //don't sync this since it has the archive file and the log in it
             writer.Close ();
 			
 			SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");	
