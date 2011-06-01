@@ -671,7 +671,7 @@ namespace SparkleShare {
         private string FormatFolderSize (double byte_count)
         {
             if (byte_count >= 1099511627776)
-                return String.Format ("{0:##.##}  ᴛʙ", Math.Round (byte_count / 1099511627776, 1));
+                return String.Format ("{0:##.##} ᴛʙ", Math.Round (byte_count / 1099511627776, 1));
             else if (byte_count >= 1073741824)
                 return String.Format ("{0:##.##} ɢʙ", Math.Round (byte_count / 1073741824, 1));
             else if (byte_count >= 1048576)
@@ -856,6 +856,11 @@ namespace SparkleShare {
             } else if (remote_folder.EndsWith (".scp")) {
                 remote_folder = remote_folder.Substring (0, (remote_folder.Length - 4));
                 fetcher = new SparkleFetcherScp (server, remote_folder, tmp_folder);
+                backend = "Scp";
+				
+			} else if (remote_folder.EndsWith (".unison")) {
+                remote_folder = remote_folder.Substring (0, (remote_folder.Length - 4));
+                fetcher = new SparkleFetcherUnison (server, remote_folder, tmp_folder);
                 backend = "Scp";
 
             } else {
