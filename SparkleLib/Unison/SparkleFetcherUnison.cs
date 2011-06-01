@@ -51,6 +51,8 @@ namespace SparkleLib {
 			//set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
 			Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
 			
+			//might want to also set UNISONLOCALHOSTNAME to something unique, currently defaults to computer hostname
+			
 			//create a root alias so unison archives are valid after moving from .tmp to ~/Sparkleshare
 			string actual_folder = base.target_folder.Replace(".tmp/", "");
 			string actual_root = "//" + System.Environment.MachineName + "/" + actual_folder;
@@ -63,12 +65,12 @@ namespace SparkleLib {
                 "-batch " +
                 "-confirmbigdel=false " +
                 "-ui text " +
-			    //"-contactquietly " +
 			    "-log " +
 			    "-rootalias " + rootalias +
 			    "-logfile templog " + 
 			    "-ignorearchives " +
-                "-force " 	+ "\"" + base.remote_url + "\" " +	//don't make changes on the server here, just mirror the repo locally
+                "-force " 	+ "\"" + base.remote_url + "\" " +
+			    "-noupdate " 	+ "\"" + base.remote_url + "\" " +//don't make changes on the server here, just mirror the repo locally
 			    "\"" + base.target_folder + "\" " + //root1: localhost
 			    "\"" + base.remote_url 	+ "\"");	//root2: remote server
 
@@ -137,10 +139,8 @@ namespace SparkleLib {
             TextWriter writer = new StreamWriter (unison_profile);
             writer.WriteLine ("root = ."); //root1: local folder
 			writer.WriteLine ("root = " + base.remote_url); //root2: remote server -- PROBLEM WITH SPACES IN THE PATH, quotes are broken!!
-			writer.WriteLine ("auto = true");
 			writer.WriteLine ("log = true");
-			writer.WriteLine ("logfile = .sparklehshare/log");
-			writer.WriteLine ("contactquietly = true"); //supress some useless output
+			writer.WriteLine ("logfile = .sparkleshare/log");
 			writer.WriteLine ("confirmbigdel = false");
 			writer.WriteLine ("retry = 2");
 			//if you have rsync installed (probably linux and mac os do then the next three can be enabled
@@ -201,6 +201,7 @@ namespace SparkleLib {
             StartInfo.FileName               = "/usr/local/bin/unison"; //needs to reference multiple paths, how does this work?
             StartInfo.Arguments              = args;
             StartInfo.RedirectStandardOutput = true;
+			StartInfo.RedirectStandardInput  = true; //need to send input to unison to get the list of changes
             StartInfo.UseShellExecute        = false;
             StartInfo.WorkingDirectory       = path;
         }

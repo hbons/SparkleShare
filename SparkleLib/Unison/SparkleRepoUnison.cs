@@ -52,14 +52,17 @@ namespace SparkleLib {
                 "sparkleshare");
 
             unison.Start ();
-			//unison.SendKeys("L"); //list changes (low verbosity)
-			//unison.StandardInput.Write("L"); //list changes (low verbosity)
+			
+			//need to wait until local appears - this won't work
+			while (!unison.StandardOutput.ReadToEnd().Contains("local") && !unison.StandardOutput.ReadToEnd().Contains("Nothing") );
+			
+			unison.StandardInput.WriteLine("L"); //list changes (low verbosity)
 			//what happens if there are no changes but it still presses L and q? -- does it break?
-			//unison.StandardInput.Flush();
+			unison.StandardInput.Flush();
 			//unison.StandardInput.Close();
-			//unison.StandardInput.Write("q"); //quit unison
-			//unison.StandardInput.Flush();
-			//unison.StandardInput.Close();
+			unison.StandardInput.WriteLine("q"); //quit unison
+			unison.StandardInput.Flush();
+			unison.StandardInput.Close();
             unison.WaitForExit ();
 
             SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
@@ -73,7 +76,7 @@ namespace SparkleLib {
 		{			
             string remote_revision = ListUnisonChanges ();
 			
-			if (!remote_revision.EndsWith ("Nothing to do: replicas have not changed since last sync.")) {
+			if (!remote_revision.Contains ("Nothing to do: replicas have not changed since last sync.")) {
                 SparkleHelpers.DebugInfo ("Unison", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
                 return true;
             } else {
@@ -103,7 +106,6 @@ namespace SparkleLib {
 			//doesn't ask any questions - just syncs - needs conflicts to have been eliminated by the previous step
             SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text " +
-                "-auto " +
                 "-batch " +
                 "sparkleshare");
 
@@ -171,7 +173,7 @@ namespace SparkleLib {
 			foreach (string line in lines) 
 			{
 				//check to see if the line describes a conflict
-				if ( line.Contains ("<-?->") )
+				if ( line.Contains ("<-?->") && !line.Contains ("[]") )
 				{
 					string conflict = line.Trim ();
 					string conflicting_path = ""; 
@@ -187,7 +189,7 @@ namespace SparkleLib {
 		            string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
 		            string abs_their_path       = Path.Combine (LocalPath, their_path);
 		
-		            File.Move (abs_conflicting_path, abs_their_path);
+		            //File.Move (abs_conflicting_path, abs_their_path);
 				}
 			}
 		}
