@@ -86,13 +86,14 @@ namespace SparkleLib {
 		
 		private bool SyncBothWays ()
 		{
-			//check for conflicts before syncing
 			string remote_revision = ListUnisonChanges ();
 			
+			//check for conflicts before syncing
 			if (remote_revision.Contains ("<-?->"))
 			    ResolveConflicts (remote_revision);
 			
 			//sync both folders now!
+			//doesn't ask any questions - just syncs - needs conflicts to have been eliminated by the previous step
             SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text -auto -batch sparkleshare");
 
@@ -163,8 +164,9 @@ namespace SparkleLib {
 				if ( line.Contains ("<-?->") )
 				{
 					string conflict = line.Trim ();
-					string conflicting_path = "";
+					string conflicting_path = ""; 
 					
+					//the end of the line contains the relative path/file name
 					//how to deal with spaces in filename?
 				
 					//when conflicts are identified copy/rename the neccesary files
