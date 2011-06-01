@@ -36,27 +36,44 @@ namespace SparkleLib {
             if (!server.Contains ("@"))
                 server = "git@" + server;
 
-            server = "ssh://" + server;
-			
-			remote_folder = remote_folder.Trim ("/".ToCharArray ());
-			
-			base.target_folder = target_folder;
-            
-			base.remote_url    = server + "//" + remote_folder;
+            server = "ssh://" + server;			
+			remote_folder = remote_folder.Trim ("/".ToCharArray ());			
+			base.target_folder = target_folder;            
+			base.remote_url    = server + "//" + remote_folder; //2 / specify an absolute path for unison
 		}
 
 
         public override bool Fetch ()
         {
-            //not sure where the log file ends up at the moment
+			//need to create the .sparkleshare folder first
+			//create folder .sparkleshare
+			string dotfolder_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare");
+			Directory.CreateDirectory(dotfolder_path);
+			
+			//set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
+			Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
+			
+			//fetch remote repo with unison
 			SparkleUnison unison = new SparkleUnison (SparklePaths.SparkleTmpPath,
-                "-auto -batch -confirmbigdel=false -ui text -force root2" + " \"" + base.remote_url + "\" " + "\"" + base.target_folder + "\" " + "\"" + base.remote_url + "\"");
+                "-auto " +
+                "-batch " +
+                "-confirmbigdel=false " +
+                "-ui text " +
+			    "-log " +
+			    "-logfile log " +			                                          
+			    "-ignorearchives " + //dangerous for the future but it might be needed here
+                "-force " 	+ "\"" + base.remote_url 	+ "\" " +	//don't make changes on the server here, just get the repo
+			    "-root " 	+ "\"" + base.target_folder + "\" " + 	//root1: localhost
+			    "-root " 	+ "\"" + base.remote_url 	+ "\"");	//root2: remote server
 
             unison.Start ();
             unison.WaitForExit ();
 
-            SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
-
+			string remote_revision = unison.StandardOutput.ReadToEnd ().TrimEnd ();
+			
+			SparkleHelpers.DebugInfo ("Unison", remote_revision);
+			SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
+           
             if (unison.ExitCode != 0) {
                 return false;
             } else {
@@ -70,14 +87,14 @@ namespace SparkleLib {
         // Install the user's name and email and some config into
         // the newly cloned repository
         private void InstallConfiguration ()
-        {
-			string dotfolder_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare");
-			Directory.CreateDirectory(dotfolder_path);
-			
-            string log_file_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "log");
-            File.Create (log_file_path);
+        {	
+            //move the log file to .sparkleshare
+			string log_file_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "log");
+			string log_file_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "log");
+			File.Move (log_file_old_path, log_file_new_path);            
 
-            string config_file_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "config");
+            //create the config file
+			string config_file_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "config");
             File.Create (config_file_path);
 
             string config = "";
@@ -96,13 +113,14 @@ namespace SparkleLib {
 		//need to run export UNISON=./.sparkleshare/ on the client so unison looks for the profiles in the .sparkleshare directory
         private void InstallUnisonProfile ()
         {
-            string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "sparkleshare.prf");
+            //create profile: sparkleshare.prf
+			string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "sparkleshare.prf");
             File.Create (unison_profile);
 
             // Write the profile to the file
             TextWriter writer = new StreamWriter (unison_profile);
-            writer.WriteLine ("root = ."); //local folder
-			writer.WriteLine ("root = " + "\"" + base.remote_url + "\""); //remote server
+            writer.WriteLine ("root = ."); //root1: local folder
+			writer.WriteLine ("root = " + "\"" + base.remote_url + "\""); //root2: remote server
 			writer.WriteLine ("log = true");
 			writer.WriteLine ("logfile = ./.sparklehshare/log"); //goes in the .sparkleshare directory
 			writer.WriteLine ("contactquietly = true"); //supress some useless output

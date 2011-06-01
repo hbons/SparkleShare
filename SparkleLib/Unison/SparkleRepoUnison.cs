@@ -44,9 +44,12 @@ namespace SparkleLib {
 		
 		private string ListUnisonChanges ()
 		{
+			//set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
+			Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
+			
 			SparkleUnison unison = new SparkleUnison (LocalPath,
-                "-ui text sparkleshare");
-			//unison doesn't seem to want to look for profiles in non-standard locations
+                "-ui text " +
+                "sparkleshare");
 
             unison.Start ();
 			unison.StandardInput.Write("L"); //list changes (low verbosity)
@@ -92,10 +95,16 @@ namespace SparkleLib {
 			if (remote_revision.Contains ("<-?->"))
 			    ResolveConflicts (remote_revision);
 			
+			//set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
+			Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
+			
 			//sync both folders now!
 			//doesn't ask any questions - just syncs - needs conflicts to have been eliminated by the previous step
             SparkleUnison unison = new SparkleUnison (LocalPath,
-                "-ui text -auto -batch sparkleshare");
+                "-ui text " +
+                "-auto " +
+                "-batch " +
+                "sparkleshare");
 
             unison.Start ();
             unison.WaitForExit ();
