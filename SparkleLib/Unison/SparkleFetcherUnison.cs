@@ -83,19 +83,24 @@ namespace SparkleLib {
         // the newly cloned repository
         private void InstallConfiguration ()
         {	
-			//need to create the .sparkleshare folder first
+            //need to create the .sparkleshare folder first
 			//create folder .sparkleshare
-			string dotfolder_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare");
-			Directory.CreateDirectory(dotfolder_path);
+			//string dotfolder_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare");
+			//Directory.CreateDirectory(dotfolder_path);     
+			
+			//move the .sparkleshare folder into the repo after fetching
+			string dotfolder_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, ".sparkleshare");
+			string dotfolder_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare");
+			Directory.Move(dotfolder_old_path, dotfolder_new_path);	
 			
             //move the log file to from .tmp to .sparkleshare
 			string log_file_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "log");
 			string log_file_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "log");
-			File.Move (log_file_old_path, log_file_new_path);            
+			File.Move (log_file_old_path, log_file_new_path);  
 
             //create the config file
 			string config_file_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "config");
-            File.Create (config_file_path);
+            //File.Create (config_file_path);
 
             string config = "";
 
@@ -115,7 +120,7 @@ namespace SparkleLib {
         {
             //create profile: sparkleshare.prf
 			string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "sparkleshare.prf");
-            File.Create (unison_profile);
+            //File.Create (unison_profile);
 
             // Write the profile to the file
             TextWriter writer = new StreamWriter (unison_profile);
