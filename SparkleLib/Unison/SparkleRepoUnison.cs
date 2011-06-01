@@ -52,13 +52,14 @@ namespace SparkleLib {
                 "sparkleshare");
 
             unison.Start ();
-			unison.StandardInput.Write("L"); //list changes (low verbosity)
+			//unison.SendKeys("L"); //list changes (low verbosity)
+			//unison.StandardInput.Write("L"); //list changes (low verbosity)
 			//what happens if there are no changes but it still presses L and q? -- does it break?
-			unison.StandardInput.Flush();
-			unison.StandardInput.Close();
-			unison.StandardInput.Write("q"); //quit unison
-			unison.StandardInput.Flush();
-			unison.StandardInput.Close();
+			//unison.StandardInput.Flush();
+			//unison.StandardInput.Close();
+			//unison.StandardInput.Write("q"); //quit unison
+			//unison.StandardInput.Flush();
+			//unison.StandardInput.Close();
             unison.WaitForExit ();
 
             SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());

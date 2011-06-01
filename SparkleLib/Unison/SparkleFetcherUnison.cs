@@ -14,7 +14,6 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-
 using System;
 using System.IO;
 using System.Diagnostics;
@@ -28,7 +27,8 @@ namespace SparkleLib {
         public SparkleFetcherUnison (string server, string remote_folder, string target_folder) :
             base (server, remote_folder, target_folder) 
 		{
-		    server = server.TrimEnd ("/".ToCharArray ());
+		    //format remote and local destination URLs and paths here
+			server = server.TrimEnd ("/".ToCharArray ());
 
             if (server.StartsWith ("ssh://"))
                 server = server.Substring (6);
@@ -54,12 +54,13 @@ namespace SparkleLib {
                 "-batch " +
                 "-confirmbigdel=false " +
                 "-ui text " +
+			    "-contactquietly " +
 			    "-log " +
-			    "-logfile log " + 
-			    "-ignorearchives " + //dangerous for the future but it might be needed here
-                "-force " 	+ "\"" + base.remote_url 	+ "\" " +	//don't make changes on the server here, just get the repo
-			    "-root " 	+ "\"" + base.target_folder + "\" " + 	//root1: localhost
-			    "-root " 	+ "\"" + base.remote_url 	+ "\"");	//root2: remote server
+			    "-logfile templog " + 
+			    "-ignorearchives " + //dangerous for the future but it might be needed here (need to figure out)
+                "-force " 	+ "\"" + base.remote_url 	+ "\" " +	//don't make changes on the server here, just mirror the repo locally
+			    "\"" + base.target_folder + "\" " + 	//root1: localhost
+			    "\"" + base.remote_url 	+ "\"");	//root2: remote server
 
             unison.Start ();
             unison.WaitForExit ();
@@ -94,7 +95,7 @@ namespace SparkleLib {
 			Directory.Move(dotfolder_old_path, dotfolder_new_path);	
 			
             //move the log file to from .tmp to .sparkleshare
-			string log_file_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "log");
+			string log_file_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "templog");
 			string log_file_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "log");
 			File.Move (log_file_old_path, log_file_new_path);  
 
@@ -125,11 +126,11 @@ namespace SparkleLib {
             // Write the profile to the file
             TextWriter writer = new StreamWriter (unison_profile);
             writer.WriteLine ("root = ."); //root1: local folder
-			writer.WriteLine ("root = " + "\"" + base.remote_url + "\""); //root2: remote server
+			writer.WriteLine ("root = " + base.remote_url); //root2: remote server -- PROBLEM WITH SPACES IN THE PATH, quotes are broken!!
 			writer.WriteLine ("log = true");
-			writer.WriteLine ("logfile = ./.sparklehshare/log"); //goes in the .sparkleshare directory
+			writer.WriteLine ("logfile = .sparklehshare/log");
 			writer.WriteLine ("contactquietly = true"); //supress some useless output
-			writer.WriteLine ("confirmbigdel = false"); //don't confirm wiping the repo
+			writer.WriteLine ("confirmbigdel = false");
 			writer.WriteLine ("retry = 2");
 			//if you have rsync installed (probably linux and mac os do then the next three can be enabled
 			//faster than using unison for big files
@@ -170,11 +171,10 @@ namespace SparkleLib {
             writer.WriteLine ("ignore = Path */.cvsignore");
             
             // Subversion
-            writer.WriteLine ("ignore = Path /.svn/*");
             writer.WriteLine ("ignore = Path */.svn/*");
 			
 			// Sparkleshare
-            writer.WriteLine ("ignore = Path */.sparkleshare"); //don't sync this since it has the archive file and the log in it
+            writer.WriteLine ("ignore = Path .sparkleshare"); //don't sync this since it has the archive file and the log in it
             writer.Close ();
 			
 			SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");	
