@@ -50,7 +50,7 @@ namespace SparkleLib {
         {
             //not sure where the log file ends up at the moment
 			SparkleUnison unison = new SparkleUnison (SparklePaths.SparkleTmpPath,
-                "-auto -batch -ui text \"" + base.target_folder + "\" " + "\"" + base.remote_url + "\"");
+                "-auto -batch -confirmbigdel=false -ui text -force root2" + " \"" + base.remote_url + "\" " + "\"" + base.target_folder + "\" " + "\"" + base.remote_url + "\"");
 
             unison.Start ();
             unison.WaitForExit ();
@@ -71,6 +71,9 @@ namespace SparkleLib {
         // the newly cloned repository
         private void InstallConfiguration ()
         {
+			string dotfolder_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare");
+			Directory.CreateDirectory(dotfolder_path);
+			
             string log_file_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "log");
             File.Create (log_file_path);
 
@@ -161,7 +164,7 @@ namespace SparkleLib {
         public SparkleUnison (string path, string args) : base ()
         {
             EnableRaisingEvents              = true;
-            StartInfo.FileName               = "/usr/bin/unison";
+            StartInfo.FileName               = "/usr/local/bin/unison"; //needs to reference multiple paths, how does this work?
             StartInfo.Arguments              = args;
             StartInfo.RedirectStandardOutput = true;
             StartInfo.UseShellExecute        = false;
