@@ -26,6 +26,7 @@ namespace SparkleLib {
 
         public SparkleFetcherUnison (string server, string remote_folder, string target_folder) :
             base (server, remote_folder, target_folder) 
+			//target folder is the canonical name now
 		{
 		    //format remote and local destination URLs and paths here
 			server = server.TrimEnd ("/".ToCharArray ());
@@ -37,9 +38,11 @@ namespace SparkleLib {
                 server = "git@" + server;
 
             server = "ssh://" + server;			
-			remote_folder = remote_folder.Trim ("/".ToCharArray ());			
-			base.target_folder = target_folder;            
-			base.remote_url    = server + "//" + remote_folder; //2 / specify an absolute path for unison
+			remote_folder = remote_folder.Trim ("/".ToCharArray ());						            
+			base.remote_url    = server + "//" + remote_folder;
+			
+			//format target/tmp folder names
+			base.target_folder = target_folder;
 		}
 
 
@@ -48,18 +51,25 @@ namespace SparkleLib {
 			//set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
 			Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
 			
+			//create a root alias so unison archives are valid after moving from .tmp to ~/Sparkleshare
+			string actual_folder = base.target_folder.Replace(".tmp/", "");
+			string actual_root = "//" + System.Environment.MachineName + "/" + actual_folder;
+			string temp_root = "//" + System.Environment.MachineName + "/" + base.target_folder;
+			string rootalias = "'" + temp_root + " -> " + actual_root + "' ";
+			
 			//fetch remote repo with unison
 			SparkleUnison unison = new SparkleUnison (SparklePaths.SparkleTmpPath,
                 "-auto " +
                 "-batch " +
                 "-confirmbigdel=false " +
                 "-ui text " +
-			    "-contactquietly " +
+			    //"-contactquietly " +
 			    "-log " +
+			    "-rootalias " + rootalias +
 			    "-logfile templog " + 
-			    "-ignorearchives " + //dangerous for the future but it might be needed here (need to figure out)
-                "-force " 	+ "\"" + base.remote_url 	+ "\" " +	//don't make changes on the server here, just mirror the repo locally
-			    "\"" + base.target_folder + "\" " + 	//root1: localhost
+			    "-ignorearchives " +
+                "-force " 	+ "\"" + base.remote_url + "\" " +	//don't make changes on the server here, just mirror the repo locally
+			    "\"" + base.target_folder + "\" " + //root1: localhost
 			    "\"" + base.remote_url 	+ "\"");	//root2: remote server
 
             unison.Start ();
@@ -127,6 +137,7 @@ namespace SparkleLib {
             TextWriter writer = new StreamWriter (unison_profile);
             writer.WriteLine ("root = ."); //root1: local folder
 			writer.WriteLine ("root = " + base.remote_url); //root2: remote server -- PROBLEM WITH SPACES IN THE PATH, quotes are broken!!
+			writer.WriteLine ("auto = true");
 			writer.WriteLine ("log = true");
 			writer.WriteLine ("logfile = .sparklehshare/log");
 			writer.WriteLine ("contactquietly = true"); //supress some useless output
