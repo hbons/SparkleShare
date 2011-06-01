@@ -56,7 +56,7 @@ namespace SparkleLib {
                 if (server.StartsWith ("ssh://"))
                     server = server.Substring (6);
 
-                if (!server.StartsWith ("@"))
+                if (!server.Contains ("@"))
                     server = "git@" + server;
 
                 server = "ssh://" + server;
