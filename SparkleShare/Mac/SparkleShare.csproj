@@ -89,6 +89,7 @@
     <Compile Include="SparkleAbout.cs" />
     <Compile Include="SparkleAlert.cs" />
     <Compile Include="SparkleBubble.cs" />
+    <Compile Include="SparkleMacWatcher.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
