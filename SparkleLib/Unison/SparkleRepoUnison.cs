@@ -55,7 +55,7 @@ namespace SparkleLib {
                 //hashes the unison fingerprint file
                 string fingerprintpath = SparkleHelpers.CombineMore (LocalPath, ".sparkleshare");
                 string[] fingerprintfiles = Directory.GetFiles(fingerprintpath,"fp*");
-				string fingerprintfile = fingerprintfile[0].ToString();
+				string fingerprintfile = fingerprintfiles[0].ToString();
                 SparkleHelpers.DebugInfo ("Unison", "Fingerprint file: " + fingerprintfile);
 				//not sure what will happen if there are more than 1 fingerprint file...
 				//what happens when more people come to sync to the repo...
