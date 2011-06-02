@@ -85,7 +85,7 @@ namespace SparkleLib {
             if (unison.ExitCode != 0) {
                 return false;
             } else {
-				CreateID ();
+                CreateID ();
                 InstallConfiguration ();
                 InstallUnisonBaseProfile ();
                 InstallUnisonDryRunProfile ();
@@ -189,7 +189,7 @@ namespace SparkleLib {
             
             SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
         }
-		
+        
             
         private void InstallUnisonDryRunProfile ()
         {
@@ -240,7 +240,7 @@ namespace SparkleLib {
             
             SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
         }
-		
+        
         
         private void InstallUnisonTransmitLocalFileProfile ()
         {
@@ -258,43 +258,43 @@ namespace SparkleLib {
             
             SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
         }
-		
-		
-		private void CreateID ()
+        
+            
+        private void CreateID ()
         {
             //idfile
-			string IDfile = SparkleHelpers.CombineMore (base.target_folder, ".unisonID");
-			
-			//check if file exists already
-			if( !File.Exists (IDfile) )
-			{				
-			    //creates a unique identifier based on the remote_url and the UTCdata/time
-				string identifier = base.remote_url + DateTime.Now.ToUniversalTime().ToString();
-				string IDhash = SHA1 (identifier);
-			
+            string IDfile = SparkleHelpers.CombineMore (base.target_folder, ".unisonID");
+            
+            //check if file exists already
+            if( !File.Exists (IDfile) )
+            {                
+                //creates a unique identifier based on the remote_url and the UTCdata/time
+                string identifier = base.remote_url + DateTime.Now.ToUniversalTime().ToString();
+                string IDhash = SHA1 (identifier);
+            
                 TextWriter writer = new StreamWriter (IDfile);
                 writer.WriteLine (IDhash);
                 writer.Close ();
             
                 SparkleHelpers.DebugInfo ("Unison Repo ID", "Added ID file to '" + IDfile + "'");
-			}
-			//idfile exists
-			else
-			{
-		        SparkleHelpers.DebugInfo ("Unison Repo ID", "IDfile exists '" + IDfile + "'");
-			}
+            }
+            //idfile exists
+            else
+            {
+                SparkleHelpers.DebugInfo ("Unison Repo ID", "IDfile exists '" + IDfile + "'");
+            }
         }
-		
-				
-		private string SHA1 (string s)
+        
+                
+        private string SHA1 (string s)
         {
             SHA1 sha1 = new SHA1CryptoServiceProvider ();
             Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
             Byte[] encoded_bytes = sha1.ComputeHash (bytes);
             return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");  
-		}
-		
-		
+        }
+        
+        
     }
 
     

@@ -95,7 +95,7 @@ namespace SparkleLib {
             
             SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_dryrun.ExitCode.ToString ());
             
-            //check to see if there are really changes
+            //check to see if there are really changes to make
 			if (unison_dryrun.ExitCode != 0) 
             {
                 //check for conflicts before syncing
