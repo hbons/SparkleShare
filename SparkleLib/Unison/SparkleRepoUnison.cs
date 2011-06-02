@@ -31,7 +31,11 @@ namespace SparkleLib {
 
         public override string Identifier {
             get {
-                return "sparkles";
+				string IDfile = SparkleHelpers.CombineMore (LocalPath, ".unisonID");
+				TextReader reader = new StreamReader (IDfile);
+				string repoID = reader.ReadToEnd().ToString();
+				SparkleHelpers.DebugInfo ("Unison", "Repo ID found:" + repoID);
+                return repoID;
             }
         }
         
@@ -91,7 +95,8 @@ namespace SparkleLib {
             
             SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_dryrun.ExitCode.ToString ());
             
-            if (unison_dryrun.ExitCode != 0) 
+            //check to see if there are really changes
+			if (unison_dryrun.ExitCode != 0) 
             {
                 //check for conflicts before syncing
                 if (remote_revision.Contains ("<-?->"))
@@ -165,9 +170,10 @@ namespace SparkleLib {
                 //check to see if the line describes a conflict (new files, changes, deletions)
                 if ( line.Contains ("<-?->") )
                 {
-                    SparkleHelpers.DebugInfo ("Unison", "Conflict: " + line);
+                    SparkleHelpers.DebugInfo ("Unison", "Conflict: " + line.TrimEnd());
                     string conflicting_path = line.Remove(0,26).TrimEnd();
-                    //check to see if the conflict is over a deleted file
+                    
+					//check to see if the conflict is over a deleted file
                     if ( line.Contains ("deleted") )
                     {
                         //just get the new version of the deleted file
@@ -182,7 +188,8 @@ namespace SparkleLib {
                         
                         SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_deletefix.ExitCode.ToString ());
                     }
-                    else
+                    //implies that there is a conflict with 2 changed files
+					else 
                     {
                         // Append a timestamp to local version (their copy is the local copy)
                         string timestamp            = DateTime.Now.ToString ("HH:mm MMM d");

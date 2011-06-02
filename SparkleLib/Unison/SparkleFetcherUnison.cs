@@ -85,12 +85,13 @@ namespace SparkleLib {
             if (unison.ExitCode != 0) {
                 return false;
             } else {
+				CreateID ();
                 InstallConfiguration ();
                 InstallUnisonBaseProfile ();
                 InstallUnisonDryRunProfile ();
                 InstallUnisonSyncProfile ();
-				InstallUnisonGrabRemoteFileProfile ();
-				InstallUnisonTransmitLocalFileProfile ();
+                InstallUnisonGrabRemoteFileProfile ();
+                InstallUnisonTransmitLocalFileProfile ();
                 return true;
             }
         }
@@ -105,7 +106,7 @@ namespace SparkleLib {
             string dotfolder_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare");
             Directory.Move(dotfolder_old_path, dotfolder_new_path);    
             
-            //move the tempog file to from .tmp to log in.sparkleshare
+            //move the templog file to from .tmp to log in.sparkleshare
             string log_file_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "templog");
             string log_file_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "log");
             File.Move (log_file_old_path, log_file_new_path);  
@@ -188,6 +189,7 @@ namespace SparkleLib {
             
             SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
         }
+		
             
         private void InstallUnisonDryRunProfile ()
         {
@@ -208,7 +210,7 @@ namespace SparkleLib {
         }
 
         
-		private void InstallUnisonSyncProfile ()
+        private void InstallUnisonSyncProfile ()
         {
             //create profile: sync.prf -- runs automatic unison batch sync
             string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "sync.prf");
@@ -220,9 +222,9 @@ namespace SparkleLib {
             
             SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
         }
-		
-		
-		private void InstallUnisonGrabRemoteFileProfile ()
+        
+        
+        private void InstallUnisonGrabRemoteFileProfile ()
         {
             //create profile: grab.prf -- used to grab a specific remote file
             string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "grab.prf");
@@ -233,13 +235,14 @@ namespace SparkleLib {
             writer.WriteLine ("nodeletion = " + base.remote_url);;
             writer.WriteLine ("noupdate = " + base.remote_url);
             writer.WriteLine ("nocreation = " + base.remote_url);
-			writer.WriteLine ("force = " + base.remote_url);
+            writer.WriteLine ("force = " + base.remote_url);
             writer.Close ();
             
             SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
         }
 		
-		private void InstallUnisonTransmitLocalFileProfile ()
+        
+        private void InstallUnisonTransmitLocalFileProfile ()
         {
             //create profile: transmit.prf -- runs automatic unison batch sync
             string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "transmit.prf");
@@ -250,10 +253,45 @@ namespace SparkleLib {
             writer.WriteLine ("nodeletion = .");
             writer.WriteLine ("noupdate = .");
             writer.WriteLine ("nocreation = .");
-			writer.WriteLine ("force = .");
+            writer.WriteLine ("force = .");
             writer.Close ();
             
             SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
+        }
+		
+		
+		private string SHA1 (string s)
+        {
+            SHA1 sha1 = new SHA1CryptoServiceProvider ();
+            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+            Byte[] encoded_bytes = sha1.ComputeHash (bytes);
+            return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");   
+		}
+		
+		
+		private void CreateID ()
+        {
+            //idfile
+			string IDfile = SparkleHelpers.CombineMore (base.target_folder, ".unisonID");
+			
+			//check if file exists already
+			if( !File.Exists (IDfile) )
+			{				
+			    //creates a unique identifier based on the remote_url and the UTCdata/time
+				string identifier = base.remote_url + DateTime.Now.ToUniversalTime().ToString();
+				string IDhash = SHA1 (identifier);
+			
+                TextWriter writer = new StreamWriter (IDfile);
+                writer.WriteLine (IDhash);
+                writer.Close ();
+            
+                SparkleHelpers.DebugInfo ("Unison Repo ID", "Added ID file to '" + IDfile + "'");
+			}
+			//idfile exists
+			else
+			{
+		        SparkleHelpers.DebugInfo ("Unison Repo ID", "IDfile exists '" + IDfile + "'");
+			}
         }
     }
 
@@ -266,7 +304,6 @@ namespace SparkleLib {
             StartInfo.FileName               = "/usr/local/bin/unison"; //needs to reference multiple paths, how does this work?
             StartInfo.Arguments              = args;
             StartInfo.RedirectStandardOutput = true;
-            StartInfo.RedirectStandardInput  = true;
             StartInfo.UseShellExecute        = false;
             StartInfo.WorkingDirectory       = path;
         }
