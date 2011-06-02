@@ -91,24 +91,29 @@ namespace SparkleLib {
             
             SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_dryrun.ExitCode.ToString ());
             
-            //check for conflicts before syncing
-            if (remote_revision.Contains ("<-?->"))
-                ResolveConflicts (remote_revision);
-            
-            //sync both folders now!
-            SparkleUnison unison_sync = new SparkleUnison (LocalPath,
-                "-ui text " +
-                "sync");
-
-            unison_sync.Start ();
-            unison_sync.WaitForExit ();
-
-            SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_sync.ExitCode.ToString ());
-
-            if (unison_sync.ExitCode != 0)
-                return false;
-            else 
-                return true;     
+            if (unison_dryrun.ExitCode != 0) 
+            {
+                //check for conflicts before syncing
+                if (remote_revision.Contains ("<-?->"))
+                    ResolveConflicts (remote_revision);
+                
+                //sync both folders now!
+                SparkleUnison unison_sync = new SparkleUnison (LocalPath,
+                    "-ui text " +
+                    "sync");
+    
+                unison_sync.Start ();
+                unison_sync.WaitForExit ();
+    
+                SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_sync.ExitCode.ToString ());
+    
+                if (unison_sync.ExitCode != 0)
+                    return false;
+                else 
+                    return true;
+			}
+			else
+				return true;
         }
 
         public override bool SyncUp ()
@@ -197,7 +202,6 @@ namespace SparkleLib {
 
         public override void CreateInitialChangeSet ()
         {
-            //?
             base.CreateInitialChangeSet ();
         }
 
