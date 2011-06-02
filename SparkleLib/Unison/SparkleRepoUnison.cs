@@ -111,9 +111,9 @@ namespace SparkleLib {
                     return false;
                 else 
                     return true;
-			}
-			else
-				return true;
+            }
+            else
+                return true;
         }
 
         public override bool SyncUp ()
@@ -162,58 +162,58 @@ namespace SparkleLib {
             string [] lines = remote_revision.Split ("\n".ToCharArray ());
             foreach (string line in lines) 
             {               
-				//check to see if the line describes a conflict (new files, changes, deletions)
+                //check to see if the line describes a conflict (new files, changes, deletions)
                 if ( line.Contains ("<-?->") )
                 {
-					SparkleHelpers.DebugInfo ("Unison", "Conflict: " + line);
-					string conflicting_path = line.Remove(0,26).TrimEnd();
-					//check to see if the conflict is over a deleted file
-					if ( line.Contains ("deleted") )
-					{
-						//just get the new version of the deleted file
-						SparkleUnison unison_deletefix = new SparkleUnison (LocalPath,
-	                        "-ui text " +
-						    "-path '" + conflicting_path + "' " +
-						    "-force newer " +
-	                        "sync");
-							
-						unison_deletefix.Start ();
-	                    unison_deletefix.WaitForExit ();
-						
-						SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_deletefix.ExitCode.ToString ());
-					}
-					else
-					{
-	                    // Append a timestamp to local version (their copy is the local copy)
-	                    string timestamp            = DateTime.Now.ToString ("HH:mm MMM d");
-	                    string their_path           = conflicting_path + " (" + SparkleConfig.DefaultConfig.UserName + ", " + timestamp + ")";
-	                    string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
-	                    string abs_their_path       = Path.Combine (LocalPath, their_path);
-	                  
-	                    File.Move (abs_conflicting_path, abs_their_path);
-	                    
-						//send the renamed file to the server
-						SparkleUnison unison_sync = new SparkleUnison (LocalPath,
-	                        "-ui text " +
-						    "-path '" + their_path + "' " +		                                
-	                        "transmit");
-							
-						unison_sync.Start ();
-	                    unison_sync.WaitForExit ();
-						
-						SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_sync.ExitCode.ToString ());
-						
-						//grab the conflicted file from the server
-						SparkleUnison unison_grab = new SparkleUnison (LocalPath,
-	                        "-ui text " +
-						    "-path '" + conflicting_path + "' " +		                                
-	                        "grab");
-	    
-	                    unison_grab.Start ();
-	                    unison_grab.WaitForExit ();
-	    
-	                    SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_grab.ExitCode.ToString ());
-					}
+                    SparkleHelpers.DebugInfo ("Unison", "Conflict: " + line);
+                    string conflicting_path = line.Remove(0,26).TrimEnd();
+                    //check to see if the conflict is over a deleted file
+                    if ( line.Contains ("deleted") )
+                    {
+                        //just get the new version of the deleted file
+                        SparkleUnison unison_deletefix = new SparkleUnison (LocalPath,
+                            "-ui text " +
+                            "-path '" + conflicting_path + "' " +
+                            "-force newer " +
+                            "sync");
+                            
+                        unison_deletefix.Start ();
+                        unison_deletefix.WaitForExit ();
+                        
+                        SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_deletefix.ExitCode.ToString ());
+                    }
+                    else
+                    {
+                        // Append a timestamp to local version (their copy is the local copy)
+                        string timestamp            = DateTime.Now.ToString ("HH:mm MMM d");
+                        string their_path           = conflicting_path + " (" + SparkleConfig.DefaultConfig.UserName + ", " + timestamp + ")";
+                        string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
+                        string abs_their_path       = Path.Combine (LocalPath, their_path);
+                      
+                        File.Move (abs_conflicting_path, abs_their_path);
+                        
+                        //send the renamed file to the server
+                        SparkleUnison unison_sync = new SparkleUnison (LocalPath,
+                            "-ui text " +
+                            "-path '" + their_path + "' " +                                        
+                            "transmit");
+                            
+                        unison_sync.Start ();
+                        unison_sync.WaitForExit ();
+                        
+                        SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_sync.ExitCode.ToString ());
+                        
+                        //grab the conflicted file from the server
+                        SparkleUnison unison_grab = new SparkleUnison (LocalPath,
+                            "-ui text " +
+                            "-path '" + conflicting_path + "' " +                                        
+                            "grab");
+        
+                        unison_grab.Start ();
+                        unison_grab.WaitForExit ();
+        
+                        SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_grab.ExitCode.ToString ());
+                    }
                 }
             }
         }
