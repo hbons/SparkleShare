@@ -260,15 +260,6 @@ namespace SparkleLib {
         }
 		
 		
-		private string SHA1 (string s)
-        {
-            SHA1 sha1 = new SHA1CryptoServiceProvider ();
-            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
-            Byte[] encoded_bytes = sha1.ComputeHash (bytes);
-            return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");   
-		}
-		
-		
 		private void CreateID ()
         {
             //idfile
@@ -293,6 +284,17 @@ namespace SparkleLib {
 		        SparkleHelpers.DebugInfo ("Unison Repo ID", "IDfile exists '" + IDfile + "'");
 			}
         }
+		
+				
+		private string SHA1 (string s)
+        {
+            SHA1 sha1 = new SHA1CryptoServiceProvider ();
+            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+            Byte[] encoded_bytes = sha1.ComputeHash (bytes);
+            return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");  
+		}
+		
+		
     }
 
     
