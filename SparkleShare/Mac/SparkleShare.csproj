@@ -148,6 +148,12 @@
       <Link>Pixmaps\idle4.png</Link>
     </Content>
     <Content Include="Growl.plist" />
+    <Content Include="..\..\data\icons\error.png">
+      <Link>Pixmaps\error.png</Link>
+    </Content>
+    <Content Include="..\..\data\icons\error-active.png">
+      <Link>Pixmaps\error-active.png</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pixmaps\" />

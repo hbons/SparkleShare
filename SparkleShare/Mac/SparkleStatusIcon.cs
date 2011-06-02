@@ -301,21 +301,28 @@ namespace SparkleShare {
             
             if (SparkleShare.Controller.Folders.Count == 0) {
                 StateText = _("Welcome to SparkleShare!");
+
                 InvokeOnMainThread (delegate {
-                    StatusItem.Image      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0.png");
-                    StatusItem.Image.Size = new SizeF (16, 16);
-                        
+                    StatusItem.Image               = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0.png");
                     StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0-active.png");
+                    StatusItem.Image.Size          = new SizeF (16, 16);
                     StatusItem.AlternateImage.Size = new SizeF (16, 16);
                 });
+
             } else {
                 if (error) {
                     StateText = _("Not everything is synced");
+
                     InvokeOnMainThread (delegate {
-                        // TODO: Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
+                        StatusItem.Image               = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/error.png");
+                        StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/error-active.png");
+                        StatusItem.Image.Size          = new SizeF (16, 16);
+                        StatusItem.AlternateImage.Size = new SizeF (16, 16);
                     });
+
                 } else {
                     StateText = _("Up to date") + " (" + SparkleShare.Controller.FolderSize + ")";
+
                     InvokeOnMainThread (delegate {
                         StatusItem.Image               = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0.png");
                         StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0-active.png");
