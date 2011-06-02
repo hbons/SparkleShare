@@ -215,29 +215,23 @@ namespace SparkleShare {
 							AddressTextField.Enabled = (ServerType == 0);
 
 							switch (ServerType) {
-	
-								case 0:
-									AddressTextField.StringValue = "";
-									FolderNameHelpLabel.StringValue = "e.g. ‘rupert/website-design’";
-								break;
-							
-								case 1:
-									AddressTextField.StringValue = "ssh://git@github.com/";
-									FolderNameHelpLabel.StringValue = "e.g. ‘rupert/website-design’";
-								break;
-							
-								case 2:
-									AddressTextField.StringValue = "ssh://git@gitorious.org/";
-									FolderNameHelpLabel.StringValue = "e.g. ‘project/website-design’";
-								break;
-							
-								case 3:
-									AddressTextField.StringValue = "ssh://git@gnome.org/git/";
-									FolderNameHelpLabel.StringValue = "e.g. ‘gnome-icon-theme’";
-								break;
-							
+							case 0:
+								AddressTextField.StringValue = "";
+								FolderNameHelpLabel.StringValue = "e.g. ‘rupert/website-design’";
+							    break;
+							case 1:
+								AddressTextField.StringValue = "ssh://git@github.com/";
+								FolderNameHelpLabel.StringValue = "e.g. ‘rupert/website-design’";
+						    	break;
+							case 2:
+								AddressTextField.StringValue = "ssh://git@gitorious.org/";
+								FolderNameHelpLabel.StringValue = "e.g. ‘project/website-design’";
+					    		break;
+							case 3:
+								AddressTextField.StringValue = "ssh://git@gnome.org/git/";
+								FolderNameHelpLabel.StringValue = "e.g. ‘gnome-icon-theme’";
+							    break;
 							}
-						
 						}
 					
 					
@@ -251,12 +245,9 @@ namespace SparkleShare {
 							
 							SyncButton.Enabled = true;
 						
-						} else { 
-						
+						} else {
 							SyncButton.Enabled = false;
-						
-						}
-
+                        }
 					});
 				
 				};
