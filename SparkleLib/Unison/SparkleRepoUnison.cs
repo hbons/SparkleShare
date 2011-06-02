@@ -159,7 +159,7 @@ namespace SparkleLib {
             //changed  <-?-> deleted -- changed locally, deleted on server
             //new file <-?-> new file -- new file on the server and a new file locally
             
-            //split lines and trim space
+            //split lines
             string [] lines = remote_revision.Split ("\n".ToCharArray ());
             foreach (string line in lines) 
             {

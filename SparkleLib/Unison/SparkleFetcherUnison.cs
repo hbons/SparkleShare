@@ -67,10 +67,12 @@ namespace SparkleLib {
                 "-rootalias " + rootalias +
                 "-logfile templog " + 
                 "-ignorearchives " +
-                "-force " + "\"" + base.remote_url + "\" " +
-                "-noupdate " + "\"" + base.remote_url + "\" " + //don't make changes on the server here, just mirror the repo locally
-                "\"" + base.target_folder + "\" " + //root1: localhost
-                "\"" + base.remote_url     + "\"");    //root2: remote server
+                "-force "      + "\"" + base.remote_url + "\" " +
+                "-noupdate "   + "\"" + base.remote_url + "\" " +
+			    "-nocreation " + "\"" + base.remote_url + "\" " +
+			    "-nodeletion " + "\"" + base.remote_url + "\" " +
+                                 "\"" + base.target_folder + "\" " +    //root1: localhost
+                                 "\"" + base.remote_url     + "\"");    //root2: remote server
 
             unison.Start ();
             unison.WaitForExit ();
