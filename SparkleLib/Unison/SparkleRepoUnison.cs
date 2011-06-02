@@ -162,12 +162,11 @@ namespace SparkleLib {
             string [] lines = remote_revision.Split ("\n".ToCharArray ());
             foreach (string line in lines) 
             {               
-				SparkleHelpers.DebugInfo ("Unison", "Conflict: " + line);
-				string conflicting_path = line.Remove(0,26).TrimEnd();
-				
 				//check to see if the line describes a conflict (new files, changes, deletions)
                 if ( line.Contains ("<-?->") )
                 {
+					SparkleHelpers.DebugInfo ("Unison", "Conflict: " + line);
+					string conflicting_path = line.Remove(0,26).TrimEnd();
 					//check to see if the conflict is over a deleted file
 					if ( line.Contains ("deleted") )
 					{
