@@ -27,8 +27,8 @@ namespace SparkleLib {
 
         public SparkleFetcherHg (string server, string remote_folder, string target_folder) :
             base (server, remote_folder, target_folder) 
-		{
-			server = server.TrimEnd ("/".ToCharArray ());
+        {
+            server = server.TrimEnd ("/".ToCharArray ());
 
             if (server.StartsWith ("ssh://"))
                 server = server.Substring (6);
@@ -37,13 +37,13 @@ namespace SparkleLib {
                 server = "git@" + server;
 
             server = "ssh://" + server;
-			
-			remote_folder = remote_folder.Trim ("/".ToCharArray ());
-			
-			base.target_folder = target_folder;
             
-			base.remote_url    = server + "//" + remote_folder;
-		}
+            remote_folder = remote_folder.Trim ("/".ToCharArray ());
+            
+            base.target_folder = target_folder;
+            
+            base.remote_url    = server + "//" + remote_folder;
+        }
 
 
         public override bool Fetch ()

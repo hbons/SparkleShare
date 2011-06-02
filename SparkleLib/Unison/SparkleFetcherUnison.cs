@@ -26,9 +26,9 @@ namespace SparkleLib {
 
         public SparkleFetcherUnison (string server, string remote_folder, string target_folder) :
             base (server, remote_folder, target_folder) 
-		{
-		    //format remote and local destination URLs and paths here
-			server = server.TrimEnd ("/".ToCharArray ());
+        {
+            //format remote and local destination URLs and paths here
+            server = server.TrimEnd ("/".ToCharArray ());
 
             if (server.StartsWith ("ssh://"))
                 server = server.Substring (6);
@@ -36,57 +36,57 @@ namespace SparkleLib {
             if (!server.Contains ("@"))
                 server = "git@" + server;
 
-            server = "ssh://" + server;			
-			remote_folder = remote_folder.Trim ("/".ToCharArray ());						            
-			base.remote_url    = server + "//" + remote_folder;
-			base.target_folder = target_folder;
-		}
+            server = "ssh://" + server;            
+            remote_folder = remote_folder.Trim ("/".ToCharArray ());                                    
+            base.remote_url    = server + "//" + remote_folder;
+            base.target_folder = target_folder;
+        }
 
 
         public override bool Fetch ()
-        {	
-			//set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
-			Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
-			
-			//might want to also set UNISONLOCALHOSTNAME to something unique, currently defaults to computer hostname
-			
-			//create a rootalias so unison archives are valid after moving from .tmp to ~/Sparkleshare/...
-			string actual_folder = base.target_folder.Replace(".tmp/", "");
-			string actual_root = "//" + System.Environment.MachineName + "/" + actual_folder;
-			string temp_root = "//" + System.Environment.MachineName + "/" + base.target_folder;
-			string rootalias = "'" + temp_root + " -> " + actual_root + "' ";
-			
-			//fetch remote repo with unison
-			SparkleUnison unison = new SparkleUnison (SparklePaths.SparkleTmpPath,
+        {    
+            //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
+            Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
+            
+            //might want to also set UNISONLOCALHOSTNAME to something unique, currently defaults to computer hostname
+            
+            //create a rootalias so unison archives are valid after moving from .tmp to ~/Sparkleshare/...
+            string actual_folder = base.target_folder.Replace(".tmp/", "");
+            string actual_root = "//" + System.Environment.MachineName + "/" + actual_folder;
+            string temp_root = "//" + System.Environment.MachineName + "/" + base.target_folder;
+            string rootalias = "'" + temp_root + " -> " + actual_root + "' ";
+            
+            //fetch remote repo with unison
+            SparkleUnison unison = new SparkleUnison (SparklePaths.SparkleTmpPath,
                 "-auto " +
                 "-batch " +
                 "-confirmbigdel=false " +
                 "-ui text " +
-			    "-log " +
-	            "-times " +
-			    "-rootalias " + rootalias +
-			    "-logfile templog " + 
-			    "-ignorearchives " +
+                "-log " +
+                "-times " +
+                "-rootalias " + rootalias +
+                "-logfile templog " + 
+                "-ignorearchives " +
                 "-force " + "\"" + base.remote_url + "\" " +
-			    "-noupdate " + "\"" + base.remote_url + "\" " + //don't make changes on the server here, just mirror the repo locally
-			    "\"" + base.target_folder + "\" " + //root1: localhost
-			    "\"" + base.remote_url 	+ "\"");	//root2: remote server
+                "-noupdate " + "\"" + base.remote_url + "\" " + //don't make changes on the server here, just mirror the repo locally
+                "\"" + base.target_folder + "\" " + //root1: localhost
+                "\"" + base.remote_url     + "\"");    //root2: remote server
 
             unison.Start ();
             unison.WaitForExit ();
 
-			string remote_revision = unison.StandardOutput.ReadToEnd ().TrimEnd ();
-			
-			SparkleHelpers.DebugInfo ("Unison", remote_revision);
-			SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
+            string remote_revision = unison.StandardOutput.ReadToEnd ().TrimEnd ();
+            
+            SparkleHelpers.DebugInfo ("Unison", remote_revision);
+            SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
            
             if (unison.ExitCode != 0) {
                 return false;
             } else {
                 InstallConfiguration ();
-				InstallUnisonBaseProfile ();
-				InstallUnisonDryRunProfile ();
-				InstallUnisonSyncProfile ();				
+                InstallUnisonBaseProfile ();
+                InstallUnisonDryRunProfile ();
+                InstallUnisonSyncProfile ();                
                 return true;
             }
         }
@@ -95,21 +95,21 @@ namespace SparkleLib {
         // Install the user's name and email and some config into
         // the newly cloned repository
         private void InstallConfiguration ()
-        {	  			
-			//move the .sparkleshare folder into the repo after fetching
-			string dotfolder_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, ".sparkleshare");
-			string dotfolder_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare");
-			Directory.Move(dotfolder_old_path, dotfolder_new_path);	
-			
+        {                  
+            //move the .sparkleshare folder into the repo after fetching
+            string dotfolder_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, ".sparkleshare");
+            string dotfolder_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare");
+            Directory.Move(dotfolder_old_path, dotfolder_new_path);    
+            
             //move the tempog file to from .tmp to log in.sparkleshare
-			string log_file_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "templog");
-			string log_file_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "log");
-			File.Move (log_file_old_path, log_file_new_path);  
-			
-			SparkleHelpers.DebugInfo ("Log", "Moved log to '" + log_file_new_path + "'");
+            string log_file_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "templog");
+            string log_file_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "log");
+            File.Move (log_file_old_path, log_file_new_path);  
+            
+            SparkleHelpers.DebugInfo ("Log", "Moved log to '" + log_file_new_path + "'");
 
             //create the config file
-			string config_file_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "config");
+            string config_file_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "config");
 
             string config = ""; //empty for now
 
@@ -121,30 +121,30 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Config", "Added configuration to '" + config_file_path + "'");
         }
 
-		
-		//install unison profile
-		//need to specify the needed options, the local and server address, the logfile location
-		//need to run export UNISON=./.sparkleshare/ on the client so unison looks for the profiles in the .sparkleshare directory
+        
+        //install unison profile
+        //need to specify the needed options, the local and server address, the logfile location
+        //need to run export UNISON=./.sparkleshare/ on the client so unison looks for the profiles in the .sparkleshare directory
         private void InstallUnisonBaseProfile ()
         {
-			// Write the base unison sparkleshare profile to the file (sparkleshare.prf)
-			string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "sparkleshare.prf");     
+            // Write the base unison sparkleshare profile to the file (sparkleshare.prf)
+            string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "sparkleshare.prf");     
             TextWriter writer = new StreamWriter (unison_profile);
             writer.WriteLine ("root = ."); //root1: local folder
-			writer.WriteLine ("root = " + base.remote_url); //root2: remote server -- PROBLEM WITH SPACES IN THE PATH, quotes are broken!!
-			writer.WriteLine ("log = true");
-			writer.WriteLine ("auto = true");
-			writer.WriteLine ("times = true");
-			writer.WriteLine ("logfile = .sparkleshare/log");
-			writer.WriteLine ("retry = 2");
-			//if you have rsync installed (probably linux and mac os do then the next three can be enabled
-			//faster than using unison for big files
-			writer.WriteLine ("copyprog = rsync --inplace --compress");
-			writer.WriteLine ("copyprogrest = rsync --partial --inplace --compress");
-			writer.WriteLine ("copythreshold = 10000"); //use rsync for files larger than 10MB (10000 kB)
-			
-			//ignore rules added here
-			// gedit and emacs
+            writer.WriteLine ("root = " + base.remote_url); //root2: remote server -- PROBLEM WITH SPACES IN THE PATH, quotes are broken!!
+            writer.WriteLine ("log = true");
+            writer.WriteLine ("auto = true");
+            writer.WriteLine ("times = true");
+            writer.WriteLine ("logfile = .sparkleshare/log");
+            writer.WriteLine ("retry = 2");
+            //if you have rsync installed (probably linux and mac os do then the next three can be enabled
+            //faster than using unison for big files
+            writer.WriteLine ("copyprog = rsync --inplace --compress");
+            writer.WriteLine ("copyprogrest = rsync --partial --inplace --compress");
+            writer.WriteLine ("copythreshold = 10000"); //use rsync for files larger than 10MB (10000 kB)
+            
+            //ignore rules added here
+            // gedit and emacs
             writer.WriteLine ("ignore = Name *~");
 
             // vi(m)
@@ -177,47 +177,47 @@ namespace SparkleLib {
             
             // Subversion
             writer.WriteLine ("ignore = Path */.svn/*");
-			
-			// Sparkleshare
+            
+            // Sparkleshare
             writer.WriteLine ("ignore = Path .sparkleshare"); //don't sync this since it has the archive file and the log in it
             writer.Close ();
-			
-			SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
-		}
-			
-		private void InstallUnisonDryRunProfile ()
-		{
-			//create profile: dryrun.prf -- does nothing, just lists the changes that need to be made
-			string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "dryrun.prf");
-			TextWriter writer = new StreamWriter (unison_profile);
-            writer.WriteLine ("include sparkleshare");
-			writer.WriteLine ("batch = true");
-			writer.WriteLine ("nodeletion = .");
-			writer.WriteLine ("nodeletion = " + base.remote_url);
-			writer.WriteLine ("noupdate = .");
-			writer.WriteLine ("noupdate = " + base.remote_url);
-			writer.WriteLine ("nocreation = .");
-			writer.WriteLine ("nocreation = " + base.remote_url);
-			writer.Close ();
-			
-			SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
-		}
-
-		private void InstallUnisonSyncProfile ()
-		{
-			//create profile: sync.prf -- runs automatic unison batch sync
-			string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "sync.prf");
-			TextWriter writer = new StreamWriter (unison_profile);
-            writer.WriteLine ("include sparkleshare");
-			writer.WriteLine ("batch = true");
-			writer.WriteLine ("confirmbigdel = false");
-			writer.Close ();
-			
-			SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
+            
+            SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
         }
-	}
+            
+        private void InstallUnisonDryRunProfile ()
+        {
+            //create profile: dryrun.prf -- does nothing, just lists the changes that need to be made
+            string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "dryrun.prf");
+            TextWriter writer = new StreamWriter (unison_profile);
+            writer.WriteLine ("include sparkleshare");
+            writer.WriteLine ("batch = true");
+            writer.WriteLine ("nodeletion = .");
+            writer.WriteLine ("nodeletion = " + base.remote_url);
+            writer.WriteLine ("noupdate = .");
+            writer.WriteLine ("noupdate = " + base.remote_url);
+            writer.WriteLine ("nocreation = .");
+            writer.WriteLine ("nocreation = " + base.remote_url);
+            writer.Close ();
+            
+            SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
+        }
 
+        private void InstallUnisonSyncProfile ()
+        {
+            //create profile: sync.prf -- runs automatic unison batch sync
+            string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "sync.prf");
+            TextWriter writer = new StreamWriter (unison_profile);
+            writer.WriteLine ("include sparkleshare");
+            writer.WriteLine ("batch = true");
+            writer.WriteLine ("confirmbigdel = false");
+            writer.Close ();
+            
+            SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
+        }
+    }
 
+    
     public class SparkleUnison : Process {
 
         public SparkleUnison (string path, string args) : base ()
@@ -226,7 +226,7 @@ namespace SparkleLib {
             StartInfo.FileName               = "/usr/local/bin/unison"; //needs to reference multiple paths, how does this work?
             StartInfo.Arguments              = args;
             StartInfo.RedirectStandardOutput = true;
-			StartInfo.RedirectStandardInput  = true;
+            StartInfo.RedirectStandardInput  = true;
             StartInfo.UseShellExecute        = false;
             StartInfo.WorkingDirectory       = path;
         }

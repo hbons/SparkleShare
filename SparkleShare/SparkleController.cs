@@ -474,8 +474,8 @@ namespace SparkleShare {
 
             else if (backend.Equals ("Scp"))
                 repo = new SparkleRepoScp (folder_path, new SparkleBackendScp ());
-			
-			else if (backend.Equals ("Unison"))
+            
+            else if (backend.Equals ("Unison"))
                 repo = new SparkleRepoUnison (folder_path, new SparkleBackendUnison ());
 
             else
@@ -857,8 +857,8 @@ namespace SparkleShare {
                 remote_folder = remote_folder.Substring (0, (remote_folder.Length - 4));
                 fetcher = new SparkleFetcherScp (server, remote_folder, tmp_folder);
                 backend = "Scp";
-				
-			} else if (remote_folder.EndsWith (".unison")) {
+                
+            } else if (remote_folder.EndsWith (".unison")) {
                 remote_folder = remote_folder.Substring (0, (remote_folder.Length - 7));
                 fetcher = new SparkleFetcherUnison (server, remote_folder, tmp_folder);
                 backend = "Unison";

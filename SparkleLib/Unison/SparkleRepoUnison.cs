@@ -34,68 +34,68 @@ namespace SparkleLib {
                 return "sparkles";
             }
         }
-		
+        
 
         public override string CurrentRevision {
             get {
                 return "";
             }
         }
-		
+        
 
-		private bool CheckForChangesBothWays ()
-		{			
-			//set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
-			Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
-			
-			SparkleUnison unison = new SparkleUnison (LocalPath,
+        private bool CheckForChangesBothWays ()
+        {            
+            //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
+            Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
+            
+            SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text " +
                 "dryrun");
 
             unison.Start ();
-			unison.WaitForExit ();
+            unison.WaitForExit ();
 
-			string remote_revision = unison.StandardOutput.ReadToEnd ().TrimEnd ();
-			
+            string remote_revision = unison.StandardOutput.ReadToEnd ().TrimEnd ();
+            
             SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
-			
-			if (unison.ExitCode != 0) {
+            
+            if (unison.ExitCode != 0) {
                 SparkleHelpers.DebugInfo ("Unison", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
                 return true;
             } else {
                 return false;
             }
-		}
-		
-		
+        }
+        
+        
         public override bool CheckForRemoteChanges ()
         {
-			return CheckForChangesBothWays ();
+            return CheckForChangesBothWays ();
         }
-		
-		
-		private bool SyncBothWays ()
-		{
-			//set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
-			Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
-			
-			//check for changes
-			SparkleUnison unison_dryrun = new SparkleUnison (LocalPath,
+        
+        
+        private bool SyncBothWays ()
+        {
+            //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
+            Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
+            
+            //check for changes
+            SparkleUnison unison_dryrun = new SparkleUnison (LocalPath,
                 "-ui text " +
                 "dryrun");
 
             unison_dryrun.Start ();
-			unison_dryrun.WaitForExit ();
+            unison_dryrun.WaitForExit ();
 
-			string remote_revision = unison_dryrun.StandardOutput.ReadToEnd ().TrimEnd ();
-			
+            string remote_revision = unison_dryrun.StandardOutput.ReadToEnd ().TrimEnd ();
+            
             SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_dryrun.ExitCode.ToString ());
-			
-			//check for conflicts before syncing
-			if (remote_revision.Contains ("<-?->"))
-			    ResolveConflicts (remote_revision);
-			
-			//sync both folders now!
+            
+            //check for conflicts before syncing
+            if (remote_revision.Contains ("<-?->"))
+                ResolveConflicts (remote_revision);
+            
+            //sync both folders now!
             SparkleUnison unison_sync = new SparkleUnison (LocalPath,
                 "-ui text " +
                 "sync");
@@ -109,7 +109,7 @@ namespace SparkleLib {
                 return false;
             else 
                 return true;     
-		}
+        }
 
         public override bool SyncUp ()
         {
@@ -125,7 +125,7 @@ namespace SparkleLib {
 
         public override bool AnyDifferences {
             get {
-				return CheckForChangesBothWays ();
+                return CheckForChangesBothWays ();
             }
         }
 
@@ -151,45 +151,45 @@ namespace SparkleLib {
             }
         }
 
-		private void ResolveConflicts (string remote_revision)
-		{
-			//unison output lines look like this when they are conflicts:
-			//changed  <-?-> changed -- changed on the server and locally
-			//deleted  <-?-> changed -- deleted locally, changed on server
-			//changed  <-?-> deleted -- changed locally, deleted on server
-			//new file <-?-> new file -- new file on the server and a new file locally
-			
+        private void ResolveConflicts (string remote_revision)
+        {
+            //unison output lines look like this when they are conflicts:
+            //changed  <-?-> changed -- changed on the server and locally
+            //deleted  <-?-> changed -- deleted locally, changed on server
+            //changed  <-?-> deleted -- changed locally, deleted on server
+            //new file <-?-> new file -- new file on the server and a new file locally
+            
             //split lines and trim space
             string [] lines = remote_revision.Split ("\n".ToCharArray ());
-			foreach (string line in lines) 
-			{
-				//check to see if the line describes a conflict
-				if ( line.Contains ("<-?->") && !line.Contains ("[]") )
-				{
-					string conflict = line.Trim ();
-					string conflicting_path = ""; 
-					
-					//the end of the line contains the relative path/file name
-					//how to deal with spaces in filename?
-				
-					//when conflicts are identified copy/rename the neccesary files
-					
-		            // Append a timestamp to local version
-		            string timestamp            = DateTime.Now.ToString ("HH:mm MMM d");
-		            string their_path           = conflicting_path + " (" + SparkleConfig.DefaultConfig.UserName + ", " + timestamp + ")";
-		            string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
-		            string abs_their_path       = Path.Combine (LocalPath, their_path);
-		
-		            //File.Move (abs_conflicting_path, abs_their_path);
-				}
-			}
-		}
-		
+            foreach (string line in lines) 
+            {
+                //check to see if the line describes a conflict
+                if ( line.Contains ("<-?->") && !line.Contains ("[]") )
+                {
+                    string conflict = line.Trim ();
+                    string conflicting_path = ""; 
+                    
+                    //the end of the line contains the relative path/file name
+                    //how to deal with spaces in filename?
+                
+                    //when conflicts are identified copy/rename the neccesary files
+                    
+                    // Append a timestamp to local version
+                    string timestamp            = DateTime.Now.ToString ("HH:mm MMM d");
+                    string their_path           = conflicting_path + " (" + SparkleConfig.DefaultConfig.UserName + ", " + timestamp + ")";
+                    string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
+                    string abs_their_path       = Path.Combine (LocalPath, their_path);
+        
+                    //File.Move (abs_conflicting_path, abs_their_path);
+                }
+            }
+        }
+        
 
         public override List <SparkleChangeSet> GetChangeSets (int count)
         {
             //parse the unison log (.sparkleshare/log)
-			var l = new List<SparkleChangeSet> ();
+            var l = new List<SparkleChangeSet> ();
             l.Add (new SparkleChangeSet () { UserName = "test", UserEmail = "test", Revision = "test", Timestamp = DateTime.Now });
             return l;
         }
@@ -197,7 +197,7 @@ namespace SparkleLib {
 
         public override void CreateInitialChangeSet ()
         {
-			//?
+            //?
             base.CreateInitialChangeSet ();
         }
 

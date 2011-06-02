@@ -41,12 +41,12 @@ namespace SparkleLib {
 
                     remote_folder += ".git";
                 }
-			
-			//github
+            
+            //github
             } else if (server.Contains ("github.com")) {
                 server = "ssh://git@github.com";
-			
-			//gnome	
+            
+            //gnome    
             } else if (server.Contains ("gnome.org")) {
                 server = "ssh://git@gnome.org/git";
 
