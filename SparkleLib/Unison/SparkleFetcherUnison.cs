@@ -69,8 +69,8 @@ namespace SparkleLib {
                 "-ignorearchives " +
                 "-force "      + "\"" + base.remote_url     + "\" " +
                 "-noupdate "   + "\"" + base.remote_url     + "\" " +
-			    "-nocreation " + "\"" + base.remote_url     + "\" " +
-			    "-nodeletion " + "\"" + base.remote_url     + "\" " +
+                "-nocreation " + "\"" + base.remote_url     + "\" " +
+                "-nodeletion " + "\"" + base.remote_url     + "\" " +
                                  "\"" + base.target_folder  + "\" " +    //root1: localhost
                                  "\"" + base.remote_url     + "\"" );    //root2: remote server
 
