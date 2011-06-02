@@ -20,6 +20,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SparkleLib {
 
@@ -39,10 +41,26 @@ namespace SparkleLib {
             }
         }
         
+        private string GetSHA1 (string s)
+        {
+            SHA1 sha1 = new SHA1CryptoServiceProvider ();
+            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+            Byte[] encoded_bytes = sha1.ComputeHash (bytes);
+            return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");  
+        }
+        
 
         public override string CurrentRevision {
             get {
-                return "";
+                //hashes the unison fingerprint file - this should work
+                string fingerprintpath = SparkleHelpers.CombineMore (LocalPath, ".sparkleshare");
+                string[] fingerprintfile = Directory.GetFiles(fingerprintpath,"fp*");
+                SparkleHelpers.DebugInfo ("Unison", "Fingerprint file: " + fingerprintfile[0].ToString());
+                TextReader reader = new StreamReader (fingerprintfile[0].ToString());
+                string fingerprint = reader.ReadToEnd().ToString();
+                string fingerprinthash = GetSHA1 (fingerprint);
+                SparkleHelpers.DebugInfo ("Unison", "Fingerprint hash: " + fingerprinthash);
+                return fingerprinthash;
             }
         }
         
