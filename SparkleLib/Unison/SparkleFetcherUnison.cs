@@ -88,7 +88,9 @@ namespace SparkleLib {
                 InstallConfiguration ();
                 InstallUnisonBaseProfile ();
                 InstallUnisonDryRunProfile ();
-                InstallUnisonSyncProfile ();                
+                InstallUnisonSyncProfile ();
+				InstallUnisonGrabRemoteFileProfile ();
+				InstallUnisonTransmitLocalFileProfile ();
                 return true;
             }
         }
@@ -205,7 +207,8 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
         }
 
-        private void InstallUnisonSyncProfile ()
+        
+		private void InstallUnisonSyncProfile ()
         {
             //create profile: sync.prf -- runs automatic unison batch sync
             string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "sync.prf");
@@ -213,6 +216,41 @@ namespace SparkleLib {
             writer.WriteLine ("include sparkleshare");
             writer.WriteLine ("batch = true");
             writer.WriteLine ("confirmbigdel = false");
+            writer.Close ();
+            
+            SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
+        }
+		
+		
+		private void InstallUnisonGrabRemoteFileProfile ()
+        {
+            //create profile: grab.prf -- used to grab a specific remote file
+            string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "grab.prf");
+            TextWriter writer = new StreamWriter (unison_profile);
+            writer.WriteLine ("include sparkleshare");
+            writer.WriteLine ("batch = true");
+            writer.WriteLine ("confirmbigdel = false");
+            writer.WriteLine ("nodeletion = " + base.remote_url);;
+            writer.WriteLine ("noupdate = " + base.remote_url);
+            writer.WriteLine ("nocreation = " + base.remote_url);
+			writer.WriteLine ("force = " + base.remote_url);
+            writer.Close ();
+            
+            SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
+        }
+		
+		private void InstallUnisonTransmitLocalFileProfile ()
+        {
+            //create profile: transmit.prf -- runs automatic unison batch sync
+            string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "transmit.prf");
+            TextWriter writer = new StreamWriter (unison_profile);
+            writer.WriteLine ("include sparkleshare");
+            writer.WriteLine ("batch = true");
+            writer.WriteLine ("confirmbigdel = false");
+            writer.WriteLine ("nodeletion = .");
+            writer.WriteLine ("noupdate = .");
+            writer.WriteLine ("nocreation = .");
+			writer.WriteLine ("force = .");
             writer.Close ();
             
             SparkleHelpers.DebugInfo ("Unison Profile", "Added unison profile to '" + unison_profile + "'");
