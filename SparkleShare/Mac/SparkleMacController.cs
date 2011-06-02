@@ -43,6 +43,11 @@ namespace SparkleShare {
                 else
                     repo_name = path;
 
+                // Ignore changes in the root of each subfolder, these
+                // are already handled bu the repository
+                if (Path.GetFileNameWithoutExtension (path).Equals (repo_name))
+                    return;
+
                 repo_name = repo_name.Trim ("/".ToCharArray ());
                 FileSystemEventArgs args = new FileSystemEventArgs (WatcherChangeTypes.Changed,
                     Path.Combine (SparklePaths.SparklePath, path), Path.GetFileName (path));
