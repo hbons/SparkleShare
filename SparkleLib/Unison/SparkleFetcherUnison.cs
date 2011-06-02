@@ -18,6 +18,8 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using System.Xml;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SparkleLib {
 
@@ -270,7 +272,7 @@ namespace SparkleLib {
             {                
                 //creates a unique identifier based on the remote_url and the UTCdata/time
                 string identifier = base.remote_url + DateTime.Now.ToUniversalTime().ToString();
-                string IDhash = SHA1 (identifier);
+                string IDhash = GetSHA1 (identifier);
             
                 TextWriter writer = new StreamWriter (IDfile);
                 writer.WriteLine (IDhash);
@@ -286,7 +288,7 @@ namespace SparkleLib {
         }
         
                 
-        private string SHA1 (string s)
+        private string GetSHA1 (string s)
         {
             SHA1 sha1 = new SHA1CryptoServiceProvider ();
             Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
