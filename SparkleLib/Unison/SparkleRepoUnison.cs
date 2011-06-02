@@ -42,41 +42,24 @@ namespace SparkleLib {
             }
         }
 		
-		private string ListUnisonChanges ()
-		{
+
+		private bool CheckForChangesBothWays ()
+		{			
 			//set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
 			Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
 			
 			SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text " +
-                "sparkleshare");
+                "dryrun");
 
             unison.Start ();
-			
-			//need to wait until local appears - this won't work
-			while (!unison.StandardOutput.ReadToEnd().Contains("local") && !unison.StandardOutput.ReadToEnd().Contains("Nothing") );
-			
-			unison.StandardInput.WriteLine("L"); //list changes (low verbosity)
-			//what happens if there are no changes but it still presses L and q? -- does it break?
-			unison.StandardInput.Flush();
-			//unison.StandardInput.Close();
-			unison.StandardInput.WriteLine("q"); //quit unison
-			unison.StandardInput.Flush();
-			unison.StandardInput.Close();
-            unison.WaitForExit ();
+			unison.WaitForExit ();
 
-            SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
-			
 			string remote_revision = unison.StandardOutput.ReadToEnd ().TrimEnd ();
 			
-			return remote_revision;
-		}
-
-		private bool CheckForChangesBothWays ()
-		{			
-            string remote_revision = ListUnisonChanges ();
+            SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
 			
-			if (!remote_revision.Contains ("Nothing to do: replicas have not changed since last sync.")) {
+			if (unison.ExitCode != 0) {
                 SparkleHelpers.DebugInfo ("Unison", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
                 return true;
             } else {
@@ -93,28 +76,36 @@ namespace SparkleLib {
 		
 		private bool SyncBothWays ()
 		{
-			string remote_revision = ListUnisonChanges ();
+			//set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
+			Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
+			
+			//check for changes
+			SparkleUnison unison_dryrun = new SparkleUnison (LocalPath,
+                "-ui text " +
+                "dryrun");
+
+            unison_dryrun.Start ();
+			unison_dryrun.WaitForExit ();
+
+			string remote_revision = unison_dryrun.StandardOutput.ReadToEnd ().TrimEnd ();
+			
+            SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_dryrun.ExitCode.ToString ());
 			
 			//check for conflicts before syncing
 			if (remote_revision.Contains ("<-?->"))
 			    ResolveConflicts (remote_revision);
 			
-			//set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
-			Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
-			
 			//sync both folders now!
-			//doesn't ask any questions - just syncs - needs conflicts to have been eliminated by the previous step
-            SparkleUnison unison = new SparkleUnison (LocalPath,
+            SparkleUnison unison_sync = new SparkleUnison (LocalPath,
                 "-ui text " +
-                "-batch " +
-                "sparkleshare");
+                "sync");
 
-            unison.Start ();
-            unison.WaitForExit ();
+            unison_sync.Start ();
+            unison_sync.WaitForExit ();
 
-            SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
+            SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_sync.ExitCode.ToString ());
 
-            if (unison.ExitCode != 0)
+            if (unison_sync.ExitCode != 0)
                 return false;
             else 
                 return true;     
