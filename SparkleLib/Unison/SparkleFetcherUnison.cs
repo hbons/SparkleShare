@@ -50,7 +50,7 @@ namespace SparkleLib {
 			
 			//might want to also set UNISONLOCALHOSTNAME to something unique, currently defaults to computer hostname
 			
-			//create a root alias so unison archives are valid after moving from .tmp to ~/Sparkleshare
+			//create a rootalias so unison archives are valid after moving from .tmp to ~/Sparkleshare/...
 			string actual_folder = base.target_folder.Replace(".tmp/", "");
 			string actual_root = "//" + System.Environment.MachineName + "/" + actual_folder;
 			string temp_root = "//" + System.Environment.MachineName + "/" + base.target_folder;
@@ -207,7 +207,7 @@ namespace SparkleLib {
 		{
 			//create profile: sync.prf -- runs automatic unison batch sync
 			string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "sync.prf");
-			TextWriterwriter = new StreamWriter (unison_profile);
+			TextWriter writer = new StreamWriter (unison_profile);
             writer.WriteLine ("include sparkleshare");
 			writer.WriteLine ("batch = true");
 			writer.WriteLine ("confirmbigdel = false");
