@@ -164,7 +164,7 @@ namespace SparkleLib {
             foreach (string line in lines) 
             {
                 //check to see if the line describes a conflict
-                if ( line.Contains ("<-?->") && !line.Contains ("[]") )
+                if ( line.Contains ("<-?->") )
                 {
                     string conflict = line.Trim ();
                     string conflicting_path = ""; 
