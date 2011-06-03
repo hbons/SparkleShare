@@ -392,8 +392,12 @@ namespace SparkleLib {
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
 
+                if (NewChangeSet != null)
+                    NewChangeSet (GetChangeSets (1) [0], LocalPath);
+
                 // There could be changes from a
-                // resolved conflict
+                // resolved conflict. Tries only once,
+                //then let the timer try again periodicallly
                 if (HasUnsyncedChanges)
                     SyncUp ();
 
@@ -409,9 +413,6 @@ namespace SparkleLib {
                 SyncStatusChanged (SyncStatus.Idle);
 
             this.remote_timer.Start ();
-
-            if (NewChangeSet != null)
-                NewChangeSet (GetChangeSets (1) [0], LocalPath);
         }
 
 
