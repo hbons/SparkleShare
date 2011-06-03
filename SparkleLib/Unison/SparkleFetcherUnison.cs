@@ -86,9 +86,9 @@ namespace SparkleLib {
            
             if (unison.ExitCode != 0) {
                 return false;
-            } else {
-                CreateID ();
+            } else {    
                 InstallConfiguration ();
+				CreateID ();
 				CreateChangeLog ();
                 InstallUnisonBaseProfile ();
                 InstallUnisonDryRunProfile ();
@@ -206,8 +206,6 @@ namespace SparkleLib {
             writer.WriteLine ("noupdate = " + base.remote_url);
             writer.WriteLine ("nocreation = .");
             writer.WriteLine ("nocreation = " + base.remote_url);
-			writer.WriteLine ("ignore = Name *."); //ignore dotfiles
-			writer.WriteLine ("ignore = Path *."); //ignore dotfolders
             writer.Close ();
             
             SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
@@ -222,8 +220,6 @@ namespace SparkleLib {
             writer.WriteLine ("include sparkleshare");
             writer.WriteLine ("batch = true");
             writer.WriteLine ("confirmbigdel = false");
-			writer.WriteLine ("ignore = Name *."); //ignore dotfiles
-			writer.WriteLine ("ignore = Path *."); //ignore dotfolders
             writer.Close ();
             
             SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");

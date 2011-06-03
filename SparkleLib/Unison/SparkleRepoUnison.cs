@@ -33,26 +33,32 @@ namespace SparkleLib {
 
         public override string Identifier {
             get {
-                //needs better error handling incase the id file was accidentally deleted
-                //maybe copy it into the .sparkleshare folder too?
                 string IDfile = SparkleHelpers.CombineMore (LocalPath, ".unisonID");
                 
-                //check for a backup in .sparkleshare if the file isn't found
+				//ID file not found
                 if(!File.Exists(IDfile))
                 {
-                    string backupIDfile = SparkleHelpers.CombineMore (LocalPath, ".sparkleshare", ".unisonID");    
-                    if(File.Exists(backupIDfile))
+                    //check for a backup in .sparkleshare
+					string backupIDfile = SparkleHelpers.CombineMore (LocalPath, ".sparkleshare", ".unisonID");    
+                    if(File.Exists ( backupIDfile) )
                     {
                         File.Copy(backupIDfile, IDfile);
                         SparkleHelpers.DebugInfo ("Unison", "Recovered backup ID file: " + backupIDfile);
                     }
+					//check if there is a copy on the server
+					else if ( UnisonGrab(IDfile) == 0 )
+					{
+						SparkleHelpers.DebugInfo ("Unison", "Downloaded ID file from server: " + IDfile);
+					}
                     else
                     {
-                        SparkleHelpers.DebugInfo ("Unison", "NO REPO ID FILE FOUND");
+                        //should probably create the ID here just like in the fetcher
+						SparkleHelpers.DebugInfo ("Unison", "NO REPO ID FILE FOUND");
                         return "unisonsparkles";
                     }
                 }            
                 
+				//read the repo ID from the file
                 TextReader reader = new StreamReader (IDfile);
                 string repoID = reader.ReadToEnd().ToString();
                 SparkleHelpers.DebugInfo ("Unison", "Repo ID found: " + repoID);
@@ -193,6 +199,7 @@ namespace SparkleLib {
             else
                 return true;
         }
+		
 
         public override bool SyncUp ()
         {
@@ -233,6 +240,7 @@ namespace SparkleLib {
                 }
             }
         }
+		
 
         private void ResolveConflicts (string remote_revision)
         {          
@@ -246,7 +254,7 @@ namespace SparkleLib {
                     SparkleHelpers.DebugInfo ("Unison", "Conflict: " + line.TrimEnd());
                     string conflicting_path = line.Remove(0,26).TrimEnd();
                     
-                    //check to see if the conflict is over a deleted file
+                    //check to see if the conflict is over a deleted file					
                     if ( line.Contains ("deleted") )
                     {
                         //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
@@ -265,6 +273,15 @@ namespace SparkleLib {
                         SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison_deletefix.ExitCode.ToString ());
 						
 						//TODO: need to pass information about the changes made
+						
+						if (line.StartsWith("deleted"))
+						{
+							//file was deleted on the local system and the new copy was just downloaded
+						}
+						else
+						{
+							//file was deleted on the server and the new copy was sent there
+						}
 						
                     }
                     //implies that there is a conflict with 2 changed files
@@ -306,7 +323,6 @@ namespace SparkleLib {
             unison.WaitForExit ();
 			
 			int exitcode = unison.ExitCode;
-
             SparkleHelpers.DebugInfo ("Unison", "Exit code: " + exitcode.ToString());
 			return exitcode;
 		}
@@ -327,46 +343,51 @@ namespace SparkleLib {
             unison.WaitForExit ();
 			
 			int exitcode = unison.ExitCode;
-
             SparkleHelpers.DebugInfo ("Unison", "Exit code: " + exitcode.ToString());
 			return exitcode;
 		}
 		
 		
-		//needs: username, useremail, revision, timestamp
-		//not sure how the change set thing works
-		
-		private void WriteChangeLog (List<SparkleChangeSet> change)
+		private int WriteChangeLog (List<SparkleChangeSet> change)
 		{
             string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");
+			
+			//update the log file from the server
+			if (UnisonGrab(changelog_file) == 0)
+			    SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
             
-            //check if file exists already
+            //check if file actually exists (might not exist/sync might have failed)
             if( !File.Exists (changelog_file) )
             {   
-				//see if you can get it from the server
-				int exitcode = UnisonGrab(changelog_file);
-				if(exitcode != 0);
-				{
-					//changelog not found locally or on server => create a new blank one
-					string changelog = "";
-	
-	                // Write the changelog to the file
-	                TextWriter writer = new StreamWriter (changelog_file);
-	                writer.WriteLine (changelog);
-	                writer.Close ();
-	
-	                SparkleHelpers.DebugInfo ("Unison", "Created changelog: " + changelog_file);
-				}
+				//changelog not found locally or on server => screate a new blank one
+				string changelog = "";
+
+                // Write the changelog to the file
+                TextWriter writer = new StreamWriter (changelog_file);
+                writer.WriteLine (changelog);
+                writer.Close ();
+
+                SparkleHelpers.DebugInfo ("Unison", "Created changelog: " + changelog_file);
             }
-            //changelog exists
-			//write the changes to the log
+			
+			//TODO: write the changes to the log file
+			
+			//send updated log to server
+			//need to figure out if its needed to merge the log if 2 people submit at the same time...
+			//what hasppens if there is a collision/conflict
+			//can try to just try again on failure...
+			int exitcode = UnisonTransmit (changelog_file);
+			
+			if(exitcode == 0)
+				SparkleHelpers.DebugInfo ("Unison", "Updated server log: " + changelog_file);
+			
+			return exitcode;
 		}
 		
 		
 		public override List <SparkleChangeSet> GetChangeSets (int count)
         {
-            //TODO: keep the .changelog file up to date
-			//read the log file here
+			//TODO: read the log file here
 			//careful with timezones
             var l = new List<SparkleChangeSet> ();
             l.Add (new SparkleChangeSet () { UserName = "test", UserEmail = "test", Revision = "test", Timestamp = DateTime.Now });
