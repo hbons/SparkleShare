@@ -304,7 +304,8 @@ namespace SparkleLib {
 
         public override List <SparkleChangeSet> GetChangeSets (int count)
         {
-            //TODO: parse the unison log (.sparkleshare/log)
+            //TODO: keep the .changelog file up to date
+			//rely on unison to merge (append >>) to the file
             var l = new List<SparkleChangeSet> ();
             l.Add (new SparkleChangeSet () { UserName = "test", UserEmail = "test", Revision = "test", Timestamp = DateTime.Now });
             return l;

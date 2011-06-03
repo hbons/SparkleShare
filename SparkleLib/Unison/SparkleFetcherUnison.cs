@@ -206,6 +206,8 @@ namespace SparkleLib {
             writer.WriteLine ("noupdate = " + base.remote_url);
             writer.WriteLine ("nocreation = .");
             writer.WriteLine ("nocreation = " + base.remote_url);
+			writer.WriteLine ("ignore = Name *."); //ignore dotfiles
+			writer.WriteLine ("ignore = Path *."); //ignore dotfolders
             writer.Close ();
             
             SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
@@ -220,6 +222,8 @@ namespace SparkleLib {
             writer.WriteLine ("include sparkleshare");
             writer.WriteLine ("batch = true");
             writer.WriteLine ("confirmbigdel = false");
+			writer.WriteLine ("ignore = Name *."); //ignore dotfiles
+			writer.WriteLine ("ignore = Path *."); //ignore dotfolders
             writer.Close ();
             
             SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
@@ -270,7 +274,7 @@ namespace SparkleLib {
             //check if file exists already
             if( !File.Exists (changelog_file) )
             {                
-                string changelog = ""; //empty for now
+                string changelog = "";
 
                 // Write the changelog to the file
                 TextWriter writer = new StreamWriter (changelog_file);
@@ -295,7 +299,7 @@ namespace SparkleLib {
             //check if file exists already
             if( !File.Exists (IDfile) )
             {                
-                //creates a unique identifier based on the remote_url and the UTCdata/time
+                //creates a unique identifier based on the remote_url and the UTC date/time
                 string identifier = base.remote_url + DateTime.Now.ToUniversalTime().ToString();
                 string IDhash = GetSHA1 (identifier);
             
