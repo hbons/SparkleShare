@@ -379,7 +379,7 @@ namespace SparkleLib {
             string timestamp = DateTime.Now.ToString ("HH:mm MMM d");
             string username = SparkleConfig.DefaultConfig.UserName.ToString().Trim();
             string useremail = SparkleConfig.DefaultConfig.UserEmail.ToString().Trim();
-            string logupdate = timestamp + " \"" + username + "\" \"" + useremail + "\" " + revision + " \"" + path + "\"";
+            string logupdate = timestamp + ", \"" + username + "\", \"" + useremail + "\", " + revision + ", \"" + path + "\"";
             
             //update the log file from the server
             if (UnisonGrab(".changelog") == 0)
@@ -417,8 +417,30 @@ namespace SparkleLib {
         {
             //TODO: read the log file here (created in WriteChangeLog)
             //careful with timezones (should be all in UTC) -> correct for user's timezone
-            var l = new List<SparkleChangeSet> ();
-            l.Add (new SparkleChangeSet () { UserName = "test", UserEmail = "test", Revision = "test", Timestamp = DateTime.Now });
+			
+			var l = new List<SparkleChangeSet> ();
+			
+			string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");
+			
+			//update the log file from the server
+            if (UnisonGrab(".changelog") == 0)
+                SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
+			
+			if (!File.Exists (changelog_file))
+			{		
+				TextReader reader = new StreamReader (changelog_file);
+	            string changelog = reader.ReadToEnd().ToString();
+				string [] lines = changelog.Split ("\n".ToCharArray ());
+                foreach (string line in lines)
+				{
+					l.Add (new SparkleChangeSet () { UserName = "test", UserEmail = "test", Revision = "test", Timestamp = DateTime.Now });
+				}
+			}
+			else
+			{
+				File.Create (changelog_file);
+				SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
+			}
             return l;
         }
 
