@@ -280,8 +280,12 @@ namespace SparkleLib {
                     //check to see if the conflict is over a deleted file                    
                     if ( line.Contains ("deleted") )
                     {
-                        //log the deletion as soon as its detected
-                        WriteChangeLog(conflicting_path, "Deleted");
+                        //check if it was the local file that was deleted, if so log the deletion
+                        if(line.Trim().StartsWith("deleted"))
+                            WriteChangeLog(conflicting_path, "Deleted");
+                        //otherwise the file must have been edited otherwise there wouldn't be a conflict
+                        else
+                            WriteChangeLog(conflicting_path, "Edited");
                         
                         //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
                         Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");                        
@@ -298,8 +302,10 @@ namespace SparkleLib {
                         
                         SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison_deletefix.ExitCode.ToString ());
                         
-                        //file was recovered so now log that
-                        WriteChangeLog(conflicting_path, "Added");                
+                        //check if it was the local file that was deleted, if so now its been recovered
+                        //don't really know easily from who's copy, ignore that for now
+                        if(line.Trim().StartsWith("deleted"))
+                            WriteChangeLog(conflicting_path, "Recovered");              
                     
                     }        
                     //implies that there is a conflict with 2 changed files
@@ -369,14 +375,11 @@ namespace SparkleLib {
         
         private int WriteChangeLog (string path, string revision)
         {
-            string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");
-                
+            string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");         
             string timestamp = DateTime.Now.ToString ("HH:mm MMM d");
             string username = SparkleConfig.DefaultConfig.UserName.ToString().Trim();
-            string useremail = "";
-            
-            //format the log string
-            string logupdate = "\"" + username + "\" \"" + useremail + "\" " + revision + " \"" + path + "\"";
+            string useremail = SparkleConfig.DefaultConfig.UserEmail.ToString().Trim();
+            string logupdate = timestamp + "\"" + username + "\" \"" + useremail + "\" " + revision + " \"" + path + "\"";
             
             //update the log file from the server
             if (UnisonGrab(".changelog") == 0)
@@ -386,13 +389,13 @@ namespace SparkleLib {
             if (!File.Exists (changelog_file))
                 File.Create (changelog_file);
                         
+            //append to the log file
             using (StreamWriter sw = File.AppendText(changelog_file)) 
             {
-                //append to the log file
                 sw.WriteLine (logupdate);
             }    
 
-            SparkleHelpers.DebugInfo ("Unison", "Updated changelog: " + changelog_file + ": " + logupdate);
+            SparkleHelpers.DebugInfo ("Unison", "Updated local log: " + changelog_file + ": " + logupdate);
             
             //send updated log to server
             //need to figure out if its needed to merge the log if 2 people submit at the same time...
