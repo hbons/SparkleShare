@@ -379,7 +379,7 @@ namespace SparkleLib {
             string timestamp = DateTime.Now.ToString ("HH:mm MMM d");
             string username = SparkleConfig.DefaultConfig.UserName.ToString().Trim();
             string useremail = SparkleConfig.DefaultConfig.UserEmail.ToString().Trim();
-            string logupdate = timestamp + "\"" + username + "\" \"" + useremail + "\" " + revision + " \"" + path + "\"";
+            string logupdate = timestamp + " \"" + username + "\" \"" + useremail + "\" " + revision + " \"" + path + "\"";
             
             //update the log file from the server
             if (UnisonGrab(".changelog") == 0)
@@ -387,7 +387,10 @@ namespace SparkleLib {
             
             //check that file exists, otherwise create it now
             if (!File.Exists (changelog_file))
+			{
                 File.Create (changelog_file);
+				SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
+			}
                         
             //append to the log file
             using (StreamWriter sw = File.AppendText(changelog_file)) 
@@ -398,9 +401,9 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Updated local log: " + changelog_file + ": " + logupdate);
             
             //send updated log to server
-            //need to figure out if its needed to merge the log if 2 people submit at the same time...
+            //TODO: need to figure out if its needed to merge the log if 2 people submit at the same time...
             //what hasppens if there is a collision/conflict
-            //can try to just try again on failure...
+            //this will overright the log, if someone checks out a log and then someone else uploads it will break...
             int exitcode = UnisonTransmit (".changelog");
             
             if(exitcode == 0)
