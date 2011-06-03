@@ -50,7 +50,8 @@ namespace SparkleLib {
         }
         
 
-        //hashes directory tree and Last Modification Time
+        //need to make sure this actually works on two different clients
+		//hashes directory tree and Last Modification Time
 		public override string CurrentRevision {
             get {				
 				StringBuilder sb = new StringBuilder();
@@ -62,7 +63,6 @@ namespace SparkleLib {
         }
 		
 
-		//need to make sure this actually works on two different clients
 		private StringBuilder PopulateTree(string dir, StringBuilder files) 
 		{
             //get the information of the directory
