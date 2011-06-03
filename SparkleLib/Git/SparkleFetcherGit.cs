@@ -116,8 +116,8 @@ namespace SparkleLib {
             // TODO: just use commands instead of messing with the config file
             config += n +
                       "[user]" + n +
-                      "\tname  = " + node_name.Value + n +
-                      "\temail = " + node_email.Value + n;
+                      "    name  = " + node_name.Value + n +
+                      "    email = " + node_email.Value + n;
 
             // Write the config to the file
             TextWriter writer = new StreamWriter (repo_config_file_path);

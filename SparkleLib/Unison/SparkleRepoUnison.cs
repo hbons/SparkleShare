@@ -193,21 +193,23 @@ namespace SparkleLib {
                     //check for changes from local->remote server (remote->local don't need logging here)
                     if(line.Contains("---->"))
                     {
-                        string path = line.ToString().Remove(0,26).Trim();
+                        string linestring = line.ToString().TrimEnd();
+                        string linetrim = linestring.Trim();
+                        string path = linestring.Remove(0,26);
                         string revision = "";
-                        if(line.Trim().StartsWith("new file"))
+                        if(linetrim.StartsWith("new file"))
                         {
                             revision = "Added";
                         }
-                        else if(line.StartsWith("deleted"))
+                        else if(linetrim.StartsWith("deleted"))
                         {
                             revision = "Deleted";
                         }
-                        else if(line.StartsWith("new dir"))
+                        else if(linetrim.StartsWith("new dir"))
                         {
                             revision = "New Folder";
                         }
-                        else if(line.StartsWith("changed"))
+                        else if(linetrim.StartsWith("changed"))
                         {
                             revision = "Edited";
                         }
@@ -376,10 +378,10 @@ namespace SparkleLib {
         private int WriteChangeLog (string path, string revision)
         {
             string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");         
-            string timestamp = DateTime.Now.ToString ("HH:mm MMM d");
+            string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm tt");
             string username = SparkleConfig.DefaultConfig.UserName.ToString().Trim();
             string useremail = SparkleConfig.DefaultConfig.UserEmail.ToString().Trim();
-            string logupdate = timestamp + ", \"" + username + "\", \"" + useremail + "\", " + revision + ", \"" + path + "\"";
+            string logupdate = timestamp + ", " + username + ", " + useremail + ", " + revision + ", " + path;
             
             //update the log file from the server
             if (UnisonGrab(".changelog") == 0)
@@ -387,10 +389,10 @@ namespace SparkleLib {
             
             //check that file exists, otherwise create it now
             if (!File.Exists (changelog_file))
-			{
+            {
                 File.Create (changelog_file);
-				SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
-			}
+                SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
+            }
                         
             //append to the log file
             using (StreamWriter sw = File.AppendText(changelog_file)) 
@@ -417,30 +419,39 @@ namespace SparkleLib {
         {
             //TODO: read the log file here (created in WriteChangeLog)
             //careful with timezones (should be all in UTC) -> correct for user's timezone
-			
-			var l = new List<SparkleChangeSet> ();
-			
-			string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");
-			
-			//update the log file from the server
+            
+            var l = new List<SparkleChangeSet> ();
+            
+            string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");
+            
+            //update the log file from the server
             if (UnisonGrab(".changelog") == 0)
                 SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
-			
-			if (!File.Exists (changelog_file))
-			{		
-				TextReader reader = new StreamReader (changelog_file);
-	            string changelog = reader.ReadToEnd().ToString();
-				string [] lines = changelog.Split ("\n".ToCharArray ());
+            
+            if (!File.Exists (changelog_file))
+            {        
+                TextReader reader = new StreamReader (changelog_file);
+                string changelog = reader.ReadToEnd().ToString();
+                string [] lines = changelog.Split ("\n".ToCharArray ());
                 foreach (string line in lines)
-				{
-					l.Add (new SparkleChangeSet () { UserName = "test", UserEmail = "test", Revision = "test", Timestamp = DateTime.Now });
-				}
-			}
-			else
-			{
-				File.Create (changelog_file);
-				SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
-			}
+                {
+                    string[] parts = line.Split(",".ToCharArray ());
+                    DateTime time   = DateTime.ParseExact(parts[0].Trim(), "yyyy-MM-dd HH:mm tt", null);
+                    string name     = parts[1].Trim();
+                    string email    = parts[2].Trim();
+                    string revision = parts[3].Trim();
+                    string path     = parts[4].Trim();
+                    l.Add (new SparkleChangeSet () { UserName = name,
+                                                     UserEmail = email,
+                                                     Revision = revision,
+                                                     Timestamp = time });
+                }
+            }
+            else
+            {
+                File.Create (changelog_file);
+                SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
+            }
             return l;
         }
 

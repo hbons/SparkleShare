@@ -450,7 +450,7 @@ namespace SparkleLib {
                             } else if (change_type.Equals ("D")) {
                                 change_set.Deleted.Add (file_path);
                             } else if (change_type.Equals ("R")) {
-                                int tab_pos  = entry_line.LastIndexOf ("\t");
+                                int tab_pos  = entry_line.LastIndexOf ("    ");
                                 file_path    = entry_line.Substring (42, tab_pos - 42);
                                 to_file_path = entry_line.Substring (tab_pos + 1);
 

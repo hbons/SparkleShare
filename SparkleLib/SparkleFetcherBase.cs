@@ -116,7 +116,7 @@ namespace SparkleLib {
                 SparklePaths.HomePath, ".ssh", "config");
 
             string ssh_config = Environment.NewLine + "Host " + host +
-                                Environment.NewLine + "\tStrictHostKeyChecking no";
+                                Environment.NewLine + "    StrictHostKeyChecking no";
 
             if (File.Exists (ssh_config_file_path)) {
                 TextWriter writer = File.AppendText (ssh_config_file_path);
@@ -143,7 +143,7 @@ namespace SparkleLib {
                 SparklePaths.HomePath, ".ssh", "config");
 
             string ssh_config = Environment.NewLine + "Host " + host +
-                                Environment.NewLine + "\tStrictHostKeyChecking no";
+                                Environment.NewLine + "    StrictHostKeyChecking no";
 
             if (File.Exists (ssh_config_file_path)) {
                 StreamReader reader = new StreamReader (ssh_config_file_path);
