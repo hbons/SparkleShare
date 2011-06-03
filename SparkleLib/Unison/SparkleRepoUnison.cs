@@ -388,11 +388,12 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
             
             //check that file exists, otherwise create it now
-            if (!File.Exists (changelog_file))
-            {
-                File.Create (changelog_file);
-                SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
-            }
+           // if (!File.Exists (changelog_file))
+           // {
+           //     File.Create (changelog_file);
+           //     SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
+           // }
+
                         
             //append to the log file
             using (StreamWriter sw = File.AppendText(changelog_file)) 
