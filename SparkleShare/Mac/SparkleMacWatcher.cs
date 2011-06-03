@@ -30,6 +30,7 @@ namespace SparkleShare {
 
         private DirectoryInfo last_changed;
 
+
         public SparkleMacWatcher (string path)
         {
             Thread thread = new Thread (new ThreadStart (delegate {
@@ -75,4 +76,3 @@ namespace SparkleShare {
         }
     }
 }
-

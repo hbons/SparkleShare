@@ -225,6 +225,20 @@ namespace SparkleShare {
                 return SparkleConfig.DefaultConfig.Folders;
             }
         }
+
+
+        public List<string> UnsyncedFolders {
+            get {
+                List<string> unsynced_folders = new List<string> ();
+
+                foreach (SparkleRepoBase repo in Repositories) {
+                    if (repo.HasUnsyncedChanges)
+                        unsynced_folders.Add (repo.Name);
+                 }
+
+                return unsynced_folders;
+            }
+        }
         
         
         public List <SparkleChangeSet> GetLog (string name)

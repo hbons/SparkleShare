@@ -34,14 +34,7 @@ namespace SparkleLib {
 
     public abstract class SparkleRepoBase {
 
-        public readonly SparkleBackend Backend;
-        public readonly string LocalPath;
-        public readonly string Name;
 
-        protected SyncStatus status;
-        protected bool is_buffering  = false;
-        protected bool is_polling    = true;
-        protected bool server_online = true;
 
         private Timer local_timer = new Timer () { Interval = 250 };
         private Timer remote_timer = new Timer () { Interval = 60000 };
@@ -50,6 +43,15 @@ namespace SparkleLib {
         private List <double> sizebuffer = new List<double> ();
         private bool has_changed   = false;
         private Object change_lock = new Object ();
+
+        protected SyncStatus status;
+        protected bool is_buffering  = false;
+        protected bool is_polling    = true;
+        protected bool server_online = true;
+
+        public readonly SparkleBackend Backend;
+        public readonly string LocalPath;
+        public readonly string Name;
 
         public abstract bool AnyDifferences { get; }
         public abstract string Identifier { get; }
@@ -390,8 +392,12 @@ namespace SparkleLib {
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
 
+                if (NewChangeSet != null)
+                    NewChangeSet (GetChangeSets (1) [0], LocalPath);
+
                 // There could be changes from a
-                // resolved conflict
+                // resolved conflict. Tries only once,
+                //then let the timer try again periodicallly
                 if (HasUnsyncedChanges)
                     SyncUp ();
 
@@ -407,9 +413,6 @@ namespace SparkleLib {
                 SyncStatusChanged (SyncStatus.Idle);
 
             this.remote_timer.Start ();
-
-            if (NewChangeSet != null)
-                NewChangeSet (GetChangeSets (1) [0], LocalPath);
         }
 
 
