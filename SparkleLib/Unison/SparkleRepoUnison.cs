@@ -103,7 +103,7 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
             
             if (unison.ExitCode != 0) {
-                SparkleHelpers.DebugInfo ("Unison", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
+                SparkleHelpers.DebugInfo ("Unison", remote_revision);
                 return true;
             } else {
                 return false;
