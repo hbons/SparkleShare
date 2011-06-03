@@ -65,6 +65,8 @@ namespace SparkleLib {
                 "-confirmbigdel=false " +
                 "-ui text " +
                 "-log " +
+			    "-terse " +
+			    "-dumbtty " +
                 "-times " +
                 "-rootalias " + rootalias +
                 "-logfile templog " + 
