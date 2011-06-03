@@ -89,6 +89,7 @@ namespace SparkleLib {
             } else {
                 CreateID ();
                 InstallConfiguration ();
+				CreateChangeLog ();
                 InstallUnisonBaseProfile ();
                 InstallUnisonDryRunProfile ();
                 InstallUnisonSyncProfile ();
@@ -124,8 +125,7 @@ namespace SparkleLib {
             TextWriter writer = new StreamWriter (config_file_path);
             writer.WriteLine (config);
             writer.Close ();
-
-            SparkleHelpers.DebugInfo ("Unison", "Added configuration to '" + config_file_path + "'");
+			
         }
 
         
@@ -261,7 +261,32 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
         }
         
+		
+		private void CreateChangeLog ()
+        {
+			//create the changelog file
+            string changelog_file = SparkleHelpers.CombineMore (base.target_folder, ".changelog");
             
+            //check if file exists already
+            if( !File.Exists (changelog_file) )
+            {                
+                string changelog = ""; //empty for now
+
+                // Write the changelog to the file
+                TextWriter writer = new StreamWriter (changelog_file);
+                writer.WriteLine (changelog);
+                writer.Close ();
+
+                SparkleHelpers.DebugInfo ("Unison", "Created changelog: " + changelog_file);
+            }
+            //changelog exists
+            else
+            {
+                SparkleHelpers.DebugInfo ("Unison", "Downloaded changelog: " + changelog_file);
+            }
+        }
+ 			
+		
         private void CreateID ()
         {
             //idfile

@@ -55,7 +55,7 @@ namespace SparkleLib {
                 
                 TextReader reader = new StreamReader (IDfile);
                 string repoID = reader.ReadToEnd().ToString();
-                SparkleHelpers.DebugInfo ("Unison", "Repo ID found:" + repoID);
+                SparkleHelpers.DebugInfo ("Unison", "Repo ID found: " + repoID);
                 return repoID;
             }
         }
@@ -71,7 +71,7 @@ namespace SparkleLib {
         
 
         //need to make sure this actually works on two different clients
-        //hashes directory tree and Last Modification Time
+        //hashes directory tree, file sizes and Last Modification Times
         public override string CurrentRevision {
             get {                
                 StringBuilder sb = new StringBuilder();
@@ -124,7 +124,7 @@ namespace SparkleLib {
 
             string remote_revision = unison.StandardOutput.ReadToEnd ().TrimEnd ();
             
-            SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
+            SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison.ExitCode.ToString ());
             
             if (unison.ExitCode != 0)
             {
@@ -157,7 +157,7 @@ namespace SparkleLib {
 
             string remote_revision = unison_dryrun.StandardOutput.ReadToEnd ().TrimEnd ();
             
-            SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_dryrun.ExitCode.ToString ());
+            SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison_dryrun.ExitCode.ToString ());
             
             //check to see if there are really changes to make
             if (unison_dryrun.ExitCode != 0) 
@@ -256,7 +256,7 @@ namespace SparkleLib {
                         unison_deletefix.Start ();
                         unison_deletefix.WaitForExit ();
                         
-                        SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_deletefix.ExitCode.ToString ());
+                        SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison_deletefix.ExitCode.ToString ());
                     }
                     //implies that there is a conflict with 2 changed files
                     else 
@@ -281,7 +281,7 @@ namespace SparkleLib {
                         unison_sync.Start ();
                         unison_sync.WaitForExit ();
                         
-                        SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_sync.ExitCode.ToString ());
+                        SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison_sync.ExitCode.ToString ());
                         
                         //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
                         Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
@@ -295,7 +295,7 @@ namespace SparkleLib {
                         unison_grab.Start ();
                         unison_grab.WaitForExit ();
         
-                        SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_grab.ExitCode.ToString ());
+                        SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison_grab.ExitCode.ToString ());
                     }
                 }
             }
