@@ -88,8 +88,8 @@ namespace SparkleLib {
                 return false;
             } else {    
                 InstallConfiguration ();
-				CreateID ();
-				CreateChangeLog ();
+                CreateID ();
+                CreateChangeLog ();
                 InstallUnisonBaseProfile ();
                 InstallUnisonDryRunProfile ();
                 InstallUnisonSyncProfile ();
@@ -124,8 +124,7 @@ namespace SparkleLib {
             // Write the config to the file
             TextWriter writer = new StreamWriter (config_file_path);
             writer.WriteLine (config);
-            writer.Close ();
-			
+            writer.Close ();        
         }
 
         
@@ -206,6 +205,7 @@ namespace SparkleLib {
             writer.WriteLine ("noupdate = " + base.remote_url);
             writer.WriteLine ("nocreation = .");
             writer.WriteLine ("nocreation = " + base.remote_url);
+            writer.WriteLine ("ignore = Name .changelog");
             writer.Close ();
             
             SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
@@ -220,6 +220,7 @@ namespace SparkleLib {
             writer.WriteLine ("include sparkleshare");
             writer.WriteLine ("batch = true");
             writer.WriteLine ("confirmbigdel = false");
+            writer.WriteLine ("ignore = Name .changelog");
             writer.Close ();
             
             SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
@@ -261,10 +262,10 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
         }
         
-		
-		private void CreateChangeLog ()
+        
+        private void CreateChangeLog ()
         {
-			//create the changelog file
+            //create the changelog file
             string changelog_file = SparkleHelpers.CombineMore (base.target_folder, ".changelog");
             
             //check if file exists already
@@ -285,8 +286,8 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("Unison", "Downloaded changelog: " + changelog_file);
             }
         }
- 			
-		
+             
+        
         private void CreateID ()
         {
             //idfile
