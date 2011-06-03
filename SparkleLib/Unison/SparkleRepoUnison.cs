@@ -50,22 +50,40 @@ namespace SparkleLib {
         }
         
 
-        public override string CurrentRevision {
-            get {
-                //hashes the unison fingerprint file
-                string fingerprintpath = SparkleHelpers.CombineMore (LocalPath, ".sparkleshare");
-                string[] fingerprintfiles = Directory.GetFiles(fingerprintpath,"fp*");
-				string fingerprintfile = fingerprintfiles[0].ToString();
-                SparkleHelpers.DebugInfo ("Unison", "Fingerprint file: " + fingerprintfile);
-				//not sure what will happen if there are more than 1 fingerprint file...
-				//what happens when more people come to sync to the repo...
-                TextReader reader = new StreamReader (fingerprintfile);
-                string fingerprint = reader.ReadToEnd().ToString();
-                string fingerprinthash = GetSHA1 (fingerprint);
-                SparkleHelpers.DebugInfo ("Unison", "Fingerprint hash: " + fingerprinthash);
-                return fingerprinthash;
+        //hashes directory tree and Last Modification Time
+		public override string CurrentRevision {
+            get {				
+				StringBuilder sb = new StringBuilder();
+				sb = PopulateTree(LocalPath, sb);				
+				string treehash = GetSHA1 (sb.ToString());				
+				SparkleHelpers.DebugInfo ("Unison", "Current Revision: " + treehash);				
+				return treehash;	
             }
         }
+		
+
+		//need to make sure this actually works on two different clients
+		private StringBuilder PopulateTree(string dir, StringBuilder files) 
+		{
+            //get the information of the directory
+            DirectoryInfo directory = new DirectoryInfo(dir);
+            //loop through each subdirectory
+            foreach(DirectoryInfo d in directory.GetDirectories()) 
+			{
+                //don't check the .sparkleshare folder since the unison archive and fingerprint files will be different
+				if(!d.FullName.ToString().Contains("."))
+				    PopulateTree(d.FullName, files);
+            }
+            // lastly, loop through each file in the directory, and add these as nodes
+            foreach(FileInfo f in directory.GetFiles())
+		    {	
+				string path = f.FullName;
+				string lastwrite = f.LastWriteTimeUtc.ToString();	
+				string size = f.Length.ToString();
+				files.AppendLine(path + " " + size + " " + lastwrite);
+			}
+			return files;
+    	}
         
 
         private bool CheckForChangesBothWays ()
@@ -123,7 +141,10 @@ namespace SparkleLib {
                 if (remote_revision.Contains ("<-?->"))
                     ResolveConflicts (remote_revision);
                 
-                //sync both folders now!
+                //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
+                Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");                
+				
+				//sync both folders now!
                 SparkleUnison unison_sync = new SparkleUnison (LocalPath,
                     "-ui text " +
                     "sync");
@@ -197,7 +218,10 @@ namespace SparkleLib {
                     //check to see if the conflict is over a deleted file
                     if ( line.Contains ("deleted") )
                     {
-                        //just get the new version of the deleted file
+                        //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
+                        Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");                        
+						
+						//just get the new version of the deleted file
                         SparkleUnison unison_deletefix = new SparkleUnison (LocalPath,
                             "-ui text " +
                             "-path '" + conflicting_path + "' " +
@@ -220,7 +244,10 @@ namespace SparkleLib {
                       
                         File.Move (abs_conflicting_path, abs_their_path);
                         
-                        //send the renamed file to the server
+                        //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
+            	        Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
+						
+						//send the renamed file to the server
                         SparkleUnison unison_sync = new SparkleUnison (LocalPath,
                             "-ui text " +
                             "-path '" + their_path + "' " +                                        
@@ -231,7 +258,10 @@ namespace SparkleLib {
                         
                         SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_sync.ExitCode.ToString ());
                         
-                        //grab the conflicted file from the server
+                        //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
+                        Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
+						
+						//grab the conflicted file from the server
                         SparkleUnison unison_grab = new SparkleUnison (LocalPath,
                             "-ui text " +
                             "-path '" + conflicting_path + "' " +                                        
