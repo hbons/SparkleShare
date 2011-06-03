@@ -29,11 +29,12 @@ namespace SparkleShare {
         public event ChangedEventHandler Changed;
 
         private DirectoryInfo last_changed;
+        private Thread thread;
 
 
         public SparkleMacWatcher (string path)
         {
-            Thread thread = new Thread (new ThreadStart (delegate {
+            this.thread = new Thread (new ThreadStart (delegate {
                 DateTime timestamp;
                 DirectoryInfo parent = new DirectoryInfo (path);
                 this.last_changed = new DirectoryInfo (path);
@@ -49,11 +50,11 @@ namespace SparkleShare {
                             Changed (relative_path);
                     }
 
-                    Thread.Sleep (5000);
+                    Thread.Sleep (2500);
                 }
             }));
 
-            thread.Start ();
+            this.thread.Start ();
         }
 
 
@@ -73,6 +74,13 @@ namespace SparkleShare {
                 }
 
             } catch (Exception) { }
+        }
+
+
+        public void Dispose ()
+        {
+            this.thread.Join ();
+            this.thread.Abort ();
         }
     }
 }
