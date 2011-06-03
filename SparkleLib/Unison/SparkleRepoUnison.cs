@@ -184,14 +184,17 @@ namespace SparkleLib {
                 unison_sync.Start ();
                 unison_sync.WaitForExit ();
     
-                SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison_sync.ExitCode.ToString ());
+                SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison_sync.ExitCode.ToString ());
                 
                 remote_revision = unison_sync.StandardOutput.ReadToEnd ().TrimEnd ();
+				
+				SparkleHelpers.DebugInfo ("Unison", "Sync Complete: " + remote_revision.ToString ());
+				
                 string [] lines = remote_revision.Split ("\n".ToCharArray ());
                 foreach (string line in lines) 
                 {      
                     //check for changes from local->remote server (remote->local don't need logging here)
-                    if(line.Contains("---->"))
+                    if(line.ToString().Contains("---->"))
                     {
                         string linestring = line.ToString().TrimEnd();
                         string linetrim = linestring.Trim();

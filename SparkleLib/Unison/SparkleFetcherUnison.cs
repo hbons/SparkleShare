@@ -139,6 +139,7 @@ namespace SparkleLib {
             writer.WriteLine ("root = ."); //root1: local folder
             writer.WriteLine ("root = " + base.remote_url); //root2: remote server -- PROBLEM WITH SPACES IN THE PATH, quotes are broken!!
             writer.WriteLine ("log = true");
+			writer.WriteLine ("dumbtty = true");
             writer.WriteLine ("auto = true");
             writer.WriteLine ("times = true");
             writer.WriteLine ("logfile = .sparkleshare/log");
