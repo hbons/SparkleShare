@@ -85,7 +85,7 @@ namespace SparkleShare {
             SparkleShare.Controller.OnIdle += delegate {
                 InvokeOnMainThread (delegate {
                     SetNormalState ();
-                    UpdateMenu ();
+                    CreateMenu ();
                 });
             };
 
@@ -99,7 +99,7 @@ namespace SparkleShare {
             SparkleShare.Controller.OnError += delegate {
                  InvokeOnMainThread (delegate {
                     SetNormalState (true);
-                    UpdateMenu ();
+                    CreateMenu ();
                 });
             };
         }
@@ -172,19 +172,18 @@ namespace SparkleShare {
                 Tasks = new EventHandler [SparkleShare.Controller.Folders.Count];
                 
                 int i = 0;
-                foreach (string path in SparkleShare.Controller.Folders) {    
-
-                    /* TODO
-                    if (repo.HasUnsyncedChanges)
-                        folder_action.IconName = "dialog-error"; */
-                    
+                foreach (string folder_name in SparkleShare.Controller.Folders) {
                     NSMenuItem item = new NSMenuItem ();
-                    
-                    item.Title      = System.IO.Path.GetFileName (path);
-                    item.Image      = NSImage.ImageNamed ("NSFolder");
-                    item.Image.Size = new SizeF (16, 16);
 
-                    Tasks [i] = OpenEventLogDelegate (path);
+                    item.Title      = folder_name;
+
+                    if (SparkleShare.Controller.UnsyncedFolders.Contains (folder_name))
+                        item.Image = NSImage.ImageNamed ("NSCaution");
+                    else
+                        item.Image = NSImage.ImageNamed ("NSFolder");
+
+                    item.Image.Size = new SizeF (16, 16);
+                    Tasks [i] = OpenEventLogDelegate (folder_name);
             
                     FolderMenuItems [i] = item;
                     FolderMenuItems [i].Activated += Tasks [i];
@@ -192,6 +191,9 @@ namespace SparkleShare {
                     
                     i++;
                 };
+
+
+
             } else {
                 FolderMenuItems = new NSMenuItem [1];
 
@@ -290,7 +292,10 @@ namespace SparkleShare {
         // The state when there's nothing going on
         private void SetNormalState ()
         {
-            SetNormalState (false);
+            if (SparkleShare.Controller.UnsyncedFolders.Count > 0)
+               SetNormalState (true);
+            else
+               SetNormalState (false);
         }
 
 
