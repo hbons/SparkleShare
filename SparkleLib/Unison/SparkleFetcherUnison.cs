@@ -276,15 +276,19 @@ namespace SparkleLib {
             
                 TextWriter writer = new StreamWriter (IDfile);
                 writer.WriteLine (IDhash);
-                writer.Close ();
+                writer.Close ();				
             
-                SparkleHelpers.DebugInfo ("Unison Repo ID", "Added ID file to '" + IDfile + "'");
+                SparkleHelpers.DebugInfo ("Unison Repo ID", "Added ID file to: " + IDfile);
             }
             //idfile exists
             else
             {
                 SparkleHelpers.DebugInfo ("Unison Repo ID", "IDfile exists '" + IDfile + "'");
             }
+			//backup ID file to .sparkleshare
+			string backupIDfile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", ".unisonID");		
+		    File.Copy(IDfile, backupIDfile);
+		    SparkleHelpers.DebugInfo ("Unison Repo ID", "Copied ID file to: " + backupIDfile);
         }
         
                 

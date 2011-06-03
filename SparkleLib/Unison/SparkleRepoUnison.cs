@@ -33,8 +33,27 @@ namespace SparkleLib {
 
         public override string Identifier {
             get {
+				//needs better error handling incase the id file was accidentally deleted
+				//maybe copy it into the .sparkleshare folder too?
                 string IDfile = SparkleHelpers.CombineMore (LocalPath, ".unisonID");
-                TextReader reader = new StreamReader (IDfile);
+                
+				//check for a backup
+				if(!File.Exists(IDfile))
+				{
+				    string backupIDfile = SparkleHelpers.CombineMore (LocalPath, ".sparkleshare", ".unisonID");	
+					if(File.Exists(backupIDfile))
+					{
+		                File.Copy(backupIDfile, IDfile);
+		                SparkleHelpers.DebugInfo ("Unison Repo ID", "Recovered backup ID file: " + backupIDfile);
+					}
+					else
+					{
+						SparkleHelpers.DebugInfo ("Unison Repo ID", "NO ID FILE FOUND");
+						return "unisonsparkles";
+					}
+				}			
+				
+				TextReader reader = new StreamReader (IDfile);
                 string repoID = reader.ReadToEnd().ToString();
                 SparkleHelpers.DebugInfo ("Unison", "Repo ID found:" + repoID);
                 return repoID;
@@ -74,7 +93,7 @@ namespace SparkleLib {
                 if(!d.FullName.ToString().StartsWith("."))
                     PopulateTree(d.FullName, files);
             }
-            // lastly, loop through each file in the directory, and add these as nodes
+            // lastly, loop through each file in the directory
             foreach(FileInfo f in directory.GetFiles())
             {    
                 string path = f.FullName;
