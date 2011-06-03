@@ -92,15 +92,19 @@ namespace SparkleLib {
             {
                 //don't check dotfolders since the unison archive and fingerprint files will be different
                 if(!d.FullName.ToString().StartsWith("."))
-                    PopulateTree(d.FullName, files);
+				{
+                    string dirname = d.Name.ToString();
+					files.AppendLine(dirname);
+					PopulateTree(d.FullName, files);
+			    }
             }
             // lastly, loop through each file in the directory
             foreach(FileInfo f in directory.GetFiles())
             {    
-                string path = f.FullName;
-                string lastwrite = f.LastWriteTimeUtc.ToString();    
+                string filename = f.Name.ToString();
+				string lastwrite = f.LastWriteTimeUtc.ToString();    
                 string size = f.Length.ToString();
-                files.AppendLine(path + " " + size + " " + lastwrite);
+                files.AppendLine(filename + " " + size + " " + lastwrite);
             }
             return files;
         }
