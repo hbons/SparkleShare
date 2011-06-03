@@ -145,5 +145,12 @@ namespace SparkleShare {
 				return html;
 			}
 		}
+
+
+        new public void Quit ()
+        {
+            this.watcher.Dispose ();
+            base.Quit ();
+        }
 	}
 }
