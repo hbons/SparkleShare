@@ -141,6 +141,7 @@ namespace SparkleLib {
             writer.WriteLine ("log = true");
 			writer.WriteLine ("dumbtty = true");
             writer.WriteLine ("auto = true");
+			writer.WriteLine ("terse = true");
             writer.WriteLine ("times = true");
             writer.WriteLine ("logfile = .sparkleshare/log");
             writer.WriteLine ("retry = 2");
