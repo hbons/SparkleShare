@@ -70,8 +70,8 @@ namespace SparkleLib {
             //loop through each subdirectory
             foreach(DirectoryInfo d in directory.GetDirectories()) 
             {
-                //don't check the .sparkleshare folder since the unison archive and fingerprint files will be different
-                if(!d.FullName.ToString().Contains("."))
+                //don't check dotfolders since the unison archive and fingerprint files will be different
+                if(!d.FullName.ToString().StartsWith("."))
                     PopulateTree(d.FullName, files);
             }
             // lastly, loop through each file in the directory, and add these as nodes
