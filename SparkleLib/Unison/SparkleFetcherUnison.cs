@@ -69,7 +69,7 @@ namespace SparkleLib {
                 "-rootalias " + rootalias +
                 "-logfile templog " + 
                 "-ignorearchives " +
-                "-force "      + "\"" + base.remote_url     + "\" " +
+                "-force "      + "\"" + base.remote_url     + "\" " +    //protect the server copy
                 "-noupdate "   + "\"" + base.remote_url     + "\" " +
                 "-nocreation " + "\"" + base.remote_url     + "\" " +
                 "-nodeletion " + "\"" + base.remote_url     + "\" " +
@@ -82,7 +82,7 @@ namespace SparkleLib {
             string remote_revision = unison.StandardOutput.ReadToEnd ().TrimEnd ();
             
             SparkleHelpers.DebugInfo ("Unison", remote_revision);
-            SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
+            SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison.ExitCode.ToString ());
            
             if (unison.ExitCode != 0) {
                 return false;

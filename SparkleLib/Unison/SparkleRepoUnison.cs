@@ -33,27 +33,27 @@ namespace SparkleLib {
 
         public override string Identifier {
             get {
-				//needs better error handling incase the id file was accidentally deleted
-				//maybe copy it into the .sparkleshare folder too?
+                //needs better error handling incase the id file was accidentally deleted
+                //maybe copy it into the .sparkleshare folder too?
                 string IDfile = SparkleHelpers.CombineMore (LocalPath, ".unisonID");
                 
-				//check for a backup in .sparkleshare if the file isn't found
-				if(!File.Exists(IDfile))
-				{
-				    string backupIDfile = SparkleHelpers.CombineMore (LocalPath, ".sparkleshare", ".unisonID");	
-					if(File.Exists(backupIDfile))
-					{
-		                File.Copy(backupIDfile, IDfile);
-		                SparkleHelpers.DebugInfo ("Unison", "Recovered backup ID file: " + backupIDfile);
-					}
-					else
-					{
-						SparkleHelpers.DebugInfo ("Unison", "NO REPO ID FILE FOUND");
-						return "unisonsparkles";
-					}
-				}			
-				
-				TextReader reader = new StreamReader (IDfile);
+                //check for a backup in .sparkleshare if the file isn't found
+                if(!File.Exists(IDfile))
+                {
+                    string backupIDfile = SparkleHelpers.CombineMore (LocalPath, ".sparkleshare", ".unisonID");    
+                    if(File.Exists(backupIDfile))
+                    {
+                        File.Copy(backupIDfile, IDfile);
+                        SparkleHelpers.DebugInfo ("Unison", "Recovered backup ID file: " + backupIDfile);
+                    }
+                    else
+                    {
+                        SparkleHelpers.DebugInfo ("Unison", "NO REPO ID FILE FOUND");
+                        return "unisonsparkles";
+                    }
+                }            
+                
+                TextReader reader = new StreamReader (IDfile);
                 string repoID = reader.ReadToEnd().ToString();
                 SparkleHelpers.DebugInfo ("Unison", "Repo ID found:" + repoID);
                 return repoID;
@@ -61,7 +61,7 @@ namespace SparkleLib {
         }
         
         
-		private string GetSHA1 (string s)
+        private string GetSHA1 (string s)
         {
             SHA1 sha1 = new SHA1CryptoServiceProvider ();
             Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
@@ -123,11 +123,11 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Exit code " + unison.ExitCode.ToString ());
             
             if (unison.ExitCode != 0)
-			{
+            {
                 SparkleHelpers.DebugInfo ("Unison", remote_revision);
                 return true;
             } 
-			else
+            else
                 return false;
         }
         
