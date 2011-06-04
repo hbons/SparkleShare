@@ -35,7 +35,7 @@ namespace SparkleShare {
 
         public List <SparkleRepoBase> Repositories;
         public string FolderSize;
-        public readonly string SparklePath;
+        public readonly string SparklePath = SparklePaths.SparklePath;
 
         public event OnQuitWhileSyncingEventHandler OnQuitWhileSyncing;
         public delegate void OnQuitWhileSyncingEventHandler ();
@@ -88,10 +88,10 @@ namespace SparkleShare {
         }
 
 
-        public SparkleController ()
-        {
-            SparklePath = SparklePaths.SparklePath;
+        public SparkleController () { }
 
+        public void Initialize ()
+        {
             InstallLauncher ();
             EnableSystemAutostart ();
 
