@@ -704,7 +704,7 @@ namespace SparkleShare {
         // so all activity is done with this key
         public void AddKey ()
         {
-            string keys_path = SparklePaths.SparkleKeysPath;
+            string keys_path = SparklePaths.SparkleConfigPath;
             string key_file_name = "sparkleshare." + UserEmail + ".key";
 
             Process process = new Process ();
@@ -753,7 +753,7 @@ namespace SparkleShare {
         // Generates and installs an RSA keypair to identify this system
         public void GenerateKeyPair ()
         {
-            string keys_path     = SparklePaths.SparkleKeysPath;
+            string keys_path     = SparklePaths.SparkleConfigPath;
             string key_file_name = "sparkleshare." + UserEmail + ".key";
             string key_file_path = Path.Combine (keys_path, key_file_name);
 
