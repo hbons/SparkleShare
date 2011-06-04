@@ -99,6 +99,8 @@ namespace SparkleShare {
             // there aren't any exceptions in the OS specific UI's
             Controller = (SparkleController) Activator.CreateInstance (
                 Type.GetType ("SparkleShare.Sparkle" + controller_name + "Controller"));
+
+            Controller.Initialize ();
         
             if (Controller != null && !hide_ui) {
                 UI = new SparkleUI ();

@@ -32,9 +32,12 @@ namespace SparkleShare {
         // System.IO.FileSystemWatcher fails watching subfolders on Mac
         private SparkleMacWatcher watcher = new SparkleMacWatcher (SparklePaths.SparklePath);
 
+        public SparkleMacController () : base () { }
 
-        public SparkleMacController () : base ()
+        new public void Initialize ()
         {
+            base.Initialize ();
+
             watcher.Changed += delegate (string path) {
                 string repo_name;
 
