@@ -16,10 +16,7 @@
 
 
 using System;
-using System.Diagnostics;
 using System.IO;
-
-using Mono.Unix;
 
 namespace SparkleLib {
 
@@ -30,7 +27,7 @@ namespace SparkleLib {
         public static string SparkleTmpPath       = Path.Combine (SparklePath, ".tmp");
         public static string SparkleConfigPath    = Path.Combine (Environment.GetFolderPath (
                                                         Environment.SpecialFolder.ApplicationData), "sparkleshare");
-        public static string SparkleLocalIconPath = SparkleHelpers.CombineMore (SparkleConfigPath, "icons");
+        public static string SparkleLocalIconPath = Path.Combine (SparkleConfigPath, "icons");
 
         public static string SparkleInstallPath   = Path.Combine (Defines.PREFIX, "sparkleshare");
         public static string SparkleIconPath      = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare", "icons");
