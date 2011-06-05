@@ -56,12 +56,17 @@ namespace SparkleLib {
 
         private void CreateInitialConfig ()
         {
-            string user_name  = new UnixUserInfo (UnixEnvironment.UserName).RealName;
+            string user_name = "Unknown";
 
-            if (string.IsNullOrEmpty (user_name))
-                user_name = "Unknown";
-            else
+            if (SparkleBackend.Platform == PlatformID.Unix ||
+                SparkleBackend.Platform == PlatformID.MacOSX) {
+
+                user_name = new UnixUserInfo (UnixEnvironment.UserName).RealName;
                 user_name = user_name.TrimEnd (",".ToCharArray());
+
+            } else {
+                user_name = Environment.UserName;
+            }
 
             TextWriter writer = new StreamWriter (Path);
             string n          = Environment.NewLine;
