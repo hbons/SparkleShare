@@ -48,11 +48,14 @@ namespace SparkleShare {
             // Use translations
             Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
-            // Don't allow running as root
-            if (new UnixUserInfo (UnixEnvironment.UserName).UserId == 0) {
+            // Don't allow running as root on Linux or Mac
+            if ((SparkleShare.Platform == PlatformID.Unix ||
+                 SparkleShare.Platform == PlatformID.MacOSX) &&
+                new UnixUserInfo (UnixEnvironment.UserName).UserId == 0) {
+
                 Console.WriteLine (_("Sorry, you can't run SparkleShare with these permissions."));
                 Console.WriteLine (_("Things would go utterly wrong."));
-                Environment.Exit (0);
+                Environment.Exit (-1);
             }
 
             // Parse the command line options
@@ -78,20 +81,16 @@ namespace SparkleShare {
                 ShowHelp (p);
 
             // Load the right controller for the OS
-            string controller_name;
+            string controller_name = "Lin";
             switch (SparkleShare.Platform) {
             case PlatformID.Unix:
                 SetProcessName ("sparkleshare");
-                controller_name = "Lin";
                 break;
             case PlatformID.MacOSX:
                 controller_name = "Mac";
                 break;
             case PlatformID.Win32NT:
                 controller_name = "Win";
-                break;
-            default:
-                controller_name = "Lin";
                 break;
             }
 

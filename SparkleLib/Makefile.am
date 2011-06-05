@@ -6,6 +6,12 @@ LINK = $(REF_SPARKLELIB)
 
 SOURCES =  \
 	Defines.cs \
+	Git/SparkleFetcherGit.cs \
+	Git/SparkleRepoGit.cs \
+	Hg/SparkleFetcherHg.cs \
+	Hg/SparkleRepoHg.cs \
+	Scp/SparkleFetcherScp.cs \
+	Scp/SparkleRepoScp.cs \
 	SparkleBackend.cs \
 	SparkleChangeSet.cs \
 	SparkleConfig.cs \
@@ -15,13 +21,7 @@ SOURCES =  \
 	SparkleListenerIrc.cs \
 	SparkleOptions.cs \
 	SparklePaths.cs \
-	SparkleRepoBase.cs \
-	Git/SparkleRepoGit.cs \
-	Git/SparkleFetcherGit.cs \
-	Hg/SparkleRepoHg.cs \
-	Hg/SparkleFetcherHg.cs \
-	Scp/SparkleFetcherScp.cs \
-	Scp/SparkleRepoScp.cs
+	SparkleRepoBase.cs
 
 
 SMARTIRC4NET_FILES_EXPANDED = $(foreach file, $(SMARTIRC4NET_FILES), $(top_builddir)/$(file))
