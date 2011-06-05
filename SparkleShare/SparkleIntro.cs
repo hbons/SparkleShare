@@ -282,7 +282,10 @@ namespace SparkleShare {
                         if (radio_button_gnome.Active)
                             server = "gnome.org";
 
-                        ShowSyncingPage (canonical_name);
+                        Application.Invoke (delegate {
+                            Deletable = false;
+                            ShowSyncingPage (canonical_name);
+                        });
                 
                         SparkleShare.Controller.FolderFetched += delegate {
                             Application.Invoke (delegate {
@@ -517,8 +520,6 @@ namespace SparkleShare {
         private void ShowSyncingPage (string name)
         {
             Reset ();
-
-                Deletable = false;
 
                 VBox layout_vertical = new VBox (false, 0);
 
