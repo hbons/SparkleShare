@@ -289,13 +289,16 @@ namespace SparkleShare {
                 
                         SparkleShare.Controller.FolderFetched += delegate {
                             Application.Invoke (delegate {
+                                this.progress_bar_pulse_timer.Stop ();
                                 Deletable = true;
+                                UrgencyHint = true;
                                 ShowSuccessPage (canonical_name);
                             });
                         };
                 
                         SparkleShare.Controller.FolderFetchError += delegate {
                             Application.Invoke (delegate {
+                                this.progress_bar_pulse_timer.Stop ();
                                 Deletable = true;
                                 ShowErrorPage ();
                             });
@@ -432,8 +435,6 @@ namespace SparkleShare {
         private void ShowErrorPage ()
         {
             Reset ();
-            
-                UrgencyHint = true;
 
                 VBox layout_vertical = new VBox (false, 0);
         
