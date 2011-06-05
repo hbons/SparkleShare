@@ -34,11 +34,11 @@ namespace SparkleShare {
 
         public SparkleMacController () : base () { }
 
-        new public void Initialize ()
+        public override void Initialize ()
         {
             base.Initialize ();
 
-            watcher.Changed += delegate (string path) {
+            this.watcher.Changed += delegate (string path) {
                 string repo_name;
 
                 if (path.Contains ("/"))
