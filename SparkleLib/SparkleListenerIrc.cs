@@ -46,7 +46,7 @@ namespace SparkleLib {
             base.channels.Add ("#" + folder_identifier);
 
             this.client = new IrcClient () {
-                PingTimeout  = 130,
+                PingTimeout  = 180,
                 PingInterval = 60
             };
 
