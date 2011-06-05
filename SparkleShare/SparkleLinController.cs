@@ -40,13 +40,15 @@ namespace SparkleShare {
         // start SparkleShare automatically at login
         public override void EnableSystemAutostart ()
         {
-            string autostart_path = SparkleHelpers.CombineMore (SparklePaths.HomePath, ".config", "autostart");
-            string desktopfile_path = SparkleHelpers.CombineMore (autostart_path, "sparkleshare.desktop");
+            string autostart_path = Path.Combine (Environment.GetFolderPath (
+                Environment.SpecialFolder.ApplicationData, "autostart");
+
+            string desktopfile_path = Path.Combine (autostart_path, "sparkleshare.desktop");
+
+            if (!Directory.Exists (autostart_path))
+                Directory.CreateDirectory (autostart_path);
 
             if (!File.Exists (desktopfile_path)) {
-                if (!Directory.Exists (autostart_path))
-                    Directory.CreateDirectory (autostart_path);
-
                 TextWriter writer = new StreamWriter (desktopfile_path);
                 writer.WriteLine ("[Desktop Entry]\n" +
                                   "Type=Application\n" +
@@ -62,7 +64,7 @@ namespace SparkleShare {
                 UnixFileInfo file_info = new UnixFileInfo (desktopfile_path);
                 file_info.Create (FileAccessPermissions.UserReadWriteExecute);
 
-                SparkleHelpers.DebugInfo ("Controller", "Created: " + desktopfile_path);
+                SparkleHelpers.DebugInfo ("Controller", "Enabled autostart on login");
             }
         }
         
