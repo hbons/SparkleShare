@@ -113,11 +113,17 @@ namespace SparkleLib {
 
         private void DisableHostKeyCheckingForHost (string host)
         {
-            string ssh_config_file_path = SparkleHelpers.CombineMore (
-                SparklePaths.HomePath, ".ssh", "config");
+            string path = SparklePaths.HomePath;
 
-            string ssh_config = Environment.NewLine + "Host " + host +
-                                Environment.NewLine + "\tStrictHostKeyChecking no";
+            if (!(SparkleBackend.Platform == PlatformID.Unix ||
+                  SparkleBackend.Platform == PlatformID.MacOSX)) {
+
+                path = Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%");
+            }
+
+            string ssh_config_file_path = SparkleHelpers.CombineMore (path, ".ssh", "config");
+            string ssh_config           = Environment.NewLine + "Host " + host +
+                                          Environment.NewLine + "\tStrictHostKeyChecking no";
 
             if (File.Exists (ssh_config_file_path)) {
                 TextWriter writer = File.AppendText (ssh_config_file_path);
@@ -140,11 +146,17 @@ namespace SparkleLib {
 
         private void EnableHostKeyCheckingForHost (string host)
         {
-            string ssh_config_file_path = SparkleHelpers.CombineMore (
-                SparklePaths.HomePath, ".ssh", "config");
+            string path = SparklePaths.HomePath;
 
-            string ssh_config = Environment.NewLine + "Host " + host +
-                                Environment.NewLine + "\tStrictHostKeyChecking no";
+            if (!(SparkleBackend.Platform == PlatformID.Unix ||
+                  SparkleBackend.Platform == PlatformID.MacOSX)) {
+
+                path = Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%");
+            }
+
+            string ssh_config_file_path = SparkleHelpers.CombineMore (path, ".ssh", "config");
+            string ssh_config           = Environment.NewLine + "Host " + host +
+                                          Environment.NewLine + "\tStrictHostKeyChecking no";
 
             if (File.Exists (ssh_config_file_path)) {
                 StreamReader reader = new StreamReader (ssh_config_file_path);
