@@ -40,6 +40,8 @@ namespace SparkleLib {
         protected string remote_url;
         private Thread thread;
 
+        public abstract bool Fetch ();
+
 
         public SparkleFetcherBase (string server, string remote_folder, string target_folder)
         {
@@ -102,12 +104,11 @@ namespace SparkleLib {
 
         public void Dispose ()
         {
-            this.thread.Abort ();
-            this.thread.Join ();
+            if (this.thread != null) {
+                this.thread.Abort ();
+                this.thread.Join ();
+            }
         }
-
-
-        public abstract bool Fetch ();
 
 
         private void DisableHostKeyCheckingForHost (string host)
