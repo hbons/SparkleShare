@@ -41,6 +41,7 @@ namespace SparkleShare {
         private NSMenuItem FolderMenuItem;
         private NSMenuItem [] FolderMenuItems;
         private NSMenuItem SyncMenuItem;
+        private NSMenuItem AboutMenuItem;
         private NSMenuItem NotificationsMenuItem;
         
         private delegate void Task ();
@@ -214,15 +215,15 @@ namespace SparkleShare {
                     SyncMenuItem.Activated += delegate {
                         InvokeOnMainThread (delegate {
                             NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-                        
+
                             if (SparkleUI.Intro == null) {
                                 SparkleUI.Intro = new SparkleIntro ();
                                 SparkleUI.Intro.ShowServerForm (true);
                             }
-            
+
                             if (!SparkleUI.Intro.IsVisible)
                                 SparkleUI.Intro.ShowServerForm (true);
-        
+
                             SparkleUI.Intro.OrderFrontRegardless ();
                             SparkleUI.Intro.MakeKeyAndOrderFront (this);
                         });
@@ -232,16 +233,17 @@ namespace SparkleShare {
             Menu.AddItem (SyncMenuItem);
             Menu.AddItem (NSMenuItem.SeparatorItem);
 
+
             NotificationsMenuItem = new NSMenuItem ();
-            
+
                 if (SparkleShare.Controller.NotificationsEnabled)
                     NotificationsMenuItem.Title = "Turn Notifications Off";
                 else
                     NotificationsMenuItem.Title = "Turn Notifications On";
-                                
+
                 NotificationsMenuItem.Activated += delegate {
                     SparkleShare.Controller.ToggleNotifications ();
-                                
+
                     InvokeOnMainThread (delegate {
                         if (SparkleShare.Controller.NotificationsEnabled)
                             NotificationsMenuItem.Title = "Turn Notifications Off";
@@ -251,7 +253,30 @@ namespace SparkleShare {
                 };
 
             Menu.AddItem (NotificationsMenuItem);
-                                         
+            Menu.AddItem (NSMenuItem.SeparatorItem);
+
+
+            AboutMenuItem = new NSMenuItem () {
+                Title = "About SparkleShare"
+            };
+
+                    AboutMenuItem.Activated += delegate {
+                        InvokeOnMainThread (delegate {
+                            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+
+                            if (SparkleUI.About == null)
+                                SparkleUI.About = new SparkleAbout ();
+
+                            SparkleUI.About.OrderFrontRegardless ();
+                            SparkleUI.About.MakeKeyAndOrderFront (this);
+                            SparkleUI.About.CheckForNewVersion ();
+                        });
+                    };
+
+
+            Menu.AddItem (AboutMenuItem);
+
+
             StatusItem.Menu = Menu;
             StatusItem.Menu.Update ();
         }
