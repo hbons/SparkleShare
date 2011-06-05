@@ -90,7 +90,7 @@ namespace SparkleShare {
 
         public SparkleController () { }
 
-        public void Initialize ()
+        public virtual void Initialize ()
         {
             InstallLauncher ();
             EnableSystemAutostart ();
