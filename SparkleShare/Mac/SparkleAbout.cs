@@ -44,7 +44,8 @@ namespace SparkleShare {
         {
             SetFrame (new RectangleF (0, 0, 360, 288), true);
             Center ();
-            
+
+            Delegate    = new SparkleAboutDelegate ();
             StyleMask   = (NSWindowStyle.Closable | NSWindowStyle.Titled);
             Title       = "About SparkleShare";
             MaxSize     = new SizeF (360, 288);
@@ -71,6 +72,12 @@ namespace SparkleShare {
                 });
             };
 
+            CheckForNewVersion ();
+        }
+
+
+        public void CheckForNewVersion ()
+        {
             SparkleShare.Controller.CheckForNewVersion ();
         }
 
@@ -137,10 +144,8 @@ namespace SparkleShare {
             };
 
             WebsiteButton.Activated += delegate {
-
                 NSUrl url = new NSUrl ("http://www.sparkleshare.org/");
                 NSWorkspace.SharedWorkspace.OpenUrl (url);
-
             };
 
             CreditsButton = new NSButton () {
@@ -164,6 +169,16 @@ namespace SparkleShare {
             ContentView.AddSubview (CreditsTextField);
             ContentView.AddSubview (CreditsButton);
             ContentView.AddSubview (WebsiteButton);
+        }
+    }
+
+
+    public class SparkleAboutDelegate : NSWindowDelegate {
+        
+        public override bool WindowShouldClose (NSObject sender)
+        {
+            (sender as SparkleAbout).OrderOut (this);
+            return false;
         }
     }
 }
