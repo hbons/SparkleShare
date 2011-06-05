@@ -92,6 +92,7 @@ namespace SparkleLib {
                 InstallConfiguration ();
                 CreateID ();
                 CreateChangeLog ();
+				InstallUnisonLogProfile ();
                 InstallUnisonBaseProfile ();
                 InstallUnisonDryRunProfile ();
                 InstallUnisonSyncProfile ();
@@ -110,13 +111,15 @@ namespace SparkleLib {
             string dotfolder_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, ".sparkleshare");
             string dotfolder_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare");
             Directory.Move(dotfolder_old_path, dotfolder_new_path);    
+			
+			SparkleHelpers.DebugInfo ("Unison", "Moved .sparkleshare folder to: " + dotfolder_new_path);
             
             //move the templog file to from .tmp to log in.sparkleshare
             string log_file_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "templog");
             string log_file_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "log");
             File.Move (log_file_old_path, log_file_new_path);  
             
-            SparkleHelpers.DebugInfo ("Unison", "Moved log to '" + log_file_new_path + "'");
+            SparkleHelpers.DebugInfo ("Unison", "Moved log to: " + log_file_new_path);
 
             //create the config file
             string config_file_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "config");
@@ -126,7 +129,9 @@ namespace SparkleLib {
             // Write the config to the file
             TextWriter writer = new StreamWriter (config_file_path);
             writer.WriteLine (config);
-            writer.Close ();        
+            writer.Close ();    
+			
+			SparkleHelpers.DebugInfo ("Unison", "Created config file: " + config_file_path);
         }
 
         
@@ -227,6 +232,24 @@ namespace SparkleLib {
             writer.WriteLine ("ignore = Name .changelog");
             writer.Close ();
             
+            SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
+        }
+		
+		private void InstallUnisonLogProfile ()
+        {
+            //create profile: log.prf -- syncs the log file, merges changes if someone else uploaded before you did
+			//required cat, sort and uniq (probably wouldn't work easily on a windows server)
+            string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "log.prf");
+            TextWriter writer = new StreamWriter (unison_profile);
+            writer.WriteLine ("include sparkleshare");
+            writer.WriteLine ("batch = true");
+            writer.WriteLine ("confirmbigdel = false");
+            writer.WriteLine ("path = Name .changelog");
+			//old copies of the change log shouldn't be needed to make merging work
+			//writer.WriteLine ("backuplocation = local");
+			//writer.WriteLine ("backupprefix = .sparkleshare/$VERSION");
+			writer.WriteLine ("merge = Name .changelog -> cat CURRENT1 CURRENT2 | sort | uniq > NEW");
+            writer.Close ();           
             SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
         }
         

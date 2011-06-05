@@ -282,17 +282,23 @@ namespace SparkleShare {
                         if (radio_button_gnome.Active)
                             server = "gnome.org";
 
-                        ShowSyncingPage (canonical_name);
+                        Application.Invoke (delegate {
+                            Deletable = false;
+                            ShowSyncingPage (canonical_name);
+                        });
                 
                         SparkleShare.Controller.FolderFetched += delegate {
                             Application.Invoke (delegate {
+                                this.progress_bar_pulse_timer.Stop ();
                                 Deletable = true;
+                                UrgencyHint = true;
                                 ShowSuccessPage (canonical_name);
                             });
                         };
                 
                         SparkleShare.Controller.FolderFetchError += delegate {
                             Application.Invoke (delegate {
+                                this.progress_bar_pulse_timer.Stop ();
                                 Deletable = true;
                                 ShowErrorPage ();
                             });
@@ -429,8 +435,6 @@ namespace SparkleShare {
         private void ShowErrorPage ()
         {
             Reset ();
-            
-                UrgencyHint = true;
 
                 VBox layout_vertical = new VBox (false, 0);
         
@@ -517,8 +521,6 @@ namespace SparkleShare {
         private void ShowSyncingPage (string name)
         {
             Reset ();
-
-                Deletable = false;
 
                 VBox layout_vertical = new VBox (false, 0);
 

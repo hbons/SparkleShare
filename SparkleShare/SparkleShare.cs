@@ -48,11 +48,14 @@ namespace SparkleShare {
             // Use translations
             Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
-            // Don't allow running as root
-            if (new UnixUserInfo (UnixEnvironment.UserName).UserId == 0) {
+            // Don't allow running as root on Linux or Mac
+            if ((SparkleBackend.Platform == PlatformID.Unix ||
+                 SparkleBackend.Platform == PlatformID.MacOSX) &&
+                new UnixUserInfo (UnixEnvironment.UserName).UserId == 0) {
+
                 Console.WriteLine (_("Sorry, you can't run SparkleShare with these permissions."));
                 Console.WriteLine (_("Things would go utterly wrong."));
-                Environment.Exit (0);
+                Environment.Exit (-1);
             }
 
             // Parse the command line options
@@ -78,11 +81,10 @@ namespace SparkleShare {
                 ShowHelp (p);
 
             // Load the right controller for the OS
-            string controller_name;
-            switch (SparkleShare.Platform) {
+            string controller_name = "Lin";
+            switch (SparkleBackend.Platform) {
             case PlatformID.Unix:
                 SetProcessName ("sparkleshare");
-                controller_name = "Lin";
                 break;
             case PlatformID.MacOSX:
                 controller_name = "Mac";
@@ -90,15 +92,14 @@ namespace SparkleShare {
             case PlatformID.Win32NT:
                 controller_name = "Win";
                 break;
-            default:
-                controller_name = "Lin";
-                break;
             }
 
             // Initialize the controller this way so that
             // there aren't any exceptions in the OS specific UI's
             Controller = (SparkleController) Activator.CreateInstance (
                 Type.GetType ("SparkleShare.Sparkle" + controller_name + "Controller"));
+
+            Controller.Initialize ();
         
             if (Controller != null && !hide_ui) {
                 UI = new SparkleUI ();
@@ -155,34 +156,6 @@ namespace SparkleShare {
 
             } catch (EntryPointNotFoundException) {
                 Console.WriteLine ("SetProcessName: Entry point not found");
-            }
-        }
-        
-        
-        // Strange magic needed by Platform ()
-        [DllImport ("libc")]
-        static extern int uname (IntPtr buf);
-
-
-        // This fixes the PlatformID enumeration for MacOSX in Environment.OSVersion.Platform,
-        // which is intentionally broken in Mono for historical reasons
-        static PlatformID Platform {
-            get {
-                IntPtr buf = IntPtr.Zero;
-
-                try {
-                    buf = Marshal.AllocHGlobal (8192);
-
-                    if (uname (buf) == 0 && Marshal.PtrToStringAnsi (buf) == "Darwin")
-                        return PlatformID.MacOSX;
-
-                } catch {
-                } finally {
-                    if (buf != IntPtr.Zero)
-                        Marshal.FreeHGlobal (buf);
-                }
-            
-                return Environment.OSVersion.Platform;
             }
         }
     }

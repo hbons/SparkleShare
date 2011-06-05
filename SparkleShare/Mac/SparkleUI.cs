@@ -53,6 +53,7 @@ namespace SparkleShare {
 		public static SparkleStatusIcon StatusIcon;
 		public static List <SparkleLog> OpenLogs;
 		public static SparkleIntro Intro;
+        public static SparkleAbout About;
 		public static NSFont Font;
 
         private NSAlert alert;

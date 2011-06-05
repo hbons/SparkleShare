@@ -32,10 +32,13 @@ namespace SparkleShare {
         // System.IO.FileSystemWatcher fails watching subfolders on Mac
         private SparkleMacWatcher watcher = new SparkleMacWatcher (SparklePaths.SparklePath);
 
+        public SparkleMacController () : base () { }
 
-        public SparkleMacController () : base ()
+        public override void Initialize ()
         {
-            watcher.Changed += delegate (string path) {
+            base.Initialize ();
+
+            this.watcher.Changed += delegate (string path) {
                 string repo_name;
 
                 if (path.Contains ("/"))
@@ -76,7 +79,30 @@ namespace SparkleShare {
 		// list of bookmarked places
 		public override void AddToBookmarks ()
 		{
-			// TODO
+            // TODO: Waiting for NSMutableArray/Dictionary support
+         /* NSDictionary sidebar_plist = NSUserDefaults.StandardUserDefaults.PersistentDomainForName ("com.apple.sidebarlists");
+
+            foreach (object sidebar_item in sidebar_plist.Keys) {
+                if (sidebar_item.ToString ().Equals ("useritems")) {
+                    NSDictionary user_items = (NSDictionary) sidebar_plist.ValueForKey (new NSString (sidebar_item.ToString ()));
+
+                    foreach (NSObject user_item in user_items.Keys) {
+                        if (user_item.ToString ().Equals ("CustomListItems")) {
+                            NSArray custom_items = (NSArray) user_items.ValueForKey (new NSString (user_item.ToString ()));
+
+                            NSDictionary new_dictionary = new NSDictionary ();
+                            new dictionary.SetValueForKey (new NSString ("Test"),  new NSString ("Name"));
+
+                            custom_items.SetValueForKey (new_dictionary, new NSString ("Item 6"));
+                            user_items.SetValueForKey (custom_items, new NSString (user_item.ToString ()));
+                        }
+                    }
+
+                    sidebar_plist.SetValueForKey (user_items, new NSString (sidebar_item.ToString ()));
+                }
+            }
+
+            NSUserDefaults.StandardUserDefaults.SetPersistentDomain (sidebar_plist, "com.apple.sidebarlists"); */
 		}
 		
 
@@ -86,6 +112,7 @@ namespace SparkleShare {
 			if (!Directory.Exists (SparklePaths.SparklePath)) {
 				Directory.CreateDirectory (SparklePaths.SparklePath);
 				return true;
+
 			} else {
 				return false;
 			}
@@ -145,5 +172,12 @@ namespace SparkleShare {
 				return html;
 			}
 		}
+
+
+        new public void Quit ()
+        {
+            this.watcher.Dispose ();
+            base.Quit ();
+        }
 	}
 }

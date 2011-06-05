@@ -35,7 +35,7 @@ namespace SparkleShare {
 
         public List <SparkleRepoBase> Repositories;
         public string FolderSize;
-        public readonly string SparklePath;
+        public readonly string SparklePath = SparklePaths.SparklePath;
 
         public event OnQuitWhileSyncingEventHandler OnQuitWhileSyncing;
         public delegate void OnQuitWhileSyncingEventHandler ();
@@ -88,10 +88,10 @@ namespace SparkleShare {
         }
 
 
-        public SparkleController ()
-        {
-            SparklePath = SparklePaths.SparklePath;
+        public SparkleController () { }
 
+        public virtual void Initialize ()
+        {
             InstallLauncher ();
             EnableSystemAutostart ();
 
@@ -707,7 +707,7 @@ namespace SparkleShare {
         // so all activity is done with this key
         public void AddKey ()
         {
-            string keys_path = SparklePaths.SparkleKeysPath;
+            string keys_path = SparklePaths.SparkleConfigPath;
             string key_file_name = "sparkleshare." + UserEmail + ".key";
 
             Process process = new Process ();
@@ -756,7 +756,7 @@ namespace SparkleShare {
         // Generates and installs an RSA keypair to identify this system
         public void GenerateKeyPair ()
         {
-            string keys_path     = SparklePaths.SparkleKeysPath;
+            string keys_path     = SparklePaths.SparkleConfigPath;
             string key_file_name = "sparkleshare." + UserEmail + ".key";
             string key_file_path = Path.Combine (keys_path, key_file_name);
 

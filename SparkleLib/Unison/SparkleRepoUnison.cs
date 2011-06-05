@@ -216,6 +216,10 @@ namespace SparkleLib {
                         {
                             revision = "Edited";
                         }
+						else
+						{
+							revision = "Unknown";
+						}
                         WriteChangeLog(path, revision);
                     }
                 }
@@ -304,8 +308,12 @@ namespace SparkleLib {
                             
                         unison_deletefix.Start ();
                         unison_deletefix.WaitForExit ();
+						
+						int exitcode = unison_deletefix.ExitCode;
                         
-                        SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison_deletefix.ExitCode.ToString ());
+                        SparkleHelpers.DebugInfo ("Unison", "Exit code: " + exitcode.ToString ());
+						
+						//need to check that this was successful
                         
                         //check if it was the local file that was deleted, if so now its been recovered
                         //don't really know easily from who's copy, ignore that for now
@@ -318,20 +326,23 @@ namespace SparkleLib {
                     {
                         // Append a timestamp to local version (their copy is the local copy)
                         string timestamp            = DateTime.Now.ToString ("HH:mm MMM d");
-                        string their_path           = conflicting_path + " (" + SparkleConfig.DefaultConfig.UserName + ", " + timestamp + ")";
+						string username             = SparkleConfig.DefaultConfig.UserName.ToString();
+                        string their_path           = conflicting_path + " (" + username + ", " + timestamp + ")";
                         string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
                         string abs_their_path       = Path.Combine (LocalPath, their_path);
                       
                         File.Move (abs_conflicting_path, abs_their_path);                        
                      
                         //upload the renamed file
-                        UnisonTransmit (their_path);
-                        
-                        //get the server version of the conflicting file
-                        UnisonGrab (conflicting_path);
-                        
-                        //update the log about the added file
-                        WriteChangeLog(their_path, "Added");
+                        if (UnisonTransmit (their_path) == 0)
+						{
+							//now get the server version of the conflicting file
+                            UnisonGrab (conflicting_path);
+							
+						    //update the log about the added timestamped/usernamed file
+                            WriteChangeLog(their_path, "Added");
+						} 
+						//TODO: what to do upon failure?
                     }
                 }
             }
@@ -376,6 +387,24 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Exit code: " + exitcode.ToString());
             return exitcode;
         }
+		
+		private int UnisonLog ()
+        {
+            //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
+            Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
+            
+            //grab the conflicted file from the server
+            SparkleUnison unison = new SparkleUnison (LocalPath,
+                "-ui text " +                                  
+                "log");
+
+            unison.Start ();
+            unison.WaitForExit ();
+            
+            int exitcode = unison.ExitCode;
+            SparkleHelpers.DebugInfo ("Unison", "Exit code: " + exitcode.ToString());
+            return exitcode;
+        }
         
         
         private int WriteChangeLog (string path, string revision)
@@ -386,17 +415,18 @@ namespace SparkleLib {
             string useremail = SparkleConfig.DefaultConfig.UserEmail.ToString().Trim();
             string logupdate = timestamp + ", " + username + ", " + useremail + ", " + revision + ", " + path;
             
-            //update the log file from the server
-            if (UnisonGrab(".changelog") == 0)
+            //sync the log with the server
+			//TODO: smight just be able to call UnisonLog() -- check this
+            if (UnisonLog() == 0)
                 SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
             
-            //check that file exists, otherwise create it now
+            //TODO: fix! 
+			//check that file exists, otherwise create it now
            // if (!File.Exists (changelog_file))
            // {
            //     File.Create (changelog_file);
            //     SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
            // }
-
                         
             //append to the log file
             using (StreamWriter sw = File.AppendText(changelog_file)) 
@@ -407,10 +437,9 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Updated local log: " + changelog_file + ": " + logupdate);
             
             //send updated log to server
-            //TODO: need to figure out if its needed to merge the log if 2 people submit at the same time...
-            //what hasppens if there is a collision/conflict
-            //this will overwrite the log, if someone checks out a log and then someone else uploads it will break...
-            int exitcode = UnisonTransmit (".changelog");
+			//TODO: check that the log entries sort properly and the merge works
+			//this will also update the local log if someone else made changes while local client was logging
+            int exitcode = UnisonLog ();
             
             if(exitcode == 0)
                 SparkleHelpers.DebugInfo ("Unison", "Updated server log: " + changelog_file);
@@ -420,15 +449,12 @@ namespace SparkleLib {
         
         
         public override List <SparkleChangeSet> GetChangeSets (int count)
-        {
-            //TODO: read the log file here (created in WriteChangeLog)
-            //careful with timezones (should be all in UTC) -> correct for user's timezone
-            
+        {            
             var l = new List<SparkleChangeSet> ();
             
             string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");
             
-            //update the log file from the server
+            //get the latest log file from the server
             if (UnisonGrab(".changelog") == 0)
                 SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
             
@@ -445,6 +471,8 @@ namespace SparkleLib {
                     string email    = parts[2].Trim();
                     string revision = parts[3].Trim();
                     string path     = parts[4].Trim();
+					
+					//how does the filename/path go to the ChangeSet?
                     l.Add (new SparkleChangeSet () { UserName = name,
                                                      UserEmail = email,
                                                      Revision = revision,
