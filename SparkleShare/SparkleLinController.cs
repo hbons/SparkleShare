@@ -41,7 +41,7 @@ namespace SparkleShare {
         public override void EnableSystemAutostart ()
         {
             string autostart_path = Path.Combine (Environment.GetFolderPath (
-                Environment.SpecialFolder.ApplicationData, "autostart");
+                Environment.SpecialFolder.ApplicationData), "autostart");
 
             string desktopfile_path = Path.Combine (autostart_path, "sparkleshare.desktop");
 
