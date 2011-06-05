@@ -49,8 +49,8 @@ namespace SparkleShare {
             Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
             // Don't allow running as root on Linux or Mac
-            if ((SparkleShare.Platform == PlatformID.Unix ||
-                 SparkleShare.Platform == PlatformID.MacOSX) &&
+            if ((SparkleBackend.Platform == PlatformID.Unix ||
+                 SparkleBackend.Platform == PlatformID.MacOSX) &&
                 new UnixUserInfo (UnixEnvironment.UserName).UserId == 0) {
 
                 Console.WriteLine (_("Sorry, you can't run SparkleShare with these permissions."));
@@ -82,7 +82,7 @@ namespace SparkleShare {
 
             // Load the right controller for the OS
             string controller_name = "Lin";
-            switch (SparkleShare.Platform) {
+            switch (SparkleBackend.Platform) {
             case PlatformID.Unix:
                 SetProcessName ("sparkleshare");
                 break;
@@ -156,34 +156,6 @@ namespace SparkleShare {
 
             } catch (EntryPointNotFoundException) {
                 Console.WriteLine ("SetProcessName: Entry point not found");
-            }
-        }
-        
-        
-        // Strange magic needed by Platform ()
-        [DllImport ("libc")]
-        static extern int uname (IntPtr buf);
-
-
-        // This fixes the PlatformID enumeration for MacOSX in Environment.OSVersion.Platform,
-        // which is intentionally broken in Mono for historical reasons
-        static PlatformID Platform {
-            get {
-                IntPtr buf = IntPtr.Zero;
-
-                try {
-                    buf = Marshal.AllocHGlobal (8192);
-
-                    if (uname (buf) == 0 && Marshal.PtrToStringAnsi (buf) == "Darwin")
-                        return PlatformID.MacOSX;
-
-                } catch {
-                } finally {
-                    if (buf != IntPtr.Zero)
-                        Marshal.FreeHGlobal (buf);
-                }
-            
-                return Environment.OSVersion.Platform;
             }
         }
     }
