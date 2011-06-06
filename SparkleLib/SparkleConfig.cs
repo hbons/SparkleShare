@@ -44,7 +44,7 @@ namespace SparkleLib {
             string icons_path = System.IO.Path.Combine (config_path, "icons");
             if (!Directory.Exists (icons_path)) {
                 Directory.CreateDirectory (icons_path);
-                SparkleHelpers.DebugInfo ("Config", "Created '" + icons_path + "'");
+                SparkleHelpers.DebugInfo ("Config", "Created \"" + icons_path + "\"");
             }
 
             if (!File.Exists (Path))
@@ -67,6 +67,9 @@ namespace SparkleLib {
             } else {
                 user_name = Environment.UserName;
             }
+
+            if (string.IsNullOrEmpty (user_name))
+                user_name = "Unknown";
 
             TextWriter writer = new StreamWriter (Path);
             string n          = Environment.NewLine;
