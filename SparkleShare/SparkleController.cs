@@ -682,7 +682,7 @@ namespace SparkleShare {
         private string FormatFolderSize (double byte_count)
         {
             if (byte_count >= 1099511627776)
-                return String.Format ("{0:##.##}  ᴛʙ", Math.Round (byte_count / 1099511627776, 1));
+                return String.Format ("{0:##.##} ᴛʙ", Math.Round (byte_count / 1099511627776, 1));
             else if (byte_count >= 1073741824)
                 return String.Format ("{0:##.##} ɢʙ", Math.Round (byte_count / 1073741824, 1));
             else if (byte_count >= 1048576)
