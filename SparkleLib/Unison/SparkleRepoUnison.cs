@@ -418,7 +418,7 @@ namespace SparkleLib {
             string logupdate = timestamp + ", " + username + ", " + useremail + ", " + revision + ", " + path;
             
             //sync the log with the server
-            if (UnisonGrab (changelog_file) == 0)
+            if (UnisonGrab (".changelog") == 0)
                 SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
             
             //TODO: fix! 
@@ -456,7 +456,7 @@ namespace SparkleLib {
             string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");
             
             //get the latest log file from the server
-            if (UnisonGrab (changelog_file) == 0)
+            if (UnisonGrab (".changelog") == 0)
                 SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
             
             if (File.Exists (changelog_file))
@@ -468,14 +468,26 @@ namespace SparkleLib {
                 {
                     string[] parts = line.Split(",".ToCharArray ());
 					
+					//output the log entries to be parsed for debugging
 					foreach (string part in parts)
 						SparkleHelpers.DebugInfo ("Unison", "Reading log: " + part.Trim());
 					
-                    DateTime time   = DateTime.Parse(parts[0].Trim());
-                    string name     = parts[1].Trim();
-                    string email    = parts[2].Trim();
-                    string revision = parts[3].Trim();
-                    string path     = parts[4].Trim();
+                    DateTime time = DateTime.Now;
+					
+					try
+					{
+					    time   = DateTime.Parse(parts[0].Trim());	
+					}
+					//if the time string can't be interpretted just use the current time for now
+					catch (FormatException)
+					{
+						time   = DateTime.Now;
+					}
+					
+                    string name         = parts[1].Trim();
+                    string email        = parts[2].Trim();
+                    string revision     = parts[3].Trim();
+                    string path         = parts[4].Trim();
 					
 					//how does the filename/path go to the ChangeSet?
                     l.Add (new SparkleChangeSet () { UserName = name,
