@@ -58,7 +58,7 @@ namespace SparkleShare {
             Resizable = false;
 
             BorderWidth = 0;
-             SetPosition (WindowPosition.Center);
+            SetPosition (WindowPosition.Center);
 
             // Open slightly off center for each consecutive window
             if (SparkleUI.OpenLogs.Count > 0) {
@@ -107,7 +107,7 @@ namespace SparkleShare {
                         }
                     };
 
-                ScrolledWindow.AddWithViewport (WebView);
+                ScrolledWindow.Add (WebView);
                 LogContent.Add (ScrolledWindow);
 
             layout_vertical.PackStart (LogContent, true, true, 0);
@@ -187,17 +187,6 @@ namespace SparkleShare {
             Application.Invoke (delegate {
                 Spinner.Stop ();
                 LogContent.Remove (LogContent.Child);
-
-                ScrolledWindow = new ScrolledWindow () {
-                    HscrollbarPolicy = PolicyType.Never
-                };
-                
-                Viewport viewport = new Viewport () {
-                    ShadowType = ShadowType.None
-                };
-
-                WebView.Reparent (viewport);
-                ScrolledWindow.Add (viewport);
 
                 WebView.LoadString (HTML, null, null, "file://");
 
