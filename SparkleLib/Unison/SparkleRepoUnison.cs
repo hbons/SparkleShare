@@ -471,17 +471,13 @@ namespace SparkleLib {
                     
                     SparkleChangeSet change_set = new SparkleChangeSet ();
                     
-                    //output the log entries to be parsed for debugging
-                    //foreach (string part in parts)
-                    //    SparkleHelpers.DebugInfo ("Unison", "Reading log: " + part.Trim());
-                    
-					int our_offset = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
+                    int our_offset = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
                     
                     try
                     {
                         change_set.Timestamp = DateTime.Parse(parts[0].Trim()); 
-						//change UTC to our timezone
-					    if (our_offset > 0)
+                        //change UTC to our timezone
+                        if (our_offset > 0)
                             change_set.Timestamp = change_set.Timestamp.AddHours (our_offset);
                         else
                             change_set.Timestamp = change_set.Timestamp.AddHours (our_offset * -1);
@@ -491,7 +487,7 @@ namespace SparkleLib {
                     {
                         change_set.Timestamp = DateTime.Now;
                     }
-					
+                    
                     string path          = parts[4].Trim();
                     
                     change_set.Revision  = parts[3].Trim();
