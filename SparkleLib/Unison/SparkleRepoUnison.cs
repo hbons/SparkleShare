@@ -396,9 +396,7 @@ namespace SparkleLib {
             //sync log with server
             SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text " + 
-                "-path '.changelog' " +
-                //"-merge = Name '.changelog' -> cat CURRENT1 CURRENT2 | sort | uniq > NEW " + 
-                "transmit"); //change to sync?
+                "logging");
 
             unison.Start ();
             unison.WaitForExit ();
@@ -437,9 +435,6 @@ namespace SparkleLib {
 
             SparkleHelpers.DebugInfo ("Unison", "Updated local log: " + changelog_file + ": " + logupdate);
             
-            //send updated log to server
-            //TODO: check that the log entries sort properly and the merge works
-            //this will also update the local log if someone else made changes while local client was logging
             int exitcode = UnisonTransmitLog ();
             
             if(exitcode == 0)
@@ -464,10 +459,10 @@ namespace SparkleLib {
                 TextReader reader = new StreamReader (changelog_file);
                 string changelog = reader.ReadToEnd().ToString().Trim();
                 string [] lines = changelog.Split ("\n".ToCharArray ());
-                Array.Reverse(lines); //puts the last event first
+                Array.Reverse(lines);
                 foreach (string line in lines)
                 {
-                    string[] parts = line.Split(",".ToCharArray ());
+                    string[] parts = line.Split(",".ToCharArray ()); //commas in filenames will be broken...
                     
                     SparkleChangeSet change_set = new SparkleChangeSet ();
                     
@@ -487,26 +482,24 @@ namespace SparkleLib {
                     {
                         change_set.Timestamp = DateTime.Now;
                     }
-                    
-                    string path          = parts[4].Trim();
-                    
+                                        
                     change_set.Revision  = parts[3].Trim();
                     change_set.UserName  = parts[1].Trim();
                     change_set.UserEmail = parts[2].Trim();
                     
                     if (change_set.Revision.Equals ("Added"))
                     {
-                        change_set.Added.Add (path);
+                        change_set.Added.Add (parts[4].Trim());
                     } 
                     else if (change_set.Revision.Equals ("Edited"))
                     {
-                        change_set.Edited.Add (path);
+                        change_set.Edited.Add (parts[4].Trim());
                     } 
                     else if (change_set.Revision.Equals ("Deleted"))
                     {
-                        change_set.Deleted.Add (path);
+                        change_set.Deleted.Add (parts[4].Trim());
                     }
-                    //unison doesn't recognize if files were moved just deleted then added
+                    //unison doesn't recognize if files were moved it just thinks they were deleted then added somewhere else, oh well.
                     
                     change_sets.Add (change_set);
                 }
