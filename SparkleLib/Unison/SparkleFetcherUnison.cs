@@ -65,8 +65,8 @@ namespace SparkleLib {
                 "-confirmbigdel=false " +
                 "-ui text " +
                 "-log " +
-			    "-terse " +
-			    "-dumbtty " +
+                "-terse " +
+                "-dumbtty " +
                 "-times " +
                 "-rootalias " + rootalias +
                 "-logfile templog " + 
@@ -110,8 +110,8 @@ namespace SparkleLib {
             string dotfolder_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, ".sparkleshare");
             string dotfolder_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare");
             Directory.Move(dotfolder_old_path, dotfolder_new_path);    
-			
-			SparkleHelpers.DebugInfo ("Unison", "Moved .sparkleshare folder to: " + dotfolder_new_path);
+            
+            SparkleHelpers.DebugInfo ("Unison", "Moved .sparkleshare folder to: " + dotfolder_new_path);
             
             //move the templog file to from .tmp to log in.sparkleshare
             string log_file_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "templog");
@@ -129,8 +129,8 @@ namespace SparkleLib {
             TextWriter writer = new StreamWriter (config_file_path);
             writer.WriteLine (config);
             writer.Close ();    
-			
-			SparkleHelpers.DebugInfo ("Unison", "Created config file: " + config_file_path);
+            
+            SparkleHelpers.DebugInfo ("Unison", "Created config file: " + config_file_path);
         }
 
         
@@ -145,9 +145,9 @@ namespace SparkleLib {
             writer.WriteLine ("root = ."); //root1: local folder
             writer.WriteLine ("root = " + base.remote_url); //root2: remote server -- PROBLEM WITH SPACES IN THE PATH, quotes are broken!!
             writer.WriteLine ("log = true");
-			writer.WriteLine ("dumbtty = true");
+            writer.WriteLine ("dumbtty = true");
             writer.WriteLine ("auto = true");
-			writer.WriteLine ("terse = true");
+            writer.WriteLine ("terse = true");
             writer.WriteLine ("times = true");
             writer.WriteLine ("logfile = .sparkleshare/log");
             writer.WriteLine ("retry = 2");

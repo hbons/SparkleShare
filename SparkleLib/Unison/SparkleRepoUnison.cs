@@ -187,9 +187,9 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison_sync.ExitCode.ToString ());
                 
                 remote_revision = unison_sync.StandardOutput.ReadToEnd ().TrimEnd ();
-				
-				SparkleHelpers.DebugInfo ("Unison", "Sync Complete: " + remote_revision.ToString ());
-				
+                
+                SparkleHelpers.DebugInfo ("Unison", "Sync Complete: " + remote_revision.ToString ());
+                
                 string [] lines = remote_revision.Split ("\n".ToCharArray ());
                 foreach (string line in lines) 
                 {      
@@ -216,10 +216,10 @@ namespace SparkleLib {
                         {
                             revision = "Edited";
                         }
-						else
-						{
-							revision = "Unknown";
-						}
+                        else
+                        {
+                            revision = "Unknown";
+                        }
                         WriteChangeLog(path, revision);
                     }
                 }
@@ -308,12 +308,12 @@ namespace SparkleLib {
                             
                         unison_deletefix.Start ();
                         unison_deletefix.WaitForExit ();
-						
-						int exitcode = unison_deletefix.ExitCode;
+                        
+                        int exitcode = unison_deletefix.ExitCode;
                         
                         SparkleHelpers.DebugInfo ("Unison", "Exit code: " + exitcode.ToString ());
-						
-						//need to check that this was successful
+                        
+                        //need to check that this was successful
                         
                         //check if it was the local file that was deleted, if so now its been recovered
                         //don't really know easily from who's copy, ignore that for now
@@ -326,7 +326,7 @@ namespace SparkleLib {
                     {
                         // Append a timestamp to local version (their copy is the local copy)
                         string timestamp            = DateTime.Now.ToString ("HH:mm MMM d");
-						string username             = SparkleConfig.DefaultConfig.UserName.ToString();
+                        string username             = SparkleConfig.DefaultConfig.UserName.ToString();
                         string their_path           = conflicting_path + " (" + username + ", " + timestamp + ")";
                         string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
                         string abs_their_path       = Path.Combine (LocalPath, their_path);
@@ -335,14 +335,14 @@ namespace SparkleLib {
                      
                         //upload the renamed file
                         if (UnisonTransmit (their_path) == 0)
-						{
-							//now get the server version of the conflicting file
+                        {
+                            //now get the server version of the conflicting file
                             UnisonGrab (conflicting_path);
-							
-						    //update the log about the added timestamped/usernamed file
+                            
+                            //update the log about the added timestamped/usernamed file
                             WriteChangeLog(their_path, "Added");
-						} 
-						//TODO: what to do upon failure?
+                        } 
+                        //TODO: what to do upon failure?
                     }
                 }
             }
@@ -387,17 +387,17 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Exit code: " + exitcode.ToString());
             return exitcode;
         }
-		
-		private int UnisonTransmitLog ()
+        
+        private int UnisonTransmitLog ()
         {
             //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
             Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
             
             //sync log with server
-			SparkleUnison unison = new SparkleUnison (LocalPath,
+            SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text " + 
-			    "-path '.changelog' " +
-			    //"-merge = Name '.changelog' -> cat CURRENT1 CURRENT2 | sort | uniq > NEW " + 
+                "-path '.changelog' " +
+                //"-merge = Name '.changelog' -> cat CURRENT1 CURRENT2 | sort | uniq > NEW " + 
                 "transmit"); //change to sync?
 
             unison.Start ();
@@ -422,7 +422,7 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
             
             //TODO: fix! 
-			//check that file exists, otherwise create it now
+            //check that file exists, otherwise create it now
            // if (!File.Exists (changelog_file))
            // {
            //     File.Create (changelog_file);
@@ -438,8 +438,8 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Updated local log: " + changelog_file + ": " + logupdate);
             
             //send updated log to server
-			//TODO: check that the log entries sort properly and the merge works
-			//this will also update the local log if someone else made changes while local client was logging
+            //TODO: check that the log entries sort properly and the merge works
+            //this will also update the local log if someone else made changes while local client was logging
             int exitcode = UnisonTransmitLog ();
             
             if(exitcode == 0)
@@ -464,47 +464,47 @@ namespace SparkleLib {
                 TextReader reader = new StreamReader (changelog_file);
                 string changelog = reader.ReadToEnd().ToString().Trim();
                 string [] lines = changelog.Split ("\n".ToCharArray ());
-				Array.Reverse(lines); //puts the last event first
+                Array.Reverse(lines); //puts the last event first
                 foreach (string line in lines)
                 {
                     string[] parts = line.Split(",".ToCharArray ());
-					
-					SparkleChangeSet change_set = new SparkleChangeSet ();
-					
-					//output the log entries to be parsed for debugging
-					//foreach (string part in parts)
-					//	SparkleHelpers.DebugInfo ("Unison", "Reading log: " + part.Trim());
-					
+                    
+                    SparkleChangeSet change_set = new SparkleChangeSet ();
+                    
+                    //output the log entries to be parsed for debugging
+                    //foreach (string part in parts)
+                    //    SparkleHelpers.DebugInfo ("Unison", "Reading log: " + part.Trim());
+                    
                     DateTime time = DateTime.Now;
-					
-					try
-					{
-					    time            = DateTime.Parse(parts[0].Trim());	
-					}
-					//if the time string can't be interpretted just use the current time for now
-					catch (FormatException)
-					{
-						time            = DateTime.Now;
-					}
-					
-					string revision = parts[3].Trim();
-					string path = parts[4].Trim();
-					
-					change_set.Revision  = revision;
+                    
+                    try
+                    {
+                        time            = DateTime.Parse(parts[0].Trim());    
+                    }
+                    //if the time string can't be interpretted just use the current time for now
+                    catch (FormatException)
+                    {
+                        time            = DateTime.Now;
+                    }
+                    
+                    string revision = parts[3].Trim();
+                    string path = parts[4].Trim();
+                    
+                    change_set.Revision  = revision;
                     change_set.UserName  = parts[1].Trim();
                     change_set.UserEmail = parts[2].Trim();
-					change_set.Timestamp = time;
-					
-					if (revision.Equals ("Added")) {
+                    change_set.Timestamp = time;
+                    
+                    if (revision.Equals ("Added")) {
                         change_set.Added.Add (path);
                     } else if (revision.Equals ("Edited")) {
                         change_set.Edited.Add (path);
                     } else if (revision.Equals("Deleted")) {
                         change_set.Deleted.Add (path);
                     }
-					//unison doesn't recognize if files were moved just deleted then added
-					
-					change_sets.Add (change_set);
+                    //unison doesn't recognize if files were moved just deleted then added
+                    
+                    change_sets.Add (change_set);
                 }
             }
             else
