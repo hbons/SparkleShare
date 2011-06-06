@@ -462,7 +462,7 @@ namespace SparkleLib {
             if (File.Exists (changelog_file))
             {        
                 TextReader reader = new StreamReader (changelog_file);
-                string changelog = reader.ReadToEnd().ToString();
+                string changelog = reader.ReadToEnd().ToString().Trim();
                 string [] lines = changelog.Split ("\n".ToCharArray ());
                 foreach (string line in lines)
                 {
@@ -476,12 +476,12 @@ namespace SparkleLib {
 					
 					try
 					{
-					    time   = DateTime.Parse(parts[0].Trim());	
+					    time            = DateTime.Parse(parts[0].Trim());	
 					}
 					//if the time string can't be interpretted just use the current time for now
 					catch (FormatException)
 					{
-						time   = DateTime.Now;
+						time            = DateTime.Now;
 					}
 					
                     string name         = parts[1].Trim();
