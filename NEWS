@@ -1,9 +1,11 @@
-0.2 for Linux and Mac (...):
+0.2 for Linux and Mac (Mon Jun 6, 2011):
 
-	Hylke: Removed the dependancy on GitSharp. file rename detection support
+	Hylke: Removed the dependancy on GitSharp. File rename detection support
 	in the event logs. Fixed all crashes reported in RC1 and improved sync
         algorithm. Redid collision detection and conflict resolving (use a copy
-	of each version). Improved about dialogs with version checking.
+	of each version). Improved about dialogs with version checking. Pluggable
+	backend (experimental Mercurial support). Added support for Growl to show
+	notifications on Mac.
 
 
 0.2-rc1 for Linux and Mac (Sun Mar 20, 2011):
