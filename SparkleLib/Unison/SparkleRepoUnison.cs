@@ -388,15 +388,17 @@ namespace SparkleLib {
             return exitcode;
         }
 		
-		private int UnisonLog ()
+		private int UnisonTransmitLog ()
         {
             //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
             Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
             
             //grab the conflicted file from the server
             SparkleUnison unison = new SparkleUnison (LocalPath,
-                "-ui text " +                                  
-                "log");
+                "-ui text " + 
+			    "-path '.changelog' " +
+                "transmit");
+			//merge = Name '.changelog' -> cat CURRENT1 CURRENT2 | sort | uniq > NEW"
 
             unison.Start ();
             unison.WaitForExit ();
@@ -410,14 +412,13 @@ namespace SparkleLib {
         private int WriteChangeLog (string path, string revision)
         {
             string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");         
-            string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm tt");
+            string timestamp = DateTime.Now.ToString();
             string username = SparkleConfig.DefaultConfig.UserName.ToString().Trim();
             string useremail = SparkleConfig.DefaultConfig.UserEmail.ToString().Trim();
             string logupdate = timestamp + ", " + username + ", " + useremail + ", " + revision + ", " + path;
             
             //sync the log with the server
-			//TODO: smight just be able to call UnisonLog() -- check this
-            if (UnisonLog() == 0)
+            if (UnisonGrab (changelog_file) == 0)
                 SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
             
             //TODO: fix! 
@@ -439,7 +440,7 @@ namespace SparkleLib {
             //send updated log to server
 			//TODO: check that the log entries sort properly and the merge works
 			//this will also update the local log if someone else made changes while local client was logging
-            int exitcode = UnisonLog ();
+            int exitcode = UnisonTransmitLog ();
             
             if(exitcode == 0)
                 SparkleHelpers.DebugInfo ("Unison", "Updated server log: " + changelog_file);
@@ -455,10 +456,10 @@ namespace SparkleLib {
             string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");
             
             //get the latest log file from the server
-            if (UnisonGrab(".changelog") == 0)
+            if (UnisonGrab (changelog_file) == 0)
                 SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
             
-            if (!File.Exists (changelog_file))
+            if (File.Exists (changelog_file))
             {        
                 TextReader reader = new StreamReader (changelog_file);
                 string changelog = reader.ReadToEnd().ToString();
@@ -466,7 +467,11 @@ namespace SparkleLib {
                 foreach (string line in lines)
                 {
                     string[] parts = line.Split(",".ToCharArray ());
-                    DateTime time   = DateTime.ParseExact(parts[0].Trim(), "yyyy-MM-dd HH:mm tt", null);
+					
+					foreach (string part in parts)
+						SparkleHelpers.DebugInfo ("Unison", "Reading log: " + part.Trim());
+					
+                    DateTime time   = DateTime.Parse(parts[0].Trim());
                     string name     = parts[1].Trim();
                     string email    = parts[2].Trim();
                     string revision = parts[3].Trim();

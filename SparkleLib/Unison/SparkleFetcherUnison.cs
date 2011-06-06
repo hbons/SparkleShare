@@ -92,7 +92,6 @@ namespace SparkleLib {
                 InstallConfiguration ();
                 CreateID ();
                 CreateChangeLog ();
-				InstallUnisonLogProfile ();
                 InstallUnisonBaseProfile ();
                 InstallUnisonDryRunProfile ();
                 InstallUnisonSyncProfile ();
@@ -232,24 +231,6 @@ namespace SparkleLib {
             writer.WriteLine ("ignore = Name .changelog");
             writer.Close ();
             
-            SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
-        }
-		
-		private void InstallUnisonLogProfile ()
-        {
-            //create profile: log.prf -- syncs the log file, merges changes if someone else uploaded before you did
-			//required cat, sort and uniq (probably wouldn't work easily on a windows server)
-            string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "log.prf");
-            TextWriter writer = new StreamWriter (unison_profile);
-            writer.WriteLine ("include sparkleshare");
-            writer.WriteLine ("batch = true");
-            writer.WriteLine ("confirmbigdel = false");
-            writer.WriteLine ("path = Name .changelog");
-			//old copies of the change log shouldn't be needed to make merging work
-			//writer.WriteLine ("backuplocation = local");
-			//writer.WriteLine ("backupprefix = .sparkleshare/$VERSION");
-			writer.WriteLine ("merge = Name .changelog -> cat CURRENT1 CURRENT2 | sort | uniq > NEW");
-            writer.Close ();           
             SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
         }
         
