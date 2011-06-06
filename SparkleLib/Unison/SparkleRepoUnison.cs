@@ -495,11 +495,16 @@ namespace SparkleLib {
                     change_set.UserEmail = parts[2].Trim();
                     change_set.Timestamp = time;
                     
-                    if (revision.Equals ("Added")) {
+                    if (revision.Equals ("Added"))
+                    {
                         change_set.Added.Add (path);
-                    } else if (revision.Equals ("Edited")) {
+                    } 
+                    else if (revision.Equals ("Edited"))
+                    {
                         change_set.Edited.Add (path);
-                    } else if (revision.Equals("Deleted")) {
+                    } 
+                    else if (revision.Equals("Deleted"))
+                    {
                         change_set.Deleted.Add (path);
                     }
                     //unison doesn't recognize if files were moved just deleted then added
