@@ -412,7 +412,7 @@ namespace SparkleLib {
         private int WriteChangeLog (string path, string revision)
         {
             string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");         
-            string timestamp = DateTime.Now.ToString();
+            string timestamp = DateTime.UtcNow.ToString(); //writes in UTC time
             string username = SparkleConfig.DefaultConfig.UserName.ToString().Trim();
             string useremail = SparkleConfig.DefaultConfig.UserEmail.ToString().Trim();
             string logupdate = timestamp + ", " + username + ", " + useremail + ", " + revision + ", " + path;
@@ -475,35 +475,38 @@ namespace SparkleLib {
                     //foreach (string part in parts)
                     //    SparkleHelpers.DebugInfo ("Unison", "Reading log: " + part.Trim());
                     
-                    DateTime time = DateTime.Now;
+					int our_offset = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
                     
                     try
                     {
-                        time            = DateTime.Parse(parts[0].Trim());    
+                        change_set.Timestamp = DateTime.Parse(parts[0].Trim()); 
+						//change UTC to our timezone
+					    if (our_offset > 0)
+                            change_set.Timestamp = change_set.Timestamp.AddHours (our_offset);
+                        else
+                            change_set.Timestamp = change_set.Timestamp.AddHours (our_offset * -1);
                     }
                     //if the time string can't be interpretted just use the current time for now
                     catch (FormatException)
                     {
-                        time            = DateTime.Now;
+                        change_set.Timestamp = DateTime.Now;
                     }
+					
+                    string path          = parts[4].Trim();
                     
-                    string revision = parts[3].Trim();
-                    string path = parts[4].Trim();
-                    
-                    change_set.Revision  = revision;
+                    change_set.Revision  = parts[3].Trim();
                     change_set.UserName  = parts[1].Trim();
                     change_set.UserEmail = parts[2].Trim();
-                    change_set.Timestamp = time;
                     
-                    if (revision.Equals ("Added"))
+                    if (change_set.Revision.Equals ("Added"))
                     {
                         change_set.Added.Add (path);
                     } 
-                    else if (revision.Equals ("Edited"))
+                    else if (change_set.Revision.Equals ("Edited"))
                     {
                         change_set.Edited.Add (path);
                     } 
-                    else if (revision.Equals("Deleted"))
+                    else if (change_set.Revision.Equals ("Deleted"))
                     {
                         change_set.Deleted.Add (path);
                     }
