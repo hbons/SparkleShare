@@ -318,7 +318,7 @@ namespace SparkleLib {
                         //check if it was the local file that was deleted, if so now its been recovered
                         //don't really know easily from who's copy, ignore that for now
                         if(line.Trim().StartsWith("deleted"))
-                            WriteChangeLog(conflicting_path, "Recovered");              
+                            WriteChangeLog(conflicting_path, "Added");              
                     
                     }        
                     //implies that there is a conflict with 2 changed files
@@ -354,7 +354,7 @@ namespace SparkleLib {
             //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
             Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
             
-            //grab the conflicted file from the server
+            //transmit the file to the server
             SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text " +
                 "-path '" + path + "' " +                                        
@@ -374,7 +374,7 @@ namespace SparkleLib {
             //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
             Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
             
-            //grab the conflicted file from the server
+            //grab the file from the server
             SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text " +
                 "-path '" + path + "' " +                                        
@@ -393,12 +393,12 @@ namespace SparkleLib {
             //set UNISON=./.sparkleshare to store archive files locally and reference profiles locally
             Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
             
-            //grab the conflicted file from the server
-            SparkleUnison unison = new SparkleUnison (LocalPath,
+            //sync log with server
+			SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text " + 
 			    "-path '.changelog' " +
-                "transmit");
-			//merge = Name '.changelog' -> cat CURRENT1 CURRENT2 | sort | uniq > NEW"
+			    //"-merge = Name '.changelog' -> cat CURRENT1 CURRENT2 | sort | uniq > NEW " + 
+                "transmit"); //change to sync?
 
             unison.Start ();
             unison.WaitForExit ();
@@ -451,7 +451,7 @@ namespace SparkleLib {
         
         public override List <SparkleChangeSet> GetChangeSets (int count)
         {            
-            var l = new List<SparkleChangeSet> ();
+            List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
             
             string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");
             
@@ -464,13 +464,16 @@ namespace SparkleLib {
                 TextReader reader = new StreamReader (changelog_file);
                 string changelog = reader.ReadToEnd().ToString().Trim();
                 string [] lines = changelog.Split ("\n".ToCharArray ());
+				Array.Reverse(lines); //puts the last event first
                 foreach (string line in lines)
                 {
                     string[] parts = line.Split(",".ToCharArray ());
 					
+					SparkleChangeSet change_set = new SparkleChangeSet ();
+					
 					//output the log entries to be parsed for debugging
-					foreach (string part in parts)
-						SparkleHelpers.DebugInfo ("Unison", "Reading log: " + part.Trim());
+					//foreach (string part in parts)
+					//	SparkleHelpers.DebugInfo ("Unison", "Reading log: " + part.Trim());
 					
                     DateTime time = DateTime.Now;
 					
@@ -484,16 +487,24 @@ namespace SparkleLib {
 						time            = DateTime.Now;
 					}
 					
-                    string name         = parts[1].Trim();
-                    string email        = parts[2].Trim();
-                    string revision     = parts[3].Trim();
-                    string path         = parts[4].Trim();
+					string revision = parts[3].Trim();
+					string path = parts[4].Trim();
 					
-					//how does the filename/path go to the ChangeSet?
-                    l.Add (new SparkleChangeSet () { UserName = name,
-                                                     UserEmail = email,
-                                                     Revision = revision,
-                                                     Timestamp = time });
+					change_set.Revision  = revision;
+                    change_set.UserName  = parts[1].Trim();
+                    change_set.UserEmail = parts[2].Trim();
+					change_set.Timestamp = time;
+					
+					if (revision.Equals ("Added")) {
+                        change_set.Added.Add (path);
+                    } else if (revision.Equals ("Edited")) {
+                        change_set.Edited.Add (path);
+                    } else if (revision.Equals("Deleted")) {
+                        change_set.Deleted.Add (path);
+                    }
+					//unison doesn't recognize if files were moved just deleted then added
+					
+					change_sets.Add (change_set);
                 }
             }
             else
@@ -501,7 +512,7 @@ namespace SparkleLib {
                 File.Create (changelog_file);
                 SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
             }
-            return l;
+            return change_sets;
         }
 
 
