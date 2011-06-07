@@ -95,7 +95,7 @@ namespace SparkleLib {
                 InstallUnisonBaseProfile ();
                 InstallUnisonDryRunProfile ();
                 InstallUnisonSyncProfile ();
-				InstallUnisonSyncLogFileProfile ();
+                InstallUnisonSyncLogFileProfile ();
                 InstallUnisonGrabRemoteFileProfile ();
                 InstallUnisonTransmitLocalFileProfile ();
                 return true;
@@ -270,8 +270,8 @@ namespace SparkleLib {
             
             SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
         }
-		
-		private void InstallUnisonSyncLogFileProfile ()
+        
+        private void InstallUnisonSyncLogFileProfile ()
         {
             //create profile: logging.prf -- runs automatic unison batch sync
             string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "logging.prf");
@@ -279,7 +279,7 @@ namespace SparkleLib {
             writer.WriteLine ("include sparkleshare");
             writer.WriteLine ("batch = true");
             writer.WriteLine ("confirmbigdel = false");
-			writer.WriteLine ("confirmmerge = false");
+            writer.WriteLine ("confirmmerge = false");
             writer.WriteLine ("path = .changelog");
             writer.WriteLine ("merge = Path .changelog -> cat CURRENT1 CURRENT2 | sort | uniq > NEW");
             writer.Close ();
