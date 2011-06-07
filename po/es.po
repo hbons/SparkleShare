@@ -4,6 +4,7 @@
 # we apologise for any incovenience this may have caused and we hope to bring them
 # back in the future.
 # 
+#   <jamelrom@gmail.com>, 2011
 #   <luiso.perez@gmail.com>, 2011
 # jamelrom <jamelrom@gmail.com>, 2011
 msgid ""
@@ -11,8 +12,8 @@ msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-28 19:48+0200\n"
-"PO-Revision-Date: 2011-05-28 17:48+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"PO-Revision-Date: 2011-05-31 17:40+0000\n"
+"Last-Translator: jamelrom <jamelrom@gmail.com>\n"
 "Language-Team: Spanish (Castilian) (http://www.transifex.net/projects/p/sparkleshare/team/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -67,15 +68,15 @@ msgstr "Acerca de SparkleShare"
 
 #: ../SparkleShare/SparkleAbout.cs:54
 msgid "A newer version is available"
-msgstr ""
+msgstr "Una nueva versión esta disponible"
 
 #: ../SparkleShare/SparkleAbout.cs:61
 msgid "You are running the latest version."
-msgstr ""
+msgstr "Estas ejecutando la última versión"
 
 #: ../SparkleShare/SparkleAbout.cs:88
 msgid "Checking for updates..."
-msgstr ""
+msgstr "Comprobando actualizaciones..."
 
 #: ../SparkleShare/SparkleAbout.cs:117
 msgid "_Show Credits"
@@ -101,7 +102,7 @@ msgstr "añadido '{0}'"
 #: ../SparkleShare/SparkleController.cs:613
 #, csharp-format
 msgid "moved ‘{0}’"
-msgstr ""
+msgstr "movido '{0}'"
 
 #: ../SparkleShare/SparkleController.cs:618
 #, csharp-format
@@ -117,12 +118,12 @@ msgstr "eliminado '{0}'"
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "y {0} más"
+msgstr[1] "y {0} más"
 
 #: ../SparkleShare/SparkleController.cs:635
 msgid "did something magical"
-msgstr ""
+msgstr "algo mágico ocurrió"
 
 #: ../SparkleShare/SparkleIntro.cs:71
 msgid ""
@@ -353,7 +354,7 @@ msgstr "Mostrar este texto de ayuda"
 
 #: ../SparkleShare/SparkleShare.cs:114
 msgid "SparkleShare, a collaboration and sharing tool."
-msgstr ""
+msgstr "SparkleShare, una herramienta de compartición y colaboración"
 
 #: ../SparkleShare/SparkleShare.cs:115
 msgid "Copyright (C) 2010 Hylke Bons"
@@ -429,6 +430,6 @@ msgstr ""
 
 #: ../SparkleShare/SparkleWindow.cs:41
 msgid "SparkleShare Setup"
-msgstr ""
+msgstr "Configuración de SparkleShare"
 
 

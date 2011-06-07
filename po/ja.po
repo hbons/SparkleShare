@@ -4,14 +4,15 @@
 # we apologise for any incovenience this may have caused and we hope to bring them
 # back in the future.
 # 
+#   <masa@takatsuka.org>, 2011
 #   <matsuu@gmail.com>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-28 19:48+0200\n"
-"PO-Revision-Date: 2011-05-28 17:48+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"PO-Revision-Date: 2011-06-04 00:29+0000\n"
+"Last-Translator: masa <masa@takatsuka.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,59 +23,59 @@ msgstr ""
 #: ../SparkleShare/Mac/SparkleStatusIcon.cs:303
 #: ../SparkleShare/SparkleIntro.cs:65 ../SparkleShare/SparkleStatusIcon.cs:299
 msgid "Welcome to SparkleShare!"
-msgstr ""
+msgstr "SparkleShareへようこそ！"
 
 #: ../SparkleShare/Mac/SparkleStatusIcon.cs:313
 #: ../SparkleShare/SparkleStatusIcon.cs:306
 msgid "Not everything is synced"
-msgstr ""
+msgstr "すべてが同期されていません"
 
 #: ../SparkleShare/Mac/SparkleStatusIcon.cs:318
 #: ../SparkleShare/SparkleStatusIcon.cs:312
 msgid "Up to date"
-msgstr ""
+msgstr "最新の状態です。"
 
 #: ../SparkleShare/Mac/SparkleStatusIcon.cs:333
 #: ../SparkleShare/SparkleStatusIcon.cs:324
 msgid "Syncing…"
-msgstr ""
+msgstr "同期中..."
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
 msgid "Copy Web Link"
-msgstr ""
+msgstr "ウェブリンクのコピー"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
 msgid "Copy the web address of this file to the clipboard"
-msgstr ""
+msgstr "このファイルのウェブアドレスをクリップボードにコピー"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
 msgid "Get Earlier Version"
-msgstr ""
+msgstr "新しいバージョンの取得"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
 msgid "Make a copy of an earlier version in this folder"
-msgstr ""
+msgstr "このフォルダに古いヴァージョンのコピーを作成"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:161
 msgid "Select to get a copy of this version"
-msgstr ""
+msgstr "このヴァージョンを選択し、コピー"
 
 #. A menu item that takes the user to http://www.sparkleshare.org/
 #: ../SparkleShare/SparkleAbout.cs:47 ../SparkleShare/SparkleStatusIcon.cs:225
 msgid "About SparkleShare"
-msgstr ""
+msgstr "SparkleShareについて"
 
 #: ../SparkleShare/SparkleAbout.cs:54
 msgid "A newer version is available"
-msgstr ""
+msgstr "新しいバージョンがあります"
 
 #: ../SparkleShare/SparkleAbout.cs:61
 msgid "You are running the latest version."
-msgstr ""
+msgstr "最新のバージョンです。"
 
 #: ../SparkleShare/SparkleAbout.cs:88
 msgid "Checking for updates..."
-msgstr ""
+msgstr "更新の確認中..."
 
 #: ../SparkleShare/SparkleAbout.cs:117
 msgid "_Show Credits"
@@ -86,11 +87,11 @@ msgstr "Webサイトにアクセスする(_V)"
 
 #: ../SparkleShare/SparkleController.cs:392
 msgid "ddd MMM d, yyyy"
-msgstr ""
+msgstr "ddd MMM d, yyyy"
 
 #: ../SparkleShare/SparkleController.cs:397
 msgid "ddd MMM d"
-msgstr ""
+msgstr "ddd MMM d"
 
 #: ../SparkleShare/SparkleController.cs:608
 #, csharp-format
@@ -100,7 +101,7 @@ msgstr "'{0}'を追加しました"
 #: ../SparkleShare/SparkleController.cs:613
 #, csharp-format
 msgid "moved ‘{0}’"
-msgstr ""
+msgstr "'{0}'を移動しました"
 
 #: ../SparkleShare/SparkleController.cs:618
 #, csharp-format
@@ -116,77 +117,77 @@ msgstr "'{0}'を削除しました"
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
-msgstr[0] ""
+msgstr[0] "、{0}詳細"
 
 #: ../SparkleShare/SparkleController.cs:635
 msgid "did something magical"
-msgstr ""
+msgstr "何か摩訶不思議なことをしました"
 
 #: ../SparkleShare/SparkleIntro.cs:71
 msgid ""
 "Before we can create a SparkleShare folder on this computer, we need a few "
 "bits of information from you."
-msgstr ""
+msgstr "SparkleShareのフォルダをこのコンピュータ上に作成する前に、少しですがお知らせがあります。"
 
 #: ../SparkleShare/SparkleIntro.cs:81
 msgid "Full Name:"
-msgstr ""
+msgstr "氏名:"
 
 #: ../SparkleShare/SparkleIntro.cs:96
 msgid "Email:"
-msgstr ""
+msgstr "電子メール:"
 
 #: ../SparkleShare/SparkleIntro.cs:107
 msgid "Next"
-msgstr ""
+msgstr "次"
 
 #: ../SparkleShare/SparkleIntro.cs:113
 msgid "Configuring…"
-msgstr ""
+msgstr "設定中..."
 
 #: ../SparkleShare/SparkleIntro.cs:159
 msgid "Where is your remote folder?"
-msgstr ""
+msgstr "リモート・フォルダの場所はどこですか？"
 
 #: ../SparkleShare/SparkleIntro.cs:172
 msgid "address-to-server.com"
-msgstr ""
+msgstr "サーバのアドレス.com"
 
 #: ../SparkleShare/SparkleIntro.cs:177
 msgid "On my own server:"
-msgstr ""
+msgstr "個人のサーバ:"
 
 #: ../SparkleShare/SparkleIntro.cs:184
 msgid "Free hosting for Free and Open Source Software projects."
-msgstr ""
+msgstr "フリーでオープンソースのソフトウェアプロジェクトのための無料ホスティング。"
 
 #: ../SparkleShare/SparkleIntro.cs:185
 msgid "Also has paid accounts for extra private space and bandwidth."
-msgstr ""
+msgstr "また、プライベートなストレージ領域の増量や高速通信のための有用アカウントもあります。"
 
 #: ../SparkleShare/SparkleIntro.cs:193
 msgid "The GNOME Project"
-msgstr ""
+msgstr "GNOMEプロジェクト"
 
 #: ../SparkleShare/SparkleIntro.cs:195
 msgid "GNOME is an easy to understand interface to your computer."
-msgstr ""
+msgstr "GNOMEはあなたのコンピュータ使いやすくする環境です。"
 
 #: ../SparkleShare/SparkleIntro.cs:196
 msgid "Select this option if you’re a developer or designer working on GNOME."
-msgstr ""
+msgstr "もしあなたが、GNOMEの開発／デザインに関わっているなら、このオプションを選択。"
 
 #: ../SparkleShare/SparkleIntro.cs:204
 msgid "Gitorious"
-msgstr ""
+msgstr "Gitorious"
 
 #: ../SparkleShare/SparkleIntro.cs:206
 msgid "Completely Free as in Freedom infrastructure."
-msgstr ""
+msgstr "自由なインフラストラクチャとして完全無料。"
 
 #: ../SparkleShare/SparkleIntro.cs:207
 msgid "Free accounts for Free and Open Source projects."
-msgstr ""
+msgstr "無料でオープンソースなプロジェクトのための無料アカウント"
 
 #: ../SparkleShare/SparkleIntro.cs:218
 msgid "Username/Folder"
@@ -194,123 +195,127 @@ msgstr "ユーザー名/フォルダ"
 
 #: ../SparkleShare/SparkleIntro.cs:223
 msgid "Project/Folder"
-msgstr ""
+msgstr "プロジェクト/フォルダ"
 
 #: ../SparkleShare/SparkleIntro.cs:228
 msgid "Project"
-msgstr ""
+msgstr "プロジェクト"
 
 #: ../SparkleShare/SparkleIntro.cs:233 ../SparkleShare/SparkleIntro.cs:252
 msgid "Folder"
-msgstr ""
+msgstr "フォルダ"
 
 #: ../SparkleShare/SparkleIntro.cs:257 ../SparkleShare/SparkleIntro.cs:410
 msgid "Folder Name:"
-msgstr ""
+msgstr "フォルダ名："
 
 #: ../SparkleShare/SparkleIntro.cs:267
 msgid "Sync"
-msgstr ""
+msgstr "同期"
 
 #: ../SparkleShare/SparkleIntro.cs:345
 msgid "Cancel"
-msgstr ""
+msgstr "キャンセル"
 
 #: ../SparkleShare/SparkleIntro.cs:353
 msgid "Skip"
-msgstr ""
+msgstr "スキップ"
 
 #: ../SparkleShare/SparkleIntro.cs:380
 msgid "Invitation received!"
-msgstr ""
+msgstr "招待状が届きました！"
 
 #: ../SparkleShare/SparkleIntro.cs:386
 msgid ""
 "You've received an invitation to join a shared folder.\n"
 "We're ready to hook you up immediately if you wish."
 msgstr ""
+"共有フォルダへのアクセスの招待状が届きました。\n"
+"すぐにアクセスする設置をする準備が整っています。"
 
 #: ../SparkleShare/SparkleIntro.cs:392
 msgid "Do you accept this invitation?"
-msgstr ""
+msgstr "この招待状を受諾しますか？"
 
 #: ../SparkleShare/SparkleIntro.cs:401
 msgid "Server Address:"
-msgstr ""
+msgstr "サーバアドレス："
 
 #: ../SparkleShare/SparkleIntro.cs:424
 msgid "Reject"
-msgstr ""
+msgstr "拒否"
 
 #: ../SparkleShare/SparkleIntro.cs:425
 msgid "Accept and Sync"
-msgstr ""
+msgstr "受諾して同期する"
 
 #: ../SparkleShare/SparkleIntro.cs:473
 msgid "Something went wrong…"
-msgstr ""
+msgstr "何らかの不具合の発生..."
 
 #: ../SparkleShare/SparkleIntro.cs:479
 msgid "Try Again"
-msgstr ""
+msgstr "再トライ"
 
 #: ../SparkleShare/SparkleIntro.cs:504
 #, csharp-format
 msgid "‘{0}’ has been successfully added"
-msgstr "'{0}'は正しく追加されました"
+msgstr "'{0}'は正常に追加されました"
 
 #: ../SparkleShare/SparkleIntro.cs:513
 msgid "Folder synced successfully!"
-msgstr ""
+msgstr "フォルダが正常に同期されました！"
 
 #: ../SparkleShare/SparkleIntro.cs:520
 #, csharp-format
 msgid ""
 "Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
-msgstr ""
+msgstr "これで、SparkleShareフォルダ'{0}'から同期されたファイルが使用可能です。"
 
 #. A button that opens the synced folder
 #: ../SparkleShare/SparkleIntro.cs:528
 msgid "Open Folder"
-msgstr ""
+msgstr "フォルダを開く"
 
 #: ../SparkleShare/SparkleIntro.cs:534 ../SparkleShare/SparkleIntro.cs:576
 #: ../SparkleShare/SparkleIntro.cs:640
 msgid "Finish"
-msgstr ""
+msgstr "完了"
 
 #: ../SparkleShare/SparkleIntro.cs:561
 #, csharp-format
 msgid "Syncing folder ‘{0}’…"
-msgstr ""
+msgstr "フォルダ'{0}'の同期中..."
 
 #: ../SparkleShare/SparkleIntro.cs:568
 msgid "This may take a while.\n"
-msgstr ""
+msgstr "しばらくお待ちください。"
 
 #: ../SparkleShare/SparkleIntro.cs:569
 msgid "Are you sure it’s not coffee o'clock?"
-msgstr ""
+msgstr "コーヒー時ではありませんか？"
 
 #: ../SparkleShare/SparkleIntro.cs:615
 msgid "SparkleShare is ready to go!"
-msgstr ""
+msgstr "SparkleShareは準備完了です！"
 
 #: ../SparkleShare/SparkleIntro.cs:621
 msgid ""
 "Now you can start accepting invitations from others. \n"
 "Just click on invitations you get by email and we will take care of the rest."
 msgstr ""
+"他の人から招待を受ける準備が整いました。\n"
+"あなたは、電子メールで受け取った招待状をクリックするだけです。後は私たちにお任せください。"
 
 #: ../SparkleShare/SparkleIntro.cs:632
 msgid "Learn how to host your own SparkleServer"
-msgstr ""
+msgstr "個人でSparkleServerを立ち上げる方法"
 
 #. TRANSLATORS: {0} is a folder name, and {1} is a server address
 #: ../SparkleShare/SparkleLog.cs:73
 #, csharp-format
 msgid "Events in ‘{0}’"
-msgstr ""
+msgstr "'{0}'のイベント"
 
 #: ../SparkleShare/SparkleLog.cs:120
 msgid "_Open Folder"
@@ -318,100 +323,100 @@ msgstr "フォルダを開く(_O)"
 
 #: ../SparkleShare/SparkleShare.cs:53
 msgid "Sorry, you can't run SparkleShare with these permissions."
-msgstr ""
+msgstr "申し訳ありませんが、SparkleShareを実行する権限がありません。パーミッションの設定を見直してください。"
 
 #: ../SparkleShare/SparkleShare.cs:54
 msgid "Things would go utterly wrong."
-msgstr ""
+msgstr "全く予期しないことになるかもしれません。"
 
 #: ../SparkleShare/SparkleShare.cs:63
 msgid "Don't show the notification icon"
-msgstr ""
+msgstr "通知アイコンを表示しない"
 
 #: ../SparkleShare/SparkleShare.cs:64
 msgid "Print version information"
-msgstr ""
+msgstr "バージョン情報の表示"
 
 #: ../SparkleShare/SparkleShare.cs:65
 msgid "Show this help text"
-msgstr ""
+msgstr "このヘルプテキストを表示"
 
 #: ../SparkleShare/SparkleShare.cs:114
 msgid "SparkleShare, a collaboration and sharing tool."
-msgstr ""
+msgstr "SparkleShare、コラボレーションと共有のためのツールです。"
 
 #: ../SparkleShare/SparkleShare.cs:115
 msgid "Copyright (C) 2010 Hylke Bons"
-msgstr ""
+msgstr "Copyright (C)2010 Hylke Bons"
 
 #: ../SparkleShare/SparkleShare.cs:117
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
-msgstr ""
+msgstr "このプログラムは完全無保証です。"
 
 #: ../SparkleShare/SparkleShare.cs:119
 msgid "This is free software, and you are welcome to redistribute it "
-msgstr ""
+msgstr "これはフリーソフトウェアであり、再配布を歓迎します。"
 
 #: ../SparkleShare/SparkleShare.cs:120
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
-msgstr ""
+msgstr "一定の条件の下で。詳細については、GNUのGPLv3をお読みください。"
 
 #: ../SparkleShare/SparkleShare.cs:122
 msgid "SparkleShare automatically syncs Git repositories in "
-msgstr ""
+msgstr "SparkleShareは自動的に..のGitリポジトリと同期します"
 
 #: ../SparkleShare/SparkleShare.cs:123
 msgid "the ~/SparkleShare folder with their remote origins."
-msgstr ""
+msgstr "リモートの元フォルダを含んだ~/SparkleShareフォルダ"
 
 #: ../SparkleShare/SparkleShare.cs:125
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
-msgstr ""
+msgstr "使用法: sparkleshare [start|stop|restart] [オプション]..."
 
 #: ../SparkleShare/SparkleShare.cs:126
 msgid "Sync SparkleShare folder with remote repositories."
-msgstr ""
+msgstr "SparkleShareフォルダをリモートのリポジトリと同期。"
 
 #: ../SparkleShare/SparkleShare.cs:128
 msgid "Arguments:"
-msgstr ""
+msgstr "引数："
 
 #: ../SparkleShare/SparkleShare.cs:138
 msgid "SparkleShare "
-msgstr ""
+msgstr "SparkleShare"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:177
 msgid "No Remote Folders Yet"
-msgstr ""
+msgstr "リモートフォルダまだ作成されていません。"
 
 #. Opens the wizard to add a new remote folder
 #: ../SparkleShare/SparkleStatusIcon.cs:185
 msgid "Add Remote Folder…"
-msgstr ""
+msgstr "リモートフォルダの追加..."
 
 #: ../SparkleShare/SparkleStatusIcon.cs:212
 msgid "Turn Notifications Off"
-msgstr ""
+msgstr "通知をオフ"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:214
 msgid "Turn Notifications On"
-msgstr ""
+msgstr "通知をオン"
 
 #. A menu item that quits the application
 #: ../SparkleShare/SparkleStatusIcon.cs:236
 msgid "Quit"
-msgstr ""
+msgstr "終了"
 
 #: ../SparkleShare/SparkleUI.cs:105
 msgid "Ouch! Mid-air collision!"
-msgstr ""
+msgstr "イテテ！空中衝突だ！"
 
 #: ../SparkleShare/SparkleUI.cs:106
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
-msgstr ""
+msgstr "心配しないでください。SparkleShareは、各競合しているファイルのコピーを作成しました。"
 
 #: ../SparkleShare/SparkleWindow.cs:41
 msgid "SparkleShare Setup"
-msgstr ""
+msgstr "SparkleShareセ​​ットアップ"
 
 
