@@ -985,6 +985,13 @@ namespace SparkleShare {
         }
 
 
+        public string Version {
+            get {
+                return SparkleBackend.Version;
+            }
+        }
+
+
         public void CheckForNewVersion ()
         {
             WebClient web_client = new WebClient ();
