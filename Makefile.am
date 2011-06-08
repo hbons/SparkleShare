@@ -1,7 +1,7 @@
 SUBDIRS =	\
 	build	\
 	help	\
-	SmartIrc4net \
+	${SPARKLE_SMARTIRC4NETDIR} \
 	SparkleLib \
 	SparkleShare \
 	data \
