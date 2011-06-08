@@ -56,10 +56,12 @@ namespace SparkleLib {
             };
 
             this.client.OnDisconnected += delegate {
+                base.is_connecting = false;
                 OnDisconnected ();
             };
 
             this.client.OnError += delegate {
+                base.is_connecting = false;
                 OnDisconnected ();
             };
 
@@ -118,9 +120,12 @@ namespace SparkleLib {
         {
             string channel = "#" + folder_identifier;
             if (!base.channels.Contains (channel)) {
-                SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
                 base.channels.Add (channel);
-                this.client.RfcJoin (channel);
+
+                if (IsConnected) {
+                    SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
+                    this.client.RfcJoin (channel);
+                }
             }
         }
 

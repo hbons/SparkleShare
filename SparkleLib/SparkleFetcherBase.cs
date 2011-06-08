@@ -187,7 +187,7 @@ namespace SparkleLib {
 
         private string GetHost (string url)
         {
-            Regex regex = new Regex (@"(@|://)([a-z0-9\.]+)(/|:)");
+            Regex regex = new Regex (@"(@|://)([a-z0-9\.-]+)(/|:)");
             Match match = regex.Match (url);
 
             if (match.Success)
