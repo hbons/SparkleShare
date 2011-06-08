@@ -289,7 +289,7 @@ msgstr "フォルダ'{0}'の同期中..."
 
 #: ../SparkleShare/SparkleIntro.cs:568
 msgid "This may take a while.\n"
-msgstr "しばらくお待ちください。"
+msgstr "しばらくお待ちください。\n"
 
 #: ../SparkleShare/SparkleIntro.cs:569
 msgid "Are you sure it’s not coffee o'clock?"
