@@ -62,12 +62,12 @@ namespace SparkleLib {
                 SparkleBackend.Platform == PlatformID.MacOSX) {
 
                 user_name = new UnixUserInfo (UnixEnvironment.UserName).RealName;
-                user_name = user_name.TrimEnd (",".ToCharArray());
-
             }
 
             if (string.IsNullOrEmpty (user_name))
                 user_name = Environment.UserName;
+            else
+                user_name = user_name.TrimEnd (",".ToCharArray());
 
             TextWriter writer = new StreamWriter (Path);
             string n          = Environment.NewLine;
