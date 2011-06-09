@@ -34,15 +34,15 @@ namespace SparkleLib {
 
     public abstract class SparkleRepoBase {
 
-
-
-        private Timer local_timer = new Timer () { Interval = 250 };
-        private Timer remote_timer = new Timer () { Interval = 60000 };
         private FileSystemWatcher watcher;
         private SparkleListenerBase listener;
+        private Timer local_timer        = new Timer () { Interval = 250 };
+        private Timer remote_timer       = new Timer () { Interval = 60000 };
+        private DateTime last_poll       = DateTime.Now;
+        private TimeSpan poll_interval   = new TimeSpan (0, 0, 10, 0);
         private List <double> sizebuffer = new List<double> ();
-        private bool has_changed   = false;
-        private Object change_lock = new Object ();
+        private bool has_changed         = false;
+        private Object change_lock       = new Object ();
 
         protected SyncStatus status;
         protected bool is_buffering  = false;
