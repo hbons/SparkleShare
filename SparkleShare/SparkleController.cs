@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -240,8 +241,22 @@ namespace SparkleShare {
             }
         }
         
-        
-        public List <SparkleChangeSet> GetLog (string name)
+
+        public List<SparkleChangeSet> GetLog ()
+        {Console.WriteLine ("PPPPPPPPPPP");
+            List<SparkleChangeSet> list = new List<SparkleChangeSet> ();
+
+            foreach (SparkleRepoBase repo in Repositories) {
+                list.AddRange (repo.GetChangeSets (10));
+                Console.WriteLine (">>>" + repo.Name);
+            }
+
+            list.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
+            return list;
+        }
+
+
+        public List<SparkleChangeSet> GetLog (string name)
         {
             string path = Path.Combine (SparklePaths.SparklePath, name);
             int log_size = 30;
