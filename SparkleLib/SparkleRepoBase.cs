@@ -98,7 +98,7 @@ namespace SparkleLib {
                 bool time_to_poll = (DateTime.Compare (this.last_poll,
                     DateTime.Now.Subtract (this.poll_interval)) < 0);
 
-                if (!this.listener.IsConnected || time_to_poll) {
+                if (time_to_poll) {
                     this.last_poll = DateTime.Now;
 
                     if (CheckForRemoteChanges ())
