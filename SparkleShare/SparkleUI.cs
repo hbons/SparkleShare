@@ -47,8 +47,11 @@ namespace SparkleShare {
         public SparkleUI ()
         {
             // Initialize the application
-            Application.Init ();
+            Application.Init ();Console.WriteLine ("OOOOOOOOO");
 
+            foreach (SparkleChangeSet change_set in SparkleShare.Controller.GetLog ()) {
+                Console.WriteLine (change_set.Timestamp.ToString ());
+            }
             // Create the statusicon
             StatusIcon = new SparkleStatusIcon ();
             
