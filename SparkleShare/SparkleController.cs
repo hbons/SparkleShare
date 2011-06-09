@@ -998,9 +998,12 @@ namespace SparkleShare {
             Uri uri = new Uri ("http://www.sparkleshare.org/version");
 
             web_client.DownloadStringCompleted += delegate (object o, DownloadStringCompletedEventArgs args) {
+                if (args.Error != null)
+                    return;
+
                 string new_version = args.Result.Trim ();
 
-                if (Defines.VERSION.Equals (new_version)) {
+                if (Version.Equals (new_version)) {
                     if (VersionUpToDate != null)
                         VersionUpToDate ();
 
