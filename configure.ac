@@ -1,9 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_define([sparkleshare_version],
-	[0.2])
+	[0.2.1])
 
 m4_define([sparkleshare_asm_version],
-	[0.2])
+	[0.2.1])
 
 AC_PREREQ([2.54])
 AC_INIT([SparkleShare], sparkleshare_version)
@@ -78,7 +78,16 @@ dnl package checks, common for all configs
 
 
 SPARKLESHARE_CHECK_GTK_SHARP
-SPARKLESHARE_SMARTIRC4NET
+
+PKG_CHECK_MODULES([SMARTIRC4NET], [smartirc4net],
+	SPARKLE_SMARTIRC4NETDIR=""
+	,
+	SPARKLESHARE_SMARTIRC4NET
+ 	SMARTIRC4NET_LIBS=""
+	AC_SUBST(SMARTIRC4NET_LIBS)
+	SPARKLE_SMARTIRC4NETDIR="SmartIrc4net"
+	AC_SUBST(SPARKLE_SMARTIRC4NETDIR)
+)
 
 dnl check for webkit-sharp
 PKG_CHECK_MODULES(WEBKIT_SHARP, webkit-sharp-1.0, have_webkit_sharp=yes, have_webkit_sharp=no)
