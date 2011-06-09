@@ -46,7 +46,6 @@ namespace SparkleLib {
 
         protected SyncStatus status;
         protected bool is_buffering  = false;
-        protected bool is_polling    = true;
         protected bool server_online = true;
 
         public readonly SparkleBackend Backend;
@@ -96,7 +95,7 @@ namespace SparkleLib {
             };
 
             this.remote_timer.Elapsed += delegate {
-                if (this.is_polling) {
+                if (!this.listener.IsConnected) {
                     if (CheckForRemoteChanges ())
                         SyncDownBase ();
                 }
@@ -192,13 +191,6 @@ namespace SparkleLib {
         }
 
 
-        public bool IsPolling {
-            get {
-                return this.is_polling;
-            }
-        }
-
-
         // Disposes all resourses of this object
         public void Dispose ()
         {
@@ -230,8 +222,6 @@ namespace SparkleLib {
 
             // Stop polling when the connection to the irc channel is succesful
             this.listener.Connected += delegate {
-                this.is_polling = false;
-
                 // Check for changes manually one more time
                 if (CheckForRemoteChanges ())
                     SyncDownBase ();
@@ -244,7 +234,6 @@ namespace SparkleLib {
             // Start polling when the connection to the irc channel is lost
             this.listener.Disconnected += delegate {
                 SparkleHelpers.DebugInfo (Name, "Falling back to polling");
-                this.is_polling = true;
             };
 
             // Fetch changes when there is a message in the irc channel
@@ -262,12 +251,11 @@ namespace SparkleLib {
                     }
                 }
             };
-
+            
             // Start listening
-            if (!this.listener.IsConnected && !this.listener.IsConnecting)
+            if (!this.listener.IsConnected && !this.listener.IsConnecting) {
                 this.listener.Connect ();
-            else
-                this.is_polling = false;
+            }
         }
 
 
