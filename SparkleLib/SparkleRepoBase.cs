@@ -36,8 +36,8 @@ namespace SparkleLib {
 
         private FileSystemWatcher watcher;
         private SparkleListenerBase listener;
-        private Timer local_timer        = new Timer () { Interval = 250 };
-        private Timer remote_timer       = new Timer () { Interval = 60000 };
+        private Timer local_timer        = new Timer () { Interval = 0.25 * 1000 };
+        private Timer remote_timer       = new Timer () { Interval = 10 * 1000 };
         private DateTime last_poll       = DateTime.Now;
         private TimeSpan poll_interval   = new TimeSpan (0, 0, 10, 0);
         private List <double> sizebuffer = new List<double> ();
@@ -95,7 +95,12 @@ namespace SparkleLib {
             };
 
             this.remote_timer.Elapsed += delegate {
-                if (!this.listener.IsConnected) {
+                bool time_to_poll = (DateTime.Compare (this.last_poll,
+                    DateTime.Now.Subtract (this.poll_interval)) < 0);
+
+                if (!this.listener.IsConnected || time_to_poll) {
+                    this.last_poll = DateTime.Now;
+
                     if (CheckForRemoteChanges ())
                         SyncDownBase ();
                 }
@@ -222,6 +227,9 @@ namespace SparkleLib {
 
             // Stop polling when the connection to the irc channel is succesful
             this.listener.Connected += delegate {
+                this.poll_interval = new TimeSpan (0, 0, 10, 0);
+                this.last_poll = DateTime.Now;
+
                 // Check for changes manually one more time
                 if (CheckForRemoteChanges ())
                     SyncDownBase ();
@@ -233,6 +241,7 @@ namespace SparkleLib {
 
             // Start polling when the connection to the irc channel is lost
             this.listener.Disconnected += delegate {
+                this.poll_interval = new TimeSpan (0, 0, 3, 0);
                 SparkleHelpers.DebugInfo (Name, "Falling back to polling");
             };
 
