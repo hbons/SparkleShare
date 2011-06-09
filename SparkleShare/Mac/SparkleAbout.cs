@@ -23,7 +23,6 @@ using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
 using MonoMac.WebKit;
-using SparkleLib;
 
 namespace SparkleShare {
 
@@ -101,7 +100,7 @@ namespace SparkleShare {
             };
 
             VersionTextField = new NSTextField () {
-                StringValue     = Defines.VERSION,
+                StringValue     = SparkleShare.Controller.Version,
                 Frame           = new RectangleF (22, Frame.Height - 94, 318, 22),
                 BackgroundColor = NSColor.White,
                 Bordered        = false,
