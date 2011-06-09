@@ -75,7 +75,7 @@ namespace SparkleShare {
             box.ModifyBg (StateType.Normal, new TreeView ().Style.Base (StateType.Normal));
 
                 Label header = new Label () {
-                    Markup = "<span font_size='xx-large'>SparkleShare</span>\n<span fgcolor='" + secondary_text_color + "'><small>" + SparkleShare.SparkleController.Version + "</small></span>",
+                    Markup = "<span font_size='xx-large'>SparkleShare</span>\n<span fgcolor='" + secondary_text_color + "'><small>" + SparkleShare.Controller.Version + "</small></span>",
                     Xalign = 0,
                     Xpad = 18,
                     Ypad = 18
