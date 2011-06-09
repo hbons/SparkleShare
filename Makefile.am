@@ -1,13 +1,14 @@
 SUBDIRS =	\
 	build	\
 	help	\
-	SmartIrc4net \
+	${SPARKLE_SMARTIRC4NETDIR} \
 	SparkleLib \
 	SparkleShare \
 	data \
 	po
 
-EXTRA_DIST = gnome-doc-utils.make
+EXTRA_DIST = gnome-doc-utils.make \
+             LICENSE
 
 DISTCLEANFILES = \
 	intltool-extract        \
