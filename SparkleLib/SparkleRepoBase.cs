@@ -39,7 +39,7 @@ namespace SparkleLib {
         private Timer local_timer        = new Timer () { Interval = 0.25 * 1000 };
         private Timer remote_timer       = new Timer () { Interval = 10 * 1000 };
         private DateTime last_poll       = DateTime.Now;
-        private TimeSpan poll_interval   = new TimeSpan (0, 0, 10, 0);
+        private TimeSpan poll_interval   = new TimeSpan (0, 0, 3, 0);
         private List <double> sizebuffer = new List<double> ();
         private bool has_changed         = false;
         private Object change_lock       = new Object ();
