@@ -105,7 +105,7 @@ namespace SparkleShare {
 
 
             string name = Path.GetFileName (LocalPath);
-            Title = String.Format ("Events in ‘{0}’", name);
+            Title = "Recent Events";
 
             Separator = new NSBox (new RectangleF (0, 58, 480, 1)) {
                 BorderColor = NSColor.LightGray,
@@ -152,7 +152,7 @@ namespace SparkleShare {
         private void GenerateHTML ()
         {
             string folder_name = Path.GetFileName (LocalPath);
-            HTML               = SparkleShare.Controller.GetHTMLLog (folder_name);
+            HTML               = SparkleShare.Controller.GetHTMLLog ();
 
             HTML = HTML.Replace ("<!-- $body-font-family -->", "Lucida Grande");
             HTML = HTML.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
