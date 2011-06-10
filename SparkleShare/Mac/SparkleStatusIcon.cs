@@ -154,7 +154,7 @@ namespace SparkleShare {
             Menu.AddItem (NSMenuItem.SeparatorItem);
 
             RecentEventsMenuItem = new NSMenuItem () {
-                Title = "Show Recent Events"
+                Title = "Recent Events"
             };
 
                 RecentEventsMenuItem.Activated +=delegate {
