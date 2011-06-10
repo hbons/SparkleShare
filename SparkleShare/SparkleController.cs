@@ -243,15 +243,15 @@ namespace SparkleShare {
         
 
         public List<SparkleChangeSet> GetLog ()
-        {Console.WriteLine ("PPPPPPPPPPP");
+        {
             List<SparkleChangeSet> list = new List<SparkleChangeSet> ();
 
-            foreach (SparkleRepoBase repo in Repositories) {
+            foreach (SparkleRepoBase repo in Repositories)
                 list.AddRange (repo.GetChangeSets (10));
-                Console.WriteLine (">>>" + repo.Name);
-            }
 
             list.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
+            list.Reverse ();
+
             return list;
         }
 
@@ -275,9 +275,9 @@ namespace SparkleShare {
         public abstract string EventEntryHTML { get; }
         
         
-        public string GetHTMLLog (string name)
+        public string GetHTMLLog ()
         {
-            List <SparkleChangeSet> change_sets = GetLog (name);
+            List <SparkleChangeSet> change_sets = GetLog ();
             List <ActivityDay> activity_days    = new List <ActivityDay> ();
             
             if (change_sets.Count == 0)
@@ -325,7 +325,7 @@ namespace SparkleShare {
     
                             foreach (string file_path in change_set.Edited) {
                                 string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-                                    name, file_path);
+                                    change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
                                     event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
@@ -339,7 +339,7 @@ namespace SparkleShare {
     
                             foreach (string file_path in change_set.Added) {
                                 string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-                                    name, file_path);
+                                    change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
                                     event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
@@ -353,7 +353,7 @@ namespace SparkleShare {
     
                             foreach (string file_path in change_set.Deleted) {
                                 string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-                                    name, file_path);
+                                    change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
                                     event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
@@ -369,9 +369,9 @@ namespace SparkleShare {
                             foreach (string file_path in change_set.MovedFrom) {
                                 string to_file_path = change_set.MovedTo [i];
                                 string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-                                    name, file_path);
+                                    change_set.Folder, file_path);
                                 string absolute_to_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-                                    name, to_file_path);
+                                    change_set.Folder, to_file_path);
 
                                 if (File.Exists (absolute_file_path))
                                     event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a><br/>" +
@@ -394,7 +394,9 @@ namespace SparkleShare {
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.UserName)
                         .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (change_set.UserEmail, 36) )
-                        .Replace ("<!-- $event-time -->", change_set.Timestamp.ToString ("H:mm"));
+                        .Replace ("<!-- $event-time -->", change_set.Timestamp.ToString ("H:mm"))
+                        .Replace ("<!-- $event-folder -->", change_set.Folder)
+                        .Replace ("<!-- $event-folder-color -->", AssignColor (change_set.Folder));
                 }
 
                 string day_entry   = "";
@@ -1029,6 +1031,21 @@ namespace SparkleShare {
             };
 
             web_client.DownloadStringAsync (uri);
+        }
+
+
+        private string [] tango_palette = new string [] {"#fce94f", "#edd400",
+            "#c4a000", "#8ae234", "#73d216", "#4e9a06", "#fcaf3e", "#f57900",
+            "#ce5c00", "#e9b96e", "#c17d11", "#8f5902", "#729fcf", "#3465a4",
+            "#204a87", "#ad7fa8", "#75507b", "#5c3566", "#888a85", "#555753",
+            "#2e3436", "#ef2929", "#cc0000", "#a40000"};
+
+        private string AssignColor (string s)
+        {
+            string hash    = GetMD5 (s).Substring (0, 6);
+            string numbers = Regex.Replace (hash, "[a-z]", "");
+            int number     = int.Parse (numbers);
+            return this.tango_palette [number % this.tango_palette.Length];
         }
     }
 
