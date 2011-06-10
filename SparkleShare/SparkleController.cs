@@ -247,12 +247,15 @@ namespace SparkleShare {
             List<SparkleChangeSet> list = new List<SparkleChangeSet> ();
 
             foreach (SparkleRepoBase repo in Repositories)
-                list.AddRange (repo.GetChangeSets (10));
+                list.AddRange (repo.GetChangeSets (30));
 
             list.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
             list.Reverse ();
 
-            return list;
+            if (list.Count > 50)
+                return list.GetRange (0, 50);
+            else
+                return list.GetRange (0, list.Count);
         }
 
 

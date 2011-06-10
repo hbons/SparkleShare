@@ -16,6 +16,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Threading;
@@ -24,6 +25,7 @@ using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
 using MonoMac.WebKit;
+using SparkleLib; // Only used for SparkleChangeSet
 
 namespace SparkleShare {
 
@@ -32,12 +34,11 @@ namespace SparkleShare {
         public readonly string LocalPath;
 
         private WebView WebView;
-        private NSButton CloseButton;
-        private NSButton OpenFolderButton;
         private NSBox Separator;
         private string HTML;
+        private NSPopUpButton popup_button;
         private NSProgressIndicator ProgressIndicator;
-
+        private List<SparkleChangeSet> change_sets = SparkleShare.Controller.GetLog ();
 
         public SparkleLog (IntPtr handle) : base (handle) { } 
         
@@ -76,44 +77,27 @@ namespace SparkleShare {
 
         private void CreateEventLog ()
         {
-            OpenFolderButton = new NSButton (new RectangleF (16, 12, 120, 32)) {
-                Title = "Open Folder",
-                BezelStyle = NSBezelStyle.Rounded   ,
-                Font = SparkleUI.Font
-            };
-
-                OpenFolderButton.Activated += delegate {
-                    SparkleShare.Controller.OpenSparkleShareFolder (LocalPath);
-                };
-
-            ContentView.AddSubview (OpenFolderButton);
-
-
-            CloseButton = new NSButton (new RectangleF (480 - 120 - 16, 12, 120, 32)) {
-                Title = "Close",
-                BezelStyle = NSBezelStyle.Rounded,
-                Font = SparkleUI.Font
-            };
-
-                CloseButton.Activated += delegate {
-                    InvokeOnMainThread (delegate {
-                            PerformClose (this);
-                    });
-                };
-
-            ContentView.AddSubview (CloseButton);
-
-
             string name = Path.GetFileName (LocalPath);
             Title = "Recent Events";
 
-            Separator = new NSBox (new RectangleF (0, 58, 480, 1)) {
+            Separator = new NSBox (new RectangleF (0, 559, 480, 1)) {
                 BorderColor = NSColor.LightGray,
                 BoxType = NSBoxType.NSBoxCustom
             };
 
             ContentView.AddSubview (Separator);
 
+            this.popup_button = new NSPopUpButton (new RectangleF (100, 570, 200, 26), false);
+            this.popup_button.AddItem ("All Folders");
+            this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
+            this.popup_button.AddItems (SparkleShare.Controller.Folders.ToArray ());
+
+
+            this.popup_button.Activated += delegate {
+                Console.WriteLine (this.popup_button.SelectedItem.Title);
+            };
+
+            ContentView.AddSubview (this.popup_button);
 
             ProgressIndicator = new NSProgressIndicator () {
                 Style = NSProgressIndicatorStyle.Spinning,
@@ -122,7 +106,7 @@ namespace SparkleShare {
 
             ProgressIndicator.StartAnimation (this);
 
-            WebView = new WebView (new RectangleF (0, 59, 480, 559), "", ""){
+            WebView = new WebView (new RectangleF (0, 0, 480, 559), "", ""){
                 PolicyDelegate = new SparkleWebPolicyDelegate ()
             };
 
