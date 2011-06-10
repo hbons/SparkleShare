@@ -198,7 +198,7 @@ namespace SparkleLib {
             if (!AnyDifferences)
                 return;
 
-            SparkleGit git = new SparkleGit (LocalPath, "commit -m '" + message + "'");
+            SparkleGit git = new SparkleGit (LocalPath, "commit -m \"" + message + "\"");
             git.Start ();
             git.WaitForExit ();
 
@@ -533,6 +533,7 @@ namespace SparkleLib {
                     return message + "..." + n;
             }
 
+            message = message.Replace ("\"", "");
             return message.TrimEnd ();
         }
 
