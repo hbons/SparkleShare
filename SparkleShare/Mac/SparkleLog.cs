@@ -77,17 +77,17 @@ namespace SparkleShare {
 
         private void CreateEventLog ()
         {
-            string name = Path.GetFileName (LocalPath);
             Title = "Recent Events";
 
-            Separator = new NSBox (new RectangleF (0, 559, 480, 1)) {
+            Separator = new NSBox (new RectangleF (0, 573, 480, 1)) {
                 BorderColor = NSColor.LightGray,
                 BoxType = NSBoxType.NSBoxCustom
             };
 
             ContentView.AddSubview (Separator);
 
-            this.popup_button = new NSPopUpButton (new RectangleF (100, 570, 200, 26), false);
+            this.popup_button = new NSPopUpButton (new RectangleF (480 - 156 - 8, 640 - 31 - 26, 156, 26), false);
+            //this.popup_button.
             this.popup_button.AddItem ("All Folders");
             this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
             this.popup_button.AddItems (SparkleShare.Controller.Folders.ToArray ());
@@ -106,7 +106,7 @@ namespace SparkleShare {
 
             ProgressIndicator.StartAnimation (this);
 
-            WebView = new WebView (new RectangleF (0, 0, 480, 559), "", ""){
+            WebView = new WebView (new RectangleF (0, 0, 480, 573   ), "", ""){
                 PolicyDelegate = new SparkleWebPolicyDelegate ()
             };
 
@@ -135,8 +135,7 @@ namespace SparkleShare {
 
         private void GenerateHTML ()
         {
-            string folder_name = Path.GetFileName (LocalPath);
-            HTML               = SparkleShare.Controller.GetHTMLLog ();
+            HTML = SparkleShare.Controller.GetHTMLLog ();
 
             HTML = HTML.Replace ("<!-- $body-font-family -->", "Lucida Grande");
             HTML = HTML.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
