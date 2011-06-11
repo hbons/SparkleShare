@@ -21,6 +21,7 @@ using System.Timers;
 
 using Gtk;
 using Mono.Unix;
+using SparkleLib;
 
 namespace SparkleShare {
 
@@ -272,7 +273,11 @@ namespace SparkleShare {
         // Makes the menu visible
         private void ShowMenu (object o, EventArgs args)
         {
-            Menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
+			if ((SparkleBackend.Platform == PlatformID.Unix ||
+				  SparkleBackend.Platform == PlatformID.MacOSX))
+				Menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
+			else
+				Menu.Popup (null, null, null, 0, Global.CurrentEventTime);
         }
 
 
