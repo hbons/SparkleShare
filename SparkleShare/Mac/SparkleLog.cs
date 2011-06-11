@@ -117,7 +117,6 @@ namespace SparkleShare {
         public void UpdateEventLog ()
         {
             InvokeOnMainThread (delegate {
-
                     if (HTML == null)
                         ContentView.AddSubview (ProgressIndicator);
             });
@@ -147,6 +146,14 @@ namespace SparkleShare {
             HTML = HTML.Replace ("<!-- $a-hover-color -->", "#009ff8");
             HTML = HTML.Replace ("<!-- $no-buddy-icon-background-image -->",
                 "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "avatar-default.png"));
+            HTML = HTML.Replace ("<!-- $document-added-background-image -->",
+                "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-added-12.png"));
+            HTML = HTML.Replace ("<!-- $document-deleted-background-image -->",
+                "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-deleted-12.png"));
+            HTML = HTML.Replace ("<!-- $document-edited-background-image -->",
+                "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-edited-12.png"));
+            HTML = HTML.Replace ("<!-- $document-moved-background-image -->",
+                "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-moved-12.png"));
         }
 
 

@@ -320,7 +320,7 @@ namespace SparkleShare {
                     string event_entry = "<dl>";
                     
                     if (change_set.IsMerge) {
-                        event_entry += "<dd>Merged a branch</dd>";
+                        event_entry += "<dd>Did something magical</dd>";
 
                     } else {
                         if (change_set.Edited.Count > 0) {
@@ -329,9 +329,9 @@ namespace SparkleShare {
                                     change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='file-edited'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+                                    event_entry += "<dd class='document-edited'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
                                 else
-                                    event_entry += "<dd class='file-edited'>" + file_path + "</dd>";
+                                    event_entry += "<dd class='document-edited'>" + file_path + "</dd>";
                             }
                         }
     
@@ -341,9 +341,9 @@ namespace SparkleShare {
                                     change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='file-added'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+                                    event_entry += "<dd class='document-added'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
                                 else
-                                    event_entry += "<dd class='file-added'>" + file_path + "</dd>";
+                                    event_entry += "<dd class='document-added'>" + file_path + "</dd>";
                             }
                         }
     
@@ -353,9 +353,9 @@ namespace SparkleShare {
                                     change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='file-deleted'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+                                    event_entry += "<dd class='document-deleted'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
                                 else
-                                    event_entry += "<dd class='file-deleted'>" + file_path + "</dd>";
+                                    event_entry += "<dd class='document-deleted'>" + file_path + "</dd>";
                             }
                         }
 
@@ -369,11 +369,9 @@ namespace SparkleShare {
                                     change_set.Folder, to_file_path);
 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='file-moved'><a href='" + absolute_file_path + "'>" + file_path + "</a><br/>" +
-                                                   "<span class='moved-arrow'>&rarr;</span> ";
+                                    event_entry += "<dd class='document-moved'><a href='" + absolute_file_path + "'>" + file_path + "</a><br/>";
                                 else
-                                    event_entry += "<dd class='file-moved'>" + file_path + "<br/>" +
-                                                   "<span class='moved-arrow'>&rarr;</span> ";
+                                    event_entry += "<dd class='document-moved'>" + file_path + "<br/>";
 
                                 if (File.Exists (absolute_to_file_path))
                                     event_entry += "<a href='" + absolute_to_file_path + "'>" + to_file_path + "</a></dd>";
@@ -388,7 +386,7 @@ namespace SparkleShare {
                     event_entry   += "</dl>";
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.UserName)
-                        .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (change_set.UserEmail, 36) )
+                        .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (change_set.UserEmail, 36))
                         .Replace ("<!-- $event-time -->", change_set.Timestamp.ToString ("H:mm"))
                         .Replace ("<!-- $event-folder -->", change_set.Folder)
                         .Replace ("<!-- $event-folder-color -->", AssignColor (change_set.Folder));
@@ -1038,7 +1036,7 @@ namespace SparkleShare {
         {
             string hash    = GetMD5 (s).Substring (0, 8);
             string numbers = Regex.Replace (hash, "[a-z]", "");
-            int number     = int.Parse (numbers);
+            int number     = 1 + int.Parse (numbers);
             return this.tango_palette [number % this.tango_palette.Length];
         }
     }
