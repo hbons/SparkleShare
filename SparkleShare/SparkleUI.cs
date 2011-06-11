@@ -49,6 +49,27 @@ namespace SparkleShare {
             // Initialize the application
             Application.Init ();
 
+            GLib.ExceptionManager.UnhandledException += delegate (GLib.UnhandledExceptionArgs exArgs) {
+                Exception UnhandledException = (Exception)exArgs.ExceptionObject;
+                string ExceptionMessage = UnhandledException.Message.ToString ();
+                MessageDialog ExceptionDialog = new MessageDialog (null, DialogFlags.Modal, MessageType.Error, ButtonsType.Ok,
+                                 "Unhandled Exception!\n" + UnhandledException.GetType ().ToString ());
+                ExceptionDialog.Title = "ERROR";
+
+                while (UnhandledException != null) {
+                    Console.WriteLine ("\n\n"
+                                    + "Unhandled exception\n"
+                                    + "-------------------\n"
+                                    + UnhandledException.Message + "\n\n"
+                                    + UnhandledException.StackTrace);
+                    UnhandledException = UnhandledException.InnerException;
+                }
+
+                ExceptionDialog.Run ();
+                ExceptionDialog.Destroy ();
+
+            };
+
             // Create the statusicon
             StatusIcon = new SparkleStatusIcon ();
             

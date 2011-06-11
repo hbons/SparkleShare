@@ -6,6 +6,9 @@
 *.app
 *.pidb
 *.gmo
+*.bak
+*.suo
+*.sln.cache
 po/POTFILES
 Makefile.in
 Makefile
@@ -22,6 +25,7 @@ INSTALL
 aclocal.m4
 autom4te.cache/
 bin/
+obj/
 install-sh
 libtool
 ltmain.sh
@@ -33,7 +37,9 @@ SparkleLib/AssemblyInfo.cs
 build/m4/shave/shave
 build/m4/*.m4
 build/m4/shave/shave-libtool
-Defines.cs
+SparkleLib/Defines.cs
+SparkleLib/windows/Defines.cs
+SparkleLib/windows/GlobalAssemblyInfo.cs
 SparkleShare/sparkleshare
 po/sparkleshare.pot
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py

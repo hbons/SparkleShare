@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <ProjectGuid>{728483AA-E34B-4441-BF2C-C8BC2901E4E0}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>SparkleShare</AssemblyName>
+    <SchemaVersion>2.0</SchemaVersion>
+    <RootNamespace>SparkleShare</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+    </Reference>
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+    </Reference>
+    <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="Mono.Posix" />
+    <Reference Include="System.XML" />
+    <Reference Include="webkit-sharp, Version=1.1.15.0, Culture=neutral, PublicKeyToken=eaa1d335d2e19745">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\webkit-sharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\SparkleLib\windows\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GlobalAssemblyInfo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Notification.cs" />
+    <Compile Include="SparkleBubble.cs" />
+    <Compile Include="..\SparkleIntro.cs" />
+    <Compile Include="..\SparkleShare.cs" />
+    <Compile Include="..\SparkleSpinner.cs" />
+    <Compile Include="..\SparkleStatusIcon.cs" />
+    <Compile Include="..\SparkleUI.cs" />
+    <Compile Include="..\SparkleWindow.cs" />
+    <Compile Include="..\SparkleEntry.cs" />
+    <Compile Include="..\SparkleLog.cs" />
+    <Compile Include="..\SparkleUIHelpers.cs" />
+    <Compile Include="..\SparkleInfobar.cs" />
+    <Compile Include="..\SparkleController.cs" />
+    <Compile Include="..\SparkleAbout.cs" />
+    <Compile Include="SparkleWinController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SparkleLib\Windows\SparkleLib.csproj">
+      <Project>{2C914413-B31C-4362-93C7-1AE34F09112A}</Project>
+      <Name>SparkleLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties InternalTargetFrameworkVersion="3.5">
+        <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="true" RelativeMakefileName="Makefile.am">
+          <BuildFilesVar Sync="true" Name="SOURCES" />
+          <DeployFilesVar />
+          <ResourcesVar />
+          <OthersVar />
+          <GacRefVar />
+          <AsmRefVar />
+          <ProjectRefVar />
+        </MonoDevelop.Autotools.MakefileInfo>
+      </Properties>
+    </MonoDevelop>
+    <VisualStudio />
+  </ProjectExtensions>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\SparkleLib\windows\GlobalAssemblyInfo.tt">
+      <Link>GlobalAssemblyInfo.tt</Link>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GlobalAssemblyInfo.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <PropertyGroup>
+    <PreBuildEvent>$(ProjectDir)transform_tt.cmd</PreBuildEvent>
+  </PropertyGroup>
+</Project>

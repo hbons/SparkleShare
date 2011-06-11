@@ -348,7 +348,12 @@ namespace SparkleLib {
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
 
             SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw -M --date=iso");
-            Console.OutputEncoding = System.Text.Encoding.Unicode;
+			if ((SparkleBackend.Platform == PlatformID.Unix ||
+				 SparkleBackend.Platform == PlatformID.MacOSX)) {
+				// this causes an IOException on windows
+				Console.OutputEncoding = System.Text.Encoding.Unicode;
+			}
+
             git_log.Start ();
 
             // Reading the standard output HAS to go before
