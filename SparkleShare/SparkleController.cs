@@ -993,15 +993,25 @@ namespace SparkleShare {
         }
 
 
+        public string Version {
+            get {
+                return SparkleBackend.Version;
+            }
+        }
+
+
         public void CheckForNewVersion ()
         {
             WebClient web_client = new WebClient ();
             Uri uri = new Uri ("http://www.sparkleshare.org/version");
 
             web_client.DownloadStringCompleted += delegate (object o, DownloadStringCompletedEventArgs args) {
+                if (args.Error != null)
+                    return;
+
                 string new_version = args.Result.Trim ();
 
-                if (Defines.VERSION.Equals (new_version)) {
+                if (Version.Equals (new_version)) {
                     if (VersionUpToDate != null)
                         VersionUpToDate ();
 

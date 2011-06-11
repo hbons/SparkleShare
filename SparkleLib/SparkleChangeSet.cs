@@ -24,6 +24,7 @@ namespace SparkleLib {
 
         public string UserName;
         public string UserEmail;
+        public string Folder;
         public string Revision;
         public DateTime Timestamp;
         public bool IsMerge           = false;

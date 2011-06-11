@@ -55,6 +55,13 @@ namespace SparkleLib {
         }
 
 
+        public static string Version {
+            get {
+                return Defines.VERSION;
+            }
+        }
+
+
         // Strange magic needed by Platform ()
         [DllImport ("libc")]
         static extern int uname (IntPtr buf);
