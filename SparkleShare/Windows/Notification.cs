@@ -16,40 +16,77 @@
 
 
 using System;
-using Gdk;
+using System.Windows.Forms;
+using System.Drawing;
+using System.IO;
+
 
 namespace Notifications
 {
-    public enum Urgency : byte {
-        Low = 0,
-        Normal,
-        Critical
-    }
-
-    public class ActionArgs : EventArgs {
-        private string action;
-        public string Action {
-          get { return action; }
-        }
-
-        public ActionArgs (string action) {
-          this.action = action;
-        }
-    }
-
-    public delegate void ActionHandler (object o, ActionArgs args);
-
-    public class Notification
+    public partial class Notification : Form
     {
-        public Pixbuf Icon;
+		private Timer animationTimer;
+		private int startPosX;
+		private int startPosY;
+
+		public new Gdk.Pixbuf Icon;
 
         public Notification ()
         {
-        }
+			InitializeComponent ();
 
-        public Notification (string title, string subtext)
-        {
-        }
+			TopMost = true;
+			ShowInTaskbar = false;
+
+			animationTimer = new Timer ();
+			animationTimer.Interval = 50;
+			animationTimer.Tick += timer_Tick;
+		}
+
+		public Notification (string title, string subtext)
+			: this()
+		{
+			this.title.Text = title;
+			this.subtext.Text = subtext;
+		}
+
+		protected override void OnLoad (EventArgs e)
+		{
+			// Move window out of screen
+			startPosX = Screen.PrimaryScreen.WorkingArea.Width - Width;
+			startPosY = Screen.PrimaryScreen.WorkingArea.Height;
+			SetDesktopLocation (startPosX, startPosY);
+			base.OnLoad (e);
+			// Begin animation
+			animationTimer.Start ();
+		}
+
+		protected override void OnShown (EventArgs e)
+		{
+			base.OnShown (e);
+
+			// hacky way to move the image from a Gdk.Pixbuf to a winforms bitmap
+			string Filename = Path.GetTempFileName ();
+			File.Delete (Filename);
+
+			Filename = Path.ChangeExtension (Filename, "bmp");
+			if (File.Exists (Filename))
+				File.Delete (Filename);
+			this.Icon.Save (Filename, "bmp");
+			using (Stream s = File.OpenRead (Filename))
+				pictureBox1.Image = Bitmap.FromStream (s);
+			File.Delete (Filename);
+		}
+
+		void timer_Tick (object sender, EventArgs e)
+		{
+			startPosY -= 5;
+
+			if (startPosY < Screen.PrimaryScreen.WorkingArea.Height - Height)
+				animationTimer.Stop ();
+			else
+				SetDesktopLocation (startPosX, startPosY);
+		}
 
         public void AddAction (string action, string label, ActionHandler handler)
         {
@@ -63,8 +100,29 @@ namespace Notifications
         {
         }
 
-        public void Show ()
-        {
-        }
     }
+
+	public enum Urgency : byte
+	{
+		Low = 0,
+		Normal,
+		Critical
+	}
+
+	public class ActionArgs : EventArgs
+	{
+		private string action;
+		public string Action
+		{
+			get { return action; }
+		}
+
+		public ActionArgs (string action)
+		{
+			this.action = action;
+		}
+	}
+
+	public delegate void ActionHandler (object o, ActionArgs args);
+
 }

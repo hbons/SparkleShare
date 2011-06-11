@@ -973,7 +973,7 @@ namespace SparkleShare {
             foreach (SparkleRepoBase repo in Repositories)
                 repo.Dispose ();
 
-            Environment.Exit (0);
+			Gtk.Application.Quit ();
         }
 
 
