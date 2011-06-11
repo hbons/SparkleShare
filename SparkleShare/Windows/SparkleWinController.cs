@@ -46,10 +46,11 @@ namespace SparkleShare {
 			               + System.Environment.ExpandEnvironmentVariables ("%PATH%");
 			System.Environment.SetEnvironmentVariable ("PATH", newPath);
 			System.Environment.SetEnvironmentVariable ("PLINK_PROTOCOL", "ssh");
-			System.Environment.SetEnvironmentVariable ("HOME", Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%"));
+
+			if (String.IsNullOrEmpty (System.Environment.GetEnvironmentVariable ("HOME")))
+				System.Environment.SetEnvironmentVariable ("HOME", Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%"));
 
 			StartSshAgent ();
-			AddDefaultKey ();
 
 			base.Initialize ();
 		}
@@ -101,17 +102,6 @@ namespace SparkleShare {
 			process.StartInfo.FileName = "explorer";
 			
 			process.Start();
-		}
-
-		public void AddDefaultKey ()
-		{
-			/*Process process = new Process ();
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.FileName = "ssh-add";
-			process.StartInfo.Arguments = @"~/.ssh/id_rsa";
-			process.Start ();
-			process.WaitForExit ();*/
 		}
 
 		private void StartSshAgent ()
