@@ -299,7 +299,7 @@ namespace SparkleLib {
         // Starts a timer when something changes
         public void OnFileActivity (object o, FileSystemEventArgs args)
         {
-            if (args.FullPath.Contains ("/."))
+            if (args.FullPath.Contains (Path.DirectorySeparatorChar + "."))
                 return;
 
             WatcherChangeTypes wct = args.ChangeType;
