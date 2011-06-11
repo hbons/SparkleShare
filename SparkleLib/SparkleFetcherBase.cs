@@ -136,9 +136,12 @@ namespace SparkleLib {
                 writer.Close ();
             }
 
-            UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
-            file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
+            if ((SparkleBackend.Platform == PlatformID.Unix ||
+                  SparkleBackend.Platform == PlatformID.MacOSX)) {
+                UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
+                file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
                                                FileAccessPermissions.UserWrite);
+            }
 
             SparkleHelpers.DebugInfo ("Fetcher", "Disabled host key checking");
         }
@@ -174,10 +177,13 @@ namespace SparkleLib {
                     TextWriter writer = new StreamWriter (ssh_config_file_path);
                     writer.WriteLine (current_ssh_config);
                     writer.Close ();
+                    if ((SparkleBackend.Platform == PlatformID.Unix ||
+                          SparkleBackend.Platform == PlatformID.MacOSX)) {
 
-                    UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
-                    file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
-                                                       FileAccessPermissions.UserWrite);
+                        UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
+                        file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
+                                                           FileAccessPermissions.UserWrite);
+                    }
                 }
             }
 
