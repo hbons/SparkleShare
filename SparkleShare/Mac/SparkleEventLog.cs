@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Threading;
@@ -29,56 +30,46 @@ using SparkleLib; // Only used for SparkleChangeSet
 
 namespace SparkleShare {
 
-    public class SparkleLog : NSWindow {
+    public class SparkleEventLog : NSWindow {
 
-        public readonly string LocalPath;
 
         private WebView WebView;
         private NSBox Separator;
         private string HTML;
         private NSPopUpButton popup_button;
         private NSProgressIndicator ProgressIndicator;
-        private List<SparkleChangeSet> change_sets = SparkleShare.Controller.GetLog ();
+        private List<SparkleChangeSet> change_sets;
+        private string selected_log = null;
 
-        public SparkleLog (IntPtr handle) : base (handle) { } 
-        
-        public SparkleLog (string path) : base ()
+        public SparkleEventLog (IntPtr handle) : base (handle) { }
+
+        public SparkleEventLog () : base ()
         {
-            LocalPath = path;
-
-            Delegate = new SparkleLogDelegate ();
+            Title    = "Recent Events";
+            Delegate = new SparkleEventsDelegate ();
 
             SetFrame (new RectangleF (0, 0, 480, 640), true);
             Center ();
-            
-            // Open slightly off center for each consecutive window
-            if (SparkleUI.OpenLogs.Count > 0) {
-                RectangleF offset = new RectangleF (Frame.X + (SparkleUI.OpenLogs.Count * 20),
-                    Frame.Y - (SparkleUI.OpenLogs.Count * 20), Frame.Width, Frame.Height);
 
-                SetFrame (offset, true);
-            }
-            
             StyleMask = (NSWindowStyle.Closable |
                          NSWindowStyle.Miniaturizable |
                          NSWindowStyle.Titled);
 
             MaxSize     = new SizeF (480, 640);
             MinSize     = new SizeF (480, 640);
-            HasShadow   = true;            
+            HasShadow   = true;
             BackingType = NSBackingStore.Buffered;
 
-            CreateEventLog ();
-            UpdateEventLog ();
-            
+            CreateEvents ();
+            UpdateEvents (false);
+            UpdateChooser ();
+
             OrderFrontRegardless ();
         }
 
 
-        private void CreateEventLog ()
+        private void CreateEvents ()
         {
-            Title = "Recent Events";
-
             Separator = new NSBox (new RectangleF (0, 573, 480, 1)) {
                 BorderColor = NSColor.LightGray,
                 BoxType = NSBoxType.NSBoxCustom
@@ -86,44 +77,77 @@ namespace SparkleShare {
 
             ContentView.AddSubview (Separator);
 
-            this.popup_button = new NSPopUpButton (new RectangleF (480 - 156 - 8, 640 - 31 - 26, 156, 26), false);
-            //this.popup_button.
-            this.popup_button.AddItem ("All Folders");
-            this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
-            this.popup_button.AddItems (SparkleShare.Controller.Folders.ToArray ());
-
-
-            this.popup_button.Activated += delegate {
-                Console.WriteLine (this.popup_button.SelectedItem.Title);
-            };
-
-            ContentView.AddSubview (this.popup_button);
-
-            ProgressIndicator = new NSProgressIndicator () {
-                Style = NSProgressIndicatorStyle.Spinning,
-                Frame = new RectangleF (Frame.Width / 2 - 10, Frame.Height / 2 + 10, 20, 20)
-            };
-
-            ProgressIndicator.StartAnimation (this);
-
             WebView = new WebView (new RectangleF (0, 0, 480, 573   ), "", ""){
                 PolicyDelegate = new SparkleWebPolicyDelegate ()
             };
 
+            ProgressIndicator = new NSProgressIndicator () {
+                Style = NSProgressIndicatorStyle.Spinning,
+                Frame = new RectangleF (WebView.Frame.Width / 2 - 10, WebView.Frame.Height / 2 + 10, 20, 20)
+            };
+
+            ProgressIndicator.StartAnimation (this);
             Update ();
         }
 
 
-        public void UpdateEventLog ()
+        public void UpdateChooser ()
         {
-            InvokeOnMainThread (delegate {
-                    if (HTML == null)
-                        ContentView.AddSubview (ProgressIndicator);
-            });
+            if (this.popup_button != null)
+                this.popup_button.RemoveFromSuperview ();
+
+            this.popup_button = new NSPopUpButton () {
+                Frame     = new RectangleF (480 - 156 - 8, 640 - 31 - 26, 156, 26),
+                PullsDown = false
+            };
+            
+            this.popup_button.AddItem ("All Folders");
+            this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
+            this.popup_button.AddItems (SparkleShare.Controller.Folders.ToArray ());
+
+            this.popup_button.Activated += delegate {
+                if (popup_button.IndexOfSelectedItem == 0)
+                    this.selected_log = null;
+                else
+                    this.selected_log = this.popup_button.SelectedItem.Title;
+
+                UpdateEvents (false);
+            };
+
+            ContentView.AddSubview (this.popup_button);
+        }
+
+
+        public void UpdateEvents ()
+        {
+            UpdateEvents (true);
+        }
+
+
+        public void UpdateEvents (bool silent)
+        {
+            if (!silent) {
+                InvokeOnMainThread (delegate {
+                    if (WebView.Superview == ContentView)
+                        WebView.RemoveFromSuperview ();
+    
+                    ContentView.AddSubview (ProgressIndicator);
+                });
+            }
 
             Thread thread = new Thread (new ThreadStart (delegate {
                 using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
+                    Stopwatch watch = new Stopwatch ();
+                    watch.Start ();
+                    this.change_sets = SparkleShare.Controller.GetLog (this.selected_log);
                     GenerateHTML ();
+                    watch.Stop ();
+
+                    // A short delay is less annoying than
+                    // a flashing window
+                    if (watch.ElapsedMilliseconds < 300 && !silent)
+                        Thread.Sleep (300 - (int) watch.ElapsedMilliseconds);
+
                     AddHTML ();
                 }
             }));
@@ -134,7 +158,7 @@ namespace SparkleShare {
 
         private void GenerateHTML ()
         {
-            HTML = SparkleShare.Controller.GetHTMLLog ();
+            HTML = SparkleShare.Controller.GetHTMLLog (this.change_sets);
 
             HTML = HTML.Replace ("<!-- $body-font-family -->", "Lucida Grande");
             HTML = HTML.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
@@ -160,24 +184,22 @@ namespace SparkleShare {
         private void AddHTML ()
         {
             InvokeOnMainThread (delegate {
-                    if (ProgressIndicator.Superview == ContentView)
-                        ProgressIndicator.RemoveFromSuperview ();
-        
-                    WebView.MainFrame.LoadHtmlString (HTML, new NSUrl (""));
-        
-                    ContentView.AddSubview (WebView);
-                    Update ();
+                if (ProgressIndicator.Superview == ContentView)
+                    ProgressIndicator.RemoveFromSuperview ();
 
+                WebView.MainFrame.LoadHtmlString (HTML, new NSUrl (""));
+                ContentView.AddSubview (WebView);
+                Update ();
             });
         }
     }
 
 
-    public class SparkleLogDelegate : NSWindowDelegate {
+    public class SparkleEventsDelegate : NSWindowDelegate {
         
         public override bool WindowShouldClose (NSObject sender)
         {
-            (sender as SparkleLog).OrderOut (this);
+            (sender as SparkleEventLog).OrderOut (this);
             return false;
         }
     }
@@ -186,7 +208,7 @@ namespace SparkleShare {
     public class SparkleWebPolicyDelegate : WebPolicyDelegate {
         
         public override void DecidePolicyForNavigation (WebView web_view, NSDictionary action_info,
-                                                        NSUrlRequest request, WebFrame frame, NSObject decision_token)
+            NSUrlRequest request, WebFrame frame, NSObject decision_token)
         {
             string file_path = request.Url.ToString ();
             file_path = file_path.Replace ("%20", " ");

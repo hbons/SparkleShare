@@ -247,13 +247,13 @@ namespace SparkleShare {
             List<SparkleChangeSet> list = new List<SparkleChangeSet> ();
 
             foreach (SparkleRepoBase repo in Repositories)
-                list.AddRange (repo.GetChangeSets (30));
+                list.AddRange (repo.GetChangeSets (50));
 
             list.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
             list.Reverse ();
 
-            if (list.Count > 50)
-                return list.GetRange (0, 50);
+            if (list.Count > 100)
+                return list.GetRange (0, 100);
             else
                 return list.GetRange (0, list.Count);
         }
@@ -261,8 +261,11 @@ namespace SparkleShare {
 
         public List<SparkleChangeSet> GetLog (string name)
         {
+            if (name == null)
+                return GetLog ();
+
             string path = Path.Combine (SparklePaths.SparklePath, name);
-            int log_size = 30;
+            int log_size = 50;
             
             foreach (SparkleRepoBase repo in Repositories) {
                 if (repo.LocalPath.Equals (path))            
@@ -278,10 +281,9 @@ namespace SparkleShare {
         public abstract string EventEntryHTML { get; }
         
         
-        public string GetHTMLLog ()
+        public string GetHTMLLog (List<SparkleChangeSet> change_sets)
         {
-            List <SparkleChangeSet> change_sets = GetLog ();
-            List <ActivityDay> activity_days    = new List <ActivityDay> ();
+            List <ActivityDay> activity_days = new List <ActivityDay> ();
             
             if (change_sets.Count == 0)
                 return null;
@@ -1036,7 +1038,7 @@ namespace SparkleShare {
         {
             string hash    = GetMD5 (s).Substring (0, 8);
             string numbers = Regex.Replace (hash, "[a-z]", "");
-            int number     = 1 + int.Parse (numbers);
+            int number     = 3 + int.Parse (numbers);
             return this.tango_palette [number % this.tango_palette.Length];
         }
     }
