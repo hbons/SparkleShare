@@ -163,6 +163,9 @@ namespace SparkleShare {
 
                         if (SparkleUI.EventLog == null)
                             SparkleUI.EventLog = new SparkleEventLog ();
+
+                        SparkleUI.EventLog.OrderFrontRegardless ();
+                        SparkleUI.EventLog.MakeKeyAndOrderFront (this);
                     });
                 };
 
