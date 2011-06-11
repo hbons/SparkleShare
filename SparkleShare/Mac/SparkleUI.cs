@@ -185,5 +185,5 @@ namespace SparkleShare {
             string path = NSBundle.MainBundle.PathForResource ("Growl", "plist");
             return NSDictionary.FromFile (path);
         }
-	}
+    }
 }
