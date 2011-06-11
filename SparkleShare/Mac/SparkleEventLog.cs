@@ -32,7 +32,6 @@ namespace SparkleShare {
 
     public class SparkleEventLog : NSWindow {
 
-
         private WebView WebView;
         private NSBox Separator;
         private string HTML;
@@ -40,6 +39,7 @@ namespace SparkleShare {
         private NSProgressIndicator ProgressIndicator;
         private List<SparkleChangeSet> change_sets;
         private string selected_log = null;
+
 
         public SparkleEventLog (IntPtr handle) : base (handle) { }
 
