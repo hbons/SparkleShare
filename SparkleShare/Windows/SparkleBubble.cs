@@ -24,7 +24,11 @@ namespace SparkleShare {
 
         public SparkleBubble (string title, string subtext) : base (title, subtext)
         {
-        }
+			System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer ();
+			timer.Tick += delegate { this.Close (); };
+			timer.Interval = 4500;
+			timer.Start ();
+		}
 
         // Checks whether the system allows adding buttons to a notification,
         // prevents error messages in Ubuntu.

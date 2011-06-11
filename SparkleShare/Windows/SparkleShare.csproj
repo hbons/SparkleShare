@@ -58,6 +58,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="Mono.Posix" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
     <Reference Include="webkit-sharp, Version=1.1.15.0, Culture=neutral, PublicKeyToken=eaa1d335d2e19745">
       <SpecificVersion>False</SpecificVersion>
@@ -72,8 +74,15 @@
       <DependentUpon>GlobalAssemblyInfo.tt</DependentUpon>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Notification.cs" />
-    <Compile Include="SparkleBubble.cs" />
+    <Compile Include="Notification.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Notification.designer.cs">
+      <DependentUpon>Notification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SparkleBubble.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="..\SparkleIntro.cs" />
     <Compile Include="..\SparkleShare.cs" />
     <Compile Include="..\SparkleSpinner.cs" />
@@ -140,4 +149,9 @@
   <PropertyGroup>
     <PreBuildEvent>$(ProjectDir)transform_tt.cmd</PreBuildEvent>
   </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Notification.resx">
+      <DependentUpon>Notification.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>
