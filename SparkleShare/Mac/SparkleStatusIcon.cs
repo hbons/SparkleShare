@@ -154,27 +154,16 @@ namespace SparkleShare {
             Menu.AddItem (NSMenuItem.SeparatorItem);
 
             RecentEventsMenuItem = new NSMenuItem () {
-                Title = "Show Events"
+                Title = "Show Recent Events"
             };
 
                 RecentEventsMenuItem.Activated +=delegate {
                     InvokeOnMainThread (delegate {
-                    NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-                    string path = "test";
-                    SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
-                        return l.LocalPath.Equals (path);
-                    });
+                        NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
 
-                    // Check whether the log is already open, create a new one if
-                    // that's not the case or present it to the user if it is
-                    if (log == null) {
-                        SparkleUI.OpenLogs.Add (new SparkleLog (path));
-                        SparkleUI.OpenLogs [SparkleUI.OpenLogs.Count - 1].MakeKeyAndOrderFront (this);
-                    } else {
-                        log.OrderFrontRegardless ();
-                        log.MakeKeyAndOrderFront (this);
-                    }
-                });
+                        if (SparkleUI.EventLog == null)
+                            SparkleUI.EventLog = new SparkleEventLog ();
+                    });
                 };
 
             Menu.AddItem (RecentEventsMenuItem);
