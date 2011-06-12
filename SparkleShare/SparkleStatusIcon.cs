@@ -310,14 +310,7 @@ namespace SparkleShare {
 
         public void UpdateMenu ()
         {
-            Menu.Remove (Menu.Children [0]);
-
-                MenuItem status_menu_item = new MenuItem (StateText) {
-                    Sensitive = false
-                };
-
-            Menu.Add (status_menu_item);
-            Menu.ReorderChild (status_menu_item, 0);
+            ((Menu.Children [0] as MenuItem).Child as Label).Text = StateText;
             Menu.ShowAll ();
         }
 
