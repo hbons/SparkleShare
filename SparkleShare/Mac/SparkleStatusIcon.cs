@@ -239,17 +239,19 @@ namespace SparkleShare {
                 Title = "Show Recent Events"
             };
 
-                RecentEventsMenuItem.Activated +=delegate {
-                    InvokeOnMainThread (delegate {
-                        NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-
-                        if (SparkleUI.EventLog == null)
-                            SparkleUI.EventLog = new SparkleEventLog ();
-
-                        SparkleUI.EventLog.OrderFrontRegardless ();
-                        SparkleUI.EventLog.MakeKeyAndOrderFront (this);
-                    });
-                };
+                if (SparkleShare.Controller.Folders.Count > 0) {
+                    RecentEventsMenuItem.Activated +=delegate {
+                        InvokeOnMainThread (delegate {
+                            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+    
+                            if (SparkleUI.EventLog == null)
+                                SparkleUI.EventLog = new SparkleEventLog ();
+    
+                            SparkleUI.EventLog.OrderFrontRegardless ();
+                            SparkleUI.EventLog.MakeKeyAndOrderFront (this);
+                        });
+                    };
+                }
 
             Menu.AddItem (RecentEventsMenuItem);
 
