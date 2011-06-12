@@ -212,7 +212,7 @@ namespace SparkleShare {
 
             MenuItem recent_events_item = new MenuItem (_("Show Recent Events"));
             
-                if (SparkleShare.Controller.FirstRun)
+                if (SparkleShare.Controller.Folders.Count > 0)
                     recent_events_item.Sensitive = false;
 
                 recent_events_item.Activated += delegate {
