@@ -24,7 +24,7 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r /Users/hbons/Code/SparkleShare/SparkleShare/Mac/Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks" externalConsole="true" />
+        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks" externalConsole="true" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
