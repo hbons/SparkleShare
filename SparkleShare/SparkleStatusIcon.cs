@@ -27,14 +27,18 @@ namespace SparkleShare {
 
     // The statusicon that stays in the
     // user's notification area
-    public class SparkleStatusIcon : StatusIcon    {
+    public class SparkleStatusIcon {
+
+    	public bool UseIndicator = true;
 
         private Timer Animation;
         private Gdk.Pixbuf [] AnimationFrames;
         private int FrameNumber;
         private string StateText;
         private Menu Menu;
-
+        private StatusIcon status_icon;
+        private  ApplicationIndicator indicator;
+private Menu menu;
         // Short alias for the translations
         public static string _ (string s)
         {
@@ -42,13 +46,23 @@ namespace SparkleShare {
         }
 
 
-        public SparkleStatusIcon () : base ()
+        public SparkleStatusIcon ()
         {
             AnimationFrames = CreateAnimationFrames ();
             Animation = CreateAnimation ();
 
-            Activate += ShowMenu;  // Primary mouse button click
-            PopupMenu += ShowMenu; // Secondary mouse button click
+            if (UseIndicator) {
+                this.indicator = new ApplicationIndicator ("sparkleshare",
+                    "folder", Category.ApplicationStatus);
+
+                indicator.Status = Status.Attention;
+
+            } else {
+                this.status_icon = new StatusIcon ();
+
+                this.status_icon.Activate += ShowMenu; // Primary mouse button click
+                this.status_icon.PopupMenu += ShowMenu; // Secondary mouse button click
+            }
 
             SetNormalState ();
             CreateMenu ();
@@ -122,7 +136,11 @@ namespace SparkleShare {
                     FrameNumber = 0;
 
                 Application.Invoke (delegate {
-                    Pixbuf = AnimationFrames [FrameNumber];
+                    if (UseIndicator) {
+                        this.indicator.IconName = "folder-videos";
+                    } else {
+                        this.status_icon.Pixbuf = AnimationFrames [FrameNumber];
+                    }
                 });
             };
 
@@ -185,6 +203,8 @@ namespace SparkleShare {
 
                     Menu.Add (no_folders_item);
                 }
+
+                Menu.Add (new SeparatorMenuItem ());
 
                 // Opens the wizard to add a new remote folder
                 MenuItem sync_item = new MenuItem (_("Add Remote Folder…"));
@@ -263,6 +283,9 @@ namespace SparkleShare {
 
             Menu.Add (quit_item);
             Menu.ShowAll ();
+
+            if (UseIndicator)
+                this.indicator.Menu = Menu;
         }
 
 
@@ -301,7 +324,7 @@ namespace SparkleShare {
         // Makes sure the menu pops up in the right position
         private void SetPosition (Menu menu, out int x, out int y, out bool push_in)
         {
-            PositionMenu (menu, out x, out y, out push_in, Handle);
+            StatusIcon.PositionMenu (menu, out x, out y, out push_in, this.status_icon.Handle);
         }
 
 
@@ -321,19 +344,31 @@ namespace SparkleShare {
                 StateText = _("Welcome to SparkleShare!");
 
                 Application.Invoke (delegate {
-                    Pixbuf = AnimationFrames [0];
+                    if (UseIndicator) {
+                        this.indicator.IconName = "folder-pictures";
+                    } else {
+                        this.status_icon.Pixbuf = AnimationFrames [0];
+                    }
                 });
             } else {
                 if (error) {
                     StateText = _("Not everything is synced");
 
                     Application.Invoke (delegate {
-                        Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
+                        if (UseIndicator) {
+                            this.indicator.IconName = "folder-music";
+                        } else {
+                            this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
+                        }
                     });
                 } else {
                     StateText = _("Up to date") + "  (" + SparkleShare.Controller.FolderSize + ")";
                     Application.Invoke (delegate {
-                        Pixbuf = AnimationFrames [0];
+                        if (UseIndicator) {
+                            this.indicator.IconName = "folder-pictures";
+                        } else {
+                            this.status_icon.Pixbuf = AnimationFrames [0];
+                        }
                     });
                 }
             }
