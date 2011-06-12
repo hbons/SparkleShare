@@ -156,20 +156,19 @@ namespace SparkleShare {
                 if (SparkleShare.Controller.Folders.Count > 0) {
             
                     // Creates a menu item for each repository with a link to their logs
-                    foreach (string path in SparkleShare.Controller.Folders) {
+                    foreach (string folder_name in SparkleShare.Controller.Folders) {
 
                         Gdk.Pixbuf folder_icon = IconTheme.Default.LoadIcon ("folder", 16,
                             IconLookupFlags.GenericFallback);
                         
-                        ImageMenuItem subfolder_item = new SparkleMenuItem (Path.GetFileName (path)) {
+                        ImageMenuItem subfolder_item = new SparkleMenuItem (folder_name) {
                             Image = new Image (folder_icon)
                         };
 
-//                        if (repo.HasUnsyncedChanges)
+//                        if (repo.HasUnsyncedChanges) TODO
 //                            folder_action.IconName = "dialog-error";
                     
-                        subfolder_item.Activated += OpenEventLogDelegate (path);
-
+                        subfolder_item.Activated += OpenFolderDelegate (folder_name);
                         Menu.Add (subfolder_item);
                     }
 
@@ -206,7 +205,24 @@ namespace SparkleShare {
             Menu.Add (sync_item);
             Menu.Add (new SeparatorMenuItem ());
 
-                MenuItem notify_item;
+            MenuItem recent_events_item = new MenuItem (_("Show Recent Events"));
+            
+                if (SparkleShare.Controller.FirstRun) // TODO in mac version too
+                    recent_events_item.Sensitive = false;
+
+                recent_events_item.Activated += delegate {
+                    Application.Invoke (delegate {
+                        if (SparkleUI.EventLog == null)
+                            SparkleUI.EventLog = new SparkleEventLog ();
+
+                        SparkleUI.EventLog.ShowAll ();
+                        SparkleUI.EventLog.Present ();
+                    });
+                };
+
+            Menu.Add (recent_events_item);
+
+            MenuItem notify_item;
                                                              
                 if (SparkleShare.Controller.NotificationsEnabled)
                     notify_item = new MenuItem (_("Turn Notifications Off"));
@@ -246,10 +262,10 @@ namespace SparkleShare {
 
         // A method reference that makes sure that opening the
         // event log for each repository works correctly
-        private EventHandler OpenEventLogDelegate (string path)
+        private EventHandler OpenFolderDelegate (string name)
         {
             return delegate {
-                SparkleShare.UI.AddEventLog (path);
+                SparkleShare.Controller.OpenSparkleShareFolder (name);
             };
         }
 
