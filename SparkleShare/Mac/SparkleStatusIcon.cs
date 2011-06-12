@@ -239,7 +239,7 @@ namespace SparkleShare {
                 Title = "Show Recent Events"
             };
 
-                if (SparkleShare.Controller.Folders.Count < 0) {
+                if (SparkleShare.Controller.Folders.Count < 1) {
                     RecentEventsMenuItem.Activated +=delegate {
                         InvokeOnMainThread (delegate {
                             NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
