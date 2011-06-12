@@ -69,15 +69,15 @@ msgstr "Über SparkleShare"
 
 #: ../SparkleShare/SparkleAbout.cs:54
 msgid "A newer version is available"
-msgstr ""
+msgstr "Eine neuere Version ist verfügbar"
 
 #: ../SparkleShare/SparkleAbout.cs:61
 msgid "You are running the latest version."
-msgstr ""
+msgstr "Sie verwenden die aktuelle Version."
 
 #: ../SparkleShare/SparkleAbout.cs:88
 msgid "Checking for updates..."
-msgstr ""
+msgstr "Suche Aktualisierungen..."
 
 #: ../SparkleShare/SparkleAbout.cs:117
 msgid "_Show Credits"
@@ -103,7 +103,7 @@ msgstr "‘{0}’ hinzugefügt"
 #: ../SparkleShare/SparkleController.cs:613
 #, csharp-format
 msgid "moved ‘{0}’"
-msgstr ""
+msgstr "‘{0}’ verschoben"
 
 #: ../SparkleShare/SparkleController.cs:618
 #, csharp-format
@@ -132,7 +132,7 @@ msgid ""
 "bits of information from you."
 msgstr ""
 "Bevor wir einen SparkleShare-Ordner auf diesem Computer einrichten können, "
-"benötigen wir ein paar Informationen von Ihnen."
+"benötigen wir einige Informationen von Ihnen."
 
 #: ../SparkleShare/SparkleIntro.cs:81
 msgid "Full Name:"
@@ -178,7 +178,7 @@ msgstr "Das GNOME Project"
 
 #: ../SparkleShare/SparkleIntro.cs:195
 msgid "GNOME is an easy to understand interface to your computer."
-msgstr "GNOME ist ein einfach verständliches Interface zu Ihrem Computer"
+msgstr "GNOME ist ein einfach verständliches Interface für Ihrem Computer"
 
 #: ../SparkleShare/SparkleIntro.cs:196
 msgid "Select this option if you’re a developer or designer working on GNOME."
@@ -356,7 +356,7 @@ msgstr "Diesen Hilfetext anzeigen"
 
 #: ../SparkleShare/SparkleShare.cs:114
 msgid "SparkleShare, a collaboration and sharing tool."
-msgstr ""
+msgstr "SparkleShare, ein Werkzeug für verteilte Zusammenarbeit."
 
 #: ../SparkleShare/SparkleShare.cs:115
 msgid "Copyright (C) 2010 Hylke Bons"
@@ -434,6 +434,6 @@ msgstr ""
 
 #: ../SparkleShare/SparkleWindow.cs:41
 msgid "SparkleShare Setup"
-msgstr ""
+msgstr "SparkleShare Konfiguration"
 
 
