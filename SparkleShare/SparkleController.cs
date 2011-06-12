@@ -223,7 +223,9 @@ namespace SparkleShare {
 
         public List<string> Folders {
             get {
-                return SparkleConfig.DefaultConfig.Folders;
+                List<string> folders = SparkleConfig.DefaultConfig.Folders;
+                folders.Sort ();
+                return folders;
             }
         }
 
