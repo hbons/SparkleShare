@@ -19,9 +19,10 @@ using System;
 using System.IO;
 using System.Timers;
 
-using AppIndicator;
 using Gtk;
 using Mono.Unix;
+
+using AppIndicator;
 
 namespace SparkleShare {
 
@@ -36,9 +37,10 @@ namespace SparkleShare {
         private int FrameNumber;
         private string StateText;
         private Menu Menu;
+
         private StatusIcon status_icon;
-        private  ApplicationIndicator indicator;
-private Menu menu;
+        private ApplicationIndicator indicator;
+        
         // Short alias for the translations
         public static string _ (string s)
         {
@@ -53,9 +55,10 @@ private Menu menu;
 
             if (UseIndicator) {
                 this.indicator = new ApplicationIndicator ("sparkleshare",
-                    "folder", Category.ApplicationStatus);
+                    "process-syncing-sparkleshare-i", Category.ApplicationStatus) {
 
-                indicator.Status = Status.Attention;
+                    Status = Status.Attention
+                };
 
             } else {
                 this.status_icon = new StatusIcon ();
@@ -135,11 +138,17 @@ private Menu menu;
                 else
                     FrameNumber = 0;
 
+                string icon_name = "process-syncing-sparkleshare-";
+
+                for (int i = 0; i <= FrameNumber; i++)
+                    icon_name += "i";
+
                 Application.Invoke (delegate {
                     if (UseIndicator) {
-                        this.indicator.IconName = "folder-videos";
+                        this.indicator.IconName = icon_name;
+                        Console.WriteLine (icon_name);
                     } else {
-                        this.status_icon.Pixbuf = AnimationFrames [FrameNumber];
+                        this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon (icon_name, 24);
                     }
                 });
             };
@@ -176,7 +185,6 @@ private Menu menu;
             
                     // Creates a menu item for each repository with a link to their logs
                     foreach (string folder_name in SparkleShare.Controller.Folders) {
-
                         Gdk.Pixbuf folder_icon;
 
                         if (SparkleShare.Controller.UnsyncedFolders.Contains (folder_name)) {
@@ -309,7 +317,6 @@ private Menu menu;
 
             Menu.Add (status_menu_item);
             Menu.ReorderChild (status_menu_item, 0);
-
             Menu.ShowAll ();
         }
 
@@ -345,18 +352,19 @@ private Menu menu;
 
                 Application.Invoke (delegate {
                     if (UseIndicator) {
-                        this.indicator.IconName = "folder-pictures";
+                        this.indicator.IconName = "process-syncing-sparkleshare-i";
                     } else {
                         this.status_icon.Pixbuf = AnimationFrames [0];
                     }
                 });
+
             } else {
                 if (error) {
                     StateText = _("Not everything is synced");
 
                     Application.Invoke (delegate {
                         if (UseIndicator) {
-                            this.indicator.IconName = "folder-music";
+                            this.indicator.IconName = "sparkleshare-syncing-error";
                         } else {
                             this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
                         }
@@ -365,7 +373,7 @@ private Menu menu;
                     StateText = _("Up to date") + "  (" + SparkleShare.Controller.FolderSize + ")";
                     Application.Invoke (delegate {
                         if (UseIndicator) {
-                            this.indicator.IconName = "folder-pictures";
+                            this.indicator.IconName = "process-syncing-sparkleshare-i";
                         } else {
                             this.status_icon.Pixbuf = AnimationFrames [0];
                         }

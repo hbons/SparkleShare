@@ -8,7 +8,12 @@ system_theme_icons =					\
 	apps,folder-sparkleshare-24.png			\
 	apps,folder-sparkleshare-256.png		\
 	apps,folder-sparkleshare-32.png			\
-	apps,folder-sparkleshare-48.png
+	apps,folder-sparkleshare-48.png			\
+	status,process-syncing-sparkleshare-i-24.png \
+	status,process-syncing-sparkleshare-ii-24.png \
+	status,process-syncing-sparkleshare-iii-24.png \
+	status,process-syncing-sparkleshare-iiii-24.png \
+	status,process-syncing-sparkleshare-iiiii-24.png
 
 app_theme_icons =					\
 	animations,process-syncing-sparkleshare-24.png	\
