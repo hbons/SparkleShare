@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using System.Timers;
 
+using AppIndicator;
 using Gtk;
 using Mono.Unix;
 
