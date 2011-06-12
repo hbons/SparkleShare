@@ -146,7 +146,6 @@ namespace SparkleShare {
                 Application.Invoke (delegate {
                     if (UseIndicator) {
                         this.indicator.IconName = icon_name;
-                        Console.WriteLine (icon_name);
                     } else {
                         this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon (icon_name, 24);
                     }
