@@ -13,10 +13,10 @@ SOURCES =  \
 	SparkleBubble.cs \
 	SparkleController.cs \
 	SparkleEntry.cs \
+	SparkleEventLog.cs \
 	SparkleInfobar.cs \
 	SparkleIntro.cs \
 	SparkleLinController.cs \
-	SparkleEventLog.cs \
 	SparkleShare.cs \
 	SparkleSpinner.cs \
 	SparkleStatusIcon.cs \

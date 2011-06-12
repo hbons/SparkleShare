@@ -416,6 +416,9 @@ namespace SparkleLib {
             //rewrite this to operate over a number of changes
             //foreach change in changes? (this only works for arrays)
             //probably need to implement some sort of class or something
+			
+			//might want to write the log server side directly via ssh and append >> to the file
+			//still need to then sync the log to the local client for offline use.
             
             string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");         
             string timestamp = DateTime.UtcNow.ToString(); //log written in UTC
@@ -473,7 +476,11 @@ namespace SparkleLib {
                 Array.Reverse(lines);
                 foreach (string line in lines)
                 {
-                    string[] parts = line.Split(",".ToCharArray ()); //TODO: fix: commas in filenames will be broken...
+                   
+					string[] parts = line.Split(",".ToCharArray ()); //TODO: fix: commas in filenames will be broken..
+					
+					foreach (string part in parts) 
+					    SparkleHelpers.DebugInfo ("Unison", "Read log entry: " + part);
                     
                     SparkleChangeSet change_set = new SparkleChangeSet ();
                     
@@ -498,23 +505,43 @@ namespace SparkleLib {
                     change_set.Revision  = parts[3].Trim();
                     change_set.UserName  = parts[1].Trim();
                     change_set.UserEmail = parts[2].Trim();
+					
+					string relativepath = parts[4].Trim();
+					string name = relativepath;
+					
+					if (!relativepath.Contains("/"))
+					{
+						change_set.Folder = Name;
+						name = relativepath;
+					}
+					else
+					{
+						string[] pathparts = relativepath.Split("/".ToCharArray ());
+						//get the file name
+						name               = pathparts[pathparts.Length - 1].ToString();
+						//remove the filename from the relative path
+						string pathhere    = relativepath.Remove(relativepath.Length - name.Length - 1, name.Length + 1);
+					    change_set.Folder  = Name + "/" + pathhere;	
+					}
+					
                     
                     if (change_set.Revision.Equals ("Added"))
                     {
-                        change_set.Added.Add (parts[4].Trim());
+                        change_set.Added.Add (name);
                     } 
                     else if (change_set.Revision.Equals ("Edited"))
                     {
-                        change_set.Edited.Add (parts[4].Trim());
+                        change_set.Edited.Add (name);
                     } 
                     else if (change_set.Revision.Equals ("Deleted"))
                     {
-                        change_set.Deleted.Add (parts[4].Trim());
+                        change_set.Deleted.Add (name);
                     }
-                    else if (change_set.Revision.Equals ("New Folder"))
+                    else if (change_set.Revision.Equals ("New Folder")) //not sure how this should be handled with the new nice log
                     {
-                        change_set.Added.Add (parts[4].Trim() + "/"); //make it look more like a directory
+                        change_set.Added.Add (name + "/"); //make it look more like a directory
                     }
+						
                     //unison doesn't recognize if files were moved it just thinks they were deleted then added somewhere else, oh well.
                     
                     change_sets.Add (change_set);

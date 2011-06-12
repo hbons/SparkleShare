@@ -146,6 +146,7 @@ namespace SparkleLib {
             writer.WriteLine ("root = ."); //root1: local folder
             writer.WriteLine ("root = " + base.remote_url); //root2: remote server -- PROBLEM WITH SPACES IN THE PATH, quotes are broken!!
             writer.WriteLine ("log = true");
+			writer.WriteLine ("batch = true");
             writer.WriteLine ("dumbtty = true");
             writer.WriteLine ("auto = true");
             writer.WriteLine ("terse = true");
@@ -197,7 +198,7 @@ namespace SparkleLib {
             writer.WriteLine ("ignore = Path .sparkleshare"); //don't sync this since it has the archive file and the log in it
             writer.Close ();
             
-            SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
+            SparkleHelpers.DebugInfo ("Unison", "Added unison profile to: " + unison_profile);
         }
         
             
@@ -207,7 +208,6 @@ namespace SparkleLib {
             string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "dryrun.prf");
             TextWriter writer = new StreamWriter (unison_profile);
             writer.WriteLine ("include sparkleshare");
-            writer.WriteLine ("batch = true");
             writer.WriteLine ("nodeletion = .");
             writer.WriteLine ("nodeletion = " + base.remote_url);
             writer.WriteLine ("noupdate = .");
@@ -217,7 +217,7 @@ namespace SparkleLib {
             writer.WriteLine ("ignore = Name .changelog");
             writer.Close ();
             
-            SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
+            SparkleHelpers.DebugInfo ("Unison", "Added unison profile to: " + unison_profile);
         }
 
         
@@ -227,12 +227,11 @@ namespace SparkleLib {
             string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "sync.prf");
             TextWriter writer = new StreamWriter (unison_profile);
             writer.WriteLine ("include sparkleshare");
-            writer.WriteLine ("batch = true");
             writer.WriteLine ("confirmbigdel = false");
             writer.WriteLine ("ignore = Name .changelog");
             writer.Close ();
             
-            SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
+            SparkleHelpers.DebugInfo ("Unison", "Added unison profile to: " + unison_profile);
         }
         
         
@@ -242,7 +241,6 @@ namespace SparkleLib {
             string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "grab.prf");
             TextWriter writer = new StreamWriter (unison_profile);
             writer.WriteLine ("include sparkleshare");
-            writer.WriteLine ("batch = true");
             writer.WriteLine ("confirmbigdel = false");
             writer.WriteLine ("nodeletion = " + base.remote_url);;
             writer.WriteLine ("noupdate = " + base.remote_url);
@@ -250,7 +248,7 @@ namespace SparkleLib {
             writer.WriteLine ("force = " + base.remote_url);
             writer.Close ();
             
-            SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
+            SparkleHelpers.DebugInfo ("Unison", "Added unison profile to: " + unison_profile);
         }
         
         
@@ -260,7 +258,6 @@ namespace SparkleLib {
             string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "transmit.prf");
             TextWriter writer = new StreamWriter (unison_profile);
             writer.WriteLine ("include sparkleshare");
-            writer.WriteLine ("batch = true");
             writer.WriteLine ("confirmbigdel = false");
             writer.WriteLine ("nodeletion = .");
             writer.WriteLine ("noupdate = .");
@@ -268,23 +265,23 @@ namespace SparkleLib {
             writer.WriteLine ("force = .");
             writer.Close ();
             
-            SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
+            SparkleHelpers.DebugInfo ("Unison", "Added unison profile to: " + unison_profile);
         }
         
         private void InstallUnisonSyncLogFileProfile ()
         {
-            //create profile: logging.prf -- runs automatic unison batch sync
+            //create profile: logging.prf -- merges local log with log file on server (both sides can be modified)
+			//requires: cat, sort and uniq
             string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "logging.prf");
             TextWriter writer = new StreamWriter (unison_profile);
             writer.WriteLine ("include sparkleshare");
-            writer.WriteLine ("batch = true");
             writer.WriteLine ("confirmbigdel = false");
             writer.WriteLine ("confirmmerge = false");
             writer.WriteLine ("path = .changelog");
             writer.WriteLine ("merge = Path .changelog -> cat CURRENT1 CURRENT2 | sort | uniq > NEW");
             writer.Close ();
             
-            SparkleHelpers.DebugInfo ("Unison", "Added unison profile to '" + unison_profile + "'");
+            SparkleHelpers.DebugInfo ("Unison", "Added unison profile to: " + unison_profile);
         }
         
         
@@ -322,7 +319,7 @@ namespace SparkleLib {
             if( !File.Exists (IDfile) )
             {                
                 //creates a unique identifier based on the remote_url and the UTC date/time
-                string identifier = base.remote_url + DateTime.Now.ToUniversalTime().ToString();
+                string identifier = base.remote_url + DateTime.UtcNow.ToString();
                 string IDhash = GetSHA1 (identifier);
             
                 TextWriter writer = new StreamWriter (IDfile);
@@ -331,12 +328,11 @@ namespace SparkleLib {
             
                 SparkleHelpers.DebugInfo ("Unison", "Added ID file to: " + IDfile);
             }
-            //idfile exists
             else
             {
-                SparkleHelpers.DebugInfo ("Unison", "IDfile exists '" + IDfile + "'");
+                SparkleHelpers.DebugInfo ("Unison", "IDfile exists: " + IDfile);
             }
-            //backup ID file to .sparkleshare
+            //backup ID file to .sparkleshare - just incase someone deleted it
             string backupIDfile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", ".unisonID");        
             File.Copy(IDfile, backupIDfile);
             SparkleHelpers.DebugInfo ("Unison", "Copied ID file to: " + backupIDfile);
