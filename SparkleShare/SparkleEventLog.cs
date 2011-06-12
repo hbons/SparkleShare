@@ -129,11 +129,17 @@ namespace SparkleShare {
             this.combo_box.Model = store;
    
             store.AppendValues (_("All Folders"));
+            store.AppendValues ("---");
 
             foreach (string folder_name in SparkleShare.Controller.Folders)
                 store.AppendValues (folder_name);
 
             this.combo_box.Active = 0;
+
+            this.combo_box.RowSeparatorFunc = delegate (TreeModel model, TreeIter iter) {
+                string item = (string) this.combo_box.Model.GetValue (iter, 0);
+                return (item == "---");
+            };
 
             this.combo_box.Changed += delegate {
                 TreeIter iter;
