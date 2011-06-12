@@ -158,16 +158,21 @@ namespace SparkleShare {
                     // Creates a menu item for each repository with a link to their logs
                     foreach (string folder_name in SparkleShare.Controller.Folders) {
 
-                        Gdk.Pixbuf folder_icon = IconTheme.Default.LoadIcon ("folder", 16,
-                            IconLookupFlags.GenericFallback);
-                        
+                        Gdk.Pixbuf folder_icon;
+
+                        if (SparkleShare.Controller.UnsyncedFolders.Contains (folder_name)) {
+                            folder_icon = IconTheme.Default.LoadIcon ("dialog-error", 16,
+                                IconLookupFlags.GenericFallback);
+
+                        } else {
+                            folder_icon = IconTheme.Default.LoadIcon ("folder", 16,
+                                IconLookupFlags.GenericFallback);
+                        }
+
                         ImageMenuItem subfolder_item = new SparkleMenuItem (folder_name) {
                             Image = new Image (folder_icon)
                         };
 
-//                        if (repo.HasUnsyncedChanges) TODO
-//                            folder_action.IconName = "dialog-error";
-                    
                         subfolder_item.Activated += OpenFolderDelegate (folder_name);
                         Menu.Add (subfolder_item);
                     }
@@ -207,7 +212,7 @@ namespace SparkleShare {
 
             MenuItem recent_events_item = new MenuItem (_("Show Recent Events"));
             
-                if (SparkleShare.Controller.FirstRun) // TODO in mac version too
+                if (SparkleShare.Controller.FirstRun)
                     recent_events_item.Sensitive = false;
 
                 recent_events_item.Activated += delegate {
