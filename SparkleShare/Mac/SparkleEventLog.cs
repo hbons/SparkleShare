@@ -145,8 +145,8 @@ namespace SparkleShare {
 
                     // A short delay is less annoying than
                     // a flashing window
-                    if (watch.ElapsedMilliseconds < 300 && !silent)
-                        Thread.Sleep (300 - (int) watch.ElapsedMilliseconds);
+                    if (watch.ElapsedMilliseconds < 500 && !silent)
+                        Thread.Sleep (500 - (int) watch.ElapsedMilliseconds);
 
                     AddHTML ();
                 }
