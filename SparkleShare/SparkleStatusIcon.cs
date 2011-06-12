@@ -19,7 +19,7 @@ using System;
 using System.IO;
 using System.Timers;
 
-#ifdef USE_APPINDICATOR
+#if HAVE_APP_INDICATOR
 using AppIndicator;
 #endif
 using Gtk;
@@ -37,7 +37,7 @@ namespace SparkleShare {
         private string StateText;
         private Menu Menu;
 
-        #ifdef USE_APPINDICATOR
+        #if HAVE_APP_INDICATOR
         private ApplicationIndicator indicator;
         #else
         private StatusIcon status_icon;
@@ -55,7 +55,7 @@ namespace SparkleShare {
             AnimationFrames = CreateAnimationFrames ();
             Animation = CreateAnimation ();
 
-            #ifdef USE_APPINDICATOR
+            #if HAVE_APP_INDICATOR
             this.indicator = new ApplicationIndicator ("sparkleshare",
                 "process-syncing-sparkleshare-i", Category.ApplicationStatus) {
 
@@ -145,7 +145,7 @@ namespace SparkleShare {
                     icon_name += "i";
 
                 Application.Invoke (delegate {
-                    #ifdef USE_APPINDICATOR
+                    #if HAVE_APP_INDICATOR
                     this.indicator.IconName = icon_name;
                     #else
                     this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon (icon_name, 24);
@@ -292,7 +292,7 @@ namespace SparkleShare {
             Menu.Add (quit_item);
             Menu.ShowAll ();
 
-            #ifdef USE_APPINDICATOR
+            #if HAVE_APP_INDICATOR
             this.indicator.Menu = Menu;
             #endif
         }
@@ -321,7 +321,7 @@ namespace SparkleShare {
             Menu.ShowAll ();
         }
 
-
+        #if !HAVE_APP_INDICATOR
         // Makes the menu visible
         private void ShowMenu (object o, EventArgs args)
         {
@@ -334,7 +334,7 @@ namespace SparkleShare {
         {
             StatusIcon.PositionMenu (menu, out x, out y, out push_in, this.status_icon.Handle);
         }
-
+        #endif
 
         // The state when there's nothing going on
         private void SetNormalState ()
@@ -352,7 +352,7 @@ namespace SparkleShare {
                 StateText = _("Welcome to SparkleShare!");
 
                 Application.Invoke (delegate {
-                    #ifdef USE_APPINDICATOR
+                    #if HAVE_APP_INDICATOR
                     this.indicator.IconName = "process-syncing-sparkleshare-i";
                     #else
                     this.status_icon.Pixbuf = AnimationFrames [0];
@@ -364,7 +364,7 @@ namespace SparkleShare {
                     StateText = _("Not everything is synced");
 
                     Application.Invoke (delegate {
-                        #ifdef USE_APPINDICATOR
+                        #if HAVE_APP_INDICATOR
                         this.indicator.IconName = "sparkleshare-syncing-error";
                         #else
                         this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
@@ -373,7 +373,7 @@ namespace SparkleShare {
                 } else {
                     StateText = _("Up to date") + "  (" + SparkleShare.Controller.FolderSize + ")";
                     Application.Invoke (delegate {
-                        #ifdef USE_APPINDICATOR
+                        #if HAVE_APP_INDICATOR
                         this.indicator.IconName = "process-syncing-sparkleshare-i";
                         #else
                         this.status_icon.Pixbuf = AnimationFrames [0];
