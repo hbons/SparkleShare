@@ -19,10 +19,11 @@ using System;
 using System.IO;
 using System.Timers;
 
+#ifdef USE_APPINDICATOR
+using AppIndicator;
+#endif
 using Gtk;
 using Mono.Unix;
-
-using AppIndicator;
 
 namespace SparkleShare {
 
@@ -30,16 +31,17 @@ namespace SparkleShare {
     // user's notification area
     public class SparkleStatusIcon {
 
-    	public bool UseIndicator = true;
-
         private Timer Animation;
         private Gdk.Pixbuf [] AnimationFrames;
         private int FrameNumber;
         private string StateText;
         private Menu Menu;
 
-        private StatusIcon status_icon;
+        #ifdef USE_APPINDICATOR
         private ApplicationIndicator indicator;
+        #else
+        private StatusIcon status_icon;
+        #endif
         
         // Short alias for the translations
         public static string _ (string s)
@@ -53,19 +55,18 @@ namespace SparkleShare {
             AnimationFrames = CreateAnimationFrames ();
             Animation = CreateAnimation ();
 
-            if (UseIndicator) {
-                this.indicator = new ApplicationIndicator ("sparkleshare",
-                    "process-syncing-sparkleshare-i", Category.ApplicationStatus) {
+            #ifdef USE_APPINDICATOR
+            this.indicator = new ApplicationIndicator ("sparkleshare",
+                "process-syncing-sparkleshare-i", Category.ApplicationStatus) {
 
-                    Status = Status.Attention
-                };
+                Status = Status.Attention
+            };
+            #else
+            this.status_icon = new StatusIcon ();
 
-            } else {
-                this.status_icon = new StatusIcon ();
-
-                this.status_icon.Activate += ShowMenu; // Primary mouse button click
-                this.status_icon.PopupMenu += ShowMenu; // Secondary mouse button click
-            }
+            this.status_icon.Activate += ShowMenu; // Primary mouse button click
+            this.status_icon.PopupMenu += ShowMenu; // Secondary mouse button click
+            #endif
 
             SetNormalState ();
             CreateMenu ();
@@ -144,11 +145,11 @@ namespace SparkleShare {
                     icon_name += "i";
 
                 Application.Invoke (delegate {
-                    if (UseIndicator) {
-                        this.indicator.IconName = icon_name;
-                    } else {
-                        this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon (icon_name, 24);
-                    }
+                    #ifdef USE_APPINDICATOR
+                    this.indicator.IconName = icon_name;
+                    #else
+                    this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon (icon_name, 24);
+                    #endif
                 });
             };
 
@@ -291,8 +292,9 @@ namespace SparkleShare {
             Menu.Add (quit_item);
             Menu.ShowAll ();
 
-            if (UseIndicator)
-                this.indicator.Menu = Menu;
+            #ifdef USE_APPINDICATOR
+            this.indicator.Menu = Menu;
+            #endif
         }
 
 
@@ -350,11 +352,11 @@ namespace SparkleShare {
                 StateText = _("Welcome to SparkleShare!");
 
                 Application.Invoke (delegate {
-                    if (UseIndicator) {
-                        this.indicator.IconName = "process-syncing-sparkleshare-i";
-                    } else {
-                        this.status_icon.Pixbuf = AnimationFrames [0];
-                    }
+                    #ifdef USE_APPINDICATOR
+                    this.indicator.IconName = "process-syncing-sparkleshare-i";
+                    #else
+                    this.status_icon.Pixbuf = AnimationFrames [0];
+                    #endif
                 });
 
             } else {
@@ -362,20 +364,20 @@ namespace SparkleShare {
                     StateText = _("Not everything is synced");
 
                     Application.Invoke (delegate {
-                        if (UseIndicator) {
-                            this.indicator.IconName = "sparkleshare-syncing-error";
-                        } else {
-                            this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
-                        }
+                        #ifdef USE_APPINDICATOR
+                        this.indicator.IconName = "sparkleshare-syncing-error";
+                        #else
+                        this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
+                        #endif
                     });
                 } else {
                     StateText = _("Up to date") + "  (" + SparkleShare.Controller.FolderSize + ")";
                     Application.Invoke (delegate {
-                        if (UseIndicator) {
-                            this.indicator.IconName = "process-syncing-sparkleshare-i";
-                        } else {
-                            this.status_icon.Pixbuf = AnimationFrames [0];
-                        }
+                        #ifdef USE_APPINDICATOR
+                        this.indicator.IconName = "process-syncing-sparkleshare-i";
+                        #else
+                        this.status_icon.Pixbuf = AnimationFrames [0];
+                        #endif
                     });
                 }
             }
