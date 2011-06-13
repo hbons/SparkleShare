@@ -8,7 +8,12 @@ system_theme_icons =					\
 	apps,folder-sparkleshare-24.png			\
 	apps,folder-sparkleshare-256.png		\
 	apps,folder-sparkleshare-32.png			\
-	apps,folder-sparkleshare-48.png
+	apps,folder-sparkleshare-48.png			\
+	status,process-syncing-sparkleshare-i-24.png \
+	status,process-syncing-sparkleshare-ii-24.png \
+	status,process-syncing-sparkleshare-iii-24.png \
+	status,process-syncing-sparkleshare-iiii-24.png \
+	status,process-syncing-sparkleshare-iiiii-24.png
 
 app_theme_icons =					\
 	animations,process-syncing-sparkleshare-24.png	\
@@ -25,10 +30,10 @@ app_theme_icons =					\
 	status,avatar-default-24.png			\
 	status,avatar-default-32.png			\
 	status,avatar-default-48.png			\
-	status,document-added-16.png			\
-	status,document-edited-16.png			\
-	status,document-moved-16.png			\
-	status,document-removed-16.png			\
+	status,document-added-12.png			\
+	status,document-edited-12.png			\
+	status,document-deleted-12.png			\
+	status,document-moved-12.png			\
 	status,dialog-error-16.png			\
 	status,dialog-error-24.png
 

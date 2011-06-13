@@ -198,7 +198,7 @@ namespace SparkleLib {
             if (!AnyDifferences)
                 return;
 
-            SparkleGit git = new SparkleGit (LocalPath, "commit -m '" + message + "'");
+            SparkleGit git = new SparkleGit (LocalPath, "commit -m \"" + message + "\"");
             git.Start ();
             git.WaitForExit ();
 
@@ -405,17 +405,16 @@ namespace SparkleLib {
                 if (match.Success) {
                     SparkleChangeSet change_set = new SparkleChangeSet ();
 
+                    change_set.Folder    = Name;
                     change_set.Revision  = match.Groups [1].Value;
                     change_set.UserName  = match.Groups [2].Value;
                     change_set.UserEmail = match.Groups [3].Value;
                     change_set.IsMerge   = is_merge_commit;
 
-
                     change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
                         int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
                         int.Parse (match.Groups [7].Value), int.Parse (match.Groups [8].Value),
                         int.Parse (match.Groups [9].Value));
-
 
                     string time_zone = match.Groups [10].Value;
                     int our_offset   = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
@@ -445,10 +444,13 @@ namespace SparkleLib {
 
                             if (change_type.Equals ("A")) {
                                 change_set.Added.Add (file_path);
+
                             } else if (change_type.Equals ("M")) {
                                 change_set.Edited.Add (file_path);
+
                             } else if (change_type.Equals ("D")) {
                                 change_set.Deleted.Add (file_path);
+
                             } else if (change_type.Equals ("R")) {
                                 int tab_pos  = entry_line.LastIndexOf ("\t");
                                 file_path    = entry_line.Substring (42, tab_pos - 42);
@@ -531,6 +533,7 @@ namespace SparkleLib {
                     return message + "..." + n;
             }
 
+            message = message.Replace ("\"", "");
             return message.TrimEnd ();
         }
 

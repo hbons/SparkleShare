@@ -43,6 +43,8 @@ namespace SparkleShare {
         private NSMenuItem SyncMenuItem;
         private NSMenuItem AboutMenuItem;
         private NSMenuItem NotificationsMenuItem;
+        private NSMenuItem RecentEventsMenuItem;
+        private NSMenuItem QuitMenuItem;
         
         private delegate void Task ();
         private EventHandler [] Tasks;
@@ -149,7 +151,7 @@ namespace SparkleShare {
                 Title = StateText
             };
             
-            Menu.AddItem (StateMenuItem);    
+            Menu.AddItem (StateMenuItem);
             Menu.AddItem (NSMenuItem.SeparatorItem);
 
             FolderMenuItem = new NSMenuItem () {
@@ -176,7 +178,7 @@ namespace SparkleShare {
                 foreach (string folder_name in SparkleShare.Controller.Folders) {
                     NSMenuItem item = new NSMenuItem ();
 
-                    item.Title      = folder_name;
+                    item.Title = folder_name;
 
                     if (SparkleShare.Controller.UnsyncedFolders.Contains (folder_name))
                         item.Image = NSImage.ImageNamed ("NSCaution");
@@ -184,7 +186,7 @@ namespace SparkleShare {
                         item.Image = NSImage.ImageNamed ("NSFolder");
 
                     item.Image.Size = new SizeF (16, 16);
-                    Tasks [i] = OpenEventLogDelegate (folder_name);
+                    Tasks [i] = OpenFolderDelegate (folder_name);
             
                     FolderMenuItems [i] = item;
                     FolderMenuItems [i].Activated += Tasks [i];
@@ -233,6 +235,25 @@ namespace SparkleShare {
             Menu.AddItem (SyncMenuItem);
             Menu.AddItem (NSMenuItem.SeparatorItem);
 
+            RecentEventsMenuItem = new NSMenuItem () {
+                Title = "Show Recent Events"
+            };
+
+                if (SparkleShare.Controller.Folders.Count > 0) {
+                    RecentEventsMenuItem.Activated += delegate {
+                        InvokeOnMainThread (delegate {
+                            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+    
+                            if (SparkleUI.EventLog == null)
+                                SparkleUI.EventLog = new SparkleEventLog ();
+    
+                            SparkleUI.EventLog.OrderFrontRegardless ();
+                            SparkleUI.EventLog.MakeKeyAndOrderFront (this);
+                        });
+                    };
+                }
+
+            Menu.AddItem (RecentEventsMenuItem);
 
             NotificationsMenuItem = new NSMenuItem ();
 
@@ -255,26 +276,26 @@ namespace SparkleShare {
             Menu.AddItem (NotificationsMenuItem);
             Menu.AddItem (NSMenuItem.SeparatorItem);
 
-
             AboutMenuItem = new NSMenuItem () {
                 Title = "About SparkleShare"
             };
 
-                    AboutMenuItem.Activated += delegate {
-                        InvokeOnMainThread (delegate {
-                            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+                AboutMenuItem.Activated += delegate {
+                    InvokeOnMainThread (delegate {
+                        NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
 
-                            if (SparkleUI.About == null)
-                                SparkleUI.About = new SparkleAbout ();
+                        if (SparkleUI.About == null)
+                            SparkleUI.About = new SparkleAbout ();
 
-                            SparkleUI.About.OrderFrontRegardless ();
-                            SparkleUI.About.MakeKeyAndOrderFront (this);
-                            SparkleUI.About.CheckForNewVersion ();
-                        });
-                    };
+                        SparkleUI.About.OrderFrontRegardless ();
+                        SparkleUI.About.MakeKeyAndOrderFront (this);
+                        SparkleUI.About.CheckForNewVersion ();
+                    });
+                };
 
 
             Menu.AddItem (AboutMenuItem);
+
 
 
             StatusItem.Menu = Menu;
@@ -284,26 +305,10 @@ namespace SparkleShare {
         
         // A method reference that makes sure that opening the
         // event log for each repository works correctly
-        private EventHandler OpenEventLogDelegate (string path)
+        private EventHandler OpenFolderDelegate (string name)
         {
             return delegate {
-                InvokeOnMainThread (delegate {
-                    NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-                    
-                    SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
-                        return l.LocalPath.Equals (path);
-                    });
-        
-                    // Check whether the log is already open, create a new one if
-                    // that's not the case or present it to the user if it is
-                    if (log == null) {
-                        SparkleUI.OpenLogs.Add (new SparkleLog (path));
-                        SparkleUI.OpenLogs [SparkleUI.OpenLogs.Count - 1].MakeKeyAndOrderFront (this);
-                    } else {
-                        log.OrderFrontRegardless ();
-                        log.MakeKeyAndOrderFront (this);
-                    }
-                });
+                SparkleShare.Controller.OpenSparkleShareFolder (name);
             };
         }
 
