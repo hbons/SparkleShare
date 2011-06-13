@@ -251,9 +251,6 @@ namespace SparkleShare {
             foreach (SparkleRepoBase repo in Repositories)
                 list.AddRange (repo.GetChangeSets (50));
 
-            list.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
-            list.Reverse ();
-
             if (list.Count > 100)
                 return list.GetRange (0, 100);
             else
@@ -286,7 +283,10 @@ namespace SparkleShare {
         public string GetHTMLLog (List<SparkleChangeSet> change_sets)
         {
             List <ActivityDay> activity_days = new List <ActivityDay> ();
-            
+
+            change_sets.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
+            change_sets.Reverse ();
+
             if (change_sets.Count == 0)
                 return null;
 
@@ -304,7 +304,7 @@ namespace SparkleShare {
                         break;
                     }
                 }
-                
+
                 if (!change_set_inserted) {
                     ActivityDay activity_day = new ActivityDay (change_set.Timestamp);
                     activity_day.Add (change_set);

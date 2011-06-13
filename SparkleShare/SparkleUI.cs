@@ -116,8 +116,10 @@ namespace SparkleShare {
 
             SparkleShare.Controller.FolderListChanged += delegate {
                 Application.Invoke (delegate {
-                    if (EventLog != null)
+                    if (EventLog != null) {
                         EventLog.UpdateChooser ();
+                        EventLog.UpdateEvents ();
+                    }
                 });
             };
         }        
