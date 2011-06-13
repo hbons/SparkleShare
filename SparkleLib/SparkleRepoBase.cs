@@ -382,6 +382,7 @@ namespace SparkleLib {
         {
             SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Initiated");
             this.remote_timer.Stop ();
+            this.local_timer.Stop ();
 
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.SyncDown);
@@ -414,6 +415,7 @@ namespace SparkleLib {
                 SyncStatusChanged (SyncStatus.Idle);
 
             this.remote_timer.Start ();
+            this.local_timer.Start ();
         }
 
 
