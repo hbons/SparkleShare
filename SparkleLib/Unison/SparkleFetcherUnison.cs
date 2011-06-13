@@ -146,7 +146,7 @@ namespace SparkleLib {
             writer.WriteLine ("root = ."); //root1: local folder
             writer.WriteLine ("root = " + base.remote_url); //root2: remote server -- PROBLEM WITH SPACES IN THE PATH, quotes are broken!!
             writer.WriteLine ("log = true");
-			writer.WriteLine ("batch = true");
+            writer.WriteLine ("batch = true");
             writer.WriteLine ("dumbtty = true");
             writer.WriteLine ("auto = true");
             writer.WriteLine ("terse = true");
@@ -271,7 +271,7 @@ namespace SparkleLib {
         private void InstallUnisonSyncLogFileProfile ()
         {
             //create profile: logging.prf -- merges local log with log file on server (both sides can be modified)
-			//requires: cat, sort and uniq
+            //requires: cat, sort and uniq
             string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "logging.prf");
             TextWriter writer = new StreamWriter (unison_profile);
             writer.WriteLine ("include sparkleshare");

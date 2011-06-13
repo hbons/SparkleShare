@@ -216,7 +216,7 @@ namespace SparkleLib {
                         {
                             revision = "Edited";
                         }
-                        else
+                        else //just incase
                         {
                             revision = "Unknown";
                         }
@@ -398,6 +398,7 @@ namespace SparkleLib {
             Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
             
             //sync log with server
+            //merges changes to .changelog with server (will also make local changes)
             SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text " + 
                 "logging");
@@ -416,9 +417,9 @@ namespace SparkleLib {
             //rewrite this to operate over a number of changes
             //foreach change in changes? (this only works for arrays)
             //probably need to implement some sort of class or something
-			
-			//might want to write the log server side directly via ssh and append >> to the file
-			//still need to then sync the log to the local client for offline use.
+            
+            //might want to write the log server side directly via ssh and append >> to the file
+            //still need to then sync the log to the local client for offline use.
             
             string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");         
             string timestamp = DateTime.UtcNow.ToString(); //log written in UTC
@@ -469,7 +470,11 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
             
             if (File.Exists (changelog_file))
-            {        
+            {   
+                //TODO: implement tail to only read from the end of the log:
+                //http://www.codeproject.com/KB/cs/wintail.aspx
+                //wait for this to be implemented in the API
+                
                 TextReader reader = new StreamReader (changelog_file);
                 string changelog = reader.ReadToEnd().ToString().Trim();
                 string [] lines = changelog.Split ("\n".ToCharArray ());
@@ -477,10 +482,12 @@ namespace SparkleLib {
                 foreach (string line in lines)
                 {
                    
-					string[] parts = line.Split(",".ToCharArray ()); //TODO: fix: commas in filenames will be broken..
-					
-					foreach (string part in parts) 
-					    SparkleHelpers.DebugInfo ("Unison", "Read log entry: " + part);
+                    string[] parts = line.Split(",".ToCharArray ()); 
+                    //TODO: fix: commas in filenames will be broken..
+                    //maybe make a way to join all the parts after the 4th comma?
+                    
+                    //foreach (string part in parts) 
+                    //    SparkleHelpers.DebugInfo ("Unison", "Read log entry: " + part);
                     
                     SparkleChangeSet change_set = new SparkleChangeSet ();
                     
@@ -505,24 +512,22 @@ namespace SparkleLib {
                     change_set.Revision  = parts[3].Trim();
                     change_set.UserName  = parts[1].Trim();
                     change_set.UserEmail = parts[2].Trim();
-					
-					string relativepath = parts[4].Trim();
-					string name = relativepath;
-					
-					if (!relativepath.Contains("/"))
-					{
-						change_set.Folder = Name;
-						name = relativepath;
-					}
-					else
-					{
-						string[] pathparts = relativepath.Split("/".ToCharArray ());
-						//get the file name
-						name               = pathparts[pathparts.Length - 1].ToString();
-						//remove the filename from the relative path
-						string pathhere    = relativepath.Remove(relativepath.Length - name.Length - 1, name.Length + 1);
-					    change_set.Folder  = Name + "/" + pathhere;	
-					}			
+                    
+                    string relativepath = parts[4].Trim();
+                    string name = relativepath;
+                    
+                    if (!relativepath.Contains("/"))
+                    {
+                        change_set.Folder = Name;
+                        name = relativepath;
+                    }
+                    else
+                    {
+                        string[] pathparts = relativepath.Split("/".ToCharArray ());
+                        name               = pathparts[pathparts.Length - 1].ToString(); //filename
+                        string pathhere    = relativepath.Remove(relativepath.Length - name.Length - 1, name.Length + 1); //relative path
+                        change_set.Folder  = Name + "/" + pathhere;    //folder Name/relative path
+                    }            
                     
                     if (change_set.Revision.Equals ("Added"))
                     {
@@ -540,7 +545,7 @@ namespace SparkleLib {
                     {
                         change_set.Added.Add (name + "/"); //make it look more like a directory
                     }
-						
+                        
                     //unison doesn't recognize if files were moved it just thinks they were deleted then added somewhere else, oh well.
                     
                     change_sets.Add (change_set);
