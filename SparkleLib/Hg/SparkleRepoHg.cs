@@ -248,7 +248,7 @@ namespace SparkleLib {
                 string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
 
                 foreach (string entry_line in entry_lines) {
-                    if (!entry_line.StartsWith ("    * "))
+                    if (!entry_line.StartsWith ("\t* "))
                         continue;
 
                     if (entry_line.EndsWith ("new file.")) {

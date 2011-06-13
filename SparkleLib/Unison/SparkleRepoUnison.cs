@@ -522,8 +522,7 @@ namespace SparkleLib {
 						//remove the filename from the relative path
 						string pathhere    = relativepath.Remove(relativepath.Length - name.Length - 1, name.Length + 1);
 					    change_set.Folder  = Name + "/" + pathhere;	
-					}
-					
+					}			
                     
                     if (change_set.Revision.Equals ("Added"))
                     {
