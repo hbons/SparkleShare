@@ -34,19 +34,21 @@ namespace SparkleLib {
 
     public abstract class SparkleRepoBase {
 
+        private TimeSpan short_interval = new TimeSpan (0, 0, 3, 0);
+        private TimeSpan long_interval  = new TimeSpan (0, 0, 10, 0);
 
-
-        private Timer local_timer = new Timer () { Interval = 250 };
-        private Timer remote_timer = new Timer () { Interval = 60000 };
         private FileSystemWatcher watcher;
         private SparkleListenerBase listener;
+        private TimeSpan poll_interval;
+        private Timer local_timer        = new Timer () { Interval = 0.25 * 1000 };
+        private Timer remote_timer       = new Timer () { Interval = 10 * 1000 };
+        private DateTime last_poll       = DateTime.Now;
         private List <double> sizebuffer = new List<double> ();
-        private bool has_changed   = false;
-        private Object change_lock = new Object ();
+        private bool has_changed         = false;
+        private Object change_lock       = new Object ();
 
         protected SyncStatus status;
         protected bool is_buffering  = false;
-        protected bool is_polling    = true;
         protected bool server_online = true;
 
         public readonly SparkleBackend Backend;
@@ -75,9 +77,10 @@ namespace SparkleLib {
 
         public SparkleRepoBase (string path, SparkleBackend backend)
         {
-            LocalPath = path;
-            Name      = Path.GetFileName (LocalPath);
-            Backend   = backend;
+            LocalPath          = path;
+            Name               = Path.GetFileName (LocalPath);
+            Backend            = backend;
+            this.poll_interval = this.short_interval;
 
             SyncStatusChanged += delegate (SyncStatus status) {
                 this.status = status;
@@ -96,7 +99,12 @@ namespace SparkleLib {
             };
 
             this.remote_timer.Elapsed += delegate {
-                if (this.is_polling) {
+                bool time_to_poll = (DateTime.Compare (this.last_poll,
+                    DateTime.Now.Subtract (this.poll_interval)) < 0);
+
+                if (time_to_poll) {
+                    this.last_poll = DateTime.Now;
+
                     if (CheckForRemoteChanges ())
                         SyncDownBase ();
                 }
@@ -192,13 +200,6 @@ namespace SparkleLib {
         }
 
 
-        public bool IsPolling {
-            get {
-                return this.is_polling;
-            }
-        }
-
-
         // Disposes all resourses of this object
         public void Dispose ()
         {
@@ -230,7 +231,8 @@ namespace SparkleLib {
 
             // Stop polling when the connection to the irc channel is succesful
             this.listener.Connected += delegate {
-                this.is_polling = false;
+                this.poll_interval = this.long_interval;
+                this.last_poll = DateTime.Now;
 
                 // Check for changes manually one more time
                 if (CheckForRemoteChanges ())
@@ -243,8 +245,8 @@ namespace SparkleLib {
 
             // Start polling when the connection to the irc channel is lost
             this.listener.Disconnected += delegate {
+                this.poll_interval = this.short_interval;
                 SparkleHelpers.DebugInfo (Name, "Falling back to polling");
-                this.is_polling = true;
             };
 
             // Fetch changes when there is a message in the irc channel
@@ -262,12 +264,11 @@ namespace SparkleLib {
                     }
                 }
             };
-
+            
             // Start listening
-            if (!this.listener.IsConnected && !this.listener.IsConnecting)
+            if (!this.listener.IsConnected && !this.listener.IsConnecting) {
                 this.listener.Connect ();
-            else
-                this.is_polling = false;
+            }
         }
 
 
@@ -302,7 +303,7 @@ namespace SparkleLib {
         // Starts a timer when something changes
         public void OnFileActivity (object o, FileSystemEventArgs args)
         {
-            if (args.FullPath.Contains ("/."))
+            if (args.FullPath.Contains (Path.DirectorySeparatorChar + "."))
                 return;
 
             WatcherChangeTypes wct = args.ChangeType;
