@@ -19,6 +19,9 @@ using System;
 using System.IO;
 using System.Timers;
 
+#if HAVE_APP_INDICATOR
+using AppIndicator;
+#endif
 using Gtk;
 using Mono.Unix;
 
@@ -26,7 +29,7 @@ namespace SparkleShare {
 
     // The statusicon that stays in the
     // user's notification area
-    public class SparkleStatusIcon : StatusIcon    {
+    public class SparkleStatusIcon {
 
         private Timer Animation;
         private Gdk.Pixbuf [] AnimationFrames;
@@ -34,6 +37,12 @@ namespace SparkleShare {
         private string StateText;
         private Menu Menu;
 
+        #if HAVE_APP_INDICATOR
+        private ApplicationIndicator indicator;
+        #else
+        private StatusIcon status_icon;
+        #endif
+        
         // Short alias for the translations
         public static string _ (string s)
         {
@@ -41,13 +50,23 @@ namespace SparkleShare {
         }
 
 
-        public SparkleStatusIcon () : base ()
+        public SparkleStatusIcon ()
         {
             AnimationFrames = CreateAnimationFrames ();
             Animation = CreateAnimation ();
 
-            Activate += ShowMenu;  // Primary mouse button click
-            PopupMenu += ShowMenu; // Secondary mouse button click
+            #if HAVE_APP_INDICATOR
+            this.indicator = new ApplicationIndicator ("sparkleshare",
+                "process-syncing-sparkleshare-i", Category.ApplicationStatus) {
+
+                Status = Status.Attention
+            };
+            #else
+            this.status_icon = new StatusIcon ();
+
+            this.status_icon.Activate += ShowMenu; // Primary mouse button click
+            this.status_icon.PopupMenu += ShowMenu; // Secondary mouse button click
+            #endif
 
             SetNormalState ();
             CreateMenu ();
@@ -120,8 +139,17 @@ namespace SparkleShare {
                 else
                     FrameNumber = 0;
 
+                string icon_name = "process-syncing-sparkleshare-";
+
+                for (int i = 0; i <= FrameNumber; i++)
+                    icon_name += "i";
+
                 Application.Invoke (delegate {
-                    Pixbuf = AnimationFrames [FrameNumber];
+                    #if HAVE_APP_INDICATOR
+                    this.indicator.IconName = icon_name;
+                    #else
+                    this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon (icon_name, 24);
+                    #endif
                 });
             };
 
@@ -157,7 +185,6 @@ namespace SparkleShare {
             
                     // Creates a menu item for each repository with a link to their logs
                     foreach (string folder_name in SparkleShare.Controller.Folders) {
-
                         Gdk.Pixbuf folder_icon;
 
                         if (SparkleShare.Controller.UnsyncedFolders.Contains (folder_name)) {
@@ -184,6 +211,8 @@ namespace SparkleShare {
 
                     Menu.Add (no_folders_item);
                 }
+
+                Menu.Add (new SeparatorMenuItem ());
 
                 // Opens the wizard to add a new remote folder
                 MenuItem sync_item = new MenuItem (_("Add Remote Folder…"));
@@ -262,6 +291,10 @@ namespace SparkleShare {
 
             Menu.Add (quit_item);
             Menu.ShowAll ();
+
+            #if HAVE_APP_INDICATOR
+            this.indicator.Menu = Menu;
+            #endif
         }
 
 
@@ -277,19 +310,11 @@ namespace SparkleShare {
 
         public void UpdateMenu ()
         {
-            Menu.Remove (Menu.Children [0]);
-
-                MenuItem status_menu_item = new MenuItem (StateText) {
-                    Sensitive = false
-                };
-
-            Menu.Add (status_menu_item);
-            Menu.ReorderChild (status_menu_item, 0);
-
+            ((Menu.Children [0] as MenuItem).Child as Label).Text = StateText;
             Menu.ShowAll ();
         }
 
-
+        #if !HAVE_APP_INDICATOR
         // Makes the menu visible
         private void ShowMenu (object o, EventArgs args)
         {
@@ -300,9 +325,9 @@ namespace SparkleShare {
         // Makes sure the menu pops up in the right position
         private void SetPosition (Menu menu, out int x, out int y, out bool push_in)
         {
-            PositionMenu (menu, out x, out y, out push_in, Handle);
+            StatusIcon.PositionMenu (menu, out x, out y, out push_in, this.status_icon.Handle);
         }
-
+        #endif
 
         // The state when there's nothing going on
         private void SetNormalState ()
@@ -320,19 +345,32 @@ namespace SparkleShare {
                 StateText = _("Welcome to SparkleShare!");
 
                 Application.Invoke (delegate {
-                    Pixbuf = AnimationFrames [0];
+                    #if HAVE_APP_INDICATOR
+                    this.indicator.IconName = "process-syncing-sparkleshare-i";
+                    #else
+                    this.status_icon.Pixbuf = AnimationFrames [0];
+                    #endif
                 });
+
             } else {
                 if (error) {
                     StateText = _("Not everything is synced");
 
                     Application.Invoke (delegate {
-                        Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
+                        #if HAVE_APP_INDICATOR
+                        this.indicator.IconName = "sparkleshare-syncing-error";
+                        #else
+                        this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
+                        #endif
                     });
                 } else {
                     StateText = _("Up to date") + "  (" + SparkleShare.Controller.FolderSize + ")";
                     Application.Invoke (delegate {
-                        Pixbuf = AnimationFrames [0];
+                        #if HAVE_APP_INDICATOR
+                        this.indicator.IconName = "process-syncing-sparkleshare-i";
+                        #else
+                        this.status_icon.Pixbuf = AnimationFrames [0];
+                        #endif
                     });
                 }
             }
