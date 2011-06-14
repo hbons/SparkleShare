@@ -820,17 +820,26 @@ namespace SparkleShare {
             string avatar_path = SparkleHelpers.CombineMore (SparklePaths.SparkleLocalIconPath,
                 size + "x" + size, "status");
 
-            if (!Directory.Exists (avatar_path)) {
-                Directory.CreateDirectory (avatar_path);
-                SparkleHelpers.DebugInfo ("Config", "Created '" + avatar_path + "'");
-            }
-
-            string avatar_file_path = SparkleHelpers.CombineMore (avatar_path, "avatar-" + email);
+            string avatar_file_path = Path.Combine (avatar_path, "avatar-" + email);
 
             if (File.Exists (avatar_file_path)) {
-                return avatar_file_path;
+                FileInfo avatar_info = new FileInfo (avatar_file_path);
+
+                // Delete avatars older than a month and get a new one
+                if (avatar_info.CreationTime < DateTime.Now.AddMonths (-1)) {
+                    avatar_info.Delete ();
+                    return GetAvatar (email, size);
+
+                } else {
+                    return avatar_file_path;
+                }
 
             } else {
+                if (!Directory.Exists (avatar_path)) {
+                    Directory.CreateDirectory (avatar_path);
+                    SparkleHelpers.DebugInfo ("Config", "Created '" + avatar_path + "'");
+                }
+
                 // Let's try to get the person's gravatar for next time
                 WebClient web_client = new WebClient ();
                 Uri uri = new Uri ("https://secure.gravatar.com/avatar/" + GetMD5 (email) +
@@ -849,6 +858,8 @@ namespace SparkleShare {
 
                         if (tmp_file_info.Length > 255)
                             File.Move (tmp_file_path, avatar_file_path);
+
+                        SparkleHelpers.DebugInfo ("Controller", "Fetched gravatar: " + email);
                         
                         if (AvatarFetched != null)
                             AvatarFetched ();
