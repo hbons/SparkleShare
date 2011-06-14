@@ -121,7 +121,6 @@ namespace SparkleLib {
                 path = Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%");
             }
 
-
             string ssh_config_path      = Path.Combine (path, ".ssh");
             string ssh_config_file_path = SparkleHelpers.CombineMore (path, ".ssh", "config");
             string ssh_config           = Environment.NewLine + "Host " + host +
