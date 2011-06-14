@@ -251,6 +251,9 @@ namespace SparkleShare {
             foreach (SparkleRepoBase repo in Repositories)
                 list.AddRange (repo.GetChangeSets (50));
 
+            list.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
+            list.Reverse ();
+
             if (list.Count > 100)
                 return list.GetRange (0, 100);
             else
