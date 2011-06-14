@@ -558,7 +558,7 @@ namespace SparkleShare {
                     });
                 };
 
-                if (this,progress_bar.Parent != null)
+                if (this.progress_bar.Parent != null)
                     this.progress_bar.Parent.Remove (this.progress_bar);
 
                 layout_vertical.PackStart (this.progress_bar, false, false, 54);
