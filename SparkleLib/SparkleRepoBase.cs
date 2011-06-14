@@ -333,7 +333,7 @@ namespace SparkleLib {
         private void SyncUpBase ()
         {
             try {
-                this.local_timer.Stop ();
+                DisableWatching ();
                 this.remote_timer.Stop ();
 
                 SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Initiated");
@@ -373,7 +373,7 @@ namespace SparkleLib {
 
             } finally {
                 this.remote_timer.Start ();
-                this.local_timer.Start ();
+                EnableWatching ();
             }
         }
 
@@ -382,7 +382,7 @@ namespace SparkleLib {
         {
             SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Initiated");
             this.remote_timer.Stop ();
-            this.local_timer.Stop ();
+            DisableWatching ();
 
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.SyncDown);
@@ -415,19 +415,21 @@ namespace SparkleLib {
                 SyncStatusChanged (SyncStatus.Idle);
 
             this.remote_timer.Start ();
-            this.local_timer.Start ();
+            EnableWatching ();
         }
 
 
         public void DisableWatching ()
         {
             this.watcher.EnableRaisingEvents = false;
+            this.local_timer.Stop ();
         }
 
 
         public void EnableWatching ()
         {
             this.watcher.EnableRaisingEvents = true;
+            this.local_timer.Start ();
         }
 
 
