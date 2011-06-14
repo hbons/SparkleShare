@@ -833,7 +833,7 @@ namespace SparkleShare {
             } else {
                 // Let's try to get the person's gravatar for next time
                 WebClient web_client = new WebClient ();
-                Uri uri = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (email) +
+                Uri uri = new Uri ("https://secure.gravatar.com/avatar/" + GetMD5 (email) +
                     ".jpg?s=" + size + "&d=404");
 
                 string tmp_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, email + size);
