@@ -24,7 +24,8 @@ SOURCES =  \
 	SparkleListenerIrc.cs \
 	SparkleOptions.cs \
 	SparklePaths.cs \
-	SparkleRepoBase.cs
+	SparkleRepoBase.cs \
+	SparkleWatcher.cs
 
 
 SMARTIRC4NET_FILES_EXPANDED = $(foreach file, $(SMARTIRC4NET_FILES), $(top_builddir)/$(file))
