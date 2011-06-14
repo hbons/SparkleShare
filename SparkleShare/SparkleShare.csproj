@@ -46,7 +46,7 @@
     <Compile Include="SparkleUI.cs" />
     <Compile Include="SparkleWindow.cs" />
     <Compile Include="SparkleEntry.cs" />
-    <Compile Include="SparkleLog.cs" />
+    <Compile Include="SparkleEventLog.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
     <Compile Include="SparkleInfobar.cs" />
     <Compile Include="SparkleController.cs" />
