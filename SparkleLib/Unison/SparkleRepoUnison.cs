@@ -178,8 +178,6 @@ namespace SparkleLib {
                         revision = "Unknown";
                     }
                     LogBuilder(linestring.Remove(0,26).Trim(), revision, logbuilder);
-                    //TODO: make an array of changes and then add them all at once
-                    //can probably use a string builder then just append the whole thing and merge to the server
                 }
             }
             WriteChangeLog(logbuilder);
@@ -420,6 +418,7 @@ namespace SparkleLib {
             string timestamp = DateTime.UtcNow.ToString();
             string username = SparkleConfig.DefaultConfig.UserName.ToString().Trim();
             string useremail = SparkleConfig.DefaultConfig.UserEmail.ToString().Trim();
+			//commas might not be the best choice of seperators...
             string logupdate = timestamp + ", " + username + ", " + useremail + ", " + revision + ", " + path;
             sb.Append(logupdate);
             return sb;
@@ -499,9 +498,10 @@ namespace SparkleLib {
                 
                 foreach (string line in lines)
                 {  
-                    string[] parts = line.Split(",".ToCharArray ()); 
-                    //TODO: fix: commas in filenames will be broken..
-                    //maybe just take the part after the 4th comma?
+                    string[] stringSeparators = new string[] {", "};
+					string[] parts = line.Split(stringSeparators, StringSplitOptions.None); 
+                    //TODO: fix: commas in any of the fields will be broken...
+					//might need a new seperator
                     
                     //foreach (string part in parts) 
                     //    SparkleHelpers.DebugInfo ("Unison", "Read log entry: " + part);
@@ -536,7 +536,7 @@ namespace SparkleLib {
                     if (!relativepath.Contains("/"))
                     {
                         change_set.Folder = Name;
-                        name = relativepath;
+                        name              = relativepath;
                     }
                     else
                     {
