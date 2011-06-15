@@ -477,14 +477,16 @@ namespace SparkleLib {
                 string changelog = reader.ReadToEnd().ToString().Trim();
                 string [] lines = changelog.Split ("\n".ToCharArray ());
                 Array.Reverse(lines);
-				
+
+								
+				//trying to read from the end of the file
 				FileStream fileStream = new FileStream(changelog_file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 1024, true);
-				if(fileStream.Length - 5 > 0)
+				if(fileStream.Length - count > 0)
 				{
 				    fileStream.Seek(Math.Max(0, fileStream.Length - count), SeekOrigin.Begin);				
 				    StreamReader fileReader = new StreamReader(fileStream);
-				    changelog = fileReader.ToString().Trim();
-					lines = changelog.Split ("\n".ToCharArray ());
+				    string endoflog = fileReader.ToString().Trim();
+					lines = endoflog.Split ("\n".ToCharArray ());
 					
 				}
                 
