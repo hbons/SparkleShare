@@ -366,7 +366,7 @@ namespace SparkleLib {
             unison.WaitForExit ();
             
             int exitcode = unison.ExitCode;
-            SparkleHelpers.DebugInfo ("Unison", "Transmitted File: " + path + " Exit code: " + exitcode.ToString());
+            SparkleHelpers.DebugInfo ("Unison", "Transmitted File: " + path + ", Exit code: " + exitcode.ToString());
             return exitcode;
         }
         
@@ -386,7 +386,7 @@ namespace SparkleLib {
             unison.WaitForExit ();
             
             int exitcode = unison.ExitCode;
-            SparkleHelpers.DebugInfo ("Unison", "Grabed file: " + path + " Exit code: " + exitcode.ToString());
+            SparkleHelpers.DebugInfo ("Unison", "Grabed file: " + path + ", Exit code: " + exitcode.ToString());
             return exitcode;
         }
         
@@ -405,7 +405,7 @@ namespace SparkleLib {
             unison.WaitForExit ();
             
             int exitcode = unison.ExitCode;
-            SparkleHelpers.DebugInfo ("Unison", "Exit code: " + exitcode.ToString());
+            SparkleHelpers.DebugInfo ("Unison", "Merged log file .changelog, Exit code: " + exitcode.ToString());
             return exitcode;
         }
         
@@ -434,8 +434,7 @@ namespace SparkleLib {
                     SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
                 }    
             }
-
-                        
+             
             //append to the log file
             using (StreamWriter sw = File.AppendText(changelog_file)) 
             {
@@ -455,6 +454,7 @@ namespace SparkleLib {
         }
         
         //TODO: read the specified number of lines from the end of the log efficiently
+		//log file will probably never get too large to read into memory
         private string [] tail (string filepath, int count)
         {            
             string[] lines = File.ReadAllLines(filepath);
