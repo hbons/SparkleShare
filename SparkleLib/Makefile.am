@@ -25,13 +25,7 @@ SOURCES =  \
 	SparkleOptions.cs \
 	SparklePaths.cs \
 	SparkleRepoBase.cs \
-<<<<<<< HEAD
-	Unison/SparkleFetcherUnison.cs \
-	Unison/SparkleRepoUnison.cs
-
-=======
 	SparkleWatcher.cs
->>>>>>> upstream/master
 
 
 SMARTIRC4NET_FILES_EXPANDED = $(foreach file, $(SMARTIRC4NET_FILES), $(top_builddir)/$(file))
