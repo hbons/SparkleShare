@@ -148,6 +148,7 @@ namespace SparkleLib {
         private void logchanges (string changelist)
 		{
 		    string [] lines = changelist.Split ("\n".ToCharArray ());
+			StringBuilder logbuilder = new StringBuilder();
             foreach (string line in lines) 
             {      
                 //check for changes from local->remote server (remote->local don't need logging here)
@@ -176,18 +177,19 @@ namespace SparkleLib {
                     {
                         revision = "Unknown";
                     }
-                    WriteChangeLog(linestring.Remove(0,26).Trim(), revision);
+                    LogBuilder(linestring.Remove(0,26).Trim(), revision, logbuilder);
                     //TODO: make an array of changes and then add them all at once
-                    //add to the contruct here
+					//can probably use a string builder then just append the whole thing and merge to the server
                 }
             }
+			WriteChangeLog(logbuilder);
 		}
 		
 		private bool SyncBothWays ()
         {
             Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
             
-            //check for changes
+            //get list of changes
             SparkleUnison unison_dryrun = new SparkleUnison (LocalPath,
                 "-ui text " +
                 "dryrun");
@@ -203,9 +205,7 @@ namespace SparkleLib {
             if (unison_dryrun.ExitCode != 0) 
             {
                 //check for conflicts before syncing
-                //conflicts and the resolution are logged in the conflict handling code
                 if (remote_revision.Contains ("<-?->"))
-                    //pass the output of the dry-run to the conflict handling code
                     ResolveConflicts (remote_revision);
                 
                 //probably not needed to set this again here - lets be safe though
@@ -226,8 +226,6 @@ namespace SparkleLib {
                 //SparkleHelpers.DebugInfo ("Unison", "Sync Complete: " + remote_revision.ToString ());
                 
                 logchanges(remote_revision);
-
-                //outside here run the new writechangelog function that will write all the changes
     
                 if (unison_sync.ExitCode != 0)
                     return false;
@@ -283,6 +281,7 @@ namespace SparkleLib {
         private void ResolveConflicts (string remote_revision)
         {          
             string [] lines = remote_revision.Split ("\n".ToCharArray ());
+			StringBuilder logbuilder = new StringBuilder();
             foreach (string line in lines) 
             {               
                 //check to see if the line describes a conflict (new files, changes, deletions)
@@ -294,13 +293,13 @@ namespace SparkleLib {
                     //check to see if the conflict is over a deleted file                    
                     if ( line.Contains ("deleted") )
                     {
-                        //TODO: queue up the log entries to write at once
                         //check if it was the local file that was deleted, if so log the deletion
+						
                         if(line.Trim().StartsWith("deleted"))
-                            WriteChangeLog(conflicting_path, "Deleted");
+                            LogBuilder(conflicting_path, "Deleted", logbuilder);
                         //otherwise the file must have been edited otherwise there wouldn't be a conflict
                         else
-                            WriteChangeLog(conflicting_path, "Edited");
+                            LogBuilder(conflicting_path, "Edited", logbuilder);
                         
                         Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");                        
                         
@@ -324,7 +323,7 @@ namespace SparkleLib {
                         //don't really know easily from who's copy, ignore that for now
                         //just reports added since there doesn't seem to be a capability for recovered
                         if(line.Trim().StartsWith("deleted"))
-                            WriteChangeLog(conflicting_path, "Added");              
+                            LogBuilder(conflicting_path, "Added", logbuilder);              
                     
                     }        
                     //implies that there is a conflict with 2 changed files
@@ -346,12 +345,13 @@ namespace SparkleLib {
                             UnisonGrab (conflicting_path);
                             
                             //update the log about the added timestamped/usernamed file
-                            WriteChangeLog(their_path, "Added");
+                            LogBuilder(their_path, "Added", logbuilder);
                         } 
                         //TODO: what to do upon failure?
                     }
                 }
             }
+			WriteChangeLog (logbuilder);
         }
 
         
@@ -412,19 +412,22 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Merged log file .changelog, Exit code: " + exitcode.ToString());
             return exitcode;
         }
-        
-        
-        private int WriteChangeLog (string path, string revision)
-        {
-            //rewrite this to operate over a number of changes
-            //foreach change in changes? (this only works for arrays)
-            //probably need to implement some sort of class or something
-            
-            string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");         
-            string timestamp = DateTime.UtcNow.ToString(); //log written in UTC
+
+		
+		private StringBuilder LogBuilder (string path, string revision, StringBuilder sb)
+		{
+			string timestamp = DateTime.UtcNow.ToString();
             string username = SparkleConfig.DefaultConfig.UserName.ToString().Trim();
             string useremail = SparkleConfig.DefaultConfig.UserEmail.ToString().Trim();
             string logupdate = timestamp + ", " + username + ", " + useremail + ", " + revision + ", " + path;
+			sb.Append(logupdate);
+			return sb;
+		}
+		
+	   
+		private int WriteChangeLog (StringBuilder sb)
+        {          			
+			string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog"); 
             
             if (!File.Exists (changelog_file))
             {
@@ -438,16 +441,16 @@ namespace SparkleLib {
                     SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
                 }    
             }
+			
+			string logupdate = sb.ToString();
              
             //append to the log file
             using (StreamWriter sw = File.AppendText(changelog_file)) 
             {
-                sw.WriteLine (logupdate);
+                sw.Write (logupdate);
             }    
 
             SparkleHelpers.DebugInfo ("Unison", "Updated local log: " + changelog_file + ": " + logupdate);
-            
-            //append all the updates queued then transmit the updated log
             
             int exitcode = UnisonTransmitLog ();
             
@@ -456,6 +459,7 @@ namespace SparkleLib {
             
             return exitcode;
         }
+           	
         
         //TODO: read the specified number of lines from the end of the log efficiently
 		//log file will probably never get too large to read into memory
