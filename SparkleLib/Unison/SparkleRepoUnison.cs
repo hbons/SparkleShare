@@ -145,7 +145,7 @@ namespace SparkleLib {
         }
         
         
-        private void logchanges (string changelist)
+        private void LogChanges (string changelist)
         {
             string [] lines = changelist.Split ("\n".ToCharArray ());
             StringBuilder logbuilder = new StringBuilder();
@@ -226,7 +226,7 @@ namespace SparkleLib {
                
                 //SparkleHelpers.DebugInfo ("Unison", "Sync Complete: " + remote_revision.ToString ());
                 
-                logchanges(remote_revision);
+                LogChanges(remote_revision);
     
                 if (unison_sync.ExitCode != 0)
                     return false;
