@@ -423,17 +423,17 @@ namespace SparkleLib {
             string logupdate = timestamp + ", " + username + ", " + useremail + ", " + revision + ", " + path;
             
             if (!File.Exists (changelog_file))
-			{
-				if (UnisonGrab (".changelog") == 0)
-				{
-					SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
-				}
-				else
-		        {
+            {
+                if (UnisonGrab (".changelog") == 0)
+                {
+                    SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
+                }
+                else
+                {
                     File.Create (changelog_file);
                     SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
-                }	
-			}
+                }    
+            }
 
                         
             //append to the log file
@@ -492,7 +492,7 @@ namespace SparkleLib {
                 {  
                     string[] parts = line.Split(",".ToCharArray ()); 
                     //TODO: fix: commas in filenames will be broken..
-					//maybe just take the part after the 4th comma?
+                    //maybe just take the part after the 4th comma?
                     
                     //foreach (string part in parts) 
                     //    SparkleHelpers.DebugInfo ("Unison", "Read log entry: " + part);
