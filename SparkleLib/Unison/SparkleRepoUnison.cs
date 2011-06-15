@@ -146,9 +146,9 @@ namespace SparkleLib {
         
         
         private void logchanges (string changelist)
-		{
-		    string [] lines = changelist.Split ("\n".ToCharArray ());
-			StringBuilder logbuilder = new StringBuilder();
+        {
+            string [] lines = changelist.Split ("\n".ToCharArray ());
+            StringBuilder logbuilder = new StringBuilder();
             foreach (string line in lines) 
             {      
                 //check for changes from local->remote server (remote->local don't need logging here)
@@ -179,13 +179,14 @@ namespace SparkleLib {
                     }
                     LogBuilder(linestring.Remove(0,26).Trim(), revision, logbuilder);
                     //TODO: make an array of changes and then add them all at once
-					//can probably use a string builder then just append the whole thing and merge to the server
+                    //can probably use a string builder then just append the whole thing and merge to the server
                 }
             }
-			WriteChangeLog(logbuilder);
-		}
-		
-		private bool SyncBothWays ()
+            WriteChangeLog(logbuilder);
+        }
+        
+        
+        private bool SyncBothWays ()
         {
             Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
             
@@ -281,7 +282,7 @@ namespace SparkleLib {
         private void ResolveConflicts (string remote_revision)
         {          
             string [] lines = remote_revision.Split ("\n".ToCharArray ());
-			StringBuilder logbuilder = new StringBuilder();
+            StringBuilder logbuilder = new StringBuilder();
             foreach (string line in lines) 
             {               
                 //check to see if the line describes a conflict (new files, changes, deletions)
@@ -294,7 +295,7 @@ namespace SparkleLib {
                     if ( line.Contains ("deleted") )
                     {
                         //check if it was the local file that was deleted, if so log the deletion
-						
+                        
                         if(line.Trim().StartsWith("deleted"))
                             LogBuilder(conflicting_path, "Deleted", logbuilder);
                         //otherwise the file must have been edited otherwise there wouldn't be a conflict
@@ -340,7 +341,7 @@ namespace SparkleLib {
                      
                         //upload the renamed file
                         if (UnisonTransmit (their_path) == 0)
-                        {		
+                        {        
                             //now get the server version of the conflicting file
                             UnisonGrab (conflicting_path);
                             
@@ -351,7 +352,7 @@ namespace SparkleLib {
                     }
                 }
             }
-			WriteChangeLog (logbuilder);
+            WriteChangeLog (logbuilder);
         }
 
         
@@ -413,21 +414,21 @@ namespace SparkleLib {
             return exitcode;
         }
 
-		
-		private StringBuilder LogBuilder (string path, string revision, StringBuilder sb)
-		{
-			string timestamp = DateTime.UtcNow.ToString();
+        
+        private StringBuilder LogBuilder (string path, string revision, StringBuilder sb)
+        {
+            string timestamp = DateTime.UtcNow.ToString();
             string username = SparkleConfig.DefaultConfig.UserName.ToString().Trim();
             string useremail = SparkleConfig.DefaultConfig.UserEmail.ToString().Trim();
             string logupdate = timestamp + ", " + username + ", " + useremail + ", " + revision + ", " + path;
-			sb.Append(logupdate);
-			return sb;
-		}
-		
-	   
-		private int WriteChangeLog (StringBuilder sb)
-        {          			
-			string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog"); 
+            sb.Append(logupdate);
+            return sb;
+        }
+        
+       
+        private int WriteChangeLog (StringBuilder sb)
+        {                      
+            string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog"); 
             
             if (!File.Exists (changelog_file))
             {
@@ -441,8 +442,8 @@ namespace SparkleLib {
                     SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
                 }    
             }
-			
-			string logupdate = sb.ToString();
+            
+            string logupdate = sb.ToString();
              
             //append to the log file
             using (StreamWriter sw = File.AppendText(changelog_file)) 
@@ -459,10 +460,10 @@ namespace SparkleLib {
             
             return exitcode;
         }
-           	
+               
         
         //TODO: read the specified number of lines from the end of the log efficiently
-		//log file will probably never get too large to read into memory
+        //log file will probably never get too large to read into memory
         private string [] tail (string filepath, int count)
         {            
             string[] lines = File.ReadAllLines(filepath);
