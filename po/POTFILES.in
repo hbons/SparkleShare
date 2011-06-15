@@ -9,7 +9,7 @@ SparkleShare/SparkleAbout.cs
 SparkleShare/SparkleBubble.cs
 SparkleShare/SparkleController.cs
 SparkleShare/SparkleIntro.cs
-SparkleShare/SparkleLog.cs
+SparkleShare/SparkleEventLog.cs
 SparkleShare/SparkleShare.cs
 SparkleShare/SparkleSpinner.cs
 SparkleShare/SparkleStatusIcon.cs

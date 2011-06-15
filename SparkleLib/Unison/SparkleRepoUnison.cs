@@ -96,7 +96,7 @@ namespace SparkleLib {
             //loop through each subdirectory
             foreach(DirectoryInfo d in directory.GetDirectories()) 
             {
-                //don't check dotfolders since the unison archive and fingerprint files will be different
+                //don't check .dotfolders since the unison archive and fingerprint files will be different
                 if(!d.FullName.ToString().StartsWith("."))
                 {
                     string dirname = d.Name.ToString();
@@ -109,7 +109,9 @@ namespace SparkleLib {
             //compiles directory names, filenames, file sizes and last write times
             foreach(FileInfo f in directory.GetFiles())
             {    
-                files.AppendLine(f.Name.ToString() + " " + f.Length.ToString() + " " + f.LastWriteTimeUtc.ToString());
+                //ignore .dotfiles, they might be different/out of sync
+				if(!f.Name.ToString().StartsWith("."))
+					files.AppendLine(f.Name.ToString() + " " + f.Length.ToString() + " " + f.LastWriteTimeUtc.ToString());
             }
             return files;
         }
@@ -117,7 +119,9 @@ namespace SparkleLib {
 
         private bool CheckForChangesBothWays ()
         {            
-            Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
+            SparkleHelpers.DebugInfo ("Unison", "Checking for changes");
+			
+			Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
             
             SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text " +
@@ -125,17 +129,11 @@ namespace SparkleLib {
 
             unison.Start ();
             unison.WaitForExit ();
-
-            //string remote_revision = unison.StandardOutput.ReadToEnd ().TrimEnd ();
             
             SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison.ExitCode.ToString ());
             
             if (unison.ExitCode != 0)
-            {
-                //don't need to output this
-                //SparkleHelpers.DebugInfo ("Unison", remote_revision);
                 return true;
-            } 
             else
                 return false;
         }
@@ -368,7 +366,7 @@ namespace SparkleLib {
             unison.WaitForExit ();
             
             int exitcode = unison.ExitCode;
-            SparkleHelpers.DebugInfo ("Unison", "Exit code: " + exitcode.ToString());
+            SparkleHelpers.DebugInfo ("Unison", "Transmitted File: " + path + " Exit code: " + exitcode.ToString());
             return exitcode;
         }
         
@@ -388,7 +386,7 @@ namespace SparkleLib {
             unison.WaitForExit ();
             
             int exitcode = unison.ExitCode;
-            SparkleHelpers.DebugInfo ("Unison", "Exit code: " + exitcode.ToString());
+            SparkleHelpers.DebugInfo ("Unison", "Grabed file: " + path + " Exit code: " + exitcode.ToString());
             return exitcode;
         }
         
