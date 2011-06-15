@@ -416,27 +416,25 @@ namespace SparkleLib {
             //foreach change in changes? (this only works for arrays)
             //probably need to implement some sort of class or something
             
-            //might want to write the log server side directly via ssh and append >> to the file
-            //still need to then sync the log to the local client for offline use.
-            
             string changelog_file = SparkleHelpers.CombineMore (LocalPath, ".changelog");         
             string timestamp = DateTime.UtcNow.ToString(); //log written in UTC
             string username = SparkleConfig.DefaultConfig.UserName.ToString().Trim();
             string useremail = SparkleConfig.DefaultConfig.UserEmail.ToString().Trim();
             string logupdate = timestamp + ", " + username + ", " + useremail + ", " + revision + ", " + path;
             
-            //grab the latest log from the server
-            //might be possible to just rely on the merging code in UnisonTransmitLog() and just skip this grab
-            //if (UnisonGrab (".changelog") == 0)
-            //    SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
-            
-            //TODO: fix! 
-            //check that file exists, otherwise create it now
-           // if (!File.Exists (changelog_file))
-           // {
-           //     File.Create (changelog_file);
-           //     SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
-           // }
+            if (!File.Exists (changelog_file))
+			{
+				if (UnisonGrab (".changelog") == 0)
+				{
+					SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
+				}
+				else
+		        {
+                    File.Create (changelog_file);
+                    SparkleHelpers.DebugInfo ("Unison", "Created log file: " + changelog_file);
+                }	
+			}
+
                         
             //append to the log file
             using (StreamWriter sw = File.AppendText(changelog_file)) 
@@ -494,7 +492,7 @@ namespace SparkleLib {
                 {  
                     string[] parts = line.Split(",".ToCharArray ()); 
                     //TODO: fix: commas in filenames will be broken..
-                    //maybe make a way to join all the parts after the 4th comma?
+					//maybe just take the part after the 4th comma?
                     
                     //foreach (string part in parts) 
                     //    SparkleHelpers.DebugInfo ("Unison", "Read log entry: " + part);
