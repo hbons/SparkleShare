@@ -130,7 +130,7 @@ namespace SparkleLib {
             unison.Start ();
             unison.WaitForExit ();
             
-            SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison.ExitCode.ToString ());
+            SparkleHelpers.DebugInfo ("Unison", "Checked for changes, Exit code: " + unison.ExitCode.ToString ());
             
             if (unison.ExitCode != 0)
                 return true;
@@ -159,7 +159,7 @@ namespace SparkleLib {
 
             string remote_revision = unison_dryrun.StandardOutput.ReadToEnd ().TrimEnd ();
             
-            SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison_dryrun.ExitCode.ToString ());
+            SparkleHelpers.DebugInfo ("Unison", "Preparing to sync, checking needed changes, Exit code: " + unison_dryrun.ExitCode.ToString ());
             
             //check to see if there are really changes to make
             if (unison_dryrun.ExitCode != 0) 
@@ -181,12 +181,11 @@ namespace SparkleLib {
                 unison_sync.Start ();
                 unison_sync.WaitForExit ();
     
-                SparkleHelpers.DebugInfo ("Unison", "Exit code: " + unison_sync.ExitCode.ToString ());
+                SparkleHelpers.DebugInfo ("Unison", "Synced, Exit code: " + unison_sync.ExitCode.ToString ());
                 
                 remote_revision = unison_sync.StandardOutput.ReadToEnd ().TrimEnd ();
-                
-                //output the result for debug
-                SparkleHelpers.DebugInfo ("Unison", "Sync Complete: " + remote_revision.ToString ());
+               
+                //SparkleHelpers.DebugInfo ("Unison", "Sync Complete: " + remote_revision.ToString ());
                 
                 //parse the output for logging
                 string [] lines = remote_revision.Split ("\n".ToCharArray ());
