@@ -505,6 +505,9 @@ namespace SparkleShare {
 
             else if (backend.Equals ("Scp"))
                 repo = new SparkleRepoScp (folder_path, new SparkleBackendScp ());
+			
+			 else if (backend.Equals ("Unison"))
+                repo = new SparkleRepoUnison (folder_path, new SparkleBackendUnison ());
 
             else
                repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);

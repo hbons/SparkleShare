@@ -471,24 +471,12 @@ namespace SparkleLib {
             {   
                 //TODO: implement tail to only read from the end of the log:
                 //http://www.codeproject.com/KB/cs/wintail.aspx
-                //wait for this to be implemented in the API
-                
+                //wait for this to be implemented in the API	
+			             
                 TextReader reader = new StreamReader (changelog_file);
                 string changelog = reader.ReadToEnd().ToString().Trim();
                 string [] lines = changelog.Split ("\n".ToCharArray ());
                 Array.Reverse(lines);
-
-								
-				//trying to read from the end of the file
-				FileStream fileStream = new FileStream(changelog_file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 1024, true);
-				if(fileStream.Length - count > 0)
-				{
-				    fileStream.Seek(Math.Max(0, fileStream.Length - count), SeekOrigin.Begin);				
-				    StreamReader fileReader = new StreamReader(fileStream);
-				    string endoflog = fileReader.ToString().Trim();
-					lines = endoflog.Split ("\n".ToCharArray ());
-					
-				}
                 
 				foreach (string line in lines)
                 {
