@@ -477,7 +477,18 @@ namespace SparkleLib {
                 string changelog = reader.ReadToEnd().ToString().Trim();
                 string [] lines = changelog.Split ("\n".ToCharArray ());
                 Array.Reverse(lines);
-                foreach (string line in lines)
+				
+				FileStream fileStream = new FileStream(changelog_file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 1024, true);
+				if(fileStream.Length - 5 > 0)
+				{
+				    fileStream.Seek(Math.Max(0, fileStream.Length - count), SeekOrigin.Begin);				
+				    StreamReader fileReader = new StreamReader(fileStream);
+				    changelog = fileReader.ToString().Trim();
+					lines = changelog.Split ("\n".ToCharArray ());
+					
+				}
+                
+				foreach (string line in lines)
                 {
                    
                     string[] parts = line.Split(",".ToCharArray ()); 
