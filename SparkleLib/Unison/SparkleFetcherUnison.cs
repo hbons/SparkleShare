@@ -195,7 +195,7 @@ namespace SparkleLib {
             writer.WriteLine ("ignore = Path */.svn/*");
             
             // Sparkleshare
-            writer.WriteLine ("ignore = Path .sparkleshare"); //don't sync this since it has the archive file and the log in it
+            writer.WriteLine ("ignore = Path .sparkleshare"); //don't sync this since it has the archive file and the unison log in it
             writer.Close ();
             
             SparkleHelpers.DebugInfo ("Unison", "Added unison profile to: " + unison_profile);

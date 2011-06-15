@@ -145,7 +145,45 @@ namespace SparkleLib {
         }
         
         
-        private bool SyncBothWays ()
+        private void logchanges (string changelist)
+		{
+		    string [] lines = changelist.Split ("\n".ToCharArray ());
+            foreach (string line in lines) 
+            {      
+                //check for changes from local->remote server (remote->local don't need logging here)
+                if(line.ToString().Contains("---->"))
+                {
+                    string linestring = line.ToString().TrimEnd();
+                    string linetrim = linestring.Trim();
+                    string revision = "";
+                    if(linetrim.StartsWith("new file"))
+                    {
+                        revision = "Added";
+                    }
+                    else if(linetrim.StartsWith("deleted"))
+                    {
+                        revision = "Deleted";
+                    }
+                    else if(linetrim.StartsWith("new dir"))
+                    {
+                        revision = "New Folder";
+                    }
+                    else if(linetrim.StartsWith("changed"))
+                    {
+                        revision = "Edited";
+                    }
+                    else //just incase
+                    {
+                        revision = "Unknown";
+                    }
+                    WriteChangeLog(linestring.Remove(0,26).Trim(), revision);
+                    //TODO: make an array of changes and then add them all at once
+                    //add to the contruct here
+                }
+            }
+		}
+		
+		private bool SyncBothWays ()
         {
             Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
             
@@ -187,41 +225,8 @@ namespace SparkleLib {
                
                 //SparkleHelpers.DebugInfo ("Unison", "Sync Complete: " + remote_revision.ToString ());
                 
-                //parse the output for logging
-                string [] lines = remote_revision.Split ("\n".ToCharArray ());
-                foreach (string line in lines) 
-                {      
-                    //check for changes from local->remote server (remote->local don't need logging here)
-                    if(line.ToString().Contains("---->"))
-                    {
-                        string linestring = line.ToString().TrimEnd();
-                        string linetrim = linestring.Trim();
-                        string revision = "";
-                        if(linetrim.StartsWith("new file"))
-                        {
-                            revision = "Added";
-                        }
-                        else if(linetrim.StartsWith("deleted"))
-                        {
-                            revision = "Deleted";
-                        }
-                        else if(linetrim.StartsWith("new dir"))
-                        {
-                            revision = "New Folder";
-                        }
-                        else if(linetrim.StartsWith("changed"))
-                        {
-                            revision = "Edited";
-                        }
-                        else //just incase
-                        {
-                            revision = "Unknown";
-                        }
-                        WriteChangeLog(linestring.Remove(0,26).Trim(), revision);
-                        //TODO: make an array of changes and then add them all at once
-                        //add to the contruct here
-                    }
-                }
+                logchanges(remote_revision);
+
                 //outside here run the new writechangelog function that will write all the changes
     
                 if (unison_sync.ExitCode != 0)
@@ -311,7 +316,7 @@ namespace SparkleLib {
                         
                         int exitcode = unison_deletefix.ExitCode;
                         
-                        SparkleHelpers.DebugInfo ("Unison", "Exit code: " + exitcode.ToString ());
+                        SparkleHelpers.DebugInfo ("Unison", "Restored conflicting deleted file, Exit code: " + exitcode.ToString ());
                         
                         //need to check that this was successful
                         
@@ -336,7 +341,7 @@ namespace SparkleLib {
                      
                         //upload the renamed file
                         if (UnisonTransmit (their_path) == 0)
-                        {
+                        {		
                             //now get the server version of the conflicting file
                             UnisonGrab (conflicting_path);
                             
@@ -481,7 +486,7 @@ namespace SparkleLib {
             
             //get the latest log file from the server
             if (UnisonGrab (".changelog") == 0)
-                SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
+                SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file + " , Exit code: 0");
             
             if (File.Exists (changelog_file))
             {                    
