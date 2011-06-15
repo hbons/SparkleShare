@@ -110,8 +110,8 @@ namespace SparkleLib {
             foreach(FileInfo f in directory.GetFiles())
             {    
                 //ignore .dotfiles, they might be different/out of sync
-				if(!f.Name.ToString().StartsWith("."))
-					files.AppendLine(f.Name.ToString() + " " + f.Length.ToString() + " " + f.LastWriteTimeUtc.ToString());
+                if(!f.Name.ToString().StartsWith("."))
+                    files.AppendLine(f.Name.ToString() + " " + f.Length.ToString() + " " + f.LastWriteTimeUtc.ToString());
             }
             return files;
         }
@@ -120,8 +120,8 @@ namespace SparkleLib {
         private bool CheckForChangesBothWays ()
         {            
             SparkleHelpers.DebugInfo ("Unison", "Checking for changes");
-			
-			Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
+            
+            Environment.SetEnvironmentVariable("UNISON", "./.sparkleshare");
             
             SparkleUnison unison = new SparkleUnison (LocalPath,
                 "-ui text " +
@@ -456,6 +456,25 @@ namespace SparkleLib {
             return exitcode;
         }
         
+        //TODO: read the specified number of lines from the end of the log efficiently
+        private string [] tail (string filepath, int count)
+        {            
+            string[] lines = File.ReadAllLines(filepath);
+            
+            if (count > lines.Length)
+            {
+                Array.Reverse(lines);
+                return lines;
+            }
+            else
+            {
+                string[] result = new string[count];
+                Array.Copy(lines, lines.Length - count, result, 0, count);
+                Array.Reverse(result);
+                return result;    
+            }
+        }
+        
         
         public override List <SparkleChangeSet> GetChangeSets (int count)
         {            
@@ -468,19 +487,11 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
             
             if (File.Exists (changelog_file))
-            {   
-                //TODO: implement tail to only read from the end of the log:
-                //http://www.codeproject.com/KB/cs/wintail.aspx
-                //wait for this to be implemented in the API	
-			             
-                TextReader reader = new StreamReader (changelog_file);
-                string changelog = reader.ReadToEnd().ToString().Trim();
-                string [] lines = changelog.Split ("\n".ToCharArray ());
-                Array.Reverse(lines);
+            {                    
+                string [] lines = tail (changelog_file, count);  
                 
-				foreach (string line in lines)
-                {
-                   
+                foreach (string line in lines)
+                {  
                     string[] parts = line.Split(",".ToCharArray ()); 
                     //TODO: fix: commas in filenames will be broken..
                     //maybe make a way to join all the parts after the 4th comma?
