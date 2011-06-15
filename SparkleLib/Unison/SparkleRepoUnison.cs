@@ -427,8 +427,8 @@ namespace SparkleLib {
             
             //grab the latest log from the server
             //might be possible to just rely on the merging code in UnisonTransmitLog() and just skip this grab
-            if (UnisonGrab (".changelog") == 0)
-                SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
+            //if (UnisonGrab (".changelog") == 0)
+            //    SparkleHelpers.DebugInfo ("Unison", "Downloaded latest log file: " + changelog_file);
             
             //TODO: fix! 
             //check that file exists, otherwise create it now
