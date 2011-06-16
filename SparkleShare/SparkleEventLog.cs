@@ -92,7 +92,8 @@ namespace SparkleShare {
                             process.StartInfo.Arguments = args.Request.Uri.Replace (" ", "\\ "); // Escape space-characters
                             process.Start ();
 
-                            UpdateEvents ();
+                            // Don't follow HREFs (as this would cause a page refresh)
+                            args.RetVal = 1;
                         }
                     };
 
