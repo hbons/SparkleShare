@@ -4,38 +4,37 @@
 # we apologise for any incovenience this may have caused and we hope to bring them
 # back in the future.
 # 
-# Сергій Гаврилов <sergiovana@bigmir.net>, 2011
+# Сергій Гаврилов <sergiovana@bigmir.net>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-28 19:48+0200\n"
-"PO-Revision-Date: 2011-05-28 17:48+0000\n"
+"POT-Creation-Date: 2011-06-17 12:09+0200\n"
+"PO-Revision-Date: 2011-06-17 10:13+0000\n"
 "Last-Translator: deejay1 <deejay1@srem.org>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:303
-#: ../SparkleShare/SparkleIntro.cs:65 ../SparkleShare/SparkleStatusIcon.cs:299
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:338
+#: ../SparkleShare/SparkleIntro.cs:67 ../SparkleShare/SparkleStatusIcon.cs:345
 msgid "Welcome to SparkleShare!"
 msgstr "Ласкаво просимо до SparkleShare!"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:313
-#: ../SparkleShare/SparkleStatusIcon.cs:306
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:349
+#: ../SparkleShare/SparkleStatusIcon.cs:357
 msgid "Not everything is synced"
 msgstr "Ще не все синхронізовано"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:318
-#: ../SparkleShare/SparkleStatusIcon.cs:312
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:359
+#: ../SparkleShare/SparkleStatusIcon.cs:367
 msgid "Up to date"
 msgstr "Оновлено"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:333
-#: ../SparkleShare/SparkleStatusIcon.cs:324
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:375
+#: ../SparkleShare/SparkleStatusIcon.cs:383
 msgid "Syncing…"
 msgstr "Синхронізація..."
 
@@ -60,59 +59,59 @@ msgid "Select to get a copy of this version"
 msgstr "Вибрати та отримати копію цієї версії"
 
 #. A menu item that takes the user to http://www.sparkleshare.org/
-#: ../SparkleShare/SparkleAbout.cs:47 ../SparkleShare/SparkleStatusIcon.cs:225
+#: ../SparkleShare/SparkleAbout.cs:46 ../SparkleShare/SparkleStatusIcon.cs:275
 msgid "About SparkleShare"
 msgstr "Про SparkleShare"
 
-#: ../SparkleShare/SparkleAbout.cs:54
+#: ../SparkleShare/SparkleAbout.cs:53
 msgid "A newer version is available"
 msgstr ""
 
-#: ../SparkleShare/SparkleAbout.cs:61
+#: ../SparkleShare/SparkleAbout.cs:60
 msgid "You are running the latest version."
 msgstr ""
 
-#: ../SparkleShare/SparkleAbout.cs:88
+#: ../SparkleShare/SparkleAbout.cs:87
 msgid "Checking for updates..."
 msgstr ""
 
-#: ../SparkleShare/SparkleAbout.cs:117
+#: ../SparkleShare/SparkleAbout.cs:116
 msgid "_Show Credits"
 msgstr "_Показати авторів"
 
-#: ../SparkleShare/SparkleAbout.cs:130
+#: ../SparkleShare/SparkleAbout.cs:129
 msgid "_Visit Website"
 msgstr "_Відвідати веб-сайт"
 
-#: ../SparkleShare/SparkleController.cs:392
+#: ../SparkleShare/SparkleController.cs:422
 msgid "ddd MMM d, yyyy"
 msgstr "ddd d MMM yyyy"
 
-#: ../SparkleShare/SparkleController.cs:397
+#: ../SparkleShare/SparkleController.cs:427
 msgid "ddd MMM d"
 msgstr "ddd d MMM"
 
-#: ../SparkleShare/SparkleController.cs:608
+#: ../SparkleShare/SparkleController.cs:629
 #, csharp-format
 msgid "added ‘{0}’"
 msgstr "додано «{0}»"
 
-#: ../SparkleShare/SparkleController.cs:613
+#: ../SparkleShare/SparkleController.cs:634
 #, csharp-format
 msgid "moved ‘{0}’"
 msgstr ""
 
-#: ../SparkleShare/SparkleController.cs:618
+#: ../SparkleShare/SparkleController.cs:639
 #, csharp-format
 msgid "edited ‘{0}’"
 msgstr "змінено «{0}»"
 
-#: ../SparkleShare/SparkleController.cs:623
+#: ../SparkleShare/SparkleController.cs:644
 #, csharp-format
 msgid "deleted ‘{0}’"
 msgstr "вилучено «{0}»"
 
-#: ../SparkleShare/SparkleController.cs:632
+#: ../SparkleShare/SparkleController.cs:653
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
@@ -120,11 +119,11 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: ../SparkleShare/SparkleController.cs:635
+#: ../SparkleShare/SparkleController.cs:657
 msgid "did something magical"
 msgstr ""
 
-#: ../SparkleShare/SparkleIntro.cs:71
+#: ../SparkleShare/SparkleIntro.cs:73
 msgid ""
 "Before we can create a SparkleShare folder on this computer, we need a few "
 "bits of information from you."
@@ -132,106 +131,106 @@ msgstr ""
 "Щоб створити теку SparkleShare на цьому комп'ютері, потрібна деяка "
 "інформація про вас."
 
-#: ../SparkleShare/SparkleIntro.cs:81
+#: ../SparkleShare/SparkleIntro.cs:83
 msgid "Full Name:"
 msgstr "Повне ім'я:"
 
-#: ../SparkleShare/SparkleIntro.cs:96
+#: ../SparkleShare/SparkleIntro.cs:98
 msgid "Email:"
 msgstr "Ел. адреса:"
 
-#: ../SparkleShare/SparkleIntro.cs:107
+#: ../SparkleShare/SparkleIntro.cs:109
 msgid "Next"
 msgstr "Далі"
 
-#: ../SparkleShare/SparkleIntro.cs:113
+#: ../SparkleShare/SparkleIntro.cs:115
 msgid "Configuring…"
 msgstr "Налаштування..."
 
-#: ../SparkleShare/SparkleIntro.cs:159
+#: ../SparkleShare/SparkleIntro.cs:161
 msgid "Where is your remote folder?"
 msgstr "Де ваша віддалена тека?"
 
-#: ../SparkleShare/SparkleIntro.cs:172
+#: ../SparkleShare/SparkleIntro.cs:174
 msgid "address-to-server.com"
 msgstr "адреса-на-server.com"
 
-#: ../SparkleShare/SparkleIntro.cs:177
+#: ../SparkleShare/SparkleIntro.cs:179
 msgid "On my own server:"
 msgstr "На моєму власному сервері:"
 
-#: ../SparkleShare/SparkleIntro.cs:184
+#: ../SparkleShare/SparkleIntro.cs:186
 msgid "Free hosting for Free and Open Source Software projects."
 msgstr "Безкоштовний хостинг для вільних програм та Open Source проектів."
 
-#: ../SparkleShare/SparkleIntro.cs:185
+#: ../SparkleShare/SparkleIntro.cs:187
 msgid "Also has paid accounts for extra private space and bandwidth."
 msgstr ""
 "Також має платні облікові записи з високою пропускною здатністю та з "
 "отриманням додаткового місця."
 
-#: ../SparkleShare/SparkleIntro.cs:193
+#: ../SparkleShare/SparkleIntro.cs:195
 msgid "The GNOME Project"
 msgstr "Проект GNOME"
 
-#: ../SparkleShare/SparkleIntro.cs:195
+#: ../SparkleShare/SparkleIntro.cs:197
 msgid "GNOME is an easy to understand interface to your computer."
 msgstr "Легкий для розуміння інтерфейс GNOME для вашого комп'ютера."
 
-#: ../SparkleShare/SparkleIntro.cs:196
+#: ../SparkleShare/SparkleIntro.cs:198
 msgid "Select this option if you’re a developer or designer working on GNOME."
 msgstr "Виберіть цей варіант, якщо ви розробник або дизайнер GNOME."
 
-#: ../SparkleShare/SparkleIntro.cs:204
+#: ../SparkleShare/SparkleIntro.cs:206
 msgid "Gitorious"
 msgstr "Gitorious"
 
-#: ../SparkleShare/SparkleIntro.cs:206
+#: ../SparkleShare/SparkleIntro.cs:208
 msgid "Completely Free as in Freedom infrastructure."
 msgstr "Цілком вільний як і в інфраструктурі Freedom."
 
-#: ../SparkleShare/SparkleIntro.cs:207
+#: ../SparkleShare/SparkleIntro.cs:209
 msgid "Free accounts for Free and Open Source projects."
 msgstr ""
 "Безкоштовні облікові записи для вільних програм та Open Source проектів."
 
-#: ../SparkleShare/SparkleIntro.cs:218
+#: ../SparkleShare/SparkleIntro.cs:220
 msgid "Username/Folder"
 msgstr "Користувач/Тека"
 
-#: ../SparkleShare/SparkleIntro.cs:223
+#: ../SparkleShare/SparkleIntro.cs:225
 msgid "Project/Folder"
 msgstr "Проект/Тека"
 
-#: ../SparkleShare/SparkleIntro.cs:228
+#: ../SparkleShare/SparkleIntro.cs:230
 msgid "Project"
 msgstr "Проект"
 
-#: ../SparkleShare/SparkleIntro.cs:233 ../SparkleShare/SparkleIntro.cs:252
+#: ../SparkleShare/SparkleIntro.cs:235 ../SparkleShare/SparkleIntro.cs:254
 msgid "Folder"
 msgstr "Тека"
 
-#: ../SparkleShare/SparkleIntro.cs:257 ../SparkleShare/SparkleIntro.cs:410
+#: ../SparkleShare/SparkleIntro.cs:259 ../SparkleShare/SparkleIntro.cs:377
 msgid "Folder Name:"
 msgstr "Назва теки:"
 
-#: ../SparkleShare/SparkleIntro.cs:267
+#: ../SparkleShare/SparkleIntro.cs:269
 msgid "Sync"
 msgstr "Синхронізувати"
 
-#: ../SparkleShare/SparkleIntro.cs:345
+#: ../SparkleShare/SparkleIntro.cs:312
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: ../SparkleShare/SparkleIntro.cs:353
+#: ../SparkleShare/SparkleIntro.cs:320
 msgid "Skip"
 msgstr "Пропустити"
 
-#: ../SparkleShare/SparkleIntro.cs:380
+#: ../SparkleShare/SparkleIntro.cs:347
 msgid "Invitation received!"
 msgstr "Запрошення отримане!"
 
-#: ../SparkleShare/SparkleIntro.cs:386
+#: ../SparkleShare/SparkleIntro.cs:353
 msgid ""
 "You've received an invitation to join a shared folder.\n"
 "We're ready to hook you up immediately if you wish."
@@ -239,40 +238,40 @@ msgstr ""
 "Ви отримали запрошення для приєднання до спільної теки.\n"
 "Якщо хочете, можете приєднатись до неї негайно."
 
-#: ../SparkleShare/SparkleIntro.cs:392
+#: ../SparkleShare/SparkleIntro.cs:359
 msgid "Do you accept this invitation?"
 msgstr "Ви приймаєте це запрошення?"
 
-#: ../SparkleShare/SparkleIntro.cs:401
+#: ../SparkleShare/SparkleIntro.cs:368
 msgid "Server Address:"
 msgstr "Адреса сервера:"
 
-#: ../SparkleShare/SparkleIntro.cs:424
+#: ../SparkleShare/SparkleIntro.cs:391
 msgid "Reject"
 msgstr "Відхилити"
 
-#: ../SparkleShare/SparkleIntro.cs:425
+#: ../SparkleShare/SparkleIntro.cs:392
 msgid "Accept and Sync"
 msgstr "Прийняти та синхронізувати"
 
-#: ../SparkleShare/SparkleIntro.cs:473
+#: ../SparkleShare/SparkleIntro.cs:442
 msgid "Something went wrong…"
 msgstr "Виникла помилка..."
 
-#: ../SparkleShare/SparkleIntro.cs:479
+#: ../SparkleShare/SparkleIntro.cs:448
 msgid "Try Again"
 msgstr "Спробувати знову"
 
-#: ../SparkleShare/SparkleIntro.cs:504
+#: ../SparkleShare/SparkleIntro.cs:473
 #, csharp-format
 msgid "‘{0}’ has been successfully added"
 msgstr "‘{0}’ успішно додано"
 
-#: ../SparkleShare/SparkleIntro.cs:513
+#: ../SparkleShare/SparkleIntro.cs:482
 msgid "Folder synced successfully!"
 msgstr "Тека синхронізована успішно!"
 
-#: ../SparkleShare/SparkleIntro.cs:520
+#: ../SparkleShare/SparkleIntro.cs:489
 #, csharp-format
 msgid ""
 "Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
@@ -281,33 +280,33 @@ msgstr ""
 "SparkleShare."
 
 #. A button that opens the synced folder
-#: ../SparkleShare/SparkleIntro.cs:528
+#: ../SparkleShare/SparkleIntro.cs:497
 msgid "Open Folder"
 msgstr "Відкрити теку"
 
-#: ../SparkleShare/SparkleIntro.cs:534 ../SparkleShare/SparkleIntro.cs:576
-#: ../SparkleShare/SparkleIntro.cs:640
+#: ../SparkleShare/SparkleIntro.cs:503 ../SparkleShare/SparkleIntro.cs:543
+#: ../SparkleShare/SparkleIntro.cs:604
 msgid "Finish"
 msgstr "Завершити"
 
-#: ../SparkleShare/SparkleIntro.cs:561
+#: ../SparkleShare/SparkleIntro.cs:528
 #, csharp-format
 msgid "Syncing folder ‘{0}’…"
 msgstr "Синхронізація теки ‘{0}’…"
 
-#: ../SparkleShare/SparkleIntro.cs:568
+#: ../SparkleShare/SparkleIntro.cs:535
 msgid "This may take a while.\n"
 msgstr "Це може тривати деякий час.\n"
 
-#: ../SparkleShare/SparkleIntro.cs:569
+#: ../SparkleShare/SparkleIntro.cs:536
 msgid "Are you sure it’s not coffee o'clock?"
 msgstr "А чи не здається вам, що настав час для кави?"
 
-#: ../SparkleShare/SparkleIntro.cs:615
+#: ../SparkleShare/SparkleIntro.cs:579
 msgid "SparkleShare is ready to go!"
 msgstr "SparkleShare готова до роботи!"
 
-#: ../SparkleShare/SparkleIntro.cs:621
+#: ../SparkleShare/SparkleIntro.cs:585
 msgid ""
 "Now you can start accepting invitations from others. \n"
 "Just click on invitations you get by email and we will take care of the rest."
@@ -315,112 +314,115 @@ msgstr ""
 "Зараз ви можете схвалювати запрошення від інших. \n"
 "Просто клацніть на запрошенні, яке ви отримали поштою, а ми зробимо все інше."
 
-#: ../SparkleShare/SparkleIntro.cs:632
+#: ../SparkleShare/SparkleIntro.cs:596
 msgid "Learn how to host your own SparkleServer"
 msgstr "Дізнайтеся, як створити свій власний сервер SparkleServer"
 
-#. TRANSLATORS: {0} is a folder name, and {1} is a server address
-#: ../SparkleShare/SparkleLog.cs:73
-#, csharp-format
-msgid "Events in ‘{0}’"
-msgstr "Події, пов'язані з «{0}»"
+#: ../SparkleShare/SparkleEventLog.cs:61
+msgid "Recent Events"
+msgstr ""
 
-#: ../SparkleShare/SparkleLog.cs:120
-msgid "_Open Folder"
-msgstr "Відкрити _теку"
+#: ../SparkleShare/SparkleEventLog.cs:131
+#: ../SparkleShare/SparkleEventLog.cs:150
+msgid "All Folders"
+msgstr ""
 
-#: ../SparkleShare/SparkleShare.cs:53
+#: ../SparkleShare/SparkleShare.cs:56
 msgid "Sorry, you can't run SparkleShare with these permissions."
 msgstr ""
 "На жаль, ви не можете запустити SparkleShare з такими правами доступу."
 
-#: ../SparkleShare/SparkleShare.cs:54
+#: ../SparkleShare/SparkleShare.cs:57
 msgid "Things would go utterly wrong."
 msgstr "Все могло піти дуже неправильно."
 
-#: ../SparkleShare/SparkleShare.cs:63
+#: ../SparkleShare/SparkleShare.cs:66
 msgid "Don't show the notification icon"
 msgstr "Не показувати значок сповіщення"
 
-#: ../SparkleShare/SparkleShare.cs:64
+#: ../SparkleShare/SparkleShare.cs:67
 msgid "Print version information"
 msgstr "Вивести дані про версію"
 
-#: ../SparkleShare/SparkleShare.cs:65
+#: ../SparkleShare/SparkleShare.cs:68
 msgid "Show this help text"
 msgstr "Показати текст цієї довідки"
 
-#: ../SparkleShare/SparkleShare.cs:114
+#: ../SparkleShare/SparkleShare.cs:115
 msgid "SparkleShare, a collaboration and sharing tool."
 msgstr ""
 
-#: ../SparkleShare/SparkleShare.cs:115
+#: ../SparkleShare/SparkleShare.cs:116
 msgid "Copyright (C) 2010 Hylke Bons"
 msgstr "Авторське право (C) 2010 Hylke Bons"
 
-#: ../SparkleShare/SparkleShare.cs:117
+#: ../SparkleShare/SparkleShare.cs:118
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
 msgstr "Ця програма розповсюджується БЕЗ ВСЯКОЇ ГАРАНТІЇ."
 
-#: ../SparkleShare/SparkleShare.cs:119
+#: ../SparkleShare/SparkleShare.cs:120
 msgid "This is free software, and you are welcome to redistribute it "
 msgstr "Це вільна програма і ви можете поширювати її "
 
-#: ../SparkleShare/SparkleShare.cs:120
+#: ../SparkleShare/SparkleShare.cs:121
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
 msgstr "за певних умов. Детальніше читайте ліцензію GNU GPLv3."
 
-#: ../SparkleShare/SparkleShare.cs:122
+#: ../SparkleShare/SparkleShare.cs:123
 msgid "SparkleShare automatically syncs Git repositories in "
 msgstr "SparkleShare автоматично синхронізує сховища Git в "
 
-#: ../SparkleShare/SparkleShare.cs:123
+#: ../SparkleShare/SparkleShare.cs:124
 msgid "the ~/SparkleShare folder with their remote origins."
 msgstr "теці ~/SparkleShare з її віддаленими походженнями."
 
-#: ../SparkleShare/SparkleShare.cs:125
+#: ../SparkleShare/SparkleShare.cs:126
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
 msgstr "Використання: sparkleshare [start|stop|restart] [OPTION]..."
 
-#: ../SparkleShare/SparkleShare.cs:126
+#: ../SparkleShare/SparkleShare.cs:127
 msgid "Sync SparkleShare folder with remote repositories."
 msgstr "Синхронізація теки SparkleShare з віддаленими сховищами."
 
-#: ../SparkleShare/SparkleShare.cs:128
+#: ../SparkleShare/SparkleShare.cs:129
 msgid "Arguments:"
 msgstr "Аргументи:"
 
-#: ../SparkleShare/SparkleShare.cs:138
+#: ../SparkleShare/SparkleShare.cs:139
 msgid "SparkleShare "
 msgstr "SparkleShare "
 
-#: ../SparkleShare/SparkleStatusIcon.cs:177
+#: ../SparkleShare/SparkleStatusIcon.cs:208
 msgid "No Remote Folders Yet"
 msgstr "Віддаленої теки ще немає"
 
 #. Opens the wizard to add a new remote folder
-#: ../SparkleShare/SparkleStatusIcon.cs:185
+#: ../SparkleShare/SparkleStatusIcon.cs:218
 msgid "Add Remote Folder…"
 msgstr "Додати віддалену теку..."
 
-#: ../SparkleShare/SparkleStatusIcon.cs:212
+#: ../SparkleShare/SparkleStatusIcon.cs:242
+msgid "Show Recent Events"
+msgstr ""
+
+#: ../SparkleShare/SparkleStatusIcon.cs:262
 msgid "Turn Notifications Off"
 msgstr "Вимкнути сповіщення"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:214
+#: ../SparkleShare/SparkleStatusIcon.cs:264
 msgid "Turn Notifications On"
 msgstr "Увімкнути сповіщення"
 
 #. A menu item that quits the application
-#: ../SparkleShare/SparkleStatusIcon.cs:236
+#: ../SparkleShare/SparkleStatusIcon.cs:286
 msgid "Quit"
 msgstr "Вийти"
 
-#: ../SparkleShare/SparkleUI.cs:105
+#: ../SparkleShare/SparkleUI.cs:96
 msgid "Ouch! Mid-air collision!"
 msgstr "Отакої! Зіткнення в повітрі!"
 
-#: ../SparkleShare/SparkleUI.cs:106
+#: ../SparkleShare/SparkleUI.cs:97
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
 msgstr ""
 "Не хвилюйтесь, SparkleShare створює копію кожного суперечливого файла."
