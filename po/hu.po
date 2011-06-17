@@ -1,0 +1,436 @@
+# This file is distributed under the same license as the Sparkleshare package.
+# 
+# WARNING: Due to the nature of Transifex all translation file headers were lost
+# we apologise for any incovenience this may have caused and we hope to bring them
+# back in the future.
+# 
+# Zoltan Hoppár <hopparz@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: SparkleShare\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-06-17 12:09+0200\n"
+"PO-Revision-Date: 2011-06-17 10:13+0000\n"
+"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:338
+#: ../SparkleShare/SparkleIntro.cs:67 ../SparkleShare/SparkleStatusIcon.cs:345
+msgid "Welcome to SparkleShare!"
+msgstr "Üdvözli a SparkleShare!"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:349
+#: ../SparkleShare/SparkleStatusIcon.cs:357
+msgid "Not everything is synced"
+msgstr "Nincs minden szinkronizálva"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:359
+#: ../SparkleShare/SparkleStatusIcon.cs:367
+msgid "Up to date"
+msgstr "Naprakész"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:375
+#: ../SparkleShare/SparkleStatusIcon.cs:383
+msgid "Syncing…"
+msgstr "Szinkronizálás..."
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
+msgid "Copy Web Link"
+msgstr "Weblink kimásolása"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
+msgid "Copy the web address of this file to the clipboard"
+msgstr "Kimásolja ennek a fájlnak webcímét a vágólapra"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
+msgid "Get Earlier Version"
+msgstr "Korábbi verzió beszerzése"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
+msgid "Make a copy of an earlier version in this folder"
+msgstr "Korábbi verzió másolása ebbe a mappába"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:161
+msgid "Select to get a copy of this version"
+msgstr "Válasszon hogy egy korábbi változatot megkapjon"
+
+#. A menu item that takes the user to http://www.sparkleshare.org/
+#: ../SparkleShare/SparkleAbout.cs:46 ../SparkleShare/SparkleStatusIcon.cs:275
+msgid "About SparkleShare"
+msgstr "A SparkleShare-ről"
+
+#: ../SparkleShare/SparkleAbout.cs:53
+msgid "A newer version is available"
+msgstr "Egy újabb verzió elérhető"
+
+#: ../SparkleShare/SparkleAbout.cs:60
+msgid "You are running the latest version."
+msgstr "Az elérhető legújabb verziót használja."
+
+#: ../SparkleShare/SparkleAbout.cs:87
+msgid "Checking for updates..."
+msgstr "Frissítések keresése..."
+
+#: ../SparkleShare/SparkleAbout.cs:116
+msgid "_Show Credits"
+msgstr "Szerzői névsor megjelenítése"
+
+#: ../SparkleShare/SparkleAbout.cs:129
+msgid "_Visit Website"
+msgstr "Weboldal meglátogatása"
+
+#: ../SparkleShare/SparkleController.cs:422
+msgid "ddd MMM d, yyyy"
+msgstr "ddd MMM d, yyyy"
+
+#: ../SparkleShare/SparkleController.cs:427
+msgid "ddd MMM d"
+msgstr "ddd MMM d"
+
+#: ../SparkleShare/SparkleController.cs:629
+#, csharp-format
+msgid "added ‘{0}’"
+msgstr "hozzáadva '{0}'"
+
+#: ../SparkleShare/SparkleController.cs:634
+#, csharp-format
+msgid "moved ‘{0}’"
+msgstr "elmozgatva '{0}'"
+
+#: ../SparkleShare/SparkleController.cs:639
+#, csharp-format
+msgid "edited ‘{0}’"
+msgstr "szerkesztve '{0}'"
+
+#: ../SparkleShare/SparkleController.cs:644
+#, csharp-format
+msgid "deleted ‘{0}’"
+msgstr "törölve '{0}'"
+
+#: ../SparkleShare/SparkleController.cs:653
+#, csharp-format
+msgid "and {0} more"
+msgid_plural "and {0} more"
+msgstr[0] "és {0} további"
+msgstr[1] "és {0} továbbiak"
+
+#: ../SparkleShare/SparkleController.cs:657
+msgid "did something magical"
+msgstr "valami varázslatosat tett"
+
+#: ../SparkleShare/SparkleIntro.cs:73
+msgid ""
+"Before we can create a SparkleShare folder on this computer, we need a few "
+"bits of information from you."
+msgstr ""
+"Mielőtt még egy SparkleShare mappát készítenénk ezen a gépen, még néhány "
+"apró információra lenne szükség."
+
+#: ../SparkleShare/SparkleIntro.cs:83
+msgid "Full Name:"
+msgstr "Teljes név:"
+
+#: ../SparkleShare/SparkleIntro.cs:98
+msgid "Email:"
+msgstr "Email:"
+
+#: ../SparkleShare/SparkleIntro.cs:109
+msgid "Next"
+msgstr "Következő"
+
+#: ../SparkleShare/SparkleIntro.cs:115
+msgid "Configuring…"
+msgstr "Beállítás alatt..."
+
+#: ../SparkleShare/SparkleIntro.cs:161
+msgid "Where is your remote folder?"
+msgstr "Hol van a távoli elérésű mappája?"
+
+#: ../SparkleShare/SparkleIntro.cs:174
+msgid "address-to-server.com"
+msgstr "cím-a-szerverhez.hu"
+
+#: ../SparkleShare/SparkleIntro.cs:179
+msgid "On my own server:"
+msgstr "A saját szerveremen:"
+
+#: ../SparkleShare/SparkleIntro.cs:186
+msgid "Free hosting for Free and Open Source Software projects."
+msgstr ""
+"Ingyenes tárhely szolgáltatás ingyenes és nyílt forrású szoftver projektek "
+"számára."
+
+#: ../SparkleShare/SparkleIntro.cs:187
+msgid "Also has paid accounts for extra private space and bandwidth."
+msgstr ""
+"De rendelkezünk fizetős regisztrációkkal még több személyes tárhelyhez és "
+"sávszélességhez."
+
+#: ../SparkleShare/SparkleIntro.cs:195
+msgid "The GNOME Project"
+msgstr "A GNOME Project"
+
+#: ../SparkleShare/SparkleIntro.cs:197
+msgid "GNOME is an easy to understand interface to your computer."
+msgstr "GNOME egy könnyen érthető kezelőfelület a gépéhez."
+
+#: ../SparkleShare/SparkleIntro.cs:198
+msgid "Select this option if you’re a developer or designer working on GNOME."
+msgstr ""
+"Válassza ezt az opciót ha fejlesztő vagy tervezőként dolgozik GNOME-ban"
+
+#: ../SparkleShare/SparkleIntro.cs:206
+msgid "Gitorious"
+msgstr "Gitorious"
+
+#: ../SparkleShare/SparkleIntro.cs:208
+msgid "Completely Free as in Freedom infrastructure."
+msgstr "Teljesen szabad mint Szabad infrastruktúra."
+
+#: ../SparkleShare/SparkleIntro.cs:209
+msgid "Free accounts for Free and Open Source projects."
+msgstr "Ingyenes regisztrációk a szabad és nyílt forrású projektek számára."
+
+#: ../SparkleShare/SparkleIntro.cs:220
+msgid "Username/Folder"
+msgstr "Felhasználónév / Mappa"
+
+#: ../SparkleShare/SparkleIntro.cs:225
+msgid "Project/Folder"
+msgstr "Projekt / Mappa"
+
+#: ../SparkleShare/SparkleIntro.cs:230
+msgid "Project"
+msgstr "Projekt"
+
+#: ../SparkleShare/SparkleIntro.cs:235 ../SparkleShare/SparkleIntro.cs:254
+msgid "Folder"
+msgstr "Mappa"
+
+#: ../SparkleShare/SparkleIntro.cs:259 ../SparkleShare/SparkleIntro.cs:377
+msgid "Folder Name:"
+msgstr "Mappa neve:"
+
+#: ../SparkleShare/SparkleIntro.cs:269
+msgid "Sync"
+msgstr "Szinkronizál"
+
+#: ../SparkleShare/SparkleIntro.cs:312
+msgid "Cancel"
+msgstr "Mégsem"
+
+#: ../SparkleShare/SparkleIntro.cs:320
+msgid "Skip"
+msgstr "Kihagyás"
+
+#: ../SparkleShare/SparkleIntro.cs:347
+msgid "Invitation received!"
+msgstr "Meghívás érkezett!"
+
+#: ../SparkleShare/SparkleIntro.cs:353
+msgid ""
+"You've received an invitation to join a shared folder.\n"
+"We're ready to hook you up immediately if you wish."
+msgstr ""
+"Meghívást kapott, hogy csatlakozzon egy megosztott mappához. Készen állunk "
+"hogy bekapcsoljuk azonnal, ha kívánja."
+
+#: ../SparkleShare/SparkleIntro.cs:359
+msgid "Do you accept this invitation?"
+msgstr "Elfogadja ezt a meghívást?"
+
+#: ../SparkleShare/SparkleIntro.cs:368
+msgid "Server Address:"
+msgstr "Szerver címe:"
+
+#: ../SparkleShare/SparkleIntro.cs:391
+msgid "Reject"
+msgstr "Elutasítás"
+
+#: ../SparkleShare/SparkleIntro.cs:392
+msgid "Accept and Sync"
+msgstr "Elfogadás és szinkronizálás"
+
+#: ../SparkleShare/SparkleIntro.cs:442
+msgid "Something went wrong…"
+msgstr "Valami nem sikerült..."
+
+#: ../SparkleShare/SparkleIntro.cs:448
+msgid "Try Again"
+msgstr "Próbálja újra"
+
+#: ../SparkleShare/SparkleIntro.cs:473
+#, csharp-format
+msgid "‘{0}’ has been successfully added"
+msgstr "'{0}' sikeresen hozzáadva"
+
+#: ../SparkleShare/SparkleIntro.cs:482
+msgid "Folder synced successfully!"
+msgstr "Mappa sikeresen szinkronizálva!"
+
+#: ../SparkleShare/SparkleIntro.cs:489
+#, csharp-format
+msgid ""
+"Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
+msgstr ""
+"Most már el tudja érni a szinkronizált fájlokat '{0}' a SparkleShare "
+"mappában."
+
+#. A button that opens the synced folder
+#: ../SparkleShare/SparkleIntro.cs:497
+msgid "Open Folder"
+msgstr "Mappa megnyitása"
+
+#: ../SparkleShare/SparkleIntro.cs:503 ../SparkleShare/SparkleIntro.cs:543
+#: ../SparkleShare/SparkleIntro.cs:604
+msgid "Finish"
+msgstr "Befejezés"
+
+#: ../SparkleShare/SparkleIntro.cs:528
+#, csharp-format
+msgid "Syncing folder ‘{0}’…"
+msgstr "Szinkronizálása mappa '{0}'..."
+
+#: ../SparkleShare/SparkleIntro.cs:535
+msgid "This may take a while.\n"
+msgstr "Ez eltarthat egy ideig.\n"
+
+#: ../SparkleShare/SparkleIntro.cs:536
+msgid "Are you sure it’s not coffee o'clock?"
+msgstr "Biztos benne, hogy nincs kávészünet?"
+
+#: ../SparkleShare/SparkleIntro.cs:579
+msgid "SparkleShare is ready to go!"
+msgstr "SparkleShare készen áll!"
+
+#: ../SparkleShare/SparkleIntro.cs:585
+msgid ""
+"Now you can start accepting invitations from others. \n"
+"Just click on invitations you get by email and we will take care of the rest."
+msgstr ""
+"Most már meg lehet kezdeni elfogadni a meghívásokat másoktól.\n"
+"Csak kattintson a meghívásokra amit e-mailben kap, és mi gondoskodunk a többiről."
+
+#: ../SparkleShare/SparkleIntro.cs:596
+msgid "Learn how to host your own SparkleServer"
+msgstr "Ismerje meg, hogyan tarthat saját SparkleServer-t"
+
+#: ../SparkleShare/SparkleEventLog.cs:61
+msgid "Recent Events"
+msgstr ""
+
+#: ../SparkleShare/SparkleEventLog.cs:131
+#: ../SparkleShare/SparkleEventLog.cs:150
+msgid "All Folders"
+msgstr ""
+
+#: ../SparkleShare/SparkleShare.cs:56
+msgid "Sorry, you can't run SparkleShare with these permissions."
+msgstr "Elnézést, nem tudja futtatni SparkleShare ezekkel a jogosultságokkal."
+
+#: ../SparkleShare/SparkleShare.cs:57
+msgid "Things would go utterly wrong."
+msgstr "A dolgok teljesen rossz irányt vehetnek."
+
+#: ../SparkleShare/SparkleShare.cs:66
+msgid "Don't show the notification icon"
+msgstr "Ne jelenjen meg az értesítési ikon"
+
+#: ../SparkleShare/SparkleShare.cs:67
+msgid "Print version information"
+msgstr "Verzió információk nyomtatása"
+
+#: ../SparkleShare/SparkleShare.cs:68
+msgid "Show this help text"
+msgstr "Ezt a súgó segítséget jeleníti meg"
+
+#: ../SparkleShare/SparkleShare.cs:115
+msgid "SparkleShare, a collaboration and sharing tool."
+msgstr "SparkleShare, az együttműködés és megosztás eszköze."
+
+#: ../SparkleShare/SparkleShare.cs:116
+msgid "Copyright (C) 2010 Hylke Bons"
+msgstr "Copyright (C) 2010 Hylke Bons"
+
+#: ../SparkleShare/SparkleShare.cs:118
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr "Erre a programra nincs SEMMIFÉLE GARANCIA."
+
+#: ../SparkleShare/SparkleShare.cs:120
+msgid "This is free software, and you are welcome to redistribute it "
+msgstr "Ez egy szabad szoftver, és mindig örülünk, ha terjesztik "
+
+#: ../SparkleShare/SparkleShare.cs:121
+msgid "under certain conditions. Please read the GNU GPLv3 for details."
+msgstr ""
+"bizonyos feltételek mellett. Kérjük, olvassa el a GNU GPLv3 a részletekért."
+
+#: ../SparkleShare/SparkleShare.cs:123
+msgid "SparkleShare automatically syncs Git repositories in "
+msgstr "SparkleShare automatikusan szinkronizálja Git adattárakat a"
+
+#: ../SparkleShare/SparkleShare.cs:124
+msgid "the ~/SparkleShare folder with their remote origins."
+msgstr "a ~/SparkleShare mappával a távoli eredetükkel."
+
+#: ../SparkleShare/SparkleShare.cs:126
+msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
+msgstr "Használat: sparkleshare [start | stop | újraindítás] [OPCIÓK] ..."
+
+#: ../SparkleShare/SparkleShare.cs:127
+msgid "Sync SparkleShare folder with remote repositories."
+msgstr "A SparkleShare mappa szinkronizálása a távoli tárolókkal."
+
+#: ../SparkleShare/SparkleShare.cs:129
+msgid "Arguments:"
+msgstr "Paraméterek:"
+
+#: ../SparkleShare/SparkleShare.cs:139
+msgid "SparkleShare "
+msgstr "SparkleShare "
+
+#: ../SparkleShare/SparkleStatusIcon.cs:208
+msgid "No Remote Folders Yet"
+msgstr "Még nincsenek távoli mappák"
+
+#. Opens the wizard to add a new remote folder
+#: ../SparkleShare/SparkleStatusIcon.cs:218
+msgid "Add Remote Folder…"
+msgstr "Távoli mappa hozzáadása..."
+
+#: ../SparkleShare/SparkleStatusIcon.cs:242
+msgid "Show Recent Events"
+msgstr ""
+
+#: ../SparkleShare/SparkleStatusIcon.cs:262
+msgid "Turn Notifications Off"
+msgstr "Értesítések kikapcsolása"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:264
+msgid "Turn Notifications On"
+msgstr "Értesítések bekapcsolása"
+
+#. A menu item that quits the application
+#: ../SparkleShare/SparkleStatusIcon.cs:286
+msgid "Quit"
+msgstr "Kilépés"
+
+#: ../SparkleShare/SparkleUI.cs:96
+msgid "Ouch! Mid-air collision!"
+msgstr "Jaj! Ütközés a forgalomban!"
+
+#: ../SparkleShare/SparkleUI.cs:97
+msgid "Don't worry, SparkleShare made a copy of each conflicting file."
+msgstr ""
+"Nincs ok az aggodalomra, SparkleShare minden ütköző fájlról készít "
+"másolatot."
+
+#: ../SparkleShare/SparkleWindow.cs:41
+msgid "SparkleShare Setup"
+msgstr "SparkleShare beállítása"
+
+
