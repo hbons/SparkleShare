@@ -55,7 +55,7 @@ namespace SparkleShare {
             SetSizeRequest (480, 640);
             SetPosition (WindowPosition.Center);
 
-            Resizable   = false;
+            Resizable   = true;
             BorderWidth = 0;
 
             Title = _("Recent Events");
