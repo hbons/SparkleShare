@@ -61,10 +61,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
-    <Reference Include="webkit-sharp, Version=1.1.15.0, Culture=neutral, PublicKeyToken=eaa1d335d2e19745">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\webkit-sharp.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\SparkleLib\windows\GlobalAssemblyInfo.cs">
@@ -90,11 +86,11 @@
     <Compile Include="..\SparkleUI.cs" />
     <Compile Include="..\SparkleWindow.cs" />
     <Compile Include="..\SparkleEntry.cs" />
-    <Compile Include="..\SparkleLog.cs" />
     <Compile Include="..\SparkleUIHelpers.cs" />
     <Compile Include="..\SparkleInfobar.cs" />
     <Compile Include="..\SparkleController.cs" />
     <Compile Include="..\SparkleAbout.cs" />
+    <Compile Include="SparkleLog.cs" />
     <Compile Include="SparkleWinController.cs" />
   </ItemGroup>
   <ItemGroup>
