@@ -70,6 +70,8 @@ namespace SparkleShare {
 				UserInfoForm.AddEntry ("Email Address:");
 				UserInfoForm.CellSize = new SizeF (280, 22);
 				UserInfoForm.IntercellSpacing = new SizeF (4, 4);
+                UserInfoForm.Cells [0].LineBreakMode = NSLineBreakMode.TruncatingTail;
+                UserInfoForm.Cells [1].LineBreakMode = NSLineBreakMode.TruncatingTail;
 
 				UserInfoForm.Cells [0].StringValue = SparkleShare.Controller.UserName;
 				UserInfoForm.Cells [1].StringValue = SparkleShare.Controller.UserEmail;
@@ -166,11 +168,14 @@ namespace SparkleShare {
 					Font        = SparkleUI.Font
 				};
 
+                AddressTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
+
 				FolderNameTextField = new NSTextField () {
 					Frame           = new RectangleF (320, Frame.Height - (240 + 22 + 4) , 256, 22),
 					StringValue     = ""
 				};
 
+                FolderNameTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
 				FolderNameHelpLabel = new NSTextField () {
 					BackgroundColor = NSColor.WindowBackground,
