@@ -34,7 +34,8 @@
 -moz-box-sizing: border-box;
 width: 75%;float:right;height: 40px" id="message-<!-- $event-revision -->"></textarea>
 <div style='clear: both'></div>
-            <input style="float:right; margin-top: 6px;margin-bottom: 6px;" type="button" onclick="location=document.getElementById('message-<!-- $event-revision -->').value" value="Add comment">
+            <input style="float:right; margin-top: 6px;margin-bottom: 6px;" type="button"
+            onclick="location='?message='+document.getElementById('message-<!-- $event-revision -->').value+'&revision=<!-- $event-revision -->';document.getElementById('message-<!-- $event-revision -->').value=''" value="Add comment">
 
         </div>
         <div style='clear: both'></div>
