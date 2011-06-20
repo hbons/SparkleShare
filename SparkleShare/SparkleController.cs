@@ -396,6 +396,7 @@ namespace SparkleShare {
                         .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (change_set.UserEmail, 36))
                         .Replace ("<!-- $event-time -->", change_set.Timestamp.ToString ("H:mm"))
                         .Replace ("<!-- $event-folder -->", change_set.Folder)
+                        .Replace ("<!-- $event-revision -->", change_set.Revision)
                         .Replace ("<!-- $event-folder-color -->", AssignColor (change_set.Folder));
                 }
 
