@@ -438,6 +438,12 @@ namespace SparkleLib {
         }
 
 
+        public virtual void AddNote (string revision, string note)
+        {
+
+        }
+
+
         // Recursively gets a folder's size in bytes
         private double CalculateFolderSize (DirectoryInfo parent)
         {
@@ -451,7 +457,7 @@ namespace SparkleLib {
             if (parent.Name.Equals ("rebase-apply"))
                 return 0;
 
-            foreach (FileInfo file in parent.GetFiles()) {
+            foreach (FileInfo file in parent.GetFiles ()) {
                 if (!file.Exists)
                     return 0;
 
