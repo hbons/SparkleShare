@@ -219,7 +219,8 @@ namespace SparkleShare {
         
         public override void DecidePolicyForNavigation (WebView web_view, NSDictionary action_info,
             NSUrlRequest request, WebFrame frame, NSObject decision_token)
-        {
+        {Console.WriteLine ("fffffffffffff");
+            Console.WriteLine (request.Url.ToString ());
             string file_path = request.Url.ToString ();
             file_path = file_path.Replace ("%20", " ");
             
