@@ -1,0 +1,432 @@
+# This file is distributed under the same license as the Sparkleshare package.
+# 
+# WARNING: Due to the nature of Transifex all translation file headers were lost
+# we apologise for any incovenience this may have caused and we hope to bring them
+# back in the future.
+# 
+# Majid Al-Dharrab <majid@aldharrab.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: SparkleShare\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-06-17 12:09+0200\n"
+"PO-Revision-Date: 2011-06-17 14:36+0000\n"
+"Last-Translator: usb333 <majid@aldharrab.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5\n"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:338
+#: ../SparkleShare/SparkleIntro.cs:67 ../SparkleShare/SparkleStatusIcon.cs:345
+msgid "Welcome to SparkleShare!"
+msgstr "مرحبًا بك في سباركل‌شير!"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:349
+#: ../SparkleShare/SparkleStatusIcon.cs:357
+msgid "Not everything is synced"
+msgstr "ليس كل شيء مزامَنًا"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:359
+#: ../SparkleShare/SparkleStatusIcon.cs:367
+msgid "Up to date"
+msgstr "محدَّث"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:375
+#: ../SparkleShare/SparkleStatusIcon.cs:383
+msgid "Syncing…"
+msgstr "يزامن..."
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
+msgid "Copy Web Link"
+msgstr "انسخ رابط الملف"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
+msgid "Copy the web address of this file to the clipboard"
+msgstr "انسخ عنوان الوِب الخاص بهذا الملف إلى الحافظة"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
+msgid "Get Earlier Version"
+msgstr "احصل على إصدارة سابقة"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
+msgid "Make a copy of an earlier version in this folder"
+msgstr "اصنع نسخة من إصدارة سابقة من هذا المجلد"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:161
+msgid "Select to get a copy of this version"
+msgstr "اختر لتحصل على نسخة من هذه الإصدارة"
+
+#. A menu item that takes the user to http://www.sparkleshare.org/
+#: ../SparkleShare/SparkleAbout.cs:46 ../SparkleShare/SparkleStatusIcon.cs:275
+msgid "About SparkleShare"
+msgstr "حوْل سباركل‌شير"
+
+#: ../SparkleShare/SparkleAbout.cs:53
+msgid "A newer version is available"
+msgstr "توجد إصدارة أحدث"
+
+#: ../SparkleShare/SparkleAbout.cs:60
+msgid "You are running the latest version."
+msgstr "أنت تستخدم الإصدارة الأحدث."
+
+#: ../SparkleShare/SparkleAbout.cs:87
+msgid "Checking for updates..."
+msgstr "يبحث عن تحديثات..."
+
+#: ../SparkleShare/SparkleAbout.cs:116
+msgid "_Show Credits"
+msgstr "أظهر الإ_شادات"
+
+#: ../SparkleShare/SparkleAbout.cs:129
+msgid "_Visit Website"
+msgstr "_زر الموقع الإلكتروني"
+
+#: ../SparkleShare/SparkleController.cs:422
+msgid "ddd MMM d, yyyy"
+msgstr "ddd MMM d, yyyy"
+
+#: ../SparkleShare/SparkleController.cs:427
+msgid "ddd MMM d"
+msgstr "ddd MMM d"
+
+#: ../SparkleShare/SparkleController.cs:629
+#, csharp-format
+msgid "added ‘{0}’"
+msgstr "أضيفَ ‘{0}’"
+
+#: ../SparkleShare/SparkleController.cs:634
+#, csharp-format
+msgid "moved ‘{0}’"
+msgstr "نُقل ‘{0}’"
+
+#: ../SparkleShare/SparkleController.cs:639
+#, csharp-format
+msgid "edited ‘{0}’"
+msgstr "حرِّر ‘{0}’"
+
+#: ../SparkleShare/SparkleController.cs:644
+#, csharp-format
+msgid "deleted ‘{0}’"
+msgstr "حُذف ‘{0}’"
+
+#: ../SparkleShare/SparkleController.cs:653
+#, csharp-format
+msgid "and {0} more"
+msgid_plural "and {0} more"
+msgstr[0] "ولا شيء غيره"
+msgstr[1] "وملف واحد آخر"
+msgstr[2] "وملفان آخران"
+msgstr[3] "و{0} ملفات أخرى"
+msgstr[4] "و{ملف آخر"
+msgstr[5] "و{0} ملف آخر"
+
+#: ../SparkleShare/SparkleController.cs:657
+msgid "did something magical"
+msgstr "فعلتُ شيئًا سحريًا"
+
+#: ../SparkleShare/SparkleIntro.cs:73
+msgid ""
+"Before we can create a SparkleShare folder on this computer, we need a few "
+"bits of information from you."
+msgstr ""
+"نحتاج بعض المعلومات منك قبل أن نتمكن من إنشاء مجلد سباركل‌شير في هذا "
+"الحاسوب."
+
+#: ../SparkleShare/SparkleIntro.cs:83
+msgid "Full Name:"
+msgstr "الاسم كاملًا:"
+
+#: ../SparkleShare/SparkleIntro.cs:98
+msgid "Email:"
+msgstr "البريد الإلكتروني:"
+
+#: ../SparkleShare/SparkleIntro.cs:109
+msgid "Next"
+msgstr "التالي"
+
+#: ../SparkleShare/SparkleIntro.cs:115
+msgid "Configuring…"
+msgstr "يضبط"
+
+#: ../SparkleShare/SparkleIntro.cs:161
+msgid "Where is your remote folder?"
+msgstr "أين مجلدك البعيد؟"
+
+#: ../SparkleShare/SparkleIntro.cs:174
+msgid "address-to-server.com"
+msgstr "عنوان-الخادوم.com"
+
+#: ../SparkleShare/SparkleIntro.cs:179
+msgid "On my own server:"
+msgstr "على خادومي الخاص:"
+
+#: ../SparkleShare/SparkleIntro.cs:186
+msgid "Free hosting for Free and Open Source Software projects."
+msgstr "استضافة مجانية للمشاريع الحرة مفتوحة المصدر."
+
+#: ../SparkleShare/SparkleIntro.cs:187
+msgid "Also has paid accounts for extra private space and bandwidth."
+msgstr "يوجد أيضًا حسابات مدفوعة بمساحة خاصة أكبر وتبادل أكثر للبيانات."
+
+#: ../SparkleShare/SparkleIntro.cs:195
+msgid "The GNOME Project"
+msgstr "مشروع جنوم."
+
+#: ../SparkleShare/SparkleIntro.cs:197
+msgid "GNOME is an easy to understand interface to your computer."
+msgstr "جنوم واجهة حاسوب سهلة الاستخدام."
+
+#: ../SparkleShare/SparkleIntro.cs:198
+msgid "Select this option if you’re a developer or designer working on GNOME."
+msgstr "اختر هذا الخيار إن كنت مطورًا أو مصممًا تعمل على مشروع جنوم."
+
+#: ../SparkleShare/SparkleIntro.cs:206
+msgid "Gitorious"
+msgstr "Gitorious"
+
+#: ../SparkleShare/SparkleIntro.cs:208
+msgid "Completely Free as in Freedom infrastructure."
+msgstr "بنية تحتية حرة تمامًا."
+
+#: ../SparkleShare/SparkleIntro.cs:209
+msgid "Free accounts for Free and Open Source projects."
+msgstr "حسابات مجانية للمشاريع الحرة مفتوحة المصدر."
+
+#: ../SparkleShare/SparkleIntro.cs:220
+msgid "Username/Folder"
+msgstr "اسم المستخدم/المجلد"
+
+#: ../SparkleShare/SparkleIntro.cs:225
+msgid "Project/Folder"
+msgstr "المشروع/المجلد"
+
+#: ../SparkleShare/SparkleIntro.cs:230
+msgid "Project"
+msgstr "المشروع"
+
+#: ../SparkleShare/SparkleIntro.cs:235 ../SparkleShare/SparkleIntro.cs:254
+msgid "Folder"
+msgstr "المجلد"
+
+#: ../SparkleShare/SparkleIntro.cs:259 ../SparkleShare/SparkleIntro.cs:377
+msgid "Folder Name:"
+msgstr "اسم المجلد:"
+
+#: ../SparkleShare/SparkleIntro.cs:269
+msgid "Sync"
+msgstr "زامِن"
+
+#: ../SparkleShare/SparkleIntro.cs:312
+msgid "Cancel"
+msgstr "ألغِ"
+
+#: ../SparkleShare/SparkleIntro.cs:320
+msgid "Skip"
+msgstr "تخطَّ"
+
+#: ../SparkleShare/SparkleIntro.cs:347
+msgid "Invitation received!"
+msgstr "وصلتك دعوة!"
+
+#: ../SparkleShare/SparkleIntro.cs:353
+msgid ""
+"You've received an invitation to join a shared folder.\n"
+"We're ready to hook you up immediately if you wish."
+msgstr ""
+"لقد استلمتَ دعوة لتنضم إلى مجلد مشترك.\n"
+"نحن مستعدون لتوصيلك مباشرة إذا شئت."
+
+#: ../SparkleShare/SparkleIntro.cs:359
+msgid "Do you accept this invitation?"
+msgstr "هل تقبل هذه الدعوة؟"
+
+#: ../SparkleShare/SparkleIntro.cs:368
+msgid "Server Address:"
+msgstr "عنوان الخادوم:"
+
+#: ../SparkleShare/SparkleIntro.cs:391
+msgid "Reject"
+msgstr "ارفض"
+
+#: ../SparkleShare/SparkleIntro.cs:392
+msgid "Accept and Sync"
+msgstr "اقبل وزامن"
+
+#: ../SparkleShare/SparkleIntro.cs:442
+msgid "Something went wrong…"
+msgstr "حدث خطأ ما..."
+
+#: ../SparkleShare/SparkleIntro.cs:448
+msgid "Try Again"
+msgstr "حاول مجددًا"
+
+#: ../SparkleShare/SparkleIntro.cs:473
+#, csharp-format
+msgid "‘{0}’ has been successfully added"
+msgstr "نجحت إضافة ‘{0}’"
+
+#: ../SparkleShare/SparkleIntro.cs:482
+msgid "Folder synced successfully!"
+msgstr "نجحت مزامنة المجلد!"
+
+#: ../SparkleShare/SparkleIntro.cs:489
+#, csharp-format
+msgid ""
+"Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
+msgstr "بإمكانك الآن الوصول إلى الملفات المزامنة من ‘{0}’ في مجلد سباركل‌شير."
+
+#. A button that opens the synced folder
+#: ../SparkleShare/SparkleIntro.cs:497
+msgid "Open Folder"
+msgstr "افتح المجلد"
+
+#: ../SparkleShare/SparkleIntro.cs:503 ../SparkleShare/SparkleIntro.cs:543
+#: ../SparkleShare/SparkleIntro.cs:604
+msgid "Finish"
+msgstr "أنهِ"
+
+#: ../SparkleShare/SparkleIntro.cs:528
+#, csharp-format
+msgid "Syncing folder ‘{0}’…"
+msgstr "يزامن المجلد ‘{0}’…"
+
+#: ../SparkleShare/SparkleIntro.cs:535
+msgid "This may take a while.\n"
+msgstr "قد يستغرق هذا بعض الوقت.\n"
+
+#: ../SparkleShare/SparkleIntro.cs:536
+msgid "Are you sure it’s not coffee o'clock?"
+msgstr "أمتأكد أنه ليس وقت احتساء القهوة؟"
+
+#: ../SparkleShare/SparkleIntro.cs:579
+msgid "SparkleShare is ready to go!"
+msgstr "سباركل‌شير جاهز للاستخدام!"
+
+#: ../SparkleShare/SparkleIntro.cs:585
+msgid ""
+"Now you can start accepting invitations from others. \n"
+"Just click on invitations you get by email and we will take care of the rest."
+msgstr ""
+"يمكنك الآن البدء في استقبال الدعوات من الآخرين.\n"
+"كل ما عليك هو النقر على الدعوات التي تصلك بالبريد الإلكتروني وسنتكفل نحن بالبقية."
+
+#: ../SparkleShare/SparkleIntro.cs:596
+msgid "Learn how to host your own SparkleServer"
+msgstr "تعلم كيف تستضيف خادوم سباركل‌شير بنفسك"
+
+#: ../SparkleShare/SparkleEventLog.cs:61
+msgid "Recent Events"
+msgstr "الأحداث الأخيرة"
+
+#: ../SparkleShare/SparkleEventLog.cs:131
+#: ../SparkleShare/SparkleEventLog.cs:150
+msgid "All Folders"
+msgstr "كل المجلدات"
+
+#: ../SparkleShare/SparkleShare.cs:56
+msgid "Sorry, you can't run SparkleShare with these permissions."
+msgstr "المعذرة، لا يمكنك تشغيل سباركل‌شير بهذه الأذون."
+
+#: ../SparkleShare/SparkleShare.cs:57
+msgid "Things would go utterly wrong."
+msgstr "وإلا فستسير الأمور على غير ما يرام."
+
+#: ../SparkleShare/SparkleShare.cs:66
+msgid "Don't show the notification icon"
+msgstr "لا تظهِر أيقونة التنبيه"
+
+#: ../SparkleShare/SparkleShare.cs:67
+msgid "Print version information"
+msgstr "اطبع معلومات الإصدارة"
+
+#: ../SparkleShare/SparkleShare.cs:68
+msgid "Show this help text"
+msgstr "أظهر نص المساعدة هذا"
+
+#: ../SparkleShare/SparkleShare.cs:115
+msgid "SparkleShare, a collaboration and sharing tool."
+msgstr "سباركل‌شير، أداة تعاون ومشاركة."
+
+#: ../SparkleShare/SparkleShare.cs:116
+msgid "Copyright (C) 2010 Hylke Bons"
+msgstr "Copyright (C) 2010 Hylke Bons"
+
+#: ../SparkleShare/SparkleShare.cs:118
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr "لا يشمل هذا البرنامج أي ضمان"
+
+#: ../SparkleShare/SparkleShare.cs:120
+msgid "This is free software, and you are welcome to redistribute it "
+msgstr "هذا برنامج حر، ونحن نرحب بتوزيعه "
+
+#: ../SparkleShare/SparkleShare.cs:121
+msgid "under certain conditions. Please read the GNU GPLv3 for details."
+msgstr ""
+"ضمن شروط معينة. يرجى قراءة رخصة جنو العمومية - الإصدارة الثالثة للاطلاع على "
+"التفاصيل."
+
+#: ../SparkleShare/SparkleShare.cs:123
+msgid "SparkleShare automatically syncs Git repositories in "
+msgstr "يزامن سباركل‌شير مستودعات جِت الموجودة في "
+
+#: ../SparkleShare/SparkleShare.cs:124
+msgid "the ~/SparkleShare folder with their remote origins."
+msgstr "مجلد ~/SparkleShare مع أصولها البعيدة آليًا."
+
+#: ../SparkleShare/SparkleShare.cs:126
+msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
+msgstr "طريقة الاستخدام: sparkleshare [start|stop|restart] [OPTION]..."
+
+#: ../SparkleShare/SparkleShare.cs:127
+msgid "Sync SparkleShare folder with remote repositories."
+msgstr "زامن مجلد سباركل‌شير مع مستودعات بعيدة."
+
+#: ../SparkleShare/SparkleShare.cs:129
+msgid "Arguments:"
+msgstr "المعطيات:"
+
+#: ../SparkleShare/SparkleShare.cs:139
+msgid "SparkleShare "
+msgstr "سباركل‌شير "
+
+#: ../SparkleShare/SparkleStatusIcon.cs:208
+msgid "No Remote Folders Yet"
+msgstr "لا توجد مجلدات بعيدة بعد"
+
+#. Opens the wizard to add a new remote folder
+#: ../SparkleShare/SparkleStatusIcon.cs:218
+msgid "Add Remote Folder…"
+msgstr "أضف مجلدًا بعيدًا..."
+
+#: ../SparkleShare/SparkleStatusIcon.cs:242
+msgid "Show Recent Events"
+msgstr "أظهر الأحداث الأخيرة"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:262
+msgid "Turn Notifications Off"
+msgstr "عطِّل التنبيهات"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:264
+msgid "Turn Notifications On"
+msgstr "فعِّل التنبيهات"
+
+#. A menu item that quits the application
+#: ../SparkleShare/SparkleStatusIcon.cs:286
+msgid "Quit"
+msgstr "اخرج"
+
+#: ../SparkleShare/SparkleUI.cs:96
+msgid "Ouch! Mid-air collision!"
+msgstr "آخ! اصطدام هوائي!"
+
+#: ../SparkleShare/SparkleUI.cs:97
+msgid "Don't worry, SparkleShare made a copy of each conflicting file."
+msgstr "لا تقلق، صنع سباركل‌شير نسخة من كل ملف متعارض."
+
+#: ../SparkleShare/SparkleWindow.cs:41
+msgid "SparkleShare Setup"
+msgstr "إعداد سباركل‌شير"
+
+
