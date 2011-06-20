@@ -4,9 +4,24 @@
         <title>SparkleShare Event Log</title>
         <script type="text/javascript" src="<!-- $jquery-url -->"></script>
         <script type="text/javascript">
-          $(document).ready(function() {
+          $(document).ready(function () {
               $("input").click(function () {
-alert('ff');
+                 textarea = $(this).parent ().find ('textarea');
+                 text = textarea.val ();
+
+                 if (text == '')
+                     return;
+
+                 textarea.val ('');
+
+                 table = $(this).parent ().find ("table");
+                 comments = table.html ();
+                 comments += '<tr><td class="comment-author">Hylke Bons</td><td class="comment-text" rowspan="2">' + text + '</td></tr>';
+                 comments += '<tr><td class="comment-timestamp">just now</td><td></td></tr>'
+
+                 table.html (comments);
+
+                 location = '?' + this.id + '&text=' + text;
               });
           });
         </script>
