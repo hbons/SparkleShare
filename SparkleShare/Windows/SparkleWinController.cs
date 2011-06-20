@@ -37,8 +37,8 @@ namespace SparkleShare {
 		public override void Initialize ()
 		{
 			// Add msysgit to path, as we cannot asume it is added to the path
-			// Asume it is installed in @"C:\msysgit\msysgit\bin" for now
-			string MSysGit=@"C:\msysgit\msysgit";
+			// Asume it is installed in @"C:\msysgit\bin" for now
+			string MSysGit=@"C:\msysgit";
 
 			string newPath = MSysGit + @"\bin" + ";"
 			               + MSysGit + @"\mingw\bin" + ";"
