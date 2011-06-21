@@ -546,16 +546,16 @@ namespace SparkleLib {
                    "    <name>" + SparkleConfig.DefaultConfig.UserName + "</name>" + n +
                    "    <email>" + SparkleConfig.DefaultConfig.UserEmail + "</email>" + n +
                    "  </user>" + n +
-                   "  <timestamp>" + (DateTime.UtcNow - new DateTime (1970, 1, 1)).TotalSeconds + "</timestamp>" + n +
+                   "  <timestamp>" + (int) (DateTime.UtcNow - new DateTime (1970, 1, 1)).TotalSeconds + "</timestamp>" + n +
                    "  <body>" + note + "</body>" + n +
                    "</note>";
 
-            SparkleGit git = new SparkleGit (LocalPath, "note append -m " + note);
+            SparkleGit git = new SparkleGit (LocalPath, "notes append -m '" + note + "'");
             git.Start ();
             git.WaitForExit ();
 
             while (Status != SyncStatus.Idle) {
-                Thread.Sleep (5 * 20);
+                System.Threading.Thread.Sleep (5 * 20);
             }
 
             SyncUp ();
