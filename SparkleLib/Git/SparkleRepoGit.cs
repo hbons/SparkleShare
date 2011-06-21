@@ -19,6 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SparkleLib {
@@ -540,17 +542,21 @@ namespace SparkleLib {
 
         public override void AddNote (string revision, string note)
         {
+            int timestamp = (int) (DateTime.UtcNow - new DateTime (1970, 1, 1)).TotalSeconds;
+
             // Create the note in one line for easier merging
             note = "<note>" +
                    "  <user>" +
                    "    <name>" + SparkleConfig.DefaultConfig.UserName + "</name>" +
                    "    <email>" + SparkleConfig.DefaultConfig.UserEmail + "</email>" +
                    "  </user>" +
-                   "  <timestamp>" + (int) (DateTime.UtcNow - new DateTime (1970, 1, 1)).TotalSeconds + "</timestamp>" +
+                   "  <timestamp>" + timestamp + "</timestamp>" +
                    "  <body>" + note + "</body>" +
                    "</note>";
 
-            SparkleGit git_notes = new SparkleGit (LocalPath, "notes append -m \"" + note + "\" " + revision);
+            string note_namespace = SHA1 (timestamp.ToString () + note);
+            SparkleGit git_notes = new SparkleGit (LocalPath,
+                "notes --ref=" + note_namespace + " append -m \"" + note + "\" " + revision);
             git_notes.Start ();
             git_notes.WaitForExit ();
 
@@ -570,6 +576,16 @@ namespace SparkleLib {
                 string file_path = SparkleHelpers.CombineMore (LocalPath, ".git", "disable_notification_center");
                 return !File.Exists (file_path);
             }
+        }
+
+
+        // Creates a SHA-1 hash of input
+        private string SHA1 (string s)
+        {
+            SHA1 sha1 = new SHA1CryptoServiceProvider ();
+            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+            Byte[] encoded_bytes = sha1.ComputeHash (bytes);
+            return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");
         }
     }
 }
