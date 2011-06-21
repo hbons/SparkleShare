@@ -24,15 +24,29 @@ namespace SparkleLib {
 
         public string UserName;
         public string UserEmail;
+
         public string Folder;
         public string Revision;
         public DateTime Timestamp;
-        public bool IsMerge           = false;
+        public bool FolderSupportsNotes = false;
+        public bool IsMerge             = false;
+
         public List<string> Added     = new List<string> ();
         public List<string> Deleted   = new List<string> ();
         public List<string> Edited    = new List<string> ();
         public List<string> MovedFrom = new List<string> ();
         public List<string> MovedTo   = new List<string> ();
 
+        public List<SparkleNote> Notes = new List<SparkleNote> ();
+    }
+
+
+    public class SparkleNote {
+
+        public string UserName;
+        public string UserEmail;
+
+        public DateTime Timestamp;
+        public string Body;
     }
 }
