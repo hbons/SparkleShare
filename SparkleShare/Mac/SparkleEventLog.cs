@@ -213,8 +213,17 @@ namespace SparkleShare {
         
         public override void DecidePolicyForNavigation (WebView web_view, NSDictionary action_info,
             NSUrlRequest request, WebFrame frame, NSObject decision_token)
-        {Console.WriteLine ("fffffffffffff");
-            Console.WriteLine (request.Url.ToString ());
+        {
+            string url = request.Url.ToString ();
+            Console.WriteLine (url);
+            string id = url.Substring (0, url.IndexOf ("%20"));
+            string note = url.Substring (url.IndexOf ("%20") + 3);
+            Console.WriteLine (id + " " + note);
+
+            SparkleShare.Controller.Repositories [0].AddNote (id, note);
+            return;
+
+
             string file_path = request.Url.ToString ();
             file_path = file_path.Replace ("%20", " ");
             
