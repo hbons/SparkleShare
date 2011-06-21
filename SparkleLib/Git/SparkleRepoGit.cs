@@ -540,25 +540,27 @@ namespace SparkleLib {
 
         public override void AddNote (string revision, string note)
         {
-            string n = Environment.NewLine;
-            note = "<note>" + n +
-                   "  <user>" + n +
-                   "    <name>" + SparkleConfig.DefaultConfig.UserName + "</name>" + n +
-                   "    <email>" + SparkleConfig.DefaultConfig.UserEmail + "</email>" + n +
-                   "  </user>" + n +
-                   "  <timestamp>" + (int) (DateTime.UtcNow - new DateTime (1970, 1, 1)).TotalSeconds + "</timestamp>" + n +
-                   "  <body>" + note + "</body>" + n +
+            // Create the note in one line for easier merging
+            note = "<note>" +
+                   "  <user>" +
+                   "    <name>" + SparkleConfig.DefaultConfig.UserName + "</name>" +
+                   "    <email>" + SparkleConfig.DefaultConfig.UserEmail + "</email>" +
+                   "  </user>" +
+                   "  <timestamp>" + (int) (DateTime.UtcNow - new DateTime (1970, 1, 1)).TotalSeconds + "</timestamp>" +
+                   "  <body>" + note + "</body>" +
                    "</note>";
 
-            SparkleGit git = new SparkleGit (LocalPath, "notes append -m '" + note + "'");
-            git.Start ();
-            git.WaitForExit ();
+            SparkleGit git_notes = new SparkleGit (LocalPath, "notes append -m \"" + note + "\" " + revision);
+            git_notes.Start ();
+            git_notes.WaitForExit ();
 
             while (Status != SyncStatus.Idle) {
                 System.Threading.Thread.Sleep (5 * 20);
             }
 
-            SyncUp ();
+            SparkleGit git_push = new SparkleGit (LocalPath, "git push origin refs/notes/*");
+            git_push.Start ();
+            git_push.WaitForExit ();
         }
 
 
