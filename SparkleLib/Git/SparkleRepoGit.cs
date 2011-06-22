@@ -22,6 +22,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace SparkleLib {
 
@@ -117,8 +118,20 @@ namespace SparkleLib {
 
         public override bool SyncDown ()
         {
-            SparkleGit git = new SparkleGit (LocalPath, "fetch -v origin master");
+            // Check if note fetching is set up
+            SparkleGit git_config = new SparkleGit (LocalPath, "config --get remote.origin.fetch");
+            git_config.Start ();
+            git_config.WaitForExit ();
 
+            // Add configuration for note fetching if it's
+            // not there yet
+            if (git_config.ExitCode != 0) {
+                git_config = new SparkleGit (LocalPath, "config --add remote.origin.fetch +refs/notes/*:refs/notes/*");
+                git_config.Start ();
+                git_config.WaitForExit ();
+            }
+
+            SparkleGit git = new SparkleGit (LocalPath, "fetch -v origin master");
             git.Start ();
             git.WaitForExit ();
 
@@ -349,7 +362,7 @@ namespace SparkleLib {
 
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
 
-            SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw -M --date=iso");
+            SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw -M --date=iso --show-notes=*");
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             git_log.Start ();
 
@@ -407,11 +420,12 @@ namespace SparkleLib {
                 if (match.Success) {
                     SparkleChangeSet change_set = new SparkleChangeSet ();
 
-                    change_set.Folder    = Name;
-                    change_set.Revision  = match.Groups [1].Value;
-                    change_set.UserName  = match.Groups [2].Value;
-                    change_set.UserEmail = match.Groups [3].Value;
-                    change_set.IsMerge   = is_merge_commit;
+                    change_set.Folder        = Name;
+                    change_set.Revision      = match.Groups [1].Value;
+                    change_set.UserName      = match.Groups [2].Value;
+                    change_set.UserEmail     = match.Groups [3].Value;
+                    change_set.IsMerge       = is_merge_commit;
+                    change_set.SupportsNotes = true;
 
                     change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
                         int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
@@ -450,6 +464,26 @@ namespace SparkleLib {
 
                                 change_set.MovedFrom.Add (file_path);
                                 change_set.MovedTo.Add (to_file_path);
+                            }
+
+                        } else if (entry_line.StartsWith ("    <note>")) {
+
+                            Regex regex_notes = new Regex (@"<name>(.+)</name>.*" +
+                                                            "<email>(.+)</email>.*" +
+                                                            "<timestamp>([0-9]+)</timestamp>.*" +
+                                                            "<body>(.+)</body>", RegexOptions.Compiled);
+
+                            Match match_notes = regex_notes.Match (entry_line);
+
+                            if (match_notes.Success) {
+                                SparkleNote note = new SparkleNote () {
+                                    UserName  = match_notes.Groups [1].Value,
+                                    UserEmail = match_notes.Groups [2].Value,
+                                    Timestamp = new DateTime (1970, 1, 1).AddSeconds (int.Parse (match_notes.Groups [3].Value)),
+                                    Body      = match_notes.Groups [4].Value
+                                };
+
+                                change_set.Notes.Add (note);
                             }
                         }
                     }
@@ -560,13 +594,20 @@ namespace SparkleLib {
             git_notes.Start ();
             git_notes.WaitForExit ();
 
+            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Added note to " + revision);
+
             while (Status != SyncStatus.Idle) {
                 System.Threading.Thread.Sleep (5 * 20);
             }
 
-            SparkleGit git_push = new SparkleGit (LocalPath, "git push origin refs/notes/*");
+            SparkleGit git_push = new SparkleGit (LocalPath, "push origin refs/notes/*");
             git_push.Start ();
             git_push.WaitForExit ();
+
+            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Notes pushed");
+
+            SparkleAnnouncement announcement = new SparkleAnnouncement (Identifier, note_namespace);
+            base.listener.Announce (announcement);
         }
 
 
