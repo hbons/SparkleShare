@@ -21,7 +21,7 @@
 
                  table.html (comments);
 
-                 location = this.id + ' ' + text;
+                 location = this.id + '~' + text;
               });
           });
         </script>
@@ -158,6 +158,20 @@ font-size: 12px;
                 width: 100%;
                 background-color: #fff;
                 border-bottom: 1px #ccc solid;
+            }
+
+            .comments {
+                width: 100%;
+            }
+
+            .comment-author {
+                font-weight: bold;
+                width: 25%;
+            }
+
+            .comment-timestamp {
+                color: <!-- $secondary-font-color -->;
+                padding-bottom: 12px;
             }
         </style>
     </head>

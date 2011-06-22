@@ -38,7 +38,6 @@ namespace SparkleLib {
         private TimeSpan long_interval  = new TimeSpan (0, 0, 10, 0);
 
         private SparkleWatcher watcher;
-        private SparkleListenerBase listener;
         private TimeSpan poll_interval;
         private Timer local_timer        = new Timer () { Interval = 0.25 * 1000 };
         private Timer remote_timer       = new Timer () { Interval = 10 * 1000 };
@@ -47,6 +46,7 @@ namespace SparkleLib {
         private bool has_changed         = false;
         private Object change_lock       = new Object ();
 
+        protected SparkleListenerBase listener;
         protected SyncStatus status;
         protected bool is_buffering  = false;
         protected bool server_online = true;
