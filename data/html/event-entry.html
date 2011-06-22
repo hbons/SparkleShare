@@ -11,13 +11,16 @@
         <div class='event-folder' style='background-color: <!-- $event-folder-color -->'><!-- $event-folder --></div>
         </div>
         <!-- $event-entry-content -->
-        <div style='clear: both'></div>
-        <div class="comments-wrapper">
-            <!-- $event-comments -->
-            <textarea class="comment-textarea"></textarea>
+        <div class="comments-section">
+            <div class="comments-wrapper">
+                <!-- $event-comments -->
+                <textarea class="comment-textarea"></textarea>
+
+                <input class="comment-button" type="button" value="Add note"
+                 id="<!-- $event-folder -->~<!-- $event-revision -->">
+                <div style='clear: both'></div>
+            </div>
             <div style='clear: both'></div>
-            <input class="comment-button" type="button" value="Add note"
-             id="<!-- $event-folder -->~<!-- $event-revision -->">
         </div>
         <div style='clear: both'></div>
     </div>
