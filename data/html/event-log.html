@@ -5,6 +5,17 @@
         <script type="text/javascript" src="<!-- $jquery-url -->"></script>
         <script type="text/javascript">
           $(document).ready(function () {
+              $('.comments-wrapper').each (function () {
+                if ($(this).find ('.comments').children ().size () < 1) {
+                  $(this).hide ();
+                }
+              });
+
+              $('.comments-section').click(function () {
+                 $(this).find ('.comments-wrapper').show ();
+                 $(this).find ('.comments-wrapper').css ('cursor', 'default');
+              });
+
               $("input").click(function () {
                  textarea = $(this).parent ().find ('textarea');
                  text = textarea.val ();
@@ -90,7 +101,6 @@
                 background-color: #f0f0f0;
                 margin-bottom:    12px;
                 padding:          0px;
-                padding-bottom:   6px;
                 border:           #ccc 1px solid;
             }
 
@@ -122,6 +132,7 @@
 
             dd:last-child {
                 border: none;
+                margin-bottom: 6px;
             }
 
             .document-added {
@@ -182,31 +193,38 @@
             .comment-button {
                 float:right;
                 margin-top: 6px;
-                margin-bottom: 6px;"
+                margin-bottom: 12px;
             }
 
             .comment-textarea {
-                margin-top:         12px;
                 box-sizing:         border-box;
                 -webkit-box-sizing: border-box;
-                -moz-box-sizing:    border-box;
                 width:              100%;
-                height:             40px;
+                height:             50px;
+                padding-bottom:     6px;
+            }
+
+            .comments-section {
+                box-sizing:         border-box;
+                -webkit-box-sizing: border-box;
+                border-top:         1px #ccc solid;
+                width: 100%;
+                height: 9px;
             }
 
             .comments-wrapper {
-                margin-top:         9px;
-                border-top:         1px #ccc solid;
                 box-sizing:         border-box;
                 -webkit-box-sizing: border-box;
-                -moz-box-sizing:    border-box;
-                margin-top:         3px;
                 width:              100%;
                 padding:            12px;
             }
 
+            .comments-section:hover {
+                cursor: pointer;
+            }
+
             .comment-text {
-                padding-bottom: 6px;
+                padding-bottom: 15px;
             }
         </style>
     </head>

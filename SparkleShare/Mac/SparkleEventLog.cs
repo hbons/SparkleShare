@@ -236,7 +236,7 @@ namespace SparkleShare {
                 if (match.Success) {
                     string folder_name = match.Groups [1].Value;
                     string revision    = match.Groups [2].Value;
-                    string note        = match.Groups [3].Value;
+                    string note        = match.Groups [3].Value.Replace ("%20", " ");
 
                     Thread thread = new Thread (new ThreadStart (delegate {
                         SparkleShare.Controller.AddNoteToFolder (folder_name, revision, note);
