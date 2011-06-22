@@ -397,11 +397,10 @@ namespace SparkleShare {
                         foreach (SparkleNote note in change_set.Notes) {
                             comments += "<tr>" +
                                         "  <td class=\"comment-author\">" + note.UserName + "</td>" +
-                                        "  <td class=\"comment-text\" rowspan=\"2\">" + note.Body + "</td>" +
+                                        "  <td class=\"comment-timestamp\">" + note.Timestamp.ToString ("d MMM") + "</td>" +
                                         "</tr>" +
                                         "<tr>" +
-                                        "  <td class=\"comment-timestamp\">" + note.Timestamp + "</td>" +
-                                        "  <td></td>" +
+                                        "  <td class=\"comment-text\" colspan=\"2\">" + note.Body + "</td>" +
                                         "</tr>";
                         }
 
@@ -451,7 +450,8 @@ namespace SparkleShare {
                 event_log += day_entry.Replace ("<!-- $day-entry-content -->", event_entries);
             }
 
-            return event_log_html.Replace ("<!-- $event-log-content -->", event_log);
+            return event_log_html.Replace ("<!-- $event-log-content -->", event_log)
+                .Replace ("<!-- $username -->", UserName);
         }
 
 

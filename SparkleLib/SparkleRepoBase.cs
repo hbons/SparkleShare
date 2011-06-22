@@ -111,8 +111,10 @@ namespace SparkleLib {
 
                 // In the unlikely case that we haven't synced up our
                 // changes or the server was down, sync up again
-                if (HasUnsyncedChanges)
+                if (HasUnsyncedChanges) {
                     SyncUpBase ();
+                    SyncUpNotes ();
+                }
             };
 
             this.remote_timer.Start ();
@@ -233,8 +235,10 @@ namespace SparkleLib {
                     SyncDownBase ();
 
                 // Push changes that were made since the last disconnect
-                if (HasUnsyncedChanges)
+                if (HasUnsyncedChanges) {
                     SyncUpBase ();
+                    SyncUpNotes ();
+                }
             };
 
             // Start polling when the connection to the irc channel is lost
@@ -444,6 +448,12 @@ namespace SparkleLib {
 
 
         public virtual void AddNote (string revision, string note)
+        {
+
+        }
+
+
+        public virtual void SyncUpNotes ()
         {
 
         }
