@@ -8,6 +8,8 @@
               $('.comments-wrapper').each (function () {
                 if ($(this).find ('.comments').children ().size () < 1) {
                   $(this).hide ();
+                } else {
+                  $(this).css ('cursor', 'default');
                 }
               });
 
@@ -208,8 +210,8 @@
                 box-sizing:         border-box;
                 -webkit-box-sizing: border-box;
                 border-top:         1px #ccc solid;
-                width: 100%;
-                height: 9px;
+                width:              100%;
+                height:             9px;
             }
 
             .comments-wrapper {
