@@ -8,24 +8,16 @@
                 <b><!-- $event-user-name --></b><br/>
                 <small><!-- $event-time --></small>
             </div>
-        <div class='event-time' style='background-color: <!-- $event-folder-color -->'><!-- $event-folder --></div>
+        <div class='event-folder' style='background-color: <!-- $event-folder-color -->'><!-- $event-folder --></div>
         </div>
         <!-- $event-entry-content -->
         <div style='clear: both'></div>
-        <div style='margin-top: 9px;border-top: 1px #ccc solid;box-sizing: border-box;
--webkit-box-sizing:border-box;
--moz-box-sizing: border-box; margin-top: 3px;width:100%;padding:12px;'>
-
+        <div class="comments-wrapper">
             <!-- $event-comments -->
-
-            <textarea style="margin-top: 12px;box-sizing: border-box;
--webkit-box-sizing:border-box;
--moz-box-sizing: border-box;
-width: 75%;float:right;height: 40px"></textarea>
-<div style='clear: both'></div>
-            <input style="float:right; margin-top: 6px;margin-bottom: 6px;" type="button"
-             value="Add note" id="<!-- $event-folder -->~<!-- $event-revision -->">
-
+            <textarea class="comment-textarea"></textarea>
+            <div style='clear: both'></div>
+            <input class="comment-button" type="button" value="Add note"
+             id="<!-- $event-folder -->~<!-- $event-revision -->">
         </div>
         <div style='clear: both'></div>
     </div>
