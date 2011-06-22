@@ -141,8 +141,8 @@ namespace SparkleShare {
 
                 html = html.Replace ("<!-- $jquery-url -->", "file://" +
                     Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "jquery.js"));
-                Console.WriteLine (html);
-				return html;
+
+                return html;
 			}
 		}
 

@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 using MonoMac.Foundation;
@@ -215,19 +216,29 @@ namespace SparkleShare {
             NSUrlRequest request, WebFrame frame, NSObject decision_token)
         {
             string url = request.Url.ToString ();
-            Console.WriteLine (url);
-            string id = url.Substring (0, url.IndexOf ("%20"));
-            string note = url.Substring (url.IndexOf ("%20") + 3);
-            Console.WriteLine (id + " " + note);
 
-            SparkleShare.Controller.Repositories [0].AddNote (id, note);
-            return;
+            if (url.StartsWith (Path.VolumeSeparatorChar.ToString ())) {
+                string file_path = request.Url.ToString ();
+                file_path = file_path.Replace ("%20", " ");
 
+                NSWorkspace.SharedWorkspace.OpenFile (file_path);
 
-            string file_path = request.Url.ToString ();
-            file_path = file_path.Replace ("%20", " ");
-            
-            NSWorkspace.SharedWorkspace.OpenFile (file_path);
+            } else {
+                Regex regex = new Regex (@"(.+)~(.+)~(.+)");
+                Match match = regex.Match (url);
+
+                if (match.Success) {
+                    string folder_name = match.Groups [1].Value;
+                    string revision    = match.Groups [2].Value;
+                    string note        = match.Groups [3].Value;
+
+                    Thread thread = new Thread (new ThreadStart (delegate {
+                        SparkleShare.Controller.AddNoteToFolder (folder_name, revision, note);
+                    }));
+
+                    thread.Start ();
+                }
+            }
         }
     }
 }

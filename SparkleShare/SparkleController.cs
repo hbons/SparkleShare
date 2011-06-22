@@ -389,7 +389,25 @@ namespace SparkleShare {
                             }
                         }
                     }
-                        
+
+                    string comments = "";
+                    if (change_set.SupportsNotes) {
+                        comments = "<table class=\"comments\">";
+
+                        foreach (SparkleNote note in change_set.Notes) {
+                            comments += "<tr>" +
+                                        "  <td class=\"comment-author\">" + note.UserName + "</td>" +
+                                        "  <td class=\"comment-text\" rowspan=\"2\">" + note.Body + "</td>" +
+                                        "</tr>" +
+                                        "<tr>" +
+                                        "  <td class=\"comment-timestamp\">" + note.Timestamp + "</td>" +
+                                        "  <td></td>" +
+                                        "</tr>";
+                        }
+
+                        comments += "</table>";
+                    }
+
                     event_entry   += "</dl>";
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.UserName)
@@ -397,7 +415,8 @@ namespace SparkleShare {
                         .Replace ("<!-- $event-time -->", change_set.Timestamp.ToString ("H:mm"))
                         .Replace ("<!-- $event-folder -->", change_set.Folder)
                         .Replace ("<!-- $event-revision -->", change_set.Revision)
-                        .Replace ("<!-- $event-folder-color -->", AssignColor (change_set.Folder));
+                        .Replace ("<!-- $event-folder-color -->", AssignColor (change_set.Folder))
+                        .Replace ("<!-- $event-comments -->", comments);
                 }
 
                 string day_entry   = "";
@@ -1017,6 +1036,15 @@ namespace SparkleShare {
         public string Version {
             get {
                 return SparkleBackend.Version;
+            }
+        }
+
+
+        public void AddNoteToFolder (string folder_name, string revision, string note)
+        {
+            foreach (SparkleRepoBase repo in Repositories) {
+                if (repo.Name.Equals (folder_name))
+                    repo.AddNote (revision, note);
             }
         }
 
