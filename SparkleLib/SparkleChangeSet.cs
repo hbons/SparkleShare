@@ -28,8 +28,8 @@ namespace SparkleLib {
         public string Folder;
         public string Revision;
         public DateTime Timestamp;
-        public bool FolderSupportsNotes = false;
-        public bool IsMerge             = false;
+        public bool SupportsNotes = false;
+        public bool IsMerge       = false;
 
         public List<string> Added     = new List<string> ();
         public List<string> Deleted   = new List<string> ();
