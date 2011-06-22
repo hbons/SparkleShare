@@ -108,9 +108,10 @@ namespace SparkleShare {
             this.popup_button.AddItem ("All Folders");
             this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
             this.popup_button.AddItems (SparkleShare.Controller.Folders.ToArray ());
+            this.popup_button.SelectItem (0);
 
             this.popup_button.Activated += delegate {
-                if (popup_button.IndexOfSelectedItem == 0)
+                if (this.popup_button.IndexOfSelectedItem == 0)
                     this.selected_log = null;
                 else
                     this.selected_log = this.popup_button.SelectedItem.Title;
