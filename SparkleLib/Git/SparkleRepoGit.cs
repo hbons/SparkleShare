@@ -595,7 +595,12 @@ namespace SparkleLib {
             git_notes.WaitForExit ();
 
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Added note to " + revision);
+            SyncUpNotes ();
+        }
 
+
+        public override void SyncUpNotes ()
+        {
             while (Status != SyncStatus.Idle) {
                 System.Threading.Thread.Sleep (5 * 20);
             }
@@ -604,9 +609,15 @@ namespace SparkleLib {
             git_push.Start ();
             git_push.WaitForExit ();
 
-            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Notes pushed");
+            if (git_push.ExitCode == 0) {
+                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Notes pushed");
 
-            SparkleAnnouncement announcement = new SparkleAnnouncement (Identifier, note_namespace);
+            } else {
+                HasUnsyncedChanges = true;
+                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing notes failed, trying again later");
+            }
+
+            SparkleAnnouncement announcement = new SparkleAnnouncement (Identifier, SHA1 (DateTime.Now.ToString ()));
             base.listener.Announce (announcement);
         }
 
