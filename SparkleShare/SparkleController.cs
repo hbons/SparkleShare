@@ -394,6 +394,8 @@ namespace SparkleShare {
                     if (change_set.SupportsNotes) {
                         comments = "<table class=\"comments\">";
 
+                        change_set.Notes.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
+                        
                         foreach (SparkleNote note in change_set.Notes) {
                             comments += "<tr>" +
                                         "  <td class=\"comment-author\">" + note.UserName + "</td>" +
