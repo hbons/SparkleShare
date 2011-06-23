@@ -33,7 +33,7 @@ namespace SparkleShare {
     public class SparkleUI {
         
         public static SparkleStatusIcon StatusIcon;
-        public static List <SparkleLog> OpenLogs;
+        public static SparkleEventLog EventLog;
         public static SparkleIntro Intro;
 
 
@@ -73,9 +73,6 @@ namespace SparkleShare {
             // Create the statusicon
             StatusIcon = new SparkleStatusIcon ();
             
-            // Keep track of which event logs are open
-            OpenLogs = new List <SparkleLog> ();
-
             if (SparkleShare.Controller.FirstRun) {
                 Intro = new SparkleIntro ();
                 Intro.ShowAccountForm ();
@@ -96,10 +93,8 @@ namespace SparkleShare {
             SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
                                                                     string message, string repository_path) {
                 Application.Invoke (delegate {
-                    foreach (SparkleLog log in OpenLogs) {
-                        if (log.LocalPath.Equals (repository_path))
-                                log.UpdateEventLog ();
-                    }
+                    if (EventLog != null)
+                        EventLog.UpdateEvents ();
                     
                     if (!SparkleShare.Controller.NotificationsEnabled)
                         return;
@@ -111,10 +106,6 @@ namespace SparkleShare {
                         bubble.Icon = new Gdk.Pixbuf (avatar_file_path);
                     else
                         bubble.Icon = SparkleUIHelpers.GetIcon ("avatar-default", 32);
-
-                    bubble.AddAction ("", "Show Events", delegate {
-                        AddEventLog (repository_path);                
-                    });
 
                     bubble.Show ();
                 });
@@ -132,38 +123,27 @@ namespace SparkleShare {
 
             SparkleShare.Controller.AvatarFetched += delegate {
                 Application.Invoke (delegate {
-                    foreach (SparkleLog log in OpenLogs)
-                        log.UpdateEventLog ();
+                    if (EventLog != null)
+                        EventLog.UpdateEvents ();
                 });
             };
 
             SparkleShare.Controller.OnIdle += delegate {
                 Application.Invoke (delegate {
-                    foreach (SparkleLog log in OpenLogs)
-                        log.UpdateEventLog ();
+                    if (EventLog != null)
+                        EventLog.UpdateEvents ();
                 });
             };
-        }
 
-
-        public void AddEventLog (string path)
-        {
-            SparkleLog log = SparkleUI.OpenLogs.Find (delegate (SparkleLog l) {
-                return l.LocalPath.Equals (path);
-            });
-
-            // Check whether the log is already open, create a new one if
-            // that's not the case or present it to the user if it is
-            if (log == null) {
-                OpenLogs.Add (new SparkleLog (path));
-                OpenLogs [OpenLogs.Count - 1].ShowAll ();
-                OpenLogs [OpenLogs.Count - 1].Present ();
-            } else {
-                log.ShowAll ();
-                log.Present ();
-            }
-        }
-        
+            SparkleShare.Controller.FolderListChanged += delegate {
+                Application.Invoke (delegate {
+                    if (EventLog != null) {
+                        EventLog.UpdateChooser ();
+                        EventLog.UpdateEvents ();
+                    }
+                });
+            };
+        }        
 
         // Runs the application
         public void Run ()

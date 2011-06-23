@@ -79,21 +79,46 @@ dnl package checks, common for all configs
 
 SPARKLESHARE_CHECK_GTK_SHARP
 
+SPARKLESHARE_SMARTIRC4NET
 PKG_CHECK_MODULES([SMARTIRC4NET], [smartirc4net],
-	SPARKLE_SMARTIRC4NETDIR=""
+	SMARTIRC4NET_ASSEMBLY=""
+	AC_SUBST(SMARTIRC4NET_ASSEMBLY)
 	,
-	SPARKLESHARE_SMARTIRC4NET
  	SMARTIRC4NET_LIBS=""
 	AC_SUBST(SMARTIRC4NET_LIBS)
-	SPARKLE_SMARTIRC4NETDIR="SmartIrc4net"
 	AC_SUBST(SPARKLE_SMARTIRC4NETDIR)
 )
+AM_CONDITIONAL(HAVE_SMARTIRC4NET, test x$SPARKLE_SMARTIRC4NETDIR = x)
 
 dnl check for webkit-sharp
 PKG_CHECK_MODULES(WEBKIT_SHARP, webkit-sharp-1.0, have_webkit_sharp=yes, have_webkit_sharp=no)
 AC_SUBST(WEBKIT_SHARP_LIBS)
 
 SHAMROCK_CHECK_NUNIT
+
+APPINDICATOR_REQUIRED=0.0.7
+
+AC_ARG_ENABLE(appindicator,
+                        AS_HELP_STRING([--enable-appindicator[=@<:@no/auto/yes@:>@]],[Build support for application indicators ]),
+                        [enable_appindicator=$enableval],
+                        [enable_appindicator="auto"])
+
+if test x$enable_appindicator = xauto ; then
+        PKG_CHECK_EXISTS([appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED],
+                         enable_appindicator="yes",
+                         enable_appindicator="no")
+fi
+
+if test x$enable_appindicator = xyes ; then
+        PKG_CHECK_EXISTS([appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED],,
+                         AC_MSG_ERROR([appindicator-sharp-0.1 is not installed]))
+        PKG_CHECK_MODULES(APP_INDICATOR,
+                        appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED)
+        AC_SUBST(APP_INDICATOR_CFLAGS)
+        AC_SUBST(APP_INDICATOR_LIBS)
+        AC_DEFINE(HAVE_APP_INDICATOR, 1, [Have AppIndicator])
+fi
+AM_CONDITIONAL(HAVE_APP_INDICATOR, test x"$enable_appindicator" = xyes)
 
 dnl Get nautilus extensions directory
 SPARKLESHARE_NAUTILUS_PYTHON
