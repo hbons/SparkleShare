@@ -686,7 +686,7 @@ namespace SparkleShare {
                 foreach (DirectoryInfo directory in parent.GetDirectories())
                     size += CalculateFolderSize (directory);
 
-            } catch (DirectoryNotFoundException) {
+            } catch (Exception) {
                 return 0;
             }
 
