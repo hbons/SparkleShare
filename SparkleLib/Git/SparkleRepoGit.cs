@@ -527,17 +527,6 @@ namespace SparkleLib {
             return message.TrimEnd ();
         }
 
-
-        public override void CreateInitialChangeSet ()
-        {
-            base.CreateInitialChangeSet ();
-            Add ();
-
-            string message = FormatCommitMessage ();
-            Commit (message);
-        }
-
-
         public override bool UsesNotificationCenter
         {
             get {
