@@ -421,21 +421,11 @@ namespace SparkleLib {
                         int.Parse (match.Groups [7].Value), int.Parse (match.Groups [8].Value),
                         int.Parse (match.Groups [9].Value));
 
-                    string time_zone = match.Groups [10].Value;
-                    int our_offset   = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
-                    int their_offset = int.Parse (time_zone.Substring (1, 2));
-
-                    // Convert their timestamp to UTC timezone
-                    if (their_offset > 0)
-                       change_set.Timestamp = change_set.Timestamp.AddHours (their_offset * -1);
-                    else
-                       change_set.Timestamp = change_set.Timestamp.AddHours (their_offset);
-
-                    // Convert the UTC timestamp into our timezone
-                    if (our_offset > 0)
-                       change_set.Timestamp = change_set.Timestamp.AddHours (our_offset);
-                    else
-                       change_set.Timestamp = change_set.Timestamp.AddHours (our_offset * -1);
+                    string time_zone     = match.Groups [10].Value;
+                    int our_offset       = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
+                    int their_offset     = int.Parse (time_zone.Substring (0, 3));
+                    change_set.Timestamp = change_set.Timestamp.AddHours (their_offset * -1);
+                    change_set.Timestamp = change_set.Timestamp.AddHours (our_offset);
 
 
                     string [] entry_lines = log_entry.Split ("\n".ToCharArray ());

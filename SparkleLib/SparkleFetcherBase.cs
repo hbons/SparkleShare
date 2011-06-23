@@ -121,9 +121,13 @@ namespace SparkleLib {
                 path = Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%");
             }
 
+            string ssh_config_path      = Path.Combine (path, ".ssh");
             string ssh_config_file_path = SparkleHelpers.CombineMore (path, ".ssh", "config");
             string ssh_config           = Environment.NewLine + "Host " + host +
                                           Environment.NewLine + "\tStrictHostKeyChecking no";
+
+            if (!Directory.Exists (ssh_config_path))
+                Directory.CreateDirectory (ssh_config_path);
 
             if (File.Exists (ssh_config_file_path)) {
                 TextWriter writer = File.AppendText (ssh_config_file_path);

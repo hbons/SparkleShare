@@ -251,6 +251,9 @@ namespace SparkleShare {
             foreach (SparkleRepoBase repo in Repositories)
                 list.AddRange (repo.GetChangeSets (50));
 
+            list.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
+            list.Reverse ();
+
             if (list.Count > 100)
                 return list.GetRange (0, 100);
             else
@@ -683,7 +686,7 @@ namespace SparkleShare {
                 foreach (DirectoryInfo directory in parent.GetDirectories())
                     size += CalculateFolderSize (directory);
 
-            } catch (DirectoryNotFoundException) {
+            } catch (Exception) {
                 return 0;
             }
 
@@ -725,7 +728,7 @@ namespace SparkleShare {
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.UseShellExecute        = false;
             process.StartInfo.FileName               = "ssh-add";
-            process.StartInfo.Arguments              = Path.Combine (keys_path, key_file_name);
+            process.StartInfo.Arguments              = "\"" + Path.Combine (keys_path, key_file_name) + "\"";
             process.Start ();
             process.WaitForExit ();
         }
@@ -817,20 +820,29 @@ namespace SparkleShare {
             string avatar_path = SparkleHelpers.CombineMore (SparklePaths.SparkleLocalIconPath,
                 size + "x" + size, "status");
 
-            if (!Directory.Exists (avatar_path)) {
-                Directory.CreateDirectory (avatar_path);
-                SparkleHelpers.DebugInfo ("Config", "Created '" + avatar_path + "'");
-            }
-
-            string avatar_file_path = SparkleHelpers.CombineMore (avatar_path, "avatar-" + email);
+            string avatar_file_path = Path.Combine (avatar_path, "avatar-" + email);
 
             if (File.Exists (avatar_file_path)) {
-                return avatar_file_path;
+                FileInfo avatar_info = new FileInfo (avatar_file_path);
+
+                // Delete avatars older than a month and get a new one
+                if (avatar_info.CreationTime < DateTime.Now.AddMonths (-1)) {
+                    avatar_info.Delete ();
+                    return GetAvatar (email, size);
+
+                } else {
+                    return avatar_file_path;
+                }
 
             } else {
+                if (!Directory.Exists (avatar_path)) {
+                    Directory.CreateDirectory (avatar_path);
+                    SparkleHelpers.DebugInfo ("Config", "Created '" + avatar_path + "'");
+                }
+
                 // Let's try to get the person's gravatar for next time
                 WebClient web_client = new WebClient ();
-                Uri uri = new Uri ("http://www.gravatar.com/avatar/" + GetMD5 (email) +
+                Uri uri = new Uri ("https://secure.gravatar.com/avatar/" + GetMD5 (email) +
                     ".jpg?s=" + size + "&d=404");
 
                 string tmp_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, email + size);
@@ -846,6 +858,8 @@ namespace SparkleShare {
 
                         if (tmp_file_info.Length > 255)
                             File.Move (tmp_file_path, avatar_file_path);
+
+                        SparkleHelpers.DebugInfo ("Controller", "Fetched gravatar: " + email);
                         
                         if (AvatarFetched != null)
                             AvatarFetched ();

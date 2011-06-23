@@ -1,9 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_define([sparkleshare_version],
-	[0.2.1])
+	[0.2.2])
 
 m4_define([sparkleshare_asm_version],
-	[0.2.1])
+	[0.2.2])
 
 AC_PREREQ([2.54])
 AC_INIT([SparkleShare], sparkleshare_version)
@@ -86,9 +86,10 @@ PKG_CHECK_MODULES([SMARTIRC4NET], [smartirc4net],
 	,
  	SMARTIRC4NET_LIBS=""
 	AC_SUBST(SMARTIRC4NET_LIBS)
+	SPARKLE_SMARTIRC4NETDIR=SmartIrc4Net
 	AC_SUBST(SPARKLE_SMARTIRC4NETDIR)
 )
-AM_CONDITIONAL(HAVE_SMARTIRC4NET, test x$SPARKLE_SMARTIRC4NETDIR = x)
+AM_CONDITIONAL([HAVE_SMARTIRC4NET], test x$SPARKLE_SMARTIRC4NETDIR = x)
 
 dnl check for webkit-sharp
 PKG_CHECK_MODULES(WEBKIT_SHARP, webkit-sharp-1.0, have_webkit_sharp=yes, have_webkit_sharp=no)
