@@ -86,12 +86,11 @@ namespace SparkleLib {
                 this.status = status;
             };
 
-            if (CurrentRevision == null) {
-                CreateInitialChangeSet ();
-                HasUnsyncedChanges = true;
-            }
-
             CreateWatcher ();
+
+            if (CurrentRevision == null)
+                CreateInitialChangeSet ();
+
             CreateListener ();
 
             this.local_timer.Elapsed += delegate (object o, ElapsedEventArgs args) {
