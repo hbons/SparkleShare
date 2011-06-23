@@ -51,7 +51,7 @@ namespace SparkleShare {
 	public class SparkleUI : AppDelegate {
 
 		public static SparkleStatusIcon StatusIcon;
-		public static List <SparkleLog> OpenLogs;
+		public static SparkleEventLog EventLog;
 		public static SparkleIntro Intro;
         public static SparkleAbout About;
 		public static NSFont Font;
@@ -63,6 +63,7 @@ namespace SparkleShare {
 		{
             string content_path = Directory.GetParent (
                 System.AppDomain.CurrentDomain.BaseDirectory).ToString ();
+
             string app_path     = Directory.GetParent (content_path).ToString ();
             string growl_path   = Path.Combine (app_path, "Frameworks", "Growl.framework", "Growl");
 
@@ -88,18 +89,15 @@ namespace SparkleShare {
     
                 Font = NSFontManager.SharedFontManager.FontWithFamily
                     ("Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
-    
-                OpenLogs   = new List <SparkleLog> ();
+
                 StatusIcon = new SparkleStatusIcon ();
             }
 
             SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
                                                                     string message, string repository_path) {
 				InvokeOnMainThread (delegate {
-                    foreach (SparkleLog log in OpenLogs) {
-                        if (log.LocalPath.Equals (repository_path))
-                                log.UpdateEventLog ();
-                    }
+                    if (EventLog != null)
+                        EventLog.UpdateEvents ();
 
                     if (SparkleShare.Controller.NotificationsEnabled) {
                         if (NSApplication.SharedApplication.DockTile.BadgeLabel == null)
@@ -134,20 +132,30 @@ namespace SparkleShare {
 
 			SparkleShare.Controller.AvatarFetched += delegate {
 				InvokeOnMainThread (delegate {
-					foreach (SparkleLog log in SparkleUI.OpenLogs)
-						log.UpdateEventLog ();
+					if (EventLog != null)
+                        EventLog.UpdateEvents ();
 				});
 			};
 			
 
-			SparkleShare.Controller.OnIdle += delegate {
-				InvokeOnMainThread (delegate {
-					foreach (SparkleLog log in SparkleUI.OpenLogs)
-						log.UpdateEventLog ();
-				});
-			};
-			
-			
+            SparkleShare.Controller.OnIdle += delegate {
+                InvokeOnMainThread (delegate {
+                    if (EventLog != null)
+                        EventLog.UpdateEvents ();
+                });
+            };
+
+
+            SparkleShare.Controller.FolderListChanged += delegate {
+                InvokeOnMainThread (delegate {
+                    if (EventLog != null) {
+                        EventLog.UpdateChooser ();
+                        EventLog.UpdateEvents ();
+                    }
+                });
+            };
+
+
 			if (SparkleShare.Controller.FirstRun) {
 				Intro = new SparkleIntro ();
 				Intro.ShowAccountForm ();
@@ -179,5 +187,5 @@ namespace SparkleShare {
             string path = NSBundle.MainBundle.PathForResource ("Growl", "plist");
             return NSDictionary.FromFile (path);
         }
-	}
+    }
 }

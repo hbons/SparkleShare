@@ -24,7 +24,7 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r /Users/hbons/Code/SparkleShare/SparkleShare/Mac/Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks" externalConsole="true" />
+        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks" externalConsole="true" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -55,16 +55,16 @@
     <Reference Include="MonoMac">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="SparkleLib, Version=0.2.0.0, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\SparkleLib.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Posix">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Meebey.SmartIrc4net, Version=0.4.5.0, Culture=neutral, PublicKeyToken=7868485fbf407e0f">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Meebey.SmartIrc4net.dll</HintPath>
+    </Reference>
+    <Reference Include="SparkleLib, Version=0.2.1.0, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\SparkleLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -79,7 +79,6 @@
     </Compile>
     <Compile Include="SparkleWindow.cs" />
     <Compile Include="SparkleIntro.cs" />
-    <Compile Include="SparkleLog.cs" />
     <Compile Include="SparkleMacController.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUI.cs" />
@@ -90,6 +89,7 @@
     <Compile Include="SparkleAlert.cs" />
     <Compile Include="SparkleBubble.cs" />
     <Compile Include="SparkleMacWatcher.cs" />
+    <Compile Include="SparkleEventLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
@@ -157,6 +157,18 @@
     </Content>
     <Content Include="..\..\data\icons\error-active.png">
       <Link>Pixmaps\error-active.png</Link>
+    </Content>
+    <Content Include="..\..\data\icons\document-added-12.png">
+      <Link>Pixmaps\document-added-12.png</Link>
+    </Content>
+    <Content Include="..\..\data\icons\document-edited-12.png">
+      <Link>Pixmaps\document-edited-12.png</Link>
+    </Content>
+    <Content Include="..\..\data\icons\document-deleted-12.png">
+      <Link>Pixmaps\document-deleted-12.png</Link>
+    </Content>
+    <Content Include="..\..\data\icons\document-moved-12.png">
+      <Link>Pixmaps\document-moved-12.png</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>

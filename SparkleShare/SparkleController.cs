@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -222,7 +223,9 @@ namespace SparkleShare {
 
         public List<string> Folders {
             get {
-                return SparkleConfig.DefaultConfig.Folders;
+                List<string> folders = SparkleConfig.DefaultConfig.Folders;
+                folders.Sort ();
+                return folders;
             }
         }
 
@@ -240,11 +243,28 @@ namespace SparkleShare {
             }
         }
         
-        
-        public List <SparkleChangeSet> GetLog (string name)
+
+        public List<SparkleChangeSet> GetLog ()
         {
+            List<SparkleChangeSet> list = new List<SparkleChangeSet> ();
+
+            foreach (SparkleRepoBase repo in Repositories)
+                list.AddRange (repo.GetChangeSets (50));
+
+            if (list.Count > 100)
+                return list.GetRange (0, 100);
+            else
+                return list.GetRange (0, list.Count);
+        }
+
+
+        public List<SparkleChangeSet> GetLog (string name)
+        {
+            if (name == null)
+                return GetLog ();
+
             string path = Path.Combine (SparklePaths.SparklePath, name);
-            int log_size = 30;
+            int log_size = 50;
             
             foreach (SparkleRepoBase repo in Repositories) {
                 if (repo.LocalPath.Equals (path))            
@@ -260,11 +280,13 @@ namespace SparkleShare {
         public abstract string EventEntryHTML { get; }
         
         
-        public string GetHTMLLog (string name)
+        public string GetHTMLLog (List<SparkleChangeSet> change_sets)
         {
-            List <SparkleChangeSet> change_sets = GetLog (name);
-            List <ActivityDay> activity_days    = new List <ActivityDay> ();
-            
+            List <ActivityDay> activity_days = new List <ActivityDay> ();
+
+            change_sets.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
+            change_sets.Reverse ();
+
             if (change_sets.Count == 0)
                 return null;
 
@@ -282,7 +304,7 @@ namespace SparkleShare {
                         break;
                     }
                 }
-                
+
                 if (!change_set_inserted) {
                     ActivityDay activity_day = new ActivityDay (change_set.Timestamp);
                     activity_day.Add (change_set);
@@ -302,68 +324,58 @@ namespace SparkleShare {
                     string event_entry = "<dl>";
                     
                     if (change_set.IsMerge) {
-                        event_entry += "<dt>Merged a branch</dt>";
+                        event_entry += "<dd>Did something magical</dd>";
 
                     } else {
                         if (change_set.Edited.Count > 0) {
-                            event_entry += "<dt>Edited</dt>";
-    
                             foreach (string file_path in change_set.Edited) {
                                 string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-                                    name, file_path);
+                                    change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+                                    event_entry += "<dd class='document-edited'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
                                 else
-                                    event_entry += "<dd>" + file_path + "</dd>";
+                                    event_entry += "<dd class='document-edited'>" + file_path + "</dd>";
                             }
                         }
     
                         if (change_set.Added.Count > 0) {
-                            event_entry += "<dt>Added</dt>";
-    
                             foreach (string file_path in change_set.Added) {
                                 string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-                                    name, file_path);
+                                    change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+                                    event_entry += "<dd class='document-added'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
                                 else
-                                    event_entry += "<dd>" + file_path + "</dd>";
+                                    event_entry += "<dd class='document-added'>" + file_path + "</dd>";
                             }
                         }
     
                         if (change_set.Deleted.Count > 0) {
-                            event_entry += "<dt>Deleted</dt>";
-    
                             foreach (string file_path in change_set.Deleted) {
                                 string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-                                    name, file_path);
+                                    change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+                                    event_entry += "<dd class='document-deleted'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
                                 else
-                                    event_entry += "<dd>" + file_path + "</dd>";
+                                    event_entry += "<dd class='document-deleted'>" + file_path + "</dd>";
                             }
                         }
 
                         if (change_set.MovedFrom.Count > 0) {
-                            event_entry += "<dt>Moved</dt>";
-
                             int i = 0;
                             foreach (string file_path in change_set.MovedFrom) {
                                 string to_file_path = change_set.MovedTo [i];
                                 string absolute_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-                                    name, file_path);
+                                    change_set.Folder, file_path);
                                 string absolute_to_file_path = SparkleHelpers.CombineMore (SparklePaths.SparklePath,
-                                    name, to_file_path);
+                                    change_set.Folder, to_file_path);
 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd><a href='" + absolute_file_path + "'>" + file_path + "</a><br/>" +
-                                                   "<span class='moved-arrow'>&rarr;</span> ";
+                                    event_entry += "<dd class='document-moved'><a href='" + absolute_file_path + "'>" + file_path + "</a><br/>";
                                 else
-                                    event_entry += "<dd>" + file_path + "<br/>" +
-                                                   "<span class='moved-arrow'>&rarr;</span> ";
+                                    event_entry += "<dd class='document-moved'>" + file_path + "<br/>";
 
                                 if (File.Exists (absolute_to_file_path))
                                     event_entry += "<a href='" + absolute_to_file_path + "'>" + to_file_path + "</a></dd>";
@@ -378,8 +390,10 @@ namespace SparkleShare {
                     event_entry   += "</dl>";
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.UserName)
-                        .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (change_set.UserEmail, 36) )
-                        .Replace ("<!-- $event-time -->", change_set.Timestamp.ToString ("H:mm"));
+                        .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (change_set.UserEmail, 36))
+                        .Replace ("<!-- $event-time -->", change_set.Timestamp.ToString ("H:mm"))
+                        .Replace ("<!-- $event-folder -->", change_set.Folder)
+                        .Replace ("<!-- $event-folder-color -->", AssignColor (change_set.Folder));
                 }
 
                 string day_entry   = "";
@@ -1014,6 +1028,20 @@ namespace SparkleShare {
             };
 
             web_client.DownloadStringAsync (uri);
+        }
+
+
+        private string [] tango_palette = new string [] {"#eaab00", "#e37222",
+            "#3892ab", "#33c2cb", "#19b271", "#9eab05", "#8599a8", "#9ca696",
+            "#b88454", "#cc0033", "#8f6678", "#8c6cd0", "#796cbf", "#4060af",
+            "#aa9c8f", "#818a8f"};
+
+        private string AssignColor (string s)
+        {
+            string hash    = GetMD5 (s).Substring (0, 8);
+            string numbers = Regex.Replace (hash, "[a-z]", "");
+            int number     = 3 + int.Parse (numbers);
+            return this.tango_palette [number % this.tango_palette.Length];
         }
     }
 

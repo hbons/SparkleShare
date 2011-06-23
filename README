@@ -63,13 +63,18 @@ Note:
 Build on Linux:
 ===============
 
-Installing the build dependencies on Debian:
+Installing the build dependencies on Debian or Ubuntu:
 
    $ sudo apt-get install gtk-sharp2 mono-runtime mono-devel monodevelop \
      libndesk-dbus1.0-cil-dev nant libnotify-cil-dev libgtk2.0-cil-dev \
      libwebkit-cil-dev intltool libtool python-nautilus libndesk-dbus-glib1.0-cil-dev
 
-Or on Fedora:
+For Ubuntu libappindicator support, run the following before building:
+
+   $ sudo apt-get install libappindicator0.1-cil-dev 
+
+
+On Fedora:
 
    $ sudo yum install gtk-sharp2-devel mono-core mono-devel monodevelop \
      ndesk-dbus-devel ndesk-dbus-glib-devel nautilus-python-devel nant \
@@ -79,13 +84,13 @@ Or on Fedora:
 
 You can build and install SparkleShare like this:
 
-   $ ./configure (or ./autogen if you got SparkleShare from the repository)
+   $ ./configure --prefix=/usr (or ./autogen.sh if you build from the repository)
    $ make
    $ sudo make install
 
 Note:
 
-   Use './configure --prefix=/usr' if you want the Nautilus extension to work.
+   Use '--prefix=/usr' if you want the Nautilus extension to work.
 
 
 Run on Mac:

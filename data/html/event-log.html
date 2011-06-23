@@ -4,7 +4,7 @@
         <title>SparkleShare Event Log</title>
         <style>
             body {
-                background-color: #f0f0f0;
+                background-color: #dedede;
                 color:            <!-- $body-color -->;
                 font-size:        <!-- $body-font-size -->;
                 font-family:      <!-- $body-font-family -->;
@@ -16,7 +16,7 @@
 
             small {
                 font-size: <!-- $small-font-size -->;
-                color:     <!-- $small-color -->;
+                color:     <!-- $secondary-font-color -->;
             }
 
             .moved-arrow {
@@ -25,13 +25,9 @@
 
             .day-entry-header {
                 font-size:     <!-- $day-entry-header-font-size -->;         
-                color:         #babdb6;
-                text-align:    center;
-                width:         90%;
-                text-shadow:   0  1px 0 rgba(255, 255, 255, 1.0);
+                color:         #444;
                 margin-bottom: 9px;
-                margin-left:   auto;
-                margin-right:  auto;            
+                margin-left:   30px;
             }
             
             .day-entry-content {
@@ -48,43 +44,70 @@
             }
 
             .event-time {
+                opacity: 0.8;
                 font-size:     80%;
-                color:         <!-- $secondary-font-color -->;
-                float:         right;
+                color:         #fff;
+                float: right;
+                padding: 3px 15px;
+                font-weight: bold;
+                -webkit-border-radius: 100px;
             }
 
             .event-entry-content {
                 display:               block;
-                width:                 400px;
-                background-color:      #fff;
+                width:                 440px;
+                background-color:      #f0f0f0;
                 margin-left:           auto;
                 margin-right:          auto;
-                margin-bottom:         9px;
-                padding:               18px;
-                -webkit-border-radius: 6px;
-                border:                #ddd 1px solid;
+                margin-bottom:         12px;
+                padding:               0px;
+                padding-bottom: 6px;
+                border:                #ccc 1px solid;
             }
-            
+
+            .wrapper {
+                float: left;
+            }
+
             dl {
-                padding: 0;
-                margin: 0;
-                padding-bottom: 15px;
-            }
-            
-            dt {
-                padding-bottom: 12px;
-                padding-top:    12px;
-                font-size:      80%;
-                color:          <!-- $secondary-font-color -->;
+                padding : 0;
+                margin:  0;
             }
             
             dd {
-                width:          300px;
+                width:          90%;
                 overflow:       hidden;
-                padding-left:   0;
-                margin-left:    12px;
                 text-overflow:  ellipsis;
-                padding-bottom: 9px;
+                padding:        0;
+                padding-top:    2px;
+                padding-bottom: 4px;
+                padding-left:   22px;
+                margin:         0;
+                margin-bottom:  2px;
+                margin-left:    12px;
+                border-bottom:  1px solid #ddd;
+                background-repeat: no-repeat;
+                background-position: center left;
+            }
+
+            dd:last-child {
+                border: none;
+            }
+
+            .document-added {
+                background-image: url('<!-- $document-added-background-image -->');
+            }
+
+            .document-deleted {
+                background-image: url('<!-- $document-deleted-background-image -->');
+            }
+
+            .document-edited {
+                background-image: url('<!-- $document-edited-background-image -->');
+            }
+
+            .document-moved {
+                background-image: url('<!-- $document-moved-background-image -->');
             }
 
             .no-buddy-icon {
@@ -104,6 +127,11 @@
 
             .event-info {
                 float: left;
+                padding: 15px;
+                margin-bottom: 6px;
+                width: 410px;
+                background-color: #fff;
+                border-bottom: 1px #ccc solid;
             }
         </style>
     </head>

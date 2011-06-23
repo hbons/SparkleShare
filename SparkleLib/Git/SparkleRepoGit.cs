@@ -449,10 +449,13 @@ namespace SparkleLib {
 
                             if (change_type.Equals ("A")) {
                                 change_set.Added.Add (file_path);
+
                             } else if (change_type.Equals ("M")) {
                                 change_set.Edited.Add (file_path);
+
                             } else if (change_type.Equals ("D")) {
                                 change_set.Deleted.Add (file_path);
+
                             } else if (change_type.Equals ("R")) {
                                 int tab_pos  = entry_line.LastIndexOf ("\t");
                                 file_path    = entry_line.Substring (42, tab_pos - 42);
