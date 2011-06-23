@@ -57,7 +57,7 @@ namespace SparkleShare {
 
                 foreach (SparkleRepoBase repo in Repositories) {
                     if (repo.Name.Equals (repo_name))
-                        repo.OnFileActivity (this, args);
+                        repo.OnFileActivity (args);
                 }
             };
         }

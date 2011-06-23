@@ -70,14 +70,14 @@ namespace SparkleShare {
 
         private void CreateEvents ()
         {
-            Separator = new NSBox (new RectangleF (0, 573, 480, 1)) {
+            Separator = new NSBox (new RectangleF (0, 579, 480, 1)) {
                 BorderColor = NSColor.LightGray,
                 BoxType = NSBoxType.NSBoxCustom
             };
 
             ContentView.AddSubview (Separator);
 
-            WebView = new WebView (new RectangleF (0, 0, 480, 573   ), "", ""){
+            WebView = new WebView (new RectangleF (0, 0, 480, 579), "", "") {
                 PolicyDelegate = new SparkleWebPolicyDelegate ()
             };
 
@@ -97,16 +97,26 @@ namespace SparkleShare {
                 this.popup_button.RemoveFromSuperview ();
 
             this.popup_button = new NSPopUpButton () {
-                Frame     = new RectangleF (480 - 156 - 8, 640 - 31 - 26, 156, 26),
+                Frame     = new RectangleF (480 - 156 - 8, 640 - 31 - 24, 156, 26),
                 PullsDown = false
             };
-            
+
+            this.popup_button.Cell.ControlSize = NSControlSize.Small;
+            this.popup_button.Font = NSFontManager.SharedFontManager.FontWithFamily
+                    ("Lucida Grande", NSFontTraitMask.Condensed, 0, NSFont.SmallSystemFontSize);
+
             this.popup_button.AddItem ("All Folders");
             this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
             this.popup_button.AddItems (SparkleShare.Controller.Folders.ToArray ());
 
+            if (this.selected_log != null &&
+                !SparkleShare.Controller.Folders.Contains (this.selected_log)) {
+
+                this.selected_log = null;
+            }
+
             this.popup_button.Activated += delegate {
-                if (popup_button.IndexOfSelectedItem == 0)
+                if (this.popup_button.IndexOfSelectedItem == 0)
                     this.selected_log = null;
                 else
                     this.selected_log = this.popup_button.SelectedItem.Title;
