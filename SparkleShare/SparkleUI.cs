@@ -149,7 +149,6 @@ namespace SparkleShare {
         public void Run ()
         {
             Application.Run ();
-			StatusIcon.Dispose ();
         }
     }
 }
