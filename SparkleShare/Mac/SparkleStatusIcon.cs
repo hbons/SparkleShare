@@ -44,7 +44,6 @@ namespace SparkleShare {
         private NSMenuItem AboutMenuItem;
         private NSMenuItem NotificationsMenuItem;
         private NSMenuItem RecentEventsMenuItem;
-        private NSMenuItem QuitMenuItem;
         
         private delegate void Task ();
         private EventHandler [] Tasks;
