@@ -686,7 +686,7 @@ namespace SparkleShare {
                 foreach (DirectoryInfo directory in parent.GetDirectories())
                     size += CalculateFolderSize (directory);
 
-            } catch (DirectoryNotFoundException) {
+            } catch (Exception) {
                 return 0;
             }
 
@@ -728,7 +728,7 @@ namespace SparkleShare {
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.UseShellExecute        = false;
             process.StartInfo.FileName               = "ssh-add";
-            process.StartInfo.Arguments              = Path.Combine (keys_path, key_file_name);
+            process.StartInfo.Arguments              = "\"" + Path.Combine (keys_path, key_file_name) + "\"";
             process.Start ();
             process.WaitForExit ();
         }
