@@ -24,19 +24,27 @@ using System.Threading;
 using Gtk;
 using Mono.Unix;
 using SparkleLib;
+#if false
+using WebKit;
+#endif
 
 namespace SparkleShare {
 
-    public class SparkleLog : Window {
-
-        public readonly string LocalPath;
+    public class SparkleEventLog : Window {
 
         private ScrolledWindow ScrolledWindow;
         private MenuBar MenuBar;
+#if false
+        private WebView WebView;
+#endif
         private string LinkStatus;
         private SparkleSpinner Spinner;
         private string HTML;
         private EventBox LogContent;
+        private List<SparkleChangeSet> change_sets;
+        private string selected_log = null;
+        private ComboBox combo_box;
+        private HBox layout_horizontal;
 
 
         // Short alias for the translations
@@ -46,84 +54,128 @@ namespace SparkleShare {
         }
 
 
-        public SparkleLog (string path) : base ("")
+        public SparkleEventLog () : base ("")
         {
-            LocalPath = path;
-            
-            string name = System.IO.Path.GetFileName (LocalPath);
             SetSizeRequest (480, 640);
-
-            Resizable = false;
-
-            BorderWidth = 0;
             SetPosition (WindowPosition.Center);
 
-            // Open slightly off center for each consecutive window
-            if (SparkleUI.OpenLogs.Count > 0) {
+            Resizable   = true;
+            BorderWidth = 0;
 
-                int x, y;
-                GetPosition (out x, out y);
-                Move (x + SparkleUI.OpenLogs.Count * 20, y + SparkleUI.OpenLogs.Count * 20);
-
-            }
-            
-            // TRANSLATORS: {0} is a folder name, and {1} is a server address
-            Title = String.Format(_("Events in ‘{0}’"), name);
+            Title = _("Recent Events");
             IconName = "folder-sparkleshare";
 
-            DeleteEvent += Close;            
+            DeleteEvent += Close;
 
-            CreateEventLog ();
-            UpdateEventLog ();
+            CreateEvents ();
+            UpdateEvents (false);
+            UpdateChooser ();
         }
 
 
-        private void CreateEventLog ()
+        private void CreateEvents ()
         {
-            LogContent           = new EventBox ();
             VBox layout_vertical = new VBox (false, 0);
+            LogContent           = new EventBox ();
 
-                ScrolledWindow = new ScrolledWindow ();
+            ScrolledWindow = new ScrolledWindow ();
 
-                LogContent.Add (ScrolledWindow);
-
-            layout_vertical.PackStart (LogContent, true, true, 0);
-
-                HButtonBox dialog_buttons = new HButtonBox {
-                    Layout = ButtonBoxStyle.Edge,
-                    BorderWidth = 12
+#if false
+                WebView = new WebView () {
+                    Editable = false
                 };
 
-                    Button open_folder_button = new Button (_("_Open Folder")) {
-                        UseUnderline = true
-                    };
- 
-                    open_folder_button.Clicked += delegate (object o, EventArgs args) {
-                        SparkleShare.Controller.OpenSparkleShareFolder (LocalPath);
+                    WebView.HoveringOverLink += delegate (object o, WebKit.HoveringOverLinkArgs args) {
+                        LinkStatus = args.Link;
                     };
 
-                    Button close_button = new Button (Stock.Close);
+                    // FIXME: Use the right event, waiting for newer webkit bindings: NavigationPolicyDecisionRequested
+                    WebView.NavigationRequested += delegate (object o, WebKit.NavigationRequestedArgs args) {
+                        if (args.Request.Uri == LinkStatus) {
+                            Process process = new Process ();
+                            process.StartInfo.FileName = "xdg-open";
+                            process.StartInfo.Arguments = args.Request.Uri.Replace (" ", "\\ "); // Escape space-characters
+                            process.Start ();
 
-                    close_button.Clicked += delegate {
-                        HideAll ();
+                            // Don't follow HREFs (as this would cause a page refresh)
+                            args.RetVal = 1;
+                        }
                     };
 
-                dialog_buttons.Add (open_folder_button);
-                dialog_buttons.Add (close_button);
+            ScrolledWindow.Add (WebView);
+#endif
+            LogContent.Add (ScrolledWindow);
+
+            this.layout_horizontal = new HBox (true, 0);
+            this.layout_horizontal.PackStart (new Label (""), true, true, 0);
+            this.layout_horizontal.PackStart (new Label (""), true, true, 0);
+
+            layout_vertical.PackStart (layout_horizontal, false, false, 0);
+            layout_vertical.PackStart (LogContent, true, true, 0);
 
             // We have to hide the menubar somewhere...
             layout_vertical.PackStart (CreateShortcutsBar (), false, false, 0);
-            layout_vertical.PackStart (dialog_buttons, false, false, 0);
 
             Add (layout_vertical);
-
             ShowAll ();
         }
 
 
-        public void UpdateEventLog ()
+        public void UpdateChooser ()
         {
-            if (HTML == null) { // TODO: there may be a race condition here
+            if (this.combo_box != null && this.combo_box.Parent != null)
+                this.layout_horizontal.Remove (this.combo_box);
+
+            this.combo_box = new ComboBox ();
+            this.layout_horizontal.BorderWidth = 9;
+
+            CellRendererText cell = new CellRendererText();
+            this.combo_box.PackStart (cell, false);
+            this.combo_box.AddAttribute (cell, "text", 0);
+            ListStore store = new ListStore (typeof (string));
+            this.combo_box.Model = store;
+   
+            store.AppendValues (_("All Folders"));
+            store.AppendValues ("---");
+
+            foreach (string folder_name in SparkleShare.Controller.Folders)
+                store.AppendValues (folder_name);
+
+            this.combo_box.Active = 0;
+
+            this.combo_box.RowSeparatorFunc = delegate (TreeModel model, TreeIter iter) {
+                string item = (string) this.combo_box.Model.GetValue (iter, 0);
+                return (item == "---");
+            };
+
+            this.combo_box.Changed += delegate {
+                TreeIter iter;
+                this.combo_box.GetActiveIter (out iter);
+
+                string selection = (string) this.combo_box.Model.GetValue (iter, 0);
+
+                if (selection.Equals (_("All Folders")))
+                    this.selected_log = null;
+                else
+                    this.selected_log = selection;
+
+                UpdateEvents (false);
+            };
+
+            this.layout_horizontal.PackStart (this.combo_box, true, true, 0);
+            this.layout_horizontal.ShowAll ();
+        }
+
+
+        public void UpdateEvents ()
+        {
+            UpdateEvents (true);
+        }
+
+
+        public void UpdateEvents (bool silent)
+        {
+            if (!silent) {
                 LogContent.Remove (LogContent.Child);
                 Spinner = new SparkleSpinner (22);
                 LogContent.Add (Spinner);
@@ -131,7 +183,17 @@ namespace SparkleShare {
             }
 
             Thread thread = new Thread (new ThreadStart (delegate {
+                Stopwatch watch = new Stopwatch ();
+                watch.Start ();
+                this.change_sets = SparkleShare.Controller.GetLog (this.selected_log);
                 GenerateHTML ();
+                watch.Stop ();
+
+                // A short delay is less annoying than
+                // a flashing window
+                if (watch.ElapsedMilliseconds < 500 && !silent)
+                    Thread.Sleep (500 - (int) watch.ElapsedMilliseconds);
+
                 AddHTML ();
             }));
 
@@ -141,7 +203,7 @@ namespace SparkleShare {
 
         private void GenerateHTML ()
         {
-            HTML = SparkleShare.Controller.GetHTMLLog (System.IO.Path.GetFileName (LocalPath));
+            HTML = SparkleShare.Controller.GetHTMLLog (this.change_sets);
 
             HTML = HTML.Replace ("<!-- $body-font-size -->", (double) (Style.FontDescription.Size / 1024 + 3) + "px");
             HTML = HTML.Replace ("<!-- $day-entry-header-font-size -->", (Style.FontDescription.Size / 1024 + 3) + "px");
@@ -156,6 +218,18 @@ namespace SparkleShare {
             HTML = HTML.Replace ("<!-- $no-buddy-icon-background-image -->", "file://" +
                     SparkleHelpers.CombineMore (Defines.PREFIX, "share", "sparkleshare", "icons", 
                         "hicolor", "32x32", "status", "avatar-default.png"));
+            HTML = HTML.Replace ("<!-- $document-added-background-image -->", "file://" +
+                    SparkleHelpers.CombineMore (Defines.PREFIX, "share", "sparkleshare", "icons", 
+                        "hicolor", "12x12", "status", "document-added.png"));
+            HTML = HTML.Replace ("<!-- $document-edited-background-image -->", "file://" +
+                    SparkleHelpers.CombineMore (Defines.PREFIX, "share", "sparkleshare", "icons", 
+                        "hicolor", "12x12", "status", "document-edited.png"));
+            HTML = HTML.Replace ("<!-- $document-deleted-background-image -->", "file://" +
+                    SparkleHelpers.CombineMore (Defines.PREFIX, "share", "sparkleshare", "icons", 
+                        "hicolor", "12x12", "status", "document-deleted.png"));
+            HTML = HTML.Replace ("<!-- $document-moved-background-image -->", "file://" +
+                    SparkleHelpers.CombineMore (Defines.PREFIX, "share", "sparkleshare", "icons", 
+                        "hicolor", "12x12", "status", "document-moved.png"));
         }
 
 
@@ -164,6 +238,10 @@ namespace SparkleShare {
             Application.Invoke (delegate {
                 Spinner.Stop ();
                 LogContent.Remove (LogContent.Child);
+
+#if false
+                WebView.LoadString (HTML, null, null, "file://");
+#endif
 
                 LogContent.Add (ScrolledWindow);
                 LogContent.ShowAll ();
@@ -223,3 +301,4 @@ namespace SparkleShare {
         }
     }
 }
+

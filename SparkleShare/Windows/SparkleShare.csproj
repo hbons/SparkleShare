@@ -29,6 +29,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -58,6 +59,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="Mono.Posix" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
@@ -90,7 +94,7 @@
     <Compile Include="..\SparkleInfobar.cs" />
     <Compile Include="..\SparkleController.cs" />
     <Compile Include="..\SparkleAbout.cs" />
-    <Compile Include="SparkleLog.cs" />
+    <Compile Include="SparkleEventLog.cs" />
     <Compile Include="SparkleWinController.cs" />
   </ItemGroup>
   <ItemGroup>

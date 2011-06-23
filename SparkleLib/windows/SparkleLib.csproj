@@ -29,6 +29,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,6 +55,9 @@
     <Reference Include="Meebey.SmartIrc4net, Version=0.4.5.0, Culture=neutral, PublicKeyToken=7868485fbf407e0f">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Meebey.SmartIrc4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.XML" />
   </ItemGroup>
@@ -84,6 +88,10 @@
     </Compile>
     <Compile Include="..\SparkleRepoBase.cs">
       <Link>SparkleRepoBase.cs</Link>
+    </Compile>
+    <Compile Include="..\SparkleWatcher.cs">
+      <Link>SparkleWatcher.cs</Link>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Defines.cs">
