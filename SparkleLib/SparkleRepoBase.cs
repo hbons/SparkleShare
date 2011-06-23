@@ -37,7 +37,7 @@ namespace SparkleLib {
         private TimeSpan short_interval = new TimeSpan (0, 0, 3, 0);
         private TimeSpan long_interval  = new TimeSpan (0, 0, 10, 0);
 
-        private FileSystemWatcher watcher;
+        private SparkleWatcher watcher;
         private SparkleListenerBase listener;
         private TimeSpan poll_interval;
         private Timer local_timer        = new Timer () { Interval = 0.25 * 1000 };
@@ -211,16 +211,10 @@ namespace SparkleLib {
 
         private void CreateWatcher ()
         {
-            this.watcher = new FileSystemWatcher (LocalPath) {
-                IncludeSubdirectories = true,
-                EnableRaisingEvents   = true,
-                Filter                = "*"
+            this.watcher = new SparkleWatcher (LocalPath);
+            this.watcher.ChangeEvent += delegate (FileSystemEventArgs args) {
+                OnFileActivity (args);
             };
-
-            this.watcher.Changed += new FileSystemEventHandler (OnFileActivity);
-            this.watcher.Created += new FileSystemEventHandler (OnFileActivity);
-            this.watcher.Deleted += new FileSystemEventHandler (OnFileActivity);
-            this.watcher.Renamed += new RenamedEventHandler (OnFileActivity);
         }
 
 
@@ -301,8 +295,13 @@ namespace SparkleLib {
 
 
         // Starts a timer when something changes
-        public void OnFileActivity (object o, FileSystemEventArgs args)
+        public void OnFileActivity (FileSystemEventArgs args)
         {
+            // Check the watcher for the occasions where this
+            // method is called directly
+            if (!this.watcher.EnableRaisingEvents)
+                return;
+
             if (args.FullPath.Contains (Path.DirectorySeparatorChar + "."))
                 return;
 
@@ -333,7 +332,7 @@ namespace SparkleLib {
         private void SyncUpBase ()
         {
             try {
-                this.local_timer.Stop ();
+                DisableWatching ();
                 this.remote_timer.Stop ();
 
                 SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Initiated");
@@ -373,7 +372,7 @@ namespace SparkleLib {
 
             } finally {
                 this.remote_timer.Start ();
-                this.local_timer.Start ();
+                EnableWatching ();
             }
         }
 
@@ -382,7 +381,7 @@ namespace SparkleLib {
         {
             SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Initiated");
             this.remote_timer.Stop ();
-            this.local_timer.Stop ();
+            DisableWatching ();
 
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.SyncDown);
@@ -415,19 +414,21 @@ namespace SparkleLib {
                 SyncStatusChanged (SyncStatus.Idle);
 
             this.remote_timer.Start ();
-            this.local_timer.Start ();
+            EnableWatching ();
         }
 
 
         public void DisableWatching ()
         {
             this.watcher.EnableRaisingEvents = false;
+            this.local_timer.Stop ();
         }
 
 
         public void EnableWatching ()
         {
             this.watcher.EnableRaisingEvents = true;
+            this.local_timer.Start ();
         }
 
 

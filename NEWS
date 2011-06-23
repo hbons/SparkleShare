@@ -1,3 +1,10 @@
+0.2.2 for Linux and Mac (Tue Jun 14, 2011):
+
+        Hylke: Fix crash on first run when ~/.ssh doesn't exist. Sync algorithm
+        tweaks. New global event log. Ubuntu integration with libappindicator. Poll
+        sometimes even when using the notification service.
+
+
 0.2.1 for Linux and Mac (Wed Jun 8, 2011):
 
         Hylke: Fix bug where host names with a "-" in them weren't accepted. Fix
