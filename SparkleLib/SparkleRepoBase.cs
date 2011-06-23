@@ -296,6 +296,11 @@ namespace SparkleLib {
         // Starts a timer when something changes
         public void OnFileActivity (FileSystemEventArgs args)
         {
+            // Check the watcher for the occasions where this
+            // method is called directly
+            if (!this.watcher.EnableRaisingEvents)
+                return;
+
             if (args.FullPath.Contains (Path.DirectorySeparatorChar + "."))
                 return;
 
