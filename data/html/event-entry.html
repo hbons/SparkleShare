@@ -1,20 +1,16 @@
 <div class='event-entry'>
-
     <div class='event-entry-content'>
-
-        <div class='no-buddy-icon'>
-            <div class='buddy-icon' style='background-image: url("<!-- $event-avatar-url -->");'></div>
-        </div>
-
         <div class='event-info'>
-            <b><!-- $event-user-name --></b>
-            <!-- $event-entry-content -->
+            <div class='wrapper'>
+                <div class='no-buddy-icon'>
+                    <div class='buddy-icon' style='background-image: url("<!-- $event-avatar-url -->");'></div>
+                </div>
+                <b><!-- $event-user-name --></b><br/>
+                <small><!-- $event-time --></small>
+            </div>
+            <div class='event-time' style='background-color: <!-- $event-folder-color -->'><!-- $event-folder --></div>
         </div>
-                
-        <div class='event-time'><!-- $event-time --></div>
-
+        <!-- $event-entry-content -->
         <div style='clear: both'></div>
-
     </div>
-
 </div>

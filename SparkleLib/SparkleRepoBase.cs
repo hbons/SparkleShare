@@ -34,12 +34,15 @@ namespace SparkleLib {
 
     public abstract class SparkleRepoBase {
 
+        private TimeSpan short_interval = new TimeSpan (0, 0, 3, 0);
+        private TimeSpan long_interval  = new TimeSpan (0, 0, 10, 0);
+
         private FileSystemWatcher watcher;
         private SparkleListenerBase listener;
+        private TimeSpan poll_interval;
         private Timer local_timer        = new Timer () { Interval = 0.25 * 1000 };
         private Timer remote_timer       = new Timer () { Interval = 10 * 1000 };
         private DateTime last_poll       = DateTime.Now;
-        private TimeSpan poll_interval   = new TimeSpan (0, 0, 3, 0);
         private List <double> sizebuffer = new List<double> ();
         private bool has_changed         = false;
         private Object change_lock       = new Object ();
@@ -74,9 +77,10 @@ namespace SparkleLib {
 
         public SparkleRepoBase (string path, SparkleBackend backend)
         {
-            LocalPath = path;
-            Name      = Path.GetFileName (LocalPath);
-            Backend   = backend;
+            LocalPath          = path;
+            Name               = Path.GetFileName (LocalPath);
+            Backend            = backend;
+            this.poll_interval = this.short_interval;
 
             SyncStatusChanged += delegate (SyncStatus status) {
                 this.status = status;
@@ -227,7 +231,7 @@ namespace SparkleLib {
 
             // Stop polling when the connection to the irc channel is succesful
             this.listener.Connected += delegate {
-                this.poll_interval = new TimeSpan (0, 0, 10, 0);
+                this.poll_interval = this.long_interval;
                 this.last_poll = DateTime.Now;
 
                 // Check for changes manually one more time
@@ -241,7 +245,7 @@ namespace SparkleLib {
 
             // Start polling when the connection to the irc channel is lost
             this.listener.Disconnected += delegate {
-                this.poll_interval = new TimeSpan (0, 0, 3, 0);
+                this.poll_interval = this.short_interval;
                 SparkleHelpers.DebugInfo (Name, "Falling back to polling");
             };
 
@@ -378,6 +382,7 @@ namespace SparkleLib {
         {
             SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Initiated");
             this.remote_timer.Stop ();
+            this.local_timer.Stop ();
 
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.SyncDown);
@@ -410,6 +415,7 @@ namespace SparkleLib {
                 SyncStatusChanged (SyncStatus.Idle);
 
             this.remote_timer.Start ();
+            this.local_timer.Start ();
         }
 
 

@@ -7,6 +7,9 @@ TARGET = exe
 
 LINK = $(REF_SPARKLESHARE) $(NOTIFY_SHARP_LIBS) $(WEBKIT_SHARP_LIBS)
 
+if HAVE_APP_INDICATOR
+BUILD_DEFINES="-define:HAVE_APP_INDICATOR"
+endif
 
 SOURCES =  \
 	SparkleAbout.cs \
@@ -16,7 +19,7 @@ SOURCES =  \
 	SparkleInfobar.cs \
 	SparkleIntro.cs \
 	SparkleLinController.cs \
-	SparkleLog.cs \
+	SparkleEventLog.cs \
 	SparkleShare.cs \
 	SparkleSpinner.cs \
 	SparkleStatusIcon.cs \
