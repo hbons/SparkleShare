@@ -396,8 +396,9 @@ namespace SparkleLib {
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
 
-                if (NewChangeSet != null)
-                    NewChangeSet (GetChangeSets (1) [0], LocalPath);
+                SparkleChangeSet change_set = GetChangeSets (1) [0];    
+                if (NewChangeSet != null && change_set.Revision != CurrentRevision)
+                    NewChangeSet (change_set, LocalPath);
 
                 // There could be changes from a
                 // resolved conflict. Tries only once,
