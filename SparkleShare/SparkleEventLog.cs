@@ -84,7 +84,6 @@ namespace SparkleShare {
                         LinkStatus = args.Link;
                     };
 
-                    // FIXME: Use the right event, waiting for newer webkit bindings: NavigationPolicyDecisionRequested
                     WebView.NavigationRequested += delegate (object o, WebKit.NavigationRequestedArgs args) {
                         if (args.Request.Uri == LinkStatus) {
                             Process process = new Process ();
@@ -92,9 +91,26 @@ namespace SparkleShare {
                             process.StartInfo.Arguments = args.Request.Uri.Replace (" ", "\\ "); // Escape space-characters
                             process.Start ();
 
-                            // Don't follow HREFs (as this would cause a page refresh)
-                            args.RetVal = 1;
+                        } else {
+                          Regex regex = new Regex (@"(.+)~(.+)~(.+)");
+                          Match match = regex.Match (args.Request.Uri);
+
+                          if (match.Success) {
+                              string folder_name = match.Groups [1].Value;
+                              string revision    = match.Groups [2].Value;
+                              string note        = match.Groups [3].Value.Replace ("%20", " ");
+
+                              Thread thread = new Thread (new ThreadStart (delegate {
+                                  SparkleShare.Controller.AddNoteToFolder (folder_name, revision, note);
+                              }));
+
+                              thread.Start ();
+                          }
                         }
+
+                        // Don't follow HREFs (as this would cause a page refresh)
+                        if (!args.Request.Uri.Equals ("file:"))
+                            args.RetVal = 1;
                     };
 
             ScrolledWindow.Add (WebView);
@@ -141,6 +157,12 @@ namespace SparkleShare {
                 string item = (string) this.combo_box.Model.GetValue (iter, 0);
                 return (item == "---");
             };
+
+            if (this.selected_log != null &&
+                !SparkleShare.Controller.Folders.Contains (this.selected_log)) {
+
+                this.selected_log = null;
+            }
 
             this.combo_box.Changed += delegate {
                 TreeIter iter;
