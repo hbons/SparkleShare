@@ -899,6 +899,9 @@ namespace SparkleShare {
 
         public void FetchFolder (string server, string remote_folder)
         {
+            server = server.Trim ();
+            remote_folder = remote_folder.Trim ();
+
             if (!Directory.Exists (SparklePaths.SparkleTmpPath))
                 Directory.CreateDirectory (SparklePaths.SparkleTmpPath);
 
