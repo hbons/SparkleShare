@@ -118,20 +118,7 @@ namespace SparkleLib {
 
         public override bool SyncDown ()
         {
-            // Check if note fetching is set up
-            SparkleGit git_config = new SparkleGit (LocalPath, "config --get remote.origin.fetch");
-            git_config.Start ();
-            git_config.WaitForExit ();
-
-            // Add configuration for note fetching if it's
-            // not there yet
-            if (git_config.ExitCode != 0) {
-                git_config = new SparkleGit (LocalPath, "config --add remote.origin.fetch +refs/notes/*:refs/notes/*");
-                git_config.Start ();
-                git_config.WaitForExit ();
-            }
-
-            SparkleGit git = new SparkleGit (LocalPath, "fetch -v origin master");
+            SparkleGit git = new SparkleGit (LocalPath, "fetch -v");
             git.Start ();
             git.WaitForExit ();
 
