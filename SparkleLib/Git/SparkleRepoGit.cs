@@ -564,16 +564,6 @@ namespace SparkleLib {
         }
 
 
-        public override void CreateInitialChangeSet ()
-        {
-            base.CreateInitialChangeSet ();
-            Add ();
-
-            string message = FormatCommitMessage ();
-            Commit (message);
-        }
-
-
         public override void AddNote (string revision, string note)
         {
             int timestamp = (int) (DateTime.UtcNow - new DateTime (1970, 1, 1)).TotalSeconds;
