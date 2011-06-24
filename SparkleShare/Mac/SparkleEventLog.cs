@@ -113,7 +113,7 @@ namespace SparkleShare {
             if (this.selected_log != null &&
                 !SparkleShare.Controller.Folders.Contains (this.selected_log)) {
 
-                this.selected_log = null;// todo on linux
+                this.selected_log = null;
             }
 
             this.popup_button.Activated += delegate {
