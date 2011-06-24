@@ -325,12 +325,12 @@ msgstr "Lernen Sie, wie Sie Ihren eigenen SparkleServer betreiben können"
 
 #: ../SparkleShare/SparkleEventLog.cs:61
 msgid "Recent Events"
-msgstr ""
+msgstr "Letzte Ereignisse"
 
 #: ../SparkleShare/SparkleEventLog.cs:131
 #: ../SparkleShare/SparkleEventLog.cs:150
 msgid "All Folders"
-msgstr ""
+msgstr "Alle Ordner"
 
 #: ../SparkleShare/SparkleShare.cs:56
 msgid "Sorry, you can't run SparkleShare with these permissions."
@@ -439,5 +439,3 @@ msgstr ""
 #: ../SparkleShare/SparkleWindow.cs:41
 msgid "SparkleShare Setup"
 msgstr "SparkleShare Konfiguration"
-
-
