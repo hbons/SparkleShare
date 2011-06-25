@@ -411,7 +411,7 @@ msgstr "Remote-Ordner hinzufügen..."
 
 #: ../SparkleShare/SparkleStatusIcon.cs:242
 msgid "Show Recent Events"
-msgstr ""
+msgstr "Zeige letzte Ereignisse"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:262
 msgid "Turn Notifications Off"
