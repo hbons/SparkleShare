@@ -558,6 +558,11 @@ namespace SparkleLib {
 
         public override void AddNote (string revision, string note)
         {
+            string url = SparkleConfig.DefaultConfig.GetUrlForFolder (Name);
+
+            if (url.StartsWith ("git") || url.StartsWith ("http"))
+                return;
+
             int timestamp = (int) (DateTime.UtcNow - new DateTime (1970, 1, 1)).TotalSeconds;
 
             // Create the note in one line for easier merging
