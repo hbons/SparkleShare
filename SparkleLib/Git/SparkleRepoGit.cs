@@ -346,7 +346,6 @@ namespace SparkleLib {
 
 
         // Returns a list of the latest change sets
-        // TODO: Method needs to be made a lot faster
         public override List <SparkleChangeSet> GetChangeSets (int count)
         {
             if (count < 1)
@@ -395,7 +394,6 @@ namespace SparkleLib {
                                 "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
                                 "*", RegexOptions.Compiled);
 
-            // TODO: Need to optimise for speed
             foreach (string log_entry in entries) {
                 Regex regex;
                 bool is_merge_commit = false;
