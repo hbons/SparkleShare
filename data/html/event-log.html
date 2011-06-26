@@ -13,6 +13,12 @@
                 }
               });
 
+              $('.buddy-icon').each (function () {
+                if ($(this).css('backgroundImage').indexOf ('@') != -1) {
+                  $(this).css ('backgroundColor', '#fff');
+                }
+              });
+
               $('.comments-section').click(function () {
                  $(this).find ('.comments-wrapper').show ();
                  $(this).find ('.comments-wrapper').css ('cursor', 'default');
