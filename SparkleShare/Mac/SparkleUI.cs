@@ -36,12 +36,6 @@ namespace SparkleShare {
             NSApplication.SharedApplication.DockTile.BadgeLabel = null;
         }
 
-        public override void OrderFrontStandardAboutPanel (NSObject sender)
-        {
-            // FIXME: Doesn't work
-            new SparkleAbout ();
-        }
-
         public override void WillTerminate (NSNotification notification)
         {
             SparkleShare.Controller.Quit ();
