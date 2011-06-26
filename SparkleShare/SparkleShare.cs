@@ -45,9 +45,6 @@ namespace SparkleShare {
 
         public static void Main (string [] args)
         {
-            // Use translations
-            Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
-
             // Don't allow running as root on Linux or Mac
             if ((SparkleBackend.Platform == PlatformID.Unix ||
                  SparkleBackend.Platform == PlatformID.MacOSX) &&
