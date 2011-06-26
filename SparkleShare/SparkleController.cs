@@ -417,10 +417,14 @@ namespace SparkleShare {
                         comments += "</table>";
                     }
 
+                    string avatar_email = "";
+                    if (File.Exists (GetAvatar (change_set.UserEmail, 36)))
+                        avatar_email = change_set.UserEmail;
+
                     event_entry   += "</dl>";
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.UserName)
-                        .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (change_set.UserEmail, 36))
+                        .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (avatar_email, 36))
                         .Replace ("<!-- $event-time -->", change_set.Timestamp.ToString ("H:mm"))
                         .Replace ("<!-- $event-folder -->", change_set.Folder)
                         .Replace ("<!-- $event-revision -->", change_set.Revision)
