@@ -21,6 +21,7 @@ using System.Drawing;
 using System.IO;
 using System.Timers;
 
+using Mono.Unix;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
@@ -70,6 +71,11 @@ namespace SparkleShare {
             // Needed for Growl
             Dlfcn.dlopen (growl_path, 0);
             NSApplication.Init ();
+
+            // Use translations
+            Catalog.Init ("sparkleshare",
+                Path.Combine (NSBundle.MainBundle.ResourcePath, "Translations"));
+            
 
             using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
 

@@ -49,6 +49,9 @@ namespace SparkleShare {
             // Initialize the application
             Application.Init ();
 
+            // Use translations
+            Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
+
             // Create the statusicon
             StatusIcon = new SparkleStatusIcon ();
             

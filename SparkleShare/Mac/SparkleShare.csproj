@@ -96,6 +96,81 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
+    <None Include="..\..\po\ar.po">
+      <Link>Translations\ar.po</Link>
+    </None>
+    <None Include="..\..\po\bg.po">
+      <Link>Translations\bg.po</Link>
+    </None>
+    <None Include="..\..\po\ca.po">
+      <Link>Translations\ca.po</Link>
+    </None>
+    <None Include="..\..\po\cs_CZ.po">
+      <Link>Translations\cs_CZ.po</Link>
+    </None>
+    <None Include="..\..\po\da.po">
+      <Link>Translations\da.po</Link>
+    </None>
+    <None Include="..\..\po\de.po">
+      <Link>Translations\de.po</Link>
+    </None>
+    <None Include="..\..\po\el.po">
+      <Link>Translations\el.po</Link>
+    </None>
+    <None Include="..\..\po\eo.po">
+      <Link>Translations\eo.po</Link>
+    </None>
+    <None Include="..\..\po\es.po">
+      <Link>Translations\es.po</Link>
+    </None>
+    <None Include="..\..\po\fi.po">
+      <Link>Translations\fi.po</Link>
+    </None>
+    <None Include="..\..\po\fr.po">
+      <Link>Translations\fr.po</Link>
+    </None>
+    <None Include="..\..\po\he.po">
+      <Link>Translations\he.po</Link>
+    </None>
+    <None Include="..\..\po\hu.po">
+      <Link>Translations\hu.po</Link>
+    </None>
+    <None Include="..\..\po\it.po">
+      <Link>Translations\it.po</Link>
+    </None>
+    <None Include="..\..\po\ja.po">
+      <Link>Translations\ja.po</Link>
+    </None>
+    <None Include="..\..\po\nl.po">
+      <Link>Translations\nl.po</Link>
+    </None>
+    <None Include="..\..\po\no_NO.po">
+      <Link>Translations\no_NO.po</Link>
+    </None>
+    <None Include="..\..\po\pl.po">
+      <Link>Translations\pl.po</Link>
+    </None>
+    <None Include="..\..\po\pt_BR.po">
+      <Link>Translations\pt_BR.po</Link>
+    </None>
+    <None Include="..\..\po\ru.po">
+      <Link>Translations\ru.po</Link>
+    </None>
+    <None Include="..\..\po\sv.po">
+      <Link>Translations\sv.po</Link>
+    </None>
+    <None Include="..\..\po\te.po">
+      <Link>Translations\te.po</Link>
+    </None>
+    <None Include="..\..\po\uk.po">
+      <Link>Translations\uk.po</Link>
+    </None>
+    <None Include="..\..\po\zh_CN.po">
+      <Link>Translations\zh_CN.po</Link>
+    </None>
+    <None Include="..\..\po\zh_TW.po">
+      <Link>Translations\zh_TW.po</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Mono\MonoMac\v0.0\Mono.MonoMac.targets" />
@@ -170,12 +245,10 @@
     <Content Include="..\..\data\icons\document-moved-12.png">
       <Link>Pixmaps\document-moved-12.png</Link>
     </Content>
-    <Content Include="..\..\data\html\jquery.js">
-      <Link>HTML\jquery.js</Link>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pixmaps\" />
     <Folder Include="HTML\" />
+    <Folder Include="Translations\" />
   </ItemGroup>
 </Project>
