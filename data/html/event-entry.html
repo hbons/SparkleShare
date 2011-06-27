@@ -8,9 +8,22 @@
                 <b><!-- $event-user-name --></b><br/>
                 <small><!-- $event-time --></small>
             </div>
-        <div class='event-time' style='background-color: <!-- $event-folder-color -->'><!-- $event-folder --></div>
+            <span title="<!-- $event-revision -->">
+              <div class='event-folder' style='background-color: <!-- $event-folder-color -->'><!-- $event-folder --></div>
+            </span>
         </div>
         <!-- $event-entry-content -->
+        <div class="comments-section">
+            <div class="comments-wrapper">
+                <!-- $event-comments -->
+                <textarea class="comment-textarea"></textarea>
+
+                <input class="comment-button" type="button" value="Add note"
+                 id="<!-- $event-folder -->~<!-- $event-revision -->">
+                <div style='clear: both'></div>
+            </div>
+            <div style='clear: both'></div>
+        </div>
         <div style='clear: both'></div>
     </div>
 </div>

@@ -49,6 +49,9 @@ namespace SparkleShare {
             // Initialize the application
             Application.Init ();
 
+            // Use translations
+            Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
+
             // Create the statusicon
             StatusIcon = new SparkleStatusIcon ();
             
@@ -79,12 +82,12 @@ namespace SparkleShare {
                         return;
 
                     SparkleBubble bubble    = new SparkleBubble (user_name, message);
-                    string avatar_file_path = SparkleShare.Controller.GetAvatar (user_email, 32);
+                    string avatar_file_path = SparkleShare.Controller.GetAvatar (user_email, 36);
 
                     if (avatar_file_path != null)
                         bubble.Icon = new Gdk.Pixbuf (avatar_file_path);
                     else
-                        bubble.Icon = SparkleUIHelpers.GetIcon ("avatar-default", 32);
+                        bubble.Icon = SparkleUIHelpers.GetIcon ("avatar-default", 36);
 
                     bubble.Show ();
                 });

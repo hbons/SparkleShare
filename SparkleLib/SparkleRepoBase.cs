@@ -38,7 +38,6 @@ namespace SparkleLib {
         private TimeSpan long_interval  = new TimeSpan (0, 0, 10, 0);
 
         private SparkleWatcher watcher;
-        private SparkleListenerBase listener;
         private TimeSpan poll_interval;
         private Timer local_timer        = new Timer () { Interval = 0.25 * 1000 };
         private Timer remote_timer       = new Timer () { Interval = 10 * 1000 };
@@ -47,6 +46,7 @@ namespace SparkleLib {
         private bool has_changed         = false;
         private Object change_lock       = new Object ();
 
+        protected SparkleListenerBase listener;
         protected SyncStatus status;
         protected bool is_buffering  = false;
         protected bool server_online = true;
@@ -86,12 +86,11 @@ namespace SparkleLib {
                 this.status = status;
             };
 
-            if (CurrentRevision == null) {
-                CreateInitialChangeSet ();
-                HasUnsyncedChanges = true;
-            }
-
             CreateWatcher ();
+
+            if (CurrentRevision == null)
+                CreateInitialChangeSet ();
+
             CreateListener ();
 
             this.local_timer.Elapsed += delegate (object o, ElapsedEventArgs args) {
@@ -111,8 +110,10 @@ namespace SparkleLib {
 
                 // In the unlikely case that we haven't synced up our
                 // changes or the server was down, sync up again
-                if (HasUnsyncedChanges)
+                if (HasUnsyncedChanges) {
                     SyncUpBase ();
+                    SyncUpNotes ();
+                }
             };
 
             this.remote_timer.Start ();
@@ -233,8 +234,10 @@ namespace SparkleLib {
                     SyncDownBase ();
 
                 // Push changes that were made since the last disconnect
-                if (HasUnsyncedChanges)
+                if (HasUnsyncedChanges) {
                     SyncUpBase ();
+                    SyncUpNotes ();
+                }
             };
 
             // Start polling when the connection to the irc channel is lost
@@ -393,8 +396,9 @@ namespace SparkleLib {
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
 
-                if (NewChangeSet != null)
-                    NewChangeSet (GetChangeSets (1) [0], LocalPath);
+                SparkleChangeSet change_set = GetChangeSets (1) [0];    
+                if (NewChangeSet != null && change_set.Revision != CurrentRevision)
+                    NewChangeSet (change_set, LocalPath);
 
                 // There could be changes from a
                 // resolved conflict. Tries only once,
@@ -443,6 +447,18 @@ namespace SparkleLib {
         }
 
 
+        public virtual void AddNote (string revision, string note)
+        {
+
+        }
+
+
+        public virtual void SyncUpNotes ()
+        {
+
+        }
+
+
         // Recursively gets a folder's size in bytes
         private double CalculateFolderSize (DirectoryInfo parent)
         {
@@ -456,7 +472,7 @@ namespace SparkleLib {
             if (parent.Name.Equals ("rebase-apply"))
                 return 0;
 
-            foreach (FileInfo file in parent.GetFiles()) {
+            foreach (FileInfo file in parent.GetFiles ()) {
                 if (!file.Exists)
                     return 0;
 

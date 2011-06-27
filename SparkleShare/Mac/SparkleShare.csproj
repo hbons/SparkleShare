@@ -62,7 +62,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Meebey.SmartIrc4net.dll</HintPath>
     </Reference>
-    <Reference Include="SparkleLib, Version=0.2.1.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="SparkleLib, Version=0.2.2.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\SparkleLib.dll</HintPath>
     </Reference>
@@ -170,9 +170,85 @@
     <Content Include="..\..\data\icons\document-moved-12.png">
       <Link>Pixmaps\document-moved-12.png</Link>
     </Content>
+    <Content Include="..\..\po\ar.po">
+      <Link>Translations\ar.po</Link>
+    </Content>
+    <Content Include="..\..\po\bg.po">
+      <Link>Translations\bg.po</Link>
+    </Content>
+    <Content Include="..\..\po\ca.po">
+      <Link>Translations\ca.po</Link>
+    </Content>
+    <Content Include="..\..\po\cs_CZ.po">
+      <Link>Translations\cs_CZ.po</Link>
+    </Content>
+    <Content Include="..\..\po\da.po">
+      <Link>Translations\da.po</Link>
+    </Content>
+    <Content Include="..\..\po\de.po">
+      <Link>Translations\de.po</Link>
+    </Content>
+    <Content Include="..\..\po\el.po">
+      <Link>Translations\el.po</Link>
+    </Content>
+    <Content Include="..\..\po\eo.po">
+      <Link>Translations\eo.po</Link>
+    </Content>
+    <Content Include="..\..\po\es.po">
+      <Link>Translations\es.po</Link>
+    </Content>
+    <Content Include="..\..\po\fi.po">
+      <Link>Translations\fi.po</Link>
+    </Content>
+    <Content Include="..\..\po\fr.po">
+      <Link>Translations\fr.po</Link>
+    </Content>
+    <Content Include="..\..\po\he.po">
+      <Link>Translations\he.po</Link>
+    </Content>
+    <Content Include="..\..\po\hu.po">
+      <Link>Translations\hu.po</Link>
+    </Content>
+    <Content Include="..\..\po\it.po">
+      <Link>Translations\it.po</Link>
+    </Content>
+    <Content Include="..\..\po\ja.po">
+      <Link>Translations\ja.po</Link>
+    </Content>
+    <Content Include="..\..\po\nl.po">
+      <Link>Translations\nl.po</Link>
+    </Content>
+    <Content Include="..\..\po\no_NO.po">
+      <Link>Translations\no_NO.po</Link>
+    </Content>
+    <Content Include="..\..\po\pl.po">
+      <Link>Translations\pl.po</Link>
+    </Content>
+    <Content Include="..\..\po\pt_BR.po">
+      <Link>Translations\pt_BR.po</Link>
+    </Content>
+    <Content Include="..\..\po\ru.po">
+      <Link>Translations\ru.po</Link>
+    </Content>
+    <Content Include="..\..\po\sv.po">
+      <Link>Translations\sv.po</Link>
+    </Content>
+    <Content Include="..\..\po\te.po">
+      <Link>Translations\te.po</Link>
+    </Content>
+    <Content Include="..\..\po\uk.po">
+      <Link>Translations\uk.po</Link>
+    </Content>
+    <Content Include="..\..\po\zh_CN.po">
+      <Link>Translations\zh_CN.po</Link>
+    </Content>
+    <Content Include="..\..\po\zh_TW.po">
+      <Link>Translations\zh_TW.po</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pixmaps\" />
     <Folder Include="HTML\" />
+    <Folder Include="Translations\" />
   </ItemGroup>
 </Project>
