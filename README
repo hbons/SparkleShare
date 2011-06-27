@@ -28,7 +28,7 @@ Run on Linux:
 
 SparkleShare currently requires:
 
-   - git >= 1.7
+   - git >= 1.7.3
    - gtk-sharp2 >= 2.12.7
    - mono-core >= 2.2
    - ndesk-dbus >= 0.6
