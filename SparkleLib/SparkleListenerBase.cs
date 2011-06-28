@@ -65,7 +65,7 @@ namespace SparkleLib {
                     break;
             }
             
-            return (SparkleListenerIrc) listeners [listeners.Count - 1];
+            return (SparkleListenerBase) listeners [listeners.Count - 1];
         }
     }
 
