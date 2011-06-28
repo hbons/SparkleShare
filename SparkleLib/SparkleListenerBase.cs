@@ -73,7 +73,7 @@ namespace SparkleLib {
             }
             
             SparkleHelpers.DebugInfo ("ListenerFactory", "Issued new listener for " + announce_uri);
-            return (SparkleListenerIrc) listeners [listeners.Count - 1];
+            return (SparkleListenerBase) listeners [listeners.Count - 1];
         }
     }
 
