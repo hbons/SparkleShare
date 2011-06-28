@@ -543,8 +543,8 @@ namespace SparkleShare {
                repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
 
             
-            string notify_uri = SparkleConfig.DefaultConfig.GetNotificationUrlForFolder (folder_name);
-            if (notify_uri == null) {
+            string announce_uri = SparkleConfig.DefaultConfig.GetAnnouncementUrlForFolder (folder_name);
+            if (announce_uri == null) {
                 string announcements = SparkleConfig.DefaultConfig.GetAnnouncementsForFolder (folder_name);
                 if (announcements == null)
                     // This is SparkleShare's centralized notification service.
@@ -553,9 +553,9 @@ namespace SparkleShare {
                     // we don't store any personal information ever
                     announcements = "204.62.14.135";
                 
-                notify_uri = String.Format("irc://{0}/", announcements);
+                announce_uri = String.Format("irc://{0}/", announcements);
             }
-            repo.CreateListener(notify_uri, folder_name);
+            repo.CreateListener(announce_uri, folder_name);
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set, string repository_path) {
                 string message = FormatMessage (change_set);
