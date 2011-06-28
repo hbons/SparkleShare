@@ -31,11 +31,9 @@ namespace SparkleLib {
         private string nick;
 
 
-        public SparkleListenerIrc (string server, string folder_identifier, string announcements) :
-            base (server, folder_identifier, announcements)
+        public SparkleListenerIrc (Uri server, string folder_identifier) :
+            base (server, folder_identifier)
         {
-            base.server = server;
-
             // Try to get a uniqueish nickname
             this.nick = SHA1 (DateTime.Now.ToString ("ffffff") + "sparkles");
 
@@ -90,9 +88,10 @@ namespace SparkleLib {
             this.thread = new Thread (
                 new ThreadStart (delegate {
                     try {
-
                         // Connect, login, and join the channel
-                        this.client.Connect (new string [] {base.server}, 6667);
+                        int port = base.server.Port;
+                        if (port < 0) port = 6667;
+                        this.client.Connect (base.server.Host, port);
                         this.client.Login (this.nick, this.nick);
 
                         foreach (string channel in base.channels) {
