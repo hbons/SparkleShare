@@ -26,13 +26,18 @@ namespace SparkleLib {
     public class SparkleListenerTcp : SparkleListenerBase {
 
         private Thread thread;
+        
+        // these are shared
+        private readonly Object mutex = new Object();
         private Socket socket;
+        private bool connected;
 
         public SparkleListenerTcp (Uri server, string folder_identifier) :
             base (server, folder_identifier)
         {
             base.channels.Add (folder_identifier);
             this.socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            this.connected = false;
 /*
             this.client.OnConnected += delegate {
                 base.is_connecting = false;
@@ -59,8 +64,12 @@ namespace SparkleLib {
 
         public override bool IsConnected {
             get {
-              //return this.client.IsConnected;
-              return true;
+                //return this.client.IsConnected;
+                bool result = false;
+                lock (this.mutex) {
+                  result = this.connected;
+                }
+                return result;
             }
         }
 
@@ -75,18 +84,20 @@ namespace SparkleLib {
             this.thread = new Thread (
                 new ThreadStart (delegate {
                     try {
-
                         // Connect and subscribe to the channel
                         int port = Server.Port;
                         if (port < 0) port = 9999;
                         this.socket.Connect (Server.Host, port);
-                        base.is_connecting = false;
+                        lock (this.mutex) {
+                            base.is_connecting = false;
+                            this.connected = true;
+                        }
 
                         foreach (string channel in base.channels) {
                             SparkleHelpers.DebugInfo ("ListenerTcp", "Subscribing to channel " + channel);
 
                             byte [] message = Encoding.UTF8.GetBytes (
-                                "{\"folder\": \"" + channel + "\", \"command\": \"subscribe\"}");
+                                "{\"repo\": \"" + channel + "\", \"command\": \"subscribe\"}");
                             this.socket.Send (message);
                         }
 
@@ -94,19 +105,21 @@ namespace SparkleLib {
 
                         // List to the channels, this blocks the thread
                         while (this.socket.Connected) {
-                            this.socket.Receive (bytes);
-                            if (bytes != null && bytes.Length > 0) {
+                            int bytes_read = this.socket.Receive (bytes);
+                            if (bytes_read > 0) {
                                 Console.WriteLine (Encoding.UTF8.GetString (bytes));
 
                                 string received_message = bytes.ToString ().Trim ();
                                 string folder_id = ""; // TODO: parse message, use XML
                                 OnAnnouncement (new SparkleAnnouncement (folder_id, received_message));
+                            } else {
+                                lock (this.mutex) {
+                                    this.socket.Close();
+                                    this.connected = false;
+                                }
                             }
                         }
-
-                        // Disconnect when we time out
-                        this.socket.Close ();
-
+                        // TODO: attempt to reconnect..?
                     } catch (SocketException e) {
                         SparkleHelpers.DebugInfo ("ListenerTcp", "Could not connect to " + Server + ": " + e.Message);
                     }
