@@ -153,6 +153,20 @@ namespace SparkleLib {
             Save ();
         }
 
+        public bool SetFolderOptionalAttribute (string name, string key, string value)
+        {
+            XmlNode folder = this.GetFolder(name);
+            if (folder == null) return false;
+            
+            if (folder[key] != null) {
+                folder[key].InnerText = value;
+            } else {
+                XmlNode new_node = CreateElement(key);
+                new_node.InnerText = value;
+                folder.AppendChild(new_node);
+            }
+            return true;
+        }
 
         public void RemoveFolder (string name)
         {
