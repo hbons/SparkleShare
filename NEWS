@@ -1,8 +1,10 @@
-0.2.3 for Linux and Mac (Sun Jun 26, 2011):
+0.2.3 for Linux and Mac (Tue Jun 28, 2011):
 
         Hylke: Add the ability to add notes in the event logs. Fix some quirks
         in the webkit view on Linux. Redid gravatar fetching parts to be more
         efficient. Remove headless feature. Fix some small bugs and crashes.
+        SparkleShare will now also try to use your existing SSH keypair. Required
+        Git version is now 1.7.1 or later.
 
 
 0.2.2 for Linux and Mac (Tue Jun 14, 2011):
