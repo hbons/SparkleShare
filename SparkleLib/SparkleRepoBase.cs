@@ -90,6 +90,7 @@ namespace SparkleLib {
                 CreateInitialChangeSet ();
 
             CreateWatcher ();
+            CreateListener ();
 
             this.local_timer.Elapsed += delegate (object o, ElapsedEventArgs args) {
                 CheckForChanges ();
@@ -114,9 +115,6 @@ namespace SparkleLib {
                 }
             };
 
-            this.remote_timer.Start ();
-            this.local_timer.Start ();
-
             // Sync up everything that changed
             // since we've been offline
             if (AnyDifferences) {
@@ -127,6 +125,9 @@ namespace SparkleLib {
                     SyncUpBase ();
                 EnableWatching ();
             }
+
+            this.remote_timer.Start ();
+            this.local_timer.Start ();
         }
 
 
@@ -217,9 +218,9 @@ namespace SparkleLib {
         }
 
 
-        public void CreateListener (string uri, string folder_name)
+        public void CreateListener ()
         {
-            this.listener = SparkleListenerFactory.CreateListener(uri, this.Identifier);
+            this.listener = SparkleListenerFactory.CreateListener (Name, Identifier);
 
             // Stop polling when the connection to the irc channel is succesful
             this.listener.Connected += delegate {
