@@ -131,7 +131,6 @@ namespace SparkleLib {
             }
         }
 
-
         public void AddFolder (string name, string url, string backend)
         {
             XmlNode node_name = CreateElement ("name");
@@ -165,53 +164,50 @@ namespace SparkleLib {
             Save ();
         }
 
+        private XmlNode GetFolder (string name)
+        {
+            return SelectSingleNode(String.Format("/sparkleshare/folder[name='{0}']", name));
+        }
+        
+        private string GetFolderValue (string name, string key)
+        {
+            XmlNode folder = this.GetFolder(name);
+            
+            if ((folder != null) && (folder[key] != null)) {
+                return folder[key].InnerText;
+            }
+            return null;
+        }
 
         public bool FolderExists (string name)
         {
-            foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
-                if (node_folder ["name"].InnerText.Equals (name))
-                    return true;
-            }
-
-            return false;
+            XmlNode folder = this.GetFolder(name);
+            return folder != null;
         }
-
 
         public string GetBackendForFolder (string name)
         {
-            foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
-                if (node_folder ["name"].InnerText.Equals (name))
-                    return node_folder ["backend"].InnerText;
-            }
-
-            return null;
+            return this.GetFolderValue(name, "backend");
         }
-
 
         public string GetUrlForFolder (string name)
         {
-            foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
-                if (node_folder ["name"].InnerText.Equals (name))
-                    return node_folder ["url"].InnerText;
-            }
-
-            return null;
+            return this.GetFolderValue(name, "url");
         }
-
 
         public string GetAnnouncementsForFolder (string name)
         {
-            foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
-                if (node_folder ["name"].InnerText.Equals (name) &&
-                    node_folder ["announcements"] != null) {
-
-                    return node_folder ["announcements"].InnerText;
-                }
-            }
-
-            return null;
+            return this.GetFolderValue(name, "announcements");
         }
 
+        public string GetNotificationUrlForFolder (string name)
+        {
+            // examples?
+            // tcp://localhost:9999/
+            // xmpp:someuser@somexmppserver?canhavefunnybits
+            // irc://hbons/#somechatroom
+            return this.GetFolderValue(name, "notificationurl");
+        }
 
         public string GetConfigOption (string name)
         {
