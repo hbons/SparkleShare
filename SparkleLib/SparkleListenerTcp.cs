@@ -28,10 +28,9 @@ namespace SparkleLib {
         private Thread thread;
         private Socket socket;
 
-        public SparkleListenerTcp (string server, string folder_identifier, string announcements) :
-            base (server, folder_identifier, announcements)
+        public SparkleListenerTcp (Uri server, string folder_identifier) :
+            base (server, folder_identifier)
         {
-            base.server = server;
             base.channels.Add (folder_identifier);
             this.socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 /*
@@ -69,7 +68,7 @@ namespace SparkleLib {
         // Starts a new thread and listens to the channel
         public override void Connect ()
         {
-            SparkleHelpers.DebugInfo ("ListenerTcp", "Connecting to " + Server);
+            SparkleHelpers.DebugInfo ("ListenerTcp", "Connecting to " + Server.Host);
 
             base.is_connecting = true;
 
@@ -78,7 +77,9 @@ namespace SparkleLib {
                     try {
 
                         // Connect and subscribe to the channel
-                        this.socket.Connect (Server, 9999);
+                        int port = Server.Port;
+                        if (port < 0) port = 9999;
+                        this.socket.Connect (Server.Host, port);
                         base.is_connecting = false;
 
                         foreach (string channel in base.channels) {
