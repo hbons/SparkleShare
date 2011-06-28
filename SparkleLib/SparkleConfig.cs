@@ -214,13 +214,13 @@ namespace SparkleLib {
             return this.GetFolderValue(name, "announcements");
         }
 
-        public string GetNotificationUrlForFolder (string name)
+        public string GetAnnouncementUrlForFolder (string name)
         {
             // examples?
             // tcp://localhost:9999/
             // xmpp:someuser@somexmppserver?canhavefunnybits
             // irc://hbons/#somechatroom
-            return this.GetFolderValue(name, "notificationurl");
+            return this.GetFolderValue(name, "announcements_url");
         }
 
         public string GetConfigOption (string name)
