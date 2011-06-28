@@ -28,7 +28,7 @@ namespace SparkleShare {
 
         private Dictionary<string, NSImage> icons = new Dictionary<string, NSImage> ();
         private int [] sizes = new int [] {16, 32, 48, 128, 256, 512};
-        private string [] Paths;
+        private string [] paths;
 
 
         public SparkleBadger (string [] paths)
@@ -40,7 +40,7 @@ namespace SparkleShare {
         public void Badge ()
         {
             using (NSAutoreleasePool a = new NSAutoreleasePool ()) {
-                foreach (string path in Paths) {
+                foreach (string path in this.paths) {
                     string extension = Path.GetExtension (path.ToLower ());
                     NSImage new_icon = new NSImage ();
 
@@ -78,7 +78,7 @@ namespace SparkleShare {
 
         public void Clear ()
         {
-            foreach (string path in Paths) {
+            foreach (string path in this.paths) {
                 string extension = Path.GetExtension (path.ToLower ());
 
                 NSImage original_icon = NSWorkspace.SharedWorkspace.IconForFileType (extension);
