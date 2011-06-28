@@ -616,6 +616,13 @@ namespace SparkleLib {
         }
 
 
+        public override void CreateInitialChangeSet ()
+        {
+            base.CreateInitialChangeSet ();
+            SyncUp ();
+        }
+
+
         // Creates a SHA-1 hash of input
         private string SHA1 (string s)
         {

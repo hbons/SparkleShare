@@ -86,12 +86,10 @@ namespace SparkleLib {
                 this.status = status;
             };
 
-            CreateWatcher ();
-
             if (CurrentRevision == null)
                 CreateInitialChangeSet ();
 
-            CreateListener ();
+            CreateWatcher ();
 
             this.local_timer.Elapsed += delegate (object o, ElapsedEventArgs args) {
                 CheckForChanges ();
@@ -219,10 +217,9 @@ namespace SparkleLib {
         }
 
 
-        private void CreateListener ()
+        public void CreateListener (string uri, string folder_name)
         {
-            this.listener = SparkleListenerFactory.CreateIrcListener (Domain, Identifier,
-                SparkleConfig.DefaultConfig.GetAnnouncementsForFolder (Name));
+            this.listener = SparkleListenerFactory.CreateListener(uri, this.Identifier);
 
             // Stop polling when the connection to the irc channel is succesful
             this.listener.Connected += delegate {
