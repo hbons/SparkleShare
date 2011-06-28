@@ -38,27 +38,6 @@ namespace SparkleLib {
             base.channels.Add (folder_identifier);
             this.socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             this.connected = false;
-/*
-            this.client.OnConnected += delegate {
-                base.is_connecting = false;
-                OnConnected ();
-            };
-
-            this.client.OnDisconnected += delegate {
-                base.is_connecting = false;
-                OnDisconnected ();
-            };
-
-            this.client.OnError += delegate {
-                base.is_connecting = false;
-                OnDisconnected ();
-            };
-
-            this..OnChannelMessage += delegate (object o, IrcEventArgs args) {
-                string message = args.Data.Message.Trim ();
-                string folder_id = args.Data.Channel.Substring (1); // remove the starting hash
-                OnAnnouncement (new SparkleAnnouncement (folder_id, message));
-            };*/
         }
 
 
