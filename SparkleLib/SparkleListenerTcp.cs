@@ -74,6 +74,16 @@ namespace SparkleLib {
             }
         }
 
+        private TcpMessagePacket ReceiveCommand(byte[] input)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(TcpMessagePacket));
+            
+            MemoryStream ms = new MemoryStream(input);
+            
+            TcpMessagePacket ret = (TcpMessagePacket) serializer.Deserialize(ms);
+            return ret;
+        }
+
         // Starts a new thread and listens to the channel
         public override void Connect ()
         {
@@ -95,8 +105,7 @@ namespace SparkleLib {
 
                         foreach (string channel in base.channels) {
                             SparkleHelpers.DebugInfo ("ListenerTcp", "Subscribing to channel " + channel);
-
-                            this.SendCommand(new TcpMessagePacket(channel, "subscribe"));
+                            this.SendCommand(new TcpMessagePacket(channel, "register"));
                         }
 
                         byte [] bytes = new byte [4096];
@@ -105,18 +114,20 @@ namespace SparkleLib {
                         while (this.socket.Connected) {
                             int bytes_read = this.socket.Receive (bytes);
                             if (bytes_read > 0) {
-                                Console.WriteLine (Encoding.UTF8.GetString (bytes));
-
-                                string received_message = bytes.ToString ().Trim ();
-                                string folder_id = ""; // TODO: parse message, use XML
-                                OnAnnouncement (new SparkleAnnouncement (folder_id, received_message));
+                                TcpMessagePacket message = this.ReceiveCommand(bytes);
+                                SparkleHelpers.DebugInfo ("ListenerTcp", "Update for folder " + message.repo);
+                                OnAnnouncement (new SparkleAnnouncement (message.repo, message.readable));
                             } else {
+                                SparkleHelpers.DebugInfo ("ListenerTcp", "Error on socket");
                                 lock (this.mutex) {
                                     this.socket.Close();
                                     this.connected = false;
                                 }
                             }
                         }
+                        
+                        SparkleHelpers.DebugInfo ("ListenerTcp", "Disconnected from " + Server.Host);
+                        
                         // TODO: attempt to reconnect..?
                     } catch (SocketException e) {
                         SparkleHelpers.DebugInfo ("ListenerTcp", "Could not connect to " + Server + ": " + e.Message);
@@ -137,7 +148,7 @@ namespace SparkleLib {
                 if (IsConnected) {
                     SparkleHelpers.DebugInfo ("ListenerTcp", "Subscribing to channel " + channel);
 
-                    this.SendCommand(new TcpMessagePacket(channel, "subscribe"));
+                    this.SendCommand(new TcpMessagePacket(channel, "register"));
                 }
             }
         }
@@ -145,7 +156,7 @@ namespace SparkleLib {
 
         public override void Announce (SparkleAnnouncement announcement)
         {
-            this.SendCommand(new TcpMessagePacket(announcement.FolderIdentifier, "publish"));
+            this.SendCommand(new TcpMessagePacket(announcement.FolderIdentifier, "new_version"));
 
             // Also announce to ourselves for debugging purposes
             // base.OnAnnouncement (announcement);
