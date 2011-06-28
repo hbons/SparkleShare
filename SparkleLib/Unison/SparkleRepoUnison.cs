@@ -392,6 +392,7 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Grabed file: " + path + ", Exit code: " + exitcode.ToString());
             return exitcode;
         }
+		
         
         private int UnisonTransmitLog ()
         {
@@ -418,7 +419,6 @@ namespace SparkleLib {
             string timestamp = DateTime.UtcNow.ToString();
             string username = SparkleConfig.DefaultConfig.UserName.ToString().Trim();
             string useremail = SparkleConfig.DefaultConfig.UserEmail.ToString().Trim();
-            //commas might not be the best choice of seperators...
             string logupdate = timestamp + ", " + username + ", " + useremail + ", " + revision + ", " + path;
             sb.Append(logupdate);
             return sb;
@@ -500,8 +500,6 @@ namespace SparkleLib {
                 {  
                     string[] stringSeparators = new string[] {", "};
                     string[] parts = line.Split(stringSeparators, StringSplitOptions.None); 
-                    //TODO: fix: commas in any of the fields will be broken...
-                    //might need a new seperator
                     
                     //foreach (string part in parts) 
                     //    SparkleHelpers.DebugInfo ("Unison", "Read log entry: " + part);
