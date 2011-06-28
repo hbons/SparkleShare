@@ -113,7 +113,7 @@ namespace SparkleShare {
             FrameNumber = 0;
 
             Timer Animation = new Timer () {
-                Interval = 35
+                Interval = 40
             };
 
             Animation.Elapsed += delegate {
