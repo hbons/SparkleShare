@@ -52,6 +52,34 @@ namespace SparkleLib {
         }
 
 
+        public override string [] UnsyncedFilePaths {
+            get {
+                List<string> file_paths = new List<string> ();
+
+                SparkleGit git = new SparkleGit (LocalPath, "status --porcelain");
+                git.Start ();
+
+                // Reading the standard output HAS to go before
+                // WaitForExit, or it will hang forever on output > 4096 bytes
+                string output = git.StandardOutput.ReadToEnd ().TrimEnd ();
+                git.WaitForExit ();
+
+                string [] lines = output.Split ("\n".ToCharArray ());
+                foreach (string line in lines) {
+                    if (line [1].ToString ().Equals ("M") ||
+                        line [1].ToString ().Equals ("?") ||
+                        line [1].ToString ().Equals ("A")) {
+
+                        string path = line.Substring (3);
+                        path = path.Trim ("\"".ToCharArray ());
+                        file_paths.Add (path);
+                    }
+                }
+
+                return file_paths.ToArray ();
+            }
+        }
+
         public override string CurrentRevision {
             get {
 
@@ -109,7 +137,6 @@ namespace SparkleLib {
             Commit (message);
 
             SparkleGit git = new SparkleGit (LocalPath, "push origin master");
-
             git.Start ();
             git.WaitForExit ();
 
@@ -140,9 +167,12 @@ namespace SparkleLib {
             get {
                 SparkleGit git = new SparkleGit (LocalPath, "status --porcelain");
                 git.Start ();
+
+                // Reading the standard output HAS to go before
+                // WaitForExit, or it will hang forever on output > 4096 bytes
+                string output = git.StandardOutput.ReadToEnd ().TrimEnd ();
                 git.WaitForExit ();
 
-                string output = git.StandardOutput.ReadToEnd ().TrimEnd ();
                 string [] lines = output.Split ("\n".ToCharArray ());
 
                 foreach (string line in lines) {
@@ -272,9 +302,12 @@ namespace SparkleLib {
 
             SparkleGit git_status = new SparkleGit (LocalPath, "status --porcelain");
             git_status.Start ();
-            git_status.WaitForExit ();
 
-            string output   = git_status.StandardOutput.ReadToEnd ().TrimEnd ();
+            // Reading the standard output HAS to go before
+            // WaitForExit, or it will hang forever on output > 4096 bytes
+            string output = git_status.StandardOutput.ReadToEnd ().TrimEnd ();
+            git.WaitForExit ();
+
             string [] lines = output.Split ("\n".ToCharArray ());
 
             foreach (string line in lines) {

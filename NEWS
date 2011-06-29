@@ -1,3 +1,8 @@
+0.2.4 for Linux and Mac (Wed Jun 29, 2011):
+
+        Hylke: Fix crash when setting up with an empty Git repository.
+
+
 0.2.3 for Linux and Mac (Tue Jun 28, 2011):
 
         Hylke: Add the ability to add notes in the event logs. Fix some quirks
