@@ -145,6 +145,13 @@ namespace SparkleLib {
         }
 
 
+        public virtual string [] UnsyncedFilePaths {
+            get {
+                return new string [0];
+            }
+        }
+
+
         public string Domain {
             get {
                 Regex regex = new Regex (@"(@|://)([a-z0-9\.-]+)(/|:)");

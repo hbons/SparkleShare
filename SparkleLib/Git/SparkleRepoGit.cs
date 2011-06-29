@@ -52,6 +52,34 @@ namespace SparkleLib {
         }
 
 
+        public override string [] UnsyncedFilePaths {
+            get {
+                List<string> file_paths = new List<string> ();
+
+                SparkleGit git = new SparkleGit (LocalPath, "status --porcelain");
+                git.Start ();
+
+                // Reading the standard output HAS to go before
+                // WaitForExit, or it will hang forever on output > 4096 bytes
+                string output = git.StandardOutput.ReadToEnd ().TrimEnd ();
+                git.WaitForExit ();
+
+                string [] lines = output.Split ("\n".ToCharArray ());
+                foreach (string line in lines) {
+                    if (line [1].ToString ().Equals ("M") ||
+                        line [1].ToString ().Equals ("?") ||
+                        line [1].ToString ().Equals ("A")) {
+
+                        string path = line.Substring (3);
+                        path = path.Trim ("\"".ToCharArray ());
+                        file_paths.Add (path);
+                    }
+                }
+
+                return file_paths.ToArray ();
+            }
+        }
+
         public override string CurrentRevision {
             get {
 

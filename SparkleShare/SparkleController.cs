@@ -555,6 +555,11 @@ namespace SparkleShare {
             };
 
             repo.SyncStatusChanged += delegate (SyncStatus status) {
+/*                if (status == SyncStatus.SyncUp) {
+                    foreach (string path in repo.UnsyncedFilePaths)
+                        Console.WriteLine (path);
+                }
+*/
                 if (status == SyncStatus.Idle     ||
                     status == SyncStatus.SyncUp   ||
                     status == SyncStatus.SyncDown ||
