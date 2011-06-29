@@ -1,7 +1,9 @@
 @echo off
 
-if "%CommonProgramFiles(x86)%"=="" (set common=%CommonProgramFiles%) else (set common=%CommonProgramFiles(x86)%)
-if "%ProgramFiles(x86)%"=="" (set program=%ProgramFiles%) else (set program=%ProgramFiles(x86)%)
+set common=%CommonProgramFiles(x86)%
+if "%common%"=="" set common=%CommonProgramFiles%
+set program=%ProgramFiles(x86)%
+if "%program%"=="" set program=%ProgramFiles%
 
 set TextTransform="%common%\Microsoft Shared\TextTemplating\10.0\texttransform.exe"
 if not exist %TextTransform% set TextTransform="%common%\Microsoft Shared\TextTemplating\1.2\texttransform.exe"
