@@ -306,7 +306,7 @@ namespace SparkleLib {
             // Reading the standard output HAS to go before
             // WaitForExit, or it will hang forever on output > 4096 bytes
             string output = git_status.StandardOutput.ReadToEnd ().TrimEnd ();
-            git.WaitForExit ();
+            git_status.WaitForExit ();
 
             string [] lines = output.Split ("\n".ToCharArray ());
 
