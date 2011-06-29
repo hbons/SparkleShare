@@ -9,31 +9,32 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-17 12:09+0200\n"
-"PO-Revision-Date: 2011-06-17 10:13+0000\n"
+"POT-Creation-Date: 2011-06-29 11:38+0200\n"
+"PO-Revision-Date: 2011-06-26 09:22+0000\n"
 "Last-Translator: deejay1 <deejay1@srem.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: cs_CZ\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:338
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:337
 #: ../SparkleShare/SparkleIntro.cs:67 ../SparkleShare/SparkleStatusIcon.cs:345
 msgid "Welcome to SparkleShare!"
 msgstr "Vítejte ve SparkleShare!"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:349
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:348
 #: ../SparkleShare/SparkleStatusIcon.cs:357
 msgid "Not everything is synced"
 msgstr "Něco není synchronizováno"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:359
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:358
 #: ../SparkleShare/SparkleStatusIcon.cs:367
 msgid "Up to date"
 msgstr "Aktuální"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:375
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:374
 #: ../SparkleShare/SparkleStatusIcon.cs:383
 msgid "Syncing…"
 msgstr "Synchronizuji…"
@@ -83,35 +84,35 @@ msgstr "_Zásluhy"
 msgid "_Visit Website"
 msgstr "_Navštívit domovskou stránku"
 
-#: ../SparkleShare/SparkleController.cs:422
+#: ../SparkleShare/SparkleController.cs:455
 msgid "ddd MMM d, yyyy"
 msgstr "ddd d. MMM, yyyy"
 
-#: ../SparkleShare/SparkleController.cs:427
+#: ../SparkleShare/SparkleController.cs:460
 msgid "ddd MMM d"
 msgstr "ddd d. MMM"
 
-#: ../SparkleShare/SparkleController.cs:629
+#: ../SparkleShare/SparkleController.cs:661
 #, csharp-format
 msgid "added ‘{0}’"
 msgstr "přidal(a) ‘{0}’"
 
-#: ../SparkleShare/SparkleController.cs:634
+#: ../SparkleShare/SparkleController.cs:666
 #, csharp-format
 msgid "moved ‘{0}’"
 msgstr ""
 
-#: ../SparkleShare/SparkleController.cs:639
+#: ../SparkleShare/SparkleController.cs:671
 #, csharp-format
 msgid "edited ‘{0}’"
 msgstr "upravil(a) ‘{0}’"
 
-#: ../SparkleShare/SparkleController.cs:644
+#: ../SparkleShare/SparkleController.cs:676
 #, csharp-format
 msgid "deleted ‘{0}’"
 msgstr "smazal(a) ‘{0}’"
 
-#: ../SparkleShare/SparkleController.cs:653
+#: ../SparkleShare/SparkleController.cs:685
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
@@ -119,7 +120,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: ../SparkleShare/SparkleController.cs:657
+#: ../SparkleShare/SparkleController.cs:689
 msgid "did something magical"
 msgstr ""
 
@@ -321,74 +322,70 @@ msgstr "Zjistěte jak připravit svůj vlastní SparkleServer"
 msgid "Recent Events"
 msgstr ""
 
-#: ../SparkleShare/SparkleEventLog.cs:131
-#: ../SparkleShare/SparkleEventLog.cs:150
+#: ../SparkleShare/SparkleEventLog.cs:148
+#: ../SparkleShare/SparkleEventLog.cs:173
 msgid "All Folders"
 msgstr ""
 
-#: ../SparkleShare/SparkleShare.cs:56
+#: ../SparkleShare/SparkleShare.cs:53
 msgid "Sorry, you can't run SparkleShare with these permissions."
 msgstr ""
 "Je nám líto, ale nemůžete spouštět SparkleShare s těmito přístupovými právy."
 
-#: ../SparkleShare/SparkleShare.cs:57
+#: ../SparkleShare/SparkleShare.cs:54
 msgid "Things would go utterly wrong."
 msgstr "Věci by se mohly příšerně pokazit."
 
-#: ../SparkleShare/SparkleShare.cs:66
-msgid "Don't show the notification icon"
-msgstr "Nezobrazovat oznamovací ikonu"
-
-#: ../SparkleShare/SparkleShare.cs:67
+#: ../SparkleShare/SparkleShare.cs:61
 msgid "Print version information"
 msgstr "Vypíše informace o verzi"
 
-#: ../SparkleShare/SparkleShare.cs:68
+#: ../SparkleShare/SparkleShare.cs:62
 msgid "Show this help text"
 msgstr "Zobrazit tuto nápovědu"
 
-#: ../SparkleShare/SparkleShare.cs:115
+#: ../SparkleShare/SparkleShare.cs:109
 msgid "SparkleShare, a collaboration and sharing tool."
 msgstr ""
 
-#: ../SparkleShare/SparkleShare.cs:116
+#: ../SparkleShare/SparkleShare.cs:110
 msgid "Copyright (C) 2010 Hylke Bons"
 msgstr "Všechna práva vyhrazena (C) 2010 Hylke Bons"
 
-#: ../SparkleShare/SparkleShare.cs:118
+#: ../SparkleShare/SparkleShare.cs:112
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
 msgstr "Tento program je ABSOLUTNĚ BEZ ZÁRUKY."
 
-#: ../SparkleShare/SparkleShare.cs:120
+#: ../SparkleShare/SparkleShare.cs:114
 msgid "This is free software, and you are welcome to redistribute it "
 msgstr "Toto je svobodný software a můžete jej dále šířit."
 
-#: ../SparkleShare/SparkleShare.cs:121
+#: ../SparkleShare/SparkleShare.cs:115
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
 msgstr ""
 "za jistých podmínek. Prosím, přečtěte si GNU GPLv3 pro více informací."
 
-#: ../SparkleShare/SparkleShare.cs:123
+#: ../SparkleShare/SparkleShare.cs:117
 msgid "SparkleShare automatically syncs Git repositories in "
 msgstr "SparkleShare automaticky synchronizuje repozitáře Git v "
 
-#: ../SparkleShare/SparkleShare.cs:124
+#: ../SparkleShare/SparkleShare.cs:118
 msgid "the ~/SparkleShare folder with their remote origins."
 msgstr "složce ~/SparkleShare s jejich vzdálenými protistranami."
 
-#: ../SparkleShare/SparkleShare.cs:126
+#: ../SparkleShare/SparkleShare.cs:120
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
 msgstr "Použití: sparkleshare [start|stop|restart] [VOLBY]..."
 
-#: ../SparkleShare/SparkleShare.cs:127
+#: ../SparkleShare/SparkleShare.cs:121
 msgid "Sync SparkleShare folder with remote repositories."
 msgstr "Synchronizovat složku SparkleShare se vzdálenými repozitáři."
 
-#: ../SparkleShare/SparkleShare.cs:129
+#: ../SparkleShare/SparkleShare.cs:123
 msgid "Arguments:"
 msgstr "Argumenty:"
 
-#: ../SparkleShare/SparkleShare.cs:139
+#: ../SparkleShare/SparkleShare.cs:133
 msgid "SparkleShare "
 msgstr "SparkleShare "
 
@@ -418,11 +415,11 @@ msgstr "Zapnout upozornění"
 msgid "Quit"
 msgstr "Ukončit"
 
-#: ../SparkleShare/SparkleUI.cs:96
+#: ../SparkleShare/SparkleUI.cs:99
 msgid "Ouch! Mid-air collision!"
 msgstr "Au! Nehoda na cestě!"
 
-#: ../SparkleShare/SparkleUI.cs:97
+#: ../SparkleShare/SparkleUI.cs:100
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
 msgstr ""
 "Nemějte strach, SparkleShare udělal kopie každého konfliktního souboru."
