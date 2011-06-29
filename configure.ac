@@ -101,7 +101,17 @@ AM_CONDITIONAL([HAVE_SMARTIRC4NET], test x$SPARKLE_SMARTIRC4NETDIR = x)
 
 dnl check for webkit-sharp
 PKG_CHECK_MODULES(WEBKIT_SHARP, webkit-sharp-1.0, have_webkit_sharp=yes, have_webkit_sharp=no)
+if test "x$have_webkit_sharp" = "xno" ; then
+    AC_ERROR("webkit-sharp is a required dependency: you need to install the appropriate devel package before you can compile")
+fi
 AC_SUBST(WEBKIT_SHARP_LIBS)
+
+dnl check for notify-sharp
+PKG_CHECK_MODULES(NOTIFY_SHARP, notify-sharp, have_notify_sharp=yes, have_notify_sharp=no)
+if test "x$have_notify_sharp" = "xno" ; then
+    AC_ERROR("notify-sharp is a required dependency: you need to install the appropriate devel package before you can compile")
+fi
+AC_SUBST(NOTIFY_SHARP_LIBS)
 
 SHAMROCK_CHECK_NUNIT
 
