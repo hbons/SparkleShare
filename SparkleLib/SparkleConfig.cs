@@ -82,6 +82,8 @@ namespace SparkleLib {
                           "  <user>" + n +
                           "    <name>" + user_name + "</name>" + n +
                           "    <email>Unknown</email>" + n +
+			              "    <previous-server></previous-server>" + n +
+			              "    <previous-folder></previous-folder>" + n +
                           "  </user>" + n +
                           "</sparkleshare>");
             writer.Close ();
@@ -113,6 +115,20 @@ namespace SparkleLib {
 
             set {
                 XmlNode node = SelectSingleNode ("/sparkleshare/user/email/text()");
+                node.InnerText = value;
+
+                Save ();
+            }
+        }
+
+        public string PrevServer {
+            get {
+                XmlNode node = SelectSingleNode ("/sparkleshare/user/previous-server/text()");
+                return node.Value;
+            }
+
+            set {
+                XmlNode node = SelectSingleNode ("/sparkleshare/user/previous-server/text()");
                 node.InnerText = value;
 
                 Save ();
