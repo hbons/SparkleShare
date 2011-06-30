@@ -37,24 +37,31 @@ namespace SparkleLib {
 
     public static class SparkleListenerFactory {
 
-        private static List<SparkleListenerBase> listeners;
+        private static List<SparkleListenerBase> listeners = new List<SparkleListenerBase> ();
 
-        public static SparkleListenerBase CreateListener (string uri, string folder_identifier)
+        public static SparkleListenerBase CreateListener (string folder_name, string folder_identifier)
         {
-            if (listeners == null)
-                listeners = new List<SparkleListenerBase> ();
+            string announce_uri = SparkleConfig.DefaultConfig.GetAnnouncementUrlForFolder (folder_name);
 
-            Uri listen_on = new Uri(uri);
-            
+            if (announce_uri == null) {
+                // This is SparkleShare's centralized notification service.
+                // Don't worry, we only use this server as a backup if you
+                // don't have your own. All data needed to connect is hashed and
+                // we don't store any personal information ever
+                
+                announce_uri = "irc://204.62.14.135/";
+            }
+
             foreach (SparkleListenerBase listener in listeners) {
-                if (listener.Server.Equals (uri)) {
-                    SparkleHelpers.DebugInfo ("ListenerFactory", "Refered to existing listener for " + uri);
+                if (listener.Server.Equals (announce_uri)) {
+                    SparkleHelpers.DebugInfo ("ListenerFactory", "Refered to existing listener for " + announce_uri);
                     listener.AlsoListenTo (folder_identifier);
                     return (SparkleListenerBase) listener;
                 }
             }
 
-            SparkleHelpers.DebugInfo ("ListenerFactory", "Issued new listener for " + uri);
+            Uri listen_on = new Uri (announce_uri);
+
             switch (listen_on.Scheme) {
                 case "tcp":
                     listeners.Add (new SparkleListenerTcp (listen_on, folder_identifier));
@@ -65,6 +72,7 @@ namespace SparkleLib {
                     break;
             }
             
+            SparkleHelpers.DebugInfo ("ListenerFactory", "Issued new listener for " + announce_uri);
             return (SparkleListenerBase) listeners [listeners.Count - 1];
         }
     }
