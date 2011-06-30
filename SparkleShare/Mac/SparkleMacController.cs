@@ -180,6 +180,7 @@ namespace SparkleShare {
         new public void Quit ()
         {
             this.watcher.Dispose ();
+            NSApplication.SharedApplication.Terminate (new NSObject ());
             base.Quit ();
         }
 	}
