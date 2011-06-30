@@ -803,6 +803,17 @@ namespace SparkleShare {
             }
         }
         
+        // Looks up the user's email from the global configuration
+        public string PrevServer
+        {
+            get {
+                return SparkleConfig.DefaultConfig.PrevServer;
+            }
+                    
+            set {
+                SparkleConfig.DefaultConfig.PrevServer = value;
+            }
+        }
 
         // Generates and installs an RSA keypair to identify this system
         public void GenerateKeyPair ()
