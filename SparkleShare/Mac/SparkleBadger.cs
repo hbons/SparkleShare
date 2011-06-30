@@ -16,7 +16,9 @@
 
 
 using System;
+using System.Drawing;
 using System.IO;
+using System.Collections.Generic;
 
 using MonoMac.AppKit;
 using MonoMac.Foundation;
@@ -33,7 +35,7 @@ namespace SparkleShare {
 
         public SparkleBadger (string [] paths)
         {
-            Paths = paths;
+            this.paths = paths;
         }
 
 
