@@ -82,8 +82,8 @@ namespace SparkleLib {
                           "  <user>" + n +
                           "    <name>" + user_name + "</name>" + n +
                           "    <email>Unknown</email>" + n +
-			              "    <previous-server></previous-server>" + n +
-			              "    <previous-folder></previous-folder>" + n +
+                          "    <previous-server>False</previous-server>" + n +
+                          "    <previous-folder>False</previous-folder>" + n +
                           "  </user>" + n +
                           "</sparkleshare>");
             writer.Close ();
@@ -135,6 +135,19 @@ namespace SparkleLib {
             }
         }
 
+        public string PrevFolder {
+            get {
+                XmlNode node = SelectSingleNode ("/sparkleshare/user/previous-folder/text()");
+               	return node.Value;
+            }
+
+            set {
+                XmlNode node = SelectSingleNode ("/sparkleshare/user/previous-folder/text()");
+                node.InnerText = value;
+
+                Save ();
+            }
+        }
 
         public List<string> Folders {
             get {
