@@ -170,9 +170,13 @@ namespace SparkleShare {
 
                     HBox layout_server = new HBox (true, 0);
 
-                        ServerEntry = new SparkleEntry () {
-                            ExampleText = _("address-to-server.com")
-                        };
+                        ServerEntry = new SparkleEntry () { };
+
+                        if (0 < SparkleShare.Controller.PrevServer.Length) {
+                            ServerEntry.Text = SparkleShare.Controller.PrevServer.Trim();
+                            ServerEntry.ExampleTextActive = false;
+                        } else
+                            ServerEntry.ExampleText = _("address-to-server.com");
                         
                         ServerEntry.Changed += CheckServerForm;
 
@@ -250,9 +254,13 @@ namespace SparkleShare {
 
                 HBox layout_folder = new HBox (true, 0);
 
-                    FolderEntry = new SparkleEntry () {
-                        ExampleText = _("Folder")
-                    };
+                    FolderEntry = new SparkleEntry () { };
+
+                    if (0 < SparkleShare.Controller.PrevFolder.Length) {
+                        FolderEntry.Text = SparkleShare.Controller.PrevFolder.Trim();
+                        FolderEntry.ExampleTextActive = false;
+                    } else
+                        FolderEntry.ExampleText = _("Folder");
                     
                     FolderEntry.Changed += CheckServerForm;
 
@@ -272,6 +280,9 @@ namespace SparkleShare {
                         string folder_name    = FolderEntry.Text;
                         string server         = ServerEntry.Text;
                         string canonical_name = System.IO.Path.GetFileNameWithoutExtension (folder_name);
+
+                        SparkleShare.Controller.PrevServer = ServerEntry.Text;
+                        SparkleShare.Controller.PrevFolder = FolderEntry.Text;
 
                         if (radio_button_gitorious.Active)
                             server = "gitorious.org";
