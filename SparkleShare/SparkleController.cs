@@ -803,19 +803,43 @@ namespace SparkleShare {
             }
         }
         
-        // Looks up the user's email from the global configuration
+        // Looks up the last server used
         public string PrevServer
         {
             get {
-                return SparkleConfig.DefaultConfig.PrevServer;
+				if ("False" != SparkleConfig.DefaultConfig.PrevServer)
+	                return SparkleConfig.DefaultConfig.PrevServer;
+				else 
+					return "";
             }
                     
             set {
-                SparkleConfig.DefaultConfig.PrevServer = value;
+				if ("" != value )
+	                SparkleConfig.DefaultConfig.PrevServer = value;
+				else 
+					SparkleConfig.DefaultConfig.PrevServer = "False";
             }
         }
 
-        // Generates and installs an RSA keypair to identify this system
+        // Looks up the last folder used
+        public string PrevFolder
+        {
+            get {
+				if ("False" != SparkleConfig.DefaultConfig.PrevFolder)
+                	return SparkleConfig.DefaultConfig.PrevFolder;
+				else 
+					return "";
+            }
+                    
+            set {
+				if ("" != value )
+                	SparkleConfig.DefaultConfig.PrevFolder = value;
+				else 
+					SparkleConfig.DefaultConfig.PrevFolder = "False";
+            }
+        }
+
+		// Generates and installs an RSA keypair to identify this system
         public void GenerateKeyPair ()
         {
             string keys_path     = SparklePaths.SparkleConfigPath;
