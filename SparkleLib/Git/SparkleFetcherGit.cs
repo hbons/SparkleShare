@@ -30,6 +30,12 @@ namespace SparkleLib {
         {
             remote_folder = remote_folder.Trim ("/".ToCharArray ());
 
+            if (server.StartsWith("http")) {
+                base.target_folder = target_folder;
+                base.remote_url    = server;
+                return;
+            }
+
             // Gitorious formatting
             if (server.Contains ("gitorious.org")) {
                 server = "ssh://git@gitorious.org";
