@@ -23,7 +23,6 @@ using System.Text.RegularExpressions;
 using System.Timers;
 
 using Gtk;
-using Mono.Unix;
 using SparkleLib;
 
 namespace SparkleShare {
@@ -38,7 +37,7 @@ namespace SparkleShare {
 
         public SparkleWindow () : base ("")
         {
-            Title          = Catalog.GetString ("SparkleShare Setup");
+            Title          = "SparkleShare Setup";
             BorderWidth    = 0;
             IconName       = "folder-sparkleshare";
             Resizable      = false;
