@@ -21,7 +21,6 @@ using System.IO;
 using System.Net;
 
 using Gtk;
-using Mono.Unix;
 
 namespace SparkleShare {
 
@@ -33,7 +32,7 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _(string s)
         {
-            return Catalog.GetString (s);
+            return s;
         }
 
 

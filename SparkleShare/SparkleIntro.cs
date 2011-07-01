@@ -22,7 +22,6 @@ using System.Text.RegularExpressions;
 using System.Timers;
 
 using Gtk;
-using Mono.Unix;
 using Notifications;
 
 namespace SparkleShare {
@@ -44,7 +43,7 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _ (string s)
         {
-            return Catalog.GetString (s);
+            return s;
         }
 
 

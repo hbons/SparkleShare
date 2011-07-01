@@ -22,7 +22,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 
 using Gtk;
-using Mono.Unix;
 using SparkleLib;
 #if false
 using WebKit;
@@ -50,7 +49,7 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _ (string s)
         {
-            return Catalog.GetString (s);
+            return s;
         }
 
 
