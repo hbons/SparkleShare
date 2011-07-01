@@ -23,7 +23,6 @@ using System.Timers;
 using AppIndicator;
 #endif
 using Gtk;
-using Mono.Unix;
 using SparkleLib;
 
 namespace SparkleShare {
@@ -47,7 +46,7 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _ (string s)
         {
-            return Catalog.GetString (s);
+            return s;
         }
 
 

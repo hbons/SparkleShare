@@ -24,8 +24,6 @@ using System.Text;
 using System.Threading;
 
 using Gtk;
-using Mono.Unix;
-using Mono.Unix.Native;
 using SparkleLib;
 
 namespace SparkleShare {
@@ -40,7 +38,7 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _(string s)
         {
-            return Catalog.GetString (s);
+            return s;
         }
 
 

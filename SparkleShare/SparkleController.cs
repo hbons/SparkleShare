@@ -27,7 +27,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
 
-using Mono.Unix;
 using SparkleLib;
 
 namespace SparkleShare {
@@ -85,7 +84,7 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _ (string s)
         {
-            return Catalog.GetString (s);
+            return s;
         }
 
 
@@ -650,7 +649,7 @@ namespace SparkleShare {
                                  change_set.MovedFrom.Count) - 1;
 
             if (changes_count > 0) {
-                string msg = Catalog.GetPluralString ("and {0} more", "and {0} more", changes_count);
+                string msg = "and {0} more";
                 message += " " + String.Format (msg, changes_count);
 
             } else if (changes_count < 0) {

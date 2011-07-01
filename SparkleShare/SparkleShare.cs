@@ -22,8 +22,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
-using Mono.Unix;
-using Mono.Unix.Native;
 using SparkleLib;
 using SparkleLib.Options;
 
@@ -39,19 +37,21 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _ (string s)
         {
-            return Catalog.GetString (s);
+            return s;
         }
         
 
         public static void Main (string [] args)
         {
             // Use translations
-            Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
+			if ((SparkleBackend.Platform == PlatformID.Unix ||
+				 SparkleBackend.Platform == PlatformID.MacOSX))
+				Mono.Unix.Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
             // Don't allow running as root on Linux or Mac
             if ((SparkleBackend.Platform == PlatformID.Unix ||
                  SparkleBackend.Platform == PlatformID.MacOSX) &&
-                new UnixUserInfo (UnixEnvironment.UserName).UserId == 0) {
+                new Mono.Unix.UnixUserInfo (Mono.Unix.UnixEnvironment.UserName).UserId == 0) {
 
                 Console.WriteLine (_("Sorry, you can't run SparkleShare with these permissions."));
                 Console.WriteLine (_("Things would go utterly wrong."));
