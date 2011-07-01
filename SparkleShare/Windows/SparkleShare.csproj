@@ -74,6 +74,11 @@
       <DependentUpon>GlobalAssemblyInfo.tt</DependentUpon>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Icons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Icons.resx</DependentUpon>
+    </Compile>
     <Compile Include="Notification.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -150,8 +155,27 @@
     <PreBuildEvent>$(ProjectDir)transform_tt.cmd</PreBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Icons.resx">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Icons.tt</DependentUpon>
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Icons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Notification.resx">
       <DependentUpon>Notification.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Icons.resx</LastGenOutput>
+    </None>
+    <None Include="Resources\folder-sparkleshare-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sparkleshare.ico" />
   </ItemGroup>
 </Project>
