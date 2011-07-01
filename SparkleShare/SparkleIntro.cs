@@ -396,7 +396,10 @@ namespace SparkleShare {
                     };
 
                     accept_button.Clicked += delegate {
-                        string url  = "ssh://git@" + server + "/" + folder;        
+                        string url  = "ssh://git@" + server + "/" + folder;
+                        if (server.StartsWith("http")) {
+                            url = server;
+                        }
                 
                         SparkleShare.Controller.FolderFetched += delegate {
                             Application.Invoke (delegate {

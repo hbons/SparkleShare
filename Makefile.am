@@ -1,11 +1,7 @@
-SUBDIRS =	\
-	build	\
-	help	\
-	SmartIrc4net \
-	SparkleLib \
-	SparkleShare \
-	data \
-	po
+basedirs = build help SmartIrc4net SparkleLib data po
+
+SUBDIRS = $(basedirs) $(GUISUBDIRS)
+DIST_SUBDIRS = $(basedirs) SparkleShare
 
 EXTRA_DIST = \
 	gnome-doc-utils.make \
