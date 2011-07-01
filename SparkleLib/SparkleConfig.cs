@@ -132,6 +132,13 @@ namespace SparkleLib {
 
             set {
                 XmlNode node = SelectSingleNode ("/sparkleshare/user/previous-server/text()");
+                if (null == node) {
+                    XmlNode parentNode = SelectSingleNode ("/sparkleshare/user");
+                    node = CreateNode (XmlNodeType.Element, "previous-server", null);
+                    node.InnerText="False";
+
+                    parentNode.AppendChild(node);
+                }
                 node.InnerText = value;
 
                 Save ();
@@ -149,6 +156,13 @@ namespace SparkleLib {
 
             set {
                 XmlNode node = SelectSingleNode ("/sparkleshare/user/previous-folder/text()");
+                if (null == node) {
+                    XmlNode parentNode = SelectSingleNode ("/sparkleshare/user");
+                    node = CreateNode (XmlNodeType.Element, "previous-folder", null);
+                    node.InnerText="False";
+
+                    parentNode.AppendChild(node);
+                }
                 node.InnerText = value;
 
                 Save ();
