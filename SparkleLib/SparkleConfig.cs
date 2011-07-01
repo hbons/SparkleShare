@@ -124,7 +124,10 @@ namespace SparkleLib {
         public string PrevServer {
             get {
                 XmlNode node = SelectSingleNode ("/sparkleshare/user/previous-server/text()");
-                return node.Value;
+                if(null != node)
+                    return node.Value;
+                else
+                    return "";
             }
 
             set {
@@ -138,7 +141,10 @@ namespace SparkleLib {
         public string PrevFolder {
             get {
                 XmlNode node = SelectSingleNode ("/sparkleshare/user/previous-folder/text()");
-               	return node.Value;
+                if(null != node)
+                    return node.Value;
+                else
+                    return "";
             }
 
             set {
