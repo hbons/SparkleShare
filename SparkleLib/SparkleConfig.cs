@@ -131,6 +131,7 @@ namespace SparkleLib {
             }
         }
 
+
         public void AddFolder (string name, string url, string backend)
         {
             XmlNode node_name = CreateElement ("name");
@@ -168,6 +169,7 @@ namespace SparkleLib {
             return true;
         }
 
+
         public void RemoveFolder (string name)
         {
             foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
@@ -178,20 +180,6 @@ namespace SparkleLib {
             Save ();
         }
 
-        private XmlNode GetFolder (string name)
-        {
-            return SelectSingleNode(String.Format("/sparkleshare/folder[name='{0}']", name));
-        }
-        
-        private string GetFolderValue (string name, string key)
-        {
-            XmlNode folder = this.GetFolder(name);
-            
-            if ((folder != null) && (folder[key] != null)) {
-                return folder[key].InnerText;
-            }
-            return null;
-        }
 
         public bool FolderExists (string name)
         {
@@ -199,31 +187,38 @@ namespace SparkleLib {
             return folder != null;
         }
 
+
         public string GetBackendForFolder (string name)
         {
             return this.GetFolderValue(name, "backend");
         }
+
 
         public string GetUrlForFolder (string name)
         {
             return this.GetFolderValue(name, "url");
         }
         
-        public List<string> GetUrls ()
-        {
-            List<string> Urls = new List<string> ();
 
-            foreach (string folder_name in SparkleLib.SparkleConfig.DefaultConfig.Folders) {
-                Urls.Add( GetUrlForFolder(folder_name).Replace("ssh://", "").Replace("git://", "").Split('/')[0] );
-            }
-            
-            return Urls;
+        public List<string> Domains {
+            get {
+                List<string> domains = new List<string> ();
+
+                foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
+                    Uri uri = new Uri (node_folder ["url"].InnerText);
+                    domains.Add (uri.Host);
+                }
+
+              return domains;
+           }
         }
+
 
         public string GetAnnouncementsForFolder (string name)
         {
             return this.GetFolderValue(name, "announcements");
         }
+
 
         public string GetAnnouncementUrlForFolder (string name)
         {
@@ -272,6 +267,23 @@ namespace SparkleLib {
 
             Save (Path);
             SparkleHelpers.DebugInfo ("Config", "Updated \"" + Path + "\"");
+        }
+
+
+        private XmlNode GetFolder (string name)
+        {
+            return SelectSingleNode(String.Format("/sparkleshare/folder[name='{0}']", name));
+        }
+        
+
+        private string GetFolderValue (string name, string key)
+        {
+            XmlNode folder = this.GetFolder(name);
+            
+            if ((folder != null) && (folder[key] != null)) {
+                return folder[key].InnerText;
+            }
+            return null;
         }
     }
 
