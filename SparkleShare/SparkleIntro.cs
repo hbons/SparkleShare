@@ -182,7 +182,7 @@ namespace SparkleShare {
                             ServerEntry.Text = strServerEntry;
                             ServerEntry.ExampleTextActive = false;
                         } else
-                            ServerEntry.ExampleText = _("user@address-to-server.com");
+                            ServerEntry.ExampleText = _("address-to-server.com");
                         
                         ServerEntry.Changed += CheckServerForm;
 
