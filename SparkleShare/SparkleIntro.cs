@@ -684,7 +684,7 @@ namespace SparkleShare {
         TreeModel ServerEntryCompletion ()
         {
             ListStore store = new ListStore (typeof (string));
-            List<string> Urls = SparkleLib.SparkleConfig.DefaultConfig.GetUrls();
+            List<string> Urls = SparkleLib.SparkleConfig.DefaultConfig.Domains;
 
             store.AppendValues ("user@localhost");
             store.AppendValues ("user@example.com");
