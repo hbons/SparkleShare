@@ -76,7 +76,7 @@ namespace SparkleLib {
 
                             foreach (string channel in base.channels) {
                                 SparkleHelpers.DebugInfo ("ListenerTcp", "Subscribing to channel " + channel);
-                                this.socket.Send (Encoding.UTF8.GetBytes ("subscribe " + channel));
+                                this.socket.Send (Encoding.UTF8.GetBytes ("subscribe " + channel + "\n"));
                             }
                         }
 
@@ -123,7 +123,7 @@ namespace SparkleLib {
                 if (IsConnected) {
                     SparkleHelpers.DebugInfo ("ListenerTcp", "Subscribing to channel " + channel);
 
-                    string to_send = "subscribe " + folder_identifier;
+                    string to_send = "subscribe " + folder_identifier + "\n";
 
                     lock (this.mutex) {
                         this.socket.Send (Encoding.UTF8.GetBytes (to_send));
@@ -135,10 +135,11 @@ namespace SparkleLib {
 
         public override void Announce (SparkleAnnouncement announcement)
         {
-            string message = "announce " + announcement.FolderIdentifier;
+            string to_send = "announce " + announcement.FolderIdentifier
+                + " " + announcement.Message + "\n";
 
             lock (this.mutex) {
-                this.socket.Send (Encoding.UTF8.GetBytes (message));
+                this.socket.Send (Encoding.UTF8.GetBytes (to_send));
             }
         }
 
