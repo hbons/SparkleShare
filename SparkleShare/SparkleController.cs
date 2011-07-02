@@ -803,7 +803,6 @@ namespace SparkleShare {
             }
         }
 
-
         // Generates and installs an RSA keypair to identify this system
         public void GenerateKeyPair ()
         {
