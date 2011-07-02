@@ -803,7 +803,7 @@ namespace SparkleShare {
             }
         }
         
-        // Looks up the last server used
+/*        // Looks up the last server used
         public string PrevServer
         {
             get {
@@ -837,7 +837,7 @@ namespace SparkleShare {
                 else 
                     SparkleConfig.DefaultConfig.PrevFolder = "False";
             }
-        }
+        } */
 
         // Generates and installs an RSA keypair to identify this system
         public void GenerateKeyPair ()
