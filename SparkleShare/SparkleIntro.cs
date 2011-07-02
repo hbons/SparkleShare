@@ -492,6 +492,9 @@ namespace SparkleShare {
 
                 UrgencyHint = true;
 
+                strServerEntry = null;
+                strFolderEntry = null;
+
                 if (!HasToplevelFocus) {
                     string title   = String.Format (_("‘{0}’ has been successfully added"), folder_name);
                     string subtext = _("");
