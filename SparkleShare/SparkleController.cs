@@ -802,7 +802,7 @@ namespace SparkleShare {
                 SparkleConfig.DefaultConfig.UserEmail = value;
             }
         }
-
+        
 
         // Generates and installs an RSA keypair to identify this system
         public void GenerateKeyPair ()
