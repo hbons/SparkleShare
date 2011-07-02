@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Timers;
+using System.Collections.Generic;
 
 using Gtk;
 using Mono.Unix;
@@ -33,6 +34,8 @@ namespace SparkleShare {
         private Entry EmailEntry;
         private SparkleEntry ServerEntry;
         private SparkleEntry FolderEntry;
+        private String strServerEntry = "";
+        private String strFolderEntry = "";
         private Button NextButton;
         private Button SyncButton;
         private bool ServerFormOnly;
@@ -170,9 +173,16 @@ namespace SparkleShare {
 
                     HBox layout_server = new HBox (true, 0);
 
-                        ServerEntry = new SparkleEntry () {
-                            ExampleText = _("address-to-server.com")
-                        };
+                        ServerEntry = new SparkleEntry () { };
+                        ServerEntry.Completion = new EntryCompletion();
+                        ServerEntry.Completion.Model = ServerEntryCompletion();
+                        ServerEntry.Completion.TextColumn = 0;
+
+                        if (0 < strServerEntry.Trim().Length) {
+                            ServerEntry.Text = strServerEntry;
+                            ServerEntry.ExampleTextActive = false;
+                        } else
+                            ServerEntry.ExampleText = _("user@address-to-server.com");
                         
                         ServerEntry.Changed += CheckServerForm;
 
@@ -250,9 +260,16 @@ namespace SparkleShare {
 
                 HBox layout_folder = new HBox (true, 0);
 
-                    FolderEntry = new SparkleEntry () {
-                        ExampleText = _("Folder")
-                    };
+                    FolderEntry = new SparkleEntry () { };
+                    FolderEntry.Completion = new EntryCompletion();
+                    FolderEntry.Completion.Model = FolderEntryCompletion();
+                    FolderEntry.Completion.TextColumn = 0;
+
+                    if (0 < strFolderEntry.Trim().Length) {
+                        FolderEntry.Text = strFolderEntry;
+                        FolderEntry.ExampleTextActive = false;
+                    } else
+                        FolderEntry.ExampleText = _("Folder");
                     
                     FolderEntry.Changed += CheckServerForm;
 
@@ -272,6 +289,9 @@ namespace SparkleShare {
                         string folder_name    = FolderEntry.Text;
                         string server         = ServerEntry.Text;
                         string canonical_name = System.IO.Path.GetFileNameWithoutExtension (folder_name);
+
+                        strServerEntry = ServerEntry.Text;
+                        strFolderEntry = FolderEntry.Text;
 
                         if (radio_button_gitorious.Active)
                             server = "gitorious.org";
@@ -661,6 +681,34 @@ namespace SparkleShare {
         }
 
 
+        TreeModel ServerEntryCompletion ()
+        {
+            ListStore store = new ListStore (typeof (string));
+            List<string> Urls = SparkleLib.SparkleConfig.DefaultConfig.GetUrls();
+
+            store.AppendValues ("user@localhost");
+            store.AppendValues ("user@example.com");
+            foreach (string url in Urls) {
+                store.AppendValues (url);
+            }
+
+            return store;
+        }
+
+
+        TreeModel FolderEntryCompletion ()
+        {
+            ListStore store = new ListStore (typeof (string));
+
+            store.AppendValues ("~/test.git");
+            foreach (string folder in SparkleLib.SparkleConfig.DefaultConfig.Folders) {
+                store.AppendValues (folder);
+            }
+
+            return store;
+        }
+        
+        
         // Checks to see if an email address is valid
         private bool IsValidEmail (string email)
         {

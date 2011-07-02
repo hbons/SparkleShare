@@ -208,6 +208,17 @@ namespace SparkleLib {
         {
             return this.GetFolderValue(name, "url");
         }
+        
+        public List<string> GetUrls ()
+        {
+            List<string> Urls = new List<string> ();
+
+            foreach (string folder_name in SparkleLib.SparkleConfig.DefaultConfig.Folders) {
+                Urls.Add( GetUrlForFolder(folder_name).Replace("ssh://", "").Replace("git://", "").Split('/')[0] );
+            }
+            
+            return Urls;
+        }
 
         public string GetAnnouncementsForFolder (string name)
         {
