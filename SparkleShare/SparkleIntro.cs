@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Timers;
+using System.Collections.Generic;
 
 using Gtk;
 using Mono.Unix;
@@ -173,6 +174,7 @@ namespace SparkleShare {
                     HBox layout_server = new HBox (true, 0);
 
                         ServerEntry = new SparkleEntry () { };
+                        //List<string> Urls = SparkleLib.SparkleConfig.DefaultConfig.GetUrls();
 
                         if (0 < strServerEntry.Trim().Length) {
                             ServerEntry.Text = strServerEntry;
@@ -257,6 +259,10 @@ namespace SparkleShare {
                 HBox layout_folder = new HBox (true, 0);
 
                     FolderEntry = new SparkleEntry () { };
+                    /* retrieve folders                    
+                    foreach (string folder_name in SparkleLib.SparkleConfig.DefaultConfig.Folders) {
+                            string folder_path = folder_name;
+                    } */
 
                     if (0 < strFolderEntry.Trim().Length) {
                         FolderEntry.Text = strFolderEntry;
