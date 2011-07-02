@@ -213,7 +213,7 @@ namespace SparkleLib {
             List<string> Urls = new List<string> ();
 
             foreach (string folder_name in SparkleLib.SparkleConfig.DefaultConfig.Folders) {
-                Urls.Add(GetUrlForFolder(folder_name));
+                Urls.Add( GetUrlForFolder(folder_name).Replace("ssh://", "").Replace("git://", "").Split('/')[0] );
             }
             
             return Urls;
