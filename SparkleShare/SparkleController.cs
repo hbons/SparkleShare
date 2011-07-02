@@ -802,42 +802,7 @@ namespace SparkleShare {
                 SparkleConfig.DefaultConfig.UserEmail = value;
             }
         }
-        
-/*        // Looks up the last server used
-        public string PrevServer
-        {
-            get {
-                if ("False" != SparkleConfig.DefaultConfig.PrevServer)
-                    return SparkleConfig.DefaultConfig.PrevServer;
-                else 
-                    return "";
-            }
-                    
-            set {
-                if ("" != value )
-                    SparkleConfig.DefaultConfig.PrevServer = value;
-                else 
-                    SparkleConfig.DefaultConfig.PrevServer = "False";
-            }
-        }
 
-        // Looks up the last folder used
-        public string PrevFolder
-        {
-            get {
-                if ("False" != SparkleConfig.DefaultConfig.PrevFolder)
-                    return SparkleConfig.DefaultConfig.PrevFolder;
-                else 
-                    return "";
-            }
-                    
-            set {
-                if ("" != value )
-                    SparkleConfig.DefaultConfig.PrevFolder = value;
-                else 
-                    SparkleConfig.DefaultConfig.PrevFolder = "False";
-            }
-        } */
 
         // Generates and installs an RSA keypair to identify this system
         public void GenerateKeyPair ()
