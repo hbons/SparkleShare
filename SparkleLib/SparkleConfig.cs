@@ -200,16 +200,16 @@ namespace SparkleLib {
         }
         
 
-        public List<string> Domains {
+        public List<string> Hosts {
             get {
-                List<string> domains = new List<string> ();
+                List<string> hosts = new List<string> ();
 
                 foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
                     Uri uri = new Uri (node_folder ["url"].InnerText);
-                    domains.Add (uri.Host);
+                    hosts.Add (uri.Host);
                 }
 
-              return domains;
+              return hosts;
            }
         }
 
