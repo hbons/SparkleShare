@@ -118,7 +118,7 @@ namespace SparkleLib {
                 Save ();
             }
         }
-        
+
 
         public List<string> Folders {
             get {
