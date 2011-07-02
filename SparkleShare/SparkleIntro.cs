@@ -174,7 +174,9 @@ namespace SparkleShare {
                     HBox layout_server = new HBox (true, 0);
 
                         ServerEntry = new SparkleEntry () { };
-                        //List<string> Urls = SparkleLib.SparkleConfig.DefaultConfig.GetUrls();
+                        ServerEntry.Completion = new EntryCompletion();
+                        ServerEntry.Completion.Model = ServerEntryCompletion();
+                        ServerEntry.Completion.TextColumn = 0;
 
                         if (0 < strServerEntry.Trim().Length) {
                             ServerEntry.Text = strServerEntry;
@@ -259,10 +261,9 @@ namespace SparkleShare {
                 HBox layout_folder = new HBox (true, 0);
 
                     FolderEntry = new SparkleEntry () { };
-                    /* retrieve folders                    
-                    foreach (string folder_name in SparkleLib.SparkleConfig.DefaultConfig.Folders) {
-                            string folder_path = folder_name;
-                    } */
+                    FolderEntry.Completion = new EntryCompletion();
+                    FolderEntry.Completion.Model = FolderEntryCompletion();
+                    FolderEntry.Completion.TextColumn = 0;
 
                     if (0 < strFolderEntry.Trim().Length) {
                         FolderEntry.Text = strFolderEntry;
@@ -677,6 +678,34 @@ namespace SparkleShare {
         }
 
 
+        TreeModel ServerEntryCompletion ()
+        {
+            ListStore store = new ListStore (typeof (string));
+            List<string> Urls = SparkleLib.SparkleConfig.DefaultConfig.GetUrls();
+
+            store.AppendValues ("user@localhost");
+            store.AppendValues ("user@example.com");
+            foreach (string url in Urls) {
+                store.AppendValues (url);
+            }
+
+            return store;
+        }
+
+
+        TreeModel FolderEntryCompletion ()
+        {
+            ListStore store = new ListStore (typeof (string));
+
+            store.AppendValues ("~/test.git");
+            foreach (string folder in SparkleLib.SparkleConfig.DefaultConfig.Folders) {
+                store.AppendValues (folder);
+            }
+
+            return store;
+        }
+        
+        
         // Checks to see if an email address is valid
         private bool IsValidEmail (string email)
         {
