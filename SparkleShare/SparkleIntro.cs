@@ -283,8 +283,8 @@ namespace SparkleShare {
                         string server         = ServerEntry.Text;
                         string canonical_name = System.IO.Path.GetFileNameWithoutExtension (folder_name);
 
-                        SparkleShare.Controller.PrevServer = ServerEntry.Text;
-                        SparkleShare.Controller.PrevFolder = FolderEntry.Text;
+                        strServerEntry = ServerEntry.Text;
+                        strFolderEntry = FolderEntry.Text;
 
                         if (radio_button_gitorious.Active)
                             server = "gitorious.org";
