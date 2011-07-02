@@ -206,7 +206,8 @@ namespace SparkleLib {
 
                 foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
                     Uri uri = new Uri (node_folder ["url"].InnerText);
-                    hosts.Add (uri.Host);
+                    if (!hosts.Contains (uri.Host))
+                        hosts.Add (uri.Host);
                 }
 
               return hosts;
