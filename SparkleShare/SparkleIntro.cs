@@ -681,29 +681,28 @@ namespace SparkleShare {
         }
 
 
-        TreeModel ServerEntryCompletion ()
+        private TreeModel ServerEntryCompletion ()
         {
-            ListStore store = new ListStore (typeof (string));
-            List<string> Urls = SparkleLib.SparkleConfig.DefaultConfig.Domains;
+            List<string> hosts = SparkleShare.Controller.PreviousHosts;
 
+            ListStore store = new ListStore (typeof (string));
             store.AppendValues ("user@localhost");
             store.AppendValues ("user@example.com");
-            foreach (string url in Urls) {
-                store.AppendValues (url);
-            }
+
+            foreach (string host in hosts)
+                store.AppendValues (host);
 
             return store;
         }
 
 
-        TreeModel FolderEntryCompletion ()
+        private TreeModel FolderEntryCompletion ()
         {
             ListStore store = new ListStore (typeof (string));
-
             store.AppendValues ("~/test.git");
-            foreach (string folder in SparkleLib.SparkleConfig.DefaultConfig.Folders) {
+
+            foreach (string folder in SparkleShare.Controller.Folders)
                 store.AppendValues (folder);
-            }
 
             return store;
         }
