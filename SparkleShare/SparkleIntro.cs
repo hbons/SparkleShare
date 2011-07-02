@@ -33,6 +33,8 @@ namespace SparkleShare {
         private Entry EmailEntry;
         private SparkleEntry ServerEntry;
         private SparkleEntry FolderEntry;
+        private String strServerEntry = "";
+        private String strFolderEntry = "";
         private Button NextButton;
         private Button SyncButton;
         private bool ServerFormOnly;
@@ -172,11 +174,11 @@ namespace SparkleShare {
 
                         ServerEntry = new SparkleEntry () { };
 
-                        if (0 < SparkleShare.Controller.PrevServer.Length) {
-                            ServerEntry.Text = SparkleShare.Controller.PrevServer.Trim();
+                        if (0 < strServerEntry.Trim().Length) {
+                            ServerEntry.Text = strServerEntry;
                             ServerEntry.ExampleTextActive = false;
                         } else
-                            ServerEntry.ExampleText = _("address-to-server.com");
+                            ServerEntry.ExampleText = _("user@address-to-server.com");
                         
                         ServerEntry.Changed += CheckServerForm;
 
@@ -256,8 +258,8 @@ namespace SparkleShare {
 
                     FolderEntry = new SparkleEntry () { };
 
-                    if (0 < SparkleShare.Controller.PrevFolder.Length) {
-                        FolderEntry.Text = SparkleShare.Controller.PrevFolder.Trim();
+                    if (0 < strFolderEntry.Trim().Length) {
+                        FolderEntry.Text = strFolderEntry;
                         FolderEntry.ExampleTextActive = false;
                     } else
                         FolderEntry.ExampleText = _("Folder");
