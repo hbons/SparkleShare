@@ -121,54 +121,6 @@ namespace SparkleLib {
             }
         }
 
-        public string PrevServer {
-            get {
-                XmlNode node = SelectSingleNode ("/sparkleshare/user/previous-server/text()");
-                if(null != node)
-                    return node.Value;
-                else
-                    return "";
-            }
-
-            set {
-                XmlNode node = SelectSingleNode ("/sparkleshare/user/previous-server/text()");
-                if (null == node) {
-                    XmlNode parentNode = SelectSingleNode ("/sparkleshare/user");
-                    node = CreateNode (XmlNodeType.Element, "previous-server", null);
-                    node.InnerText="False";
-
-                    parentNode.AppendChild(node);
-                }
-                node.InnerText = value;
-
-                Save ();
-            }
-        }
-
-        public string PrevFolder {
-            get {
-                XmlNode node = SelectSingleNode ("/sparkleshare/user/previous-folder/text()");
-                if(null != node)
-                    return node.Value;
-                else
-                    return "";
-            }
-
-            set {
-                XmlNode node = SelectSingleNode ("/sparkleshare/user/previous-folder/text()");
-                if (null == node) {
-                    XmlNode parentNode = SelectSingleNode ("/sparkleshare/user");
-                    node = CreateNode (XmlNodeType.Element, "previous-folder", null);
-                    node.InnerText="False";
-
-                    parentNode.AppendChild(node);
-                }
-                node.InnerText = value;
-
-                Save ();
-            }
-        }
-
         public List<string> Folders {
             get {
                 List<string> folders = new List<string> ();
