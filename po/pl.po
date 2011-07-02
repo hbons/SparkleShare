@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-29 11:38+0200\n"
-"PO-Revision-Date: 2011-06-26 09:22+0000\n"
+"PO-Revision-Date: 2011-07-02 16:58+0000\n"
 "Last-Translator: deejay1 <deejay1@srem.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -66,15 +66,15 @@ msgstr "Informacje o"
 
 #: ../SparkleShare/SparkleAbout.cs:53
 msgid "A newer version is available"
-msgstr ""
+msgstr "Dostępna jest nowsza wersja"
 
 #: ../SparkleShare/SparkleAbout.cs:60
 msgid "You are running the latest version."
-msgstr ""
+msgstr "Korzystasz z najnowszej wersji."
 
 #: ../SparkleShare/SparkleAbout.cs:87
 msgid "Checking for updates..."
-msgstr ""
+msgstr "Wyszukiwanie aktualizacji"
 
 #: ../SparkleShare/SparkleAbout.cs:116
 msgid "_Show Credits"
@@ -319,12 +319,12 @@ msgstr "Dowiedz się, jak postawić własny SparkleServer"
 
 #: ../SparkleShare/SparkleEventLog.cs:61
 msgid "Recent Events"
-msgstr ""
+msgstr "Ostatnie zdarzenia"
 
 #: ../SparkleShare/SparkleEventLog.cs:148
 #: ../SparkleShare/SparkleEventLog.cs:173
 msgid "All Folders"
-msgstr ""
+msgstr "Wszystkie katalogi"
 
 #: ../SparkleShare/SparkleShare.cs:53
 msgid "Sorry, you can't run SparkleShare with these permissions."
@@ -406,7 +406,7 @@ msgstr "Dodaj zdalny katalog"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:242
 msgid "Show Recent Events"
-msgstr ""
+msgstr "Wyświetl ostatnie zdarzenia"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:262
 msgid "Turn Notifications Off"
@@ -431,6 +431,6 @@ msgstr "Bez obaw, program SparkleShare wykonał kopię skonfliktowanych plików.
 
 #: ../SparkleShare/SparkleWindow.cs:41
 msgid "SparkleShare Setup"
-msgstr ""
+msgstr "Ustawienia programu SparkleShare"
 
 
