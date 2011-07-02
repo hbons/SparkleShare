@@ -34,8 +34,8 @@ namespace SparkleShare {
         private Entry EmailEntry;
         private SparkleEntry ServerEntry;
         private SparkleEntry FolderEntry;
-        private String strServerEntry;
-        private String strFolderEntry;
+        private string PreviousServer;
+        private string PreviousFolder;
         private Button NextButton;
         private Button SyncButton;
         private bool ServerFormOnly;
@@ -178,8 +178,8 @@ namespace SparkleShare {
                         ServerEntry.Completion.Model = ServerEntryCompletion();
                         ServerEntry.Completion.TextColumn = 0;
 
-                        if (strServerEntry != null) {
-                            ServerEntry.Text = strServerEntry;
+                        if (PreviousServer != null) {
+                            ServerEntry.Text = PreviousServer;
                             ServerEntry.ExampleTextActive = false;
                         } else
                             ServerEntry.ExampleText = _("address-to-server.com");
@@ -265,8 +265,8 @@ namespace SparkleShare {
                     FolderEntry.Completion.Model = FolderEntryCompletion();
                     FolderEntry.Completion.TextColumn = 0;
 
-                    if (strFolderEntry != null) {
-                        FolderEntry.Text = strFolderEntry;
+                    if (PreviousFolder != null) {
+                        FolderEntry.Text = PreviousFolder;
                         FolderEntry.ExampleTextActive = false;
                     } else
                         FolderEntry.ExampleText = _("Folder");
@@ -290,8 +290,8 @@ namespace SparkleShare {
                         string server         = ServerEntry.Text;
                         string canonical_name = System.IO.Path.GetFileNameWithoutExtension (folder_name);
 
-                        strServerEntry = ServerEntry.Text;
-                        strFolderEntry = FolderEntry.Text;
+                        PreviousServer = ServerEntry.Text;
+                        PreviousFolder = FolderEntry.Text;
 
                         if (radio_button_gitorious.Active)
                             server = "gitorious.org";
@@ -492,8 +492,8 @@ namespace SparkleShare {
 
                 UrgencyHint = true;
 
-                strServerEntry = null;
-                strFolderEntry = null;
+                PreviousServer = null;
+                PreviousFolder = null;
 
                 if (!HasToplevelFocus) {
                     string title   = String.Format (_("‘{0}’ has been successfully added"), folder_name);
