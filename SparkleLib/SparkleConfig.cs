@@ -82,8 +82,6 @@ namespace SparkleLib {
                           "  <user>" + n +
                           "    <name>" + user_name + "</name>" + n +
                           "    <email>Unknown</email>" + n +
-                          "    <previous-server>False</previous-server>" + n +
-                          "    <previous-folder>False</previous-folder>" + n +
                           "  </user>" + n +
                           "</sparkleshare>");
             writer.Close ();
@@ -208,6 +206,17 @@ namespace SparkleLib {
         public string GetUrlForFolder (string name)
         {
             return this.GetFolderValue(name, "url");
+        }
+        
+        public List<string> GetUrls ()
+        {
+            List<string> Urls = new List<string> ();
+
+            foreach (string folder_name in SparkleLib.SparkleConfig.DefaultConfig.Folders) {
+                Urls.Add(GetUrlForFolder(folder_name));
+            }
+            
+            return Urls;
         }
 
         public string GetAnnouncementsForFolder (string name)
