@@ -96,8 +96,6 @@ namespace SparkleShare {
             SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
                                                                     string message, string repository_path) {
                 InvokeOnMainThread (delegate {
-                    if (EventLog != null)
-                        EventLog.UpdateEvents ();
 
                     if (SparkleShare.Controller.NotificationsEnabled) {
                         if (NSApplication.SharedApplication.DockTile.BadgeLabel == null)
@@ -130,30 +128,7 @@ namespace SparkleShare {
             };
 
 
-            SparkleShare.Controller.AvatarFetched += delegate {
-                InvokeOnMainThread (delegate {
-                    if (EventLog != null)
-                        EventLog.UpdateEvents ();
-                });
-            };
-            
 
-            SparkleShare.Controller.OnIdle += delegate {
-                InvokeOnMainThread (delegate {
-                    if (EventLog != null)
-                        EventLog.UpdateEvents ();
-                });
-            };
-
-
-            SparkleShare.Controller.FolderListChanged += delegate {
-                InvokeOnMainThread (delegate {
-                    if (EventLog != null) {
-                        EventLog.UpdateChooser ();
-                        EventLog.UpdateEvents ();
-                    }
-                });
-            };
 
 
             if (SparkleShare.Controller.FirstRun) {
