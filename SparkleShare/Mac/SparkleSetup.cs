@@ -28,7 +28,7 @@ using MonoMac.WebKit;
 
 namespace SparkleShare {
 
-	public class SparkleSetup : SparkleWindow {
+	public class SparkleSetup : SparkleSetupWindow {
 
         public SparkleSetupController Controller = new SparkleSetupController ();
 

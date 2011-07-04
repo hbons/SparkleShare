@@ -31,6 +31,8 @@ namespace SparkleShare {
     // user's notification area
     public class SparkleStatusIcon : NSObject {
 
+        public SparkleStatusIconController Controller = new SparkleStatusIconController ();
+
         private Timer Animation;
         private int FrameNumber;
         private string StateText;
@@ -58,51 +60,236 @@ namespace SparkleShare {
         
         public SparkleStatusIcon () : base ()
         {
-            Animation = CreateAnimation ();
+            using (var a = new NSAutoreleasePool ()) {
+                Animation = CreateAnimation ();
 
-            StatusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
-            StatusItem.HighlightMode = true;
-            
-            SetNormalState ();
-            CreateMenu ();
-            
-            Menu.Delegate = new SparkleStatusIconMenuDelegate ();
+                StatusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
+                StatusItem.HighlightMode = true;
+    
+                StateText = _("Up to date") + " (" + Controller.FolderSize + ")";
+                CreateMenu ();
+    
+                Menu.Delegate = new SparkleStatusIconMenuDelegate ();
+            }
 
-            SparkleShare.Controller.FolderSizeChanged += delegate {
+            Controller.UpdateMenuEvent += delegate (IconState state) {
                 InvokeOnMainThread (delegate {
-                    if (!Animation.Enabled)
-                        SetNormalState ();
-                            
-                    UpdateMenu ();
+                    using (var a = new NSAutoreleasePool ()) {
+                        switch (state) {
+                        case IconState.Idle:
+    
+                            Animation.Stop ();
+
+                            if (Controller.Folders.Length == 0)
+                                StateText = _("Welcome to SparkleShare!");
+                            else
+                                StateText = _("Up to date") + " (" + Controller.FolderSize + ")";
+    
+                            StateMenuItem.Title = StateText;
+                            CreateMenu ();
+    
+                            break;
+    
+                        case IconState.Syncing:
+    
+                            StateText = _("Syncing…");
+                            StateMenuItem.Title = StateText;
+    
+                            if (!Animation.Enabled)
+                                Animation.Start ();
+    
+                            break;
+    
+                        case IconState.Error:
+    
+                            StateText = _("Not everything is synced");
+                            StateMenuItem.Title = StateText;
+                            CreateMenu ();
+    
+                            InvokeOnMainThread (delegate {
+                                StatusItem.Image               = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/error.png");
+                                StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/error-active.png");
+                                StatusItem.Image.Size          = new SizeF (16, 16);
+                                StatusItem.AlternateImage.Size = new SizeF (16, 16);
+                            });
+                            break;
+                        }
+                    }
                 });
             };
-            
-            SparkleShare.Controller.FolderListChanged += delegate {
-                InvokeOnMainThread (delegate {
-                    SetNormalState ();
-                    CreateMenu ();
-                });
-            };
 
-            SparkleShare.Controller.OnIdle += delegate {
-                InvokeOnMainThread (delegate {
-                    SetNormalState ();
-                    CreateMenu ();
-                });
-            };
 
-            SparkleShare.Controller.OnSyncing += delegate {
-                InvokeOnMainThread (delegate {
-                    SetAnimationState ();
-                    UpdateMenu ();
-                });
-            };
 
-            SparkleShare.Controller.OnError += delegate {
-                 InvokeOnMainThread (delegate {
-                    SetNormalState (true);
-                    CreateMenu ();
-                });
+        }
+
+
+        public void CreateMenu ()
+        {
+            using (NSAutoreleasePool a = new NSAutoreleasePool ()) {
+                StatusItem.Image               = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0.png");
+                StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0-active.png");
+                StatusItem.Image.Size          = new SizeF (16, 16);
+                StatusItem.AlternateImage.Size = new SizeF (16, 16);
+    
+                Menu = new NSMenu ();
+                
+                    StateMenuItem = new NSMenuItem () {
+                        Title = StateText
+                    };
+                
+                Menu.AddItem (StateMenuItem);
+                Menu.AddItem (NSMenuItem.SeparatorItem);
+    
+                    FolderMenuItem = new NSMenuItem () {
+                        Title = "SparkleShare"
+                    };
+    
+                    FolderMenuItem.Activated += delegate {
+                        SparkleShare.Controller.OpenSparkleShareFolder ();
+                    };
+                
+                    FolderMenuItem.Image = NSImage.ImageNamed ("sparkleshare-mac");
+                    FolderMenuItem.Image.Size = new SizeF (16, 16);    
+                
+                Menu.AddItem (FolderMenuItem);
+    
+                    FolderMenuItems = new NSMenuItem [SparkleShare.Controller.Folders.Count];
+    
+                    if (Controller.Folders.Length > 0) {
+                        Tasks = new EventHandler [SparkleShare.Controller.Folders.Count];
+    
+                        int i = 0;
+                        foreach (string folder_name in SparkleShare.Controller.Folders) {
+                            NSMenuItem item = new NSMenuItem ();
+    
+                            item.Title = folder_name;
+    
+                            if (SparkleShare.Controller.UnsyncedFolders.Contains (folder_name))
+                                item.Image = NSImage.ImageNamed ("NSCaution");
+                            else
+                                item.Image = NSImage.ImageNamed ("NSFolder");
+    
+                            item.Image.Size = new SizeF (16, 16);
+                            Tasks [i] = OpenFolderDelegate (folder_name);
+    
+                            FolderMenuItems [i] = item;
+                            FolderMenuItems [i].Activated += Tasks [i];
+    
+                            i++;
+                        };
+    
+                    } else {
+                        FolderMenuItems = new NSMenuItem [1];
+    
+                        FolderMenuItems [0] = new NSMenuItem () {
+                            Title = "No Remote Folders Yet"
+                        };
+                    }
+    
+                foreach (NSMenuItem item in FolderMenuItems)
+                    Menu.AddItem (item);
+                    
+                Menu.AddItem (NSMenuItem.SeparatorItem);
+    
+                    SyncMenuItem = new NSMenuItem () {
+                        Title = "Add Remote Folder…"
+                    };
+                
+                    if (!SparkleShare.Controller.FirstRun) {
+                        SyncMenuItem.Activated += delegate {
+                            InvokeOnMainThread (delegate {
+                                NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+    
+                                if (SparkleUI.Setup == null) {
+                                    SparkleUI.Setup = new SparkleSetup ();
+                                    SparkleUI.Setup.Controller.ShowAddPage ();
+                                }
+    
+                                if (!SparkleUI.Setup.IsVisible)
+                                    SparkleUI.Setup.Controller.ShowAddPage ();
+    
+                                SparkleUI.Setup.OrderFrontRegardless ();
+                                SparkleUI.Setup.MakeKeyAndOrderFront (this);
+                            });
+                        };
+                    }
+    
+                Menu.AddItem (SyncMenuItem);
+                Menu.AddItem (NSMenuItem.SeparatorItem);
+    
+                    RecentEventsMenuItem = new NSMenuItem () {
+                        Title = "Show Recent Events"
+                    };
+    
+                    if (Controller.Folders.Length > 0) {
+                        RecentEventsMenuItem.Activated += delegate {
+                            InvokeOnMainThread (delegate {
+                                NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+        
+                                if (SparkleUI.EventLog == null)
+                                    SparkleUI.EventLog = new SparkleEventLog ();
+        
+                                SparkleUI.EventLog.OrderFrontRegardless ();
+                                SparkleUI.EventLog.MakeKeyAndOrderFront (this);
+                            });
+                        };
+                    }
+    
+                Menu.AddItem (RecentEventsMenuItem);
+    
+                    NotificationsMenuItem = new NSMenuItem ();
+    
+                    if (SparkleShare.Controller.NotificationsEnabled)
+                        NotificationsMenuItem.Title = "Turn Notifications Off";
+                    else
+                        NotificationsMenuItem.Title = "Turn Notifications On";
+    
+                    NotificationsMenuItem.Activated += delegate {
+                        SparkleShare.Controller.ToggleNotifications ();
+    
+                        InvokeOnMainThread (delegate {
+                            if (SparkleShare.Controller.NotificationsEnabled)
+                                NotificationsMenuItem.Title = "Turn Notifications Off";
+                            else
+                                NotificationsMenuItem.Title = "Turn Notifications On";
+                        });
+                    };
+    
+                Menu.AddItem (NotificationsMenuItem);
+                Menu.AddItem (NSMenuItem.SeparatorItem);
+    
+                    AboutMenuItem = new NSMenuItem () {
+                        Title = "About SparkleShare"
+                    };
+    
+                    AboutMenuItem.Activated += delegate {
+                        InvokeOnMainThread (delegate {
+                            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+    
+                            if (SparkleUI.About == null)
+                                SparkleUI.About = new SparkleAbout ();
+    
+                            SparkleUI.About.OrderFrontRegardless ();
+                            SparkleUI.About.MakeKeyAndOrderFront (this);
+                            SparkleUI.About.CheckForNewVersion ();
+                        });
+                    };
+    
+    
+                Menu.AddItem (AboutMenuItem);
+    
+                StatusItem.Menu = Menu;
+                StatusItem.Menu.Update ();
+            }
+        }
+
+
+        // A method reference that makes sure that opening the
+        // event log for each repository works correctly
+        private EventHandler OpenFolderDelegate (string name)
+        {
+            return delegate {
+                SparkleShare.Controller.OpenSparkleShareFolder (name);
             };
         }
 
@@ -125,7 +312,7 @@ namespace SparkleShare {
                 InvokeOnMainThread (delegate {
                     string image_path =    Path.Combine (NSBundle.MainBundle.ResourcePath,
                         "Pixmaps", "idle" + FrameNumber + ".png");
-                    
+
                     string alternate_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
                         "Pixmaps", "idle" + FrameNumber + "-active.png");
 
@@ -139,243 +326,6 @@ namespace SparkleShare {
             return Animation;
         }
 
-
-        // Creates the menu that is popped up when the
-        // user clicks the status icon
-        public void CreateMenu ()
-        {
-            Menu = new NSMenu ();
-            
-            StateMenuItem = new NSMenuItem () {
-                Title = StateText
-            };
-            
-            Menu.AddItem (StateMenuItem);
-            Menu.AddItem (NSMenuItem.SeparatorItem);
-
-            FolderMenuItem = new NSMenuItem () {
-                Title = "SparkleShare"
-            };
-
-                FolderMenuItem.Activated += delegate {
-                    SparkleShare.Controller.OpenSparkleShareFolder ();
-                };
-
-                string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "sparkleshare-mac.icns");
-            
-                FolderMenuItem.Image = new NSImage (folder_icon_path);
-                FolderMenuItem.Image.Size = new SizeF (16, 16);    
-            
-            Menu.AddItem (FolderMenuItem);
-
-            if (SparkleShare.Controller.Folders.Count > 0) {
-                FolderMenuItems = new NSMenuItem [SparkleShare.Controller.Folders.Count];
-                Tasks = new EventHandler [SparkleShare.Controller.Folders.Count];
-                
-                int i = 0;
-                foreach (string folder_name in SparkleShare.Controller.Folders) {
-                    NSMenuItem item = new NSMenuItem ();
-
-                    item.Title = folder_name;
-
-                    if (SparkleShare.Controller.UnsyncedFolders.Contains (folder_name))
-                        item.Image = NSImage.ImageNamed ("NSCaution");
-                    else
-                        item.Image = NSImage.ImageNamed ("NSFolder");
-
-                    item.Image.Size = new SizeF (16, 16);
-                    Tasks [i] = OpenFolderDelegate (folder_name);
-            
-                    FolderMenuItems [i] = item;
-                    FolderMenuItems [i].Activated += Tasks [i];
-                    Menu.AddItem (FolderMenuItems [i]);
-                    
-                    i++;
-                };
-
-
-
-            } else {
-                FolderMenuItems = new NSMenuItem [1];
-
-                FolderMenuItems [0] = new NSMenuItem () {    
-                    Title = "No Remote Folders Yet"
-                };
-                
-                Menu.AddItem (FolderMenuItems [0]);
-            }
-                
-            Menu.AddItem (NSMenuItem.SeparatorItem);
-
-            SyncMenuItem = new NSMenuItem () {
-                Title = "Add Remote Folder…"
-            };
-            
-                if (!SparkleShare.Controller.FirstRun) {
-                    SyncMenuItem.Activated += delegate {
-                        InvokeOnMainThread (delegate {
-                            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-
-                            if (SparkleUI.Setup == null) {
-                                SparkleUI.Setup = new SparkleSetup ();
-                                SparkleUI.Setup.Controller.ShowAddPage ();
-                            }
-
-                            if (!SparkleUI.Setup.IsVisible)
-                                SparkleUI.Setup.Controller.ShowAddPage ();
-
-                            SparkleUI.Setup.OrderFrontRegardless ();
-                            SparkleUI.Setup.MakeKeyAndOrderFront (this);
-                        });
-                    };
-                }
-
-            Menu.AddItem (SyncMenuItem);
-            Menu.AddItem (NSMenuItem.SeparatorItem);
-
-            RecentEventsMenuItem = new NSMenuItem () {
-                Title = "Show Recent Events"
-            };
-
-                if (SparkleShare.Controller.Folders.Count > 0) {
-                    RecentEventsMenuItem.Activated += delegate {
-                        InvokeOnMainThread (delegate {
-                            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-    
-                            if (SparkleUI.EventLog == null)
-                                SparkleUI.EventLog = new SparkleEventLog ();
-    
-                            SparkleUI.EventLog.OrderFrontRegardless ();
-                            SparkleUI.EventLog.MakeKeyAndOrderFront (this);
-                        });
-                    };
-                }
-
-            Menu.AddItem (RecentEventsMenuItem);
-
-            NotificationsMenuItem = new NSMenuItem ();
-
-                if (SparkleShare.Controller.NotificationsEnabled)
-                    NotificationsMenuItem.Title = "Turn Notifications Off";
-                else
-                    NotificationsMenuItem.Title = "Turn Notifications On";
-
-                NotificationsMenuItem.Activated += delegate {
-                    SparkleShare.Controller.ToggleNotifications ();
-
-                    InvokeOnMainThread (delegate {
-                        if (SparkleShare.Controller.NotificationsEnabled)
-                            NotificationsMenuItem.Title = "Turn Notifications Off";
-                        else
-                            NotificationsMenuItem.Title = "Turn Notifications On";
-                    });
-                };
-
-            Menu.AddItem (NotificationsMenuItem);
-            Menu.AddItem (NSMenuItem.SeparatorItem);
-
-            AboutMenuItem = new NSMenuItem () {
-                Title = "About SparkleShare"
-            };
-
-                AboutMenuItem.Activated += delegate {
-                    InvokeOnMainThread (delegate {
-                        NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-
-                        if (SparkleUI.About == null)
-                            SparkleUI.About = new SparkleAbout ();
-
-                        SparkleUI.About.OrderFrontRegardless ();
-                        SparkleUI.About.MakeKeyAndOrderFront (this);
-                        SparkleUI.About.CheckForNewVersion ();
-                    });
-                };
-
-
-            Menu.AddItem (AboutMenuItem);
-
-
-
-            StatusItem.Menu = Menu;
-            StatusItem.Menu.Update ();
-        }
-
-        
-        // A method reference that makes sure that opening the
-        // event log for each repository works correctly
-        private EventHandler OpenFolderDelegate (string name)
-        {
-            return delegate {
-                SparkleShare.Controller.OpenSparkleShareFolder (name);
-            };
-        }
-
-
-        public void UpdateMenu ()
-        {
-            StateMenuItem.Title = StateText;
-        }
-
-
-        // The state when there's nothing going on
-        private void SetNormalState ()
-        {
-            if (SparkleShare.Controller.UnsyncedFolders.Count > 0)
-               SetNormalState (true);
-            else
-               SetNormalState (false);
-        }
-
-
-        // The state when there's nothing going on
-        private void SetNormalState (bool error)
-        {
-            Animation.Stop ();
-            
-            if (SparkleShare.Controller.Folders.Count == 0) {
-                StateText = _("Welcome to SparkleShare!");
-
-                InvokeOnMainThread (delegate {
-                    StatusItem.Image               = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0.png");
-                    StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0-active.png");
-                    StatusItem.Image.Size          = new SizeF (16, 16);
-                    StatusItem.AlternateImage.Size = new SizeF (16, 16);
-                });
-
-            } else {
-                if (error) {
-                    StateText = _("Not everything is synced");
-
-                    InvokeOnMainThread (delegate {
-                        StatusItem.Image               = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/error.png");
-                        StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/error-active.png");
-                        StatusItem.Image.Size          = new SizeF (16, 16);
-                        StatusItem.AlternateImage.Size = new SizeF (16, 16);
-                    });
-
-                } else {
-                    StateText = _("Up to date") + " (" + SparkleShare.Controller.FolderSize + ")";
-
-                    InvokeOnMainThread (delegate {
-                        StatusItem.Image               = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0.png");
-                        StatusItem.AlternateImage      = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/idle0-active.png");
-                        StatusItem.Image.Size          = new SizeF (16, 16);
-                        StatusItem.AlternateImage.Size = new SizeF (16, 16);
-                    });
-                }
-            }
-        }
-
-
-        // The state when animating
-        private void SetAnimationState ()
-        {
-            StateText = _("Syncing…");
-
-            if (!Animation.Enabled)
-                Animation.Start ();
-        }
     }
     
     
