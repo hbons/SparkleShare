@@ -104,28 +104,12 @@ namespace SparkleShare {
                             NSApplication.SharedApplication.DockTile.BadgeLabel =
                                 (int.Parse (NSApplication.SharedApplication.DockTile.BadgeLabel) + 1).ToString ();
 
-                        if (GrowlApplicationBridge.IsGrowlRunning ()) {
-                            SparkleBubble bubble = new SparkleBubble (user_name, message) {
-                                ImagePath = SparkleShare.Controller.GetAvatar (user_email, 36)
-                            };
-
-                            bubble.Show ();
-
-                        } else {
-                          NSApplication.SharedApplication.RequestUserAttention (
-                              NSRequestUserAttentionType.InformationalRequest);
-                        }
-                    }
+                                            }
                 });
             };
             
 
-            SparkleShare.Controller.ConflictNotificationRaised += delegate {
-                    string title   = "Ouch! Mid-air collision!";
-                    string subtext = "Don't worry, SparkleShare made a copy of each conflicting file.";
 
-                    new SparkleBubble (title, subtext).Show ();
-            };
 
 
 
