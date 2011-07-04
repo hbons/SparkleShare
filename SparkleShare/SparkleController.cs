@@ -498,7 +498,7 @@ namespace SparkleShare {
 
 
         // Fires events for the current syncing state
-        private void UpdateState ()
+        public void UpdateState ()
         {
             foreach (SparkleRepoBase repo in Repositories) {
                 if (repo.Status == SyncStatus.SyncDown ||
