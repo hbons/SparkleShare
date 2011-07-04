@@ -87,11 +87,12 @@
     </Compile>
     <Compile Include="SparkleAbout.cs" />
     <Compile Include="SparkleAlert.cs" />
-    <Compile Include="SparkleBubble.cs" />
     <Compile Include="SparkleMacWatcher.cs" />
     <Compile Include="SparkleEventLog.cs" />
     <Compile Include="SparkleBadger.cs" />
     <Compile Include="SparkleEventLogController.cs" />
+    <Compile Include="SparkleBubbleController.cs" />
+    <Compile Include="SparkleBubbles.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
