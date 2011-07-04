@@ -47,6 +47,7 @@ namespace SparkleShare {
 
         public SparkleEventLog (IntPtr handle) : base (handle) { }
 
+        // TODO: Window needs to be made resizable
         public SparkleEventLog () : base ()
         {
             Title    = "Recent Events";
@@ -67,8 +68,8 @@ namespace SparkleShare {
             ContentView.AddSubview (Separator);
 
 
-            this.progress_indicator = new NSthis.progress_indicator () {
-                Style = NSthis.progress_indicatorStyle.Spinning,
+            this.progress_indicator = new NSProgressIndicator () {
+                Style = NSProgressIndicatorStyle.Spinning,
                 Frame = new RectangleF (this.web_view.Frame.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10, 20, 20)
             };
 
@@ -167,10 +168,9 @@ namespace SparkleShare {
                         if (this.progress_indicator.Superview == ContentView)
                             this.progress_indicator.RemoveFromSuperview ();
 
+                        // TODO: still causes some flashes
                         this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
                         ContentView.AddSubview (this.web_view);
-
-                        Update ();
                     });
                 }));
 
