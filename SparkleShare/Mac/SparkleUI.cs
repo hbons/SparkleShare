@@ -33,7 +33,7 @@ namespace SparkleShare {
 
         public static SparkleStatusIcon StatusIcon;
         public static SparkleEventLog EventLog;
-        public static SparkleIntro Intro;
+        public static SparkleSetup Setup;
         public static SparkleBubbles Bubbles;
         public static SparkleAbout About;
         public static NSFont Font;
@@ -80,8 +80,8 @@ namespace SparkleShare {
                 Bubbles = new SparkleBubbles ();
 
                 if (SparkleShare.Controller.FirstRun) {
-                    Intro = new SparkleIntro ();
-                    Intro.ShowAccountForm ();
+                    Setup = new SparkleSetup ();
+                    Setup.Controller.ShowSetupPage ();
                 }
             }
         }
