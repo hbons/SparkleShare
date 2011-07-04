@@ -16,8 +16,6 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -27,18 +25,24 @@ using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
 using MonoMac.WebKit;
-using SparkleLib; // Only used for SparkleChangeSet
 
 namespace SparkleShare {
 
     public class SparkleEventLog : NSWindow {
 
-        private SparkleEventLogController controller;
+        private SparkleEventLogController controller = new SparkleEventLogController ();
 
-        private WebView WebView;
-        private NSBox Separator;
+        private WebView web_view = new WebView (new RectangleF (0, 0, 480, 579), "", "") {
+            PolicyDelegate = new SparkleWebPolicyDelegate ()
+        };
+
+        private NSBox Separator = new NSBox (new RectangleF (0, 579, 480, 1)) {
+            BorderColor = NSColor.LightGray,
+            BoxType = NSBoxType.NSBoxCustom
+        };
+
         private NSPopUpButton popup_button;
-        private NSProgressIndicator ProgressIndicator;
+        private NSProgressIndicator progress_indicator;
 
 
         public SparkleEventLog (IntPtr handle) : base (handle) { }
@@ -60,51 +64,52 @@ namespace SparkleShare {
             HasShadow   = true;
             BackingType = NSBackingStore.Buffered;
 
-
-            Separator = new NSBox (new RectangleF (0, 579, 480, 1)) {
-                BorderColor = NSColor.LightGray,
-                BoxType = NSBoxType.NSBoxCustom
-            };
-
             ContentView.AddSubview (Separator);
 
 
-            WebView = new WebView (new RectangleF (0, 0, 480, 579), "", "") {
-                PolicyDelegate = new SparkleWebPolicyDelegate ()
+            this.progress_indicator = new NSthis.progress_indicator () {
+                Style = NSthis.progress_indicatorStyle.Spinning,
+                Frame = new RectangleF (this.web_view.Frame.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10, 20, 20)
             };
 
-
-            ProgressIndicator = new NSProgressIndicator () {
-                Style = NSProgressIndicatorStyle.Spinning,
-                Frame = new RectangleF (WebView.Frame.Width / 2 - 10, WebView.Frame.Height / 2 + 10, 20, 20)
-            };
+            this.progress_indicator.StartAnimation (this);
+            ContentView.AddSubview (this.progress_indicator);
 
 
-            UpdateContent (null, false);
-            UpdateChooser (this.controller.Folders);
+            UpdateContent (null);
+            UpdateChooser (null);
             OrderFrontRegardless ();
 
-            // Hook up the controller events
-            this.controller = new SparkleEventLogController ();
 
+            // Hook up the controller events
             this.controller.UpdateChooserEvent += delegate (string [] folders) {
                 InvokeOnMainThread (delegate {
                     UpdateChooser (folders);
                 });
             };
 
-            this.controller.UpdateContentEvent += delegate (string html, bool silently) {
+            this.controller.UpdateContentEvent += delegate (string html) {
                 InvokeOnMainThread (delegate {
-                    UpdateContent (html, true);
+                    UpdateContent (html);
+                });
+            };
+
+            this.controller.ContentLoadingEvent += delegate {
+                InvokeOnMainThread (delegate {
+                    if (this.web_view.Superview == ContentView)
+                        this.web_view.RemoveFromSuperview ();
+
+                    ContentView.AddSubview (this.progress_indicator);
                 });
             };
         }
 
 
-
-
         public void UpdateChooser (string [] folders)
         {
+            if (folders == null)
+                folders = this.controller.Folders;
+
             if (this.popup_button != null)
                 this.popup_button.RemoveFromSuperview ();
 
@@ -132,20 +137,13 @@ namespace SparkleShare {
         }
 
 
-        public void UpdateContent (string html, bool silently)
+        public void UpdateContent (string html)
         {
-            if (!silently) {
-                if (WebView.Superview == ContentView)
-                    WebView.RemoveFromSuperview ();
-
-                ContentView.AddSubview (ProgressIndicator);
-            }
-
-            Thread thread = new Thread (new ThreadStart (delegate {
-                using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
+            using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
+                Thread thread = new Thread (new ThreadStart (delegate {
                     if (html == null)
                         html = this.controller.HTML;
-
+    
                     html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
                     html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
                     html = html.Replace ("<!-- $body-font-size -->", "13.4px");
@@ -164,21 +162,23 @@ namespace SparkleShare {
                                          "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-edited-12.png"));
                     html = html.Replace ("<!-- $document-moved-background-image -->",
                                          "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-moved-12.png"));
-
+    
                     InvokeOnMainThread (delegate {
-                        if (ProgressIndicator.Superview == ContentView)
-                            ProgressIndicator.RemoveFromSuperview ();
+                        if (this.progress_indicator.Superview == ContentView)
+                            this.progress_indicator.RemoveFromSuperview ();
 
-                        WebView.MainFrame.LoadHtmlString (html, new NSUrl (""));
-                        ContentView.AddSubview (WebView);
+                        this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
+                        ContentView.AddSubview (this.web_view);
+
                         Update ();
                     });
-                }
-            }));
+                }));
 
-            thread.Start ();
+                thread.Start ();
+            }
         }
     }
+
 
     public class SparkleEventsDelegate : NSWindowDelegate {
         

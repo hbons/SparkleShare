@@ -27,10 +27,14 @@ namespace SparkleShare {
     public class SparkleEventLogController {
 
         public event UpdateContentEventEventHandler UpdateContentEvent;
-        public delegate void UpdateContentEventEventHandler (string html, bool silently);
-        
+        public delegate void UpdateContentEventEventHandler (string html);
+
         public event UpdateChooserEventHandler UpdateChooserEvent;
         public delegate void UpdateChooserEventHandler (string [] folders);
+
+        public event ContentLoadingEventHandler ContentLoadingEvent;
+        public delegate void ContentLoadingEventHandler ();
+
 
         public string SelectedFolder {
             get {
@@ -40,27 +44,33 @@ namespace SparkleShare {
             set {
                 this.selected_folder = value;
 
-                if (UpdateContentEvent != null)
-                    UpdateContentEvent (HTML, true);
+                if (ContentLoadingEvent != null)
+                    ContentLoadingEvent ();
+
+                Stopwatch watch = new Stopwatch ();
+                watch.Start ();
+
+                Thread thread = new Thread (new ThreadStart (delegate {
+                    string html = HTML;
+                    watch.Stop ();
+
+                    // A short delay is less annoying than
+                    // a flashing window
+                    if (watch.ElapsedMilliseconds < 500)
+                        Thread.Sleep (500 - (int) watch.ElapsedMilliseconds);
+
+                    if (UpdateContentEvent != null)
+                        UpdateContentEvent (html);
+                }));
+
+                thread.Start ();
             }
         }
 
         public string HTML {
             get {
-                Stopwatch watch = new Stopwatch ();
-                watch.Start ();
-
-                List<SparkleChangeSet> change_sets = SparkleShare.Controller.GetLog (SelectedFolder);
-                string html = SparkleShare.Controller.GetHTMLLog (change_sets);
-
-                watch.Stop ();
-
-                // A short delay is less annoying than
-                // a flashing window
-                if (watch.ElapsedMilliseconds < 500 /* && !silent */)
-                    Thread.Sleep (500 - (int) watch.ElapsedMilliseconds);
-
-                return html;
+                List<SparkleChangeSet> change_sets = SparkleShare.Controller.GetLog (this.selected_folder);
+                return SparkleShare.Controller.GetHTMLLog (change_sets);
             }
         }
 
@@ -78,12 +88,12 @@ namespace SparkleShare {
         {
             SparkleShare.Controller.AvatarFetched += delegate {
                 if (UpdateContentEvent != null)
-                    UpdateContentEvent (HTML, true);
+                    UpdateContentEvent (HTML);
             };
 
             SparkleShare.Controller.OnIdle += delegate {
                 if (UpdateContentEvent != null)
-                    UpdateContentEvent (HTML, true);
+                    UpdateContentEvent (HTML);
             };
 
             SparkleShare.Controller.FolderListChanged += delegate {
@@ -97,12 +107,12 @@ namespace SparkleShare {
                     UpdateChooserEvent (Folders);
 
                 if (UpdateContentEvent != null)
-                    UpdateContentEvent (HTML, true);
+                    UpdateContentEvent (HTML);
             };
 
             SparkleShare.Controller.NotificationRaised += delegate {
                 if (UpdateContentEvent != null)
-                    UpdateContentEvent (HTML, true);
+                    UpdateContentEvent (HTML);
             };
         }
     }
