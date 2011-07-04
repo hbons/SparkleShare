@@ -28,14 +28,15 @@ namespace SparkleShare {
         public SparkleBubblesController ()
         {
             SparkleShare.Controller.ConflictNotificationRaised += delegate {
-                if (ShowBubbleEvent != null)
+                if (ShowBubbleEvent != null && SparkleShare.Controller.NotificationsEnabled)
                     ShowBubbleEvent ("Ouch! Mid-air collision!",
                         "Don't worry, SparkleShare made a copy of each conflicting file.", null);
             };
 
             SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
                                                                     string message, string folder_path) {
-                if (ShowBubbleEvent != null)
+
+                if (ShowBubbleEvent != null && SparkleShare.Controller.NotificationsEnabled)
                     ShowBubbleEvent (user_name, message,
                         SparkleShare.Controller.GetAvatar (user_email, 36));
             };

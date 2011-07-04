@@ -2,19 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>TicketVersion</key>
-    <integer>1</integer>
-    <key>AllNotifications</key>
-    <array>
-        <string>Start</string>
-        <string>Stop</string>
-        <string>Info</string>
-    </array>
-    <key>DefaultNotifications</key>
-    <array>
-        <string>Start</string>
-        <string>Stop</string>
-        <string>Info</string>
-    </array>
+	<key>TicketVersion</key>
+	<integer>1</integer>
+	<key>AllNotifications</key>
+	<array>
+		<string>Event</string>
+	</array>
+	<key>DefaultNotifications</key>
+	<array>
+		<string>Event</string>
+	</array>
 </dict>
 </plist>
