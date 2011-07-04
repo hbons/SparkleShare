@@ -88,13 +88,21 @@
     <Compile Include="SparkleMacWatcher.cs" />
     <Compile Include="SparkleEventLog.cs" />
     <Compile Include="SparkleBadger.cs" />
-    <Compile Include="SparkleEventLogController.cs" />
     <Compile Include="SparkleBubbles.cs" />
-    <Compile Include="SparkleBubblesController.cs" />
     <Compile Include="SparkleSetup.cs" />
-    <Compile Include="SparkleSetupController.cs" />
     <Compile Include="SparkleSetupWindow.cs" />
-    <Compile Include="SparkleStatusIconController.cs" />
+    <Compile Include="..\SparkleBubblesController.cs">
+      <Link>SparkleBubblesController.cs</Link>
+    </Compile>
+    <Compile Include="..\SparkleEventLogController.cs">
+      <Link>SparkleEventLogController.cs</Link>
+    </Compile>
+    <Compile Include="..\SparkleSetupController.cs">
+      <Link>SparkleSetupController.cs</Link>
+    </Compile>
+    <Compile Include="..\SparkleStatusIconController.cs">
+      <Link>SparkleStatusIconController.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />

@@ -52,6 +52,10 @@
     <Compile Include="SparkleController.cs" />
     <Compile Include="SparkleAbout.cs" />
     <Compile Include="SparkleLinController.cs" />
+    <Compile Include="SparkleBubblesController.cs" />
+    <Compile Include="SparkleEventLogController.cs" />
+    <Compile Include="SparkleSetupController.cs" />
+    <Compile Include="SparkleStatusIconController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SparkleLib\SparkleLib.csproj">
