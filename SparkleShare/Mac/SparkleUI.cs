@@ -29,25 +29,12 @@ using MonoMac.Growl;
 
 namespace SparkleShare {
 
-    public partial class AppDelegate : NSApplicationDelegate {
-
-        public override void WillBecomeActive (NSNotification notification)
-        {
-            NSApplication.SharedApplication.DockTile.BadgeLabel = null;
-        }
-
-        public override void WillTerminate (NSNotification notification)
-        {
-            SparkleShare.Controller.Quit ();
-        }
-    }
-
-
     public class SparkleUI : AppDelegate {
 
         public static SparkleStatusIcon StatusIcon;
         public static SparkleEventLog EventLog;
         public static SparkleIntro Intro;
+        public static SparkleBubbles Bubbles;
         public static SparkleAbout About;
         public static NSFont Font;
 
@@ -69,7 +56,6 @@ namespace SparkleShare {
             // Use translations
             Catalog.Init ("sparkleshare",
                 Path.Combine (NSBundle.MainBundle.ResourcePath, "Translations"));
-            
 
             using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
 
@@ -79,45 +65,24 @@ namespace SparkleShare {
                 NSApplication.SharedApplication.ApplicationIconImage
                     = NSImage.ImageNamed ("sparkleshare.icns");
 
-                SetFolderIcon ();
-
                 if (!SparkleShare.Controller.BackendIsPresent) {
                     this.alert = new SparkleAlert ();
                     this.alert.RunModal ();
                     return;
                 }
+
+                SetFolderIcon ();
     
                 Font = NSFontManager.SharedFontManager.FontWithFamily
                     ("Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
 
                 StatusIcon = new SparkleStatusIcon ();
-            }
+                Bubbles = new SparkleBubbles ();
 
-            SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
-                                                                    string message, string repository_path) {
-                InvokeOnMainThread (delegate {
-
-                    if (SparkleShare.Controller.NotificationsEnabled) {
-                        if (NSApplication.SharedApplication.DockTile.BadgeLabel == null)
-                            NSApplication.SharedApplication.DockTile.BadgeLabel = "1";
-                        else
-                            NSApplication.SharedApplication.DockTile.BadgeLabel =
-                                (int.Parse (NSApplication.SharedApplication.DockTile.BadgeLabel) + 1).ToString ();
-
-                                            }
-                });
-            };
-            
-
-
-
-
-
-
-
-            if (SparkleShare.Controller.FirstRun) {
-                Intro = new SparkleIntro ();
-                Intro.ShowAccountForm ();
+                if (SparkleShare.Controller.FirstRun) {
+                    Intro = new SparkleIntro ();
+                    Intro.ShowAccountForm ();
+                }
             }
         }
     
@@ -145,6 +110,20 @@ namespace SparkleShare {
         {
             string path = NSBundle.MainBundle.PathForResource ("Growl", "plist");
             return NSDictionary.FromFile (path);
+        }
+    }
+
+
+    public partial class AppDelegate : NSApplicationDelegate {
+
+        public override void WillBecomeActive (NSNotification notification)
+        {
+            NSApplication.SharedApplication.DockTile.BadgeLabel = null;
+        }
+
+        public override void WillTerminate (NSNotification notification)
+        {
+            SparkleShare.Controller.Quit ();
         }
     }
 }

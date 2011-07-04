@@ -91,8 +91,8 @@
     <Compile Include="SparkleEventLog.cs" />
     <Compile Include="SparkleBadger.cs" />
     <Compile Include="SparkleEventLogController.cs" />
-    <Compile Include="SparkleBubbleController.cs" />
     <Compile Include="SparkleBubbles.cs" />
+    <Compile Include="SparkleBubblesController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
