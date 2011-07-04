@@ -77,7 +77,6 @@
     <Compile Include="..\SparkleController.cs">
       <Link>SparkleController.cs</Link>
     </Compile>
-    <Compile Include="SparkleWindow.cs" />
     <Compile Include="SparkleMacController.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUI.cs" />
@@ -94,6 +93,8 @@
     <Compile Include="SparkleBubblesController.cs" />
     <Compile Include="SparkleSetup.cs" />
     <Compile Include="SparkleSetupController.cs" />
+    <Compile Include="SparkleSetupWindow.cs" />
+    <Compile Include="SparkleStatusIconController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
