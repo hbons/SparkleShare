@@ -217,16 +217,16 @@ namespace SparkleShare {
                         InvokeOnMainThread (delegate {
                             NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
 
-                            if (SparkleUI.Intro == null) {
-                                SparkleUI.Intro = new SparkleIntro ();
-                                SparkleUI.Intro.ShowServerForm (true);
+                            if (SparkleUI.Setup == null) {
+                                SparkleUI.Setup = new SparkleSetup ();
+                                SparkleUI.Setup.Controller.ShowAddPage ();
                             }
 
-                            if (!SparkleUI.Intro.IsVisible)
-                                SparkleUI.Intro.ShowServerForm (true);
+                            if (!SparkleUI.Setup.IsVisible)
+                                SparkleUI.Setup.Controller.ShowAddPage ();
 
-                            SparkleUI.Intro.OrderFrontRegardless ();
-                            SparkleUI.Intro.MakeKeyAndOrderFront (this);
+                            SparkleUI.Setup.OrderFrontRegardless ();
+                            SparkleUI.Setup.MakeKeyAndOrderFront (this);
                         });
                     };
                 }
