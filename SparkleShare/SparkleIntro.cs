@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Timers;
+using System.Collections.Generic;
 
 using Gtk;
 using Mono.Unix;
@@ -33,6 +34,8 @@ namespace SparkleShare {
         private Entry EmailEntry;
         private SparkleEntry ServerEntry;
         private SparkleEntry FolderEntry;
+        private string PreviousServer;
+        private string PreviousFolder;
         private Button NextButton;
         private Button SyncButton;
         private bool ServerFormOnly;
@@ -170,9 +173,16 @@ namespace SparkleShare {
 
                     HBox layout_server = new HBox (true, 0);
 
-                        ServerEntry = new SparkleEntry () {
-                            ExampleText = _("address-to-server.com")
-                        };
+                        ServerEntry = new SparkleEntry () { };
+                        ServerEntry.Completion = new EntryCompletion();
+                        ServerEntry.Completion.Model = ServerEntryCompletion();
+                        ServerEntry.Completion.TextColumn = 0;
+
+                        if (PreviousServer != null) {
+                            ServerEntry.Text = PreviousServer;
+                            ServerEntry.ExampleTextActive = false;
+                        } else
+                            ServerEntry.ExampleText = _("address-to-server.com");
                         
                         ServerEntry.Changed += CheckServerForm;
 
@@ -250,9 +260,16 @@ namespace SparkleShare {
 
                 HBox layout_folder = new HBox (true, 0);
 
-                    FolderEntry = new SparkleEntry () {
-                        ExampleText = _("Folder")
-                    };
+                    FolderEntry = new SparkleEntry () { };
+                    FolderEntry.Completion = new EntryCompletion();
+                    FolderEntry.Completion.Model = FolderEntryCompletion();
+                    FolderEntry.Completion.TextColumn = 0;
+
+                    if (PreviousFolder != null) {
+                        FolderEntry.Text = PreviousFolder;
+                        FolderEntry.ExampleTextActive = false;
+                    } else
+                        FolderEntry.ExampleText = _("Folder");
                     
                     FolderEntry.Changed += CheckServerForm;
 
@@ -272,6 +289,9 @@ namespace SparkleShare {
                         string folder_name    = FolderEntry.Text;
                         string server         = ServerEntry.Text;
                         string canonical_name = System.IO.Path.GetFileNameWithoutExtension (folder_name);
+
+                        PreviousServer = ServerEntry.Text;
+                        PreviousFolder = FolderEntry.Text;
 
                         if (radio_button_gitorious.Active)
                             server = "gitorious.org";
@@ -472,6 +492,9 @@ namespace SparkleShare {
 
                 UrgencyHint = true;
 
+                PreviousServer = null;
+                PreviousFolder = null;
+
                 if (!HasToplevelFocus) {
                     string title   = String.Format (_("‘{0}’ has been successfully added"), folder_name);
                     string subtext = _("");
@@ -661,6 +684,33 @@ namespace SparkleShare {
         }
 
 
+        private TreeModel ServerEntryCompletion ()
+        {
+            List<string> hosts = SparkleShare.Controller.PreviousHosts;
+
+            ListStore store = new ListStore (typeof (string));
+            store.AppendValues ("user@localhost");
+            store.AppendValues ("user@example.com");
+
+            foreach (string host in hosts)
+                store.AppendValues (host);
+
+            return store;
+        }
+
+
+        private TreeModel FolderEntryCompletion ()
+        {
+            ListStore store = new ListStore (typeof (string));
+            store.AppendValues ("~/test.git");
+
+            foreach (string folder in SparkleShare.Controller.Folders)
+                store.AppendValues (folder);
+
+            return store;
+        }
+        
+        
         // Checks to see if an email address is valid
         private bool IsValidEmail (string email)
         {
