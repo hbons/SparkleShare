@@ -1,0 +1,18 @@
+sparkleshare for Debian
+-----------------------
+
+SparkleShare is a collaboration and sharing tool that is designed to keep
+things simple and to stay out of your way. It allows you to instantly sync
+with any Git repository you have access to.
+
+Though SparkleShare is not made to be a graphical frontend 
+for git or a backup tool, it may be useful for other kinds of purposes as well, 
+like backing up small files or monitoring your favourite project. In contrast 
+to the projects name, we will very likely refuse to implement your personal 
+ponies.
+
+SparkleShare currently works on Linux and Mac. A Windows port and mobile
+device support are planned for the future.
+
+
+ -- Yann Verry <yann@verry.org>  Tue, 05 Jul 2011 11:05:14 +0200
