@@ -293,11 +293,8 @@ namespace SparkleLib {
             //check if file exists already
             if( !File.Exists (changelog_file) )
             {                
-                //string changelog = "";
-
-                // Write the changelog to the file
+                //create the changelog file
                 TextWriter writer = new StreamWriter (changelog_file);
-                //writer.WriteLine (changelog);
                 writer.Close ();
 
                 SparkleHelpers.DebugInfo ("Unison", "Created changelog: " + changelog_file);
@@ -327,6 +324,9 @@ namespace SparkleLib {
                 writer.Close ();                
             
                 SparkleHelpers.DebugInfo ("Unison", "Added ID file to: " + IDfile);
+				
+				//might want to manually use unison to push the ID to the server so that the entry doesn't got logged upon the first sync
+				//mostly cosmetic.
             }
             else
             {
