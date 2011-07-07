@@ -36,27 +36,27 @@ namespace SparkleLib {
                 string IDfile = SparkleHelpers.CombineMore (LocalPath, ".unisonID");
                 
                 //ID file not found
-                if(!File.Exists(IDfile))
-                {
-                    //check for a backup in .sparkleshare
-                    string backupIDfile = SparkleHelpers.CombineMore (LocalPath, ".sparkleshare", ".unisonID");    
-                    if(File.Exists ( backupIDfile) )
-                    {
-                        File.Copy(backupIDfile, IDfile);
-                        SparkleHelpers.DebugInfo ("Unison", "Recovered backup ID file: " + backupIDfile);
-                    }
-                    //check if there is a copy on the server
-                    else if ( UnisonGrab(IDfile) == 0 )
-                    {
-                        SparkleHelpers.DebugInfo ("Unison", "Downloaded ID file from server: " + IDfile);
-                    }
-                    else
-                    {
-                        //TODO: recalculate the repoID and upload it to the server
-                        SparkleHelpers.DebugInfo ("Unison", "NO REPO ID FILE FOUND");
-                        return "unisonsparkles";
-                    }
-                }            
+                //if(!File.Exists(IDfile))
+                //{
+                //    //check for a backup in .sparkleshare
+                //    string backupIDfile = SparkleHelpers.CombineMore (LocalPath, ".sparkleshare", ".unisonID");    
+                //   if(File.Exists ( backupIDfile) )
+                //    {
+                //        File.Copy(backupIDfile, IDfile);
+                //        SparkleHelpers.DebugInfo ("Unison", "Recovered backup ID file: " + backupIDfile);
+                //    }
+                //    //check if there is a copy on the server
+                //    else if ( UnisonGrab(IDfile) == 0 )
+                //    {
+                //        SparkleHelpers.DebugInfo ("Unison", "Downloaded ID file from server: " + IDfile);
+                //    }
+                //   else
+                //    {
+                //        //TODO: recalculate the repoID and upload it to the server
+                //       SparkleHelpers.DebugInfo ("Unison", "NO REPO ID FILE FOUND");
+                //        return "unisonsparkles";
+                //    }
+                //}            
                 
                 //read the repo ID from the file
                 TextReader reader = new StreamReader (IDfile);
@@ -419,7 +419,7 @@ namespace SparkleLib {
             string timestamp = DateTime.UtcNow.ToString();
             string username = SparkleConfig.DefaultConfig.UserName.ToString().Trim();
             string useremail = SparkleConfig.DefaultConfig.UserEmail.ToString().Trim();
-            string logupdate = timestamp + ", " + username + ", " + useremail + ", " + revision + ", " + path;
+            string logupdate = timestamp + ", " + username + ", " + useremail + ", " + revision + ", " + path + Environment.NewLine;
             sb.Append(logupdate);
             return sb;
         }
