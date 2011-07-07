@@ -293,11 +293,11 @@ namespace SparkleLib {
             //check if file exists already
             if( !File.Exists (changelog_file) )
             {                
-                string changelog = "";
+                //string changelog = "";
 
                 // Write the changelog to the file
                 TextWriter writer = new StreamWriter (changelog_file);
-                writer.WriteLine (changelog);
+                //writer.WriteLine (changelog);
                 writer.Close ();
 
                 SparkleHelpers.DebugInfo ("Unison", "Created changelog: " + changelog_file);
