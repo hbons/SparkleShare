@@ -232,7 +232,8 @@ namespace SparkleShare {
 
         public List<string> PreviousHosts {
             get {
-                List<string> hosts = SparkleConfig.DefaultConfig.Hosts;
+                List<string> hosts = SparkleConfig.DefaultConfig.HostsWithUsername;
+                hosts.AddRange(SparkleConfig.DefaultConfig.Hosts);
                 hosts.Sort ();
                 return hosts;
             }
