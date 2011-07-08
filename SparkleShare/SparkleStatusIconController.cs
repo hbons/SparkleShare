@@ -29,7 +29,6 @@ namespace SparkleShare {
 
     public class SparkleStatusIconController {
 
-        public event UpdateStatusLineEventHandler UpdateStatusLineEvent;
         public delegate void UpdateStatusLineEventHandler ();
 
         public event UpdateMenuEventHandler UpdateMenuEvent;

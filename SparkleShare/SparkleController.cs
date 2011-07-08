@@ -230,15 +230,6 @@ namespace SparkleShare {
         }
 
 
-        public List<string> PreviousHosts {
-            get {
-                List<string> hosts = SparkleConfig.DefaultConfig.Hosts;
-                hosts.Sort ();
-                return hosts;
-            }
-        }
-
-
         public List<string> UnsyncedFolders {
             get {
                 List<string> unsynced_folders = new List<string> ();

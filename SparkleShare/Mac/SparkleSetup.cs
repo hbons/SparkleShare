@@ -36,7 +36,6 @@ namespace SparkleShare {
 		private NSButton SyncButton;
 		private NSButton TryAgainButton;
 		private NSButton CancelButton;
-		private NSButton SkipButton;
 		private NSButton OpenFolderButton;
 		private NSButton FinishButton;
 		private NSForm UserInfoForm;
