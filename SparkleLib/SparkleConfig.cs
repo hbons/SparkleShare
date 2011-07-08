@@ -215,6 +215,21 @@ namespace SparkleLib {
         }
 
 
+        public List<string> HostsWithUsername {
+            get {
+                List<string> hosts = new List<string> ();
+
+                foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
+                    Uri uri = new Uri (node_folder ["url"].InnerText);
+                    if (!hosts.Contains (uri.UserInfo + "@" + uri.Host))
+                        hosts.Add (uri.UserInfo + "@" + uri.Host);
+                }
+
+              return hosts;
+           }
+        }
+        
+        
         public string GetAnnouncementsForFolder (string name)
         {
             return this.GetFolderValue(name, "announcements");
