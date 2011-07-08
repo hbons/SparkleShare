@@ -38,17 +38,13 @@
     <Reference Include="Mono.Posix" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SparkleBubble.cs" />
-    <Compile Include="SparkleIntro.cs" />
     <Compile Include="SparkleShare.cs" />
     <Compile Include="SparkleSpinner.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUI.cs" />
-    <Compile Include="SparkleWindow.cs" />
     <Compile Include="SparkleEntry.cs" />
     <Compile Include="SparkleEventLog.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
-    <Compile Include="SparkleInfobar.cs" />
     <Compile Include="SparkleController.cs" />
     <Compile Include="SparkleAbout.cs" />
     <Compile Include="SparkleLinController.cs" />
@@ -56,6 +52,9 @@
     <Compile Include="SparkleEventLogController.cs" />
     <Compile Include="SparkleSetupController.cs" />
     <Compile Include="SparkleStatusIconController.cs" />
+    <Compile Include="SparkleBubbles.cs" />
+    <Compile Include="SparkleSetup.cs" />
+    <Compile Include="SparkleSetupWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SparkleLib\SparkleLib.csproj">
