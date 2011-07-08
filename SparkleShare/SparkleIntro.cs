@@ -691,6 +691,8 @@ namespace SparkleShare {
             ListStore store = new ListStore (typeof (string));
             store.AppendValues ("user@localhost");
             store.AppendValues ("user@example.com");
+            store.AppendValues ("localhost");
+            store.AppendValues ("example.com");
 
             foreach (string host in hosts)
                 store.AppendValues (host);
@@ -701,10 +703,12 @@ namespace SparkleShare {
 
         private TreeModel FolderEntryCompletion ()
         {
+            List<string> folders = SparkleShare.Controller.FoldersWithPath;
+            
             ListStore store = new ListStore (typeof (string));
             store.AppendValues ("~/test.git");
 
-            foreach (string folder in SparkleShare.Controller.Folders)
+            foreach (string folder in folders)
                 store.AppendValues (folder);
 
             return store;
