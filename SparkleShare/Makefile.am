@@ -13,6 +13,7 @@ endif
 
 SOURCES =  \
 	SparkleAbout.cs \
+	SparkleAboutController.cs
 	SparkleBubbles.cs \
 	SparkleBubblesController.cs \
 	SparkleController.cs \
