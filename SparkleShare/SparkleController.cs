@@ -75,12 +75,6 @@ namespace SparkleShare {
         public delegate void NotificationRaisedEventHandler (string user_name, string user_email,
                                                              string message, string repository_path);
 
-        public event NewVersionAvailableEventHandler NewVersionAvailable;
-        public delegate void NewVersionAvailableEventHandler (string new_version);
-
-        public event VersionUpToDateEventHandler VersionUpToDate;
-        public delegate void VersionUpToDateEventHandler ();
-
         
         // Short alias for the translations
         public static string _ (string s)
@@ -1058,11 +1052,6 @@ namespace SparkleShare {
         }
 
 
-        public string Version {
-            get {
-                return SparkleBackend.Version;
-            }
-        }
 
 
         public void AddNoteToFolder (string folder_name, string revision, string note)
@@ -1074,29 +1063,6 @@ namespace SparkleShare {
         }
 
 
-        public void CheckForNewVersion ()
-        {
-            WebClient web_client = new WebClient ();
-            Uri uri = new Uri ("http://www.sparkleshare.org/version");
-
-            web_client.DownloadStringCompleted += delegate (object o, DownloadStringCompletedEventArgs args) {
-                if (args.Error != null)
-                    return;
-
-                string new_version = args.Result.Trim ();
-
-                if (Version.Equals (new_version)) {
-                    if (VersionUpToDate != null)
-                        VersionUpToDate ();
-
-                } else {
-                    if (NewVersionAvailable != null)
-                        NewVersionAvailable (new_version);
-                }
-            };
-
-            web_client.DownloadStringAsync (uri);
-        }
 
 
         private string [] tango_palette = new string [] {"#eaab00", "#e37222",

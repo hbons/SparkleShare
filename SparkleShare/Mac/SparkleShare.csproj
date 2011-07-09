@@ -103,6 +103,7 @@
     <Compile Include="..\SparkleStatusIconController.cs">
       <Link>SparkleStatusIconController.cs</Link>
     </Compile>
+    <Compile Include="SparkleAboutController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
@@ -257,6 +258,9 @@
     </Content>
     <Content Include="..\..\po\zh_TW.po">
       <Link>Translations\zh_TW.po</Link>
+    </Content>
+    <Content Include="..\..\data\about.png">
+      <Link>Pixmaps\about.png</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
