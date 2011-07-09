@@ -268,10 +268,6 @@ namespace SparkleShare {
     
                             if (SparkleUI.About == null)
                                 SparkleUI.About = new SparkleAbout ();
-    
-                            SparkleUI.About.OrderFrontRegardless ();
-                            SparkleUI.About.MakeKeyAndOrderFront (this);
-                            SparkleUI.About.CheckForNewVersion ();
                         });
                     };
     
