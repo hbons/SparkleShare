@@ -132,6 +132,27 @@ namespace SparkleLib {
         }
 
 
+        public List<string> FoldersWithPath {
+            get {
+                List<string> folders = new List<string> ();
+
+                foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
+                    Uri uri = new Uri (node_folder ["url"].InnerText);
+                    String path = uri.LocalPath;
+                    if (!folders.Contains (path))
+                        folders.Add (path);
+
+                    if (1 < path.Length && "/" == path.Substring (0, 1))
+                        if (!folders.Contains (path.Substring (1)))
+                            folders.Add (path.Substring (1));
+
+                }
+
+                return folders;
+            }
+        }
+
+
         public void AddFolder (string name, string url, string backend)
         {
             XmlNode node_name = CreateElement ("name");
@@ -215,6 +236,22 @@ namespace SparkleLib {
         }
 
 
+        public List<string> HostsWithUsername {
+            get {
+                List<string> hosts = new List<string> ();
+
+                foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
+                    Uri uri = new Uri (node_folder ["url"].InnerText);
+
+                    if ("git" != uri.UserInfo && !hosts.Contains (uri.UserInfo + "@" + uri.Host))
+                        hosts.Add (uri.UserInfo + "@" + uri.Host);
+                }
+
+              return hosts;
+           }
+        }
+        
+        
         public string GetAnnouncementsForFolder (string name)
         {
             return this.GetFolderValue(name, "announcements");

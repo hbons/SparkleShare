@@ -230,9 +230,19 @@ namespace SparkleShare {
         }
 
 
+        public List<string> FoldersWithPath {
+            get {
+                List<string> folders = SparkleConfig.DefaultConfig.FoldersWithPath;
+                folders.Sort ();
+                return folders;
+            }
+        }
+
+
         public List<string> PreviousHosts {
             get {
-                List<string> hosts = SparkleConfig.DefaultConfig.Hosts;
+                List<string> hosts = SparkleConfig.DefaultConfig.HostsWithUsername;
+                hosts.AddRange(SparkleConfig.DefaultConfig.Hosts);
                 hosts.Sort ();
                 return hosts;
             }
