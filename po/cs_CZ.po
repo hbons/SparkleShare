@@ -4,14 +4,15 @@
 # we apologise for any incovenience this may have caused and we hope to bring them
 # back in the future.
 # 
+# Jiri Slezka <jiri.slezka@slu.cz>, 2011.
 # zzanzare <zzanzare@gmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-29 11:38+0200\n"
-"PO-Revision-Date: 2011-06-26 09:22+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"PO-Revision-Date: 2011-07-09 22:10+0000\n"
+"Last-Translator: dron23 <jiri.slezka@slu.cz>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -66,15 +67,15 @@ msgstr "O SparkleShare"
 
 #: ../SparkleShare/SparkleAbout.cs:53
 msgid "A newer version is available"
-msgstr ""
+msgstr "Je k dispozici novější verze"
 
 #: ../SparkleShare/SparkleAbout.cs:60
 msgid "You are running the latest version."
-msgstr ""
+msgstr "Provozujete aktuální verzi."
 
 #: ../SparkleShare/SparkleAbout.cs:87
 msgid "Checking for updates..."
-msgstr ""
+msgstr "Kontroluji aktualizace..."
 
 #: ../SparkleShare/SparkleAbout.cs:116
 msgid "_Show Credits"
@@ -100,7 +101,7 @@ msgstr "přidal(a) ‘{0}’"
 #: ../SparkleShare/SparkleController.cs:666
 #, csharp-format
 msgid "moved ‘{0}’"
-msgstr ""
+msgstr "přesunuto \"{0}\""
 
 #: ../SparkleShare/SparkleController.cs:671
 #, csharp-format
@@ -116,13 +117,13 @@ msgstr "smazal(a) ‘{0}’"
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "a {0} více"
+msgstr[1] "a {0} více"
+msgstr[2] "a {0} více"
 
 #: ../SparkleShare/SparkleController.cs:689
 msgid "did something magical"
-msgstr ""
+msgstr "stalo se něco magického"
 
 #: ../SparkleShare/SparkleIntro.cs:73
 msgid ""
@@ -320,12 +321,12 @@ msgstr "Zjistěte jak připravit svůj vlastní SparkleServer"
 
 #: ../SparkleShare/SparkleEventLog.cs:61
 msgid "Recent Events"
-msgstr ""
+msgstr "Nedávné události"
 
 #: ../SparkleShare/SparkleEventLog.cs:148
 #: ../SparkleShare/SparkleEventLog.cs:173
 msgid "All Folders"
-msgstr ""
+msgstr "Všechny složky"
 
 #: ../SparkleShare/SparkleShare.cs:53
 msgid "Sorry, you can't run SparkleShare with these permissions."
@@ -346,7 +347,7 @@ msgstr "Zobrazit tuto nápovědu"
 
 #: ../SparkleShare/SparkleShare.cs:109
 msgid "SparkleShare, a collaboration and sharing tool."
-msgstr ""
+msgstr "SparkleShare, nástroj pro sdílení a spolupráci."
 
 #: ../SparkleShare/SparkleShare.cs:110
 msgid "Copyright (C) 2010 Hylke Bons"
@@ -400,7 +401,7 @@ msgstr "Přidat vzdálenou složku…"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:242
 msgid "Show Recent Events"
-msgstr ""
+msgstr "Zobrazit nedávné události"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:262
 msgid "Turn Notifications Off"
@@ -426,6 +427,6 @@ msgstr ""
 
 #: ../SparkleShare/SparkleWindow.cs:41
 msgid "SparkleShare Setup"
-msgstr ""
+msgstr "Nastavení SparkleShare"
 
 
