@@ -5,6 +5,7 @@
 # back in the future.
 # 
 #   <smygrokarn@tekniktoppen.com>, 2011.
+#   <lindblom.jan@gmail.com>, 2011.
 #   <tx@elehu.com>, 2011.
 # smygrokarn <smygrokarn@tekniktoppen.com>, 2011.
 msgid ""
@@ -12,8 +13,8 @@ msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-29 11:38+0200\n"
-"PO-Revision-Date: 2011-06-26 09:22+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"PO-Revision-Date: 2011-07-07 18:57+0000\n"
+"Last-Translator: janerictobias <lindblom.jan@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -320,12 +321,12 @@ msgstr "Lär dig hur du sätter upp en egen SparkleServer"
 
 #: ../SparkleShare/SparkleEventLog.cs:61
 msgid "Recent Events"
-msgstr ""
+msgstr "Senaste händelser"
 
 #: ../SparkleShare/SparkleEventLog.cs:148
 #: ../SparkleShare/SparkleEventLog.cs:173
 msgid "All Folders"
-msgstr ""
+msgstr "Alla kataloger"
 
 #: ../SparkleShare/SparkleShare.cs:53
 msgid "Sorry, you can't run SparkleShare with these permissions."
@@ -398,7 +399,7 @@ msgstr "Lägg till fjärrkatalog"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:242
 msgid "Show Recent Events"
-msgstr ""
+msgstr "Visa senaste händelser"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:262
 msgid "Turn Notifications Off"
