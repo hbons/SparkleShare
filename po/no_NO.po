@@ -4,14 +4,15 @@
 # we apologise for any incovenience this may have caused and we hope to bring them
 # back in the future.
 # 
+#   <vegard.aarseth@gmail.com>, 2011.
 # habakke <habakke@matrise.net>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-29 11:38+0200\n"
-"PO-Revision-Date: 2011-06-26 09:22+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"PO-Revision-Date: 2011-07-05 10:29+0000\n"
+"Last-Translator: VegardAa <vegard.aarseth@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -62,23 +63,23 @@ msgstr "Vel for å få en kopi av denne versjonen."
 #. A menu item that takes the user to http://www.sparkleshare.org/
 #: ../SparkleShare/SparkleAbout.cs:46 ../SparkleShare/SparkleStatusIcon.cs:275
 msgid "About SparkleShare"
-msgstr ""
+msgstr "Om SparkleShare"
 
 #: ../SparkleShare/SparkleAbout.cs:53
 msgid "A newer version is available"
-msgstr ""
+msgstr "En nyere versjon er tilgjengelig"
 
 #: ../SparkleShare/SparkleAbout.cs:60
 msgid "You are running the latest version."
-msgstr ""
+msgstr "Du kjører siste versjon"
 
 #: ../SparkleShare/SparkleAbout.cs:87
 msgid "Checking for updates..."
-msgstr ""
+msgstr "Ser etter oppdateringer..."
 
 #: ../SparkleShare/SparkleAbout.cs:116
 msgid "_Show Credits"
-msgstr ""
+msgstr "_Vis ...."
 
 #: ../SparkleShare/SparkleAbout.cs:129
 msgid "_Visit Website"
@@ -100,7 +101,7 @@ msgstr "la til '{0}'"
 #: ../SparkleShare/SparkleController.cs:666
 #, csharp-format
 msgid "moved ‘{0}’"
-msgstr ""
+msgstr "Flyttet ‘{0}’"
 
 #: ../SparkleShare/SparkleController.cs:671
 #, csharp-format
@@ -121,7 +122,7 @@ msgstr[1] ""
 
 #: ../SparkleShare/SparkleController.cs:689
 msgid "did something magical"
-msgstr ""
+msgstr "Gjorde noe magisk"
 
 #: ../SparkleShare/SparkleIntro.cs:73
 msgid ""
@@ -149,7 +150,7 @@ msgstr "Konfigurerer..."
 
 #: ../SparkleShare/SparkleIntro.cs:161
 msgid "Where is your remote folder?"
-msgstr "Hvor er din eksterne mappen?"
+msgstr "Hvor er din eksterne mappe?"
 
 #: ../SparkleShare/SparkleIntro.cs:174
 msgid "address-to-server.com"
@@ -161,7 +162,7 @@ msgstr "På min egen server:"
 
 #: ../SparkleShare/SparkleIntro.cs:186
 msgid "Free hosting for Free and Open Source Software projects."
-msgstr "Gratis hosting for Free og Åpne Kildekode prosjekter"
+msgstr "Gratis hosting for gratis og Åpen Kildekode prosjekter"
 
 #: ../SparkleShare/SparkleIntro.cs:187
 msgid "Also has paid accounts for extra private space and bandwidth."
@@ -216,7 +217,7 @@ msgstr "Mappe Navn:"
 
 #: ../SparkleShare/SparkleIntro.cs:269
 msgid "Sync"
-msgstr "Synk"
+msgstr "Synkroniser"
 
 #: ../SparkleShare/SparkleIntro.cs:312
 msgid "Cancel"
@@ -244,7 +245,7 @@ msgstr "Aksepterer du denne invitasjonen?"
 
 #: ../SparkleShare/SparkleIntro.cs:368
 msgid "Server Address:"
-msgstr "Server Adresse:"
+msgstr "Tjener Adresse:"
 
 #: ../SparkleShare/SparkleIntro.cs:391
 msgid "Reject"
@@ -252,7 +253,7 @@ msgstr "Avvis"
 
 #: ../SparkleShare/SparkleIntro.cs:392
 msgid "Accept and Sync"
-msgstr "Godta og Synk"
+msgstr "Godta og Synkroniser"
 
 #: ../SparkleShare/SparkleIntro.cs:442
 msgid "Something went wrong…"
@@ -265,7 +266,7 @@ msgstr "Forsøk igjen"
 #: ../SparkleShare/SparkleIntro.cs:473
 #, csharp-format
 msgid "‘{0}’ has been successfully added"
-msgstr ""
+msgstr "‘{0}’ har blitt lagt til"
 
 #: ../SparkleShare/SparkleIntro.cs:482
 msgid "Folder synced successfully!"
@@ -320,12 +321,12 @@ msgstr "Lær hvordan du kan være vert for din egen SparkleServer"
 
 #: ../SparkleShare/SparkleEventLog.cs:61
 msgid "Recent Events"
-msgstr ""
+msgstr "Nylige hendelser"
 
 #: ../SparkleShare/SparkleEventLog.cs:148
 #: ../SparkleShare/SparkleEventLog.cs:173
 msgid "All Folders"
-msgstr ""
+msgstr "Alle mapper"
 
 #: ../SparkleShare/SparkleShare.cs:53
 msgid "Sorry, you can't run SparkleShare with these permissions."
@@ -395,19 +396,19 @@ msgstr "Ingen Eksterne Mapper Ennå"
 #. Opens the wizard to add a new remote folder
 #: ../SparkleShare/SparkleStatusIcon.cs:218
 msgid "Add Remote Folder…"
-msgstr ""
+msgstr "Legg til esktern mappe..."
 
 #: ../SparkleShare/SparkleStatusIcon.cs:242
 msgid "Show Recent Events"
-msgstr ""
+msgstr "Vis nylige hendelser"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:262
 msgid "Turn Notifications Off"
-msgstr ""
+msgstr "Slå av varslinger"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:264
 msgid "Turn Notifications On"
-msgstr ""
+msgstr "Slå på varslinger"
 
 #. A menu item that quits the application
 #: ../SparkleShare/SparkleStatusIcon.cs:286
