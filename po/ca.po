@@ -6,14 +6,15 @@
 # 
 #   <bielet@bielet.com>, 2011.
 # Carles Mateu <carlesm@carlesm.com>, 2011.
+#   <a@alexandresaiz.com>, 2011.
 # alexandresaiz <a@alexandresaiz.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-29 11:38+0200\n"
-"PO-Revision-Date: 2011-06-26 09:22+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"PO-Revision-Date: 2011-07-02 21:33+0000\n"
+"Last-Translator: alexandresaiz <a@alexandresaiz.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -88,11 +89,11 @@ msgstr "_Visitar lloc web"
 
 #: ../SparkleShare/SparkleController.cs:455
 msgid "ddd MMM d, yyyy"
-msgstr ""
+msgstr "ddd MMM d, yyyy"
 
 #: ../SparkleShare/SparkleController.cs:460
 msgid "ddd MMM d"
-msgstr ""
+msgstr "ddd MMM d"
 
 #: ../SparkleShare/SparkleController.cs:661
 #, csharp-format
@@ -324,12 +325,12 @@ msgstr "Apren com gestionar el teu propi servidor SparkleShare"
 
 #: ../SparkleShare/SparkleEventLog.cs:61
 msgid "Recent Events"
-msgstr ""
+msgstr "Accions recents"
 
 #: ../SparkleShare/SparkleEventLog.cs:148
 #: ../SparkleShare/SparkleEventLog.cs:173
 msgid "All Folders"
-msgstr ""
+msgstr "Totes les carpetes"
 
 #: ../SparkleShare/SparkleShare.cs:53
 msgid "Sorry, you can't run SparkleShare with these permissions."
@@ -404,7 +405,7 @@ msgstr "Afegeix una carpeta remota"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:242
 msgid "Show Recent Events"
-msgstr ""
+msgstr "Mostra les accions més recents"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:262
 msgid "Turn Notifications Off"
