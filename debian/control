@@ -12,12 +12,11 @@ Package: sparkleshare
 Architecture: amd64 i386
 Depends: ${shlibs:Depends}, ${misc:Depends}, libwebkit1.1-cil, libnotify0.4-cil, git-core
 Description: SparkleShare is a collaboration and sharing tool that is designed to keep
-things simple and to stay out of your way. It allows you to instantly sync
-with any Git repository you have access to.
-
-Though SparkleShare is not made to be a graphical frontend
-for git or a backup tool, it may be useful for other kinds of purposes as well,
-like backing up small files or monitoring your favourite project. In contrast
-to the projects name, we will very likely refuse to implement your personal
-ponies.
-
+ things simple and to stay out of your way. It allows you to instantly sync
+ with any Git repository you have access to.
+ .
+ Though SparkleShare is not made to be a graphical frontend
+ for git or a backup tool, it may be useful for other kinds of purposes as well,
+ like backing up small files or monitoring your favourite project. In contrast
+ to the projects name, we will very likely refuse to implement your personal
+ ponies.
