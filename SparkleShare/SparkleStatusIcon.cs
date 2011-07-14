@@ -223,16 +223,16 @@ namespace SparkleShare {
                 sync_item.Activated += delegate {
                     Application.Invoke (delegate {
 
-                        if (SparkleUI.Intro == null) {
-                            SparkleUI.Intro = new SparkleIntro ();
-                            SparkleUI.Intro.ShowServerForm (true);
+                        if (SparkleUI.Setup == null) {
+                            SparkleUI.Setup = new SparkleSetup ();
+                            SparkleUI.Setup.Controller.ShowAddPage ();
                         }
         
-                        if (!SparkleUI.Intro.Visible)
-                            SparkleUI.Intro.ShowServerForm (true);
+                        if (!SparkleUI.Setup.Visible)
+                            SparkleUI.Setup.Controller.ShowAddPage ();
 
-                        SparkleUI.Intro.ShowAll ();
-                        SparkleUI.Intro.Present ();
+                        //SparkleUI.Intro.ShowAll ();
+                        //SparkleUI.Intro.Present ();
                     });
                 };
 

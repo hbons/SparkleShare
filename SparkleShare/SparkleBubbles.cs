@@ -31,14 +31,14 @@ namespace SparkleShare {
         {
             Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
                 Notification notification = new Notification () {
-                    Timeout  = 5 * 1000;
-                    Urgency  = Urgency.Low;
-                }
+                    Timeout  = 5 * 1000,
+                    Urgency  = Urgency.Low
+                };
 
                 if (image_path != null)
-                    Icon = new Gdk.Pixbuf (image_path);
+                    notification.Icon = new Gdk.Pixbuf (image_path);
                 else
-                    IconName = "folder-sparkleshare";
+                    notification.IconName = "folder-sparkleshare";
 
                 notification.Show ();
             };

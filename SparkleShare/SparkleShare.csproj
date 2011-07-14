@@ -38,26 +38,6 @@
     <Reference Include="Mono.Posix" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SparkleShare.cs" />
-    <Compile Include="SparkleSpinner.cs" />
-    <Compile Include="SparkleStatusIcon.cs" />
-    <Compile Include="SparkleUI.cs" />
-    <Compile Include="SparkleEntry.cs" />
-    <Compile Include="SparkleEventLog.cs" />
-    <Compile Include="SparkleUIHelpers.cs" />
-    <Compile Include="SparkleController.cs" />
-    <Compile Include="SparkleAbout.cs" />
-    <Compile Include="SparkleAboutController.cs" />
-    <Compile Include="SparkleLinController.cs" />
-    <Compile Include="SparkleBubblesController.cs" />
-    <Compile Include="SparkleEventLogController.cs" />
-    <Compile Include="SparkleSetupController.cs" />
-    <Compile Include="SparkleStatusIconController.cs" />
-    <Compile Include="SparkleBubbles.cs" />
-    <Compile Include="SparkleSetup.cs" />
-    <Compile Include="SparkleSetupWindow.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\SparkleLib\SparkleLib.csproj">
       <Project>{2C914413-B31C-4362-93C7-1AE34F09112A}</Project>
       <Name>SparkleLib</Name>
@@ -78,4 +58,25 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <Compile Include="SparkleAbout.cs" />
+    <Compile Include="SparkleAboutController.cs" />
+    <Compile Include="SparkleBubbles.cs" />
+    <Compile Include="SparkleBubblesController.cs" />
+    <Compile Include="SparkleController.cs" />
+    <Compile Include="SparkleEntry.cs" />
+    <Compile Include="SparkleEventLog.cs" />
+    <Compile Include="SparkleEventLogController.cs" />
+    <Compile Include="SparkleInvitation.cs" />
+    <Compile Include="SparkleLinController.cs" />
+    <Compile Include="SparkleSetup.cs" />
+    <Compile Include="SparkleSetupController.cs" />
+    <Compile Include="SparkleSetupWindow.cs" />
+    <Compile Include="SparkleShare.cs" />
+    <Compile Include="SparkleSpinner.cs" />
+    <Compile Include="SparkleStatusIcon.cs" />
+    <Compile Include="SparkleStatusIconController.cs" />
+    <Compile Include="SparkleUI.cs" />
+    <Compile Include="SparkleUIHelpers.cs" />
+  </ItemGroup>
 </Project>
