@@ -64,39 +64,6 @@ namespace SparkleShare {
             SparkleShare.Controller.OnQuitWhileSyncing += delegate {
                 // TODO: Pop up a warning when quitting whilst syncing
             };
-
-
-            // Show a bubble when there are new changes
-            SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
-                                                                    string message, string repository_path) {
-                Application.Invoke (delegate {
-                    if (EventLog != null)
-                        EventLog.UpdateEvents ();
-
-                    if (!SparkleShare.Controller.NotificationsEnabled)
-                        return;
-
-                    // TODO SparkleBubble bubble    = new SparkleBubble (user_name, message);
-                    //string avatar_file_path = SparkleShare.Controller.GetAvatar (user_email, 36);
-
-                    //if (avatar_file_path != null)
-                      //  bubble.Icon = new Gdk.Pixbuf (avatar_file_path);
-                    //else
-                      //  bubble.Icon = SparkleUIHelpers.GetIcon ("avatar-default", 36);
-
-                    //bubble.Show ();
-                });
-            };
-
-            // Show a bubble when there was a conflict
-            SparkleShare.Controller.ConflictNotificationRaised += delegate {
-                Application.Invoke (delegate {
-                    string title   = _("Ouch! Mid-air collision!");
-                    string subtext = _("Don't worry, SparkleShare made a copy of each conflicting file.");
-
-                    // TODO new SparkleBubble (title, subtext).Show ();
-                });
-            };
         }
 
         // Runs the application
