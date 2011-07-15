@@ -68,8 +68,8 @@ namespace SparkleShare {
 
             Controller.NewVersionEvent += delegate (string new_version) {
                 Application.Invoke (delegate {
-                    this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#f57900'>{0}: {1}</span>",
-                        _("A newer version is available!"), new_version);
+                    this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#f57900'>{0}</span>",
+                        String.Format (_("A newer version ({0}) is available!"), new_version));
                     this.updates.ShowAll ();
                 });
             };
