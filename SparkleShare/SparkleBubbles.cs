@@ -16,26 +16,41 @@
 
 
 using System;
+
+using Gtk;
 using Notifications;
 
 namespace SparkleShare {
     
-    public class SparkleBubble : Notification {
+    public class SparkleBubbles {
 
-        public SparkleBubble (string title, string subtext) : base (title, subtext)
+        public SparkleBubblesController Controller = new SparkleBubblesController ();
+
+
+        public SparkleBubbles ()
         {
-            IconName = "folder-sparkleshare";
-            Timeout  = 4500;
-            Urgency  = Urgency.Low;
+            Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
+                Notification notification = new Notification () {
+                    Timeout  = 5 * 1000,
+                    Urgency  = Urgency.Low
+                };
+
+                if (image_path != null)
+                    notification.Icon = new Gdk.Pixbuf (image_path);
+                else
+                    notification.IconName = "folder-sparkleshare";
+
+                notification.Show ();
+            };
         }
 
 
         // Checks whether the system allows adding buttons to a notification,
         // prevents error messages in Ubuntu.
-        new public void AddAction (string action, string label, ActionHandler handler)
-        {
-            if (Array.IndexOf (Notifications.Global.Capabilities, "actions") > -1)
-                base.AddAction (action, label, handler);
-        }
+//        new public void AddAction (string action, string label, ActionHandler handler)
+//        {
+//            if (Array.IndexOf (Notifications.Global.Capabilities, "actions") > -1)
+//                base.AddAction (action, label, handler);
+//        }
     }
 }

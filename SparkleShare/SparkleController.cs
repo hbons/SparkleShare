@@ -75,12 +75,6 @@ namespace SparkleShare {
         public delegate void NotificationRaisedEventHandler (string user_name, string user_email,
                                                              string message, string repository_path);
 
-        public event NewVersionAvailableEventHandler NewVersionAvailable;
-        public delegate void NewVersionAvailableEventHandler (string new_version);
-
-        public event VersionUpToDateEventHandler VersionUpToDate;
-        public delegate void VersionUpToDateEventHandler ();
-
         
         // Short alias for the translations
         public static string _ (string s)
@@ -226,15 +220,6 @@ namespace SparkleShare {
                 List<string> folders = SparkleConfig.DefaultConfig.Folders;
                 folders.Sort ();
                 return folders;
-            }
-        }
-
-
-        public List<string> PreviousHosts {
-            get {
-                List<string> hosts = SparkleConfig.DefaultConfig.Hosts;
-                hosts.Sort ();
-                return hosts;
             }
         }
 
@@ -498,7 +483,7 @@ namespace SparkleShare {
 
 
         // Fires events for the current syncing state
-        private void UpdateState ()
+        public void UpdateState ()
         {
             foreach (SparkleRepoBase repo in Repositories) {
                 if (repo.Status == SyncStatus.SyncDown ||
@@ -1006,7 +991,6 @@ namespace SparkleShare {
 
 
             fetcher.Failed += delegate {
-
                 if (FolderFetchError != null)
                     FolderFetchError ();
 
@@ -1068,11 +1052,6 @@ namespace SparkleShare {
         }
 
 
-        public string Version {
-            get {
-                return SparkleBackend.Version;
-            }
-        }
 
 
         public void AddNoteToFolder (string folder_name, string revision, string note)
@@ -1084,29 +1063,6 @@ namespace SparkleShare {
         }
 
 
-        public void CheckForNewVersion ()
-        {
-            WebClient web_client = new WebClient ();
-            Uri uri = new Uri ("http://www.sparkleshare.org/version");
-
-            web_client.DownloadStringCompleted += delegate (object o, DownloadStringCompletedEventArgs args) {
-                if (args.Error != null)
-                    return;
-
-                string new_version = args.Result.Trim ();
-
-                if (Version.Equals (new_version)) {
-                    if (VersionUpToDate != null)
-                        VersionUpToDate ();
-
-                } else {
-                    if (NewVersionAvailable != null)
-                        NewVersionAvailable (new_version);
-                }
-            };
-
-            web_client.DownloadStringAsync (uri);
-        }
 
 
         private string [] tango_palette = new string [] {"#eaab00", "#e37222",

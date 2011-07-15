@@ -28,21 +28,26 @@ using SparkleLib;
 
 namespace SparkleShare {
 
-    public class SparkleWindow : Window    {
+    public class SparkleSetupWindow : Window    {
 
         private HBox HBox;
         private VBox VBox;
         private VBox Wrapper;
         private HButtonBox Buttons;
 
+        public string Header;
+        public string Description;
 
-        public SparkleWindow () : base ("")
+        public Container Content;
+
+        public SparkleSetupWindow () : base ("")
         {
             Title          = Catalog.GetString ("SparkleShare Setup");
             BorderWidth    = 0;
             IconName       = "folder-sparkleshare";
             Resizable      = false;
             WindowPosition = WindowPosition.Center;
+            Deletable      = false;
 
             SetSizeRequest (680, 440);
 
@@ -104,13 +109,35 @@ namespace SparkleShare {
 
         new public void Add (Widget widget)
         {
-            Wrapper.PackStart (widget, true, true, 0);
+            Label header = new Label ("<span size='large'><b>" + Header + "</b></span>") {
+                UseMarkup = true,
+                Xalign = 0
+            };
+
+            Label description = new Label (Description) {
+                Xalign = 0,
+                Wrap   = true
+            };
+
+            VBox layout_vertical = new VBox (false, 0);
+            layout_vertical.PackStart (header, false, false, 0);
+
+            if (!string.IsNullOrEmpty (Description))
+                layout_vertical.PackStart (description, false, false, 21);
+
+            if (widget != null)
+                layout_vertical.PackStart (widget, true, true, 21);
+
+            Wrapper.PackStart (layout_vertical, true, true, 0);
             ShowAll ();
         }
 
 
         public void Reset ()
         {
+            Header      = "";
+            Description = "";
+
             if (Wrapper.Children.Length > 0)
                 Wrapper.Remove (Wrapper.Children [0]);
 
@@ -122,7 +149,9 @@ namespace SparkleShare {
         
         new public void ShowAll ()
         {
-            Present ();
+
+         Present ();
+
             base.ShowAll ();
         }
 
