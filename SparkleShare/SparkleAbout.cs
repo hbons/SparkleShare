@@ -41,6 +41,11 @@ namespace SparkleShare {
 
         public SparkleAbout () : base ("")
         {
+            DeleteEvent += delegate (object o, DeleteEventArgs args) {
+                HideAll ();
+                args.RetVal = true;
+            };
+
             DefaultSize    = new Gdk.Size (600, 260);
             Resizable      = false;
             BorderWidth    = 0;
