@@ -458,8 +458,14 @@ namespace SparkleShare {
                 event_log += day_entry.Replace ("<!-- $day-entry-content -->", event_entries);
             }
 
-            return event_log_html.Replace ("<!-- $event-log-content -->", event_log)
+            string html =  event_log_html.Replace ("<!-- $event-log-content -->", event_log)
                 .Replace ("<!-- $username -->", UserName);
+
+            System.IO.StreamWriter file = new System.IO.StreamWriter (Path.Combine (SparklePaths.SparkleConfigPath, "log-debug.html"));
+            file.WriteLine (html);
+            file.Close ();
+
+            return html;
         }
 
 
