@@ -27,7 +27,9 @@ namespace SparkleShare {
 
     public class SparkleAbout : Window {
 
-        private Label version;
+        public SparkleAboutController Controller = new SparkleAboutController ();
+
+        private Label updates;
 
 
         // Short alias for the translations
@@ -39,30 +41,54 @@ namespace SparkleShare {
 
         public SparkleAbout () : base ("")
         {
-            DefaultSize    = new Gdk.Size (360, 260);
+            DeleteEvent += delegate (object o, DeleteEventArgs args) {
+                HideAll ();
+                args.RetVal = true;
+            };
+
+            DefaultSize    = new Gdk.Size (600, 260);
+            Resizable      = false;
             BorderWidth    = 0;
             IconName       = "folder-sparkleshare";
             WindowPosition = WindowPosition.Center;
             Title          = _("About SparkleShare");
-            Resizable      = false;
+            AppPaintable   = true;
+
+            // TODO: Should be able to do without referencing SparkleLib...
+            string image_path = SparkleLib.SparkleHelpers.CombineMore (SparkleLib.Defines.DATAROOTDIR,
+                "sparkleshare", "pixmaps", "about.png");
+
+            Realize ();
+            Gdk.Pixbuf buf = new Gdk.Pixbuf (image_path);
+            Gdk.Pixmap map, map2;
+            buf.RenderPixmapAndMask (out map, out map2, 255);
+            GdkWindow.SetBackPixmap (map, false);
 
             CreateAbout ();
 
-            SparkleShare.Controller.NewVersionAvailable += delegate (string new_version) {
+            Controller.NewVersionEvent += delegate (string new_version) {
                 Application.Invoke (delegate {
-                    this.version.Markup = String.Format ("<small><span fgcolor='#f57900'>{0}: {1}</span></small>", _("A newer version is available"), new_version);
-                    this.version.ShowAll ();
+                    this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#f57900'>{0}</span>",
+                        String.Format (_("A newer version ({0}) is available!"), new_version));
+                    this.updates.ShowAll ();
                 });
             };
 
-            SparkleShare.Controller.VersionUpToDate += delegate {
+            Controller.VersionUpToDateEvent += delegate {
                 Application.Invoke (delegate {
-                    this.version.Markup = String.Format ("<small><span fgcolor='#4e9a06'>{0}</span></small>", _("You are running the latest version."));
-                    this.version.ShowAll ();
+                    this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#4e9a06'>{0}</span>",
+                        _("You are running the latest version."));
+                    this.updates.ShowAll ();
                 });
             };
 
-            SparkleShare.Controller.CheckForNewVersion ();
+            Controller.CheckingForNewVersionEvent += delegate {
+                Application.Invoke (delegate {
+                    this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#4e9a06'>{0}</span>",
+                        _("Checking for updates..."));
+                    this.updates.ShowAll ();
+                });
+            };
         }
 
 
@@ -71,84 +97,58 @@ namespace SparkleShare {
             Gdk.Color color = Style.Foreground (StateType.Insensitive);
             string secondary_text_color = SparkleUIHelpers.GdkColorToHex (color);
 
-            EventBox box = new EventBox ();
-            box.ModifyBg (StateType.Normal, new TreeView ().Style.Base (StateType.Normal));
-
-                Label header = new Label () {
-                    Markup = "<span font_size='xx-large'>SparkleShare</span>\n<span fgcolor='" + secondary_text_color + "'><small>" + SparkleShare.Controller.Version + "</small></span>",
-                    Xalign = 0,
-                    Xpad = 18,
-                    Ypad = 18
-                };
-
-            box.Add (header);
-
-            this.version = new Label () {
-                Markup = String.Format ("<small>{0}</small>", _("Checking for updates...")),
+            Label version = new Label () {
+                Markup = "<span font_size='small' fgcolor='white'>" +
+                         "version " + Controller.RunningVersion +
+                         "</span>",
                 Xalign = 0,
-                Xpad   = 18,
-                Ypad   = 22,
+                Xpad = 300
+            };
+
+            this.updates = new Label () {
+                Markup = "<span font_size='small' fgcolor='" + secondary_text_color + "'>" +
+                         _("Checking for updates...") +
+                         "</span>",
+                Xalign = 0,
+                Xpad = 300
+            };
+
+            Label copyright = new Label () {
+                Markup = "<span font_size='small' fgcolor='white'>" +
+                         "Copyright © 2010–" + DateTime.Now.Year + " " +
+                         "Hylke Bons and others." +
+                         "</span>",
+                Xalign = 0,
+                Xpad   = 300
             };
 
             Label license = new Label () {
-                Xalign = 0,
-                Xpad   = 18,
-                Ypad   = 0,
                 LineWrap     = true,
-                Wrap         = true,
                 LineWrapMode = Pango.WrapMode.Word,
-
-                Markup = "<small>Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others\n" +
-                         "\n" +
-                         "SparkleShare is Free and Open Source Software. " +
-                         "You are free to use, modify, and redistribute it " +
-                         "under the terms of the GNU General Public License version 3 or later.</small>"
+                Markup       = "<span font_size='small' fgcolor='white'>" +
+                               "SparkleShare is Free and Open Source Software. You are free to use, modify, " +
+                               "and redistribute it under the GNU General Public License version 3 or later." +
+                               "</span>",
+                WidthRequest = 330,
+                Wrap         = true,
+                Xalign       = 0,
+                Xpad         = 300,
             };
 
-            VBox vbox = new VBox (false, 0) {
-                BorderWidth = 0
+            VBox layout_horizontal = new VBox (false, 0) {
+                BorderWidth   = 0,
+                HeightRequest = 260,
+                WidthRequest  = 640
             };
 
-                HButtonBox button_bar = new HButtonBox () {
-                    BorderWidth = 12
-                };
+            layout_horizontal.PackStart (new Label (""), false, false, 42);
+            layout_horizontal.PackStart (version, false, false, 0);
+            layout_horizontal.PackStart (this.updates, false, false, 0);
+            layout_horizontal.PackStart (copyright, false, false, 9);
+            layout_horizontal.PackStart (license, false, false, 0);
+            layout_horizontal.PackStart (new Label (""), false, false, 0);
 
-                Button credits_button = new Button (_("_Show Credits")) {
-                    UseUnderline = true
-                };
-
-                    credits_button.Clicked += delegate {
-
-                        Process process             = new Process ();
-                        process.StartInfo.FileName  = "xdg-open";
-                        process.StartInfo.Arguments = "http://www.sparkleshare.org/credits";
-                        process.Start ();
-
-                    };
-
-                    Button website_button = new Button (_("_Visit Website")) {
-                        UseUnderline = true
-                    };
-
-                    website_button.Clicked += delegate {
-
-                        Process process = new Process ();
-                        process.StartInfo.FileName = "xdg-open";
-                        process.StartInfo.Arguments = "http://www.sparkleshare.org/";
-                        process.Start ();
-
-                    };
-
-                button_bar.Add (website_button);
-                button_bar.Add (credits_button);
-
-            vbox.PackStart (box, true, true, 0);
-            vbox.PackStart (this.version, false, false, 0);
-            vbox.PackStart (license, true, true, 0);
-            vbox.PackStart (new Label (""), true, true, 0);
-            vbox.PackStart (button_bar, false, false, 0);
-
-            Add (vbox);
+            Add (layout_horizontal);
         }
     }
 }
