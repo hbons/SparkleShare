@@ -28,7 +28,7 @@ using Mono.Unix;
 
 namespace SparkleShare {
 
-    public class SparkleWindow : NSWindow {
+    public class SparkleSetupWindow : NSWindow {
 
         public List <NSButton> Buttons;
         public string Header;
@@ -40,7 +40,7 @@ namespace SparkleShare {
         private NSTextField DescriptionTextField;
 
 
-        public SparkleWindow () : base ()
+        public SparkleSetupWindow () : base ()
         {
             SetFrame (new RectangleF (0, 0, 640, 380), true);
 

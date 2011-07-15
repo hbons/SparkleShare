@@ -13,19 +13,39 @@ endif
 
 SOURCES =  \
 	SparkleAbout.cs \
-	SparkleBubble.cs \
+	SparkleAboutController.cs \
+	SparkleBubbles.cs \
+	SparkleBubblesController.cs \
 	SparkleController.cs \
 	SparkleEntry.cs \
-	SparkleInfobar.cs \
-	SparkleIntro.cs \
-	SparkleLinController.cs \
 	SparkleEventLog.cs \
+	SparkleEventLogController.cs \
+	SparkleLinController.cs \
+	SparkleSetup.cs \
+	SparkleSetupController.cs \
+	SparkleSetupWindow.cs \
 	SparkleShare.cs \
 	SparkleSpinner.cs \
 	SparkleStatusIcon.cs \
+	SparkleStatusIconController.cs \
 	SparkleUI.cs \
-	SparkleUIHelpers.cs \
-	SparkleWindow.cs
+	SparkleUIHelpers.cs
+	SparkleBubbles.cs \
+	SparkleBubblesController.cs \
+	SparkleController.cs \
+	SparkleEntry.cs \
+	SparkleEventLog.cs \
+	SparkleEventLogController.cs \
+	SparkleLinController.cs \
+	SparkleSetup.cs \
+	SparkleSetupController.cs \
+	SparkleSetupWindow.cs \
+	SparkleShare.cs \
+	SparkleSpinner.cs \
+	SparkleStatusIcon.cs \
+	SparkleStatusIconController.cs \
+	SparkleUI.cs \
+	SparkleUIHelpers.cs
 
 include $(top_srcdir)/build/build.mk
 
