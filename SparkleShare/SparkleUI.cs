@@ -35,6 +35,7 @@ namespace SparkleShare {
         public static SparkleStatusIcon StatusIcon;
         public static SparkleEventLog EventLog;
         public static SparkleSetup Setup;
+        public static SparkleAbout About;
 
 
         // Short alias for the translations

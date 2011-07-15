@@ -275,8 +275,13 @@ namespace SparkleShare {
                 MenuItem about_item = new MenuItem (_("About SparkleShare"));
 
                 about_item.Activated += delegate {
-                    SparkleAbout about = new SparkleAbout ();
-                    about.ShowAll ();
+                    Application.Invoke (delegate {
+                        if (SparkleUI.About == null)
+                            SparkleUI.About = new SparkleAbout ();
+
+                        SparkleUI.About.ShowAll ();
+                        SparkleUI.About.Present ();
+                    });
                 };
 
             Menu.Add (about_item);
