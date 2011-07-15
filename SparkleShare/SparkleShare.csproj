@@ -59,15 +59,10 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
-    <Compile Include="SparkleAbout.cs" />
-    <Compile Include="SparkleAboutController.cs" />
     <Compile Include="SparkleBubbles.cs" />
     <Compile Include="SparkleBubblesController.cs" />
     <Compile Include="SparkleController.cs" />
     <Compile Include="SparkleEntry.cs" />
-    <Compile Include="SparkleEventLog.cs" />
-    <Compile Include="SparkleEventLogController.cs" />
-    <Compile Include="SparkleInvitation.cs" />
     <Compile Include="SparkleLinController.cs" />
     <Compile Include="SparkleSetup.cs" />
     <Compile Include="SparkleSetupController.cs" />
@@ -78,5 +73,9 @@
     <Compile Include="SparkleStatusIconController.cs" />
     <Compile Include="SparkleUI.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
+    <Compile Include="SparkleEventLogController.cs" />
+    <Compile Include="SparkleEventLog.cs" />
+    <Compile Include="SparkleAboutController.cs" />
+    <Compile Include="SparkleAbout.cs" />
   </ItemGroup>
 </Project>

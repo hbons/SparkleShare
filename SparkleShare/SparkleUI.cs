@@ -66,7 +66,6 @@ namespace SparkleShare {
             };
 
 
-
             // Show a bubble when there are new changes
             SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
                                                                     string message, string repository_path) {
@@ -98,30 +97,7 @@ namespace SparkleShare {
                     // TODO new SparkleBubble (title, subtext).Show ();
                 });
             };
-
-            SparkleShare.Controller.AvatarFetched += delegate {
-                Application.Invoke (delegate {
-                    if (EventLog != null)
-                        EventLog.UpdateEvents ();
-                });
-            };
-
-            SparkleShare.Controller.OnIdle += delegate {
-                Application.Invoke (delegate {
-                    if (EventLog != null)
-                        EventLog.UpdateEvents ();
-                });
-            };
-
-            SparkleShare.Controller.FolderListChanged += delegate {
-                Application.Invoke (delegate {
-                    if (EventLog != null) {
-                        EventLog.UpdateChooser ();
-                        EventLog.UpdateEvents ();
-                    }
-                });
-            };
-        }        
+        }
 
         // Runs the application
         public void Run ()
