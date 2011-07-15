@@ -19,9 +19,9 @@
                 }
               });
 
-              $('.comments-section').click(function () {
-                 $(this).find ('.comments-wrapper').show ();
-                 $(this).find ('.comments-wrapper').css ('cursor', 'default');
+              $('.comment').click(function () {
+                 $(this).parent ().find ('.comments-wrapper').show ();
+                 //$(this).parent ().find ('.comments-wrapper').css ('cursor', 'default');
               });
 
               $("input").click(function () {
@@ -50,8 +50,13 @@
         </script>
 
         <style>
+            * {
+                box-sizing:         border-box;
+                -webkit-box-sizing: border-box;
+            }
+
             body {
-                background-color: #dedede;
+                background-color: #fff;
                 color:            <!-- $body-color -->;
                 font-size:        <!-- $body-font-size -->;
                 font-family:      <!-- $body-font-family -->;
@@ -81,65 +86,91 @@
                 padding-top: 9px;
                 margin-left: auto;
                 margin-right: auto;
+                display: block;
+                text-align: center;
             }
                         
             a {
                 color:           <!-- $a-color -->;
                 text-decoration: none;
+                text-overflow: ellipsis;
+                width: 100%;
+                white-space: nowrap;
             }
 
             a:hover {
                 color: <!-- $a-hover-color -->;
             }
 
-            .event-folder {
-                margin: 6px;
-                opacity: 0.8;
-                font-size:     80%;
-                color:         #fff;
-                float: right;
-                padding: 3px 15px;
+            .stuff {
+                width: 100%;
+                padding-left: 56px;
+            }
+
+            .event-timestamp {
+                color: <!-- $secondary-font-color -->;
+            }
+
+            .event-user-name {
+                float: left;
                 font-weight: bold;
-                -webkit-border-radius: 100px;
+            }
+
+            .event-folder {
+                float: right;
+                color: <!-- $secondary-font-color -->;
             }
 
             .event-entry-content {
-                display:          block;
-                background-color: #f0f0f0;
-                margin-bottom:    12px;
-                padding:          0px;
-                border:           #ccc 1px solid;
+                display:        block;
+                padding-bottom: 60px;
+                padding:        0px;
             }
 
-            .wrapper {
-                margin: 9px;
-                float: left;
+            .action {
+                margin-left: 15px;
+                float: right;
+                color: <!-- $a-color -->;
+            }
+
+            .action:hover {
+                color: <!-- $a-hover-color -->;
+                cursor: pointer;
+            }
+
+            .clearer {
+                clear: both;
+                backround-color: blue;
+                margin: 0;
+                padding: 0;
+                height: 0;
+            }
+
+            .separator {
+                border-bottom: 1px #ccc solid;
+                margin-top: 24px;
+                margin-bottom: 24px;
             }
 
             dl {
+                background-color:orange;
                 padding : 0;
                 margin:  0;
+                margin-bottom: 12px;
             }
             
             dd {
-                width:          90%;
-                overflow:       hidden;
-                text-overflow:  ellipsis;
-                padding:        0;
-                padding-top:    2px;
-                padding-bottom: 4px;
-                padding-left:   22px;
-                margin:         0;
-                margin-bottom:  2px;
-                margin-left:    12px;
-                border-bottom:  1px solid #ddd;
-                background-repeat: no-repeat;
+                overflow:            hidden;
+                text-overflow:       ellipsis;
+                width:               90%;
+                padding:             0;
+                padding-top:         2px;
+                padding-bottom:      2px;
+                padding-left:        22px;
+                margin:              0;
+                margin-bottom:       2px;
+                background-repeat:   no-repeat;
                 background-position: center left;
-            }
-
-            dd:last-child {
-                border: none;
-                margin-bottom: 6px;
             }
 
             .document-added {
@@ -159,28 +190,20 @@
             }
 
             .no-buddy-icon {
+                position: relative;
+                top: 0;
+                left: 0;
                 float:               left;
                 margin-right:        12px;
-                width:               36px;
+                width:               48px;
                 background-image:    url('<!-- $no-buddy-icon-background-image -->');
                 background-repeat:   no-repeat;
                 background-position: top center; 
             }
 
             .buddy-icon {
-                width:            36px;
-                height:           36px;
-            }
-
-            .event-info {
-                padding: 6px;
-                float: left;
-                margin-bottom: 8px;
-                width: 100%;
-                background-color: #fff;
-                border-bottom: 1px #ccc solid;
-                box-sizing:         border-box;
-                -webkit-box-sizing: border-box;
+                width:            48px;
+                height:           48px;
             }
 
             .comments {
@@ -200,7 +223,6 @@
             .comment-button {
                 float:right;
                 margin-top: 6px;
-                margin-bottom: 12px;
             }
 
             .comment-textarea {
@@ -214,16 +236,13 @@
             .comments-section {
                 box-sizing:         border-box;
                 -webkit-box-sizing: border-box;
-                border-top:         1px #ccc solid;
                 width:              100%;
-                height:             9px;
-            }
 
             .comments-wrapper {
                 box-sizing:         border-box;
                 -webkit-box-sizing: border-box;
                 width:              100%;
-                padding:            12px;
+                margin-top: 12px;
             }
 
             .comments-section:hover {

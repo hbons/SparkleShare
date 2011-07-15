@@ -1,29 +1,38 @@
 <div class='event-entry'>
     <div class='event-entry-content'>
-        <div class='event-info'>
-            <div class='wrapper'>
-                <div class='no-buddy-icon'>
-                    <div class='buddy-icon' style='background-image: url("<!-- $event-avatar-url -->");'></div>
-                </div>
-                <b><!-- $event-user-name --></b><br/>
-                <small><!-- $event-time --></small>
-            </div>
-            <span title="<!-- $event-revision -->">
-              <div class='event-folder' style='background-color: <!-- $event-folder-color -->'><!-- $event-folder --></div>
-            </span>
+        <div class='no-buddy-icon'>
+            <div class='buddy-icon' style='background-image: url("<!-- $event-avatar-url -->");'></div>
         </div>
-        <!-- $event-entry-content -->
-        <div class="comments-section">
-            <div class="comments-wrapper">
-                <!-- $event-comments -->
-                <textarea class="comment-textarea"></textarea>
 
-                <input class="comment-button" type="button" value="Add note"
-                 id="<!-- $event-folder -->~<!-- $event-revision -->">
-                <div style='clear: both'></div>
+        <div class="stuff">
+            <div class='event-user-name' style='background-color:red'><!-- $event-user-name --></div>
+            <div class='event-folder' style='background-color:green'><!-- $event-folder --></div>
+            <div class="clearer"></div>
+
+            <!-- $event-entry-content -->
+
+            <div class="clearer"></div>
+            <div style="float: left" class="event-timestamp"><!-- $event-time --></div>
+            <div class="action comment">Comment</div>
+            <div class="action"><a href=''>View all</a></div>
+
+            <div class="clearer"></div>
+
+            <div class="comments-section">
+                <div class="comments-wrapper">
+                    <!-- $event-comments -->
+                    <textarea class="comment-textarea"></textarea>
+
+                    <input class="comment-button" type="button" value="Add"
+                     id="<!-- $event-folder -->~<!-- $event-revision -->">
+                    <div style='clear: both'></div>
+                </div>
+                <div class="clearer"></div>
             </div>
-            <div style='clear: both'></div>
+
+            <div class="clearer"></div>
         </div>
-        <div style='clear: both'></div>
+        <div class="clearer"></div>
     </div>
+    <div class="separator" />
 </div>
