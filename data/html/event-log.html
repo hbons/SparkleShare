@@ -101,12 +101,12 @@
             }
 
             .day-entry-header {
-                opacity: 0.5;
+                color: #aaa;
                 margin-left: auto;
                 margin-right: auto;
                 display: block;
                 text-align: center;
-                margin-bottom: 24px;
+                margin-bottom: 36px;
                 font-weight: bold;
             }
 
@@ -117,9 +117,6 @@
             a {
                 color:           <!-- $a-color -->;
                 text-decoration: none;
-                text-overflow: ellipsis;
-                width: 100%;
-                white-space: nowrap;
             }
 
             a:hover {
@@ -211,19 +208,25 @@
                 display: block;
             }
 
-            .document-added {
+            .document {
+                text-overflow: ellipsis;
+                width: 100%;
+                white-space: nowrap;
+            }
+
+            .added {
                 background-image: url('<!-- $document-added-background-image -->');
             }
 
-            .document-deleted {
+            .deleted {
                 background-image: url('<!-- $document-deleted-background-image -->');
             }
 
-            .document-edited {
+            .edited {
                 background-image: url('<!-- $document-edited-background-image -->');
             }
 
-            .document-moved {
+            .moved {
                 background-image: url('<!-- $document-moved-background-image -->');
             }
 
