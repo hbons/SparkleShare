@@ -336,9 +336,9 @@ namespace SparkleShare {
                                     change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='document-edited'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+                                    event_entry += "<dd class='document edited'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
                                 else
-                                    event_entry += "<dd class='document-edited'>" + file_path + "</dd>";
+                                    event_entry += "<dd class='document edited'>" + file_path + "</dd>";
                             }
                         }
     
@@ -348,9 +348,9 @@ namespace SparkleShare {
                                     change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='document-added'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+                                    event_entry += "<dd class='document added'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
                                 else
-                                    event_entry += "<dd class='document-added'>" + file_path + "</dd>";
+                                    event_entry += "<dd class='document added'>" + file_path + "</dd>";
                             }
                         }
     
@@ -360,9 +360,9 @@ namespace SparkleShare {
                                     change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='document-deleted'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+                                    event_entry += "<dd class='document deleted'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
                                 else
-                                    event_entry += "<dd class='document-deleted'>" + file_path + "</dd>";
+                                    event_entry += "<dd class='document deleted'>" + file_path + "</dd>";
                             }
                         }
 
@@ -376,9 +376,9 @@ namespace SparkleShare {
                                     change_set.Folder, to_file_path);
 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='document-moved'><a href='" + absolute_file_path + "'>" + file_path + "</a><br/>";
+                                    event_entry += "<dd class='document moved'><a href='" + absolute_file_path + "'>" + file_path + "</a><br/>";
                                 else
-                                    event_entry += "<dd class='document-moved'>" + file_path + "<br/>";
+                                    event_entry += "<dd class='document moved'>" + file_path + "<br/>";
 
                                 if (File.Exists (absolute_to_file_path))
                                     event_entry += "<a href='" + absolute_to_file_path + "'>" + to_file_path + "</a></dd>";
