@@ -103,7 +103,9 @@
     <Compile Include="..\SparkleStatusIconController.cs">
       <Link>SparkleStatusIconController.cs</Link>
     </Compile>
-    <Compile Include="SparkleAboutController.cs" />
+    <Compile Include="..\SparkleAboutController.cs">
+      <Link>SparkleAboutController.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
