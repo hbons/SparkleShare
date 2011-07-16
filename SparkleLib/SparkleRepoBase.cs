@@ -18,6 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
 using System.Xml;
@@ -109,10 +111,8 @@ namespace SparkleLib {
 
                 // In the unlikely case that we haven't synced up our
                 // changes or the server was down, sync up again
-                if (HasUnsyncedChanges) {
+                if (HasUnsyncedChanges)
                     SyncUpBase ();
-                    SyncUpNotes ();
-                }
             };
 
             // Sync up everything that changed
@@ -239,10 +239,8 @@ namespace SparkleLib {
                     SyncDownBase ();
 
                 // Push changes that were made since the last disconnect
-                if (HasUnsyncedChanges) {
+                if (HasUnsyncedChanges)
                     SyncUpBase ();
-                    SyncUpNotes ();
-                }
             };
 
             // Start polling when the connection to the irc channel is lost
@@ -334,6 +332,42 @@ namespace SparkleLib {
                     this.has_changed = true;
                 }
             }
+        }
+
+
+        public List<SparkleNote> GetNotes (string revision) {
+            List<SparkleNote> notes = new List<SparkleNote> ();
+
+            string notes_path = Path.Combine (LocalPath, ".notes");
+
+            if (!Directory.Exists (notes_path))
+                Directory.CreateDirectory (notes_path);
+
+            Regex regex_notes = new Regex (@"<name>(.+)</name>.*" +
+                                "<email>(.+)</email>.*" +
+                                "<timestamp>([0-9]+)</timestamp>.*" +
+                                "<body>(.+)</body>", RegexOptions.Compiled);
+
+            foreach (string file_name in Directory.GetFiles (notes_path)) {
+                if (file_name.StartsWith (revision)) {
+                    string note_xml = String.Join ("", File.ReadAllLines (file_name));
+
+                    Match match_notes = regex_notes.Match (note_xml);
+
+                    if (match_notes.Success) {
+                        SparkleNote note = new SparkleNote () {
+                            UserName  = match_notes.Groups [1].Value,
+                            UserEmail = match_notes.Groups [2].Value,
+                            Timestamp = new DateTime (1970, 1, 1).AddSeconds (int.Parse (match_notes.Groups [3].Value)),
+                            Body      = match_notes.Groups [4].Value
+                        };
+
+                        notes.Add (note);
+                    }
+                }
+            }
+
+            return notes;
         }
 
 
@@ -452,15 +486,34 @@ namespace SparkleLib {
         }
 
 
-        public virtual void AddNote (string revision, string note)
+        public void AddNote (string revision, string note)
         {
+            string notes_path = Path.Combine (LocalPath, ".notes");
 
-        }
+            if (!Directory.Exists (notes_path))
+                Directory.CreateDirectory (notes_path);
 
+            // Add a timestamp in seconds since unix epoch
+            int timestamp = (int) (DateTime.UtcNow - new DateTime (1970, 1, 1)).TotalSeconds;
 
-        public virtual void SyncUpNotes ()
-        {
+            string n = Environment.NewLine;
+            note     = "<note>" + n +
+                       "  <user>" +  n +
+                       "    <name>" + SparkleConfig.DefaultConfig.UserName + "</name>" + n +
+                       "    <email>" + SparkleConfig.DefaultConfig.UserEmail + "</email>" + n +
+                       "  </user>" + n +
+                       "  <timestamp>" + timestamp + "</timestamp>" + n +
+                       "  <body>" + note + "</body>" + n +
+                       "</note>" + n;
 
+            string note_name = revision + SHA1 (timestamp.ToString () + note);
+            string note_path = Path.Combine (notes_path, note_name);
+
+            StreamWriter writer = new StreamWriter (note_path);
+            writer.Write (note);
+            writer.Close ();
+
+            SparkleHelpers.DebugInfo ("Note", "Added note to " + revision);
         }
 
 
@@ -488,6 +541,16 @@ namespace SparkleLib {
                 size += CalculateFolderSize (directory);
 
             return size;
+        }
+
+
+        // Creates a SHA-1 hash of input
+        private string SHA1 (string s)
+        {
+            SHA1 sha1 = new SHA1CryptoServiceProvider ();
+            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+            Byte[] encoded_bytes = sha1.ComputeHash (bytes);
+            return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");
         }
     }
 }
