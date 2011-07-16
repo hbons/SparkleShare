@@ -19,9 +19,28 @@
                 }
               });
 
-              $('.comment').click(function () {
+              // Show the form when 'Add note' is clicked
+              $('.note').click(function () {
                  $(this).parent ().find ('.comments-wrapper').show ();
                  //$(this).parent ().find ('.comments-wrapper').css ('cursor', 'default');
+              });
+
+              // Hide the 'Show all' link when there are less than 10 events
+              $('.show').each (function () {
+                var entries = $(this).parent ().find ('dl').children ().length;
+
+                if (entries <= 10) {
+                  $(this).hide ();
+                } else {
+                  // Append the number of entries
+                  $(this).html ('Show all ' + entries);
+                }
+              });
+
+              // When 'Show all' is clicked, show all collapsed events
+              $('.show').click(function () {
+                 $(this).parent ().find ('dl').children ().show ();
+                 $(this).hide ();
               });
 
               $("input").click(function () {
@@ -74,20 +93,26 @@
                 color: <!-- $secondary-font-color -->;
             }
 
-            td {
-                vertical-align: top;
-                font-size: 12px;
+            .comment-text {
+                font-size: 90%;
+                padding: 12px;
+                background-color: #FFF4DB;
+                margin-bottom: 1px;
+               <!-- padding-right: 48px; -->
             }
 
             .day-entry-header {
-                font-size:     <!-- $day-entry-header-font-size -->;         
-                color:         #444;
-                padding: 18px;
-                padding-top: 9px;
+                opacity: 0.5;
                 margin-left: auto;
                 margin-right: auto;
                 display: block;
                 text-align: center;
+                margin-bottom: 24px;
+                font-weight: bold;
+            }
+
+            .day-entry-content .event-entry:last-child {
+                border: none;
             }
                         
             a {
@@ -102,12 +127,9 @@
                 color: <!-- $a-hover-color -->;
             }
 
-            .stuff {
-                width: 100%;
-                padding-left: 56px;
-            }
-
             .event-timestamp {
+                float: left;
+                font-size: 80%;
                 color: <!-- $secondary-font-color -->;
             }
 
@@ -121,15 +143,21 @@
                 color: <!-- $secondary-font-color -->;
             }
 
-            .event-entry-content {
+            .event-entry {
+                margin-bottom: 24px;
+                padding-bottom: 24px;
+                border-bottom: 1px  <!-- $secondary-font-color --> solid;
+                width: 100%;
+                padding-left: 60px;
+                background-repeat: no-repeat;
                 display:        block;
-                padding-bottom: 60px;
-                padding:        0px;
             }
 
             .action {
+                font-size: 80%;
                 margin-left: 15px;
                 float: right;
+                margin-bottom: 9px;
                 color: <!-- $a-color -->;
             }
 
@@ -147,30 +175,37 @@
             }
 
             .separator {
+                clear: both;
                 border-bottom: 1px #ccc solid;
                 margin-top: 24px;
                 margin-bottom: 24px;
             }
 
             dl {
-                background-color:orange;
                 padding : 0;
                 margin:  0;
                 margin-bottom: 12px;
+                padding-top: 6px;
+                clear: both;
             }
             
             dd {
+                display: none;
                 overflow:            hidden;
                 text-overflow:       ellipsis;
                 width:               90%;
                 padding:             0;
                 padding-top:         2px;
                 padding-bottom:      2px;
-                padding-left:        22px;
+                padding-left:        20px;
                 margin:              0;
-                margin-bottom:       2px;
+                margin-bottom:       1px;
                 background-repeat:   no-repeat;
                 background-position: center left;
+            }
+
+            dl dd:nth-child(-n+10) {
+                display: block;
             }
 
             .document-added {
@@ -208,11 +243,16 @@
 
             .comments {
                 width: 100%;
+                font-size: 90%;
+                margin-bottom: 9px;
             }
 
             .comment-author {
+                font-size: 90%;
                 font-weight: bold;
                 width: 75%;
+                margin: 0;
+                margin-top: 12px;
             }
 
             .comment-timestamp {
@@ -229,7 +269,7 @@
                 box-sizing:         border-box;
                 -webkit-box-sizing: border-box;
                 width:              100%;
-                height:             50px;
+                height:             3em;
                 padding-bottom:     6px;
             }
 
@@ -237,6 +277,7 @@
                 box-sizing:         border-box;
                 -webkit-box-sizing: border-box;
                 width:              100%;
+            }
 
             .comments-wrapper {
                 box-sizing:         border-box;
