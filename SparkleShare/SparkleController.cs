@@ -312,7 +312,7 @@ namespace SparkleShare {
             }
 
             new Thread (new ThreadStart (delegate {
-                FetchAvatars (emails, 36);
+                FetchAvatars (emails, 48);
             })).Start ();
 
             string event_log_html   = EventLogHTML;
@@ -392,33 +392,27 @@ namespace SparkleShare {
 
                     string comments = "";
                     if (change_set.SupportsNotes) {
-                        comments = "<table class=\"comments\">";
+                        comments = "<div class=\"comments\">";
 
                         if (change_set.Notes != null) {
                             change_set.Notes.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
                             
                             foreach (SparkleNote note in change_set.Notes) {
-                                comments += "<tr>" +
-                                            "  <td class=\"comment-author\">" + note.UserName + "</td>" +
-                                            "  <td class=\"comment-timestamp\">" + note.Timestamp.ToString ("d MMM") + "</td>" +
-                                            "</tr>" +
-                                            "<tr>" +
-                                            "  <td class=\"comment-text\" colspan=\"2\">" + note.Body + "</td>" +
-                                            "</tr>";
+                                comments += "<div class=\"comment-text\">" + note.Body + "<p class=\"comment-author\">" + note.UserName +  "</p></div>";
                             }
                         }
 
-                        comments += "</table>";
+                        comments += "</div>";
                     }
 
                     string avatar_email = "";
-                    if (File.Exists (GetAvatar (change_set.UserEmail, 36)))
+                    if (File.Exists (GetAvatar (change_set.UserEmail, 48)))
                         avatar_email = change_set.UserEmail;
 
                     event_entry   += "</dl>";
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.UserName)
-                        .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (avatar_email, 36))
+                        .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (avatar_email, 48))
                         .Replace ("<!-- $event-time -->", change_set.Timestamp.ToString ("H:mm"))
                         .Replace ("<!-- $event-folder -->", change_set.Folder)
                         .Replace ("<!-- $event-revision -->", change_set.Revision)
@@ -434,24 +428,24 @@ namespace SparkleShare {
                     today.Month == activity_day.DateTime.Month && 
                     today.Year  == activity_day.DateTime.Year) {
 
-                    day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "<b>Today</b>");
+                    day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "Today");
 
                 } else if (yesterday.Day   == activity_day.DateTime.Day &&
                            yesterday.Month == activity_day.DateTime.Month &&
                            yesterday.Year  == activity_day.DateTime.Year) {
 
-                    day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "<b>Yesterday</b>");
+                    day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "Yesterday");
 
                 } else {
                     if (activity_day.DateTime.Year != DateTime.Now.Year) {
                         // TRANSLATORS: This is the date in the event logs
                         day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
-                            "<b>" + activity_day.DateTime.ToString (_("ddd MMM d, yyyy")) + "</b>");
+                            activity_day.DateTime.ToString (_("dddd, MMMM d, yyyy")));
 
                     } else {
                         // TRANSLATORS: This is the date in the event logs, without the year
                         day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
-                            "<b>" + activity_day.DateTime.ToString (_("ddd MMM d")) + "</b>");
+                            activity_day.DateTime.ToString (_("dddd, MMMM d")));
                     }
                 }
 
