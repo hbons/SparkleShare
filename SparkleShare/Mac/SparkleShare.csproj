@@ -264,6 +264,9 @@
     <Content Include="..\..\data\about.png">
       <Link>Pixmaps\about.png</Link>
     </Content>
+    <Content Include="..\..\data\html\jquery.js">
+      <Link>HTML\jquery.js</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pixmaps\" />
