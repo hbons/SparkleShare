@@ -398,7 +398,12 @@ namespace SparkleShare {
                             change_set.Notes.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
                             
                             foreach (SparkleNote note in change_set.Notes) {
-                                comments += "<div class=\"comment-text\">" + note.Body + "<p class=\"comment-author\">" + note.UserName +  "</p></div>";
+                                comments += "<div class=\"comment-text\">" +
+                                            "<p class=\"comment-author\"" +
+                                            " style=\"background-image: url('file://" + GetAvatar (note.UserEmail, 48) + "');\">" +
+                                            note.UserName +  "</p>" +
+                                            note.Body +
+                                            "</div>";
                             }
                         }
 
