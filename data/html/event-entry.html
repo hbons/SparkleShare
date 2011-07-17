@@ -1,29 +1,22 @@
-<div class='event-entry'>
-    <div class='event-entry-content'>
-        <div class='event-info'>
-            <div class='wrapper'>
-                <div class='no-buddy-icon'>
-                    <div class='buddy-icon' style='background-image: url("<!-- $event-avatar-url -->");'></div>
-                </div>
-                <b><!-- $event-user-name --></b><br/>
-                <small><!-- $event-time --></small>
-            </div>
-            <span title="<!-- $event-revision -->">
-              <div class='event-folder' style='background-color: <!-- $event-folder-color -->'><!-- $event-folder --></div>
-            </span>
-        </div>
-        <!-- $event-entry-content -->
-        <div class="comments-section">
-            <div class="comments-wrapper">
-                <!-- $event-comments -->
-                <textarea class="comment-textarea"></textarea>
+<div class='event-entry' style='background-image: url("<!-- $event-avatar-url -->");'>
+    <div class='event-user-name'><!-- $event-user-name --></div>
+    <div class='event-folder'><!-- $event-folder --></div>
 
-                <input class="comment-button" type="button" value="Add note"
-                 id="<!-- $event-folder -->~<!-- $event-revision -->">
-                <div style='clear: both'></div>
-            </div>
-            <div style='clear: both'></div>
-        </div>
+    <!-- $event-entry-content -->
+
+    <div class="clearer"></div>
+    <div class="event-timestamp"><!-- $event-time --></div>
+    <div class="action note">Add note</div>
+    <div class="action show">Show all</div>
+
+    <div class="clearer"></div>
+
+    <div class="comments-section">
+        <!-- $event-comments -->
+        <textarea class="comment-textarea"></textarea>
+        <input class="comment-button" type="button" value="Add note"
+         id="<!-- $event-folder -->~<!-- $event-revision -->">
         <div style='clear: both'></div>
     </div>
+    <div class="clearer"></div>
 </div>
