@@ -5,11 +5,9 @@
         <script type="text/javascript" src="<!-- $jquery-url -->"></script>
         <script type="text/javascript">
           $(document).ready(function () {
-              $('.comments-wrapper').each (function () {
+              $('.comments-section').each (function () {
                 if ($(this).find ('.comments').children ().size () < 1) {
                   $(this).hide ();
-                } else {
-                  $(this).css ('cursor', 'default');
                 }
               });
 
@@ -21,8 +19,7 @@
 
               // Show the form when 'Add note' is clicked
               $('.note').click(function () {
-                 $(this).parent ().find ('.comments-wrapper').show ();
-                 //$(this).parent ().find ('.comments-wrapper').css ('cursor', 'default');
+                 $(this).parent ().find ('.comments-section').show ();
               });
 
               // Hide the 'Show all' link when there are less than 10 events
@@ -50,19 +47,23 @@
                  if (text == '')
                      return;
 
+                 // Clear the textarea
                  textarea.val ('');
 
-                 table = $(this).parent ().find ("table");
+                 table = $(this).parent ().find (".comments");
                  comments = table.html ();
-                 comments += '<tr>' +
-                             '  <td class=\"comment-author\"><!-- $username --></td>' +
-                             '  <td class=\"comment-timestamp\">just now</td>' +
-                             '</tr>' +
-                             '<tr>' +
-                             '  <td class=\"comment-text\" colspan=\"2\">' + text + '</td>' +
-                             '</tr>';
+
+                 // Add the note to the html
+                 comments += '<div class="comment-text">' +
+                             '<p class="comment-author"' +
+                             ' style="background-image: url(\'<!-- $user-avatar-url -->\');">' +
+                             '<!-- $username --></p>' +
+                             text +
+                             '</div>';
+
                  table.html (comments);
 
+                 // Feed the note to the backend
                  location = this.id + '~' + text;
               });
           });
@@ -295,10 +296,6 @@
                 -webkit-box-sizing: border-box;
                 width:              100%;
                 margin-top: 12px;
-            }
-
-            .comments-section:hover {
-                cursor: pointer;
             }
 
             .comment-text {
