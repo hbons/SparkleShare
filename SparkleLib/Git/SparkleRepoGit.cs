@@ -19,8 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 
@@ -122,8 +120,6 @@ namespace SparkleLib {
                 return true;
 
             } else {
-                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching notes");
-                SyncDown ();
                 return false;
             }
         }
@@ -386,7 +382,7 @@ namespace SparkleLib {
 
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
 
-            SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw -M --date=iso --show-notes=*");
+            SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw -M --date=iso");
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             git_log.Start ();
 
@@ -448,7 +444,6 @@ namespace SparkleLib {
                     change_set.UserName      = match.Groups [2].Value;
                     change_set.UserEmail     = match.Groups [3].Value;
                     change_set.IsMerge       = is_merge_commit;
-                    change_set.SupportsNotes = true;
 
                     change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
                         int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
@@ -471,7 +466,7 @@ namespace SparkleLib {
                             string file_path   = entry_line.Substring (39);
                             string to_file_path;
 
-                            if (change_type.Equals ("A")) {
+                            if (change_type.Equals ("A") && !file_path.Contains (".notes")) {
                                 change_set.Added.Add (file_path);
 
                             } else if (change_type.Equals ("M")) {
@@ -488,30 +483,16 @@ namespace SparkleLib {
                                 change_set.MovedFrom.Add (file_path);
                                 change_set.MovedTo.Add (to_file_path);
                             }
-
-                        } else if (entry_line.StartsWith ("    <note>")) {
-
-                            Regex regex_notes = new Regex (@"<name>(.+)</name>.*" +
-                                                            "<email>(.+)</email>.*" +
-                                                            "<timestamp>([0-9]+)</timestamp>.*" +
-                                                            "<body>(.+)</body>", RegexOptions.Compiled);
-
-                            Match match_notes = regex_notes.Match (entry_line);
-
-                            if (match_notes.Success) {
-                                SparkleNote note = new SparkleNote () {
-                                    UserName  = match_notes.Groups [1].Value,
-                                    UserEmail = match_notes.Groups [2].Value,
-                                    Timestamp = new DateTime (1970, 1, 1).AddSeconds (int.Parse (match_notes.Groups [3].Value)),
-                                    Body      = match_notes.Groups [4].Value
-                                };
-
-                                change_set.Notes.Add (note);
-                            }
                         }
                     }
 
-                    change_sets.Add (change_set);
+                    if ((change_set.Added.Count +
+                         change_set.Edited.Count +
+                         change_set.Deleted.Count) > 0) {
+
+                        change_set.Notes.AddRange (GetNotes (change_set.Revision));
+                        change_sets.Add (change_set);
+                    }
                 }
             }
 
@@ -587,59 +568,6 @@ namespace SparkleLib {
         }
 
 
-        public override void AddNote (string revision, string note)
-        {
-            string url = SparkleConfig.DefaultConfig.GetUrlForFolder (Name);
-
-            if (url.StartsWith ("git") || url.StartsWith ("http"))
-                return;
-
-            int timestamp = (int) (DateTime.UtcNow - new DateTime (1970, 1, 1)).TotalSeconds;
-
-            // Create the note in one line for easier merging
-            note = "<note>" +
-                   "  <user>" +
-                   "    <name>" + SparkleConfig.DefaultConfig.UserName + "</name>" +
-                   "    <email>" + SparkleConfig.DefaultConfig.UserEmail + "</email>" +
-                   "  </user>" +
-                   "  <timestamp>" + timestamp + "</timestamp>" +
-                   "  <body>" + note + "</body>" +
-                   "</note>";
-
-            string note_namespace = SHA1 (timestamp.ToString () + note);
-            SparkleGit git_notes = new SparkleGit (LocalPath,
-                "notes --ref=" + note_namespace + " append -m \"" + note + "\" " + revision);
-            git_notes.Start ();
-            git_notes.WaitForExit ();
-
-            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Added note to " + revision);
-            SyncUpNotes ();
-        }
-
-
-        public override void SyncUpNotes ()
-        {
-            while (Status != SyncStatus.Idle) {
-                System.Threading.Thread.Sleep (5 * 20);
-            }
-
-            SparkleGit git_push = new SparkleGit (LocalPath, "push origin refs/notes/*");
-            git_push.Start ();
-            git_push.WaitForExit ();
-
-            if (git_push.ExitCode == 0) {
-                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Notes pushed");
-
-            } else {
-                HasUnsyncedChanges = true;
-                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Pushing notes failed, trying again later");
-            }
-
-            SparkleAnnouncement announcement = new SparkleAnnouncement (Identifier, SHA1 (DateTime.Now.ToString ()));
-            base.listener.Announce (announcement);
-        }
-
-
         public override bool UsesNotificationCenter
         {
             get {
@@ -653,16 +581,6 @@ namespace SparkleLib {
         {
             base.CreateInitialChangeSet ();
             SyncUp ();
-        }
-
-
-        // Creates a SHA-1 hash of input
-        private string SHA1 (string s)
-        {
-            SHA1 sha1 = new SHA1CryptoServiceProvider ();
-            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
-            Byte[] encoded_bytes = sha1.ComputeHash (bytes);
-            return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");
         }
     }
 }
