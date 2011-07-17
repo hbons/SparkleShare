@@ -444,7 +444,6 @@ namespace SparkleLib {
                     change_set.UserName      = match.Groups [2].Value;
                     change_set.UserEmail     = match.Groups [3].Value;
                     change_set.IsMerge       = is_merge_commit;
-                    change_set.SupportsNotes = true;
 
                     change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
                         int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
@@ -467,7 +466,7 @@ namespace SparkleLib {
                             string file_path   = entry_line.Substring (39);
                             string to_file_path;
 
-                            if (change_type.Equals ("A")) {
+                            if (change_type.Equals ("A") && !file_path.Contains (".notes")) {
                                 change_set.Added.Add (file_path);
 
                             } else if (change_type.Equals ("M")) {
@@ -487,8 +486,12 @@ namespace SparkleLib {
                         }
                     }
 
-                    change_set.Notes.AddRange (GetNotes (change_set.Revision));
-                    change_sets.Add (change_set);
+                    if ((change_set.Added.Count + change_set.Edited.Count +
+                         change_set.Deleted.Count) > 0) {
+
+                        change_set.Notes.AddRange (GetNotes (change_set.Revision));
+                        change_sets.Add (change_set);
+                    }
                 }
             }
 

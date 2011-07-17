@@ -308,7 +308,8 @@ namespace SparkleLib {
             if (!this.watcher.EnableRaisingEvents)
                 return;
 
-            if (args.FullPath.Contains (Path.DirectorySeparatorChar + "."))
+            if (args.FullPath.Contains (Path.DirectorySeparatorChar + ".") &&
+                !args.FullPath.Contains (Path.DirectorySeparatorChar + ".notes"))
                 return;
 
             WatcherChangeTypes wct = args.ChangeType;
@@ -348,9 +349,9 @@ namespace SparkleLib {
                                 "<timestamp>([0-9]+)</timestamp>.*" +
                                 "<body>(.+)</body>", RegexOptions.Compiled);
 
-            foreach (string file_name in Directory.GetFiles (notes_path)) {
-                if (file_name.StartsWith (revision)) {
-                    string note_xml = String.Join ("", File.ReadAllLines (file_name));
+            foreach (string file_path in Directory.GetFiles (notes_path)) {
+                if (Path.GetFileName (file_path).StartsWith (revision)) {
+                    string note_xml = String.Join ("", File.ReadAllLines (file_path));
 
                     Match match_notes = regex_notes.Match (note_xml);
 
@@ -513,6 +514,13 @@ namespace SparkleLib {
             writer.Write (note);
             writer.Close ();
 
+
+            // The watcher doesn't like .*/ so we need to trigger
+            // a change manually
+            FileSystemEventArgs args = new FileSystemEventArgs (WatcherChangeTypes.Changed,
+                notes_path, note_name);
+
+            OnFileActivity (args);
             SparkleHelpers.DebugInfo ("Note", "Added note to " + revision);
         }
 

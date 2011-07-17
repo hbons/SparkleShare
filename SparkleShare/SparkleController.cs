@@ -325,7 +325,7 @@ namespace SparkleShare {
 
                 foreach (SparkleChangeSet change_set in activity_day) {
                     string event_entry = "<dl>";
-                    
+
                     if (change_set.IsMerge) {
                         event_entry += "<dd>Did something magical</dd>";
 
@@ -391,24 +391,22 @@ namespace SparkleShare {
                     }
 
                     string comments = "";
-                    if (change_set.SupportsNotes) {
-                        comments = "<div class=\"comments\">";
+                    comments = "<div class=\"comments\">";
 
-                        if (change_set.Notes != null) {
-                            change_set.Notes.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
-                            
-                            foreach (SparkleNote note in change_set.Notes) {
-                                comments += "<div class=\"comment-text\">" +
-                                            "<p class=\"comment-author\"" +
-                                            " style=\"background-image: url('file://" + GetAvatar (note.UserEmail, 48) + "');\">" +
-                                            note.UserName +  "</p>" +
-                                            note.Body +
-                                            "</div>";
-                            }
+                    if (change_set.Notes != null) {
+                        change_set.Notes.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
+
+                        foreach (SparkleNote note in change_set.Notes) {
+                            comments += "<div class=\"comment-text\">" +
+                                        "<p class=\"comment-author\"" +
+                                        " style=\"background-image: url('file://" + GetAvatar (note.UserEmail, 48) + "');\">" +
+                                        note.UserName +  "</p>" +
+                                        note.Body +
+                                        "</div>";
                         }
-
-                        comments += "</div>";
                     }
+
+                    comments += "</div>";
 
                     string avatar_email = "";
                     if (File.Exists (GetAvatar (change_set.UserEmail, 48)))
@@ -458,7 +456,8 @@ namespace SparkleShare {
             }
 
             string html =  event_log_html.Replace ("<!-- $event-log-content -->", event_log)
-                .Replace ("<!-- $username -->", UserName);
+                .Replace ("<!-- $username -->", UserName)
+                .Replace ("<!-- $user-avatar-url -->", "file://" + GetAvatar (UserEmail, 48));
 
             return html;
         }
