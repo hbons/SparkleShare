@@ -89,17 +89,18 @@
     <Compile Include="SparkleBubble.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="..\SparkleIntro.cs" />
+    <Compile Include="..\SparkleSetup.cs" />
+    <Compile Include="..\SparkleSetupController.cs" />
+    <Compile Include="..\SparkleSetupWindow.cs" />
     <Compile Include="..\SparkleShare.cs" />
     <Compile Include="..\SparkleSpinner.cs" />
     <Compile Include="..\SparkleStatusIcon.cs" />
     <Compile Include="..\SparkleUI.cs" />
-    <Compile Include="..\SparkleWindow.cs" />
     <Compile Include="..\SparkleEntry.cs" />
     <Compile Include="..\SparkleUIHelpers.cs" />
-    <Compile Include="..\SparkleInfobar.cs" />
     <Compile Include="..\SparkleController.cs" />
     <Compile Include="..\SparkleAbout.cs" />
+    <Compile Include="..\SparkleAboutController.cs" />
     <Compile Include="SparkleEventLog.cs" />
     <Compile Include="SparkleWinController.cs" />
   </ItemGroup>

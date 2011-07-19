@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace SparkleLib {
 
@@ -49,6 +50,34 @@ namespace SparkleLib {
         }
 
 
+        public override string [] UnsyncedFilePaths {
+            get {
+                List<string> file_paths = new List<string> ();
+
+                SparkleGit git = new SparkleGit (LocalPath, "status --porcelain");
+                git.Start ();
+
+                // Reading the standard output HAS to go before
+                // WaitForExit, or it will hang forever on output > 4096 bytes
+                string output = git.StandardOutput.ReadToEnd ().TrimEnd ();
+                git.WaitForExit ();
+
+                string [] lines = output.Split ("\n".ToCharArray ());
+                foreach (string line in lines) {
+                    if (line [1].ToString ().Equals ("M") ||
+                        line [1].ToString ().Equals ("?") ||
+                        line [1].ToString ().Equals ("A")) {
+
+                        string path = line.Substring (3);
+                        path = path.Trim ("\"".ToCharArray ());
+                        file_paths.Add (path);
+                    }
+                }
+
+                return file_paths.ToArray ();
+            }
+        }
+
         public override string CurrentRevision {
             get {
 
@@ -63,8 +92,9 @@ namespace SparkleLib {
                 git.WaitForExit ();
 
                 if (git.ExitCode == 0) {
-                    string output   = git.StandardOutput.ReadToEnd ();
+                    string output = git.StandardOutput.ReadToEnd ();
                     return output.TrimEnd ();
+
                 } else {
                     return null;
                 }
@@ -88,6 +118,7 @@ namespace SparkleLib {
             if (!remote_revision.StartsWith (CurrentRevision)) {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
                 return true;
+
             } else {
                 return false;
             }
@@ -102,7 +133,6 @@ namespace SparkleLib {
             Commit (message);
 
             SparkleGit git = new SparkleGit (LocalPath, "push origin master");
-
             git.Start ();
             git.WaitForExit ();
 
@@ -115,14 +145,14 @@ namespace SparkleLib {
 
         public override bool SyncDown ()
         {
-            SparkleGit git = new SparkleGit (LocalPath, "fetch -v origin master");
-
+            SparkleGit git = new SparkleGit (LocalPath, "fetch -v");
             git.Start ();
             git.WaitForExit ();
 
             if (git.ExitCode == 0) {
                 Rebase ();
                 return true;
+
             } else {
                 return false;
             }
@@ -133,9 +163,12 @@ namespace SparkleLib {
             get {
                 SparkleGit git = new SparkleGit (LocalPath, "status --porcelain");
                 git.Start ();
+
+                // Reading the standard output HAS to go before
+                // WaitForExit, or it will hang forever on output > 4096 bytes
+                string output = git.StandardOutput.ReadToEnd ().TrimEnd ();
                 git.WaitForExit ();
 
-                string output = git.StandardOutput.ReadToEnd ().TrimEnd ();
                 string [] lines = output.Split ("\n".ToCharArray ());
 
                 foreach (string line in lines) {
@@ -265,9 +298,12 @@ namespace SparkleLib {
 
             SparkleGit git_status = new SparkleGit (LocalPath, "status --porcelain");
             git_status.Start ();
+
+            // Reading the standard output HAS to go before
+            // WaitForExit, or it will hang forever on output > 4096 bytes
+            string output = git_status.StandardOutput.ReadToEnd ().TrimEnd ();
             git_status.WaitForExit ();
 
-            string output   = git_status.StandardOutput.ReadToEnd ().TrimEnd ();
             string [] lines = output.Split ("\n".ToCharArray ());
 
             foreach (string line in lines) {
@@ -339,7 +375,6 @@ namespace SparkleLib {
 
 
         // Returns a list of the latest change sets
-        // TODO: Method needs to be made a lot faster
         public override List <SparkleChangeSet> GetChangeSets (int count)
         {
             if (count < 1)
@@ -393,7 +428,6 @@ namespace SparkleLib {
                                 "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
                                 "*", RegexOptions.Compiled);
 
-            // TODO: Need to optimise for speed
             foreach (string log_entry in entries) {
                 Regex regex;
                 bool is_merge_commit = false;
@@ -410,11 +444,11 @@ namespace SparkleLib {
                 if (match.Success) {
                     SparkleChangeSet change_set = new SparkleChangeSet ();
 
-                    change_set.Folder    = Name;
-                    change_set.Revision  = match.Groups [1].Value;
-                    change_set.UserName  = match.Groups [2].Value;
-                    change_set.UserEmail = match.Groups [3].Value;
-                    change_set.IsMerge   = is_merge_commit;
+                    change_set.Folder        = Name;
+                    change_set.Revision      = match.Groups [1].Value;
+                    change_set.UserName      = match.Groups [2].Value;
+                    change_set.UserEmail     = match.Groups [3].Value;
+                    change_set.IsMerge       = is_merge_commit;
 
                     change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
                         int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
@@ -437,7 +471,7 @@ namespace SparkleLib {
                             string file_path   = entry_line.Substring (39);
                             string to_file_path;
 
-                            if (change_type.Equals ("A")) {
+                            if (change_type.Equals ("A") && !file_path.Contains (".notes")) {
                                 change_set.Added.Add (file_path);
 
                             } else if (change_type.Equals ("M")) {
@@ -457,7 +491,13 @@ namespace SparkleLib {
                         }
                     }
 
-                    change_sets.Add (change_set);
+                    if ((change_set.Added.Count +
+                         change_set.Edited.Count +
+                         change_set.Deleted.Count) > 0) {
+
+                        change_set.Notes.AddRange (GetNotes (change_set.Revision));
+                        change_sets.Add (change_set);
+                    }
                 }
             }
 
@@ -533,22 +573,19 @@ namespace SparkleLib {
         }
 
 
-        public override void CreateInitialChangeSet ()
-        {
-            base.CreateInitialChangeSet ();
-            Add ();
-
-            string message = FormatCommitMessage ();
-            Commit (message);
-        }
-
-
         public override bool UsesNotificationCenter
         {
             get {
                 string file_path = SparkleHelpers.CombineMore (LocalPath, ".git", "disable_notification_center");
                 return !File.Exists (file_path);
             }
+        }
+
+
+        public override void CreateInitialChangeSet ()
+        {
+            base.CreateInitialChangeSet ();
+            SyncUp ();
         }
     }
 }

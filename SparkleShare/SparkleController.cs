@@ -74,12 +74,6 @@ namespace SparkleShare {
         public delegate void NotificationRaisedEventHandler (string user_name, string user_email,
                                                              string message, string repository_path);
 
-        public event NewVersionAvailableEventHandler NewVersionAvailable;
-        public delegate void NewVersionAvailableEventHandler (string new_version);
-
-        public event VersionUpToDateEventHandler VersionUpToDate;
-        public delegate void VersionUpToDateEventHandler ();
-
         
         // Short alias for the translations
         public static string _ (string s)
@@ -285,6 +279,7 @@ namespace SparkleShare {
         public string GetHTMLLog (List<SparkleChangeSet> change_sets)
         {
             List <ActivityDay> activity_days = new List <ActivityDay> ();
+            List<string> emails = new List<string> ();
 
             change_sets.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
             change_sets.Reverse ();
@@ -293,7 +288,8 @@ namespace SparkleShare {
                 return null;
 
             foreach (SparkleChangeSet change_set in change_sets) {
-                GetAvatar (change_set.UserEmail, 36);
+                if (!emails.Contains (change_set.UserEmail))
+                    emails.Add (change_set.UserEmail);
 
                 bool change_set_inserted = false;
                 foreach (ActivityDay stored_activity_day in activity_days) {
@@ -314,6 +310,10 @@ namespace SparkleShare {
                 }
             }
 
+            new Thread (new ThreadStart (delegate {
+                FetchAvatars (emails, 48);
+            })).Start ();
+
             string event_log_html   = EventLogHTML;
             string day_entry_html   = DayEntryHTML;
             string event_entry_html = EventEntryHTML;
@@ -324,7 +324,7 @@ namespace SparkleShare {
 
                 foreach (SparkleChangeSet change_set in activity_day) {
                     string event_entry = "<dl>";
-                    
+
                     if (change_set.IsMerge) {
                         event_entry += "<dd>Did something magical</dd>";
 
@@ -335,9 +335,9 @@ namespace SparkleShare {
                                     change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='document-edited'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+                                    event_entry += "<dd class='document edited'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
                                 else
-                                    event_entry += "<dd class='document-edited'>" + file_path + "</dd>";
+                                    event_entry += "<dd class='document edited'>" + file_path + "</dd>";
                             }
                         }
     
@@ -347,9 +347,9 @@ namespace SparkleShare {
                                     change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='document-added'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+                                    event_entry += "<dd class='document added'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
                                 else
-                                    event_entry += "<dd class='document-added'>" + file_path + "</dd>";
+                                    event_entry += "<dd class='document added'>" + file_path + "</dd>";
                             }
                         }
     
@@ -359,9 +359,9 @@ namespace SparkleShare {
                                     change_set.Folder, file_path);
                                 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='document-deleted'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
+                                    event_entry += "<dd class='document deleted'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
                                 else
-                                    event_entry += "<dd class='document-deleted'>" + file_path + "</dd>";
+                                    event_entry += "<dd class='document deleted'>" + file_path + "</dd>";
                             }
                         }
 
@@ -375,9 +375,9 @@ namespace SparkleShare {
                                     change_set.Folder, to_file_path);
 
                                 if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='document-moved'><a href='" + absolute_file_path + "'>" + file_path + "</a><br/>";
+                                    event_entry += "<dd class='document moved'><a href='" + absolute_file_path + "'>" + file_path + "</a><br/>";
                                 else
-                                    event_entry += "<dd class='document-moved'>" + file_path + "<br/>";
+                                    event_entry += "<dd class='document moved'>" + file_path + "<br/>";
 
                                 if (File.Exists (absolute_to_file_path))
                                     event_entry += "<a href='" + absolute_to_file_path + "'>" + to_file_path + "</a></dd>";
@@ -388,14 +388,38 @@ namespace SparkleShare {
                             }
                         }
                     }
-                        
+
+                    string comments = "";
+                    comments = "<div class=\"comments\">";
+
+                    if (change_set.Notes != null) {
+                        change_set.Notes.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
+
+                        foreach (SparkleNote note in change_set.Notes) {
+                            comments += "<div class=\"comment-text\">" +
+                                        "<p class=\"comment-author\"" +
+                                        " style=\"background-image: url('file://" + GetAvatar (note.UserEmail, 48) + "');\">" +
+                                        note.UserName +  "</p>" +
+                                        note.Body +
+                                        "</div>";
+                        }
+                    }
+
+                    comments += "</div>";
+
+                    string avatar_email = "";
+                    if (File.Exists (GetAvatar (change_set.UserEmail, 48)))
+                        avatar_email = change_set.UserEmail;
+
                     event_entry   += "</dl>";
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.UserName)
-                        .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (change_set.UserEmail, 36))
+                        .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (avatar_email, 48))
                         .Replace ("<!-- $event-time -->", change_set.Timestamp.ToString ("H:mm"))
                         .Replace ("<!-- $event-folder -->", change_set.Folder)
-                        .Replace ("<!-- $event-folder-color -->", AssignColor (change_set.Folder));
+                        .Replace ("<!-- $event-revision -->", change_set.Revision)
+                        .Replace ("<!-- $event-folder-color -->", AssignColor (change_set.Folder))
+                        .Replace ("<!-- $event-comments -->", comments);
                 }
 
                 string day_entry   = "";
@@ -406,31 +430,35 @@ namespace SparkleShare {
                     today.Month == activity_day.DateTime.Month && 
                     today.Year  == activity_day.DateTime.Year) {
 
-                    day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "<b>Today</b>");
+                    day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "Today");
 
                 } else if (yesterday.Day   == activity_day.DateTime.Day &&
                            yesterday.Month == activity_day.DateTime.Month &&
                            yesterday.Year  == activity_day.DateTime.Year) {
 
-                    day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "<b>Yesterday</b>");
+                    day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "Yesterday");
 
                 } else {
                     if (activity_day.DateTime.Year != DateTime.Now.Year) {
                         // TRANSLATORS: This is the date in the event logs
                         day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
-                            "<b>" + activity_day.DateTime.ToString (_("ddd MMM d, yyyy")) + "</b>");
+                            activity_day.DateTime.ToString (_("dddd, MMMM d, yyyy")));
 
                     } else {
                         // TRANSLATORS: This is the date in the event logs, without the year
                         day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
-                            "<b>" + activity_day.DateTime.ToString (_("ddd MMM d")) + "</b>");
+                            activity_day.DateTime.ToString (_("dddd, MMMM d")));
                     }
                 }
 
                 event_log += day_entry.Replace ("<!-- $day-entry-content -->", event_entries);
             }
 
-            return event_log_html.Replace ("<!-- $event-log-content -->", event_log);
+            string html =  event_log_html.Replace ("<!-- $event-log-content -->", event_log)
+                .Replace ("<!-- $username -->", UserName)
+                .Replace ("<!-- $user-avatar-url -->", "file://" + GetAvatar (UserEmail, 48));
+
+            return html;
         }
 
 
@@ -454,7 +482,7 @@ namespace SparkleShare {
 
 
         // Fires events for the current syncing state
-        private void UpdateState ()
+        public void UpdateState ()
         {
             foreach (SparkleRepoBase repo in Repositories) {
                 if (repo.Status == SyncStatus.SyncDown ||
@@ -495,7 +523,6 @@ namespace SparkleShare {
 
             if (backend == null)
                 return;
-
             
             SparkleRepoBase repo = null;
 
@@ -507,7 +534,6 @@ namespace SparkleShare {
 
             else
                repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
-
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set, string repository_path) {
                 string message = FormatMessage (change_set);
@@ -522,6 +548,11 @@ namespace SparkleShare {
             };
 
             repo.SyncStatusChanged += delegate (SyncStatus status) {
+/*                if (status == SyncStatus.SyncUp) {
+                    foreach (string path in repo.UnsyncedFilePaths)
+                        Console.WriteLine (path);
+                }
+*/
                 if (status == SyncStatus.Idle     ||
                     status == SyncStatus.SyncUp   ||
                     status == SyncStatus.SyncDown ||
@@ -814,68 +845,77 @@ namespace SparkleShare {
 
 
         // Gets the avatar for a specific email address and size
-        public string GetAvatar (string email, int size)
+        public void FetchAvatars (List<string> emails, int size)
         {
-            string avatar_path = SparkleHelpers.CombineMore (SparklePaths.SparkleLocalIconPath,
-                size + "x" + size, "status");
+            List<string> old_avatars = new List<string> ();
+            bool avatar_fetched      = false;
+            string avatar_path       = SparkleHelpers.CombineMore (
+                SparklePaths.SparkleLocalIconPath, size + "x" + size, "status");
 
-            string avatar_file_path = Path.Combine (avatar_path, "avatar-" + email);
+            if (!Directory.Exists (avatar_path)) {
+                Directory.CreateDirectory (avatar_path);
+                SparkleHelpers.DebugInfo ("Config", "Created '" + avatar_path + "'");
+            }
 
-            if (File.Exists (avatar_file_path)) {
-                FileInfo avatar_info = new FileInfo (avatar_file_path);
+            foreach (string email in emails) {
+                string avatar_file_path = Path.Combine (avatar_path, "avatar-" + email);
 
-                // Delete avatars older than a month and get a new one
-                if (avatar_info.CreationTime < DateTime.Now.AddMonths (-1)) {
-                    avatar_info.Delete ();
-                    return GetAvatar (email, size);
+                if (File.Exists (avatar_file_path)) {
+                    FileInfo avatar_info = new FileInfo (avatar_file_path);
+
+                    // Delete avatars older than a month
+                    if (avatar_info.CreationTime < DateTime.Now.AddMonths (-1)) {
+                        avatar_info.Delete ();
+                        old_avatars.Add (email);
+                    }
 
                 } else {
-                    return avatar_file_path;
-                }
+                  WebClient client = new WebClient ();
+                  string url       =  "http://gravatar.com/avatar/" + GetMD5 (email) +
+                                      ".jpg?s=" + size + "&d=404";
 
-            } else {
-                if (!Directory.Exists (avatar_path)) {
-                    Directory.CreateDirectory (avatar_path);
-                    SparkleHelpers.DebugInfo ("Config", "Created '" + avatar_path + "'");
-                }
+                  try {
+                    // Fetch the avatar
+                    byte [] buffer = client.DownloadData (url);
 
-                // Let's try to get the person's gravatar for next time
-                WebClient web_client = new WebClient ();
-                Uri uri = new Uri ("https://secure.gravatar.com/avatar/" + GetMD5 (email) +
-                    ".jpg?s=" + size + "&d=404");
+                    // Write the avatar data to a
+                    // if not empty
+                    if (buffer.Length > 255) {
+                        avatar_fetched = true;
+                        File.WriteAllBytes (avatar_file_path, buffer);
+                        SparkleHelpers.DebugInfo ("Controller", "Fetched gravatar for " + email);
+                    }
 
-                string tmp_file_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, email + size);
-
-                if (!File.Exists (tmp_file_path)) {
-                    web_client.DownloadFileAsync (uri, tmp_file_path);
-
-                    web_client.DownloadFileCompleted += delegate {
-                        if (File.Exists (avatar_file_path))
-                            File.Delete (avatar_file_path);
-
-                        FileInfo tmp_file_info = new FileInfo (tmp_file_path);
-
-                        if (tmp_file_info.Length > 255)
-                            File.Move (tmp_file_path, avatar_file_path);
-
-                        SparkleHelpers.DebugInfo ("Controller", "Fetched gravatar: " + email);
-                        
-                        if (AvatarFetched != null)
-                            AvatarFetched ();
-                    };
-                }
-
-                // Fall back to a generic icon if there is no gravatar
-                if (File.Exists (avatar_file_path))
-                    return avatar_file_path;
-                else
-                    return null;
+                  } catch (WebException) {
+                        SparkleHelpers.DebugInfo ("Controller", "Failed fetching gravatar for " + email);
+                  }
+               }
             }
+
+            // Fetch new versions of the avatars that we
+            // deleted because they were too old
+            if (old_avatars.Count > 0)
+                FetchAvatars (old_avatars, size);
+
+            if (AvatarFetched != null && avatar_fetched)
+                AvatarFetched ();
+        }
+
+
+        public string GetAvatar (string email, int size)
+        {
+            string avatar_file_path = SparkleHelpers.CombineMore (
+                SparklePaths.SparkleLocalIconPath, size + "x" + size, "status", "avatar-" + email);
+
+            return avatar_file_path;
         }
 
 
         public void FetchFolder (string server, string remote_folder)
         {
+            server = server.Trim ();
+            remote_folder = remote_folder.Trim ();
+
             if (!Directory.Exists (SparklePaths.SparkleTmpPath))
                 Directory.CreateDirectory (SparklePaths.SparkleTmpPath);
 
@@ -950,7 +990,6 @@ namespace SparkleShare {
 
 
             fetcher.Failed += delegate {
-
                 if (FolderFetchError != null)
                     FolderFetchError ();
 
@@ -1012,36 +1051,17 @@ namespace SparkleShare {
         }
 
 
-        public string Version {
-            get {
-                return SparkleBackend.Version;
+
+
+        public void AddNoteToFolder (string folder_name, string revision, string note)
+        {
+            foreach (SparkleRepoBase repo in Repositories) {
+                if (repo.Name.Equals (folder_name))
+                    repo.AddNote (revision, note);
             }
         }
 
 
-        public void CheckForNewVersion ()
-        {
-            WebClient web_client = new WebClient ();
-            Uri uri = new Uri ("http://www.sparkleshare.org/version");
-
-            web_client.DownloadStringCompleted += delegate (object o, DownloadStringCompletedEventArgs args) {
-                if (args.Error != null)
-                    return;
-
-                string new_version = args.Result.Trim ();
-
-                if (Version.Equals (new_version)) {
-                    if (VersionUpToDate != null)
-                        VersionUpToDate ();
-
-                } else {
-                    if (NewVersionAvailable != null)
-                        NewVersionAvailable (new_version);
-                }
-            };
-
-            web_client.DownloadStringAsync (uri);
-        }
 
 
         private string [] tango_palette = new string [] {"#eaab00", "#e37222",

@@ -43,11 +43,6 @@ namespace SparkleShare {
 
         public static void Main (string [] args)
         {
-            // Use translations
-			if ((SparkleBackend.Platform == PlatformID.Unix ||
-				 SparkleBackend.Platform == PlatformID.MacOSX))
-				Mono.Unix.Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
-
             // Don't allow running as root on Linux or Mac
             if ((SparkleBackend.Platform == PlatformID.Unix ||
                  SparkleBackend.Platform == PlatformID.MacOSX) &&
@@ -59,17 +54,14 @@ namespace SparkleShare {
             }
 
             // Parse the command line options
-            bool hide_ui   = false;
-            bool show_help = false;
-
-            var p = new OptionSet () {
-                { "d|disable-gui", _("Don't show the notification icon"), v => hide_ui = v != null },
+            bool show_help       = false;
+            OptionSet option_set = new OptionSet () {
                 { "v|version", _("Print version information"), v => { PrintVersion (); } },
                 { "h|help", _("Show this help text"), v => show_help = v != null }
             };
 
             try {
-                p.Parse (args);
+                option_set.Parse (args);
 
             } catch (OptionException e) {
                 Console.Write ("SparkleShare: ");
@@ -78,7 +70,7 @@ namespace SparkleShare {
             }
 
             if (show_help)
-                ShowHelp (p);
+                ShowHelp (option_set);
 
             // Load the right controller for the OS
             string controller_name = "Lin";
@@ -101,7 +93,7 @@ namespace SparkleShare {
 
             Controller.Initialize ();
         
-            if (Controller != null && !hide_ui) {
+            if (Controller != null) {
                 UI = new SparkleUI ();
                 UI.Run ();
             }
