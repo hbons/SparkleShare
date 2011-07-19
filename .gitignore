@@ -9,6 +9,7 @@
 *.bak
 *.suo
 *.sln.cache
+*.user
 po/POTFILES
 Makefile.in
 Makefile
