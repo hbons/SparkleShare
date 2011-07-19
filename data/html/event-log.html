@@ -2,9 +2,81 @@
 <html>
     <head>
         <title>SparkleShare Event Log</title>
+        <script type="text/javascript" src="<!-- $jquery-url -->"></script>
+        <script type="text/javascript">
+          $(document).ready(function () {
+              $('.comments-section').each (function () {
+                if ($(this).find ('.comments').children ().size () < 1) {
+                  $(this).hide ();
+                }
+              });
+
+              $('.buddy-icon').each (function () {
+                if ($(this).css('backgroundImage').indexOf ('@') != -1) {
+                  $(this).css ('backgroundColor', '#fff');
+                }
+              });
+
+              // Show the form when 'Add note' is clicked
+              $('.note').click(function () {
+                 $(this).parent ().find ('.comments-section').show ();
+              });
+
+              // Hide the 'Show all' link when there are less than 10 events
+              $('.show').each (function () {
+                var entries = $(this).parent ().find ('dl').children ().length;
+
+                if (entries <= 10) {
+                  $(this).hide ();
+                } else {
+                  // Append the number of entries
+                  $(this).html ('Show all ' + entries);
+                }
+              });
+
+              // When 'Show all' is clicked, show all collapsed events
+              $('.show').click(function () {
+                 $(this).parent ().find ('dl').children ().show ();
+                 $(this).hide ();
+              });
+
+              $("input").click(function () {
+                 textarea = $(this).parent ().find ('textarea');
+                 text = textarea.val ();
+
+                 if (text == '')
+                     return;
+
+                 // Clear the textarea
+                 textarea.val ('');
+
+                 table = $(this).parent ().find (".comments");
+                 comments = table.html ();
+
+                 // Add the note to the html
+                 comments += '<div class="comment-text">' +
+                             '<p class="comment-author"' +
+                             ' style="background-image: url(\'<!-- $user-avatar-url -->\');">' +
+                             '<!-- $username --></p>' +
+                             text +
+                             '</div>';
+
+                 table.html (comments);
+
+                 // Feed the note to the backend
+                 location = this.id + '~' + text;
+              });
+          });
+        </script>
+
         <style>
+            * {
+                box-sizing:         border-box;
+                -webkit-box-sizing: border-box;
+            }
+
             body {
-                background-color: #dedede;
+                background-color: #fff;
                 color:            <!-- $body-color -->;
                 font-size:        <!-- $body-font-size -->;
                 font-family:      <!-- $body-font-family -->;
@@ -22,15 +94,26 @@
                 color: <!-- $secondary-font-color -->;
             }
 
-            .day-entry-header {
-                font-size:     <!-- $day-entry-header-font-size -->;         
-                color:         #444;
-                padding: 18px;
-                padding-top: 9px;
-                margin-left: auto;
-                margin-right: auto;
+            .comment-text {
+                font-size: 90%;
+                padding: 12px;
+                background-color: #FFF4DB;
+                margin-bottom: 2px;
             }
 
+            .day-entry-header {
+                color: #aaa;
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+                text-align: center;
+                margin-bottom: 36px;
+                font-weight: bold;
+            }
+
+            .day-entry-content .event-entry:last-child {
+                border: none;
+            }
                         
             a {
                 color:           <!-- $a-color -->;
@@ -41,92 +124,182 @@
                 color: <!-- $a-hover-color -->;
             }
 
-            .event-time {
-                margin: 15px;
-                opacity: 0.8;
-                font-size:     80%;
-                color:         #fff;
-                float: right;
-                padding: 3px 15px;
-                font-weight: bold;
-                -webkit-border-radius: 100px;
-            }
-
-            .event-entry-content {
-                display:               block;
-                background-color:      #f0f0f0;
-                margin-bottom:         12px;
-                padding:               0px;
-                padding-bottom: 6px;
-                border:                #ccc 1px solid;
-            }
-
-            .wrapper {
-                margin: 15px;
+            .event-timestamp {
                 float: left;
+                font-size: 80%;
+                color: <!-- $secondary-font-color -->;
+            }
+
+            .event-user-name {
+                float: left;
+                font-weight: bold;
+            }
+
+            .event-folder {
+                float: right;
+                color: <!-- $secondary-font-color -->;
+            }
+
+            .event-entry {
+                margin-bottom: 24px;
+                padding-bottom: 24px;
+                border-bottom: 1px  <!-- $secondary-font-color --> solid;
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+                padding-left: 72px;
+                padding-right: 12px;
+                background-repeat: no-repeat;
+                background-position: 12px top;
+                display:        block;
+            }
+
+            .action {
+                font-size: 80%;
+                margin-left: 15px;
+                float: right;
+                margin-bottom: 9px;
+                color: <!-- $a-color -->;
+            }
+
+            .action:hover {
+                color: <!-- $a-hover-color -->;
+                cursor: pointer;
+            }
+
+            .clearer {
+                clear: both;
+                backround-color: blue;
+                margin: 0;
+                padding: 0;
+                height: 0;
+            }
+
+            .separator {
+                clear: both;
+                border-bottom: 1px #ccc solid;
+                margin-top: 24px;
+                margin-bottom: 24px;
             }
 
             dl {
                 padding : 0;
                 margin:  0;
+                margin-bottom: 12px;
+                padding-top: 6px;
+                clear: both;
             }
             
             dd {
-                width:          90%;
-                overflow:       hidden;
-                text-overflow:  ellipsis;
-                padding:        0;
-                padding-top:    2px;
-                padding-bottom: 4px;
-                padding-left:   22px;
-                margin:         0;
-                margin-bottom:  2px;
-                margin-left:    12px;
-                border-bottom:  1px solid #ddd;
-                background-repeat: no-repeat;
+                display: none;
+                overflow:            hidden;
+                text-overflow:       ellipsis;
+                width:               90%;
+                padding:             0;
+                padding-top:         2px;
+                padding-bottom:      2px;
+                padding-left:        20px;
+                margin:              0;
+                margin-bottom:       1px;
+                background-repeat:   no-repeat;
                 background-position: center left;
             }
 
-            dd:last-child {
-                border: none;
+            dl dd:nth-child(-n+10) {
+                display: block;
             }
 
-            .document-added {
+            .document {
+                text-overflow: ellipsis;
+                width: 100%;
+                white-space: nowrap;
+            }
+
+            .added {
                 background-image: url('<!-- $document-added-background-image -->');
             }
 
-            .document-deleted {
+            .deleted {
                 background-image: url('<!-- $document-deleted-background-image -->');
             }
 
-            .document-edited {
+            .edited {
                 background-image: url('<!-- $document-edited-background-image -->');
             }
 
-            .document-moved {
+            .moved {
                 background-image: url('<!-- $document-moved-background-image -->');
             }
 
             .no-buddy-icon {
+                position: relative;
+                top: 0;
+                left: 0;
                 float:               left;
                 margin-right:        12px;
-                width:               36px;
+                width:               48px;
                 background-image:    url('<!-- $no-buddy-icon-background-image -->');
                 background-repeat:   no-repeat;
                 background-position: top center; 
             }
 
             .buddy-icon {
-                width:            36px;
-                height:           36px;
+                width:            48px;
+                height:           48px;
             }
 
-            .event-info {
-                float: left;
-                margin-bottom: 8px;
+            .comments {
                 width: 100%;
-                background-color: #fff;
-                border-bottom: 1px #ccc solid;
+                font-size: 90%;
+                margin-bottom: 9px;
+            }
+
+            .comment-author {
+                font-size: 90%;
+                font-weight: bold;
+                margin: 0;
+                margin-bottom: 9px;
+                background-repeat: no-repeat;
+                background-position: bottom left;
+                background-size: 24px;
+                height: 24px;
+                padding-left: 30px;
+                line-height: 24px;
+            }
+
+            .comment-timestamp {
+                color: <!-- $secondary-font-color -->;
+                text-align: right;
+            }
+
+            .comment-button {
+                float:right;
+                margin-top: 6px;
+            }
+
+            .comment-textarea {
+                box-sizing:         border-box;
+                -webkit-box-sizing: border-box;
+                width:              100%;
+                height:             3em;
+                padding-bottom:     6px;
+            }
+
+            .comments-section {
+                box-sizing:         border-box;
+                -webkit-box-sizing: border-box;
+                width:              100%;
+            }
+
+            .comments-wrapper {
+                box-sizing:         border-box;
+                -webkit-box-sizing: border-box;
+                width:              100%;
+                margin-top: 12px;
+            }
+
+            .comment-text {
+                padding-bottom: 15px;
             }
         </style>
     </head>

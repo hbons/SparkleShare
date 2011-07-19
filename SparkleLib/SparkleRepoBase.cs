@@ -18,6 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
 using System.Xml;
@@ -38,7 +40,6 @@ namespace SparkleLib {
         private TimeSpan long_interval  = new TimeSpan (0, 0, 10, 0);
 
         private SparkleWatcher watcher;
-        private SparkleListenerBase listener;
         private TimeSpan poll_interval;
         private Timer local_timer        = new Timer () { Interval = 0.25 * 1000 };
         private Timer remote_timer       = new Timer () { Interval = 10 * 1000 };
@@ -47,6 +48,7 @@ namespace SparkleLib {
         private bool has_changed         = false;
         private Object change_lock       = new Object ();
 
+        protected SparkleListenerBase listener;
         protected SyncStatus status;
         protected bool is_buffering  = false;
         protected bool server_online = true;
@@ -86,10 +88,8 @@ namespace SparkleLib {
                 this.status = status;
             };
 
-            if (CurrentRevision == null) {
+            if (CurrentRevision == null)
                 CreateInitialChangeSet ();
-                HasUnsyncedChanges = true;
-            }
 
             CreateWatcher ();
             CreateListener ();
@@ -115,9 +115,6 @@ namespace SparkleLib {
                     SyncUpBase ();
             };
 
-            this.remote_timer.Start ();
-            this.local_timer.Start ();
-
             // Sync up everything that changed
             // since we've been offline
             if (AnyDifferences) {
@@ -128,6 +125,9 @@ namespace SparkleLib {
                     SyncUpBase ();
                 EnableWatching ();
             }
+
+            this.remote_timer.Start ();
+            this.local_timer.Start ();
         }
 
 
@@ -141,6 +141,13 @@ namespace SparkleLib {
         public SyncStatus Status {
             get {
                 return this.status;
+            }
+        }
+
+
+        public virtual string [] UnsyncedFilePaths {
+            get {
+                return new string [0];
             }
         }
 
@@ -218,10 +225,9 @@ namespace SparkleLib {
         }
 
 
-        private void CreateListener ()
+        public void CreateListener ()
         {
-            this.listener = SparkleListenerFactory.CreateIrcListener (Domain, Identifier,
-                SparkleConfig.DefaultConfig.GetAnnouncementsForFolder (Name));
+            this.listener = SparkleListenerFactory.CreateListener (Name, Identifier);
 
             // Stop polling when the connection to the irc channel is succesful
             this.listener.Connected += delegate {
@@ -302,7 +308,8 @@ namespace SparkleLib {
             if (!this.watcher.EnableRaisingEvents)
                 return;
 
-            if (args.FullPath.Contains (Path.DirectorySeparatorChar + "."))
+            if (args.FullPath.Contains (Path.DirectorySeparatorChar + ".") &&
+                !args.FullPath.Contains (Path.DirectorySeparatorChar + ".notes"))
                 return;
 
             WatcherChangeTypes wct = args.ChangeType;
@@ -326,6 +333,42 @@ namespace SparkleLib {
                     this.has_changed = true;
                 }
             }
+        }
+
+
+        public List<SparkleNote> GetNotes (string revision) {
+            List<SparkleNote> notes = new List<SparkleNote> ();
+
+            string notes_path = Path.Combine (LocalPath, ".notes");
+
+            if (!Directory.Exists (notes_path))
+                Directory.CreateDirectory (notes_path);
+
+            Regex regex_notes = new Regex (@"<name>(.+)</name>.*" +
+                                "<email>(.+)</email>.*" +
+                                "<timestamp>([0-9]+)</timestamp>.*" +
+                                "<body>(.+)</body>", RegexOptions.Compiled);
+
+            foreach (string file_path in Directory.GetFiles (notes_path)) {
+                if (Path.GetFileName (file_path).StartsWith (revision)) {
+                    string note_xml = String.Join ("", File.ReadAllLines (file_path));
+
+                    Match match_notes = regex_notes.Match (note_xml);
+
+                    if (match_notes.Success) {
+                        SparkleNote note = new SparkleNote () {
+                            UserName  = match_notes.Groups [1].Value,
+                            UserEmail = match_notes.Groups [2].Value,
+                            Timestamp = new DateTime (1970, 1, 1).AddSeconds (int.Parse (match_notes.Groups [3].Value)),
+                            Body      = match_notes.Groups [4].Value
+                        };
+
+                        notes.Add (note);
+                    }
+                }
+            }
+
+            return notes;
         }
 
 
@@ -393,8 +436,9 @@ namespace SparkleLib {
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
 
-                if (NewChangeSet != null)
-                    NewChangeSet (GetChangeSets (1) [0], LocalPath);
+                SparkleChangeSet change_set = GetChangeSets (1) [0];    
+                if (NewChangeSet != null && change_set.Revision != CurrentRevision)
+                    NewChangeSet (change_set, LocalPath);
 
                 // There could be changes from a
                 // resolved conflict. Tries only once,
@@ -443,6 +487,44 @@ namespace SparkleLib {
         }
 
 
+        public void AddNote (string revision, string note)
+        {
+            string notes_path = Path.Combine (LocalPath, ".notes");
+
+            if (!Directory.Exists (notes_path))
+                Directory.CreateDirectory (notes_path);
+
+            // Add a timestamp in seconds since unix epoch
+            int timestamp = (int) (DateTime.UtcNow - new DateTime (1970, 1, 1)).TotalSeconds;
+
+            string n = Environment.NewLine;
+            note     = "<note>" + n +
+                       "  <user>" +  n +
+                       "    <name>" + SparkleConfig.DefaultConfig.UserName + "</name>" + n +
+                       "    <email>" + SparkleConfig.DefaultConfig.UserEmail + "</email>" + n +
+                       "  </user>" + n +
+                       "  <timestamp>" + timestamp + "</timestamp>" + n +
+                       "  <body>" + note + "</body>" + n +
+                       "</note>" + n;
+
+            string note_name = revision + SHA1 (timestamp.ToString () + note);
+            string note_path = Path.Combine (notes_path, note_name);
+
+            StreamWriter writer = new StreamWriter (note_path);
+            writer.Write (note);
+            writer.Close ();
+
+
+            // The watcher doesn't like .*/ so we need to trigger
+            // a change manually
+            FileSystemEventArgs args = new FileSystemEventArgs (WatcherChangeTypes.Changed,
+                notes_path, note_name);
+
+            OnFileActivity (args);
+            SparkleHelpers.DebugInfo ("Note", "Added note to " + revision);
+        }
+
+
         // Recursively gets a folder's size in bytes
         private double CalculateFolderSize (DirectoryInfo parent)
         {
@@ -456,7 +538,7 @@ namespace SparkleLib {
             if (parent.Name.Equals ("rebase-apply"))
                 return 0;
 
-            foreach (FileInfo file in parent.GetFiles()) {
+            foreach (FileInfo file in parent.GetFiles ()) {
                 if (!file.Exists)
                     return 0;
 
@@ -467,6 +549,16 @@ namespace SparkleLib {
                 size += CalculateFolderSize (directory);
 
             return size;
+        }
+
+
+        // Creates a SHA-1 hash of input
+        private string SHA1 (string s)
+        {
+            SHA1 sha1 = new SHA1CryptoServiceProvider ();
+            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+            Byte[] encoded_bytes = sha1.ComputeHash (bytes);
+            return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");
         }
     }
 }

@@ -9,31 +9,32 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-17 12:09+0200\n"
-"PO-Revision-Date: 2011-06-17 14:36+0000\n"
-"Last-Translator: usb333 <majid@aldharrab.com>\n"
+"POT-Creation-Date: 2011-06-29 11:38+0200\n"
+"PO-Revision-Date: 2011-06-26 09:22+0000\n"
+"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5\n"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:338
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:337
 #: ../SparkleShare/SparkleIntro.cs:67 ../SparkleShare/SparkleStatusIcon.cs:345
 msgid "Welcome to SparkleShare!"
 msgstr "مرحبًا بك في سباركل‌شير!"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:349
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:348
 #: ../SparkleShare/SparkleStatusIcon.cs:357
 msgid "Not everything is synced"
 msgstr "ليس كل شيء مزامَنًا"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:359
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:358
 #: ../SparkleShare/SparkleStatusIcon.cs:367
 msgid "Up to date"
 msgstr "محدَّث"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:375
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:374
 #: ../SparkleShare/SparkleStatusIcon.cs:383
 msgid "Syncing…"
 msgstr "يزامن..."
@@ -83,35 +84,35 @@ msgstr "أظهر الإ_شادات"
 msgid "_Visit Website"
 msgstr "_زر الموقع الإلكتروني"
 
-#: ../SparkleShare/SparkleController.cs:422
+#: ../SparkleShare/SparkleController.cs:455
 msgid "ddd MMM d, yyyy"
 msgstr "ddd MMM d, yyyy"
 
-#: ../SparkleShare/SparkleController.cs:427
+#: ../SparkleShare/SparkleController.cs:460
 msgid "ddd MMM d"
 msgstr "ddd MMM d"
 
-#: ../SparkleShare/SparkleController.cs:629
+#: ../SparkleShare/SparkleController.cs:661
 #, csharp-format
 msgid "added ‘{0}’"
 msgstr "أضيفَ ‘{0}’"
 
-#: ../SparkleShare/SparkleController.cs:634
+#: ../SparkleShare/SparkleController.cs:666
 #, csharp-format
 msgid "moved ‘{0}’"
 msgstr "نُقل ‘{0}’"
 
-#: ../SparkleShare/SparkleController.cs:639
+#: ../SparkleShare/SparkleController.cs:671
 #, csharp-format
 msgid "edited ‘{0}’"
 msgstr "حرِّر ‘{0}’"
 
-#: ../SparkleShare/SparkleController.cs:644
+#: ../SparkleShare/SparkleController.cs:676
 #, csharp-format
 msgid "deleted ‘{0}’"
 msgstr "حُذف ‘{0}’"
 
-#: ../SparkleShare/SparkleController.cs:653
+#: ../SparkleShare/SparkleController.cs:685
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
@@ -122,7 +123,7 @@ msgstr[3] "و{0} ملفات أخرى"
 msgstr[4] "و{ملف آخر"
 msgstr[5] "و{0} ملف آخر"
 
-#: ../SparkleShare/SparkleController.cs:657
+#: ../SparkleShare/SparkleController.cs:689
 msgid "did something magical"
 msgstr "فعلتُ شيئًا سحريًا"
 
@@ -320,74 +321,70 @@ msgstr "تعلم كيف تستضيف خادوم سباركل‌شير بنفسك
 msgid "Recent Events"
 msgstr "الأحداث الأخيرة"
 
-#: ../SparkleShare/SparkleEventLog.cs:131
-#: ../SparkleShare/SparkleEventLog.cs:150
+#: ../SparkleShare/SparkleEventLog.cs:148
+#: ../SparkleShare/SparkleEventLog.cs:173
 msgid "All Folders"
 msgstr "كل المجلدات"
 
-#: ../SparkleShare/SparkleShare.cs:56
+#: ../SparkleShare/SparkleShare.cs:53
 msgid "Sorry, you can't run SparkleShare with these permissions."
 msgstr "المعذرة، لا يمكنك تشغيل سباركل‌شير بهذه الأذون."
 
-#: ../SparkleShare/SparkleShare.cs:57
+#: ../SparkleShare/SparkleShare.cs:54
 msgid "Things would go utterly wrong."
 msgstr "وإلا فستسير الأمور على غير ما يرام."
 
-#: ../SparkleShare/SparkleShare.cs:66
-msgid "Don't show the notification icon"
-msgstr "لا تظهِر أيقونة التنبيه"
-
-#: ../SparkleShare/SparkleShare.cs:67
+#: ../SparkleShare/SparkleShare.cs:61
 msgid "Print version information"
 msgstr "اطبع معلومات الإصدارة"
 
-#: ../SparkleShare/SparkleShare.cs:68
+#: ../SparkleShare/SparkleShare.cs:62
 msgid "Show this help text"
 msgstr "أظهر نص المساعدة هذا"
 
-#: ../SparkleShare/SparkleShare.cs:115
+#: ../SparkleShare/SparkleShare.cs:109
 msgid "SparkleShare, a collaboration and sharing tool."
 msgstr "سباركل‌شير، أداة تعاون ومشاركة."
 
-#: ../SparkleShare/SparkleShare.cs:116
+#: ../SparkleShare/SparkleShare.cs:110
 msgid "Copyright (C) 2010 Hylke Bons"
 msgstr "Copyright (C) 2010 Hylke Bons"
 
-#: ../SparkleShare/SparkleShare.cs:118
+#: ../SparkleShare/SparkleShare.cs:112
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
 msgstr "لا يشمل هذا البرنامج أي ضمان"
 
-#: ../SparkleShare/SparkleShare.cs:120
+#: ../SparkleShare/SparkleShare.cs:114
 msgid "This is free software, and you are welcome to redistribute it "
 msgstr "هذا برنامج حر، ونحن نرحب بتوزيعه "
 
-#: ../SparkleShare/SparkleShare.cs:121
+#: ../SparkleShare/SparkleShare.cs:115
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
 msgstr ""
 "ضمن شروط معينة. يرجى قراءة رخصة جنو العمومية - الإصدارة الثالثة للاطلاع على "
 "التفاصيل."
 
-#: ../SparkleShare/SparkleShare.cs:123
+#: ../SparkleShare/SparkleShare.cs:117
 msgid "SparkleShare automatically syncs Git repositories in "
 msgstr "يزامن سباركل‌شير مستودعات جِت الموجودة في "
 
-#: ../SparkleShare/SparkleShare.cs:124
+#: ../SparkleShare/SparkleShare.cs:118
 msgid "the ~/SparkleShare folder with their remote origins."
 msgstr "مجلد ~/SparkleShare مع أصولها البعيدة آليًا."
 
-#: ../SparkleShare/SparkleShare.cs:126
+#: ../SparkleShare/SparkleShare.cs:120
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
 msgstr "طريقة الاستخدام: sparkleshare [start|stop|restart] [OPTION]..."
 
-#: ../SparkleShare/SparkleShare.cs:127
+#: ../SparkleShare/SparkleShare.cs:121
 msgid "Sync SparkleShare folder with remote repositories."
 msgstr "زامن مجلد سباركل‌شير مع مستودعات بعيدة."
 
-#: ../SparkleShare/SparkleShare.cs:129
+#: ../SparkleShare/SparkleShare.cs:123
 msgid "Arguments:"
 msgstr "المعطيات:"
 
-#: ../SparkleShare/SparkleShare.cs:139
+#: ../SparkleShare/SparkleShare.cs:133
 msgid "SparkleShare "
 msgstr "سباركل‌شير "
 
@@ -417,11 +414,11 @@ msgstr "فعِّل التنبيهات"
 msgid "Quit"
 msgstr "اخرج"
 
-#: ../SparkleShare/SparkleUI.cs:96
+#: ../SparkleShare/SparkleUI.cs:99
 msgid "Ouch! Mid-air collision!"
 msgstr "آخ! اصطدام هوائي!"
 
-#: ../SparkleShare/SparkleUI.cs:97
+#: ../SparkleShare/SparkleUI.cs:100
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
 msgstr "لا تقلق، صنع سباركل‌شير نسخة من كل ملف متعارض."
 

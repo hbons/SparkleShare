@@ -6,36 +6,38 @@
 # 
 #   <bielet@bielet.com>, 2011.
 # Carles Mateu <carlesm@carlesm.com>, 2011.
+#   <a@alexandresaiz.com>, 2011.
 # alexandresaiz <a@alexandresaiz.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-17 12:09+0200\n"
-"PO-Revision-Date: 2011-06-17 10:13+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"POT-Creation-Date: 2011-06-29 11:38+0200\n"
+"PO-Revision-Date: 2011-07-02 21:33+0000\n"
+"Last-Translator: alexandresaiz <a@alexandresaiz.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:338
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:337
 #: ../SparkleShare/SparkleIntro.cs:67 ../SparkleShare/SparkleStatusIcon.cs:345
 msgid "Welcome to SparkleShare!"
 msgstr "Benvinguts a SparkleShare"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:349
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:348
 #: ../SparkleShare/SparkleStatusIcon.cs:357
 msgid "Not everything is synced"
 msgstr "No està tot sincronitzat"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:359
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:358
 #: ../SparkleShare/SparkleStatusIcon.cs:367
 msgid "Up to date"
 msgstr "Al dia"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:375
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:374
 #: ../SparkleShare/SparkleStatusIcon.cs:383
 msgid "Syncing…"
 msgstr "Sincronitzant ..."
@@ -85,42 +87,42 @@ msgstr "Mostra els Credits"
 msgid "_Visit Website"
 msgstr "_Visitar lloc web"
 
-#: ../SparkleShare/SparkleController.cs:422
+#: ../SparkleShare/SparkleController.cs:455
 msgid "ddd MMM d, yyyy"
-msgstr ""
+msgstr "ddd MMM d, yyyy"
 
-#: ../SparkleShare/SparkleController.cs:427
+#: ../SparkleShare/SparkleController.cs:460
 msgid "ddd MMM d"
-msgstr ""
+msgstr "ddd MMM d"
 
-#: ../SparkleShare/SparkleController.cs:629
+#: ../SparkleShare/SparkleController.cs:661
 #, csharp-format
 msgid "added ‘{0}’"
 msgstr "afegit '{0}'"
 
-#: ../SparkleShare/SparkleController.cs:634
+#: ../SparkleShare/SparkleController.cs:666
 #, csharp-format
 msgid "moved ‘{0}’"
 msgstr "mogut ’{0}’"
 
-#: ../SparkleShare/SparkleController.cs:639
+#: ../SparkleShare/SparkleController.cs:671
 #, csharp-format
 msgid "edited ‘{0}’"
 msgstr "editat '{0}'"
 
-#: ../SparkleShare/SparkleController.cs:644
+#: ../SparkleShare/SparkleController.cs:676
 #, csharp-format
 msgid "deleted ‘{0}’"
 msgstr "eliminat '{0}'"
 
-#: ../SparkleShare/SparkleController.cs:653
+#: ../SparkleShare/SparkleController.cs:685
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
 msgstr[0] "i ‘{0}’ més"
 msgstr[1] "i ‘{0}’ més"
 
-#: ../SparkleShare/SparkleController.cs:657
+#: ../SparkleShare/SparkleController.cs:689
 msgid "did something magical"
 msgstr "va fer una cosa màgica"
 
@@ -323,76 +325,72 @@ msgstr "Apren com gestionar el teu propi servidor SparkleShare"
 
 #: ../SparkleShare/SparkleEventLog.cs:61
 msgid "Recent Events"
-msgstr ""
+msgstr "Accions recents"
 
-#: ../SparkleShare/SparkleEventLog.cs:131
-#: ../SparkleShare/SparkleEventLog.cs:150
+#: ../SparkleShare/SparkleEventLog.cs:148
+#: ../SparkleShare/SparkleEventLog.cs:173
 msgid "All Folders"
-msgstr ""
+msgstr "Totes les carpetes"
 
-#: ../SparkleShare/SparkleShare.cs:56
+#: ../SparkleShare/SparkleShare.cs:53
 msgid "Sorry, you can't run SparkleShare with these permissions."
 msgstr "Ho sentim, no pots executar SparkleShare amb aquests permisos."
 
-#: ../SparkleShare/SparkleShare.cs:57
+#: ../SparkleShare/SparkleShare.cs:54
 msgid "Things would go utterly wrong."
 msgstr "Les coses anirien molt malament."
 
-#: ../SparkleShare/SparkleShare.cs:66
-msgid "Don't show the notification icon"
-msgstr "No  mostrar la icona de notificació"
-
-#: ../SparkleShare/SparkleShare.cs:67
+#: ../SparkleShare/SparkleShare.cs:61
 msgid "Print version information"
 msgstr "Imprimir la informació de versió"
 
-#: ../SparkleShare/SparkleShare.cs:68
+#: ../SparkleShare/SparkleShare.cs:62
 msgid "Show this help text"
 msgstr "Mostra aquest text d'ajuda"
 
-#: ../SparkleShare/SparkleShare.cs:115
+#: ../SparkleShare/SparkleShare.cs:109
 msgid "SparkleShare, a collaboration and sharing tool."
 msgstr "una eina d'intercanvi i col·laboració"
 
-#: ../SparkleShare/SparkleShare.cs:116
+#: ../SparkleShare/SparkleShare.cs:110
 msgid "Copyright (C) 2010 Hylke Bons"
 msgstr "Copyright (C) 2010  Hylke Bons"
 
-#: ../SparkleShare/SparkleShare.cs:118
+#: ../SparkleShare/SparkleShare.cs:112
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
 msgstr "Aquest programa ve sense, absolutament, cap garantia."
 
-#: ../SparkleShare/SparkleShare.cs:120
+#: ../SparkleShare/SparkleShare.cs:114
 msgid "This is free software, and you are welcome to redistribute it "
 msgstr "Aquest és programari lliure, i estas convidat a redistribuir-lo"
 
-#: ../SparkleShare/SparkleShare.cs:121
+#: ../SparkleShare/SparkleShare.cs:115
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
 msgstr ""
 "sota certes condicions. Si us plau, llegeix la GNU GPLv3 per obtenir més "
 "detalls."
 
-#: ../SparkleShare/SparkleShare.cs:123
+#: ../SparkleShare/SparkleShare.cs:117
 msgid "SparkleShare automatically syncs Git repositories in "
 msgstr "SparkleShare sincronitza automàticament repositoris Git a"
 
-#: ../SparkleShare/SparkleShare.cs:124
+#: ../SparkleShare/SparkleShare.cs:118
 msgid "the ~/SparkleShare folder with their remote origins."
 msgstr "carpeta ~ / SparkleShare amb els seus orígens remots."
 
-#: ../SparkleShare/SparkleShare.cs:126
+#: ../SparkleShare/SparkleShare.cs:120
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
 msgstr "Ús: sparkleshare [start|stop|restart] [OPCIÓ] ..."
 
-#: ../SparkleShare/SparkleShare.cs:127
+#: ../SparkleShare/SparkleShare.cs:121
 msgid "Sync SparkleShare folder with remote repositories."
 msgstr "Sincronitza carpeta SparkleShare amb repositoris remots."
 
-#: ../SparkleShare/SparkleShare.cs:129
+#: ../SparkleShare/SparkleShare.cs:123
 msgid "Arguments:"
 msgstr "Arguments:"
 
-#: ../SparkleShare/SparkleShare.cs:139
+#: ../SparkleShare/SparkleShare.cs:133
 msgid "SparkleShare "
 msgstr "SparkleShare"
 
@@ -407,7 +405,7 @@ msgstr "Afegeix una carpeta remota"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:242
 msgid "Show Recent Events"
-msgstr ""
+msgstr "Mostra les accions més recents"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:262
 msgid "Turn Notifications Off"
@@ -422,11 +420,11 @@ msgstr "Activa les Notificacions"
 msgid "Quit"
 msgstr "Sortir"
 
-#: ../SparkleShare/SparkleUI.cs:96
+#: ../SparkleShare/SparkleUI.cs:99
 msgid "Ouch! Mid-air collision!"
 msgstr "Ai! Col·lisió en ple vol!"
 
-#: ../SparkleShare/SparkleUI.cs:97
+#: ../SparkleShare/SparkleUI.cs:100
 msgid "Don't worry, SparkleShare made a copy of each conflicting file."
 msgstr ""
 "No et preocupis, SparkleShare ha fet una còpia de cada fitxer en conflicte."

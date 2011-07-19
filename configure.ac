@@ -1,9 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_define([sparkleshare_version],
-	[0.2.2])
+	[0.2.4])
 
 m4_define([sparkleshare_asm_version],
-	[0.2.2])
+	[0.2.4])
 
 AC_PREREQ([2.54])
 AC_INIT([SparkleShare], sparkleshare_version)
@@ -38,13 +38,21 @@ AC_PROG_INSTALL
 
 dnl Mono and gmcs
 SHAMROCK_CHECK_MONO_MODULE(2.2)
-SHAMROCK_FIND_MONO_2_0_COMPILER
 SHAMROCK_FIND_MONO_RUNTIME
+    
+PKG_CHECK_EXISTS([mono >= 2.8],
+[SHAMROCK_FIND_MONO_4_0_COMPILER
+SHAMROCK_CHECK_MONO_4_0_GAC_ASSEMBLIES([
+    System
+    System.Security
+    Mono.Posix
+])],
+[SHAMROCK_FIND_MONO_2_0_COMPILER
 SHAMROCK_CHECK_MONO_2_0_GAC_ASSEMBLIES([
     System
     System.Security
     Mono.Posix
-])
+])])
 
 SPARKLESHARE_CHECK_NOTIFY_SHARP
 
@@ -91,41 +99,63 @@ PKG_CHECK_MODULES([SMARTIRC4NET], [smartirc4net],
 )
 AM_CONDITIONAL([HAVE_SMARTIRC4NET], test x$SPARKLE_SMARTIRC4NETDIR = x)
 
-dnl check for webkit-sharp
-PKG_CHECK_MODULES(WEBKIT_SHARP, webkit-sharp-1.0, have_webkit_sharp=yes, have_webkit_sharp=no)
-AC_SUBST(WEBKIT_SHARP_LIBS)
-
-SHAMROCK_CHECK_NUNIT
-
-APPINDICATOR_REQUIRED=0.0.7
+AC_ARG_ENABLE(gtkui,
+	AS_HELP_STRING([--disable-gtkui], [Do not build the Gtk+ user interface]),
+	[ enable_gtkui=no ], [ enable_gtkui=yes ])
 
 AC_ARG_ENABLE(appindicator,
-                        AS_HELP_STRING([--enable-appindicator[=@<:@no/auto/yes@:>@]],[Build support for application indicators ]),
-                        [enable_appindicator=$enableval],
-                        [enable_appindicator="auto"])
+	AS_HELP_STRING([--enable-appindicator[=@<:@no/auto/yes@:>@]],[Build support for application indicators ]),
+	[enable_appindicator=$enableval],
+	[enable_appindicator="auto"])
 
-if test x$enable_appindicator = xauto ; then
-        PKG_CHECK_EXISTS([appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED],
-                         enable_appindicator="yes",
-                         enable_appindicator="no")
+AM_CONDITIONAL(ENABLE_GTKUI, test x$enable_gtkui = xyes)
+if test "x$enable_gtkui" = "xyes" ; then
+	dnl check for webkit-sharp
+	PKG_CHECK_MODULES(WEBKIT_SHARP, webkit-sharp-1.0, have_webkit_sharp=yes, have_webkit_sharp=no)
+	if test "x$have_webkit_sharp" = "xno" ; then
+		AC_ERROR("webkit-sharp is a required dependency: you need to install the appropriate devel package before you can compile")
+	fi
+	AC_SUBST(WEBKIT_SHARP_LIBS)
+
+	dnl check for notify-sharp
+	PKG_CHECK_MODULES(NOTIFY_SHARP, notify-sharp, have_notify_sharp=yes, have_notify_sharp=no)
+	if test "x$have_notify_sharp" = "xno" ; then
+		AC_ERROR("notify-sharp is a required dependency: you need to install the appropriate devel package before you can compile")
+	fi
+	AC_SUBST(NOTIFY_SHARP_LIBS)
+
+	APPINDICATOR_REQUIRED=0.0.7
+
+	if test x$enable_appindicator = xauto ; then
+			PKG_CHECK_EXISTS([appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED],
+							 enable_appindicator="yes",
+							 enable_appindicator="no")
+	fi
+
+	if test x$enable_appindicator = xyes ; then
+			PKG_CHECK_EXISTS([appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED],,
+							 AC_MSG_ERROR([appindicator-sharp-0.1 is not installed]))
+			PKG_CHECK_MODULES(APP_INDICATOR,
+							appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED)
+			AC_SUBST(APP_INDICATOR_CFLAGS)
+			AC_SUBST(APP_INDICATOR_LIBS)
+			AC_DEFINE(HAVE_APP_INDICATOR, 1, [Have AppIndicator])
+	fi
+
+	GUISUBDIRS=SparkleShare
+else
+	GUISUBDIRS=
 fi
 
-if test x$enable_appindicator = xyes ; then
-        PKG_CHECK_EXISTS([appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED],,
-                         AC_MSG_ERROR([appindicator-sharp-0.1 is not installed]))
-        PKG_CHECK_MODULES(APP_INDICATOR,
-                        appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED)
-        AC_SUBST(APP_INDICATOR_CFLAGS)
-        AC_SUBST(APP_INDICATOR_LIBS)
-        AC_DEFINE(HAVE_APP_INDICATOR, 1, [Have AppIndicator])
-fi
 AM_CONDITIONAL(HAVE_APP_INDICATOR, test x"$enable_appindicator" = xyes)
+AC_SUBST([GUISUBDIRS])
+
+SHAMROCK_CHECK_NUNIT
 
 dnl Get nautilus extensions directory
 SPARKLESHARE_NAUTILUS_PYTHON
 
 SHAVE_INIT([build/m4/shave], [enable])
-
 
 AC_OUTPUT([
 build/Makefile
@@ -153,6 +183,7 @@ SparkleShare ${VERSION}
 
 Configuration:
        Prefix              : ${prefix}
+       Build Gtk+ UI       : ${enable_gtkui}
        Nautilus plugin     : ${have_nautilus_python}
        User Help           : ${enable_user_help} (requires gnome-doc-utils >= 0.17.3)
 

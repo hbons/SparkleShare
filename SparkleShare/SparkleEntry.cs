@@ -17,6 +17,7 @@
 
 using Gtk;
 
+// TODO: Remove with Gtk3
 namespace SparkleShare {
 
     public class SparkleEntry : Entry {
@@ -33,7 +34,6 @@ namespace SparkleShare {
             ClipboardPasted += delegate { OnEntered (); };
             
             FocusOutEvent += delegate {
-
                 if (Text.Equals ("") || Text == null)
                     ExampleTextActive = true;
 

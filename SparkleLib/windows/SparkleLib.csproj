@@ -108,6 +108,7 @@
     <Compile Include="..\SparkleChangeSet.cs" />
     <Compile Include="..\SparkleListenerBase.cs" />
     <Compile Include="..\SparkleListenerIrc.cs" />
+    <Compile Include="..\SparkleListenerTcp.cs" />
     <Compile Include="..\SparkleBackend.cs" />
     <Compile Include="GlobalAssemblyInfo.cs">
       <AutoGen>True</AutoGen>
