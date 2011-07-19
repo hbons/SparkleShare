@@ -392,7 +392,7 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Unison", "Grabed file: " + path + ", Exit code: " + exitcode.ToString());
             return exitcode;
         }
-		
+        
         
         private int UnisonTransmitLog ()
         {

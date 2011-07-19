@@ -3,9 +3,8 @@ SUBDIRS = \
 	html
 
 dist_pixmaps_DATA = \
-	sparkleshare-gnome.svg \
-	sparkleshare-mist.svg \
-	side-splash.png
+	side-splash.png \
+	about.png
 
 pixmapsdir = $(pkgdatadir)/pixmaps/
 

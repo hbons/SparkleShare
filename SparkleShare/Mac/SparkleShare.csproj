@@ -62,7 +62,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Meebey.SmartIrc4net.dll</HintPath>
     </Reference>
-    <Reference Include="SparkleLib, Version=0.2.3.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="SparkleLib, Version=0.2.4.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\SparkleLib.dll</HintPath>
     </Reference>
@@ -77,8 +77,6 @@
     <Compile Include="..\SparkleController.cs">
       <Link>SparkleController.cs</Link>
     </Compile>
-    <Compile Include="SparkleWindow.cs" />
-    <Compile Include="SparkleIntro.cs" />
     <Compile Include="SparkleMacController.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUI.cs" />
@@ -87,10 +85,27 @@
     </Compile>
     <Compile Include="SparkleAbout.cs" />
     <Compile Include="SparkleAlert.cs" />
-    <Compile Include="SparkleBubble.cs" />
     <Compile Include="SparkleMacWatcher.cs" />
     <Compile Include="SparkleEventLog.cs" />
     <Compile Include="SparkleBadger.cs" />
+    <Compile Include="SparkleBubbles.cs" />
+    <Compile Include="SparkleSetup.cs" />
+    <Compile Include="SparkleSetupWindow.cs" />
+    <Compile Include="..\SparkleBubblesController.cs">
+      <Link>SparkleBubblesController.cs</Link>
+    </Compile>
+    <Compile Include="..\SparkleEventLogController.cs">
+      <Link>SparkleEventLogController.cs</Link>
+    </Compile>
+    <Compile Include="..\SparkleSetupController.cs">
+      <Link>SparkleSetupController.cs</Link>
+    </Compile>
+    <Compile Include="..\SparkleStatusIconController.cs">
+      <Link>SparkleStatusIconController.cs</Link>
+    </Compile>
+    <Compile Include="..\SparkleAboutController.cs">
+      <Link>SparkleAboutController.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
@@ -245,6 +260,12 @@
     </Content>
     <Content Include="..\..\po\zh_TW.po">
       <Link>Translations\zh_TW.po</Link>
+    </Content>
+    <Content Include="..\..\data\about.png">
+      <Link>Pixmaps\about.png</Link>
+    </Content>
+    <Content Include="..\..\data\html\jquery.js">
+      <Link>HTML\jquery.js</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>

@@ -33,14 +33,22 @@ namespace SparkleLib {
             server = server.TrimEnd ("/".ToCharArray ());
 
             if (server.StartsWith ("ssh://"))
-                server = server.Substring (6);
+                server          = server.Substring (6);
 
             if (!server.Contains ("@"))
-                server = "git@" + server;
+                server          = "git@" + server;
 
-            server = "ssh://" + server;            
-            remote_folder = remote_folder.Trim ("/".ToCharArray ());                                    
-            base.remote_url    = server + "//" + remote_folder;
+            server              = "ssh://" + server;            
+            remote_folder       = remote_folder.Trim ("/".ToCharArray ()); 
+			
+			//could use ssh server "echo $HOME" to resolve ~
+			//would need a SparkleSSH thing in addtion to SparkleUnison
+			
+			//if(remote_folder.Contains ("~"))
+            //    base.remote_url = server + "/" + remote_folder;
+			//else
+				base.remote_url = server + "//" + remote_folder;
+				
             base.target_folder = target_folder;
         }
 
@@ -54,9 +62,9 @@ namespace SparkleLib {
             
             //create a rootalias so unison archives are valid after moving from .tmp to ~/Sparkleshare/...
             string actual_folder = base.target_folder.Replace(".tmp/", "");
-            string actual_root = "//" + System.Environment.MachineName + "/" + actual_folder;
-            string temp_root = "//" + System.Environment.MachineName + "/" + base.target_folder;
-            string rootalias = "'" + temp_root + " -> " + actual_root + "' ";
+            string actual_root   = "//" + System.Environment.MachineName + "/" + actual_folder;
+            string temp_root     = "//" + System.Environment.MachineName + "/" + base.target_folder;
+            string rootalias     = "'" + temp_root + " -> " + actual_root + "' ";
             
             //fetch remote repo with unison
             SparkleUnison unison = new SparkleUnison (SparklePaths.SparkleTmpPath,
@@ -144,7 +152,7 @@ namespace SparkleLib {
             string unison_profile = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "sparkleshare.prf");     
             TextWriter writer = new StreamWriter (unison_profile);
             writer.WriteLine ("root = ."); //root1: local folder
-            writer.WriteLine ("root = " + base.remote_url); //root2: remote server -- PROBLEM WITH SPACES IN THE PATH, quotes are broken!!
+            writer.WriteLine ("root = " + base.remote_url); //root2: remote server -- PROBLEM WITH SPACES IN THE PATH, quotes are broken!!, try single quotes
             writer.WriteLine ("log = true");
             writer.WriteLine ("batch = true");
             writer.WriteLine ("dumbtty = true");
@@ -324,9 +332,9 @@ namespace SparkleLib {
                 writer.Close ();                
             
                 SparkleHelpers.DebugInfo ("Unison", "Added ID file to: " + IDfile);
-				
-				//might want to manually use unison to push the ID to the server so that the entry doesn't got logged upon the first sync
-				//mostly cosmetic.
+                
+                //might want to manually use unison to push the ID to the server so that the entry doesn't got logged upon the first sync
+                //mostly cosmetic.
             }
             else
             {
