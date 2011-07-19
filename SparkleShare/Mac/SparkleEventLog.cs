@@ -16,33 +16,38 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
 using MonoMac.WebKit;
-using SparkleLib; // Only used for SparkleChangeSet
 
 namespace SparkleShare {
 
     public class SparkleEventLog : NSWindow {
 
-        private WebView WebView;
-        private NSBox Separator;
-        private string HTML;
+        private SparkleEventLogController controller = new SparkleEventLogController ();
+
+        private WebView web_view = new WebView (new RectangleF (0, 0, 480, 579), "", "") {
+            PolicyDelegate = new SparkleWebPolicyDelegate ()
+        };
+
+        private NSBox Separator = new NSBox (new RectangleF (0, 579, 480, 1)) {
+            BorderColor = NSColor.LightGray,
+            BoxType = NSBoxType.NSBoxCustom
+        };
+
         private NSPopUpButton popup_button;
-        private NSProgressIndicator ProgressIndicator;
-        private List<SparkleChangeSet> change_sets;
-        private string selected_log = null;
+        private NSProgressIndicator progress_indicator;
 
 
         public SparkleEventLog (IntPtr handle) : base (handle) { }
 
+        // TODO: Window needs to be made resizable
         public SparkleEventLog () : base ()
         {
             Title    = "Recent Events";
@@ -60,39 +65,52 @@ namespace SparkleShare {
             HasShadow   = true;
             BackingType = NSBackingStore.Buffered;
 
-            CreateEvents ();
-            UpdateEvents (false);
-            UpdateChooser ();
-
-            OrderFrontRegardless ();
-        }
-
-
-        private void CreateEvents ()
-        {
-            Separator = new NSBox (new RectangleF (0, 579, 480, 1)) {
-                BorderColor = NSColor.LightGray,
-                BoxType = NSBoxType.NSBoxCustom
-            };
-
             ContentView.AddSubview (Separator);
 
-            WebView = new WebView (new RectangleF (0, 0, 480, 579), "", "") {
-                PolicyDelegate = new SparkleWebPolicyDelegate ()
-            };
 
-            ProgressIndicator = new NSProgressIndicator () {
+            this.progress_indicator = new NSProgressIndicator () {
                 Style = NSProgressIndicatorStyle.Spinning,
-                Frame = new RectangleF (WebView.Frame.Width / 2 - 10, WebView.Frame.Height / 2 + 10, 20, 20)
+                Frame = new RectangleF (this.web_view.Frame.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10, 20, 20)
             };
 
-            ProgressIndicator.StartAnimation (this);
-            Update ();
+            this.progress_indicator.StartAnimation (this);
+            ContentView.AddSubview (this.progress_indicator);
+
+
+            UpdateContent (null);
+            UpdateChooser (null);
+            OrderFrontRegardless ();
+
+
+            // Hook up the controller events
+            this.controller.UpdateChooserEvent += delegate (string [] folders) {
+                InvokeOnMainThread (delegate {
+                    UpdateChooser (folders);
+                });
+            };
+
+            this.controller.UpdateContentEvent += delegate (string html) {
+                InvokeOnMainThread (delegate {
+                    UpdateContent (html);
+                });
+            };
+
+            this.controller.ContentLoadingEvent += delegate {
+                InvokeOnMainThread (delegate {
+                    if (this.web_view.Superview == ContentView)
+                        this.web_view.RemoveFromSuperview ();
+
+                    ContentView.AddSubview (this.progress_indicator);
+                });
+            };
         }
 
 
-        public void UpdateChooser ()
+        public void UpdateChooser (string [] folders)
         {
+            if (folders == null)
+                folders = this.controller.Folders;
+
             if (this.popup_button != null)
                 this.popup_button.RemoveFromSuperview ();
 
@@ -103,104 +121,61 @@ namespace SparkleShare {
 
             this.popup_button.Cell.ControlSize = NSControlSize.Small;
             this.popup_button.Font = NSFontManager.SharedFontManager.FontWithFamily
-                    ("Lucida Grande", NSFontTraitMask.Condensed, 0, NSFont.SmallSystemFontSize);
+                ("Lucida Grande", NSFontTraitMask.Condensed, 0, NSFont.SmallSystemFontSize);
 
             this.popup_button.AddItem ("All Folders");
             this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
-            this.popup_button.AddItems (SparkleShare.Controller.Folders.ToArray ());
-
-            if (this.selected_log != null &&
-                !SparkleShare.Controller.Folders.Contains (this.selected_log)) {
-
-                this.selected_log = null;
-            }
+            this.popup_button.AddItems (folders);
 
             this.popup_button.Activated += delegate {
                 if (this.popup_button.IndexOfSelectedItem == 0)
-                    this.selected_log = null;
+                    this.controller.SelectedFolder = null;
                 else
-                    this.selected_log = this.popup_button.SelectedItem.Title;
-
-                UpdateEvents (false);
+                    this.controller.SelectedFolder = this.popup_button.SelectedItem.Title;
             };
 
             ContentView.AddSubview (this.popup_button);
         }
 
 
-        public void UpdateEvents ()
+        public void UpdateContent (string html)
         {
-            UpdateEvents (true);
-        }
-
-
-        public void UpdateEvents (bool silent)
-        {
-            if (!silent) {
-                InvokeOnMainThread (delegate {
-                    if (WebView.Superview == ContentView)
-                        WebView.RemoveFromSuperview ();
+            using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
+                Thread thread = new Thread (new ThreadStart (delegate {
+                    if (html == null)
+                        html = this.controller.HTML;
     
-                    ContentView.AddSubview (ProgressIndicator);
-                });
+                    html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
+                    html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
+                    html = html.Replace ("<!-- $body-font-size -->", "13.4px");
+                    html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
+                    html = html.Replace ("<!-- $small-color -->", "#ddd");
+                    html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
+                    html = html.Replace ("<!-- $a-color -->", "#0085cf");
+                    html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
+                    html = html.Replace ("<!-- $no-buddy-icon-background-image -->",
+                                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "avatar-default.png"));
+                    html = html.Replace ("<!-- $document-added-background-image -->",
+                                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-added-12.png"));
+                    html = html.Replace ("<!-- $document-deleted-background-image -->",
+                                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-deleted-12.png"));
+                    html = html.Replace ("<!-- $document-edited-background-image -->",
+                                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-edited-12.png"));
+                    html = html.Replace ("<!-- $document-moved-background-image -->",
+                                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-moved-12.png"));
+    
+                    InvokeOnMainThread (delegate {
+                        if (this.progress_indicator.Superview == ContentView)
+                            this.progress_indicator.RemoveFromSuperview ();
+
+                        // TODO: still causes some flashes
+                        this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
+                        ContentView.AddSubview (this.web_view);
+                    });
+                }));
+
+                thread.Start ();
             }
-
-            Thread thread = new Thread (new ThreadStart (delegate {
-                using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
-                    Stopwatch watch = new Stopwatch ();
-                    watch.Start ();
-                    this.change_sets = SparkleShare.Controller.GetLog (this.selected_log);
-                    GenerateHTML ();
-                    watch.Stop ();
-
-                    // A short delay is less annoying than
-                    // a flashing window
-                    if (watch.ElapsedMilliseconds < 500 && !silent)
-                        Thread.Sleep (500 - (int) watch.ElapsedMilliseconds);
-
-                    AddHTML ();
-                }
-            }));
-
-            thread.Start ();
-        }
-
-
-        private void GenerateHTML ()
-        {
-            HTML = SparkleShare.Controller.GetHTMLLog (this.change_sets);
-
-            HTML = HTML.Replace ("<!-- $body-font-family -->", "Lucida Grande");
-            HTML = HTML.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
-            HTML = HTML.Replace ("<!-- $body-font-size -->", "13.4px");
-            HTML = HTML.Replace ("<!-- $secondary-font-color -->", "#bbb");
-            HTML = HTML.Replace ("<!-- $small-color -->", "#ddd");
-            HTML = HTML.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
-            HTML = HTML.Replace ("<!-- $a-color -->", "#0085cf");
-            HTML = HTML.Replace ("<!-- $a-hover-color -->", "#009ff8");
-            HTML = HTML.Replace ("<!-- $no-buddy-icon-background-image -->",
-                "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "avatar-default.png"));
-            HTML = HTML.Replace ("<!-- $document-added-background-image -->",
-                "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-added-12.png"));
-            HTML = HTML.Replace ("<!-- $document-deleted-background-image -->",
-                "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-deleted-12.png"));
-            HTML = HTML.Replace ("<!-- $document-edited-background-image -->",
-                "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-edited-12.png"));
-            HTML = HTML.Replace ("<!-- $document-moved-background-image -->",
-                "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-moved-12.png"));
-        }
-
-
-        private void AddHTML ()
-        {
-            InvokeOnMainThread (delegate {
-                if (ProgressIndicator.Superview == ContentView)
-                    ProgressIndicator.RemoveFromSuperview ();
-
-                WebView.MainFrame.LoadHtmlString (HTML, new NSUrl (""));
-                ContentView.AddSubview (WebView);
-                Update ();
-            });
         }
     }
 
@@ -220,10 +195,30 @@ namespace SparkleShare {
         public override void DecidePolicyForNavigation (WebView web_view, NSDictionary action_info,
             NSUrlRequest request, WebFrame frame, NSObject decision_token)
         {
-            string file_path = request.Url.ToString ();
-            file_path = file_path.Replace ("%20", " ");
-            
-            NSWorkspace.SharedWorkspace.OpenFile (file_path);
+            string url = request.Url.ToString ();
+
+            if (url.StartsWith (Path.VolumeSeparatorChar.ToString ())) {
+                string file_path = request.Url.ToString ();
+                file_path = file_path.Replace ("%20", " ");
+
+                NSWorkspace.SharedWorkspace.OpenFile (file_path);
+
+            } else {
+                Regex regex = new Regex (@"(.+)~(.+)~(.+)");
+                Match match = regex.Match (url);
+
+                if (match.Success) {
+                    string folder_name = match.Groups [1].Value;
+                    string revision    = match.Groups [2].Value;
+                    string note        = match.Groups [3].Value.Replace ("%20", " ");
+
+                    Thread thread = new Thread (new ThreadStart (delegate {
+                        SparkleShare.Controller.AddNoteToFolder (folder_name, revision, note);
+                    }));
+
+                    thread.Start ();
+                }
+            }
         }
     }
 }

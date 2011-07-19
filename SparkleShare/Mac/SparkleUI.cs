@@ -14,13 +14,14 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-	
+    
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Timers;
 
+using Mono.Unix;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
@@ -28,39 +29,20 @@ using MonoMac.Growl;
 
 namespace SparkleShare {
 
-	public partial class AppDelegate : NSApplicationDelegate {
+    public class SparkleUI : AppDelegate {
 
-        public override void WillBecomeActive (NSNotification notification)
-        {
-            NSApplication.SharedApplication.DockTile.BadgeLabel = null;
-        }
-
-        public override void OrderFrontStandardAboutPanel (NSObject sender)
-        {
-            // FIXME: Doesn't work
-            new SparkleAbout ();
-        }
-
-        public override void WillTerminate (NSNotification notification)
-        {
-            SparkleShare.Controller.Quit ();
-        }
-	}
-
-
-	public class SparkleUI : AppDelegate {
-
-		public static SparkleStatusIcon StatusIcon;
-		public static SparkleEventLog EventLog;
-		public static SparkleIntro Intro;
+        public static SparkleStatusIcon StatusIcon;
+        public static SparkleEventLog EventLog;
+        public static SparkleSetup Setup;
+        public static SparkleBubbles Bubbles;
         public static SparkleAbout About;
-		public static NSFont Font;
+        public static NSFont Font;
 
         private NSAlert alert;
 
 
-		public SparkleUI ()
-		{
+        public SparkleUI ()
+        {
             string content_path = Directory.GetParent (
                 System.AppDomain.CurrentDomain.BaseDirectory).ToString ();
 
@@ -71,6 +53,10 @@ namespace SparkleShare {
             Dlfcn.dlopen (growl_path, 0);
             NSApplication.Init ();
 
+            // Use translations
+            Catalog.Init ("sparkleshare",
+                Path.Combine (NSBundle.MainBundle.ResourcePath, "Translations"));
+
             using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
 
                 // Needed for Growl
@@ -79,106 +65,44 @@ namespace SparkleShare {
                 NSApplication.SharedApplication.ApplicationIconImage
                     = NSImage.ImageNamed ("sparkleshare.icns");
 
-                SetFolderIcon ();
-
                 if (!SparkleShare.Controller.BackendIsPresent) {
                     this.alert = new SparkleAlert ();
                     this.alert.RunModal ();
                     return;
                 }
+
+                SetFolderIcon ();
     
                 Font = NSFontManager.SharedFontManager.FontWithFamily
                     ("Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
 
                 StatusIcon = new SparkleStatusIcon ();
+                Bubbles = new SparkleBubbles ();
+
+                if (SparkleShare.Controller.FirstRun) {
+                    Setup = new SparkleSetup ();
+                    Setup.Controller.ShowSetupPage ();
+                }
             }
+        }
+    
 
-            SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
-                                                                    string message, string repository_path) {
-				InvokeOnMainThread (delegate {
-                    if (EventLog != null)
-                        EventLog.UpdateEvents ();
+        public void SetFolderIcon ()
+        {
+            string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
+                "sparkleshare-mac.icns");
 
-                    if (SparkleShare.Controller.NotificationsEnabled) {
-                        if (NSApplication.SharedApplication.DockTile.BadgeLabel == null)
-                            NSApplication.SharedApplication.DockTile.BadgeLabel = "1";
-                        else
-    					    NSApplication.SharedApplication.DockTile.BadgeLabel =
-                                (int.Parse (NSApplication.SharedApplication.DockTile.BadgeLabel) + 1).ToString ();
-
-                        if (GrowlApplicationBridge.IsGrowlRunning ()) {
-                            SparkleBubble bubble = new SparkleBubble (user_name, message) {
-                                ImagePath = SparkleShare.Controller.GetAvatar (user_email, 36)
-                            };
-
-                            bubble.Show ();
-
-                        } else {
-        					NSApplication.SharedApplication.RequestUserAttention
-        						(NSRequestUserAttentionType.InformationalRequest);
-                        }
-                    }
-				});
-			};
-			
-
-            SparkleShare.Controller.ConflictNotificationRaised += delegate {
-                    string title   = "Ouch! Mid-air collision!";
-                    string subtext = "Don't worry, SparkleShare made a copy of each conflicting file.";
-
-                    new SparkleBubble (title, subtext).Show ();
-            };
+            NSImage folder_icon = new NSImage (folder_icon_path);
+                        
+            NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon,
+                SparkleShare.Controller.SparklePath, 0);
+        }
 
 
-			SparkleShare.Controller.AvatarFetched += delegate {
-				InvokeOnMainThread (delegate {
-					if (EventLog != null)
-                        EventLog.UpdateEvents ();
-				});
-			};
-			
-
-            SparkleShare.Controller.OnIdle += delegate {
-                InvokeOnMainThread (delegate {
-                    if (EventLog != null)
-                        EventLog.UpdateEvents ();
-                });
-            };
-
-
-            SparkleShare.Controller.FolderListChanged += delegate {
-                InvokeOnMainThread (delegate {
-                    if (EventLog != null) {
-                        EventLog.UpdateChooser ();
-                        EventLog.UpdateEvents ();
-                    }
-                });
-            };
-
-
-			if (SparkleShare.Controller.FirstRun) {
-				Intro = new SparkleIntro ();
-				Intro.ShowAccountForm ();
-			}
-		}
-	
-
-		public void SetFolderIcon ()
-		{
-			string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-				"sparkleshare-mac.icns");
-
-			NSImage folder_icon = new NSImage (folder_icon_path);
-						
-			NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon,
-				SparkleShare.Controller.SparklePath, 0);
-		}
-
-
-		public void Run ()
-		{
+        public void Run ()
+        {
             NSApplication.Main (new string [0]);
-		}
+        }
 
 
         [Export("registrationDictionaryForGrowl")]
@@ -186,6 +110,20 @@ namespace SparkleShare {
         {
             string path = NSBundle.MainBundle.PathForResource ("Growl", "plist");
             return NSDictionary.FromFile (path);
+        }
+    }
+
+
+    public partial class AppDelegate : NSApplicationDelegate {
+
+        public override void WillBecomeActive (NSNotification notification)
+        {
+            NSApplication.SharedApplication.DockTile.BadgeLabel = null;
+        }
+
+        public override void WillTerminate (NSNotification notification)
+        {
+            SparkleShare.Controller.Quit ();
         }
     }
 }

@@ -157,38 +157,20 @@
         <data name="error" type="System.Resources.ResXFileRef, System.Windows.Forms">
         <value>..\..\data\icons\error.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
       </data>
-        <data name="folder_sparkleshare_16_mist" type="System.Resources.ResXFileRef, System.Windows.Forms">
-        <value>..\..\data\icons\folder-sparkleshare-16-mist.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-      </data>
         <data name="folder_sparkleshare_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
         <value>..\..\data\icons\folder-sparkleshare-16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-      </data>
-        <data name="folder_sparkleshare_22_mist" type="System.Resources.ResXFileRef, System.Windows.Forms">
-        <value>..\..\data\icons\folder-sparkleshare-22-mist.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
       </data>
         <data name="folder_sparkleshare_22" type="System.Resources.ResXFileRef, System.Windows.Forms">
         <value>..\..\data\icons\folder-sparkleshare-22.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
       </data>
-        <data name="folder_sparkleshare_24_mist" type="System.Resources.ResXFileRef, System.Windows.Forms">
-        <value>..\..\data\icons\folder-sparkleshare-24-mist.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-      </data>
         <data name="folder_sparkleshare_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
         <value>..\..\data\icons\folder-sparkleshare-24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-      </data>
-        <data name="folder_sparkleshare_256_mist" type="System.Resources.ResXFileRef, System.Windows.Forms">
-        <value>..\..\data\icons\folder-sparkleshare-256-mist.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
       </data>
         <data name="folder_sparkleshare_256" type="System.Resources.ResXFileRef, System.Windows.Forms">
         <value>..\..\data\icons\folder-sparkleshare-256.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
       </data>
-        <data name="folder_sparkleshare_32_mist" type="System.Resources.ResXFileRef, System.Windows.Forms">
-        <value>..\..\data\icons\folder-sparkleshare-32-mist.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-      </data>
         <data name="folder_sparkleshare_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
         <value>..\..\data\icons\folder-sparkleshare-32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-      </data>
-        <data name="folder_sparkleshare_48_mist" type="System.Resources.ResXFileRef, System.Windows.Forms">
-        <value>..\..\data\icons\folder-sparkleshare-48-mist.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
       </data>
         <data name="folder_sparkleshare_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
         <value>..\..\data\icons\folder-sparkleshare-48.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -222,9 +204,6 @@
       </data>
         <data name="idle4" type="System.Resources.ResXFileRef, System.Windows.Forms">
         <value>..\..\data\icons\idle4.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-      </data>
-        <data name="process_syncing_sparkleshare_24_mist" type="System.Resources.ResXFileRef, System.Windows.Forms">
-        <value>..\..\data\icons\process-syncing-sparkleshare-24-mist.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
       </data>
         <data name="process_syncing_sparkleshare_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
         <value>..\..\data\icons\process-syncing-sparkleshare-24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

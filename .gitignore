@@ -44,5 +44,5 @@ SparkleShare/sparkleshare
 po/sparkleshare.pot
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py
 gnome-doc-utils.make
-sparkleshare-*
+/sparkleshare-*
 desktop.ini
