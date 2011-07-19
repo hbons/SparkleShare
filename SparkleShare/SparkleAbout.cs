@@ -53,15 +53,14 @@ namespace SparkleShare {
             Title          = _("About SparkleShare");
             AppPaintable   = true;
 
-            // TODO: Should be able to do without referencing SparkleLib...
-            //string image_path = SparkleLib.SparkleHelpers.CombineMore (SparkleLib.Defines.DATAROOTDIR,
-            //    "sparkleshare", "pixmaps", "about.png");
-
+            MemoryStream MemStream = new MemoryStream();
+            Icons.about.Save(MemStream, System.Drawing.Imaging.ImageFormat.Png);
+            MemStream.Seek(0, SeekOrigin.Begin);
             Realize ();
-            //Gdk.Pixbuf buf = new Gdk.Pixbuf (image_path);
-            //Gdk.Pixmap map, map2;
-            //buf.RenderPixmapAndMask (out map, out map2, 255);
-            //GdkWindow.SetBackPixmap (map, false);
+            Gdk.Pixbuf buf = new Gdk.Pixbuf(MemStream);
+            Gdk.Pixmap map, map2;
+            buf.RenderPixmapAndMask (out map, out map2, 255);
+            GdkWindow.SetBackPixmap (map, false);
 
             CreateAbout ();
 
