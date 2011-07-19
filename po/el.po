@@ -4,13 +4,14 @@
 # we apologise for any incovenience this may have caused and we hope to bring them
 # back in the future.
 # 
+#   <manolis@kapcom.gr>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-29 11:38+0200\n"
-"PO-Revision-Date: 2011-06-26 09:22+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"PO-Revision-Date: 2011-07-13 19:17+0000\n"
+"Last-Translator: kapcom01 <manolis@kapcom.gr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -40,15 +41,15 @@ msgstr ""
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
 msgid "Copy Web Link"
-msgstr ""
+msgstr "Αντιγραφή Συνδέσμου Ιστού"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
 msgid "Copy the web address of this file to the clipboard"
-msgstr ""
+msgstr "Αντιγραφή της διεύθυνσης ιστού αυτού του αρχείου στο πρόχειρο"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
 msgid "Get Earlier Version"
-msgstr ""
+msgstr "Λήψη Προηγούμενης Έκδοσης"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
 msgid "Make a copy of an earlier version in this folder"
