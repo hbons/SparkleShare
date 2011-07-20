@@ -276,6 +276,7 @@ namespace SparkleLib {
         {
             lock (this.change_lock) {
                 if (this.has_changed) {
+                    Console.WriteLine ("checking...");
                     if (this.sizebuffer.Count >= 4)
                         this.sizebuffer.RemoveAt (0);
                         
@@ -317,6 +318,10 @@ namespace SparkleLib {
             if (AnyDifferences) {
                 this.is_buffering = true;
 
+                // We want to disable wathcing temporarily, but
+                // not stop the local timer
+                this.watcher.EnableRaisingEvents = false;
+
                 // Only fire the event if the timer has been stopped.
                 // This prevents multiple events from being raised whilst "buffering".
                 if (!this.has_changed) {
@@ -326,7 +331,7 @@ namespace SparkleLib {
 
                 SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + args.Name + "'");
                 SparkleHelpers.DebugInfo ("Event", "[" + Name + "] Changes found, checking if settled.");
-                
+
                 this.remote_timer.Stop ();
 
                 lock (this.change_lock) {
