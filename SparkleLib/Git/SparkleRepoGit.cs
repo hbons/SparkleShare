@@ -128,12 +128,11 @@ namespace SparkleLib {
         public override bool SyncUp ()
         {
             Add ();
-
-            string message = FormatCommitMessage ();
-            Commit (message);
+            Commit ("Changes made by SparkleShare");
 
             SparkleGit git = new SparkleGit (LocalPath, "push origin master");
             git.Start ();
+            git.StandardOutput.ReadToEnd ();
             git.WaitForExit ();
 
             if (git.ExitCode == 0)
@@ -228,11 +227,9 @@ namespace SparkleLib {
         // Commits the made changes
         private void Commit (string message)
         {
-            if (!AnyDifferences)
-                return;
-
             SparkleGit git = new SparkleGit (LocalPath, "commit -m \"" + message + "\"");
             git.Start ();
+            git.StandardOutput.ReadToEnd ();
             git.WaitForExit ();
 
             SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message);
@@ -268,7 +265,6 @@ namespace SparkleLib {
                     ResolveConflict ();
 
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
-
                 OnConflictResolved ();
             }
 
