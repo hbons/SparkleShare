@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleShare", "SparkleShare.csproj", "{728483AA-E34B-4441-BF2C-C8BC2901E4E0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleLib", "..\..\SparkleLib\windows\SparkleLib.csproj", "{2C914413-B31C-4362-93C7-1AE34F09112A}"
