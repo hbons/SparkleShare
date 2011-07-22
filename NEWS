@@ -3,8 +3,9 @@
         Hylke: Reimplement notes to be less buggy and backend independent. Polish
         about dialog and event log html. Fix a bug where large collections of files 
         weren't being synced when adding them at the same time. The event log now
-        collapses huge change sets. Add a controller per UI component to make the
-        Windows verion easier to implement.
+        collapses huge change sets and squashes events together by day when they
+        are on the same day and in the same folder. Add a controller per UI component 
+        to make the Windows verion easier to implement.
 
 
 0.2.4 for Linux and Mac (Wed Jun 29, 2011):
