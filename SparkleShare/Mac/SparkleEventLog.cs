@@ -196,7 +196,7 @@ namespace SparkleShare {
             NSUrlRequest request, WebFrame frame, NSObject decision_token)
         {
             string url = request.Url.ToString ();
-
+            
             if (url.StartsWith (Path.VolumeSeparatorChar.ToString ())) {
                 string file_path = request.Url.ToString ();
                 file_path = file_path.Replace ("%20", " ");
@@ -210,7 +210,7 @@ namespace SparkleShare {
                 if (match.Success) {
                     string folder_name = match.Groups [1].Value;
                     string revision    = match.Groups [2].Value;
-                    string note        = match.Groups [3].Value.Replace ("%20", " ");
+                    string note        = match.Groups [3].Value;
 
                     Thread thread = new Thread (new ThreadStart (delegate {
                         SparkleShare.Controller.AddNoteToFolder (folder_name, revision, note);
