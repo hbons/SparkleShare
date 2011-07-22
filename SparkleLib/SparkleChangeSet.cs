@@ -28,6 +28,7 @@ namespace SparkleLib {
         public string Folder;
         public string Revision;
         public DateTime Timestamp;
+        public DateTime FirstTimestamp;
         public bool IsMerge       = false;
 
         public List<string> Added     = new List<string> ();
