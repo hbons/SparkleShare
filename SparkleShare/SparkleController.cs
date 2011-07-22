@@ -224,6 +224,25 @@ namespace SparkleShare {
         }
 
 
+        public List<string> FolderPaths {
+            get {
+                List<string> folders = SparkleConfig.DefaultConfig.FolderPaths;
+                folders.Sort ();
+                return folders;
+            }
+        }
+
+
+        public List<string> PreviousHosts {
+            get {
+                List<string> hosts = SparkleConfig.DefaultConfig.HostsWithUsername;
+                hosts.AddRange(SparkleConfig.DefaultConfig.Hosts);
+                hosts.Sort ();
+                return hosts;
+            }
+        }
+
+
         public List<string> UnsyncedFolders {
             get {
                 List<string> unsynced_folders = new List<string> ();
@@ -236,7 +255,7 @@ namespace SparkleShare {
                 return unsynced_folders;
             }
         }
-        
+
 
         public List<SparkleChangeSet> GetLog ()
         {
