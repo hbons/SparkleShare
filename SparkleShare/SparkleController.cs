@@ -448,10 +448,9 @@ namespace SparkleShare {
 
                     string timestamp = change_set.Timestamp.ToString ("H:mm");
 
-                    if (change_set.FirstTimestamp != null)
+                    if (!change_set.FirstTimestamp.Equals (new DateTime ()))
                         timestamp = change_set.FirstTimestamp.ToString ("H:mm") +
-                                    " – " +
-                                    change_set.Timestamp.ToString ("H:mm");
+                                    " – " + timestamp;
 
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.UserName)
@@ -729,7 +728,7 @@ namespace SparkleShare {
             }
 
             return message;
-        }
+        } // TODO: move to bubbles controller
 
 
         // Recursively gets a folder's size in bytes
