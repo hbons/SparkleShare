@@ -909,26 +909,31 @@ namespace SparkleShare {
                     }
 
                 } else {
-                  WebClient client = new WebClient ();
-                  string url       =  "http://gravatar.com/avatar/" + GetMD5 (email) +
+                    WebClient client = new WebClient ();
+                    string url       =  "http://gravatar.com/avatar/" + GetMD5 (email) +
                                       ".jpg?s=" + size + "&d=404";
 
-                  try {
-                    // Fetch the avatar
-                    byte [] buffer = client.DownloadData (url);
+                    try {
+                        // Fetch the avatar
+                        byte [] buffer = client.DownloadData (url);
 
-                    // Write the avatar data to a
-                    // if not empty
-                    if (buffer.Length > 255) {
-                        avatar_fetched = true;
-                        File.WriteAllBytes (avatar_file_path, buffer);
-                        SparkleHelpers.DebugInfo ("Controller", "Fetched gravatar for " + email);
-                    }
+                        // Write the avatar data to a
+                        // if not empty
+                        if (buffer.Length > 255) {
+                            avatar_fetched = true;
+                            File.WriteAllBytes (avatar_file_path, buffer);
+                            SparkleHelpers.DebugInfo ("Controller", "Fetched gravatar for " + email);
+                        }
 
-                  } catch (WebException) {
+                    } catch (WebException ex) {
                         SparkleHelpers.DebugInfo ("Controller", "Failed fetching gravatar for " + email);
-                  }
-               }
+
+                        if (ex.Status == WebExceptionStatus.Timeout) {
+                            // stop downloading further avatars if we have no internet access
+                            break;
+                        }
+                    }
+                }
             }
 
             // Fetch new versions of the avatars that we
