@@ -298,7 +298,39 @@ namespace SparkleShare {
                         stored_activity_day.DateTime.Month == change_set.Timestamp.Month &&
                         stored_activity_day.DateTime.Day   == change_set.Timestamp.Day) {
 
-                        stored_activity_day.Add (change_set);
+                        bool squash = false;
+                        foreach (SparkleChangeSet existing_set in stored_activity_day) {
+                            if (change_set.UserName.Equals (existing_set.UserName) &&
+                                change_set.UserEmail.Equals (existing_set.UserEmail) &&
+                                change_set.Folder.Equals (existing_set.Folder)) {
+
+                                existing_set.Added.AddRange (change_set.Added);
+                                existing_set.Edited.AddRange (change_set.Edited);
+                                existing_set.Deleted.AddRange (change_set.Deleted);
+                                existing_set.MovedFrom.AddRange (change_set.MovedFrom);
+                                existing_set.MovedTo.AddRange (change_set.MovedTo);
+                                existing_set.Notes.AddRange (change_set.Notes);
+
+                                existing_set.Added   = existing_set.Added.Distinct ().ToList ();
+                                existing_set.Edited  = existing_set.Edited.Distinct ().ToList ();
+                                existing_set.Deleted = existing_set.Deleted.Distinct ().ToList ();
+
+                                if (DateTime.Compare (existing_set.Timestamp, change_set.Timestamp) < 1) {
+                                    existing_set.FirstTimestamp = existing_set.Timestamp;
+                                    existing_set.Timestamp = change_set.Timestamp;
+                                    existing_set.Revision = change_set.Revision;
+
+                                } else {
+                                    existing_set.FirstTimestamp = change_set.Timestamp;
+                                }
+
+                                squash = true;
+                            }
+                        }
+
+                        if (!squash)
+                            stored_activity_day.Add (change_set);
+
                         change_set_inserted = true;
                         break;
                     }
@@ -413,10 +445,18 @@ namespace SparkleShare {
                         avatar_email = change_set.UserEmail;
 
                     event_entry   += "</dl>";
+
+                    string timestamp = change_set.Timestamp.ToString ("H:mm");
+
+                    if (change_set.FirstTimestamp != null)
+                        timestamp = change_set.FirstTimestamp.ToString ("H:mm") +
+                                    " – " +
+                                    change_set.Timestamp.ToString ("H:mm");
+
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.UserName)
                         .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (avatar_email, 48))
-                        .Replace ("<!-- $event-time -->", change_set.Timestamp.ToString ("H:mm"))
+                        .Replace ("<!-- $event-time -->", timestamp)
                         .Replace ("<!-- $event-folder -->", change_set.Folder)
                         .Replace ("<!-- $event-revision -->", change_set.Revision)
                         .Replace ("<!-- $event-folder-color -->", AssignColor (change_set.Folder))
@@ -1056,6 +1096,9 @@ namespace SparkleShare {
 
         public void AddNoteToFolder (string folder_name, string revision, string note)
         {
+            folder_name = folder_name.Replace ("%20", " ");
+            note        = note.Replace ("%20", " ");
+
             foreach (SparkleRepoBase repo in Repositories) {
                 if (repo.Name.Equals (folder_name))
                     repo.AddNote (revision, note);
