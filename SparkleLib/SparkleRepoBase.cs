@@ -67,8 +67,11 @@ namespace SparkleLib {
         public delegate void SyncStatusChangedEventHandler (SyncStatus new_status);
         public event SyncStatusChangedEventHandler SyncStatusChanged;
 
-        public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set, string source_path);
+        public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set);
         public event NewChangeSetEventHandler NewChangeSet;
+
+        public delegate void NewNoteEventHandler (string user_name, string user_email);
+        public event NewNoteEventHandler NewNote;
 
         public delegate void ConflictResolvedEventHandler ();
         public event ConflictResolvedEventHandler ConflictResolved;
@@ -441,8 +444,23 @@ namespace SparkleLib {
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
 
-                if (NewChangeSet != null)
-                    NewChangeSet (GetChangeSets (1) [0], LocalPath);
+                SparkleChangeSet change_set = GetChangeSets (1) [0];
+
+                bool note_added = false;
+                foreach (string added in change_set.Added) {
+                    if (added.StartsWith (".notes")) {
+                        if (NewNote != null)
+                            NewNote (change_set.UserName, change_set.UserEmail);
+
+                        note_added = true;
+                        break;
+                    }
+                }
+
+                if (!note_added) {
+                    if (NewChangeSet != null)
+                        NewChangeSet (change_set);
+                }
 
                 // There could be changes from a
                 // resolved conflict. Tries only once,
