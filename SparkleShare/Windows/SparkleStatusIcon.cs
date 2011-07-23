@@ -244,7 +244,7 @@ namespace SparkleShare {
                     SparkleUI.About = new SparkleAbout ();
 
                 SparkleUI.About.Show ();
-                SparkleUI.About.Present ();
+                SparkleUI.About.BringToFront ();
             };
 
             Menu.Items.Add (about_item);
