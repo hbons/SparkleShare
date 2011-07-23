@@ -23,6 +23,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace SparkleShare {
 
@@ -34,6 +35,9 @@ namespace SparkleShare {
 
 		public override void Initialize ()
 		{
+			Application.EnableVisualStyles ();
+			Application.SetCompatibleTextRenderingDefault (false);
+
 			// Add msysgit to path, as we cannot asume it is added to the path
 			// Asume it is installed in @"C:\msysgit\bin" for now
 			string MSysGit=@"C:\msysgit";
