@@ -34,8 +34,10 @@ namespace SparkleShare {
         
         public static SparkleStatusIcon StatusIcon;
         public static SparkleEventLog EventLog;
+        public static SparkleBubbles Bubbles;
         public static SparkleSetup Setup;
         public static SparkleAbout About;
+        public static string AssetsPath = Path.Combine (Defines.PREFIX, "share", "sparkleshare");
 
 
         // Short alias for the translations
@@ -53,8 +55,8 @@ namespace SparkleShare {
             // Use translations
             Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
-            // Create the statusicon
             StatusIcon = new SparkleStatusIcon ();
+            Bubbles    = new SparkleBubbles ();
             
             if (SparkleShare.Controller.FirstRun) {
                 Setup = new SparkleSetup ();

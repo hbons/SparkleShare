@@ -371,14 +371,15 @@ namespace SparkleLib {
 
 
         // Returns a list of the latest change sets
-        public override List <SparkleChangeSet> GetChangeSets (int count)
+        public override List <SparkleChangeSet> GetChangeSets (int since_days_ago)
         {
-            if (count < 1)
-                count = 30;
+            if (since_days_ago < 1)
+                since_days_ago = 7;
 
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
 
-            SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw -M --date=iso");
+            SparkleGit git_log = new SparkleGit (LocalPath, "log --since=\"" + since_days_ago +
+                                                            " days ago\" --raw -M --date=iso");
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             git_log.Start ();
 
