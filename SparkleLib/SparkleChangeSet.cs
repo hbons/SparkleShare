@@ -76,10 +76,18 @@ namespace SparkleLib {
 
     public class SparkleNote {
 
-        public string UserName;
-        public string UserEmail;
+        public SparkleUser User;
 
         public DateTime Timestamp;
         public string Body;
+    }
+
+
+    public class SparkleUser {
+
+        public string Name;
+        public string Email;
+
+        public string PublicKey;
     }
 }
