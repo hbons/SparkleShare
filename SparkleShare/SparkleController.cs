@@ -944,8 +944,12 @@ namespace SparkleShare {
                         SparkleHelpers.DebugInfo ("Controller", "Fetched gravatar for " + email);
                     }
 
-                  } catch (WebException) {
+                  } catch (WebException e) {
                         SparkleHelpers.DebugInfo ("Controller", "Failed fetching gravatar for " + email);
+
+                        // Stop downloading further avatars if we have no internet access
+                        if (e.Status == WebExceptionStatus.Timeout)
+                            break;
                   }
                }
             }
