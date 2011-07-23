@@ -268,6 +268,9 @@ namespace SparkleShare {
     
                             if (SparkleUI.About == null)
                                 SparkleUI.About = new SparkleAbout ();
+                            else
+                                 SparkleUI.About.OrderFrontRegardless ();
+
                         });
                     };
     
