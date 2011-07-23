@@ -276,14 +276,14 @@ namespace SparkleLib {
         {
             lock (this.change_lock) {
                 if (this.has_changed) {
-                    Console.WriteLine ("checking...");
                     if (this.sizebuffer.Count >= 4)
                         this.sizebuffer.RemoveAt (0);
                         
                     DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
                      this.sizebuffer.Add (CalculateFolderSize (dir_info));
 
-                    if (this.sizebuffer [0].Equals (this.sizebuffer [1]) &&
+                    if (this.sizebuffer.Count >= 4 &&
+                        this.sizebuffer [0].Equals (this.sizebuffer [1]) &&
                         this.sizebuffer [1].Equals (this.sizebuffer [2]) &&
                         this.sizebuffer [2].Equals (this.sizebuffer [3])) {
 
