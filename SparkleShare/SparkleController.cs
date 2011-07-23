@@ -450,8 +450,8 @@ namespace SparkleShare {
                         foreach (SparkleNote note in change_set.Notes) {
                             comments += "<div class=\"comment-text\">" +
                                         "<p class=\"comment-author\"" +
-                                        " style=\"background-image: url('file://" + GetAvatar (note.UserEmail, 48) + "');\">" +
-                                        note.UserName +  "</p>" +
+                                        " style=\"background-image: url('file://" + GetAvatar (note.User.Email, 48) + "');\">" +
+                                        note.User.Name +  "</p>" +
                                         note.Body +
                                         "</div>";
                         }
