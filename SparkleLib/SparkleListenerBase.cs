@@ -52,24 +52,30 @@ namespace SparkleLib {
                 announce_uri = "irc://204.62.14.135/";
             }
 
+            // We use only one listener per server to keep
+            // the number of connections as low as possible
             foreach (SparkleListenerBase listener in listeners) {
                 if (listener.Server.Equals (announce_uri)) {
-                    SparkleHelpers.DebugInfo ("ListenerFactory", "Refered to existing listener for " + announce_uri);
+                    SparkleHelpers.DebugInfo ("ListenerFactory",
+                        "Refered to existing listener for " + announce_uri);
+
                     listener.AlsoListenTo (folder_identifier);
                     return (SparkleListenerBase) listener;
                 }
             }
 
-            Uri listen_on = new Uri (announce_uri);
-
-            switch (listen_on.Scheme) {
-                case "tcp":
-                    listeners.Add (new SparkleListenerTcp (listen_on, folder_identifier));
-                    break;
-                case "irc":
-                default:
-                    listeners.Add (new SparkleListenerIrc (listen_on, folder_identifier));
-                    break;
+            // Create a new listener with the appropriate
+            // type if one doesn't exist yet for that server
+            switch (announce_uri.Scheme) {
+            case "tcp":
+                listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
+                break;
+            case "irc":
+                listeners.Add (new SparkleListenerIrc (announce_uri, folder_identifier));
+                break;
+            default:
+                listeners.Add (new SparkleListenerIrc (announce_uri, folder_identifier));
+                break;
             }
             
             SparkleHelpers.DebugInfo ("ListenerFactory", "Issued new listener for " + announce_uri);
@@ -109,20 +115,25 @@ namespace SparkleLib {
         protected Uri server;
         protected Timer reconnect_timer = new Timer { Interval = 60 * 1000, Enabled = true };
 
-        public SparkleListenerBase (Uri server, string folder_identifier) {
+        public SparkleListenerBase (Uri server, string folder_identifier)
+        {
+            this.server = server;
+
             this.reconnect_timer.Elapsed += delegate {
                 if (!IsConnected && !this.is_connecting)
                     Reconnect ();
             };
 
-            this.server = server;
             this.reconnect_timer.Start ();
         }
 
 
-        public void AnnounceBase (SparkleAnnouncement announcement) {
+        public void AnnounceBase (SparkleAnnouncement announcement)
+        {
             if (IsConnected) {
-                SparkleHelpers.DebugInfo ("Listener", "Announcing to " + announcement.FolderIdentifier + " on " + this.server);
+                SparkleHelpers.DebugInfo ("Listener",
+                    "Announcing to " + announcement.FolderIdentifier + " on " + this.server);
+
                 Announce (announcement);
 
             } else {
@@ -161,6 +172,7 @@ namespace SparkleLib {
 
             if (this.queue_up.Count > 0) {
                 SparkleHelpers.DebugInfo ("Listener", "Delivering queued messages...");
+
                 foreach (SparkleAnnouncement announcement in this.queue_up) {
                     AnnounceBase (announcement);
                     this.queue_up.Remove (announcement);
