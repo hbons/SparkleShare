@@ -594,11 +594,17 @@ namespace SparkleShare {
             else
                repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
 
-            repo.NewChangeSet += delegate (SparkleChangeSet change_set, string repository_path) {
+            repo.NewChangeSet += delegate (SparkleChangeSet change_set) {
                 string message = FormatMessage (change_set);
 
                 if (NotificationRaised != null)
-                    NotificationRaised (change_set.UserName, change_set.UserEmail, message, repository_path);
+                    NotificationRaised (change_set.UserName, change_set.UserEmail, message, repo.LocalPath);
+            };
+
+            repo.NewNote += delegate (string user_name, string user_email) {
+                if (NotificationRaised != null)
+                    NotificationRaised (user_name, user_email,
+                        "added a note to " + Path.GetFileName (repo.LocalPath), repo.LocalPath);
             };
 
             repo.ConflictResolved += delegate {
