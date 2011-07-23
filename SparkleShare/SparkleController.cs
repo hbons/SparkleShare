@@ -280,10 +280,11 @@ namespace SparkleShare {
                 return GetLog ();
 
             string path = Path.Combine (SparklePaths.SparklePath, name);
-
+            int log_size = 50;
+            
             foreach (SparkleRepoBase repo in Repositories) {
                 if (repo.LocalPath.Equals (path))            
-                    return repo.GetChangeSets (7);
+                    return repo.GetChangeSets (log_size);
             }
 
             return null;

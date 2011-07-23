@@ -180,7 +180,7 @@ namespace SparkleLib {
         }
 
 
-        public virtual List<SparkleChangeSet> GetChangeSets (int since_days_ago) {
+        public virtual List<SparkleChangeSet> GetChangeSets (int count) {
             return null;
         }
 
