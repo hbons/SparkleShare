@@ -71,6 +71,8 @@ namespace SparkleShare {
             SparkleShare.Controller.OnSyncing += delegate {
                 CurrentState = IconState.Syncing;
 
+                // TODO up down both
+
                 if (UpdateMenuEvent != null)
                     UpdateMenuEvent (IconState.Syncing);
             };
