@@ -368,7 +368,7 @@ namespace SparkleShare {
                             string title   = String.Format (_("‘{0}’ has been successfully added"), Controller.SyncingFolder);
                             string subtext = _("");
 
-                            //TODO new SparkleBubble (title, subtext).Show ();
+                            SparkleUI.Bubbles.Controller.ShowBubble (title, subtext, null);
                         }
 
                         Header      = _("Folder synced successfully!");
