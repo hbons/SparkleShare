@@ -168,7 +168,6 @@ namespace SparkleShare {
                         if (this.progress_indicator.Superview == ContentView)
                             this.progress_indicator.RemoveFromSuperview ();
 
-                        // TODO: still causes some flashes
                         this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
                         ContentView.AddSubview (this.web_view);
                     });

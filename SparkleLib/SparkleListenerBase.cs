@@ -41,16 +41,18 @@ namespace SparkleLib {
 
         public static SparkleListenerBase CreateListener (string folder_name, string folder_identifier)
         {
-            string announce_uri = SparkleConfig.DefaultConfig.GetAnnouncementUrlForFolder (folder_name);
+            string uri = SparkleConfig.DefaultConfig.GetAnnouncementUrlForFolder (folder_name);
 
-            if (announce_uri == null) {
+            if (uri == null) {
                 // This is SparkleShare's centralized notification service.
                 // Don't worry, we only use this server as a backup if you
                 // don't have your own. All data needed to connect is hashed and
                 // we don't store any personal information ever
-                
-                announce_uri = "irc://204.62.14.135/";
+
+                uri = "irc://204.62.14.135/";
             }
+
+            Uri announce_uri = new Uri (uri);
 
             // We use only one listener per server to keep
             // the number of connections as low as possible
