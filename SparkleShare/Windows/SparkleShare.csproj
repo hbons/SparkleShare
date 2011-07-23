@@ -96,7 +96,6 @@
     <Compile Include="..\SparkleSetupWindow.cs" />
     <Compile Include="..\SparkleShare.cs" />
     <Compile Include="..\SparkleSpinner.cs" />
-    <Compile Include="..\SparkleStatusIcon.cs" />
     <Compile Include="..\SparkleUI.cs" />
     <Compile Include="..\SparkleEntry.cs" />
     <Compile Include="..\SparkleUIHelpers.cs" />
@@ -104,6 +103,7 @@
     <Compile Include="..\SparkleAbout.cs" />
     <Compile Include="..\SparkleAboutController.cs" />
     <Compile Include="SparkleEventLog.cs" />
+    <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleWinController.cs" />
   </ItemGroup>
   <ItemGroup>
