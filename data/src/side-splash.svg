@@ -14,7 +14,7 @@
    height="480"
    id="svg8763"
    version="1.1"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.48.0 r9654"
    sodipodi:docname="side-splash.svg"
    inkscape:export-filename="/home/hbons/github/SparkleShare/data/side-splash.png"
    inkscape:export-xdpi="90"
@@ -27,16 +27,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="276.72576"
+     inkscape:cx="19.72576"
      inkscape:cy="237.36832"
      inkscape:document-units="px"
      inkscape:current-layer="g8506"
      showgrid="false"
-     inkscape:window-width="1440"
-     inkscape:window-height="841"
+     inkscape:window-width="1276"
+     inkscape:window-height="756"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="0" />
   <defs
      id="defs8765">
     <radialGradient
@@ -56,11 +56,11 @@
       <stop
          id="stop7607"
          offset="0"
-         style="stop-color:#888a85;stop-opacity:1" />
+         style="stop-color:#5c5c5c;stop-opacity:1" />
       <stop
          id="stop7609"
          offset="1"
-         style="stop-color:#2e3436;stop-opacity:1" />
+         style="stop-color:#000000;stop-opacity:1" />
     </linearGradient>
     <clipPath
        id="clipPath8463"
@@ -615,7 +615,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -833,7 +833,7 @@
              inkscape:flatsided="false"
              inkscape:rounded="0"
              inkscape:randomized="0"
-             d="m 206.67379,217.35364 -40.25404,-8.01083 -22.18276,34.4648 -4.82043,-40.75934 -39.632833,-10.44685 37.274853,-17.17984 -2.31168,-40.92131 27.85756,30.14162 38.20413,-14.84391 -20.05793,35.80838 25.92313,31.74728 z"
+             d="m 206.67379,217.35364 -40.25404,-8.01083 -22.18276,34.4648 -4.82043,-40.75934 -39.632833,-10.44685 37.274853,-17.17984 -2.31168,-40.92131 27.85756,30.14162 38.20413,-14.84391 -20.05793,35.80838 z"
              inkscape:transform-center-x="0.042578782"
              inkscape:transform-center-y="-4.4264044"
              transform="matrix(0.795516,0.351305,-0.351384,0.795695,88.379148,-256.9333)" />
