@@ -462,9 +462,9 @@ namespace SparkleLib {
                         NewChangeSet (change_set);
                 }
 
-                // There could be changes from a
-                // resolved conflict. Tries only once,
-                //then let the timer try again periodicallly
+                // There could be changes from a resolved
+                // conflict. Tries only once, then lets
+                // the timer try again periodically
                 if (HasUnsyncedChanges)
                     SyncUp ();
 
