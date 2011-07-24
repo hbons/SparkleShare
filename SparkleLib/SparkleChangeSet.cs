@@ -16,20 +16,20 @@
 
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 namespace SparkleLib {
 
     public class SparkleChangeSet {
 
-        public string UserName;
-        public string UserEmail;
+        public SparkleUser User = new SparkleUser ("Unknown", "Unknown");
 
         public string Folder;
         public string Revision;
         public DateTime Timestamp;
         public DateTime FirstTimestamp;
-        public bool IsMerge       = false;
+        public bool IsMagical = false;
 
         public List<string> Added     = new List<string> ();
         public List<string> Deleted   = new List<string> ();
@@ -89,5 +89,31 @@ namespace SparkleLib {
         public string Email;
 
         public string PublicKey;
+
+
+        public SparkleUser (string name, string email)
+        {
+            Name  = name;
+            Email = email;
+        }
+    }
+
+
+    public class SparkleFolder {
+
+        public string Name;
+        // TODO: Uri
+
+        public string FullPath {
+            get {
+                return Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, Name);
+            }
+        }
+
+
+        public SparkleFolder (string name)
+        {
+            Name = name;
+        }
     }
 }

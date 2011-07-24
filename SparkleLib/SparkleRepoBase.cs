@@ -365,10 +365,8 @@ namespace SparkleLib {
 
                     if (match_notes.Success) {
                         SparkleNote note = new SparkleNote () {
-                            User = new SparkleUser () {
-                                Name  = match_notes.Groups [1].Value,
-                                Email = match_notes.Groups [2].Value
-                            },
+                            User = new SparkleUser (match_notes.Groups [1].Value,
+                                match_notes.Groups [2].Value),
                             Timestamp = new DateTime (1970, 1, 1).AddSeconds (int.Parse (match_notes.Groups [3].Value)),
                             Body      = match_notes.Groups [4].Value
                         };
@@ -452,7 +450,7 @@ namespace SparkleLib {
                 foreach (string added in change_set.Added) {
                     if (added.Contains (".notes")) {
                         if (NewNote != null)
-                            NewNote (change_set.UserName, change_set.UserEmail);
+                            NewNote (change_set.User.Name, change_set.User.Email);
 
                         note_added = true;
                         break;
@@ -524,8 +522,8 @@ namespace SparkleLib {
             string n = Environment.NewLine;
             note     = "<note>" + n +
                        "  <user>" +  n +
-                       "    <name>" + SparkleConfig.DefaultConfig.UserName + "</name>" + n +
-                       "    <email>" + SparkleConfig.DefaultConfig.UserEmail + "</email>" + n +
+                       "    <name>" + SparkleConfig.DefaultConfig.User.Name + "</name>" + n +
+                       "    <email>" + SparkleConfig.DefaultConfig.User.Email + "</email>" + n +
                        "  </user>" + n +
                        "  <timestamp>" + timestamp + "</timestamp>" + n +
                        "  <body>" + note + "</body>" + n +
