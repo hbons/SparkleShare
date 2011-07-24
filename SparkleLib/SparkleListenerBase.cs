@@ -186,7 +186,7 @@ namespace SparkleLib {
 
         public void OnDisconnected ()
         {
-            SparkleHelpers.DebugInfo ("Listener", "Disonnected");
+            SparkleHelpers.DebugInfo ("Listener", "Disonnected from " + Server);
 
             if (Disconnected != null)
                 Disconnected ();
