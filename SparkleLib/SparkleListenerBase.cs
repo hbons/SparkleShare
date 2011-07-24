@@ -41,7 +41,8 @@ namespace SparkleLib {
 
         public static SparkleListenerBase CreateListener (string folder_name, string folder_identifier)
         {
-            string uri = SparkleConfig.DefaultConfig.GetAnnouncementUrlForFolder (folder_name);
+            string uri = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (
+                folder_name, "announcements_url");
 
             if (uri == null) {
                 // This is SparkleShare's centralized notification service.
