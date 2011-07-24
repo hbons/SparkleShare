@@ -27,8 +27,7 @@ namespace SparkleShare {
 
     public class SparkleAbout : Window {
 
-        public SparkleAboutController Controller = new SparkleAboutController ();
-
+        public SparkleAboutController Controller;
         private Label updates;
 
 
@@ -54,9 +53,8 @@ namespace SparkleShare {
             Title          = _("About SparkleShare");
             AppPaintable   = true;
 
-            // TODO: Should be able to do without referencing SparkleLib...
-            string image_path = SparkleLib.SparkleHelpers.CombineMore (SparkleLib.Defines.DATAROOTDIR,
-                "sparkleshare", "pixmaps", "about.png");
+            string image_path = System.IO.Path.Combine (SparkleUI.AssetsPath,
+                 "pixmaps", "about.png");
 
             Realize ();
             Gdk.Pixbuf buf = new Gdk.Pixbuf (image_path);
@@ -64,12 +62,13 @@ namespace SparkleShare {
             buf.RenderPixmapAndMask (out map, out map2, 255);
             GdkWindow.SetBackPixmap (map, false);
 
-            CreateAbout ();
+            Controller = new SparkleAboutController ();
 
             Controller.NewVersionEvent += delegate (string new_version) {
                 Application.Invoke (delegate {
                     this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#f57900'>{0}</span>",
                         String.Format (_("A newer version ({0}) is available!"), new_version));
+
                     this.updates.ShowAll ();
                 });
             };
@@ -78,6 +77,7 @@ namespace SparkleShare {
                 Application.Invoke (delegate {
                     this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#4e9a06'>{0}</span>",
                         _("You are running the latest version."));
+
                     this.updates.ShowAll ();
                 });
             };
@@ -86,9 +86,12 @@ namespace SparkleShare {
                 Application.Invoke (delegate {
                     this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#4e9a06'>{0}</span>",
                         _("Checking for updates..."));
+
                     this.updates.ShowAll ();
                 });
             };
+
+            this.CreateAbout ();
         }
 
 
