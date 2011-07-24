@@ -240,8 +240,8 @@ namespace SparkleShare {
 
                                 ListStore folder_store = new ListStore (typeof (string));
 
-                                foreach (string host in SparkleShare.Controller.FolderPaths)
-                                    folder_store.AppendValues (host);
+                                //foreach (string host in SparkleShare.Controller.FolderPaths)
+                                //    folder_store.AppendValues (host);
 
                                 FolderEntry.Completion.Model = folder_store;
                                 FolderEntry.Completion.TextColumn = 0;
