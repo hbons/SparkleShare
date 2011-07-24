@@ -113,7 +113,7 @@ namespace SparkleLib {
 
         private void DisableHostKeyCheckingForHost (string host)
         {
-            string path = SparklePaths.HomePath;
+            string path = SparkleConfig.DefaultConfig.HomePath;
 
             if (!(SparkleBackend.Platform == PlatformID.Unix ||
                   SparkleBackend.Platform == PlatformID.MacOSX)) {
@@ -150,7 +150,7 @@ namespace SparkleLib {
 
         private void EnableHostKeyCheckingForHost (string host)
         {
-            string path = SparklePaths.HomePath;
+            string path = SparkleConfig.DefaultConfig.HomePath;
 
             if (!(SparkleBackend.Platform == PlatformID.Unix ||
                   SparkleBackend.Platform == PlatformID.MacOSX)) {
