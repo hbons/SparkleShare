@@ -415,9 +415,16 @@ namespace SparkleShare {
                         change_set.Notes.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
 
                         foreach (SparkleNote note in change_set.Notes) {
+
+                            string note_avatar = GetAvatar (note.User.Email, 48);
+                            if (File.Exists (note_avatar))
+                                note_avatar = "file://" + note_avatar;
+                            else
+                                note_avatar = "<!-- $no-buddy-icon-background-image -->";
+
                             comments += "<div class=\"comment-text\">" +
                                         "<p class=\"comment-author\"" +
-                                        " style=\"background-image: url('file://" + GetAvatar (note.User.Email, 48) + "');\">" +
+                                        " style=\"background-image: url('" + note_avatar + "');\">" +
                                         note.User.Name +  "</p>" +
                                         note.Body +
                                         "</div>";
@@ -426,9 +433,11 @@ namespace SparkleShare {
 
                     comments += "</div>";
 
-                    string avatar_email = "";
-                    if (File.Exists (GetAvatar (change_set.User.Email, 48)))
-                        avatar_email = change_set.User.Email;
+                    string change_set_avatar = GetAvatar (change_set.User.Email, 48);
+                    if (File.Exists (change_set_avatar))
+                        change_set_avatar = "file://" + change_set_avatar;
+                    else
+                        change_set_avatar = "<!-- $no-buddy-icon-background-image -->";
 
                     event_entry   += "</dl>";
 
@@ -440,7 +449,7 @@ namespace SparkleShare {
 
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.User.Name)
-                        .Replace ("<!-- $event-avatar-url -->", "file://" + GetAvatar (avatar_email, 48))
+                        .Replace ("<!-- $event-avatar-url -->", change_set_avatar)
                         .Replace ("<!-- $event-time -->", timestamp)
                         .Replace ("<!-- $event-folder -->", change_set.Folder)
                         .Replace ("<!-- $event-revision -->", change_set.Revision)
@@ -466,11 +475,13 @@ namespace SparkleShare {
 
                 } else {
                     if (activity_day.DateTime.Year != DateTime.Now.Year) {
+
                         // TRANSLATORS: This is the date in the event logs
                         day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
                             activity_day.DateTime.ToString (_("dddd, MMMM d, yyyy")));
 
                     } else {
+
                         // TRANSLATORS: This is the date in the event logs, without the year
                         day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
                             activity_day.DateTime.ToString (_("dddd, MMMM d")));
