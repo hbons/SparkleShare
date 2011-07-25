@@ -30,7 +30,7 @@ namespace SparkleLib {
         {
             remote_folder = remote_folder.Trim ("/".ToCharArray ());
 
-            if (server.StartsWith("http")) {
+            if (server.StartsWith ("http")) {
                 base.target_folder = target_folder;
                 base.remote_url    = server;
                 return;
