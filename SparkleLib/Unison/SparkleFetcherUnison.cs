@@ -67,7 +67,7 @@ namespace SparkleLib {
             string rootalias     = "'" + temp_root + " -> " + actual_root + "' ";
             
             //fetch remote repo with unison
-            SparkleUnison unison = new SparkleUnison (SparklePaths.SparkleTmpPath,
+            SparkleUnison unison = new SparkleUnison (SparkleConfig.DefaultConfig.TmpPath,
                 "-auto " +
                 "-batch " +
                 "-confirmbigdel=false " +
@@ -116,14 +116,14 @@ namespace SparkleLib {
         private void InstallConfiguration ()
         {                  
             //move the .sparkleshare folder into the repo after fetching
-            string dotfolder_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, ".sparkleshare");
+            string dotfolder_old_path = SparkleHelpers.CombineMore (SparkleConfig.DefaultConfig.TmpPath, ".sparkleshare");
             string dotfolder_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare");
             Directory.Move(dotfolder_old_path, dotfolder_new_path);    
             
             SparkleHelpers.DebugInfo ("Unison", "Moved .sparkleshare folder to: " + dotfolder_new_path);
             
             //move the templog file to from .tmp to log in.sparkleshare
-            string log_file_old_path = SparkleHelpers.CombineMore (SparklePaths.SparkleTmpPath, "templog");
+            string log_file_old_path = SparkleHelpers.CombineMore (SparkleConfig.DefaultConfig.TmpPath, "templog");
             string log_file_new_path = SparkleHelpers.CombineMore (base.target_folder, ".sparkleshare", "log");
             File.Move (log_file_old_path, log_file_new_path);  
             

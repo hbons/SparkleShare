@@ -330,7 +330,7 @@ namespace SparkleLib {
                     {
                         // Append a timestamp to local version (their copy is the local copy)
                         string timestamp            = DateTime.Now.ToString ("HH:mm MMM d");
-                        string username             = SparkleConfig.DefaultConfig.UserName.ToString();
+                        string username             = SparkleConfig.DefaultConfig.User.Name.ToString();
                         string their_path           = conflicting_path + " (" + username + ", " + timestamp + ")";
                         string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
                         string abs_their_path       = Path.Combine (LocalPath, their_path);
@@ -417,8 +417,8 @@ namespace SparkleLib {
         private StringBuilder LogBuilder (string path, string revision, StringBuilder sb)
         {
             string timestamp = DateTime.UtcNow.ToString();
-            string username = SparkleConfig.DefaultConfig.UserName.ToString().Trim();
-            string useremail = SparkleConfig.DefaultConfig.UserEmail.ToString().Trim();
+            string username = SparkleConfig.DefaultConfig.User.Name.ToString().Trim();
+            string useremail = SparkleConfig.DefaultConfig.User.Email.ToString().Trim();
             string logupdate = timestamp + ", " + username + ", " + useremail + ", " + revision + ", " + path + Environment.NewLine;
             sb.Append(logupdate);
             return sb;
@@ -525,8 +525,8 @@ namespace SparkleLib {
                         change_set.Timestamp = change_set.Timestamp.AddHours (our_offset * -1);
                                         
                     change_set.Revision  = parts[3].Trim();
-                    change_set.UserName  = parts[1].Trim();
-                    change_set.UserEmail = parts[2].Trim();
+                    change_set.User.Name  = parts[1].Trim();
+                    change_set.User.Email = parts[2].Trim();
                     
                     string relativepath = parts[4].Trim();
                     string name = relativepath;
