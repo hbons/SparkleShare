@@ -1,4 +1,4 @@
-0.2.5 for Linux and Mac (...):
+0.2.5 for Linux and Mac (Mon Jul 25 2011):
 
         Hylke: Reimplement notes to be less buggy and backend independent. Polish
         about dialog and event log html. Fix a bug where large collections of files 
