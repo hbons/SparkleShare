@@ -46,11 +46,12 @@ namespace SparkleLib {
 
         public override bool IsConnected {
             get {
-                //return this.client.IsConnected;
                 bool result = false;
+
                 lock (this.mutex) {
                   result = this.connected;
                 }
+
                 return result;
             }
         }
@@ -70,9 +71,12 @@ namespace SparkleLib {
                         int port = Server.Port;
                         if (port < 0) port = 9999;
                         this.socket.Connect (Server.Host, port);
+
                         lock (this.mutex) {
                             base.is_connecting = false;
                             this.connected = true;
+
+                            OnConnected ();
 
                             foreach (string channel in base.channels) {
                                 SparkleHelpers.DebugInfo ("ListenerTcp", "Subscribing to channel " + channel);
@@ -80,30 +84,33 @@ namespace SparkleLib {
                             }
                         }
 
-
                         byte [] bytes = new byte [4096];
 
                         // List to the channels, this blocks the thread
                         while (this.socket.Connected) {
                             int bytes_read = this.socket.Receive (bytes);
+
                             if (bytes_read > 0) {
                                 string received = Encoding.UTF8.GetString (bytes);
                                 string folder_identifier = received.Substring (0, received.IndexOf ("!"));
                                 string message = received.Substring (received.IndexOf ("!") + 1);
 
                                 OnAnnouncement (new SparkleAnnouncement (folder_identifier, message));
+
                             } else {
                                 SparkleHelpers.DebugInfo ("ListenerTcp", "Error on socket");
+
                                 lock (this.mutex) {
-                                    this.socket.Close();
+                                    this.socket.Close ();
                                     this.connected = false;
+
+                                    OnDisconnected ();
                                 }
                             }
                         }
                         
                         SparkleHelpers.DebugInfo ("ListenerTcp", "Disconnected from " + Server.Host);
                         
-                        // TODO: attempt to reconnect..?
                     } catch (SocketException e) {
                         SparkleHelpers.DebugInfo ("ListenerTcp", "Could not connect to " + Server + ": " + e.Message);
                     }

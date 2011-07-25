@@ -30,7 +30,7 @@ namespace SparkleShare {
 
         // We have to use our own custom made folder watcher, as
         // System.IO.FileSystemWatcher fails watching subfolders on Mac
-        private SparkleMacWatcher watcher = new SparkleMacWatcher (SparklePaths.SparklePath);
+        private SparkleMacWatcher watcher = new SparkleMacWatcher (SparkleConfig.DefaultConfig.FoldersPath);
 
         public SparkleMacController () : base () { }
 
@@ -53,7 +53,7 @@ namespace SparkleShare {
 
                 repo_name = repo_name.Trim ("/".ToCharArray ());
                 FileSystemEventArgs args = new FileSystemEventArgs (WatcherChangeTypes.Changed,
-                    Path.Combine (SparklePaths.SparklePath, path), Path.GetFileName (path));
+                    Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, path), Path.GetFileName (path));
 
                 foreach (SparkleRepoBase repo in Repositories) {
                     if (repo.Name.Equals (repo_name))
@@ -109,8 +109,8 @@ namespace SparkleShare {
 		// Creates the SparkleShare folder in the user's home folder
 		public override bool CreateSparkleShareFolder ()
 		{
-			if (!Directory.Exists (SparklePaths.SparklePath)) {
-				Directory.CreateDirectory (SparklePaths.SparklePath);
+			if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
+				Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
 				return true;
 
 			} else {
@@ -122,7 +122,7 @@ namespace SparkleShare {
 		// Opens the SparkleShare folder or an (optional) subfolder
 		public override void OpenSparkleShareFolder (string subfolder)
 		{
-			string folder = Path.Combine (SparklePaths.SparklePath, subfolder);
+			string folder = Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, subfolder);
 			folder.Replace (" ", "\\ "); // Escape space-characters			
 			
 			NSWorkspace.SharedWorkspace.OpenFile (folder);

@@ -43,14 +43,5 @@ namespace SparkleShare {
                 notification.Show ();
             };
         }
-
-
-        // Checks whether the system allows adding buttons to a notification,
-        // prevents error messages in Ubuntu.
-//        new public void AddAction (string action, string label, ActionHandler handler)
-//        {
-//            if (Array.IndexOf (Notifications.Global.Capabilities, "actions") > -1)
-//                base.AddAction (action, label, handler);
-//        }
     }
 }

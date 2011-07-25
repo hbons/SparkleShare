@@ -67,8 +67,11 @@ namespace SparkleLib {
         public delegate void SyncStatusChangedEventHandler (SyncStatus new_status);
         public event SyncStatusChangedEventHandler SyncStatusChanged;
 
-        public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set, string source_path);
+        public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set);
         public event NewChangeSetEventHandler NewChangeSet;
+
+        public delegate void NewNoteEventHandler (string user_name, string user_email);
+        public event NewNoteEventHandler NewNote;
 
         public delegate void ConflictResolvedEventHandler ();
         public event ConflictResolvedEventHandler ConflictResolved;
@@ -282,7 +285,8 @@ namespace SparkleLib {
                     DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
                      this.sizebuffer.Add (CalculateFolderSize (dir_info));
 
-                    if (this.sizebuffer [0].Equals (this.sizebuffer [1]) &&
+                    if (this.sizebuffer.Count >= 4 &&
+                        this.sizebuffer [0].Equals (this.sizebuffer [1]) &&
                         this.sizebuffer [1].Equals (this.sizebuffer [2]) &&
                         this.sizebuffer [2].Equals (this.sizebuffer [3])) {
 
@@ -317,6 +321,10 @@ namespace SparkleLib {
             if (AnyDifferences) {
                 this.is_buffering = true;
 
+                // We want to disable wathcing temporarily, but
+                // not stop the local timer
+                this.watcher.EnableRaisingEvents = false;
+
                 // Only fire the event if the timer has been stopped.
                 // This prevents multiple events from being raised whilst "buffering".
                 if (!this.has_changed) {
@@ -326,7 +334,7 @@ namespace SparkleLib {
 
                 SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + args.Name + "'");
                 SparkleHelpers.DebugInfo ("Event", "[" + Name + "] Changes found, checking if settled.");
-                
+
                 this.remote_timer.Stop ();
 
                 lock (this.change_lock) {
@@ -357,8 +365,8 @@ namespace SparkleLib {
 
                     if (match_notes.Success) {
                         SparkleNote note = new SparkleNote () {
-                            UserName  = match_notes.Groups [1].Value,
-                            UserEmail = match_notes.Groups [2].Value,
+                            User = new SparkleUser (match_notes.Groups [1].Value,
+                                match_notes.Groups [2].Value),
                             Timestamp = new DateTime (1970, 1, 1).AddSeconds (int.Parse (match_notes.Groups [3].Value)),
                             Body      = match_notes.Groups [4].Value
                         };
@@ -436,13 +444,27 @@ namespace SparkleLib {
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
 
-                SparkleChangeSet change_set = GetChangeSets (1) [0];    
-                if (NewChangeSet != null && change_set.Revision != CurrentRevision)
-                    NewChangeSet (change_set, LocalPath);
+                SparkleChangeSet change_set = GetChangeSets (1) [0];
 
-                // There could be changes from a
-                // resolved conflict. Tries only once,
-                //then let the timer try again periodicallly
+                bool note_added = false;
+                foreach (string added in change_set.Added) {
+                    if (added.Contains (".notes")) {
+                        if (NewNote != null)
+                            NewNote (change_set.User.Name, change_set.User.Email);
+
+                        note_added = true;
+                        break;
+                    }
+                }
+
+                if (!note_added) {
+                    if (NewChangeSet != null)
+                        NewChangeSet (change_set);
+                }
+
+                // There could be changes from a resolved
+                // conflict. Tries only once, then lets
+                // the timer try again periodically
                 if (HasUnsyncedChanges)
                     SyncUp ();
 
@@ -500,8 +522,8 @@ namespace SparkleLib {
             string n = Environment.NewLine;
             note     = "<note>" + n +
                        "  <user>" +  n +
-                       "    <name>" + SparkleConfig.DefaultConfig.UserName + "</name>" + n +
-                       "    <email>" + SparkleConfig.DefaultConfig.UserEmail + "</email>" + n +
+                       "    <name>" + SparkleConfig.DefaultConfig.User.Name + "</name>" + n +
+                       "    <email>" + SparkleConfig.DefaultConfig.User.Email + "</email>" + n +
                        "  </user>" + n +
                        "  <timestamp>" + timestamp + "</timestamp>" + n +
                        "  <body>" + note + "</body>" + n +

@@ -26,20 +26,21 @@ information see the LICENSE file or visit http://www.gnu.org/licenses/gpl-3.0.ht
 Run on Linux:
 =============
 
-SparkleShare currently requires:
+Requirements:
 
-   - git >= 1.7.1
-   - gtk-sharp2 >= 2.12.7
-   - mono-core >= 2.2
-   - ndesk-dbus >= 0.6
-   - openssh
-   - gvfs >= 1.3
+   - git >= 1.7.0
+   - gtk-sharp2
+   - gvfs
    - intltool
    - libnotify
+   - mono-core >= 2.8
+   - notify-sharp
    - nautilus-python
+   - openssh
    - pygtk
    - webkitgtk
    - webkit-sharp
+
 
 Run the service, either click the SparkleShare launcher or:
 
@@ -191,4 +192,3 @@ http://www.transifex.net/projects/p/sparkleshare/
 
 
 Now have fun and create cool things together! :)
-

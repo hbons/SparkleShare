@@ -234,10 +234,12 @@ namespace SparkleLib {
 
                 SparkleChangeSet change_set = new SparkleChangeSet () {
                     Revision  = match.Groups [9].Value,
-                    UserName  = match.Groups [7].Value.Trim (),
-                    UserEmail = match.Groups [8].Value,
-                    IsMerge   = is_merge_commit
+                    IsMagical   = is_merge_commit
                 };
+
+                change_set.User.Name  = match.Groups [7].Value.Trim ();
+                change_set.User.Email = match.Groups [8].Value;
+
 
                 change_set.Timestamp = new DateTime (int.Parse (match.Groups [1].Value),
                     int.Parse (match.Groups [2].Value), int.Parse (match.Groups [3].Value),

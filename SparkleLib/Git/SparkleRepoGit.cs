@@ -128,12 +128,11 @@ namespace SparkleLib {
         public override bool SyncUp ()
         {
             Add ();
-
-            string message = FormatCommitMessage ();
-            Commit (message);
+            Commit ("Changes made by SparkleShare");
 
             SparkleGit git = new SparkleGit (LocalPath, "push origin master");
             git.Start ();
+            git.StandardOutput.ReadToEnd ();
             git.WaitForExit ();
 
             if (git.ExitCode == 0)
@@ -228,11 +227,9 @@ namespace SparkleLib {
         // Commits the made changes
         private void Commit (string message)
         {
-            if (!AnyDifferences)
-                return;
-
             SparkleGit git = new SparkleGit (LocalPath, "commit -m \"" + message + "\"");
             git.Start ();
+            git.StandardOutput.ReadToEnd ();
             git.WaitForExit ();
 
             SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message);
@@ -268,7 +265,6 @@ namespace SparkleLib {
                     ResolveConflict ();
 
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
-
                 OnConflictResolved ();
             }
 
@@ -324,7 +320,7 @@ namespace SparkleLib {
 
                     // Append a timestamp to local version
                     string timestamp            = DateTime.Now.ToString ("HH:mm MMM d");
-                    string their_path           = conflicting_path + " (" + SparkleConfig.DefaultConfig.UserName + ", " + timestamp + ")";
+                    string their_path           = conflicting_path + " (" + SparkleConfig.DefaultConfig.User.Name + ", " + timestamp + ")";
                     string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
                     string abs_their_path       = Path.Combine (LocalPath, their_path);
 
@@ -441,9 +437,9 @@ namespace SparkleLib {
 
                     change_set.Folder        = Name;
                     change_set.Revision      = match.Groups [1].Value;
-                    change_set.UserName      = match.Groups [2].Value;
-                    change_set.UserEmail     = match.Groups [3].Value;
-                    change_set.IsMerge       = is_merge_commit;
+                    change_set.User.Name     = match.Groups [2].Value;
+                    change_set.User.Email    = match.Groups [3].Value;
+                    change_set.IsMagical     = is_merge_commit;
 
                     change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
                         int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),

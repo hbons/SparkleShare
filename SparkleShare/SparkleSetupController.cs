@@ -121,7 +121,7 @@ namespace SparkleShare {
                 this.syncing_folder = "";
             };
 
-            SparkleShare.Controller.FetchFolder (server, this.syncing_folder);
+            SparkleShare.Controller.FetchFolder (server, folder_name);
         }
 
 

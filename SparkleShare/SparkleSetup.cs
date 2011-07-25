@@ -150,8 +150,8 @@ namespace SparkleShare {
 
                                 ListStore server_store = new ListStore (typeof (string));
 
-                                //TODO foreach (string host in SparkleShare.Controller.PreviousHosts)
-                                  //  server_store.AppendValues (host);
+                                foreach (string host in SparkleShare.Controller.PreviousHosts)
+                                    server_store.AppendValues (host);
 
                                 ServerEntry.Completion.Model = server_store;
                                 ServerEntry.Completion.TextColumn = 0;
@@ -236,6 +236,15 @@ namespace SparkleShare {
 
                                 FolderEntry             = new SparkleEntry ();
                                 FolderEntry.ExampleText = _("Folder");
+                                FolderEntry.Completion = new EntryCompletion();
+
+                                ListStore folder_store = new ListStore (typeof (string));
+
+                                //foreach (string host in SparkleShare.Controller.FolderPaths)
+                                //    folder_store.AppendValues (host);
+
+                                FolderEntry.Completion.Model = folder_store;
+                                FolderEntry.Completion.TextColumn = 0;
 
                                 FolderEntry.Changed += delegate {
                                     CheckAddPage ();
@@ -359,7 +368,7 @@ namespace SparkleShare {
                             string title   = String.Format (_("‘{0}’ has been successfully added"), Controller.SyncingFolder);
                             string subtext = _("");
 
-                            //TODO new SparkleBubble (title, subtext).Show ();
+                            SparkleUI.Bubbles.Controller.ShowBubble (title, subtext, null);
                         }
 
                         Header      = _("Folder synced successfully!");

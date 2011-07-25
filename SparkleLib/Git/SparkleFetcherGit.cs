@@ -30,7 +30,7 @@ namespace SparkleLib {
         {
             remote_folder = remote_folder.Trim ("/".ToCharArray ());
 
-            if (server.StartsWith("http")) {
+            if (server.StartsWith ("http")) {
                 base.target_folder = target_folder;
                 base.remote_url    = server;
                 return;
@@ -73,7 +73,7 @@ namespace SparkleLib {
 
         public override bool Fetch ()
         {
-            SparkleGit git = new SparkleGit (SparklePaths.SparkleTmpPath,
+            SparkleGit git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
                 "clone \"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
 
             git.Start ();
@@ -95,7 +95,7 @@ namespace SparkleLib {
         // the newly cloned repository
         private void InstallConfiguration ()
         {
-            string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
+            string global_config_file_path = Path.Combine (SparkleConfig.DefaultConfig.TmpPath, "config.xml");
 
             if (!File.Exists (global_config_file_path))
                 return;
