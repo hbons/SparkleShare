@@ -160,13 +160,22 @@ Now start the first part of the build:
 Ignore the error and continue to the MonoDevelop-part.
 
 
-Building the Cocoa UI MonoDevelop
----------------------------------
+Building the Mac UI
+-------------------
 
 Now that you have compiled the libraries, open 'SparkleShare/Mac/SparkleShare.sln' in
 MonoDevelop and start the build.
 
-To create the SparkleShare.app, select Project from the menu bar and click "Create Mac Installer..."
+To create the SparkleShare.app, select Project from the menu bar 
+and click "Create Mac Installer..." Save the SparkleShare.app somewhere.
+
+Paste the contents of the following file in SparkleShare.app/Contents/MonoBundle/config:
+https://raw.github.com/gist/1aeffa61bac73fc08eca/0c0f09ef9e36864c35f34fd5e8bf4f99886be193/gistfile1.txt
+
+Copy /Library/Frameworks/Mono.framework/Versions/Current/lib/libintl.dylib 
+to SparkleShare.app/Contents/Resources
+
+Now you should have a working .app that you can run.
 
 
 Info
@@ -192,3 +201,4 @@ http://www.transifex.net/projects/p/sparkleshare/
 
 
 Now have fun and create cool things together! :)
+
