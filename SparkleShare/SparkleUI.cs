@@ -37,7 +37,8 @@ namespace SparkleShare {
         public static SparkleBubbles Bubbles;
         public static SparkleSetup Setup;
         public static SparkleAbout About;
-        public static string AssetsPath = Path.Combine (Defines.PREFIX, "share", "sparkleshare");
+        public static string AssetsPath = Path.Combine (
+            new string [] {Defines.PREFIX, "share", "sparkleshare"});
 
 
         // Short alias for the translations
