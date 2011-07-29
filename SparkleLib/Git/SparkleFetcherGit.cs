@@ -103,14 +103,18 @@ namespace SparkleLib {
             string repo_config_file_path = SparkleHelpers.CombineMore (base.target_folder, ".git", "config");
             string config = String.Join (Environment.NewLine, File.ReadAllLines (repo_config_file_path));
 
+            string n = Environment.NewLine;
+
+            // Show special characters in the logs
+            config = config.Replace ("[core]" + n,
+                "[core]" + n + "quotepath = false" + n);
+
             // Be case sensitive explicitly to work on Mac
             config = config.Replace ("ignorecase = true", "ignorecase = false");
 
             // Ignore permission changes
             config = config.Replace ("filemode = true", "filemode = false");
-            config = config.Replace ("fetch = +refs/heads/*:refs/remotes/origin/*", 
-                "fetch = +refs/heads/*:refs/remotes/origin/*" + Environment.NewLine +
-                "\tfetch = +refs/notes/*:refs/notes/*");
+
 
             // Add user info
             string n        = Environment.NewLine;
