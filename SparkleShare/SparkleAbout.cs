@@ -53,7 +53,7 @@ namespace SparkleShare {
             Title          = _("About SparkleShare");
             AppPaintable   = true;
 
-            string image_path = System.IO.Path.Combine (new string {SparkleUI.AssetsPath,
+            string image_path = System.IO.Path.Combine (new string [] {SparkleUI.AssetsPath,
                  "pixmaps", "about.png"});
 
             Realize ();
