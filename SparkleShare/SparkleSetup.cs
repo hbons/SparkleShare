@@ -175,7 +175,7 @@ namespace SparkleShare {
                             // Github radiobutton
                             string github_text = "<b>" + "Github" + "</b>\n" +
                                   "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
-                                _("Free hosting for Free and Open Source Software projects.") + "\n" +
+                                _("Free hosting for Free and Open Source Software projects.") +
                                 _("Also has paid accounts for extra private space and bandwidth.") +
                                   "</span>";
 
@@ -192,7 +192,7 @@ namespace SparkleShare {
                             // Gitorious radiobutton
                             string gitorious_text = "<b>" + _("Gitorious") + "</b>\n" +
                                   "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
-                                _("Completely Free as in Freedom infrastructure.") + "\n" +
+                                _("Completely Free as in Freedom infrastructure.") +
                                 _("Free accounts for Free and Open Source projects.") +
                                   "</span>";
 
@@ -209,7 +209,7 @@ namespace SparkleShare {
                             // GNOME radiobutton
                             string gnome_text = "<b>" + _("The GNOME Project") + "</b>\n"+
                                  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
-                                _("GNOME is an easy to understand interface to your computer.") + "\n" +
+                                _("GNOME is an easy to understand interface to your computer.") +
                                 _("Select this option if you’re a developer or designer working on GNOME.") +
                                   "</span>";
 
