@@ -73,10 +73,11 @@ namespace SparkleShare {
         // from the Internet category if needed
         public override void InstallLauncher ()
         {
-            string apps_path = Path.Combine (SparkleConfig.DefaultConfig.HomePath,
-                ".local", "share", "applications");
+            string apps_path = Path.Combine (
+                new string [] {SparkleConfig.DefaultConfig.HomePath,
+                    ".local", "share", "applications"});
 
-            string desktopfile_path = SparkleHelpers.CombineMore (apps_path, "sparkleshare.desktop");
+            string desktopfile_path = Path.Combine (apps_path, "sparkleshare.desktop");
 
             if (!File.Exists (desktopfile_path)) {
                 if (!Directory.Exists (apps_path))
@@ -135,8 +136,9 @@ namespace SparkleShare {
                 Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
                 SparkleHelpers.DebugInfo ("Controller", "Created '" + SparkleConfig.DefaultConfig.FoldersPath + "'");
 
-                string gvfs_command_path = Path.Combine (Path.VolumeSeparatorChar.ToString (),
-                    "usr", "bin", "gvfs-set-attribute");
+                string gvfs_command_path = Path.Combine (
+                    new string [] {Path.VolumeSeparatorChar.ToString (),
+                        "usr", "bin", "gvfs-set-attribute"});
 
                 // Add a special icon to the SparkleShare folder
                 if (File.Exists (gvfs_command_path)) {
@@ -166,8 +168,8 @@ namespace SparkleShare {
 
         public override string EventLogHTML {
             get {
-                string path = Path.Combine (Defines.PREFIX,
-                    "share", "sparkleshare", "html", "event-log.html");
+                string path = Path.Combine (new string [] {Defines.PREFIX,
+                    "share", "sparkleshare", "html", "event-log.html"});
 
                 string html = String.Join (Environment.NewLine, File.ReadAllLines (path));
 
@@ -181,8 +183,8 @@ namespace SparkleShare {
         
         public override string DayEntryHTML {
             get {
-                string path = Path.Combine (Defines.PREFIX,
-                    "share", "sparkleshare", "html", "day-entry.html");
+                string path = Path.Combine (new string [] {Defines.PREFIX,
+                    "share", "sparkleshare", "html", "day-entry.html"});
             
                 return String.Join (Environment.NewLine, File.ReadAllLines (path));
             }
@@ -191,8 +193,8 @@ namespace SparkleShare {
         
         public override string EventEntryHTML {
             get {
-                string path = Path.Combine (Defines.PREFIX,
-                    "share", "sparkleshare", "html", "event-entry.html");
+                string path = Path.Combine (new string [] {Defines.PREFIX,
+                    "share", "sparkleshare", "html", "event-entry.html"});
             
                 return String.Join (Environment.NewLine, File.ReadAllLines (path));
             }
