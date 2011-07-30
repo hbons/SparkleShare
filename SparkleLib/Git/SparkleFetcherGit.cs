@@ -117,7 +117,6 @@ namespace SparkleLib {
 
 
             // Add user info
-            string n        = Environment.NewLine;
             XmlDocument xml = new XmlDocument();
             xml.Load (global_config_file_path);
 
