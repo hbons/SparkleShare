@@ -59,5 +59,92 @@ namespace SparkleShare.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&apos;day-entry&apos;&gt;
+        ///    &lt;div class=&apos;day-entry-header&apos;&gt;
+        ///        &lt;!-- $day-entry-header --&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;div class=&apos;day-entry-content&apos;&gt;
+        ///        &lt;!-- $day-entry-content --&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/div&gt;
+        ///.
+        /// </summary>
+        internal static string day_entry_html {
+            get {
+                return ResourceManager.GetString("day_entry_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&apos;event-entry&apos; style=&apos;background-image: url(&quot;&lt;!-- $event-avatar-url --&gt;&quot;);&apos;&gt;
+        ///    &lt;div class=&apos;event-user-name&apos;&gt;&lt;!-- $event-user-name --&gt;&lt;/div&gt;
+        ///    &lt;div class=&apos;event-folder&apos;&gt;&lt;!-- $event-folder --&gt;&lt;/div&gt;
+        ///
+        ///    &lt;!-- $event-entry-content --&gt;
+        ///
+        ///    &lt;div class=&quot;clearer&quot;&gt;&lt;/div&gt;
+        ///    &lt;div class=&quot;event-timestamp&quot;&gt;&lt;!-- $event-time --&gt;&lt;/div&gt;
+        ///    &lt;div class=&quot;action note&quot;&gt;Add note&lt;/div&gt;
+        ///    &lt;div class=&quot;action show&quot;&gt;Show all&lt;/div&gt;
+        ///
+        ///    &lt;div class=&quot;clearer&quot;&gt;&lt;/div&gt;
+        ///
+        ///    &lt;div class=&quot;comments-section&quot;&gt;
+        ///   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string event_entry_html {
+            get {
+                return ResourceManager.GetString("event_entry_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!doctype html&gt;
+        ///&lt;html&gt;
+        ///    &lt;head&gt;
+        ///        &lt;title&gt;SparkleShare Event Log&lt;/title&gt;
+        ///        &lt;script type=&quot;text/javascript&quot; src=&quot;&lt;!-- $jquery-url --&gt;&quot;&gt;&lt;/script&gt;
+        ///        &lt;script type=&quot;text/javascript&quot;&gt;
+        ///          $(document).ready(function () {
+        ///              $(&apos;.comments-section&apos;).each (function () {
+        ///                if ($(this).find (&apos;.comments&apos;).children ().size () &lt; 1) {
+        ///                  $(this).hide ();
+        ///                }
+        ///              });
+        ///
+        ///              $(&apos;.buddy-icon&apos;).each (function () {
+        ///       [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string event_log_html {
+            get {
+                return ResourceManager.GetString("event_log_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*!
+        /// * jQuery JavaScript Library v1.6.1
+        /// * http://jquery.com/
+        /// *
+        /// * Copyright 2011, John Resig
+        /// * Dual licensed under the MIT or GPL Version 2 licenses.
+        /// * http://jquery.org/license
+        /// *
+        /// * Includes Sizzle.js
+        /// * http://sizzlejs.com/
+        /// * Copyright 2011, The Dojo Foundation
+        /// * Released under the MIT, BSD, and GPL Licenses.
+        /// *
+        /// * Date: Thu May 12 15:04:36 2011 -0400
+        /// */
+        ///(function(a,b){function cy(a){return f.isWindow(a)?a:a.nodeType===9?a.defaultView||a.parentWindow:!1}function cv(a){if(!cj[a]){var [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string jquery_js {
+            get {
+                return ResourceManager.GetString("jquery_js", resourceCulture);
+            }
+        }
     }
 }
