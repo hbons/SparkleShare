@@ -215,8 +215,8 @@ namespace SparkleShare {
                 if (SparkleUI.EventLog == null)
                     SparkleUI.EventLog = new SparkleEventLog ();
 
-                SparkleUI.EventLog.ShowAll ();
-                SparkleUI.EventLog.Present ();
+                SparkleUI.EventLog.Show ();
+                SparkleUI.EventLog.BringToFront ();
             };
 
             Menu.Items.Add (recent_events_item);

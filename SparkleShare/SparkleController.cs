@@ -946,7 +946,7 @@ namespace SparkleShare {
         }
 
 
-        public string GetAvatar (string email, int size)
+        public virtual string GetAvatar (string email, int size)
         {
             string avatar_file_path = SparkleHelpers.CombineMore (
                 SparklePaths.SparkleLocalIconPath, size + "x" + size, "status", "avatar-" + email);
