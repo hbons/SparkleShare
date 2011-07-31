@@ -40,7 +40,7 @@ namespace SparkleShare {
             return s;
         }
         
-
+        [STAThread]
         public static void Main (string [] args)
         {
             // Don't allow running as root on Linux or Mac
