@@ -123,7 +123,7 @@ Install git, automake, and intltool:
 
 Start the first part of the build:
 
-   $ ./autogen.sh
+   $ ./autogen.sh --enable-gtkui=no
    $ make
 
 The last step will give you some errors in SparkleShare.exe, ignore these and go on to the
@@ -154,7 +154,7 @@ Now start the first part of the build:
 	$ cd SmartIrc4net
 	$ ./autogen.sh
 	$ cd ..
-	$ ./autogen.sh
+	$ ./autogen.sh --enable-gtkui=no
 	$ make
 
 Ignore the error and continue to the MonoDevelop-part.
