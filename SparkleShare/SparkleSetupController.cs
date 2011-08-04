@@ -17,6 +17,7 @@
 
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace SparkleShare {
 
@@ -100,7 +101,7 @@ namespace SparkleShare {
 
         public void AddPageCompleted (string server, string folder_name)
         {
-            this.syncing_folder = Path.GetFileNameWithoutExtension (folder_name);
+            this.syncing_folder = Regex.Replace (folder_name, @"\..*$", "");
             this.previous_server = server;
             this.previous_folder = folder_name;
 

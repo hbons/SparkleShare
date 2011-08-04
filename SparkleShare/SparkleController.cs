@@ -964,7 +964,8 @@ namespace SparkleShare {
                 Directory.CreateDirectory (SparklePaths.SparkleTmpPath);
 
             // Strip the '.git' from the name
-            string canonical_name = Path.GetFileNameWithoutExtension (remote_folder);
+            string canonical_name = Regex.Replace (remote_folder, @"\..*$", "");
+            canonical_name = Regex.Replace (remote_folder, @"^.*/", "");
             string tmp_folder     = Path.Combine (SparklePaths.SparkleTmpPath, canonical_name);
 
             SparkleFetcherBase fetcher = null;
@@ -1009,7 +1010,7 @@ namespace SparkleShare {
                 try {
                     Directory.Move (tmp_folder, target_folder_path);
                 } catch (Exception e) {
-                    SparkleHelpers.DebugInfo ("Controller", "Error moving folder: " + e.Message);
+                    SparkleHelpers.DebugInfo ("Controller", String.Format ("Error moving folder from {0} to {1}: {2}", tmp_folder, target_folder_path, e.Message));
                 }
 
                 SparkleConfig.DefaultConfig.AddFolder (target_folder_name, fetcher.RemoteUrl, backend);
