@@ -45,6 +45,9 @@ namespace SparkleLib {
                 string output = git.StandardOutput.ReadToEnd ();
                 git.WaitForExit ();
 
+                if (output.Length < 40)
+                    return null;
+
                 return output.Substring (0, 40);
             }
         }

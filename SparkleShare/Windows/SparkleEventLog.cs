@@ -53,7 +53,7 @@ namespace SparkleShare {
 
             this.Icon = Icons.sparkleshare;
 
-            this.change_sets = SparkleShare.Controller.GetLog (null);
+            this.change_sets = Program.Controller.GetLog (null);
             GenerateHTML ();
 
             _browserControl = new CefWebBrowser ("application://sparkleshare/eventlog");
@@ -71,7 +71,7 @@ namespace SparkleShare {
             this.combo_box.Items.Add (_ ("All Folders"));
             this.combo_box.Items.Add ("");
 
-            foreach (string folder_name in SparkleShare.Controller.Folders)
+            foreach (string folder_name in Program.Controller.Folders)
                 this.combo_box.Items.Add (folder_name);
 
             this.combo_box.SelectedItem = this.combo_box.Items[0];
@@ -89,7 +89,7 @@ namespace SparkleShare {
             Thread thread = new Thread (new ThreadStart (delegate {
                 Stopwatch watch = new Stopwatch ();
                 watch.Start ();
-                this.change_sets = SparkleShare.Controller.GetLog (this.selected_log);
+                this.change_sets = Program.Controller.GetLog (this.selected_log);
                 GenerateHTML ();
                 watch.Stop ();
 
@@ -107,7 +107,10 @@ namespace SparkleShare {
 
         private void GenerateHTML ()
         {
-            HTML = SparkleShare.Controller.GetHTMLLog (this.change_sets);
+            HTML = Program.Controller.GetHTMLLog (this.change_sets);
+
+            if (HTML == null)
+                return;
 
             HTML = HTML.Replace ("<!-- $body-font-size -->", this.Font.Size + "px");
             HTML = HTML.Replace ("<!-- $day-entry-header-font-size -->", this.Font.Size + "px");
@@ -158,9 +161,12 @@ namespace SparkleShare {
             Console.WriteLine ("{0} {1}", request.Method, request.Url);
 
             if (request.Url.StartsWith ("application://sparkleshare/eventlog")) {
-                Stream resourceStream = new MemoryStream (Encoding.UTF8.GetPreamble ().Concat (Encoding.UTF8.GetBytes (HTML)).ToArray ());
+                Stream resourceStream;
+                if (HTML != null)
+                    resourceStream = new MemoryStream (Encoding.UTF8.GetPreamble ().Concat (Encoding.UTF8.GetBytes (HTML)).ToArray ());
+                else
+                    resourceStream = new MemoryStream ();
 
-                //Stream resourceStream = new MemoryStream (Encoding.UTF8.GetBytes (HTML));
                 requestResponse.RespondWith (resourceStream, "text/html");
             } else if (request.Url.StartsWith ("application://file/")) {
                 string Filename = request.Url.Substring ("application://file/".Length);

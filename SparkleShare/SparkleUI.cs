@@ -72,12 +72,12 @@ namespace SparkleShare {
             // Create the statusicon
             StatusIcon = new SparkleStatusIcon ();
             
-            if (SparkleShare.Controller.FirstRun) {
+            if (Program.Controller.FirstRun) {
                 Setup = new SparkleSetup ();
                 Setup.Controller.ShowSetupPage ();
             }
             
-            SparkleShare.Controller.OnQuitWhileSyncing += delegate {
+            Program.Controller.OnQuitWhileSyncing += delegate {
                 // TODO: Pop up a warning when quitting whilst syncing
             };
         }
