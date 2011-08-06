@@ -56,7 +56,7 @@ namespace SparkleShare {
             CreateMenu ();
             SetNormalState ();
 
-            SparkleShare.Controller.FolderSizeChanged += delegate {
+            Program.Controller.FolderSizeChanged += delegate {
                 status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
                     if (!Animation.Enabled)
                         SetNormalState ();
@@ -65,28 +65,28 @@ namespace SparkleShare {
                 });
             };
             
-            SparkleShare.Controller.FolderListChanged += delegate {
+            Program.Controller.FolderListChanged += delegate {
                 status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
                     SetNormalState ();
                     CreateMenu ();
                 });
             };
 
-            SparkleShare.Controller.OnIdle += delegate {
+            Program.Controller.OnIdle += delegate {
                 status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
                     SetNormalState ();
                     UpdateMenu ();
                 });
             };
 
-            SparkleShare.Controller.OnSyncing += delegate {
+            Program.Controller.OnSyncing += delegate {
                 status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
                     SetAnimationState ();
                     UpdateMenu ();
                 });
             };
 
-            SparkleShare.Controller.OnError += delegate {
+            Program.Controller.OnError += delegate {
                 status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
                     SetNormalState (true);
                     UpdateMenu ();
@@ -151,18 +151,18 @@ namespace SparkleShare {
             };
 
             folder_item.Click += delegate {
-                SparkleShare.Controller.OpenSparkleShareFolder ();
+                Program.Controller.OpenSparkleShareFolder ();
             };
 
             Menu.Items.Add (folder_item);
 
-            if (SparkleShare.Controller.Folders.Count > 0) {
+            if (Program.Controller.Folders.Count > 0) {
 
                 // Creates a menu item for each repository with a link to their logs
-                foreach (string folder_name in SparkleShare.Controller.Folders) {
+                foreach (string folder_name in Program.Controller.Folders) {
                     Bitmap folder_icon;
 
-                    if (SparkleShare.Controller.UnsyncedFolders.Contains (folder_name)) {
+                    if (Program.Controller.UnsyncedFolders.Contains (folder_name)) {
                         folder_icon = Icons.dialog_error_16;
                     } else {
                         folder_icon = Icons.sparkleshare_windows_status;
@@ -189,7 +189,7 @@ namespace SparkleShare {
             // Opens the wizard to add a new remote folder
             ToolStripMenuItem sync_item = new ToolStripMenuItem (_ ("Add Remote Folder…"));
 
-            if (SparkleShare.Controller.FirstRun)
+            if (Program.Controller.FirstRun)
                 sync_item.Enabled = false;
 
             sync_item.Click += delegate {
@@ -208,7 +208,7 @@ namespace SparkleShare {
 
             ToolStripMenuItem recent_events_item = new ToolStripMenuItem (_ ("Show Recent Events"));
 
-            if (SparkleShare.Controller.Folders.Count < 1)
+            if (Program.Controller.Folders.Count < 1)
                 recent_events_item.Enabled = false;
 
             recent_events_item.Click += delegate {
@@ -223,13 +223,13 @@ namespace SparkleShare {
 
             ToolStripMenuItem notify_item;
 
-            if (SparkleShare.Controller.NotificationsEnabled)
+            if (Program.Controller.NotificationsEnabled)
                 notify_item = new ToolStripMenuItem (_ ("Turn Notifications Off"));
             else
                 notify_item = new ToolStripMenuItem (_ ("Turn Notifications On"));
 
             notify_item.Click += delegate {
-                SparkleShare.Controller.ToggleNotifications ();
+                Program.Controller.ToggleNotifications ();
                 CreateMenu ();
             };
 
@@ -254,7 +254,7 @@ namespace SparkleShare {
             ToolStripMenuItem quit_item = new ToolStripMenuItem (_ ("Quit"));
 
             quit_item.Click += delegate {
-                SparkleShare.Controller.Quit ();
+                Program.Controller.Quit ();
             };
 
             Menu.Items.Add (quit_item);
@@ -268,7 +268,7 @@ namespace SparkleShare {
         private EventHandler OpenFolderDelegate (string name)
         {
             return delegate {
-                SparkleShare.Controller.OpenSparkleShareFolder (name);
+                Program.Controller.OpenSparkleShareFolder (name);
             };
         }
 
@@ -291,7 +291,7 @@ namespace SparkleShare {
         {
             Animation.Stop ();
 
-            if (SparkleShare.Controller.Folders.Count == 0) {
+            if (Program.Controller.Folders.Count == 0) {
                 StateText = _("Welcome to SparkleShare!");
 
                 status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
@@ -306,7 +306,7 @@ namespace SparkleShare {
                         this.status_icon.Icon = Icon.FromHandle (Icons.sparkleshare_syncing_error_24.GetHicon ());
                     });
                 } else {
-                    StateText = _("Up to date") + "  (" + SparkleShare.Controller.FolderSize + ")";
+                    StateText = _("Up to date") + "  (" + Program.Controller.FolderSize + ")";
                     status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
                         this.status_icon.Icon = Icon.FromHandle (AnimationFrames [0].GetHicon ());
                     });

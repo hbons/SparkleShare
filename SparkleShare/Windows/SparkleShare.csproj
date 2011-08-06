@@ -81,6 +81,9 @@
     </Compile>
     <Compile Include="ApplicationSchemeHandler.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="controls\ExampleTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FileSchemeHandler.cs" />
     <Compile Include="Icons.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -107,10 +110,7 @@
     <Compile Include="SparkleBubble.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="..\SparkleSetup.cs" />
     <Compile Include="..\SparkleSetupController.cs" />
-    <Compile Include="..\SparkleSetupWindow.cs" />
-    <Compile Include="..\SparkleShare.cs" />
     <Compile Include="..\SparkleSpinner.cs" />
     <Compile Include="..\SparkleUI.cs" />
     <Compile Include="..\SparkleEntry.cs" />
@@ -122,9 +122,19 @@
     <Compile Include="SparkleEventLog.Designer.cs">
       <DependentUpon>SparkleEventLog.cs</DependentUpon>
     </Compile>
+    <Compile Include="SparkleSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SparkleSetup.Designer.cs">
+      <DependentUpon>SparkleSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
     <Compile Include="SparkleWinController.cs" />
+    <Compile Include="controls\TablessControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SparkleLib\Windows\SparkleLib.csproj">
@@ -204,6 +214,9 @@
     <EmbeddedResource Include="SparkleEventLog.resx">
       <DependentUpon>SparkleEventLog.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SparkleSetup.resx">
+      <DependentUpon>SparkleSetup.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
