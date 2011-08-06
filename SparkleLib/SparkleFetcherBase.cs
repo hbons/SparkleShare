@@ -21,7 +21,9 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
 
+#if __MonoCS__
 using Mono.Unix;
+#endif
 
 namespace SparkleLib {
 
@@ -140,12 +142,11 @@ namespace SparkleLib {
                 writer.Close ();
             }
 
-            if ((SparkleBackend.Platform == PlatformID.Unix ||
-                  SparkleBackend.Platform == PlatformID.MacOSX)) {
-                UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
+#if __MonoCS__
+            UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
                 file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
                                                FileAccessPermissions.UserWrite);
-            }
+#endif
 
             SparkleHelpers.DebugInfo ("Fetcher", "Disabled host key checking");
         }
@@ -181,13 +182,12 @@ namespace SparkleLib {
                     TextWriter writer = new StreamWriter (ssh_config_file_path);
                     writer.WriteLine (current_ssh_config);
                     writer.Close ();
-                    if ((SparkleBackend.Platform == PlatformID.Unix ||
-                          SparkleBackend.Platform == PlatformID.MacOSX)) {
 
+#if __MonoCS__
                         UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
                         file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
                                                            FileAccessPermissions.UserWrite);
-                    }
+#endif
                 }
             }
 

@@ -1092,7 +1092,11 @@ namespace SparkleShare {
             foreach (SparkleRepoBase repo in Repositories)
                 repo.Dispose ();
 
-			Gtk.Application.Quit ();
+#if __MonoCS__
+            Gtk.Application.Quit ();
+#else
+            System.Windows.Forms.Application.Exit ();
+#endif
         }
 
 

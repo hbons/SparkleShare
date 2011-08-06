@@ -54,7 +54,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Mono.Posix" />
     <Reference Include="Meebey.SmartIrc4net, Version=0.4.5.0, Culture=neutral, PublicKeyToken=7868485fbf407e0f">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Meebey.SmartIrc4net.dll</HintPath>
