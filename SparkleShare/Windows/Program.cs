@@ -98,6 +98,14 @@ namespace SparkleShare {
                 UI = new SparkleUI ();
                 UI.Run ();
             }
+
+#if !__MonoCS__
+            // For now we must do GC.Collect to free some internal handles, otherwise
+            // in debug mode you can got assertion message.
+            GC.Collect (GC.MaxGeneration, GCCollectionMode.Forced);
+            GC.WaitForPendingFinalizers ();
+            CefSharp.CEF.Shutdown ();    // Shutdown CEF.
+#endif
         }
 
 
