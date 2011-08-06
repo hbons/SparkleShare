@@ -26,7 +26,7 @@ namespace SparkleShare {
 
     // The statusicon that stays in the
     // user's notification area
-    public class SparkleStatusIcon {
+    public class SparkleStatusIcon : IDisposable {
 
         private Timer Animation;
         private Bitmap [] AnimationFrames;
@@ -323,6 +323,15 @@ namespace SparkleShare {
             if (!Animation.Enabled)
                 Animation.Start ();
         }
+
+        #region IDisposable Members
+
+        public void Dispose ()
+        {
+            status_icon.Dispose ();
+        }
+
+        #endregion
     }
 
 
