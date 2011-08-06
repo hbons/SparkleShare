@@ -41,7 +41,7 @@ namespace SparkleShare {
         public delegate void OnQuitWhileSyncingEventHandler ();
 
         public event FolderFetchedEventHandler FolderFetched;
-        public delegate void FolderFetchedEventHandler ();
+        public delegate void FolderFetchedEventHandler (string target_folder_name);
         
         public event FolderFetchErrorEventHandler FolderFetchError;
         public delegate void FolderFetchErrorEventHandler ();
@@ -873,8 +873,10 @@ namespace SparkleShare {
 
                     // Create an easily accessible copy of the public
                     // key in the user's SparkleShare folder
-                    File.Copy (key_file_path + ".pub",
-                        Path.Combine (SparklePath, UserName + "'s key.txt"));
+                    string PublicKeyCopy = Path.Combine (SparklePath, UserName + "'s key.txt");
+                    if (File.Exists (PublicKeyCopy))
+                        File.Delete (PublicKeyCopy);
+                    File.Copy (key_file_path + ".pub", PublicKeyCopy);
                 };
                 
                 process.Start ();
@@ -882,10 +884,14 @@ namespace SparkleShare {
             }
         }
 
-
+        private bool FetchingAvatars = false;
         // Gets the avatar for a specific email address and size
         public void FetchAvatars (List<string> emails, int size)
         {
+            if (FetchingAvatars)
+                return;
+            FetchingAvatars = true;
+
             List<string> old_avatars = new List<string> ();
             bool avatar_fetched      = false;
             string avatar_path       = SparkleHelpers.CombineMore (
@@ -935,6 +941,7 @@ namespace SparkleShare {
                     }
                 }
             }
+            FetchingAvatars = false;
 
             // Fetch new versions of the avatars that we
             // deleted because they were too old
@@ -964,7 +971,9 @@ namespace SparkleShare {
                 Directory.CreateDirectory (SparklePaths.SparkleTmpPath);
 
             // Strip the '.git' from the name
-            string canonical_name = Path.GetFileNameWithoutExtension (remote_folder);
+            string canonical_name = Regex.Replace (remote_folder, @"\..*$", "");
+            canonical_name = Regex.Replace (remote_folder, @"^.*/", "");
+
             string tmp_folder     = Path.Combine (SparklePaths.SparkleTmpPath, canonical_name);
 
             SparkleFetcherBase fetcher = null;
@@ -1016,7 +1025,7 @@ namespace SparkleShare {
                 AddRepository (target_folder_path);
 
                 if (FolderFetched != null)
-                    FolderFetched ();
+                    FolderFetched (target_folder_name);
 
                 FolderSize = GetFolderSize ();
 
