@@ -145,7 +145,7 @@ namespace SparkleShare {
                 }
             };
 
-            new Thread (new ThreadStart (PopulateRepositories)).Start ();
+            PopulateRepositories();
         }
 
 
@@ -1091,6 +1091,7 @@ namespace SparkleShare {
         {
             foreach (SparkleRepoBase repo in Repositories)
                 repo.Dispose ();
+            Repositories = null;
 
 #if __MonoCS__
             Gtk.Application.Quit ();

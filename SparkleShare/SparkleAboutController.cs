@@ -68,24 +68,24 @@ namespace SparkleShare {
             Uri uri = new Uri ("http://www.sparkleshare.org/version");
 
             web_client.DownloadStringCompleted += delegate (object o, DownloadStringCompletedEventArgs args) {
-                if (args.Error != null)
-                    return;
-
-                string new_version = args.Result.Trim ();
-
-                // Add a little delay, making it seems we're
-                // actually doing hard work
-                Thread.Sleep (2 * 1000);
-
-                if (RunningVersion.Equals (new_version)) {
-                    if (VersionUpToDateEvent != null)
-                        VersionUpToDateEvent ();
-
+                if (args.Error != null) {
+                    Console.WriteLine ("Error during version check: {0}", args.Error.Message);
                 } else {
-                    if (NewVersionEvent != null)
-                        NewVersionEvent (new_version);
-                }
+                    string new_version = args.Result.Trim ();
 
+                    // Add a little delay, making it seems we're
+                    // actually doing hard work
+                    Thread.Sleep (2 * 1000);
+
+                    if (RunningVersion.Equals (new_version)) {
+                        if (VersionUpToDateEvent != null)
+                            VersionUpToDateEvent ();
+
+                    } else {
+                        if (NewVersionEvent != null)
+                            NewVersionEvent (new_version);
+                    }
+                }
                 this.version_checker.Start ();
             };
 

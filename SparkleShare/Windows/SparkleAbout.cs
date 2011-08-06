@@ -71,8 +71,12 @@ namespace SparkleShare {
 
         private void SparkleAbout_FormClosing (object sender, FormClosingEventArgs e)
         {
-            e.Cancel = true;
-            this.Hide ();
+            if (e.CloseReason != CloseReason.ApplicationExitCall
+                    && e.CloseReason != CloseReason.TaskManagerClosing
+                    && e.CloseReason != CloseReason.WindowsShutDown) {
+                e.Cancel = true;
+                this.Hide ();
+            }
         }
     }
 }
