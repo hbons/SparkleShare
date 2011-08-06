@@ -53,17 +53,8 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="CefSharp, Version=0.3.4006.34354, Culture=neutral, processorArchitecture=x86" />
-    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-    </Reference>
-    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-    </Reference>
-    <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="Mono.Posix" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -111,9 +102,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\SparkleSetupController.cs" />
-    <Compile Include="..\SparkleSpinner.cs" />
     <Compile Include="..\SparkleUI.cs" />
-    <Compile Include="..\SparkleEntry.cs" />
     <Compile Include="..\SparkleController.cs" />
     <Compile Include="..\SparkleAboutController.cs" />
     <Compile Include="SparkleEventLog.cs">

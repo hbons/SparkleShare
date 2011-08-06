@@ -45,14 +45,14 @@ namespace SparkleShare {
         public static void Main (string [] args)
         {
             // Don't allow running as root on Linux or Mac
-            if ((SparkleBackend.Platform == PlatformID.Unix ||
-                 SparkleBackend.Platform == PlatformID.MacOSX) &&
-                new Mono.Unix.UnixUserInfo (Mono.Unix.UnixEnvironment.UserName).UserId == 0) {
+#if __MonoCS__
+            if (new Mono.Unix.UnixUserInfo (Mono.Unix.UnixEnvironment.UserName).UserId == 0) {
 
                 Console.WriteLine (_("Sorry, you can't run SparkleShare with these permissions."));
                 Console.WriteLine (_("Things would go utterly wrong."));
                 Environment.Exit (-1);
             }
+#endif
 
             // Parse the command line options
             bool show_help       = false;
@@ -76,15 +76,15 @@ namespace SparkleShare {
             // Load the right controller for the OS
             string controller_name = "Lin";
             switch (SparkleBackend.Platform) {
-            case PlatformID.Unix:
-                SetProcessName ("sparkleshare");
-                break;
-            case PlatformID.MacOSX:
-                controller_name = "Mac";
-                break;
-            case PlatformID.Win32NT:
-                controller_name = "Win";
-                break;
+                case PlatformID.Unix:
+                    SetProcessName ("sparkleshare");
+                    break;
+                case PlatformID.MacOSX:
+                    controller_name = "Mac";
+                    break;
+                case PlatformID.Win32NT:
+                    controller_name = "Win";
+                    break;
             }
 
             // Initialize the controller this way so that
@@ -133,15 +133,16 @@ namespace SparkleShare {
             Environment.Exit (0);
         }
 
-
+#if __MonoCS__
         // Strange magic needed by SetProcessName ()
         [DllImport ("libc")]
         private static extern int prctl (int option, byte [] arg2, IntPtr arg3, IntPtr arg4, IntPtr arg5);
-        
+#endif
         
         // Sets the Unix process name to 'sparkleshare' instead of 'mono'
         private static void SetProcessName (string name)
         {
+#if __MonoCS__
             try {
                 if (prctl (15, Encoding.ASCII.GetBytes (name + "\0"), IntPtr.Zero, IntPtr.Zero, IntPtr.Zero) != 0)
                     throw new ApplicationException ("Error setting process name: " +
@@ -150,6 +151,7 @@ namespace SparkleShare {
             } catch (EntryPointNotFoundException) {
                 Console.WriteLine ("SetProcessName: Entry point not found");
             }
+#endif
         }
     }
 }

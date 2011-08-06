@@ -14,7 +14,6 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using Gtk;
 using SparkleLib;
 using System;
 using System.IO;
@@ -33,36 +32,6 @@ namespace SparkleShare {
             Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
             Byte[] encodedBytes = md5.ComputeHash (bytes);
             return BitConverter.ToString (encodedBytes).ToLower ().Replace ("-", "");
-        }
-
-
-        // Looks up an icon from the system's theme
-        public static Gdk.Pixbuf GetIcon (string name, int size)
-        {
-            IconTheme icon_theme = new IconTheme ();
-            icon_theme.AppendSearchPath (SparklePaths.SparkleIconPath);
-            icon_theme.AppendSearchPath (SparklePaths.SparkleLocalIconPath);
-
-            try {
-                return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
-            } catch {
-                try {
-                    return icon_theme.LoadIcon ("gtk-missing-image", size, IconLookupFlags.GenericFallback);
-                } catch {
-                    return null;
-                }
-            }
-        }
-
-
-        // Converts a Gdk RGB color to a hex value.
-        // Example: from "rgb:0,0,0" to "#000000"
-        public static string GdkColorToHex (Gdk.Color color)
-        {
-            return String.Format ("#{0:X2}{1:X2}{2:X2}",
-                (int) Math.Truncate (color.Red   / 256.00),
-                (int) Math.Truncate (color.Green / 256.00),
-                (int) Math.Truncate (color.Blue  / 256.00));
         }
 
         public static string ToHex (this System.Drawing.Color color)

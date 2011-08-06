@@ -23,7 +23,11 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
+#if __MonoCS__
 using Gtk;
+#else
+using System.Windows.Forms;
+#endif
 using SparkleLib;
 
 namespace SparkleShare {
@@ -46,6 +50,7 @@ namespace SparkleShare {
         public SparkleUI ()
         {
             // Initialize the application
+#if __MonoCS__
             Application.Init ();
 
             GLib.ExceptionManager.UnhandledException += delegate (GLib.UnhandledExceptionArgs exArgs) {
@@ -68,7 +73,7 @@ namespace SparkleShare {
                 ExceptionDialog.Destroy ();
 
             };
-
+#endif
             // Create the statusicon
             StatusIcon = new SparkleStatusIcon ();
             
