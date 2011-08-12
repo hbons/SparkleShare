@@ -3,4 +3,4 @@
 	url = git://git.qnetp.net/smartirc4net.git
 [submodule "tools/TextTemplating"]
 	path = tools/TextTemplating
-	url = git@github.com:wimh/TextTemplating.git
+	url = git://github.com/wimh/TextTemplating.git
