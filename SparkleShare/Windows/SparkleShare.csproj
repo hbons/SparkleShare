@@ -39,8 +39,9 @@
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -52,19 +53,12 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-    </Reference>
-    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-    </Reference>
-    <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-    </Reference>
+    <Reference Include="CefSharp, Version=0.3.4006.34354, Culture=neutral, processorArchitecture=x86" />
     <Reference Include="System" />
-    <Reference Include="Mono.Posix" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
@@ -76,7 +70,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GlobalAssemblyInfo.tt</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationSchemeHandler.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="controls\ExampleTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FileSchemeHandler.cs" />
     <Compile Include="Icons.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -88,23 +87,43 @@
     <Compile Include="Notification.designer.cs">
       <DependentUpon>Notification.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SparkleAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SparkleAbout.Designer.cs">
+      <DependentUpon>SparkleAbout.cs</DependentUpon>
+    </Compile>
     <Compile Include="SparkleBubble.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="..\SparkleSetup.cs" />
     <Compile Include="..\SparkleSetupController.cs" />
-    <Compile Include="..\SparkleSetupWindow.cs" />
-    <Compile Include="..\SparkleShare.cs" />
-    <Compile Include="..\SparkleSpinner.cs" />
-    <Compile Include="..\SparkleStatusIcon.cs" />
     <Compile Include="..\SparkleUI.cs" />
-    <Compile Include="..\SparkleEntry.cs" />
-    <Compile Include="..\SparkleUIHelpers.cs" />
     <Compile Include="..\SparkleController.cs" />
-    <Compile Include="..\SparkleAbout.cs" />
     <Compile Include="..\SparkleAboutController.cs" />
-    <Compile Include="SparkleEventLog.cs" />
+    <Compile Include="SparkleEventLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SparkleEventLog.Designer.cs">
+      <DependentUpon>SparkleEventLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SparkleSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SparkleSetup.Designer.cs">
+      <DependentUpon>SparkleSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="SparkleStatusIcon.cs" />
+    <Compile Include="SparkleUIHelpers.cs" />
     <Compile Include="SparkleWinController.cs" />
+    <Compile Include="controls\TablessControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SparkleLib\Windows\SparkleLib.csproj">
@@ -129,11 +148,6 @@
     <VisualStudio />
   </ProjectExtensions>
   <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
       <Visible>False</Visible>
       <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
@@ -147,11 +161,6 @@
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
@@ -182,15 +191,27 @@
       <DependentUpon>Notification.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SparkleAbout.resx">
+      <DependentUpon>SparkleAbout.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SparkleEventLog.resx">
+      <DependentUpon>SparkleEventLog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SparkleSetup.resx">
+      <DependentUpon>SparkleSetup.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Icons.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Icons.resx</LastGenOutput>
     </None>
-    <None Include="Resources\folder-sparkleshare-16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\sparkleshare.ico" />
   </ItemGroup>
 </Project>
