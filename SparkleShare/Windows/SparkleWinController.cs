@@ -23,6 +23,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using CefSharp;
 
 namespace SparkleShare {
 
@@ -34,6 +36,20 @@ namespace SparkleShare {
 
 		public override void Initialize ()
 		{
+            Settings settings = new Settings ();
+            BrowserSettings browserSettings = new BrowserSettings ();
+
+            if (!CEF.Initialize (settings, browserSettings)) {
+                Console.WriteLine ("Couldn't initialise CEF");
+                return;
+            }
+
+            CEF.RegisterScheme ("application", "sparkleshare", new ApplicationSchemeHandlerFactory ());
+            CEF.RegisterScheme ("application", "file", new FileSchemeHandlerFactory ());
+            
+			Application.EnableVisualStyles ();
+			Application.SetCompatibleTextRenderingDefault (false);
+
 			// Add msysgit to path, as we cannot asume it is added to the path
 			// Asume it is installed in @"C:\msysgit\bin" for now
 			string MSysGit=@"C:\msysgit";
@@ -53,9 +69,47 @@ namespace SparkleShare {
 			base.Initialize ();
 		}
 
-		public override string EventLogHTML { get { return "";  } }
-		public override string DayEntryHTML { get { return ""; } }
-		public override string EventEntryHTML { get { return ""; } }
+        public override string EventLogHTML
+        {
+            get
+            {
+                string html = Properties.Resources.event_log_html;
+
+                html = html.Replace ("<!-- $jquery-url -->", "application://sparkleshare/jquery.js");
+
+                return html;
+            }
+        }
+
+
+        public override string DayEntryHTML
+        {
+            get
+            {
+                return Properties.Resources.day_entry_html;
+            }
+        }
+
+
+        public override string EventEntryHTML
+        {
+            get
+            {
+                return Properties.Resources.event_entry_html;
+            }
+        }
+
+        public override string GetAvatar (string email, int size)
+        {
+            if (string.IsNullOrEmpty (email)) {
+                return "application://sparkleshare/avatar-default-32.png";
+            }
+            string avatar_file_path = SparkleHelpers.CombineMore (
+                SparklePaths.SparkleLocalIconPath, size + "x" + size, "status", "avatar-" + email);
+
+            return avatar_file_path;
+        }
+
 
 		// Creates a .desktop entry in autostart folder to
 		// start SparkleShare automatically at login

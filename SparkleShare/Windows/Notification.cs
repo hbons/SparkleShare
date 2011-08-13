@@ -29,7 +29,7 @@ namespace Notifications
 		private int startPosX;
 		private int startPosY;
 
-		public new Gdk.Pixbuf Icon;
+		//public new Gdk.Pixbuf Icon;
 
         public Notification ()
         {
@@ -72,7 +72,7 @@ namespace Notifications
 			Filename = Path.ChangeExtension (Filename, "bmp");
 			if (File.Exists (Filename))
 				File.Delete (Filename);
-			this.Icon.Save (Filename, "bmp");
+			//this.Icon.Save (Filename, "bmp");
 			using (Stream s = File.OpenRead (Filename))
 				pictureBox1.Image = Bitmap.FromStream (s);
 			File.Delete (Filename);

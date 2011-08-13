@@ -23,7 +23,11 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
+#if __MonoCS__
 using Gtk;
+#else
+using System.Windows.Forms;
+#endif
 using SparkleLib;
 
 namespace SparkleShare {
@@ -46,6 +50,7 @@ namespace SparkleShare {
         public SparkleUI ()
         {
             // Initialize the application
+#if __MonoCS__
             Application.Init ();
 
             GLib.ExceptionManager.UnhandledException += delegate (GLib.UnhandledExceptionArgs exArgs) {
@@ -68,16 +73,16 @@ namespace SparkleShare {
                 ExceptionDialog.Destroy ();
 
             };
-
+#endif
             // Create the statusicon
             StatusIcon = new SparkleStatusIcon ();
             
-            if (SparkleShare.Controller.FirstRun) {
+            if (Program.Controller.FirstRun) {
                 Setup = new SparkleSetup ();
                 Setup.Controller.ShowSetupPage ();
             }
             
-            SparkleShare.Controller.OnQuitWhileSyncing += delegate {
+            Program.Controller.OnQuitWhileSyncing += delegate {
                 // TODO: Pop up a warning when quitting whilst syncing
             };
         }
@@ -86,6 +91,7 @@ namespace SparkleShare {
         public void Run ()
         {
             Application.Run ();
+            StatusIcon.Dispose ();
         }
     }
 }

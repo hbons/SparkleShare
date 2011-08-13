@@ -87,11 +87,11 @@ namespace SparkleShare {
 
         public void SetupPageCompleted (string full_name, string email)
         {
-            SparkleShare.Controller.UserName  = full_name;
-            SparkleShare.Controller.UserEmail = email;
+            Program.Controller.UserName  = full_name;
+            Program.Controller.UserEmail = email;
 
-            SparkleShare.Controller.GenerateKeyPair ();
-            SparkleShare.Controller.UpdateState ();
+            Program.Controller.GenerateKeyPair ();
+            Program.Controller.UpdateState ();
 
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Add);
@@ -100,28 +100,28 @@ namespace SparkleShare {
 
         public void AddPageCompleted (string server, string folder_name)
         {
-            this.syncing_folder = Path.GetFileNameWithoutExtension (folder_name);
+            this.syncing_folder = folder_name;
             this.previous_server = server;
             this.previous_folder = folder_name;
 
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Syncing);
 
-            SparkleShare.Controller.FolderFetched += delegate {
+            Program.Controller.FolderFetched += (target_folder_name) => {
+                this.syncing_folder = target_folder_name;
+
                 if (ChangePageEvent != null)
                     ChangePageEvent (PageType.Finished);
-
-                this.syncing_folder = "";
             };
 
-            SparkleShare.Controller.FolderFetchError += delegate {
+            Program.Controller.FolderFetchError += delegate {
                 if (ChangePageEvent != null)
                     ChangePageEvent (PageType.Error);
 
                 this.syncing_folder = "";
             };
 
-            SparkleShare.Controller.FetchFolder (server, this.syncing_folder);
+            Program.Controller.FetchFolder (server, this.syncing_folder);
         }
 
 
@@ -136,7 +136,7 @@ namespace SparkleShare {
         {
             this.previous_server = "";
             this.previous_folder = "";
-            SparkleShare.Controller.UpdateState ();
+            Program.Controller.UpdateState ();
         }
     }
 }
