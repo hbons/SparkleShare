@@ -20,8 +20,9 @@ using System.IO;
 using System.Collections.Generic;
 using System.Xml;
 
+#if __MonoCS__
 using Mono.Unix;
-
+#endif
 namespace SparkleLib {
 
     public class SparkleConfig : XmlDocument {
@@ -58,18 +59,15 @@ namespace SparkleLib {
         {
             string user_name = "Unknown";
 
-            if (SparkleBackend.Platform == PlatformID.Unix ||
-                SparkleBackend.Platform == PlatformID.MacOSX) {
-
+#if __MonoCS__
                 user_name = new UnixUserInfo (UnixEnvironment.UserName).RealName;
                 if (string.IsNullOrEmpty (user_name))
                     user_name = UnixEnvironment.UserName;
                 else
                     user_name = user_name.TrimEnd (",".ToCharArray());
-
-            } else {
-                user_name = Environment.UserName;
-            }
+#else
+            user_name = Environment.UserName;
+#endif
 
             if (string.IsNullOrEmpty (user_name))
                 user_name = "Unknown";
