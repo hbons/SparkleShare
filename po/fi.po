@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-29 11:38+0200\n"
-"PO-Revision-Date: 2011-06-26 09:22+0000\n"
+"POT-Creation-Date: 2011-07-19 07:04+0200\n"
+"PO-Revision-Date: 2011-07-19 05:10+0000\n"
 "Last-Translator: deejay1 <deejay1@srem.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,25 +21,26 @@ msgstr ""
 "Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:337
-#: ../SparkleShare/SparkleIntro.cs:67 ../SparkleShare/SparkleStatusIcon.cs:345
-msgid "Welcome to SparkleShare!"
-msgstr "Tervetuloa SparkleShareen!"
-
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:348
-#: ../SparkleShare/SparkleStatusIcon.cs:357
-msgid "Not everything is synced"
-msgstr "Kaikkea ei ole synkronoitu"
-
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:358
-#: ../SparkleShare/SparkleStatusIcon.cs:367
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:69
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:86
+#: ../SparkleShare/SparkleStatusIcon.cs:372
 msgid "Up to date"
 msgstr "Ajantasalla"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:374
-#: ../SparkleShare/SparkleStatusIcon.cs:383
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:84
+#: ../SparkleShare/SparkleSetup.cs:69 ../SparkleShare/SparkleStatusIcon.cs:350
+msgid "Welcome to SparkleShare!"
+msgstr "Tervetuloa SparkleShareen!"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:95
+#: ../SparkleShare/SparkleStatusIcon.cs:388
 msgid "Syncing…"
 msgstr "Synkronoidaan..."
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:105
+#: ../SparkleShare/SparkleStatusIcon.cs:362
+msgid "Not everything is synced"
+msgstr "Kaikkea ei ole synkronoitu"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
 msgid "Copy Web Link"
@@ -62,259 +63,61 @@ msgid "Select to get a copy of this version"
 msgstr "Tee kopio tästä versiosta"
 
 #. A menu item that takes the user to http://www.sparkleshare.org/
-#: ../SparkleShare/SparkleAbout.cs:46 ../SparkleShare/SparkleStatusIcon.cs:275
+#: ../SparkleShare/SparkleAbout.cs:54 ../SparkleShare/SparkleStatusIcon.cs:275
 msgid "About SparkleShare"
 msgstr "Tietoja SparkleSharesta"
 
-#: ../SparkleShare/SparkleAbout.cs:53
-msgid "A newer version is available"
-msgstr "Uudempi versio on saatavissa"
+#: ../SparkleShare/SparkleAbout.cs:72
+#, csharp-format
+msgid "A newer version ({0}) is available!"
+msgstr ""
 
-#: ../SparkleShare/SparkleAbout.cs:60
+#: ../SparkleShare/SparkleAbout.cs:80
 msgid "You are running the latest version."
 msgstr "Sinulla on uusin versio käytössäsi"
 
-#: ../SparkleShare/SparkleAbout.cs:87
+#: ../SparkleShare/SparkleAbout.cs:88 ../SparkleShare/SparkleAbout.cs:110
 msgid "Checking for updates..."
 msgstr "Tarkistetaan päivityksiä..."
 
-#: ../SparkleShare/SparkleAbout.cs:116
-msgid "_Show Credits"
-msgstr "_Näytä osallistujat"
+#: ../SparkleShare/SparkleController.cs:446
+msgid "dddd, MMMM d, yyyy"
+msgstr ""
 
-#: ../SparkleShare/SparkleAbout.cs:129
-msgid "_Visit Website"
-msgstr "_Käy nettisivulla"
+#: ../SparkleShare/SparkleController.cs:451
+msgid "dddd, MMMM d"
+msgstr ""
 
-#: ../SparkleShare/SparkleController.cs:455
-msgid "ddd MMM d, yyyy"
-msgstr "ppp kkk d, vvvv"
-
-#: ../SparkleShare/SparkleController.cs:460
-msgid "ddd MMM d"
-msgstr "ppp kkk d"
-
-#: ../SparkleShare/SparkleController.cs:661
+#: ../SparkleShare/SparkleController.cs:660
 #, csharp-format
 msgid "added ‘{0}’"
 msgstr "lisätty '{0}'"
 
-#: ../SparkleShare/SparkleController.cs:666
+#: ../SparkleShare/SparkleController.cs:665
 #, csharp-format
 msgid "moved ‘{0}’"
 msgstr "siirrettiin '{0}'"
 
-#: ../SparkleShare/SparkleController.cs:671
+#: ../SparkleShare/SparkleController.cs:670
 #, csharp-format
 msgid "edited ‘{0}’"
 msgstr "muokattu '{0}'"
 
-#: ../SparkleShare/SparkleController.cs:676
+#: ../SparkleShare/SparkleController.cs:675
 #, csharp-format
 msgid "deleted ‘{0}’"
 msgstr "poistettu '{0}'"
 
-#: ../SparkleShare/SparkleController.cs:685
+#: ../SparkleShare/SparkleController.cs:684
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../SparkleShare/SparkleController.cs:689
+#: ../SparkleShare/SparkleController.cs:688
 msgid "did something magical"
 msgstr "teki jotain maagista"
-
-#: ../SparkleShare/SparkleIntro.cs:73
-msgid ""
-"Before we can create a SparkleShare folder on this computer, we need a few "
-"bits of information from you."
-msgstr ""
-"Ennen kuin voit luoda SparkleShare-kansio tälle tietokoneelle, tarvitsemme "
-"joitain tietoja sinusta."
-
-#: ../SparkleShare/SparkleIntro.cs:83
-msgid "Full Name:"
-msgstr "Koko nimi:"
-
-#: ../SparkleShare/SparkleIntro.cs:98
-msgid "Email:"
-msgstr "Sähköposti:"
-
-#: ../SparkleShare/SparkleIntro.cs:109
-msgid "Next"
-msgstr "Seuraava"
-
-#: ../SparkleShare/SparkleIntro.cs:115
-msgid "Configuring…"
-msgstr "Säädetään..."
-
-#: ../SparkleShare/SparkleIntro.cs:161
-msgid "Where is your remote folder?"
-msgstr "Missä etähakemisto on?"
-
-#: ../SparkleShare/SparkleIntro.cs:174
-msgid "address-to-server.com"
-msgstr "palvelimen-osoite.fi"
-
-#: ../SparkleShare/SparkleIntro.cs:179
-msgid "On my own server:"
-msgstr "Omalle palvelimelleni:"
-
-#: ../SparkleShare/SparkleIntro.cs:186
-msgid "Free hosting for Free and Open Source Software projects."
-msgstr "Ilmainen palvelintila vapaan lähdekoodin projekteille."
-
-#: ../SparkleShare/SparkleIntro.cs:187
-msgid "Also has paid accounts for extra private space and bandwidth."
-msgstr ""
-"Myös maksullisia tilejä ylimääräisellä tilalla ja nopeammalla yhteydellä."
-
-#: ../SparkleShare/SparkleIntro.cs:195
-msgid "The GNOME Project"
-msgstr "GNOME-projekti"
-
-#: ../SparkleShare/SparkleIntro.cs:197
-msgid "GNOME is an easy to understand interface to your computer."
-msgstr "GNOME on helppokäyttöinen käyttöliittymä tietokoneellesi."
-
-#: ../SparkleShare/SparkleIntro.cs:198
-msgid "Select this option if you’re a developer or designer working on GNOME."
-msgstr "Valitse tämä, jos olet kehittäjä tai suunnittelija GNOME-projektissa."
-
-#: ../SparkleShare/SparkleIntro.cs:206
-msgid "Gitorious"
-msgstr "Gitorious"
-
-#: ../SparkleShare/SparkleIntro.cs:208
-msgid "Completely Free as in Freedom infrastructure."
-msgstr "Täysin vapaa infrastruktuuri."
-
-#: ../SparkleShare/SparkleIntro.cs:209
-msgid "Free accounts for Free and Open Source projects."
-msgstr "Ilmainen tili vapaan lähdekoodin projekteille."
-
-#: ../SparkleShare/SparkleIntro.cs:220
-msgid "Username/Folder"
-msgstr "Käyttäjätunnus/hakemisto"
-
-#: ../SparkleShare/SparkleIntro.cs:225
-msgid "Project/Folder"
-msgstr "Projekti/hakemisto"
-
-#: ../SparkleShare/SparkleIntro.cs:230
-msgid "Project"
-msgstr "Projekt"
-
-#: ../SparkleShare/SparkleIntro.cs:235 ../SparkleShare/SparkleIntro.cs:254
-msgid "Folder"
-msgstr "Hakemisto"
-
-#: ../SparkleShare/SparkleIntro.cs:259 ../SparkleShare/SparkleIntro.cs:377
-msgid "Folder Name:"
-msgstr "Hakemiston nimi:"
-
-#: ../SparkleShare/SparkleIntro.cs:269
-msgid "Sync"
-msgstr "Synkronoi"
-
-#: ../SparkleShare/SparkleIntro.cs:312
-msgid "Cancel"
-msgstr "Peruuta"
-
-#: ../SparkleShare/SparkleIntro.cs:320
-msgid "Skip"
-msgstr "Ohita"
-
-#: ../SparkleShare/SparkleIntro.cs:347
-msgid "Invitation received!"
-msgstr "Kutsu vastaanotettu!"
-
-#: ../SparkleShare/SparkleIntro.cs:353
-msgid ""
-"You've received an invitation to join a shared folder.\n"
-"We're ready to hook you up immediately if you wish."
-msgstr ""
-"Olet saanut kutsun liittyä jaettuun kansioon.\n"
-"Olemme valmiita liittämään sinut välittömästi, jos haluat."
-
-#: ../SparkleShare/SparkleIntro.cs:359
-msgid "Do you accept this invitation?"
-msgstr "Hyväksytkö tämän kutsun?"
-
-#: ../SparkleShare/SparkleIntro.cs:368
-msgid "Server Address:"
-msgstr "Palvelimen osoite:"
-
-#: ../SparkleShare/SparkleIntro.cs:391
-msgid "Reject"
-msgstr "Hylkää"
-
-#: ../SparkleShare/SparkleIntro.cs:392
-msgid "Accept and Sync"
-msgstr "Hyväksy ja synkronoi"
-
-#: ../SparkleShare/SparkleIntro.cs:442
-msgid "Something went wrong…"
-msgstr "Jotain meni pieleen..."
-
-#: ../SparkleShare/SparkleIntro.cs:448
-msgid "Try Again"
-msgstr "Yritä uudelleen"
-
-#: ../SparkleShare/SparkleIntro.cs:473
-#, csharp-format
-msgid "‘{0}’ has been successfully added"
-msgstr "'{0}' lisättiin onnistuneesti"
-
-#: ../SparkleShare/SparkleIntro.cs:482
-msgid "Folder synced successfully!"
-msgstr "Hakemistojen synkronointi onnistui!"
-
-#: ../SparkleShare/SparkleIntro.cs:489
-#, csharp-format
-msgid ""
-"Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
-msgstr "Voit käyttää '{0}' synkronoituja tiedostoja SparkleShare-kansiossasi."
-
-#. A button that opens the synced folder
-#: ../SparkleShare/SparkleIntro.cs:497
-msgid "Open Folder"
-msgstr "Avaa hakemisto"
-
-#: ../SparkleShare/SparkleIntro.cs:503 ../SparkleShare/SparkleIntro.cs:543
-#: ../SparkleShare/SparkleIntro.cs:604
-msgid "Finish"
-msgstr "Valmis"
-
-#: ../SparkleShare/SparkleIntro.cs:528
-#, csharp-format
-msgid "Syncing folder ‘{0}’…"
-msgstr "Synkronoidaan hakemistoa '{0}'..."
-
-#: ../SparkleShare/SparkleIntro.cs:535
-msgid "This may take a while.\n"
-msgstr "Tämä voi kestää hetken.\n"
-
-#: ../SparkleShare/SparkleIntro.cs:536
-msgid "Are you sure it’s not coffee o'clock?"
-msgstr "Oletko varma, että ei ole kahvitauon paikka?"
-
-#: ../SparkleShare/SparkleIntro.cs:579
-msgid "SparkleShare is ready to go!"
-msgstr "SparkleShare on valmis toimimaan!"
-
-#: ../SparkleShare/SparkleIntro.cs:585
-msgid ""
-"Now you can start accepting invitations from others. \n"
-"Just click on invitations you get by email and we will take care of the rest."
-msgstr ""
-"Nyt voit ottaa vastaan kutsuja muilta.\n"
-"Paina kutsua jonka sait sähköpostilla, ja hoidamme loput."
-
-#: ../SparkleShare/SparkleIntro.cs:596
-msgid "Learn how to host your own SparkleServer"
-msgstr "Selvitä, kuinka voit pitää omaa SparkleServer-palvelinta"
 
 #: ../SparkleShare/SparkleEventLog.cs:61
 msgid "Recent Events"
@@ -324,6 +127,151 @@ msgstr ""
 #: ../SparkleShare/SparkleEventLog.cs:173
 msgid "All Folders"
 msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:70
+msgid ""
+"Before we can create a SparkleShare folder on this computer, we need a few "
+"bits of information from you."
+msgstr ""
+"Ennen kuin voit luoda SparkleShare-kansio tälle tietokoneelle, tarvitsemme "
+"joitain tietoja sinusta."
+
+#: ../SparkleShare/SparkleSetup.cs:77
+msgid "Full Name:"
+msgstr "Koko nimi:"
+
+#: ../SparkleShare/SparkleSetup.cs:92
+msgid "Email:"
+msgstr "Sähköposti:"
+
+#: ../SparkleShare/SparkleSetup.cs:102
+msgid "Next"
+msgstr "Seuraava"
+
+#: ../SparkleShare/SparkleSetup.cs:122
+msgid "Where is your remote folder?"
+msgstr "Missä etähakemisto on?"
+
+#. Own server radiobutton
+#: ../SparkleShare/SparkleSetup.cs:131
+msgid "On my own server:"
+msgstr "Omalle palvelimelleni:"
+
+#: ../SparkleShare/SparkleSetup.cs:136 ../SparkleShare/SparkleSetup.cs:238
+msgid "Folder"
+msgstr "Hakemisto"
+
+#: ../SparkleShare/SparkleSetup.cs:163
+msgid "address-to-server.com"
+msgstr "palvelimen-osoite.fi"
+
+#: ../SparkleShare/SparkleSetup.cs:178
+msgid "Free hosting for Free and Open Source Software projects."
+msgstr "Ilmainen palvelintila vapaan lähdekoodin projekteille."
+
+#: ../SparkleShare/SparkleSetup.cs:179
+msgid "Also has paid accounts for extra private space and bandwidth."
+msgstr ""
+"Myös maksullisia tilejä ylimääräisellä tilalla ja nopeammalla yhteydellä."
+
+#: ../SparkleShare/SparkleSetup.cs:188
+msgid "Username/Folder"
+msgstr "Käyttäjätunnus/hakemisto"
+
+#. Gitorious radiobutton
+#: ../SparkleShare/SparkleSetup.cs:193
+msgid "Gitorious"
+msgstr "Gitorious"
+
+#: ../SparkleShare/SparkleSetup.cs:195
+msgid "Completely Free as in Freedom infrastructure."
+msgstr "Täysin vapaa infrastruktuuri."
+
+#: ../SparkleShare/SparkleSetup.cs:196
+msgid "Free accounts for Free and Open Source projects."
+msgstr "Ilmainen tili vapaan lähdekoodin projekteille."
+
+#: ../SparkleShare/SparkleSetup.cs:205
+msgid "Project/Folder"
+msgstr "Projekti/hakemisto"
+
+#. GNOME radiobutton
+#: ../SparkleShare/SparkleSetup.cs:210
+msgid "The GNOME Project"
+msgstr "GNOME-projekti"
+
+#: ../SparkleShare/SparkleSetup.cs:212
+msgid "GNOME is an easy to understand interface to your computer."
+msgstr "GNOME on helppokäyttöinen käyttöliittymä tietokoneellesi."
+
+#: ../SparkleShare/SparkleSetup.cs:213
+msgid "Select this option if you’re a developer or designer working on GNOME."
+msgstr "Valitse tämä, jos olet kehittäjä tai suunnittelija GNOME-projektissa."
+
+#: ../SparkleShare/SparkleSetup.cs:222
+msgid "Project"
+msgstr "Projekt"
+
+#: ../SparkleShare/SparkleSetup.cs:232
+msgid "Folder Name:"
+msgstr "Hakemiston nimi:"
+
+#. Cancel button
+#: ../SparkleShare/SparkleSetup.cs:251
+msgid "Cancel"
+msgstr "Peruuta"
+
+#. Sync button
+#: ../SparkleShare/SparkleSetup.cs:259
+msgid "Sync"
+msgstr "Synkronoi"
+
+#: ../SparkleShare/SparkleSetup.cs:286
+#, csharp-format
+msgid "Syncing folder ‘{0}’…"
+msgstr "Synkronoidaan hakemistoa '{0}'..."
+
+#: ../SparkleShare/SparkleSetup.cs:287
+msgid "This may take a while."
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:288
+msgid "Are you sure it’s not coffee o'clock?"
+msgstr "Oletko varma, että ei ole kahvitauon paikka?"
+
+#: ../SparkleShare/SparkleSetup.cs:292 ../SparkleShare/SparkleSetup.cs:375
+msgid "Finish"
+msgstr "Valmis"
+
+#: ../SparkleShare/SparkleSetup.cs:321
+msgid "Something went wrong"
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:341
+msgid "Try Again"
+msgstr "Yritä uudelleen"
+
+#: ../SparkleShare/SparkleSetup.cs:359
+#, csharp-format
+msgid "‘{0}’ has been successfully added"
+msgstr "'{0}' lisättiin onnistuneesti"
+
+#: ../SparkleShare/SparkleSetup.cs:365
+msgid "Folder synced successfully!"
+msgstr "Hakemistojen synkronointi onnistui!"
+
+#: ../SparkleShare/SparkleSetup.cs:366
+msgid "Access the synced files from your SparkleShare folder."
+msgstr ""
+
+#. A button that opens the synced folder
+#: ../SparkleShare/SparkleSetup.cs:369
+msgid "Open Folder"
+msgstr "Avaa hakemisto"
+
+#: ../SparkleShare/SparkleSetupWindow.cs:45
+msgid "SparkleShare Setup"
+msgstr "SparkleSharen asennus"
 
 #: ../SparkleShare/SparkleShare.cs:53
 msgid "Sorry, you can't run SparkleShare with these permissions."
@@ -407,22 +355,8 @@ msgid "Turn Notifications On"
 msgstr "Ota ilmoitukset käyttöön"
 
 #. A menu item that quits the application
-#: ../SparkleShare/SparkleStatusIcon.cs:286
+#: ../SparkleShare/SparkleStatusIcon.cs:291
 msgid "Quit"
 msgstr "Lopeta"
-
-#: ../SparkleShare/SparkleUI.cs:99
-msgid "Ouch! Mid-air collision!"
-msgstr "Auts! Törmäys!"
-
-#: ../SparkleShare/SparkleUI.cs:100
-msgid "Don't worry, SparkleShare made a copy of each conflicting file."
-msgstr ""
-"Ei huolta, SparkleShare teki kopion kaikista tiedostoista, joissa on "
-"konflikti."
-
-#: ../SparkleShare/SparkleWindow.cs:41
-msgid "SparkleShare Setup"
-msgstr "SparkleSharen asennus"
 
 
