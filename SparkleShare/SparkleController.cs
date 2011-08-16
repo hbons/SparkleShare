@@ -246,7 +246,7 @@ namespace SparkleShare {
             if (name == null)
                 return GetLog ();
 
-            string path = Path.Combine (new string [] {SparkleConfig.DefaultConfig.FoldersPath, name});
+            string path = new string [] {SparkleConfig.DefaultConfig.FoldersPath, name}.Combine ();
             int log_size = 50;
             
             foreach (SparkleRepoBase repo in Repositories) {
@@ -350,9 +350,8 @@ namespace SparkleShare {
                     } else {
                         if (change_set.Edited.Count > 0) {
                             foreach (string file_path in change_set.Edited) {
-                                string absolute_file_path = Path.Combine (
-                                    new string [] {SparkleConfig.DefaultConfig.FoldersPath,
-                                        change_set.Folder, file_path});
+                                string absolute_file_path = new string [] {SparkleConfig.DefaultConfig.FoldersPath,
+                                    change_set.Folder, file_path}.Combine ();
                                 
                                 if (File.Exists (absolute_file_path))
                                     event_entry += "<dd class='document edited'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
@@ -363,9 +362,8 @@ namespace SparkleShare {
     
                         if (change_set.Added.Count > 0) {
                             foreach (string file_path in change_set.Added) {
-                                string absolute_file_path = Path.Combine (
-                                    new string [] {SparkleConfig.DefaultConfig.FoldersPath,
-                                        change_set.Folder, file_path});
+                                string absolute_file_path = new string [] {SparkleConfig.DefaultConfig.FoldersPath,
+                                    change_set.Folder, file_path}.Combine ();
                                 
                                 if (File.Exists (absolute_file_path))
                                     event_entry += "<dd class='document added'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
@@ -376,9 +374,8 @@ namespace SparkleShare {
     
                         if (change_set.Deleted.Count > 0) {
                             foreach (string file_path in change_set.Deleted) {
-                                string absolute_file_path = Path.Combine (
-                                    new string [] {SparkleConfig.DefaultConfig.FoldersPath,
-                                        change_set.Folder, file_path});
+                                string absolute_file_path = new string [] {SparkleConfig.DefaultConfig.FoldersPath,
+                                    change_set.Folder, file_path}.Combine ();
                                 
                                 if (File.Exists (absolute_file_path))
                                     event_entry += "<dd class='document deleted'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
@@ -392,13 +389,11 @@ namespace SparkleShare {
                             foreach (string file_path in change_set.MovedFrom) {
                                 string to_file_path = change_set.MovedTo [i];
 
-                                string absolute_file_path = Path.Combine (
-                                    new string [] {SparkleConfig.DefaultConfig.FoldersPath,
-                                        change_set.Folder, file_path});
+                                string absolute_file_path = new string [] {SparkleConfig.DefaultConfig.FoldersPath,
+                                    change_set.Folder, file_path}.Combine ();
 
-                                string absolute_to_file_path = Path.Combine (
-                                    new string [] {SparkleConfig.DefaultConfig.FoldersPath,
-                                        change_set.Folder, file_path});
+                                string absolute_to_file_path = new string [] {SparkleConfig.DefaultConfig.FoldersPath,
+                                    change_set.Folder, to_file_path}.Combine ();
 
                                 if (File.Exists (absolute_file_path))
                                     event_entry += "<dd class='document moved'><a href='" + absolute_file_path + "'>" + file_path + "</a><br/>";
@@ -901,9 +896,9 @@ namespace SparkleShare {
         {
             List<string> old_avatars = new List<string> ();
             bool avatar_fetched      = false;
-            string avatar_path       = Path.Combine (
-                new string [] {Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath), "icons",
-                    size + "x" + size, "status"});
+            string avatar_path       = new string [] {
+                Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath),
+                "icons", size + "x" + size, "status"}.Combine ();
 
             if (!Directory.Exists (avatar_path)) {
                 Directory.CreateDirectory (avatar_path);
