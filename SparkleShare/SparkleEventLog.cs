@@ -203,6 +203,9 @@ namespace SparkleShare {
                 if (html == null)
                     html = Controller.HTML;
 
+                if (html == null)
+                    return;
+
                 html = html.Replace ("<!-- $body-font-size -->", (double) (Style.FontDescription.Size / 1024 + 3) + "px");
                 html = html.Replace ("<!-- $day-entry-header-font-size -->", (Style.FontDescription.Size / 1024 + 3) + "px");
                 html = html.Replace ("<!-- $a-color -->", "#0085cf");
