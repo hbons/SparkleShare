@@ -59,7 +59,7 @@ namespace SparkleShare {
                     Reset ();
 
                     switch (type) {
-                    case PageType.Setup:
+                    case PageType.Setup: {
 
                         Header       = "Welcome to SparkleShare!";
                         Description  = "Before we can create a SparkleShare folder on this " +
@@ -115,8 +115,9 @@ namespace SparkleShare {
                         Buttons.Add (ContinueButton);
 
                         break;
+                    }
 
-                    case PageType.Add:
+                    case PageType.Add: {
 
                         Header       = "Where is your remote folder?";
                         Description  = "";
@@ -285,8 +286,9 @@ namespace SparkleShare {
                             Buttons.Add (CancelButton);
 
                         break;
+                    }
 
-                    case PageType.Syncing:
+                    case PageType.Syncing: {
 
                         Header      = "Syncing folder ‘" + Controller.SyncingFolder + "’…";
                         Description = "This may take a while.\n" +
@@ -308,8 +310,9 @@ namespace SparkleShare {
                         Buttons.Add (FinishButton);
 
                         break;
+                    }
 
-                    case PageType.Error:
+                    case PageType.Error: {
 
                         Header      = "Something went wrong…";
                         Description = "";
@@ -325,8 +328,9 @@ namespace SparkleShare {
                         Buttons.Add (TryAgainButton);
 
                         break;
+                    }
 
-                    case PageType.Finished:
+                    case PageType.Finished: {
 
                         Header      = "Folder synced succesfully!";
                         Description = "Now you can access the synced files from " +
@@ -358,6 +362,7 @@ namespace SparkleShare {
                             (NSRequestUserAttentionType.CriticalRequest);
 
                         break;
+                    }
                     }
 
                     ShowAll ();
