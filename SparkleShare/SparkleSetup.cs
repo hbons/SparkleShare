@@ -64,7 +64,7 @@ namespace SparkleShare {
                     Reset ();
 
                     switch (type) {
-                    case PageType.Setup:
+                    case PageType.Setup: {
 
                         Header = _("Welcome to SparkleShare!");
                         Description = _("Before we can create a SparkleShare folder on this " +
@@ -116,8 +116,9 @@ namespace SparkleShare {
                         CheckSetupPage ();
 
                         break;
+                    } 
 
-                    case PageType.Add:
+                    case PageType.Add: {
 
                         Header = _("Where is your remote folder?");
 
@@ -289,8 +290,9 @@ namespace SparkleShare {
                         CheckAddPage ();
 
                         break;
+                    }
 
-                    case PageType.Syncing:
+                    case PageType.Syncing: {
 
                         Header      = String.Format (_("Syncing folder ‘{0}’…"), Controller.SyncingFolder);
                         Description = _("This may take a while." + Environment.NewLine) +
@@ -322,8 +324,9 @@ namespace SparkleShare {
                         Add (bar_wrapper);
 
                         break;
+                    }
 
-                    case PageType.Error:
+                    case PageType.Error: {
 
                         string n = Environment.NewLine;
 
@@ -359,8 +362,9 @@ namespace SparkleShare {
                         Add (l);
 
                         break;
+                    }
 
-                    case PageType.Finished:
+                    case PageType.Finished: {
 
                         UrgencyHint = true;
 
@@ -394,11 +398,12 @@ namespace SparkleShare {
 
                         break;
                     }
+                    }
 
                     ShowAll ();
+
                 });
             };
-
         }
 
 
