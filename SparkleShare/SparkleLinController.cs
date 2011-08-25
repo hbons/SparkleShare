@@ -166,8 +166,13 @@ namespace SparkleShare {
             get {
                 string path = SparkleHelpers.CombineMore (Defines.PREFIX,
                     "share", "sparkleshare", "html", "event-log.html");
+
+                string html = String.Join (Environment.NewLine, File.ReadAllLines (path));
+
+                html = html.Replace ("<!-- $jquery-url -->", "file://" +
+                  SparkleHelpers.CombineMore (Defines.PREFIX, "share", "sparkleshare", "html", "jquery.js"));
             
-                return String.Join (Environment.NewLine, File.ReadAllLines (path));
+                return html;
             }
         }
 
