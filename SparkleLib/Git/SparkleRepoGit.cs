@@ -92,6 +92,7 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
                 return true;
             } else {
+//                FetchNotes ();TODO
                 return false;
             }
         }
