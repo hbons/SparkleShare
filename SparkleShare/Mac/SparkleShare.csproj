@@ -62,7 +62,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Meebey.SmartIrc4net.dll</HintPath>
     </Reference>
-    <Reference Include="SparkleLib, Version=0.2.1.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="SparkleLib, Version=0.2.2.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\SparkleLib.dll</HintPath>
     </Reference>
@@ -169,6 +169,9 @@
     </Content>
     <Content Include="..\..\data\icons\document-moved-12.png">
       <Link>Pixmaps\document-moved-12.png</Link>
+    </Content>
+    <Content Include="..\..\data\html\jquery.js">
+      <Link>HTML\jquery.js</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
