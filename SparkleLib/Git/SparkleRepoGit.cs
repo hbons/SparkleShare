@@ -66,8 +66,9 @@ namespace SparkleLib {
                 git.WaitForExit ();
 
                 if (git.ExitCode == 0) {
-                    string output   = git.StandardOutput.ReadToEnd ();
+                    string output = git.StandardOutput.ReadToEnd ();
                     return output.TrimEnd ();
+
                 } else {
                     return null;
                 }
@@ -91,8 +92,10 @@ namespace SparkleLib {
             if (!remote_revision.StartsWith (CurrentRevision)) {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
                 return true;
+
             } else {
-//                FetchNotes ();TODO
+                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Fetching notes");
+                SyncDown ();
                 return false;
             }
         }
@@ -126,6 +129,7 @@ namespace SparkleLib {
             if (git.ExitCode == 0) {
                 Rebase ();
                 return true;
+
             } else {
                 return false;
             }
