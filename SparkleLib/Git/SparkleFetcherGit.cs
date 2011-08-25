@@ -102,7 +102,10 @@ namespace SparkleLib {
 
             // Ignore permission changes
             config = config.Replace ("filemode = true", "filemode = false");
-
+            config = config.Replace ("fetch = +refs/heads/*:refs/remotes/origin/*", 
+                "fetch = +refs/heads/*:refs/remotes/origin/*" + Environment.NewLine +
+                "\tfetch = +refs/notes/*:refs/notes/*");
+Console.WriteLine (">>>>>>>>>>>>>>>" + config);
             // Add user info
             string n        = Environment.NewLine;
             XmlDocument xml = new XmlDocument();
