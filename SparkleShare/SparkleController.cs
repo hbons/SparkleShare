@@ -75,7 +75,9 @@ namespace SparkleShare {
         public delegate void NotificationRaisedEventHandler (string user_name, string user_email,
                                                              string message, string repository_path);
 
-        
+        private SparkleFetcherBase fetcher;
+
+
         // Short alias for the translations
         public static string _ (string s)
         {
@@ -977,7 +979,6 @@ namespace SparkleShare {
             string canonical_name = Path.GetFileNameWithoutExtension (remote_folder);
             string tmp_folder     = Path.Combine (tmp_path, canonical_name);
 
-            SparkleFetcherBase fetcher = null;
             string backend = null;
 
 /*            if (remote_folder.EndsWith (".hg")) {
@@ -991,7 +992,7 @@ namespace SparkleShare {
                 backend = "Scp";
 
             } else {*/
-                fetcher = new SparkleFetcherGit (server, remote_folder, tmp_folder);
+                this.fetcher = new SparkleFetcherGit (server, remote_folder, tmp_folder);
                 backend = "Git";
             //}
 
@@ -1011,7 +1012,7 @@ namespace SparkleShare {
             if (i > 1)
                 target_folder_name += " (" + i + ")";
 
-            fetcher.Finished += delegate {
+            this.fetcher.Finished += delegate {
 
                 // Needed to do the moving
                 SparkleHelpers.ClearAttributes (tmp_folder);
@@ -1024,7 +1025,7 @@ namespace SparkleShare {
                     SparkleHelpers.DebugInfo ("Controller", "Error moving folder: " + e.Message);
                 }
 
-                SparkleConfig.DefaultConfig.AddFolder (target_folder_name, fetcher.RemoteUrl, backend);
+                SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.RemoteUrl, backend);
                 AddRepository (target_folder_path);
 
                 if (FolderFetched != null)
@@ -1038,25 +1039,32 @@ namespace SparkleShare {
                 if (FolderListChanged != null)
                     FolderListChanged ();
 
-                fetcher.Dispose ();
+                this.fetcher.Dispose ();
 
                 if (Directory.Exists (tmp_path))
                     Directory.Delete (tmp_path, true);
             };
 
 
-            fetcher.Failed += delegate {
+            this.fetcher.Failed += delegate {
                 if (FolderFetchError != null)
                     FolderFetchError ();
 
-                fetcher.Dispose ();
+                this.fetcher.Dispose ();
 
                 if (Directory.Exists (tmp_path))
                     Directory.Delete (tmp_path, true);
             };
 
 
-            fetcher.Start ();
+            this.fetcher.Start ();
+        }
+
+
+        public void StopFetcher ()
+        {
+            if (fetcher != null)
+                fetcher.Stop ();
         }
 
 

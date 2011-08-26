@@ -49,7 +49,7 @@ namespace SparkleShare {
 		private NSButtonCell ButtonCellProto;
 		private NSMatrix Matrix;
 		private int ServerType;
-        private Timer timer;
+                private Timer timer;
 
 		
 		public SparkleSetup () : base ()
@@ -307,7 +307,16 @@ namespace SparkleShare {
                             Enabled = false
                         };
 
+                        CancelButton = new NSButton () {
+    		                Title = "Cancel"
+    		            };
+
+		                CancelButton.Activated += delegate {
+                            Controller.SyncingCancelled ();
+		                };
+
                         Buttons.Add (FinishButton);
+                        Buttons.Add (CancelButton);
 
                         break;
                     }

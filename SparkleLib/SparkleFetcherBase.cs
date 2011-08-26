@@ -95,6 +95,13 @@ namespace SparkleLib {
         }
 
 
+        public virtual void Stop ()
+        {
+            this.thread.Abort ();
+            this.thread.Join ();
+        }
+
+
         public string RemoteUrl {
             get {
                 return this.remote_url;
