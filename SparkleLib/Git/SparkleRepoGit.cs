@@ -493,7 +493,8 @@ namespace SparkleLib {
 
                     if ((change_set.Added.Count +
                          change_set.Edited.Count +
-                         change_set.Deleted.Count) > 0) {
+                         change_set.Deleted.Count +
+                         change_set.MovedFrom.Count) > 0) {
 
                         change_set.Notes.AddRange (GetNotes (change_set.Revision));
                         change_sets.Add (change_set);
