@@ -132,6 +132,15 @@ namespace SparkleShare {
         }
 
 
+        public void SyncingCancelled ()
+        {
+            SparkleShare.Controller.StopFetcher ();
+
+            if (ChangePageEvent != null)
+                ChangePageEvent (PageType.Add);
+        }
+
+
         public void FinishedPageCompleted ()
         {
             this.previous_server = "";

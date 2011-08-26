@@ -25,6 +25,9 @@ namespace SparkleLib {
     // Sets up a fetcher that can get remote folders
     public class SparkleFetcherGit : SparkleFetcherBase {
 
+        private SparkleGit git;
+
+
         public SparkleFetcherGit (string server, string remote_folder, string target_folder) :
             base (server, remote_folder, target_folder)
         {
@@ -73,21 +76,32 @@ namespace SparkleLib {
 
         public override bool Fetch ()
         {
-            SparkleGit git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+            this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
                 "clone \"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
 
-            git.Start ();
-            git.WaitForExit ();
+            this.git.Start ();
+            this.git.WaitForExit ();
 
-            SparkleHelpers.DebugInfo ("Git", "Exit code " + git.ExitCode.ToString ());
+            SparkleHelpers.DebugInfo ("Git", "Exit code " + this.git.ExitCode.ToString ());
 
-            if (git.ExitCode != 0) {
+            if (this.git.ExitCode != 0) {
                 return false;
             } else {
                 InstallConfiguration ();
                 InstallExcludeRules ();
                 return true;
             }
+        }
+
+
+        public override void Stop ()
+        {
+            if (this.git != null) {
+                this.git.Kill ();
+                this.git.Dispose ();
+            }
+
+            base.Stop ();
         }
 
 
