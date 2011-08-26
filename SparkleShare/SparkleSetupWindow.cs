@@ -71,7 +71,7 @@ namespace SparkleShare {
 
                 EventBox box = new EventBox ();
                 Gdk.Color bg_color = new Gdk.Color ();
-                Gdk.Color.Parse ("#2e3336", ref bg_color);
+                Gdk.Color.Parse ("#000", ref bg_color);
                 box.ModifyBg (StateType.Normal, bg_color);
 
                     string image_path = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare",
