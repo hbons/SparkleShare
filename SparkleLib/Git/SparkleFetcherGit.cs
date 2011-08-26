@@ -60,13 +60,22 @@ namespace SparkleLib {
             } else {
                 server = server.TrimEnd ("/".ToCharArray ());
 
-                if (server.StartsWith ("ssh://"))
+                string protocol = "";
+
+                if (server.StartsWith ("ssh://")) {
+                    server   = server.Substring (6);
+                    protocol = "ssh://";
+                }
+
+                if (server.StartsWith ("git://")) {
                     server = server.Substring (6);
+                    protocol = "git://";
+                 }
 
                 if (!server.Contains ("@"))
                     server = "git@" + server;
 
-                server = "ssh://" + server;
+                server = protocol + server;
             }
 
             base.target_folder = target_folder;
