@@ -65,10 +65,27 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("Config", "Created \"" + icons_path + "\"");
             }
 
-            if (!File.Exists (FullPath))
+            try {
+              Load (FullPath);
+              
+            } catch (FileNotFoundException) {
                 CreateInitialConfig ();
 
-            Load (FullPath);
+            } catch (XmlException) {
+            
+                FileInfo file = new FileInfo (FullPath);
+                
+                if (file.Length == 0) {
+                    File.Delete (FullPath);
+                    CreateInitialConfig ();            
+
+                } else {
+                    throw new XmlException (FullPath + " does not contain a valid SparkleShare XML tree.");
+                }
+
+            } finally {
+                Load (FullPath);
+            }
         }
 
 
