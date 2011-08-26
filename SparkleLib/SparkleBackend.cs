@@ -32,6 +32,7 @@ namespace SparkleLib {
         public SparkleBackend (string name, string [] paths)
         {
             Name = name;
+            Path = "git";
 
             foreach (string path in paths) {
                 if (File.Exists (path)) {
