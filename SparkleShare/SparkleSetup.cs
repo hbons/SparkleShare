@@ -298,16 +298,21 @@ namespace SparkleShare {
                         Description = _("This may take a while." + Environment.NewLine) +
                                       _("Are you sure it’s not coffee o'clock?");
 
-                        Button button = new Button () {
+                        Button finish_button = new Button () {
                             Sensitive = false,
                             Label = _("Finish")
                         };
 
-                        button.Clicked += delegate {
-                            Close ();
+                        Button cancel_button = new Button () {
+                            Label = _("Cancel")
                         };
 
-                        AddButton (button);
+                        cancel_button.Clicked += delegate {
+                            Controller.SyncingCancelled ();
+                        };
+
+                        AddButton (cancel_button);
+                        AddButton (finish_button);
 
                         this.progress_bar_pulse_timer.Elapsed += delegate {
                             Application.Invoke (delegate {
