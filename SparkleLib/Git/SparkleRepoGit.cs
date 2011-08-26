@@ -128,7 +128,9 @@ namespace SparkleLib {
         public override bool SyncUp ()
         {
             Add ();
-            Commit ("Changes made by SparkleShare");
+
+            string message = FormatCommitMessage ();
+            Commit (message);
 
             SparkleGit git = new SparkleGit (LocalPath, "push origin master");
             git.Start ();
