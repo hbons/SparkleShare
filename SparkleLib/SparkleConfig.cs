@@ -28,10 +28,9 @@ namespace SparkleLib {
 
         public static string ConfigPath = Path.Combine (
             Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
-            "sparkleshare");
+                "sparkleshare");
 
-        public static SparkleConfig DefaultConfig = new SparkleConfig (
-            ConfigPath, "config.xml");
+        public static SparkleConfig DefaultConfig = new SparkleConfig (ConfigPath, "config.xml");
 
 
         public string FullPath;
@@ -251,7 +250,6 @@ namespace SparkleLib {
         }
 
 
-
         public List<string> Hosts {
             get {
                 List<string> hosts = new List<string> ();
@@ -350,3 +348,4 @@ namespace SparkleLib {
             base (message) { }
     }
 }
+
