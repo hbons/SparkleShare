@@ -295,11 +295,20 @@ namespace SparkleShare {
                                       "Are you sure it’s not coffee o'clock?";
 
                         ProgressIndicator = new NSProgressIndicator () {
-                            Frame = new RectangleF (190, Frame.Height - 200, 640 - 150 - 80, 20),
-                            Style = NSProgressIndicatorStyle.Bar
+                            Frame    = new RectangleF (190, Frame.Height - 200, 640 - 150 - 80, 20),
+                            Style    = NSProgressIndicatorStyle.Bar,
+							MinValue = 0.0,
+							MaxValue = 100.0
                         };
-
-                        ProgressIndicator.StartAnimation (this);
+						
+                        // ProgressIndicator.StartAnimation (this);
+												
+						Controller.UpdateProgressBarEvent += delegate (double percentage) {
+						    InvokeOnMainThread (delegate {
+                                ProgressIndicator.DoubleValue = percentage;
+                            });	
+						};
+						
                         ContentView.AddSubview (ProgressIndicator);
 
                         FinishButton = new NSButton () {
