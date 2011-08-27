@@ -346,7 +346,7 @@ namespace SparkleShare {
 
                         Label label_two = new Label () {
                             Markup = "<b>" + Controller.PreviousUrl + "</b> is the address we've compiled. " +
-                                     "Does this look allright?",
+                                     "Does this look alright?",
                             Wrap   = true,
                             Xalign = 0
                         };
