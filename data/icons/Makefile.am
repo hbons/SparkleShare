@@ -35,6 +35,7 @@ app_theme_icons =					\
 	status,document-deleted-12.png			\
 	status,document-moved-12.png			\
 	status,dialog-error-16.png			\
+	status,list-point-16.png			\
 	status,dialog-error-24.png
 
 install_icon_exec = $(top_srcdir)/build/icon-theme-installer \

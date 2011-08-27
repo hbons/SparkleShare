@@ -331,29 +331,55 @@ namespace SparkleShare {
 
                     case PageType.Error: {
 
-                        string n = Environment.NewLine;
-
                         Header      = _("Something went wrong") + "…";
-                        Description = "We don't know exactly what the problem is, " +
-                                      "but we can try to help you pinpoint it.";
+
+						VBox points = new VBox (false, 0);
+						Image list_point_one   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16)) {  };
+						Image list_point_two   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16)) {  };
+						Image list_point_three = new Image (SparkleUIHelpers.GetIcon ("list-point", 16)) {  };
+
+                        Label label_one = new Label () {
+                            Text   = "First, have you tried turning it off and on again?",
+                            Wrap   = true,
+                            Xalign = 0
+                        };
+
+                        Label label_two = new Label () {
+                            Markup = "<b>" + Controller.PreviousUrl + "</b> is the address we've compiled. " +
+                                     "Does this look allright?",
+                            Wrap   = true,
+                            Xalign = 0
+                        };
+
+                        Label label_three = new Label () {
+                            Text   = "The host needs to know who you are. Did you upload the key that's in " +
+                                     "your SparkleShare folder?",
+                            Wrap   = true,
+                            Xalign = 0
+                        };
+
+						
+                        points.PackStart (new Label ("Please check the following:") { Xalign = 0 }, false, false, 6);
+
+                        HBox point_one = new HBox (false, 0);
+						point_one.PackStart (list_point_one, false, false, 0);
+						point_one.PackStart (label_one, true, true, 12);
+						points.PackStart (point_one, false, false, 12);
+						
+						HBox point_two = new HBox (false, 0);
+						point_two.PackStart (list_point_two, false, false, 0);
+						point_two.PackStart (label_two, true, true, 12);
+						points.PackStart (point_two, false, false, 12);
+                          
+                        HBox point_three = new HBox (false, 0);
+						point_three.PackStart (list_point_three, false, false, 0);
+						point_three.PackStart (label_three, true, true, 12);
+						points.PackStart (point_three, false, false, 12);
+
+                        points.PackStart (new Label (""), true, true, 0);
 
 
-                          Label l = new Label (
-                          "First, have you tried turning it off and on again?" + n +
-                          n +
-                          Controller.SyncingFolder +" is the address we've compiled from the information " +
-                          "you entered. Does this look correct?" + n +
-                          n +
-                          "The host needs to know who you are. Have you uploaded the key that sits in your SparkleShare folder?");
-
-
-
-                        l.Xpad = 12;
-                        l.Wrap = true;
-
-
-
-                        Button try_again_button = new Button (_("Try Again")) {
+                        Button try_again_button = new Button (_("Try Again…")) {
                             Sensitive = true
                         };
 
@@ -362,7 +388,7 @@ namespace SparkleShare {
                         };
 
                         AddButton (try_again_button);
-                        Add (l);
+                        Add (points);
 
                         break;
                     }
