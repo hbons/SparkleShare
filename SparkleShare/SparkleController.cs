@@ -45,7 +45,7 @@ namespace SparkleShare {
         public delegate void FolderFetchedEventHandler ();
         
         public event FolderFetchErrorEventHandler FolderFetchError;
-        public delegate void FolderFetchErrorEventHandler ();
+        public delegate void FolderFetchErrorEventHandler (string remote_url);
         
         public event FolderFetchingEventHandler FolderFetching;
         public delegate void FolderFetchingEventHandler (double percentage);
@@ -1051,7 +1051,7 @@ namespace SparkleShare {
 
             this.fetcher.Failed += delegate {
                 if (FolderFetchError != null)
-                    FolderFetchError ();
+                    FolderFetchError (this.fetcher.RemoteUrl);
 
                 this.fetcher.Dispose ();
 

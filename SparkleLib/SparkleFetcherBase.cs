@@ -40,16 +40,18 @@ namespace SparkleLib {
 
         protected string target_folder;
         protected string remote_url;
+
         private Thread thread;
 
-        public abstract bool Fetch ();
-
-
+        
         public SparkleFetcherBase (string server, string remote_folder, string target_folder)
         {
             this.target_folder = target_folder;
             this.remote_url    = server + "/" + remote_folder;
         }
+
+
+        public abstract bool Fetch ();
 
 
         // Clones the remote repository
