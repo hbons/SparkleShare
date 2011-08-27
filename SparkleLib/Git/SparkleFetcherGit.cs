@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace SparkleLib {
@@ -86,9 +87,45 @@ namespace SparkleLib {
         public override bool Fetch ()
         {
             this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
-                "clone \"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
-
+                "clone " +
+			    "--progress " + // Redirects progress stats to standarderror
+			    "\"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
+			
+			this.git.StartInfo.RedirectStandardError = true;
             this.git.Start ();
+			
+			double percentage = 1.0;
+            Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
+			
+			while (!this.git.StandardError.EndOfStream) {
+				string line = this.git.StandardError.ReadLine ();
+				Match match = progress_regex.Match (line);
+				
+				double number = 0.0;
+                if (match.Success) {
+                    number = double.Parse (match.Groups [1].Value);
+					
+					// The cloning progress consists of two stages: the "Compressing 
+					// objects" stage which we count as 20% of the total progress, and 
+					// the "Receiving objects" stage which we count as the last 80%
+					if (line.Contains ("|"))
+						// "Receiving objects" stage
+						number = (number / 100 * 75 + 20);	
+					else
+						// "Compressing objects" stage
+						number = (number / 100 * 20);
+				}
+				
+				if (number >= percentage) {
+					percentage = number;
+					
+					// FIXME: for some reason it doesn't go above 95%
+					base.OnProgressChanged (percentage);
+				}
+				
+				System.Threading.Thread.Sleep (100);		
+			}
+			
             this.git.WaitForExit ();
 
             SparkleHelpers.DebugInfo ("Git", "Exit code " + this.git.ExitCode.ToString ());

@@ -43,10 +43,8 @@ namespace SparkleShare {
         private Button SyncButton;
 
         private Table Table;
-
-        private ProgressBar progress_bar = new ProgressBar () { PulseStep = 0.01 };
-        private Timer progress_bar_pulse_timer = new Timer () { Interval = 25, Enabled = true };
-
+        private ProgressBar progress_bar = new ProgressBar ();
+        
 
         // Short alias for the translations
         public static string _ (string s)
@@ -314,11 +312,11 @@ namespace SparkleShare {
                         AddButton (cancel_button);
                         AddButton (finish_button);
 
-                        this.progress_bar_pulse_timer.Elapsed += delegate {
-                            Application.Invoke (delegate {
-                                progress_bar.Pulse ();
-                            });
-                        };
+                        Controller.UpdateProgressBarEvent += delegate (double percentage) {
+						    Application.Invoke (delegate {
+								this.progress_bar.Fraction = percentage / 100;
+							});
+						};
 
                         if (this.progress_bar.Parent != null)
                            (this.progress_bar.Parent as Container).Remove (this.progress_bar);
