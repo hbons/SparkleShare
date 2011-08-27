@@ -46,8 +46,8 @@ namespace SparkleShare {
         
         public event FolderFetchErrorEventHandler FolderFetchError;
         public delegate void FolderFetchErrorEventHandler ();
-		
-		public event FolderFetchingEventHandler FolderFetching;
+        
+        public event FolderFetchingEventHandler FolderFetching;
         public delegate void FolderFetchingEventHandler (double percentage);
         
         public event FolderListChangedEventHandler FolderListChanged;
@@ -1058,12 +1058,12 @@ namespace SparkleShare {
                 if (Directory.Exists (tmp_path))
                     Directory.Delete (tmp_path, true);
             };
-			
-			
-			this.fetcher.ProgressChanged += delegate (double percentage) {
-			    if (FolderFetching != null)	
-					FolderFetching (percentage);
-			};
+            
+            
+            this.fetcher.ProgressChanged += delegate (double percentage) {
+                if (FolderFetching != null)    
+                    FolderFetching (percentage);
+            };
 
 
             this.fetcher.Start ();

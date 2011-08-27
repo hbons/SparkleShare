@@ -28,32 +28,32 @@ using MonoMac.WebKit;
 
 namespace SparkleShare {
 
-	public class SparkleSetup : SparkleSetupWindow {
+        public class SparkleSetup : SparkleSetupWindow {
 
         public SparkleSetupController Controller = new SparkleSetupController ();
 
-		private NSButton ContinueButton;
-		private NSButton SyncButton;
-		private NSButton TryAgainButton;
-		private NSButton CancelButton;
-		private NSButton OpenFolderButton;
-		private NSButton FinishButton;
-		private NSForm UserInfoForm;
-		private NSProgressIndicator ProgressIndicator;
-		private NSTextField AddressTextField;
-		private NSTextField FolderNameTextField;
-		private NSTextField ServerTypeLabel;
-		private NSTextField AddressLabel;
-		private NSTextField FolderNameLabel;
-		private NSTextField FolderNameHelpLabel;
-		private NSButtonCell ButtonCellProto;
-		private NSMatrix Matrix;
-		private int ServerType;
+                private NSButton ContinueButton;
+                private NSButton SyncButton;
+                private NSButton TryAgainButton;
+                private NSButton CancelButton;
+                private NSButton OpenFolderButton;
+                private NSButton FinishButton;
+                private NSForm UserInfoForm;
+                private NSProgressIndicator ProgressIndicator;
+                private NSTextField AddressTextField;
+                private NSTextField FolderNameTextField;
+                private NSTextField ServerTypeLabel;
+                private NSTextField AddressLabel;
+                private NSTextField FolderNameLabel;
+                private NSTextField FolderNameHelpLabel;
+                private NSButtonCell ButtonCellProto;
+                private NSMatrix Matrix;
+                private int ServerType;
                 private Timer timer;
 
-		
-		public SparkleSetup () : base ()
-		{
+                
+                public SparkleSetup () : base ()
+                {
             Controller.ChangePageEvent += delegate (PageType type) {
                 InvokeOnMainThread (delegate {
                     Reset ();
@@ -297,18 +297,18 @@ namespace SparkleShare {
                         ProgressIndicator = new NSProgressIndicator () {
                             Frame    = new RectangleF (190, Frame.Height - 200, 640 - 150 - 80, 20),
                             Style    = NSProgressIndicatorStyle.Bar,
-							MinValue = 0.0,
-							MaxValue = 100.0
+                                                        MinValue = 0.0,
+                                                        MaxValue = 100.0
                         };
-						
+                                                
                         // ProgressIndicator.StartAnimation (this);
-												
-						Controller.UpdateProgressBarEvent += delegate (double percentage) {
-						    InvokeOnMainThread (delegate {
+                                                                                                
+                                                Controller.UpdateProgressBarEvent += delegate (double percentage) {
+                                                    InvokeOnMainThread (delegate {
                                 ProgressIndicator.DoubleValue = percentage;
-                            });	
-						};
-						
+                            });        
+                                                };
+                                                
                         ContentView.AddSubview (ProgressIndicator);
 
                         FinishButton = new NSButton () {
@@ -317,12 +317,12 @@ namespace SparkleShare {
                         };
 
                         CancelButton = new NSButton () {
-    		                Title = "Cancel"
-    		            };
+                                    Title = "Cancel"
+                                };
 
-		                CancelButton.Activated += delegate {
+                                CancelButton.Activated += delegate {
                             Controller.SyncingCancelled ();
-		                };
+                                };
 
                         Buttons.Add (FinishButton);
                         Buttons.Add (CancelButton);
@@ -387,5 +387,5 @@ namespace SparkleShare {
                 });
             };
         }
-	}
+        }
 }
