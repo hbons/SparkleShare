@@ -568,16 +568,7 @@ namespace SparkleShare {
             if (backend == null)
                 return;
             
-            SparkleRepoBase repo = null;
-
-/*            if (backend.Equals ("Hg"))
-                repo = new SparkleRepoHg (folder_path, new SparkleBackendHg ());
-
-            else if (backend.Equals ("Scp"))
-                repo = new SparkleRepoScp (folder_path, new SparkleBackendScp ());
-
-            else */
-               repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
+            SparkleRepoBase repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set) {
                 string message = FormatMessage (change_set);

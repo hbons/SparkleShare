@@ -117,9 +117,6 @@ namespace SparkleShare {
                     }
                 });
             };
-
-
-
         }
 
 
