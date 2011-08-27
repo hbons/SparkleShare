@@ -149,9 +149,7 @@ namespace SparkleShare {
         
         new public void ShowAll ()
         {
-
-         Present ();
-
+            Present ();
             base.ShowAll ();
         }
 

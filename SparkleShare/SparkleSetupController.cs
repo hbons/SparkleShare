@@ -37,6 +37,12 @@ namespace SparkleShare {
         public event UpdateProgressBarEventHandler UpdateProgressBarEvent;
         public delegate void UpdateProgressBarEventHandler (double percentage);
 
+        public string PreviousUrl {
+            get {
+                return this.previous_url;
+            }
+        }
+
         public string PreviousServer {
             get {
                 return this.previous_server;
@@ -63,6 +69,7 @@ namespace SparkleShare {
 
         private string previous_server = "";
         private string previous_folder = "";
+        private string previous_url    = "";
         private string syncing_folder  = "";
         private PageType previous_page;
 
@@ -117,7 +124,9 @@ namespace SparkleShare {
                 this.syncing_folder = "";
             };
 
-            SparkleShare.Controller.FolderFetchError += delegate {
+            SparkleShare.Controller.FolderFetchError += delegate (string remote_url) {
+                this.previous_url = remote_url;
+
                 if (ChangePageEvent != null)
                     ChangePageEvent (PageType.Error);
 
