@@ -33,8 +33,8 @@ namespace SparkleShare {
 
         public event ChangePageEventHandler ChangePageEvent;
         public delegate void ChangePageEventHandler (PageType page);
-		
-		public event UpdateProgressBarEventHandler UpdateProgressBarEvent;
+        
+        public event UpdateProgressBarEventHandler UpdateProgressBarEvent;
         public delegate void UpdateProgressBarEventHandler (double percentage);
 
         public string PreviousServer {
@@ -123,11 +123,11 @@ namespace SparkleShare {
 
                 this.syncing_folder = "";
             };
-			
-			SparkleShare.Controller.FolderFetching += delegate (double percentage) {
-				if (UpdateProgressBarEvent != null)
-					UpdateProgressBarEvent (percentage);
-			};
+            
+            SparkleShare.Controller.FolderFetching += delegate (double percentage) {
+                if (UpdateProgressBarEvent != null)
+                    UpdateProgressBarEvent (percentage);
+            };
 
             SparkleShare.Controller.FetchFolder (server, folder_name);
         }

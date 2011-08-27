@@ -313,10 +313,10 @@ namespace SparkleShare {
                         AddButton (finish_button);
 
                         Controller.UpdateProgressBarEvent += delegate (double percentage) {
-						    Application.Invoke (delegate {
-								this.progress_bar.Fraction = percentage / 100;
-							});
-						};
+                            Application.Invoke (delegate {
+                                this.progress_bar.Fraction = percentage / 100;
+                            });
+                        };
 
                         if (this.progress_bar.Parent != null)
                            (this.progress_bar.Parent as Container).Remove (this.progress_bar);
