@@ -31,10 +31,12 @@ namespace SparkleLib {
         public delegate void StartedEventHandler ();
         public delegate void FinishedEventHandler ();
         public delegate void FailedEventHandler ();
+		public delegate void ProgressChangedEventHandler (double percentage);
 
         public event StartedEventHandler Started;
         public event FinishedEventHandler Finished;
         public event FailedEventHandler Failed;
+		public event ProgressChangedEventHandler ProgressChanged;
 
         protected string target_folder;
         protected string remote_url;
@@ -117,7 +119,13 @@ namespace SparkleLib {
             }
         }
 
-
+		
+		protected void OnProgressChanged (double percentage) {
+			if (ProgressChanged != null)
+				ProgressChanged (percentage);	
+		}
+	
+		
         private void DisableHostKeyCheckingForHost (string host)
         {
             string path = SparkleConfig.DefaultConfig.HomePath;
