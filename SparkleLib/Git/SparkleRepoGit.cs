@@ -303,6 +303,11 @@ namespace SparkleLib {
             string output = git_status.StandardOutput.ReadToEnd ().TrimEnd ();
             git_status.WaitForExit ();
 
+            if (String.IsNullOrEmpty (output)) {
+                // no conflict any more.
+                return;
+            }
+
             string [] lines = output.Split ("\n".ToCharArray ());
 
             foreach (string line in lines) {
