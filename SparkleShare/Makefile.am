@@ -25,7 +25,7 @@ SOURCES =  \
 	SparkleSetup.cs \
 	SparkleSetupController.cs \
 	SparkleSetupWindow.cs \
-	SparkleShare.cs \
+	Program.cs \
 	SparkleSpinner.cs \
 	SparkleStatusIcon.cs \
 	SparkleStatusIconController.cs \
@@ -41,7 +41,7 @@ SOURCES =  \
 	SparkleSetup.cs \
 	SparkleSetupController.cs \
 	SparkleSetupWindow.cs \
-	SparkleShare.cs \
+	Program.cs \
 	SparkleSpinner.cs \
 	SparkleStatusIcon.cs \
 	SparkleStatusIconController.cs \

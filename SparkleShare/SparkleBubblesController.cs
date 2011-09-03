@@ -27,23 +27,23 @@ namespace SparkleShare {
 
         public SparkleBubblesController ()
         {
-            SparkleShare.Controller.ConflictNotificationRaised += delegate {
+            Program.Controller.ConflictNotificationRaised += delegate {
                 ShowBubble ("Ouch! Mid-air collision!",
                             "Don't worry, SparkleShare made a copy of each conflicting file.",
                             null);
             };
 
-            SparkleShare.Controller.NotificationRaised += delegate (string user_name, string user_email,
+            Program.Controller.NotificationRaised += delegate (string user_name, string user_email,
                                                                     string message, string folder_path) {
                 ShowBubble (user_name, message,
-                    SparkleShare.Controller.GetAvatar (user_email, 36));
+                    Program.Controller.GetAvatar (user_email, 36));
             };
         }
 
 
         public void ShowBubble (string title, string subtext, string image_path)
         {
-            if (ShowBubbleEvent != null && SparkleShare.Controller.NotificationsEnabled)
+            if (ShowBubbleEvent != null && Program.Controller.NotificationsEnabled)
                 ShowBubbleEvent (title, subtext, image_path);
         }
     }
