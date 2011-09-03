@@ -168,6 +168,7 @@ namespace SparkleLib {
                 // Windows
                 writer.WriteLine ("Thumbs.db");
                 writer.WriteLine ("Desktop.ini");
+                writer.WriteLine ("~*");
 
                 // CVS
                 writer.WriteLine ("*/CVS/*");
