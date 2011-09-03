@@ -67,7 +67,7 @@
     <Compile Include="SparkleSetup.cs" />
     <Compile Include="SparkleSetupController.cs" />
     <Compile Include="SparkleSetupWindow.cs" />
-    <Compile Include="SparkleShare.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="SparkleSpinner.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleStatusIconController.cs" />

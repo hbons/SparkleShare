@@ -65,7 +65,7 @@ namespace SparkleShare {
                 NSApplication.SharedApplication.ApplicationIconImage
                     = NSImage.ImageNamed ("sparkleshare.icns");
 
-                if (!SparkleShare.Controller.BackendIsPresent) {
+                if (!Program.Controller.BackendIsPresent) {
                     this.alert = new SparkleAlert ();
                     this.alert.RunModal ();
                     return;
@@ -79,7 +79,7 @@ namespace SparkleShare {
                 StatusIcon = new SparkleStatusIcon ();
                 Bubbles = new SparkleBubbles ();
 
-                if (SparkleShare.Controller.FirstRun) {
+                if (Program.Controller.FirstRun) {
                     Setup = new SparkleSetup ();
                     Setup.Controller.ShowSetupPage ();
                 }
@@ -95,7 +95,7 @@ namespace SparkleShare {
             NSImage folder_icon = new NSImage (folder_icon_path);
                         
             NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon,
-                SparkleShare.Controller.SparklePath, 0);
+                Program.Controller.SparklePath, 0);
         }
 
 
@@ -123,7 +123,7 @@ namespace SparkleShare {
 
         public override void WillTerminate (NSNotification notification)
         {
-            SparkleShare.Controller.Quit ();
+            Program.Controller.Quit ();
         }
     }
 }
