@@ -26,8 +26,15 @@ namespace SparkleLib {
 
     public class SparkleRepoGit : SparkleRepoBase {
 
+        private string exlude_rules_file_path;
+        private string ExclusionBlock = "#Temporary Exclusions";
+
         public SparkleRepoGit (string path, SparkleBackend backend) :
-            base (path, backend) { }
+            base (path, backend) {
+            // Set exclude file path
+            exlude_rules_file_path = SparkleHelpers.CombineMore (
+                 LocalPath, ".git", "info", "exclude");
+        }
 
 
         public override string Identifier {
@@ -214,6 +221,167 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes staged");
         }
 
+        // Add a new file to be ignored
+        public override bool AddExclusionRule (FileSystemEventArgs args) {
+
+            string RelativePath = SparkleHelpers.DiffPaths(args.FullPath, LocalPath);
+            
+            List<String> exclusions;
+            try {
+                exclusions = ReadExclusionRules();
+            }
+            catch {
+                return false;
+            }
+            
+            // Look for the local exclusions section
+            bool added = false;
+            for(int i = 0; i < exclusions.Count; i++) {
+            	string entry = exclusions[i];
+            	if(entry.Equals(ExclusionBlock)) {
+                    // add a new exclusion rule containing a file path
+                    exclusions.Insert(i + 1, RelativePath);
+                    added = true;
+                    break;
+            	}
+            }
+            
+            /*
+             * For compability to existing repos:
+             * Add a "#Temporary Exclusions"-Block to the
+             * ignore file in order to recognize this
+             * exclude rules later on
+             */
+            if(!added) {
+                exclusions.Add(ExclusionBlock);
+                exclusions.Add(RelativePath);
+            }
+            
+            // Write exceptions list back to file
+            return WriteExclusionRules(exclusions);
+        }
+		
+        // Check whether a specific rule exists in the exclusion file
+        public override bool ExclusionRuleExists(FileSystemEventArgs args) {
+            string RelativePath = SparkleHelpers.DiffPaths(args.FullPath, LocalPath);
+        
+            List<String> exclusions;
+            try {
+                // Read rules from temporary block only
+                exclusions = ReadExclusionRules(true);
+        
+                foreach(string entry in exclusions) {
+                    if(entry.Equals(RelativePath)) {
+                        return true;
+                    }
+                }
+            } catch {
+                SparkleHelpers.DebugInfo("Error", "Cannot determine whether an exclusion rule for " +
+                                         args.FullPath + " already exists or not.");
+                return false;
+            }
+        
+            return false;
+        }
+        
+        // Remove file from exclusion list when they are readable again
+        public override bool RemoveExclusionRule(FileSystemEventArgs args) {
+            string RelativePath = SparkleHelpers.DiffPaths(args.FullPath, LocalPath);
+        
+            List<String> exclusions;
+            try {
+                exclusions = ReadExclusionRules();
+        
+                /*
+                 * Removing a rule should only apply to rules in the "Temporary Exclusion"-block.
+                 * Therefore we first read until reaching the block and then remove the rule.
+                 *
+                 * We cannot use ReadExclusionRules(true) here since we write all lines back
+                 * to the file. This would result in a crippled exclusion file.
+                 */
+                bool BlockReached = false;
+                foreach(string entry in exclusions) {
+                    if(entry.Equals(ExclusionBlock)) {
+                        BlockReached = true;
+                    }
+        
+                    // Remove this rule
+                    if(BlockReached && entry.Equals(RelativePath)) {
+                        exclusions.Remove(entry);
+                        break;
+                    }
+                }
+        
+                return WriteExclusionRules(exclusions);
+            } catch {
+                SparkleHelpers.DebugInfo("Error", "Unable to remove exclusion rule for entry " + RelativePath);
+                return false;
+            }
+        }
+
+        // Reads the exclusion rules file into a string list
+        private List<String> ReadExclusionRules() {
+        
+            List<String> exclusions = new List<String>();
+            TextReader reader = new StreamReader (exlude_rules_file_path);;
+        
+            try {
+                while(reader.Peek() > -1) {
+                    exclusions.Add(reader.ReadLine().TrimEnd());
+                }
+            }
+            catch (IOException e) {
+                SparkleHelpers.DebugInfo("Error", "Reading from exclusion file failed: " + e.Message);
+                return new List<String>();
+            }
+            finally {
+                if(reader != null) {
+                    reader.Close();
+                }
+            }
+        
+            return exclusions;
+        }
+
+        // Reads rules only from temporary exclusion block
+        private List<String> ReadExclusionRules(bool TempOnly) {
+            if(TempOnly) {
+                bool ForceRead = false;
+                List<String> exclusions = new List<String>();
+                foreach(string entry in ReadExclusionRules()) {
+                    if(ForceRead || entry.Equals(ExclusionBlock)) {
+                        exclusions.Add(entry);
+                        ForceRead = true;
+                    }
+                }
+        
+                return exclusions;
+            }
+        
+            return ReadExclusionRules();
+        }
+
+        // Writes the exclusion rules file with a given string list
+        private bool WriteExclusionRules(List<String> lines) {
+        
+            TextWriter writer = new StreamWriter (exlude_rules_file_path);
+        
+            try {
+                foreach(string line in lines) {
+                    writer.WriteLine(line.TrimEnd());
+                }
+            } catch(IOException e) {
+                SparkleHelpers.DebugInfo("Error", "Writing into exclusion file failed: " + e.Message);
+                return false;
+            }
+            finally {
+                if(writer != null) {
+                    writer.Close();
+                }
+            }
+        
+            return true;
+        }
 
         // Removes unneeded objects
         private void CollectGarbage ()

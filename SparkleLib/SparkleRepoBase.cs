@@ -64,6 +64,10 @@ namespace SparkleLib {
         public abstract bool SyncDown ();
         public abstract bool HasUnsyncedChanges { get; set; }
 
+        public abstract bool AddExclusionRule (FileSystemEventArgs args);
+        public abstract bool RemoveExclusionRule (FileSystemEventArgs args);
+        public abstract bool ExclusionRuleExists (FileSystemEventArgs args);
+		
         public delegate void SyncStatusChangedEventHandler (SyncStatus new_status);
         public event SyncStatusChangedEventHandler SyncStatusChanged;
 
@@ -316,6 +320,38 @@ namespace SparkleLib {
                 !args.FullPath.Contains (Path.DirectorySeparatorChar + ".notes"))
                 return;
 
+            /*
+            * Check whether the file which triggered the action
+            * is readable so that git can actually commit it
+            */
+            try {
+                if(File.Exists(args.FullPath)) {
+                    FileStream file = File.OpenRead(args.FullPath);
+                    file.Close();
+                }
+            } catch {
+                if(!ExclusionRuleExists(args)) {
+                    SparkleHelpers.DebugInfo("Warning", "File " + args.FullPath + " is not readable. Adding to ignore list.");
+                    AddExclusionRule(args);
+                }
+
+                return;
+            }
+
+            /*
+             * Remove rule if file is readable but there is still
+             * an exclusion rule set
+             */
+            if(ExclusionRuleExists(args)) {
+                SparkleHelpers.DebugInfo("Info", "Removing exclusion rule for " + args.Name);
+                RemoveExclusionRule(args);
+
+                // If a file was former unreadable but has now been (re)moved, skip the process.
+                if(!File.Exists(args.FullPath)) {
+                    return;
+                }
+            }
+            
             WatcherChangeTypes wct = args.ChangeType;
 
             if (AnyDifferences) {
