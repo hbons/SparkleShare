@@ -80,8 +80,8 @@
     <Compile Include="SparkleMacController.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUI.cs" />
-    <Compile Include="..\SparkleShare.cs">
-      <Link>SparkleShare.cs</Link>
+    <Compile Include="..\Program.cs">
+      <Link>Program.cs</Link>
     </Compile>
     <Compile Include="SparkleAbout.cs" />
     <Compile Include="SparkleAlert.cs" />
