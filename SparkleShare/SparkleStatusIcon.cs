@@ -193,18 +193,18 @@ namespace SparkleShare {
                 };
 
                 folder_item.Activated += delegate {
-                    SparkleShare.Controller.OpenSparkleShareFolder ();
+                    Program.Controller.OpenSparkleShareFolder ();
                 };
                 
             Menu.Add (folder_item);
 
-                if (SparkleShare.Controller.Folders.Count > 0) {
+                if (Program.Controller.Folders.Count > 0) {
             
                     // Creates a menu item for each repository with a link to their logs
-                    foreach (string folder_name in SparkleShare.Controller.Folders) {
+                    foreach (string folder_name in Program.Controller.Folders) {
                         Gdk.Pixbuf folder_icon;
 
-                        if (SparkleShare.Controller.UnsyncedFolders.Contains (folder_name)) {
+                        if (Program.Controller.UnsyncedFolders.Contains (folder_name)) {
                             folder_icon = IconTheme.Default.LoadIcon ("dialog-error", 16,
                                 IconLookupFlags.GenericFallback);
 
@@ -234,7 +234,7 @@ namespace SparkleShare {
                 // Opens the wizard to add a new remote folder
                 MenuItem sync_item = new MenuItem (_("Add Remote Folder…"));
             
-                if (SparkleShare.Controller.FirstRun)
+                if (Program.Controller.FirstRun)
                     sync_item.Sensitive = false;
 
                 sync_item.Activated += delegate {
@@ -258,7 +258,7 @@ namespace SparkleShare {
 
             MenuItem recent_events_item = new MenuItem (_("Show Recent Events"));
             
-                if (SparkleShare.Controller.Folders.Count < 1)
+                if (Program.Controller.Folders.Count < 1)
                     recent_events_item.Sensitive = false;
 
                 recent_events_item.Activated += delegate {
@@ -275,13 +275,13 @@ namespace SparkleShare {
 
             MenuItem notify_item;
                                                              
-                if (SparkleShare.Controller.NotificationsEnabled)
+                if (Program.Controller.NotificationsEnabled)
                     notify_item = new MenuItem (_("Turn Notifications Off"));
                 else
                     notify_item = new MenuItem (_("Turn Notifications On"));
 
                 notify_item.Activated += delegate {
-                    SparkleShare.Controller.ToggleNotifications ();
+                    Program.Controller.ToggleNotifications ();
                     CreateMenu ();
                 };
 
@@ -308,7 +308,7 @@ namespace SparkleShare {
                 MenuItem quit_item = new MenuItem (_("Quit"));
 
                 quit_item.Activated += delegate {
-                    SparkleShare.Controller.Quit ();
+                    Program.Controller.Quit ();
                 };
 
             Menu.Add (quit_item);
@@ -325,7 +325,7 @@ namespace SparkleShare {
         private EventHandler OpenFolderDelegate (string name)
         {
             return delegate {
-                SparkleShare.Controller.OpenSparkleShareFolder (name);
+                Program.Controller.OpenSparkleShareFolder (name);
             };
         }
 

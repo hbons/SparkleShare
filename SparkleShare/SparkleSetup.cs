@@ -77,7 +77,7 @@ namespace SparkleShare {
                                 Xalign    = 0
                             };
 
-                            NameEntry = new Entry (SparkleShare.Controller.UserName);
+                            NameEntry = new Entry (Program.Controller.UserName);
                             NameEntry.Changed += delegate {
                                 CheckSetupPage ();
                             };
@@ -149,7 +149,7 @@ namespace SparkleShare {
 
                                 ListStore server_store = new ListStore (typeof (string));
 
-                                foreach (string host in SparkleShare.Controller.PreviousHosts)
+                                foreach (string host in Program.Controller.PreviousHosts)
                                     server_store.AppendValues (host);
 
                                 ServerEntry.Completion.Model = server_store;
@@ -239,7 +239,7 @@ namespace SparkleShare {
 
                                 ListStore folder_store = new ListStore (typeof (string));
 
-                                //foreach (string host in SparkleShare.Controller.FolderPaths)
+                                //foreach (string host in Program.Controller.FolderPaths)
                                 //    folder_store.AppendValues (host);
 
                                 FolderEntry.Completion.Model = folder_store;
@@ -411,7 +411,7 @@ namespace SparkleShare {
                         Button open_folder_button = new Button (_("Open Folder"));
 
                         open_folder_button.Clicked += delegate {
-                          SparkleShare.Controller.OpenSparkleShareFolder (Controller.SyncingFolder);
+                          Program.Controller.OpenSparkleShareFolder (Controller.SyncingFolder);
                         };
 
                         Button finish_button = new Button (_("Finish"));
@@ -441,7 +441,7 @@ namespace SparkleShare {
         private void CheckSetupPage ()
         {
             if (NameEntry.Text.Length > 0 &&
-                SparkleShare.Controller.IsValidEmail (EmailEntry.Text)) {
+                Program.Controller.IsValidEmail (EmailEntry.Text)) {
 
                 NextButton.Sensitive = true;
             } else {

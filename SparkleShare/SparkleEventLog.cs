@@ -92,7 +92,7 @@ namespace SparkleShare {
                                 string note        = match.Groups [3].Value;
 
                                 Thread thread = new Thread (new ThreadStart (delegate {
-                                    SparkleShare.Controller.AddNoteToFolder (folder_name, revision, note);
+                                    Program.Controller.AddNoteToFolder (folder_name, revision, note);
                                 }));
 
                                 thread.Start ();
@@ -202,6 +202,9 @@ namespace SparkleShare {
             Thread thread = new Thread (new ThreadStart (delegate {
                 if (html == null)
                     html = Controller.HTML;
+
+                if (html == null)
+                    return;
 
                 html = html.Replace ("<!-- $body-font-size -->", (double) (Style.FontDescription.Size / 1024 + 3) + "px");
                 html = html.Replace ("<!-- $day-entry-header-font-size -->", (Style.FontDescription.Size / 1024 + 3) + "px");
