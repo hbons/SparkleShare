@@ -30,7 +30,7 @@ using SparkleLib.Options;
 namespace SparkleShare {
 
     // This is SparkleShare!
-    public class SparkleShare {
+    public class Program {
 
         public static SparkleController Controller;
         public static SparkleUI UI;

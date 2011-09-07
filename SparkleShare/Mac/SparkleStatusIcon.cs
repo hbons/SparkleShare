@@ -142,7 +142,7 @@ namespace SparkleShare {
                     };
     
                     FolderMenuItem.Activated += delegate {
-                        SparkleShare.Controller.OpenSparkleShareFolder ();
+                        Program.Controller.OpenSparkleShareFolder ();
                     };
                 
                     FolderMenuItem.Image = NSImage.ImageNamed ("sparkleshare-mac");
@@ -150,18 +150,18 @@ namespace SparkleShare {
                 
                 Menu.AddItem (FolderMenuItem);
     
-                    FolderMenuItems = new NSMenuItem [SparkleShare.Controller.Folders.Count];
+                    FolderMenuItems = new NSMenuItem [Program.Controller.Folders.Count];
     
                     if (Controller.Folders.Length > 0) {
-                        Tasks = new EventHandler [SparkleShare.Controller.Folders.Count];
+                        Tasks = new EventHandler [Program.Controller.Folders.Count];
     
                         int i = 0;
-                        foreach (string folder_name in SparkleShare.Controller.Folders) {
+                        foreach (string folder_name in Program.Controller.Folders) {
                             NSMenuItem item = new NSMenuItem ();
     
                             item.Title = folder_name;
     
-                            if (SparkleShare.Controller.UnsyncedFolders.Contains (folder_name))
+                            if (Program.Controller.UnsyncedFolders.Contains (folder_name))
                                 item.Image = NSImage.ImageNamed ("NSCaution");
                             else
                                 item.Image = NSImage.ImageNamed ("NSFolder");
@@ -192,7 +192,7 @@ namespace SparkleShare {
                         Title = "Add Remote Folder…"
                     };
                 
-                    if (!SparkleShare.Controller.FirstRun) {
+                    if (!Program.Controller.FirstRun) {
                         SyncMenuItem.Activated += delegate {
                             InvokeOnMainThread (delegate {
                                 NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
@@ -236,16 +236,16 @@ namespace SparkleShare {
     
                     NotificationsMenuItem = new NSMenuItem ();
     
-                    if (SparkleShare.Controller.NotificationsEnabled)
+                    if (Program.Controller.NotificationsEnabled)
                         NotificationsMenuItem.Title = "Turn Notifications Off";
                     else
                         NotificationsMenuItem.Title = "Turn Notifications On";
     
                     NotificationsMenuItem.Activated += delegate {
-                        SparkleShare.Controller.ToggleNotifications ();
+                        Program.Controller.ToggleNotifications ();
     
                         InvokeOnMainThread (delegate {
-                            if (SparkleShare.Controller.NotificationsEnabled)
+                            if (Program.Controller.NotificationsEnabled)
                                 NotificationsMenuItem.Title = "Turn Notifications Off";
                             else
                                 NotificationsMenuItem.Title = "Turn Notifications On";
@@ -285,7 +285,7 @@ namespace SparkleShare {
         private EventHandler OpenFolderDelegate (string name)
         {
             return delegate {
-                SparkleShare.Controller.OpenSparkleShareFolder (name);
+                Program.Controller.OpenSparkleShareFolder (name);
             };
         }
 
