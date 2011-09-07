@@ -97,11 +97,11 @@ namespace SparkleShare {
 
         public void SetupPageCompleted (string full_name, string email)
         {
-            SparkleShare.Controller.UserName  = full_name;
-            SparkleShare.Controller.UserEmail = email;
+            Program.Controller.UserName  = full_name;
+            Program.Controller.UserEmail = email;
 
-            SparkleShare.Controller.GenerateKeyPair ();
-            SparkleShare.Controller.UpdateState ();
+            Program.Controller.GenerateKeyPair ();
+            Program.Controller.UpdateState ();
 
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Add);
@@ -117,14 +117,14 @@ namespace SparkleShare {
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Syncing);
 
-            SparkleShare.Controller.FolderFetched += delegate {
+            Program.Controller.FolderFetched += delegate {
                 if (ChangePageEvent != null)
                     ChangePageEvent (PageType.Finished);
 
                 this.syncing_folder = "";
             };
 
-            SparkleShare.Controller.FolderFetchError += delegate (string remote_url) {
+            Program.Controller.FolderFetchError += delegate (string remote_url) {
                 this.previous_url = remote_url;
 
                 if (ChangePageEvent != null)
@@ -133,12 +133,12 @@ namespace SparkleShare {
                 this.syncing_folder = "";
             };
             
-            SparkleShare.Controller.FolderFetching += delegate (double percentage) {
+            Program.Controller.FolderFetching += delegate (double percentage) {
                 if (UpdateProgressBarEvent != null)
                     UpdateProgressBarEvent (percentage);
             };
 
-            SparkleShare.Controller.FetchFolder (server, folder_name);
+            Program.Controller.FetchFolder (server, folder_name);
         }
 
 
@@ -151,7 +151,7 @@ namespace SparkleShare {
 
         public void SyncingCancelled ()
         {
-            SparkleShare.Controller.StopFetcher ();
+            Program.Controller.StopFetcher ();
 
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Add);
@@ -162,7 +162,7 @@ namespace SparkleShare {
         {
             this.previous_server = "";
             this.previous_folder = "";
-            SparkleShare.Controller.UpdateState ();
+            Program.Controller.UpdateState ();
         }
     }
 }
