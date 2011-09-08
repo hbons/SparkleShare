@@ -75,8 +75,8 @@ namespace SparkleShare {
                         UserInfoForm.Cells [0].LineBreakMode = NSLineBreakMode.TruncatingTail;
                         UserInfoForm.Cells [1].LineBreakMode = NSLineBreakMode.TruncatingTail;
 
-                        UserInfoForm.Cells [0].StringValue   = SparkleShare.Controller.UserName;
-                        UserInfoForm.Cells [1].StringValue   = SparkleShare.Controller.UserEmail;
+                        UserInfoForm.Cells [0].StringValue   = Program.Controller.UserName;
+                        UserInfoForm.Cells [1].StringValue   = Program.Controller.UserEmail;
 
                         // TODO: Ugly hack, do properly with events
                         timer = new Timer () {
@@ -102,7 +102,7 @@ namespace SparkleShare {
                             InvokeOnMainThread (delegate {
                                 bool name_is_valid = !UserInfoForm.Cells [0].StringValue.Trim ().Equals ("");
 
-                                bool email_is_valid = SparkleShare.Controller.IsValidEmail (
+                                bool email_is_valid = Program.Controller.IsValidEmail (
                                     UserInfoForm.Cells [1].StringValue.Trim ());
 
                                 ContinueButton.Enabled = (name_is_valid && email_is_valid);
@@ -370,7 +370,7 @@ namespace SparkleShare {
                         };
 
                         OpenFolderButton.Activated += delegate {
-                            SparkleShare.Controller.OpenSparkleShareFolder (Controller.SyncingFolder);
+                            Program.Controller.OpenSparkleShareFolder (Controller.SyncingFolder);
                         };
 
                         Buttons.Add (FinishButton);
