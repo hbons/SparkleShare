@@ -212,7 +212,7 @@ namespace SparkleShare {
                     string note        = match.Groups [3].Value;
 
                     Thread thread = new Thread (new ThreadStart (delegate {
-                        SparkleShare.Controller.AddNoteToFolder (folder_name, revision, note);
+                        Program.Controller.AddNoteToFolder (folder_name, revision, note);
                     }));
 
                     thread.Start ();
