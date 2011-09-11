@@ -63,10 +63,8 @@ namespace SparkleLib {
 
                 string protocol = "ssh://";
 
-                if (server.StartsWith ("ssh://")) {
+                if (server.StartsWith ("ssh://"))
                     server   = server.Substring (6);
-                    protocol = "ssh://";
-                }
 
                 if (server.StartsWith ("git://")) {
                     server = server.Substring (6);
@@ -210,8 +208,8 @@ namespace SparkleLib {
                 writer.WriteLine ("*~");
 
                 // Firefox and Chromium temporary download files
-                writer.WriteLine (".part");
-                writer.WriteLine (".crdownload");
+                writer.WriteLine ("*.part");
+                writer.WriteLine ("*.crdownload");
 
                 // vi(m)
                 writer.WriteLine (".*.sw[a-z]");
