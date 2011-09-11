@@ -209,6 +209,10 @@ namespace SparkleLib {
                 // gedit and emacs
                 writer.WriteLine ("*~");
 
+                // Firefox and Chromium temporary download files
+                writer.WriteLine (".part");
+                writer.WriteLine (".crdownload");
+
                 // vi(m)
                 writer.WriteLine (".*.sw[a-z]");
                 writer.WriteLine ("*.un~");
