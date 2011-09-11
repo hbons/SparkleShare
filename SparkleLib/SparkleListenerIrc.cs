@@ -92,11 +92,12 @@ namespace SparkleLib {
                         int port = base.server.Port;
                         if (port < 0) port = 6667;
                         this.client.Connect (base.server.Host, port);
-                        this.client.Login (this.nick, this.nick);
+                        this.client.Login (this.nick, this.nick, 8, this.nick);
 
                         foreach (string channel in base.channels) {
                             SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
                             this.client.RfcJoin (channel);
+                            this.client.RfcMode (channel, "+s");
                         }
 
                         // List to the channel, this blocks the thread
@@ -124,6 +125,7 @@ namespace SparkleLib {
                 if (IsConnected) {
                     SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
                     this.client.RfcJoin (channel);
+                    this.client.RfcMode (channel, "+s");
                 }
             }
         }
