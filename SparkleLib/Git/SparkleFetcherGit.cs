@@ -61,7 +61,7 @@ namespace SparkleLib {
             } else {
                 server = server.TrimEnd ("/".ToCharArray ());
 
-                string protocol = "";
+                string protocol = "ssh://";
 
                 if (server.StartsWith ("ssh://")) {
                     server   = server.Substring (6);
@@ -71,7 +71,7 @@ namespace SparkleLib {
                 if (server.StartsWith ("git://")) {
                     server = server.Substring (6);
                     protocol = "git://";
-                 }
+                }
 
                 if (!server.Contains ("@"))
                     server = "git@" + server;
