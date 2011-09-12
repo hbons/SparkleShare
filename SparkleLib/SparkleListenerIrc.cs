@@ -55,8 +55,8 @@ namespace SparkleLib {
 
                 if (proxy_uri.Scheme == "http") {
                     this.client.ProxyType = ProxyType.Http;
-                    this.client.ProxyHost = proxyUri.Host;
-                    this.client.ProxyPort = proxyUri.Port;
+                    this.client.ProxyHost = proxy_uri.Host;
+                    this.client.ProxyPort = proxy_uri.Port;
                 }
             }
 
