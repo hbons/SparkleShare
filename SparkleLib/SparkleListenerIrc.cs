@@ -48,11 +48,12 @@ namespace SparkleLib {
                 PingInterval = 60
             };
 
-            var proxy = Environment.GetEnvironmentVariable("http_proxy");
-            Uri proxyUri = null;
-            if (!String.IsNullOrEmpty(proxy) &&
-                Uri.TryCreate(proxy, UriKind.Absolute, out proxyUri)) {
-                if (proxyUri.Scheme == "http") {
+            string proxy  = Environment.GetEnvironmentVariable ("http_proxy");
+            Uri proxy_uri = null;
+            if (!String.IsNullOrEmpty (proxy) &&
+                Uri.TryCreate (proxy, UriKind.Absolute, out proxy_uri)) {
+
+                if (proxy_uri.Scheme == "http") {
                     this.client.ProxyType = ProxyType.Http;
                     this.client.ProxyHost = proxyUri.Host;
                     this.client.ProxyPort = proxyUri.Port;
