@@ -48,6 +48,17 @@ namespace SparkleLib {
                 PingInterval = 60
             };
 
+            var proxy = Environment.GetEnvironmentVariable("http_proxy");
+            Uri proxyUri = null;
+            if (!String.IsNullOrEmpty(proxy) &&
+                Uri.TryCreate(proxy, UriKind.Absolute, out proxyUri)) {
+                if (proxyUri.Scheme == "http") {
+                    this.client.ProxyType = ProxyType.Http;
+                    this.client.ProxyHost = proxyUri.Host;
+                    this.client.ProxyPort = proxyUri.Port;
+                }
+            }
+
             this.client.OnConnected += delegate {
                 base.is_connecting = false;
                 OnConnected ();
