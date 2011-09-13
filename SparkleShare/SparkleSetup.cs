@@ -427,6 +427,104 @@ namespace SparkleShare {
 
                         break;
                     }
+
+
+                    case PageType.Tutorial: {
+
+                        switch (Controller.TutorialPageNumber) {
+                        case 1: {
+                            Header      = _("What's next?");
+                            Description = _(@"SparkleShare creates a special folder on your computer
+                                              that will keep track of your projects.");
+
+                            Button skip_tutorial_button = new Button (_("Skip Tutorial"));
+                            skip_tutorial_button.Clicked += delegate {
+                                // Controller.TutorialSkipped ();
+                            };
+
+                            Button continue_button = new Button (_("Continue"));
+                            continue_button.Clicked += delegate {
+                                Controller.TutorialPageCompleted ();
+                            };
+
+                            // Add (null); TODO image Controller.TutorialPageNumber
+                            AddButton (skip_tutorial_button);
+                            AddButton (continue_button);
+
+                            break;
+                        }
+
+                        case 2: {
+                            Header      = _("Adding files");
+                            Description = _(@"All files added to your project folders are synced with the host
+                                              automatically, as well as with all of your collaborators.");
+
+                            Button continue_button = new Button (_("Continue"));
+                            continue_button.Clicked += delegate {
+                                Controller.TutorialPageCompleted ();
+                            };
+
+                            // Add (null); TODO image Controller.TutorialPageNumber
+                            AddButton (continue_button);
+
+                            break;
+                        }
+
+                        case 3: {
+                            Header      = _("The status icon");
+                            Description = _(@"All files added to your project folders are synced with the host
+                                              automatically, as well as with all of your collaborators.");
+
+                            Button continue_button = new Button (_("Continue"));
+                            continue_button.Clicked += delegate {
+                                Controller.TutorialPageCompleted ();
+                            };
+
+                            // Add (null); TODO image Controller.TutorialPageNumber
+                            AddButton (continue_button);
+
+                            break;
+                        }
+
+                        case 4: {
+                            Header      = _("Adding Projects");
+                            Description = _(@"Whenever you see this button on a website, just click it,
+                                              and the project will be immediately added to SparkleShare:");
+
+                            Button continue_button = new Button (_("Continue"));
+                            continue_button.Clicked += delegate {
+                                Controller.TutorialPageCompleted ();
+                            };
+
+
+                            Label label = new Label (_(@"…or click the status icon and select Add Project…
+                                                        to manually add a project."));
+                            // Add (null); TODO image Controller.TutorialPageNumber
+
+
+                            Button add_project_button = new Button (_("Add Project…"));
+                            add_project_button.Clicked += delegate {
+                                Controller.TutorialPageCompleted ();
+                            };
+
+                            Button finish_button = new Button (_("Finish"));
+                            finish_button.Clicked += delegate {
+                                Close ();
+                            };
+
+                            AddButton (add_project_button);
+                            AddButton (finish_button);
+
+                            break;
+                        }
+                        }
+
+
+
+
+
+                        break;
+                    }
                     }
 
                     ShowAll ();
