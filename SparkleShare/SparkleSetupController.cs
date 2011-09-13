@@ -127,11 +127,10 @@ namespace SparkleShare {
 
             } else {
                 this.tutorial_page_number++;
+
+                if (ChangePageEvent != null)
+                    ChangePageEvent (PageType.Tutorial);
             }
-
-
-            if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Tutorial);
         }
 
 
