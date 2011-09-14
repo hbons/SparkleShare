@@ -165,6 +165,8 @@ namespace SparkleLib {
 
         public override bool AnyDifferences {
             get {
+                FillEmptyDirectories (LocalPath);
+
                 SparkleGit git = new SparkleGit (LocalPath, "status --porcelain");
                 git.Start ();
 
@@ -506,6 +508,22 @@ namespace SparkleLib {
             }
 
             return change_sets;
+        }
+
+
+        // Git doesn't track empty directories, so this method
+        // fills them all with a hidden empty file
+        private void FillEmptyDirectories (string path)
+        {
+            foreach (string child_path in Directory.GetDirectories (path)) {
+                if (path.EndsWith (".git") || path.EndsWith (".notes"))
+                    continue;
+
+                FillEmptyDirectories (child_path);
+            }
+
+            if (Directory.GetFiles (path).Length == 0)
+                File.Create (Path.Combine (path, ".empty"));
         }
 
 
