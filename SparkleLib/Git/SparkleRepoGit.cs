@@ -201,7 +201,7 @@ namespace SparkleLib {
 
                 if (value) {
                     if (!File.Exists (unsynced_file_path))
-                        File.Create (unsynced_file_path);
+                        File.Create (unsynced_file_path).Close ();
                 } else {
                     File.Delete (unsynced_file_path);
                 }
