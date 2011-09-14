@@ -61,6 +61,15 @@ namespace SparkleShare {
         }
 
 
+        public static Image GetImage (string name)
+        {
+            string image_path = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare",
+                "pixmaps", name);
+
+            return new Image (image_path);
+        }
+
+
         // Converts a Gdk RGB color to a hex value.
         // Example: from "rgb:0,0,0" to "#000000"
         public static string GdkColorToHex (Gdk.Color color)
