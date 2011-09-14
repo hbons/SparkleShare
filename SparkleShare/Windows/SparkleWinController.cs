@@ -58,8 +58,10 @@ namespace SparkleShare {
 			               + MSysGit + @"\mingw\bin" + ";"
 			               + MSysGit + @"\cmd" + ";"
 			               + System.Environment.ExpandEnvironmentVariables ("%PATH%");
+
 			System.Environment.SetEnvironmentVariable ("PATH", newPath);
 			System.Environment.SetEnvironmentVariable ("PLINK_PROTOCOL", "ssh");
+			System.Environment.SetEnvironmentVariable ("GIT_SSH", "ssh");
 
 			if (String.IsNullOrEmpty (System.Environment.GetEnvironmentVariable ("HOME")))
 				System.Environment.SetEnvironmentVariable ("HOME", Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%"));
