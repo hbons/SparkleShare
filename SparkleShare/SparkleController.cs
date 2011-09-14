@@ -901,7 +901,10 @@ namespace SparkleShare {
                 SparkleHelpers.DebugInfo ("Config", "Created '" + avatar_path + "'");
             }
 
-            foreach (string email in emails) {
+            foreach (string raw_email in emails) {
+
+                // Gravatar wants lowercase emails
+                string email            = raw_email.ToLower ();
                 string avatar_file_path = Path.Combine (avatar_path, "avatar-" + email);
 
                 if (File.Exists (avatar_file_path)) {
