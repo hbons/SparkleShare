@@ -471,6 +471,9 @@ namespace SparkleLib {
                             string file_path   = entry_line.Substring (39);
                             string to_file_path;
 
+                            if (file_path.EndsWith (".empty"))
+                                file_path = file_path.Substring (0, file_path.Length - ".empty".Length);
+
                             if (change_type.Equals ("A") && !file_path.Contains (".notes")) {
                                 change_set.Added.Add (file_path);
 
