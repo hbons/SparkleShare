@@ -399,7 +399,7 @@ namespace SparkleShare {
 
                         if (!HasToplevelFocus) {
                             string title   = String.Format (_("‘{0}’ has been successfully added"), Controller.SyncingFolder);
-                            string subtext = _("");
+                            string subtext = "";
 
                             SparkleUI.Bubbles.Controller.ShowBubble (title, subtext, null);
                         }
