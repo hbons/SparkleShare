@@ -1,14 +1,15 @@
 # This file is distributed under the same license as the Sparkleshare package.
 # 
+# Translators:
 #   <ajarmund@gmail.com>, 2011.
-#   <vegard.aarseth@gmail.com>, 2011.
 # habakke <habakke@matrise.net>, 2011.
+#   <vegard.aarseth@gmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-25 13:59+0200\n"
-"PO-Revision-Date: 2011-08-28 15:14+0000\n"
+"PO-Revision-Date: 2011-09-01 14:40+0000\n"
 "Last-Translator: anjar <ajarmund@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -40,11 +41,11 @@ msgstr "Ikke alt er synkronisert"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
 msgid "Copy Web Link"
-msgstr "Kopier web link"
+msgstr "Kopier web-link"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
 msgid "Copy the web address of this file to the clipboard"
-msgstr "Kopier denne filens web addresse til utklippstavlen"
+msgstr "Kopier denne filens web-addresse til utklippstavlen"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
 msgid "Get Earlier Version"
@@ -56,7 +57,7 @@ msgstr "Lag en kopi av en tidligere versjon i denne mappen"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:161
 msgid "Select to get a copy of this version"
-msgstr "Vel for å få en kopi av denne versjonen."
+msgstr "Velg for å få en kopi av denne versjonen."
 
 #. A menu item that takes the user to http://www.sparkleshare.org/
 #: ../SparkleShare/SparkleAbout.cs:53 ../SparkleShare/SparkleStatusIcon.cs:275
@@ -134,11 +135,11 @@ msgstr ""
 
 #: ../SparkleShare/SparkleSetup.cs:77
 msgid "Full Name:"
-msgstr "Fullt Navn:"
+msgstr "Fullt navn:"
 
 #: ../SparkleShare/SparkleSetup.cs:92
 msgid "Email:"
-msgstr "Epost:"
+msgstr "E-post:"
 
 #: ../SparkleShare/SparkleSetup.cs:102
 msgid "Next"
