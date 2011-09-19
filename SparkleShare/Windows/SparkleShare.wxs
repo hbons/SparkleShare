@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+
+  <Product Name='SparkleShare 0.2' Id='184950D5-67F6-4D06-9717-7E2F1607A7B0' UpgradeCode='D3DF1D99-87F5-47A7-A349-863DD6E4B73A'
+    Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='sparkleshare.org'>
+
+    <Package Id='*' Keywords='Installer' Description="SparkleShare 0.2 Installer"
+      Comments='This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.' Manufacturer='sparkleshare.org'
+      InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+	  
+	  <Media Id='1' Cabinet='SparkleShare.cab' EmbedCab='yes' DiskPrompt='Bundle CAB' />
+   <Property Id='DiskPrompt' Value="sparkleshare.org Bundle CAB Installation" />
+   
+   <Directory Id='TARGETDIR' Name='SourceDir'>
+	
+    <Directory Id='ProgramFilesFolder' Name='PFiles'>
+        <Directory Id='sparkleshareDotOrgDir' Name='sparkleshare.org'>
+			<Directory Id='INSTALLDIR' Name='SparkleShare'>
+				<Component Id='MainExecutable' Guid='0DA692D5-4DBE-4251-9F62-E7C1A76F10E1'>
+					<File Id='CefSharp.dll' Name='CefSharp.dll' Source='bin/CefSharp.dll' DiskId='1' />
+					<File Id='Meebey.SmartIrc4net.dll' Name='Meebey.SmartIrc4net.dll' Source='bin/Meebey.SmartIrc4net.dll' DiskId='1' />
+					<File Id='Meebey.SmartIrc4net.xml' Name='Meebey.SmartIrc4net.xml' Source='bin/Meebey.SmartIrc4net.xml' DiskId='1' />
+					<File Id='SparkleLib.dll' Name='SparkleLib.dll' Source='bin/SparkleLib.dll' DiskId='1' />
+					<File Id='SparkleShare.exe' Name='SparkleShare.exe' Source='bin/SparkleShare.exe' KeyPath='yes' DiskId='1' />
+					<File Id='avcodec52.dll' Name='avcodec-52.dll' Source='bin/avcodec-52.dll' DiskId='1' />
+					<File Id='avformat52.dll' Name='avformat-52.dll' Source='bin/avformat-52.dll' DiskId='1' />
+					<File Id='avutil50.dll' Name='avutil-50.dll' Source='bin/avutil-50.dll' DiskId='1' />
+					<File Id='icudt42.dll' Name='icudt42.dll' Source='bin/icudt42.dll' DiskId='1' />
+					<File Id='debug.log' Name='debug.log' Source='bin/debug.log' DiskId='1' />
+					<File Id='libcef.dll' Name='libcef.dll' Source='bin/libcef.dll' DiskId='1' />
+				</Component>
+			</Directory>
+		</Directory>
+	</Directory>
+	
+	</Directory>
+	
+	<Feature Id='Complete' Level='1'>
+      <ComponentRef Id='MainExecutable' />
+    </Feature>
+	
+	<UIRef Id="WixUI_InstallDir" />
+	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+    <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
+  </Product>
+   
+</Wix>
