@@ -142,6 +142,7 @@ namespace SparkleLib {
                     SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
                     this.client.RfcJoin (channel);
                     this.client.RfcMode (channel, "+s");
+                    this.client.RfcMode (channel, "+k " + key);
                 }
             }
         }
