@@ -301,13 +301,13 @@ namespace SparkleShare {
                                                         MaxValue = 100.0
                         };
                                                 
-                        // ProgressIndicator.StartAnimation (this);
+                        ProgressIndicator.StartAnimation (this);
                                                                                                 
-                                                Controller.UpdateProgressBarEvent += delegate (double percentage) {
-                                                    InvokeOnMainThread (delegate {
+                        Controller.UpdateProgressBarEvent += delegate (double percentage) {
+                            InvokeOnMainThread (delegate {
                                 ProgressIndicator.DoubleValue = percentage;
                             });        
-                                                };
+                        };
                                                 
                         ContentView.AddSubview (ProgressIndicator);
 
@@ -317,12 +317,12 @@ namespace SparkleShare {
                         };
 
                         CancelButton = new NSButton () {
-                                    Title = "Cancel"
-                                };
+                            Title = "Cancel"
+                        };
 
-                                CancelButton.Activated += delegate {
+                        CancelButton.Activated += delegate {
                             Controller.SyncingCancelled ();
-                                };
+                        };
 
                         Buttons.Add (FinishButton);
                         Buttons.Add (CancelButton);
@@ -378,6 +378,8 @@ namespace SparkleShare {
 
                         NSApplication.SharedApplication.RequestUserAttention
                             (NSRequestUserAttentionType.CriticalRequest);
+
+                        NSSound.FromName ("Glass").Play ();
 
                         break;
                     }
