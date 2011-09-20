@@ -57,10 +57,6 @@ namespace SparkleLib {
                 uri = "irc://204.62.14.135/";
             }
 
-            if (key == null) {
-                key = "12345";
-            }
-
             Uri announce_uri = new Uri (uri);
 
             // We use only one listener per server to keep
