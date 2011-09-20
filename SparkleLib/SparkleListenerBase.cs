@@ -43,6 +43,10 @@ namespace SparkleLib {
         {
             string uri = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (
                 folder_name, "announcements_url");
+            
+            string key = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (
+                folder_name, "key");
+
 
             if (uri == null) {
                 // This is SparkleShare's centralized notification service.
@@ -51,6 +55,10 @@ namespace SparkleLib {
                 // we don't store any personal information ever
 
                 uri = "irc://204.62.14.135/";
+            }
+
+            if (key == null) {
+                key = "12345";
             }
 
             Uri announce_uri = new Uri (uri);
@@ -74,10 +82,10 @@ namespace SparkleLib {
                 listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
                 break;
             case "irc":
-                listeners.Add (new SparkleListenerIrc (announce_uri, folder_identifier));
+                listeners.Add (new SparkleListenerIrc (announce_uri, folder_identifier, key));
                 break;
             default:
-                listeners.Add (new SparkleListenerIrc (announce_uri, folder_identifier));
+                listeners.Add (new SparkleListenerIrc (announce_uri, folder_identifier, key));
                 break;
             }
             
