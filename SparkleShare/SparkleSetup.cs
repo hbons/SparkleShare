@@ -396,6 +396,7 @@ namespace SparkleShare {
                     case PageType.Finished: {
 
                         UrgencyHint = true;
+                        NSSound.FromName ("Glass").Play ();
 
                         if (!HasToplevelFocus) {
                             string title   = String.Format (_("‘{0}’ has been successfully added"), Controller.SyncingFolder);
