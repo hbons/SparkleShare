@@ -29,9 +29,10 @@ namespace SparkleLib {
         private Thread thread;
         private IrcClient client;
         private string nick;
+        private string key;
 
 
-        public SparkleListenerIrc (Uri server, string folder_identifier) :
+        public SparkleListenerIrc (Uri server, string folder_identifier, string key) :
             base (server, folder_identifier)
         {
             // Try to get a uniqueish nickname
@@ -40,6 +41,8 @@ namespace SparkleLib {
             // Most irc servers don't allow nicknames starting
             // with a number, so prefix an alphabetic character
             this.nick = "s" + this.nick.Substring (0, 7);
+
+            this.key = key;
 
             base.channels.Add ("#" + folder_identifier);
 
@@ -110,6 +113,7 @@ namespace SparkleLib {
                             SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
                             this.client.RfcJoin (channel);
                             this.client.RfcMode (channel, "+s");
+                            this.client.RfcMode (channel, "+k " + key);
                         }
 
                         // List to the channel, this blocks the thread
