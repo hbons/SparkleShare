@@ -111,9 +111,14 @@ namespace SparkleLib {
 
                         foreach (string channel in base.channels) {
                             SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
-                            this.client.RfcJoin (channel);
+                            if (key != null) {
+                                SparkleHelpers.DebugInfo ("ListenerIrc", "Ussing key");
+                                this.client.RfcJoin (channel, key);
+                                this.client.RfcMode (channel, "+k " + key);
+                            } else {
+                                this.client.RfcJoin (channel);
+                            }
                             this.client.RfcMode (channel, "+s");
-                            this.client.RfcMode (channel, "+k " + key);
                         }
 
                         // List to the channel, this blocks the thread
@@ -140,9 +145,14 @@ namespace SparkleLib {
 
                 if (IsConnected) {
                     SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
-                    this.client.RfcJoin (channel);
+                    if (key != null) {
+                        SparkleHelpers.DebugInfo ("ListenerIrc", "Ussing key");
+                        this.client.RfcJoin (channel, key);
+                        this.client.RfcMode (channel, "+k " + key);
+                    } else {
+                        this.client.RfcJoin (channel);
+                    }
                     this.client.RfcMode (channel, "+s");
-                    this.client.RfcMode (channel, "+k " + key);
                 }
             }
         }
