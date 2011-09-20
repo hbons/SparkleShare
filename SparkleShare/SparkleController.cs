@@ -1055,7 +1055,7 @@ namespace SparkleShare {
             
             
             this.fetcher.ProgressChanged += delegate (double percentage) {
-                if (FolderFetching != null)    
+                if (FolderFetching != null)
                     FolderFetching (percentage);
             };
 

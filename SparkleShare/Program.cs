@@ -23,7 +23,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 using Mono.Unix;
-using Mono.Unix.Native;
+//using Mono.Unix.Native;
 using SparkleLib;
 using SparkleLib.Options;
 
@@ -46,7 +46,7 @@ namespace SparkleShare {
         public static void Main (string [] args)
         {
             // Don't allow running as root on Linux or Mac
-            if ((SparkleBackend.Platform == PlatformID.Unix ||
+        /*    if ((SparkleBackend.Platform == PlatformID.Unix ||
                  SparkleBackend.Platform == PlatformID.MacOSX) &&
                 new UnixUserInfo (UnixEnvironment.UserName).UserId == 0) {
 
@@ -54,7 +54,7 @@ namespace SparkleShare {
                 Console.WriteLine (_("Things would go utterly wrong."));
                 Environment.Exit (-1);
             }
-
+             */
             // Parse the command line options
             bool show_help       = false;
             OptionSet option_set = new OptionSet () {
@@ -90,9 +90,7 @@ namespace SparkleShare {
 
             // Initialize the controller this way so that
             // there aren't any exceptions in the OS specific UI's
-            Controller = (SparkleController) Activator.CreateInstance (
-                Type.GetType ("SparkleShare.Sparkle" + controller_name + "Controller"));
-
+            Controller = new SparkleMacController ();
             Controller.Initialize ();
         
             if (Controller != null) {
