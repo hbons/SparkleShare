@@ -62,7 +62,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Meebey.SmartIrc4net.dll</HintPath>
     </Reference>
-    <Reference Include="SparkleLib, Version=0.2.4.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="SparkleLib, Version=0.2.5.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\SparkleLib.dll</HintPath>
     </Reference>
@@ -106,12 +106,18 @@
     <Compile Include="..\SparkleAboutController.cs">
       <Link>SparkleAboutController.cs</Link>
     </Compile>
+    <Compile Include="..\SparkleExtensions.cs">
+      <Link>SparkleExtensions.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
+    <None Include="..\..\data\icons\avatar-default.png">
+      <Link>Pixmaps\avatar-default.png</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Mono\MonoMac\v0.0\Mono.MonoMac.targets" />
@@ -127,9 +133,6 @@
     </Content>
     <Content Include="..\..\data\side-splash.png">
       <Link>Pixmaps\side-splash.png</Link>
-    </Content>
-    <Content Include="..\..\data\avatar-default.png">
-      <Link>Pixmaps\avatar-default.png</Link>
     </Content>
     <Content Include="..\..\data\sparkleshare-mac.icns">
       <Link>sparkleshare-mac.icns</Link>
