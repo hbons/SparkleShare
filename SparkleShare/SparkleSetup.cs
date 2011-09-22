@@ -402,12 +402,13 @@ namespace SparkleShare {
                         Button open_folder_button = new Button (_("Open Folder"));
 
                         open_folder_button.Clicked += delegate {
-                          Program.Controller.OpenSparkleShareFolder (Controller.SyncingFolder);
+                            Program.Controller.OpenSparkleShareFolder (Controller.SyncingFolder);
                         };
 
                         Button finish_button = new Button (_("Finish"));
 
                         finish_button.Clicked += delegate {
+                            Controller.FinishedPageCompleted ();
                             Close ();
                         };
 
