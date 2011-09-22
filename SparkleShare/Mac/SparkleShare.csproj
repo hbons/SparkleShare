@@ -270,6 +270,18 @@
     <Content Include="..\..\data\html\jquery.js">
       <Link>HTML\jquery.js</Link>
     </Content>
+    <Content Include="..\..\data\tutorial-slide-1.png">
+      <Link>Pixmaps\tutorial-slide-1.png</Link>
+    </Content>
+    <Content Include="..\..\data\tutorial-slide-2.png">
+      <Link>Pixmaps\tutorial-slide-2.png</Link>
+    </Content>
+    <Content Include="..\..\data\tutorial-slide-3.png">
+      <Link>Pixmaps\tutorial-slide-3.png</Link>
+    </Content>
+    <Content Include="..\..\data\tutorial-slide-4.png">
+      <Link>Pixmaps\tutorial-slide-4.png</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pixmaps\" />
