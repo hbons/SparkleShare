@@ -189,7 +189,7 @@ namespace SparkleShare {
                 Menu.AddItem (NSMenuItem.SeparatorItem);
     
                     SyncMenuItem = new NSMenuItem () {
-                        Title = "Add Remote Folder…"
+                        Title = "Add Project…"
                     };
                 
                     if (!Program.Controller.FirstRun) {

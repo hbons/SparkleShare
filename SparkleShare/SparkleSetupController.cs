@@ -75,6 +75,21 @@ namespace SparkleShare {
             }
         }
 
+        public string GuessedUserName {
+            get {
+                return Program.Controller.UserName;
+            }
+        }
+
+        public string GuessedUserEmail {
+            get {
+                if (Program.Controller.UserEmail.Equals ("Unknown"))
+                    return "";
+                else
+                    return Program.Controller.UserEmail;
+            }
+        }
+
 
         private string previous_server   = "";
         private string previous_folder   = "";
@@ -121,16 +136,10 @@ namespace SparkleShare {
 
         public void TutorialPageCompleted ()
         {
-            if (this.tutorial_page_number == 4) {
-                if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Add);
+            this.tutorial_page_number++;
 
-            } else {
-                this.tutorial_page_number++;
-
-                if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Tutorial);
-            }
+            if (ChangePageEvent != null)
+                ChangePageEvent (PageType.Tutorial);
         }
 
 

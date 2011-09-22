@@ -77,12 +77,12 @@ namespace SparkleShare {
                                 Xalign    = 0
                             };
 
-                            NameEntry = new Entry (Program.Controller.UserName);
+                            NameEntry = new Entry (Controller.GuessedUserName);
                             NameEntry.Changed += delegate {
                                 CheckSetupPage ();
                             };
 
-                            EmailEntry = new Entry ();
+                            EmailEntry = new Entry (Controller.GuessedUserEmail);
                             EmailEntry.Changed += delegate {
                                 CheckSetupPage ();
                             };
