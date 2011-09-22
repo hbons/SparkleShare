@@ -368,6 +368,7 @@ namespace SparkleShare {
 
                         FinishButton.Activated += delegate {
                             InvokeOnMainThread (delegate {
+                                Controller.FinishedPageCompleted ();
                                 PerformClose (this);
                             });
                         };
