@@ -83,7 +83,7 @@ namespace SparkleShare {
                         case IconState.Idle:
     
                             Animation.Stop ();
-                            Console.WriteLine (Controller.Folders.Length);
+                            
                             if (Controller.Folders.Length == 0)
                                 StateText = _("Welcome to SparkleShare!");
                             else
