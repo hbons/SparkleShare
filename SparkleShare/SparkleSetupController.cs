@@ -94,9 +94,8 @@ namespace SparkleShare {
 
         public void ShowAddPage ()
         {
-            this.tutorial_page_number = 1;
            if (ChangePageEvent != null)
-               ChangePageEvent (PageType.Tutorial);
+               ChangePageEvent (PageType.Add);
         }
 
 
