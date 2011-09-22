@@ -42,11 +42,11 @@ namespace SparkleShare {
 
         public SparkleSetupWindow () : base ()
         {
-            SetFrame (new RectangleF (0, 0, 640, 380), true);
+            SetFrame (new RectangleF (0, 0, 640, 420), true);
 
             StyleMask   = NSWindowStyle.Titled;
-            MaxSize     = new SizeF (640, 380);
-            MinSize     = new SizeF (640, 380);
+            MaxSize     = new SizeF (640, 420);
+            MinSize     = new SizeF (640, 420);
             HasShadow   = true;
             BackingType = NSBackingStore.Buffered;
 
@@ -76,7 +76,7 @@ namespace SparkleShare {
             };
             
             DescriptionTextField = new NSTextField () {
-                Frame           = new RectangleF (190, Frame.Height - 155 , 640 - 240, 64),
+                Frame           = new RectangleF (190, Frame.Height - 130, 640 - 240, 44),
                 BackgroundColor = NSColor.WindowBackground,
                 Bordered        = false,
                 Editable        = false,
