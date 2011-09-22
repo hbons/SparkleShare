@@ -66,7 +66,11 @@ namespace SparkleShare {
                 StatusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
                 StatusItem.HighlightMode = true;
     
-                StateText = _("Up to date") + " (" + Controller.FolderSize + ")";
+                if (Controller.Folders.Length == 0)
+                    StateText = _("Welcome to SparkleShare!");
+                else
+                    StateText = _("Up to date") + " (" + Controller.FolderSize + ")";
+
                 CreateMenu ();
     
                 Menu.Delegate = new SparkleStatusIconMenuDelegate ();
@@ -79,7 +83,7 @@ namespace SparkleShare {
                         case IconState.Idle:
     
                             Animation.Stop ();
-
+                            Console.WriteLine (Controller.Folders.Length);
                             if (Controller.Folders.Length == 0)
                                 StateText = _("Welcome to SparkleShare!");
                             else
@@ -179,7 +183,7 @@ namespace SparkleShare {
                         FolderMenuItems = new NSMenuItem [1];
     
                         FolderMenuItems [0] = new NSMenuItem () {
-                            Title = "No Remote Folders Yet"
+                            Title = "No projects yet"
                         };
                     }
     
