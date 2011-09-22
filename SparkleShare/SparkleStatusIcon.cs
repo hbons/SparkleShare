@@ -71,7 +71,10 @@ namespace SparkleShare {
             this.status_icon.Pixbuf = AnimationFrames [0];
             #endif
 
-            StateText = _("Up to date") + " (" + Controller.FolderSize + ")";
+            if (Controller.Folders.Length == 0)
+                StateText = _("Welcome to SparkleShare!");
+            else
+                StateText = _("Up to date") + " (" + Controller.FolderSize + ")";
 
             CreateMenu ();
 
@@ -222,7 +225,7 @@ namespace SparkleShare {
                     }
 
                 } else {
-                    MenuItem no_folders_item = new MenuItem (_("No Remote Folders Yet")) {
+                    MenuItem no_folders_item = new MenuItem (_("No projects yet")) {
                         Sensitive   = false
                     };
 
@@ -232,7 +235,7 @@ namespace SparkleShare {
                 Menu.Add (new SeparatorMenuItem ());
 
                 // Opens the wizard to add a new remote folder
-                MenuItem sync_item = new MenuItem (_("Add Remote Folder…"));
+                MenuItem sync_item = new MenuItem (_("Add Project…"));
             
                 if (Program.Controller.FirstRun)
                     sync_item.Sensitive = false;

@@ -118,7 +118,7 @@ namespace SparkleShare {
 
                     case PageType.Add: {
 
-                        Header = _("Where is your remote folder?");
+                        Header = _("Where is your project?");
 
                         Table = new Table (6, 2, false) {
                             RowSpacing = 0
@@ -255,7 +255,7 @@ namespace SparkleShare {
 
 
                             // Sync button
-                            SyncButton = new Button (_("Sync"));
+                            SyncButton = new Button (_("Add"));
 
                             SyncButton.Clicked += delegate {
                                 string server         = ServerEntry.Text;
@@ -283,7 +283,7 @@ namespace SparkleShare {
 
                     case PageType.Syncing: {
 
-                        Header      = String.Format (_("Syncing folder ‘{0}’…"), Controller.SyncingFolder);
+                        Header      = String.Format (_("Adding project ‘{0}’…"), Controller.SyncingFolder);
                         Description = _("This may take a while." + Environment.NewLine) +
                                       _("Are you sure it’s not coffee o'clock?");
 
@@ -395,8 +395,8 @@ namespace SparkleShare {
                             SparkleUI.Bubbles.Controller.ShowBubble (title, subtext, null);
                         }
 
-                        Header      = _("Folder synced successfully!");
-                        Description = _("Access the synced files from your SparkleShare folder.");
+                        Header      = _("Project successfully added!");
+                        Description = _("Access the files from your SparkleShare folder.");
 
                         // A button that opens the synced folder
                         Button open_folder_button = new Button (_("Open Folder"));
