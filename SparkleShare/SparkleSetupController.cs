@@ -25,7 +25,8 @@ namespace SparkleShare {
         Add,
         Syncing,
         Error,
-        Finished
+        Finished,
+        Tutorial
     }
 
 
@@ -36,6 +37,13 @@ namespace SparkleShare {
         
         public event UpdateProgressBarEventHandler UpdateProgressBarEvent;
         public delegate void UpdateProgressBarEventHandler (double percentage);
+
+
+        public int TutorialPageNumber {
+            get {
+                return this.tutorial_page_number;
+            }
+        }
 
         public string PreviousUrl {
             get {
@@ -67,11 +75,14 @@ namespace SparkleShare {
             }
         }
 
-        private string previous_server = "";
-        private string previous_folder = "";
-        private string previous_url    = "";
-        private string syncing_folder  = "";
+
+        private string previous_server   = "";
+        private string previous_folder   = "";
+        private string previous_url      = "";
+        private string syncing_folder    = "";
+        private int tutorial_page_number = 1;
         private PageType previous_page;
+
 
         public SparkleSetupController ()
         {
@@ -83,8 +94,9 @@ namespace SparkleShare {
 
         public void ShowAddPage ()
         {
+            this.tutorial_page_number = 1;
            if (ChangePageEvent != null)
-               ChangePageEvent (PageType.Add);
+               ChangePageEvent (PageType.Tutorial);
         }
 
 
@@ -104,7 +116,31 @@ namespace SparkleShare {
             Program.Controller.UpdateState ();
 
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Add);
+                ChangePageEvent (PageType.Tutorial);
+        }
+
+
+        public void TutorialPageCompleted ()
+        {
+            if (this.tutorial_page_number == 4) {
+                if (ChangePageEvent != null)
+                    ChangePageEvent (PageType.Add);
+
+            } else {
+                this.tutorial_page_number++;
+
+                if (ChangePageEvent != null)
+                    ChangePageEvent (PageType.Tutorial);
+            }
+        }
+
+
+        public void TutorialSkipped ()
+        {
+            this.tutorial_page_number = 4;
+
+            if (ChangePageEvent != null)
+                ChangePageEvent (PageType.Tutorial);
         }
 
 
