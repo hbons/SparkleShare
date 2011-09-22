@@ -295,7 +295,7 @@ namespace SparkleShare {
 
                     case PageType.Syncing: {
 
-                        Header      = "Syncing folder ‘" + Controller.SyncingFolder + "’…";
+                        Header      = "Adding project ‘" + Controller.SyncingFolder + "’…";
                         Description = "This may take a while.\n" +
                                       "Are you sure it’s not coffee o'clock?";
 
@@ -357,8 +357,8 @@ namespace SparkleShare {
 
                     case PageType.Finished: {
 
-                        Header      = "Folder synced succesfully!";
-                        Description = "Now you can access the synced files from " +
+                        Header      = "Project succesfully added!";
+                        Description = "Now you can access the files from " +
                                       "‘" + Controller.SyncingFolder + "’ in " +
                                       "your SparkleShare folder.";
 
