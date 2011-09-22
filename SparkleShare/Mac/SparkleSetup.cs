@@ -70,7 +70,7 @@ namespace SparkleShare {
                         Description  = "Before we can create a SparkleShare folder on this " +
                                        "computer, we need some information from you.";
 
-                        UserInfoForm = new NSForm (new RectangleF (250, 115, 350, 64));
+                        UserInfoForm = new NSForm (new RectangleF (250, Frame.Height - 280, 350, 64));
 
                         UserInfoForm.AddEntry ("Full Name:");
                         UserInfoForm.AddEntry ("Email Address:");
@@ -80,8 +80,8 @@ namespace SparkleShare {
                         UserInfoForm.Cells [0].LineBreakMode = NSLineBreakMode.TruncatingTail;
                         UserInfoForm.Cells [1].LineBreakMode = NSLineBreakMode.TruncatingTail;
 
-                        UserInfoForm.Cells [0].StringValue   = Program.Controller.UserName;
-                        UserInfoForm.Cells [1].StringValue   = Program.Controller.UserEmail;
+                        UserInfoForm.Cells [0].StringValue   = Controller.GuessedUserName;
+                        UserInfoForm.Cells [1].StringValue   = Controller.GuessedUserEmail;
 
                         // TODO: Ugly hack, do properly with events
                         timer = new Timer () {
@@ -124,7 +124,7 @@ namespace SparkleShare {
 
                     case PageType.Add: {
 
-                        Header       = "Where is your remote folder?";
+                        Header       = "Where is your project?";
                         Description  = "";
 
                         ServerTypeLabel  = new NSTextField () {
@@ -133,7 +133,7 @@ namespace SparkleShare {
                             Bordered        = false,
                             Editable        = false,
                             Frame           = new RectangleF (150, Frame.Height - 159 , 160, 17),
-                            StringValue     = "Server Type:",
+                            StringValue     = "Host Type:",
                             Font            = SparkleUI.Font
                         };
 
@@ -263,7 +263,7 @@ namespace SparkleShare {
                         ContentView.AddSubview (FolderNameHelpLabel);
 
                         SyncButton = new NSButton () {
-                            Title = "Sync",
+                            Title = "Add",
                             Enabled = false
                         };
 

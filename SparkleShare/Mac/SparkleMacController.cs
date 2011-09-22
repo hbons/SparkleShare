@@ -111,13 +111,13 @@ namespace SparkleShare {
 		{
             this.watcher = new SparkleMacWatcher (SparkleConfig.DefaultConfig.FoldersPath);
 
-			if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
-				Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
-				return true;
+            if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
+                Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
+                return true;
 
-			} else {
-				return false;
-			}
+            } else {
+                return false;
+            }
 		}
 
 		
