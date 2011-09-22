@@ -69,7 +69,7 @@ namespace SparkleShare {
                 if (Controller.Folders.Length == 0)
                     StateText = _("Welcome to SparkleShare!");
                 else
-                    StateText = _("Up to date") + " (" + Controller.FolderSize + ")";
+                    StateText = _("Up to date") + " — " + Controller.FolderSize;
 
                 CreateMenu ();
     
@@ -87,7 +87,7 @@ namespace SparkleShare {
                             if (Controller.Folders.Length == 0)
                                 StateText = _("Welcome to SparkleShare!");
                             else
-                                StateText = _("Up to date") + " (" + Controller.FolderSize + ")";
+                                StateText = _("Up to date") + " — " + Controller.FolderSize;
     
                             StateMenuItem.Title = StateText;
                             CreateMenu ();
@@ -150,7 +150,7 @@ namespace SparkleShare {
                     };
                 
                     FolderMenuItem.Image = NSImage.ImageNamed ("sparkleshare-mac");
-                    FolderMenuItem.Image.Size = new SizeF (16, 16);    
+                    FolderMenuItem.Image.Size = new SizeF (16, 16);
                 
                 Menu.AddItem (FolderMenuItem);
     
@@ -169,7 +169,6 @@ namespace SparkleShare {
                                 item.Image = NSImage.ImageNamed ("NSCaution");
                             else
                                 item.Image = NSImage.ImageNamed ("NSFolder");
-    
                             item.Image.Size = new SizeF (16, 16);
                             Tasks [i] = OpenFolderDelegate (folder_name);
     
