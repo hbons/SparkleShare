@@ -70,7 +70,7 @@ namespace SparkleLib {
             } catch (TypeInitializationException) {
                 CreateInitialConfig ();
 
-            } catch (FileException) {
+            } catch (IOException) {
                 CreateInitialConfig ();
 
             } catch (XmlException) {
@@ -82,7 +82,7 @@ namespace SparkleLib {
                     CreateInitialConfig ();            
 
                 } else {
-                    throw new XmlException (FullPath + " does not contain a valid SparkleShare XML structure.");
+                    throw new XmlException (FullPath + " does not contain a valid config XML structure.");
                 }
 
             } finally {
