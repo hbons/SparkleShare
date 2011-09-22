@@ -489,11 +489,6 @@ namespace SparkleShare {
                             Description = _("Just click this button when you see it on the web, and " +
                                 "the project will be automatically added:");
 
-                            Button continue_button = new Button (_("Continue"));
-                            continue_button.Clicked += delegate {
-                                Controller.TutorialPageCompleted ();
-                            };
-
                             Label label = new Label (_("…or select <b>‘Add Project…’</b> from the status icon menu " +
                                 "to add one by hand.")) {
                                 Wrap   = true,

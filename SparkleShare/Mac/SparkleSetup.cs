@@ -36,8 +36,12 @@ namespace SparkleShare {
                 private NSButton SyncButton;
                 private NSButton TryAgainButton;
                 private NSButton CancelButton;
+                private NSButton SkipTutorialButton;
                 private NSButton OpenFolderButton;
                 private NSButton FinishButton;
+                private NSButton AddProjectButton;
+                private NSImage SlideImage;
+                private NSImageView SlideImageView;
                 private NSForm UserInfoForm;
                 private NSProgressIndicator ProgressIndicator;
                 private NSTextField AddressTextField;
@@ -46,6 +50,7 @@ namespace SparkleShare {
                 private NSTextField AddressLabel;
                 private NSTextField FolderNameLabel;
                 private NSTextField FolderNameHelpLabel;
+                private NSTextField AddProjectTextField;
                 private NSButtonCell ButtonCellProto;
                 private NSMatrix Matrix;
                 private int ServerType;
@@ -127,7 +132,7 @@ namespace SparkleShare {
                             BackgroundColor = NSColor.WindowBackground,
                             Bordered        = false,
                             Editable        = false,
-                            Frame           = new RectangleF (150, Frame.Height - 139 , 160, 17),
+                            Frame           = new RectangleF (150, Frame.Height - 159 , 160, 17),
                             StringValue     = "Server Type:",
                             Font            = SparkleUI.Font
                         };
@@ -137,7 +142,7 @@ namespace SparkleShare {
                             BackgroundColor = NSColor.WindowBackground,
                             Bordered        = false,
                             Editable        = false,
-                            Frame           = new RectangleF (150, Frame.Height - 237 , 160, 17),
+                            Frame           = new RectangleF (150, Frame.Height - 257 , 160, 17),
                             StringValue     = "Address:",
                             Font            = SparkleUI.Font
                         };
@@ -147,14 +152,14 @@ namespace SparkleShare {
                             BackgroundColor = NSColor.WindowBackground,
                             Bordered        = false,
                             Editable        = false,
-                            Frame           = new RectangleF (150, Frame.Height - 264 , 160, 17),
+                            Frame           = new RectangleF (150, Frame.Height - 284 , 160, 17),
                             StringValue     = "Folder Name:",
                             Font            = SparkleUI.Font
                         };
 
 
                         AddressTextField = new NSTextField () {
-                            Frame       = new RectangleF (320, Frame.Height - 240 , 256, 22),
+                            Frame       = new RectangleF (320, Frame.Height - 260 , 256, 22),
                             Font        = SparkleUI.Font,
                             StringValue = Controller.PreviousServer
                         };
@@ -162,7 +167,7 @@ namespace SparkleShare {
                         AddressTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
                         FolderNameTextField = new NSTextField () {
-                            Frame           = new RectangleF (320, Frame.Height - (240 + 22 + 4) , 256, 22),
+                            Frame           = new RectangleF (320, Frame.Height - (260 + 22 + 4) , 256, 22),
                             StringValue     = Controller.PreviousFolder
                         };
 
@@ -173,7 +178,7 @@ namespace SparkleShare {
                             Bordered        = false,
                             TextColor       = NSColor.DisabledControlText,
                             Editable        = false,
-                            Frame           = new RectangleF (320, Frame.Height - 285 , 200, 17),
+                            Frame           = new RectangleF (320, Frame.Height - 305 , 200, 17),
                             StringValue     = "e.g. ‘rupert/website-design’"
                         };
 
@@ -182,7 +187,7 @@ namespace SparkleShare {
                         ButtonCellProto = new NSButtonCell ();
                         ButtonCellProto.SetButtonType (NSButtonType.Radio) ;
 
-                        Matrix = new NSMatrix (new RectangleF (315, 180, 256, 78),
+                        Matrix = new NSMatrix (new RectangleF (315, Frame.Height - 220, 256, 78),
                             NSMatrixMode.Radio, ButtonCellProto, 4, 1);
 
                         Matrix.CellSize = new SizeF (256, 18);
@@ -297,8 +302,10 @@ namespace SparkleShare {
                         ProgressIndicator = new NSProgressIndicator () {
                             Frame    = new RectangleF (190, Frame.Height - 200, 640 - 150 - 80, 20),
                             Style    = NSProgressIndicatorStyle.Bar,
-                                                        MinValue = 0.0,
-                                                        MaxValue = 100.0
+                            MinValue = 0.0,
+                            MaxValue = 100.0,
+                            Indeterminate = false,
+                            DoubleValue = 1.0
                         };
                                                 
                         ProgressIndicator.StartAnimation (this);
@@ -306,7 +313,7 @@ namespace SparkleShare {
                         Controller.UpdateProgressBarEvent += delegate (double percentage) {
                             InvokeOnMainThread (delegate {
                                 ProgressIndicator.DoubleValue = percentage;
-                            });        
+                            });
                         };
                                                 
                         ContentView.AddSubview (ProgressIndicator);
@@ -380,6 +387,168 @@ namespace SparkleShare {
                             (NSRequestUserAttentionType.CriticalRequest);
 
                         NSSound.FromName ("Glass").Play ();
+
+                        break;
+                    }
+
+                    case PageType.Tutorial: {
+
+                        switch (Controller.TutorialPageNumber) {
+                        case 1: {
+                            Header      = "What's happening next?";
+                            Description = "SparkleShare creates a special folder in your personal folder " +
+                                "that will keep track of your projects.";
+
+                            SkipTutorialButton = new NSButton () {
+                                Title = "Skip Tutorial"
+                            };
+
+                            SkipTutorialButton.Activated += delegate {
+                                Controller.TutorialSkipped ();
+                            };
+
+                            ContinueButton = new NSButton () {
+                                Title = "Continue"
+                            };
+
+                            ContinueButton.Activated += delegate {
+                                Controller.TutorialPageCompleted ();
+                            };
+
+                            string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
+                                "Pixmaps", "tutorial-slide-1.png");
+
+                            SlideImage = new NSImage (slide_image_path) {
+                                Size = new SizeF (350, 200)
+                            };
+
+                            SlideImageView = new NSImageView () {
+                                Image = SlideImage,
+                                Frame = new RectangleF (215, Frame.Height - 350, 350, 200)
+                            };
+
+                            ContentView.AddSubview (SlideImageView);
+                            Buttons.Add (ContinueButton);
+                            Buttons.Add (SkipTutorialButton);
+
+                            break;
+                        }
+
+                        case 2: {
+                            Header      = "Sharing files with others";
+                            Description = "All files added to your project folders are synced with the host " +
+                                "automatically, as well as with your collaborators.";
+
+                            ContinueButton = new NSButton () {
+                                Title = "Continue"
+                            };
+
+                            ContinueButton.Activated += delegate {
+                                Controller.TutorialPageCompleted ();
+                            };
+
+                            string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
+                                "Pixmaps", "tutorial-slide-2.png");
+
+                            SlideImage = new NSImage (slide_image_path) {
+                                Size = new SizeF (350, 200)
+                            };
+
+                            SlideImageView = new NSImageView () {
+                                Image = SlideImage,
+                                Frame = new RectangleF (215, Frame.Height - 350, 350, 200)
+                            };
+
+                            ContentView.AddSubview (SlideImageView);
+                            Buttons.Add (ContinueButton);
+
+                            break;
+                        }
+
+                        case 3: {
+                            Header      = "The status icon is here to help";
+                            Description = "It shows the syncing process status, " +
+                                "and contains links to your projects and the event log.";
+
+                            ContinueButton = new NSButton () {
+                                Title = "Continue"
+                            };
+
+                            ContinueButton.Activated += delegate {
+                                Controller.TutorialPageCompleted ();
+                            };
+
+                            string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
+                                "Pixmaps", "tutorial-slide-3.png");
+
+                            SlideImage = new NSImage (slide_image_path) {
+                                Size = new SizeF (350, 200)
+                            };
+
+                            SlideImageView = new NSImageView () {
+                                Image = SlideImage,
+                                Frame = new RectangleF (215, Frame.Height - 350, 350, 200)
+                            };
+
+                            ContentView.AddSubview (SlideImageView);
+                            Buttons.Add (ContinueButton);
+
+                            break;
+                        }
+
+                        case 4: {
+                            Header      = "Adding projects to SparkleShare";
+                            Description = "Just click this button when you see it on the web, and " +
+                                "the project will be automatically added:";
+
+                            AddProjectTextField = new NSTextField () {
+                                Frame           = new RectangleF (190, Frame.Height - 290, 640 - 240, 44),
+                                BackgroundColor = NSColor.WindowBackground,
+                                Bordered        = false,
+                                Editable        = false,
+                                Font            = SparkleUI.Font,
+                                StringValue     = "…or select ‘Add Project…’ from the status icon menu " +
+                                "to add one by hand."
+                            };
+
+                            AddProjectButton = new NSButton () {
+                                Title = "Add Project…"
+                            };
+
+                            AddProjectButton.Activated += delegate {
+                                Controller.TutorialPageCompleted ();
+                            };
+
+                            FinishButton = new NSButton () {
+                                Title = "Finish"
+                            };
+
+                            FinishButton.Activated += delegate {
+                                InvokeOnMainThread (delegate {
+                                    PerformClose (this);
+                                });
+                            };
+
+                            string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
+                                "Pixmaps", "tutorial-slide-4.png");
+
+                            SlideImage = new NSImage (slide_image_path) {
+                                Size = new SizeF (350, 64)
+                            };
+
+                            SlideImageView = new NSImageView () {
+                                Image = SlideImage,
+                                Frame = new RectangleF (215, Frame.Height - 215, 350, 64)
+                            };
+
+                            ContentView.AddSubview (SlideImageView);
+                            ContentView.AddSubview (AddProjectTextField);
+                            Buttons.Add (FinishButton);
+                            Buttons.Add (AddProjectButton);
+
+                            break;
+                        }
+                        }
 
                         break;
                     }
