@@ -30,7 +30,7 @@ namespace SparkleShare {
 
         // We have to use our own custom made folder watcher, as
         // System.IO.FileSystemWatcher fails watching subfolders on Mac
-        private SparkleMacWatcher watcher = new SparkleMacWatcher (SparkleConfig.DefaultConfig.FoldersPath);
+        private SparkleMacWatcher watcher;
 
         public SparkleMacController () : base () { }
 
@@ -109,6 +109,8 @@ namespace SparkleShare {
 		// Creates the SparkleShare folder in the user's home folder
 		public override bool CreateSparkleShareFolder ()
 		{
+            this.watcher = new SparkleMacWatcher (SparkleConfig.DefaultConfig.FoldersPath);
+
 			if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
 				Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
 				return true;
