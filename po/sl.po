@@ -6,10 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-16 16:10+0200\n"
-"PO-Revision-Date: 2011-09-15 15:02+0000\n"
+"POT-Creation-Date: 2011-09-22 10:47+0200\n"
+"PO-Revision-Date: 2011-09-22 08:48+0000\n"
 "Last-Translator: deejay1 <deejay1@srem.org>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -58,64 +57,56 @@ msgstr "Ustvari kopijo prejšnje različice v tej mapi"
 msgid "Select to get a copy of this version"
 msgstr "Izberite za pridobitev kopije te različice"
 
-#: ../SparkleShare/Program.cs:53
-msgid "Sorry, you can't run SparkleShare with these permissions."
-msgstr "Oprostite, s temi dovoljenji ne morete zagnati SparkleShare."
-
-#: ../SparkleShare/Program.cs:54
-msgid "Things would go utterly wrong."
-msgstr "Stvari bi šle grozno narobe."
-
-#: ../SparkleShare/Program.cs:61
+#: ../SparkleShare/Program.cs:51
 msgid "Print version information"
 msgstr "Izpiši informacije o različici"
 
-#: ../SparkleShare/Program.cs:62
+#: ../SparkleShare/Program.cs:52
 msgid "Show this help text"
 msgstr "Prikaži to besedilo za pomoč"
 
-#: ../SparkleShare/Program.cs:109
+#: ../SparkleShare/Program.cs:97
 msgid "SparkleShare, a collaboration and sharing tool."
 msgstr "SparkleShare, orodje za deljenje in sodelovanje."
 
-#: ../SparkleShare/Program.cs:110
+#: ../SparkleShare/Program.cs:98
 msgid "Copyright (C) 2010 Hylke Bons"
 msgstr "Copyright (C) 2010 Hylke Bons"
 
-#: ../SparkleShare/Program.cs:112
+#: ../SparkleShare/Program.cs:100
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
 msgstr "Ta programska oprema je na voljo BREZ GARANCIJE."
 
-#: ../SparkleShare/Program.cs:114
+#: ../SparkleShare/Program.cs:102
 msgid "This is free software, and you are welcome to redistribute it "
 msgstr "To je prosta programska oprema in jo lahko redistribuirate "
 
-#: ../SparkleShare/Program.cs:115
+#: ../SparkleShare/Program.cs:103
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
 msgstr ""
 "pod določenimi pogoji. Prosimo preberite licenco GNU GPLv3 za podrobnosti."
 
-#: ../SparkleShare/Program.cs:117
+#: ../SparkleShare/Program.cs:105
 msgid "SparkleShare automatically syncs Git repositories in "
 msgstr "SparkleShare avtomatsko sinhronizira Git repozitorije"
 
-#: ../SparkleShare/Program.cs:118
+#: ../SparkleShare/Program.cs:106
 msgid "the ~/SparkleShare folder with their remote origins."
 msgstr "~/SparkleShare mapi z njihovimi oddaljenimi izvori."
 
-#: ../SparkleShare/Program.cs:120
+#: ../SparkleShare/Program.cs:108
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
 msgstr "Uporaba: sparkleshare [start|stop|restart] [OPTION]..."
 
-#: ../SparkleShare/Program.cs:121
+#: ../SparkleShare/Program.cs:109
 msgid "Sync SparkleShare folder with remote repositories."
 msgstr "Sinhroniziraj SparkleShare mapo z oddaljenimi repozitoriji."
 
-#: ../SparkleShare/Program.cs:123
+#: ../SparkleShare/Program.cs:111
 msgid "Arguments:"
 msgstr "Argumenti:"
 
-#: ../SparkleShare/Program.cs:133
+#: ../SparkleShare/Program.cs:121
 msgid "SparkleShare "
 msgstr "SparkleShare "
 
