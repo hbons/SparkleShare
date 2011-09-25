@@ -74,10 +74,9 @@
     <Compile Include="MainMenu.xib.designer.cs">
       <DependentUpon>MainMenu.xib</DependentUpon>
     </Compile>
-    <Compile Include="..\SparkleController.cs">
-      <Link>SparkleController.cs</Link>
+    <Compile Include="..\SparkleControllerBase.cs">
+      <Link>SparkleControllerBase.cs</Link>
     </Compile>
-    <Compile Include="SparkleMacController.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUI.cs" />
     <Compile Include="..\Program.cs">
@@ -109,6 +108,7 @@
     <Compile Include="..\SparkleExtensions.cs">
       <Link>SparkleExtensions.cs</Link>
     </Compile>
+    <Compile Include="SparkleController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
