@@ -64,23 +64,10 @@ namespace SparkleShare {
             if (show_help)
                 ShowHelp (option_set);
 
-            // Load the right controller for the OS
-            string controller_name = "Lin";
-            switch (SparkleBackend.Platform) {
-            case PlatformID.Unix:
-                SetProcessName ("sparkleshare");
-                break;
-            case PlatformID.MacOSX:
-                controller_name = "Mac";
-                break;
-            case PlatformID.Win32NT:
-                controller_name = "Win";
-                break;
-            }
 
             // Initialize the controller this way so that
             // there aren't any exceptions in the OS specific UI's
-            Controller = new SparkleMacController ();
+            Controller = new SparkleController ();
             Controller.Initialize ();
         
             if (Controller != null) {
