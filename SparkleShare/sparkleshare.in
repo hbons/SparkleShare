@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ $UID -e 0 ]]; then
+if [[ $UID -eq 0 ]]; then
   echo "Cannot run as root. Things would go utterly wrong."
   exit 1
 fi
