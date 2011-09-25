@@ -516,7 +516,7 @@ namespace SparkleLib {
         private void FillEmptyDirectories (string path)
         {
             foreach (string child_path in Directory.GetDirectories (path)) {
-                if (path.EndsWith (".git") || path.EndsWith (".notes"))
+                if (child_path.EndsWith (".git") || child_path.EndsWith (".notes"))
                     continue;
 
                 FillEmptyDirectories (child_path);
