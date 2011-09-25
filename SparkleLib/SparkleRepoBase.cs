@@ -256,6 +256,8 @@ namespace SparkleLib {
             this.listener.Announcement += delegate (SparkleAnnouncement announcement) {
                 string identifier = Identifier;
 
+                Console.WriteLine (announcement.Message + " ! " + CurrentRevision);
+
                 if (announcement.FolderIdentifier == identifier &&
                     !announcement.Message.Equals (CurrentRevision)) {
                     if ((Status != SyncStatus.SyncUp)   &&
