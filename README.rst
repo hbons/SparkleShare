@@ -191,7 +191,7 @@ Now have fun and create cool things together! :)
 
 .. _`Official website`: http://www.sparkleshare.org/
 .. _`SparkleShare`: http://www.sparkleshare.org/
-.. _`Source code`: http://github.com/SparkleShare/
+.. _`Source code`: http://github.com/hbons/SparkleShare/
 .. _Wiki: http://github.com/hbons/SparkleShare/wiki/
 .. _`Report issues`: http://github.com/hbons/SparkleShare/issues/
 .. _`Translation project`: http://www.transifex.net/projects/p/sparkleshare
