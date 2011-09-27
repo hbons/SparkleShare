@@ -25,6 +25,9 @@ namespace SparkleShare {
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (SparkleSetup));
             this.pictureBox = new System.Windows.Forms.PictureBox ();
+            this.panel_info = new System.Windows.Forms.Panel ();
+            this.groupBox3 = new System.Windows.Forms.GroupBox ();
+            this.label_info = new System.Windows.Forms.Label ();
             this.tabControl = new SparkleShare.controls.TablessControl ();
             this.setupPage = new System.Windows.Forms.TabPage ();
             this.EmailEntry = new System.Windows.Forms.TextBox ();
@@ -35,15 +38,18 @@ namespace SparkleShare {
             this.label10 = new System.Windows.Forms.Label ();
             this.buttonNext = new System.Windows.Forms.Button ();
             this.addPage = new System.Windows.Forms.TabPage ();
-            this.buttonSync = new System.Windows.Forms.Button ();
-            this.buttonCancel = new System.Windows.Forms.Button ();
-            this.label5 = new System.Windows.Forms.Label ();
-            this.FolderEntry = new SparkleShare.controls.ExampleTextBox ();
+            this.panel_server_selection = new System.Windows.Forms.Panel ();
+            this.groupbox_server_selection = new System.Windows.Forms.GroupBox ();
             this.ServerEntry = new SparkleShare.controls.ExampleTextBox ();
             this.radio_button_gnome = new System.Windows.Forms.RadioButton ();
             this.radio_button_gitorious = new System.Windows.Forms.RadioButton ();
             this.radio_button_github = new System.Windows.Forms.RadioButton ();
             this.radio_button_own_server = new System.Windows.Forms.RadioButton ();
+            this.groupbox_folder_selection = new System.Windows.Forms.GroupBox ();
+            this.label5 = new System.Windows.Forms.Label ();
+            this.FolderEntry = new SparkleShare.controls.ExampleTextBox ();
+            this.buttonSync = new System.Windows.Forms.Button ();
+            this.buttonCancel = new System.Windows.Forms.Button ();
             this.label4 = new System.Windows.Forms.Label ();
             this.syncingPage = new System.Windows.Forms.TabPage ();
             this.syncingProgressBar = new System.Windows.Forms.ProgressBar ();
@@ -61,9 +67,14 @@ namespace SparkleShare {
             this.buttonFinished = new System.Windows.Forms.Button ();
             this.buttonOpenFolder = new System.Windows.Forms.Button ();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit ();
+            this.panel_info.SuspendLayout ();
+            this.groupBox3.SuspendLayout ();
             this.tabControl.SuspendLayout ();
             this.setupPage.SuspendLayout ();
             this.addPage.SuspendLayout ();
+            this.panel_server_selection.SuspendLayout ();
+            this.groupbox_server_selection.SuspendLayout ();
+            this.groupbox_folder_selection.SuspendLayout ();
             this.syncingPage.SuspendLayout ();
             this.errorPage.SuspendLayout ();
             this.finishedPage.SuspendLayout ();
@@ -74,9 +85,37 @@ namespace SparkleShare {
             this.pictureBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.pictureBox.Location = new System.Drawing.Point (0, 0);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size (150, 407);
+            this.pictureBox.Size = new System.Drawing.Size (150, 396);
             this.pictureBox.TabIndex = 1;
             this.pictureBox.TabStop = false;
+            // 
+            // panel_info
+            // 
+            this.panel_info.BackColor = System.Drawing.Color.White;
+            this.panel_info.Controls.Add (this.groupBox3);
+            this.panel_info.Location = new System.Drawing.Point (0, 0);
+            this.panel_info.Name = "panel_info";
+            this.panel_info.Size = new System.Drawing.Size (150, 396);
+            this.panel_info.TabIndex = 7;
+            this.panel_info.Visible = false;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add (this.label_info);
+            this.groupBox3.Location = new System.Drawing.Point (15, 56);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size (129, 270);
+            this.groupBox3.TabIndex = 0;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Information";
+            // 
+            // label_info
+            // 
+            this.label_info.Location = new System.Drawing.Point (11, 28);
+            this.label_info.Name = "label_info";
+            this.label_info.Size = new System.Drawing.Size (112, 229);
+            this.label_info.TabIndex = 0;
+            this.label_info.Text = "Informative text";
             // 
             // tabControl
             // 
@@ -85,11 +124,11 @@ namespace SparkleShare {
             this.tabControl.Controls.Add (this.syncingPage);
             this.tabControl.Controls.Add (this.errorPage);
             this.tabControl.Controls.Add (this.finishedPage);
-            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Right;
             this.tabControl.Location = new System.Drawing.Point (150, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size (522, 407);
+            this.tabControl.Size = new System.Drawing.Size (514, 396);
             this.tabControl.TabIndex = 0;
             this.tabControl.TabStop = false;
             // 
@@ -105,7 +144,7 @@ namespace SparkleShare {
             this.setupPage.Location = new System.Drawing.Point (4, 22);
             this.setupPage.Name = "setupPage";
             this.setupPage.Padding = new System.Windows.Forms.Padding (3);
-            this.setupPage.Size = new System.Drawing.Size (514, 381);
+            this.setupPage.Size = new System.Drawing.Size (506, 370);
             this.setupPage.TabIndex = 0;
             this.setupPage.Text = "Setup";
             this.setupPage.UseVisualStyleBackColor = true;
@@ -178,23 +217,127 @@ namespace SparkleShare {
             // 
             // addPage
             // 
+            this.addPage.Controls.Add (this.panel_server_selection);
+            this.addPage.Controls.Add (this.groupbox_folder_selection);
             this.addPage.Controls.Add (this.buttonSync);
             this.addPage.Controls.Add (this.buttonCancel);
-            this.addPage.Controls.Add (this.label5);
-            this.addPage.Controls.Add (this.FolderEntry);
-            this.addPage.Controls.Add (this.ServerEntry);
-            this.addPage.Controls.Add (this.radio_button_gnome);
-            this.addPage.Controls.Add (this.radio_button_gitorious);
-            this.addPage.Controls.Add (this.radio_button_github);
-            this.addPage.Controls.Add (this.radio_button_own_server);
             this.addPage.Controls.Add (this.label4);
             this.addPage.Location = new System.Drawing.Point (4, 22);
             this.addPage.Name = "addPage";
             this.addPage.Padding = new System.Windows.Forms.Padding (3);
-            this.addPage.Size = new System.Drawing.Size (514, 381);
+            this.addPage.Size = new System.Drawing.Size (506, 370);
             this.addPage.TabIndex = 1;
             this.addPage.Text = "Add";
             this.addPage.UseVisualStyleBackColor = true;
+            // 
+            // panel_server_selection
+            // 
+            this.panel_server_selection.Controls.Add (this.groupbox_server_selection);
+            this.panel_server_selection.Location = new System.Drawing.Point (0, 53);
+            this.panel_server_selection.Name = "panel_server_selection";
+            this.panel_server_selection.Size = new System.Drawing.Size (512, 154);
+            this.panel_server_selection.TabIndex = 12;
+            this.panel_server_selection.MouseLeave += new System.EventHandler (this.panel_server_selection_MouseLeave);
+            // 
+            // groupbox_server_selection
+            // 
+            this.groupbox_server_selection.Controls.Add (this.ServerEntry);
+            this.groupbox_server_selection.Controls.Add (this.radio_button_gnome);
+            this.groupbox_server_selection.Controls.Add (this.radio_button_gitorious);
+            this.groupbox_server_selection.Controls.Add (this.radio_button_github);
+            this.groupbox_server_selection.Controls.Add (this.radio_button_own_server);
+            this.groupbox_server_selection.Location = new System.Drawing.Point (15, 9);
+            this.groupbox_server_selection.Name = "groupbox_server_selection";
+            this.groupbox_server_selection.Size = new System.Drawing.Size (470, 123);
+            this.groupbox_server_selection.TabIndex = 11;
+            this.groupbox_server_selection.TabStop = false;
+            this.groupbox_server_selection.Text = "Server selection";
+            // 
+            // ServerEntry
+            // 
+            this.ServerEntry.ExampleText = "address-to-server/ip-to-server";
+            this.ServerEntry.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
+            this.ServerEntry.Location = new System.Drawing.Point (139, 21);
+            this.ServerEntry.Name = "ServerEntry";
+            this.ServerEntry.Size = new System.Drawing.Size (312, 20);
+            this.ServerEntry.TabIndex = 10;
+            // 
+            // radio_button_gnome
+            // 
+            this.radio_button_gnome.AutoSize = true;
+            this.radio_button_gnome.Location = new System.Drawing.Point (6, 91);
+            this.radio_button_gnome.Name = "radio_button_gnome";
+            this.radio_button_gnome.Size = new System.Drawing.Size (165, 17);
+            this.radio_button_gnome.TabIndex = 9;
+            this.radio_button_gnome.Text = "The GNOME Project account";
+            this.radio_button_gnome.UseVisualStyleBackColor = true;
+            this.radio_button_gnome.MouseEnter += new System.EventHandler (this.radio_button_gnome_MouseEnter);
+            // 
+            // radio_button_gitorious
+            // 
+            this.radio_button_gitorious.AutoSize = true;
+            this.radio_button_gitorious.Location = new System.Drawing.Point (6, 68);
+            this.radio_button_gitorious.Name = "radio_button_gitorious";
+            this.radio_button_gitorious.Size = new System.Drawing.Size (108, 17);
+            this.radio_button_gitorious.TabIndex = 8;
+            this.radio_button_gitorious.Text = "Gitorious account";
+            this.radio_button_gitorious.UseVisualStyleBackColor = true;
+            this.radio_button_gitorious.MouseEnter += new System.EventHandler (this.radio_button_gitorious_MouseEnter);
+            // 
+            // radio_button_github
+            // 
+            this.radio_button_github.AutoSize = true;
+            this.radio_button_github.Location = new System.Drawing.Point (6, 45);
+            this.radio_button_github.Name = "radio_button_github";
+            this.radio_button_github.Size = new System.Drawing.Size (98, 17);
+            this.radio_button_github.TabIndex = 7;
+            this.radio_button_github.Text = "Github account";
+            this.radio_button_github.UseVisualStyleBackColor = true;
+            this.radio_button_github.MouseEnter += new System.EventHandler (this.radio_button_github_MouseEnter);
+            // 
+            // radio_button_own_server
+            // 
+            this.radio_button_own_server.AutoSize = true;
+            this.radio_button_own_server.Checked = true;
+            this.radio_button_own_server.Location = new System.Drawing.Point (6, 22);
+            this.radio_button_own_server.Name = "radio_button_own_server";
+            this.radio_button_own_server.Size = new System.Drawing.Size (115, 17);
+            this.radio_button_own_server.TabIndex = 6;
+            this.radio_button_own_server.TabStop = true;
+            this.radio_button_own_server.Text = "On my own Server:";
+            this.radio_button_own_server.UseVisualStyleBackColor = true;
+            this.radio_button_own_server.MouseEnter += new System.EventHandler (this.radio_button_own_server_MouseEnter);
+            // 
+            // groupbox_folder_selection
+            // 
+            this.groupbox_folder_selection.Controls.Add (this.label5);
+            this.groupbox_folder_selection.Controls.Add (this.FolderEntry);
+            this.groupbox_folder_selection.Location = new System.Drawing.Point (21, 213);
+            this.groupbox_folder_selection.Name = "groupbox_folder_selection";
+            this.groupbox_folder_selection.Size = new System.Drawing.Size (470, 123);
+            this.groupbox_folder_selection.TabIndex = 11;
+            this.groupbox_folder_selection.TabStop = false;
+            this.groupbox_folder_selection.Text = "Folder selection";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point (6, 55);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size (121, 13);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Folder name (on server):";
+            // 
+            // FolderEntry
+            // 
+            this.FolderEntry.ExampleText = "/path/to/folder";
+            this.FolderEntry.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
+            this.FolderEntry.Location = new System.Drawing.Point (133, 52);
+            this.FolderEntry.Name = "FolderEntry";
+            this.FolderEntry.Size = new System.Drawing.Size (318, 20);
+            this.FolderEntry.TabIndex = 8;
+            this.FolderEntry.MouseEnter += new System.EventHandler (this.FolderEntry_MouseEnter);
+            this.FolderEntry.MouseLeave += new System.EventHandler (this.FolderEntry_MouseLeave);
             // 
             // buttonSync
             // 
@@ -216,81 +359,6 @@ namespace SparkleShare {
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler (this.buttonCancel_Click);
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point (96, 254);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size (121, 13);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "Folder name (on server):";
-            // 
-            // FolderEntry
-            // 
-            this.FolderEntry.ExampleText = "Folder";
-            this.FolderEntry.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
-            this.FolderEntry.Location = new System.Drawing.Point (223, 251);
-            this.FolderEntry.Name = "FolderEntry";
-            this.FolderEntry.Size = new System.Drawing.Size (283, 20);
-            this.FolderEntry.TabIndex = 6;
-            this.FolderEntry.TextChanged += new System.EventHandler (this.CheckAddPage);
-            // 
-            // ServerEntry
-            // 
-            this.ServerEntry.ExampleText = "address-to-server.com";
-            this.ServerEntry.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.ServerEntry.Location = new System.Drawing.Point (223, 64);
-            this.ServerEntry.Name = "ServerEntry";
-            this.ServerEntry.Size = new System.Drawing.Size (283, 20);
-            this.ServerEntry.TabIndex = 5;
-            this.ServerEntry.TextChanged += new System.EventHandler (this.CheckAddPage);
-            // 
-            // radio_button_gnome
-            // 
-            this.radio_button_gnome.AutoSize = true;
-            this.radio_button_gnome.Location = new System.Drawing.Point (12, 213);
-            this.radio_button_gnome.Name = "radio_button_gnome";
-            this.radio_button_gnome.Size = new System.Drawing.Size (123, 17);
-            this.radio_button_gnome.TabIndex = 4;
-            this.radio_button_gnome.Text = "The GNOME Project";
-            this.radio_button_gnome.UseVisualStyleBackColor = true;
-            this.radio_button_gnome.CheckedChanged += new System.EventHandler (this.CheckAddPage);
-            // 
-            // radio_button_gitorious
-            // 
-            this.radio_button_gitorious.AutoSize = true;
-            this.radio_button_gitorious.Location = new System.Drawing.Point (12, 161);
-            this.radio_button_gitorious.Name = "radio_button_gitorious";
-            this.radio_button_gitorious.Size = new System.Drawing.Size (66, 17);
-            this.radio_button_gitorious.TabIndex = 3;
-            this.radio_button_gitorious.Text = "Gitorious";
-            this.radio_button_gitorious.UseVisualStyleBackColor = true;
-            this.radio_button_gitorious.CheckedChanged += new System.EventHandler (this.CheckAddPage);
-            // 
-            // radio_button_github
-            // 
-            this.radio_button_github.AutoSize = true;
-            this.radio_button_github.Location = new System.Drawing.Point (12, 107);
-            this.radio_button_github.Name = "radio_button_github";
-            this.radio_button_github.Size = new System.Drawing.Size (56, 17);
-            this.radio_button_github.TabIndex = 2;
-            this.radio_button_github.Text = "Github";
-            this.radio_button_github.UseVisualStyleBackColor = true;
-            this.radio_button_github.CheckedChanged += new System.EventHandler (this.CheckAddPage);
-            // 
-            // radio_button_own_server
-            // 
-            this.radio_button_own_server.AutoSize = true;
-            this.radio_button_own_server.Checked = true;
-            this.radio_button_own_server.Location = new System.Drawing.Point (12, 65);
-            this.radio_button_own_server.Name = "radio_button_own_server";
-            this.radio_button_own_server.Size = new System.Drawing.Size (115, 17);
-            this.radio_button_own_server.TabIndex = 1;
-            this.radio_button_own_server.TabStop = true;
-            this.radio_button_own_server.Text = "On my own Server:";
-            this.radio_button_own_server.UseVisualStyleBackColor = true;
-            this.radio_button_own_server.CheckedChanged += new System.EventHandler (this.radio_button_own_server_CheckedChanged);
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -309,7 +377,7 @@ namespace SparkleShare {
             this.syncingPage.Controls.Add (this.label6);
             this.syncingPage.Location = new System.Drawing.Point (4, 22);
             this.syncingPage.Name = "syncingPage";
-            this.syncingPage.Size = new System.Drawing.Size (514, 381);
+            this.syncingPage.Size = new System.Drawing.Size (506, 370);
             this.syncingPage.TabIndex = 2;
             this.syncingPage.Text = "Syncing";
             this.syncingPage.UseVisualStyleBackColor = true;
@@ -358,7 +426,7 @@ namespace SparkleShare {
             this.errorPage.Controls.Add (this.label1);
             this.errorPage.Location = new System.Drawing.Point (4, 22);
             this.errorPage.Name = "errorPage";
-            this.errorPage.Size = new System.Drawing.Size (514, 381);
+            this.errorPage.Size = new System.Drawing.Size (506, 370);
             this.errorPage.TabIndex = 3;
             this.errorPage.Text = "Error";
             this.errorPage.UseVisualStyleBackColor = true;
@@ -408,7 +476,7 @@ namespace SparkleShare {
             this.finishedPage.Controls.Add (this.buttonOpenFolder);
             this.finishedPage.Location = new System.Drawing.Point (4, 22);
             this.finishedPage.Name = "finishedPage";
-            this.finishedPage.Size = new System.Drawing.Size (514, 381);
+            this.finishedPage.Size = new System.Drawing.Size (506, 370);
             this.finishedPage.TabIndex = 4;
             this.finishedPage.Text = "Finished";
             this.finishedPage.UseVisualStyleBackColor = true;
@@ -453,7 +521,8 @@ namespace SparkleShare {
             // 
             // SparkleSetup
             // 
-            this.ClientSize = new System.Drawing.Size (672, 407);
+            this.ClientSize = new System.Drawing.Size (664, 396);
+            this.Controls.Add (this.panel_info);
             this.Controls.Add (this.tabControl);
             this.Controls.Add (this.pictureBox);
             this.Name = "SparkleSetup";
@@ -461,11 +530,18 @@ namespace SparkleShare {
             this.Text = "SparkleShare Setup";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler (this.SparkleSetup_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit ();
+            this.panel_info.ResumeLayout (false);
+            this.groupBox3.ResumeLayout (false);
             this.tabControl.ResumeLayout (false);
             this.setupPage.ResumeLayout (false);
             this.setupPage.PerformLayout ();
             this.addPage.ResumeLayout (false);
             this.addPage.PerformLayout ();
+            this.panel_server_selection.ResumeLayout (false);
+            this.groupbox_server_selection.ResumeLayout (false);
+            this.groupbox_server_selection.PerformLayout ();
+            this.groupbox_folder_selection.ResumeLayout (false);
+            this.groupbox_folder_selection.PerformLayout ();
             this.syncingPage.ResumeLayout (false);
             this.syncingPage.PerformLayout ();
             this.errorPage.ResumeLayout (false);
@@ -487,16 +563,9 @@ namespace SparkleShare {
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.RadioButton radio_button_gnome;
-        private System.Windows.Forms.RadioButton radio_button_gitorious;
-        private System.Windows.Forms.RadioButton radio_button_github;
-        private System.Windows.Forms.RadioButton radio_button_own_server;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button buttonSync;
         private System.Windows.Forms.Button buttonCancel;
-        private System.Windows.Forms.Label label5;
-        private SparkleShare.controls.ExampleTextBox FolderEntry;
-        private SparkleShare.controls.ExampleTextBox ServerEntry;
         private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
@@ -514,6 +583,19 @@ namespace SparkleShare {
         private System.Windows.Forms.TextBox NameEntry;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.GroupBox groupbox_folder_selection;
+        private System.Windows.Forms.Label label5;
+        private controls.ExampleTextBox FolderEntry;
+        private System.Windows.Forms.Panel panel_info;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label_info;
+        private System.Windows.Forms.Panel panel_server_selection;
+        private System.Windows.Forms.GroupBox groupbox_server_selection;
+        private controls.ExampleTextBox ServerEntry;
+        private System.Windows.Forms.RadioButton radio_button_gnome;
+        private System.Windows.Forms.RadioButton radio_button_gitorious;
+        private System.Windows.Forms.RadioButton radio_button_github;
+        private System.Windows.Forms.RadioButton radio_button_own_server;
 
 
 
