@@ -184,5 +184,43 @@ namespace SparkleShare {
             }
         }
 
+        private void showInfo (string text) {
+            pictureBox.Visible = false;
+            panel_info.Visible = true;
+            label_info.Text = text;
+        }
+
+        private void hideInfo () {
+            pictureBox.Visible = true;
+            panel_info.Visible = false;
+        }
+
+        private void radio_button_own_server_MouseEnter (object sender, EventArgs e) {
+            showInfo ("To use your own server you need to blabla");
+        }
+
+        private void radio_button_github_MouseEnter (object sender, EventArgs e) {
+            showInfo ("To use your own server you need to blabla");
+        }
+
+        private void radio_button_gitorious_MouseEnter (object sender, EventArgs e) {
+            showInfo ("awdaw");
+        }
+
+        private void radio_button_gnome_MouseEnter (object sender, EventArgs e) {
+            showInfo ("Gnome");
+        }
+
+        private void panel_server_selection_MouseLeave (object sender, EventArgs e) {
+            hideInfo ();
+        }
+
+        private void FolderEntry_MouseEnter (object sender, EventArgs e) {
+            showInfo ("Type in the folder");
+        }
+
+        private void FolderEntry_MouseLeave (object sender, EventArgs e) {
+            hideInfo ();
+        }
     }
 }
