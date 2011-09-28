@@ -196,19 +196,19 @@ namespace SparkleShare {
         }
 
         private void radio_button_own_server_MouseEnter (object sender, EventArgs e) {
-            showInfo ("To use your own server you need to blabla");
+            showInfo ("To use your own server you need to ...");
         }
 
         private void radio_button_github_MouseEnter (object sender, EventArgs e) {
-            showInfo ("To use your own server you need to blabla");
+            showInfo ("To use github to store your files you need to ...");
         }
 
         private void radio_button_gitorious_MouseEnter (object sender, EventArgs e) {
-            showInfo ("awdaw");
+            showInfo ("To use gitorious to store your files you need to ...");
         }
 
         private void radio_button_gnome_MouseEnter (object sender, EventArgs e) {
-            showInfo ("Gnome");
+            showInfo ("To use gnome project to store your files you need to ...");
         }
 
         private void panel_server_selection_MouseLeave (object sender, EventArgs e) {
@@ -216,7 +216,7 @@ namespace SparkleShare {
         }
 
         private void FolderEntry_MouseEnter (object sender, EventArgs e) {
-            showInfo ("Type in the folder");
+            showInfo ("This is the path to your git project ...");
         }
 
         private void FolderEntry_MouseLeave (object sender, EventArgs e) {
