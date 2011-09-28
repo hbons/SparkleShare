@@ -26,10 +26,10 @@ namespace SparkleShare {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (SparkleSetup));
             this.pictureBox = new System.Windows.Forms.PictureBox ();
             this.panel_info = new System.Windows.Forms.Panel ();
-            this.groupBox3 = new System.Windows.Forms.GroupBox ();
             this.label_info = new System.Windows.Forms.Label ();
             this.tabControl = new SparkleShare.controls.TablessControl ();
             this.setupPage = new System.Windows.Forms.TabPage ();
+            this.groupBox1 = new System.Windows.Forms.GroupBox ();
             this.EmailEntry = new System.Windows.Forms.TextBox ();
             this.NameEntry = new System.Windows.Forms.TextBox ();
             this.label13 = new System.Windows.Forms.Label ();
@@ -38,6 +38,10 @@ namespace SparkleShare {
             this.label10 = new System.Windows.Forms.Label ();
             this.buttonNext = new System.Windows.Forms.Button ();
             this.addPage = new System.Windows.Forms.TabPage ();
+            this.panel_folder_selection = new System.Windows.Forms.Panel ();
+            this.groupbox_folder_selection = new System.Windows.Forms.GroupBox ();
+            this.label5 = new System.Windows.Forms.Label ();
+            this.FolderEntry = new SparkleShare.controls.ExampleTextBox ();
             this.panel_server_selection = new System.Windows.Forms.Panel ();
             this.groupbox_server_selection = new System.Windows.Forms.GroupBox ();
             this.ServerEntry = new SparkleShare.controls.ExampleTextBox ();
@@ -45,9 +49,6 @@ namespace SparkleShare {
             this.radio_button_gitorious = new System.Windows.Forms.RadioButton ();
             this.radio_button_github = new System.Windows.Forms.RadioButton ();
             this.radio_button_own_server = new System.Windows.Forms.RadioButton ();
-            this.groupbox_folder_selection = new System.Windows.Forms.GroupBox ();
-            this.label5 = new System.Windows.Forms.Label ();
-            this.FolderEntry = new SparkleShare.controls.ExampleTextBox ();
             this.buttonSync = new System.Windows.Forms.Button ();
             this.buttonCancel = new System.Windows.Forms.Button ();
             this.label4 = new System.Windows.Forms.Label ();
@@ -68,13 +69,14 @@ namespace SparkleShare {
             this.buttonOpenFolder = new System.Windows.Forms.Button ();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit ();
             this.panel_info.SuspendLayout ();
-            this.groupBox3.SuspendLayout ();
             this.tabControl.SuspendLayout ();
             this.setupPage.SuspendLayout ();
+            this.groupBox1.SuspendLayout ();
             this.addPage.SuspendLayout ();
+            this.panel_folder_selection.SuspendLayout ();
+            this.groupbox_folder_selection.SuspendLayout ();
             this.panel_server_selection.SuspendLayout ();
             this.groupbox_server_selection.SuspendLayout ();
-            this.groupbox_folder_selection.SuspendLayout ();
             this.syncingPage.SuspendLayout ();
             this.errorPage.SuspendLayout ();
             this.finishedPage.SuspendLayout ();
@@ -92,29 +94,19 @@ namespace SparkleShare {
             // panel_info
             // 
             this.panel_info.BackColor = System.Drawing.Color.White;
-            this.panel_info.Controls.Add (this.groupBox3);
+            this.panel_info.Controls.Add (this.label_info);
             this.panel_info.Location = new System.Drawing.Point (0, 0);
             this.panel_info.Name = "panel_info";
             this.panel_info.Size = new System.Drawing.Size (150, 396);
             this.panel_info.TabIndex = 7;
             this.panel_info.Visible = false;
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add (this.label_info);
-            this.groupBox3.Location = new System.Drawing.Point (15, 56);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size (129, 270);
-            this.groupBox3.TabIndex = 0;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Information";
-            // 
             // label_info
             // 
-            this.label_info.Location = new System.Drawing.Point (11, 28);
+            this.label_info.Location = new System.Drawing.Point (12, 105);
             this.label_info.Name = "label_info";
-            this.label_info.Size = new System.Drawing.Size (112, 229);
-            this.label_info.TabIndex = 0;
+            this.label_info.Size = new System.Drawing.Size (112, 253);
+            this.label_info.TabIndex = 1;
             this.label_info.Text = "Informative text";
             // 
             // tabControl
@@ -134,10 +126,7 @@ namespace SparkleShare {
             // 
             // setupPage
             // 
-            this.setupPage.Controls.Add (this.EmailEntry);
-            this.setupPage.Controls.Add (this.NameEntry);
-            this.setupPage.Controls.Add (this.label13);
-            this.setupPage.Controls.Add (this.label12);
+            this.setupPage.Controls.Add (this.groupBox1);
             this.setupPage.Controls.Add (this.label11);
             this.setupPage.Controls.Add (this.label10);
             this.setupPage.Controls.Add (this.buttonNext);
@@ -149,40 +138,51 @@ namespace SparkleShare {
             this.setupPage.Text = "Setup";
             this.setupPage.UseVisualStyleBackColor = true;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add (this.EmailEntry);
+            this.groupBox1.Controls.Add (this.NameEntry);
+            this.groupBox1.Controls.Add (this.label13);
+            this.groupBox1.Controls.Add (this.label12);
+            this.groupBox1.Location = new System.Drawing.Point (14, 119);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size (429, 102);
+            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Information about you";
+            // 
             // EmailEntry
             // 
-            this.EmailEntry.Location = new System.Drawing.Point (157, 135);
+            this.EmailEntry.Location = new System.Drawing.Point (150, 54);
             this.EmailEntry.Name = "EmailEntry";
             this.EmailEntry.Size = new System.Drawing.Size (275, 20);
-            this.EmailEntry.TabIndex = 6;
-            this.EmailEntry.TextChanged += new System.EventHandler (this.CheckSetupPage);
+            this.EmailEntry.TabIndex = 10;
             // 
             // NameEntry
             // 
-            this.NameEntry.Location = new System.Drawing.Point (157, 109);
+            this.NameEntry.Location = new System.Drawing.Point (150, 28);
             this.NameEntry.Name = "NameEntry";
             this.NameEntry.Size = new System.Drawing.Size (275, 20);
-            this.NameEntry.TabIndex = 5;
-            this.NameEntry.TextChanged += new System.EventHandler (this.CheckSetupPage);
+            this.NameEntry.TabIndex = 9;
             // 
             // label13
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point (11, 138);
+            this.label13.Location = new System.Drawing.Point (15, 57);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size (41, 13);
-            this.label13.TabIndex = 4;
+            this.label13.TabIndex = 8;
             this.label13.Text = "Email:";
             // 
             // label12
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point (11, 112);
+            this.label12.Location = new System.Drawing.Point (15, 31);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size (65, 13);
-            this.label12.TabIndex = 3;
+            this.label12.TabIndex = 7;
             this.label12.Text = "Full name:";
             // 
             // label11
@@ -217,8 +217,8 @@ namespace SparkleShare {
             // 
             // addPage
             // 
+            this.addPage.Controls.Add (this.panel_folder_selection);
             this.addPage.Controls.Add (this.panel_server_selection);
-            this.addPage.Controls.Add (this.groupbox_folder_selection);
             this.addPage.Controls.Add (this.buttonSync);
             this.addPage.Controls.Add (this.buttonCancel);
             this.addPage.Controls.Add (this.label4);
@@ -229,6 +229,45 @@ namespace SparkleShare {
             this.addPage.TabIndex = 1;
             this.addPage.Text = "Add";
             this.addPage.UseVisualStyleBackColor = true;
+            // 
+            // panel_folder_selection
+            // 
+            this.panel_folder_selection.Controls.Add (this.groupbox_folder_selection);
+            this.panel_folder_selection.Location = new System.Drawing.Point (2, 213);
+            this.panel_folder_selection.Name = "panel_folder_selection";
+            this.panel_folder_selection.Size = new System.Drawing.Size (512, 123);
+            this.panel_folder_selection.TabIndex = 13;
+            this.panel_folder_selection.MouseLeave += new System.EventHandler (this.panel_folder_selection_MouseLeave);
+            // 
+            // groupbox_folder_selection
+            // 
+            this.groupbox_folder_selection.Controls.Add (this.label5);
+            this.groupbox_folder_selection.Controls.Add (this.FolderEntry);
+            this.groupbox_folder_selection.Location = new System.Drawing.Point (10, 20);
+            this.groupbox_folder_selection.Name = "groupbox_folder_selection";
+            this.groupbox_folder_selection.Size = new System.Drawing.Size (470, 88);
+            this.groupbox_folder_selection.TabIndex = 11;
+            this.groupbox_folder_selection.TabStop = false;
+            this.groupbox_folder_selection.Text = "Folder selection";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point (6, 43);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size (121, 13);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Folder name (on server):";
+            // 
+            // FolderEntry
+            // 
+            this.FolderEntry.ExampleText = "/path/to/folder";
+            this.FolderEntry.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
+            this.FolderEntry.Location = new System.Drawing.Point (133, 40);
+            this.FolderEntry.Name = "FolderEntry";
+            this.FolderEntry.Size = new System.Drawing.Size (318, 20);
+            this.FolderEntry.TabIndex = 8;
+            this.FolderEntry.MouseEnter += new System.EventHandler (this.FolderEntry_MouseEnter);
             // 
             // panel_server_selection
             // 
@@ -307,37 +346,6 @@ namespace SparkleShare {
             this.radio_button_own_server.Text = "On my own Server:";
             this.radio_button_own_server.UseVisualStyleBackColor = true;
             this.radio_button_own_server.MouseEnter += new System.EventHandler (this.radio_button_own_server_MouseEnter);
-            // 
-            // groupbox_folder_selection
-            // 
-            this.groupbox_folder_selection.Controls.Add (this.label5);
-            this.groupbox_folder_selection.Controls.Add (this.FolderEntry);
-            this.groupbox_folder_selection.Location = new System.Drawing.Point (21, 213);
-            this.groupbox_folder_selection.Name = "groupbox_folder_selection";
-            this.groupbox_folder_selection.Size = new System.Drawing.Size (470, 123);
-            this.groupbox_folder_selection.TabIndex = 11;
-            this.groupbox_folder_selection.TabStop = false;
-            this.groupbox_folder_selection.Text = "Folder selection";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point (6, 55);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size (121, 13);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "Folder name (on server):";
-            // 
-            // FolderEntry
-            // 
-            this.FolderEntry.ExampleText = "/path/to/folder";
-            this.FolderEntry.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
-            this.FolderEntry.Location = new System.Drawing.Point (133, 52);
-            this.FolderEntry.Name = "FolderEntry";
-            this.FolderEntry.Size = new System.Drawing.Size (318, 20);
-            this.FolderEntry.TabIndex = 8;
-            this.FolderEntry.MouseEnter += new System.EventHandler (this.FolderEntry_MouseEnter);
-            this.FolderEntry.MouseLeave += new System.EventHandler (this.FolderEntry_MouseLeave);
             // 
             // buttonSync
             // 
@@ -531,17 +539,19 @@ namespace SparkleShare {
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler (this.SparkleSetup_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit ();
             this.panel_info.ResumeLayout (false);
-            this.groupBox3.ResumeLayout (false);
             this.tabControl.ResumeLayout (false);
             this.setupPage.ResumeLayout (false);
             this.setupPage.PerformLayout ();
+            this.groupBox1.ResumeLayout (false);
+            this.groupBox1.PerformLayout ();
             this.addPage.ResumeLayout (false);
             this.addPage.PerformLayout ();
+            this.panel_folder_selection.ResumeLayout (false);
+            this.groupbox_folder_selection.ResumeLayout (false);
+            this.groupbox_folder_selection.PerformLayout ();
             this.panel_server_selection.ResumeLayout (false);
             this.groupbox_server_selection.ResumeLayout (false);
             this.groupbox_server_selection.PerformLayout ();
-            this.groupbox_folder_selection.ResumeLayout (false);
-            this.groupbox_folder_selection.PerformLayout ();
             this.syncingPage.ResumeLayout (false);
             this.syncingPage.PerformLayout ();
             this.errorPage.ResumeLayout (false);
@@ -579,16 +589,10 @@ namespace SparkleShare {
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button buttonNext;
-        private System.Windows.Forms.TextBox EmailEntry;
-        private System.Windows.Forms.TextBox NameEntry;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.GroupBox groupbox_folder_selection;
         private System.Windows.Forms.Label label5;
         private controls.ExampleTextBox FolderEntry;
         private System.Windows.Forms.Panel panel_info;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label_info;
         private System.Windows.Forms.Panel panel_server_selection;
         private System.Windows.Forms.GroupBox groupbox_server_selection;
         private controls.ExampleTextBox ServerEntry;
@@ -596,6 +600,13 @@ namespace SparkleShare {
         private System.Windows.Forms.RadioButton radio_button_gitorious;
         private System.Windows.Forms.RadioButton radio_button_github;
         private System.Windows.Forms.RadioButton radio_button_own_server;
+        private System.Windows.Forms.Label label_info;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox EmailEntry;
+        private System.Windows.Forms.TextBox NameEntry;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Panel panel_folder_selection;
 
 
 
