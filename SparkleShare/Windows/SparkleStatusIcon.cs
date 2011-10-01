@@ -262,6 +262,15 @@ namespace SparkleShare {
             status_icon.ContextMenuStrip = Menu;
         }
 
+        public void ShowBalloon (string title, string subtext, string image_path)
+        {
+            status_icon.BalloonTipText = title;
+            status_icon.BalloonTipText = subtext;
+            // TODO: Use the image pointed to by image_path
+            status_icon.BalloonTipIcon = ToolTipIcon.None;
+            status_icon.ShowBalloonTip (2 * 1000);
+        }
+
 
         // A method reference that makes sure that opening the
         // event log for each repository works correctly

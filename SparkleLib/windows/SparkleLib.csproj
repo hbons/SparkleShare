@@ -72,18 +72,11 @@
     <Compile Include="..\Git\SparkleRepoGit.cs">
       <Link>SparkleRepoGit.cs</Link>
     </Compile>
-    <Compile Include="..\Hg\SparkleFetcherHg.cs">
-      <Link>SparkleFetcherHg.cs</Link>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="..\Hg\SparkleRepoHg.cs">
-      <Link>SparkleRepoHg.cs</Link>
-    </Compile>
     <Compile Include="..\SparkleConfig.cs">
       <Link>SparkleConfig.cs</Link>
     </Compile>
-    <Compile Include="..\SparklePaths.cs">
-      <Link>SparklePaths.cs</Link>
+    <Compile Include="..\SparklePath.cs">
+      <Link>SparklePath.cs</Link>
     </Compile>
     <Compile Include="..\SparkleRepoBase.cs">
       <Link>SparkleRepoBase.cs</Link>

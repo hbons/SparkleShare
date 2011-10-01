@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-29 11:38+0200\n"
-"PO-Revision-Date: 2011-07-02 21:33+0000\n"
+"POT-Creation-Date: 2011-07-19 07:04+0200\n"
+"PO-Revision-Date: 2011-08-11 10:56+0000\n"
 "Last-Translator: alexandresaiz <a@alexandresaiz.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,25 +22,26 @@ msgstr ""
 "Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:337
-#: ../SparkleShare/SparkleIntro.cs:67 ../SparkleShare/SparkleStatusIcon.cs:345
-msgid "Welcome to SparkleShare!"
-msgstr "Benvinguts a SparkleShare"
-
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:348
-#: ../SparkleShare/SparkleStatusIcon.cs:357
-msgid "Not everything is synced"
-msgstr "No està tot sincronitzat"
-
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:358
-#: ../SparkleShare/SparkleStatusIcon.cs:367
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:69
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:86
+#: ../SparkleShare/SparkleStatusIcon.cs:372
 msgid "Up to date"
 msgstr "Al dia"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:374
-#: ../SparkleShare/SparkleStatusIcon.cs:383
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:84
+#: ../SparkleShare/SparkleSetup.cs:69 ../SparkleShare/SparkleStatusIcon.cs:350
+msgid "Welcome to SparkleShare!"
+msgstr "Benvinguts a SparkleShare"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:95
+#: ../SparkleShare/SparkleStatusIcon.cs:388
 msgid "Syncing…"
 msgstr "Sincronitzant ..."
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:105
+#: ../SparkleShare/SparkleStatusIcon.cs:362
+msgid "Not everything is synced"
+msgstr "No està tot sincronitzat"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
 msgid "Copy Web Link"
@@ -63,265 +64,61 @@ msgid "Select to get a copy of this version"
 msgstr "Selecciona per obtenir una còpia d'aquesta versió"
 
 #. A menu item that takes the user to http://www.sparkleshare.org/
-#: ../SparkleShare/SparkleAbout.cs:46 ../SparkleShare/SparkleStatusIcon.cs:275
+#: ../SparkleShare/SparkleAbout.cs:54 ../SparkleShare/SparkleStatusIcon.cs:275
 msgid "About SparkleShare"
 msgstr "Sobre SparkleShare"
 
-#: ../SparkleShare/SparkleAbout.cs:53
-msgid "A newer version is available"
-msgstr "Hi ha una versió nova"
+#: ../SparkleShare/SparkleAbout.cs:72
+#, csharp-format
+msgid "A newer version ({0}) is available!"
+msgstr "Hi ha una nova versió ({0}) disponible!"
 
-#: ../SparkleShare/SparkleAbout.cs:60
+#: ../SparkleShare/SparkleAbout.cs:80
 msgid "You are running the latest version."
 msgstr "Estas utilitzant la darrera versió"
 
-#: ../SparkleShare/SparkleAbout.cs:87
+#: ../SparkleShare/SparkleAbout.cs:88 ../SparkleShare/SparkleAbout.cs:110
 msgid "Checking for updates..."
 msgstr "Comprovant actualitzacions..."
 
-#: ../SparkleShare/SparkleAbout.cs:116
-msgid "_Show Credits"
-msgstr "Mostra els Credits"
-
-#: ../SparkleShare/SparkleAbout.cs:129
-msgid "_Visit Website"
-msgstr "_Visitar lloc web"
-
-#: ../SparkleShare/SparkleController.cs:455
-msgid "ddd MMM d, yyyy"
+#: ../SparkleShare/SparkleController.cs:446
+msgid "dddd, MMMM d, yyyy"
 msgstr "ddd MMM d, yyyy"
 
-#: ../SparkleShare/SparkleController.cs:460
-msgid "ddd MMM d"
-msgstr "ddd MMM d"
+#: ../SparkleShare/SparkleController.cs:451
+msgid "dddd, MMMM d"
+msgstr "dddd, MMMM d"
 
-#: ../SparkleShare/SparkleController.cs:661
+#: ../SparkleShare/SparkleController.cs:660
 #, csharp-format
 msgid "added ‘{0}’"
 msgstr "afegit '{0}'"
 
-#: ../SparkleShare/SparkleController.cs:666
+#: ../SparkleShare/SparkleController.cs:665
 #, csharp-format
 msgid "moved ‘{0}’"
 msgstr "mogut ’{0}’"
 
-#: ../SparkleShare/SparkleController.cs:671
+#: ../SparkleShare/SparkleController.cs:670
 #, csharp-format
 msgid "edited ‘{0}’"
 msgstr "editat '{0}'"
 
-#: ../SparkleShare/SparkleController.cs:676
+#: ../SparkleShare/SparkleController.cs:675
 #, csharp-format
 msgid "deleted ‘{0}’"
 msgstr "eliminat '{0}'"
 
-#: ../SparkleShare/SparkleController.cs:685
+#: ../SparkleShare/SparkleController.cs:684
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
 msgstr[0] "i ‘{0}’ més"
 msgstr[1] "i ‘{0}’ més"
 
-#: ../SparkleShare/SparkleController.cs:689
+#: ../SparkleShare/SparkleController.cs:688
 msgid "did something magical"
 msgstr "va fer una cosa màgica"
-
-#: ../SparkleShare/SparkleIntro.cs:73
-msgid ""
-"Before we can create a SparkleShare folder on this computer, we need a few "
-"bits of information from you."
-msgstr ""
-"Abans de crear una carpeta de SparkleShare en aquest ordinador, necessitem "
-"algunes informacions sobre tu"
-
-#: ../SparkleShare/SparkleIntro.cs:83
-msgid "Full Name:"
-msgstr "Nom sencer:"
-
-#: ../SparkleShare/SparkleIntro.cs:98
-msgid "Email:"
-msgstr "Correu electrònic:"
-
-#: ../SparkleShare/SparkleIntro.cs:109
-msgid "Next"
-msgstr "Següent"
-
-#: ../SparkleShare/SparkleIntro.cs:115
-msgid "Configuring…"
-msgstr "Configurant..."
-
-#: ../SparkleShare/SparkleIntro.cs:161
-msgid "Where is your remote folder?"
-msgstr "On és la teva carpeta remota?"
-
-#: ../SparkleShare/SparkleIntro.cs:174
-msgid "address-to-server.com"
-msgstr "adreça-del-servidor.com"
-
-#: ../SparkleShare/SparkleIntro.cs:179
-msgid "On my own server:"
-msgstr "En el meu propi servidor:"
-
-#: ../SparkleShare/SparkleIntro.cs:186
-msgid "Free hosting for Free and Open Source Software projects."
-msgstr "Allotjament gratuït per a projectes de programari lliure."
-
-#: ../SparkleShare/SparkleIntro.cs:187
-msgid "Also has paid accounts for extra private space and bandwidth."
-msgstr "També te comptes de pagament per espai i ample de banda addicional."
-
-#: ../SparkleShare/SparkleIntro.cs:195
-msgid "The GNOME Project"
-msgstr "El projecte GNOME"
-
-#: ../SparkleShare/SparkleIntro.cs:197
-msgid "GNOME is an easy to understand interface to your computer."
-msgstr "GNOME és una interfície fàcil d'usar i aprendre pel teu ordinador."
-
-#: ../SparkleShare/SparkleIntro.cs:198
-msgid "Select this option if you’re a developer or designer working on GNOME."
-msgstr ""
-"Escull aquesta opció si ets un desenvolupador o dissenyador treballant a "
-"GNOME."
-
-#: ../SparkleShare/SparkleIntro.cs:206
-msgid "Gitorious"
-msgstr "Gitorious"
-
-#: ../SparkleShare/SparkleIntro.cs:208
-msgid "Completely Free as in Freedom infrastructure."
-msgstr "Infrastructura totalment lliure, com en llibertat."
-
-#: ../SparkleShare/SparkleIntro.cs:209
-msgid "Free accounts for Free and Open Source projects."
-msgstr "Comptes gratuïts per a projectes lliures i de codi obert."
-
-#: ../SparkleShare/SparkleIntro.cs:220
-msgid "Username/Folder"
-msgstr "Usuari/Carpeta"
-
-#: ../SparkleShare/SparkleIntro.cs:225
-msgid "Project/Folder"
-msgstr "Projecte/Carpeta"
-
-#: ../SparkleShare/SparkleIntro.cs:230
-msgid "Project"
-msgstr "Projecte"
-
-#: ../SparkleShare/SparkleIntro.cs:235 ../SparkleShare/SparkleIntro.cs:254
-msgid "Folder"
-msgstr "Carpeta"
-
-#: ../SparkleShare/SparkleIntro.cs:259 ../SparkleShare/SparkleIntro.cs:377
-msgid "Folder Name:"
-msgstr "Nom de Carpeta:"
-
-#: ../SparkleShare/SparkleIntro.cs:269
-msgid "Sync"
-msgstr "Sincronitza"
-
-#: ../SparkleShare/SparkleIntro.cs:312
-msgid "Cancel"
-msgstr "Cancel·la"
-
-#: ../SparkleShare/SparkleIntro.cs:320
-msgid "Skip"
-msgstr "Salta"
-
-#: ../SparkleShare/SparkleIntro.cs:347
-msgid "Invitation received!"
-msgstr "Invitació rebuda!"
-
-#: ../SparkleShare/SparkleIntro.cs:353
-msgid ""
-"You've received an invitation to join a shared folder.\n"
-"We're ready to hook you up immediately if you wish."
-msgstr ""
-"Has rebut una invitació per compartir una carpeta. Estem preparats per "
-"connectar-t'hi immediatament si així ho vols."
-
-#: ../SparkleShare/SparkleIntro.cs:359
-msgid "Do you accept this invitation?"
-msgstr "Acceptes aquesta invitació?"
-
-#: ../SparkleShare/SparkleIntro.cs:368
-msgid "Server Address:"
-msgstr "Adreça del servidor:"
-
-#: ../SparkleShare/SparkleIntro.cs:391
-msgid "Reject"
-msgstr "Rebutjar"
-
-#: ../SparkleShare/SparkleIntro.cs:392
-msgid "Accept and Sync"
-msgstr "Acceptar i sincronitzar"
-
-#: ../SparkleShare/SparkleIntro.cs:442
-msgid "Something went wrong…"
-msgstr "Alguna cosa ha fallat..."
-
-#: ../SparkleShare/SparkleIntro.cs:448
-msgid "Try Again"
-msgstr "Torna-ho a provar"
-
-#: ../SparkleShare/SparkleIntro.cs:473
-#, csharp-format
-msgid "‘{0}’ has been successfully added"
-msgstr "‘{0}’ ha estat afegit satisfactoriament"
-
-#: ../SparkleShare/SparkleIntro.cs:482
-msgid "Folder synced successfully!"
-msgstr "Carpeta sincronitzada amb èxit!"
-
-#: ../SparkleShare/SparkleIntro.cs:489
-#, csharp-format
-msgid ""
-"Now you can access the synced files from ‘{0}’ in your SparkleShare folder."
-msgstr ""
-"Ja pots accedir els fitxers sincronitzas de  ‘{0}’ a la teva carpeta de "
-"SparkleShare."
-
-#. A button that opens the synced folder
-#: ../SparkleShare/SparkleIntro.cs:497
-msgid "Open Folder"
-msgstr "Obrir Carpeta"
-
-#: ../SparkleShare/SparkleIntro.cs:503 ../SparkleShare/SparkleIntro.cs:543
-#: ../SparkleShare/SparkleIntro.cs:604
-msgid "Finish"
-msgstr "Finalitzar"
-
-#: ../SparkleShare/SparkleIntro.cs:528
-#, csharp-format
-msgid "Syncing folder ‘{0}’…"
-msgstr "Sincronitzant  carpeta '{0}' ..."
-
-#: ../SparkleShare/SparkleIntro.cs:535
-msgid "This may take a while.\n"
-msgstr ""
-"Això pot trigar una estona.\n"
-"\n"
-
-#: ../SparkleShare/SparkleIntro.cs:536
-msgid "Are you sure it’s not coffee o'clock?"
-msgstr "Segur que no és l'hora del cafè?"
-
-#: ../SparkleShare/SparkleIntro.cs:579
-msgid "SparkleShare is ready to go!"
-msgstr "SparkleShare està llest!"
-
-#: ../SparkleShare/SparkleIntro.cs:585
-msgid ""
-"Now you can start accepting invitations from others. \n"
-"Just click on invitations you get by email and we will take care of the rest."
-msgstr ""
-"Ara pots començar a acceptar invitacions d'altres usuaris. Només cal que "
-"facis clic a les invitacions que rebràs per correu electrònic i nosaltres "
-"ens encarreguem de la resta."
-
-#: ../SparkleShare/SparkleIntro.cs:596
-msgid "Learn how to host your own SparkleServer"
-msgstr "Apren com gestionar el teu propi servidor SparkleShare"
 
 #: ../SparkleShare/SparkleEventLog.cs:61
 msgid "Recent Events"
@@ -331,6 +128,153 @@ msgstr "Accions recents"
 #: ../SparkleShare/SparkleEventLog.cs:173
 msgid "All Folders"
 msgstr "Totes les carpetes"
+
+#: ../SparkleShare/SparkleSetup.cs:70
+msgid ""
+"Before we can create a SparkleShare folder on this computer, we need a few "
+"bits of information from you."
+msgstr ""
+"Abans de crear una carpeta de SparkleShare en aquest ordinador, necessitem "
+"algunes informacions sobre tu"
+
+#: ../SparkleShare/SparkleSetup.cs:77
+msgid "Full Name:"
+msgstr "Nom sencer:"
+
+#: ../SparkleShare/SparkleSetup.cs:92
+msgid "Email:"
+msgstr "Correu electrònic:"
+
+#: ../SparkleShare/SparkleSetup.cs:102
+msgid "Next"
+msgstr "Següent"
+
+#: ../SparkleShare/SparkleSetup.cs:122
+msgid "Where is your remote folder?"
+msgstr "On és la teva carpeta remota?"
+
+#. Own server radiobutton
+#: ../SparkleShare/SparkleSetup.cs:131
+msgid "On my own server:"
+msgstr "En el meu propi servidor:"
+
+#: ../SparkleShare/SparkleSetup.cs:136 ../SparkleShare/SparkleSetup.cs:238
+msgid "Folder"
+msgstr "Carpeta"
+
+#: ../SparkleShare/SparkleSetup.cs:163
+msgid "address-to-server.com"
+msgstr "adreça-del-servidor.com"
+
+#: ../SparkleShare/SparkleSetup.cs:178
+msgid "Free hosting for Free and Open Source Software projects."
+msgstr "Allotjament gratuït per a projectes de programari lliure."
+
+#: ../SparkleShare/SparkleSetup.cs:179
+msgid "Also has paid accounts for extra private space and bandwidth."
+msgstr "També te comptes de pagament per espai i ample de banda addicional."
+
+#: ../SparkleShare/SparkleSetup.cs:188
+msgid "Username/Folder"
+msgstr "Usuari/Carpeta"
+
+#. Gitorious radiobutton
+#: ../SparkleShare/SparkleSetup.cs:193
+msgid "Gitorious"
+msgstr "Gitorious"
+
+#: ../SparkleShare/SparkleSetup.cs:195
+msgid "Completely Free as in Freedom infrastructure."
+msgstr "Infrastructura totalment lliure, com en llibertat."
+
+#: ../SparkleShare/SparkleSetup.cs:196
+msgid "Free accounts for Free and Open Source projects."
+msgstr "Comptes gratuïts per a projectes lliures i de codi obert."
+
+#: ../SparkleShare/SparkleSetup.cs:205
+msgid "Project/Folder"
+msgstr "Projecte/Carpeta"
+
+#. GNOME radiobutton
+#: ../SparkleShare/SparkleSetup.cs:210
+msgid "The GNOME Project"
+msgstr "El projecte GNOME"
+
+#: ../SparkleShare/SparkleSetup.cs:212
+msgid "GNOME is an easy to understand interface to your computer."
+msgstr "GNOME és una interfície fàcil d'usar i aprendre pel teu ordinador."
+
+#: ../SparkleShare/SparkleSetup.cs:213
+msgid "Select this option if you’re a developer or designer working on GNOME."
+msgstr ""
+"Escull aquesta opció si ets un desenvolupador o dissenyador treballant a "
+"GNOME."
+
+#: ../SparkleShare/SparkleSetup.cs:222
+msgid "Project"
+msgstr "Projecte"
+
+#: ../SparkleShare/SparkleSetup.cs:232
+msgid "Folder Name:"
+msgstr "Nom de Carpeta:"
+
+#. Cancel button
+#: ../SparkleShare/SparkleSetup.cs:251
+msgid "Cancel"
+msgstr "Cancel·la"
+
+#. Sync button
+#: ../SparkleShare/SparkleSetup.cs:259
+msgid "Sync"
+msgstr "Sincronitza"
+
+#: ../SparkleShare/SparkleSetup.cs:286
+#, csharp-format
+msgid "Syncing folder ‘{0}’…"
+msgstr "Sincronitzant  carpeta '{0}' ..."
+
+#: ../SparkleShare/SparkleSetup.cs:287
+msgid "This may take a while."
+msgstr "Això pot trigar una estona."
+
+#: ../SparkleShare/SparkleSetup.cs:288
+msgid "Are you sure it’s not coffee o'clock?"
+msgstr "Segur que no és l'hora del cafè?"
+
+#: ../SparkleShare/SparkleSetup.cs:292 ../SparkleShare/SparkleSetup.cs:375
+msgid "Finish"
+msgstr "Finalitzar"
+
+#: ../SparkleShare/SparkleSetup.cs:321
+msgid "Something went wrong"
+msgstr "Quelcom ha fallat."
+
+#: ../SparkleShare/SparkleSetup.cs:341
+msgid "Try Again"
+msgstr "Torna-ho a provar"
+
+#: ../SparkleShare/SparkleSetup.cs:359
+#, csharp-format
+msgid "‘{0}’ has been successfully added"
+msgstr "‘{0}’ ha estat afegit satisfactoriament"
+
+#: ../SparkleShare/SparkleSetup.cs:365
+msgid "Folder synced successfully!"
+msgstr "Carpeta sincronitzada amb èxit!"
+
+#: ../SparkleShare/SparkleSetup.cs:366
+msgid "Access the synced files from your SparkleShare folder."
+msgstr ""
+"Accedeix als teus fitxers sincronitzats des de la teva carpeta SparkleShare."
+
+#. A button that opens the synced folder
+#: ../SparkleShare/SparkleSetup.cs:369
+msgid "Open Folder"
+msgstr "Obrir Carpeta"
+
+#: ../SparkleShare/SparkleSetupWindow.cs:45
+msgid "SparkleShare Setup"
+msgstr "Instal·lació SparkleShare"
 
 #: ../SparkleShare/SparkleShare.cs:53
 msgid "Sorry, you can't run SparkleShare with these permissions."
@@ -416,21 +360,8 @@ msgid "Turn Notifications On"
 msgstr "Activa les Notificacions"
 
 #. A menu item that quits the application
-#: ../SparkleShare/SparkleStatusIcon.cs:286
+#: ../SparkleShare/SparkleStatusIcon.cs:291
 msgid "Quit"
 msgstr "Sortir"
-
-#: ../SparkleShare/SparkleUI.cs:99
-msgid "Ouch! Mid-air collision!"
-msgstr "Ai! Col·lisió en ple vol!"
-
-#: ../SparkleShare/SparkleUI.cs:100
-msgid "Don't worry, SparkleShare made a copy of each conflicting file."
-msgstr ""
-"No et preocupis, SparkleShare ha fet una còpia de cada fitxer en conflicte."
-
-#: ../SparkleShare/SparkleWindow.cs:41
-msgid "SparkleShare Setup"
-msgstr "Instal·lació SparkleShare"
 
 
