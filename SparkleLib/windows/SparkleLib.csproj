@@ -79,15 +79,11 @@
     <Compile Include="..\Hg\SparkleRepoHg.cs">
       <Link>SparkleRepoHg.cs</Link>
     </Compile>
-    <Compile Include="..\Scp\SparkleFetcherScp.cs">
-      <Link>SparkleFetcherScp.cs</Link>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="..\Scp\SparkleRepoScp.cs">
-      <Link>SparkleRepoScp.cs</Link>
-    </Compile>
     <Compile Include="..\SparkleConfig.cs">
       <Link>SparkleConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\SparklePaths.cs">
+      <Link>SparklePaths.cs</Link>
     </Compile>
     <Compile Include="..\SparkleRepoBase.cs">
       <Link>SparkleRepoBase.cs</Link>
@@ -105,7 +101,6 @@
     </Compile>
     <Compile Include="..\SparkleFetcherBase.cs" />
     <Compile Include="..\SparkleHelpers.cs" />
-    <Compile Include="..\SparklePaths.cs" />
     <Compile Include="..\SparkleOptions.cs" />
     <Compile Include="..\SparkleChangeSet.cs" />
     <Compile Include="..\SparkleListenerBase.cs" />

@@ -28,9 +28,9 @@ using CefSharp;
 
 namespace SparkleShare {
 
-	public class SparkleWinController : SparkleController {
+    public class SparkleController : SparkleControllerBase {
 
-		public SparkleWinController () : base ()
+		public SparkleController () : base ()
 		{
 		}
 

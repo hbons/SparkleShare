@@ -69,14 +69,14 @@ namespace SparkleShare {
 
         public string HTML {
             get {
-                List<SparkleChangeSet> change_sets = SparkleShare.Controller.GetLog (this.selected_folder);
-                return SparkleShare.Controller.GetHTMLLog (change_sets);
+                List<SparkleChangeSet> change_sets = Program.Controller.GetLog (this.selected_folder);
+                return Program.Controller.GetHTMLLog (change_sets);
             }
         }
 
         public string [] Folders {
             get {
-                return SparkleShare.Controller.Folders.ToArray ();
+                return Program.Controller.Folders.ToArray ();
             }
         }
 
@@ -86,19 +86,19 @@ namespace SparkleShare {
 
         public SparkleEventLogController ()
         {
-            SparkleShare.Controller.AvatarFetched += delegate {
+            Program.Controller.AvatarFetched += delegate {
                 if (UpdateContentEvent != null)
                     UpdateContentEvent (HTML);
             };
 
-            SparkleShare.Controller.OnIdle += delegate {
+            Program.Controller.OnIdle += delegate {
                 if (UpdateContentEvent != null)
                     UpdateContentEvent (HTML);
             };
 
-            SparkleShare.Controller.FolderListChanged += delegate {
+            Program.Controller.FolderListChanged += delegate {
                 if (this.selected_folder != null &&
-                    !SparkleShare.Controller.Folders.Contains (this.selected_folder)) {
+                    !Program.Controller.Folders.Contains (this.selected_folder)) {
 
                     this.selected_folder = null;
                 }
@@ -110,7 +110,7 @@ namespace SparkleShare {
                     UpdateContentEvent (HTML);
             };
 
-            SparkleShare.Controller.NotificationRaised += delegate {
+            Program.Controller.NotificationRaised += delegate {
                 if (UpdateContentEvent != null)
                     UpdateContentEvent (HTML);
             };

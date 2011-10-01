@@ -25,7 +25,8 @@ namespace SparkleShare {
         Add,
         Syncing,
         Error,
-        Finished
+        Finished,
+        Tutorial
     }
 
 
@@ -33,6 +34,22 @@ namespace SparkleShare {
 
         public event ChangePageEventHandler ChangePageEvent;
         public delegate void ChangePageEventHandler (PageType page);
+        
+        public event UpdateProgressBarEventHandler UpdateProgressBarEvent;
+        public delegate void UpdateProgressBarEventHandler (double percentage);
+
+
+        public int TutorialPageNumber {
+            get {
+                return this.tutorial_page_number;
+            }
+        }
+
+        public string PreviousUrl {
+            get {
+                return this.previous_url;
+            }
+        }
 
         public string PreviousServer {
             get {
@@ -58,10 +75,29 @@ namespace SparkleShare {
             }
         }
 
-        private string previous_server = "";
-        private string previous_folder = "";
-        private string syncing_folder  = "";
+        public string GuessedUserName {
+            get {
+                return Program.Controller.UserName;
+            }
+        }
+
+        public string GuessedUserEmail {
+            get {
+                if (Program.Controller.UserEmail.Equals ("Unknown"))
+                    return "";
+                else
+                    return Program.Controller.UserEmail;
+            }
+        }
+
+
+        private string previous_server   = "";
+        private string previous_folder   = "";
+        private string previous_url      = "";
+        private string syncing_folder    = "";
+        private int tutorial_page_number = 1;
         private PageType previous_page;
+
 
         public SparkleSetupController ()
         {
@@ -94,39 +130,73 @@ namespace SparkleShare {
             Program.Controller.UpdateState ();
 
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Add);
+                ChangePageEvent (PageType.Tutorial);
+        }
+
+
+        public void TutorialPageCompleted ()
+        {
+            this.tutorial_page_number++;
+
+            if (ChangePageEvent != null)
+                ChangePageEvent (PageType.Tutorial);
+        }
+
+
+        public void TutorialSkipped ()
+        {
+            this.tutorial_page_number = 4;
+
+            if (ChangePageEvent != null)
+                ChangePageEvent (PageType.Tutorial);
         }
 
 
         public void AddPageCompleted (string server, string folder_name)
         {
-            this.syncing_folder = folder_name;
+            this.syncing_folder = Path.GetFileNameWithoutExtension (folder_name);
             this.previous_server = server;
             this.previous_folder = folder_name;
 
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Syncing);
 
-            Program.Controller.FolderFetched += (target_folder_name) => {
-                this.syncing_folder = target_folder_name;
-
+            Program.Controller.FolderFetched += delegate {
                 if (ChangePageEvent != null)
                     ChangePageEvent (PageType.Finished);
+
+                this.syncing_folder = "";
             };
 
-            Program.Controller.FolderFetchError += delegate {
+            Program.Controller.FolderFetchError += delegate (string remote_url) {
+                this.previous_url = remote_url;
+
                 if (ChangePageEvent != null)
                     ChangePageEvent (PageType.Error);
 
                 this.syncing_folder = "";
             };
+            
+            Program.Controller.FolderFetching += delegate (double percentage) {
+                if (UpdateProgressBarEvent != null)
+                    UpdateProgressBarEvent (percentage);
+            };
 
-            Program.Controller.FetchFolder (server, this.syncing_folder);
+            Program.Controller.FetchFolder (server, folder_name);
         }
 
 
         public void ErrorPageCompleted ()
         {
+            if (ChangePageEvent != null)
+                ChangePageEvent (PageType.Add);
+        }
+
+
+        public void SyncingCancelled ()
+        {
+            Program.Controller.StopFetcher ();
+
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Add);
         }

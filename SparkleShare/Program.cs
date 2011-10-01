@@ -22,10 +22,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
-#if __MonoCS__
 using Mono.Unix;
 //using Mono.Unix.Native;
-#endif
 using SparkleLib;
 using SparkleLib.Options;
 
@@ -41,16 +39,10 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _ (string s)
         {
-#if __MonoCS__
             return Catalog.GetString (s);
-#else
-            return s;
-#endif
         }
         
-#if !__MonoCS__
-        [STAThread]
-#endif
+
         public static void Main (string [] args)
         {
             // Parse the command line options
@@ -82,14 +74,6 @@ namespace SparkleShare {
                 UI = new SparkleUI ();
                 UI.Run ();
             }
-
-#if !__MonoCS__
-            // For now we must do GC.Collect to free some internal handles, otherwise
-            // in debug mode you can got assertion message.
-            GC.Collect (GC.MaxGeneration, GCCollectionMode.Forced);
-            GC.WaitForPendingFinalizers ();
-            CefSharp.CEF.Shutdown ();    // Shutdown CEF.
-#endif
         }
 
 
@@ -125,16 +109,15 @@ namespace SparkleShare {
             Environment.Exit (0);
         }
 
-#if __MonoCS__
+
         // Strange magic needed by SetProcessName ()
         [DllImport ("libc")]
         private static extern int prctl (int option, byte [] arg2, IntPtr arg3, IntPtr arg4, IntPtr arg5);
-#endif
+        
         
         // Sets the Unix process name to 'sparkleshare' instead of 'mono'
         private static void SetProcessName (string name)
         {
-#if __MonoCS__
             try {
                 if (prctl (15, Encoding.ASCII.GetBytes (name + "\0"), IntPtr.Zero, IntPtr.Zero, IntPtr.Zero) != 0)
                     throw new ApplicationException ("Error setting process name: " +
@@ -143,7 +126,6 @@ namespace SparkleShare {
             } catch (EntryPointNotFoundException) {
                 Console.WriteLine ("SetProcessName: Entry point not found");
             }
-#endif
         }
     }
 }
