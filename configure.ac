@@ -165,6 +165,7 @@ build/m4/shave/shave-libtool
 data/Makefile
 data/icons/Makefile
 data/html/Makefile
+data/plugins/Makefile
 help/Makefile
 SparkleLib/AssemblyInfo.cs
 SparkleLib/Defines.cs
