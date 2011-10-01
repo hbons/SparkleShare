@@ -36,8 +36,11 @@ namespace SparkleShare {
         
         public static SparkleStatusIcon StatusIcon;
         public static SparkleEventLog EventLog;
+        public static SparkleBubbles Bubbles;
         public static SparkleSetup Setup;
         public static SparkleAbout About;
+        public static string AssetsPath =
+            new string [] {Defines.PREFIX, "share", "sparkleshare"}.Combine ();
 
 
         // Short alias for the translations
@@ -60,22 +63,9 @@ namespace SparkleShare {
                                  "Unhandled Exception!\n" + UnhandledException.GetType ().ToString ());
                 ExceptionDialog.Title = "ERROR";
 
-                while (UnhandledException != null) {
-                    Console.WriteLine ("\n\n"
-                                    + "Unhandled exception\n"
-                                    + "-------------------\n"
-                                    + UnhandledException.Message + "\n\n"
-                                    + UnhandledException.StackTrace);
-                    UnhandledException = UnhandledException.InnerException;
-                }
-
-                ExceptionDialog.Run ();
-                ExceptionDialog.Destroy ();
-
-            };
 #endif
-            // Create the statusicon
             StatusIcon = new SparkleStatusIcon ();
+            Bubbles    = new SparkleBubbles ();
             
             if (Program.Controller.FirstRun) {
                 Setup = new SparkleSetup ();

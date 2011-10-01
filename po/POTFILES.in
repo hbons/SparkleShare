@@ -5,12 +5,12 @@
 SparkleShare/Mac/SparkleStatusIcon.cs
 SparkleShare/Mac/SparkleUI.cs
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in
+SparkleShare/Program.cs
 SparkleShare/SparkleAbout.cs
 SparkleShare/SparkleController.cs
 SparkleShare/SparkleEventLog.cs
 SparkleShare/SparkleSetup.cs
 SparkleShare/SparkleSetupWindow.cs
-SparkleShare/SparkleShare.cs
 SparkleShare/SparkleSpinner.cs
 SparkleShare/SparkleStatusIcon.cs
 SparkleShare/SparkleUI.cs

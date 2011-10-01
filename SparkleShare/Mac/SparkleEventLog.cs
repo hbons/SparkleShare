@@ -168,7 +168,6 @@ namespace SparkleShare {
                         if (this.progress_indicator.Superview == ContentView)
                             this.progress_indicator.RemoveFromSuperview ();
 
-                        // TODO: still causes some flashes
                         this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
                         ContentView.AddSubview (this.web_view);
                     });
@@ -213,7 +212,7 @@ namespace SparkleShare {
                     string note        = match.Groups [3].Value;
 
                     Thread thread = new Thread (new ThreadStart (delegate {
-                        SparkleShare.Controller.AddNoteToFolder (folder_name, revision, note);
+                        Program.Controller.AddNoteToFolder (folder_name, revision, note);
                     }));
 
                     thread.Start ();

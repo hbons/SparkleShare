@@ -277,6 +277,13 @@ namespace SparkleShare {
             }
         }
         
+        internal static System.Drawing.Bitmap list_point_16 {
+            get {
+                object obj = ResourceManager.GetObject("list_point_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap process_syncing_sparkleshare_24 {
             get {
                 object obj = ResourceManager.GetObject("process_syncing_sparkleshare_24", resourceCulture);
@@ -350,6 +357,34 @@ namespace SparkleShare {
         internal static System.Drawing.Bitmap sparkleshare_windows_status {
             get {
                 object obj = ResourceManager.GetObject("sparkleshare_windows_status", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap tutorial_slide_1 {
+            get {
+                object obj = ResourceManager.GetObject("tutorial_slide_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap tutorial_slide_2 {
+            get {
+                object obj = ResourceManager.GetObject("tutorial_slide_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap tutorial_slide_3 {
+            get {
+                object obj = ResourceManager.GetObject("tutorial_slide_3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap tutorial_slide_4 {
+            get {
+                object obj = ResourceManager.GetObject("tutorial_slide_4", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
