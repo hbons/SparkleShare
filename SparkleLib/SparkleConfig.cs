@@ -79,7 +79,7 @@ namespace SparkleLib {
                 
                 if (file.Length == 0) {
                     File.Delete (FullPath);
-                    CreateInitialConfig ();            
+                    CreateInitialConfig ();
 
                 } else {
                     throw new XmlException (FullPath + " does not contain a valid config XML structure.");
