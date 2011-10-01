@@ -67,8 +67,11 @@ namespace SparkleLib {
         public delegate void SyncStatusChangedEventHandler (SyncStatus new_status);
         public event SyncStatusChangedEventHandler SyncStatusChanged;
 
-        public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set, string source_path);
+        public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set);
         public event NewChangeSetEventHandler NewChangeSet;
+
+        public delegate void NewNoteEventHandler (string user_name, string user_email);
+        public event NewNoteEventHandler NewNote;
 
         public delegate void ConflictResolvedEventHandler ();
         public event ConflictResolvedEventHandler ConflictResolved;
@@ -253,6 +256,8 @@ namespace SparkleLib {
             this.listener.Announcement += delegate (SparkleAnnouncement announcement) {
                 string identifier = Identifier;
 
+                Console.WriteLine (announcement.Message + " ! " + CurrentRevision);
+
                 if (announcement.FolderIdentifier == identifier &&
                     !announcement.Message.Equals (CurrentRevision)) {
                     if ((Status != SyncStatus.SyncUp)   &&
@@ -276,7 +281,6 @@ namespace SparkleLib {
         {
             lock (this.change_lock) {
                 if (this.has_changed) {
-                    Console.WriteLine ("checking...");
                     if (this.sizebuffer.Count >= 4)
                         this.sizebuffer.RemoveAt (0);
                         
@@ -363,8 +367,8 @@ namespace SparkleLib {
 
                     if (match_notes.Success) {
                         SparkleNote note = new SparkleNote () {
-                            UserName  = match_notes.Groups [1].Value,
-                            UserEmail = match_notes.Groups [2].Value,
+                            User = new SparkleUser (match_notes.Groups [1].Value,
+                                match_notes.Groups [2].Value),
                             Timestamp = new DateTime (1970, 1, 1).AddSeconds (int.Parse (match_notes.Groups [3].Value)),
                             Body      = match_notes.Groups [4].Value
                         };
@@ -446,13 +450,26 @@ namespace SparkleLib {
                 if (change_sets != null && change_sets.Count > 0) {
                     SparkleChangeSet change_set = change_sets [0];
 
-                    if (NewChangeSet != null)
-                        NewChangeSet (change_set, LocalPath);
+                    bool note_added = false;
+                    foreach (string added in change_set.Added) {
+                        if (added.Contains (".notes")) {
+                            if (NewNote != null)
+                                NewNote (change_set.User.Name, change_set.User.Email);
+
+                            note_added = true;
+                            break;
+                        }
+                    }
+
+                    if (!note_added) {
+                        if (NewChangeSet != null)
+                            NewChangeSet (change_set);
+                    }
                 }
 
-                // There could be changes from a
-                // resolved conflict. Tries only once,
-                //then let the timer try again periodicallly
+                // There could be changes from a resolved
+                // conflict. Tries only once, then lets
+                // the timer try again periodically
                 if (HasUnsyncedChanges)
                     SyncUp ();
 
@@ -510,8 +527,8 @@ namespace SparkleLib {
             string n = Environment.NewLine;
             note     = "<note>" + n +
                        "  <user>" +  n +
-                       "    <name>" + SparkleConfig.DefaultConfig.UserName + "</name>" + n +
-                       "    <email>" + SparkleConfig.DefaultConfig.UserEmail + "</email>" + n +
+                       "    <name>" + SparkleConfig.DefaultConfig.User.Name + "</name>" + n +
+                       "    <email>" + SparkleConfig.DefaultConfig.User.Email + "</email>" + n +
                        "  </user>" + n +
                        "  <timestamp>" + timestamp + "</timestamp>" + n +
                        "  <body>" + note + "</body>" + n +

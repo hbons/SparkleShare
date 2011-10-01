@@ -43,10 +43,8 @@ namespace SparkleShare {
         private Button SyncButton;
 
         private Table Table;
-
-        private ProgressBar progress_bar = new ProgressBar () { PulseStep = 0.01 };
-        private Timer progress_bar_pulse_timer = new Timer () { Interval = 25, Enabled = true };
-
+        private ProgressBar progress_bar = new ProgressBar ();
+        
 
         // Short alias for the translations
         public static string _ (string s)
@@ -64,7 +62,7 @@ namespace SparkleShare {
                     Reset ();
 
                     switch (type) {
-                    case PageType.Setup:
+                    case PageType.Setup: {
 
                         Header = _("Welcome to SparkleShare!");
                         Description = _("Before we can create a SparkleShare folder on this " +
@@ -79,12 +77,12 @@ namespace SparkleShare {
                                 Xalign    = 0
                             };
 
-                            NameEntry = new Entry (SparkleShare.Controller.UserName);
+                            NameEntry = new Entry (Controller.GuessedUserName);
                             NameEntry.Changed += delegate {
                                 CheckSetupPage ();
                             };
 
-                            EmailEntry = new Entry ();
+                            EmailEntry = new Entry (Controller.GuessedUserEmail);
                             EmailEntry.Changed += delegate {
                                 CheckSetupPage ();
                             };
@@ -116,13 +114,14 @@ namespace SparkleShare {
                         CheckSetupPage ();
 
                         break;
+                    } 
 
-                    case PageType.Add:
+                    case PageType.Add: {
 
-                        Header = _("Where is your remote folder?");
+                        Header = _("Where is your project?");
 
                         Table = new Table (6, 2, false) {
-                            RowSpacing = 12
+                            RowSpacing = 0
                         };
 
                             HBox layout_server = new HBox (true, 0);
@@ -150,8 +149,8 @@ namespace SparkleShare {
 
                                 ListStore server_store = new ListStore (typeof (string));
 
-                                //TODO foreach (string host in SparkleShare.Controller.PreviousHosts)
-                                  //  server_store.AppendValues (host);
+                                foreach (string host in Program.Controller.PreviousHosts)
+                                    server_store.AppendValues (host);
 
                                 ServerEntry.Completion.Model = server_store;
                                 ServerEntry.Completion.TextColumn = 0;
@@ -173,11 +172,7 @@ namespace SparkleShare {
                         Table.Attach (layout_server,          0, 2, 1, 2);
 
                             // Github radiobutton
-                            string github_text = "<b>" + "Github" + "</b>\n" +
-                                  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
-                                _("Free hosting for Free and Open Source Software projects.") + "\n" +
-                                _("Also has paid accounts for extra private space and bandwidth.") +
-                                  "</span>";
+                            string github_text = "<b>" + "Github" + "</b>";
 
                             RadioButton radio_button_github = new RadioButton (radio_button, github_text);
                             (radio_button_github.Child as Label).UseMarkup = true;
@@ -190,11 +185,7 @@ namespace SparkleShare {
 
 
                             // Gitorious radiobutton
-                            string gitorious_text = "<b>" + _("Gitorious") + "</b>\n" +
-                                  "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
-                                _("Completely Free as in Freedom infrastructure.") + "\n" +
-                                _("Free accounts for Free and Open Source projects.") +
-                                  "</span>";
+                            string gitorious_text = "<b>" + _("Gitorious") + "</b>";
 
                             RadioButton radio_button_gitorious = new RadioButton (radio_button, gitorious_text);
                             (radio_button_gitorious.Child as Label).UseMarkup = true;
@@ -207,11 +198,7 @@ namespace SparkleShare {
 
 
                             // GNOME radiobutton
-                            string gnome_text = "<b>" + _("The GNOME Project") + "</b>\n"+
-                                 "<span fgcolor='" + SecondaryTextColor + "' size='small'>" +
-                                _("GNOME is an easy to understand interface to your computer.") + "\n" +
-                                _("Select this option if you’re a developer or designer working on GNOME.") +
-                                  "</span>";
+                            string gnome_text = "<b>" + _("The GNOME Project") + "</b>";
 
                             RadioButton radio_button_gnome = new RadioButton (radio_button, gnome_text);
                             (radio_button_gnome.Child as Label).UseMarkup = true;
@@ -236,6 +223,15 @@ namespace SparkleShare {
 
                                 FolderEntry             = new SparkleEntry ();
                                 FolderEntry.ExampleText = _("Folder");
+                                FolderEntry.Completion = new EntryCompletion();
+
+                                ListStore folder_store = new ListStore (typeof (string));
+
+                                //foreach (string host in Program.Controller.FolderPaths)
+                                //    folder_store.AppendValues (host);
+
+                                FolderEntry.Completion.Model = folder_store;
+                                FolderEntry.Completion.TextColumn = 0;
 
                                 FolderEntry.Changed += delegate {
                                     CheckAddPage ();
@@ -245,7 +241,10 @@ namespace SparkleShare {
                             layout_folder.PackStart (FolderEntry, true, true, 0);
 
                         Table.Attach (layout_folder, 0, 2, 5, 6);
-                        Add (Table);
+
+                        VBox box = new VBox (false, 0);
+                        box.PackStart (Table, false, false, 0);
+                        Add (box);
 
                             // Cancel button
                             Button cancel_button = new Button (_("Cancel"));
@@ -256,7 +255,7 @@ namespace SparkleShare {
 
 
                             // Sync button
-                            SyncButton = new Button (_("Sync"));
+                            SyncButton = new Button (_("Add"));
 
                             SyncButton.Clicked += delegate {
                                 string server         = ServerEntry.Text;
@@ -280,27 +279,33 @@ namespace SparkleShare {
                         CheckAddPage ();
 
                         break;
+                    }
 
-                    case PageType.Syncing:
+                    case PageType.Syncing: {
 
-                        Header      = String.Format (_("Syncing folder ‘{0}’…"), Controller.SyncingFolder);
+                        Header      = String.Format (_("Adding project ‘{0}’…"), Controller.SyncingFolder);
                         Description = _("This may take a while." + Environment.NewLine) +
                                       _("Are you sure it’s not coffee o'clock?");
 
-                        Button button = new Button () {
+                        Button finish_button = new Button () {
                             Sensitive = false,
                             Label = _("Finish")
                         };
 
-                        button.Clicked += delegate {
-                            Close ();
+                        Button cancel_button = new Button () {
+                            Label = _("Cancel")
                         };
 
-                        AddButton (button);
+                        cancel_button.Clicked += delegate {
+                            Controller.SyncingCancelled ();
+                        };
 
-                        this.progress_bar_pulse_timer.Elapsed += delegate {
+                        AddButton (cancel_button);
+                        AddButton (finish_button);
+
+                        Controller.UpdateProgressBarEvent += delegate (double percentage) {
                             Application.Invoke (delegate {
-                                progress_bar.Pulse ();
+                                this.progress_bar.Fraction = percentage / 100;
                             });
                         };
 
@@ -313,32 +318,59 @@ namespace SparkleShare {
                         Add (bar_wrapper);
 
                         break;
+                    }
 
-                    case PageType.Error:
-
-                        string n = Environment.NewLine;
+                    case PageType.Error: {
 
                         Header      = _("Something went wrong") + "…";
-                        Description = "We don't know exactly what the problem is, " +
-                                      "but we can try to help you pinpoint it.";
+
+						VBox points = new VBox (false, 0);
+						Image list_point_one   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16)) {  };
+						Image list_point_two   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16)) {  };
+						Image list_point_three = new Image (SparkleUIHelpers.GetIcon ("list-point", 16)) {  };
+
+                        Label label_one = new Label () {
+                            Text   = "First, have you tried turning it off and on again?",
+                            Wrap   = true,
+                            Xalign = 0
+                        };
+
+                        Label label_two = new Label () {
+                            Markup = "<b>" + Controller.PreviousUrl + "</b> is the address we've compiled. " +
+                                     "Does this look alright?",
+                            Wrap   = true,
+                            Xalign = 0
+                        };
+
+                        Label label_three = new Label () {
+                            Text   = "The host needs to know who you are. Did you upload the key that's in " +
+                                     "your SparkleShare folder?",
+                            Wrap   = true,
+                            Xalign = 0
+                        };
+
+						
+                        points.PackStart (new Label ("Please check the following:") { Xalign = 0 }, false, false, 6);
+
+                        HBox point_one = new HBox (false, 0);
+						point_one.PackStart (list_point_one, false, false, 0);
+						point_one.PackStart (label_one, true, true, 12);
+						points.PackStart (point_one, false, false, 12);
+						
+						HBox point_two = new HBox (false, 0);
+						point_two.PackStart (list_point_two, false, false, 0);
+						point_two.PackStart (label_two, true, true, 12);
+						points.PackStart (point_two, false, false, 12);
+                          
+                        HBox point_three = new HBox (false, 0);
+						point_three.PackStart (list_point_three, false, false, 0);
+						point_three.PackStart (label_three, true, true, 12);
+						points.PackStart (point_three, false, false, 12);
+
+                        points.PackStart (new Label (""), true, true, 0);
 
 
-                          Label l = new Label (
-                          "First, have you tried turning it off and on again?" + n +
-                          n +
-                          Controller.SyncingFolder +" is the address we've compiled from the information " +
-                          "you entered. Does this look correct?" + n +
-                          n +
-                          "The host needs to know who you are. Have you uploaded the key that sits in your SparkleShare folder?");
-
-
-
-                        l.Xpad = 12;
-                        l.Wrap = true;
-
-
-
-                        Button try_again_button = new Button (_("Try Again")) {
+                        Button try_again_button = new Button (_("Try Again…")) {
                             Sensitive = true
                         };
 
@@ -347,34 +379,36 @@ namespace SparkleShare {
                         };
 
                         AddButton (try_again_button);
-                        Add (l);
+                        Add (points);
 
                         break;
+                    }
 
-                    case PageType.Finished:
+                    case PageType.Finished: {
 
                         UrgencyHint = true;
 
                         if (!HasToplevelFocus) {
                             string title   = String.Format (_("‘{0}’ has been successfully added"), Controller.SyncingFolder);
-                            string subtext = _("");
+                            string subtext = "";
 
-                            //TODO new SparkleBubble (title, subtext).Show ();
+                            SparkleUI.Bubbles.Controller.ShowBubble (title, subtext, null);
                         }
 
-                        Header      = _("Folder synced successfully!");
-                        Description = _("Access the synced files from your SparkleShare folder.");
+                        Header      = _("Project successfully added!");
+                        Description = _("Access the files from your SparkleShare folder.");
 
                         // A button that opens the synced folder
                         Button open_folder_button = new Button (_("Open Folder"));
 
                         open_folder_button.Clicked += delegate {
-                          SparkleShare.Controller.OpenSparkleShareFolder (Controller.SyncingFolder);
+                            Program.Controller.OpenSparkleShareFolder (Controller.SyncingFolder);
                         };
 
                         Button finish_button = new Button (_("Finish"));
 
                         finish_button.Clicked += delegate {
+                            Controller.FinishedPageCompleted ();
                             Close ();
                         };
 
@@ -386,10 +420,116 @@ namespace SparkleShare {
                         break;
                     }
 
+
+                    case PageType.Tutorial: {
+
+                        switch (Controller.TutorialPageNumber) {
+                        case 1: {
+                            Header      = _("What's happening next?");
+                            Description = _("SparkleShare creates a special folder in your personal folder " +
+                                "that will keep track of your projects.");
+
+                            Button skip_tutorial_button = new Button (_("Skip Tutorial"));
+                            skip_tutorial_button.Clicked += delegate {
+                                Controller.TutorialSkipped ();
+                            };
+
+                            Button continue_button = new Button (_("Continue"));
+                            continue_button.Clicked += delegate {
+                                Controller.TutorialPageCompleted ();
+                            };
+
+                            Image slide = SparkleUIHelpers.GetImage ("tutorial-slide-1.png");
+
+                            Add (slide);
+
+                            AddButton (skip_tutorial_button);
+                            AddButton (continue_button);
+
+                            break;
+                        }
+
+                        case 2: {
+                            Header      = _("Sharing files with others");
+                            Description = _("All files added to your project folders are synced with the host " +
+                                "automatically, as well as with your collaborators.");
+
+                            Button continue_button = new Button (_("Continue"));
+                            continue_button.Clicked += delegate {
+                                Controller.TutorialPageCompleted ();
+                            };
+
+                            Image slide = SparkleUIHelpers.GetImage ("tutorial-slide-2.png");
+
+                            Add (slide);
+                            AddButton (continue_button);
+
+                            break;
+                        }
+
+                        case 3: {
+                            Header      = _("The status icon is here to help");
+                            Description = _("It shows the syncing process status, " +
+                                "and contains links to your projects and the event log.");
+
+                            Button continue_button = new Button (_("Continue"));
+                            continue_button.Clicked += delegate {
+                                Controller.TutorialPageCompleted ();
+                            };
+
+                            Image slide = SparkleUIHelpers.GetImage ("tutorial-slide-3.png");
+
+                            Add (slide);
+                            AddButton (continue_button);
+
+                            break;
+                        }
+
+                        case 4: {
+                            Header      = _("Adding projects to SparkleShare");
+                            Description = _("Just click this button when you see it on the web, and " +
+                                "the project will be automatically added:");
+
+                            Label label = new Label (_("…or select <b>‘Add Project…’</b> from the status icon menu " +
+                                "to add one by hand.")) {
+                                Wrap   = true,
+                                Xalign = 0,
+                                UseMarkup = true
+                            };
+
+                            Image slide = SparkleUIHelpers.GetImage ("tutorial-slide-4.png");
+
+                            Button add_project_button = new Button (_("Add Project…"));
+                            add_project_button.Clicked += delegate {
+                                Controller.TutorialPageCompleted ();
+                            };
+
+                            Button finish_button = new Button (_("Finish"));
+                            finish_button.Clicked += delegate {
+                                Close ();
+                            };
+
+
+                            VBox box = new VBox (false, 0);
+                            box.Add (slide);
+                            box.Add (label);
+
+                            Add (box);
+
+                            AddButton (add_project_button);
+                            AddButton (finish_button);
+
+                            break;
+                        }
+                        }
+
+                        break;
+                    }
+                    }
+
                     ShowAll ();
                 });
             };
-
         }
 
 
@@ -398,7 +538,7 @@ namespace SparkleShare {
         private void CheckSetupPage ()
         {
             if (NameEntry.Text.Length > 0 &&
-                SparkleShare.Controller.IsValidEmail (EmailEntry.Text)) {
+                Program.Controller.IsValidEmail (EmailEntry.Text)) {
 
                 NextButton.Sensitive = true;
             } else {

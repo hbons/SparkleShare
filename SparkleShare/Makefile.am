@@ -12,19 +12,20 @@ BUILD_DEFINES="-define:HAVE_APP_INDICATOR"
 endif
 
 SOURCES =  \
+	Program.cs \
 	SparkleAbout.cs \
 	SparkleAboutController.cs \
 	SparkleBubbles.cs \
 	SparkleBubblesController.cs \
 	SparkleController.cs \
+	SparkleControllerBase.cs \
 	SparkleEntry.cs \
 	SparkleEventLog.cs \
 	SparkleEventLogController.cs \
-	SparkleLinController.cs \
+	SparkleExtensions.cs \
 	SparkleSetup.cs \
 	SparkleSetupController.cs \
 	SparkleSetupWindow.cs \
-	SparkleShare.cs \
 	SparkleSpinner.cs \
 	SparkleStatusIcon.cs \
 	SparkleStatusIconController.cs \
@@ -40,7 +41,7 @@ SOURCES =  \
 	SparkleSetup.cs \
 	SparkleSetupController.cs \
 	SparkleSetupWindow.cs \
-	SparkleShare.cs \
+	Program.cs \
 	SparkleSpinner.cs \
 	SparkleStatusIcon.cs \
 	SparkleStatusIconController.cs \

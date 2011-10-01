@@ -33,23 +33,27 @@ namespace SparkleLib {
         public delegate void StartedEventHandler ();
         public delegate void FinishedEventHandler ();
         public delegate void FailedEventHandler ();
+        public delegate void ProgressChangedEventHandler (double percentage);
 
         public event StartedEventHandler Started;
         public event FinishedEventHandler Finished;
         public event FailedEventHandler Failed;
+        public event ProgressChangedEventHandler ProgressChanged;
 
         protected string target_folder;
         protected string remote_url;
+
         private Thread thread;
 
-        public abstract bool Fetch ();
-
-
+        
         public SparkleFetcherBase (string server, string remote_folder, string target_folder)
         {
             this.target_folder = target_folder;
             this.remote_url    = server + "/" + remote_folder;
         }
+
+
+        public abstract bool Fetch ();
 
 
         // Clones the remote repository
@@ -97,6 +101,13 @@ namespace SparkleLib {
         }
 
 
+        public virtual void Stop ()
+        {
+            this.thread.Abort ();
+            this.thread.Join ();
+        }
+
+
         public string RemoteUrl {
             get {
                 return this.remote_url;
@@ -112,10 +123,16 @@ namespace SparkleLib {
             }
         }
 
-
+        
+        protected void OnProgressChanged (double percentage) {
+            if (ProgressChanged != null)
+                ProgressChanged (percentage);    
+        }
+    
+        
         private void DisableHostKeyCheckingForHost (string host)
         {
-            string path = SparklePaths.HomePath;
+            string path = SparkleConfig.DefaultConfig.HomePath;
 
             if (!(SparkleBackend.Platform == PlatformID.Unix ||
                   SparkleBackend.Platform == PlatformID.MacOSX)) {
@@ -154,7 +171,7 @@ namespace SparkleLib {
 
         private void EnableHostKeyCheckingForHost (string host)
         {
-            string path = SparklePaths.HomePath;
+            string path = SparkleConfig.DefaultConfig.HomePath;
 
             if (!(SparkleBackend.Platform == PlatformID.Unix ||
                   SparkleBackend.Platform == PlatformID.MacOSX)) {

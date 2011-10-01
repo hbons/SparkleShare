@@ -23,13 +23,15 @@ using System.Timers;
 using AppIndicator;
 #endif
 using Gtk;
-using SparkleLib;
+using Mono.Unix;
 
 namespace SparkleShare {
 
     // The statusicon that stays in the
     // user's notification area
     public class SparkleStatusIcon {
+
+        public SparkleStatusIconController Controller = new SparkleStatusIconController ();
 
         private Timer Animation;
         private Gdk.Pixbuf [] AnimationFrames;
@@ -46,14 +48,14 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _ (string s)
         {
-            return s;
+            return Catalog.GetString (s);
         }
 
 
         public SparkleStatusIcon ()
         {
             AnimationFrames = CreateAnimationFrames ();
-            Animation = CreateAnimation ();
+            Animation       = CreateAnimation ();
 
             #if HAVE_APP_INDICATOR
             this.indicator = new ApplicationIndicator ("sparkleshare",
@@ -66,45 +68,63 @@ namespace SparkleShare {
 
             this.status_icon.Activate += ShowMenu; // Primary mouse button click
             this.status_icon.PopupMenu += ShowMenu; // Secondary mouse button click
+            this.status_icon.Pixbuf = AnimationFrames [0];
             #endif
 
-            SetNormalState ();
+            if (Controller.Folders.Length == 0)
+                StateText = _("Welcome to SparkleShare!");
+            else
+                StateText = _("Up to date") + " — " + Controller.FolderSize;
+
             CreateMenu ();
 
-            SparkleShare.Controller.FolderSizeChanged += delegate {
+            Controller.UpdateMenuEvent += delegate (IconState state) {
                 Application.Invoke (delegate {
-                    if (!Animation.Enabled)
-                        SetNormalState ();
+                        switch (state) {
+                        case IconState.Idle:
 
-                    UpdateMenu ();
-                });
-            };
-            
-            SparkleShare.Controller.FolderListChanged += delegate {
-                Application.Invoke (delegate {
-                    SetNormalState ();
-                    CreateMenu ();
-                });
-            };
+                            Animation.Stop ();
 
-            SparkleShare.Controller.OnIdle += delegate {
-                Application.Invoke (delegate {
-                    SetNormalState ();
-                    UpdateMenu ();
-                });
-            };
+                            if (Controller.Folders.Length == 0)
+                                StateText = _("Welcome to SparkleShare!");
+                            else
+                                StateText = _("Up to date") + " — " + Controller.FolderSize;
 
-            SparkleShare.Controller.OnSyncing += delegate {
-                Application.Invoke (delegate {
-                    SetAnimationState ();
-                    UpdateMenu ();
-                });
-            };
+                            #if HAVE_APP_INDICATOR
+                            this.indicator.IconName = "process-syncing-sparkleshare-i";
+                            #else
+                            this.status_icon.Pixbuf = AnimationFrames [0];
+                            #endif
 
-            SparkleShare.Controller.OnError += delegate {
-                Application.Invoke (delegate {
-                    SetNormalState (true);
-                    UpdateMenu ();
+                            UpdateStateText ();
+                            CreateMenu ();
+
+                            break;
+
+                        case IconState.Syncing:
+
+                            StateText = _("Syncing…");
+                            UpdateStateText (); // TODO
+
+                            if (!Animation.Enabled)
+                                Animation.Start ();
+
+                            break;
+
+                        case IconState.Error:
+
+                            StateText = _("Not everything is synced");
+                            UpdateStateText ();
+                            CreateMenu ();
+    
+                            #if HAVE_APP_INDICATOR
+                            this.indicator.IconName = "sparkleshare-syncing-error";
+                            #else
+                            this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
+                            #endif
+
+                            break;
+                        }
                 });
             };
         }
@@ -176,18 +196,18 @@ namespace SparkleShare {
                 };
 
                 folder_item.Activated += delegate {
-                    SparkleShare.Controller.OpenSparkleShareFolder ();
+                    Program.Controller.OpenSparkleShareFolder ();
                 };
                 
             Menu.Add (folder_item);
 
-                if (SparkleShare.Controller.Folders.Count > 0) {
+                if (Program.Controller.Folders.Count > 0) {
             
                     // Creates a menu item for each repository with a link to their logs
-                    foreach (string folder_name in SparkleShare.Controller.Folders) {
+                    foreach (string folder_name in Program.Controller.Folders) {
                         Gdk.Pixbuf folder_icon;
 
-                        if (SparkleShare.Controller.UnsyncedFolders.Contains (folder_name)) {
+                        if (Program.Controller.UnsyncedFolders.Contains (folder_name)) {
                             folder_icon = IconTheme.Default.LoadIcon ("dialog-error", 16,
                                 IconLookupFlags.GenericFallback);
 
@@ -205,7 +225,7 @@ namespace SparkleShare {
                     }
 
                 } else {
-                    MenuItem no_folders_item = new MenuItem (_("No Remote Folders Yet")) {
+                    MenuItem no_folders_item = new MenuItem (_("No projects yet")) {
                         Sensitive   = false
                     };
 
@@ -215,9 +235,9 @@ namespace SparkleShare {
                 Menu.Add (new SeparatorMenuItem ());
 
                 // Opens the wizard to add a new remote folder
-                MenuItem sync_item = new MenuItem (_("Add Remote Folderâ€¦"));
+                MenuItem sync_item = new MenuItem (_("Add Project…"));
             
-                if (SparkleShare.Controller.FirstRun)
+                if (Program.Controller.FirstRun)
                     sync_item.Sensitive = false;
 
                 sync_item.Activated += delegate {
@@ -241,7 +261,7 @@ namespace SparkleShare {
 
             MenuItem recent_events_item = new MenuItem (_("Show Recent Events"));
             
-                if (SparkleShare.Controller.Folders.Count < 1)
+                if (Program.Controller.Folders.Count < 1)
                     recent_events_item.Sensitive = false;
 
                 recent_events_item.Activated += delegate {
@@ -258,13 +278,13 @@ namespace SparkleShare {
 
             MenuItem notify_item;
                                                              
-                if (SparkleShare.Controller.NotificationsEnabled)
+                if (Program.Controller.NotificationsEnabled)
                     notify_item = new MenuItem (_("Turn Notifications Off"));
                 else
                     notify_item = new MenuItem (_("Turn Notifications On"));
 
                 notify_item.Activated += delegate {
-                    SparkleShare.Controller.ToggleNotifications ();
+                    Program.Controller.ToggleNotifications ();
                     CreateMenu ();
                 };
 
@@ -291,7 +311,7 @@ namespace SparkleShare {
                 MenuItem quit_item = new MenuItem (_("Quit"));
 
                 quit_item.Activated += delegate {
-                    SparkleShare.Controller.Quit ();
+                    Program.Controller.Quit ();
                 };
 
             Menu.Add (quit_item);
@@ -308,12 +328,12 @@ namespace SparkleShare {
         private EventHandler OpenFolderDelegate (string name)
         {
             return delegate {
-                SparkleShare.Controller.OpenSparkleShareFolder (name);
+                Program.Controller.OpenSparkleShareFolder (name);
             };
         }
 
 
-        public void UpdateMenu ()
+        public void UpdateStateText ()
         {
             ((Menu.Children [0] as MenuItem).Child as Label).Text = StateText;
             Menu.ShowAll ();
@@ -323,11 +343,7 @@ namespace SparkleShare {
         // Makes the menu visible
         private void ShowMenu (object o, EventArgs args)
         {
-			if ((SparkleBackend.Platform == PlatformID.Unix ||
-				  SparkleBackend.Platform == PlatformID.MacOSX))
-				Menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
-			else
-				Menu.Popup (null, null, null, 0, Global.CurrentEventTime);
+            Menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
         }
 
 
@@ -337,63 +353,6 @@ namespace SparkleShare {
             StatusIcon.PositionMenu (menu, out x, out y, out push_in, this.status_icon.Handle);
         }
         #endif
-
-        // The state when there's nothing going on
-        private void SetNormalState ()
-        {
-            SetNormalState (false);
-        }
-
-
-        // The state when there's nothing going on
-        private void SetNormalState (bool error)
-        {
-            Animation.Stop ();
-
-            if (SparkleShare.Controller.Folders.Count == 0) {
-                StateText = _("Welcome to SparkleShare!");
-
-                Application.Invoke (delegate {
-                    #if HAVE_APP_INDICATOR
-                    this.indicator.IconName = "process-syncing-sparkleshare-i";
-                    #else
-                    this.status_icon.Pixbuf = AnimationFrames [0];
-                    #endif
-                });
-
-            } else {
-                if (error) {
-                    StateText = _("Not everything is synced");
-
-                    Application.Invoke (delegate {
-                        #if HAVE_APP_INDICATOR
-                        this.indicator.IconName = "sparkleshare-syncing-error";
-                        #else
-                        this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
-                        #endif
-                    });
-                } else {
-                    StateText = _("Up to date") + "  (" + SparkleShare.Controller.FolderSize + ")";
-                    Application.Invoke (delegate {
-                        #if HAVE_APP_INDICATOR
-                        this.indicator.IconName = "process-syncing-sparkleshare-i";
-                        #else
-                        this.status_icon.Pixbuf = AnimationFrames [0];
-                        #endif
-                    });
-                }
-            }
-        }
-
-
-        // The state when animating
-        private void SetAnimationState ()
-        {
-            StateText = _("Syncingâ€¦");
-
-            if (!Animation.Enabled)
-                Animation.Start ();
-        }
     }
 
     
