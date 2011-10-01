@@ -131,7 +131,9 @@ namespace SparkleLib {
         public override bool SyncUp ()
         {
             Add ();
-            Commit ("Changes made by SparkleShare");
+
+            string message = FormatCommitMessage ();
+            Commit (message);
 
             SparkleGit git = new SparkleGit (LocalPath, "push origin master");
             git.Start ();
@@ -163,6 +165,8 @@ namespace SparkleLib {
 
         public override bool AnyDifferences {
             get {
+                FillEmptyDirectories (LocalPath);
+
                 SparkleGit git = new SparkleGit (LocalPath, "status --porcelain");
                 git.Start ();
 
@@ -197,7 +201,7 @@ namespace SparkleLib {
 
                 if (value) {
                     if (!File.Exists (unsynced_file_path))
-                        File.Create (unsynced_file_path);
+                        File.Create (unsynced_file_path).Close ();
                 } else {
                     File.Delete (unsynced_file_path);
                 }
@@ -330,7 +334,7 @@ namespace SparkleLib {
                     // Windows doesn't allow colons in the file name, so
                     // we use "h" between the hours and minutes instead.
                     string timestamp            = DateTime.Now.ToString ("HH\\hmm MMM d");
-                    string their_path           = conflicting_path + " (" + SparkleConfig.DefaultConfig.UserName + ", " + timestamp + ")";
+                    string their_path           = conflicting_path + " (" + SparkleConfig.DefaultConfig.User.Name + ", " + timestamp + ")";
                     string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
                     string abs_their_path       = Path.Combine (LocalPath, their_path);
 
@@ -452,9 +456,9 @@ namespace SparkleLib {
 
                     change_set.Folder        = Name;
                     change_set.Revision      = match.Groups [1].Value;
-                    change_set.UserName      = match.Groups [2].Value;
-                    change_set.UserEmail     = match.Groups [3].Value;
-                    change_set.IsMerge       = is_merge_commit;
+                    change_set.User.Name     = match.Groups [2].Value;
+                    change_set.User.Email    = match.Groups [3].Value;
+                    change_set.IsMagical     = is_merge_commit;
 
                     change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
                         int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
@@ -476,6 +480,9 @@ namespace SparkleLib {
                             string change_type = entry_line [37].ToString ();
                             string file_path   = entry_line.Substring (39);
                             string to_file_path;
+
+                            if (file_path.EndsWith (".empty"))
+                                file_path = file_path.Substring (0, file_path.Length - ".empty".Length);
 
                             if (change_type.Equals ("A") && !file_path.Contains (".notes")) {
                                 change_set.Added.Add (file_path);
@@ -509,6 +516,22 @@ namespace SparkleLib {
             }
 
             return change_sets;
+        }
+
+
+        // Git doesn't track empty directories, so this method
+        // fills them all with a hidden empty file
+        private void FillEmptyDirectories (string path)
+        {
+            foreach (string child_path in Directory.GetDirectories (path)) {
+                if (child_path.EndsWith (".git") || child_path.EndsWith (".notes"))
+                    continue;
+
+                FillEmptyDirectories (child_path);
+            }
+
+            if (Directory.GetFiles (path).Length == 0)
+                File.Create (Path.Combine (path, ".empty")).Close ();
         }
 
 

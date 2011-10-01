@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace SparkleLib {
@@ -25,12 +26,15 @@ namespace SparkleLib {
     // Sets up a fetcher that can get remote folders
     public class SparkleFetcherGit : SparkleFetcherBase {
 
+        private SparkleGit git;
+
+
         public SparkleFetcherGit (string server, string remote_folder, string target_folder) :
             base (server, remote_folder, target_folder)
         {
             remote_folder = remote_folder.Trim ("/".ToCharArray ());
 
-            if (server.StartsWith("http")) {
+            if (server.StartsWith ("http")) {
                 base.target_folder = target_folder;
                 base.remote_url    = server;
                 return;
@@ -57,13 +61,20 @@ namespace SparkleLib {
             } else {
                 server = server.TrimEnd ("/".ToCharArray ());
 
+                string protocol = "ssh://";
+
                 if (server.StartsWith ("ssh://"))
+                    server   = server.Substring (6);
+
+                if (server.StartsWith ("git://")) {
                     server = server.Substring (6);
+                    protocol = "git://";
+                }
 
                 if (!server.Contains ("@"))
                     server = "git@" + server;
 
-                server = "ssh://" + server;
+                server = protocol + server;
             }
 
             base.target_folder = target_folder;
@@ -73,15 +84,51 @@ namespace SparkleLib {
 
         public override bool Fetch ()
         {
-            SparkleGit git = new SparkleGit (SparklePaths.SparkleTmpPath,
-                "clone \"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
+            this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+                "clone " +
+                "--progress " + // Redirects progress stats to standarderror
+                "\"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
+            
+            this.git.StartInfo.RedirectStandardError = true;
+            this.git.Start ();
+            
+            double percentage = 1.0;
+            Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
+            
+            while (!this.git.StandardError.EndOfStream) {
+                string line = this.git.StandardError.ReadLine ();
+                Match match = progress_regex.Match (line);
+                
+                double number = 0.0;
+                if (match.Success) {
+                    number = double.Parse (match.Groups [1].Value);
+                    
+                    // The cloning progress consists of two stages: the "Compressing 
+                    // objects" stage which we count as 20% of the total progress, and 
+                    // the "Receiving objects" stage which we count as the last 80%
+                    if (line.Contains ("|"))
+                        // "Receiving objects" stage
+                        number = (number / 100 * 75 + 20);    
+                    else
+                        // "Compressing objects" stage
+                        number = (number / 100 * 20);
+                }
+                
+                if (number >= percentage) {
+                    percentage = number;
+                    
+                    // FIXME: for some reason it doesn't go above 95%
+                    base.OnProgressChanged (percentage);
+                }
+                
+                System.Threading.Thread.Sleep (100);        
+            }
+            
+            this.git.WaitForExit ();
 
-            git.Start ();
-            git.WaitForExit ();
+            SparkleHelpers.DebugInfo ("Git", "Exit code " + this.git.ExitCode.ToString ());
 
-            SparkleHelpers.DebugInfo ("Git", "Exit code " + git.ExitCode.ToString ());
-
-            if (git.ExitCode != 0) {
+            if (this.git.ExitCode != 0) {
                 return false;
             } else {
                 InstallConfiguration ();
@@ -91,11 +138,22 @@ namespace SparkleLib {
         }
 
 
+        public override void Stop ()
+        {
+            if (this.git != null) {
+                this.git.Kill ();
+                this.git.Dispose ();
+            }
+
+            base.Stop ();
+        }
+
+
         // Install the user's name and email and some config into
         // the newly cloned repository
         private void InstallConfiguration ()
         {
-            string global_config_file_path = Path.Combine (SparklePaths.SparkleConfigPath, "config.xml");
+            string global_config_file_path = Path.Combine (SparkleConfig.DefaultConfig.TmpPath, "config.xml");
 
             if (!File.Exists (global_config_file_path))
                 return;
@@ -103,17 +161,20 @@ namespace SparkleLib {
             string repo_config_file_path = SparkleHelpers.CombineMore (base.target_folder, ".git", "config");
             string config = String.Join (Environment.NewLine, File.ReadAllLines (repo_config_file_path));
 
+            string n = Environment.NewLine;
+
+            // Show special characters in the logs
+            config = config.Replace ("[core]" + n,
+                "[core]" + n + "quotepath = false" + n);
+
             // Be case sensitive explicitly to work on Mac
             config = config.Replace ("ignorecase = true", "ignorecase = false");
 
             // Ignore permission changes
             config = config.Replace ("filemode = true", "filemode = false");
-            config = config.Replace ("fetch = +refs/heads/*:refs/remotes/origin/*", 
-                "fetch = +refs/heads/*:refs/remotes/origin/*" + Environment.NewLine +
-                "\tfetch = +refs/notes/*:refs/notes/*");
+
 
             // Add user info
-            string n        = Environment.NewLine;
             XmlDocument xml = new XmlDocument();
             xml.Load (global_config_file_path);
 
@@ -146,6 +207,10 @@ namespace SparkleLib {
                 // gedit and emacs
                 writer.WriteLine ("*~");
 
+                // Firefox and Chromium temporary download files
+                writer.WriteLine ("*.part");
+                writer.WriteLine ("*.crdownload");
+
                 // vi(m)
                 writer.WriteLine (".*.sw[a-z]");
                 writer.WriteLine ("*.un~");
@@ -168,7 +233,6 @@ namespace SparkleLib {
                 // Windows
                 writer.WriteLine ("Thumbs.db");
                 writer.WriteLine ("Desktop.ini");
-                writer.WriteLine ("~*");
 
                 // CVS
                 writer.WriteLine ("*/CVS/*");

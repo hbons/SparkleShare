@@ -71,6 +71,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GlobalAssemblyInfo.tt</DependentUpon>
     </Compile>
+    <Compile Include="..\SparkleControllerBase.cs">
+      <Link>SparkleControllerBase.cs</Link>
+    </Compile>
+    <Compile Include="..\SparkleExtensions.cs">
+      <Link>SparkleExtensions.cs</Link>
+    </Compile>
     <Compile Include="ApplicationSchemeHandler.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="controls\ExampleTextBox.cs">
@@ -104,8 +110,8 @@
     </Compile>
     <Compile Include="..\SparkleSetupController.cs" />
     <Compile Include="..\SparkleUI.cs" />
-    <Compile Include="..\SparkleController.cs" />
     <Compile Include="..\SparkleAboutController.cs" />
+    <Compile Include="SparkleController.cs" />
     <Compile Include="SparkleEventLog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,7 +127,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
-    <Compile Include="SparkleWinController.cs" />
     <Compile Include="controls\TablessControl.cs">
       <SubType>Component</SubType>
     </Compile>

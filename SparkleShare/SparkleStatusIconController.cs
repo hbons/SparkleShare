@@ -38,29 +38,29 @@ namespace SparkleShare {
 
         public string [] Folders {
             get {
-                return SparkleShare.Controller.Folders.ToArray ();
+                return Program.Controller.Folders.ToArray ();
             }
         }
 
         public string FolderSize {
             get {
-                return SparkleShare.Controller.FolderSize;
+                return Program.Controller.FolderSize;
             }
         }
 
         public SparkleStatusIconController ()
         {
-            SparkleShare.Controller.FolderSizeChanged += delegate {
+            Program.Controller.FolderSizeChanged += delegate {
                 if (UpdateMenuEvent != null)
                     UpdateMenuEvent (CurrentState);
             };
 
-            SparkleShare.Controller.FolderListChanged += delegate {
+            Program.Controller.FolderListChanged += delegate {
                 if (UpdateMenuEvent != null)
                     UpdateMenuEvent (CurrentState);
             };
 
-            SparkleShare.Controller.OnIdle += delegate {
+            Program.Controller.OnIdle += delegate {
                 if (CurrentState != IconState.Error)
                     CurrentState = IconState.Idle;
 
@@ -68,14 +68,16 @@ namespace SparkleShare {
                     UpdateMenuEvent (CurrentState);
             };
 
-            SparkleShare.Controller.OnSyncing += delegate {
+            Program.Controller.OnSyncing += delegate {
                 CurrentState = IconState.Syncing;
+
+                // TODO up down both
 
                 if (UpdateMenuEvent != null)
                     UpdateMenuEvent (IconState.Syncing);
             };
 
-            SparkleShare.Controller.OnError += delegate {
+            Program.Controller.OnError += delegate {
                 CurrentState = IconState.Error;
 
                 if (UpdateMenuEvent != null)

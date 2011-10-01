@@ -21,20 +21,20 @@ using System.IO;
 using System.Net;
 
 using Gtk;
+using Mono.Unix;
 
 namespace SparkleShare {
 
     public class SparkleAbout : Window {
 
-        public SparkleAboutController Controller = new SparkleAboutController ();
-
+        public SparkleAboutController Controller;
         private Label updates;
 
 
         // Short alias for the translations
         public static string _(string s)
         {
-            return s;
+            return Catalog.GetString (s);
         }
 
 
@@ -53,21 +53,22 @@ namespace SparkleShare {
             Title          = _("About SparkleShare");
             AppPaintable   = true;
 
-            MemoryStream MemStream = new MemoryStream();
-            Icons.about.Save(MemStream, System.Drawing.Imaging.ImageFormat.Png);
-            MemStream.Seek(0, SeekOrigin.Begin);
+            string image_path = new string [] {SparkleUI.AssetsPath,
+                 "pixmaps", "about.png"}.Combine ();
+
             Realize ();
-            Gdk.Pixbuf buf = new Gdk.Pixbuf(MemStream);
+            Gdk.Pixbuf buf = new Gdk.Pixbuf (image_path);
             Gdk.Pixmap map, map2;
             buf.RenderPixmapAndMask (out map, out map2, 255);
             GdkWindow.SetBackPixmap (map, false);
 
-            CreateAbout ();
+            Controller = new SparkleAboutController ();
 
             Controller.NewVersionEvent += delegate (string new_version) {
                 Application.Invoke (delegate {
                     this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#f57900'>{0}</span>",
                         String.Format (_("A newer version ({0}) is available!"), new_version));
+
                     this.updates.ShowAll ();
                 });
             };
@@ -76,6 +77,7 @@ namespace SparkleShare {
                 Application.Invoke (delegate {
                     this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#4e9a06'>{0}</span>",
                         _("You are running the latest version."));
+
                     this.updates.ShowAll ();
                 });
             };
@@ -84,9 +86,12 @@ namespace SparkleShare {
                 Application.Invoke (delegate {
                     this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#4e9a06'>{0}</span>",
                         _("Checking for updates..."));
+
                     this.updates.ShowAll ();
                 });
             };
+
+            this.CreateAbout ();
         }
 
 

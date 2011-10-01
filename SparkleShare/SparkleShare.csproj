@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -9,6 +9,7 @@
     <AssemblyName>SparkleShare</AssemblyName>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace>SparkleShare</RootNamespace>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,15 +38,9 @@
     <Reference Include="System" />
     <Reference Include="Mono.Posix" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SparkleLib\SparkleLib.csproj">
-      <Project>{2C914413-B31C-4362-93C7-1AE34F09112A}</Project>
-      <Name>SparkleLib</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
-      <Properties InternalTargetFrameworkVersion="3.5">
+      <Properties>
         <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="true" RelativeMakefileName="Makefile.am">
           <BuildFilesVar Sync="true" Name="SOURCES" />
           <DeployFilesVar />
@@ -63,11 +58,10 @@
     <Compile Include="SparkleBubblesController.cs" />
     <Compile Include="SparkleController.cs" />
     <Compile Include="SparkleEntry.cs" />
-    <Compile Include="SparkleLinController.cs" />
     <Compile Include="SparkleSetup.cs" />
     <Compile Include="SparkleSetupController.cs" />
     <Compile Include="SparkleSetupWindow.cs" />
-    <Compile Include="SparkleShare.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="SparkleSpinner.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleStatusIconController.cs" />
@@ -77,5 +71,7 @@
     <Compile Include="SparkleEventLog.cs" />
     <Compile Include="SparkleAboutController.cs" />
     <Compile Include="SparkleAbout.cs" />
+    <Compile Include="SparkleExtensions.cs" />
+    <Compile Include="SparkleControllerBase.cs" />
   </ItemGroup>
 </Project>
