@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <plugin>
+    <info>
+        <name>Bitbucket</name>
+        <description>Free code hosting for Mercurial</description>
+        <icon>bitbucket.png</icon>
+        <backend>Mercurial</backend>
+    </info>
+    <address>
+      <value>ssh://hg@bitbucket.org/</value>
+      <example></example>
+    </address>
+    <path>
+      <value></value>
+      <example>/username/project</example>
+    </path>
+  </plugin>
+</sparkleshare>
+

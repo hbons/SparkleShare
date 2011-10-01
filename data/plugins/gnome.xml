@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <plugin>
+    <info>
+        <name>The GNOME Project</name>
+        <description>A free and easy interface for your computer</description>
+        <icon>gnome.png</icon>
+        <backend>Git</backend>
+    </info>
+    <address>
+      <value>ssh://git@gnome.org/</value>
+      <example></example>
+    </address>
+    <path>
+      <value></value>
+      <example>/project</example>
+    </path>
+  </plugin>
+</sparkleshare>
+
