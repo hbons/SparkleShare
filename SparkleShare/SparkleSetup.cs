@@ -169,28 +169,12 @@ namespace SparkleShare {
                         TreePath default_path = new TreePath ("0");
                         default_selection.SelectPath (default_path);
 
-                        tree.Model.Foreach (new TreeModelForeachFunc (delegate (TreeModel model,
-                            TreePath path, TreeIter iter) {
+                        ScrolledWindow scrolled_window = new ScrolledWindow ();
+                        scrolled_window.AddWithViewport (tree);
 
-                            string address;
+                        FolderEntry = new SparkleEntry ();
+                        ServerEntry = new SparkleEntry ();
 
-                            try {
-                                address = (model.GetValue (iter, 2) as SparklePlugin).Address;
-                            } catch (NullReferenceException) {
-                                address = "";
-                            }
-
-                            if (!string.IsNullOrEmpty (address) &&
-                                address.Equals (Controller.PreviousServer)) {
-
-                                tree.SetCursor (path, service_column, false);
-                                // TODO: Scroll to the selection
-
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }));
 
                         // Update the address field text when the selection changes
                         tree.CursorChanged += delegate(object sender, EventArgs e) {
@@ -240,10 +224,37 @@ namespace SparkleShare {
                             // TODO: Scroll along with the selection
                         };
 
-                        ScrolledWindow scrolled_window = new ScrolledWindow ();
-                        scrolled_window.AddWithViewport (tree);
+                        tree.Model.Foreach (new TreeModelForeachFunc (delegate (TreeModel model,
+                            TreePath path, TreeIter iter) {
 
-                        ServerEntry            = new SparkleEntry ();
+                            string address;
+
+                            try {
+                                address = (model.GetValue (iter, 2) as SparklePlugin).Address;
+                            } catch (NullReferenceException) {
+                                address = "";
+                            }
+
+                            if (!string.IsNullOrEmpty (address) &&
+                                address.Equals (Controller.PreviousServer)) {
+
+                                tree.SetCursor (path, service_column, false);
+                                SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
+
+                                if (plugin.Address != null) {Console.WriteLine ("DDDDDDDDD");
+                                    ServerEntry.Sensitive = false;}
+
+                                if (plugin.Path != null)
+                                    FolderEntry.Sensitive = false;
+
+                                // TODO: Scroll to the selection
+
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }));
+
                         ServerEntry.Completion = new EntryCompletion();
                         ListStore server_store = new ListStore (typeof (string));
 
@@ -272,7 +283,7 @@ namespace SparkleShare {
 
                                 layout_address.PackStart (ServerEntry, true, true, 0);
 
-                                    FolderEntry             = new SparkleEntry ();
+
                                     FolderEntry.ExampleText = _("/path/to/project");
                                     FolderEntry.Completion  = new EntryCompletion();
 
