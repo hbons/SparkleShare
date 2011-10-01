@@ -113,16 +113,13 @@ namespace SparkleShare {
             string plugins_path = SparkleHelpers.CombineMore (
                 Defines.DATAROOTDIR, "sparkleshare", "plugins");
 
-            try {
+            if (Directory.Exists (local_plugins_path))
                 foreach (string xml_file_path in Directory.GetFiles (local_plugins_path, "*.xml"))
                     Plugins.Add (new SparklePlugin (xml_file_path));
 
-                foreach (string xml_file_path in Directory.GetFiles (plugins_path, "*.xml"))
-                    Plugins.Add (new SparklePlugin (xml_file_path));
-
-            } catch (DirectoryNotFoundException e) {
-                Console.WriteLine ("Could not find any plugins: " + e.Message);
-            }
+            if (Directory.Exists (plugins_path))
+            foreach (string xml_file_path in Directory.GetFiles (plugins_path, "*.xml"))
+                Plugins.Add (new SparklePlugin (xml_file_path));
 
             ChangePageEvent += delegate (PageType page) {
                 this.previous_page = page;
