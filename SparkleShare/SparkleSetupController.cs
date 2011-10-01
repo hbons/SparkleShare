@@ -16,7 +16,10 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+
+using SparkleLib;
 
 namespace SparkleShare {
 
@@ -37,6 +40,8 @@ namespace SparkleShare {
         
         public event UpdateProgressBarEventHandler UpdateProgressBarEvent;
         public delegate void UpdateProgressBarEventHandler (double percentage);
+
+        public readonly List<SparklePlugin> Plugins = new List<SparklePlugin> ();
 
 
         public int TutorialPageNumber {
@@ -101,6 +106,24 @@ namespace SparkleShare {
 
         public SparkleSetupController ()
         {
+            string local_plugins_path = SparkleHelpers.CombineMore (
+                Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
+                "sparkleshare", "plugins");
+
+            string plugins_path = SparkleHelpers.CombineMore (
+                Defines.DATAROOTDIR, "sparkleshare", "plugins");
+
+            try {
+                foreach (string xml_file_path in Directory.GetFiles (local_plugins_path, "*.xml"))
+                    Plugins.Add (new SparklePlugin (xml_file_path));
+
+                foreach (string xml_file_path in Directory.GetFiles (plugins_path, "*.xml"))
+                    Plugins.Add (new SparklePlugin (xml_file_path));
+
+            } catch (DirectoryNotFoundException e) {
+                Console.WriteLine ("Could not find any plugins: " + e.Message);
+            }
+
             ChangePageEvent += delegate (PageType page) {
                 this.previous_page = page;
             };

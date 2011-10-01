@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <plugin>
+    <info>
+        <name>Github</name>
+        <description>Free public Git repositories with collaborator management</description>
+        <icon>github.png</icon>
+        <backend>Git</backend>
+    </info>
+    <address>
+      <value>ssh://git@github.com/</value>
+      <example></example>
+    </address>
+    <path>
+      <value></value>
+      <example>/username/project</example>
+    </path>
+  </plugin>
+</sparkleshare>
+
