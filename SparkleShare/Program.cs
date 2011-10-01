@@ -39,10 +39,10 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _ (string s)
         {
-            return Catalog.GetString (s);
+            return s;
         }
         
-
+        [STAThread]
         public static void Main (string [] args)
         {
             // Parse the command line options

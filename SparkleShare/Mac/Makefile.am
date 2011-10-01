@@ -5,11 +5,12 @@ EXTRA_DIST = \
   MainMenu.xib.designer.cs \
   SparkleAbout.cs \
   SparkleAlert.cs \
-  SparkleIntro.cs \
+  SparkleSetup.cs \
   SparkleEventLog.cs \
   SparkleMacController.cs \
+  SparkleMacWatcher.cs \
   SparkleShare.csproj \
   SparkleShare.sln \
   SparkleStatusIcon.cs \
   SparkleUI.cs \
-  SparkleWindow.cs
+  SparkleSetupWindow.cs
