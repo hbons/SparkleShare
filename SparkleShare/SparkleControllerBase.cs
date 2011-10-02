@@ -36,7 +36,7 @@ namespace SparkleShare {
 
     public abstract class SparkleControllerBase {
 
-        public List <SparkleRepoBase> Repositories;
+        public List<SparkleRepoBase> Repositories = new List<SparkleRepoBase> ();
         public string FolderSize;
         public readonly string SparklePath = SparkleConfig.DefaultConfig.FoldersPath;
 
@@ -155,6 +155,9 @@ namespace SparkleShare {
                 }
             };
 
+            // FIXME: this should probably not called in a thread, because 
+            // Repositories will not be valid until PopulateRepositories
+            // has been finished, but other functions use Repositories
             new Thread (new ThreadStart (PopulateRepositories)).Start ();
         }
 
@@ -643,7 +646,7 @@ namespace SparkleShare {
         // folders in the SparkleShare folder
         private void PopulateRepositories ()
         {
-            Repositories = new List<SparkleRepoBase> ();
+            List<SparkleRepoBase> TempRepositories = new List<SparkleRepoBase> ();
 
             foreach (string folder_name in SparkleConfig.DefaultConfig.Folders) {
                 string folder_path = new SparkleFolder (folder_name).FullPath;
@@ -653,6 +656,8 @@ namespace SparkleShare {
                 else
                     SparkleConfig.DefaultConfig.RemoveFolder (folder_name);
             }
+
+            Repositories = TempRepositories;
 
             if (FolderListChanged != null)
                 FolderListChanged ();
