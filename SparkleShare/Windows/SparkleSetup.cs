@@ -200,15 +200,18 @@ namespace SparkleShare {
         }
 
         private void radio_button_github_MouseEnter (object sender, EventArgs e) {
-            showInfo ("To use github to store your files you need to ...");
+            showInfo (_("Free hosting for Free and Open Source Software projects.") +
+                      _("Also has paid accounts for extra private space and bandwidth."));
         }
 
         private void radio_button_gitorious_MouseEnter (object sender, EventArgs e) {
-            showInfo ("To use gitorious to store your files you need to ...");
+            showInfo (_("Completely Free as in Freedom infrastructure.") +
+                      _("Free accounts for Free and Open Source projects."));
         }
 
         private void radio_button_gnome_MouseEnter (object sender, EventArgs e) {
-            showInfo ("To use gnome project to store your files you need to ...");
+            showInfo (_("GNOME is an easy to understand interface to your computer.") +
+                      _("Select this option if you're a developer or designer working on GNOME."));
         }
 
         private void panel_server_selection_MouseLeave (object sender, EventArgs e) {
