@@ -348,7 +348,8 @@ namespace SparkleShare {
         public static void SafeInvoke (this Control uiElement, Action updater, bool forceSynchronous)
         {
             if (uiElement == null) {
-                throw new ArgumentNullException ("uiElement");
+                //throw new ArgumentNullException ("uiElement");
+                return;
             }
 
             if (uiElement.InvokeRequired) {
