@@ -76,5 +76,10 @@ namespace SparkleLib {
             DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
             return unix_epoch.AddSeconds (timestamp);
         }
+
+        // Gets the relative path of two hirarchical absolute paths
+        public static string DiffPaths(string target, string source) {
+        	return target.Replace(source + Path.DirectorySeparatorChar, "");			
+        }
     }
 }
