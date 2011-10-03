@@ -113,6 +113,8 @@ namespace SparkleLib {
                         
                     } catch (SocketException e) {
                         SparkleHelpers.DebugInfo ("ListenerTcp", "Could not connect to " + Server + ": " + e.Message);
+
+                        OnDisconnected ();
                     }
                 })
             );
@@ -132,8 +134,14 @@ namespace SparkleLib {
 
                     string to_send = "subscribe " + folder_identifier + "\n";
 
-                    lock (this.mutex) {
-                        this.socket.Send (Encoding.UTF8.GetBytes (to_send));
+                    try {
+
+                        lock (this.mutex) {
+                            this.socket.Send (Encoding.UTF8.GetBytes (to_send));
+                        }
+                    } catch (SocketException e) {
+                      SparkleHelpers.DebugInfo ("ListenerTcp", "Could not connect to " + Server + ": " + e.Message);
+                      OnDisconnected ();
                     }
                 }
             }
@@ -145,8 +153,15 @@ namespace SparkleLib {
             string to_send = "announce " + announcement.FolderIdentifier
                 + " " + announcement.Message + "\n";
 
-            lock (this.mutex) {
-                this.socket.Send (Encoding.UTF8.GetBytes (to_send));
+            try {
+
+                lock (this.mutex) {
+                    this.socket.Send (Encoding.UTF8.GetBytes (to_send));
+                }
+            } catch (SocketException e) {
+              SparkleHelpers.DebugInfo ("ListenerTcp", "Could not connect to " + Server + ": " + e.Message);
+
+              OnDisconnected ();
             }
         }
 
