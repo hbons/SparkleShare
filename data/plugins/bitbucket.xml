@@ -3,12 +3,12 @@
   <plugin>
     <info>
         <name>Bitbucket</name>
-        <description>Free code hosting for Mercurial</description>
+        <description>Free code hosting for Git and Mercurial</description>
         <icon>bitbucket.png</icon>
-        <backend>Mercurial</backend>
+        <backend>Git</backend>
     </info>
     <address>
-      <value>ssh://hg@bitbucket.org/</value>
+      <value>ssh://git@bitbucket.org/</value>
       <example></example>
     </address>
     <path>
