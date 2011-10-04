@@ -33,6 +33,7 @@ namespace SparkleShare {
         public SparkleSetupController Controller = new SparkleSetupController ();
 
         private string SecondaryTextColor;
+        private string SecondaryTextColorSelected;
 
         private Entry NameEntry;
         private Entry EmailEntry;
@@ -56,15 +57,29 @@ namespace SparkleShare {
         private void RenderServiceColumn (TreeViewColumn column, CellRenderer cell,
             TreeModel model, TreeIter iter)
         {
-            (cell as Gtk.CellRendererText).Markup = (string) model.GetValue (iter, 1);
-            // TODO: When the row is highlighted, the description text should be
-            // colored with a mix of the selected text color + the selected row color
+            string markup           = (string) model.GetValue (iter, 1);
+            TreeSelection selection = (column.TreeView as TreeView).Selection;
+
+            if (selection.IterIsSelected (iter))
+                markup = markup.Replace (SecondaryTextColor, SecondaryTextColorSelected);
+            else
+                markup = markup.Replace (SecondaryTextColorSelected, SecondaryTextColor);
+
+            (cell as Gtk.CellRendererText).Markup = markup;
         }
 
 
         public SparkleSetup () : base ()
         {
-            SecondaryTextColor = SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive));
+            SecondaryTextColor         = SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive));
+            SecondaryTextColorSelected =
+                SparkleUIHelpers.GdkColorToHex (
+                    MixColors (
+                        new TreeView ().Style.Foreground (StateType.Selected),
+                        new TreeView ().Style.Background (StateType.Selected),
+                        0.15
+                    )
+                );
 
             Controller.ChangePageEvent += delegate (PageType type) {
                 Application.Invoke (delegate {
@@ -149,6 +164,7 @@ namespace SparkleShare {
                         service_column.PackStart (service_cell, true);
                         service_column.SetCellDataFunc (service_cell, new TreeCellDataFunc (RenderServiceColumn));
 
+
                         store.AppendValues (new Gdk.Pixbuf ("/usr/share/icons/gnome/24x24/places/network-server.png"),
                             "<span size=\"small\"><b>On my own server</b>\n" +
                             "<span fgcolor=\"" + SecondaryTextColor + "\">Everything under my control</span></span>",
@@ -158,7 +174,7 @@ namespace SparkleShare {
                             store.AppendValues (
                                 new Gdk.Pixbuf (plugin.ImagePath),
                                 "<span size=\"small\"><b>" + plugin.Name + "</b>\n" +
-                                "<span fgcolor=\"" + SecondaryTextColor + "\">" + plugin.Description + "</span></span>",
+                                "<span fgcolor=\"" + SecondaryTextColorSelected + "\">" + plugin.Description + "</span></span>",
                                 plugin);
                         }
 
@@ -177,7 +193,7 @@ namespace SparkleShare {
 
 
                         // Update the address field text when the selection changes
-                        tree.CursorChanged += delegate(object sender, EventArgs e) {
+                        tree.CursorChanged += delegate (object sender, EventArgs e) {
                             TreeIter iter;
                             TreeModel model;
 
@@ -629,5 +645,13 @@ namespace SparkleShare {
             }
         }
 
+        private Gdk.Color MixColors (Gdk.Color first_color, Gdk.Color second_color, double ratio)
+        {
+            return new Gdk.Color (
+                Convert.ToByte ((255 * (Math.Min (65535, first_color.Red   * (1.0 - ratio) + second_color.Red   * ratio))) / 65535),
+                Convert.ToByte ((255 * (Math.Min (65535, first_color.Green * (1.0 - ratio) + second_color.Green * ratio))) / 65535),
+                Convert.ToByte ((255 * (Math.Min (65535, first_color.Blue  * (1.0 - ratio) + second_color.Blue  * ratio))) / 65535)
+            );
+        }
     }
 }
