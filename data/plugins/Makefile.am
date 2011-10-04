@@ -6,7 +6,9 @@ dist_plugins_DATA = \
 	bitbucket.xml \
 	bitbucket.png \
 	gnome.xml \
-	gnome.png
+	gnome.png \
+	own-server.xml \
+	own-server.png
 
 pluginsdir = $(pkgdatadir)/plugins/
 
