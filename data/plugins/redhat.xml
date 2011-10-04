@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <plugin>
+    <info>
+        <name>Red Hat UX Team Hub</name>
+        <description>Internal server for the UX team</description>
+        <icon>redhat.png</icon>
+        <backend>Git</backend>
+    </info>
+    <address>
+      <value>ssh://git@design.bos.lab.redhat.com/</value>
+      <example></example>
+    </address>
+    <path>
+      <value></value>
+      <example>/project</example>
+    </path>
+  </plugin>
+</sparkleshare>
+
