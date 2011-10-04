@@ -166,16 +166,19 @@ namespace SparkleShare {
                         PathEntry = new SparkleEntry ();
                         AddressEntry = new SparkleEntry ();
 
+                        Controller.SelectListPluginEvent += delegate (int index) {
+                            Application.Invoke (delegate {
+                                TreeSelection selection = tree.Selection;
+                                TreePath path = new TreePath (index.ToString ());
+                                selection.SelectPath (path);
+                            });
+                        };
+
                         // Select the first plugin by default
                         TreeSelection default_selection = tree.Selection;
                         TreePath default_path = new TreePath ("0");
                         default_selection.SelectPath (default_path);
-
-                        Controller.SelectListPluginEvent += delegate (int index) {
-                            TreeSelection selection = tree.Selection;
-                            TreePath path = new TreePath (index.ToString ());
-                            selection.SelectPath (path);
-                        };
+                        Controller.SelectedPluginChanged (0);
 
                         Controller.ChangeAddressFieldEvent += delegate (string text,
                             string example_text, FieldState state) {
