@@ -65,8 +65,6 @@ namespace SparkleShare {
 				System.Environment.SetEnvironmentVariable ("HOME", Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%"));
 
             StartSshAgent();
-            // Start the agent but also make it stop when application is qutting
-            Application.ApplicationExit += new EventHandler(this.StopSshAgent);
 
 			base.Initialize ();
 		}
@@ -189,12 +187,6 @@ namespace SparkleShare {
 				}
 			}
 		}
-
-        private void StopSshAgent (object sender, EventArgs e)
-        {
-            int pid = Int32.Parse(System.Environment.GetEnvironmentVariable("SSH_AGENT_PID"));
-            Process.GetProcessById(pid).Kill();
-        }
 
 
 	}
