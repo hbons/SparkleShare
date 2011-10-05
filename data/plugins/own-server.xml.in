@@ -2,8 +2,8 @@
 <sparkleshare>
   <plugin>
     <info>
-        <name>On my own server</name>
-        <description>Everything under my control</description>
+        <_name>On my own server</_name>
+        <_description>Everything under my control</_description>
         <icon>own-server.png</icon>
         <backend>Git</backend>
     </info>
@@ -13,7 +13,7 @@
     </address>
     <path>
       <value></value>
-      <example>/path/to/project</example>
+      <_example>/path/to/project</_example>
     </path>
   </plugin>
 </sparkleshare>
