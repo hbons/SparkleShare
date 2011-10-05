@@ -2,18 +2,18 @@
 <sparkleshare>
   <plugin>
     <info>
-        <name>The GNOME Project</name>
-        <description>A free and easy interface for your computer</description>
-        <icon>gnome.png</icon>
+        <_name>Github</_name>
+        <_description>Free public Git repositories with collaborator management</_description>
+        <icon>github.png</icon>
         <backend>Git</backend>
     </info>
     <address>
-      <value>ssh://git@gnome.org/</value>
+      <value>ssh://git@github.com/</value>
       <example></example>
     </address>
     <path>
       <value></value>
-      <example>/project</example>
+      <_example>/username/project</_example>
     </path>
   </plugin>
 </sparkleshare>

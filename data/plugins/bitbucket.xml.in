@@ -2,18 +2,18 @@
 <sparkleshare>
   <plugin>
     <info>
-        <name>Red Hat UX Team Hub</name>
-        <description>Internal server for the UX team</description>
-        <icon>redhat.png</icon>
+        <_name>Bitbucket</_name>
+        <_description>Free code hosting for Git and Mercurial</_description>
+        <icon>bitbucket.png</icon>
         <backend>Git</backend>
     </info>
     <address>
-      <value>ssh://git@design.bos.lab.redhat.com/</value>
+      <value>ssh://git@bitbucket.org/</value>
       <example></example>
     </address>
     <path>
       <value></value>
-      <example>/project</example>
+      <_example>/username/project</_example>
     </path>
   </plugin>
 </sparkleshare>
