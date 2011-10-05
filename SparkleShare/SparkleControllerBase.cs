@@ -1128,6 +1128,10 @@ namespace SparkleShare {
             Environment.Exit (0);
 #else
             System.Windows.Forms.Application.Exit ();
+
+            // Also kill the SSH_AGENT 
+            int pid = Int32.Parse(System.Environment.GetEnvironmentVariable("SSH_AGENT_PID"));
+            Process.GetProcessById(pid).Kill();
 #endif
         }
 
@@ -1135,12 +1139,9 @@ namespace SparkleShare {
         // Checks to see if an email address is valid
         public bool IsValidEmail (string email)
         {
-            Regex regex = new Regex (@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$", RegexOptions.IgnoreCase);
+            Regex regex = new Regex(@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$", RegexOptions.IgnoreCase);
             return regex.IsMatch (email);
         }
-
-
-
 
         public void AddNoteToFolder (string folder_name, string revision, string note)
         {
@@ -1152,9 +1153,6 @@ namespace SparkleShare {
                     repo.AddNote (revision, note);
             }
         }
-
-
-
 
         private string [] tango_palette = new string [] {"#eaab00", "#e37222",
             "#3892ab", "#33c2cb", "#19b271", "#9eab05", "#8599a8", "#9ca696",
