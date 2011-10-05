@@ -22,8 +22,9 @@ namespace SparkleShare {
 
     public class SparkleEntry : Entry {
 
-        public bool ExampleTextActive;
-        private string pExampleText;
+
+        private string example_text;
+        private bool example_text_active;
 
 
         public SparkleEntry ()
@@ -32,7 +33,7 @@ namespace SparkleShare {
 
             FocusGrabbed += delegate { OnEntered (); };
             ClipboardPasted += delegate { OnEntered (); };
-            
+
             FocusOutEvent += delegate {
                 if (Text.Equals ("") || Text == null)
                     ExampleTextActive = true;
@@ -47,8 +48,24 @@ namespace SparkleShare {
         {
             if (ExampleTextActive) {
                 ExampleTextActive = false;
-                Text = "";    
+                Text = "";
                 UseNormalTextColor ();
+            }
+        }
+
+
+        public bool ExampleTextActive {
+            get {
+                return this.example_text_active;
+            }
+
+            set {
+                this.example_text_active = value;
+
+                if (this.example_text_active)
+                    UseSecondaryTextColor ();
+                else
+                    UseNormalTextColor ();
             }
         }
 
@@ -56,24 +73,21 @@ namespace SparkleShare {
         public string ExampleText
         {
             get {
-                return pExampleText;
+                return this.example_text;
             }
 
             set {
-                pExampleText = value;
+                this.example_text = value;
 
-                if (ExampleTextActive) {
-
+                if (this.example_text_active)
                     UseExampleText ();
-
-                }
             }
         }
 
 
         private void UseExampleText ()
         {
-            Text = pExampleText;
+            Text = this.example_text;
             UseSecondaryTextColor ();
         }
 

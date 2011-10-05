@@ -24,7 +24,6 @@ using System.Timers;
 
 using Gtk;
 using Mono.Unix;
-using SparkleLib;
 
 namespace SparkleShare {
 
@@ -71,17 +70,13 @@ namespace SparkleShare {
 
                 EventBox box = new EventBox ();
                 Gdk.Color bg_color = new Gdk.Color ();
-                Gdk.Color.Parse ("#2e3336", ref bg_color);
+                Gdk.Color.Parse ("#000", ref bg_color);
                 box.ModifyBg (StateType.Normal, bg_color);
 
-                    string image_path = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare",
-                        "pixmaps", "side-splash.png");
+                Image side_splash = SparkleUIHelpers.GetImage ("side-splash.png");
+                side_splash.Yalign = 1;
 
-                    Image side_splash = new Image (image_path) {
-                        Yalign = 1
-                    };
-
-                box.Add (side_splash);
+            box.Add (side_splash);
 
             HBox.PackStart (box, false, false, 0);
             HBox.PackStart (VBox, true, true, 0);
@@ -126,7 +121,7 @@ namespace SparkleShare {
                 layout_vertical.PackStart (description, false, false, 21);
 
             if (widget != null)
-                layout_vertical.PackStart (widget, true, true, 21);
+                layout_vertical.PackStart (widget, true, true, 0);
 
             Wrapper.PackStart (layout_vertical, true, true, 0);
             ShowAll ();
@@ -149,9 +144,7 @@ namespace SparkleShare {
         
         new public void ShowAll ()
         {
-
-         Present ();
-
+            Present ();
             base.ShowAll ();
         }
 

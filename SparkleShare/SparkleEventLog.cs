@@ -92,7 +92,7 @@ namespace SparkleShare {
                                 string note        = match.Groups [3].Value;
 
                                 Thread thread = new Thread (new ThreadStart (delegate {
-                                    SparkleShare.Controller.AddNoteToFolder (folder_name, revision, note);
+                                    Program.Controller.AddNoteToFolder (folder_name, revision, note);
                                 }));
 
                                 thread.Start ();
@@ -203,6 +203,9 @@ namespace SparkleShare {
                 if (html == null)
                     html = Controller.HTML;
 
+                if (html == null)
+                    return;
+
                 html = html.Replace ("<!-- $body-font-size -->", (double) (Style.FontDescription.Size / 1024 + 3) + "px");
                 html = html.Replace ("<!-- $day-entry-header-font-size -->", (Style.FontDescription.Size / 1024 + 3) + "px");
                 html = html.Replace ("<!-- $a-color -->", "#0085cf");
@@ -214,20 +217,20 @@ namespace SparkleShare {
                 html = html.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
                 html = html.Replace ("<!-- $small-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
                 html = html.Replace ("<!-- $no-buddy-icon-background-image -->", "file://" +
-                        System.IO.Path.Combine (new string [] {SparkleUI.AssetsPath, "icons",
-                            "hicolor", "32x32", "status", "avatar-default.png"}));
+                        new string [] {SparkleUI.AssetsPath, "icons",
+                            "hicolor", "32x32", "status", "avatar-default.png"}.Combine ());
                 html = html.Replace ("<!-- $document-added-background-image -->", "file://" +
-                        System.IO.Path.Combine (new string [] {SparkleUI.AssetsPath, "icons",
-                            "hicolor", "12x12", "status", "document-added.png"}));
+                        new string [] {SparkleUI.AssetsPath, "icons",
+                            "hicolor", "12x12", "status", "document-added.png"}.Combine ());
                 html = html.Replace ("<!-- $document-edited-background-image -->", "file://" +
-                        System.IO.Path.Combine (new string [] {SparkleUI.AssetsPath, "icons",
-                            "hicolor", "12x12", "status", "document-edited.png"}));
+                        new string [] {SparkleUI.AssetsPath, "icons",
+                            "hicolor", "12x12", "status", "document-edited.png"}.Combine ());
                 html = html.Replace ("<!-- $document-deleted-background-image -->", "file://" +
-                        System.IO.Path.Combine (new string [] {SparkleUI.AssetsPath, "icons",
-                            "hicolor", "12x12", "status", "document-deleted.png"}));
+                        new string [] {SparkleUI.AssetsPath, "icons",
+                            "hicolor", "12x12", "status", "document-deleted.png"}.Combine ());
                 html = html.Replace ("<!-- $document-moved-background-image -->", "file://" +
-                        System.IO.Path.Combine (new string [] {SparkleUI.AssetsPath, "icons",
-                            "hicolor", "12x12", "status", "document-moved.png"}));
+                        new string [] {SparkleUI.AssetsPath, "icons",
+                            "hicolor", "12x12", "status", "document-moved.png"}.Combine ());
 
                 Application.Invoke (delegate {
                     this.spinner.Stop ();

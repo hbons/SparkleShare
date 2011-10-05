@@ -37,8 +37,8 @@ namespace SparkleShare {
         public static SparkleBubbles Bubbles;
         public static SparkleSetup Setup;
         public static SparkleAbout About;
-        public static string AssetsPath = Path.Combine (
-            new string [] {Defines.PREFIX, "share", "sparkleshare"});
+        public static string AssetsPath =
+            new string [] {Defines.PREFIX, "share", "sparkleshare"}.Combine ();
 
 
         // Short alias for the translations
@@ -59,12 +59,12 @@ namespace SparkleShare {
             StatusIcon = new SparkleStatusIcon ();
             Bubbles    = new SparkleBubbles ();
             
-            if (SparkleShare.Controller.FirstRun) {
+            if (Program.Controller.FirstRun) {
                 Setup = new SparkleSetup ();
                 Setup.Controller.ShowSetupPage ();
             }
             
-            SparkleShare.Controller.OnQuitWhileSyncing += delegate {
+            Program.Controller.OnQuitWhileSyncing += delegate {
                 // TODO: Pop up a warning when quitting whilst syncing
             };
         }

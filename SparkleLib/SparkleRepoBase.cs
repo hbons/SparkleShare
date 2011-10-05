@@ -256,6 +256,8 @@ namespace SparkleLib {
             this.listener.Announcement += delegate (SparkleAnnouncement announcement) {
                 string identifier = Identifier;
 
+                Console.WriteLine (announcement.Message + " ! " + CurrentRevision);
+
                 if (announcement.FolderIdentifier == identifier &&
                     !announcement.Message.Equals (CurrentRevision)) {
                     if ((Status != SyncStatus.SyncUp)   &&
@@ -444,22 +446,25 @@ namespace SparkleLib {
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
 
-                SparkleChangeSet change_set = GetChangeSets (1) [0];
+                List<SparkleChangeSet> change_sets = GetChangeSets (1);
+                if (change_sets != null && change_sets.Count > 0) {
+                    SparkleChangeSet change_set = change_sets [0];
 
-                bool note_added = false;
-                foreach (string added in change_set.Added) {
-                    if (added.Contains (".notes")) {
-                        if (NewNote != null)
-                            NewNote (change_set.User.Name, change_set.User.Email);
+                    bool note_added = false;
+                    foreach (string added in change_set.Added) {
+                        if (added.Contains (".notes")) {
+                            if (NewNote != null)
+                                NewNote (change_set.User.Name, change_set.User.Email);
 
-                        note_added = true;
-                        break;
+                            note_added = true;
+                            break;
+                        }
                     }
-                }
 
-                if (!note_added) {
-                    if (NewChangeSet != null)
-                        NewChangeSet (change_set);
+                    if (!note_added) {
+                        if (NewChangeSet != null)
+                            NewChangeSet (change_set);
+                    }
                 }
 
                 // There could be changes from a resolved

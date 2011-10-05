@@ -45,6 +45,9 @@ namespace SparkleLib {
                 string output = git.StandardOutput.ReadToEnd ();
                 git.WaitForExit ();
 
+                if (output.Length < 40)
+                    return null;
+
                 return output.Substring (0, 40);
             }
         }
@@ -128,7 +131,9 @@ namespace SparkleLib {
         public override bool SyncUp ()
         {
             Add ();
-            Commit ("Changes made by SparkleShare");
+
+            string message = FormatCommitMessage ();
+            Commit (message);
 
             SparkleGit git = new SparkleGit (LocalPath, "push origin master");
             git.Start ();
@@ -160,6 +165,8 @@ namespace SparkleLib {
 
         public override bool AnyDifferences {
             get {
+                FillEmptyDirectories (LocalPath);
+
                 SparkleGit git = new SparkleGit (LocalPath, "status --porcelain");
                 git.Start ();
 
@@ -194,7 +201,7 @@ namespace SparkleLib {
 
                 if (value) {
                     if (!File.Exists (unsynced_file_path))
-                        File.Create (unsynced_file_path);
+                        File.Create (unsynced_file_path).Close ();
                 } else {
                     File.Delete (unsynced_file_path);
                 }
@@ -318,8 +325,10 @@ namespace SparkleLib {
                     git_theirs.Start ();
                     git_theirs.WaitForExit ();
 
-                    // Append a timestamp to local version
-                    string timestamp            = DateTime.Now.ToString ("HH:mm MMM d");
+                    // Append a timestamp to local version.
+                    // Windows doesn't allow colons in the file name, so
+                    // we use "h" between the hours and minutes instead.
+                    string timestamp            = DateTime.Now.ToString ("HH\\hmm MMM d");
                     string their_path           = conflicting_path + " (" + SparkleConfig.DefaultConfig.User.Name + ", " + timestamp + ")";
                     string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
                     string abs_their_path       = Path.Combine (LocalPath, their_path);
@@ -348,7 +357,7 @@ namespace SparkleLib {
                     // We need to specifically mention the file, so
                     // we can't reuse the Add () method
                     SparkleGit git_add = new SparkleGit (LocalPath,
-                        "add " + conflicting_path);
+                        "add \"" + conflicting_path + "\"");
                     git_add.Start ();
                     git_add.WaitForExit ();
 
@@ -378,8 +387,10 @@ namespace SparkleLib {
 
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
 
-            SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw -M --date=iso");
+            // Console.InputEncoding  = System.Text.Encoding.Unicode;
             Console.OutputEncoding = System.Text.Encoding.Unicode;
+
+            SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count + " --raw -M --date=iso");
             git_log.Start ();
 
             // Reading the standard output HAS to go before
@@ -462,6 +473,9 @@ namespace SparkleLib {
                             string file_path   = entry_line.Substring (39);
                             string to_file_path;
 
+                            if (file_path.EndsWith (".empty"))
+                                file_path = file_path.Substring (0, file_path.Length - ".empty".Length);
+
                             if (change_type.Equals ("A") && !file_path.Contains (".notes")) {
                                 change_set.Added.Add (file_path);
 
@@ -484,7 +498,8 @@ namespace SparkleLib {
 
                     if ((change_set.Added.Count +
                          change_set.Edited.Count +
-                         change_set.Deleted.Count) > 0) {
+                         change_set.Deleted.Count +
+                         change_set.MovedFrom.Count) > 0) {
 
                         change_set.Notes.AddRange (GetNotes (change_set.Revision));
                         change_sets.Add (change_set);
@@ -493,6 +508,22 @@ namespace SparkleLib {
             }
 
             return change_sets;
+        }
+
+
+        // Git doesn't track empty directories, so this method
+        // fills them all with a hidden empty file
+        private void FillEmptyDirectories (string path)
+        {
+            foreach (string child_path in Directory.GetDirectories (path)) {
+                if (child_path.EndsWith (".git") || child_path.EndsWith (".notes"))
+                    continue;
+
+                FillEmptyDirectories (child_path);
+            }
+
+            if (Directory.GetFiles (path).Length == 0)
+                File.Create (Path.Combine (path, ".empty")).Close ();
         }
 
 

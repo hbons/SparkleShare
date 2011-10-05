@@ -26,13 +26,17 @@ using SparkleLib;
 
 namespace SparkleShare {
 
-	public class SparkleMacController : SparkleController {
+	public class SparkleController : SparkleControllerBase {
 
         // We have to use our own custom made folder watcher, as
         // System.IO.FileSystemWatcher fails watching subfolders on Mac
-        private SparkleMacWatcher watcher = new SparkleMacWatcher (SparkleConfig.DefaultConfig.FoldersPath);
+        private SparkleMacWatcher watcher;
 
-        public SparkleMacController () : base () { }
+        
+        public SparkleController () : base ()
+        {
+        }
+
 
         public override void Initialize ()
         {
@@ -109,13 +113,15 @@ namespace SparkleShare {
 		// Creates the SparkleShare folder in the user's home folder
 		public override bool CreateSparkleShareFolder ()
 		{
-			if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
-				Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
-				return true;
+            this.watcher = new SparkleMacWatcher (SparkleConfig.DefaultConfig.FoldersPath);
 
-			} else {
-				return false;
-			}
+            if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
+                Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
+                return true;
+
+            } else {
+                return false;
+            }
 		}
 
 		

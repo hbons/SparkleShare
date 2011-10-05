@@ -23,14 +23,14 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 using Mono.Unix;
-using Mono.Unix.Native;
+//using Mono.Unix.Native;
 using SparkleLib;
 using SparkleLib.Options;
 
 namespace SparkleShare {
 
     // This is SparkleShare!
-    public class SparkleShare {
+    public class Program {
 
         public static SparkleController Controller;
         public static SparkleUI UI;
@@ -45,16 +45,6 @@ namespace SparkleShare {
 
         public static void Main (string [] args)
         {
-            // Don't allow running as root on Linux or Mac
-            if ((SparkleBackend.Platform == PlatformID.Unix ||
-                 SparkleBackend.Platform == PlatformID.MacOSX) &&
-                new UnixUserInfo (UnixEnvironment.UserName).UserId == 0) {
-
-                Console.WriteLine (_("Sorry, you can't run SparkleShare with these permissions."));
-                Console.WriteLine (_("Things would go utterly wrong."));
-                Environment.Exit (-1);
-            }
-
             // Parse the command line options
             bool show_help       = false;
             OptionSet option_set = new OptionSet () {
@@ -74,25 +64,10 @@ namespace SparkleShare {
             if (show_help)
                 ShowHelp (option_set);
 
-            // Load the right controller for the OS
-            string controller_name = "Lin";
-            switch (SparkleBackend.Platform) {
-            case PlatformID.Unix:
-                SetProcessName ("sparkleshare");
-                break;
-            case PlatformID.MacOSX:
-                controller_name = "Mac";
-                break;
-            case PlatformID.Win32NT:
-                controller_name = "Win";
-                break;
-            }
 
             // Initialize the controller this way so that
             // there aren't any exceptions in the OS specific UI's
-            Controller = (SparkleController) Activator.CreateInstance (
-                Type.GetType ("SparkleShare.Sparkle" + controller_name + "Controller"));
-
+            Controller = new SparkleController ();
             Controller.Initialize ();
         
             if (Controller != null) {

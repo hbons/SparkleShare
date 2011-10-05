@@ -50,7 +50,7 @@ namespace SparkleLib {
                 // don't have your own. All data needed to connect is hashed and
                 // we don't store any personal information ever
 
-                uri = "irc://204.62.14.135/";
+                uri = "tcp://204.62.14.135:1986"; // TODO: announcements.sparkleshare.org
             }
 
             Uri announce_uri = new Uri (uri);
@@ -77,7 +77,7 @@ namespace SparkleLib {
                 listeners.Add (new SparkleListenerIrc (announce_uri, folder_identifier));
                 break;
             default:
-                listeners.Add (new SparkleListenerIrc (announce_uri, folder_identifier));
+                listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
                 break;
             }
             
