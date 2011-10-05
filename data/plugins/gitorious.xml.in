@@ -2,8 +2,8 @@
 <sparkleshare>
   <plugin>
     <info>
-        <name>Gitorious</name>
-        <description>Open source infrastructure for hosting open source projects</description>
+        <_name>Gitorious</_name>
+        <_description>Open source infrastructure for hosting open source projects</_description>
         <icon>gitorious.png</icon>
         <backend>Git</backend>
     </info>
@@ -13,7 +13,7 @@
     </address>
     <path>
       <value></value>
-      <example>/project/repository</example>
+      <_example>/project/repository</_example>
     </path>
   </plugin>
 </sparkleshare>
