@@ -1,42 +1,46 @@
-# This file is distributed under the same license as the Sparkleshare package.
+# This file is distributed under the same license as the SparkleShare package.
 # 
 # Translators:
 # Jan Lindblom <lindblom.jan@gmail.com>, 2011.
+#   <lindblom.jan@gmail.com>, 2011.
 # Robin Jakobsson <jakobsson.robin@gmail.com>, 2011.
 # smygrokarn <smygrokarn@tekniktoppen.com>, 2011.
+#   <smygrokarn@tekniktoppen.com>, 2011.
 #   <tx@elehu.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-16 16:10+0200\n"
-"PO-Revision-Date: 2011-09-21 08:31+0000\n"
-"Last-Translator: rjakobsson <jakobsson.robin@gmail.com>\n"
+"POT-Creation-Date: 2011-09-30 22:26+0200\n"
+"PO-Revision-Date: 2011-09-30 20:30+0000\n"
+"Last-Translator: deejay1 <deejay1@srem.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:69
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:86
-#: ../SparkleShare/SparkleStatusIcon.cs:74
-#: ../SparkleShare/SparkleStatusIcon.cs:88
-msgid "Up to date"
-msgstr "Aktuell"
-
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:84
-#: ../SparkleShare/SparkleSetup.cs:67 ../SparkleShare/SparkleStatusIcon.cs:86
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:70
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:88
+#: ../SparkleShare/SparkleSetup.cs:67 ../SparkleShare/SparkleStatusIcon.cs:75
+#: ../SparkleShare/SparkleStatusIcon.cs:89
 msgid "Welcome to SparkleShare!"
 msgstr "Välkommen till SparkleShare!"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:95
-#: ../SparkleShare/SparkleStatusIcon.cs:103
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:72
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:90
+#: ../SparkleShare/SparkleStatusIcon.cs:77
+#: ../SparkleShare/SparkleStatusIcon.cs:91
+msgid "Up to date"
+msgstr "Aktuell"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:99
+#: ../SparkleShare/SparkleStatusIcon.cs:106
 msgid "Syncing…"
 msgstr "Synkroniserar…"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:105
-#: ../SparkleShare/SparkleStatusIcon.cs:113
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:109
+#: ../SparkleShare/SparkleStatusIcon.cs:116
 msgid "Not everything is synced"
 msgstr "Inte allt har synkroniserats"
 
@@ -60,68 +64,60 @@ msgstr "Gör en kopia av en tidigare version i denna katalog"
 msgid "Select to get a copy of this version"
 msgstr "Välj för att få en kopia av den här versionen"
 
-#: ../SparkleShare/Program.cs:53
-msgid "Sorry, you can't run SparkleShare with these permissions."
-msgstr "Ledsen, men du kan inte köra SparkleShare med dessa rättigheter."
-
-#: ../SparkleShare/Program.cs:54
-msgid "Things would go utterly wrong."
-msgstr "Detta kan gå helt fel."
-
-#: ../SparkleShare/Program.cs:61
+#: ../SparkleShare/Program.cs:51
 msgid "Print version information"
 msgstr "Skriv ut versionsinformation"
 
-#: ../SparkleShare/Program.cs:62
+#: ../SparkleShare/Program.cs:52
 msgid "Show this help text"
 msgstr "Visa denna hjälp-text"
 
-#: ../SparkleShare/Program.cs:109
+#: ../SparkleShare/Program.cs:84
 msgid "SparkleShare, a collaboration and sharing tool."
 msgstr "SparkleShare, ett verktyg för samarbete och delning"
 
-#: ../SparkleShare/Program.cs:110
+#: ../SparkleShare/Program.cs:85
 msgid "Copyright (C) 2010 Hylke Bons"
 msgstr "Copyright (C) 2010 Hylke Bons"
 
-#: ../SparkleShare/Program.cs:112
+#: ../SparkleShare/Program.cs:87
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
 msgstr "Detta program kommer utan några som helst garantier."
 
-#: ../SparkleShare/Program.cs:114
+#: ../SparkleShare/Program.cs:89
 msgid "This is free software, and you are welcome to redistribute it "
 msgstr "Detta är fri programvara och du är välkommen att distribuera det "
 
-#: ../SparkleShare/Program.cs:115
+#: ../SparkleShare/Program.cs:90
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
 msgstr "under vissa förhållanden. Vänligen läs GNU GPL v3 för detaljer."
 
-#: ../SparkleShare/Program.cs:117
+#: ../SparkleShare/Program.cs:92
 msgid "SparkleShare automatically syncs Git repositories in "
 msgstr "SparkleShare synkroniserar automatiskt Git-källor i "
 
-#: ../SparkleShare/Program.cs:118
+#: ../SparkleShare/Program.cs:93
 msgid "the ~/SparkleShare folder with their remote origins."
 msgstr "katalogen ~/SparkleShare med deras fjärrkällor."
 
-#: ../SparkleShare/Program.cs:120
+#: ../SparkleShare/Program.cs:95
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
 msgstr "Användning: sparkleshare [start|stop|restart] [VÄXEL]"
 
-#: ../SparkleShare/Program.cs:121
+#: ../SparkleShare/Program.cs:96
 msgid "Sync SparkleShare folder with remote repositories."
 msgstr "Synkronisera SparkleShare mappen med fjärrkällor."
 
-#: ../SparkleShare/Program.cs:123
+#: ../SparkleShare/Program.cs:98
 msgid "Arguments:"
 msgstr "Argument:"
 
-#: ../SparkleShare/Program.cs:133
+#: ../SparkleShare/Program.cs:108
 msgid "SparkleShare "
 msgstr "SparkleShare"
 
 #. A menu item that takes the user to http://www.sparkleshare.org/
-#: ../SparkleShare/SparkleAbout.cs:53 ../SparkleShare/SparkleStatusIcon.cs:292
+#: ../SparkleShare/SparkleAbout.cs:53 ../SparkleShare/SparkleStatusIcon.cs:295
 msgid "About SparkleShare"
 msgstr "Om SparkleShare"
 
@@ -138,44 +134,44 @@ msgstr "Du kör den senaste versionen"
 msgid "Checking for updates..."
 msgstr "Söker uppdateringar..."
 
-#: ../SparkleShare/SparkleController.cs:488
+#: ../SparkleShare/SparkleControllerBase.cs:491
 msgid "dddd, MMMM d, yyyy"
-msgstr "ddd MMM d, åååå"
+msgstr ""
 
-#: ../SparkleShare/SparkleController.cs:494
+#: ../SparkleShare/SparkleControllerBase.cs:497
 msgid "dddd, MMMM d"
-msgstr "ddd, MMM, d"
+msgstr ""
 
-#: ../SparkleShare/SparkleController.cs:702
+#: ../SparkleShare/SparkleControllerBase.cs:705
 #, csharp-format
 msgid "added ‘{0}’"
-msgstr "la till '{0}'"
+msgstr ""
 
-#: ../SparkleShare/SparkleController.cs:707
+#: ../SparkleShare/SparkleControllerBase.cs:710
 #, csharp-format
 msgid "moved ‘{0}’"
-msgstr "flyttat '{0}'"
+msgstr ""
 
-#: ../SparkleShare/SparkleController.cs:712
+#: ../SparkleShare/SparkleControllerBase.cs:715
 #, csharp-format
 msgid "edited ‘{0}’"
-msgstr "redigerade '{0}'"
+msgstr ""
 
-#: ../SparkleShare/SparkleController.cs:717
+#: ../SparkleShare/SparkleControllerBase.cs:720
 #, csharp-format
 msgid "deleted ‘{0}’"
-msgstr "tog bort '{0}'"
+msgstr ""
 
-#: ../SparkleShare/SparkleController.cs:726
+#: ../SparkleShare/SparkleControllerBase.cs:729
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
-msgstr[0] "och {0} fler"
-msgstr[1] "och {0} fler"
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../SparkleShare/SparkleController.cs:730
+#: ../SparkleShare/SparkleControllerBase.cs:733
 msgid "did something magical"
-msgstr "gjorde något magiskt"
+msgstr ""
 
 #: ../SparkleShare/SparkleEventLog.cs:58
 msgid "Recent Events"
@@ -207,15 +203,15 @@ msgid "Next"
 msgstr "Nästa"
 
 #: ../SparkleShare/SparkleSetup.cs:121
-msgid "Where is your remote folder?"
-msgstr "Var är din fjärrkatalog?"
+msgid "Where is your project?"
+msgstr ""
 
 #. Own server radiobutton
 #: ../SparkleShare/SparkleSetup.cs:130
 msgid "On my own server:"
 msgstr "På min egen server"
 
-#: ../SparkleShare/SparkleSetup.cs:135 ../SparkleShare/SparkleSetup.cs:237
+#: ../SparkleShare/SparkleSetup.cs:135 ../SparkleShare/SparkleSetup.cs:225
 msgid "Folder"
 msgstr "Katalog"
 
@@ -223,137 +219,169 @@ msgstr "Katalog"
 msgid "address-to-server.com"
 msgstr "adress-till-servern.se"
 
-#: ../SparkleShare/SparkleSetup.cs:177
-msgid "Free hosting for Free and Open Source Software projects."
-msgstr "Gratistjänst för fria- och öppna källkodsprojekt."
-
-#: ../SparkleShare/SparkleSetup.cs:178
-msgid "Also has paid accounts for extra private space and bandwidth."
-msgstr "Har också betaltjänster för extra privat utrymme och bandbredd."
-
-#: ../SparkleShare/SparkleSetup.cs:187
+#: ../SparkleShare/SparkleSetup.cs:183
 msgid "Username/Folder"
 msgstr "Användarnamn/Katalog"
 
 #. Gitorious radiobutton
-#: ../SparkleShare/SparkleSetup.cs:192
+#: ../SparkleShare/SparkleSetup.cs:188
 msgid "Gitorious"
 msgstr "Gitorious"
 
-#: ../SparkleShare/SparkleSetup.cs:194
-msgid "Completely Free as in Freedom infrastructure."
-msgstr "Fullständigt fritt "
-
-#: ../SparkleShare/SparkleSetup.cs:195
-msgid "Free accounts for Free and Open Source projects."
-msgstr "Gratiskonton för fria- och öppna källkodsprojekt"
-
-#: ../SparkleShare/SparkleSetup.cs:204
+#: ../SparkleShare/SparkleSetup.cs:196
 msgid "Project/Folder"
 msgstr "Projekt/Katalog"
 
 #. GNOME radiobutton
-#: ../SparkleShare/SparkleSetup.cs:209
+#: ../SparkleShare/SparkleSetup.cs:201
 msgid "The GNOME Project"
 msgstr "GNOME-projektet"
 
-#: ../SparkleShare/SparkleSetup.cs:211
-msgid "GNOME is an easy to understand interface to your computer."
-msgstr "GNOME är ett enkelt gränssnitt till din dator."
-
-#: ../SparkleShare/SparkleSetup.cs:212
-msgid "Select this option if you’re a developer or designer working on GNOME."
-msgstr ""
-"Välj detta om du är en utvecklare eller designer som arbetar med GNOME."
-
-#: ../SparkleShare/SparkleSetup.cs:221
+#: ../SparkleShare/SparkleSetup.cs:209
 msgid "Project"
 msgstr "Projekt"
 
-#: ../SparkleShare/SparkleSetup.cs:231
+#: ../SparkleShare/SparkleSetup.cs:219
 msgid "Folder Name:"
 msgstr "Katalognamn:"
 
 #. Cancel button
-#: ../SparkleShare/SparkleSetup.cs:259 ../SparkleShare/SparkleSetup.cs:305
+#: ../SparkleShare/SparkleSetup.cs:250 ../SparkleShare/SparkleSetup.cs:296
 msgid "Cancel"
 msgstr "Avbryt"
 
 #. Sync button
-#: ../SparkleShare/SparkleSetup.cs:267
-msgid "Sync"
-msgstr "Synkronisera"
+#: ../SparkleShare/SparkleSetup.cs:258
+msgid "Add"
+msgstr ""
 
-#: ../SparkleShare/SparkleSetup.cs:295
+#: ../SparkleShare/SparkleSetup.cs:286
 #, csharp-format
-msgid "Syncing folder ‘{0}’…"
-msgstr "Synkroniserar katalog ‘{0}’…"
+msgid "Adding project ‘{0}’…"
+msgstr ""
 
-#: ../SparkleShare/SparkleSetup.cs:296
+#: ../SparkleShare/SparkleSetup.cs:287
 msgid "This may take a while."
 msgstr "Det här kan ta en stund."
 
-#: ../SparkleShare/SparkleSetup.cs:297
+#: ../SparkleShare/SparkleSetup.cs:288
 msgid "Are you sure it’s not coffee o'clock?"
 msgstr "Är du säker på att det inte är fikadags?"
 
-#: ../SparkleShare/SparkleSetup.cs:301 ../SparkleShare/SparkleSetup.cs:417
+#: ../SparkleShare/SparkleSetup.cs:292 ../SparkleShare/SparkleSetup.cs:408
+#: ../SparkleShare/SparkleSetup.cs:507
 msgid "Finish"
 msgstr "Slutför"
 
-#: ../SparkleShare/SparkleSetup.cs:334
+#: ../SparkleShare/SparkleSetup.cs:325
 msgid "Something went wrong"
 msgstr "Något blev fel"
 
-#: ../SparkleShare/SparkleSetup.cs:382
+#: ../SparkleShare/SparkleSetup.cs:373
 msgid "Try Again…"
 msgstr "Försök igen..."
 
-#: ../SparkleShare/SparkleSetup.cs:401
+#: ../SparkleShare/SparkleSetup.cs:392
 #, csharp-format
 msgid "‘{0}’ has been successfully added"
 msgstr "'{0}' har lagts till korrekt"
 
-#: ../SparkleShare/SparkleSetup.cs:407
-msgid "Folder synced successfully!"
-msgstr "Katalogen synkroniserades framgångsrikt!"
+#: ../SparkleShare/SparkleSetup.cs:398
+msgid "Project successfully added!"
+msgstr ""
 
-#: ../SparkleShare/SparkleSetup.cs:408
-msgid "Access the synced files from your SparkleShare folder."
-msgstr "Nå de synkroniserade filerna från din SparkleShare-mapp."
+#: ../SparkleShare/SparkleSetup.cs:399
+msgid "Access the files from your SparkleShare folder."
+msgstr ""
 
 #. A button that opens the synced folder
-#: ../SparkleShare/SparkleSetup.cs:411
+#: ../SparkleShare/SparkleSetup.cs:402
 msgid "Open Folder"
 msgstr "Öppna katalog"
+
+#: ../SparkleShare/SparkleSetup.cs:428
+msgid "What's happening next?"
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:429
+msgid ""
+"SparkleShare creates a special folder in your personal folder that will keep"
+" track of your projects."
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:432
+msgid "Skip Tutorial"
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:437 ../SparkleShare/SparkleSetup.cs:457
+#: ../SparkleShare/SparkleSetup.cs:475
+msgid "Continue"
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:453
+msgid "Sharing files with others"
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:454
+msgid ""
+"All files added to your project folders are synced with the host "
+"automatically, as well as with your collaborators."
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:471
+msgid "The status icon is here to help"
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:472
+msgid ""
+"It shows the syncing process status, and contains links to your projects and"
+" the event log."
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:489
+msgid "Adding projects to SparkleShare"
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:490
+msgid ""
+"Just click this button when you see it on the web, and the project will be "
+"automatically added:"
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:493
+msgid ""
+"…or select <b>‘Add Project…’</b> from the status icon menu to add one by "
+"hand."
+msgstr ""
+
+#. Opens the wizard to add a new remote folder
+#: ../SparkleShare/SparkleSetup.cs:502
+#: ../SparkleShare/SparkleStatusIcon.cs:238
+msgid "Add Project…"
+msgstr ""
 
 #: ../SparkleShare/SparkleSetupWindow.cs:45
 msgid "SparkleShare Setup"
 msgstr "SparkleShare-inställningar"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:225
-msgid "No Remote Folders Yet"
-msgstr "Inga fjärrkataloger ännu"
+#: ../SparkleShare/SparkleStatusIcon.cs:228
+msgid "No projects yet"
+msgstr ""
 
-#. Opens the wizard to add a new remote folder
-#: ../SparkleShare/SparkleStatusIcon.cs:235
-msgid "Add Remote Folder…"
-msgstr "Lägg till fjärrkatalog"
-
-#: ../SparkleShare/SparkleStatusIcon.cs:259
+#: ../SparkleShare/SparkleStatusIcon.cs:262
 msgid "Show Recent Events"
 msgstr "Visa senaste händelser"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:279
+#: ../SparkleShare/SparkleStatusIcon.cs:282
 msgid "Turn Notifications Off"
 msgstr "Stäng av notifieringar"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:281
+#: ../SparkleShare/SparkleStatusIcon.cs:284
 msgid "Turn Notifications On"
 msgstr "Sätt på notifieringar"
 
 #. A menu item that quits the application
-#: ../SparkleShare/SparkleStatusIcon.cs:308
+#: ../SparkleShare/SparkleStatusIcon.cs:311
 msgid "Quit"
 msgstr "Avsluta"
 
