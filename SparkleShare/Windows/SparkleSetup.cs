@@ -178,53 +178,52 @@ namespace SparkleShare {
             // entries filled in by the user
             if (!String.IsNullOrEmpty(NameEntry.Text) &&
                 Program.Controller.IsValidEmail (EmailEntry.Text)) {
-
                 buttonNext.Enabled = true;
             } else {
                 buttonNext.Enabled = false;
             }
         }
 
-        private void showInfo (string text) {
+        private void ShowInfo (string text) {
             pictureBox.Visible = false;
             panel_info.Visible = true;
             label_info.Text = text;
         }
 
-        private void hideInfo () {
+        private void HideInfo () {
             pictureBox.Visible = true;
             panel_info.Visible = false;
         }
 
         private void radio_button_own_server_MouseEnter (object sender, EventArgs e) {
-            showInfo ("To use your own server you need to ...");
+            ShowInfo ("To use your own server you need to ...");
         }
 
         private void radio_button_github_MouseEnter (object sender, EventArgs e) {
-            showInfo (_("Free hosting for Free and Open Source Software projects.") +
+            ShowInfo (_("Free hosting for Free and Open Source Software projects.") +
                       _("Also has paid accounts for extra private space and bandwidth."));
         }
 
         private void radio_button_gitorious_MouseEnter (object sender, EventArgs e) {
-            showInfo (_("Completely Free as in Freedom infrastructure.") +
+            ShowInfo (_("Completely Free as in Freedom infrastructure.") +
                       _("Free accounts for Free and Open Source projects."));
         }
 
         private void radio_button_gnome_MouseEnter (object sender, EventArgs e) {
-            showInfo (_("GNOME is an easy to understand interface to your computer.") +
+            ShowInfo (_("GNOME is an easy to understand interface to your computer.") +
                       _("Select this option if you're a developer or designer working on GNOME."));
         }
 
         private void panel_server_selection_MouseLeave (object sender, EventArgs e) {
-            hideInfo ();
+            HideInfo ();
         }
 
         private void FolderEntry_MouseEnter (object sender, EventArgs e) {
-            showInfo ("This is the path to your git project ...");
+            ShowInfo ("This is the path to your git project ...");
         }
 
         private void panel_folder_selection_MouseLeave (object sender, EventArgs e) {
-            hideInfo ();
+            HideInfo ();
         }
     }
 }
