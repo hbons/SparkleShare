@@ -65,10 +65,19 @@ namespace SparkleLib {
                 string [] files = Directory .GetFiles(path);
 
                 foreach (string file in files)
-                    File.SetAttributes (file, FileAttributes.Normal);
+                    if (!IsSymlink (file))
+                        File.SetAttributes (file, FileAttributes.Normal);
             }
         }
 
+        // Check if a file is a symbolic link
+        public static bool IsSymlink (string file)
+        {
+            FileAttributes attr = File.GetAttributes (file);
+
+            return ((attr & FileAttributes.ReparsePoint) ==
+                    FileAttributes.ReparsePoint);
+        }
 
         // Converts a UNIX timestamp to a more usable time object
         public static DateTime UnixTimestampToDateTime (int timestamp)
