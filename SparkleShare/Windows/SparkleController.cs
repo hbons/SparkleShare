@@ -64,7 +64,9 @@ namespace SparkleShare {
 			if (String.IsNullOrEmpty (System.Environment.GetEnvironmentVariable ("HOME")))
 				System.Environment.SetEnvironmentVariable ("HOME", Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%"));
 
-			StartSshAgent ();
+            StartSshAgent();
+            // Start the agent but also make it stop when application is qutting
+            Application.ApplicationExit += new EventHandler(this.StopSshAgent);
 
 			base.Initialize ();
 		}
@@ -160,15 +162,17 @@ namespace SparkleShare {
 		{
 			if (String.IsNullOrEmpty (System.Environment.GetEnvironmentVariable ("SSH_AUTH_SOCK"))) {
 
-				Process process = new Process ();
-				process.StartInfo.FileName = "ssh-agent";
-				process.StartInfo.UseShellExecute = false;
-				process.StartInfo.RedirectStandardOutput = true;
+				ProcessStartInfo processInfo = new ProcessStartInfo ();
+                Process process;
 
-				process.Start ();
-
+				processInfo.FileName = "ssh-agent";
+				processInfo.UseShellExecute = false;
+				processInfo.RedirectStandardOutput = true;
+                
+				process = Process.Start (processInfo);
 				string Output = process.StandardOutput.ReadToEnd ();
-				process.WaitForExit ();
+                process.WaitForExit();
+                process.Close ();
 
 				Match AuthSock = new Regex (@"SSH_AUTH_SOCK=([^;\n\r]*)").Match (Output);
 				if (AuthSock.Success) {
@@ -185,6 +189,12 @@ namespace SparkleShare {
 				}
 			}
 		}
+
+        private void StopSshAgent (object sender, EventArgs e)
+        {
+            int pid = Int32.Parse(System.Environment.GetEnvironmentVariable("SSH_AGENT_PID"));
+            Process.GetProcessById(pid).Kill();
+        }
 
 
 	}
