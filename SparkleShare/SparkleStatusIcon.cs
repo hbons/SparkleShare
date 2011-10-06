@@ -235,7 +235,7 @@ namespace SparkleShare {
                 Menu.Add (new SeparatorMenuItem ());
 
                 // Opens the wizard to add a new remote folder
-                MenuItem sync_item = new MenuItem (_("Add Project…"));
+                MenuItem sync_item = new MenuItem (_("Add Hosted Project…"));
             
                 if (Program.Controller.FirstRun)
                     sync_item.Sensitive = false;
@@ -259,7 +259,7 @@ namespace SparkleShare {
             Menu.Add (sync_item);
             Menu.Add (new SeparatorMenuItem ());
 
-            MenuItem recent_events_item = new MenuItem (_("Show Recent Events"));
+            MenuItem recent_events_item = new MenuItem (_("Open Recent Events"));
             
                 if (Program.Controller.Folders.Count < 1)
                     recent_events_item.Sensitive = false;
