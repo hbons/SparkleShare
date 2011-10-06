@@ -189,12 +189,6 @@ namespace SparkleShare {
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Add);
 
-            int index;
-            if (SelectedPlugin == null)
-                index = 0;
-            else
-                index = Plugins.IndexOf (SelectedPlugin);
-
             SelectedPluginChanged (SelectedPluginIndex);
         }
 

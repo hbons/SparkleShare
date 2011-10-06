@@ -155,13 +155,13 @@ namespace SparkleShare {
                             Editable        = false,
                             Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 308, 160, 17),
                             StringValue     = "Remote Path:",
-                            Font            = SparkleUI.Font,
-                            Enabled         = (Controller.SelectedPlugin.Path == null)
+                            Font            = SparkleUI.Font
                         };
 
                         PathTextField = new NSTextField () {
                             Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 336, 196, 22),
-                            StringValue     = Controller.PreviousPath
+                            StringValue     = Controller.PreviousPath,
+                            Enabled         = (Controller.SelectedPlugin.Path == null)
                         };
 
 
@@ -359,7 +359,43 @@ namespace SparkleShare {
                     case PageType.Error: {
 
                         Header      = "Something went wrong…";
-                        Description = "";
+                        Description = "Please check the following:";
+
+                        // Displaying marked up text with Cocoa is
+                        // a pain, so we just use a webview instead
+                        WebView web_view = new WebView ();
+                        web_view.Frame = new RectangleF (190, Frame.Height - 525, 375, 400);
+
+                        string html = "<style>" +
+                            "* {" +
+                            "  font-family: 'Lucida Grande';" +
+                            "  font-size: 12px; cursor: default;" +
+                            "}" +
+                            "body {" +
+                            "  -webkit-user-select: none;" +
+                            "  margin: 0;" +
+                            "  padding: 3px;" +
+                            "}" +
+                            "li {" +
+                            "  margin-bottom: 16px;" +
+                            "  margin-left: 0;" +
+                            "  padding-left: 0;" +
+                            "  line-height: 20px;" +
+                            "}" +
+                            "ul {" +
+                            "  padding-left: 24px;" +
+                            "}" +
+                            "</style>" +
+                            "<ul>" +
+                            "  <li>First, have you tried turning it off and on again?</li>" +
+                            "  <li><b>" + Controller.PreviousUrl + "</b> is the address we've compiled. Does this look alright?</li>" +
+                            "  <li>The host needs to know who you are. Did you upload the key that's in your SparkleShare folder?</li>" +
+                            "</ul>";
+
+                        web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
+                        web_view.DrawsBackground = false;
+
+                        ContentView.AddSubview (web_view);
 
                         TryAgainButton = new NSButton () {
                             Title = "Try again…"
