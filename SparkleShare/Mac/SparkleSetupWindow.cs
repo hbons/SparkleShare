@@ -129,6 +129,8 @@ namespace SparkleShare {
                     i++;
                 }
             }
+
+            RecalculateKeyViewLoop ();
         }
 
 
@@ -144,6 +146,12 @@ namespace SparkleShare {
             OrderOut (this);
             NSApplication.SharedApplication.RemoveWindowsItem (this);
             return;
+        }
+
+
+        public override bool AcceptsFirstResponder ()
+        {
+            return true;
         }
     }
 }
