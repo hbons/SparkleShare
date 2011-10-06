@@ -282,24 +282,6 @@ namespace SparkleShare {
                 if (ChangePathFieldEvent != null)
                     ChangePathFieldEvent ("", "", FieldState.Enabled);
             }
-
-            // TODO: previous server/folder doesn't work yet
-
-            /*
-            if (!string.IsNullOrEmpty (PreviousServer) && SelectedPlugin.Address == null) {
-                if (ChangeAddressFieldEvent != null) {
-                    ChangeAddressFieldEvent (this.previous_server,
-                        SelectedPlugin.AddressExample, FieldState.Enabled);
-                }
-            }
-
-            if (!string.IsNullOrEmpty (PreviousFolder) && SelectedPlugin.Path == null) {
-                if (ChangePathFieldEvent != null) {
-                    ChangeAddressFieldEvent (this.previous_folder,
-                        SelectedPlugin.PathExample, FieldState.Enabled);
-                }
-            }
-            */
         }
     }
 

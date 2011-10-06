@@ -166,13 +166,6 @@ namespace SparkleShare {
                         PathEntry = new SparkleEntry ();
                         AddressEntry = new SparkleEntry ();
 
-                        Controller.SelectListPluginEvent += delegate (int index) {
-                            Application.Invoke (delegate {
-                                TreeSelection selection = tree.Selection;
-                                TreePath path = new TreePath (index.ToString ());
-                                selection.SelectPath (path);
-                            });
-                        };
 
                         // Select the first plugin by default
                         TreeSelection default_selection = tree.Selection;
@@ -182,14 +175,20 @@ namespace SparkleShare {
 
                         Controller.ChangeAddressFieldEvent += delegate (string text,
                             string example_text, FieldState state) {
-
+                            Console.WriteLine ("> " +  text);
                             Application.Invoke (delegate {
                                 AddressEntry.Text        = text;
                                 AddressEntry.Sensitive   = (state == FieldState.Enabled);
-                                AddressEntry.ExampleText = example_text;
 
-                                if (!string.IsNullOrEmpty (text))
+                                if (string.IsNullOrEmpty (example_text))
+                                    AddressEntry.ExampleText = null;
+                                else
+                                    AddressEntry.ExampleText = example_text;
+
+                                if (string.IsNullOrEmpty (text))
                                     AddressEntry.ExampleTextActive = true;
+                                else
+                                    AddressEntry.ExampleTextActive = false;
                             });
                         };
 
@@ -199,10 +198,16 @@ namespace SparkleShare {
                             Application.Invoke (delegate {
                                 PathEntry.Text        = text;
                                 PathEntry.Sensitive   = (state == FieldState.Enabled);
-                                PathEntry.ExampleText = example_text;
 
-                                if (!string.IsNullOrEmpty (text))
+                                if (string.IsNullOrEmpty (example_text))
+                                    PathEntry.ExampleText = null;
+                                else
+                                    PathEntry.ExampleText = example_text;
+
+                                if (string.IsNullOrEmpty (text))
                                     PathEntry.ExampleTextActive = true;
+                                else
+                                    PathEntry.ExampleTextActive = false;
                             });
                         };
 
@@ -235,7 +240,7 @@ namespace SparkleShare {
                             }
 
                             if (!string.IsNullOrEmpty (address) &&
-                                address.Equals (Controller.PreviousServer)) {
+                                address.Equals (Controller.PreviousAddress)) {
 
                                 tree.SetCursor (path, service_column, false);
                                 SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
