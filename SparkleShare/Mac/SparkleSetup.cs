@@ -20,6 +20,8 @@ using System.Drawing;
 using System.IO;
 using System.Timers;
 
+using System.Collections.Generic;
+
 using Mono.Unix;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
@@ -28,37 +30,38 @@ using MonoMac.WebKit;
 
 namespace SparkleShare {
 
-        public class SparkleSetup : SparkleSetupWindow {
+    public class SparkleSetup : SparkleSetupWindow {
 
         public SparkleSetupController Controller = new SparkleSetupController ();
 
-                private NSButton ContinueButton;
-                private NSButton SyncButton;
-                private NSButton TryAgainButton;
-                private NSButton CancelButton;
-                private NSButton SkipTutorialButton;
-                private NSButton OpenFolderButton;
-                private NSButton FinishButton;
-                private NSButton AddProjectButton;
-                private NSImage SlideImage;
-                private NSImageView SlideImageView;
-                private NSForm UserInfoForm;
-                private NSProgressIndicator ProgressIndicator;
-                private NSTextField AddressTextField;
-                private NSTextField FolderNameTextField;
-                private NSTextField ServerTypeLabel;
-                private NSTextField AddressLabel;
-                private NSTextField FolderNameLabel;
-                private NSTextField FolderNameHelpLabel;
-                private NSTextField AddProjectTextField;
-                private NSButtonCell ButtonCellProto;
-                private NSMatrix Matrix;
-                private int ServerType;
-                private Timer timer;
+        private NSButton ContinueButton;
+        private NSButton SyncButton;
+        private NSButton TryAgainButton;
+        private NSButton CancelButton;
+        private NSButton SkipTutorialButton;
+        private NSButton OpenFolderButton;
+        private NSButton FinishButton;
+        private NSButton AddProjectButton;
+        private NSImage SlideImage;
+        private NSImageView SlideImageView;
+        private NSForm UserInfoForm;
+        private NSProgressIndicator ProgressIndicator;
+        private NSTextField AddressTextField;
+        private NSTextField PathTextField;
+        private NSTextField AddressLabel;
+        private NSTextField PathLabel;
+        private NSTextField PathHelpLabel;
+        private NSTextField AddProjectTextField;
+        private Timer timer;
+        private NSTableView TableView;
+        private NSScrollView ScrollView;
+        private NSTableColumn IconColumn;
+        private NSTableColumn DescriptionColumn;
+        private SparkleDataSource DataSource;
 
-                
-                public SparkleSetup () : base ()
-                {
+
+        public SparkleSetup () : base ()
+        {
             Controller.ChangePageEvent += delegate (PageType type) {
                 InvokeOnMainThread (delegate {
                     Reset ();
@@ -124,122 +127,140 @@ namespace SparkleShare {
 
                     case PageType.Add: {
 
-                        Header       = "Where is your project?";
+                        Header       = "Where's your project hosted?";
                         Description  = "";
 
-                        ServerTypeLabel  = new NSTextField () {
-                            Alignment       = NSTextAlignment.Right,
-                            BackgroundColor = NSColor.WindowBackground,
-                            Bordered        = false,
-                            Editable        = false,
-                            Frame           = new RectangleF (150, Frame.Height - 159 , 160, 17),
-                            StringValue     = "Host Type:",
-                            Font            = SparkleUI.Font
-                        };
-
                         AddressLabel = new NSTextField () {
-                            Alignment       = NSTextAlignment.Right,
+                            Alignment       = NSTextAlignment.Left,
                             BackgroundColor = NSColor.WindowBackground,
                             Bordered        = false,
                             Editable        = false,
-                            Frame           = new RectangleF (150, Frame.Height - 257 , 160, 17),
+                            Frame           = new RectangleF (190, Frame.Height - 308, 160, 17),
                             StringValue     = "Address:",
                             Font            = SparkleUI.Font
                         };
 
-                        FolderNameLabel = new NSTextField () {
-                            Alignment       = NSTextAlignment.Right,
+                        AddressTextField = new NSTextField () {
+                            Frame       = new RectangleF (190, Frame.Height - 336, 196, 22),
+                            Font        = SparkleUI.Font,
+                            StringValue = Controller.PreviousAddress,
+                            Enabled     = (Controller.SelectedPlugin.Address == null)
+                        };
+
+
+                        PathLabel = new NSTextField () {
+                            Alignment       = NSTextAlignment.Left,
                             BackgroundColor = NSColor.WindowBackground,
                             Bordered        = false,
                             Editable        = false,
-                            Frame           = new RectangleF (150, Frame.Height - 284 , 160, 17),
-                            StringValue     = "Folder Name:",
+                            Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 308, 160, 17),
+                            StringValue     = "Remote Path:",
                             Font            = SparkleUI.Font
                         };
 
-
-                        AddressTextField = new NSTextField () {
-                            Frame       = new RectangleF (320, Frame.Height - 260 , 256, 22),
-                            Font        = SparkleUI.Font,
-                            StringValue = Controller.PreviousServer
+                        PathTextField = new NSTextField () {
+                            Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 336, 196, 22),
+                            StringValue     = Controller.PreviousPath,
+                            Enabled         = (Controller.SelectedPlugin.Path == null)
                         };
 
-                        AddressTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
-                        FolderNameTextField = new NSTextField () {
-                            Frame           = new RectangleF (320, Frame.Height - (260 + 22 + 4) , 256, 22),
-                            StringValue     = Controller.PreviousFolder
-                        };
+                        AddressTextField.Cell.LineBreakMode    = NSLineBreakMode.TruncatingTail;
+                        PathTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
-                        FolderNameTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
-                        FolderNameHelpLabel = new NSTextField () {
+                        PathHelpLabel = new NSTextField () {
                             BackgroundColor = NSColor.WindowBackground,
                             Bordered        = false,
                             TextColor       = NSColor.DisabledControlText,
                             Editable        = false,
-                            Frame           = new RectangleF (320, Frame.Height - 305 , 200, 17),
-                            StringValue     = "e.g. ‘rupert/website-design’"
+                            Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 355, 204, 17),
+                            StringValue     = "e.g. ‘rupert/website-design’",
+                            Font            = NSFontManager.SharedFontManager.FontWithFamily
+                                                  ("Lucida Grande", NSFontTraitMask.Condensed, 0, 11)
                         };
 
-                        ServerType = 0;
 
-                        ButtonCellProto = new NSButtonCell ();
-                        ButtonCellProto.SetButtonType (NSButtonType.Radio) ;
+                        TableView = new NSTableView () {
+                            Frame            = new RectangleF (0, 0, 0, 0),
+                            RowHeight        = 30,
+                            IntercellSpacing = new SizeF (0, 12),
+                            HeaderView       = null
+                        };
 
-                        Matrix = new NSMatrix (new RectangleF (315, Frame.Height - 220, 256, 78),
-                            NSMatrixMode.Radio, ButtonCellProto, 4, 1);
+                        ScrollView = new NSScrollView () {
+                            Frame               = new RectangleF (190, Frame.Height - 280, 408, 175),
+                            DocumentView        = TableView,
+                            HasVerticalScroller = true,
+                            BorderType          = NSBorderType.BezelBorder
+                        };
 
-                        Matrix.CellSize = new SizeF (256, 18);
+                        IconColumn = new NSTableColumn (new NSImage ()) {
+                            Width = 42,
+                            HeaderToolTip = "Icon",
+                            DataCell = new NSImageCell ()
+                        };
 
-                        Matrix.Cells [0].Title = "My own server";
-                        Matrix.Cells [1].Title = "Github";
-                        Matrix.Cells [2].Title = "Gitorious";
-                        Matrix.Cells [3].Title = "The GNOME Project";
+                        DescriptionColumn = new NSTableColumn () {
+                            Width         = 350,
+                            HeaderToolTip = "Description",
+                            Editable      = false
+                        };
 
-                        foreach (NSCell cell in Matrix.Cells)
-                            cell.Font = SparkleUI.Font;
+                        DescriptionColumn.DataCell.Font =
+                            NSFontManager.SharedFontManager.FontWithFamily (
+                                "Lucida Grande", NSFontTraitMask.Condensed, 0, 11);
 
-                        // TODO: Ugly hack, do properly with events
+                        TableView.AddColumn (IconColumn);
+                        TableView.AddColumn (DescriptionColumn);
+
+                        DataSource = new SparkleDataSource ();
+
+                        foreach (SparklePlugin plugin in Controller.Plugins)
+                            DataSource.Items.Add (plugin);
+
+                        TableView.DataSource = DataSource;
+                        TableView.ReloadData ();
+
+
+                        Controller.ChangeAddressFieldEvent += delegate (string text,
+                            string example_text, FieldState state) {
+
+                            InvokeOnMainThread (delegate {
+                                AddressTextField.StringValue = text;
+                                AddressTextField.Enabled     = (state == FieldState.Enabled);
+                            });
+                        };
+
+
+                        Controller.ChangePathFieldEvent += delegate (string text,
+                            string example_text, FieldState state) {
+
+                            InvokeOnMainThread (delegate {
+                                PathTextField.StringValue = text;
+                                PathTextField.Enabled     = (state == FieldState.Enabled);
+
+                                if (!string.IsNullOrEmpty (example_text))
+                                    PathHelpLabel.StringValue = "e.g. " + example_text;
+                            });
+                        };
+
+                        TableView.SelectRow (Controller.SelectedPluginIndex, false);
+
+
                         timer = new Timer () {
                             Interval = 50
                         };
 
+                        // TODO: Use an event
                         timer.Elapsed += delegate {
+                            if (TableView.SelectedRow != Controller.SelectedPluginIndex)
+                                Controller.SelectedPluginChanged (TableView.SelectedRow);
+
                             InvokeOnMainThread (delegate {
-                                if (Matrix.SelectedRow != ServerType) {
-                                    ServerType = Matrix.SelectedRow;
-
-                                    AddressTextField.Enabled = (ServerType == 0);
-
-                                    switch (ServerType) {
-                                    case 0:
-                                        AddressTextField.StringValue = "";
-                                        FolderNameHelpLabel.StringValue = "e.g. ‘rupert/website-design’";
-                                        break;
-                                    case 1:
-                                        AddressTextField.StringValue = "ssh://git@github.com/";
-                                        FolderNameHelpLabel.StringValue = "e.g. ‘rupert/website-design’";
-                                        break;
-                                    case 2:
-                                        AddressTextField.StringValue = "ssh://git@gitorious.org/";
-                                        FolderNameHelpLabel.StringValue = "e.g. ‘project/website-design’";
-                                        break;
-                                    case 3:
-                                        AddressTextField.StringValue = "ssh://git@gnome.org/git/";
-                                        FolderNameHelpLabel.StringValue = "e.g. ‘gnome-icon-theme’";
-                                        break;
-                                    }
-                                }
-
-
-                                if (ServerType == 0 && !AddressTextField.StringValue.Trim ().Equals ("")
-                                    && !FolderNameTextField.StringValue.Trim ().Equals ("")) {
-
-                                    SyncButton.Enabled = true;
-
-                                } else if (ServerType != 0 &&
-                                           !FolderNameTextField.StringValue.Trim ().Equals ("")) {
+                                // TODO: Move checking logic to controller
+                                if (!string.IsNullOrWhiteSpace (AddressTextField.StringValue) &&
+                                    !string.IsNullOrWhiteSpace (PathTextField.StringValue)) {
 
                                     SyncButton.Enabled = true;
 
@@ -247,20 +268,17 @@ namespace SparkleShare {
                                     SyncButton.Enabled = false;
                                 }
                             });
-
                         };
 
                         timer.Start ();
 
-                        ContentView.AddSubview (ServerTypeLabel);
-                        ContentView.AddSubview (Matrix);
 
+                        ContentView.AddSubview (ScrollView);
                         ContentView.AddSubview (AddressLabel);
                         ContentView.AddSubview (AddressTextField);
-
-                        ContentView.AddSubview (FolderNameLabel);
-                        ContentView.AddSubview (FolderNameTextField);
-                        ContentView.AddSubview (FolderNameHelpLabel);
+                        ContentView.AddSubview (PathLabel);
+                        ContentView.AddSubview (PathTextField);
+                        ContentView.AddSubview (PathHelpLabel);
 
                         SyncButton = new NSButton () {
                             Title = "Add",
@@ -271,9 +289,10 @@ namespace SparkleShare {
                                 timer.Stop ();
                                 timer = null;
 
-                                string folder_name    = FolderNameTextField.StringValue;
-                                string server         = AddressTextField.StringValue;
-                                Controller.AddPageCompleted (server, folder_name);
+                                Controller.AddPageCompleted (
+                                    AddressTextField.StringValue,
+                                    PathTextField.StringValue
+                                );
                             };
 
                         Buttons.Add (SyncButton);
@@ -288,7 +307,7 @@ namespace SparkleShare {
                                 });
                             };
 
-                            Buttons.Add (CancelButton);
+                        Buttons.Add (CancelButton);
 
                         break;
                     }
@@ -307,7 +326,7 @@ namespace SparkleShare {
                             Indeterminate = false,
                             DoubleValue = 1.0
                         };
-                                                
+
                         ProgressIndicator.StartAnimation (this);
                                                                                                 
                         Controller.UpdateProgressBarEvent += delegate (double percentage) {
@@ -315,7 +334,7 @@ namespace SparkleShare {
                                 ProgressIndicator.DoubleValue = percentage;
                             });
                         };
-                                                
+
                         ContentView.AddSubview (ProgressIndicator);
 
                         FinishButton = new NSButton () {
@@ -340,7 +359,43 @@ namespace SparkleShare {
                     case PageType.Error: {
 
                         Header      = "Something went wrong…";
-                        Description = "";
+                        Description = "Please check the following:";
+
+                        // Displaying marked up text with Cocoa is
+                        // a pain, so we just use a webview instead
+                        WebView web_view = new WebView ();
+                        web_view.Frame = new RectangleF (190, Frame.Height - 525, 375, 400);
+
+                        string html = "<style>" +
+                            "* {" +
+                            "  font-family: 'Lucida Grande';" +
+                            "  font-size: 12px; cursor: default;" +
+                            "}" +
+                            "body {" +
+                            "  -webkit-user-select: none;" +
+                            "  margin: 0;" +
+                            "  padding: 3px;" +
+                            "}" +
+                            "li {" +
+                            "  margin-bottom: 16px;" +
+                            "  margin-left: 0;" +
+                            "  padding-left: 0;" +
+                            "  line-height: 20px;" +
+                            "}" +
+                            "ul {" +
+                            "  padding-left: 24px;" +
+                            "}" +
+                            "</style>" +
+                            "<ul>" +
+                            "  <li>First, have you tried turning it off and on again?</li>" +
+                            "  <li><b>" + Controller.PreviousUrl + "</b> is the address we've compiled. Does this look alright?</li>" +
+                            "  <li>The host needs to know who you are. Did you upload the key that's in your SparkleShare folder?</li>" +
+                            "</ul>";
+
+                        web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
+                        web_view.DrawsBackground = false;
+
+                        ContentView.AddSubview (web_view);
 
                         TryAgainButton = new NSButton () {
                             Title = "Try again…"
@@ -559,5 +614,47 @@ namespace SparkleShare {
                 });
             };
         }
+    }
+
+
+    [Register("SparkleDataSource")]
+    public class SparkleDataSource : NSTableViewDataSource {
+
+        public List<object> Items ;
+
+
+        public SparkleDataSource ()
+        {
+            Items = new List<object> ();
         }
+
+
+        [Export("numberOfRowsInTableView:")]
+        public int numberOfRowsInTableView (NSTableView table_view)
+        {
+            if (Items == null)
+                return 0;
+            else
+                return Items.Count;
+        }
+
+
+        [Export("tableView:objectValueForTableColumn:row:")]
+        public NSObject objectValueForTableColumn (NSTableView table_view,
+            NSTableColumn table_column, int row_index)
+        {
+            // TODO: Style text nicely: "<b>Name</b>\n<grey>Description</grey>"
+            if (table_column.HeaderToolTip.Equals ("Description")) {
+                return new NSString (
+                    (Items [row_index] as SparklePlugin).Name + "\n" +
+                    (Items [row_index] as SparklePlugin).Description
+                );
+
+            } else {
+                return new NSImage ((Items [row_index] as SparklePlugin).ImagePath) {
+                    Size = new SizeF (24, 24)
+                };
+            }
+        }
+    }
 }
