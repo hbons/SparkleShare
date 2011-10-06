@@ -175,14 +175,20 @@ namespace SparkleShare {
 
                         Controller.ChangeAddressFieldEvent += delegate (string text,
                             string example_text, FieldState state) {
-
+                            Console.WriteLine ("> " +  text);
                             Application.Invoke (delegate {
                                 AddressEntry.Text        = text;
                                 AddressEntry.Sensitive   = (state == FieldState.Enabled);
-                                AddressEntry.ExampleText = example_text;
 
-                                if (!string.IsNullOrEmpty (text))
+                                if (string.IsNullOrEmpty (example_text))
+                                    AddressEntry.ExampleText = null;
+                                else
+                                    AddressEntry.ExampleText = example_text;
+
+                                if (string.IsNullOrEmpty (text))
                                     AddressEntry.ExampleTextActive = true;
+                                else
+                                    AddressEntry.ExampleTextActive = false;
                             });
                         };
 
@@ -192,10 +198,16 @@ namespace SparkleShare {
                             Application.Invoke (delegate {
                                 PathEntry.Text        = text;
                                 PathEntry.Sensitive   = (state == FieldState.Enabled);
-                                PathEntry.ExampleText = example_text;
 
-                                if (!string.IsNullOrEmpty (text))
+                                if (string.IsNullOrEmpty (example_text))
+                                    PathEntry.ExampleText = null;
+                                else
+                                    PathEntry.ExampleText = example_text;
+
+                                if (string.IsNullOrEmpty (text))
                                     PathEntry.ExampleTextActive = true;
+                                else
+                                    PathEntry.ExampleTextActive = false;
                             });
                         };
 
