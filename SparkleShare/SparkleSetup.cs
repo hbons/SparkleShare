@@ -166,13 +166,6 @@ namespace SparkleShare {
                         PathEntry = new SparkleEntry ();
                         AddressEntry = new SparkleEntry ();
 
-                        Controller.SelectListPluginEvent += delegate (int index) {
-                            Application.Invoke (delegate {
-                                TreeSelection selection = tree.Selection;
-                                TreePath path = new TreePath (index.ToString ());
-                                selection.SelectPath (path);
-                            });
-                        };
 
                         // Select the first plugin by default
                         TreeSelection default_selection = tree.Selection;
@@ -235,7 +228,7 @@ namespace SparkleShare {
                             }
 
                             if (!string.IsNullOrEmpty (address) &&
-                                address.Equals (Controller.PreviousServer)) {
+                                address.Equals (Controller.PreviousAddress)) {
 
                                 tree.SetCursor (path, service_column, false);
                                 SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
