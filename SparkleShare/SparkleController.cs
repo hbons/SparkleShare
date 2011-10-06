@@ -80,27 +80,9 @@ namespace SparkleShare {
         // from the Internet category if needed
         public override void InstallLauncher ()
         {
-            if (folder_path.Equals (SparkleConfig.DefaultConfig.TmpPath))
-                return;
-
-            string folder_name = Path.GetFileName (folder_path);
-            string backend = SparkleConfig.DefaultConfig.GetBackendForFolder (folder_name);
-
-            if (backend == null)
-                return;
-            
-            SparkleRepoBase repo = null;
-
-           if (backend.Equals ("Hg"))
-                repo = new SparkleRepoHg (folder_path, new SparkleBackendHg ());
-			
-	   else if (backend.Equals ("Unison"))
-                repo = new SparkleRepoUnison (folder_path, new SparkleBackendUnison ());
-
             string apps_path = 
                 new string [] {SparkleConfig.DefaultConfig.HomePath,
                     ".local", "share", "applications"}.Combine ();
-
 
             string desktopfile_path = Path.Combine (apps_path, "sparkleshare.desktop");
 
@@ -215,151 +197,11 @@ namespace SparkleShare {
             }
         }
 
-<<<<<<< HEAD
-
-        public string GetAvatar (string email, int size)
-        {
-            string avatar_file_path = SparkleHelpers.CombineMore (
-                Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath), "icons",
-                size + "x" + size, "status", "avatar-" + email);
-
-            return avatar_file_path;
-        }
-
-
-        public void FetchFolder (string server, string remote_folder)
-        {
-            server = server.Trim ();
-            remote_folder = remote_folder.Trim ();
-
-            string tmp_path = SparkleConfig.DefaultConfig.TmpPath;
-            if (!Directory.Exists (tmp_path))
-                Directory.CreateDirectory (tmp_path);
-
-            // Strip the '.git' from the name
-            string canonical_name = Path.GetFileNameWithoutExtension (remote_folder);
-            string tmp_folder     = Path.Combine (tmp_path, canonical_name);
-
-            SparkleFetcherBase fetcher = null;
-            string backend = null;
-
-/*            if (remote_folder.EndsWith (".hg")) {
-                remote_folder = remote_folder.Substring (0, (remote_folder.Length - 3));
-                fetcher       = new SparkleFetcherHg (server, remote_folder, tmp_folder);
-                backend       = "Hg";
-
-            } else if (remote_folder.EndsWith (".scp")) {
-                remote_folder = remote_folder.Substring (0, (remote_folder.Length - 4));
-                fetcher = new SparkleFetcherScp (server, remote_folder, tmp_folder);
-                backend = "Scp";
-				
-		    } else if (remote_folder.EndsWith (".unison")) {
-                remote_folder = remote_folder.Substring (0, (remote_folder.Length - 7));
-                fetcher = new SparkleFetcherUnison (server, remote_folder, tmp_folder);
-                backend = "Unison";
-
-            } else {*/
-                fetcher = new SparkleFetcherGit (server, remote_folder, tmp_folder);
-                backend = "Git";
-            //}
-
-            bool target_folder_exists = Directory.Exists (
-                Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, canonical_name));
-
-            // Add a numbered suffix to the nameif a folder with the same name
-            // already exists. Example: "Folder (2)"
-            int i = 1;
-            while (target_folder_exists) {
-                i++;
-                target_folder_exists = Directory.Exists (
-                    Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, canonical_name + " (" + i + ")"));
-            }
-
-            string target_folder_name = canonical_name;
-            if (i > 1)
-                target_folder_name += " (" + i + ")";
-
-            fetcher.Finished += delegate {
-
-                // Needed to do the moving
-                SparkleHelpers.ClearAttributes (tmp_folder);
-                string target_folder_path = Path.Combine (
-                    SparkleConfig.DefaultConfig.FoldersPath, target_folder_name);
-
-                try {
-                    Directory.Move (tmp_folder, target_folder_path);
-                } catch (Exception e) {
-                    SparkleHelpers.DebugInfo ("Controller", "Error moving folder: " + e.Message);
-                }
-
-                SparkleConfig.DefaultConfig.AddFolder (target_folder_name, fetcher.RemoteUrl, backend);
-                AddRepository (target_folder_path);
-
-                if (FolderFetched != null)
-                    FolderFetched ();
-
-                FolderSize = GetFolderSize ();
-
-                if (FolderSizeChanged != null)
-                    FolderSizeChanged (FolderSize);
-
-                if (FolderListChanged != null)
-                    FolderListChanged ();
-
-                fetcher.Dispose ();
-
-                if (Directory.Exists (tmp_path))
-                    Directory.Delete (tmp_path, true);
-            };
-
-
-            fetcher.Failed += delegate {
-                if (FolderFetchError != null)
-                    FolderFetchError ();
-
-                fetcher.Dispose ();
-
-                if (Directory.Exists (tmp_path))
-                    Directory.Delete (tmp_path, true);
-            };
-
-
-            fetcher.Start ();
-        }
-
-
-        // Creates an MD5 hash of input
-        private string GetMD5 (string s)
-        {
-            MD5 md5 = new MD5CryptoServiceProvider ();
-            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
-            Byte[] encoded_bytes = md5.ComputeHash (bytes);
-            return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");
-        }
-
-
-        // Checks whether there are any folders syncing and
-        // quits if safe
-        public void TryQuit ()
-        {
-            foreach (SparkleRepoBase repo in Repositories) {
-                if (repo.Status == SyncStatus.SyncUp   ||
-                    repo.Status == SyncStatus.SyncDown ||
-                    repo.IsBuffering) {
-
-                    if (OnQuitWhileSyncing != null)
-                        OnQuitWhileSyncing ();
-                    
-                    return;
-                }
-            }
-=======
         
         public override string EventEntryHTML {
             get {
                 string path = new string [] {Defines.PREFIX,
                     "share", "sparkleshare", "html", "event-entry.html"}.Combine ();
->>>>>>> upstream/master
             
                 return String.Join (Environment.NewLine, File.ReadAllLines (path));
             }
