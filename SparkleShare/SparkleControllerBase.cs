@@ -1130,8 +1130,8 @@ namespace SparkleShare {
             System.Windows.Forms.Application.Exit ();
 
             // Also kill the SSH_AGENT 
-            int pid = Int32.Parse(System.Environment.GetEnvironmentVariable("SSH_AGENT_PID"));
-            Process.GetProcessById(pid).Kill();
+            int pid = Int32.Parse (System.Environment.GetEnvironmentVariable ("SSH_AGENT_PID"));
+            Process.GetProcessById (pid).Kill ();
 #endif
         }
 
@@ -1139,7 +1139,7 @@ namespace SparkleShare {
         // Checks to see if an email address is valid
         public bool IsValidEmail (string email)
         {
-            Regex regex = new Regex(@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$", RegexOptions.IgnoreCase);
+            Regex regex = new Regex (@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$", RegexOptions.IgnoreCase);
             return regex.IsMatch (email);
         }
 
