@@ -30,12 +30,13 @@ namespace SparkleShare {
 
     public class SparkleController : SparkleControllerBase {
 
-		public SparkleController () : base ()
-		{
-		}
+        public SparkleController ()
+            : base ()
+        {
+        }
 
-		public override void Initialize ()
-		{
+        public override void Initialize ()
+        {
             Settings settings = new Settings ();
             BrowserSettings browserSettings = new BrowserSettings ();
 
@@ -46,28 +47,28 @@ namespace SparkleShare {
 
             CEF.RegisterScheme ("application", "sparkleshare", new ApplicationSchemeHandlerFactory ());
             CEF.RegisterScheme ("application", "file", new FileSchemeHandlerFactory ());
-            
-			Application.EnableVisualStyles ();
-			Application.SetCompatibleTextRenderingDefault (false);
 
-			// Add msysgit to path, as we cannot asume it is added to the path
-			// Asume it is installed in @"C:\msysgit\bin" for now
-			string MSysGit=@"C:\msysgit";
+            Application.EnableVisualStyles ();
+            Application.SetCompatibleTextRenderingDefault (false);
 
-			string newPath = MSysGit + @"\bin" + ";"
-			               + MSysGit + @"\mingw\bin" + ";"
-			               + MSysGit + @"\cmd" + ";"
-			               + System.Environment.ExpandEnvironmentVariables ("%PATH%");
-			System.Environment.SetEnvironmentVariable ("PATH", newPath);
-			System.Environment.SetEnvironmentVariable ("PLINK_PROTOCOL", "ssh");
+            // Add msysgit to path, as we cannot asume it is added to the path
+            // Asume it is installed in @"C:\msysgit\bin" for now
+            string MSysGit = @"C:\msysgit";
 
-			if (String.IsNullOrEmpty (System.Environment.GetEnvironmentVariable ("HOME")))
-				System.Environment.SetEnvironmentVariable ("HOME", Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%"));
+            string newPath = MSysGit + @"\bin" + ";"
+                           + MSysGit + @"\mingw\bin" + ";"
+                           + MSysGit + @"\cmd" + ";"
+                           + System.Environment.ExpandEnvironmentVariables ("%PATH%");
+            System.Environment.SetEnvironmentVariable ("PATH", newPath);
+            System.Environment.SetEnvironmentVariable ("PLINK_PROTOCOL", "ssh");
 
-            StartSshAgent();
+            if (String.IsNullOrEmpty (System.Environment.GetEnvironmentVariable ("HOME")))
+                System.Environment.SetEnvironmentVariable ("HOME", Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%"));
 
-			base.Initialize ();
-		}
+            StartSshAgent ();
+
+            base.Initialize ();
+        }
 
         public override string EventLogHTML
         {
@@ -111,53 +112,53 @@ namespace SparkleShare {
         }
 
 
-		// Creates a .desktop entry in autostart folder to
-		// start SparkleShare automatically at login
-		public override void EnableSystemAutostart ()
-		{
-		}
-		
-
-		// Installs a launcher so the user can launch SparkleShare
-		// from the Internet category if needed
-		public override void InstallLauncher ()
-		{
-		}
+        // Creates a .desktop entry in autostart folder to
+        // start SparkleShare automatically at login
+        public override void EnableSystemAutostart ()
+        {
+        }
 
 
-		// Adds the SparkleShare folder to the user's
-		// list of bookmarked places
-		public override void AddToBookmarks ()
-		{
-		}
+        // Installs a launcher so the user can launch SparkleShare
+        // from the Internet category if needed
+        public override void InstallLauncher ()
+        {
+        }
 
 
-		// Creates the SparkleShare folder in the user's home folder
-		public override bool CreateSparkleShareFolder ()
-		{
-			if (!Directory.Exists (SparklePaths.SparklePath)) {
+        // Adds the SparkleShare folder to the user's
+        // list of bookmarked places
+        public override void AddToBookmarks ()
+        {
+        }
 
-				Directory.CreateDirectory (SparklePaths.SparklePath);
-				SparkleHelpers.DebugInfo ("Config", "Created '" + SparklePaths.SparklePath + "'");
 
-				return true;
+        // Creates the SparkleShare folder in the user's home folder
+        public override bool CreateSparkleShareFolder ()
+        {
+            if (!Directory.Exists (SparklePaths.SparklePath)) {
 
-			}
+                Directory.CreateDirectory (SparklePaths.SparklePath);
+                SparkleHelpers.DebugInfo ("Config", "Created '" + SparklePaths.SparklePath + "'");
 
-			return false;
-		}
+                return true;
 
-		public override void OpenSparkleShareFolder (string subfolder)
-		{
-			Process process = new Process();
-			process.StartInfo.Arguments = ",/root," + SparkleHelpers.CombineMore(SparklePaths.SparklePath, subfolder);
-			process.StartInfo.FileName = "explorer";
-			
-			process.Start();
-		}
+            }
 
-		private void StartSshAgent ()
-		{
+            return false;
+        }
+
+        public override void OpenSparkleShareFolder (string subfolder)
+        {
+            Process process = new Process ();
+            process.StartInfo.Arguments = ",/root," + SparkleHelpers.CombineMore (SparklePaths.SparklePath, subfolder);
+            process.StartInfo.FileName = "explorer";
+
+            process.Start ();
+        }
+
+        private void StartSshAgent ()
+        {
             // Check to see if the process is running
             Process [] ProcessList = Process.GetProcesses ();
             foreach (Process p in ProcessList) {
@@ -196,9 +197,9 @@ namespace SparkleShare {
                     SparkleHelpers.DebugInfo ("SSH", "ssh-agent started, PID=unknown");
                 }
             }
-		}
+        }
 
 
-	}
+    }
 
 }
