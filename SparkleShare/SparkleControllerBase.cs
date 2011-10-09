@@ -1130,8 +1130,15 @@ namespace SparkleShare {
             System.Windows.Forms.Application.Exit ();
 
             // Also kill the SSH_AGENT 
-            int pid = Int32.Parse (System.Environment.GetEnvironmentVariable ("SSH_AGENT_PID"));
-            Process.GetProcessById (pid).Kill ();
+            try {
+                // Check if we created the process, if so bring it down. Else leave it running
+                if (!System.Environment.GetEnvironmentVariable ("SSH_AUTH_SOCK").Equals("unknown")) {
+                    int pid = Int32.Parse (System.Environment.GetEnvironmentVariable ("SSH_AGENT_PID"));
+                    Process.GetProcessById (pid).Kill ();
+                }
+            } catch (Exception e) {
+                // Handle exception if needed
+            }
 #endif
         }
 

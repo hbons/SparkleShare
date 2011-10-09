@@ -158,34 +158,44 @@ namespace SparkleShare {
 
 		private void StartSshAgent ()
 		{
-			if (String.IsNullOrEmpty (System.Environment.GetEnvironmentVariable ("SSH_AUTH_SOCK"))) {
+            // Check to see if the process is running
+            Process [] ProcessList = Process.GetProcesses ();
+            foreach (Process p in ProcessList) {
+                if (p.ToString ().Contains ("ssh-agent")) {
+                    System.Environment.SetEnvironmentVariable ("SSH_AGENT_PID", p.Id.ToString ());
+                    System.Environment.SetEnvironmentVariable ("SSH_AUTH_SOCK", "unknown");
+                    return;
+                }
+            }
 
-				ProcessStartInfo processInfo = new ProcessStartInfo ();
+            // If it wasn't running we start it
+            if (String.IsNullOrEmpty (System.Environment.GetEnvironmentVariable ("SSH_AGENT_PID"))) {
+
+                ProcessStartInfo processInfo = new ProcessStartInfo ();
                 Process process;
 
-				processInfo.FileName = "ssh-agent";
-				processInfo.UseShellExecute = false;
-				processInfo.RedirectStandardOutput = true;
-                
-				process = Process.Start (processInfo);
-				string Output = process.StandardOutput.ReadToEnd ();
-                process.WaitForExit();
+                processInfo.FileName = "ssh-agent";
+                processInfo.UseShellExecute = false;
+                processInfo.RedirectStandardOutput = true;
+
+                process = Process.Start (processInfo);
+                string Output = process.StandardOutput.ReadToEnd ();
+                process.WaitForExit ();
                 process.Close ();
 
-				Match AuthSock = new Regex (@"SSH_AUTH_SOCK=([^;\n\r]*)").Match (Output);
-				if (AuthSock.Success) {
-					System.Environment.SetEnvironmentVariable ("SSH_AUTH_SOCK", AuthSock.Groups[1].Value);
-				}
+                Match AuthSock = new Regex (@"SSH_AUTH_SOCK=([^;\n\r]*)").Match (Output);
+                if (AuthSock.Success) {
+                    System.Environment.SetEnvironmentVariable ("SSH_AUTH_SOCK", AuthSock.Groups [1].Value);
+                }
 
-				Match AgentPid = new Regex (@"SSH_AGENT_PID=([^;\n\r]*)").Match (Output);
-				if (AgentPid.Success) {
-					System.Environment.SetEnvironmentVariable ("SSH_AGENT_PID", AgentPid.Groups[1].Value);
-					SparkleHelpers.DebugInfo ("SSH", "ssh-agent started, PID=" + AgentPid.Groups[1].Value);
-				}
-				else {
-					SparkleHelpers.DebugInfo ("SSH", "ssh-agent started, PID=unknown");
-				}
-			}
+                Match AgentPid = new Regex (@"SSH_AGENT_PID=([^;\n\r]*)").Match (Output);
+                if (AgentPid.Success) {
+                    System.Environment.SetEnvironmentVariable ("SSH_AGENT_PID", AgentPid.Groups [1].Value);
+                    SparkleHelpers.DebugInfo ("SSH", "ssh-agent started, PID=" + AgentPid.Groups [1].Value);
+                } else {
+                    SparkleHelpers.DebugInfo ("SSH", "ssh-agent started, PID=unknown");
+                }
+            }
 		}
 
 
