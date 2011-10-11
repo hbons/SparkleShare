@@ -30,9 +30,10 @@ namespace SparkleLib {
         private IrcClient client;
         private string nick;
         private string key;
+        private string dangerous_access;
 
 
-        public SparkleListenerIrc (Uri server, string folder_identifier, string key) :
+        public SparkleListenerIrc (Uri server, string folder_identifier, string key, string dangerous_access) :
             base (server, folder_identifier)
         {
             // Try to get a uniqueish nickname
@@ -42,7 +43,11 @@ namespace SparkleLib {
             // with a number, so prefix an alphabetic character
             this.nick = "s" + this.nick.Substring (0, 7);
 
+            // Key to access the channel
             this.key = key;
+
+            // Allow access to the channel
+            this.dangerous_access = dangerous_access;
 
             base.channels.Add ("#" + folder_identifier);
 
@@ -112,11 +117,16 @@ namespace SparkleLib {
                         foreach (string channel in base.channels) {
                             SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
                             if (key != null) {
-                                SparkleHelpers.DebugInfo ("ListenerIrc", "Ussing key");
+                                SparkleHelpers.DebugInfo ("ListenerIrc", "Key set to access the channel");
                                 this.client.RfcJoin (channel, key);
                                 this.client.RfcMode (channel, "+k " + key);
                             } else {
-                                this.client.RfcJoin (channel);
+                                if (dangerous_access == "yes") {
+                                    SparkleHelpers.DebugInfo ("ListenerIrc", "Accessing a dangerous channel change the setting to not access");
+                                    this.client.RfcJoin (channel);
+                                } else {
+                                    SparkleHelpers.DebugInfo ("ListenerIrc", "Dangerous channel change the setting to access");
+                                }
                             }
                             this.client.RfcMode (channel, "+s");
                         }
@@ -146,14 +156,19 @@ namespace SparkleLib {
                 if (IsConnected) {
                     SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
                     if (key != null) {
-                        SparkleHelpers.DebugInfo ("ListenerIrc", "Ussing key");
+                        SparkleHelpers.DebugInfo ("ListenerIrc", "Key set to access the channel");
                         this.client.RfcJoin (channel, key);
                         this.client.RfcMode (channel, "+k " + key);
                     } else {
-                        this.client.RfcJoin (channel);
+                        if (dangerous_access == "yes") {
+                            SparkleHelpers.DebugInfo ("ListenerIrc", "Accessing a dangerous channel change the setting to not access");
+                            this.client.RfcJoin (channel);
+                        } else {
+                            SparkleHelpers.DebugInfo ("ListenerIrc", "Dangerous channel change the setting to access");
+                        }
                     }
-                    this.client.RfcMode (channel, "+s");
                 }
+                this.client.RfcMode (channel, "+s");
             }
         }
 
