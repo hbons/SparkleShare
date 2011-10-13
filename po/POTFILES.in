@@ -7,7 +7,6 @@ data/plugins/github.xml.in
 data/plugins/gitorious.xml.in
 data/plugins/gnome.xml.in
 data/plugins/own-server.xml.in
-data/plugins/redhat.xml.in
 SparkleShare/Mac/SparkleStatusIcon.cs
 SparkleShare/Mac/SparkleUI.cs
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in
