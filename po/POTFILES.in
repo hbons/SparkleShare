@@ -13,6 +13,7 @@ SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in
 SparkleShare/Program.cs
 SparkleShare/SparkleAbout.cs
 SparkleShare/SparkleController.cs
+SparkleShare/SparkleControllerBase.cs
 SparkleShare/SparkleEventLog.cs
 SparkleShare/SparkleSetup.cs
 SparkleShare/SparkleSetupWindow.cs
