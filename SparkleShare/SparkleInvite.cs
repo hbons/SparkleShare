@@ -57,15 +57,12 @@ namespace SparkleShare {
 
         private Thread thread;
         private TcpListener tcp_listener;
-        private int port;
 
 
         public SparkleInviteListener (int port)
         {
-            this.port         = port;
             this.tcp_listener = new TcpListener (IPAddress.Any, port);
             this.thread       = new Thread(new ThreadStart (Listen));
-
         }
 
 
@@ -115,18 +112,20 @@ namespace SparkleShare {
                 if (bytes_read == 0)
                     break;
 
-                ASCIIEncoding encoding = new ASCIIEncoding ();
+                ASCIIEncoding encoding  = new ASCIIEncoding ();
                 string received_message = encoding.GetString (message, 0, bytes_read);
-
 
                 // SparkleShare's protocol format looks like this:
                 // sparkle://user@host.org/path/token
+                Uri uri      = new Uri (received_message);
+                string token = uri.AbsolutePath.Substring (uri.AbsolutePath.LastIndexOf ("/") + 1);
+                string path  = uri.AbsolutePath.Substring (0, uri.AbsolutePath.LastIndexOf ("/"));
 
                 if (InviteReceived != null)
-                    InviteReceived (new SparkleInvite ("", "", ""));
+                    InviteReceived (new SparkleInvite (uri.Host, path, token));
             }
 
-            tcp_client.Close();
+            tcp_client.Close ();
         }
     }
 }
