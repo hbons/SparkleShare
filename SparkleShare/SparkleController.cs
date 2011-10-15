@@ -30,6 +30,14 @@ namespace SparkleShare {
 
     public class SparkleController : SparkleControllerBase {
 
+
+        public override string PluginsPath {
+            get {
+                return SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare", "plugins");
+            }
+        }
+
+
         public SparkleController () : base ()
         {
         }

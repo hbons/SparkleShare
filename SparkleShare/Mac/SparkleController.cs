@@ -28,6 +28,12 @@ namespace SparkleShare {
 
 	public class SparkleController : SparkleControllerBase {
 
+        public override string PluginsPath {
+            get {
+                return Path.Combine (NSBundle.MainBundle.ResourcePath, "Plugins");
+            }
+        }
+
         // We have to use our own custom made folder watcher, as
         // System.IO.FileSystemWatcher fails watching subfolders on Mac
         private SparkleMacWatcher watcher;
