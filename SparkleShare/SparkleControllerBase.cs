@@ -80,6 +80,8 @@ namespace SparkleShare {
         public delegate void NotificationRaisedEventHandler (string user_name, string user_email,
                                                              string message, string repository_path);
 
+        public abstract string PluginsPath { get; }
+
         private SparkleFetcherBase fetcher;
 
 

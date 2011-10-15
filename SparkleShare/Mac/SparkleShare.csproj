@@ -109,6 +109,9 @@
       <Link>SparkleExtensions.cs</Link>
     </Compile>
     <Compile Include="SparkleController.cs" />
+    <Compile Include="..\SparklePlugin.cs">
+      <Link>SparklePlugin.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
@@ -282,10 +285,41 @@
     <Content Include="..\..\data\tutorial-slide-4.png">
       <Link>Pixmaps\tutorial-slide-4.png</Link>
     </Content>
+    <Content Include="..\..\data\plugins\bitbucket.xml">
+      <Link>Plugins\bitbucket.xml</Link>
+    </Content>
+    <Content Include="..\..\data\plugins\github.xml">
+      <Link>Plugins\github.xml</Link>
+    </Content>
+    <Content Include="..\..\data\plugins\gitorious.xml">
+      <Link>Plugins\gitorious.xml</Link>
+    </Content>
+    <Content Include="..\..\data\plugins\gnome.xml">
+      <Link>Plugins\gnome.xml</Link>
+    </Content>
+    <Content Include="..\..\data\plugins\own-server.xml">
+      <Link>Plugins\own-server.xml</Link>
+    </Content>
+    <Content Include="..\..\data\plugins\bitbucket.png">
+      <Link>Plugins\bitbucket.png</Link>
+    </Content>
+    <Content Include="..\..\data\plugins\github.png">
+      <Link>Plugins\github.png</Link>
+    </Content>
+    <Content Include="..\..\data\plugins\gitorious.png">
+      <Link>Plugins\gitorious.png</Link>
+    </Content>
+    <Content Include="..\..\data\plugins\gnome.png">
+      <Link>Plugins\gnome.png</Link>
+    </Content>
+    <Content Include="..\..\data\plugins\own-server.png">
+      <Link>Plugins\own-server.png</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pixmaps\" />
     <Folder Include="HTML\" />
     <Folder Include="Translations\" />
+    <Folder Include="Plugins\" />
   </ItemGroup>
 </Project>
