@@ -44,14 +44,6 @@ namespace SparkleLib {
             string uri = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (
                 folder_name, "announcements_url");
 
-            // Key to turn the channel access more safely.
-            string key = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (
-                folder_name, "key");
-           
-            // Identifier to define access in IRC channel when no key is defined
-            string dangerous_access = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (
-                folder_name, "dangerous_access");
-
             if (uri == null) {
                 // This is SparkleShare's centralized notification service.
                 // Don't worry, we only use this server as a backup if you
@@ -59,13 +51,6 @@ namespace SparkleLib {
                 // we don't store any personal information ever
 
                 uri = "irc://204.62.14.135/";
-            }
-
-            // This action ensures that the Sparkleshare function normally when the key is not defined.
-            // It is recommended that the user asked a question to see whether or not to allow access
-            // to the channel without a key.
-            if (dangerous_access == null) {
-              dangerous_access = "yes";
             }
 
             Uri announce_uri = new Uri (uri);
@@ -89,10 +74,10 @@ namespace SparkleLib {
                 listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
                 break;
             case "irc":
-                listeners.Add (new SparkleListenerIrc (announce_uri, folder_identifier, key, dangerous_access));
+                listeners.Add (new SparkleListenerIrc (announce_uri, folder_identifier));
                 break;
             default:
-                listeners.Add (new SparkleListenerIrc (announce_uri, folder_identifier, key, dangerous_access));
+                listeners.Add (new SparkleListenerIrc (announce_uri, folder_identifier));
                 break;
             }
             
