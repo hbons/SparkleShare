@@ -19,7 +19,6 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Xml;
 
 namespace SparkleLib {
 
@@ -153,11 +152,6 @@ namespace SparkleLib {
         // the newly cloned repository
         private void InstallConfiguration ()
         {
-            string global_config_file_path = Path.Combine (SparkleConfig.DefaultConfig.TmpPath, "config.xml");
-
-            if (!File.Exists (global_config_file_path))
-                return;
-
             string repo_config_file_path = SparkleHelpers.CombineMore (base.target_folder, ".git", "config");
             string config = String.Join (Environment.NewLine, File.ReadAllLines (repo_config_file_path));
 
@@ -172,20 +166,6 @@ namespace SparkleLib {
 
             // Ignore permission changes
             config = config.Replace ("filemode = true", "filemode = false");
-
-
-            // Add user info
-            XmlDocument xml = new XmlDocument();
-            xml.Load (global_config_file_path);
-
-            XmlNode node_name  = xml.SelectSingleNode ("//user/name/text()");
-            XmlNode node_email = xml.SelectSingleNode ("//user/email/text()");
-
-            // TODO: just use commands instead of messing with the config file
-            config += n +
-                      "[user]" + n +
-                      "\tname  = " + node_name.Value + n +
-                      "\temail = " + node_email.Value + n;
 
             // Write the config to the file
             TextWriter writer = new StreamWriter (repo_config_file_path);
