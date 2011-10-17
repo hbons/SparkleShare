@@ -61,7 +61,7 @@ namespace SparkleShare {
 
         public SparkleInviteListener (int port)
         {
-            this.tcp_listener = new TcpListener (IPAddress.Any, port);
+            this.tcp_listener = new TcpListener (IPAddress.Loopback, port);
             this.thread       = new Thread(new ThreadStart (Listen));
         }
 
