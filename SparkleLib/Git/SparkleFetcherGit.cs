@@ -179,10 +179,22 @@ namespace SparkleLib {
         // Add a .gitignore file to the repo
         private void InstallExcludeRules ()
         {
-            string exlude_rules_file_path = SparkleHelpers.CombineMore (
+            string exclude_rules_file_path = SparkleHelpers.CombineMore (
                 this.target_folder, ".git", "info", "exclude");
 
-            TextWriter writer = new StreamWriter (exlude_rules_file_path);
+            string directory = Path.GetDirectoryName(exclude_rules_file_path);
+
+            if (directory == null)
+            {
+                return;
+            }
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            TextWriter writer = new StreamWriter (exclude_rules_file_path);
 
                 // gedit and emacs
                 writer.WriteLine ("*~");
