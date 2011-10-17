@@ -14,6 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using System.Reflection;
 using SparkleLib;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,15 @@ using CefSharp;
 namespace SparkleShare {
 
     public class SparkleController : SparkleControllerBase {
+
+        public override string PluginsPath
+        {
+            get
+            {
+                return Path.Combine (Path.GetDirectoryName (Assembly.GetExecutingAssembly ().Location), "plugins");
+            }
+        }
+
 
 		public SparkleController () : base ()
 		{
