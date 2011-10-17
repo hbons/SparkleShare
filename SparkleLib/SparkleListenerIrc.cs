@@ -43,19 +43,17 @@ namespace SparkleLib {
             // with a number, so prefix an alphabetic character
             this.nick = "s" + this.nick.Substring (0, 7);
 
-            // Key to turn the channel access more safely.
-            this.announcements_password = 
-              SparkleConfig.DefaultConfig.GetConfigOption ("announcements_password");
+            // Optional password to make the channel access more safe
+            this.announcements_password =
+                SparkleConfig.DefaultConfig.GetConfigOption ("announcements_password");
 
-            // Identifier to define access in IRC channel when no key is defined
-            this.allow_passwordless_join =
-              SparkleConfig.DefaultConfig.GetConfigOption ("allow_passwordless_join");
-            
-            // This action ensures that the Sparkleshare function normally when the key is not defined.
-            // It is recommended that the user asked a question to see whether or not to allow access
-            // to the channel without a key.
-            if (this.allow_passwordless_join == null) {
-              this.allow_passwordless_join = true
+            // Option to allow access to channel when no password is defined
+            try {
+                this.allow_passwordless_join = Convert.ToBoolean (
+                    SparkleConfig.DefaultConfig.GetConfigOption ("allow_passwordless_join"));
+
+            } catch (Exception) {
+                this.allow_passwordless_join = true;
             }
 
             base.channels.Add ("#" + folder_identifier);
@@ -119,24 +117,31 @@ namespace SparkleLib {
                     try {
                         // Connect, login, and join the channel
                         int port = base.server.Port;
-                        if (port < 0) port = 6667;
+
+                        if (port < 0)
+                            port = 6667;
+
                         this.client.Connect (base.server.Host, port);
                         this.client.Login (this.nick, this.nick, 8, this.nick);
 
                         foreach (string channel in base.channels) {
                             SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
-                            if (this.announcements_password != null) {
+
+                            if (!string.IsNullOrEmpty (this.announcements_password)) {
                                 SparkleHelpers.DebugInfo ("ListenerIrc", "Password set to access the channel");
                                 this.client.RfcJoin (channel, this.announcements_password);
                                 this.client.RfcMode (channel, "+k " + this.announcements_password);
+
                             } else {
-                                if (allow_passwordless_join) {
-                                    SparkleHelpers.DebugInfo ("ListenerIrc", "Accessing a dangerous channel change the setting to not access");
+                                if (this.allow_passwordless_join) {
+                                    SparkleHelpers.DebugInfo ("ListenerIrc", "Accessing a dangerous channel, change the setting to not access");
                                     this.client.RfcJoin (channel);
+
                                 } else {
                                     SparkleHelpers.DebugInfo ("ListenerIrc", "Dangerous channel, change the setting to access");
                                 }
                             }
+
                             this.client.RfcMode (channel, "+s");
                         }
 
