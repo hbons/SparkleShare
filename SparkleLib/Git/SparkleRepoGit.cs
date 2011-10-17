@@ -402,7 +402,11 @@ namespace SparkleLib {
         // Commits the made changes
         private void Commit (string message)
         {
-            SparkleGit git = new SparkleGit (LocalPath, "commit -m \"" + message + "\"");
+            SparkleGit git = new SparkleGit (LocalPath,
+                "commit -m \"" + message + "\" " +
+                "--author=\"" + SparkleConfig.DefaultConfig.User.Name +
+                " <" + SparkleConfig.DefaultConfig.User.Email + ">\"");
+
             git.Start ();
             git.StandardOutput.ReadToEnd ();
             git.WaitForExit ();
