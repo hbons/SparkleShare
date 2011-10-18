@@ -1,30 +1,21 @@
-SparkleShare
-============
+# SparkleShare
 
 SparkleShare is a collaboration and sharing tool that is designed to keep
 things simple and to stay out of your way. It allows you to instantly sync
 with any Git repository you have access to.
 
-Though SparkleShare is not made to be a graphical frontend 
-for git or a backup tool, it may be useful for other kinds of purposes as well, 
-like backing up small files or monitoring your favourite project. In contrast 
-to the projects name, we will very likely refuse to implement your personal 
-ponies.
-
 SparkleShare currently works on Linux and Mac. A Windows port and mobile
 device support are planned for the future.
 
 
-License
-=======
+# License
 
 SparkleShare is free software and licensed under the GNU GPLv3 or later. You
 are welcome to change and redistribute it under certain conditions. For more
 information see the LICENSE file or visit http://www.gnu.org/licenses/gpl-3.0.html
 
 
-Run on Linux:
-=============
+# Run on Linux
 
 Requirements:
 
@@ -40,7 +31,6 @@ Requirements:
    - pygtk
    - webkitgtk
    - webkit-sharp
-
 
 Run the service, either click the SparkleShare launcher or:
 
@@ -61,8 +51,7 @@ Note:
    own server by hand.
 
 
-Build on Linux:
-===============
+# Build on Linux
 
 Installing the build dependencies on Debian or Ubuntu:
 
@@ -73,15 +62,13 @@ Installing the build dependencies on Debian or Ubuntu:
 For Ubuntu libappindicator support, run the following before building:
 
    $ sudo apt-get install libappindicator0.1-cil-dev 
-
-
+   
 On Fedora:
 
    $ sudo yum install gtk-sharp2-devel mono-core mono-devel monodevelop \
      ndesk-dbus-devel ndesk-dbus-glib-devel nautilus-python-devel nant \
      notify-sharp-devel webkit-sharp-devel webkitgtk-devel libtool intltool \
      gnome-doc-utils
-
 
 You can build and install SparkleShare like this:
 
@@ -94,14 +81,12 @@ Note:
    Use '--prefix=/usr' if you want the Nautilus extension to work.
 
 
-Run on Mac:
-===========
+# Run on Mac
 
-Just double-click the SparkleShare.app.
+Just double-click the SparkleShare bundle.
 
 
-Build on Mac:
-=============
+# Build on Mac
 
 Install the Mono Framework, MonoDevelop and the MonoMac plugin (you find it in Add-in Manager).
 
@@ -111,58 +96,15 @@ You may need to adjust some environment variables to let the build environment t
    $ export PKG_CONFIG=/Library/Frameworks/Mono.framework/Versions/Current/bin/pkg-config
    $ export PKG_CONFIG_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
 
-Then you need either MacPorts or Homebrew. Go on and choose one of the next two sections.
-
-
-Using MacPorts
---------------
-
-Install git, automake, and intltool:
+Install git, automake, and intltool using MacPorts:
 
    $ sudo port install git-core automake intltool
-
+   
 Start the first part of the build:
 
    $ ./autogen.sh --enable-gtkui=no
    $ make
-
-The last step will give you some errors in SparkleShare.exe, ignore these and go on to the
-MonoDevelop section.
-
-
-Using Homebrew
---------------
-
-Because there are old versions of autoconf and automake installed on OS X, they are not in 
-the official master branch. It's easy to create the formulas:
-
-   $ brew create $url
    
-Now install the formulas.
-
-You can have a look at this branch for the created Formulas:
-https://github.com/toabi/homebrew/commits/sparkleshare
-
-You also have to comment out the 'keg_only' in gettext and remove it if you already
-installed it. If you created the formulas install them:
-
-	$ brew install git autoconf automake intltool gettext
-
-Now start the first part of the build:
-
-	$ export ACLOCAL_FLAGS="-I /usr/local/share/aclocal"
-	$ cd SmartIrc4net
-	$ ./autogen.sh
-	$ cd ..
-	$ ./autogen.sh --enable-gtkui=no
-	$ make
-
-Ignore the error and continue to the MonoDevelop-part.
-
-
-Building the Mac UI
--------------------
-
 Now that you have compiled the libraries, open 'SparkleShare/Mac/SparkleShare.sln' in
 MonoDevelop and start the build.
 
@@ -175,11 +117,10 @@ https://raw.github.com/gist/1aeffa61bac73fc08eca/0c0f09ef9e36864c35f34fd5e8bf4f9
 Copy /Library/Frameworks/Mono.framework/Versions/Current/lib/libintl.dylib 
 to SparkleShare.app/Contents/Resources
 
-Now you should have a working .app that you can run.
+Now you should have a working bundle that you can run.
 
 
-Info
-====
+# Info
 
 Official website:
 http://www.sparkleshare.org/
