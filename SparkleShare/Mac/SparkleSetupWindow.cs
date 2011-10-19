@@ -56,12 +56,12 @@ namespace SparkleShare {
                 "Pixmaps", "side-splash.png");
 
             SideSplash = new NSImage (side_splash_path) {
-                Size = new SizeF (150, 407)
+                Size = new SizeF (150, 482)
             };
 
             SideSplashView = new NSImageView () {
                 Image = SideSplash,
-                Frame = new RectangleF (0, 0, 150, 407)
+                Frame = new RectangleF (0, 0, 150, 482)
             };
 
             Buttons = new List <NSButton> ();
