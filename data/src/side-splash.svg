@@ -14,7 +14,7 @@
    height="480"
    id="svg8763"
    version="1.1"
-   inkscape:version="0.48.0 r9654"
+   inkscape:version="0.48.2 r9819"
    sodipodi:docname="side-splash.svg"
    inkscape:export-filename="/home/hbons/github/SparkleShare/data/side-splash.png"
    inkscape:export-xdpi="90"
@@ -26,17 +26,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="19.72576"
-     inkscape:cy="237.36832"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="373.61286"
+     inkscape:cy="228.3949"
      inkscape:document-units="px"
      inkscape:current-layer="g8506"
      showgrid="false"
-     inkscape:window-width="1276"
-     inkscape:window-height="756"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0" />
+     inkscape:window-width="1440"
+     inkscape:window-height="842"
+     inkscape:window-x="-1"
+     inkscape:window-y="26"
+     inkscape:window-maximized="1" />
   <defs
      id="defs8765">
     <radialGradient
@@ -569,7 +569,7 @@
        x2="15.142853"
        y1="385.79074"
        x1="-17.857147"
-       gradientTransform="matrix(0.93600978,0,0,1,1.5716112,5.089059e-7)"
+       gradientTransform="matrix(0.93600978,0,0,1.0947292,1.5716112,-55.491464)"
        gradientUnits="userSpaceOnUse"
        id="linearGradient8586"
        xlink:href="#linearGradient8492"
@@ -591,7 +591,7 @@
        xlink:href="#linearGradient8492"
        id="linearGradient3734"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.54207039,0,0,1,-5.4630223,5.089059e-7)"
+       gradientTransform="matrix(0.54207039,0,0,1.0953665,-5.4630223,-55.864827)"
        x1="-17.857147"
        y1="385.79074"
        x2="15.142853"
@@ -601,11 +601,113 @@
        xlink:href="#linearGradient8492"
        id="linearGradient3738"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.20873706,0,0,1,-11.415405,5.089059e-7)"
+       gradientTransform="matrix(0.20873706,0,0,1.0947292,-11.415405,-55.491464)"
        x1="-17.857147"
        y1="385.79074"
        x2="15.142853"
        y2="385.79074" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient97855"
+       id="linearGradient75956"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6031387,0,0,1.320142,-335.96248,-128.42873)"
+       x1="437.71024"
+       y1="431.8201"
+       x2="437.71024"
+       y2="776.56293" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient97855">
+      <stop
+         style="stop-color:#72cfcf;stop-opacity:1"
+         offset="0"
+         id="stop97857" />
+      <stop
+         style="stop-color:#3465a4;stop-opacity:1"
+         offset="1"
+         id="stop97859" />
+    </linearGradient>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath76786">
+      <rect
+         style="fill:url(#linearGradient76790);fill-opacity:1;stroke:none"
+         id="rect76788"
+         width="654.5387"
+         height="321.83084"
+         x="617.64337"
+         y="-407.10275"
+         inkscape:export-filename="/Users/hbons/Code/SparkleShare/data/about.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90"
+         transform="matrix(0.6027834,0.79790486,0.79790486,-0.6027834,0,0)" />
+    </clipPath>
+    <linearGradient
+       y2="776.56293"
+       x2="437.71024"
+       y1="431.8201"
+       x1="437.71024"
+       gradientTransform="matrix(1.4148952,0,0,1.1651284,-617.69281,-374.63045)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient100921"
+       xlink:href="#linearGradient97855"
+       inkscape:collect="always" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7605"
+       id="radialGradient100996"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.7535912,-5.2275014e-7,4.9956873e-7,2.9977309,-440.46603,-789.77953)"
+       cx="138.22266"
+       cy="423.06143"
+       fx="138.22266"
+       fy="423.06143"
+       r="73.079796" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient97855"
+       id="linearGradient100998"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.4148952,0,0,1.1651284,-583.69281,-380.63046)"
+       x1="437.71024"
+       y1="431.8201"
+       x2="437.71024"
+       y2="776.56293" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7605"
+       id="radialGradient101001"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.7535912,-5.2275014e-7,4.9956873e-7,2.9977309,-440.46603,-789.77953)"
+       cx="138.22266"
+       cy="423.06143"
+       fx="138.22266"
+       fy="423.06143"
+       r="73.079796" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath101003">
+      <rect
+         style="color:#000000;fill:url(#radialGradient101007);fill-opacity:1;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect101005"
+         width="177.83012"
+         height="571.90167"
+         x="46.604168"
+         y="102.81245"
+         transform="matrix(0.95444635,0.2983826,-0.2983826,0.95444635,0,0)" />
+    </clipPath>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7605"
+       id="radialGradient101007"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(3.2644764,-6.1973814e-7,5.9225579e-7,3.5539123,-315.7056,-956.07141)"
+       cx="138.22266"
+       cy="423.06143"
+       fx="138.22266"
+       fy="423.06143"
+       r="73.079796" />
   </defs>
   <metadata
      id="metadata8768">
@@ -615,7 +717,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -627,17 +729,184 @@
     <g
        transform="translate(374.14287,98.00001)"
        id="g8506">
-      <rect
-         y="103.39075"
-         x="-134.85715"
-         height="482.39999"
-         width="150"
-         id="rect8343"
-         style="color:#000000;fill:url(#radialGradient8554);fill-opacity:1;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <g
+         id="g100970"
+         clip-path="url(#clipPath101003)"
+         transform="matrix(0.80507706,-0.25168621,0.25168621,0.80507706,-174.16784,16.668277)"
+         inkscape:export-filename="/home/hbons/Projects/SparkleShare/data/side-splash.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90">
+        <rect
+           style="fill:url(#linearGradient100998);fill-opacity:1;stroke:none"
+           id="rect3322"
+           width="903.76007"
+           height="441.28906"
+           x="-471.73718"
+           y="94.146225"
+           inkscape:export-filename="/Users/hbons/Code/SparkleShare/data/about.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
+        <g
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/home/hbons/SparkleShare/SparkleShare-Design-Corner/android/market-banner.png"
+           clip-path="url(#clipPath76786)"
+           style="opacity:0.3;fill:#000000;fill-opacity:1"
+           transform="matrix(1.0746823,1.4126925,1.4225579,-1.0672295,-1721.0035,715.31306)"
+           id="g76634">
+          <path
+             sodipodi:type="arc"
+             style="opacity:0.33333333;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="path76622"
+             sodipodi:cx="281.4285"
+             sodipodi:cy="207.2578"
+             sodipodi:rx="479.4184"
+             sodipodi:ry="479.4184"
+             d="m 41.719297,-207.93071 c 36.283859,-20.9485 75.157203,-37.05037 115.626593,-47.8941 L 281.4285,207.2578 z"
+             transform="translate(227.68838,594.78858)"
+             sodipodi:start="4.1887902"
+             sodipodi:end="4.4505896" />
+          <path
+             sodipodi:end="3.403392"
+             sodipodi:start="3.1415927"
+             transform="translate(227.68838,594.78858)"
+             d="m -197.9899,207.25777 c 0,-41.89697 5.49205,-83.61319 16.33578,-124.082565 L 281.4285,207.2578 z"
+             sodipodi:ry="479.4184"
+             sodipodi:rx="479.4184"
+             sodipodi:cy="207.2578"
+             sodipodi:cx="281.4285"
+             id="path76624"
+             style="opacity:0.33333333;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             sodipodi:type="arc" />
+          <path
+             sodipodi:type="arc"
+             style="opacity:0.33333333;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="path76626"
+             sodipodi:cx="281.4285"
+             sodipodi:cy="207.2578"
+             sodipodi:rx="479.4184"
+             sodipodi:ry="479.4184"
+             d="m -133.76002,446.96699 c -20.94849,-36.28386 -37.05036,-75.15721 -47.8941,-115.6266 L 281.4285,207.2578 z"
+             transform="translate(227.68838,594.78858)"
+             sodipodi:start="2.6179939"
+             sodipodi:end="2.8797933" />
+          <path
+             sodipodi:end="1.8325957"
+             sodipodi:start="1.5707963"
+             transform="translate(227.68838,594.78858)"
+             d="m 281.42851,686.67619 c -41.89699,0 -83.61323,-5.49204 -124.08262,-16.33578 L 281.4285,207.2578 z"
+             sodipodi:ry="479.4184"
+             sodipodi:rx="479.4184"
+             sodipodi:cy="207.2578"
+             sodipodi:cx="281.4285"
+             id="path76628"
+             style="opacity:0.33333333;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             sodipodi:type="arc" />
+          <path
+             sodipodi:type="arc"
+             style="opacity:0.33333333;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="path76630"
+             sodipodi:cx="281.4285"
+             sodipodi:cy="207.2578"
+             sodipodi:rx="479.4184"
+             sodipodi:ry="479.4184"
+             d="m 696.61701,446.967 c -20.9485,36.28385 -46.56287,69.66515 -76.18851,99.29079 l -339,-338.99999 z"
+             transform="translate(227.68838,594.78858)"
+             sodipodi:start="0.52359878"
+             sodipodi:end="0.78539816" />
+          <path
+             sodipodi:end="0.26179939"
+             sodipodi:start="0"
+             transform="translate(227.68838,594.78858)"
+             d="m 760.84689,207.2578 c 0,41.89699 -5.49204,83.61323 -16.33578,124.08261 L 281.4285,207.2578 z"
+             sodipodi:ry="479.4184"
+             sodipodi:rx="479.4184"
+             sodipodi:cy="207.2578"
+             sodipodi:cx="281.4285"
+             id="path76632"
+             style="opacity:0.33333333;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             sodipodi:type="arc" />
+          <path
+             sodipodi:type="arc"
+             style="opacity:0.33333333;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="path76766"
+             sodipodi:cx="281.4285"
+             sodipodi:cy="207.2578"
+             sodipodi:rx="479.4184"
+             sodipodi:ry="479.4184"
+             d="m -133.76002,-32.451389 c 20.94849,-36.283859 46.562867,-69.665161 76.188513,-99.290811 l 339.000007,339 z"
+             transform="translate(227.68838,594.78858)"
+             sodipodi:start="3.6651914"
+             sodipodi:end="3.9269908" />
+          <path
+             sodipodi:end="2.3561945"
+             sodipodi:start="2.0943951"
+             transform="translate(227.68838,594.78858)"
+             d="M 41.7193,622.44631 C 5.4354417,601.49781 -27.945859,575.88344 -57.571505,546.25779 L 281.4285,207.2578 z"
+             sodipodi:ry="479.4184"
+             sodipodi:rx="479.4184"
+             sodipodi:cy="207.2578"
+             sodipodi:cx="281.4285"
+             id="path76768"
+             style="opacity:0.33333333;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             sodipodi:type="arc" />
+          <path
+             sodipodi:type="arc"
+             style="opacity:0.33333333;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="path76770"
+             sodipodi:cx="281.4285"
+             sodipodi:cy="207.2578"
+             sodipodi:rx="479.4184"
+             sodipodi:ry="479.4184"
+             d="M 521.13768,622.44632 C 484.85383,643.3948 445.9805,659.49667 405.51113,670.3404 L 281.4285,207.2578 z"
+             transform="translate(227.68838,594.78858)"
+             sodipodi:start="1.0471976"
+             sodipodi:end="1.3089969" />
+          <path
+             sodipodi:type="arc"
+             style="opacity:0.33333333;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="path76772"
+             sodipodi:cx="281.4285"
+             sodipodi:cy="207.2578"
+             sodipodi:rx="479.4184"
+             sodipodi:ry="479.4184"
+             d="m 696.617,-32.451414 c 20.9485,36.2838581 37.05037,75.157205 47.89411,115.626591 L 281.4285,207.2578 z"
+             transform="translate(227.68838,594.78858)"
+             sodipodi:start="5.7595865"
+             sodipodi:end="6.0213859" />
+          <path
+             sodipodi:end="5.4977871"
+             sodipodi:start="5.2359878"
+             transform="translate(227.68838,594.78858)"
+             d="m 521.13771,-207.9307 c 36.28385,20.94849 69.66513,46.56285 99.29077,76.18848 L 281.4285,207.2578 z"
+             sodipodi:ry="479.4184"
+             sodipodi:rx="479.4184"
+             sodipodi:cy="207.2578"
+             sodipodi:cx="281.4285"
+             id="path76774"
+             style="opacity:0.33333333;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             sodipodi:type="arc" />
+          <path
+             sodipodi:type="arc"
+             style="opacity:0.33333333;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="path76776"
+             sodipodi:cx="281.4285"
+             sodipodi:cy="207.2578"
+             sodipodi:rx="479.4184"
+             sodipodi:ry="479.4184"
+             d="m 281.42851,-272.1606 c 41.89699,0 83.61323,5.49205 124.08261,16.33579 L 281.4285,207.2578 z"
+             transform="translate(227.68838,594.78858)"
+             sodipodi:start="4.712389"
+             sodipodi:end="4.9741884" />
+        </g>
+      </g>
       <g
          transform="matrix(0.94794592,-0.25400134,0.25400134,0.94794592,152.92196,89.255385)"
          id="g8347"
-         clip-path="url(#clipPath8463)">
+         clip-path="url(#clipPath8463)"
+         inkscape:export-filename="/home/hbons/Projects/SparkleShare/data/side-splash.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90">
         <g
            transform="translate(-471.91777,216.612)"
            id="g8349"
@@ -910,7 +1179,10 @@
       <g
          id="g8475"
          transform="translate(-200,0)"
-         clip-path="url(#clipPath8482)">
+         clip-path="url(#clipPath8482)"
+         inkscape:export-filename="/home/hbons/Projects/SparkleShare/data/side-splash.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90">
         <image
            y="184.94933"
            x="219.12404"
@@ -940,26 +1212,35 @@
          style="opacity:0.2;color:#000000;fill:url(#linearGradient8586);fill-opacity:1;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          id="rect8488"
          width="30.888323"
-         height="440.4061"
+         height="482.1254"
          x="-15.142853"
-         y="145.38464"
-         transform="scale(-1,1)" />
+         y="103.66534"
+         transform="scale(-1,1)"
+         inkscape:export-filename="/home/hbons/Projects/SparkleShare/data/side-splash.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
       <rect
          transform="scale(-1,1)"
-         y="145.38464"
+         y="103.38464"
          x="-15.142853"
-         height="440.4061"
+         height="482.4061"
          width="17.888323"
          id="rect3732"
-         style="opacity:0.2;color:#000000;fill:url(#linearGradient3734);fill-opacity:1;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         style="opacity:0.2;color:#000000;fill:url(#linearGradient3734);fill-opacity:1;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         inkscape:export-filename="/home/hbons/Projects/SparkleShare/data/side-splash.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
       <rect
          style="opacity:0.2;color:#000000;fill:url(#linearGradient3738);fill-opacity:1;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          id="rect3736"
          width="6.8883228"
-         height="440.4061"
+         height="482.1254"
          x="-15.142853"
-         y="145.38464"
-         transform="scale(-1,1)" />
+         y="103.66534"
+         transform="scale(-1,1)"
+         inkscape:export-filename="/home/hbons/Projects/SparkleShare/data/side-splash.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
     </g>
   </g>
 </svg>
