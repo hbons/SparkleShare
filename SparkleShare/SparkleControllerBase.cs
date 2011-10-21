@@ -571,7 +571,7 @@ namespace SparkleShare {
 
 
         // Adds a repository to the list of repositories
-        private void AddRepository (string folder_path)
+        private void AddRepository (List<SparkleRepoBase> RepositoryList, string folder_path)
         {
             if (folder_path.Equals (SparkleConfig.DefaultConfig.TmpPath))
                 return;
@@ -621,7 +621,7 @@ namespace SparkleShare {
                 UpdateState ();
             };
 
-            Repositories.Add (repo);
+            RepositoryList.Add (repo);
         }
 
 
@@ -654,7 +654,7 @@ namespace SparkleShare {
                 string folder_path = new SparkleFolder (folder_name).FullPath;
 
                 if (Directory.Exists (folder_path))
-                    AddRepository (folder_path);
+                    AddRepository (TempRepositories, folder_path);
                 else
                     SparkleConfig.DefaultConfig.RemoveFolder (folder_name);
             }
@@ -1043,7 +1043,7 @@ namespace SparkleShare {
                 }
 
                 SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.RemoteUrl, backend);
-                AddRepository (target_folder_path);
+                AddRepository (Repositories, target_folder_path);
 
                 if (FolderFetched != null)
                     FolderFetched ();
