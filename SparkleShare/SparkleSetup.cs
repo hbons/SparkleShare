@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using Gtk;
 using Mono.Unix;
 
-
 namespace SparkleShare {
 
     public class SparkleSetup : SparkleSetupWindow {
