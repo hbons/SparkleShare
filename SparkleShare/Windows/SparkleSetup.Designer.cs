@@ -300,6 +300,7 @@ namespace SparkleShare {
             this.ServerEntry.Name = "ServerEntry";
             this.ServerEntry.Size = new System.Drawing.Size (312, 20);
             this.ServerEntry.TabIndex = 10;
+            this.ServerEntry.MouseEnter += new System.EventHandler (this.radio_button_own_server_MouseEnter);
             // 
             // radio_button_gnome
             // 

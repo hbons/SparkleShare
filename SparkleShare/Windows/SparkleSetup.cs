@@ -46,6 +46,7 @@ namespace SparkleShare {
 
             pictureBox.Image = Icons.side_splash;
             this.ClientSize = new Size (this.ClientSize.Width, Icons.side_splash.Size.Height);
+            panel_info.Size = pictureBox.Size;
             this.Icon = Icons.sparkleshare;
 
             Controller.ChangePageEvent += delegate (PageType type) {
