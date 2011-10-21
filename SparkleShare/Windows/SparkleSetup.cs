@@ -21,6 +21,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Timers;
 using System.Collections.Generic;
+using System.Threading;
 
 using System.Windows.Forms;
 using System.Drawing;
@@ -230,7 +231,7 @@ namespace SparkleShare {
             showInfo ("This is the path to your git project ...");
         }
 
-        private void FolderEntry_MouseLeave (object sender, EventArgs e) {
+        private void panel_folder_selection_MouseLeave (object sender, EventArgs e) {
             hideInfo ();
         }
     }
