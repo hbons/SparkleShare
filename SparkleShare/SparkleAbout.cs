@@ -75,7 +75,7 @@ namespace SparkleShare {
 
             Controller.VersionUpToDateEvent += delegate {
                 Application.Invoke (delegate {
-                    this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#4e9a06'>{0}</span>",
+                    this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#729fcf'>{0}</span>",
                         _("You are running the latest version."));
 
                     this.updates.ShowAll ();
@@ -84,7 +84,7 @@ namespace SparkleShare {
 
             Controller.CheckingForNewVersionEvent += delegate {
                 Application.Invoke (delegate {
-                    this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#4e9a06'>{0}</span>",
+                    this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#729fcf'>{0}</span>",
                         _("Checking for updates..."));
 
                     this.updates.ShowAll ();
@@ -109,7 +109,7 @@ namespace SparkleShare {
             };
 
             this.updates = new Label () {
-                Markup = "<span font_size='small' fgcolor='" + secondary_text_color + "'>" +
+                Markup = "<span font_size='small' fgcolor='#729fcf'>" +
                          _("Checking for updates...") +
                          "</span>",
                 Xalign = 0,
