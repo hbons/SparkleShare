@@ -88,7 +88,7 @@ Just double-click the SparkleShare bundle.
 
 # Build on Mac
 
-Install the Mono Framework, MonoDevelop and the MonoMac plugin (you find it in Add-in Manager).
+Install Xcode, the Mono Framework, MonoDevelop and the MonoMac plugin (you find it in Add-in Manager).
 
 You may need to adjust some environment variables to let the build environment tools find mono:
    
