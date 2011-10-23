@@ -214,6 +214,12 @@ namespace SparkleLib {
                 writer.WriteLine ("Thumbs.db");
                 writer.WriteLine ("Desktop.ini");
 
+		// MS Office
+		writer.WriteLine ("~*.tmp");
+		writer.WriteLine ("~*.TMP");
+		writer.WriteLine ("*~*.tmp");
+		writer.WriteLine ("*~*.TMP");
+
                 // CVS
                 writer.WriteLine ("*/CVS/*");
                 writer.WriteLine (".cvsignore");
