@@ -51,14 +51,34 @@ namespace SparkleShare {
                     if (image_path != null && File.Exists (image_path)) {
                         NSData image_data = NSData.FromFile (image_path);
                         GrowlApplicationBridge.Notify (title, subtext,
-                            "Event", image_data, 0, false, null);
+                            "Event", image_data, 0, false, new NSString (""));
 
                     } else {
                         GrowlApplicationBridge.Notify (title, subtext,
-                            "Event", null, 0, false, null);
+                            "Event", null, 0, false, new NSString (""));
                     }
                 });
             };
+        }
+    }
+
+
+    public class SparkleGrowlDelegate : GrowlDelegate {
+
+        [Export("growlNotificationWasClicked")]
+        public override void GrowlNotificationWasClicked (NSObject o)
+        {
+            InvokeOnMainThread (delegate {
+                NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+
+                if (SparkleUI.EventLog == null)
+                    SparkleUI.EventLog = new SparkleEventLog ();
+
+                SparkleUI.EventLog.Controller.SelectedFolder = null;
+
+                SparkleUI.EventLog.OrderFrontRegardless ();
+                SparkleUI.EventLog.MakeKeyAndOrderFront (this);
+            });
         }
     }
 }
