@@ -157,6 +157,7 @@ namespace SparkleShare {
             this.EmailEntry.Name = "EmailEntry";
             this.EmailEntry.Size = new System.Drawing.Size (275, 20);
             this.EmailEntry.TabIndex = 10;
+            this.EmailEntry.TextChanged += new System.EventHandler (this.CheckSetupPage);
             // 
             // NameEntry
             // 
@@ -164,6 +165,7 @@ namespace SparkleShare {
             this.NameEntry.Name = "NameEntry";
             this.NameEntry.Size = new System.Drawing.Size (275, 20);
             this.NameEntry.TabIndex = 9;
+            this.NameEntry.TextChanged += new System.EventHandler (this.CheckSetupPage);
             // 
             // label13
             // 
@@ -267,6 +269,7 @@ namespace SparkleShare {
             this.FolderEntry.Name = "FolderEntry";
             this.FolderEntry.Size = new System.Drawing.Size (318, 20);
             this.FolderEntry.TabIndex = 8;
+            this.FolderEntry.TextChanged += new System.EventHandler (this.CheckAddPage);
             this.FolderEntry.MouseEnter += new System.EventHandler (this.FolderEntry_MouseEnter);
             // 
             // panel_server_selection
@@ -300,6 +303,7 @@ namespace SparkleShare {
             this.ServerEntry.Name = "ServerEntry";
             this.ServerEntry.Size = new System.Drawing.Size (312, 20);
             this.ServerEntry.TabIndex = 10;
+            this.ServerEntry.TextChanged += new System.EventHandler (this.CheckAddPage);
             this.ServerEntry.MouseEnter += new System.EventHandler (this.radio_button_own_server_MouseEnter);
             // 
             // radio_button_gnome
@@ -311,6 +315,7 @@ namespace SparkleShare {
             this.radio_button_gnome.TabIndex = 9;
             this.radio_button_gnome.Text = "The GNOME Project account";
             this.radio_button_gnome.UseVisualStyleBackColor = true;
+            this.radio_button_gnome.CheckedChanged += new System.EventHandler (this.CheckAddPage);
             this.radio_button_gnome.MouseEnter += new System.EventHandler (this.radio_button_gnome_MouseEnter);
             // 
             // radio_button_gitorious
@@ -322,6 +327,7 @@ namespace SparkleShare {
             this.radio_button_gitorious.TabIndex = 8;
             this.radio_button_gitorious.Text = "Gitorious account";
             this.radio_button_gitorious.UseVisualStyleBackColor = true;
+            this.radio_button_gitorious.CheckedChanged += new System.EventHandler (this.CheckAddPage);
             this.radio_button_gitorious.MouseEnter += new System.EventHandler (this.radio_button_gitorious_MouseEnter);
             // 
             // radio_button_github
@@ -333,6 +339,7 @@ namespace SparkleShare {
             this.radio_button_github.TabIndex = 7;
             this.radio_button_github.Text = "Github account";
             this.radio_button_github.UseVisualStyleBackColor = true;
+            this.radio_button_github.CheckedChanged += new System.EventHandler (this.CheckAddPage);
             this.radio_button_github.MouseEnter += new System.EventHandler (this.radio_button_github_MouseEnter);
             // 
             // radio_button_own_server
@@ -350,6 +357,7 @@ namespace SparkleShare {
             // 
             // buttonSync
             // 
+            this.buttonSync.Enabled = false;
             this.buttonSync.Location = new System.Drawing.Point (431, 355);
             this.buttonSync.Name = "buttonSync";
             this.buttonSync.Size = new System.Drawing.Size (75, 23);
