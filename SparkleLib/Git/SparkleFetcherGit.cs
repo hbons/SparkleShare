@@ -215,10 +215,10 @@ namespace SparkleLib {
                 writer.WriteLine ("Desktop.ini");
 
 		// MS Office
-		writer.WriteLine ("~*.tmp");
-		writer.WriteLine ("~*.TMP");
-		writer.WriteLine ("*~*.tmp");
-		writer.WriteLine ("*~*.TMP");
+                writer.WriteLine ("~*.tmp");
+                writer.WriteLine ("~*.TMP");
+                writer.WriteLine ("*~*.tmp");
+                writer.WriteLine ("*~*.TMP");
                 writer.WriteLine ("~*.ppt");
                 writer.WriteLine ("~*.pptx");
                 writer.WriteLine ("~*.PPT");
