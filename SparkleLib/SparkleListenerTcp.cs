@@ -39,7 +39,6 @@ namespace SparkleLib {
             base (server, folder_identifier)
         {
             base.channels.Add (folder_identifier);
-            this.socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             this.connected = false;
         }
 
@@ -70,9 +69,11 @@ namespace SparkleLib {
                         // Connect and subscribe to the channel
                         int port = Server.Port;
                         if (port < 0) port = 9999;
-                        this.socket.Connect (Server.Host, port);
 
                         lock (this.mutex) {
+                            this.socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                            this.socket.Connect (Server.Host, port);
+
                             base.is_connecting = false;
                             this.connected = true;
 
