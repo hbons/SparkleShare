@@ -160,7 +160,7 @@ namespace SparkleShare {
 		public override void OpenSparkleShareFolder (string subfolder)
 		{
 			Process process = new Process();
-			process.StartInfo.Arguments = ",/root," + SparkleHelpers.CombineMore(SparklePaths.SparklePath, subfolder);
+			process.StartInfo.Arguments = ",/root," + SparkleHelpers.CombineMore(SparkleConfig.DefaultConfig.FoldersPath, subfolder);
 			process.StartInfo.FileName = "explorer";
 			
 			process.Start();
