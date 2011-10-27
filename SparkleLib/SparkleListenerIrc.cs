@@ -49,8 +49,9 @@ namespace SparkleLib {
 
             // Option to allow access to channel when no password is defined
             try {
-                string option = SparkleConfig.DefaultConfig.GetConfigOption ("allow_passwordless_join");
-                this.allow_passwordless_join = option==null || Convert.ToBoolean (option);
+                this.allow_passwordless_join = Convert.ToBoolean (
+                    SparkleConfig.DefaultConfig.GetConfigOption ("allow_passwordless_join"));
+
             } catch (Exception) {
                 this.allow_passwordless_join = true;
             }
@@ -140,9 +141,6 @@ namespace SparkleLib {
 
                                 } else {
                                     SparkleHelpers.DebugInfo ("ListenerIrc", "Dangerous channel, change the setting to access");
-                                    base.is_connecting = false;
-                                    OnDisconnected ();
-                                    throw new ConnectionException ("Dangerous channel, change the setting to access");
                                 }
                             }
 
