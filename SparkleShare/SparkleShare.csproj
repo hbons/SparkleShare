@@ -9,7 +9,6 @@
     <AssemblyName>SparkleShare</AssemblyName>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace>SparkleShare</RootNamespace>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,6 +36,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="Mono.Posix" />
+    <Reference Include="notify-sharp, Version=0.4.0.0, Culture=neutral, PublicKeyToken=2df29c54e245917a">
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

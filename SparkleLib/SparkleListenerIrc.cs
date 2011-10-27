@@ -49,9 +49,8 @@ namespace SparkleLib {
 
             // Option to allow access to channel when no password is defined
             try {
-                this.allow_passwordless_join = Convert.ToBoolean (
-                    SparkleConfig.DefaultConfig.GetConfigOption ("allow_passwordless_join"));
-
+                string option = SparkleConfig.DefaultConfig.GetConfigOption ("allow_passwordless_join");
+                this.allow_passwordless_join = (option == null || Convert.ToBoolean (option));
             } catch (Exception) {
                 this.allow_passwordless_join = true;
             }
@@ -136,11 +135,14 @@ namespace SparkleLib {
 
                             } else {
                                 if (this.allow_passwordless_join) {
-                                    SparkleHelpers.DebugInfo ("ListenerIrc", "Accessing a dangerous channel, change the setting to not access");
+                                    SparkleHelpers.DebugInfo ("ListenerIrc", "Accessing unprotected channel, change the setting to not access");
                                     this.client.RfcJoin (channel);
-
+                                
                                 } else {
-                                    SparkleHelpers.DebugInfo ("ListenerIrc", "Dangerous channel, change the setting to access");
+                                    SparkleHelpers.DebugInfo ("ListenerIrc", "Unprotected channel, change the setting to access");
+                                    base.is_connecting = false;
+                                    OnDisconnected ();
+                                    throw new ConnectionException ("Unprotected channel, change the setting to access");
                                 }
                             }
 

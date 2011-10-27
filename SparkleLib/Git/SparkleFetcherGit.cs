@@ -226,6 +226,24 @@ namespace SparkleLib {
                 writer.WriteLine ("Thumbs.db");
                 writer.WriteLine ("Desktop.ini");
 
+		// MS Office
+                writer.WriteLine ("~*.tmp");
+                writer.WriteLine ("~*.TMP");
+                writer.WriteLine ("*~*.tmp");
+                writer.WriteLine ("*~*.TMP");
+                writer.WriteLine ("~*.ppt");
+                writer.WriteLine ("~*.pptx");
+                writer.WriteLine ("~*.PPT");
+                writer.WriteLine ("~*.PPTX");
+                writer.WriteLine ("~*.xls");
+                writer.WriteLine ("~*.xlsx");
+                writer.WriteLine ("~*.XLS");
+                writer.WriteLine ("~*.XLSX");
+                writer.WriteLine ("~*.doc");
+                writer.WriteLine ("~*.docx");
+                writer.WriteLine ("~*.DOC");
+                writer.WriteLine ("~*.DOCX");
+
                 // CVS
                 writer.WriteLine ("*/CVS/*");
                 writer.WriteLine (".cvsignore");
