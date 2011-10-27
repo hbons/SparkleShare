@@ -148,7 +148,7 @@ namespace SparkleLib {
 
         public bool HasQueueDownAnnouncement (string folder_identifier)
         {
-            foreach (SparkleAnnouncement announcement in this.queue_down) {
+            foreach (SparkleAnnouncement announcement in this.queue_down.GetRange(0, this.queue_down.Count)) {
                 if (announcement.FolderIdentifier.Equals (folder_identifier)) {
                     this.queue_down.Remove (announcement);
                     return true;
@@ -174,9 +174,9 @@ namespace SparkleLib {
                 Connected ();
 
             if (this.queue_up.Count > 0) {
-                SparkleHelpers.DebugInfo ("Listener", "Delivering queued messages...");
+                SparkleHelpers.DebugInfo ("Listener", "Delivering " + this.queue_up.Count + " queued messages...");
 
-                foreach (SparkleAnnouncement announcement in this.queue_up) {
+                foreach (SparkleAnnouncement announcement in this.queue_up.GetRange(0, this.queue_up.Count)) {
                     AnnounceBase (announcement);
                     this.queue_up.Remove (announcement);
                 }
