@@ -61,6 +61,7 @@ namespace SparkleShare {
 
                 // Needed for Growl
                 GrowlApplicationBridge.WeakDelegate = this;
+                GrowlApplicationBridge.Delegate = new SparkleGrowlDelegate ();
 
                 NSApplication.SharedApplication.ApplicationIconImage
                     = NSImage.ImageNamed ("sparkleshare.icns");

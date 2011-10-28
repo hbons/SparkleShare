@@ -29,6 +29,8 @@ namespace SparkleLib {
         private Thread thread;
         private IrcClient client;
         private string nick;
+        private string announcements_password;
+        private bool allow_passwordless_join;
 
 
         public SparkleListenerIrc (Uri server, string folder_identifier) :
@@ -40,6 +42,18 @@ namespace SparkleLib {
             // Most irc servers don't allow nicknames starting
             // with a number, so prefix an alphabetic character
             this.nick = "s" + this.nick.Substring (0, 7);
+
+            // Optional password to make the channel access more safe
+            this.announcements_password =
+                SparkleConfig.DefaultConfig.GetConfigOption ("announcements_password");
+
+            // Option to allow access to channel when no password is defined
+            try {
+                string option = SparkleConfig.DefaultConfig.GetConfigOption ("allow_passwordless_join");
+                this.allow_passwordless_join = (option == null || Convert.ToBoolean (option));
+            } catch (Exception) {
+                this.allow_passwordless_join = true;
+            }
 
             base.channels.Add ("#" + folder_identifier);
 
@@ -102,13 +116,34 @@ namespace SparkleLib {
                     try {
                         // Connect, login, and join the channel
                         int port = base.server.Port;
-                        if (port < 0) port = 6667;
+
+                        if (port < 0)
+                            port = 6667;
+
                         this.client.Connect (base.server.Host, port);
                         this.client.Login (this.nick, this.nick, 8, this.nick);
 
                         foreach (string channel in base.channels) {
                             SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
-                            this.client.RfcJoin (channel);
+
+                            if (!string.IsNullOrEmpty (this.announcements_password)) {
+                                SparkleHelpers.DebugInfo ("ListenerIrc", "Password set to access the channel");
+                                this.client.RfcJoin (channel, this.announcements_password);
+                                this.client.RfcMode (channel, "+k " + this.announcements_password);
+
+                            } else {
+                                if (this.allow_passwordless_join) {
+                                    SparkleHelpers.DebugInfo ("ListenerIrc", "Accessing unprotected channel, change the setting to not access");
+                                    this.client.RfcJoin (channel);
+                                
+                                } else {
+                                    SparkleHelpers.DebugInfo ("ListenerIrc", "Unprotected channel, change the setting to access");
+                                    base.is_connecting = false;
+                                    OnDisconnected ();
+                                    throw new ConnectionException ("Unprotected channel, change the setting to access");
+                                }
+                            }
+
                             this.client.RfcMode (channel, "+s");
                         }
 
@@ -136,7 +171,18 @@ namespace SparkleLib {
 
                 if (IsConnected) {
                     SparkleHelpers.DebugInfo ("ListenerIrc", "Joining channel " + channel);
-                    this.client.RfcJoin (channel);
+                    if (this.announcements_password != null) {
+                        SparkleHelpers.DebugInfo ("ListenerIrc", "Password set to access the channel");
+                        this.client.RfcJoin (channel, this.announcements_password);
+                        this.client.RfcMode (channel, "+k " + this.announcements_password);
+                    } else {
+                        if (allow_passwordless_join) {
+                            SparkleHelpers.DebugInfo ("ListenerIrc", "Accessing a dangerous channel change the setting to not access");
+                            this.client.RfcJoin (channel);
+                        } else {
+                            SparkleHelpers.DebugInfo ("ListenerIrc", "Dangerous channel, change the setting to access");
+                        }
+                    }
                     this.client.RfcMode (channel, "+s");
                 }
             }

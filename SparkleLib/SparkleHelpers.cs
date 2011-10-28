@@ -70,14 +70,15 @@ namespace SparkleLib {
             }
         }
 
+
         // Check if a file is a symbolic link
         public static bool IsSymlink (string file)
         {
             FileAttributes attr = File.GetAttributes (file);
 
-            return ((attr & FileAttributes.ReparsePoint) ==
-                    FileAttributes.ReparsePoint);
+            return ((attr & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint);
         }
+
 
         // Converts a UNIX timestamp to a more usable time object
         public static DateTime UnixTimestampToDateTime (int timestamp)
@@ -85,5 +86,13 @@ namespace SparkleLib {
             DateTime unix_epoch = new DateTime (1970, 1, 1, 0, 0, 0, 0);
             return unix_epoch.AddSeconds (timestamp);
         }
+
+
+        // Gets the relative path of two hierarchical absolute paths	
+        public static string DiffPaths (string target, string source)
+        {
+            return target.Replace (source + Path.DirectorySeparatorChar, "");      
+        }
     }
 }
+
