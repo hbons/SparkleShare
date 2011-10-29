@@ -30,7 +30,7 @@ namespace SparkleShare {
 
     public class SparkleEventLog : NSWindow {
 
-        private SparkleEventLogController controller = new SparkleEventLogController ();
+        public SparkleEventLogController Controller = new SparkleEventLogController ();
 
         private WebView web_view = new WebView (new RectangleF (0, 0, 480, 579), "", "") {
             PolicyDelegate = new SparkleWebPolicyDelegate ()
@@ -83,19 +83,19 @@ namespace SparkleShare {
 
 
             // Hook up the controller events
-            this.controller.UpdateChooserEvent += delegate (string [] folders) {
+            Controller.UpdateChooserEvent += delegate (string [] folders) {
                 InvokeOnMainThread (delegate {
                     UpdateChooser (folders);
                 });
             };
 
-            this.controller.UpdateContentEvent += delegate (string html) {
+            Controller.UpdateContentEvent += delegate (string html) {
                 InvokeOnMainThread (delegate {
                     UpdateContent (html);
                 });
             };
 
-            this.controller.ContentLoadingEvent += delegate {
+            Controller.ContentLoadingEvent += delegate {
                 InvokeOnMainThread (delegate {
                     if (this.web_view.Superview == ContentView)
                         this.web_view.RemoveFromSuperview ();
@@ -109,7 +109,7 @@ namespace SparkleShare {
         public void UpdateChooser (string [] folders)
         {
             if (folders == null)
-                folders = this.controller.Folders;
+                folders = Controller.Folders;
 
             if (this.popup_button != null)
                 this.popup_button.RemoveFromSuperview ();
@@ -129,9 +129,9 @@ namespace SparkleShare {
 
             this.popup_button.Activated += delegate {
                 if (this.popup_button.IndexOfSelectedItem == 0)
-                    this.controller.SelectedFolder = null;
+                    Controller.SelectedFolder = null;
                 else
-                    this.controller.SelectedFolder = this.popup_button.SelectedItem.Title;
+                    Controller.SelectedFolder = this.popup_button.SelectedItem.Title;
             };
 
             ContentView.AddSubview (this.popup_button);
@@ -143,7 +143,7 @@ namespace SparkleShare {
             using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
                 Thread thread = new Thread (new ThreadStart (delegate {
                     if (html == null)
-                        html = this.controller.HTML;
+                        html = Controller.HTML;
     
                     html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
                     html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");

@@ -1,6 +1,7 @@
 SUBDIRS = \
 	icons \
-	html
+	html \
+	plugins
 
 dist_pixmaps_DATA = \
 	side-splash.png \

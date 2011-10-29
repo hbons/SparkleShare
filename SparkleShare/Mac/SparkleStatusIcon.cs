@@ -192,7 +192,7 @@ namespace SparkleShare {
                 Menu.AddItem (NSMenuItem.SeparatorItem);
     
                     SyncMenuItem = new NSMenuItem () {
-                        Title = "Add Project…"
+                        Title = "Add Hosted Project…"
                     };
                 
                     if (!Program.Controller.FirstRun) {
@@ -218,7 +218,7 @@ namespace SparkleShare {
                 Menu.AddItem (NSMenuItem.SeparatorItem);
     
                     RecentEventsMenuItem = new NSMenuItem () {
-                        Title = "Show Recent Events"
+                        Title = "Open Recent Events"
                     };
     
                     if (Controller.Folders.Length > 0) {

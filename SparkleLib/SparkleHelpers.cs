@@ -65,8 +65,18 @@ namespace SparkleLib {
                 string [] files = Directory .GetFiles(path);
 
                 foreach (string file in files)
-                    File.SetAttributes (file, FileAttributes.Normal);
+                    if (!IsSymlink (file))
+                        File.SetAttributes (file, FileAttributes.Normal);
             }
+        }
+
+
+        // Check if a file is a symbolic link
+        public static bool IsSymlink (string file)
+        {
+            FileAttributes attr = File.GetAttributes (file);
+
+            return ((attr & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint);
         }
 
 
@@ -77,9 +87,12 @@ namespace SparkleLib {
             return unix_epoch.AddSeconds (timestamp);
         }
 
-        // Gets the relative path of two hirarchical absolute paths
-        public static string DiffPaths(string target, string source) {
-        	return target.Replace(source + Path.DirectorySeparatorChar, "");			
+
+        // Gets the relative path of two hierarchical absolute paths	
+        public static string DiffPaths (string target, string source)
+        {
+            return target.Replace (source + Path.DirectorySeparatorChar, "");      
         }
     }
 }
+

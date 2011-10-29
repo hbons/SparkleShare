@@ -80,6 +80,9 @@
     <Compile Include="..\SparkleExtensions.cs">
       <Link>SparkleExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\SparklePlugin.cs">
+      <Link>SparklePlugin.cs</Link>
+    </Compile>
     <Compile Include="ApplicationSchemeHandler.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="controls\ExampleTextBox.cs">
@@ -223,6 +226,50 @@
     <None Include="Icons.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Icons.resx</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\data\plugins\bitbucket.png">
+      <Link>plugins\bitbucket.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\data\plugins\github.png">
+      <Link>plugins\github.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\data\plugins\gitorious.png">
+      <Link>plugins\gitorious.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\data\plugins\gnome.png">
+      <Link>plugins\gnome.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\data\plugins\own-server.png">
+      <Link>plugins\own-server.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\data\plugins\bitbucket.xml">
+      <Link>plugins\bitbucket.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\data\plugins\github.xml">
+      <Link>plugins\github.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\data\plugins\gitorious.xml">
+      <Link>plugins\gitorious.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\data\plugins\gnome.xml">
+      <Link>plugins\gnome.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\data\plugins\own-server.xml">
+      <Link>plugins\own-server.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 </Project>
