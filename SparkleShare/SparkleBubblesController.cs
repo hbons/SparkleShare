@@ -34,7 +34,7 @@ namespace SparkleShare {
             };
 
             Program.Controller.NotificationRaised += delegate (string user_name, string user_email,
-                                                                    string message, string folder_path) {
+                                                               string message, string folder_path) {
                 ShowBubble (user_name, message,
                     Program.Controller.GetAvatar (user_email, 36));
             };
