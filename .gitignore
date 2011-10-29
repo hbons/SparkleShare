@@ -46,5 +46,6 @@ po/sparkleshare.pot
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py
 gnome-doc-utils.make
 /sparkleshare-*
+data/plugins/*.xml
 desktop.ini
 _ReSharper.*

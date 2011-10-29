@@ -24,7 +24,6 @@ using System.Timers;
 
 using Gtk;
 using Mono.Unix;
-using SparkleLib;
 
 namespace SparkleShare {
 

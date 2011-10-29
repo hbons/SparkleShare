@@ -88,7 +88,7 @@ dnl package checks, common for all configs
 SPARKLESHARE_CHECK_GTK_SHARP
 
 SPARKLESHARE_SMARTIRC4NET
-PKG_CHECK_MODULES([SMARTIRC4NET], [smartirc4net],
+PKG_CHECK_MODULES([SMARTIRC4NET], [smartirc4net >= 0.5],
 	SMARTIRC4NET_ASSEMBLY=""
 	AC_SUBST(SMARTIRC4NET_ASSEMBLY)
 	,
@@ -165,6 +165,7 @@ build/m4/shave/shave-libtool
 data/Makefile
 data/icons/Makefile
 data/html/Makefile
+data/plugins/Makefile
 help/Makefile
 SparkleLib/AssemblyInfo.cs
 SparkleLib/Defines.cs

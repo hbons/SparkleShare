@@ -46,6 +46,7 @@ namespace SparkleShare {
 
             pictureBox.Image = Icons.side_splash;
             this.ClientSize = new Size (this.ClientSize.Width, Icons.side_splash.Size.Height);
+            panel_info.Size = pictureBox.Size;
             this.Icon = Icons.sparkleshare;
 
             Controller.ChangePageEvent += delegate (PageType type) {
@@ -53,8 +54,8 @@ namespace SparkleShare {
                     switch (type) {
                         case PageType.Add:
                             tabControl.SelectedIndex = 1;
-                            if (!string.IsNullOrEmpty (Controller.PreviousServer))
-                                ServerEntry.Text = Controller.PreviousServer;
+                            if (!string.IsNullOrEmpty (Controller.PreviousUrl))
+                                ServerEntry.Text = Controller.PreviousUrl;
                             else
                                 ServerEntry.Text = "";
                             FolderEntry.Text = "";
@@ -79,6 +80,14 @@ namespace SparkleShare {
                             tabControl.SelectedIndex = 2;
                             Show ();
                             break;
+                        case PageType.Tutorial:
+                            if (Controller.TutorialPageNumber==1)
+                                Controller.TutorialSkipped ();
+                            else
+                                Controller.ShowAddPage ();
+                            break;
+                        default:
+                            throw new NotImplementedException("unknown PageType");
                     }
                 });
             };

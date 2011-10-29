@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-27 20:30+0200\n"
-"PO-Revision-Date: 2011-09-28 12:49+0000\n"
-"Last-Translator: paa <angelini@univ-rennes1.fr>\n"
+"POT-Creation-Date: 2011-09-30 22:26+0200\n"
+"PO-Revision-Date: 2011-09-30 20:30+0000\n"
+"Last-Translator: deejay1 <deejay1@srem.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -134,6 +134,45 @@ msgstr "Vous disposez de la dernière version."
 #: ../SparkleShare/SparkleAbout.cs:88 ../SparkleShare/SparkleAbout.cs:113
 msgid "Checking for updates..."
 msgstr "Vérification des mises à jour…"
+
+#: ../SparkleShare/SparkleControllerBase.cs:491
+msgid "dddd, MMMM d, yyyy"
+msgstr ""
+
+#: ../SparkleShare/SparkleControllerBase.cs:497
+msgid "dddd, MMMM d"
+msgstr ""
+
+#: ../SparkleShare/SparkleControllerBase.cs:705
+#, csharp-format
+msgid "added ‘{0}’"
+msgstr ""
+
+#: ../SparkleShare/SparkleControllerBase.cs:710
+#, csharp-format
+msgid "moved ‘{0}’"
+msgstr ""
+
+#: ../SparkleShare/SparkleControllerBase.cs:715
+#, csharp-format
+msgid "edited ‘{0}’"
+msgstr ""
+
+#: ../SparkleShare/SparkleControllerBase.cs:720
+#, csharp-format
+msgid "deleted ‘{0}’"
+msgstr ""
+
+#: ../SparkleShare/SparkleControllerBase.cs:729
+#, csharp-format
+msgid "and {0} more"
+msgid_plural "and {0} more"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../SparkleShare/SparkleControllerBase.cs:733
+msgid "did something magical"
+msgstr ""
 
 #: ../SparkleShare/SparkleEventLog.cs:58
 msgid "Recent Events"
