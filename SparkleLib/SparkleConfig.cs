@@ -73,9 +73,6 @@ namespace SparkleLib {
             } catch (IOException) {
                 CreateInitialConfig ();
 
-            } catch (FileNotFoundException) {
-                CreateInitialConfig ();
-
             } catch (XmlException) {
             
                 FileInfo file = new FileInfo (FullPath);
