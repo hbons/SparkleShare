@@ -876,18 +876,23 @@ namespace SparkleShare {
                 // -f is the file name to store the private key in
                 process.StartInfo.Arguments = "-t rsa -P \"\" -f " + key_file_name;
 
-                process.Exited += delegate {
-                    SparkleHelpers.DebugInfo ("Config", "Created private key '" + key_file_name + "'");
-                    SparkleHelpers.DebugInfo ("Config", "Created public key  '" + key_file_name + ".pub'");
-
-                    // Create an easily accessible copy of the public
-                    // key in the user's SparkleShare folder
-                    File.Copy (key_file_path + ".pub",
-                        Path.Combine (SparklePath, UserName + "'s key.txt"));
-                };
-                
                 process.Start ();
                 process.WaitForExit ();
+
+                SparkleHelpers.DebugInfo ("Config", "Created private key '" + key_file_name + "'");
+                SparkleHelpers.DebugInfo ("Config", "Created public key  '" + key_file_name + ".pub'");
+
+                // Add some restrictions to what the key can
+                // do when uploaded to the server
+                string public_key = File.ReadAllText (key_file_path + ".pub");
+                public_key = "no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty " + public_key;
+                File.WriteAllText (key_file_path + ".pub", public_key);
+
+                // Create an easily accessible copy of the public
+                // key in the user's SparkleShare folder
+                File.Copy (key_file_path + ".pub",
+                    Path.Combine (SparklePath, UserName + "'s key.txt"));
+
             }
         }
 
