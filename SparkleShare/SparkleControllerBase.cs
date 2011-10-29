@@ -969,7 +969,10 @@ namespace SparkleShare {
                 Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath), "icons",
                 size + "x" + size, "status", "avatar-" + email);
 
-            return avatar_file_path;
+            if (File.Exists (avatar_file_path))
+                return avatar_file_path;
+            else
+                return null;
         }
 
 
