@@ -19,7 +19,6 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Xml;
 
 namespace SparkleLib {
 
@@ -153,11 +152,6 @@ namespace SparkleLib {
         // the newly cloned repository
         private void InstallConfiguration ()
         {
-            string global_config_file_path = Path.Combine (SparkleConfig.DefaultConfig.TmpPath, "config.xml");
-
-            if (!File.Exists (global_config_file_path))
-                return;
-
             string repo_config_file_path = SparkleHelpers.CombineMore (base.target_folder, ".git", "config");
             string config = String.Join (Environment.NewLine, File.ReadAllLines (repo_config_file_path));
 
@@ -173,20 +167,6 @@ namespace SparkleLib {
             // Ignore permission changes
             config = config.Replace ("filemode = true", "filemode = false");
 
-
-            // Add user info
-            XmlDocument xml = new XmlDocument();
-            xml.Load (global_config_file_path);
-
-            XmlNode node_name  = xml.SelectSingleNode ("//user/name/text()");
-            XmlNode node_email = xml.SelectSingleNode ("//user/email/text()");
-
-            // TODO: just use commands instead of messing with the config file
-            config += n +
-                      "[user]" + n +
-                      "\tname  = " + node_name.Value + n +
-                      "\temail = " + node_email.Value + n;
-
             // Write the config to the file
             TextWriter writer = new StreamWriter (repo_config_file_path);
             writer.WriteLine (config);
@@ -199,10 +179,22 @@ namespace SparkleLib {
         // Add a .gitignore file to the repo
         private void InstallExcludeRules ()
         {
-            string exlude_rules_file_path = SparkleHelpers.CombineMore (
+            string exclude_rules_file_path = SparkleHelpers.CombineMore (
                 this.target_folder, ".git", "info", "exclude");
 
-            TextWriter writer = new StreamWriter (exlude_rules_file_path);
+            string directory = Path.GetDirectoryName(exclude_rules_file_path);
+
+            if (directory == null)
+            {
+                return;
+            }
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            TextWriter writer = new StreamWriter (exclude_rules_file_path);
 
                 // gedit and emacs
                 writer.WriteLine ("*~");
@@ -233,6 +225,24 @@ namespace SparkleLib {
                 // Windows
                 writer.WriteLine ("Thumbs.db");
                 writer.WriteLine ("Desktop.ini");
+
+		// MS Office
+                writer.WriteLine ("~*.tmp");
+                writer.WriteLine ("~*.TMP");
+                writer.WriteLine ("*~*.tmp");
+                writer.WriteLine ("*~*.TMP");
+                writer.WriteLine ("~*.ppt");
+                writer.WriteLine ("~*.pptx");
+                writer.WriteLine ("~*.PPT");
+                writer.WriteLine ("~*.PPTX");
+                writer.WriteLine ("~*.xls");
+                writer.WriteLine ("~*.xlsx");
+                writer.WriteLine ("~*.XLS");
+                writer.WriteLine ("~*.XLSX");
+                writer.WriteLine ("~*.doc");
+                writer.WriteLine ("~*.docx");
+                writer.WriteLine ("~*.DOC");
+                writer.WriteLine ("~*.DOCX");
 
                 // CVS
                 writer.WriteLine ("*/CVS/*");

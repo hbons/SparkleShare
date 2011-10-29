@@ -69,14 +69,15 @@ namespace SparkleShare {
                 InvokeOnMainThread (delegate {
                     UpdatesTextField.StringValue = "You are running the latest version.";
                     UpdatesTextField.TextColor   =
-                        NSColor.FromCalibratedRgba (0.31f, 0.60f, 0.02f, 1.0f); // Tango Chameleon #3
+                        NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f); // Tango Sky Blue #1
                 });
             };
 
             Controller.CheckingForNewVersionEvent += delegate {
                 InvokeOnMainThread (delegate {
                     UpdatesTextField.StringValue = "Checking for updates...";
-                    UpdatesTextField.TextColor   = NSColor.DisabledControlText;
+                    UpdatesTextField.TextColor   =
+                        NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f); // Tango Sky Blue #1
                 });
             };
         }
@@ -117,7 +118,8 @@ namespace SparkleShare {
                 DrawsBackground = false,
                 Font            = NSFontManager.SharedFontManager.FontWithFamily
                     ("Lucida Grande", NSFontTraitMask.Unbold, 0, 11),
-                TextColor       = NSColor.DisabledControlText
+                TextColor       =
+                    NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f) // Tango Sky Blue #1
             };
 
             CreditsTextField = new NSTextField () {

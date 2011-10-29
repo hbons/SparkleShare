@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using Gtk;
 using Mono.Unix;
 
-
 namespace SparkleShare {
 
     public class SparkleSetup : SparkleSetupWindow {
@@ -33,11 +32,12 @@ namespace SparkleShare {
         public SparkleSetupController Controller = new SparkleSetupController ();
 
         private string SecondaryTextColor;
+        private string SecondaryTextColorSelected;
 
         private Entry NameEntry;
         private Entry EmailEntry;
-        private SparkleEntry ServerEntry;
-        private SparkleEntry FolderEntry;
+        private SparkleEntry AddressEntry;
+        private SparkleEntry PathEntry;
 
         private Button NextButton;
         private Button SyncButton;
@@ -55,7 +55,15 @@ namespace SparkleShare {
 
         public SparkleSetup () : base ()
         {
-            SecondaryTextColor = SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive));
+            SecondaryTextColor         = SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive));
+            SecondaryTextColorSelected =
+                SparkleUIHelpers.GdkColorToHex (
+                    MixColors (
+                        new TreeView ().Style.Foreground (StateType.Selected),
+                        new TreeView ().Style.Background (StateType.Selected),
+                        0.15
+                    )
+                );
 
             Controller.ChangePageEvent += delegate (PageType type) {
                 Application.Invoke (delegate {
@@ -118,133 +126,184 @@ namespace SparkleShare {
 
                     case PageType.Add: {
 
-                        Header = _("Where is your project?");
+                        Header = _("Where's your project hosted?");
 
-                        Table = new Table (6, 2, false) {
-                            RowSpacing = 0
+                        VBox layout_vertical = new VBox (false, 12);
+                        HBox layout_fields   = new HBox (true, 12);
+                        VBox layout_address  = new VBox (true, 0);
+                        VBox layout_path     = new VBox (true, 0);
+
+                        ListStore store = new ListStore (typeof (Gdk.Pixbuf),
+                            typeof (string), typeof (SparklePlugin));
+
+                        TreeView tree = new TreeView (store) { HeadersVisible = false };
+                        ScrolledWindow scrolled_window = new ScrolledWindow ();
+                        scrolled_window.AddWithViewport (tree);
+
+                        // Icon column
+                        tree.AppendColumn ("Icon", new Gtk.CellRendererPixbuf (), "pixbuf", 0);
+                        tree.Columns [0].Cells [0].Xpad = 6;
+
+                        // Service column
+                        TreeViewColumn service_column = new TreeViewColumn () { Title = "Service" };
+                        CellRendererText service_cell = new CellRendererText () { Ypad = 4 };
+                        service_column.PackStart (service_cell, true);
+                        service_column.SetCellDataFunc (service_cell, new TreeCellDataFunc (RenderServiceColumn));
+
+                        foreach (SparklePlugin plugin in Controller.Plugins) {
+                            store.AppendValues (
+                                new Gdk.Pixbuf (plugin.ImagePath),
+                                "<span size=\"small\"><b>" + plugin.Name + "</b>\n" +
+                                  "<span fgcolor=\"" + SecondaryTextColorSelected + "\">" +
+                                  plugin.Description + "</span>" +
+                                "</span>",
+                                plugin);
+                        }
+
+                        tree.AppendColumn (service_column);
+
+                        PathEntry = new SparkleEntry ();
+                        AddressEntry = new SparkleEntry ();
+
+
+                        // Select the first plugin by default
+                        TreeSelection default_selection = tree.Selection;
+                        TreePath default_path = new TreePath ("0");
+                        default_selection.SelectPath (default_path);
+                        Controller.SelectedPluginChanged (0);
+
+                        Controller.ChangeAddressFieldEvent += delegate (string text,
+                            string example_text, FieldState state) {
+                            Console.WriteLine ("> " +  text);
+                            Application.Invoke (delegate {
+                                AddressEntry.Text        = text;
+                                AddressEntry.Sensitive   = (state == FieldState.Enabled);
+
+                                if (string.IsNullOrEmpty (example_text))
+                                    AddressEntry.ExampleText = null;
+                                else
+                                    AddressEntry.ExampleText = example_text;
+
+                                if (string.IsNullOrEmpty (text))
+                                    AddressEntry.ExampleTextActive = true;
+                                else
+                                    AddressEntry.ExampleTextActive = false;
+                            });
                         };
 
-                            HBox layout_server = new HBox (true, 0);
+                        Controller.ChangePathFieldEvent += delegate (string text,
+                            string example_text, FieldState state) {
 
-                                // Own server radiobutton
-                                RadioButton radio_button = new RadioButton ("<b>" + _("On my own server:") + "</b>");
-                                (radio_button.Child as Label).UseMarkup = true;
+                            Application.Invoke (delegate {
+                                PathEntry.Text        = text;
+                                PathEntry.Sensitive   = (state == FieldState.Enabled);
 
-                                radio_button.Toggled += delegate {
-                                    if (radio_button.Active) {
-                                        FolderEntry.ExampleText = _("Folder");
-                                        ServerEntry.Sensitive   = true;
+                                if (string.IsNullOrEmpty (example_text))
+                                    PathEntry.ExampleText = null;
+                                else
+                                    PathEntry.ExampleText = example_text;
+
+                                if (string.IsNullOrEmpty (text))
+                                    PathEntry.ExampleTextActive = true;
+                                else
+                                    PathEntry.ExampleTextActive = false;
+                            });
+                        };
+
+                        // Update the address field text when the selection changes
+                        tree.CursorChanged += delegate (object sender, EventArgs e) {
+                            TreeIter iter;
+                            TreeModel model;
+
+                            TreeSelection selection = (sender as TreeView).Selection;
+                            selection.GetSelected (out model, out iter);
+
+                            SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
+                            int selected_path = int.Parse (model.GetPath (iter).ToString ());
+
+                            Controller.SelectedPluginChanged (selected_path);
+
+                            // TODO: Scroll to selected row when using arrow keys
+                        };
+
+                        tree.Model.Foreach (new TreeModelForeachFunc (delegate (TreeModel model,
+                            TreePath path, TreeIter iter) {
+
+                            string address;
+
+                            try {
+                                address = (model.GetValue (iter, 2) as SparklePlugin).Address;
+
+                            } catch (NullReferenceException) {
+                                address = "";
+                            }
+
+                            if (!string.IsNullOrEmpty (address) &&
+                                address.Equals (Controller.PreviousAddress)) {
+
+                                tree.SetCursor (path, service_column, false);
+                                SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
+
+                                if (plugin.Address != null) {
+                                    AddressEntry.Sensitive = false;}
+
+                                if (plugin.Path != null)
+                                    PathEntry.Sensitive = false;
+
+                                // TODO: Scroll to the selection
+
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }));
+
+                        AddressEntry.Completion = new EntryCompletion();
+                        ListStore server_store = new ListStore (typeof (string));
+
+                        foreach (string host in Program.Controller.PreviousHosts)
+                            server_store.AppendValues (host);
+
+                        AddressEntry.Completion.Model      = server_store;
+                        AddressEntry.Completion.TextColumn = 0;
+
+                        AddressEntry.Changed += delegate {
+                            CheckAddPage ();
+                        };
+
+                                layout_address.PackStart (new Label () {
+                                    Markup = "<b>" + _("Address") + "</b>",
+                                    Xalign = 0
+                                }, true, true, 0);
+
+                                layout_address.PackStart (AddressEntry, true, true, 0);
+
+                                    PathEntry.Completion  = new EntryCompletion();
+
+                                    ListStore folder_store = new ListStore (typeof (string));
+
+                                    //foreach (string host in Program.Controller.FolderPaths)
+                                    //    folder_store.AppendValues (host);
+
+                                    PathEntry.Completion.Model      = folder_store;
+                                    PathEntry.Completion.TextColumn = 0;
+
+                                    PathEntry.Changed += delegate {
                                         CheckAddPage ();
-                                    } else {
-                                        ServerEntry.Sensitive = false;
-                                        CheckAddPage ();
-                                    }
+                                    };
 
-                                    ShowAll ();
-                                };
+                                layout_path.PackStart (new Label () { Markup = "<b>" + _("Remote Path") + "</b>", Xalign = 0 },
+                                    true, true, 0);
+                                layout_path.PackStart (PathEntry, true, true, 0);
 
-                                // Own server entry
-                                ServerEntry = new SparkleEntry () { };
-                                ServerEntry.Completion = new EntryCompletion();
+                            layout_fields.PackStart (layout_address);
+                            layout_fields.PackStart (layout_path);
 
-                                ListStore server_store = new ListStore (typeof (string));
+                        layout_vertical.PackStart (new Label (""), false, false, 0);
+                        layout_vertical.PackStart (scrolled_window, true, true, 0);
+                        layout_vertical.PackStart (layout_fields, false, false, 0);
 
-                                foreach (string host in Program.Controller.PreviousHosts)
-                                    server_store.AppendValues (host);
-
-                                ServerEntry.Completion.Model = server_store;
-                                ServerEntry.Completion.TextColumn = 0;
-
-                                if (!string.IsNullOrEmpty (Controller.PreviousServer)) {
-                                    ServerEntry.Text = Controller.PreviousServer;
-                                    ServerEntry.ExampleTextActive = false;
-                                } else {
-                                    ServerEntry.ExampleText = _("address-to-server.com");
-                                }
-
-                                ServerEntry.Changed += delegate {
-                                    CheckAddPage ();
-                                };
-
-                            layout_server.Add (radio_button);
-                            layout_server.Add (ServerEntry);
-
-                        Table.Attach (layout_server,          0, 2, 1, 2);
-
-                            // Github radiobutton
-                            string github_text = "<b>" + "Github" + "</b>";
-
-                            RadioButton radio_button_github = new RadioButton (radio_button, github_text);
-                            (radio_button_github.Child as Label).UseMarkup = true;
-                            (radio_button_github.Child as Label).Wrap      = true;
-
-                            radio_button_github.Toggled += delegate {
-                                if (radio_button_github.Active)
-                                    FolderEntry.ExampleText = _("Username/Folder");
-                            };
-
-
-                            // Gitorious radiobutton
-                            string gitorious_text = "<b>" + _("Gitorious") + "</b>";
-
-                            RadioButton radio_button_gitorious = new RadioButton (radio_button, gitorious_text);
-                            (radio_button_gitorious.Child as Label).UseMarkup = true;
-                            (radio_button_gitorious.Child as Label).Wrap      = true;
-
-                            radio_button_gitorious.Toggled += delegate {
-                                if (radio_button_gitorious.Active)
-                                    FolderEntry.ExampleText = _("Project/Folder");
-                            };
-
-
-                            // GNOME radiobutton
-                            string gnome_text = "<b>" + _("The GNOME Project") + "</b>";
-
-                            RadioButton radio_button_gnome = new RadioButton (radio_button, gnome_text);
-                            (radio_button_gnome.Child as Label).UseMarkup = true;
-                            (radio_button_gnome.Child as Label).Wrap      = true;
-
-                            radio_button_gnome.Toggled += delegate {
-                                if (radio_button_gnome.Active)
-                                    FolderEntry.ExampleText = _("Project");
-                            };
-
-                        Table.Attach (radio_button_github,    0, 2, 2, 3);
-                        Table.Attach (radio_button_gitorious, 0, 2, 3, 4);
-                        Table.Attach (radio_button_gnome,     0, 2, 4, 5);
-
-                            // Folder label and entry
-                            HBox layout_folder = new HBox (true, 0);
-
-                                Label folder_label = new Label (_("Folder Name:")) {
-                                    UseMarkup = true,
-                                    Xalign    = 1
-                                };
-
-                                FolderEntry             = new SparkleEntry ();
-                                FolderEntry.ExampleText = _("Folder");
-                                FolderEntry.Completion = new EntryCompletion();
-
-                                ListStore folder_store = new ListStore (typeof (string));
-
-                                //foreach (string host in Program.Controller.FolderPaths)
-                                //    folder_store.AppendValues (host);
-
-                                FolderEntry.Completion.Model = folder_store;
-                                FolderEntry.Completion.TextColumn = 0;
-
-                                FolderEntry.Changed += delegate {
-                                    CheckAddPage ();
-                                };
-
-                            layout_folder.PackStart (folder_label, true, true, 12);
-                            layout_folder.PackStart (FolderEntry, true, true, 0);
-
-                        Table.Attach (layout_folder, 0, 2, 5, 6);
-
-                        VBox box = new VBox (false, 0);
-                        box.PackStart (Table, false, false, 0);
-                        Add (box);
+                        Add (layout_vertical);
 
                             // Cancel button
                             Button cancel_button = new Button (_("Cancel"));
@@ -253,22 +312,12 @@ namespace SparkleShare {
                                 Close ();
                             };
 
-
                             // Sync button
                             SyncButton = new Button (_("Add"));
 
                             SyncButton.Clicked += delegate {
-                                string server         = ServerEntry.Text;
-                                string folder_name    = FolderEntry.Text;
-
-                                if (radio_button_gitorious.Active)
-                                    server = "gitorious.org";
-
-                                if (radio_button_github.Active)
-                                    server = "github.com";
-
-                                if (radio_button_gnome.Active)
-                                    server = "gnome.org";
+                                string server         = AddressEntry.Text;
+                                string folder_name    = PathEntry.Text;
 
                                 Controller.AddPageCompleted (server, folder_name);
                             };
@@ -553,14 +602,14 @@ namespace SparkleShare {
         {
             SyncButton.Sensitive = false;
 
-            if (FolderEntry.ExampleTextActive ||
-                (ServerEntry.Sensitive && ServerEntry.ExampleTextActive))
+            if (PathEntry.ExampleTextActive ||
+                (AddressEntry.Sensitive && AddressEntry.ExampleTextActive))
                 return;
 
-            bool IsFolder = !FolderEntry.Text.Trim ().Equals ("");
-            bool IsServer = !ServerEntry.Text.Trim ().Equals ("");
+            bool IsFolder = !PathEntry.Text.Trim ().Equals ("");
+            bool IsServer = !AddressEntry.Text.Trim ().Equals ("");
 
-            if (ServerEntry.Sensitive == true) {
+            if (AddressEntry.Sensitive == true) {
                 if (IsServer && IsFolder)
                     SyncButton.Sensitive = true;
             } else if (IsFolder) {
@@ -568,5 +617,29 @@ namespace SparkleShare {
             }
         }
 
+
+        private void RenderServiceColumn (TreeViewColumn column, CellRenderer cell,
+            TreeModel model, TreeIter iter)
+        {
+            string markup           = (string) model.GetValue (iter, 1);
+            TreeSelection selection = (column.TreeView as TreeView).Selection;
+
+            if (selection.IterIsSelected (iter))
+                markup = markup.Replace (SecondaryTextColor, SecondaryTextColorSelected);
+            else
+                markup = markup.Replace (SecondaryTextColorSelected, SecondaryTextColor);
+
+            (cell as CellRendererText).Markup = markup;
+        }
+
+
+        private Gdk.Color MixColors (Gdk.Color first_color, Gdk.Color second_color, double ratio)
+        {
+            return new Gdk.Color (
+                Convert.ToByte ((255 * (Math.Min (65535, first_color.Red   * (1.0 - ratio) + second_color.Red   * ratio))) / 65535),
+                Convert.ToByte ((255 * (Math.Min (65535, first_color.Green * (1.0 - ratio) + second_color.Green * ratio))) / 65535),
+                Convert.ToByte ((255 * (Math.Min (65535, first_color.Blue  * (1.0 - ratio) + second_color.Blue  * ratio))) / 65535)
+            );
+        }
     }
 }

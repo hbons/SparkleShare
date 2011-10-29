@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <plugin>
+    <info>
+        <_name>Gitorious</_name>
+        <_description>Open source infrastructure for hosting open source projects</_description>
+        <icon>gitorious.png</icon>
+        <backend>Git</backend>
+    </info>
+    <address>
+      <value>ssh://git@gitorious.org/</value>
+      <example></example>
+    </address>
+    <path>
+      <value></value>
+      <_example>/project/repository</_example>
+    </path>
+  </plugin>
+</sparkleshare>
+

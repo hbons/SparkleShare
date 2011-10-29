@@ -402,7 +402,11 @@ namespace SparkleLib {
         // Commits the made changes
         private void Commit (string message)
         {
-            SparkleGit git = new SparkleGit (LocalPath, "commit -m \"" + message + "\"");
+            SparkleGit git = new SparkleGit (LocalPath,
+                "commit -m \"" + message + "\" " +
+                "--author=\"" + SparkleConfig.DefaultConfig.User.Name +
+                " <" + SparkleConfig.DefaultConfig.User.Email + ">\"");
+
             git.Start ();
             git.StandardOutput.ReadToEnd ();
             git.WaitForExit ();
@@ -530,7 +534,7 @@ namespace SparkleLib {
                     // We need to specifically mention the file, so
                     // we can't reuse the Add () method
                     SparkleGit git_add = new SparkleGit (LocalPath,
-                        "add " + conflicting_path);
+                        "add \"" + conflicting_path + "\"");
                     git_add.Start ();
                     git_add.WaitForExit ();
 
