@@ -1,0 +1,370 @@
+# This file is distributed under the same license as the SparkleShare package.
+# 
+# Translators:
+# Matej Moško <matej.mosko@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: SparkleShare\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-10-07 23:32+0200\n"
+"PO-Revision-Date: 2011-10-07 21:33+0000\n"
+"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sk\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
+
+#: ../data/plugins/bitbucket.xml.in.h:1 ../data/plugins/github.xml.in.h:1
+msgid "/username/project"
+msgstr ""
+
+#: ../data/plugins/bitbucket.xml.in.h:2
+msgid "Bitbucket"
+msgstr ""
+
+#: ../data/plugins/bitbucket.xml.in.h:3
+msgid "Free code hosting for Git and Mercurial"
+msgstr ""
+
+#: ../data/plugins/github.xml.in.h:2
+msgid "Free public Git repositories with collaborator management"
+msgstr ""
+
+#: ../data/plugins/github.xml.in.h:3
+msgid "Github"
+msgstr ""
+
+#: ../data/plugins/gitorious.xml.in.h:1
+msgid "/project/repository"
+msgstr ""
+
+#: ../data/plugins/gitorious.xml.in.h:2
+msgid "Gitorious"
+msgstr "Gitorious"
+
+#: ../data/plugins/gitorious.xml.in.h:3
+msgid "Open source infrastructure for hosting open source projects"
+msgstr ""
+
+#: ../data/plugins/gnome.xml.in.h:1
+msgid "/project"
+msgstr ""
+
+#: ../data/plugins/gnome.xml.in.h:2
+msgid "A free and easy interface for your computer"
+msgstr ""
+
+#: ../data/plugins/gnome.xml.in.h:3
+msgid "The GNOME Project"
+msgstr ""
+
+#: ../data/plugins/own-server.xml.in.h:1
+msgid "/path/to/project"
+msgstr ""
+
+#: ../data/plugins/own-server.xml.in.h:2
+msgid "Everything under my control"
+msgstr ""
+
+#: ../data/plugins/own-server.xml.in.h:3
+msgid "On my own server"
+msgstr ""
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:70
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:88
+#: ../SparkleShare/SparkleSetup.cs:76 ../SparkleShare/SparkleStatusIcon.cs:75
+#: ../SparkleShare/SparkleStatusIcon.cs:89
+msgid "Welcome to SparkleShare!"
+msgstr "Vitajte v Sparkleshare"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:72
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:90
+#: ../SparkleShare/SparkleStatusIcon.cs:77
+#: ../SparkleShare/SparkleStatusIcon.cs:91
+msgid "Up to date"
+msgstr "Aktualizované"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:99
+#: ../SparkleShare/SparkleStatusIcon.cs:106
+msgid "Syncing…"
+msgstr "Synchronizujem..."
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:109
+#: ../SparkleShare/SparkleStatusIcon.cs:116
+msgid "Not everything is synced"
+msgstr "Nie všetko je synchronizované"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
+msgid "Copy Web Link"
+msgstr "Skopíruj webový odkaz"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
+msgid "Copy the web address of this file to the clipboard"
+msgstr "Skopíruj webový odkaz na tento súbor do schránky"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
+msgid "Get Earlier Version"
+msgstr "Vyber staršiu verziu"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
+msgid "Make a copy of an earlier version in this folder"
+msgstr "Vytvor kópiu staršej verzie v tomto priečinku"
+
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:161
+msgid "Select to get a copy of this version"
+msgstr "Vyber si verziu na skopírovanie"
+
+#: ../SparkleShare/Program.cs:51
+msgid "Print version information"
+msgstr "Vytlačiť informácie o verzii"
+
+#: ../SparkleShare/Program.cs:52
+msgid "Show this help text"
+msgstr "Zobraziť tohto pomocníka"
+
+#: ../SparkleShare/Program.cs:84
+msgid "SparkleShare, a collaboration and sharing tool."
+msgstr "SparkleShare, nástroj na spoluprácu a zdieľanie"
+
+#: ../SparkleShare/Program.cs:85
+msgid "Copyright (C) 2010 Hylke Bons"
+msgstr ""
+
+#: ../SparkleShare/Program.cs:87
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr ""
+
+#: ../SparkleShare/Program.cs:89
+msgid "This is free software, and you are welcome to redistribute it "
+msgstr ""
+
+#: ../SparkleShare/Program.cs:90
+msgid "under certain conditions. Please read the GNU GPLv3 for details."
+msgstr ""
+
+#: ../SparkleShare/Program.cs:92
+msgid "SparkleShare automatically syncs Git repositories in "
+msgstr ""
+
+#: ../SparkleShare/Program.cs:93
+msgid "the ~/SparkleShare folder with their remote origins."
+msgstr ""
+
+#: ../SparkleShare/Program.cs:95
+msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
+msgstr ""
+
+#: ../SparkleShare/Program.cs:96
+msgid "Sync SparkleShare folder with remote repositories."
+msgstr ""
+
+#: ../SparkleShare/Program.cs:98
+msgid "Arguments:"
+msgstr "Prepínače:"
+
+#: ../SparkleShare/Program.cs:108
+msgid "SparkleShare "
+msgstr "SparkleShare"
+
+#. A menu item that takes the user to http://www.sparkleshare.org/
+#: ../SparkleShare/SparkleAbout.cs:53 ../SparkleShare/SparkleStatusIcon.cs:295
+msgid "About SparkleShare"
+msgstr "O SparkleShare"
+
+#: ../SparkleShare/SparkleAbout.cs:70
+#, csharp-format
+msgid "A newer version ({0}) is available!"
+msgstr "Novšia verzia ({0}) je k dispozícii!"
+
+#: ../SparkleShare/SparkleAbout.cs:79
+msgid "You are running the latest version."
+msgstr "Používate najnovšiu verziu."
+
+#: ../SparkleShare/SparkleAbout.cs:88 ../SparkleShare/SparkleAbout.cs:113
+msgid "Checking for updates..."
+msgstr "Kontrolujem aktualizácie"
+
+#: ../SparkleShare/SparkleEventLog.cs:58
+msgid "Recent Events"
+msgstr "Nedávne udalosti"
+
+#: ../SparkleShare/SparkleEventLog.cs:169
+#: ../SparkleShare/SparkleEventLog.cs:188
+msgid "All Folders"
+msgstr "Všetky priečinky"
+
+#: ../SparkleShare/SparkleSetup.cs:77
+msgid ""
+"Before we can create a SparkleShare folder on this computer, we need a few "
+"bits of information from you."
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:84
+msgid "Full Name:"
+msgstr "Celé meno:"
+
+#: ../SparkleShare/SparkleSetup.cs:99
+msgid "Email:"
+msgstr "Email:"
+
+#: ../SparkleShare/SparkleSetup.cs:109
+msgid "Next"
+msgstr "Ďalej"
+
+#: ../SparkleShare/SparkleSetup.cs:130
+msgid "Where's your project hosted?"
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:276
+msgid "Address"
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:296
+msgid "Remote Path"
+msgstr ""
+
+#. Cancel button
+#: ../SparkleShare/SparkleSetup.cs:310 ../SparkleShare/SparkleSetup.cs:346
+msgid "Cancel"
+msgstr "Zrušiť"
+
+#. Sync button
+#: ../SparkleShare/SparkleSetup.cs:317
+msgid "Add"
+msgstr "Pridať"
+
+#: ../SparkleShare/SparkleSetup.cs:336
+#, csharp-format
+msgid "Adding project ‘{0}’…"
+msgstr "Pridávam projekt '{0}' ..."
+
+#: ../SparkleShare/SparkleSetup.cs:337
+msgid "This may take a while."
+msgstr "Toto môže chvíľu trvať."
+
+#: ../SparkleShare/SparkleSetup.cs:338
+msgid "Are you sure it’s not coffee o'clock?"
+msgstr "Ste si istý, že nie je čas na kávu?"
+
+#: ../SparkleShare/SparkleSetup.cs:342 ../SparkleShare/SparkleSetup.cs:458
+#: ../SparkleShare/SparkleSetup.cs:557
+msgid "Finish"
+msgstr "Dokončiť"
+
+#: ../SparkleShare/SparkleSetup.cs:375
+msgid "Something went wrong"
+msgstr "Niečo sa nepodarilo"
+
+#: ../SparkleShare/SparkleSetup.cs:423
+msgid "Try Again…"
+msgstr "Skúste znovu..."
+
+#: ../SparkleShare/SparkleSetup.cs:442
+#, csharp-format
+msgid "‘{0}’ has been successfully added"
+msgstr "\"{0}\" bol úspešne pridaný"
+
+#: ../SparkleShare/SparkleSetup.cs:448
+msgid "Project successfully added!"
+msgstr "Projekt bol úspešne pridaný!"
+
+#: ../SparkleShare/SparkleSetup.cs:449
+msgid "Access the files from your SparkleShare folder."
+msgstr "Pristupovať k súborom zo SparkleShare priečinka."
+
+#. A button that opens the synced folder
+#: ../SparkleShare/SparkleSetup.cs:452
+msgid "Open Folder"
+msgstr "Otvoriť priečinok"
+
+#: ../SparkleShare/SparkleSetup.cs:478
+msgid "What's happening next?"
+msgstr "Čo sa deje ďalej?"
+
+#: ../SparkleShare/SparkleSetup.cs:479
+msgid ""
+"SparkleShare creates a special folder in your personal folder that will keep"
+" track of your projects."
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:482
+msgid "Skip Tutorial"
+msgstr "Preskočiť výučbu"
+
+#: ../SparkleShare/SparkleSetup.cs:487 ../SparkleShare/SparkleSetup.cs:507
+#: ../SparkleShare/SparkleSetup.cs:525
+msgid "Continue"
+msgstr "Pokračovať"
+
+#: ../SparkleShare/SparkleSetup.cs:503
+msgid "Sharing files with others"
+msgstr "Zdieľanie súborov s ostatnými"
+
+#: ../SparkleShare/SparkleSetup.cs:504
+msgid ""
+"All files added to your project folders are synced with the host "
+"automatically, as well as with your collaborators."
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:521
+msgid "The status icon is here to help"
+msgstr "Ikona stavu je tu pre Vás"
+
+#: ../SparkleShare/SparkleSetup.cs:522
+msgid ""
+"It shows the syncing process status, and contains links to your projects and"
+" the event log."
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:539
+msgid "Adding projects to SparkleShare"
+msgstr "Pridanie projektov do SparkleShare"
+
+#: ../SparkleShare/SparkleSetup.cs:540
+msgid ""
+"Just click this button when you see it on the web, and the project will be "
+"automatically added:"
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:543
+msgid ""
+"…or select <b>‘Add Project…’</b> from the status icon menu to add one by "
+"hand."
+msgstr ""
+
+#: ../SparkleShare/SparkleSetup.cs:552
+msgid "Add Project…"
+msgstr "Pridať projekt ..."
+
+#: ../SparkleShare/SparkleSetupWindow.cs:44
+msgid "SparkleShare Setup"
+msgstr "Nastavenia SparkleShare"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:228
+msgid "No projects yet"
+msgstr "Zatiaľ žiadne projekty"
+
+#. Opens the wizard to add a new remote folder
+#: ../SparkleShare/SparkleStatusIcon.cs:238
+msgid "Add Hosted Project…"
+msgstr ""
+
+#: ../SparkleShare/SparkleStatusIcon.cs:262
+msgid "Open Recent Events"
+msgstr ""
+
+#: ../SparkleShare/SparkleStatusIcon.cs:282
+msgid "Turn Notifications Off"
+msgstr "Vypni upozornenia"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:284
+msgid "Turn Notifications On"
+msgstr "Zapni upozornenia"
+
+#. A menu item that quits the application
+#: ../SparkleShare/SparkleStatusIcon.cs:311
+msgid "Quit"
+msgstr "Vypnúť"
+
+
