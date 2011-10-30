@@ -140,8 +140,10 @@ namespace SparkleLib {
 
             string ssh_config_path      = Path.Combine (path, ".ssh");
             string ssh_config_file_path = SparkleHelpers.CombineMore (path, ".ssh", "config");
-            string ssh_config           = Environment.NewLine + "Host " + host +
-                                          Environment.NewLine + "\tStrictHostKeyChecking no";
+            string ssh_config           = Environment.NewLine + "# <SparkleShare>" +
+                                          Environment.NewLine + "Host " + host +
+                                          Environment.NewLine + "\tStrictHostKeyChecking no" +
+                                          Environment.NewLine + "# </SparkleShare>";
 
             if (!Directory.Exists (ssh_config_path))
                 Directory.CreateDirectory (ssh_config_path);
@@ -152,16 +154,14 @@ namespace SparkleLib {
                 writer.Close ();
 
             } else {
-                TextWriter writer = new StreamWriter (ssh_config_file_path);
-                writer.WriteLine (ssh_config);
-                writer.Close ();
+                File.WriteAllText (ssh_config_file_path, ssh_config);
             }
 
             UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
             file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
                                                FileAccessPermissions.UserWrite);
 
-            SparkleHelpers.DebugInfo ("Fetcher", "Disabled host key checking");
+            SparkleHelpers.DebugInfo ("Fetcher", "Disabled host key checking " + host);
         }
         
 
@@ -176,25 +176,37 @@ namespace SparkleLib {
             }
 
             string ssh_config_file_path = SparkleHelpers.CombineMore (path, ".ssh", "config");
-            string ssh_config           = Environment.NewLine + "Host " + host +
-                                          Environment.NewLine + "\tStrictHostKeyChecking no";
 
             if (File.Exists (ssh_config_file_path)) {
-                StreamReader reader = new StreamReader (ssh_config_file_path);
-                string current_ssh_config = reader.ReadToEnd ();
-                reader.Close ();
+                string current_ssh_config = File.ReadAllText (ssh_config_file_path);
 
-                current_ssh_config = current_ssh_config.Remove (
-                    current_ssh_config.IndexOf (ssh_config), ssh_config.Length);
+                current_ssh_config = current_ssh_config.Trim ();
+                string [] lines = current_ssh_config.Split (Environment.NewLine.ToCharArray ());
+                string new_ssh_config = "";
+                bool in_sparkleshare_section = false;
 
-                bool has_some_ssh_config = new Regex (@"[a-z]").IsMatch (current_ssh_config);
-                if (!has_some_ssh_config) {
+                foreach (string line in lines) {
+                    if (line.StartsWith ("# <SparkleShare>")) {
+                        in_sparkleshare_section = true;
+                        continue;
+                    }
+
+                    if (line.StartsWith ("# </SparkleShare>")) {
+                        in_sparkleshare_section = false;
+                        continue;
+                    }
+
+                    if (in_sparkleshare_section)
+                        continue;
+
+                    new_ssh_config += line + Environment.NewLine;
+                }
+
+                if (string.IsNullOrWhiteSpace (new_ssh_config)) {
                     File.Delete (ssh_config_file_path);
 
                 } else {
-                    TextWriter writer = new StreamWriter (ssh_config_file_path);
-                    writer.WriteLine (current_ssh_config);
-                    writer.Close ();
+                    File.WriteAllText (ssh_config_file_path, new_ssh_config.Trim ());
 
                     UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
                     file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
@@ -202,7 +214,7 @@ namespace SparkleLib {
                 }
             }
 
-            SparkleHelpers.DebugInfo ("Fetcher", "Enabled host key checking");
+            SparkleHelpers.DebugInfo ("Fetcher", "Enabled host key checking for " + host);
         }
 
 
