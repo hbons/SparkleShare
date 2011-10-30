@@ -563,7 +563,7 @@ namespace SparkleShare {
                                 Bordered        = false,
                                 Editable        = false,
                                 Font            = SparkleUI.Font,
-                                StringValue     = "…or select ‘Add Project…’ from the status icon menu " +
+                                StringValue     = "…or select ‘Add Hosted Project…’ from the status icon menu " +
                                 "to add one by hand."
                             };
 
