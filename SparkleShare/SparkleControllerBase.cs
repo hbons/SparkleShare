@@ -341,6 +341,7 @@ namespace SparkleShare {
 
             new Thread (new ThreadStart (delegate {
                 FetchAvatars (emails, 48);
+                FetchAvatars (emails, 36);
             })).Start ();
 
             string event_log_html   = EventLogHTML;
@@ -807,6 +808,7 @@ namespace SparkleShare {
             process.StartInfo.UseShellExecute        = false;
             process.StartInfo.FileName               = "ssh-add";
             process.StartInfo.Arguments              = "\"" + Path.Combine (keys_path, key_file_name) + "\"";
+
             process.Start ();
             process.WaitForExit ();
         }
@@ -897,6 +899,11 @@ namespace SparkleShare {
         }
 
 
+        public void FetchAvatars (string email, int size)
+        {
+            FetchAvatars (new List<string> (new string [] { email }), size);
+        }
+
         // Gets the avatar for a specific email address and size
         public void FetchAvatars (List<string> emails, int size)
         {
@@ -969,10 +976,17 @@ namespace SparkleShare {
                 Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath), "icons",
                 size + "x" + size, "status", "avatar-" + email);
 
-            if (File.Exists (avatar_file_path))
+            if (File.Exists (avatar_file_path)) {
                 return avatar_file_path;
-            else
-                return null;
+
+            } else {
+                FetchAvatars (email, size);
+
+                if (File.Exists (avatar_file_path))
+                    return avatar_file_path;
+                else
+                    return null;
+            }
         }
 
 
