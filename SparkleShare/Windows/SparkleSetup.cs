@@ -46,7 +46,6 @@ namespace SparkleShare {
 
             pictureBox.Image = Icons.side_splash;
             this.ClientSize = new Size (this.ClientSize.Width, Icons.side_splash.Size.Height);
-            panel_info.Size = pictureBox.Size;
             this.Icon = Icons.sparkleshare;
 
             Controller.ChangePageEvent += delegate (PageType type) {
@@ -54,12 +53,29 @@ namespace SparkleShare {
                     switch (type) {
                         case PageType.Add:
                             tabControl.SelectedIndex = 1;
-                            if (!string.IsNullOrEmpty (Controller.PreviousUrl))
-                                ServerEntry.Text = Controller.PreviousUrl;
-                            else
-                                ServerEntry.Text = "";
-                            FolderEntry.Text = "";
-                            radio_button_own_server.Checked = true;
+                            TreeNode treeNode1 = new TreeNode ("Node 1;additional info");
+                            TreeNode treeNode2 = new TreeNode ("Node 2;additional info");
+                            TreeNode treeNode3 = new TreeNode ("Node 3;additional info");
+
+                            ImageList imageList = new ImageList ();
+                            imageList.ImageSize = new Size (32, 32);
+                            imageList.Images.Add (Icons.sparkleshare);
+
+                            TreeView treeView = new TreeView ();
+                            treeView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
+                            treeView.FullRowSelect = true;
+                            treeView.ImageIndex = 0;
+                            treeView.Indent = 35;
+
+                            treeView.Nodes.AddRange (new System.Windows.Forms.TreeNode [] {treeNode1,treeNode2,treeNode3});
+                            treeView.SelectedImageIndex = 0;
+                            treeView.ImageList = imageList;
+                            treeView.ShowLines = false;
+                            treeView.ShowRootLines = false;
+                            treeView.Size = new System.Drawing.Size (448, 192);
+
+                            this.panel_server_selection.Controls.Add (treeView);
+
                             //CheckAddPage (null, null);
                             Show ();
                             break;
@@ -107,7 +123,7 @@ namespace SparkleShare {
         {
             this.Hide ();
         }
-
+        /*
         private void buttonSync_Click (object sender, EventArgs e)
         {
             string server = ServerEntry.Text;
@@ -124,7 +140,7 @@ namespace SparkleShare {
 
             Controller.AddPageCompleted (server, folder_name);
         }
-
+        
         private void CheckAddPage (object sender, EventArgs e)
         {
             buttonSync.Enabled = false;
@@ -146,12 +162,14 @@ namespace SparkleShare {
                     buttonSync.Enabled = true;
             }
         }
-
+        */
+        /*
         private void radio_button_own_server_CheckedChanged (object sender, EventArgs e)
         {
             ServerEntry.Enabled = radio_button_own_server.Checked;
             CheckAddPage (sender,e);
         }
+        */
 
         private void buttonFinish_Click (object sender, EventArgs e)
         {
@@ -192,47 +210,28 @@ namespace SparkleShare {
                 buttonNext.Enabled = false;
             }
         }
+    }
 
-        private void ShowInfo (string text) {
-            pictureBox.Visible = false;
-            panel_info.Visible = true;
-            label_info.Text = text;
+    public class TreeView : System.Windows.Forms.TreeView {
+
+        public TreeView ()
+        {
+
         }
-
-        private void HideInfo () {
-            pictureBox.Visible = true;
-            panel_info.Visible = false;
-        }
-
-        private void radio_button_own_server_MouseEnter (object sender, EventArgs e) {
-            ShowInfo ("To use your own server you need to ...");
-        }
-
-        private void radio_button_github_MouseEnter (object sender, EventArgs e) {
-            ShowInfo (_("Free hosting for Free and Open Source Software projects.") +
-                      _("Also has paid accounts for extra private space and bandwidth."));
-        }
-
-        private void radio_button_gitorious_MouseEnter (object sender, EventArgs e) {
-            ShowInfo (_("Completely Free as in Freedom infrastructure.") +
-                      _("Free accounts for Free and Open Source projects."));
-        }
-
-        private void radio_button_gnome_MouseEnter (object sender, EventArgs e) {
-            ShowInfo (_("GNOME is an easy to understand interface to your computer.") +
-                      _("Select this option if you're a developer or designer working on GNOME."));
-        }
-
-        private void panel_server_selection_MouseLeave (object sender, EventArgs e) {
-            HideInfo ();
-        }
-
-        private void FolderEntry_MouseEnter (object sender, EventArgs e) {
-            ShowInfo ("This is the path to your git project ...");
-        }
-
-        private void panel_folder_selection_MouseLeave (object sender, EventArgs e) {
-            HideInfo ();
+        protected override void OnDrawNode (DrawTreeNodeEventArgs e)
+        {
+            e.Graphics.DrawString (e.Node.Text.Split (';') [0], new Font ("Microsoft Sans Serif", 13),
+                new SolidBrush (Color.Black), e.Bounds.X, e.Bounds.Y);
+            e.Graphics.DrawString (e.Node.Text.Split (';') [1], new Font ("Microsoft Sans Serif", 9),
+                new SolidBrush (Color.Black), e.Bounds.X + 10, e.Bounds.Y + 15);
         }
     }
+
+    public class TreeNode : System.Windows.Forms.TreeNode {
+        public TreeNode (string text)
+        {
+            this.Text = text;
+        }
+    }
+
 }
