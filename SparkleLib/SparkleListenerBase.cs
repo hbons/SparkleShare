@@ -16,8 +16,10 @@
 
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Timers;
+using System.Linq;
 
 namespace SparkleLib {
 
@@ -112,6 +114,7 @@ namespace SparkleLib {
 
 
         protected List<string> channels                = new List<string> ();
+        protected Hashtable last_announce              = new Hashtable ();
         protected List<SparkleAnnouncement> queue_up   = new List<SparkleAnnouncement> ();
         protected List<SparkleAnnouncement> queue_down = new List<SparkleAnnouncement> ();
         protected bool is_connecting;
@@ -197,8 +200,21 @@ namespace SparkleLib {
 
         public void OnAnnouncement (SparkleAnnouncement announcement)
         {
-            SparkleHelpers.DebugInfo ("Listener", "Got message from " + announcement.FolderIdentifier + " on " + this.server);
+            SparkleHelpers.DebugInfo ("Listener", "Got message " + announcement.Message + " from " + announcement.FolderIdentifier + " on " + this.server);
 
+            if (this.last_announce.ContainsKey (announcement.FolderIdentifier) ){
+                SparkleHelpers.DebugInfo ("Listener", "Received previous message from " + announcement.FolderIdentifier + " on " + this.server);
+                if (this.last_announce[announcement.FolderIdentifier].Equals(announcement.Message)) {
+                    SparkleHelpers.DebugInfo ("Listener", "Ignoring already processed announcment " + announcement.Message + " from " + announcement.FolderIdentifier + " on " + this.server);
+                    return;
+                }
+            }
+
+            SparkleHelpers.DebugInfo ("Listener", "Processing message " + announcement.Message + " from " + announcement.FolderIdentifier + " on " + this.server);
+            if (this.last_announce.ContainsKey (announcement.FolderIdentifier) )
+                this.last_announce.Remove (announcement.FolderIdentifier);
+                
+            this.last_announce.Add (announcement.FolderIdentifier, announcement.Message);
             this.queue_down.Add (announcement);
 
             if (Announcement != null)
