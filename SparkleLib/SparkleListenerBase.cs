@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Timers;
 
 namespace SparkleLib {
@@ -200,6 +201,7 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Listener", "Got message from " + announcement.FolderIdentifier + " on " + this.server);
 
             this.queue_down.Add (announcement);
+            this.queue_down = this.queue_down.Distinct ().ToList ();
 
             if (Announcement != null)
                 Announcement (announcement);
