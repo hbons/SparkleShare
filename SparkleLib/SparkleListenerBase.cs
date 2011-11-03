@@ -196,8 +196,9 @@ namespace SparkleLib {
         public void OnAnnouncement (SparkleAnnouncement announcement)
         {
             SparkleHelpers.DebugInfo ("Listener", "Got message from " + announcement.FolderIdentifier + " on " + this.server);
- 
-            this.queue_down.Add (announcement);
+
+            if (!this.queue_down.Contains (announcement))
+                this.queue_down.Add (announcement);
 
             if (Announcement != null)
                 Announcement (announcement);
