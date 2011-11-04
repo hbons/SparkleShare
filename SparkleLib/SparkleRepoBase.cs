@@ -114,6 +114,12 @@ namespace SparkleLib {
 
                     if (CheckForRemoteChanges ())
                         SyncDownBase ();
+
+                    string message;
+                    while ((message = this.listener.NextQueueDownMessage (identifier)) != null) {
+                        if (!message.Equals (CurrentRevision))
+                            SyncDownBase ();
+                    }
                 }
 
                 // In the unlikely case that we haven't synced up our
@@ -260,16 +266,18 @@ namespace SparkleLib {
             this.listener.Announcement += delegate (SparkleAnnouncement announcement) {
                 string identifier = Identifier;
 
-                Console.WriteLine (announcement.Message + " ! " + CurrentRevision);
-
-                if (announcement.FolderIdentifier == identifier &&
+                if (announcement.FolderIdentifier.Equals (identifier) &&
                     !announcement.Message.Equals (CurrentRevision)) {
+
                     if ((Status != SyncStatus.SyncUp)   &&
                         (Status != SyncStatus.SyncDown) &&
                         !this.is_buffering) {
 
-                        while (this.listener.HasQueueDownAnnouncement (identifier))
-                            SyncDownBase ();
+                        string message;
+                        while ((message = this.listener.NextQueueDownMessage (identifier)) != null) {
+                            if (!message.Equals (CurrentRevision))
+                                SyncDownBase ();
+                        }
                     }
                 }
             };

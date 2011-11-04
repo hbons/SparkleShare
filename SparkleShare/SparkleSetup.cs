@@ -539,7 +539,7 @@ namespace SparkleShare {
                             Description = _("Just click this button when you see it on the web, and " +
                                 "the project will be automatically added:");
 
-                            Label label = new Label (_("…or select <b>‘Add Project…’</b> from the status icon menu " +
+                            Label label = new Label (_("…or select <b>‘Add Hosted Project…’</b> from the status icon menu " +
                                 "to add one by hand.")) {
                                 Wrap   = true,
                                 Xalign = 0,
@@ -548,7 +548,7 @@ namespace SparkleShare {
 
                             Image slide = SparkleUIHelpers.GetImage ("tutorial-slide-4.png");
 
-                            Button add_project_button = new Button (_("Add Project…"));
+                            Button add_project_button = new Button (_("Add Hosted Project…"));
                             add_project_button.Clicked += delegate {
                                 Controller.TutorialPageCompleted ();
                             };

@@ -350,6 +350,7 @@ namespace SparkleShare {
 
             new Thread (new ThreadStart (delegate {
                 FetchAvatars (emails, 48);
+                FetchAvatars (emails, 36);
             })).Start ();
 
             string event_log_html   = EventLogHTML;
@@ -822,6 +823,7 @@ namespace SparkleShare {
             process.StartInfo.UseShellExecute        = false;
             process.StartInfo.FileName               = "ssh-add";
             process.StartInfo.Arguments              = "\"" + Path.Combine (keys_path, key_file_name) + "\"";
+
             process.Start ();
             process.WaitForExit ();
         }
@@ -891,21 +893,31 @@ namespace SparkleShare {
                 // -f is the file name to store the private key in
                 process.StartInfo.Arguments = "-t rsa -P \"\" -f " + key_file_name;
 
-                process.Exited += delegate {
-                    SparkleHelpers.DebugInfo ("Config", "Created private key '" + key_file_name + "'");
-                    SparkleHelpers.DebugInfo ("Config", "Created public key  '" + key_file_name + ".pub'");
-
-                    // Create an easily accessible copy of the public
-                    // key in the user's SparkleShare folder
-                    File.Copy (key_file_path + ".pub",
-                        Path.Combine (SparklePath, UserName + "'s key.txt"));
-                };
-                
                 process.Start ();
                 process.WaitForExit ();
+
+                SparkleHelpers.DebugInfo ("Config", "Created private key '" + key_file_name + "'");
+                SparkleHelpers.DebugInfo ("Config", "Created public key  '" + key_file_name + ".pub'");
+
+                // Add some restrictions to what the key can
+                // do when uploaded to the server
+                string public_key = File.ReadAllText (key_file_path + ".pub");
+                public_key = "no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty " + public_key;
+                File.WriteAllText (key_file_path + ".pub", public_key);
+
+                // Create an easily accessible copy of the public
+                // key in the user's SparkleShare folder
+                File.Copy (key_file_path + ".pub",
+                    Path.Combine (SparklePath, UserName + "'s key.txt"));
+
             }
         }
 
+
+        public void FetchAvatars (string email, int size)
+        {
+            FetchAvatars (new List<string> (new string [] { email }), size);
+        }
 
         // Gets the avatar for a specific email address and size
         public void FetchAvatars (List<string> emails, int size)
@@ -979,7 +991,17 @@ namespace SparkleShare {
                 Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath), "icons",
                 size + "x" + size, "status", "avatar-" + email);
 
-            return avatar_file_path;
+            if (File.Exists (avatar_file_path)) {
+                return avatar_file_path;
+
+            } else {
+                FetchAvatars (email, size);
+
+                if (File.Exists (avatar_file_path))
+                    return avatar_file_path;
+                else
+                    return null;
+            }
         }
 
 
