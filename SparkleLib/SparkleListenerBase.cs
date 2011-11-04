@@ -149,18 +149,17 @@ namespace SparkleLib {
         }
 
 
-        public bool HasQueueDownAnnouncement (string folder_identifier)
+        public string NextQueueDownMessage (string folder_identifier)
         {
-            this.queue_down = this.queue_down.Distinct ().ToList ();
-
-            foreach (SparkleAnnouncement announcement in this.queue_down.GetRange(0, this.queue_down.Count)) {
+            foreach (SparkleAnnouncement announcement in this.queue_down.GetRange (0, this.queue_down.Count)) {
                 if (announcement.FolderIdentifier.Equals (folder_identifier)) {
+                    string message = announcement.Message;
                     this.queue_down.Remove (announcement);
-                    return true;
+                    return message;
                 }
             }
 
-            return false;
+            return null;
         }
 
 
