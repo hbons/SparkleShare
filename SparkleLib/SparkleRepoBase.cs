@@ -110,6 +110,12 @@ namespace SparkleLib {
 
                     if (CheckForRemoteChanges ())
                         SyncDownBase ();
+
+                    string message;
+                    while ((message = this.listener.NextQueueDownMessage (identifier)) != null) {
+                        if (!message.Equals (CurrentRevision))
+                            SyncDownBase ();
+                    }
                 }
 
                 // In the unlikely case that we haven't synced up our
