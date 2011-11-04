@@ -32,8 +32,10 @@ namespace SparkleShare {
             Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
                 try {
                     Notification notification = new Notification () {
-                        Timeout  = 5 * 1000,
-                        Urgency  = Urgency.Low
+                        Summary = title,
+                        Body    = subtext,
+                        Timeout = 5 * 1000,
+                        Urgency = Urgency.Low
                     };
     
                     if (image_path != null)

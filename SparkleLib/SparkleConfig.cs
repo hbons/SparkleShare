@@ -72,7 +72,7 @@ namespace SparkleLib {
             } catch (TypeInitializationException) {
                 CreateInitialConfig ();
 
-            } catch (IOException) {
+            } catch (FileNotFoundException) {
                 CreateInitialConfig ();
 
             } catch (XmlException) {
