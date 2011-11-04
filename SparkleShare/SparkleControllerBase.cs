@@ -1152,6 +1152,14 @@ namespace SparkleShare {
             Environment.Exit (0);
 #else
             System.Windows.Forms.Application.Exit ();
+
+            // Also kill the SSH_AGENT that we started
+            try {
+                int pid = Int32.Parse (System.Environment.GetEnvironmentVariable ("SSH_AGENT_PID"));
+                Process.GetProcessById (pid).Kill ();
+            } catch (ArgumentException) {
+                SparkleHelpers.DebugInfo ("SSH", "Could not kill the ssh-agent, due to the process wasn't running");
+            }
 #endif
         }
 
