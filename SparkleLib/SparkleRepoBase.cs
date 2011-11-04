@@ -106,6 +106,8 @@ namespace SparkleLib {
             };
 
             this.remote_timer.Elapsed += delegate {
+                string identifier = Identifier;
+
                 bool time_to_poll = (DateTime.Compare (this.last_poll,
                     DateTime.Now.Subtract (this.poll_interval)) < 0);
 

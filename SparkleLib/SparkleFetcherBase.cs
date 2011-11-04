@@ -206,7 +206,7 @@ namespace SparkleLib {
                     new_ssh_config += line + Environment.NewLine;
                 }
 
-                if (string.IsNullOrWhiteSpace (new_ssh_config)) {
+                if (string.IsNullOrEmpty (new_ssh_config.Trim ())) {
                     File.Delete (ssh_config_file_path);
 
                 } else {
