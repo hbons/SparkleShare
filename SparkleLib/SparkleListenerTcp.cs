@@ -29,7 +29,7 @@ namespace SparkleLib {
     public class SparkleListenerTcp : SparkleListenerBase {
 
         private Thread thread;
-        
+
         // these are shared
         private readonly Object mutex = new Object();
         private Socket socket;
@@ -94,9 +94,9 @@ namespace SparkleLib {
                             if (bytes_read > 0) {
                                 string received = Encoding.UTF8.GetString (bytes);
                                 string folder_identifier = received.Substring (0, received.IndexOf ("!"));
-                                string message = received.Substring (received.IndexOf ("!") + 1);
-
-                                OnAnnouncement (new SparkleAnnouncement (folder_identifier, message));
+                                string message = this.CleanMessage (received.Substring (received.IndexOf ("!") + 1));
+                                if (!message.Equals("connected..."))
+                                    OnAnnouncement (new SparkleAnnouncement (folder_identifier, message));
 
                             } else {
                                 SparkleHelpers.DebugInfo ("ListenerTcp", "Error on socket");
@@ -109,9 +109,9 @@ namespace SparkleLib {
                                 }
                             }
                         }
-                        
+
                         SparkleHelpers.DebugInfo ("ListenerTcp", "Disconnected from " + Server.Host);
-                        
+
                     } catch (SocketException e) {
                         SparkleHelpers.DebugInfo ("ListenerTcp", "Could not connect to " + Server + ": " + e.Message);
 
@@ -172,6 +172,11 @@ namespace SparkleLib {
             this.thread.Abort ();
             this.thread.Join ();
             base.Dispose ();
+        }
+
+        private string CleanMessage(string message)
+        {
+            return message.Trim ().Replace ("\n", "").Replace ("\0", "");
         }
     }
 }
