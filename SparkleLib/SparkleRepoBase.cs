@@ -110,12 +110,6 @@ namespace SparkleLib {
 
                     if (CheckForRemoteChanges ())
                         SyncDownBase ();
-
-                    string message;
-                    while ((message = this.listener.NextQueueDownMessage (identifier)) != null) {
-                        if (!message.Equals (CurrentRevision))
-                            SyncDownBase ();
-                    }
                 }
 
                 // In the unlikely case that we haven't synced up our
@@ -265,23 +259,30 @@ namespace SparkleLib {
                 if (announcement.FolderIdentifier.Equals (identifier) &&
                     !announcement.Message.Equals (CurrentRevision)) {
 
-                    if ((Status != SyncStatus.SyncUp)   &&
-                        (Status != SyncStatus.SyncDown) &&
-                        !this.is_buffering) {
-
-                        string message;
-                        while ((message = this.listener.NextQueueDownMessage (identifier)) != null) {
-                            if (!message.Equals (CurrentRevision))
-                                SyncDownBase ();
-                        }
+                    while (this.IsSyncing ()) {
+                        //nothing just wait
                     }
+                    SparkleHelpers.DebugInfo ("Listener", "Syncing due to Announcement");
+                    if (!announcement.Message.Equals (CurrentRevision))
+                        SyncDownBase ();
+                } else {
+                    if (announcement.FolderIdentifier.Equals (identifier))
+                        SparkleHelpers.DebugInfo ("Listener", "Not syncing message is for current revision");
                 }
             };
-            
+
             // Start listening
             if (!this.listener.IsConnected && !this.listener.IsConnecting) {
                 this.listener.Connect ();
             }
+        }
+
+
+        private bool IsSyncing ()
+        {
+            if (Status == SyncStatus.SyncUp || Status == SyncStatus.SyncDown || this.is_buffering)
+                return true;
+            return false;
         }
 
 
@@ -291,7 +292,7 @@ namespace SparkleLib {
                 if (this.has_changed) {
                     if (this.sizebuffer.Count >= 4)
                         this.sizebuffer.RemoveAt (0);
-                        
+
                     DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
                      this.sizebuffer.Add (CalculateFolderSize (dir_info));
 
@@ -303,7 +304,7 @@ namespace SparkleLib {
                         SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled.");
                         this.is_buffering = false;
                         this.has_changed  = false;
-                        
+
                         DisableWatching ();
                         while (AnyDifferences)
                             SyncUpBase ();

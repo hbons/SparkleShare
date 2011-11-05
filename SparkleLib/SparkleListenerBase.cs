@@ -82,7 +82,7 @@ namespace SparkleLib {
                 listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
                 break;
             }
-            
+
             SparkleHelpers.DebugInfo ("ListenerFactory", "Issued new listener for " + announce_uri);
             return (SparkleListenerBase) listeners [listeners.Count - 1];
         }
@@ -113,10 +113,14 @@ namespace SparkleLib {
         public abstract bool IsConnected { get; }
 
 
-        protected List<string> channels                = new List<string> ();
-        protected Hashtable last_announce              = new Hashtable ();
-        protected List<SparkleAnnouncement> queue_up   = new List<SparkleAnnouncement> ();
-        protected List<SparkleAnnouncement> queue_down = new List<SparkleAnnouncement> ();
+        protected List<string> channels          = new List<string> ();
+
+        protected Dictionary<string,List<SparkleAnnouncement>> recent_announcements = new Dictionary<string, List<SparkleAnnouncement>> ();
+        protected int max_recent_announcements   = 10;
+
+        protected Dictionary<string, SparkleAnnouncement> queue_up = new Dictionary<string, SparkleAnnouncement> ();
+        protected Dictionary<string,SparkleAnnouncement> queue_down = new Dictionary<string, SparkleAnnouncement> ();
+
         protected bool is_connecting;
         protected Uri server;
         protected Timer reconnect_timer = new Timer { Interval = 60 * 1000, Enabled = true };
@@ -136,30 +140,22 @@ namespace SparkleLib {
 
         public void AnnounceBase (SparkleAnnouncement announcement)
         {
-            if (IsConnected) {
-                SparkleHelpers.DebugInfo ("Listener",
-                    "Announcing to " + announcement.FolderIdentifier + " on " + this.server);
+            if (!this.IsRecentAnnounement (announcement)) {
+                if (IsConnected) {
+                    SparkleHelpers.DebugInfo ("Listener",
+                        "Announcing message " + announcement.Message + " to " + announcement.FolderIdentifier + " on " + this.server);
 
-                Announce (announcement);
-
-            } else {
-                SparkleHelpers.DebugInfo ("Listener", "Not connected to " + this.server + ". Queuing message");
-                this.queue_up.Add (announcement);
-            }
-        }
-
-
-        public string NextQueueDownMessage (string folder_identifier)
-        {
-            foreach (SparkleAnnouncement announcement in this.queue_down.GetRange (0, this.queue_down.Count)) {
-                if (announcement.FolderIdentifier.Equals (folder_identifier)) {
-                    string message = announcement.Message;
-                    this.queue_down.Remove (announcement);
-                    return message;
+                    Announce (announcement);
+                    this.AddRecentAnnouncement (announcement);
+                } else {
+                    SparkleHelpers.DebugInfo ("Listener", "Not connected to " + this.server + ". Queuing message");
+                    this.queue_up [announcement.FolderIdentifier] = announcement;
                 }
+            } else {
+                SparkleHelpers.DebugInfo ("Listener",
+                    "Already received or sent message " + announcement.Message + " to " + announcement.FolderIdentifier + " on " + this.server);
             }
 
-            return null;
         }
 
 
@@ -180,10 +176,11 @@ namespace SparkleLib {
             if (this.queue_up.Count > 0) {
                 SparkleHelpers.DebugInfo ("Listener", "Delivering " + this.queue_up.Count + " queued messages...");
 
-                foreach (SparkleAnnouncement announcement in this.queue_up.GetRange(0, this.queue_up.Count)) {
+                foreach (KeyValuePair<string, SparkleAnnouncement> item in this.queue_up) {
+                    SparkleAnnouncement announcement = item.Value;
                     AnnounceBase (announcement);
-                    this.queue_up.Remove (announcement);
                 }
+                this.queue_down.Clear ();
             }
         }
 
@@ -201,23 +198,59 @@ namespace SparkleLib {
         {
             SparkleHelpers.DebugInfo ("Listener", "Got message " + announcement.Message + " from " + announcement.FolderIdentifier + " on " + this.server);
 
-            if (this.last_announce.ContainsKey (announcement.FolderIdentifier) ){
-                SparkleHelpers.DebugInfo ("Listener", "Received previous message from " + announcement.FolderIdentifier + " on " + this.server);
-                if (this.last_announce[announcement.FolderIdentifier].Equals(announcement.Message)) {
-                    SparkleHelpers.DebugInfo ("Listener", "Ignoring already processed announcment " + announcement.Message + " from " + announcement.FolderIdentifier + " on " + this.server);
-                    return;
-                }
+            if (this.IsRecentAnnounement(announcement) ){
+                SparkleHelpers.DebugInfo ("Listener", "Ignoring previously received message " + announcement.Message + " from " + announcement.FolderIdentifier + " on " + this.server);
+                return;
             }
 
             SparkleHelpers.DebugInfo ("Listener", "Processing message " + announcement.Message + " from " + announcement.FolderIdentifier + " on " + this.server);
-            if (this.last_announce.ContainsKey (announcement.FolderIdentifier) )
-                this.last_announce.Remove (announcement.FolderIdentifier);
-                
-            this.last_announce.Add (announcement.FolderIdentifier, announcement.Message);
-            this.queue_down.Add (announcement);
+
+            this.AddRecentAnnouncement (announcement);
+            this.queue_down [announcement.FolderIdentifier] = announcement;
 
             if (Announcement != null)
                 Announcement (announcement);
+        }
+
+
+        private bool IsRecentAnnounement (SparkleAnnouncement announcement)
+        {
+            if (!this.HasRecentAnnouncements (announcement.FolderIdentifier)) {
+                return false;
+            } else {
+                foreach (SparkleAnnouncement recent_announcement in this.GetRecentAnnouncements (announcement.FolderIdentifier)) {
+                    if (recent_announcement.Message.Equals (announcement.Message))
+                        return true;
+                }
+                return false;
+            }
+        }
+
+
+        private List<SparkleAnnouncement> GetRecentAnnouncements (string folder_identifier)
+        {
+            if (!this.recent_announcements.ContainsKey (folder_identifier)) {
+                this.recent_announcements [folder_identifier] = new List<SparkleAnnouncement> ();
+            }
+            return (List<SparkleAnnouncement>) this.recent_announcements [folder_identifier];
+        }
+
+
+        private void AddRecentAnnouncement (SparkleAnnouncement announcement)
+        {
+            List<SparkleAnnouncement> recent_announcements = this.GetRecentAnnouncements (announcement.FolderIdentifier);
+
+            if (!this.IsRecentAnnounement (announcement))
+                recent_announcements.Add (announcement);
+
+            if (recent_announcements.Count > this.max_recent_announcements)
+                recent_announcements.RemoveRange (0, (recent_announcements.Count - this.max_recent_announcements));
+        }
+
+
+        private bool HasRecentAnnouncements (string folder_identifier)
+        {
+            return this.recent_announcements.ContainsKey (folder_identifier);
         }
 
 
