@@ -177,7 +177,7 @@ namespace SparkleLib {
             if (this.queue_up.Count > 0) {
                 SparkleHelpers.DebugInfo ("Listener", "Delivering " + this.queue_up.Count + " queued messages...");
 
-                foreach (SparkleAnnouncement announcement in this.queue_up.GetRange(0, this.queue_up.Count)) {
+                foreach (SparkleAnnouncement announcement in this.queue_up.GetRange (0, this.queue_up.Count)) {
                     AnnounceBase (announcement);
                     this.queue_up.Remove (announcement);
                 }

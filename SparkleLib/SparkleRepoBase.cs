@@ -112,7 +112,7 @@ namespace SparkleLib {
                         SyncDownBase ();
 
                     string message;
-                    while ((message = this.listener.NextQueueDownMessage (identifier)) != null) {
+                    while ((message = this.listener.NextQueueDownMessage (Identifier)) != null) {
                         if (!message.Equals (CurrentRevision))
                             SyncDownBase ();
                     }
