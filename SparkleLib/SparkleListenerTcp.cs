@@ -93,11 +93,14 @@ namespace SparkleLib {
 
                             if (bytes_read > 0) {
                                 string received = Encoding.UTF8.GetString (bytes);
-                                string folder_identifier = received.Substring (0, received.IndexOf ("!"));
-                                string message = this.CleanMessage (received.Substring (received.IndexOf ("!") + 1));
-                                if (!message.Equals("connected..."))
+                                string line = received.Substring (0, received.IndexOf ("\n"));
+                                if (!line.Contains ("!"))
+                                    continue;
+                                string folder_identifier = line.Substring (0, line.IndexOf ("!"));
+                                string message = this.CleanMessage (line.Substring (line.IndexOf ("!") + 1));
+                                if (!folder_identifier.Equals("debug") &&
+                                    !String.IsNullOrEmpty(message))
                                     OnAnnouncement (new SparkleAnnouncement (folder_identifier, message));
-
                             } else {
                                 SparkleHelpers.DebugInfo ("ListenerTcp", "Error on socket");
 

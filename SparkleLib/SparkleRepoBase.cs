@@ -260,7 +260,7 @@ namespace SparkleLib {
                     !announcement.Message.Equals (CurrentRevision)) {
 
                     while (this.IsSyncing ()) {
-                        //nothing just wait
+                        System.Threading.Thread.Sleep (100);
                     }
                     SparkleHelpers.DebugInfo ("Listener", "Syncing due to Announcement");
                     if (!announcement.Message.Equals (CurrentRevision))
@@ -448,6 +448,7 @@ namespace SparkleLib {
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.SyncDown);
 
+            string pre_sync_revision = CurrentRevision;
             if (SyncDown ()) {
                 SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Done");
                 this.server_online = true;
@@ -455,24 +456,26 @@ namespace SparkleLib {
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
 
-                List<SparkleChangeSet> change_sets = GetChangeSets (1);
-                if (change_sets != null && change_sets.Count > 0) {
-                    SparkleChangeSet change_set = change_sets [0];
+                if (pre_sync_revision != CurrentRevision) {
+                    List<SparkleChangeSet> change_sets = GetChangeSets (1);
+                    if (change_sets != null && change_sets.Count > 0) {
+                        SparkleChangeSet change_set = change_sets [0];
 
-                    bool note_added = false;
-                    foreach (string added in change_set.Added) {
-                        if (added.Contains (".notes")) {
-                            if (NewNote != null)
-                                NewNote (change_set.User.Name, change_set.User.Email);
+                        bool note_added = false;
+                        foreach (string added in change_set.Added) {
+                            if (added.Contains (".notes")) {
+                                if (NewNote != null)
+                                    NewNote (change_set.User.Name, change_set.User.Email);
 
-                            note_added = true;
-                            break;
+                                note_added = true;
+                                break;
+                            }
                         }
-                    }
 
-                    if (!note_added) {
-                        if (NewChangeSet != null)
-                            NewChangeSet (change_set);
+                        if (!note_added) {
+                            if (NewChangeSet != null)
+                                NewChangeSet (change_set);
+                        }
                     }
                 }
 
