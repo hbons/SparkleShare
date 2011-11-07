@@ -333,7 +333,7 @@ namespace SparkleShare {
                     case PageType.Syncing: {
 
                         Header      = String.Format (_("Adding project ‘{0}’…"), Controller.SyncingFolder);
-                        Description = _("This may take a while." + Environment.NewLine) +
+                        Description = _("This may take a while.") + Environment.NewLine +
                                       _("Are you sure it’s not coffee o'clock?");
 
                         Button finish_button = new Button () {
