@@ -111,6 +111,7 @@ namespace SparkleLib {
             if (string.IsNullOrEmpty (user_name))
                 user_name = "Unknown";
 
+            string n = Environment.NewLine;
             File.WriteAllText (FullPath,
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + n +
                 "<sparkleshare>" + n +
