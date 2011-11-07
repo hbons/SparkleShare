@@ -153,7 +153,7 @@ namespace SparkleLib {
                 }
             } else {
                 SparkleHelpers.DebugInfo ("Listener",
-                    "Already received or sent message " + announcement.Message + " to " + announcement.FolderIdentifier + " on " + this.server);
+                    "Already processed message " + announcement.Message + " to " + announcement.FolderIdentifier + " on " + this.server);
             }
 
         }
@@ -199,7 +199,7 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Listener", "Got message " + announcement.Message + " from " + announcement.FolderIdentifier + " on " + this.server);
 
             if (this.IsRecentAnnounement(announcement) ){
-                SparkleHelpers.DebugInfo ("Listener", "Ignoring previously received message " + announcement.Message + " from " + announcement.FolderIdentifier + " on " + this.server);
+                SparkleHelpers.DebugInfo ("Listener", "Ignoring previously processed message " + announcement.Message + " from " + announcement.FolderIdentifier + " on " + this.server);
                 return;
             }
 
