@@ -111,17 +111,13 @@ namespace SparkleLib {
             if (string.IsNullOrEmpty (user_name))
                 user_name = "Unknown";
 
-            TextWriter writer = new StreamWriter (FullPath);
-            string n          = Environment.NewLine;
-
-            writer.Write ("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + n +
-                          "<sparkleshare>" + n +
-                          "  <user>" + n +
-                          "    <name>" + user_name + "</name>" + n +
-                          "    <email>Unknown</email>" + n +
-                          "  </user>" + n +
-                          "</sparkleshare>");
-            writer.Close ();
+            File.WriteAllText (FullPath,
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + n +
+                "<sparkleshare>" + n +
+                "  <user>" + n +
+                "    <name>" + user_name + "</name>" + n +
+                "    <email>Unknown</email>" + n + "  </user>" + n +
+                "</sparkleshare>");
 
             SparkleHelpers.DebugInfo ("Config", "Created \"" + FullPath + "\"");
         }
