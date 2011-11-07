@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# for use with gitolite
+#
+# http://sitaramc.github.com/gitolite/hooks.html
+# copy this file to
+# .gitolite/hooks/common/post-update
+# run gl-setup again
+
+# for use with standard ssh/http(s)/git repos
+#
+# simply move this file to
+# .git/hooks/post-update in the remote repository
+
+# make sure to chmod -x in all cases after the file has been copied
+
+#To supress all output
+exec > /dev/null 2>&1
+
+# for information on running your own server
+# https://github.com/hbons/fanout.node.js
+SERVER="204.62.14.135"
+PORT="1986"
+CHANNEL=$(git rev-list --reverse HEAD | head -n 1)
+MESSAGE=$(git rev-list HEAD | head -n 1)
+DATA="announce ${CHANNEL} ${MESSAGE}"
+echo "${DATA}\n" | socat - TCP-CONNECT:${SERVER}:${PORT} &
+
+exit 0
