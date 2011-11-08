@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-30 15:50+0100\n"
-"PO-Revision-Date: 2011-10-30 14:50+0000\n"
+"PO-Revision-Date: 2011-11-08 00:21+0000\n"
 "Last-Translator: deejay1 <deejay1@srem.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +26,8 @@ msgstr "Bitbucket"
 #: ../data/plugins/bitbucket.xml.in.h:3
 msgid "Free code hosting for Git and Mercurial"
 msgstr ""
-"Darmowe utrzymywanie kod dla projektów zarządzanych przez git oraz Mercurial"
+"Darmowe utrzymywanie kodu dla projektów zarządzanych przez git oraz "
+"Mercurial"
 
 #: ../data/plugins/github.xml.in.h:2
 msgid "Free public Git repositories with collaborator management"
@@ -47,8 +48,8 @@ msgstr "Gitorious"
 #: ../data/plugins/gitorious.xml.in.h:3
 msgid "Open source infrastructure for hosting open source projects"
 msgstr ""
-"Infrakstruktura o otwartym kodzie źródłowym dla projektów dla społeczności "
-"otwartego kodu"
+"Infrastruktura o otwartym kodzie źródłowym dla projektów o otwartym kodzie "
+"źródłowym"
 
 #: ../data/plugins/gnome.xml.in.h:1
 msgid "/project"
@@ -141,7 +142,7 @@ msgstr "Niniejszy program dostarczany jest BEZ JAKIEJKOLWIEK GWARANCJI."
 #: ../SparkleShare/Program.cs:89
 msgid "This is free software, and you are welcome to redistribute it "
 msgstr ""
-"Niniejszy program jest wolnym oprogramowanie, można go rozprowadzać dalej "
+"Niniejszy program jest wolnym oprogramowaniem, można go rozprowadzać dalej "
 "pod pewnymi warunkami."
 
 #: ../SparkleShare/Program.cs:90
@@ -153,7 +154,7 @@ msgstr ""
 #: ../SparkleShare/Program.cs:92
 msgid "SparkleShare automatically syncs Git repositories in "
 msgstr ""
-"Program SparkleShare automatycznie synchronizuje reozytoria Git znajdujące "
+"Program SparkleShare automatycznie synchronizuje repozytoria Git znajdujące "
 "się"
 
 #: ../SparkleShare/Program.cs:93
@@ -289,7 +290,7 @@ msgstr "Dodaj"
 #: ../SparkleShare/SparkleSetup.cs:335
 #, csharp-format
 msgid "Adding project ‘{0}’…"
-msgstr "Dodawanie projektu „{0}…"
+msgstr "Dodawanie projektu \"{0}\"…"
 
 #: ../SparkleShare/SparkleSetup.cs:336
 msgid "This may take a while."
