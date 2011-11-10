@@ -1,6 +1,7 @@
 # This file is distributed under the same license as the SparkleShare package.
 # 
 # Translators:
+# Claudio Rodrigo Pereyra Diaz <elsupergomez@gmail.com>, 2011.
 #   <jamelrom@gmail.com>, 2011.
 # jamelrom <jamelrom@gmail.com>, 2011.
 #   <luiso.perez@gmail.com>, 2011.
@@ -9,8 +10,8 @@ msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-30 15:50+0100\n"
-"PO-Revision-Date: 2011-10-30 14:50+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"PO-Revision-Date: 2011-11-02 12:13+0000\n"
+"Last-Translator: elsupergomez <elsupergomez@gmail.com>\n"
 "Language-Team: Spanish (Castilian) (http://www.transifex.net/projects/p/sparkleshare/team/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -201,33 +202,33 @@ msgstr ""
 #: ../SparkleShare/SparkleControllerBase.cs:707
 #, csharp-format
 msgid "added ‘{0}’"
-msgstr ""
+msgstr "añadido '{0}'"
 
 #: ../SparkleShare/SparkleControllerBase.cs:712
 #, csharp-format
 msgid "moved ‘{0}’"
-msgstr ""
+msgstr "movido '{0}'"
 
 #: ../SparkleShare/SparkleControllerBase.cs:717
 #, csharp-format
 msgid "edited ‘{0}’"
-msgstr ""
+msgstr "editado '{0}'"
 
 #: ../SparkleShare/SparkleControllerBase.cs:722
 #, csharp-format
 msgid "deleted ‘{0}’"
-msgstr ""
+msgstr "eliminado '{0}'"
 
 #: ../SparkleShare/SparkleControllerBase.cs:731
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "y {0} más"
+msgstr[1] "y {0} más"
 
 #: ../SparkleShare/SparkleControllerBase.cs:735
 msgid "did something magical"
-msgstr ""
+msgstr "hizo algo mágico"
 
 #: ../SparkleShare/SparkleEventLog.cs:58
 msgid "Recent Events"
@@ -386,6 +387,8 @@ msgid ""
 "…or select <b>‘Add Hosted Project…’</b> from the status icon menu to add one"
 " by hand."
 msgstr ""
+"... o seleccione <b>\"Agregar proyecto alojado ... \"</b> en el menú del "
+"icono de estado para agregar uno manualmente."
 
 #. Opens the wizard to add a new remote folder
 #: ../SparkleShare/SparkleSetup.cs:551
