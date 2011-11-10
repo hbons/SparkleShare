@@ -1,13 +1,14 @@
 # This file is distributed under the same license as the SparkleShare package.
 # 
 # Translators:
+#   <ophir.setter+transifex@gmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-30 15:50+0100\n"
-"PO-Revision-Date: 2011-10-30 14:50+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"PO-Revision-Date: 2011-11-01 20:06+0000\n"
+"Last-Translator: ophir <ophir.setter+transifex@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -64,11 +65,11 @@ msgstr ""
 
 #: ../data/plugins/own-server.xml.in.h:2
 msgid "Everything under my control"
-msgstr ""
+msgstr "הכל תחת שליטתי"
 
 #: ../data/plugins/own-server.xml.in.h:3
 msgid "On my own server"
-msgstr ""
+msgstr "שרת משלי"
 
 #: ../SparkleShare/Mac/SparkleStatusIcon.cs:70
 #: ../SparkleShare/Mac/SparkleStatusIcon.cs:88
@@ -169,20 +170,20 @@ msgstr "ספארקלשר"
 #. A menu item that takes the user to http://www.sparkleshare.org/
 #: ../SparkleShare/SparkleAbout.cs:53 ../SparkleShare/SparkleStatusIcon.cs:295
 msgid "About SparkleShare"
-msgstr ""
+msgstr "אודות ספארקלשר"
 
 #: ../SparkleShare/SparkleAbout.cs:70
 #, csharp-format
 msgid "A newer version ({0}) is available!"
-msgstr ""
+msgstr "גירסה חדשה יותר ({0}) זמינה!"
 
 #: ../SparkleShare/SparkleAbout.cs:79
 msgid "You are running the latest version."
-msgstr ""
+msgstr "אתה מריץ את הגרסה המעודכנת ביותר"
 
 #: ../SparkleShare/SparkleAbout.cs:88 ../SparkleShare/SparkleAbout.cs:113
 msgid "Checking for updates..."
-msgstr ""
+msgstr "בודק עדכונים..."
 
 #: ../SparkleShare/SparkleControllerBase.cs:493
 msgid "dddd, MMMM d, yyyy"
@@ -195,22 +196,22 @@ msgstr ""
 #: ../SparkleShare/SparkleControllerBase.cs:707
 #, csharp-format
 msgid "added ‘{0}’"
-msgstr ""
+msgstr "‘{0}’ הוסף"
 
 #: ../SparkleShare/SparkleControllerBase.cs:712
 #, csharp-format
 msgid "moved ‘{0}’"
-msgstr ""
+msgstr "‘{0}’ הוזז"
 
 #: ../SparkleShare/SparkleControllerBase.cs:717
 #, csharp-format
 msgid "edited ‘{0}’"
-msgstr ""
+msgstr "‘{0}’ שונה"
 
 #: ../SparkleShare/SparkleControllerBase.cs:722
 #, csharp-format
 msgid "deleted ‘{0}’"
-msgstr ""
+msgstr "‘{0}’ נמחק"
 
 #: ../SparkleShare/SparkleControllerBase.cs:731
 #, csharp-format
@@ -225,12 +226,12 @@ msgstr ""
 
 #: ../SparkleShare/SparkleEventLog.cs:58
 msgid "Recent Events"
-msgstr ""
+msgstr "אירועים אחרונים"
 
 #: ../SparkleShare/SparkleEventLog.cs:169
 #: ../SparkleShare/SparkleEventLog.cs:188
 msgid "All Folders"
-msgstr ""
+msgstr "כל התיקיות"
 
 #: ../SparkleShare/SparkleSetup.cs:76
 msgid ""
@@ -245,7 +246,7 @@ msgstr "שם מלא:"
 
 #: ../SparkleShare/SparkleSetup.cs:98
 msgid "Email:"
-msgstr "דוא\"ל"
+msgstr "דוא\"ל:"
 
 #: ../SparkleShare/SparkleSetup.cs:108
 msgid "Next"
@@ -271,20 +272,20 @@ msgstr "בטל"
 #. Sync button
 #: ../SparkleShare/SparkleSetup.cs:316
 msgid "Add"
-msgstr ""
+msgstr "הוסף"
 
 #: ../SparkleShare/SparkleSetup.cs:335
 #, csharp-format
 msgid "Adding project ‘{0}’…"
-msgstr ""
+msgstr "מוסיף פרויקט ‘{0}’…"
 
 #: ../SparkleShare/SparkleSetup.cs:336
 msgid "This may take a while."
-msgstr ""
+msgstr "זה עלול לקחת זמן מה"
 
 #: ../SparkleShare/SparkleSetup.cs:337
 msgid "Are you sure it’s not coffee o'clock?"
-msgstr ""
+msgstr "מה אתה אומר על קפה?"
 
 #: ../SparkleShare/SparkleSetup.cs:341 ../SparkleShare/SparkleSetup.cs:457
 #: ../SparkleShare/SparkleSetup.cs:556
@@ -293,24 +294,24 @@ msgstr "סיים"
 
 #: ../SparkleShare/SparkleSetup.cs:374
 msgid "Something went wrong"
-msgstr ""
+msgstr "משהו השתבש"
 
 #: ../SparkleShare/SparkleSetup.cs:422
 msgid "Try Again…"
-msgstr ""
+msgstr "נסה שוב..."
 
 #: ../SparkleShare/SparkleSetup.cs:441
 #, csharp-format
 msgid "‘{0}’ has been successfully added"
-msgstr ""
+msgstr "‘{0}’ הוסף בהצלחה"
 
 #: ../SparkleShare/SparkleSetup.cs:447
 msgid "Project successfully added!"
-msgstr ""
+msgstr "פרויקט הוסף בהצלחה!"
 
 #: ../SparkleShare/SparkleSetup.cs:448
 msgid "Access the files from your SparkleShare folder."
-msgstr ""
+msgstr "גש לקבצים מתיקיית ספארקלשר"
 
 #. A button that opens the synced folder
 #: ../SparkleShare/SparkleSetup.cs:451
@@ -319,7 +320,7 @@ msgstr "פתח תקייה"
 
 #: ../SparkleShare/SparkleSetup.cs:477
 msgid "What's happening next?"
-msgstr ""
+msgstr "מה עכשיו?"
 
 #: ../SparkleShare/SparkleSetup.cs:478
 msgid ""
@@ -329,16 +330,16 @@ msgstr ""
 
 #: ../SparkleShare/SparkleSetup.cs:481
 msgid "Skip Tutorial"
-msgstr ""
+msgstr "דלג על הדרכה"
 
 #: ../SparkleShare/SparkleSetup.cs:486 ../SparkleShare/SparkleSetup.cs:506
 #: ../SparkleShare/SparkleSetup.cs:524
 msgid "Continue"
-msgstr ""
+msgstr "המשך"
 
 #: ../SparkleShare/SparkleSetup.cs:502
 msgid "Sharing files with others"
-msgstr ""
+msgstr "שיתוף קבצים עם אחרים"
 
 #: ../SparkleShare/SparkleSetup.cs:503
 msgid ""
@@ -358,13 +359,13 @@ msgstr ""
 
 #: ../SparkleShare/SparkleSetup.cs:538
 msgid "Adding projects to SparkleShare"
-msgstr ""
+msgstr "הוספת פרויקטים לספארקלשר"
 
 #: ../SparkleShare/SparkleSetup.cs:539
 msgid ""
 "Just click this button when you see it on the web, and the project will be "
 "automatically added:"
-msgstr ""
+msgstr "לחץ כאן כשאתה רואה אותו ברשת, והפרויקט יתווסף אוטומטית:"
 
 #: ../SparkleShare/SparkleSetup.cs:542
 msgid ""
@@ -380,23 +381,23 @@ msgstr ""
 
 #: ../SparkleShare/SparkleSetupWindow.cs:44
 msgid "SparkleShare Setup"
-msgstr ""
+msgstr "התקנת ספארקלשר"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:228
 msgid "No projects yet"
-msgstr ""
+msgstr "עדיין אין פרויקטים"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:262
 msgid "Open Recent Events"
-msgstr ""
+msgstr "פתח אירועים אחרונים"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:282
 msgid "Turn Notifications Off"
-msgstr ""
+msgstr "כבה הודעות"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:284
 msgid "Turn Notifications On"
-msgstr ""
+msgstr "הפעל הודעות"
 
 #. A menu item that quits the application
 #: ../SparkleShare/SparkleStatusIcon.cs:311
