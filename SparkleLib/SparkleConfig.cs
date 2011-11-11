@@ -117,7 +117,8 @@ namespace SparkleLib {
                 "<sparkleshare>" + n +
                 "  <user>" + n +
                 "    <name>" + user_name + "</name>" + n +
-                "    <email>Unknown</email>" + n + "  </user>" + n +
+                "    <email>Unknown</email>" + n +
+                "  </user>" + n +
                 "</sparkleshare>");
 
             SparkleHelpers.DebugInfo ("Config", "Created \"" + FullPath + "\"");
