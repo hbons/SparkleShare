@@ -886,15 +886,14 @@ namespace SparkleShare {
 
                 // Add some restrictions to what the key can
                 // do when uploaded to the server
-                string public_key = File.ReadAllText (key_file_path + ".pub");
-                public_key = "no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty " + public_key;
-                File.WriteAllText (key_file_path + ".pub", public_key);
+                // string public_key = File.ReadAllText (key_file_path + ".pub");
+                // public_key = "no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty " + public_key;
+                // File.WriteAllText (key_file_path + ".pub", public_key);
 
                 // Create an easily accessible copy of the public
                 // key in the user's SparkleShare folder
                 File.Copy (key_file_path + ".pub",
                     Path.Combine (SparklePath, UserName + "'s key.txt"));
-
             }
         }
 
