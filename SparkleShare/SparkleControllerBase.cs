@@ -928,8 +928,17 @@ namespace SparkleShare {
 
                     // Delete avatars older than a month
                     if (avatar_info.CreationTime < DateTime.Now.AddMonths (-1)) {
-                        avatar_info.Delete ();
-                        old_avatars.Add (email);
+                        try {
+                          avatar_info.Delete ();
+                          old_avatars.Add (email);
+
+                        } catch (FileNotFoundException) {
+                            // FIXME: For some reason the previous File.Exists () check
+                            // doesn't cover all cases sometimes, so we catch any errors
+
+                            if (old_avatars.Contains (email))
+                                old_avatars.Remove (email);
+                        }
                     }
 
                 } else {
