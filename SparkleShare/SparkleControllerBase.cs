@@ -81,6 +81,7 @@ namespace SparkleShare {
         public abstract string PluginsPath { get; }
 
         private SparkleFetcherBase fetcher;
+        private List<string> failed_avatars = new List<string> ();
 
 
         // Short alias for the translations
@@ -941,6 +942,8 @@ namespace SparkleShare {
                         }
                     }
 
+                } else if (this.failed_avatars.Contains (email)) {
+                    break;
                 } else {
                   WebClient client = new WebClient ();
                   string url       =  "http://gravatar.com/avatar/" + GetMD5 (email) +
@@ -962,8 +965,11 @@ namespace SparkleShare {
                         SparkleHelpers.DebugInfo ("Controller", "Failed fetching gravatar for " + email);
 
                         // Stop downloading further avatars if we have no internet access
-                        if (e.Status == WebExceptionStatus.Timeout)
+                        if (e.Status == WebExceptionStatus.Timeout){
                             break;
+                        } else {
+                            this.failed_avatars.Add (email);
+                        }
                   }
                }
             }
