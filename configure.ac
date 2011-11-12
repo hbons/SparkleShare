@@ -175,6 +175,7 @@ SparkleShare/Makefile
 SparkleShare/Mac/Makefile
 SparkleShare/Nautilus/Makefile
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py
+SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py
 po/Makefile.in
 Makefile
 ])
