@@ -185,7 +185,8 @@ SparkleShare ${VERSION}
 Configuration:
        Prefix              : ${prefix}
        Build Gtk+ UI       : ${enable_gtkui}
-       Nautilus plugin     : ${have_nautilus_python}
+       Nautilus 2.x plugin : ${have_nautilus2_python}
+       Nautilus 3.x plugin : ${have_nautilus3_python}
        User Help           : ${enable_user_help} (requires gnome-doc-utils >= 0.17.3)
 
 "
