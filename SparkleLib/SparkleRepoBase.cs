@@ -110,12 +110,6 @@ namespace SparkleLib {
 
                     if (CheckForRemoteChanges ())
                         SyncDownBase ();
-
-                    string message;
-                    while ((message = this.listener.NextQueueDownMessage (Identifier)) != null) {
-                        if (!message.Equals (CurrentRevision))
-                            SyncDownBase ();
-                    }
                 }
 
                 // In the unlikely case that we haven't synced up our
@@ -265,23 +259,30 @@ namespace SparkleLib {
                 if (announcement.FolderIdentifier.Equals (identifier) &&
                     !announcement.Message.Equals (CurrentRevision)) {
 
-                    if ((Status != SyncStatus.SyncUp)   &&
-                        (Status != SyncStatus.SyncDown) &&
-                        !this.is_buffering) {
-
-                        string message;
-                        while ((message = this.listener.NextQueueDownMessage (identifier)) != null) {
-                            if (!message.Equals (CurrentRevision))
-                                SyncDownBase ();
-                        }
+                    while (this.IsSyncing ()) {
+                        System.Threading.Thread.Sleep (100);
                     }
+                    SparkleHelpers.DebugInfo ("Listener", "Syncing due to Announcement");
+                    if (!announcement.Message.Equals (CurrentRevision))
+                        SyncDownBase ();
+                } else {
+                    if (announcement.FolderIdentifier.Equals (identifier))
+                        SparkleHelpers.DebugInfo ("Listener", "Not syncing message is for current revision");
                 }
             };
-            
+
             // Start listening
             if (!this.listener.IsConnected && !this.listener.IsConnecting) {
                 this.listener.Connect ();
             }
+        }
+
+
+        private bool IsSyncing ()
+        {
+            if (Status == SyncStatus.SyncUp || Status == SyncStatus.SyncDown || this.is_buffering)
+                return true;
+            return false;
         }
 
 
@@ -291,7 +292,7 @@ namespace SparkleLib {
                 if (this.has_changed) {
                     if (this.sizebuffer.Count >= 4)
                         this.sizebuffer.RemoveAt (0);
-                        
+
                     DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
                      this.sizebuffer.Add (CalculateFolderSize (dir_info));
 
@@ -303,7 +304,7 @@ namespace SparkleLib {
                         SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled.");
                         this.is_buffering = false;
                         this.has_changed  = false;
-                        
+
                         DisableWatching ();
                         while (AnyDifferences)
                             SyncUpBase ();
@@ -447,6 +448,8 @@ namespace SparkleLib {
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.SyncDown);
 
+            string pre_sync_revision = CurrentRevision;
+
             if (SyncDown ()) {
                 SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Done");
                 this.server_online = true;
@@ -454,24 +457,27 @@ namespace SparkleLib {
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
 
-                List<SparkleChangeSet> change_sets = GetChangeSets (1);
-                if (change_sets != null && change_sets.Count > 0) {
-                    SparkleChangeSet change_set = change_sets [0];
+                if (!pre_sync_revision.Equals (CurrentRevision)) {
+                    List<SparkleChangeSet> change_sets = GetChangeSets (1);
 
-                    bool note_added = false;
-                    foreach (string added in change_set.Added) {
-                        if (added.Contains (".notes")) {
-                            if (NewNote != null)
-                                NewNote (change_set.User.Name, change_set.User.Email);
+                   if (change_sets != null && change_sets.Count > 0) {
+                        SparkleChangeSet change_set = change_sets [0];
 
-                            note_added = true;
-                            break;
+                        bool note_added = false;
+                        foreach (string added in change_set.Added) {
+                            if (added.Contains (".notes")) {
+                                if (NewNote != null)
+                                    NewNote (change_set.User.Name, change_set.User.Email);
+
+                                note_added = true;
+                                break;
+                            }
                         }
-                    }
 
-                    if (!note_added) {
-                        if (NewChangeSet != null)
-                            NewChangeSet (change_set);
+                        if (!note_added) {
+                            if (NewChangeSet != null)
+                                NewChangeSet (change_set);
+                        }
                     }
                 }
 
