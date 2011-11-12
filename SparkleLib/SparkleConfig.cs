@@ -272,10 +272,16 @@ namespace SparkleLib {
                 List<string> hosts = new List<string> ();
 
                 foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
-                    Uri uri = new Uri (node_folder ["url"].InnerText);
+                    try {
+                        Uri uri = new Uri (node_folder ["url"].InnerText);
 
-                    if ("git" != uri.UserInfo && !hosts.Contains (uri.UserInfo + "@" + uri.Host))
-                        hosts.Add (uri.UserInfo + "@" + uri.Host);
+                        if (uri.UserInfo != "git" && !hosts.Contains (uri.UserInfo + "@" + uri.Host))
+                            hosts.Add (uri.UserInfo + "@" + uri.Host);
+
+                    } catch (UriFormatException) {
+                        SparkleHelpers.DebugInfo ("Config",
+                            "Ignoring badly formatted URI: " + node_folder ["url"].InnerText);
+                    }
                 }
 
               return hosts;
