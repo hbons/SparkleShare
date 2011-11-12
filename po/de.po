@@ -6,6 +6,7 @@
 # Heffer <felix@fetzig.org>, 2011.
 # Jan-Christoph Borchardt <JanCBorchardt@fsfe.org>, 2011.
 # kabum <uu.kabum@gmail.com>, 2011.
+#   <killerjoe@gmx.de>, 2011.
 # kxnop <m_leinmueller@hotmail.com>, 2011.
 # Łukasz Jernaś <deejay1@srem.org>, 2011.
 #   <mm@imsoftware.de>, 2011.
@@ -16,8 +17,8 @@ msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-30 15:50+0100\n"
-"PO-Revision-Date: 2011-10-30 14:50+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"PO-Revision-Date: 2011-11-10 15:27+0000\n"
+"Last-Translator: MarkusLitz <killerjoe@gmx.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,11 +27,11 @@ msgstr ""
 
 #: ../data/plugins/bitbucket.xml.in.h:1 ../data/plugins/github.xml.in.h:1
 msgid "/username/project"
-msgstr ""
+msgstr "/username/project"
 
 #: ../data/plugins/bitbucket.xml.in.h:2
 msgid "Bitbucket"
-msgstr ""
+msgstr "Bitbucket"
 
 #: ../data/plugins/bitbucket.xml.in.h:3
 msgid "Free code hosting for Git and Mercurial"
@@ -42,7 +43,7 @@ msgstr ""
 
 #: ../data/plugins/github.xml.in.h:3
 msgid "Github"
-msgstr ""
+msgstr "Github"
 
 #: ../data/plugins/gitorious.xml.in.h:1
 msgid "/project/repository"
@@ -74,11 +75,11 @@ msgstr ""
 
 #: ../data/plugins/own-server.xml.in.h:2
 msgid "Everything under my control"
-msgstr ""
+msgstr "Alles unter meiner Kontrolle"
 
 #: ../data/plugins/own-server.xml.in.h:3
 msgid "On my own server"
-msgstr ""
+msgstr "Auf meinem eigenen Server"
 
 #: ../SparkleShare/Mac/SparkleStatusIcon.cs:70
 #: ../SparkleShare/Mac/SparkleStatusIcon.cs:88
@@ -92,21 +93,21 @@ msgstr "Willkommen bei SparkleShare!"
 #: ../SparkleShare/SparkleStatusIcon.cs:77
 #: ../SparkleShare/SparkleStatusIcon.cs:91
 msgid "Up to date"
-msgstr "Schon auf dem aktuellsten Stand."
+msgstr "Aktualisiert"
 
 #: ../SparkleShare/Mac/SparkleStatusIcon.cs:99
 #: ../SparkleShare/SparkleStatusIcon.cs:106
 msgid "Syncing…"
-msgstr "Abgleichen …"
+msgstr "Synchronisiere..."
 
 #: ../SparkleShare/Mac/SparkleStatusIcon.cs:109
 #: ../SparkleShare/SparkleStatusIcon.cs:116
 msgid "Not everything is synced"
-msgstr "Nicht alles ist synchronisiert"
+msgstr "Es ist nicht alles synchronisiert"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
 msgid "Copy Web Link"
-msgstr "Internetadresse kopieren"
+msgstr "Web Link kopieren"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
 msgid "Copy the web address of this file to the clipboard"
@@ -212,7 +213,7 @@ msgstr ""
 #: ../SparkleShare/SparkleControllerBase.cs:712
 #, csharp-format
 msgid "moved ‘{0}’"
-msgstr ""
+msgstr "'{0}' verschoben"
 
 #: ../SparkleShare/SparkleControllerBase.cs:717
 #, csharp-format
@@ -270,11 +271,11 @@ msgstr ""
 
 #: ../SparkleShare/SparkleSetup.cs:275
 msgid "Address"
-msgstr ""
+msgstr "Adresse"
 
 #: ../SparkleShare/SparkleSetup.cs:295
 msgid "Remote Path"
-msgstr ""
+msgstr "Entfernter Pfad"
 
 #. Cancel button
 #: ../SparkleShare/SparkleSetup.cs:309 ../SparkleShare/SparkleSetup.cs:345
@@ -289,7 +290,7 @@ msgstr "Hinzufügen"
 #: ../SparkleShare/SparkleSetup.cs:335
 #, csharp-format
 msgid "Adding project ‘{0}’…"
-msgstr ""
+msgstr "Füge Projekt '{0}' hinzu..."
 
 #: ../SparkleShare/SparkleSetup.cs:336
 msgid "This may take a while."
@@ -323,7 +324,7 @@ msgstr "Projekt erfolgreich hinzugefügt!"
 
 #: ../SparkleShare/SparkleSetup.cs:448
 msgid "Access the files from your SparkleShare folder."
-msgstr ""
+msgstr "Zugriff auf die Dateien von Ihrem SparkleShare Ordner."
 
 #. A button that opens the synced folder
 #: ../SparkleShare/SparkleSetup.cs:451
@@ -339,6 +340,8 @@ msgid ""
 "SparkleShare creates a special folder in your personal folder that will keep"
 " track of your projects."
 msgstr ""
+"SparkleShare erzeugt einen eigenen Ordner in Ihrem persönlichen Ordner, der "
+"den Überblick über Ihre Projekte behalten."
 
 #: ../SparkleShare/SparkleSetup.cs:481
 msgid "Skip Tutorial"
@@ -358,6 +361,8 @@ msgid ""
 "All files added to your project folders are synced with the host "
 "automatically, as well as with your collaborators."
 msgstr ""
+"Alle zu Ihrem Projekt hinzugefügten Dateien sind automatisch mit dem Server "
+"und Ihren Mitarbeitern synchronisiert."
 
 #: ../SparkleShare/SparkleSetup.cs:520
 msgid "The status icon is here to help"
@@ -371,7 +376,7 @@ msgstr ""
 
 #: ../SparkleShare/SparkleSetup.cs:538
 msgid "Adding projects to SparkleShare"
-msgstr ""
+msgstr "Füge Projekte zu SparkleShare"
 
 #: ../SparkleShare/SparkleSetup.cs:539
 msgid ""
@@ -397,7 +402,7 @@ msgstr "SparkleShare Konfiguration"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:228
 msgid "No projects yet"
-msgstr ""
+msgstr "Bislang keine Projekte "
 
 #: ../SparkleShare/SparkleStatusIcon.cs:262
 msgid "Open Recent Events"
