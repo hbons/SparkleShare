@@ -130,6 +130,7 @@ namespace SparkleLib {
         public override void AlsoListenTo (string folder_identifier)
         {
             string channel = folder_identifier;
+
             if (!base.channels.Contains (channel)) {
                 base.channels.Add (channel);
 
@@ -139,13 +140,13 @@ namespace SparkleLib {
                     string to_send = "subscribe " + folder_identifier + "\n";
 
                     try {
-
                         lock (this.mutex) {
                             this.socket.Send (Encoding.UTF8.GetBytes (to_send));
                         }
+
                     } catch (SocketException e) {
-                      SparkleHelpers.DebugInfo ("ListenerTcp", "Could not connect to " + Server + ": " + e.Message);
-                      OnDisconnected ();
+                        SparkleHelpers.DebugInfo ("ListenerTcp", "Could not connect to " + Server + ": " + e.Message);
+                        OnDisconnected ();
                     }
                 }
             }

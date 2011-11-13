@@ -21,6 +21,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Timers;
 using System.Xml;
 
@@ -41,10 +42,10 @@ namespace SparkleLib {
 
         private SparkleWatcher watcher;
         private TimeSpan poll_interval;
-        private Timer local_timer        = new Timer () { Interval = 0.25 * 1000 };
-        private Timer remote_timer       = new Timer () { Interval = 10 * 1000 };
+        private System.Timers.Timer local_timer        = new System.Timers.Timer () { Interval = 0.25 * 1000 };
+        private System.Timers.Timer remote_timer       = new System.Timers.Timer () { Interval = 10 * 1000 };
         private DateTime last_poll       = DateTime.Now;
-        private List <double> sizebuffer = new List<double> ();
+        private List<double> sizebuffer = new List<double> ();
         private bool has_changed         = false;
         private Object change_lock       = new Object ();
 
@@ -236,8 +237,10 @@ namespace SparkleLib {
             if (this.listener.IsConnected) {
                 this.poll_interval = this.long_interval;
 
-                if (!IsSyncing && CheckForRemoteChanges ())
-                    SyncDownBase ();
+                new Thread (new ThreadStart (delegate {
+                    if (!IsSyncing && CheckForRemoteChanges ())
+                        SyncDownBase ();
+                })).Start ();
             }
 
             // Stop polling when the connection to the irc channel is succesful
