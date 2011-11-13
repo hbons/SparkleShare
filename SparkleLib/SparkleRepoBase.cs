@@ -126,6 +126,7 @@ namespace SparkleLib {
 
                 while (HasUnsyncedChanges)
                     SyncUpBase ();
+
                 EnableWatching ();
             }
 
@@ -232,18 +233,28 @@ namespace SparkleLib {
         {
             this.listener = SparkleListenerFactory.CreateListener (Name, Identifier);
 
+            if (this.listener.IsConnected) {
+                this.poll_interval = this.long_interval;
+
+                if (!IsSyncing && CheckForRemoteChanges ())
+                    SyncDownBase ();
+            }
+
             // Stop polling when the connection to the irc channel is succesful
             this.listener.Connected += delegate {
                 this.poll_interval = this.long_interval;
                 this.last_poll = DateTime.Now;
 
-                // Check for changes manually one more time
-                if (CheckForRemoteChanges ())
-                    SyncDownBase ();
+                if (!IsSyncing) {
 
-                // Push changes that were made since the last disconnect
-                if (HasUnsyncedChanges)
-                    SyncUpBase ();
+                    // Check for changes manually one more time
+                    if (CheckForRemoteChanges ())
+                        SyncDownBase ();
+
+                    // Push changes that were made since the last disconnect
+                    if (HasUnsyncedChanges)
+                        SyncUpBase ();
+                }
             };
 
             // Start polling when the connection to the irc channel is lost
@@ -259,30 +270,30 @@ namespace SparkleLib {
                 if (announcement.FolderIdentifier.Equals (identifier) &&
                     !announcement.Message.Equals (CurrentRevision)) {
 
-                    while (this.IsSyncing ()) {
+                    while (this.IsSyncing)
                         System.Threading.Thread.Sleep (100);
-                    }
-                    SparkleHelpers.DebugInfo ("Listener", "Syncing due to Announcement");
-                    if (!announcement.Message.Equals (CurrentRevision))
-                        SyncDownBase ();
+
+                    SparkleHelpers.DebugInfo ("Listener", "Syncing due to announcement");
+                    SyncDownBase ();
+
                 } else {
                     if (announcement.FolderIdentifier.Equals (identifier))
-                        SparkleHelpers.DebugInfo ("Listener", "Not syncing message is for current revision");
+                        SparkleHelpers.DebugInfo ("Listener", "Not syncing, message is for current revision");
                 }
             };
 
             // Start listening
-            if (!this.listener.IsConnected && !this.listener.IsConnecting) {
+            if (!this.listener.IsConnected && !this.listener.IsConnecting)
                 this.listener.Connect ();
-            }
         }
 
 
-        private bool IsSyncing ()
-        {
-            if (Status == SyncStatus.SyncUp || Status == SyncStatus.SyncDown || this.is_buffering)
-                return true;
-            return false;
+        private bool IsSyncing {
+            get {
+                return (Status == SyncStatus.SyncUp   ||
+                        Status == SyncStatus.SyncDown ||
+                        this.is_buffering);
+            }
         }
 
 
