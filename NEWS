@@ -14,6 +14,10 @@
         - Replace IRC by a custom protocol as the default notification system
         - Many many fixes for crashes and bugs
 
+        Travis:
+        - Nautilus 3.x plugin
+        - Bugfixes
+
 
 0.2.5 for Linux and Mac (Mon Jul 25 2011):
 
