@@ -201,7 +201,8 @@ namespace SparkleShare {
                         FolderMenuItems = new NSMenuItem [1];
     
                         FolderMenuItems [0] = new NSMenuItem () {
-                            Title = "No projects yet"
+                            Title   = "No projects yet",
+                            Enabled = false
                         };
                     }
     
