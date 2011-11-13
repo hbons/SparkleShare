@@ -43,7 +43,6 @@ namespace SparkleShare {
         private NSButton FinishButton;
         private NSImage SlideImage;
         private NSImageView SlideImageView;
-        private NSForm UserInfoForm;
         private NSProgressIndicator ProgressIndicator;
         private NSTextField EmailLabel;
         private NSTextField EmailTextField;
