@@ -218,7 +218,7 @@ namespace SparkleShare {
                             TreeSelection selection = (sender as TreeView).Selection;
                             selection.GetSelected (out model, out iter);
 
-                            SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
+                            // SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
                             int selected_path = int.Parse (model.GetPath (iter).ToString ());
 
                             Controller.SelectedPluginChanged (selected_path);
