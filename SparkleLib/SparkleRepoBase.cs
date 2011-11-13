@@ -42,12 +42,13 @@ namespace SparkleLib {
 
         private SparkleWatcher watcher;
         private TimeSpan poll_interval;
-        private System.Timers.Timer local_timer        = new System.Timers.Timer () { Interval = 0.25 * 1000 };
-        private System.Timers.Timer remote_timer       = new System.Timers.Timer () { Interval = 10 * 1000 };
+        private System.Timers.Timer local_timer  = new System.Timers.Timer () { Interval = 0.25 * 1000 };
+        private System.Timers.Timer remote_timer = new System.Timers.Timer () { Interval = 10 * 1000 };
         private DateTime last_poll       = DateTime.Now;
-        private List<double> sizebuffer = new List<double> ();
+        private List<double> sizebuffer  = new List<double> ();
         private bool has_changed         = false;
         private Object change_lock       = new Object ();
+        private Object watch_lock        = new Object ();
 
         protected SparkleListenerBase listener;
         protected SyncStatus status;
@@ -519,15 +520,19 @@ namespace SparkleLib {
 
         public void DisableWatching ()
         {
-            this.watcher.EnableRaisingEvents = false;
-            this.local_timer.Stop ();
+            lock (watch_lock) {
+                this.watcher.EnableRaisingEvents = false;
+                this.local_timer.Stop ();
+            }
         }
 
 
         public void EnableWatching ()
         {
-            this.watcher.EnableRaisingEvents = true;
-            this.local_timer.Start ();
+            lock (watch_lock) {
+                this.watcher.EnableRaisingEvents = true;
+                this.local_timer.Start ();
+            }
         }
 
 
