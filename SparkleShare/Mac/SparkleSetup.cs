@@ -41,7 +41,6 @@ namespace SparkleShare {
         private NSButton SkipTutorialButton;
         private NSButton OpenFolderButton;
         private NSButton FinishButton;
-        private NSButton AddProjectButton;
         private NSImage SlideImage;
         private NSImageView SlideImageView;
         private NSForm UserInfoForm;
@@ -567,14 +566,6 @@ namespace SparkleShare {
                                 "to add one by hand."
                             };
 
-                            AddProjectButton = new NSButton () {
-                                Title = "Add Project…"
-                            };
-
-                            AddProjectButton.Activated += delegate {
-                                Controller.TutorialPageCompleted ();
-                            };
-
                             FinishButton = new NSButton () {
                                 Title = "Finish"
                             };
@@ -600,7 +591,6 @@ namespace SparkleShare {
                             ContentView.AddSubview (SlideImageView);
                             ContentView.AddSubview (AddProjectTextField);
                             Buttons.Add (FinishButton);
-                            Buttons.Add (AddProjectButton);
 
                             break;
                         }

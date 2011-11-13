@@ -548,11 +548,6 @@ namespace SparkleShare {
 
                             Image slide = SparkleUIHelpers.GetImage ("tutorial-slide-4.png");
 
-                            Button add_project_button = new Button (_("Add Hosted Project…"));
-                            add_project_button.Clicked += delegate {
-                                Controller.TutorialPageCompleted ();
-                            };
-
                             Button finish_button = new Button (_("Finish"));
                             finish_button.Clicked += delegate {
                                 Close ();
@@ -564,8 +559,6 @@ namespace SparkleShare {
                             box.Add (label);
 
                             Add (box);
-
-                            AddButton (add_project_button);
                             AddButton (finish_button);
 
                             break;
