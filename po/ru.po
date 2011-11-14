@@ -4,14 +4,15 @@
 # Dmitry Golubkov <master@hsdesign.ru>, 2011.
 #   <faland@gmail.com>, 2011.
 # Just a baka  <justabaka@gmail.com>, 2011.
+# Misha Shnurapet <shnurapet@fedoraproject.org>, 2011.
 # Oleg Shmelyov <shmelyov.o@gmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-30 15:50+0100\n"
-"PO-Revision-Date: 2011-10-30 14:50+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"PO-Revision-Date: 2011-11-02 11:31+0000\n"
+"Last-Translator: shnurapet <shnurapet@fedoraproject.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -192,43 +193,43 @@ msgstr "Проверка обновлений…"
 
 #: ../SparkleShare/SparkleControllerBase.cs:493
 msgid "dddd, MMMM d, yyyy"
-msgstr ""
+msgstr "дддд, ММММ д, гггг"
 
 #: ../SparkleShare/SparkleControllerBase.cs:499
 msgid "dddd, MMMM d"
-msgstr ""
+msgstr "дддд, ММММ д"
 
 #: ../SparkleShare/SparkleControllerBase.cs:707
 #, csharp-format
 msgid "added ‘{0}’"
-msgstr ""
+msgstr "«{0}» добавлено"
 
 #: ../SparkleShare/SparkleControllerBase.cs:712
 #, csharp-format
 msgid "moved ‘{0}’"
-msgstr ""
+msgstr "«{0}» перемещено"
 
 #: ../SparkleShare/SparkleControllerBase.cs:717
 #, csharp-format
 msgid "edited ‘{0}’"
-msgstr ""
+msgstr "«{0}» изменено"
 
 #: ../SparkleShare/SparkleControllerBase.cs:722
 #, csharp-format
 msgid "deleted ‘{0}’"
-msgstr ""
+msgstr "«{0}» удалено"
 
 #: ../SparkleShare/SparkleControllerBase.cs:731
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "и ещё над {0}"
+msgstr[1] "и ещё над {0}"
+msgstr[2] "и ещё над {0}"
 
 #: ../SparkleShare/SparkleControllerBase.cs:735
 msgid "did something magical"
-msgstr ""
+msgstr "совершено какое-то колдовство"
 
 #: ../SparkleShare/SparkleEventLog.cs:58
 msgid "Recent Events"
@@ -318,7 +319,7 @@ msgstr "Проект успешно добавлен!"
 
 #: ../SparkleShare/SparkleSetup.cs:448
 msgid "Access the files from your SparkleShare folder."
-msgstr ""
+msgstr "Получить доступ к файлам из своей папки SparkleShare."
 
 #. A button that opens the synced folder
 #: ../SparkleShare/SparkleSetup.cs:451
@@ -379,18 +380,22 @@ msgid ""
 "Just click this button when you see it on the web, and the project will be "
 "automatically added:"
 msgstr ""
+"Просто нажмите эту кнопку, когда увидите её в сети, и проект будет добавлен "
+"автоматически:"
 
 #: ../SparkleShare/SparkleSetup.cs:542
 msgid ""
 "…or select <b>‘Add Hosted Project…’</b> from the status icon menu to add one"
 " by hand."
 msgstr ""
+"...или выберите <b>«Добавить ведомый проект...»</b> через меню в области "
+"уведомлений, чтобы добавить проект вручную."
 
 #. Opens the wizard to add a new remote folder
 #: ../SparkleShare/SparkleSetup.cs:551
 #: ../SparkleShare/SparkleStatusIcon.cs:238
 msgid "Add Hosted Project…"
-msgstr ""
+msgstr "Добавить ведомый проект..."
 
 #: ../SparkleShare/SparkleSetupWindow.cs:44
 msgid "SparkleShare Setup"

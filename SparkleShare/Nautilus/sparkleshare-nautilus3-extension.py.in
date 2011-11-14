@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #   SparkleShare, an instant update workflow to Git.
 #   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
 #
@@ -25,7 +26,7 @@ from gi.repository import Nautilus, GObject, Gtk, Gdk
 SPARKLESHARE_PATH = os.path.join (os.path.expanduser ('~'), "SparkleShare")
 
 import gettext
-gettext.bindtextdomain('sparkleshare', '/usr/share/locale')
+gettext.bindtextdomain('sparkleshare', '@prefix@/share/locale')
 gettext.textdomain('sparkleshare')
 _ = gettext.gettext
 

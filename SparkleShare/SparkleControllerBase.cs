@@ -83,6 +83,7 @@ namespace SparkleShare {
         public abstract string PluginsPath { get; }
 
         private SparkleFetcherBase fetcher;
+        private List<string> failed_avatars = new List<string> ();
 
 
         // Short alias for the translations
@@ -901,15 +902,15 @@ namespace SparkleShare {
 
                 // Add some restrictions to what the key can
                 // do when uploaded to the server
-                string public_key = File.ReadAllText (key_file_path + ".pub");
-                public_key = "no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty " + public_key;
-                File.WriteAllText (key_file_path + ".pub", public_key);
+                // string public_key = File.ReadAllText (key_file_path + ".pub");
+                // public_key = "no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty " + public_key;
+                // File.WriteAllText (key_file_path + ".pub", public_key);
 
                 // Create an easily accessible copy of the public
                 // key in the user's SparkleShare folder
                 File.Copy (key_file_path + ".pub",
-                    Path.Combine (SparklePath, UserName + "'s key.txt"));
-
+                    Path.Combine (SparklePath, UserName + "'s key.txt"),
+                    true); // Overwriting is allowed
             }
         }
 
@@ -944,10 +945,21 @@ namespace SparkleShare {
 
                     // Delete avatars older than a month
                     if (avatar_info.CreationTime < DateTime.Now.AddMonths (-1)) {
-                        avatar_info.Delete ();
-                        old_avatars.Add (email);
+                        try {
+                          avatar_info.Delete ();
+                          old_avatars.Add (email);
+
+                        } catch (FileNotFoundException) {
+                            // FIXME: For some reason the previous File.Exists () check
+                            // doesn't cover all cases sometimes, so we catch any errors
+
+                            if (old_avatars.Contains (email))
+                                old_avatars.Remove (email);
+                        }
                     }
 
+                } else if (this.failed_avatars.Contains (email)) {
+                    break;
                 } else {
                   WebClient client = new WebClient ();
                   string url       =  "http://gravatar.com/avatar/" + GetMD5 (email) +
@@ -969,8 +981,11 @@ namespace SparkleShare {
                         SparkleHelpers.DebugInfo ("Controller", "Failed fetching gravatar for " + email);
 
                         // Stop downloading further avatars if we have no internet access
-                        if (e.Status == WebExceptionStatus.Timeout)
+                        if (e.Status == WebExceptionStatus.Timeout){
                             break;
+                        } else {
+                            this.failed_avatars.Add (email);
+                        }
                   }
                }
             }
