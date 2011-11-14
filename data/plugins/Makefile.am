@@ -17,7 +17,7 @@ dist_plugins_DATA = \
 
 pluginsdir = $(pkgdatadir)/plugins/
 
-EXTRA_DIST=$(xml_in_files) $(xml_DATA)
+EXTRA_DIST=$(dist_plugins_in_files) $(xml_DATA)
 
 MAINTAINERCLEANFILES = \
 	Makefile.in

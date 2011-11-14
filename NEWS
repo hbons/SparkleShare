@@ -1,3 +1,24 @@
+0.4.0 for Linux and Mac (Sun Nov 12 2011):
+        Hylke: It has been a while since the last release. Since so many 
+        things changed, and it being (softly) incompatible with 0.2, I decided 
+        to call it 0.4. Here are the most important improvements:
+
+        - Support OS X Lion
+        - Revamped "Add Hosted Project..." dialog
+        - First run tutorial
+        - Clicking notifications opens the event log
+        - Support for organisation/host plugins
+        - Adding empty folders now works
+        - More useful error reporting
+        - Progress bar on the initial sync, and a button to cancel
+        - Replace IRC by a custom protocol as the default notification system
+        - Many many fixes for crashes and bugs
+
+        Travis:
+        - Nautilus 3.x plugin
+        - Bugfixes
+
+
 0.2.5 for Linux and Mac (Mon Jul 25 2011):
 
         Hylke: Reimplement notes to be less buggy and backend independent. Polish

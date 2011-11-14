@@ -147,9 +147,11 @@ namespace SparkleShare {
                 StatusItem.AlternateImage.Size = new SizeF (16, 16);
     
                 Menu = new NSMenu ();
+                Menu.AutoEnablesItems = false;
                 
                     StateMenuItem = new NSMenuItem () {
-                        Title = StateText
+                        Title = StateText,
+                        Enabled = false
                     };
                 
                 Menu.AddItem (StateMenuItem);
@@ -165,6 +167,7 @@ namespace SparkleShare {
                 
                     FolderMenuItem.Image = SparkleShareImage;
                     FolderMenuItem.Image.Size = new SizeF (16, 16);
+                    FolderMenuItem.Enabled = true;
                 
                 Menu.AddItem (FolderMenuItem);
     
@@ -189,7 +192,8 @@ namespace SparkleShare {
     
                             FolderMenuItems [i] = item;
                             FolderMenuItems [i].Activated += Tasks [i];
-    
+                            FolderMenuItem.Enabled = true;
+
                             i++;
                         };
     
@@ -197,7 +201,8 @@ namespace SparkleShare {
                         FolderMenuItems = new NSMenuItem [1];
     
                         FolderMenuItems [0] = new NSMenuItem () {
-                            Title = "No projects yet"
+                            Title   = "No projects yet",
+                            Enabled = false
                         };
                     }
     
@@ -207,7 +212,8 @@ namespace SparkleShare {
                 Menu.AddItem (NSMenuItem.SeparatorItem);
     
                     SyncMenuItem = new NSMenuItem () {
-                        Title = "Add Hosted Project…"
+                        Title = "Add Hosted Project…",
+                        Enabled = true
                     };
                 
                     if (!Program.Controller.FirstRun) {
@@ -233,7 +239,8 @@ namespace SparkleShare {
                 Menu.AddItem (NSMenuItem.SeparatorItem);
     
                     RecentEventsMenuItem = new NSMenuItem () {
-                        Title = "Open Recent Events"
+                        Title = "Open Recent Events",
+                        Enabled = true
                     };
     
                     if (Controller.Folders.Length > 0) {
@@ -252,7 +259,9 @@ namespace SparkleShare {
     
                 Menu.AddItem (RecentEventsMenuItem);
     
-                    NotificationsMenuItem = new NSMenuItem ();
+                    NotificationsMenuItem = new NSMenuItem () {
+                        Enabled = true
+                    };
     
                     if (Program.Controller.NotificationsEnabled)
                         NotificationsMenuItem.Title = "Turn Notifications Off";
@@ -274,7 +283,8 @@ namespace SparkleShare {
                 Menu.AddItem (NSMenuItem.SeparatorItem);
     
                     AboutMenuItem = new NSMenuItem () {
-                        Title = "About SparkleShare"
+                        Title = "About SparkleShare",
+                        Enabled = true
                     };
     
                     AboutMenuItem.Activated += delegate {
