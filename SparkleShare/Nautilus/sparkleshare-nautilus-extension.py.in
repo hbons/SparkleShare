@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #   SparkleShare, an instant update workflow to Git.
 #   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
 #
