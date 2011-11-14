@@ -10,15 +10,16 @@
 # kxnop <m_leinmueller@hotmail.com>, 2011.
 # Łukasz Jernaś <deejay1@srem.org>, 2011.
 #   <mm@imsoftware.de>, 2011.
+# Sascha  <S.Lewandowski@abiwillich.de>, 2011.
 #   <urs.obernolte@googlemail.com>, 2011.
 #   <yujiang.wang@ymail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-30 15:50+0100\n"
-"PO-Revision-Date: 2011-11-10 15:27+0000\n"
-"Last-Translator: MarkusLitz <killerjoe@gmx.de>\n"
+"POT-Creation-Date: 2011-11-12 18:42+0100\n"
+"PO-Revision-Date: 2011-11-14 07:55+0000\n"
+"Last-Translator: iwsnipy <S.Lewandowski@abiwillich.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -47,7 +48,7 @@ msgstr "Github"
 
 #: ../data/plugins/gitorious.xml.in.h:1
 msgid "/project/repository"
-msgstr ""
+msgstr "/Projekt/Ablage"
 
 #: ../data/plugins/gitorious.xml.in.h:2
 msgid "Gitorious"
@@ -59,11 +60,11 @@ msgstr ""
 
 #: ../data/plugins/gnome.xml.in.h:1
 msgid "/project"
-msgstr ""
+msgstr "/Projekt"
 
 #: ../data/plugins/gnome.xml.in.h:2
 msgid "A free and easy interface for your computer"
-msgstr ""
+msgstr "Eine freie und einfache Schnittstelle für deinen Computer"
 
 #: ../data/plugins/gnome.xml.in.h:3
 msgid "The GNOME Project"
@@ -71,7 +72,7 @@ msgstr "Das GNOME Projekt"
 
 #: ../data/plugins/own-server.xml.in.h:1
 msgid "/path/to/project"
-msgstr ""
+msgstr "/Pfad/zum/Projekt"
 
 #: ../data/plugins/own-server.xml.in.h:2
 msgid "Everything under my control"
@@ -81,47 +82,52 @@ msgstr "Alles unter meiner Kontrolle"
 msgid "On my own server"
 msgstr "Auf meinem eigenen Server"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:70
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:88
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:84
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:102
 #: ../SparkleShare/SparkleSetup.cs:75 ../SparkleShare/SparkleStatusIcon.cs:75
 #: ../SparkleShare/SparkleStatusIcon.cs:89
 msgid "Welcome to SparkleShare!"
 msgstr "Willkommen bei SparkleShare!"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:72
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:90
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:86
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:104
 #: ../SparkleShare/SparkleStatusIcon.cs:77
 #: ../SparkleShare/SparkleStatusIcon.cs:91
 msgid "Up to date"
 msgstr "Aktualisiert"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:99
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:113
 #: ../SparkleShare/SparkleStatusIcon.cs:106
 msgid "Syncing…"
 msgstr "Synchronisiere..."
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:109
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:123
 #: ../SparkleShare/SparkleStatusIcon.cs:116
 msgid "Not everything is synced"
 msgstr "Es ist nicht alles synchronisiert"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:140
 msgid "Copy Web Link"
 msgstr "Web Link kopieren"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:141
 msgid "Copy the web address of this file to the clipboard"
 msgstr "Die Internetadresse dieser Datei in die Zwischenablage kopieren"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:173
 msgid "Get Earlier Version"
 msgstr "Frühere Version abrufen"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:174
 msgid "Make a copy of an earlier version in this folder"
 msgstr "Erstelle eine Kopie einer früheren Version in diesem Verzeichnis"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:161
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:187
 msgid "Select to get a copy of this version"
 msgstr "Selektieren, um eine Kopie dieser Version abzurufen"
 
@@ -197,42 +203,42 @@ msgstr "Sie verwenden die aktuelle Version."
 msgid "Checking for updates..."
 msgstr "Suche Aktualisierungen..."
 
-#: ../SparkleShare/SparkleControllerBase.cs:493
+#: ../SparkleShare/SparkleControllerBase.cs:494
 msgid "dddd, MMMM d, yyyy"
 msgstr ""
 
-#: ../SparkleShare/SparkleControllerBase.cs:499
+#: ../SparkleShare/SparkleControllerBase.cs:500
 msgid "dddd, MMMM d"
 msgstr ""
 
-#: ../SparkleShare/SparkleControllerBase.cs:707
+#: ../SparkleShare/SparkleControllerBase.cs:708
 #, csharp-format
 msgid "added ‘{0}’"
-msgstr ""
+msgstr "Hinzugefügt '{0}'"
 
-#: ../SparkleShare/SparkleControllerBase.cs:712
+#: ../SparkleShare/SparkleControllerBase.cs:713
 #, csharp-format
 msgid "moved ‘{0}’"
 msgstr "'{0}' verschoben"
 
-#: ../SparkleShare/SparkleControllerBase.cs:717
+#: ../SparkleShare/SparkleControllerBase.cs:718
 #, csharp-format
 msgid "edited ‘{0}’"
-msgstr ""
+msgstr "Bearbeitet '{0}'"
 
-#: ../SparkleShare/SparkleControllerBase.cs:722
+#: ../SparkleShare/SparkleControllerBase.cs:723
 #, csharp-format
 msgid "deleted ‘{0}’"
-msgstr ""
+msgstr "Gelöscht '{0}'"
 
-#: ../SparkleShare/SparkleControllerBase.cs:731
+#: ../SparkleShare/SparkleControllerBase.cs:732
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../SparkleShare/SparkleControllerBase.cs:735
+#: ../SparkleShare/SparkleControllerBase.cs:736
 msgid "did something magical"
 msgstr ""
 
@@ -373,6 +379,8 @@ msgid ""
 "It shows the syncing process status, and contains links to your projects and"
 " the event log."
 msgstr ""
+"Es zeigt den Synchronisierungsstatus und beinhaltet Links zu deinem Projekt "
+"und deinen letzten Ereignissen."
 
 #: ../SparkleShare/SparkleSetup.cs:538
 msgid "Adding projects to SparkleShare"
@@ -383,6 +391,8 @@ msgid ""
 "Just click this button when you see it on the web, and the project will be "
 "automatically added:"
 msgstr ""
+"Klicken den Button, wenn du ihn im Internet siehst, und das Projekt wird "
+"automatisch hinzu gefügt:"
 
 #: ../SparkleShare/SparkleSetup.cs:542
 msgid ""
@@ -406,7 +416,7 @@ msgstr "Bislang keine Projekte "
 
 #: ../SparkleShare/SparkleStatusIcon.cs:262
 msgid "Open Recent Events"
-msgstr ""
+msgstr "Öffne letzte Ereignisse"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:282
 msgid "Turn Notifications Off"
