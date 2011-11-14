@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-30 15:50+0100\n"
-"PO-Revision-Date: 2011-10-30 14:50+0000\n"
+"POT-Creation-Date: 2011-11-12 13:18+0100\n"
+"PO-Revision-Date: 2011-11-12 12:34+0000\n"
 "Last-Translator: deejay1 <deejay1@srem.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +26,8 @@ msgstr "Bitbucket"
 #: ../data/plugins/bitbucket.xml.in.h:3
 msgid "Free code hosting for Git and Mercurial"
 msgstr ""
-"Darmowe utrzymywanie kod dla projektów zarządzanych przez git oraz Mercurial"
+"Darmowe utrzymywanie kodu dla projektów zarządzanych przez git oraz "
+"Mercurial"
 
 #: ../data/plugins/github.xml.in.h:2
 msgid "Free public Git repositories with collaborator management"
@@ -47,8 +48,8 @@ msgstr "Gitorious"
 #: ../data/plugins/gitorious.xml.in.h:3
 msgid "Open source infrastructure for hosting open source projects"
 msgstr ""
-"Infrakstruktura o otwartym kodzie źródłowym dla projektów dla społeczności "
-"otwartego kodu"
+"Infrastruktura o otwartym kodzie źródłowym dla projektów o otwartym kodzie "
+"źródłowym"
 
 #: ../data/plugins/gnome.xml.in.h:1
 msgid "/project"
@@ -74,26 +75,26 @@ msgstr "Wszystko pod własną kontrolą"
 msgid "On my own server"
 msgstr "Na własnym serwerze"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:70
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:88
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:84
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:102
 #: ../SparkleShare/SparkleSetup.cs:75 ../SparkleShare/SparkleStatusIcon.cs:75
 #: ../SparkleShare/SparkleStatusIcon.cs:89
 msgid "Welcome to SparkleShare!"
 msgstr "Witamy w programie SparkleShare!"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:72
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:90
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:86
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:104
 #: ../SparkleShare/SparkleStatusIcon.cs:77
 #: ../SparkleShare/SparkleStatusIcon.cs:91
 msgid "Up to date"
 msgstr "Wszystko jest aktualne"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:99
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:113
 #: ../SparkleShare/SparkleStatusIcon.cs:106
 msgid "Syncing…"
 msgstr "Synchronizowanie…"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:109
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:123
 #: ../SparkleShare/SparkleStatusIcon.cs:116
 msgid "Not everything is synced"
 msgstr "Nie wszystko zostało zsynchronizowane"
@@ -141,7 +142,7 @@ msgstr "Niniejszy program dostarczany jest BEZ JAKIEJKOLWIEK GWARANCJI."
 #: ../SparkleShare/Program.cs:89
 msgid "This is free software, and you are welcome to redistribute it "
 msgstr ""
-"Niniejszy program jest wolnym oprogramowanie, można go rozprowadzać dalej "
+"Niniejszy program jest wolnym oprogramowaniem, można go rozprowadzać dalej "
 "pod pewnymi warunkami."
 
 #: ../SparkleShare/Program.cs:90
@@ -153,7 +154,7 @@ msgstr ""
 #: ../SparkleShare/Program.cs:92
 msgid "SparkleShare automatically syncs Git repositories in "
 msgstr ""
-"Program SparkleShare automatycznie synchronizuje reozytoria Git znajdujące "
+"Program SparkleShare automatycznie synchronizuje repozytoria Git znajdujące "
 "się"
 
 #: ../SparkleShare/Program.cs:93
@@ -195,35 +196,35 @@ msgstr "Korzystasz z najnowszej wersji."
 msgid "Checking for updates..."
 msgstr "Wyszukiwanie aktualizacji"
 
-#: ../SparkleShare/SparkleControllerBase.cs:493
+#: ../SparkleShare/SparkleControllerBase.cs:494
 msgid "dddd, MMMM d, yyyy"
-msgstr ""
+msgstr "dddd, d MMMM yyyy"
 
-#: ../SparkleShare/SparkleControllerBase.cs:499
+#: ../SparkleShare/SparkleControllerBase.cs:500
 msgid "dddd, MMMM d"
-msgstr ""
+msgstr "dddd, d MMMM"
 
-#: ../SparkleShare/SparkleControllerBase.cs:707
+#: ../SparkleShare/SparkleControllerBase.cs:708
 #, csharp-format
 msgid "added ‘{0}’"
 msgstr "dodano \"{0}\""
 
-#: ../SparkleShare/SparkleControllerBase.cs:712
+#: ../SparkleShare/SparkleControllerBase.cs:713
 #, csharp-format
 msgid "moved ‘{0}’"
 msgstr "przesunięto \"{0}\""
 
-#: ../SparkleShare/SparkleControllerBase.cs:717
+#: ../SparkleShare/SparkleControllerBase.cs:718
 #, csharp-format
 msgid "edited ‘{0}’"
 msgstr "edytowano \"{0}\""
 
-#: ../SparkleShare/SparkleControllerBase.cs:722
+#: ../SparkleShare/SparkleControllerBase.cs:723
 #, csharp-format
 msgid "deleted ‘{0}’"
 msgstr "usunięto \"{0}\""
 
-#: ../SparkleShare/SparkleControllerBase.cs:731
+#: ../SparkleShare/SparkleControllerBase.cs:732
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
@@ -231,7 +232,7 @@ msgstr[0] "oraz {0} więcej"
 msgstr[1] "oraz {0} więcej"
 msgstr[2] "oraz {0} więcej"
 
-#: ../SparkleShare/SparkleControllerBase.cs:735
+#: ../SparkleShare/SparkleControllerBase.cs:736
 msgid "did something magical"
 msgstr "stało się coś magicznego"
 
@@ -289,7 +290,7 @@ msgstr "Dodaj"
 #: ../SparkleShare/SparkleSetup.cs:335
 #, csharp-format
 msgid "Adding project ‘{0}’…"
-msgstr "Dodawanie projektu „{0}…"
+msgstr "Dodawanie projektu \"{0}\"…"
 
 #: ../SparkleShare/SparkleSetup.cs:336
 msgid "This may take a while."
@@ -323,7 +324,7 @@ msgstr "Projekt został dodany pomyślnie."
 
 #: ../SparkleShare/SparkleSetup.cs:448
 msgid "Access the files from your SparkleShare folder."
-msgstr ""
+msgstr "Dostęp do plików możliwy jest z katalogu SparkleShare."
 
 #. A button that opens the synced folder
 #: ../SparkleShare/SparkleSetup.cs:451
@@ -339,7 +340,7 @@ msgid ""
 "SparkleShare creates a special folder in your personal folder that will keep"
 " track of your projects."
 msgstr ""
-"Program SparkleShare utwrzy specjalny katalog w katalogu domowym, który "
+"Program SparkleShare utworzy specjalny katalog w katalogu domowym, który "
 "będzie zajmował się projektami."
 
 #: ../SparkleShare/SparkleSetup.cs:481
@@ -372,7 +373,7 @@ msgid ""
 "It shows the syncing process status, and contains links to your projects and"
 " the event log."
 msgstr ""
-"Wyświetla stan synchronizacji, jak i zawiera odnośniki do projektów i "
+"Wyświetla stan synchronizacji, jak i zawiera odnośniki do projektów oraz "
 "dziennika zdarzeń."
 
 #: ../SparkleShare/SparkleSetup.cs:538
@@ -392,6 +393,8 @@ msgid ""
 "…or select <b>‘Add Hosted Project…’</b> from the status icon menu to add one"
 " by hand."
 msgstr ""
+"…lub można wybrać opcję <b>\"Dodaj utrzymywany projekt…\"</b> z menu "
+"powiadamiania, aby dodać projekt ręcznie."
 
 #. Opens the wizard to add a new remote folder
 #: ../SparkleShare/SparkleSetup.cs:551
