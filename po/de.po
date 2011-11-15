@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-12 18:42+0100\n"
-"PO-Revision-Date: 2011-11-14 07:55+0000\n"
+"PO-Revision-Date: 2011-11-15 07:26+0000\n"
 "Last-Translator: iwsnipy <S.Lewandowski@abiwillich.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: ../data/plugins/github.xml.in.h:2
 msgid "Free public Git repositories with collaborator management"
-msgstr ""
+msgstr "Freie öffentliche Git Repositories mit Mitarbeiterverwaltung"
 
 #: ../data/plugins/github.xml.in.h:3
 msgid "Github"
@@ -56,7 +56,7 @@ msgstr "Gitorious"
 
 #: ../data/plugins/gitorious.xml.in.h:3
 msgid "Open source infrastructure for hosting open source projects"
-msgstr ""
+msgstr "Quelloffene Infrastruktur zum hosten von quelloffenen Projekten"
 
 #: ../data/plugins/gnome.xml.in.h:1
 msgid "/project"
@@ -205,11 +205,11 @@ msgstr "Suche Aktualisierungen..."
 
 #: ../SparkleShare/SparkleControllerBase.cs:494
 msgid "dddd, MMMM d, yyyy"
-msgstr ""
+msgstr "dd mm, yyyy"
 
 #: ../SparkleShare/SparkleControllerBase.cs:500
 msgid "dddd, MMMM d"
-msgstr ""
+msgstr "dd mm"
 
 #: ../SparkleShare/SparkleControllerBase.cs:708
 #, csharp-format
@@ -235,8 +235,8 @@ msgstr "Gelöscht '{0}'"
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "und {0} mehr"
+msgstr[1] "und {0} mehr"
 
 #: ../SparkleShare/SparkleControllerBase.cs:736
 msgid "did something magical"
@@ -273,7 +273,7 @@ msgstr "Weiter"
 
 #: ../SparkleShare/SparkleSetup.cs:129
 msgid "Where's your project hosted?"
-msgstr ""
+msgstr "Wo ist dein Projekt gehostet?"
 
 #: ../SparkleShare/SparkleSetup.cs:275
 msgid "Address"
@@ -399,12 +399,14 @@ msgid ""
 "…or select <b>‘Add Hosted Project…’</b> from the status icon menu to add one"
 " by hand."
 msgstr ""
+"... oder wähle <b>'Füge gehostetes Projekt hinzu...'</b> im Statusmenü um "
+"einen via Hand hinzu zu fügen."
 
 #. Opens the wizard to add a new remote folder
 #: ../SparkleShare/SparkleSetup.cs:551
 #: ../SparkleShare/SparkleStatusIcon.cs:238
 msgid "Add Hosted Project…"
-msgstr ""
+msgstr "Füge ein gehostetes Projekt hinzu..."
 
 #: ../SparkleShare/SparkleSetupWindow.cs:44
 msgid "SparkleShare Setup"
