@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-30 15:50+0100\n"
-"PO-Revision-Date: 2011-11-02 12:13+0000\n"
+"POT-Creation-Date: 2011-11-12 18:42+0100\n"
+"PO-Revision-Date: 2011-11-14 18:09+0000\n"
 "Last-Translator: elsupergomez <elsupergomez@gmail.com>\n"
 "Language-Team: Spanish (Castilian) (http://www.transifex.net/projects/p/sparkleshare/team/es/)\n"
 "MIME-Version: 1.0\n"
@@ -76,47 +76,52 @@ msgstr "Todo bajo mi control"
 msgid "On my own server"
 msgstr "En mi propio servidor"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:70
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:88
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:84
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:102
 #: ../SparkleShare/SparkleSetup.cs:75 ../SparkleShare/SparkleStatusIcon.cs:75
 #: ../SparkleShare/SparkleStatusIcon.cs:89
 msgid "Welcome to SparkleShare!"
 msgstr "¡Bienvenido a SparkleShare!"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:72
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:90
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:86
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:104
 #: ../SparkleShare/SparkleStatusIcon.cs:77
 #: ../SparkleShare/SparkleStatusIcon.cs:91
 msgid "Up to date"
 msgstr "Actualizado"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:99
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:113
 #: ../SparkleShare/SparkleStatusIcon.cs:106
 msgid "Syncing…"
 msgstr "Sincronizando..."
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:109
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:123
 #: ../SparkleShare/SparkleStatusIcon.cs:116
 msgid "Not everything is synced"
 msgstr "Pendiente de sincronizar"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:140
 msgid "Copy Web Link"
 msgstr "Copiar Enlace"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:141
 msgid "Copy the web address of this file to the clipboard"
 msgstr "Copiar la dirección web de este archivo al portapapeles"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:173
 msgid "Get Earlier Version"
 msgstr "Obtener versión anterior"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:174
 msgid "Make a copy of an earlier version in this folder"
 msgstr "Hacer una copia de una versión anterior en esta carpeta"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:161
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:187
 msgid "Select to get a copy of this version"
 msgstr "Seleccionar para obtener una copia de esta versión"
 
@@ -191,42 +196,42 @@ msgstr "Estas ejecutando la última versión"
 msgid "Checking for updates..."
 msgstr "Comprobando actualizaciones..."
 
-#: ../SparkleShare/SparkleControllerBase.cs:493
+#: ../SparkleShare/SparkleControllerBase.cs:494
 msgid "dddd, MMMM d, yyyy"
-msgstr ""
+msgstr "dddd, MMMM d, yyyy"
 
-#: ../SparkleShare/SparkleControllerBase.cs:499
+#: ../SparkleShare/SparkleControllerBase.cs:500
 msgid "dddd, MMMM d"
-msgstr ""
+msgstr "dddd, MMMM d"
 
-#: ../SparkleShare/SparkleControllerBase.cs:707
+#: ../SparkleShare/SparkleControllerBase.cs:708
 #, csharp-format
 msgid "added ‘{0}’"
 msgstr "añadido '{0}'"
 
-#: ../SparkleShare/SparkleControllerBase.cs:712
+#: ../SparkleShare/SparkleControllerBase.cs:713
 #, csharp-format
 msgid "moved ‘{0}’"
 msgstr "movido '{0}'"
 
-#: ../SparkleShare/SparkleControllerBase.cs:717
+#: ../SparkleShare/SparkleControllerBase.cs:718
 #, csharp-format
 msgid "edited ‘{0}’"
 msgstr "editado '{0}'"
 
-#: ../SparkleShare/SparkleControllerBase.cs:722
+#: ../SparkleShare/SparkleControllerBase.cs:723
 #, csharp-format
 msgid "deleted ‘{0}’"
 msgstr "eliminado '{0}'"
 
-#: ../SparkleShare/SparkleControllerBase.cs:731
+#: ../SparkleShare/SparkleControllerBase.cs:732
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
 msgstr[0] "y {0} más"
 msgstr[1] "y {0} más"
 
-#: ../SparkleShare/SparkleControllerBase.cs:735
+#: ../SparkleShare/SparkleControllerBase.cs:736
 msgid "did something magical"
 msgstr "hizo algo mágico"
 
