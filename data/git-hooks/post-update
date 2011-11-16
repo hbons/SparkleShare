@@ -1,29 +1,40 @@
 #!/bin/sh
 
-# for use with gitolite
 #
-# http://sitaramc.github.com/gitolite/hooks.html
-# copy this file to
-# .gitolite/hooks/common/post-update
-# run gl-setup again
-
-# for use with standard ssh/http(s)/git repos
+#  This Git hook sends update message to a notification server, so
+#  that manual git pushes to a repository also will be noticed by 
+#  SparkleShare clients.
 #
-# simply move this file to
-# .git/hooks/post-update in the remote repository
+#  For information on running your own notification service:
+#  https://github.com/hbons/fanout.node.js
+#
+#
+#  For use with Gitolite:
+#
+#  Copy this file to .gitolite/hooks/common/post-update.
+#  Run "gl-setup" again.
+#
+#
+#  For use with standard Git repositories:
+#
+#  Copy this file to .git/hooks/post-update in 
+#  the remote repository
+#
+#
+#  Make sure to "chmod -x" this hook after the file has been copied
+#
 
-# make sure to chmod -x in all cases after the file has been copied
+#  Change these if you run your own service somewhere
+SERVER = "notifications.sparkleshare.org"
+PORT   = "1986"
 
-#To supress all output
+#  Don't edit below this line
 exec > /dev/null 2>&1
 
-# for information on running your own server
-# https://github.com/hbons/fanout.node.js
-SERVER="204.62.14.135"
-PORT="1986"
-CHANNEL=$(git rev-list --reverse HEAD | head -n 1)
-MESSAGE=$(git rev-list HEAD | head -n 1)
-DATA="announce ${CHANNEL} ${MESSAGE}"
+CHANNEL = $(git rev-list --reverse HEAD | head -n 1)
+MESSAGE = $(git rev-list HEAD | head -n 1)
+
+DATA = "announce ${CHANNEL} ${MESSAGE}"
 echo "${DATA}\n" | socat - TCP-CONNECT:${SERVER}:${PORT} &
 
 exit 0
