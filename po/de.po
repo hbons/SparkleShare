@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-12 18:42+0100\n"
-"PO-Revision-Date: 2011-11-15 07:26+0000\n"
+"PO-Revision-Date: 2011-11-16 09:20+0000\n"
 "Last-Translator: iwsnipy <S.Lewandowski@abiwillich.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -36,7 +36,7 @@ msgstr "Bitbucket"
 
 #: ../data/plugins/bitbucket.xml.in.h:3
 msgid "Free code hosting for Git and Mercurial"
-msgstr ""
+msgstr "Freies Code-Hosting für Git und Mercurial"
 
 #: ../data/plugins/github.xml.in.h:2
 msgid "Free public Git repositories with collaborator management"
@@ -240,7 +240,7 @@ msgstr[1] "und {0} mehr"
 
 #: ../SparkleShare/SparkleControllerBase.cs:736
 msgid "did something magical"
-msgstr ""
+msgstr "hat etwas magisches"
 
 #: ../SparkleShare/SparkleEventLog.cs:58
 msgid "Recent Events"
