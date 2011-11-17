@@ -193,7 +193,7 @@ namespace SparkleShare {
         public override void DecidePolicyForNavigation (WebView web_view, NSDictionary action_info,
             NSUrlRequest request, WebFrame frame, NSObject decision_token)
         {
-            SparkleEventLogController.LinkClicked (request.Url.ToString ());
+            Controller.LinkClicked (request.Url.ToString ());
         }
     }
 }
