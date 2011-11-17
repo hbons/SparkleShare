@@ -189,6 +189,13 @@ namespace SparkleShare {
 		}
 
 
+        public override void OpenFile (string url)
+        {
+            url = url.Replace ("%20", " ");
+            NSWorkspace.SharedWorkspace.OpenFile (url);
+        }
+
+
         new public void Quit ()
         {
             this.watcher.Dispose ();
