@@ -73,7 +73,7 @@ namespace SparkleShare {
 
             this.web_view.NavigationRequested += delegate (object o, WebKit.NavigationRequestedArgs args) {
                 if (args.Request.Uri == this.link_status)
-                    Controller.LinkClicked (args.Request.Uri);
+                    SparkleEventLogController.LinkClicked (args.Request.Uri);
 
                 // Don't follow HREFs (as this would cause a page refresh)
                 if (!args.Request.Uri.Equals ("file:"))
