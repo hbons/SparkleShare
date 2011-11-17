@@ -531,6 +531,9 @@ namespace SparkleShare {
         // Opens the SparkleShare folder or an (optional) subfolder
         public abstract void OpenSparkleShareFolder (string subfolder);
 
+        // Opens a file with the appropriate application
+        public abstract void OpenFile (string url);
+
 
         // Fires events for the current syncing state
         public void UpdateState ()
