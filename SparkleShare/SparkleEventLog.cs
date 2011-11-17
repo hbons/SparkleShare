@@ -65,44 +65,22 @@ namespace SparkleShare {
             this.content_wrapper = new EventBox ();
             this.scrolled_window = new ScrolledWindow ();
 
-                this.web_view = new WebView () {
-                    Editable = false
-                };
+            this.web_view = new WebView () {
+                Editable = false
+            };
 
-                    this.web_view.HoveringOverLink += delegate (object o, WebKit.HoveringOverLinkArgs args) {
-                        this.link_status = args.Link;
-                    };
+            this.web_view.HoveringOverLink += delegate (object o, WebKit.HoveringOverLinkArgs args) {
+                this.link_status = args.Link;
+            };
 
-                    this.web_view.NavigationRequested += delegate (object o, WebKit.NavigationRequestedArgs args) {
-                        if (args.Request.Uri == this.link_status) {
-                    // TODO: controller
-                            Process process = new Process ();
-                            process.StartInfo.FileName = "xdg-open";
-                            process.StartInfo.Arguments = args.Request.Uri.Replace (" ", "\\ "); // Escape space-characters
-                            process.Start ();
+            this.web_view.NavigationRequested += delegate (object o, WebKit.NavigationRequestedArgs args) {
+                if (args.Request.Uri == this.link_status)
+                    Controller.LinkClicked (args.Request.Uri);
 
-                        } else {
-                    //TODO: controller
-                            Regex regex = new Regex (@"(.+)~(.+)~(.+)");
-                            Match match = regex.Match (args.Request.Uri);
-
-                            if (match.Success) {
-                                string folder_name = match.Groups [1].Value;
-                                string revision    = match.Groups [2].Value;
-                                string note        = match.Groups [3].Value;
-
-                                Thread thread = new Thread (new ThreadStart (delegate {
-                                    Program.Controller.AddNoteToFolder (folder_name, revision, note);
-                                }));
-
-                                thread.Start ();
-                            }
-                        }
-
-                        // Don't follow HREFs (as this would cause a page refresh)
-                        if (!args.Request.Uri.Equals ("file:"))
-                            args.RetVal = 1;
-                    };
+                // Don't follow HREFs (as this would cause a page refresh)
+                if (!args.Request.Uri.Equals ("file:"))
+                    args.RetVal = 1;
+            };
 
             this.scrolled_window.Add (this.web_view);
             this.content_wrapper.Add (this.spinner);
