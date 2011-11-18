@@ -72,7 +72,7 @@ namespace SparkleLib {
         public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set);
         public event NewChangeSetEventHandler NewChangeSet;
 
-        public delegate void NewNoteEventHandler (string user_name, string user_email);
+        public delegate void NewNoteEventHandler (SparkleUser user);
         public event NewNoteEventHandler NewNote;
 
         public delegate void ConflictResolvedEventHandler ();
@@ -482,7 +482,7 @@ namespace SparkleLib {
                         foreach (string added in change_set.Added) {
                             if (added.Contains (".notes")) {
                                 if (NewNote != null)
-                                    NewNote (change_set.User.Name, change_set.User.Email);
+                                    NewNote (change_set.User);
 
                                 note_added = true;
                                 break;

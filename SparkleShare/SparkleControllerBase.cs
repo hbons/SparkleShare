@@ -75,8 +75,10 @@ namespace SparkleShare {
         public delegate void ConflictNotificationRaisedEventHandler ();
 
         public event NotificationRaisedEventHandler NotificationRaised;
-        public delegate void NotificationRaisedEventHandler (string user_name, string user_email,
-                                                             string message, string repository_path);
+        public delegate void NotificationRaisedEventHandler (SparkleChangeSet change_set);
+
+        public event NoteNotificationRaisedEventHandler NoteNotificationRaised;
+        public delegate void NoteNotificationRaisedEventHandler (SparkleUser user, string folder_name);
 
         public abstract string PluginsPath { get; }
 
@@ -581,16 +583,15 @@ namespace SparkleShare {
             SparkleRepoBase repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set) {
-                string message = FormatMessage (change_set);
 
                 if (NotificationRaised != null)
-                    NotificationRaised (change_set.User.Name, change_set.User.Email, message, repo.LocalPath);
+                    NotificationRaised (change_set);
             };
 
-            repo.NewNote += delegate (string user_name, string user_email) {
-                if (NotificationRaised != null)
-                    NotificationRaised (user_name, user_email,
-                        "added a note to " + Path.GetFileName (repo.LocalPath), repo.LocalPath);
+            repo.NewNote += delegate (SparkleUser user) {
+                if (NoteNotificationRaised != null)
+                    NoteNotificationRaised (user, repo.Name);
+
             };
 
             repo.ConflictResolved += delegate {
@@ -700,48 +701,6 @@ namespace SparkleShare {
 
             return FormatFolderSize (folder_size);
         }
-
-
-        private string FormatMessage (SparkleChangeSet change_set)
-        {
-            string file_name = "";
-            string message   = "";
-
-            if (change_set.Added.Count > 0) {
-                file_name = change_set.Added [0];
-                message = String.Format (_("added ‘{0}’"), file_name);
-            }
-
-            if (change_set.MovedFrom.Count > 0) {
-                file_name = change_set.MovedFrom [0];
-                message = String.Format (_("moved ‘{0}’"), file_name);
-            }
-
-            if (change_set.Edited.Count > 0) {
-                file_name = change_set.Edited [0];
-                message = String.Format (_("edited ‘{0}’"), file_name);
-            }
-
-            if (change_set.Deleted.Count > 0) {
-                file_name = change_set.Deleted [0];
-                message = String.Format (_("deleted ‘{0}’"), file_name);
-            }
-
-            int changes_count = (change_set.Added.Count +
-                                 change_set.Edited.Count +
-                                 change_set.Deleted.Count +
-                                 change_set.MovedFrom.Count) - 1;
-
-            if (changes_count > 0) {
-                string msg = Catalog.GetPluralString ("and {0} more", "and {0} more", changes_count);
-                message += " " + String.Format (msg, changes_count);
-
-            } else if (changes_count < 0) {
-                message += _("did something magical");
-            }
-
-            return message;
-        } // TODO: move to bubbles controller
 
 
         // Recursively gets a folder's size in bytes
