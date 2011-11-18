@@ -41,6 +41,12 @@ namespace SparkleShare {
         public event UpdateProgressBarEventHandler UpdateProgressBarEvent;
         public delegate void UpdateProgressBarEventHandler (double percentage);
 
+        public event UpdateSetupContinueButtonEventHandler UpdateSetupContinueButtonEvent;
+        public delegate void UpdateSetupContinueButtonEventHandler (bool button_enabled);
+
+        public event UpdateAddProjectButtonEventHandler UpdateAddProjectButtonEvent;
+        public delegate void UpdateAddProjectButtonEventHandler (bool button_enabled);
+
         public event ChangeAddressFieldEventHandler ChangeAddressFieldEvent;
         public delegate void ChangeAddressFieldEventHandler (string text,
             string example_text, FieldState state);
@@ -153,6 +159,19 @@ namespace SparkleShare {
         }
 
 
+        public void CheckSetupPage (string full_name, string email)
+        {
+            full_name = full_name.Trim ();
+            email     = email.Trim ();
+
+            bool fields_valid = (!string.IsNullOrWhiteSpace (full_name) &&
+                Program.Controller.IsValidEmail (email));
+
+            if (UpdateSetupContinueButtonEvent != null)
+                UpdateSetupContinueButtonEvent (fields_valid);
+        }
+
+
         public void SetupPageCompleted (string full_name, string email)
         {
             Program.Controller.UserName  = full_name;
@@ -190,6 +209,22 @@ namespace SparkleShare {
                 ChangePageEvent (PageType.Add);
 
             SelectedPluginChanged (SelectedPluginIndex);
+        }
+
+
+        public void CheckAddPage (string address, string remote_path, int selected_plugin)
+        {
+            if (SelectedPluginIndex != selected_plugin)
+                SelectedPluginChanged (selected_plugin);
+
+            address     = address.Trim ();
+            remote_path = remote_path.Trim ();
+
+            bool fields_valid = (!string.IsNullOrWhiteSpace (address) &&
+                !string.IsNullOrWhiteSpace (remote_path));
+
+            if (UpdateAddProjectButtonEvent != null)
+                UpdateAddProjectButtonEvent (fields_valid);
         }
 
 
