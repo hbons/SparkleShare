@@ -33,6 +33,11 @@ namespace SparkleShare {
         Tutorial
     }
 
+    public enum FieldState {
+        Enabled,
+        Disabled
+    }
+
 
     public class SparkleSetupController {
 
@@ -328,11 +333,5 @@ namespace SparkleShare {
 
             return regex.IsMatch (email);
         }
-    }
-
-
-    public enum FieldState {
-        Enabled,
-        Disabled
     }
 }
