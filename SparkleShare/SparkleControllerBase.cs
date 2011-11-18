@@ -31,7 +31,7 @@ using SparkleLib;
 
 namespace SparkleShare {
 
-    public partial abstract class SparkleControllerBase {
+    public abstract partial class SparkleControllerBase {
 
         public List <SparkleRepoBase> Repositories;
         public string FolderSize;

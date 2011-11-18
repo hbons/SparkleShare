@@ -32,7 +32,7 @@ using SparkleLib;
 
 namespace SparkleShare {
 
-    public partial abstract class SparkleControllerBase {
+    public abstract partial class SparkleControllerBase {
 
         // Short alias for the translations
         public static string _ (string s)
