@@ -38,13 +38,19 @@ namespace SparkleShare {
             return Catalog.GetString (s);
         }
 
-        public void Init ()
+        public static void Init ()
         {
             // Initialize the application
             Application.Init ();
 
             // Use translations
             Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
+        }
+
+        // Runs the application
+        public void Run ()
+        {
+            Application.Run ();
         }
     }
 }

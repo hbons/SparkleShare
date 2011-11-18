@@ -27,7 +27,7 @@ using SparkleLib;
 
 namespace SparkleShare {
 
-    public class SparkleUI {
+    public partial class SparkleUI {
         
         public static SparkleStatusIcon StatusIcon;
         public static SparkleEventLog EventLog;
@@ -55,10 +55,5 @@ namespace SparkleShare {
             };
         }
 
-        // Runs the application
-        public void Run ()
-        {
-            Application.Run ();
-        }
     }
 }

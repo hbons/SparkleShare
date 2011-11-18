@@ -32,6 +32,7 @@ SOURCES =  \
 	SparkleStatusIcon.cs \
 	SparkleStatusIconController.cs \
 	SparkleUI.cs \
+	SparkleUI.posix.cs \
 	SparkleUIHelpers.cs
 	SparkleBubbles.cs \
 	SparkleBubblesController.cs \

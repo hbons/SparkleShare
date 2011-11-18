@@ -35,8 +35,14 @@ namespace SparkleShare {
             return s;
         }
 
-        public void Init ()
+        public static void Init ()
         {
+        }
+
+        // Runs the application
+        public void Run ()
+        {
+            System.Windows.Forms.Application.Run ();
         }
     }
 }
