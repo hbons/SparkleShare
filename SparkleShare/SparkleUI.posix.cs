@@ -23,42 +23,29 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
+using Gtk;
+using Mono.Unix;
+using Mono.Unix.Native;
 using SparkleLib;
 
 namespace SparkleShare {
 
-    public class SparkleUI {
-        
-        public static SparkleStatusIcon StatusIcon;
-        public static SparkleEventLog EventLog;
-        public static SparkleBubbles Bubbles;
-        public static SparkleSetup Setup;
-        public static SparkleAbout About;
-        public static string AssetsPath =
-            new string [] {Defines.PREFIX, "share", "sparkleshare"}.Combine ();
+    public partial class SparkleUI {
 
-
-        public SparkleUI ()
+        // Short alias for the translations
+        public static string _(string s)
         {
-            Init ();
-
-            StatusIcon = new SparkleStatusIcon ();
-            Bubbles    = new SparkleBubbles ();
-            
-            if (Program.Controller.FirstRun) {
-                Setup = new SparkleSetup ();
-                Setup.Controller.ShowSetupPage ();
-            }
-            
-            Program.Controller.OnQuitWhileSyncing += delegate {
-                // TODO: Pop up a warning when quitting whilst syncing
-            };
+            return Catalog.GetString (s);
         }
 
-        // Runs the application
-        public void Run ()
+        public void Init ()
         {
-            Application.Run ();
+            // Initialize the application
+            Application.Init ();
+
+            // Use translations
+            Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
         }
     }
 }
+

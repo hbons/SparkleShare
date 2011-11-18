@@ -68,6 +68,7 @@
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleStatusIconController.cs" />
     <Compile Include="SparkleUI.cs" />
+    <Compile Include="SparkleUI.posix.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
     <Compile Include="SparkleEventLogController.cs" />
     <Compile Include="SparkleEventLog.cs" />
