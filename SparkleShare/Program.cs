@@ -25,7 +25,6 @@ using System.Text;
 using Mono.Unix;
 //using Mono.Unix.Native;
 using SparkleLib;
-using SparkleLib.Options;
 
 namespace SparkleShare {
 
