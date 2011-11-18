@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 
 using SparkleLib;
 
@@ -165,7 +166,7 @@ namespace SparkleShare {
             email     = email.Trim ();
 
             bool fields_valid = (!string.IsNullOrWhiteSpace (full_name) &&
-                Program.Controller.IsValidEmail (email));
+                IsValidEmail (email));
 
             if (UpdateSetupContinueButtonEvent != null)
                 UpdateSetupContinueButtonEvent (fields_valid);
@@ -317,6 +318,15 @@ namespace SparkleShare {
                 if (ChangePathFieldEvent != null)
                     ChangePathFieldEvent ("", "", FieldState.Enabled);
             }
+        }
+
+
+        private bool IsValidEmail (string email)
+        {
+            Regex regex = new Regex (@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$",
+                RegexOptions.IgnoreCase);
+
+            return regex.IsMatch (email);
         }
     }
 
