@@ -19,7 +19,6 @@ SOURCES =  \
 	SparkleListenerBase.cs \
 	SparkleListenerIrc.cs \
 	SparkleListenerTcp.cs \
-	SparkleOptions.cs \
 	SparkleRepoBase.cs \
 	SparkleWatcher.cs
 
