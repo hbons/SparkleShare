@@ -75,6 +75,7 @@
     <Compile Include="SparkleAbout.cs" />
     <Compile Include="SparkleExtensions.cs" />
     <Compile Include="SparkleControllerBase.cs" />
+    <Compile Include="SparkleControllerBase.posix.cs" />
     <Compile Include="SparklePlugin.cs" />
   </ItemGroup>
 </Project>
