@@ -575,42 +575,6 @@ namespace SparkleShare {
         }
 
 
-        // Enables or disables the 'Next' button depending on the
-        // entries filled in by the user
-        private void CheckSetupPage ()
-        {
-            if (NameEntry.Text.Length > 0 &&
-                Program.Controller.IsValidEmail (EmailEntry.Text)) {
-
-                NextButton.Sensitive = true;
-            } else {
-                NextButton.Sensitive = false;
-            }
-        }
-
-
-        // Enables or disables the 'Next' button depending on the
-        // entries filled in by the user
-        public void CheckAddPage ()
-        {
-            SyncButton.Sensitive = false;
-
-            if (PathEntry.ExampleTextActive ||
-                (AddressEntry.Sensitive && AddressEntry.ExampleTextActive))
-                return;
-
-            bool IsFolder = !PathEntry.Text.Trim ().Equals ("");
-            bool IsServer = !AddressEntry.Text.Trim ().Equals ("");
-
-            if (AddressEntry.Sensitive == true) {
-                if (IsServer && IsFolder)
-                    SyncButton.Sensitive = true;
-            } else if (IsFolder) {
-                    SyncButton.Sensitive = true;
-            }
-        }
-
-
         private void RenderServiceColumn (TreeViewColumn column, CellRenderer cell,
             TreeModel model, TreeIter iter)
         {
