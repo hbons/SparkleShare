@@ -81,7 +81,7 @@ namespace SparkleShare {
 
                             panel_server_selection.Controls.Add (treeView);
                             treeView.SelectedNode = treeView.Nodes [0];
-
+                            treeView.Select ();
                             Show ();
                             break;
                         case PageType.Error:
