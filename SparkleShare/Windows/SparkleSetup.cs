@@ -61,7 +61,7 @@ namespace SparkleShare {
 
                             // Set up the treeview
                             ImageList imageList = new ImageList ();
-                            imageList.ImageSize = new Size (32, 32);
+                            imageList.ImageSize = new Size (24, 24);
                             treeView = new TreeView ();
                             treeView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
                             treeView.FullRowSelect = true;
@@ -69,6 +69,7 @@ namespace SparkleShare {
                             treeView.Indent = 35;
                             treeView.AfterSelect += new TreeViewEventHandler (CheckAddPage);
                             treeView.HideSelection = false;
+                            treeView.ItemHeight = 40;
 
                             TreeNode [] nodes = new TreeNode [Controller.Plugins.Count];
 
