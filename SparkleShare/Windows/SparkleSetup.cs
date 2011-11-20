@@ -53,21 +53,23 @@ namespace SparkleShare {
                     switch (type) {
                         case PageType.Add:
                             tabControl.SelectedIndex = 1;
-                            TreeNode treeNode1 = new TreeNode ("Node 1;additional info");
-                            TreeNode treeNode2 = new TreeNode ("Node 2;additional info");
-                            TreeNode treeNode3 = new TreeNode ("Node 3;additional info");
 
                             ImageList imageList = new ImageList ();
                             imageList.ImageSize = new Size (32, 32);
-                            imageList.Images.Add (Icons.sparkleshare);
-
                             TreeView treeView = new TreeView ();
                             treeView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
                             treeView.FullRowSelect = true;
                             treeView.ImageIndex = 0;
                             treeView.Indent = 35;
 
-                            treeView.Nodes.AddRange (new System.Windows.Forms.TreeNode [] {treeNode1,treeNode2,treeNode3});
+                            TreeNode [] nodes = new TreeNode[Controller.Plugins.Count];
+
+                            for (int i = 0; i < Controller.Plugins.Count; i++) {
+                                nodes [i].Text = Controller.Plugins [i].Name + ";" + Controller.Plugins;
+                                imageList.Images.Add (new Icon(Controller.Plugins [i].ImagePath));
+                            }
+                           
+                            treeView.Nodes.AddRange (nodes);
                             treeView.SelectedImageIndex = 0;
                             treeView.ImageList = imageList;
                             treeView.ShowLines = false;
@@ -203,7 +205,7 @@ namespace SparkleShare {
         {
             // Enables or disables the 'Next' button depending on the
             // entries filled in by the user
-            if (!String.IsNullOrEmpty(NameEntry.Text) &&
+            if (!String.IsNullOrEmpty (NameEntry.Text) &&
                 Program.Controller.IsValidEmail (EmailEntry.Text)) {
                 buttonNext.Enabled = true;
             } else {
