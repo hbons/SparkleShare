@@ -36,6 +36,8 @@ namespace SparkleShare {
             this.label10 = new System.Windows.Forms.Label ();
             this.buttonNext = new System.Windows.Forms.Button ();
             this.addPage = new System.Windows.Forms.TabPage ();
+            this.FolderEntry = new SparkleShare.controls.ExampleTextBox ();
+            this.ServerEntry = new SparkleShare.controls.ExampleTextBox ();
             this.label5 = new System.Windows.Forms.Label ();
             this.label14 = new System.Windows.Forms.Label ();
             this.panel_server_selection = new System.Windows.Forms.Panel ();
@@ -57,8 +59,6 @@ namespace SparkleShare {
             this.label8 = new System.Windows.Forms.Label ();
             this.buttonFinished = new System.Windows.Forms.Button ();
             this.buttonOpenFolder = new System.Windows.Forms.Button ();
-            this.server_address = new SparkleShare.controls.ExampleTextBox ();
-            this.server_remote_path = new SparkleShare.controls.ExampleTextBox ();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit ();
             this.tabControl.SuspendLayout ();
             this.setupPage.SuspendLayout ();
@@ -188,8 +188,8 @@ namespace SparkleShare {
             // 
             // addPage
             // 
-            this.addPage.Controls.Add (this.server_remote_path);
-            this.addPage.Controls.Add (this.server_address);
+            this.addPage.Controls.Add (this.FolderEntry);
+            this.addPage.Controls.Add (this.ServerEntry);
             this.addPage.Controls.Add (this.label5);
             this.addPage.Controls.Add (this.label14);
             this.addPage.Controls.Add (this.panel_server_selection);
@@ -203,6 +203,24 @@ namespace SparkleShare {
             this.addPage.TabIndex = 1;
             this.addPage.Text = "Add";
             this.addPage.UseVisualStyleBackColor = true;
+            // 
+            // FolderEntry
+            // 
+            this.FolderEntry.ExampleText = "";
+            this.FolderEntry.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
+            this.FolderEntry.Location = new System.Drawing.Point (201, 290);
+            this.FolderEntry.Name = "FolderEntry";
+            this.FolderEntry.Size = new System.Drawing.Size (168, 20);
+            this.FolderEntry.TabIndex = 17;
+            // 
+            // ServerEntry
+            // 
+            this.ServerEntry.ExampleText = _ ("Server address");
+            this.ServerEntry.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
+            this.ServerEntry.Location = new System.Drawing.Point (12, 290);
+            this.ServerEntry.Name = "ServerEntry";
+            this.ServerEntry.Size = new System.Drawing.Size (168, 20);
+            this.ServerEntry.TabIndex = 16;
             // 
             // label5
             // 
@@ -411,24 +429,6 @@ namespace SparkleShare {
             this.buttonOpenFolder.UseVisualStyleBackColor = true;
             this.buttonOpenFolder.Click += new System.EventHandler (this.buttonOpenFolder_Click);
             // 
-            // server_address
-            // 
-            this.server_address.ExampleText = "";
-            this.server_address.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
-            this.server_address.Location = new System.Drawing.Point (12, 290);
-            this.server_address.Name = "server_address";
-            this.server_address.Size = new System.Drawing.Size (168, 20);
-            this.server_address.TabIndex = 16;
-            // 
-            // server_remote_path
-            // 
-            this.server_remote_path.ExampleText = "";
-            this.server_remote_path.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
-            this.server_remote_path.Location = new System.Drawing.Point (201, 290);
-            this.server_remote_path.Name = "server_remote_path";
-            this.server_remote_path.Size = new System.Drawing.Size (168, 20);
-            this.server_remote_path.TabIndex = 17;
-            // 
             // SparkleSetup
             // 
             this.ClientSize = new System.Drawing.Size (664, 396);
@@ -491,8 +491,8 @@ namespace SparkleShare {
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label14;
-        private SparkleShare.controls.ExampleTextBox server_remote_path;
-        private SparkleShare.controls.ExampleTextBox server_address;
+        private SparkleShare.controls.ExampleTextBox FolderEntry;
+        private SparkleShare.controls.ExampleTextBox ServerEntry;
 
 
 
