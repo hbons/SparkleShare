@@ -135,8 +135,11 @@ namespace SparkleShare {
         }
 
         private void buttonSync_Click (object sender, EventArgs e) {
-            Controller.AddPageCompleted (Controller.Plugins [treeView.SelectedNode.Index].Address,
-                FolderEntry.Text);
+            if (treeView.SelectedNode.Index == 0)
+                Controller.AddPageCompleted (ServerEntry.Text, FolderEntry.Text);
+            else
+                Controller.AddPageCompleted (Controller.Plugins [treeView.SelectedNode.Index].Address,
+                    FolderEntry.Text);
         }
 
         private void CheckAddPage (object sender, EventArgs e) {
