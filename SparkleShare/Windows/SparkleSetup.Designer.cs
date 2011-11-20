@@ -230,7 +230,7 @@ namespace SparkleShare {
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size (113, 20);
             this.label5.TabIndex = 15;
-            this.label5.Text = "Remote path";
+            this.label5.Text = _ ("Remote path");
             // 
             // label14
             // 
@@ -240,7 +240,7 @@ namespace SparkleShare {
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size (75, 20);
             this.label14.TabIndex = 14;
-            this.label14.Text = "Address";
+            this.label14.Text = _ ("Address");
             // 
             // panel_server_selection
             // 
@@ -277,7 +277,7 @@ namespace SparkleShare {
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size (240, 20);
             this.label4.TabIndex = 0;
-            this.label4.Text = "Where is your remote folder?";
+            this.label4.Text = _ ("Where is your remote folder?");
             // 
             // syncingPage
             // 
