@@ -68,6 +68,7 @@ namespace SparkleShare {
                             treeView.ImageIndex = 0;
                             treeView.Indent = 35;
                             treeView.AfterSelect += new TreeViewEventHandler (CheckAddPage);
+                            treeView.HideSelection = false;
 
                             TreeNode [] nodes = new TreeNode [Controller.Plugins.Count];
 
@@ -134,20 +135,27 @@ namespace SparkleShare {
         }
 
         private void buttonSync_Click (object sender, EventArgs e) {
-            Controller.AddPageCompleted (ServerEntry.Text, FolderEntry.Text);
+            Controller.AddPageCompleted (Controller.Plugins [treeView.SelectedNode.Index].Address,
+                FolderEntry.Text);
         }
 
         private void CheckAddPage (object sender, EventArgs e) {
             buttonSync.Enabled = false;
 
             FolderEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].PathExample;
-            ServerEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].AddressExample;
+            ServerEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].Address;
 
             // Enables or disables the 'Next' button depending on the
             // entries filled in by the user
             buttonSync.Enabled = false;
-            if (!String.IsNullOrEmpty (FolderEntry.Text)) {
-                if (!String.IsNullOrEmpty (ServerEntry.Text))
+
+            if (treeView.SelectedNode.Index == 0) {
+                if (!String.IsNullOrEmpty (FolderEntry.Text)) {
+                    if (!String.IsNullOrEmpty (ServerEntry.Text))
+                        buttonSync.Enabled = true;
+                }
+            } else {
+                if (!String.IsNullOrEmpty (FolderEntry.Text))
                     buttonSync.Enabled = true;
             }
         }
