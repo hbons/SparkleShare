@@ -44,6 +44,12 @@ namespace SparkleShare {
         public SparkleSetup () {
             InitializeComponent ();
 
+            /* Support translations for the UI */
+            this.label5.Text = _ ("Remote path");
+            this.label14.Text = _ ("Address");
+            this.label4.Text = _ ("Where is your remote folder?");
+            this.ServerEntry.ExampleText = _ ("Server address");
+
             pictureBox.Image = Icons.side_splash;
             this.Icon = Icons.sparkleshare;
 
