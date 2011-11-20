@@ -33,6 +33,8 @@ namespace SparkleShare {
 
         public SparkleSetupController Controller = new SparkleSetupController ();
 
+        private TreeView treeView;
+
         // Short alias for the translations
         public static string _ (string s) {
             return s;
@@ -43,7 +45,6 @@ namespace SparkleShare {
             InitializeComponent ();
 
             pictureBox.Image = Icons.side_splash;
-            //this.ClientSize = new Size (this.ClientSize.Width, Icons.side_splash.Size.Height);
             this.Icon = Icons.sparkleshare;
 
             Controller.ChangePageEvent += delegate (PageType type) {
@@ -52,23 +53,20 @@ namespace SparkleShare {
                         case PageType.Add:
                             tabControl.SelectedIndex = 1;
 
-                            // Set exampletext for textboxes
-                            server_address.ExampleText = _ ("Server address");
-                            server_remote_path.ExampleText = "/path/to/project";
-
                             // Set up the treeview
                             ImageList imageList = new ImageList ();
                             imageList.ImageSize = new Size (32, 32);
-                            TreeView treeView = new TreeView ();
+                            treeView = new TreeView ();
                             treeView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
                             treeView.FullRowSelect = true;
                             treeView.ImageIndex = 0;
                             treeView.Indent = 35;
+                            treeView.AfterSelect += new TreeViewEventHandler (CheckAddPage);
 
                             TreeNode [] nodes = new TreeNode [Controller.Plugins.Count];
 
                             for (int i = 0; i < Controller.Plugins.Count; i++) {
-                                nodes [i] = new TreeNode (Controller.Plugins [i].Name + ";" + Controller.Plugins[i].Description);
+                                nodes [i] = new TreeNode (Controller.Plugins [i].Name + ";" + Controller.Plugins [i].Description);
                                 nodes [i].ImageIndex = i;
                                 nodes [i].SelectedImageIndex = i;
                                 imageList.Images.Add (Image.FromFile (Controller.Plugins [i].ImagePath));
@@ -78,12 +76,12 @@ namespace SparkleShare {
                             treeView.ImageList = imageList;
                             treeView.ShowLines = false;
                             treeView.ShowRootLines = false;
-                            treeView.Size = new System.Drawing.Size (this.panel_server_selection.Size.Width,
-                                this.panel_server_selection.Size.Height);
+                            treeView.Size = new System.Drawing.Size (panel_server_selection.Size.Width,
+                                panel_server_selection.Size.Height);
 
-                            this.panel_server_selection.Controls.Add (treeView);
+                            panel_server_selection.Controls.Add (treeView);
+                            treeView.SelectedNode = treeView.Nodes [0];
 
-                            //CheckAddPage (null, null);
                             Show ();
                             break;
                         case PageType.Error:
@@ -128,53 +126,25 @@ namespace SparkleShare {
         private void buttonCancel_Click (object sender, EventArgs e) {
             this.Hide ();
         }
-        /*
-        private void buttonSync_Click (object sender, EventArgs e)
-        {
-            string server = ServerEntry.Text;
-            string folder_name = FolderEntry.Text;
 
-            if (radio_button_gitorious.Checked)
-                server = "gitorious.org";
-
-            if (radio_button_github.Checked)
-                server = "github.com";
-
-            if (radio_button_gnome.Checked)
-                server = "gnome.org";
-
-            Controller.AddPageCompleted (server, folder_name);
+        private void buttonSync_Click (object sender, EventArgs e) {
+            Controller.AddPageCompleted (ServerEntry.Text, FolderEntry.Text);
         }
-        /*
-        private void CheckAddPage (object sender, EventArgs e)
-        {
+
+        private void CheckAddPage (object sender, EventArgs e) {
             buttonSync.Enabled = false;
 
-            if (radio_button_own_server.Checked)
-                FolderEntry.ExampleText = _ ("Folder");
-            else if (radio_button_github.Checked)
-                FolderEntry.ExampleText = _ ("Username/Folder");
-            else if (radio_button_gitorious.Checked)
-                FolderEntry.ExampleText = _ ("Project/Folder");
-            else if(radio_button_gnome.Checked)
-                FolderEntry.ExampleText = _ ("Project");
+            FolderEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].PathExample;
+            ServerEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].AddressExample;
 
             // Enables or disables the 'Next' button depending on the
             // entries filled in by the user
             buttonSync.Enabled = false;
             if (!String.IsNullOrEmpty (FolderEntry.Text)) {
-                if (!radio_button_own_server.Checked || !String.IsNullOrEmpty (ServerEntry.Text))
+                if (!String.IsNullOrEmpty (ServerEntry.Text))
                     buttonSync.Enabled = true;
             }
         }
-        */
-        /*
-        private void radio_button_own_server_CheckedChanged (object sender, EventArgs e)
-        {
-            ServerEntry.Enabled = radio_button_own_server.Checked;
-            CheckAddPage (sender,e);
-        }
-        */
 
         private void buttonFinish_Click (object sender, EventArgs e) {
             this.Hide ();
