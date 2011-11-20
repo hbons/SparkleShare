@@ -71,19 +71,26 @@ namespace SparkleShare {
                 if (args.Error != null)
                     return;
 
-                string new_version = args.Result.Trim ();
+                int running_version = int.Parse (
+                    "" + RunningVersion [0] + RunningVersion [2] + RunningVersion [4]
+                );
+
+                string result = args.Result.Trim ();
+                int new_version = int.Parse (
+                    "" + result [0] + result [2] + result [4]
+                );
 
                 // Add a little delay, making it seems we're
                 // actually doing hard work
                 Thread.Sleep (2 * 1000);
 
-                if (RunningVersion.Equals (new_version)) {
+                if (running_version >= new_version) {
                     if (VersionUpToDateEvent != null)
                         VersionUpToDateEvent ();
 
                 } else {
                     if (NewVersionEvent != null)
-                        NewVersionEvent (new_version);
+                        NewVersionEvent (result);
                 }
 
                 this.version_checker.Start ();

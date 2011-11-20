@@ -41,14 +41,16 @@ namespace SparkleShare {
         private NSButton SkipTutorialButton;
         private NSButton OpenFolderButton;
         private NSButton FinishButton;
-        private NSButton AddProjectButton;
         private NSImage SlideImage;
         private NSImageView SlideImageView;
-        private NSForm UserInfoForm;
         private NSProgressIndicator ProgressIndicator;
+        private NSTextField EmailLabel;
+        private NSTextField EmailTextField;
+        private NSTextField FullNameTextField;
+        private NSTextField FullNameLabel;
         private NSTextField AddressTextField;
-        private NSTextField PathTextField;
         private NSTextField AddressLabel;
+        private NSTextField PathTextField;
         private NSTextField PathLabel;
         private NSTextField PathHelpLabel;
         private NSTextField AddProjectTextField;
@@ -73,18 +75,36 @@ namespace SparkleShare {
                         Description  = "Before we can create a SparkleShare folder on this " +
                                        "computer, we need some information from you.";
 
-                        UserInfoForm = new NSForm (new RectangleF (250, Frame.Height - 280, 350, 64));
 
-                        UserInfoForm.AddEntry ("Full Name:");
-                        UserInfoForm.AddEntry ("Email Address:");
+                        FullNameLabel = new NSTextField () {
+                            Alignment       = NSTextAlignment.Right,
+                            BackgroundColor = NSColor.WindowBackground,
+                            Bordered        = false,
+                            Editable        = false,
+                            Frame           = new RectangleF (165, Frame.Height - 234, 160, 17),
+                            StringValue     = "Full Name:",
+                            Font            = SparkleUI.Font
+                        };
 
-                        UserInfoForm.CellSize                = new SizeF (280, 22);
-                        UserInfoForm.IntercellSpacing        = new SizeF (4, 4);
-                        UserInfoForm.Cells [0].LineBreakMode = NSLineBreakMode.TruncatingTail;
-                        UserInfoForm.Cells [1].LineBreakMode = NSLineBreakMode.TruncatingTail;
+                        FullNameTextField = new NSTextField () {
+                            Frame           = new RectangleF (330, Frame.Height - 238, 196, 22),
+                            StringValue     = Controller.GuessedUserName
+                        };
 
-                        UserInfoForm.Cells [0].StringValue   = Controller.GuessedUserName;
-                        UserInfoForm.Cells [1].StringValue   = Controller.GuessedUserEmail;
+                        EmailLabel = new NSTextField () {
+                            Alignment       = NSTextAlignment.Right,
+                            BackgroundColor = NSColor.WindowBackground,
+                            Bordered        = false,
+                            Editable        = false,
+                            Frame           = new RectangleF (165, Frame.Height - 264, 160, 17),
+                            StringValue     = "Email:",
+                            Font            = SparkleUI.Font
+                        };
+
+                        EmailTextField = new NSTextField () {
+                            Frame           = new RectangleF (330, Frame.Height - 268, 196, 22),
+                            StringValue     = Controller.GuessedUserEmail
+                        };
 
                         // TODO: Ugly hack, do properly with events
                         timer = new Timer () {
@@ -100,18 +120,18 @@ namespace SparkleShare {
                             timer.Stop ();
                             timer = null;
 
-                            string full_name = UserInfoForm.Cells [0].StringValue.Trim ();
-                            string email = UserInfoForm.Cells [1].StringValue.Trim ();
+                            string full_name = FullNameTextField.StringValue.Trim ();
+                            string email     = EmailTextField.StringValue.Trim ();
 
                             Controller.SetupPageCompleted (full_name, email);
                         };
 
                         timer.Elapsed += delegate {
                             InvokeOnMainThread (delegate {
-                                bool name_is_valid = !UserInfoForm.Cells [0].StringValue.Trim ().Equals ("");
+                                bool name_is_valid = !FullNameTextField.StringValue.Trim ().Equals ("");
 
                                 bool email_is_valid = Program.Controller.IsValidEmail (
-                                    UserInfoForm.Cells [1].StringValue.Trim ());
+                                    EmailTextField.StringValue.Trim ());
 
                                 ContinueButton.Enabled = (name_is_valid && email_is_valid);
                             });
@@ -119,7 +139,11 @@ namespace SparkleShare {
 
                         timer.Start ();
 
-                        ContentView.AddSubview (UserInfoForm);
+                        ContentView.AddSubview (FullNameLabel);
+                        ContentView.AddSubview (FullNameTextField);
+                        ContentView.AddSubview (EmailLabel);
+                        ContentView.AddSubview (EmailTextField);
+
                         Buttons.Add (ContinueButton);
 
                         break;
@@ -161,7 +185,8 @@ namespace SparkleShare {
                         PathTextField = new NSTextField () {
                             Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 336, 196, 22),
                             StringValue     = Controller.PreviousPath,
-                            Enabled         = (Controller.SelectedPlugin.Path == null)
+                            Enabled         = (Controller.SelectedPlugin.Path == null),
+                            Bezeled = true
                         };
 
 
@@ -563,16 +588,8 @@ namespace SparkleShare {
                                 Bordered        = false,
                                 Editable        = false,
                                 Font            = SparkleUI.Font,
-                                StringValue     = "…or select ‘Add Project…’ from the status icon menu " +
+                                StringValue     = "…or select ‘Add Hosted Project…’ from the status icon menu " +
                                 "to add one by hand."
-                            };
-
-                            AddProjectButton = new NSButton () {
-                                Title = "Add Project…"
-                            };
-
-                            AddProjectButton.Activated += delegate {
-                                Controller.TutorialPageCompleted ();
                             };
 
                             FinishButton = new NSButton () {
@@ -600,7 +617,6 @@ namespace SparkleShare {
                             ContentView.AddSubview (SlideImageView);
                             ContentView.AddSubview (AddProjectTextField);
                             Buttons.Add (FinishButton);
-                            Buttons.Add (AddProjectButton);
 
                             break;
                         }

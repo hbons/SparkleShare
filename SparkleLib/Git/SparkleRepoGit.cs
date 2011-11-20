@@ -37,25 +37,31 @@ namespace SparkleLib {
         }
 
 
+        private string identifier = null;
+
         public override string Identifier {
             get {
+                if (string.IsNullOrEmpty (this.identifier)) {
 
-                // Because git computes a hash based on content,
-                // author, and timestamp; it is unique enough to
-                // use the hash of the first commit as an identifier
-                // for our folder
-                SparkleGit git = new SparkleGit (LocalPath, "rev-list --reverse HEAD");
-                git.Start ();
+                    // Because git computes a hash based on content,
+                    // author, and timestamp; it is unique enough to
+                    // use the hash of the first commit as an identifier
+                    // for our folder
+                    SparkleGit git = new SparkleGit (LocalPath, "rev-list --reverse HEAD");
+                    git.Start ();
 
-                // Reading the standard output HAS to go before
-                // WaitForExit, or it will hang forever on output > 4096 bytes
-                string output = git.StandardOutput.ReadToEnd ();
-                git.WaitForExit ();
+                    // Reading the standard output HAS to go before
+                    // WaitForExit, or it will hang forever on output > 4096 bytes
+                    string output = git.StandardOutput.ReadToEnd ();
+                    git.WaitForExit ();
 
-                if (output.Length < 40)
-                    return null;
+                    if (output.Length < 40)
+                        return null;
 
-                return output.Substring (0, 40);
+                    this.identifier = output.Substring (0, 40);
+                }
+
+                return this.identifier;
             }
         }
 
@@ -87,6 +93,7 @@ namespace SparkleLib {
                 return file_paths.ToArray ();
             }
         }
+
 
         public override string CurrentRevision {
             get {
@@ -702,7 +709,7 @@ namespace SparkleLib {
                 FillEmptyDirectories (child_path);
             }
 
-            if (Directory.GetFiles (path).Length == 0)
+            if (Directory.GetFiles (path).Length == 0 && !path.Equals (LocalPath))
                 File.Create (Path.Combine (path, ".empty")).Close ();
         }
 

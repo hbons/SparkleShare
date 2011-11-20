@@ -21,6 +21,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Timers;
 using System.Xml;
 
@@ -41,12 +42,13 @@ namespace SparkleLib {
 
         private SparkleWatcher watcher;
         private TimeSpan poll_interval;
-        private Timer local_timer        = new Timer () { Interval = 0.25 * 1000 };
-        private Timer remote_timer       = new Timer () { Interval = 10 * 1000 };
+        private System.Timers.Timer local_timer  = new System.Timers.Timer () { Interval = 0.25 * 1000 };
+        private System.Timers.Timer remote_timer = new System.Timers.Timer () { Interval = 10 * 1000 };
         private DateTime last_poll       = DateTime.Now;
-        private List <double> sizebuffer = new List<double> ();
+        private List<double> sizebuffer  = new List<double> ();
         private bool has_changed         = false;
         private Object change_lock       = new Object ();
+        private Object watch_lock        = new Object ();
 
         protected SparkleListenerBase listener;
         protected SyncStatus status;
@@ -106,6 +108,8 @@ namespace SparkleLib {
             };
 
             this.remote_timer.Elapsed += delegate {
+                string identifier = Identifier;
+
                 bool time_to_poll = (DateTime.Compare (this.last_poll,
                     DateTime.Now.Subtract (this.poll_interval)) < 0);
 
@@ -130,6 +134,7 @@ namespace SparkleLib {
 
                 while (HasUnsyncedChanges)
                     SyncUpBase ();
+
                 EnableWatching ();
             }
 
@@ -236,18 +241,30 @@ namespace SparkleLib {
         {
             this.listener = SparkleListenerFactory.CreateListener (Name, Identifier);
 
+            if (this.listener.IsConnected) {
+                this.poll_interval = this.long_interval;
+
+                new Thread (new ThreadStart (delegate {
+                    if (!IsSyncing && CheckForRemoteChanges ())
+                        SyncDownBase ();
+                })).Start ();
+            }
+
             // Stop polling when the connection to the irc channel is succesful
             this.listener.Connected += delegate {
                 this.poll_interval = this.long_interval;
                 this.last_poll = DateTime.Now;
 
-                // Check for changes manually one more time
-                if (CheckForRemoteChanges ())
-                    SyncDownBase ();
+                if (!IsSyncing) {
 
-                // Push changes that were made since the last disconnect
-                if (HasUnsyncedChanges)
-                    SyncUpBase ();
+                    // Check for changes manually one more time
+                    if (CheckForRemoteChanges ())
+                        SyncDownBase ();
+
+                    // Push changes that were made since the last disconnect
+                    if (HasUnsyncedChanges)
+                        SyncUpBase ();
+                }
             };
 
             // Start polling when the connection to the irc channel is lost
@@ -260,23 +277,32 @@ namespace SparkleLib {
             this.listener.Announcement += delegate (SparkleAnnouncement announcement) {
                 string identifier = Identifier;
 
-                Console.WriteLine (announcement.Message + " ! " + CurrentRevision);
-
-                if (announcement.FolderIdentifier == identifier &&
+                if (announcement.FolderIdentifier.Equals (identifier) &&
                     !announcement.Message.Equals (CurrentRevision)) {
-                    if ((Status != SyncStatus.SyncUp)   &&
-                        (Status != SyncStatus.SyncDown) &&
-                        !this.is_buffering) {
 
-                        while (this.listener.HasQueueDownAnnouncement (identifier))
-                            SyncDownBase ();
-                    }
+                    while (this.IsSyncing)
+                        System.Threading.Thread.Sleep (100);
+
+                    SparkleHelpers.DebugInfo ("Listener", "Syncing due to announcement");
+                    SyncDownBase ();
+
+                } else {
+                    if (announcement.FolderIdentifier.Equals (identifier))
+                        SparkleHelpers.DebugInfo ("Listener", "Not syncing, message is for current revision");
                 }
             };
-            
+
             // Start listening
-            if (!this.listener.IsConnected && !this.listener.IsConnecting) {
+            if (!this.listener.IsConnected && !this.listener.IsConnecting)
                 this.listener.Connect ();
+        }
+
+
+        private bool IsSyncing {
+            get {
+                return (Status == SyncStatus.SyncUp   ||
+                        Status == SyncStatus.SyncDown ||
+                        this.is_buffering);
             }
         }
 
@@ -287,7 +313,7 @@ namespace SparkleLib {
                 if (this.has_changed) {
                     if (this.sizebuffer.Count >= 4)
                         this.sizebuffer.RemoveAt (0);
-                        
+
                     DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
                      this.sizebuffer.Add (CalculateFolderSize (dir_info));
 
@@ -299,7 +325,7 @@ namespace SparkleLib {
                         SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled.");
                         this.is_buffering = false;
                         this.has_changed  = false;
-                        
+
                         DisableWatching ();
                         while (AnyDifferences)
                             SyncUpBase ();
@@ -475,6 +501,8 @@ namespace SparkleLib {
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.SyncDown);
 
+            string pre_sync_revision = CurrentRevision;
+
             if (SyncDown ()) {
                 SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Done");
                 this.server_online = true;
@@ -482,24 +510,27 @@ namespace SparkleLib {
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
 
-                List<SparkleChangeSet> change_sets = GetChangeSets (1);
-                if (change_sets != null && change_sets.Count > 0) {
-                    SparkleChangeSet change_set = change_sets [0];
+                if (!pre_sync_revision.Equals (CurrentRevision)) {
+                    List<SparkleChangeSet> change_sets = GetChangeSets (1);
 
-                    bool note_added = false;
-                    foreach (string added in change_set.Added) {
-                        if (added.Contains (".notes")) {
-                            if (NewNote != null)
-                                NewNote (change_set.User.Name, change_set.User.Email);
+                   if (change_sets != null && change_sets.Count > 0) {
+                        SparkleChangeSet change_set = change_sets [0];
 
-                            note_added = true;
-                            break;
+                        bool note_added = false;
+                        foreach (string added in change_set.Added) {
+                            if (added.Contains (".notes")) {
+                                if (NewNote != null)
+                                    NewNote (change_set.User.Name, change_set.User.Email);
+
+                                note_added = true;
+                                break;
+                            }
                         }
-                    }
 
-                    if (!note_added) {
-                        if (NewChangeSet != null)
-                            NewChangeSet (change_set);
+                        if (!note_added) {
+                            if (NewChangeSet != null)
+                                NewChangeSet (change_set);
+                        }
                     }
                 }
 
@@ -527,15 +558,19 @@ namespace SparkleLib {
 
         public void DisableWatching ()
         {
-            this.watcher.EnableRaisingEvents = false;
-            this.local_timer.Stop ();
+            lock (watch_lock) {
+                this.watcher.EnableRaisingEvents = false;
+                this.local_timer.Stop ();
+            }
         }
 
 
         public void EnableWatching ()
         {
-            this.watcher.EnableRaisingEvents = true;
-            this.local_timer.Start ();
+            lock (watch_lock) {
+                this.watcher.EnableRaisingEvents = true;
+                this.local_timer.Start ();
+            }
         }
 
 
