@@ -36,6 +36,8 @@ namespace SparkleShare {
             this.label10 = new System.Windows.Forms.Label ();
             this.buttonNext = new System.Windows.Forms.Button ();
             this.addPage = new System.Windows.Forms.TabPage ();
+            this.label5 = new System.Windows.Forms.Label ();
+            this.label14 = new System.Windows.Forms.Label ();
             this.panel_server_selection = new System.Windows.Forms.Panel ();
             this.buttonSync = new System.Windows.Forms.Button ();
             this.buttonCancel = new System.Windows.Forms.Button ();
@@ -55,6 +57,8 @@ namespace SparkleShare {
             this.label8 = new System.Windows.Forms.Label ();
             this.buttonFinished = new System.Windows.Forms.Button ();
             this.buttonOpenFolder = new System.Windows.Forms.Button ();
+            this.server_address = new SparkleShare.controls.ExampleTextBox ();
+            this.server_remote_path = new SparkleShare.controls.ExampleTextBox ();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit ();
             this.tabControl.SuspendLayout ();
             this.setupPage.SuspendLayout ();
@@ -111,7 +115,7 @@ namespace SparkleShare {
             this.groupBox1.Controls.Add (this.label12);
             this.groupBox1.Location = new System.Drawing.Point (14, 119);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size (429, 102);
+            this.groupBox1.Size = new System.Drawing.Size (471, 102);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Information about you";
@@ -174,7 +178,7 @@ namespace SparkleShare {
             // buttonNext
             // 
             this.buttonNext.Enabled = false;
-            this.buttonNext.Location = new System.Drawing.Point (431, 350);
+            this.buttonNext.Location = new System.Drawing.Point (410, 316);
             this.buttonNext.Name = "buttonNext";
             this.buttonNext.Size = new System.Drawing.Size (75, 23);
             this.buttonNext.TabIndex = 0;
@@ -184,6 +188,10 @@ namespace SparkleShare {
             // 
             // addPage
             // 
+            this.addPage.Controls.Add (this.server_remote_path);
+            this.addPage.Controls.Add (this.server_address);
+            this.addPage.Controls.Add (this.label5);
+            this.addPage.Controls.Add (this.label14);
             this.addPage.Controls.Add (this.panel_server_selection);
             this.addPage.Controls.Add (this.buttonSync);
             this.addPage.Controls.Add (this.buttonCancel);
@@ -196,27 +204,46 @@ namespace SparkleShare {
             this.addPage.Text = "Add";
             this.addPage.UseVisualStyleBackColor = true;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font ("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point (197, 267);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size (113, 20);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "Remote path";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font ("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point (8, 267);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size (75, 20);
+            this.label14.TabIndex = 14;
+            this.label14.Text = "Address";
+            // 
             // panel_server_selection
             // 
-            this.panel_server_selection.Location = new System.Drawing.Point (0, 53);
+            this.panel_server_selection.Location = new System.Drawing.Point (12, 54);
             this.panel_server_selection.Name = "panel_server_selection";
-            this.panel_server_selection.Size = new System.Drawing.Size (512, 283);
+            this.panel_server_selection.Size = new System.Drawing.Size (479, 189);
             this.panel_server_selection.TabIndex = 12;
             // 
             // buttonSync
             // 
             this.buttonSync.Enabled = false;
-            this.buttonSync.Location = new System.Drawing.Point (431, 355);
+            this.buttonSync.Location = new System.Drawing.Point (416, 339);
             this.buttonSync.Name = "buttonSync";
             this.buttonSync.Size = new System.Drawing.Size (75, 23);
             this.buttonSync.TabIndex = 9;
             this.buttonSync.Text = "Sync";
             this.buttonSync.UseVisualStyleBackColor = true;
-            //this.buttonSync.Click += new System.EventHandler (this.buttonSync_Click);
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point (350, 355);
+            this.buttonCancel.Location = new System.Drawing.Point (335, 339);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size (75, 23);
             this.buttonCancel.TabIndex = 8;
@@ -298,7 +325,7 @@ namespace SparkleShare {
             // 
             // buttonTryAgain
             // 
-            this.buttonTryAgain.Location = new System.Drawing.Point (431, 350);
+            this.buttonTryAgain.Location = new System.Drawing.Point (380, 319);
             this.buttonTryAgain.Name = "buttonTryAgain";
             this.buttonTryAgain.Size = new System.Drawing.Size (75, 23);
             this.buttonTryAgain.TabIndex = 3;
@@ -366,7 +393,7 @@ namespace SparkleShare {
             // 
             // buttonFinished
             // 
-            this.buttonFinished.Location = new System.Drawing.Point (431, 350);
+            this.buttonFinished.Location = new System.Drawing.Point (399, 318);
             this.buttonFinished.Name = "buttonFinished";
             this.buttonFinished.Size = new System.Drawing.Size (75, 23);
             this.buttonFinished.TabIndex = 1;
@@ -376,13 +403,31 @@ namespace SparkleShare {
             // 
             // buttonOpenFolder
             // 
-            this.buttonOpenFolder.Location = new System.Drawing.Point (350, 350);
+            this.buttonOpenFolder.Location = new System.Drawing.Point (318, 318);
             this.buttonOpenFolder.Name = "buttonOpenFolder";
             this.buttonOpenFolder.Size = new System.Drawing.Size (75, 23);
             this.buttonOpenFolder.TabIndex = 0;
             this.buttonOpenFolder.Text = "Open Folder";
             this.buttonOpenFolder.UseVisualStyleBackColor = true;
             this.buttonOpenFolder.Click += new System.EventHandler (this.buttonOpenFolder_Click);
+            // 
+            // server_address
+            // 
+            this.server_address.ExampleText = "";
+            this.server_address.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
+            this.server_address.Location = new System.Drawing.Point (12, 290);
+            this.server_address.Name = "server_address";
+            this.server_address.Size = new System.Drawing.Size (168, 20);
+            this.server_address.TabIndex = 16;
+            // 
+            // server_remote_path
+            // 
+            this.server_remote_path.ExampleText = "";
+            this.server_remote_path.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
+            this.server_remote_path.Location = new System.Drawing.Point (201, 290);
+            this.server_remote_path.Name = "server_remote_path";
+            this.server_remote_path.Size = new System.Drawing.Size (168, 20);
+            this.server_remote_path.TabIndex = 17;
             // 
             // SparkleSetup
             // 
@@ -444,6 +489,10 @@ namespace SparkleShare {
         private System.Windows.Forms.TextBox NameEntry;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label14;
+        private SparkleShare.controls.ExampleTextBox server_remote_path;
+        private SparkleShare.controls.ExampleTextBox server_address;
 
 
 

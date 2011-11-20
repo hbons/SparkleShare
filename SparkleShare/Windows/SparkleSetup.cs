@@ -34,18 +34,16 @@ namespace SparkleShare {
         public SparkleSetupController Controller = new SparkleSetupController ();
 
         // Short alias for the translations
-        public static string _ (string s)
-        {
+        public static string _ (string s) {
             return s;
         }
 
 
-        public SparkleSetup () 
-        {
+        public SparkleSetup () {
             InitializeComponent ();
 
             pictureBox.Image = Icons.side_splash;
-            this.ClientSize = new Size (this.ClientSize.Width, Icons.side_splash.Size.Height);
+            //this.ClientSize = new Size (this.ClientSize.Width, Icons.side_splash.Size.Height);
             this.Icon = Icons.sparkleshare;
 
             Controller.ChangePageEvent += delegate (PageType type) {
@@ -54,6 +52,11 @@ namespace SparkleShare {
                         case PageType.Add:
                             tabControl.SelectedIndex = 1;
 
+                            // Set exampletext for textboxes
+                            server_address.ExampleText = _ ("Server address");
+                            server_remote_path.ExampleText = "/path/to/project";
+
+                            // Set up the treeview
                             ImageList imageList = new ImageList ();
                             imageList.ImageSize = new Size (32, 32);
                             TreeView treeView = new TreeView ();
@@ -62,19 +65,21 @@ namespace SparkleShare {
                             treeView.ImageIndex = 0;
                             treeView.Indent = 35;
 
-                            TreeNode [] nodes = new TreeNode[Controller.Plugins.Count];
+                            TreeNode [] nodes = new TreeNode [Controller.Plugins.Count];
 
                             for (int i = 0; i < Controller.Plugins.Count; i++) {
-                                nodes [i].Text = Controller.Plugins [i].Name + ";" + Controller.Plugins;
-                                imageList.Images.Add (new Icon(Controller.Plugins [i].ImagePath));
+                                nodes [i] = new TreeNode (Controller.Plugins [i].Name + ";" + Controller.Plugins[i].Description);
+                                nodes [i].ImageIndex = i;
+                                nodes [i].SelectedImageIndex = i;
+                                imageList.Images.Add (Image.FromFile (Controller.Plugins [i].ImagePath));
                             }
-                           
+
                             treeView.Nodes.AddRange (nodes);
-                            treeView.SelectedImageIndex = 0;
                             treeView.ImageList = imageList;
                             treeView.ShowLines = false;
                             treeView.ShowRootLines = false;
-                            treeView.Size = new System.Drawing.Size (448, 192);
+                            treeView.Size = new System.Drawing.Size (this.panel_server_selection.Size.Width,
+                                this.panel_server_selection.Size.Height);
 
                             this.panel_server_selection.Controls.Add (treeView);
 
@@ -99,20 +104,19 @@ namespace SparkleShare {
                             Show ();
                             break;
                         case PageType.Tutorial:
-                            if (Controller.TutorialPageNumber==1)
+                            if (Controller.TutorialPageNumber == 1)
                                 Controller.TutorialSkipped ();
                             else
                                 Controller.ShowAddPage ();
                             break;
                         default:
-                            throw new NotImplementedException("unknown PageType");
+                            throw new NotImplementedException ("unknown PageType");
                     }
                 });
             };
         }
 
-        private void SparkleSetup_FormClosing (object sender, FormClosingEventArgs e)
-        {
+        private void SparkleSetup_FormClosing (object sender, FormClosingEventArgs e) {
             if (e.CloseReason != CloseReason.ApplicationExitCall
                     && e.CloseReason != CloseReason.TaskManagerClosing
                     && e.CloseReason != CloseReason.WindowsShutDown) {
@@ -121,8 +125,7 @@ namespace SparkleShare {
             }
         }
 
-        private void buttonCancel_Click (object sender, EventArgs e)
-        {
+        private void buttonCancel_Click (object sender, EventArgs e) {
             this.Hide ();
         }
         /*
@@ -142,7 +145,7 @@ namespace SparkleShare {
 
             Controller.AddPageCompleted (server, folder_name);
         }
-        
+        /*
         private void CheckAddPage (object sender, EventArgs e)
         {
             buttonSync.Enabled = false;
@@ -173,36 +176,30 @@ namespace SparkleShare {
         }
         */
 
-        private void buttonFinish_Click (object sender, EventArgs e)
-        {
+        private void buttonFinish_Click (object sender, EventArgs e) {
             this.Hide ();
         }
 
-        private void buttonTryAgain_Click (object sender, EventArgs e)
-        {
+        private void buttonTryAgain_Click (object sender, EventArgs e) {
             Controller.ErrorPageCompleted ();
         }
 
-        private void buttonFinished_Click (object sender, EventArgs e)
-        {
+        private void buttonFinished_Click (object sender, EventArgs e) {
             this.Hide ();
         }
 
-        private void buttonOpenFolder_Click (object sender, EventArgs e)
-        {
+        private void buttonOpenFolder_Click (object sender, EventArgs e) {
             Program.Controller.OpenSparkleShareFolder (Controller.SyncingFolder);
         }
 
-        private void buttonNext_Click (object sender, EventArgs e)
-        {
+        private void buttonNext_Click (object sender, EventArgs e) {
             string full_name = NameEntry.Text;
             string email = EmailEntry.Text;
 
             Controller.SetupPageCompleted (full_name, email);
         }
 
-        private void CheckSetupPage (object sender, EventArgs e)
-        {
+        private void CheckSetupPage (object sender, EventArgs e) {
             // Enables or disables the 'Next' button depending on the
             // entries filled in by the user
             if (!String.IsNullOrEmpty (NameEntry.Text) &&
@@ -216,22 +213,19 @@ namespace SparkleShare {
 
     public class TreeView : System.Windows.Forms.TreeView {
 
-        public TreeView ()
-        {
+        public TreeView () {
 
         }
-        protected override void OnDrawNode (DrawTreeNodeEventArgs e)
-        {
-            e.Graphics.DrawString (e.Node.Text.Split (';') [0], new Font ("Microsoft Sans Serif", 13),
+        protected override void OnDrawNode (DrawTreeNodeEventArgs e) {
+            e.Graphics.DrawString (e.Node.Text.Split (';') [0], new Font (Font.SystemFontName, 13),
                 new SolidBrush (Color.Black), e.Bounds.X, e.Bounds.Y);
-            e.Graphics.DrawString (e.Node.Text.Split (';') [1], new Font ("Microsoft Sans Serif", 9),
+            e.Graphics.DrawString (e.Node.Text.Split (';') [1], new Font (Font.SystemFontName, 9),
                 new SolidBrush (Color.Black), e.Bounds.X + 10, e.Bounds.Y + 15);
         }
     }
 
     public class TreeNode : System.Windows.Forms.TreeNode {
-        public TreeNode (string text)
-        {
+        public TreeNode (string text) {
             this.Text = text;
         }
     }
