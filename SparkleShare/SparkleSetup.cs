@@ -218,7 +218,7 @@ namespace SparkleShare {
                             TreeSelection selection = (sender as TreeView).Selection;
                             selection.GetSelected (out model, out iter);
 
-                            SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
+                            // SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
                             int selected_path = int.Parse (model.GetPath (iter).ToString ());
 
                             Controller.SelectedPluginChanged (selected_path);
@@ -333,7 +333,7 @@ namespace SparkleShare {
                     case PageType.Syncing: {
 
                         Header      = String.Format (_("Adding project ‘{0}’…"), Controller.SyncingFolder);
-                        Description = _("This may take a while." + Environment.NewLine) +
+                        Description = _("This may take a while.") + Environment.NewLine +
                                       _("Are you sure it’s not coffee o'clock?");
 
                         Button finish_button = new Button () {
@@ -539,7 +539,7 @@ namespace SparkleShare {
                             Description = _("Just click this button when you see it on the web, and " +
                                 "the project will be automatically added:");
 
-                            Label label = new Label (_("…or select <b>‘Add Project…’</b> from the status icon menu " +
+                            Label label = new Label (_("…or select <b>‘Add Hosted Project…’</b> from the status icon menu " +
                                 "to add one by hand.")) {
                                 Wrap   = true,
                                 Xalign = 0,
@@ -547,11 +547,6 @@ namespace SparkleShare {
                             };
 
                             Image slide = SparkleUIHelpers.GetImage ("tutorial-slide-4.png");
-
-                            Button add_project_button = new Button (_("Add Project…"));
-                            add_project_button.Clicked += delegate {
-                                Controller.TutorialPageCompleted ();
-                            };
 
                             Button finish_button = new Button (_("Finish"));
                             finish_button.Clicked += delegate {
@@ -564,8 +559,6 @@ namespace SparkleShare {
                             box.Add (label);
 
                             Add (box);
-
-                            AddButton (add_project_button);
                             AddButton (finish_button);
 
                             break;

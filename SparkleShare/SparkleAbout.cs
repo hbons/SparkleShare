@@ -97,9 +97,6 @@ namespace SparkleShare {
 
         private void CreateAbout ()
         {
-            Gdk.Color color = Style.Foreground (StateType.Insensitive);
-            string secondary_text_color = SparkleUIHelpers.GdkColorToHex (color);
-
             Label version = new Label () {
                 Markup = "<span font_size='small' fgcolor='white'>" +
                          "version " + Controller.RunningVersion +
