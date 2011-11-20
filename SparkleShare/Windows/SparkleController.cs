@@ -30,6 +30,7 @@ using CefSharp;
 namespace SparkleShare {
 
     public class SparkleController : SparkleControllerBase {
+        private int sshAgentPid;
 
         public override string PluginsPath
         {
@@ -166,12 +167,18 @@ namespace SparkleShare {
 			process.Start();
 		}
 
+        public override void Quit ()
+        {
+            KillSshAgent ();
+            base.Quit ();
+        }
+
 		private void StartSshAgent ()
 		{
-			if (String.IsNullOrEmpty (System.Environment.GetEnvironmentVariable ("SSH_AUTH_SOCK"))) {
+		    if (String.IsNullOrEmpty (System.Environment.GetEnvironmentVariable ("SSH_AUTH_SOCK"))) {
 
-				Process process = new Process ();
-				process.StartInfo.FileName = "ssh-agent";
+                Process process = new Process ();
+			    process.StartInfo.FileName = "ssh-agent";
 				process.StartInfo.UseShellExecute = false;
 				process.StartInfo.RedirectStandardOutput = true;
 
@@ -187,6 +194,7 @@ namespace SparkleShare {
 
 				Match AgentPid = new Regex (@"SSH_AGENT_PID=([^;\n\r]*)").Match (Output);
 				if (AgentPid.Success) {
+                    Int32.TryParse (AgentPid.Groups [1].Value, out sshAgentPid);
 					System.Environment.SetEnvironmentVariable ("SSH_AGENT_PID", AgentPid.Groups[1].Value);
 					SparkleHelpers.DebugInfo ("SSH", "ssh-agent started, PID=" + AgentPid.Groups[1].Value);
 				}
@@ -196,7 +204,18 @@ namespace SparkleShare {
 			}
 		}
 
+		private void KillSshAgent ()
+		{
+            if (sshAgentPid != 0) {
+                // Kill the SSH_AGENT that we started
+                try {
+                    Process.GetProcessById (sshAgentPid).Kill ();
+                } catch (ArgumentException) {
+                    SparkleHelpers.DebugInfo ("SSH", "Could not kill the ssh-agent, because the process wasn't running");
+                }
+            }
+		}
 
-	}
+    }
 
 }

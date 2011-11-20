@@ -6,65 +6,128 @@
 # Heffer <felix@fetzig.org>, 2011.
 # Jan-Christoph Borchardt <JanCBorchardt@fsfe.org>, 2011.
 # kabum <uu.kabum@gmail.com>, 2011.
+#   <killerjoe@gmx.de>, 2011.
 # kxnop <m_leinmueller@hotmail.com>, 2011.
 # Łukasz Jernaś <deejay1@srem.org>, 2011.
 #   <mm@imsoftware.de>, 2011.
+# Sascha  <S.Lewandowski@abiwillich.de>, 2011.
 #   <urs.obernolte@googlemail.com>, 2011.
 #   <yujiang.wang@ymail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-30 22:26+0200\n"
-"PO-Revision-Date: 2011-10-04 17:13+0000\n"
-"Last-Translator: imsoftware <mm@imsoftware.de>\n"
+"POT-Creation-Date: 2011-11-12 18:42+0100\n"
+"PO-Revision-Date: 2011-11-14 07:55+0000\n"
+"Last-Translator: iwsnipy <S.Lewandowski@abiwillich.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:70
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:88
-#: ../SparkleShare/SparkleSetup.cs:67 ../SparkleShare/SparkleStatusIcon.cs:75
+#: ../data/plugins/bitbucket.xml.in.h:1 ../data/plugins/github.xml.in.h:1
+msgid "/username/project"
+msgstr "/username/project"
+
+#: ../data/plugins/bitbucket.xml.in.h:2
+msgid "Bitbucket"
+msgstr "Bitbucket"
+
+#: ../data/plugins/bitbucket.xml.in.h:3
+msgid "Free code hosting for Git and Mercurial"
+msgstr ""
+
+#: ../data/plugins/github.xml.in.h:2
+msgid "Free public Git repositories with collaborator management"
+msgstr ""
+
+#: ../data/plugins/github.xml.in.h:3
+msgid "Github"
+msgstr "Github"
+
+#: ../data/plugins/gitorious.xml.in.h:1
+msgid "/project/repository"
+msgstr "/Projekt/Ablage"
+
+#: ../data/plugins/gitorious.xml.in.h:2
+msgid "Gitorious"
+msgstr "Gitorious"
+
+#: ../data/plugins/gitorious.xml.in.h:3
+msgid "Open source infrastructure for hosting open source projects"
+msgstr ""
+
+#: ../data/plugins/gnome.xml.in.h:1
+msgid "/project"
+msgstr "/Projekt"
+
+#: ../data/plugins/gnome.xml.in.h:2
+msgid "A free and easy interface for your computer"
+msgstr "Eine freie und einfache Schnittstelle für deinen Computer"
+
+#: ../data/plugins/gnome.xml.in.h:3
+msgid "The GNOME Project"
+msgstr "Das GNOME Projekt"
+
+#: ../data/plugins/own-server.xml.in.h:1
+msgid "/path/to/project"
+msgstr "/Pfad/zum/Projekt"
+
+#: ../data/plugins/own-server.xml.in.h:2
+msgid "Everything under my control"
+msgstr "Alles unter meiner Kontrolle"
+
+#: ../data/plugins/own-server.xml.in.h:3
+msgid "On my own server"
+msgstr "Auf meinem eigenen Server"
+
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:84
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:102
+#: ../SparkleShare/SparkleSetup.cs:75 ../SparkleShare/SparkleStatusIcon.cs:75
 #: ../SparkleShare/SparkleStatusIcon.cs:89
 msgid "Welcome to SparkleShare!"
 msgstr "Willkommen bei SparkleShare!"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:72
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:90
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:86
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:104
 #: ../SparkleShare/SparkleStatusIcon.cs:77
 #: ../SparkleShare/SparkleStatusIcon.cs:91
 msgid "Up to date"
-msgstr "Schon auf dem aktuellsten Stand."
+msgstr "Aktualisiert"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:99
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:113
 #: ../SparkleShare/SparkleStatusIcon.cs:106
 msgid "Syncing…"
-msgstr "Abgleichen …"
+msgstr "Synchronisiere..."
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:109
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:123
 #: ../SparkleShare/SparkleStatusIcon.cs:116
 msgid "Not everything is synced"
-msgstr "Nicht alles ist synchronisiert"
+msgstr "Es ist nicht alles synchronisiert"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:140
 msgid "Copy Web Link"
-msgstr "Internetadresse kopieren"
+msgstr "Web Link kopieren"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:141
 msgid "Copy the web address of this file to the clipboard"
 msgstr "Die Internetadresse dieser Datei in die Zwischenablage kopieren"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:173
 msgid "Get Earlier Version"
 msgstr "Frühere Version abrufen"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:174
 msgid "Make a copy of an earlier version in this folder"
 msgstr "Erstelle eine Kopie einer früheren Version in diesem Verzeichnis"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:161
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:187
 msgid "Select to get a copy of this version"
 msgstr "Selektieren, um eine Kopie dieser Version abzurufen"
 
@@ -140,42 +203,42 @@ msgstr "Sie verwenden die aktuelle Version."
 msgid "Checking for updates..."
 msgstr "Suche Aktualisierungen..."
 
-#: ../SparkleShare/SparkleControllerBase.cs:491
+#: ../SparkleShare/SparkleControllerBase.cs:494
 msgid "dddd, MMMM d, yyyy"
 msgstr ""
 
-#: ../SparkleShare/SparkleControllerBase.cs:497
+#: ../SparkleShare/SparkleControllerBase.cs:500
 msgid "dddd, MMMM d"
 msgstr ""
 
-#: ../SparkleShare/SparkleControllerBase.cs:705
+#: ../SparkleShare/SparkleControllerBase.cs:708
 #, csharp-format
 msgid "added ‘{0}’"
-msgstr ""
+msgstr "Hinzugefügt '{0}'"
 
-#: ../SparkleShare/SparkleControllerBase.cs:710
+#: ../SparkleShare/SparkleControllerBase.cs:713
 #, csharp-format
 msgid "moved ‘{0}’"
-msgstr ""
+msgstr "'{0}' verschoben"
 
-#: ../SparkleShare/SparkleControllerBase.cs:715
+#: ../SparkleShare/SparkleControllerBase.cs:718
 #, csharp-format
 msgid "edited ‘{0}’"
-msgstr ""
+msgstr "Bearbeitet '{0}'"
 
-#: ../SparkleShare/SparkleControllerBase.cs:720
+#: ../SparkleShare/SparkleControllerBase.cs:723
 #, csharp-format
 msgid "deleted ‘{0}’"
-msgstr ""
+msgstr "Gelöscht '{0}'"
 
-#: ../SparkleShare/SparkleControllerBase.cs:729
+#: ../SparkleShare/SparkleControllerBase.cs:732
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../SparkleShare/SparkleControllerBase.cs:733
+#: ../SparkleShare/SparkleControllerBase.cs:736
 msgid "did something magical"
 msgstr ""
 
@@ -188,7 +251,7 @@ msgstr "Letzte Ereignisse"
 msgid "All Folders"
 msgstr "Alle Ordner"
 
-#: ../SparkleShare/SparkleSetup.cs:68
+#: ../SparkleShare/SparkleSetup.cs:76
 msgid ""
 "Before we can create a SparkleShare folder on this computer, we need a few "
 "bits of information from you."
@@ -196,187 +259,164 @@ msgstr ""
 "Bevor wir einen SparkleShare-Ordner auf diesem Computer einrichten können, "
 "benötigen wir einige Informationen von Ihnen."
 
-#: ../SparkleShare/SparkleSetup.cs:75
+#: ../SparkleShare/SparkleSetup.cs:83
 msgid "Full Name:"
 msgstr "Vollständiger Name:"
 
-#: ../SparkleShare/SparkleSetup.cs:90
+#: ../SparkleShare/SparkleSetup.cs:98
 msgid "Email:"
 msgstr "E-Mail:"
 
-#: ../SparkleShare/SparkleSetup.cs:100
+#: ../SparkleShare/SparkleSetup.cs:108
 msgid "Next"
 msgstr "Weiter"
 
-#: ../SparkleShare/SparkleSetup.cs:121
-msgid "Where is your project?"
+#: ../SparkleShare/SparkleSetup.cs:129
+msgid "Where's your project hosted?"
 msgstr ""
 
-#. Own server radiobutton
-#: ../SparkleShare/SparkleSetup.cs:130
-msgid "On my own server:"
-msgstr "Auf meinem eigenen Server"
+#: ../SparkleShare/SparkleSetup.cs:275
+msgid "Address"
+msgstr "Adresse"
 
-#: ../SparkleShare/SparkleSetup.cs:135 ../SparkleShare/SparkleSetup.cs:225
-msgid "Folder"
-msgstr "Ordner"
-
-#: ../SparkleShare/SparkleSetup.cs:162
-msgid "address-to-server.com"
-msgstr "server-adresse.com"
-
-#: ../SparkleShare/SparkleSetup.cs:183
-msgid "Username/Folder"
-msgstr "Benutzername/Ordner"
-
-#. Gitorious radiobutton
-#: ../SparkleShare/SparkleSetup.cs:188
-msgid "Gitorious"
-msgstr "Gitorious"
-
-#: ../SparkleShare/SparkleSetup.cs:196
-msgid "Project/Folder"
-msgstr "Projekt/Ordner"
-
-#. GNOME radiobutton
-#: ../SparkleShare/SparkleSetup.cs:201
-msgid "The GNOME Project"
-msgstr "Das GNOME Projekt"
-
-#: ../SparkleShare/SparkleSetup.cs:209
-msgid "Project"
-msgstr "Projekt"
-
-#: ../SparkleShare/SparkleSetup.cs:219
-msgid "Folder Name:"
-msgstr "Verzeichnisname:"
+#: ../SparkleShare/SparkleSetup.cs:295
+msgid "Remote Path"
+msgstr "Entfernter Pfad"
 
 #. Cancel button
-#: ../SparkleShare/SparkleSetup.cs:250 ../SparkleShare/SparkleSetup.cs:296
+#: ../SparkleShare/SparkleSetup.cs:309 ../SparkleShare/SparkleSetup.cs:345
 msgid "Cancel"
 msgstr "Abbrechen"
 
 #. Sync button
-#: ../SparkleShare/SparkleSetup.cs:258
+#: ../SparkleShare/SparkleSetup.cs:316
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: ../SparkleShare/SparkleSetup.cs:286
+#: ../SparkleShare/SparkleSetup.cs:335
 #, csharp-format
 msgid "Adding project ‘{0}’…"
-msgstr ""
+msgstr "Füge Projekt '{0}' hinzu..."
 
-#: ../SparkleShare/SparkleSetup.cs:287
+#: ../SparkleShare/SparkleSetup.cs:336
 msgid "This may take a while."
 msgstr "Das dauert vielleicht einen Moment."
 
-#: ../SparkleShare/SparkleSetup.cs:288
+#: ../SparkleShare/SparkleSetup.cs:337
 msgid "Are you sure it’s not coffee o'clock?"
 msgstr "Meinst Du nicht, dass es Kaffeezeit ist?"
 
-#: ../SparkleShare/SparkleSetup.cs:292 ../SparkleShare/SparkleSetup.cs:408
-#: ../SparkleShare/SparkleSetup.cs:507
+#: ../SparkleShare/SparkleSetup.cs:341 ../SparkleShare/SparkleSetup.cs:457
+#: ../SparkleShare/SparkleSetup.cs:556
 msgid "Finish"
 msgstr "Fertigstellen"
 
-#: ../SparkleShare/SparkleSetup.cs:325
+#: ../SparkleShare/SparkleSetup.cs:374
 msgid "Something went wrong"
 msgstr "Etwas ist schiefgelaufen"
 
-#: ../SparkleShare/SparkleSetup.cs:373
+#: ../SparkleShare/SparkleSetup.cs:422
 msgid "Try Again…"
 msgstr "Nochmal versuchen..."
 
-#: ../SparkleShare/SparkleSetup.cs:392
+#: ../SparkleShare/SparkleSetup.cs:441
 #, csharp-format
 msgid "‘{0}’ has been successfully added"
 msgstr "»{0}« wurde erfolgreich hinzugefügt"
 
-#: ../SparkleShare/SparkleSetup.cs:398
+#: ../SparkleShare/SparkleSetup.cs:447
 msgid "Project successfully added!"
 msgstr "Projekt erfolgreich hinzugefügt!"
 
-#: ../SparkleShare/SparkleSetup.cs:399
+#: ../SparkleShare/SparkleSetup.cs:448
 msgid "Access the files from your SparkleShare folder."
-msgstr ""
+msgstr "Zugriff auf die Dateien von Ihrem SparkleShare Ordner."
 
 #. A button that opens the synced folder
-#: ../SparkleShare/SparkleSetup.cs:402
+#: ../SparkleShare/SparkleSetup.cs:451
 msgid "Open Folder"
 msgstr "Ordner öffnen"
 
-#: ../SparkleShare/SparkleSetup.cs:428
+#: ../SparkleShare/SparkleSetup.cs:477
 msgid "What's happening next?"
 msgstr "Was passiert als nächstes?"
 
-#: ../SparkleShare/SparkleSetup.cs:429
+#: ../SparkleShare/SparkleSetup.cs:478
 msgid ""
 "SparkleShare creates a special folder in your personal folder that will keep"
 " track of your projects."
 msgstr ""
+"SparkleShare erzeugt einen eigenen Ordner in Ihrem persönlichen Ordner, der "
+"den Überblick über Ihre Projekte behalten."
 
-#: ../SparkleShare/SparkleSetup.cs:432
+#: ../SparkleShare/SparkleSetup.cs:481
 msgid "Skip Tutorial"
 msgstr "Tutorial überspringen"
 
-#: ../SparkleShare/SparkleSetup.cs:437 ../SparkleShare/SparkleSetup.cs:457
-#: ../SparkleShare/SparkleSetup.cs:475
+#: ../SparkleShare/SparkleSetup.cs:486 ../SparkleShare/SparkleSetup.cs:506
+#: ../SparkleShare/SparkleSetup.cs:524
 msgid "Continue"
 msgstr "Weiter"
 
-#: ../SparkleShare/SparkleSetup.cs:453
+#: ../SparkleShare/SparkleSetup.cs:502
 msgid "Sharing files with others"
 msgstr "Dateien mit anderen teilen"
 
-#: ../SparkleShare/SparkleSetup.cs:454
+#: ../SparkleShare/SparkleSetup.cs:503
 msgid ""
 "All files added to your project folders are synced with the host "
 "automatically, as well as with your collaborators."
 msgstr ""
+"Alle zu Ihrem Projekt hinzugefügten Dateien sind automatisch mit dem Server "
+"und Ihren Mitarbeitern synchronisiert."
 
-#: ../SparkleShare/SparkleSetup.cs:471
+#: ../SparkleShare/SparkleSetup.cs:520
 msgid "The status icon is here to help"
 msgstr "Das Status Icon ist da um dir zu helfen"
 
-#: ../SparkleShare/SparkleSetup.cs:472
+#: ../SparkleShare/SparkleSetup.cs:521
 msgid ""
 "It shows the syncing process status, and contains links to your projects and"
 " the event log."
 msgstr ""
+"Es zeigt den Synchronisierungsstatus und beinhaltet Links zu deinem Projekt "
+"und deinen letzten Ereignissen."
 
-#: ../SparkleShare/SparkleSetup.cs:489
+#: ../SparkleShare/SparkleSetup.cs:538
 msgid "Adding projects to SparkleShare"
-msgstr ""
+msgstr "Füge Projekte zu SparkleShare"
 
-#: ../SparkleShare/SparkleSetup.cs:490
+#: ../SparkleShare/SparkleSetup.cs:539
 msgid ""
 "Just click this button when you see it on the web, and the project will be "
 "automatically added:"
 msgstr ""
+"Klicken den Button, wenn du ihn im Internet siehst, und das Projekt wird "
+"automatisch hinzu gefügt:"
 
-#: ../SparkleShare/SparkleSetup.cs:493
+#: ../SparkleShare/SparkleSetup.cs:542
 msgid ""
-"…or select <b>‘Add Project…’</b> from the status icon menu to add one by "
-"hand."
+"…or select <b>‘Add Hosted Project…’</b> from the status icon menu to add one"
+" by hand."
 msgstr ""
 
 #. Opens the wizard to add a new remote folder
-#: ../SparkleShare/SparkleSetup.cs:502
+#: ../SparkleShare/SparkleSetup.cs:551
 #: ../SparkleShare/SparkleStatusIcon.cs:238
-msgid "Add Project…"
-msgstr "Projekt hinzufügen..."
+msgid "Add Hosted Project…"
+msgstr ""
 
-#: ../SparkleShare/SparkleSetupWindow.cs:45
+#: ../SparkleShare/SparkleSetupWindow.cs:44
 msgid "SparkleShare Setup"
 msgstr "SparkleShare Konfiguration"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:228
 msgid "No projects yet"
-msgstr ""
+msgstr "Bislang keine Projekte "
 
 #: ../SparkleShare/SparkleStatusIcon.cs:262
-msgid "Show Recent Events"
-msgstr "Zeige letzte Ereignisse"
+msgid "Open Recent Events"
+msgstr "Öffne letzte Ereignisse"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:282
 msgid "Turn Notifications Off"
