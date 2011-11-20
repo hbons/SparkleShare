@@ -212,14 +212,17 @@ namespace SparkleShare {
             this.FolderEntry.Name = "FolderEntry";
             this.FolderEntry.Size = new System.Drawing.Size (168, 20);
             this.FolderEntry.TabIndex = 17;
+            this.FolderEntry.TextChanged += new System.EventHandler (this.CheckAddPage);
             // 
             // ServerEntry
             // 
+            this.ServerEntry.ExampleText = "";
             this.ServerEntry.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
             this.ServerEntry.Location = new System.Drawing.Point (12, 290);
             this.ServerEntry.Name = "ServerEntry";
             this.ServerEntry.Size = new System.Drawing.Size (168, 20);
             this.ServerEntry.TabIndex = 16;
+            this.ServerEntry.TextChanged += new System.EventHandler (this.CheckAddPage);
             // 
             // label5
             // 
@@ -229,6 +232,7 @@ namespace SparkleShare {
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size (113, 20);
             this.label5.TabIndex = 15;
+            this.label5.Text = "Remote path";
             // 
             // label14
             // 
@@ -238,6 +242,7 @@ namespace SparkleShare {
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size (75, 20);
             this.label14.TabIndex = 14;
+            this.label14.Text = "Address";
             // 
             // panel_server_selection
             // 
@@ -255,7 +260,7 @@ namespace SparkleShare {
             this.buttonSync.TabIndex = 9;
             this.buttonSync.Text = "Sync";
             this.buttonSync.UseVisualStyleBackColor = true;
-            this.buttonSync.Click += new System.EventHandler(buttonSync_Click);
+            this.buttonSync.Click += new System.EventHandler (this.buttonSync_Click);
             // 
             // buttonCancel
             // 
@@ -273,8 +278,9 @@ namespace SparkleShare {
             this.label4.Font = new System.Drawing.Font ("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point (8, 18);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size (240, 20);
+            this.label4.Size = new System.Drawing.Size (68, 20);
             this.label4.TabIndex = 0;
+            this.label4.Text = "Header";
             // 
             // syncingPage
             // 
