@@ -255,6 +255,7 @@ namespace SparkleShare {
             this.buttonSync.TabIndex = 9;
             this.buttonSync.Text = "Sync";
             this.buttonSync.UseVisualStyleBackColor = true;
+            this.buttonSync.Click += new System.EventHandler(buttonSync_Click);
             // 
             // buttonCancel
             // 
