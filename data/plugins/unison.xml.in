@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <plugin>
+    <info>
+        <_name>On my own server with Unison</_name>
+        <_description>http://www.cis.upenn.edu/~bcpierce/unison/</_description>
+        <icon>unison.png</icon>
+        <backend>Unison</backend>
+    </info>
+    <address>
+      <value></value>
+      <example>domain name or IP address</example>
+    </address>
+    <path>
+      <value></value>
+      <_example>/path/to/project</_example>
+    </path>
+  </plugin>
+</sparkleshare>
+

@@ -38,7 +38,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SparkleRepoBase.cs" />
+    <Compile Include="Git/SparkleRepoGit.cs" />
+    <Compile Include="Hg/SparkleRepoHg.cs" />
     <Compile Include="SparkleFetcherBase.cs" />
+    <Compile Include="Git/SparkleFetcherGit.cs" />
+    <Compile Include="Hg/SparkleFetcherHg.cs" />
     <Compile Include="Defines.cs" />
     <Compile Include="SparkleHelpers.cs" />
     <Compile Include="SparklePaths.cs" />
@@ -49,14 +53,6 @@
     <Compile Include="SparkleBackend.cs" />
     <Compile Include="SparkleConfig.cs" />
     <Compile Include="SparkleWatcher.cs" />
-    <Compile Include="Git\SparkleRepoGit.cs" />
-    <Compile Include="Hg\SparkleRepoHg.cs" />
-    <Compile Include="Git\SparkleFetcherGit.cs" />
-    <Compile Include="Hg\SparkleFetcherHg.cs" />
-    <Compile Include="Scp\SparkleFetcherScp.cs" />
-    <Compile Include="Scp\SparkleRepoScp.cs" />
-    <Compile Include="Unison\SparkleFetcherUnison.cs" />
-    <Compile Include="Unison\SparkleRepoUnison.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
