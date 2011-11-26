@@ -58,15 +58,11 @@
     <Reference Include="Mono.Posix">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Meebey.SmartIrc4net, Version=0.4.5.0, Culture=neutral, PublicKeyToken=7868485fbf407e0f">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\Meebey.SmartIrc4net.dll</HintPath>
-    </Reference>
-    <Reference Include="SparkleLib, Version=0.2.5.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="System.Net" />
+    <Reference Include="SparkleLib, Version=0.4.0.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\SparkleLib.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDelegate.cs">
@@ -112,6 +108,9 @@
     <Compile Include="SparkleController.cs" />
     <Compile Include="..\SparklePlugin.cs">
       <Link>SparklePlugin.cs</Link>
+    </Compile>
+    <Compile Include="..\SparkleOptions.cs">
+      <Link>SparkleOptions.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
