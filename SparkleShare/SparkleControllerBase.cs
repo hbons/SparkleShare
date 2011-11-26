@@ -27,12 +27,11 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
 
-using Mono.Unix;
 using SparkleLib;
 
 namespace SparkleShare {
 
-    public abstract class SparkleControllerBase {
+    public abstract partial class SparkleControllerBase {
 
         public List <SparkleRepoBase> Repositories;
         public string FolderSize;
@@ -83,12 +82,6 @@ namespace SparkleShare {
         private SparkleFetcherBase fetcher;
         private List<string> failed_avatars = new List<string> ();
 
-
-        // Short alias for the translations
-        public static string _ (string s)
-        {
-            return Catalog.GetString (s);
-        }
 
 
         public SparkleControllerBase ()
@@ -733,7 +726,7 @@ namespace SparkleShare {
                                  change_set.MovedFrom.Count) - 1;
 
             if (changes_count > 0) {
-                string msg = Catalog.GetPluralString ("and {0} more", "and {0} more", changes_count);
+                string msg = GetPluralString ("and {0} more", "and {0} more", changes_count);
                 message += " " + String.Format (msg, changes_count);
 
             } else if (changes_count < 0) {
@@ -1151,7 +1144,7 @@ namespace SparkleShare {
             foreach (SparkleRepoBase repo in Repositories)
                 repo.Dispose ();
 
-            Environment.Exit (0);
+            Exit (0);
         }
 
 

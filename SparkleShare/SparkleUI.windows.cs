@@ -28,32 +28,22 @@ using SparkleLib;
 namespace SparkleShare {
 
     public partial class SparkleUI {
-        
-        public static SparkleStatusIcon StatusIcon;
-        public static SparkleEventLog EventLog;
-        public static SparkleBubbles Bubbles;
-        public static SparkleSetup Setup;
-        public static SparkleAbout About;
-        public static string AssetsPath =
-            new string [] {Defines.PREFIX, "share", "sparkleshare"}.Combine ();
 
-
-        public SparkleUI ()
+        // Short alias for the translations
+        public static string _(string s)
         {
-            Init ();
-
-            StatusIcon = new SparkleStatusIcon ();
-            Bubbles    = new SparkleBubbles ();
-            
-            if (Program.Controller.FirstRun) {
-                Setup = new SparkleSetup ();
-                Setup.Controller.ShowSetupPage ();
-            }
-            
-            Program.Controller.OnQuitWhileSyncing += delegate {
-                // TODO: Pop up a warning when quitting whilst syncing
-            };
+            return s;
         }
 
+        public static void Init ()
+        {
+        }
+
+        // Runs the application
+        public void Run ()
+        {
+            System.Windows.Forms.Application.Run ();
+        }
     }
 }
+

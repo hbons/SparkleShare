@@ -19,41 +19,39 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
+using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
+using System.Xml;
 
 using SparkleLib;
 
 namespace SparkleShare {
 
-    public partial class SparkleUI {
-        
-        public static SparkleStatusIcon StatusIcon;
-        public static SparkleEventLog EventLog;
-        public static SparkleBubbles Bubbles;
-        public static SparkleSetup Setup;
-        public static SparkleAbout About;
-        public static string AssetsPath =
-            new string [] {Defines.PREFIX, "share", "sparkleshare"}.Combine ();
+    public abstract partial class SparkleControllerBase {
 
-
-        public SparkleUI ()
+        // Short alias for the translations
+        public static string _ (string s)
         {
-            Init ();
+            return s;
+        }
 
-            StatusIcon = new SparkleStatusIcon ();
-            Bubbles    = new SparkleBubbles ();
-            
-            if (Program.Controller.FirstRun) {
-                Setup = new SparkleSetup ();
-                Setup.Controller.ShowSetupPage ();
-            }
-            
-            Program.Controller.OnQuitWhileSyncing += delegate {
-                // TODO: Pop up a warning when quitting whilst syncing
-            };
+        public static string GetPluralString (string singular, string plural, int number)
+        {
+            if (number>1)
+                return plural;
+            return singular;
+        }
+
+        public void Exit (int exitCode)
+        {
+            Environment.ExitCode = exitCode;
+            System.Windows.Forms.Application.Exit ();
         }
 
     }
 }
+
