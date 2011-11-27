@@ -437,6 +437,8 @@ namespace SparkleShare {
             this.ClientSize = new System.Drawing.Size (664, 396);
             this.Controls.Add (this.tabControl);
             this.Controls.Add (this.pictureBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "SparkleSetup";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SparkleShare Setup";
