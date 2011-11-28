@@ -52,6 +52,9 @@ namespace SparkleShare {
         private NSTextField PathLabel;
         private NSTextField PathHelpLabel;
         private NSTextField AddProjectTextField;
+        private NSTextField WarningTextField;
+        private NSImage WarningImage;
+        private NSImageView WarningImageView;
         private NSTableView TableView;
         private NSScrollView ScrollView;
         private NSTableColumn IconColumn;
@@ -61,7 +64,7 @@ namespace SparkleShare {
 
         public SparkleSetup () : base ()
         {
-            Controller.ChangePageEvent += delegate (PageType type) {
+            Controller.ChangePageEvent += delegate (PageType type, string [] warnings) {
                 InvokeOnMainThread (delegate {
                     Reset ();
 
@@ -451,6 +454,28 @@ namespace SparkleShare {
                         Description = "Now you can access the files from " +
                                       "‘" + Controller.SyncingFolder + "’ in " +
                                       "your SparkleShare folder.";
+
+                        if (warnings != null) {
+                            WarningImage = NSImage.ImageNamed ("NSCaution");
+                            WarningImage.Size = new SizeF (24, 24);
+
+                            WarningImageView = new NSImageView () {
+                                Image = WarningImage,
+                                Frame = new RectangleF (190, Frame.Height - 175, 24, 24)
+                            };
+
+                            WarningTextField = new NSTextField () {
+                                Frame           = new RectangleF (230, Frame.Height - 245, 325, 100),
+                                StringValue     = warnings [0],
+                                BackgroundColor = NSColor.WindowBackground,
+                                Bordered        = false,
+                                Editable        = false,
+                                Font            = SparkleUI.Font
+                            };
+
+                            ContentView.AddSubview (WarningImageView);
+                            ContentView.AddSubview (WarningTextField);
+                        }
 
                         FinishButton = new NSButton () {
                             Title = "Finish"

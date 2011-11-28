@@ -42,7 +42,7 @@ namespace SparkleShare {
         public delegate void OnQuitWhileSyncingEventHandler ();
 
         public event FolderFetchedEventHandler FolderFetched;
-        public delegate void FolderFetchedEventHandler ();
+        public delegate void FolderFetchedEventHandler (string [] warnings);
         
         public event FolderFetchErrorEventHandler FolderFetchError;
         public delegate void FolderFetchErrorEventHandler (string remote_url);
@@ -1013,7 +1013,7 @@ namespace SparkleShare {
             if (i > 1)
                 target_folder_name += " (" + i + ")";
 
-            this.fetcher.Finished += delegate {
+            this.fetcher.Finished += delegate (string [] warnings) {
 
                 // Needed to do the moving
                 SparkleHelpers.ClearAttributes (tmp_folder);
@@ -1030,7 +1030,7 @@ namespace SparkleShare {
                 AddRepository (target_folder_path);
 
                 if (FolderFetched != null)
-                    FolderFetched ();
+                    FolderFetched (warnings);
 
                 FolderSize = GetFolderSize ();
 
