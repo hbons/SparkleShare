@@ -48,7 +48,6 @@ namespace SparkleShare {
             this.label5.Text = _ ("Remote path");
             this.label14.Text = _ ("Address");
             this.label4.Text = _ ("Where is your remote folder?");
-            this.ServerEntry.ExampleText = _ ("Server address");
 
             pictureBox.Image = Icons.side_splash;
             this.Icon = Icons.sparkleshare;
@@ -90,6 +89,7 @@ namespace SparkleShare {
                             panel_server_selection.Controls.Add (treeView);
                             treeView.SelectedNode = treeView.Nodes [0];
                             treeView.Select ();
+                            CheckAddPage (null, null);
                             Show ();
                             break;
                         case PageType.Error:
@@ -144,10 +144,19 @@ namespace SparkleShare {
         }
 
         private void CheckAddPage (object sender, EventArgs e) {
-            buttonSync.Enabled = false;
+            // If the "own server" choice is selected, allow input to the server entry box
+            if (treeView.SelectedNode.Index == 0) { 
+                ServerEntry.Enabled = true;
+                ServerEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].AddressExample;
+            } else {
+                ServerEntry.Text = ""; //Clear any previous input data so that exampletext can show
+                FolderEntry.Text = "";
+                ServerEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].Address;
+                ServerEntry.Enabled = false;
+            }
 
             FolderEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].PathExample;
-            ServerEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].Address;
+           
 
             // Enables or disables the 'Next' button depending on the
             // entries filled in by the user
