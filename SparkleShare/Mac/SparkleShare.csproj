@@ -25,6 +25,7 @@
     <CustomCommands>
       <CustomCommands>
         <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks" externalConsole="true" />
+        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Resources; cp -r git ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="true" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -79,8 +80,6 @@
     <Compile Include="..\Program.cs">
       <Link>Program.cs</Link>
     </Compile>
-    <Compile Include="SparkleAbout.cs" />
-    <Compile Include="SparkleAlert.cs" />
     <Compile Include="SparkleMacWatcher.cs" />
     <Compile Include="SparkleEventLog.cs" />
     <Compile Include="SparkleBadger.cs" />
@@ -112,6 +111,7 @@
     <Compile Include="..\SparkleOptions.cs">
       <Link>SparkleOptions.cs</Link>
     </Compile>
+    <Compile Include="SparkleAbout.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
@@ -321,5 +321,6 @@
     <Folder Include="HTML\" />
     <Folder Include="Translations\" />
     <Folder Include="Plugins\" />
+    <Folder Include="git\" />
   </ItemGroup>
 </Project>
