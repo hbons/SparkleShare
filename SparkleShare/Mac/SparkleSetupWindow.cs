@@ -143,7 +143,7 @@ namespace SparkleShare {
 
         public override void PerformClose (NSObject sender)
         {
-            OrderOut (this);
+            base.OrderOut (this);
             NSApplication.SharedApplication.RemoveWindowsItem (this);
             return;
         }

@@ -73,10 +73,6 @@ else
     touch gnome-doc-utils.make
 fi
 
-if git --help &>/dev/null; then
-	git submodule update --init
-fi
-
 run intltoolize --force --copy
 run $LIBTOOLIZE --force --copy --automake
 run aclocal -I build/m4/sparkleshare -I build/m4/shamrock -I build/m4/shave $ACLOCAL_FLAGS
@@ -84,12 +80,6 @@ run autoconf
 
 run automake --gnu --add-missing --force --copy \
 	-Wno-portability -Wno-portability
-
-if test -d $srcdir/SmartIrc4net; then
-    echo Running SmartIrc4net/autogen.sh ...
-    (cd $srcdir/SmartIrc4net; NOCONFIGURE=1 ./autogen.sh "$@")
-    echo Done running SmartIrc4net/autogen.sh ...
-fi
 
 if [ ! -z "$NOCONFIGURE" ]; then
 	echo "Done. ./configure skipped."

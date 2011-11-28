@@ -38,6 +38,7 @@ SOURCES =  \
 	SparkleEntry.cs \
 	SparkleEventLog.cs \
 	SparkleEventLogController.cs \
+	SparkleOptions.cs \
 	SparkleSetup.cs \
 	SparkleSetupController.cs \
 	SparkleSetupWindow.cs \

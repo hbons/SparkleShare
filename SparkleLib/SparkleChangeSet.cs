@@ -102,7 +102,7 @@ namespace SparkleLib {
     public class SparkleFolder {
 
         public string Name;
-        // TODO: Uri
+        public Uri RemoteAddress;
 
         public string FullPath {
             get {
