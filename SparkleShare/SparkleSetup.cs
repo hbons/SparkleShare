@@ -461,7 +461,31 @@ namespace SparkleShare {
                             Close ();
                         };
 
-                        Add (null);
+
+                        if (warnings != null) {
+                            WarningImage = NSImage.ImageNamed ("NSCaution");
+                            WarningImage.Size = new SizeF (24, 24);
+
+                            WarningImageView = new NSImageView () {
+                                Image = WarningImage,
+                                Frame = new RectangleF (190, Frame.Height - 175, 24, 24)
+                            };
+
+                            Image warning_image = new Image (SparkleUIHelpers.GetIcon ("dialog-warning", 24));
+                            Label warning_label = new Label (warnings [0]) {
+                                Xalign = 0
+                            };
+
+                            HBox warning_layout = new HBox (false, 0);
+                            warning_layout.PackStart (warning_image, false, false, 0);
+                            warning_layout.PackStart (warning_label, true, true, 0);
+
+                            Add (warning_layout);
+
+                        } else {
+                            Add (null);
+                        }
+
 
                         AddButton (open_folder_button);
                         AddButton (finish_button);
@@ -572,42 +596,6 @@ namespace SparkleShare {
                     ShowAll ();
                 });
             };
-        }
-
-
-        // Enables or disables the 'Next' button depending on the
-        // entries filled in by the user
-        private void CheckSetupPage ()
-        {
-            if (NameEntry.Text.Length > 0 &&
-                Program.Controller.IsValidEmail (EmailEntry.Text)) {
-
-                NextButton.Sensitive = true;
-            } else {
-                NextButton.Sensitive = false;
-            }
-        }
-
-
-        // Enables or disables the 'Next' button depending on the
-        // entries filled in by the user
-        public void CheckAddPage ()
-        {
-            SyncButton.Sensitive = false;
-
-            if (PathEntry.ExampleTextActive ||
-                (AddressEntry.Sensitive && AddressEntry.ExampleTextActive))
-                return;
-
-            bool IsFolder = !PathEntry.Text.Trim ().Equals ("");
-            bool IsServer = !AddressEntry.Text.Trim ().Equals ("");
-
-            if (AddressEntry.Sensitive == true) {
-                if (IsServer && IsFolder)
-                    SyncButton.Sensitive = true;
-            } else if (IsFolder) {
-                    SyncButton.Sensitive = true;
-            }
         }
 
 

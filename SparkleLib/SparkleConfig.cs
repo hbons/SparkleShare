@@ -19,8 +19,9 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Xml;
+using System.Security.Principal;
 
-using Mono.Unix;
+//using Mono.Unix;
 
 namespace SparkleLib {
 
@@ -98,11 +99,11 @@ namespace SparkleLib {
             if (SparkleBackend.Platform == PlatformID.Unix ||
                 SparkleBackend.Platform == PlatformID.MacOSX) {
 
-                user_name = new UnixUserInfo (UnixEnvironment.UserName).RealName;
+                user_name = Environment.UserName;
                 if (string.IsNullOrEmpty (user_name))
-                    user_name = UnixEnvironment.UserName;
+                    user_name = "";
                 else
-                    user_name = user_name.TrimEnd (",".ToCharArray());
+                    user_name = user_name.TrimEnd (",".ToCharArray ());
 
             } else {
                 user_name = Environment.UserName;
