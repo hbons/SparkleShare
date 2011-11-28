@@ -38,21 +38,9 @@ namespace SparkleShare {
         public static SparkleAbout About;
         public static NSFont Font;
 
-        private NSAlert alert;
-
 
         public SparkleUI ()
         {
-            string content_path = Directory.GetParent (
-                System.AppDomain.CurrentDomain.BaseDirectory).ToString ();
-
-            string app_path     = Directory.GetParent (content_path).ToString ();
-            string growl_path   = Path.Combine (app_path, "Frameworks", "Growl.framework", "Growl");
-
-            // Needed for Growl
-            Dlfcn.dlopen (growl_path, 0);
-            NSApplication.Init ();
-
             // Use translations
             Catalog.Init ("sparkleshare",
                 Path.Combine (NSBundle.MainBundle.ResourcePath, "Translations"));
@@ -65,12 +53,6 @@ namespace SparkleShare {
 
                 NSApplication.SharedApplication.ApplicationIconImage
                     = NSImage.ImageNamed ("sparkleshare.icns");
-
-                if (!Program.Controller.BackendIsPresent) {
-                    this.alert = new SparkleAlert ();
-                    this.alert.RunModal ();
-                    return;
-                }
 
                 SetFolderIcon ();
     
