@@ -461,7 +461,31 @@ namespace SparkleShare {
                             Close ();
                         };
 
-                        Add (null);
+
+                        if (warnings != null) {
+                            WarningImage = NSImage.ImageNamed ("NSCaution");
+                            WarningImage.Size = new SizeF (24, 24);
+
+                            WarningImageView = new NSImageView () {
+                                Image = WarningImage,
+                                Frame = new RectangleF (190, Frame.Height - 175, 24, 24)
+                            };
+
+                            Image warning_image = new Image (SparkleUIHelpers.GetIcon ("dialog-warning", 24));
+                            Label warning_label = new Label (warnings [0]) {
+                                Xalign = 0
+                            };
+
+                            HBox warning_layout = new HBox (false, 0);
+                            warning_layout.PackStart (warning_image, false, false, 0);
+                            warning_layout.PackStart (warning_label, true, true, 0);
+
+                            Add (warning_layout);
+
+                        } else {
+                            Add (null);
+                        }
+
 
                         AddButton (open_folder_button);
                         AddButton (finish_button);

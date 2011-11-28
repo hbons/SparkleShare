@@ -137,6 +137,30 @@ namespace SparkleLib {
         }
 
 
+        public override string [] Warnings {
+            get {
+                SparkleGit git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+                    "config --global core.excludesfile");
+
+                git.Start ();
+
+                // Reading the standard output HAS to go before
+                // WaitForExit, or it will hang forever on output > 4096 bytes
+                string output = git.StandardOutput.ReadToEnd ().Trim ();
+                git.WaitForExit ();
+
+                if (string.IsNullOrEmpty (output)) {
+                    return null;
+
+                } else {
+                    return new string [] {
+                        string.Format ("You seem to have configured a system ‘gitignore’ file. " +
+                                       "This may interfere with SparkleShare.\n({0})", output)
+                    };
+                }
+            }
+        }
+
         public override void Stop ()
         {
             if (this.git != null) {

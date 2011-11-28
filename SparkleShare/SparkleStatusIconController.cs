@@ -24,7 +24,7 @@ namespace SparkleShare {
         Idle,
         SyncingUp,
         SyncingDown,
-        SyncingUpDown,
+        Syncing,
         Error
     }
 
