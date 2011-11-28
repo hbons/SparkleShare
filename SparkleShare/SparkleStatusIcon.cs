@@ -104,7 +104,7 @@ namespace SparkleShare {
                         case IconState.Syncing:
 
                             StateText = _("Syncing…");
-                            UpdateStateText (); // TODO
+                            UpdateStateText ();
 
                             if (!Animation.Enabled)
                                 Animation.Start ();

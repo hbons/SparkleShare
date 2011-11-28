@@ -18,10 +18,11 @@
 using System;
 using System.IO;
 using System.Diagnostics;
+using System.Security.AccessControl;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-using Mono.Unix;
+//using Mono.Unix;
 
 namespace SparkleLib {
 
@@ -29,7 +30,7 @@ namespace SparkleLib {
     public abstract class SparkleFetcherBase {
 
         public delegate void StartedEventHandler ();
-        public delegate void FinishedEventHandler ();
+        public delegate void FinishedEventHandler (string [] warnings);
         public delegate void FailedEventHandler ();
         public delegate void ProgressChangedEventHandler (double percentage);
 
@@ -52,7 +53,7 @@ namespace SparkleLib {
 
 
         public abstract bool Fetch ();
-
+        public abstract string [] Warnings { get; }
 
         // Clones the remote repository
         public void Start ()
@@ -83,7 +84,7 @@ namespace SparkleLib {
                     EnableHostKeyCheckingForHost (host);
 
                     if (Finished != null)
-                        Finished ();
+                        Finished (Warnings);
 
                 } else {
                     SparkleHelpers.DebugInfo ("Fetcher", "Failed");
@@ -157,9 +158,9 @@ namespace SparkleLib {
                 File.WriteAllText (ssh_config_file_path, ssh_config);
             }
 
-            UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
-            file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
-                                               FileAccessPermissions.UserWrite);
+            //UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
+            //file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
+            //                                   FileAccessPermissions.UserWrite); TODO
 
             SparkleHelpers.DebugInfo ("Fetcher", "Disabled host key checking " + host);
         }
@@ -169,8 +170,8 @@ namespace SparkleLib {
         {
             string path = SparkleConfig.DefaultConfig.HomePath;
 
-            if (!(SparkleBackend.Platform == PlatformID.Unix ||
-                  SparkleBackend.Platform == PlatformID.MacOSX)) {
+            if (SparkleBackend.Platform != PlatformID.Unix &&
+                SparkleBackend.Platform != PlatformID.MacOSX) {
 
                 path = Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%");
             }
@@ -208,9 +209,9 @@ namespace SparkleLib {
                 } else {
                     File.WriteAllText (ssh_config_file_path, new_ssh_config.Trim ());
 
-                    UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
-                    file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
-                                                       FileAccessPermissions.UserWrite);
+                    //UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
+                    //file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
+                    //                                   FileAccessPermissions.UserWrite); TODO
                 }
             }
 

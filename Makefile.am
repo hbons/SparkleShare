@@ -1,4 +1,4 @@
-basedirs = build help SmartIrc4net SparkleLib data po
+basedirs = build help SparkleLib data po
 
 SUBDIRS = $(basedirs) $(GUISUBDIRS)
 DIST_SUBDIRS = $(basedirs) SparkleShare

@@ -22,6 +22,8 @@ namespace SparkleShare {
 
     public enum IconState {
         Idle,
+        SyncingUp,
+        SyncingDown,
         Syncing,
         Error
     }
@@ -70,8 +72,6 @@ namespace SparkleShare {
 
             Program.Controller.OnSyncing += delegate {
                 CurrentState = IconState.Syncing;
-
-                // TODO up down both
 
                 if (UpdateMenuEvent != null)
                     UpdateMenuEvent (IconState.Syncing);
