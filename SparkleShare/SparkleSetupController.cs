@@ -42,7 +42,7 @@ namespace SparkleShare {
     public class SparkleSetupController {
 
         public event ChangePageEventHandler ChangePageEvent;
-        public delegate void ChangePageEventHandler (PageType page);
+        public delegate void ChangePageEventHandler (PageType page, string [] warnings);
         
         public event UpdateProgressBarEventHandler UpdateProgressBarEvent;
         public delegate void UpdateProgressBarEventHandler (double percentage);
@@ -152,7 +152,7 @@ namespace SparkleShare {
 
             SelectedPlugin = Plugins [0];
 
-            ChangePageEvent += delegate (PageType page) {
+            ChangePageEvent += delegate (PageType page, string [] warning) {
                 this.previous_page = page;
             };
         }
@@ -161,7 +161,7 @@ namespace SparkleShare {
         public void ShowSetupPage ()
         {
            if (ChangePageEvent != null)
-               ChangePageEvent (PageType.Setup);
+               ChangePageEvent (PageType.Setup, null);
         }
 
 
@@ -187,7 +187,7 @@ namespace SparkleShare {
             Program.Controller.UpdateState ();
 
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Tutorial);
+                ChangePageEvent (PageType.Tutorial, null);
         }
 
 
@@ -196,7 +196,7 @@ namespace SparkleShare {
             this.tutorial_page_number++;
 
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Tutorial);
+                ChangePageEvent (PageType.Tutorial, null);
         }
 
 
@@ -205,14 +205,14 @@ namespace SparkleShare {
             this.tutorial_page_number = 4;
 
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Tutorial);
+                ChangePageEvent (PageType.Tutorial, null);
         }
 
 
         public void ShowAddPage ()
         {
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Add);
+                ChangePageEvent (PageType.Add, null);
 
             SelectedPluginChanged (SelectedPluginIndex);
         }
@@ -241,11 +241,13 @@ namespace SparkleShare {
             this.previous_path    = path;
 
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Syncing);
+                ChangePageEvent (PageType.Syncing, null);
 
-            Program.Controller.FolderFetched += delegate {
+            // TODO: Remove events afterwards
+
+            Program.Controller.FolderFetched += delegate (string [] warnings) {
                 if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Finished);
+                    ChangePageEvent (PageType.Finished, warnings);
 
                 this.previous_address = "";
                 this.syncing_folder   = "";
@@ -257,7 +259,7 @@ namespace SparkleShare {
                 this.previous_url = remote_url;
 
                 if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Error);
+                    ChangePageEvent (PageType.Error, null);
 
                 this.syncing_folder = "";
             };
@@ -274,7 +276,7 @@ namespace SparkleShare {
         public void ErrorPageCompleted ()
         {
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Add);
+                ChangePageEvent (PageType.Add, null);
         }
 
 
@@ -283,7 +285,7 @@ namespace SparkleShare {
             Program.Controller.StopFetcher ();
 
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Add);
+                ChangePageEvent (PageType.Add, null);
         }
 
 
