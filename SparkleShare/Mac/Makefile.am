@@ -6,7 +6,6 @@ EXTRA_DIST = \
   MainMenu.xib \
   MainMenu.xib.designer.cs \
   SparkleAbout.cs \
-  SparkleAlert.cs \
   SparkleBadger.cs \
   SparkleBubbles.cs \
   SparkleController.cs \
