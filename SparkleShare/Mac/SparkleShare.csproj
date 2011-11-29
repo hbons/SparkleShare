@@ -60,7 +60,7 @@
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System.Net" />
-    <Reference Include="SparkleLib, Version=0.4.0.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="SparkleLib, Version=0.4.1.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\SparkleLib.dll</HintPath>
     </Reference>
@@ -321,6 +321,5 @@
     <Folder Include="HTML\" />
     <Folder Include="Translations\" />
     <Folder Include="Plugins\" />
-    <Folder Include="git\" />
   </ItemGroup>
 </Project>
