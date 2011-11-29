@@ -463,14 +463,6 @@ namespace SparkleShare {
 
 
                         if (warnings != null) {
-                            WarningImage = NSImage.ImageNamed ("NSCaution");
-                            WarningImage.Size = new SizeF (24, 24);
-
-                            WarningImageView = new NSImageView () {
-                                Image = WarningImage,
-                                Frame = new RectangleF (190, Frame.Height - 175, 24, 24)
-                            };
-
                             Image warning_image = new Image (SparkleUIHelpers.GetIcon ("dialog-warning", 24));
                             Label warning_label = new Label (warnings [0]) {
                                 Xalign = 0
