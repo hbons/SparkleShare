@@ -33,21 +33,6 @@ SOURCES =  \
 	SparkleStatusIconController.cs \
 	SparkleUI.cs \
 	SparkleUIHelpers.cs
-	SparkleBubbles.cs \
-	SparkleBubblesController.cs \
-	SparkleController.cs \
-	SparkleEntry.cs \
-	SparkleEventLog.cs \
-	SparkleEventLogController.cs \
-	SparkleOptions.cs \
-	SparkleSetup.cs \
-	SparkleSetupController.cs \
-	SparkleSetupWindow.cs \
-	SparkleSpinner.cs \
-	SparkleStatusIcon.cs \
-	SparkleStatusIconController.cs \
-	SparkleUI.cs \
-	SparkleUIHelpers.cs
 
 include $(top_srcdir)/build/build.mk
 
