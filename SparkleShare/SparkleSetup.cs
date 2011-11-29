@@ -65,7 +65,7 @@ namespace SparkleShare {
                     )
                 );
 
-            Controller.ChangePageEvent += delegate (PageType type) {
+            Controller.ChangePageEvent += delegate (PageType type, string [] warnings) {
                 Application.Invoke (delegate {
                     Reset ();
 
