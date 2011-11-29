@@ -16,6 +16,6 @@ Global
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = SparkleShare.csproj
-		version = 0.2.5
+		version = 0.4.1
 	EndGlobalSection
 EndGlobal
