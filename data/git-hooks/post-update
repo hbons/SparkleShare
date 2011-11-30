@@ -25,16 +25,16 @@
 #
 
 #  Change these if you run your own service somewhere
-SERVER = "notifications.sparkleshare.org"
-PORT   = "1986"
+SERVER="notifications.sparkleshare.org"
+PORT="1986"
 
 #  Don't edit below this line
 exec > /dev/null 2>&1
 
-CHANNEL = $(git rev-list --reverse HEAD | head -n 1)
-MESSAGE = $(git rev-list HEAD | head -n 1)
+CHANNEL=$(git rev-list --reverse HEAD | head -n 1)
+MESSAGE=$(git rev-list HEAD | head -n 1)
 
-DATA = "announce ${CHANNEL} ${MESSAGE}"
+DATA="announce ${CHANNEL} ${MESSAGE}"
 echo "${DATA}\n" | socat - TCP-CONNECT:${SERVER}:${PORT} &
 
 exit 0
