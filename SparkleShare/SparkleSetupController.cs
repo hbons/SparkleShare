@@ -170,8 +170,8 @@ namespace SparkleShare {
             full_name = full_name.Trim ();
             email     = email.Trim ();
 
-            bool fields_valid = (!string.IsNullOrWhiteSpace (full_name) &&
-                IsValidEmail (email));
+            bool fields_valid = full_name != null && full_name.Trim().Length > 0 &&
+                IsValidEmail (email);
 
             if (UpdateSetupContinueButtonEvent != null)
                 UpdateSetupContinueButtonEvent (fields_valid);
@@ -226,8 +226,8 @@ namespace SparkleShare {
             address     = address.Trim ();
             remote_path = remote_path.Trim ();
 
-            bool fields_valid = (!string.IsNullOrWhiteSpace (address) &&
-                !string.IsNullOrWhiteSpace (remote_path));
+            bool fields_valid = address != null && address.Trim().Length > 0 &&
+                remote_path != null && remote_path.Trim().Length > 0;
 
             if (UpdateAddProjectButtonEvent != null)
                 UpdateAddProjectButtonEvent (fields_valid);

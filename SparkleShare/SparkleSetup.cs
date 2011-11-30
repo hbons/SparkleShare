@@ -52,6 +52,13 @@ namespace SparkleShare {
             return Catalog.GetString (s);
         }
 
+        public static int GetSelected (TreeView tree)
+        {
+            TreeIter iter;
+            TreeModel model;
+            tree.Selection.GetSelected(out model, out iter);
+            return int.Parse (model.GetPath (iter).ToString ());
+        }
 
         public SparkleSetup () : base ()
         {
@@ -87,12 +94,12 @@ namespace SparkleShare {
 
                             NameEntry = new Entry (Controller.GuessedUserName);
                             NameEntry.Changed += delegate {
-                                CheckSetupPage ();
+                                Controller.CheckSetupPage (NameEntry.Text, EmailEntry.Text);
                             };
 
                             EmailEntry = new Entry (Controller.GuessedUserEmail);
                             EmailEntry.Changed += delegate {
-                                CheckSetupPage ();
+                                Controller.CheckSetupPage (NameEntry.Text, EmailEntry.Text);
                             };
 
                             Label email_label = new Label ("<b>" + _("Email:") + "</b>") {
@@ -119,7 +126,7 @@ namespace SparkleShare {
                         AddButton (NextButton);
                         Add (Table);
 
-                        CheckSetupPage ();
+                        Controller.CheckSetupPage (NameEntry.Text, EmailEntry.Text);
 
                         break;
                     } 
@@ -132,6 +139,7 @@ namespace SparkleShare {
                         HBox layout_fields   = new HBox (true, 12);
                         VBox layout_address  = new VBox (true, 0);
                         VBox layout_path     = new VBox (true, 0);
+
 
                         ListStore store = new ListStore (typeof (Gdk.Pixbuf),
                             typeof (string), typeof (SparklePlugin));
@@ -212,16 +220,7 @@ namespace SparkleShare {
 
                         // Update the address field text when the selection changes
                         tree.CursorChanged += delegate (object sender, EventArgs e) {
-                            TreeIter iter;
-                            TreeModel model;
-
-                            TreeSelection selection = (sender as TreeView).Selection;
-                            selection.GetSelected (out model, out iter);
-
-                            // SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
-                            int selected_path = int.Parse (model.GetPath (iter).ToString ());
-
-                            Controller.SelectedPluginChanged (selected_path);
+                            Controller.SelectedPluginChanged (GetSelected(sender as TreeView));
 
                             // TODO: Scroll to selected row when using arrow keys
                         };
@@ -268,7 +267,7 @@ namespace SparkleShare {
                         AddressEntry.Completion.TextColumn = 0;
 
                         AddressEntry.Changed += delegate {
-                            CheckAddPage ();
+                            Controller.CheckAddPage (AddressEntry.Text, PathEntry.Text, GetSelected(tree));
                         };
 
                                 layout_address.PackStart (new Label () {
@@ -289,7 +288,7 @@ namespace SparkleShare {
                                     PathEntry.Completion.TextColumn = 0;
 
                                     PathEntry.Changed += delegate {
-                                        CheckAddPage ();
+                                        Controller.CheckAddPage (AddressEntry.Text, PathEntry.Text, GetSelected(tree));
                                     };
 
                                 layout_path.PackStart (new Label () { Markup = "<b>" + _("Remote Path") + "</b>", Xalign = 0 },
@@ -325,7 +324,7 @@ namespace SparkleShare {
                         AddButton (cancel_button);
                         AddButton (SyncButton);
 
-                        CheckAddPage ();
+                        Controller.CheckAddPage (AddressEntry.Text, PathEntry.Text, GetSelected(tree));
 
                         break;
                     }
