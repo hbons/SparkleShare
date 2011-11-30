@@ -533,8 +533,12 @@ namespace SparkleLib {
                 FillEmptyDirectories (child_path);
             }
 
-            if (Directory.GetFiles (path).Length == 0 && !path.Equals (LocalPath))
+            if (Directory.GetFiles (path).Length == 0 &&
+                Directory.GetDirectories (path).Length == 0 &&
+                !path.Equals (LocalPath)) {
+
                 File.Create (Path.Combine (path, ".empty")).Close ();
+            }
         }
 
 
