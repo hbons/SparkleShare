@@ -52,13 +52,6 @@ namespace SparkleShare {
             return Catalog.GetString (s);
         }
 
-        public static int GetSelected (TreeView tree)
-        {
-            TreeIter iter;
-            TreeModel model;
-            tree.Selection.GetSelected(out model, out iter);
-            return int.Parse (model.GetPath (iter).ToString ());
-        }
 
         public SparkleSetup () : base ()
         {
@@ -144,7 +137,7 @@ namespace SparkleShare {
                         ListStore store = new ListStore (typeof (Gdk.Pixbuf),
                             typeof (string), typeof (SparklePlugin));
 
-                        TreeView tree = new TreeView (store) { HeadersVisible = false };
+                        SparkleTreeView tree = new SparkleTreeView (store) { HeadersVisible = false };
                         ScrolledWindow scrolled_window = new ScrolledWindow ();
                         scrolled_window.AddWithViewport (tree);
 
@@ -220,7 +213,7 @@ namespace SparkleShare {
 
                         // Update the address field text when the selection changes
                         tree.CursorChanged += delegate (object sender, EventArgs e) {
-                            Controller.SelectedPluginChanged (GetSelected(sender as TreeView));
+                            Controller.SelectedPluginChanged ((sender as TreeView).SelectedRow);
 
                             // TODO: Scroll to selected row when using arrow keys
                         };
@@ -267,7 +260,7 @@ namespace SparkleShare {
                         AddressEntry.Completion.TextColumn = 0;
 
                         AddressEntry.Changed += delegate {
-                            Controller.CheckAddPage (AddressEntry.Text, PathEntry.Text, GetSelected(tree));
+                            Controller.CheckAddPage (AddressEntry.Text, PathEntry.Text, tree.SelectedRow);
                         };
 
                                 layout_address.PackStart (new Label () {
@@ -288,7 +281,7 @@ namespace SparkleShare {
                                     PathEntry.Completion.TextColumn = 0;
 
                                     PathEntry.Changed += delegate {
-                                        Controller.CheckAddPage (AddressEntry.Text, PathEntry.Text, GetSelected(tree));
+                                        Controller.CheckAddPage (AddressEntry.Text, PathEntry.Text, tree.SelectedRow);
                                     };
 
                                 layout_path.PackStart (new Label () { Markup = "<b>" + _("Remote Path") + "</b>", Xalign = 0 },
@@ -324,7 +317,7 @@ namespace SparkleShare {
                         AddButton (cancel_button);
                         AddButton (SyncButton);
 
-                        Controller.CheckAddPage (AddressEntry.Text, PathEntry.Text, GetSelected(tree));
+                        Controller.CheckAddPage (AddressEntry.Text, PathEntry.Text, tree.SelectedRow);
 
                         break;
                     }
@@ -612,6 +605,27 @@ namespace SparkleShare {
                 Convert.ToByte ((255 * (Math.Min (65535, first_color.Green * (1.0 - ratio) + second_color.Green * ratio))) / 65535),
                 Convert.ToByte ((255 * (Math.Min (65535, first_color.Blue  * (1.0 - ratio) + second_color.Blue  * ratio))) / 65535)
             );
+        }
+    }
+
+
+    public class SparkleTreeView : TreeView {
+
+        public int SelectedRow
+        {
+            get {
+                TreeIter iter;
+                TreeModel model;
+
+                Selection.GetSelected (out model, out iter);
+
+                return int.Parse (model.GetPath (iter).ToString ());
+            }
+        }
+
+
+        public SparkleTreeView (ListStore store) : base (store)
+        {
         }
     }
 }
