@@ -9,7 +9,6 @@
     <AssemblyName>SparkleShare</AssemblyName>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace>SparkleShare</RootNamespace>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,5 +77,6 @@
     <Compile Include="SparkleControllerBase.cs" />
     <Compile Include="SparklePlugin.cs" />
     <Compile Include="SparkleOptions.cs" />
+    <Compile Include="SparkleInvite.cs" />
   </ItemGroup>
 </Project>
