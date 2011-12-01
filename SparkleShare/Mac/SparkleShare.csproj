@@ -112,6 +112,9 @@
       <Link>SparkleOptions.cs</Link>
     </Compile>
     <Compile Include="SparkleAbout.cs" />
+    <Compile Include="..\SparkleInvite.cs">
+      <Link>SparkleInvite.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xib" />
