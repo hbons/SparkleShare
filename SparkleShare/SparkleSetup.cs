@@ -214,7 +214,6 @@ namespace SparkleShare {
                         // Update the address field text when the selection changes
                         tree.CursorChanged += delegate (object sender, EventArgs e) {
                             Controller.SelectedPluginChanged (tree.SelectedRow);
-
                             // TODO: Scroll to selected row when using arrow keys
                         };
 
