@@ -24,6 +24,7 @@ SOURCES =  \
 	SparkleEventLogController.cs \
 	SparkleExtensions.cs \
 	SparkleOptions.cs \
+	SparkleInvite.cs \
 	SparklePlugin.cs \
 	SparkleSetup.cs \
 	SparkleSetupController.cs \

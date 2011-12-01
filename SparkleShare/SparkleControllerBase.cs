@@ -38,41 +38,41 @@ namespace SparkleShare {
         public string FolderSize;
         public readonly string SparklePath = SparkleConfig.DefaultConfig.FoldersPath;
 
-        public event OnQuitWhileSyncingEventHandler OnQuitWhileSyncing;
-        public delegate void OnQuitWhileSyncingEventHandler ();
+        public event OnQuitWhileSyncingHandler OnQuitWhileSyncing;
+        public delegate void OnQuitWhileSyncingHandler ();
 
         public event FolderFetchedEventHandler FolderFetched;
         public delegate void FolderFetchedEventHandler (string [] warnings);
         
-        public event FolderFetchErrorEventHandler FolderFetchError;
-        public delegate void FolderFetchErrorEventHandler (string remote_url);
+        public event FolderFetchErrorHandler FolderFetchError;
+        public delegate void FolderFetchErrorHandler (string remote_url);
         
-        public event FolderFetchingEventHandler FolderFetching;
-        public delegate void FolderFetchingEventHandler (double percentage);
+        public event FolderFetchingHandler FolderFetching;
+        public delegate void FolderFetchingHandler (double percentage);
         
-        public event FolderListChangedEventHandler FolderListChanged;
-        public delegate void FolderListChangedEventHandler ();
+        public event FolderListChangedHandler FolderListChanged;
+        public delegate void FolderListChangedHandler ();
 
-        public event FolderSizeChangedEventHandler FolderSizeChanged;
-        public delegate void FolderSizeChangedEventHandler (string folder_size);
+        public event FolderSizeChangedHandler FolderSizeChanged;
+        public delegate void FolderSizeChangedHandler (string folder_size);
         
-        public event AvatarFetchedEventHandler AvatarFetched;
-        public delegate void AvatarFetchedEventHandler ();
+        public event AvatarFetchedHandler AvatarFetched;
+        public delegate void AvatarFetchedHandler ();
 
-        public event OnIdleEventHandler OnIdle;
-        public delegate void OnIdleEventHandler ();
+        public event OnIdleHandler OnIdle;
+        public delegate void OnIdleHandler ();
 
-        public event OnSyncingEventHandler OnSyncing;
-        public delegate void OnSyncingEventHandler ();
+        public event OnSyncingHandler OnSyncing;
+        public delegate void OnSyncingHandler ();
 
-        public event OnErrorEventHandler OnError;
-        public delegate void OnErrorEventHandler ();
+        public event OnErrorHandler OnError;
+        public delegate void OnErrorHandler ();
 
-        public event OnInvitationEventHandler OnInvitation;
-        public delegate void OnInvitationEventHandler (string server, string folder, string token);
+        public event OnInviteHandler OnInvite;
+        public delegate void OnInviteHandler (SparkleInvite invite);
 
-        public event ConflictNotificationRaisedEventHandler ConflictNotificationRaised;
-        public delegate void ConflictNotificationRaisedEventHandler ();
+        public event ConflictNotificationRaisedHandler ConflictNotificationRaised;
+        public delegate void ConflictNotificationRaisedHandler ();
 
         public event NotificationRaisedEventHandler NotificationRaised;
         public delegate void NotificationRaisedEventHandler (SparkleChangeSet change_set);
@@ -136,23 +136,14 @@ namespace SparkleShare {
             };
 
 
-            watcher.Created += delegate (object o, FileSystemEventArgs args) {
+            SparkleInviteListener invite_listener = new SparkleInviteListener (1986);
 
-                // Handle invitations when the user saves an
-                // invitation into the SparkleShare folder
-                if (args.Name.EndsWith (".sparkle") && !FirstRun) {
-                    XmlDocument xml_doc = new XmlDocument (); 
-                    xml_doc.Load (args.Name);
-
-                    string server = xml_doc.GetElementsByTagName ("server") [0].InnerText;
-                    string folder = xml_doc.GetElementsByTagName ("folder") [0].InnerText;
-                    string token  = xml_doc.GetElementsByTagName ("token") [0].InnerText;
-            
-                    // FIXME: this is broken :\
-                    if (OnInvitation != null)
-                        OnInvitation (server, folder, token);
-                }
+            invite_listener.InviteReceived += delegate (SparkleInvite invite) {
+                if (OnInvite != null && !FirstRun)
+                    OnInvite (invite);
             };
+
+            invite_listener.Start ();
 
             new Thread (new ThreadStart (PopulateRepositories)).Start ();
         }
