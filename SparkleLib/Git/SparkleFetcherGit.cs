@@ -203,9 +203,10 @@ namespace SparkleLib {
         // Add a .gitignore file to the repo
         private void InstallExcludeRules ()
         {
-            string exlude_rules_file_path = SparkleHelpers.CombineMore (
-                this.target_folder, ".git", "info", "exclude");
+            DirectoryInfo info = Directory.CreateDirectory (SparkleHelpers.CombineMore (
+                this.target_folder, ".git", "info"));
 
+            string exlude_rules_file_path = Path.Combine (info.FullName, "exclude");
             TextWriter writer = new StreamWriter (exlude_rules_file_path);
 
                 // gedit and emacs
@@ -238,7 +239,7 @@ namespace SparkleLib {
                 writer.WriteLine ("Thumbs.db");
                 writer.WriteLine ("Desktop.ini");
 
-		// MS Office
+                // MS Office
                 writer.WriteLine ("~*.tmp");
                 writer.WriteLine ("~*.TMP");
                 writer.WriteLine ("*~*.tmp");
