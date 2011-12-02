@@ -73,8 +73,8 @@ namespace SparkleShare {
                     case PageType.Setup: {
 
                         Header = _("Welcome to SparkleShare!");
-                        Description = _("Before we can create a SparkleShare folder on this " +
-                                        "computer, we need a few bits of information from you.");
+                        Description  = "We'll need some info to mark your changes in the event log. " +
+                                       "Don't worry, this stays between you and your peers.";
 
                         Table = new Table (4, 2, true) {
                             RowSpacing = 6
