@@ -347,6 +347,13 @@ namespace SparkleShare {
 
                         Buttons.Add (CancelButton);
 
+                        Controller.CheckAddPage (
+                            AddressTextField.StringValue,
+                            PathTextField.StringValue,
+                            TableView.SelectedRow
+                        );
+
+
                         break;
                     }
 
