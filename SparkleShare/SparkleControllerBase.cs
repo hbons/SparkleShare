@@ -139,6 +139,10 @@ namespace SparkleShare {
             SparkleInviteListener invite_listener = new SparkleInviteListener (1986);
 
             invite_listener.InviteReceived += delegate (SparkleInvite invite) {
+
+                Console.WriteLine (invite.Host + " " + invite.Path + " " + invite.Token);
+                return;
+
                 if (OnInvite != null && !FirstRun)
                     OnInvite (invite);
             };
