@@ -144,7 +144,8 @@ namespace SparkleShare {
                         invite_xml = ASCIIEncoding.ASCII.GetString (buffer);
 
                     } catch (WebException e) {
-                        SparkleHelpers.DebugInfo ("Invite", "Failed downloading: " + received_message);
+                        SparkleHelpers.DebugInfo ("Invite", "Failed downloading: " +
+                                                            received_message + " " + e.Message);
                         continue;
                     }
 
