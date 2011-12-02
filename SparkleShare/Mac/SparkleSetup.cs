@@ -72,8 +72,8 @@ namespace SparkleShare {
                     case PageType.Setup: {
 
                         Header       = "Welcome to SparkleShare!";
-                        Description  = "Before we can create a SparkleShare folder on this " +
-                                       "computer, we need some information from you.";
+                        Description  = "We'll need some info to mark your changes in the event log. " +
+                                       "Don't worry, this stays between you and your peers.";
 
 
                         FullNameLabel = new NSTextField () {
@@ -149,6 +149,11 @@ namespace SparkleShare {
                         ContentView.AddSubview (EmailTextField);
 
                         Buttons.Add (ContinueButton);
+
+                        Controller.CheckSetupPage (
+                            FullNameTextField.StringValue,
+                            EmailTextField.StringValue
+                        );
 
                         break;
                     }
