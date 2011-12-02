@@ -16,6 +16,7 @@ SparkleShare/SparkleAbout.cs
 SparkleShare/SparkleController.cs
 SparkleShare/SparkleControllerBase.cs
 SparkleShare/SparkleEventLog.cs
+SparkleShare/SparkleOptions.cs
 SparkleShare/SparkleSetup.cs
 SparkleShare/SparkleSetupWindow.cs
 SparkleShare/SparkleSpinner.cs
