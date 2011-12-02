@@ -580,6 +580,10 @@ namespace SparkleLib {
 
             foreach (string added in Added) {
                 file_name = added.Trim ("\"".ToCharArray ());
+
+                if (file_name.EndsWith (".empty"))
+                    file_name = file_name.Substring (0, file_name.Length - 6);
+
                 message += "+ ‘" + file_name + "’" + n;
 
                 count++;
@@ -589,6 +593,10 @@ namespace SparkleLib {
 
             foreach (string modified in Modified) {
                 file_name = modified.Trim ("\"".ToCharArray ());
+
+                if (file_name.EndsWith (".empty"))
+                    file_name = file_name.Substring (0, file_name.Length - 6);
+
                 message += "/ ‘" + file_name + "’" + n;
 
                 count++;
@@ -598,6 +606,10 @@ namespace SparkleLib {
 
             foreach (string removed in Removed) {
                 file_name = removed.Trim ("\"".ToCharArray ());
+
+                if (file_name.EndsWith (".empty"))
+                    file_name = file_name.Substring (0, file_name.Length - 6);
+
                 message += "- ‘" + file_name + "’" + n;
 
                 count++;
