@@ -116,7 +116,7 @@ namespace SparkleLib {
 
                 // In the unlikely case that we haven't synced up our
                 // changes or the server was down, sync up again
-                if (HasUnsyncedChanges)
+                if (HasUnsyncedChanges && !IsSyncing && this.server_online)
                     SyncUpBase ();
             };
 
@@ -180,7 +180,7 @@ namespace SparkleLib {
         }
 
 
-        public virtual bool CheckForRemoteChanges () // HasRemoteChanges { get; } ?
+        public virtual bool CheckForRemoteChanges () // TODO: HasRemoteChanges { get; }
         {
             return true;
         }
@@ -432,8 +432,9 @@ namespace SparkleLib {
 
                     HasUnsyncedChanges = true;
                     SyncDownBase ();
+                    DisableWatching ();
 
-                    if (SyncUp ()) {
+                    if (this.server_online && SyncUp ()) {
                         HasUnsyncedChanges = false;
 
                         if (SyncStatusChanged != null)
@@ -442,6 +443,8 @@ namespace SparkleLib {
                         this.listener.AnnounceBase (new SparkleAnnouncement (Identifier, CurrentRevision));
 
                     } else {
+                        this.server_online = false;
+
                         if (SyncStatusChanged != null)
                             SyncStatusChanged (SyncStatus.Error);
                     }
