@@ -34,7 +34,6 @@ namespace SparkleShare {
         public SparkleSetupController Controller = new SparkleSetupController ();
 
         private TreeView treeView;
-        private bool clearFolderEntry;
 
         // Short alias for the translations
         public static string _ (string s) {
@@ -213,9 +212,6 @@ namespace SparkleShare {
 }
 
 public class TreeView : System.Windows.Forms.TreeView {
-
-    private string selectedNodeTag;
-    private string prevNodeTag;
 
     protected override void OnDrawNode (DrawTreeNodeEventArgs e) {
         e.Graphics.DrawString (e.Node.Text.Split (';') [0], new Font (Font.SystemFontName, 13),
