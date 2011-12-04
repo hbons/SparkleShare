@@ -161,16 +161,11 @@ namespace SparkleShare {
                 else
                     FrameNumber = 0;
 
-                string icon_name = "process-syncing-sparkleshare-";
-
-                for (int i = 0; i <= FrameNumber; i++)
-                    icon_name += "i";
-
                 Application.Invoke (delegate {
                     #if HAVE_APP_INDICATOR
                     this.indicator.IconName = icon_name;
                     #else
-                    this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon (icon_name, 24);
+                    this.status_icon.Pixbuf = AnimationFrames [FrameNumber];
                     #endif
                 });
             };
