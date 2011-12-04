@@ -34,6 +34,7 @@ namespace SparkleShare {
         public SparkleSetupController Controller = new SparkleSetupController ();
 
         private TreeView treeView;
+        private bool clearFolderEntry;
 
         // Short alias for the translations
         public static string _ (string s) {
@@ -66,7 +67,7 @@ namespace SparkleShare {
                             treeView.FullRowSelect = true;
                             treeView.ImageIndex = 0;
                             treeView.Indent = 35;
-                            treeView.AfterSelect += new TreeViewEventHandler (CheckAddPage);
+                            treeView.AfterSelect += new TreeViewEventHandler (CheckTreeNode);
                             treeView.HideSelection = false;
                             treeView.ItemHeight = 40;
 
@@ -76,6 +77,7 @@ namespace SparkleShare {
                                 nodes [i] = new TreeNode (Controller.Plugins [i].Name + ";" + Controller.Plugins [i].Description);
                                 nodes [i].ImageIndex = i;
                                 nodes [i].SelectedImageIndex = i;
+                                nodes [i].Tag = Controller.Plugins [i].Name;
                                 imageList.Images.Add (Image.FromFile (Controller.Plugins [i].ImagePath));
                             }
 
@@ -143,21 +145,22 @@ namespace SparkleShare {
                     FolderEntry.Text);
         }
 
-        private void CheckAddPage (object sender, EventArgs e) {
+        private void CheckTreeNode (object sender, EventArgs e) {
             // If the "own server" choice is selected, allow input to the server entry box
-            if (treeView.SelectedNode.Index == 0) { 
+            if (treeView.SelectedNode.Tag.ToString () == "On my own server") {
                 ServerEntry.Enabled = true;
                 ServerEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].AddressExample;
             } else {
                 ServerEntry.Text = ""; //Clear any previous input data so that exampletext can show
-                FolderEntry.Text = "";
                 ServerEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].Address;
                 ServerEntry.Enabled = false;
             }
-
+            FolderEntry.Text = "";
             FolderEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].PathExample;
-           
+            CheckAddPage (null, null);
+        }
 
+        private void CheckAddPage (object sender, EventArgs e) {
             // Enables or disables the 'Next' button depending on the
             // entries filled in by the user
             buttonSync.Enabled = false;
@@ -207,24 +210,24 @@ namespace SparkleShare {
             }
         }
     }
-
-    public class TreeView : System.Windows.Forms.TreeView {
-
-        public TreeView () {
-
-        }
-        protected override void OnDrawNode (DrawTreeNodeEventArgs e) {
-            e.Graphics.DrawString (e.Node.Text.Split (';') [0], new Font (Font.SystemFontName, 13),
-                new SolidBrush (Color.Black), e.Bounds.X, e.Bounds.Y);
-            e.Graphics.DrawString (e.Node.Text.Split (';') [1], new Font (Font.SystemFontName, 9),
-                new SolidBrush (Color.Black), e.Bounds.X + 10, e.Bounds.Y + 15);
-        }
-    }
-
-    public class TreeNode : System.Windows.Forms.TreeNode {
-        public TreeNode (string text) {
-            this.Text = text;
-        }
-    }
-
 }
+
+public class TreeView : System.Windows.Forms.TreeView {
+
+    private string selectedNodeTag;
+    private string prevNodeTag;
+
+    protected override void OnDrawNode (DrawTreeNodeEventArgs e) {
+        e.Graphics.DrawString (e.Node.Text.Split (';') [0], new Font (Font.SystemFontName, 13),
+            new SolidBrush (Color.Black), e.Bounds.X, e.Bounds.Y);
+        e.Graphics.DrawString (e.Node.Text.Split (';') [1], new Font (Font.SystemFontName, 9),
+            new SolidBrush (Color.Black), e.Bounds.X + 10, e.Bounds.Y + 15);
+    }
+}
+
+public class TreeNode : System.Windows.Forms.TreeNode {
+    public TreeNode (string text) {
+        this.Text = text;
+    }
+}
+
