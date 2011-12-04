@@ -112,6 +112,8 @@ namespace SparkleShare {
                             break;
 
                         case IconState.Error:
+                            
+                            Animation.Stop ();
 
                             StateText = _("Not everything is synced");
                             UpdateStateText ();

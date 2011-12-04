@@ -449,6 +449,7 @@ namespace SparkleLib {
 
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
+                SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] " + this.status);
             }
         }
 
