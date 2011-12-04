@@ -436,23 +436,20 @@ namespace SparkleLib {
 
                     if (this.server_online && SyncUp ()) {
                         HasUnsyncedChanges = false;
-
-                        if (SyncStatusChanged != null)
-                            SyncStatusChanged (SyncStatus.Idle);
-
                         this.listener.AnnounceBase (new SparkleAnnouncement (Identifier, CurrentRevision));
 
                     } else {
                         this.server_online = false;
-
-                        if (SyncStatusChanged != null)
-                            SyncStatusChanged (SyncStatus.Error);
                     }
                 }
 
             } finally {
                 this.remote_timer.Start ();
                 EnableWatching ();
+
+                if (SyncStatusChanged != null)
+                    SyncStatusChanged (SyncStatus.Idle);
+                SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] " + this.status);
             }
         }
 
@@ -478,7 +475,7 @@ namespace SparkleLib {
                 if (!pre_sync_revision.Equals (CurrentRevision)) {
                     List<SparkleChangeSet> change_sets = GetChangeSets (1);
 
-                   if (change_sets != null && change_sets.Count > 0) {
+                    if (change_sets != null && change_sets.Count > 0) {
                         SparkleChangeSet change_set = change_sets [0];
 
                         bool note_added = false;
@@ -506,18 +503,15 @@ namespace SparkleLib {
                     SyncUp ();
 
             } else {
-                SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Error");
                 this.server_online = false;
-
-                if (SyncStatusChanged != null)
-                    SyncStatusChanged (SyncStatus.Error);
+                SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Error");
             }
-
-            if (SyncStatusChanged != null)
-                SyncStatusChanged (SyncStatus.Idle);
 
             this.remote_timer.Start ();
             EnableWatching ();
+
+            if (SyncStatusChanged != null)
+                SyncStatusChanged (SyncStatus.Idle);
         }
 
 

@@ -112,6 +112,8 @@ namespace SparkleShare {
                             break;
 
                         case IconState.Error:
+                            
+                            Animation.Stop ();
 
                             Animation.Stop ();
 
