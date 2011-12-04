@@ -532,31 +532,39 @@ namespace SparkleShare {
         // Fires events for the current syncing state
         public void UpdateState ()
         {
+            bool has_syncing_repos  = false;
+            bool has_unsynced_repos = false;
+
             foreach (SparkleRepoBase repo in Repositories) {
                 if (repo.Status == SyncStatus.SyncDown ||
                     repo.Status == SyncStatus.SyncUp   ||
                     repo.IsBuffering) {
 
-                    if (OnSyncing != null)
-                        OnSyncing ();
-
-                    return;
+                    has_syncing_repos = true;
 
                 } else if (repo.HasUnsyncedChanges) {
-                    if (OnError != null)
-                        OnError ();
-
-                    return;
+                    has_unsynced_repos = true;
                 }
             }
 
-            if (OnIdle != null)
-                OnIdle ();
 
-            FolderSize = GetFolderSize ();
+            if (has_syncing_repos) {
+                if (OnSyncing != null)
+                    OnSyncing ();
 
-            if (FolderSizeChanged != null)
-                FolderSizeChanged (FolderSize);
+            } else if (has_unsynced_repos) {
+                if (OnError != null)
+                    OnError ();
+
+            } else {
+                if (OnIdle != null)
+                    OnIdle ();
+
+                FolderSize = GetFolderSize ();
+
+                if (FolderSizeChanged != null)
+                    FolderSizeChanged (FolderSize);
+            }
         }
 
 
