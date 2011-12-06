@@ -57,7 +57,12 @@ namespace SparkleShare {
                     switch (type) {
                         case PageType.Add:
                             tabControl.SelectedIndex = 1;
-
+                            // Check whether the treeView is already created
+                            if (treeView != null) {
+                                CheckAddPage (null, null);
+                                CheckTreeNode (null, null);
+                                break;
+                            }
                             // Set up the treeview
                             ImageList imageList = new ImageList ();
                             imageList.ImageSize = new Size (24, 24);
@@ -91,6 +96,8 @@ namespace SparkleShare {
                             treeView.SelectedNode = treeView.Nodes [0];
                             treeView.Select ();
                             CheckAddPage (null, null);
+                            CheckTreeNode (null, null);
+                            Console.WriteLine ("AddPage");
                             Show ();
                             break;
                         case PageType.Error:
@@ -145,15 +152,17 @@ namespace SparkleShare {
         }
 
         private void CheckTreeNode (object sender, EventArgs e) {
-            // If the "own server" choice is selected, allow input to the server entry box
-            if (treeView.SelectedNode.Tag.ToString () == "On my own server") {
+            // If the "own server" choice is selected, the address field is empty
+            if (String.IsNullOrEmpty (Controller.Plugins [treeView.SelectedNode.Index].Address)) {
                 ServerEntry.Enabled = true;
                 ServerEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].AddressExample;
             } else {
-                ServerEntry.Text = ""; //Clear any previous input data so that exampletext can show
+                ServerEntry.Enabled = false;
                 ServerEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].Address;
                 ServerEntry.Enabled = false;
             }
+            //Clear any previous input data so that exampletext can show
+            ServerEntry.Text = "";
             FolderEntry.Text = "";
             FolderEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].PathExample;
             CheckAddPage (null, null);
