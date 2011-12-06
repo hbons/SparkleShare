@@ -58,10 +58,9 @@ namespace SparkleShare {
                         case PageType.Add:
                             tabControl.SelectedIndex = 1;
                             // Check whether the treeView is already created
+                            // If it is dispose it and start over
                             if (treeView != null) {
-                                CheckAddPage (null, null);
-                                CheckTreeNode (null, null);
-                                break;
+                                treeView.Dispose();
                             }
                             // Set up the treeview
                             ImageList imageList = new ImageList ();
@@ -97,7 +96,6 @@ namespace SparkleShare {
                             treeView.Select ();
                             CheckAddPage (null, null);
                             CheckTreeNode (null, null);
-                            Console.WriteLine ("AddPage");
                             Show ();
                             break;
                         case PageType.Error:
