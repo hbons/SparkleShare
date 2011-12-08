@@ -118,6 +118,12 @@ namespace SparkleShare {
 
                         AddButton (NextButton);
                         Add (Table);
+                        
+                        Controller.UpdateSetupContinueButtonEvent += delegate (bool button_enabled) {
+                            Application.Invoke (delegate {
+                                NextButton.Sensitive = button_enabled;
+                            });
+                        };
 
                         Controller.CheckSetupPage (NameEntry.Text, EmailEntry.Text);
 
