@@ -141,17 +141,17 @@ namespace SparkleLib {
 
             string ssh_config_path      = Path.Combine (path, ".ssh");
             string ssh_config_file_path = SparkleHelpers.CombineMore (path, ".ssh", "config");
-            string ssh_config           = Environment.NewLine + "# <SparkleShare>" +
-                                          Environment.NewLine + "Host " + host +
-                                          Environment.NewLine + "\tStrictHostKeyChecking no" +
-                                          Environment.NewLine + "# </SparkleShare>";
+            string ssh_config           = "\n# <SparkleShare>" +
+                                          "\nHost " + host +
+                                          "\n\tStrictHostKeyChecking no" +
+                                          "\n# </SparkleShare>";
 
             if (!Directory.Exists (ssh_config_path))
                 Directory.CreateDirectory (ssh_config_path);
 
             if (File.Exists (ssh_config_file_path)) {
                 TextWriter writer = File.AppendText (ssh_config_file_path);
-                writer.WriteLine (ssh_config);
+                writer.Write (ssh_config);
                 writer.Close ();
 
             } else {
@@ -182,7 +182,7 @@ namespace SparkleLib {
                 string current_ssh_config = File.ReadAllText (ssh_config_file_path);
 
                 current_ssh_config = current_ssh_config.Trim ();
-                string [] lines = current_ssh_config.Split (Environment.NewLine.ToCharArray ());
+                string [] lines = current_ssh_config.Split ('\n');
                 string new_ssh_config = "";
                 bool in_sparkleshare_section = false;
 
@@ -200,7 +200,7 @@ namespace SparkleLib {
                     if (in_sparkleshare_section)
                         continue;
 
-                    new_ssh_config += line + Environment.NewLine;
+                    new_ssh_config += line + "\n"; // do not use Environment.NewLine because file is in unix format
                 }
 
                 if (string.IsNullOrEmpty (new_ssh_config.Trim ())) {
