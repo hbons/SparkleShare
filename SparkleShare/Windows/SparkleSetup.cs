@@ -142,7 +142,7 @@ namespace SparkleShare {
         }
 
         private void buttonSync_Click (object sender, EventArgs e) {
-            if (treeView.SelectedNode.Index == 0)
+            if (String.IsNullOrEmpty (Controller.Plugins [treeView.SelectedNode.Index].Address))
                 Controller.AddPageCompleted (ServerEntry.Text, FolderEntry.Text);
             else
                 Controller.AddPageCompleted (Controller.Plugins [treeView.SelectedNode.Index].Address,
@@ -171,7 +171,7 @@ namespace SparkleShare {
             // entries filled in by the user
             buttonSync.Enabled = false;
 
-            if (treeView.SelectedNode.Index == 0) {
+            if (String.IsNullOrEmpty (Controller.Plugins [treeView.SelectedNode.Index].Address)) {
                 if (!String.IsNullOrEmpty (FolderEntry.Text)) {
                     if (!String.IsNullOrEmpty (ServerEntry.Text))
                         buttonSync.Enabled = true;
