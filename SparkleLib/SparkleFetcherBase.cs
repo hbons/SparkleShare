@@ -209,7 +209,7 @@ namespace SparkleLib {
                 } else {
                     File.WriteAllText (ssh_config_file_path, new_ssh_config.Trim ());
 
-                    //UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
+                    //UnixFileSystemInfo file_info    = new UnixFileInfo (ssh_config_file_path);
                     //file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
                     //                                   FileAccessPermissions.UserWrite); TODO
                 }
