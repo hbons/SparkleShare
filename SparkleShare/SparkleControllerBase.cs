@@ -85,6 +85,8 @@ namespace SparkleShare {
         private SparkleFetcherBase fetcher;
         private List<string> failed_avatars = new List<string> ();
 
+        private Object avatar_lock = new Object ();
+
 
         // Short alias for the translations
         public static string _ (string s)
@@ -920,7 +922,10 @@ namespace SparkleShare {
                     // if not empty
                     if (buffer.Length > 255) {
                         avatar_fetched = true;
-                        File.WriteAllBytes (avatar_file_path, buffer);
+
+                        lock (this.avatar_lock)
+                            File.WriteAllBytes (avatar_file_path, buffer);
+
                         SparkleHelpers.DebugInfo ("Controller", "Fetched gravatar for " + email);
                     }
 
