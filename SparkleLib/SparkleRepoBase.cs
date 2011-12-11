@@ -523,7 +523,7 @@ namespace SparkleLib {
 
         public void DisableWatching ()
         {
-            lock (watch_lock) {
+            lock (this.watch_lock) {
                 this.watcher.EnableRaisingEvents = false;
                 this.local_timer.Stop ();
             }
@@ -532,7 +532,7 @@ namespace SparkleLib {
 
         public void EnableWatching ()
         {
-            lock (watch_lock) {
+            lock (this.watch_lock) {
                 this.watcher.EnableRaisingEvents = true;
                 this.local_timer.Start ();
             }
