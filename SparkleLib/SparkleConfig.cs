@@ -89,6 +89,8 @@ namespace SparkleLib {
             } finally {
                 Load (FullPath);
             }
+
+            ConfigureSSH ();
         }
 
 
@@ -148,6 +150,52 @@ namespace SparkleLib {
 
                 this.Save ();
             }
+        }
+
+
+        private void ConfigureSSH ()
+        {
+            string path = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+
+            if (!(SparkleBackend.Platform == PlatformID.Unix ||
+                  SparkleBackend.Platform == PlatformID.MacOSX)) {
+
+                path = Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%");
+            }
+
+            string ssh_config_path      = Path.Combine (path, ".ssh");
+            string ssh_config_file_path = SparkleHelpers.CombineMore (path, ".ssh", "config");
+            string ssh_config           = "IdentityFile " +
+                Path.Combine (SparkleConfig.ConfigPath, "sparkleshare." + User.Email + ".key\n");
+
+            if (!Directory.Exists (ssh_config_path))
+                Directory.CreateDirectory (ssh_config_path);
+
+            if (File.Exists (ssh_config_file_path)) {
+                string current_config = File.ReadAllText (ssh_config_file_path);
+                if (current_config.Contains (ssh_config))
+                    return;
+
+                if (current_config.EndsWith ("\n\n"))
+                    ssh_config = "# SparkleShare's key\n" + ssh_config;
+                else if (current_config.EndsWith ("\n"))
+                    ssh_config = "\n# SparkleShare's key\n" + ssh_config;
+                else
+                    ssh_config = "\n\n# SparkleShare's key\n" + ssh_config;
+
+                TextWriter writer = File.AppendText (ssh_config_file_path);
+                writer.Write (ssh_config);
+                writer.Close ();
+
+            } else {
+                File.WriteAllText (ssh_config_file_path, ssh_config);
+            }
+
+            //UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
+            //file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
+            //                                   FileAccessPermissions.UserWrite); TODO
+
+            SparkleHelpers.DebugInfo ("Config", "Added key to " + ssh_config_file_path);
         }
 
 
