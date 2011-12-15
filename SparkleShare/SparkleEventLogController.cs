@@ -98,7 +98,7 @@ namespace SparkleShare {
                     if (this.selected_folder == null)
                         size += repo.Size;
                     else if (this.selected_folder.Equals (repo.Name))
-                        return Program.Controller.FormatFolderSize (repo.Size);
+                        return Program.Controller.FormatSize (repo.Size);
                 }
 
                 return Program.Controller.FormatSize (size);
@@ -113,7 +113,7 @@ namespace SparkleShare {
                     if (this.selected_folder == null)
                         size += repo.HistorySize;
                     else if (this.selected_folder.Equals (repo.Name))
-                        return Program.Controller.FormatFolderSize (repo.HistorySize);
+                        return Program.Controller.FormatSize (repo.HistorySize);
                 }
 
                 return Program.Controller.FormatSize (size);
