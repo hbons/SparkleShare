@@ -4,3 +4,6 @@
 [submodule "tools/TextTemplating"]
 	path = tools/TextTemplating
 	url = git://github.com/wimh/TextTemplating.git
+[submodule "tools\\gettext-cs-utils"]
+	path = tools\\gettext-cs-utils
+	url = git://github.com/wimh/gettext-cs-utils.git
