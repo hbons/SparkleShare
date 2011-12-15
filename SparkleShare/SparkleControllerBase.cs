@@ -35,7 +35,6 @@ namespace SparkleShare {
     public abstract class SparkleControllerBase {
 
         public List <SparkleRepoBase> Repositories;
-        public string FolderSize;
         public readonly string SparklePath = SparkleConfig.DefaultConfig.FoldersPath;
 
         public event OnQuitWhileSyncingHandler OnQuitWhileSyncing;
@@ -53,9 +52,6 @@ namespace SparkleShare {
         public event FolderListChangedHandler FolderListChanged;
         public delegate void FolderListChangedHandler ();
 
-        public event FolderSizeChangedHandler FolderSizeChanged;
-        public delegate void FolderSizeChangedHandler (string folder_size);
-        
         public event AvatarFetchedHandler AvatarFetched;
         public delegate void AvatarFetchedHandler ();
 
@@ -109,8 +105,6 @@ namespace SparkleShare {
             if (CreateSparkleShareFolder ())
                 AddToBookmarks ();
 
-            FolderSize = GetFolderSize ();
-
             if (FirstRun)
                 SparkleConfig.DefaultConfig.SetConfigOption ("notifications", bool.TrueString);
             else
@@ -130,11 +124,6 @@ namespace SparkleShare {
 
                 if (FolderListChanged != null)
                     FolderListChanged ();
-
-                FolderSize = GetFolderSize ();
-
-                if (FolderSizeChanged != null)
-                    FolderSizeChanged (FolderSize);
             };
 
 
@@ -163,8 +152,8 @@ namespace SparkleShare {
         public bool AcceptInvitation (string server, string folder, string token)
         {
             // The location of the user's public key for SparkleShare
-            string public_key_file_path = SparkleHelpers.CombineMore (SparkleConfig.DefaultConfig.HomePath, ".ssh",
-                "sparkleshare." + UserEmail + ".key.pub");
+            string public_key_file_path = SparkleHelpers.CombineMore (SparkleConfig.DefaultConfig.HomePath,
+                ".ssh", "sparkleshare." + UserEmail + ".key.pub");
 
             if (!File.Exists (public_key_file_path))
                 return false;
@@ -561,11 +550,6 @@ namespace SparkleShare {
             } else {
                 if (OnIdle != null)
                     OnIdle ();
-
-                FolderSize = GetFolderSize ();
-
-                if (FolderSizeChanged != null)
-                    FolderSizeChanged (FolderSize);
             }
         }
 
@@ -660,11 +644,6 @@ namespace SparkleShare {
 
             if (FolderListChanged != null)
                 FolderListChanged ();
-            
-            FolderSize = GetFolderSize ();
-
-            if (FolderSizeChanged != null)
-                FolderSizeChanged (FolderSize);
         }
 
 
@@ -696,51 +675,37 @@ namespace SparkleShare {
         }
 
 
-        private string GetFolderSize ()
+        public string GetSize (string folder_name)
         {
-            double folder_size = CalculateFolderSize (
-                new DirectoryInfo (SparkleConfig.DefaultConfig.FoldersPath));
+            double folder_size = 0;
+            /* TODO
+            foreach (SparkleRepoBase repo in
+                Repositories.GetRange (0, Repositories.Count)) {
 
+                folder_size += repo.Size + repo.HistorySize;
+            }
+             */
             return FormatFolderSize (folder_size);
         }
 
 
-        // Recursively gets a folder's size in bytes
-        private double CalculateFolderSize (DirectoryInfo parent)
+        public string GetHistorySize (string folder_name)
         {
-            if (!Directory.Exists (parent.ToString ()))
-                return 0;
+            double folder_size = 0;
+            /* TODO
+            foreach (SparkleRepoBase repo in
+                Repositories.GetRange (0, Repositories.Count)) {
 
-            double size = 0;
-
-            // Ignore the temporary 'rebase-apply' and '.tmp' directories. This prevents potential
-            // crashes when files are being queried whilst the files have already been deleted.
-            if (parent.Name.Equals ("rebase-apply") ||
-                parent.Name.Equals (".tmp"))
-                return 0;
-
-            try {
-                foreach (FileInfo file in parent.GetFiles()) {
-                    if (!file.Exists)
-                        return 0;
-
-                    size += file.Length;
-                }
-
-                foreach (DirectoryInfo directory in parent.GetDirectories())
-                    size += CalculateFolderSize (directory);
-
-            } catch (Exception) {
-                return 0;
+                folder_size += repo.Size + repo.HistorySize;
             }
-
-            return size;
+             */
+            return FormatFolderSize (folder_size);
         }
 
 
         // Format a file size nicely with small caps.
         // Example: 1048576 becomes "1 ᴍʙ"
-        private string FormatFolderSize (double byte_count)
+        public string FormatFolderSize (double byte_count)
         {
             if (byte_count >= 1099511627776)
                 return String.Format ("{0:##.##} ᴛʙ", Math.Round (byte_count / 1099511627776, 1));
@@ -1036,11 +1001,6 @@ namespace SparkleShare {
 
                 if (FolderFetched != null)
                     FolderFetched (warnings);
-
-                FolderSize = GetFolderSize ();
-
-                if (FolderSizeChanged != null)
-                    FolderSizeChanged (FolderSize);
 
                 if (FolderListChanged != null)
                     FolderListChanged ();
