@@ -18,6 +18,8 @@
 using System;
 using System.IO;
 
+using SparkleLib;
+
 namespace SparkleShare {
 
     public enum IconState {
@@ -46,17 +48,18 @@ namespace SparkleShare {
 
         public string FolderSize {
             get {
-                return Program.Controller.FolderSize;
+                double size = 0;
+
+                foreach (SparkleRepoBase repo in Program.Controller.Repositories)
+                    size += repo.Size + repo.HistorySize;
+
+                return Program.Controller.FormatSize (size);
             }
         }
 
+
         public SparkleStatusIconController ()
         {
-            Program.Controller.FolderSizeChanged += delegate {
-                if (UpdateMenuEvent != null)
-                    UpdateMenuEvent (CurrentState);
-            };
-
             Program.Controller.FolderListChanged += delegate {
                 if (UpdateMenuEvent != null)
                     UpdateMenuEvent (CurrentState);

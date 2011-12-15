@@ -34,8 +34,13 @@ namespace SparkleShare {
         public event UpdateChooserEventHandler UpdateChooserEvent;
         public delegate void UpdateChooserEventHandler (string [] folders);
 
+        public event UpdateSizeInfoEventHandler UpdateSizeInfoEvent;
+        public delegate void UpdateSizeInfoEventHandler (string size, string history_size);
+
         public event ContentLoadingEventHandler ContentLoadingEvent;
         public delegate void ContentLoadingEventHandler ();
+
+        private string selected_folder;
 
 
         public string SelectedFolder {
@@ -63,6 +68,9 @@ namespace SparkleShare {
 
                     if (UpdateContentEvent != null)
                         UpdateContentEvent (html);
+    
+                    if (UpdateSizeInfoEvent != null)
+                        UpdateSizeInfoEvent (Size, HistorySize);
                 }));
 
                 thread.Start ();
@@ -82,8 +90,35 @@ namespace SparkleShare {
             }
         }
 
+        public string Size {
+            get {
+                double size = 0;
 
-        private string selected_folder;
+                foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
+                    if (this.selected_folder == null)
+                        size += repo.Size;
+                    else if (this.selected_folder.Equals (repo.Name))
+                        return Program.Controller.FormatFolderSize (repo.Size);
+                }
+
+                return Program.Controller.FormatSize (size);
+            }
+        }
+
+        public string HistorySize {
+            get {
+                double size = 0;
+
+                foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
+                    if (this.selected_folder == null)
+                        size += repo.HistorySize;
+                    else if (this.selected_folder.Equals (repo.Name))
+                        return Program.Controller.FormatFolderSize (repo.HistorySize);
+                }
+
+                return Program.Controller.FormatSize (size);
+            }
+        }
 
 
         public SparkleEventLogController ()
@@ -96,6 +131,9 @@ namespace SparkleShare {
             Program.Controller.OnIdle += delegate {
                 if (UpdateContentEvent != null)
                     UpdateContentEvent (HTML);
+
+                if (UpdateSizeInfoEvent != null)
+                    UpdateSizeInfoEvent (Size, HistorySize);
             };
 
             Program.Controller.FolderListChanged += delegate {
@@ -110,11 +148,9 @@ namespace SparkleShare {
 
                 if (UpdateContentEvent != null)
                     UpdateContentEvent (HTML);
-            };
 
-            Program.Controller.NotificationRaised += delegate {
-                if (UpdateContentEvent != null)
-                    UpdateContentEvent (HTML);
+                if (UpdateSizeInfoEvent != null)
+                    UpdateSizeInfoEvent (Size, HistorySize);
             };
         }
 

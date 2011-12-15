@@ -64,7 +64,11 @@ namespace SparkleLib {
         public abstract string CurrentRevision { get; }
         public abstract bool SyncUp ();
         public abstract bool SyncDown ();
+        public abstract double CalculateSize (DirectoryInfo parent);
         public abstract bool HasUnsyncedChanges { get; set; }
+
+        public abstract double Size { get; }
+        public abstract double HistorySize { get; }
 
         public delegate void SyncStatusChangedEventHandler (SyncStatus new_status);
         public event SyncStatusChangedEventHandler SyncStatusChanged;
@@ -309,7 +313,7 @@ namespace SparkleLib {
                         this.sizebuffer.RemoveAt (0);
 
                     DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
-                     this.sizebuffer.Add (CalculateFolderSize (dir_info));
+                     this.sizebuffer.Add (CalculateSize (dir_info));
 
                     if (this.sizebuffer.Count >= 4 &&
                         this.sizebuffer [0].Equals (this.sizebuffer [1]) &&
@@ -585,33 +589,6 @@ namespace SparkleLib {
 
             OnFileActivity (args);
             SparkleHelpers.DebugInfo ("Note", "Added note to " + revision);
-        }
-
-
-        // Recursively gets a folder's size in bytes
-        private double CalculateFolderSize (DirectoryInfo parent)
-        {
-            if (!System.IO.Directory.Exists (parent.ToString ()))
-                return 0;
-
-            double size = 0;
-
-            // Ignore the temporary 'rebase-apply' directory. This prevents potential
-            // crashes when files are being queried whilst the files have already been deleted.
-            if (parent.Name.Equals ("rebase-apply"))
-                return 0;
-
-            foreach (FileInfo file in parent.GetFiles ()) {
-                if (!file.Exists)
-                    return 0;
-
-                size += file.Length;
-            }
-
-            foreach (DirectoryInfo directory in parent.GetDirectories())
-                size += CalculateFolderSize (directory);
-
-            return size;
         }
 
 
