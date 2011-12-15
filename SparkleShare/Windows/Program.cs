@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -44,7 +45,7 @@ namespace SparkleShare {
 #if __MonoCS__
             return Catalog.GetString (s);
 #else
-            return s;
+            return Strings.T(s);
 #endif
         }
         
@@ -53,6 +54,9 @@ namespace SparkleShare {
 #endif
         public static void Main (string [] args)
         {
+            //var culture = CultureInfo.GetCultureInfo ("en"); // FIXME: test only
+            //System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+
             // Parse the command line options
             bool show_help       = false;
             OptionSet option_set = new OptionSet () {

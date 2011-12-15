@@ -41,6 +41,7 @@ build/m4/shave/shave-libtool
 SparkleLib/Defines.cs
 SparkleLib/windows/Defines.cs
 SparkleLib/windows/GlobalAssemblyInfo.cs
+SparkleShare/Windows/Strings.cs
 SparkleShare/sparkleshare
 po/sparkleshare.pot
 SparkleShare/Nautilus/sparkleshare-nautilus-extension.py

@@ -55,7 +55,12 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="CefSharp, Version=0.3.4006.34354, Culture=neutral, processorArchitecture=x86" />
+    <Reference Include="Gettext.Cs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\tools\gettext-cs-utils\Gettext.CsUtils\Core\Gettext.Cs\bin\Release\Gettext.Cs.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -136,6 +141,11 @@
     <Compile Include="SparkleUIHelpers.cs" />
     <Compile Include="controls\TablessControl.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Strings.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -270,6 +280,126 @@
     <None Include="..\..\data\plugins\own-server.xml">
       <Link>plugins\own-server.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\ar.po">
+      <Link>po\ar.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\bg.po">
+      <Link>po\bg.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\ca.po">
+      <Link>po\ca.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\cs_CZ.po">
+      <Link>po\cs_CZ.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\da.po">
+      <Link>po\da.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\de.po">
+      <Link>po\de.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\el.po">
+      <Link>po\el.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\eo.po">
+      <Link>po\eo.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\es.po">
+      <Link>po\es.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\fi.po">
+      <Link>po\fi.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\fr.po">
+      <Link>po\fr.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\he.po">
+      <Link>po\he.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\hu.po">
+      <Link>po\hu.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\it.po">
+      <Link>po\it.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\ja.po">
+      <Link>po\ja.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\nl.po">
+      <Link>po\nl.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\nn_NO.po">
+      <Link>po\nn_NO.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\no_NO.po">
+      <Link>po\no_NO.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\pl.po">
+      <Link>po\pl.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\pt_BR.po">
+      <Link>po\pt_BR.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\ru.po">
+      <Link>po\ru.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\sk.po">
+      <Link>po\sk.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\sl.po">
+      <Link>po\sl.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\sr_RS.po">
+      <Link>po\sr_RS.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\sv.po">
+      <Link>po\sv.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\te.po">
+      <Link>po\te.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\uk.po">
+      <Link>po\uk.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\zh_CN.po">
+      <Link>po\zh_CN.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\po\zh_TW.po">
+      <Link>po\zh_TW.po</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Strings.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Strings.cs</LastGenOutput>
     </None>
   </ItemGroup>
 </Project>
