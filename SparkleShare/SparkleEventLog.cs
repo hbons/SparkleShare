@@ -61,7 +61,7 @@ namespace SparkleShare {
 
             this.size_label = new Label () {
                 Markup = "<b>Size:</b> " + Controller.Size + "   " +
-                         "<b>History:</b> " + Controller.HistorySize;
+                         "<b>History:</b> " + Controller.HistorySize
             };
 
             VBox layout_vertical = new VBox (false, 0);
