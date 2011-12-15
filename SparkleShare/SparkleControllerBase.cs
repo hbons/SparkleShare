@@ -685,7 +685,7 @@ namespace SparkleShare {
                 folder_size += repo.Size + repo.HistorySize;
             }
              */
-            return FormatFolderSize (folder_size);
+            return FormatSize (folder_size);
         }
 
 
@@ -699,13 +699,13 @@ namespace SparkleShare {
                 folder_size += repo.Size + repo.HistorySize;
             }
              */
-            return FormatFolderSize (folder_size);
+            return FormatSize (folder_size);
         }
 
 
         // Format a file size nicely with small caps.
         // Example: 1048576 becomes "1 ᴍʙ"
-        public string FormatFolderSize (double byte_count)
+        public string FormatSize (double byte_count)
         {
             if (byte_count >= 1099511627776)
                 return String.Format ("{0:##.##} ᴛʙ", Math.Round (byte_count / 1099511627776, 1));
