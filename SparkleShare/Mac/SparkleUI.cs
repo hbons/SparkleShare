@@ -108,6 +108,7 @@ namespace SparkleShare {
             NSApplication.SharedApplication.DockTile.BadgeLabel = null;
         }
 
+
         public override void WillTerminate (NSNotification notification)
         {
             Program.Controller.Quit ();
