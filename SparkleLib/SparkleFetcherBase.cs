@@ -162,7 +162,7 @@ namespace SparkleLib {
             //file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
             //                                   FileAccessPermissions.UserWrite); TODO
 
-            SparkleHelpers.DebugInfo ("Fetcher", "Disabled host key checking " + host);
+            SparkleHelpers.DebugInfo ("Fetcher", "Disabled host key checking for " + host);
         }
         
 
