@@ -242,7 +242,7 @@ namespace SparkleShare {
     
                     RecentEventsMenuItem = new NSMenuItem () {
                         Title = "Open Recent Events",
-                        Enabled = true
+                        Enabled = (Controller.Folders.Length > 0)
                     };
     
                     if (Controller.Folders.Length > 0) {
