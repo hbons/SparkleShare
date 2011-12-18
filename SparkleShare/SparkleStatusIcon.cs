@@ -261,9 +261,8 @@ namespace SparkleShare {
             Menu.Add (new SeparatorMenuItem ());
 
             MenuItem recent_events_item = new MenuItem (_("Open Recent Events"));
-            
-                if (Program.Controller.Folders.Count < 1)
-                    recent_events_item.Sensitive = false;
+
+                recent_events_item.Sensitive = (Controller.Folders.Length > 0);
 
                 recent_events_item.Activated += delegate {
                     Application.Invoke (delegate {
