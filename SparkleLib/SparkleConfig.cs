@@ -33,11 +33,9 @@ namespace SparkleLib {
 
         public static SparkleConfig DefaultConfig = new SparkleConfig (ConfigPath, "config.xml");
 
-
         public string FullPath;
-
         public string HomePath = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
-        public string TmpPath;
+
 
         public string FoldersPath {
             get {
@@ -48,11 +46,16 @@ namespace SparkleLib {
             }
         }
 
+        public string TmpPath {
+            get {
+                return Path.Combine (FoldersPath, ".tmp");
+            }
+        }
+
 
         public SparkleConfig (string config_path, string config_file_name)
         {
             FullPath = System.IO.Path.Combine (config_path, config_file_name);
-            TmpPath  = Path.Combine (FoldersPath, ".tmp");
 
             if (!Directory.Exists (config_path)) {
                 Directory.CreateDirectory (config_path);
