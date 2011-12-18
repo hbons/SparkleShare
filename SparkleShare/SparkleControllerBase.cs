@@ -992,23 +992,24 @@ namespace SparkleShare {
 
                 try {
                     Directory.Move (tmp_folder, target_folder_path);
+
+                    SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.RemoteUrl, backend);
+                    AddRepository (target_folder_path);
+
+                    if (FolderFetched != null)
+                        FolderFetched (warnings);
+
+                    if (FolderListChanged != null)
+                        FolderListChanged ();
+
+                    this.fetcher.Dispose ();
+
+                    if (Directory.Exists (tmp_path))
+                        Directory.Delete (tmp_path, true);
+
                 } catch (Exception e) {
                     SparkleHelpers.DebugInfo ("Controller", "Error moving folder: " + e.Message);
                 }
-
-                SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.RemoteUrl, backend);
-                AddRepository (target_folder_path);
-
-                if (FolderFetched != null)
-                    FolderFetched (warnings);
-
-                if (FolderListChanged != null)
-                    FolderListChanged ();
-
-                this.fetcher.Dispose ();
-
-                if (Directory.Exists (tmp_path))
-                    Directory.Delete (tmp_path, true);
             };
 
 

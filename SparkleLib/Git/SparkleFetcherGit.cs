@@ -83,14 +83,14 @@ namespace SparkleLib {
 
         public override bool Fetch ()
         {
-            this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+            this.git = new SparkleGit (base.target_folder,
                 "clone " +
                 "--progress " + // Redirects progress stats to standarderror
                 "\"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
             
             this.git.StartInfo.RedirectStandardError = true;
             this.git.Start ();
-            
+
             double percentage = 1.0;
             Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
             
@@ -269,6 +269,7 @@ namespace SparkleLib {
             writer.Close ();
         }
     }
+
 
     public class SparkleGit : Process {
 
