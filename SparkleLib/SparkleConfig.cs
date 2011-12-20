@@ -169,7 +169,7 @@ namespace SparkleLib {
             string ssh_config_path      = Path.Combine (path, ".ssh");
             string ssh_config_file_path = SparkleHelpers.CombineMore (path, ".ssh", "config");
             string ssh_config           = "IdentityFile " +
-                Path.Combine (SparkleConfig.ConfigPath, "sparkleshare." + User.Email + ".key\n");
+                Path.Combine (SparkleConfig.ConfigPath, "sparkleshare." + User.Email + ".key");
 
             if (!Directory.Exists (ssh_config_path))
                 Directory.CreateDirectory (ssh_config_path);
@@ -187,7 +187,7 @@ namespace SparkleLib {
                     ssh_config = "\n\n# SparkleShare's key\n" + ssh_config;
 
                 TextWriter writer = File.AppendText (ssh_config_file_path);
-                writer.Write (ssh_config);
+                writer.Write (ssh_config + "\n");
                 writer.Close ();
 
             } else {
