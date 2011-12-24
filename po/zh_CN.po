@@ -1,14 +1,15 @@
 # This file is distributed under the same license as the SparkleShare package.
 # 
 # Translators:
+#   <focusheart@gmail.com>, 2011.
 #   <yujiang.wang@ymail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-30 15:50+0100\n"
-"PO-Revision-Date: 2011-10-30 14:50+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"POT-Creation-Date: 2011-12-04 12:45+0100\n"
+"PO-Revision-Date: 2011-12-08 07:18+0000\n"
+"Last-Translator: focusheart <focusheart@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,27 +18,27 @@ msgstr ""
 
 #: ../data/plugins/bitbucket.xml.in.h:1 ../data/plugins/github.xml.in.h:1
 msgid "/username/project"
-msgstr ""
+msgstr "/username/project"
 
 #: ../data/plugins/bitbucket.xml.in.h:2
 msgid "Bitbucket"
-msgstr ""
+msgstr "小桶"
 
 #: ../data/plugins/bitbucket.xml.in.h:3
 msgid "Free code hosting for Git and Mercurial"
-msgstr ""
+msgstr "免费的Git与Mercurial代码托管"
 
 #: ../data/plugins/github.xml.in.h:2
 msgid "Free public Git repositories with collaborator management"
-msgstr ""
+msgstr "具备协作管理的免费开放仓库"
 
 #: ../data/plugins/github.xml.in.h:3
 msgid "Github"
-msgstr ""
+msgstr "Github"
 
 #: ../data/plugins/gitorious.xml.in.h:1
 msgid "/project/repository"
-msgstr ""
+msgstr "/project/repository"
 
 #: ../data/plugins/gitorious.xml.in.h:2
 msgid "Gitorious"
@@ -45,15 +46,15 @@ msgstr "Gitorious"
 
 #: ../data/plugins/gitorious.xml.in.h:3
 msgid "Open source infrastructure for hosting open source projects"
-msgstr ""
+msgstr "托管开源项目的开源架构"
 
 #: ../data/plugins/gnome.xml.in.h:1
 msgid "/project"
-msgstr ""
+msgstr "/project"
 
 #: ../data/plugins/gnome.xml.in.h:2
 msgid "A free and easy interface for your computer"
-msgstr ""
+msgstr "为你的计算机提供一个免费并且简单的接口"
 
 #: ../data/plugins/gnome.xml.in.h:3
 msgid "The GNOME Project"
@@ -61,182 +62,155 @@ msgstr "GMOME项目"
 
 #: ../data/plugins/own-server.xml.in.h:1
 msgid "/path/to/project"
-msgstr ""
+msgstr "/path/to/project"
 
 #: ../data/plugins/own-server.xml.in.h:2
 msgid "Everything under my control"
-msgstr ""
+msgstr "一切尽在你的掌控"
 
 #: ../data/plugins/own-server.xml.in.h:3
 msgid "On my own server"
-msgstr ""
+msgstr "拥有你自己的服务器"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:70
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:88
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:84
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:102
 #: ../SparkleShare/SparkleSetup.cs:75 ../SparkleShare/SparkleStatusIcon.cs:75
 #: ../SparkleShare/SparkleStatusIcon.cs:89
 msgid "Welcome to SparkleShare!"
 msgstr "欢迎使用 SparkleShare！"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:72
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:90
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:86
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:104
 #: ../SparkleShare/SparkleStatusIcon.cs:77
 #: ../SparkleShare/SparkleStatusIcon.cs:91
 msgid "Up to date"
-msgstr ""
+msgstr "保持最新"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:99
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:113
 #: ../SparkleShare/SparkleStatusIcon.cs:106
 msgid "Syncing…"
 msgstr "同步中..."
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:109
-#: ../SparkleShare/SparkleStatusIcon.cs:116
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:125
+#: ../SparkleShare/SparkleStatusIcon.cs:118
 msgid "Not everything is synced"
-msgstr ""
+msgstr "尚有内容未同步"
 
-#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:141
 msgid "Copy Web Link"
 msgstr "复制Web链接"
 
-#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:115
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:142
 msgid "Copy the web address of this file to the clipboard"
 msgstr "复制该文件的Web地址到剪贴板"
 
-#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:174
 msgid "Get Earlier Version"
 msgstr "获取较早的版本"
 
-#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:149
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:175
 msgid "Make a copy of an earlier version in this folder"
 msgstr "在本目录中制作一个较早的版本"
 
-#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:161
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:162
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:188
 msgid "Select to get a copy of this version"
 msgstr "获取该版本的复制"
 
-#: ../SparkleShare/Program.cs:51
+#: ../SparkleShare/Program.cs:50
 msgid "Print version information"
-msgstr ""
+msgstr "打印版本信息"
 
-#: ../SparkleShare/Program.cs:52
+#: ../SparkleShare/Program.cs:51
 msgid "Show this help text"
-msgstr ""
+msgstr "显示当前帮助文字"
+
+#: ../SparkleShare/Program.cs:83
+msgid "SparkleShare, a collaboration and sharing tool."
+msgstr "SparkleShare，协作与分享的工具"
 
 #: ../SparkleShare/Program.cs:84
-msgid "SparkleShare, a collaboration and sharing tool."
-msgstr ""
-
-#: ../SparkleShare/Program.cs:85
 msgid "Copyright (C) 2010 Hylke Bons"
-msgstr ""
+msgstr "版权(C) 2010 Hylke Bons"
 
-#: ../SparkleShare/Program.cs:87
+#: ../SparkleShare/Program.cs:86
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
 msgstr "本程序不提供任何质量保证"
 
-#: ../SparkleShare/Program.cs:89
+#: ../SparkleShare/Program.cs:88
 msgid "This is free software, and you are welcome to redistribute it "
 msgstr "这是自由软件，欢迎您再次分发。"
 
-#: ../SparkleShare/Program.cs:90
+#: ../SparkleShare/Program.cs:89
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
 msgstr "在某种条件下。详情请参见 GNU GPLv3。"
 
-#: ../SparkleShare/Program.cs:92
+#: ../SparkleShare/Program.cs:91
 msgid "SparkleShare automatically syncs Git repositories in "
-msgstr ""
+msgstr "SparkleShare 自动同步Git仓库"
 
-#: ../SparkleShare/Program.cs:93
+#: ../SparkleShare/Program.cs:92
 msgid "the ~/SparkleShare folder with their remote origins."
-msgstr ""
+msgstr "~/SparkleShare 目录与远程所有"
 
-#: ../SparkleShare/Program.cs:95
+#: ../SparkleShare/Program.cs:94
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
 msgstr "用法：sparkleshare [start|stop|restart] [OPTION]..."
 
-#: ../SparkleShare/Program.cs:96
+#: ../SparkleShare/Program.cs:95
 msgid "Sync SparkleShare folder with remote repositories."
-msgstr ""
+msgstr "与远程仓库同步SparkleShare "
 
-#: ../SparkleShare/Program.cs:98
+#: ../SparkleShare/Program.cs:97
 msgid "Arguments:"
 msgstr "参数："
 
-#: ../SparkleShare/Program.cs:108
+#: ../SparkleShare/Program.cs:107
 msgid "SparkleShare "
 msgstr "SparkleShare"
 
 #. A menu item that takes the user to http://www.sparkleshare.org/
-#: ../SparkleShare/SparkleAbout.cs:53 ../SparkleShare/SparkleStatusIcon.cs:295
+#: ../SparkleShare/SparkleAbout.cs:53 ../SparkleShare/SparkleStatusIcon.cs:297
 msgid "About SparkleShare"
 msgstr "关于 SparkleShare"
 
 #: ../SparkleShare/SparkleAbout.cs:70
 #, csharp-format
 msgid "A newer version ({0}) is available!"
-msgstr ""
+msgstr "有新版本({0})了！"
 
 #: ../SparkleShare/SparkleAbout.cs:79
 msgid "You are running the latest version."
-msgstr ""
+msgstr "你所使用的是最新版本"
 
-#: ../SparkleShare/SparkleAbout.cs:88 ../SparkleShare/SparkleAbout.cs:113
+#: ../SparkleShare/SparkleAbout.cs:88 ../SparkleShare/SparkleAbout.cs:110
 msgid "Checking for updates..."
-msgstr ""
+msgstr "正在检查更新..."
 
-#: ../SparkleShare/SparkleControllerBase.cs:493
+#: ../SparkleShare/SparkleControllerBase.cs:489
 msgid "dddd, MMMM d, yyyy"
-msgstr ""
+msgstr "dddd,MMMM d, yyyy"
 
-#: ../SparkleShare/SparkleControllerBase.cs:499
+#: ../SparkleShare/SparkleControllerBase.cs:495
 msgid "dddd, MMMM d"
-msgstr ""
+msgstr "ddd, MMMM d"
 
-#: ../SparkleShare/SparkleControllerBase.cs:707
-#, csharp-format
-msgid "added ‘{0}’"
-msgstr ""
-
-#: ../SparkleShare/SparkleControllerBase.cs:712
-#, csharp-format
-msgid "moved ‘{0}’"
-msgstr ""
-
-#: ../SparkleShare/SparkleControllerBase.cs:717
-#, csharp-format
-msgid "edited ‘{0}’"
-msgstr ""
-
-#: ../SparkleShare/SparkleControllerBase.cs:722
-#, csharp-format
-msgid "deleted ‘{0}’"
-msgstr ""
-
-#: ../SparkleShare/SparkleControllerBase.cs:731
-#, csharp-format
-msgid "and {0} more"
-msgid_plural "and {0} more"
-msgstr[0] ""
-
-#: ../SparkleShare/SparkleControllerBase.cs:735
-msgid "did something magical"
-msgstr ""
-
-#: ../SparkleShare/SparkleEventLog.cs:58
+#: ../SparkleShare/SparkleEventLog.cs:56
 msgid "Recent Events"
-msgstr ""
+msgstr "最近事件"
 
-#: ../SparkleShare/SparkleEventLog.cs:169
-#: ../SparkleShare/SparkleEventLog.cs:188
+#: ../SparkleShare/SparkleEventLog.cs:145
+#: ../SparkleShare/SparkleEventLog.cs:164
 msgid "All Folders"
-msgstr ""
+msgstr "所有目录"
 
-#: ../SparkleShare/SparkleSetup.cs:76
-msgid ""
-"Before we can create a SparkleShare folder on this computer, we need a few "
-"bits of information from you."
-msgstr ""
+#: ../SparkleShare/SparkleOptions.cs:486
+msgid "OptionName"
+msgstr "选项名称"
 
 #: ../SparkleShare/SparkleSetup.cs:83
 msgid "Full Name:"
@@ -252,153 +226,152 @@ msgstr "下一步"
 
 #: ../SparkleShare/SparkleSetup.cs:129
 msgid "Where's your project hosted?"
-msgstr ""
+msgstr "你的项目托管在哪里？"
 
-#: ../SparkleShare/SparkleSetup.cs:275
+#: ../SparkleShare/SparkleSetup.cs:266
 msgid "Address"
-msgstr ""
+msgstr "地址"
 
-#: ../SparkleShare/SparkleSetup.cs:295
+#: ../SparkleShare/SparkleSetup.cs:286
 msgid "Remote Path"
-msgstr ""
+msgstr "远程路径"
 
 #. Cancel button
-#: ../SparkleShare/SparkleSetup.cs:309 ../SparkleShare/SparkleSetup.cs:345
+#: ../SparkleShare/SparkleSetup.cs:300 ../SparkleShare/SparkleSetup.cs:336
 msgid "Cancel"
 msgstr "取消"
 
 #. Sync button
-#: ../SparkleShare/SparkleSetup.cs:316
+#: ../SparkleShare/SparkleSetup.cs:307
 msgid "Add"
-msgstr ""
+msgstr "添加"
 
-#: ../SparkleShare/SparkleSetup.cs:335
+#: ../SparkleShare/SparkleSetup.cs:326
 #, csharp-format
 msgid "Adding project ‘{0}’…"
-msgstr ""
+msgstr "添加项目'{0}'..."
 
-#: ../SparkleShare/SparkleSetup.cs:336
+#: ../SparkleShare/SparkleSetup.cs:327
 msgid "This may take a while."
-msgstr ""
+msgstr "这可能要花一点时间。"
 
-#: ../SparkleShare/SparkleSetup.cs:337
+#: ../SparkleShare/SparkleSetup.cs:328
 msgid "Are you sure it’s not coffee o'clock?"
-msgstr ""
+msgstr "你不觉得现在是休息时间么？"
 
-#: ../SparkleShare/SparkleSetup.cs:341 ../SparkleShare/SparkleSetup.cs:457
-#: ../SparkleShare/SparkleSetup.cs:556
+#: ../SparkleShare/SparkleSetup.cs:332 ../SparkleShare/SparkleSetup.cs:448
+#: ../SparkleShare/SparkleSetup.cs:558
 msgid "Finish"
 msgstr "完成"
 
-#: ../SparkleShare/SparkleSetup.cs:374
+#: ../SparkleShare/SparkleSetup.cs:365
 msgid "Something went wrong"
-msgstr ""
+msgstr "好像有什么问题"
 
-#: ../SparkleShare/SparkleSetup.cs:422
+#: ../SparkleShare/SparkleSetup.cs:413
 msgid "Try Again…"
-msgstr ""
+msgstr "再试试看..."
 
-#: ../SparkleShare/SparkleSetup.cs:441
+#: ../SparkleShare/SparkleSetup.cs:432
 #, csharp-format
 msgid "‘{0}’ has been successfully added"
-msgstr ""
+msgstr "'{0}'被成功添加"
 
-#: ../SparkleShare/SparkleSetup.cs:447
+#: ../SparkleShare/SparkleSetup.cs:438
 msgid "Project successfully added!"
-msgstr ""
+msgstr "项目成功添加！"
 
-#: ../SparkleShare/SparkleSetup.cs:448
+#: ../SparkleShare/SparkleSetup.cs:439
 msgid "Access the files from your SparkleShare folder."
-msgstr ""
+msgstr "从你的SparkleShare目录访问这些文件。"
 
 #. A button that opens the synced folder
-#: ../SparkleShare/SparkleSetup.cs:451
+#: ../SparkleShare/SparkleSetup.cs:442
 msgid "Open Folder"
 msgstr "打开文件夹"
 
-#: ../SparkleShare/SparkleSetup.cs:477
+#: ../SparkleShare/SparkleSetup.cs:484
 msgid "What's happening next?"
-msgstr ""
+msgstr "下来做什么？"
 
-#: ../SparkleShare/SparkleSetup.cs:478
+#: ../SparkleShare/SparkleSetup.cs:485
 msgid ""
 "SparkleShare creates a special folder in your personal folder that will keep"
 " track of your projects."
-msgstr ""
+msgstr "SparkleShare在你的个人文件夹中创建了一个特别的文件夹用以保持跟踪你的项目。"
 
-#: ../SparkleShare/SparkleSetup.cs:481
+#: ../SparkleShare/SparkleSetup.cs:488
 msgid "Skip Tutorial"
-msgstr ""
+msgstr "跳过教程"
 
-#: ../SparkleShare/SparkleSetup.cs:486 ../SparkleShare/SparkleSetup.cs:506
-#: ../SparkleShare/SparkleSetup.cs:524
+#: ../SparkleShare/SparkleSetup.cs:493 ../SparkleShare/SparkleSetup.cs:513
+#: ../SparkleShare/SparkleSetup.cs:531
 msgid "Continue"
-msgstr ""
+msgstr "继续"
 
-#: ../SparkleShare/SparkleSetup.cs:502
+#: ../SparkleShare/SparkleSetup.cs:509
 msgid "Sharing files with others"
-msgstr ""
+msgstr "与他人分享文件"
 
-#: ../SparkleShare/SparkleSetup.cs:503
+#: ../SparkleShare/SparkleSetup.cs:510
 msgid ""
 "All files added to your project folders are synced with the host "
 "automatically, as well as with your collaborators."
-msgstr ""
+msgstr "所有添加到你的项目中的文件都将与服务器自动同步，你的所有协作伙伴们也是如此。"
 
-#: ../SparkleShare/SparkleSetup.cs:520
+#: ../SparkleShare/SparkleSetup.cs:527
 msgid "The status icon is here to help"
-msgstr ""
+msgstr "状态图标可以提供帮助"
 
-#: ../SparkleShare/SparkleSetup.cs:521
+#: ../SparkleShare/SparkleSetup.cs:528
 msgid ""
 "It shows the syncing process status, and contains links to your projects and"
 " the event log."
-msgstr ""
+msgstr "此处显示同步进度状态，并且包含了到你的项目和事件日志的链接。"
 
-#: ../SparkleShare/SparkleSetup.cs:538
+#: ../SparkleShare/SparkleSetup.cs:545
 msgid "Adding projects to SparkleShare"
-msgstr ""
+msgstr "向SparkleShare添加项目"
 
-#: ../SparkleShare/SparkleSetup.cs:539
+#: ../SparkleShare/SparkleSetup.cs:546
 msgid ""
 "Just click this button when you see it on the web, and the project will be "
 "automatically added:"
-msgstr ""
+msgstr "在网页上看到这个按钮的时候即可点击，项目会被自动添加进去；"
 
-#: ../SparkleShare/SparkleSetup.cs:542
+#: ../SparkleShare/SparkleSetup.cs:549
 msgid ""
 "…or select <b>‘Add Hosted Project…’</b> from the status icon menu to add one"
 " by hand."
-msgstr ""
-
-#. Opens the wizard to add a new remote folder
-#: ../SparkleShare/SparkleSetup.cs:551
-#: ../SparkleShare/SparkleStatusIcon.cs:238
-msgid "Add Hosted Project…"
-msgstr ""
+msgstr "...或者从状态图标菜单中选择 <b>'添加已托管的项目...'</b>来手工添加。"
 
 #: ../SparkleShare/SparkleSetupWindow.cs:44
 msgid "SparkleShare Setup"
 msgstr "SparkleShare "
 
-#: ../SparkleShare/SparkleStatusIcon.cs:228
+#: ../SparkleShare/SparkleStatusIcon.cs:230
 msgid "No projects yet"
-msgstr ""
+msgstr "尚无项目"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:262
+#. Opens the wizard to add a new remote folder
+#: ../SparkleShare/SparkleStatusIcon.cs:240
+msgid "Add Hosted Project…"
+msgstr "添加已托管的项目"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:264
 msgid "Open Recent Events"
-msgstr ""
-
-#: ../SparkleShare/SparkleStatusIcon.cs:282
-msgid "Turn Notifications Off"
-msgstr ""
+msgstr "打开最近的活动"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:284
+msgid "Turn Notifications Off"
+msgstr "关闭通知"
+
+#: ../SparkleShare/SparkleStatusIcon.cs:286
 msgid "Turn Notifications On"
-msgstr ""
+msgstr "打开通知"
 
 #. A menu item that quits the application
-#: ../SparkleShare/SparkleStatusIcon.cs:311
+#: ../SparkleShare/SparkleStatusIcon.cs:313
 msgid "Quit"
 msgstr "退出"
 
