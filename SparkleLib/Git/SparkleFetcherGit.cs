@@ -83,7 +83,7 @@ namespace SparkleLib {
 
         public override bool Fetch ()
         {
-            this.git = new SparkleGit (base.target_folder,
+            this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
                 "clone " +
                 "--progress " + // Redirects progress stats to standarderror
                 "\"" + base.remote_url + "\" " + "\"" + base.target_folder + "\"");
