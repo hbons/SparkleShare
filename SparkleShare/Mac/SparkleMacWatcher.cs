@@ -28,7 +28,7 @@ namespace SparkleShare {
         public delegate void ChangedEventHandler (string path);
         public event ChangedEventHandler Changed;
 
-        private DirectoryInfo last_changed;
+        private FileSystemInfo last_changed;
         private Thread thread;
 
 
@@ -50,7 +50,7 @@ namespace SparkleShare {
                             Changed (relative_path);
                     }
 
-                    Thread.Sleep (2500);
+                    Thread.Sleep (10 * 1000);
                 }
             }));
 
@@ -73,7 +73,16 @@ namespace SparkleShare {
                     }
                 }
 
-            } catch (Exception) { }
+                foreach (FileInfo info in parent.GetFiles ()) {
+                    if (!info.FullName.Contains ("/.")) {
+                        if (DateTime.Compare (info.LastWriteTime, this.last_changed.LastWriteTime) > 0)
+                            this.last_changed = (FileSystemInfo) info;
+                    }
+                }
+
+            } catch (Exception) {
+                // Don't care...
+            }
         }
 
 
