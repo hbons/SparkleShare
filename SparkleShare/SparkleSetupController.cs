@@ -289,6 +289,9 @@ namespace SparkleShare {
         }
 
 
+        // TODO: public void WindowClosed () { }
+
+
         public void FinishedPageCompleted ()
         {
             this.previous_address = "";
