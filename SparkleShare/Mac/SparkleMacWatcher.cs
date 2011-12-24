@@ -30,6 +30,7 @@ namespace SparkleShare {
 
         private FileSystemInfo last_changed;
         private Thread thread;
+        private int poll_count = 0;
 
 
         public SparkleMacWatcher (string path)
@@ -50,7 +51,8 @@ namespace SparkleShare {
                             Changed (relative_path);
                     }
 
-                    Thread.Sleep (10 * 1000);
+                    Thread.Sleep (7500);
+                    this.poll_count++;
                 }
             }));
 
@@ -73,11 +75,15 @@ namespace SparkleShare {
                     }
                 }
 
-                foreach (FileInfo info in parent.GetFiles ()) {
-                    if (!info.FullName.Contains ("/.")) {
-                        if (DateTime.Compare (info.LastWriteTime, this.last_changed.LastWriteTime) > 0)
-                            this.last_changed = (FileSystemInfo) info;
+                if (this.poll_count >= 8) {
+                    foreach (FileInfo info in parent.GetFiles ()) {
+                        if (!info.FullName.Contains ("/.")) {
+                            if (DateTime.Compare (info.LastWriteTime, this.last_changed.LastWriteTime) > 0)
+                                this.last_changed = info;
+                        }
                     }
+
+                    this.poll_count = 0;
                 }
 
             } catch (Exception) {
