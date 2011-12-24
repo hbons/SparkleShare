@@ -1,3 +1,11 @@
+0.6.0 for Linux and Mac (Sat Dec 24 2011):
+        
+        Hylke:
+        - Several fixes for annoying bugs and crashes
+        - Fix freeze on quit on Mac
+        - Show project and history size in the event log
+
+
 0.4.2 for Linux and Mac (Fri Dec 2 2011):
         Hylke: Fix crash trying to add a project
 
