@@ -163,7 +163,7 @@ namespace SparkleLib {
 
         public override void Stop ()
         {
-            if (this.git != null) {
+            if (this.git != null && !this.git.HasExited) {
                 this.git.Kill ();
                 this.git.Dispose ();
             }
