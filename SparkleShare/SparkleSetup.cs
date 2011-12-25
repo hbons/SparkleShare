@@ -466,16 +466,23 @@ namespace SparkleShare {
 
 
                         if (warnings != null) {
-                            Image warning_image = new Image (SparkleUIHelpers.GetIcon ("dialog-warning", 24));
+                            Image warning_image = new Image (
+                                SparkleUIHelpers.GetIcon ("dialog-warning", 24)
+                            );
+
                             Label warning_label = new Label (warnings [0]) {
-                                Xalign = 0
+                                Xalign = 0,
+                                Wrap   = true
                             };
 
                             HBox warning_layout = new HBox (false, 0);
                             warning_layout.PackStart (warning_image, false, false, 0);
-                            warning_layout.PackStart (warning_label, true, true, 0);
+                            warning_layout.PackStart (warning_label, true, true, 15);
+                            
+                            VBox warning_wrapper = new VBox (false, 0);
+                            warning_wrapper.PackStart (warning_layout, false, false, 0);
 
-                            Add (warning_layout);
+                            Add (warning_wrapper);
 
                         } else {
                             Add (null);
