@@ -22,7 +22,7 @@ using System.Security.AccessControl;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-//using Mono.Unix;
+using Mono.Unix;
 
 namespace SparkleLib {
 
@@ -158,9 +158,9 @@ namespace SparkleLib {
                 File.WriteAllText (ssh_config_file_path, ssh_config);
             }
 
-            //UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
-            //file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
-            //                                   FileAccessPermissions.UserWrite); TODO
+            UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
+            file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
+                                               FileAccessPermissions.UserWrite);
 
             SparkleHelpers.DebugInfo ("Fetcher", "Disabled host key checking for " + host);
         }
@@ -209,9 +209,9 @@ namespace SparkleLib {
                 } else {
                     File.WriteAllText (ssh_config_file_path, new_ssh_config.Trim ());
 
-                    //UnixFileSystemInfo file_info    = new UnixFileInfo (ssh_config_file_path);
-                    //file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
-                    //                                   FileAccessPermissions.UserWrite); TODO
+                    UnixFileSystemInfo file_info    = new UnixFileInfo (ssh_config_file_path);
+                    file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
+                                                       FileAccessPermissions.UserWrite);
                 }
             }
 
