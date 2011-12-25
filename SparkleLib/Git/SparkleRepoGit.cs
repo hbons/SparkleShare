@@ -248,14 +248,14 @@ namespace SparkleLib {
 
 
         // Removes unneeded objects
-        private void CollectGarbage ()
+/*        private void CollectGarbage ()
         {
             SparkleGit git = new SparkleGit (LocalPath, "gc");
             git.Start ();
             git.WaitForExit ();
 
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Garbage collected.");
-        }
+        } */
 
 
         // Commits the made changes
