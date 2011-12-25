@@ -105,7 +105,7 @@ namespace SparkleShare {
                         Table.Attach (email_label, 0, 1, 1, 2);
                         Table.Attach (EmailEntry, 1, 2, 1, 2);
 
-                            NextButton = new Button (_("Next")) {
+                            NextButton = new Button (_("Continue")) {
                                 Sensitive = false
                             };
 
