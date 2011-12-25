@@ -32,9 +32,13 @@ namespace SparkleLib {
                 "sparkleshare");
 
         public static SparkleConfig DefaultConfig = new SparkleConfig (ConfigPath, "config.xml");
-
         public string FullPath;
-        public string HomePath = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+
+        public string HomePath {
+            get {
+		        return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+		    }
+        }
 
 
         public string FoldersPath {
