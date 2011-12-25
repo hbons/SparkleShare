@@ -181,7 +181,7 @@ namespace SparkleShare {
 
                         Controller.ChangeAddressFieldEvent += delegate (string text,
                             string example_text, FieldState state) {
-                            Console.WriteLine ("> " +  text);
+
                             Application.Invoke (delegate {
                                 AddressEntry.Text        = text;
                                 AddressEntry.Sensitive   = (state == FieldState.Enabled);
