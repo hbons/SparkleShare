@@ -91,9 +91,9 @@ namespace SparkleShare {
 
             this.spinner.Start ();
 
-            this.layout_horizontal = new HBox (true, 0);
+            this.layout_horizontal = new HBox (false, 0);
             this.layout_horizontal.PackStart (this.size_label, true, true, 0);
-            this.layout_horizontal.PackStart (new Label (""), true, true, 0);
+            this.layout_horizontal.PackStart (new Label ("  "), false, false, 0);
 
             layout_vertical.PackStart (this.layout_horizontal, false, false, 0);
             layout_vertical.PackStart (CreateShortcutsBar (), false, false, 0);
