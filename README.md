@@ -7,6 +7,8 @@ with any Git repository you have access to.
 SparkleShare currently works on Linux and Mac. A Windows port and mobile
 device support are planned for the future.
 
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/thing/21770/SparkleShare-Sharing-work-made-easy)
+
 
 ## License
 
