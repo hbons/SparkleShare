@@ -89,11 +89,7 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _ (string s)
         {
-#if __MonoCS__
-            return Catalog.GetString (s);
-#else
-            return s;
-#endif
+            return Program._ (s);
         }
 
 
@@ -359,6 +355,12 @@ namespace SparkleShare {
             string event_entry_html = EventEntryHTML;
             string event_log        = "";
 
+            event_entry_html = event_entry_html
+                    .Replace ("Add note", _ ("Add note"))
+                    .Replace ("Show all", _ ("Show all"));
+            event_log_html = event_log_html
+                    .Replace ("Show all", _ ("Show all"));
+
             foreach (ActivityDay activity_day in activity_days) {
                 string event_entries = "";
 
@@ -600,6 +602,7 @@ namespace SparkleShare {
             };
 
             repo.ConflictResolved += delegate {
+                Program.SetUiCulture();
                 if (ConflictNotificationRaised != null)
                     ConflictNotificationRaised ();
             };

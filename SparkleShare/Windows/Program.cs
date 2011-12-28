@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -48,14 +49,27 @@ namespace SparkleShare {
             return Strings.T(s);
 #endif
         }
-        
+
+#if !__MonoCS__
+        public static void TranslateWinForm (System.Windows.Forms.Form form)
+        {
+            form.Text = Program._ (form.Text);
+
+            foreach (var label in form.Controls.All ().OfType<System.Windows.Forms.Label> ()) {
+                label.Text = Program._ (label.Text);
+            }
+            foreach (var button in form.Controls.All ().OfType<System.Windows.Forms.Button> ()) {
+                button.Text = Program._ (button.Text);
+            }
+        }
+#endif
+
 #if !__MonoCS__
         [STAThread]
 #endif
         public static void Main (string [] args)
         {
-            //var culture = CultureInfo.GetCultureInfo ("en"); // FIXME: test only
-            //System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+            SetUiCulture();
 
             // Parse the command line options
             bool show_help       = false;
@@ -94,6 +108,12 @@ namespace SparkleShare {
             GC.WaitForPendingFinalizers ();
             CefSharp.CEF.Shutdown ();    // Shutdown CEF.
 #endif
+        }
+
+        public static void SetUiCulture()
+        {
+            //var culture = CultureInfo.GetCultureInfo ("en"); // FIXME: test only
+            //System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
         }
 
 

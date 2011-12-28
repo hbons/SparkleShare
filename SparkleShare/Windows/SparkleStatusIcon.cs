@@ -39,7 +39,7 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _ (string s)
         {
-            return s;
+            return Program._ (s);
         }
 
 
@@ -187,7 +187,7 @@ namespace SparkleShare {
             Menu.Items.Add (new ToolStripSeparator ());
 
             // Opens the wizard to add a new remote folder
-            ToolStripMenuItem sync_item = new ToolStripMenuItem (_ ("Add Remote Folder…"));
+            ToolStripMenuItem sync_item = new ToolStripMenuItem (_ ("Add Hosted Project…"));
 
             if (Program.Controller.FirstRun)
                 sync_item.Enabled = false;
@@ -206,7 +206,7 @@ namespace SparkleShare {
             Menu.Items.Add (sync_item);
             Menu.Items.Add (new ToolStripSeparator ());
 
-            ToolStripMenuItem recent_events_item = new ToolStripMenuItem (_ ("Show Recent Events"));
+            ToolStripMenuItem recent_events_item = new ToolStripMenuItem (_ ("Open Recent Events"));
 
             if (Program.Controller.Folders.Count < 1)
                 recent_events_item.Enabled = false;

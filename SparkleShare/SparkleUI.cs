@@ -46,7 +46,7 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _(string s)
         {
-            return s;
+            return Program._ (s);
         }
 
 

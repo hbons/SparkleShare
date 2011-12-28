@@ -24,12 +24,18 @@ namespace SparkleShare {
         public event ShowBubbleEventHandler ShowBubbleEvent;
         public delegate void ShowBubbleEventHandler (string title, string subtext, string image_path);
 
+        // Short alias for the translations
+        public static string _ (string s)
+        {
+            string t=Program._ (s);
+            return t;
+        }
 
         public SparkleBubblesController ()
         {
             Program.Controller.ConflictNotificationRaised += delegate {
-                ShowBubble ("Ouch! Mid-air collision!",
-                            "Don't worry, SparkleShare made a copy of each conflicting file.",
+                ShowBubble (_("Ouch! Mid-air collision!"),
+                            _("Don't worry, SparkleShare made a copy of each conflicting file."),
                             null);
             };
 
