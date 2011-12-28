@@ -544,7 +544,7 @@ namespace SparkleShare {
                             };
 
                             string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                                "Pixmaps", "tutorial-slide-1.png");
+                                "Pixmaps", "tutorial-slide-1-mac.png");
 
                             SlideImage = new NSImage (slide_image_path) {
                                 Size = new SizeF (350, 200)
@@ -576,7 +576,7 @@ namespace SparkleShare {
                             };
 
                             string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                                "Pixmaps", "tutorial-slide-2.png");
+                                "Pixmaps", "tutorial-slide-2-mac.png");
 
                             SlideImage = new NSImage (slide_image_path) {
                                 Size = new SizeF (350, 200)
@@ -607,7 +607,7 @@ namespace SparkleShare {
                             };
 
                             string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                                "Pixmaps", "tutorial-slide-3.png");
+                                "Pixmaps", "tutorial-slide-3-mac.png");
 
                             SlideImage = new NSImage (slide_image_path) {
                                 Size = new SizeF (350, 200)
