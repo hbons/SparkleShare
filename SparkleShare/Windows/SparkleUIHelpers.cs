@@ -14,6 +14,8 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Collections.Generic;
+using System.Windows.Forms;
 using SparkleLib;
 using System;
 using System.IO;
@@ -37,6 +39,17 @@ namespace SparkleShare {
         public static string ToHex (this System.Drawing.Color color)
         {
             return String.Format ("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
+        }
+
+        //http://stackoverflow.com/a/1499161/33499
+        public static IEnumerable<Control> All (this Control.ControlCollection controls)
+        {
+            foreach (Control control in controls) {
+                foreach (Control grandChild in control.Controls.All ())
+                    yield return grandChild;
+
+                yield return control;
+            }
         }
     }
 }

@@ -45,9 +45,10 @@ namespace SparkleShare {
             this.buttonCancel = new System.Windows.Forms.Button ();
             this.label4 = new System.Windows.Forms.Label ();
             this.syncingPage = new System.Windows.Forms.TabPage ();
+            this.label16 = new System.Windows.Forms.Label ();
+            this.label15 = new System.Windows.Forms.Label ();
             this.syncingProgressBar = new System.Windows.Forms.ProgressBar ();
             this.buttonFinish = new System.Windows.Forms.Button ();
-            this.label7 = new System.Windows.Forms.Label ();
             this.label6 = new System.Windows.Forms.Label ();
             this.errorPage = new System.Windows.Forms.TabPage ();
             this.buttonTryAgain = new System.Windows.Forms.Button ();
@@ -118,7 +119,6 @@ namespace SparkleShare {
             this.groupBox1.Size = new System.Drawing.Size (471, 102);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Information about you";
             // 
             // EmailEntry
             // 
@@ -152,9 +152,9 @@ namespace SparkleShare {
             this.label12.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.Location = new System.Drawing.Point (15, 31);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size (65, 13);
+            this.label12.Size = new System.Drawing.Size (67, 13);
             this.label12.TabIndex = 7;
-            this.label12.Text = "Full name:";
+            this.label12.Text = "Full Name:";
             // 
             // label11
             // 
@@ -163,7 +163,7 @@ namespace SparkleShare {
             this.label11.Size = new System.Drawing.Size (307, 62);
             this.label11.TabIndex = 2;
             this.label11.Text = "Before we can create a SparkleShare folder on this computer, we need a few bits o" +
-                "f information from you.\r\n";
+                "f information from you.";
             // 
             // label10
             // 
@@ -178,7 +178,7 @@ namespace SparkleShare {
             // buttonNext
             // 
             this.buttonNext.Enabled = false;
-            this.buttonNext.Location = new System.Drawing.Point (410, 316);
+            this.buttonNext.Location = new System.Drawing.Point (416, 339);
             this.buttonNext.Name = "buttonNext";
             this.buttonNext.Size = new System.Drawing.Size (75, 23);
             this.buttonNext.TabIndex = 0;
@@ -230,9 +230,9 @@ namespace SparkleShare {
             this.label5.Font = new System.Drawing.Font ("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point (197, 267);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size (113, 20);
+            this.label5.Size = new System.Drawing.Size (114, 20);
             this.label5.TabIndex = 15;
-            this.label5.Text = "Remote path";
+            this.label5.Text = "Remote Path";
             // 
             // label14
             // 
@@ -258,7 +258,7 @@ namespace SparkleShare {
             this.buttonSync.Name = "buttonSync";
             this.buttonSync.Size = new System.Drawing.Size (75, 23);
             this.buttonSync.TabIndex = 9;
-            this.buttonSync.Text = "Sync";
+            this.buttonSync.Text = "Add";
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler (this.buttonSync_Click);
             // 
@@ -278,15 +278,16 @@ namespace SparkleShare {
             this.label4.Font = new System.Drawing.Font ("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point (8, 18);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size (68, 20);
+            this.label4.Size = new System.Drawing.Size (243, 20);
             this.label4.TabIndex = 0;
-            this.label4.Text = "Header";
+            this.label4.Text = "Where\'s your project hosted?";
             // 
             // syncingPage
             // 
+            this.syncingPage.Controls.Add (this.label16);
+            this.syncingPage.Controls.Add (this.label15);
             this.syncingPage.Controls.Add (this.syncingProgressBar);
             this.syncingPage.Controls.Add (this.buttonFinish);
-            this.syncingPage.Controls.Add (this.label7);
             this.syncingPage.Controls.Add (this.label6);
             this.syncingPage.Location = new System.Drawing.Point (4, 22);
             this.syncingPage.Name = "syncingPage";
@@ -294,6 +295,24 @@ namespace SparkleShare {
             this.syncingPage.TabIndex = 2;
             this.syncingPage.Text = "Syncing";
             this.syncingPage.UseVisualStyleBackColor = true;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point (11, 57);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size (176, 13);
+            this.label16.TabIndex = 5;
+            this.label16.Text = "Are you sure it’s not coffee o\'clock?";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point (11, 44);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size (112, 13);
+            this.label15.TabIndex = 4;
+            this.label15.Text = "This may take a while.";
             // 
             // syncingProgressBar
             // 
@@ -305,7 +324,7 @@ namespace SparkleShare {
             // buttonFinish
             // 
             this.buttonFinish.Enabled = false;
-            this.buttonFinish.Location = new System.Drawing.Point (431, 350);
+            this.buttonFinish.Location = new System.Drawing.Point (416, 339);
             this.buttonFinish.Name = "buttonFinish";
             this.buttonFinish.Size = new System.Drawing.Size (75, 23);
             this.buttonFinish.TabIndex = 2;
@@ -313,23 +332,15 @@ namespace SparkleShare {
             this.buttonFinish.UseVisualStyleBackColor = true;
             this.buttonFinish.Click += new System.EventHandler (this.buttonFinish_Click);
             // 
-            // label7
-            // 
-            this.label7.Location = new System.Drawing.Point (11, 44);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size (307, 62);
-            this.label7.TabIndex = 1;
-            this.label7.Text = "This may take a while.\r\nAre you sure it’s not coffee o\'clock?\r\n";
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font ("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.label6.Location = new System.Drawing.Point (8, 18);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size (123, 20);
+            this.label6.Size = new System.Drawing.Size (79, 20);
             this.label6.TabIndex = 0;
-            this.label6.Text = "Syncing folder";
+            this.label6.Text = "Syncing…";
             // 
             // errorPage
             // 
@@ -346,11 +357,11 @@ namespace SparkleShare {
             // 
             // buttonTryAgain
             // 
-            this.buttonTryAgain.Location = new System.Drawing.Point (380, 319);
+            this.buttonTryAgain.Location = new System.Drawing.Point (416, 339);
             this.buttonTryAgain.Name = "buttonTryAgain";
             this.buttonTryAgain.Size = new System.Drawing.Size (75, 23);
             this.buttonTryAgain.TabIndex = 3;
-            this.buttonTryAgain.Text = "Try Again";
+            this.buttonTryAgain.Text = "Try Again…";
             this.buttonTryAgain.UseVisualStyleBackColor = true;
             this.buttonTryAgain.Click += new System.EventHandler (this.buttonTryAgain_Click);
             // 
@@ -400,7 +411,7 @@ namespace SparkleShare {
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size (307, 62);
             this.label9.TabIndex = 3;
-            this.label9.Text = "Access the synced files from your SparkleShare folder.";
+            this.label9.Text = "Access the files from your SparkleShare folder.";
             // 
             // label8
             // 
@@ -408,13 +419,13 @@ namespace SparkleShare {
             this.label8.Font = new System.Drawing.Font ("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.label8.Location = new System.Drawing.Point (8, 18);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size (228, 20);
+            this.label8.Size = new System.Drawing.Size (227, 20);
             this.label8.TabIndex = 2;
-            this.label8.Text = "Folder synced successfully!";
+            this.label8.Text = "Project successfully added!";
             // 
             // buttonFinished
             // 
-            this.buttonFinished.Location = new System.Drawing.Point (399, 318);
+            this.buttonFinished.Location = new System.Drawing.Point (416, 339);
             this.buttonFinished.Name = "buttonFinished";
             this.buttonFinished.Size = new System.Drawing.Size (75, 23);
             this.buttonFinished.TabIndex = 1;
@@ -424,7 +435,7 @@ namespace SparkleShare {
             // 
             // buttonOpenFolder
             // 
-            this.buttonOpenFolder.Location = new System.Drawing.Point (318, 318);
+            this.buttonOpenFolder.Location = new System.Drawing.Point (335, 339);
             this.buttonOpenFolder.Name = "buttonOpenFolder";
             this.buttonOpenFolder.Size = new System.Drawing.Size (75, 23);
             this.buttonOpenFolder.TabIndex = 0;
@@ -476,7 +487,6 @@ namespace SparkleShare {
         private System.Windows.Forms.Button buttonSync;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.PictureBox pictureBox;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button buttonFinish;
         private System.Windows.Forms.ProgressBar syncingProgressBar;
@@ -498,6 +508,8 @@ namespace SparkleShare {
         private System.Windows.Forms.Label label14;
         private SparkleShare.controls.ExampleTextBox FolderEntry;
         private SparkleShare.controls.ExampleTextBox ServerEntry;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
 
 
 

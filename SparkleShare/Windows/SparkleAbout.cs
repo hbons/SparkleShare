@@ -18,6 +18,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 
 using System.Windows.Forms;
@@ -32,7 +33,7 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _(string s)
         {
-            return s;
+            return Program._(s);
         }
 
 
@@ -48,6 +49,8 @@ namespace SparkleShare {
             this.MaximumSize = this.Size;
             this.MinimumSize = this.Size;
             this.version.Text = "";
+
+            Program.TranslateWinForm (this);
 
             Controller.NewVersionEvent += delegate (string new_version) {
                 this.version.Invoke((Action)delegate {
