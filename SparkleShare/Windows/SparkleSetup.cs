@@ -37,17 +37,14 @@ namespace SparkleShare {
 
         // Short alias for the translations
         public static string _ (string s) {
-            return s;
+            return Program._ (s);
         }
 
 
         public SparkleSetup () {
             InitializeComponent ();
 
-            /* Support translations for the UI */
-            this.label5.Text = _ ("Remote path");
-            this.label14.Text = _ ("Address");
-            this.label4.Text = _ ("Where is your remote folder?");
+            Program.TranslateWinForm (this);
 
             pictureBox.Image = Icons.side_splash;
             this.Icon = Icons.sparkleshare;

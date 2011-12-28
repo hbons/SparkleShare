@@ -44,12 +44,14 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _ (string s)
         {
-            return s;
+            return Program._ (s);
         }
 
         public SparkleEventLog () 
         {
             InitializeComponent ();
+
+            Program.TranslateWinForm (this);
 
             this.Icon = Icons.sparkleshare;
 
@@ -87,6 +89,7 @@ namespace SparkleShare {
         public void UpdateEvents (bool silent)
         {
             Thread thread = new Thread (new ThreadStart (delegate {
+                Program.SetUiCulture ();
                 Stopwatch watch = new Stopwatch ();
                 watch.Start ();
                 this.change_sets = Program.Controller.GetLog (this.selected_log);
