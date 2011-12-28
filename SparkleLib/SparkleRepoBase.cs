@@ -223,8 +223,11 @@ namespace SparkleLib {
         public void Dispose ()
         {
             this.remote_timer.Dispose ();
+            this.remote_timer = null;
             this.local_timer.Dispose ();
+            this.local_timer = null;
             this.listener.Dispose ();
+            this.listener = null;
         }
 
 
@@ -399,7 +402,8 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + args.Name + "'");
                 SparkleHelpers.DebugInfo ("Event", "[" + Name + "] Changes found, checking if settled.");
 
-                this.remote_timer.Stop ();
+                if (this.remote_timer != null)
+                    this.remote_timer.Stop ();
 
                 lock (this.change_lock) {
                     this.has_changed = true;
@@ -448,7 +452,8 @@ namespace SparkleLib {
         {
             try {
                 DisableWatching ();
-                this.remote_timer.Stop ();
+                if (this.remote_timer != null)
+                    this.remote_timer.Stop ();
 
                 SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Initiated");
 
@@ -463,7 +468,8 @@ namespace SparkleLib {
                     if (SyncStatusChanged != null)
                         SyncStatusChanged (SyncStatus.Idle);
 
-                    this.listener.AnnounceBase (new SparkleAnnouncement (Identifier, CurrentRevision));
+                    if (this.listener != null)
+                        this.listener.AnnounceBase (new SparkleAnnouncement(Identifier, CurrentRevision));
 
                 } else {
                     SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Error");
@@ -477,7 +483,8 @@ namespace SparkleLib {
                         if (SyncStatusChanged != null)
                             SyncStatusChanged (SyncStatus.Idle);
 
-                        this.listener.AnnounceBase (new SparkleAnnouncement (Identifier, CurrentRevision));
+                        if (this.listener != null)
+                            this.listener.AnnounceBase (new SparkleAnnouncement (Identifier, CurrentRevision));
 
                     } else {
                         if (SyncStatusChanged != null)
@@ -486,7 +493,8 @@ namespace SparkleLib {
                 }
 
             } finally {
-                this.remote_timer.Start ();
+                if (this.remote_timer != null)
+                    this.remote_timer.Start ();
                 EnableWatching ();
             }
         }
@@ -495,7 +503,8 @@ namespace SparkleLib {
         private void SyncDownBase ()
         {
             SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Initiated");
-            this.remote_timer.Stop ();
+            if (this.remote_timer != null)
+                this.remote_timer.Stop ();
             DisableWatching ();
 
             if (SyncStatusChanged != null)
@@ -551,7 +560,8 @@ namespace SparkleLib {
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.Idle);
 
-            this.remote_timer.Start ();
+            if (this.remote_timer != null)
+                this.remote_timer.Start ();
             EnableWatching ();
         }
 
@@ -560,7 +570,8 @@ namespace SparkleLib {
         {
             lock (watch_lock) {
                 this.watcher.EnableRaisingEvents = false;
-                this.local_timer.Stop ();
+                if (this.local_timer != null)
+                    this.local_timer.Stop ();
             }
         }
 
@@ -569,7 +580,8 @@ namespace SparkleLib {
         {
             lock (watch_lock) {
                 this.watcher.EnableRaisingEvents = true;
-                this.local_timer.Start ();
+                if (this.local_timer != null)
+                    this.local_timer.Start ();
             }
         }
 
