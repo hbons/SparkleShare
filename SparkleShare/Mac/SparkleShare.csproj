@@ -278,6 +278,15 @@
     <Content Include="..\..\data\tutorial-slide-1.png">
       <Link>Pixmaps\tutorial-slide-1.png</Link>
     </Content>
+    <Content Include="..\..\data\tutorial-slide-1-mac.png">
+      <Link>Pixmaps\tutorial-slide-1-mac.png</Link>
+    </Content>
+    <Content Include="..\..\data\tutorial-slide-2-mac.png">
+      <Link>Pixmaps\tutorial-slide-2-mac.png</Link>
+    </Content>
+    <Content Include="..\..\data\tutorial-slide-3-mac.png">
+      <Link>Pixmaps\tutorial-slide-3-mac.png</Link>
+    </Content>
     <Content Include="..\..\data\tutorial-slide-2.png">
       <Link>Pixmaps\tutorial-slide-2.png</Link>
     </Content>
