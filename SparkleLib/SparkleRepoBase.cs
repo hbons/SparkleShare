@@ -66,6 +66,7 @@ namespace SparkleLib {
         public abstract bool SyncDown ();
         public abstract double CalculateSize (DirectoryInfo parent);
         public abstract bool HasUnsyncedChanges { get; set; }
+        public abstract List<string> ExcludePaths { get; }
 
         public abstract double Size { get; }
         public abstract double HistorySize { get; }
@@ -342,9 +343,12 @@ namespace SparkleLib {
             if (!this.watcher.EnableRaisingEvents)
                 return;
 
-            if (args.FullPath.Contains (Path.DirectorySeparatorChar + ".") &&
-                !args.FullPath.Contains (Path.DirectorySeparatorChar + ".notes"))
-                return;
+            string relative_path = args.FullPath.Replace (LocalPath, "");
+
+            foreach (string exclude_path in ExcludePaths) {
+                if (relative_path.Contains (exclude_path))
+                    return;
+            }
 
             WatcherChangeTypes wct = args.ChangeType;
 
