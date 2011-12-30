@@ -155,7 +155,6 @@ namespace SparkleShare {
 
             Controller.UpdateSizeInfoEvent += delegate (string size, string history_size) {
                 InvokeOnMainThread (delegate {
-                    Console.WriteLine (size + " " + history_size);
                     this.size_label_value.StringValue = size;
                     this.history_label_value.StringValue = history_size;
                 });
