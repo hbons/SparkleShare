@@ -110,7 +110,10 @@ namespace SparkleShare {
     
                         case IconState.Syncing:
     
-                            StateText = _("Syncing…");
+                            StateText = _("Syncing… " +
+                                        Controller.ProgressPercentage + "%  " +
+                                        Controller.ProgressSpeed);
+
                             StateMenuItem.Title = StateText;
     
                             if (!Animation.Enabled)

@@ -172,10 +172,65 @@ namespace SparkleLib {
                 Commit (message);
             }
 
-            SparkleGit git = new SparkleGit (LocalPath, "push origin master");
+
+            SparkleGit git = new SparkleGit (LocalPath,
+                "push --progress " + // Redirects progress stats to standarderror
+                "origin master");
+
+            git.StartInfo.RedirectStandardError = true;
             git.Start ();
-            git.StandardOutput.ReadToEnd ();
+
+            double percentage = 1.0;
+            Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
+
+            DateTime last_change     = DateTime.Now;
+            TimeSpan change_interval = new TimeSpan (0, 0, 0, 1);
+
+            while (!git.StandardError.EndOfStream) {
+                string line   = git.StandardError.ReadLine ();
+                Match match   = progress_regex.Match (line);
+                string speed  = "";
+                double number = 0.0;
+
+                if (match.Success) {
+                    number = double.Parse (match.Groups [1].Value);
+
+                    // The cloning progress consists of two stages: the "Compressing
+                    // objects" stage which we count as 20% of the total progress, and
+                    // the "Writing objects" stage which we count as the last 80%
+                    if (line.StartsWith ("Compressing")) {
+                        // "Compressing objects" stage
+                        number = (number / 100 * 20);
+
+                    } else {
+                        // "Writing objects" stage
+                        number = (number / 100 * 80 + 20);
+
+                        if (line.Contains ("|")) {
+                            speed = line.Substring (line.IndexOf ("|") + 1).Trim ();
+                            speed = speed.Replace (", done.", "").Trim ();
+                            speed = speed.Replace ("i", "");
+                            speed = speed.Replace ("KB/s", "ᴋʙ/s");
+                            speed = speed.Replace ("MB/s", "ᴍʙ/s");
+                        }
+                    }
+                }
+
+                if (number >= percentage) {
+                    percentage = number;
+
+                    if (percentage == 100.0)
+                        percentage = 99.0;
+
+                    if (DateTime.Compare (last_change, DateTime.Now.Subtract (change_interval)) < 0) {
+                        base.OnSyncProgressChanged (percentage, speed);
+                        last_change = DateTime.Now;
+                    }
+                }
+            }
+
             git.WaitForExit ();
+
 
             if (git.ExitCode == 0)
                 return true;
@@ -239,6 +294,7 @@ namespace SparkleLib {
                 if (value) {
                     if (!File.Exists (unsynced_file_path))
                         File.Create (unsynced_file_path).Close ();
+
                 } else {
                     File.Delete (unsynced_file_path);
                 }

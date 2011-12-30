@@ -44,11 +44,13 @@ namespace SparkleLib {
         private TimeSpan poll_interval;
         private System.Timers.Timer local_timer  = new System.Timers.Timer () { Interval = 0.25 * 1000 };
         private System.Timers.Timer remote_timer = new System.Timers.Timer () { Interval = 10 * 1000 };
-        private DateTime last_poll       = DateTime.Now;
-        private List<double> sizebuffer  = new List<double> ();
-        private bool has_changed         = false;
-        private Object change_lock       = new Object ();
-        private Object watch_lock        = new Object ();
+        private DateTime last_poll         = DateTime.Now;
+        private List<double> sizebuffer    = new List<double> ();
+        private bool has_changed           = false;
+        private Object change_lock         = new Object ();
+        private Object watch_lock          = new Object ();
+        private double progress_percentage = 0.0;
+        private string progress_speed      = "";
 
         protected SparkleListenerBase listener;
         protected SyncStatus status;
@@ -73,6 +75,9 @@ namespace SparkleLib {
 
         public delegate void SyncStatusChangedEventHandler (SyncStatus new_status);
         public event SyncStatusChangedEventHandler SyncStatusChanged;
+
+        public delegate void SyncProgressChangedEventHandler (double percentage, string speed);
+        public event SyncProgressChangedEventHandler SyncProgressChanged;
 
         public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set);
         public event NewChangeSetEventHandler NewChangeSet;
@@ -152,6 +157,20 @@ namespace SparkleLib {
         public SyncStatus Status {
             get {
                 return this.status;
+            }
+        }
+
+
+        public double ProgressPercentage {
+            get {
+                return this.progress_percentage;
+            }
+        }
+
+
+        public string ProgressSpeed {
+            get {
+                return this.progress_speed;
             }
         }
 
@@ -297,7 +316,7 @@ namespace SparkleLib {
         }
 
 
-        private bool IsSyncing {
+        public bool IsSyncing {
             get {
                 return (Status == SyncStatus.SyncUp   ||
                         Status == SyncStatus.SyncDown ||
@@ -461,6 +480,9 @@ namespace SparkleLib {
             } finally {
                 this.remote_timer.Start ();
                 EnableWatching ();
+
+                this.progress_percentage = 0.0;
+                this.progress_speed      = "";
             }
         }
 
@@ -526,6 +548,9 @@ namespace SparkleLib {
 
             this.remote_timer.Start ();
             EnableWatching ();
+
+            this.progress_percentage = 0.0;
+            this.progress_speed      = "";
         }
 
 
@@ -593,6 +618,16 @@ namespace SparkleLib {
 
             OnFileActivity (args);
             SparkleHelpers.DebugInfo ("Note", "Added note to " + revision);
+        }
+
+
+        protected void OnSyncProgressChanged (double progress_percentage, string progress_speed)
+        {
+            this.progress_percentage = progress_percentage;
+            this.progress_speed      = progress_speed;
+
+            if (SyncProgressChanged != null)
+                SyncProgressChanged (progress_percentage, progress_speed);
         }
 
 
