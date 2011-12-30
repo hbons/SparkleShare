@@ -37,6 +37,9 @@ namespace SparkleShare {
         public List <SparkleRepoBase> Repositories;
         public readonly string SparklePath = SparkleConfig.DefaultConfig.FoldersPath;
 
+        public double ProgressPercentage = 0.0;
+        public string ProgressSpeed      = "";
+
         public event OnQuitWhileSyncingHandler OnQuitWhileSyncing;
         public delegate void OnQuitWhileSyncingHandler ();
 
@@ -586,11 +589,11 @@ namespace SparkleShare {
             };
 
             repo.SyncStatusChanged += delegate (SyncStatus status) {
-/*                if (status == SyncStatus.SyncUp) {
-                    foreach (string path in repo.UnsyncedFilePaths)
-                        Console.WriteLine (path);
+                if (status == SyncStatus.Idle) {
+                    ProgressPercentage = 0.0;
+                    ProgressSpeed      = "";
                 }
-*/
+
                 if (status == SyncStatus.Idle     ||
                     status == SyncStatus.SyncUp   ||
                     status == SyncStatus.SyncDown ||
@@ -598,6 +601,13 @@ namespace SparkleShare {
 
                     UpdateState ();
                 }
+            };
+
+            repo.SyncProgressChanged += delegate (double percentage, string speed) {
+                ProgressPercentage = percentage;
+                ProgressSpeed      = speed;
+
+                UpdateState ();
             };
 
             repo.ChangesDetected += delegate {
