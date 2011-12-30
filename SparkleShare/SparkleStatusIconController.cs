@@ -58,12 +58,26 @@ namespace SparkleShare {
         }
 
 
+        public int ProgressPercentage {
+            get {
+                return (int) Program.Controller.ProgressPercentage;
+            }
+        }
+
+        public string ProgressSpeed {
+            get {
+                return Program.Controller.ProgressSpeed;
+            }
+        }
+
+
         public SparkleStatusIconController ()
         {
             Program.Controller.FolderListChanged += delegate {
                 if (UpdateMenuEvent != null)
                     UpdateMenuEvent (CurrentState);
             };
+
 
             Program.Controller.OnIdle += delegate {
                 if (CurrentState != IconState.Error)
@@ -73,12 +87,14 @@ namespace SparkleShare {
                     UpdateMenuEvent (CurrentState);
             };
 
+
             Program.Controller.OnSyncing += delegate {
                 CurrentState = IconState.Syncing;
 
                 if (UpdateMenuEvent != null)
                     UpdateMenuEvent (IconState.Syncing);
             };
+
 
             Program.Controller.OnError += delegate {
                 CurrentState = IconState.Error;
