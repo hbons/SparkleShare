@@ -623,6 +623,8 @@ namespace SparkleLib {
 
         protected void OnSyncProgressChanged (double progress_percentage, string progress_speed)
         {
+            // Console.WriteLine ("OnProgressChanged: " + progress_percentage + " " + progress_speed);
+
             this.progress_percentage = progress_percentage;
             this.progress_speed      = progress_speed;
 
