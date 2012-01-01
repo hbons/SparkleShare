@@ -21,8 +21,6 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Security.Principal;
 
-//using Mono.Unix;
-
 namespace SparkleLib {
 
     public class SparkleConfig : XmlDocument {
@@ -96,8 +94,6 @@ namespace SparkleLib {
             } finally {
                 Load (FullPath);
             }
-
-            ConfigureSSH ();
         }
 
 
@@ -156,12 +152,17 @@ namespace SparkleLib {
                 email_node.InnerText = user.Email;
 
                 this.Save ();
+
+                ConfigureSSH ();
             }
         }
 
 
         private void ConfigureSSH ()
         {
+            if (User.Email.Equals ("Unknown"))
+                return;
+
             string path = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
 
             if (!(SparkleBackend.Platform == PlatformID.Unix ||
@@ -198,9 +199,7 @@ namespace SparkleLib {
                 File.WriteAllText (ssh_config_file_path, ssh_config);
             }
 
-            //UnixFileSystemInfo file_info = new UnixFileInfo (ssh_config_file_path);
-            //file_info.FileAccessPermissions = (FileAccessPermissions.UserRead |
-            //                                   FileAccessPermissions.UserWrite); TODO
+            Chmod644 (ssh_config_file_path);
 
             SparkleHelpers.DebugInfo ("Config", "Added key to " + ssh_config_file_path);
         }
@@ -401,6 +400,16 @@ namespace SparkleLib {
 
             this.Save (FullPath);
             SparkleHelpers.DebugInfo ("Config", "Updated \"" + FullPath + "\"");
+        }
+
+
+        private void Chmod644 (string file_path)
+        {
+            // Hack to be able to set the permissions on a file
+            // that OpenSSH still likes without resorting to Mono.Unix
+            FileInfo file_info   = new FileInfo (file_path);
+            file_info.Attributes = FileAttributes.ReadOnly;
+            file_info.Attributes = FileAttributes.Normal;
         }
     }
 
