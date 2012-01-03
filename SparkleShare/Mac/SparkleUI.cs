@@ -67,8 +67,6 @@ namespace SparkleShare {
                 Bubbles = new SparkleBubbles ();
 
                 if (Program.Controller.FirstRun) {
-					//Show Icon in Dock
-					this.SetRegularActivationPolicy();
                     Setup = new SparkleSetup ();
                     Setup.Controller.ShowSetupPage ();
                 }
@@ -92,11 +90,29 @@ namespace SparkleShare {
         {
             NSApplication.Main (new string [0]);
         }
-		
-		public void SetRegularActivationPolicy()
-		{
-			NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
-		}
+
+
+        public void UpdateDockIconVisibility ()
+        {
+            if (true) { // TODO: check for open windows
+
+                ShowDockIcon ();
+
+            } else {
+                HideDockIcon ();
+            }
+        }
+
+
+        private void HideDockIcon () {
+            // Currently not supported, here for completeness sake (see Apple's docs)
+            // NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.None;
+        }
+
+
+        private void ShowDockIcon () {
+            NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
+        }
 
 
         [Export("registrationDictionaryForGrowl")]

@@ -57,6 +57,8 @@ namespace SparkleShare {
             OrderFrontRegardless ();
             MakeKeyAndOrderFront (this);
 
+            Program.UI.UpdateDockIconVisibility ();
+
             Controller.NewVersionEvent += delegate (string new_version) {
                 InvokeOnMainThread (delegate {
                     UpdatesTextField.StringValue = "A newer version (" + new_version + ") is available!";
@@ -161,6 +163,8 @@ namespace SparkleShare {
         public override bool WindowShouldClose (NSObject sender)
         {
             (sender as SparkleAbout).OrderOut (this);
+            Program.UI.UpdateDockIconVisibility ();
+            
             return false;
         }
     }
