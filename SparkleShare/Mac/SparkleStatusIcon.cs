@@ -308,6 +308,10 @@ namespace SparkleShare {
                         });
                     };
 				
+				Menu.AddItem (AboutMenuItem);
+			    Menu.AddItem (NSMenuItem.SeparatorItem);
+
+				
 				QuitAppMenuItem = new NSMenuItem () {
                         Title = "Quit SparkleShare",
                         Enabled = true
