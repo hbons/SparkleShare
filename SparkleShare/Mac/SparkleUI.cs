@@ -67,6 +67,8 @@ namespace SparkleShare {
                 Bubbles = new SparkleBubbles ();
 
                 if (Program.Controller.FirstRun) {
+					//Show Icon in Dock
+					this.SetRegularActivationPolicy();
                     Setup = new SparkleSetup ();
                     Setup.Controller.ShowSetupPage ();
                 }
@@ -90,6 +92,11 @@ namespace SparkleShare {
         {
             NSApplication.Main (new string [0]);
         }
+		
+		public void SetRegularActivationPolicy()
+		{
+			NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
+		}
 
 
         [Export("registrationDictionaryForGrowl")]
