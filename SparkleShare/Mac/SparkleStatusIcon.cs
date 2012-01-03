@@ -46,6 +46,7 @@ namespace SparkleShare {
         private NSMenuItem AboutMenuItem;
         private NSMenuItem NotificationsMenuItem;
         private NSMenuItem RecentEventsMenuItem;
+		private NSMenuItem QuitAppMenuItem;
         private NSImage [] AnimationFrames;
         private NSImage [] AnimationFramesActive;
         private NSImage ErrorImage;
@@ -251,6 +252,9 @@ namespace SparkleShare {
                     if (Controller.Folders.Length > 0) {
                         RecentEventsMenuItem.Activated += delegate {
                             InvokeOnMainThread (delegate {
+								//Show the icon in Dock
+								Program.UI.SetRegularActivationPolicy();
+							
                                 NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
         
                                 if (SparkleUI.EventLog == null)
@@ -303,9 +307,25 @@ namespace SparkleShare {
 
                         });
                     };
+				
+				Menu.AddItem (AboutMenuItem);
+			    Menu.AddItem (NSMenuItem.SeparatorItem);
+
+				
+				QuitAppMenuItem = new NSMenuItem () {
+                        Title = "Quit SparkleShare",
+                        Enabled = true
+                    };
+    
+                    QuitAppMenuItem.Activated += delegate {
+                        InvokeOnMainThread (delegate {
+                            NSApplication.SharedApplication.Terminate(this);
+
+                        });
+                    };
     
     
-                Menu.AddItem (AboutMenuItem);
+                Menu.AddItem (QuitAppMenuItem);
     
                 StatusItem.Menu = Menu;
                 StatusItem.Menu.Update ();
