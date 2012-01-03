@@ -28,8 +28,6 @@ using MonoMac.WebKit;
 namespace SparkleShare {
 
     public class SparkleEventLog : NSWindow {
-		
-		
 
         public SparkleEventLogController Controller = new SparkleEventLogController ();
 
@@ -53,7 +51,7 @@ namespace SparkleShare {
 
         // TODO: Window needs to be made resizable
         public SparkleEventLog () : base ()
-        {	
+        {
             Title    = "Recent Events";
             Delegate = new SparkleEventsDelegate ();
 
@@ -132,6 +130,7 @@ namespace SparkleShare {
             UpdateChooser (null);
             OrderFrontRegardless ();
 
+            Program.UI.UpdateDockIconVisibility ();
 
             // Hook up the controller events
             Controller.UpdateChooserEvent += delegate (string [] folders) {
@@ -242,6 +241,8 @@ namespace SparkleShare {
         public override bool WindowShouldClose (NSObject sender)
         {
             (sender as SparkleEventLog).OrderOut (this);
+            Program.UI.UpdateDockIconVisibility ();
+            
             return false;
         }
     }
