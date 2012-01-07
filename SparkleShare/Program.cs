@@ -25,7 +25,6 @@ using System.Text;
 using Mono.Unix;
 //using Mono.Unix.Native;
 using SparkleLib;
-using SparkleLib.Options;
 
 namespace SparkleShare {
 
@@ -39,10 +38,10 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _ (string s)
         {
-            return s;
+            return Catalog.GetString (s);
         }
         
-        [STAThread]
+
         public static void Main (string [] args)
         {
             // Parse the command line options
@@ -111,12 +110,12 @@ namespace SparkleShare {
 
 
         // Strange magic needed by SetProcessName ()
-        [DllImport ("libc")]
-        private static extern int prctl (int option, byte [] arg2, IntPtr arg3, IntPtr arg4, IntPtr arg5);
+//        [DllImport ("libc")]
+//        private static extern int prctl (int option, byte [] arg2, IntPtr arg3, IntPtr arg4, IntPtr arg5);
         
         
         // Sets the Unix process name to 'sparkleshare' instead of 'mono'
-        private static void SetProcessName (string name)
+/*        private static void SetProcessName (string name)
         {
             try {
                 if (prctl (15, Encoding.ASCII.GetBytes (name + "\0"), IntPtr.Zero, IntPtr.Zero, IntPtr.Zero) != 0)
@@ -126,6 +125,6 @@ namespace SparkleShare {
             } catch (EntryPointNotFoundException) {
                 Console.WriteLine ("SetProcessName: Entry point not found");
             }
-        }
+        } */
     }
 }

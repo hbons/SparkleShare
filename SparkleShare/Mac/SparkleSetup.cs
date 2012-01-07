@@ -16,11 +16,9 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Timers;
-
-using System.Collections.Generic;
 
 using Mono.Unix;
 using MonoMac.Foundation;
@@ -54,7 +52,9 @@ namespace SparkleShare {
         private NSTextField PathLabel;
         private NSTextField PathHelpLabel;
         private NSTextField AddProjectTextField;
-        private Timer timer;
+        private NSTextField WarningTextField;
+        private NSImage WarningImage;
+        private NSImageView WarningImageView;
         private NSTableView TableView;
         private NSScrollView ScrollView;
         private NSTableColumn IconColumn;
@@ -64,7 +64,7 @@ namespace SparkleShare {
 
         public SparkleSetup () : base ()
         {
-            Controller.ChangePageEvent += delegate (PageType type) {
+            Controller.ChangePageEvent += delegate (PageType type, string [] warnings) {
                 InvokeOnMainThread (delegate {
                     Reset ();
 
@@ -72,8 +72,8 @@ namespace SparkleShare {
                     case PageType.Setup: {
 
                         Header       = "Welcome to SparkleShare!";
-                        Description  = "Before we can create a SparkleShare folder on this " +
-                                       "computer, we need some information from you.";
+                        Description  = "We'll need some info to mark your changes in the event log. " +
+                                       "Don't worry, this stays between you and your peers.";
 
 
                         FullNameLabel = new NSTextField () {
@@ -87,8 +87,9 @@ namespace SparkleShare {
                         };
 
                         FullNameTextField = new NSTextField () {
-                            Frame           = new RectangleF (330, Frame.Height - 238, 196, 22),
-                            StringValue     = Controller.GuessedUserName
+                            Frame       = new RectangleF (330, Frame.Height - 238, 196, 22),
+                            StringValue = Controller.GuessedUserName,
+                            Delegate    = new SparkleTextFieldDelegate ()
                         };
 
                         EmailLabel = new NSTextField () {
@@ -102,14 +103,26 @@ namespace SparkleShare {
                         };
 
                         EmailTextField = new NSTextField () {
-                            Frame           = new RectangleF (330, Frame.Height - 268, 196, 22),
-                            StringValue     = Controller.GuessedUserEmail
+                            Frame       = new RectangleF (330, Frame.Height - 268, 196, 22),
+                            StringValue = Controller.GuessedUserEmail,
+                            Delegate    = new SparkleTextFieldDelegate ()
                         };
 
-                        // TODO: Ugly hack, do properly with events
-                        timer = new Timer () {
-                            Interval = 50
+
+                        (FullNameTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
+                            Controller.CheckSetupPage (
+                                FullNameTextField.StringValue,
+                                EmailTextField.StringValue
+                            );
                         };
+
+                        (EmailTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
+                            Controller.CheckSetupPage (
+                                FullNameTextField.StringValue,
+                                EmailTextField.StringValue
+                            );
+                        };
+
 
                         ContinueButton = new NSButton () {
                             Title    = "Continue",
@@ -117,27 +130,18 @@ namespace SparkleShare {
                         };
 
                         ContinueButton.Activated += delegate {
-                            timer.Stop ();
-                            timer = null;
-
                             string full_name = FullNameTextField.StringValue.Trim ();
                             string email     = EmailTextField.StringValue.Trim ();
 
                             Controller.SetupPageCompleted (full_name, email);
                         };
 
-                        timer.Elapsed += delegate {
+                        Controller.UpdateSetupContinueButtonEvent += delegate (bool button_enabled) {
                             InvokeOnMainThread (delegate {
-                                bool name_is_valid = !FullNameTextField.StringValue.Trim ().Equals ("");
-
-                                bool email_is_valid = Program.Controller.IsValidEmail (
-                                    EmailTextField.StringValue.Trim ());
-
-                                ContinueButton.Enabled = (name_is_valid && email_is_valid);
+                                ContinueButton.Enabled = button_enabled;
                             });
                         };
 
-                        timer.Start ();
 
                         ContentView.AddSubview (FullNameLabel);
                         ContentView.AddSubview (FullNameTextField);
@@ -145,6 +149,11 @@ namespace SparkleShare {
                         ContentView.AddSubview (EmailTextField);
 
                         Buttons.Add (ContinueButton);
+
+                        Controller.CheckSetupPage (
+                            FullNameTextField.StringValue,
+                            EmailTextField.StringValue
+                        );
 
                         break;
                     }
@@ -168,7 +177,8 @@ namespace SparkleShare {
                             Frame       = new RectangleF (190, Frame.Height - 336, 196, 22),
                             Font        = SparkleUI.Font,
                             StringValue = Controller.PreviousAddress,
-                            Enabled     = (Controller.SelectedPlugin.Address == null)
+                            Enabled     = (Controller.SelectedPlugin.Address == null),
+                            Delegate    = new SparkleTextFieldDelegate ()
                         };
 
 
@@ -186,12 +196,12 @@ namespace SparkleShare {
                             Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 336, 196, 22),
                             StringValue     = Controller.PreviousPath,
                             Enabled         = (Controller.SelectedPlugin.Path == null),
-                            Bezeled = true
+                            Delegate        = new SparkleTextFieldDelegate ()
                         };
 
 
-                        AddressTextField.Cell.LineBreakMode    = NSLineBreakMode.TruncatingTail;
-                        PathTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
+                        AddressTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
+                        PathTextField.Cell.LineBreakMode    = NSLineBreakMode.TruncatingTail;
 
 
                         PathHelpLabel = new NSTextField () {
@@ -210,7 +220,8 @@ namespace SparkleShare {
                             Frame            = new RectangleF (0, 0, 0, 0),
                             RowHeight        = 30,
                             IntercellSpacing = new SizeF (0, 12),
-                            HeaderView       = null
+                            HeaderView       = null,
+                            Delegate         = new SparkleTableViewDelegate ()
                         };
 
                         ScrollView = new NSScrollView () {
@@ -270,32 +281,42 @@ namespace SparkleShare {
                             });
                         };
 
+
                         TableView.SelectRow (Controller.SelectedPluginIndex, false);
 
 
-                        timer = new Timer () {
-                            Interval = 50
+                         (AddressTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
+                            Controller.CheckAddPage (
+                                AddressTextField.StringValue,
+                                PathTextField.StringValue,
+                                TableView.SelectedRow
+                            );
                         };
 
-                        // TODO: Use an event
-                        timer.Elapsed += delegate {
-                            if (TableView.SelectedRow != Controller.SelectedPluginIndex)
-                                Controller.SelectedPluginChanged (TableView.SelectedRow);
+                         (PathTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
+                            Controller.CheckAddPage (
+                                AddressTextField.StringValue,
+                                PathTextField.StringValue,
+                                TableView.SelectedRow
+                            );
+                        };
 
+                        (TableView.Delegate as SparkleTableViewDelegate).SelectionChanged += delegate {
+                            Controller.SelectedPluginChanged (TableView.SelectedRow);
+
+                            Controller.CheckAddPage (
+                                AddressTextField.StringValue,
+                                PathTextField.StringValue,
+                                TableView.SelectedRow
+                            );
+                        };
+
+
+                        Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
                             InvokeOnMainThread (delegate {
-                                // TODO: Move checking logic to controller
-                                if (!string.IsNullOrWhiteSpace (AddressTextField.StringValue) &&
-                                    !string.IsNullOrWhiteSpace (PathTextField.StringValue)) {
-
-                                    SyncButton.Enabled = true;
-
-                                } else {
-                                    SyncButton.Enabled = false;
-                                }
+                                SyncButton.Enabled = button_enabled;
                             });
                         };
-
-                        timer.Start ();
 
 
                         ContentView.AddSubview (ScrollView);
@@ -311,9 +332,6 @@ namespace SparkleShare {
                         };
 
                             SyncButton.Activated += delegate {
-                                timer.Stop ();
-                                timer = null;
-
                                 Controller.AddPageCompleted (
                                     AddressTextField.StringValue,
                                     PathTextField.StringValue
@@ -333,6 +351,13 @@ namespace SparkleShare {
                             };
 
                         Buttons.Add (CancelButton);
+
+                        Controller.CheckAddPage (
+                            AddressTextField.StringValue,
+                            PathTextField.StringValue,
+                            TableView.SelectedRow
+                        );
+
 
                         break;
                     }
@@ -442,6 +467,28 @@ namespace SparkleShare {
                                       "‘" + Controller.SyncingFolder + "’ in " +
                                       "your SparkleShare folder.";
 
+                        if (warnings != null) {
+                            WarningImage = NSImage.ImageNamed ("NSCaution");
+                            WarningImage.Size = new SizeF (24, 24);
+
+                            WarningImageView = new NSImageView () {
+                                Image = WarningImage,
+                                Frame = new RectangleF (190, Frame.Height - 175, 24, 24)
+                            };
+
+                            WarningTextField = new NSTextField () {
+                                Frame           = new RectangleF (230, Frame.Height - 245, 325, 100),
+                                StringValue     = warnings [0],
+                                BackgroundColor = NSColor.WindowBackground,
+                                Bordered        = false,
+                                Editable        = false,
+                                Font            = SparkleUI.Font
+                            };
+
+                            ContentView.AddSubview (WarningImageView);
+                            ContentView.AddSubview (WarningTextField);
+                        }
+
                         FinishButton = new NSButton () {
                             Title = "Finish"
                         };
@@ -497,7 +544,7 @@ namespace SparkleShare {
                             };
 
                             string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                                "Pixmaps", "tutorial-slide-1.png");
+                                "Pixmaps", "tutorial-slide-1-mac.png");
 
                             SlideImage = new NSImage (slide_image_path) {
                                 Size = new SizeF (350, 200)
@@ -529,7 +576,7 @@ namespace SparkleShare {
                             };
 
                             string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                                "Pixmaps", "tutorial-slide-2.png");
+                                "Pixmaps", "tutorial-slide-2-mac.png");
 
                             SlideImage = new NSImage (slide_image_path) {
                                 Size = new SizeF (350, 200)
@@ -560,7 +607,7 @@ namespace SparkleShare {
                             };
 
                             string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                                "Pixmaps", "tutorial-slide-3.png");
+                                "Pixmaps", "tutorial-slide-3-mac.png");
 
                             SlideImage = new NSImage (slide_image_path) {
                                 Size = new SizeF (350, 200)
@@ -671,6 +718,41 @@ namespace SparkleShare {
                     Size = new SizeF (24, 24)
                 };
             }
+        }
+    }
+
+
+    public class SparkleTextFieldDelegate : NSTextFieldDelegate {
+
+        public event StringValueChangedHandler StringValueChanged;
+        public delegate void StringValueChangedHandler ();
+
+
+        public override void Changed (NSNotification notification)
+        {
+            if (StringValueChanged!= null)
+                StringValueChanged ();
+        }
+
+
+        public override string [] GetCompletions (NSControl control, NSTextView text_view,
+            string [] a, MonoMac.Foundation.NSRange range, int b)
+        {
+            return new string [0];
+        }
+    }
+
+
+    public class SparkleTableViewDelegate : NSTableViewDelegate {
+
+        public event SelectionChangedHandler SelectionChanged;
+        public delegate void SelectionChangedHandler ();
+
+
+        public override void SelectionDidChange (NSNotification notification)
+        {
+            if (SelectionChanged != null)
+                SelectionChanged ();
         }
     }
 }

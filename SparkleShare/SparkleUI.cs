@@ -23,11 +23,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
-#if __MonoCS__
 using Gtk;
-#else
-using System.Windows.Forms;
-#endif
+using Mono.Unix;
+using Mono.Unix.Native;
 using SparkleLib;
 
 namespace SparkleShare {
@@ -46,24 +44,18 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _(string s)
         {
-            return Program._ (s);
+            return Catalog.GetString (s);
         }
 
 
         public SparkleUI ()
         {
             // Initialize the application
-#if __MonoCS__
             Application.Init ();
 
-            GLib.ExceptionManager.UnhandledException += delegate (GLib.UnhandledExceptionArgs exArgs) {
-                Exception UnhandledException = (Exception)exArgs.ExceptionObject;
-                string ExceptionMessage = UnhandledException.Message.ToString ();
-                MessageDialog ExceptionDialog = new MessageDialog (null, DialogFlags.Modal, MessageType.Error, ButtonsType.Ok,
-                                 "Unhandled Exception!\n" + UnhandledException.GetType ().ToString ());
-                ExceptionDialog.Title = "ERROR";
+            // Use translations
+            Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
-#endif
             StatusIcon = new SparkleStatusIcon ();
             Bubbles    = new SparkleBubbles ();
             
@@ -81,7 +73,6 @@ namespace SparkleShare {
         public void Run ()
         {
             Application.Run ();
-            StatusIcon.Dispose ();
         }
     }
 }

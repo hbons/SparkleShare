@@ -18,10 +18,14 @@
 using System;
 using System.IO;
 
+using SparkleLib;
+
 namespace SparkleShare {
 
     public enum IconState {
         Idle,
+        SyncingUp,
+        SyncingDown,
         Syncing,
         Error
     }
@@ -44,21 +48,36 @@ namespace SparkleShare {
 
         public string FolderSize {
             get {
-                return Program.Controller.FolderSize;
+                double size = 0;
+
+                foreach (SparkleRepoBase repo in Program.Controller.Repositories)
+                    size += repo.Size + repo.HistorySize;
+
+                return Program.Controller.FormatSize (size);
             }
         }
 
+
+        public int ProgressPercentage {
+            get {
+                return (int) Program.Controller.ProgressPercentage;
+            }
+        }
+
+        public string ProgressSpeed {
+            get {
+                return Program.Controller.ProgressSpeed;
+            }
+        }
+
+
         public SparkleStatusIconController ()
         {
-            Program.Controller.FolderSizeChanged += delegate {
-                if (UpdateMenuEvent != null)
-                    UpdateMenuEvent (CurrentState);
-            };
-
             Program.Controller.FolderListChanged += delegate {
                 if (UpdateMenuEvent != null)
                     UpdateMenuEvent (CurrentState);
             };
+
 
             Program.Controller.OnIdle += delegate {
                 if (CurrentState != IconState.Error)
@@ -68,14 +87,14 @@ namespace SparkleShare {
                     UpdateMenuEvent (CurrentState);
             };
 
+
             Program.Controller.OnSyncing += delegate {
                 CurrentState = IconState.Syncing;
-
-                // TODO up down both
 
                 if (UpdateMenuEvent != null)
                     UpdateMenuEvent (IconState.Syncing);
             };
+
 
             Program.Controller.OnError += delegate {
                 CurrentState = IconState.Error;

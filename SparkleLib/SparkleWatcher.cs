@@ -51,7 +51,6 @@ namespace SparkleLib {
                 if (ChangeEvent != null)
                     ChangeEvent (args);
             };
-
         }
     }
 }

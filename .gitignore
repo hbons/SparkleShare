@@ -27,6 +27,8 @@ aclocal.m4
 autom4te.cache/
 bin/
 obj/
+/bin/
+SparkleShare/Mac/bin
 install-sh
 libtool
 ltmain.sh
