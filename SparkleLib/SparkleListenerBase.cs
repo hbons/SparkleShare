@@ -75,9 +75,6 @@ namespace SparkleLib {
             case "tcp":
                 listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
                 break;
-            case "irc":
-                listeners.Add (new SparkleListenerIrc (announce_uri, folder_identifier));
-                break;
             default:
                 listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
                 break;

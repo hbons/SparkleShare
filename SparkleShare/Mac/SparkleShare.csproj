@@ -11,7 +11,7 @@
     <RootNamespace>SparkleShare</RootNamespace>
     <AssemblyName>SparkleShare</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <ReleaseVersion>0.2.5</ReleaseVersion>
+    <ReleaseVersion>0.6.0</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,7 +24,7 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks" externalConsole="true" />
+        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks;mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Resources; cp -r git ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="true" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -58,15 +58,11 @@
     <Reference Include="Mono.Posix">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Meebey.SmartIrc4net, Version=0.4.5.0, Culture=neutral, PublicKeyToken=7868485fbf407e0f">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\Meebey.SmartIrc4net.dll</HintPath>
-    </Reference>
-    <Reference Include="SparkleLib, Version=0.2.5.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="System.Net" />
+    <Reference Include="SparkleLib, Version=0.6.0.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\SparkleLib.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDelegate.cs">
@@ -83,8 +79,6 @@
     <Compile Include="..\Program.cs">
       <Link>Program.cs</Link>
     </Compile>
-    <Compile Include="SparkleAbout.cs" />
-    <Compile Include="SparkleAlert.cs" />
     <Compile Include="SparkleMacWatcher.cs" />
     <Compile Include="SparkleEventLog.cs" />
     <Compile Include="SparkleBadger.cs" />
@@ -112,6 +106,13 @@
     <Compile Include="SparkleController.cs" />
     <Compile Include="..\SparklePlugin.cs">
       <Link>SparklePlugin.cs</Link>
+    </Compile>
+    <Compile Include="..\SparkleOptions.cs">
+      <Link>SparkleOptions.cs</Link>
+    </Compile>
+    <Compile Include="SparkleAbout.cs" />
+    <Compile Include="..\SparkleInvite.cs">
+      <Link>SparkleInvite.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -276,6 +277,15 @@
     </Content>
     <Content Include="..\..\data\tutorial-slide-1.png">
       <Link>Pixmaps\tutorial-slide-1.png</Link>
+    </Content>
+    <Content Include="..\..\data\tutorial-slide-1-mac.png">
+      <Link>Pixmaps\tutorial-slide-1-mac.png</Link>
+    </Content>
+    <Content Include="..\..\data\tutorial-slide-2-mac.png">
+      <Link>Pixmaps\tutorial-slide-2-mac.png</Link>
+    </Content>
+    <Content Include="..\..\data\tutorial-slide-3-mac.png">
+      <Link>Pixmaps\tutorial-slide-3-mac.png</Link>
     </Content>
     <Content Include="..\..\data\tutorial-slide-2.png">
       <Link>Pixmaps\tutorial-slide-2.png</Link>

@@ -84,8 +84,7 @@ namespace SparkleShare {
 
         private void SetImage ()
         {
-			if (CurrentStep < Images.Length)
-				Pixbuf = Images[CurrentStep];
+            Pixbuf = Images [CurrentStep];
         }
 
 

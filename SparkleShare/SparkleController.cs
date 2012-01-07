@@ -217,5 +217,14 @@ namespace SparkleShare {
             process.StartInfo.Arguments = "\"" + folder + "\"";
             process.Start ();
         }
+
+
+        public override void OpenFile (string url)
+        {
+            Process process = new Process ();
+            process.StartInfo.FileName = "xdg-open";
+            process.StartInfo.Arguments = url.Replace (" ", "%20");
+            process.Start ();
+        }
     }
 }

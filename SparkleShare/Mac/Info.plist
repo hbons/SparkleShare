@@ -8,9 +8,11 @@
 	<string>org.sparkleshare.sparkleshare</string>
 	<key>CFBundleName</key>
 	<string>SparkleShare</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.6</string>
-	<key>CFBundleVersion</key>
+	<key>LSUIElement</key>
 	<string>1</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>

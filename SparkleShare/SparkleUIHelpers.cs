@@ -42,10 +42,12 @@ namespace SparkleShare {
             IconTheme icon_theme = new IconTheme ();
 
             icon_theme.AppendSearchPath (
-                Path.Combine (SparkleUI.AssetsPath, "icons"));
+                Path.Combine (SparkleUI.AssetsPath, "icons")
+            );
 
             icon_theme.AppendSearchPath (
-                Path.Combine (SparkleConfig.ConfigPath, "icons"));
+                Path.Combine (SparkleConfig.ConfigPath, "icons")
+            );
 
             try {
                 return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);

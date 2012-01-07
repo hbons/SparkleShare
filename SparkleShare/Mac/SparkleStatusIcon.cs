@@ -46,6 +46,7 @@ namespace SparkleShare {
         private NSMenuItem AboutMenuItem;
         private NSMenuItem NotificationsMenuItem;
         private NSMenuItem RecentEventsMenuItem;
+        private NSMenuItem QuitMenuItem;
         private NSImage [] AnimationFrames;
         private NSImage [] AnimationFramesActive;
         private NSImage ErrorImage;
@@ -110,7 +111,10 @@ namespace SparkleShare {
     
                         case IconState.Syncing:
     
-                            StateText = _("Syncing…");
+                            StateText = _("Syncing… " +
+                                        Controller.ProgressPercentage + "%  " +
+                                        Controller.ProgressSpeed);
+
                             StateMenuItem.Title = StateText;
     
                             if (!Animation.Enabled)
@@ -119,6 +123,8 @@ namespace SparkleShare {
                             break;
     
                         case IconState.Error:
+
+                            Animation.Stop ();
     
                             StateText = _("Not everything is synced");
                             StateMenuItem.Title = StateText;
@@ -240,7 +246,7 @@ namespace SparkleShare {
     
                     RecentEventsMenuItem = new NSMenuItem () {
                         Title = "Open Recent Events",
-                        Enabled = true
+                        Enabled = (Controller.Folders.Length > 0)
                     };
     
                     if (Controller.Folders.Length > 0) {
@@ -298,10 +304,22 @@ namespace SparkleShare {
 
                         });
                     };
+				
+				Menu.AddItem (AboutMenuItem);
+			    Menu.AddItem (NSMenuItem.SeparatorItem);
+
+				
+                QuitMenuItem = new NSMenuItem () {
+                    Title = "Quit",
+                    Enabled = true
+                };
     
-    
-                Menu.AddItem (AboutMenuItem);
-    
+                    QuitMenuItem.Activated += delegate {
+                        Program.Controller.Quit ();
+                    };
+
+                Menu.AddItem (QuitMenuItem);
+
                 StatusItem.Menu = Menu;
                 StatusItem.Menu.Update ();
             }

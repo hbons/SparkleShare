@@ -17,8 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
 using System.Threading;
 
 using Gtk;
@@ -31,6 +29,7 @@ namespace SparkleShare {
 
         public SparkleEventLogController Controller = new SparkleEventLogController ();
 
+        private Label size_label;
         private HBox layout_horizontal;
         private ComboBox combo_box;
         private EventBox content_wrapper;
@@ -60,58 +59,41 @@ namespace SparkleShare {
 
             DeleteEvent += Close;
 
+            this.size_label = new Label () {
+                Markup = "<b>Size:</b> " + Controller.Size + "   " +
+                         "<b>History:</b> " + Controller.HistorySize
+            };
+
             VBox layout_vertical = new VBox (false, 0);
             this.spinner         = new SparkleSpinner (22);
             this.content_wrapper = new EventBox ();
             this.scrolled_window = new ScrolledWindow ();
 
-                this.web_view = new WebView () {
-                    Editable = false
-                };
+            this.web_view = new WebView () {
+                Editable = false
+            };
 
-                    this.web_view.HoveringOverLink += delegate (object o, WebKit.HoveringOverLinkArgs args) {
-                        this.link_status = args.Link;
-                    };
+            this.web_view.HoveringOverLink += delegate (object o, WebKit.HoveringOverLinkArgs args) {
+                this.link_status = args.Link;
+            };
 
-                    this.web_view.NavigationRequested += delegate (object o, WebKit.NavigationRequestedArgs args) {
-                        if (args.Request.Uri == this.link_status) {
-                    // TODO: controller
-                            Process process = new Process ();
-                            process.StartInfo.FileName = "xdg-open";
-                            process.StartInfo.Arguments = args.Request.Uri.Replace (" ", "\\ "); // Escape space-characters
-                            process.Start ();
+            this.web_view.NavigationRequested += delegate (object o, WebKit.NavigationRequestedArgs args) {
+                if (args.Request.Uri == this.link_status)
+                    SparkleEventLogController.LinkClicked (args.Request.Uri);
 
-                        } else {
-                    //TODO: controller
-                            Regex regex = new Regex (@"(.+)~(.+)~(.+)");
-                            Match match = regex.Match (args.Request.Uri);
-
-                            if (match.Success) {
-                                string folder_name = match.Groups [1].Value;
-                                string revision    = match.Groups [2].Value;
-                                string note        = match.Groups [3].Value;
-
-                                Thread thread = new Thread (new ThreadStart (delegate {
-                                    Program.Controller.AddNoteToFolder (folder_name, revision, note);
-                                }));
-
-                                thread.Start ();
-                            }
-                        }
-
-                        // Don't follow HREFs (as this would cause a page refresh)
-                        if (!args.Request.Uri.Equals ("file:"))
-                            args.RetVal = 1;
-                    };
+                // Don't follow HREFs (as this would cause a page refresh)
+                if (!args.Request.Uri.Equals ("file:"))
+                    args.RetVal = 1;
+            };
 
             this.scrolled_window.Add (this.web_view);
             this.content_wrapper.Add (this.spinner);
 
             this.spinner.Start ();
 
-            this.layout_horizontal = new HBox (true, 0);
-            this.layout_horizontal.PackStart (new Label (""), true, true, 0);
-            this.layout_horizontal.PackStart (new Label (""), true, true, 0);
+            this.layout_horizontal = new HBox (false, 0);
+            this.layout_horizontal.PackStart (this.size_label, true, true, 0);
+            this.layout_horizontal.PackStart (new Label ("  "), false, false, 0);
 
             layout_vertical.PackStart (this.layout_horizontal, false, false, 0);
             layout_vertical.PackStart (CreateShortcutsBar (), false, false, 0);
@@ -147,6 +129,15 @@ namespace SparkleShare {
                     this.content_wrapper.ShowAll ();
                 });
             };
+
+            Controller.UpdateSizeInfoEvent += delegate (string size, string history_size) {
+                Application.Invoke (delegate {
+                    this.size_label.Markup = "<b>Size:</b> " + size + "   " +
+                                             "<b>History:</b> " + history_size;
+
+                    this.size_label.ShowAll ();
+                });
+            };
         }
 
 
@@ -166,7 +157,7 @@ namespace SparkleShare {
 
             ListStore store = new ListStore (typeof (string));
 
-            store.AppendValues (_("All Folders"));
+            store.AppendValues (_("All Projects"));
             store.AppendValues ("---");
 
             foreach (string folder in folders)

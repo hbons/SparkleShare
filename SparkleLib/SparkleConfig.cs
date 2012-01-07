@@ -19,10 +19,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Xml;
-
-#if __MonoCS__
-using Mono.Unix;
-#endif
+using System.Security.Principal;
 
 namespace SparkleLib {
 
@@ -33,12 +30,14 @@ namespace SparkleLib {
                 "sparkleshare");
 
         public static SparkleConfig DefaultConfig = new SparkleConfig (ConfigPath, "config.xml");
-
-
         public string FullPath;
 
-        public string HomePath = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
-        public string TmpPath;
+        public string HomePath {
+            get {
+		        return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+		    }
+        }
+
 
         public string FoldersPath {
             get {
@@ -49,11 +48,16 @@ namespace SparkleLib {
             }
         }
 
+        public string TmpPath {
+            get {
+                return Path.Combine (FoldersPath, ".tmp");
+            }
+        }
+
 
         public SparkleConfig (string config_path, string config_file_name)
         {
             FullPath = System.IO.Path.Combine (config_path, config_file_name);
-            TmpPath  = Path.Combine (FoldersPath, ".tmp");
 
             if (!Directory.Exists (config_path)) {
                 Directory.CreateDirectory (config_path);
@@ -99,13 +103,13 @@ namespace SparkleLib {
 
             if (SparkleBackend.Platform == PlatformID.Unix ||
                 SparkleBackend.Platform == PlatformID.MacOSX) {
-#if __MonoCS__
-                user_name = new UnixUserInfo (UnixEnvironment.UserName).RealName;
+
+                user_name = Environment.UserName;
                 if (string.IsNullOrEmpty (user_name))
-                    user_name = UnixEnvironment.UserName;
+                    user_name = "";
                 else
-                    user_name = user_name.TrimEnd (",".ToCharArray());
-#endif
+                    user_name = user_name.TrimEnd (",".ToCharArray ());
+
             } else {
                 user_name = Environment.UserName;
             }
@@ -148,7 +152,56 @@ namespace SparkleLib {
                 email_node.InnerText = user.Email;
 
                 this.Save ();
+
+                ConfigureSSH ();
             }
+        }
+
+
+        private void ConfigureSSH ()
+        {
+            if (User.Email.Equals ("Unknown"))
+                return;
+
+            string path = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+
+            if (!(SparkleBackend.Platform == PlatformID.Unix ||
+                  SparkleBackend.Platform == PlatformID.MacOSX)) {
+
+                path = Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%");
+            }
+
+            string ssh_config_path      = Path.Combine (path, ".ssh");
+            string ssh_config_file_path = SparkleHelpers.CombineMore (path, ".ssh", "config");
+            string ssh_config           = "IdentityFile " +
+                Path.Combine (SparkleConfig.ConfigPath, "sparkleshare." + User.Email + ".key");
+
+            if (!Directory.Exists (ssh_config_path))
+                Directory.CreateDirectory (ssh_config_path);
+
+            if (File.Exists (ssh_config_file_path)) {
+                string current_config = File.ReadAllText (ssh_config_file_path);
+                if (current_config.Contains (ssh_config))
+                    return;
+
+                if (current_config.EndsWith ("\n\n"))
+                    ssh_config = "# SparkleShare's key\n" + ssh_config;
+                else if (current_config.EndsWith ("\n"))
+                    ssh_config = "\n# SparkleShare's key\n" + ssh_config;
+                else
+                    ssh_config = "\n\n# SparkleShare's key\n" + ssh_config;
+
+                TextWriter writer = File.AppendText (ssh_config_file_path);
+                writer.Write (ssh_config + "\n");
+                writer.Close ();
+
+            } else {
+                File.WriteAllText (ssh_config_file_path, ssh_config);
+            }
+
+            Chmod644 (ssh_config_file_path);
+
+            SparkleHelpers.DebugInfo ("Config", "Added key to " + ssh_config_file_path);
         }
 
 
@@ -347,6 +400,16 @@ namespace SparkleLib {
 
             this.Save (FullPath);
             SparkleHelpers.DebugInfo ("Config", "Updated \"" + FullPath + "\"");
+        }
+
+
+        private void Chmod644 (string file_path)
+        {
+            // Hack to be able to set the permissions on a file
+            // that OpenSSH still likes without resorting to Mono.Unix
+            FileInfo file_info   = new FileInfo (file_path);
+            file_info.Attributes = FileAttributes.ReadOnly;
+            file_info.Attributes = FileAttributes.Normal;
         }
     }
 

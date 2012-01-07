@@ -90,10 +90,13 @@ namespace SparkleLib {
             
             this.git.StartInfo.RedirectStandardError = true;
             this.git.Start ();
-            
+
             double percentage = 1.0;
             Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
-            
+
+            DateTime last_change     = DateTime.Now;
+            TimeSpan change_interval = new TimeSpan (0, 0, 0, 1);
+
             while (!this.git.StandardError.EndOfStream) {
                 string line = this.git.StandardError.ReadLine ();
                 Match match = progress_regex.Match (line);
@@ -107,7 +110,7 @@ namespace SparkleLib {
                     // the "Receiving objects" stage which we count as the last 80%
                     if (line.Contains ("|"))
                         // "Receiving objects" stage
-                        number = (number / 100 * 75 + 20);    
+                        number = (number / 100 * 80 + 20);
                     else
                         // "Compressing objects" stage
                         number = (number / 100 * 20);
@@ -115,20 +118,21 @@ namespace SparkleLib {
                 
                 if (number >= percentage) {
                     percentage = number;
-                    
-                    // FIXME: for some reason it doesn't go above 95%
-                    base.OnProgressChanged (percentage);
+
+                    if (DateTime.Compare (last_change, DateTime.Now.Subtract (change_interval)) < 0) {
+                        base.OnProgressChanged (percentage);
+                        last_change = DateTime.Now;
+                    }
                 }
-                
-                System.Threading.Thread.Sleep (100);        
             }
             
             this.git.WaitForExit ();
-
             SparkleHelpers.DebugInfo ("Git", "Exit code " + this.git.ExitCode.ToString ());
+
 
             if (this.git.ExitCode != 0) {
                 return false;
+
             } else {
                 InstallConfiguration ();
                 InstallExcludeRules ();
@@ -137,9 +141,33 @@ namespace SparkleLib {
         }
 
 
+        public override string [] Warnings {
+            get {
+                SparkleGit git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+                    "config --global core.excludesfile");
+
+                git.Start ();
+
+                // Reading the standard output HAS to go before
+                // WaitForExit, or it will hang forever on output > 4096 bytes
+                string output = git.StandardOutput.ReadToEnd ().Trim ();
+                git.WaitForExit ();
+
+                if (string.IsNullOrEmpty (output)) {
+                    return null;
+
+                } else {
+                    return new string [] {
+                        string.Format ("You seem to have configured a system ‘gitignore’ file. " +
+                                       "This may interfere with SparkleShare.\n({0})", output)
+                    };
+                }
+            }
+        }
+
         public override void Stop ()
         {
-            if (this.git != null) {
+            if (this.git != null && !this.git.HasExited) {
                 this.git.Kill ();
                 this.git.Dispose ();
             }
@@ -179,22 +207,11 @@ namespace SparkleLib {
         // Add a .gitignore file to the repo
         private void InstallExcludeRules ()
         {
-            string exclude_rules_file_path = SparkleHelpers.CombineMore (
-                this.target_folder, ".git", "info", "exclude");
+            DirectoryInfo info = Directory.CreateDirectory (SparkleHelpers.CombineMore (
+                this.target_folder, ".git", "info"));
 
-            string directory = Path.GetDirectoryName(exclude_rules_file_path);
-
-            if (directory == null)
-            {
-                return;
-            }
-
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            TextWriter writer = new StreamWriter (exclude_rules_file_path);
+            string exlude_rules_file_path = Path.Combine (info.FullName, "exclude");
+            TextWriter writer = new StreamWriter (exlude_rules_file_path);
 
                 // gedit and emacs
                 writer.WriteLine ("*~");
@@ -226,7 +243,7 @@ namespace SparkleLib {
                 writer.WriteLine ("Thumbs.db");
                 writer.WriteLine ("Desktop.ini");
 
-		// MS Office
+                // MS Office
                 writer.WriteLine ("~*.tmp");
                 writer.WriteLine ("~*.TMP");
                 writer.WriteLine ("*~*.tmp");
@@ -256,6 +273,7 @@ namespace SparkleLib {
             writer.Close ();
         }
     }
+
 
     public class SparkleGit : Process {
 

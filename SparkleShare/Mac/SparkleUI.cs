@@ -37,22 +37,11 @@ namespace SparkleShare {
         public static SparkleBubbles Bubbles;
         public static SparkleAbout About;
         public static NSFont Font;
-
-        private NSAlert alert;
+        public static NSFont BoldFont;
 
 
         public SparkleUI ()
         {
-            string content_path = Directory.GetParent (
-                System.AppDomain.CurrentDomain.BaseDirectory).ToString ();
-
-            string app_path     = Directory.GetParent (content_path).ToString ();
-            string growl_path   = Path.Combine (app_path, "Frameworks", "Growl.framework", "Growl");
-
-            // Needed for Growl
-            Dlfcn.dlopen (growl_path, 0);
-            NSApplication.Init ();
-
             // Use translations
             Catalog.Init ("sparkleshare",
                 Path.Combine (NSBundle.MainBundle.ResourcePath, "Translations"));
@@ -66,16 +55,13 @@ namespace SparkleShare {
                 NSApplication.SharedApplication.ApplicationIconImage
                     = NSImage.ImageNamed ("sparkleshare.icns");
 
-                if (!Program.Controller.BackendIsPresent) {
-                    this.alert = new SparkleAlert ();
-                    this.alert.RunModal ();
-                    return;
-                }
-
                 SetFolderIcon ();
     
                 Font = NSFontManager.SharedFontManager.FontWithFamily
                     ("Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
+
+                BoldFont = NSFontManager.SharedFontManager.FontWithFamily
+                    ("Lucida Grande", NSFontTraitMask.Bold, 0, 13);
 
                 StatusIcon = new SparkleStatusIcon ();
                 Bubbles = new SparkleBubbles ();
@@ -106,6 +92,29 @@ namespace SparkleShare {
         }
 
 
+        public void UpdateDockIconVisibility ()
+        {
+            if (true) { // TODO: check for open windows
+
+                ShowDockIcon ();
+
+            } else {
+                HideDockIcon ();
+            }
+        }
+
+
+        private void HideDockIcon () {
+            // Currently not supported, here for completeness sake (see Apple's docs)
+            // NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.None;
+        }
+
+
+        private void ShowDockIcon () {
+            NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
+        }
+
+
         [Export("registrationDictionaryForGrowl")]
         NSDictionary RegistrationDictionaryForGrowl ()
         {
@@ -121,6 +130,7 @@ namespace SparkleShare {
         {
             NSApplication.SharedApplication.DockTile.BadgeLabel = null;
         }
+
 
         public override void WillTerminate (NSNotification notification)
         {
