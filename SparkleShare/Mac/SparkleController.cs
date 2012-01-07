@@ -41,6 +41,21 @@ namespace SparkleShare {
         
         public SparkleController () : base ()
         {
+            string content_path =
+                Directory.GetParent (System.AppDomain.CurrentDomain.BaseDirectory)
+                    .ToString ();
+
+            string app_path     = Directory.GetParent (content_path).ToString ();
+            string growl_path   = Path.Combine (app_path, "Frameworks", "Growl.framework", "Growl");
+
+            // Needed for Growl
+            Dlfcn.dlopen (growl_path, 0);
+            NSApplication.Init ();
+
+            // Let's use the bundled git first
+            SparkleBackend.DefaultBackend.Path =
+                Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    "git", "bin", "git");
         }
 
 
@@ -189,11 +204,10 @@ namespace SparkleShare {
 		}
 
 
-        new public void Quit ()
+        public override void OpenFile (string url)
         {
-            this.watcher.Dispose ();
-            NSApplication.SharedApplication.Terminate (new NSObject ());
-            base.Quit ();
+            url = url.Replace ("%20", " ");
+            NSWorkspace.SharedWorkspace.OpenFile (url);
         }
 	}
 }

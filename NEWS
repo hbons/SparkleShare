@@ -1,3 +1,25 @@
+0.6.0 for Linux and Mac (Sun Dec 25 2011):
+        
+        Hylke:
+        - Several fixes for annoying bugs and crashes
+        - Fix freeze on quit on Mac
+        - Show project and history size in the event log
+
+
+0.4.2 for Linux and Mac (Fri Dec 2 2011):
+        Hylke: Fix crash trying to add a project
+
+
+0.4.1 for Linux and Mac (Tue Nov 29 2011):
+        Hylke: Just some small tweaks and fixes:
+
+        - Bundle git with the Mac application
+        - Warn about potential global gitignore files
+        - Remove SmartIrc4Net
+        - Build system fixes
+	- Code cleanups
+
+
 0.4.0 for Linux and Mac (Sun Nov 12 2011):
         Hylke: It has been a while since the last release. Since so many 
         things changed, and it being (softly) incompatible with 0.2, I decided 

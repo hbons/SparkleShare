@@ -18,7 +18,6 @@
 using System;
 using System.Drawing;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Threading;
 
 using MonoMac.Foundation;
@@ -36,14 +35,17 @@ namespace SparkleShare {
             PolicyDelegate = new SparkleWebPolicyDelegate ()
         };
 
-        private NSBox Separator = new NSBox (new RectangleF (0, 579, 480, 1)) {
+        private NSBox separator = new NSBox (new RectangleF (0, 579, 480, 1)) {
             BorderColor = NSColor.LightGray,
             BoxType = NSBoxType.NSBoxCustom
         };
 
         private NSPopUpButton popup_button;
         private NSProgressIndicator progress_indicator;
-
+        private NSTextField size_label;
+        private NSTextField size_label_value;
+        private NSTextField history_label;
+        private NSTextField history_label_value;
 
         public SparkleEventLog (IntPtr handle) : base (handle) { }
 
@@ -65,7 +67,54 @@ namespace SparkleShare {
             HasShadow   = true;
             BackingType = NSBackingStore.Buffered;
 
-            ContentView.AddSubview (Separator);
+
+            this.size_label = new NSTextField () {
+                Alignment       = NSTextAlignment.Right,
+                BackgroundColor = NSColor.WindowBackground,
+                Bordered        = false,
+                Editable        = false,
+                Frame           = new RectangleF (0, 588, 60, 20),
+                StringValue     = "Size:",
+                Font            = SparkleUI.BoldFont
+            };
+
+            this.size_label_value = new NSTextField () {
+                Alignment       = NSTextAlignment.Left,
+                BackgroundColor = NSColor.WindowBackground,
+                Bordered        = false,
+                Editable        = false,
+                Frame           = new RectangleF (60, 588, 75, 20),
+                StringValue     = Controller.Size,
+                Font            = SparkleUI.Font
+            };
+
+
+            this.history_label = new NSTextField () {
+                Alignment       = NSTextAlignment.Right,
+                BackgroundColor = NSColor.WindowBackground,
+                Bordered        = false,
+                Editable        = false,
+                Frame           = new RectangleF (130, 588, 60, 20),
+                StringValue     = "History:",
+                Font            = SparkleUI.BoldFont
+            };
+
+            this.history_label_value = new NSTextField () {
+                Alignment       = NSTextAlignment.Left,
+                BackgroundColor = NSColor.WindowBackground,
+                Bordered        = false,
+                Editable        = false,
+                Frame           = new RectangleF (190, 588, 75, 20),
+                StringValue     = Controller.HistorySize,
+                Font            = SparkleUI.Font
+            };
+
+
+            ContentView.AddSubview (this.size_label);
+            ContentView.AddSubview (this.size_label_value);
+            ContentView.AddSubview (this.history_label);
+            ContentView.AddSubview (this.history_label_value);
+            ContentView.AddSubview (this.separator);
 
 
             this.progress_indicator = new NSProgressIndicator () {
@@ -81,6 +130,7 @@ namespace SparkleShare {
             UpdateChooser (null);
             OrderFrontRegardless ();
 
+            Program.UI.UpdateDockIconVisibility ();
 
             // Hook up the controller events
             Controller.UpdateChooserEvent += delegate (string [] folders) {
@@ -103,6 +153,13 @@ namespace SparkleShare {
                     ContentView.AddSubview (this.progress_indicator);
                 });
             };
+
+            Controller.UpdateSizeInfoEvent += delegate (string size, string history_size) {
+                InvokeOnMainThread (delegate {
+                    this.size_label_value.StringValue = size;
+                    this.history_label_value.StringValue = history_size;
+                });
+            };
         }
 
 
@@ -123,7 +180,7 @@ namespace SparkleShare {
             this.popup_button.Font = NSFontManager.SharedFontManager.FontWithFamily
                 ("Lucida Grande", NSFontTraitMask.Condensed, 0, NSFont.SmallSystemFontSize);
 
-            this.popup_button.AddItem ("All Folders");
+            this.popup_button.AddItem ("All Projects");
             this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
             this.popup_button.AddItems (folders);
 
@@ -184,6 +241,8 @@ namespace SparkleShare {
         public override bool WindowShouldClose (NSObject sender)
         {
             (sender as SparkleEventLog).OrderOut (this);
+            Program.UI.UpdateDockIconVisibility ();
+            
             return false;
         }
     }
@@ -194,30 +253,7 @@ namespace SparkleShare {
         public override void DecidePolicyForNavigation (WebView web_view, NSDictionary action_info,
             NSUrlRequest request, WebFrame frame, NSObject decision_token)
         {
-            string url = request.Url.ToString ();
-            
-            if (url.StartsWith (Path.VolumeSeparatorChar.ToString ())) {
-                string file_path = request.Url.ToString ();
-                file_path = file_path.Replace ("%20", " ");
-
-                NSWorkspace.SharedWorkspace.OpenFile (file_path);
-
-            } else {
-                Regex regex = new Regex (@"(.+)~(.+)~(.+)");
-                Match match = regex.Match (url);
-
-                if (match.Success) {
-                    string folder_name = match.Groups [1].Value;
-                    string revision    = match.Groups [2].Value;
-                    string note        = match.Groups [3].Value;
-
-                    Thread thread = new Thread (new ThreadStart (delegate {
-                        Program.Controller.AddNoteToFolder (folder_name, revision, note);
-                    }));
-
-                    thread.Start ();
-                }
-            }
+            SparkleEventLogController.LinkClicked (request.Url.ToString ());
         }
     }
 }

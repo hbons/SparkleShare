@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 
 using SparkleLib;
 
@@ -32,14 +33,25 @@ namespace SparkleShare {
         Tutorial
     }
 
+    public enum FieldState {
+        Enabled,
+        Disabled
+    }
+
 
     public class SparkleSetupController {
 
         public event ChangePageEventHandler ChangePageEvent;
-        public delegate void ChangePageEventHandler (PageType page);
+        public delegate void ChangePageEventHandler (PageType page, string [] warnings);
         
         public event UpdateProgressBarEventHandler UpdateProgressBarEvent;
         public delegate void UpdateProgressBarEventHandler (double percentage);
+
+        public event UpdateSetupContinueButtonEventHandler UpdateSetupContinueButtonEvent;
+        public delegate void UpdateSetupContinueButtonEventHandler (bool button_enabled);
+
+        public event UpdateAddProjectButtonEventHandler UpdateAddProjectButtonEvent;
+        public delegate void UpdateAddProjectButtonEventHandler (bool button_enabled);
 
         public event ChangeAddressFieldEventHandler ChangeAddressFieldEvent;
         public delegate void ChangeAddressFieldEventHandler (string text,
@@ -140,7 +152,7 @@ namespace SparkleShare {
 
             SelectedPlugin = Plugins [0];
 
-            ChangePageEvent += delegate (PageType page) {
+            ChangePageEvent += delegate (PageType page, string [] warning) {
                 this.previous_page = page;
             };
         }
@@ -149,7 +161,20 @@ namespace SparkleShare {
         public void ShowSetupPage ()
         {
            if (ChangePageEvent != null)
-               ChangePageEvent (PageType.Setup);
+               ChangePageEvent (PageType.Setup, null);
+        }
+
+
+        public void CheckSetupPage (string full_name, string email)
+        {
+            full_name = full_name.Trim ();
+            email     = email.Trim ();
+
+            bool fields_valid = full_name != null && full_name.Trim().Length > 0 &&
+                IsValidEmail (email);
+
+            if (UpdateSetupContinueButtonEvent != null)
+                UpdateSetupContinueButtonEvent (fields_valid);
         }
 
 
@@ -162,7 +187,7 @@ namespace SparkleShare {
             Program.Controller.UpdateState ();
 
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Tutorial);
+                ChangePageEvent (PageType.Tutorial, null);
         }
 
 
@@ -171,7 +196,7 @@ namespace SparkleShare {
             this.tutorial_page_number++;
 
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Tutorial);
+                ChangePageEvent (PageType.Tutorial, null);
         }
 
 
@@ -180,16 +205,32 @@ namespace SparkleShare {
             this.tutorial_page_number = 4;
 
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Tutorial);
+                ChangePageEvent (PageType.Tutorial, null);
         }
 
 
         public void ShowAddPage ()
         {
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Add);
+                ChangePageEvent (PageType.Add, null);
 
             SelectedPluginChanged (SelectedPluginIndex);
+        }
+
+
+        public void CheckAddPage (string address, string remote_path, int selected_plugin)
+        {
+            if (SelectedPluginIndex != selected_plugin)
+                SelectedPluginChanged (selected_plugin);
+
+            address     = address.Trim ();
+            remote_path = remote_path.Trim ();
+
+            bool fields_valid = address != null && address.Trim().Length > 0 &&
+                remote_path != null && remote_path.Trim().Length > 0;
+
+            if (UpdateAddProjectButtonEvent != null)
+                UpdateAddProjectButtonEvent (fields_valid);
         }
 
 
@@ -200,11 +241,13 @@ namespace SparkleShare {
             this.previous_path    = path;
 
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Syncing);
+                ChangePageEvent (PageType.Syncing, null);
 
-            Program.Controller.FolderFetched += delegate {
+            // TODO: Remove events afterwards
+
+            Program.Controller.FolderFetched += delegate (string [] warnings) {
                 if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Finished);
+                    ChangePageEvent (PageType.Finished, warnings);
 
                 this.previous_address = "";
                 this.syncing_folder   = "";
@@ -216,7 +259,7 @@ namespace SparkleShare {
                 this.previous_url = remote_url;
 
                 if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Error);
+                    ChangePageEvent (PageType.Error, null);
 
                 this.syncing_folder = "";
             };
@@ -233,7 +276,7 @@ namespace SparkleShare {
         public void ErrorPageCompleted ()
         {
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Add);
+                ChangePageEvent (PageType.Add, null);
         }
 
 
@@ -242,8 +285,11 @@ namespace SparkleShare {
             Program.Controller.StopFetcher ();
 
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Add);
+                ChangePageEvent (PageType.Add, null);
         }
+
+
+        // TODO: public void WindowClosed () { }
 
 
         public void FinishedPageCompleted ()
@@ -283,11 +329,14 @@ namespace SparkleShare {
                     ChangePathFieldEvent ("", "", FieldState.Enabled);
             }
         }
-    }
 
 
-    public enum FieldState {
-        Enabled,
-        Disabled
+        private bool IsValidEmail (string email)
+        {
+            Regex regex = new Regex (@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$",
+                RegexOptions.IgnoreCase);
+
+            return regex.IsMatch (email);
+        }
     }
 }

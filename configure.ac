@@ -1,9 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_define([sparkleshare_version],
-	[0.4.0])
+	[0.6.0])
 
 m4_define([sparkleshare_asm_version],
-	[0.4.0])
+	[0.6.0])
 
 AC_PREREQ([2.54])
 AC_INIT([SparkleShare], sparkleshare_version)
@@ -86,18 +86,6 @@ dnl package checks, common for all configs
 
 
 SPARKLESHARE_CHECK_GTK_SHARP
-
-SPARKLESHARE_SMARTIRC4NET
-PKG_CHECK_MODULES([SMARTIRC4NET], [smartirc4net >= 0.5],
-	SMARTIRC4NET_ASSEMBLY=""
-	AC_SUBST(SMARTIRC4NET_ASSEMBLY)
-	,
- 	SMARTIRC4NET_LIBS=""
-	AC_SUBST(SMARTIRC4NET_LIBS)
-	SPARKLE_SMARTIRC4NETDIR=SmartIrc4Net
-	AC_SUBST(SPARKLE_SMARTIRC4NETDIR)
-)
-AM_CONDITIONAL([HAVE_SMARTIRC4NET], test x$SPARKLE_SMARTIRC4NETDIR = x)
 
 AC_ARG_ENABLE(gtkui,
 	AS_HELP_STRING([--disable-gtkui], [Do not build the Gtk+ user interface]),
