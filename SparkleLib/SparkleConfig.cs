@@ -37,8 +37,11 @@ namespace SparkleLib {
 
         public string HomePath {
             get {
-		        return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
-		    }
+                if (GetConfigOption ("home_path") != null)
+                    return GetConfigOption ("home_path");
+                else
+                    return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+            }
         }
 
         public string FoldersPath {
@@ -105,6 +108,7 @@ namespace SparkleLib {
 
             } finally {
                 Load (FullPath);
+                TmpPath = Path.Combine(FoldersPath, ".tmp");
             }
         }
 
