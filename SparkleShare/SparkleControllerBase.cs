@@ -27,7 +27,9 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
 
+#if __MonoCS__
 using Mono.Unix;
+#endif
 using SparkleLib;
 
 namespace SparkleShare {
@@ -90,7 +92,7 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _ (string s)
         {
-            return Catalog.GetString (s);
+            return Program._(s);
         }
 
 
@@ -1081,12 +1083,16 @@ namespace SparkleShare {
         }
 
 
-        public void Quit ()
+        public virtual void Quit ()
         {
             foreach (SparkleRepoBase repo in Repositories)
                 repo.Dispose ();
 
+#if __MonoCS__
             Environment.Exit (0);
+#else
+            System.Windows.Forms.Application.Exit();
+#endif
         }
 
 

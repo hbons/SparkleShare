@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <ProjectGuid>{728483AA-E34B-4441-BF2C-C8BC2901E4E0}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AssemblyName>SparkleShare</AssemblyName>
@@ -54,7 +54,9 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="CefSharp, Version=0.3.4006.34354, Culture=neutral, processorArchitecture=x86" />
+    <Reference Include="CefSharp, Version=0.3.4006.34354, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\..\bin\CefSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Gettext.Cs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\gettext-cs-utils\Gettext.CsUtils\Core\Gettext.Cs\bin\Release\Gettext.Cs.dll</HintPath>
@@ -84,6 +86,9 @@
     </Compile>
     <Compile Include="..\SparkleExtensions.cs">
       <Link>SparkleExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\SparkleInvite.cs">
+      <Link>SparkleInvite.cs</Link>
     </Compile>
     <Compile Include="..\SparklePlugin.cs">
       <Link>SparklePlugin.cs</Link>

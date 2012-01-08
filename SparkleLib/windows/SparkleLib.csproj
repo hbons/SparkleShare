@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2C914413-B31C-4362-93C7-1AE34F09112A}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -75,9 +75,6 @@
     <Compile Include="..\SparkleConfig.cs">
       <Link>SparkleConfig.cs</Link>
     </Compile>
-    <Compile Include="..\SparklePath.cs">
-      <Link>SparklePath.cs</Link>
-    </Compile>
     <Compile Include="..\SparkleRepoBase.cs">
       <Link>SparkleRepoBase.cs</Link>
     </Compile>
@@ -97,7 +94,6 @@
     <Compile Include="..\SparkleOptions.cs" />
     <Compile Include="..\SparkleChangeSet.cs" />
     <Compile Include="..\SparkleListenerBase.cs" />
-    <Compile Include="..\SparkleListenerIrc.cs" />
     <Compile Include="..\SparkleListenerTcp.cs" />
     <Compile Include="..\SparkleBackend.cs" />
     <Compile Include="GlobalAssemblyInfo.cs">
