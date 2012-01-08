@@ -56,14 +56,14 @@ namespace SparkleShare {
             CreateMenu ();
             SetNormalState ();
 
-            Program.Controller.FolderSizeChanged += delegate {
+            /*Program.Controller.FolderSizeChanged += delegate {
                 status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
                     if (!Animation.Enabled)
                         SetNormalState ();
 
                     UpdateMenu ();
                 });
-            };
+            };*/
             
             Program.Controller.FolderListChanged += delegate {
                 status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
@@ -315,7 +315,7 @@ namespace SparkleShare {
                         this.status_icon.Icon = Icon.FromHandle (Icons.sparkleshare_syncing_error_24.GetHicon ());
                     });
                 } else {
-                    StateText = _("Up to date") + "  (" + Program.Controller.FolderSize + ")";
+                    StateText = _("Up to date") + "  (" + FolderSize + ")";
                     status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
                         this.status_icon.Icon = Icon.FromHandle (AnimationFrames [0].GetHicon ());
                     });
@@ -331,6 +331,19 @@ namespace SparkleShare {
 
             if (!Animation.Enabled)
                 Animation.Start ();
+        }
+
+        public string FolderSize
+        {
+            get
+            {
+                double size = 0;
+
+                foreach (SparkleRepoBase repo in Program.Controller.Repositories)
+                    size += repo.Size + repo.HistorySize;
+
+                return Program.Controller.FormatSize(size);
+            }
         }
 
         #region IDisposable Members

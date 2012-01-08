@@ -49,7 +49,7 @@ namespace SparkleShare {
             pictureBox.Image = Icons.side_splash;
             this.Icon = Icons.sparkleshare;
 
-            Controller.ChangePageEvent += delegate (PageType type) {
+            Controller.ChangePageEvent += delegate (PageType type, string [] warnings) {
                 tabControl.SafeInvoke ((Action)delegate {
                     switch (type) {
                         case PageType.Add:
@@ -206,11 +206,18 @@ namespace SparkleShare {
             // Enables or disables the 'Next' button depending on the
             // entries filled in by the user
             if (!String.IsNullOrEmpty (NameEntry.Text) &&
-                Program.Controller.IsValidEmail (EmailEntry.Text)) {
+                this.IsValidEmail (EmailEntry.Text)) {
                 buttonNext.Enabled = true;
             } else {
                 buttonNext.Enabled = false;
             }
+        }
+
+        // Checks to see if an email address is valid
+        public bool IsValidEmail(string email)
+        {
+            Regex regex = new Regex(@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$", RegexOptions.IgnoreCase);
+            return regex.IsMatch(email);
         }
     }
 }

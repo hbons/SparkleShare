@@ -136,7 +136,7 @@ namespace SparkleShare {
             HTML = HTML.Replace ("<!-- $document-moved-background-image -->",
                 "application://sparkleshare/document-moved-12.png");
 
-            HTML = HTML.Replace ("href='" + SparklePaths.SparklePath, "href='application://file/" + SparklePaths.SparklePath);
+            HTML = HTML.Replace("href='" + SparkleConfig.DefaultConfig.FoldersPath, "href='application://file/" + SparkleConfig.DefaultConfig.FoldersPath);
             HTML = HTML.Replace ("file://application://sparkleshare/", "application://sparkleshare/");
             HTML = HTML.Replace ("file://", "application://file/");
         }
@@ -180,7 +180,7 @@ namespace SparkleShare {
                 Filename = Uri.UnescapeDataString (Filename);
                 Filename = Filename.Replace ("/", "\\");
 
-                if (Filename.StartsWith (SparklePaths.SparklePath))
+                if (Filename.StartsWith(SparkleConfig.DefaultConfig.FoldersPath))
                     System.Diagnostics.Process.Start (Filename);
             }
         }

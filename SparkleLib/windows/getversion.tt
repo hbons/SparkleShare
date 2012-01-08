@@ -19,7 +19,7 @@
     process.StartInfo.RedirectStandardOutput = true;
     process.StartInfo.CreateNoWindow = true;
     process.StartInfo.FileName = "git";
-    process.StartInfo.Arguments = "describe --tags --dirty=-d --always";
+    process.StartInfo.Arguments = "describe --tags";
     process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Host.TemplateFile);
     process.Start();
 

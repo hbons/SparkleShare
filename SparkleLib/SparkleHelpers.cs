@@ -93,6 +93,29 @@ namespace SparkleLib {
         {
             return target.Replace (source + Path.DirectorySeparatorChar, "");      
         }
+
+        public static bool IsWindows
+        {
+            get
+            {
+                PlatformID platform = Environment.OSVersion.Platform;
+                return (platform == PlatformID.Win32NT
+                    || platform == PlatformID.Win32S
+                    || platform == PlatformID.Win32Windows);
+            }
+        }
+
+        public static string NormalizeSeparatorsToOS(string path)
+        {
+            if (IsWindows)
+            {
+                return path.Replace('\\', '/');
+            }
+            else
+            {
+                return path;
+            }
+        }
     }
 }
 
