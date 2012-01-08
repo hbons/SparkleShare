@@ -16,15 +16,13 @@ set wixBinDir=%WIX%\bin
 
 if "%1"=="installer" (
 	if exist "%wixBinDir%" (
-		"%wixBinDir%\heat.exe" dir "%git_install_root%." -cg msysGitComponentGroup -gg -scom -sreg -sfrag -srd -dr MSYSGIT_DIR -t addmedia.xlst -var wix.msysgitpath -o msysgit.wxs
-		"%wixBinDir%\candle" "%~dp0\SparkleShare.wxs"
-		"%wixBinDir%\candle" "msysgit.wxs
-		"%wixBinDir%\light" -ext WixUIExtension Sparkleshare.wixobj msysgit.wixobj -dmsysgitpath=%git_install_root% -o SparkleShare.msi
+		"%wixBinDir%\heat.exe" dir "%~dp0\..\..\bin\msysgit" -cg msysGitComponentGroup -gg -scom -sreg -sfrag -srd -dr MSYSGIT_DIR -var wix.msysgitpath -o msysgit.wxs
+		"%wixBinDir%\candle" "%~dp0\SparkleShare.wxs" -ext WixUIExtension -ext WixUtilExtension
+		"%wixBinDir%\candle" "%~dp0\msysgit.wxs" -ext WixUIExtension -ext WixUtilExtension
+		"%wixBinDir%\light" -ext WixUIExtension -ext WixUtilExtension Sparkleshare.wixobj msysgit.wixobj -droot="%~dp0\..\.." -dmsysgitpath="%~dp0\..\..\bin\msysgit" -o SparkleShare.msi 
 		echo SparkleShare.msi created.
-
 	) else (
 		echo Not building installer ^(could not find wix, Windows Installer XML toolset^)
-	    echo wix is available at http://wix.sourceforge.net/
+	  echo wix is available at http://wix.sourceforge.net/
 	)
-	
 ) else echo Not building installer, as it was not requested. ^(Issue "build.cmd installer" to build installer ^)

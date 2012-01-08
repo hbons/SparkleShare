@@ -62,8 +62,9 @@ namespace SparkleShare {
 			Application.SetCompatibleTextRenderingDefault (false);
 
 			// Add msysgit to path, as we cannot asume it is added to the path
-			// Asume it is installed in @"C:\msysgit\bin" for now
-			string MSysGit=@"C:\msysgit";
+			// Asume it is installed in @"<exec dir>\msysgit\bin"
+            string ExecutableDir = Path.GetDirectoryName(Application.ExecutablePath);
+            string MSysGit = Path.Combine(ExecutableDir, "msysgit");
 
 			string newPath = MSysGit + @"\bin" + ";"
 			               + MSysGit + @"\mingw\bin" + ";"
@@ -110,7 +111,7 @@ namespace SparkleShare {
             }
         }
 
-        public override string GetAvatar (string email, int size)
+        /*public override string GetAvatar (string email, int size)
         {
             if (string.IsNullOrEmpty (email)) {
                 return "application://sparkleshare/avatar-default-32.png";
@@ -119,7 +120,7 @@ namespace SparkleShare {
                 SparklePaths.SparkleLocalIconPath, size + "x" + size, "status", "avatar-" + email);
 
             return avatar_file_path;
-        }
+        }*/
 
 
 		// Creates a .desktop entry in autostart folder to
@@ -146,17 +147,26 @@ namespace SparkleShare {
 		// Creates the SparkleShare folder in the user's home folder
 		public override bool CreateSparkleShareFolder ()
 		{
-			if (!Directory.Exists (SparklePaths.SparklePath)) {
-
-				Directory.CreateDirectory (SparklePaths.SparklePath);
-				SparkleHelpers.DebugInfo ("Config", "Created '" + SparklePaths.SparklePath + "'");
+            if (!Directory.Exists(SparkleConfig.DefaultConfig.FoldersPath))
+            {
+                Directory.CreateDirectory(SparkleConfig.DefaultConfig.FoldersPath);
+                Directory.CreateDirectory(SparkleConfig.DefaultConfig.TmpPath);
+                SparkleHelpers.DebugInfo("Config", "Created '" + SparkleConfig.DefaultConfig.FoldersPath + "'");
 
 				return true;
-
 			}
 
 			return false;
 		}
+
+        public override void OpenFile(string url)
+        {
+            Process process = new Process();
+            process.StartInfo.Arguments = "\"" + url + "\"";
+            process.StartInfo.FileName = "start";
+
+            process.Start();
+        }
 
 		public override void OpenSparkleShareFolder (string subfolder)
 		{
