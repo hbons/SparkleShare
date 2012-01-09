@@ -30,6 +30,10 @@
             </Component>
             <Directory Id='MSYSGIT_DIR' Name='msysgit'>
             </Directory>
+            <Directory Id='PO_DIR' Name='po'>
+            </Directory>
+            <Directory Id='PLUGINS_DIR' Name='plugins'>
+            </Directory>
           </Directory>
         </Directory>
       </Directory>
@@ -56,6 +60,8 @@
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="Autostart" />
       <ComponentGroupRef Id='msysGitComponentGroup' />
+      <ComponentGroupRef Id='poComponentGroup' />
+      <ComponentGroupRef Id='pluginsComponentGroup' />
     </Feature>
 
     <UI>
@@ -63,7 +69,7 @@
       <Publish Dialog="ExitDialog"
                Control="Finish"
                Event="DoAction"
-               Value="LaunchApplication" />
+               Value="LaunchApplication">1</Publish>
     </UI>
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
     <WixVariable Id="WixUILicenseRtf" Value="..\..\LICENSE.rtf" />
