@@ -7,12 +7,14 @@
           $(document).ready(function () {
 
               // Update the Today and Yesterday labels after midnight
-              setInterval (function(){
+              var midnight_interval = setInterval (function(){
                 var date = new Date();
 
                 if ((date.getTime() / 1000) >= <!-- $midnight -->) {
                   $("#today").html($("#today").attr("name"));
                   $("#yesterday").html($("#yesterday").attr("name"));
+
+                  clearInterval(midnight_interval);
                 }
               }, 60 * 1000);
 
