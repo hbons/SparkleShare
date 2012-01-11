@@ -34,8 +34,15 @@ namespace SparkleLib {
                 if (!message.StartsWith ("["))
                     message = " " + message;
 
-                // TODO: Write to a log
-                Console.WriteLine (timestamp + " " + "[" + type + "]" + message);
+                string line = timestamp + " " + "[" + type + "]" + message;
+
+                if (SparkleConfig.DefaultConfig.DebugMode)
+                    Console.WriteLine (line);
+
+                File.AppendAllText (
+                    SparkleConfig.DefaultConfig.LogFilePath,
+                    line + Environment.NewLine
+                );
             }
         }
 
