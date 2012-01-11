@@ -29,15 +29,17 @@ namespace SparkleLib {
             Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
                 "sparkleshare");
 
+        public bool DebugMode = true;
+
         public static SparkleConfig DefaultConfig = new SparkleConfig (ConfigPath, "config.xml");
         public string FullPath;
+        public string LogFilePath;
 
         public string HomePath {
             get {
 		        return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
 		    }
         }
-
 
         public string FoldersPath {
             get {
@@ -57,7 +59,17 @@ namespace SparkleLib {
 
         public SparkleConfig (string config_path, string config_file_name)
         {
-            FullPath = System.IO.Path.Combine (config_path, config_file_name);
+            FullPath    = Path.Combine (config_path, config_file_name);
+            LogFilePath = Path.Combine (config_path, "debug.log");
+
+            if (File.Exists (LogFilePath)) {
+                try {
+                    File.Delete (LogFilePath);
+
+                } catch (Exception) {
+                    // Don't delete the debug.log if 'tail' is reading it
+                }
+            }
 
             if (!Directory.Exists (config_path)) {
                 Directory.CreateDirectory (config_path);
