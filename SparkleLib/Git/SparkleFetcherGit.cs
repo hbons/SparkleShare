@@ -207,9 +207,10 @@ namespace SparkleLib {
         // Add a .gitignore file to the repo
         private void InstallExcludeRules ()
         {
-            DirectoryInfo info = Directory.CreateDirectory (SparkleHelpers.CombineMore (
-                this.target_folder, ".git", "info"));
+            DirectoryInfo info = Directory.CreateDirectory (
+                SparkleHelpers.CombineMore (this.target_folder, ".git", "info"));
 
+            // File that lists the files we want git to ignore
             string exlude_rules_file_path = Path.Combine (info.FullName, "exclude");
             TextWriter writer = new StreamWriter (exlude_rules_file_path);
 
@@ -269,6 +270,101 @@ namespace SparkleLib {
                 // Subversion
                 writer.WriteLine ("/.svn/*");
                 writer.WriteLine ("*/.svn/*");
+
+            writer.Close ();
+
+
+            // File that lists the files we want don't want git to compress
+            // Not compressing the already compressed files saves us memory
+            // usage and increases peed
+            string no_compression_rules_file_path = Path.Combine (info.FullName, "attributes");
+            writer = new StreamWriter (no_compression_rules_file_path);
+
+                // Images
+                writer.WriteLine ("*.jpg -delta");
+                writer.WriteLine ("*.jpeg -delta");
+                writer.WriteLine ("*.JPG -delta");
+                writer.WriteLine ("*.JPEG -delta");
+
+                writer.WriteLine ("*.png -delta");
+                writer.WriteLine ("*.PNG -delta");
+
+                writer.WriteLine ("*.tiff -delta");
+                writer.WriteLine ("*.TIFF -delta");
+
+                // Audio
+                writer.WriteLine ("*.flac -delta");
+                writer.WriteLine ("*.FLAC -delta");
+
+                writer.WriteLine ("*.mp3 -delta");
+                writer.WriteLine ("*.MP3 -delta");
+
+                writer.WriteLine ("*.ogg -delta");
+                writer.WriteLine ("*.OGG -delta");
+
+                writer.WriteLine ("*.oga -delta");
+                writer.WriteLine ("*.OGA -delta");
+
+                // Video
+                writer.WriteLine ("*.avi -delta");
+                writer.WriteLine ("*.AVI -delta");
+
+                writer.WriteLine ("*.mov -delta");
+                writer.WriteLine ("*.MOV -delta");
+
+                writer.WriteLine ("*.mpg -delta");
+                writer.WriteLine ("*.MPG -delta");
+                writer.WriteLine ("*.mpeg -delta");
+                writer.WriteLine ("*.MPEG -delta");
+
+                writer.WriteLine ("*.mkv -delta");
+                writer.WriteLine ("*.MKV -delta");
+
+                writer.WriteLine ("*.ogv -delta");
+                writer.WriteLine ("*.OGV -delta");
+
+                writer.WriteLine ("*.ogx -delta");
+                writer.WriteLine ("*.OGX -delta");
+
+                writer.WriteLine ("*.webm -delta");
+                writer.WriteLine ("*.WEBM -delta");
+
+                // Archives
+                writer.WriteLine ("*.zip -delta");
+                writer.WriteLine ("*.ZIP -delta");
+
+                writer.WriteLine ("*.gz -delta");
+                writer.WriteLine ("*.GZ -delta");
+
+                writer.WriteLine ("*.bz -delta");
+                writer.WriteLine ("*.BZ -delta");
+
+                writer.WriteLine ("*.bz2 -delta");
+                writer.WriteLine ("*.BZ2 -delta");
+
+                writer.WriteLine ("*.rpm -delta");
+                writer.WriteLine ("*.RPM -delta");
+
+                writer.WriteLine ("*.deb -delta");
+                writer.WriteLine ("*.DEB -delta");
+
+                writer.WriteLine ("*.tgz -delta");
+                writer.WriteLine ("*.TGZ -delta");
+
+                writer.WriteLine ("*.rar -delta");
+                writer.WriteLine ("*.RAR -delta");
+
+                writer.WriteLine ("*.ace -delta");
+                writer.WriteLine ("*.ACE -delta");
+
+                writer.WriteLine ("*.7z -delta");
+                writer.WriteLine ("*.7Z -delta");
+
+                writer.WriteLine ("*.pak -delta");
+                writer.WriteLine ("*.PAK -delta");
+
+                writer.WriteLine ("*.tar -delta");
+                writer.WriteLine ("*.TAR -delta");
 
             writer.Close ();
         }
