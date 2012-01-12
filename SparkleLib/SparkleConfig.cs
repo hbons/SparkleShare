@@ -34,6 +34,8 @@ namespace SparkleLib {
         public static SparkleConfig DefaultConfig = new SparkleConfig (ConfigPath, "config.xml");
         public string FullPath;
         public string LogFilePath;
+        public string TmpPath;
+
 
         public string HomePath {
             get {
@@ -52,13 +54,6 @@ namespace SparkleLib {
                     return Path.Combine (HomePath, "SparkleShare");
             }
         }
-
-        public string TmpPath {
-            get {
-                return Path.Combine (FoldersPath, ".tmp");
-            }
-        }
-
 
         public SparkleConfig (string config_path, string config_file_name)
         {
@@ -108,7 +103,7 @@ namespace SparkleLib {
 
             } finally {
                 Load (FullPath);
-                TmpPath = Path.Combine(FoldersPath, ".tmp");
+                TmpPath = Path.Combine (FoldersPath, ".tmp");
             }
         }
 
