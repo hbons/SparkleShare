@@ -441,6 +441,7 @@ namespace SparkleLib {
             // DU    unmerged, deleted by us   -> Use theirs
             // AA    unmerged, both added      -> Use theirs, save ours as a timestamped copy
             // UU    unmerged, both modified   -> Use theirs, save ours as a timestamped copy
+            // ??    unmerged, new files       -> Stage the new files
             //
             // Note that a rebase merge works by replaying each commit from the working branch on
             // top of the upstream branch. Because of this, when a merge conflict happens the
@@ -524,6 +525,16 @@ namespace SparkleLib {
                     SparkleGit git_rebase_skip = new SparkleGit (LocalPath, "rebase --skip");
                     git_rebase_skip.Start ();
                     git_rebase_skip.WaitForExit ();
+                }
+
+                // New local files
+                if (line.StartsWith ("??")) {
+
+                    Add ();
+
+                    SparkleGit git_rebase_continue = new SparkleGit (LocalPath, "rebase --continue");
+                    git_rebase_continue.Start ();
+                    git_rebase_continue.WaitForExit ();
                 }
             }
         }
