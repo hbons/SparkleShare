@@ -586,7 +586,7 @@ namespace SparkleLib {
 
             writer.WriteLine ("");
             writer.WriteLine ("SparkleShare is a Free and Open Source software program that helps people ");
-            writer.WriteLine ("collaborate and share files. If you like what we do, please consider a small );
+            writer.WriteLine ("collaborate and share files. If you like what we do, please consider a small ");
             writer.WriteLine ("donation to support the project: http://sparkleshare.org/support-us/");
             writer.WriteLine ("");
             writer.WriteLine ("Have fun! :)");
