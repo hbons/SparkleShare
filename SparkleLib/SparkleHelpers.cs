@@ -23,7 +23,7 @@ namespace SparkleLib {
     public static class SparkleHelpers {
 
         public static bool ShowDebugInfo = true;
-
+        private static object debug_lock = new object ();
 
         // Show debug info if needed
         public static void DebugInfo (string type, string message)
@@ -39,10 +39,12 @@ namespace SparkleLib {
                 if (SparkleConfig.DefaultConfig.DebugMode)
                     Console.WriteLine (line);
 
-                File.AppendAllText (
-                    SparkleConfig.DefaultConfig.LogFilePath,
-                    line + Environment.NewLine
-                );
+                lock (debug_lock) {
+                    File.AppendAllText (
+                        SparkleConfig.DefaultConfig.LogFilePath,
+                        line + Environment.NewLine
+                    );
+                }
             }
         }
 
