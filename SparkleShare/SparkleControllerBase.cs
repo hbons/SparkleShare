@@ -499,7 +499,7 @@ namespace SparkleShare {
 
 
             int midnight = (int) (DateTime.Today.AddDays (1) - new DateTime (1970, 1, 1)).TotalSeconds;
-            Console.WriteLine (midnight);
+
             string html = event_log_html.Replace ("<!-- $event-log-content -->", event_log)
                 .Replace ("<!-- $username -->", UserName)
                 .Replace ("<!-- $user-avatar-url -->", "file://" + GetAvatar (UserEmail, 48))
