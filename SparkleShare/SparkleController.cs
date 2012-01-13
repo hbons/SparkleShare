@@ -175,13 +175,16 @@ namespace SparkleShare {
 
         public override string EventLogHTML {
             get {
-                string path = new string [] {Defines.PREFIX,
-                    "share", "sparkleshare", "html", "event-log.html"}.Combine ();
+                string html_path = new string [] {Defines.PREFIX, "share",
+                    "sparkleshare", "html", "event-log.html"}.Combine ();
 
-                string html = String.Join (Environment.NewLine, File.ReadAllLines (path));
+                string html = File.ReadAllText (html_path);
 
-                html = html.Replace ("<!-- $jquery-url -->", "file://" +
-                  new string [] {Defines.PREFIX, "share", "sparkleshare", "html", "jquery.js"}.Combine ());
+                string jquery_file_path = new string [] {Defines.PREFIX, "share",
+                    "sparkleshare", "html", "jquery.js"}.Combine ()
+
+                string jquery = File.ReadAllText (jquery_file_path);
+                html          = html.Replace ("<!-- $jquery -->", jquery);
             
                 return html;
             }

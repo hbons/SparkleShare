@@ -161,13 +161,13 @@ namespace SparkleShare {
 			get {
 				string resource_path = NSBundle.MainBundle.ResourcePath;
 				string html_path     = Path.Combine (resource_path, "HTML", "event-log.html");
-				
-				StreamReader reader = new StreamReader (html_path);
-				string html = reader.ReadToEnd ();
-				reader.Close ();
+				string html          = File.ReadAllText (html_path);
 
-                html = html.Replace ("<!-- $jquery-url -->", "file://" +
-                    Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "jquery.js"));
+                string jquery_file_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    "HTML", "jquery.js");
+
+                string jquery = File.ReadAllText (jquery_file_path);
+                html          = html.Replace ("<!-- $jquery -->", jquery);
 
                 return html;
 			}
