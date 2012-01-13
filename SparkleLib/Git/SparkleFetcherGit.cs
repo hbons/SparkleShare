@@ -230,14 +230,14 @@ namespace SparkleLib {
                 // KDE
                 writer.WriteLine (".directory");
     
-                // Mac OSX
+                // Mac OS X
                 writer.WriteLine (".DS_Store");
                 writer.WriteLine ("Icon?");
                 writer.WriteLine ("._*");
                 writer.WriteLine (".Spotlight-V100");
                 writer.WriteLine (".Trashes");
 
-                // Mac OSX
+                // Omnigraffle
                 writer.WriteLine ("*(Autosaved).graffle");
             
                 // Windows
@@ -250,16 +250,16 @@ namespace SparkleLib {
                 writer.WriteLine ("*~*.tmp");
                 writer.WriteLine ("*~*.TMP");
                 writer.WriteLine ("~*.ppt");
-                writer.WriteLine ("~*.pptx");
                 writer.WriteLine ("~*.PPT");
+                writer.WriteLine ("~*.pptx");
                 writer.WriteLine ("~*.PPTX");
                 writer.WriteLine ("~*.xls");
-                writer.WriteLine ("~*.xlsx");
                 writer.WriteLine ("~*.XLS");
+                writer.WriteLine ("~*.xlsx");
                 writer.WriteLine ("~*.XLSX");
                 writer.WriteLine ("~*.doc");
-                writer.WriteLine ("~*.docx");
                 writer.WriteLine ("~*.DOC");
+                writer.WriteLine ("~*.docx");
                 writer.WriteLine ("~*.DOCX");
 
                 // CVS
@@ -274,9 +274,9 @@ namespace SparkleLib {
             writer.Close ();
 
 
-            // File that lists the files we want don't want git to compress
+            // File that lists the files we want don't want git to compress.
             // Not compressing the already compressed files saves us memory
-            // usage and increases peed
+            // usage and increases speed
             string no_compression_rules_file_path = Path.Combine (info.FullName, "attributes");
             writer = new StreamWriter (no_compression_rules_file_path);
 
