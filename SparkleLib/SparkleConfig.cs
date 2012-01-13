@@ -164,11 +164,11 @@ namespace SparkleLib {
 
                 this.Save ();
 
-                ConfigureSSH ();
+                // ConfigureSSH ();
             }
         }
 
-
+/*
         private void ConfigureSSH ()
         {
             if (User.Email.Equals ("Unknown"))
@@ -214,7 +214,7 @@ namespace SparkleLib {
 
             SparkleHelpers.DebugInfo ("Config", "Added key to " + ssh_config_file_path);
         }
-
+*/
 
         public List<string> Folders {
             get {
