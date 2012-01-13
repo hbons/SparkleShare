@@ -31,53 +31,54 @@ namespace SparkleLib {
         public SparkleFetcherGit (string server, string remote_folder, string target_folder) :
             base (server, remote_folder, target_folder)
         {
-            remote_folder = remote_folder.Trim ("/".ToCharArray ());
+            if (server.EndsWith ("/"))
+                server = server.Substring (0, server.Length - 1);
 
-            if (server.StartsWith ("http")) {
-                base.target_folder = target_folder;
-                base.remote_url    = server;
-                return;
+            if (!remote_folder.StartsWith ("/"))
+                remote_folder = "/" + remote_folder;
+
+
+            Uri uri;
+
+            try {
+                uri = new Uri (server + remote_folder);
+
+            } catch (UriFormatException) {
+                uri = new Uri ("ssh://" + server + remote_folder);
             }
 
-            // Gitorious formatting
-            if (server.Contains ("gitorious.org")) {
-                server = "ssh://git@gitorious.org";
 
-                if (!remote_folder.EndsWith (".git")) {
+            if (!uri.Scheme.Equals ("ssh") &&
+                !uri.Scheme.Equals ("git")) {
 
-                    if (!remote_folder.Contains ("/"))
-                        remote_folder = remote_folder + "/" + remote_folder;
+                uri = new Uri ("ssh://" + server);
+            }
 
-                    remote_folder += ".git";
+
+            if (uri.Host.Equals ("gitorious.org")) {
+                if (!uri.AbsolutePath.Equals ("/") &&
+                    !uri.AbsolutePath.EndsWith (".git")) {
+
+                    uri = new Uri ("ssh://git@gitorious.org" + uri.AbsolutePath + ".git");
+
+                } else {
+                    uri = new Uri ("ssh://git@gitorious.org" + uri.AbsolutePath);
                 }
 
-            } else if (server.Contains ("github.com")) {
-                server = "ssh://git@github.com";
+            } else if (uri.Host.Equals ("github.com")) {
+                uri = new Uri ("ssh://git@github.com" + uri.AbsolutePath);
 
-            } else if (server.Contains ("gnome.org")) {
-                server = "ssh://git@gnome.org/git";
+            } else if (uri.Host.Equals ("gnome.org")) {
+                uri = new Uri ("ssh://git@gnome.org/git" + uri.AbsolutePath);
 
             } else {
-                server = server.TrimEnd ("/".ToCharArray ());
-
-                string protocol = "ssh://";
-
-                if (server.StartsWith ("ssh://"))
-                    server   = server.Substring (6);
-
-                if (server.StartsWith ("git://")) {
-                    server = server.Substring (6);
-                    protocol = "git://";
-                }
-
-                if (!server.Contains ("@"))
-                    server = "git@" + server;
-
-                server = protocol + server;
+                if (string.IsNullOrEmpty (uri.UserInfo))
+                    uri = new Uri (uri.Scheme + "://git@" + uri.Host + uri.AbsolutePath);
             }
 
+
             base.target_folder = target_folder;
-            base.remote_url    = server + "/" + remote_folder;
+            base.remote_url    = uri.ToString ();
         }
 
 
