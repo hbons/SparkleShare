@@ -1,3 +1,12 @@
+0.8.0 for Linux and Mac (Sat Jan 14):
+
+        Hylke:
+        - Show syncing progress in the status icon
+        - Hide dock icon on Mac until you open a window
+        - Update dates in the event log after midnight
+        - Don't let git compress already compressed files (.jpg .ogg .zip, etc.)
+
+
 0.6.0 for Linux and Mac (Sun Dec 25 2011):
         
         Hylke:
