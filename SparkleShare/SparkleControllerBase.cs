@@ -961,8 +961,10 @@ namespace SparkleShare {
             remote_folder = remote_folder.Trim ();
 
             string tmp_path = SparkleConfig.DefaultConfig.TmpPath;
-            if (!Directory.Exists (tmp_path))
+            if (!Directory.Exists (tmp_path)) {
                 Directory.CreateDirectory (tmp_path);
+                File.SetAttributes (tmp_path, File.GetAttributes (tmp_path) | FileAttributes.Hidden);
+            }
 
             // Strip the '.git' from the name
             string canonical_name = Path.GetFileNameWithoutExtension (remote_folder);
