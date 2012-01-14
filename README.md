@@ -71,6 +71,12 @@ $ sudo apt-get install gtk-sharp2 mono-runtime mono-devel monodevelop \
   libwebkit-cil-dev intltool libtool python-nautilus libndesk-dbus-glib1.0-cil-dev
 ```
 
+For Ubuntu `libappindicator` support, install the following package:
+
+```bash
+$ sudo apt-get install libappindicator0.1-cil-dev
+```
+
 #### Fedora (yum):
 
 ```bash
@@ -80,11 +86,6 @@ $ sudo yum install gtk-sharp2-devel mono-core mono-devel monodevelop \
   gnome-doc-utils
 ```
 
-For Ubuntu `libappindicator` support, install the following package:
-
-```bash
-$ sudo apt-get install libappindicator0.1-cil-dev 
-```
 
 You can then build and install SparkleShare like this:
 
