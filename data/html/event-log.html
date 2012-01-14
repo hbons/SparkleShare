@@ -2,9 +2,26 @@
 <html>
     <head>
         <title>SparkleShare Event Log</title>
-        <script type="text/javascript" src="<!-- $jquery-url -->"></script>
+        <script type="text/javascript">
+          <!-- $jquery -->
+        </script>
+
         <script type="text/javascript">
           $(document).ready(function () {
+
+              // Update the Today and Yesterday labels after midnight
+              var midnight_interval = setInterval (function(){
+                var date = new Date();
+
+                if ((date.getTime() / 1000) >= <!-- $midnight -->) {
+                  $("#today").html($("#today").attr("name"));
+                  $("#yesterday").html($("#yesterday").attr("name"));
+
+                  clearInterval(midnight_interval);
+                }
+              }, 60 * 1000);
+
+          
               $('.comments-section').each (function () {
                 if ($(this).find ('.comments').children ().size () < 1) {
                   $(this).hide ();
