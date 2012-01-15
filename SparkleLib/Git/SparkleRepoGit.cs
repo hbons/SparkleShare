@@ -183,9 +183,6 @@ namespace SparkleLib {
             double percentage = 1.0;
             Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
 
-            DateTime last_change     = DateTime.Now;
-            TimeSpan change_interval = new TimeSpan (0, 0, 0, 1);
-
             while (!git.StandardError.EndOfStream) {
                 string line   = git.StandardError.ReadLine ();
                 Match match   = progress_regex.Match (line);
@@ -218,14 +215,7 @@ namespace SparkleLib {
 
                 if (number >= percentage) {
                     percentage = number;
-
-                    if (percentage == 100.0)
-                        percentage = 99.0;
-
-                    if (DateTime.Compare (last_change, DateTime.Now.Subtract (change_interval)) < 0) {
-                        base.OnSyncProgressChanged (percentage, speed);
-                        last_change = DateTime.Now;
-                    }
+                    base.OnSyncProgressChanged (percentage, speed);
                 }
             }
 
@@ -248,9 +238,6 @@ namespace SparkleLib {
 
             double percentage = 1.0;
             Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
-
-            DateTime last_change     = DateTime.Now;
-            TimeSpan change_interval = new TimeSpan (0, 0, 0, 1);
 
             while (!git.StandardError.EndOfStream) {
                 string line   = git.StandardError.ReadLine ();
@@ -284,14 +271,7 @@ namespace SparkleLib {
 
                 if (number >= percentage) {
                     percentage = number;
-
-                    if (percentage == 100.0)
-                        percentage = 99.0;
-
-                    if (DateTime.Compare (last_change, DateTime.Now.Subtract (change_interval)) < 0) {
-                        base.OnSyncProgressChanged (percentage, speed);
-                        last_change = DateTime.Now;
-                    }
+                    base.OnSyncProgressChanged (percentage, speed);
                 }
             }
 
