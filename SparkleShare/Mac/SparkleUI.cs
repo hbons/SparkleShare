@@ -94,13 +94,13 @@ namespace SparkleShare {
 
         public void UpdateDockIconVisibility ()
         {
-            if (true) { // TODO: check for open windows
+            // if (true) { // TODO: check for open windows
 
                 ShowDockIcon ();
 
-            } else {
-                HideDockIcon ();
-            }
+            // } else {
+            //     HideDockIcon ();
+            // }
         }
 
 
