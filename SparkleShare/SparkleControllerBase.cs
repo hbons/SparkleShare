@@ -469,13 +469,17 @@ namespace SparkleShare {
                     today.Month == activity_day.DateTime.Month && 
                     today.Year  == activity_day.DateTime.Year) {
 
-                    day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "Today");
+                    day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
+                        "<span id='today' name='" + activity_day.DateTime.ToString (_("dddd, MMMM d")) + "'>"
+                        + _("Today") + "</span>");
 
                 } else if (yesterday.Day   == activity_day.DateTime.Day &&
                            yesterday.Month == activity_day.DateTime.Month &&
                            yesterday.Year  == activity_day.DateTime.Year) {
 
-                    day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->", "Yesterday");
+                    day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
+                        "<span id='yesterday' name='" + activity_day.DateTime.ToString (_("dddd, MMMM d")) + "'>"
+                        + _("Yesterday") + "</span>");
 
                 } else {
                     if (activity_day.DateTime.Year != DateTime.Now.Year) {
@@ -495,9 +499,13 @@ namespace SparkleShare {
                 event_log += day_entry.Replace ("<!-- $day-entry-content -->", event_entries);
             }
 
-            string html =  event_log_html.Replace ("<!-- $event-log-content -->", event_log)
+
+            int midnight = (int) (DateTime.Today.AddDays (1) - new DateTime (1970, 1, 1)).TotalSeconds;
+
+            string html = event_log_html.Replace ("<!-- $event-log-content -->", event_log)
                 .Replace ("<!-- $username -->", UserName)
-                .Replace ("<!-- $user-avatar-url -->", "file://" + GetAvatar (UserEmail, 48));
+                .Replace ("<!-- $user-avatar-url -->", "file://" + GetAvatar (UserEmail, 48))
+                .Replace ("<!-- $midnight -->", midnight.ToString ());
 
             return html;
         }
