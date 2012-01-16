@@ -380,25 +380,4 @@ namespace SparkleLib {
             writer.Close ();
         }
     }
-
-
-    public class SparkleGit : Process {
-
-        public SparkleGit (string path, string args) : base ()
-        {
-            EnableRaisingEvents              = true;
-            StartInfo.FileName               = SparkleBackend.DefaultBackend.Path;
-            StartInfo.Arguments              = args;
-            StartInfo.RedirectStandardOutput = true;
-            StartInfo.UseShellExecute        = false;
-            StartInfo.WorkingDirectory       = path;
-        }
-
-
-        new public void Start ()
-        {
-            SparkleHelpers.DebugInfo ("Cmd", StartInfo.FileName + " " + StartInfo.Arguments);
-            base.Start ();
-        }
-    }
 }
