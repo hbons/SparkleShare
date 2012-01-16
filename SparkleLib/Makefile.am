@@ -4,6 +4,7 @@ TARGET = library
 SOURCES =  \
 	Defines.cs \
 	Git/SparkleFetcherGit.cs \
+	Git/SparkleGit.cs \
 	Git/SparkleRepoGit.cs \
 	SparkleBackend.cs \
 	SparkleChangeSet.cs \
