@@ -272,6 +272,16 @@ namespace SparkleLib {
                 writer.WriteLine ("/.svn/*");
                 writer.WriteLine ("*/.svn/*");
 
+                // Mercurial
+                writer.WriteLine ("/.hg/*");
+                writer.WriteLine ("*/.hg/*");
+                writer.WriteLine ("*/.hgignore");
+
+                // Bazaar
+                writer.WriteLine ("/.bzr/*");
+                writer.WriteLine ("*/.bzr/*");
+                writer.WriteLine ("*/.bzrignore");
+
             writer.Close ();
 
 
