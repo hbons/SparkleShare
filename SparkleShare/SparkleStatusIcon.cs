@@ -161,7 +161,7 @@ namespace SparkleShare {
                 else
                     FrameNumber = 0;
 
-                string icon_name = "process-syncing-sparkleshare"; 
+                string icon_name = "process-syncing-sparkleshare-"; 
                 for (int i = 0; i <= FrameNumber; i++)
                     icon_name += "i";
 
