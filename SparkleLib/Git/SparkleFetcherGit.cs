@@ -188,7 +188,7 @@ namespace SparkleLib {
 
             // Show special characters in the logs
             config = config.Replace ("[core]" + n,
-                "[core]" + n + "quotepath = false" + n);
+                "[core]" + n + "\tquotepath = false" + n);
 
             // Be case sensitive explicitly to work on Mac
             config = config.Replace ("ignorecase = true", "ignorecase = false");
