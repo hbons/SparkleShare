@@ -542,16 +542,24 @@ namespace SparkleLib {
             string [] lines       = output.Split ("\n".ToCharArray ());
             List <string> entries = new List <string> ();
 
-            int j = 0;
+            int line_number = 0;
+            bool first_pass = true;
             string entry = "", last_entry = "";
             foreach (string line in lines) {
-                if (line.StartsWith ("commit") && j > 0) {
+                if (line.StartsWith ("commit") && !first_pass) {
                     entries.Add (entry);
                     entry = "";
+                    line_number = 0;
+
+                } else {
+                    first_pass = false;
                 }
 
-                entry += line + "\n";
-                j++;
+                // Only parse 250 files to prevent memory issues
+                if (line_number < 254) {
+                    entry += line + "\n";
+                    line_number++;
+                }
 
                 last_entry = entry;
             }
@@ -636,6 +644,7 @@ namespace SparkleLib {
                             }
                         }
                     }
+
 
                     if ((change_set.Added.Count +
                          change_set.Edited.Count +
