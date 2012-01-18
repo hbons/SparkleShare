@@ -46,7 +46,7 @@ namespace SparkleShare {
             );
 
             icon_theme.AppendSearchPath (
-                Path.Combine (SparkleConfig.ConfigPath, "icons")
+                Path.Combine (Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath), "icons")
             );
 
             try {
