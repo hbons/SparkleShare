@@ -748,14 +748,25 @@ namespace SparkleShare {
         // so all activity is done with this key
         public void AddKey ()
         {
-            string keys_path = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
+            string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
             string key_file_name = "sparkleshare." + UserEmail + ".key";
+            string key_file_path = Path.Combine (keys_path, key_file_name);
+
+            if (!File.Exists (key_file_path)) {
+                foreach (string file_name in Directory.GetFiles (keys_path)) {
+                    if (file_name.StartsWith ("sparkleshare") &&
+                        file_name.EndsWith (".key")) {
+
+                        key_file_path = Path.Combine (keys_path, file_name);
+                    }
+                }
+            }
 
             Process process = new Process ();
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.UseShellExecute        = false;
             process.StartInfo.FileName               = "ssh-add";
-            process.StartInfo.Arguments              = "\"" + Path.Combine (keys_path, key_file_name) + "\"";
+            process.StartInfo.Arguments              = "\"" + key_file_path + "\"";
 
             process.Start ();
             process.WaitForExit ();
