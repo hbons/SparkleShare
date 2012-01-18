@@ -71,19 +71,45 @@ namespace SparkleLib {
 
         public override double Size {
             get {
-                return CalculateSize (
-                    new DirectoryInfo (LocalPath)
-                );
+                string file_path = Path.Combine (LocalPath, ".git", "repo_size");
+
+                try {
+                    return double.Parse (File.ReadAllText (file_path));
+
+                } catch {
+                    return 0;
+                }
             }
         }
 
 
         public override double HistorySize {
             get {
-                return CalculateSize (
-                    new DirectoryInfo (Path.Combine (LocalPath, ".git"))
-                );
+                string file_path = Path.Combine (LocalPath, ".git", "repo_history_size");
+
+                try {
+                    return double.Parse (File.ReadAllText (file_path));
+
+                } catch {
+                    return 0;
+                }
             }
+        }
+
+
+        private void CalculateSizes ()
+        {
+            double size = CalculateSize (
+                new DirectoryInfo (LocalPath));
+
+            double history_size = CalculateSize (
+                new DirectoryInfo (Path.Combine (LocalPath, ".git")));
+
+            string size_file_path = Path.Combine (LocalPath, ".git", "repo_size");
+            string history_size_file_path = Path.Combine (LocalPath, ".git", "repo_history_size");
+
+            File.WriteAllText (size_file_path, size.ToString ());
+            File.WriteAllText (history_size_file_path, history_size.ToString ());
         }
 
 
@@ -221,6 +247,7 @@ namespace SparkleLib {
 
             git.WaitForExit ();
 
+            CalculateSizes ();
 
             if (git.ExitCode == 0)
                 return true;
@@ -277,6 +304,7 @@ namespace SparkleLib {
 
             git.WaitForExit ();
 
+            CalculateSizes ();
 
             if (git.ExitCode == 0) {
                 Rebase ();

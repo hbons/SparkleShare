@@ -50,18 +50,19 @@ namespace SparkleShare {
             get {
                 double size = 0;
 
-
                 foreach (SparkleRepoBase repo in
-                         Program.Controller.Repositories.GetRange (0,
-                            Program.Controller.Repositories.Count)) {
+                         Program.Controller.Repositories.GetRange (
+                             0, Program.Controller.Repositories.Count)) {
 
                     size += repo.Size + repo.HistorySize;
                 }
 
-                return Program.Controller.FormatSize (size);
+                if (size == 0)
+                    return "";
+                else
+                    return " — " + Program.Controller.FormatSize (size);
             }
         }
-
 
         public int ProgressPercentage {
             get {
