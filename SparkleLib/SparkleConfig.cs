@@ -133,8 +133,6 @@ namespace SparkleLib {
                 "    <email>Unknown</email>" + n +
                 "  </user>" + n +
                 "</sparkleshare>");
-
-            SparkleHelpers.DebugInfo ("Config", "Created \"" + FullPath + "\"");
         }
 
 
