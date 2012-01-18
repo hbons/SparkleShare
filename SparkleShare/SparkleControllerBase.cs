@@ -222,7 +222,7 @@ namespace SparkleShare {
             List<SparkleChangeSet> list = new List<SparkleChangeSet> ();
 
             foreach (SparkleRepoBase repo in Repositories) {
-                List<SparkleChangeSet> change_sets = repo.GetChangeSets (50);
+                List<SparkleChangeSet> change_sets = repo.GetChangeSets (30);
 
                 if (change_sets != null)
                     list.AddRange (change_sets);
