@@ -60,8 +60,7 @@ namespace SparkleShare {
             DeleteEvent += Close;
 
             this.size_label = new Label () {
-                Markup = "<b>Size:</b> " + Controller.Size + "   " +
-                         "<b>History:</b> " + Controller.HistorySize
+                Markup = "<b>Size:</b> …   <b>History:</b> …"
             };
 
             VBox layout_vertical = new VBox (false, 0);
