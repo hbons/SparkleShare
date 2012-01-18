@@ -130,6 +130,12 @@ namespace SparkleLib {
                     SyncUpBase ();
             };
 
+
+        }
+
+
+        public void Initialize ()
+        {
             // Sync up everything that changed
             // since we've been offline
             if (AnyDifferences) {
