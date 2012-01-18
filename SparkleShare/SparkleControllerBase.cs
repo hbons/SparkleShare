@@ -622,8 +622,8 @@ namespace SparkleShare {
                 UpdateState ();
             };
 
-            repo.Initialize ();
             Repositories.Add (repo);
+            repo.Initialize ();
         }
 
 
