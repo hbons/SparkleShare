@@ -84,7 +84,7 @@ namespace SparkleShare {
                 if (Controller.Folders.Length == 0)
                     StateText = _("Welcome to SparkleShare!");
                 else
-                    StateText = _("Up to date") + " — " + Controller.FolderSize;
+                    StateText = _("Up to date") + Controller.FolderSize;
 
                 CreateMenu ();
     
@@ -102,7 +102,7 @@ namespace SparkleShare {
                             if (Controller.Folders.Length == 0)
                                 StateText = _("Welcome to SparkleShare!");
                             else
-                                StateText = _("Up to date") + " — " + Controller.FolderSize;
+                                StateText = _("Up to date") + Controller.FolderSize;
     
                             StateMenuItem.Title = StateText;
                             CreateMenu ();
