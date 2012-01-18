@@ -186,9 +186,17 @@ namespace SparkleLib {
 
             string n = Environment.NewLine;
 
-            // Show special characters in the logs
             config = config.Replace ("[core]" + n,
-                "[core]" + n + "\tquotepath = false" + n);
+                "[core]" + n + "\tquotepath = false" + n + // Show special characters in the logs
+                "\tpackedGitLimit = 128m" + n +
+                "\tpackedGitWindowSize = 128m" + n);
+
+            config = config.Replace ("[remote \"origin\"]" + n,
+                "[pack]" + n +
+                "\tdeltaCacheSize = 128m" + n +
+                "\tpackSizeLimit = 128m" + n +
+                "\twindowMemory = 128m" + n +
+                "[remote \"origin\"]" + n);
 
             // Be case sensitive explicitly to work on Mac
             config = config.Replace ("ignorecase = true", "ignorecase = false");
