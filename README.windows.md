@@ -9,10 +9,10 @@
 
 * Open a Git console (available in Start Menu > Git > Git Bash). On the command line write
 
-    cd /c
-    git clone -b gettext-cs git://github.com/serras/SparkleShare.git
-    cd SparkleShare
-    git submodule update --init
+        cd /c
+        git clone -b gettext-cs git://github.com/serras/SparkleShare.git
+        cd SparkleShare
+        git submodule update --init
 
 * This way you will get the SparkleShare source code in `C:\SparkleShare`
 
@@ -26,10 +26,10 @@
 
 * Open a command shell (available in Start Menu > Accessories > Command Prompt) and execute
 
-    C:
-    cd C:\SparkleShare
-    cd SparkleShare\Windows
-    build
+        C:
+        cd C:\SparkleShare
+        cd SparkleShare\Windows
+        build
 
 * `C:\SparkleShare\bin` should now contain `SparkleLib.dll` and `SparkleShare.exe`, apart from folders `plugins`, `po` and `msysgit`
 
@@ -37,15 +37,15 @@
 
 * Then open a command shell and write almost the same as before, but with `installer` at the end
 
-    C:
-    cd C:\SparkleShare
-    cd SparkleShare\Windows
-    build installer
+        C:
+        cd C:\SparkleShare
+        cd SparkleShare\Windows
+        build installer
 
-* Each time you would like to get the latest changes open a Git console and run
+Now, each time you would like to get the latest changes open a Git console and run
 
-    cd /c/SparkleShare
-    git pull
-    git submodule update
+        cd /c/SparkleShare
+        git pull
+        git submodule update
 
-  and then run the build in the command shell.
+and then run the build in the command shell.
