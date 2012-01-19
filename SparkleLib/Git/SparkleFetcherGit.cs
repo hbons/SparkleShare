@@ -187,9 +187,17 @@ namespace SparkleLib {
 
             string n = Environment.NewLine;
 
-            // Show special characters in the logs
             config = config.Replace ("[core]" + n,
-                "[core]" + n + "quotepath = false" + n);
+                "[core]" + n + "\tquotepath = false" + n + // Show special characters in the logs
+                "\tpackedGitLimit = 128m" + n +
+                "\tpackedGitWindowSize = 128m" + n);
+
+            config = config.Replace ("[remote \"origin\"]" + n,
+                "[pack]" + n +
+                "\tdeltaCacheSize = 128m" + n +
+                "\tpackSizeLimit = 128m" + n +
+                "\twindowMemory = 128m" + n +
+                "[remote \"origin\"]" + n);
 
             // Be case sensitive explicitly to work on Mac
             config = config.Replace ("ignorecase = true", "ignorecase = false");
@@ -272,6 +280,16 @@ namespace SparkleLib {
                 // Subversion
                 writer.WriteLine ("/.svn/*");
                 writer.WriteLine ("*/.svn/*");
+
+                // Mercurial
+                writer.WriteLine ("/.hg/*");
+                writer.WriteLine ("*/.hg/*");
+                writer.WriteLine ("*/.hgignore");
+
+                // Bazaar
+                writer.WriteLine ("/.bzr/*");
+                writer.WriteLine ("*/.bzr/*");
+                writer.WriteLine ("*/.bzrignore");
 
             writer.Close ();
 
@@ -369,27 +387,6 @@ namespace SparkleLib {
                 writer.WriteLine ("*.TAR -delta");
 
             writer.Close ();
-        }
-    }
-
-
-    public class SparkleGit : Process {
-
-        public SparkleGit (string path, string args) : base ()
-        {
-            EnableRaisingEvents              = true;
-            StartInfo.FileName               = SparkleBackend.DefaultBackend.Path;
-            StartInfo.Arguments              = args;
-            StartInfo.RedirectStandardOutput = true;
-            StartInfo.UseShellExecute        = false;
-            StartInfo.WorkingDirectory       = path;
-        }
-
-
-        new public void Start ()
-        {
-            SparkleHelpers.DebugInfo ("Cmd", StartInfo.FileName + " " + StartInfo.Arguments);
-            base.Start ();
         }
     }
 }
