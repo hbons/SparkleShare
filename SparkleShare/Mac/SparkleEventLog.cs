@@ -84,7 +84,7 @@ namespace SparkleShare {
                 Bordered        = false,
                 Editable        = false,
                 Frame           = new RectangleF (60, 588, 75, 20),
-                StringValue     = Controller.Size,
+                StringValue     = "…",
                 Font            = SparkleUI.Font
             };
 
@@ -105,7 +105,7 @@ namespace SparkleShare {
                 Bordered        = false,
                 Editable        = false,
                 Frame           = new RectangleF (190, 588, 75, 20),
-                StringValue     = Controller.HistorySize,
+                StringValue     = "…",
                 Font            = SparkleUI.Font
             };
 

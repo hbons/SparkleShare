@@ -130,6 +130,12 @@ namespace SparkleLib {
                     SyncUpBase ();
             };
 
+
+        }
+
+
+        public void Initialize ()
+        {
             // Sync up everything that changed
             // since we've been offline
             if (AnyDifferences) {
@@ -634,15 +640,25 @@ namespace SparkleLib {
         }
 
 
+        private DateTime progress_last_change     = DateTime.Now;
+        private TimeSpan progress_change_interval = new TimeSpan (0, 0, 0, 1);
+
         protected void OnSyncProgressChanged (double progress_percentage, string progress_speed)
         {
-            // Console.WriteLine ("OnProgressChanged: " + progress_percentage + " " + progress_speed);
+            if (DateTime.Compare (this.progress_last_change,
+                    DateTime.Now.Subtract (this.progress_change_interval)) < 0) {
 
-            this.progress_percentage = progress_percentage;
-            this.progress_speed      = progress_speed;
+                if (SyncProgressChanged != null) {
+                    if (progress_percentage == 100.0)
+                        progress_percentage = 99.0;
 
-            if (SyncProgressChanged != null)
-                SyncProgressChanged (progress_percentage, progress_speed);
+                    this.progress_percentage  = progress_percentage;
+                    this.progress_speed       = progress_speed;
+                    this.progress_last_change = DateTime.Now;
+
+                    SyncProgressChanged (progress_percentage, progress_speed);
+                }
+            }
         }
 
 

@@ -224,7 +224,7 @@ namespace SparkleShare {
             List<SparkleChangeSet> list = new List<SparkleChangeSet> ();
 
             foreach (SparkleRepoBase repo in Repositories) {
-                List<SparkleChangeSet> change_sets = repo.GetChangeSets (50);
+                List<SparkleChangeSet> change_sets = repo.GetChangeSets (30);
 
                 if (change_sets != null)
                     list.AddRange (change_sets);
@@ -625,6 +625,7 @@ namespace SparkleShare {
             };
 
             Repositories.Add (repo);
+            repo.Initialize ();
         }
 
 
@@ -750,14 +751,25 @@ namespace SparkleShare {
         // so all activity is done with this key
         public void AddKey ()
         {
-            string keys_path = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
+            string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
             string key_file_name = "sparkleshare." + UserEmail + ".key";
+            string key_file_path = Path.Combine (keys_path, key_file_name);
+
+            if (!File.Exists (key_file_path)) {
+                foreach (string file_name in Directory.GetFiles (keys_path)) {
+                    if (file_name.StartsWith ("sparkleshare") &&
+                        file_name.EndsWith (".key")) {
+
+                        key_file_path = Path.Combine (keys_path, file_name);
+                    }
+                }
+            }
 
             Process process = new Process ();
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.UseShellExecute        = false;
             process.StartInfo.FileName               = "ssh-add";
-            process.StartInfo.Arguments              = "\"" + Path.Combine (keys_path, key_file_name) + "\"";
+            process.StartInfo.Arguments              = "\"" + key_file_path + "\"";
 
             process.Start ();
             process.WaitForExit ();
@@ -963,8 +975,10 @@ namespace SparkleShare {
             remote_folder = remote_folder.Trim ();
 
             string tmp_path = SparkleConfig.DefaultConfig.TmpPath;
-            if (!Directory.Exists (tmp_path))
+            if (!Directory.Exists (tmp_path)) {
                 Directory.CreateDirectory (tmp_path);
+                File.SetAttributes (tmp_path, File.GetAttributes (tmp_path) | FileAttributes.Hidden);
+            }
 
             // Strip the '.git' from the name
             string canonical_name = Path.GetFileNameWithoutExtension (remote_folder);
