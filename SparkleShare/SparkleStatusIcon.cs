@@ -74,7 +74,7 @@ namespace SparkleShare {
             if (Controller.Folders.Length == 0)
                 StateText = _("Welcome to SparkleShare!");
             else
-                StateText = _("Up to date") + " — " + Controller.FolderSize;
+                StateText = _("Up to date") + Controller.FolderSize;
 
             CreateMenu ();
 
@@ -88,7 +88,7 @@ namespace SparkleShare {
                             if (Controller.Folders.Length == 0)
                                 StateText = _("Welcome to SparkleShare!");
                             else
-                                StateText = _("Up to date") + " — " + Controller.FolderSize;
+                                StateText = _("Up to date") + Controller.FolderSize;
 
                             #if HAVE_APP_INDICATOR
                             this.indicator.IconName = "process-syncing-sparkleshare-i";
@@ -161,7 +161,7 @@ namespace SparkleShare {
                 else
                     FrameNumber = 0;
 
-                string icon_name = "process-syncing-sparkleshare"; 
+                string icon_name = "process-syncing-sparkleshare-"; 
                 for (int i = 0; i <= FrameNumber; i++)
                     icon_name += "i";
 

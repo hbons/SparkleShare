@@ -25,17 +25,17 @@ namespace SparkleLib {
 
     public class SparkleConfig : XmlDocument {
 
-        public static string ConfigPath = Path.Combine (
+        private static string default_config_path = Path.Combine (
             Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
                 "sparkleshare");
 
-        public bool DebugMode = true;
+        public static SparkleConfig DefaultConfig = new SparkleConfig (default_config_path, "config.xml");
+        public static bool DebugMode = true;
 
-        public static SparkleConfig DefaultConfig = new SparkleConfig (ConfigPath, "config.xml");
+
         public string FullPath;
-        public string LogFilePath;
         public string TmpPath;
-
+        public string LogFilePath;
 
         public string HomePath {
             get {
@@ -69,16 +69,12 @@ namespace SparkleLib {
                 }
             }
 
-            if (!Directory.Exists (config_path)) {
+            if (!Directory.Exists (config_path))
                 Directory.CreateDirectory (config_path);
-                SparkleHelpers.DebugInfo ("Config", "Created \"" + config_path + "\"");
-            }
 
-            string icons_path = System.IO.Path.Combine (config_path, "icons");
-            if (!Directory.Exists (icons_path)) {
+            string icons_path = Path.Combine (config_path, "icons");
+            if (!Directory.Exists (icons_path))
                 Directory.CreateDirectory (icons_path);
-                SparkleHelpers.DebugInfo ("Config", "Created \"" + icons_path + "\"");
-            }
 
             try {
               Load (FullPath);
@@ -137,8 +133,6 @@ namespace SparkleLib {
                 "    <email>Unknown</email>" + n +
                 "  </user>" + n +
                 "</sparkleshare>");
-
-            SparkleHelpers.DebugInfo ("Config", "Created \"" + FullPath + "\"");
         }
 
 
