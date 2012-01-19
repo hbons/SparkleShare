@@ -67,6 +67,9 @@
   <ItemGroup>
     <Compile Include="..\Git\SparkleFetcherGit.cs">
       <Link>SparkleFetcherGit.cs</Link>
+    </Compile>
+    <Compile Include="..\Git\SparkleGit.cs">
+      <Link>SparkleGit.cs</Link>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="..\Git\SparkleRepoGit.cs">
