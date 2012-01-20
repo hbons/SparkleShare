@@ -1,7 +1,5 @@
 # Build on windows
 
-* When you clone the repository, remember to run `git submodule update --init`
-
 * Install [.NET Framework 4.0](http://www.microsoft.com/download/en/details.aspx?id=17851) (if not installed yet)
 
 * Install [msysGit](http://code.google.com/p/msysgit/downloads/detail?name=Git-1.7.8-preview20111206.exe)
