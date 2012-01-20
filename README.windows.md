@@ -5,7 +5,7 @@
 * Install [msysGit](http://code.google.com/p/msysgit/downloads/detail?name=Git-1.7.8-preview20111206.exe)
   *  I recommend you to install in `C:\msysgit`
 
-* Open a Git console (available in Start Menu > Git > Git Bash). On the command line write
+* _Clone step_: Open a Git console (available in Start Menu > Git > Git Bash). On the command line write
 
         cd /c
         git clone -b gettext-cs git://github.com/serras/SparkleShare.git
@@ -22,7 +22,7 @@
 
 * Copy the entire contents of the msysGit folder to `C:\SparkleShare\bin\msysgit`
 
-* Open a command shell (available in Start Menu > Accessories > Command Prompt) and execute
+* _Build step_: Open a command shell (available in Start Menu > Accessories > Command Prompt) and execute
 
         C:
         cd C:\SparkleShare
@@ -33,7 +33,7 @@
 
 * If you want to build the Windows installer download and install [WiX](http://wix.sourceforge.net/)
 
-* Then open a command shell and write almost the same as before, but with `installer` at the end
+* _Installer build step_: Then open a command shell and write almost the same as before, but with `installer` at the end
 
         C:
         cd C:\SparkleShare
@@ -46,4 +46,4 @@ Now, each time you would like to get the latest changes open a Git console and r
         git pull
         git submodule update
 
-and then run the build in the command shell.
+and then run the build step and/or build installer step in the command shell.
