@@ -7,7 +7,7 @@ m4_define([sparkleshare_asm_version],
 
 AC_PREREQ([2.54])
 AC_INIT([SparkleShare], sparkleshare_version)
-AM_INIT_AUTOMAKE([1.11 dist-bzip2 dist-zip foreign tar-ustar])
+AM_INIT_AUTOMAKE([1.11 dist-bzip2 dist-zip foreign tar-pax])
 AM_MAINTAINER_MODE
 
 dnl Export Version Info
