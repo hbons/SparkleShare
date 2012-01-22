@@ -184,6 +184,7 @@ namespace SparkleShare {
             Program.Controller.UserEmail = email;
 
             Program.Controller.GenerateKeyPair ();
+            Program.Controller.ImportPrivateKey ();
             Program.Controller.UpdateState ();
 
             if (ChangePageEvent != null)

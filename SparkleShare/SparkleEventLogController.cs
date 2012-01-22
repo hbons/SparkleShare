@@ -84,10 +84,12 @@ namespace SparkleShare {
             get {
                 List<SparkleChangeSet> change_sets = Program.Controller.GetLog (this.selected_folder);
 
+                string html = Program.Controller.GetHTMLLog (change_sets);
+
                 if (UpdateSizeInfoEvent != null)
                     UpdateSizeInfoEvent (Size, HistorySize);
 
-                return Program.Controller.GetHTMLLog (change_sets);
+                return html;
             }
         }
 

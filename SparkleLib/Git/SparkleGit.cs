@@ -22,20 +22,27 @@ namespace SparkleLib {
 
     public class SparkleGit : Process {
 
+        public static string ExecPath = null;
+
+
         public SparkleGit (string path, string args) : base ()
         {
             EnableRaisingEvents              = true;
             StartInfo.FileName               = SparkleBackend.DefaultBackend.Path;
-            StartInfo.Arguments              = args;
             StartInfo.RedirectStandardOutput = true;
             StartInfo.UseShellExecute        = false;
             StartInfo.WorkingDirectory       = path;
+
+            if (!string.IsNullOrEmpty (ExecPath))
+                StartInfo.Arguments = "--exec-path=\"" + ExecPath + "\" " + args;
+            else
+                StartInfo.Arguments = args;
         }
 
 
         new public void Start ()
         {
-            SparkleHelpers.DebugInfo ("Cmd", StartInfo.FileName + " " + StartInfo.Arguments);
+            SparkleHelpers.DebugInfo ("Cmd", "git " + StartInfo.Arguments);
             base.Start ();
         }
     }

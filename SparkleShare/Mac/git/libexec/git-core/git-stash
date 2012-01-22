@@ -12,12 +12,14 @@ USAGE="list [<options>]
 
 SUBDIRECTORY_OK=Yes
 OPTIONS_SPEC=
+START_DIR=`pwd`
 . git-sh-setup
 require_work_tree
 cd_to_toplevel
 
 TMP="$GIT_DIR/.git-stash.$$"
-trap 'rm -f "$TMP-*"' 0
+TMPindex=${GIT_INDEX_FILE-"$GIT_DIR/index"}.stash.$$
+trap 'rm -f "$TMP-"* "$TMPindex"' 0
 
 ref_stash=refs/stash
 
@@ -81,14 +83,12 @@ create_stash () {
 
 		# state of the working tree
 		w_tree=$( (
-			rm -f "$TMP-index" &&
-			cp -p ${GIT_INDEX_FILE-"$GIT_DIR/index"} "$TMP-index" &&
-			GIT_INDEX_FILE="$TMP-index" &&
+			git read-tree --index-output="$TMPindex" -m $i_tree &&
+			GIT_INDEX_FILE="$TMPindex" &&
 			export GIT_INDEX_FILE &&
-			git read-tree -m $i_tree &&
 			git diff --name-only -z HEAD | git update-index -z --add --remove --stdin &&
 			git write-tree &&
-			rm -f "$TMP-index"
+			rm -f "$TMPindex"
 		) ) ||
 			die "Cannot save the current worktree state"
 
@@ -136,11 +136,12 @@ save_stash () {
 			keep_index=t
 			;;
 		--no-keep-index)
-			keep_index=
+			keep_index=n
 			;;
 		-p|--patch)
 			patch_mode=t
-			keep_index=t
+			# only default to keep if we don't already have an override
+			test -z "$keep_index" && keep_index=t
 			;;
 		-q|--quiet)
 			GIT_QUIET=t
@@ -185,7 +186,7 @@ save_stash () {
 	then
 		git reset --hard ${GIT_QUIET:+-q}
 
-		if test -n "$keep_index" && test -n $i_tree
+		if test "$keep_index" = "t" && test -n $i_tree
 		then
 			git read-tree --reset -u $i_tree
 		fi
@@ -193,7 +194,7 @@ save_stash () {
 		git apply -R < "$TMP-patch" ||
 		die "Cannot remove worktree changes"
 
-		if test -z "$keep_index"
+		if test "$keep_index" != "t"
 		then
 			git reset
 		fi
@@ -264,7 +265,7 @@ parse_flags_and_rev()
 	b_tree=
 	i_tree=
 
-	REV=$(git rev-parse --no-flags --symbolic "$@" 2>/dev/null)
+	REV=$(git rev-parse --no-flags --symbolic "$@") || exit 1
 
 	FLAGS=
 	for opt
@@ -310,16 +311,6 @@ parse_flags_and_rev()
 	IS_STASH_LIKE=t &&
 	test "$ref_stash" = "$(git rev-parse --symbolic-full-name "${REV%@*}")" &&
 	IS_STASH_REF=t
-
-	if test "${REV}" != "${REV%{*\}}"
-	then
-		# maintainers: it would be better if git rev-parse indicated
-		# this condition with a non-zero status code but as of 1.7.2.1 it
-		# it did not. So, we use non-empty stderr output as a proxy for the
-		# condition of interest.
-		test -z "$(git rev-parse "$REV" 2>&1 >/dev/null)" || die "$REV does not exist in the stash log"
-	fi
-
 }
 
 is_stash_like()
@@ -344,9 +335,7 @@ apply_stash () {
 
 	assert_stash_like "$@"
 
-	git update-index -q --refresh &&
-	git diff-files --quiet --ignore-submodules ||
-		die 'Cannot apply to a dirty working tree, please stage your changes'
+	git update-index -q --refresh || die 'unable to refresh index'
 
 	# current index state
 	c_tree=$(git write-tree) ||
@@ -394,7 +383,7 @@ apply_stash () {
 		then
 			squelch='>/dev/null 2>&1'
 		fi
-		eval "git status $squelch" || :
+		(cd "$START_DIR" && eval "git status $squelch") || :
 	else
 		# Merge conflict; keep the exit status from merge-recursive
 		status=$?
