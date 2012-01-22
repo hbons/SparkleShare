@@ -245,7 +245,7 @@ namespace SparkleShare {
             if (name == null)
                 return GetLog ();
 
-            string path = new string [] {SparkleConfig.DefaultConfig.FoldersPath, name}.Combine ();
+            string path = Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, name);
             int log_size = 50;
             
             foreach (SparkleRepoBase repo in Repositories) {
