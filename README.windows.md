@@ -29,7 +29,7 @@
 
 * `C:\SparkleShare\bin` should now contain `SparkleLib.dll` and `SparkleShare.exe`, apart from folders `plugins`, `po` and `msysgit`
 
-* If you want to build the Windows installer download and install [WiX 3.5](http://wix.sourceforge.net/)
+* If you want to build the Windows installer download and install [WiX 3.6](http://wix.sourceforge.net/)
 
 * _Installer build step_: Then open a command shell and write almost the same as before, but with `installer` at the end
 
