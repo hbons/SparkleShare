@@ -59,7 +59,7 @@
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System.Net" />
-    <Reference Include="SparkleLib, Version=0.6.0.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="SparkleLib, Version=0.8.0.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\SparkleLib.dll</HintPath>
     </Reference>
@@ -145,42 +145,42 @@
     <Content Include="..\..\data\sparkleshare.icns">
       <Link>sparkleshare.icns</Link>
     </Content>
-    <Content Include="..\..\data\icons\idle0-active.png">
-      <Link>Pixmaps\idle0-active.png</Link>
+    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-i-active.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-mac-i-active.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\idle0.png">
-      <Link>Pixmaps\idle0.png</Link>
+    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-i.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-mac-i.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\idle1-active.png">
-      <Link>Pixmaps\idle1-active.png</Link>
+    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-ii-active.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-mac-ii-active.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\idle1.png">
-      <Link>Pixmaps\idle1.png</Link>
+    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-ii.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-mac-ii.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\idle2-active.png">
-      <Link>Pixmaps\idle2-active.png</Link>
+    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-iii-active.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-mac-iii-active.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\idle2.png">
-      <Link>Pixmaps\idle2.png</Link>
+    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-iii.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-mac-iii.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\idle3-active.png">
-      <Link>Pixmaps\idle3-active.png</Link>
+    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-iiii-active.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-mac-iiii-active.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\idle3.png">
-      <Link>Pixmaps\idle3.png</Link>
+    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-iiii.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-mac-iiii.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\idle4-active.png">
-      <Link>Pixmaps\idle4-active.png</Link>
+    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-iiiii-active.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-mac-iiiii-active.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\idle4.png">
-      <Link>Pixmaps\idle4.png</Link>
+    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-iiiii.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-mac-iiiii.png</Link>
     </Content>
     <Content Include="Growl.plist" />
-    <Content Include="..\..\data\icons\error.png">
-      <Link>Pixmaps\error.png</Link>
+    <Content Include="..\..\data\icons\sparkleshare-syncing-error-mac.png">
+      <Link>Pixmaps\sparkleshare-syncing-error-mac.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\error-active.png">
-      <Link>Pixmaps\error-active.png</Link>
+    <Content Include="..\..\data\icons\sparkleshare-syncing-error-mac-active.png">
+      <Link>Pixmaps\sparkleshare-syncing-error-mac-active.png</Link>
     </Content>
     <Content Include="..\..\data\icons\document-added-12.png">
       <Link>Pixmaps\document-added-12.png</Link>
