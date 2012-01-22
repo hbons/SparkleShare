@@ -16,6 +16,7 @@ set wixBinDir=%WIX%\bin
 
 if "%1"=="installer" (
 	if exist "%wixBinDir%" (
+	  if exist "%~dp0\SparkleShare.msi" del "%~dp0\SparkleShare.msi"
 		"%wixBinDir%\heat.exe" dir "%~dp0\..\..\bin\msysgit" -cg msysGitComponentGroup -gg -scom -sreg -sfrag -srd -dr MSYSGIT_DIR -var wix.msysgitpath -o msysgit.wxs
 		"%wixBinDir%\heat.exe" dir "%~dp0\..\..\bin\po" -cg poComponentGroup -gg -scom -sreg -sfrag -srd -dr PO_DIR -var wix.podir -o po.wxs
 		"%wixBinDir%\heat.exe" dir "%~dp0\..\..\bin\plugins" -cg pluginsComponentGroup -gg -scom -sreg -sfrag -srd -dr PLUGINS_DIR -var wix.pluginsdir -o plugins.wxs
@@ -24,7 +25,7 @@ if "%1"=="installer" (
 		"%wixBinDir%\candle" "%~dp0\po.wxs" -ext WixUIExtension -ext WixUtilExtension
 		"%wixBinDir%\candle" "%~dp0\plugins.wxs" -ext WixUIExtension -ext WixUtilExtension
 		"%wixBinDir%\light" -ext WixUIExtension -ext WixUtilExtension Sparkleshare.wixobj msysgit.wixobj po.wixobj plugins.wixobj -droot="%~dp0\..\.." -dmsysgitpath="%~dp0\..\..\bin\msysgit" -dpodir="%~dp0\..\..\bin\po" -dpluginsdir="%~dp0\..\..\bin\plugins"  -o SparkleShare.msi 
-		echo SparkleShare.msi created.
+		if exist "%~dp0\SparkleShare.msi" echo SparkleShare.msi created.
 	) else (
 		echo Not building installer ^(could not find wix, Windows Installer XML toolset^)
 	  echo wix is available at http://wix.sourceforge.net/

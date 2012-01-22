@@ -17,8 +17,6 @@
           <Directory Id='INSTALLDIR' Name='SparkleShare'>
             <Component Id='MainExecutable' Guid='0DA692D5-4DBE-4251-9F62-E7C1A76F10E1'>
               <File Id='CefSharp.dll' Name='CefSharp.dll' Source='!(wix.root)\bin\CefSharp.dll' DiskId='1' />
-              <File Id='Meebey.SmartIrc4net.dll' Name='Meebey.SmartIrc4net.dll' Source='!(wix.root)\bin\Meebey.SmartIrc4net.dll' DiskId='1' />
-              <File Id='Meebey.SmartIrc4net.xml' Name='Meebey.SmartIrc4net.xml' Source='!(wix.root)\bin\Meebey.SmartIrc4net.xml' DiskId='1' />
               <File Id='Gettext.Cs.dll' Name='Gettext.Cs.dll' Source='!(wix.root)\bin\Gettext.Cs.dll' DiskId='1' />
               <File Id='SparkleLib.dll' Name='SparkleLib.dll' Source='!(wix.root)\bin\SparkleLib.dll' DiskId='1' />
               <File Id='SparkleShare.exe' Name='SparkleShare.exe' Source='!(wix.root)\bin\SparkleShare.exe' KeyPath='yes' DiskId='1' />
