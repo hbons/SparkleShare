@@ -9,7 +9,7 @@ except ImportError:
     _digest = sha.new
 import sys
 import os
-sys.path.insert(0, os.getenv("GITPYTHONLIB","/usr/local/git/lib/python2.6/site-packages"))
+sys.path.insert(0, os.getenv("GITPYTHONLIB","/usr/local/git/lib/python2.7/site-packages"))
 
 from git_remote_helpers.util import die, debug, warn
 from git_remote_helpers.git.repo import GitRepo
