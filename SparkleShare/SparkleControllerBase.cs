@@ -113,7 +113,7 @@ namespace SparkleShare {
             if (FirstRun)
                 SparkleConfig.DefaultConfig.SetConfigOption ("notifications", bool.TrueString);
             else
-                AddKey ();
+                ImportPrivateKey ();
 
             // Watch the SparkleShare folder
             FileSystemWatcher watcher = new FileSystemWatcher (SparkleConfig.DefaultConfig.FoldersPath) {
@@ -247,7 +247,7 @@ namespace SparkleShare {
             if (name == null)
                 return GetLog ();
 
-            string path = new string [] {SparkleConfig.DefaultConfig.FoldersPath, name}.Combine ();
+            string path = Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, name);
             int log_size = 50;
             
             foreach (SparkleRepoBase repo in Repositories) {
@@ -749,7 +749,7 @@ namespace SparkleShare {
         
         // Adds the user's SparkleShare key to the ssh-agent,
         // so all activity is done with this key
-        public void AddKey ()
+        public void ImportPrivateKey ()
         {
             string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
             string key_file_name = "sparkleshare." + UserEmail + ".key";
