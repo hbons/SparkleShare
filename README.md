@@ -23,16 +23,16 @@ Requirements:
 
    - git >= 1.7.0
    - gtk-sharp2
-   - gvfs
-   - intltool
-   - libnotify
    - mono-core >= 2.8
    - notify-sharp
-   - nautilus-python
-   - openssh
-   - pygtk
-   - webkitgtk
    - webkit-sharp
+
+Optional:
+
+   - nautilus-python
+   - gvfs
+   - libappindicator
+
 
 Run the service, either click the SparkleShare launcher or:
 
