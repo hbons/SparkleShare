@@ -1,4 +1,5 @@
 EXTRA_DIST = \
+  config \
   AppDelegate.cs \
   Growl.framework \
   Growl.plist \
