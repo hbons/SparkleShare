@@ -447,7 +447,7 @@ namespace SparkleShare {
                             SparkleUI.Bubbles.Controller.ShowBubble (title, subtext, null);
                         }
 
-                        Header      = _("Project ‘" + Path.GetFileName (Controller.PreviousPath) +
+                        Header      = _("Project ‘" + System.IO.Path.GetFileName (Controller.PreviousPath) +
                                         "’ successfully added!");
                         Description = _("Access the files from your SparkleShare folder.");
 
@@ -455,7 +455,7 @@ namespace SparkleShare {
                         Button open_folder_button = new Button (_("Open Folder"));
 
                         open_folder_button.Clicked += delegate {
-                            Program.Controller.OpenSparkleShareFolder (Controller.SyncingFolder);
+                            Program.Controller.OpenSparkleShareFolder (System.IO.Path.GetFileName (Controller.PreviousPath));
                         };
 
                         Button finish_button = new Button (_("Finish"));
