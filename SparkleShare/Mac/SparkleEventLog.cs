@@ -71,9 +71,9 @@ namespace SparkleShare {
 
 
             this.hidden_close_button = new NSButton () {
-                Frame                     = new RectangleF (0, 0, 0, 0)
+                Frame                     = new RectangleF (0, 0, 0, 0),
                 KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
-                KeyEquivalent             = "w",
+                KeyEquivalent             = "w"
             };
 
             this.hidden_close_button.Activated += delegate {
