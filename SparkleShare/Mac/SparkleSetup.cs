@@ -504,7 +504,7 @@ namespace SparkleShare {
                         };
 
                         OpenFolderButton.Activated += delegate {
-                            Program.Controller.OpenSparkleShareFolder (Controller.SyncingFolder);
+                            Program.Controller.OpenSparkleShareFolder (Path.GetFileName (Controller.PreviousPath));
                         };
 
                         Buttons.Add (FinishButton);
