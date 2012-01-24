@@ -224,7 +224,7 @@ namespace SparkleShare {
 
                 Application.Invoke (delegate {
                     this.spinner.Stop ();
-                    this.web_view.LoadString (html, null, null, "file:///");
+                    this.web_view.LoadString (html, null, null, "file://");
                     this.content_wrapper.Remove (this.content_wrapper.Child);
                     this.content_wrapper.Add (this.scrolled_window);
                     this.content_wrapper.ShowAll ();
