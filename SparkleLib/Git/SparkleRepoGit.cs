@@ -71,7 +71,7 @@ namespace SparkleLib {
 
         public override double Size {
             get {
-                string file_path = Path.Combine (LocalPath, ".git", "repo_size");
+                string file_path = new string [] {LocalPath, ".git", "repo_size"}.Combine ();
 
                 try {
                     return double.Parse (File.ReadAllText (file_path));
@@ -85,7 +85,7 @@ namespace SparkleLib {
 
         public override double HistorySize {
             get {
-                string file_path = Path.Combine (LocalPath, ".git", "repo_history_size");
+                string file_path = new string [] {LocalPath, ".git", "repo_history_size"}.Combine ();
 
                 try {
                     return double.Parse (File.ReadAllText (file_path));
@@ -105,8 +105,8 @@ namespace SparkleLib {
             double history_size = CalculateSize (
                 new DirectoryInfo (Path.Combine (LocalPath, ".git")));
 
-            string size_file_path = Path.Combine (LocalPath, ".git", "repo_size");
-            string history_size_file_path = Path.Combine (LocalPath, ".git", "repo_history_size");
+            string size_file_path = new string [] {LocalPath, ".git", "repo_size"}.Combine ();
+            string history_size_file_path = new string [] {LocalPath, ".git", "repo_history_size"}.Combine ();
 
             File.WriteAllText (size_file_path, size.ToString ());
             File.WriteAllText (history_size_file_path, history_size.ToString ());
