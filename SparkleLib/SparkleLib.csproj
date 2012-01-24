@@ -49,6 +49,7 @@
     <Compile Include="SparkleBackend.cs" />
     <Compile Include="SparkleConfig.cs" />
     <Compile Include="SparkleWatcher.cs" />
+    <Compile Include="SparkleExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
