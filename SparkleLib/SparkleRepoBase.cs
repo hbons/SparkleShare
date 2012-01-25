@@ -60,6 +60,7 @@ namespace SparkleLib {
         public readonly SparkleBackend Backend;
         public readonly string LocalPath;
         public readonly string Name;
+        public readonly Uri Url;
 
         public abstract bool AnyDifferences { get; }
         public abstract string Identifier { get; }
@@ -94,8 +95,10 @@ namespace SparkleLib {
 
         public SparkleRepoBase (string path, SparkleBackend backend)
         {
-            LocalPath          = path;
-            Name               = Path.GetFileName (LocalPath);
+            LocalPath = path;
+            Name      = Path.GetFileName (LocalPath);
+            Url       = new Uri (SparkleConfig.DefaultConfig.GetUrlForFolder (Name));
+
             Backend            = backend;
             this.poll_interval = this.short_interval;
 
