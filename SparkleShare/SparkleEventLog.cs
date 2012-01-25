@@ -180,7 +180,7 @@ namespace SparkleShare {
                     Console.WriteLine (">>> if statement");
                     Controller.SelectedFolder = null;
                 } else {
-                    Console.WriteLine (">>> else statement: " + selection);
+                    Console.WriteLine (">>> else statement: " + path.Indices [0]);
                     Controller.SelectedFolder = selection;
                 }
             };
