@@ -260,8 +260,7 @@ namespace SparkleShare {
         public abstract string EventLogHTML { get; }
         public abstract string DayEntryHTML { get; }
         public abstract string EventEntryHTML { get; }
-        
-        
+
         public string GetHTMLLog (List<SparkleChangeSet> change_sets)
         {
             List <ActivityDay> activity_days = new List <ActivityDay> ();

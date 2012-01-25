@@ -173,9 +173,10 @@ namespace SparkleShare {
             this.combo_box.Changed += delegate {
                 TreeIter iter;
                 this.combo_box.GetActiveIter (out iter);
-                string selection = (string) this.combo_box.Model.GetValue (iter, 0);
+//                string selection = (string) this.combo_box.Model.GetValue (iter, 0);
+                TreePath path = this.combo_box.Model.GetPath (iter);
 
-                if (selection.Equals (_("All Folders"))) {
+                if (path.Indices [0] == 0) {
                     Console.WriteLine (">>> if statement");
                     Controller.SelectedFolder = null;
                 } else {

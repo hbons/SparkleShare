@@ -66,8 +66,8 @@ namespace SparkleShare {
 
                     // A short delay is less annoying than
                     // a flashing window
-                    if (watch.ElapsedMilliseconds < 500)
-                        Thread.Sleep (500 - (int) watch.ElapsedMilliseconds);
+                    if (watch.ElapsedMilliseconds < 750)
+                        Thread.Sleep (750 - (int) watch.ElapsedMilliseconds);
 
                     if (UpdateContentEvent != null)
                         UpdateContentEvent (html);
