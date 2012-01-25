@@ -181,7 +181,7 @@ namespace SparkleShare {
                     Controller.SelectedFolder = null;
                 } else {
                     Console.WriteLine (">>> else statement: " + path.Indices [0]);
-                    Controller.SelectedFolder = selection;
+                    Controller.SelectedFolder = path.Indices [0];
                 }
             };
 
