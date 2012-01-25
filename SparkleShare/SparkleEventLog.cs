@@ -175,10 +175,13 @@ namespace SparkleShare {
                 this.combo_box.GetActiveIter (out iter);
                 string selection = (string) this.combo_box.Model.GetValue (iter, 0);
 
-                if (selection.Equals (_("All Folders")))
+                if (selection.Equals (_("All Folders"))) {
+                    Console.WriteLine (">>> if statement");
                     Controller.SelectedFolder = null;
-                else
+                } else {
+                    Console.WriteLine (">>> else statement: " + selection);
                     Controller.SelectedFolder = selection;
+                }
             };
 
             this.layout_horizontal.BorderWidth = 9;
