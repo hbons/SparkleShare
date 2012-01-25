@@ -174,15 +174,12 @@ namespace SparkleShare {
                 TreeIter iter;
                 this.combo_box.GetActiveIter (out iter);
                 string selection = (string) this.combo_box.Model.GetValue (iter, 0);
-                TreePath path = this.combo_box.Model.GetPath (iter);
+                TreePath path    = this.combo_box.Model.GetPath (iter);
 
-                if (path.Indices [0] == 0) {
-                    Console.WriteLine (">>> if statement");
+                if (path.Indices [0] == 0);
                     Controller.SelectedFolder = null;
-                } else {
-                    Console.WriteLine (">>> else statement: " + path.Indices [0]);
+                else
                     Controller.SelectedFolder = selection;
-                }
             };
 
             this.layout_horizontal.BorderWidth = 9;
