@@ -176,7 +176,7 @@ namespace SparkleShare {
                 string selection = (string) this.combo_box.Model.GetValue (iter, 0);
                 TreePath path    = this.combo_box.Model.GetPath (iter);
 
-                if (path.Indices [0] == 0);
+                if (path.Indices [0] == 0)
                     Controller.SelectedFolder = null;
                 else
                     Controller.SelectedFolder = selection;
