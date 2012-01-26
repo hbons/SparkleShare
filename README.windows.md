@@ -3,7 +3,7 @@
 * Install [.NET Framework 4.0](http://www.microsoft.com/download/en/details.aspx?id=17851) (if not installed yet)
 
 * Install [msysGit](http://code.google.com/p/msysgit/downloads/detail?name=Git-1.7.8-preview20111206.exe)
-  *  I recommend you to install in `C:\msysgit`
+  *  Change install location to `C:\msysgit` (location is hard-coded in the build scrits)
   *  Use default settings for all other questions during installation
 
 * _Clone step_: Open a Git console (available in Start Menu > Git > Git Bash). On the command line write
@@ -20,7 +20,7 @@
 
 * Copy the entire contents of the msysGit folder to `C:\SparkleShare\bin\msysgit`
 
-* _Build step_: Open a command shell (available in Start Menu > Accessories > Command Prompt) and execute
+* _Build step_: Open a command shell (available in Start Menu > Accessories > Command Prompt) and execute   (Note to Windows 7 x64 users: change the WinDirNet variable in build.cmd to "%WinDir%\Microsoft.NET\Framework64") 
 
         C:
         cd C:\SparkleShare
