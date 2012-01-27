@@ -30,6 +30,7 @@ namespace SparkleLib {
         public DateTime Timestamp;
         public DateTime FirstTimestamp;
         public bool IsMagical = false;
+        public Uri Url;
 
         public List<string> Added     = new List<string> ();
         public List<string> Deleted   = new List<string> ();
