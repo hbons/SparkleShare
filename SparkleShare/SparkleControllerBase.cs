@@ -977,7 +977,7 @@ namespace SparkleShare {
 
         public void FetchFolder (string server, string remote_folder)
         {
-            server = server.Trim ();
+            server        = server.Trim ();
             remote_folder = remote_folder.Trim ();
 
             string tmp_path = SparkleConfig.DefaultConfig.TmpPath;
@@ -986,14 +986,41 @@ namespace SparkleShare {
                 File.SetAttributes (tmp_path, File.GetAttributes (tmp_path) | FileAttributes.Hidden);
             }
 
+
             // Strip the '.git' from the name
             string canonical_name = Path.GetFileNameWithoutExtension (remote_folder);
             string tmp_folder     = Path.Combine (tmp_path, canonical_name);
+            string backend        = Path.GetExtension (remote_folder);
 
-            string backend = null;
+            if (!string.IsNullOrEmpty (backend)) {
+                backend = backend.Substring (1);
 
-                this.fetcher = new SparkleFetcherGit (server, remote_folder, tmp_folder);
+                char [] letters = backend.ToCharArray ();
+                letters [0] = char.ToUpper (letters [0]);
+                backend = new string (letters);
+
+            } else {
                 backend = "Git";
+            }
+
+
+            try {
+                this.fetcher = (SparkleFetcherBase) Activator.CreateInstance (
+                        Type.GetType ("SparkleLib.SparkleFetcher" + backend + ", SparkleLib"),
+                            server,
+                            remote_folder,
+                            tmp_folder
+                );
+
+            } catch {
+                SparkleHelpers.DebugInfo ("Controller",
+                    "Failed to load \"" + backend + "\" backend for \"" + canonical_name + "\"");
+
+                if (FolderFetchError != null)
+                    FolderFetchError ("");
+
+                return;
+            }
 
 
             bool target_folder_exists = Directory.Exists (
