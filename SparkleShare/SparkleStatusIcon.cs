@@ -33,11 +33,13 @@ namespace SparkleShare {
 
         public SparkleStatusIconController Controller = new SparkleStatusIconController ();
 
+        // TODO: fix case
         private Timer Animation;
         private Gdk.Pixbuf [] AnimationFrames;
         private int FrameNumber;
         private string StateText;
         private Menu Menu;
+        private MenuItem quit_item;
 
         #if HAVE_APP_INDICATOR
         private ApplicationIndicator indicator;
@@ -77,6 +79,14 @@ namespace SparkleShare {
                 StateText = _("Up to date") + Controller.FolderSize;
 
             CreateMenu ();
+
+
+            Controller.UpdateQuitItemEvent += delegate (bool quit_item_enabled) {
+                Application.Invoke (delegate {
+                    if (this.quit_item != null)
+                        this.quit_item.Sensitive = quit_item_enabled;
+                });
+            };
 
             Controller.UpdateMenuEvent += delegate (IconState state) {
                 Application.Invoke (delegate {
@@ -311,13 +321,15 @@ namespace SparkleShare {
             Menu.Add (new SeparatorMenuItem ());
 
                 // A menu item that quits the application
-                MenuItem quit_item = new MenuItem (_("Quit"));
+                this.quit_item = new MenuItem (_("Quit")) {
+                    Sensitive = Controller.QuitItemEnabled;
+                };
 
-                quit_item.Activated += delegate {
+                this.quit_item.Activated += delegate {
                     Program.Controller.Quit ();
                 };
 
-            Menu.Add (quit_item);
+            Menu.Add (this.quit_item);
             Menu.ShowAll ();
 
             #if HAVE_APP_INDICATOR
