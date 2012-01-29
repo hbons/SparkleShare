@@ -322,7 +322,7 @@ namespace SparkleShare {
 
                 // A menu item that quits the application
                 this.quit_item = new MenuItem (_("Quit")) {
-                    Sensitive = Controller.QuitItemEnabled;
+                    Sensitive = Controller.QuitItemEnabled
                 };
 
                 this.quit_item.Activated += delegate {
