@@ -1,9 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_define([sparkleshare_version],
-	[0.8.0])
+	[0.8.1])
 
 m4_define([sparkleshare_asm_version],
-	[0.8.0])
+	[0.8.1])
 
 AC_PREREQ([2.54])
 AC_INIT([SparkleShare], sparkleshare_version)

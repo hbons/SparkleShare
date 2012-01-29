@@ -1,3 +1,14 @@
+0.8.1 for Linux and Mac (Sun Jan 29):
+
+        Hylke:
+        - Disable the Quit menu item when a sync is going on
+        - Show remote url when hovering project names in the log
+        - Fix the event log on Linux
+        - Allow server ports to be specified once again
+        - Open Folder button after setup now takes you to SparkleShare/subfolder
+        - Close event log on Cmd+W on Mac
+
+
 0.8.0 for Linux and Mac (Sun Jan 22):
 
         Hylke:
