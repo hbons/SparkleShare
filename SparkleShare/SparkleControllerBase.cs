@@ -1017,7 +1017,7 @@ namespace SparkleShare {
                     "Failed to load \"" + backend + "\" backend for \"" + canonical_name + "\"");
 
                 if (FolderFetchError != null)
-                    FolderFetchError ("");
+                    FolderFetchError (Path.Combine (server, remote_folder));
 
                 return;
             }
