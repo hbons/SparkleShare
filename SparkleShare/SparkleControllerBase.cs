@@ -992,20 +992,9 @@ namespace SparkleShare {
 
             string backend = null;
 
-/*            if (remote_folder.EndsWith (".hg")) {
-                remote_folder = remote_folder.Substring (0, (remote_folder.Length - 3));
-                fetcher       = new SparkleFetcherHg (server, remote_folder, tmp_folder);
-                backend       = "Hg";
-
-            } else if (remote_folder.EndsWith (".scp")) {
-                remote_folder = remote_folder.Substring (0, (remote_folder.Length - 4));
-                fetcher = new SparkleFetcherScp (server, remote_folder, tmp_folder);
-                backend = "Scp";
-
-            } else {*/
                 this.fetcher = new SparkleFetcherGit (server, remote_folder, tmp_folder);
                 backend = "Git";
-            //}
+
 
             bool target_folder_exists = Directory.Exists (
                 Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, canonical_name));
@@ -1052,7 +1041,6 @@ namespace SparkleShare {
                 }
             };
 
-
             this.fetcher.Failed += delegate {
                 if (FolderFetchError != null)
                     FolderFetchError (this.fetcher.RemoteUrl);
@@ -1062,7 +1050,6 @@ namespace SparkleShare {
                 if (Directory.Exists (tmp_path))
                     Directory.Delete (tmp_path, true);
             };
-            
             
             this.fetcher.ProgressChanged += delegate (double percentage) {
                 if (FolderFetching != null)
