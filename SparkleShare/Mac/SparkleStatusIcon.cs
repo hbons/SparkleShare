@@ -93,8 +93,10 @@ namespace SparkleShare {
 
             Controller.UpdateQuitItemEvent += delegate (bool quit_item_enabled) {
                 InvokeOnMainThread (delegate {
-                    if (QuitMenuItem != null)
+                    if (QuitMenuItem != null) {
                         QuitMenuItem.Enabled = quit_item_enabled;
+                        StatusItem.Menu.Update ();
+                    }
                 });
             };
 
@@ -144,6 +146,8 @@ namespace SparkleShare {
 
                             break;
                         }
+
+                        StatusItem.Menu.Update ();
                     }
                 });
             };

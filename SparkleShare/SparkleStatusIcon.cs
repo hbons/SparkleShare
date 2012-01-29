@@ -83,63 +83,67 @@ namespace SparkleShare {
 
             Controller.UpdateQuitItemEvent += delegate (bool quit_item_enabled) {
                 Application.Invoke (delegate {
-                    if (this.quit_item != null)
+                    if (this.quit_item != null) {
                         this.quit_item.Sensitive = quit_item_enabled;
+                        Menu.ShowAll ();
+                    }
                 });
             };
 
             Controller.UpdateMenuEvent += delegate (IconState state) {
                 Application.Invoke (delegate {
-                        switch (state) {
-                        case IconState.Idle:
+                    switch (state) {
+                    case IconState.Idle:
 
-                            Animation.Stop ();
+                        Animation.Stop ();
 
-                            if (Controller.Folders.Length == 0)
-                                StateText = _("Welcome to SparkleShare!");
-                            else
-                                StateText = _("Up to date") + Controller.FolderSize;
+                        if (Controller.Folders.Length == 0)
+                            StateText = _("Welcome to SparkleShare!");
+                        else
+                            StateText = _("Up to date") + Controller.FolderSize;
 
-                            #if HAVE_APP_INDICATOR
-                            this.indicator.IconName = "process-syncing-sparkleshare-i";
-                            #else
-                            this.status_icon.Pixbuf = AnimationFrames [0];
-                            #endif
+                        #if HAVE_APP_INDICATOR
+                        this.indicator.IconName = "process-syncing-sparkleshare-i";
+                        #else
+                        this.status_icon.Pixbuf = AnimationFrames [0];
+                        #endif
 
-                            UpdateStateText ();
-                            CreateMenu ();
+                        UpdateStateText ();
+                        CreateMenu ();
 
-                            break;
+                        break;
 
-                        case IconState.Syncing:
+                    case IconState.Syncing:
 
-                            StateText = _("Syncing… ") +
-                                        Controller.ProgressPercentage + "%  " +
-                                        Controller.ProgressSpeed;
+                        StateText = _("Syncing… ") +
+                                    Controller.ProgressPercentage + "%  " +
+                                    Controller.ProgressSpeed;
 
-                            UpdateStateText ();
+                        UpdateStateText ();
 
-                            if (!Animation.Enabled)
-                                Animation.Start ();
+                        if (!Animation.Enabled)
+                            Animation.Start ();
 
-                            break;
+                        break;
 
-                        case IconState.Error:
+                    case IconState.Error:
 
-                            Animation.Stop ();
+                        Animation.Stop ();
 
-                            StateText = _("Not everything is synced");
-                            UpdateStateText ();
-                            CreateMenu ();
-    
-                            #if HAVE_APP_INDICATOR
-                            this.indicator.IconName = "sparkleshare-syncing-error";
-                            #else
-                            this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
-                            #endif
+                        StateText = _("Not everything is synced");
+                        UpdateStateText ();
+                        CreateMenu ();
 
-                            break;
-                        }
+                        #if HAVE_APP_INDICATOR
+                        this.indicator.IconName = "sparkleshare-syncing-error";
+                        #else
+                        this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
+                        #endif
+
+                        break;
+                    }
+
+                    Menu.ShowAll ();
                 });
             };
         }
