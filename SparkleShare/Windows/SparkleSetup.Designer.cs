@@ -186,6 +186,7 @@ namespace SparkleShare {
             this.buttonNext.TabIndex = 3;
             this.buttonNext.Text = "Next";
             this.buttonNext.UseVisualStyleBackColor = true;
+			this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
             // 
             // NameEntry
             // 
