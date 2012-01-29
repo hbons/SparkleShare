@@ -568,16 +568,22 @@ namespace SparkleShare {
         // Adds a repository to the list of repositories
         private void AddRepository (string folder_path)
         {
-            if (folder_path.Equals (SparkleConfig.DefaultConfig.TmpPath))
-                return;
+            SparkleRepoBase repo = null;
+            string folder_name   = Path.GetFileName (folder_path);
+            string backend       = SparkleConfig.DefaultConfig.GetBackendForFolder (folder_name);
 
-            string folder_name = Path.GetFileName (folder_path);
-            string backend = SparkleConfig.DefaultConfig.GetBackendForFolder (folder_name);
+            try {
+                repo = (SparkleRepoBase) Activator.CreateInstance (
+                    Type.GetType ("SparkleLib.SparkleRepo" + backend),
+                    folder_path,
+                    SparkleBackend.DefaultBackend
+                );
 
-            if (backend == null)
+            } catch {
+                SparkleHelpers.DebugInfo ("Controller", "Failed to load backend for " + folder_name);
                 return;
-            
-            SparkleRepoBase repo = new SparkleRepoGit (folder_path, SparkleBackend.DefaultBackend);
+            }
+
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set) {
 
@@ -621,6 +627,7 @@ namespace SparkleShare {
             repo.ChangesDetected += delegate {
                 UpdateState ();
             };
+
 
             Repositories.Add (repo);
             repo.Initialize ();
@@ -815,7 +822,7 @@ namespace SparkleShare {
             string key_file_path = Path.Combine (keys_path, key_file_name);
 
             if (File.Exists (key_file_path)) {
-                SparkleHelpers.DebugInfo ("Config", "Key already exists ('" + key_file_name + "'), " +
+                SparkleHelpers.DebugInfo ("Auth", "Key already exists ('" + key_file_name + "'), " +
                                           "leaving it untouched");
                 return;
             }
@@ -841,8 +848,8 @@ namespace SparkleShare {
                 process.Start ();
                 process.WaitForExit ();
 
-                SparkleHelpers.DebugInfo ("Config", "Created private key '" + key_file_name + "'");
-                SparkleHelpers.DebugInfo ("Config", "Created public key  '" + key_file_name + ".pub'");
+                SparkleHelpers.DebugInfo ("Auth", "Created private key '" + key_file_name + "'");
+                SparkleHelpers.DebugInfo ("Auth", "Created public key  '" + key_file_name + ".pub'");
 
                 // Add some restrictions to what the key can
                 // do when uploaded to the server
@@ -875,7 +882,7 @@ namespace SparkleShare {
 
             if (!Directory.Exists (avatar_path)) {
                 Directory.CreateDirectory (avatar_path);
-                SparkleHelpers.DebugInfo ("Config", "Created '" + avatar_path + "'");
+                SparkleHelpers.DebugInfo ("Avatar", "Created '" + avatar_path + "'");
             }
 
             foreach (string raw_email in emails) {
@@ -921,11 +928,11 @@ namespace SparkleShare {
                         lock (this.avatar_lock)
                             File.WriteAllBytes (avatar_file_path, buffer);
 
-                        SparkleHelpers.DebugInfo ("Controller", "Fetched gravatar for " + email);
+                        SparkleHelpers.DebugInfo ("Avatar", "Fetched gravatar for " + email);
                     }
 
                   } catch (WebException e) {
-                        SparkleHelpers.DebugInfo ("Controller", "Failed fetching gravatar for " + email);
+                        SparkleHelpers.DebugInfo ("Avatar", "Failed fetching gravatar for " + email);
 
                         // Stop downloading further avatars if we have no internet access
                         if (e.Status == WebExceptionStatus.Timeout){
