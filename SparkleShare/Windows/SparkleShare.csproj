@@ -30,7 +30,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <ApplicationIcon>sparkleshare.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\data\icons\sparkleshare.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -409,6 +409,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="sparkleshare.ico" />
+    <Content Include="..\..\data\icons\sparkleshare.ico" />
   </ItemGroup>
 </Project>
