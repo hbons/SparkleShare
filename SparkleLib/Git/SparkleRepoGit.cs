@@ -26,8 +26,9 @@ namespace SparkleLib {
 
     public class SparkleRepoGit : SparkleRepoBase {
 
-        public SparkleRepoGit (string path, SparkleBackend backend) :
-            base (path, backend) { }
+        public SparkleRepoGit (string path) : base (path)
+        {
+        }
 
 
         private string identifier = null;
