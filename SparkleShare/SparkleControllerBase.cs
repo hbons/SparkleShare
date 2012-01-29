@@ -574,13 +574,14 @@ namespace SparkleShare {
 
             try {
                 repo = (SparkleRepoBase) Activator.CreateInstance (
-                    Type.GetType ("SparkleLib.SparkleRepo" + backend),
-                    folder_path,
-                    SparkleBackend.DefaultBackend
+                    Type.GetType ("SparkleLib.SparkleRepo" + backend + ", SparkleLib"),
+                        folder_path
                 );
 
             } catch {
-                SparkleHelpers.DebugInfo ("Controller", "Failed to load backend for " + folder_name);
+                SparkleHelpers.DebugInfo ("Controller",
+                    "Failed to load \"" + backend + "\" backend for \"" + folder_name + "\"");
+
                 return;
             }
 
