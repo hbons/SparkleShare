@@ -222,8 +222,8 @@ namespace SparkleLib {
                 SparkleHelpers.CombineMore (this.target_folder, ".git", "info"));
 
             // File that lists the files we want git to ignore
-            string exlude_rules_file_path = Path.Combine (info.FullName, "exclude");
-            TextWriter writer = new StreamWriter (exlude_rules_file_path);
+            string exclude_rules_file_path = Path.Combine (info.FullName, "exclude");
+            TextWriter writer = new StreamWriter (exclude_rules_file_path);
 
                 // gedit and emacs
                 writer.WriteLine ("*~");
