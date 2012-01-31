@@ -64,7 +64,7 @@ namespace SparkleLib {
                     SparkleHelpers.DebugInfo ("ListenerFactory",
                         "Refered to existing listener for " + announce_uri);
 
-                    listener.AlsoListenTo (folder_identifier);
+                    listener.AlsoListenToBase (folder_identifier);
                     return (SparkleListenerBase) listener;
                 }
             }
@@ -103,10 +103,10 @@ namespace SparkleLib {
 
 
         public abstract void Connect ();
-        public abstract void Announce (SparkleAnnouncement announcent);
-        public abstract void AlsoListenTo (string folder_identifier);
         public abstract bool IsConnected { get; }
         public abstract bool IsConnecting { get; }
+        protected abstract void Announce (SparkleAnnouncement announcent);
+        protected abstract void AlsoListenTo (string folder_identifier);
 
 
         protected List<string> channels = new List<string> ();
@@ -168,6 +168,18 @@ namespace SparkleLib {
                     announcement.FolderIdentifier + " from " + Server);
             }
 
+        }
+
+
+        public void AlsoListenToBase (string channel)
+        {
+            if (!this.channels.Contains (channel) && IsConnected) {
+                SparkleHelpers.DebugInfo ("Listener",
+                    "Subscribing to channel " + channel);
+
+                this.channels.Add (channel);
+                AlsoListenTo (channel);
+            }
         }
 
 

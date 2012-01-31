@@ -145,40 +145,9 @@ namespace SparkleLib {
         }
 
 
-        public override void AlsoListenTo (string folder_identifier)
+        protected override void AlsoListenTo (string folder_identifier)
         {
-            string channel = folder_identifier;
-
-            if (!base.channels.Contains (channel)) {
-                base.channels.Add (channel);
-
-                if (IsConnected) {
-                    SparkleHelpers.DebugInfo ("ListenerTcp", "Subscribing to channel " + channel);
-
-                    string to_send = "subscribe " + folder_identifier + "\n";
-
-                    try {
-                        lock (this.socket_lock) {
-                            this.socket.Send (Encoding.UTF8.GetBytes (to_send));
-                        }
-
-                    } catch (SocketException e) {
-                        SparkleHelpers.DebugInfo ("ListenerTcp", "Could not connect to " + Server + ": " + e.Message);
-                        this.is_connected     = false;
-                        this.is_connecting = false;
-
-
-                        OnDisconnected ();
-                    }
-                }
-            }
-        }
-
-
-        public override void Announce (SparkleAnnouncement announcement)
-        {
-            string to_send = "announce " + announcement.FolderIdentifier
-                + " " + announcement.Message + "\n";
+            string to_send = "subscribe " + folder_identifier + "\n";
 
             try {
                 lock (this.socket_lock) {
@@ -186,10 +155,34 @@ namespace SparkleLib {
                 }
 
             } catch (SocketException e) {
-              SparkleHelpers.DebugInfo ("ListenerTcp", "Could not connect to " + Server + ": " + e.Message);
+                SparkleHelpers.DebugInfo ("ListenerTcp",
+                    "Could not connect to " + Server + ": " + e.Message);
 
-              this.is_connected = false;
-              OnDisconnected ();
+                this.is_connected  = false;
+                this.is_connecting = false;
+
+                OnDisconnected ();
+            }
+        }
+
+
+        protected override void Announce (SparkleAnnouncement announcement)
+        {
+            string to_send = "announce " + announcement.FolderIdentifier
+                + " " + announcement.Message + "\n";
+
+            try {
+                lock (this.socket_lock)
+                    this.socket.Send (Encoding.UTF8.GetBytes (to_send));
+
+            } catch (SocketException e) {
+                SparkleHelpers.DebugInfo ("ListenerTcp",
+                    "Could not connect to " + Server + ": " + e.Message);
+
+                this.is_connected  = false;
+                this.is_connecting = false;
+
+                OnDisconnected ();
             }
         }
 
