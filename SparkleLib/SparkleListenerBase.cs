@@ -107,13 +107,14 @@ namespace SparkleLib {
         public abstract void Announce (SparkleAnnouncement announcent);
         public abstract void AlsoListenTo (string folder_identifier);
         public abstract bool IsConnected { get; }
+        public abstract bool IsConnecting { get; }
 
         protected List<string> channels = new List<string> ();
         protected Dictionary<string,List<SparkleAnnouncement>> recent_announcements = new Dictionary<string, List<SparkleAnnouncement>> ();
         protected int max_recent_announcements = 10;
         protected Dictionary<string, SparkleAnnouncement> queue_up  = new Dictionary<string, SparkleAnnouncement> ();
         protected Dictionary<string,SparkleAnnouncement> queue_down = new Dictionary<string, SparkleAnnouncement> ();
-        protected bool is_connecting;
+
         protected Uri server;
         protected Timer reconnect_timer = new Timer { Interval = 60 * 1000, Enabled = true };
 
@@ -121,9 +122,10 @@ namespace SparkleLib {
         public SparkleListenerBase (Uri server, string folder_identifier)
         {
             this.server = server;
+            this.channels.Add (folder_identifier);
 
             this.reconnect_timer.Elapsed += delegate {
-                if (!IsConnected && !this.is_connecting)
+                if (!IsConnected && !IsConnecting)
                     Reconnect ();
             };
 
@@ -265,13 +267,6 @@ namespace SparkleLib {
         public Uri Server {
             get {
                 return this.server;
-            }
-        }
-
-
-        public bool IsConnecting {
-            get {
-               return this.is_connecting;
             }
         }
     }

@@ -28,30 +28,31 @@ namespace SparkleLib {
 
     public class SparkleListenerTcp : SparkleListenerBase {
 
-        private Thread thread;
-
-        // these are shared
-        private readonly Object mutex = new Object();
         private Socket socket;
-        private bool connected;
+        private Object socket_lock = new Object ();
+        private Thread thread;
+        private bool is_connected  = false;
+        private bool is_connecting = false;
+
 
         public SparkleListenerTcp (Uri server, string folder_identifier) :
             base (server, folder_identifier)
         {
-            base.channels.Add (folder_identifier);
-            this.connected = false;
         }
 
 
         public override bool IsConnected {
             get {
-                bool result = false;
+                lock (this.socket_lock)
+                    return this.is_connected;
+            }
+        }
 
-                lock (this.mutex) {
-                  result = this.connected;
-                }
 
-                return result;
+        public override bool IsConnecting {
+            get {
+                lock (this.socket_lock)
+                    return this.is_connecting;
             }
         }
 
@@ -61,21 +62,29 @@ namespace SparkleLib {
         {
             SparkleHelpers.DebugInfo ("ListenerTcp", "Connecting to " + Server.Host);
 
-            base.is_connecting = true;
+            this.is_connecting = true;
 
             this.thread = new Thread (
                 new ThreadStart (delegate {
                     try {
                         // Connect and subscribe to the channel
                         int port = Server.Port;
-                        if (port < 0) port = 9999;
 
-                        lock (this.mutex) {
-                            this.socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                        if (port < 0)
+                            port = 9999;
+
+
+                        lock (this.socket_lock) {
+                            this.socket = new Socket (AddressFamily.InterNetwork,
+                                SocketType.Stream, ProtocolType.Tcp) {
+
+                                ReceiveTimeout = 30 * 1000
+                            };
+
                             this.socket.Connect (Server.Host, port);
 
-                            base.is_connecting = false;
-                            this.connected = true;
+                            this.is_connecting = false;
+                            this.is_connected = true;
 
                             OnConnected ();
 
@@ -85,6 +94,7 @@ namespace SparkleLib {
                             }
                         }
 
+
                         byte [] bytes = new byte [4096];
 
                         // List to the channels, this blocks the thread
@@ -93,20 +103,26 @@ namespace SparkleLib {
 
                             if (bytes_read > 0) {
                                 string received = Encoding.UTF8.GetString (bytes);
-                                string line = received.Substring (0, received.IndexOf ("\n"));
+                                string line     = received.Substring (0, received.IndexOf ("\n"));
+
                                 if (!line.Contains ("!"))
                                     continue;
+
                                 string folder_identifier = line.Substring (0, line.IndexOf ("!"));
-                                string message = this.CleanMessage (line.Substring (line.IndexOf ("!") + 1));
-                                if (!folder_identifier.Equals("debug") &&
-                                    !String.IsNullOrEmpty(message))
+                                string message           = CleanMessage (line.Substring (line.IndexOf ("!") + 1));
+
+                                if (!folder_identifier.Equals ("debug") &&
+                                    !String.IsNullOrEmpty (message)) {
+
                                     OnAnnouncement (new SparkleAnnouncement (folder_identifier, message));
+                                }
+
                             } else {
                                 SparkleHelpers.DebugInfo ("ListenerTcp", "Error on socket");
 
-                                lock (this.mutex) {
+                                lock (this.socket_lock) {
                                     this.socket.Close ();
-                                    this.connected = false;
+                                    this.is_connected = false;
 
                                     OnDisconnected ();
                                 }
@@ -117,6 +133,8 @@ namespace SparkleLib {
 
                     } catch (SocketException e) {
                         SparkleHelpers.DebugInfo ("ListenerTcp", "Could not connect to " + Server + ": " + e.Message);
+                        this.is_connected     = false;
+                        this.is_connecting = false;
 
                         OnDisconnected ();
                     }
@@ -140,12 +158,16 @@ namespace SparkleLib {
                     string to_send = "subscribe " + folder_identifier + "\n";
 
                     try {
-                        lock (this.mutex) {
+                        lock (this.socket_lock) {
                             this.socket.Send (Encoding.UTF8.GetBytes (to_send));
                         }
 
                     } catch (SocketException e) {
                         SparkleHelpers.DebugInfo ("ListenerTcp", "Could not connect to " + Server + ": " + e.Message);
+                        this.is_connected     = false;
+                        this.is_connecting = false;
+
+
                         OnDisconnected ();
                     }
                 }
@@ -159,13 +181,14 @@ namespace SparkleLib {
                 + " " + announcement.Message + "\n";
 
             try {
-
-                lock (this.mutex) {
+                lock (this.socket_lock) {
                     this.socket.Send (Encoding.UTF8.GetBytes (to_send));
                 }
+
             } catch (SocketException e) {
               SparkleHelpers.DebugInfo ("ListenerTcp", "Could not connect to " + Server + ": " + e.Message);
 
+              this.is_connected = false;
               OnDisconnected ();
             }
         }
@@ -175,12 +198,16 @@ namespace SparkleLib {
         {
             this.thread.Abort ();
             this.thread.Join ();
+
             base.Dispose ();
         }
 
-        private string CleanMessage(string message)
+
+        private string CleanMessage (string message)
         {
-            return message.Trim ().Replace ("\n", "").Replace ("\0", "");
+            return message.Trim ()
+                .Replace ("\n", "")
+                .Replace ("\0", "");
         }
     }
 }
