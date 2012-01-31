@@ -299,7 +299,7 @@ namespace SparkleLib {
             };
 
             // Fetch changes when there is a message in the irc channel
-            this.listener.Announcement += delegate (SparkleAnnouncement announcement) {
+            this.listener.Received += delegate (SparkleAnnouncement announcement) {
                 string identifier = Identifier;
 
                 if (announcement.FolderIdentifier.Equals (identifier) &&
