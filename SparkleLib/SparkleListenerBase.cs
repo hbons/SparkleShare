@@ -167,7 +167,6 @@ namespace SparkleLib {
                     "Already processed message " + announcement.Message + " to " +
                     announcement.FolderIdentifier + " from " + Server);
             }
-
         }
 
 
