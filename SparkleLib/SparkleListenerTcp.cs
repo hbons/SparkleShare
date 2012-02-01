@@ -75,11 +75,13 @@ namespace SparkleLib {
                     try {
                         lock (this.socket_lock) {
                             this.socket = new Socket (AddressFamily.InterNetwork,
-                                SocketType.Stream, ProtocolType.Tcp);
+                                SocketType.Stream, ProtocolType.Tcp) {
 
-                            // TODO: our own time comparison to account for system sleep?
-                            this.socket.ReceiveTimeout = 30 * 1000;
-                            this.socket.Blocking       = true;
+                                ReceiveTimeout = 60 * 1000,
+                                SendTimeout    = 3 * 1000
+                            };
+
+                            // Try to connect to the server
                             this.socket.Connect (Server.Host, port);
 
                             this.is_connecting = false;
@@ -87,6 +89,7 @@ namespace SparkleLib {
 
                             OnConnected ();
 
+                            // Subscribe to channels of interest to us
                             foreach (string channel in base.channels) {
                                 SparkleHelpers.DebugInfo ("ListenerTcp",
                                     "Subscribing to channel " + channel);
@@ -110,22 +113,39 @@ namespace SparkleLib {
                     byte [] bytes  = new byte [4096];
                     int bytes_read = 0;
 
-                    // List to the channels, this blocks the thread
-                    while (this.socket.Connected) {
+                    // Wait for messages
+                    while (true) {
                         try {
+                            // This blocks the thread
                             bytes_read = this.socket.Receive (bytes);
 
-                        } catch (Exception e) {
-                            if (!PingHost (Server.Host)) {
-                                lock (this.socket_lock) {
-                                    this.socket.Close ();
-                                    this.is_connected = false;
+                        // We've timed out, let's ping the server to
+                        // see if the connection is still up
+                        } catch (SocketException e) {
+                            try {
+                                byte [] ping_bytes =
+                                    Encoding.UTF8.GetBytes ("ping");
 
-                                    OnDisconnected (e.Message);
-                                }
+                                this.socket.Send (ping_bytes);
+                                this.socket.ReceiveTimeout = 3 * 1000;
+
+                                // 10057 means "Socket is not connected"
+                                if (this.socket.Receive (bytes) < 1)
+                                    throw new SocketException (10057);
+
+                            // The ping failed: disconnect completely
+                            } catch (SocketException) {
+                                this.is_connected  = false;
+                                this.is_connecting = false;
+
+                                this.socket.ReceiveTimeout = 60 * 1000;
+
+                                OnDisconnected (e.Message);
+                                return;
                             }
                         }
 
+                        // Parse the received message
                         if (bytes_read > 0) {
                             string received = Encoding.UTF8.GetString (bytes);
                             string line     = received.Substring (0, received.IndexOf ("\n"));
@@ -139,12 +159,11 @@ namespace SparkleLib {
                             if (!folder_identifier.Equals ("debug") &&
                                 !String.IsNullOrEmpty (message)) {
 
+                                // We have a message!
                                 OnAnnouncement (new SparkleAnnouncement (folder_identifier, message));
                             }
                         }
                     }
-
-                    OnDisconnected ("");
                 })
             );
 
@@ -157,9 +176,8 @@ namespace SparkleLib {
             string to_send = "subscribe " + folder_identifier + "\n";
 
             try {
-                lock (this.socket_lock) {
+                lock (this.socket_lock)
                     this.socket.Send (Encoding.UTF8.GetBytes (to_send));
-                }
 
             } catch (SocketException e) {
                 this.is_connected  = false;
@@ -202,22 +220,6 @@ namespace SparkleLib {
             return message.Trim ()
                 .Replace ("\n", "")
                 .Replace ("\0", "");
-        }
-
-
-        private bool PingHost (string host)
-        {
-            Ping ping           = new Ping ();
-            PingOptions options = new PingOptions () {
-                DontFragment = true
-            };
-
-            string data    = "00000000000000000000000000000000";
-            byte [] buffer = Encoding.ASCII.GetBytes (data);
-
-            PingReply reply = ping.Send (host, 15, buffer, options);
-
-            return reply.Status == IPStatus.Success;
         }
     }
 }
