@@ -114,7 +114,7 @@ namespace SparkleLib {
                     int bytes_read = 0;
 
                     // Wait for messages
-                    while (true) {
+                    while (this.is_connected) {
                         try {
                             // This blocks the thread
                             bytes_read = this.socket.Receive (bytes);
@@ -141,7 +141,7 @@ namespace SparkleLib {
                                 this.socket.ReceiveTimeout = 60 * 1000;
 
                                 OnDisconnected (e.Message);
-                                return;
+                                break;
                             }
                         }
 
