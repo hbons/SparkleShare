@@ -45,7 +45,7 @@ namespace SparkleLib {
         private System.Timers.Timer local_timer  = new System.Timers.Timer () { Interval = 0.25 * 1000 };
         private System.Timers.Timer remote_timer = new System.Timers.Timer () { Interval = 10 * 1000 };
         private DateTime last_poll         = DateTime.Now;
-        private List<double> sizebuffer    = new List<double> ();
+        private List<double> size_buffer    = new List<double> ();
         private bool has_changed           = false;
         private Object change_lock         = new Object ();
         private Object watch_lock          = new Object ();
@@ -336,16 +336,16 @@ namespace SparkleLib {
         {
             lock (this.change_lock) {
                 if (this.has_changed) {
-                    if (this.sizebuffer.Count >= 4)
-                        this.sizebuffer.RemoveAt (0);
+                    if (this.size_buffer.Count >= 4)
+                        this.size_buffer.RemoveAt (0);
 
                     DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
-                     this.sizebuffer.Add (CalculateSize (dir_info));
+                     this.size_buffer.Add (CalculateSize (dir_info));
 
-                    if (this.sizebuffer.Count >= 4 &&
-                        this.sizebuffer [0].Equals (this.sizebuffer [1]) &&
-                        this.sizebuffer [1].Equals (this.sizebuffer [2]) &&
-                        this.sizebuffer [2].Equals (this.sizebuffer [3])) {
+                    if (this.size_buffer.Count >= 4 &&
+                        this.size_buffer [0].Equals (this.size_buffer [1]) &&
+                        this.size_buffer [1].Equals (this.size_buffer [2]) &&
+                        this.size_buffer [2].Equals (this.size_buffer [3])) {
 
                         SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled.");
                         this.is_buffering = false;
