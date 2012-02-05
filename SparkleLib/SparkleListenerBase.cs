@@ -16,10 +16,8 @@
 
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Timers;
-using System.Linq;
 
 namespace SparkleLib {
 
