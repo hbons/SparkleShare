@@ -776,6 +776,7 @@ namespace SparkleShare {
             process.StartInfo.UseShellExecute        = false;
             process.StartInfo.FileName               = "ssh-add";
             process.StartInfo.Arguments              = "\"" + key_file_path + "\"";
+            process.StartInfo.CreateNoWindow         = true;
 
             process.Start ();
             process.WaitForExit ();
@@ -836,10 +837,11 @@ namespace SparkleShare {
                     EnableRaisingEvents = true
                 };
                 
-                process.StartInfo.WorkingDirectory = keys_path;
-                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.WorkingDirectory       = keys_path;
+                process.StartInfo.UseShellExecute        = false;
                 process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.FileName = "ssh-keygen";
+                process.StartInfo.FileName               = "ssh-keygen";
+                process.StartInfo.CreateNoWindow         = true;
 
                 // -t is the crypto type
                 // -P is the password (none)
