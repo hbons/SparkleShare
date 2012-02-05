@@ -32,6 +32,7 @@ namespace SparkleLib {
             StartInfo.RedirectStandardOutput = true;
             StartInfo.UseShellExecute        = false;
             StartInfo.WorkingDirectory       = path;
+            StartInfo.CreateNoWindow         = true;
 
             if (!string.IsNullOrEmpty (ExecPath))
                 StartInfo.Arguments = "--exec-path=\"" + ExecPath + "\" " + args;
