@@ -26,8 +26,9 @@ namespace SparkleLib {
 
     public class SparkleRepoGit : SparkleRepoBase {
 
-        public SparkleRepoGit (string path, SparkleBackend backend) :
-            base (path, backend) { }
+        public SparkleRepoGit (string path) : base (path)
+        {
+        }
 
 
         private string identifier = null;
@@ -71,7 +72,7 @@ namespace SparkleLib {
 
         public override double Size {
             get {
-                string file_path = SparkleHelpers.CombineMore (LocalPath, ".git", "repo_size");
+                string file_path = new string [] {LocalPath, ".git", "repo_size"}.Combine ();
 
                 try {
                     return double.Parse (File.ReadAllText (file_path));
@@ -85,7 +86,7 @@ namespace SparkleLib {
 
         public override double HistorySize {
             get {
-                string file_path = SparkleHelpers.CombineMore(LocalPath, ".git", "repo_history_size");
+                string file_path = new string [] {LocalPath, ".git", "repo_history_size"}.Combine ();
 
                 try {
                     return double.Parse (File.ReadAllText (file_path));
@@ -105,8 +106,8 @@ namespace SparkleLib {
             double history_size = CalculateSize (
                 new DirectoryInfo (Path.Combine (LocalPath, ".git")));
 
-            string size_file_path = SparkleHelpers.CombineMore(LocalPath, ".git", "repo_size");
-            string history_size_file_path = SparkleHelpers.CombineMore(LocalPath, ".git", "repo_history_size");
+            string size_file_path = new string [] {LocalPath, ".git", "repo_size"}.Combine ();
+            string history_size_file_path = new string [] {LocalPath, ".git", "repo_history_size"}.Combine ();
 
             File.WriteAllText (size_file_path, size.ToString ());
             File.WriteAllText (history_size_file_path, history_size.ToString ());
@@ -169,7 +170,7 @@ namespace SparkleLib {
         public override bool CheckForRemoteChanges ()
         {
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Checking for remote changes...");
-            SparkleGit git = new SparkleGit (LocalPath, "ls-remote origin master");
+            SparkleGit git = new SparkleGit (LocalPath, "ls-remote " + Url + " master");
 
             git.Start ();
             git.WaitForExit ();
@@ -201,7 +202,7 @@ namespace SparkleLib {
 
             SparkleGit git = new SparkleGit (LocalPath,
                 "push --progress " + // Redirects progress stats to standarderror
-                "origin master");
+                Url + " master");
 
             git.StartInfo.RedirectStandardError = true;
             git.Start ();
@@ -258,7 +259,7 @@ namespace SparkleLib {
 
         public override bool SyncDown ()
         {
-            SparkleGit git = new SparkleGit (LocalPath, "fetch --progress");
+            SparkleGit git = new SparkleGit (LocalPath, "fetch --progress " + Url);
 
             git.StartInfo.RedirectStandardError = true;
             git.Start ();
@@ -623,11 +624,12 @@ namespace SparkleLib {
                 if (match.Success) {
                     SparkleChangeSet change_set = new SparkleChangeSet ();
 
-                    change_set.Folder        = Name;
-                    change_set.Revision      = match.Groups [1].Value;
-                    change_set.User.Name     = match.Groups [2].Value;
-                    change_set.User.Email    = match.Groups [3].Value;
-                    change_set.IsMagical     = is_merge_commit;
+                    change_set.Folder     = Name;
+                    change_set.Revision   = match.Groups [1].Value;
+                    change_set.User.Name  = match.Groups [2].Value;
+                    change_set.User.Email = match.Groups [3].Value;
+                    change_set.IsMagical  = is_merge_commit;
+                    change_set.Url        = Url;
 
                     change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
                         int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),

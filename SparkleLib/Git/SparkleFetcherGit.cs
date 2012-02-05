@@ -51,7 +51,7 @@ namespace SparkleLib {
             if (!uri.Scheme.Equals ("ssh") &&
                 !uri.Scheme.Equals ("git")) {
 
-                uri = new Uri ("ssh://" + server);
+                uri = new Uri ("ssh://" + uri);
             }
 
 
@@ -72,8 +72,10 @@ namespace SparkleLib {
                 uri = new Uri ("ssh://git@gnome.org/git" + uri.AbsolutePath);
 
             } else {
-                if (string.IsNullOrEmpty (uri.UserInfo))
-                    uri = new Uri (uri.Scheme + "://git@" + uri.Host + uri.AbsolutePath);
+                if (string.IsNullOrEmpty (uri.UserInfo)) {
+                    uri = new Uri (uri.Scheme + "://git@" + uri.Host + ":" + uri.Port + uri.AbsolutePath);
+                    uri = new Uri (uri.ToString ().Replace (":-1", ""));
+                }
             }
 
 
@@ -221,75 +223,11 @@ namespace SparkleLib {
                 SparkleHelpers.CombineMore (this.target_folder, ".git", "info"));
 
             // File that lists the files we want git to ignore
-            string exlude_rules_file_path = Path.Combine (info.FullName, "exclude");
-            TextWriter writer = new StreamWriter (exlude_rules_file_path);
+            string exclude_rules_file_path = Path.Combine (info.FullName, "exclude");
+            TextWriter writer = new StreamWriter (exclude_rules_file_path);
 
-                // gedit and emacs
-                writer.WriteLine ("*~");
-
-                // Firefox and Chromium temporary download files
-                writer.WriteLine ("*.part");
-                writer.WriteLine ("*.crdownload");
-
-                // vi(m)
-                writer.WriteLine (".*.sw[a-z]");
-                writer.WriteLine ("*.un~");
-                writer.WriteLine ("*.swp");
-                writer.WriteLine ("*.swo");
-                
-                // KDE
-                writer.WriteLine (".directory");
-    
-                // Mac OS X
-                writer.WriteLine (".DS_Store");
-                writer.WriteLine ("Icon?");
-                writer.WriteLine ("._*");
-                writer.WriteLine (".Spotlight-V100");
-                writer.WriteLine (".Trashes");
-
-                // Omnigraffle
-                writer.WriteLine ("*(Autosaved).graffle");
-            
-                // Windows
-                writer.WriteLine ("Thumbs.db");
-                writer.WriteLine ("Desktop.ini");
-
-                // MS Office
-                writer.WriteLine ("~*.tmp");
-                writer.WriteLine ("~*.TMP");
-                writer.WriteLine ("*~*.tmp");
-                writer.WriteLine ("*~*.TMP");
-                writer.WriteLine ("~*.ppt");
-                writer.WriteLine ("~*.PPT");
-                writer.WriteLine ("~*.pptx");
-                writer.WriteLine ("~*.PPTX");
-                writer.WriteLine ("~*.xls");
-                writer.WriteLine ("~*.XLS");
-                writer.WriteLine ("~*.xlsx");
-                writer.WriteLine ("~*.XLSX");
-                writer.WriteLine ("~*.doc");
-                writer.WriteLine ("~*.DOC");
-                writer.WriteLine ("~*.docx");
-                writer.WriteLine ("~*.DOCX");
-
-                // CVS
-                writer.WriteLine ("*/CVS/*");
-                writer.WriteLine (".cvsignore");
-                writer.WriteLine ("*/.cvsignore");
-                
-                // Subversion
-                writer.WriteLine ("/.svn/*");
-                writer.WriteLine ("*/.svn/*");
-
-                // Mercurial
-                writer.WriteLine ("/.hg/*");
-                writer.WriteLine ("*/.hg/*");
-                writer.WriteLine ("*/.hgignore");
-
-                // Bazaar
-                writer.WriteLine ("/.bzr/*");
-                writer.WriteLine ("*/.bzr/*");
-                writer.WriteLine ("*/.bzrignore");
+            foreach (string exclude_rule in ExcludeRules)
+                writer.WriteLine (exclude_rule);
 
             writer.Close ();
 

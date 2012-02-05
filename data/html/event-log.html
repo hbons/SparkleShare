@@ -88,23 +88,23 @@
 
         <style>
             * {
-                box-sizing:         border-box;
+                box-sizing: border-box;
                 -webkit-box-sizing: border-box;
             }
 
             body {
-                background-color: #fff;
-                color:            <!-- $body-color -->;
-                font-size:        <!-- $body-font-size -->;
-                font-family:      <!-- $body-font-family -->;
-                margin:           0;
-                padding:          18px;
+                background-color: #fafafa;
+                color: <!-- $body-color -->;
+                font-size: <!-- $body-font-size -->;
+                font-family: <!-- $body-font-family -->;
+                margin: 0;
+                padding: 18px;
                 -webkit-user-select: none;
             }
 
             small {
                 font-size: <!-- $small-font-size -->;
-                color:     <!-- $secondary-font-color -->;
+                color: <!-- $secondary-font-color -->;
             }
 
             .moved-arrow {
@@ -152,23 +152,45 @@
                 font-weight: bold;
             }
 
+
             .event-folder {
                 float: right;
                 color: <!-- $secondary-font-color -->;
+                position: relative;
+                cursor: pointer;
             }
+
+            .event-folder span {
+              display: none
+            }
+
+            .event-folder:hover span {
+                display: block;
+                position: absolute;
+                top: 20px;
+                right: 0;
+                background-color: rgba(20, 20, 20, 0.8);
+                color: #fafafa;
+                padding: 7px 12px;
+                border-radius: 5px;
+                font-family: sans-serif;
+                font-size: 12px;
+                float:right;
+            }
+
 
             .event-entry {
                 margin-bottom: 24px;
                 padding-bottom: 24px;
-                border-bottom: 1px  <!-- $secondary-font-color --> solid;
-                width: 95%;
+                border-bottom: 1px #ddd solid;
+                width: 99%;
                 margin-left: auto;
                 margin-right: auto;
                 padding-left: 72px;
                 padding-right: 12px;
                 background-repeat: no-repeat;
                 background-position: 12px top;
-                display:        block;
+                display: block;
             }
 
             .action {
@@ -209,16 +231,16 @@
             
             dd {
                 display: none;
-                overflow:            hidden;
-                text-overflow:       ellipsis;
-                width:               90%;
-                padding:             0;
-                padding-top:         2px;
-                padding-bottom:      2px;
-                padding-left:        20px;
-                margin:              0;
-                margin-bottom:       1px;
-                background-repeat:   no-repeat;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 90%;
+                padding: 0;
+                padding-top: 2px;
+                padding-bottom: 2px;
+                padding-left: 20px;
+                margin: 0;
+                margin-bottom: 1px;
+                background-repeat: no-repeat;
                 background-position: center left;
             }
 
@@ -252,17 +274,17 @@
                 position: relative;
                 top: 0;
                 left: 0;
-                float:               left;
-                margin-right:        12px;
-                width:               48px;
-                background-image:    url('<!-- $no-buddy-icon-background-image -->');
-                background-repeat:   no-repeat;
+                float: left;
+                margin-right: 12px;
+                width: 48px;
+                background-image: url('<!-- $no-buddy-icon-background-image -->');
+                background-repeat: no-repeat;
                 background-position: top center; 
             }
 
             .buddy-icon {
-                width:            48px;
-                height:           48px;
+                width: 48px;
+                height: 48px;
             }
 
             .comments {
@@ -295,23 +317,23 @@
             }
 
             .comment-textarea {
-                box-sizing:         border-box;
+                box-sizing: border-box;
                 -webkit-box-sizing: border-box;
-                width:              100%;
-                height:             3em;
-                padding-bottom:     6px;
+                width: 100%;
+                height: 3em;
+                padding-bottom: 6px;
             }
 
             .comments-section {
-                box-sizing:         border-box;
+                box-sizing: border-box;
                 -webkit-box-sizing: border-box;
-                width:              100%;
+                width: 100%;
             }
 
             .comments-wrapper {
-                box-sizing:         border-box;
+                box-sizing: border-box;
                 -webkit-box-sizing: border-box;
-                width:              100%;
+                width: 100%;
                 margin-top: 12px;
             }
 

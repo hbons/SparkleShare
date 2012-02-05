@@ -46,6 +46,8 @@ namespace SparkleShare {
         private NSTextField size_label_value;
         private NSTextField history_label;
         private NSTextField history_label_value;
+        private NSButton hidden_close_button;
+        
 
         public SparkleEventLog (IntPtr handle) : base (handle) { }
 
@@ -66,6 +68,19 @@ namespace SparkleShare {
             MinSize     = new SizeF (480, 640);
             HasShadow   = true;
             BackingType = NSBackingStore.Buffered;
+
+
+            this.hidden_close_button = new NSButton () {
+                Frame                     = new RectangleF (0, 0, 0, 0),
+                KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
+                KeyEquivalent             = "w"
+            };
+
+            this.hidden_close_button.Activated += delegate {
+                PerformClose (this);
+            };
+
+            ContentView.AddSubview (this.hidden_close_button);
 
 
             this.size_label = new NSTextField () {
@@ -237,7 +252,7 @@ namespace SparkleShare {
 
 
     public class SparkleEventsDelegate : NSWindowDelegate {
-        
+
         public override bool WindowShouldClose (NSObject sender)
         {
             (sender as SparkleEventLog).OrderOut (this);
