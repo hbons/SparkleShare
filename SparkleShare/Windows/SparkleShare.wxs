@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-  <Product Name='SparkleShare 0.6' Id='184950D5-67F6-4D06-9717-7E2F1607A7B0' UpgradeCode='D3DF1D99-87F5-47A7-A349-863DD6E4B73A'
-    Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='sparkleshare.org'>
+  <Product Name='SparkleShare' Id='184950D5-67F6-4D06-9717-7E2F1607A7B0' UpgradeCode='D3DF1D99-87F5-47A7-A349-863DD6E4B73A'
+    Language='1033' Codepage='1252' Version='0.8.1' Manufacturer='sparkleshare.org'>
 
-    <Package Id='*' Keywords='Installer' Description="SparkleShare 0.6 Installer"
+    <Package Id='*' Keywords='Installer' Description="SparkleShare Installer"
       Comments='This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.' Manufacturer='sparkleshare.org'
       InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
 
