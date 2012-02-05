@@ -174,8 +174,9 @@ namespace SparkleShare {
                 TreeIter iter;
                 this.combo_box.GetActiveIter (out iter);
                 string selection = (string) this.combo_box.Model.GetValue (iter, 0);
+                TreePath path    = this.combo_box.Model.GetPath (iter);
 
-                if (selection.Equals (_("All Folders")))
+                if (path.Indices [0] == 0)
                     Controller.SelectedFolder = null;
                 else
                     Controller.SelectedFolder = selection;
@@ -224,7 +225,7 @@ namespace SparkleShare {
 
                 Application.Invoke (delegate {
                     this.spinner.Stop ();
-                    this.web_view.LoadString (html, null, null, "file:///");
+                    this.web_view.LoadString (html, null, null, "file://");
                     this.content_wrapper.Remove (this.content_wrapper.Child);
                     this.content_wrapper.Add (this.scrolled_window);
                     this.content_wrapper.ShowAll ();

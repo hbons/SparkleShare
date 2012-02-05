@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [[ $UID -eq 0 ]]; then
   echo "Cannot run as root. Things would go utterly wrong."

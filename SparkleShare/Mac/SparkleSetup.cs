@@ -462,10 +462,9 @@ namespace SparkleShare {
 
                     case PageType.Finished: {
 
-                        Header      = "Project succesfully added!";
-                        Description = "Now you can access the files from " +
-                                      "‘" + Controller.SyncingFolder + "’ in " +
-                                      "your SparkleShare folder.";
+                        Header      = "Project ‘" + Path.GetFileName (Controller.PreviousPath) +
+                                      "’ succesfully added!";
+                        Description = "Access the files from your SparkleShare folder.";
 
                         if (warnings != null) {
                             WarningImage = NSImage.ImageNamed ("NSCaution");
@@ -505,7 +504,7 @@ namespace SparkleShare {
                         };
 
                         OpenFolderButton.Activated += delegate {
-                            Program.Controller.OpenSparkleShareFolder (Controller.SyncingFolder);
+                            Program.Controller.OpenSparkleShareFolder (Path.GetFileName (Controller.PreviousPath));
                         };
 
                         Buttons.Add (FinishButton);

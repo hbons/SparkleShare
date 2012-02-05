@@ -57,9 +57,9 @@ namespace SparkleLib {
         protected bool is_buffering  = false;
         protected bool server_online = true;
 
-        public readonly SparkleBackend Backend;
         public readonly string LocalPath;
         public readonly string Name;
+        public readonly Uri Url;
 
         public abstract bool AnyDifferences { get; }
         public abstract string Identifier { get; }
@@ -92,11 +92,12 @@ namespace SparkleLib {
         public event ChangesDetectedEventHandler ChangesDetected;
 
 
-        public SparkleRepoBase (string path, SparkleBackend backend)
+        public SparkleRepoBase (string path)
         {
-            LocalPath          = path;
-            Name               = Path.GetFileName (LocalPath);
-            Backend            = backend;
+            LocalPath = path;
+            Name      = Path.GetFileName (LocalPath);
+            Url       = new Uri (SparkleConfig.DefaultConfig.GetUrlForFolder (Name));
+
             this.poll_interval = this.short_interval;
 
             SyncStatusChanged += delegate (SyncStatus status) {
@@ -298,7 +299,7 @@ namespace SparkleLib {
             };
 
             // Fetch changes when there is a message in the irc channel
-            this.listener.Announcement += delegate (SparkleAnnouncement announcement) {
+            this.listener.Received += delegate (SparkleAnnouncement announcement) {
                 string identifier = Identifier;
 
                 if (announcement.FolderIdentifier.Equals (identifier) &&
