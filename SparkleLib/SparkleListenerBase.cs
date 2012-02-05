@@ -39,8 +39,11 @@ namespace SparkleLib {
 
         private static List<SparkleListenerBase> listeners = new List<SparkleListenerBase> ();
 
+
         public static SparkleListenerBase CreateListener (string folder_name, string folder_identifier)
         {
+            // TODO: Allow a different announcements uri for each folder
+            // next to a global one
             string uri = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (
                 folder_name, "announcements_url");
 
@@ -48,7 +51,10 @@ namespace SparkleLib {
                 // This is SparkleShare's centralized notification service.
                 // Don't worry, we only use this server as a backup if you
                 // don't have your own. All data needed to connect is hashed and
-                // we don't store any personal information ever
+                // we don't store any personal information ever.
+                //
+                // Please see the SparkleShare wiki if you wish to run
+                // your own service instead
 
                 uri = "tcp://notifications.sparkleshare.org:1986";
             }
@@ -60,7 +66,8 @@ namespace SparkleLib {
             foreach (SparkleListenerBase listener in listeners) {
                 if (listener.Server.Equals (announce_uri)) {
                     SparkleHelpers.DebugInfo ("ListenerFactory",
-                        "Refered to existing listener for " + announce_uri);
+                        "Refered to existing " + announce_uri.Scheme +
+                        " listener for " + announce_uri);
 
                     listener.AlsoListenToBase (folder_identifier);
                     return (SparkleListenerBase) listener;
@@ -78,7 +85,9 @@ namespace SparkleLib {
                 break;
             }
 
-            SparkleHelpers.DebugInfo ("ListenerFactory", "Issued new listener for " + announce_uri);
+            SparkleHelpers.DebugInfo ("ListenerFactory",
+                "Issued new " + announce_uri.Scheme + " listener for " + announce_uri);
+
             return (SparkleListenerBase) listeners [listeners.Count - 1];
         }
     }
