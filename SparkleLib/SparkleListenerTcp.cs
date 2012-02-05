@@ -126,12 +126,20 @@ namespace SparkleLib {
                                 byte [] ping_bytes =
                                     Encoding.UTF8.GetBytes ("ping");
 
+                                Console.WriteLine ("1");
+
                                 this.socket.Send (ping_bytes);
                                 this.socket.ReceiveTimeout = 3 * 1000;
 
+                                Console.WriteLine ("2");
+
                                 // 10057 means "Socket is not connected"
-                                if (this.socket.Receive (bytes) < 1)
+                                if (this.socket.Receive (bytes) < 1) {
+                                    Console.WriteLine ("3");
                                     throw new SocketException (10057);
+                                }
+
+                                Console.WriteLine ("4");
 
                             // The ping failed: disconnect completely
                             } catch (SocketException) {
