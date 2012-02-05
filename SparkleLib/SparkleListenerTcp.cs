@@ -16,14 +16,9 @@
 
 
 using System;
-using System.IO;
 using System.Text;
 using System.Threading;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Security.Cryptography;
-using System.Collections.Generic;
-using System.Xml.Serialization;
 
 namespace SparkleLib {
 
@@ -122,6 +117,9 @@ namespace SparkleLib {
                         // We've timed out, let's ping the server to
                         // see if the connection is still up
                         } catch (SocketException e) {
+
+                            Console.WriteLine ("1st catch block");
+
                             try {
                                 byte [] ping_bytes =
                                     Encoding.UTF8.GetBytes ("ping");
@@ -147,6 +145,8 @@ namespace SparkleLib {
                                 this.is_connecting = false;
 
                                 this.socket.ReceiveTimeout = 60 * 1000;
+
+                                Console.WriteLine ("2nd catch block");
 
                                 OnDisconnected (e.Message);
                                 break;
