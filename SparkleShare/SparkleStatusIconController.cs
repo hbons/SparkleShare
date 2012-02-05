@@ -38,6 +38,9 @@ namespace SparkleShare {
         public event UpdateMenuEventHandler UpdateMenuEvent;
         public delegate void UpdateMenuEventHandler (IconState state);
 
+        public event UpdateQuitItemEventHandler UpdateQuitItemEvent;
+        public delegate void UpdateQuitItemEventHandler (bool quit_item_enabled);
+
         public IconState CurrentState = IconState.Idle;
 
         public string [] Folders {
@@ -76,6 +79,14 @@ namespace SparkleShare {
             }
         }
 
+        public bool QuitItemEnabled {
+            get {
+                return (CurrentState != IconState.Syncing &&
+                        CurrentState != IconState.SyncingDown &&
+                        CurrentState != IconState.SyncingUp);
+            }
+        }
+
 
         public SparkleStatusIconController ()
         {
@@ -89,6 +100,9 @@ namespace SparkleShare {
                 if (CurrentState != IconState.Error)
                     CurrentState = IconState.Idle;
 
+                if (UpdateQuitItemEvent != null)
+                    UpdateQuitItemEvent (QuitItemEnabled);
+
                 if (UpdateMenuEvent != null)
                     UpdateMenuEvent (CurrentState);
             };
@@ -97,6 +111,9 @@ namespace SparkleShare {
             Program.Controller.OnSyncing += delegate {
                 CurrentState = IconState.Syncing;
 
+                if (UpdateQuitItemEvent != null)
+                    UpdateQuitItemEvent (QuitItemEnabled);
+
                 if (UpdateMenuEvent != null)
                     UpdateMenuEvent (IconState.Syncing);
             };
@@ -104,6 +121,9 @@ namespace SparkleShare {
 
             Program.Controller.OnError += delegate {
                 CurrentState = IconState.Error;
+
+                if (UpdateQuitItemEvent != null)
+                    UpdateQuitItemEvent (QuitItemEnabled);
 
                 if (UpdateMenuEvent != null)
                     UpdateMenuEvent (IconState.Error);

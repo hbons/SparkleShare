@@ -87,7 +87,9 @@ namespace SparkleShare {
             MakeKeyAndOrderFront (this);
             
             OrderFrontRegardless ();
-            Program.UI.UpdateDockIconVisibility ();
+
+            if (Program.UI != null)
+                Program.UI.UpdateDockIconVisibility ();
         }
 
         
@@ -146,7 +148,9 @@ namespace SparkleShare {
         {
             base.OrderOut (this);
             NSApplication.SharedApplication.RemoveWindowsItem (this);
-            Program.UI.UpdateDockIconVisibility ();
+
+            if (Program.UI != null)
+                Program.UI.UpdateDockIconVisibility ();
 
             return;
         }

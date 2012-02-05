@@ -29,7 +29,7 @@ namespace SparkleShare {
         public SparkleBubblesController ()
         {
             Program.Controller.ConflictNotificationRaised += delegate {
-                ShowBubble ("Ouch! Mid-air collision!",
+                ShowBubble ("Conflict detected.",
                     "Don't worry, SparkleShare made a copy of each conflicting file.",
                     null);
             };

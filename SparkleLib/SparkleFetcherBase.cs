@@ -16,8 +16,8 @@
 
 
 using System;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
 using System.Security.AccessControl;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -37,21 +37,93 @@ namespace SparkleLib {
         public event FailedEventHandler Failed;
         public event ProgressChangedEventHandler ProgressChanged;
 
+        public string [] ExcludeRules;
+
         protected string target_folder;
         protected string remote_url;
 
         private Thread thread;
 
-        
+
         public SparkleFetcherBase (string server, string remote_folder, string target_folder)
         {
             this.target_folder = target_folder;
             this.remote_url    = server + "/" + remote_folder;
+
+            ExcludeRules = new string [] {
+                // gedit and emacs
+                "*~",
+
+                // Firefox and Chromium temporary download files
+                "*.part",
+                "*.crdownload",
+
+                // vi(m)
+                ".*.sw[a-z]",
+                "*.un~",
+                "*.swp",
+                "*.swo",
+
+                // KDE
+                ".directory",
+
+                // Mac OS X
+                ".DS_Store",
+                "Icon?",
+                "._*",
+                ".Spotlight-V100",
+                ".Trashes",
+
+                // Omnigraffle
+                "*(Autosaved).graffle",
+
+                // Windows
+                "Thumbs.db",
+                "Desktop.ini",
+
+                // MS Office
+                "~*.tmp",
+                "~*.TMP",
+                "*~*.tmp",
+                "*~*.TMP",
+                "~*.ppt",
+                "~*.PPT",
+                "~*.pptx",
+                "~*.PPTX",
+                "~*.xls",
+                "~*.XLS",
+                "~*.xlsx",
+                "~*.XLSX",
+                "~*.doc",
+                "~*.DOC",
+                "~*.docx",
+                "~*.DOCX",
+
+                // CVS
+                "*/CVS/*",
+                ".cvsignore",
+                "*/.cvsignore",
+
+                // Subversion
+                "/.svn/*",
+                "*/.svn/*",
+
+                // Mercurial
+                "/.hg/*",
+                "*/.hg/*",
+                "*/.hgignore",
+
+                // Bazaar
+                "/.bzr/*",
+                "*/.bzr/*",
+                "*/.bzrignore"
+            };
         }
 
 
         public abstract bool Fetch ();
         public abstract string [] Warnings { get; }
+
 
         // Clones the remote repository
         public void Start ()
