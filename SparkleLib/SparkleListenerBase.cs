@@ -21,88 +21,6 @@ using System.Timers;
 
 namespace SparkleLib {
 
-    public class SparkleAnnouncement {
-
-        public readonly string FolderIdentifier;
-        public readonly string Message;
-
-
-        public SparkleAnnouncement (string folder_identifier, string message)
-        {
-            FolderIdentifier = folder_identifier;
-            Message          = message;
-        }
-    }
-
-
-    public static class SparkleListenerFactory {
-
-        private static List<SparkleListenerBase> listeners = new List<SparkleListenerBase> ();
-
-
-        public static SparkleListenerBase CreateListener (string folder_name, string folder_identifier)
-        {
-            // Check if the user wants to use a global custom notification service
-            string uri = SparkleConfig.DefaultConfig.GetConfigOption ("announcements_url");
-
-            // Check if the user wants a use a custom notification service for this folder
-            if (string.IsNullOrEmpty (uri))
-                uri = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (
-                    folder_name, "announcements_url");
-
-            // Fall back to the fallback service is neither is the case
-            if (string.IsNullOrEmpty (uri)) {
-                // This is SparkleShare's centralized notification service.
-                // It communicates "It's time to sync!" signals between clients.
-                //
-                // Here's how it works: the client listens to a channel (the
-                // folder identifier, a SHA-1 hash) for when it's time to sync.
-                // Clients also send the current revision hash to the channel
-                // for other clients to pick up when you've synced up any
-                // changes. This way
-                //
-                // Please see the SparkleShare wiki if you wish to run
-                // your own service instead
-
-                uri = "tcp://notifications.sparkleshare.org:1986";
-            }
-
-            Uri announce_uri = new Uri (uri);
-
-            // We use only one listener per notification service to keep
-            // the number of connections as low as possible
-            foreach (SparkleListenerBase listener in listeners) {
-                if (listener.Server.Equals (announce_uri)) {
-                    SparkleHelpers.DebugInfo ("ListenerFactory",
-                        "Refered to existing " + announce_uri.Scheme +
-                        " listener for " + announce_uri);
-
-                    // We already seem to have a listener for this server,
-                    // refer to the existing one instead
-                    listener.AlsoListenToBase (folder_identifier);
-                    return (SparkleListenerBase) listener;
-                }
-            }
-
-            // Create a new listener with the appropriate
-            // type if one doesn't exist yet for that server
-            switch (announce_uri.Scheme) {
-            case "tcp":
-                listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
-                break;
-            default:
-                listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
-                break;
-            }
-
-            SparkleHelpers.DebugInfo ("ListenerFactory",
-                "Issued new " + announce_uri.Scheme + " listener for " + announce_uri);
-
-            return (SparkleListenerBase) listeners [listeners.Count - 1];
-        }
-    }
-
-
     // A persistent connection to the server that
     // listens for change notifications
     public abstract class SparkleListenerBase {
@@ -311,4 +229,3 @@ namespace SparkleLib {
         }
     }
 }
-
