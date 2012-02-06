@@ -16,6 +16,7 @@
 
 
 using System;
+using System.IO;
 using System.Diagnostics;
 
 namespace SparkleLib {
@@ -23,27 +24,57 @@ namespace SparkleLib {
     public class SparkleGit : Process {
 
         public static string ExecPath = null;
+        public static string Path     = null;
 
 
         public SparkleGit (string path, string args) : base ()
         {
+            Path = LocateGit ();
+
             EnableRaisingEvents              = true;
-            StartInfo.FileName               = SparkleBackend.DefaultBackend.Path;
+            StartInfo.FileName               = Path;
             StartInfo.RedirectStandardOutput = true;
             StartInfo.UseShellExecute        = false;
             StartInfo.WorkingDirectory       = path;
 
-            if (!string.IsNullOrEmpty (ExecPath))
-                StartInfo.Arguments = "--exec-path=\"" + ExecPath + "\" " + args;
-            else
+            if (string.IsNullOrEmpty (ExecPath))
                 StartInfo.Arguments = args;
+            else
+                StartInfo.Arguments = "--exec-path=\"" + ExecPath + "\" " + args;
         }
 
 
         new public void Start ()
         {
             SparkleHelpers.DebugInfo ("Cmd", "git " + StartInfo.Arguments);
-            base.Start ();
+
+            try {
+                base.Start ();
+
+            } catch (Exception e) {
+                SparkleHelpers.DebugInfo ("Cmd", "There's a problem running Git: " + e.Message);
+                Environment.Exit (-1);
+            }
+        }
+
+
+        private string LocateGit ()
+        {
+            if (!string.IsNullOrEmpty (Path))
+                return Path;
+
+            string [] possible_git_paths = new string [] {
+                "/usr/bin/git",
+                "/usr/local/bin/git",
+                "/opt/local/bin/git",
+                "/usr/local/git/bin/git"
+            };
+
+            foreach (string path in possible_git_paths)
+                if (File.Exists (path))
+                    return path;
+
+            return "git";
         }
     }
 }
