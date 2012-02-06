@@ -782,13 +782,6 @@ namespace SparkleShare {
         }
 
 
-        public bool BackendIsPresent {
-            get {
-                return SparkleBackend.DefaultBackend.IsPresent;
-            }
-        }
-
-
         // Looks up the user's name from the global configuration
         public string UserName
         {
