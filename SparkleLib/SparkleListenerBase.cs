@@ -49,9 +49,13 @@ namespace SparkleLib {
 
             if (uri == null) {
                 // This is SparkleShare's centralized notification service.
-                // Don't worry, we only use this server as a backup if you
-                // don't have your own. All data needed to connect is hashed and
-                // we don't store any personal information ever.
+                // It communicates "It's time to sync!" signals between clients.
+                //
+                // Here's how it works: the client listens to a channel (the
+                // folder identifier, a SHA-1 hash) for when it's time to sync.
+                // Clients also send the current revision hash to the channel
+                // for other clients to pick up when you've synced up any
+                // changes. This way
                 //
                 // Please see the SparkleShare wiki if you wish to run
                 // your own service instead
