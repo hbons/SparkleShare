@@ -33,12 +33,11 @@ namespace SparkleShare {
 
         public SparkleStatusIconController Controller = new SparkleStatusIconController ();
 
-        // TODO: fix case
-        private Timer Animation;
-        private Gdk.Pixbuf [] AnimationFrames;
-        private int FrameNumber;
-        private string StateText;
-        private Menu Menu;
+        private Timer animation;
+        private Gdk.Pixbuf [] animation_frames;
+        private int frame_number;
+        private string state_text;
+        private Menu menu;
         private MenuItem quit_item;
 
         #if HAVE_APP_INDICATOR
@@ -56,8 +55,8 @@ namespace SparkleShare {
 
         public SparkleStatusIcon ()
         {
-            AnimationFrames = CreateAnimationFrames ();
-            Animation       = CreateAnimation ();
+            CreateAnimationFrames ();
+            CreateAnimation ();
 
             #if HAVE_APP_INDICATOR
             this.indicator = new ApplicationIndicator ("sparkleshare",
@@ -70,13 +69,13 @@ namespace SparkleShare {
 
             this.status_icon.Activate += ShowMenu; // Primary mouse button click
             this.status_icon.PopupMenu += ShowMenu; // Secondary mouse button click
-            this.status_icon.Pixbuf = AnimationFrames [0];
+            this.status_icon.Pixbuf = this.animation_frames [0];
             #endif
 
             if (Controller.Folders.Length == 0)
-                StateText = _("Welcome to SparkleShare!");
+                this.state_text = _("Welcome to SparkleShare!");
             else
-                StateText = _("Up to date") + Controller.FolderSize;
+                this.state_text = _("Up to date") + Controller.FolderSize;
 
             CreateMenu ();
 
@@ -85,7 +84,7 @@ namespace SparkleShare {
                 Application.Invoke (delegate {
                     if (this.quit_item != null) {
                         this.quit_item.Sensitive = quit_item_enabled;
-                        Menu.ShowAll ();
+                        this.menu.ShowAll ();
                     }
                 });
             };
@@ -95,43 +94,43 @@ namespace SparkleShare {
                     switch (state) {
                     case IconState.Idle:
 
-                        Animation.Stop ();
+                        this.animation.Stop ();
 
                         if (Controller.Folders.Length == 0)
-                            StateText = _("Welcome to SparkleShare!");
+                            this.state_text = _("Welcome to SparkleShare!");
                         else
-                            StateText = _("Up to date") + Controller.FolderSize;
+                            this.state_text = _("Up to date") + Controller.FolderSize;
 
                         #if HAVE_APP_INDICATOR
                         this.indicator.IconName = "process-syncing-sparkleshare-i";
                         #else
-                        this.status_icon.Pixbuf = AnimationFrames [0];
+                        this.status_icon.Pixbuf = this.animation_frames [0];
                         #endif
 
-                        UpdateStateText ();
+                        Updatethis.state_text ();
                         CreateMenu ();
 
                         break;
 
                     case IconState.Syncing:
 
-                        StateText = _("Syncing… ") +
+                        this.state_text = _("Syncing… ") +
                                     Controller.ProgressPercentage + "%  " +
                                     Controller.ProgressSpeed;
 
-                        UpdateStateText ();
+                        Updatethis.state_text ();
 
-                        if (!Animation.Enabled)
-                            Animation.Start ();
+                        if (!this.animation.Enabled)
+                            this.animation.Start ();
 
                         break;
 
                     case IconState.Error:
 
-                        Animation.Stop ();
+                        this.animation.Stop ();
 
-                        StateText = _("Not everything is synced");
-                        UpdateStateText ();
+                        this.state_text = _("Not everything is synced");
+                        Updatethis.state_text ();
                         CreateMenu ();
 
                         #if HAVE_APP_INDICATOR
@@ -143,7 +142,7 @@ namespace SparkleShare {
                         break;
                     }
 
-                    Menu.ShowAll ();
+                    this.menu.ShowAll ();
                 });
             };
         }
@@ -163,35 +162,33 @@ namespace SparkleShare {
         }
 
 
-        // Creates the Animation that handles the syncing animation
-        private Timer CreateAnimation ()
+        // Creates the animation that handles the syncing animation
+        private void CreateAnimation ()
         {
-            FrameNumber = 0;
+            this.frame_number = 0;
 
-            Timer Animation = new Timer () {
+            this.animation = new Timer () {
                 Interval = 35
             };
 
-            Animation.Elapsed += delegate {
-                if (FrameNumber < AnimationFrames.Length - 1)
-                    FrameNumber++;
+            this.animation.Elapsed += delegate {
+                if (this.frame_number < this.animation_frames.Length - 1)
+                    this.frame_number++;
                 else
-                    FrameNumber = 0;
+                    this.frame_number = 0;
 
                 string icon_name = "process-syncing-sparkleshare-"; 
-                for (int i = 0; i <= FrameNumber; i++)
+                for (int i = 0; i <= this.frame_number; i++)
                     icon_name += "i";
 
                 Application.Invoke (delegate {
                     #if HAVE_APP_INDICATOR
                     this.indicator.IconName = icon_name;
                     #else
-                    this.status_icon.Pixbuf = AnimationFrames [FrameNumber];
+                    this.status_icon.Pixbuf = this.animation_frames [this.frame_number];
                     #endif
                 });
             };
-
-            return Animation;
         }
 
 
@@ -199,15 +196,15 @@ namespace SparkleShare {
         // user clicks the status icon
         public void CreateMenu ()
         {
-            Menu = new Menu ();
+            this.menu = new Menu ();
 
                 // The menu item showing the status and size of the SparkleShare folder
-                MenuItem status_menu_item = new MenuItem (StateText) {
+                MenuItem status_menu_item = new MenuItem (this.state_text) {
                     Sensitive = false
                 };
 
-            Menu.Add (status_menu_item);
-            Menu.Add (new SeparatorMenuItem ());
+            this.menu.Add (status_menu_item);
+            this.menu.Add (new SeparatorMenuItem ());
 
                 ImageMenuItem folder_item = new SparkleMenuItem ("SparkleShare"){
                     Image = new Image (SparkleUIHelpers.GetIcon ("folder-sparkleshare", 16))
@@ -217,7 +214,7 @@ namespace SparkleShare {
                     Program.Controller.OpenSparkleShareFolder ();
                 };
                 
-            Menu.Add (folder_item);
+            this.menu.Add (folder_item);
 
                 if (Program.Controller.Folders.Count > 0) {
             
@@ -239,7 +236,7 @@ namespace SparkleShare {
                         };
 
                         subfolder_item.Activated += OpenFolderDelegate (folder_name);
-                        Menu.Add (subfolder_item);
+                        this.menu.Add (subfolder_item);
                     }
 
                 } else {
@@ -247,10 +244,10 @@ namespace SparkleShare {
                         Sensitive   = false
                     };
 
-                    Menu.Add (no_folders_item);
+                    this.menu.Add (no_folders_item);
                 }
 
-                Menu.Add (new SeparatorMenuItem ());
+                this.menu.Add (new SeparatorMenuItem ());
 
                 // Opens the wizard to add a new remote folder
                 MenuItem sync_item = new MenuItem (_("Add Hosted Project…"));
@@ -274,8 +271,8 @@ namespace SparkleShare {
                     });
                 };
 
-            Menu.Add (sync_item);
-            Menu.Add (new SeparatorMenuItem ());
+            this.menu.Add (sync_item);
+            this.menu.Add (new SeparatorMenuItem ());
 
             MenuItem recent_events_item = new MenuItem (_("Open Recent Events"));
 
@@ -291,7 +288,7 @@ namespace SparkleShare {
                     });
                 };
 
-            Menu.Add (recent_events_item);
+            this.menu.Add (recent_events_item);
 
             MenuItem notify_item;
                                                              
@@ -305,8 +302,8 @@ namespace SparkleShare {
                     CreateMenu ();
                 };
 
-            Menu.Add (notify_item);
-            Menu.Add (new SeparatorMenuItem ());
+            this.menu.Add (notify_item);
+            this.menu.Add (new SeparatorMenuItem ());
 
                 // A menu item that takes the user to http://www.sparkleshare.org/
                 MenuItem about_item = new MenuItem (_("About SparkleShare"));
@@ -321,8 +318,8 @@ namespace SparkleShare {
                     });
                 };
 
-            Menu.Add (about_item);
-            Menu.Add (new SeparatorMenuItem ());
+            this.menu.Add (about_item);
+            this.menu.Add (new SeparatorMenuItem ());
 
                 // A menu item that quits the application
                 this.quit_item = new MenuItem (_("Quit")) {
@@ -333,11 +330,11 @@ namespace SparkleShare {
                     Program.Controller.Quit ();
                 };
 
-            Menu.Add (this.quit_item);
-            Menu.ShowAll ();
+            this.menu.Add (this.quit_item);
+            this.menu.ShowAll ();
 
             #if HAVE_APP_INDICATOR
-            this.indicator.Menu = Menu;
+            this.indicator.Menu = this.menu;
             #endif
         }
 
@@ -354,15 +351,15 @@ namespace SparkleShare {
 
         public void UpdateStateText ()
         {
-            ((Menu.Children [0] as MenuItem).Child as Label).Text = StateText;
-            Menu.ShowAll ();
+            ((this.MenuMenu.Children [0] as MenuItem).Child as Label).Text = this.state_text;
+            this.menu.ShowAll ();
         }
 
         #if !HAVE_APP_INDICATOR
         // Makes the menu visible
         private void ShowMenu (object o, EventArgs args)
         {
-            Menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
+            this.menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
         }
 
 
