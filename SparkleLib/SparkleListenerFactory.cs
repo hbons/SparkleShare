@@ -44,7 +44,7 @@ namespace SparkleLib {
                 // folder identifier, a SHA-1 hash) for when it's time to sync.
                 // Clients also send the current revision hash to the channel
                 // for other clients to pick up when you've synced up any
-                // changes. This way
+                // changes.
                 //
                 // Please see the SparkleShare wiki if you wish to run
                 // your own service instead
