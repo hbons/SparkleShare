@@ -23,7 +23,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Timers;
-using System.Xml;
 
 namespace SparkleLib {
 
