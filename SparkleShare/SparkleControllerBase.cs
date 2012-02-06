@@ -40,9 +40,6 @@ namespace SparkleShare {
         public double ProgressPercentage = 0.0;
         public string ProgressSpeed      = "";
 
-        public event OnQuitWhileSyncingHandler OnQuitWhileSyncing;
-        public delegate void OnQuitWhileSyncingHandler ();
-
         public event FolderFetchedEventHandler FolderFetched;
         public delegate void FolderFetchedEventHandler (string [] warnings);
         
@@ -776,6 +773,7 @@ namespace SparkleShare {
             process.StartInfo.UseShellExecute        = false;
             process.StartInfo.FileName               = "ssh-add";
             process.StartInfo.Arguments              = "\"" + key_file_path + "\"";
+            process.StartInfo.CreateNoWindow         = true;
 
             process.Start ();
             process.WaitForExit ();
@@ -1107,9 +1105,6 @@ namespace SparkleShare {
                     repo.Status == SyncStatus.SyncDown ||
                     repo.IsBuffering) {
 
-                    if (OnQuitWhileSyncing != null)
-                        OnQuitWhileSyncing ();
-                    
                     return;
                 }
             }

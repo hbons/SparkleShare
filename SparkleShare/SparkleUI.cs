@@ -63,11 +63,8 @@ namespace SparkleShare {
                 Setup = new SparkleSetup ();
                 Setup.Controller.ShowSetupPage ();
             }
-            
-            Program.Controller.OnQuitWhileSyncing += delegate {
-                // TODO: Pop up a warning when quitting whilst syncing
-            };
         }
+
 
         // Runs the application
         public void Run ()
