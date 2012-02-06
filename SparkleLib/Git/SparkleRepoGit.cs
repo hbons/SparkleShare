@@ -165,25 +165,29 @@ namespace SparkleLib {
         }
 
 
-        public override bool CheckForRemoteChanges ()
+        public override bool HasRemoteChanges
         {
-            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Checking for remote changes...");
-            SparkleGit git = new SparkleGit (LocalPath, "ls-remote " + Url + " master");
+            get {
+                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Checking for remote changes...");
+                SparkleGit git = new SparkleGit (LocalPath, "ls-remote " + Url + " master");
+    
+                git.Start ();
+                git.WaitForExit ();
+    
+                if (git.ExitCode != 0)
+                    return false;
+    
+                string remote_revision = git.StandardOutput.ReadToEnd ().TrimEnd ();
+    
+                if (!remote_revision.StartsWith (CurrentRevision)) {
+                    SparkleHelpers.DebugInfo ("Git",
+                        "[" + Name + "] Remote changes found. (" + remote_revision + ")");
 
-            git.Start ();
-            git.WaitForExit ();
+                    return true;
 
-            if (git.ExitCode != 0)
-                return false;
-
-            string remote_revision = git.StandardOutput.ReadToEnd ().TrimEnd ();
-
-            if (!remote_revision.StartsWith (CurrentRevision)) {
-                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Remote changes found. (" + remote_revision + ")");
-                return true;
-
-            } else {
-                return false;
+                } else {
+                    return false;
+                }
             }
         }
 

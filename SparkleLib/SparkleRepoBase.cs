@@ -67,6 +67,7 @@ namespace SparkleLib {
         public abstract bool SyncDown ();
         public abstract double CalculateSize (DirectoryInfo parent);
         public abstract bool HasUnsyncedChanges { get; set; }
+        public abstract bool HasRemoteChanges { get; }
         public abstract List<string> ExcludePaths { get; }
 
         public abstract double Size { get; }
@@ -120,7 +121,7 @@ namespace SparkleLib {
                 if (time_to_poll) {
                     this.last_poll = DateTime.Now;
 
-                    if (CheckForRemoteChanges ())
+                    if (HasRemoteChanges)
                         SyncDownBase ();
                 }
 
@@ -210,12 +211,6 @@ namespace SparkleLib {
         }
 
 
-        public virtual bool CheckForRemoteChanges () // TODO: HasRemoteChanges { get; }
-        {
-            return true;
-        }
-
-
         public virtual List<SparkleChangeSet> GetChangeSets (int count) {
             return null;
         }
@@ -269,7 +264,7 @@ namespace SparkleLib {
                 this.poll_interval = this.long_interval;
 
                 new Thread (new ThreadStart (delegate {
-                    if (!IsSyncing && CheckForRemoteChanges ())
+                    if (!IsSyncing && HasRemoteChanges)
                         SyncDownBase ();
                 })).Start ();
             }
@@ -282,7 +277,7 @@ namespace SparkleLib {
                 if (!IsSyncing) {
 
                     // Check for changes manually one more time
-                    if (CheckForRemoteChanges ())
+                    if (HasRemoteChanges)
                         SyncDownBase ();
 
                     // Push changes that were made since the last disconnect
