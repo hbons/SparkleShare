@@ -40,21 +40,21 @@ namespace SparkleLib {
         private TimeSpan long_interval  = new TimeSpan (0, 0, 10, 0);
 
         private SparkleWatcher watcher;
+        private SparkleListenerBase listener;
         private TimeSpan poll_interval;
         private System.Timers.Timer local_timer  = new System.Timers.Timer () { Interval = 0.25 * 1000 };
         private System.Timers.Timer remote_timer = new System.Timers.Timer () { Interval = 10 * 1000 };
-        private DateTime last_poll         = DateTime.Now;
-        private List<double> size_buffer    = new List<double> ();
-        private bool has_changed           = false;
-        private Object change_lock         = new Object ();
-        private Object watch_lock          = new Object ();
-        private double progress_percentage = 0.0;
-        private string progress_speed      = "";
+        private DateTime last_poll               = DateTime.Now;
+        private List<double> size_buffer         = new List<double> ();
+        private bool has_changed                 = false;
+        private Object change_lock               = new Object ();
+        private Object watch_lock                = new Object ();
+        private double progress_percentage       = 0.0;
+        private string progress_speed            = "";
+        private SyncStatus status;
 
-        protected SparkleListenerBase listener;
-        protected SyncStatus status;
-        protected bool is_buffering  = false;
-        protected bool server_online = true;
+        private bool is_buffering  = false;
+        private bool server_online = true;
 
         public readonly string LocalPath;
         public readonly string Name;
