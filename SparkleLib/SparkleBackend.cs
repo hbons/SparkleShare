@@ -21,40 +21,7 @@ using System.Runtime.InteropServices;
 
 namespace SparkleLib {
 
-    public class SparkleBackend {
-
-        public static SparkleBackend DefaultBackend = new SparkleBackendGit ();
-
-        public string Name;
-        public string Path;
-
-
-        public SparkleBackend (string name, string [] paths)
-        {
-            Name = name;
-            Path = "git";
-
-            foreach (string path in paths) {
-                if (File.Exists (path)) {
-                    Path = path;
-                    break;
-                }
-            }
-        }
-
-
-        public bool IsPresent {
-            get {
-               return (Path != null);
-            }
-        }
-
-
-        public bool IsUsablePath (string path)
-        {
-            return (path.Length > 0);
-        }
-
+    public static class SparkleBackend {
 
         public static string Version {
             get {
@@ -65,7 +32,7 @@ namespace SparkleLib {
 
         // Strange magic needed by Platform ()
         [DllImport ("libc")]
-        static extern int uname (IntPtr buf);
+        private static extern int uname (IntPtr buf);
 
 
         // This fixes the PlatformID enumeration for MacOSX in Environment.OSVersion.Platform,
@@ -89,45 +56,5 @@ namespace SparkleLib {
                 return Environment.OSVersion.Platform;
             }
         }
-    }
-
-
-    public class SparkleBackendGit : SparkleBackend {
-
-        private static string name     = "Git";
-        private static string [] paths = new string [] {
-            "/opt/local/bin/git",
-            "/usr/bin/git",
-            "/usr/local/bin/git",
-            "/usr/local/git/bin/git"
-        };
-
-        public SparkleBackendGit () : base (name, paths) { }
-
-    }
-
-
-    public class SparkleBackendHg : SparkleBackend {
-
-        private static string name     = "Hg";
-        private static string [] paths = new string [] {
-            "/opt/local/bin/hg",
-            "/usr/bin/hg"
-        };
-
-        public SparkleBackendHg () : base (name, paths) { }
-
-    }
-
-
-    public class SparkleBackendScp : SparkleBackend {
-
-        private static string name     = "Scp";
-        private static string [] paths = new string [] {
-            "/usr/bin/scp"
-        };
-
-        public SparkleBackendScp () : base (name, paths) { }
-
     }
 }
