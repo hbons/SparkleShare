@@ -42,12 +42,16 @@ namespace SparkleLib {
 
         public static SparkleListenerBase CreateListener (string folder_name, string folder_identifier)
         {
-            // TODO: Allow a different announcements uri for each folder
-            // next to a global one
-            string uri = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (
-                folder_name, "announcements_url");
+            // Check if the user wants to use a global custom notification service
+            string uri = SparkleConfig.DefaultConfig.GetConfigOption ("announcements_url");
 
-            if (uri == null) {
+            // Check if the user wants a use a custom notification service for this folder
+            if (string.IsNullOrEmpty (uri))
+                uri = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (
+                    folder_name, "announcements_url");
+
+            // Fall back to the fallback service is neither is the case
+            if (string.IsNullOrEmpty (uri)) {
                 // This is SparkleShare's centralized notification service.
                 // It communicates "It's time to sync!" signals between clients.
                 //
@@ -65,7 +69,7 @@ namespace SparkleLib {
 
             Uri announce_uri = new Uri (uri);
 
-            // We use only one listener per server to keep
+            // We use only one listener per notification service to keep
             // the number of connections as low as possible
             foreach (SparkleListenerBase listener in listeners) {
                 if (listener.Server.Equals (announce_uri)) {
@@ -73,6 +77,8 @@ namespace SparkleLib {
                         "Refered to existing " + announce_uri.Scheme +
                         " listener for " + announce_uri);
 
+                    // We already seem to have a listener for this server,
+                    // refer to the existing one instead
                     listener.AlsoListenToBase (folder_identifier);
                     return (SparkleListenerBase) listener;
                 }
