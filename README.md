@@ -82,8 +82,7 @@ $ sudo apt-get install libappindicator0.1-cil-dev
 ```bash
 $ sudo yum install gtk-sharp2-devel mono-core mono-devel monodevelop \
   ndesk-dbus-devel ndesk-dbus-glib-devel nautilus-python-devel nant \
-  notify-sharp-devel webkit-sharp-devel webkitgtk-devel libtool intltool \
-  gnome-doc-utils
+  notify-sharp-devel webkit-sharp-devel webkitgtk-devel libtool intltool
 ```
 
 
