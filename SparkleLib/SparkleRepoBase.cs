@@ -191,6 +191,7 @@ namespace SparkleLib {
 
         public string Domain {
             get {
+                // TODO: use Uri class
                 Regex regex = new Regex (@"(@|://)([a-z0-9\.-]+)(/|:)");
                 Match match = regex.Match (SparkleConfig.DefaultConfig.GetUrlForFolder (Name));
 
