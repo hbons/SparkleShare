@@ -33,6 +33,7 @@ namespace SparkleShare {
 
         public SparkleStatusIconController Controller = new SparkleStatusIconController ();
 
+        // TODO: Fix case
         private Timer Animation;
         private int FrameNumber;
         private string StateText;
