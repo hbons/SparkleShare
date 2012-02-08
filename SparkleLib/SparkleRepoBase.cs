@@ -23,7 +23,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Timers;
-using System.Xml;
 
 namespace SparkleLib {
 
@@ -41,21 +40,21 @@ namespace SparkleLib {
         private TimeSpan long_interval  = new TimeSpan (0, 0, 10, 0);
 
         private SparkleWatcher watcher;
+        private SparkleListenerBase listener;
         private TimeSpan poll_interval;
         private System.Timers.Timer local_timer  = new System.Timers.Timer () { Interval = 0.25 * 1000 };
         private System.Timers.Timer remote_timer = new System.Timers.Timer () { Interval = 10 * 1000 };
-        private DateTime last_poll         = DateTime.Now;
-        private List<double> sizebuffer    = new List<double> ();
-        private bool has_changed           = false;
-        private Object change_lock         = new Object ();
-        private Object watch_lock          = new Object ();
-        private double progress_percentage = 0.0;
-        private string progress_speed      = "";
+        private DateTime last_poll               = DateTime.Now;
+        private List<double> size_buffer         = new List<double> ();
+        private bool has_changed                 = false;
+        private Object change_lock               = new Object ();
+        private Object watch_lock                = new Object ();
+        private double progress_percentage       = 0.0;
+        private string progress_speed            = "";
+        private SyncStatus status;
 
-        protected SparkleListenerBase listener;
-        protected SyncStatus status;
-        protected bool is_buffering  = false;
-        protected bool server_online = true;
+        private bool is_buffering  = false;
+        private bool server_online = true;
 
         public readonly string LocalPath;
         public readonly string Name;
@@ -68,6 +67,7 @@ namespace SparkleLib {
         public abstract bool SyncDown ();
         public abstract double CalculateSize (DirectoryInfo parent);
         public abstract bool HasUnsyncedChanges { get; set; }
+        public abstract bool HasRemoteChanges { get; }
         public abstract List<string> ExcludePaths { get; }
 
         public abstract double Size { get; }
@@ -121,7 +121,7 @@ namespace SparkleLib {
                 if (time_to_poll) {
                     this.last_poll = DateTime.Now;
 
-                    if (CheckForRemoteChanges ())
+                    if (HasRemoteChanges)
                         SyncDownBase ();
                 }
 
@@ -191,6 +191,7 @@ namespace SparkleLib {
 
         public string Domain {
             get {
+                // TODO: use Uri class
                 Regex regex = new Regex (@"(@|://)([a-z0-9\.-]+)(/|:)");
                 Match match = regex.Match (SparkleConfig.DefaultConfig.GetUrlForFolder (Name));
 
@@ -208,12 +209,6 @@ namespace SparkleLib {
 
             if (ConflictResolved != null)
                 ConflictResolved ();
-        }
-
-
-        public virtual bool CheckForRemoteChanges () // TODO: HasRemoteChanges { get; }
-        {
-            return true;
         }
 
 
@@ -270,7 +265,7 @@ namespace SparkleLib {
                 this.poll_interval = this.long_interval;
 
                 new Thread (new ThreadStart (delegate {
-                    if (!IsSyncing && CheckForRemoteChanges ())
+                    if (!IsSyncing && HasRemoteChanges)
                         SyncDownBase ();
                 })).Start ();
             }
@@ -283,7 +278,7 @@ namespace SparkleLib {
                 if (!IsSyncing) {
 
                     // Check for changes manually one more time
-                    if (CheckForRemoteChanges ())
+                    if (HasRemoteChanges)
                         SyncDownBase ();
 
                     // Push changes that were made since the last disconnect
@@ -336,16 +331,16 @@ namespace SparkleLib {
         {
             lock (this.change_lock) {
                 if (this.has_changed) {
-                    if (this.sizebuffer.Count >= 4)
-                        this.sizebuffer.RemoveAt (0);
+                    if (this.size_buffer.Count >= 4)
+                        this.size_buffer.RemoveAt (0);
 
                     DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
-                     this.sizebuffer.Add (CalculateSize (dir_info));
+                     this.size_buffer.Add (CalculateSize (dir_info));
 
-                    if (this.sizebuffer.Count >= 4 &&
-                        this.sizebuffer [0].Equals (this.sizebuffer [1]) &&
-                        this.sizebuffer [1].Equals (this.sizebuffer [2]) &&
-                        this.sizebuffer [2].Equals (this.sizebuffer [3])) {
+                    if (this.size_buffer.Count >= 4 &&
+                        this.size_buffer [0].Equals (this.size_buffer [1]) &&
+                        this.size_buffer [1].Equals (this.size_buffer [2]) &&
+                        this.size_buffer [2].Equals (this.size_buffer [3])) {
 
                         SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled.");
                         this.is_buffering = false;

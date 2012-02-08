@@ -40,9 +40,6 @@ namespace SparkleShare {
         public double ProgressPercentage = 0.0;
         public string ProgressSpeed      = "";
 
-        public event OnQuitWhileSyncingHandler OnQuitWhileSyncing;
-        public delegate void OnQuitWhileSyncingHandler ();
-
         public event FolderFetchedEventHandler FolderFetched;
         public delegate void FolderFetchedEventHandler (string [] warnings);
         
@@ -783,13 +780,6 @@ namespace SparkleShare {
         }
 
 
-        public bool BackendIsPresent {
-            get {
-                return SparkleBackend.DefaultBackend.IsPresent;
-            }
-        }
-
-
         // Looks up the user's name from the global configuration
         public string UserName
         {
@@ -1116,9 +1106,6 @@ namespace SparkleShare {
                     repo.Status == SyncStatus.SyncDown ||
                     repo.IsBuffering) {
 
-                    if (OnQuitWhileSyncing != null)
-                        OnQuitWhileSyncing ();
-                    
                     return;
                 }
             }

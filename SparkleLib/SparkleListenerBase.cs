@@ -16,75 +16,10 @@
 
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Timers;
-using System.Linq;
 
 namespace SparkleLib {
-
-    public class SparkleAnnouncement {
-
-        public readonly string FolderIdentifier;
-        public readonly string Message;
-
-
-        public SparkleAnnouncement (string folder_identifier, string message)
-        {
-            FolderIdentifier = folder_identifier;
-            Message          = message;
-        }
-    }
-
-
-    public static class SparkleListenerFactory {
-
-        private static List<SparkleListenerBase> listeners = new List<SparkleListenerBase> ();
-
-        public static SparkleListenerBase CreateListener (string folder_name, string folder_identifier)
-        {
-            string uri = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (
-                folder_name, "announcements_url");
-
-            if (uri == null) {
-                // This is SparkleShare's centralized notification service.
-                // Don't worry, we only use this server as a backup if you
-                // don't have your own. All data needed to connect is hashed and
-                // we don't store any personal information ever
-
-                uri = "tcp://notifications.sparkleshare.org:1986";
-            }
-
-            Uri announce_uri = new Uri (uri);
-
-            // We use only one listener per server to keep
-            // the number of connections as low as possible
-            foreach (SparkleListenerBase listener in listeners) {
-                if (listener.Server.Equals (announce_uri)) {
-                    SparkleHelpers.DebugInfo ("ListenerFactory",
-                        "Refered to existing listener for " + announce_uri);
-
-                    listener.AlsoListenToBase (folder_identifier);
-                    return (SparkleListenerBase) listener;
-                }
-            }
-
-            // Create a new listener with the appropriate
-            // type if one doesn't exist yet for that server
-            switch (announce_uri.Scheme) {
-            case "tcp":
-                listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
-                break;
-            default:
-                listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
-                break;
-            }
-
-            SparkleHelpers.DebugInfo ("ListenerFactory", "Issued new listener for " + announce_uri);
-            return (SparkleListenerBase) listeners [listeners.Count - 1];
-        }
-    }
-
 
     // A persistent connection to the server that
     // listens for change notifications
@@ -170,6 +105,7 @@ namespace SparkleLib {
         }
 
 
+        // TODO: rename override method instead?
         public void AlsoListenToBase (string channel)
         {
             if (!this.channels.Contains (channel) && IsConnected) {
@@ -210,9 +146,9 @@ namespace SparkleLib {
         }
 
 
-        public void OnDisconnected ()
+        public void OnDisconnected (string message)
         {
-            SparkleHelpers.DebugInfo ("Listener", "Signal of " + Server + " lost");
+            SparkleHelpers.DebugInfo ("Listener", "Disconnected from " + Server + ": " + message);
 
             if (Disconnected != null)
                 Disconnected ();
@@ -294,4 +230,3 @@ namespace SparkleLib {
         }
     }
 }
-
