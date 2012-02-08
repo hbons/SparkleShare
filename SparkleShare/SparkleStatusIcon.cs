@@ -351,7 +351,7 @@ namespace SparkleShare {
 
         public void UpdateStateText ()
         {
-            ((this.MenuMenu.Children [0] as MenuItem).Child as Label).Text = this.state_text;
+            ((this.menu.Children [0] as MenuItem).Child as Label).Text = this.state_text;
             this.menu.ShowAll ();
         }
 
