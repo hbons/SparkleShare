@@ -36,7 +36,10 @@ namespace SparkleShare {
 
         public string ImagePath {
             get {
-                return System.IO.Path.Combine (this.plugin_directory, GetValue ("info", "icon"));
+                return System.IO.Path.Combine (
+                    this.plugin_directory,
+                    GetValue ("info", "icon")
+                );
             }
         }
 
@@ -83,7 +86,8 @@ namespace SparkleShare {
 
         private string GetValue (string a, string b)
         {
-            XmlNode node = this.xml.SelectSingleNode ("/sparkleshare/plugin/" + a + "/" + b + "/text()");
+            XmlNode node = this.xml.SelectSingleNode (
+                "/sparkleshare/plugin/" + a + "/" + b + "/text()");
 
             if (node != null)
                 return node.Value;
