@@ -25,10 +25,11 @@ namespace SparkleLib {
     public class SparkleListenerTcp : SparkleListenerBase {
 
         private Socket socket;
-        private Object socket_lock = new Object ();
         private Thread thread;
-        private bool is_connected  = false;
-        private bool is_connecting = false;
+        private Object socket_lock  = new Object ();
+        private bool is_connected   = false;
+        private bool is_connecting  = false;
+        private int receive_timeout = 180 * 1000;
 
 
         public SparkleListenerTcp (Uri server, string folder_identifier) :
@@ -56,8 +57,6 @@ namespace SparkleLib {
         // Starts a new thread and listens to the channel
         public override void Connect ()
         {
-            SparkleHelpers.DebugInfo ("ListenerTcp", "Connecting to " + Server.Host);
-
             this.is_connecting = true;
 
             this.thread = new Thread (
@@ -72,8 +71,8 @@ namespace SparkleLib {
                             this.socket = new Socket (AddressFamily.InterNetwork,
                                 SocketType.Stream, ProtocolType.Tcp) {
 
-                                ReceiveTimeout = 60 * 1000,
-                                SendTimeout    = 3 * 1000
+                                ReceiveTimeout = this.receive_timeout,
+                                SendTimeout    = 10 * 1000
                             };
 
                             // Try to connect to the server
@@ -87,7 +86,7 @@ namespace SparkleLib {
                             // Subscribe to channels of interest to us
                             foreach (string channel in base.channels) {
                                 SparkleHelpers.DebugInfo ("ListenerTcp",
-                                    "Subscribing to channel " + channel);
+                                    "Subscribing to channel " + channel + " on " + Server);
 
                                 byte [] subscribe_bytes =
                                     Encoding.UTF8.GetBytes ("subscribe " + channel + "\n");
@@ -116,40 +115,34 @@ namespace SparkleLib {
 
                         // We've timed out, let's ping the server to
                         // see if the connection is still up
-                        } catch (SocketException e) {
-
-                            Console.WriteLine ("1st catch block");
-
+                        } catch (SocketException) {
                             try {
-                                byte [] ping_bytes =
-                                    Encoding.UTF8.GetBytes ("ping");
+                                byte [] ping_bytes      = Encoding.UTF8.GetBytes ("ping\n");
+                                byte [] ping_back_bytes = new byte [4096];
 
-                                Console.WriteLine ("1");
+                                SparkleHelpers.DebugInfo ("ListenerTcp", "Pinging " + Server);
 
-                                this.socket.Send (ping_bytes);
-                                this.socket.ReceiveTimeout = 3 * 1000;
+                                lock (this.socket_lock)
+                                    this.socket.Send (ping_bytes);
 
-                                Console.WriteLine ("2");
+                                this.socket.ReceiveTimeout = 10 * 1000;
 
                                 // 10057 means "Socket is not connected"
-                                if (this.socket.Receive (bytes) < 1) {
-                                    Console.WriteLine ("3");
+                                if (this.socket.Receive (ping_back_bytes) < 1)
                                     throw new SocketException (10057);
-                                }
 
-                                Console.WriteLine ("4");
+                                SparkleHelpers.DebugInfo ("ListenerTcp", "Received pong from " + Server);
+                                this.socket.ReceiveTimeout = this.receive_timeout;
 
                             // The ping failed: disconnect completely
                             } catch (SocketException) {
                                 this.is_connected  = false;
                                 this.is_connecting = false;
 
-                                this.socket.ReceiveTimeout = 60 * 1000;
+                                this.socket.ReceiveTimeout = this.receive_timeout;
 
-                                Console.WriteLine ("2nd catch block");
-
-                                OnDisconnected (e.Message);
-                                break;
+                                OnDisconnected ("Ping timeout");
+                                return;
                             }
                         }
 
