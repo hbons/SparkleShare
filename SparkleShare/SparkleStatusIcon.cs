@@ -107,7 +107,7 @@ namespace SparkleShare {
                         this.status_icon.Pixbuf = this.animation_frames [0];
                         #endif
 
-                        Updatethis.state_text ();
+                        UpdateStateText ();
                         CreateMenu ();
 
                         break;
@@ -118,7 +118,7 @@ namespace SparkleShare {
                                     Controller.ProgressPercentage + "%  " +
                                     Controller.ProgressSpeed;
 
-                        Updatethis.state_text ();
+                        UpdateStateText ();
 
                         if (!this.animation.Enabled)
                             this.animation.Start ();
@@ -130,7 +130,7 @@ namespace SparkleShare {
                         this.animation.Stop ();
 
                         this.state_text = _("Not everything is synced");
-                        Updatethis.state_text ();
+                        UpdateStateText ();
                         CreateMenu ();
 
                         #if HAVE_APP_INDICATOR
