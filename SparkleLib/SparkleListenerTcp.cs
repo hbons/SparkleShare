@@ -104,8 +104,9 @@ namespace SparkleLib {
                     }
 
 
-                    byte [] bytes  = new byte [4096];
-                    int bytes_read = 0;
+                    byte [] bytes      = new byte [4096];
+                    int bytes_read     = 0;
+                    DateTime last_ping = DateTime.Now;
 
                     // Wait for messages
                     while (this.is_connected) {
@@ -117,32 +118,51 @@ namespace SparkleLib {
                         // see if the connection is still up
                         } catch (SocketException) {
                             try {
-                                byte [] ping_bytes      = Encoding.UTF8.GetBytes ("ping\n");
-                                byte [] ping_back_bytes = new byte [4096];
+                                // Check when the last ping occured. If it's
+                                // significantly longer than our regular interval the
+                                // system likely woke up from sleep and we want to
+                                // simulate a disconnect
+                                int sleepiness = DateTime.Compare (
+                                    last_ping.AddMilliseconds (this.receive_timeout * 1.25),
+                                    DateTime.Now
+                                );
+
+                                if (sleepiness <= 0) {
+                                    // 10057 means "Socket is not connected"
+                                    Console.WriteLine ("SLEEP OCCURED");
+                                    throw new SocketException (10057);
+                                }
+
 
                                 SparkleHelpers.DebugInfo ("ListenerTcp", "Pinging " + Server);
+
+                                byte [] ping_bytes = Encoding.UTF8.GetBytes ("ping\n");
+                                byte [] pong_bytes = new byte [4096];
 
                                 lock (this.socket_lock)
                                     this.socket.Send (ping_bytes);
 
+
                                 this.socket.ReceiveTimeout = 10 * 1000;
 
-                                // 10057 means "Socket is not connected"
-                                if (this.socket.Receive (ping_back_bytes) < 1)
+                                if (this.socket.Receive (pong_bytes) < 1)
+                                    // 10057 means "Socket is not connected"
                                     throw new SocketException (10057);
 
                                 SparkleHelpers.DebugInfo ("ListenerTcp", "Received pong from " + Server);
+
+
                                 this.socket.ReceiveTimeout = this.receive_timeout;
+                                last_ping                  = DateTime.Now;
 
                             // The ping failed: disconnect completely
                             } catch (SocketException) {
-                                this.is_connected  = false;
-                                this.is_connecting = false;
-
+                                this.is_connected          = false;
+                                this.is_connecting         = false;
                                 this.socket.ReceiveTimeout = this.receive_timeout;
 
                                 OnDisconnected ("Ping timeout");
-                                return;
+                                break;
                             }
                         }
 
