@@ -61,7 +61,7 @@ namespace SparkleLib {
         public override List<string> ExcludePaths {
             get {
                 List<string> rules = new List<string> ();
-                rules.Add (Path.DirectorySeparatorChar + ".git");
+                rules.Add (".git");
 
                 return rules;
             }
@@ -96,12 +96,12 @@ namespace SparkleLib {
         }
 
 
-        private void CalculateSizes ()
+        private void UpdateSizes ()
         {
-            double size = CalculateSize (
+            double size = CalculateSizes (
                 new DirectoryInfo (LocalPath));
 
-            double history_size = CalculateSize (
+            double history_size = CalculateSizes (
                 new DirectoryInfo (Path.Combine (LocalPath, ".git")));
 
             string size_file_path = new string [] {LocalPath, ".git", "repo_size"}.Combine ();
@@ -194,7 +194,7 @@ namespace SparkleLib {
 
         public override bool SyncUp ()
         {
-            if (AnyDifferences) {
+            if (HasLocalChanges) {
                 Add ();
 
                 string message = FormatCommitMessage ();
@@ -250,7 +250,7 @@ namespace SparkleLib {
 
             git.WaitForExit ();
 
-            CalculateSizes ();
+            UpdateSizes ();
 
             if (git.ExitCode == 0)
                 return true;
@@ -307,7 +307,7 @@ namespace SparkleLib {
 
             git.WaitForExit ();
 
-            CalculateSizes ();
+            UpdateSizes ();
 
             if (git.ExitCode == 0) {
                 Rebase ();
@@ -319,7 +319,7 @@ namespace SparkleLib {
         }
 
 
-        public override bool AnyDifferences {
+        public override bool HasLocalChanges {
             get {
                 PrepareDirectories (LocalPath);
 
@@ -414,7 +414,7 @@ namespace SparkleLib {
         {
             DisableWatching ();
 
-            if (AnyDifferences) {
+            if (HasLocalChanges) {
                 Add ();
 
                 string commit_message = FormatCommitMessage ();
@@ -429,7 +429,7 @@ namespace SparkleLib {
             if (git.ExitCode != 0) {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected. Trying to get out...");
 
-                while (AnyDifferences)
+                while (HasLocalChanges)
                     ResolveConflict ();
 
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
@@ -809,34 +809,15 @@ namespace SparkleLib {
         }
 
 
-        public override bool UsesNotificationCenter
-        {
-            get {
-                string file_path = SparkleHelpers.CombineMore (LocalPath, ".git", "disable_notification_center");
-                return !File.Exists (file_path);
-            }
-        }
-
-
-        public override void CreateInitialChangeSet ()
-        {
-            base.CreateInitialChangeSet ();
-            SyncUp ();
-        }
-
-
         // Recursively gets a folder's size in bytes
-        public override double CalculateSize (DirectoryInfo parent)
+        private double CalculateSizes (DirectoryInfo parent)
         {
             if (!Directory.Exists (parent.ToString ()))
                 return 0;
 
             double size = 0;
 
-            // Ignore the temporary 'rebase-apply' and '.tmp' directories. This prevents potential
-            // crashes when files are being queried whilst the files have already been deleted.
-            if (parent.Name.Equals ("rebase-apply") ||
-                parent.Name.Equals (".tmp"))
+            if (parent.Name.Equals ("rebase-apply"))
                 return 0;
 
             try {
@@ -848,7 +829,7 @@ namespace SparkleLib {
                 }
 
                 foreach (DirectoryInfo directory in parent.GetDirectories ())
-                    size += CalculateSize (directory);
+                    size += CalculateSizes (directory);
 
             } catch (Exception) {
                 return 0;
