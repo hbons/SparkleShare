@@ -16,56 +16,79 @@
 
 
 using System;
-using System.IO;
 using System.Xml;
 
 namespace SparkleShare {
 
     public class SparklePlugin {
 
-        public string Name;
-        public string Description;
-        public string ImagePath;
-        public string Backend;
+        public string Name {
+            get {
+                return GetValue ("info", "name");
+            }
+        }
 
-        public string Address;
-        public string AddressExample;
-        public string Path;
-        public string PathExample;
+        public string Description {
+            get {
+                return GetValue ("info", "description");
+            }
+        }
 
+        public string ImagePath {
+            get {
+                return System.IO.Path.Combine (this.plugin_directory, GetValue ("info", "icon"));
+            }
+        }
+
+        public string Backend {
+            get {
+                return GetValue ("info", "backend");
+            }
+        }
+
+        public string Address {
+            get {
+                return GetValue ("address", "value");
+            }
+        }
+
+        public string AddressExample {
+            get {
+                return GetValue ("address", "example");
+            }
+        }
+
+        public string Path {
+            get {
+                return GetValue ("path", "value");
+            }
+        }
+
+        public string PathExample {
+            get {
+                return GetValue ("path", "example");
+            }
+        }
+
+
+        private XmlDocument xml = new XmlDocument ();
+        private string plugin_directory;
 
         public SparklePlugin (string plugin_path)
         {
-            string plugin_directory = System.IO.Path.GetDirectoryName (plugin_path);
+            this.plugin_directory = System.IO.Path.GetDirectoryName (plugin_path);
+            this.xml.Load (plugin_path);
+        }
 
-            XmlDocument xml = new XmlDocument ();
-            xml.Load (plugin_path);
 
-            XmlNode node;
+        private string GetValue (string a, string b)
+        {
+            XmlNode node = this.xml.SelectSingleNode ("/sparkleshare/plugin/" + a + "/" + b + "/text()");
 
-            node = xml.SelectSingleNode ("/sparkleshare/plugin/info/name/text()");
-            if (node != null) { Name = node.Value; }
-
-            node = xml.SelectSingleNode ("/sparkleshare/plugin/info/description/text()");
-            if (node != null) { Description = node.Value; }
-
-            node = xml.SelectSingleNode ("/sparkleshare/plugin/info/icon/text()");
-            if (node != null) { ImagePath = System.IO.Path.Combine (plugin_directory, node.Value); }
-
-            node = xml.SelectSingleNode ("/sparkleshare/plugin/info/backend/text()");
-            if (node != null) { Backend = node.Value; }
-
-            node = xml.SelectSingleNode ("/sparkleshare/plugin/address/value/text()");
-            if (node != null) { Address = node.Value; }
-
-            node = xml.SelectSingleNode ("/sparkleshare/plugin/address/example/text()");
-            if (node != null) { AddressExample = node.Value; }
-
-            node = xml.SelectSingleNode ("/sparkleshare/plugin/path/value/text()");
-            if (node != null) { Path = node.Value; }
-
-            node = xml.SelectSingleNode ("/sparkleshare/plugin/path/example/text()");
-            if (node != null) { PathExample = node.Value; }
+            if (node != null)
+                return node.Value;
+            else
+                return null;
         }
     }
 }
