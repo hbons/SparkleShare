@@ -152,7 +152,7 @@ namespace SparkleShare {
         // animation frames.
         private void CreateAnimationFrames ()
         {
-            Gdk.Pixbuf [] this.animation_frames = new Gdk.Pixbuf [5];
+            this.animation_frames    = new Gdk.Pixbuf [5];
             Gdk.Pixbuf frames_pixbuf = SparkleUIHelpers.GetIcon ("process-syncing-sparkleshare", 24);
             
             for (int i = 0; i < this.animation_frames.Length; i++)
