@@ -129,6 +129,7 @@ namespace SparkleLib {
 
                                 if (sleepiness <= 0) {
                                     // 10057 means "Socket is not connected"
+                                    // TODO: remove debug output
                                     Console.WriteLine ("SLEEP OCCURED");
                                     throw new SocketException (10057);
                                 }
