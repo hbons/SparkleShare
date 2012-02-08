@@ -105,6 +105,7 @@ namespace SparkleLib {
         }
 
 
+        // TODO: rename override method instead?
         public void AlsoListenToBase (string channel)
         {
             if (!this.channels.Contains (channel) && IsConnected) {
