@@ -54,7 +54,7 @@ namespace SparkleShare {
 
 
             // Let's use the bundled git first
-            SparkleBackend.DefaultBackend.Path =
+            SparkleGit.Path =
                 Path.Combine (NSBundle.MainBundle.ResourcePath,
                     "git", "libexec", "git-core", "git");
 

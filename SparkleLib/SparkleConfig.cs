@@ -29,6 +29,7 @@ namespace SparkleLib {
             Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
                 "sparkleshare");
 
+        // TODO: declare elsewhere
         public static SparkleConfig DefaultConfig = new SparkleConfig (default_config_path, "config.xml");
         public static bool DebugMode = true;
 
