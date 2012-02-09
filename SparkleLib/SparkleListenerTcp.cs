@@ -29,7 +29,7 @@ namespace SparkleLib {
         private Object socket_lock  = new Object ();
         private bool is_connected   = false;
         private bool is_connecting  = false;
-        private int receive_timeout = 180 * 1000;
+        private DateTime last_ping  = DateTime.Now;
 
 
         public SparkleListenerTcp (Uri server, string folder_identifier) :
@@ -70,9 +70,8 @@ namespace SparkleLib {
                         lock (this.socket_lock) {
                             this.socket = new Socket (AddressFamily.InterNetwork,
                                 SocketType.Stream, ProtocolType.Tcp) {
-
-                                ReceiveTimeout = this.receive_timeout,
-                                SendTimeout    = 10 * 1000
+                                ReceiveTimeout = 5 * 1000,
+                                SendTimeout    = 5 * 1000
                             };
 
                             // Try to connect to the server
@@ -99,6 +98,11 @@ namespace SparkleLib {
                         this.is_connected  = false;
                         this.is_connecting = false;
 
+                        if (this.socket.Connected)
+                            this.socket.Shutdown (SocketShutdown.Both);
+
+                        this.socket.Dispose ();
+
                         OnDisconnected (e.Message);
                         return;
                     }
@@ -106,81 +110,94 @@ namespace SparkleLib {
 
                     byte [] bytes      = new byte [4096];
                     int bytes_read     = 0;
-                    DateTime last_ping = DateTime.Now;
 
                     // Wait for messages
                     while (this.is_connected) {
-                        try {
-                            // This blocks the thread
-                            bytes_read = this.socket.Receive (bytes);
 
-                        // We've timed out, let's ping the server to
-                        // see if the connection is still up
-                        } catch (SocketException) {
+                        // This blocks the thread
+                        int i = 0;
+                        while (this.socket.Available < 1) {
+                            Thread.Sleep (1000);
+                            Console.WriteLine ("Waiting for available bytes... " + i);
+                            i++;
+
                             try {
-                                // Check when the last ping occured. If it's
-                                // significantly longer than our regular interval the
-                                // system likely woke up from sleep and we want to
-                                // simulate a disconnect
-                                int sleepiness = DateTime.Compare (
-                                    last_ping.AddMilliseconds (this.receive_timeout * 1.25),
-                                    DateTime.Now
-                                );
+                                // We've timed out, let's ping the server to
+                                // see if the connection is still up
+                                if (i == 60) {
+                                    SparkleHelpers.DebugInfo ("ListenerTcp",
+                                        "Pinging " + Server);
 
-                                if (sleepiness <= 0) {
-                                    // 10057 means "Socket is not connected"
-                                    // TODO: remove debug output
-                                    Console.WriteLine ("SLEEP OCCURED");
-                                    throw new SocketException (10057);
+                                    byte [] ping_bytes = Encoding.UTF8.GetBytes ("ping\n");
+                                    byte [] pong_bytes = new byte [4096];
+
+                                    lock (this.socket_lock)
+                                        this.socket.Send (ping_bytes);
+
+                                    if (this.socket.Receive (pong_bytes) < 1)
+                                        // 10057 means "Socket is not connected"
+                                        throw new SocketException (10057);
+
+                                    SparkleHelpers.DebugInfo ("ListenerTcp",
+                                        "Received pong from " + Server);
+
+                                    i = 0;
+                                    this.last_ping = DateTime.Now;
+
+                                } else {
+                                    // Check when the last ping occured. If it's
+                                    // significantly longer than our regular interval the
+                                    // system likely woke up from sleep and we want to
+                                    // simulate a disconnect
+                                    int sleepiness = DateTime.Compare (
+                                        this.last_ping.AddMilliseconds (60 * 1000 * 1.2),
+                                        DateTime.Now
+                                    );
+    
+                                    if (sleepiness <= 0) {
+                                        SparkleHelpers.DebugInfo ("ListenerTcp",
+                                            "System woke up from sleep");
+
+                                        // 10057 means "Socket is not connected"
+                                        throw new SocketException (10057);
+                                    }
                                 }
-
-
-                                SparkleHelpers.DebugInfo ("ListenerTcp", "Pinging " + Server);
-
-                                byte [] ping_bytes = Encoding.UTF8.GetBytes ("ping\n");
-                                byte [] pong_bytes = new byte [4096];
-
-                                lock (this.socket_lock)
-                                    this.socket.Send (ping_bytes);
-
-
-                                this.socket.ReceiveTimeout = 10 * 1000;
-
-                                if (this.socket.Receive (pong_bytes) < 1)
-                                    // 10057 means "Socket is not connected"
-                                    throw new SocketException (10057);
-
-                                SparkleHelpers.DebugInfo ("ListenerTcp", "Received pong from " + Server);
-
-
-                                this.socket.ReceiveTimeout = this.receive_timeout;
-                                last_ping                  = DateTime.Now;
 
                             // The ping failed: disconnect completely
                             } catch (SocketException) {
                                 this.is_connected          = false;
                                 this.is_connecting         = false;
-                                this.socket.ReceiveTimeout = this.receive_timeout;
+
+                                if (this.socket.Connected)
+                                    this.socket.Shutdown (SocketShutdown.Both);
+
+                                this.socket.Dispose ();
 
                                 OnDisconnected ("Ping timeout");
-                                break;
+                                return;
                             }
                         }
+
+
+                        if (this.socket.Available > 0)
+                            lock (this.socket_lock)
+                                bytes_read = this.socket.Receive (bytes);
+
 
                         // Parse the received message
                         if (bytes_read > 0) {
                             string received = Encoding.UTF8.GetString (bytes);
                             string line     = received.Substring (0, received.IndexOf ("\n"));
-
+    
                             if (!line.Contains ("!"))
                                 continue;
-
+    
                             string folder_identifier = line.Substring (0, line.IndexOf ("!"));
                             string message           = CleanMessage (line.Substring (line.IndexOf ("!") + 1));
 
                             if (!folder_identifier.Equals ("debug") &&
                                 !String.IsNullOrEmpty (message)) {
-
+    
                                 // We have a message!
                                 OnAnnouncement (new SparkleAnnouncement (folder_identifier, message));
                             }
@@ -201,6 +218,8 @@ namespace SparkleLib {
                 lock (this.socket_lock)
                     this.socket.Send (Encoding.UTF8.GetBytes (to_send));
 
+                this.last_ping = DateTime.Now;
+
             } catch (SocketException e) {
                 this.is_connected  = false;
                 this.is_connecting = false;
@@ -218,6 +237,8 @@ namespace SparkleLib {
             try {
                 lock (this.socket_lock)
                     this.socket.Send (Encoding.UTF8.GetBytes (to_send));
+
+                this.last_ping = DateTime.Now;
 
             } catch (SocketException e) {
                 this.is_connected  = false;
