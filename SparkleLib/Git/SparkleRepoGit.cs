@@ -244,7 +244,7 @@ namespace SparkleLib {
 
                 if (number >= percentage) {
                     percentage = number;
-                    base.OnSyncProgressChanged (percentage, speed);
+                    base.OnProgressChanged (percentage, speed);
                 }
             }
 
@@ -301,7 +301,7 @@ namespace SparkleLib {
 
                 if (number >= percentage) {
                     percentage = number;
-                    base.OnSyncProgressChanged (percentage, speed);
+                    base.OnProgressChanged (percentage, speed);
                 }
             }
 

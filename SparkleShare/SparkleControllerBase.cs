@@ -615,7 +615,7 @@ namespace SparkleShare {
                 }
             };
 
-            repo.SyncProgressChanged += delegate (double percentage, string speed) {
+            repo.ProgressChanged += delegate (double percentage, string speed) {
                 ProgressPercentage = percentage;
                 ProgressSpeed      = speed;
 
