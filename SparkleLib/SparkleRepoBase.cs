@@ -38,45 +38,28 @@ namespace SparkleLib {
 
         private TimeSpan short_interval = new TimeSpan (0, 0, 3, 0);
         private TimeSpan long_interval  = new TimeSpan (0, 0, 10, 0);
-
+        private TimeSpan poll_interval;
         private SparkleWatcher watcher;
         private SparkleListenerBase listener;
-        private TimeSpan poll_interval;
         private System.Timers.Timer local_timer  = new System.Timers.Timer () { Interval = 0.25 * 1000 };
         private System.Timers.Timer remote_timer = new System.Timers.Timer () { Interval = 10 * 1000 };
         private DateTime last_poll               = DateTime.Now;
         private List<double> size_buffer         = new List<double> ();
-        private bool has_changed                 = false;
         private Object change_lock               = new Object ();
         private Object watch_lock                = new Object ();
         private double progress_percentage       = 0.0;
         private string progress_speed            = "";
+        private bool has_changed                 = false;
+        private bool is_buffering                = false;
+        private bool server_online               = true;
         private SyncStatus status;
 
-        private bool is_buffering  = false;
-        private bool server_online = true;
-
-        public readonly string LocalPath;
-        public readonly string Name;
-        public readonly Uri Url;
-
-        public abstract bool HasLocalChanges { get; }
-        public abstract string Identifier { get; }
-        public abstract string CurrentRevision { get; }
-        public abstract bool SyncUp ();
-        public abstract bool SyncDown ();
-        public abstract bool HasUnsyncedChanges { get; set; }
-        public abstract bool HasRemoteChanges { get; }
-        public abstract List<string> ExcludePaths { get; }
-
-        public abstract double Size { get; }
-        public abstract double HistorySize { get; }
 
         public delegate void SyncStatusChangedEventHandler (SyncStatus new_status);
         public event SyncStatusChangedEventHandler SyncStatusChanged;
 
-        public delegate void SyncProgressChangedEventHandler (double percentage, string speed);
-        public event SyncProgressChangedEventHandler SyncProgressChanged;
+        public delegate void ProgressChangedEventHandler (double percentage, string speed);
+        public event ProgressChangedEventHandler SyncProgressChanged;
 
         public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set);
         public event NewChangeSetEventHandler NewChangeSet;
@@ -91,12 +74,28 @@ namespace SparkleLib {
         public event ChangesDetectedEventHandler ChangesDetected;
 
 
+        public readonly string LocalPath;
+        public readonly string Name;
+        public readonly Uri Url;
+
+        public abstract string Identifier { get; }
+        public abstract string CurrentRevision { get; }
+        public abstract double Size { get; }
+        public abstract double HistorySize { get; }
+        public abstract List<string> ExcludePaths { get; }
+        public abstract bool HasUnsyncedChanges { get; set; }
+        public abstract bool HasLocalChanges { get; }
+        public abstract bool HasRemoteChanges { get; }
+        public abstract bool SyncUp ();
+        public abstract bool SyncDown ();
+        public abstract List<SparkleChangeSet> GetChangeSets (int count);
+
+
         public bool ServerOnline {
             get {
                 return this.server_online;
             }
         }
-
 
         public SyncStatus Status {
             get {
@@ -104,13 +103,11 @@ namespace SparkleLib {
             }
         }
 
-
         public double ProgressPercentage {
             get {
                 return this.progress_percentage;
             }
         }
-
 
         public string ProgressSpeed {
             get {
@@ -118,13 +115,11 @@ namespace SparkleLib {
             }
         }
 
-
         public virtual string [] UnsyncedFilePaths {
             get {
                 return new string [0];
             }
         }
-
 
         public bool IsSyncing {
             get {
@@ -133,7 +128,6 @@ namespace SparkleLib {
                         this.is_buffering);
             }
         }
-
 
         public bool IsBuffering {
             get {
@@ -210,11 +204,6 @@ namespace SparkleLib {
 
             if (ConflictResolved != null)
                 ConflictResolved ();
-        }
-
-
-        public virtual List<SparkleChangeSet> GetChangeSets (int count) {
-            return null;
         }
 
 
@@ -585,7 +574,7 @@ namespace SparkleLib {
         private DateTime progress_last_change     = DateTime.Now;
         private TimeSpan progress_change_interval = new TimeSpan (0, 0, 0, 1);
 
-        protected void OnSyncProgressChanged (double progress_percentage, string progress_speed)
+        protected void OnProgressChanged (double progress_percentage, string progress_speed)
         {
             if (DateTime.Compare (this.progress_last_change,
                     DateTime.Now.Subtract (this.progress_change_interval)) < 0) {
@@ -614,8 +603,7 @@ namespace SparkleLib {
             writer.WriteLine ("Congratulations, you've successfully created a SparkleShare repository!");
             writer.WriteLine ("");
             writer.WriteLine ("Any files you add or change in this folder will be automatically synced to ");
-            writer.WriteLine (SparkleConfig.DefaultConfig.GetUrlForFolder (Name) + " and everyone connected to it.");
-            // TODO: Url property? ^
+            writer.WriteLine (Url + " and everyone connected to it.");
 
             writer.WriteLine ("");
             writer.WriteLine ("SparkleShare is a Free and Open Source software program that helps people ");
@@ -649,8 +637,6 @@ namespace SparkleLib {
 
             double size = 0;
 
-            // Ignore the temporary 'rebase-apply' and '.tmp' directories. This prevents potential
-            // crashes when files are being queried whilst the files have already been deleted.
             if (ExcludePaths.Contains (parent.Name))
                 return 0;
 
