@@ -59,7 +59,7 @@ namespace SparkleLib {
         public event SyncStatusChangedEventHandler SyncStatusChanged;
 
         public delegate void ProgressChangedEventHandler (double percentage, string speed);
-        public event ProgressChangedEventHandler SyncProgressChanged;
+        public event ProgressChangedEventHandler ProgressChanged;
 
         public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set);
         public event NewChangeSetEventHandler NewChangeSet;
@@ -579,7 +579,7 @@ namespace SparkleLib {
             if (DateTime.Compare (this.progress_last_change,
                     DateTime.Now.Subtract (this.progress_change_interval)) < 0) {
 
-                if (SyncProgressChanged != null) {
+                if (ProgressChanged != null) {
                     if (progress_percentage == 100.0)
                         progress_percentage = 99.0;
 
@@ -587,7 +587,7 @@ namespace SparkleLib {
                     this.progress_speed       = progress_speed;
                     this.progress_last_change = DateTime.Now;
 
-                    SyncProgressChanged (progress_percentage, progress_speed);
+                    ProgressChanged (progress_percentage, progress_speed);
                 }
             }
         }
