@@ -98,9 +98,6 @@ namespace SparkleLib {
                         this.is_connected  = false;
                         this.is_connecting = false;
 
-                        if (this.socket.Connected)
-                            this.socket.Shutdown (SocketShutdown.Both);
-
                         this.socket.Dispose ();
 
                         OnDisconnected (e.Message);
@@ -108,8 +105,9 @@ namespace SparkleLib {
                     }
 
 
-                    byte [] bytes      = new byte [4096];
-                    int bytes_read     = 0;
+                    byte [] bytes  = new byte [4096];
+                    int bytes_read = 0;
+                    this.last_ping = DateTime.Now;
 
                     // Wait for messages
                     while (this.is_connected) {
@@ -118,13 +116,12 @@ namespace SparkleLib {
                         int i = 0;
                         while (this.socket.Available < 1) {
                             Thread.Sleep (1000);
-                            Console.WriteLine ("Waiting for available bytes... " + i);
                             i++;
 
                             try {
                                 // We've timed out, let's ping the server to
                                 // see if the connection is still up
-                                if (i == 60) {
+                                if (i == 180) {
                                     SparkleHelpers.DebugInfo ("ListenerTcp",
                                         "Pinging " + Server);
 
@@ -150,7 +147,7 @@ namespace SparkleLib {
                                     // system likely woke up from sleep and we want to
                                     // simulate a disconnect
                                     int sleepiness = DateTime.Compare (
-                                        this.last_ping.AddMilliseconds (60 * 1000 * 1.2),
+                                        this.last_ping.AddMilliseconds (180 * 1000 * 1.2),
                                         DateTime.Now
                                     );
     
@@ -166,10 +163,7 @@ namespace SparkleLib {
                             // The ping failed: disconnect completely
                             } catch (SocketException) {
                                 this.is_connected          = false;
-                                this.is_connecting         = false;
-
-                                if (this.socket.Connected)
-                                    this.socket.Shutdown (SocketShutdown.Both);
+                                this.is_connecting         = false;;
 
                                 this.socket.Dispose ();
 
@@ -188,10 +182,10 @@ namespace SparkleLib {
                         if (bytes_read > 0) {
                             string received = Encoding.UTF8.GetString (bytes);
                             string line     = received.Substring (0, received.IndexOf ("\n"));
-    
+
                             if (!line.Contains ("!"))
                                 continue;
-    
+
                             string folder_identifier = line.Substring (0, line.IndexOf ("!"));
                             string message           = CleanMessage (line.Substring (line.IndexOf ("!") + 1));
 
