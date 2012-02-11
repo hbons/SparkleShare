@@ -352,7 +352,7 @@ namespace SparkleLib {
                     if (SyncStatusChanged != null)
                         SyncStatusChanged (SyncStatus.Idle);
 
-                    this.listener.AnnounceBase (new SparkleAnnouncement (Identifier, CurrentRevision));
+                    this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
 
                 } else {
                     SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Error");
@@ -367,7 +367,7 @@ namespace SparkleLib {
                         if (SyncStatusChanged != null)
                             SyncStatusChanged (SyncStatus.Idle);
 
-                        this.listener.AnnounceBase (new SparkleAnnouncement (Identifier, CurrentRevision));
+                        this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
 
                     } else {
                         this.server_online = false;
