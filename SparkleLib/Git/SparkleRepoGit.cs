@@ -655,7 +655,8 @@ namespace SparkleLib {
                             string to_file_path;
 
                             if (file_path.EndsWith (".empty"))
-                                file_path = file_path.Substring (0, file_path.Length - ".empty".Length);
+                                file_path = file_path.Substring (0,
+                                    file_path.Length - ".empty".Length);
 
                             if (change_type.Equals ("A") && !file_path.Contains (".notes")) {
                                 change_set.Added.Add (file_path);
@@ -670,6 +671,14 @@ namespace SparkleLib {
                                 int tab_pos  = entry_line.LastIndexOf ("\t");
                                 file_path    = entry_line.Substring (42, tab_pos - 42);
                                 to_file_path = entry_line.Substring (tab_pos + 1);
+
+                                if (file_path.EndsWith (".empty"))
+                                    file_path = file_path.Substring (0,
+                                        file_path.Length - ".empty".Length);
+
+                                if (to_file_path.EndsWith (".empty"))
+                                    to_file_path = to_file_path.Substring (0,
+                                        to_file_path.Length - ".empty".Length);
 
                                 change_set.MovedFrom.Add (file_path);
                                 change_set.MovedTo.Add (to_file_path);
