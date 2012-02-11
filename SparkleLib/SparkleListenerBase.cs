@@ -40,8 +40,8 @@ namespace SparkleLib {
         public abstract void Connect ();
         public abstract bool IsConnected { get; }
         public abstract bool IsConnecting { get; }
-        protected abstract void Announce (SparkleAnnouncement announcent);
-        protected abstract void AlsoListenTo (string folder_identifier);
+        protected abstract void AnnounceInternal (SparkleAnnouncement announcent);
+        protected abstract void AlsoListenToInternal (string folder_identifier);
 
 
         protected List<string> channels = new List<string> ();
@@ -78,7 +78,7 @@ namespace SparkleLib {
         }
 
 
-        public void AnnounceBase (SparkleAnnouncement announcement)
+        public void Announce (SparkleAnnouncement announcement)
         {
             if (!IsRecentAnnouncement (announcement)) {
                 if (IsConnected) {
@@ -86,7 +86,7 @@ namespace SparkleLib {
                         "Announcing message " + announcement.Message + " to " +
                         announcement.FolderIdentifier + " on " + Server);
 
-                    Announce (announcement);
+                    AnnounceInternal (announcement);
                     AddRecentAnnouncement (announcement);
 
                 } else {
@@ -105,15 +105,14 @@ namespace SparkleLib {
         }
 
 
-        // TODO: rename override method instead?
-        public void AlsoListenToBase (string channel)
+        public void AlsoListenTo (string channel)
         {
             if (!this.channels.Contains (channel) && IsConnected) {
                 SparkleHelpers.DebugInfo ("Listener",
                     "Subscribing to channel " + channel);
 
                 this.channels.Add (channel);
-                AlsoListenTo (channel);
+                AlsoListenToInternal (channel);
             }
         }
 
@@ -138,7 +137,7 @@ namespace SparkleLib {
 
                 foreach (KeyValuePair<string, SparkleAnnouncement> item in this.queue_up) {
                     SparkleAnnouncement announcement = item.Value;
-                    AnnounceBase (announcement);
+                    Announce (announcement);
                 }
 
                 this.queue_down.Clear ();

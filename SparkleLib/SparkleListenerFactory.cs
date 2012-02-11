@@ -64,7 +64,7 @@ namespace SparkleLib {
 
                     // We already seem to have a listener for this server,
                     // refer to the existing one instead
-                    listener.AlsoListenToBase (folder_identifier);
+                    listener.AlsoListenTo (folder_identifier);
                     return (SparkleListenerBase) listener;
                 }
             }
