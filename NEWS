@@ -1,4 +1,11 @@
-0.8.1 for Linux and Mac (Sun Jan 29):
+0.8.2 for Linux and Mac (Sat Feb 11 2012):
+
+        Hylke:
+        - Use the more reliable and less resource intensive FSEvents on Mac.
+	- Improvements to the reconnect mechanism of the notification system
+
+
+0.8.1 for Linux and Mac (Sun Jan 29 2012):
 
         Hylke:
         - Disable the Quit menu item when a sync is going on
@@ -9,7 +16,7 @@
         - Close event log on Cmd+W on Mac
 
 
-0.8.0 for Linux and Mac (Sun Jan 22):
+0.8.0 for Linux and Mac (Sun Jan 22 2012):
 
         Hylke:
         - Show syncing progress in the status icon
