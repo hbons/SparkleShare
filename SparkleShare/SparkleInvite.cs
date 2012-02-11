@@ -60,7 +60,37 @@ namespace SparkleShare {
 
         public SparkleInvite (string xml_file_path)
         {
-            // TODO
+            XmlDocument xml_document = new XmlDocument ();
+            XmlNode node;
+
+            string host = "", path = "", token = "";
+
+            try {
+                xml_document.Load (xml_file_path);
+
+                node = xml_document.SelectSingleNode ("/sparkleshare/invite/host/text()");
+                if (node != null) { host = node.Value; }
+
+                node = xml_document.SelectSingleNode ("/sparkleshare/invite/path/text()");
+                if (node != null) { path = node.Value; }
+
+                node = xml_document.SelectSingleNode ("/sparkleshare/invite/token/text()");
+                if (node != null) { token = node.Value; }
+
+            } catch (XmlException e) {
+                SparkleHelpers.DebugInfo ("Invite", "Invalid XML: " + e.Message);
+                return;
+            }
+
+
+            if (path.StartsWith ("/"))
+                path = path.Substring (1);
+
+            if (!host.EndsWith ("/"))
+                host = host + "/";
+
+            FullAddress = new Uri ("ssh://" + host + path);
+            Token       = token;
         }
     }
 
@@ -168,9 +198,8 @@ namespace SparkleShare {
 
                 XmlDocument xml_document = new XmlDocument ();
                 XmlNode node;
-                string host = "";
-                string path = "";
-                string token = "";
+
+                string host = "", path = "", token = "";
 
                 try {
                     xml_document.LoadXml (invite_xml);
@@ -185,7 +214,7 @@ namespace SparkleShare {
                     if (node != null) { token = node.Value; }
 
                 } catch (XmlException e) {
-                    SparkleHelpers.DebugInfo ("Invite", "Not valid XML: " + received_message + " " + e.Message);
+                    SparkleHelpers.DebugInfo ("Invite", "Invalid XML: " + received_message + " " + e.Message);
                     return;
                 }
 
