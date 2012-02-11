@@ -83,15 +83,8 @@ namespace SparkleLib {
                             OnConnected ();
 
                             // Subscribe to channels of interest to us
-                            foreach (string channel in base.channels) {
-                                SparkleHelpers.DebugInfo ("ListenerTcp",
-                                    "Subscribing to channel " + channel + " on " + Server);
-
-                                byte [] subscribe_bytes =
-                                    Encoding.UTF8.GetBytes ("subscribe " + channel + "\n");
-
-                                this.socket.Send (subscribe_bytes);
-                            }
+                            foreach (string channel in base.channels)
+                                AlsoListenToInternal (channel);
                         }
 
                     } catch (SocketException e) {
@@ -204,8 +197,11 @@ namespace SparkleLib {
         }
 
 
-        protected override void AlsoListenTo (string folder_identifier)
+        protected override void AlsoListenToInternal (string folder_identifier)
         {
+            SparkleHelpers.DebugInfo ("ListenerTcp",
+                "Subscribing to channel " + folder_identifier + " on " + Server);
+
             string to_send = "subscribe " + folder_identifier + "\n";
 
             try {
@@ -223,7 +219,7 @@ namespace SparkleLib {
         }
 
 
-        protected override void Announce (SparkleAnnouncement announcement)
+        protected override void AnnounceInternal (SparkleAnnouncement announcement)
         {
             string to_send = "announce " + announcement.FolderIdentifier
                 + " " + announcement.Message + "\n";
