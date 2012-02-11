@@ -130,7 +130,6 @@ namespace SparkleShare {
             SparkleInviteListener invite_listener = new SparkleInviteListener (1987);
 
             invite_listener.InviteReceived += delegate (SparkleInvite invite) {
-
                 if (OnInvite != null && !FirstRun)
                     OnInvite (invite);
             };
