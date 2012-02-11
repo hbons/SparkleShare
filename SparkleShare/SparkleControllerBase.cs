@@ -127,7 +127,7 @@ namespace SparkleShare {
             };
 
 
-            SparkleInviteListener invite_listener = new SparkleInviteListener (1986);
+            SparkleInviteListener invite_listener = new SparkleInviteListener (1987);
 
             invite_listener.InviteReceived += delegate (SparkleInvite invite) {
 
@@ -1087,16 +1087,6 @@ namespace SparkleShare {
         }
 
 
-        // Creates an MD5 hash of input
-        private string GetMD5 (string s)
-        {
-            MD5 md5 = new MD5CryptoServiceProvider ();
-            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
-            Byte[] encoded_bytes = md5.ComputeHash (bytes);
-            return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");
-        }
-
-
         // Checks whether there are any folders syncing and
         // quits if safe
         public void TryQuit ()
@@ -1146,6 +1136,16 @@ namespace SparkleShare {
             string numbers = Regex.Replace (hash, "[a-z]", "");
             int number     = 3 + int.Parse (numbers);
             return this.tango_palette [number % this.tango_palette.Length];
+        }
+
+
+        // Creates an MD5 hash of input
+        private string GetMD5 (string s)
+        {
+            MD5 md5 = new MD5CryptoServiceProvider ();
+            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+            Byte[] encoded_bytes = md5.ComputeHash (bytes);
+            return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");
         }
     }
 
