@@ -68,7 +68,13 @@ namespace SparkleShare {
         {
             base.Initialize ();
 
-            this.watcher.Changed += delegate (string path) {
+            this.watcher.Changed += delegate (object sender, SparkleMacWatcherEventArgs args) {
+                string path = args.Path;
+
+                // Don't even bother with paths in .git/
+                if (path.Contains (".git"))
+                    return;
+
                 string repo_name;
 
                 if (path.Contains ("/"))
@@ -77,17 +83,24 @@ namespace SparkleShare {
                     repo_name = path;
 
                 // Ignore changes in the root of each subfolder, these
-                // are already handled bu the repository
+                // are already handled by the repository
                 if (Path.GetFileNameWithoutExtension (path).Equals (repo_name))
                     return;
 
                 repo_name = repo_name.Trim ("/".ToCharArray ());
-                FileSystemEventArgs args = new FileSystemEventArgs (WatcherChangeTypes.Changed,
-                    Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, path), Path.GetFileName (path));
+                FileSystemEventArgs fse_args = new FileSystemEventArgs (
+                    WatcherChangeTypes.Changed,
+                    Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, path),
+                    Path.GetFileName (path)
+                );
 
                 foreach (SparkleRepoBase repo in Repositories) {
-                    if (repo.Name.Equals (repo_name))
-                        repo.OnFileActivity (args);
+                    if (repo.Name.Equals (repo_name)) {
+                        repo.OnFileActivity (fse_args);
+
+                Console.WriteLine (">>> " + repo_name);
+
+                    }
                 }
             };
         }
