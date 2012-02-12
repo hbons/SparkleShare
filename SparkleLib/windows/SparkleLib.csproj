@@ -71,11 +71,17 @@
     <Compile Include="..\Git\SparkleRepoGit.cs">
       <Link>SparkleRepoGit.cs</Link>
     </Compile>
+    <Compile Include="..\SparkleAnnouncement.cs">
+      <Link>SparkleAnnouncement.cs</Link>
+    </Compile>
     <Compile Include="..\SparkleConfig.cs">
       <Link>SparkleConfig.cs</Link>
     </Compile>
     <Compile Include="..\SparkleExtensions.cs">
       <Link>SparkleExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\SparkleListenerFactory.cs">
+      <Link>SparkleListenerFactory.cs</Link>
     </Compile>
     <Compile Include="..\SparkleRepoBase.cs">
       <Link>SparkleRepoBase.cs</Link>
@@ -93,7 +99,6 @@
     </Compile>
     <Compile Include="..\SparkleFetcherBase.cs" />
     <Compile Include="..\SparkleHelpers.cs" />
-    <Compile Include="..\SparkleOptions.cs" />
     <Compile Include="..\SparkleChangeSet.cs" />
     <Compile Include="..\SparkleListenerBase.cs" />
     <Compile Include="..\SparkleListenerTcp.cs" />
