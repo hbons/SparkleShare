@@ -44,8 +44,8 @@ namespace SparkleShare {
             string content_path =
                 Directory.GetParent (System.AppDomain.CurrentDomain.BaseDirectory).ToString ();
 
-            string app_path     = Directory.GetParent (content_path).ToString ();
-            string growl_path   = Path.Combine (app_path, "Frameworks", "Growl.framework", "Growl");
+            string app_path   = Directory.GetParent (content_path).ToString ();
+            string growl_path = Path.Combine (app_path, "Frameworks", "Growl.framework", "Growl");
 
 
             // Needed for Growl
