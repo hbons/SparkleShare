@@ -67,11 +67,11 @@ namespace SparkleShare {
         public event OnInviteHandler OnInvite;
         public delegate void OnInviteHandler (SparkleInvite invite);
 
-        public event ConflictNotificationRaisedHandler ConflictNotificationRaised;
-        public delegate void ConflictNotificationRaisedHandler ();
-
         public event NotificationRaisedEventHandler NotificationRaised;
         public delegate void NotificationRaisedEventHandler (SparkleChangeSet change_set);
+
+        public event AlertNotificationRaisedEventHandler AlertNotificationRaised;
+        public delegate void AlertNotificationRaisedEventHandler (string title, string message);
 
         public event NoteNotificationRaisedEventHandler NoteNotificationRaised;
         public delegate void NoteNotificationRaisedEventHandler (SparkleUser user, string folder_name);
@@ -126,15 +126,22 @@ namespace SparkleShare {
                     FolderListChanged ();
             };
 
+            watcher.Created += delegate (object o, FileSystemEventArgs args) {
+                if (!args.FullPath.EndsWith (".xml"))
+                    return;
 
-            SparkleInviteListener invite_listener = new SparkleInviteListener (1987);
+                if (this.fetcher == null ||
+                    this.fetcher.IsActive) {
 
-            invite_listener.InviteReceived += delegate (SparkleInvite invite) {
-                if (OnInvite != null && !FirstRun)
-                    OnInvite (invite);
+                    if (AlertNotificationRaised != null)
+                        AlertNotificationRaised ("SparkleShare Setup is busy",
+                            "Please try again later");
+
+                } else {
+                    if (OnInvite != null)
+                        OnInvite (new SparkleInvite (args.FullPath));
+                }
             };
-
-            invite_listener.Start ();
 
             new Thread (new ThreadStart (PopulateRepositories)).Start ();
         }
@@ -147,7 +154,7 @@ namespace SparkleShare {
         }
 
 
-        // Uploads the user's public key to the server
+        // Uploads the user's public key to the server TODO
         public bool AcceptInvitation (string server, string folder, string token)
         {
             // The location of the user's public key for SparkleShare
@@ -184,6 +191,7 @@ namespace SparkleShare {
             get {
                 List<string> folders = SparkleConfig.DefaultConfig.Folders;
                 folders.Sort ();
+
                 return folders;
             }
         }
@@ -584,7 +592,6 @@ namespace SparkleShare {
 
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set) {
-
                 if (NotificationRaised != null)
                     NotificationRaised (change_set);
             };
@@ -596,8 +603,9 @@ namespace SparkleShare {
             };
 
             repo.ConflictResolved += delegate {
-                if (ConflictNotificationRaised != null)
-                    ConflictNotificationRaised ();
+                if (AlertNotificationRaised != null)
+                    AlertNotificationRaised ("Conflict detected.",
+                        "Don't worry, SparkleShare made a copy of each conflicting file.");
             };
 
             repo.SyncStatusChanged += delegate (SyncStatus status) {
@@ -851,7 +859,6 @@ namespace SparkleShare {
             }
 
             foreach (string raw_email in emails) {
-
                 // Gravatar wants lowercase emails
                 string email            = raw_email.ToLower ();
                 string avatar_file_path = Path.Combine (avatar_path, "avatar-" + email);
@@ -866,9 +873,6 @@ namespace SparkleShare {
                           old_avatars.Add (email);
 
                         } catch (FileNotFoundException) {
-                            // FIXME: For some reason the previous File.Exists () check
-                            // doesn't cover all cases sometimes, so we catch any errors
-
                             if (old_avatars.Contains (email))
                                 old_avatars.Remove (email);
                         }
@@ -876,11 +880,11 @@ namespace SparkleShare {
 
                 } else if (this.failed_avatars.Contains (email)) {
                     break;
+
                 } else {
                   WebClient client = new WebClient ();
                   string url       =  "http://gravatar.com/avatar/" + GetMD5 (email) +
                                       ".jpg?s=" + size + "&d=404";
-
                   try {
                     // Fetch the avatar
                     byte [] buffer = client.DownloadData (url);
@@ -900,11 +904,10 @@ namespace SparkleShare {
                         SparkleHelpers.DebugInfo ("Avatar", "Failed fetching gravatar for " + email);
 
                         // Stop downloading further avatars if we have no internet access
-                        if (e.Status == WebExceptionStatus.Timeout){
+                        if (e.Status == WebExceptionStatus.Timeout)
                             break;
-                        } else {
+                        else
                             this.failed_avatars.Add (email);
-                        }
                   }
                }
             }
