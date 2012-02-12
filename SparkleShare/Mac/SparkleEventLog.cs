@@ -134,7 +134,8 @@ namespace SparkleShare {
 
             this.progress_indicator = new NSProgressIndicator () {
                 Style = NSProgressIndicatorStyle.Spinning,
-                Frame = new RectangleF (this.web_view.Frame.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10, 20, 20)
+                Frame = new RectangleF (this.web_view.Frame.Width / 2 - 10,
+                    this.web_view.Frame.Height / 2 + 10, 20, 20)
             };
 
             this.progress_indicator.StartAnimation (this);
@@ -226,15 +227,24 @@ namespace SparkleShare {
                     html = html.Replace ("<!-- $a-color -->", "#0085cf");
                     html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
                     html = html.Replace ("<!-- $no-buddy-icon-background-image -->",
-                                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "avatar-default.png"));
+                        "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
+                        "Pixmaps","avatar-default.png"));
+
                     html = html.Replace ("<!-- $document-added-background-image -->",
-                                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-added-12.png"));
+                        "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
+                        "Pixmaps", "document-added-12.png"));
+
                     html = html.Replace ("<!-- $document-deleted-background-image -->",
-                                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-deleted-12.png"));
+                        "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
+                        "Pixmaps", "document-deleted-12.png"));
+
                     html = html.Replace ("<!-- $document-edited-background-image -->",
-                                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-edited-12.png"));
+                        "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
+                        "Pixmaps", "document-edited-12.png"));
+
                     html = html.Replace ("<!-- $document-moved-background-image -->",
-                                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "document-moved-12.png"));
+                        "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
+                        "Pixmaps", "document-moved-12.png"));
     
                     InvokeOnMainThread (delegate {
                         if (this.progress_indicator.Superview == ContentView)

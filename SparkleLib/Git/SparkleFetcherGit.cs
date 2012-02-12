@@ -79,8 +79,8 @@ namespace SparkleLib {
             }
 
 
-            base.target_folder = target_folder;
-            base.remote_url    = uri.ToString ();
+            TargetFolder = target_folder;
+            RemoteUrl    = uri.ToString ();
         }
 
 
@@ -89,8 +89,7 @@ namespace SparkleLib {
             this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
                 "clone " +
                 "--progress " + // Redirects progress stats to standarderror
-                "\"" + base.remote_url + "\" " + 
-                "\"" + SparkleHelpers.NormalizeSeparatorsToOS(base.target_folder) + "\"");
+                "\"" + RemoteUrl + "\" " + "\"" + SparkleHelpers.NormalizeSeparatorsToOS(TargetFolder) + "\"");
             
             this.git.StartInfo.RedirectStandardError = true;
             this.git.Start ();
@@ -140,34 +139,35 @@ namespace SparkleLib {
             } else {
                 InstallConfiguration ();
                 InstallExcludeRules ();
+                AddWarnings ();
                 return true;
             }
         }
 
 
-        public override string [] Warnings {
-            get {
-                SparkleGit git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
-                    "config --global core.excludesfile");
+        private void AddWarnings ()
+        {
+            SparkleGit git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+                "config --global core.excludesfile");
 
-                git.Start ();
+            git.Start ();
 
-                // Reading the standard output HAS to go before
-                // WaitForExit, or it will hang forever on output > 4096 bytes
-                string output = git.StandardOutput.ReadToEnd ().Trim ();
-                git.WaitForExit ();
+            // Reading the standard output HAS to go before
+            // WaitForExit, or it will hang forever on output > 4096 bytes
+            string output = git.StandardOutput.ReadToEnd ().Trim ();
+            git.WaitForExit ();
 
-                if (string.IsNullOrEmpty (output)) {
-                    return null;
+            if (string.IsNullOrEmpty (output)) {
+                return;
 
-                } else {
-                    return new string [] {
-                        string.Format ("You seem to have configured a system ‘gitignore’ file. " +
-                                       "This may interfere with SparkleShare.\n({0})", output)
-                    };
-                }
+            } else {
+                Warnings = new string [] {
+                    string.Format ("You seem to have configured a system ‘gitignore’ file. " +
+                                   "This may interfere with SparkleShare.\n({0})", output)
+                };
             }
         }
+
 
         public override void Stop ()
         {
@@ -176,7 +176,7 @@ namespace SparkleLib {
                 this.git.Dispose ();
             }
 
-            base.Stop ();
+            Dispose ();
         }
 
 
@@ -184,7 +184,7 @@ namespace SparkleLib {
         // the newly cloned repository
         private void InstallConfiguration ()
         {
-            string repo_config_file_path = SparkleHelpers.CombineMore (base.target_folder, ".git", "config");
+            string repo_config_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "config");
             string config = String.Join (Environment.NewLine, File.ReadAllLines (repo_config_file_path));
 
             string n = Environment.NewLine;
@@ -220,7 +220,7 @@ namespace SparkleLib {
         private void InstallExcludeRules ()
         {
             DirectoryInfo info = Directory.CreateDirectory (
-                SparkleHelpers.CombineMore (this.target_folder, ".git", "info"));
+                SparkleHelpers.CombineMore (TargetFolder, ".git", "info"));
 
             // File that lists the files we want git to ignore
             string exclude_rules_file_path = Path.Combine (info.FullName, "exclude");

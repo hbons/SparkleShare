@@ -1,9 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_define([sparkleshare_version],
-	[0.8.1])
+	[0.8.2])
 
 m4_define([sparkleshare_asm_version],
-	[0.8.1])
+	[0.8.2])
 
 AC_PREREQ([2.54])
 AC_INIT([SparkleShare], sparkleshare_version)
@@ -154,7 +154,6 @@ data/Makefile
 data/icons/Makefile
 data/html/Makefile
 data/plugins/Makefile
-help/Makefile
 SparkleLib/AssemblyInfo.cs
 SparkleLib/Defines.cs
 SparkleLib/Makefile
@@ -176,7 +175,6 @@ Configuration:
        Build Gtk+ UI       : ${enable_gtkui}
        Nautilus 2.x plugin : ${have_nautilus2_python}
        Nautilus 3.x plugin : ${have_nautilus3_python}
-       User Help           : ${enable_user_help} (requires gnome-doc-utils >= 0.17.3)
 
 "
 

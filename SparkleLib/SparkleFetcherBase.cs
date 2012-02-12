@@ -16,9 +16,7 @@
 
 
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Security.AccessControl;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -37,18 +35,21 @@ namespace SparkleLib {
         public event FailedEventHandler Failed;
         public event ProgressChangedEventHandler ProgressChanged;
 
-        public string [] ExcludeRules;
+        public abstract bool Fetch ();
+        public abstract void Stop ();
 
-        protected string target_folder;
-        protected string remote_url;
+        public string TargetFolder;
+        public string RemoteUrl;
+        public string [] ExcludeRules;
+        public string [] Warnings;
 
         private Thread thread;
 
 
         public SparkleFetcherBase (string server, string remote_folder, string target_folder)
         {
-            this.target_folder = target_folder;
-            this.remote_url    = server + "/" + remote_folder;
+            TargetFolder = target_folder;
+            RemoteUrl    = server + "/" + remote_folder;
 
             ExcludeRules = new string [] {
                 // gedit and emacs
@@ -121,22 +122,18 @@ namespace SparkleLib {
         }
 
 
-        public abstract bool Fetch ();
-        public abstract string [] Warnings { get; }
-
-
         // Clones the remote repository
         public void Start ()
         {
-            SparkleHelpers.DebugInfo ("Fetcher", "[" + this.target_folder + "] Fetching folder: " + this.remote_url);
+            SparkleHelpers.DebugInfo ("Fetcher", "[" + TargetFolder + "] Fetching folder: " + RemoteUrl);
 
             if (Started != null)
                 Started ();
 
-            if (Directory.Exists (this.target_folder))
-                Directory.Delete (this.target_folder, true);
+            if (Directory.Exists (TargetFolder))
+                Directory.Delete (TargetFolder, true);
 
-            string host = GetHost (this.remote_url);
+            string host = GetHost (RemoteUrl);
 
             if (String.IsNullOrEmpty (host)) {
                 if (Failed != null)
@@ -167,20 +164,6 @@ namespace SparkleLib {
             }));
 
             this.thread.Start ();
-        }
-
-
-        public virtual void Stop ()
-        {
-            this.thread.Abort ();
-            this.thread.Join ();
-        }
-
-
-        public string RemoteUrl {
-            get {
-                return this.remote_url;
-            }
         }
 
 

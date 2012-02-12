@@ -42,7 +42,7 @@ stop() {
       rm -f ${pidfile}
       echo "Done."
     else
-      echo "SparkleShare is not running, removing stale pid file."
+      echo "SparkleShare is not running, removing stale pid file..."
       rm -f ${pidfile}
     fi
   else
@@ -64,14 +64,10 @@ case $1 in
   help|--help|-h)
     mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" --help
     ;;
-  -d|--disable-gui)
-    mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" --disable-gui
-    ;;
-  -v|--version)
+  version|--version|-v)
     mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" --version
     ;;
   *)
-    echo "Usage: sparkleshare {start|stop|restart|help}"
+    echo "Usage: sparkleshare {start|stop|restart|help|version}"
     ;;
 esac
-
