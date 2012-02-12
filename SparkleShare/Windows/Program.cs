@@ -29,7 +29,6 @@ using Mono.Unix;
 //using Mono.Unix.Native;
 #endif
 using SparkleLib;
-using SparkleLib.Options;
 
 namespace SparkleShare {
 

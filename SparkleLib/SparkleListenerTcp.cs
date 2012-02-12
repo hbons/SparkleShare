@@ -91,7 +91,7 @@ namespace SparkleLib {
                         this.is_connected  = false;
                         this.is_connecting = false;
 
-                        this.socket.Dispose ();
+                        // this.socket.Dispose ();
 
                         OnDisconnected (e.Message);
                         return;
@@ -158,7 +158,7 @@ namespace SparkleLib {
                                 this.is_connected          = false;
                                 this.is_connecting         = false;;
 
-                                this.socket.Dispose ();
+                                // this.socket.Dispose ();
 
                                 OnDisconnected ("Ping timeout");
                                 return;
