@@ -699,34 +699,6 @@ namespace SparkleShare {
         }
 
 
-        public string GetSize (string folder_name)
-        {
-            double folder_size = 0;
-            /* TODO
-            foreach (SparkleRepoBase repo in
-                Repositories.GetRange (0, Repositories.Count)) {
-
-                folder_size += repo.Size + repo.HistorySize;
-            }
-             */
-            return FormatSize (folder_size);
-        }
-
-
-        public string GetHistorySize (string folder_name)
-        {
-            double folder_size = 0;
-            /* TODO
-            foreach (SparkleRepoBase repo in
-                Repositories.GetRange (0, Repositories.Count)) {
-
-                folder_size += repo.Size + repo.HistorySize;
-            }
-             */
-            return FormatSize (folder_size);
-        }
-
-
         // Format a file size nicely with small caps.
         // Example: 1048576 becomes "1 ᴍʙ"
         public string FormatSize (double byte_count)
