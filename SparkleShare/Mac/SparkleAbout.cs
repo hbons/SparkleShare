@@ -19,11 +19,10 @@ using System;
 using System.Drawing;
 using System.IO;
 
-using MonoMac.Foundation;
 using MonoMac.AppKit;
+using MonoMac.Foundation;
 using MonoMac.ObjCRuntime;
 using MonoMac.WebKit;
-
 
 namespace SparkleShare {
 
@@ -54,8 +53,11 @@ namespace SparkleShare {
             BackingType = NSBackingStore.Buffered;
 
             CreateAbout ();
-            OrderFrontRegardless ();
+
+            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
             MakeKeyAndOrderFront (this);
+
+            OrderFrontRegardless ();
 
             Program.UI.UpdateDockIconVisibility ();
 

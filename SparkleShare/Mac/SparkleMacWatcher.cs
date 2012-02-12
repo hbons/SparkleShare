@@ -14,88 +14,216 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-    
+//   Originally taken from:
+//   https://github.com/jesse99/Continuum/blob/master/source/shared/DirectoryWatcher.cs
+//   Modified to use MonoMac and integrate into SparkleShare
+
+//   Copyright (C) 2008 Jesse Jones
+//
+//   Permission is hereby granted, free of charge, to any person obtaining
+//   a copy of this software and associated documentation files (the
+//   "Software"), to deal in the Software without restriction, including
+//   without limitation the rights to use, copy, modify, merge, publish,
+//   distribute, sublicense, and/or sell copies of the Software, and to
+//   permit persons to whom the Software is furnished to do so, subject to
+//   the following conditions:
+//
+//   The above copyright notice and this permission notice shall be
+//   included in all copies or substantial portions of the Software.
+//
+//   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+//   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+//   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+//   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+//   LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+//   OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+//   WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.IO;
 using System.Threading;
 using System.Timers;
 
+using MonoMac.AppKit;
+using MonoMac.Foundation;
+
 namespace SparkleShare {
 
-    public class SparkleMacWatcher {
+    [Serializable]
+    public sealed class SparkleMacWatcherEventArgs : EventArgs {
 
-        public delegate void ChangedEventHandler (string path);
-        public event ChangedEventHandler Changed;
+        public string Path { get; private set; }
 
-        private FileSystemInfo last_changed;
-        private Thread thread;
-        private int poll_count = 0;
+
+        public SparkleMacWatcherEventArgs (string path)
+        {
+            Path = path;
+        }
+    }
+
+
+    public sealed class SparkleMacWatcher : IDisposable
+    {
+        public event EventHandler<SparkleMacWatcherEventArgs> Changed;
+        public string Path { get; private set; }
+
+
+        [Flags]
+        [Serializable]
+        private enum FSEventStreamCreateFlags : uint
+        {
+            kFSEventStreamCreateFlagNone       = 0x00000000,
+            kFSEventStreamCreateFlagUseCFTypes = 0x00000001,
+            kFSEventStreamCreateFlagNoDefer    = 0x00000002,
+            kFSEventStreamCreateFlagWatchRoot  = 0x00000004,
+        }
+
+        private DateTime last_found_timestamp;
+        private IntPtr m_stream;
+        private FSEventStreamCallback m_callback; // need to keep a reference around so that it isn't GC'ed
+        private static readonly IntPtr kCFRunLoopDefaultMode = (new NSString ("kCFRunLoopDefaultMode")).Handle;
+        private ulong kFSEventStreamEventIdSinceNow          = 0xFFFFFFFFFFFFFFFFUL;
+
+        private delegate void FSEventStreamCallback (
+            IntPtr streamRef,
+            IntPtr clientCallBackInfo,
+            int numEvents,
+            IntPtr eventPaths,
+            IntPtr eventFlags,
+            IntPtr eventIds);
+
+
+        ~SparkleMacWatcher ()
+        {
+            Dispose (false);
+        }
 
 
         public SparkleMacWatcher (string path)
         {
-            this.thread = new Thread (new ThreadStart (delegate {
-                DateTime timestamp;
-                DirectoryInfo parent = new DirectoryInfo (path);
-                this.last_changed = new DirectoryInfo (path);
+            Path       = path;
+            m_callback = DoCallback;
 
-                while (true) {
-                    timestamp = this.last_changed.LastWriteTime;
-                    GetLastChange (parent);
+            NSString [] s  = new NSString [1];
+            s [0]          = new NSString (path);
+            NSArray path_p = NSArray.FromNSObjects (s);
 
-                    if (DateTime.Compare (this.last_changed.LastWriteTime, timestamp) != 0) {
-                        string relative_path = this.last_changed.FullName.Substring (path.Length + 1);
+            m_stream = FSEventStreamCreate ( // note that the stream will always be valid
+                IntPtr.Zero, // allocator
+                m_callback, // callback
+                IntPtr.Zero, // context
+                path_p.Handle, // pathsToWatch
+                kFSEventStreamEventIdSinceNow, // sinceWhen
+                2, // latency (in seconds)
+                FSEventStreamCreateFlags.kFSEventStreamCreateFlagNone); // flags
 
-                        if (Changed != null)
-                            Changed (relative_path);
-                    }
+            FSEventStreamScheduleWithRunLoop (
+                m_stream, // streamRef
+                CFRunLoopGetMain(), // runLoop
+                kCFRunLoopDefaultMode); // runLoopMode
 
-                    Thread.Sleep (7500);
-                    this.poll_count++;
-                }
-            }));
-
-            this.thread.Start ();
-        }
-
-
-        private void GetLastChange (DirectoryInfo parent)
-        {
-            try {
-                if (DateTime.Compare (parent.LastWriteTime, this.last_changed.LastWriteTime) > 0)
-                    this.last_changed = parent;
-
-                foreach (DirectoryInfo info in parent.GetDirectories ()) {
-                    if (!info.FullName.Contains ("/.")) {
-                        if (DateTime.Compare (info.LastWriteTime, this.last_changed.LastWriteTime) > 0)
-                            this.last_changed = info;
-    
-                        GetLastChange (info);
-                    }
-                }
-
-                if (this.poll_count >= 8) {
-                    foreach (FileInfo info in parent.GetFiles ()) {
-                        if (!info.FullName.Contains ("/.")) {
-                            if (DateTime.Compare (info.LastWriteTime, this.last_changed.LastWriteTime) > 0)
-                                this.last_changed = info;
-                        }
-                    }
-
-                    this.poll_count = 0;
-                }
-
-            } catch (Exception) {
-                // Don't care...
+            bool started = FSEventStreamStart (m_stream);
+            if (!started) {
+                GC.SuppressFinalize (this);
+                throw new InvalidOperationException ("Failed to start FSEvent stream for " + path);
             }
+
         }
 
 
         public void Dispose ()
         {
-            this.thread.Join ();
-            this.thread.Abort ();
+            Dispose (true);
+            GC.SuppressFinalize (this);
         }
+
+
+        private void Dispose (bool disposing)
+        {
+            if (m_stream != IntPtr.Zero) {
+                FSEventStreamStop (m_stream);
+                FSEventStreamInvalidate (m_stream);
+                FSEventStreamRelease (m_stream);
+
+                m_stream = IntPtr.Zero;
+            }
+        }
+
+
+        private void checkDirectory (string dir)
+        {
+            DirectoryInfo parent = new DirectoryInfo (dir);
+
+            if (!parent.FullName.Contains ("/.") &&
+                DateTime.Compare (parent.LastWriteTime, this.last_found_timestamp) > 0) {
+
+                last_found_timestamp = parent.LastWriteTime;
+            }
+        }
+
+
+        private void DoCallback (IntPtr streamRef, IntPtr clientCallBackInfo,
+            int numEvents, IntPtr eventPaths, IntPtr eventFlags, IntPtr eventIds)
+        {
+            int bytes = Marshal.SizeOf (typeof (IntPtr));
+            string [] paths = new string [numEvents];
+
+            for (int i = 0; i < numEvents; ++i) {
+                IntPtr p = Marshal.ReadIntPtr (eventPaths, i * bytes);
+                paths [i] = Marshal.PtrToStringAnsi (p);
+                checkDirectory (paths [i]);
+            }
+
+            var handler = Changed;
+            if (handler != null) {
+                string path = paths [0];
+                path = path.Substring (Path.Length);
+                path = path.Trim ("/".ToCharArray ());
+                handler (this, new SparkleMacWatcherEventArgs (path));
+            }
+
+            GC.KeepAlive (this);
+        }
+
+
+        [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
+        private extern static IntPtr CFRunLoopGetMain ();
+
+        [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
+        private extern static IntPtr FSEventStreamCreate (
+            IntPtr allocator,
+            FSEventStreamCallback callback,
+            IntPtr context,
+            IntPtr pathsToWatch,
+            ulong sinceWhen,
+            double latency,
+            FSEventStreamCreateFlags flags);
+
+        [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
+        private extern static void FSEventStreamScheduleWithRunLoop (
+            IntPtr streamRef,
+            IntPtr runLoop,
+            IntPtr runLoopMode);
+
+        [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
+        [return: MarshalAs (UnmanagedType.U1)]
+        private extern static bool FSEventStreamStart (
+            IntPtr streamRef);
+
+        [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
+        private extern static void FSEventStreamStop (
+            IntPtr streamRef);
+
+        [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
+        private extern static void FSEventStreamInvalidate (
+            IntPtr streamRef);
+
+        [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
+        private extern static void FSEventStreamRelease (
+            IntPtr streamRef);
     }
 }
