@@ -97,6 +97,9 @@ namespace SparkleShare {
                             break;
                         case PageType.Error:
                             tabControl.SelectedIndex = 3;
+                            label3.Text = "First, have you tried turning it off and on again?\n\n" +
+                                Controller.PreviousUrl + " is the address we've compiled. Does this look alright?\n\n" +
+                                "The host needs to know who you are. Have you uploaded the key that sits in your SparkleShare folder?";
                             Show ();
                             break;
                         case PageType.Finished:
