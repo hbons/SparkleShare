@@ -27,6 +27,7 @@ namespace SparkleShare {
     public enum PageType {
         Setup,
         Add,
+        Invite,
         Syncing,
         Error,
         Finished,
@@ -271,6 +272,49 @@ namespace SparkleShare {
             };
 
             Program.Controller.FetchFolder (address, path);
+        }
+
+
+        public void InvitePageCompleted (SparkleInvite invite)
+        {/*
+            if (ChangePageEvent != null)
+                ChangePageEvent (PageType.Syncing, null);
+
+            if (!invite.Accept ()) {
+                if (ChangePageEvent != null)
+                    ChangePageEvent (PageType.Error, null);
+
+                return;
+            }
+              */
+
+            // TODO: Remove events afterwards
+
+            Program.Controller.FolderFetched += delegate (string [] warnings) {
+                if (ChangePageEvent != null)
+                    ChangePageEvent (PageType.Finished, warnings);
+
+                this.previous_address = "";
+                this.syncing_folder   = "";
+                this.previous_url     = "";
+                SelectedPlugin        = Plugins [0];
+            };
+
+            Program.Controller.FolderFetchError += delegate (string remote_url) {
+                this.previous_url = remote_url;
+
+                if (ChangePageEvent != null)
+                    ChangePageEvent (PageType.Error, null);
+
+                this.syncing_folder = "";
+            };
+
+            Program.Controller.FolderFetching += delegate (double percentage) {
+                if (UpdateProgressBarEvent != null)
+                    UpdateProgressBarEvent (percentage);
+            };
+
+            //Program.Controller.FetchFolder (address, path);
         }
 
 
