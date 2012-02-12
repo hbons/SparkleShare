@@ -44,8 +44,8 @@ namespace SparkleShare {
             string content_path =
                 Directory.GetParent (System.AppDomain.CurrentDomain.BaseDirectory).ToString ();
 
-            string app_path     = Directory.GetParent (content_path).ToString ();
-            string growl_path   = Path.Combine (app_path, "Frameworks", "Growl.framework", "Growl");
+            string app_path   = Directory.GetParent (content_path).ToString ();
+            string growl_path = Path.Combine (app_path, "Frameworks", "Growl.framework", "Growl");
 
 
             // Needed for Growl
@@ -54,7 +54,7 @@ namespace SparkleShare {
 
 
             // Let's use the bundled git first
-            SparkleBackend.DefaultBackend.Path =
+            SparkleGit.Path =
                 Path.Combine (NSBundle.MainBundle.ResourcePath,
                     "git", "libexec", "git-core", "git");
 
@@ -68,7 +68,13 @@ namespace SparkleShare {
         {
             base.Initialize ();
 
-            this.watcher.Changed += delegate (string path) {
+            this.watcher.Changed += delegate (object sender, SparkleMacWatcherEventArgs args) {
+                string path = args.Path;
+
+                // Don't even bother with paths in .git/
+                if (path.Contains (".git"))
+                    return;
+
                 string repo_name;
 
                 if (path.Contains ("/"))
@@ -77,17 +83,20 @@ namespace SparkleShare {
                     repo_name = path;
 
                 // Ignore changes in the root of each subfolder, these
-                // are already handled bu the repository
+                // are already handled by the repository
                 if (Path.GetFileNameWithoutExtension (path).Equals (repo_name))
                     return;
 
                 repo_name = repo_name.Trim ("/".ToCharArray ());
-                FileSystemEventArgs args = new FileSystemEventArgs (WatcherChangeTypes.Changed,
-                    Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, path), Path.GetFileName (path));
+                FileSystemEventArgs fse_args = new FileSystemEventArgs (
+                    WatcherChangeTypes.Changed,
+                    Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, path),
+                    Path.GetFileName (path)
+                );
 
                 foreach (SparkleRepoBase repo in Repositories) {
                     if (repo.Name.Equals (repo_name))
-                        repo.OnFileActivity (args);
+                        repo.OnFileActivity (fse_args);
                 }
             };
         }

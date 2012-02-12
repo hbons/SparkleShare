@@ -40,12 +40,14 @@
     <Compile Include="Git/SparkleFetcherGit.cs" />
     <Compile Include="Hg/SparkleFetcherHg.cs" />
     <Compile Include="Defines.cs" />
+    <Compile Include="SparkleAnnouncement.cs" />
     <Compile Include="SparkleHelpers.cs" />
     <Compile Include="SparklePaths.cs" />
     <Compile Include="SparkleOptions.cs" />
     <Compile Include="SparkleChangeSet.cs" />
     <Compile Include="SparkleListenerBase.cs" />
-    <Compile Include="SparkleListenerIrc.cs" />
+    <Compile Include="SparkleListenerFactory.cs" />
+    <Compile Include="SparkleListenerTcp.cs" />
     <Compile Include="SparkleBackend.cs" />
     <Compile Include="SparkleConfig.cs" />
     <Compile Include="SparkleWatcher.cs" />

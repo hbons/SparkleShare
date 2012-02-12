@@ -42,9 +42,6 @@ namespace SparkleShare {
         public double ProgressPercentage = 0.0;
         public string ProgressSpeed      = "";
 
-        public event OnQuitWhileSyncingHandler OnQuitWhileSyncing;
-        public delegate void OnQuitWhileSyncingHandler ();
-
         public event FolderFetchedEventHandler FolderFetched;
         public delegate void FolderFetchedEventHandler (string [] warnings);
         
@@ -132,10 +129,9 @@ namespace SparkleShare {
             };
 
 
-            SparkleInviteListener invite_listener = new SparkleInviteListener (1986);
+            SparkleInviteListener invite_listener = new SparkleInviteListener (1987);
 
             invite_listener.InviteReceived += delegate (SparkleInvite invite) {
-
                 if (OnInvite != null && !FirstRun)
                     OnInvite (invite);
             };
@@ -303,8 +299,8 @@ namespace SparkleShare {
 
                                 if (DateTime.Compare (existing_set.Timestamp, change_set.Timestamp) < 1) {
                                     existing_set.FirstTimestamp = existing_set.Timestamp;
-                                    existing_set.Timestamp = change_set.Timestamp;
-                                    existing_set.Revision = change_set.Revision;
+                                    existing_set.Timestamp      = change_set.Timestamp;
+                                    existing_set.Revision       = change_set.Revision;
 
                                 } else {
                                     existing_set.FirstTimestamp = change_set.Timestamp;
@@ -351,37 +347,40 @@ namespace SparkleShare {
                     } else {
                         if (change_set.Edited.Count > 0) {
                             foreach (string file_path in change_set.Edited) {
-                                string absolute_file_path = new string [] {SparkleConfig.DefaultConfig.FoldersPath,
-                                    change_set.Folder, file_path}.Combine ();
-                                
-                                if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='document edited'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
-                                else
-                                    event_entry += "<dd class='document edited'>" + file_path + "</dd>";
+                                    event_entry += "<dd class='document edited'>";
+
+                                    event_entry += FormatBreadCrumbs (
+                                        Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, change_set.Folder),
+                                        file_path
+                                    );
+
+                                    event_entry += "</dd>";
                             }
                         }
     
                         if (change_set.Added.Count > 0) {
                             foreach (string file_path in change_set.Added) {
-                                string absolute_file_path = new string [] {SparkleConfig.DefaultConfig.FoldersPath,
-                                    change_set.Folder, file_path}.Combine ();
-                                
-                                if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='document added'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
-                                else
-                                    event_entry += "<dd class='document added'>" + file_path + "</dd>";
+                                event_entry += "<dd class='document added'>";
+
+                                    event_entry += FormatBreadCrumbs (
+                                        Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, change_set.Folder),
+                                        file_path
+                                    );
+
+                                    event_entry += "</dd>";
                             }
                         }
     
                         if (change_set.Deleted.Count > 0) {
                             foreach (string file_path in change_set.Deleted) {
-                                string absolute_file_path = new string [] {SparkleConfig.DefaultConfig.FoldersPath,
-                                    change_set.Folder, file_path}.Combine ();
-                                
-                                if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='document deleted'><a href='" + absolute_file_path + "'>" + file_path + "</a></dd>";
-                                else
-                                    event_entry += "<dd class='document deleted'>" + file_path + "</dd>";
+                                    event_entry += "<dd class='document deleted'>";
+
+                                    event_entry += FormatBreadCrumbs (
+                                        Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, change_set.Folder),
+                                        file_path
+                                    );
+
+                                    event_entry += "</dd>";
                             }
                         }
 
@@ -390,21 +389,19 @@ namespace SparkleShare {
                             foreach (string file_path in change_set.MovedFrom) {
                                 string to_file_path = change_set.MovedTo [i];
 
-                                string absolute_file_path = new string [] {SparkleConfig.DefaultConfig.FoldersPath,
-                                    change_set.Folder, file_path}.Combine ();
+                                event_entry += "<dd class='document moved'>";
+                                event_entry += FormatBreadCrumbs (
+                                        Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, change_set.Folder),
+                                        file_path
+                                );
 
-                                string absolute_to_file_path = new string [] {SparkleConfig.DefaultConfig.FoldersPath,
-                                    change_set.Folder, to_file_path}.Combine ();
+                                event_entry += "<br>";
+                                event_entry += FormatBreadCrumbs (
+                                        Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, change_set.Folder),
+                                        to_file_path
+                                );
 
-                                if (File.Exists (absolute_file_path))
-                                    event_entry += "<dd class='document moved'><a href='" + absolute_file_path + "'>" + file_path + "</a><br/>";
-                                else
-                                    event_entry += "<dd class='document moved'>" + file_path + "<br/>";
-
-                                if (File.Exists (absolute_to_file_path))
-                                    event_entry += "<a href='" + absolute_to_file_path + "'>" + to_file_path + "</a></dd>";
-                                else
-                                    event_entry += to_file_path + "</dd>";
+                                event_entry += "</dd>";
 
                                 i++;
                             }
@@ -620,7 +617,7 @@ namespace SparkleShare {
                 }
             };
 
-            repo.SyncProgressChanged += delegate (double percentage, string speed) {
+            repo.ProgressChanged += delegate (double percentage, string speed) {
                 ProgressPercentage = percentage;
                 ProgressSpeed      = speed;
 
@@ -782,13 +779,6 @@ namespace SparkleShare {
 
             process.Start ();
             process.WaitForExit ();
-        }
-
-
-        public bool BackendIsPresent {
-            get {
-                return SparkleBackend.DefaultBackend.IsPresent;
-            }
         }
 
 
@@ -1099,16 +1089,6 @@ namespace SparkleShare {
         }
 
 
-        // Creates an MD5 hash of input
-        private string GetMD5 (string s)
-        {
-            MD5 md5 = new MD5CryptoServiceProvider ();
-            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
-            Byte[] encoded_bytes = md5.ComputeHash (bytes);
-            return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");
-        }
-
-
         // Checks whether there are any folders syncing and
         // quits if safe
         public void TryQuit ()
@@ -1118,9 +1098,6 @@ namespace SparkleShare {
                     repo.Status == SyncStatus.SyncDown ||
                     repo.IsBuffering) {
 
-                    if (OnQuitWhileSyncing != null)
-                        OnQuitWhileSyncing ();
-                    
                     return;
                 }
             }
@@ -1165,6 +1142,55 @@ namespace SparkleShare {
             string numbers = Regex.Replace (hash, "[a-z]", "");
             int number     = 3 + int.Parse (numbers);
             return this.tango_palette [number % this.tango_palette.Length];
+        }
+
+
+        // Creates an MD5 hash of input
+        private string GetMD5 (string s)
+        {
+            MD5 md5 = new MD5CryptoServiceProvider ();
+            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
+            Byte[] encoded_bytes = md5.ComputeHash (bytes);
+            return BitConverter.ToString (encoded_bytes).ToLower ().Replace ("-", "");
+        }
+
+
+        private string FormatBreadCrumbs (string path_root, string path)
+        {
+            string link      = "";
+            string [] crumbs = path.Split (Path.DirectorySeparatorChar);
+
+            int i = 0;
+            string new_path_root = path_root;
+            bool previous_was_folder = false;
+            foreach (string crumb in crumbs) {
+
+                if (string.IsNullOrEmpty (crumb))
+                    continue;
+
+                string crumb_path = Path.Combine (new_path_root, crumb);
+
+                if (Directory.Exists (crumb_path)) {
+                    link += "<a href='" + crumb_path + "'>" + crumb + Path.DirectorySeparatorChar + "</a>";
+                    previous_was_folder = true;
+
+                } else if (File.Exists (crumb_path)) {
+                    link += "<a href='" + crumb_path + "'>" + crumb + "</a>";
+                    previous_was_folder = false;
+
+                } else {
+                    if (i > 0 && !previous_was_folder)
+                        link += Path.DirectorySeparatorChar;
+
+                    link += crumb;
+                    previous_was_folder = false;
+                }
+
+                new_path_root = Path.Combine (new_path_root, crumb);
+                i++;
+            }
+
+            return link;
         }
     }
 
