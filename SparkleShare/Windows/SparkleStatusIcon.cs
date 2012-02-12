@@ -22,6 +22,8 @@ using SparkleLib;
 using System.Windows.Forms;
 using System.Drawing;
 
+using System.Runtime.InteropServices;
+
 namespace SparkleShare {
 
     // The statusicon that stays in the
@@ -109,6 +111,16 @@ namespace SparkleShare {
             return animation_frames;
         }
 
+        [DllImport("user32.dll", EntryPoint = "DestroyIcon")]
+        static extern bool DestroyIcon(IntPtr hIcon);
+
+        private Icon GetIconFromBitmap (Bitmap bitmap)
+        {
+            IntPtr unmanagedIcon = bitmap.GetHicon();
+            Icon icon = (Icon)Icon.FromHandle(unmanagedIcon).Clone();
+            DestroyIcon(unmanagedIcon);
+            return icon;
+        }
 
         // Creates the Animation that handles the syncing animation
         private Timer CreateAnimation ()
@@ -126,7 +138,7 @@ namespace SparkleShare {
                     FrameNumber = 0;
 
                 status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
-                    this.status_icon.Icon = Icon.FromHandle (AnimationFrames [FrameNumber].GetHicon ());
+                    this.status_icon.Icon = GetIconFromBitmap( AnimationFrames [FrameNumber]);
                 });
             };
 
@@ -304,7 +316,7 @@ namespace SparkleShare {
                 StateText = _("Welcome to SparkleShare!");
 
                 status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
-                    this.status_icon.Icon = Icon.FromHandle (AnimationFrames [0].GetHicon ());
+                    this.status_icon.Icon = GetIconFromBitmap (AnimationFrames [0]);
                 });
 
             } else {
@@ -312,12 +324,12 @@ namespace SparkleShare {
                     StateText = _("Not everything is synced");
 
                     status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
-                        this.status_icon.Icon = Icon.FromHandle (Icons.sparkleshare_syncing_error_24.GetHicon ());
+                        this.status_icon.Icon = GetIconFromBitmap (Icons.sparkleshare_syncing_error_24);
                     });
                 } else {
                     StateText = _("Up to date") + "  (" + FolderSize + ")";
                     status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
-                        this.status_icon.Icon = Icon.FromHandle (AnimationFrames [0].GetHicon ());
+                        this.status_icon.Icon = GetIconFromBitmap (AnimationFrames [0]);
                     });
                 }
             }
