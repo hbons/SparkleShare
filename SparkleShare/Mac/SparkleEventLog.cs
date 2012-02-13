@@ -55,6 +55,7 @@ namespace SparkleShare {
         public SparkleEventLog () : base ()
         {
             Title    = "Recent Events";
+
             Delegate = new SparkleEventsDelegate ();
 
             SetFrame (new RectangleF (0, 0, 480, 640), true);
@@ -140,6 +141,12 @@ namespace SparkleShare {
 
             this.progress_indicator.StartAnimation (this);
             ContentView.AddSubview (this.progress_indicator);
+
+
+            (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate)
+                .LinkClicked += delegate (string href) {
+                    Controller.LinkClicked (href);
+                };
 
 
             UpdateContent (null);
@@ -274,11 +281,16 @@ namespace SparkleShare {
     
     
     public class SparkleWebPolicyDelegate : WebPolicyDelegate {
-        
+
+        public event LinkClickedHandler LinkClicked;
+        public delegate void LinkClickedHandler (string href);
+
+
         public override void DecidePolicyForNavigation (WebView web_view, NSDictionary action_info,
             NSUrlRequest request, WebFrame frame, NSObject decision_token)
         {
-            SparkleEventLogController.LinkClicked (request.Url.ToString ());
+            if (LinkClicked != null)
+                LinkClicked (request.Url.ToString ());
         }
     }
 }
