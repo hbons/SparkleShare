@@ -178,7 +178,7 @@ namespace SparkleShare {
         }
 
 
-        public static void LinkClicked (string url)
+        public void LinkClicked (string url)
         {
             if (url.StartsWith (Path.VolumeSeparatorChar.ToString ())) {
                 Program.Controller.OpenFile (url);
