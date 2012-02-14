@@ -208,6 +208,7 @@ namespace SparkleShare {
                                 path_entry.Text        = text;
                                 path_entry.Sensitive   = (state == FieldState.Enabled);
 
+                                // TODO: Use small labels like the mac UI
                                 if (string.IsNullOrEmpty (example_text))
                                     path_entry.ExampleText = null;
                                 else
