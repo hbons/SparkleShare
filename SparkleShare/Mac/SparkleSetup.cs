@@ -48,6 +48,7 @@ namespace SparkleShare {
         private NSTextField FullNameLabel;
         private NSTextField AddressTextField;
         private NSTextField AddressLabel;
+        private NSTextField AddressHelpLabel;
         private NSTextField PathTextField;
         private NSTextField PathLabel;
         private NSTextField PathHelpLabel;
@@ -215,6 +216,17 @@ namespace SparkleShare {
                                                   ("Lucida Grande", NSFontTraitMask.Condensed, 0, 11)
                         };
 
+                        AddressHelpLabel = new NSTextField () {
+                            BackgroundColor = NSColor.WindowBackground,
+                            Bordered        = false,
+                            TextColor       = NSColor.DisabledControlText,
+                            Editable        = false,
+                            Frame           = new RectangleF (190, Frame.Height - 355, 204, 17),
+                            StringValue     = "e.g. ‘rupert/website-design’",
+                            Font            = NSFontManager.SharedFontManager.FontWithFamily
+                                                  ("Lucida Grande", NSFontTraitMask.Condensed, 0, 11)
+                        };
+
 
                         TableView = new NSTableView () {
                             Frame            = new RectangleF (0, 0, 0, 0),
@@ -265,6 +277,7 @@ namespace SparkleShare {
                             InvokeOnMainThread (delegate {
                                 AddressTextField.StringValue = text;
                                 AddressTextField.Enabled     = (state == FieldState.Enabled);
+                                AddressHelpLabel.StringValue = example_text;
                             });
                         };
 
@@ -275,9 +288,7 @@ namespace SparkleShare {
                             InvokeOnMainThread (delegate {
                                 PathTextField.StringValue = text;
                                 PathTextField.Enabled     = (state == FieldState.Enabled);
-
-                                if (!string.IsNullOrEmpty (example_text))
-                                    PathHelpLabel.StringValue = "e.g. " + example_text;
+                                PathHelpLabel.StringValue = example_text;
                             });
                         };
 
@@ -322,6 +333,7 @@ namespace SparkleShare {
                         ContentView.AddSubview (ScrollView);
                         ContentView.AddSubview (AddressLabel);
                         ContentView.AddSubview (AddressTextField);
+                        ContentView.AddSubview (AddressHelpLabel);
                         ContentView.AddSubview (PathLabel);
                         ContentView.AddSubview (PathTextField);
                         ContentView.AddSubview (PathHelpLabel);
