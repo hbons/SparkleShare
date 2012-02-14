@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 using SparkleLib;
 
@@ -214,7 +215,7 @@ namespace SparkleShare {
         public void ShowAddPage ()
         {
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Add, null);
+                ChangePageEvent (PageType.Invite, null);
 
             SelectedPluginChanged (SelectedPluginIndex);
         }
@@ -258,6 +259,7 @@ namespace SparkleShare {
             };
 
             Program.Controller.FolderFetchError += delegate (string remote_url) {
+                Thread.Sleep (1000);
                 this.previous_url = remote_url;
 
                 if (ChangePageEvent != null)
@@ -275,18 +277,22 @@ namespace SparkleShare {
         }
 
 
-        public void InvitePageCompleted (SparkleInvite invite)
-        {/*
+        public SparkleInvite PendingInvite = new SparkleInvite ("ssh://git@sparkleshare.org/",
+                "/home/stuff/",
+                "http://www.sparkleshare.org/");
+
+        public void InvitePageCompleted ()
+        {
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Syncing, null);
 
-            if (!invite.Accept ()) {
+            if (!PendingInvite.Accept ()) {
                 if (ChangePageEvent != null)
                     ChangePageEvent (PageType.Error, null);
 
                 return;
             }
-              */
+
 
             // TODO: Remove events afterwards
 
@@ -301,6 +307,7 @@ namespace SparkleShare {
             };
 
             Program.Controller.FolderFetchError += delegate (string remote_url) {
+                Thread.Sleep (1000);
                 this.previous_url = remote_url;
 
                 if (ChangePageEvent != null)
@@ -314,13 +321,18 @@ namespace SparkleShare {
                     UpdateProgressBarEvent (percentage);
             };
 
-            //Program.Controller.FetchFolder (address, path);
+            Program.Controller.FetchFolder (PendingInvite.Address, PendingInvite.RemotePath);
         }
 
 
         public void ErrorPageCompleted ()
         {
-            if (ChangePageEvent != null)
+            if (ChangePageEvent == null)
+                return;
+
+            if (PendingInvite != null)
+                ChangePageEvent (PageType.Invite, null);
+            else
                 ChangePageEvent (PageType.Add, null);
         }
 
@@ -329,7 +341,12 @@ namespace SparkleShare {
         {
             Program.Controller.StopFetcher ();
 
-            if (ChangePageEvent != null)
+            if (ChangePageEvent == null)
+                return;
+
+            if (PendingInvite != null)
+                ChangePageEvent (PageType.Invite, null);
+            else
                 ChangePageEvent (PageType.Add, null);
         }
 

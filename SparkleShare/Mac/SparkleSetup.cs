@@ -36,6 +36,7 @@ namespace SparkleShare {
         private NSButton SyncButton;
         private NSButton TryAgainButton;
         private NSButton CancelButton;
+        private NSButton AcceptButton;
         private NSButton SkipTutorialButton;
         private NSButton OpenFolderButton;
         private NSButton FinishButton;
@@ -158,10 +159,40 @@ namespace SparkleShare {
                         break;
                     }
 
+                    case PageType.Invite: {
+
+                        Header      = "You've received an invite!";
+                        Description = "Do you want to add this project to SparkleShare?";
+
+
+                        CancelButton = new NSButton () {
+                                Title = "Cancel"
+                        };
+
+                            CancelButton.Activated += delegate {
+                                InvokeOnMainThread (delegate {
+                                    PerformClose (this);
+                                });
+                            };
+
+                        AcceptButton = new NSButton () {
+                             Title = "Accept"
+                        };
+
+                            AcceptButton.Activated += delegate {
+                                Controller.InvitePageCompleted ();
+                            };
+
+                        Buttons.Add (AcceptButton);
+                        Buttons.Add (CancelButton);
+
+                        break;
+                    }
+
                     case PageType.Add: {
 
-                        Header       = "Where's your project hosted?";
-                        Description  = "";
+                        Header      = "Where's your project hosted?";
+                        Description = "";
 
                         AddressLabel = new NSTextField () {
                             Alignment       = NSTextAlignment.Left,
