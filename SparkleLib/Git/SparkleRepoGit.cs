@@ -724,6 +724,9 @@ namespace SparkleLib {
 
                 } else if (child_path.EndsWith (".notes")) {
                     continue;
+
+                } else if (child_path.EndsWith (".git")) {
+                    continue;
                 }
 
                 PrepareDirectories (child_path);
