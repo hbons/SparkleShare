@@ -40,6 +40,17 @@ namespace SparkleShare {
         public double ProgressPercentage = 0.0;
         public string ProgressSpeed      = "";
 
+
+        public event ShowSetupWindowEventHandler ShowSetupWindowEvent;
+        public delegate void ShowSetupWindowEventHandler (PageType page_type);
+
+        public event ShowAboutWindowEventHandler ShowAboutWindowEvent;
+        public delegate void ShowAboutWindowEventHandler ();
+
+        public event ShowEventsWindowEventHandler ShowEventsWindowEvent;
+        public delegate void ShowEventsWindowEventHandler ();
+
+
         public event FolderFetchedEventHandler FolderFetched;
         public delegate void FolderFetchedEventHandler (string [] warnings);
         
@@ -64,14 +75,14 @@ namespace SparkleShare {
         public event OnErrorHandler OnError;
         public delegate void OnErrorHandler ();
 
-        public event OnInviteHandler OnInvite;
-        public delegate void OnInviteHandler (SparkleInvite invite);
-
-        public event ConflictNotificationRaisedHandler ConflictNotificationRaised;
-        public delegate void ConflictNotificationRaisedHandler ();
+        public event InviteReceivedHandler InviteReceived;
+        public delegate void InviteReceivedHandler (SparkleInvite invite);
 
         public event NotificationRaisedEventHandler NotificationRaised;
         public delegate void NotificationRaisedEventHandler (SparkleChangeSet change_set);
+
+        public event AlertNotificationRaisedEventHandler AlertNotificationRaised;
+        public delegate void AlertNotificationRaisedEventHandler (string title, string message);
 
         public event NoteNotificationRaisedEventHandler NoteNotificationRaised;
         public delegate void NoteNotificationRaisedEventHandler (SparkleUser user, string folder_name);
@@ -126,15 +137,26 @@ namespace SparkleShare {
                     FolderListChanged ();
             };
 
+            watcher.Created += delegate (object o, FileSystemEventArgs args) {
+                if (!args.FullPath.EndsWith (".xml"))
+                    return;
 
-            SparkleInviteListener invite_listener = new SparkleInviteListener (1987);
+                if (this.fetcher != null &&
+                    this.fetcher.IsActive) {
 
-            invite_listener.InviteReceived += delegate (SparkleInvite invite) {
-                if (OnInvite != null && !FirstRun)
-                    OnInvite (invite);
+                    if (AlertNotificationRaised != null)
+                        AlertNotificationRaised ("SparkleShare Setup is busy",
+                            "Please try again later");
+
+                } else {
+                    if (InviteReceived != null) {
+                        SparkleInvite invite = new SparkleInvite (args.FullPath);
+
+                        if (invite.Valid)
+                            InviteReceived (invite);
+                    }
+                }
             };
-
-            invite_listener.Start ();
 
             new Thread (new ThreadStart (PopulateRepositories)).Start ();
         }
@@ -147,43 +169,11 @@ namespace SparkleShare {
         }
 
 
-        // Uploads the user's public key to the server
-        public bool AcceptInvitation (string server, string folder, string token)
-        {
-            // The location of the user's public key for SparkleShare
-            string public_key_file_path = SparkleHelpers.CombineMore (SparkleConfig.DefaultConfig.HomePath,
-                ".ssh", "sparkleshare." + UserEmail + ".key.pub");
-
-            if (!File.Exists (public_key_file_path))
-                return false;
-
-            StreamReader reader = new StreamReader (public_key_file_path);
-            string public_key = reader.ReadToEnd ();
-            reader.Close ();
-
-            string url = "https://" + server + "/?folder=" + folder +
-                         "&token=" + token + "&pubkey=" + public_key;
-
-            SparkleHelpers.DebugInfo ("WebRequest", url);
-
-            HttpWebRequest request   = (HttpWebRequest) WebRequest.Create (url);
-            HttpWebResponse response = (HttpWebResponse) request.GetResponse();
-
-            if (response.StatusCode == HttpStatusCode.OK) {
-                response.Close ();
-                return true;
-
-            } else {
-                response.Close ();
-                return false;
-            }
-        }
-
-
         public List<string> Folders {
             get {
                 List<string> folders = SparkleConfig.DefaultConfig.Folders;
                 folders.Sort ();
+
                 return folders;
             }
         }
@@ -194,6 +184,7 @@ namespace SparkleShare {
                 List<string> hosts = SparkleConfig.DefaultConfig.HostsWithUsername;
                 hosts.AddRange(SparkleConfig.DefaultConfig.Hosts);
                 hosts.Sort ();
+
                 return hosts;
             }
         }
@@ -211,6 +202,28 @@ namespace SparkleShare {
                 return unsynced_folders;
             }
         }
+
+
+        public void ShowSetupWindow (PageType page_type)
+        {
+            if (ShowSetupWindowEvent != null)
+                ShowSetupWindowEvent (page_type);
+        }
+
+
+        public void ShowAboutWindow ()
+        {
+            if (ShowAboutWindowEvent != null)
+                ShowAboutWindowEvent ();
+        }
+
+
+        public void ShowEventsWindow ()
+        {
+            if (ShowEventsWindowEvent != null)
+                ShowEventsWindowEvent ();
+        }
+
 
 
         public List<SparkleChangeSet> GetLog ()
@@ -584,7 +597,6 @@ namespace SparkleShare {
 
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set) {
-
                 if (NotificationRaised != null)
                     NotificationRaised (change_set);
             };
@@ -596,8 +608,9 @@ namespace SparkleShare {
             };
 
             repo.ConflictResolved += delegate {
-                if (ConflictNotificationRaised != null)
-                    ConflictNotificationRaised ();
+                if (AlertNotificationRaised != null)
+                    AlertNotificationRaised ("Conflict detected.",
+                        "Don't worry, SparkleShare made a copy of each conflicting file.");
             };
 
             repo.SyncStatusChanged += delegate (SyncStatus status) {
@@ -851,7 +864,6 @@ namespace SparkleShare {
             }
 
             foreach (string raw_email in emails) {
-
                 // Gravatar wants lowercase emails
                 string email            = raw_email.ToLower ();
                 string avatar_file_path = Path.Combine (avatar_path, "avatar-" + email);
@@ -866,9 +878,6 @@ namespace SparkleShare {
                           old_avatars.Add (email);
 
                         } catch (FileNotFoundException) {
-                            // FIXME: For some reason the previous File.Exists () check
-                            // doesn't cover all cases sometimes, so we catch any errors
-
                             if (old_avatars.Contains (email))
                                 old_avatars.Remove (email);
                         }
@@ -876,11 +885,11 @@ namespace SparkleShare {
 
                 } else if (this.failed_avatars.Contains (email)) {
                     break;
+
                 } else {
                   WebClient client = new WebClient ();
                   string url       =  "http://gravatar.com/avatar/" + GetMD5 (email) +
                                       ".jpg?s=" + size + "&d=404";
-
                   try {
                     // Fetch the avatar
                     byte [] buffer = client.DownloadData (url);
@@ -900,11 +909,10 @@ namespace SparkleShare {
                         SparkleHelpers.DebugInfo ("Avatar", "Failed fetching gravatar for " + email);
 
                         // Stop downloading further avatars if we have no internet access
-                        if (e.Status == WebExceptionStatus.Timeout){
+                        if (e.Status == WebExceptionStatus.Timeout)
                             break;
-                        } else {
+                        else
                             this.failed_avatars.Add (email);
-                        }
                   }
                }
             }
