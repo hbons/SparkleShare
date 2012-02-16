@@ -65,11 +65,11 @@ namespace SparkleShare {
 
                 StatusIcon = new SparkleStatusIcon ();
                 Bubbles = new SparkleBubbles ();
+                Setup = new SparkleSetup ();
+                // About = new SparkleAbout ();
 
                 if (Program.Controller.FirstRun) {
-                    Setup = new SparkleSetup ();
-                    Setup.Controller.ShowSetupPage ();
-
+                    Program.Controller.ShowSetupWindow (PageType.Setup);
                     UpdateDockIconVisibility ();
                 }
             }
