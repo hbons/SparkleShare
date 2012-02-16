@@ -16,12 +16,8 @@
 
 
 using System;
-using System.IO;
 using System.Net;
-using System.Net.Sockets;
-using System.Text;
 using System.Xml;
-using System.Threading;
 
 using SparkleLib;
 
@@ -29,22 +25,22 @@ namespace SparkleShare {
 
     public class SparkleInvite {
 
-        public readonly string Address;
-        public readonly string RemotePath;
-        public readonly Uri AcceptUrl;
+        public string Address { get; private set; }
+        public string RemotePath { get; private set; }
+        public Uri AcceptUrl { get; private set; }
+
+        public bool Valid {
+            get {
+                return (!string.IsNullOrEmpty (Address) &&
+                        !string.IsNullOrEmpty (RemotePath) &&
+                        !string.IsNullOrEmpty (AcceptUrl.ToString ()));
+            }
+        }
 
 
         public SparkleInvite (string address, string remote_path, string accept_url)
         {
-            if (remote_path.StartsWith ("/"))
-                remote_path = remote_path.Substring (1);
-
-            if (!address.EndsWith ("/"))
-                address = address + "/";
-
-            Address    = address;
-            RemotePath = remote_path;
-            AcceptUrl  = new Uri (accept_url);
+            Initialize (address, remote_path, accept_url);
         }
 
 
@@ -53,7 +49,10 @@ namespace SparkleShare {
             XmlDocument xml_document = new XmlDocument ();
             XmlNode node;
 
-            string address = "", remote_path = "", accept_url = "";
+            string address     = "";
+            string remote_path = "";
+            string accept_url  = "";
+
 
             try {
                 xml_document.Load (xml_file_path);
@@ -67,21 +66,12 @@ namespace SparkleShare {
                 node = xml_document.SelectSingleNode ("/sparkleshare/invite/accept_url/text()");
                 if (node != null) { accept_url = node.Value; }
 
+                Initialize (address, remote_path, accept_url);
+
             } catch (XmlException e) {
                 SparkleHelpers.DebugInfo ("Invite", "Invalid XML: " + e.Message);
                 return;
             }
-
-
-            if (remote_path.StartsWith ("/"))
-                remote_path = remote_path.Substring (1);
-
-            if (!address.EndsWith ("/"))
-                address = address + "/";
-
-            Address    = address;
-            RemotePath = remote_path;
-            AcceptUrl  = new Uri (accept_url);
         }
 
 
@@ -101,6 +91,20 @@ namespace SparkleShare {
 
                 return false;
             }
+        }
+
+
+        private void Initialize (string address, string remote_path, string accept_url)
+        {/*
+            if (!remote_path.StartsWith ("/"))
+                remote_path = "/" + remote_path;
+
+            if (!address.EndsWith ("/"))
+                address = address + "/";
+              */
+            Address    = address;
+            RemotePath = remote_path;
+            AcceptUrl  = new Uri (accept_url);
         }
     }
 }
