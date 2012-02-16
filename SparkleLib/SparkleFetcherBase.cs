@@ -42,6 +42,7 @@ namespace SparkleLib {
         public string RemoteUrl;
         public string [] ExcludeRules;
         public string [] Warnings;
+        public bool IsActive { get; private set; }
 
         private Thread thread;
 
@@ -50,6 +51,7 @@ namespace SparkleLib {
         {
             TargetFolder = target_folder;
             RemoteUrl    = server + "/" + remote_folder;
+            IsActive       = false;
 
             ExcludeRules = new string [] {
                 // gedit and emacs
@@ -125,6 +127,7 @@ namespace SparkleLib {
         // Clones the remote repository
         public void Start ()
         {
+            IsActive = true;
             SparkleHelpers.DebugInfo ("Fetcher", "[" + TargetFolder + "] Fetching folder: " + RemoteUrl);
 
             if (Started != null)
@@ -149,6 +152,7 @@ namespace SparkleLib {
                     SparkleHelpers.DebugInfo ("Fetcher", "Finished");
 
                     EnableHostKeyCheckingForHost (host);
+                    IsActive = false;
 
                     if (Finished != null)
                         Finished (Warnings);
@@ -157,6 +161,7 @@ namespace SparkleLib {
                     SparkleHelpers.DebugInfo ("Fetcher", "Failed");
 
                     EnableHostKeyCheckingForHost (host);
+                    IsActive = false;
 
                     if (Failed != null)
                         Failed ();

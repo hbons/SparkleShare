@@ -230,26 +230,13 @@ namespace SparkleShare {
                 Menu.AddItem (NSMenuItem.SeparatorItem);
     
                     SyncMenuItem = new NSMenuItem () {
-                        Title = "Add Hosted Project…",
+                        Title   = "Add Hosted Project…",
                         Enabled = true
                     };
                 
                     if (!Program.Controller.FirstRun) {
                         SyncMenuItem.Activated += delegate {
-                            InvokeOnMainThread (delegate {
-                                NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-    
-                                if (SparkleUI.Setup == null) {
-                                    SparkleUI.Setup = new SparkleSetup ();
-                                    SparkleUI.Setup.Controller.ShowAddPage ();
-                                }
-    
-                                if (!SparkleUI.Setup.IsVisible)
-                                    SparkleUI.Setup.Controller.ShowAddPage ();
-    
-                                SparkleUI.Setup.OrderFrontRegardless ();
-                                SparkleUI.Setup.MakeKeyAndOrderFront (this);
-                            });
+                            Controller.AddHostedProjectClicked ();
                         };
                     }
     
@@ -262,7 +249,9 @@ namespace SparkleShare {
                     };
     
                     if (Controller.Folders.Length > 0) {
+                        // TODO: move this logic
                         RecentEventsMenuItem.Activated += delegate {
+                            // Controller.OpenRecentEventsClicked ()
                             InvokeOnMainThread (delegate {
                                 NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
         
@@ -304,8 +293,10 @@ namespace SparkleShare {
                         Title = "About SparkleShare",
                         Enabled = true
                     };
-    
+
+                    // TODO: move this logic
                     AboutMenuItem.Activated += delegate {
+                        // Controller.AboutClicked ();
                         InvokeOnMainThread (delegate {
                             NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
     

@@ -33,7 +33,7 @@ namespace SparkleShare {
         public SparkleSetupController Controller = new SparkleSetupController ();
 
         private NSButton ContinueButton;
-        private NSButton SyncButton;
+        private NSButton AddButton;
         private NSButton TryAgainButton;
         private NSButton CancelButton;
         private NSButton SkipTutorialButton;
@@ -65,6 +65,18 @@ namespace SparkleShare {
 
         public SparkleSetup () : base ()
         {
+            Controller.HideWindowEvent += delegate {
+                InvokeOnMainThread (delegate {
+                    PerformClose (this);
+                });
+            };
+
+            Controller.ShowWindowEvent += delegate {
+                InvokeOnMainThread (delegate {
+                    OrderFrontRegardless ();
+                });
+            };
+
             Controller.ChangePageEvent += delegate (PageType type, string [] warnings) {
                 InvokeOnMainThread (delegate {
                     Reset ();
@@ -72,6 +84,7 @@ namespace SparkleShare {
                     switch (type) {
                     case PageType.Setup: {
 
+                        // TODO: Improve text
                         Header       = "Welcome to SparkleShare!";
                         Description  = "We'll need some info to mark your changes in the event log. " +
                                        "Don't worry, this stays between you and your peers.";
@@ -159,10 +172,85 @@ namespace SparkleShare {
                         break;
                     }
 
+                    case PageType.Invite: {
+
+                        Header      = "You've received an invite!";
+                        Description = "Do you want to add this project to SparkleShare?";
+
+
+                        AddressLabel = new NSTextField () {
+                            Alignment       = NSTextAlignment.Right,
+                            BackgroundColor = NSColor.WindowBackground,
+                            Bordered        = false,
+                            Editable        = false,
+                            Frame           = new RectangleF (165, Frame.Height - 240, 160, 17),
+                            StringValue     = "Address:",
+                            Font            = SparkleUI.Font
+                        };
+
+                        PathLabel = new NSTextField () {
+                            Alignment       = NSTextAlignment.Right,
+                            BackgroundColor = NSColor.WindowBackground,
+                            Bordered        = false,
+                            Editable        = false,
+                            Frame           = new RectangleF (165, Frame.Height - 264, 160, 17),
+                            StringValue     = "Remote Path:",
+                            Font            = SparkleUI.Font
+                        };
+
+                        AddressTextField = new NSTextField () {
+                            Alignment       = NSTextAlignment.Left,
+                            BackgroundColor = NSColor.WindowBackground,
+                            Bordered        = false,
+                            Editable        = false,
+                            Frame           = new RectangleF (330, Frame.Height - 240, 260, 17),
+                            StringValue     = Controller.PendingInvite.Address,
+                            Font            = SparkleUI.BoldFont
+                        };
+
+                        PathTextField = new NSTextField () {
+                            Alignment       = NSTextAlignment.Left,
+                            BackgroundColor = NSColor.WindowBackground,
+                            Bordered        = false,
+                            Editable        = false,
+                            Frame           = new RectangleF (330, Frame.Height - 264, 260, 17),
+                            StringValue     = Controller.PendingInvite.RemotePath,
+                            Font            = SparkleUI.BoldFont
+                        };
+
+
+                        ContentView.AddSubview (AddressLabel);
+                        ContentView.AddSubview (PathLabel);
+                        ContentView.AddSubview (AddressTextField);
+                        ContentView.AddSubview (PathTextField);
+
+
+                        CancelButton = new NSButton () {
+                                Title = "Cancel"
+                        };
+
+                            CancelButton.Activated += delegate {
+                                Controller.PageCancelled ();
+                            };
+
+                        AddButton = new NSButton () {
+                             Title = "Add"
+                        };
+
+                            AddButton.Activated += delegate {
+                                Controller.InvitePageCompleted ();
+                            };
+
+                        Buttons.Add (AddButton);
+                        Buttons.Add (CancelButton);
+
+                        break;
+                    }
+
                     case PageType.Add: {
 
-                        Header       = "Where's your project hosted?";
-                        Description  = "";
+                        Header      = "Where's your project hosted?";
+                        Description = "";
 
                         AddressLabel = new NSTextField () {
                             Alignment       = NSTextAlignment.Left,
@@ -171,7 +259,7 @@ namespace SparkleShare {
                             Editable        = false,
                             Frame           = new RectangleF (190, Frame.Height - 308, 160, 17),
                             StringValue     = "Address:",
-                            Font            = SparkleUI.Font
+                            Font            = SparkleUI.BoldFont
                         };
 
                         AddressTextField = new NSTextField () {
@@ -190,7 +278,7 @@ namespace SparkleShare {
                             Editable        = false,
                             Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 308, 160, 17),
                             StringValue     = "Remote Path:",
-                            Font            = SparkleUI.Font
+                            Font            = SparkleUI.BoldFont
                         };
 
                         PathTextField = new NSTextField () {
@@ -325,7 +413,7 @@ namespace SparkleShare {
 
                         Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
                             InvokeOnMainThread (delegate {
-                                SyncButton.Enabled = button_enabled;
+                                AddButton.Enabled = button_enabled;
                             });
                         };
 
@@ -338,28 +426,26 @@ namespace SparkleShare {
                         ContentView.AddSubview (PathTextField);
                         ContentView.AddSubview (PathHelpLabel);
 
-                        SyncButton = new NSButton () {
+                        AddButton = new NSButton () {
                             Title = "Add",
                             Enabled = false
                         };
 
-                            SyncButton.Activated += delegate {
+                            AddButton.Activated += delegate {
                                 Controller.AddPageCompleted (
                                     AddressTextField.StringValue,
                                     PathTextField.StringValue
                                 );
                             };
 
-                        Buttons.Add (SyncButton);
+                        Buttons.Add (AddButton);
 
                             CancelButton = new NSButton () {
                                 Title = "Cancel"
                             };
 
                             CancelButton.Activated += delegate {
-                                InvokeOnMainThread (delegate {
-                                    PerformClose (this);
-                                });
+                                Controller.PageCancelled ();
                             };
 
                         Buttons.Add (CancelButton);
@@ -505,10 +591,7 @@ namespace SparkleShare {
                         };
 
                         FinishButton.Activated += delegate {
-                            InvokeOnMainThread (delegate {
-                                Controller.FinishedPageCompleted ();
-                                PerformClose (this);
-                            });
+                            Controller.FinishPageCompleted ();
                         };
 
                         OpenFolderButton = new NSButton () {
@@ -655,9 +738,7 @@ namespace SparkleShare {
                             };
 
                             FinishButton.Activated += delegate {
-                                InvokeOnMainThread (delegate {
-                                    PerformClose (this);
-                                });
+                                Controller.TutorialPageCompleted ();
                             };
 
                             string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
