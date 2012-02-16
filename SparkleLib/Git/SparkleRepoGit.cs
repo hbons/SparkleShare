@@ -783,7 +783,10 @@ namespace SparkleLib {
                 if (file_name.EndsWith (".empty"))
                     file_name = file_name.Substring (0, file_name.Length - 6);
 
-                message += "+ ‘" + file_name + "’" + n;
+                if (file_name.StartsWith (".notes"))
+                    message += "added a note";
+                else
+                    message += "+ ‘" + file_name + "’" + n;
 
                 count++;
                 if (count == max_count)
