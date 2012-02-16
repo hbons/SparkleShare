@@ -43,6 +43,12 @@ namespace SparkleShare {
 
     public class SparkleSetupController {
 
+        public event ShowWindowEventHandler ShowWindowEvent;
+        public delegate void ShowWindowEventHandler ();
+
+        public event HideWindowEventHandler HideWindowEvent;
+        public delegate void HideWindowEventHandler ();
+
         public event ChangePageEventHandler ChangePageEvent;
         public delegate void ChangePageEventHandler (PageType page, string [] warnings);
         
@@ -60,52 +66,21 @@ namespace SparkleShare {
             string example_text, FieldState state);
 
         public event ChangePathFieldEventHandler ChangePathFieldEvent;
-        public delegate void ChangePathFieldEventHandler (string text,
-            string example_text, FieldState state);
+        public delegate void ChangePathFieldEventHandler (string text, string example_text, FieldState state);
 
         public readonly List<SparklePlugin> Plugins = new List<SparklePlugin> ();
         public SparklePlugin SelectedPlugin;
+
+        public int TutorialPageNumber { get; private set; }
+        public string PreviousUrl { get; private set; }
+        public string PreviousAddress { get; private set; }
+        public string PreviousPath { get; private set; }
+        public string SyncingFolder { get; private set; }
 
 
         public int SelectedPluginIndex {
             get {
                 return Plugins.IndexOf (SelectedPlugin);
-            }
-        }
-
-        public int TutorialPageNumber {
-            get {
-                return this.tutorial_page_number;
-            }
-        }
-
-        public string PreviousUrl {
-            get {
-                return this.previous_url;
-            }
-        }
-
-        public string PreviousAddress {
-            get {
-                return this.previous_address;
-            }
-        }
-
-        public string PreviousPath {
-            get {
-                return this.previous_path;
-            }
-        }
-
-        public string SyncingFolder {
-            get {
-                return this.syncing_folder;
-            }
-        }
-
-        public PageType PreviousPage {
-            get {
-                return this.previous_page;
             }
         }
 
@@ -125,16 +100,14 @@ namespace SparkleShare {
         }
 
 
-        private string previous_address  = "";
-        private string previous_path     = "";
-        private string previous_url      = "";
-        private string syncing_folder    = "";
-        private int tutorial_page_number = 1;
-        private PageType previous_page;
-
-
         public SparkleSetupController ()
         {
+            TutorialPageNumber = 1;
+            PreviousAddress    = "";
+            PreviousPath       = "";
+            PreviousUrl        = "";
+            SyncingFolder      = "";
+
             string local_plugins_path = SparkleHelpers.CombineMore (
                 Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
                 "sparkleshare", "plugins");
@@ -154,16 +127,37 @@ namespace SparkleShare {
 
             SelectedPlugin = Plugins [0];
 
-            ChangePageEvent += delegate (PageType page, string [] warning) {
-                this.previous_page = page;
+
+            Program.Controller.InviteReceived += delegate (SparkleInvite invite) {
+                PendingInvite = invite;
+
+                if (ChangePageEvent != null)
+                    ChangePageEvent (PageType.Invite, null);
+
+                if (ShowWindowEvent != null)
+                    ShowWindowEvent ();
+            };
+
+
+            Program.Controller.ShowSetupWindowEvent += delegate (PageType page_type) {
+                if (ChangePageEvent != null)
+                    ChangePageEvent (page_type, null);
+
+                if (ShowWindowEvent != null)
+                    ShowWindowEvent ();
+
+                if (page_type == PageType.Add)
+                    SelectedPluginChanged (SelectedPluginIndex);
             };
         }
 
 
-        public void ShowSetupPage ()
+        public void PageCancelled ()
         {
-           if (ChangePageEvent != null)
-               ChangePageEvent (PageType.Setup, null);
+            // PendingInvite = null;
+
+            if (HideWindowEvent != null)
+                HideWindowEvent ();
         }
 
 
@@ -194,171 +188,27 @@ namespace SparkleShare {
         }
 
 
-        public void TutorialPageCompleted ()
-        {
-            this.tutorial_page_number++;
-
-            if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Tutorial, null);
-        }
-
-
         public void TutorialSkipped ()
         {
-            this.tutorial_page_number = 4;
+            TutorialPageNumber = 4;
 
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Tutorial, null);
         }
 
 
-        public void ShowAddPage ()
+        public void TutorialPageCompleted ()
         {
-            if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Invite, null);
+            TutorialPageNumber++;
 
-            SelectedPluginChanged (SelectedPluginIndex);
-        }
+            if (TutorialPageNumber == 4) {
+                if (HideWindowEvent != null)
+                    HideWindowEvent ();
 
-
-        public void CheckAddPage (string address, string remote_path, int selected_plugin)
-        {
-            if (SelectedPluginIndex != selected_plugin)
-                SelectedPluginChanged (selected_plugin);
-
-            address     = address.Trim ();
-            remote_path = remote_path.Trim ();
-
-            bool fields_valid = address != null && address.Trim().Length > 0 &&
-                remote_path != null && remote_path.Trim().Length > 0;
-
-            if (UpdateAddProjectButtonEvent != null)
-                UpdateAddProjectButtonEvent (fields_valid);
-        }
-
-
-        public void AddPageCompleted (string address, string path)
-        {
-            this.syncing_folder   = Path.GetFileNameWithoutExtension (path);
-            this.previous_address = address;
-            this.previous_path    = path;
-
-            if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Syncing, null);
-
-            // TODO: Remove events afterwards
-
-            Program.Controller.FolderFetched += delegate (string [] warnings) {
+            } else {
                 if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Finished, warnings);
-
-                this.previous_address = "";
-                this.syncing_folder   = "";
-                this.previous_url     = "";
-                SelectedPlugin        = Plugins [0];
-            };
-
-            Program.Controller.FolderFetchError += delegate (string remote_url) {
-                Thread.Sleep (1000);
-                this.previous_url = remote_url;
-
-                if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Error, null);
-
-                this.syncing_folder = "";
-            };
-            
-            Program.Controller.FolderFetching += delegate (double percentage) {
-                if (UpdateProgressBarEvent != null)
-                    UpdateProgressBarEvent (percentage);
-            };
-
-            Program.Controller.FetchFolder (address, path);
-        }
-
-
-        public SparkleInvite PendingInvite = new SparkleInvite ("ssh://git@sparkleshare.org/",
-                "/home/stuff/",
-                "http://www.sparkleshare.org/");
-
-        public void InvitePageCompleted ()
-        {
-            if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Syncing, null);
-
-            if (!PendingInvite.Accept ()) {
-                if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Error, null);
-
-                return;
+                    ChangePageEvent (PageType.Tutorial, null);
             }
-
-
-            // TODO: Remove events afterwards
-
-            Program.Controller.FolderFetched += delegate (string [] warnings) {
-                if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Finished, warnings);
-
-                this.previous_address = "";
-                this.syncing_folder   = "";
-                this.previous_url     = "";
-                SelectedPlugin        = Plugins [0];
-            };
-
-            Program.Controller.FolderFetchError += delegate (string remote_url) {
-                Thread.Sleep (1000);
-                this.previous_url = remote_url;
-
-                if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Error, null);
-
-                this.syncing_folder = "";
-            };
-
-            Program.Controller.FolderFetching += delegate (double percentage) {
-                if (UpdateProgressBarEvent != null)
-                    UpdateProgressBarEvent (percentage);
-            };
-
-            Program.Controller.FetchFolder (PendingInvite.Address, PendingInvite.RemotePath);
-        }
-
-
-        public void ErrorPageCompleted ()
-        {
-            if (ChangePageEvent == null)
-                return;
-
-            if (PendingInvite != null)
-                ChangePageEvent (PageType.Invite, null);
-            else
-                ChangePageEvent (PageType.Add, null);
-        }
-
-
-        public void SyncingCancelled ()
-        {
-            Program.Controller.StopFetcher ();
-
-            if (ChangePageEvent == null)
-                return;
-
-            if (PendingInvite != null)
-                ChangePageEvent (PageType.Invite, null);
-            else
-                ChangePageEvent (PageType.Add, null);
-        }
-
-
-        // TODO: public void WindowClosed () { }
-
-
-        public void FinishedPageCompleted ()
-        {
-            this.previous_address = "";
-            this.previous_path    = "";
-            Program.Controller.UpdateState ();
         }
 
 
@@ -390,6 +240,155 @@ namespace SparkleShare {
                 if (ChangePathFieldEvent != null)
                     ChangePathFieldEvent ("", "", FieldState.Enabled);
             }
+        }
+
+
+        public void CheckAddPage (string address, string remote_path, int selected_plugin)
+        {
+            if (SelectedPluginIndex != selected_plugin)
+                SelectedPluginChanged (selected_plugin);
+
+            address     = address.Trim ();
+            remote_path = remote_path.Trim ();
+
+            bool fields_valid = address != null && address.Trim().Length > 0 &&
+                remote_path != null && remote_path.Trim().Length > 0;
+
+            if (UpdateAddProjectButtonEvent != null)
+                UpdateAddProjectButtonEvent (fields_valid);
+        }
+
+
+        public void AddPageCompleted (string address, string path)
+        {
+            SyncingFolder   = Path.GetFileNameWithoutExtension (path);
+            PreviousAddress = address;
+            PreviousPath    = path;
+
+            if (ChangePageEvent != null)
+                ChangePageEvent (PageType.Syncing, null);
+
+            // TODO: Remove events afterwards
+
+            Program.Controller.FolderFetched += delegate (string [] warnings) {
+                if (ChangePageEvent != null)
+                    ChangePageEvent (PageType.Finished, warnings);
+
+                PreviousAddress = "";
+                SyncingFolder   = "";
+                PreviousUrl     = "";
+                SelectedPlugin  = Plugins [0];
+            };
+
+            Program.Controller.FolderFetchError += delegate (string remote_url) {
+                Thread.Sleep (1000);
+                PreviousUrl = remote_url;
+
+                if (ChangePageEvent != null)
+                    ChangePageEvent (PageType.Error, null);
+
+                SyncingFolder = "";
+            };
+            
+            Program.Controller.FolderFetching += delegate (double percentage) {
+                if (UpdateProgressBarEvent != null)
+                    UpdateProgressBarEvent (percentage);
+            };
+
+            Program.Controller.FetchFolder (address, path);
+        }
+
+
+        // TODO: trailing slash should work
+        public SparkleInvite PendingInvite = new SparkleInvite ("ssh://git@github.com/",
+            "/hbons/Stuff", "http://www.sparkleshare.org/");
+
+        public void InvitePageCompleted ()
+        {
+            SyncingFolder   = Path.GetFileNameWithoutExtension (PendingInvite.RemotePath);
+            PreviousAddress = PendingInvite.Address;
+            PreviousPath    = PendingInvite.RemotePath;
+
+            if (ChangePageEvent != null)
+                ChangePageEvent (PageType.Syncing, null);
+
+            if (!PendingInvite.Accept ()) {
+                if (ChangePageEvent != null)
+                    ChangePageEvent (PageType.Error, null);
+
+                return;
+            }
+
+
+            // TODO: Remove events afterwards
+
+            Program.Controller.FolderFetched += delegate (string [] warnings) {
+                if (ChangePageEvent != null)
+                    ChangePageEvent (PageType.Finished, warnings);
+
+
+                PreviousAddress = "";
+                SyncingFolder   = "";
+                PreviousUrl     = "";
+                SelectedPlugin  = Plugins [0];
+
+                PendingInvite = null;
+            };
+
+            Program.Controller.FolderFetchError += delegate (string remote_url) {
+                Thread.Sleep (1000);
+                PreviousUrl = remote_url;
+
+                if (ChangePageEvent != null)
+                    ChangePageEvent (PageType.Error, null);
+
+                SyncingFolder = "";
+            };
+
+            Program.Controller.FolderFetching += delegate (double percentage) {
+                if (UpdateProgressBarEvent != null)
+                    UpdateProgressBarEvent (percentage);
+            };
+
+            Program.Controller.FetchFolder (PendingInvite.Address, PendingInvite.RemotePath);
+        }
+
+
+        public void SyncingCancelled ()
+        {
+            Program.Controller.StopFetcher ();
+
+            if (ChangePageEvent == null)
+                return;
+
+            if (PendingInvite != null)
+                ChangePageEvent (PageType.Invite, null);
+            else
+                ChangePageEvent (PageType.Add, null);
+        }
+
+
+        public void ErrorPageCompleted ()
+        {
+            if (ChangePageEvent == null)
+                return;
+
+            if (PendingInvite != null)
+                ChangePageEvent (PageType.Invite, null);
+            else
+                ChangePageEvent (PageType.Add, null);
+        }
+
+
+        public void FinishPageCompleted ()
+        {
+            PreviousAddress = "";
+            PreviousPath    = "";
+
+            Program.Controller.UpdateState ();
+
+            if (HideWindowEvent != null)
+                HideWindowEvent ();
         }
 
 

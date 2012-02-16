@@ -40,6 +40,17 @@ namespace SparkleShare {
         public double ProgressPercentage = 0.0;
         public string ProgressSpeed      = "";
 
+
+        public event ShowSetupWindowEventHandler ShowSetupWindowEvent;
+        public delegate void ShowSetupWindowEventHandler (PageType page_type);
+
+        public event ShowAboutWindowEventHandler ShowAboutWindowEvent;
+        public delegate void ShowAboutWindowEventHandler ();
+
+        public event ShowEventsWindowEventHandler ShowEventsWindowEvent;
+        public delegate void ShowEventsWindowEventHandler ();
+
+
         public event FolderFetchedEventHandler FolderFetched;
         public delegate void FolderFetchedEventHandler (string [] warnings);
         
@@ -64,8 +75,8 @@ namespace SparkleShare {
         public event OnErrorHandler OnError;
         public delegate void OnErrorHandler ();
 
-        public event OnInviteHandler OnInvite;
-        public delegate void OnInviteHandler (SparkleInvite invite);
+        public event InviteReceivedHandler InviteReceived;
+        public delegate void InviteReceivedHandler (SparkleInvite invite);
 
         public event NotificationRaisedEventHandler NotificationRaised;
         public delegate void NotificationRaisedEventHandler (SparkleChangeSet change_set);
@@ -130,7 +141,7 @@ namespace SparkleShare {
                 if (!args.FullPath.EndsWith (".xml"))
                     return;
 
-                if (this.fetcher == null ||
+                if (this.fetcher != null &&
                     this.fetcher.IsActive) {
 
                     if (AlertNotificationRaised != null)
@@ -138,8 +149,12 @@ namespace SparkleShare {
                             "Please try again later");
 
                 } else {
-                    if (OnInvite != null)
-                        OnInvite (new SparkleInvite (args.FullPath));
+                    if (InviteReceived != null) {
+                        SparkleInvite invite = new SparkleInvite (args.FullPath);
+
+                        if (invite.Valid)
+                            InviteReceived (invite);
+                    }
                 }
             };
 
@@ -150,39 +165,6 @@ namespace SparkleShare {
         public bool FirstRun {
             get {
                 return SparkleConfig.DefaultConfig.User.Email.Equals ("Unknown");
-            }
-        }
-
-
-        // Uploads the user's public key to the server TODO
-        public bool AcceptInvitation (string server, string folder, string token)
-        {
-            // The location of the user's public key for SparkleShare
-            string public_key_file_path = SparkleHelpers.CombineMore (SparkleConfig.DefaultConfig.HomePath,
-                ".ssh", "sparkleshare." + UserEmail + ".key.pub");
-
-            if (!File.Exists (public_key_file_path))
-                return false;
-
-            StreamReader reader = new StreamReader (public_key_file_path);
-            string public_key = reader.ReadToEnd ();
-            reader.Close ();
-
-            string url = "https://" + server + "/?folder=" + folder +
-                         "&token=" + token + "&pubkey=" + public_key;
-
-            SparkleHelpers.DebugInfo ("WebRequest", url);
-
-            HttpWebRequest request   = (HttpWebRequest) WebRequest.Create (url);
-            HttpWebResponse response = (HttpWebResponse) request.GetResponse();
-
-            if (response.StatusCode == HttpStatusCode.OK) {
-                response.Close ();
-                return true;
-
-            } else {
-                response.Close ();
-                return false;
             }
         }
 
@@ -202,6 +184,7 @@ namespace SparkleShare {
                 List<string> hosts = SparkleConfig.DefaultConfig.HostsWithUsername;
                 hosts.AddRange(SparkleConfig.DefaultConfig.Hosts);
                 hosts.Sort ();
+
                 return hosts;
             }
         }
@@ -219,6 +202,28 @@ namespace SparkleShare {
                 return unsynced_folders;
             }
         }
+
+
+        public void ShowSetupWindow (PageType page_type)
+        {
+            if (ShowSetupWindowEvent != null)
+                ShowSetupWindowEvent (page_type);
+        }
+
+
+        public void ShowAboutWindow ()
+        {
+            if (ShowAboutWindowEvent != null)
+                ShowAboutWindowEvent ();
+        }
+
+
+        public void ShowEventsWindow ()
+        {
+            if (ShowEventsWindowEvent != null)
+                ShowEventsWindowEvent ();
+        }
+
 
 
         public List<SparkleChangeSet> GetLog ()
