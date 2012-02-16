@@ -129,5 +129,11 @@ namespace SparkleShare {
                     UpdateMenuEvent (IconState.Error);
             };
         }
+
+
+        public void AddHostedProjectClicked ()
+        {
+            Program.Controller.ShowSetupWindow (PageType.Add);
+        }
     }
 }
