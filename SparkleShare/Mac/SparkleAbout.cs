@@ -54,12 +54,17 @@ namespace SparkleShare {
 
             CreateAbout ();
 
-            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-            MakeKeyAndOrderFront (this);
+            Controller.HideWindowEvent += delegate {
+                InvokeOnMainThread (delegate {
+                    PerformClose (this);
+                });
+            };
 
-            OrderFrontRegardless ();
-
-            Program.UI.UpdateDockIconVisibility ();
+            Controller.ShowWindowEvent += delegate {
+                InvokeOnMainThread (delegate {
+                    OrderFrontRegardless ();
+                });
+            };
 
             Controller.NewVersionEvent += delegate (string new_version) {
                 InvokeOnMainThread (delegate {
@@ -157,6 +162,29 @@ namespace SparkleShare {
             ContentView.AddSubview (UpdatesTextField);
             ContentView.AddSubview (CreditsTextField);
         }
+
+
+        public override void OrderFrontRegardless ()
+        {
+            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+            MakeKeyAndOrderFront (this);
+
+            if (Program.UI != null)
+                Program.UI.UpdateDockIconVisibility ();
+
+            base.OrderFrontRegardless ();
+        }
+
+
+        public override void PerformClose (NSObject sender)
+        {
+            base.OrderOut (this);
+
+            if (Program.UI != null)
+                Program.UI.UpdateDockIconVisibility ();
+
+            return;
+        }
     }
 
 
@@ -164,9 +192,7 @@ namespace SparkleShare {
         
         public override bool WindowShouldClose (NSObject sender)
         {
-            (sender as SparkleAbout).OrderOut (this);
-            Program.UI.UpdateDockIconVisibility ();
-            
+            (sender as SparkleAbout).Controller.HideWindow ();
             return false;
         }
     }

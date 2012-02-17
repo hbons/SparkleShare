@@ -64,9 +64,9 @@ namespace SparkleShare {
                     ("Lucida Grande", NSFontTraitMask.Bold, 0, 13);
 
                 StatusIcon = new SparkleStatusIcon ();
-                Bubbles = new SparkleBubbles ();
-                Setup = new SparkleSetup ();
-                // About = new SparkleAbout ();
+                Bubbles    = new SparkleBubbles ();
+                Setup      = new SparkleSetup ();
+                About      = new SparkleAbout ();
 
                 if (Program.Controller.FirstRun)
                     Program.Controller.ShowSetupWindow (PageType.Setup);
