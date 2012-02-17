@@ -137,6 +137,9 @@ namespace SparkleShare {
             NSApplication.SharedApplication.AddWindowsItem (this, "SparkleShare Setup", false);
             NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
             MakeKeyAndOrderFront (this);
+
+            if (Program.UI != null)
+                Program.UI.UpdateDockIconVisibility ();
             
             base.OrderFrontRegardless ();
         }
