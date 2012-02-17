@@ -84,22 +84,6 @@ namespace SparkleLib {
     }
 
 
-    public class SparkleUser {
-
-        public string Name;
-        public string Email;
-
-        public string PublicKey;
-
-
-        public SparkleUser (string name, string email)
-        {
-            Name  = name;
-            Email = email;
-        }
-    }
-
-
     public class SparkleFolder {
 
         public string Name;
