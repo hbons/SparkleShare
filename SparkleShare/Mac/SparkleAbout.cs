@@ -65,7 +65,7 @@ namespace SparkleShare {
                 InvokeOnMainThread (delegate {
                     UpdatesTextField.StringValue = "A newer version (" + new_version + ") is available!";
                     UpdatesTextField.TextColor   =
-                        NSColor.FromCalibratedRgba (0.96f, 0.47f, 0.0f, 1.0f); // Tango Orange #2
+                        NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f);
                 });
             };
 
@@ -73,7 +73,7 @@ namespace SparkleShare {
                 InvokeOnMainThread (delegate {
                     UpdatesTextField.StringValue = "You are running the latest version.";
                     UpdatesTextField.TextColor   =
-                        NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f); // Tango Sky Blue #1
+                        NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f);
                 });
             };
 

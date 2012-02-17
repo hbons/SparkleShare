@@ -384,7 +384,7 @@ namespace SparkleShare {
                         TableView.SelectRow (Controller.SelectedPluginIndex, false);
 
 
-                         (AddressTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
+                        (AddressTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
                             Controller.CheckAddPage (
                                 AddressTextField.StringValue,
                                 PathTextField.StringValue,
