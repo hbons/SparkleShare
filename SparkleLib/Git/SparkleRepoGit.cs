@@ -626,12 +626,11 @@ namespace SparkleLib {
                 if (match.Success) {
                     SparkleChangeSet change_set = new SparkleChangeSet ();
 
-                    change_set.Folder     = Name;
-                    change_set.Revision   = match.Groups [1].Value;
-                    change_set.User.Name  = match.Groups [2].Value;
-                    change_set.User.Email = match.Groups [3].Value;
-                    change_set.IsMagical  = is_merge_commit;
-                    change_set.Url        = Url;
+                    change_set.Folder    = Name;
+                    change_set.Revision  = match.Groups [1].Value;
+                    change_set.User      = new SparkleUser (match.Groups [2].Value, match.Groups [3].Value);
+                    change_set.IsMagical = is_merge_commit;
+                    change_set.Url       = Url;
 
                     change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
                         int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),

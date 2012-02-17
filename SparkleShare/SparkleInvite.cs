@@ -16,7 +16,9 @@
 
 
 using System;
+using System.IO;
 using System.Net;
+using System.Text;
 using System.Xml;
 
 using SparkleLib;
@@ -77,17 +79,34 @@ namespace SparkleShare {
 
         public bool Accept ()
         {
-            WebClient web_client = new WebClient ();
-
             try {
-                web_client.DownloadData (AcceptUrl);
-                SparkleHelpers.DebugInfo ("Invite", "Uploaded public key");
+                WebRequest request  = WebRequest.Create (AcceptUrl);
 
-                return true;
+                request.Method        = "POST";
+                request.ContentType   = "application/x-www-form-urlencoded";
+                string post_data      = "pubkey=" + SparkleConfig.DefaultConfig.User.PublicKey;
+                byte [] post_bytes    = Encoding.UTF8.GetBytes (post_data);
+                request.ContentLength = post_bytes.Length;
+
+                Stream data_stream = request.GetRequestStream ();
+                data_stream.Write (post_bytes, 0, post_bytes.Length);
+                data_stream.Close ();
+
+                WebResponse response = request.GetResponse ();
+                response.Close ();
+
+
+                if ((response as HttpWebResponse).StatusCode == HttpStatusCode.OK) {
+                    SparkleHelpers.DebugInfo ("Invite", "Uploaded public key to " + AcceptUrl);
+                    return true;
+
+                } else {
+                    SparkleHelpers.DebugInfo ("Invite", "Failed uploading public key to " + AcceptUrl);
+                    return false;
+                }
 
             } catch (WebException e) {
-                SparkleHelpers.DebugInfo ("Invite",
-                    "Failed uploading public key: " + e.Message);
+                SparkleHelpers.DebugInfo ("Invite", "Failed uploading public key to " + AcceptUrl + ": " + e.Message);
 
                 return false;
             }
