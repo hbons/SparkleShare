@@ -294,18 +294,8 @@ namespace SparkleShare {
                         Enabled = true
                     };
 
-                    // TODO: move this logic
                     AboutMenuItem.Activated += delegate {
-                        // Controller.AboutClicked ();
-                        InvokeOnMainThread (delegate {
-                            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-    
-                            if (SparkleUI.About == null)
-                                SparkleUI.About = new SparkleAbout ();
-                            else
-                                 SparkleUI.About.OrderFrontRegardless ();
-
-                        });
+                        Controller.AboutClicked ();
                     };
 				
 				Menu.AddItem (AboutMenuItem);

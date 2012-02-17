@@ -135,5 +135,11 @@ namespace SparkleShare {
         {
             Program.Controller.ShowSetupWindow (PageType.Add);
         }
+
+
+        public void AboutClicked ()
+        {
+            Program.Controller.ShowAboutWindow ();
+        }
     }
 }
