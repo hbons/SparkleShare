@@ -68,10 +68,9 @@ namespace SparkleShare {
                 Setup = new SparkleSetup ();
                 // About = new SparkleAbout ();
 
-                if (Program.Controller.FirstRun) {
+                if (Program.Controller.FirstRun)
                     Program.Controller.ShowSetupWindow (PageType.Setup);
-                    UpdateDockIconVisibility ();
-                }
+
             }
         }
     

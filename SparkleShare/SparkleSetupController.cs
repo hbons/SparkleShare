@@ -76,6 +76,7 @@ namespace SparkleShare {
         public string PreviousAddress { get; private set; }
         public string PreviousPath { get; private set; }
         public string SyncingFolder { get; private set; }
+        public SparkleInvite PendingInvite;
 
 
         public int SelectedPluginIndex {
@@ -140,6 +141,13 @@ namespace SparkleShare {
 
 
             Program.Controller.ShowSetupWindowEvent += delegate (PageType page_type) {
+                if (PendingInvite != null) {
+                    if (ShowWindowEvent != null)
+                        ShowWindowEvent ();
+
+                    return;
+                }
+
                 if (ChangePageEvent != null)
                     ChangePageEvent (page_type, null);
 
@@ -154,7 +162,7 @@ namespace SparkleShare {
 
         public void PageCancelled ()
         {
-            // PendingInvite = null;
+            PendingInvite = null;
 
             if (HideWindowEvent != null)
                 HideWindowEvent ();
@@ -299,14 +307,11 @@ namespace SparkleShare {
         }
 
 
-        // TODO: trailing slash should work
-        public SparkleInvite PendingInvite = new SparkleInvite ("ssh://git@github.com/",
-            "/hbons/Stuff", "http://www.sparkleshare.org/");
-
         public void InvitePageCompleted ()
         {
             SyncingFolder   = Path.GetFileNameWithoutExtension (PendingInvite.RemotePath);
             PreviousAddress = PendingInvite.Address;
+            // TODO: trailing slash should work
             PreviousPath    = PendingInvite.RemotePath;
 
             if (ChangePageEvent != null)
