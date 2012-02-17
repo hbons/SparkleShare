@@ -145,15 +145,21 @@ namespace SparkleShare {
                     this.fetcher.IsActive) {
 
                     if (AlertNotificationRaised != null)
-                        AlertNotificationRaised ("SparkleShare Setup is busy",
-                            "Please try again later");
+                        AlertNotificationRaised ("SparkleShare Setup seems busy",
+                            "Please wait for it to finish");
 
                 } else {
                     if (InviteReceived != null) {
                         SparkleInvite invite = new SparkleInvite (args.FullPath);
 
-                        if (invite.Valid)
+                        if (invite.Valid) {
                             InviteReceived (invite);
+
+                        } else {
+                            if (AlertNotificationRaised != null)
+                                AlertNotificationRaised ("Oh noes!",
+                                    "This invite seems screwed up...");
+                        }
                     }
                 }
             };
