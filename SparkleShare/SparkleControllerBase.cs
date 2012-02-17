@@ -106,7 +106,7 @@ namespace SparkleShare {
         {
         }
 
-        
+
         public virtual void Initialize ()
         {
             InstallLauncher ();
