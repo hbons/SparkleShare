@@ -3,7 +3,6 @@
 *.exe
 *.exe.mdb
 *.userprefs
-*.app
 *.pidb
 *.gmo
 po/POTFILES
