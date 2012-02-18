@@ -2,20 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<key>CFBundleURLTypes</key>
-<array>
-	<dict>
-		<key>CFBundleURLName</key>
-		<string>SparkleShareInviteOpener</string>
-		<key>CFBundleURLSchemes</key>
-		<array>
-			<string>sparkleshare</string>
-		</array>
-	</dict>
-</array>
-
-  <key>CFBundleIdentifier</key>
-  <string>org.sparkleshare.SparkleShareInviteOpener</string>
 	<key>CFBundleAllowMixedLocalizations</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -24,6 +10,8 @@
 	<string>applet</string>
 	<key>CFBundleIconFile</key>
 	<string>applet</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.sparkleshare.SparkleShareInviteOpener</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -32,6 +20,17 @@
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
 	<string>aplt</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>SparkleShareInviteOpener</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>sparkleshare</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSMinimumSystemVersionByArchitecture</key>
 	<dict>
 		<key>x86_64</key>
@@ -50,9 +49,9 @@
 		<key>positionOfDivider</key>
 		<real>333</real>
 		<key>savedFrame</key>
-		<string>3 178 602 597 0 0 1280 778 </string>
+		<string>263 111 773 597 0 0 1280 778 </string>
 		<key>selectedTabView</key>
-		<string>result</string>
+		<string>event log</string>
 	</dict>
 </dict>
 </plist>
