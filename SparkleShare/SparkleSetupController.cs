@@ -384,6 +384,15 @@ namespace SparkleShare {
         }
 
 
+        public void OpenFolderClicked ()
+        {
+            Program.Controller.OpenSparkleShareFolder (
+                Path.GetFileName (PreviousPath));
+
+            FinishPageCompleted ();
+        }
+
+
         public void FinishPageCompleted ()
         {
             PreviousAddress = "";
