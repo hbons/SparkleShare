@@ -183,7 +183,7 @@ namespace SparkleLib {
         
         protected void OnProgressChanged (double percentage) {
             if (ProgressChanged != null)
-                ProgressChanged (percentage);    
+                ProgressChanged (percentage);
         }
     
         
