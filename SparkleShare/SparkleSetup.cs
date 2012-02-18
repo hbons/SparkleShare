@@ -456,7 +456,7 @@ namespace SparkleShare {
                         Button open_folder_button = new Button (_("Open Folder"));
 
                         open_folder_button.Clicked += delegate {
-                            Program.Controller.OpenSparkleShareFolder (System.IO.Path.GetFileName (Controller.PreviousPath));
+                            Controller.OpenFolderClicked ();
                         };
 
                         Button finish_button = new Button (_("Finish"));
