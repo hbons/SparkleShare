@@ -24,7 +24,7 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r git ${TargetDir}/${SolutionName}.app/Contents/Resources; cp -r SparkleShareIviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="true" />
+        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r git ${TargetDir}/${SolutionName}.app/Contents/Resources; cp -r SparkleShareInviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="true" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
