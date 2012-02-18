@@ -141,5 +141,11 @@ namespace SparkleShare {
         {
             Program.Controller.ShowAboutWindow ();
         }
+
+
+        public void OpenRecentEventsClicked ()
+        {
+            Program.Controller.ShowEventLogWindow ();
+        }
     }
 }

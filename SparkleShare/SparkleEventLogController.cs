@@ -28,6 +28,12 @@ namespace SparkleShare {
 
     public class SparkleEventLogController {
 
+        public event ShowWindowEventHandler ShowWindowEvent;
+        public delegate void ShowWindowEventHandler ();
+
+        public event HideWindowEventHandler HideWindowEvent;
+        public delegate void HideWindowEventHandler ();
+
         public event UpdateContentEventEventHandler UpdateContentEvent;
         public delegate void UpdateContentEventEventHandler (string html);
 
@@ -146,6 +152,11 @@ namespace SparkleShare {
 
         public SparkleEventLogController ()
         {
+            Program.Controller.ShowEventLogWindowEvent += delegate {
+                if (ShowWindowEvent != null)
+                    ShowWindowEvent ();
+            };
+
             Program.Controller.AvatarFetched += delegate {
                 if (UpdateContentEvent != null)
                     UpdateContentEvent (HTML);
@@ -175,6 +186,13 @@ namespace SparkleShare {
                 if (UpdateSizeInfoEvent != null)
                     UpdateSizeInfoEvent (Size, HistorySize);
             };
+        }
+
+
+        public void WindowClosed ()
+        {
+            if (HideWindowEvent != null)
+                HideWindowEvent ();
         }
 
 

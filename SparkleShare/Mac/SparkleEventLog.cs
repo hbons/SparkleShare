@@ -149,13 +149,22 @@ namespace SparkleShare {
                 };
 
 
-            UpdateContent (null);
-            UpdateChooser (null);
-            OrderFrontRegardless ();
-
-            Program.UI.UpdateDockIconVisibility ();
-
             // Hook up the controller events
+            Controller.HideWindowEvent += delegate {
+                InvokeOnMainThread (delegate {
+                    PerformClose (this);
+                });
+            };
+
+            Controller.ShowWindowEvent += delegate {
+                InvokeOnMainThread (delegate {
+                    OrderFrontRegardless ();
+
+                    UpdateContent (null);
+                    UpdateChooser (null);
+                });
+            };
+
             Controller.UpdateChooserEvent += delegate (string [] folders) {
                 InvokeOnMainThread (delegate {
                     UpdateChooser (folders);
@@ -265,6 +274,29 @@ namespace SparkleShare {
                 thread.Start ();
             }
         }
+
+
+        public override void OrderFrontRegardless ()
+        {
+            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+            MakeKeyAndOrderFront (this);
+
+            if (Program.UI != null)
+                Program.UI.UpdateDockIconVisibility ();
+
+            base.OrderFrontRegardless ();
+        }
+
+
+        public override void PerformClose (NSObject sender)
+        {
+            base.OrderOut (this);
+
+            if (Program.UI != null)
+                Program.UI.UpdateDockIconVisibility ();
+
+            return;
+        }
     }
 
 
@@ -272,9 +304,7 @@ namespace SparkleShare {
 
         public override bool WindowShouldClose (NSObject sender)
         {
-            (sender as SparkleEventLog).OrderOut (this);
-            Program.UI.UpdateDockIconVisibility ();
-            
+            (sender as SparkleEventLog).Controller.WindowClosed ();
             return false;
         }
     }

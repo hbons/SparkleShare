@@ -192,7 +192,7 @@ namespace SparkleShare {
         
         public override bool WindowShouldClose (NSObject sender)
         {
-            (sender as SparkleAbout).Controller.HideWindow ();
+            (sender as SparkleAbout).Controller.WindowClosed ();
             return false;
         }
     }
