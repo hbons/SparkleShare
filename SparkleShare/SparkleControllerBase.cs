@@ -161,6 +161,8 @@ namespace SparkleShare {
                                 AlertNotificationRaised ("Oh noes!",
                                     "This invite seems screwed up...");
                         }
+
+                        File.Delete (args.FullPath);
                     }
                 }
             };
@@ -1055,6 +1057,8 @@ namespace SparkleShare {
                 } catch (Exception e) {
                     SparkleHelpers.DebugInfo ("Controller", "Error moving folder: " + e.Message);
                 }
+
+                this.fetcher = null;
             };
 
             this.fetcher.Failed += delegate {
@@ -1065,6 +1069,8 @@ namespace SparkleShare {
 
                 if (Directory.Exists (tmp_path))
                     Directory.Delete (tmp_path, true);
+
+                this.fetcher = null;
             };
             
             this.fetcher.ProgressChanged += delegate (double percentage) {
