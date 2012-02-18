@@ -34,7 +34,7 @@ namespace SparkleShare {
 
     public abstract class SparkleControllerBase {
 
-        public List <SparkleRepoBase> Repositories;
+        public List<SparkleRepoBase> Repositories = new List<SparkleRepoBase> ();
         public readonly string SparklePath = SparkleConfig.DefaultConfig.FoldersPath;
 
         public double ProgressPercentage = 0.0;
@@ -93,6 +93,7 @@ namespace SparkleShare {
         private List<string> failed_avatars = new List<string> ();
 
         private Object avatar_lock = new Object ();
+        private Object repo_lock   = new Object ();
 
 
         // Short alias for the translations
@@ -200,10 +201,12 @@ namespace SparkleShare {
             get {
                 List<string> unsynced_folders = new List<string> ();
 
-                foreach (SparkleRepoBase repo in Repositories) {
-                    if (repo.HasUnsyncedChanges)
-                        unsynced_folders.Add (repo.Name);
-                 }
+                lock (this.repo_lock) {
+                    foreach (SparkleRepoBase repo in Repositories) {
+                        if (repo.HasUnsyncedChanges)
+                            unsynced_folders.Add (repo.Name);
+                    }
+                }
 
                 return unsynced_folders;
             }
@@ -236,13 +239,15 @@ namespace SparkleShare {
         {
             List<SparkleChangeSet> list = new List<SparkleChangeSet> ();
 
-            foreach (SparkleRepoBase repo in Repositories) {
-                List<SparkleChangeSet> change_sets = repo.GetChangeSets (30);
-
-                if (change_sets != null)
-                    list.AddRange (change_sets);
-                else
-                    SparkleHelpers.DebugInfo ("Log", "Could not create log for " + repo.Name);
+            lock (this.repo_lock) {
+                foreach (SparkleRepoBase repo in Repositories) {
+                    List<SparkleChangeSet> change_sets = repo.GetChangeSets (30);
+    
+                    if (change_sets != null)
+                        list.AddRange (change_sets);
+                    else
+                        SparkleHelpers.DebugInfo ("Log", "Could not create log for " + repo.Name);
+                }
             }
 
             list.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
@@ -262,10 +267,12 @@ namespace SparkleShare {
 
             string path = Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, name);
             int log_size = 50;
-            
-            foreach (SparkleRepoBase repo in Repositories) {
-                if (repo.LocalPath.Equals (path))            
-                    return repo.GetChangeSets (log_size);
+
+            lock (this.repo_lock) {
+                foreach (SparkleRepoBase repo in Repositories) {
+                    if (repo.LocalPath.Equals (path))            
+                        return repo.GetChangeSets (log_size);
+                }
             }
 
             return null;
@@ -553,18 +560,19 @@ namespace SparkleShare {
             bool has_syncing_repos  = false;
             bool has_unsynced_repos = false;
 
-            foreach (SparkleRepoBase repo in Repositories) {
-                if (repo.Status == SyncStatus.SyncDown ||
-                    repo.Status == SyncStatus.SyncUp   ||
-                    repo.IsBuffering) {
-
-                    has_syncing_repos = true;
-
-                } else if (repo.HasUnsyncedChanges) {
-                    has_unsynced_repos = true;
+            lock (this.repo_lock) {
+                foreach (SparkleRepoBase repo in Repositories) {
+                    if (repo.Status == SyncStatus.SyncDown ||
+                        repo.Status == SyncStatus.SyncUp   ||
+                        repo.IsBuffering) {
+    
+                        has_syncing_repos = true;
+    
+                    } else if (repo.HasUnsyncedChanges) {
+                        has_unsynced_repos = true;
+                    }
                 }
             }
-
 
             if (has_syncing_repos) {
                 if (OnSyncing != null)
@@ -646,7 +654,10 @@ namespace SparkleShare {
             };
 
 
-            Repositories.Add (repo);
+            lock (this.repo_lock) {
+                Repositories.Add (repo);
+            }
+
             repo.Initialize ();
         }
 
@@ -657,14 +668,16 @@ namespace SparkleShare {
         {
             string folder_name = Path.GetFileName (folder_path);
 
-            for (int i = 0; i < Repositories.Count; i++) {
-                SparkleRepoBase repo = Repositories [i];
-
-                if (repo.Name.Equals (folder_name)) {
-                    repo.Dispose ();
-                    Repositories.Remove (repo);
-                    repo = null;
-                    break;
+            lock (this.repo_lock) {
+                for (int i = 0; i < Repositories.Count; i++) {
+                    SparkleRepoBase repo = Repositories [i];
+    
+                    if (repo.Name.Equals (folder_name)) {
+                        repo.Dispose ();
+                        Repositories.Remove (repo);
+                        repo = null;
+                        break;
+                    }
                 }
             }
         }
@@ -674,8 +687,6 @@ namespace SparkleShare {
         // folders in the SparkleShare folder
         private void PopulateRepositories ()
         {
-            Repositories = new List<SparkleRepoBase> ();
-
             foreach (string folder_name in SparkleConfig.DefaultConfig.Folders) {
                 string folder_path = new SparkleFolder (folder_name).FullPath;
 
@@ -1077,12 +1088,14 @@ namespace SparkleShare {
         // quits if safe
         public void TryQuit ()
         {
-            foreach (SparkleRepoBase repo in Repositories) {
-                if (repo.Status == SyncStatus.SyncUp   ||
-                    repo.Status == SyncStatus.SyncDown ||
-                    repo.IsBuffering) {
-
-                    return;
+            lock (this.repo_lock) {
+                foreach (SparkleRepoBase repo in Repositories) {
+                    if (repo.Status == SyncStatus.SyncUp   ||
+                        repo.Status == SyncStatus.SyncDown ||
+                        repo.IsBuffering) {
+    
+                        return;
+                    }
                 }
             }
             
@@ -1092,8 +1105,10 @@ namespace SparkleShare {
 
         public void Quit ()
         {
-            foreach (SparkleRepoBase repo in Repositories)
-                repo.Dispose ();
+            lock (this.repo_lock) {
+                foreach (SparkleRepoBase repo in Repositories)
+                    repo.Dispose ();
+            }
 
             Environment.Exit (0);
         }
@@ -1104,9 +1119,11 @@ namespace SparkleShare {
             folder_name = folder_name.Replace ("%20", " ");
             note        = note.Replace ("%20", " ");
 
-            foreach (SparkleRepoBase repo in Repositories) {
-                if (repo.Name.Equals (folder_name))
-                    repo.AddNote (revision, note);
+            lock (this.repo_lock) {
+                foreach (SparkleRepoBase repo in Repositories) {
+                    if (repo.Name.Equals (folder_name))
+                        repo.AddNote (revision, note);
+                }
             }
         }
 
