@@ -63,14 +63,14 @@ namespace SparkleShare {
                 BoldFont = NSFontManager.SharedFontManager.FontWithFamily
                     ("Lucida Grande", NSFontTraitMask.Bold, 0, 13);
 
-                StatusIcon = new SparkleStatusIcon ();
-                Bubbles    = new SparkleBubbles ();
                 Setup      = new SparkleSetup ();
+                EventLog   = new SparkleEventLog ();
                 About      = new SparkleAbout ();
+                Bubbles    = new SparkleBubbles ();
+                StatusIcon = new SparkleStatusIcon ();
 
                 if (Program.Controller.FirstRun)
                     Program.Controller.ShowSetupWindow (PageType.Setup);
-
             }
         }
     

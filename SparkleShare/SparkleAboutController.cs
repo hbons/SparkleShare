@@ -60,7 +60,7 @@ namespace SparkleShare {
         }
 
 
-        public void HideWindow ()
+        public void WindowClosed ()
         {
             if (HideWindowEvent != null)
                 HideWindowEvent ();

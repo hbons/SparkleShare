@@ -249,18 +249,8 @@ namespace SparkleShare {
                     };
     
                     if (Controller.Folders.Length > 0) {
-                        // TODO: move this logic
                         RecentEventsMenuItem.Activated += delegate {
-                            // Controller.OpenRecentEventsClicked ()
-                            InvokeOnMainThread (delegate {
-                                NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-        
-                                if (SparkleUI.EventLog == null)
-                                    SparkleUI.EventLog = new SparkleEventLog ();
-        
-                                SparkleUI.EventLog.OrderFrontRegardless ();
-                                SparkleUI.EventLog.MakeKeyAndOrderFront (this);
-                            });
+                            Controller.OpenRecentEventsClicked ();
                         };
                     }
     

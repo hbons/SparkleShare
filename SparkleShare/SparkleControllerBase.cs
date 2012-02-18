@@ -47,8 +47,8 @@ namespace SparkleShare {
         public event ShowAboutWindowEventHandler ShowAboutWindowEvent;
         public delegate void ShowAboutWindowEventHandler ();
 
-        public event ShowEventsWindowEventHandler ShowEventsWindowEvent;
-        public delegate void ShowEventsWindowEventHandler ();
+        public event ShowEventLogWindowEventHandler ShowEventLogWindowEvent;
+        public delegate void ShowEventLogWindowEventHandler ();
 
 
         public event FolderFetchedEventHandler FolderFetched;
@@ -224,10 +224,10 @@ namespace SparkleShare {
         }
 
 
-        public void ShowEventsWindow ()
+        public void ShowEventLogWindow ()
         {
-            if (ShowEventsWindowEvent != null)
-                ShowEventsWindowEvent ();
+            if (ShowEventLogWindowEvent != null)
+                ShowEventLogWindowEvent ();
         }
 
 

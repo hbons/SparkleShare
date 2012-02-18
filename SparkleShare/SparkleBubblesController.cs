@@ -51,6 +51,12 @@ namespace SparkleShare {
         }
 
 
+        public void BubbleClicked ()
+        {
+            Program.Controller.ShowEventLogWindow ();
+        }
+
+
         private string FormatMessage (SparkleChangeSet change_set)
         {
             string file_name = "";
