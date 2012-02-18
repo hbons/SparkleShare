@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace SparkleLib {
 
@@ -136,6 +137,18 @@ namespace SparkleLib {
             this.git.WaitForExit ();
             SparkleHelpers.DebugInfo ("Git", "Exit code " + this.git.ExitCode.ToString ());
 
+            while (percentage < 100) {
+                percentage += 25;
+
+                if (percentage >= 100)
+                    break;
+
+                base.OnProgressChanged (percentage);
+                Thread.Sleep (750);
+            }
+
+            base.OnProgressChanged (100);
+            Thread.Sleep (1000);
 
             if (this.git.ExitCode != 0) {
                 return false;

@@ -331,7 +331,6 @@ namespace SparkleShare {
                 if (ChangePageEvent != null)
                     ChangePageEvent (PageType.Finished, warnings);
 
-
                 PreviousAddress = "";
                 SyncingFolder   = "";
                 PreviousUrl     = "";
