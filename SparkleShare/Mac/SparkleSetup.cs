@@ -599,7 +599,7 @@ namespace SparkleShare {
                         };
 
                         OpenFolderButton.Activated += delegate {
-                            Program.Controller.OpenSparkleShareFolder (Path.GetFileName (Controller.PreviousPath));
+                            Controller.OpenFolderClicked ();
                         };
 
                         Buttons.Add (FinishButton);
