@@ -24,7 +24,7 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks;mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Resources; cp -r git ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="true" />
+        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r git ${TargetDir}/${SolutionName}.app/Contents/Resources; cp -r SparkleShareIviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="true" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -59,7 +59,7 @@
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System.Net" />
-    <Reference Include="SparkleLib, Version=0.8.1.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="SparkleLib, Version=0.8.2.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\SparkleLib.dll</HintPath>
     </Reference>
