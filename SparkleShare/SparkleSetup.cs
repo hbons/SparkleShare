@@ -31,9 +31,6 @@ namespace SparkleShare {
 
         public SparkleSetupController Controller = new SparkleSetupController ();
 
-        private string SecondaryTextColor;
-        private string SecondaryTextColorSelected;
-
         private ProgressBar progress_bar = new ProgressBar ();
         
 
@@ -46,17 +43,6 @@ namespace SparkleShare {
 
         public SparkleSetup () : base ()
         {
-            SecondaryTextColor         = SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive));
-            SecondaryTextColorSelected =
-                SparkleUIHelpers.GdkColorToHex (
-                    MixColors (
-                        new TreeView ().Style.Foreground (StateType.Selected),
-                        new TreeView ().Style.Background (StateType.Selected),
-                        0.15
-                    )
-                );
-
-
             Controller.HideWindowEvent += delegate {
                 Application.Invoke (delegate {
                     HideAll ();
@@ -186,8 +172,10 @@ namespace SparkleShare {
 
                         tree.AppendColumn (service_column);
 
-                        SparkleEntry path_entry    = new SparkleEntry ();
-                        SparkleEntry address_entry = new SparkleEntry ();
+                        Entry address_entry = new Entry ();
+                        Entry path_entry    = new Entry ();
+                        Label address_example      = new Label ("1") { Xalign = 0, UseMarkup = true };
+                        Label path_example         = new Label ("2") { Xalign = 0, UseMarkup = true };
 
 
                         // Select the first plugin by default
@@ -200,18 +188,11 @@ namespace SparkleShare {
                             string example_text, FieldState state) {
 
                             Application.Invoke (delegate {
-                                address_entry.Text        = text;
-                                address_entry.Sensitive   = (state == FieldState.Enabled);
+                                address_entry.Text      = text;
+                                address_entry.Sensitive = (state == FieldState.Enabled);
+                                address_example.Markup  =  "<span size=\"small\" fgcolor=\""
+                                    + SecondaryTextColor + "\">" + example_text + "</span>";
 
-                                if (string.IsNullOrEmpty (example_text))
-                                    address_entry.ExampleText = null;
-                                else
-                                    address_entry.ExampleText = example_text;
-
-                                if (string.IsNullOrEmpty (text))
-                                    address_entry.ExampleTextActive = true;
-                                else
-                                    address_entry.ExampleTextActive = false;
                             });
                         };
 
@@ -219,21 +200,13 @@ namespace SparkleShare {
                             string example_text, FieldState state) {
 
                             Application.Invoke (delegate {
-                                path_entry.Text        = text;
-                                path_entry.Sensitive   = (state == FieldState.Enabled);
-
-                                // TODO: Use small labels like the mac UI
-                                if (string.IsNullOrEmpty (example_text))
-                                    path_entry.ExampleText = null;
-                                else
-                                    path_entry.ExampleText = example_text;
-
-                                if (string.IsNullOrEmpty (text))
-                                    path_entry.ExampleTextActive = true;
-                                else
-                                    path_entry.ExampleTextActive = false;
+                                path_entry.Text      = text;
+                                path_entry.Sensitive = (state == FieldState.Enabled);
+                                path_example.Markup  =  "<span size=\"small\" fgcolor=\""
+                                    + SecondaryTextColor + "\">" + example_text + "</span>";
                             });
                         };
+                        
 
                         // Update the address field text when the selection changes
                         tree.CursorChanged += delegate (object sender, EventArgs e) {
@@ -291,7 +264,8 @@ namespace SparkleShare {
                                         Xalign = 0
                                     }, true, true, 0);
 
-                                layout_address.PackStart (address_entry, true, true, 0);
+                                layout_address.PackStart (address_entry, false, false, 0);
+                                layout_address.PackStart (address_example, false, false, 0);
 
                                     path_entry.Completion  = new EntryCompletion();
 
@@ -312,7 +286,8 @@ namespace SparkleShare {
                                         Xalign = 0
                                     }, true, true, 0);
                                 
-                                layout_path.PackStart (path_entry, true, true, 0);
+                                layout_path.PackStart (path_entry, false, false, 0);
+                                layout_path.PackStart (path_example, false, false, 0);
 
                             layout_fields.PackStart (layout_address);
                             layout_fields.PackStart (layout_path);
@@ -330,7 +305,6 @@ namespace SparkleShare {
                                 Controller.PageCancelled ();
                             };
 
-                            // Sync button
                             Button add_button = new Button (_("Add"));
 
                             add_button.Clicked += delegate {
@@ -340,10 +314,16 @@ namespace SparkleShare {
                                 Controller.AddPageCompleted (server, folder_name);
                             };
 
+                        Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
+                            Application.Invoke (delegate {
+                                add_button.Sensitive = button_enabled;                            
+                            });
+                        };
+
                         AddButton (cancel_button);
                         AddButton (add_button);
 
-                        Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree.SelectedRow);
+                        Controller.CheckAddPage (address_entry.Text, path_entry.Text, 1);
 
                         break;
                     }
@@ -628,19 +608,6 @@ namespace SparkleShare {
                 markup = markup.Replace (SecondaryTextColorSelected, SecondaryTextColor);
 
             (cell as CellRendererText).Markup = markup;
-        }
-
-
-        private Gdk.Color MixColors (Gdk.Color first_color, Gdk.Color second_color, double ratio)
-        {
-            return new Gdk.Color (
-                Convert.ToByte ((255 * (Math.Min (65535, first_color.Red * (1.0 - ratio) +
-                    second_color.Red   * ratio))) / 65535),
-                Convert.ToByte ((255 * (Math.Min (65535, first_color.Green * (1.0 - ratio) +
-                    second_color.Green * ratio))) / 65535),
-                Convert.ToByte ((255 * (Math.Min (65535, first_color.Blue * (1.0 - ratio) +
-                    second_color.Blue  * ratio))) / 65535)
-            );
         }
     }
 

@@ -36,6 +36,9 @@ namespace SparkleShare {
 
         public string Header;
         public string Description;
+        
+        public string SecondaryTextColor;
+        public string SecondaryTextColorSelected;
 
         public Container Content;
 
@@ -48,20 +51,31 @@ namespace SparkleShare {
             WindowPosition = WindowPosition.Center;
             Deletable      = false;
 
-            SetSizeRequest (680, 440);
+            SecondaryTextColor = SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive));
+                        
+            SecondaryTextColorSelected =
+                SparkleUIHelpers.GdkColorToHex (
+                    MixColors (
+                        new TreeView ().Style.Foreground (StateType.Selected),
+                        new TreeView ().Style.Background (StateType.Selected),
+                        0.15
+                    )
+                );
 
-            HBox = new HBox (false, 6);
+            SetSizeRequest (680, 400);
+
+            HBox = new HBox (false, 0);
 
                 VBox = new VBox (false, 0);
 
                     Wrapper = new VBox (false, 0) {
-                        BorderWidth = 30
+                        BorderWidth = 0
                     };
 
                     Buttons = CreateButtonBox ();
 
                 VBox.PackStart (Wrapper, true, true, 0);
-                VBox.PackStart (Buttons, false, false, 0);
+                VBox.PackStart (Buttons, false, false, 15);
 
                 EventBox box = new EventBox ();
                 Gdk.Color bg_color = new Gdk.Color ();
@@ -74,7 +88,7 @@ namespace SparkleShare {
             box.Add (side_splash);
 
             HBox.PackStart (box, false, false, 0);
-            HBox.PackStart (VBox, true, true, 0);
+            HBox.PackStart (VBox, true, true, 30);
 
             base.Add (HBox);
         }
@@ -83,7 +97,7 @@ namespace SparkleShare {
         private HButtonBox CreateButtonBox ()
         {
             return new HButtonBox () {
-                BorderWidth = 12,
+                BorderWidth = 0,
                 Layout      = ButtonBoxStyle.End,
                 Spacing     = 6
             };
@@ -101,7 +115,7 @@ namespace SparkleShare {
         {
             Label header = new Label ("<span size='large'><b>" + Header + "</b></span>") {
                 UseMarkup = true,
-                Xalign = 0
+                Xalign = 0,
             };
 
             Label description = new Label (Description) {
@@ -110,6 +124,7 @@ namespace SparkleShare {
             };
 
             VBox layout_vertical = new VBox (false, 0);
+            layout_vertical.PackStart (new Label (""), false, false, 6);
             layout_vertical.PackStart (header, false, false, 0);
 
             if (!string.IsNullOrEmpty (Description))
@@ -137,10 +152,24 @@ namespace SparkleShare {
             ShowAll ();
         }
         
+        
         new public void ShowAll ()
         {
             Present ();
             base.ShowAll ();
+        }
+        
+        
+        private Gdk.Color MixColors (Gdk.Color first_color, Gdk.Color second_color, double ratio)
+        {
+            return new Gdk.Color (
+                Convert.ToByte ((255 * (Math.Min (65535, first_color.Red * (1.0 - ratio) +
+                    second_color.Red   * ratio))) / 65535),
+                Convert.ToByte ((255 * (Math.Min (65535, first_color.Green * (1.0 - ratio) +
+                    second_color.Green * ratio))) / 65535),
+                Convert.ToByte ((255 * (Math.Min (65535, first_color.Blue * (1.0 - ratio) +
+                    second_color.Blue  * ratio))) / 65535)
+            );
         }
     }
 }
