@@ -74,40 +74,6 @@ namespace SparkleShare {
                 SparkleHelpers.DebugInfo ("Controller", "Enabled autostart on login");
             }
         }
-        
-
-        // Installs a launcher so the user can launch SparkleShare
-        // from the Internet category if needed
-        public override void InstallLauncher ()
-        {
-            string apps_path = 
-                new string [] {SparkleConfig.DefaultConfig.HomePath,
-                    ".local", "share", "applications"}.Combine ();
-
-            string desktopfile_path = Path.Combine (apps_path, "sparkleshare.desktop");
-
-            if (!File.Exists (desktopfile_path)) {
-                if (!Directory.Exists (apps_path))
-                    Directory.CreateDirectory (apps_path);
-
-                TextWriter writer = new StreamWriter (desktopfile_path);
-                writer.WriteLine ("[Desktop Entry]\n" +
-                                  "Type=Application\n" +
-                                  "Name=SparkleShare\n" +
-                                  "Comment=Share documents\n" +
-                                  "Exec=sparkleshare start\n" +
-                                  "Icon=folder-sparkleshare\n" +
-                                  "Terminal=false\n" +
-                                  "Categories=Network;");
-                writer.Close ();
-
-                // Give the launcher the right permissions so it can be launched by the user
-                UnixFileInfo file_info = new UnixFileInfo (desktopfile_path);
-                file_info.FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute;
-
-                SparkleHelpers.DebugInfo ("Controller", "Created '" + desktopfile_path + "'");
-            }
-        }
 
 
         // Adds the SparkleShare folder to the user's

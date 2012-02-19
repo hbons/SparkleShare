@@ -113,6 +113,12 @@ namespace SparkleShare {
 			// N/A
 		}
 
+
+        public override void InstallProtocolHandler ()
+        {
+             // We ship SparkleShareInviteHandler.app in the bundle
+        }
+
 		
 		// Adds the SparkleShare folder to the user's
 		// list of bookmarked places

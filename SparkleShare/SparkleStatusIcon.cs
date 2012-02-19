@@ -209,7 +209,7 @@ namespace SparkleShare {
                 };
 
                 folder_item.Activated += delegate {
-                    Program.Controller.OpenSparkleShareFolder ();
+                    Controller.SparkleShareClicked ();
                 };
                 
             this.menu.Add (folder_item);
@@ -318,7 +318,7 @@ namespace SparkleShare {
         private EventHandler OpenFolderDelegate (string name)
         {
             return delegate {
-                Program.Controller.OpenSparkleShareFolder (name);
+                Controller.SubfolderClicked (name);
             };
         }
 
