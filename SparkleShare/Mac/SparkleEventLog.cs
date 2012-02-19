@@ -78,7 +78,7 @@ namespace SparkleShare {
             };
 
             this.hidden_close_button.Activated += delegate {
-                PerformClose (this);
+                Controller.WindowClosed ();
             };
 
             ContentView.AddSubview (this.hidden_close_button);
