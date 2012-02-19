@@ -30,6 +30,7 @@ namespace SparkleShare {
         public SparkleEventLogController Controller = new SparkleEventLogController ();
 
         private Label size_label;
+        private Label history_label;
         private HBox layout_horizontal;
         private ComboBox combo_box;
         private EventBox content_wrapper;
@@ -63,8 +64,18 @@ namespace SparkleShare {
             };
 
             this.size_label = new Label () {
-                Markup = "<b>Size:</b> …   <b>History:</b> …"
+                Markup = "<b>Size:</b> …",
+                Xalign = 0
             };
+            
+            this.history_label = new Label () {
+                Markup = "<b>History:</b> …",
+                Xalign = 0
+            };
+            
+            HBox layout_sizes = new HBox (false, 12);
+            layout_sizes.Add (this.size_label);
+            layout_sizes.Add (this.history_label);
 
             VBox layout_vertical = new VBox (false, 0);
             this.spinner         = new SparkleSpinner (22);
@@ -93,9 +104,8 @@ namespace SparkleShare {
 
             this.spinner.Start ();
 
-            this.layout_horizontal = new HBox (false, 0);
-            this.layout_horizontal.PackStart (this.size_label, true, true, 0);
-            this.layout_horizontal.PackStart (new Label ("  "), false, false, 0);
+            this.layout_horizontal = new HBox (true, 0);
+            this.layout_horizontal.PackStart (layout_sizes, true, true, 12);
 
             layout_vertical.PackStart (this.layout_horizontal, false, false, 0);
             layout_vertical.PackStart (CreateShortcutsBar (), false, false, 0);
@@ -146,10 +156,11 @@ namespace SparkleShare {
 
             Controller.UpdateSizeInfoEvent += delegate (string size, string history_size) {
                 Application.Invoke (delegate {
-                    this.size_label.Markup = "<b>Size:</b> " + size + "   " +
-                                             "<b>History:</b> " + history_size;
+                    this.size_label.Markup    = "<b>Size:</b> " + size;
+                    this.history_label.Markup = "<b>History:</b> " + history_size;
 
                     this.size_label.ShowAll ();
+                    this.history_label.ShowAll ();
                 });
             };
         }
