@@ -90,7 +90,7 @@ namespace SparkleShare {
 
                 // Add a little delay, making it seems we're
                 // actually doing hard work
-                Thread.Sleep (2 * 1000);
+                Thread.Sleep (1000);
 
                 if (running_version >= new_version) {
                     if (VersionUpToDateEvent != null)
