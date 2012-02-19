@@ -198,7 +198,7 @@ namespace SparkleShare {
         {
             Process process = new Process ();
             process.StartInfo.FileName = "xdg-open";
-            process.StartInfo.Arguments = url.Replace (" ", "%20");
+            process.StartInfo.Arguments = "\"" + url + "\"";
             process.Start ();
         }
     }
