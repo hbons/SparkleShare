@@ -43,8 +43,9 @@ namespace SparkleShare {
                     else
                         notification.IconName = "folder-sparkleshare";
 
-                    notification.Closed += delegate {
-                        Controller.BubbleClicked ();
+                    notification.Closed += delegate (object o, EventArgs args) {
+                        if ((args as CloseArgs).Reason == CloseReason.User)
+                            Controller.BubbleClicked ();
                     };
 
                     notification.Show ();
