@@ -34,8 +34,7 @@ namespace SparkleShare {
         public bool Valid {
             get {
                 return (!string.IsNullOrEmpty (Address) &&
-                        !string.IsNullOrEmpty (RemotePath) &&
-                        !string.IsNullOrEmpty (AcceptUrl.ToString ()));
+                        !string.IsNullOrEmpty (RemotePath));
             }
         }
 
@@ -79,6 +78,9 @@ namespace SparkleShare {
 
         public bool Accept ()
         {
+            if (AcceptUrl == null)
+                return true;
+
             try {
                 WebRequest request  = WebRequest.Create (AcceptUrl);
 
@@ -114,13 +116,7 @@ namespace SparkleShare {
 
 
         private void Initialize (string address, string remote_path, string accept_url)
-        {/*
-            if (!remote_path.StartsWith ("/"))
-                remote_path = "/" + remote_path;
-
-            if (!address.EndsWith ("/"))
-                address = address + "/";
-              */
+        {
             Address    = address;
             RemotePath = remote_path;
             AcceptUrl  = new Uri (accept_url);

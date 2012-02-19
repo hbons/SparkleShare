@@ -155,6 +155,7 @@ namespace SparkleShare {
 
                         if (invite.Valid) {
                             InviteReceived (invite);
+                            File.Delete (args.FullPath);
 
                         } else {
                             if (AlertNotificationRaised != null)
@@ -162,7 +163,6 @@ namespace SparkleShare {
                                     "This invite seems screwed up...");
                         }
 
-                        File.Delete (args.FullPath);
                     }
                 }
             };
