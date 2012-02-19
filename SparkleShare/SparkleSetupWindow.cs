@@ -50,11 +50,6 @@ namespace SparkleShare {
 
             SetSizeRequest (680, 440);
 
-            DeleteEvent += delegate (object o, DeleteEventArgs args) {
-                args.RetVal = true;
-                Close ();
-            };
-
             HBox = new HBox (false, 6);
 
                 VBox = new VBox (false, 0);
@@ -146,11 +141,6 @@ namespace SparkleShare {
         {
             Present ();
             base.ShowAll ();
-        }
-
-        public void Close ()
-        {
-            HideAll ();
         }
     }
 }

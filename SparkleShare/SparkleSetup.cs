@@ -327,7 +327,7 @@ namespace SparkleShare {
                             Button cancel_button = new Button (_("Cancel"));
 
                             cancel_button.Clicked += delegate {
-                                Close ();
+                                Controller.PageCancelled ();
                             };
 
                             // Sync button
@@ -477,7 +477,6 @@ namespace SparkleShare {
 
                         finish_button.Clicked += delegate {
                             Controller.FinishedPageCompleted ();
-                            Close ();
                         };
 
 
@@ -592,7 +591,7 @@ namespace SparkleShare {
 
                             Button finish_button = new Button (_("Finish"));
                             finish_button.Clicked += delegate {
-                                Close ();
+                                Controller.FinishPageCompleted ();
                             };
 
 
