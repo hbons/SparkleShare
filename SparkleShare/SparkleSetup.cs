@@ -287,7 +287,7 @@ namespace SparkleShare {
                         };
 
                                 layout_address.PackStart (new Label () {
-                                        Markup = "<b>" + _("Address") + "</b>",
+                                        Markup = "<b>" + _("Address:") + "</b>",
                                         Xalign = 0
                                     }, true, true, 0);
 
@@ -308,7 +308,7 @@ namespace SparkleShare {
                                     };
 
                                 layout_path.PackStart (new Label () {
-                                        Markup = "<b>" + _("Remote Path") + "</b>",
+                                        Markup = "<b>" + _("Remote Path:") + "</b>",
                                         Xalign = 0
                                     }, true, true, 0);
                                 
@@ -476,7 +476,7 @@ namespace SparkleShare {
                         Button finish_button = new Button (_("Finish"));
 
                         finish_button.Clicked += delegate {
-                            Controller.FinishedPageCompleted ();
+                            Controller.FinishPageCompleted ();
                         };
 
 
