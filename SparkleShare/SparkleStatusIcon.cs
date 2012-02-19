@@ -254,19 +254,7 @@ namespace SparkleShare {
                     sync_item.Sensitive = false;
 
                 sync_item.Activated += delegate {
-                    Application.Invoke (delegate {
-
-                        if (SparkleUI.Setup == null) {
-                            SparkleUI.Setup = new SparkleSetup ();
-                            SparkleUI.Setup.Controller.ShowAddPage ();
-                        }
-        
-                        if (!SparkleUI.Setup.Visible)
-                            SparkleUI.Setup.Controller.ShowAddPage ();
-
-                        //SparkleUI.Intro.ShowAll ();
-                        //SparkleUI.Intro.Present ();
-                    });
+                    Controller.AddHostedProjectClicked ();
                 };
 
             this.menu.Add (sync_item);
@@ -277,13 +265,7 @@ namespace SparkleShare {
                 recent_events_item.Sensitive = (Controller.Folders.Length > 0);
 
                 recent_events_item.Activated += delegate {
-                    Application.Invoke (delegate {
-                        if (SparkleUI.EventLog == null)
-                            SparkleUI.EventLog = new SparkleEventLog ();
-
-                        SparkleUI.EventLog.ShowAll ();
-                        SparkleUI.EventLog.Present ();
-                    });
+                    Controller.OpenRecentEventsClicked ();
                 };
 
             this.menu.Add (recent_events_item);
@@ -307,13 +289,7 @@ namespace SparkleShare {
                 MenuItem about_item = new MenuItem (_("About SparkleShare"));
 
                 about_item.Activated += delegate {
-                    Application.Invoke (delegate {
-                        if (SparkleUI.About == null)
-                            SparkleUI.About = new SparkleAbout ();
-
-                        SparkleUI.About.ShowAll ();
-                        SparkleUI.About.Present ();
-                    });
+                    Controller.AboutClicked ();
                 };
 
             this.menu.Add (about_item);

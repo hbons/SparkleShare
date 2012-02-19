@@ -57,7 +57,10 @@ namespace SparkleShare {
             Title = _("Recent Events");
             IconName = "folder-sparkleshare";
 
-            DeleteEvent += Close;
+            DeleteEvent += Close (object o, DeleteEventArgs args) {
+                Controller.WindowClosed ();
+                args.RetVal = true;
+            };
 
             this.size_label = new Label () {
                 Markup = "<b>Size:</b> …   <b>History:</b> …"
@@ -99,13 +102,25 @@ namespace SparkleShare {
             layout_vertical.PackStart (this.content_wrapper, true, true, 0);
 
             Add (layout_vertical);
-            ShowAll ();
-
-            UpdateChooser (null);
-            UpdateContent (null);
 
 
             // Hook up the controller events
+            Controller.HideWindowEvent += delegate {
+                Application.Invoke (delegate {
+                    HideAll ();
+                });
+            };
+
+            Controller.ShowWindowEvent += delegate {
+                Application.Invoke (delegate {
+                    ShowAll ();
+                    Present ();
+
+                    UpdateChooser (null);
+                    UpdateContent (null);
+                });
+            };
+
             Controller.UpdateChooserEvent += delegate (string [] folders) {
                 Application.Invoke (delegate {
                     UpdateChooser (folders);
@@ -233,13 +248,6 @@ namespace SparkleShare {
             }));
 
             thread.Start ();
-        }
-
-
-        public void Close (object o, DeleteEventArgs args)
-        {
-            HideAll ();
-            args.RetVal = true;
         }
 
 
