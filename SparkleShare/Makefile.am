@@ -19,7 +19,6 @@ SOURCES =  \
 	SparkleBubblesController.cs \
 	SparkleController.cs \
 	SparkleControllerBase.cs \
-	SparkleEntry.cs \
 	SparkleEventLog.cs \
 	SparkleEventLogController.cs \
 	SparkleExtensions.cs \
