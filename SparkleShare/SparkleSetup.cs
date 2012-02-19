@@ -56,6 +56,20 @@ namespace SparkleShare {
                     )
                 );
 
+
+            Controller.HideWindowEvent += delegate {
+                Application.Invoke (delegate {
+                    HideAll ();
+                });
+            };
+
+            Controller.ShowWindowEvent += delegate {
+                Application.Invoke (delegate {
+                    ShowAll ();
+                    Present ();
+                });
+            };
+
             Controller.ChangePageEvent += delegate (PageType type, string [] warnings) {
                 Application.Invoke (delegate {
                     Reset ();
@@ -621,9 +635,12 @@ namespace SparkleShare {
         private Gdk.Color MixColors (Gdk.Color first_color, Gdk.Color second_color, double ratio)
         {
             return new Gdk.Color (
-                Convert.ToByte ((255 * (Math.Min (65535, first_color.Red   * (1.0 - ratio) + second_color.Red   * ratio))) / 65535),
-                Convert.ToByte ((255 * (Math.Min (65535, first_color.Green * (1.0 - ratio) + second_color.Green * ratio))) / 65535),
-                Convert.ToByte ((255 * (Math.Min (65535, first_color.Blue  * (1.0 - ratio) + second_color.Blue  * ratio))) / 65535)
+                Convert.ToByte ((255 * (Math.Min (65535, first_color.Red * (1.0 - ratio) +
+                    second_color.Red   * ratio))) / 65535),
+                Convert.ToByte ((255 * (Math.Min (65535, first_color.Green * (1.0 - ratio) +
+                    second_color.Green * ratio))) / 65535),
+                Convert.ToByte ((255 * (Math.Min (65535, first_color.Blue * (1.0 - ratio) +
+                    second_color.Blue  * ratio))) / 65535)
             );
         }
     }
