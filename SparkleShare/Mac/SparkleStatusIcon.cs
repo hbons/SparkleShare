@@ -180,7 +180,7 @@ namespace SparkleShare {
                     };
     
                     FolderMenuItem.Activated += delegate {
-                        Program.Controller.OpenSparkleShareFolder ();
+                        Controller.SparkleShareClicked ();
                     };
                 
                     FolderMenuItem.Image = SparkleShareImage;
@@ -314,7 +314,7 @@ namespace SparkleShare {
         private EventHandler OpenFolderDelegate (string name)
         {
             return delegate {
-                Program.Controller.OpenSparkleShareFolder (name);
+                Controller.SubfolderClicked (name);
             };
         }
 
