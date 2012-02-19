@@ -87,7 +87,33 @@ namespace SparkleShare {
         public event NoteNotificationRaisedEventHandler NoteNotificationRaised;
         public delegate void NoteNotificationRaisedEventHandler (SparkleUser user, string folder_name);
 
+
+        // Path where the plugins are kept
         public abstract string PluginsPath { get; }
+
+        // Enables SparkleShare to start automatically at login
+        public abstract void EnableSystemAutostart ();
+
+        // Installs a launcher so the user can launch SparkleShare
+        // from the Internet category if needed
+        public abstract void InstallLauncher ();
+
+        // Installs the sparkleshare:// protocol handler
+        public abstract void InstallProtocolHandler ();
+
+        // Adds the SparkleShare folder to the user's
+        // list of bookmarked places
+        public abstract void AddToBookmarks ();
+
+        // Creates the SparkleShare folder in the user's home folder
+        public abstract bool CreateSparkleShareFolder ();
+
+        // Opens the SparkleShare folder or an (optional) subfolder
+        public abstract void OpenSparkleShareFolder (string subfolder);
+
+        // Opens a file with the appropriate application
+        public abstract void OpenFile (string url);
+
 
         private SparkleFetcherBase fetcher;
         private List<string> failed_avatars = new List<string> ();
@@ -117,10 +143,13 @@ namespace SparkleShare {
             if (CreateSparkleShareFolder ())
                 AddToBookmarks ();
 
-            if (FirstRun)
+            if (FirstRun) {
                 SparkleConfig.DefaultConfig.SetConfigOption ("notifications", bool.TrueString);
-            else
+                InstallProtocolHandler ();
+
+            } else {
                 ImportPrivateKey ();
+            }
 
             // Watch the SparkleShare folder
             FileSystemWatcher watcher = new FileSystemWatcher (SparkleConfig.DefaultConfig.FoldersPath) {
@@ -532,28 +561,6 @@ namespace SparkleShare {
 
             return html;
         }
-
-
-        // Creates a .desktop entry in autostart folder to
-        // start SparkleShare automatically at login
-        public abstract void EnableSystemAutostart ();
-
-        // Installs a launcher so the user can launch SparkleShare
-        // from the Internet category if needed
-        public abstract void InstallLauncher ();
-
-        // Adds the SparkleShare folder to the user's
-        // list of bookmarked places
-        public abstract void AddToBookmarks ();
-
-        // Creates the SparkleShare folder in the user's home folder
-        public abstract bool CreateSparkleShareFolder ();
-
-        // Opens the SparkleShare folder or an (optional) subfolder
-        public abstract void OpenSparkleShareFolder (string subfolder);
-
-        // Opens a file with the appropriate application
-        public abstract void OpenFile (string url);
 
 
         // Fires events for the current syncing state
