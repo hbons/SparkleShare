@@ -138,18 +138,16 @@ namespace SparkleShare {
         {
             InstallLauncher ();
             EnableSystemAutostart ();
+            InstallProtocolHandler ();
 
             // Create the SparkleShare folder and add it to the bookmarks
             if (CreateSparkleShareFolder ())
                 AddToBookmarks ();
 
-            if (FirstRun) {
+            if (FirstRun)
                 SparkleConfig.DefaultConfig.SetConfigOption ("notifications", bool.TrueString);
-                InstallProtocolHandler ();
-
-            } else {
+            else
                 ImportPrivateKey ();
-            }
 
             // Watch the SparkleShare folder
             FileSystemWatcher watcher = new FileSystemWatcher (SparkleConfig.DefaultConfig.FoldersPath) {
