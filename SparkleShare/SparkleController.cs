@@ -74,6 +74,12 @@ namespace SparkleShare {
                 SparkleHelpers.DebugInfo ("Controller", "Enabled autostart on login");
             }
         }
+        
+        
+        public override void InstallProtocolHandler ()
+        {
+            // TODO
+        }
 
 
         // Adds the SparkleShare folder to the user's

@@ -94,10 +94,6 @@ namespace SparkleShare {
         // Enables SparkleShare to start automatically at login
         public abstract void EnableSystemAutostart ();
 
-        // Installs a launcher so the user can launch SparkleShare
-        // from the Internet category if needed
-        public abstract void InstallLauncher ();
-
         // Installs the sparkleshare:// protocol handler
         public abstract void InstallProtocolHandler ();
 
@@ -136,7 +132,6 @@ namespace SparkleShare {
 
         public virtual void Initialize ()
         {
-            InstallLauncher ();
             EnableSystemAutostart ();
             InstallProtocolHandler ();
 

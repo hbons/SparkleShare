@@ -64,7 +64,7 @@ namespace SparkleShare {
             StatusIcon = new SparkleStatusIcon ();
         
             if (Program.Controller.FirstRun)
-                Program.Controller.ShowSetupWindow (PageType.Setup)
+                Program.Controller.ShowSetupWindow (PageType.Setup);
         }
 
 

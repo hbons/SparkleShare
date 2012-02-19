@@ -57,7 +57,7 @@ namespace SparkleShare {
             Title = _("Recent Events");
             IconName = "folder-sparkleshare";
 
-            DeleteEvent += Close (object o, DeleteEventArgs args) {
+            DeleteEvent += delegate (object o, DeleteEventArgs args) {
                 Controller.WindowClosed ();
                 args.RetVal = true;
             };
@@ -269,15 +269,15 @@ namespace SparkleShare {
                         AddAccelGroup (accel_group);
 
                         // Close on Esc
-                        close_1.AddAccelerator ("activate", accel_group, new AccelKey (Gdk.Key.W, Gdk.ModifierType.ControlMask,
-                            AccelFlags.Visible));
+                        close_1.AddAccelerator ("activate", accel_group, new AccelKey (Gdk.Key.W,
+                            Gdk.ModifierType.ControlMask, AccelFlags.Visible));
 
-                        close_1.Activated += delegate { HideAll (); };
+                        close_1.Activated += delegate { Controller.WindowClosed (); };
 
                         // Close on Ctrl+W
-                        close_2.AddAccelerator ("activate", accel_group, new AccelKey (Gdk.Key.Escape, Gdk.ModifierType.None,
-                            AccelFlags.Visible));
-                        close_2.Activated += delegate { HideAll (); };
+                        close_2.AddAccelerator ("activate", accel_group, new AccelKey (Gdk.Key.Escape,
+                            Gdk.ModifierType.None, AccelFlags.Visible));
+                        close_2.Activated += delegate { Controller.WindowClosed (); };
 
                     file_menu.Append (close_1);
                     file_menu.Append (close_2);
