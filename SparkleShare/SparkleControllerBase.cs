@@ -485,8 +485,8 @@ namespace SparkleShare {
                     if (File.Exists (change_set_avatar))
                         change_set_avatar = "file://" + change_set_avatar;
                     else
-                        change_set_avatar = "<!-- $no-buddy-icon-background-image -->";
-
+                        change_set_avatar = "<!-- $pixmaps-path -->/" + AssignAvatar (change_set.User.Email);
+                  
                     event_entry   += "</dl>";
 
                     string timestamp = change_set.Timestamp.ToString ("H:mm");
@@ -1141,10 +1141,21 @@ namespace SparkleShare {
 
         private string AssignColor (string s)
         {
-            string hash    = GetMD5 (s).Substring (0, 8);
+            string hash    = "0" + GetMD5 (s).Substring (0, 8);
             string numbers = Regex.Replace (hash, "[a-z]", "");
-            int number     = 3 + int.Parse (numbers);
+            int number     = int.Parse (numbers);
+
             return this.tango_palette [number % this.tango_palette.Length];
+        }
+
+
+        private string AssignAvatar (string s)
+        {
+            string hash    = "0" + GetMD5 (s).Substring (0, 8);
+            string numbers = Regex.Replace (hash, "[a-z]", "");
+            int number     = int.Parse (numbers);
+
+            return "avatar-" + (number % 11) + ".png";
         }
 
 
