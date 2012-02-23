@@ -55,7 +55,7 @@ namespace SparkleShare {
             Resizable   = true;
             BorderWidth = 0;
 
-            Title = _("Recent Events");
+            Title = _("Recent Changes");
             IconName = "folder-sparkleshare";
 
             DeleteEvent += delegate (object o, DeleteEventArgs args) {
