@@ -101,6 +101,10 @@ namespace SparkleShare {
         }
 
 
+        private string saved_address     = "";
+        private string saved_remote_path = "";
+
+
         public SparkleSetupController ()
         {
             TutorialPageNumber = 1;
@@ -230,10 +234,10 @@ namespace SparkleShare {
 
             } else if (SelectedPlugin.AddressExample != null) {
                 if (ChangeAddressFieldEvent != null)
-                    ChangeAddressFieldEvent ("", SelectedPlugin.AddressExample, FieldState.Enabled);
+                    ChangeAddressFieldEvent (this.saved_address, SelectedPlugin.AddressExample, FieldState.Enabled);
             } else {
                 if (ChangeAddressFieldEvent != null)
-                    ChangeAddressFieldEvent ("", "", FieldState.Enabled);
+                    ChangeAddressFieldEvent (this.saved_address, "", FieldState.Enabled);
             }
 
             if (SelectedPlugin.Path != null) {
@@ -242,11 +246,11 @@ namespace SparkleShare {
 
             } else if (SelectedPlugin.PathExample != null) {
                 if (ChangePathFieldEvent != null)
-                    ChangePathFieldEvent ("", SelectedPlugin.PathExample, FieldState.Enabled);
+                    ChangePathFieldEvent (this.saved_remote_path, SelectedPlugin.PathExample, FieldState.Enabled);
 
             } else {
                 if (ChangePathFieldEvent != null)
-                    ChangePathFieldEvent ("", "", FieldState.Enabled);
+                    ChangePathFieldEvent (this.saved_remote_path, "", FieldState.Enabled);
             }
         }
 
@@ -259,8 +263,13 @@ namespace SparkleShare {
             address     = address.Trim ();
             remote_path = remote_path.Trim ();
 
-            bool fields_valid = address != null && address.Trim().Length > 0 &&
-                remote_path != null && remote_path.Trim().Length > 0;
+            if (selected_plugin == 0)
+                this.saved_address     = address;
+
+            this.saved_remote_path = remote_path;
+
+            bool fields_valid = address != null && address.Trim ().Length > 0 &&
+                remote_path != null && remote_path.Trim ().Length > 0;
 
             if (UpdateAddProjectButtonEvent != null)
                 UpdateAddProjectButtonEvent (fields_valid);
