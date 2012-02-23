@@ -24,7 +24,7 @@ app_theme_icons =					\
 	places,folder-sparkleshare-256.png		\
 	places,folder-sparkleshare-32.png		\
 	places,folder-sparkleshare-48.png		\
-	status,sparkleshare-syncing-error-24.png			\
+	status,sparkleshare-syncing-error-24.png	\
 	status,avatar-default-16.png			\
 	status,avatar-default-22.png			\
 	status,avatar-default-24.png			\
