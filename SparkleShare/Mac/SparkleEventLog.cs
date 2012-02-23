@@ -54,7 +54,7 @@ namespace SparkleShare {
         // TODO: Window needs to be made resizable
         public SparkleEventLog () : base ()
         {
-            Title    = "Recent Events";
+            Title    = "Recent Changes";
 
             Delegate = new SparkleEventsDelegate ();
 
