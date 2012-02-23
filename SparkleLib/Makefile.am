@@ -6,6 +6,9 @@ SOURCES =  \
 	Git/SparkleFetcherGit.cs \
 	Git/SparkleGit.cs \
 	Git/SparkleRepoGit.cs \
+	Gut/SparkleFetcherGut.cs \
+	Gut/SparkleGut.cs \
+	Gut/SparkleRepoGut.cs \
 	SparkleAnnouncement.cs \
 	SparkleBackend.cs \
 	SparkleChangeSet.cs \
