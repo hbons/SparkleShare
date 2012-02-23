@@ -260,7 +260,7 @@ namespace SparkleShare {
             this.menu.Add (sync_item);
             this.menu.Add (new SeparatorMenuItem ());
 
-            MenuItem recent_events_item = new MenuItem (_("Open Recent Events"));
+            MenuItem recent_events_item = new MenuItem (_("View Recent Changes…"));
 
                 recent_events_item.Sensitive = (Controller.Folders.Length > 0);
 
