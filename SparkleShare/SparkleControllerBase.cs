@@ -1154,8 +1154,9 @@ namespace SparkleShare {
             string hash    = "0" + GetMD5 (s).Substring (0, 8);
             string numbers = Regex.Replace (hash, "[a-z]", "");
             int number     = int.Parse (numbers);
+            string letters = "abcdefghijklmnopqrstuvwxyz";
 
-            return "avatar-" + (number % 11) + ".png";
+            return "avatar-" + letters [(number % 11)] + ".png";
         }
 
 

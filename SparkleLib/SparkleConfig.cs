@@ -150,9 +150,10 @@ namespace SparkleLib {
                     "sparkleshare." + email + ".key.pub"
                 );
 
-                SparkleUser user = new SparkleUser (name, email) {
-                    PublicKey = File.ReadAllText (pubkey_file_path)
-                };
+                SparkleUser user = new SparkleUser (name, email);
+                
+                if (File.Exists (pubkey_file_path))
+                    user.PublicKey = File.ReadAllText (pubkey_file_path);
 
                 return user;
             }
