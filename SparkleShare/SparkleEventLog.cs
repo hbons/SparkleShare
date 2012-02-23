@@ -233,9 +233,8 @@ namespace SparkleShare {
                 html = html.Replace ("<!-- $day-entry-header-background-color -->", SparkleUIHelpers.GdkColorToHex (Style.Background (StateType.Normal)));
                 html = html.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
                 html = html.Replace ("<!-- $small-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
-                html = html.Replace ("<!-- $no-buddy-icon-background-image -->", "file://" +
-                        new string [] {SparkleUI.AssetsPath, "icons",
-                            "hicolor", "32x32", "status", "avatar-default.png"}.Combine ());
+                html = html.Replace ("<!-- $pixmaps-path -->", "file://" + 
+                        new string [] {SparkleUI.AssetsPath, "pixmaps"}.Combine ());
                 html = html.Replace ("<!-- $document-added-background-image -->", "file://" +
                         new string [] {SparkleUI.AssetsPath, "icons",
                             "hicolor", "12x12", "status", "document-added.png"}.Combine ());
@@ -248,6 +247,8 @@ namespace SparkleShare {
                 html = html.Replace ("<!-- $document-moved-background-image -->", "file://" +
                         new string [] {SparkleUI.AssetsPath, "icons",
                             "hicolor", "12x12", "status", "document-moved.png"}.Combine ());
+
+Console.WriteLine (html);
 
                 Application.Invoke (delegate {
                     this.spinner.Stop ();

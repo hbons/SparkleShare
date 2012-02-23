@@ -326,38 +326,38 @@
     <Content Include="..\..\data\icons\avatar-default.png">
       <Link>Pixmaps\avatar-default.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\avatar-1.png">
-      <Link>Pixmaps\avatar-1.png</Link>
+    <Content Include="..\..\data\icons\avatar-a.png">
+      <Link>Pixmaps\avatar-a.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\avatar-2.png">
-      <Link>Pixmaps\avatar-2.png</Link>
+    <Content Include="..\..\data\icons\avatar-b.png">
+      <Link>Pixmaps\avatar-b.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\avatar-3.png">
-      <Link>Pixmaps\avatar-3.png</Link>
+    <Content Include="..\..\data\icons\avatar-c.png">
+      <Link>Pixmaps\avatar-c.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\avatar-4.png">
-      <Link>Pixmaps\avatar-4.png</Link>
+    <Content Include="..\..\data\icons\avatar-d.png">
+      <Link>Pixmaps\avatar-d.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\avatar-5.png">
-      <Link>Pixmaps\avatar-5.png</Link>
+    <Content Include="..\..\data\icons\avatar-e.png">
+      <Link>Pixmaps\avatar-e.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\avatar-6.png">
-      <Link>Pixmaps\avatar-6.png</Link>
+    <Content Include="..\..\data\icons\avatar-f.png">
+      <Link>Pixmaps\avatar-f.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\avatar-7.png">
-      <Link>Pixmaps\avatar-7.png</Link>
+    <Content Include="..\..\data\icons\avatar-g.png">
+      <Link>Pixmaps\avatar-g.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\avatar-8.png">
-      <Link>Pixmaps\avatar-8.png</Link>
+    <Content Include="..\..\data\icons\avatar-h.png">
+      <Link>Pixmaps\avatar-h.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\avatar-9.png">
-      <Link>Pixmaps\avatar-9.png</Link>
+    <Content Include="..\..\data\icons\avatar-i.png">
+      <Link>Pixmaps\avatar-i.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\avatar-10.png">
-      <Link>Pixmaps\avatar-10.png</Link>
+    <Content Include="..\..\data\icons\avatar-j.png">
+      <Link>Pixmaps\avatar-j.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\avatar-11.png">
-      <Link>Pixmaps\avatar-11.png</Link>
+    <Content Include="..\..\data\icons\avatar-k.png">
+      <Link>Pixmaps\avatar-k.png</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
