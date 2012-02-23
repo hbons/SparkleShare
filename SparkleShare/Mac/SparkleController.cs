@@ -108,12 +108,6 @@ namespace SparkleShare {
 		}
 
 
-		public override void InstallLauncher ()
-		{
-			// N/A
-		}
-
-
         public override void InstallProtocolHandler ()
         {
              // We ship SparkleShareInviteHandler.app in the bundle
