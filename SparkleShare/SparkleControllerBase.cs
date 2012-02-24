@@ -92,7 +92,7 @@ namespace SparkleShare {
         public abstract string PluginsPath { get; }
 
         // Enables SparkleShare to start automatically at login
-        public abstract void EnableSystemAutostart ();
+        public abstract void CreateStartupItem ();
 
         // Installs the sparkleshare:// protocol handler
         public abstract void InstallProtocolHandler ();
@@ -132,7 +132,6 @@ namespace SparkleShare {
 
         public virtual void Initialize ()
         {
-            EnableSystemAutostart ();
             InstallProtocolHandler ();
 
             // Create the SparkleShare folder and add it to the bookmarks

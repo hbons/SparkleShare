@@ -64,8 +64,9 @@ namespace SparkleShare {
                     case PageType.Setup: {
 
                         Header = _("Welcome to SparkleShare!");
-                        Description  = "We'll need some info to mark your changes in the event log. " +
-                                       "Don't worry, this stays between you and your peers.";
+                        Description  = "Before we get started, what's your name and email? " +
+                            "Don't worry, this information is only visible to your team members.";
+
 
 
                         Table table = new Table (2, 3, true) {
@@ -496,8 +497,8 @@ namespace SparkleShare {
                         switch (Controller.TutorialPageNumber) {
                         case 1: {
                             Header      = _("What's happening next?");
-                            Description = _("SparkleShare creates a special folder in your personal folder " +
-                                "that will keep track of your projects.");
+                            Description = "SparkleShare creates a special folder on your computer " +
+                                "that will keep track of your projects.";
 
                             Button skip_tutorial_button = new Button (_("Skip Tutorial"));
                             skip_tutorial_button.Clicked += delegate {
@@ -521,8 +522,8 @@ namespace SparkleShare {
 
                         case 2: {
                             Header      = _("Sharing files with others");
-                            Description = _("All files added to your project folders are synced with the host " +
-                                "automatically, as well as with your collaborators.");
+                            Description = _("All files added to your project folders are synced automatically with " +
+                                "the host and your team members.");
 
                             Button continue_button = new Button (_("Continue"));
                             continue_button.Clicked += delegate {
@@ -539,8 +540,8 @@ namespace SparkleShare {
 
                         case 3: {
                             Header      = _("The status icon is here to help");
-                            Description = _("It shows the syncing process status, " +
-                                "and contains links to your projects and the event log.");
+                            Description = _("It shows the syncing progress, provides easy access to " +
+                                "your projects and let's you view recent changes.");
 
                             Button continue_button = new Button (_("Continue"));
                             continue_button.Clicked += delegate {
@@ -557,15 +558,8 @@ namespace SparkleShare {
 
                         case 4: {
                             Header      = _("Adding projects to SparkleShare");
-                            Description = _("Just click this button when you see it on the web, and " +
-                                "the project will be automatically added:");
-
-                            Label label = new Label (_("…or select <b>‘Add Hosted Project…’</b> from the status icon menu " +
-                                "to add one by hand.")) {
-                                Wrap   = true,
-                                Xalign = 0,
-                                UseMarkup = true
-                            };
+                            Description = _("You can do this through the status icon menu, or by clicking " +
+                                "magic buttons on webpages that look like this:");
 
                             Image slide = SparkleUIHelpers.GetImage ("tutorial-slide-4.png");
 
@@ -574,12 +568,9 @@ namespace SparkleShare {
                                 Controller.FinishPageCompleted ();
                             };
 
+                            // TODO: Add startup item checkbox here
 
-                            VBox box = new VBox (false, 0);
-                            box.Add (slide);
-                            box.Add (label);
-
-                            Add (box);
+                            Add (slide);
                             AddButton (finish_button);
 
                             break;

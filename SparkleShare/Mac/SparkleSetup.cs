@@ -37,6 +37,7 @@ namespace SparkleShare {
         private NSButton TryAgainButton;
         private NSButton CancelButton;
         private NSButton SkipTutorialButton;
+        private NSButton StartupCheckButton;
         private NSButton OpenFolderButton;
         private NSButton FinishButton;
         private NSImage SlideImage;
@@ -52,7 +53,6 @@ namespace SparkleShare {
         private NSTextField PathTextField;
         private NSTextField PathLabel;
         private NSTextField PathHelpLabel;
-        private NSTextField AddProjectTextField;
         private NSTextField WarningTextField;
         private NSImage WarningImage;
         private NSImageView WarningImageView;
@@ -84,10 +84,9 @@ namespace SparkleShare {
                     switch (type) {
                     case PageType.Setup: {
 
-                        // TODO: Improve text
                         Header       = "Welcome to SparkleShare!";
-                        Description  = "We'll need some info to mark your changes in the event log. " +
-                                       "Don't worry, this stays between you and your peers.";
+                        Description  = "Before we get started, what's your name and email? " +
+                            "Don't worry, this information is only visible to your team members.";
 
 
                         FullNameLabel = new NSTextField () {
@@ -618,7 +617,7 @@ namespace SparkleShare {
                         switch (Controller.TutorialPageNumber) {
                         case 1: {
                             Header      = "What's happening next?";
-                            Description = "SparkleShare creates a special folder in your personal folder " +
+                            Description = "SparkleShare creates a special folder on your computer " +
                                 "that will keep track of your projects.";
 
                             SkipTutorialButton = new NSButton () {
@@ -658,8 +657,8 @@ namespace SparkleShare {
 
                         case 2: {
                             Header      = "Sharing files with others";
-                            Description = "All files added to your project folders are synced with the host " +
-                                "automatically, as well as with your collaborators.";
+                            Description = "All files added to your project folders are synced automatically with " +
+                                "the host and your team members.";
 
                             ContinueButton = new NSButton () {
                                 Title = "Continue"
@@ -689,8 +688,8 @@ namespace SparkleShare {
 
                         case 3: {
                             Header      = "The status icon is here to help";
-                            Description = "It shows the syncing process status, " +
-                                "and contains links to your projects and the event log.";
+                            Description = "It shows the syncing progress, provides easy access to " +
+                                "your projects and let's you view recent changes.";
 
                             ContinueButton = new NSButton () {
                                 Title = "Continue"
@@ -720,17 +719,20 @@ namespace SparkleShare {
 
                         case 4: {
                             Header      = "Adding projects to SparkleShare";
-                            Description = "Just click this button when you see it on the web, and " +
-                                "the project will be automatically added:";
+                            Description = "You can do this through the status icon menu, or by clicking " +
+                                "magic buttons on webpages that look like this:";
 
-                            AddProjectTextField = new NSTextField () {
-                                Frame           = new RectangleF (190, Frame.Height - 290, 640 - 240, 44),
-                                BackgroundColor = NSColor.WindowBackground,
-                                Bordered        = false,
-                                Editable        = false,
-                                Font            = SparkleUI.Font,
-                                StringValue     = "…or select ‘Add Hosted Project…’ from the status icon menu " +
-                                "to add one by hand."
+
+                            StartupCheckButton = new NSButton () {
+                                Frame = new RectangleF (190, Frame.Height - 400, 300, 18),
+                                Title = "Add SparkleShare to startup items",
+                                State = NSCellStateValue.On
+                            };
+
+                            StartupCheckButton.SetButtonType (NSButtonType.Switch);
+
+                            StartupCheckButton.Activated += delegate {
+                                Controller.StartupItemChanged (StartupCheckButton.State == NSCellStateValue.On);
                             };
 
                             FinishButton = new NSButton () {
@@ -740,6 +742,7 @@ namespace SparkleShare {
                             FinishButton.Activated += delegate {
                                 Controller.TutorialPageCompleted ();
                             };
+
 
                             string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
                                 "Pixmaps", "tutorial-slide-4.png");
@@ -754,7 +757,7 @@ namespace SparkleShare {
                             };
 
                             ContentView.AddSubview (SlideImageView);
-                            ContentView.AddSubview (AddProjectTextField);
+                            ContentView.AddSubview (StartupCheckButton);
                             Buttons.Add (FinishButton);
 
                             break;
