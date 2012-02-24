@@ -623,9 +623,15 @@ namespace SparkleShare {
                                 Controller.FinishPageCompleted ();
                             };
 
-                            // TODO: Add startup item checkbox here
+
+                            check_button = new CheckButton ("Add SparkleShare to startup items");
+
+                            check_button.Toggled += delegate {
+                                Controller.StartupItemChanged (check_button.Active);
+                            };
 
                             Add (slide);
+                            AddOption (check_button);
                             AddButton (finish_button);
 
                             break;

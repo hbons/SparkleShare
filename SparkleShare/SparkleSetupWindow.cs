@@ -29,9 +29,11 @@ namespace SparkleShare {
 
     public class SparkleSetupWindow : Window    {
 
+        // TODO: caps
         private HBox HBox;
         private VBox VBox;
         private VBox Wrapper;
+        private VBox OptionArea;
         private HButtonBox Buttons;
 
         public string Header;
@@ -72,10 +74,22 @@ namespace SparkleShare {
                         BorderWidth = 0
                     };
 
+                    OptionArea = new VBox (false, 0) {
+                        BorderWidth = 0
+                    };
+
                     Buttons = CreateButtonBox ();
 
+
+                HBox layout_horizontal = new HBox (false , 0) {
+                    BorderWidth = 0
+                };
+
+                layout_horizontal.PackStart (OptionArea, true, true, 0);
+                layout_horizontal.PackStart (Buttons, false, false, 0);
+
                 VBox.PackStart (Wrapper, true, true, 0);
-                VBox.PackStart (Buttons, false, false, 15);
+                VBox.PackStart (layout_horizontal, false, false, 15);
 
                 EventBox box = new EventBox ();
                 Gdk.Color bg_color = new Gdk.Color ();
@@ -107,6 +121,13 @@ namespace SparkleShare {
         public void AddButton (Button button)
         {
             Buttons.Add (button);
+            ShowAll ();
+        }
+
+
+        public void AddOption (Widget widget)
+        {
+            OptionArea.Add (widget);
             ShowAll ();
         }
 
