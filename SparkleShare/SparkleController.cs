@@ -45,8 +45,10 @@ namespace SparkleShare {
 
         // Creates a .desktop entry in autostart folder to
         // start SparkleShare automatically at login
-        public override void EnableSystemAutostart ()
+        public override void CreateStartupItem ()
         {
+            // TODO: check whether this still works
+
             string autostart_path = Path.Combine (Environment.GetFolderPath (
                 Environment.SpecialFolder.ApplicationData), "autostart");
 
