@@ -68,7 +68,6 @@ namespace SparkleShare {
                             "Don't worry, this information is only visible to your team members.";
 
 
-
                         Table table = new Table (2, 3, true) {
                             RowSpacing    = 6,
                             ColumnSpacing = 6
@@ -325,6 +324,62 @@ namespace SparkleShare {
                         AddButton (add_button);
 
                         Controller.CheckAddPage (address_entry.Text, path_entry.Text, 1);
+
+                        break;
+                    }
+
+                    case PageType.Invite: {
+
+                        Header      = _("You've reveived an invite!");
+                        Description = _("Do you want to add this project to SparkleShare?");
+
+
+                        Table table = new Table (2, 3, true) {
+                            RowSpacing    = 6,
+                            ColumnSpacing = 6
+                        };
+
+                            Label address_label = new Label (_("Address:")) {
+                                Xalign    = 1
+                            };
+
+                            Label path_label = new Label (_("Remote Path:")) {
+                                Xalign    = 1
+                            };
+
+                            Label address_value = new Label ("<b>" + Controller.PendingInvite.Address + "</b>") {
+                                UseMarkup = true,
+                                Xalign    = 0
+                            };
+
+                            Label path_value = new Label ("<b>" + Controller.PendingInvite.RemotePath + "</b>") {
+                                UseMarkup = true,
+                                Xalign    = 0
+                            };
+
+                        table.Attach (address_label, 0, 1, 0, 1);
+                        table.Attach (address_value, 1, 2, 0, 1);
+                        table.Attach (path_label, 0, 1, 1, 2);
+                        table.Attach (path_value, 1, 2, 1, 2);
+
+                        VBox wrapper = new VBox (false, 9);
+                        wrapper.PackStart (table, true, false, 0);
+
+                            Button cancel_button = new Button (_("Cancel"));
+
+                            cancel_button.Clicked += delegate {
+                                Controller.PageCancelled ();
+                            };
+
+                            Button add_button = new Button (_("Add"));
+
+                            add_button.Clicked += delegate {
+                                Controller.InvitePageCompleted ();
+                            };
+
+                        AddButton (cancel_button);
+                        AddButton (add_button);
+                        Add (wrapper);
 
                         break;
                     }
