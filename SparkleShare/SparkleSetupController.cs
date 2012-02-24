@@ -103,6 +103,7 @@ namespace SparkleShare {
 
         private string saved_address     = "";
         private string saved_remote_path = "";
+        private bool create_startup_item = true;
 
 
         public SparkleSetupController ()
@@ -209,13 +210,22 @@ namespace SparkleShare {
         }
 
 
+        public void StartupItemChanged (bool create_startup_item)
+        {
+            this.create_startup_item = create_startup_item;
+        }
+
+
         public void TutorialPageCompleted ()
         {
             TutorialPageNumber++;
 
-            if (TutorialPageNumber == 4) {
+            if (TutorialPageNumber == 5) {
                 if (HideWindowEvent != null)
                     HideWindowEvent ();
+
+                if (this.create_startup_item)
+                    Program.Controller.CreateStartupItem ();
 
             } else {
                 if (ChangePageEvent != null)
@@ -264,7 +274,7 @@ namespace SparkleShare {
             remote_path = remote_path.Trim ();
 
             if (selected_plugin == 0)
-                this.saved_address     = address;
+                this.saved_address = address;
 
             this.saved_remote_path = remote_path;
 
