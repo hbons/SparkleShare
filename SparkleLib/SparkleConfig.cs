@@ -18,8 +18,8 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Xml;
 using System.Security.Principal;
+using System.Xml;
 
 namespace SparkleLib {
 
@@ -167,7 +167,7 @@ namespace SparkleLib {
                 XmlNode email_node = SelectSingleNode ("/sparkleshare/user/email/text()");
                 email_node.InnerText = user.Email;
 
-                this.Save ();
+                Save ();
 
                 // ConfigureSSH ();
             }
@@ -252,7 +252,7 @@ namespace SparkleLib {
             XmlNode node_root = SelectSingleNode ("/sparkleshare");
             node_root.AppendChild (node_folder);
 
-            this.Save ();
+            Save ();
         }
 
 
@@ -263,32 +263,32 @@ namespace SparkleLib {
                     SelectSingleNode ("/sparkleshare").RemoveChild (node_folder);
             }
 
-            this.Save ();
+            Save ();
         }
 
 
         public bool FolderExists (string name)
         {
-            XmlNode folder = this.GetFolder (name);
+            XmlNode folder = GetFolder (name);
             return (folder != null);
         }
 
 
         public string GetBackendForFolder (string name)
         {
-            return this.GetFolderValue (name, "backend");
+            return GetFolderValue (name, "backend");
         }
 
 
         public string GetUrlForFolder (string name)
         {
-            return this.GetFolderValue (name, "url");
+            return GetFolderValue (name, "url");
         }
 
 
         public bool SetFolderOptionalAttribute (string folder_name, string key, string value)
         {
-            XmlNode folder = this.GetFolder (folder_name);
+            XmlNode folder = GetFolder (folder_name);
 
             if (folder == null)
                 return false;
@@ -302,13 +302,14 @@ namespace SparkleLib {
                 folder.AppendChild (new_node);
             }
 
+            Save ();
             return true;
         }
 
 
         public string GetFolderOptionalAttribute (string folder_name, string key)
         {
-            XmlNode folder = this.GetFolder (folder_name);
+            XmlNode folder = GetFolder (folder_name);
 
             if (folder != null) {
                 if (folder [key] != null)
@@ -368,7 +369,7 @@ namespace SparkleLib {
 
         private string GetFolderValue (string name, string key)
         {
-            XmlNode folder = this.GetFolder(name);
+            XmlNode folder = GetFolder(name);
             
             if ((folder != null) && (folder [key] != null)) {
                 return folder [key].InnerText;
@@ -405,7 +406,7 @@ namespace SparkleLib {
             }
 
             SparkleHelpers.DebugInfo ("Config", "Updated " + name + ":" + content);
-            this.Save ();
+            Save ();
         }
 
 
@@ -414,7 +415,7 @@ namespace SparkleLib {
             if (!File.Exists (FullPath))
                 throw new ConfigFileNotFoundException (FullPath + " does not exist");
 
-            this.Save (FullPath);
+            Save (FullPath);
             SparkleHelpers.DebugInfo ("Config", "Updated \"" + FullPath + "\"");
         }
 
