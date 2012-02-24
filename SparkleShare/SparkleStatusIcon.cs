@@ -249,9 +249,6 @@ namespace SparkleShare {
 
                 // Opens the wizard to add a new remote folder
                 MenuItem sync_item = new MenuItem (_("Add Hosted Project…"));
-            
-                if (Program.Controller.FirstRun)
-                    sync_item.Sensitive = false;
 
                 sync_item.Activated += delegate {
                     Controller.AddHostedProjectClicked ();

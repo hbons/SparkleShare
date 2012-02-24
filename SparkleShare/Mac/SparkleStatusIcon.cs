@@ -234,11 +234,10 @@ namespace SparkleShare {
                         Enabled = true
                     };
                 
-                    if (!Program.Controller.FirstRun) {
-                        SyncMenuItem.Activated += delegate {
-                            Controller.AddHostedProjectClicked ();
-                        };
-                    }
+                    SyncMenuItem.Activated += delegate {
+                        Controller.AddHostedProjectClicked ();
+                    };
+
     
                 Menu.AddItem (SyncMenuItem);
                 Menu.AddItem (NSMenuItem.SeparatorItem);

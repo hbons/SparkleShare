@@ -108,7 +108,7 @@ namespace SparkleShare {
 
         public SparkleSetupController ()
         {
-            TutorialPageNumber = 1;
+            TutorialPageNumber = 0;
             PreviousAddress    = "";
             PreviousPath       = "";
             PreviousUrl        = "";
@@ -153,14 +153,23 @@ namespace SparkleShare {
                     return;
                 }
 
+                if (page_type == PageType.Add) {
+                    if (TutorialPageNumber < 5) {
+                        if (ShowWindowEvent != null)
+                            ShowWindowEvent ();
+
+                        return;
+
+                    } else {
+                        SelectedPluginChanged (SelectedPluginIndex);
+                    }
+                }
+
                 if (ChangePageEvent != null)
                     ChangePageEvent (page_type, null);
 
                 if (ShowWindowEvent != null)
                     ShowWindowEvent ();
-
-                if (page_type == PageType.Add)
-                    SelectedPluginChanged (SelectedPluginIndex);
             };
         }
 
@@ -194,7 +203,8 @@ namespace SparkleShare {
 
             Program.Controller.GenerateKeyPair ();
             Program.Controller.ImportPrivateKey ();
-            Program.Controller.UpdateState ();
+
+            TutorialPageNumber = 1;
 
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Tutorial, null);
