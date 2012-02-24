@@ -174,16 +174,18 @@ namespace SparkleShare {
                     if (InviteReceived != null) {
                         SparkleInvite invite = new SparkleInvite (args.FullPath);
 
-                        if (invite.Valid) {
+                        if (invite.IsValid) {
                             InviteReceived (invite);
-                            File.Delete (args.FullPath);
 
                         } else {
+                            invite = null;
+
                             if (AlertNotificationRaised != null)
                                 AlertNotificationRaised ("Oh noes!",
                                     "This invite seems screwed up...");
                         }
 
+                        File.Delete (args.FullPath);
                     }
                 }
             };
@@ -965,10 +967,14 @@ namespace SparkleShare {
         }
 
 
-        public void FetchFolder (string server, string remote_folder)
+        public void FetchFolder (string server, string remote_folder, string announcements_url)
         {
-            server        = server.Trim ();
-            remote_folder = remote_folder.Trim ();
+            server            = server.Trim ();
+            remote_folder     = remote_folder.Trim ();
+
+            if (announcements_url != null)
+                announcements_url = announcements_url.Trim ();
+
 
             string tmp_path = SparkleConfig.DefaultConfig.TmpPath;
             if (!Directory.Exists (tmp_path)) {
@@ -1038,8 +1044,14 @@ namespace SparkleShare {
 
                 try {
                     Directory.Move (tmp_folder, target_folder_path);
-
                     SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.RemoteUrl, backend);
+
+                    if (!string.IsNullOrEmpty (announcements_url)) {
+                        SparkleConfig.DefaultConfig.SetFolderOptionalAttribute (target_folder_name,
+                            "announcements_url", announcements_url);
+                    }
+
+
                     AddRepository (target_folder_path);
 
                     if (FolderFetched != null)

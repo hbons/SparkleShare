@@ -71,12 +71,12 @@ namespace SparkleShare {
         public readonly List<SparklePlugin> Plugins = new List<SparklePlugin> ();
         public SparklePlugin SelectedPlugin;
 
+        public SparkleInvite PendingInvite { get; private set; }
         public int TutorialPageNumber { get; private set; }
         public string PreviousUrl { get; private set; }
         public string PreviousAddress { get; private set; }
         public string PreviousPath { get; private set; }
         public string SyncingFolder { get; private set; }
-        public SparkleInvite PendingInvite;
 
 
         public int SelectedPluginIndex {
@@ -135,8 +135,6 @@ namespace SparkleShare {
 
 
             Program.Controller.InviteReceived += delegate (SparkleInvite invite) {
-                PendingInvite = invite;
-
                 if (ChangePageEvent != null)
                     ChangePageEvent (PageType.Invite, null);
 
@@ -154,15 +152,21 @@ namespace SparkleShare {
                 }
 
                 if (page_type == PageType.Add) {
-                    if (TutorialPageNumber < 5) {
+                    if (!Program.Controller.FirstRun &&
+                        (TutorialPageNumber == 0 ||
+                        TutorialPageNumber > 4)) {
+
+                        if (ChangePageEvent != null)
+                            ChangePageEvent (page_type, null);
+
                         if (ShowWindowEvent != null)
                             ShowWindowEvent ();
 
-                        return;
-
-                    } else {
                         SelectedPluginChanged (SelectedPluginIndex);
+
                     }
+
+                    return;
                 }
 
                 if (ChangePageEvent != null)
@@ -332,7 +336,7 @@ namespace SparkleShare {
                     UpdateProgressBarEvent (percentage);
             };
 
-            Program.Controller.FetchFolder (address, path);
+            Program.Controller.FetchFolder (address, path, SelectedPlugin.AnnouncementsUrl);
         }
 
 
@@ -383,7 +387,8 @@ namespace SparkleShare {
                     UpdateProgressBarEvent (percentage);
             };
 
-            Program.Controller.FetchFolder (PendingInvite.Address, PendingInvite.RemotePath);
+            Program.Controller.FetchFolder (PendingInvite.Address,
+                PendingInvite.RemotePath, PendingInvite.AnnouncementsUrl.ToString ());
         }
 
 
