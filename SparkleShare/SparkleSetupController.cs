@@ -152,10 +152,8 @@ namespace SparkleShare {
                 }
 
                 if (page_type == PageType.Add) {
-                    if (!Program.Controller.FirstRun &&
-                        (TutorialPageNumber == 0 ||
-                        TutorialPageNumber > 4)) {
 
+                    if (!Program.Controller.FirstRun && TutorialPageNumber == 0) {
                         if (ChangePageEvent != null)
                             ChangePageEvent (page_type, null);
 
@@ -163,7 +161,6 @@ namespace SparkleShare {
                             ShowWindowEvent ();
 
                         SelectedPluginChanged (SelectedPluginIndex);
-
                     }
 
                     return;
@@ -235,6 +232,8 @@ namespace SparkleShare {
             TutorialPageNumber++;
 
             if (TutorialPageNumber == 5) {
+                TutorialPageNumber = 0;
+
                 if (HideWindowEvent != null)
                     HideWindowEvent ();
 

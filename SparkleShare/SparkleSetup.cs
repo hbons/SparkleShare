@@ -620,11 +620,13 @@ namespace SparkleShare {
 
                             Button finish_button = new Button (_("Finish"));
                             finish_button.Clicked += delegate {
-                                Controller.FinishPageCompleted ();
+                                Controller.TutorialPageCompleted ();
                             };
 
 
-                            check_button = new CheckButton ("Add SparkleShare to startup items");
+                            CheckButton check_button = new CheckButton ("Add SparkleShare to startup items") {
+                                Active = true
+                            };
 
                             check_button.Toggled += delegate {
                                 Controller.StartupItemChanged (check_button.Active);
