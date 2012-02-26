@@ -69,10 +69,6 @@ namespace SparkleShare {
                         "X-GNOME-Autostart-enabled=true\n" +
                         "Categories=Network");
 
-                    // Give the launcher the right permissions so it can be launched by the user
-                    UnixFileInfo file_info = new UnixFileInfo (desktopfile_path);
-                    file_info.Create (FileAccessPermissions.UserReadWriteExecute);
-
                     SparkleHelpers.DebugInfo ("Controller", "Added SparkleShare to login items");
 
                 } catch (Exception e) {
