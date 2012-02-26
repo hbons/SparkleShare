@@ -73,10 +73,10 @@ namespace SparkleShare {
                     UnixFileInfo file_info = new UnixFileInfo (desktopfile_path);
                     file_info.Create (FileAccessPermissions.UserReadWriteExecute);
 
-                    SparkleHelpers.DebugInfo ("Controller", "Added " + app_path + " to login items");
+                    SparkleHelpers.DebugInfo ("Controller", "Added SparkleShare to login items");
 
                 } catch (Exception e) {
-                    SparkleHelpers.DebugInfo ("Controller", "Failed adding " + app_path + " to login items: " + e.Message);
+                    SparkleHelpers.DebugInfo ("Controller", "Failed adding SparkleShare to login items: " + e.Message);
                 }
             }
         }
