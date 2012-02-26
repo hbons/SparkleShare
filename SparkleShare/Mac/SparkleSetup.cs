@@ -86,7 +86,7 @@ namespace SparkleShare {
 
                         Header       = "Welcome to SparkleShare!";
                         Description  = "Before we get started, what's your name and email? " +
-                            "Don't worry, this information is only visible to your team members.";
+                            "Don't worry, this information will only visible to your team members.";
 
 
                         FullNameLabel = new NSTextField () {
