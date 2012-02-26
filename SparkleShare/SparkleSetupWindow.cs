@@ -139,17 +139,18 @@ namespace SparkleShare {
                 Xalign = 0,
             };
 
-            Label description = new Label (Description) {
-                Xalign = 0,
-                Wrap   = true
-            };
-
             VBox layout_vertical = new VBox (false, 0);
-            layout_vertical.PackStart (new Label (""), false, false, 6);
+            layout_vertical.PackStart (new Label (""), false, false, 0);
             layout_vertical.PackStart (header, false, false, 0);
 
-            if (!string.IsNullOrEmpty (Description))
+            if (!string.IsNullOrEmpty (Description)) {
+                Label description = new Label (Description) {
+                    Xalign = 0,
+                    Wrap   = true
+                };
+
                 layout_vertical.PackStart (description, false, false, 21);
+            }
 
             if (widget != null)
                 layout_vertical.PackStart (widget, true, true, 0);
