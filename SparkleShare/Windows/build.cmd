@@ -7,11 +7,11 @@ set msbuild="%WinDirNet%\v3.5\msbuild.exe"
 if not exist %msbuild% set msbuild="%WinDirNet%\v4.0.30319\msbuild.exe"
 set wixBinDir=%WIX%\bin
 
+cd lib
+copy * ..\..\..\bin
+cd ..
 
-
-%msbuild% /t:Rebuild /p:Configuration=Release /p:Platform="AnyCPU"   %~dp0..\..\tools\gettext-cs-utils\Gettext.CsUtils\Core\Gettext.Cs\Gettext.Cs.csproj 
-
-
+%msbuild% /t:Rebuild /p:Configuration=Release /p:Platform="AnyCPU"   %~dp0\tools\gettext-cs-utils\Gettext.CsUtils\Core\Gettext.Cs\Gettext.Cs.csproj
 %msbuild% /t:Rebuild /p:Configuration=Release /p:Platform="Any CPU" %~dp0\SparkleShare.sln
 
 if "%1"=="installer" (
