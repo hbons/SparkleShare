@@ -48,8 +48,10 @@ namespace SparkleShare {
             this.buttonCancel = new System.Windows.Forms.Button();
             this.syncingPage = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
+            this.syncFinishButton = new System.Windows.Forms.Button();
+            this.syncCancelButton = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
-            this.buttonFinish = new System.Windows.Forms.Button();
             this.syncingProgressBar = new System.Windows.Forms.ProgressBar();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
@@ -66,6 +68,17 @@ namespace SparkleShare {
             this.buttonFinished = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.invitePage = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+            this.InviteAddButton = new System.Windows.Forms.Button();
+            this.InviteCancelButton = new System.Windows.Forms.Button();
+            this.InviteFolderEntry = new System.Windows.Forms.TextBox();
+            this.InviteAddressEntry = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.tabControl.SuspendLayout();
             this.setupPage.SuspendLayout();
@@ -75,11 +88,15 @@ namespace SparkleShare {
             this.flowLayoutPanel1.SuspendLayout();
             this.syncingPage.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
+            this.flowLayoutPanel4.SuspendLayout();
             this.errorPage.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.finishedPage.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
+            this.invitePage.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
+            this.flowLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox
@@ -98,6 +115,7 @@ namespace SparkleShare {
             this.tabControl.Controls.Add(this.syncingPage);
             this.tabControl.Controls.Add(this.errorPage);
             this.tabControl.Controls.Add(this.finishedPage);
+            this.tabControl.Controls.Add(this.invitePage);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Right;
             this.tabControl.Location = new System.Drawing.Point(150, 0);
             this.tabControl.Name = "tabControl";
@@ -161,9 +179,9 @@ namespace SparkleShare {
             this.buttonNext.Name = "buttonNext";
             this.buttonNext.Size = new System.Drawing.Size(75, 25);
             this.buttonNext.TabIndex = 3;
-            this.buttonNext.Text = "Next";
+            this.buttonNext.Text = "Continue";
             this.buttonNext.UseVisualStyleBackColor = true;
-            this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
+            this.buttonNext.Click += new System.EventHandler(this.SetupNextClicked);
             // 
             // NameEntry
             // 
@@ -206,8 +224,8 @@ namespace SparkleShare {
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(484, 30);
             this.label11.TabIndex = 2;
-            this.label11.Text = "Before we can create a SparkleShare folder on this computer, we need a few bits o" +
-                "f information from you.";
+            this.label11.Text = "Before we get started, what\'s your name and email?\r\nDon\'t worry, this information" +
+                " is only visible to your team members.";
             // 
             // label12
             // 
@@ -343,7 +361,7 @@ namespace SparkleShare {
             this.buttonSync.TabIndex = 9;
             this.buttonSync.Text = "Add";
             this.buttonSync.UseVisualStyleBackColor = true;
-            this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
+            this.buttonSync.Click += new System.EventHandler(this.AddButtonClicked);
             // 
             // buttonCancel
             // 
@@ -354,7 +372,7 @@ namespace SparkleShare {
             this.buttonCancel.TabIndex = 8;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            this.buttonCancel.Click += new System.EventHandler(this.CancelButtonClicked);
             // 
             // syncingPage
             // 
@@ -370,8 +388,8 @@ namespace SparkleShare {
             // 
             this.tableLayoutPanel3.ColumnCount = 1;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel4, 0, 6);
             this.tableLayoutPanel3.Controls.Add(this.label6, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.buttonFinish, 0, 6);
             this.tableLayoutPanel3.Controls.Add(this.syncingProgressBar, 0, 4);
             this.tableLayoutPanel3.Controls.Add(this.label16, 0, 2);
             this.tableLayoutPanel3.Controls.Add(this.label15, 0, 1);
@@ -390,6 +408,38 @@ namespace SparkleShare {
             this.tableLayoutPanel3.Size = new System.Drawing.Size(506, 370);
             this.tableLayoutPanel3.TabIndex = 6;
             // 
+            // flowLayoutPanel4
+            // 
+            this.flowLayoutPanel4.Controls.Add(this.syncFinishButton);
+            this.flowLayoutPanel4.Controls.Add(this.syncCancelButton);
+            this.flowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Right;
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(334, 330);
+            this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel4.Name = "flowLayoutPanel4";
+            this.flowLayoutPanel4.Size = new System.Drawing.Size(162, 30);
+            this.flowLayoutPanel4.TabIndex = 19;
+            // 
+            // syncFinishButton
+            // 
+            this.syncFinishButton.Enabled = false;
+            this.syncFinishButton.Location = new System.Drawing.Point(3, 3);
+            this.syncFinishButton.Name = "syncFinishButton";
+            this.syncFinishButton.Size = new System.Drawing.Size(75, 25);
+            this.syncFinishButton.TabIndex = 9;
+            this.syncFinishButton.Text = "Finish";
+            this.syncFinishButton.UseVisualStyleBackColor = true;
+            // 
+            // syncCancelButton
+            // 
+            this.syncCancelButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.syncCancelButton.Location = new System.Drawing.Point(84, 3);
+            this.syncCancelButton.Name = "syncCancelButton";
+            this.syncCancelButton.Size = new System.Drawing.Size(75, 25);
+            this.syncCancelButton.TabIndex = 8;
+            this.syncCancelButton.Text = "Cancel";
+            this.syncCancelButton.UseVisualStyleBackColor = true;
+            this.syncCancelButton.Click += new System.EventHandler(this.syncCancelClicked);
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -400,18 +450,6 @@ namespace SparkleShare {
             this.label6.Size = new System.Drawing.Size(480, 25);
             this.label6.TabIndex = 0;
             this.label6.Text = "Syncing…";
-            // 
-            // buttonFinish
-            // 
-            this.buttonFinish.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonFinish.Enabled = false;
-            this.buttonFinish.Location = new System.Drawing.Point(418, 333);
-            this.buttonFinish.Name = "buttonFinish";
-            this.buttonFinish.Size = new System.Drawing.Size(75, 24);
-            this.buttonFinish.TabIndex = 2;
-            this.buttonFinish.Text = "Finish";
-            this.buttonFinish.UseVisualStyleBackColor = true;
-            this.buttonFinish.Click += new System.EventHandler(this.buttonFinish_Click);
             // 
             // syncingProgressBar
             // 
@@ -592,6 +630,140 @@ namespace SparkleShare {
             this.label8.TabIndex = 2;
             this.label8.Text = "Project successfully added!";
             // 
+            // invitePage
+            // 
+            this.invitePage.Controls.Add(this.tableLayoutPanel6);
+            this.invitePage.Location = new System.Drawing.Point(4, 22);
+            this.invitePage.Name = "invitePage";
+            this.invitePage.Padding = new System.Windows.Forms.Padding(3);
+            this.invitePage.Size = new System.Drawing.Size(506, 370);
+            this.invitePage.TabIndex = 5;
+            this.invitePage.Text = "Invite";
+            this.invitePage.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel6
+            // 
+            this.tableLayoutPanel6.ColumnCount = 2;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel6.Controls.Add(this.flowLayoutPanel3, 1, 6);
+            this.tableLayoutPanel6.Controls.Add(this.InviteFolderEntry, 1, 4);
+            this.tableLayoutPanel6.Controls.Add(this.InviteAddressEntry, 1, 3);
+            this.tableLayoutPanel6.Controls.Add(this.label19, 0, 4);
+            this.tableLayoutPanel6.Controls.Add(this.label18, 0, 3);
+            this.tableLayoutPanel6.Controls.Add(this.label17, 0, 1);
+            this.tableLayoutPanel6.Controls.Add(this.label7, 0, 0);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 7;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(500, 364);
+            this.tableLayoutPanel6.TabIndex = 0;
+            // 
+            // flowLayoutPanel3
+            // 
+            this.flowLayoutPanel3.Controls.Add(this.InviteAddButton);
+            this.flowLayoutPanel3.Controls.Add(this.InviteCancelButton);
+            this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Right;
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(338, 331);
+            this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(162, 33);
+            this.flowLayoutPanel3.TabIndex = 19;
+            // 
+            // InviteAddButton
+            // 
+            this.InviteAddButton.Enabled = false;
+            this.InviteAddButton.Location = new System.Drawing.Point(3, 3);
+            this.InviteAddButton.Name = "InviteAddButton";
+            this.InviteAddButton.Size = new System.Drawing.Size(75, 25);
+            this.InviteAddButton.TabIndex = 9;
+            this.InviteAddButton.Text = "Add";
+            this.InviteAddButton.UseVisualStyleBackColor = true;
+            this.InviteAddButton.Click += new System.EventHandler(this.InviteAddButtonClicked);
+            // 
+            // InviteCancelButton
+            // 
+            this.InviteCancelButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.InviteCancelButton.Location = new System.Drawing.Point(84, 3);
+            this.InviteCancelButton.Name = "InviteCancelButton";
+            this.InviteCancelButton.Size = new System.Drawing.Size(75, 25);
+            this.InviteCancelButton.TabIndex = 8;
+            this.InviteCancelButton.Text = "Cancel";
+            this.InviteCancelButton.UseVisualStyleBackColor = true;
+            this.InviteCancelButton.Click += new System.EventHandler(this.InviteCancelButtonClicked);
+            // 
+            // InviteFolderEntry
+            // 
+            this.InviteFolderEntry.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.InviteFolderEntry.Location = new System.Drawing.Point(93, 144);
+            this.InviteFolderEntry.Name = "InviteFolderEntry";
+            this.InviteFolderEntry.ReadOnly = true;
+            this.InviteFolderEntry.Size = new System.Drawing.Size(404, 20);
+            this.InviteFolderEntry.TabIndex = 11;
+            // 
+            // InviteAddressEntry
+            // 
+            this.InviteAddressEntry.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.InviteAddressEntry.Location = new System.Drawing.Point(93, 119);
+            this.InviteAddressEntry.Name = "InviteAddressEntry";
+            this.InviteAddressEntry.ReadOnly = true;
+            this.InviteAddressEntry.Size = new System.Drawing.Size(404, 20);
+            this.InviteAddressEntry.TabIndex = 10;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(3, 141);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(84, 25);
+            this.label19.TabIndex = 9;
+            this.label19.Text = "Remote Path:";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.Location = new System.Drawing.Point(3, 116);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(84, 25);
+            this.label18.TabIndex = 8;
+            this.label18.Text = "Address:";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label17
+            // 
+            this.tableLayoutPanel6.SetColumnSpan(this.label17, 2);
+            this.label17.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label17.Location = new System.Drawing.Point(3, 25);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(494, 20);
+            this.label17.TabIndex = 3;
+            this.label17.Text = "Do you want to add this project to SparkleShare?";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.tableLayoutPanel6.SetColumnSpan(this.label7, 2);
+            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(3, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(494, 25);
+            this.label7.TabIndex = 2;
+            this.label7.Text = "You\'ve received an invite!";
+            // 
             // SparkleSetup
             // 
             this.ClientSize = new System.Drawing.Size(664, 396);
@@ -615,6 +787,7 @@ namespace SparkleShare {
             this.syncingPage.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
+            this.flowLayoutPanel4.ResumeLayout(false);
             this.errorPage.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
@@ -622,6 +795,10 @@ namespace SparkleShare {
             this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel5.PerformLayout();
             this.flowLayoutPanel2.ResumeLayout(false);
+            this.invitePage.ResumeLayout(false);
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.tableLayoutPanel6.PerformLayout();
+            this.flowLayoutPanel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -642,7 +819,6 @@ namespace SparkleShare {
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button buttonFinish;
         private System.Windows.Forms.ProgressBar syncingProgressBar;
         private System.Windows.Forms.Button buttonTryAgain;
         private System.Windows.Forms.Label label9;
@@ -670,6 +846,20 @@ namespace SparkleShare {
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.TabPage invitePage;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox InviteFolderEntry;
+        private System.Windows.Forms.TextBox InviteAddressEntry;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+        private System.Windows.Forms.Button InviteAddButton;
+        private System.Windows.Forms.Button InviteCancelButton;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
+        private System.Windows.Forms.Button syncFinishButton;
+        private System.Windows.Forms.Button syncCancelButton;
 
 
 
