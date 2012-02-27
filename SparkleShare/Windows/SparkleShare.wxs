@@ -15,18 +15,22 @@
       <Directory Id='ProgramFilesFolder' Name='PFiles'>
         <Directory Id='sparkleshareDotOrgDir' Name='sparkleshare.org'>
           <Directory Id='INSTALLDIR' Name='SparkleShare'>
-            <Component Id='MainExecutable' Guid='0DA692D5-4DBE-4251-9F62-E7C1A76F10E1'>
+            <Component Id='SparkleShare.exe' Guid='0DA582D5-4ABE-4251-9F62-E7DEA76F10E1'>
+              <File Id='SparkleShare.exe' Name='SparkleShare.exe' Source='!(wix.root)\bin\SparkleShare.exe' KeyPath='yes' DiskId='1' />
+            </Component>
+            <Component Id='SparkleShareInviteOpen.exe' Guid='0DA582D5-4ABE-4251-9F62-E7DEA76F28E1'>
+              <File Id='SparkleShareInviteOpen.exe' Name='SparkleShareInviteOpen.exe' Source='!(wix.root)\bin\SparkleShareInviteOpen.exe' DiskId='1' />
+            </Component>
+            <Component Id='Libraries' Guid='0DA692D5-4DBE-4251-9F62-E7C1A76F10E1'>
               <File Id='CefSharp.dll' Name='CefSharp.dll' Source='!(wix.root)\bin\CefSharp.dll' DiskId='1' />
               <File Id='Gettext.Cs.dll' Name='Gettext.Cs.dll' Source='!(wix.root)\bin\Gettext.Cs.dll' DiskId='1' />
               <File Id='SparkleLib.dll' Name='SparkleLib.dll' Source='!(wix.root)\bin\SparkleLib.dll' DiskId='1' />
-              <File Id='SparkleShare.exe' Name='SparkleShare.exe' Source='!(wix.root)\bin\SparkleShare.exe' KeyPath='yes' DiskId='1' />
               <File Id='avcodec52.dll' Name='avcodec-52.dll' Source='!(wix.root)\bin\avcodec-52.dll' DiskId='1' />
               <File Id='avformat52.dll' Name='avformat-52.dll' Source='!(wix.root)\bin\avformat-52.dll' DiskId='1' />
               <File Id='avutil50.dll' Name='avutil-50.dll' Source='!(wix.root)\bin\avutil-50.dll' DiskId='1' />
               <File Id='icudt42.dll' Name='icudt42.dll' Source='!(wix.root)\bin\icudt42.dll' DiskId='1' />
               <File Id='libcef.dll' Name='libcef.dll' Source='!(wix.root)\bin\libcef.dll' DiskId='1' />
-              <File Id='sparkleshare.ico' Name='sparkleshare.ico' Source='!(wix.root)\bin\sparkleshare.ico' DiskId='1' />
-              <File Id='SparkleShareInviteOpen.exe' Name='SparkleShareInviteOpen.exe' Source='!(wix.root)\bin\SparkleShareInviteOpen.exe' DiskId='1' />
+              <File Id='sparkleshare.ico' Name='sparkleshare.ico' Source='!(wix.root)\data\icons\sparkleshare.ico' DiskId='1' />
             </Component>
             <Directory Id='MSYSGIT_DIR' Name='msysgit'>
             </Directory>
@@ -56,7 +60,9 @@
     </Directory>
 
     <Feature Id='SparkleShareFeature' Title='SparkleShare' Description='This is the SparkleShare executables.' Level='1' AllowAdvertise='no'>
-      <ComponentRef Id='MainExecutable' />
+      <ComponentRef Id="SparkleShare.exe" />
+      <ComponentRef Id="SparkleShareInviteOpen.exe" />
+      <ComponentRef Id="Libraries" />
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="Autostart" />
       <ComponentGroupRef Id='msysGitComponentGroup' />
@@ -66,19 +72,28 @@
 
     <UI>
       <UIRef Id="WixUI_InstallDir" />
-      <Publish Dialog="ExitDialog"
+      <!-- <Publish Dialog="ExitDialog"
                Control="Finish"
                Event="DoAction"
-               Value="LaunchApplication">1</Publish>
+               Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish> -->
     </UI>
+    <!-- <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch SparkleShare" /> -->
+    
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+    
     <WixVariable Id="WixUILicenseRtf" Value="..\..\LICENSE.rtf" />
     <WixVariable Id="WixUIBannerBmp" Value="..\..\data\install\bannrbmp.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="..\..\data\install\dlgbmp.bmp" />
     
     <Property Id="WixShellExecTarget" Value="[#SparkleShare.exe]" />
     <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
-    
+
+    <InstallExecuteSequence>
+      <Custom Action="LaunchApplication" After="InstallFinalize">Not Installed</Custom>
+    </InstallExecuteSequence>
+
+    <!-- <CustomAction Id='LaunchProduct' FileKey='ApplicationExe' ExeCommand='' Return="asyncNoWait" /> -->
+
   </Product>
 
 </Wix>
