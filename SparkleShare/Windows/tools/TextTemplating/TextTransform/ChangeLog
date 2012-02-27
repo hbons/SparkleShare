@@ -1,0 +1,25 @@
+2009-08-12  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Makefile.am:
+	* TextTransform.csproj: Include the ASP.NET MVC and
+	  TextTemplating addins in the main solution and build.
+
+2009-03-13  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* TextTransform.csproj: Move output dir from ../bin to
+	  ../build.
+
+2009-03-05  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* TextTransform.csproj: Updated.
+
+	* TextTransform.cs: Complete the runner implementation.
+
+2009-03-04  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Options.cs:
+	* AssemblyInfo.cs:
+	* TextTransform.cs:
+	* TextTransform.csproj: Stub out the command-line
+	  TextTransform tool.
+

@@ -159,7 +159,7 @@ namespace SparkleLib {
                                 this.is_connected          = false;
                                 this.is_connecting         = false;;
 
-			        if (this.socket != null)
+                                if (this.socket != null)
                                     this.socket.Close ();
 
                                 OnDisconnected ("Ping timeout");
