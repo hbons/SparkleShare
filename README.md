@@ -146,6 +146,33 @@ Copy `/Library/Frameworks/Mono.framework/Versions/Current/lib/libintl.dylib` to 
 
 Now you should have a working bundle that you can run.
 
+## Build on Windows
+
+* Install [.NET Framework 4.0](http://www.microsoft.com/download/en/details.aspx?id=17851) (if not installed yet)
+
+* Install [msysGit](http://code.google.com/p/msysgit/downloads/detail?name=Git-1.7.8-preview20111206.exe)
+  *  Change install location to `C:\msysgit` (location is hard-coded in the build scrits)
+  *  Use default settings for all other questions during installation
+
+* Copy the entire contents of the msysGit folder to `{clone folder}\bin\msysgit`
+
+* _Build step_: Open a command shell (available in Start Menu > Accessories > Command Prompt) and execute   (Note to Windows 7 x64 users: change the WinDirNet variable in build.cmd to "%WinDir%\Microsoft.NET\Framework64") 
+
+        C:
+        cd {clone folder}
+        cd SparkleShare\Windows
+        build
+
+* `{clone folder}\bin` should now contain `SparkleLib.dll` and `SparkleShare.exe`, apart from folders `plugins`, `po` and `msysgit`
+
+* If you want to build the Windows installer download and install [WiX 3.6](http://wix.sourceforge.net/)
+
+* _Installer build step_: Then open a command shell and write almost the same as before, but with `installer` at the end
+
+        C:
+        cd {clone folder}
+        cd SparkleShare\Windows
+        build installer
 
 ## Info
 
