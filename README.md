@@ -138,13 +138,12 @@ Now you should have a working bundle that you can run.
 
 Install version 4.0 of the [.NET Framework](http://www.microsoft.com/download/en/details.aspx?id=17851) if you haven't already.
 
-Install [msysGit](http://code.google.com/p/msysgit/downloads/detail?name=Git-1.7.8-preview20111206.exe). Change the install location to `C:\msysgit` and use the default settings for the other settings during the installation.
+Install [msysGit](http://code.google.com/p/msysgit/downloads/detail?name=Git-1.7.8-preview20111206.exe). Change the install location to `C:\msysgit` and use the default settings for the other settings during the installation. Copy the `C:\msysgit` directory into `bin\msysgit` (in the SparkleShare source directory).
 
-Copy the entire contents of the msysGit folder to `bin\msysgit`.
 Open a command prompt and execute the following:
 
 ```
-cd \path\to\SparkleShare\source
+cd C:\path\to\SparkleShare\source
 cd SparkleShare\Windows
 build
 ```
