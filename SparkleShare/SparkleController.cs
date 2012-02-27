@@ -78,7 +78,7 @@ namespace SparkleShare {
             // sparkleshare-invite-opener.desktop launches the handler on newer
             // systems (like GNOME 3) that implement the last freedesktop.org specs.
             // For GNOME 2 however we need to tell gconf about the protocol manually
-            Console.WriteLine ();
+
             try {
                 // Add the handler to gconf...
                 Process process = new Process ();
