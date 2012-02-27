@@ -4,8 +4,7 @@ SparkleShare is a collaboration and sharing tool that is designed to keep
 things simple and to stay out of your way. It allows you to instantly sync
 with any Git repository you have access to.
 
-SparkleShare currently works on Linux and Mac. A Windows port and mobile
-device support are planned for the future.
+SparkleShare currently works on Linux, Mac and Windows.
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/thing/21770/SparkleShare-Sharing-work-made-easy)
 
@@ -17,7 +16,17 @@ are welcome to change and redistribute it under certain conditions. For more
 information see the LICENSE file or visit http://www.gnu.org/licenses/gpl-3.0.html
 
 
-## Run on Linux
+## Running SparkleShare
+
+**Note:**
+
+   SparkleShare creates its own RSA keypair in `$HOME/.config/sparkleshare/` and uses 
+   that for authentication. Please mind this if you're planning to set up your 
+   own server by hand.
+
+### Linux
+
+You can choose to build from source or get the packages through your distribution's repositories.
 
 Requirements:
 
@@ -35,36 +44,19 @@ Optional:
    - libappindicator
 
 
-Run the service, either click the SparkleShare launcher or:
+### Mac
 
-```bash
-$ sparkleshare start
-```
+Download, unzip and open the SparkleShare bundle.
 
-You can stop the service via the graphical interface or by typing:
 
-```bash
-$ sparkleshare stop
-```
+### Windows
 
-For help:
-
-```bash
-$ sparkleshare --help
-```
-
-**Note:**
-
-   SparkleShare creates its own RSA keypair in `~/config/sparkleshare/` and uses 
-   that for authentication. Please mind this if you're planning to set up your 
-   own server by hand.
+Download the installer and run SparkleShare from the start menu.
 
 
 ## Build on Linux
 
-### Install build dependencies
-
-#### Debian or Ubuntu (apt):
+### Debian or Ubuntu (apt):
 
 ```bash
 $ sudo apt-get install gtk-sharp2 mono-runtime mono-devel monodevelop \
@@ -78,7 +70,7 @@ For Ubuntu `libappindicator` support, install the following package:
 $ sudo apt-get install libappindicator0.1-cil-dev
 ```
 
-#### Fedora (yum):
+### Fedora (yum):
 
 ```bash
 $ sudo yum install gtk-sharp2-devel mono-core mono-devel monodevelop \
@@ -96,11 +88,6 @@ $ sudo make install
 ```
 
 **Note:**  Use `--prefix=/usr` if you want the Nautilus extension to work.
-
-
-## Run on Mac
-
-Just double-click the SparkleShare bundle.
 
 
 ## Build on Mac
@@ -149,31 +136,27 @@ Now you should have a working bundle that you can run.
 
 ## Build on Windows
 
-* Install [.NET Framework 4.0](http://www.microsoft.com/download/en/details.aspx?id=17851) (if not installed yet)
+Install version 4.0 of the [.NET Framework](http://www.microsoft.com/download/en/details.aspx?id=17851) if you haven't already.
 
-* Install [msysGit](http://code.google.com/p/msysgit/downloads/detail?name=Git-1.7.8-preview20111206.exe)
-  *  Change install location to `C:\msysgit` (location is hard-coded in the build scrits)
-  *  Use default settings for all other questions during installation
+Install [msysGit](http://code.google.com/p/msysgit/downloads/detail?name=Git-1.7.8-preview20111206.exe). Change the install location to `C:\msysgit` and use the default settings for the other settings during the installation.
 
-* Copy the entire contents of the msysGit folder to `{clone folder}\bin\msysgit`
+Copy the entire contents of the msysGit folder to `bin\msysgit`.
+Open a command prompt and execute the following:
 
-* _Build step_: Open a command shell (available in Start Menu > Accessories > Command Prompt) and execute   (Note to Windows 7 x64 users: change the WinDirNet variable in build.cmd to "%WinDir%\Microsoft.NET\Framework64") 
+```
+cd \path\to\SparkleShare\source
+cd SparkleShare\Windows
+build
+```
 
-        C:
-        cd {clone folder}
-        cd SparkleShare\Windows
-        build
+* `\bin` should now contain `SparkleShare.exe`, which you can run.
 
-* `{clone folder}\bin` should now contain `SparkleLib.dll` and `SparkleShare.exe`, apart from folders `plugins`, `po` and `msysgit`
+If you want to create an installer package, install [WiX 3.6](http://wix.sourceforge.net/), and run:
 
-* If you want to build the Windows installer download and install [WiX 3.6](http://wix.sourceforge.net/)
+```
+build installer
+```
 
-* _Installer build step_: Then open a command shell and write almost the same as before, but with `installer` at the end
-
-        C:
-        cd {clone folder}
-        cd SparkleShare\Windows
-        build installer
 
 ## Info
 
