@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=SparkleShareInviteOpener
+Exec=sparkleshare open %U
+Terminal=false
+MimeType=application/x-sparkleshare;x-scheme-handler/sparkleshare;
