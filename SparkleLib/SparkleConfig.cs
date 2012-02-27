@@ -189,8 +189,14 @@ namespace SparkleLib {
 
             string ssh_config_path      = Path.Combine (path, ".ssh");
             string ssh_config_file_path = SparkleHelpers.CombineMore (path, ".ssh", "config");
-            string ssh_config           = "IdentityFile " +
-                Path.Combine (SparkleConfig.ConfigPath, "sparkleshare." + User.Email + ".key");
+
+            string ssh_key_path = SparkleHelpers.NormalizeSeparatorsToOS(
+                Path.Combine(SparkleConfig.ConfigPath, "sparkleshare." + User.Email + ".key"));
+            if (SparkleHelpers.IsWindows && ssh_key_path.IndexOf(' ') >= 0)
+            {
+                ssh_key_path = "\"" + ssh_key_path + "\"";
+            }
+            string ssh_config = "IdentityFile " + ssh_key_path;
 
             if (!Directory.Exists (ssh_config_path))
                 Directory.CreateDirectory (ssh_config_path);

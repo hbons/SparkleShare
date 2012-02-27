@@ -94,7 +94,7 @@ namespace SparkleLib {
             this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
                 "clone " +
                 "--progress " + // Redirects progress stats to standarderror
-                "\"" + RemoteUrl + "\" " + "\"" + TargetFolder + "\"");
+                "\"" + RemoteUrl + "\" " + "\"" + SparkleHelpers.NormalizeSeparatorsToOS(TargetFolder) + "\"");
             
             this.git.StartInfo.RedirectStandardError = true;
             this.git.Start ();

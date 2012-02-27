@@ -1,0 +1,10 @@
+﻿<#@ assembly name="System.Configuration" #>
+
+<#
+	this.ClassName = "Strings";
+	this.ResourceName = "Strings";
+    this.NamespaceName = "Gettext.Samples.Database";
+    this.StoredProcedureName = "GettextGetResourceSet";
+    this.UseDatabase = true;
+#>
+<#@ include file="..\..\Core\Gettext.Cs\Templates\Strings.tt" #>
