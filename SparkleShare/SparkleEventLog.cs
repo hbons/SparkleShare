@@ -248,8 +248,7 @@ namespace SparkleShare {
                         new string [] {SparkleUI.AssetsPath, "icons",
                             "hicolor", "12x12", "status", "document-moved.png"}.Combine ());
 
-Console.WriteLine (html);
-
+                
                 Application.Invoke (delegate {
                     this.spinner.Stop ();
                     this.web_view.LoadString (html, null, null, "file://");
