@@ -1,0 +1,9 @@
+﻿<#@ assembly name="System.Configuration" #>
+
+<#
+	this.ClassName = "Strings";
+	this.ResourceName = "Strings";
+    this.NamespaceName = "Gettext.Samples.Spanish";
+    this.DefaultResourceDir = "Resources"; 
+#>
+<#@ include file="..\..\Core\Gettext.Cs\Templates\Strings.tt" #>

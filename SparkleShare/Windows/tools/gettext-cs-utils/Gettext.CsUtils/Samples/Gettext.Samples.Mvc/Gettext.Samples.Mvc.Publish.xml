@@ -1,0 +1,35 @@
+<publishData>
+  <publishTarget publishUrl="e:\test\utils\foo\">
+    <file relUrl="Scripts/MicrosoftAjax.js" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="Scripts/jquery-1.3.2.js" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="Views/Account/ChangePassword.aspx" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="bin/Gettext.Cs.Web.pdb" publishTime="11/29/2010 15:36:56" />
+    <file relUrl="Scripts/MicrosoftAjax.debug.js" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="bin/Gettext.Cs.Web.dll" publishTime="11/29/2010 15:36:56" />
+    <file relUrl="Web.config" publishTime="12/01/2010 16:25:30" />
+    <file relUrl="Views/Home/Index.aspx" publishTime="12/01/2010 16:08:50" />
+    <file relUrl="Views/Account/ChangePasswordSuccess.aspx" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="bin/Gettext.Samples.Mvc.pdb" publishTime="12/02/2010 16:14:34" />
+    <file relUrl="Scripts/MicrosoftMvcAjax.js" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="bin/Gettext.Cs.pdb" publishTime="12/02/2010 14:52:25" />
+    <file relUrl="bin/Gettext.Cs.dll" publishTime="12/02/2010 14:52:25" />
+    <file relUrl="Global.asax" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="Views/Shared/Site.Master" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="Views/Home/About.aspx" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="Views/Shared/LogOnUserControl.ascx" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="Scripts/jquery-1.3.2-vsdoc.js" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="bin/Gettext/Resources/es/Strings.po" publishTime="12/02/2010 16:13:55" />
+    <file relUrl="Scripts/jquery-1.3.2.min.js" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="Views/Shared/Error.aspx" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="Views/Account/LogOn.aspx" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="Scripts/jquery-1.3.2.min-vsdoc.js" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="bin/Gettext/Resources/en/Strings.po" publishTime="12/02/2010 16:06:21" />
+    <file relUrl="bin/Templates/Strings.tt" publishTime="12/01/2010 16:17:51" />
+    <file relUrl="Views/Web.config" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="Default.aspx" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="Scripts/MicrosoftMvcAjax.debug.js" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="Content/Site.css" publishTime="11/30/2010 15:39:58" />
+    <file relUrl="bin/Gettext.Samples.Mvc.dll" publishTime="12/02/2010 16:14:34" />
+    <file relUrl="Views/Account/Register.aspx" publishTime="11/30/2010 15:39:58" />
+  </publishTarget>
+</publishData>

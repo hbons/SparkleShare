@@ -23,9 +23,13 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
+#if __MonoCS__
 using Gtk;
 using Mono.Unix;
 using Mono.Unix.Native;
+#else
+using System.Windows.Forms;
+#endif
 using SparkleLib;
 
 namespace SparkleShare {
@@ -45,17 +49,19 @@ namespace SparkleShare {
         // Short alias for the translations
         public static string _(string s)
         {
-            return Catalog.GetString (s);
+            return Program._ (s);
         }
 
 
         public SparkleUI ()
         {
             // Initialize the application
+#if __MonoCS__
             Application.Init ();
 
             // Use translations
             Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
+#endif
 
             Setup      = new SparkleSetup ();
             EventLog   = new SparkleEventLog ();
@@ -72,6 +78,7 @@ namespace SparkleShare {
         public void Run ()
         {
             Application.Run ();
+            StatusIcon.Dispose ();
         }
     }
 }
