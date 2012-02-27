@@ -1,9 +1,13 @@
-0.8.3 for Linux and Mac (Mon Feb 19 2012):
+0.8.3 for Linux and Mac (Mon Feb 27 2012):
 
         Hylke:
-        - 
-        -
-        -
+	- Invites feature: link to a server with one click
+	- Implement sparklshare:// protocol handlers for invites
+	- "Add SparkleShare to login items" on last page of the tutorial
+	- Text entries aren't being reset when selecting plugins in the setup dialog
+	- A variety of new default avatars (GNOME style)
+	- More useful hints below the entries in the setup dialog
+	- Breadcrumbs for paths in the event log: directories can be clicked
 
 
 0.8.2 for Linux and Mac (Sat Feb 11 2012):
