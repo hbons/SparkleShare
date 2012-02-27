@@ -41,3 +41,7 @@ bin_SCRIPTS = sparkleshare
 Applicationsdir = $(datadir)/applications
 dist_Applications_DATA = sparkleshare.desktop \
 	sparkleshare-invite-opener.desktop
+	
+install-data-hook:
+	update-desktop-database
+	echo "Installed protocol handler sparkleshare://"
