@@ -86,6 +86,9 @@
     <Compile Include="..\SparkleRepoBase.cs">
       <Link>SparkleRepoBase.cs</Link>
     </Compile>
+    <Compile Include="..\SparkleUser.cs">
+      <Link>SparkleUser.cs</Link>
+    </Compile>
     <Compile Include="..\SparkleWatcher.cs">
       <Link>SparkleWatcher.cs</Link>
       <SubType>Component</SubType>

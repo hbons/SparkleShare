@@ -99,6 +99,9 @@
     <Compile Include="..\SparklePlugin.cs">
       <Link>SparklePlugin.cs</Link>
     </Compile>
+    <Compile Include="..\SparkleStatusIconController.cs">
+      <Link>SparkleStatusIconController.cs</Link>
+    </Compile>
     <Compile Include="ApplicationSchemeHandler.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="controls\ExampleTextBox.cs">
