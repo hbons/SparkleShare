@@ -26,6 +26,7 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using CefSharp;
+using Microsoft.Win32;
 
 namespace SparkleShare {
 
@@ -111,17 +112,6 @@ namespace SparkleShare {
             }
         }
 
-        /*public override string GetAvatar (string email, int size)
-        {
-            if (string.IsNullOrEmpty (email)) {
-                return "application://sparkleshare/avatar-default-32.png";
-            }
-            string avatar_file_path = SparkleHelpers.CombineMore (
-                SparklePaths.SparkleLocalIconPath, size + "x" + size, "status", "avatar-" + email);
-
-            return avatar_file_path;
-        }*/
-
 
 		// Creates a .desktop entry in autostart folder to
 		// start SparkleShare automatically at login
@@ -132,6 +122,22 @@ namespace SparkleShare {
 
         public override void InstallProtocolHandler()
 		{
+            // Get assembly location
+            string location = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string folder = Path.GetDirectoryName(location);
+            string inviteExe = Path.Combine(folder, "SparkleShareInviteOpen.exe");
+
+            // Register protocol handler as explained in
+            // http://msdn.microsoft.com/en-us/library/ie/aa767914(v=vs.85).aspx
+            string mainKey = "HKEY_CLASSES_ROOT\\sparkleshare";
+            Registry.SetValue(mainKey, "", "SparkleShare Invites");
+            Registry.SetValue(mainKey, "URL Protocol", "");
+
+            string iconKey = "HKEY_CLASSES_ROOT\\sparkleshare\\DefaultIcon";
+            Registry.SetValue(iconKey, "", inviteExe + ",1");
+
+            string actionKey = "HKEY_CLASSES_ROOT\\sparkleshare\\shell\\open\\command";
+            Registry.SetValue(actionKey, "", "\"" + inviteExe + "\" \"%1\"");
 		}
 
 

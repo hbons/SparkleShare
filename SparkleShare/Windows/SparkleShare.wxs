@@ -25,6 +25,8 @@
               <File Id='avutil50.dll' Name='avutil-50.dll' Source='!(wix.root)\bin\avutil-50.dll' DiskId='1' />
               <File Id='icudt42.dll' Name='icudt42.dll' Source='!(wix.root)\bin\icudt42.dll' DiskId='1' />
               <File Id='libcef.dll' Name='libcef.dll' Source='!(wix.root)\bin\libcef.dll' DiskId='1' />
+              <File Id='sparkleshare.ico' Name='sparkleshare.ico' Source='!(wix.root)\bin\sparkleshare.ico' DiskId='1' />
+              <File Id='SparkleShareInviteOpen.exe' Name='SparkleShareInviteOpen.exe' Source='!(wix.root)\bin\SparkleShareInviteOpen.exe' DiskId='1' />
             </Component>
             <Directory Id='MSYSGIT_DIR' Name='msysgit'>
             </Directory>

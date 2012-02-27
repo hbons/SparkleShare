@@ -11,6 +11,8 @@ cd lib
 copy * ..\..\..\bin
 cd ..
 
+cp ..\..\data\icons\sparkleshare.ico ..\..\bin
+
 %msbuild% /t:Rebuild /p:Configuration=Release /p:Platform="AnyCPU"   %~dp0\tools\gettext-cs-utils\Gettext.CsUtils\Core\Gettext.Cs\Gettext.Cs.csproj
 %msbuild% /t:Rebuild /p:Configuration=Release /p:Platform="Any CPU" %~dp0\SparkleShare.sln
 
