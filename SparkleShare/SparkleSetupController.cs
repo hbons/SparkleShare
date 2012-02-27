@@ -135,6 +135,8 @@ namespace SparkleShare {
 
 
             Program.Controller.InviteReceived += delegate (SparkleInvite invite) {
+                PendingInvite = invite;
+
                 if (ChangePageEvent != null)
                     ChangePageEvent (PageType.Invite, null);
 

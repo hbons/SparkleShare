@@ -62,7 +62,8 @@ case $1 in
     start
     ;;
   open|--open)
-    curl -o ~/SparkleShare/`date -u +%N`.xml `echo $2 | sed s/sparkleshare:/https:/`
+    invite=`date -u +%N`
+    curl -o ~/SparkleShare/$invite.xml `echo $2 | sed s/sparkleshare:/http:/`
     ;;
   help|--help|-h)
     mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" --help

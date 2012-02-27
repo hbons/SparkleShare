@@ -29,8 +29,8 @@ namespace SparkleShare {
 
         public string Address { get; private set; }
         public string RemotePath { get; private set; }
-        public Uri AcceptUrl { get; private set; }
-        public Uri AnnouncementsUrl { get; private set; }
+        public string AcceptUrl { get; private set; }
+        public string AnnouncementsUrl { get; private set; }
 
 
         public bool IsValid {
@@ -68,6 +68,7 @@ namespace SparkleShare {
             try {
                 xml_document.Load (xml_file_path);
 
+                
                 node = xml_document.SelectSingleNode ("/sparkleshare/invite/address/text()");
                 if (node != null) { address = node.Value; }
 
@@ -80,6 +81,7 @@ namespace SparkleShare {
                 node = xml_document.SelectSingleNode ("/sparkleshare/invite/announcements_url/text()");
                 if (node != null) { announcements_url = node.Value; }
 
+
                 Initialize (address, remote_path, accept_url, announcements_url);
 
             } catch (XmlException e) {
@@ -91,7 +93,7 @@ namespace SparkleShare {
 
         public bool Accept ()
         {
-            if (AcceptUrl == null)
+            if (string.IsNullOrEmpty (AcceptUrl))
                 return true;
 
             try {
@@ -133,8 +135,8 @@ namespace SparkleShare {
         {
             Address          = address;
             RemotePath       = remote_path;
-            AcceptUrl        = new Uri (accept_url);
-            AnnouncementsUrl = new Uri (announcements_url);
+            AcceptUrl        = accept_url;
+            AnnouncementsUrl = announcements_url;
         }
     }
 }

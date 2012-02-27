@@ -330,7 +330,7 @@ namespace SparkleShare {
 
                     case PageType.Invite: {
 
-                        Header      = _("You've reveived an invite!");
+                        Header      = _("You've received an invite!");
                         Description = _("Do you want to add this project to SparkleShare?");
 
 
