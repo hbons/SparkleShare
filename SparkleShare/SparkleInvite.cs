@@ -18,10 +18,8 @@
 using System;
 using System.IO;
 using System.Net;
-using System.Net.Sockets;
 using System.Text;
 using System.Xml;
-using System.Threading;
 
 using SparkleLib;
 
@@ -29,32 +27,31 @@ namespace SparkleShare {
 
     public class SparkleInvite {
 
-        public readonly Uri FullAddress;
-        public readonly string Token;
+        public string Address { get; private set; }
+        public string RemotePath { get; private set; }
+        public Uri AcceptUrl { get; private set; }
+        public Uri AnnouncementsUrl { get; private set; }
 
-        public string Host {
+
+        public bool IsValid {
             get {
-                return FullAddress.Host;
+                return (!string.IsNullOrEmpty (Address) &&
+                        !string.IsNullOrEmpty (RemotePath));
             }
         }
 
-        public string Path {
-            get {
-                return FullAddress.AbsolutePath;
-            }
-        }
 
-
-        public SparkleInvite (string host, string path, string token)
+        public SparkleInvite (string address, string remote_path,
+            string accept_url)
         {
-            if (path.StartsWith ("/"))
-                path = path.Substring (1);
+            Initialize (address, remote_path, accept_url, null);
+        }
 
-            if (!host.EndsWith ("/"))
-                host = host + "/";
 
-            FullAddress = new Uri ("ssh://" + host + path);
-            Token       = token;
+        public SparkleInvite (string address, string remote_path,
+            string accept_url, string announcements_url)
+        {
+            Initialize (address, remote_path, accept_url, announcements_url);
         }
 
 
@@ -63,166 +60,81 @@ namespace SparkleShare {
             XmlDocument xml_document = new XmlDocument ();
             XmlNode node;
 
-            string host = "", path = "", token = "";
+            string address           = "";
+            string remote_path       = "";
+            string accept_url        = "";
+            string announcements_url = "";
 
             try {
                 xml_document.Load (xml_file_path);
 
-                node = xml_document.SelectSingleNode ("/sparkleshare/invite/host/text()");
-                if (node != null) { host = node.Value; }
+                node = xml_document.SelectSingleNode ("/sparkleshare/invite/address/text()");
+                if (node != null) { address = node.Value; }
 
-                node = xml_document.SelectSingleNode ("/sparkleshare/invite/path/text()");
-                if (node != null) { path = node.Value; }
+                node = xml_document.SelectSingleNode ("/sparkleshare/invite/remote_path/text()");
+                if (node != null) { remote_path = node.Value; }
 
-                node = xml_document.SelectSingleNode ("/sparkleshare/invite/token/text()");
-                if (node != null) { token = node.Value; }
+                node = xml_document.SelectSingleNode ("/sparkleshare/invite/accept_url/text()");
+                if (node != null) { accept_url = node.Value; }
+
+                node = xml_document.SelectSingleNode ("/sparkleshare/invite/announcements_url/text()");
+                if (node != null) { announcements_url = node.Value; }
+
+                Initialize (address, remote_path, accept_url, announcements_url);
 
             } catch (XmlException e) {
                 SparkleHelpers.DebugInfo ("Invite", "Invalid XML: " + e.Message);
                 return;
             }
-
-
-            if (path.StartsWith ("/"))
-                path = path.Substring (1);
-
-            if (!host.EndsWith ("/"))
-                host = host + "/";
-
-            FullAddress = new Uri ("ssh://" + host + path);
-            Token       = token;
-        }
-    }
-
-
-    public class SparkleInviteListener {
-
-        public event InviteReceivedHandler InviteReceived;
-        public delegate void InviteReceivedHandler (SparkleInvite invite);
-
-        private Thread thread;
-        private TcpListener tcp_listener;
-
-
-        public SparkleInviteListener (int port)
-        {
-            this.tcp_listener = new TcpListener (IPAddress.Loopback, port);
-            this.thread       = new Thread(new ThreadStart (Listen));
         }
 
 
-        public void Start ()
+        public bool Accept ()
         {
-            this.thread.Start ();
-        }
+            if (AcceptUrl == null)
+                return true;
+
+            try {
+                WebRequest request  = WebRequest.Create (AcceptUrl);
+
+                request.Method        = "POST";
+                request.ContentType   = "application/x-www-form-urlencoded";
+                string post_data      = "pubkey=" + SparkleConfig.DefaultConfig.User.PublicKey;
+                byte [] post_bytes    = Encoding.UTF8.GetBytes (post_data);
+                request.ContentLength = post_bytes.Length;
+
+                Stream data_stream = request.GetRequestStream ();
+                data_stream.Write (post_bytes, 0, post_bytes.Length);
+                data_stream.Close ();
+
+                WebResponse response = request.GetResponse ();
+                response.Close ();
 
 
-        private void Listen ()
-        {
-            this.tcp_listener.Start ();
-
-            while (true)
-            {
-                // Blocks until a client connects
-                TcpClient client = this.tcp_listener.AcceptTcpClient ();
-
-                // Create a thread to handle communications
-                Thread client_thread = new Thread (HandleClient);
-                client_thread.Start (client);
-            }
-        }
-
-
-        private void HandleClient (object client)
-        {
-            TcpClient tcp_client = (TcpClient) client;
-            NetworkStream client_stream = tcp_client.GetStream ();
-
-            byte [] message = new byte [4096];
-            int bytes_read;
-
-            while (true)
-            {
-                bytes_read = 0;
-
-                try {
-                  // Blocks until the client sends a message
-                  bytes_read = client_stream.Read (message, 0, 4096);
-    
-                } catch {
-                    Console.WriteLine ("Socket error...");
-                }
-    
-                // The client has disconnected
-                if (bytes_read == 0)
-                    break;
-
-                ASCIIEncoding encoding  = new ASCIIEncoding ();
-                string received_message = encoding.GetString (message, 0, bytes_read);
-                string invite_xml = "";
-
-                if (received_message.StartsWith (Uri.UriSchemeHttp) ||
-                    received_message.StartsWith (Uri.UriSchemeHttps)) {
-
-                    WebClient web_client = new WebClient ();
-
-                    try {
-                        // Fetch the invite file
-                        byte [] buffer = web_client.DownloadData (received_message);
-                        SparkleHelpers.DebugInfo ("Invite", "Received: " + received_message);
-
-                        invite_xml = ASCIIEncoding.ASCII.GetString (buffer);
-
-                    } catch (WebException e) {
-                        SparkleHelpers.DebugInfo ("Invite", "Failed downloading: " +
-                                                            received_message + " " + e.Message);
-                        continue;
-                    }
-
-                } else if (received_message.StartsWith (Uri.UriSchemeFile)) {
-                    try {
-                        received_message = received_message.Replace (Uri.UriSchemeFile + "://", "");
-                        invite_xml = File.ReadAllText (received_message);
-
-                    } catch {
-                        SparkleHelpers.DebugInfo ("Invite", "Failed opening: " + received_message);
-                        continue;
-                    }
+                if ((response as HttpWebResponse).StatusCode == HttpStatusCode.OK) {
+                    SparkleHelpers.DebugInfo ("Invite", "Uploaded public key to " + AcceptUrl);
+                    return true;
 
                 } else {
-                    SparkleHelpers.DebugInfo ("Invite",
-                        "Path to invite must use either the file:// or http(s):// scheme");
-
-                    continue;
+                    SparkleHelpers.DebugInfo ("Invite", "Failed uploading public key to " + AcceptUrl);
+                    return false;
                 }
 
-                XmlDocument xml_document = new XmlDocument ();
-                XmlNode node;
+            } catch (WebException e) {
+                SparkleHelpers.DebugInfo ("Invite", "Failed uploading public key to " + AcceptUrl + ": " + e.Message);
 
-                string host = "", path = "", token = "";
-
-                try {
-                    xml_document.LoadXml (invite_xml);
-
-                    node = xml_document.SelectSingleNode ("/sparkleshare/invite/host/text()");
-                    if (node != null) { host = node.Value; }
-
-                    node = xml_document.SelectSingleNode ("/sparkleshare/invite/path/text()");
-                    if (node != null) { path = node.Value; }
-
-                    node = xml_document.SelectSingleNode ("/sparkleshare/invite/token/text()");
-                    if (node != null) { token = node.Value; }
-
-                } catch (XmlException e) {
-                    SparkleHelpers.DebugInfo ("Invite", "Invalid XML: " + received_message + " " + e.Message);
-                    return;
-                }
-
-                if (InviteReceived != null)
-                    InviteReceived (new SparkleInvite (host, path, token));
+                return false;
             }
+        }
 
-            tcp_client.Close ();
+
+        private void Initialize (string address, string remote_path,
+            string accept_url, string announcements_url)
+        {
+            Address          = address;
+            RemotePath       = remote_path;
+            AcceptUrl        = new Uri (accept_url);
+            AnnouncementsUrl = new Uri (announcements_url);
         }
     }
 }

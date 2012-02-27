@@ -41,6 +41,7 @@ namespace SparkleShare {
         public static SparkleBubbles Bubbles;
         public static SparkleSetup Setup;
         public static SparkleAbout About;
+
         public static string AssetsPath =
             new string [] {Defines.PREFIX, "share", "sparkleshare"}.Combine ();
 
@@ -62,13 +63,14 @@ namespace SparkleShare {
             Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 #endif
 
-            StatusIcon = new SparkleStatusIcon ();
+            Setup      = new SparkleSetup ();
+            EventLog   = new SparkleEventLog ();
+            About      = new SparkleAbout ();
             Bubbles    = new SparkleBubbles ();
-            
-            if (Program.Controller.FirstRun) {
-                Setup = new SparkleSetup ();
-                Setup.Controller.ShowSetupPage ();
-            }
+            StatusIcon = new SparkleStatusIcon ();
+        
+            if (Program.Controller.FirstRun)
+                Program.Controller.ShowSetupWindow (PageType.Setup);
         }
 
 

@@ -54,7 +54,8 @@ namespace SparkleShare {
         // TODO: Window needs to be made resizable
         public SparkleEventLog () : base ()
         {
-            Title    = "Recent Events";
+            Title    = "Recent Changes";
+
             Delegate = new SparkleEventsDelegate ();
 
             SetFrame (new RectangleF (0, 0, 480, 640), true);
@@ -77,7 +78,7 @@ namespace SparkleShare {
             };
 
             this.hidden_close_button.Activated += delegate {
-                PerformClose (this);
+                Controller.WindowClosed ();
             };
 
             ContentView.AddSubview (this.hidden_close_button);
@@ -142,13 +143,28 @@ namespace SparkleShare {
             ContentView.AddSubview (this.progress_indicator);
 
 
-            UpdateContent (null);
-            UpdateChooser (null);
-            OrderFrontRegardless ();
+            (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate)
+                .LinkClicked += delegate (string href) {
+                    Controller.LinkClicked (href);
+                };
 
-            Program.UI.UpdateDockIconVisibility ();
 
             // Hook up the controller events
+            Controller.HideWindowEvent += delegate {
+                InvokeOnMainThread (delegate {
+                    PerformClose (this);
+                });
+            };
+
+            Controller.ShowWindowEvent += delegate {
+                InvokeOnMainThread (delegate {
+                    OrderFrontRegardless ();
+
+                    UpdateContent (null);
+                    UpdateChooser (null);
+                });
+            };
+
             Controller.UpdateChooserEvent += delegate (string [] folders) {
                 InvokeOnMainThread (delegate {
                     UpdateChooser (folders);
@@ -226,9 +242,9 @@ namespace SparkleShare {
                     html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
                     html = html.Replace ("<!-- $a-color -->", "#0085cf");
                     html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
-                    html = html.Replace ("<!-- $no-buddy-icon-background-image -->",
+                    html = html.Replace ("<!-- $pixmaps-path -->",
                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
-                        "Pixmaps","avatar-default.png"));
+                        "Pixmaps"));
 
                     html = html.Replace ("<!-- $document-added-background-image -->",
                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
@@ -245,7 +261,8 @@ namespace SparkleShare {
                     html = html.Replace ("<!-- $document-moved-background-image -->",
                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
                         "Pixmaps", "document-moved-12.png"));
-    
+
+                    
                     InvokeOnMainThread (delegate {
                         if (this.progress_indicator.Superview == ContentView)
                             this.progress_indicator.RemoveFromSuperview ();
@@ -258,6 +275,29 @@ namespace SparkleShare {
                 thread.Start ();
             }
         }
+
+
+        public override void OrderFrontRegardless ()
+        {
+            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
+            MakeKeyAndOrderFront (this);
+
+            if (Program.UI != null)
+                Program.UI.UpdateDockIconVisibility ();
+
+            base.OrderFrontRegardless ();
+        }
+
+
+        public override void PerformClose (NSObject sender)
+        {
+            base.OrderOut (this);
+
+            if (Program.UI != null)
+                Program.UI.UpdateDockIconVisibility ();
+
+            return;
+        }
     }
 
 
@@ -265,20 +305,23 @@ namespace SparkleShare {
 
         public override bool WindowShouldClose (NSObject sender)
         {
-            (sender as SparkleEventLog).OrderOut (this);
-            Program.UI.UpdateDockIconVisibility ();
-            
+            (sender as SparkleEventLog).Controller.WindowClosed ();
             return false;
         }
     }
     
     
     public class SparkleWebPolicyDelegate : WebPolicyDelegate {
-        
+
+        public event LinkClickedHandler LinkClicked;
+        public delegate void LinkClickedHandler (string href);
+
+
         public override void DecidePolicyForNavigation (WebView web_view, NSDictionary action_info,
             NSUrlRequest request, WebFrame frame, NSObject decision_token)
         {
-            SparkleEventLogController.LinkClicked (request.Url.ToString ());
+            if (LinkClicked != null)
+                LinkClicked (request.Url.ToString ());
         }
     }
 }

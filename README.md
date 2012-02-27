@@ -21,7 +21,7 @@ information see the LICENSE file or visit http://www.gnu.org/licenses/gpl-3.0.ht
 
 Requirements:
 
-   - git >= 1.7.0
+   - git >= 1.7.3
    - gtk-sharp2
    - mono-core >= 2.8
    - notify-sharp

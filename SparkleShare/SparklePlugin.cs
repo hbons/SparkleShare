@@ -49,6 +49,12 @@ namespace SparkleShare {
             }
         }
 
+        public string AnnouncementsUrl {
+            get {
+                return GetValue ("info", "announcements_url");
+            }
+        }
+
         public string Address {
             get {
                 return GetValue ("address", "value");

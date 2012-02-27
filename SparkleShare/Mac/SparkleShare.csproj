@@ -11,7 +11,7 @@
     <RootNamespace>SparkleShare</RootNamespace>
     <AssemblyName>SparkleShare</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <ReleaseVersion>0.8.2</ReleaseVersion>
+    <ReleaseVersion>0.8.3</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,7 +24,7 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks;mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Resources; cp -r git ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="true" />
+        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r git ${TargetDir}/${SolutionName}.app/Contents/Resources; cp -r SparkleShareInviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="true" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -59,7 +59,7 @@
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System.Net" />
-    <Reference Include="SparkleLib, Version=0.8.1.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="SparkleLib, Version=0.8.2.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\SparkleLib.dll</HintPath>
     </Reference>
@@ -120,9 +120,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
-    <None Include="..\..\data\icons\avatar-default.png">
-      <Link>Pixmaps\avatar-default.png</Link>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Mono\MonoMac\v0.0\Mono.MonoMac.targets" />
@@ -325,6 +322,42 @@
     </Content>
     <Content Include="..\..\data\plugins\own-server.png">
       <Link>Plugins\own-server.png</Link>
+    </Content>
+    <Content Include="..\..\data\icons\avatar-default.png">
+      <Link>Pixmaps\avatar-default.png</Link>
+    </Content>
+    <Content Include="..\..\data\avatar-a.png">
+      <Link>Pixmaps\avatar-a.png</Link>
+    </Content>
+    <Content Include="..\..\data\avatar-b.png">
+      <Link>Pixmaps\avatar-b.png</Link>
+    </Content>
+    <Content Include="..\..\data\avatar-c.png">
+      <Link>Pixmaps\avatar-c.png</Link>
+    </Content>
+    <Content Include="..\..\data\avatar-d.png">
+      <Link>Pixmaps\avatar-d.png</Link>
+    </Content>
+    <Content Include="..\..\data\avatar-e.png">
+      <Link>Pixmaps\avatar-e.png</Link>
+    </Content>
+    <Content Include="..\..\data\avatar-f.png">
+      <Link>Pixmaps\avatar-f.png</Link>
+    </Content>
+    <Content Include="..\..\data\avatar-g.png">
+      <Link>Pixmaps\avatar-g.png</Link>
+    </Content>
+    <Content Include="..\..\data\avatar-h.png">
+      <Link>Pixmaps\avatar-h.png</Link>
+    </Content>
+    <Content Include="..\..\data\avatar-i.png">
+      <Link>Pixmaps\avatar-i.png</Link>
+    </Content>
+    <Content Include="..\..\data\avatar-j.png">
+      <Link>Pixmaps\avatar-j.png</Link>
+    </Content>
+    <Content Include="..\..\data\avatar-k.png">
+      <Link>Pixmaps\avatar-k.png</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>

@@ -45,10 +45,12 @@ namespace SparkleShare {
 
         // Creates a .desktop entry in autostart folder to
         // start SparkleShare automatically at login
-        public override void EnableSystemAutostart ()
+        public override void CreateStartupItem ()
         {
-            string autostart_path = Path.Combine (Environment.GetFolderPath (
-                Environment.SpecialFolder.ApplicationData), "autostart");
+            string autostart_path = Path.Combine (
+                Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
+                "autostart"
+            );
 
             string desktopfile_path = Path.Combine (autostart_path, "sparkleshare.desktop");
 
@@ -56,57 +58,33 @@ namespace SparkleShare {
                 Directory.CreateDirectory (autostart_path);
 
             if (!File.Exists (desktopfile_path)) {
-                TextWriter writer = new StreamWriter (desktopfile_path);
-                writer.WriteLine ("[Desktop Entry]\n" +
-                                  "Type=Application\n" +
-                                  "Name=SparkleShare\n" +
-                                  "Exec=sparkleshare start\n" +
-                                  "Icon=folder-sparkleshare\n" +
-                                  "Terminal=false\n" +
-                                  "X-GNOME-Autostart-enabled=true\n" +
-                                  "Categories=Network");
-                writer.Close ();
+                try {
+                    File.WriteAllText (desktopfile_path,
+                        "[Desktop Entry]\n" +
+                        "Type=Application\n" +
+                        "Name=SparkleShare\n" +
+                        "Exec=sparkleshare start\n" +
+                        "Icon=folder-sparkleshare\n" +
+                        "Terminal=false\n" +
+                        "X-GNOME-Autostart-enabled=true\n" +
+                        "Categories=Network");
 
-                // Give the launcher the right permissions so it can be launched by the user
-                UnixFileInfo file_info = new UnixFileInfo (desktopfile_path);
-                file_info.Create (FileAccessPermissions.UserReadWriteExecute);
+                    // Give the launcher the right permissions so it can be launched by the user
+                    UnixFileInfo file_info = new UnixFileInfo (desktopfile_path);
+                    file_info.Create (FileAccessPermissions.UserReadWriteExecute);
 
-                SparkleHelpers.DebugInfo ("Controller", "Enabled autostart on login");
+                    SparkleHelpers.DebugInfo ("Controller", "Added " + app_path + " to login items");
+
+                } catch (Exception e) {
+                    SparkleHelpers.DebugInfo ("Controller", "Failed adding " + app_path + " to login items: " + e.Message);
+                }
             }
         }
         
-
-        // Installs a launcher so the user can launch SparkleShare
-        // from the Internet category if needed
-        public override void InstallLauncher ()
+        
+        public override void InstallProtocolHandler ()
         {
-            string apps_path = 
-                new string [] {SparkleConfig.DefaultConfig.HomePath,
-                    ".local", "share", "applications"}.Combine ();
-
-            string desktopfile_path = Path.Combine (apps_path, "sparkleshare.desktop");
-
-            if (!File.Exists (desktopfile_path)) {
-                if (!Directory.Exists (apps_path))
-                    Directory.CreateDirectory (apps_path);
-
-                TextWriter writer = new StreamWriter (desktopfile_path);
-                writer.WriteLine ("[Desktop Entry]\n" +
-                                  "Type=Application\n" +
-                                  "Name=SparkleShare\n" +
-                                  "Comment=Share documents\n" +
-                                  "Exec=sparkleshare start\n" +
-                                  "Icon=folder-sparkleshare\n" +
-                                  "Terminal=false\n" +
-                                  "Categories=Network;");
-                writer.Close ();
-
-                // Give the launcher the right permissions so it can be launched by the user
-                UnixFileInfo file_info = new UnixFileInfo (desktopfile_path);
-                file_info.FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute;
-
-                SparkleHelpers.DebugInfo ("Controller", "Created '" + desktopfile_path + "'");
-            }
+            // TODO
         }
 
 
@@ -226,7 +204,7 @@ namespace SparkleShare {
         {
             Process process = new Process ();
             process.StartInfo.FileName = "xdg-open";
-            process.StartInfo.Arguments = url.Replace (" ", "%20");
+            process.StartInfo.Arguments = "\"" + url + "\"";
             process.Start ();
         }
     }
