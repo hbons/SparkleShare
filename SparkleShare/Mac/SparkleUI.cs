@@ -63,15 +63,14 @@ namespace SparkleShare {
                 BoldFont = NSFontManager.SharedFontManager.FontWithFamily
                     ("Lucida Grande", NSFontTraitMask.Bold, 0, 13);
 
+                Setup      = new SparkleSetup ();
+                EventLog   = new SparkleEventLog ();
+                About      = new SparkleAbout ();
+                Bubbles    = new SparkleBubbles ();
                 StatusIcon = new SparkleStatusIcon ();
-                Bubbles = new SparkleBubbles ();
 
-                if (Program.Controller.FirstRun) {
-                    Setup = new SparkleSetup ();
-                    Setup.Controller.ShowSetupPage ();
-
-                    UpdateDockIconVisibility ();
-                }
+                if (Program.Controller.FirstRun)
+                    Program.Controller.ShowSetupWindow (PageType.Setup);
             }
         }
     
@@ -96,8 +95,8 @@ namespace SparkleShare {
 
         public void UpdateDockIconVisibility ()
         {
-            // if (true) { // TODO: check for open windows
-
+            // TODO: check for open windows
+            // if (true) {
                 ShowDockIcon ();
 
             // } else {
@@ -106,13 +105,15 @@ namespace SparkleShare {
         }
 
 
-        private void HideDockIcon () {
+        private void HideDockIcon ()
+        {
             // Currently not supported, here for completeness sake (see Apple's docs)
             // NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.None;
         }
 
 
-        private void ShowDockIcon () {
+        private void ShowDockIcon ()
+        {
             NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
         }
 

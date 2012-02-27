@@ -75,7 +75,7 @@ namespace SparkleShare {
             if (Controller.Folders.Length == 0)
                 this.state_text = _("Welcome to SparkleShare!");
             else
-                this.state_text = _("Up to date") + Controller.FolderSize;
+                this.state_text = _("Files up to date") + Controller.FolderSize;
 
             CreateMenu ();
 
@@ -99,7 +99,7 @@ namespace SparkleShare {
                         if (Controller.Folders.Length == 0)
                             this.state_text = _("Welcome to SparkleShare!");
                         else
-                            this.state_text = _("Up to date") + Controller.FolderSize;
+                            this.state_text = _("Files up to date") + Controller.FolderSize;
 
                         #if HAVE_APP_INDICATOR
                         this.indicator.IconName = "process-syncing-sparkleshare-i";
@@ -209,7 +209,7 @@ namespace SparkleShare {
                 };
 
                 folder_item.Activated += delegate {
-                    Program.Controller.OpenSparkleShareFolder ();
+                    Controller.SparkleShareClicked ();
                 };
                 
             this.menu.Add (folder_item);
@@ -249,41 +249,20 @@ namespace SparkleShare {
 
                 // Opens the wizard to add a new remote folder
                 MenuItem sync_item = new MenuItem (_("Add Hosted Project…"));
-            
-                if (Program.Controller.FirstRun)
-                    sync_item.Sensitive = false;
 
                 sync_item.Activated += delegate {
-                    Application.Invoke (delegate {
-
-                        if (SparkleUI.Setup == null) {
-                            SparkleUI.Setup = new SparkleSetup ();
-                            SparkleUI.Setup.Controller.ShowAddPage ();
-                        }
-        
-                        if (!SparkleUI.Setup.Visible)
-                            SparkleUI.Setup.Controller.ShowAddPage ();
-
-                        //SparkleUI.Intro.ShowAll ();
-                        //SparkleUI.Intro.Present ();
-                    });
+                    Controller.AddHostedProjectClicked ();
                 };
 
             this.menu.Add (sync_item);
             this.menu.Add (new SeparatorMenuItem ());
 
-            MenuItem recent_events_item = new MenuItem (_("Open Recent Events"));
+            MenuItem recent_events_item = new MenuItem (_("View Recent Changes…"));
 
                 recent_events_item.Sensitive = (Controller.Folders.Length > 0);
 
                 recent_events_item.Activated += delegate {
-                    Application.Invoke (delegate {
-                        if (SparkleUI.EventLog == null)
-                            SparkleUI.EventLog = new SparkleEventLog ();
-
-                        SparkleUI.EventLog.ShowAll ();
-                        SparkleUI.EventLog.Present ();
-                    });
+                    Controller.OpenRecentEventsClicked ();
                 };
 
             this.menu.Add (recent_events_item);
@@ -307,13 +286,7 @@ namespace SparkleShare {
                 MenuItem about_item = new MenuItem (_("About SparkleShare"));
 
                 about_item.Activated += delegate {
-                    Application.Invoke (delegate {
-                        if (SparkleUI.About == null)
-                            SparkleUI.About = new SparkleAbout ();
-
-                        SparkleUI.About.ShowAll ();
-                        SparkleUI.About.Present ();
-                    });
+                    Controller.AboutClicked ();
                 };
 
             this.menu.Add (about_item);
@@ -342,7 +315,7 @@ namespace SparkleShare {
         private EventHandler OpenFolderDelegate (string name)
         {
             return delegate {
-                Program.Controller.OpenSparkleShareFolder (name);
+                Controller.SubfolderClicked (name);
             };
         }
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <invite>
+    <address>ssh://git@github.com/</address>
+    <remote_path>/hbons/Stuff</remote_path>
+    <accept_url>http://www.sparkleshare.org/test.php</accept_url>
+  </invite>
+</sparkleshare>
+

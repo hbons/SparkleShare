@@ -28,10 +28,8 @@ namespace SparkleShare {
 
         public SparkleBubblesController ()
         {
-            Program.Controller.ConflictNotificationRaised += delegate {
-                ShowBubble ("Conflict detected.",
-                    "Don't worry, SparkleShare made a copy of each conflicting file.",
-                    null);
+            Program.Controller.AlertNotificationRaised += delegate (string title, string message) {
+                ShowBubble (title, message, null);
             };
 
             Program.Controller.NotificationRaised += delegate (SparkleChangeSet change_set) {
@@ -50,6 +48,12 @@ namespace SparkleShare {
         {
             if (ShowBubbleEvent != null && Program.Controller.NotificationsEnabled)
                 ShowBubbleEvent (title, subtext, image_path);
+        }
+
+
+        public void BubbleClicked ()
+        {
+            Program.Controller.ShowEventLogWindow ();
         }
 
 

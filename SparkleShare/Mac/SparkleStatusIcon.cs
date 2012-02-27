@@ -85,7 +85,7 @@ namespace SparkleShare {
                 if (Controller.Folders.Length == 0)
                     StateText = _("Welcome to SparkleShare!");
                 else
-                    StateText = _("Up to date") + Controller.FolderSize;
+                    StateText = _("Files up to date") + Controller.FolderSize;
 
                 CreateMenu ();
     
@@ -112,7 +112,7 @@ namespace SparkleShare {
                             if (Controller.Folders.Length == 0)
                                 StateText = _("Welcome to SparkleShare!");
                             else
-                                StateText = _("Up to date") + Controller.FolderSize;
+                                StateText = _("Files up to date") + Controller.FolderSize;
     
                             StateMenuItem.Title = StateText;
                             CreateMenu ();
@@ -180,7 +180,7 @@ namespace SparkleShare {
                     };
     
                     FolderMenuItem.Activated += delegate {
-                        Program.Controller.OpenSparkleShareFolder ();
+                        Controller.SparkleShareClicked ();
                     };
                 
                     FolderMenuItem.Image = SparkleShareImage;
@@ -230,48 +230,26 @@ namespace SparkleShare {
                 Menu.AddItem (NSMenuItem.SeparatorItem);
     
                     SyncMenuItem = new NSMenuItem () {
-                        Title = "Add Hosted Project…",
+                        Title   = "Add Hosted Project…",
                         Enabled = true
                     };
                 
-                    if (!Program.Controller.FirstRun) {
-                        SyncMenuItem.Activated += delegate {
-                            InvokeOnMainThread (delegate {
-                                NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-    
-                                if (SparkleUI.Setup == null) {
-                                    SparkleUI.Setup = new SparkleSetup ();
-                                    SparkleUI.Setup.Controller.ShowAddPage ();
-                                }
-    
-                                if (!SparkleUI.Setup.IsVisible)
-                                    SparkleUI.Setup.Controller.ShowAddPage ();
-    
-                                SparkleUI.Setup.OrderFrontRegardless ();
-                                SparkleUI.Setup.MakeKeyAndOrderFront (this);
-                            });
-                        };
-                    }
+                    SyncMenuItem.Activated += delegate {
+                        Controller.AddHostedProjectClicked ();
+                    };
+
     
                 Menu.AddItem (SyncMenuItem);
                 Menu.AddItem (NSMenuItem.SeparatorItem);
     
                     RecentEventsMenuItem = new NSMenuItem () {
-                        Title = "Open Recent Events",
+                        Title = "View Recent Changes…",
                         Enabled = (Controller.Folders.Length > 0)
                     };
     
                     if (Controller.Folders.Length > 0) {
                         RecentEventsMenuItem.Activated += delegate {
-                            InvokeOnMainThread (delegate {
-                                NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-        
-                                if (SparkleUI.EventLog == null)
-                                    SparkleUI.EventLog = new SparkleEventLog ();
-        
-                                SparkleUI.EventLog.OrderFrontRegardless ();
-                                SparkleUI.EventLog.MakeKeyAndOrderFront (this);
-                            });
+                            Controller.OpenRecentEventsClicked ();
                         };
                     }
     
@@ -304,17 +282,9 @@ namespace SparkleShare {
                         Title = "About SparkleShare",
                         Enabled = true
                     };
-    
-                    AboutMenuItem.Activated += delegate {
-                        InvokeOnMainThread (delegate {
-                            NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-    
-                            if (SparkleUI.About == null)
-                                SparkleUI.About = new SparkleAbout ();
-                            else
-                                 SparkleUI.About.OrderFrontRegardless ();
 
-                        });
+                    AboutMenuItem.Activated += delegate {
+                        Controller.AboutClicked ();
                     };
 				
 				Menu.AddItem (AboutMenuItem);
@@ -343,7 +313,7 @@ namespace SparkleShare {
         private EventHandler OpenFolderDelegate (string name)
         {
             return delegate {
-                Program.Controller.OpenSparkleShareFolder (name);
+                Controller.SubfolderClicked (name);
             };
         }
 

@@ -30,6 +30,7 @@ namespace SparkleShare {
         public SparkleEventLogController Controller = new SparkleEventLogController ();
 
         private Label size_label;
+        private Label history_label;
         private HBox layout_horizontal;
         private ComboBox combo_box;
         private EventBox content_wrapper;
@@ -54,14 +55,27 @@ namespace SparkleShare {
             Resizable   = true;
             BorderWidth = 0;
 
-            Title = _("Recent Events");
+            Title = _("Recent Changes");
             IconName = "folder-sparkleshare";
 
-            DeleteEvent += Close;
+            DeleteEvent += delegate (object o, DeleteEventArgs args) {
+                Controller.WindowClosed ();
+                args.RetVal = true;
+            };
 
             this.size_label = new Label () {
-                Markup = "<b>Size:</b> …   <b>History:</b> …"
+                Markup = "<b>Size:</b> …",
+                Xalign = 0
             };
+            
+            this.history_label = new Label () {
+                Markup = "<b>History:</b> …",
+                Xalign = 0
+            };
+            
+            HBox layout_sizes = new HBox (false, 12);
+            layout_sizes.Add (this.size_label);
+            layout_sizes.Add (this.history_label);
 
             VBox layout_vertical = new VBox (false, 0);
             this.spinner         = new SparkleSpinner (22);
@@ -78,7 +92,7 @@ namespace SparkleShare {
 
             this.web_view.NavigationRequested += delegate (object o, WebKit.NavigationRequestedArgs args) {
                 if (args.Request.Uri == this.link_status)
-                    SparkleEventLogController.LinkClicked (args.Request.Uri);
+                    Controller.LinkClicked (args.Request.Uri);
 
                 // Don't follow HREFs (as this would cause a page refresh)
                 if (!args.Request.Uri.Equals ("file:"))
@@ -90,22 +104,33 @@ namespace SparkleShare {
 
             this.spinner.Start ();
 
-            this.layout_horizontal = new HBox (false, 0);
-            this.layout_horizontal.PackStart (this.size_label, true, true, 0);
-            this.layout_horizontal.PackStart (new Label ("  "), false, false, 0);
+            this.layout_horizontal = new HBox (true, 0);
+            this.layout_horizontal.PackStart (layout_sizes, true, true, 12);
 
             layout_vertical.PackStart (this.layout_horizontal, false, false, 0);
             layout_vertical.PackStart (CreateShortcutsBar (), false, false, 0);
             layout_vertical.PackStart (this.content_wrapper, true, true, 0);
 
             Add (layout_vertical);
-            ShowAll ();
-
-            UpdateChooser (null);
-            UpdateContent (null);
 
 
             // Hook up the controller events
+            Controller.HideWindowEvent += delegate {
+                Application.Invoke (delegate {
+                    HideAll ();
+                });
+            };
+
+            Controller.ShowWindowEvent += delegate {
+                Application.Invoke (delegate {
+                    ShowAll ();
+                    Present ();
+
+                    UpdateChooser (null);
+                    UpdateContent (null);
+                });
+            };
+
             Controller.UpdateChooserEvent += delegate (string [] folders) {
                 Application.Invoke (delegate {
                     UpdateChooser (folders);
@@ -131,10 +156,11 @@ namespace SparkleShare {
 
             Controller.UpdateSizeInfoEvent += delegate (string size, string history_size) {
                 Application.Invoke (delegate {
-                    this.size_label.Markup = "<b>Size:</b> " + size + "   " +
-                                             "<b>History:</b> " + history_size;
+                    this.size_label.Markup    = "<b>Size:</b> " + size;
+                    this.history_label.Markup = "<b>History:</b> " + history_size;
 
                     this.size_label.ShowAll ();
+                    this.history_label.ShowAll ();
                 });
             };
         }
@@ -207,9 +233,8 @@ namespace SparkleShare {
                 html = html.Replace ("<!-- $day-entry-header-background-color -->", SparkleUIHelpers.GdkColorToHex (Style.Background (StateType.Normal)));
                 html = html.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
                 html = html.Replace ("<!-- $small-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
-                html = html.Replace ("<!-- $no-buddy-icon-background-image -->", "file://" +
-                        new string [] {SparkleUI.AssetsPath, "icons",
-                            "hicolor", "32x32", "status", "avatar-default.png"}.Combine ());
+                html = html.Replace ("<!-- $pixmaps-path -->", "file://" + 
+                        new string [] {SparkleUI.AssetsPath, "pixmaps"}.Combine ());
                 html = html.Replace ("<!-- $document-added-background-image -->", "file://" +
                         new string [] {SparkleUI.AssetsPath, "icons",
                             "hicolor", "12x12", "status", "document-added.png"}.Combine ());
@@ -223,6 +248,8 @@ namespace SparkleShare {
                         new string [] {SparkleUI.AssetsPath, "icons",
                             "hicolor", "12x12", "status", "document-moved.png"}.Combine ());
 
+Console.WriteLine (html);
+
                 Application.Invoke (delegate {
                     this.spinner.Stop ();
                     this.web_view.LoadString (html, null, null, "file://");
@@ -233,13 +260,6 @@ namespace SparkleShare {
             }));
 
             thread.Start ();
-        }
-
-
-        public void Close (object o, DeleteEventArgs args)
-        {
-            HideAll ();
-            args.RetVal = true;
         }
 
 
@@ -261,15 +281,15 @@ namespace SparkleShare {
                         AddAccelGroup (accel_group);
 
                         // Close on Esc
-                        close_1.AddAccelerator ("activate", accel_group, new AccelKey (Gdk.Key.W, Gdk.ModifierType.ControlMask,
-                            AccelFlags.Visible));
+                        close_1.AddAccelerator ("activate", accel_group, new AccelKey (Gdk.Key.W,
+                            Gdk.ModifierType.ControlMask, AccelFlags.Visible));
 
-                        close_1.Activated += delegate { HideAll (); };
+                        close_1.Activated += delegate { Controller.WindowClosed (); };
 
                         // Close on Ctrl+W
-                        close_2.AddAccelerator ("activate", accel_group, new AccelKey (Gdk.Key.Escape, Gdk.ModifierType.None,
-                            AccelFlags.Visible));
-                        close_2.Activated += delegate { HideAll (); };
+                        close_2.AddAccelerator ("activate", accel_group, new AccelKey (Gdk.Key.Escape,
+                            Gdk.ModifierType.None, AccelFlags.Visible));
+                        close_2.Activated += delegate { Controller.WindowClosed (); };
 
                     file_menu.Append (close_1);
                     file_menu.Append (close_2);

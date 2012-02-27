@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace SparkleLib {
 
@@ -28,23 +29,27 @@ namespace SparkleLib {
         private SparkleGit git;
 
 
-        public SparkleFetcherGit (string server, string remote_folder, string target_folder) :
-            base (server, remote_folder, target_folder)
+        public SparkleFetcherGit (string server, string remote_path, string target_folder) :
+            base (server, remote_path, target_folder)
         {
             if (server.EndsWith ("/"))
                 server = server.Substring (0, server.Length - 1);
 
-            if (!remote_folder.StartsWith ("/"))
-                remote_folder = "/" + remote_folder;
+            // FIXME: Adding these lines makes the fetcher fail
+            // if (remote_path.EndsWith ("/"))
+            //     remote_path = remote_path.Substring (0, remote_path.Length - 1);
+
+            if (!remote_path.StartsWith ("/"))
+                remote_path = "/" + remote_path;
 
 
             Uri uri;
 
             try {
-                uri = new Uri (server + remote_folder);
+                uri = new Uri (server + remote_path);
 
             } catch (UriFormatException) {
-                uri = new Uri ("ssh://" + server + remote_folder);
+                uri = new Uri ("ssh://" + server + remote_path);
             }
 
 
@@ -132,6 +137,18 @@ namespace SparkleLib {
             this.git.WaitForExit ();
             SparkleHelpers.DebugInfo ("Git", "Exit code " + this.git.ExitCode.ToString ());
 
+            while (percentage < 100) {
+                percentage += 25;
+
+                if (percentage >= 100)
+                    break;
+
+                base.OnProgressChanged (percentage);
+                Thread.Sleep (750);
+            }
+
+            base.OnProgressChanged (100);
+            Thread.Sleep (1000);
 
             if (this.git.ExitCode != 0) {
                 return false;

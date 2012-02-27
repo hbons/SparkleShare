@@ -19,12 +19,11 @@ SOURCES =  \
 	SparkleBubblesController.cs \
 	SparkleController.cs \
 	SparkleControllerBase.cs \
-	SparkleEntry.cs \
 	SparkleEventLog.cs \
 	SparkleEventLogController.cs \
 	SparkleExtensions.cs \
-	SparkleOptions.cs \
 	SparkleInvite.cs \
+	SparkleOptions.cs \
 	SparklePlugin.cs \
 	SparkleSetup.cs \
 	SparkleSetupController.cs \

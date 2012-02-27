@@ -129,5 +129,35 @@ namespace SparkleShare {
                     UpdateMenuEvent (IconState.Error);
             };
         }
+
+
+        public void SparkleShareClicked ()
+        {
+            Program.Controller.OpenSparkleShareFolder ();
+        }
+
+
+        public void SubfolderClicked (string subfolder)
+        {
+            Program.Controller.OpenSparkleShareFolder (subfolder);
+        }
+
+
+        public void AddHostedProjectClicked ()
+        {
+            Program.Controller.ShowSetupWindow (PageType.Add);
+        }
+
+
+        public void OpenRecentEventsClicked ()
+        {
+            Program.Controller.ShowEventLogWindow ();
+        }
+
+
+        public void AboutClicked ()
+        {
+            Program.Controller.ShowAboutWindow ();
+        }
     }
 }

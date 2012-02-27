@@ -9,7 +9,7 @@
     </info>
     <address>
       <value></value>
-      <example>domain name or IP address</example>
+      <example>[user@]hostname[:port]</example>
     </address>
     <path>
       <value></value>
@@ -17,4 +17,3 @@
     </path>
   </plugin>
 </sparkleshare>
-
