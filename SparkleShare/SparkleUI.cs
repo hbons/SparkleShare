@@ -78,7 +78,9 @@ namespace SparkleShare {
         public void Run ()
         {
             Application.Run ();
+#if !__MonoCS__
             StatusIcon.Dispose ();
+#endif
         }
     }
 }
