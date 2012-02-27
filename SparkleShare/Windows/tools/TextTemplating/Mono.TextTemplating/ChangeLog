@@ -1,0 +1,212 @@
+2010-03-15  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/TemplateGenerator.cs: Expose OutputFile
+	  for custom tool to access.
+
+2010-03-01  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/CrossAppDomainAssemblyResolver.cs: A
+	  handler for AssemblyResolve events that looks them up in the
+	  domain that created the resolver.
+
+	* Makefile.am:
+	* Mono.TextTemplating.csproj: Added file.
+
+2009-11-27  Olivier Dagenais  <olivier.dagenais@gmail.com>
+	* Mono.TextTemplating/ParsedTemplate.cs: Fixed a bug where the
+	  location of an error was being ignored.
+
+2009-11-27  Olivier Dagenais  <olivier.dagenais@gmail.com>
+
+	* Mono.TextTemplating/TemplatingEngine.cs: Mark the generated
+	  type as partial.
+
+2009-11-25  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/ParsedTemplate.cs: Don't check if
+	  included file exists before trying to resolve it from the
+	  host, because host may use include paths. Patch from Aaron
+	  Bockover.
+
+2009-08-17  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/TemplatingEngine.cs: Fix NRE when
+	  template fails to compile.
+
+2009-08-12  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Makefile.am:
+	* Mono.TextTemplating.csproj: Include the ASP.NET MVC and
+	  TextTemplating addins in the main solution and build.
+
+2009-08-11  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating.csproj:
+	* Mono.TextTemplating/ParsedTemplate.cs:
+	* Mono.TextTemplating/CompiledTemplate.cs:
+	* Mono.TextTemplating/TemplatingEngine.cs:
+	* Mono.TextTemplating/TemplateGenerator.cs:
+	* Mono.TextTemplating/IExtendedTextTemplatingEngineHost.cs:
+	  Add support for caching compiled templates, and a couple of
+	  bugfixes. Patch from Nathan Baulch
+	  (nathan.baulch@gmail.com).
+
+2009-06-25  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/TemplatingEngine.cs: Handle expressions
+	  and content in helpers, based on patch from Nathan Baulch.
+	  Liberally add C# 3 sugar to neaten up CodeDOM usage.
+
+2009-06-25  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/TemplateGenerator.cs: Added overload for
+	  Process template that uses input/output strings directly,
+	  avoiding file read/write. Expose engine to subclasses.
+
+	* Mono.TextTemplating/Tokeniser.cs: Remove outdated TODO.
+
+2009-04-13  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Microsoft.VisualStudio.TextTemplating/ToStringHelper.cs: Use
+	  IConvertible.ToString (formatProvider) when possible.
+	
+	Thanks to Stuart Carnie for this patch.
+
+2009-04-13  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/Tokeniser.cs: Add support for Mac and
+	  Windows newlines.
+
+	* Mono.TextTemplating/TemplatingEngine.cs: Keep temp files
+	  when in debug mode, so that the generated code can be
+	  debugged.
+
+	* Mono.TextTemplating/ParsedTemplate.cs: Fixes for csc
+	  compilation.
+
+	Thanks to Stuart Carnie for this patch.
+
+2009-04-03  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating.csproj:
+	* Mono.TextTemplating/TemplatingEngine.cs:
+	* Mono.TextTemplating/TemplateSettings.cs:
+	* Microsoft.VisualStudio.TextTemplating/Engine.cs: Move the
+	  real engine into the Mono.TextTemplating namespace and
+	  expose helper methods so that they can be tested.
+
+2009-03-13  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating.csproj: Move output dir from ../bin to
+	  ../build.
+
+2009-03-12  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/Tokeniser.cs: Tweaked location of next
+	  state after directive.
+
+2009-03-12  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/Tokeniser.cs: Location tweaks within
+	  directives.
+
+	* Mono.TextTemplating/ParsedTemplate.cs: Make Location
+	  equatable.
+
+2009-03-10  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/Tokeniser.cs:
+	* Mono.TextTemplating/ParsedTemplate.cs: Fix end location
+	  capture after newline handling changes.
+
+2009-03-10  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/Tokeniser.cs:
+	* Microsoft.VisualStudio.TextTemplating/Engine.cs: Match T4's
+	  newline handling.
+
+2009-03-10  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/ParsedTemplate.cs: Fix logic that
+	  prevented adding directives.
+
+2009-03-09  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/Tokeniser.cs:
+	* Mono.TextTemplating/ParsedTemplate.cs: More accurate
+	  location captures. Capture start of tags as well as start of
+	  content.
+
+2009-03-09  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/TemplateGenerator.cs: Report exceptions
+	  in errors.
+
+	* Mono.TextTemplating/Tokeniser.cs: Make API public.
+
+	* Mono.TextTemplating/ParsedTemplate.cs: Unify segment types.
+	  Track end locations. Make API public. Allow parsing without
+	  includes.
+
+	* Microsoft.VisualStudio.TextTemplating/Engine.cs: Track
+	  location API.
+
+2009-03-06  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/TemplateGenerator.cs: Fix
+	  SetFileExtension.
+
+	* Microsoft.VisualStudio.TextTemplating/Engine.cs: Capture
+	  hostspecific attribute from template directive.
+
+2009-03-05  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating/TemplateGenerator.cs: Fix output
+	  extension changing.
+
+	* Mono.TextTemplating/Tokeniser.cs: Fix helper regions.
+
+2009-03-05  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Mono.TextTemplating.csproj: Updated.
+
+	* Mono.TextTemplating/TemplateGenerator.cs: Simple template
+	  host implementation. Doesn't handle everything yet.
+
+	* Mono.TextTemplating/Tokeniser.cs: Fix a number of offset
+	  issues that broke most captures. Only allow EOF in content
+	  regions, and in this case capture the last content. Track
+	  current column, for error reporting.
+
+	* Mono.TextTemplating/ParsedTemplate.cs: Overhaul location
+	  tracking for error reporting. Don't record empty segments.
+
+	* Microsoft.VisualStudio.TextTemplating/Engine.cs: Use run
+	  method instead of runner, since the whole thing's done in
+	  the appdomain now. Catch errors from the runner. Use host's
+	  default assemblies and imports. Track ParsedTemplate error
+	  reporting changes. Filter out content regions with only a
+	  single newline.
+
+	* Microsoft.VisualStudio.TextTemplating/ToStringHelper.cs:
+	  Don't cache delegates; this won't work for instances. Maybe
+	  IL generation is called for.
+
+2009-03-04  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* AssemblyInfo.cs:
+	* Mono.TextTemplating:
+	* Mono.TextTemplating.csproj:
+	* Mono.TextTemplating/Tokeniser.cs:
+	* Microsoft.VisualStudio.TextTemplating:
+	* Mono.TextTemplating/ParsedTemplate.cs:
+	* Microsoft.VisualStudio.TextTemplating/Engine.cs:
+	* Microsoft.VisualStudio.TextTemplating/ToStringHelper.cs:
+	* Microsoft.VisualStudio.TextTemplating/DirectiveProcessor.cs:
+	* Microsoft.VisualStudio.TextTemplating/TextTransformation.cs:
+	* Microsoft.VisualStudio.TextTemplating/ITextTemplatingEngineHost.cs:
+	* Microsoft.VisualStudio.TextTemplating/DirectiveProcessorException.cs:
+	* Microsoft.VisualStudio.TextTemplating/RequiresProvidesDirectiveProcessor.cs:
+	  Move T4 implementation to its own assembly. Tweak some
+	  appdomain stuff.
+
