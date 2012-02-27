@@ -30,6 +30,8 @@ namespace SparkleShare {
     // user's notification area
     public class SparkleStatusIcon : IDisposable {
 
+        public SparkleStatusIconController Controller = new SparkleStatusIconController();
+
         private Timer Animation;
         private Bitmap [] AnimationFrames;
         private int FrameNumber;
@@ -57,15 +59,6 @@ namespace SparkleShare {
 
             CreateMenu ();
             SetNormalState ();
-
-            /*Program.Controller.FolderSizeChanged += delegate {
-                status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
-                    if (!Animation.Enabled)
-                        SetNormalState ();
-
-                    UpdateMenu ();
-                });
-            };*/
             
             Program.Controller.FolderListChanged += delegate {
                 status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
@@ -205,14 +198,7 @@ namespace SparkleShare {
                 sync_item.Enabled = false;
 
             sync_item.Click += delegate {
-
-                if (SparkleUI.Setup == null) {
-                    SparkleUI.Setup = new SparkleSetup ();
-                    SparkleUI.Setup.Controller.ShowAddPage ();
-                }
-
-                if (!SparkleUI.Setup.Visible)
-                    SparkleUI.Setup.Controller.ShowAddPage ();
+                Controller.AddHostedProjectClicked();
             };
 
             Menu.Items.Add (sync_item);

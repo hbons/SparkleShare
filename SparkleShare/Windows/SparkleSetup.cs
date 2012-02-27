@@ -49,11 +49,32 @@ namespace SparkleShare {
             pictureBox.Image = Icons.side_splash;
             this.Icon = Icons.sparkleshare;
 
+            Controller.HideWindowEvent += delegate
+            {
+                this.Hide();
+            };
+
+            Controller.ShowWindowEvent += delegate
+            {
+                this.Show();
+            };
+
             Controller.ChangePageEvent += delegate (PageType type, string [] warnings) {
                 tabControl.SafeInvoke ((Action)delegate {
                     switch (type) {
+                        case PageType.Setup:
+                            tabControl.SelectedIndex = 0;
+                            NameEntry.Text = Controller.GuessedUserName;
+                            EmailEntry.Text = Controller.GuessedUserEmail;
+                            Show();
+                            Controller.CheckSetupPage(NameEntry.Text, EmailEntry.Text);
+                            break;
+
                         case PageType.Add:
                             tabControl.SelectedIndex = 1;
+
+                            // Add plugins to tree
+                            // ===================
                             // Check whether the treeView is already created
                             // If it is dispose it and start over
                             if (treeView != null) {
@@ -67,7 +88,6 @@ namespace SparkleShare {
                             treeView.FullRowSelect = true;
                             treeView.ImageIndex = 0;
                             treeView.Indent = 35;
-                            treeView.AfterSelect += new TreeViewEventHandler (CheckTreeNode);
                             treeView.HideSelection = false;
                             treeView.ItemHeight = 40;
 
@@ -89,12 +109,31 @@ namespace SparkleShare {
                                 panel_server_selection.Size.Height);
 
                             panel_server_selection.Controls.Add (treeView);
-                            treeView.SelectedNode = treeView.Nodes [0];
-                            treeView.Select ();
-                            CheckAddPage (null, null);
-                            CheckTreeNode (null, null);
+                            // Finished adding and populating tree
+
+                            // Select first node
+                            treeView.SelectedNode = treeView.Nodes[0];
+                            treeView.Select();
+                            Controller.SelectedPluginChanged(0);
+
+                            treeView.AfterSelect += new TreeViewEventHandler(CheckTreeNode);
+
                             Show ();
+                            Controller.CheckAddPage(ServerEntry.Text, FolderEntry.Text, 1);
                             break;
+
+                        case PageType.Invite:
+                            tabControl.SelectedIndex = 5;
+                            InviteAddressEntry.Text = Controller.PendingInvite.Address;
+                            InviteFolderEntry.Text = Controller.PendingInvite.RemotePath;
+                            Show();
+                            break;
+
+                        case PageType.Syncing:
+                            tabControl.SelectedIndex = 2;
+                            Show();
+                            break;
+
                         case PageType.Error:
                             tabControl.SelectedIndex = 3;
                             label3.Text = "First, have you tried turning it off and on again?\n\n" +
@@ -102,126 +141,138 @@ namespace SparkleShare {
                                 "The host needs to know who you are. Have you uploaded the key that sits in your SparkleShare folder?";
                             Show ();
                             break;
+
                         case PageType.Finished:
                             tabControl.SelectedIndex = 4;
                             Show ();
                             break;
-                        case PageType.Setup:
-                            tabControl.SelectedIndex = 0;
-                            NameEntry.Text = Program.Controller.UserName;
-                            Show ();
-                            break;
-                        case PageType.Syncing:
-                            tabControl.SelectedIndex = 2;
-                            Show ();
-                            break;
+
                         case PageType.Tutorial:
-                            if (Controller.TutorialPageNumber == 1)
-                                Controller.TutorialSkipped ();
-                            else
-                                Controller.ShowAddPage ();
+                            // Do nothing in tutorial by now
+                            Controller.TutorialSkipped();;
                             break;
+
                         default:
                             throw new NotImplementedException ("unknown PageType");
                     }
                 });
             };
+
+            Controller.UpdateSetupContinueButtonEvent += new SparkleSetupController.UpdateSetupContinueButtonEventHandler(UpdateSetupContinueButtonEvent);
+
+            Controller.ChangeAddressFieldEvent += new SparkleSetupController.ChangeAddressFieldEventHandler(ChangeAddressFieldEvent);
+            Controller.ChangePathFieldEvent += new SparkleSetupController.ChangePathFieldEventHandler(ChangePathFieldEvent);
+            Controller.UpdateAddProjectButtonEvent += new SparkleSetupController.UpdateAddProjectButtonEventHandler(UpdateAddProjectButtonEvent);
+
+            Controller.UpdateProgressBarEvent += new SparkleSetupController.UpdateProgressBarEventHandler(UpdateProgressBarEvent);
         }
 
         private void SparkleSetup_FormClosing (object sender, FormClosingEventArgs e) {
             if (e.CloseReason != CloseReason.ApplicationExitCall
-                    && e.CloseReason != CloseReason.TaskManagerClosing
-                    && e.CloseReason != CloseReason.WindowsShutDown) {
+                && e.CloseReason != CloseReason.TaskManagerClosing
+                && e.CloseReason != CloseReason.WindowsShutDown) {
                 e.Cancel = true;
                 this.Hide ();
             }
         }
 
-        private void buttonCancel_Click (object sender, EventArgs e) {
-            this.Hide ();
+        #region Things for "Setup" page
+        private void SetupNextClicked(object sender, EventArgs e)
+        {
+            Controller.SetupPageCompleted(NameEntry.Text, EmailEntry.Text);
         }
 
-        private void buttonSync_Click (object sender, EventArgs e) {
-            if (String.IsNullOrEmpty (Controller.Plugins [treeView.SelectedNode.Index].Address))
-                Controller.AddPageCompleted (ServerEntry.Text, FolderEntry.Text);
-            else
-                Controller.AddPageCompleted (Controller.Plugins [treeView.SelectedNode.Index].Address,
-                    FolderEntry.Text);
+        private void CheckSetupPage(object sender, EventArgs e)
+        {
+            Controller.CheckSetupPage(NameEntry.Text, EmailEntry.Text);
         }
 
-        private void CheckTreeNode (object sender, EventArgs e) {
-            // If the "own server" choice is selected, the address field is empty
-            if (String.IsNullOrEmpty (Controller.Plugins [treeView.SelectedNode.Index].Address)) {
-                ServerEntry.Enabled = true;
-                ServerEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].AddressExample;
-            } else {
-                ServerEntry.Enabled = false;
-                ServerEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].Address;
-                ServerEntry.Enabled = false;
-            }
-            //Clear any previous input data so that exampletext can show
-            ServerEntry.Text = "";
-            FolderEntry.Text = "";
-            FolderEntry.ExampleText = Controller.Plugins [treeView.SelectedNode.Index].PathExample;
-            CheckAddPage (null, null);
+        void UpdateSetupContinueButtonEvent(bool button_enabled)
+        {
+            buttonNext.Enabled = button_enabled;
+        }
+        #endregion
+
+        #region Things for "Add" page
+        void ChangeAddressFieldEvent(string text, string example_text, FieldState state)
+        {
+            ServerEntry.Text = text;
+            ServerEntry.Enabled = state == FieldState.Enabled;
+            ServerEntry.ExampleText = example_text;
         }
 
-        private void CheckAddPage (object sender, EventArgs e) {
-            // Enables or disables the 'Next' button depending on the
-            // entries filled in by the user
-            buttonSync.Enabled = false;
-
-            if (String.IsNullOrEmpty (Controller.Plugins [treeView.SelectedNode.Index].Address)) {
-                if (!String.IsNullOrEmpty (FolderEntry.Text)) {
-                    if (!String.IsNullOrEmpty (ServerEntry.Text))
-                        buttonSync.Enabled = true;
-                }
-            } else {
-                if (!String.IsNullOrEmpty (FolderEntry.Text))
-                    buttonSync.Enabled = true;
-            }
+        void ChangePathFieldEvent(string text, string example_text, FieldState state)
+        {
+            FolderEntry.Text = text;
+            FolderEntry.Enabled = state == FieldState.Enabled;
+            FolderEntry.ExampleText = example_text;
         }
 
-        private void buttonFinish_Click (object sender, EventArgs e) {
-            this.Hide ();
+        private void CheckTreeNode(object sender, EventArgs e)
+        {
+            Controller.SelectedPluginChanged(treeView.SelectedNode.Index);
         }
 
-        private void buttonTryAgain_Click (object sender, EventArgs e) {
-            Controller.ErrorPageCompleted ();
+        private void CancelButtonClicked (object sender, EventArgs e) {
+            Controller.PageCancelled();
         }
 
+        private void AddButtonClicked(object sender, EventArgs e)
+        {
+            Controller.AddPageCompleted(ServerEntry.Text, FolderEntry.Text);
+        }
+
+        void UpdateAddProjectButtonEvent(bool button_enabled)
+        {
+            buttonSync.Enabled = button_enabled;
+        }
+
+        private void CheckAddPage(object sender, EventArgs e)
+        {
+            Controller.CheckAddPage(ServerEntry.Text, FolderEntry.Text, treeView.SelectedNode.Index);
+        }
+        #endregion
+
+        #region Things for "Invite" page
+        private void InviteAddButtonClicked(object sender, EventArgs e)
+        {
+            Controller.InvitePageCompleted();
+        }
+
+        private void InviteCancelButtonClicked(object sender, EventArgs e)
+        {
+            Controller.PageCancelled();
+        }
+        #endregion
+
+        #region Things for "Syncing" page
+        private void syncCancelClicked(object sender, EventArgs e)
+        {
+            Controller.SyncingCancelled();
+        }
+
+        void UpdateProgressBarEvent(double percentage)
+        {
+            syncingProgressBar.Value = (int)percentage;
+        }
+        #endregion
+
+        #region Things for "Error" page
+        private void buttonTryAgain_Click(object sender, EventArgs e)
+        {
+            Controller.ErrorPageCompleted();
+        }
+        #endregion
+
+        #region Thigngs for "Finish" page
         private void buttonFinished_Click (object sender, EventArgs e) {
-            this.Hide ();
+            Controller.FinishPageCompleted();
         }
 
         private void buttonOpenFolder_Click (object sender, EventArgs e) {
-            Program.Controller.OpenSparkleShareFolder (Controller.SyncingFolder);
+            Controller.OpenFolderClicked();
         }
-
-        private void buttonNext_Click (object sender, EventArgs e) {
-            string full_name = NameEntry.Text;
-            string email = EmailEntry.Text;
-
-            Controller.SetupPageCompleted (full_name, email);
-        }
-
-        private void CheckSetupPage (object sender, EventArgs e) {
-            // Enables or disables the 'Next' button depending on the
-            // entries filled in by the user
-            if (!String.IsNullOrEmpty (NameEntry.Text) &&
-                this.IsValidEmail (EmailEntry.Text)) {
-                buttonNext.Enabled = true;
-            } else {
-                buttonNext.Enabled = false;
-            }
-        }
-
-        // Checks to see if an email address is valid
-        public bool IsValidEmail(string email)
-        {
-            Regex regex = new Regex(@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$", RegexOptions.IgnoreCase);
-            return regex.IsMatch(email);
-        }
+        #endregion
     }
 }
 

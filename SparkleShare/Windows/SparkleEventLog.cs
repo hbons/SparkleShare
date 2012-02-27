@@ -144,9 +144,16 @@ namespace SparkleShare {
 
         private void AddHTML ()
         {
-            Invoke ((Action)delegate {
-                _browserControl.Reload ();
-            });
+            try
+            {
+                Invoke((Action)delegate
+                {
+                    _browserControl.Reload();
+                });
+            }
+            catch (InvalidOperationException e)
+            {
+            }
         }
 
         private void SparkleEventLog_FormClosing (object sender, FormClosingEventArgs e)

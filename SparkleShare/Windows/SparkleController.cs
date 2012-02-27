@@ -125,14 +125,12 @@ namespace SparkleShare {
 
 		// Creates a .desktop entry in autostart folder to
 		// start SparkleShare automatically at login
-		public override void EnableSystemAutostart ()
+		public override void CreateStartupItem ()
 		{
 		}
 		
 
-		// Installs a launcher so the user can launch SparkleShare
-		// from the Internet category if needed
-		public override void InstallLauncher ()
+        public override void InstallProtocolHandler()
 		{
 		}
 
