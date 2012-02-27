@@ -174,6 +174,17 @@ namespace SparkleShare {
                     if (InviteReceived != null) {
                         SparkleInvite invite = new SparkleInvite (args.FullPath);
 
+                        // It may be that the invite we received a path to isn't
+                        // fully downloaded yet, so we try to read it several times
+                        int tries = 0;
+                        while (!invite.IsValid) {
+                            Thread.Sleep (1 * 250);
+                            invite = new SparkleInvite (args.FullPath);
+                            tries++;
+                            if (tries > 20)
+                                break;
+                        }
+
                         if (invite.IsValid) {
                             InviteReceived (invite);
 

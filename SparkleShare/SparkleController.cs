@@ -75,7 +75,31 @@ namespace SparkleShare {
         
         public override void InstallProtocolHandler ()
         {
-            // TODO
+            // sparkleshare-invite-opener.desktop launches the handler on newer
+            // systems (like GNOME 3) that implement the last freedesktop.org specs.
+            // For GNOME 2 however we need to tell gconf about the protocol manually
+            Console.WriteLine ();
+            try {
+                // Add the handler to gconf...
+                Process process = new Process ();
+                process.StartInfo.FileName  = "gconftool-2";
+                process.StartInfo.Arguments =
+                    "-s /desktop/gnome/url-handlers/sparkleshare/command 'sparkleshare open %s' --type String";
+
+                process.Start ();
+                process.WaitForExit ();
+
+
+                // ...and enable it
+                process.StartInfo.Arguments =
+                    "-s /desktop/gnome/url-handlers/sparkleshare/enabled --type Boolean true";
+
+                process.Start ();
+                process.WaitForExit ();
+
+            } catch {
+                // Pity...
+            }
         }
 
 
