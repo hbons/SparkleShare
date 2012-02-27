@@ -30,18 +30,22 @@ You can choose to build from source or get the packages through your distributio
 
 Requirements:
 
-   - curl
-   - git >= 1.7.3
-   - gtk-sharp2
-   - mono-core >= 2.8
-   - notify-sharp
-   - webkit-sharp
+```
+curl
+git >= 1.7.3
+gtk-sharp2
+mono-core >= 2.8
+notify-sharp
+webkit-sharp
+```
 
 Optional:
 
-   - nautilus-python
-   - gvfs
-   - libappindicator
+```
+nautilus-python
+gvfs
+libappindicator
+```
 
 
 ### Mac
