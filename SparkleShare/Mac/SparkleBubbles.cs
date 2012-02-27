@@ -26,12 +26,12 @@ namespace SparkleShare {
     
     public class SparkleBubbles : NSObject {
 
-        private SparkleBubblesController controller = new SparkleBubblesController ();
+        public SparkleBubblesController Controller = new SparkleBubblesController ();
 
 
         public SparkleBubbles ()
         {
-            this.controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
+            Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
                 InvokeOnMainThread (delegate {
                     if (!GrowlApplicationBridge.IsGrowlRunning ()) {
                         NSApplication.SharedApplication.RequestUserAttention (
@@ -68,17 +68,7 @@ namespace SparkleShare {
         [Export("growlNotificationWasClicked")]
         public override void GrowlNotificationWasClicked (NSObject o)
         {
-            InvokeOnMainThread (delegate {
-                NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
-
-                if (SparkleUI.EventLog == null)
-                    SparkleUI.EventLog = new SparkleEventLog ();
-
-                SparkleUI.EventLog.Controller.SelectedFolder = null;
-
-                SparkleUI.EventLog.OrderFrontRegardless ();
-                SparkleUI.EventLog.MakeKeyAndOrderFront (this);
-            });
+            SparkleUI.Bubbles.Controller.BubbleClicked ();
         }
     }
 }

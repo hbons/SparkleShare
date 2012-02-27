@@ -27,7 +27,7 @@ namespace SparkleShare {
 
     public class SparkleAbout : Window {
 
-        public SparkleAboutController Controller;
+        public SparkleAboutController Controller = new SparkleAboutController ();
         private Label updates;
 
 
@@ -41,9 +41,10 @@ namespace SparkleShare {
         public SparkleAbout () : base ("")
         {
             DeleteEvent += delegate (object o, DeleteEventArgs args) {
-                HideAll ();
+                Controller.WindowClosed ();
                 args.RetVal = true;
             };
+
 
             DefaultSize    = new Gdk.Size (600, 260);
             Resizable      = false;
@@ -62,11 +63,23 @@ namespace SparkleShare {
             buf.RenderPixmapAndMask (out map, out map2, 255);
             GdkWindow.SetBackPixmap (map, false);
 
-            Controller = new SparkleAboutController ();
+
+            Controller.HideWindowEvent += delegate {
+                Application.Invoke (delegate {
+                    HideAll ();
+                });
+            };
+
+            Controller.ShowWindowEvent += delegate {
+                Application.Invoke (delegate {
+                    ShowAll ();
+                    Present ();
+                });
+            };
 
             Controller.NewVersionEvent += delegate (string new_version) {
                 Application.Invoke (delegate {
-                    this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#f57900'>{0}</span>",
+                    this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#729fcf'>{0}</span>",
                         String.Format (_("A newer version ({0}) is available!"), new_version));
 
                     this.updates.ShowAll ();

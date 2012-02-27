@@ -26,6 +26,12 @@ namespace SparkleShare {
 
     public class SparkleAboutController {
 
+        public event ShowWindowEventHandler ShowWindowEvent;
+        public delegate void ShowWindowEventHandler ();
+
+        public event HideWindowEventHandler HideWindowEvent;
+        public delegate void HideWindowEventHandler ();
+
         public event NewVersionEventHandler NewVersionEvent;
         public delegate void NewVersionEventHandler (string new_version);
 
@@ -35,32 +41,34 @@ namespace SparkleShare {
         public event CheckingForNewVersionEventHandler CheckingForNewVersionEvent;
         public delegate void CheckingForNewVersionEventHandler ();
 
+
         public string RunningVersion {
             get {
                 return SparkleBackend.Version;
             }
         }
 
-        // Check for a new version once a day
-        private System.Timers.Timer version_checker = new System.Timers.Timer () {
-            Enabled  = true,
-            Interval = 24 * 60 * 60 * 1000
-        };
-
 
         public SparkleAboutController ()
         {
-            CheckForNewVersion ();
+            Program.Controller.ShowAboutWindowEvent += delegate {
+                if (ShowWindowEvent != null)
+                    ShowWindowEvent ();
 
-            this.version_checker.Elapsed += delegate {
                 CheckForNewVersion ();
             };
         }
 
 
+        public void WindowClosed ()
+        {
+            if (HideWindowEvent != null)
+                HideWindowEvent ();
+        }
+
+
         public void CheckForNewVersion ()
         {
-            this.version_checker.Stop ();
             if (CheckingForNewVersionEvent != null)
                 CheckingForNewVersionEvent ();
 
@@ -82,7 +90,7 @@ namespace SparkleShare {
 
                 // Add a little delay, making it seems we're
                 // actually doing hard work
-                Thread.Sleep (2 * 1000);
+                Thread.Sleep (1000);
 
                 if (running_version >= new_version) {
                     if (VersionUpToDateEvent != null)
@@ -92,8 +100,6 @@ namespace SparkleShare {
                     if (NewVersionEvent != null)
                         NewVersionEvent (result);
                 }
-
-                this.version_checker.Start ();
             };
 
             web_client.DownloadStringAsync (uri);

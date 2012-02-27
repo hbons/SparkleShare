@@ -102,16 +102,40 @@ namespace SparkleShare {
         }
 
 
-		public override void EnableSystemAutostart ()
+		public override void CreateStartupItem ()
 		{
-			// N/A
+            // There aren't any bindings in MonoMac to support this yet, so
+            // we call out to an applescript to do the job
+            Process process = new Process ();
+            process.EnableRaisingEvents              = true;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.UseShellExecute        = false;
+            process.StartInfo.FileName               = "osascript";
+            process.StartInfo.CreateNoWindow         = true;
+
+            string app_path = Path.GetDirectoryName (NSBundle.MainBundle.ResourcePath);
+            app_path        = Path.GetDirectoryName (app_path);
+
+            process.StartInfo.Arguments = "-e 'tell application \"System Events\" to " +
+                "make login item at end with properties {path:\"" + app_path + "\", hidden:false}'";
+
+            process.Exited += delegate {
+                SparkleHelpers.DebugInfo ("Controller", "Added " + app_path + " to login items");
+            };
+
+            try {
+                process.Start ();
+
+            } catch (Exception e) {
+                SparkleHelpers.DebugInfo ("Controller", "Failed adding " + app_path + " to login items: " + e.Message);
+            }
 		}
 
 
-		public override void InstallLauncher ()
-		{
-			// N/A
-		}
+        public override void InstallProtocolHandler ()
+        {
+             // We ship SparkleShareInviteHandler.app in the bundle
+        }
 
 		
 		// Adds the SparkleShare folder to the user's
