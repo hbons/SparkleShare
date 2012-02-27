@@ -1,0 +1,16 @@
+#: E:\Gettext\cs-utils\Gettext.CsUtils\Samples\Gettext.Samples.Mvc\Controllers\HomeController.cs:14
+msgid "Welcome to internationalized ASP.NET MVC!"
+msgstr ""
+
+#: E:\Gettext\cs-utils\Gettext.CsUtils\Samples\Gettext.Samples.Mvc\Views\Home\Index.aspx.postrings:1
+msgid "Hello world"
+msgstr ""
+
+#: E:\Gettext\cs-utils\Gettext.CsUtils\Samples\Gettext.Samples.Mvc\Views\Home\Index.aspx.postrings:2
+#, csharp-format
+msgid "Go to the {0} page."
+msgstr ""
+
+#: E:\Gettext\cs-utils\Gettext.CsUtils\Samples\Gettext.Samples.Mvc\Views\Home\Index.aspx.postrings:3
+msgid "home"
+msgstr ""

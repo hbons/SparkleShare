@@ -1,0 +1,9 @@
+2009-08-12  Michael Hutchinson  <mhutchinson@novell.com>
+
+	* Makefile.am:
+	* TextTransform:
+	* Mono.TextTemplating:
+	* Mono.TextTemplating.Tests:
+	* MonoDevelop.TextTemplating: Include the ASP.NET MVC and
+	  TextTemplating addins in the main solution and build.
+

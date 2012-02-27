@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A2364D6A-00EF-417C-80A6-815726C70032}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Mono.TextTemplating</RootNamespace>
+    <AssemblyName>Mono.TextTemplating</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\DirectiveProcessor.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\DirectiveProcessorException.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\Engine.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\RequiresProvidesDirectiveProcessor.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\TextTransformation.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\ToStringHelper.cs" />
+    <Compile Include="Mono.TextTemplating\CompiledTemplate.cs" />
+    <Compile Include="Mono.TextTemplating\ParsedTemplate.cs" />
+    <Compile Include="Mono.TextTemplating\Tokeniser.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Mono.TextTemplating\TemplateGenerator.cs" />
+    <Compile Include="Mono.TextTemplating\TemplatingEngine.cs" />
+    <Compile Include="Mono.TextTemplating\TemplateSettings.cs" />
+    <Compile Include="Mono.TextTemplating\CrossAppDomainAssemblyResolver.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\AssemblyCacheMonitor.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\EncodingHelper.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\ParameterDirectiveProcessor.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\TextTemplatingSession.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\Interfaces.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Microsoft.VisualStudio.TextTemplating\" />
+    <Folder Include="Mono.TextTemplating\" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="Flat" ResourceNamePolicy="FileName" />
+        </Policies>
+        <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="true" RelativeMakefileName="Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="true" IsAutotoolsProject="true" RelativeConfigureInPath="..">
+          <BuildFilesVar Sync="true" Name="FILES" />
+          <DeployFilesVar />
+          <ResourcesVar Sync="true" Name="RES" />
+          <OthersVar />
+          <GacRefVar Sync="true" Name="REFS" Prefix="-r:" />
+          <AsmRefVar Sync="true" Name="REFS" Prefix="-r:" />
+          <ProjectRefVar Sync="true" Name="DEPS" />
+        </MonoDevelop.Autotools.MakefileInfo>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+</Project>
