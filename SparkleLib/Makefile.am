@@ -3,9 +3,6 @@ TARGET = library
 
 SOURCES =  \
 	Defines.cs \
-	Git/SparkleFetcherGit.cs \
-	Git/SparkleGit.cs \
-	Git/SparkleRepoGit.cs \
 	SparkleAnnouncement.cs \
 	SparkleBackend.cs \
 	SparkleChangeSet.cs \
