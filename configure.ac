@@ -157,6 +157,7 @@ data/plugins/Makefile
 SparkleLib/AssemblyInfo.cs
 SparkleLib/Defines.cs
 SparkleLib/Makefile
+SparkleLib/Git/Makefile
 SparkleShare/sparkleshare
 SparkleShare/Makefile
 SparkleShare/Mac/Makefile
