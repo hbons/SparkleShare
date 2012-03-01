@@ -41,16 +41,18 @@ namespace SparkleShare {
         
         public SparkleController () : base ()
         {
-            string content_path =
-                Directory.GetParent (System.AppDomain.CurrentDomain.BaseDirectory).ToString ();
-
-            string app_path   = Directory.GetParent (content_path).ToString ();
-            string growl_path = Path.Combine (app_path, "Frameworks", "Growl.framework", "Growl");
-
-
-            // Needed for Growl
-            Dlfcn.dlopen (growl_path, 0);
-            NSApplication.Init ();
+            using (var a = new NSAutoreleasePool ())
+            {
+                string content_path =
+                    Directory.GetParent (System.AppDomain.CurrentDomain.BaseDirectory).ToString ();
+    
+                string app_path   = Directory.GetParent (content_path).ToString ();
+                string growl_path = Path.Combine (app_path, "Frameworks", "Growl.framework", "Growl");
+    
+                // Needed for Growl
+                Dlfcn.dlopen (growl_path, 0);
+                NSApplication.Init ();
+            }
 
 
             // Let's use the bundled git first
@@ -197,17 +199,19 @@ namespace SparkleShare {
 		public override string EventLogHTML
 		{
 			get {
-				string resource_path = NSBundle.MainBundle.ResourcePath;
-				string html_path     = Path.Combine (resource_path, "HTML", "event-log.html");
-				string html          = File.ReadAllText (html_path);
-
-                string jquery_file_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "HTML", "jquery.js");
-
-                string jquery = File.ReadAllText (jquery_file_path);
-                html          = html.Replace ("<!-- $jquery -->", jquery);
-
-                return html;
+                using (var a = new NSAutoreleasePool ()) {
+    				string resource_path = NSBundle.MainBundle.ResourcePath;
+    				string html_path     = Path.Combine (resource_path, "HTML", "event-log.html");
+    				string html          = File.ReadAllText (html_path);
+    
+                    string jquery_file_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
+                        "HTML", "jquery.js");
+    
+                    string jquery = File.ReadAllText (jquery_file_path);
+                    html          = html.Replace ("<!-- $jquery -->", jquery);
+    
+                    return html;
+                }
 			}
 		}
 
@@ -215,14 +219,17 @@ namespace SparkleShare {
 		public override string DayEntryHTML
 		{
 			get {
-				string resource_path = NSBundle.MainBundle.ResourcePath;
-				string html_path     = Path.Combine (resource_path, "HTML", "day-entry.html");
-				
-				StreamReader reader = new StreamReader (html_path);
-				string html = reader.ReadToEnd ();
-				reader.Close ();
-				
-				return html;
+                using (var a = new NSAutoreleasePool ())
+                {
+    				string resource_path = NSBundle.MainBundle.ResourcePath;
+    				string html_path     = Path.Combine (resource_path, "HTML", "day-entry.html");
+    				
+    				StreamReader reader = new StreamReader (html_path);
+    				string html = reader.ReadToEnd ();
+    				reader.Close ();
+    				
+    				return html;
+                }
 			}
 		}
 		
@@ -230,14 +237,16 @@ namespace SparkleShare {
 		public override string EventEntryHTML
 		{
 			get {
-				string resource_path = NSBundle.MainBundle.ResourcePath;
-				string html_path     = Path.Combine (resource_path, "HTML", "event-entry.html");
-				
-				StreamReader reader = new StreamReader (html_path);
-				string html = reader.ReadToEnd ();
-				reader.Close ();
-				
-				return html;
+                using (var a = new NSAutoreleasePool ()) {
+    				string resource_path = NSBundle.MainBundle.ResourcePath;
+    				string html_path     = Path.Combine (resource_path, "HTML", "event-entry.html");
+    				
+    				StreamReader reader = new StreamReader (html_path);
+    				string html = reader.ReadToEnd ();
+    				reader.Close ();
+    				
+    				return html;
+                }
 			}
 		}
 
