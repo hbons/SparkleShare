@@ -21,11 +21,11 @@ using System.IO;
 using System.Text.RegularExpressions;
 using SparkleLib;
 
-namespace SparkleLib {
+namespace SparkleLib.Git {
 
-    public class SparkleRepoGit : SparkleRepoBase {
+    public class SparkleRepo : SparkleRepoBase {
 
-        public SparkleRepoGit (string path) : base (path)
+        public SparkleRepo (string path) : base (path)
         {
         }
 
