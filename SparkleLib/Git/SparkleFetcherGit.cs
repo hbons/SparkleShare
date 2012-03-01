@@ -20,6 +20,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
+using SparkleLib;
 
 namespace SparkleLib {
 
