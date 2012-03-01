@@ -305,43 +305,54 @@ namespace SparkleShare {
         }
 
 
-        public void AddPageCompleted (string address, string path)
+        public void AddPageCompleted (string address, string remote_path)
         {
-            SyncingFolder   = Path.GetFileNameWithoutExtension (path);
+            SyncingFolder   = Path.GetFileNameWithoutExtension (remote_path);
             PreviousAddress = address;
-            PreviousPath    = path;
+            PreviousPath    = remote_path;
 
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Syncing, null);
 
-            // TODO: Remove events afterwards
+            Program.Controller.FolderFetched    += AddPageFetchedDelegate;
+            Program.Controller.FolderFetchError += AddPageFetchErrorDelegate;
+            Program.Controller.FolderFetching   += SyncingPageFetchingDelegate;
 
-            Program.Controller.FolderFetched += delegate (string [] warnings) {
-                if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Finished, warnings);
+            Program.Controller.FetchFolder (address, remote_path, SelectedPlugin.AnnouncementsUrl);
+        }
 
-                PreviousAddress = "";
-                SyncingFolder   = "";
-                PreviousUrl     = "";
-                SelectedPlugin  = Plugins [0];
-            };
+        // The following private methods are
+        // delegates used by the previous method
 
-            Program.Controller.FolderFetchError += delegate (string remote_url) {
-                Thread.Sleep (1000);
-                PreviousUrl = remote_url;
+        private void AddPageFetchedDelegate (string [] warnings)
+        {
+            SyncingFolder = "";
 
-                if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Error, null);
+            if (ChangePageEvent != null)
+                ChangePageEvent (PageType.Finished, warnings);
 
-                SyncingFolder = "";
-            };
-            
-            Program.Controller.FolderFetching += delegate (double percentage) {
-                if (UpdateProgressBarEvent != null)
-                    UpdateProgressBarEvent (percentage);
-            };
+            Program.Controller.FolderFetched    -= AddPageFetchedDelegate;
+            Program.Controller.FolderFetchError -= AddPageFetchErrorDelegate;
+            Program.Controller.FolderFetching   -= SyncingPageFetchingDelegate;
+        }
 
-            Program.Controller.FetchFolder (address, path, SelectedPlugin.AnnouncementsUrl);
+        private void AddPageFetchErrorDelegate (string remote_url)
+        {
+            SyncingFolder = "";
+            PreviousUrl   = remote_url;
+
+            if (ChangePageEvent != null)
+                ChangePageEvent (PageType.Error, null);
+
+            Program.Controller.FolderFetched    -= AddPageFetchedDelegate;
+            Program.Controller.FolderFetchError -= AddPageFetchErrorDelegate;
+            Program.Controller.FolderFetching   -= SyncingPageFetchingDelegate;
+        }
+
+        private void SyncingPageFetchingDelegate (double percentage)
+        {
+            if (UpdateProgressBarEvent != null)
+                UpdateProgressBarEvent (percentage);
         }
 
 
@@ -349,8 +360,7 @@ namespace SparkleShare {
         {
             SyncingFolder   = Path.GetFileNameWithoutExtension (PendingInvite.RemotePath);
             PreviousAddress = PendingInvite.Address;
-            // TODO: trailing slash should work
-            PreviousPath    = PendingInvite.RemotePath;
+            PreviousPath    = PendingInvite.RemotePath; // FIXME: trailing slash should work
 
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Syncing, null);
@@ -362,37 +372,41 @@ namespace SparkleShare {
                 return;
             }
 
-
-            // TODO: Remove events afterwards
-
-            Program.Controller.FolderFetched += delegate (string [] warnings) {
-                if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Finished, warnings);
-
-                PreviousAddress = "";
-                SyncingFolder   = "";
-                PreviousUrl     = "";
-                SelectedPlugin  = Plugins [0];
-
-                PendingInvite = null;
-            };
-
-            Program.Controller.FolderFetchError += delegate (string remote_url) {
-                PreviousUrl = remote_url;
-
-                if (ChangePageEvent != null)
-                    ChangePageEvent (PageType.Error, null);
-
-                SyncingFolder = "";
-            };
-
-            Program.Controller.FolderFetching += delegate (double percentage) {
-                if (UpdateProgressBarEvent != null)
-                    UpdateProgressBarEvent (percentage);
-            };
+            Program.Controller.FolderFetched    += InvitePageFetchedDelegate;
+            Program.Controller.FolderFetchError += InvitePageFetchErrorDelegate;
+            Program.Controller.FolderFetching   += SyncingPageFetchingDelegate;
 
             Program.Controller.FetchFolder (PendingInvite.Address,
                 PendingInvite.RemotePath, PendingInvite.AnnouncementsUrl.ToString ());
+        }
+
+        // The following private methods are
+        // delegates used by the previous method
+
+        private void InvitePageFetchedDelegate (string [] warnings)
+        {
+            SyncingFolder   = "";
+            PendingInvite = null;
+
+            if (ChangePageEvent != null)
+                ChangePageEvent (PageType.Finished, warnings);
+
+            Program.Controller.FolderFetched    -= AddPageFetchedDelegate;
+            Program.Controller.FolderFetchError -= AddPageFetchErrorDelegate;
+            Program.Controller.FolderFetching   -= SyncingPageFetchingDelegate;
+        }
+
+        private void InvitePageFetchErrorDelegate (string remote_url)
+        {
+            SyncingFolder = "";
+            PreviousUrl   = remote_url;
+
+            if (ChangePageEvent != null)
+                ChangePageEvent (PageType.Error, null);
+
+            Program.Controller.FolderFetched    -= AddPageFetchedDelegate;
+            Program.Controller.FolderFetchError -= AddPageFetchErrorDelegate;
+            Program.Controller.FolderFetching   -= SyncingPageFetchingDelegate;
         }
 
 
@@ -433,6 +447,8 @@ namespace SparkleShare {
 
         public void FinishPageCompleted ()
         {
+            SelectedPlugin  = Plugins [0];
+            PreviousUrl     = "";
             PreviousAddress = "";
             PreviousPath    = "";
 
