@@ -104,7 +104,8 @@ namespace SparkleShare {
                 });
             };
 
-            this.CreateAbout ();
+
+            CreateAbout ();
         }
 
 
