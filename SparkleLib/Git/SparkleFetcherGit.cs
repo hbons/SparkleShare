@@ -22,15 +22,15 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using SparkleLib;
 
-namespace SparkleLib {
+namespace SparkleLib.Git {
 
     // Sets up a fetcher that can get remote folders
-    public class SparkleFetcherGit : SparkleFetcherBase {
+    public class SparkleFetcher : SparkleFetcherBase {
 
         private SparkleGit git;
 
 
-        public SparkleFetcherGit (string server, string remote_path, string target_folder) :
+        public SparkleFetcher (string server, string remote_path, string target_folder) :
             base (server, remote_path, target_folder)
         {
             if (server.EndsWith ("/"))
