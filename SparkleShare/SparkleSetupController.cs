@@ -374,7 +374,6 @@ namespace SparkleShare {
             };
 
             Program.Controller.FolderFetchError += delegate (string remote_url) {
-                Thread.Sleep (1000);
                 PreviousUrl = remote_url;
 
                 if (ChangePageEvent != null)
