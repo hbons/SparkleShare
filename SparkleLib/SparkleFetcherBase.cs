@@ -149,6 +149,7 @@ namespace SparkleLib {
 
             this.thread = new Thread (new ThreadStart (delegate {
                 if (Fetch ()) {
+                    Thread.Sleep (500);
                     SparkleHelpers.DebugInfo ("Fetcher", "Finished");
 
                     EnableHostKeyCheckingForHost (host);
@@ -158,6 +159,7 @@ namespace SparkleLib {
                         Finished (Warnings);
 
                 } else {
+                    Thread.Sleep (500);
                     SparkleHelpers.DebugInfo ("Fetcher", "Failed");
 
                     EnableHostKeyCheckingForHost (host);

@@ -150,7 +150,6 @@ namespace SparkleLib.Git {
                 }
     
                 base.OnProgressChanged (100);
-                Thread.Sleep (1000);
 
                 InstallConfiguration ();
                 InstallExcludeRules ();
