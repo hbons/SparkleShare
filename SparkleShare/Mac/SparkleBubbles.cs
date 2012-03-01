@@ -68,6 +68,7 @@ namespace SparkleShare {
         [Export("growlNotificationWasClicked")]
         public override void GrowlNotificationWasClicked (NSObject o)
         {
+            NSApplication.SharedApplication.DockTile.BadgeLabel = null;
             SparkleUI.Bubbles.Controller.BubbleClicked ();
         }
     }
