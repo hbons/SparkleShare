@@ -54,7 +54,7 @@ namespace SparkleShare {
 
 
         public event FolderFetchedEventHandler FolderFetched;
-        public delegate void FolderFetchedEventHandler (string [] warnings);
+        public delegate void FolderFetchedEventHandler (string remote_url, string [] warnings);
         
         public event FolderFetchErrorHandler FolderFetchError;
         public delegate void FolderFetchErrorHandler (string remote_url);
@@ -134,6 +134,7 @@ namespace SparkleShare {
 
         public virtual void Initialize ()
         {
+            SparklePlugin.PluginsPath = PluginsPath;
             InstallProtocolHandler ();
 
             // Create the SparkleShare folder and add it to the bookmarks
@@ -1057,32 +1058,31 @@ namespace SparkleShare {
 
                 try {
                     Directory.Move (tmp_folder, target_folder_path);
-                    SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.RemoteUrl, backend);
 
+                    SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.RemoteUrl, backend);
+    
                     if (!string.IsNullOrEmpty (announcements_url)) {
                         SparkleConfig.DefaultConfig.SetFolderOptionalAttribute (target_folder_name,
                             "announcements_url", announcements_url);
                     }
 
-
                     AddRepository (target_folder_path);
 
                     if (FolderFetched != null)
-                        FolderFetched (warnings);
+                        FolderFetched (this.fetcher.RemoteUrl, warnings);
 
                     if (FolderListChanged != null)
-                        FolderListChanged ();
-
-                    this.fetcher.Dispose ();
-
-                    if (Directory.Exists (tmp_path))
-                        Directory.Delete (tmp_path, true);
+                    FolderListChanged ();
 
                 } catch (Exception e) {
                     SparkleHelpers.DebugInfo ("Controller", "Error moving folder: " + e.Message);
                 }
 
+                this.fetcher.Dispose ();
                 this.fetcher = null;
+
+                if (Directory.Exists (tmp_path))
+                    Directory.Delete (tmp_path, true);
             };
 
             this.fetcher.Failed += delegate {
