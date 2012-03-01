@@ -244,7 +244,7 @@ namespace SparkleShare {
                 this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
                 this.popup_button.AddItems (folders);
     
-                this.popup_button.Activated += delegate { // FIXME: Still causes some memory leak warnings
+                this.popup_button.Activated += delegate {
                     using (var b = new NSAutoreleasePool ())
                     {
                         InvokeOnMainThread (delegate {
