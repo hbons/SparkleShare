@@ -92,18 +92,23 @@ namespace SparkleShare {
                 Menu.Delegate = new SparkleStatusIconMenuDelegate ();
             }
 
+
             Controller.UpdateQuitItemEvent += delegate (bool quit_item_enabled) {
-                InvokeOnMainThread (delegate {
-                    if (QuitMenuItem != null) {
-                        QuitMenuItem.Enabled = quit_item_enabled;
-                        StatusItem.Menu.Update ();
-                    }
-                });
+                using (var a = new NSAutoreleasePool ())
+                {
+                    InvokeOnMainThread (delegate {
+                        if (QuitMenuItem != null) {
+                            QuitMenuItem.Enabled = quit_item_enabled;
+                            StatusItem.Menu.Update ();
+                        }
+                    });
+                }
             };
 
             Controller.UpdateMenuEvent += delegate (IconState state) {
-                InvokeOnMainThread (delegate {
-                    using (var a = new NSAutoreleasePool ()) {
+                using (var a = new NSAutoreleasePool ())
+                {
+                    InvokeOnMainThread (delegate {
                         switch (state) {
                         case IconState.Idle:
     
@@ -149,8 +154,8 @@ namespace SparkleShare {
                         }
 
                         StatusItem.Menu.Update ();
-                    }
-                });
+                    });
+                }
             };
         }
 

@@ -81,9 +81,9 @@ namespace SparkleShare {
             {
                 string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
                     "sparkleshare-mac.icns");
-    
+
                 NSImage folder_icon = new NSImage (folder_icon_path);
-                            
+
                 NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon,
                     Program.Controller.SparklePath, 0);
             }
@@ -117,10 +117,7 @@ namespace SparkleShare {
 
         private void ShowDockIcon ()
         {
-            using (var a = new NSAutoreleasePool ())
-            {
-                NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
-            }
+            NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
         }
 
 
@@ -137,7 +134,10 @@ namespace SparkleShare {
 
         public override void WillBecomeActive (NSNotification notification)
         {
-            NSApplication.SharedApplication.DockTile.BadgeLabel = null;
+            if (NSApplication.SharedApplication.DockTile.BadgeLabel != null) {
+                Program.Controller.ShowEventLogWindow ();
+                NSApplication.SharedApplication.DockTile.BadgeLabel = null;
+            }
         }
 
 
