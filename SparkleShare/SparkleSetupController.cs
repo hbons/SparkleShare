@@ -179,7 +179,11 @@ namespace SparkleShare {
 
         public void PageCancelled ()
         {
-            PendingInvite = null;
+            PendingInvite   = null;
+            SelectedPlugin  = Plugins [0];
+            PreviousAddress = "";
+            PreviousPath    = "";
+            PreviousUrl     = "";
 
             if (HideWindowEvent != null)
                 HideWindowEvent ();
