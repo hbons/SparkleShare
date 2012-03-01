@@ -31,15 +31,8 @@ namespace SparkleShare {
 
         public SparkleEventLogController Controller = new SparkleEventLogController ();
 
-        private WebView web_view = new WebView (new RectangleF (0, 0, 480, 579), "", "") {
-            PolicyDelegate = new SparkleWebPolicyDelegate ()
-        };
-
-        private NSBox separator = new NSBox (new RectangleF (0, 579, 480, 1)) {
-            BorderColor = NSColor.LightGray,
-            BoxType = NSBoxType.NSBoxCustom
-        };
-
+        private WebView web_view;
+        private NSBox separator;
         private NSPopUpButton popup_button;
         private NSProgressIndicator progress_indicator;
         private NSTextField size_label;
@@ -49,188 +42,225 @@ namespace SparkleShare {
         private NSButton hidden_close_button;
         
 
-        public SparkleEventLog (IntPtr handle) : base (handle) { }
+        public SparkleEventLog (IntPtr handle) : base (handle)
+        {
+        }
 
-        // TODO: Window needs to be made resizable
+
         public SparkleEventLog () : base ()
         {
-            Title    = "Recent Changes";
+            using (var a = new NSAutoreleasePool ())
+            {
+                Title    = "Recent Changes";
+                Delegate = new SparkleEventsDelegate ();
+                // TODO: Window needs to be made resizable
 
-            Delegate = new SparkleEventsDelegate ();
+                SetFrame (new RectangleF (0, 0, 480, 640), true);
+                Center ();
 
-            SetFrame (new RectangleF (0, 0, 480, 640), true);
-            Center ();
+                StyleMask = (NSWindowStyle.Closable |
+                             NSWindowStyle.Miniaturizable |
+                             NSWindowStyle.Titled);
 
-            StyleMask = (NSWindowStyle.Closable |
-                         NSWindowStyle.Miniaturizable |
-                         NSWindowStyle.Titled);
-
-            MaxSize     = new SizeF (480, 640);
-            MinSize     = new SizeF (480, 640);
-            HasShadow   = true;
-            BackingType = NSBackingStore.Buffered;
-
-
-            this.hidden_close_button = new NSButton () {
-                Frame                     = new RectangleF (0, 0, 0, 0),
-                KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
-                KeyEquivalent             = "w"
-            };
-
-            this.hidden_close_button.Activated += delegate {
-                Controller.WindowClosed ();
-            };
-
-            ContentView.AddSubview (this.hidden_close_button);
+                MaxSize     = new SizeF (480, 640);
+                MinSize     = new SizeF (480, 640);
+                HasShadow   = true;
+                BackingType = NSBackingStore.Buffered;
 
 
-            this.size_label = new NSTextField () {
-                Alignment       = NSTextAlignment.Right,
-                BackgroundColor = NSColor.WindowBackground,
-                Bordered        = false,
-                Editable        = false,
-                Frame           = new RectangleF (0, 588, 60, 20),
-                StringValue     = "Size:",
-                Font            = SparkleUI.BoldFont
-            };
-
-            this.size_label_value = new NSTextField () {
-                Alignment       = NSTextAlignment.Left,
-                BackgroundColor = NSColor.WindowBackground,
-                Bordered        = false,
-                Editable        = false,
-                Frame           = new RectangleF (60, 588, 75, 20),
-                StringValue     = "…",
-                Font            = SparkleUI.Font
-            };
-
-
-            this.history_label = new NSTextField () {
-                Alignment       = NSTextAlignment.Right,
-                BackgroundColor = NSColor.WindowBackground,
-                Bordered        = false,
-                Editable        = false,
-                Frame           = new RectangleF (130, 588, 60, 20),
-                StringValue     = "History:",
-                Font            = SparkleUI.BoldFont
-            };
-
-            this.history_label_value = new NSTextField () {
-                Alignment       = NSTextAlignment.Left,
-                BackgroundColor = NSColor.WindowBackground,
-                Bordered        = false,
-                Editable        = false,
-                Frame           = new RectangleF (190, 588, 75, 20),
-                StringValue     = "…",
-                Font            = SparkleUI.Font
-            };
-
-
-            ContentView.AddSubview (this.size_label);
-            ContentView.AddSubview (this.size_label_value);
-            ContentView.AddSubview (this.history_label);
-            ContentView.AddSubview (this.history_label_value);
-            ContentView.AddSubview (this.separator);
-
-
-            this.progress_indicator = new NSProgressIndicator () {
-                Style = NSProgressIndicatorStyle.Spinning,
-                Frame = new RectangleF (this.web_view.Frame.Width / 2 - 10,
-                    this.web_view.Frame.Height / 2 + 10, 20, 20)
-            };
-
-            this.progress_indicator.StartAnimation (this);
-            ContentView.AddSubview (this.progress_indicator);
-
-
-            (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate)
-                .LinkClicked += delegate (string href) {
-                    Controller.LinkClicked (href);
+                this.web_view = new WebView (new RectangleF (0, 0, 480, 579), "", "") {
+                    PolicyDelegate = new SparkleWebPolicyDelegate ()
                 };
+
+
+                this.hidden_close_button = new NSButton () {
+                    Frame                     = new RectangleF (0, 0, 0, 0),
+                    KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
+                    KeyEquivalent             = "w"
+                };
+
+                this.hidden_close_button.Activated += delegate {
+                    Controller.WindowClosed ();
+                };
+
+
+                this.size_label = new NSTextField () {
+                    Alignment       = NSTextAlignment.Right,
+                    BackgroundColor = NSColor.WindowBackground,
+                    Bordered        = false,
+                    Editable        = false,
+                    Frame           = new RectangleF (0, 588, 60, 20),
+                    StringValue     = "Size:",
+                    Font            = SparkleUI.BoldFont
+                };
+
+                this.size_label_value = new NSTextField () {
+                    Alignment       = NSTextAlignment.Left,
+                    BackgroundColor = NSColor.WindowBackground,
+                    Bordered        = false,
+                    Editable        = false,
+                    Frame           = new RectangleF (60, 588, 75, 20),
+                    StringValue     = "…",
+                    Font            = SparkleUI.Font
+                };
+
+
+                this.history_label = new NSTextField () {
+                    Alignment       = NSTextAlignment.Right,
+                    BackgroundColor = NSColor.WindowBackground,
+                    Bordered        = false,
+                    Editable        = false,
+                    Frame           = new RectangleF (130, 588, 60, 20),
+                    StringValue     = "History:",
+                    Font            = SparkleUI.BoldFont
+                };
+
+                this.history_label_value = new NSTextField () {
+                    Alignment       = NSTextAlignment.Left,
+                    BackgroundColor = NSColor.WindowBackground,
+                    Bordered        = false,
+                    Editable        = false,
+                    Frame           = new RectangleF (190, 588, 75, 20),
+                    StringValue     = "…",
+                    Font            = SparkleUI.Font
+                };
+
+
+                this.separator = new NSBox (new RectangleF (0, 579, 480, 1)) {
+                    BorderColor = NSColor.LightGray,
+                    BoxType = NSBoxType.NSBoxCustom
+                };
+
+
+                this.progress_indicator = new NSProgressIndicator () {
+                    Style = NSProgressIndicatorStyle.Spinning,
+                    Frame = new RectangleF (this.web_view.Frame.Width / 2 - 10,
+                        this.web_view.Frame.Height / 2 + 10, 20, 20)
+                };
+
+                this.progress_indicator.StartAnimation (this);
+
+
+                ContentView.AddSubview (this.size_label);
+                ContentView.AddSubview (this.size_label_value);
+                ContentView.AddSubview (this.history_label);
+                ContentView.AddSubview (this.history_label_value);
+                ContentView.AddSubview (this.separator);
+                ContentView.AddSubview (this.progress_indicator);
+                ContentView.AddSubview (this.hidden_close_button);
+
+
+                (this.web_view.PolicyDelegate as
+                SparkleWebPolicyDelegate).LinkClicked += delegate (string href) {
+                        Controller.LinkClicked (href);
+                };
+            }
 
 
             // Hook up the controller events
             Controller.HideWindowEvent += delegate {
-                InvokeOnMainThread (delegate {
-                    PerformClose (this);
-                });
+                using (var a = new NSAutoreleasePool ())
+                {
+                    InvokeOnMainThread (delegate {
+                        PerformClose (this);
+                    });
+                }
             };
 
             Controller.ShowWindowEvent += delegate {
-                InvokeOnMainThread (delegate {
-                    OrderFrontRegardless ();
+                using (var a = new NSAutoreleasePool ())
+                {
+                    InvokeOnMainThread (delegate {
+                        OrderFrontRegardless ();
 
-                    UpdateContent (null);
-                    UpdateChooser (null);
-                });
+                        UpdateContent (null);
+                        UpdateChooser (null);
+                    });
+                }
             };
 
             Controller.UpdateChooserEvent += delegate (string [] folders) {
-                InvokeOnMainThread (delegate {
-                    UpdateChooser (folders);
-                });
+                using (var a = new NSAutoreleasePool ())
+                {
+                    InvokeOnMainThread (delegate {
+                        UpdateChooser (folders);
+                    });
+                }
             };
 
             Controller.UpdateContentEvent += delegate (string html) {
-                InvokeOnMainThread (delegate {
-                    UpdateContent (html);
-                });
+                using (var a = new NSAutoreleasePool ())
+                {
+                    InvokeOnMainThread (delegate {
+                        UpdateContent (html);
+                    });
+                }
             };
 
             Controller.ContentLoadingEvent += delegate {
-                InvokeOnMainThread (delegate {
-                    if (this.web_view.Superview == ContentView)
-                        this.web_view.RemoveFromSuperview ();
+                using (var a = new NSAutoreleasePool ())
+                {
+                    InvokeOnMainThread (delegate {
+                        if (this.web_view.Superview == ContentView)
+                            this.web_view.RemoveFromSuperview ();
 
-                    ContentView.AddSubview (this.progress_indicator);
-                });
+                        ContentView.AddSubview (this.progress_indicator);
+                    });
+                }
             };
 
             Controller.UpdateSizeInfoEvent += delegate (string size, string history_size) {
-                InvokeOnMainThread (delegate {
-                    this.size_label_value.StringValue = size;
-                    this.history_label_value.StringValue = history_size;
-                });
+                using (var a = new NSAutoreleasePool ())
+                {
+                    InvokeOnMainThread (delegate {
+                        this.size_label_value.StringValue    = size;
+                        this.history_label_value.StringValue = history_size;
+                    });
+                }
             };
         }
 
 
         public void UpdateChooser (string [] folders)
         {
-            if (folders == null)
-                folders = Controller.Folders;
+            using (var a = new NSAutoreleasePool ())
+            {
+                if (folders == null)
+                    folders = Controller.Folders;
+    
+                if (this.popup_button != null)
+                    this.popup_button.RemoveFromSuperview ();
+    
+                this.popup_button = new NSPopUpButton () {
+                    Frame     = new RectangleF (480 - 156 - 8, 640 - 31 - 24, 156, 26),
+                    PullsDown = false
+                };
+    
+                this.popup_button.Cell.ControlSize = NSControlSize.Small;
+                this.popup_button.Font = NSFontManager.SharedFontManager.FontWithFamily
+                    ("Lucida Grande", NSFontTraitMask.Condensed, 0, NSFont.SmallSystemFontSize);
+    
+                this.popup_button.AddItem ("All Projects");
+                this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
+                this.popup_button.AddItems (folders);
+    
+                this.popup_button.Activated += delegate {
+                    if (this.popup_button.IndexOfSelectedItem == 0)
+                        Controller.SelectedFolder = null;
+                    else
+                        Controller.SelectedFolder = this.popup_button.SelectedItem.Title;
+                };
 
-            if (this.popup_button != null)
-                this.popup_button.RemoveFromSuperview ();
-
-            this.popup_button = new NSPopUpButton () {
-                Frame     = new RectangleF (480 - 156 - 8, 640 - 31 - 24, 156, 26),
-                PullsDown = false
-            };
-
-            this.popup_button.Cell.ControlSize = NSControlSize.Small;
-            this.popup_button.Font = NSFontManager.SharedFontManager.FontWithFamily
-                ("Lucida Grande", NSFontTraitMask.Condensed, 0, NSFont.SmallSystemFontSize);
-
-            this.popup_button.AddItem ("All Projects");
-            this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
-            this.popup_button.AddItems (folders);
-
-            this.popup_button.Activated += delegate {
-                if (this.popup_button.IndexOfSelectedItem == 0)
-                    Controller.SelectedFolder = null;
-                else
-                    Controller.SelectedFolder = this.popup_button.SelectedItem.Title;
-            };
-
-            ContentView.AddSubview (this.popup_button);
+                ContentView.AddSubview (this.popup_button);
+            }
         }
 
 
         public void UpdateContent (string html)
         {
-            using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
-                Thread thread = new Thread (new ThreadStart (delegate {
+            Thread thread = new Thread (new ThreadStart (delegate {
+                using (var a = new NSAutoreleasePool ())
+                {
                     if (html == null)
                         html = Controller.HTML;
     
@@ -245,35 +275,34 @@ namespace SparkleShare {
                     html = html.Replace ("<!-- $pixmaps-path -->",
                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
                         "Pixmaps"));
-
+    
                     html = html.Replace ("<!-- $document-added-background-image -->",
                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
                         "Pixmaps", "document-added-12.png"));
-
+    
                     html = html.Replace ("<!-- $document-deleted-background-image -->",
                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
                         "Pixmaps", "document-deleted-12.png"));
-
+    
                     html = html.Replace ("<!-- $document-edited-background-image -->",
                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
                         "Pixmaps", "document-edited-12.png"));
-
+    
                     html = html.Replace ("<!-- $document-moved-background-image -->",
                         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
                         "Pixmaps", "document-moved-12.png"));
 
-                    
                     InvokeOnMainThread (delegate {
                         if (this.progress_indicator.Superview == ContentView)
                             this.progress_indicator.RemoveFromSuperview ();
-
+    
                         this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
                         ContentView.AddSubview (this.web_view);
                     });
-                }));
+                }
+            }));
 
-                thread.Start ();
-            }
+            thread.Start ();
         }
 
 
