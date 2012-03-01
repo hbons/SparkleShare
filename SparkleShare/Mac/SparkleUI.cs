@@ -42,11 +42,11 @@ namespace SparkleShare {
 
         public SparkleUI ()
         {
-            // Use translations
-            Catalog.Init ("sparkleshare",
-                Path.Combine (NSBundle.MainBundle.ResourcePath, "Translations"));
-
-            using (NSAutoreleasePool pool = new NSAutoreleasePool ()) {
+            using (var a = new NSAutoreleasePool ())
+            {
+                // Use translations
+                Catalog.Init ("sparkleshare",
+                    Path.Combine (NSBundle.MainBundle.ResourcePath, "Translations"));
 
                 // Needed for Growl
                 GrowlApplicationBridge.WeakDelegate = this;
@@ -77,13 +77,16 @@ namespace SparkleShare {
 
         public void SetFolderIcon ()
         {
-            string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                "sparkleshare-mac.icns");
-
-            NSImage folder_icon = new NSImage (folder_icon_path);
-                        
-            NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon,
-                Program.Controller.SparklePath, 0);
+            using (var a = new NSAutoreleasePool ())
+            {
+                string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    "sparkleshare-mac.icns");
+    
+                NSImage folder_icon = new NSImage (folder_icon_path);
+                            
+                NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon,
+                    Program.Controller.SparklePath, 0);
+            }
         }
 
 
@@ -114,7 +117,10 @@ namespace SparkleShare {
 
         private void ShowDockIcon ()
         {
-            NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
+            using (var a = new NSAutoreleasePool ())
+            {
+                NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
+            }
         }
 
 

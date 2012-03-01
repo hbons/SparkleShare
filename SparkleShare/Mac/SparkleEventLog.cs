@@ -152,7 +152,7 @@ namespace SparkleShare {
 
                 (this.web_view.PolicyDelegate as
                 SparkleWebPolicyDelegate).LinkClicked += delegate (string href) {
-                        Controller.LinkClicked (href);
+                    Controller.LinkClicked (href);
                 };
             }
 
@@ -244,11 +244,16 @@ namespace SparkleShare {
                 this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
                 this.popup_button.AddItems (folders);
     
-                this.popup_button.Activated += delegate {
-                    if (this.popup_button.IndexOfSelectedItem == 0)
-                        Controller.SelectedFolder = null;
-                    else
-                        Controller.SelectedFolder = this.popup_button.SelectedItem.Title;
+                this.popup_button.Activated += delegate { // FIXME: Still causes some memory leak warnings
+                    using (var b = new NSAutoreleasePool ())
+                    {
+                        InvokeOnMainThread (delegate {
+                            if (this.popup_button.IndexOfSelectedItem == 0)
+                                Controller.SelectedFolder = null;
+                            else
+                                Controller.SelectedFolder = this.popup_button.SelectedItem.Title;
+                        });
+                    }
                 };
 
                 ContentView.AddSubview (this.popup_button);
