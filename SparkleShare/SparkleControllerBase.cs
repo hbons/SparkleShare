@@ -614,7 +614,7 @@ namespace SparkleShare {
 
             try {
                 repo = (SparkleRepoBase) Activator.CreateInstance (
-                    Type.GetType ("SparkleLib.SparkleRepo" + backend + ", SparkleLib." + backend),
+                    Type.GetType ("SparkleLib." + backend + ".SparkleRepo, SparkleLib." + backend),
                         folder_path
                 );
 
@@ -1015,7 +1015,7 @@ namespace SparkleShare {
 
             try {
                 this.fetcher = (SparkleFetcherBase) Activator.CreateInstance (
-                        Type.GetType ("SparkleLib.SparkleFetcher" + backend + ", SparkleLib." + backend),
+                        Type.GetType ("SparkleLib." + backend + ".SparkleFetcher, SparkleLib." + backend),
                             server,
                             remote_folder,
                             tmp_folder
