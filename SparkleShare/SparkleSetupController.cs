@@ -377,7 +377,7 @@ namespace SparkleShare {
             Program.Controller.FolderFetching   += SyncingPageFetchingDelegate;
 
             Program.Controller.FetchFolder (PendingInvite.Address,
-                PendingInvite.RemotePath, PendingInvite.AnnouncementsUrl.ToString ());
+                PendingInvite.RemotePath, PendingInvite.AnnouncementsUrl);
         }
 
         // The following private methods are
