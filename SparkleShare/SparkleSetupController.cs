@@ -114,16 +114,18 @@ namespace SparkleShare {
             PreviousUrl        = "";
             SyncingFolder      = "";
 
-            string local_plugins_path = SparkleHelpers.CombineMore (
-                Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
-                "sparkleshare", "plugins");
+            string local_plugins_path = SparklePlugin.LocalPluginsPath;
 
+            // Import all of the plugins
             if (Directory.Exists (local_plugins_path))
+                // Local plugins go first...
                 foreach (string xml_file_path in Directory.GetFiles (local_plugins_path, "*.xml"))
                     Plugins.Add (new SparklePlugin (xml_file_path));
 
+            // ...system plugins after that...
             if (Directory.Exists (Program.Controller.PluginsPath)) {
                 foreach (string xml_file_path in Directory.GetFiles (Program.Controller.PluginsPath, "*.xml")) {
+                    // ...and "Own server" at the very top
                     if (xml_file_path.EndsWith ("own-server.xml"))
                         Plugins.Insert (0, new SparklePlugin (xml_file_path));
                     else
@@ -154,7 +156,6 @@ namespace SparkleShare {
                 }
 
                 if (page_type == PageType.Add) {
-
                     if (!Program.Controller.FirstRun && TutorialPageNumber == 0) {
                         if (ChangePageEvent != null)
                             ChangePageEvent (page_type, null);
@@ -324,9 +325,31 @@ namespace SparkleShare {
         // The following private methods are
         // delegates used by the previous method
 
-        private void AddPageFetchedDelegate (string [] warnings)
+        private void AddPageFetchedDelegate (string remote_url, string [] warnings)
         {
             SyncingFolder = "";
+
+            // Create a local plugin for succesfully added projects, so
+            // so the user can easily use the same host again
+            if (SelectedPluginIndex == 0) {
+                SparklePlugin new_plugin;
+                Uri uri = new Uri (remote_url);
+
+                try {
+                    string address = remote_url.Replace (uri.AbsolutePath, "");
+    
+                    new_plugin = SparklePlugin.Create (
+                        uri.Host, address, address, "", "", "");
+    
+                    if (new_plugin != null) {
+                        Plugins.Insert (1, new_plugin);
+                        SparkleHelpers.DebugInfo ("Controller", "Added plugin for " + uri.Host);
+                    }
+
+                } catch {
+                    SparkleHelpers.DebugInfo ("Controller", "Failed adding plugin for " + uri.Host);
+                }
+            }
 
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Finished, warnings);
@@ -383,7 +406,7 @@ namespace SparkleShare {
         // The following private methods are
         // delegates used by the previous method
 
-        private void InvitePageFetchedDelegate (string [] warnings)
+        private void InvitePageFetchedDelegate (string remote_url, string [] warnings)
         {
             SyncingFolder   = "";
             PendingInvite = null;

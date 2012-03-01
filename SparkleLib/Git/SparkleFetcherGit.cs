@@ -145,8 +145,8 @@ namespace SparkleLib.Git {
                     if (percentage >= 100)
                         break;
     
+                    Thread.Sleep (500);
                     base.OnProgressChanged (percentage);
-                    Thread.Sleep (750);
                 }
     
                 base.OnProgressChanged (100);
