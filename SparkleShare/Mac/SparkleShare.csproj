@@ -59,9 +59,13 @@
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System.Net" />
-    <Reference Include="SparkleLib, Version=0.8.2.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="SparkleLib, Version=0.8.3.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\SparkleLib.dll</HintPath>
+    </Reference>
+    <Reference Include="SparkleLib.Git, Version=0.8.3.0, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\SparkleLib.Git.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
