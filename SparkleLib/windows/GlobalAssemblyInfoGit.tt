@@ -11,7 +11,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyProduct("SparkleLib.Git")]
+[assembly: AssemblyProduct("SparkleShare")]
 
 [assembly: AssemblyVersion("<#= ASM_VERSION #>")]
 [assembly: AssemblyFileVersion("<#= ASM_FILE_VERSION #>")]
