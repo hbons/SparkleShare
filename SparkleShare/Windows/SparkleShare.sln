@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleLib", "..\..\Sparkle
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleShareInviteOpen", "SparkleShareInviteOpen\SparkleShareInviteOpen.csproj", "{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleLib.Git", "..\..\SparkleLib\windows\SparkleLib.Git.csproj", "{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
