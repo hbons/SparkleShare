@@ -22,6 +22,7 @@
               <File Id='SparkleShareInviteOpen.exe' Name='SparkleShareInviteOpen.exe' Source='!(wix.root)\bin\SparkleShareInviteOpen.exe' DiskId='1' />
             </Component>
             <Component Id='Libraries' Guid='0DA692D5-4DBE-4251-9F62-E7C1A76F10E1'>
+              <File Id='SparkleLib.Git.dll' Name='SparkleLib.Git.dll' Source='!(wix.root)\bin\SparkleLib.Git.dll' DiskId='1' />
               <File Id='CefSharp.dll' Name='CefSharp.dll' Source='!(wix.root)\bin\CefSharp.dll' DiskId='1' />
               <File Id='Gettext.Cs.dll' Name='Gettext.Cs.dll' Source='!(wix.root)\bin\Gettext.Cs.dll' DiskId='1' />
               <File Id='SparkleLib.dll' Name='SparkleLib.dll' Source='!(wix.root)\bin\SparkleLib.dll' DiskId='1' />
@@ -81,7 +82,7 @@
     
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
     
-    <WixVariable Id="WixUILicenseRtf" Value="..\..\LICENSE.rtf" />
+    <WixVariable Id="WixUILicenseRtf" Value="..\..\LICENSE" />
     <WixVariable Id="WixUIBannerBmp" Value="..\..\data\install\bannrbmp.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="..\..\data\install\dlgbmp.bmp" />
     

@@ -8,4 +8,4 @@ echo running texttransform..
 
 %TextTransform% -out Defines.cs Defines.tt
 %TextTransform% -out GlobalAssemblyInfo.cs GlobalAssemblyInfo.tt
-
+%TextTransform% -out GlobalAssemblyInfoGit.cs GlobalAssemblyInfoGit.tt
