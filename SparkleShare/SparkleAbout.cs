@@ -63,6 +63,8 @@ namespace SparkleShare {
             buf.RenderPixmapAndMask (out map, out map2, 255);
             GdkWindow.SetBackPixmap (map, false);
 
+            CreateAbout ();
+            
 
             Controller.HideWindowEvent += delegate {
                 Application.Invoke (delegate {
@@ -103,9 +105,6 @@ namespace SparkleShare {
                     this.updates.ShowAll ();
                 });
             };
-
-
-            CreateAbout ();
         }
 
 
