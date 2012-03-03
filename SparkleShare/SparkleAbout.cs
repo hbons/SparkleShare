@@ -16,18 +16,21 @@
 
 
 using System;
+
 using Gtk;
+using Mono.Unix;
 
 namespace SparkleShare {
 
     public class SparkleAbout : Window {
 
         public SparkleAboutController Controller = new SparkleAboutController ();
+
         private Label updates;
 
 
         // Short alias for the translations
-        public static string _(string s)
+        public static string _ (string s)
         {
             return Catalog.GetString (s);
         }
@@ -77,7 +80,7 @@ namespace SparkleShare {
             Controller.NewVersionEvent += delegate (string new_version) {
                 Application.Invoke (delegate {
                     this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#729fcf'>{0}</span>",
-                        String.Format (_("A newer version ({0}) is available!"), new_version));
+                        String.Format ("A newer version ({0}) is available!", new_version));
 
                     this.updates.ShowAll ();
                 });
@@ -86,7 +89,7 @@ namespace SparkleShare {
             Controller.VersionUpToDateEvent += delegate {
                 Application.Invoke (delegate {
                     this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#729fcf'>{0}</span>",
-                        _("You are running the latest version."));
+                        "You are running the latest version.");
 
                     this.updates.ShowAll ();
                 });
@@ -95,7 +98,7 @@ namespace SparkleShare {
             Controller.CheckingForNewVersionEvent += delegate {
                 Application.Invoke (delegate {
                     this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#729fcf'>{0}</span>",
-                        _("Checking for updates..."));
+                        "Checking for updates...");
 
                     this.updates.ShowAll ();
                 });
@@ -115,7 +118,7 @@ namespace SparkleShare {
 
             this.updates = new Label () {
                 Markup = "<span font_size='small' fgcolor='#729fcf'>" +
-                         _("Checking for updates...") +
+                         "Checking for updates..." +
                          "</span>",
                 Xalign = 0,
                 Xpad = 300
