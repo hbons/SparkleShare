@@ -142,24 +142,30 @@ Now you should have a working bundle that you can run.
 
 Install version 4.0 of the [.NET Framework](http://www.microsoft.com/download/en/details.aspx?id=17851) if you haven't already.
 
-Install [msysGit](http://code.google.com/p/msysgit/downloads/detail?name=Git-1.7.8-preview20111206.exe). Change the install location to `C:\msysgit` and use the default settings for the other settings during the installation. Copy the `C:\msysgit` directory into `bin\msysgit` (in the SparkleShare source directory).
+Download the latest sourcecode of SparkleShare from here and extract the contents of the ZIP file into `C:\SparkleShareSource\` (make sure that this file `README.md` lies in exactly this directory!)
+
+Install the latest version of [msysGit](http://code.google.com/p/msysgit/downloads/). Change the install location to `C:\msysgit` and use the default settings for the other settings during the installation. Copy the `C:\msysgit` directory into `C:\SparkleShareSource\bin\msysgit`
 
 Open a command prompt and execute the following:
 
 ```
-cd C:\path\to\SparkleShare\source
+cd C:\SparkleShareSource
 cd SparkleShare\Windows
 build
 ```
 
-* `\bin` should now contain `SparkleShare.exe`, which you can run.
+* `C:\SparkleShareSource\bin` should now contain `SparkleShare.exe`, which you can run. You may want to copy the contents of `C:\SparkleShareSource\bin` into a different directory as `C:\Program Files (x86)\SparkleShare\`.
 
-If you want to create an installer package, install [WiX 3.6](http://wix.sourceforge.net/), and run:
+If you want to create an installer package, install [WiX 3.6](http://wix.sourceforge.net/), restart Windows and run:
 
 ```
 build installer
 ```
+Check for errors when the building finishes. (`LICENSE.rtf` was missing for me, creating an empty file in `C:\SparkleShareSource\` fixed that for me.)
 
+You can find the file `SparkleShare.msi` in the folder where you ran the command (likely `C:\SparkleShareSource\SparkleShare\Windows\`)
+
+Please note: SparkleShare needs to be run with administrator priviledges in newer versions of Windows (Vista, 7). If not the application may crash (should happen during the installer installation, no worries!). To fix this crash you need to edit the preferences of the file `C:\Program Files (x86)\sparkleshare.org\SparkleShare\SparkleShare.exe` and tick the option *Run application as administrator* in the *Compatibility* tab.
 
 ## Info
 
