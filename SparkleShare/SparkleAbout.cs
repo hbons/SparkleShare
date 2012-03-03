@@ -16,12 +16,7 @@
 
 
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-
 using Gtk;
-using Mono.Unix;
 
 namespace SparkleShare {
 
