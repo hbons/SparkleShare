@@ -9,10 +9,12 @@
 *.suo
 *.sln.cache
 *.user
+*.resources
 po/POTFILES
 Makefile.in
 Makefile
 POTFILES
+SparkleLib/windows/GlobalAssemblyInfoGit.cs
 intltool-*
 configure
 config.guess
