@@ -64,8 +64,8 @@ namespace SparkleShare {
 #endif
 
             Setup      = new SparkleSetup ();
-            EventLog   = new SparkleEventLog ();
-            //About      = new SparkleAbout ();
+            //EventLog   = new SparkleEventLog ();
+            About      = new SparkleAbout ();
             Bubbles    = new SparkleBubbles ();
             StatusIcon = new SparkleStatusIcon ();
         
