@@ -218,7 +218,8 @@ namespace SparkleShare {
 					Environment.SetEnvironmentVariable ("SSH_AUTH_SOCK",
                         auth_sock_match.Groups [1].Value);
 
-				Match ssh_pid_match = new Regex (@"SSH_AGENT_PID=([^;\n\r]*)").Match (output);
+				Match ssh_pid_match =
+                    new Regex (@"SSH_AGENT_PID=([^;\n\r]*)").Match (output);
 
                 if (ssh_pid_match.Success) {
                     string ssh_pid = ssh_pid_match.Groups [1].Value;
@@ -230,7 +231,8 @@ namespace SparkleShare {
                         "ssh-agent started, PID=" + ssh_pid);
 
                 } else {
-					SparkleHelpers.DebugInfo ("Controller", "ssh-agent started, PID=unknown");
+					SparkleHelpers.DebugInfo ("Controller",
+                        "ssh-agent started, PID=unknown");
 				}
 			}
 		}
