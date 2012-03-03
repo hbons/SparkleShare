@@ -22,11 +22,12 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Windows.Forms;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace SparkleShare {
 
-    public class SparkleAbout : Form {
+    public class SparkleAbout : Window {
 
         public SparkleAboutController Controller = new SparkleAboutController ();
 
@@ -74,6 +75,7 @@ namespace SparkleShare {
             Controller.ShowWindowEvent += delegate {
                 Invoke ((Action) delegate {
                     Show ();
+                    Activate ();
                 });
             };
 
