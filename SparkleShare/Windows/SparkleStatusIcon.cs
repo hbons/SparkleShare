@@ -339,7 +339,7 @@ namespace SparkleShare {
         private Icon GetIconFromBitmap (Bitmap bitmap)
         {
             IntPtr unmanaged_icon = bitmap.GetHicon ();
-            Icon icon = (Icon) Icon.FromHandle (unmanaged_con).Clone ();
+            Icon icon = (Icon) Icon.FromHandle (unmanaged_icon).Clone ();
             DestroyIcon (unmanaged_icon);
 
             return icon;
