@@ -8,8 +8,8 @@
     <ProjectGuid>{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SparkleShareInviteOpen</RootNamespace>
-    <AssemblyName>SparkleShareInviteOpen</AssemblyName>
+    <RootNamespace>SparkleShareInviteOpener</RootNamespace>
+    <AssemblyName>SparkleShareInviteOpener</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>..\..\..\data\icons\sparkleshare.ico</ApplicationIcon>
@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="sparkleshare-invite-opener.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
