@@ -158,12 +158,12 @@ SparkleLib/AssemblyInfo.cs
 SparkleLib/Defines.cs
 SparkleLib/Makefile
 SparkleLib/Git/Makefile
-SparkleShare/sparkleshare
+SparkleShare/Linux/Makefile
+SparkleShare/Linux/sparkleshare
+SparkleShare/Linux/Nautilus/Makefile
+SparkleShare/Linux/Nautilus/sparkleshare-nautilus-extension.py
+SparkleShare/Linux/Nautilus/sparkleshare-nautilus3-extension.py
 SparkleShare/Makefile
-SparkleShare/Mac/Makefile
-SparkleShare/Nautilus/Makefile
-SparkleShare/Nautilus/sparkleshare-nautilus-extension.py
-SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py
 po/Makefile.in
 Makefile
 ])
