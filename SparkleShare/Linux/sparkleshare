@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+
+if [[ $UID -eq 0 ]]; then
+  echo "Cannot run as root. Things would go utterly wrong."
+  exit 1
+fi
+
+if [ "$XDG_RUNTIME_DIR" ]; then
+  pidfile=${XDG_RUNTIME_DIR}/sparkleshare.pid
+else
+  pidfile=/tmp/sparkleshare-${USER}.pid
+fi
+
+start() {
+  if [ -e "${pidfile}" ]; then
+    sparklepid=`cat ${pidfile}`
+    if [ -n "`ps -p ${sparklepid} | grep ${sparklepid}`" ]; then
+      echo "SparkleShare is already running."
+      exit 0
+    else
+      echo "SparkleShare stale pid file found, starting a new instance."
+      rm -f $pidfile
+    fi
+  fi
+
+  echo -n "Starting SparkleShare... "
+  if [ -n "${SSH_AGENT_PID}" -o -n "${SSH_AUTH_SOCK}" ] ; then
+    mono "/usr/lib/sparkleshare/SparkleShare.exe" $2 &
+  else
+    ssh-agent mono "/usr/lib/sparkleshare/SparkleShare.exe" $2 &
+  fi
+  ( umask 066; echo $! > ${pidfile} )
+  echo "Done."
+}
+
+stop() {
+  if [ -e "${pidfile}" ]; then
+    sparklepid=`cat ${pidfile}`
+    if [ -n "`ps -p ${sparklepid} | grep ${sparklepid}`" ]; then
+      echo -n "Stopping SparkleShare... "
+      kill ${sparklepid}
+      rm -f ${pidfile}
+      echo "Done."
+    else
+      echo "SparkleShare is not running, removing stale pid file..."
+      rm -f ${pidfile}
+    fi
+  else
+    echo "SparkleShare is not running."
+  fi
+}
+
+case $1 in
+  start|--start)
+    start
+    ;;
+  stop|--stop)
+    stop
+    ;;
+  restart|--restart)
+    stop
+    start
+    ;;
+  open|--open)
+    invite=`date -u +%N`
+    curl -o ~/SparkleShare/$invite.xml `echo $2 | sed s/sparkleshare:/https:/`
+    ;;
+  help|--help|-h)
+    mono "/usr/lib/sparkleshare/SparkleShare.exe" --help
+    ;;
+  version|--version|-v)
+    mono "/usr/lib/sparkleshare/SparkleShare.exe" --version
+    ;;
+  *)
+    echo "Usage: sparkleshare {start|stop|restart|help|version}"
+    ;;
+esac

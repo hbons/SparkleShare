@@ -1,6 +1,4 @@
-SUBDIRS =	\
-	Nautilus \
-	Mac
+SUBDIRS =	Linux
 
 ASSEMBLY = SparkleShare
 TARGET = exe
@@ -13,34 +11,18 @@ endif
 
 SOURCES =  \
 	Program.cs \
-	SparkleAbout.cs \
 	SparkleAboutController.cs \
-	SparkleBubbles.cs \
 	SparkleBubblesController.cs \
-	SparkleController.cs \
 	SparkleControllerBase.cs \
-	SparkleEventLog.cs \
 	SparkleEventLogController.cs \
 	SparkleExtensions.cs \
 	SparkleInvite.cs \
 	SparkleOptions.cs \
 	SparklePlugin.cs \
-	SparkleSetup.cs \
 	SparkleSetupController.cs \
-	SparkleSetupWindow.cs \
-	SparkleSpinner.cs \
-	SparkleStatusIcon.cs \
-	SparkleStatusIconController.cs \
-	SparkleUI.cs \
-	SparkleUIHelpers.cs
+	SparkleStatusIconController.cs
 
 include $(top_srcdir)/build/build.mk
-
-bin_SCRIPTS = sparkleshare
-
-Applicationsdir = $(datadir)/applications
-dist_Applications_DATA = sparkleshare.desktop \
-	sparkleshare-invite-opener.desktop
 	
 install-data-hook:
 	update-desktop-database
