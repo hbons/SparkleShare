@@ -16,18 +16,17 @@
 
 
 using System;
-using System.ComponentModel
+using System.ComponentModel;	
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Forms;
 
 namespace SparkleShare {
 
-    public class SparkleAbout : Window {
+    public class SparkleAbout : Form {
 
         public SparkleAboutController Controller = new SparkleAboutController ();
 
@@ -67,7 +66,7 @@ namespace SparkleShare {
             SizeGripStyle = SizeGripStyle.Hide;
             StartPosition = FormStartPosition.CenterScreen;
 
-            FormClosing += FormClosingEventHandler (Close);
+            FormClosing += Close;
 
             CreateAbout ();
 

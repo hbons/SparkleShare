@@ -117,7 +117,7 @@
     </Compile>
 
     <Compile Include="..\SparkleSetupController.cs" />
-    <Compile Include="..\SparkleUI.cs" />
+    <Compile Include="SparkleUI.cs" />
     <Compile Include="..\SparkleAboutController.cs" />
     <Compile Include="SparkleBubbles.cs" />
     <Compile Include="SparkleAbout.cs" />
