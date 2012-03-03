@@ -26,7 +26,7 @@ using System.Windows.Forms;
 
 namespace SparkleShare {
 
-    public partial class SparkleAbout : Form {
+    public class SparkleAbout : Form {
 
         public SparkleAboutController Controller = new SparkleAboutController ();
 
@@ -46,9 +46,26 @@ namespace SparkleShare {
 
         public SparkleAbout ()
         {
+            Name = "SparkleAbout";
+
+            Text = "About SparkleShare";
+            Icon = Icons.sparkleshare;
+
+            MaximizeBox = false;
+            MinimizeBox = false;
+
+            ClientSize          = BackgroundImage.Size;
+            AutoScaleDimensions = new SizeF (6F, 13F);
+            AutoScaleMode       = AutoScaleMode.Font;
+            ClientSize          = new Size (640, 260);
+
             BackgroundImage = Icons.about;
-            ClientSize      = BackgroundImage.Size;
-            Icon            = Icons.sparkleshare;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+
+            SizeGripStyle = SizeGripStyle.Hide;
+            StartPosition = FormStartPosition.CenterScreen;
+
+            FormClosing += FormClosingEventHandler (Close);
 
             Program.TranslateWinForm (this);
 
@@ -96,9 +113,7 @@ namespace SparkleShare {
             this.emptyLabel = new System.Windows.Forms.Label ();
             this.SparkleShareVersion = new System.Windows.Forms.Label ();
             this.SuspendLayout ();
-            //
-            // version
-            //
+
             this.version.AutoSize = true;
             this.version.BackColor = System.Drawing.Color.Transparent;
             this.version.ForeColor = System.Drawing.Color.LightGray;
@@ -107,9 +122,7 @@ namespace SparkleShare {
             this.version.Size = new System.Drawing.Size (34, 13);
             this.version.TabIndex = 1;
             this.version.Text = ".........";
-            //
-            // copyright
-            //
+
             this.copyright.BackColor = System.Drawing.Color.Transparent;
             this.copyright.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.copyright.ForeColor = System.Drawing.Color.White;
@@ -118,17 +131,13 @@ namespace SparkleShare {
             this.copyright.Size = new System.Drawing.Size (298, 84);
             this.copyright.TabIndex = 2;
             this.copyright.Text = resources.GetString ("copyright.Text");
-            //
-            // emptyLabel
-            //
+
             this.emptyLabel.AutoSize = true;
             this.emptyLabel.Location = new System.Drawing.Point (16, 89);
             this.emptyLabel.Name = "emptyLabel";
             this.emptyLabel.Size = new System.Drawing.Size (0, 13);
             this.emptyLabel.TabIndex = 6;
-            //
-            // SparkleShareVersion
-            //
+
             this.SparkleShareVersion.AutoSize = true;
             this.SparkleShareVersion.BackColor = System.Drawing.Color.Transparent;
             this.SparkleShareVersion.ForeColor = System.Drawing.Color.White;
@@ -137,24 +146,12 @@ namespace SparkleShare {
             this.SparkleShareVersion.Size = new System.Drawing.Size (106, 13);
             this.SparkleShareVersion.TabIndex = 1;
             this.SparkleShareVersion.Text = "SparkleShareVersion";
-            //
-            // SparkleAbout
-            //
-            this.AutoScaleDimensions = new System.Drawing.SizeF (6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size (640, 260);
+
+
             this.Controls.Add (this.SparkleShareVersion);
             this.Controls.Add (this.emptyLabel);
             this.Controls.Add (this.copyright);
             this.Controls.Add (this.version);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "SparkleAbout";
-            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "About SparkleShare";
-            this.FormClosing += FormClosingEventHandler (Close);
             this.ResumeLayout (false);
             this.PerformLayout ();
 
