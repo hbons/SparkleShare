@@ -16,12 +16,12 @@
 
 
 using System;
+using System.ComponentModel
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace SparkleShare {
@@ -30,11 +30,10 @@ namespace SparkleShare {
 
         public SparkleAboutController Controller = new SparkleAboutController ();
 
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components;
         private Label version;
         private Label copyright;
-        private Label empty_label;
-        private Label SparkleShareVersion;
+        private Label updates;
 
 
         // Short alias for the translations
@@ -58,6 +57,8 @@ namespace SparkleShare {
             AutoScaleDimensions = new SizeF (6F, 13F);
             AutoScaleMode       = AutoScaleMode.Font;
             ClientSize          = new Size (640, 260);
+            MaximumSize         = Size;
+            MinimumSize         = Size;
 
             BackgroundImage = Icons.about;
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -67,7 +68,7 @@ namespace SparkleShare {
 
             FormClosing += FormClosingEventHandler (Close);
 
-            Program.TranslateWinForm (this);
+            CreateAbout ();
 
 
             Controller.ShowWindowEvent += delegate {
@@ -84,81 +85,66 @@ namespace SparkleShare {
 
             Controller.NewVersionEvent += delegate (string new_version) {
                 Invoke ((Action) delegate {
-                    this.version.Text = new_version;
+                    this.updates.Text = "A newer version (" + new_version + ") is available!";
                 });
             };
 
             Controller.VersionUpToDateEvent += delegate {
                 Invoke ((Action) delegate {
-                    this.version.Text = "You are running the latest version.";
+                    this.updates.Text = "You are running the latest version.";
                 });
             };
 
             Controller.CheckingForNewVersionEvent += delegate {
                 Invoke ((Action) delegate {
-                    this.version.Text = "Checking for updates...";
+                    this.updates.Text = "Checking for updates...";
                 });
             };
-
-
-            CreateAbout ();
         }
 
 
-        private void CreateAbout
+        private void CreateAbout ()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (SparkleAbout));
-            this.version = new System.Windows.Forms.Label ();
-            this.copyright = new System.Windows.Forms.Label ();
-            this.emptyLabel = new System.Windows.Forms.Label ();
-            this.SparkleShareVersion = new System.Windows.Forms.Label ();
-            this.SuspendLayout ();
+            ComponentResourceManager resources =
+                new ComponentResourceManager (typeof (SparkleAbout));
 
-            this.version.AutoSize = true;
-            this.version.BackColor = System.Drawing.Color.Transparent;
-            this.version.ForeColor = System.Drawing.Color.LightGray;
-            this.version.Location = new System.Drawing.Point (302, 102);
-            this.version.Name = "version";
-            this.version.Size = new System.Drawing.Size (34, 13);
-            this.version.TabIndex = 1;
-            this.version.Text = ".........";
+            SuspendLayout ();
 
-            this.copyright.BackColor = System.Drawing.Color.Transparent;
-            this.copyright.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.copyright.ForeColor = System.Drawing.Color.White;
-            this.copyright.Location = new System.Drawing.Point (302, 135);
-            this.copyright.Name = "copyright";
-            this.copyright.Size = new System.Drawing.Size (298, 84);
-            this.copyright.TabIndex = 2;
-            this.copyright.Text = resources.GetString ("copyright.Text");
+            this.version = new Label () {
+                AutoSize  = true,
+                BackColor = Color.Transparent,
+                ForeColor = Color.LightGray,
+                Location  = new Point (302, 102),
+                Size      = new Size (34, 13),
+                Text      = "version " + Controller.RunningVersion
+            };
 
-            this.emptyLabel.AutoSize = true;
-            this.emptyLabel.Location = new System.Drawing.Point (16, 89);
-            this.emptyLabel.Name = "emptyLabel";
-            this.emptyLabel.Size = new System.Drawing.Size (0, 13);
-            this.emptyLabel.TabIndex = 6;
+            this.updates = new Label () {
+                AutoSize  = true,
+                BackColor = Color.Transparent,
+                ForeColor = Color.White,
+                Location  = new Point (302, 89),
+                Size      = new Size (106, 13),
+                Text      = "Checking for updates..."
+            };
 
-            this.SparkleShareVersion.AutoSize = true;
-            this.SparkleShareVersion.BackColor = System.Drawing.Color.Transparent;
-            this.SparkleShareVersion.ForeColor = System.Drawing.Color.White;
-            this.SparkleShareVersion.Location = new System.Drawing.Point (302, 89);
-            this.SparkleShareVersion.Name = "SparkleShareVersion";
-            this.SparkleShareVersion.Size = new System.Drawing.Size (106, 13);
-            this.SparkleShareVersion.TabIndex = 1;
-            this.SparkleShareVersion.Text = "SparkleShareVersion";
+            this.copyright = new Label () {
+                BackColor = Color.Transparent,
+                Font      = new Font ("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte) (0))),
+                ForeColor = Color.White,
+                Location  = new Point (302, 135),
+                Size      = new Size (298, 84),
+                Text      = "Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others.\n" +
+                    "SparkleShare is Free and Open Source Software. You are free to use, modify, " +
+                    "and redistribute it under the GNU General Public License version 3 or later."
+            };
 
+            Controls.Add (this.version);
+            Controls.Add (this.updates);
+            Controls.Add (this.copyright);
 
-            this.Controls.Add (this.SparkleShareVersion);
-            this.Controls.Add (this.emptyLabel);
-            this.Controls.Add (this.copyright);
-            this.Controls.Add (this.version);
-            this.ResumeLayout (false);
-            this.PerformLayout ();
-
-            this.SparkleShareVersion.Text = Controller.RunningVersion;
-            this.MaximumSize = this.Size;
-            this.MinimumSize = this.Size;
-            this.version.Text = "";
+            ResumeLayout (false);
+            PerformLayout ();
         }
 
 
@@ -176,8 +162,8 @@ namespace SparkleShare {
                 args.CloseReason != CloseReason.TaskManagerClosing  &&
                 args.CloseReason != CloseReason.WindowsShutDown) {
 
-                args.Cancel = true;
                 Controller.WindowClosed ();
+                args.Cancel = true;
             }
         }
     }
