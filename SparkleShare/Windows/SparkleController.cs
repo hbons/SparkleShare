@@ -24,11 +24,11 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows.Forms;
 
 using CefSharp;
 using Microsoft.Win32;
 using SparkleLib;
-using System.Windows.Forms;
 
 namespace SparkleShare {
 
@@ -152,7 +152,7 @@ namespace SparkleShare {
 
 		public override bool CreateSparkleShareFolder ()
 		{
-            if (!Directory.Exists(SparkleConfig.DefaultConfig.FoldersPath) {
+            if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
                 Directory.CreateDirectory(SparkleConfig.DefaultConfig.FoldersPath);
                 Directory.CreateDirectory(SparkleConfig.DefaultConfig.TmpPath);
 
