@@ -21,14 +21,21 @@ using System.IO;
 using System.Linq;
 using System.Net;
 
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace SparkleShare {
 
     public partial class SparkleAbout : Form {
 
         public SparkleAboutController Controller = new SparkleAboutController ();
+
+        private System.ComponentModel.IContainer components = null;
+        private Label version;
+        private Label copyright;
+        private Label empty_label;
+        private Label SparkleShareVersion;
+
 
         // Short alias for the translations
         public static string _(string s)
@@ -39,46 +46,141 @@ namespace SparkleShare {
 
         public SparkleAbout ()
         {
-            InitializeComponent ();
-
-            this.BackgroundImage=Icons.about;
-            this.ClientSize = this.BackgroundImage.Size;
-            this.Icon = Icons.sparkleshare;
-
-            this.SparkleShareVersion.Text = SparkleLib.Defines.VERSION;
-            this.MaximumSize = this.Size;
-            this.MinimumSize = this.Size;
-            this.version.Text = "";
+            BackgroundImage = Icons.about;
+            ClientSize      = BackgroundImage.Size;
+            Icon            = Icons.sparkleshare;
 
             Program.TranslateWinForm (this);
 
+
+            Controller.ShowWindowEvent += delegate {
+                Invoke ((Action) delegate {
+                    Show ();
+                });
+            };
+
+            Controller.HideWindowEvent += delegate {
+                Invoke ((Action) delegate {
+                    Hide ();
+                });
+            };
+
             Controller.NewVersionEvent += delegate (string new_version) {
-                this.version.Invoke((Action)delegate {
+                Invoke ((Action) delegate {
                     this.version.Text = new_version;
                 });
             };
 
             Controller.VersionUpToDateEvent += delegate {
-                this.version.Invoke((Action)delegate {
+                Invoke ((Action) delegate {
                     this.version.Text = "You are running the latest version.";
                 });
             };
 
             Controller.CheckingForNewVersionEvent += delegate {
-                this.version.Invoke((Action)delegate {
+                Invoke ((Action) delegate {
                     this.version.Text = "Checking for updates...";
                 });
             };
 
+
+            CreateAbout ();
         }
 
-        private void SparkleAbout_FormClosing (object sender, FormClosingEventArgs e)
+
+        private void CreateAbout
         {
-            if (e.CloseReason != CloseReason.ApplicationExitCall
-                    && e.CloseReason != CloseReason.TaskManagerClosing
-                    && e.CloseReason != CloseReason.WindowsShutDown) {
-                e.Cancel = true;
-                this.Hide ();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (SparkleAbout));
+            this.version = new System.Windows.Forms.Label ();
+            this.copyright = new System.Windows.Forms.Label ();
+            this.emptyLabel = new System.Windows.Forms.Label ();
+            this.SparkleShareVersion = new System.Windows.Forms.Label ();
+            this.SuspendLayout ();
+            //
+            // version
+            //
+            this.version.AutoSize = true;
+            this.version.BackColor = System.Drawing.Color.Transparent;
+            this.version.ForeColor = System.Drawing.Color.LightGray;
+            this.version.Location = new System.Drawing.Point (302, 102);
+            this.version.Name = "version";
+            this.version.Size = new System.Drawing.Size (34, 13);
+            this.version.TabIndex = 1;
+            this.version.Text = ".........";
+            //
+            // copyright
+            //
+            this.copyright.BackColor = System.Drawing.Color.Transparent;
+            this.copyright.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.copyright.ForeColor = System.Drawing.Color.White;
+            this.copyright.Location = new System.Drawing.Point (302, 135);
+            this.copyright.Name = "copyright";
+            this.copyright.Size = new System.Drawing.Size (298, 84);
+            this.copyright.TabIndex = 2;
+            this.copyright.Text = resources.GetString ("copyright.Text");
+            //
+            // emptyLabel
+            //
+            this.emptyLabel.AutoSize = true;
+            this.emptyLabel.Location = new System.Drawing.Point (16, 89);
+            this.emptyLabel.Name = "emptyLabel";
+            this.emptyLabel.Size = new System.Drawing.Size (0, 13);
+            this.emptyLabel.TabIndex = 6;
+            //
+            // SparkleShareVersion
+            //
+            this.SparkleShareVersion.AutoSize = true;
+            this.SparkleShareVersion.BackColor = System.Drawing.Color.Transparent;
+            this.SparkleShareVersion.ForeColor = System.Drawing.Color.White;
+            this.SparkleShareVersion.Location = new System.Drawing.Point (302, 89);
+            this.SparkleShareVersion.Name = "SparkleShareVersion";
+            this.SparkleShareVersion.Size = new System.Drawing.Size (106, 13);
+            this.SparkleShareVersion.TabIndex = 1;
+            this.SparkleShareVersion.Text = "SparkleShareVersion";
+            //
+            // SparkleAbout
+            //
+            this.AutoScaleDimensions = new System.Drawing.SizeF (6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size (640, 260);
+            this.Controls.Add (this.SparkleShareVersion);
+            this.Controls.Add (this.emptyLabel);
+            this.Controls.Add (this.copyright);
+            this.Controls.Add (this.version);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "SparkleAbout";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "About SparkleShare";
+            this.FormClosing += FormClosingEventHandler (Close);
+            this.ResumeLayout (false);
+            this.PerformLayout ();
+
+            this.SparkleShareVersion.Text = Controller.RunningVersion;
+            this.MaximumSize = this.Size;
+            this.MinimumSize = this.Size;
+            this.version.Text = "";
+        }
+
+
+        protected override void Dispose (bool disposing) {
+            if (disposing && (components != null))
+                components.Dispose ();
+
+            base.Dispose (disposing);
+        }
+
+
+        private void Close (object sender, FormClosingEventArgs args)
+        {
+            if (args.CloseReason != CloseReason.ApplicationExitCall &&
+                args.CloseReason != CloseReason.TaskManagerClosing  &&
+                args.CloseReason != CloseReason.WindowsShutDown) {
+
+                args.Cancel = true;
+                Controller.WindowClosed ();
             }
         }
     }
