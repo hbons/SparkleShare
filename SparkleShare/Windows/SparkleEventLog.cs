@@ -70,7 +70,7 @@ namespace SparkleShare {
 
         public void UpdateChooser ()
         {
-            this.combo_box.Items.Add (_ ("All Folders"));
+            this.combo_box.Items.Add (_ ("All Projects"));
             this.combo_box.Items.Add ("");
 
             foreach (string folder_name in Program.Controller.Folders)
