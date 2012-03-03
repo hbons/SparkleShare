@@ -231,11 +231,12 @@ namespace SparkleShare {
             ToolStripMenuItem about_item = new ToolStripMenuItem (_("About SparkleShare"));
 
             about_item.Click += delegate {
-                if (SparkleUI.About == null)
-                    SparkleUI.About = new SparkleAbout ();
+                //if (SparkleUI.About == null)
+                  //  SparkleUI.About = new SparkleAbout ();
 
-                SparkleUI.About.Show ();
-                SparkleUI.About.BringToFront ();
+                //SparkleUI.About.Show ();
+                //SparkleUI.About.BringToFront ();
+				Controller.AboutClicked ();
             };
 
             Menu.Items.Add (about_item);

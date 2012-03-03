@@ -53,28 +53,29 @@ namespace SparkleShare {
             MaximizeBox = false;
             MinimizeBox = false;
 
+			BackgroundImage = Icons.about;
             ClientSize          = BackgroundImage.Size;
             AutoScaleDimensions = new SizeF (6F, 13F);
             AutoScaleMode       = AutoScaleMode.Font;
             ClientSize          = new Size (640, 260);
             MaximumSize         = Size;
             MinimumSize         = Size;
-
-            BackgroundImage = Icons.about;
+			
             FormBorderStyle = FormBorderStyle.FixedDialog;
 
             SizeGripStyle = SizeGripStyle.Hide;
             StartPosition = FormStartPosition.CenterScreen;
 
             FormClosing += Close;
-
+			CreateHandle ();
+			
             CreateAbout ();
 
 
             Controller.ShowWindowEvent += delegate {
-                Invoke ((Action) delegate {
+                this.version.Invoke ((Action) delegate {
                     Show ();
-                    Activate ();
+					BringToFront ();
                 });
             };
 
@@ -146,6 +147,7 @@ namespace SparkleShare {
 
             ResumeLayout (false);
             PerformLayout ();
+			
         }
 
 
