@@ -23,6 +23,9 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+
 
 namespace SparkleShare {
 
@@ -30,8 +33,6 @@ namespace SparkleShare {
 
         public SparkleAboutController Controller = new SparkleAboutController ();
 
-        private Label version;
-        private Label copyright;
         private Label updates;
 
 
@@ -44,24 +45,20 @@ namespace SparkleShare {
 
         public SparkleAbout ()
         {
-            Title = "About SparkleShare";
-//            Icon = Icons.sparkleshare;
-
+            Title      = "About SparkleShare";
             ResizeMode = ResizeMode.NoResize;
+			Height     = 288;
+			Width      = 640;
 			
-			
-			//BackgroundImage = Icons.about;
-            Height = 300;
-			Width = 600;
-			//Closing
-			// += Close;
-			
+			Closing += Close;
+
             CreateAbout ();
-			
+
 
             Controller.ShowWindowEvent += delegate {
                Dispatcher.Invoke ((Action) delegate {
                     Show ();
+					Activate ();
 					BringIntoView ();
                 });
             };
@@ -97,63 +94,72 @@ namespace SparkleShare {
 
         private void CreateAbout ()
         {
-            this.version = new Label () {
-                
-                
-                Content    = "version " + Controller.RunningVersion
-            };
+			Image image = new Image () {
+				Width  = 640,
+				Height = 260
+			};
+		
+			BitmapImage bitmap_image = new BitmapImage();
 			
+			bitmap_image.BeginInit();
+			// TODO: get relative reference to the image
+			bitmap_image.UriSource = new Uri(@"C:\Users\Hylke\Code\SparkleShare\data\about.png");
+			bitmap_image.DecodePixelWidth = 640;
+			bitmap_image.EndInit();
+			
+			image.Source  = bitmap_image;
+			
+			
+            Label version = new Label () {
+                Content    = "version " + Controller.RunningVersion,
+				FontSize   = 11,
+				Foreground = new SolidColorBrush (Colors.White)
+            };
 
             this.updates = new Label () {
-                Content   = "Checking for updates..."
+				Content    = "Checking for updates...",
+				FontSize   = 11,
+				Foreground = new SolidColorBrush (Color.FromRgb(45, 62, 81))
             };
 			
-
-			
-            this.copyright = new Label () {
-                Content   = "Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others.\n" +
+            TextBlock credits = new TextBlock () {
+				FontSize     = 11,
+				Foreground   = new SolidColorBrush (Colors.White),
+                Text         = "Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others.\n" +
+					"\n" +
                     "SparkleShare is Free and Open Source Software. You are free to use, modify, " +
-                    "and redistribute it under the GNU General Public License version 3 or later."
-            };
-
-			Button b = new Button ();
-			b.Content = "FFF";
-	
+                    "and redistribute it under the GNU General Public License version 3 or later.",
+				TextWrapping = TextWrapping.Wrap,
+            	Width        = 318
+			};
+			
+			
 			Canvas canvas = new Canvas ();
-			canvas.Children.Add(this.version);
-			Canvas.SetLeft(this.version, 302);
-			Canvas.SetTop(this.version, 102);
 			
+			canvas.Children.Add (image);
+			Canvas.SetLeft (image, 0);
+			Canvas.SetTop (image, 0);
+
+			canvas.Children.Add (version);
+			Canvas.SetLeft (version, 289);
+			Canvas.SetTop (version, 92);
 			
-			canvas.Children.Add(this.updates);
-			Canvas.SetLeft(this.updates, 302);
-			Canvas.SetTop(this.updates, 122);
+			canvas.Children.Add (this.updates);
+			Canvas.SetLeft (this.updates, 289);
+			Canvas.SetTop (this.updates, 109);
 			
-			canvas.Children.Add(this.copyright);
-			Canvas.SetLeft(this.copyright, 302);
-			Canvas.SetTop(this.copyright, 142);
-			
+			canvas.Children.Add (credits);
+			Canvas.SetLeft (credits, 294);
+			Canvas.SetTop (credits, 142);	
 			
 			Content = canvas;
-			//AddChild(this.version);
-			//AddChild(this.updates);
-			//AddChild(this.copyright);
-			Show ();
         }
-
-
-        
-		/*
-
-        private void Close (object sender, Clos)
+		
+		
+        private void Close (object sender, CancelEventArgs args)
         {
-            if (args.CloseReason != CloseReason.ApplicationExitCall &&
-                args.CloseReason != CloseReason.TaskManagerClosing  &&
-                args.CloseReason != CloseReason.WindowsShutDown) {
-
                 Controller.WindowClosed ();
-                args.Cancel = true;
-            }
-        }*/
+                args.Cancel = true;    
+        }
     }
 }
