@@ -21,7 +21,9 @@ using System.IO;
 using System.Runtime.InteropServices;
 
 using SparkleLib;
-using System.Windows.Forms;
+using WinForms = System.Windows.Forms;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace SparkleShare {
 
@@ -30,13 +32,12 @@ namespace SparkleShare {
         public SparkleStatusIconController Controller = new SparkleStatusIconController();
 
 
-        private Timer Animation;
+        private WinForms.Timer Animation;
         private Bitmap [] AnimationFrames;
         private int FrameNumber;
         private string StateText;
 
-        private ToolStripItem status_menu_item;
-        private NotifyIcon status_icon;
+        private WinForms.NotifyIcon status_icon;
         
         // Short alias for the translations
         public static string _ (string s)
@@ -45,15 +46,70 @@ namespace SparkleShare {
         }
 
 
-        public SparkleStatusIcon ()
+
+		
+        void notifier_MouseDown(object sender, WinForms.MouseEventArgs e)
+		{
+                ContextMenu menu = new ContextMenu ();
+				
+				MenuItem item = new MenuItem () {Header = " SparkleShare"};
+		
+				MenuItem item2 = new MenuItem () {Header = " Add Hosted Project..."};
+			
+				MenuItem item3 = new MenuItem () {Header = " View Recent Changes..."};
+				MenuItem item4 = new MenuItem () {Header = " Turn Notifications Off"};
+				MenuItem item5 = new MenuItem () {Header = " About SparkleShare"};
+			
+				MenuItem item6 = new MenuItem () {Header = " Quit"};
+			
+				menu.Items.Add (item);
+			menu.Items.Add (new Separator ());menu.Items.Add (item2);
+			menu.Items.Add (new Separator ());
+			menu.Items.Add (item3);
+			menu.Items.Add (item4);
+			menu.Items.Add (new Separator ());
+			menu.Items.Add (item5);
+			menu.Items.Add (new Separator ());
+			menu.Items.Add (item6);
+			
+				menu.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
+                menu.IsOpen = true;
+				menu.IsHitTestVisible=true;
+				
+				Window w = new Window ();
+				
+				w.Title = "test";
+				w.Show ();
+				w.Height = 300;
+				w.Width = 300;
+				w.BringIntoView ();
+				
+				
+            
+        }
+		
+		
+		
+		public SparkleStatusIcon ()
         {
             AnimationFrames = CreateAnimationFrames ();
             Animation = CreateAnimation ();
 
-            this.status_icon = new NotifyIcon ();
+            this.status_icon = new WinForms.NotifyIcon ();
             status_icon.Text = "SparkleShare";
             status_icon.Icon = Icons.sparkleshare;
             status_icon.Visible = true;
+			
+		this.status_icon.MouseDown += new WinForms.MouseEventHandler(notifier_MouseDown);	
+			
+			
+			
+			
+			
+			
+			
+			
+			
 
             CreateMenu ();
             SetNormalState ();
@@ -108,11 +164,11 @@ namespace SparkleShare {
 
 
         // Creates the Animation that handles the syncing animation
-        private Timer CreateAnimation ()
+        private WinForms.Timer CreateAnimation ()
         {
             FrameNumber = 0;
 
-            Timer Animation = new Timer () {
+            WinForms.Timer Animation = new WinForms.Timer () {
                 Interval = 35
             };
 
@@ -135,7 +191,7 @@ namespace SparkleShare {
         // user clicks the status icon
         public void CreateMenu ()
         {
-            ContextMenuStrip Menu = new ContextMenuStrip ();
+  /*          ContextMenuStrip Menu = new ContextMenuStrip ();
 
             // The menu item showing the status and size of the SparkleShare folder
             status_menu_item = new ToolStripLabel (StateText);
@@ -252,7 +308,11 @@ namespace SparkleShare {
             Menu.Items.Add (quit_item);
 
             status_icon.ContextMenuStrip = Menu;
-        }
+ */
+			
+			
+			// ShowBalloon ("Hi!", "...", null);
+		}
 
 
         public void ShowBalloon (string title, string subtext, string image_path)
@@ -261,7 +321,7 @@ namespace SparkleShare {
 
             status_icon.BalloonTipText = title;
             status_icon.BalloonTipText = subtext;
-            status_icon.BalloonTipIcon = ToolTipIcon.None;
+            status_icon.BalloonTipIcon = WinForms.ToolTipIcon.None;
 
             status_icon.ShowBalloonTip (5 * 1000);
         }
@@ -269,7 +329,7 @@ namespace SparkleShare {
 
         public void UpdateMenu ()
         {
-            status_menu_item.Text=StateText;
+//            status_menu_item.Text=StateText;
         }
 
 
@@ -350,7 +410,7 @@ namespace SparkleShare {
 
     public static class ControlExtention {
 
-        public static void SafeInvoke (this Control ui_element,
+        public static void SafeInvoke (this WinForms.Control ui_element,
             Action updater, bool force_synchronous)
         {
             if (ui_element == null)
@@ -377,7 +437,7 @@ namespace SparkleShare {
         }
 
 
-        public static void SafeInvoke (this Control ui_element, Action updater)
+        public static void SafeInvoke (this WinForms.Control ui_element, Action updater)
         {
             ui_element.SafeInvoke (updater, false);
         }
