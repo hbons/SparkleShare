@@ -1,5 +1,5 @@
 //   SparkleShare, a collaboration and sharing tool.
-//   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
+//   Copyright (C) 2010  Hylke Bons (hylkebons@gmail.com)
 //
 //   This program is free software: you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as published by
@@ -12,200 +12,154 @@
 //   GNU General Public License for more details.
 //
 //   You should have received a copy of the GNU General Public License
-//   along with this program. If not, see <http://www.gnu.org/licenses/>.
+//   along with this program. If not, see (http://www.gnu.org/licenses/).
 
 
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Threading;
-
-using System.Windows.Forms;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.ComponentModel;
-
-using SparkleLib;
-using CefSharp;
-using System.IO;
-using System.Text;
+using System.ComponentModel;	
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace SparkleShare {
 
-    public partial class SparkleEventLog : Form, IBeforeResourceLoad {
-        private readonly CefWebBrowser _browserControl;
+    public class SparkleEventLog : Window {
 
-        private string HTML;
-        private List<SparkleChangeSet> change_sets;
-        private string selected_log = null;
+        public SparkleEventLogController Controller = new SparkleEventLogController ();
+
+        private Label updates;
+
 
         // Short alias for the translations
-        public static string _ (string s)
+        public static string _(string s)
         {
-            return Program._ (s);
+            return Program._(s);
         }
 
-        public SparkleEventLog () 
+
+        public SparkleEventLog ()
         {
-            InitializeComponent ();
-
-            Program.TranslateWinForm (this);
-
-           // this.Icon = Icons.sparkleshare;
 			
-            this.change_sets = Program.Controller.GetLog (null);
-            GenerateHTML ();
-			
-            _browserControl = new CefWebBrowser ("application://sparkleshare/eventlog");
-            _browserControl.Dock = DockStyle.Fill;
-            //_browserControl.PropertyChanged += HandleBrowserPropertyChanged;
-            //_browserControl.ConsoleMessage += HandleConsoleMessage;
-            _browserControl.BeforeResourceLoadHandler = this;
-            WebViewPanel.Controls.Add (_browserControl);
-            UpdateChooser ();
-			
-        }
-
-        public void UpdateChooser ()
-        {
-            this.combo_box.Items.Add (_ ("All Projects"));
-            this.combo_box.Items.Add ("");
-            foreach (string folder_name in Program.Controller.Folders)
-                this.combo_box.Items.Add (folder_name);
+            Title      = "Recent Changes";
+            ResizeMode = ResizeMode.NoResize;
+			Height     = 640;
+			Width      = 480;
+		Background = new SolidColorBrush (Colors.WhiteSmoke);
 			
 			
-           //this.combo_box.SelectedItem = this.combo_box.Items[0];
-		
-        }
+			Closing += Close;
+
+            CreateAbout ();
 
 
-        public void UpdateEvents ()
-        {
-            UpdateEvents (true);
-        }
-
-
-        public void UpdateEvents (bool silent)
-        {
-            Thread thread = new Thread (new ThreadStart (delegate {
-                Program.SetUiCulture ();
-                Stopwatch watch = new Stopwatch ();
-                watch.Start ();
-                this.change_sets = Program.Controller.GetLog (this.selected_log);
-                GenerateHTML ();
-                watch.Stop ();
-
-                // A short delay is less annoying than
-                // a flashing window
-                if (watch.ElapsedMilliseconds < 500 && !silent)
-                    Thread.Sleep (500 - (int) watch.ElapsedMilliseconds);
-
-                AddHTML ();
-            }));
-
-            thread.Start ();
-        }
-
-
-        private void GenerateHTML ()
-        {
-            HTML = Program.Controller.GetHTMLLog (this.change_sets);
-
-            if (HTML == null)
-                return;
-
-            HTML = HTML.Replace ("<!-- $body-font-size -->", this.Font.Size + "px");
-            HTML = HTML.Replace ("<!-- $day-entry-header-font-size -->", this.Font.Size + "px");
-            HTML = HTML.Replace ("<!-- $a-color -->", "#0085cf");
-            HTML = HTML.Replace ("<!-- $a-hover-color -->", "#009ff8");
-            HTML = HTML.Replace ("<!-- $body-font-family -->", "\"" + this.Font.FontFamily + "\"");
-            HTML = HTML.Replace ("<!-- $body-color -->", this.ForeColor.ToHex());
-            HTML = HTML.Replace ("<!-- $body-background-color -->", this.BackColor.ToHex());
-            HTML = HTML.Replace ("<!-- $day-entry-header-background-color -->", this.BackColor.ToHex());
-            HTML = HTML.Replace ("<!-- $secondary-font-color -->", this.ForeColor.ToHex());
-            HTML = HTML.Replace ("<!-- $small-color -->", this.ForeColor.ToHex());    
-            HTML = HTML.Replace ("<!-- $no-buddy-icon-background-image -->",
-                "application://sparkleshare/avatar-default-32.png");
-            HTML = HTML.Replace ("<!-- $document-added-background-image -->",
-                "application://sparkleshare/document-added-12.png");
-            HTML = HTML.Replace ("<!-- $document-edited-background-image -->",
-                "application://sparkleshare/document-edited-12.png");
-            HTML = HTML.Replace ("<!-- $document-deleted-background-image -->",
-                "application://sparkleshare/document-deleted-12.png");
-            HTML = HTML.Replace ("<!-- $document-moved-background-image -->",
-                "application://sparkleshare/document-moved-12.png");
-
-            HTML = HTML.Replace("href='" + SparkleConfig.DefaultConfig.FoldersPath, "href='application://file/" + SparkleConfig.DefaultConfig.FoldersPath);
-            HTML = HTML.Replace ("file://application://sparkleshare/", "application://sparkleshare/");
-            HTML = HTML.Replace ("file://", "application://file/");
-        }
-
-
-        private void AddHTML ()
-        {
-            try
-            {
-                Invoke((Action)delegate
-                {
-                    _browserControl.Reload();
+            Controller.ShowWindowEvent += delegate {
+               Dispatcher.Invoke ((Action) delegate {
+                    Show ();
+					Activate ();
+					BringIntoView ();
                 });
-            }
-            catch (InvalidOperationException e)
-            {
-            }
+            };
+
+            Controller.HideWindowEvent += delegate {
+                Dispatcher.Invoke ((Action) delegate {
+                    Hide ();
+                });
+            };
+/*         Controller.CheckingForNewVersionEvent += delegate {
+                Dispatcher.Invoke ((Action) delegate {
+                    this.updates.Content = "Checking for updates...";
+					this.updates.UpdateLayout ();
+                });
+            };*/
         }
 
-        private void SparkleEventLog_FormClosing (object sender, FormClosingEventArgs e)
+
+        private void CreateAbout ()
         {
-            if (e.CloseReason != CloseReason.ApplicationExitCall
-                    && e.CloseReason != CloseReason.TaskManagerClosing
-                    && e.CloseReason != CloseReason.WindowsShutDown) {
-                e.Cancel = true;
-                this.Hide ();
-            }
+			Image image = new Image () {
+				Width  = 640,
+				Height = 260
+			};
+		
+			BitmapImage bitmap_image = new BitmapImage();
+			
+			bitmap_image.BeginInit();
+			// TODO: get relative reference to the image
+			bitmap_image.UriSource = new Uri(@"C:\Users\Hylke\Code\SparkleShare\data\about.png");
+			bitmap_image.DecodePixelWidth = 640;
+			bitmap_image.EndInit();
+			
+			image.Source  = bitmap_image;
+			
+			
+            Label version = new Label () {
+                Content    = "version ",// + Controller.RunningVersion,
+				FontSize   = 11,
+				Foreground = new SolidColorBrush (Colors.White)
+            };
+
+            this.updates = new Label () {
+				Content    = "Checking for updates...",
+				FontSize   = 11,
+				Foreground = new SolidColorBrush (Color.FromRgb(45, 62, 81))
+            };
+			
+            TextBlock credits = new TextBlock () {
+				FontSize     = 11,
+				Foreground   = new SolidColorBrush (Colors.White),
+                Text         = "Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others.\n" +
+					"\n" +
+                    "SparkleShare is Free and Open Source Software. You are free to use, modify, " +
+                    "and redistribute it under the GNU General Public License version 3 or later.",
+				TextWrapping = TextWrapping.Wrap,
+            	Width        = 318
+			};
+			
+			Canvas canvas = new Canvas ();
+			
+			ComboBox combo_box = new ComboBox ();
+			
+			ComboBoxItem item = new ComboBoxItem () {
+				Content = "All Projects"
+			};
+			
+			
+			combo_box.Items.Add (item);
+			
+			combo_box.Items.Add (new Separator ());
+			combo_box.SelectedItem = combo_box.Items.GetItemAt (0);
+			combo_box.Width = 150;
+			
+			
+			canvas.Children.Add (image);
+			Canvas.SetLeft (image, 0);
+			Canvas.SetTop (image, 0);
+
+			canvas.Children.Add (version);
+			Canvas.SetLeft (version, 289);
+			Canvas.SetTop (version, 92);
+			
+			canvas.Children.Add (this.updates);
+			Canvas.SetLeft (this.updates, 289);
+			Canvas.SetTop (this.updates, 109);
+			
+			canvas.Children.Add (credits);
+			Canvas.SetLeft (credits, 294);
+			Canvas.SetTop (credits, 142);	
+			
+			
+			canvas.Children.Add (combo_box);
+			Canvas.SetLeft (combo_box, 50);
+			Canvas.SetTop (combo_box, 100);
+			Content = canvas;
         }
-
-    
-        #region IBeforeResourceLoad Members
-
-        public void HandleBeforeResourceLoad (CefWebBrowser browserControl, IRequestResponse requestResponse)
+		
+		
+        private void Close (object sender, CancelEventArgs args)
         {
-            IRequest request = requestResponse.Request;
-            Console.WriteLine ("{0} {1}", request.Method, request.Url);
-
-            if (request.Url.StartsWith ("application://sparkleshare/eventlog")) {
-                Stream resourceStream;
-                if (HTML != null)
-                    resourceStream = new MemoryStream (Encoding.UTF8.GetPreamble ().Concat (Encoding.UTF8.GetBytes (HTML)).ToArray ());
-                else
-                    resourceStream = new MemoryStream ();
-
-                requestResponse.RespondWith (resourceStream, "text/html");
-            } else if (request.Url.StartsWith ("application://file/")) {
-                string Filename = request.Url.Substring ("application://file/".Length);
-                Filename = Uri.UnescapeDataString (Filename);
-                Filename = Filename.Replace ("/", "\\");
-
-                if (Filename.StartsWith(SparkleConfig.DefaultConfig.FoldersPath))
-                    System.Diagnostics.Process.Start (Filename);
-            }
-        }
-
-        #endregion
-
-        private void combo_box_SelectedIndexChanged (object sender, EventArgs e)
-        {
-            String SelectedText = this.combo_box.SelectedItem as string;
-
-            if (string.IsNullOrEmpty (SelectedText) || SelectedText.Equals (_ ("All Folders")))
-                this.selected_log = null;
-            else
-                this.selected_log = SelectedText;
-
-            UpdateEvents (false);
+                Controller.WindowClosed ();
+                args.Cancel = true;    
         }
     }
 }
-
