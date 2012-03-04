@@ -20,88 +20,36 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using SparkleLib;
 using WinForms = System.Windows.Forms;
 using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 
 namespace SparkleShare {
 
-    public class SparkleStatusIcon : IDisposable {
-
+    public class SparkleStatusIcon : Control {
+		
         public SparkleStatusIconController Controller = new SparkleStatusIconController();
-
 
         private WinForms.Timer Animation;
         private Bitmap [] AnimationFrames;
         private int FrameNumber;
         private string StateText;
+		private ContextMenu context_menu;
 
-        private WinForms.NotifyIcon status_icon;
-        
+        private WinForms.NotifyIcon notify_icon = new WinForms.NotifyIcon () {
+            Text = "SparkleShare",
+            Icon = Icons.sparkleshare,
+            Visible = true
+		};
+		
+
+		
         // Short alias for the translations
         public static string _ (string s)
         {
             return Program._ (s);
         }
-
-
-
-		
-        void notifier_MouseDown(object o, EventArgs e)
-		{
-			
-                ContextMenu menu = new ContextMenu ();
-				
-			MenuItem item0 = new MenuItem () {Header = " Files up to date"};
-	item0.IsEnabled = false;
-				MenuItem item = new MenuItem () {Header = " SparkleShare"};
-	
-			// item.Icon = ;
-			
-				MenuItem item2 = new MenuItem () {Header = " Add Hosted Project…"};
-			
-				MenuItem item3 = new MenuItem () {Header = " View Recent Changes…"};
-				MenuItem item4 = new MenuItem () {Header = " Turn Notifications Off"};
-				MenuItem item5 = new MenuItem () {Header = " About SparkleShare"};
-			item5.Click += delegate {
-				 Controller.AboutClicked ();
-			};
-				MenuItem item6 = new MenuItem () {Header = " Exit"};
-			item6.Click += delegate {
-				this.status_icon.Dispose ();
-		 Program.Controller.Quit ();	
-			};
-			
-			
-				menu.Items.Add (item0);
-			menu.Items.Add (new Separator ());
-				menu.Items.Add (item);
-			menu.Items.Add (new Separator ());menu.Items.Add (item2);
-			menu.Items.Add (new Separator ());
-			menu.Items.Add (item3);
-			menu.Items.Add (item4);
-			menu.Items.Add (new Separator ());
-			menu.Items.Add (item5);
-			menu.Items.Add (new Separator ());
-			menu.Items.Add (item6);
-			
-				menu.Placement = System.Windows.Controls.Primitives.PlacementMode.Mouse;
-                menu.IsOpen = true;
-				menu.IsHitTestVisible=true;
-				
-			/*	Window w = new Window ();
-				
-				w.Title = "test";
-				w.Show ();
-				w.Height = 300;
-				w.Width = 300;
-				w.BringIntoView ();
-				
-				
-            */
-        }
-		
 		
 		
 		public SparkleStatusIcon ()
@@ -109,55 +57,50 @@ namespace SparkleShare {
             AnimationFrames = CreateAnimationFrames ();
             Animation = CreateAnimation ();
 
-            this.status_icon = new WinForms.NotifyIcon ();
-            status_icon.Text = "SparkleShare";
-            status_icon.Icon = Icons.sparkleshare;
-            status_icon.Visible = true;
+			this.notify_icon.MouseClick +=new WinForms.MouseEventHandler(ShowMenu);	
 			
-		this.status_icon.Click += notifier_MouseDown;	
-			
-			
-			
-			
-			
-			
-			
-			
-			
-
             CreateMenu ();
             SetNormalState ();
             
+			
+			//TODO quit item event
+			
             Program.Controller.FolderListChanged += delegate {
-                status_icon.ContextMenuStrip.SafeInvoke ((Action) delegate {
+                Dispatcher.Invoke ((Action) delegate {
                     SetNormalState ();
                     CreateMenu ();
                 });
             };
 
             Program.Controller.OnIdle += delegate {
-                status_icon.ContextMenuStrip.SafeInvoke ((Action) delegate {
+                Dispatcher.Invoke ((Action) delegate {
                     SetNormalState ();
                     UpdateMenu ();
                 });
             };
-
+			
             Program.Controller.OnSyncing += delegate {
-                status_icon.ContextMenuStrip.SafeInvoke ((Action) delegate {
+                Dispatcher.Invoke ((Action) delegate {
                     SetAnimationState ();
                     UpdateMenu ();
                 });
             };
 
             Program.Controller.OnError += delegate {
-                status_icon.ContextMenuStrip.SafeInvoke ((Action) delegate {
+                Dispatcher.Invoke ((Action) delegate {
                     SetNormalState (true);
                     UpdateMenu ();
                 });
             };
         }
 
-
+		
+        private void ShowMenu (object sender, WinForms.MouseEventArgs e)
+		{
+			this.context_menu.Placement        = PlacementMode.Mouse;
+ 	        this.context_menu.IsOpen           = true;
+		}
+		
         [DllImport("user32.dll", EntryPoint = "DestroyIcon")]
         static extern bool DestroyIcon(IntPtr hIcon);
 
@@ -192,8 +135,8 @@ namespace SparkleShare {
                 else
                     FrameNumber = 0;
 
-                status_icon.ContextMenuStrip.SafeInvoke ((Action) delegate {
-                    this.status_icon.Icon = GetIconFromBitmap (AnimationFrames [FrameNumber]);
+                Dispatcher.Invoke ((Action) delegate {
+                    this.notify_icon.Icon = GetIconFromBitmap (AnimationFrames [FrameNumber]);
                 });
             };
 
@@ -201,131 +144,110 @@ namespace SparkleShare {
         }
 
 
-        // Creates the menu that is popped up when the
-        // user clicks the status icon
         public void CreateMenu ()
         {
-  /*          ContextMenuStrip Menu = new ContextMenuStrip ();
+			this.context_menu = new ContextMenu ();
 
-            // The menu item showing the status and size of the SparkleShare folder
-            status_menu_item = new ToolStripLabel (StateText);
+			MenuItem status_item = new MenuItem () {
+				Header    = StateText,
+				IsEnabled = false
+			};
+			
+			MenuItem folder_item = new MenuItem () {
+				Header = " SparkleShare",
+				Icon   = Icons.sparkleshare
+			};
+		
+				folder_item.Click += delegate {
+					Controller.SparkleShareClicked ();
+				};
+			
+			MenuItem add_item = new MenuItem () {
+				Header    = " Add Hosted Project…",
+				IsEnabled = (!Program.Controller.FirstRun)
+			};
+			
+				add_item.Click += delegate {
+					Controller.AddHostedProjectClicked ();
+				};
+			
+			MenuItem log_item = new MenuItem () {
+				Header    = " View Recent Changes…",
+				IsEnabled = (Program.Controller.Folders.Count > 0)
+			};
+			
+				log_item.Click += delegate {
+					Controller.OpenRecentEventsClicked ();
+				};
+			
+			MenuItem notify_item = new MenuItem ();
 
-            Menu.Items.Add (status_menu_item);
-            Menu.Items.Add (new ToolStripSeparator ());
-
-            ToolStripMenuItem folder_item = new ToolStripMenuItem ("SparkleShare") {
-                Image = Icons.folder_sparkleshare_16
-            };
-
-            folder_item.Click += delegate {
-                Controller.SparkleShareClicked ();
-            };
-
-            Menu.Items.Add (folder_item);
+	            if (Program.Controller.NotificationsEnabled)
+	                notify_item = new MenuItem () { Header = " Turn Notifications Off" };
+	            else
+	                notify_item = new MenuItem () { Header = " Turn Notifications On" };
+	
+	            notify_item.Click += delegate {
+	                Program.Controller.ToggleNotifications ();
+	                CreateMenu ();
+	            };
+			
+			MenuItem about_item = new MenuItem () {
+				Header = " About SparkleShare"
+			};
+			
+				about_item.Click += delegate {
+					 Controller.AboutClicked ();
+				};
+			
+			MenuItem exit_item = new MenuItem () {
+				Header = " Exit"
+			};
+			
+				exit_item.Click += delegate {
+					this.notify_icon.Dispose ();
+			 		Program.Controller.Quit ();	
+				};
+			
+			
+			this.context_menu.Items.Add (status_item);
+			this.context_menu.Items.Add (new Separator ());
+			this.context_menu.Items.Add (folder_item);
 
             if (Program.Controller.Folders.Count > 0) {
+                foreach (string folder_name in Program.Controller.Folders) {     
+					MenuItem subfolder_item = new MenuItem () {
+						Header = folder_name
+					};
+					
+					subfolder_item.Click += OpenFolderDelegate (folder_name);
 
-                // Creates a menu item for each repository with a link to their logs
-                foreach (string folder_name in Program.Controller.Folders) {
-                    Bitmap folder_icon;
+                    if (Program.Controller.UnsyncedFolders.Contains (folder_name))
+                        subfolder_item.Icon = Icons.dialog_error_16;
+                    else
+                        subfolder_item.Icon = Icons.sparkleshare_windows_status;
 
-                    if (Program.Controller.UnsyncedFolders.Contains (folder_name)) {
-                        folder_icon = Icons.dialog_error_16;
-                    } else {
-                        folder_icon = Icons.sparkleshare_windows_status;
-                    }
-
-                    ToolStripMenuItem subfolder_item = new ToolStripMenuItem (folder_name) {
-                        Image = folder_icon
-                    };
-
-                    subfolder_item.Click += OpenFolderDelegate (folder_name);
-                    Menu.Items.Add (subfolder_item);
+                    this.context_menu.Items.Add (subfolder_item);
                 }
 
             } else {
-                ToolStripMenuItem no_folders_item = new ToolStripMenuItem (_("No projects yet")) {
-                    Enabled = false
-                };
-
-                Menu.Items.Add (no_folders_item);
-            }
-
-            Menu.Items.Add (new ToolStripSeparator ());
-
-            // Opens the wizard to add a new remote folder
-            ToolStripMenuItem sync_item = new ToolStripMenuItem (_("Add Hosted Project…"));
-
-            if (Program.Controller.FirstRun)
-                sync_item.Enabled = false;
-
-            sync_item.Click += delegate {
-                Controller.AddHostedProjectClicked ();
-            };
-
-            Menu.Items.Add (sync_item);
-            Menu.Items.Add (new ToolStripSeparator ());
-
-            ToolStripMenuItem recent_events_item = new ToolStripMenuItem (_("View Recent Changes…"));
-
-            if (Program.Controller.Folders.Count < 1)
-                recent_events_item.Enabled = false;
-
-            recent_events_item.Click += delegate {
-                // Controller.OpenRecentEventsClicked ();
-                if (SparkleUI.EventLog == null)
-                    SparkleUI.EventLog = new SparkleEventLog ();
-
-                SparkleUI.EventLog.Show ();
-                SparkleUI.EventLog.BringToFront ();
-            };
-
-            Menu.Items.Add (recent_events_item);
-
-            ToolStripMenuItem notify_item;
-
-            if (Program.Controller.NotificationsEnabled)
-                notify_item = new ToolStripMenuItem (_("Turn Notifications Off"));
-            else
-                notify_item = new ToolStripMenuItem (_("Turn Notifications On"));
-
-            notify_item.Click += delegate {
-                Program.Controller.ToggleNotifications ();
-                CreateMenu ();
-            };
-
-            Menu.Items.Add (notify_item);
-            Menu.Items.Add (new ToolStripSeparator ());
-
-
-            ToolStripMenuItem about_item = new ToolStripMenuItem (_("About SparkleShare"));
-
-            about_item.Click += delegate {
-                //if (SparkleUI.About == null)
-                  //  SparkleUI.About = new SparkleAbout ();
-
-                //SparkleUI.About.Show ();
-                //SparkleUI.About.BringToFront ();
-				Controller.AboutClicked ();
-            };
-
-            Menu.Items.Add (about_item);
-            Menu.Items.Add (new ToolStripSeparator ());
-
-            // A menu item that quits the application
-            ToolStripMenuItem quit_item = new ToolStripMenuItem (_("Quit"));
-
-            quit_item.Click += delegate {
-                Program.Controller.Quit ();
-            };
-
-            Menu.Items.Add (quit_item);
-
-            status_icon.ContextMenuStrip = Menu;
- */
+                MenuItem no_folders_item = new MenuItem () {
+					Header    = " No projects yet",
+					IsEnabled = false
+				};
+               
+                this.context_menu.Items.Add (no_folders_item);
+			}
 			
-			
-			// ShowBalloon ("Hi!", "...", null);
+			this.context_menu.Items.Add (new Separator ());
+			this.context_menu.Items.Add (add_item);
+			this.context_menu.Items.Add (new Separator ());
+			this.context_menu.Items.Add (log_item);
+			this.context_menu.Items.Add (notify_item);
+			this.context_menu.Items.Add (new Separator ());
+			this.context_menu.Items.Add (about_item);
+			this.context_menu.Items.Add (new Separator ());
+			this.context_menu.Items.Add (exit_item);
 		}
 
 
@@ -333,17 +255,18 @@ namespace SparkleShare {
         {
             // TODO: Use the image pointed to by image_path
 
-            status_icon.BalloonTipText = title;
-            status_icon.BalloonTipText = subtext;
-            status_icon.BalloonTipIcon = WinForms.ToolTipIcon.None;
+            this.notify_icon.BalloonTipText = title;
+            this.notify_icon.BalloonTipText = subtext;
+            this.notify_icon.BalloonTipIcon = WinForms.ToolTipIcon.None;
 
-            status_icon.ShowBalloonTip (5 * 1000);
+            this.notify_icon.ShowBalloonTip (5 * 1000);
         }
 
 
         public void UpdateMenu ()
         {
-//            status_menu_item.Text=StateText;
+			(this.context_menu.Items [0] as MenuItem).Header = StateText;
+			(this.context_menu.Items [0] as MenuItem).UpdateLayout ();
         }
 
 
@@ -360,35 +283,33 @@ namespace SparkleShare {
             Animation.Stop ();
 
             if (Program.Controller.Folders.Count == 0) {
-                StateText = _("Welcome to SparkleShare!");
+                StateText = _(" Welcome to SparkleShare!");
 
-                status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
-                    this.status_icon.Icon = GetIconFromBitmap (AnimationFrames [0]);
+                Dispatcher.Invoke ((Action)delegate {
+                    this.notify_icon.Icon = GetIconFromBitmap (AnimationFrames [0]);
                 });
 
             } else {
                 if (error) {
-                    StateText = _("Not everything is synced");
+                    StateText = _(" Not everything is synced");
 
-                    status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
-                        this.status_icon.Icon = GetIconFromBitmap (Icons.sparkleshare_syncing_error_24);
+                    Dispatcher.Invoke ((Action) delegate {
+                        this.notify_icon.Icon = GetIconFromBitmap (Icons.sparkleshare_syncing_error_24);
                     });
                 } else {
-                    StateText = _("Files up to date") + Controller.FolderSize;
-                    status_icon.ContextMenuStrip.SafeInvoke ((Action)delegate {
-                        this.status_icon.Icon = GetIconFromBitmap (AnimationFrames [0]);
+                    StateText = _(" Files up to date") + Controller.FolderSize;
+                    Dispatcher.Invoke ((Action)delegate {
+                        this.notify_icon.Icon = GetIconFromBitmap (AnimationFrames [0]);
                     });
                 }
             }
         }
 
 
-        #region IDisposable Members
         public void Dispose ()
         {
-            this.status_icon.Dispose ();
+            this.notify_icon.Dispose ();
         }
-        #endregion
 
 
         // The state when animating
@@ -403,10 +324,10 @@ namespace SparkleShare {
 
         // A method reference that makes sure that opening the
         // event log for each repository works correctly
-        private EventHandler OpenFolderDelegate (string name)
+        private RoutedEventHandler OpenFolderDelegate (string folder_name)
         {
             return delegate {
-                Controller.SubfolderClicked (name);
+                Controller.SubfolderClicked (folder_name);
             };
         }
 
@@ -421,7 +342,7 @@ namespace SparkleShare {
         }
     }
 
-
+// TODO: remove
     public static class ControlExtention {
 
         public static void SafeInvoke (this WinForms.Control ui_element,
