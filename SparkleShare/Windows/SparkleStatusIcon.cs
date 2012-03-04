@@ -48,20 +48,34 @@ namespace SparkleShare {
 
 
 		
-        void notifier_MouseDown(object sender, WinForms.MouseEventArgs e)
+        void notifier_MouseDown(object o, EventArgs e)
 		{
+			
                 ContextMenu menu = new ContextMenu ();
 				
+			MenuItem item0 = new MenuItem () {Header = " Files up to date"};
+	item0.IsEnabled = false;
 				MenuItem item = new MenuItem () {Header = " SparkleShare"};
-		
-				MenuItem item2 = new MenuItem () {Header = " Add Hosted Project..."};
+	
+			// item.Icon = ;
 			
-				MenuItem item3 = new MenuItem () {Header = " View Recent Changes..."};
+				MenuItem item2 = new MenuItem () {Header = " Add Hosted Project…"};
+			
+				MenuItem item3 = new MenuItem () {Header = " View Recent Changes…"};
 				MenuItem item4 = new MenuItem () {Header = " Turn Notifications Off"};
 				MenuItem item5 = new MenuItem () {Header = " About SparkleShare"};
+			item5.Click += delegate {
+				 Controller.AboutClicked ();
+			};
+				MenuItem item6 = new MenuItem () {Header = " Exit"};
+			item6.Click += delegate {
+				this.status_icon.Dispose ();
+		 Program.Controller.Quit ();	
+			};
 			
-				MenuItem item6 = new MenuItem () {Header = " Quit"};
 			
+				menu.Items.Add (item0);
+			menu.Items.Add (new Separator ());
 				menu.Items.Add (item);
 			menu.Items.Add (new Separator ());menu.Items.Add (item2);
 			menu.Items.Add (new Separator ());
@@ -72,11 +86,11 @@ namespace SparkleShare {
 			menu.Items.Add (new Separator ());
 			menu.Items.Add (item6);
 			
-				menu.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
+				menu.Placement = System.Windows.Controls.Primitives.PlacementMode.Mouse;
                 menu.IsOpen = true;
 				menu.IsHitTestVisible=true;
 				
-				Window w = new Window ();
+			/*	Window w = new Window ();
 				
 				w.Title = "test";
 				w.Show ();
@@ -85,7 +99,7 @@ namespace SparkleShare {
 				w.BringIntoView ();
 				
 				
-            
+            */
         }
 		
 		
@@ -100,7 +114,7 @@ namespace SparkleShare {
             status_icon.Icon = Icons.sparkleshare;
             status_icon.Visible = true;
 			
-		this.status_icon.MouseDown += new WinForms.MouseEventHandler(notifier_MouseDown);	
+		this.status_icon.Click += notifier_MouseDown;	
 			
 			
 			
