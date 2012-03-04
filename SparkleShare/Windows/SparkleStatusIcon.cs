@@ -36,7 +36,8 @@ namespace SparkleShare {
         private int FrameNumber;
         private string StateText;
 		private ContextMenu context_menu;
-
+		private MenuItem exit_item;
+		
         private WinForms.NotifyIcon notify_icon = new WinForms.NotifyIcon () {
             Text = "SparkleShare",
             Icon = Icons.sparkleshare,
@@ -64,6 +65,14 @@ namespace SparkleShare {
             
 			
 			//TODO quit item event
+			
+			Controller.UpdateQuitItemEvent += delegate (bool enable) {
+			  	Dispatcher.Invoke ((Action) delegate {
+                    this.exit_item.IsEnabled = enable;
+					this.exit_item.UpdateLayout ();
+                });
+			};
+			
 			
             Program.Controller.FolderListChanged += delegate {
                 Dispatcher.Invoke ((Action) delegate {
@@ -154,8 +163,8 @@ namespace SparkleShare {
 			};
 			
 			MenuItem folder_item = new MenuItem () {
-				Header = " SparkleShare",
-				Icon   = Icons.sparkleshare
+				Header = " SparkleShare"//,
+				//Icon   = Icons.sparkleshare
 			};
 		
 				folder_item.Click += delegate {
@@ -200,11 +209,11 @@ namespace SparkleShare {
 					 Controller.AboutClicked ();
 				};
 			
-			MenuItem exit_item = new MenuItem () {
+			exit_item = new MenuItem () {
 				Header = " Exit"
 			};
 			
-				exit_item.Click += delegate {
+				this.exit_item.Click += delegate {
 					this.notify_icon.Dispose ();
 			 		Program.Controller.Quit ();	
 				};
@@ -217,7 +226,7 @@ namespace SparkleShare {
             if (Program.Controller.Folders.Count > 0) {
                 foreach (string folder_name in Program.Controller.Folders) {     
 					MenuItem subfolder_item = new MenuItem () {
-						Header = folder_name
+						Header = " " + folder_name
 					};
 					
 					subfolder_item.Click += OpenFolderDelegate (folder_name);
@@ -247,7 +256,7 @@ namespace SparkleShare {
 			this.context_menu.Items.Add (new Separator ());
 			this.context_menu.Items.Add (about_item);
 			this.context_menu.Items.Add (new Separator ());
-			this.context_menu.Items.Add (exit_item);
+			this.context_menu.Items.Add (this.exit_item);
 		}
 
 

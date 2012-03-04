@@ -16,7 +16,8 @@
 
 
 using System;
-using System.ComponentModel;	
+using System.ComponentModel;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -28,9 +29,13 @@ namespace SparkleShare {
 
         public SparkleEventLogController Controller = new SparkleEventLogController ();
 
-        private Label updates;
-
-
+		private Canvas canvas;
+        private Label size_label_value;
+		private Label history_label_value;
+		private ComboBox combo_box;
+		private WebBrowser web_browser;
+		
+		
         // Short alias for the translations
         public static string _(string s)
         {
@@ -40,24 +45,84 @@ namespace SparkleShare {
 
         public SparkleEventLog ()
         {
-			
             Title      = "Recent Changes";
-            ResizeMode = ResizeMode.NoResize;
 			Height     = 640;
 			Width      = 480;
-		Background = new SolidColorBrush (Colors.WhiteSmoke);
-			
+			ResizeMode = ResizeMode.NoResize;
+			Background = new SolidColorBrush (Colors.WhiteSmoke);	
 			
 			Closing += Close;
+			
+						
+            Label size_label = new Label () {
+                Content    = "Size:",
+				FontWeight = FontWeights.Bold
+            };
+			
+			this.size_label_value = new Label () {
+				Content = Controller.Size
+			};
+			
+			size_label.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
+			Rect size_label_rect = new Rect (size_label.DesiredSize);
+			
+			
+			
+			Label history_label = new Label () {
+                Content    = "History:",
+				FontWeight = FontWeights.Bold
+            };
+			
+			this.history_label_value = new Label () {
+                Content = Controller.HistorySize
+            };
+			
+			history_label.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
+			Rect history_label_rect = new Rect (history_label.DesiredSize);
+			
+			
+			this.web_browser = new WebBrowser () {
+				Width  = Width - 7,
+				Height = Height - 48 - 12
+			};
+			
+			
+			this.canvas = new Canvas ();
+			
+			canvas.Children.Add (size_label);
+			Canvas.SetLeft (size_label, 12);
+			Canvas.SetTop (size_label, 10);
+			
+			canvas.Children.Add (this.size_label_value);
+			Canvas.SetLeft (this.size_label_value, 12 + size_label_rect.Width);
+			Canvas.SetTop (this.size_label_value, 10);
+			
+			
+			canvas.Children.Add (history_label);
+			Canvas.SetLeft (history_label, 120);
+			Canvas.SetTop (history_label, 10);
+			
+			canvas.Children.Add (this.history_label_value);
+			Canvas.SetLeft (this.history_label_value, 120 + history_label_rect.Width);
+			Canvas.SetTop (this.history_label_value, 10);
+			
+			
+			
+			
+			Content = this.canvas;
 
-            CreateAbout ();
-
+			
+			
+			
 
             Controller.ShowWindowEvent += delegate {
                Dispatcher.Invoke ((Action) delegate {
                     Show ();
 					Activate ();
 					BringIntoView ();
+					
+					UpdateContent (null);
+					UpdateChooser (null);
                 });
             };
 
@@ -66,94 +131,133 @@ namespace SparkleShare {
                     Hide ();
                 });
             };
-/*         Controller.CheckingForNewVersionEvent += delegate {
+			
+			Controller.UpdateSizeInfoEvent += delegate (string size, string history_size) {
+				Dispatcher.Invoke ((Action) delegate {
+					this.size_label_value.Content = size;
+					this.size_label_value.UpdateLayout ();
+					
+					this.history_label_value.Content = history_size;
+					this.history_label_value.UpdateLayout ();
+				});
+			};
+			
+            Controller.UpdateChooserEvent += delegate (string [] folders) {
+        		Dispatcher.Invoke ((Action) delegate {
+                    UpdateChooser (folders);
+                });    
+            };
+
+            Controller.UpdateContentEvent += delegate (string html) {
                 Dispatcher.Invoke ((Action) delegate {
-                    this.updates.Content = "Checking for updates...";
-					this.updates.UpdateLayout ();
+                    UpdateContent (html);
                 });
-            };*/
+            };
+
+            Controller.ContentLoadingEvent += delegate {
+                if (this.canvas.Children.Contains (this.web_browser))
+					this.canvas.Children.Remove (this.web_browser);
+
+                    //    ContentView.AddSubview (this.progress_indicator);
+                
+            };
         }
 
-
-        private void CreateAbout ()
-        {
-			Image image = new Image () {
-				Width  = 640,
-				Height = 260
-			};
 		
-			BitmapImage bitmap_image = new BitmapImage();
+		public void UpdateChooser (string [] folders)
+		{
+			if (folders == null)
+                folders = Controller.Folders;
 			
-			bitmap_image.BeginInit();
-			// TODO: get relative reference to the image
-			bitmap_image.UriSource = new Uri(@"C:\Users\Hylke\Code\SparkleShare\data\about.png");
-			bitmap_image.DecodePixelWidth = 640;
-			bitmap_image.EndInit();
-			
-			image.Source  = bitmap_image;
-			
-			
-            Label version = new Label () {
-                Content    = "version ",// + Controller.RunningVersion,
-				FontSize   = 11,
-				Foreground = new SolidColorBrush (Colors.White)
-            };
-
-            this.updates = new Label () {
-				Content    = "Checking for updates...",
-				FontSize   = 11,
-				Foreground = new SolidColorBrush (Color.FromRgb(45, 62, 81))
-            };
-			
-            TextBlock credits = new TextBlock () {
-				FontSize     = 11,
-				Foreground   = new SolidColorBrush (Colors.White),
-                Text         = "Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others.\n" +
-					"\n" +
-                    "SparkleShare is Free and Open Source Software. You are free to use, modify, " +
-                    "and redistribute it under the GNU General Public License version 3 or later.",
-				TextWrapping = TextWrapping.Wrap,
-            	Width        = 318
+			if (this.combo_box != null)
+				this.canvas.Children.Remove (this.combo_box);
+				
+    		this.combo_box = new ComboBox () {
+				Width = 160	
 			};
 			
-			Canvas canvas = new Canvas ();
+				ComboBoxItem item = new ComboBoxItem () {
+					Content = "All Projects"
+				};
 			
-			ComboBox combo_box = new ComboBox ();
+			this.combo_box.Items.Add (item);
+			this.combo_box.SelectedItem = combo_box.Items [0];
+			this.combo_box.Items.Add (new Separator ());
 			
-			ComboBoxItem item = new ComboBoxItem () {
-				Content = "All Projects"
+			foreach (string folder in folders) {
+				this.combo_box.Items.Add (
+					new ComboBoxItem () { Content = folder }
+				);
+			}
+			
+			this.combo_box.SelectionChanged += delegate {
+				Dispatcher.Invoke ((Action) delegate {
+					int index = this.combo_box.SelectedIndex;
+					
+					if (index == 0)
+						Controller.SelectedFolder = null;
+					else
+						Controller.SelectedFolder = (string)
+							(this.combo_box.Items [index] as ComboBoxItem).Content;
+				});
 			};
 			
-			
-			combo_box.Items.Add (item);
-			
-			combo_box.Items.Add (new Separator ());
-			combo_box.SelectedItem = combo_box.Items.GetItemAt (0);
-			combo_box.Width = 150;
-			
-			
-			canvas.Children.Add (image);
-			Canvas.SetLeft (image, 0);
-			Canvas.SetTop (image, 0);
+			this.canvas.Children.Add (combo_box);
+			Canvas.SetLeft (this.combo_box, Width - 18 - this.combo_box.Width);
+			Canvas.SetTop (this.combo_box, 12);
+		}
+		
+		
+		public void UpdateContent (string html)
+		{
+            Thread thread = new Thread (new ThreadStart (delegate {
+                if (html == null)
+                    html = Controller.HTML;
 
-			canvas.Children.Add (version);
-			Canvas.SetLeft (version, 289);
-			Canvas.SetTop (version, 92);
-			
-			canvas.Children.Add (this.updates);
-			Canvas.SetLeft (this.updates, 289);
-			Canvas.SetTop (this.updates, 109);
-			
-			canvas.Children.Add (credits);
-			Canvas.SetLeft (credits, 294);
-			Canvas.SetTop (credits, 142);	
-			
-			
-			canvas.Children.Add (combo_box);
-			Canvas.SetLeft (combo_box, 50);
-			Canvas.SetTop (combo_box, 100);
-			Content = canvas;
-        }
+                html = html.Replace ("<!-- $body-font-family -->", "Sans");
+                html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
+                html = html.Replace ("<!-- $body-font-size -->", "13.4px");
+                html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
+                html = html.Replace ("<!-- $small-color -->", "#ddd");
+                html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
+                html = html.Replace ("<!-- $a-color -->", "#0085cf");
+                html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
+             //   html = html.Replace ("<!-- $pixmaps-path -->",
+               //     "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
+                 //   "Pixmaps"));
+
+         //       html = html.Replace ("<!-- $document-added-background-image -->",
+           //         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
+             //       "Pixmaps", "document-added-12.png"));
+
+              //  html = html.Replace ("<!-- $document-deleted-background-image -->",
+                //    "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
+                  //  "Pixmaps", "document-deleted-12.png"));
+
+                //html = html.Replace ("<!-- $document-edited-background-image -->",
+                  //  "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    //"Pixmaps", "document-edited-12.png"));
+
+                //html = html.Replace ("<!-- $document-moved-background-image -->",
+                  //  "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    //"Pixmaps", "document-moved-12.png"));
+
+                Dispatcher.Invoke ((Action) delegate {
+                    //if (this.progress_indicator.Superview == ContentView) TODO
+                       // this.progress_indicator.RemoveFromSuperview ();
+
+					this.web_browser.NavigateToString (html);
+					
+					if (!this.canvas.Children.Contains (this.web_browser)) {
+						this.canvas.Children.Add (this.web_browser);
+						Canvas.SetLeft (this.web_browser, 0);
+						Canvas.SetTop (this.web_browser, 48);
+					}
+                });
+            }));
+
+            thread.Start ();
+		}
 		
 		
         private void Close (object sender, CancelEventArgs args)
