@@ -47,7 +47,8 @@ namespace SparkleShare {
             Title = "About SparkleShare";
 //            Icon = Icons.sparkleshare;
 
-            
+            ResizeMode = ResizeMode.NoResize;
+			
 			
 			//BackgroundImage = Icons.about;
             Height = 300;
@@ -74,18 +75,21 @@ namespace SparkleShare {
             Controller.NewVersionEvent += delegate (string new_version) {
                 Dispatcher.Invoke ((Action) delegate {
                     this.updates.Content = "A newer version (" + new_version + ") is available!";
-                });
+                	this.updates.UpdateLayout ();
+				});
             };
 
             Controller.VersionUpToDateEvent += delegate {
                 Dispatcher.Invoke ((Action) delegate {
                     this.updates.Content = "You are running the latest version.";
+					this.updates.UpdateLayout ();
                 });
             };
 
             Controller.CheckingForNewVersionEvent += delegate {
                 Dispatcher.Invoke ((Action) delegate {
                     this.updates.Content = "Checking for updates...";
+					this.updates.UpdateLayout ();
                 });
             };
         }
@@ -99,15 +103,11 @@ namespace SparkleShare {
                 Content    = "version " + Controller.RunningVersion
             };
 			
-			this.version.SetValue(Canvas.LeftProperty, 302.0);
-			this.version.SetValue(Canvas.TopProperty, 102.0);
 
             this.updates = new Label () {
                 Content   = "Checking for updates..."
             };
 			
-			this.version.SetValue(Canvas.LeftProperty, 302.0);
-			this.version.SetValue(Canvas.TopProperty, 98.0);
 
 			
             this.copyright = new Label () {
@@ -116,13 +116,25 @@ namespace SparkleShare {
                     "and redistribute it under the GNU General Public License version 3 or later."
             };
 
-			this.version.SetValue(Canvas.LeftProperty, 302.0);
-			this.version.SetValue(Canvas.TopProperty, 84.0);
-	AddVisualChild (this.version);
 			Button b = new Button ();
 			b.Content = "FFF";
+	
+			Canvas canvas = new Canvas ();
+			canvas.Children.Add(this.version);
+			Canvas.SetLeft(this.version, 302);
+			Canvas.SetTop(this.version, 102);
 			
-			Content = this.copyright;
+			
+			canvas.Children.Add(this.updates);
+			Canvas.SetLeft(this.updates, 302);
+			Canvas.SetTop(this.updates, 122);
+			
+			canvas.Children.Add(this.copyright);
+			Canvas.SetLeft(this.copyright, 302);
+			Canvas.SetTop(this.copyright, 142);
+			
+			
+			Content = canvas;
 			//AddChild(this.version);
 			//AddChild(this.updates);
 			//AddChild(this.copyright);
