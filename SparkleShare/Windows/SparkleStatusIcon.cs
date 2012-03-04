@@ -221,12 +221,12 @@ namespace SparkleShare {
 					};
 					
 					subfolder_item.Click += OpenFolderDelegate (folder_name);
-
+					/*
                     if (Program.Controller.UnsyncedFolders.Contains (folder_name))
                         subfolder_item.Icon = Icons.dialog_error_16;
                     else
                         subfolder_item.Icon = Icons.sparkleshare_windows_status;
-
+					 */
                     this.context_menu.Items.Add (subfolder_item);
                 }
 
