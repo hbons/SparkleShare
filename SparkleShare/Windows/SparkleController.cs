@@ -206,6 +206,7 @@ namespace SparkleShare {
 			    process.StartInfo.FileName               = "ssh-agent";
 				process.StartInfo.UseShellExecute        = false;
 				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.CreateNoWindow         = true;
 
 				process.Start ();
 
