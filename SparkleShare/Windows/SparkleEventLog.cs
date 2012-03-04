@@ -22,6 +22,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 
 namespace SparkleShare {
 
@@ -85,6 +86,11 @@ namespace SparkleShare {
 				Width  = Width - 7,
 				Height = Height - 48 - 12
 			};
+			
+			this.web_browser.Navigating += delegate(object sender, NavigatingCancelEventArgs e) {
+	            string url = e.Uri.ToString ();
+				Controller.LinkClicked (url);
+	        };
 			
 			
 			this.canvas = new Canvas ();
