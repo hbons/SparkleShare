@@ -53,30 +53,31 @@ namespace SparkleShare {
 
             Program.TranslateWinForm (this);
 
-            this.Icon = Icons.sparkleshare;
-
+           // this.Icon = Icons.sparkleshare;
+			
             this.change_sets = Program.Controller.GetLog (null);
             GenerateHTML ();
-
+			
             _browserControl = new CefWebBrowser ("application://sparkleshare/eventlog");
             _browserControl.Dock = DockStyle.Fill;
             //_browserControl.PropertyChanged += HandleBrowserPropertyChanged;
             //_browserControl.ConsoleMessage += HandleConsoleMessage;
             _browserControl.BeforeResourceLoadHandler = this;
             WebViewPanel.Controls.Add (_browserControl);
-            
             UpdateChooser ();
+			
         }
 
         public void UpdateChooser ()
         {
             this.combo_box.Items.Add (_ ("All Projects"));
             this.combo_box.Items.Add ("");
-
             foreach (string folder_name in Program.Controller.Folders)
                 this.combo_box.Items.Add (folder_name);
-
-            this.combo_box.SelectedItem = this.combo_box.Items[0];
+			
+			
+           //this.combo_box.SelectedItem = this.combo_box.Items[0];
+		
         }
 
 
