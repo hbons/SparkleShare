@@ -88,31 +88,24 @@ namespace SparkleShare {
 			
 			
 			this.canvas = new Canvas ();
+			Content = this.canvas;
 			
-			canvas.Children.Add (size_label);
+			this.canvas.Children.Add (size_label);
 			Canvas.SetLeft (size_label, 12);
 			Canvas.SetTop (size_label, 10);
 			
-			canvas.Children.Add (this.size_label_value);
+			this.canvas.Children.Add (this.size_label_value);
 			Canvas.SetLeft (this.size_label_value, 12 + size_label_rect.Width);
 			Canvas.SetTop (this.size_label_value, 10);
 			
 			
-			canvas.Children.Add (history_label);
+			this.canvas.Children.Add (history_label);
 			Canvas.SetLeft (history_label, 120);
 			Canvas.SetTop (history_label, 10);
 			
-			canvas.Children.Add (this.history_label_value);
+			this.canvas.Children.Add (this.history_label_value);
 			Canvas.SetLeft (this.history_label_value, 120 + history_label_rect.Width);
 			Canvas.SetTop (this.history_label_value, 10);
-			
-			
-			
-			
-			Content = this.canvas;
-
-			
-			
 			
 
             Controller.ShowWindowEvent += delegate {
@@ -158,8 +151,7 @@ namespace SparkleShare {
                 if (this.canvas.Children.Contains (this.web_browser))
 					this.canvas.Children.Remove (this.web_browser);
 
-                    //    ContentView.AddSubview (this.progress_indicator);
-                
+                    //    ContentView.AddSubview (this.progress_indicator); //TODO spinner
             };
         }
 
@@ -214,7 +206,7 @@ namespace SparkleShare {
                 if (html == null)
                     html = Controller.HTML;
 
-                html = html.Replace ("<!-- $body-font-family -->", "Sans");
+                html = html.Replace ("<!-- $body-font-family -->", "sans-serif");
                 html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
                 html = html.Replace ("<!-- $body-font-size -->", "13.4px");
                 html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
@@ -243,7 +235,7 @@ namespace SparkleShare {
                     //"Pixmaps", "document-moved-12.png"));
 
                 Dispatcher.Invoke ((Action) delegate {
-                    //if (this.progress_indicator.Superview == ContentView) TODO
+                    //if (this.progress_indicator.Superview == ContentView) TODO: spinner
                        // this.progress_indicator.RemoveFromSuperview ();
 
 					this.web_browser.NavigateToString (html);
