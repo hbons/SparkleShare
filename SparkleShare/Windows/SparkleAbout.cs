@@ -18,19 +18,18 @@
 using System;
 using System.ComponentModel;	
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Windows.Forms;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace SparkleShare {
 
-    public class SparkleAbout : Form {
+    public class SparkleAbout : Window {
 
         public SparkleAboutController Controller = new SparkleAboutController ();
 
-        private IContainer components;
         private Label version;
         private Label copyright;
         private Label updates;
@@ -45,61 +44,48 @@ namespace SparkleShare {
 
         public SparkleAbout ()
         {
-            Name = "SparkleAbout";
+            Title = "About SparkleShare";
+//            Icon = Icons.sparkleshare;
 
-            Text = "About SparkleShare";
-            Icon = Icons.sparkleshare;
-
-            MaximizeBox = false;
-            MinimizeBox = false;
-
-			BackgroundImage = Icons.about;
-            ClientSize          = BackgroundImage.Size;
-            AutoScaleDimensions = new SizeF (6F, 13F);
-            AutoScaleMode       = AutoScaleMode.Font;
-            ClientSize          = new Size (640, 260);
-            MaximumSize         = Size;
-            MinimumSize         = Size;
+            
 			
-            FormBorderStyle = FormBorderStyle.FixedDialog;
-
-            SizeGripStyle = SizeGripStyle.Hide;
-            StartPosition = FormStartPosition.CenterScreen;
-
-            FormClosing += Close;
-			CreateHandle ();
+			//BackgroundImage = Icons.about;
+            Height = 300;
+			Width = 600;
+			//Closing
+			// += Close;
 			
             CreateAbout ();
-
+			
 
             Controller.ShowWindowEvent += delegate {
-                this.version.Invoke ((Action) delegate {
+               Dispatcher.Invoke ((Action) delegate {
                     Show ();
-					BringToFront ();
+					BringIntoView ();
                 });
             };
 
             Controller.HideWindowEvent += delegate {
-                Invoke ((Action) delegate {
+                Dispatcher.Invoke ((Action) delegate {
                     Hide ();
                 });
             };
 
             Controller.NewVersionEvent += delegate (string new_version) {
-                Invoke ((Action) delegate {
-                    this.updates.Text = "A newer version (" + new_version + ") is available!";
+                Dispatcher.Invoke ((Action) delegate {
+                    this.updates.Content = "A newer version (" + new_version + ") is available!";
                 });
             };
 
             Controller.VersionUpToDateEvent += delegate {
-                Invoke ((Action) delegate {
-                    this.updates.Text = "You are running the latest version.";
+                Dispatcher.Invoke ((Action) delegate {
+                    this.updates.Content = "You are running the latest version.";
                 });
             };
 
             Controller.CheckingForNewVersionEvent += delegate {
-                Invoke ((Action) delegate {
-                    this.updates.Text = "Checking for updates...";
+                Dispatcher.Invoke ((Action) delegate {
+                    this.updates.Content = "Checking for updates...";
                 });
             };
         }
@@ -107,59 +93,47 @@ namespace SparkleShare {
 
         private void CreateAbout ()
         {
-            ComponentResourceManager resources =
-                new ComponentResourceManager (typeof (SparkleAbout));
-
-            SuspendLayout ();
-
             this.version = new Label () {
-                AutoSize  = true,
-                BackColor = Color.Transparent,
-                ForeColor = Color.LightGray,
-                Location  = new Point (302, 102),
-                Size      = new Size (34, 13),
-                Text      = "version " + Controller.RunningVersion
+                
+                
+                Content    = "version " + Controller.RunningVersion
             };
+			
+			this.version.SetValue(Canvas.LeftProperty, 302.0);
+			this.version.SetValue(Canvas.TopProperty, 102.0);
 
             this.updates = new Label () {
-                AutoSize  = true,
-                BackColor = Color.Transparent,
-                ForeColor = Color.White,
-                Location  = new Point (302, 89),
-                Size      = new Size (106, 13),
-                Text      = "Checking for updates..."
+                Content   = "Checking for updates..."
             };
+			
+			this.version.SetValue(Canvas.LeftProperty, 302.0);
+			this.version.SetValue(Canvas.TopProperty, 98.0);
 
+			
             this.copyright = new Label () {
-                BackColor = Color.Transparent,
-                Font      = new Font ("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte) (0))),
-                ForeColor = Color.White,
-                Location  = new Point (302, 135),
-                Size      = new Size (298, 84),
-                Text      = "Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others.\n" +
+                Content   = "Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others.\n" +
                     "SparkleShare is Free and Open Source Software. You are free to use, modify, " +
                     "and redistribute it under the GNU General Public License version 3 or later."
             };
 
-            Controls.Add (this.version);
-            Controls.Add (this.updates);
-            Controls.Add (this.copyright);
-
-            ResumeLayout (false);
-            PerformLayout ();
+			this.version.SetValue(Canvas.LeftProperty, 302.0);
+			this.version.SetValue(Canvas.TopProperty, 84.0);
+	AddVisualChild (this.version);
+			Button b = new Button ();
+			b.Content = "FFF";
 			
+			Content = this.copyright;
+			//AddChild(this.version);
+			//AddChild(this.updates);
+			//AddChild(this.copyright);
+			Show ();
         }
 
 
-        protected override void Dispose (bool disposing) {
-            if (disposing && (components != null))
-                components.Dispose ();
+        
+		/*
 
-            base.Dispose (disposing);
-        }
-
-
-        private void Close (object sender, FormClosingEventArgs args)
+        private void Close (object sender, Clos)
         {
             if (args.CloseReason != CloseReason.ApplicationExitCall &&
                 args.CloseReason != CloseReason.TaskManagerClosing  &&
@@ -168,6 +142,6 @@ namespace SparkleShare {
                 Controller.WindowClosed ();
                 args.Cancel = true;
             }
-        }
+        }*/
     }
 }

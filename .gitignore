@@ -16,6 +16,7 @@ Makefile
 POTFILES
 SparkleLib/windows/GlobalAssemblyInfoGit.cs
 intltool-*
+SparkleShare/data
 configure
 config.guess
 config.h
