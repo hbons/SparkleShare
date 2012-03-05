@@ -63,9 +63,6 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml" />
-    <Reference Include="CefSharp, Version=0.3.4006.34354, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\bin\CefSharp.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsBase" />
@@ -73,6 +70,9 @@
       <HintPath>..\..\bin\Gettext.Cs.dll</HintPath>
     </Reference>
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="CefSharp">
+      <HintPath>..\..\bin\CefSharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\SparkleLib\windows\GlobalAssemblyInfo.cs">

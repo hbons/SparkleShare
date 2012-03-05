@@ -206,7 +206,14 @@ namespace SparkleShare {
 
             new Thread (new ThreadStart (PopulateRepositories)).Start ();
         }
-
+		
+		
+		public void UIHasLoaded ()
+		{
+			if (FirstRun)
+	        	ShowSetupWindow (PageType.Setup);
+		}
+		
 
         public bool FirstRun {
             get {
