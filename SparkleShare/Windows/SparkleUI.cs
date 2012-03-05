@@ -62,7 +62,7 @@ namespace SparkleShare {
             // Use translations
             Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 #endif
-			SparkleSetupWindow window = new SparkleSetupWindow ();
+			SparkleWindow window = new SparkleWindow ();
 			
             Setup      = new SparkleSetup ();
             EventLog   = new SparkleEventLog ();
