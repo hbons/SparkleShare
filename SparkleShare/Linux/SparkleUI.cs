@@ -23,13 +23,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
-#if __MonoCS__
 using Gtk;
 using Mono.Unix;
 using Mono.Unix.Native;
-#else
-using System.Windows.Forms;
-#endif
 using SparkleLib;
 
 namespace SparkleShare {
@@ -55,13 +51,10 @@ namespace SparkleShare {
 
         public SparkleUI ()
         {
-            // Initialize the application
-#if __MonoCS__
             Application.Init ();
 
             // Use translations
             Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
-#endif
 
             Setup      = new SparkleSetup ();
             EventLog   = new SparkleEventLog ();
@@ -69,8 +62,7 @@ namespace SparkleShare {
             Bubbles    = new SparkleBubbles ();
             StatusIcon = new SparkleStatusIcon ();
         
-            if (Program.Controller.FirstRun)
-                Program.Controller.ShowSetupWindow (PageType.Setup);
+			Program.Controller.UIHasLoaded ();
         }
 
 
@@ -78,9 +70,6 @@ namespace SparkleShare {
         public void Run ()
         {
             Application.Run ();
-#if !__MonoCS__
-            StatusIcon.Dispose ();
-#endif
         }
     }
 }
