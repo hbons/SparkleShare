@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms.Integration;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -31,7 +30,7 @@ namespace SparkleShare {
 
     public class SparkleSetupWindow : Window {
 		
-		public Canvas ContentCanvas = new Canvas ();
+		public Canvas ContentCanvas  = new Canvas ();
 		public List <Button> Buttons = new List <Button> ();
         public string Header;
         public string Description;
@@ -39,6 +38,7 @@ namespace SparkleShare {
 		private Image side_splash;
 		private Rectangle bar;
 		private Rectangle line;
+		
 
         public SparkleSetupWindow ()
         {
@@ -52,7 +52,6 @@ namespace SparkleShare {
 			Content               = ContentCanvas;
 			
 			Closing += Close;
-			
 			
 			this.bar = new Rectangle () {
 				Width  = Width,
@@ -155,9 +154,9 @@ namespace SparkleShare {
 			
 					button.Width = rect.Width + 26;
 					
-					//if (button.Width < 60)
-					//	button.Width = 60;
-						
+					if (button.Width < 75)
+						button.Width = 75;
+					
                     ContentCanvas.Children.Add (button);
 					Canvas.SetRight (button, right);
 					Canvas.SetBottom (button, 9);
@@ -169,121 +168,11 @@ namespace SparkleShare {
 			ElementHost.EnableModelessKeyboardInterop (this);
 			Show ();
 		}
-		
+    
 		
         private void Close (object sender, CancelEventArgs args)
         {
-            //Controller.WindowClosed ();
             args.Cancel = true;    
         }
-    }
-	
-	
-	public class SparkleWindow : SparkleSetupWindow {
-	
-		public SparkleSetupController Controller = new SparkleSetupController ();
-		
-		
-		public SparkleWindow ()
-		{
-			Reset ();
-			
-			Header      = "Welcome to SparkleShare!";
-       		Description = "Before we get started, what's your name and email?\n" +
-            	"Don't worry, this information will only visible to any team members.";
-							
-			Button continue_button = new Button () {
-				Content = "Continue",
-				IsEnabled = false//,
-				//Width   = 75
-			};
-			
-			
-			Button cancel_button = new Button () {
-				Content = "Cancel"//,
-				//Width   = 75
-			};
-			
-			Buttons.Add (continue_button);
-			Buttons.Add (cancel_button);
-			
-			
-			
-			CheckBox check_box = new CheckBox () {
-				Content = "Add SparkleShare to startup items",
-				IsChecked = true
-			};
-			
-			
-			ContentCanvas.Children.Add (check_box);
-			Canvas.SetLeft (check_box, 185);
-			Canvas.SetBottom (check_box, 12);
-			
-				
-			
-            TextBlock name_label = new TextBlock () {
-                Text = "Full Name:",
-				Width = 150,
-				TextAlignment = TextAlignment.Right,
-				FontWeight = FontWeights.Bold
-            };
-			
-			
-			TextBox name = new TextBox () {
-				Text  = Controller.GuessedUserName,
-				Width = 175
-				
-			};
-			
-            TextBlock email_label = new TextBlock () {
-                Text    = "Email:",
-				Width = 150,
-				TextAlignment = TextAlignment.Right,
-				FontWeight = FontWeights.Bold
-            };
-			
-			TextBox email = new TextBox () {
-				Width = 175,
-				Text = Controller.GuessedUserEmail
-			};
-			
-			name.TextChanged += delegate {
-				Controller.CheckSetupPage (name.Text, email.Text);
-			};
-			
-			email.TextChanged += delegate {
-				Controller.CheckSetupPage (name.Text, email.Text);
-			};
-			
-			Controller.UpdateSetupContinueButtonEvent += delegate (bool enabled) {
-				Dispatcher.Invoke ((Action) delegate {
-					continue_button.IsEnabled = enabled;
-				});
-			};
-			
-			ContentCanvas.Children.Add (name);
-			Canvas.SetLeft (name, 340);
-			Canvas.SetTop (name, 200);
-			
-			
-			ContentCanvas.Children.Add (name_label);
-			Canvas.SetLeft (name_label, 180);
-			Canvas.SetTop (name_label, 200 + 3);
-			
-			ContentCanvas.Children.Add (email_label);
-			Canvas.SetLeft (email_label, 180);
-			Canvas.SetTop (email_label, 230 + 3);
-			
-			
-			ContentCanvas.Children.Add (email);
-			Canvas.SetLeft (email, 340);
-			Canvas.SetTop (email, 230);
-			
-			
-			
-				Controller.CheckSetupPage (name.Text, email.Text);
-			
-			ShowAll ();
-		}
 	}
 }

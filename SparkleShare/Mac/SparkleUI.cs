@@ -16,10 +16,8 @@
 
     
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Timers;
 
 using Mono.Unix;
 using MonoMac.Foundation;
@@ -36,41 +34,36 @@ namespace SparkleShare {
         public static SparkleSetup Setup;
         public static SparkleBubbles Bubbles;
         public static SparkleAbout About;
-        public static NSFont Font;
-        public static NSFont BoldFont;
-
+		
+		public static NSFont Font = NSFontManager.SharedFontManager.FontWithFamily
+			("Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
+		
+        public static NSFont BoldFont = NSFontManager.SharedFontManager.FontWithFamily
+			("Lucida Grande", NSFontTraitMask.Bold, 0, 13);
+		
 
         public SparkleUI ()
         {
             using (var a = new NSAutoreleasePool ())
             {
-                // Use translations
                 Catalog.Init ("sparkleshare",
                     Path.Combine (NSBundle.MainBundle.ResourcePath, "Translations"));
 
-                // Needed for Growl
                 GrowlApplicationBridge.WeakDelegate = this;
-                GrowlApplicationBridge.Delegate = new SparkleGrowlDelegate ();
+                GrowlApplicationBridge.Delegate     = new SparkleGrowlDelegate ();
 
-                NSApplication.SharedApplication.ApplicationIconImage
-                    = NSImage.ImageNamed ("sparkleshare.icns");
+                NSApplication.SharedApplication.ApplicationIconImage =
+					NSImage.ImageNamed ("sparkleshare.icns");
 
                 SetFolderIcon ();
     
-                Font = NSFontManager.SharedFontManager.FontWithFamily
-                    ("Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
-
-                BoldFont = NSFontManager.SharedFontManager.FontWithFamily
-                    ("Lucida Grande", NSFontTraitMask.Bold, 0, 13);
-
                 Setup      = new SparkleSetup ();
                 EventLog   = new SparkleEventLog ();
                 About      = new SparkleAbout ();
                 Bubbles    = new SparkleBubbles ();
                 StatusIcon = new SparkleStatusIcon ();
 
-                if (Program.Controller.FirstRun)
-                    Program.Controller.ShowSetupWindow (PageType.Setup);
+                Program.Controller.UIHasLoaded ();
             }
         }
     
@@ -79,8 +72,10 @@ namespace SparkleShare {
         {
             using (var a = new NSAutoreleasePool ())
             {
-                string folder_icon_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "sparkleshare-mac.icns");
+                string folder_icon_path = Path.Combine (
+					NSBundle.MainBundle.ResourcePath,
+                    "sparkleshare-mac.icns"
+				);
 
                 NSImage folder_icon = new NSImage (folder_icon_path);
 
@@ -111,13 +106,15 @@ namespace SparkleShare {
         private void HideDockIcon ()
         {
             // Currently not supported, here for completeness sake (see Apple's docs)
-            // NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.None;
+            // NSApplication.SharedApplication.ActivationPolicy = 
+			//     NSApplicationActivationPolicy.None;
         }
 
 
         private void ShowDockIcon ()
         {
-            NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
+            NSApplication.SharedApplication.ActivationPolicy =
+				NSApplicationActivationPolicy.Regular;
         }
 
 

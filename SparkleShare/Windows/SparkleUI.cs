@@ -18,23 +18,19 @@
 using System;
 using System.Windows.Forms;
 
-using SparkleLib;
-
 namespace SparkleShare {
 
     public class SparkleUI {
         
-        public static SparkleStatusIcon StatusIcon;
-        public static SparkleEventLog EventLog;
+		public static SparkleSetup Setup;
+		public static SparkleEventLog EventLog;
         public static SparkleBubbles Bubbles;
-        public static SparkleSetup Setup;
+		public static SparkleStatusIcon StatusIcon;
         public static SparkleAbout About;
 
 
         public SparkleUI ()
-        {
-			SparkleWindow window = new SparkleWindow ();
-			
+        {			
             Setup      = new SparkleSetup ();
             EventLog   = new SparkleEventLog ();
             About      = new SparkleAbout ();

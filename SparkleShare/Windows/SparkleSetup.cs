@@ -16,293 +16,371 @@
 
 
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Timers;
-using System.Collections.Generic;
-using System.Threading;
-
-using System.Windows.Forms;
+using System.ComponentModel;
 using System.Drawing;
-
+using System.IO;
+using System.Media;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace SparkleShare {
 
-    public partial class SparkleSetup : Form {
-
-        public SparkleSetupController Controller = new SparkleSetupController ();
-
-        private TreeView treeView;
-
-        // Short alias for the translations
-        public static string _ (string s) {
-            return Program._ (s);
-        }
-
-
-        public SparkleSetup () {
-            InitializeComponent ();
-
-            Program.TranslateWinForm (this);
-
-            pictureBox.Image = Icons.side_splash;
-            this.Icon = Icons.sparkleshare;
-
-            Controller.HideWindowEvent += delegate
-            {
-                this.Hide();
-            };
-
-            Controller.ShowWindowEvent += delegate
-            {
-                this.Show();
-            };
-
-            Controller.ChangePageEvent += delegate (PageType type, string [] warnings) {
-                tabControl.SafeInvoke ((Action)delegate {
-                    switch (type) {
-                        case PageType.Setup:
-                            tabControl.SelectedIndex = 0;
-                            NameEntry.Text = Controller.GuessedUserName;
-                            EmailEntry.Text = Controller.GuessedUserEmail;
-                            Show();
-                            Controller.CheckSetupPage(NameEntry.Text, EmailEntry.Text);
-                            break;
-
-                        case PageType.Add:
-                            tabControl.SelectedIndex = 1;
-
-                            // Add plugins to tree
-                            // ===================
-                            // Check whether the treeView is already created
-                            // If it is dispose it and start over
-                            if (treeView != null) {
-                                treeView.Dispose();
-                            }
-                            // Set up the treeview
-                            ImageList imageList = new ImageList ();
-                            imageList.ImageSize = new Size (24, 24);
-                            treeView = new TreeView ();
-                            treeView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
-                            treeView.FullRowSelect = true;
-                            treeView.ImageIndex = 0;
-                            treeView.Indent = 35;
-                            treeView.HideSelection = false;
-                            treeView.ItemHeight = 40;
-
-                            TreeNode [] nodes = new TreeNode [Controller.Plugins.Count];
-
-                            for (int i = 0; i < Controller.Plugins.Count; i++) {
-                                nodes [i] = new TreeNode (Controller.Plugins [i].Name + ";" + Controller.Plugins [i].Description);
-                                nodes [i].ImageIndex = i;
-                                nodes [i].SelectedImageIndex = i;
-                                nodes [i].Tag = Controller.Plugins [i].Name;
-                                imageList.Images.Add (Image.FromFile (Controller.Plugins [i].ImagePath));
-                            }
-
-                            treeView.Nodes.AddRange (nodes);
-                            treeView.ImageList = imageList;
-                            treeView.ShowLines = false;
-                            treeView.ShowRootLines = false;
-                            treeView.Size = new System.Drawing.Size (panel_server_selection.Size.Width,
-                                panel_server_selection.Size.Height);
-
-                            panel_server_selection.Controls.Add (treeView);
-                            // Finished adding and populating tree
-
-                            // Select first node
-                            treeView.SelectedNode = treeView.Nodes[0];
-                            treeView.Select();
-                            Controller.SelectedPluginChanged(0);
-
-                            treeView.AfterSelect += new TreeViewEventHandler(CheckTreeNode);
-
-                            Show ();
-                            Controller.CheckAddPage(ServerEntry.Text, FolderEntry.Text, 1);
-                            break;
-
-                        case PageType.Invite:
-                            tabControl.SelectedIndex = 5;
-                            InviteAddressEntry.Text = Controller.PendingInvite.Address;
-                            InviteFolderEntry.Text = Controller.PendingInvite.RemotePath;
-                            Show();
-                            break;
-
-                        case PageType.Syncing:
-                            tabControl.SelectedIndex = 2;
-                            Show();
-                            break;
-
-                        case PageType.Error:
-                            tabControl.SelectedIndex = 3;
-                            label3.Text = "First, have you tried turning it off and on again?\n\n" +
-                                Controller.PreviousUrl + " is the address we've compiled. Does this look alright?\n\n" +
-                                "The host needs to know who you are. Have you uploaded the key that sits in your SparkleShare folder?";
-                            Show ();
-                            break;
-
-                        case PageType.Finished:
-                            tabControl.SelectedIndex = 4;
-                            Show ();
-                            break;
-
-                        case PageType.Tutorial:
-                            // Do nothing in tutorial by now
-                            Controller.TutorialSkipped();;
-                            break;
-
-                        default:
-                            throw new NotImplementedException ("unknown PageType");
-                    }
+    public class SparkleSetup : SparkleSetupWindow {
+	
+		public SparkleSetupController Controller = new SparkleSetupController ();
+		
+		
+		public SparkleSetup ()
+		{
+            Controller.ShowWindowEvent += delegate {
+               Dispatcher.Invoke ((Action) delegate {
+                    Show ();
+					Activate ();
+					BringIntoView ();
                 });
             };
 
-            Controller.UpdateSetupContinueButtonEvent += new SparkleSetupController.UpdateSetupContinueButtonEventHandler(UpdateSetupContinueButtonEvent);
+            Controller.HideWindowEvent += delegate {
+                Dispatcher.Invoke ((Action) delegate {
+                    Hide ();
+                });
+            };
+			
+            Controller.ChangePageEvent += delegate (PageType type, string [] warnings) {
+				Dispatcher.Invoke ((Action) delegate {
+					Reset ();
+					
+					switch (type) {
+                    case PageType.Setup: {
+						Header      = "Welcome to SparkleShare!";
+			       		Description = "Before we get started, what's your name and email?\n" +
+			            	"Don't worry, this information will only visible to any team members.";
+		
+						
+			            TextBlock name_label = new TextBlock () {
+			                Text = "Full Name:",
+							Width = 150,
+							TextAlignment = TextAlignment.Right,
+							FontWeight = FontWeights.Bold
+			            };
+													
+						TextBox name_box = new TextBox () {
+							Text  = Controller.GuessedUserName,
+							Width = 175
+							
+						};
+						
+						
+			            TextBlock email_label = new TextBlock () {
+			                Text    = "Email:",
+							Width = 150,
+							TextAlignment = TextAlignment.Right,
+							FontWeight = FontWeights.Bold
+			            };
+						
+						TextBox email_box = new TextBox () {
+							Width = 175,
+							Text = Controller.GuessedUserEmail
+						};
+						
+						
+						Button continue_button = new Button () {
+							Content = "Continue",
+							IsEnabled = false
+						};
+						
+						
+						ContentCanvas.Children.Add (name_label);
+						Canvas.SetLeft (name_label, 180);
+						Canvas.SetTop (name_label, 200 + 3);
+						
+						ContentCanvas.Children.Add (name_box);
+						Canvas.SetLeft (name_box, 340);
+						Canvas.SetTop (name_box, 200);
+						
+						ContentCanvas.Children.Add (email_label);
+						Canvas.SetLeft (email_label, 180);
+						Canvas.SetTop (email_label, 230 + 3);
+						
+						ContentCanvas.Children.Add (email_box);
+						Canvas.SetLeft (email_box, 340);
+						Canvas.SetTop (email_box, 230);
+						
+						Buttons.Add (continue_button);
+						
+						
+						Controller.UpdateSetupContinueButtonEvent += delegate (bool enabled) {
+						Dispatcher.Invoke ((Action) delegate {
+								continue_button.IsEnabled = enabled;
+							});
+						};
+						
+						name_box.TextChanged += delegate {
+							Controller.CheckSetupPage (name_box.Text, email_box.Text);
+						};
+						
+						email_box.TextChanged += delegate {
+							Controller.CheckSetupPage (name_box.Text, email_box.Text);
+						};
+						
+						continue_button.Click += delegate {
+							Controller.SetupPageCompleted (name_box.Text, email_box.Text);
+						};
+						
+						Controller.CheckSetupPage (name_box.Text, email_box.Text);
+						
+						break;
+					}
 
-            Controller.ChangeAddressFieldEvent += new SparkleSetupController.ChangeAddressFieldEventHandler(ChangeAddressFieldEvent);
-            Controller.ChangePathFieldEvent += new SparkleSetupController.ChangePathFieldEventHandler(ChangePathFieldEvent);
-            Controller.UpdateAddProjectButtonEvent += new SparkleSetupController.UpdateAddProjectButtonEventHandler(UpdateAddProjectButtonEvent);
+                    case PageType.Invite: {
+						// TODO
+						break;
+					}
+						
+                    case PageType.Add: {
+						Header = "Where's your project hosted?";
+						
+						
+						Button cancel_button = new Button () {
+                            Content = "Cancel"
+                        };
+    
+                        Button add_button = new Button () {
+                            Content = "Add"
+                        };
+	
+						
+						Buttons.Add (add_button);
+						Buttons.Add (cancel_button);
+						
+						
+					  	Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
+                            Dispatcher.Invoke ((Action) delegate {
+                                add_button.IsEnabled = button_enabled;
+                            });
+                        };
+						
+						cancel_button.Click += delegate {
+							Controller.PageCancelled ();
+						};
 
-            Controller.UpdateProgressBarEvent += new SparkleSetupController.UpdateProgressBarEventHandler(UpdateProgressBarEvent);
-        }
+                        add_button.Click += delegate {
+                            Controller.AddPageCompleted ("github.com", "hbons/Stuff"); // TODO
+                        };
+						
+						break;
+					}
+						
+						
+					case PageType.Syncing: {
+						Header = "Adding project ‘" + Controller.SyncingFolder + "’…";
+                            Description = "This may take a while.\n" +
+                                          "Are you sure it’s not coffee o'clock?";
+ 
+						
+						Button finish_button = new Button () {
+                            Content   = "Finish",
+							IsEnabled = false
+                        };
+    
+                        Button cancel_button = new Button () {
+                            Content = "Cancel"
+                        };
+						
+						ProgressBar progress_bar = new ProgressBar () {
+							Width = 414,
+							Height = 15,
+							Value = 1
+						};
+						
+						
+						ContentCanvas.Children.Add (progress_bar);
+						Canvas.SetLeft (progress_bar, 185);
+						Canvas.SetTop (progress_bar, 150);
+						
+						Buttons.Add (finish_button);
+						Buttons.Add (cancel_button);
+						
+                                                                                                    
+                        Controller.UpdateProgressBarEvent += delegate (double percentage) {
+                            Dispatcher.Invoke ((Action) delegate {
+                                progress_bar.Value = percentage;
+                            });
+                        };
+    
+                        cancel_button.Click += delegate {
+                            Controller.SyncingCancelled ();
+                        };
+						
+						break;
+					}
+						
+						
+					case PageType.Error: {
+						Header      = "Something went wrong…";
+                        Description = "Please check the following:";
+ 
+						// TODO: Bullet points
+						
+						Button try_again_button = new Button () {
+                            Content   = "Try again…"
+                        };
+    					
+						Buttons.Add (try_again_button);
+    
+                        try_again_button.Click += delegate {
+                            Controller.ErrorPageCompleted ();
+                        };
+						
+						break;
+					}	
+						
+					case PageType.Finished: {
+						Header = "Project ‘" + Path.GetFileName (Controller.PreviousPath) +
+							"’ succesfully added!";
+                            
+						Description = "Access the files from your SparkleShare folder.";
+						
+						
+						// TODO: warnings
+						
+						Button finish_button = new Button () {
+                            Content = "Finish"
+                        };
+    
+                        Button open_folder_button = new Button () {
+                            Content = "Open folder"
+                        };
+	
+						
+						Buttons.Add (finish_button);
+						Buttons.Add (open_folder_button);
+						
+						
+						finish_button.Click += delegate {
+							Controller.FinishPageCompleted ();
+						};
 
-        private void SparkleSetup_FormClosing (object sender, FormClosingEventArgs e) {
-            if (e.CloseReason != CloseReason.ApplicationExitCall
-                && e.CloseReason != CloseReason.TaskManagerClosing
-                && e.CloseReason != CloseReason.WindowsShutDown) {
-                e.Cancel = true;
-                this.Hide ();
-            }
-        }
-
-        #region Things for "Setup" page
-        private void SetupNextClicked(object sender, EventArgs e)
-        {
-            Controller.SetupPageCompleted(NameEntry.Text, EmailEntry.Text);
-        }
-
-        private void CheckSetupPage(object sender, EventArgs e)
-        {
-            Controller.CheckSetupPage(NameEntry.Text, EmailEntry.Text);
-        }
-
-        void UpdateSetupContinueButtonEvent(bool button_enabled)
-        {
-            buttonNext.Enabled = button_enabled;
-        }
-        #endregion
-
-        #region Things for "Add" page
-        void ChangeAddressFieldEvent(string text, string example_text, FieldState state)
-        {
-            ServerEntry.Text = text;
-            ServerEntry.Enabled = state == FieldState.Enabled;
-            ServerEntry.ExampleText = example_text;
-        }
-
-        void ChangePathFieldEvent(string text, string example_text, FieldState state)
-        {
-            FolderEntry.Text = text;
-            FolderEntry.Enabled = state == FieldState.Enabled;
-            FolderEntry.ExampleText = example_text;
-        }
-
-        private void CheckTreeNode(object sender, EventArgs e)
-        {
-            Controller.SelectedPluginChanged(treeView.SelectedNode.Index);
-        }
-
-        private void CancelButtonClicked (object sender, EventArgs e) {
-            Controller.PageCancelled();
-        }
-
-        private void AddButtonClicked(object sender, EventArgs e)
-        {
-            Controller.AddPageCompleted(ServerEntry.Text, FolderEntry.Text);
-        }
-
-        void UpdateAddProjectButtonEvent(bool button_enabled)
-        {
-            buttonSync.Enabled = button_enabled;
-        }
-
-        private void CheckAddPage(object sender, EventArgs e)
-        {
-            Controller.CheckAddPage(ServerEntry.Text, FolderEntry.Text, treeView.SelectedNode.Index);
-        }
-        #endregion
-
-        #region Things for "Invite" page
-        private void InviteAddButtonClicked(object sender, EventArgs e)
-        {
-            Controller.InvitePageCompleted();
-        }
-
-        private void InviteCancelButtonClicked(object sender, EventArgs e)
-        {
-            Controller.PageCancelled();
-        }
-        #endregion
-
-        #region Things for "Syncing" page
-        private void syncCancelClicked(object sender, EventArgs e)
-        {
-            Controller.SyncingCancelled();
-        }
-
-        void UpdateProgressBarEvent(double percentage)
-        {
-            syncingProgressBar.Value = (int)percentage;
-        }
-        #endregion
-
-        #region Things for "Error" page
-        private void buttonTryAgain_Click(object sender, EventArgs e)
-        {
-            Controller.ErrorPageCompleted();
-        }
-        #endregion
-
-        #region Thigngs for "Finish" page
-        private void buttonFinished_Click (object sender, EventArgs e) {
-            Controller.FinishPageCompleted();
-        }
-
-        private void buttonOpenFolder_Click (object sender, EventArgs e) {
-            Controller.OpenFolderClicked();
-        }
-        #endregion
-    }
+                        open_folder_button.Click += delegate {
+                            Controller.OpenFolderClicked ();
+                        };
+						
+						
+						SystemSounds.Exclamation.Play ();
+						// TODO: Catch attention without having to raise the window
+						
+						break;
+					}
+						
+					case PageType.Tutorial: {
+						
+						switch (Controller.TutorialPageNumber) {
+                            case 1: {
+                                Header      = "What's happening next?";
+                                Description = "SparkleShare creates a special folder on your computer " +
+                                    "that will keep track of your projects.";
+    
+							
+                                Button skip_tutorial_button = new Button () {
+                                    Content = "Skip tutorial"
+                                };
+    
+    
+                                Button continue_button = new Button () {
+                                    Content = "Continue"
+                                };
+							
+                            	// TODO: Add slides    
+							
+                                Buttons.Add (continue_button);
+                                Buttons.Add (skip_tutorial_button);
+								
+								
+								skip_tutorial_button.Click += delegate {
+									Controller.TutorialSkipped ();
+								};
+								
+								continue_button.Click += delegate {
+									Controller.TutorialPageCompleted ();
+								};
+							
+								break;
+							}
+						
+							case 2: {
+                                Header      = "Sharing files with others";
+                                Description = "All files added to your project folders are synced automatically with " +
+                                    "the host and your team members.";
+    
+                                Button continue_button = new Button () {
+                                    Content = "Continue"
+                                };
+    						
+								Buttons.Add (continue_button);                        
+								
+								continue_button.Click += delegate {
+                                    Controller.TutorialPageCompleted ();
+                                };
+							
+                                break;
+                        	}
+							
+							case 3: {
+								Header      = "The status icon is here to help";
+                                Description = "It shows the syncing progress, provides easy access to " +
+                                    "your projects and let's you view recent changes.";
+    
+							
+                                Button continue_button = new Button () {
+                                    Content = "Continue"
+                                };
+								
+								Buttons.Add (continue_button);                                
+							
+								continue_button.Click += delegate {
+                                    Controller.TutorialPageCompleted ();
+                                };
+							
+                                break;
+							}
+							
+							case 4: {
+                                Header      = "Adding projects to SparkleShare";
+                                Description = "You can do this through the status icon menu, or by clicking " +
+                                    "magic buttons on webpages that look like this:";
+							
+							
+								Button finish_button = new Button () {
+                                    Content = "Finish"
+                                };
+    
+								CheckBox check_box = new CheckBox () {
+									Content   = "Add SparkleShare to startup items",
+									IsChecked = true
+								};
+							
+							
+								ContentCanvas.Children.Add (check_box);
+								Canvas.SetLeft (check_box, 185);
+								Canvas.SetBottom (check_box, 12);
+								
+                                Buttons.Add (finish_button);
+								
+							
+								finish_button.Click += delegate {
+									Controller.TutorialPageCompleted ();
+								};
+    
+                                break;
+							}
+						}
+						break;
+					}
+					}
+					
+					ShowAll ();
+				});		
+			};
+		}
+	}
 }
-
-public class TreeView : System.Windows.Forms.TreeView {
-
-    protected override void OnDrawNode (DrawTreeNodeEventArgs e) {
-        e.Graphics.DrawString (e.Node.Text.Split (';') [0], new Font (Font.SystemFontName, 13),
-            new SolidBrush (Color.Black), e.Bounds.X, e.Bounds.Y);
-        e.Graphics.DrawString (e.Node.Text.Split (';') [1], new Font (Font.SystemFontName, 9),
-            new SolidBrush (Color.Black), e.Bounds.X + 10, e.Bounds.Y + 15);
-    }
-}
-
-public class TreeNode : System.Windows.Forms.TreeNode {
-    public TreeNode (string text) {
-      
-          this.Text = text;
-    }
-	
-	
-	
-	
-}
-
-
-
-
-
-
-
-
-
-
