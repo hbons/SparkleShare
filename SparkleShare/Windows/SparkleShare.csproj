@@ -125,12 +125,7 @@
     <Compile Include="SparkleAbout.cs" />
     <Compile Include="SparkleController.cs" />
     <Compile Include="SparkleEventLog.cs" />
-    <Compile Include="SparkleSetup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SparkleSetup.Designer.cs">
-      <DependentUpon>SparkleSetup.cs</DependentUpon>
-    </Compile>
+    <Compile Include="SparkleSetup.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUIHelpers.cs" />

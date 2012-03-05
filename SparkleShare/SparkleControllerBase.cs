@@ -90,6 +90,40 @@ namespace SparkleShare {
         public delegate void NoteNotificationRaisedEventHandler (SparkleUser user, string folder_name);
 
 
+
+        public bool FirstRun {
+            get {
+                return SparkleConfig.DefaultConfig.User.Email.Equals ("Unknown");
+            }
+        }
+
+
+        public List<string> Folders {
+            get {
+                List<string> folders = SparkleConfig.DefaultConfig.Folders;
+                folders.Sort ();
+
+                return folders;
+            }
+        }
+
+
+        public List<string> UnsyncedFolders {
+            get {
+                List<string> unsynced_folders = new List<string> ();
+
+                lock (this.repo_lock) {
+                    foreach (SparkleRepoBase repo in Repositories) {
+                        if (repo.HasUnsyncedChanges)
+                            unsynced_folders.Add (repo.Name);
+                    }
+                }
+
+                return unsynced_folders;
+            }
+        }
+
+		
         // Path where the plugins are kept
         public abstract string PluginsPath { get; }
 
@@ -210,53 +244,9 @@ namespace SparkleShare {
 		
 		public void UIHasLoaded ()
 		{
-			if (FirstRun)
+			// if (FirstRun)
 	        	ShowSetupWindow (PageType.Setup);
 		}
-		
-
-        public bool FirstRun {
-            get {
-                return SparkleConfig.DefaultConfig.User.Email.Equals ("Unknown");
-            }
-        }
-
-
-        public List<string> Folders {
-            get {
-                List<string> folders = SparkleConfig.DefaultConfig.Folders;
-                folders.Sort ();
-
-                return folders;
-            }
-        }
-
-
-        public List<string> PreviousHosts {
-            get {
-                List<string> hosts = SparkleConfig.DefaultConfig.HostsWithUsername;
-                hosts.AddRange(SparkleConfig.DefaultConfig.Hosts);
-                hosts.Sort ();
-
-                return hosts;
-            }
-        }
-
-
-        public List<string> UnsyncedFolders {
-            get {
-                List<string> unsynced_folders = new List<string> ();
-
-                lock (this.repo_lock) {
-                    foreach (SparkleRepoBase repo in Repositories) {
-                        if (repo.HasUnsyncedChanges)
-                            unsynced_folders.Add (repo.Name);
-                    }
-                }
-
-                return unsynced_folders;
-            }
-        }
 
 
         public void ShowSetupWindow (PageType page_type)
