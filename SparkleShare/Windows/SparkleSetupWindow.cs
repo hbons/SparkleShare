@@ -16,6 +16,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows;
@@ -28,10 +29,15 @@ using System.Windows.Shapes;
 namespace SparkleShare {
 
     public class SparkleSetupWindow : Window {
-
-		private Canvas canvas;
 		
-
+		public Canvas ContentCanvas = new Canvas ();
+		public List <Button> Buttons = new List <Button> ();
+        public string Header;
+        public string Description;
+		
+		private Image side_splash;
+		private Rectangle bar;
+		private Rectangle line;
 
         public SparkleSetupWindow ()
         {
@@ -42,60 +48,172 @@ namespace SparkleShare {
 			Background = new SolidColorBrush (Colors.WhiteSmoke);
 			
 			WindowStartupLocation = WindowStartupLocation.CenterScreen;
+			Content               = ContentCanvas;
 			
 			Closing += Close;
 			
 			
-				Image image = new Image () {
+			this.bar = new Rectangle () {
+				Width  = Width,
+				Height = 40,
+				Fill   = new SolidColorBrush (Color.FromRgb (240, 240, 240))	
+			};
+			
+			this.line = new Rectangle () {
+				Width  = Width,
+				Height = 1,
+				Fill   = new SolidColorBrush (Color.FromRgb (223, 223, 223))	
+			};
+					
+			
+			this.side_splash = new Image () {
 				Width  = 150,
 				Height = 482
 			};
-		
+			
 			BitmapImage bitmap_image = new BitmapImage();
 			
-			bitmap_image.BeginInit();
-			// TODO: get relative reference to the image
-			bitmap_image.UriSource = new Uri(@"C:\Users\Hylke\Code\SparkleShare\data\side-splash.png");
+			bitmap_image.BeginInit ();
 			bitmap_image.DecodePixelWidth = 150;
-			bitmap_image.EndInit();
 			
-			image.Source  = bitmap_image;
-						
+			bitmap_image.UriSource =
+				new Uri (@"C:\Users\Hylke\Code\SparkleShare\data\side-splash.png");
 			
-            Label size_label = new Label () {
-                Content    = "Welcome to SparkleShare!",
-				
+			bitmap_image.EndInit ();
+			this.side_splash.Source = bitmap_image;
+		
+			
+			ContentCanvas.Children.Add (this.bar);
+			Canvas.SetRight (bar, 0);
+			Canvas.SetBottom (bar, 0);
+			
+			ContentCanvas.Children.Add (this.line);
+			Canvas.SetRight (this.line, 0);
+			Canvas.SetBottom (this.line, 40);
+			
+			ContentCanvas.Children.Add (this.side_splash);
+			Canvas.SetLeft (this.side_splash, 0);
+			Canvas.SetBottom (this.side_splash, 0);
+			
+			// TODO: enable keyboard navigation
+        }
+		
+		
+        public void Reset ()
+		{
+			ContentCanvas.Children.Remove (this.bar);
+			
+			ContentCanvas.Children.Remove (this.line);
+			
+			ContentCanvas.Children.Remove (this.side_splash);
+            ContentCanvas = new Canvas ();
+			Content       = ContentCanvas;
+			
+			ContentCanvas.Children.Add (this.bar);
+			ContentCanvas.Children.Add (this.line);
+			ContentCanvas.Children.Add (this.side_splash);
+			
+            Buttons       = new List <Button> ();
+            Header        = "";
+            Description   = "";
+        }
+		
+		
+		public void ShowAll ()
+		{
+            Label header_label = new Label () {
+                Content    = Header,
 				Foreground = new SolidColorBrush (Color.FromRgb (0, 51, 153)),
 				FontSize   = 16
-				
             };
-			
-			
-			
-			TextBlock history_label_value = new TextBlock () {
-                Text = "Before we get started, what's your name and email?\n" +
-                	"Don't worry, this information will only visible to any team members.",
-				TextWrapping = TextWrapping.Wrap,
-				Width = 375
-            };
-			
 						
-			this.canvas = new Canvas ();
-			Content = this.canvas;
-			
-			this.canvas.Children.Add (size_label);
-			Canvas.SetLeft (size_label, 180);
-			Canvas.SetTop (size_label, 18);
-			
+			TextBlock description_label = new TextBlock () {
+                Text         = Description, 
+				TextWrapping = TextWrapping.Wrap,
+				Width        = 375
+            };
 			
 			
-			this.canvas.Children.Add (history_label_value);
-			Canvas.SetLeft (history_label_value, 185);
-			Canvas.SetTop (history_label_value, 60);
-
+			ContentCanvas.Children.Add (header_label);
+			Canvas.SetLeft (header_label, 180);
+			Canvas.SetTop (header_label, 18);	
+			
+		    ContentCanvas.Children.Add (description_label);
+			Canvas.SetLeft (description_label, 185);
+			Canvas.SetTop (description_label, 60);
+			
+			
+            if (Buttons.Count > 0) {
+                Buttons [0].IsDefault = true;
+                
+				int right = 9;
+				
+                foreach (Button button in Buttons) {
+					button.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
+					Rect rect = new Rect (button.DesiredSize);
+			
+					button.Width = rect.Width + 26;
+					
+					//if (button.Width < 60)
+					//	button.Width = 60;
+						
+                    ContentCanvas.Children.Add (button);
+					Canvas.SetRight (button, right);
+					Canvas.SetBottom (button, 9);
+					
+					right += (int) button.Width + 9;
+                }
+            }
+			
+			Show ();
+		}
+		
+		
+        private void Close (object sender, CancelEventArgs args)
+        {
+            //Controller.WindowClosed ();
+            args.Cancel = true;    
+        }
+    }
+	
+	
+	public class SparkleWindow : SparkleSetupWindow {
+	
+		public SparkleWindow ()
+		{
+			Reset ();
+			
+			Header      = "Welcome to SparkleShare!";
+       		Description = "Before we get started, what's your name and email?\n" +
+            	"Don't worry, this information will only visible to any team members.";
+							
+			Button continue_button = new Button () {
+				Content = "Continue"//,
+				//Width   = 75
+			};
+			
+			
+			Button cancel_button = new Button () {
+				Content = "Cancel"//,
+				//Width   = 75
+			};
+			
+			Buttons.Add (continue_button);
+			Buttons.Add (cancel_button);
 			
 			
 			
+			CheckBox check_box = new CheckBox () {
+				Content = "Add SparkleShare to startup items",
+				IsChecked = true
+			};
+			
+			
+			ContentCanvas.Children.Add (check_box);
+			Canvas.SetLeft (check_box, 185);
+			Canvas.SetBottom (check_box, 12);
+			
+				
 			
             TextBlock name_label = new TextBlock () {
                 Text = "Full Name:",
@@ -110,8 +228,6 @@ namespace SparkleShare {
 				Width = 175 
 			};
 			
-			
-			
             TextBlock email_label = new TextBlock () {
                 Text    = "Email:",
 				Width = 150,
@@ -121,86 +237,35 @@ namespace SparkleShare {
 			
 			TextBox email = new TextBox () {
 				Text  = "hylkebons@gmail.com",
-				Width = 175
+				Width = 175,
+				IsEnabled = true
 			};
 			
-			canvas.Children.Add (name);
+			ContentCanvas.Children.Add (name);
 			Canvas.SetLeft (name, 340);
 			Canvas.SetTop (name, 200);
 			
-			canvas.Children.Add (name_label);
+			name.TextChanged += delegate {
+				// Controller.CheckSetupPage ();
+			};
+			
+			ContentCanvas.Children.Add (name_label);
 			Canvas.SetLeft (name_label, 180);
 			Canvas.SetTop (name_label, 200 + 3);
 			
-			canvas.Children.Add (email_label);
+			ContentCanvas.Children.Add (email_label);
 			Canvas.SetLeft (email_label, 180);
 			Canvas.SetTop (email_label, 230 + 3);
 			
 			
-			canvas.Children.Add (email);
+			ContentCanvas.Children.Add (email);
 			Canvas.SetLeft (email, 340);
 			Canvas.SetTop (email, 230);
 			
 			
 			
-			Rectangle rect = new Rectangle () {
-				Width = Width,
-				Height = 40,
-				Fill = new SolidColorBrush (Color.FromRgb (240, 240, 240))	
-			};
 			
-			Rectangle line = new Rectangle () {
-				Width = Width,
-				Height = 1,
-				Fill = new SolidColorBrush (Color.FromRgb (223, 223, 223))	
-			};
-			
-			
-			
-			
-			canvas.Children.Add (rect);
-			Canvas.SetRight (rect, 0);
-			Canvas.SetBottom (rect, 0);
-			
-			canvas.Children.Add (line);
-			Canvas.SetRight (line, 0);
-			Canvas.SetBottom (line, 40);
-			
-			
-			Button button = new Button () {
-				Content = "Continue",
-				Width = 75,
-				IsDefault = true
-			};
-			
-			
-			canvas.Children.Add (button);
-			Canvas.SetRight (button, 10);
-			Canvas.SetBottom (button, 9);
-			
-			
-			CheckBox check_box = new CheckBox () {
-				Content = "Add SparkleShare to startup items",
-				IsChecked = true
-			};
-			
-			
-			canvas.Children.Add (check_box);
-			Canvas.SetLeft (check_box, 200);
-			Canvas.SetBottom (check_box, 12);
-			
-			
-			canvas.Children.Add (image);
-			Canvas.SetLeft (image, 0);
-			Canvas.SetBottom (image, 0);
-			
-            Show ();
-        }
-		
-        private void Close (object sender, CancelEventArgs args)
-        {
-            //Controller.WindowClosed ();
-            args.Cancel = true;    
-        }
-    }
+			ShowAll ();
+		}
+	}
 }

@@ -30,7 +30,7 @@ namespace SparkleShare {
 
     public class SparkleSetupWindow : NSWindow {
 
-        public List <NSButton> Buttons;
+        public List <NSButton> Buttons = new List <NSButton> ();
         public string Header;
         public string Description;
 
@@ -63,8 +63,6 @@ namespace SparkleShare {
                 Image = SideSplash,
                 Frame = new RectangleF (0, 0, 150, 482)
             };
-
-            Buttons = new List <NSButton> ();
 
             HeaderTextField = new NSTextField () {
                 Frame           = new RectangleF (190, Frame.Height - 100, Frame.Width, 48),
