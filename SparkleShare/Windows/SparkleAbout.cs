@@ -45,6 +45,8 @@ namespace SparkleShare {
 			Height     = 288;
 			Width      = 640;
 			
+			WindowStartupLocation = WindowStartupLocation.CenterScreen;
+			
 			Closing += Close;
 
             CreateAbout ();
@@ -153,8 +155,8 @@ namespace SparkleShare {
 		
         private void Close (object sender, CancelEventArgs args)
         {
-                Controller.WindowClosed ();
-                args.Cancel = true;    
+            Controller.WindowClosed ();
+            args.Cancel = true;    
         }
     }
 }

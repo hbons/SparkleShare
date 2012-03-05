@@ -27,8 +27,8 @@ namespace SparkleShare {
 
         public SparkleBubbles ()
         {
-            Controller.ShowBubbleEvent += delegate (string title, string subtext,
-                string image_path) {
+            Controller.ShowBubbleEvent += delegate (string title,
+			    string subtext, string image_path) {
 
                 SparkleUI.StatusIcon.ShowBalloon (title, subtext, image_path);
             };
