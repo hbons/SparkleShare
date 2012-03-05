@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Forms.Integration;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -165,6 +166,7 @@ namespace SparkleShare {
                 }
             }
 			
+			ElementHost.EnableModelessKeyboardInterop (this);
 			Show ();
 		}
 		
@@ -179,6 +181,9 @@ namespace SparkleShare {
 	
 	public class SparkleWindow : SparkleSetupWindow {
 	
+		public SparkleSetupController Controller = new SparkleSetupController ();
+		
+		
 		public SparkleWindow ()
 		{
 			Reset ();
@@ -188,7 +193,8 @@ namespace SparkleShare {
             	"Don't worry, this information will only visible to any team members.";
 							
 			Button continue_button = new Button () {
-				Content = "Continue"//,
+				Content = "Continue",
+				IsEnabled = false//,
 				//Width   = 75
 			};
 			
@@ -224,8 +230,9 @@ namespace SparkleShare {
 			
 			
 			TextBox name = new TextBox () {
-				Text  = "Hylke Bons",
-				Width = 175 
+				Text  = Controller.GuessedUserName,
+				Width = 175
+				
 			};
 			
             TextBlock email_label = new TextBlock () {
@@ -236,18 +243,28 @@ namespace SparkleShare {
             };
 			
 			TextBox email = new TextBox () {
-				Text  = "hylkebons@gmail.com",
 				Width = 175,
-				IsEnabled = true
+				Text = Controller.GuessedUserEmail
+			};
+			
+			name.TextChanged += delegate {
+				Controller.CheckSetupPage (name.Text, email.Text);
+			};
+			
+			email.TextChanged += delegate {
+				Controller.CheckSetupPage (name.Text, email.Text);
+			};
+			
+			Controller.UpdateSetupContinueButtonEvent += delegate (bool enabled) {
+				Dispatcher.Invoke ((Action) delegate {
+					continue_button.IsEnabled = enabled;
+				});
 			};
 			
 			ContentCanvas.Children.Add (name);
 			Canvas.SetLeft (name, 340);
 			Canvas.SetTop (name, 200);
 			
-			name.TextChanged += delegate {
-				// Controller.CheckSetupPage ();
-			};
 			
 			ContentCanvas.Children.Add (name_label);
 			Canvas.SetLeft (name_label, 180);
@@ -264,6 +281,7 @@ namespace SparkleShare {
 			
 			
 			
+				Controller.CheckSetupPage (name.Text, email.Text);
 			
 			ShowAll ();
 		}
