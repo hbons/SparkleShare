@@ -22,6 +22,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using System.Windows.Navigation;
 
 namespace SparkleShare {
@@ -50,18 +51,20 @@ namespace SparkleShare {
 			Height     = 640;
 			Width      = 480;
 			ResizeMode = ResizeMode.NoResize;
-			Background = new SolidColorBrush (Colors.WhiteSmoke);	
+			Background = new SolidColorBrush (Color.FromRgb (240, 240, 240));	
+			
+			WindowStartupLocation = WindowStartupLocation.CenterScreen;
 			
 			Closing += Close;
 			
 						
             Label size_label = new Label () {
-                Content    = "Size:",
-				FontWeight = FontWeights.Bold
+                Content    = "Size:"
             };
 			
 			this.size_label_value = new Label () {
-				Content = Controller.Size
+				Content = Controller.Size,
+				FontWeight = FontWeights.Bold
 			};
 			
 			size_label.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
@@ -70,24 +73,31 @@ namespace SparkleShare {
 			
 			
 			Label history_label = new Label () {
-                Content    = "History:",
-				FontWeight = FontWeights.Bold
+                Content    = "History:"
             };
 			
 			this.history_label_value = new Label () {
-                Content = Controller.HistorySize
+                Content = Controller.HistorySize,
+				FontWeight = FontWeights.Bold
             };
 			
 			history_label.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
 			Rect history_label_rect = new Rect (history_label.DesiredSize);
 			
 			
-			this.web_browser = new WebBrowser () {
-				Width  = Width - 7,
-				Height = Height - 48 - 12
+			Rectangle line = new Rectangle () {
+				Width = Width,
+				Height = 1,
+				Fill = new SolidColorBrush (Color.FromRgb (223, 223, 223))	
 			};
 			
-			this.web_browser.Navigating += delegate(object sender, NavigatingCancelEventArgs e) {
+			
+			this.web_browser = new WebBrowser () {
+				Width  = Width - 7,
+				Height = Height - 36 - 12
+			};
+			
+			this.web_browser.Navigating += delegate (object sender, NavigatingCancelEventArgs e) {
 	            string url = e.Uri.ToString ();
 				Controller.LinkClicked (url);
 	        };
@@ -98,20 +108,25 @@ namespace SparkleShare {
 			
 			this.canvas.Children.Add (size_label);
 			Canvas.SetLeft (size_label, 12);
-			Canvas.SetTop (size_label, 10);
+			Canvas.SetTop (size_label, 4);
 			
 			this.canvas.Children.Add (this.size_label_value);
 			Canvas.SetLeft (this.size_label_value, 12 + size_label_rect.Width);
-			Canvas.SetTop (this.size_label_value, 10);
+			Canvas.SetTop (this.size_label_value, 4);
 			
 			
 			this.canvas.Children.Add (history_label);
 			Canvas.SetLeft (history_label, 120);
-			Canvas.SetTop (history_label, 10);
+			Canvas.SetTop (history_label, 4);
 			
 			this.canvas.Children.Add (this.history_label_value);
 			Canvas.SetLeft (this.history_label_value, 120 + history_label_rect.Width);
-			Canvas.SetTop (this.history_label_value, 10);
+			Canvas.SetTop (this.history_label_value, 4);
+			
+			
+			this.canvas.Children.Add (line);
+			Canvas.SetLeft (line, 0);
+			Canvas.SetTop (line, 35);
 			
 
             Controller.ShowWindowEvent += delegate {
@@ -202,7 +217,7 @@ namespace SparkleShare {
 			
 			this.canvas.Children.Add (combo_box);
 			Canvas.SetLeft (this.combo_box, Width - 18 - this.combo_box.Width);
-			Canvas.SetTop (this.combo_box, 12);
+			Canvas.SetTop (this.combo_box, 6);
 		}
 		
 		
@@ -249,7 +264,7 @@ namespace SparkleShare {
 					if (!this.canvas.Children.Contains (this.web_browser)) {
 						this.canvas.Children.Add (this.web_browser);
 						Canvas.SetLeft (this.web_browser, 0);
-						Canvas.SetTop (this.web_browser, 48);
+						Canvas.SetTop (this.web_browser, 36);
 					}
                 });
             }));
@@ -260,8 +275,8 @@ namespace SparkleShare {
 		
         private void Close (object sender, CancelEventArgs args)
         {
-                Controller.WindowClosed ();
-                args.Cancel = true;    
+            Controller.WindowClosed ();
+            args.Cancel = true;    
         }
     }
 }
