@@ -153,7 +153,7 @@ cd SparkleShare\Windows
 build
 ```
 
-`\bin` should now contain `SparkleShare.exe`, which you can run.
+`C:\path\to\SparkleShare\source\bin` should now contain `SparkleShare.exe`, which you can run.
 
 **Note:** SparkleShare needs to be run with administrator privileges.
 Open the properties dialog for `SparkleShare.exe` and tick
