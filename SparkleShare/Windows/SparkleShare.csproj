@@ -223,8 +223,8 @@
       <Link>plugins\bitbucket.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\data\icons\process-syncing-sparkleshare-mac-i.png">
-      <Link>Pixmaps\process-syncing-sparkleshare-mac-i.png</Link>
+    <EmbeddedResource Include="..\..\data\tutorial-slide-4.png">
+      <Link>Pixmaps\tutorial-slide-4.png</Link>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

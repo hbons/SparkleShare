@@ -757,6 +757,7 @@ namespace SparkleShare {
                                     Image = SlideImage,
                                     Frame = new RectangleF (215, Frame.Height - 215, 350, 64)
                                 };
+								
     
                                 ContentView.AddSubview (SlideImageView);
                                 ContentView.AddSubview (StartupCheckButton);
