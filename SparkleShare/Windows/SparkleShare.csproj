@@ -126,7 +126,6 @@
     <Compile Include="SparkleController.cs" />
     <Compile Include="SparkleEventLog.cs" />
     <Compile Include="SparkleSetup.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
     <Compile Include="controls\TablessControl.cs">
@@ -141,6 +140,9 @@
       <Link>SparkleEventLogController.cs</Link>
     </Compile>
     <Compile Include="SparkleSetupWindow.cs" />
+    <Compile Include="..\Program.cs">
+      <Link>Program.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SparkleLib\windows\SparkleLib.csproj">

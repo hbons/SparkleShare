@@ -14,42 +14,28 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.Collections.Generic;
-using System.Windows.Forms;
-using SparkleLib;
+
 using System;
+using System.Drawing;
 using System.IO;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
+using System.Reflection;
+using System.Windows.Media.Imaging;
 
 namespace SparkleShare {
 
     public static class SparkleUIHelpers {
-
-        // Creates an MD5 hash of input
-        public static string GetMD5 (string s)
+		
+        public static string ToHex (this Color color)
         {
-            MD5 md5 = new MD5CryptoServiceProvider ();
-            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
-            Byte[] encodedBytes = md5.ComputeHash (bytes);
-            return BitConverter.ToString (encodedBytes).ToLower ().Replace ("-", "");
+            return string.Format ("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
         }
 
-        public static string ToHex (this System.Drawing.Color color)
-        {
-            return String.Format ("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
-        }
-
-        //http://stackoverflow.com/a/1499161/33499
-        public static IEnumerable<Control> All (this Control.ControlCollection controls)
-        {
-            foreach (Control control in controls) {
-                foreach (Control grandChild in control.Controls.All ())
-                    yield return grandChild;
-
-                yield return control;
-            }
-        }
+        
+		public static BitmapFrame GetBitmap (string name)
+		{			                              
+			Assembly assembly = Assembly.GetExecutingAssembly ();
+			Stream image_stream = assembly.GetManifestResourceStream ("SparkleShare.Pixmaps." + name + ".png");
+			return BitmapFrame.Create (image_stream);
+		}
     }
 }

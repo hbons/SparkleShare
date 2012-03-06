@@ -73,23 +73,9 @@ namespace SparkleShare {
 				Width  = 150,
 				Height = 482
 			};
-			System.Reflection.Assembly thisExe; 
-thisExe = System.Reflection.Assembly.GetExecutingAssembly();
-string [] resources = thisExe.GetManifestResourceNames();
-string list = "";
-
-// Build the string of resources.
-foreach (string resource in resources)
-   list += resource + "\r\n";
-			MessageBox.Show (list);
-			
-;
-Assembly thisassembly = Assembly.GetExecutingAssembly();
-System.IO.Stream imageStream= thisassembly.GetManifestResourceStream("SparkleShare.Pixmaps.side-splash.png");
-BitmapFrame bmp= BitmapFrame.Create(imageStream);
 
 			
-			this.side_splash.Source = bmp;
+			this.side_splash.Source = SparkleUIHelpers.GetBitmap ("side-splash");
 			
 			
 			
