@@ -78,7 +78,6 @@ namespace SparkleShare {
                 });
 			};
 			
-			
             Program.Controller.FolderListChanged += delegate {
                 Dispatcher.Invoke ((Action) delegate {
                     SetNormalState ();
@@ -177,7 +176,6 @@ namespace SparkleShare {
 			MenuItem folder_item = new MenuItem () {
 				Header = " SparkleShare"//,
 				,Icon   = i
-
 			};
 		
 				folder_item.Click += delegate {
