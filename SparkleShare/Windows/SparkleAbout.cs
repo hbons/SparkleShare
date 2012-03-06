@@ -96,11 +96,7 @@ namespace SparkleShare {
 				Height = 260
 			};
 		
-			image.Source  =  
-				System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-					Icons.about.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty, 
-					BitmapSizeOptions.FromWidthAndHeight(640, 260));
-
+			image.Source = SparkleUIHelpers.GetBitmap ("about");
 			
 			
             Label version = new Label () {
@@ -112,7 +108,7 @@ namespace SparkleShare {
             this.updates = new Label () {
 				Content    = "Checking for updates...",
 				FontSize   = 11,
-				Foreground = new SolidColorBrush (Color.FromRgb(45, 62, 81))
+				Foreground = new SolidColorBrush (Color.FromRgb (45, 62, 81))
             };
 			
             TextBlock credits = new TextBlock () {

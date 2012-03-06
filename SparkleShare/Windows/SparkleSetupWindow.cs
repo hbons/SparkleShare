@@ -25,7 +25,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 using System.Reflection;
 
 namespace SparkleShare {
@@ -74,9 +73,7 @@ namespace SparkleShare {
 				Height = 482
 			};
 
-			
 			this.side_splash.Source = SparkleUIHelpers.GetBitmap ("side-splash");
-			
 			
 			
 			ContentCanvas.Children.Add (this.bar);

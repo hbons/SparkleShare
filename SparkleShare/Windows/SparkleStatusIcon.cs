@@ -25,6 +25,7 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 
+
 namespace SparkleShare {
 
     public class SparkleStatusIcon : Control {
@@ -40,7 +41,6 @@ namespace SparkleShare {
 		
         private WinForms.NotifyIcon notify_icon = new WinForms.NotifyIcon () {
             Text = "SparkleShare",
-            
             Visible = true
 		};
 		
@@ -55,6 +55,11 @@ namespace SparkleShare {
 		
 		public SparkleStatusIcon ()
         {
+			LostFocus += delegate {
+				
+				this.context_menu.IsOpen = false;
+			};
+			
 			notify_icon.Icon = Icon.FromHandle(Icons.document_added_12.GetHicon());
             AnimationFrames = CreateAnimationFrames ();
             Animation = CreateAnimation ();
@@ -65,7 +70,6 @@ namespace SparkleShare {
             SetNormalState ();
             
 			
-			//TODO quit item event
 			
 			Controller.UpdateQuitItemEvent += delegate (bool enable) {
 			  	Dispatcher.Invoke ((Action) delegate {
@@ -404,3 +408,10 @@ namespace SparkleShare {
         }
     }
 }
+	
+	
+		
+
+
+
+

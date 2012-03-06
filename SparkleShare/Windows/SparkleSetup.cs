@@ -16,12 +16,18 @@
 
 
 using System;
-using System.ComponentModel;
-using System.Drawing;
 using System.IO;
-using System.Media;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms.Integration;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Data;
+using System.Media;
+using WPF = System.Windows.Controls;
 
 namespace SparkleShare {
 
@@ -67,7 +73,6 @@ namespace SparkleShare {
 						TextBox name_box = new TextBox () {
 							Text  = Controller.GuessedUserName,
 							Width = 175
-							
 						};
 						
 						
@@ -140,19 +145,133 @@ namespace SparkleShare {
                     case PageType.Add: {
 						Header = "Where's your project hosted?";
 						
+
+						ListView list_view = new ListView () {
+							Width  = 419,
+							Height = 195,
+							SelectionMode = SelectionMode.Single
+						};
+						
+						GridView grid_view = new GridView ();
+						
+				        grid_view.Columns.Add (
+							new GridViewColumn {
+								DisplayMemberBinding = new Binding ("Text")
+							}
+						);
+						
+						// TODO: 
+						// - Disable column headers
+						// - Add plugin images
+						// - Nicer markup: <b>Name</b>\n<small>Description</small>
+						foreach (SparklePlugin plugin in Controller.Plugins) {
+							list_view.Items.Add (
+								new {
+									Text = plugin.Name + "\n" + plugin.Description
+							});
+						}		
+						
+				        list_view.View          = grid_view;
+						list_view.SelectedIndex = Controller.SelectedPluginIndex;
+						
+						
+			            TextBlock address_label = new TextBlock () {
+			                Text       = "Address:",
+							FontWeight = FontWeights.Bold
+			            };
+													
+						TextBox address_box = new TextBox () {
+							Width = 200,
+							Text  = Controller.PreviousAddress
+						};
+						
+						TextBlock address_help_label = new TextBlock () {
+			                Text       = "",
+							FontSize   = 11,
+							Foreground = new SolidColorBrush (Color.FromRgb (128, 128, 128))
+			            };
+						
+						TextBlock path_label = new TextBlock () {
+			                Text       = "Remote Path:",
+							FontWeight = FontWeights.Bold,
+							Width      = 200
+			            };
+													
+						TextBox path_box = new TextBox () {
+							Width = 200,
+							Text  = Controller.PreviousPath
+						};
+						
+						TextBlock path_help_label = new TextBlock () {
+			                Text       = "",
+							FontSize   = 11,
+							Width      = 200,
+							Foreground = new SolidColorBrush (Color.FromRgb (128, 128, 128))
+			            };
+						
 						
 						Button cancel_button = new Button () {
-                            Content = "Cancel"
-                        };
-    
-                        Button add_button = new Button () {
-                            Content = "Add"
-                        };
-	
+							Content = "Cancel"
+						};
 						
+						Button add_button = new Button () {
+							Content = "Add"
+						};
+						
+						
+						ContentCanvas.Children.Add (list_view);
+						Canvas.SetTop (list_view, 70);
+						Canvas.SetLeft (list_view, 185);
+						
+						ContentCanvas.Children.Add (address_label);
+						Canvas.SetTop (address_label, 285);
+						Canvas.SetLeft (address_label, 185);
+						
+						ContentCanvas.Children.Add (address_box);
+						Canvas.SetTop (address_box, 305);
+						Canvas.SetLeft (address_box, 185);
+						
+						ContentCanvas.Children.Add (address_help_label);
+						Canvas.SetTop (address_help_label, 330);
+						Canvas.SetLeft (address_help_label, 185);
+						
+						ContentCanvas.Children.Add (path_label);
+						Canvas.SetTop (path_label, 285);
+						Canvas.SetRight (path_label, 30);
+						
+						ContentCanvas.Children.Add (path_box);
+						Canvas.SetTop (path_box, 305);
+						Canvas.SetRight (path_box, 30);
+						
+						ContentCanvas.Children.Add (path_help_label);
+						Canvas.SetTop (path_help_label, 330);
+						Canvas.SetRight (path_help_label, 30);
+						
+
 						Buttons.Add (add_button);
 						Buttons.Add (cancel_button);
 						
+						
+                        Controller.ChangeAddressFieldEvent += delegate (string text,
+                            string example_text, FieldState state) {
+
+                            Dispatcher.Invoke ((Action) delegate {
+                                address_box.Text        = text;
+                                address_box.IsEnabled   = (state == FieldState.Enabled);
+                                address_help_label.Text = example_text;
+                            });
+                        };
+
+
+                        Controller.ChangePathFieldEvent += delegate (string text,
+                            string example_text, FieldState state) {
+
+                            Dispatcher.Invoke ((Action) delegate {
+                                path_box.Text        = text;
+                                path_box.IsEnabled   = (state == FieldState.Enabled);
+                                path_help_label.Text = example_text;
+                            });
+                        };
 						
 					  	Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
                             Dispatcher.Invoke ((Action) delegate {
@@ -160,13 +279,43 @@ namespace SparkleShare {
                             });
                         };
 						
+						list_view.SelectionChanged += delegate {
+							Controller.SelectedPluginChanged (list_view.SelectedIndex);
+						};
+						
+						list_view.KeyDown += delegate {
+							Controller.SelectedPluginChanged (list_view.SelectedIndex);
+						};
+						
+						address_box.TextChanged += delegate {
+							Controller.CheckAddPage (
+								address_box.Text,
+								path_box.Text,
+								list_view.SelectedIndex
+	                        );
+						};
+						
+						path_box.TextChanged += delegate {
+							Controller.CheckAddPage (
+								address_box.Text,
+								path_box.Text,
+								list_view.SelectedIndex
+	                        );
+						};
+						
 						cancel_button.Click += delegate {
 							Controller.PageCancelled ();
 						};
 
                         add_button.Click += delegate {
-                            Controller.AddPageCompleted ("github.com", "hbons/Stuff"); // TODO
+                            Controller.AddPageCompleted (address_box.Text, path_box.Text);
                         };
+						
+						Controller.CheckAddPage (
+							address_box.Text,
+							path_box.Text,
+							list_view.SelectedIndex
+                        );
 						
 						break;
 					}
@@ -312,6 +461,7 @@ namespace SparkleShare {
                                 Description = "All files added to your project folders are synced automatically with " +
                                     "the host and your team members.";
     
+							
                                 Button continue_button = new Button () {
                                     Content = "Continue"
                                 };
@@ -335,7 +485,20 @@ namespace SparkleShare {
                                     Content = "Continue"
                                 };
 								
+								WPF.Image slide_image = new WPF.Image () {
+									Width  = 350,
+									Height = 200
+								};
+							
+								slide_image.Source = SparkleUIHelpers.GetBitmap ("tutorial-slide-3-windows");
+							
+							
+								ContentCanvas.Children.Add (slide_image);
+								Canvas.SetLeft (slide_image, 215);
+								Canvas.SetTop (slide_image, 130);
+							
 								Buttons.Add (continue_button);                                
+							
 							
 								continue_button.Click += delegate {
                                     Controller.TutorialPageCompleted ();
