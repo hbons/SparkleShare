@@ -18,11 +18,9 @@ information see the LICENSE file or visit http://www.gnu.org/licenses/gpl-3.0.ht
 
 ## Running SparkleShare
 
-**Note:**
-
-   SparkleShare creates its own RSA keypair in `$HOME/.config/sparkleshare/` and uses 
-   that for authentication. Please mind this if you're planning to set up your 
-   own server by hand.
+**Note:** SparkleShare creates its own RSA keypair in `$HOME/.config/sparkleshare/` and uses 
+that for authentication. Please mind this if you're planning to set up your 
+own server by hand.
 
 ### Linux
 
@@ -157,12 +155,10 @@ build
 
 `\bin` should now contain `SparkleShare.exe`, which you can run.
 
-**Note:**
-
-   SparkleShare needs to be run with administrator privileges.
-   Open the properties dialog for `SparkleShare.exe` and tick
-   the *Run this program as an administrator* option in the 
-   *Compatibility* tab.
+**Note:** SparkleShare needs to be run with administrator privileges.
+Open the properties dialog for `SparkleShare.exe` and tick
+the *Run this program as an administrator* option in the 
+*Compatibility* tab.
 
 
 ### Creating a Windows installer
