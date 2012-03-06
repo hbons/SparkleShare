@@ -527,7 +527,14 @@ namespace SparkleShare {
 							
 								Button finish_button = new Button () {
                                     Content = "Finish"
-                                };
+								};
+								
+								WPF.Image slide_image = new WPF.Image () {
+									Width  = 350,
+									Height = 64
+								};
+								
+								slide_image.Source = SparkleUIHelpers.GetBitmap ("tutorial-slide-4");
     
 								CheckBox check_box = new CheckBox () {
 									Content   = "Add SparkleShare to startup items",
@@ -535,6 +542,10 @@ namespace SparkleShare {
 								};
 							
 							
+								ContentCanvas.Children.Add (slide_image);
+								Canvas.SetLeft (slide_image, 215);
+								Canvas.SetTop (slide_image, 130);
+
 								ContentCanvas.Children.Add (check_box);
 								Canvas.SetLeft (check_box, 185);
 								Canvas.SetBottom (check_box, 12);
