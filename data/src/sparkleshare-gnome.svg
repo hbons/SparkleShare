@@ -31,8 +31,8 @@
      height="300px"
      id="base"
      inkscape:current-layer="layer17"
-     inkscape:cx="577.69934"
-     inkscape:cy="231.48159"
+     inkscape:cx="583"
+     inkscape:cy="159.26777"
      inkscape:document-units="px"
      inkscape:grid-bbox="true"
      inkscape:pageopacity="0.0"
@@ -42,8 +42,8 @@
      inkscape:snap-nodes="false"
      inkscape:window-height="756"
      inkscape:window-width="1276"
-     inkscape:window-x="213"
-     inkscape:window-y="165"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:zoom="4"
      objecttolerance="10000"
      pagecolor="#ffffff"
@@ -3052,91 +3052,108 @@
          width="1.9999704"
          id="rect12657-5"
          style="color:#000000;fill:#888a85;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new" />
-      <g
-         style="display:inline;enable-background:new"
-         id="g12764-7"
-         transform="translate(-14.003148,1.98544)">
-        <g
-           transform="translate(231,-288.9985)"
-           id="g12757-4"
-           style="opacity:0.5;fill:none;stroke:#000000;stroke-opacity:1;display:inline;enable-background:new">
-          <path
-             style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;enable-background:new"
-             d="m 536.4981,230.5 c -0.57203,0.064 -1.00351,0.54941 -1,1.125 l 0,0.90625 c -0.68054,0 -0.99809,0.62729 -0.9981,1.4375 l 0,9.125 c 0,1.33756 1.27557,2.40625 2.09375,2.40625 l 10.96875,0 c 0.81819,0 1.9375,-1.06869 1.9375,-2.40625 l 0,-9.90625 c 0,-0.37505 -0.29595,-0.6875 -0.65625,-0.6875 l -5.99653,0 -0.88822,-2 z"
-             transform="translate(-231,-11.0015)"
-             id="path12759-9"
-             inkscape:connector-curvature="0"
-             sodipodi:nodetypes="ccccssssssccc" />
-        </g>
-        <g
-           style="stroke:none;display:inline;enable-background:new"
-           id="g10370-6-2"
-           transform="translate(231,-287.9985)">
-          <path
-             sodipodi:nodetypes="cccccsssssssssccc"
-             inkscape:connector-curvature="0"
-             id="path12761-5"
-             d="m 305.59375,218.9985 c -0.32201,0.036 -0.56448,0.30099 -0.5625,0.625 l 0,0.90625 c -3e-5,0.26179 -0.23821,0.49997 -0.5,0.5 -0.18664,0 -0.24684,0.0427 -0.34375,0.1875 -0.0969,0.1448 -0.1875,0.41704 -0.1875,0.75 l 0,9.125 c 0,0.50984 0.24538,0.98446 0.59375,1.34375 0.34837,0.35929 0.80861,0.5625 1,0.5625 l 10.96875,0 c 0.1914,0 0.5954,-0.17788 0.90625,-0.53125 0.31085,-0.35337 0.53125,-0.84569 0.53125,-1.375 l 0,-9.90625 c 0,-0.11202 -0.085,-0.1875 -0.15625,-0.1875 l -6.35938,0 -0.87864,-2 z"
-             style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;display:inline;enable-background:new" />
-        </g>
-        <rect
-           style="color:#000000;fill:#b4b4b2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
-           id="rect12657-0"
-           width="1.9999704"
-           height="2"
-           x="541"
-           y="-62"
-           rx="0"
-           ry="0" />
-        <path
-           sodipodi:nodetypes="ccccccccccccccccc"
-           inkscape:connector-curvature="0"
-           id="path12670-1"
-           d="m 541.99919,-64.500037 -0.30757,-2.21e-4 -1.00266,1.994507 -2.18347,0.0051 C 538,-63 538.49167,-61.814834 538.49167,-61.814834 l 1.90193,1.921793 -1.0451,2.136338 0.56709,0.392297 2.0565,-1.320983 2.12881,1.380561 0.47825,-0.47492 -0.98095,-2.111519 1.90439,-1.918369 -0.0349,-0.683193 -2.15805,-0.0083 -1.00551,-1.995469 z"
-           style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-        <path
-           style="fill:none;stroke:#626262;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
-           d="m 541.96092,-65.499657 -0.95078,-3.43e-4 -1.01569,2.021211 -2.50769,0.0014 0.007,2.45777 2.01317,1.531383 -0.98278,1.525808 -0.006,1.459651 1.48216,0.02348 2.01572,-0.973778 2,0.958667 1.49773,0.0026 9.9e-4,-1.503099 -1.01656,-1.490525 2.02188,-1.531544 0.004,-2.463825 -2.53024,0.0027 -0.99318,-2.016236 z"
-           id="path12672-4"
-           inkscape:connector-curvature="0"
-           sodipodi:nodetypes="ccccccccccccccccccc" />
-        <path
-           sodipodi:nodetypes="ccccc"
-           inkscape:connector-curvature="0"
-           id="path12726-8"
-           d="m 536.03219,-68.007813 c 0.005,0.665823 -0.019,0.874167 -0.34061,1 l 6.80384,0 -0.44979,-1 z"
-           style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#646464;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" />
-        <path
-           sodipodi:nodetypes="cccc"
-           inkscape:connector-curvature="0"
-           id="rect12659-6"
-           d="m 542,-64 1,2 -2,0 z"
-           style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new" />
-        <path
-           style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
-           d="m 545,-62 -2,2 0,-2 z"
-           id="path12662-6"
-           inkscape:connector-curvature="0"
-           sodipodi:nodetypes="cccc" />
-        <path
-           sodipodi:nodetypes="cccc"
-           inkscape:connector-curvature="0"
-           id="path12664-4"
-           d="m 539,-62 2,2 0,-2 z"
-           style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new" />
-        <path
-           style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
-           d="M 539.99997,-57.970102 542.9961,-59.97231 541.00992,-60 z"
-           id="path12666-5"
-           inkscape:connector-curvature="0"
-           sodipodi:nodetypes="cccc" />
-        <path
-           sodipodi:nodetypes="cccc"
-           inkscape:connector-curvature="0"
-           id="path12668-2"
-           d="M 544,-58 540.99997,-59.97231 542.98615,-60 z"
-           style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new" />
-      </g>
+      <path
+         style="opacity:0.5;fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;enable-background:new"
+         d="m 522.49495,-67.51456 c -0.57203,0.064 -1.00351,0.54941 -1,1.125 l 0,0.90625 c -0.68054,0 -0.99809,0.62729 -0.9981,1.4375 l 0,9.125 c 0,1.33756 1.27557,2.40625 2.09375,2.40625 l 10.96875,0 c 0.81819,0 1.9375,-1.06869 1.9375,-2.40625 l 0,-9.90625 c 0,-0.37505 -0.29595,-0.6875 -0.65625,-0.6875 l -5.99653,0 -0.88822,-2 z"
+         id="path12759-9"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccssssssccc"
+         inkscape:export-filename="/Users/hbons/Code/SparkleShare/data/icons/process-syncing-sparkleshare-windows-i.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccccsssssssssccc"
+         inkscape:connector-curvature="0"
+         id="path12761-5"
+         d="m 522.5906,-67.01456 c -0.32201,0.036 -0.56448,0.30099 -0.5625,0.625 l 0,0.90625 c -3e-5,0.26179 -0.23821,0.49997 -0.5,0.5 -0.18664,0 -0.24684,0.0427 -0.34375,0.1875 -0.0969,0.1448 -0.1875,0.41704 -0.1875,0.75 l 0,9.125 c 0,0.50984 0.24538,0.98446 0.59375,1.34375 0.34837,0.35929 0.80861,0.5625 1,0.5625 l 10.96875,0 c 0.1914,0 0.5954,-0.17788 0.90625,-0.53125 0.31085,-0.35337 0.53125,-0.84569 0.53125,-1.375 l 0,-9.90625 c 0,-0.11202 -0.085,-0.1875 -0.15625,-0.1875 l -6.35938,0 -0.87864,-2 z"
+         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;display:inline;enable-background:new"
+         inkscape:export-filename="/Users/hbons/Code/SparkleShare/data/icons/process-syncing-sparkleshare-windows-i.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <rect
+         ry="0"
+         rx="0"
+         y="-60.014561"
+         x="526.99683"
+         height="2"
+         width="1.9999704"
+         id="rect12657-0"
+         style="color:#000000;fill:#b4b4b2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         inkscape:export-filename="/Users/hbons/Code/SparkleShare/data/icons/process-syncing-sparkleshare-windows-i.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 527.99604,-62.514597 -0.30757,-2.21e-4 -1.00266,1.994507 -2.18347,0.0051 c -0.50549,-0.499349 -0.0138,0.685817 -0.0138,0.685817 l 1.90193,1.921793 -1.0451,2.136338 0.56709,0.392297 2.0565,-1.320983 2.12881,1.380561 0.47825,-0.47492 -0.98095,-2.111519 1.90439,-1.918369 -0.0349,-0.683193 -2.15805,-0.0083 -1.00551,-1.995469 z"
+         id="path12670-1"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccccccccccccccc"
+         inkscape:export-filename="/Users/hbons/Code/SparkleShare/data/icons/process-syncing-sparkleshare-windows-i.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="ccccccccccccccccccc"
+         inkscape:connector-curvature="0"
+         id="path12672-4"
+         d="m 527.95777,-63.514217 -0.95078,-3.43e-4 -1.01569,2.021211 -2.50769,0.0014 0.007,2.45777 2.01317,1.531383 -0.98278,1.525808 -0.006,1.459651 1.48216,0.02348 2.01572,-0.973778 2,0.958667 1.49773,0.0026 9.9e-4,-1.503099 -1.01656,-1.490525 2.02188,-1.531544 0.004,-2.463825 -2.53024,0.0027 -0.99318,-2.016236 z"
+         style="fill:none;stroke:#626262;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
+         inkscape:export-filename="/Users/hbons/Code/SparkleShare/data/icons/process-syncing-sparkleshare-windows-i.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#646464;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         d="m 522.02904,-66.022373 c 0.005,0.665823 -0.019,0.874167 -0.34061,1 l 6.80384,0 -0.44979,-1 z"
+         id="path12726-8"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc"
+         inkscape:export-filename="/Users/hbons/Code/SparkleShare/data/icons/process-syncing-sparkleshare-windows-i.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         d="m 527.99685,-62.01456 1,2 -2,0 z"
+         id="rect12659-6"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc"
+         inkscape:export-filename="/Users/hbons/Code/SparkleShare/data/icons/process-syncing-sparkleshare-windows-i.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0"
+         id="path12662-6"
+         d="m 530.99685,-60.01456 -2,2 0,-2 z"
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         inkscape:export-filename="/Users/hbons/Code/SparkleShare/data/icons/process-syncing-sparkleshare-windows-i.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         d="m 524.99685,-60.01456 2,2 0,-2 z"
+         id="path12664-4"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc"
+         inkscape:export-filename="/Users/hbons/Code/SparkleShare/data/icons/process-syncing-sparkleshare-windows-i.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0"
+         id="path12666-5"
+         d="m 525.99682,-55.984662 2.99613,-2.002208 -1.98618,-0.02769 z"
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         inkscape:export-filename="/Users/hbons/Code/SparkleShare/data/icons/process-syncing-sparkleshare-windows-i.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         d="m 529.99685,-56.01456 -3.00003,-1.97231 1.98618,-0.02769 z"
+         id="path12668-2"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc"
+         inkscape:export-filename="/Users/hbons/Code/SparkleShare/data/icons/process-syncing-sparkleshare-windows-i.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
       <image
          inkscape:export-ydpi="90"
          inkscape:export-xdpi="90"
@@ -3873,7 +3890,455 @@
              height="76.367538"
              width="240.57834"
              id="rect4846" /></flowRegion><flowPara
-           id="flowPara4848">Windows 7</flowPara></flowRoot>    </g>
+           id="flowPara4848">Windows 7</flowPara></flowRoot>      <path
+         sodipodi:nodetypes="ccccssssssccc"
+         inkscape:connector-curvature="0"
+         id="path6315"
+         d="m 542.49495,-67.51456 c -0.57203,0.064 -1.00351,0.54941 -1,1.125 l 0,0.90625 c -0.68054,0 -0.99809,0.62729 -0.9981,1.4375 l 0,9.125 c 0,1.33756 1.27557,2.40625 2.09375,2.40625 l 10.96875,0 c 0.81819,0 1.9375,-1.06869 1.9375,-2.40625 l 0,-9.90625 c 0,-0.37505 -0.29595,-0.6875 -0.65625,-0.6875 l -5.99653,0 -0.88822,-2 z"
+         style="opacity:0.5;fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;enable-background:new"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-ii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;display:inline;enable-background:new"
+         d="m 542.5906,-67.01456 c -0.32201,0.036 -0.56448,0.30099 -0.5625,0.625 l 0,0.90625 c -3e-5,0.26179 -0.23821,0.49997 -0.5,0.5 -0.18664,0 -0.24684,0.0427 -0.34375,0.1875 -0.0969,0.1448 -0.1875,0.41704 -0.1875,0.75 l 0,9.125 c 0,0.50984 0.24538,0.98446 0.59375,1.34375 0.34837,0.35929 0.80861,0.5625 1,0.5625 l 10.96875,0 c 0.1914,0 0.5954,-0.17788 0.90625,-0.53125 0.31085,-0.35337 0.53125,-0.84569 0.53125,-1.375 l 0,-9.90625 c 0,-0.11202 -0.085,-0.1875 -0.15625,-0.1875 l -6.35938,0 -0.87864,-2 z"
+         id="path6319"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccsssssssssccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-ii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="ccccccccccccccccc"
+         inkscape:connector-curvature="0"
+         id="path6323"
+         d="m 547.99604,-62.514597 -0.30757,-2.21e-4 -1.00266,1.994507 -2.18347,0.0051 c -0.50549,-0.499349 -0.0138,0.685817 -0.0138,0.685817 l 1.90193,1.921793 -1.0451,2.136338 0.56709,0.392297 2.0565,-1.320983 2.12881,1.380561 0.47825,-0.47492 -0.98095,-2.111519 1.90439,-1.918369 -0.0349,-0.683193 -2.15805,-0.0083 -1.00551,-1.995469 z"
+         style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-ii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path6327"
+         d="m 542.02904,-66.022373 c 0.005,0.665823 -0.019,0.874167 -0.34061,1 l 6.80384,0 -0.44979,-1 z"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#646464;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-ii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <rect
+         style="color:#000000;fill:#b4b4b2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         id="rect6321"
+         width="1.9999704"
+         height="2"
+         x="513.07416"
+         y="-199.82068"
+         rx="0"
+         ry="0"
+         transform="matrix(0.96592583,0.25881905,-0.25881905,0.96592583,0,0)"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-ii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="fill:none;stroke:#626262;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
+         d="m 549.05213,-63.299096 -0.91829,-0.24641 -1.50421,1.68946 -2.42261,-0.647688 -0.62936,2.375833 1.54822,2.00025 -1.3442,1.219454 -0.38358,1.408362 1.42558,0.406291 2.19907,-0.41889 1.68373,1.443639 1.44602,0.390152 0.38999,-1.451626 -0.59615,-1.702843 2.34938,-0.956054 0.64155,-2.378838 -2.44472,-0.652266 -0.4375,-2.204589 z"
+         id="path6325"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccccccccccccccccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-ii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0"
+         id="path6329"
+         d="m 548.79252,-61.891628 0.44829,2.190671 -1.93185,-0.517638 z"
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-ii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         d="m 551.17266,-59.183319 -2.44949,1.414213 0.51764,-1.931851 z"
+         id="path6331"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-ii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0"
+         id="path6333"
+         d="m 545.3771,-60.736234 1.41422,2.44949 0.51764,-1.931851 z"
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-ii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         d="m 545.29999,-56.58484 3.41225,-1.158529 -1.91134,-0.540807 z"
+         id="path6335"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-ii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0"
+         id="path6337"
+         d="m 549.17146,-55.578435 -2.38734,-2.68157 1.92567,0.487315 z"
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-ii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="opacity:0.5;fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;enable-background:new"
+         d="m 562.49495,-67.51456 c -0.57203,0.064 -1.00351,0.54941 -1,1.125 l 0,0.90625 c -0.68054,0 -0.99809,0.62729 -0.9981,1.4375 l 0,9.125 c 0,1.33756 1.27557,2.40625 2.09375,2.40625 l 10.96875,0 c 0.81819,0 1.9375,-1.06869 1.9375,-2.40625 l 0,-9.90625 c 0,-0.37505 -0.29595,-0.6875 -0.65625,-0.6875 l -5.99653,0 -0.88822,-2 z"
+         id="path6343"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccssssssccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccccsssssssssccc"
+         inkscape:connector-curvature="0"
+         id="path6347"
+         d="m 562.5906,-67.01456 c -0.32201,0.036 -0.56448,0.30099 -0.5625,0.625 l 0,0.90625 c -3e-5,0.26179 -0.23821,0.49997 -0.5,0.5 -0.18664,0 -0.24684,0.0427 -0.34375,0.1875 -0.0969,0.1448 -0.1875,0.41704 -0.1875,0.75 l 0,9.125 c 0,0.50984 0.24538,0.98446 0.59375,1.34375 0.34837,0.35929 0.80861,0.5625 1,0.5625 l 10.96875,0 c 0.1914,0 0.5954,-0.17788 0.90625,-0.53125 0.31085,-0.35337 0.53125,-0.84569 0.53125,-1.375 l 0,-9.90625 c 0,-0.11202 -0.085,-0.1875 -0.15625,-0.1875 l -6.35938,0 -0.87864,-2 z"
+         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;display:inline;enable-background:new"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#646464;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         d="m 562.02904,-66.022373 c 0.005,0.665823 -0.019,0.874167 -0.34061,1 l 6.80384,0 -0.44979,-1 z"
+         id="path6355"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <rect
+         ry="0"
+         rx="0"
+         y="-336.06787"
+         x="461.25424"
+         height="2"
+         width="1.9999704"
+         id="rect6349"
+         style="color:#000000;fill:#b4b4b2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         transform="matrix(0.8660254,0.5,-0.5,0.8660254,0,0)"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 569.6072,-62.081679 -0.26627,-0.153983 -1.86559,1.225965 -1.89348,-1.087313 c -0.18776,-0.685273 -0.35486,0.587038 -0.35486,0.587038 l 0.68626,2.615277 -1.97328,1.327573 0.29499,0.623292 2.44145,-0.115764 1.15335,2.260012 0.65164,-0.172126 0.20623,-2.319106 2.60843,-0.709178 0.31137,-0.609114 -1.86477,-1.086208 0.12694,-2.230883 z"
+         id="path6351"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccccccccccccccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="ccccccccccccccccccc"
+         inkscape:connector-curvature="0"
+         id="path6353"
+         d="m 570.07384,-62.966514 -0.8232,-0.475685 -1.89021,1.242575 -2.17246,-1.252649 -1.22281,2.131992 0.97776,2.332804 -1.61402,0.829993 -0.73502,1.261095 1.27184,0.761409 2.23258,0.164545 1.25271,1.830231 1.29576,0.751111 0.75241,-1.301221 -0.13511,-1.799122 2.51678,-0.315411 1.23538,-2.131736 -2.19259,-1.262775 0.14798,-2.242702 z"
+         style="fill:none;stroke:#626262;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         d="m 569.35787,-61.648233 -0.13395,2.232055 -1.73206,-1.000005 z"
+         id="path6357"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0"
+         id="path6359"
+         d="m 570.95596,-58.416181 -2.73206,0.73205 1.00002,-1.732047 z"
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         d="m 565.75979,-61.416186 0.73206,2.73206 1.00001,-1.732057 z"
+         id="path6361"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0"
+         id="path6363"
+         d="m 564.61087,-57.426199 3.59583,-0.235899 -1.70626,-1.017081 z"
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         d="m 568.08991,-55.452079 -1.61195,-3.208095 1.73394,0.969115 z"
+         id="path6365"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="ccccssssssccc"
+         inkscape:connector-curvature="0"
+         id="path6371"
+         d="m 582.49495,-67.51456 c -0.57203,0.064 -1.00351,0.54941 -1,1.125 l 0,0.90625 c -0.68054,0 -0.99809,0.62729 -0.9981,1.4375 l 0,9.125 c 0,1.33756 1.27557,2.40625 2.09375,2.40625 l 10.96875,0 c 0.81819,0 1.9375,-1.06869 1.9375,-2.40625 l 0,-9.90625 c 0,-0.37505 -0.29595,-0.6875 -0.65625,-0.6875 l -5.99653,0 -0.88822,-2 z"
+         style="opacity:0.5;fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;enable-background:new"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;display:inline;enable-background:new"
+         d="m 582.5906,-67.01456 c -0.32201,0.036 -0.56448,0.30099 -0.5625,0.625 l 0,0.90625 c -3e-5,0.26179 -0.23821,0.49997 -0.5,0.5 -0.18664,0 -0.24684,0.0427 -0.34375,0.1875 -0.0969,0.1448 -0.1875,0.41704 -0.1875,0.75 l 0,9.125 c 0,0.50984 0.24538,0.98446 0.59375,1.34375 0.34837,0.35929 0.80861,0.5625 1,0.5625 l 10.96875,0 c 0.1914,0 0.5954,-0.17788 0.90625,-0.53125 0.31085,-0.35337 0.53125,-0.84569 0.53125,-1.375 l 0,-9.90625 c 0,-0.11202 -0.085,-0.1875 -0.15625,-0.1875 l -6.35938,0 -0.87864,-2 z"
+         id="path6375"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccsssssssssccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path6383"
+         d="m 582.02904,-66.022373 c 0.005,0.665823 -0.019,0.874167 -0.34061,1 l 6.80384,0 -0.44979,-1 z"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#646464;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#646464;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         d="m 582.02904,-66.022373 c 0.005,0.665823 -0.019,0.874167 -0.34061,1 l 6.80384,0 -0.44979,-1 z"
+         id="path6462"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="opacity:0.5;fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;enable-background:new"
+         d="m 602.49495,-67.51456 c -0.57203,0.064 -1.00351,0.54941 -1,1.125 l 0,0.90625 c -0.68054,0 -0.99809,0.62729 -0.9981,1.4375 l 0,9.125 c 0,1.33756 1.27557,2.40625 2.09375,2.40625 l 10.96875,0 c 0.81819,0 1.9375,-1.06869 1.9375,-2.40625 l 0,-9.90625 c 0,-0.37505 -0.29595,-0.6875 -0.65625,-0.6875 l -5.99653,0 -0.88822,-2 z"
+         id="path6399"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccssssssccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccccsssssssssccc"
+         inkscape:connector-curvature="0"
+         id="path6403"
+         d="m 602.5906,-67.01456 c -0.32201,0.036 -0.56448,0.30099 -0.5625,0.625 l 0,0.90625 c -3e-5,0.26179 -0.23821,0.49997 -0.5,0.5 -0.18664,0 -0.24684,0.0427 -0.34375,0.1875 -0.0969,0.1448 -0.1875,0.41704 -0.1875,0.75 l 0,9.125 c 0,0.50984 0.24538,0.98446 0.59375,1.34375 0.34837,0.35929 0.80861,0.5625 1,0.5625 l 10.96875,0 c 0.1914,0 0.5954,-0.17788 0.90625,-0.53125 0.31085,-0.35337 0.53125,-0.84569 0.53125,-1.375 l 0,-9.90625 c 0,-0.11202 -0.085,-0.1875 -0.15625,-0.1875 l -6.35938,0 -0.87864,-2 z"
+         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;display:inline;enable-background:new"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#646464;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         d="m 602.02904,-66.022373 c 0.005,0.665823 -0.019,0.874167 -0.34061,1 l 6.80384,0 -0.44979,-1 z"
+         id="path6411"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <rect
+         style="color:#000000;fill:#b4b4b2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         id="rect6591"
+         width="1.9999704"
+         height="2"
+         x="456.4404"
+         y="372.90576"
+         rx="0"
+         ry="0"
+         transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="ccccccccccccccccc"
+         inkscape:connector-curvature="0"
+         id="path6593"
+         d="m 585.37512,-61.54231 -0.21766,0.217326 0.70138,2.11931 -1.54034,1.547552 c -0.71057,0.0043 0.47518,0.494696 0.47518,0.494696 l 2.7038,0.01403 0.77163,2.249619 0.67839,-0.123613 0.52009,-2.388241 2.48148,-0.52908 0.002,-0.673988 -2.18668,-0.799445 -0.01,-2.703089 -0.50778,-0.458416 -1.53181,1.520078 -2.12202,-0.699999 z"
+         style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="fill:none;stroke:#626262;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
+         d="m 584.64121,-62.222092 -0.67253,0.672066 0.71101,2.147414 -1.77221,1.774193 1.74285,1.732956 2.50637,-0.34067 0.38398,1.77384 1.02789,1.036366 1.06464,-1.031438 0.73676,-2.113885 2.09211,-0.736339 1.06091,-1.057234 -1.06216,-1.063552 -1.77278,-0.335145 0.3467,-2.512635 -1.73935,-1.745011 -1.78723,1.791042 -2.12799,-0.723407 z"
+         id="path6595"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccccccccccccccccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0"
+         id="path6597"
+         d="m 585.72927,-61.189298 2.12132,0.707106 -1.41421,1.414209 z"
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         d="m 589.26478,-61.896401 0,2.828428 -1.41419,-1.414219 z"
+         id="path6599"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0"
+         id="path6601"
+         d="m 585.02215,-57.653768 2.82845,-10e-7 -1.41422,-1.414214 z"
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         d="m 588.57884,-55.511295 0.7028,-3.534357 -1.42406,1.384877 z"
+         id="path6603"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0"
+         id="path6605"
+         d="m 591.38612,-58.36087 -3.51595,0.7267 1.38485,-1.424027 z"
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <rect
+         ry="0"
+         rx="0"
+         y="99.451866"
+         x="601.87329"
+         height="2"
+         width="1.9999704"
+         id="rect6607"
+         style="color:#000000;fill:#b4b4b2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         transform="matrix(0.96592583,-0.25881905,0.25881905,0.96592583,0,0)"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 607.42287,-62.386484 -0.29711,0.07939 -0.45224,2.186067 -2.10779,0.569952 c -0.61736,-0.35182 0.16418,0.666023 0.16418,0.666023 l 2.33458,1.364027 -0.45656,2.334026 0.6493,0.232174 1.64453,-1.808251 2.41355,0.782552 0.33874,-0.582699 -1.49396,-1.785673 1.34287,-2.34593 -0.21054,-0.6509 -2.08656,0.550806 -1.48774,-1.667239 z"
+         id="path6609"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccccccccccccccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="ccccccccccccccccccc"
+         inkscape:connector-curvature="0"
+         id="path6611"
+         d="m 607.12722,-63.342137 -0.91845,0.24574 -0.45801,2.215231 -2.42197,0.649996 0.64289,2.372219 2.34095,0.958149 -0.55437,1.72819 0.37198,1.411429 1.43776,-0.360924 1.69494,-1.462289 2.18001,0.408366 1.44753,-0.384755 -0.3881,-1.452168 -1.3677,-1.176631 1.55655,-2.002646 -0.63382,-2.38091 -2.44323,0.65777 -1.48118,-1.690475 z"
+         style="fill:none;stroke:#626262;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         d="m 607.55313,-61.903684 1.48354,1.673034 -1.93181,0.517615 z"
+         id="path6613"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0"
+         id="path6615"
+         d="m 610.96852,-60.7483 -1.41419,2.449469 -0.51766,-1.931819 z"
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         d="m 605.17299,-59.195392 2.44948,1.414201 -0.51761,-1.931844 z"
+         id="path6617"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0"
+         id="path6619"
+         d="m 607.18193,-55.561609 2.3758,-2.709447 -1.9257,0.487311 z"
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="color:#000000;fill:#626262;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+         d="m 611.03786,-56.625788 -3.40825,-1.128636 1.91134,-0.540811 z"
+         id="path6621"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc"
+         inkscape:export-filename="process-syncing-sparkleshare-windows-iiiii.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="ccccssssssccc"
+         inkscape:connector-curvature="0"
+         id="path6623"
+         d="m 622.49495,-67.51456 c -0.57203,0.064 -1.00351,0.54941 -1,1.125 l 0,0.90625 c -0.68054,0 -0.99809,0.62729 -0.9981,1.4375 l 0,9.125 c 0,1.33756 1.27557,2.40625 2.09375,2.40625 l 10.96875,0 c 0.81819,0 1.9375,-1.06869 1.9375,-2.40625 l 0,-9.90625 c 0,-0.37505 -0.29595,-0.6875 -0.65625,-0.6875 l -5.99653,0 -0.88822,-2 z"
+         style="opacity:0.5;fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;enable-background:new"
+         inkscape:export-filename="sparkleshare-syncing-error-windows.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;display:inline;enable-background:new"
+         d="m 622.5906,-67.01456 c -0.32201,0.036 -0.56448,0.30099 -0.5625,0.625 l 0,0.90625 c -3e-5,0.26179 -0.23821,0.49997 -0.5,0.5 -0.18664,0 -0.24684,0.0427 -0.34375,0.1875 -0.0969,0.1448 -0.1875,0.41704 -0.1875,0.75 l 0,9.125 c 0,0.50984 0.24538,0.98446 0.59375,1.34375 0.34837,0.35929 0.80861,0.5625 1,0.5625 l 10.96875,0 c 0.1914,0 0.5954,-0.17788 0.90625,-0.53125 0.31085,-0.35337 0.53125,-0.84569 0.53125,-1.375 l 0,-9.90625 c 0,-0.11202 -0.085,-0.1875 -0.15625,-0.1875 l -6.35938,0 -0.87864,-2 z"
+         id="path6625"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccsssssssssccc"
+         inkscape:export-filename="sparkleshare-syncing-error-windows.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path6627"
+         d="m 622.02904,-66.022373 c 0.005,0.665823 -0.019,0.874167 -0.34061,1 l 6.80384,0 -0.44979,-1 z"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#646464;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         inkscape:export-filename="sparkleshare-syncing-error-windows.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+    </g>
     <g
        style="display:inline"
        inkscape:label="hires"
@@ -4210,6 +4675,78 @@
          style="opacity:0.7;fill:none;stroke:url(#radialGradient3597);stroke-width:8.14736748;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
          sodipodi:type="arc" />
     </g>
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#626262;stroke-width:1;stroke-opacity:1"
+       id="rect6645"
+       width="3"
+       height="3.0533838"
+       x="626.5"
+       y="-57.5"
+       rx="0.98483658"
+       ry="0.98483658"
+       inkscape:export-filename="sparkleshare-syncing-error-windows.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       ry="0.99118114"
+       rx="1"
+       y="-63.5"
+       x="626.5"
+       height="6"
+       width="3"
+       id="rect6661"
+       style="fill:#ffffff;fill-opacity:1;stroke:#626262;stroke-width:0.99999994;stroke-opacity:1"
+       inkscape:export-filename="sparkleshare-syncing-error-windows.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#959592;fill-opacity:1;stroke:none"
+       id="rect6654"
+       width="2"
+       height="1"
+       x="627"
+       y="-58"
+       rx="0"
+       ry="0"
+       inkscape:export-filename="sparkleshare-syncing-error-windows.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:#959592;fill-opacity:1;stroke:none"
+       d="m 627,-59 c 0,0 0.0444,0.966854 0.97249,1 L 627,-58 z"
+       id="rect6656"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="sparkleshare-syncing-error-windows.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:nodetypes="cccc"
+       inkscape:connector-curvature="0"
+       id="path6659"
+       d="m 629,-59 c 0,0 -0.0444,0.966854 -0.97249,1 L 629,-58 z"
+       style="fill:#959592;fill-opacity:1;stroke:none"
+       inkscape:export-filename="sparkleshare-syncing-error-windows.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:nodetypes="cccc"
+       inkscape:connector-curvature="0"
+       id="path6663"
+       d="m 627,-56.574524 c 0,0 0.0242,-0.411373 0.53055,-0.425476 L 627,-57 z"
+       style="fill:#959592;fill-opacity:1;stroke:none"
+       inkscape:export-filename="sparkleshare-syncing-error-windows.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:#959592;fill-opacity:1;stroke:none"
+       d="m 629,-56.574524 c 0,0 -0.0237,-0.411373 -0.5195,-0.425476 L 629,-57 z"
+       id="path6665"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="sparkleshare-syncing-error-windows.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
   </g>
   <g
      transform="translate(81,-71)"
