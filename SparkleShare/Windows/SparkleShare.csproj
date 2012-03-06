@@ -104,9 +104,6 @@
     </Compile>
     <Compile Include="ApplicationSchemeHandler.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="controls\ExampleTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="FileSchemeHandler.cs" />
     <Compile Include="Icons.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -126,11 +123,9 @@
     <Compile Include="SparkleController.cs" />
     <Compile Include="SparkleEventLog.cs" />
     <Compile Include="SparkleSetup.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
-    <Compile Include="controls\TablessControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Strings.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -140,9 +135,6 @@
       <Link>SparkleEventLogController.cs</Link>
     </Compile>
     <Compile Include="SparkleSetupWindow.cs" />
-    <Compile Include="..\Program.cs">
-      <Link>Program.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SparkleLib\windows\SparkleLib.csproj">
@@ -215,8 +207,21 @@
       <DependentUpon>SparkleSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\about.png">
+      <Link>Pixmaps\about.png</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\data\side-splash.png">
       <Link>Pixmaps\side-splash.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\tutorial-slide-1-windows.png">
+      <Link>Pixmaps\tutorial-slide-1-windows.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\tutorial-slide-3-windows.png">
+      <Link>Pixmaps\tutorial-slide-3-windows.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\plugins\bitbucket.png">
+      <Link>plugins\bitbucket.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -226,10 +231,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\data\plugins\bitbucket.png">
-      <Link>plugins\bitbucket.png</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="..\..\data\plugins\github.png">
       <Link>plugins\github.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -393,7 +394,6 @@
     <Content Include="..\..\data\icons\sparkleshare.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="New Folder\" />
     <Folder Include="Pixmaps\" />
   </ItemGroup>
 </Project>
