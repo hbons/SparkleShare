@@ -49,19 +49,7 @@ namespace SparkleShare {
 #endif
         }
 
-#if !__MonoCS__
-        public static void TranslateWinForm (System.Windows.Forms.Form form)
-        {
-            form.Text = Program._ (form.Text);
 
-            foreach (var label in form.Controls.All ().OfType<System.Windows.Forms.Label> ()) {
-                label.Text = Program._ (label.Text);
-            }
-            foreach (var button in form.Controls.All ().OfType<System.Windows.Forms.Button> ()) {
-                button.Text = Program._ (button.Text);
-            }
-        }
-#endif
 
 #if !__MonoCS__
         [STAThread]

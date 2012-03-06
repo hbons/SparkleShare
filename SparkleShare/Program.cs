@@ -16,13 +16,10 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
 
+#if __MonoCS__
 using Mono.Unix;
+#endif
 using SparkleLib;
 
 namespace SparkleShare {
@@ -36,8 +33,12 @@ namespace SparkleShare {
 
         // Short alias for the translations
         public static string _ (string s)
-        {
+		{
+            #if __MonoCS__
             return Catalog.GetString (s);
+		    #else
+            return Strings.T (s);
+			#endif
         }
         
 
