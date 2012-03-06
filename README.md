@@ -58,7 +58,7 @@ Download, unzip and open the SparkleShare bundle.
 Download the installer and run SparkleShare from the start menu.
 
 
-## Build on Linux
+## Building on Linux
 
 ### Debian or Ubuntu (apt):
 
@@ -94,7 +94,7 @@ $ sudo make install
 **Note:**  Use `--prefix=/usr` if you want the Nautilus extension to work.
 
 
-## Build on Mac
+## Building on Mac
 
 Install <tt>Xcode</tt>, the <tt>Mono</tt> Framework, <tt>MonoDevelop</tt> and the <tt>MonoMac</tt> plugin
 (you can find it in <tt>MonoDevelop</tt> => <tt>Add-in Manager</tt>).
@@ -123,6 +123,9 @@ $ make
 Now that you have compiled the libraries, open `SparkleShare/Mac/SparkleShare.sln` in
 MonoDevelop and start the build.
 
+
+# Creating a Mac .app
+
 To create the <tt>SparkleShare.app</tt>, make sure the project is focused and select Project from the menu bar 
 and click <tt>"Create Mac Installer..."</tt>. Make sure to select <tt>"Don't link assemblies"</tt>. 
 
@@ -135,10 +138,10 @@ cp SparkleShare/Mac/config SparkleShare.app/Contents/MonoBundle/config
 
 Copy `/Library/Frameworks/Mono.framework/Versions/Current/lib/libintl.dylib` to `SparkleShare.app/Contents/Resources`
 
-
 Now you should have a working bundle that you can run.
 
-## Build on Windows
+
+## Building on Windows
 
 Install version 4.0 of the [.NET Framework](http://www.microsoft.com/download/en/details.aspx?id=17851) if you haven't already.
 
@@ -152,13 +155,25 @@ cd SparkleShare\Windows
 build
 ```
 
-* `\bin` should now contain `SparkleShare.exe`, which you can run.
+`\bin` should now contain `SparkleShare.exe`, which you can run.
 
-If you want to create an installer package, install [WiX 3.6](http://wix.sourceforge.net/), and run:
+**Note:**
+
+   SparkleShare needs to be run with administrator privileges.
+   Open the properties dialog for `SparkleShare.exe` and tick
+   the *Run this program as an administrator* option in the 
+   *Compatibility* tab.
+
+
+# Creating a Windows installer
+
+To create an installer package, install [WiX 3.6](http://wix.sourceforge.net/), restart Windows and run:
 
 ```
 build installer
 ```
+
+This will create `SparkleShare.msi` in the same directory.
 
 
 ## Info
