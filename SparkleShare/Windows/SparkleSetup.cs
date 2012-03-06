@@ -430,6 +430,18 @@ namespace SparkleShare {
                                     "that will keep track of your projects.";
     
 							
+								WPF.Image slide_image = new WPF.Image () {
+									Width  = 350,
+									Height = 200
+								};
+							
+								slide_image.Source = SparkleUIHelpers.GetBitmap ("tutorial-slide-1-windows");
+							
+							
+								ContentCanvas.Children.Add (slide_image);
+								Canvas.SetLeft (slide_image, 215);
+								Canvas.SetTop (slide_image, 130);
+							
                                 Button skip_tutorial_button = new Button () {
                                     Content = "Skip tutorial"
                                 };
@@ -529,6 +541,10 @@ namespace SparkleShare {
 								
                                 Buttons.Add (finish_button);
 								
+								
+								check_box.Click += delegate {
+									Controller.StartupItemChanged (check_box.IsChecked.Value);
+								};
 							
 								finish_button.Click += delegate {
 									Controller.TutorialPageCompleted ();
