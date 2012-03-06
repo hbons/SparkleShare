@@ -213,6 +213,9 @@
       <DependentUpon>SparkleSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\side-splash.png">
+      <Link>Pixmaps\side-splash.png</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Icons.tt">
@@ -386,5 +389,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\data\icons\sparkleshare.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="New Folder\" />
+    <Folder Include="Pixmaps\" />
   </ItemGroup>
 </Project>

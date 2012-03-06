@@ -26,6 +26,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using System.Reflection;
+
 namespace SparkleShare {
 
     public class SparkleSetupWindow : Window {
@@ -37,6 +39,7 @@ namespace SparkleShare {
 		
 		private Image side_splash;
 		private Rectangle bar;
+		
 		private Rectangle line;
 		
 
@@ -70,18 +73,25 @@ namespace SparkleShare {
 				Width  = 150,
 				Height = 482
 			};
+			System.Reflection.Assembly thisExe; 
+thisExe = System.Reflection.Assembly.GetExecutingAssembly();
+string [] resources = thisExe.GetManifestResourceNames();
+string list = "";
+
+// Build the string of resources.
+foreach (string resource in resources)
+   list += resource + "\r\n";
+			MessageBox.Show (list);
 			
-			BitmapImage bitmap_image = new BitmapImage();
+;
+Assembly thisassembly = Assembly.GetExecutingAssembly();
+System.IO.Stream imageStream= thisassembly.GetManifestResourceStream("SparkleShare.Pixmaps.side-splash.png");
+BitmapFrame bmp= BitmapFrame.Create(imageStream);
+
 			
-			bitmap_image.BeginInit ();
-			bitmap_image.DecodePixelWidth = 150;
+			this.side_splash.Source = bmp;
 			
-			bitmap_image.UriSource =
-				new Uri (@"C:\Users\Hylke\Code\SparkleShare\data\side-splash.png");
 			
-			bitmap_image.EndInit ();
-			this.side_splash.Source = bitmap_image;
-		
 			
 			ContentCanvas.Children.Add (this.bar);
 			Canvas.SetRight (bar, 0);

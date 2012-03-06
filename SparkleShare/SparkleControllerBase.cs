@@ -990,7 +990,8 @@ namespace SparkleShare {
             string tmp_path = SparkleConfig.DefaultConfig.TmpPath;
             if (!Directory.Exists (tmp_path)) {
                 Directory.CreateDirectory (tmp_path);
-                File.SetAttributes (tmp_path, File.GetAttributes (tmp_path) | FileAttributes.Hidden);
+				
+                File.SetAttributes (tmp_path, FileAttributes.Directory | FileAttributes.Hidden);
             }
 
 

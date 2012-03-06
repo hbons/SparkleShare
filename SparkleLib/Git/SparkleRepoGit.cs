@@ -737,6 +737,7 @@ namespace SparkleLib.Git {
                 !path.Equals (LocalPath)) {
 
                 File.Create (Path.Combine (path, ".empty")).Close ();
+                File.SetAttributes (Path.Combine (path, ".empty"), FileAttributes.Hidden);
             }
         }
 
