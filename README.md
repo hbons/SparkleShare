@@ -124,7 +124,7 @@ Now that you have compiled the libraries, open `SparkleShare/Mac/SparkleShare.sl
 MonoDevelop and start the build.
 
 
-# Creating a Mac .app
+### Creating a Mac .app
 
 To create the <tt>SparkleShare.app</tt>, make sure the project is focused and select Project from the menu bar 
 and click <tt>"Create Mac Installer..."</tt>. Make sure to select <tt>"Don't link assemblies"</tt>. 
@@ -165,7 +165,7 @@ build
    *Compatibility* tab.
 
 
-# Creating a Windows installer
+### Creating a Windows installer
 
 To create an installer package, install [WiX 3.6](http://wix.sourceforge.net/), restart Windows and run:
 
