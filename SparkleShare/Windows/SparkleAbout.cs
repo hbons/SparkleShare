@@ -96,15 +96,11 @@ namespace SparkleShare {
 				Height = 260
 			};
 		
-			BitmapImage bitmap_image = new BitmapImage();
-			
-			bitmap_image.BeginInit();
-			// TODO: get relative reference to the image
-			bitmap_image.UriSource = new Uri(@"C:\Users\Hylke\Code\SparkleShare\data\about.png");
-			bitmap_image.DecodePixelWidth = 640;
-			bitmap_image.EndInit();
-			
-			image.Source  = bitmap_image;
+			image.Source  =  
+				System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+					Icons.about.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty, 
+					BitmapSizeOptions.FromWidthAndHeight(640, 260));
+
 			
 			
             Label version = new Label () {

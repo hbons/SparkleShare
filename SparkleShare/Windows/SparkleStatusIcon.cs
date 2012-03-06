@@ -40,7 +40,7 @@ namespace SparkleShare {
 		
         private WinForms.NotifyIcon notify_icon = new WinForms.NotifyIcon () {
             Text = "SparkleShare",
-            Icon = Icons.sparkleshare,
+            
             Visible = true
 		};
 		
@@ -55,6 +55,7 @@ namespace SparkleShare {
 		
 		public SparkleStatusIcon ()
         {
+			notify_icon.Icon = Icon.FromHandle(Icons.document_added_12.GetHicon());
             AnimationFrames = CreateAnimationFrames ();
             Animation = CreateAnimation ();
 
@@ -162,9 +163,17 @@ namespace SparkleShare {
 				IsEnabled = false
 			};
 			
+			System.Windows.Controls.Image i = new System.Windows.Controls.Image();
+			i.Source = 
+				System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+					Icons.folder_sparkleshare_16.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty, 
+					System.Windows.Media.Imaging.BitmapSizeOptions.FromWidthAndHeight(16, 16));
+
+			
 			MenuItem folder_item = new MenuItem () {
 				Header = " SparkleShare"//,
-				//Icon   = Icons.sparkleshare
+				,Icon   = i
+
 			};
 		
 				folder_item.Click += delegate {
@@ -230,6 +239,14 @@ namespace SparkleShare {
 					};
 					
 					subfolder_item.Click += OpenFolderDelegate (folder_name);
+					
+					System.Windows.Controls.Image i2 = new System.Windows.Controls.Image();
+			i2.Source = 
+				System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+					Icons.sparkleshare_windows_status.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty, 
+					System.Windows.Media.Imaging.BitmapSizeOptions.FromWidthAndHeight(16, 16));
+					
+					subfolder_item.Icon = i2;
 					/*
                     if (Program.Controller.UnsyncedFolders.Contains (folder_name))
                         subfolder_item.Icon = Icons.dialog_error_16;
@@ -295,7 +312,7 @@ namespace SparkleShare {
                 StateText = _(" Welcome to SparkleShare!");
 
                 Dispatcher.Invoke ((Action)delegate {
-                    this.notify_icon.Icon = GetIconFromBitmap (AnimationFrames [0]);
+                    this.notify_icon.Icon = GetIconFromBitmap (Icons.sparkleshare_windows_status);
                 });
 
             } else {
@@ -308,7 +325,7 @@ namespace SparkleShare {
                 } else {
                     StateText = _(" Files up to date") + Controller.FolderSize;
                     Dispatcher.Invoke ((Action)delegate {
-                        this.notify_icon.Icon = GetIconFromBitmap (AnimationFrames [0]);
+                        this.notify_icon.Icon = GetIconFromBitmap (Icons.sparkleshare_windows_status);
                     });
                 }
             }
@@ -324,7 +341,7 @@ namespace SparkleShare {
         // The state when animating
         private void SetAnimationState ()
         {
-            StateText = _("Syncing…");
+            StateText = _(" Syncing…");
 
             if (!Animation.Enabled)
                 Animation.Start ();
