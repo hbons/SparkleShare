@@ -108,7 +108,7 @@ namespace SparkleShare {
             this.updates = new Label () {
 				Content    = "Checking for updates...",
 				FontSize   = 11,
-				Foreground = new SolidColorBrush (Color.FromRgb (45, 62, 81))
+				Foreground = new SolidColorBrush (Color.FromRgb (45, 62, 81)) // TODO: color looks off
             };
 			
             TextBlock credits = new TextBlock () {

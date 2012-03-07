@@ -78,7 +78,8 @@ namespace SparkleShare {
                 BackgroundColor = NSColor.WindowBackground,
                 Bordered        = false,
                 Editable        = false,
-                Font            = SparkleUI.Font
+                Font            = NSFontManager.SharedFontManager.FontWithFamily
+                    ("Lucida Grande", NSFontTraitMask.Condensed, 0, 11)
             };
 
             if (Program.UI != null)
@@ -108,17 +109,20 @@ namespace SparkleShare {
             ContentView.AddSubview (SideSplashView);
             
             int i = 1;
+            int x = 0;
             if (Buttons.Count > 0) {
                 DefaultButtonCell = Buttons [0].Cell;
                 
                 foreach (NSButton button in Buttons) {
                     button.BezelStyle = NSBezelStyle.Rounded;
-                    button.Frame = new RectangleF (Frame.Width - 15 - (105 * i), 12, 105, 32);
+                    button.Frame = new RectangleF (Frame.Width - 15 - x - (105 * i), 12, 105, 32);
 
                     // Make the button a bit wider if the text is
                     // likely to be longer
-                    if (button.Title.Contains (" "))
+                    if (button.Title.Contains (" ")) {
                         button.Frame = new RectangleF (Frame.Width - 30 - (105 * i), 12, 120, 32);
+                        x += 15;
+                    }
                     
                     button.Font = SparkleUI.Font;
                     ContentView.AddSubview (button);

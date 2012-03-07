@@ -33,15 +33,18 @@ namespace SparkleShare {
 
         // Short alias for the translations
         public static string _ (string s)
-		{
-            #if __MonoCS__
+        {
+        #if __MonoCS__
             return Catalog.GetString (s);
-		    #else
+         #else
             return Strings.T (s);
-			#endif
+         #endif
         }
         
-
+     
+        #if !__MonoCS__
+        [STAThread]
+        #endif
         public static void Main (string [] args)
         {
             // Parse the command line options
@@ -73,6 +76,12 @@ namespace SparkleShare {
                 UI = new SparkleUI ();
                 UI.Run ();
             }
+         
+            #if !__MonoCS__
+            // Suppress assertion messages in debug mode
+            GC.Collect (GC.MaxGeneration, GCCollectionMode.Forced);
+            GC.WaitForPendingFinalizers ();
+            #endif
         }
 
 
@@ -101,7 +110,6 @@ namespace SparkleShare {
         }
 
 
-        // Prints the version information
         public static void PrintVersion ()
         {
             Console.WriteLine (_("SparkleShare " + Defines.VERSION));
