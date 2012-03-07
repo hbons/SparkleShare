@@ -31,11 +31,19 @@ namespace SparkleShare {
         }
 
         
-		public static BitmapFrame GetBitmap (string name)
+		public static BitmapFrame GetImageSource (string name)
 		{			                              
-			Assembly assembly = Assembly.GetExecutingAssembly ();
+			Assembly assembly   = Assembly.GetExecutingAssembly ();
 			Stream image_stream = assembly.GetManifestResourceStream ("SparkleShare.Pixmaps." + name + ".png");
 			return BitmapFrame.Create (image_stream);
+		}
+		
+		
+		public static Bitmap GetBitmap (string name)
+		{			                              
+			Assembly assembly   = Assembly.GetExecutingAssembly ();
+			Stream image_stream = assembly.GetManifestResourceStream ("SparkleShare.Pixmaps." + name + ".png");
+			return (Bitmap) Bitmap.FromStream (image_stream);
 		}
     }
 }

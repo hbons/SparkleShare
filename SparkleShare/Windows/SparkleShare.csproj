@@ -226,6 +226,24 @@
     <EmbeddedResource Include="..\..\data\tutorial-slide-4.png">
       <Link>Pixmaps\tutorial-slide-4.png</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\process-syncing-sparkleshare-windows-i.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-windows-i.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\process-syncing-sparkleshare-windows-ii.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-windows-ii.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\process-syncing-sparkleshare-windows-iii.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-windows-iii.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\process-syncing-sparkleshare-windows-iiii.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-windows-iiii.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\process-syncing-sparkleshare-windows-iiiii.png">
+      <Link>Pixmaps\process-syncing-sparkleshare-windows-iiiii.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\sparkleshare-syncing-error-windows.png">
+      <Link>Pixmaps\sparkleshare-syncing-error-windows.png</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Icons.tt">
