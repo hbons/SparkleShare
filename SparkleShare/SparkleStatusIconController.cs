@@ -159,5 +159,10 @@ namespace SparkleShare {
         {
             Program.Controller.ShowAboutWindow ();
         }
+		
+        public void QuitClicked ()
+        {
+            Program.Controller.Quit ();
+        }
     }
 }
