@@ -25,11 +25,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Xml;
 
-#if __MonoCS__
-using Mono.Unix;
-#endif
 using SparkleLib;
 
 namespace SparkleShare {
@@ -1138,11 +1134,7 @@ namespace SparkleShare {
                     repo.Dispose ();
             }
 
-#if __MonoCS__
             Environment.Exit (0);
-#else
-            System.Windows.Forms.Application.Exit();
-#endif
         }
 
 

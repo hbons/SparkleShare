@@ -89,6 +89,11 @@ namespace SparkleShare {
 						};
 						
 						
+						
+						Button cancel_button = new Button () {
+							Content = "Cancel"
+						};
+						
 						Button continue_button = new Button () {
 							Content = "Continue",
 							IsEnabled = false
@@ -112,6 +117,7 @@ namespace SparkleShare {
 						Canvas.SetTop (email_box, 230);
 						
 						Buttons.Add (continue_button);
+						Buttons.Add (cancel_button);
 						
 						
 						Controller.UpdateSetupContinueButtonEvent += delegate (bool enabled) {
@@ -126,6 +132,13 @@ namespace SparkleShare {
 						
 						email_box.TextChanged += delegate {
 							Controller.CheckSetupPage (name_box.Text, email_box.Text);
+						};
+						
+						cancel_button.Click += delegate {
+							Dispatcher.Invoke ((Action) delegate {
+								SparkleUI.StatusIcon.Dispose ();	
+								Controller.SetupPageCancelled ();
+							});
 						};
 						
 						continue_button.Click += delegate {
@@ -371,13 +384,25 @@ namespace SparkleShare {
  
 						// TODO: Bullet points
 						
-						Button try_again_button = new Button () {
-                            Content   = "Try again…"
+						
+						Button cancel_button = new Button () {
+                            Content = "Cancel"
                         };
+						
+						Button try_again_button = new Button () {
+                            Content = "Try again…"
+                        };
+						
     					
 						Buttons.Add (try_again_button);
+    					Buttons.Add (cancel_button);
     
-                        try_again_button.Click += delegate {
+						
+                        cancel_button.Click += delegate {
+                            Controller.PageCancelled ();
+                        };
+						
+						try_again_button.Click += delegate {
                             Controller.ErrorPageCompleted ();
                         };
 						
