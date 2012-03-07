@@ -17,7 +17,6 @@
 
 using System;
 using System.Drawing;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -213,7 +212,7 @@ namespace SparkleShare {
 			
 				this.exit_item.Click += delegate {
 					this.notify_icon.Dispose ();
-			 		Program.Controller.Quit ();	
+					Controller.QuitClicked ();
 				};
 			
 			

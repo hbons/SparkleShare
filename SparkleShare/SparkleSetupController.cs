@@ -203,7 +203,13 @@ namespace SparkleShare {
                 UpdateSetupContinueButtonEvent (fields_valid);
         }
 
-
+		
+		public void SetupPageCancelled ()
+        {
+        	Program.Controller.Quit ();
+        }
+		
+		
         public void SetupPageCompleted (string full_name, string email)
         {
             Program.Controller.UserName  = full_name;
@@ -449,9 +455,6 @@ namespace SparkleShare {
 
         public void ErrorPageCompleted ()
         {
-            if (ChangePageEvent == null)
-                return;
-
             if (PendingInvite != null)
                 ChangePageEvent (PageType.Invite, null);
             else
