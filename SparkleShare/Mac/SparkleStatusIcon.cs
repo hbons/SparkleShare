@@ -302,7 +302,7 @@ namespace SparkleShare {
                 };
     
                     QuitMenuItem.Activated += delegate {
-                        Program.Controller.Quit ();
+                        Controller.QuitClicked ();
                     };
 
                 Menu.AddItem (QuitMenuItem);

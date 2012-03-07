@@ -298,7 +298,7 @@ namespace SparkleShare {
                 };
 
                 this.quit_item.Activated += delegate {
-                    Program.Controller.Quit ();
+                    Controller.QuitClicked ();
                 };
 
             this.menu.Add (this.quit_item);

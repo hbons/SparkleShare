@@ -106,7 +106,13 @@ namespace SparkleShare {
                         
                         VBox wrapper = new VBox (false, 9);
                         wrapper.PackStart (table, true, false, 0);
+						
+							Button cancel_button = new Button (_("Cancel"));
 
+                            cancel_button.Clicked += delegate {
+                                Controller.SetupPageCancelled ();
+                            };
+						
                             Button continue_button = new Button (_("Continue")) {
                                 Sensitive = false
                             };
@@ -117,7 +123,8 @@ namespace SparkleShare {
 
                                 Controller.SetupPageCompleted (full_name, email);
                             };
-
+						
+                        AddButton (cancel_button);
                         AddButton (continue_button);
                         Add (wrapper);
 
@@ -472,7 +479,12 @@ namespace SparkleShare {
 
                         points.PackStart (new Label (""), true, true, 0);
 
+						Button cancel_button = new Button (_("Cancel"));
 
+                            cancel_button.Clicked += delegate {
+                                Controller.PageCancelled ();
+                            };
+						
                         Button try_again_button = new Button (_("Try Again…")) {
                             Sensitive = true
                         };
@@ -480,7 +492,8 @@ namespace SparkleShare {
                         try_again_button.Clicked += delegate {
                             Controller.ErrorPageCompleted ();
                         };
-
+						
+						AddButton (cancel_button);
                         AddButton (try_again_button);
                         Add (points);
 
