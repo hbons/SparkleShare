@@ -19,12 +19,10 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
-
-using Forms = System.Windows.Forms;
-using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-
+using Forms = System.Windows.Forms;
 
 namespace SparkleShare {
 
@@ -41,11 +39,10 @@ namespace SparkleShare {
 		private MenuItem exit_item;
 		
         private Forms.NotifyIcon notify_icon = new Forms.NotifyIcon () {
-           Text = "SparkleShare",
+            Text = "SparkleShare",
             Visible = true
 		};
 		
-
 		
         // Short alias for the translations
         public static string _ (string s)
@@ -56,11 +53,6 @@ namespace SparkleShare {
 		
 		public SparkleStatusIcon ()
         {
-			LostFocus += delegate {
-				
-				this.context_menu.IsOpen = false;
-			};
-			
             AnimationFrames = CreateAnimationFrames ();
             Animation = CreateAnimation ();
 			notify_icon.Icon = AnimationFrames [0];
@@ -112,9 +104,6 @@ namespace SparkleShare {
         }
 
 		
-        [DllImport("user32.dll", EntryPoint = "DestroyIcon")]
-        static extern bool DestroyIcon(IntPtr hIcon);
-
 
         // Slices up the graphic that contains the
         // animation frames.
@@ -315,7 +304,16 @@ namespace SparkleShare {
                 }
             }
         }
-
+		
+		
+		public void ShowBalloon (string title, string subtext, string image_path)
+        {
+            // TODO:
+			// - Use the image pointed to by image_path
+			// - Find a way to use the prettier (Win7?) balloons
+            this.notify_icon.ShowBalloonTip (5 * 1000, title, subtext, Forms.ToolTipIcon.Info);
+        }
+		
 
         public void Dispose ()
         {
@@ -348,8 +346,12 @@ namespace SparkleShare {
             IntPtr unmanaged_icon = bitmap.GetHicon ();
             Icon icon = (Icon) Icon.FromHandle (unmanaged_icon).Clone ();
             DestroyIcon (unmanaged_icon);
-
+			
             return icon;
         }
+		
+		
+		[DllImport("user32.dll", EntryPoint = "DestroyIcon")]
+		static extern bool DestroyIcon (IntPtr hIcon);
     }
 }
