@@ -150,6 +150,15 @@ namespace SparkleShare {
     
                                 Controller.SetupPageCompleted (full_name, email);
                             };
+							
+							CancelButton = new NSButton () {
+                                Title = "Cancel"
+                            };
+    
+                            CancelButton.Activated += delegate {
+                                Controller.SetupPageCancelled ();
+                            };
+							
     
                             Controller.UpdateSetupContinueButtonEvent += delegate (bool button_enabled) {
                                 InvokeOnMainThread (delegate {
@@ -164,6 +173,7 @@ namespace SparkleShare {
                             ContentView.AddSubview (EmailTextField);
     
                             Buttons.Add (ContinueButton);
+							Buttons.Add (CancelButton);
     
                             Controller.CheckSetupPage (
                                 FullNameTextField.StringValue,
@@ -553,8 +563,17 @@ namespace SparkleShare {
                             TryAgainButton.Activated += delegate {
                                 Controller.ErrorPageCompleted ();
                             };
+							
+							CancelButton = new NSButton () {
+                                Title = "Cancel"
+                            };
+    
+                            CancelButton.Activated += delegate {
+                                Controller.PageCancelled ();
+                            };
     
                             Buttons.Add (TryAgainButton);
+							Buttons.Add (CancelButton);
     
                             break;
                         }
