@@ -435,7 +435,7 @@ namespace SparkleShare {
 									Height = 200
 								};
 							
-								slide_image.Source = SparkleUIHelpers.GetBitmap ("tutorial-slide-1-windows");
+								slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-1-windows");
 							
 							
 								ContentCanvas.Children.Add (slide_image);
@@ -502,7 +502,7 @@ namespace SparkleShare {
 									Height = 200
 								};
 							
-								slide_image.Source = SparkleUIHelpers.GetBitmap ("tutorial-slide-3-windows");
+								slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-3-windows");
 							
 							
 								ContentCanvas.Children.Add (slide_image);
@@ -534,7 +534,7 @@ namespace SparkleShare {
 									Height = 64
 								};
 								
-								slide_image.Source = SparkleUIHelpers.GetBitmap ("tutorial-slide-4");
+								slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-4");
     
 								CheckBox check_box = new CheckBox () {
 									Content   = "Add SparkleShare to startup items",

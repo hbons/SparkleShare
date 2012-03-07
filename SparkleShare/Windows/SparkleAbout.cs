@@ -96,7 +96,7 @@ namespace SparkleShare {
 				Height = 260
 			};
 		
-			image.Source = SparkleUIHelpers.GetBitmap ("about");
+			image.Source = SparkleUIHelpers.GetImageSource ("about");
 			
 			
             Label version = new Label () {

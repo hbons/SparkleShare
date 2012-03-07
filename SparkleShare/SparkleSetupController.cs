@@ -159,7 +159,7 @@ namespace SparkleShare {
                     if (!Program.Controller.FirstRun && TutorialPageNumber == 0) {
                         if (ChangePageEvent != null)
                             ChangePageEvent (page_type, null);
-
+						
                         if (ShowWindowEvent != null)
                             ShowWindowEvent ();
 

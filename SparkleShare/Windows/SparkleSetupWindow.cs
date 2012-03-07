@@ -73,7 +73,7 @@ namespace SparkleShare {
 				Height = 482
 			};
 
-			this.side_splash.Source = SparkleUIHelpers.GetBitmap ("side-splash");
+			this.side_splash.Source = SparkleUIHelpers.GetImageSource ("side-splash");
 			
 			
 			ContentCanvas.Children.Add (this.bar);
@@ -159,7 +159,6 @@ namespace SparkleShare {
             }
 			
 			ElementHost.EnableModelessKeyboardInterop (this);
-			Show ();
 		}
     
 		
