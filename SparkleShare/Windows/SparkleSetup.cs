@@ -151,7 +151,74 @@ namespace SparkleShare {
 					}
 
                     case PageType.Invite: {
-						// TODO
+						Header      = "You've received an invite!";
+			       		Description = "Do you want to add this project to SparkleShare?";
+		
+						
+			            TextBlock address_label = new TextBlock () {
+			                Text = "Address:",
+							Width = 150,
+							TextAlignment = TextAlignment.Right
+			            };
+													
+						TextBlock address_value = new TextBlock () {
+							Text  = Controller.PendingInvite.Address,
+							Width = 175,
+							FontWeight = FontWeights.Bold
+						};
+						
+						
+			            TextBlock path_label = new TextBlock () {
+			                Text  = "Remote Path:",
+							Width = 150,
+							TextAlignment = TextAlignment.Right
+			            };
+						
+						TextBlock path_value = new TextBlock () {
+							Width = 175,
+							Text = Controller.PendingInvite.RemotePath,
+							FontWeight = FontWeights.Bold
+						};
+						
+						
+						
+						Button cancel_button = new Button () {
+							Content = "Cancel"
+						};
+						
+						Button add_button = new Button () {
+							Content = "Add"
+						};
+						
+						
+						ContentCanvas.Children.Add (address_label);
+						Canvas.SetLeft (address_label, 180);
+						Canvas.SetTop (address_label, 200);
+						
+						ContentCanvas.Children.Add (address_value);
+						Canvas.SetLeft (address_value, 340);
+						Canvas.SetTop (address_value, 200);
+						
+						ContentCanvas.Children.Add (path_label);
+						Canvas.SetLeft (path_label, 180);
+						Canvas.SetTop (path_label, 225);
+						
+						ContentCanvas.Children.Add (path_value);
+						Canvas.SetLeft (path_value, 340);
+						Canvas.SetTop (path_value, 225);
+						
+						Buttons.Add (add_button);
+						Buttons.Add (cancel_button);
+						
+						
+						cancel_button.Click += delegate {
+							Controller.PageCancelled ();
+						};
+						
+						add_button.Click += delegate {
+							Controller.InvitePageCompleted ();
+						};
+						
 						break;
 					}
 						
