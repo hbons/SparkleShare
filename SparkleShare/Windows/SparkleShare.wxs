@@ -18,8 +18,8 @@
             <Component Id='SparkleShare.exe' Guid='0DA582D5-4ABE-4251-9F62-E7DEA76F10E1'>
               <File Id='SparkleShare.exe' Name='SparkleShare.exe' Source='!(wix.root)\bin\SparkleShare.exe' KeyPath='yes' DiskId='1' />
             </Component>
-            <Component Id='SparkleShareInviteOpen.exe' Guid='0DA582D5-4ABE-4251-9F62-E7DEA76F28E1'>
-              <File Id='SparkleShareInviteOpen.exe' Name='SparkleShareInviteOpen.exe' Source='!(wix.root)\bin\SparkleShareInviteOpen.exe' DiskId='1' />
+            <Component Id='SparkleShareInviteOpener.exe' Guid='0DA582D5-4ABE-4251-9F62-E7DEA76F28E1'>
+              <File Id='SparkleShareInviteOpener.exe' Name='SparkleShareInviteOpener.exe' Source='!(wix.root)\bin\SparkleShareInviteOpener.exe' DiskId='1' />
             </Component>
             <Component Id='Libraries' Guid='0DA692D5-4DBE-4251-9F62-E7C1A76F10E1'>
               <File Id='SparkleLib.Git.dll' Name='SparkleLib.Git.dll' Source='!(wix.root)\bin\SparkleLib.Git.dll' DiskId='1' />
@@ -62,7 +62,7 @@
 
     <Feature Id='SparkleShareFeature' Title='SparkleShare' Description='This is the SparkleShare executables.' Level='1' AllowAdvertise='no'>
       <ComponentRef Id="SparkleShare.exe" />
-      <ComponentRef Id="SparkleShareInviteOpen.exe" />
+      <ComponentRef Id="SparkleShareInviteOpener.exe" />
       <ComponentRef Id="Libraries" />
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="Autostart" />
