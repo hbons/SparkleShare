@@ -20,7 +20,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using WinForms = System.Windows.Forms;
+using Forms = System.Windows.Forms;
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Controls.Primitives;
@@ -32,15 +32,16 @@ namespace SparkleShare {
 		
         public SparkleStatusIconController Controller = new SparkleStatusIconController();
 
-        private WinForms.Timer Animation;
-        private Bitmap [] AnimationFrames;
+        private Forms.Timer Animation;
+        private Icon [] AnimationFrames;
+		private Icon ErrorIcon;
         private int FrameNumber;
         private string StateText;
 		private ContextMenu context_menu;
 		private MenuItem exit_item;
 		
-        private WinForms.NotifyIcon notify_icon = new WinForms.NotifyIcon () {
-            Text = "SparkleShare",
+        private Forms.NotifyIcon notify_icon = new Forms.NotifyIcon () {
+           Text = "SparkleShare",
             Visible = true
 		};
 		
@@ -60,15 +61,18 @@ namespace SparkleShare {
 				this.context_menu.IsOpen = false;
 			};
 			
-			notify_icon.Icon = Icon.FromHandle(Icons.document_added_12.GetHicon());
             AnimationFrames = CreateAnimationFrames ();
             Animation = CreateAnimation ();
+			notify_icon.Icon = AnimationFrames [0];
+			ErrorIcon = GetIconFromBitmap (SparkleUIHelpers.GetBitmap ("sparkleshare-syncing-error-windows"));
 
-			this.notify_icon.MouseClick +=new WinForms.MouseEventHandler(ShowMenu);	
+			this.notify_icon.MouseClick += delegate {
+				this.context_menu.Placement = PlacementMode.Mouse;
+	 	        this.context_menu.IsOpen    = true;	
+			};
 			
             CreateMenu ();
             SetNormalState ();
-            
 			
 			
 			Controller.UpdateQuitItemEvent += delegate (bool enable) {
@@ -108,37 +112,31 @@ namespace SparkleShare {
         }
 
 		
-        private void ShowMenu (object sender, WinForms.MouseEventArgs e)
-		{
-			this.context_menu.Placement        = PlacementMode.Mouse;
- 	        this.context_menu.IsOpen           = true;
-		}
-		
         [DllImport("user32.dll", EntryPoint = "DestroyIcon")]
         static extern bool DestroyIcon(IntPtr hIcon);
 
 
         // Slices up the graphic that contains the
         // animation frames.
-        private Bitmap [] CreateAnimationFrames ()
+        private Icon [] CreateAnimationFrames ()
         {
-            Bitmap [] animation_frames = new Bitmap [5];
-            animation_frames [0] = Icons.process_syncing_sparkleshare_i_24;
-            animation_frames [1] = Icons.process_syncing_sparkleshare_ii_24;
-            animation_frames [2] = Icons.process_syncing_sparkleshare_iii_24;
-            animation_frames [3] = Icons.process_syncing_sparkleshare_iiii_24;
-            animation_frames [4] = Icons.process_syncing_sparkleshare_iiiii_24;
+            Icon [] animation_frames = new Icon [5];
+            animation_frames [0] = GetIconFromBitmap (SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-i"));
+            animation_frames [1] = GetIconFromBitmap (SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-ii"));
+            animation_frames [2] = GetIconFromBitmap (SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iii"));
+            animation_frames [3] = GetIconFromBitmap (SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iiii"));
+            animation_frames [4] = GetIconFromBitmap (SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iiiii"));
 
             return animation_frames;
         }
 
 
         // Creates the Animation that handles the syncing animation
-        private WinForms.Timer CreateAnimation ()
+        private Forms.Timer CreateAnimation ()
         {
             FrameNumber = 0;
 
-            WinForms.Timer Animation = new WinForms.Timer () {
+            Forms.Timer Animation = new Forms.Timer () {
                 Interval = 35
             };
 
@@ -149,7 +147,7 @@ namespace SparkleShare {
                     FrameNumber = 0;
 
                 Dispatcher.Invoke ((Action) delegate {
-                    this.notify_icon.Icon = GetIconFromBitmap (AnimationFrames [FrameNumber]);
+                    this.notify_icon.Icon = AnimationFrames [FrameNumber];
                 });
             };
 
@@ -174,7 +172,7 @@ namespace SparkleShare {
 
 			
 			MenuItem folder_item = new MenuItem () {
-				Header = " SparkleShare"//,
+				Header = "SparkleShare"//,
 				,Icon   = i
 			};
 		
@@ -183,7 +181,7 @@ namespace SparkleShare {
 				};
 			
 			MenuItem add_item = new MenuItem () {
-				Header    = " Add Hosted Project…",
+				Header    = "Add Hosted Project…",
 				IsEnabled = (!Program.Controller.FirstRun)
 			};
 			
@@ -192,7 +190,7 @@ namespace SparkleShare {
 				};
 			
 			MenuItem log_item = new MenuItem () {
-				Header    = " View Recent Changes…",
+				Header    = "View Recent Changes…",
 				IsEnabled = (Program.Controller.Folders.Count > 0)
 			};
 			
@@ -203,9 +201,9 @@ namespace SparkleShare {
 			MenuItem notify_item = new MenuItem ();
 
 	            if (Program.Controller.NotificationsEnabled)
-	                notify_item = new MenuItem () { Header = " Turn Notifications Off" };
+	                notify_item = new MenuItem () { Header = "Turn Notifications Off" };
 	            else
-	                notify_item = new MenuItem () { Header = " Turn Notifications On" };
+	                notify_item = new MenuItem () { Header = "Turn Notifications On" };
 	
 	            notify_item.Click += delegate {
 	                Program.Controller.ToggleNotifications ();
@@ -213,7 +211,7 @@ namespace SparkleShare {
 	            };
 			
 			MenuItem about_item = new MenuItem () {
-				Header = " About SparkleShare"
+				Header = "About SparkleShare"
 			};
 			
 				about_item.Click += delegate {
@@ -221,7 +219,7 @@ namespace SparkleShare {
 				};
 			
 			exit_item = new MenuItem () {
-				Header = " Exit"
+				Header = "Exit"
 			};
 			
 				this.exit_item.Click += delegate {
@@ -237,18 +235,12 @@ namespace SparkleShare {
             if (Program.Controller.Folders.Count > 0) {
                 foreach (string folder_name in Program.Controller.Folders) {     
 					MenuItem subfolder_item = new MenuItem () {
-						Header = " " + folder_name
+						Header = folder_name
 					};
 					
 					subfolder_item.Click += OpenFolderDelegate (folder_name);
 					
-					System.Windows.Controls.Image i2 = new System.Windows.Controls.Image();
-			i2.Source = 
-				System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-					Icons.sparkleshare_windows_status.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty, 
-					System.Windows.Media.Imaging.BitmapSizeOptions.FromWidthAndHeight(16, 16));
-					
-					subfolder_item.Icon = i2;
+					subfolder_item.Icon = ErrorIcon;
 					/*
                     if (Program.Controller.UnsyncedFolders.Contains (folder_name))
                         subfolder_item.Icon = Icons.dialog_error_16;
@@ -260,7 +252,7 @@ namespace SparkleShare {
 
             } else {
                 MenuItem no_folders_item = new MenuItem () {
-					Header    = " No projects yet",
+					Header    = "No projects yet",
 					IsEnabled = false
 				};
                
@@ -279,17 +271,7 @@ namespace SparkleShare {
 		}
 
 
-        public void ShowBalloon (string title, string subtext, string image_path)
-        {
-            // TODO: Use the image pointed to by image_path
-
-            this.notify_icon.BalloonTipText = title;
-            this.notify_icon.BalloonTipText = subtext;
-            this.notify_icon.BalloonTipIcon = WinForms.ToolTipIcon.None;
-
-            this.notify_icon.ShowBalloonTip (5 * 1000);
-        }
-
+       
 
         public void UpdateMenu ()
         {
@@ -311,23 +293,24 @@ namespace SparkleShare {
             Animation.Stop ();
 
             if (Program.Controller.Folders.Count == 0) {
-                StateText = _(" Welcome to SparkleShare!");
+                StateText = _("Welcome to SparkleShare!");
 
                 Dispatcher.Invoke ((Action)delegate {
-                    this.notify_icon.Icon = GetIconFromBitmap (Icons.sparkleshare_windows_status);
+                    this.notify_icon.Icon = AnimationFrames [0];
                 });
 
             } else {
                 if (error) {
-                    StateText = _(" Not everything is synced");
+                    StateText = _("Not everything is synced");
 
                     Dispatcher.Invoke ((Action) delegate {
-                        this.notify_icon.Icon = GetIconFromBitmap (Icons.sparkleshare_syncing_error_24);
+                        this.notify_icon.Icon = ErrorIcon;
                     });
                 } else {
-                    StateText = _(" Files up to date") + Controller.FolderSize;
+                    StateText = _("Files up to date") + Controller.FolderSize;
                     Dispatcher.Invoke ((Action)delegate {
-                        this.notify_icon.Icon = GetIconFromBitmap (Icons.sparkleshare_windows_status);
+                        this.notify_icon.Icon = AnimationFrames [0];
+
                     });
                 }
             }
@@ -343,7 +326,7 @@ namespace SparkleShare {
         // The state when animating
         private void SetAnimationState ()
         {
-            StateText = _(" Syncing…");
+            StateText = _("Syncing…");
 
             if (!Animation.Enabled)
                 Animation.Start ();
@@ -369,47 +352,4 @@ namespace SparkleShare {
             return icon;
         }
     }
-
-// TODO: remove
-    public static class ControlExtention {
-
-        public static void SafeInvoke (this WinForms.Control ui_element,
-            Action updater, bool force_synchronous)
-        {
-            if (ui_element == null)
-                return;
-
-            if (ui_element.InvokeRequired) {
-                if (force_synchronous) {
-                    ui_element.Invoke ((Action) delegate {
-                        SafeInvoke (ui_element, updater, force_synchronous);
-                    });
-
-                } else {
-                    ui_element.BeginInvoke ((Action) delegate {
-                        SafeInvoke (ui_element, updater, force_synchronous);
-                    });
-                }
-
-            } else {
-                if (ui_element.IsDisposed)
-                    throw new ObjectDisposedException ("Control is already disposed.");
-
-                updater ();
-            }
-        }
-
-
-        public static void SafeInvoke (this WinForms.Control ui_element, Action updater)
-        {
-            ui_element.SafeInvoke (updater, false);
-        }
-    }
 }
-	
-	
-		
-
-
-
-

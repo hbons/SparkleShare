@@ -270,13 +270,6 @@ namespace SparkleShare {
             }
         }
         
-        internal static System.Drawing.Bitmap sparkleshare_windows_status {
-            get {
-                object obj = ResourceManager.GetObject("sparkleshare_windows_status", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap tutorial_slide_1 {
             get {
                 object obj = ResourceManager.GetObject("tutorial_slide_1", resourceCulture);
