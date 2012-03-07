@@ -569,8 +569,21 @@ namespace SparkleShare {
                                 Button continue_button = new Button () {
                                     Content = "Continue"
                                 };
-    						
-								Buttons.Add (continue_button);                        
+								
+								WPF.Image slide_image = new WPF.Image () {
+									Width  = 350,
+									Height = 200
+								};
+							
+								slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-2-windows");
+							
+							
+								ContentCanvas.Children.Add (slide_image);
+								Canvas.SetLeft (slide_image, 215);
+								Canvas.SetTop (slide_image, 130);
+							
+								Buttons.Add (continue_button);
+							
 								
 								continue_button.Click += delegate {
                                     Controller.TutorialPageCompleted ();

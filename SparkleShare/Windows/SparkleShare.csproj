@@ -242,6 +242,9 @@
     <EmbeddedResource Include="..\..\data\icons\sparkleshare-syncing-error-windows.png">
       <Link>Pixmaps\sparkleshare-syncing-error-windows.png</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\tutorial-slide-2-windows.png">
+      <Link>Pixmaps\tutorial-slide-2-windows.png</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Icons.tt">
