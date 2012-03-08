@@ -546,7 +546,7 @@ namespace SparkleShare {
                                 "}" +
                                 "</style>" +
                                 "<ul>" +
-                                "  <li>First, have you tried turning it off and on again?</li>" +
+                                "  <li>Is the host online?</li>" +
                                 "  <li><b>" + Controller.PreviousUrl + "</b> is the address we've compiled. Does this look alright?</li>" +
                                 "  <li>The host needs to know who you are. Did you upload the key that's in your SparkleShare folder?</li>" +
                                 "</ul>";
