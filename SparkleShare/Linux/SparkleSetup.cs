@@ -440,7 +440,7 @@ namespace SparkleShare {
 						Image list_point_three = new Image (SparkleUIHelpers.GetIcon ("list-point", 16)) {  };
 
                         Label label_one = new Label () {
-                            Text   = "First, have you tried turning it off and on again?",
+                            Text   = "Is the host online?",
                             Wrap   = true,
                             Xalign = 0
                         };

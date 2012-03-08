@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Documents;
 using System.Windows.Forms.Integration;
 using System.Windows;
 using System.Windows.Controls;
@@ -449,9 +450,22 @@ namespace SparkleShare {
                         Header      = "Something went wrong…";
                         Description = "Please check the following:";
  
-                        // TODO: Bullet points
                         
-                        
+						TextBlock help_block = new TextBlock () {
+							TextWrapping = TextWrapping.Wrap,
+                			Width        = 310	
+						};
+						
+						help_block.Inlines.Add ("Is the host online?\n\n");
+						help_block.Inlines.Add (new Bold (new Run (Controller.PreviousUrl)));
+						help_block.Inlines.Add (" is the address we've compiled. Does this look alright?\n\n");
+						help_block.Inlines.Add ("The host needs to know who you are. Did you upload the key that's in your SparkleShare folder?");
+						
+						TextBlock bullets_block = new TextBlock () {
+							Text = "•\n\n•\n\n\n•"
+						};
+						
+						
                         Button cancel_button = new Button () {
                             Content = "Cancel"
                         };
@@ -461,6 +475,16 @@ namespace SparkleShare {
                         };
                         
                         
+						
+				        ContentCanvas.Children.Add (bullets_block);
+                        Canvas.SetLeft (bullets_block, 195);
+                        Canvas.SetTop (bullets_block, 100);
+						
+				        ContentCanvas.Children.Add (help_block);
+                        Canvas.SetLeft (help_block, 210);
+                        Canvas.SetTop (help_block, 100);
+                        
+						
                         Buttons.Add (try_again_button);
                         Buttons.Add (cancel_button);
     
