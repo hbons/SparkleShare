@@ -976,8 +976,8 @@ namespace SparkleShare {
 
         public void FetchFolder (string server, string remote_folder, string announcements_url)
         {
-            server            = server.Trim ();
-            remote_folder     = remote_folder.Trim ();
+            server        = server.Trim ();
+            remote_folder = remote_folder.Trim ();
 
             if (announcements_url != null)
                 announcements_url = announcements_url.Trim ();
@@ -1020,7 +1020,7 @@ namespace SparkleShare {
                     "Failed to load \"" + backend + "\" backend for \"" + canonical_name + "\"");
 
                 if (FolderFetchError != null)
-                    FolderFetchError (Path.Combine (server, remote_folder));
+                    FolderFetchError (Path.Combine (server, remote_folder).Replace (@"\", "/"));
 
                 return;
             }
