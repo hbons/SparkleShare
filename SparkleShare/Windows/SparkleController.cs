@@ -125,6 +125,8 @@ namespace SparkleShare {
 
         public override void InstallProtocolHandler()
         {
+		/* FIXME: Need to find a way to do this without administrator privilidges (or move to the installer)
+		 
             // Get assembly location
             string location   = System.Reflection.Assembly.GetExecutingAssembly ().Location;
             string folder     = Path.GetDirectoryName (location);
@@ -141,6 +143,7 @@ namespace SparkleShare {
 
             string action_key = "HKEY_CLASSES_ROOT\\sparkleshare\\shell\\open\\command";
             Registry.SetValue (action_key, "", "\"" + invite_exe + "\" \"%1\"");
+        */
         }
 
 
