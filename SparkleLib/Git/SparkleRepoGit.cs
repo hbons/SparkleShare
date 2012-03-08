@@ -847,6 +847,7 @@ namespace SparkleLib.Git {
                     size += file.Length;
                 }
 
+                // FIXME: Doesn't seem to recurse on Windows
                 foreach (DirectoryInfo directory in parent.GetDirectories ())
                     size += CalculateSizes (directory);
 
