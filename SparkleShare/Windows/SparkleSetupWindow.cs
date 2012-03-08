@@ -87,8 +87,6 @@ namespace SparkleShare {
             ContentCanvas.Children.Add (this.side_splash);
             Canvas.SetLeft (this.side_splash, 0);
             Canvas.SetBottom (this.side_splash, 0);
-            
-            // TODO: enable keyboard navigation
         }
         
         
