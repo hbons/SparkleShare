@@ -837,9 +837,12 @@ namespace SparkleLib.Git {
                 return 0;
 
             try {
-                foreach (FileInfo file in parent.GetFiles()) {
+                foreach (FileInfo file in parent.GetFiles ()) {
                     if (!file.Exists)
                         return 0;
+
+                    if (file.Name.Equals (".empty"))
+                        File.SetAttributes (file.FullName, FileAttributes.Hidden);
 
                     size += file.Length;
                 }
