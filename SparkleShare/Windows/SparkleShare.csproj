@@ -245,6 +245,12 @@
     <EmbeddedResource Include="..\..\data\tutorial-slide-2-windows.png">
       <Link>Pixmaps\tutorial-slide-2-windows.png</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\folder-sparkleshare-windows-16.png">
+      <Link>Pixmaps\folder-sparkleshare-windows-16.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\folder-windows-16.png">
+      <Link>Pixmaps\folder-windows-16.png</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Icons.tt">

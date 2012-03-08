@@ -35,7 +35,7 @@ namespace SparkleShare {
         private int FrameNumber;
         private string StateText;
 		private ContextMenu context_menu;
-		private MenuItem exit_item;
+		private SparkleMenuItem exit_item;
 		
         private Forms.NotifyIcon notify_icon = new Forms.NotifyIcon () {
             Text = "SparkleShare",
@@ -147,28 +147,26 @@ namespace SparkleShare {
         {
 			this.context_menu = new ContextMenu ();
 
-			MenuItem status_item = new MenuItem () {
+			SparkleMenuItem status_item = new SparkleMenuItem () {
 				Header    = StateText,
 				IsEnabled = false
 			};
 			
 			System.Windows.Controls.Image i = new System.Windows.Controls.Image();
-			i.Source = 
-				System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-					Icons.folder_sparkleshare_16.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty, 
-					System.Windows.Media.Imaging.BitmapSizeOptions.FromWidthAndHeight(16, 16));
-
+			i.Source = SparkleUIHelpers.GetImageSource ("folder-sparkleshare-windows-16");
+				i.Width = 16;
+			i.Height = 16;
 			
-			MenuItem folder_item = new MenuItem () {
-				Header = "SparkleShare"//,
-				,Icon   = i
+			SparkleMenuItem folder_item = new SparkleMenuItem () {
+				Header = "SparkleShare",
+				Icon   = i
 			};
 		
 				folder_item.Click += delegate {
 					Controller.SparkleShareClicked ();
 				};
 			
-			MenuItem add_item = new MenuItem () {
+			SparkleMenuItem add_item = new SparkleMenuItem () {
 				Header    = "Add Hosted Project…",
 				IsEnabled = (!Program.Controller.FirstRun)
 			};
@@ -177,7 +175,7 @@ namespace SparkleShare {
 					Controller.AddHostedProjectClicked ();
 				};
 			
-			MenuItem log_item = new MenuItem () {
+			SparkleMenuItem log_item = new SparkleMenuItem () {
 				Header    = "View Recent Changes…",
 				IsEnabled = (Program.Controller.Folders.Count > 0)
 			};
@@ -186,19 +184,19 @@ namespace SparkleShare {
 					Controller.OpenRecentEventsClicked ();
 				};
 			
-			MenuItem notify_item = new MenuItem ();
+			SparkleMenuItem notify_item = new SparkleMenuItem ();
 
 	            if (Program.Controller.NotificationsEnabled)
-	                notify_item = new MenuItem () { Header = "Turn Notifications Off" };
+	                notify_item = new SparkleMenuItem () { Header = "Turn Notifications Off" };
 	            else
-	                notify_item = new MenuItem () { Header = "Turn Notifications On" };
+	                notify_item = new SparkleMenuItem () { Header = "Turn Notifications On" };
 	
 	            notify_item.Click += delegate {
 	                Program.Controller.ToggleNotifications ();
 	                CreateMenu ();
 	            };
 			
-			MenuItem about_item = new MenuItem () {
+			SparkleMenuItem about_item = new SparkleMenuItem () {
 				Header = "About SparkleShare"
 			};
 			
@@ -206,7 +204,7 @@ namespace SparkleShare {
 					 Controller.AboutClicked ();
 				};
 			
-			exit_item = new MenuItem () {
+			exit_item = new SparkleMenuItem () {
 				Header = "Exit"
 			};
 			
@@ -222,24 +220,29 @@ namespace SparkleShare {
 
             if (Program.Controller.Folders.Count > 0) {
                 foreach (string folder_name in Program.Controller.Folders) {     
-					MenuItem subfolder_item = new MenuItem () {
+					SparkleMenuItem subfolder_item = new SparkleMenuItem () {
 						Header = folder_name
 					};
 					
 					subfolder_item.Click += OpenFolderDelegate (folder_name);
 					
-					subfolder_item.Icon = ErrorIcon;
+					System.Windows.Controls.Image i2 = new System.Windows.Controls.Image();
+			i2.Source = SparkleUIHelpers.GetImageSource ("folder-windows-16");
+				i2.Width = 16;
+			i2.Height = 16;
+					subfolder_item.Icon = i2;
 					/*
                     if (Program.Controller.UnsyncedFolders.Contains (folder_name))
                         subfolder_item.Icon = Icons.dialog_error_16;
                     else
                         subfolder_item.Icon = Icons.sparkleshare_windows_status;
 					 */
+					
                     this.context_menu.Items.Add (subfolder_item);
                 }
 
             } else {
-                MenuItem no_folders_item = new MenuItem () {
+                SparkleMenuItem no_folders_item = new SparkleMenuItem () {
 					Header    = "No projects yet",
 					IsEnabled = false
 				};
@@ -263,8 +266,8 @@ namespace SparkleShare {
 
         public void UpdateMenu ()
         {
-			(this.context_menu.Items [0] as MenuItem).Header = StateText;
-			(this.context_menu.Items [0] as MenuItem).UpdateLayout ();
+			(this.context_menu.Items [0] as SparkleMenuItem).Header = StateText;
+			(this.context_menu.Items [0] as SparkleMenuItem).UpdateLayout ();
         }
 
 
@@ -353,4 +356,13 @@ namespace SparkleShare {
 		[DllImport("user32.dll", EntryPoint = "DestroyIcon")]
 		static extern bool DestroyIcon (IntPtr hIcon);
     }
+	
+	
+	public class SparkleMenuItem : MenuItem {
+		
+		public SparkleMenuItem () : base ()
+		{
+			Padding = new Thickness (6, 3, 4, 0);
+		}
+	}
 }
