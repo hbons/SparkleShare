@@ -159,7 +159,7 @@ namespace SparkleShare {
                     if (!Program.Controller.FirstRun && TutorialPageNumber == 0) {
                         if (ChangePageEvent != null)
                             ChangePageEvent (page_type, null);
-						
+                        
                         if (ShowWindowEvent != null)
                             ShowWindowEvent ();
 
@@ -203,13 +203,13 @@ namespace SparkleShare {
                 UpdateSetupContinueButtonEvent (fields_valid);
         }
 
-		
-		public void SetupPageCancelled ()
+        
+        public void SetupPageCancelled ()
         {
-        	Program.Controller.Quit ();
+            Program.Controller.Quit ();
         }
-		
-		
+        
+        
         public void SetupPageCompleted (string full_name, string email)
         {
             Program.Controller.UserName  = full_name;

@@ -53,8 +53,8 @@ namespace SparkleShare {
         }
 
 
-		public override void Initialize ()
-		{
+        public override void Initialize ()
+        {
             Settings settings                = new Settings ();
             BrowserSettings browser_settings = new BrowserSettings ();
 
@@ -66,29 +66,29 @@ namespace SparkleShare {
             CEF.RegisterScheme ("application", "sparkleshare", new ApplicationSchemeHandlerFactory ());
             CEF.RegisterScheme ("application", "file", new FileSchemeHandlerFactory ());
             
-			Application.EnableVisualStyles ();
-			Application.SetCompatibleTextRenderingDefault (false);
+            Application.EnableVisualStyles ();
+            Application.SetCompatibleTextRenderingDefault (false);
 
-			// Add msysgit to path, as we cannot asume it is added to the path
-			// Asume it is installed in @"<exec dir>\msysgit\bin"
+            // Add msysgit to path, as we cannot asume it is added to the path
+            // Asume it is installed in @"<exec dir>\msysgit\bin"
             string executable_dir = Path.GetDirectoryName (Application.ExecutablePath);
             string msysgit = Path.Combine (executable_dir, "msysgit");
 
-			string new_PATH = msysgit + @"\bin" + ";" +
-			    msysgit + @"\mingw\bin" + ";" +
-			    msysgit + @"\cmd" + ";" +
-			    Environment.ExpandEnvironmentVariables ("%PATH%");
+            string new_PATH = msysgit + @"\bin" + ";" +
+                msysgit + @"\mingw\bin" + ";" +
+                msysgit + @"\cmd" + ";" +
+                Environment.ExpandEnvironmentVariables ("%PATH%");
 
-			Environment.SetEnvironmentVariable ("PATH", new_PATH);
-			Environment.SetEnvironmentVariable ("PLINK_PROTOCOL", "ssh");
+            Environment.SetEnvironmentVariable ("PATH", new_PATH);
+            Environment.SetEnvironmentVariable ("PLINK_PROTOCOL", "ssh");
 
-			if (string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("HOME")))
-			    Environment.SetEnvironmentVariable ("HOME",
+            if (string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("HOME")))
+                Environment.SetEnvironmentVariable ("HOME",
                     Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%"));
 
-			StartSSH ();
-			base.Initialize ();
-		}
+            StartSSH ();
+            base.Initialize ();
+        }
 
 
         public override string EventLogHTML
@@ -117,14 +117,14 @@ namespace SparkleShare {
         }
 
 
-		public override void CreateStartupItem ()
-		{
+        public override void CreateStartupItem ()
+        {
             // TODO
-		}
-		
+        }
+        
 
         public override void InstallProtocolHandler()
-		{
+        {
             // Get assembly location
             string location   = System.Reflection.Assembly.GetExecutingAssembly ().Location;
             string folder     = Path.GetDirectoryName (location);
@@ -141,17 +141,17 @@ namespace SparkleShare {
 
             string action_key = "HKEY_CLASSES_ROOT\\sparkleshare\\shell\\open\\command";
             Registry.SetValue (action_key, "", "\"" + invite_exe + "\" \"%1\"");
-		}
+        }
 
 
-		public override void AddToBookmarks ()
-		{
+        public override void AddToBookmarks ()
+        {
             // TODO
-		}
+        }
 
 
-		public override bool CreateSparkleShareFolder ()
-		{
+        public override bool CreateSparkleShareFolder ()
+        {
             if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
                 Directory.CreateDirectory(SparkleConfig.DefaultConfig.FoldersPath);
                 Directory.CreateDirectory(SparkleConfig.DefaultConfig.TmpPath);
@@ -161,12 +161,12 @@ namespace SparkleShare {
 
                 // TODO: Set a custom SparkleShare folder icon
 
-				return true;
+                return true;
 
             } else {
-			    return false;
+                return false;
             }
-		}
+        }
 
 
         public override void OpenFile (string url)
@@ -179,15 +179,15 @@ namespace SparkleShare {
         }
 
 
-		public override void OpenSparkleShareFolder (string subfolder)
-		{
-			Process process             = new Process ();
+        public override void OpenSparkleShareFolder (string subfolder)
+        {
+            Process process             = new Process ();
             process.StartInfo.FileName  = "explorer";
             process.StartInfo.Arguments = ",/root," +
                 Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, subfolder);
-			
-			process.Start();
-		}
+            
+            process.Start();
+        }
 
 
         public override void Quit ()
@@ -197,50 +197,50 @@ namespace SparkleShare {
         }
 
 
-		private void StartSSH ()
-		{
+        private void StartSSH ()
+        {
             string auth_sock = Environment.GetEnvironmentVariable ("SSH_AUTH_SOCK");
 
             if (string.IsNullOrEmpty (auth_sock)) {
                 Process process                          = new Process ();
-			    process.StartInfo.FileName               = "ssh-agent";
-				process.StartInfo.UseShellExecute        = false;
-				process.StartInfo.RedirectStandardOutput = true;
-				process.StartInfo.CreateNoWindow         = true;
+                process.StartInfo.FileName               = "ssh-agent";
+                process.StartInfo.UseShellExecute        = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.CreateNoWindow         = true;
 
-				process.Start ();
+                process.Start ();
 
-				string output = process.StandardOutput.ReadToEnd ();
-				process.WaitForExit ();
+                string output = process.StandardOutput.ReadToEnd ();
+                process.WaitForExit ();
 
-				Match auth_sock_match = new Regex (@"SSH_AUTH_SOCK=([^;\n\r]*)").Match (output);
+                Match auth_sock_match = new Regex (@"SSH_AUTH_SOCK=([^;\n\r]*)").Match (output);
 
                 if (auth_sock_match.Success)
-					Environment.SetEnvironmentVariable ("SSH_AUTH_SOCK",
+                    Environment.SetEnvironmentVariable ("SSH_AUTH_SOCK",
                         auth_sock_match.Groups [1].Value);
 
-				Match ssh_pid_match =
+                Match ssh_pid_match =
                     new Regex (@"SSH_AGENT_PID=([^;\n\r]*)").Match (output);
 
                 if (ssh_pid_match.Success) {
                     string ssh_pid = ssh_pid_match.Groups [1].Value;
 
                     Int32.TryParse (ssh_pid, out this.ssh_agent_pid);
-					Environment.SetEnvironmentVariable ("SSH_AGENT_PID", ssh_pid);
+                    Environment.SetEnvironmentVariable ("SSH_AGENT_PID", ssh_pid);
 
                     SparkleHelpers.DebugInfo ("Controller",
                         "ssh-agent started, PID=" + ssh_pid);
 
                 } else {
-					SparkleHelpers.DebugInfo ("Controller",
+                    SparkleHelpers.DebugInfo ("Controller",
                         "ssh-agent started, PID=unknown");
-				}
-			}
-		}
+                }
+            }
+        }
 
 
-		private void StopSSH ()
-		{
+        private void StopSSH ()
+        {
             if (ssh_agent_pid != 0) {
                 try {
                     Process.GetProcessById (this.ssh_agent_pid).Kill ();
@@ -250,6 +250,6 @@ namespace SparkleShare {
                         "Could not stop SSH: the process isn't running");
                 }
             }
-		}
+        }
     }
 }

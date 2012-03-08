@@ -93,7 +93,7 @@ namespace SparkleLib {
         }
 
 
-        // Gets the relative path of two hierarchical absolute paths	
+        // Gets the relative path of two hierarchical absolute paths    
         public static string DiffPaths (string target, string source)
         {
             return target.Replace (source + Path.DirectorySeparatorChar, "");      
