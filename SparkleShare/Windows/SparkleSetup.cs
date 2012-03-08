@@ -529,25 +529,22 @@ namespace SparkleShare {
                             
                                 slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-1-windows");
                             
+								Button skip_tutorial_button = new Button () {
+									Content = "Skip tutorial"
+								};
+								
+								Button continue_button = new Button () {
+									Content = "Continue"
+								};
+							
                             
                                 ContentCanvas.Children.Add (slide_image);
                                 Canvas.SetLeft (slide_image, 215);
                                 Canvas.SetTop (slide_image, 130);
                             
-                                Button skip_tutorial_button = new Button () {
-                                    Content = "Skip tutorial"
-                                };
-    
-    
-                                Button continue_button = new Button () {
-                                    Content = "Continue"
-                                };
-                            
-                                // TODO: Add slides    
-                            
-                                Buttons.Add (continue_button);
-                                Buttons.Add (skip_tutorial_button);
-                                
+								Buttons.Add (continue_button);
+								Buttons.Add (skip_tutorial_button);
+                               
                                 
                                 skip_tutorial_button.Click += delegate {
                                     Controller.TutorialSkipped ();
