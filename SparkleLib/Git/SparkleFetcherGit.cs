@@ -47,17 +47,17 @@ namespace SparkleLib.Git {
             Uri uri;
 
             try {
-                uri = new Uri (server + remote_path);
+				uri = new Uri (server + remote_path);
 
             } catch (UriFormatException) {
-                uri = new Uri ("ssh://" + server + remote_path);
+				uri = new Uri ("ssh://" + server + remote_path);
             }
 
 
             if (!uri.Scheme.Equals ("ssh") &&
                 !uri.Scheme.Equals ("git")) {
-
-                uri = new Uri ("ssh://" + uri);
+				
+				uri = new Uri ("ssh://" + uri);
             }
 
 
@@ -79,8 +79,10 @@ namespace SparkleLib.Git {
 
             } else {
                 if (string.IsNullOrEmpty (uri.UserInfo)) {
-                    uri = new Uri (uri.Scheme + "://git@" + uri.Host + ":" + uri.Port + uri.AbsolutePath);
-                    uri = new Uri (uri.ToString ().Replace (":-1", ""));
+					if (uri.Port == -1)
+						uri = new Uri (uri.Scheme + "://git@" + uri.Host + uri.AbsolutePath);
+					else
+						uri = new Uri (uri.Scheme + "://git@" + uri.Host + ":" + uri.Port + uri.AbsolutePath);
                 }
             }
 
