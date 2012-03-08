@@ -16,6 +16,7 @@
 
 
 using System;
+using System.Threading;
 
 #if __MonoCS__
 using Mono.Unix;
@@ -29,8 +30,10 @@ namespace SparkleShare {
 
         public static SparkleController Controller;
         public static SparkleUI UI;
-
-
+		
+		public static Mutex ProgramMutex = new Mutex (false, "SparkleShare");
+		
+		
         // Short alias for the translations
         public static string _ (string s)
         {
@@ -66,7 +69,14 @@ namespace SparkleShare {
             if (show_help)
                 ShowHelp (option_set);
 
-
+			
+			// Only allow one instance of SparkleShare
+			if (!ProgramMutex.WaitOne (0, false)) {
+				Console.WriteLine ("SparkleShare is already running.");
+				Environment.Exit (-1);
+			}
+				
+			
             // Initialize the controller this way so that
             // there aren't any exceptions in the OS specific UI's
             Controller = new SparkleController ();
