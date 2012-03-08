@@ -22,25 +22,25 @@ namespace SparkleShare {
 
     public class SparkleUI {
         
-		public static SparkleSetup Setup;
-		public static SparkleEventLog EventLog;
+        public static SparkleSetup Setup;
+        public static SparkleEventLog EventLog;
         public static SparkleBubbles Bubbles;
-		public static SparkleStatusIcon StatusIcon;
+        public static SparkleStatusIcon StatusIcon;
         public static SparkleAbout About;
 
 
         public SparkleUI ()
-        {			
+        {            
             Setup      = new SparkleSetup ();
             EventLog   = new SparkleEventLog ();
             About      = new SparkleAbout ();
             Bubbles    = new SparkleBubbles ();
             StatusIcon = new SparkleStatusIcon ();
-			
-			Program.Controller.UIHasLoaded ();
+            
+            Program.Controller.UIHasLoaded ();
         }
 
-		
+        
         public void Run ()
         {
             Application.Run ();

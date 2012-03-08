@@ -247,7 +247,7 @@ namespace SparkleLib {
             this.thread.Join ();
 
             if (this.socket != null)
-	        this.socket.Close ();
+            this.socket.Close ();
 
             base.Dispose ();
         }

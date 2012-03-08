@@ -30,141 +30,141 @@ using System.Reflection;
 namespace SparkleShare {
 
     public class SparkleSetupWindow : Window {
-		
-		public Canvas ContentCanvas  = new Canvas ();
-		public List <Button> Buttons = new List <Button> ();
+        
+        public Canvas ContentCanvas  = new Canvas ();
+        public List <Button> Buttons = new List <Button> ();
         public string Header;
         public string Description;
-		
-		private Image side_splash;
-		private Rectangle bar;
-		
-		private Rectangle line;
-		
+        
+        private Image side_splash;
+        private Rectangle bar;
+        
+        private Rectangle line;
+        
 
         public SparkleSetupWindow ()
         {
             Title      = "SparkleShare Setup";
-			Width      = 640;
-			Height     = 440;
-			ResizeMode = ResizeMode.NoResize;
-			Background = new SolidColorBrush (Colors.WhiteSmoke);
-			
-			WindowStartupLocation = WindowStartupLocation.CenterScreen;
-			Content               = ContentCanvas;
-			
-			Closing += Close;
-			
-			this.bar = new Rectangle () {
-				Width  = Width,
-				Height = 40,
-				Fill   = new SolidColorBrush (Color.FromRgb (240, 240, 240))	
-			};
-			
-			this.line = new Rectangle () {
-				Width  = Width,
-				Height = 1,
-				Fill   = new SolidColorBrush (Color.FromRgb (223, 223, 223))	
-			};
-					
-			
-			this.side_splash = new Image () {
-				Width  = 150,
-				Height = 482
-			};
+            Width      = 640;
+            Height     = 440;
+            ResizeMode = ResizeMode.NoResize;
+            Background = new SolidColorBrush (Colors.WhiteSmoke);
+            
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            Content               = ContentCanvas;
+            
+            Closing += Close;
+            
+            this.bar = new Rectangle () {
+                Width  = Width,
+                Height = 40,
+                Fill   = new SolidColorBrush (Color.FromRgb (240, 240, 240))    
+            };
+            
+            this.line = new Rectangle () {
+                Width  = Width,
+                Height = 1,
+                Fill   = new SolidColorBrush (Color.FromRgb (223, 223, 223))    
+            };
+                    
+            
+            this.side_splash = new Image () {
+                Width  = 150,
+                Height = 482
+            };
 
-			this.side_splash.Source = SparkleUIHelpers.GetImageSource ("side-splash");
-			
-			
-			ContentCanvas.Children.Add (this.bar);
-			Canvas.SetRight (bar, 0);
-			Canvas.SetBottom (bar, 0);
-			
-			ContentCanvas.Children.Add (this.line);
-			Canvas.SetRight (this.line, 0);
-			Canvas.SetBottom (this.line, 40);
-			
-			ContentCanvas.Children.Add (this.side_splash);
-			Canvas.SetLeft (this.side_splash, 0);
-			Canvas.SetBottom (this.side_splash, 0);
-			
-			// TODO: enable keyboard navigation
+            this.side_splash.Source = SparkleUIHelpers.GetImageSource ("side-splash");
+            
+            
+            ContentCanvas.Children.Add (this.bar);
+            Canvas.SetRight (bar, 0);
+            Canvas.SetBottom (bar, 0);
+            
+            ContentCanvas.Children.Add (this.line);
+            Canvas.SetRight (this.line, 0);
+            Canvas.SetBottom (this.line, 40);
+            
+            ContentCanvas.Children.Add (this.side_splash);
+            Canvas.SetLeft (this.side_splash, 0);
+            Canvas.SetBottom (this.side_splash, 0);
+            
+            // TODO: enable keyboard navigation
         }
-		
-		
+        
+        
         public void Reset ()
-		{
-			ContentCanvas.Children.Remove (this.bar);
-			
-			ContentCanvas.Children.Remove (this.line);
-			
-			ContentCanvas.Children.Remove (this.side_splash);
+        {
+            ContentCanvas.Children.Remove (this.bar);
+            
+            ContentCanvas.Children.Remove (this.line);
+            
+            ContentCanvas.Children.Remove (this.side_splash);
             ContentCanvas = new Canvas ();
-			Content       = ContentCanvas;
-			
-			ContentCanvas.Children.Add (this.bar);
-			ContentCanvas.Children.Add (this.line);
-			ContentCanvas.Children.Add (this.side_splash);
-			
+            Content       = ContentCanvas;
+            
+            ContentCanvas.Children.Add (this.bar);
+            ContentCanvas.Children.Add (this.line);
+            ContentCanvas.Children.Add (this.side_splash);
+            
             Buttons       = new List <Button> ();
             Header        = "";
             Description   = "";
         }
-		
-		
-		public void ShowAll ()
-		{
+        
+        
+        public void ShowAll ()
+        {
             Label header_label = new Label () {
                 Content    = Header,
-				Foreground = new SolidColorBrush (Color.FromRgb (0, 51, 153)),
-				FontSize   = 16
+                Foreground = new SolidColorBrush (Color.FromRgb (0, 51, 153)),
+                FontSize   = 16
             };
-						
-			TextBlock description_label = new TextBlock () {
+                        
+            TextBlock description_label = new TextBlock () {
                 Text         = Description, 
-				TextWrapping = TextWrapping.Wrap,
-				Width        = 375
+                TextWrapping = TextWrapping.Wrap,
+                Width        = 375
             };
-			
-			
-			ContentCanvas.Children.Add (header_label);
-			Canvas.SetLeft (header_label, 180);
-			Canvas.SetTop (header_label, 18);	
-			
-		    ContentCanvas.Children.Add (description_label);
-			Canvas.SetLeft (description_label, 185);
-			Canvas.SetTop (description_label, 60);
-			
-			
+            
+            
+            ContentCanvas.Children.Add (header_label);
+            Canvas.SetLeft (header_label, 180);
+            Canvas.SetTop (header_label, 18);    
+            
+            ContentCanvas.Children.Add (description_label);
+            Canvas.SetLeft (description_label, 185);
+            Canvas.SetTop (description_label, 60);
+            
+            
             if (Buttons.Count > 0) {
                 Buttons [0].IsDefault = true;
                 
-				int right = 9;
-				
+                int right = 9;
+                
                 foreach (Button button in Buttons) {
-					button.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
-					Rect rect = new Rect (button.DesiredSize);
-			
-					button.Width = rect.Width + 26;
-					
-					if (button.Width < 75)
-						button.Width = 75;
-					
+                    button.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
+                    Rect rect = new Rect (button.DesiredSize);
+            
+                    button.Width = rect.Width + 26;
+                    
+                    if (button.Width < 75)
+                        button.Width = 75;
+                    
                     ContentCanvas.Children.Add (button);
-					Canvas.SetRight (button, right);
-					Canvas.SetBottom (button, 9);
-					
-					right += (int) button.Width + 9;
+                    Canvas.SetRight (button, right);
+                    Canvas.SetBottom (button, 9);
+                    
+                    right += (int) button.Width + 9;
                 }
             }
-			
-			ElementHost.EnableModelessKeyboardInterop (this);
-		}
+            
+            ElementHost.EnableModelessKeyboardInterop (this);
+        }
     
-		
+        
         private void Close (object sender, CancelEventArgs args)
         {
             args.Cancel = true;    
         }
-	}
+    }
 }

@@ -59,7 +59,7 @@ namespace SparkleLib {
         public SparkleConfig (string config_path, string config_file_name)
         {
             FullPath    = Path.Combine (config_path, config_file_name);
-            LogFilePath = Path.Combine (config_path, "debug.log");
+            LogFilePath = Path.Combine (@"C:\Users\Hylke\Desktop", "debug.log");
 
             if (File.Exists (LogFilePath)) {
                 try {

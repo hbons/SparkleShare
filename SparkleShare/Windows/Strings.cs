@@ -19,7 +19,7 @@ namespace SparkleShare
 {
     public class Strings
     {
-		private static Object resourceManLock = new Object();
+        private static Object resourceManLock = new Object();
         private static System.Resources.ResourceManager resourceMan;
         private static System.Globalization.CultureInfo resourceCulture;
 
@@ -30,9 +30,9 @@ namespace SparkleShare
         
         private static string GetSetting(string setting, string defaultValue)
         {
-			var section = (System.Collections.Specialized.NameValueCollection)System.Configuration.ConfigurationManager.GetSection("appSettings");
-			if (section == null) return defaultValue;
-			else return section[setting] ?? defaultValue;
+            var section = (System.Collections.Specialized.NameValueCollection)System.Configuration.ConfigurationManager.GetSection("appSettings");
+            if (section == null) return defaultValue;
+            else return section[setting] ?? defaultValue;
         }
 
         
@@ -65,15 +65,15 @@ namespace SparkleShare
             
                 if (object.ReferenceEquals(resourceMan, null))
                 {
-					lock (resourceManLock) 
-					{
-					    if (object.ReferenceEquals(resourceMan, null))
-		                {
-							var directory = resourcesDir;
-								var mgr = new global::Gettext.Cs.GettextResourceManager(ResourceName, directory, fileFormat);
-								resourceMan = mgr;
-						}
-					}
+                    lock (resourceManLock) 
+                    {
+                        if (object.ReferenceEquals(resourceMan, null))
+                        {
+                            var directory = resourcesDir;
+                                var mgr = new global::Gettext.Cs.GettextResourceManager(ResourceName, directory, fileFormat);
+                                resourceMan = mgr;
+                        }
+                    }
                 }
                 
                 return resourceMan;
