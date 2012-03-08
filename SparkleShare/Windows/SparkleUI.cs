@@ -30,7 +30,7 @@ namespace SparkleShare {
 
 
         public SparkleUI ()
-        {            
+        {   
             Setup      = new SparkleSetup ();
             EventLog   = new SparkleEventLog ();
             About      = new SparkleAbout ();
