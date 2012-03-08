@@ -31,13 +31,13 @@ namespace SparkleShare {
 
         public SparkleEventLogController Controller = new SparkleEventLogController ();
 
-		private Canvas canvas;
+        private Canvas canvas;
         private Label size_label_value;
-		private Label history_label_value;
-		private ComboBox combo_box;
-		private WebBrowser web_browser;
-		
-		
+        private Label history_label_value;
+        private ComboBox combo_box;
+        private WebBrowser web_browser;
+        
+        
         // Short alias for the translations
         public static string _(string s)
         {
@@ -48,95 +48,95 @@ namespace SparkleShare {
         public SparkleEventLog ()
         {
             Title      = "Recent Changes";
-			Height     = 640;
-			Width      = 480;
-			ResizeMode = ResizeMode.NoResize;
-			Background = new SolidColorBrush (Color.FromRgb (240, 240, 240));	
-			
-			WindowStartupLocation = WindowStartupLocation.CenterScreen;
-			
-			Closing += Close;
-			
-						
+            Height     = 640;
+            Width      = 480;
+            ResizeMode = ResizeMode.NoResize;
+            Background = new SolidColorBrush (Color.FromRgb (240, 240, 240));    
+            
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            
+            Closing += Close;
+            
+                        
             Label size_label = new Label () {
                 Content    = "Size:"
             };
-			
-			this.size_label_value = new Label () {
-				Content = Controller.Size,
-				FontWeight = FontWeights.Bold
-			};
-			
-			size_label.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
-			Rect size_label_rect = new Rect (size_label.DesiredSize);
-			
-			
-			
-			Label history_label = new Label () {
+            
+            this.size_label_value = new Label () {
+                Content = Controller.Size,
+                FontWeight = FontWeights.Bold
+            };
+            
+            size_label.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
+            Rect size_label_rect = new Rect (size_label.DesiredSize);
+            
+            
+            
+            Label history_label = new Label () {
                 Content    = "History:"
             };
-			
-			this.history_label_value = new Label () {
+            
+            this.history_label_value = new Label () {
                 Content = Controller.HistorySize,
-				FontWeight = FontWeights.Bold
+                FontWeight = FontWeights.Bold
             };
-			
-			history_label.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
-			Rect history_label_rect = new Rect (history_label.DesiredSize);
-			
-			
-			Rectangle line = new Rectangle () {
-				Width = Width,
-				Height = 1,
-				Fill = new SolidColorBrush (Color.FromRgb (223, 223, 223))	
-			};
-			
-			
-			this.web_browser = new WebBrowser () {
-				Width  = Width - 7,
-				Height = Height - 36 - 12
-			};
-			
-			this.web_browser.Navigating += delegate (object sender, NavigatingCancelEventArgs e) {
-	            string url = e.Uri.ToString ();
-				Controller.LinkClicked (url);
-	        };
-			
-			
-			this.canvas = new Canvas ();
-			Content = this.canvas;
-			
-			this.canvas.Children.Add (size_label);
-			Canvas.SetLeft (size_label, 12);
-			Canvas.SetTop (size_label, 4);
-			
-			this.canvas.Children.Add (this.size_label_value);
-			Canvas.SetLeft (this.size_label_value, 12 + size_label_rect.Width);
-			Canvas.SetTop (this.size_label_value, 4);
-			
-			
-			this.canvas.Children.Add (history_label);
-			Canvas.SetLeft (history_label, 120);
-			Canvas.SetTop (history_label, 4);
-			
-			this.canvas.Children.Add (this.history_label_value);
-			Canvas.SetLeft (this.history_label_value, 120 + history_label_rect.Width);
-			Canvas.SetTop (this.history_label_value, 4);
-			
-			
-			this.canvas.Children.Add (line);
-			Canvas.SetLeft (line, 0);
-			Canvas.SetTop (line, 35);
-			
+            
+            history_label.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
+            Rect history_label_rect = new Rect (history_label.DesiredSize);
+            
+            
+            Rectangle line = new Rectangle () {
+                Width = Width,
+                Height = 1,
+                Fill = new SolidColorBrush (Color.FromRgb (223, 223, 223))    
+            };
+            
+            
+            this.web_browser = new WebBrowser () {
+                Width  = Width - 7,
+                Height = Height - 36 - 12
+            };
+            
+            this.web_browser.Navigating += delegate (object sender, NavigatingCancelEventArgs e) {
+                string url = e.Uri.ToString ();
+                Controller.LinkClicked (url);
+            };
+            
+            
+            this.canvas = new Canvas ();
+            Content = this.canvas;
+            
+            this.canvas.Children.Add (size_label);
+            Canvas.SetLeft (size_label, 12);
+            Canvas.SetTop (size_label, 4);
+            
+            this.canvas.Children.Add (this.size_label_value);
+            Canvas.SetLeft (this.size_label_value, 12 + size_label_rect.Width);
+            Canvas.SetTop (this.size_label_value, 4);
+            
+            
+            this.canvas.Children.Add (history_label);
+            Canvas.SetLeft (history_label, 120);
+            Canvas.SetTop (history_label, 4);
+            
+            this.canvas.Children.Add (this.history_label_value);
+            Canvas.SetLeft (this.history_label_value, 120 + history_label_rect.Width);
+            Canvas.SetTop (this.history_label_value, 4);
+            
+            
+            this.canvas.Children.Add (line);
+            Canvas.SetLeft (line, 0);
+            Canvas.SetTop (line, 35);
+            
 
             Controller.ShowWindowEvent += delegate {
                Dispatcher.Invoke ((Action) delegate {
                     Show ();
-					Activate ();
-					BringIntoView ();
-					
-					UpdateContent (null);
-					UpdateChooser (null);
+                    Activate ();
+                    BringIntoView ();
+                    
+                    UpdateContent (null);
+                    UpdateChooser (null);
                 });
             };
 
@@ -145,19 +145,19 @@ namespace SparkleShare {
                     Hide ();
                 });
             };
-			
-			Controller.UpdateSizeInfoEvent += delegate (string size, string history_size) {
-				Dispatcher.Invoke ((Action) delegate {
-					this.size_label_value.Content = size;
-					this.size_label_value.UpdateLayout ();
-					
-					this.history_label_value.Content = history_size;
-					this.history_label_value.UpdateLayout ();
-				});
-			};
-			
+            
+            Controller.UpdateSizeInfoEvent += delegate (string size, string history_size) {
+                Dispatcher.Invoke ((Action) delegate {
+                    this.size_label_value.Content = size;
+                    this.size_label_value.UpdateLayout ();
+                    
+                    this.history_label_value.Content = history_size;
+                    this.history_label_value.UpdateLayout ();
+                });
+            };
+            
             Controller.UpdateChooserEvent += delegate (string [] folders) {
-        		Dispatcher.Invoke ((Action) delegate {
+                Dispatcher.Invoke ((Action) delegate {
                     UpdateChooser (folders);
                 });    
             };
@@ -170,59 +170,59 @@ namespace SparkleShare {
 
             Controller.ContentLoadingEvent += delegate {
                 if (this.canvas.Children.Contains (this.web_browser))
-					this.canvas.Children.Remove (this.web_browser);
+                    this.canvas.Children.Remove (this.web_browser);
 
                     //    ContentView.AddSubview (this.progress_indicator); //TODO spinner
             };
         }
 
-		
-		public void UpdateChooser (string [] folders)
-		{
-			if (folders == null)
+        
+        public void UpdateChooser (string [] folders)
+        {
+            if (folders == null)
                 folders = Controller.Folders;
-			
-			if (this.combo_box != null)
-				this.canvas.Children.Remove (this.combo_box);
-				
-    		this.combo_box = new ComboBox () {
-				Width = 160	
-			};
-			
-				ComboBoxItem item = new ComboBoxItem () {
-					Content = "All Projects"
-				};
-			
-			this.combo_box.Items.Add (item);
-			this.combo_box.SelectedItem = combo_box.Items [0];
-			this.combo_box.Items.Add (new Separator ());
-			
-			foreach (string folder in folders) {
-				this.combo_box.Items.Add (
-					new ComboBoxItem () { Content = folder }
-				);
-			}
-			
-			this.combo_box.SelectionChanged += delegate {
-				Dispatcher.Invoke ((Action) delegate {
-					int index = this.combo_box.SelectedIndex;
-					
-					if (index == 0)
-						Controller.SelectedFolder = null;
-					else
-						Controller.SelectedFolder = (string)
-							(this.combo_box.Items [index] as ComboBoxItem).Content;
-				});
-			};
-			
-			this.canvas.Children.Add (combo_box);
-			Canvas.SetLeft (this.combo_box, Width - 18 - this.combo_box.Width);
-			Canvas.SetTop (this.combo_box, 6);
-		}
-		
-		
-		public void UpdateContent (string html)
-		{
+            
+            if (this.combo_box != null)
+                this.canvas.Children.Remove (this.combo_box);
+                
+            this.combo_box = new ComboBox () {
+                Width = 160    
+            };
+            
+                ComboBoxItem item = new ComboBoxItem () {
+                    Content = "All Projects"
+                };
+            
+            this.combo_box.Items.Add (item);
+            this.combo_box.SelectedItem = combo_box.Items [0];
+            this.combo_box.Items.Add (new Separator ());
+            
+            foreach (string folder in folders) {
+                this.combo_box.Items.Add (
+                    new ComboBoxItem () { Content = folder }
+                );
+            }
+            
+            this.combo_box.SelectionChanged += delegate {
+                Dispatcher.Invoke ((Action) delegate {
+                    int index = this.combo_box.SelectedIndex;
+                    
+                    if (index == 0)
+                        Controller.SelectedFolder = null;
+                    else
+                        Controller.SelectedFolder = (string)
+                            (this.combo_box.Items [index] as ComboBoxItem).Content;
+                });
+            };
+            
+            this.canvas.Children.Add (combo_box);
+            Canvas.SetLeft (this.combo_box, Width - 18 - this.combo_box.Width);
+            Canvas.SetTop (this.combo_box, 6);
+        }
+        
+        
+        public void UpdateContent (string html)
+        {
             Thread thread = new Thread (new ThreadStart (delegate {
                 if (html == null)
                     html = Controller.HTML;
@@ -259,20 +259,20 @@ namespace SparkleShare {
                     //if (this.progress_indicator.Superview == ContentView) TODO: spinner
                        // this.progress_indicator.RemoveFromSuperview ();
 
-					this.web_browser.NavigateToString (html);
-					
-					if (!this.canvas.Children.Contains (this.web_browser)) {
-						this.canvas.Children.Add (this.web_browser);
-						Canvas.SetLeft (this.web_browser, 0);
-						Canvas.SetTop (this.web_browser, 36);
-					}
+                    this.web_browser.NavigateToString (html);
+                    
+                    if (!this.canvas.Children.Contains (this.web_browser)) {
+                        this.canvas.Children.Add (this.web_browser);
+                        Canvas.SetLeft (this.web_browser, 0);
+                        Canvas.SetTop (this.web_browser, 36);
+                    }
                 });
             }));
 
             thread.Start ();
-		}
-		
-		
+        }
+        
+        
         private void Close (object sender, CancelEventArgs args)
         {
             Controller.WindowClosed ();

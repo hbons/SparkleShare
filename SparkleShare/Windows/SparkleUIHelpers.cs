@@ -24,26 +24,26 @@ using System.Windows.Media.Imaging;
 namespace SparkleShare {
 
     public static class SparkleUIHelpers {
-		
+        
         public static string ToHex (this Color color)
         {
             return string.Format ("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
         }
 
         
-		public static BitmapFrame GetImageSource (string name)
-		{			                              
-			Assembly assembly   = Assembly.GetExecutingAssembly ();
-			Stream image_stream = assembly.GetManifestResourceStream ("SparkleShare.Pixmaps." + name + ".png");
-			return BitmapFrame.Create (image_stream);
-		}
-		
-		
-		public static Bitmap GetBitmap (string name)
-		{			                              
-			Assembly assembly   = Assembly.GetExecutingAssembly ();
-			Stream image_stream = assembly.GetManifestResourceStream ("SparkleShare.Pixmaps." + name + ".png");
-			return (Bitmap) Bitmap.FromStream (image_stream);
-		}
+        public static BitmapFrame GetImageSource (string name)
+        {                                          
+            Assembly assembly   = Assembly.GetExecutingAssembly ();
+            Stream image_stream = assembly.GetManifestResourceStream ("SparkleShare.Pixmaps." + name + ".png");
+            return BitmapFrame.Create (image_stream);
+        }
+        
+        
+        public static Bitmap GetBitmap (string name)
+        {                                          
+            Assembly assembly   = Assembly.GetExecutingAssembly ();
+            Stream image_stream = assembly.GetManifestResourceStream ("SparkleShare.Pixmaps." + name + ".png");
+            return (Bitmap) Bitmap.FromStream (image_stream);
+        }
     }
 }

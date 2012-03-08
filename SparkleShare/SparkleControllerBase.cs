@@ -119,7 +119,7 @@ namespace SparkleShare {
             }
         }
 
-		
+        
         // Path where the plugins are kept
         public abstract string PluginsPath { get; }
 
@@ -236,13 +236,13 @@ namespace SparkleShare {
 
             new Thread (new ThreadStart (PopulateRepositories)).Start ();
         }
-		
-		
-		public void UIHasLoaded ()
-		{
-			if (FirstRun)
-	        	ShowSetupWindow (PageType.Setup);
-		}
+        
+        
+        public void UIHasLoaded ()
+        {
+            if (FirstRun)
+                ShowSetupWindow (PageType.Setup);
+        }
 
 
         public void ShowSetupWindow (PageType page_type)

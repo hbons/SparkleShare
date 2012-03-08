@@ -16,7 +16,7 @@
 
 
 using System;
-using System.ComponentModel;	
+using System.ComponentModel;    
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -42,12 +42,12 @@ namespace SparkleShare {
         {
             Title      = "About SparkleShare";
             ResizeMode = ResizeMode.NoResize;
-			Height     = 288;
-			Width      = 640;
-			
-			WindowStartupLocation = WindowStartupLocation.CenterScreen;
-			
-			Closing += Close;
+            Height     = 288;
+            Width      = 640;
+            
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            
+            Closing += Close;
 
             CreateAbout ();
 
@@ -55,8 +55,8 @@ namespace SparkleShare {
             Controller.ShowWindowEvent += delegate {
                Dispatcher.Invoke ((Action) delegate {
                     Show ();
-					Activate ();
-					BringIntoView ();
+                    Activate ();
+                    BringIntoView ();
                 });
             };
 
@@ -69,21 +69,21 @@ namespace SparkleShare {
             Controller.NewVersionEvent += delegate (string new_version) {
                 Dispatcher.Invoke ((Action) delegate {
                     this.updates.Content = "A newer version (" + new_version + ") is available!";
-                	this.updates.UpdateLayout ();
-				});
+                    this.updates.UpdateLayout ();
+                });
             };
 
             Controller.VersionUpToDateEvent += delegate {
                 Dispatcher.Invoke ((Action) delegate {
                     this.updates.Content = "You are running the latest version.";
-					this.updates.UpdateLayout ();
+                    this.updates.UpdateLayout ();
                 });
             };
 
             Controller.CheckingForNewVersionEvent += delegate {
                 Dispatcher.Invoke ((Action) delegate {
                     this.updates.Content = "Checking for updates...";
-					this.updates.UpdateLayout ();
+                    this.updates.UpdateLayout ();
                 });
             };
         }
@@ -91,60 +91,60 @@ namespace SparkleShare {
 
         private void CreateAbout ()
         {
-			Image image = new Image () {
-				Width  = 640,
-				Height = 260
-			};
-		
-			image.Source = SparkleUIHelpers.GetImageSource ("about");
-			
-			
+            Image image = new Image () {
+                Width  = 640,
+                Height = 260
+            };
+        
+            image.Source = SparkleUIHelpers.GetImageSource ("about");
+            
+            
             Label version = new Label () {
                 Content    = "version " + Controller.RunningVersion,
-				FontSize   = 11,
-				Foreground = new SolidColorBrush (Colors.White)
+                FontSize   = 11,
+                Foreground = new SolidColorBrush (Colors.White)
             };
 
             this.updates = new Label () {
-				Content    = "Checking for updates...",
-				FontSize   = 11,
-				Foreground = new SolidColorBrush (Color.FromRgb (45, 62, 81)) // TODO: color looks off
+                Content    = "Checking for updates...",
+                FontSize   = 11,
+                Foreground = new SolidColorBrush (Color.FromRgb (45, 62, 81)) // TODO: color looks off
             };
-			
+            
             TextBlock credits = new TextBlock () {
-				FontSize     = 11,
-				Foreground   = new SolidColorBrush (Colors.White),
+                FontSize     = 11,
+                Foreground   = new SolidColorBrush (Colors.White),
                 Text         = "Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others.\n" +
-					"\n" +
+                    "\n" +
                     "SparkleShare is Free and Open Source Software. You are free to use, modify, " +
                     "and redistribute it under the GNU General Public License version 3 or later.",
-				TextWrapping = TextWrapping.Wrap,
-            	Width        = 318
-			};
-			
-			
-			Canvas canvas = new Canvas ();
-			
-			canvas.Children.Add (image);
-			Canvas.SetLeft (image, 0);
-			Canvas.SetTop (image, 0);
+                TextWrapping = TextWrapping.Wrap,
+                Width        = 318
+            };
+            
+            
+            Canvas canvas = new Canvas ();
+            
+            canvas.Children.Add (image);
+            Canvas.SetLeft (image, 0);
+            Canvas.SetTop (image, 0);
 
-			canvas.Children.Add (version);
-			Canvas.SetLeft (version, 289);
-			Canvas.SetTop (version, 92);
-			
-			canvas.Children.Add (this.updates);
-			Canvas.SetLeft (this.updates, 289);
-			Canvas.SetTop (this.updates, 109);
-			
-			canvas.Children.Add (credits);
-			Canvas.SetLeft (credits, 294);
-			Canvas.SetTop (credits, 142);	
-			
-			Content = canvas;
+            canvas.Children.Add (version);
+            Canvas.SetLeft (version, 289);
+            Canvas.SetTop (version, 92);
+            
+            canvas.Children.Add (this.updates);
+            Canvas.SetLeft (this.updates, 289);
+            Canvas.SetTop (this.updates, 109);
+            
+            canvas.Children.Add (credits);
+            Canvas.SetLeft (credits, 294);
+            Canvas.SetTop (credits, 142);    
+            
+            Content = canvas;
         }
-		
-		
+        
+        
         private void Close (object sender, CancelEventArgs args)
         {
             Controller.WindowClosed ();

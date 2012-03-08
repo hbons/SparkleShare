@@ -1,8 +1,8 @@
 ﻿<#@ assembly name="System.Configuration" #>
 
 <#
-	this.ClassName = "Strings";
-	this.ResourceName = "Strings";
+    this.ClassName = "Strings";
+    this.ResourceName = "Strings";
     this.NamespaceName = "SparkleShare";
     this.DefaultResourceDir = "po"; 
     this.DefaultFileFormat = "{{culture}}.po";

@@ -291,7 +291,7 @@ namespace SparkleLib {
             // that OpenSSH still likes without resorting to Mono.Unix
             FileInfo file_info   = new FileInfo (file_path);
             file_info.Attributes = FileAttributes.ReadOnly;
-			file_info.Attributes = FileAttributes.Normal;
+            file_info.Attributes = FileAttributes.Normal;
         }
     }
 }
