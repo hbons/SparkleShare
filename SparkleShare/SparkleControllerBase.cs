@@ -240,7 +240,7 @@ namespace SparkleShare {
 		
 		public void UIHasLoaded ()
 		{
-			//if (FirstRun)
+			if (FirstRun)
 	        	ShowSetupWindow (PageType.Setup);
 		}
 
@@ -986,7 +986,6 @@ namespace SparkleShare {
             string tmp_path = SparkleConfig.DefaultConfig.TmpPath;
             if (!Directory.Exists (tmp_path)) {
                 Directory.CreateDirectory (tmp_path);
-				
                 File.SetAttributes (tmp_path, FileAttributes.Directory | FileAttributes.Hidden);
             }
 

@@ -264,8 +264,10 @@ namespace SparkleLib {
 
             string notes_path = Path.Combine (LocalPath, ".notes");
 
-            if (!Directory.Exists (notes_path))
+            if (!Directory.Exists (notes_path)) {
                 Directory.CreateDirectory (notes_path);
+				File.SetAttributes (notes_path, FileAttributes.Directory | FileAttributes.Hidden);
+			}
 
             Regex regex_notes = new Regex (@"<name>(.+)</name>.*" +
                                 "<email>(.+)</email>.*" +
@@ -451,6 +453,12 @@ namespace SparkleLib {
 
             this.progress_percentage = 0.0;
             this.progress_speed      = "";
+			
+			string notes_path = Path.Combine (LocalPath, ".notes");
+			
+			if (Directory.Exists (notes_path))
+				File.SetAttributes (notes_path,
+					FileAttributes.Directory | FileAttributes.Hidden);
         }
 
 
