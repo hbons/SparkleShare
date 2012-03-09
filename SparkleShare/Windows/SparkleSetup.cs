@@ -21,15 +21,17 @@ using System.ComponentModel;
 using System.IO;
 using System.Media;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms.Integration;
-using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 
+using Drawing = System.Drawing;
+using Imaging = System.Windows.Interop.Imaging;
 using WPF = System.Windows.Controls;
 
 namespace SparkleShare {
@@ -122,9 +124,11 @@ namespace SparkleShare {
                         Buttons.Add (continue_button);
                         Buttons.Add (cancel_button);
                         
+						name_box.Focus ();
+						name_box.Select (name_box.Text.Length, 0);
                         
                         Controller.UpdateSetupContinueButtonEvent += delegate (bool enabled) {
-                        Dispatcher.Invoke ((Action) delegate {
+                        	Dispatcher.Invoke ((Action) delegate {
                                 continue_button.IsEnabled = enabled;
                             });
                         };
@@ -314,8 +318,7 @@ namespace SparkleShare {
                             Width      = 200,
                             Foreground = new SolidColorBrush (Color.FromRgb (128, 128, 128))
                         };
-                        
-                        
+						
                         Button cancel_button = new Button () {
                             Content = "Cancel"
                         };
@@ -353,12 +356,13 @@ namespace SparkleShare {
                         Canvas.SetTop (path_help_label, 330);
                         Canvas.SetRight (path_help_label, 30);
                         
-
                         Buttons.Add (add_button);
                         Buttons.Add (cancel_button);
                         
-                        
-                        Controller.ChangeAddressFieldEvent += delegate (string text,
+						address_box.Focus ();
+                        address_box.Select (address_box.Text.Length, 0);
+						
+						Controller.ChangeAddressFieldEvent += delegate (string text,
                             string example_text, FieldState state) {
 
                             Dispatcher.Invoke ((Action) delegate {
@@ -367,7 +371,6 @@ namespace SparkleShare {
                                 address_help_label.Text = example_text;
                             });
                         };
-
 
                         Controller.ChangePathFieldEvent += delegate (string text,
                             string example_text, FieldState state) {
@@ -379,7 +382,7 @@ namespace SparkleShare {
                             });
                         };
                         
-                          Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
+                        Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
                             Dispatcher.Invoke ((Action) delegate {
                                 add_button.IsEnabled = button_enabled;
                             });
@@ -532,8 +535,6 @@ namespace SparkleShare {
                         Description = "Access the files from your SparkleShare folder.";
                         
                         
-                        // TODO: warnings
-                        
                         Button finish_button = new Button () {
                             Content = "Finish"
                         };
@@ -541,8 +542,28 @@ namespace SparkleShare {
                         Button open_folder_button = new Button () {
                             Content = "Open folder"
                         };
-    
-                        
+
+                        if (warnings != null) {
+							Image warning_image = new Image () {
+								Source = Imaging.CreateBitmapSourceFromHIcon (Drawing.SystemIcons.Warning.Handle,
+                                	Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions ())
+							};
+							
+                            TextBlock warning_block = new TextBlock () {
+								Text         = warnings [0],
+								Width        = 310,
+								TextWrapping = TextWrapping.Wrap
+							};
+							                                                    
+					        ContentCanvas.Children.Add (warning_image);
+	                        Canvas.SetLeft (warning_image, 193);
+	                        Canvas.SetTop (warning_image, 100);
+							                                                    
+					        ContentCanvas.Children.Add (warning_block);
+	                        Canvas.SetLeft (warning_block, 240);
+	                        Canvas.SetTop (warning_block, 100);
+						}
+						
                         Buttons.Add (finish_button);
                         Buttons.Add (open_folder_button);
                         
