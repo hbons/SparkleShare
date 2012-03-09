@@ -16,18 +16,20 @@
 
 
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Media;
+using System.Windows;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms.Integration;
-using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Data;
-using System.Media;
+
 using WPF = System.Windows.Controls;
 
 namespace SparkleShare {
@@ -233,28 +235,51 @@ namespace SparkleShare {
                             SelectionMode = SelectionMode.Single
                         };
                         
-                        GridView grid_view = new GridView ();
-                        
-                        grid_view.Columns.Add (
-                            new GridViewColumn {
-                                DisplayMemberBinding = new Binding ("Text")
-                            }
-                        );
-                        
-                        // TODO: 
-                        // - Disable column headers
-                        // - Add plugin images
-                        // - Nicer markup: <b>Name</b>\n<small>Description</small>
+                        GridView grid_view = new GridView () {
+							AllowsColumnReorder = false
+						};
+						
+						grid_view.Columns.Add (new GridViewColumn ());
+					
+						string xaml =	
+							"<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"" +
+							"  xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\">" +
+						    "  <Grid>" +
+						    "    <StackPanel Orientation=\"Horizontal\">" +
+						    "      <Image Margin=\"5,0,0,0\" Source=\"{Binding Image}\" Height=\"24\" Width=\"24\"/>" +
+						    "      <StackPanel>" +
+							"        <TextBlock Padding=\"10,4,0,0\" FontWeight=\"Bold\" Text=\"{Binding Name}\">" +
+							"        </TextBlock>" +
+							"        <TextBlock Padding=\"10,0,0,4\" Opacity=\"0.5\" Text=\"{Binding Description}\">" +
+							"        </TextBlock>" +
+							"      </StackPanel>" +
+							"    </StackPanel>" +
+							"  </Grid>" +
+							"</DataTemplate>";
+
+    					grid_view.Columns [0].CellTemplate = (DataTemplate) XamlReader.Parse (xaml);
+												
+						Style header_style = new Style(typeof (GridViewColumnHeader));
+						header_style.Setters.Add (new Setter (GridViewColumnHeader.VisibilityProperty, Visibility.Collapsed));
+					    grid_view.ColumnHeaderContainerStyle = header_style;
+					    
                         foreach (SparklePlugin plugin in Controller.Plugins) {
+							BitmapFrame image = BitmapFrame.Create (
+								new Uri (plugin.ImagePath)
+							);
+						
+							
                             list_view.Items.Add (
                                 new {
-                                    Text = plugin.Name + "\n" + plugin.Description
-                            });
+                                    Name        = plugin.Name,
+									Description = plugin.Description,
+									Image       = image
+								}
+                            );
                         }        
                         
                         list_view.View          = grid_view;
                         list_view.SelectedIndex = Controller.SelectedPluginIndex;
-                        
                         
                         TextBlock address_label = new TextBlock () {
                             Text       = "Address:",
