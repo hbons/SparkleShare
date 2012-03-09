@@ -28,10 +28,6 @@ information see the LICENSE file or visit http://www.gnu.org/licenses/gpl-3.0.ht
 
 ## Running SparkleShare
 
-**Note:** SparkleShare creates its own RSA keypair in `$HOME/.config/sparkleshare/` and uses 
-that for authentication. Please mind this if you're planning to set up your 
-own server by hand.
-
 ### Linux
 
 You can choose to build from source or get the packages through your distribution's repositories.
@@ -63,31 +59,33 @@ Download, unzip and open the SparkleShare bundle.
 
 ### Windows
 
-Download the installer and run SparkleShare from the start menu.
+Download and run the installer and start SparkleShare from the Windows menu.
 
 
 ## Building on Linux
 
-### Debian or Ubuntu (apt):
+### Ubuntu:
 
 ```bash
-$ sudo apt-get install gtk-sharp2 mono-runtime mono-devel monodevelop \
-  libndesk-dbus1.0-cil-dev nant libnotify-cil-dev libgtk2.0-cil-dev mono-mcs mono-gmcs \
-  libwebkit-cil-dev intltool libtool python-nautilus libndesk-dbus-glib1.0-cil-dev
+$ sudo apt-get install libappindicator0.1-cil-dev gtk-sharp2 mono-runtime mono-devel \
+  monodevelop libndesk-dbus1.0-cil-dev nant libnotify-cil-dev libgtk2.0-cil-dev mono-mcs 
+  mono-gmcs libwebkit-cil-dev intltool libtool python-nautilus libndesk-dbus-glib1.0-cil-dev
 ```
 
-For Ubuntu `libappindicator` support, install the following package:
-
-```bash
-$ sudo apt-get install libappindicator0.1-cil-dev
-```
-
-### Fedora (yum):
+### Fedora:
 
 ```bash
 $ sudo yum install gtk-sharp2-devel mono-core mono-devel monodevelop \
   ndesk-dbus-devel ndesk-dbus-glib-devel nautilus-python-devel nant \
   notify-sharp-devel webkit-sharp-devel webkitgtk-devel libtool intltool
+```
+
+### Debian:
+
+```bash
+$ sudo apt-get install gtk-sharp2 mono-runtime mono-devel monodevelop \
+  libndesk-dbus1.0-cil-dev nant libnotify-cil-dev libgtk2.0-cil-dev mono-mcs mono-gmcs \
+  libwebkit-cil-dev intltool libtool python-nautilus libndesk-dbus-glib1.0-cil-dev
 ```
 
 
@@ -99,13 +97,16 @@ $ make
 $ sudo make install
 ```
 
-**Note:**  Use `--prefix=/usr` if you want the Nautilus extension to work.
+**Note:**  The Nautilus extension will only be enabled if you build with `--prefix=/usr`.
 
 
 ## Building on Mac
 
-Install <tt>Xcode</tt>, the <tt>Mono</tt> Framework, <tt>MonoDevelop</tt> and the <tt>MonoMac</tt> plugin
-(you can find it in <tt>MonoDevelop</tt> => <tt>Add-in Manager</tt>).
+Install [Xcode](https://developer.apple.com/xcode/), the [Mono Framework](http://www.mono-project.com/) 
+and [MonoDevelop](http://monodevelop.com/).
+
+Start MonoDevelop and install the MonoMac add-in (it's in <tt>MonoDevelop</tt> > <tt>Add-in Manager</tt>).
+
 
 You may need to adjust some environment variables to let the build environment tools find mono:
    
@@ -132,7 +133,7 @@ Now that you have compiled the libraries, open `SparkleShare/Mac/SparkleShare.sl
 MonoDevelop and start the build.
 
 
-### Creating a Mac .app
+### Creating a Mac bundle
 
 To create the <tt>SparkleShare.app</tt>, make sure the project is focused and select Project from the menu bar 
 and click <tt>"Create Mac Installer..."</tt>. Make sure to select <tt>"Don't link assemblies"</tt>. 
