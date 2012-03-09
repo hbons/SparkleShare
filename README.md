@@ -9,7 +9,6 @@ SparkleShare allows you to instantly sync with any [Git](http://www.git-scm.org/
 
 ## Resources
 
-|||
 |-----------------------------------:|:--------------------------|
 |              **Website**: | http://www.sparkleshare.org/ |
 |          **Source code**: | http://github.com/SparkleShare/ |
