@@ -1,12 +1,22 @@
 # SparkleShare
 
 SparkleShare is a collaboration and sharing tool that is designed to keep
-things simple and to stay out of your way. It allows you to instantly sync
-with any Git repository you have access to.
+things simple and to stay out of your way. SparkleShare is available for Linux, Mac and Windows.
 
-SparkleShare currently works on Linux, Mac and Windows.
+SparkleShare allows you to instantly sync with any [Git](http://www.git-scm.org/) repository you have access to.
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/thing/21770/SparkleShare-Sharing-work-made-easy)
+
+## Resources
+
+|||
+|-----------------------------------:|:--------------------------|
+|              **Website**: | http://www.sparkleshare.org/ |
+|          **Source code**: | http://github.com/SparkleShare/ |
+|          **IRC channel**: | #sparkleshare on irc.gnome.org |
+|                 **Wiki**: | http://github.com/hbons/SparkleShare/wiki/ |
+|        **Report issues**: | http://github.com/hbons/SparkleShare/issues/ |
+|  **Translation project**: | http://www.transifex.net/projects/p/sparkleshare/ |
 
 
 ## License
@@ -182,16 +192,6 @@ rm -Rf ~/.config/sparkleshare
 Remove `My Documents\SparkleShare` and `AppData\Roaming\sparkleshare` (`AppData` is hidden by default).
 
 
-## Info
+## Finally
 
-|||
-|-----------------------------------:|:--------------------------|
-|     **Official website**: | http://www.sparkleshare.org/ |
-|          **Source code**: | http://github.com/SparkleShare/ |
-|          **IRC Channel**: | #sparkleshare on irc.gnome.org |
-|                 **Wiki**: | http://github.com/hbons/SparkleShare/wiki/ |
-|        **Report issues**: | http://github.com/hbons/SparkleShare/issues/ |
-|  **Translation project**: | http://www.transifex.net/projects/p/sparkleshare/ |
-
-
-Now have fun and create cool things together! :)
+Have fun! :)
