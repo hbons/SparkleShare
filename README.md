@@ -171,8 +171,19 @@ build installer
 
 This will create `SparkleShare.msi` in the same directory.
 
+## Troubleshooting
 
-## Info
+Working directories sparkleshare uses:
+#### Windows
+```
+%user%\AppData\Roaming\sparkleshare (c:\USER\AppData\Roaming\sparkleshare)
+```
+```
+%user%\Documents\sparkleshare (via CLI) or %user%\My Documents\sparkleshare (via GUI)
+```
+The above directories can be removed to obtain a "fresh install".
+
+## More Info
 
 |||
 |-----------------------------------:|:--------------------------|
