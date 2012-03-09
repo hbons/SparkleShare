@@ -178,7 +178,7 @@ This will create `SparkleShare.msi` in the same directory.
 
 ```
 rm -Rf ~/SparkleShare
-rm -Rf ~/.config/SparkleShare
+rm -Rf ~/.config/sparkleshare
 ```
 
 ### Windows
