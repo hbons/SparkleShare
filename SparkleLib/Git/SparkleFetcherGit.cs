@@ -182,8 +182,8 @@ namespace SparkleLib.Git {
 
             } else {
                 Warnings = new string [] {
-                    string.Format ("You seem to have configured a system ‘gitignore’ file. " +
-                                   "This may interfere with SparkleShare.\n({0})", output)
+                    string.Format ("You seem to have configured a system wide ‘gitignore’ file. " +
+                                   "This may affect SparkleShare files:\n\n{0}", output)
                 };
             }
         }
