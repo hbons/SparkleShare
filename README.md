@@ -173,9 +173,15 @@ This will create `SparkleShare.msi` in the same directory.
 
 ## Troubleshooting
 
-On Windows, to start fresh on a new build:
-Remove %user%\AppData\Roaming\sparkleshare (c:\USER\AppData\Roaming\sparkleshare)
-Remove %user%\Documents\sparkleshare (via CLI) or %user%\My Documents\sparkleshare (via GUI)
+Working directories sparkleshare uses:
+#### Windows
+```
+%user%\AppData\Roaming\sparkleshare (c:\USER\AppData\Roaming\sparkleshare)
+```
+```
+%user%\Documents\sparkleshare (via CLI) or %user%\My Documents\sparkleshare (via GUI)
+```
+The above directories can be removed to obtain a "fresh install".
 
 ## More Info
 
