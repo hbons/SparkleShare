@@ -171,8 +171,13 @@ build installer
 
 This will create `SparkleShare.msi` in the same directory.
 
+## Troubleshooting
 
-## Info
+On Windows, to start fresh on a new build:
+Remove %user%\AppData\Roaming\sparkleshare (c:\USER\AppData\Roaming\sparkleshare)
+Remove %user%\Documents\sparkleshare (via CLI) or %user%\My Documents\sparkleshare (via GUI)
+
+## More Info
 
 |||
 |-----------------------------------:|:--------------------------|
