@@ -172,6 +172,20 @@ build installer
 This will create `SparkleShare.msi` in the same directory.
 
 
+## Reset SparkleShare settings
+
+### Linux and Mac:
+
+```
+rm -Rf ~/SparkleShare
+rm -Rf ~/.config/SparkleShare
+```
+
+### Windows
+
+Remove `My Documents\SparkleShare` and `AppData\Roaming\sparkleshare` (`AppData` is hidden by default).
+
+
 ## Info
 
 |||
