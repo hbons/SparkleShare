@@ -19,6 +19,7 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Forms = System.Windows.Forms;
@@ -30,19 +31,18 @@ namespace SparkleShare {
         public SparkleStatusIconController Controller = new SparkleStatusIconController();
 
         private Forms.Timer Animation;
-        private Icon [] AnimationFrames;
-        private Icon ErrorIcon;
+        private Bitmap [] AnimationFrames;
+        private Bitmap ErrorIcon;
         private int FrameNumber;
         private string StateText;
         private ContextMenu context_menu;
         private SparkleMenuItem status_item;
         private SparkleMenuItem exit_item;
         
-        private Forms.NotifyIcon notify_icon = new Forms.NotifyIcon () {
-            Text = "SparkleShare",
-            Visible = true
-        };
-        
+        private SparkleNotifyIcon notify_icon = new SparkleNotifyIcon () {
+			Text = "SparkleShare"	
+		};
+
         
         // Short alias for the translations
         public static string _ (string s)
@@ -54,21 +54,17 @@ namespace SparkleShare {
         public SparkleStatusIcon ()
         {
             AnimationFrames = CreateAnimationFrames ();
-            Animation = CreateAnimation ();
-            this.notify_icon.Icon = AnimationFrames [0];
-            ErrorIcon = GetIconFromBitmap (SparkleUIHelpers.GetBitmap ("sparkleshare-syncing-error-windows"));
+            Animation       = CreateAnimation ();
+			ErrorIcon       = SparkleUIHelpers.GetBitmap ("sparkleshare-syncing-error-windows");
 
-            this.notify_icon.MouseClick += delegate {
-                this.context_menu.Placement = PlacementMode.Mouse;
-                 this.context_menu.IsOpen    = true;    
-            };
+			this.notify_icon.Icon = AnimationFrames [0];
             
             if (Controller.Folders.Length == 0)
-                    StateText = _("Welcome to SparkleShare!");
-                else
-                    StateText = _("Files up to date") + Controller.FolderSize;
+                StateText = _("Welcome to SparkleShare!");
+            else
+                StateText = _("Files up to date") + Controller.FolderSize;
 
-                CreateMenu ();
+            CreateMenu ();
             
             
             Controller.UpdateQuitItemEvent += delegate (bool enable) {
@@ -77,7 +73,7 @@ namespace SparkleShare {
                     this.exit_item.UpdateLayout ();
                 });
             };
-            
+
             
             Controller.UpdateMenuEvent += delegate (IconState state) {
                 Dispatcher.Invoke ((Action) delegate {
@@ -134,19 +130,15 @@ namespace SparkleShare {
         }
 
         
-
-        // Slices up the graphic that contains the
-        // animation frames.
-        private Icon [] CreateAnimationFrames ()
+        private Bitmap [] CreateAnimationFrames ()
         {
-            Icon [] animation_frames = new Icon [5];
-            animation_frames [0] = GetIconFromBitmap (SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-i"));
-            animation_frames [1] = GetIconFromBitmap (SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-ii"));
-            animation_frames [2] = GetIconFromBitmap (SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iii"));
-            animation_frames [3] = GetIconFromBitmap (SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iiii"));
-            animation_frames [4] = GetIconFromBitmap (SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iiiii"));
-
-            return animation_frames;
+            return new Bitmap [] {
+	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-i"),
+	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-ii"),
+	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iii"),
+	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iiii"),
+	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iiiii")
+			};
         }
 
 
@@ -262,7 +254,7 @@ namespace SparkleShare {
                 i2.Width = 16;
             i2.Height = 16;
                     subfolder_item.Icon = i2;
-                    /*
+                    /* TODO
                     if (Program.Controller.UnsyncedFolders.Contains (folder_name))
                         subfolder_item.Icon = Icons.dialog_error_16;
                     else
@@ -290,6 +282,8 @@ namespace SparkleShare {
             this.context_menu.Items.Add (about_item);
             this.context_menu.Items.Add (new Separator ());
             this.context_menu.Items.Add (this.exit_item);
+			
+			this.notify_icon.ContextMenu = this.context_menu;
         }
 
         
@@ -298,7 +292,7 @@ namespace SparkleShare {
             // TODO:
             // - Use the image pointed to by image_path
             // - Find a way to use the prettier (Win7?) balloons
-            this.notify_icon.ShowBalloonTip (5 * 1000, title, subtext, Forms.ToolTipIcon.Info);
+            //this.notify_icon.ShowBalloonTip (5 * 1000, title, subtext, Forms.ToolTipIcon.Info);
         }
         
 
@@ -316,20 +310,6 @@ namespace SparkleShare {
                 Controller.SubfolderClicked (folder_name);
             };
         }
-
-
-        private Icon GetIconFromBitmap (Bitmap bitmap)
-        {
-            IntPtr unmanaged_icon = bitmap.GetHicon ();
-            Icon icon = (Icon) Icon.FromHandle (unmanaged_icon).Clone ();
-            DestroyIcon (unmanaged_icon);
-            
-            return icon;
-        }
-        
-        
-        [DllImport("user32.dll", EntryPoint = "DestroyIcon")]
-        static extern bool DestroyIcon (IntPtr hIcon);
     }
     
     

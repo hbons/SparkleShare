@@ -137,6 +137,7 @@
     <Compile Include="..\Program.cs">
       <Link>Program.cs</Link>
     </Compile>
+    <Compile Include="SparkleNotifyIcon.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SparkleLib\windows\SparkleLib.csproj">
