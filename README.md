@@ -155,10 +155,6 @@ build
 
 `C:\path\to\SparkleShare\source\bin` should now contain `SparkleShare.exe`, which you can run.
 
-**Note:** SparkleShare needs to be run with administrator privileges.
-Open the properties dialog for `SparkleShare.exe` and tick
-the `Run this program as an administrator` option in the 
-`Compatibility` tab.
 
 
 ### Creating a Windows installer
