@@ -186,8 +186,7 @@ namespace SparkleShare {
         {
             Process process             = new Process ();
             process.StartInfo.FileName  = "explorer";
-            process.StartInfo.Arguments = ",/root," +
-                Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, subfolder);
+            process.StartInfo.Arguments = Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, subfolder);
             
             process.Start();
         }
