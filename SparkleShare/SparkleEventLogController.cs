@@ -202,22 +202,6 @@ namespace SparkleShare {
 			    url.Substring (1, 1).Equals (":")) {
 				
                 Program.Controller.OpenFile (url);
-
-            } else {
-                Regex regex = new Regex (@"(.+)~(.+)~(.+)");
-                Match match = regex.Match (url);
-
-                if (match.Success) {
-                    string folder_name = match.Groups [1].Value;
-                    string revision    = match.Groups [2].Value;
-                    string note        = match.Groups [3].Value;
-
-                    Thread thread = new Thread (new ThreadStart (delegate {
-                        Program.Controller.AddNoteToFolder (folder_name, revision, note);
-                    }));
-
-                    thread.Start ();
-                }
             }
         }
     }
