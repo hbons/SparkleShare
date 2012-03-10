@@ -17,6 +17,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -44,21 +45,17 @@ namespace SparkleShare {
             return Program._(s);
         }
 
-
+		
         public SparkleEventLog ()
-        {
-            Title      = "Recent Changes";
-            Height     = 640;
-            Width      = 480;
-            ResizeMode = ResizeMode.NoResize;
-            Background = new SolidColorBrush (Color.FromRgb (240, 240, 240));    
-			
-			AllowsTransparency = false;
-            
+		{
+            Title                 = "Recent Changes";
+            Height                = 640;
+            Width                 = 480;
+            ResizeMode            = ResizeMode.NoResize;
+            Background            = new SolidColorBrush (Color.FromRgb (240, 240, 240));    
+			AllowsTransparency    = false;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            
-            Closing += Close;
-            
+
                         
             Label size_label = new Label () {
                 Content    = "Size:",
@@ -72,8 +69,6 @@ namespace SparkleShare {
             size_label.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
             Rect size_label_rect = new Rect (size_label.DesiredSize);
             
-            
-            
             Label history_label = new Label () {
                 Content    = "History:",
 				FontWeight = FontWeights.Bold
@@ -86,24 +81,20 @@ namespace SparkleShare {
             history_label.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
             Rect history_label_rect = new Rect (history_label.DesiredSize);
             
-            
             Rectangle line = new Rectangle () {
                 Width = Width,
                 Height = 1,
                 Fill = new SolidColorBrush (Color.FromRgb (223, 223, 223))    
             };
-            
-            
+                        
             this.web_browser = new WebBrowser () {
                 Width  = Width - 7,
                 Height = Height - 36 - 12
             };
-            
-            /*this.web_browser.Navigating += delegate (object sender, NavigatingCancelEventArgs e) {
-                string url = e.Uri.ToString ();
-                Controller.LinkClicked (url);
-            };
-            */
+			
+			// Disable annoying IE clicking sound
+			CoInternetSetFeatureEnabled (21, 0x00000002, true);
+
             
             this.canvas = new Canvas ();
             Content = this.canvas;
@@ -131,6 +122,8 @@ namespace SparkleShare {
             Canvas.SetTop (line, 35);
             
 
+            Closing += Close;
+			
             Controller.ShowWindowEvent += delegate {
                Dispatcher.Invoke ((Action) delegate {
                     Show ();
@@ -260,7 +253,16 @@ namespace SparkleShare {
                 Dispatcher.Invoke ((Action) delegate {
                     //if (this.progress_indicator.Superview == ContentView) TODO: spinner
                        // this.progress_indicator.RemoveFromSuperview ();
+					
+					this.web_browser.LoadCompleted += delegate(object sender, NavigationEventArgs e) {
+						this.web_browser.Navigating += delegate(object sender2, NavigatingCancelEventArgs e2) {
+							MessageBox.Show (e2.Uri.ToString ());
+							e2.Cancel = true;
+						};
+					};
+					
 					this.web_browser.NavigateToString (html);
+					
 					//MessageBox.Show (html);
                     if (!this.canvas.Children.Contains (this.web_browser)) {
                         this.canvas.Children.Add (this.web_browser);
@@ -279,5 +281,12 @@ namespace SparkleShare {
             Controller.WindowClosed ();
             args.Cancel = true;    
         }
+		
+
+		[DllImport ("urlmon.dll")]
+		[PreserveSig]
+		[return:MarshalAs (UnmanagedType.Error)]
+		static extern int CoInternetSetFeatureEnabled (int feature,
+			[MarshalAs (UnmanagedType.U4)] int flags, bool enable);
     }
 }
