@@ -236,6 +236,51 @@
     <EmbeddedResource Include="..\..\data\html\jquery.js">
       <Link>HTML\jquery.js</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-a.png">
+      <Link>Pixmaps\avatar-a.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-b.png">
+      <Link>Pixmaps\avatar-b.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-c.png">
+      <Link>Pixmaps\avatar-c.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-d.png">
+      <Link>Pixmaps\avatar-d.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-e.png">
+      <Link>Pixmaps\avatar-e.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-f.png">
+      <Link>Pixmaps\avatar-f.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-g.png">
+      <Link>Pixmaps\avatar-g.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-h.png">
+      <Link>Pixmaps\avatar-h.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-i.png">
+      <Link>Pixmaps\avatar-i.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-j.png">
+      <Link>Pixmaps\avatar-j.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-k.png">
+      <Link>Pixmaps\avatar-k.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\document-added-12.png">
+      <Link>Pixmaps\document-added-12.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\document-deleted-12.png">
+      <Link>Pixmaps\document-deleted-12.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\document-edited-12.png">
+      <Link>Pixmaps\document-edited-12.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\document-moved-12.png">
+      <Link>Pixmaps\document-moved-12.png</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\plugins\github.png">
