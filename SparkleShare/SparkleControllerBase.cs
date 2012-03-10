@@ -1203,7 +1203,7 @@ namespace SparkleShare {
 
                 if (string.IsNullOrEmpty (crumb))
                     continue;
-
+				
                 string crumb_path = Path.Combine (new_path_root, crumb);
 
                 if (Directory.Exists (crumb_path)) {

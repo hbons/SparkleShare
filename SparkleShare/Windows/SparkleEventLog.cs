@@ -18,13 +18,13 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Windows.Navigation;
 
 namespace SparkleShare {
 
@@ -89,9 +89,12 @@ namespace SparkleShare {
                         
             this.web_browser = new WebBrowser () {
                 Width  = Width - 7,
-                Height = Height - 36 - 12
+                Height = Height - 36 - 12,
+				
             };
-			
+
+			this.web_browser.ObjectForScripting = new SparkleScriptingObject ();;
+					
 			// Disable annoying IE clicking sound
 			CoInternetSetFeatureEnabled (21, 0x00000002, true);
 
@@ -100,7 +103,7 @@ namespace SparkleShare {
             Content = this.canvas;
             
             this.canvas.Children.Add (size_label);
-            Canvas.SetLeft (size_label, 22);
+            Canvas.SetLeft (size_label, 24);
             Canvas.SetTop (size_label, 4);
             
             this.canvas.Children.Add (this.size_label_value);
@@ -211,7 +214,7 @@ namespace SparkleShare {
             };
             
             this.canvas.Children.Add (combo_box);
-            Canvas.SetLeft (this.combo_box, Width - 18 - this.combo_box.Width);
+            Canvas.SetLeft (this.combo_box, Width - 24 - this.combo_box.Width);
             Canvas.SetTop (this.combo_box, 6);
         }
         
@@ -221,6 +224,9 @@ namespace SparkleShare {
             Thread thread = new Thread (new ThreadStart (delegate {
                 if (html == null)
                     html = Controller.HTML;
+				
+				
+                html = html.Replace ("<a href=", "<a class='windows' href=");
 
                 html = html.Replace ("<!-- $body-font-family -->", "sans-serif");
                 html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
@@ -249,21 +255,13 @@ namespace SparkleShare {
                 //html = html.Replace ("<!-- $document-moved-background-image -->",
                   //  "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
                     //"Pixmaps", "document-moved-12.png"));
-
+				
                 Dispatcher.Invoke ((Action) delegate {
                     //if (this.progress_indicator.Superview == ContentView) TODO: spinner
                        // this.progress_indicator.RemoveFromSuperview ();
 					
-					this.web_browser.LoadCompleted += delegate(object sender, NavigationEventArgs e) {
-						this.web_browser.Navigating += delegate(object sender2, NavigatingCancelEventArgs e2) {
-							MessageBox.Show (e2.Uri.ToString ());
-							e2.Cancel = true;
-						};
-					};
-					
 					this.web_browser.NavigateToString (html);
 					
-					//MessageBox.Show (html);
                     if (!this.canvas.Children.Contains (this.web_browser)) {
                         this.canvas.Children.Add (this.web_browser);
                         Canvas.SetLeft (this.web_browser, 0);
@@ -286,7 +284,18 @@ namespace SparkleShare {
 		[DllImport ("urlmon.dll")]
 		[PreserveSig]
 		[return:MarshalAs (UnmanagedType.Error)]
-		static extern int CoInternetSetFeatureEnabled (int feature,
-			[MarshalAs (UnmanagedType.U4)] int flags, bool enable);
+		static extern int CoInternetSetFeatureEnabled (
+			int feature, [MarshalAs (UnmanagedType.U4)] int flags, bool enable);
+    }
+
+	
+	[PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
+    [ComVisible(true)]
+    public class SparkleScriptingObject {
+		
+        public void LinkClicked (string url)
+        {
+			SparkleUI.EventLog.Controller.LinkClicked (url);
+        }
     }
 }

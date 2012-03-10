@@ -161,7 +161,7 @@ namespace SparkleShare {
                 if (UpdateContentEvent != null)
                     UpdateContentEvent (HTML);
             };
-
+			
             Program.Controller.OnIdle += delegate {
                 if (UpdateContentEvent != null)
                     UpdateContentEvent (HTML);
@@ -198,7 +198,9 @@ namespace SparkleShare {
 
         public void LinkClicked (string url)
         {
-            if (url.StartsWith (Path.VolumeSeparatorChar.ToString ())) {
+            if (url.StartsWith (Path.VolumeSeparatorChar.ToString ()) ||
+			    url.Substring (1, 1).Equals (":")) {
+				
                 Program.Controller.OpenFile (url);
 
             } else {
