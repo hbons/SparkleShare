@@ -99,8 +99,8 @@ namespace SparkleShare {
                         case IconState.Syncing: {
     
                             this.notify_icon.Text = StateText = "Syncing… " +
-                                        Controller.ProgressPercentage + "%  " +
-                                        Controller.ProgressSpeed;
+                            	Controller.ProgressPercentage + "%  " +
+                                Controller.ProgressSpeed;
 
                             this.status_item.Header = StateText;
     
@@ -118,7 +118,7 @@ namespace SparkleShare {
                             this.status_item.Header = StateText;
                             CreateMenu ();
 
-                            this.status_item.Icon = ErrorIcon;
+                            this.notify_icon.Icon = ErrorIcon;
                             
                             break;
                         }
