@@ -10,6 +10,8 @@
         <script type="text/javascript">
           $(document).ready(function () {
 
+              $('dl dd:nth-child(-n+10)').css('display', 'block');
+
               // Update the Today and Yesterday labels after midnight
               var midnight_interval = setInterval (function(){
                 var date = new Date();
@@ -244,10 +246,6 @@
                 margin-bottom: 1px;
                 background-repeat: no-repeat;
                 background-position: center left;
-            }
-
-            dl dd:nth-child(-n+10) {
-                display: block;
             }
 
             .document {
