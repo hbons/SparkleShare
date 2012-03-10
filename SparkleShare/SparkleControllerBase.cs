@@ -629,12 +629,6 @@ namespace SparkleShare {
                     NotificationRaised (change_set);
             };
 
-            repo.NewNote += delegate (SparkleUser user) {
-                if (NoteNotificationRaised != null)
-                    NoteNotificationRaised (user, repo.Name);
-
-            };
-
             repo.ConflictResolved += delegate {
                 if (AlertNotificationRaised != null)
                     AlertNotificationRaised ("Conflict detected.",
@@ -1138,20 +1132,6 @@ namespace SparkleShare {
             }
 
             Environment.Exit (0);
-        }
-
-
-        public void AddNoteToFolder (string folder_name, string revision, string note)
-        {
-            folder_name = folder_name.Replace ("%20", " ");
-            note        = note.Replace ("%20", " ");
-
-            lock (this.repo_lock) {
-                foreach (SparkleRepoBase repo in Repositories) {
-                    if (repo.Name.Equals (folder_name))
-                        repo.AddNote (revision, note);
-                }
-            }
         }
 
 

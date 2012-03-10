@@ -658,7 +658,7 @@ namespace SparkleLib.Git {
                                 file_path = file_path.Substring (0,
                                     file_path.Length - ".empty".Length);
 
-                            if (change_type.Equals ("A") && !file_path.Contains (".notes")) {
+                            if (change_type.Equals ("A")) {
                                 change_set.Added.Add (file_path);
 
                             } else if (change_type.Equals ("M")) {
@@ -692,7 +692,6 @@ namespace SparkleLib.Git {
                          change_set.Deleted.Count +
                          change_set.MovedFrom.Count) > 0) {
 
-                        change_set.Notes.AddRange (GetNotes (change_set.Revision));
                         change_sets.Add (change_set);
                     }
                 }
@@ -720,9 +719,6 @@ namespace SparkleLib.Git {
                         SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Renamed " + HEAD_file_path);
                     }
 
-                    continue;
-
-                } else if (child_path.EndsWith (".notes")) {
                     continue;
 
                 } else if (child_path.EndsWith (".git")) {
@@ -784,10 +780,7 @@ namespace SparkleLib.Git {
                 if (file_name.EndsWith (".empty"))
                     file_name = file_name.Substring (0, file_name.Length - 6);
 
-                if (file_name.StartsWith (".notes"))
-                    message += "added a note";
-                else
-                    message += "+ ‘" + file_name + "’" + n;
+                message += "+ ‘" + file_name + "’" + n;
 
                 count++;
                 if (count == max_count)
