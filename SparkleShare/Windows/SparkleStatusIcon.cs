@@ -40,9 +40,7 @@ namespace SparkleShare {
         private SparkleMenuItem status_item;
         private SparkleMenuItem exit_item;
         
-        private SparkleNotifyIcon notify_icon = new SparkleNotifyIcon () {
-			Text = "SparkleShare"	
-		};
+        private SparkleNotifyIcon notify_icon = new SparkleNotifyIcon ();
 
         
         // Short alias for the translations
@@ -59,11 +57,12 @@ namespace SparkleShare {
 			ErrorIcon       = SparkleUIHelpers.GetBitmap ("sparkleshare-syncing-error-windows");
 
 			this.notify_icon.Icon = AnimationFrames [0];
-            
+            this.notify_icon.HeaderText = "SparkleShare";
+			
             if (Controller.Folders.Length == 0)
                 StateText = _("Welcome to SparkleShare!");
             else
-                StateText = _("Files up to date") + Controller.FolderSize;
+                this.notify_icon.Text = StateText = _("Files up to date") + Controller.FolderSize;
 
             CreateMenu ();
             
@@ -84,9 +83,9 @@ namespace SparkleShare {
                             Animation.Stop ();
                         
                             if (Controller.Folders.Length == 0)
-                                StateText = "Welcome to SparkleShare!";
+                                this.notify_icon.Text = StateText = "Welcome to SparkleShare!";
                             else
-                                StateText = "Files up to date" + Controller.FolderSize;
+                                this.notify_icon.Text = StateText = "Files up to date" + Controller.FolderSize;
     
                         
                             this.status_item.Header = StateText;
@@ -99,7 +98,7 @@ namespace SparkleShare {
                         
                         case IconState.Syncing: {
     
-                            StateText = "Syncing… " +
+                            this.notify_icon.Text = StateText = "Syncing… " +
                                         Controller.ProgressPercentage + "%  " +
                                         Controller.ProgressSpeed;
 
@@ -115,7 +114,7 @@ namespace SparkleShare {
 
                             Animation.Stop ();
     
-                            StateText = _("Not everything is synced");
+                            this.notify_icon.Text = StateText = _("Not everything is synced");
                             this.status_item.Header = StateText;
                             CreateMenu ();
 
