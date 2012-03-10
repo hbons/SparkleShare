@@ -31,6 +31,9 @@ namespace SparkleShare {
 
         public SparkleUI ()
         {   
+			// FIXME: The second time windows are shown, the windows
+			// don't have the smooth ease in animation, but appear abruptly. 
+			// The ease out animation always seems to work
             Setup      = new SparkleSetup ();
             EventLog   = new SparkleEventLog ();
             About      = new SparkleAbout ();
