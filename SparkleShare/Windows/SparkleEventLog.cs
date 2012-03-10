@@ -192,15 +192,22 @@ namespace SparkleShare {
                 };
             
             this.combo_box.Items.Add (item);
-            this.combo_box.SelectedItem = combo_box.Items [0];
             this.combo_box.Items.Add (new Separator ());
             
+			this.combo_box.SelectedItem = combo_box.Items [0];
+			
+			int row = 2;
             foreach (string folder in folders) {
                 this.combo_box.Items.Add (
                     new ComboBoxItem () { Content = folder }
                 );
+				
+				if (folder.Equals (Controller.SelectedFolder))
+					this.combo_box.SelectedItem = combo_box.Items [row];
+				
+				row++;
             }
-            
+			
             this.combo_box.SelectionChanged += delegate {
                 Dispatcher.Invoke ((Action) delegate {
                     int index = this.combo_box.SelectedIndex;
