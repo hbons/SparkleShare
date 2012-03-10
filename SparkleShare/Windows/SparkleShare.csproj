@@ -100,11 +100,6 @@
       <Link>SparkleStatusIconController.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Icons.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Icons.resx</DependentUpon>
-    </Compile>
     <Compile Include="..\SparkleSetupController.cs" />
     <Compile Include="SparkleUI.cs" />
     <Compile Include="..\SparkleAboutController.cs" />
@@ -183,14 +178,6 @@
     <PreBuildEvent>$(ProjectDir)transform_tt.cmd</PreBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Icons.resx">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Icons.tt</DependentUpon>
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Icons.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="..\..\data\about.png">
       <Link>Pixmaps\about.png</Link>
     </EmbeddedResource>
@@ -249,12 +236,6 @@
     <EmbeddedResource Include="..\..\data\html\jquery.js">
       <Link>HTML\jquery.js</Link>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Icons.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Icons.resx</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\plugins\github.png">
