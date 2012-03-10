@@ -70,9 +70,6 @@
       <HintPath>..\..\bin\Gettext.Cs.dll</HintPath>
     </Reference>
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="CefSharp">
-      <HintPath>..\..\bin\CefSharp.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\SparkleLib\windows\GlobalAssemblyInfo.cs">
@@ -102,18 +99,11 @@
     <Compile Include="..\SparkleStatusIconController.cs">
       <Link>SparkleStatusIconController.cs</Link>
     </Compile>
-    <Compile Include="ApplicationSchemeHandler.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="FileSchemeHandler.cs" />
     <Compile Include="Icons.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Icons.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="..\SparkleSetupController.cs" />
     <Compile Include="SparkleUI.cs" />
@@ -201,11 +191,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Icons.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="..\..\data\about.png">
       <Link>Pixmaps\about.png</Link>
     </EmbeddedResource>
@@ -251,6 +236,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\data\icons\folder-windows-16.png">
       <Link>Pixmaps\folder-windows-16.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\html\day-entry.html">
+      <Link>HTML\day-entry.html</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\html\event-entry.html">
+      <Link>HTML\event-entry.html</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\html\event-log.html">
+      <Link>HTML\event-log.html</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\html\jquery.js">
+      <Link>HTML\jquery.js</Link>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -424,5 +421,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pixmaps\" />
+    <Folder Include="HTML\" />
   </ItemGroup>
 </Project>
