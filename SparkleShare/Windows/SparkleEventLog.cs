@@ -61,12 +61,12 @@ namespace SparkleShare {
             
                         
             Label size_label = new Label () {
-                Content    = "Size:"
+                Content    = "Size:",
+				FontWeight = FontWeights.Bold
             };
             
             this.size_label_value = new Label () {
-                Content = Controller.Size,
-                FontWeight = FontWeights.Bold
+                Content = Controller.Size
             };
             
             size_label.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
@@ -75,12 +75,12 @@ namespace SparkleShare {
             
             
             Label history_label = new Label () {
-                Content    = "History:"
+                Content    = "History:",
+				FontWeight = FontWeights.Bold
             };
             
             this.history_label_value = new Label () {
                 Content = Controller.HistorySize,
-                FontWeight = FontWeights.Bold
             };
             
             history_label.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
@@ -109,20 +109,20 @@ namespace SparkleShare {
             Content = this.canvas;
             
             this.canvas.Children.Add (size_label);
-            Canvas.SetLeft (size_label, 12);
+            Canvas.SetLeft (size_label, 22);
             Canvas.SetTop (size_label, 4);
             
             this.canvas.Children.Add (this.size_label_value);
-            Canvas.SetLeft (this.size_label_value, 12 + size_label_rect.Width);
+            Canvas.SetLeft (this.size_label_value, 22 + size_label_rect.Width);
             Canvas.SetTop (this.size_label_value, 4);
             
             
             this.canvas.Children.Add (history_label);
-            Canvas.SetLeft (history_label, 120);
+            Canvas.SetLeft (history_label, 130);
             Canvas.SetTop (history_label, 4);
             
             this.canvas.Children.Add (this.history_label_value);
-            Canvas.SetLeft (this.history_label_value, 120 + history_label_rect.Width);
+            Canvas.SetLeft (this.history_label_value, 130 + history_label_rect.Width);
             Canvas.SetTop (this.history_label_value, 4);
             
             

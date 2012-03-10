@@ -490,11 +490,15 @@ namespace SparkleShare {
                     comments += "</div>";
 
                     string change_set_avatar = GetAvatar (change_set.User.Email, 48);
-                    if (File.Exists (change_set_avatar))
-                        change_set_avatar = "file://" + change_set_avatar;
-                    else
-                        change_set_avatar = "<!-- $pixmaps-path -->/" + AssignAvatar (change_set.User.Email);
-                  
+                    
+					if (File.Exists (change_set_avatar)) {
+                        change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
+					
+				    } else {
+                        change_set_avatar = Path.Combine ("<!-- $pixmaps-path -->",
+							AssignAvatar (change_set.User.Email)); // TODO
+					}
+					
                     event_entry   += "</dl>";
 
                     string timestamp = change_set.Timestamp.ToString ("H:mm");
