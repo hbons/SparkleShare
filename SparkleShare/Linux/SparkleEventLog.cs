@@ -184,12 +184,19 @@ namespace SparkleShare {
 
             store.AppendValues (_("All Projects"));
             store.AppendValues ("---");
-
-            foreach (string folder in folders)
-                store.AppendValues (folder);
-
-            this.combo_box.Model  = store;
-            this.combo_box.Active = 0;
+			
+			this.combo_box.Model  = store;
+			this.combo_box.Active = 0;
+			
+			int row = 2;
+       		foreach (string folder in folders) {
+				store.AppendValues (folder);
+				
+				if (folder.Equals (Controller.SelectedFolder))
+					this.combobox.Active = row;
+				
+				row++;
+        	}
 
             this.combo_box.RowSeparatorFunc = delegate (TreeModel model, TreeIter iter) {
                 string item = (string) this.combo_box.Model.GetValue (iter, 0);

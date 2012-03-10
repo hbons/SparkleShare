@@ -169,7 +169,7 @@ namespace SparkleShare {
                 if (UpdateSizeInfoEvent != null)
                     UpdateSizeInfoEvent (Size, HistorySize);
             };
-
+			
             Program.Controller.FolderListChanged += delegate {
                 if (this.selected_folder != null &&
                     !Program.Controller.Folders.Contains (this.selected_folder)) {
@@ -179,9 +179,6 @@ namespace SparkleShare {
 
                 if (UpdateChooserEvent != null)
                     UpdateChooserEvent (Folders);
-
-                if (UpdateContentEvent != null)
-                    UpdateContentEvent (HTML);
 
                 if (UpdateSizeInfoEvent != null)
                     UpdateSizeInfoEvent (Size, HistorySize);

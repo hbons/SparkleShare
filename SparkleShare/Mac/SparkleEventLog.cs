@@ -242,6 +242,17 @@ namespace SparkleShare {
     
                 this.popup_button.AddItem ("All Projects");
                 this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
+				
+				int row = 2;
+           		foreach (string folder in folders) {
+	                this.popup_button.AddItem (folder);
+					
+					if (folder.Equals (Controller.SelectedFolder))
+						this.popup_button.SelectItemAtIndex (row);
+					
+					row++;
+            	}
+				
                 this.popup_button.AddItems (folders);
     
                 this.popup_button.Activated += delegate {
