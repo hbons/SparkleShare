@@ -45,5 +45,14 @@ namespace SparkleShare {
             Stream image_stream = assembly.GetManifestResourceStream ("SparkleShare.Pixmaps." + name + ".png");
             return (Bitmap) Bitmap.FromStream (image_stream);
         }
+		
+		public static string GetHTML (string name)
+        {                                          
+            Assembly assembly        = Assembly.GetExecutingAssembly ();
+            StreamReader html_reader = new StreamReader (
+				assembly.GetManifestResourceStream ("SparkleShare.HTML." + name));
+            
+			return html_reader.ReadToEnd ();
+        }
     }
 }

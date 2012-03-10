@@ -22,6 +22,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+
 using Forms = System.Windows.Forms;
 
 namespace SparkleShare {
@@ -52,7 +53,7 @@ namespace SparkleShare {
         
         
         public SparkleStatusIcon ()
-        {
+		{
             AnimationFrames = CreateAnimationFrames ();
             Animation       = CreateAnimation ();
 			ErrorIcon       = SparkleUIHelpers.GetBitmap ("sparkleshare-syncing-error-windows");
