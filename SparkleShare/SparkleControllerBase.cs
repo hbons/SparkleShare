@@ -1173,19 +1173,25 @@ namespace SparkleShare {
 
         private string FormatBreadCrumbs (string path_root, string path)
         {
+			path_root = path_root.Replace ("/",
+				Path.DirectorySeparatorChar.ToString ());
+			
+			path = path.Replace ("/",
+				Path.DirectorySeparatorChar.ToString ());
+			
             string link      = "";
             string [] crumbs = path.Split (Path.DirectorySeparatorChar);
 
             int i = 0;
             string new_path_root = path_root;
             bool previous_was_folder = false;
+			
             foreach (string crumb in crumbs) {
-
                 if (string.IsNullOrEmpty (crumb))
                     continue;
 				
                 string crumb_path = Path.Combine (new_path_root, crumb);
-
+				
                 if (Directory.Exists (crumb_path)) {
                     link += "<a href='" + crumb_path + "'>" + crumb + Path.DirectorySeparatorChar + "</a>";
                     previous_was_folder = true;
