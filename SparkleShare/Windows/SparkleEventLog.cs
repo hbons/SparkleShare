@@ -52,6 +52,8 @@ namespace SparkleShare {
             Width      = 480;
             ResizeMode = ResizeMode.NoResize;
             Background = new SolidColorBrush (Color.FromRgb (240, 240, 240));    
+			
+			AllowsTransparency = false;
             
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             
@@ -97,11 +99,11 @@ namespace SparkleShare {
                 Height = Height - 36 - 12
             };
             
-            this.web_browser.Navigating += delegate (object sender, NavigatingCancelEventArgs e) {
+            /*this.web_browser.Navigating += delegate (object sender, NavigatingCancelEventArgs e) {
                 string url = e.Uri.ToString ();
                 Controller.LinkClicked (url);
             };
-            
+            */
             
             this.canvas = new Canvas ();
             Content = this.canvas;
@@ -258,9 +260,8 @@ namespace SparkleShare {
                 Dispatcher.Invoke ((Action) delegate {
                     //if (this.progress_indicator.Superview == ContentView) TODO: spinner
                        // this.progress_indicator.RemoveFromSuperview ();
-
-                    this.web_browser.NavigateToString (html);
-                    
+					this.web_browser.NavigateToString (html);
+					//MessageBox.Show (html);
                     if (!this.canvas.Children.Contains (this.web_browser)) {
                         this.canvas.Children.Add (this.web_browser);
                         Canvas.SetLeft (this.web_browser, 0);

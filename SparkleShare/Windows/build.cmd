@@ -7,9 +7,6 @@ set msbuild="%WinDirNet%\v3.5\msbuild.exe"
 if not exist %msbuild% set msbuild="%WinDirNet%\v4.0.30319\msbuild.exe"
 set wixBinDir=%WIX%\bin
 
-cd lib
-copy * ..\..\..\bin
-cd ..
 
 copy ..\..\data\icons\sparkleshare.ico ..\..\bin
 
