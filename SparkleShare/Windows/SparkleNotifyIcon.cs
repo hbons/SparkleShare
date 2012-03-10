@@ -67,13 +67,28 @@ namespace SparkleShare {
             }
 		}
 
+        public string HeaderText {
+            get {
+                return header_text;
+            }
+            
+            set {
+				header_text = value;
+            }
+        }
+		
         public string Text {
             get {
                 return (string) GetValue (TextProperty);
             }
             
             set {
-                SetValue (TextProperty, value);
+				string text = value;
+				
+				if (!string.IsNullOrEmpty (header_text))
+					text = header_text + "\n" + text;
+					
+                SetValue (TextProperty, text);
             }
         }
 
@@ -108,6 +123,7 @@ namespace SparkleShare {
 			"Text",	typeof(string), typeof (SparkleNotifyIcon), new PropertyMetadata (OnTextChanged));
 
         
+		private string header_text;
         private Forms.NotifyIcon notify_icon;
 		private HookProc hook_proc_ref;
 		private int mouse_hook_handle;
