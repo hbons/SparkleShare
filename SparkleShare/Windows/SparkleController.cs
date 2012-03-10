@@ -160,11 +160,7 @@ namespace SparkleShare {
 
         public override void OpenFile (string url)
         {
-            Process process = new Process ();
-            process.StartInfo.FileName  = "start";
-            process.StartInfo.Arguments = "\"" + url + "\"";
-
-            process.Start ();
+			Process.Start (url);
         }
 
 
