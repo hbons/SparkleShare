@@ -123,6 +123,7 @@
       <Link>Program.cs</Link>
     </Compile>
     <Compile Include="SparkleNotifyIcon.cs" />
+    <Compile Include="SparkleSpinner.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SparkleLib\windows\SparkleLib.csproj">
@@ -280,6 +281,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\data\icons\document-moved-12.png">
       <Link>Pixmaps\document-moved-12.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\process-working-22.png">
+      <Link>Pixmaps\process-working-22.png</Link>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
