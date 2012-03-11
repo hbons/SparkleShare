@@ -37,8 +37,7 @@ namespace SparkleLib {
         public List<string> Edited    = new List<string> ();
         public List<string> MovedFrom = new List<string> ();
         public List<string> MovedTo   = new List<string> ();
-
-        public List<SparkleNote> Notes = new List<SparkleNote> ();
+		
 
         public string RelativeTimestamp {
             get {
@@ -57,7 +56,7 @@ namespace SparkleLib {
                         ? time_span.Hours + " hours ago"
                         : "an hour ago";
 
-                 if (time_span <= TimeSpan.FromDays (30))
+                if (time_span <= TimeSpan.FromDays (30))
                     return time_span.Days > 1
                         ? time_span.Days + " days ago"
                         : "a day ago";
@@ -70,17 +69,8 @@ namespace SparkleLib {
                 return time_span.Days > 365
                     ? (time_span.Days / 365) + " years ago"
                     : "a year ago";
-           }
-       }
-   }
-
-
-    public class SparkleNote {
-
-        public SparkleUser User;
-
-        public DateTime Timestamp;
-        public string Body;
+            }   
+        }
     }
 
 
