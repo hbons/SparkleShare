@@ -24,7 +24,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Forms.Integration;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -458,7 +457,7 @@ namespace SparkleShare {
                         
                         Buttons.Add (finish_button);
                         Buttons.Add (cancel_button);
-                        
+
                                                                                                     
                         Controller.UpdateProgressBarEvent += delegate (double percentage) {
                             Dispatcher.Invoke ((Action) delegate {

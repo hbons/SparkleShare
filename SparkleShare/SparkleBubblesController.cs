@@ -36,11 +36,6 @@ namespace SparkleShare {
                 ShowBubble (change_set.User.Name, FormatMessage (change_set),
                     Program.Controller.GetAvatar (change_set.User.Email, 36));
             };
-
-            Program.Controller.NoteNotificationRaised += delegate (SparkleUser user, string folder_name) {
-                ShowBubble (user.Name, "added a note to '" + folder_name + "'",
-                    Program.Controller.GetAvatar (user.Email, 36));
-            };
         }
 
 
