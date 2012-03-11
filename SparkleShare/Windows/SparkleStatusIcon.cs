@@ -289,10 +289,7 @@ namespace SparkleShare {
         
         public void ShowBalloon (string title, string subtext, string image_path)
         {
-            // TODO:
-            // - Use the image pointed to by image_path
-            // - Find a way to use the prettier (Win7?) balloons
-            //this.notify_icon.ShowBalloonTip (5 * 1000, title, subtext, Forms.ToolTipIcon.Info);
+            this.notify_icon.ShowBalloonTip (title, subtext, image_path);
         }
         
 
