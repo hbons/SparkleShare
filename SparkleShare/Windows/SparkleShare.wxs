@@ -2,18 +2,16 @@
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
   <Product Name='SparkleShare' Id='184950D5-67F6-4D06-9717-7E2F1607A7B0' UpgradeCode='D3DF1D99-87F5-47A7-A349-863DD6E4B73A'
-    Language='1033' Codepage='1252' Version='0.8.1' Manufacturer='sparkleshare.org'>
+    Language='1033' Codepage='1252' Version='0.8.1' Manufacturer='SparkleShare'>
 
-    <Package Id='*' Keywords='Installer' Description="SparkleShare Installer"
-      Comments='This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.' Manufacturer='sparkleshare.org'
+    <Package Id='*' Keywords='Installer' Description="SparkleShare Setup" Manufacturer='SparkleShare'
       InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
 
     <Media Id='1' Cabinet='SparkleShare.cab' EmbedCab='yes' DiskPrompt='SparkleShare CAB' />
-    <Property Id='DiskPrompt' Value="sparkleshare.org Bundle CAB Installation" />
+    <Property Id='DiskPrompt' Value="SparkleShare Bundle CAB Installation" />
 
     <Directory Id='TARGETDIR' Name='SourceDir'>
       <Directory Id='ProgramFilesFolder' Name='PFiles'>
-        <Directory Id='sparkleshareDotOrgDir' Name='sparkleshare.org'>
           <Directory Id='INSTALLDIR' Name='SparkleShare'>
             <Component Id='SparkleShare.exe' Guid='0DA582D5-4ABE-4251-9F62-E7DEA76F10E1'>
               <File Id='SparkleShare.exe' Name='SparkleShare.exe' Source='!(wix.root)\bin\SparkleShare.exe' KeyPath='yes' DiskId='1' />
@@ -33,62 +31,36 @@
             </Directory>
             <Directory Id='PLUGINS_DIR' Name='plugins'>
             </Directory>
-          </Directory>
         </Directory>
       </Directory>
       <Directory Id="ProgramMenuFolder">
-        <Directory Id="ApplicationProgramsFolder" Name="SparkleShare">
           <Component Id="ApplicationShortcut" Guid="468550D5-67F6-4D06-97A2-7E2F1607A7B0">
             <Shortcut Id="ApplicationStartMenuShortcut"
                       Name="SparkleShare"
-                      Description="Collaboration and sharing tool that is designed to keep things simple"
                       Target="[INSTALLDIR]SparkleShare.exe"
                       WorkingDirectory="INSTALLDIR"/>
             <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
             <RegistryValue Root="HKCU" Key="Software\Microsoft\SparkleShare" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
           </Component>
-        </Directory>
       </Directory>
-      <Component Id="Autostart" Guid="468321D5-6AB6-248E-97A2-7E2F162447B0">
-        <RegistryValue Root="HKMU" Key="Software\Microsoft\Windows\CurrentVersion\Run" Name="SparkleShare" Type="string" Value="[INSTALLDIR]SparkleShare.exe" KeyPath="yes" />
-      </Component>
     </Directory>
 
-    <Feature Id='SparkleShareFeature' Title='SparkleShare' Description='This is the SparkleShare executables.' Level='1' AllowAdvertise='no'>
+    <Feature Id='SparkleShareFeature' Title='SparkleShare' Description='SparkleShare' Level='1' AllowAdvertise='no'>
       <ComponentRef Id="SparkleShare.exe" />
       <ComponentRef Id="SparkleShareInviteOpener.exe" />
       <ComponentRef Id="Libraries" />
       <ComponentRef Id="ApplicationShortcut" />
-      <ComponentRef Id="Autostart" />
       <ComponentGroupRef Id='msysGitComponentGroup' />
       <ComponentGroupRef Id='poComponentGroup' />
       <ComponentGroupRef Id='pluginsComponentGroup' />
     </Feature>
 
+	<WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
+
     <UI>
       <UIRef Id="WixUI_InstallDir" />
-      <!-- <Publish Dialog="ExitDialog"
-               Control="Finish"
-               Event="DoAction"
-               Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish> -->
     </UI>
-    <!-- <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch SparkleShare" /> -->
     
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
-    
-    <WixVariable Id="WixUILicenseRtf" Value="..\..\LICENSE" />
-    <WixVariable Id="WixUIBannerBmp" Value="..\..\data\install\bannrbmp.bmp" />
-    <WixVariable Id="WixUIDialogBmp" Value="..\..\data\install\dlgbmp.bmp" />
-    
-    <Property Id="WixShellExecTarget" Value="[#SparkleShare.exe]" />
-    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
-
-    <InstallExecuteSequence>
-      <Custom Action="LaunchApplication" After="InstallFinalize">Not Installed</Custom>
-    </InstallExecuteSequence>
-
-    <!-- <CustomAction Id='LaunchProduct' FileKey='ApplicationExe' ExeCommand='' Return="asyncNoWait" /> -->
-
   </Product>
-
 </Wix>

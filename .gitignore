@@ -55,3 +55,7 @@ gnome-doc-utils.make
 data/plugins/*.xml
 desktop.ini
 _ReSharper.*
+*.msi
+*.wixobj
+*.wixpdb
+*.wxs
