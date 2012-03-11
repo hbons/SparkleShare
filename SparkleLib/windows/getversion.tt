@@ -37,7 +37,7 @@
         
         VERSION=DescribeOutput;
         ASM_VERSION=String.Format("{0}.{1}",version[0],version[1]);
-        ASM_FILE_VERSION=String.Format("{0}.{1}.{2}.{3}",version[0],version[1],version[2],version[3]);
+        ASM_FILE_VERSION="";
         
     } catch (Exception e) {
         // Current defaults
