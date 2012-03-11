@@ -347,8 +347,7 @@ namespace SparkleShare {
                                 existing_set.Deleted.AddRange (change_set.Deleted);
                                 existing_set.MovedFrom.AddRange (change_set.MovedFrom);
                                 existing_set.MovedTo.AddRange (change_set.MovedTo);
-                                existing_set.Notes.AddRange (change_set.Notes);
-
+                                
                                 existing_set.Added   = existing_set.Added.Distinct ().ToList ();
                                 existing_set.Edited  = existing_set.Edited.Distinct ().ToList ();
                                 existing_set.Deleted = existing_set.Deleted.Distinct ().ToList ();
@@ -401,42 +400,42 @@ namespace SparkleShare {
                         event_entry += "<dd>Did something magical</dd>";
 
                     } else {
-                        if (change_set.Edited.Count > 0) {
-                            foreach (string file_path in change_set.Edited) {
-                                    event_entry += "<dd class='document edited'>";
-
-                                    event_entry += FormatBreadCrumbs (
-                                        Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, change_set.Folder),
-                                        file_path
-                                    );
-
-                                    event_entry += "</dd>";
-                            }
-                        }
-    
                         if (change_set.Added.Count > 0) {
                             foreach (string file_path in change_set.Added) {
                                 event_entry += "<dd class='document added'>";
+								
+                                event_entry += FormatBreadCrumbs (
+                                    Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, change_set.Folder),
+                                    file_path
+                                );
 
-                                    event_entry += FormatBreadCrumbs (
-                                        Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, change_set.Folder),
-                                        file_path
-                                    );
+                                event_entry += "</dd>";
+                            }
+                        }
+						
+                        if (change_set.Edited.Count > 0) {
+                            foreach (string file_path in change_set.Edited) {
+                                event_entry += "<dd class='document edited'>";
 
-                                    event_entry += "</dd>";
+                                event_entry += FormatBreadCrumbs (
+                                    Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, change_set.Folder),
+                                    file_path
+                                );
+
+                                event_entry += "</dd>";
                             }
                         }
     
                         if (change_set.Deleted.Count > 0) {
                             foreach (string file_path in change_set.Deleted) {
-                                    event_entry += "<dd class='document deleted'>";
+                                event_entry += "<dd class='document deleted'>";
+								
+                                event_entry += FormatBreadCrumbs (
+                                    Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, change_set.Folder),
+                                    file_path
+                                );
 
-                                    event_entry += FormatBreadCrumbs (
-                                        Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, change_set.Folder),
-                                        file_path
-                                    );
-
-                                    event_entry += "</dd>";
+                                event_entry += "</dd>";
                             }
                         }
 
@@ -444,8 +443,8 @@ namespace SparkleShare {
                             int i = 0;
                             foreach (string file_path in change_set.MovedFrom) {
                                 string to_file_path = change_set.MovedTo [i];
-
-                                event_entry += "<dd class='document moved'>";
+								event_entry += "<dd class='document moved'>";
+								
                                 event_entry += FormatBreadCrumbs (
                                         Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, change_set.Folder),
                                         file_path
@@ -464,39 +463,14 @@ namespace SparkleShare {
                         }
                     }
 
-                    string comments = "";
-                    comments = "<div class=\"comments\">";
-
-                    if (change_set.Notes != null) {
-                        change_set.Notes.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
-
-                        foreach (SparkleNote note in change_set.Notes) {
-
-                            string note_avatar = GetAvatar (note.User.Email, 48);
-                            if (File.Exists (note_avatar))
-                                note_avatar = "file://" + note_avatar;
-                            else
-                                note_avatar = "<!-- $no-buddy-icon-background-image -->";
-
-                            comments += "<div class=\"comment-text\">" +
-                                        "<p class=\"comment-author\"" +
-                                        " style=\"background-image: url('" + note_avatar + "');\">" +
-                                        note.User.Name +  "</p>" +
-                                        note.Body +
-                                        "</div>";
-                        }
-                    }
-
-                    comments += "</div>";
-
                     string change_set_avatar = GetAvatar (change_set.User.Email, 48);
                     
 					if (File.Exists (change_set_avatar)) {
                         change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
 					
 				    } else {
-                        change_set_avatar = Path.Combine ("<!-- $pixmaps-path -->",
-							AssignAvatar (change_set.User.Email)); // TODO
+                        change_set_avatar = "file://<!-- $pixmaps-path -->/" +
+							AssignAvatar (change_set.User.Email);
 					}
 					
                     event_entry   += "</dl>";
@@ -514,8 +488,7 @@ namespace SparkleShare {
                         .Replace ("<!-- $event-folder -->", change_set.Folder)
                         .Replace ("<!-- $event-url -->", change_set.Url.ToString ())
                         .Replace ("<!-- $event-revision -->", change_set.Revision)
-                        .Replace ("<!-- $event-folder-color -->", AssignColor (change_set.Folder))
-                        .Replace ("<!-- $event-comments -->", comments);
+                        .Replace ("<!-- $event-folder-color -->", AssignColor (change_set.Folder));
                 }
 
                 string day_entry   = "";
@@ -1071,9 +1044,10 @@ namespace SparkleShare {
 
                 this.fetcher.Dispose ();
                 this.fetcher = null;
-
-                if (Directory.Exists (tmp_path))
-                    Directory.Delete (tmp_path, true);
+				
+				// TODO: only remove stale repos
+                //if (Directory.Exists (tmp_path))
+                //    Directory.Delete (tmp_path, true);
             };
 
             this.fetcher.Failed += delegate {
