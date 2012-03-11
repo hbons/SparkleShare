@@ -118,6 +118,9 @@ namespace SparkleShare {
             Controller.HideWindowEvent += delegate {
                 Application.Invoke (delegate {
                     HideAll ();
+					
+					if (this.content_wrapper.Child != null)
+                        this.content_wrapper.Remove (this.content_wrapper.Child);
                 });
             };
 
