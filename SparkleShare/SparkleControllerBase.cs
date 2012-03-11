@@ -82,10 +82,6 @@ namespace SparkleShare {
         public event AlertNotificationRaisedEventHandler AlertNotificationRaised;
         public delegate void AlertNotificationRaisedEventHandler (string title, string message);
 
-        public event NoteNotificationRaisedEventHandler NoteNotificationRaised;
-        public delegate void NoteNotificationRaisedEventHandler (SparkleUser user, string folder_name);
-
-
 
         public bool FirstRun {
             get {
