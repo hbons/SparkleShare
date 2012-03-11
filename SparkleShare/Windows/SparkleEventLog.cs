@@ -152,6 +152,9 @@ namespace SparkleShare {
             Controller.HideWindowEvent += delegate {
                 Dispatcher.Invoke ((Action) delegate {
                     Hide ();
+					
+					if (this.canvas.Children.Contains (this.web_browser))
+                    	this.canvas.Children.Remove (this.web_browser);
                 });
             };
             

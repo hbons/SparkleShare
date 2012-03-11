@@ -163,6 +163,9 @@ namespace SparkleShare {
                 {
                     InvokeOnMainThread (delegate {
                         PerformClose (this);
+						
+						if (this.web_view.Superview == ContentView)
+                            this.web_view.RemoveFromSuperview ();
                     });
                 }
             };
