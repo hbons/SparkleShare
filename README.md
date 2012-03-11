@@ -170,7 +170,7 @@ build
 
 ### Creating a Windows installer
 
-To create an installer package, install [WiX 3.6](http://wix.sourceforge.net/), restart Windows and run:
+To create an installer package, install [WiX 3.5](http://wix.sourceforge.net/), restart Windows and run:
 
 ```
 build installer
