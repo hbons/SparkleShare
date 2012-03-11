@@ -39,6 +39,7 @@ namespace SparkleShare {
         private Label history_label_value;
         private ComboBox combo_box;
         private WebBrowser web_browser;
+		private SparkleSpinner spinner;
         
         
         // Short alias for the translations
@@ -103,13 +104,15 @@ namespace SparkleShare {
 
 			this.web_browser.ObjectForScripting = new SparkleScriptingObject ();;
 					
+			spinner = new SparkleSpinner (22);
+			
 			// Disable annoying IE clicking sound
 			CoInternetSetFeatureEnabled (21, 0x00000002, true);
 
             
             this.canvas = new Canvas ();
             Content     = this.canvas;
-            
+			
             this.canvas.Children.Add (size_label);
             Canvas.SetLeft (size_label, 24);
             Canvas.SetTop (size_label, 4);
@@ -130,6 +133,10 @@ namespace SparkleShare {
             this.canvas.Children.Add (background);
             Canvas.SetLeft (background, 0);
             Canvas.SetTop (background, 36);
+			
+            this.canvas.Children.Add (spinner);
+            Canvas.SetLeft (spinner, (Width / 2) - 15);
+            Canvas.SetTop (spinner, (Height / 2) - 22);
 			
             this.canvas.Children.Add (line);
             Canvas.SetLeft (line, 0);
@@ -181,10 +188,10 @@ namespace SparkleShare {
             };
 
             Controller.ContentLoadingEvent += delegate {
-                if (this.canvas.Children.Contains (this.web_browser))
-                    this.canvas.Children.Remove (this.web_browser);
-
-                    //    ContentView.AddSubview (this.progress_indicator); //TODO spinner
+				this.spinner.Start ();
+				
+				if (this.canvas.Children.Contains (this.web_browser))
+					this.canvas.Children.Remove (this.web_browser);
             };
         }
 
@@ -277,8 +284,7 @@ namespace SparkleShare {
 				
 				
                 Dispatcher.Invoke ((Action) delegate {
-                    //if (this.progress_indicator.Superview == ContentView) TODO: spinner
-                       // this.progress_indicator.RemoveFromSuperview ();
+                    this.spinner.Stop ();
 					
 					this.web_browser.NavigateToString (html);
 					
