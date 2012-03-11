@@ -89,6 +89,12 @@ namespace SparkleShare {
                 Height = 1,
                 Fill   = new SolidColorBrush (Color.FromRgb (223, 223, 223))    
             };
+			
+			Shapes.Rectangle background = new Shapes.Rectangle () {
+                Width  = Width,
+                Height = Height,
+                Fill   = new SolidColorBrush (Color.FromRgb (250, 250, 250))    
+            };
                         
             this.web_browser = new WebBrowser () {
                 Width  = Width - 7,
@@ -121,6 +127,10 @@ namespace SparkleShare {
             Canvas.SetLeft (this.history_label_value, 130 + history_label_rect.Width);
             Canvas.SetTop (this.history_label_value, 4);
             
+            this.canvas.Children.Add (background);
+            Canvas.SetLeft (background, 0);
+            Canvas.SetTop (background, 36);
+			
             this.canvas.Children.Add (line);
             Canvas.SetLeft (line, 0);
             Canvas.SetTop (line, 35);
@@ -239,9 +249,9 @@ namespace SparkleShare {
 				pixmaps_path = pixmaps_path.Replace ("\\", "/");
 				
                 html = html.Replace ("<a href=", "<a class='windows' href=");
-                html = html.Replace ("<!-- $body-font-family -->", "sans-serif");
-                html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
-                html = html.Replace ("<!-- $body-font-size -->", "13.4px");
+                html = html.Replace ("<!-- $body-font-family -->", "'Segoe UI', sans-serif");
+                html = html.Replace ("<!-- $day-entry-header-font-size -->", "13px");
+                html = html.Replace ("<!-- $body-font-size -->", "12px");
                 html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
                 html = html.Replace ("<!-- $small-color -->", "#ddd");
                 html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
