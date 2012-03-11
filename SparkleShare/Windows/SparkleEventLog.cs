@@ -17,6 +17,7 @@
 
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Threading;
@@ -24,7 +25,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
+using Shapes = System.Windows.Shapes;
 
 namespace SparkleShare {
 
@@ -55,7 +57,8 @@ namespace SparkleShare {
             Background            = new SolidColorBrush (Color.FromRgb (240, 240, 240));    
 			AllowsTransparency    = false;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
+			
+			WriteOutImages ();
                         
             Label size_label = new Label () {
                 Content    = "Size:",
@@ -81,16 +84,15 @@ namespace SparkleShare {
             history_label.Measure (new Size (Double.PositiveInfinity, Double.PositiveInfinity));
             Rect history_label_rect = new Rect (history_label.DesiredSize);
             
-            Rectangle line = new Rectangle () {
-                Width = Width,
+            Shapes.Rectangle line = new Shapes.Rectangle () {
+                Width  = Width,
                 Height = 1,
-                Fill = new SolidColorBrush (Color.FromRgb (223, 223, 223))    
+                Fill   = new SolidColorBrush (Color.FromRgb (223, 223, 223))    
             };
                         
             this.web_browser = new WebBrowser () {
                 Width  = Width - 7,
-                Height = Height - 36 - 12,
-				
+                Height = Height - 36 - 12
             };
 
 			this.web_browser.ObjectForScripting = new SparkleScriptingObject ();;
@@ -100,7 +102,7 @@ namespace SparkleShare {
 
             
             this.canvas = new Canvas ();
-            Content = this.canvas;
+            Content     = this.canvas;
             
             this.canvas.Children.Add (size_label);
             Canvas.SetLeft (size_label, 24);
@@ -119,11 +121,10 @@ namespace SparkleShare {
             Canvas.SetLeft (this.history_label_value, 130 + history_label_rect.Width);
             Canvas.SetTop (this.history_label_value, 4);
             
-            
             this.canvas.Children.Add (line);
             Canvas.SetLeft (line, 0);
             Canvas.SetTop (line, 35);
-            
+			
 
             Closing += Close;
 			
@@ -232,9 +233,12 @@ namespace SparkleShare {
                 if (html == null)
                     html = Controller.HTML;
 				
+				string pixmaps_path = Path.Combine (
+					SparkleLib.SparkleConfig.DefaultConfig.TmpPath, "Pixmaps");
+				
+				pixmaps_path = pixmaps_path.Replace ("\\", "/");
 				
                 html = html.Replace ("<a href=", "<a class='windows' href=");
-
                 html = html.Replace ("<!-- $body-font-family -->", "sans-serif");
                 html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
                 html = html.Replace ("<!-- $body-font-size -->", "13.4px");
@@ -243,25 +247,21 @@ namespace SparkleShare {
                 html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
                 html = html.Replace ("<!-- $a-color -->", "#0085cf");
                 html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
-             //   html = html.Replace ("<!-- $pixmaps-path -->",
-               //     "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
-                 //   "Pixmaps"));
-
-         //       html = html.Replace ("<!-- $document-added-background-image -->",
-           //         "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
-             //       "Pixmaps", "document-added-12.png"));
-
-              //  html = html.Replace ("<!-- $document-deleted-background-image -->",
-                //    "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
-                  //  "Pixmaps", "document-deleted-12.png"));
-
-                //html = html.Replace ("<!-- $document-edited-background-image -->",
-                  //  "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    //"Pixmaps", "document-edited-12.png"));
-
-                //html = html.Replace ("<!-- $document-moved-background-image -->",
-                  //  "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    //"Pixmaps", "document-moved-12.png"));
+			
+				html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
+			
+				html = html.Replace ("<!-- $document-added-background-image -->",
+					pixmaps_path + "/document-added-12.png");
+				
+				html = html.Replace ("<!-- $document-edited-background-image -->",
+					pixmaps_path + "/document-edited-12.png");
+				
+				html = html.Replace ("<!-- $document-deleted-background-image -->",
+					pixmaps_path + "/document-deleted-12.png");
+				
+				html = html.Replace ("<!-- $document-moved-background-image -->",
+					pixmaps_path + "/document-moved-12.png");
+				
 				
                 Dispatcher.Invoke ((Action) delegate {
                     //if (this.progress_indicator.Superview == ContentView) TODO: spinner
@@ -280,6 +280,48 @@ namespace SparkleShare {
             thread.Start ();
         }
         
+		
+		private void WriteOutImages ()
+		{
+			string pixmaps_path = Path.Combine (
+				SparkleLib.SparkleConfig.DefaultConfig.TmpPath,
+				"Pixmaps"
+			);
+			
+			if (!Directory.Exists (pixmaps_path))
+				Directory.CreateDirectory (pixmaps_path);
+			
+			char [] letters = new char [] {'a', 'b', 'c',
+				'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'};
+			
+			foreach (char letter in letters) {	
+				BitmapSource image = SparkleUIHelpers.GetImageSource ("avatar-" + letter);
+				string file_path = Path.Combine (pixmaps_path, "avatar-" + letter + ".png");
+					
+				using (FileStream stream = new FileStream (file_path, FileMode.Create))
+			    {
+			        BitmapEncoder encoder = new PngBitmapEncoder ();
+			        encoder.Frames.Add (BitmapFrame.Create (image));
+			        encoder.Save (stream);
+			    }
+			}
+			
+			string [] actions = new string [] {"added",
+				"deleted", "edited", "moved"};
+			
+			foreach (string action in actions) {	
+				BitmapSource image = SparkleUIHelpers.GetImageSource ("document-" + action + "-12");
+				string file_path = Path.Combine (pixmaps_path, "document-" + action + "-12.png");
+					
+				using (FileStream stream = new FileStream (file_path, FileMode.Create))
+			    {
+			        BitmapEncoder encoder = new PngBitmapEncoder ();
+			        encoder.Frames.Add (BitmapFrame.Create (image));
+			        encoder.Save (stream);
+			    }
+			}
+		}
+		
         
         private void Close (object sender, CancelEventArgs args)
         {
