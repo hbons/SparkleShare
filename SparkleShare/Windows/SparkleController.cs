@@ -26,7 +26,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
-using CefSharp;
 using Microsoft.Win32;
 using SparkleLib;
 
@@ -55,20 +54,6 @@ namespace SparkleShare {
 
         public override void Initialize ()
         {
-            Settings settings                = new Settings ();
-            BrowserSettings browser_settings = new BrowserSettings ();
-
-            if (!CEF.Initialize (settings, browser_settings)) {
-                Console.WriteLine ("Could not initialise CEF");
-                return;
-            }
-
-            CEF.RegisterScheme ("application", "sparkleshare", new ApplicationSchemeHandlerFactory ());
-            CEF.RegisterScheme ("application", "file", new FileSchemeHandlerFactory ());
-            
-            Application.EnableVisualStyles ();
-            Application.SetCompatibleTextRenderingDefault (false);
-
             // Add msysgit to path, as we cannot asume it is added to the path
             // Asume it is installed in @"<exec dir>\msysgit\bin"
             string executable_dir = Path.GetDirectoryName (Application.ExecutablePath);
@@ -94,8 +79,9 @@ namespace SparkleShare {
         public override string EventLogHTML
         {
             get {
-                string html = Properties.Resources.event_log_html;
-                html = html.Replace ("<!-- $jquery-url -->", "application://sparkleshare/jquery.js");
+                string html = SparkleUIHelpers.GetHTML ("event-log.html");
+                html        = html.Replace ("<!-- $jquery -->", SparkleUIHelpers.GetHTML ("jquery.js"));
+				
                 return html;
             }
         }
@@ -104,7 +90,7 @@ namespace SparkleShare {
         public override string DayEntryHTML
         {
             get {
-                return Properties.Resources.day_entry_html;
+                return SparkleUIHelpers.GetHTML ("day-entry.html");
             }
         }
 
@@ -112,7 +98,7 @@ namespace SparkleShare {
         public override string EventEntryHTML
         {
             get {
-                return Properties.Resources.event_entry_html;
+                return SparkleUIHelpers.GetHTML ("event-entry.html");
             }
         }
 
@@ -125,6 +111,8 @@ namespace SparkleShare {
 
         public override void InstallProtocolHandler()
         {
+		/* FIXME: Need to find a way to do this without administrator privilidges (or move to the installer)
+		 
             // Get assembly location
             string location   = System.Reflection.Assembly.GetExecutingAssembly ().Location;
             string folder     = Path.GetDirectoryName (location);
@@ -141,6 +129,7 @@ namespace SparkleShare {
 
             string action_key = "HKEY_CLASSES_ROOT\\sparkleshare\\shell\\open\\command";
             Registry.SetValue (action_key, "", "\"" + invite_exe + "\" \"%1\"");
+        */
         }
 
 
@@ -171,11 +160,7 @@ namespace SparkleShare {
 
         public override void OpenFile (string url)
         {
-            Process process = new Process ();
-            process.StartInfo.FileName  = "start";
-            process.StartInfo.Arguments = "\"" + url + "\"";
-
-            process.Start ();
+			Process.Start (url);
         }
 
 
@@ -183,8 +168,7 @@ namespace SparkleShare {
         {
             Process process             = new Process ();
             process.StartInfo.FileName  = "explorer";
-            process.StartInfo.Arguments = ",/root," +
-                Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, subfolder);
+            process.StartInfo.Arguments = Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, subfolder);
             
             process.Start();
         }

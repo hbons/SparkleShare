@@ -21,6 +21,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Xaml;
 
 namespace SparkleShare {
 
@@ -108,7 +109,7 @@ namespace SparkleShare {
             this.updates = new Label () {
                 Content    = "Checking for updates...",
                 FontSize   = 11,
-                Foreground = new SolidColorBrush (Color.FromRgb (45, 62, 81)) // TODO: color looks off
+                Foreground = new SolidColorBrush (Color.FromRgb (135, 178, 227))
             };
             
             TextBlock credits = new TextBlock () {

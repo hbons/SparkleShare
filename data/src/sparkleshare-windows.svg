@@ -621,8 +621,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="6.5546478"
-     inkscape:cy="11.465966"
+     inkscape:cx="16.709944"
+     inkscape:cy="10.037034"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -637,7 +637,9 @@
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
-     fit-margin-bottom="0">
+     fit-margin-bottom="0"
+     showguides="true"
+     inkscape:guide-bbox="true">
     <inkscape:grid
        type="xygrid"
        id="grid2996"
@@ -645,6 +647,10 @@
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="-0.97227183,31.377863"
+       id="guide3920" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -837,23 +843,23 @@
     <path
        sodipodi:nodetypes="cccccc"
        id="path10372"
-       d="m 225.02287,711.88807 0.98835,-1.03125 c 1.38713,-10e-6 4.47783,-0.0221 4.47783,-0.0221 0,0 1.06986,-0.10063 1.06133,1.03839 0.95546,-0.002 0.94901,1.04242 0.94901,1.04242 l -0.0442,7.41004"
+       d="m 225.02287,711.88807 0.98835,-1.03125 c 1.38713,-10e-6 4.47783,-0.0221 4.47783,-0.0221 0,0.83969 1.06133,1.03839 1.06133,1.03839 0.95546,-0.002 0.94901,1.04242 0.94901,1.04242 l -0.0442,7.41004"
        style="fill:#fbc264;fill-opacity:1;fill-rule:evenodd;stroke:#ee9845;stroke-width:0.99999964;stroke-miterlimit:4;stroke-opacity:1;display:inline;enable-background:new"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Hylke\Code\SparkleShare\data\src\rect7965.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       sodipodi:nodetypes="cccccccccscc"
+       sodipodi:nodetypes="cccccccccsccc"
        id="path10374"
-       d="m 231.5177,720.32557 c -1e-5,0.11468 -0.0728,0.18749 -0.1875,0.1875 l -12.71875,0 c -0.11468,-10e-6 -0.18749,-0.0728 -0.1875,-0.1875 l 0,-6.3125 c 1e-5,-0.11468 0.0728,-0.18749 0.1875,-0.1875 10.97759,2.74489 6.68711,-0.79219 6.68711,-0.79219 0,0 1.06767,-1.15396 1.12857,-1.15436 l 4.11008,-0.0471 c 0,0 -0.41496,0.86719 0.0159,0.90906 l 0.96468,0.0937 c 0,0 0.33967,5.78287 -4e-5,7.49085 z"
-       style="fill:none;stroke:#fdd999;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;display:inline;enable-background:new;stroke-dasharray:none;stroke-linejoin:round"
+       d="m 231.5177,720.32557 c -1e-5,0.11468 -0.0728,0.18749 -0.1875,0.1875 l -12.71875,0 c -0.11468,-10e-6 -0.18749,-0.0728 -0.1875,-0.1875 l 0,-6.3125 c 1e-5,-0.11468 0.0728,-0.18749 0.1875,-0.1875 10.97759,2.74489 6.68711,-0.79219 6.68711,-0.79219 0,0 1.06767,-1.15396 1.12857,-1.15436 l 3.37525,-0.0471 c 0,0 0.31987,0.86719 0.75073,0.90906 l 0.96468,0.0937 c 0,0 0.33967,5.78287 -4e-5,7.49085 z"
+       style="fill:none;stroke:#fdd999;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;enable-background:new"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Hylke\Code\SparkleShare\data\src\rect7965.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="fill:url(#linearGradient7924);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient7643);stroke-width:0.99999970000000005;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
+       style="fill:url(#linearGradient7924);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient7643);stroke-width:0.9999997;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
        d="m 224.2052,711.85682 c 0.2554,0 0.45965,0.13987 0.59375,0.34375 0.43264,0.54853 1.12354,1.65625 1.65625,1.65625 l 4.6875,0 c 0.83807,0 1.34374,0.5428 1.34375,1.46875 l 0,6.53125 0.0312,1 -15.03125,0 0,-0.96875 0,-9.04263 c 0,-0.73174 0.25868,-0.98862 1.04955,-0.98862 z"
        id="path10377"
        sodipodi:nodetypes="cccccccccccc"
@@ -862,20 +868,20 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="C:\Users\Hylke\Code\SparkleShare\data\src\rect7965.png"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc"
+       id="path3926"
+       d="m 224.23645,711.88807 c 0.2554,0 0.4284,0.10862 0.5625,0.3125 0.43264,0.54853 1.12354,1.65625 1.65625,1.65625 l 5.03125,0"
+       style="fill:none;stroke:#f2b274;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new" />
+    <path
        style="opacity:0.3;fill:none;stroke:#ffffff;stroke-width:0.9999997;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
-       d="m 224.04895,712.85682 c 0.74659,0.74659 1.60864,2 2.40625,2 l 4.6875,0 c 0.20314,0 0.22418,0.0344 0.25,0.0625 0.0258,0.0281 0.0937,0.12531 0.0937,0.40625 l 0,6.53125 -13,0 0,-9 5.5625,0 z"
+       d="m 224.04895,712.85682 c 0.83498,1.23273 1.60864,2 2.40625,2 l 4.6875,0 c 0.20314,0 0.22418,0.0344 0.25,0.0625 0.0258,0.0281 0.0937,0.12531 0.0937,0.40625 l 0,6.53125 -13,0 0,-9 5.5625,0 z"
        id="path10379"
        sodipodi:nodetypes="cccscccccc"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="C:\Users\Hylke\Code\SparkleShare\data\src\rect7965.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <path
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccc"
-       id="path7974"
-       d="m 224.2052,711.85682 c 0.2554,0 0.45965,0.13987 0.59375,0.34375 0.43264,0.54853 1.12354,1.65625 1.65625,1.65625 l 5.84532,0"
-       style="fill:none;stroke:url(#radialGradient7986);stroke-width:0.9999997;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new"
        inkscape:export-filename="C:\Users\Hylke\Code\SparkleShare\data\src\rect7965.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
