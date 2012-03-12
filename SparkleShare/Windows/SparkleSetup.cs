@@ -16,17 +16,21 @@
 
 
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows.Forms.Integration;
+using System.IO;
+using System.Media;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Data;
-using System.Media;
+
+using Drawing = System.Drawing;
+using Imaging = System.Windows.Interop.Imaging;
 using WPF = System.Windows.Controls;
 
 namespace SparkleShare {
@@ -119,9 +123,11 @@ namespace SparkleShare {
                         Buttons.Add (continue_button);
                         Buttons.Add (cancel_button);
                         
+						name_box.Focus ();
+						name_box.Select (name_box.Text.Length, 0);
                         
                         Controller.UpdateSetupContinueButtonEvent += delegate (bool enabled) {
-                        Dispatcher.Invoke ((Action) delegate {
+                        	Dispatcher.Invoke ((Action) delegate {
                                 continue_button.IsEnabled = enabled;
                             });
                         };
@@ -232,28 +238,51 @@ namespace SparkleShare {
                             SelectionMode = SelectionMode.Single
                         };
                         
-                        GridView grid_view = new GridView ();
-                        
-                        grid_view.Columns.Add (
-                            new GridViewColumn {
-                                DisplayMemberBinding = new Binding ("Text")
-                            }
-                        );
-                        
-                        // TODO: 
-                        // - Disable column headers
-                        // - Add plugin images
-                        // - Nicer markup: <b>Name</b>\n<small>Description</small>
+                        GridView grid_view = new GridView () {
+							AllowsColumnReorder = false
+						};
+						
+						grid_view.Columns.Add (new GridViewColumn ());
+					
+						string xaml =	
+							"<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"" +
+							"  xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\">" +
+						    "  <Grid>" +
+						    "    <StackPanel Orientation=\"Horizontal\">" +
+						    "      <Image Margin=\"5,0,0,0\" Source=\"{Binding Image}\" Height=\"24\" Width=\"24\"/>" +
+						    "      <StackPanel>" +
+							"        <TextBlock Padding=\"10,4,0,0\" FontWeight=\"Bold\" Text=\"{Binding Name}\">" +
+							"        </TextBlock>" +
+							"        <TextBlock Padding=\"10,0,0,4\" Opacity=\"0.5\" Text=\"{Binding Description}\">" +
+							"        </TextBlock>" +
+							"      </StackPanel>" +
+							"    </StackPanel>" +
+							"  </Grid>" +
+							"</DataTemplate>";
+
+    					grid_view.Columns [0].CellTemplate = (DataTemplate) XamlReader.Parse (xaml);
+												
+						Style header_style = new Style(typeof (GridViewColumnHeader));
+						header_style.Setters.Add (new Setter (GridViewColumnHeader.VisibilityProperty, Visibility.Collapsed));
+					    grid_view.ColumnHeaderContainerStyle = header_style;
+					    
                         foreach (SparklePlugin plugin in Controller.Plugins) {
+							BitmapFrame image = BitmapFrame.Create (
+								new Uri (plugin.ImagePath)
+							);
+						
+							
                             list_view.Items.Add (
                                 new {
-                                    Text = plugin.Name + "\n" + plugin.Description
-                            });
+                                    Name        = plugin.Name,
+									Description = plugin.Description,
+									Image       = image
+								}
+                            );
                         }        
                         
                         list_view.View          = grid_view;
                         list_view.SelectedIndex = Controller.SelectedPluginIndex;
-                        
                         
                         TextBlock address_label = new TextBlock () {
                             Text       = "Address:",
@@ -288,8 +317,7 @@ namespace SparkleShare {
                             Width      = 200,
                             Foreground = new SolidColorBrush (Color.FromRgb (128, 128, 128))
                         };
-                        
-                        
+						
                         Button cancel_button = new Button () {
                             Content = "Cancel"
                         };
@@ -327,12 +355,13 @@ namespace SparkleShare {
                         Canvas.SetTop (path_help_label, 330);
                         Canvas.SetRight (path_help_label, 30);
                         
-
                         Buttons.Add (add_button);
                         Buttons.Add (cancel_button);
                         
-                        
-                        Controller.ChangeAddressFieldEvent += delegate (string text,
+						address_box.Focus ();
+                        address_box.Select (address_box.Text.Length, 0);
+						
+						Controller.ChangeAddressFieldEvent += delegate (string text,
                             string example_text, FieldState state) {
 
                             Dispatcher.Invoke ((Action) delegate {
@@ -341,7 +370,6 @@ namespace SparkleShare {
                                 address_help_label.Text = example_text;
                             });
                         };
-
 
                         Controller.ChangePathFieldEvent += delegate (string text,
                             string example_text, FieldState state) {
@@ -353,7 +381,7 @@ namespace SparkleShare {
                             });
                         };
                         
-                          Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
+                        Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
                             Dispatcher.Invoke ((Action) delegate {
                                 add_button.IsEnabled = button_enabled;
                             });
@@ -429,7 +457,7 @@ namespace SparkleShare {
                         
                         Buttons.Add (finish_button);
                         Buttons.Add (cancel_button);
-                        
+
                                                                                                     
                         Controller.UpdateProgressBarEvent += delegate (double percentage) {
                             Dispatcher.Invoke ((Action) delegate {
@@ -449,9 +477,22 @@ namespace SparkleShare {
                         Header      = "Something went wrong…";
                         Description = "Please check the following:";
  
-                        // TODO: Bullet points
                         
-                        
+						TextBlock help_block = new TextBlock () {
+							TextWrapping = TextWrapping.Wrap,
+                			Width        = 310	
+						};
+						
+						help_block.Inlines.Add ("Is the host online?\n\n");
+						help_block.Inlines.Add (new Bold (new Run (Controller.PreviousUrl)));
+						help_block.Inlines.Add (" is the address we've compiled. Does this look alright?\n\n");
+						help_block.Inlines.Add ("The host needs to know who you are. Did you upload the key that's in your SparkleShare folder?");
+						
+						TextBlock bullets_block = new TextBlock () {
+							Text = "•\n\n•\n\n\n•"
+						};
+						
+						
                         Button cancel_button = new Button () {
                             Content = "Cancel"
                         };
@@ -461,6 +502,16 @@ namespace SparkleShare {
                         };
                         
                         
+						
+				        ContentCanvas.Children.Add (bullets_block);
+                        Canvas.SetLeft (bullets_block, 195);
+                        Canvas.SetTop (bullets_block, 100);
+						
+				        ContentCanvas.Children.Add (help_block);
+                        Canvas.SetLeft (help_block, 210);
+                        Canvas.SetTop (help_block, 100);
+                        
+						
                         Buttons.Add (try_again_button);
                         Buttons.Add (cancel_button);
     
@@ -483,8 +534,6 @@ namespace SparkleShare {
                         Description = "Access the files from your SparkleShare folder.";
                         
                         
-                        // TODO: warnings
-                        
                         Button finish_button = new Button () {
                             Content = "Finish"
                         };
@@ -492,8 +541,28 @@ namespace SparkleShare {
                         Button open_folder_button = new Button () {
                             Content = "Open folder"
                         };
-    
-                        
+
+                        if (warnings != null) {
+							Image warning_image = new Image () {
+								Source = Imaging.CreateBitmapSourceFromHIcon (Drawing.SystemIcons.Warning.Handle,
+                                	Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions ())
+							};
+							
+                            TextBlock warning_block = new TextBlock () {
+								Text         = warnings [0],
+								Width        = 310,
+								TextWrapping = TextWrapping.Wrap
+							};
+							                                                    
+					        ContentCanvas.Children.Add (warning_image);
+	                        Canvas.SetLeft (warning_image, 193);
+	                        Canvas.SetTop (warning_image, 100);
+							                                                    
+					        ContentCanvas.Children.Add (warning_block);
+	                        Canvas.SetLeft (warning_block, 240);
+	                        Canvas.SetTop (warning_block, 100);
+						}
+						
                         Buttons.Add (finish_button);
                         Buttons.Add (open_folder_button);
                         

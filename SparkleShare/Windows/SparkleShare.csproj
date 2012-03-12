@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -15,7 +15,6 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -70,9 +69,7 @@
       <HintPath>..\..\bin\Gettext.Cs.dll</HintPath>
     </Reference>
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="CefSharp">
-      <HintPath>..\..\bin\CefSharp.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\SparkleLib\windows\GlobalAssemblyInfo.cs">
@@ -102,19 +99,7 @@
     <Compile Include="..\SparkleStatusIconController.cs">
       <Link>SparkleStatusIconController.cs</Link>
     </Compile>
-    <Compile Include="ApplicationSchemeHandler.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="FileSchemeHandler.cs" />
-    <Compile Include="Icons.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Icons.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="..\SparkleSetupController.cs" />
     <Compile Include="SparkleUI.cs" />
     <Compile Include="..\SparkleAboutController.cs" />
@@ -137,6 +122,8 @@
     <Compile Include="..\Program.cs">
       <Link>Program.cs</Link>
     </Compile>
+    <Compile Include="SparkleNotifyIcon.cs" />
+    <Compile Include="SparkleSpinner.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SparkleLib\windows\SparkleLib.csproj">
@@ -192,19 +179,6 @@
     <PreBuildEvent>$(ProjectDir)transform_tt.cmd</PreBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Icons.resx">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Icons.tt</DependentUpon>
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Icons.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="..\..\data\about.png">
       <Link>Pixmaps\about.png</Link>
     </EmbeddedResource>
@@ -251,12 +225,66 @@
     <EmbeddedResource Include="..\..\data\icons\folder-windows-16.png">
       <Link>Pixmaps\folder-windows-16.png</Link>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Icons.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Icons.resx</LastGenOutput>
-    </None>
+    <EmbeddedResource Include="..\..\data\html\day-entry.html">
+      <Link>HTML\day-entry.html</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\html\event-entry.html">
+      <Link>HTML\event-entry.html</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\html\event-log.html">
+      <Link>HTML\event-log.html</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\html\jquery.js">
+      <Link>HTML\jquery.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-a.png">
+      <Link>Pixmaps\avatar-a.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-b.png">
+      <Link>Pixmaps\avatar-b.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-c.png">
+      <Link>Pixmaps\avatar-c.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-d.png">
+      <Link>Pixmaps\avatar-d.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-e.png">
+      <Link>Pixmaps\avatar-e.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-f.png">
+      <Link>Pixmaps\avatar-f.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-g.png">
+      <Link>Pixmaps\avatar-g.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-h.png">
+      <Link>Pixmaps\avatar-h.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-i.png">
+      <Link>Pixmaps\avatar-i.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-j.png">
+      <Link>Pixmaps\avatar-j.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\avatar-k.png">
+      <Link>Pixmaps\avatar-k.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\document-added-12.png">
+      <Link>Pixmaps\document-added-12.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\document-deleted-12.png">
+      <Link>Pixmaps\document-deleted-12.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\document-edited-12.png">
+      <Link>Pixmaps\document-edited-12.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\document-moved-12.png">
+      <Link>Pixmaps\document-moved-12.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\data\icons\process-working-22.png">
+      <Link>Pixmaps\process-working-22.png</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\plugins\github.png">
@@ -423,5 +451,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pixmaps\" />
+    <Folder Include="HTML\" />
   </ItemGroup>
 </Project>
