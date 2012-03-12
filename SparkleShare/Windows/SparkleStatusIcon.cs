@@ -198,8 +198,7 @@ namespace SparkleShare {
                 };
             
             SparkleMenuItem add_item = new SparkleMenuItem () {
-                Header    = "Add Hosted Project…",
-                IsEnabled = (!Program.Controller.FirstRun)
+                Header    = "Add Hosted Project…"
             };
             
                 add_item.Click += delegate {
