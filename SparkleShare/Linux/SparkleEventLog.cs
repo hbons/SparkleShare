@@ -23,6 +23,8 @@ using Gtk;
 using Mono.Unix;
 using WebKit;
 
+using IO = System.IO;
+
 namespace SparkleShare {
 
     public class SparkleEventLog : Window {
@@ -196,7 +198,7 @@ namespace SparkleShare {
 				store.AppendValues (folder);
 				
 				if (folder.Equals (Controller.SelectedFolder))
-					this.combobox.Active = row;
+					this.combo_box.Active = row;
 				
 				row++;
         	}
@@ -233,7 +235,7 @@ namespace SparkleShare {
                 if (html == null)
                     return;
 				
-				string pixmaps_path = Path.Combine (SparkleUI.AssetsPath, "pixmaps");
+				string pixmaps_path = IO.Path.Combine (SparkleUI.AssetsPath, "pixmaps");
 				string icons_path  = new string [] {SparkleUI.AssetsPath, "icons",
                 	"hicolor", "12x12", "status"}.Combine ();
 
@@ -251,16 +253,16 @@ namespace SparkleShare {
 				html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
                 
 				html = html.Replace ("<!-- $document-added-background-image -->", 
-					"file://" + Path.Combine (icons_path + "document-added.png"));
+					"file://" + IO.Path.Combine (icons_path + "document-added.png"));
 				
 				html = html.Replace ("<!-- $document-edited-background-image -->", 
-					"file://" + Path.Combine (icons_path + "document-edited.png"));
+					"file://" + IO.Path.Combine (icons_path + "document-edited.png"));
 				
 				html = html.Replace ("<!-- $document-deleted-background-image -->", 
-					"file://" + Path.Combine (icons_path + "document-deleted.png"));
+					"file://" + IO.Path.Combine (icons_path + "document-deleted.png"));
 				
 				html = html.Replace ("<!-- $document-moved-background-image -->", 
-					"file://" + Path.Combine (icons_path + "document-moved.png"));
+					"file://" + IO.Path.Combine (icons_path + "document-moved.png"));
                         
                 
                 Application.Invoke (delegate {

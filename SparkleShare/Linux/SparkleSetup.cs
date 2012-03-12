@@ -253,14 +253,6 @@ namespace SparkleShare {
                             }
                         }));
 
-                        address_entry.Completion = new EntryCompletion();
-                        ListStore server_store = new ListStore (typeof (string));
-
-                        foreach (string host in Program.Controller.PreviousHosts)
-                            server_store.AppendValues (host);
-
-                        address_entry.Completion.Model      = server_store;
-                        address_entry.Completion.TextColumn = 0;
 
                         address_entry.Changed += delegate {
                             Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree.SelectedRow);
@@ -273,16 +265,6 @@ namespace SparkleShare {
 
                                 layout_address.PackStart (address_entry, false, false, 0);
                                 layout_address.PackStart (address_example, false, false, 0);
-
-                                    path_entry.Completion  = new EntryCompletion();
-
-                                    ListStore folder_store = new ListStore (typeof (string));
-
-                                    //foreach (string host in Program.Controller.FolderPaths)
-                                    //    folder_store.AppendValues (host);
-
-                                    path_entry.Completion.Model      = folder_store;
-                                    path_entry.Completion.TextColumn = 0;
 
                                     path_entry.Changed += delegate {
                                         Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree.SelectedRow);
