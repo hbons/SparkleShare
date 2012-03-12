@@ -23,6 +23,8 @@ using Gtk;
 using Mono.Unix;
 using WebKit;
 
+using IO = System.IO;
+
 namespace SparkleShare {
 
     public class SparkleEventLog : Window {
@@ -118,6 +120,9 @@ namespace SparkleShare {
             Controller.HideWindowEvent += delegate {
                 Application.Invoke (delegate {
                     HideAll ();
+					
+					if (this.content_wrapper.Child != null)
+                        this.content_wrapper.Remove (this.content_wrapper.Child);
                 });
             };
 
@@ -184,12 +189,19 @@ namespace SparkleShare {
 
             store.AppendValues (_("All Projects"));
             store.AppendValues ("---");
-
-            foreach (string folder in folders)
-                store.AppendValues (folder);
-
-            this.combo_box.Model  = store;
-            this.combo_box.Active = 0;
+			
+			this.combo_box.Model  = store;
+			this.combo_box.Active = 0;
+			
+			int row = 2;
+       		foreach (string folder in folders) {
+				store.AppendValues (folder);
+				
+				if (folder.Equals (Controller.SelectedFolder))
+					this.combo_box.Active = row;
+				
+				row++;
+        	}
 
             this.combo_box.RowSeparatorFunc = delegate (TreeModel model, TreeIter iter) {
                 string item = (string) this.combo_box.Model.GetValue (iter, 0);
@@ -222,6 +234,10 @@ namespace SparkleShare {
 
                 if (html == null)
                     return;
+				
+				string pixmaps_path = IO.Path.Combine (SparkleUI.AssetsPath, "pixmaps");
+				string icons_path  = new string [] {SparkleUI.AssetsPath, "icons",
+                	"hicolor", "12x12", "status"}.Combine ();
 
                 html = html.Replace ("<!-- $body-font-size -->", (double) (Style.FontDescription.Size / 1024 + 3) + "px");
                 html = html.Replace ("<!-- $day-entry-header-font-size -->", (Style.FontDescription.Size / 1024 + 3) + "px");
@@ -233,21 +249,21 @@ namespace SparkleShare {
                 html = html.Replace ("<!-- $day-entry-header-background-color -->", SparkleUIHelpers.GdkColorToHex (Style.Background (StateType.Normal)));
                 html = html.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
                 html = html.Replace ("<!-- $small-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
-                html = html.Replace ("<!-- $pixmaps-path -->", "file://" + 
-                        new string [] {SparkleUI.AssetsPath, "pixmaps"}.Combine ());
-                html = html.Replace ("<!-- $document-added-background-image -->", "file://" +
-                        new string [] {SparkleUI.AssetsPath, "icons",
-                            "hicolor", "12x12", "status", "document-added.png"}.Combine ());
-                html = html.Replace ("<!-- $document-edited-background-image -->", "file://" +
-                        new string [] {SparkleUI.AssetsPath, "icons",
-                            "hicolor", "12x12", "status", "document-edited.png"}.Combine ());
-                html = html.Replace ("<!-- $document-deleted-background-image -->", "file://" +
-                        new string [] {SparkleUI.AssetsPath, "icons",
-                            "hicolor", "12x12", "status", "document-deleted.png"}.Combine ());
-                html = html.Replace ("<!-- $document-moved-background-image -->", "file://" +
-                        new string [] {SparkleUI.AssetsPath, "icons",
-                            "hicolor", "12x12", "status", "document-moved.png"}.Combine ());
-
+             
+				html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
+                
+				html = html.Replace ("<!-- $document-added-background-image -->", 
+					"file://" + IO.Path.Combine (icons_path + "document-added.png"));
+				
+				html = html.Replace ("<!-- $document-edited-background-image -->", 
+					"file://" + IO.Path.Combine (icons_path + "document-edited.png"));
+				
+				html = html.Replace ("<!-- $document-deleted-background-image -->", 
+					"file://" + IO.Path.Combine (icons_path + "document-deleted.png"));
+				
+				html = html.Replace ("<!-- $document-moved-background-image -->", 
+					"file://" + IO.Path.Combine (icons_path + "document-moved.png"));
+                        
                 
                 Application.Invoke (delegate {
                     this.spinner.Stop ();

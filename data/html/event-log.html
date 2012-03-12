@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
     <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>SparkleShare Event Log</title>
         <script type="text/javascript">
           <!-- $jquery -->
@@ -8,6 +9,12 @@
 
         <script type="text/javascript">
           $(document).ready(function () {
+              $('dl dd:nth-child(-n+10)').css('display', 'block');
+			  $('.day-entry-content .event-entry:last-child').css('border', 'none');
+			
+			  $('dd a.windows').click(function () {
+			      window.external.LinkClicked($(this).attr("href"));
+			  });
 
               // Update the Today and Yesterday labels after midnight
               var midnight_interval = setInterval (function(){
@@ -21,22 +28,10 @@
                 }
               }, 60 * 1000);
 
-          
-              $('.comments-section').each (function () {
-                if ($(this).find ('.comments').children ().size () < 1) {
-                  $(this).hide ();
-                }
-              });
-
               $('.buddy-icon').each (function () {
                 if ($(this).css('backgroundImage').indexOf ('@') != -1) {
                   $(this).css ('backgroundColor', '#fff');
                 }
-              });
-
-              // Show the form when 'Add note' is clicked
-              $('.note').click(function () {
-                 $(this).parent ().find ('.comments-section').show ();
               });
 
               // Hide the 'Show all' link when there are less than 10 events
@@ -55,33 +50,6 @@
               $('.show').click(function () {
                  $(this).parent ().find ('dl').children ().show ();
                  $(this).hide ();
-              });
-
-              $("input").click(function () {
-                 textarea = $(this).parent ().find ('textarea');
-                 text = textarea.val ();
-
-                 if (text == '')
-                     return;
-
-                 // Clear the textarea
-                 textarea.val ('');
-
-                 table = $(this).parent ().find (".comments");
-                 comments = table.html ();
-
-                 // Add the note to the html
-                 comments += '<div class="comment-text">' +
-                             '<p class="comment-author"' +
-                             ' style="background-image: url(\'<!-- $user-avatar-url -->\');">' +
-                             '<!-- $username --></p>' +
-                             text +
-                             '</div>';
-
-                 table.html (comments);
-
-                 // Feed the note to the backend
-                 location = this.id + '~' + text;
               });
           });
         </script>
@@ -111,13 +79,6 @@
                 color: <!-- $secondary-font-color -->;
             }
 
-            .comment-text {
-                font-size: 90%;
-                padding: 12px;
-                background-color: #FFF4DB;
-                margin-bottom: 2px;
-            }
-
             .day-entry-header {
                 color: #aaa;
                 margin-left: auto;
@@ -127,14 +88,11 @@
                 margin-bottom: 36px;
                 font-weight: bold;
             }
-
-            .day-entry-content .event-entry:last-child {
-                border: none;
-            }
                         
             a {
                 color:           <!-- $a-color -->;
                 text-decoration: none;
+				outline: 0;
             }
 
             a:hover {
@@ -176,19 +134,18 @@
                 border-radius: 5px;
                 font-family: sans-serif;
                 font-size: 12px;
-                float:right;
+                float: right;
             }
-
 
             .event-entry {
                 margin-bottom: 24px;
                 padding-bottom: 24px;
                 border-bottom: 1px #ddd solid;
-                width: 99%;
+                width: 100%;
                 margin-left: auto;
                 margin-right: auto;
                 padding-left: 72px;
-                padding-right: 12px;
+                padding-right: 24px;
                 background-repeat: no-repeat;
                 background-position: 12px top;
                 display: block;
@@ -228,6 +185,7 @@
                 margin-bottom: 12px;
                 padding-top: 6px;
                 clear: both;
+			    table-layout: fixed;
             }
             
             dd {
@@ -243,10 +201,6 @@
                 margin-bottom: 1px;
                 background-repeat: no-repeat;
                 background-position: center left;
-            }
-
-            dl dd:nth-child(-n+10) {
-                display: block;
             }
 
             .document {
@@ -286,60 +240,6 @@
             .buddy-icon {
                 width: 48px;
                 height: 48px;
-            }
-
-            .comments {
-                width: 100%;
-                font-size: 90%;
-                margin-bottom: 9px;
-            }
-
-            .comment-author {
-                font-size: 90%;
-                font-weight: bold;
-                margin: 0;
-                margin-bottom: 9px;
-                background-repeat: no-repeat;
-                background-position: bottom left;
-                background-size: 24px;
-                height: 24px;
-                padding-left: 30px;
-                line-height: 24px;
-            }
-
-            .comment-timestamp {
-                color: <!-- $secondary-font-color -->;
-                text-align: right;
-            }
-
-            .comment-button {
-                float:right;
-                margin-top: 6px;
-            }
-
-            .comment-textarea {
-                box-sizing: border-box;
-                -webkit-box-sizing: border-box;
-                width: 100%;
-                height: 3em;
-                padding-bottom: 6px;
-            }
-
-            .comments-section {
-                box-sizing: border-box;
-                -webkit-box-sizing: border-box;
-                width: 100%;
-            }
-
-            .comments-wrapper {
-                box-sizing: border-box;
-                -webkit-box-sizing: border-box;
-                width: 100%;
-                margin-top: 12px;
-            }
-
-            .comment-text {
-                padding-bottom: 15px;
             }
         </style>
     </head>

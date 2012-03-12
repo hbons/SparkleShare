@@ -1,12 +1,22 @@
 # SparkleShare
 
 SparkleShare is a collaboration and sharing tool that is designed to keep
-things simple and to stay out of your way. It allows you to instantly sync
-with any Git repository you have access to.
+things simple and to stay out of your way. SparkleShare is available for Linux, Mac and Windows.
 
-SparkleShare currently works on Linux, Mac and Windows.
+SparkleShare allows you to instantly sync with any [Git](http://www.git-scm.org/) repository you have access to.
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/thing/21770/SparkleShare-Sharing-work-made-easy)
+
+## Resources
+
+|||
+|-----------------------------------:|:--------------------------|
+|              **Website**: | http://www.sparkleshare.org/ |
+|          **Source code**: | http://github.com/SparkleShare/ |
+|          **IRC channel**: | #sparkleshare on irc.gnome.org |
+|                 **Wiki**: | http://github.com/hbons/SparkleShare/wiki/ |
+|        **Report issues**: | http://github.com/hbons/SparkleShare/issues/ |
+|  **Translation project**: | http://www.transifex.net/projects/p/sparkleshare/ |
 
 
 ## License
@@ -17,10 +27,6 @@ information see the LICENSE file or visit http://www.gnu.org/licenses/gpl-3.0.ht
 
 
 ## Running SparkleShare
-
-**Note:** SparkleShare creates its own RSA keypair in `$HOME/.config/sparkleshare/` and uses 
-that for authentication. Please mind this if you're planning to set up your 
-own server by hand.
 
 ### Linux
 
@@ -53,31 +59,33 @@ Download, unzip and open the SparkleShare bundle.
 
 ### Windows
 
-Download the installer and run SparkleShare from the start menu.
+Download and run the installer and start SparkleShare from the Windows menu.
 
 
 ## Building on Linux
 
-### Debian or Ubuntu (apt):
+### Ubuntu:
 
 ```bash
-$ sudo apt-get install gtk-sharp2 mono-runtime mono-devel monodevelop \
-  libndesk-dbus1.0-cil-dev nant libnotify-cil-dev libgtk2.0-cil-dev mono-mcs mono-gmcs \
-  libwebkit-cil-dev intltool libtool python-nautilus libndesk-dbus-glib1.0-cil-dev
+$ sudo apt-get install libappindicator0.1-cil-dev gtk-sharp2 mono-runtime mono-devel \
+  monodevelop libndesk-dbus1.0-cil-dev nant libnotify-cil-dev libgtk2.0-cil-dev mono-mcs 
+  mono-gmcs libwebkit-cil-dev intltool libtool python-nautilus libndesk-dbus-glib1.0-cil-dev
 ```
 
-For Ubuntu `libappindicator` support, install the following package:
-
-```bash
-$ sudo apt-get install libappindicator0.1-cil-dev
-```
-
-### Fedora (yum):
+### Fedora:
 
 ```bash
 $ sudo yum install gtk-sharp2-devel mono-core mono-devel monodevelop \
   ndesk-dbus-devel ndesk-dbus-glib-devel nautilus-python-devel nant \
   notify-sharp-devel webkit-sharp-devel webkitgtk-devel libtool intltool
+```
+
+### Debian:
+
+```bash
+$ sudo apt-get install gtk-sharp2 mono-runtime mono-devel monodevelop \
+  libndesk-dbus1.0-cil-dev nant libnotify-cil-dev libgtk2.0-cil-dev mono-mcs mono-gmcs \
+  libwebkit-cil-dev intltool libtool python-nautilus libndesk-dbus-glib1.0-cil-dev
 ```
 
 
@@ -89,13 +97,16 @@ $ make
 $ sudo make install
 ```
 
-**Note:**  Use `--prefix=/usr` if you want the Nautilus extension to work.
+**Note:**  The Nautilus extension will only be enabled if you build with `--prefix=/usr`.
 
 
 ## Building on Mac
 
-Install <tt>Xcode</tt>, the <tt>Mono</tt> Framework, <tt>MonoDevelop</tt> and the <tt>MonoMac</tt> plugin
-(you can find it in <tt>MonoDevelop</tt> => <tt>Add-in Manager</tt>).
+Install [Xcode](https://developer.apple.com/xcode/), the [Mono Framework](http://www.mono-project.com/) 
+and [MonoDevelop](http://monodevelop.com/).
+
+Start MonoDevelop and install the MonoMac add-in (it's in <tt>MonoDevelop</tt> > <tt>Add-in Manager</tt>).
+
 
 You may need to adjust some environment variables to let the build environment tools find mono:
    
@@ -122,7 +133,7 @@ Now that you have compiled the libraries, open `SparkleShare/Mac/SparkleShare.sl
 MonoDevelop and start the build.
 
 
-### Creating a Mac .app
+### Creating a Mac bundle
 
 To create the <tt>SparkleShare.app</tt>, make sure the project is focused and select Project from the menu bar 
 and click <tt>"Create Mac Installer..."</tt>. Make sure to select <tt>"Don't link assemblies"</tt>. 
@@ -155,15 +166,11 @@ build
 
 `C:\path\to\SparkleShare\source\bin` should now contain `SparkleShare.exe`, which you can run.
 
-**Note:** SparkleShare needs to be run with administrator privileges.
-Open the properties dialog for `SparkleShare.exe` and tick
-the `Run this program as an administrator` option in the 
-`Compatibility` tab.
 
 
 ### Creating a Windows installer
 
-To create an installer package, install [WiX 3.6](http://wix.sourceforge.net/), restart Windows and run:
+To create an installer package, install [WiX 3.5](http://wix.sourceforge.net/), restart Windows and run:
 
 ```
 build installer
@@ -172,16 +179,20 @@ build installer
 This will create `SparkleShare.msi` in the same directory.
 
 
-## Info
+## Reset SparkleShare settings
 
-|||
-|-----------------------------------:|:--------------------------|
-|     **Official website**: | http://www.sparkleshare.org/ |
-|          **Source code**: | http://github.com/SparkleShare/ |
-|          **IRC Channel**: | #sparkleshare on irc.gnome.org |
-|                 **Wiki**: | http://github.com/hbons/SparkleShare/wiki/ |
-|        **Report issues**: | http://github.com/hbons/SparkleShare/issues/ |
-|  **Translation project**: | http://www.transifex.net/projects/p/sparkleshare/ |
+### Linux and Mac:
+
+```
+rm -Rf ~/SparkleShare
+rm -Rf ~/.config/sparkleshare
+```
+
+### Windows
+
+Remove `My Documents\SparkleShare` and `AppData\Roaming\sparkleshare` (`AppData` is hidden by default).
 
 
-Now have fun and create cool things together! :)
+## Finally
+
+Have fun! :)

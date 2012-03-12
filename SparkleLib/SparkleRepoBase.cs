@@ -64,9 +64,6 @@ namespace SparkleLib {
         public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set);
         public event NewChangeSetEventHandler NewChangeSet;
 
-        public delegate void NewNoteEventHandler (SparkleUser user);
-        public event NewNoteEventHandler NewNote;
-
         public delegate void ConflictResolvedEventHandler ();
         public event ConflictResolvedEventHandler ConflictResolved;
 
@@ -259,82 +256,6 @@ namespace SparkleLib {
         }
 
 
-        public List<SparkleNote> GetNotes (string revision) {
-            List<SparkleNote> notes = new List<SparkleNote> ();
-
-            string notes_path = Path.Combine (LocalPath, ".notes");
-
-            if (!Directory.Exists (notes_path)) {
-                Directory.CreateDirectory (notes_path);
-                File.SetAttributes (notes_path, FileAttributes.Directory | FileAttributes.Hidden);
-            }
-
-            Regex regex_notes = new Regex (@"<name>(.+)</name>.*" +
-                                "<email>(.+)</email>.*" +
-                                "<timestamp>([0-9]+)</timestamp>.*" +
-                                "<body>(.+)</body>", RegexOptions.Compiled);
-
-            foreach (string file_path in Directory.GetFiles (notes_path)) {
-                if (Path.GetFileName (file_path).StartsWith (revision)) {
-                    string note_xml = String.Join ("", File.ReadAllLines (file_path));
-
-                    Match match_notes = regex_notes.Match (note_xml);
-
-                    if (match_notes.Success) {
-                        SparkleNote note = new SparkleNote () {
-                            User = new SparkleUser (match_notes.Groups [1].Value,
-                                match_notes.Groups [2].Value),
-                            Timestamp = new DateTime (1970, 1, 1).AddSeconds (int.Parse (match_notes.Groups [3].Value)),
-                            Body      = match_notes.Groups [4].Value
-                        };
-
-                        notes.Add (note);
-                    }
-                }
-            }
-
-            return notes;
-        }
-
-
-        public void AddNote (string revision, string note)
-        {
-            string notes_path = Path.Combine (LocalPath, ".notes");
-
-            if (!Directory.Exists (notes_path))
-                Directory.CreateDirectory (notes_path);
-
-            // Add a timestamp in seconds since unix epoch
-            int timestamp = (int) (DateTime.UtcNow - new DateTime (1970, 1, 1)).TotalSeconds;
-
-            string n = Environment.NewLine;
-            note     = "<note>" + n +
-                       "  <user>" +  n +
-                       "    <name>" + SparkleConfig.DefaultConfig.User.Name + "</name>" + n +
-                       "    <email>" + SparkleConfig.DefaultConfig.User.Email + "</email>" + n +
-                       "  </user>" + n +
-                       "  <timestamp>" + timestamp + "</timestamp>" + n +
-                       "  <body>" + note + "</body>" + n +
-                       "</note>" + n;
-
-            string note_name = revision + SHA1 (timestamp.ToString () + note);
-            string note_path = Path.Combine (notes_path, note_name);
-
-            StreamWriter writer = new StreamWriter (note_path);
-            writer.Write (note);
-            writer.Close ();
-
-
-            // The watcher doesn't like .*/ so we need to trigger
-            // a change manually
-            FileSystemEventArgs args = new FileSystemEventArgs (WatcherChangeTypes.Changed,
-                notes_path, note_name);
-
-            OnFileActivity (args);
-            SparkleHelpers.DebugInfo ("Note", "Added note to " + revision);
-        }
-
-
         private void SyncUpBase ()
         {
             try {
@@ -411,23 +332,8 @@ namespace SparkleLib {
                     List<SparkleChangeSet> change_sets = GetChangeSets (1);
 
                    if (change_sets != null && change_sets.Count > 0) {
-                        SparkleChangeSet change_set = change_sets [0];
-
-                        bool note_added = false;
-                        foreach (string added in change_set.Added) {
-                            if (added.Contains (".notes")) {
-                                if (NewNote != null)
-                                    NewNote (change_set.User);
-
-                                note_added = true;
-                                break;
-                            }
-                        }
-
-                        if (!note_added) {
-                            if (NewChangeSet != null)
-                                NewChangeSet (change_set);
-                        }
+                        if (NewChangeSet != null)
+                            NewChangeSet (change_sets [0]);
                     }
                 }
 
@@ -452,14 +358,8 @@ namespace SparkleLib {
             EnableWatching ();
 
             this.progress_percentage = 0.0;
-            this.progress_speed      = "";
-            
-            string notes_path = Path.Combine (LocalPath, ".notes");
-            
-            if (Directory.Exists (notes_path))
-                File.SetAttributes (notes_path,
-                    FileAttributes.Directory | FileAttributes.Hidden);
-        }
+            this.progress_speed      = "";    
+		}
 
 
         private void CreateWatcher ()

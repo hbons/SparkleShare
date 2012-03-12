@@ -10,6 +10,17 @@ BUILD_DEFINES="-define:HAVE_APP_INDICATOR"
 endif
 
 SOURCES =  \
+	../Program.cs \
+	../SparkleAboutController.cs \
+	../SparkleBubblesController.cs \
+	../SparkleControllerBase.cs \
+	../SparkleEventLogController.cs \
+	../SparkleExtensions.cs \
+	../SparkleInvite.cs \
+	../SparkleOptions.cs \
+	../SparklePlugin.cs \
+	../SparkleSetupController.cs \
+	../SparkleStatusIconController.cs \
 	SparkleAbout.cs \
 	SparkleBubbles.cs \
 	SparkleController.cs \

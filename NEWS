@@ -1,6 +1,7 @@
-0.8.3 for Linux and Mac (Sun Mar 4 2012):
+0.8.3 for Linux, Mac and Windows (Sun Mar 11 2012):
 
         Hylke:
+	- Windows version implemented with WPF
         - Invites feature: link to a host with one click
         - Implement sparklshare:// protocol handlers for invites
         - "Add SparkleShare to login items" checkbox on the last tutorial page
