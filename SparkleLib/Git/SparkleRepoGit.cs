@@ -708,32 +708,37 @@ namespace SparkleLib.Git {
         // git submodules by renaming the .git/HEAD file
         private void PrepareDirectories (string path)
         {
-            foreach (string child_path in Directory.GetDirectories (path)) {
-                if (child_path.EndsWith (".git") &&
-                    !child_path.Equals (Path.Combine (LocalPath, ".git"))) {
-
-                    string HEAD_file_path = Path.Combine (child_path, "HEAD");
-
-                    if (File.Exists (HEAD_file_path)) {
-                        File.Move (HEAD_file_path, HEAD_file_path + ".backup");
-                        SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Renamed " + HEAD_file_path);
+            try {
+                foreach (string child_path in Directory.GetDirectories (path)) {
+                    if (child_path.EndsWith (".git") &&
+                        !child_path.Equals (Path.Combine (LocalPath, ".git"))) {
+    
+                        string HEAD_file_path = Path.Combine (child_path, "HEAD");
+    
+                        if (File.Exists (HEAD_file_path)) {
+                            File.Move (HEAD_file_path, HEAD_file_path + ".backup");
+                            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Renamed " + HEAD_file_path);
+                        }
+    
+                        continue;
+    
+                    } else if (child_path.EndsWith (".git")) {
+                        continue;
                     }
-
-                    continue;
-
-                } else if (child_path.EndsWith (".git")) {
-                    continue;
+    
+                    PrepareDirectories (child_path);
+                }
+    
+                if (Directory.GetFiles (path).Length == 0 &&
+                    Directory.GetDirectories (path).Length == 0 &&
+                    !path.Equals (LocalPath)) {
+    
+                    File.Create (Path.Combine (path, ".empty")).Close ();
+                    File.SetAttributes (Path.Combine (path, ".empty"), FileAttributes.Hidden);
                 }
 
-                PrepareDirectories (child_path);
-            }
-
-            if (Directory.GetFiles (path).Length == 0 &&
-                Directory.GetDirectories (path).Length == 0 &&
-                !path.Equals (LocalPath)) {
-
-                File.Create (Path.Combine (path, ".empty")).Close ();
-                File.SetAttributes (Path.Combine (path, ".empty"), FileAttributes.Hidden);
+            } catch (IOException e) {
+                SparkleHelpers.DebugInfo ("Git", "Failed preparing directory: " + e.Message);
             }
         }
 
