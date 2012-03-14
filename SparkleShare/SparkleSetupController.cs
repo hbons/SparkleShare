@@ -162,8 +162,6 @@ namespace SparkleShare {
                         
                         if (ShowWindowEvent != null)
                             ShowWindowEvent ();
-
-                        SelectedPluginChanged (SelectedPluginIndex);
                     }
 
                     return;
@@ -271,6 +269,7 @@ namespace SparkleShare {
             } else if (SelectedPlugin.AddressExample != null) {
                 if (ChangeAddressFieldEvent != null)
                     ChangeAddressFieldEvent (this.saved_address, SelectedPlugin.AddressExample, FieldState.Enabled);
+
             } else {
                 if (ChangeAddressFieldEvent != null)
                     ChangeAddressFieldEvent (this.saved_address, "", FieldState.Enabled);
@@ -293,9 +292,6 @@ namespace SparkleShare {
 
         public void CheckAddPage (string address, string remote_path, int selected_plugin)
         {
-            if (SelectedPluginIndex != selected_plugin)
-                SelectedPluginChanged (selected_plugin);
-
             address     = address.Trim ();
             remote_path = remote_path.Trim ();
 
@@ -304,8 +300,10 @@ namespace SparkleShare {
 
             this.saved_remote_path = remote_path;
 
-            bool fields_valid = address != null && address.Trim ().Length > 0 &&
-                remote_path != null && remote_path.Trim ().Length > 0;
+            bool fields_valid = (address != null &&
+                                 address.Trim ().Length > 0 &&
+                                 remote_path != null &&
+                                 remote_path.Trim ().Length > 0);
 
             if (UpdateAddProjectButtonEvent != null)
                 UpdateAddProjectButtonEvent (fields_valid);
@@ -314,6 +312,10 @@ namespace SparkleShare {
 
         public void AddPageCompleted (string address, string remote_path)
         {
+            address     = address.Trim ();
+            remote_path = remote_path.Trim ();
+            remote_path = remote_path.TrimEnd ("/".ToCharArray ());
+			
             SyncingFolder   = Path.GetFileNameWithoutExtension (remote_path);
             PreviousAddress = address;
             PreviousPath    = remote_path;

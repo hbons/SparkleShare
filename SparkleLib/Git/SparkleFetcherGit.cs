@@ -20,6 +20,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
+
 using SparkleLib;
 
 namespace SparkleLib.Git {
@@ -33,10 +34,13 @@ namespace SparkleLib.Git {
         public SparkleFetcher (string server, string remote_path, string target_folder) :
             base (server, remote_path, target_folder)
         {
+			//server = server.Trim ("/".ToCharArray ());
+			remote_path = remote_path.Trim ("/".ToCharArray ());
+			
             if (server.EndsWith ("/"))
                 server = server.Substring (0, server.Length - 1);
 
-            // FIXME: Adding these lines makes the fetcher fail
+             //FIXME: Adding these lines makes the fetcher fail
             // if (remote_path.EndsWith ("/"))
             //     remote_path = remote_path.Substring (0, remote_path.Length - 1);
 
@@ -97,7 +101,7 @@ namespace SparkleLib.Git {
             this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
                 "clone " +
                 "--progress " + // Redirects progress stats to standarderror
-                "\"" + RemoteUrl + "\" " + "\"" + SparkleHelpers.NormalizeSeparatorsToOS(TargetFolder) + "\"");
+                "\"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
             
             this.git.StartInfo.RedirectStandardError = true;
             this.git.Start ();
