@@ -109,18 +109,6 @@ namespace SparkleLib {
                     || platform == PlatformID.Win32Windows);
             }
         }
-
-        public static string NormalizeSeparatorsToOS(string path)
-        {
-            if (IsWindows)
-            {
-                return path.Replace('\\', '/');
-            }
-            else
-            {
-                return path;
-            }
-        }
     }
 }
 

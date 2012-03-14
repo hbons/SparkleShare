@@ -291,7 +291,8 @@ namespace SparkleShare {
                                                     
                         TextBox address_box = new TextBox () {
                             Width = 200,
-                            Text  = Controller.PreviousAddress
+                            Text  = Controller.PreviousAddress,
+                            IsEnabled = (Controller.SelectedPlugin.Address == null)
                         };
                         
                         TextBlock address_help_label = new TextBlock () {
@@ -308,7 +309,8 @@ namespace SparkleShare {
                                                     
                         TextBox path_box = new TextBox () {
                             Width = 200,
-                            Text  = Controller.PreviousPath
+                            Text  = Controller.PreviousPath,
+                            IsEnabled = (Controller.SelectedPlugin.Path == null)
                         };
                         
                         TextBlock path_help_label = new TextBlock () {
@@ -361,6 +363,7 @@ namespace SparkleShare {
 						address_box.Focus ();
                         address_box.Select (address_box.Text.Length, 0);
 						
+
 						Controller.ChangeAddressFieldEvent += delegate (string text,
                             string example_text, FieldState state) {
 
@@ -394,21 +397,15 @@ namespace SparkleShare {
                         list_view.KeyDown += delegate {
                             Controller.SelectedPluginChanged (list_view.SelectedIndex);
                         };
+
+                        Controller.CheckAddPage (address_box.Text, path_box.Text, list_view.SelectedIndex);
                         
                         address_box.TextChanged += delegate {
-                            Controller.CheckAddPage (
-                                address_box.Text,
-                                path_box.Text,
-                                list_view.SelectedIndex
-                            );
+                            Controller.CheckAddPage (address_box.Text, path_box.Text, list_view.SelectedIndex);
                         };
                         
                         path_box.TextChanged += delegate {
-                            Controller.CheckAddPage (
-                                address_box.Text,
-                                path_box.Text,
-                                list_view.SelectedIndex
-                            );
+                            Controller.CheckAddPage (address_box.Text, path_box.Text, list_view.SelectedIndex);
                         };
                         
                         cancel_button.Click += delegate {
@@ -418,13 +415,7 @@ namespace SparkleShare {
                         add_button.Click += delegate {
                             Controller.AddPageCompleted (address_box.Text, path_box.Text);
                         };
-                        
-                        Controller.CheckAddPage (
-                            address_box.Text,
-                            path_box.Text,
-                            list_view.SelectedIndex
-                        );
-                        
+                                          
                         break;
                     }
                         
