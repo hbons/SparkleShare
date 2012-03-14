@@ -179,10 +179,18 @@ namespace SparkleShare {
 
                         tree.AppendColumn (service_column);
 
-                        Entry address_entry = new Entry ();
-                        Entry path_entry    = new Entry ();
-                        Label address_example      = new Label ("1") { Xalign = 0, UseMarkup = true };
-                        Label path_example         = new Label ("2") { Xalign = 0, UseMarkup = true };
+                        Entry address_entry = new Entry () {
+							Text = Controller.PreviousAddress,
+							Sensitive = (SelectedPlugin.Address == null)
+						};
+						
+                        Entry path_entry = new Entry () {
+			         	    Text = Controller.PreviousPath,
+							Sensitive = (SelectedPlugin.Path == null)
+						};
+						
+                        Label address_example = new Label ("1") { Xalign = 0, UseMarkup = true };
+                        Label path_example    = new Label ("2") { Xalign = 0, UseMarkup = true };
 
 
                         // Select the first plugin by default
@@ -199,7 +207,6 @@ namespace SparkleShare {
                                 address_entry.Sensitive = (state == FieldState.Enabled);
                                 address_example.Markup  =  "<span size=\"small\" fgcolor=\""
                                     + SecondaryTextColor + "\">" + example_text + "</span>";
-
                             });
                         };
 
