@@ -168,7 +168,6 @@ namespace SparkleShare {
                 if (UpdateContentEvent != null)
                     UpdateContentEvent (HTML);
 				
-				// TODO: Check selected folder
                 if (UpdateSizeInfoEvent != null)
                     UpdateSizeInfoEvent (Size, HistorySize);
             };
