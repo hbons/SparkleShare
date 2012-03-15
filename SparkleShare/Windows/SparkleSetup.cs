@@ -566,9 +566,8 @@ namespace SparkleShare {
                             Controller.OpenFolderClicked ();
                         };
                         
-                        
+                       
                         SystemSounds.Exclamation.Play ();
-                        // TODO: Catch attention without having to raise the window
                         
                         break;
                     }
