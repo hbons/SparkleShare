@@ -235,9 +235,9 @@ namespace SparkleShare {
         
         
         public void UIHasLoaded ()
-        {
-           // if (FirstRun)
-                ShowSetupWindow (PageType.Setup);
+		{
+        	if (FirstRun)
+        		ShowSetupWindow (PageType.Setup);
         }
 
 
@@ -950,7 +950,8 @@ namespace SparkleShare {
 
 			if (!Directory.Exists (tmp_path)) {
                 Directory.CreateDirectory (tmp_path);
-                File.SetAttributes (tmp_path, FileAttributes.Directory | FileAttributes.Hidden);
+                File.SetAttributes (tmp_path, // FIXME: Doesn't seem to be hidden
+					File.GetAttributes (tmp_path) | FileAttributes.Hidden);
             }
 
             string canonical_name = Path.GetFileNameWithoutExtension (remote_path);
