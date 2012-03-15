@@ -391,7 +391,7 @@ namespace SparkleShare {
         {
             SyncingFolder   = Path.GetFileNameWithoutExtension (PendingInvite.RemotePath);
             PreviousAddress = PendingInvite.Address;
-            PreviousPath    = PendingInvite.RemotePath; // FIXME: trailing slash should work
+            PreviousPath    = PendingInvite.RemotePath;
 
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Syncing, null);
