@@ -108,9 +108,13 @@ namespace SparkleShare {
 			string startup_folder_path = Environment.GetFolderPath (
 				Environment.SpecialFolder.Startup);
 			
-			string shortcut_path   = Path.Combine (startup_folder_path, "SparkleShare.lnk");
-			string shortcut_target = Forms.Application.ExecutablePath;
-			
+			string shortcut_path = Path.Combine (startup_folder_path, "SparkleShare.lnk");
+
+            if (File.Exists (shortcut_path))
+                File.Delete (shortcut_path);
+
+            string shortcut_target = Forms.Application.ExecutablePath;
+
             Shortcut shortcut = new Shortcut ();
             shortcut.Create (shortcut_path, shortcut_target);
         }
@@ -146,6 +150,10 @@ namespace SparkleShare {
 				Environment.SpecialFolder.UserProfile);
 			
 			string shortcut_path   = Path.Combine (user_profile_path, "Links", "SparkleShare.lnk");
+
+            if (File.Exists (shortcut_path))
+                File.Delete (shortcut_path);
+
 			string shortcut_target = SparkleConfig.DefaultConfig.FoldersPath;
 
             Shortcut shortcut = new Shortcut ();
