@@ -142,7 +142,14 @@ namespace SparkleShare {
 
         public override void AddToBookmarks ()
         {
-            // TODO
+			string user_profile_path = Environment.GetFolderPath (
+				Environment.SpecialFolder.UserProfile);
+			
+			string shortcut_path   = Path.Combine (user_profile_path, "Links", "SparkleShare.lnk");
+			string shortcut_target = SparkleConfig.DefaultConfig.FoldersPath;
+
+            Shortcut shortcut = new Shortcut ();
+            shortcut.Create (shortcut_path, shortcut_target);
         }
 
 
