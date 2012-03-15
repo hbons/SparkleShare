@@ -24,7 +24,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Windows.Forms;
+using Forms = System.Windows.Forms;
 
 using Microsoft.Win32;
 using SparkleLib;
@@ -56,7 +56,7 @@ namespace SparkleShare {
         {
             // Add msysgit to path, as we cannot asume it is added to the path
             // Asume it is installed in @"<exec dir>\msysgit\bin"
-            string executable_dir = Path.GetDirectoryName (Application.ExecutablePath);
+            string executable_dir = Path.GetDirectoryName (Forms.Application.ExecutablePath);
             string msysgit = Path.Combine (executable_dir, "msysgit");
 
             string new_PATH = msysgit + @"\bin" + ";" +
@@ -105,13 +105,20 @@ namespace SparkleShare {
 
         public override void CreateStartupItem ()
         {
-            // TODO
+			string startup_folder_path = Environment.GetFolderPath (
+				Environment.SpecialFolder.Startup);
+			
+			string shortcut_path   = Path.Combine (startup_folder_path, "SparkleShare.lnk");
+			string shortcut_target = Forms.Application.ExecutablePath;
+			
+            Shortcut shortcut = new Shortcut ();
+            shortcut.Create (shortcut_path, shortcut_target);
         }
         
 
         public override void InstallProtocolHandler()
         {
-		/* FIXME: Need to find a way to do this without administrator privilidges (or move to the installer)
+		/* FIXME: Need to find a way to do this without administrator privileges (or move to the installer)
 		 
             // Get assembly location
             string location   = System.Reflection.Assembly.GetExecutingAssembly ().Location;

@@ -236,7 +236,7 @@ namespace SparkleShare {
         
         public void UIHasLoaded ()
         {
-            if (FirstRun)
+           // if (FirstRun)
                 ShowSetupWindow (PageType.Setup);
         }
 
