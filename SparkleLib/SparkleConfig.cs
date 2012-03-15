@@ -40,10 +40,21 @@ namespace SparkleLib {
 
         public string HomePath {
             get {
-                if (GetConfigOption ("home_path") != null)
+                if (GetConfigOption ("home_path") != null) {
                     return GetConfigOption ("home_path");
-                else
-                    return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+					
+				} else {
+					try {
+						Environment.SpecialFolder folder =
+							(Environment.SpecialFolder) Enum.Parse (
+                                typeof(Environment.SpecialFolder), "UserProfile");
+						
+						return (Environment.GetFolderPath (folder));
+						
+					} catch {	
+						return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+					}
+				}
             }
         }
 
@@ -58,6 +69,29 @@ namespace SparkleLib {
 
         public SparkleConfig (string config_path, string config_file_name)
         {
+            try {
+                Environment.SpecialFolder folder =
+                    (Environment.SpecialFolder) Enum.Parse(
+                                typeof(Environment.SpecialFolder), "UserProfile");
+
+                string old_path = Path.Combine (
+                    Environment.GetFolderPath (Environment.SpecialFolder.Personal), "SparkleShare");
+
+                if (Directory.Exists (old_path) &&
+				    Environment.OSVersion.Platform == PlatformID.Win32NT) {
+
+                    string new_path = Path.Combine (Environment.GetFolderPath (folder), "SparkleShare");
+                    Directory.Move (old_path, new_path);
+
+                    Console.WriteLine ("Migrated SparkleShare folder to %USERPROFILE%");
+                
+				}
+
+            } catch (Exception e) {
+                Console.WriteLine ("Failed to migrate: " + e.Message);
+                // TODO: Remove this block when most people have migrated to the new path
+            }
+
             FullPath    = Path.Combine (config_path, config_file_name);
             LogFilePath = Path.Combine (config_path, "debug.log");
 
