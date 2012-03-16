@@ -198,7 +198,7 @@ namespace SparkleShare {
                 };
             
             SparkleMenuItem add_item = new SparkleMenuItem () {
-                Header    = "Add Hosted Project…"
+                Header    = "Add hosted project…"
             };
             
                 add_item.Click += delegate {
@@ -206,7 +206,7 @@ namespace SparkleShare {
                 };
             
             SparkleMenuItem log_item = new SparkleMenuItem () {
-                Header    = "View Recent Changes…",
+                Header    = "View recent changes…",
                 IsEnabled = (Program.Controller.Folders.Count > 0)
             };
             
@@ -217,9 +217,9 @@ namespace SparkleShare {
             SparkleMenuItem notify_item = new SparkleMenuItem ();
 
                 if (Program.Controller.NotificationsEnabled)
-                    notify_item = new SparkleMenuItem () { Header = "Turn Notifications Off" };
+                    notify_item = new SparkleMenuItem () { Header = "Turn notifications off" };
                 else
-                    notify_item = new SparkleMenuItem () { Header = "Turn Notifications On" };
+                    notify_item = new SparkleMenuItem () { Header = "Turn notifications on" };
     
                 notify_item.Click += delegate {
                     Program.Controller.ToggleNotifications ();
