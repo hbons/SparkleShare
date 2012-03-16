@@ -105,7 +105,6 @@ namespace SparkleLib {
 
                     // Wait for messages
                     while (this.is_connected) {
-
                         try {
                             // This blocks the thread
                             int i = 0;
@@ -170,9 +169,6 @@ namespace SparkleLib {
                             }
 
                         } catch (ObjectDisposedException) {
-                            this.is_connected  = false;
-                            this.is_connecting = false;
-
                             return;
                         }
 
