@@ -132,7 +132,7 @@ namespace SparkleLib.Git {
                         line [1].ToString ().Equals ("A")) {
 
                         string path = line.Substring (3);
-                        path = path.Trim ("\"".ToCharArray ());
+                        path        = path.Trim ("\"".ToCharArray ());
                         file_paths.Add (path);
                     }
                 }
