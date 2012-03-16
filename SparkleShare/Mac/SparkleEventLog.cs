@@ -251,7 +251,7 @@ namespace SparkleShare {
 	                this.popup_button.AddItem (folder);
 					
 					if (folder.Equals (Controller.SelectedFolder))
-						this.popup_button.SelectItemAtIndex (row);
+						this.popup_button.SelectItem (row);
 					
 					row++;
             	}
@@ -283,7 +283,7 @@ namespace SparkleShare {
                     if (html == null)
                         html = Controller.HTML;
     
-					string pixmaps_path = Path.Combine (
+					string pixmaps_path = "file://" + Path.Combine (
 						NSBundle.MainBundle.ResourcePath, "Pixmaps");
 					
                     html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
@@ -298,17 +298,16 @@ namespace SparkleShare {
                     html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
     
                     html = html.Replace ("<!-- $document-added-background-image -->",
-                        pixmaps_path + "/document-added-12.png"));
+                        pixmaps_path + "/document-added-12.png");
     
                     html = html.Replace ("<!-- $document-deleted-background-image -->",
-                        pixmaps_path + "/document-deleted-12.png"));
+                        pixmaps_path + "/document-deleted-12.png");
     
                     html = html.Replace ("<!-- $document-edited-background-image -->",
-                        pixmaps_path + "/document-edited-12.png"));
+                        pixmaps_path + "/document-edited-12.png");
     
                     html = html.Replace ("<!-- $document-moved-background-image -->",
-                        pixmaps_path + "/document-moved-12.png"));
-					
+                        pixmaps_path + "/document-moved-12.png");
 					
                     InvokeOnMainThread (delegate {
                         if (this.progress_indicator.Superview == ContentView)
