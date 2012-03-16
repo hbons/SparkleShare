@@ -98,7 +98,7 @@ namespace SparkleShare {
             };
                         
             this.web_browser = new WebBrowser () {
-                Width  = Width - 7,
+                Width  = Width - 6,
                 Height = Height - 36 - 12
             };
 
