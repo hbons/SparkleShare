@@ -95,7 +95,6 @@ namespace SparkleShare {
                     UpdateMenuEvent (CurrentState);
             };
 
-
             Program.Controller.OnIdle += delegate {
                 if (CurrentState != IconState.Error)
                     CurrentState = IconState.Idle;
@@ -107,17 +106,39 @@ namespace SparkleShare {
                     UpdateMenuEvent (CurrentState);
             };
 
-
             Program.Controller.OnSyncing += delegate {
-                CurrentState = IconState.Syncing;
+				int repos_syncing_up   = 0;
+				int repos_syncing_down = 0;
+				
+				foreach (SparkleRepoBase repo in
+				         Program.Controller.Repositories.GetRange (
+				         	0, Program.Controller.Repositories.Count)) {
+					
+					if (repo.Status == SyncStatus.SyncUp)
+						repos_syncing_up++;
+					
+					if (repo.Status == SyncStatus.SyncDown)
+						repos_syncing_down++;
+				}
+				
+				if (repos_syncing_up > 0 &&
+				    repos_syncing_down > 0) {
+					
+					CurrentState = IconState.Syncing;
+				
+				} else if (repos_syncing_down == 0) {
+					CurrentState = IconState.SyncingUp;
+					
+				} else {
+					CurrentState = IconState.SyncingDown;
+				}
 
                 if (UpdateQuitItemEvent != null)
                     UpdateQuitItemEvent (QuitItemEnabled);
 
                 if (UpdateMenuEvent != null)
-                    UpdateMenuEvent (IconState.Syncing);
+                    UpdateMenuEvent (CurrentState);
             };
-
 
             Program.Controller.OnError += delegate {
                 CurrentState = IconState.Error;
@@ -126,7 +147,7 @@ namespace SparkleShare {
                     UpdateQuitItemEvent (QuitItemEnabled);
 
                 if (UpdateMenuEvent != null)
-                    UpdateMenuEvent (IconState.Error);
+                    UpdateMenuEvent (CurrentState);
             };
         }
 
@@ -160,6 +181,7 @@ namespace SparkleShare {
             Program.Controller.ShowAboutWindow ();
         }
         
+		
         public void QuitClicked ()
         {
             Program.Controller.Quit ();

@@ -124,9 +124,17 @@ namespace SparkleShare {
     
                             break;
     
-                        case IconState.Syncing:
+                        case default:
+							string state_text;
+						
+							if (state == IconState.SyncingUp)
+								state_text = "Sending files…";
+							else if (state == IconState.SyncingDown)
+								state_text = "Receiving files…";
+							else
+								state_text = "Syncing…";
     
-                            StateText = _("Syncing… ") +
+                            StateText = state_text +
                                         Controller.ProgressPercentage + "%  " +
                                         Controller.ProgressSpeed;
 
