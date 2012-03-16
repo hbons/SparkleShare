@@ -325,9 +325,6 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Done");
                 this.server_online = true;
 
-                if (SyncStatusChanged != null)
-                    SyncStatusChanged (SyncStatus.Idle);
-
                 if (!pre_sync_revision.Equals (CurrentRevision)) {
                     List<SparkleChangeSet> change_sets = GetChangeSets (1);
 
@@ -340,8 +337,16 @@ namespace SparkleLib {
                 // There could be changes from a resolved
                 // conflict. Tries only once, then lets
                 // the timer try again periodically
-                if (HasUnsyncedChanges)
+                if (HasUnsyncedChanges) {
+	                if (SyncStatusChanged != null)
+	                    SyncStatusChanged (SyncStatus.SyncUp);
+					
                     SyncUp ();
+					HasUnsyncedChanges = false;
+				}
+				
+                if (SyncStatusChanged != null)
+                    SyncStatusChanged (SyncStatus.Idle);
 
             } else {
                 SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Error");
