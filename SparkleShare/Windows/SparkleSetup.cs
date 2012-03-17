@@ -28,6 +28,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Windows.Shell;
 
 using Drawing = System.Drawing;
 using Imaging = System.Windows.Interop.Imaging;
@@ -357,6 +358,9 @@ namespace SparkleShare {
                         Canvas.SetTop (path_help_label, 330);
                         Canvas.SetRight (path_help_label, 30);
                         
+						TaskbarItemInfo.ProgressValue = 0.0;
+						TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+						
                         Buttons.Add (add_button);
                         Buttons.Add (cancel_button);
                         
@@ -441,18 +445,21 @@ namespace SparkleShare {
                             Value = 1
                         };
                         
-                        
+						
                         ContentCanvas.Children.Add (progress_bar);
                         Canvas.SetLeft (progress_bar, 185);
                         Canvas.SetTop (progress_bar, 150);
                         
+						TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+						
                         Buttons.Add (finish_button);
                         Buttons.Add (cancel_button);
 
                                                                                                     
                         Controller.UpdateProgressBarEvent += delegate (double percentage) {
                             Dispatcher.Invoke ((Action) delegate {
-                                progress_bar.Value = percentage;
+                                progress_bar.Value = percentage;	
+								TaskbarItemInfo.ProgressValue = percentage / 100;
                             });
                         };
     
@@ -502,6 +509,8 @@ namespace SparkleShare {
                         Canvas.SetLeft (help_block, 210);
                         Canvas.SetTop (help_block, 100);
                         
+						TaskbarItemInfo.ProgressValue = 1.0;
+						TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Error;
 						
                         Buttons.Add (try_again_button);
                         Buttons.Add (cancel_button);
@@ -553,6 +562,9 @@ namespace SparkleShare {
 	                        Canvas.SetLeft (warning_block, 240);
 	                        Canvas.SetTop (warning_block, 100);
 						}
+						
+						TaskbarItemInfo.ProgressValue = 0.0;
+						TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
 						
                         Buttons.Add (finish_button);
                         Buttons.Add (open_folder_button);
