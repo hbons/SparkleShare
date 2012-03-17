@@ -124,7 +124,7 @@ namespace SparkleShare {
     
                             break;
     
-                        case default:
+                        default:
 							string state_text;
 						
 							if (state == IconState.SyncingUp)
