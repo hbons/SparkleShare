@@ -18,14 +18,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows.Forms.Integration;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms.Integration;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Reflection;
+using System.Windows.Shell;
 
 namespace SparkleShare {
 
@@ -49,6 +47,10 @@ namespace SparkleShare {
             Height     = 440;
             ResizeMode = ResizeMode.NoResize;
             Background = new SolidColorBrush (Colors.WhiteSmoke);
+			
+			TaskbarItemInfo = new TaskbarItemInfo () {
+				Description = "SparkleShare"
+			};
             
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             Content               = ContentCanvas;
