@@ -216,7 +216,7 @@ namespace SparkleShare {
                 };
             
             SparkleMenuItem notify_item = new SparkleMenuItem () {
-				Header = "Notifications",
+				Header      = "Notifications",
                 IsCheckable = true,
 			    IsChecked   = Program.Controller.NotificationsEnabled
 			};

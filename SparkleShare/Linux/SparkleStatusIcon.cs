@@ -263,7 +263,6 @@ namespace SparkleShare {
                 };
 
             this.menu.Add (sync_item);
-            this.menu.Add (new SeparatorMenuItem ());
 
             MenuItem recent_events_item = new MenuItem (_("View Recent Changes…"));
 
@@ -274,14 +273,12 @@ namespace SparkleShare {
                 };
 
             this.menu.Add (recent_events_item);
+            this.menu.Add (new SeparatorMenuItem ());
 
-            MenuItem notify_item;
-                                                             
-                if (Program.Controller.NotificationsEnabled)
-                    notify_item = new MenuItem (_("Turn Notifications Off"));
-                else
-                    notify_item = new MenuItem (_("Turn Notifications On"));
-
+            CheckMenuItem notify_item = new CheckMenuItem (_("Notifications")) {
+				Active = Program.Controller.NotificationsEnabled	
+			};
+                                      
                 notify_item.Activated += delegate {
                     Program.Controller.ToggleNotifications ();
                     CreateMenu ();
