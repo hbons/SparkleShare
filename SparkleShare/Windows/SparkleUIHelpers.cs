@@ -59,37 +59,5 @@ namespace SparkleShare {
             
 			return html_reader.ReadToEnd ();
         }
-		
-		
-		public static ImageSource ToImageSource(FrameworkElement obj)
-        {
-            // Save current canvas transform
-            Transform transform = obj.LayoutTransform;
-            obj.LayoutTransform = null;
-            
-            // fix margin offset as well
-            Thickness margin = obj.Margin;
-            obj.Margin = new Thickness(0, 0,
-                 margin.Right - margin.Left, margin.Bottom - margin.Top);
-
-            // Get the size of canvas
-            Size size = new Size(obj.Width, obj.Height);
-            
-            // force control to Update
-            obj.Measure(size);
-            obj.Arrange(new Rect(size));
-
-            RenderTargetBitmap bmp = new RenderTargetBitmap(
-                (int)obj.Width, (int)obj.Height, 96, 96, PixelFormats.Pbgra32);
-            
-            bmp.Render(obj);
-			bmp.Freeze ();
-
-            // return values as they were before
-            obj.LayoutTransform = transform;
-            obj.Margin = margin;
-            return bmp;
-        }
-		
     }
 }
