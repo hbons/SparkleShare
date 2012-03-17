@@ -253,6 +253,7 @@ namespace SparkleShare {
 
     
                 Menu.AddItem (SyncMenuItem);
+                Menu.AddItem (NSMenuItem.SeparatorItem);
     
                     RecentEventsMenuItem = new NSMenuItem () {
                         Title = "View Recent Changes…",
@@ -266,21 +267,25 @@ namespace SparkleShare {
                     }
     
                 Menu.AddItem (RecentEventsMenuItem);
-				Menu.AddItem (NSMenuItem.SeparatorItem);
     
                     NotificationsMenuItem = new NSMenuItem () {
-                        Enabled = true,
-						Title   = "Notifications"
+                        Enabled = true
                     };
     
                     if (Program.Controller.NotificationsEnabled)
-                        NotificationsMenuItem.State = NSCellStateValue.On;
+                        NotificationsMenuItem.Title = "Turn Notifications Off";
                     else
-                        NotificationsMenuItem.State = NSCellStateValue.Off;
+                        NotificationsMenuItem.Title = "Turn Notifications On";
     
                     NotificationsMenuItem.Activated += delegate {
                         Program.Controller.ToggleNotifications ();
-    					CreateMenu ();
+    
+                        InvokeOnMainThread (delegate {
+                            if (Program.Controller.NotificationsEnabled)
+                                NotificationsMenuItem.Title = "Turn Notifications Off";
+                            else
+                                NotificationsMenuItem.Title = "Turn Notifications On";
+                        });
                     };
     
                 Menu.AddItem (NotificationsMenuItem);
