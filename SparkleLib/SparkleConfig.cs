@@ -42,19 +42,21 @@ namespace SparkleLib {
             get {
                 if (GetConfigOption ("home_path") != null) {
                     return GetConfigOption ("home_path");
-					
-				} else {
-					try {
-						Environment.SpecialFolder folder =
-							(Environment.SpecialFolder) Enum.Parse (
+
+                } else if (SparkleHelpers.IsWindows) {
+                    try {
+                        Environment.SpecialFolder folder =
+                            (Environment.SpecialFolder) Enum.Parse (
                                 typeof(Environment.SpecialFolder), "UserProfile");
-						
-						return (Environment.GetFolderPath (folder));
-						
-					} catch {	
-						return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
-					}
-				}
+
+                        return (Environment.GetFolderPath (folder));
+
+                    } catch {
+                        return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+                    }
+                } else
+                    return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+
             }
         }
 
@@ -78,14 +80,14 @@ namespace SparkleLib {
                     Environment.GetFolderPath (Environment.SpecialFolder.Personal), "SparkleShare");
 
                 if (Directory.Exists (old_path) &&
-				    Environment.OSVersion.Platform == PlatformID.Win32NT) {
+                    Environment.OSVersion.Platform == PlatformID.Win32NT) {
 
                     string new_path = Path.Combine (Environment.GetFolderPath (folder), "SparkleShare");
                     Directory.Move (old_path, new_path);
 
                     Console.WriteLine ("Migrated SparkleShare folder to %USERPROFILE%");
-                
-				}
+
+                }
 
             } catch (Exception e) {
                 Console.WriteLine ("Failed to migrate: " + e.Message);
@@ -113,7 +115,7 @@ namespace SparkleLib {
 
             try {
               Load (FullPath);
-              
+
             } catch (TypeInitializationException) {
                 CreateInitialConfig ();
 
@@ -121,9 +123,9 @@ namespace SparkleLib {
                 CreateInitialConfig ();
 
             } catch (XmlException) {
-            
+
                 FileInfo file = new FileInfo (FullPath);
-                
+
                 if (file.Length == 0) {
                     File.Delete (FullPath);
                     CreateInitialConfig ();
@@ -185,7 +187,7 @@ namespace SparkleLib {
                 );
 
                 SparkleUser user = new SparkleUser (name, email);
-                
+
                 if (File.Exists (pubkey_file_path))
                     user.PublicKey = File.ReadAllText (pubkey_file_path);
 
@@ -410,7 +412,7 @@ namespace SparkleLib {
         private string GetFolderValue (string name, string key)
         {
             XmlNode folder = GetFolder(name);
-            
+
             if ((folder != null) && (folder [key] != null)) {
                 return folder [key].InnerText;
             }
