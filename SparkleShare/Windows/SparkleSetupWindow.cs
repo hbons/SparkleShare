@@ -133,9 +133,10 @@ namespace SparkleShare {
             Canvas.SetLeft (description_label, 185);
             Canvas.SetTop (description_label, 60);
             
-            
+        
             if (Buttons.Count > 0) {
                 Buttons [0].IsDefault = true;
+				Buttons.Reverse ();
                 
                 int right = 9;
                 
