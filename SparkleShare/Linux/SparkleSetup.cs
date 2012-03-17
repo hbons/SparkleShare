@@ -181,12 +181,12 @@ namespace SparkleShare {
 
                         Entry address_entry = new Entry () {
 							Text = Controller.PreviousAddress,
-							Sensitive = (SelectedPlugin.Address == null)
+							Sensitive = (Controller.SelectedPlugin.Address == null)
 						};
 						
                         Entry path_entry = new Entry () {
 			         	    Text = Controller.PreviousPath,
-							Sensitive = (SelectedPlugin.Path == null)
+							Sensitive = (Controller.SelectedPlugin.Path == null)
 						};
 						
                         Label address_example = new Label ("1") { Xalign = 0, UseMarkup = true };
