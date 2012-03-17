@@ -133,6 +133,7 @@ namespace SparkleLib {
                                         this.last_ping = DateTime.Now;
 
                                     } else {
+
                                         // Check when the last ping occured. If it's
                                         // significantly longer than our regular interval the
                                         // system likely woke up from sleep and we want to
@@ -156,8 +157,10 @@ namespace SparkleLib {
                                     this.is_connected  = false;
                                     this.is_connecting = false;
 
-                                    if (this.socket != null)
+                                    if (this.socket != null) {
                                         this.socket.Close ();
+                                        this.socket = null;
+                                    }
 
                                     OnDisconnected ("Ping timeout");
                                     return;
@@ -215,7 +218,7 @@ namespace SparkleLib {
 
                 this.last_ping = DateTime.Now;
 
-            } catch (SocketException e) {
+            } catch (Exception e) {
                 this.is_connected  = false;
                 this.is_connecting = false;
 
@@ -231,11 +234,12 @@ namespace SparkleLib {
 
             try {
                 lock (this.socket_lock)
-                    this.socket.Send (Encoding.UTF8.GetBytes (to_send));
+                    if (this.socket != null)
+                        this.socket.Send (Encoding.UTF8.GetBytes (to_send));
 
                 this.last_ping = DateTime.Now;
 
-            } catch (SocketException e) {
+            } catch (Exception e) {
                 this.is_connected  = false;
                 this.is_connecting = false;
 
@@ -250,7 +254,7 @@ namespace SparkleLib {
             this.thread.Join ();
 
             if (this.socket != null)
-            this.socket.Close ();
+                this.socket.Close ();
 
             base.Dispose ();
         }
