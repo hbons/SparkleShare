@@ -99,7 +99,7 @@ namespace SparkleShare {
                         
             this.web_browser = new WebBrowser () {
                 Width  = Width - 6,
-                Height = Height - 36 - 12
+                Height = Height - 36 - 11
             };
 
 			this.web_browser.ObjectForScripting = new SparkleScriptingObject ();;
