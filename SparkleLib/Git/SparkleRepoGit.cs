@@ -491,7 +491,7 @@ namespace SparkleLib.Git {
                     // Append a timestamp to local version.
                     // Windows doesn't allow colons in the file name, so
                     // we use "h" between the hours and minutes instead.
-                    string timestamp            = DateTime.Now.ToString ("HH\\hmm MMM d");
+                    string timestamp            = DateTime.Now.ToString ("MMM d H\\hmm");
                     string their_path           = conflicting_path + " (" + SparkleConfig.DefaultConfig.User.Name + ", " + timestamp + ")";
                     string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
                     string abs_their_path       = Path.Combine (LocalPath, their_path);
