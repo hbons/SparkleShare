@@ -16,16 +16,20 @@
 
 
 using System;
-using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
+
+using Drawing = System.Drawing;
 
 namespace SparkleShare {
 
     public static class SparkleUIHelpers {
         
-        public static string ToHex (this Color color)
+        public static string ToHex (this Drawing.Color color)
         {
             return string.Format ("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
         }
@@ -39,12 +43,13 @@ namespace SparkleShare {
         }
 
         
-        public static Bitmap GetBitmap (string name)
+        public static Drawing.Bitmap GetBitmap (string name)
         {                                          
             Assembly assembly   = Assembly.GetExecutingAssembly ();
             Stream image_stream = assembly.GetManifestResourceStream ("SparkleShare.Pixmaps." + name + ".png");
-            return (Bitmap) Bitmap.FromStream (image_stream);
+            return (Drawing.Bitmap) Drawing.Bitmap.FromStream (image_stream);
         }
+		
 		
 		public static string GetHTML (string name)
         {                                          
@@ -54,5 +59,37 @@ namespace SparkleShare {
             
 			return html_reader.ReadToEnd ();
         }
+		
+		
+		public static ImageSource ToImageSource(FrameworkElement obj)
+        {
+            // Save current canvas transform
+            Transform transform = obj.LayoutTransform;
+            obj.LayoutTransform = null;
+            
+            // fix margin offset as well
+            Thickness margin = obj.Margin;
+            obj.Margin = new Thickness(0, 0,
+                 margin.Right - margin.Left, margin.Bottom - margin.Top);
+
+            // Get the size of canvas
+            Size size = new Size(obj.Width, obj.Height);
+            
+            // force control to Update
+            obj.Measure(size);
+            obj.Arrange(new Rect(size));
+
+            RenderTargetBitmap bmp = new RenderTargetBitmap(
+                (int)obj.Width, (int)obj.Height, 96, 96, PixelFormats.Pbgra32);
+            
+            bmp.Render(obj);
+			bmp.Freeze ();
+
+            // return values as they were before
+            obj.LayoutTransform = transform;
+            obj.Margin = margin;
+            return bmp;
+        }
+		
     }
 }

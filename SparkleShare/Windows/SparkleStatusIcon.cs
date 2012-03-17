@@ -16,13 +16,13 @@
 
 
 using System;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
+using Drawing = System.Drawing;
 using Forms = System.Windows.Forms;
 
 namespace SparkleShare {
@@ -32,8 +32,8 @@ namespace SparkleShare {
         public SparkleStatusIconController Controller = new SparkleStatusIconController();
 
         private Forms.Timer Animation;
-        private Bitmap [] AnimationFrames;
-        private Bitmap ErrorIcon;
+        private Drawing.Bitmap [] AnimationFrames;
+        private Drawing.Bitmap ErrorIcon;
         private int FrameNumber;
         private string StateText;
         private ContextMenu context_menu;
@@ -138,9 +138,9 @@ namespace SparkleShare {
         }
 
         
-        private Bitmap [] CreateAnimationFrames ()
+        private Drawing.Bitmap [] CreateAnimationFrames ()
         {
-            return new Bitmap [] {
+            return new Drawing.Bitmap [] {
 	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-i"),
 	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-ii"),
 	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iii"),
@@ -183,14 +183,15 @@ namespace SparkleShare {
                 IsEnabled = false
             };
             
-            System.Windows.Controls.Image i = new System.Windows.Controls.Image();
-            i.Source = SparkleUIHelpers.GetImageSource ("folder-sparkleshare-windows-16");
-                i.Width = 16;
-            i.Height = 16;
+            Image folder_image = new Image () {
+            	Source = SparkleUIHelpers.GetImageSource ("folder-sparkleshare-windows-16"),
+                Width  = 16,
+            	Height = 16
+			};
             
             SparkleMenuItem folder_item = new SparkleMenuItem () {
                 Header = "SparkleShare",
-                Icon   = i
+                Icon   = folder_image
             };
         
                 folder_item.Click += delegate {
@@ -214,12 +215,11 @@ namespace SparkleShare {
                     Controller.OpenRecentEventsClicked ();
                 };
             
-            SparkleMenuItem notify_item = new SparkleMenuItem ();
-
-                if (Program.Controller.NotificationsEnabled)
-                    notify_item = new SparkleMenuItem () { Header = "Turn notifications off" };
-                else
-                    notify_item = new SparkleMenuItem () { Header = "Turn notifications on" };
+            SparkleMenuItem notify_item = new SparkleMenuItem () {
+				Header = "Notifications",
+                IsCheckable = true,
+			    IsChecked   = Program.Controller.NotificationsEnabled
+			};
     
                 notify_item.Click += delegate {
                     Program.Controller.ToggleNotifications ();
@@ -246,7 +246,7 @@ namespace SparkleShare {
             
             this.context_menu.Items.Add (status_item);
             this.context_menu.Items.Add (new Separator ());
-            this.context_menu.Items.Add (folder_item);
+			this.context_menu.Items.Add (folder_item);
 
             if (Program.Controller.Folders.Count > 0) {
                 foreach (string folder_name in Program.Controller.Folders) {     
@@ -256,11 +256,14 @@ namespace SparkleShare {
                     
                     subfolder_item.Click += OpenFolderDelegate (folder_name);
                     
-                    System.Windows.Controls.Image i2 = new System.Windows.Controls.Image();
-            i2.Source = SparkleUIHelpers.GetImageSource ("folder-windows-16");
-                i2.Width = 16;
-            i2.Height = 16;
-                    subfolder_item.Icon = i2;
+					Image subfolder_image = new Image () {
+		            	Source = SparkleUIHelpers.GetImageSource ("folder-windows-16"),
+		                Width  = 16,
+		            	Height = 16
+					};
+					
+                    subfolder_item.Icon = subfolder_image;
+					
                     /* TODO
                     if (Program.Controller.UnsyncedFolders.Contains (folder_name))
                         subfolder_item.Icon = Icons.dialog_error_16;
@@ -282,9 +285,9 @@ namespace SparkleShare {
             
             this.context_menu.Items.Add (new Separator ());
             this.context_menu.Items.Add (add_item);
-            this.context_menu.Items.Add (new Separator ());
             this.context_menu.Items.Add (log_item);
-            this.context_menu.Items.Add (notify_item);
+			this.context_menu.Items.Add (new Separator ());
+			this.context_menu.Items.Add (notify_item);
             this.context_menu.Items.Add (new Separator ());
             this.context_menu.Items.Add (about_item);
             this.context_menu.Items.Add (new Separator ());
