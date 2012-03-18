@@ -1,3 +1,16 @@
+0.8.4 for Linux, Mac and Window (Sun Mar 18 2012)
+
+	Hylke:
+	- Fix "Add" item being disabled on first run
+	- Fix some crashes in notfication mechanism
+	- Use ~/SparkleShare instead of ~/My Documents/SparkleShare on Windows
+	- Add option to add SparkleShare to startup items on Windows
+	- Add SparkleShare to Explorer sidebar
+	- Report whether we're sending or receiving (or both) in the status icon
+	- Fix some cases where SparkleShare would incorrectly say "not synced"
+	- Some UI changes on Windows to comply with the Windows HIG
+
+
 0.8.3 for Linux, Mac and Windows (Sun Mar 11 2012):
 
         Hylke:
