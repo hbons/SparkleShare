@@ -281,7 +281,7 @@ namespace SparkleShare {
                                       
                 notify_item.Activated += delegate {
                     Program.Controller.ToggleNotifications ();
-                    CreateMenu ();
+                  //  CreateMenu ();
                 };
 
             this.menu.Add (notify_item);

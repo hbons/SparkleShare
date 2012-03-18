@@ -189,8 +189,19 @@ namespace SparkleShare {
 							Sensitive = (Controller.SelectedPlugin.Path == null)
 						};
 						
-                        Label address_example = new Label ("1") { Xalign = 0, UseMarkup = true };
-                        Label path_example    = new Label ("2") { Xalign = 0, UseMarkup = true };
+                        Label address_example = new Label () {
+                            Xalign = 0,
+                            UseMarkup = true,
+                            Markup = "<span size=\"small\" fgcolor=\"" +
+                                SecondaryTextColor + "\">" + Controller.SelectedPlugin.AddressExample + "</span>"
+                        };
+
+                        Label path_example = new Label () {
+                            Xalign = 0,
+                            UseMarkup = true,
+                            Markup = "<span size=\"small\" fgcolor=\"" +
+                                SecondaryTextColor + "\">" + Controller.SelectedPlugin.PathExample + "</span>"
+                        };
 
 
                         // Select the first plugin by default
@@ -220,7 +231,8 @@ namespace SparkleShare {
                                     + SecondaryTextColor + "\">" + example_text + "</span>";
                             });
                         };
-                        
+
+                        Controller.CheckAddPage (address_entry.Text, path_entry.Text, 1);
 
                         // Update the address field text when the selection changes
                         tree.CursorChanged += delegate (object sender, EventArgs e) {
@@ -319,7 +331,7 @@ namespace SparkleShare {
                         AddButton (cancel_button);
                         AddButton (add_button);
 
-                        Controller.CheckAddPage (address_entry.Text, path_entry.Text, 1);
+
 
                         break;
                     }
