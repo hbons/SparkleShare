@@ -1,6 +1,7 @@
 0.8.4 for Linux, Mac and Window (Sun Mar 18 2012)
 
 	Hylke:
+	- Show initial sync progress in taskbar item on Windows 7
 	- Fix "Add" item being disabled on first run
 	- Fix some crashes in notfication mechanism
 	- Use ~/SparkleShare instead of ~/My Documents/SparkleShare on Windows
