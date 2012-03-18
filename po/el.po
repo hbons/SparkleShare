@@ -1,14 +1,16 @@
 # This file is distributed under the same license as the SparkleShare package.
 # 
 # Translators:
+#   <e.sarbanis@gmail.com>, 2012.
 #   <manolis@kapcom.gr>, 2011.
+# Nikos Roussos <nikos@autoverse.net>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-30 15:50+0100\n"
-"PO-Revision-Date: 2011-10-30 14:50+0000\n"
-"Last-Translator: deejay1 <deejay1@srem.org>\n"
+"POT-Creation-Date: 2012-01-17 19:31+0100\n"
+"PO-Revision-Date: 2012-02-22 10:43+0000\n"
+"Last-Translator: Nikos Roussos <nikos@autoverse.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,390 +19,371 @@ msgstr ""
 
 #: ../data/plugins/bitbucket.xml.in.h:1 ../data/plugins/github.xml.in.h:1
 msgid "/username/project"
-msgstr ""
+msgstr "/username/project"
 
 #: ../data/plugins/bitbucket.xml.in.h:2
 msgid "Bitbucket"
-msgstr ""
+msgstr "Bitbucket"
 
 #: ../data/plugins/bitbucket.xml.in.h:3
 msgid "Free code hosting for Git and Mercurial"
-msgstr ""
+msgstr "Δωρεάν φιλοξενία κώδικα για Git και Mercurial"
 
 #: ../data/plugins/github.xml.in.h:2
 msgid "Free public Git repositories with collaborator management"
-msgstr ""
+msgstr "Δωρεάν δημόσια Git αποθετήρια με διαχείριση συνεργατών"
 
 #: ../data/plugins/github.xml.in.h:3
 msgid "Github"
-msgstr ""
+msgstr "Github"
 
 #: ../data/plugins/gitorious.xml.in.h:1
 msgid "/project/repository"
-msgstr ""
+msgstr "/project/repository"
 
 #: ../data/plugins/gitorious.xml.in.h:2
 msgid "Gitorious"
-msgstr ""
+msgstr "Gitorious"
 
 #: ../data/plugins/gitorious.xml.in.h:3
 msgid "Open source infrastructure for hosting open source projects"
-msgstr ""
+msgstr "Open source υποδομή για φιλοξενία open source projects"
 
 #: ../data/plugins/gnome.xml.in.h:1
 msgid "/project"
-msgstr ""
+msgstr "/project"
 
 #: ../data/plugins/gnome.xml.in.h:2
 msgid "A free and easy interface for your computer"
-msgstr ""
+msgstr "Ένα ελεύθερο και απλό interface για τον υπολογιστή σου"
 
 #: ../data/plugins/gnome.xml.in.h:3
 msgid "The GNOME Project"
-msgstr ""
+msgstr "Το GNOME Project"
 
 #: ../data/plugins/own-server.xml.in.h:1
 msgid "/path/to/project"
-msgstr ""
+msgstr "/path/to/project"
 
 #: ../data/plugins/own-server.xml.in.h:2
 msgid "Everything under my control"
-msgstr ""
+msgstr "Όλα κάτω απ' τον δικό μου έλεγχο"
 
 #: ../data/plugins/own-server.xml.in.h:3
 msgid "On my own server"
-msgstr ""
+msgstr "Στον δικό μου server"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:70
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:88
-#: ../SparkleShare/SparkleSetup.cs:75 ../SparkleShare/SparkleStatusIcon.cs:75
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:85
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:103
+#: ../SparkleShare/SparkleSetup.cs:66 ../SparkleShare/SparkleStatusIcon.cs:75
 #: ../SparkleShare/SparkleStatusIcon.cs:89
 msgid "Welcome to SparkleShare!"
-msgstr ""
+msgstr "Καλώς ήλθατε στο SparkleShare!"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:72
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:90
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:87
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:105
 #: ../SparkleShare/SparkleStatusIcon.cs:77
 #: ../SparkleShare/SparkleStatusIcon.cs:91
 msgid "Up to date"
-msgstr ""
+msgstr "Ενημερωμένα"
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:99
-#: ../SparkleShare/SparkleStatusIcon.cs:106
-msgid "Syncing…"
-msgstr ""
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:114
+msgid "Syncing… "
+msgstr "Συγχρονισμός... "
 
-#: ../SparkleShare/Mac/SparkleStatusIcon.cs:109
-#: ../SparkleShare/SparkleStatusIcon.cs:116
+#: ../SparkleShare/Mac/SparkleStatusIcon.cs:129
+#: ../SparkleShare/SparkleStatusIcon.cs:118
 msgid "Not everything is synced"
-msgstr ""
+msgstr "Δεν είναι όλα συγχρονισμένα"
 
-#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:141
 msgid "Copy Web Link"
 msgstr "Αντιγραφή Συνδέσμου Ιστού"
 
-#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:115
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:142
 msgid "Copy the web address of this file to the clipboard"
 msgstr "Αντιγραφή της διεύθυνσης ιστού αυτού του αρχείου στο πρόχειρο"
 
-#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:174
 msgid "Get Earlier Version"
 msgstr "Λήψη Προηγούμενης Έκδοσης"
 
-#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:148
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:149
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:175
 msgid "Make a copy of an earlier version in this folder"
-msgstr ""
+msgstr "Δημιουργία αντιγράφου προηγούμενης έκδοσης αυτού του φακέλου"
 
-#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:161
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:162
+#: ../SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py.in:188
 msgid "Select to get a copy of this version"
-msgstr ""
+msgstr "Επιλογή για την λήψη αντιγράφου αυτής της έκδοσης"
+
+#: ../SparkleShare/Program.cs:50
+msgid "Print version information"
+msgstr "Εκτύπωση πληροφοριών έκδοσης"
 
 #: ../SparkleShare/Program.cs:51
-msgid "Print version information"
-msgstr ""
-
-#: ../SparkleShare/Program.cs:52
 msgid "Show this help text"
-msgstr ""
+msgstr "Εμφάνιση κειμένου βοήθειας"
+
+#: ../SparkleShare/Program.cs:83
+msgid "SparkleShare, a collaboration and sharing tool."
+msgstr "SparkleShare, ένα εργαλείο συνεργασίας και ανταλλαγής."
 
 #: ../SparkleShare/Program.cs:84
-msgid "SparkleShare, a collaboration and sharing tool."
-msgstr ""
-
-#: ../SparkleShare/Program.cs:85
 msgid "Copyright (C) 2010 Hylke Bons"
-msgstr ""
+msgstr "Copyright (C) 2010 Hylke Bons"
 
-#: ../SparkleShare/Program.cs:87
+#: ../SparkleShare/Program.cs:86
 msgid "This program comes with ABSOLUTELY NO WARRANTY."
-msgstr ""
+msgstr "Το πρόγραμμα αυτό δεν περιλαμβάνει ΑΠΟΛΥΤΩΣ ΚΑΜΙΑ ΕΓΓΥΗΣΗ"
+
+#: ../SparkleShare/Program.cs:88
+msgid "This is free software, and you are welcome to redistribute it "
+msgstr "Αυτό είναι ένα δωρεάν πρόγραμμα, και είστε ευπρόσδεκτοι να το αναδιανείμετε "
 
 #: ../SparkleShare/Program.cs:89
-msgid "This is free software, and you are welcome to redistribute it "
-msgstr ""
-
-#: ../SparkleShare/Program.cs:90
 msgid "under certain conditions. Please read the GNU GPLv3 for details."
-msgstr ""
+msgstr "υπό συγκεκριμένες προϋποθέσεις. Παρακαλώ διαβάστε το GNU GPLv3 για λεπτομέρειες."
+
+#: ../SparkleShare/Program.cs:91
+msgid "SparkleShare automatically syncs Git repositories in "
+msgstr "Το SparkleShare συγχρονίζει αυτόματα αποθετήρια Git σε "
 
 #: ../SparkleShare/Program.cs:92
-msgid "SparkleShare automatically syncs Git repositories in "
-msgstr ""
-
-#: ../SparkleShare/Program.cs:93
 msgid "the ~/SparkleShare folder with their remote origins."
-msgstr ""
+msgstr "τον φάκελο ~/SparkleShare με τις απομακρυσμένες προελεύσεις τους."
+
+#: ../SparkleShare/Program.cs:94
+msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
+msgstr "Χρήση: sparkleshare [start|stop|restart] [OPTION]..."
 
 #: ../SparkleShare/Program.cs:95
-msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
-msgstr ""
-
-#: ../SparkleShare/Program.cs:96
 msgid "Sync SparkleShare folder with remote repositories."
-msgstr ""
+msgstr "Συγχρονισμός φακέλου SparkleShare με απομακρυσμένα αποθετήρια."
 
-#: ../SparkleShare/Program.cs:98
+#: ../SparkleShare/Program.cs:97
 msgid "Arguments:"
-msgstr ""
+msgstr "Παράμετροι:"
 
-#: ../SparkleShare/Program.cs:108
+#: ../SparkleShare/Program.cs:107
 msgid "SparkleShare "
-msgstr ""
+msgstr "SparkleShare "
 
 #. A menu item that takes the user to http://www.sparkleshare.org/
 #: ../SparkleShare/SparkleAbout.cs:53 ../SparkleShare/SparkleStatusIcon.cs:295
 msgid "About SparkleShare"
-msgstr ""
+msgstr "Σχετικά με το SparkleShare"
 
 #: ../SparkleShare/SparkleAbout.cs:70
 #, csharp-format
 msgid "A newer version ({0}) is available!"
-msgstr ""
+msgstr "Είναι διαθέσιμη μια πιο πρόσφατη έκδοση ({0})!"
 
 #: ../SparkleShare/SparkleAbout.cs:79
 msgid "You are running the latest version."
-msgstr ""
+msgstr "Έχετε την τελευταία έκδοση."
 
-#: ../SparkleShare/SparkleAbout.cs:88 ../SparkleShare/SparkleAbout.cs:113
+#: ../SparkleShare/SparkleAbout.cs:88 ../SparkleShare/SparkleAbout.cs:110
 msgid "Checking for updates..."
-msgstr ""
+msgstr "Έλεγχος ενημερώσεων..."
 
+#: ../SparkleShare/SparkleControllerBase.cs:471
+#: ../SparkleShare/SparkleControllerBase.cs:479
 #: ../SparkleShare/SparkleControllerBase.cs:493
-msgid "dddd, MMMM d, yyyy"
-msgstr ""
-
-#: ../SparkleShare/SparkleControllerBase.cs:499
 msgid "dddd, MMMM d"
-msgstr ""
+msgstr "dddd, MMMM d"
 
-#: ../SparkleShare/SparkleControllerBase.cs:707
-#, csharp-format
-msgid "added ‘{0}’"
-msgstr ""
+#: ../SparkleShare/SparkleControllerBase.cs:472
+msgid "Today"
+msgstr "Σήμερα"
 
-#: ../SparkleShare/SparkleControllerBase.cs:712
-#, csharp-format
-msgid "moved ‘{0}’"
-msgstr ""
+#: ../SparkleShare/SparkleControllerBase.cs:480
+msgid "Yesterday"
+msgstr "Χτες"
 
-#: ../SparkleShare/SparkleControllerBase.cs:717
-#, csharp-format
-msgid "edited ‘{0}’"
-msgstr ""
+#: ../SparkleShare/SparkleControllerBase.cs:487
+msgid "dddd, MMMM d, yyyy"
+msgstr "dddd, MMMM d, yyyy"
 
-#: ../SparkleShare/SparkleControllerBase.cs:722
-#, csharp-format
-msgid "deleted ‘{0}’"
-msgstr ""
-
-#: ../SparkleShare/SparkleControllerBase.cs:731
-#, csharp-format
-msgid "and {0} more"
-msgid_plural "and {0} more"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../SparkleShare/SparkleControllerBase.cs:735
-msgid "did something magical"
-msgstr ""
-
-#: ../SparkleShare/SparkleEventLog.cs:58
+#: ../SparkleShare/SparkleEventLog.cs:57
 msgid "Recent Events"
-msgstr ""
+msgstr "Πρόσφατα γεγονότα"
 
-#: ../SparkleShare/SparkleEventLog.cs:169
-#: ../SparkleShare/SparkleEventLog.cs:188
+#: ../SparkleShare/SparkleEventLog.cs:160
+msgid "All Projects"
+msgstr "Όλα τα projects"
+
+#: ../SparkleShare/SparkleEventLog.cs:179
 msgid "All Folders"
-msgstr ""
+msgstr "Όλοι οι Φάκελοι"
+
+#: ../SparkleShare/SparkleOptions.cs:486
+msgid "OptionName"
+msgstr "OptionName"
 
 #: ../SparkleShare/SparkleSetup.cs:76
-msgid ""
-"Before we can create a SparkleShare folder on this computer, we need a few "
-"bits of information from you."
-msgstr ""
-
-#: ../SparkleShare/SparkleSetup.cs:83
 msgid "Full Name:"
-msgstr ""
+msgstr "Πλήρες όνομα:"
 
-#: ../SparkleShare/SparkleSetup.cs:98
+#: ../SparkleShare/SparkleSetup.cs:97
 msgid "Email:"
-msgstr ""
+msgstr "Email:"
 
-#: ../SparkleShare/SparkleSetup.cs:108
-msgid "Next"
-msgstr ""
+#: ../SparkleShare/SparkleSetup.cs:110 ../SparkleShare/SparkleSetup.cs:512
+#: ../SparkleShare/SparkleSetup.cs:532 ../SparkleShare/SparkleSetup.cs:550
+msgid "Continue"
+msgstr "Συνέχεια"
 
-#: ../SparkleShare/SparkleSetup.cs:129
+#: ../SparkleShare/SparkleSetup.cs:138
 msgid "Where's your project hosted?"
-msgstr ""
+msgstr "Που φιλοξενείται το project σου;"
 
 #: ../SparkleShare/SparkleSetup.cs:275
 msgid "Address"
-msgstr ""
+msgstr "Διεύθυνση"
 
-#: ../SparkleShare/SparkleSetup.cs:295
+#: ../SparkleShare/SparkleSetup.cs:296
 msgid "Remote Path"
-msgstr ""
+msgstr "Απομακρυσμένο path"
 
 #. Cancel button
-#: ../SparkleShare/SparkleSetup.cs:309 ../SparkleShare/SparkleSetup.cs:345
+#: ../SparkleShare/SparkleSetup.cs:312 ../SparkleShare/SparkleSetup.cs:348
 msgid "Cancel"
-msgstr ""
+msgstr "Ακύρωση"
 
 #. Sync button
-#: ../SparkleShare/SparkleSetup.cs:316
+#: ../SparkleShare/SparkleSetup.cs:319
 msgid "Add"
-msgstr ""
+msgstr "Προσθήκη"
 
-#: ../SparkleShare/SparkleSetup.cs:335
+#: ../SparkleShare/SparkleSetup.cs:338
 #, csharp-format
 msgid "Adding project ‘{0}’…"
-msgstr ""
+msgstr "Προσθήκη project ‘{0}’…"
 
-#: ../SparkleShare/SparkleSetup.cs:336
+#: ../SparkleShare/SparkleSetup.cs:339
 msgid "This may take a while."
-msgstr ""
+msgstr "Αυτό μπορεί να πάρει λίγο χρόνο."
 
-#: ../SparkleShare/SparkleSetup.cs:337
+#: ../SparkleShare/SparkleSetup.cs:340
 msgid "Are you sure it’s not coffee o'clock?"
-msgstr ""
+msgstr "Είστε σίγουροι ότι δεν είναι ώρα για καφέ;"
 
-#: ../SparkleShare/SparkleSetup.cs:341 ../SparkleShare/SparkleSetup.cs:457
-#: ../SparkleShare/SparkleSetup.cs:556
+#: ../SparkleShare/SparkleSetup.cs:344 ../SparkleShare/SparkleSetup.cs:460
+#: ../SparkleShare/SparkleSetup.cs:577
 msgid "Finish"
-msgstr ""
+msgstr "Τέλος"
 
-#: ../SparkleShare/SparkleSetup.cs:374
+#: ../SparkleShare/SparkleSetup.cs:377
 msgid "Something went wrong"
-msgstr ""
+msgstr "Κάτι πήγε λάθος"
 
-#: ../SparkleShare/SparkleSetup.cs:422
+#: ../SparkleShare/SparkleSetup.cs:425
 msgid "Try Again…"
-msgstr ""
+msgstr "Προσπαθήστε ξανά..."
 
-#: ../SparkleShare/SparkleSetup.cs:441
+#: ../SparkleShare/SparkleSetup.cs:444
 #, csharp-format
 msgid "‘{0}’ has been successfully added"
-msgstr ""
+msgstr "‘{0}’ προστέθηκε με επιτυχία"
 
-#: ../SparkleShare/SparkleSetup.cs:447
+#: ../SparkleShare/SparkleSetup.cs:450
 msgid "Project successfully added!"
-msgstr ""
+msgstr "Το project προστέθηκε με επιτυχία!"
 
-#: ../SparkleShare/SparkleSetup.cs:448
+#: ../SparkleShare/SparkleSetup.cs:451
 msgid "Access the files from your SparkleShare folder."
-msgstr ""
+msgstr "Πρόσβαση στα αρχεία του SparkleShare φακέλου σας."
 
 #. A button that opens the synced folder
-#: ../SparkleShare/SparkleSetup.cs:451
+#: ../SparkleShare/SparkleSetup.cs:454
 msgid "Open Folder"
-msgstr ""
+msgstr "Άνοιγμα Φακέλου"
 
-#: ../SparkleShare/SparkleSetup.cs:477
+#: ../SparkleShare/SparkleSetup.cs:503
 msgid "What's happening next?"
-msgstr ""
+msgstr "Τι γίνεται μετά;"
 
-#: ../SparkleShare/SparkleSetup.cs:478
+#: ../SparkleShare/SparkleSetup.cs:504
 msgid ""
 "SparkleShare creates a special folder in your personal folder that will keep"
 " track of your projects."
-msgstr ""
+msgstr "Το SparkleShare δημιουργεί έναν ειδικό φάκελο στον προσωπικό σας φάκελο, στον οποίο παρακολουθεί τα project σας."
 
-#: ../SparkleShare/SparkleSetup.cs:481
+#: ../SparkleShare/SparkleSetup.cs:507
 msgid "Skip Tutorial"
-msgstr ""
+msgstr "Παράληψη Οδηγού"
 
-#: ../SparkleShare/SparkleSetup.cs:486 ../SparkleShare/SparkleSetup.cs:506
-#: ../SparkleShare/SparkleSetup.cs:524
-msgid "Continue"
-msgstr ""
-
-#: ../SparkleShare/SparkleSetup.cs:502
+#: ../SparkleShare/SparkleSetup.cs:528
 msgid "Sharing files with others"
-msgstr ""
+msgstr "Διαμοιρασμός αρχείων με άλλους"
 
-#: ../SparkleShare/SparkleSetup.cs:503
+#: ../SparkleShare/SparkleSetup.cs:529
 msgid ""
 "All files added to your project folders are synced with the host "
 "automatically, as well as with your collaborators."
-msgstr ""
+msgstr "Όλα τα αρχεία που προστίθενται στους φακέλους των project σου συγχρονίζονται αυτόματα με τον host, όπως και με τους συνεργάτες σου."
 
-#: ../SparkleShare/SparkleSetup.cs:520
+#: ../SparkleShare/SparkleSetup.cs:546
 msgid "The status icon is here to help"
-msgstr ""
+msgstr "Το status icon είναι εδώ για να βοηθήσει"
 
-#: ../SparkleShare/SparkleSetup.cs:521
+#: ../SparkleShare/SparkleSetup.cs:547
 msgid ""
 "It shows the syncing process status, and contains links to your projects and"
 " the event log."
-msgstr ""
+msgstr "Απεικονίζει την κατάσταση συγχρονισμού, και περιέχει συνδέσμους για τα projects και το ημερολόγιο ενεργειών."
 
-#: ../SparkleShare/SparkleSetup.cs:538
+#: ../SparkleShare/SparkleSetup.cs:564
 msgid "Adding projects to SparkleShare"
-msgstr ""
+msgstr "Προσθήκη projects στο SparkleShare"
 
-#: ../SparkleShare/SparkleSetup.cs:539
+#: ../SparkleShare/SparkleSetup.cs:565
 msgid ""
 "Just click this button when you see it on the web, and the project will be "
 "automatically added:"
-msgstr ""
+msgstr "Απλώς πάτα αυτό το κουμπί όταν το δεις στο web, και το project θα προστεθεί αυτόματα:"
 
-#: ../SparkleShare/SparkleSetup.cs:542
+#: ../SparkleShare/SparkleSetup.cs:568
 msgid ""
 "…or select <b>‘Add Hosted Project…’</b> from the status icon menu to add one"
 " by hand."
-msgstr ""
-
-#. Opens the wizard to add a new remote folder
-#: ../SparkleShare/SparkleSetup.cs:551
-#: ../SparkleShare/SparkleStatusIcon.cs:238
-msgid "Add Hosted Project…"
-msgstr ""
+msgstr "…ή επέλεξε <b>‘Προσθήκη Project…’</b> από το μενού του status icon για να προσθέσεις κάποιο χειροκίνητα."
 
 #: ../SparkleShare/SparkleSetupWindow.cs:44
 msgid "SparkleShare Setup"
-msgstr ""
+msgstr "Στήσιμο SparkleShare"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:228
+#: ../SparkleShare/SparkleStatusIcon.cs:106
+msgid "Syncing…"
+msgstr "Συγχρονισμός..."
+
+#: ../SparkleShare/SparkleStatusIcon.cs:229
 msgid "No projects yet"
-msgstr ""
+msgstr "Κανένα project ακόμα"
 
-#: ../SparkleShare/SparkleStatusIcon.cs:262
+#. Opens the wizard to add a new remote folder
+#: ../SparkleShare/SparkleStatusIcon.cs:239
+msgid "Add Hosted Project…"
+msgstr "Προσθήκη Project..."
+
+#: ../SparkleShare/SparkleStatusIcon.cs:263
 msgid "Open Recent Events"
-msgstr ""
+msgstr "Πρόσφατες ενέργειες"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:282
 msgid "Turn Notifications Off"
-msgstr ""
+msgstr "Ενεργοποίηση ειδοποιήσεων"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:284
 msgid "Turn Notifications On"
-msgstr ""
+msgstr "Απενεργοποίηση ειδοποιήσεων"
 
 #. A menu item that quits the application
 #: ../SparkleShare/SparkleStatusIcon.cs:311
 msgid "Quit"
-msgstr ""
-
-
+msgstr "Εγκατάλειψη"
