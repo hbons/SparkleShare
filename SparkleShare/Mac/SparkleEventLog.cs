@@ -33,6 +33,7 @@ namespace SparkleShare {
 
         private WebView web_view;
         private NSBox separator;
+        private NSBox background;
         private NSPopUpButton popup_button;
         private NSProgressIndicator progress_indicator;
         private NSTextField size_label;
@@ -132,6 +133,12 @@ namespace SparkleShare {
                 };
 
 
+                this.background = new NSBox (new RectangleF (0, -1, 481, 581)) {
+                    FillColor = NSColor.White,
+                    BoxType = NSBoxType.NSBoxCustom
+                };
+
+
                 this.progress_indicator = new NSProgressIndicator () {
                     Style = NSProgressIndicatorStyle.Spinning,
                     Frame = new RectangleF (this.web_view.Frame.Width / 2 - 10,
@@ -145,6 +152,7 @@ namespace SparkleShare {
                 ContentView.AddSubview (this.size_label_value);
                 ContentView.AddSubview (this.history_label);
                 ContentView.AddSubview (this.history_label_value);
+                ContentView.AddSubview (this.background);
                 ContentView.AddSubview (this.separator);
                 ContentView.AddSubview (this.progress_indicator);
                 ContentView.AddSubview (this.hidden_close_button);
