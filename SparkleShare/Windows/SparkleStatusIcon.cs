@@ -217,13 +217,19 @@ namespace SparkleShare {
             
             SparkleMenuItem notify_item = new SparkleMenuItem () {
 				Header      = "Notifications",
-                IsCheckable = true,
-			    IsChecked   = Program.Controller.NotificationsEnabled
+                StaysOpenOnClick = true
 			};
-    
+
+                CheckBox notify_check_box = new CheckBox () {
+                    Margin = new Thickness (6,0,0,0),
+                    IsChecked   = Program.Controller.NotificationsEnabled
+                };
+
+                notify_item.Icon = notify_check_box;
+
                 notify_item.Click += delegate {
                     Program.Controller.ToggleNotifications ();
-                    CreateMenu ();
+                    notify_check_box.IsChecked = Program.Controller.NotificationsEnabled;
                 };
             
             SparkleMenuItem about_item = new SparkleMenuItem () {
