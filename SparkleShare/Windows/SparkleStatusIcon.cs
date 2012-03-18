@@ -216,8 +216,7 @@ namespace SparkleShare {
                 };
             
             SparkleMenuItem notify_item = new SparkleMenuItem () {
-				Header      = "Notifications",
-                StaysOpenOnClick = true
+				Header      = "Notifications"
 			};
 
                 CheckBox notify_check_box = new CheckBox () {
