@@ -35,6 +35,7 @@ namespace SparkleShare {
         private Label history_label;
         private HBox layout_horizontal;
         private ComboBox combo_box;
+        private HBox combo_box_wrapper;
         private EventBox content_wrapper;
         private ScrolledWindow scrolled_window;
         private WebView web_view;
@@ -176,9 +177,12 @@ namespace SparkleShare {
             if (folders == null)
                 folders = Controller.Folders;
 
-            if (this.combo_box != null && this.combo_box.Parent != null)
-                this.layout_horizontal.Remove (this.combo_box);
+            if (this.combo_box_wrapper != null && this.combo_box_wrapper.Parent != null) {
+                this.layout_horizontal.Remove (this.combo_box_wrapper);
+                this.combo_box_wrapper.Remove (this.combo_box);
+            }
 
+            this.combo_box_wrapper = new HBox (false, 0);
             this.combo_box = new ComboBox ();
 
             CellRendererText cell = new CellRendererText();
@@ -220,8 +224,11 @@ namespace SparkleShare {
                     Controller.SelectedFolder = selection;
             };
 
+            this.combo_box_wrapper.PackStart (new Label (" "), false, false, 9);
+            this.combo_box_wrapper.PackStart (this.combo_box, true, true, 0);
+
             this.layout_horizontal.BorderWidth = 9;
-            this.layout_horizontal.PackStart (this.combo_box, true, true, 0);
+            this.layout_horizontal.PackStart (this.combo_box_wrapper, true, true, 0);
             this.layout_horizontal.ShowAll ();
         }
 
