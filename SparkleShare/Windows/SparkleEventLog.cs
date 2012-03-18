@@ -112,15 +112,14 @@ namespace SparkleShare {
             
             this.canvas = new Canvas ();
             Content     = this.canvas;
-			
+
             this.canvas.Children.Add (size_label);
             Canvas.SetLeft (size_label, 24);
             Canvas.SetTop (size_label, 4);
-            
+
             this.canvas.Children.Add (this.size_label_value);
             Canvas.SetLeft (this.size_label_value, 22 + size_label_rect.Width);
             Canvas.SetTop (this.size_label_value, 4);
-            
             
             this.canvas.Children.Add (history_label);
             Canvas.SetLeft (history_label, 130);

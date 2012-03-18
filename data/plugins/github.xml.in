@@ -3,7 +3,7 @@
   <plugin>
     <info>
         <_name>Github</_name>
-        <_description>Free public Git repositories with collaborator management</_description>
+        <_description>Collaborate on projects hosted on github.com</_description>
         <icon>github.png</icon>
         <backend>Git</backend>
     </info>

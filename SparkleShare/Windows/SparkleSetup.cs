@@ -268,10 +268,10 @@ namespace SparkleShare {
 					    grid_view.ColumnHeaderContainerStyle = header_style;
 					    
                         foreach (SparklePlugin plugin in Controller.Plugins) {
-							BitmapFrame image = BitmapFrame.Create (
+                            // FIXME: images are blurry
+                            BitmapFrame image = BitmapFrame.Create (
 								new Uri (plugin.ImagePath)
 							);
-						
 							
                             list_view.Items.Add (
                                 new {
