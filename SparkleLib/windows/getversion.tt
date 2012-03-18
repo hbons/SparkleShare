@@ -7,42 +7,7 @@
     String VERSION;
     String ASM_VERSION;
     String ASM_FILE_VERSION;
-    
-    try {
-        // Add msysgit to path, as we cannot asume it is added to the path
-        // Asume it is installed in @"C:\msysgit\bin" for now
-        string MSysGit=@"C:\msysgit";
-
-        string newPath = MSysGit + @"\bin" + ";"
-                       + MSysGit + @"\mingw\bin" + ";"
-                       + MSysGit + @"\cmd" + ";"
-                       + System.Environment.ExpandEnvironmentVariables ("%PATH%");
-        System.Environment.SetEnvironmentVariable ("PATH", newPath);
-
-        Process process = new Process();
-        process.StartInfo.UseShellExecute = false;
-        process.StartInfo.RedirectStandardOutput = true;
-        process.StartInfo.CreateNoWindow = true;
-        process.StartInfo.FileName = "git";
-        process.StartInfo.Arguments = "describe --tags";
-        process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Host.TemplateFile);
-        process.Start();
-
-        String DescribeOutput=process.StandardOutput.ReadLine();
-
-        Match m = Regex.Match(DescribeOutput, @"(\d+)\.(\d+)(?:-rc(\d+))?-(\d+)");
-        int[] version = new int [4];
-        for(int i=1; i <= 4; i++)
-            Int32.TryParse(m.Groups[i].Value, out version[i-1]);
-        
-        VERSION=DescribeOutput;
-        ASM_VERSION=String.Format("{0}.{1}",version[0],version[1]);
-        ASM_FILE_VERSION="";
-        
-    } catch (Exception e) {
-        // Current defaults
-        VERSION = ASM_VERSION = ASM_FILE_VERSION = "0.8.3";
-    }
+    VERSION = ASM_VERSION = ASM_FILE_VERSION = "0.8.4";
 
 #>
 
