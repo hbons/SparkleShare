@@ -310,7 +310,7 @@ namespace SparkleShare {
                                 TextColor       = NSColor.DisabledControlText,
                                 Editable        = false,
                                 Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 355, 204, 17),
-                                StringValue     = "",
+                                StringValue     = Controller.SelectedPlugin.PathExample,
                                 Font            = NSFontManager.SharedFontManager.FontWithFamily
                                                       ("Lucida Grande", NSFontTraitMask.Condensed, 0, 11)
                             };
@@ -321,7 +321,7 @@ namespace SparkleShare {
                                 TextColor       = NSColor.DisabledControlText,
                                 Editable        = false,
                                 Frame           = new RectangleF (190, Frame.Height - 355, 204, 17),
-                                StringValue     = "",
+                                StringValue     = Controller.SelectedPlugin.AddressExample,
                                 Font            = NSFontManager.SharedFontManager.FontWithFamily
                                                       ("Lucida Grande", NSFontTraitMask.Condensed, 0, 11)
                             };
