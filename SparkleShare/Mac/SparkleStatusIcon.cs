@@ -110,7 +110,7 @@ namespace SparkleShare {
                 {
                     InvokeOnMainThread (delegate {
                         switch (state) {
-                        case IconState.Idle:
+                        case IconState.Idle: {
     
                             Animation.Stop ();
                             
@@ -121,10 +121,14 @@ namespace SparkleShare {
     
                             StateMenuItem.Title = StateText;
                             CreateMenu ();
+
+                            StatusItem.Image          = AnimationFrames [0];
+                            StatusItem.AlternateImage = AnimationFramesActive [0];
     
                             break;
     
-                        default:
+                        }
+                        default: {
 							string state_text;
 						
 							if (state == IconState.SyncingUp)
@@ -144,8 +148,8 @@ namespace SparkleShare {
                                 Animation.Start ();
     
                             break;
-    
-                        case IconState.Error:
+                        }
+                        case IconState.Error:{
 
                             Animation.Stop ();
     
@@ -159,6 +163,7 @@ namespace SparkleShare {
                             StatusItem.AlternateImage.Size = new SizeF (16, 16);
 
                             break;
+                        }
                         }
 
                         StatusItem.Menu.Update ();
