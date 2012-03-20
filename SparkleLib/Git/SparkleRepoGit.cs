@@ -564,7 +564,7 @@ namespace SparkleLib.Git {
             // Console.OutputEncoding = System.Text.Encoding.Unicode;
 
             SparkleGit git_log = new SparkleGit (LocalPath,
-                "log -" + count + " --raw -M --date=iso --format=medium");
+                "log -" + count + " --raw -M --date=iso --format=medium --no-color");
             git_log.Start ();
 
             // Reading the standard output HAS to go before
