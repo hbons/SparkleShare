@@ -152,9 +152,9 @@ namespace SparkleShare {
                 ContentView.AddSubview (this.size_label_value);
                 ContentView.AddSubview (this.history_label);
                 ContentView.AddSubview (this.history_label_value);
-                ContentView.AddSubview (this.background);
                 ContentView.AddSubview (this.separator);
                 ContentView.AddSubview (this.progress_indicator);
+                ContentView.AddSubview (this.background);
                 ContentView.AddSubview (this.hidden_close_button);
 
 

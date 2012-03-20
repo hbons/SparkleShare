@@ -92,7 +92,7 @@ namespace SparkleShare {
             Controller.UpdateMenuEvent += delegate (IconState state) {
                 Application.Invoke (delegate {
                     switch (state) {
-                    case IconState.Idle:
+                    case IconState.Idle: {
 
                         this.animation.Stop ();
 
@@ -112,7 +112,8 @@ namespace SparkleShare {
 
                         break;
 
-                    default:
+                    }
+                    default: {
 						string state_text;
 						
 							if (state == IconState.SyncingUp)
@@ -133,7 +134,8 @@ namespace SparkleShare {
 
                         break;
 
-                    case IconState.Error:
+                    }
+                    case IconState.Error: {
 
                         this.animation.Stop ();
 
@@ -148,6 +150,7 @@ namespace SparkleShare {
                         #endif
 
                         break;
+                    }
                     }
 
                     this.menu.ShowAll ();
