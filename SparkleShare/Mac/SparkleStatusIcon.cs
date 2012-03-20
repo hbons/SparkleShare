@@ -134,7 +134,7 @@ namespace SparkleShare {
 							else
 								state_text = "Syncing…";
     
-                            StateText = state_text +
+                            StateText = state_text + " " +
                                         Controller.ProgressPercentage + "%  " +
                                         Controller.ProgressSpeed;
 
