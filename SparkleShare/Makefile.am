@@ -25,5 +25,4 @@ SOURCES =  \
 include $(top_srcdir)/build/build.mk
 	
 install-data-hook:
-	update-desktop-database $(datadir)/applications
-	echo "Installed protocol handler sparkleshare://"
+	test -z $(DESTDIR) && update-desktop-database $(datadir)/applications || :
