@@ -57,6 +57,9 @@ namespace SparkleLib {
                 // gedit and emacs
                 "*~",
 
+                // LibreOffice
+                ".~lock.*",
+
                 // Firefox and Chromium temporary download files
                 "*.part",
                 "*.crdownload",
