@@ -743,6 +743,7 @@ namespace SparkleShare {
                         file_name.EndsWith (".key")) {
 
                         key_file_path = Path.Combine (keys_path, file_name);
+                        break;
                     }
                 }
             }
