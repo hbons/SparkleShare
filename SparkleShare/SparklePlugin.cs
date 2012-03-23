@@ -96,12 +96,12 @@ namespace SparkleShare {
         }
 		
         public Boolean LowerCasePath {
-		    get {
-			    if (GetValue ("info", "lower_case_path").Equals ("true"))
-				    return true;
-				else
-				    return false;
-		    }
+            get {
+                if (GetValue ("info", "lower_case_path").Equals ("true"))
+                    return true;
+                else
+                    return false;
+            }
         }
 
 
