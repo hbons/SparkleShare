@@ -6,6 +6,7 @@
         <_description>Free code hosting for Git and Mercurial</_description>
         <icon>bitbucket.png</icon>
         <backend>Git</backend>
+        <lower_case_path>true</lower_case_path>
     </info>
     <address>
       <value>ssh://git@bitbucket.org/</value>
