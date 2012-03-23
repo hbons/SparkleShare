@@ -315,9 +315,9 @@ namespace SparkleShare {
             address     = address.Trim ();
             remote_path = remote_path.Trim ();
             remote_path = remote_path.TrimEnd ("/".ToCharArray ());
-			
-			if (SelectedPlugin.LowerCasePath)
-			    remote_path = remote_path.ToLower ();
+
+            if (SelectedPlugin.LowerCasePath)
+                remote_path = remote_path.ToLower ();
 			
             SyncingFolder   = Path.GetFileNameWithoutExtension (remote_path);
             PreviousAddress = address;
