@@ -329,8 +329,8 @@ namespace SparkleShare {
     
                             TableView = new NSTableView () {
                                 Frame            = new RectangleF (0, 0, 0, 0),
-                                RowHeight        = 30,
-                                IntercellSpacing = new SizeF (0, 12),
+                                RowHeight        = 34,
+                                IntercellSpacing = new SizeF (8, 12),
                                 HeaderView       = null,
                                 Delegate         = new SparkleTableViewDelegate ()
                             };
@@ -343,9 +343,11 @@ namespace SparkleShare {
                             };
     
                             IconColumn = new NSTableColumn (new NSImage ()) {
-                                Width = 42,
+                                Width = 36,
                                 HeaderToolTip = "Icon",
-                                DataCell = new NSImageCell ()
+                                DataCell = new NSImageCell () {
+                                    ImageAlignment = NSImageAlignment.Right
+                                }
                             };
     
                             DescriptionColumn = new NSTableColumn () {
@@ -357,14 +359,11 @@ namespace SparkleShare {
                             DescriptionColumn.DataCell.Font =
                                 NSFontManager.SharedFontManager.FontWithFamily (
                                     "Lucida Grande", NSFontTraitMask.Condensed, 0, 11);
-    
+                            
                             TableView.AddColumn (IconColumn);
                             TableView.AddColumn (DescriptionColumn);
     
-                            DataSource = new SparkleDataSource ();
-    
-                            foreach (SparklePlugin plugin in Controller.Plugins)
-                                DataSource.Items.Add (plugin);
+                            DataSource = new SparkleDataSource (Controller.Plugins);
     
                             TableView.DataSource = DataSource;
                             TableView.ReloadData ();
@@ -802,11 +801,34 @@ namespace SparkleShare {
     public class SparkleDataSource : NSTableViewDataSource {
 
         public List<object> Items ;
+        public NSAttributedString [] Cells;
 
 
-        public SparkleDataSource ()
+        public SparkleDataSource (List<SparklePlugin> plugins)
         {
-            Items = new List<object> ();
+            Items = new List <object> ();
+            Cells = new NSAttributedString [plugins.Count];
+
+            int i = 0;
+            foreach (SparklePlugin plugin in plugins) {
+                Items.Add (plugin);
+
+                NSTextFieldCell cell = new NSTextFieldCell ();
+                NSData data          = NSData.FromString (
+                    "<font face='Lucida Grande'><b>" + plugin.Name + "</b></font>");
+
+                NSDictionary dictionary       = new NSDictionary();
+                NSAttributedString attributes = new NSAttributedString (
+                    data, new NSUrl ("file://"), out dictionary);
+
+                NSMutableAttributedString mutable_attributes = new NSMutableAttributedString (attributes);
+                mutable_attributes.Append (new NSAttributedString ("\n" + plugin.Description));
+
+                cell.SetAttributedStringValue (mutable_attributes);
+
+                Cells [i] = (NSAttributedString) cell.ObjectValue;
+                i++;
+            }
         }
 
 
@@ -824,12 +846,8 @@ namespace SparkleShare {
         public NSObject objectValueForTableColumn (NSTableView table_view,
             NSTableColumn table_column, int row_index)
         {
-            // TODO: Style text nicely: "<b>Name</b>\n<grey>Description</grey>"
             if (table_column.HeaderToolTip.Equals ("Description")) {
-                return new NSString (
-                    (Items [row_index] as SparklePlugin).Name + "\n" +
-                    (Items [row_index] as SparklePlugin).Description
-                );
+                return Cells [row_index];
 
             } else {
                 return new NSImage ((Items [row_index] as SparklePlugin).ImagePath) {
