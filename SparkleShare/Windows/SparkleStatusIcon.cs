@@ -59,10 +59,8 @@ namespace SparkleShare {
 			this.notify_icon.Icon = AnimationFrames [0];
             this.notify_icon.HeaderText = "SparkleShare";
 			
-            if (Controller.Folders.Length == 0)
-                StateText = _("Welcome to SparkleShare!");
-            else
-                this.notify_icon.Text = StateText = _("Files up to date") + Controller.FolderSize;
+            StateText = _("Welcome to SparkleShare!");
+
 
             CreateMenu ();
             

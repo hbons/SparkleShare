@@ -72,10 +72,8 @@ namespace SparkleShare {
             this.status_icon.Pixbuf = this.animation_frames [0];
             #endif
 
-            if (Controller.Folders.Length == 0)
-                this.state_text = _("Welcome to SparkleShare!");
-            else
-                this.state_text = _("Files up to date") + Controller.FolderSize;
+            this.state_text = _("Welcome to SparkleShare!");
+
 
             CreateMenu ();
 
