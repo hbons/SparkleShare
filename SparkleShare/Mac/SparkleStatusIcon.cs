@@ -82,10 +82,8 @@ namespace SparkleShare {
                 StatusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
                 StatusItem.HighlightMode = true;
     
-                if (Controller.Folders.Length == 0)
-                    StateText = _("Welcome to SparkleShare!");
-                else
-                    StateText = _("Files up to date") + Controller.FolderSize;
+                StateText = _("Welcome to SparkleShare!");
+
 
                 CreateMenu ();
     
