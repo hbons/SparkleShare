@@ -94,6 +94,15 @@ namespace SparkleShare {
                 return GetValue ("info", "announcements_url");
             }
         }
+		
+		public Boolean LowerCaseOnly {
+			get {
+				if (GetValue ("info", "lower_case_only").Equals ("true"))
+					return true;
+				else
+					return false;
+			}
+		}
 
 
         private XmlDocument xml = new XmlDocument ();
