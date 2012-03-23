@@ -276,12 +276,13 @@ namespace SparkleShare {
                             AddressTextField = new NSTextField () {
                                 Frame       = new RectangleF (190, Frame.Height - 336, 196, 22),
                                 Font        = SparkleUI.Font,
-                                StringValue = Controller.PreviousAddress,
                                 Enabled     = (Controller.SelectedPlugin.Address == null),
                                 Delegate    = new SparkleTextFieldDelegate ()
                             };
-    
-    
+
+                            if (Controller.PreviousAddress != null)
+                                AddressTextField.StringValue = Controller.PreviousAddress;
+
                             PathLabel = new NSTextField () {
                                 Alignment       = NSTextAlignment.Left,
                                 BackgroundColor = NSColor.WindowBackground,
@@ -294,12 +295,13 @@ namespace SparkleShare {
     
                             PathTextField = new NSTextField () {
                                 Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 336, 196, 22),
-                                StringValue     = Controller.PreviousPath,
                                 Enabled         = (Controller.SelectedPlugin.Path == null),
                                 Delegate        = new SparkleTextFieldDelegate ()
                             };
-    
-    
+
+                            if (Controller.PreviousPath != null)
+                                PathTextField.StringValue = Controller.PreviousPath;
+
                             AddressTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
                             PathTextField.Cell.LineBreakMode    = NSLineBreakMode.TruncatingTail;
     
@@ -310,10 +312,12 @@ namespace SparkleShare {
                                 TextColor       = NSColor.DisabledControlText,
                                 Editable        = false,
                                 Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 355, 204, 17),
-                                StringValue     = Controller.SelectedPlugin.PathExample,
                                 Font            = NSFontManager.SharedFontManager.FontWithFamily
                                                       ("Lucida Grande", NSFontTraitMask.Condensed, 0, 11)
                             };
+
+                            if (Controller.SelectedPlugin.PathExample != null)
+                                PathHelpLabel.StringValue = Controller.SelectedPlugin.PathExample;
     
                             AddressHelpLabel = new NSTextField () {
                                 BackgroundColor = NSColor.WindowBackground,
@@ -321,12 +325,14 @@ namespace SparkleShare {
                                 TextColor       = NSColor.DisabledControlText,
                                 Editable        = false,
                                 Frame           = new RectangleF (190, Frame.Height - 355, 204, 17),
-                                StringValue     = Controller.SelectedPlugin.AddressExample,
                                 Font            = NSFontManager.SharedFontManager.FontWithFamily
                                                       ("Lucida Grande", NSFontTraitMask.Condensed, 0, 11)
                             };
-    
-    
+
+                            if (Controller.SelectedPlugin.AddressExample != null)
+                                AddressHelpLabel.StringValue = Controller.SelectedPlugin.AddressExample;
+
+
                             TableView = new NSTableView () {
                                 Frame            = new RectangleF (0, 0, 0, 0),
                                 RowHeight        = 34,
@@ -866,15 +872,8 @@ namespace SparkleShare {
 
         public override void Changed (NSNotification notification)
         {
-            if (StringValueChanged!= null)
+            if (StringValueChanged != null)
                 StringValueChanged ();
-        }
-
-
-        public override string [] GetCompletions (NSControl control, NSTextView text_view,
-            string [] a, MonoMac.Foundation.NSRange range, int b)
-        {
-            return new string [0];
         }
     }
 
