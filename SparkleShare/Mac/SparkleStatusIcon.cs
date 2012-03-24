@@ -18,7 +18,6 @@
 using System;
 using System.Drawing;
 using System.IO;
-using System.Timers;
 
 using Mono.Unix;
 using MonoMac.Foundation;
@@ -27,37 +26,37 @@ using MonoMac.ObjCRuntime;
 
 namespace SparkleShare {
 
-    // The statusicon that stays in the
-    // user's notification area
     public class SparkleStatusIcon : NSObject {
 
         public SparkleStatusIconController Controller = new SparkleStatusIconController ();
 
-        // TODO: Fix case
-        private Timer Animation;
-        private int FrameNumber;
-        private string StateText;
+        private NSMenu menu;
+        private NSMenu submenu;
 
-        private NSStatusItem StatusItem;
-        private NSMenu Menu;
-        private NSMenuItem StateMenuItem;
-        private NSMenuItem FolderMenuItem;
-        private NSMenuItem [] FolderMenuItems;
-        private NSMenuItem SyncMenuItem;
-        private NSMenuItem AboutMenuItem;
-        private NSMenuItem NotificationsMenuItem;
-        private NSMenuItem RecentEventsMenuItem;
-        private NSMenuItem QuitMenuItem;
-        private NSImage [] AnimationFrames;
-        private NSImage [] AnimationFramesActive;
-        private NSImage ErrorImage;
-        private NSImage ErrorImageActive;
-        private NSImage FolderImage;
-        private NSImage CautionImage;
-        private NSImage SparkleShareImage;
+        private NSStatusItem status_item;
+        private NSMenuItem state_item;
+        private NSMenuItem folder_item;
 
-        private delegate void Task ();
-        private EventHandler [] Tasks;
+        private NSMenuItem [] folder_menu_items;
+        private NSMenuItem [] submenu_items;
+
+        private NSMenuItem more_item;
+        private NSMenuItem add_item;
+        private NSMenuItem about_item;
+        private NSMenuItem notify_item;
+        private NSMenuItem recent_events_item;
+        private NSMenuItem quit_item;
+
+        private NSImage [] animation_frames;
+        private NSImage [] animation_frames_active;
+        private NSImage error_image;
+        private NSImage error_image_active;
+        private NSImage folder_image;
+        private NSImage caution_image;
+        private NSImage sparkleshare_image;
+
+        private EventHandler [] folder_tasks;
+        private EventHandler [] overflow_tasks;
 
         
         // Short alias for the translations
@@ -71,100 +70,73 @@ namespace SparkleShare {
         {
             using (var a = new NSAutoreleasePool ())
             {
-                ErrorImage        = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/sparkleshare-syncing-error-mac.png");
-                ErrorImageActive  = new NSImage (NSBundle.MainBundle.ResourcePath + "/Pixmaps/sparkleshare-syncing-error-mac-active.png");
-                FolderImage       = NSImage.ImageNamed ("NSFolder");
-                CautionImage      = NSImage.ImageNamed ("NSCaution");
-                SparkleShareImage = NSImage.ImageNamed ("sparkleshare-mac");
+                CreateAnimation ();
 
-                Animation = CreateAnimation ();
+                this.status_item = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
+                this.status_item.HighlightMode = true;
+                this.status_item.Image = this.animation_frames [0];
 
-                StatusItem = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
-                StatusItem.HighlightMode = true;
-    
-                StateText = _("Welcome to SparkleShare!");
+                this.status_item.Image               = this.animation_frames [0];
+                this.status_item.Image.Size          = new SizeF (16, 16);
+                this.status_item.AlternateImage      = this.animation_frames_active [0];
+                this.status_item.AlternateImage.Size = new SizeF (16, 16);
 
+                this.error_image        = new NSImage (NSBundle.MainBundle.ResourcePath +
+                    "/Pixmaps/sparkleshare-syncing-error-mac.png");
+                this.error_image_active = new NSImage (NSBundle.MainBundle.ResourcePath +
+                    "/Pixmaps/sparkleshare-syncing-error-mac-active.png");
+
+                this.folder_image       = NSImage.ImageNamed ("NSFolder");
+                this.caution_image      = NSImage.ImageNamed ("NSCaution");
+                this.sparkleshare_image = NSImage.ImageNamed ("sparkleshare-mac");
 
                 CreateMenu ();
-    
-                Menu.Delegate = new SparkleStatusIconMenuDelegate ();
             }
 
 
-            Controller.UpdateQuitItemEvent += delegate (bool quit_item_enabled) {
+            Controller.UpdateIconEvent += delegate (int icon_frame) {
                 using (var a = new NSAutoreleasePool ())
                 {
                     InvokeOnMainThread (delegate {
-                        if (QuitMenuItem != null) {
-                            QuitMenuItem.Enabled = quit_item_enabled;
-                            StatusItem.Menu.Update ();
+                        if (icon_frame > -1) {
+                            this.status_item.Image               = this.animation_frames [icon_frame];
+                            this.status_item.Image.Size          = new SizeF (16, 16);
+                            this.status_item.AlternateImage      = this.animation_frames_active [icon_frame];
+                            this.status_item.AlternateImage.Size = new SizeF (16, 16);
+
+                        } else {
+                            this.status_item.Image               = this.error_image;
+                            this.status_item.AlternateImage      = this.error_image_active;
+                            this.status_item.Image.Size          = new SizeF (16, 16);
+                            this.status_item.AlternateImage.Size = new SizeF (16, 16);
                         }
                     });
                 }
             };
 
-            Controller.UpdateMenuEvent += delegate (IconState state) {
+            Controller.UpdateStatusItemEvent += delegate (string state_text) {
                 using (var a = new NSAutoreleasePool ())
                 {
                     InvokeOnMainThread (delegate {
-                        switch (state) {
-                        case IconState.Idle: {
-    
-                            Animation.Stop ();
-                            
-                            if (Controller.Folders.Length == 0)
-                                StateText = _("Welcome to SparkleShare!");
-                            else
-                                StateText = _("Files up to date") + Controller.FolderSize;
-    
-                            StateMenuItem.Title = StateText;
-                            CreateMenu ();
+                        this.state_item.Title = state_text;
+                    });
+                }
+            };
 
-                            StatusItem.Image          = AnimationFrames [0];
-                            StatusItem.AlternateImage = AnimationFramesActive [0];
-    
-                            break;
-    
-                        }
-                        default: {
-							string state_text;
-						
-							if (state == IconState.SyncingUp)
-								state_text = "Sending files…";
-							else if (state == IconState.SyncingDown)
-								state_text = "Receiving files…";
-							else
-								state_text = "Syncing…";
-    
-                            StateText = state_text + " " +
-                                        Controller.ProgressPercentage + "%  " +
-                                        Controller.ProgressSpeed;
+            Controller.UpdateMenuEvent += delegate {
+                using (var a = new NSAutoreleasePool ())
+                {
+                    InvokeOnMainThread (delegate {
+                        CreateMenu ();
+                    });
+                }
+            };
 
-                            StateMenuItem.Title = StateText;
-    
-                            if (!Animation.Enabled)
-                                Animation.Start ();
-    
-                            break;
-                        }
-                        case IconState.Error:{
-
-                            Animation.Stop ();
-    
-                            StateText = _("Not everything is synced");
-                            StateMenuItem.Title = StateText;
-                            CreateMenu ();
-
-                            StatusItem.Image               = ErrorImage;
-                            StatusItem.AlternateImage      = ErrorImageActive;
-                            StatusItem.Image.Size          = new SizeF (16, 16);
-                            StatusItem.AlternateImage.Size = new SizeF (16, 16);
-
-                            break;
-                        }
-                        }
-
-                        StatusItem.Menu.Update ();
+            Controller.UpdateQuitItemEvent += delegate (bool quit_item_enabled) {
+                using (var a = new NSAutoreleasePool ())
+                {
+                    InvokeOnMainThread (delegate {
+                        this.quit_item.Enabled = quit_item_enabled;
                     });
                 }
             };
@@ -175,151 +147,173 @@ namespace SparkleShare {
         {
             using (NSAutoreleasePool a = new NSAutoreleasePool ())
             {
-                StatusItem.Image               = AnimationFrames [0];
-                StatusItem.AlternateImage      = AnimationFramesActive [0];
-                StatusItem.Image.Size          = new SizeF (16, 16);
-                StatusItem.AlternateImage.Size = new SizeF (16, 16);
-    
-                Menu = new NSMenu ();
-                Menu.AutoEnablesItems = false;
-                
-                    StateMenuItem = new NSMenuItem () {
-                        Title = StateText,
-                        Enabled = false
-                    };
-                
-                Menu.AddItem (StateMenuItem);
-                Menu.AddItem (NSMenuItem.SeparatorItem);
-    
-                    FolderMenuItem = new NSMenuItem () {
-                        Title = "SparkleShare"
-                    };
-    
-                    FolderMenuItem.Activated += delegate {
-                        Controller.SparkleShareClicked ();
-                    };
-                
-                    FolderMenuItem.Image = SparkleShareImage;
-                    FolderMenuItem.Image.Size = new SizeF (16, 16);
-                    FolderMenuItem.Enabled = true;
-                
-                Menu.AddItem (FolderMenuItem);
-    
-                    FolderMenuItems = new NSMenuItem [Program.Controller.Folders.Count];
-    
-                    if (Controller.Folders.Length > 0) {
-                        Tasks = new EventHandler [Program.Controller.Folders.Count];
-    
-                        int i = 0;
-                        foreach (string folder_name in Program.Controller.Folders) {
-                            NSMenuItem item = new NSMenuItem ();
-    
-                            item.Title = folder_name;
-    
-                            if (Program.Controller.UnsyncedFolders.Contains (folder_name))
-                                item.Image = CautionImage;
-                            else
-                                item.Image = FolderImage;
+                this.menu                  = new NSMenu ();
+                this.menu.AutoEnablesItems = false;
 
-                            item.Image.Size = new SizeF (16, 16);
-                            Tasks [i] = OpenFolderDelegate (folder_name);
-    
-                            FolderMenuItems [i] = item;
-                            FolderMenuItems [i].Activated += Tasks [i];
-                            FolderMenuItem.Enabled = true;
+                this.state_item = new NSMenuItem () {
+                    Title   = Controller.StateText,
+                    Enabled = false
+                };
 
-                            i++;
-                        };
-    
-                    } else {
-                        FolderMenuItems = new NSMenuItem [1];
-    
-                        FolderMenuItems [0] = new NSMenuItem () {
-                            Title   = "No projects yet",
-                            Enabled = false
-                        };
-                    }
-    
-                foreach (NSMenuItem item in FolderMenuItems)
-                    Menu.AddItem (item);
-                    
-                Menu.AddItem (NSMenuItem.SeparatorItem);
-    
-                    SyncMenuItem = new NSMenuItem () {
-                        Title   = "Add Hosted Project…",
-                        Enabled = true
-                    };
-                
-                    SyncMenuItem.Activated += delegate {
-                        Controller.AddHostedProjectClicked ();
-                    };
+                this.folder_item = new NSMenuItem () {
+                    Title = "SparkleShare"
+                };
 
-    
-                Menu.AddItem (SyncMenuItem);
+                this.folder_item.Activated += delegate {
+                    Controller.SparkleShareClicked ();
+                };
 
-                    RecentEventsMenuItem = new NSMenuItem () {
-                        Title = "View Recent Changes…",
-                        Enabled = (Controller.Folders.Length > 0)
-                    };
+                this.folder_item.Image      = this.sparkleshare_image;
+                this.folder_item.Image.Size = new SizeF (16, 16);
+                this.folder_item.Enabled    = true;
 
-                    if (Controller.Folders.Length > 0) {
-                        RecentEventsMenuItem.Activated += delegate {
-                            Controller.OpenRecentEventsClicked ();
-                        };
-                    }
+                this.add_item = new NSMenuItem () {
+                    Title   = "Add Hosted Project…",
+                    Enabled = true
+                };
 
-                Menu.AddItem (RecentEventsMenuItem);
-                Menu.AddItem (NSMenuItem.SeparatorItem);
-    
-                    NotificationsMenuItem = new NSMenuItem () {
-                        Enabled = true
-                    };
-    
-                    if (Program.Controller.NotificationsEnabled)
-                        NotificationsMenuItem.Title = "Turn Notifications Off";
-                    else
-                        NotificationsMenuItem.Title = "Turn Notifications On";
-    
-                    NotificationsMenuItem.Activated += delegate {
-                        Program.Controller.ToggleNotifications ();
-    
-                        InvokeOnMainThread (delegate {
-                            if (Program.Controller.NotificationsEnabled)
-                                NotificationsMenuItem.Title = "Turn Notifications Off";
-                            else
-                                NotificationsMenuItem.Title = "Turn Notifications On";
-                        });
-                    };
-    
-                Menu.AddItem (NotificationsMenuItem);
-                Menu.AddItem (NSMenuItem.SeparatorItem);
-    
-                    AboutMenuItem = new NSMenuItem () {
-                        Title = "About SparkleShare",
-                        Enabled = true
-                    };
+                this.add_item.Activated += delegate {
+                    Controller.AddHostedProjectClicked ();
+                };
 
-                    AboutMenuItem.Activated += delegate {
-                        Controller.AboutClicked ();
-                    };
-				
-				Menu.AddItem (AboutMenuItem);
-			    Menu.AddItem (NSMenuItem.SeparatorItem);
+                this.recent_events_item = new NSMenuItem () {
+                    Title   = "View Recent Changes…",
+                    Enabled = (Controller.Folders.Length > 0)
+                };
 
-				
-                QuitMenuItem = new NSMenuItem () {
+                if (Controller.Folders.Length > 0) {
+                    this.recent_events_item.Activated += delegate {
+                        Controller.OpenRecentEventsClicked ();
+                    };
+                }
+
+                this.notify_item = new NSMenuItem () {
+                    Enabled = true
+                };
+
+                if (Program.Controller.NotificationsEnabled)
+                    this.notify_item.Title = "Turn Notifications Off";
+                else
+                    this.notify_item.Title = "Turn Notifications On";
+
+                this.notify_item.Activated += delegate {
+                    Program.Controller.ToggleNotifications ();
+
+                    InvokeOnMainThread (delegate {
+                        if (Program.Controller.NotificationsEnabled)
+                            this.notify_item.Title = "Turn Notifications Off";
+                        else
+                            this.notify_item.Title = "Turn Notifications On";
+                    });
+                };
+
+                this.about_item = new NSMenuItem () {
+                    Title   = "About SparkleShare",
+                    Enabled = true
+                };
+
+                this.about_item.Activated += delegate {
+                    Controller.AboutClicked ();
+                };
+
+                this.quit_item = new NSMenuItem () {
                     Title   = "Quit",
                     Enabled = Controller.QuitItemEnabled
                 };
-    
-                    QuitMenuItem.Activated += delegate {
-                        Controller.QuitClicked ();
+
+                this.quit_item.Activated += delegate {
+                    Controller.QuitClicked ();
+                };
+
+
+                this.menu.AddItem (this.state_item);
+                this.menu.AddItem (NSMenuItem.SeparatorItem);
+                this.menu.AddItem (this.folder_item);
+
+                this.folder_menu_items = new NSMenuItem [Controller.Folders.Length];
+                this.submenu_items     = new NSMenuItem [Controller.OverflowFolders.Length];
+
+                if (Controller.Folders.Length > 0) {
+                    this.folder_tasks   = new EventHandler [Controller.Folders.Length];
+                    this.overflow_tasks = new EventHandler [Controller.OverflowFolders.Length];
+
+                    int i = 0;
+                    foreach (string folder_name in Controller.Folders) {
+                        NSMenuItem item = new NSMenuItem ();
+                        item.Title      = folder_name;
+
+                        if (Program.Controller.UnsyncedFolders.Contains (folder_name))
+                            item.Image = this.caution_image;
+                        else
+                            item.Image = this.folder_image;
+
+                        item.Image.Size = new SizeF (16, 16);
+                        this.folder_tasks [i] = OpenFolderDelegate (folder_name);
+
+                        this.folder_menu_items [i] = item;
+                        this.folder_menu_items [i].Activated += this.folder_tasks [i];
+
+                        i++;
                     };
 
-                Menu.AddItem (QuitMenuItem);
+                    i = 0;
+                    foreach (string folder_name in Controller.OverflowFolders) {
+                        NSMenuItem item = new NSMenuItem ();
+                        item.Title      = folder_name;
 
-                StatusItem.Menu = Menu;
-                StatusItem.Menu.Update ();
+                        if (Program.Controller.UnsyncedFolders.Contains (folder_name))
+                            item.Image = this.caution_image;
+                        else
+                            item.Image = this.folder_image;
+
+                        item.Image.Size   = new SizeF (16, 16);
+                        this.overflow_tasks [i] = OpenFolderDelegate (folder_name);
+
+                        this.submenu_items [i] = item;
+                        this.submenu_items [i].Activated += this.overflow_tasks [i];
+
+                        i++;
+                    };
+
+                } else {
+                    this.folder_menu_items     = new NSMenuItem [1];
+                    this.folder_menu_items [0] = new NSMenuItem () {
+                        Title   = "No projects yet",
+                        Enabled = false
+                    };
+                }
+
+
+                foreach (NSMenuItem item in this.folder_menu_items)
+                    this.menu.AddItem (item);
+
+                if (this.submenu_items.Length > 0) {
+                    this.submenu = new NSMenu ();
+
+                    foreach (NSMenuItem item in this.submenu_items)
+                        this.submenu.AddItem (item);
+
+                    this.more_item = new NSMenuItem () {
+                        Title = "More Projects",
+                        Submenu = this.submenu
+                    };
+
+                    this.menu.AddItem (NSMenuItem.SeparatorItem);
+                    this.menu.AddItem (this.more_item);
+                }
+
+                this.menu.AddItem (NSMenuItem.SeparatorItem);
+                this.menu.AddItem (this.add_item);
+                this.menu.AddItem (this.recent_events_item);
+                this.menu.AddItem (NSMenuItem.SeparatorItem);
+                this.menu.AddItem (this.notify_item);
+                this.menu.AddItem (NSMenuItem.SeparatorItem);
+				this.menu.AddItem (this.about_item);
+			    this.menu.AddItem (NSMenuItem.SeparatorItem);
+                this.menu.AddItem (this.quit_item);
+
+                this.menu.Delegate    = new SparkleStatusIconMenuDelegate ();
+                this.status_item.Menu = this.menu;
             }
         }
 
@@ -334,54 +328,43 @@ namespace SparkleShare {
         }
 
 
-        // Creates the Animation that handles the syncing animation
-        private Timer CreateAnimation ()
+        private void CreateAnimation ()
         {
-            FrameNumber = 0;
-
-            AnimationFrames = new NSImage [] {
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-sparkleshare-mac-i.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-sparkleshare-mac-ii.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-sparkleshare-mac-iii.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-sparkleshare-mac-iiii.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-sparkleshare-mac-iiiii.png"))
+            this.animation_frames = new NSImage [] {
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    "Pixmaps", "process-syncing-sparkleshare-mac-i.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    "Pixmaps", "process-syncing-sparkleshare-mac-ii.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    "Pixmaps", "process-syncing-sparkleshare-mac-iii.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    "Pixmaps", "process-syncing-sparkleshare-mac-iiii.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    "Pixmaps", "process-syncing-sparkleshare-mac-iiiii.png"))
             };
 
-            AnimationFramesActive = new NSImage [] {
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-sparkleshare-mac-i-active.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-sparkleshare-mac-ii-active.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-sparkleshare-mac-iii-active.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-sparkleshare-mac-iiii-active.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-sparkleshare-mac-iiiii-active.png"))
+            this.animation_frames_active = new NSImage [] {
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    "Pixmaps", "process-syncing-sparkleshare-mac-i-active.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    "Pixmaps", "process-syncing-sparkleshare-mac-ii-active.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    "Pixmaps", "process-syncing-sparkleshare-mac-iii-active.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    "Pixmaps", "process-syncing-sparkleshare-mac-iiii-active.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
+                    "Pixmaps", "process-syncing-sparkleshare-mac-iiiii-active.png"))
             };
-
-            Timer Animation = new Timer () {
-                Interval = 40
-            };
-
-            Animation.Elapsed += delegate {
-                if (FrameNumber < 4)
-                    FrameNumber++;
-                else
-                    FrameNumber = 0;
-
-                InvokeOnMainThread (delegate {
-                    StatusItem.Image               = AnimationFrames [FrameNumber];
-                    StatusItem.AlternateImage      = AnimationFramesActive [FrameNumber];
-                    StatusItem.Image.Size          = new SizeF (16, 16);
-                    StatusItem.AlternateImage.Size = new SizeF (16, 16);
-                });
-            };
-
-            return Animation;
         }
-
     }
     
     
     public class SparkleStatusIconMenuDelegate : NSMenuDelegate {
         
-        public override void MenuWillHighlightItem (NSMenu menu, NSMenuItem item) { }
+        public override void MenuWillHighlightItem (NSMenu menu, NSMenuItem item)
+        {
+        }
+
     
         public override void MenuWillOpen (NSMenu menu)
         {
