@@ -18,6 +18,8 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -61,7 +63,10 @@ namespace SparkleShare {
 			
 			Controller.UpdateIconEvent += delegate (int icon_frame) {
 				Dispatcher.Invoke ((Action) delegate {
-					this.notify_icon.Icon = animation_frames [icon_frame];
+					if (icon_frame > -1)
+						this.notify_icon.Icon = animation_frames [icon_frame];
+					else
+						this.notify_icon.Icon = this.error_icon;
 				});				
 			};
 			
@@ -175,8 +180,6 @@ namespace SparkleShare {
                         Header = folder_name
                     };
                     
-					// FIXME: can't click items. probably has something to do
-					// with SparkleNotifyIcon
                     subfolder_item.Click += OpenFolderDelegate (folder_name);
                     
 					Image subfolder_image = new Image () {
@@ -185,15 +188,20 @@ namespace SparkleShare {
 		            	Height = 16
 					};
 					
-                    subfolder_item.Icon = subfolder_image;
-					this.context_menu.Items.Add (subfolder_item);
+                    if (Program.Controller.UnsyncedFolders.Contains (folder_name)) {
+                    	subfolder_item.Icon = new Image () {
+							Source = (BitmapSource) Imaging.CreateBitmapSourceFromHIcon (
+								System.Drawing.SystemIcons.Exclamation.Handle, 
+								Int32Rect.Empty,
+								BitmapSizeOptions.FromWidthAndHeight (16,16)
+							)
+						};  
+						
+					} else {
+                    	subfolder_item.Icon = subfolder_image;
+					}
 					
-                    /* TODO
-                    if (Program.Controller.UnsyncedFolders.Contains (folder_name))
-                        subfolder_item.Icon = Icons.dialog_error_16;
-                    else
-                        subfolder_item.Icon = Icons.sparkleshare_windows_status;
-                     */
+					this.context_menu.Items.Add (subfolder_item);
 				}
 				
 				SparkleMenuItem more_item = new SparkleMenuItem () {
@@ -213,15 +221,20 @@ namespace SparkleShare {
 		            	Height = 16
 					};
 					
-                    subfolder_item.Icon = subfolder_image;
-					more_item.Items.Add (subfolder_item);
+					if (Program.Controller.UnsyncedFolders.Contains (folder_name)) {
+                    	subfolder_item.Icon = new Image () {
+							Source = (BitmapSource) Imaging.CreateBitmapSourceFromHIcon (
+								System.Drawing.SystemIcons.Exclamation.Handle, 
+								Int32Rect.Empty,
+								BitmapSizeOptions.FromWidthAndHeight (16,16)
+							)
+						};  
+						
+					} else {
+                        subfolder_item.Icon = subfolder_image;
+					}
 					
-                    /* TODO
-                    if (Program.Controller.UnsyncedFolders.Contains (folder_name))
-                        subfolder_item.Icon = Icons.dialog_error_16;
-                    else
-                        subfolder_item.Icon = Icons.sparkleshare_windows_status;
-                     */
+					more_item.Items.Add (subfolder_item);
                 }
 				
 				if (more_item.Items.Count > 0) {
