@@ -70,7 +70,7 @@ namespace SparkleShare {
         {
             using (var a = new NSAutoreleasePool ())
             {
-                CreateAnimation ();
+                CreateAnimationFrames ();
 
                 this.status_item = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
                 this.status_item.HighlightMode = true;
@@ -81,18 +81,13 @@ namespace SparkleShare {
                 this.status_item.AlternateImage      = this.animation_frames_active [0];
                 this.status_item.AlternateImage.Size = new SizeF (16, 16);
 
-                this.error_image        = new NSImage (NSBundle.MainBundle.ResourcePath +
-                    "/Pixmaps/sparkleshare-syncing-error-mac.png");
-                this.error_image_active = new NSImage (NSBundle.MainBundle.ResourcePath +
-                    "/Pixmaps/sparkleshare-syncing-error-mac-active.png");
-
                 this.folder_image       = NSImage.ImageNamed ("NSFolder");
                 this.caution_image      = NSImage.ImageNamed ("NSCaution");
                 this.sparkleshare_image = NSImage.ImageNamed ("sparkleshare-mac");
 
                 CreateMenu ();
             }
-
+			
 
             Controller.UpdateIconEvent += delegate (int icon_frame) {
                 using (var a = new NSAutoreleasePool ())
@@ -328,7 +323,7 @@ namespace SparkleShare {
         }
 
 
-        private void CreateAnimation ()
+        private void CreateAnimationFrames ()
         {
             this.animation_frames = new NSImage [] {
                 new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
@@ -355,6 +350,11 @@ namespace SparkleShare {
                 new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
                     "Pixmaps", "process-syncing-sparkleshare-mac-iiiii-active.png"))
             };
+			
+            this.error_image        = new NSImage (NSBundle.MainBundle.ResourcePath +
+                "/Pixmaps/sparkleshare-syncing-error-mac.png");
+            this.error_image_active = new NSImage (NSBundle.MainBundle.ResourcePath +
+                "/Pixmaps/sparkleshare-syncing-error-mac-active.png");
         }
     }
     
