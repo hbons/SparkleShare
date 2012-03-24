@@ -31,13 +31,12 @@ namespace SparkleShare {
         
         public SparkleStatusIconController Controller = new SparkleStatusIconController();
 
-        private Forms.Timer Animation;
-        private Drawing.Bitmap [] AnimationFrames;
-        private Drawing.Bitmap ErrorIcon;
-        private int FrameNumber;
-        private string StateText;
+        private Drawing.Bitmap [] animation_frames;
+        private Drawing.Bitmap error_icon;
+
         private ContextMenu context_menu;
-        private SparkleMenuItem status_item;
+		
+        private SparkleMenuItem state_item;
         private SparkleMenuItem exit_item;
         
         private SparkleNotifyIcon notify_icon = new SparkleNotifyIcon ();
@@ -52,123 +51,40 @@ namespace SparkleShare {
         
         public SparkleStatusIcon ()
 		{
-            AnimationFrames = CreateAnimationFrames ();
-            Animation       = CreateAnimation ();
-			ErrorIcon       = SparkleUIHelpers.GetBitmap ("sparkleshare-syncing-error-windows");
+			CreateAnimationFrames ();
 
-			this.notify_icon.Icon = AnimationFrames [0];
+			this.notify_icon.Icon = animation_frames [0];
             this.notify_icon.HeaderText = "SparkleShare";
-			
-            StateText = _("Welcome to SparkleShare!");
-
 
             CreateMenu ();
+         
+			
+			Controller.UpdateIconEvent += delegate (int icon_frame) {
+				Dispatcher.Invoke ((Action) delegate {
+					this.notify_icon.Icon = animation_frames [icon_frame];
+				});				
+			};
+			
+			Controller.UpdateStatusItemEvent += delegate (string state_text) {
+				Dispatcher.Invoke ((Action) delegate {
+					this.state_item.Header = state_text;
+					this.state_item.UpdateLayout ();
+					this.notify_icon.HeaderText = "SparkleShare\n" + state_text;
+				});
+			};
+			
+			Controller.UpdateMenuEvent += delegate (IconState state) {
+				Dispatcher.Invoke ((Action) delegate {
+					CreateMenu ();     
+				});
+			};
             
-            
-            Controller.UpdateQuitItemEvent += delegate (bool enable) {
+            Controller.UpdateQuitItemEvent += delegate (bool exit_item_enabled) {
                   Dispatcher.Invoke ((Action) delegate {
-                    this.exit_item.IsEnabled = enable;
+                    this.exit_item.IsEnabled = exit_item_enabled;
                     this.exit_item.UpdateLayout ();
                 });
             };
-
-            
-            Controller.UpdateMenuEvent += delegate (IconState state) {
-                Dispatcher.Invoke ((Action) delegate {
-                        switch (state) {
-                        case IconState.Idle: {
-    
-                            Animation.Stop ();
-                        
-                            if (Controller.Folders.Length == 0)
-                                this.notify_icon.Text = StateText = "Welcome to SparkleShare!";
-                            else
-                                this.notify_icon.Text = StateText = "Files up to date" + Controller.FolderSize;
-    
-                        
-                            this.status_item.Header = StateText;
-                            this.notify_icon.Icon = AnimationFrames [0];
-                        
-                            CreateMenu ();
-    
-                            break;
-                        }
-                        
-                        default: {
-    						string state_text;
-						
-							if (state == IconState.SyncingUp)
-								state_text = "Sending files…";
-							else if (state == IconState.SyncingDown)
-								state_text = "Receiving files…";
-							else
-								state_text = "Syncing…";
-						
-                            this.notify_icon.Text = StateText = state_text + " " +
-                            	Controller.ProgressPercentage + "%  " +
-                                Controller.ProgressSpeed;
-
-                            this.status_item.Header = StateText;
-    
-                            if (!Animation.Enabled)
-                                Animation.Start ();
-    
-                            break;
-                        }
-    
-                        case IconState.Error: {
-
-                            Animation.Stop ();
-    
-                            this.notify_icon.Text = StateText = _("Not everything is synced");
-                            this.status_item.Header = StateText;
-                            CreateMenu ();
-
-                            this.notify_icon.Icon = ErrorIcon;
-                            
-                            break;
-                        }
-                        }
-                    
-                        this.status_item.UpdateLayout ();
-                    });
-            };
-        }
-
-        
-        private Drawing.Bitmap [] CreateAnimationFrames ()
-        {
-            return new Drawing.Bitmap [] {
-	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-i"),
-	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-ii"),
-	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iii"),
-	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iiii"),
-	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iiiii")
-			};
-        }
-
-
-        // Creates the Animation that handles the syncing animation
-        private Forms.Timer CreateAnimation ()
-        {
-            FrameNumber = 0;
-
-            Forms.Timer Animation = new Forms.Timer () {
-                Interval = 35
-            };
-
-            Animation.Tick += delegate {
-                if (FrameNumber < AnimationFrames.Length - 1)
-                    FrameNumber++;
-                else
-                    FrameNumber = 0;
-
-                Dispatcher.Invoke ((Action) delegate {
-                    this.notify_icon.Icon = AnimationFrames [FrameNumber];
-                });
-            };
-
-            return Animation;
         }
 
 
@@ -176,10 +92,12 @@ namespace SparkleShare {
         {
             this.context_menu = new ContextMenu ();
 
-            status_item = new SparkleMenuItem () {
-                Header    = StateText,
+            this.state_item = new SparkleMenuItem () {
+                Header    = Controller.StateText,
                 IsEnabled = false
             };
+			
+			this.notify_icon.HeaderText = "SparkleShare\n" + Controller.StateText;
             
             Image folder_image = new Image () {
             	Source = SparkleUIHelpers.GetImageSource ("folder-sparkleshare-windows-16"),
@@ -237,7 +155,7 @@ namespace SparkleShare {
                      Controller.AboutClicked ();
                 };
             
-            exit_item = new SparkleMenuItem () {
+            this.exit_item = new SparkleMenuItem () {
                 Header = "Exit"
             };
             
@@ -247,7 +165,7 @@ namespace SparkleShare {
                 };
             
             
-            this.context_menu.Items.Add (status_item);
+            this.context_menu.Items.Add (this.state_item);
             this.context_menu.Items.Add (new Separator ());
 			this.context_menu.Items.Add (folder_item);
 
@@ -309,6 +227,20 @@ namespace SparkleShare {
         public void Dispose ()
         {
             this.notify_icon.Dispose ();
+        }
+		
+		
+		private void CreateAnimationFrames ()
+        {
+            this.animation_frames = new Drawing.Bitmap [] {
+	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-i"),
+	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-ii"),
+	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iii"),
+	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iiii"),
+	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iiiii")
+			};
+			
+			this.error_icon = SparkleUIHelpers.GetBitmap ("sparkleshare-syncing-error-windows");
         }
 
 
