@@ -115,7 +115,7 @@ namespace SparkleShare {
                 };
             
             SparkleMenuItem add_item = new SparkleMenuItem () {
-                Header    = "Add hosted project…"
+                Header = "Add hosted project…"
             };
             
                 add_item.Click += delegate {
@@ -132,12 +132,12 @@ namespace SparkleShare {
                 };
             
             SparkleMenuItem notify_item = new SparkleMenuItem () {
-				Header      = "Notifications"
+				Header = "Notifications"
 			};
 
                 CheckBox notify_check_box = new CheckBox () {
-                    Margin = new Thickness (6,0,0,0),
-                    IsChecked   = Program.Controller.NotificationsEnabled
+                    Margin    = new Thickness (6,0,0,0),
+                    IsChecked = Program.Controller.NotificationsEnabled
                 };
 
                 notify_item.Icon = notify_check_box;
@@ -169,8 +169,38 @@ namespace SparkleShare {
             this.context_menu.Items.Add (new Separator ());
 			this.context_menu.Items.Add (folder_item);
 
-            if (Program.Controller.Folders.Count > 0) {
-                foreach (string folder_name in Program.Controller.Folders) {     
+            if (Controller.Folders.Length > 0) {
+                foreach (string folder_name in Controller.Folders) {     
+                    SparkleMenuItem subfolder_item = new SparkleMenuItem () {
+                        Header = folder_name
+                    };
+                    
+					// FIXME: can't click items. probably has something to do
+					// with SparkleNotifyIcon
+                    subfolder_item.Click += OpenFolderDelegate (folder_name);
+                    
+					Image subfolder_image = new Image () {
+		            	Source = SparkleUIHelpers.GetImageSource ("folder-windows-16"),
+		                Width  = 16,
+		            	Height = 16
+					};
+					
+                    subfolder_item.Icon = subfolder_image;
+					this.context_menu.Items.Add (subfolder_item);
+					
+                    /* TODO
+                    if (Program.Controller.UnsyncedFolders.Contains (folder_name))
+                        subfolder_item.Icon = Icons.dialog_error_16;
+                    else
+                        subfolder_item.Icon = Icons.sparkleshare_windows_status;
+                     */
+				}
+				
+				SparkleMenuItem more_item = new SparkleMenuItem () {
+                    Header = "More projects"
+                };
+				
+                foreach (string folder_name in Controller.OverflowFolders) {     
                     SparkleMenuItem subfolder_item = new SparkleMenuItem () {
                         Header = folder_name
                     };
@@ -184,6 +214,7 @@ namespace SparkleShare {
 					};
 					
                     subfolder_item.Icon = subfolder_image;
+					more_item.Items.Add (subfolder_item);
 					
                     /* TODO
                     if (Program.Controller.UnsyncedFolders.Contains (folder_name))
@@ -191,9 +222,12 @@ namespace SparkleShare {
                     else
                         subfolder_item.Icon = Icons.sparkleshare_windows_status;
                      */
-                    
-                    this.context_menu.Items.Add (subfolder_item);
                 }
+				
+				if (more_item.Items.Count > 0) {
+                    this.context_menu.Items.Add (new Separator ());
+                    this.context_menu.Items.Add (more_item);
+				}
 
             } else {
                 SparkleMenuItem no_folders_item = new SparkleMenuItem () {
