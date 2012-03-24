@@ -229,15 +229,15 @@ namespace SparkleShare {
                     }
                 }
             };
-
-            new Thread (new ThreadStart (PopulateRepositories)).Start ();
         }
-        
-        
+
+
         public void UIHasLoaded ()
-		{
-        	if (FirstRun)
-        		ShowSetupWindow (PageType.Setup);
+        {
+            if (FirstRun)
+                ShowSetupWindow (PageType.Setup);
+            else
+                new Thread (new ThreadStart (PopulateRepositories)).Start ();
         }
 
 
