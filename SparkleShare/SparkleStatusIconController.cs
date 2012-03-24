@@ -50,8 +50,8 @@ namespace SparkleShare {
         public string StateText = "Welcome to SparkleShare!";
 
 
-        public readonly int MenuOverFlowThreshold   = 4;
-        public readonly int MinSubmenuOverflowCount = 2;
+        public readonly int MenuOverFlowThreshold   = 9;
+        public readonly int MinSubmenuOverflowCount = 3;
 
 
         public string [] Folders {
