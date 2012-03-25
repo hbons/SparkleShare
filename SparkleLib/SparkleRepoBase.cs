@@ -35,7 +35,8 @@ namespace SparkleLib {
 
 
     public abstract class SparkleRepoBase {
-
+		
+		private string identifier;
         private TimeSpan short_interval = new TimeSpan (0, 0, 3, 0);
         private TimeSpan long_interval  = new TimeSpan (0, 0, 10, 0);
         private TimeSpan poll_interval;
@@ -75,7 +76,7 @@ namespace SparkleLib {
         public readonly string Name;
         public readonly Uri Url;
 
-        public abstract string Identifier { get; }
+        public abstract string ComputeIdentifier ();
         public abstract string CurrentRevision { get; }
         public abstract double Size { get; }
         public abstract double HistorySize { get; }
@@ -131,6 +132,25 @@ namespace SparkleLib {
                 return this.is_buffering;
             }
         }
+		
+		public string Identifier {
+			get {
+				if (this.identifier == null) {
+					string id_path = Path.Combine (LocalPath, ".sparkleshare");
+					
+					if (File.Exists (id_path)) {
+						this.identifier = File.ReadAllText (id_path).Trim ();	
+					
+					} else {
+						this.identifier = ComputeIdentifier ();
+						File.WriteAllText (id_path, this.identifier);
+                    	File.SetAttributes (id_path, FileAttributes.Hidden);
+					}
+				}
+				
+				return this.identifier;
+			}
+		}
 
 
         public SparkleRepoBase (string path)
@@ -147,6 +167,9 @@ namespace SparkleLib {
 
             if (CurrentRevision == null)
                 CreateInitialChangeSet ();
+			
+			this.identifier = Identifier;
+				
 
             CreateWatcher ();
             CreateListener ();
@@ -171,8 +194,6 @@ namespace SparkleLib {
                 if (HasUnsyncedChanges && !IsSyncing && this.server_online)
                     SyncUpBase ();
             };
-
-
         }
 
 
@@ -328,7 +349,10 @@ namespace SparkleLib {
                 if (!pre_sync_revision.Equals (CurrentRevision)) {
                     List<SparkleChangeSet> change_sets = GetChangeSets (1);
 
-                   if (change_sets != null && change_sets.Count > 0) {
+                   if (change_sets != null && 
+					   change_sets.Count > 0 &&
+					   !change_sets [0].Added.Contains (".sparkleshare")) {
+						
                         if (NewChangeSet != null)
                             NewChangeSet (change_sets [0]);
                     }
@@ -517,7 +541,6 @@ namespace SparkleLib {
             writer.WriteLine ("");
             writer.WriteLine ("Any files you add or change in this folder will be automatically synced to ");
             writer.WriteLine (Url + " and everyone connected to it.");
-
             writer.WriteLine ("");
             writer.WriteLine ("SparkleShare is a Free and Open Source software program that helps people ");
             writer.WriteLine ("collaborate and share files. If you like what we do, please consider a small ");
