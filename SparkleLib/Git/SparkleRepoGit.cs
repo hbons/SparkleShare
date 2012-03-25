@@ -30,32 +30,23 @@ namespace SparkleLib.Git {
         }
 
 
-        private string identifier = null;
+        public override string ComputeIdentifier () {
+            // Because git computes a hash based on content,
+            // author, and timestamp; it is unique enough to
+            // use the hash of the first commit as an identifier
+            // for our folder
+            SparkleGit git = new SparkleGit (LocalPath, "rev-list --reverse HEAD");
+            git.Start ();
 
-        public override string Identifier {
-            get {
-                if (string.IsNullOrEmpty (this.identifier)) {
+            // Reading the standard output HAS to go before
+            // WaitForExit, or it will hang forever on output > 4096 bytes
+            string output = git.StandardOutput.ReadToEnd ();
+            git.WaitForExit ();
 
-                    // Because git computes a hash based on content,
-                    // author, and timestamp; it is unique enough to
-                    // use the hash of the first commit as an identifier
-                    // for our folder
-                    SparkleGit git = new SparkleGit (LocalPath, "rev-list --reverse HEAD");
-                    git.Start ();
+            if (output.Length < 40)
+                return null;
 
-                    // Reading the standard output HAS to go before
-                    // WaitForExit, or it will hang forever on output > 4096 bytes
-                    string output = git.StandardOutput.ReadToEnd ();
-                    git.WaitForExit ();
-
-                    if (output.Length < 40)
-                        return null;
-
-                    this.identifier = output.Substring (0, 40);
-                }
-
-                return this.identifier;
-            }
+            return output.Substring (0, 40);
         }
 
 
@@ -312,7 +303,13 @@ namespace SparkleLib.Git {
 
             if (git.ExitCode == 0) {
                 Rebase ();
-                return true;
+                
+				File.SetAttributes (
+					Path.Combine (LocalPath, ".sparkleshare"),
+					FileAttributes.Hidden
+				);
+                
+				return true;
 
             } else {
                 return false;
@@ -659,7 +656,9 @@ namespace SparkleLib.Git {
                                 file_path = file_path.Substring (0,
                                     file_path.Length - ".empty".Length);
 
-                            if (change_type.Equals ("A")) {
+                            if (change_type.Equals ("A") &&
+							    !file_path.Equals (".sparkleshare")) {
+								
                                 change_set.Added.Add (file_path);
 
                             } else if (change_type.Equals ("M")) {
