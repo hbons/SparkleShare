@@ -95,10 +95,12 @@ namespace SparkleShare {
             }
         }
 		
-        public Boolean LowerCasePath {
+        public bool PathUsesLowerCase {
             get {
-                if (GetValue ("info", "lower_case_path").Equals ("true"))
-                    return true;
+                string uses_lower_case = GetValue ("path", "uses_lower_case");
+                
+                if (!string.IsNullOrEmpty (uses_lower_case))
+                    return uses_lower_case.Equals (bool.TrueString);
                 else
                     return false;
             }
