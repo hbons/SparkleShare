@@ -297,7 +297,7 @@ namespace SparkleShare {
                         };
                         
                         TextBlock address_help_label = new TextBlock () {
-                            Text       = "",
+                            Text       = Controller.SelectedPlugin.AddressExample,
                             FontSize   = 11,
                             Foreground = new SolidColorBrush (Color.FromRgb (128, 128, 128))
                         };
@@ -315,7 +315,7 @@ namespace SparkleShare {
                         };
                         
                         TextBlock path_help_label = new TextBlock () {
-                            Text       = "",
+                            Text       = Controller.SelectedPlugin.PathExample,
                             FontSize   = 11,
                             Width      = 200,
                             Foreground = new SolidColorBrush (Color.FromRgb (128, 128, 128))
