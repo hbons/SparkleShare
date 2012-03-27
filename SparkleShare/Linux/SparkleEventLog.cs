@@ -85,6 +85,11 @@ namespace SparkleShare {
             this.content_wrapper = new EventBox ();
             this.scrolled_window = new ScrolledWindow ();
 
+            Gdk.Color white = new Gdk.Color();
+            Gdk.Color.Parse ("white", ref white);
+
+            this.content_wrapper.ModifyBg (StateType.Normal, white);
+
             this.web_view = new WebView () {
                 Editable = false
             };
@@ -117,7 +122,6 @@ namespace SparkleShare {
             Add (layout_vertical);
 
 
-            // Hook up the controller events
             Controller.HideWindowEvent += delegate {
                 Application.Invoke (delegate {
                     HideAll ();
