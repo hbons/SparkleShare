@@ -757,6 +757,15 @@ namespace SparkleShare {
 
             process.Start ();
             process.WaitForExit ();
+
+            string pubkey_file_path = key_file_path + ".pub";
+
+            // Create an easily accessible copy of the public
+            // key in the user's SparkleShare folder
+            if (!File.Exists (pubkey_file_path))
+                File.Copy (pubkey_file_path,
+                    Path.Combine (SparklePath, UserName + "'s key.txt"),
+                    true); // Overwriting is allowed
         }
 
 
