@@ -822,10 +822,10 @@ namespace SparkleShare {
                 process.StartInfo.FileName               = "ssh-keygen";
                 process.StartInfo.CreateNoWindow         = true;
 
-                // -t is the crypto type
-                // -P is the password (none)
-                // -f is the file name to store the private key in
-                process.StartInfo.Arguments = "-t rsa -P \"\" -f " + key_file_name;
+                process.StartInfo.Arguments = "-t rsa" + // crypto type
+                    "-P \"\" " + // password (none)
+                    "-C \"" + System.Net.Dns.GetHostName () + "\" " + // key comment
+                    "-f " + key_file_name; // file name
 
                 process.Start ();
                 process.WaitForExit ();
