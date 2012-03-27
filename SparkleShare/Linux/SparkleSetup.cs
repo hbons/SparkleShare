@@ -216,8 +216,8 @@ namespace SparkleShare {
                             Application.Invoke (delegate {
                                 address_entry.Text      = text;
                                 address_entry.Sensitive = (state == FieldState.Enabled);
-                                address_example.Markup  =  "<span size=\"small\" fgcolor=\""
-                                    + SecondaryTextColor + "\">" + example_text + "</span>";
+                                address_example.Markup  =  "<span size=\"small\" fgcolor=\"" +
+                                    SecondaryTextColor + "\">" + example_text + "</span>";
                             });
                         };
 
