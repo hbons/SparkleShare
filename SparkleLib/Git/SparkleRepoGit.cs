@@ -399,11 +399,6 @@ namespace SparkleLib.Git {
             git.WaitForExit ();
 
             SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message);
-
-            // Collect garbage pseudo-randomly. Turn off for
-            // now: too resource heavy.
-            // if (DateTime.Now.Second % 10 == 0)
-            //     CollectGarbage ();
         }
 
 
@@ -419,7 +414,8 @@ namespace SparkleLib.Git {
                 Commit (commit_message);
             }
 
-            SparkleGit git = new SparkleGit (LocalPath, "rebase -v FETCH_HEAD");
+            SparkleGit git = new SparkleGit (LocalPath, "rebase FETCH_HEAD");
+            git.StartInfo.RedirectStandardOutput = false;
 
             git.Start ();
             git.WaitForExit ();
