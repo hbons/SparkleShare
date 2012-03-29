@@ -72,8 +72,6 @@ namespace SparkleShare {
             Controller.UpdateIconEvent += delegate (int icon_frame) {
                 Application.Invoke (delegate {
                     if (icon_frame > -1) {
-                        this.status_icon.Pixbuf = this.animation_frames [icon_frame];
-
                         #if HAVE_APP_INDICATOR
                         string icon_name = "process-syncing-sparkleshare-";
                         for (int i = 0; i <= this.frame_number; i++)
@@ -85,7 +83,11 @@ namespace SparkleShare {
                         #endif
 
                     } else {
-                        this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
+                        #if HAVE_APP_INDICATOR
+                        this.indicator.IconName = sparkleshare-syncing-error;
+                        #else
+						this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
+                        #endif
                     }
                 });
             };
