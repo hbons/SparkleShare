@@ -196,8 +196,8 @@ namespace SparkleShare {
                         Button add_button = new Button () {
                             Content = "Add"
                         };
-                        
-                        
+
+
                         ContentCanvas.Children.Add (address_label);
                         Canvas.SetLeft (address_label, 180);
                         Canvas.SetTop (address_label, 200);
@@ -328,7 +328,20 @@ namespace SparkleShare {
                         Button add_button = new Button () {
                             Content = "Add"
                         };
-                        
+
+                        CheckBox history_check_box = new CheckBox ()
+                        {
+                            Content   = "Fetch prior revisions",
+                            IsChecked = Controller.FetchPriorHistory
+                        };
+						
+						history_check_box.Click += delegate {
+							Controller.HistoryItemChanged (history_check_box.IsChecked.Value);
+						};
+						
+                        ContentCanvas.Children.Add (history_check_box);
+                        Canvas.SetLeft (history_check_box, 185);
+                        Canvas.SetBottom (history_check_box, 12);
                         
                         ContentCanvas.Children.Add (list_view);
                         Canvas.SetTop (list_view, 70);
