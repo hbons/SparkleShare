@@ -74,7 +74,7 @@ namespace SparkleShare {
                     if (icon_frame > -1) {
                         #if HAVE_APP_INDICATOR
                         string icon_name = "process-syncing-sparkleshare-";
-                        for (int i = 0; i <= this.frame_number; i++)
+                        for (int i = 0; i <= icon_frame; i++)
                             icon_name += "i";
 
                         this.indicator.IconName = icon_name;
@@ -84,7 +84,7 @@ namespace SparkleShare {
 
                     } else {
                         #if HAVE_APP_INDICATOR
-                        this.indicator.IconName = sparkleshare-syncing-error;
+                        this.indicator.IconName = "sparkleshare-syncing-error";
                         #else
 						this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
                         #endif
