@@ -961,7 +961,7 @@ namespace SparkleShare {
 
 			if (!Directory.Exists (tmp_path)) {
                 Directory.CreateDirectory (tmp_path);
-                File.SetAttributes (tmp_path, // FIXME: Doesn't seem to be hidden
+                File.SetAttributes (tmp_path,
 					File.GetAttributes (tmp_path) | FileAttributes.Hidden);
             }
 
