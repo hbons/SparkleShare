@@ -32,7 +32,18 @@ namespace SparkleShare {
 
     public abstract class SparkleControllerBase {
 
-        public List<SparkleRepoBase> Repositories = new List<SparkleRepoBase> ();
+        public SparkleRepoBase [] Repositories {
+            get {
+                lock (this.repo_lock) {
+                    SparkleRepoBase [] repositories =
+                        this.repositories.GetRange (0, this.repositories.Count).ToArray ();
+
+                    return repositories;
+                }
+            }
+        }
+
+        public List<SparkleRepoBase> repositories = new List<SparkleRepoBase> ();
         public readonly string SparklePath = SparkleConfig.DefaultConfig.FoldersPath;
 
         public double ProgressPercentage = 0.0;
@@ -632,7 +643,7 @@ namespace SparkleShare {
 
 
             lock (this.repo_lock) {
-                Repositories.Add (repo);
+                this.repositories.Add (repo);
             }
 
             repo.Initialize ();
@@ -646,12 +657,12 @@ namespace SparkleShare {
             string folder_name = Path.GetFileName (folder_path);
 
             lock (this.repo_lock) {
-                for (int i = 0; i < Repositories.Count; i++) {
-                    SparkleRepoBase repo = Repositories [i];
+                for (int i = 0; i < this.repositories.Count; i++) {
+                    SparkleRepoBase repo = this.repositories [i];
     
                     if (repo.Name.Equals (folder_name)) {
                         repo.Dispose ();
-                        Repositories.Remove (repo);
+                        this.repositories.Remove (repo);
                         repo = null;
                         break;
                     }
