@@ -47,7 +47,8 @@ namespace SparkleLib {
         private Thread thread;
 
 
-        public SparkleFetcherBase (string server, string remote_folder, string target_folder)
+        public SparkleFetcherBase (string server, string remote_folder,
+            string target_folder, bool fetch_prior_history)
         {
             TargetFolder = target_folder;
             RemoteUrl    = server + "/" + remote_folder;

@@ -29,10 +29,11 @@ namespace SparkleLib.Git {
     public class SparkleFetcher : SparkleFetcherBase {
 
         private SparkleGit git;
+        private bool fetch_prior_history = false;
 
 
-        public SparkleFetcher (string server, string remote_path, string target_folder) :
-            base (server, remote_path, target_folder)
+        public SparkleFetcher (string server, string remote_path, string target_folder, bool fetch_prior_history) :
+            base (server, remote_path, target_folder, fetch_prior_history)
         {
 			remote_path = remote_path.Trim ("/".ToCharArray ());
 			
@@ -87,15 +88,26 @@ namespace SparkleLib.Git {
 
             TargetFolder = target_folder;
             RemoteUrl    = uri.ToString ();
+
+            this.fetch_prior_history = fetch_prior_history;
         }
 
 
         public override bool Fetch ()
         {
-            this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
-                "clone " +
-                "--progress " + // Redirects progress stats to standarderror
-                "\"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
+            if (this.fetch_prior_history) {
+                this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+                    "clone " +
+                    "--progress " +
+                    "--depth=1 " +
+                    "\"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
+
+            } else {
+                    this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+                    "clone " +
+                    "--progress " +
+                    "\"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
+            }
             
             this.git.StartInfo.RedirectStandardError = true;
             this.git.Start ();
