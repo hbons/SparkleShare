@@ -301,13 +301,15 @@ namespace SparkleShare {
 		
 		private void WriteOutImages ()
 		{
-			string pixmaps_path = Path.Combine (
-				SparkleLib.SparkleConfig.DefaultConfig.TmpPath,
-				"Pixmaps"
-			);
+			string tmp_path     = SparkleLib.SparkleConfig.DefaultConfig.TmpPath;
+			string pixmaps_path = Path.Combine (tmp_path, "Pixmaps");
 			
-			if (!Directory.Exists (pixmaps_path))
+			if (!Directory.Exists (pixmaps_path)) {
 				Directory.CreateDirectory (pixmaps_path);
+				
+				File.SetAttributes (tmp_path,
+					File.GetAttributes (tmp_path) | FileAttributes.Hidden);
+			}
 			
 			char [] letters = new char [] {'a', 'b', 'c',
 				'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'};
