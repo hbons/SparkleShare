@@ -81,12 +81,8 @@ namespace SparkleShare {
             get {
                 double size = 0;
 
-                foreach (SparkleRepoBase repo in
-                         Program.Controller.Repositories.GetRange (
-                             0, Program.Controller.Repositories.Count)) {
-
+                foreach (SparkleRepoBase repo in Program.Controller.Repositories)
                     size += repo.Size + repo.HistorySize;
-                }
 
                 if (size == 0)
                     return "";
@@ -167,10 +163,7 @@ namespace SparkleShare {
 				int repos_syncing_up   = 0;
 				int repos_syncing_down = 0;
 				
-				foreach (SparkleRepoBase repo in
-				         Program.Controller.Repositories.GetRange (
-				         	0, Program.Controller.Repositories.Count)) {
-					
+				foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
 					if (repo.Status == SyncStatus.SyncUp)
 						repos_syncing_up++;
 					
