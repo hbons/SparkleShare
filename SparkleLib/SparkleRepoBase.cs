@@ -380,14 +380,14 @@ namespace SparkleLib {
                     SyncStatusChanged (SyncStatus.Error);
             }
 
+            this.progress_percentage = 0.0;
+            this.progress_speed      = "";
+
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.Idle);
 
             this.remote_timer.Start ();
             EnableWatching ();
-
-            this.progress_percentage = 0.0;
-            this.progress_speed      = "";    
 		}
 
 
