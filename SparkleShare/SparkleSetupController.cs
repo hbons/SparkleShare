@@ -241,12 +241,6 @@ namespace SparkleShare {
         }
 
 
-        public void StartupItemChanged (bool create_startup_item)
-        {
-            this.create_startup_item = create_startup_item;
-        }
-
-
         public void HistoryItemChanged (bool fetch_prior_history)
         {
             this.fetch_prior_history = fetch_prior_history;
@@ -302,6 +296,12 @@ namespace SparkleShare {
                 if (ChangePathFieldEvent != null)
                     ChangePathFieldEvent (this.saved_remote_path, "", FieldState.Enabled);
             }
+        }
+
+
+        public void StartupItemChanged (bool create_startup_item)
+        {
+            this.create_startup_item = create_startup_item;
         }
 
 
