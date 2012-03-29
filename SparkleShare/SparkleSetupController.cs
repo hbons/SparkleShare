@@ -100,10 +100,17 @@ namespace SparkleShare {
             }
         }
 
+        public bool FetchPriorHistory {
+            get {
+                return this.fetch_prior_history;
+            }
+        }
+
 
         private string saved_address     = "";
         private string saved_remote_path = "";
         private bool create_startup_item = true;
+        private bool fetch_prior_history = false;
 
 
         public SparkleSetupController ()
@@ -184,6 +191,8 @@ namespace SparkleShare {
             PreviousPath    = "";
             PreviousUrl     = "";
 
+            this.fetch_prior_history = false;
+
             if (HideWindowEvent != null)
                 HideWindowEvent ();
         }
@@ -235,6 +244,12 @@ namespace SparkleShare {
         public void StartupItemChanged (bool create_startup_item)
         {
             this.create_startup_item = create_startup_item;
+        }
+
+
+        public void HistoryItemChanged (bool fetch_prior_history)
+        {
+            this.fetch_prior_history = fetch_prior_history;
         }
 
 
@@ -330,7 +345,8 @@ namespace SparkleShare {
             Program.Controller.FolderFetchError += AddPageFetchErrorDelegate;
             Program.Controller.FolderFetching   += SyncingPageFetchingDelegate;
 
-            Program.Controller.FetchFolder (address, remote_path, SelectedPlugin.AnnouncementsUrl);
+            Program.Controller.FetchFolder (address, remote_path,
+                SelectedPlugin.AnnouncementsUrl, this.fetch_prior_history);
         }
 
         // The following private methods are
@@ -411,7 +427,7 @@ namespace SparkleShare {
             Program.Controller.FolderFetching   += SyncingPageFetchingDelegate;
 
             Program.Controller.FetchFolder (PendingInvite.Address,
-                PendingInvite.RemotePath, PendingInvite.AnnouncementsUrl);
+                PendingInvite.RemotePath, PendingInvite.AnnouncementsUrl, false); // TODO: checkbox on invite page
         }
 
         // The following private methods are
@@ -482,6 +498,7 @@ namespace SparkleShare {
             PreviousUrl     = "";
             PreviousAddress = "";
             PreviousPath    = "";
+            this.fetch_prior_history = false;
 
             Program.Controller.UpdateState ();
 

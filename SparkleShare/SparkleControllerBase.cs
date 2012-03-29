@@ -951,7 +951,8 @@ namespace SparkleShare {
         }
 
 
-        public void FetchFolder (string address, string remote_path, string announcements_url)
+        public void FetchFolder (string address, string remote_path, string announcements_url,
+            bool fetch_prior_history)
         {
             if (announcements_url != null)
                 announcements_url = announcements_url.Trim ();
@@ -983,7 +984,8 @@ namespace SparkleShare {
                         Type.GetType ("SparkleLib." + backend + ".SparkleFetcher, SparkleLib." + backend),
                             address,
                             remote_path,
-                            tmp_folder
+                            tmp_folder,
+                            fetch_prior_history
                 );
 
             } catch {
