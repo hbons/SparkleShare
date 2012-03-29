@@ -57,7 +57,7 @@ namespace SparkleShare {
             this.indicator = new ApplicationIndicator ("sparkleshare",
                 "process-syncing-sparkleshare-i", Category.ApplicationStatus);
 
-            this.indicator.Status = Status.Attention
+            this.indicator.Status = Status.Attention;
             #else
             this.status_icon        = new StatusIcon ();
             this.status_icon.Pixbuf = this.animation_frames [0];
