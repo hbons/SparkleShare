@@ -30,11 +30,12 @@ namespace SparkleShare {
 
         public SparkleAboutController Controller = new SparkleAboutController ();
 
-        private NSImage AboutImage;
-        private NSImageView AboutImageView;
-        private NSTextField VersionTextField;
-        private NSTextField UpdatesTextField;
-        private NSTextField CreditsTextField;
+        private NSImage about_image;
+        private NSImageView about_image_view;
+        private NSTextField version_text_field;
+        private NSTextField updates_text_field;
+        private NSTextField credits_text_field;
+        private NSButton hidden_close_button;
 
 
         public SparkleAbout (IntPtr handle) : base (handle) { }
@@ -53,6 +54,18 @@ namespace SparkleShare {
                 MinSize     = new SizeF (640, 281);
                 HasShadow   = true;
                 BackingType = NSBackingStore.Buffered;
+
+                this.hidden_close_button = new NSButton () {
+                    Frame                     = new RectangleF (0, 0, 0, 0),
+                    KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
+                    KeyEquivalent             = "w"
+                };
+
+                this.hidden_close_button.Activated += delegate {
+                    Controller.WindowClosed ();
+                };
+
+                ContentView.AddSubview (this.hidden_close_button);
 
                 CreateAbout ();
             }
@@ -79,8 +92,8 @@ namespace SparkleShare {
                 using (var a = new NSAutoreleasePool ())
                 {
                     InvokeOnMainThread (delegate {
-                        UpdatesTextField.StringValue = "A newer version (" + new_version + ") is available!";
-                        UpdatesTextField.TextColor   =
+                        this.updates_text_field.StringValue = "A newer version (" + new_version + ") is available!";
+                        this.updates_text_field.TextColor   =
                             NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f);
                     });
                 }
@@ -90,8 +103,8 @@ namespace SparkleShare {
                 using (var a = new NSAutoreleasePool ())
                 {
                     InvokeOnMainThread (delegate {
-                        UpdatesTextField.StringValue = "You are running the latest version.";
-                        UpdatesTextField.TextColor   =
+                        this.updates_text_field.StringValue = "You are running the latest version.";
+                        this.updates_text_field.TextColor   =
                             NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f);
                     });
                 }
@@ -101,8 +114,8 @@ namespace SparkleShare {
                 using (var a = new NSAutoreleasePool ())
                 {
                     InvokeOnMainThread (delegate {
-                        UpdatesTextField.StringValue = "Checking for updates...";
-                        UpdatesTextField.TextColor   =
+                        this.updates_text_field.StringValue = "Checking for updates...";
+                        this.updates_text_field.TextColor   =
                             NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f); // Tango Sky Blue #1
                     });
                 }
@@ -117,17 +130,17 @@ namespace SparkleShare {
                 string about_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
                     "Pixmaps", "about.png");
 
-                AboutImage = new NSImage (about_image_path) {
+                this.about_image = new NSImage (about_image_path) {
                     Size = new SizeF (640, 260)
                 };
 
-                AboutImageView = new NSImageView () {
-                    Image = AboutImage,
+                this.about_image_view = new NSImageView () {
+                    Image = this.about_image,
                     Frame = new RectangleF (0, 0, 640, 260)
                 };
 
 
-                VersionTextField = new NSTextField () {
+                this.version_text_field = new NSTextField () {
                     StringValue     = "version " + Controller.RunningVersion,
                     Frame           = new RectangleF (295, 140, 318, 22),
                     BackgroundColor = NSColor.White,
@@ -139,7 +152,7 @@ namespace SparkleShare {
                         ("Lucida Grande", NSFontTraitMask.Unbold, 0, 11)
                 };
 
-                UpdatesTextField = new NSTextField () {
+                this.updates_text_field = new NSTextField () {
                     StringValue     = "Checking for updates...",
                     Frame           = new RectangleF (295, Frame.Height - 232, 318, 98),
                     Bordered        = false,
@@ -151,7 +164,7 @@ namespace SparkleShare {
                         NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f) // Tango Sky Blue #1
                 };
 
-                CreditsTextField = new NSTextField () {
+                this.credits_text_field = new NSTextField () {
                     StringValue     = @"Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others." +
                                        "\n" +
                                        "\n" +
@@ -176,11 +189,11 @@ namespace SparkleShare {
     //                NSWorkspace.SharedWorkspace.OpenUrl (url);
     //            };
 
-                ContentView.AddSubview (AboutImageView);
+                ContentView.AddSubview (this.about_image_view);
 
-                ContentView.AddSubview (VersionTextField);
-                ContentView.AddSubview (UpdatesTextField);
-                ContentView.AddSubview (CreditsTextField);
+                ContentView.AddSubview (this.version_text_field);
+                ContentView.AddSubview (this.updates_text_field);
+                ContentView.AddSubview (this.credits_text_field);
             }
         }
 
