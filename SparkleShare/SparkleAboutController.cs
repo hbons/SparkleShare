@@ -14,33 +14,21 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-
 using System;
 using System.Net;
-using System.Threading;
-using System.Timers;
-
 using SparkleLib;
 
 namespace SparkleShare {
 
     public class SparkleAboutController {
 
-        public event ShowWindowEventHandler ShowWindowEvent;
-        public delegate void ShowWindowEventHandler ();
+        public event Action ShowWindowEvent = delegate { };
+        public event Action HideWindowEvent = delegate { };
+        public event Action VersionUpToDateEvent = delegate { };
+        public event Action CheckingForNewVersionEvent = delegate { };
 
-        public event HideWindowEventHandler HideWindowEvent;
-        public delegate void HideWindowEventHandler ();
-
-        public event NewVersionEventHandler NewVersionEvent;
-        public delegate void NewVersionEventHandler (string new_version);
-
-        public event VersionUpToDateEventHandler VersionUpToDateEvent;
-        public delegate void VersionUpToDateEventHandler ();
-
-        public event CheckingForNewVersionEventHandler CheckingForNewVersionEvent;
-        public delegate void CheckingForNewVersionEventHandler ();
-
+        public event NewVersionEventDelegate NewVersionEvent = delegate { };
+        public delegate void NewVersionEventDelegate (string new_version_string);
 
         public string RunningVersion {
             get {
@@ -48,29 +36,22 @@ namespace SparkleShare {
             }
         }
 
-
         public SparkleAboutController ()
         {
             Program.Controller.ShowAboutWindowEvent += delegate {
-                if (ShowWindowEvent != null)
-                    ShowWindowEvent ();
-
+                ShowWindowEvent ();
                 CheckForNewVersion ();
             };
         }
 
-
         public void WindowClosed ()
         {
-            if (HideWindowEvent != null)
-                HideWindowEvent ();
+            HideWindowEvent ();
         }
 
-
-        public void CheckForNewVersion ()
+        private void CheckForNewVersion ()
         {
-            if (CheckingForNewVersionEvent != null)
-                CheckingForNewVersionEvent ();
+            CheckingForNewVersionEvent ();
 
             WebClient web_client = new WebClient ();
             Uri uri = new Uri ("http://www.sparkleshare.org/version");
@@ -79,30 +60,61 @@ namespace SparkleShare {
                 if (args.Error != null)
                     return;
 
-                int running_version = int.Parse (
-                    "" + RunningVersion [0] + RunningVersion [2] + RunningVersion [4]
-                );
+                string latest_version_string = args.Result.Trim ();
 
-                string result = args.Result.Trim ();
-                int new_version = int.Parse (
-                    "" + result [0] + result [2] + result [4]
-                );
-
-                // Add a little delay, making it seems we're
-                // actually doing hard work
-                Thread.Sleep (1000);
-
-                if (running_version >= new_version) {
-                    if (VersionUpToDateEvent != null)
-                        VersionUpToDateEvent ();
-
+                if (UpdateRequired (RunningVersion, latest_version_string)) {
+                    NewVersionEvent (latest_version_string);
                 } else {
-                    if (NewVersionEvent != null)
-                        NewVersionEvent (result);
+                    VersionUpToDateEvent ();                    
                 }
             };
 
             web_client.DownloadStringAsync (uri);
+        }
+
+        private bool UpdateRequired (string running_version_string, string latest_version_string)
+        {
+            if (running_version_string == null)
+                throw new ArgumentNullException ("running_version_string");
+
+            if (string.IsNullOrWhiteSpace (running_version_string))
+                throw new ArgumentException ("running_version_string");
+
+            if (latest_version_string == null)
+                throw new ArgumentNullException ("latest_version_string");
+
+            if (string.IsNullOrWhiteSpace (latest_version_string))
+                throw new ArgumentException ("latest_version_string");
+
+            int running_major;
+            int running_minor;
+            int running_build;
+            try {
+                string[] running_split = running_version_string.Split ('.');
+                running_major = int.Parse (running_split [0]);
+                running_minor = int.Parse (running_split [1]);
+                running_build = int.Parse (running_split [2]);
+            } catch (Exception ex) {
+                throw new FormatException ("running_version_string", ex);
+            }
+
+            int latest_major;
+            int latest_minor;
+            int latest_build;
+            try {
+                string[] latest_split = latest_version_string.Split ('.');
+                latest_major = int.Parse (latest_split [0]);
+                latest_minor = int.Parse (latest_split [1]);
+                latest_build = int.Parse (latest_split [2]);
+            } catch (Exception ex) {
+                throw new FormatException ("latest_version_string", ex);
+            }
+
+            bool higher_major = latest_major > running_major;
+            bool higher_minor = latest_major == running_major && latest_minor > running_minor;
+            bool higher_build = latest_major == running_major && latest_minor == running_minor && latest_build > running_build;
+
+            return higher_major || higher_minor || higher_build;
         }
     }
 }
