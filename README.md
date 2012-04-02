@@ -12,7 +12,7 @@ SparkleShare allows you to instantly sync with any [Git](http://www.git-scm.org/
 |||
 |-----------------------------------:|:--------------------------|
 |              **Website**: | http://www.sparkleshare.org/ |
-|          **Source code**: | http://github.com/SparkleShare/ |
+|          **Source code**: | https://github.com/hbons/SparkleShare |
 |          **IRC channel**: | #sparkleshare on irc.gnome.org |
 |                 **Wiki**: | http://github.com/hbons/SparkleShare/wiki/ |
 |        **Report issues**: | http://github.com/hbons/SparkleShare/issues/ |
