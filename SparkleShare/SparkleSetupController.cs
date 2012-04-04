@@ -222,8 +222,12 @@ namespace SparkleShare {
             Program.Controller.UserName  = full_name;
             Program.Controller.UserEmail = email;
 
-            Program.Controller.GenerateKeyPair ();
-            Program.Controller.ImportPrivateKey ();
+            new Thread (
+                new ThreadStart (delegate {
+                    Program.Controller.GenerateKeyPair ();
+                    Program.Controller.ImportPrivateKey ();
+                })
+            );
 
             TutorialPageNumber = 1;
 
