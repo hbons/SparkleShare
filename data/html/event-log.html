@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>SparkleShare Event Log</title>
         <script type="text/javascript">
           <!-- $jquery -->
@@ -10,11 +10,11 @@
         <script type="text/javascript">
           $(document).ready(function () {
               $('dl dd:nth-child(-n+10)').css('display', 'block');
-			  $('.day-entry-content .event-entry:last-child').css('border', 'none');
-			
-			  $('dd a.windows').click(function () {
-			      window.external.LinkClicked($(this).attr("href"));
-			  });
+              $('.day-entry-content .event-entry:last-child').css('border', 'none');
+            
+              $('dd a.windows').click(function () {
+                  window.external.LinkClicked($(this).attr("href"));
+              });
 
               // Update the Today and Yesterday labels after midnight
               var midnight_interval = setInterval (function(){
@@ -66,7 +66,6 @@
                 font-size: <!-- $body-font-size -->;
                 font-family: <!-- $body-font-family -->;
                 margin: 0;
-                padding: 18px;
                 -webkit-user-select: none;
             }
 
@@ -85,14 +84,14 @@
                 margin-right: auto;
                 display: block;
                 text-align: center;
-                margin-bottom: 36px;
+                padding-top: 24px;
                 font-weight: bold;
             }
                         
             a {
                 color:           <!-- $a-color -->;
                 text-decoration: none;
-				outline: 0;
+                outline: 0;
             }
 
             a:hover {
@@ -138,16 +137,13 @@
             }
 
             .event-entry {
-                margin-bottom: 24px;
+                padding-top: 24px;      
                 padding-bottom: 24px;
                 border-bottom: 1px #ddd solid;
-                width: 100%;
-                margin-left: auto;
-                margin-right: auto;
-                padding-left: 72px;
-                padding-right: 24px;
+                padding-left: 96px;
+                padding-right: 32px;
                 background-repeat: no-repeat;
-                background-position: 12px top;
+                background-position: 36px 24px;
                 display: block;
             }
 
@@ -185,7 +181,7 @@
                 margin-bottom: 12px;
                 padding-top: 6px;
                 clear: both;
-			    table-layout: fixed;
+                table-layout: fixed;
             }
             
             dd {
@@ -243,7 +239,7 @@
             }
         </style>
     </head>
-    <body>
+    <body oncontextmenu="return false;">
         <!-- $event-log-content -->
     </body>
 </html>
