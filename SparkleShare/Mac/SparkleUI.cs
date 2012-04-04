@@ -93,28 +93,23 @@ namespace SparkleShare {
 
         public void UpdateDockIconVisibility ()
         {
-            // TODO: check for open windows
-            // if (true) {
+            if (Setup.IsVisible || EventLog.IsVisible || About.IsVisible)
                 ShowDockIcon ();
-
-            // } else {
-            //     HideDockIcon ();
-            // }
+            else
+                HideDockIcon ();
         }
 
 
         private void HideDockIcon ()
         {
             // Currently not supported, here for completeness sake (see Apple's docs)
-            // NSApplication.SharedApplication.ActivationPolicy = 
-			//     NSApplicationActivationPolicy.None;
+            // NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.None;
         }
 
 
         private void ShowDockIcon ()
         {
-            NSApplication.SharedApplication.ActivationPolicy =
-				NSApplicationActivationPolicy.Regular;
+            NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
         }
 
 
