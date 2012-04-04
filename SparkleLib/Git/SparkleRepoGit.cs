@@ -221,6 +221,12 @@ namespace SparkleLib.Git {
                         number = (number / 100 * 20);
 
                     } else {
+                        if (line.StartsWith ("ERROR: QUOTA EXCEEDED")) {
+                            int quota_limit = int.Parse (line.Substring (21).Trim ());
+                            throw new QuotaExceededException ("Quota exceeded", quota_limit);
+                        }
+
+
                         // "Writing objects" stage
                         number = (number / 100 * 80 + 20);
 

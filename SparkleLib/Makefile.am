@@ -7,6 +7,7 @@ SOURCES =  \
 	SparkleBackend.cs \
 	SparkleChangeSet.cs \
 	SparkleConfig.cs \
+	SparkleExceptions.cs \
 	SparkleExtensions.cs \
 	SparkleFetcherBase.cs \
 	SparkleHelpers.cs \
