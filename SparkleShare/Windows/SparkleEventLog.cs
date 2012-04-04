@@ -39,7 +39,7 @@ namespace SparkleShare {
         private Label history_label_value;
         private ComboBox combo_box;
         private WebBrowser web_browser;
-		private SparkleSpinner spinner;
+        private SparkleSpinner spinner;
         
         
         // Short alias for the translations
@@ -48,22 +48,22 @@ namespace SparkleShare {
             return Program._(s);
         }
 
-		
+        
         public SparkleEventLog ()
-		{
+        {
             Title                 = "Recent Changes";
             Height                = 640;
             Width                 = 480;
             ResizeMode            = ResizeMode.NoResize;
             Background            = new SolidColorBrush (Color.FromRgb (240, 240, 240));    
-			AllowsTransparency    = false;
+            AllowsTransparency    = false;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-			
-			WriteOutImages ();
+            
+            WriteOutImages ();
                         
             Label size_label = new Label () {
                 Content    = "Size:",
-				FontWeight = FontWeights.Bold
+                FontWeight = FontWeights.Bold
             };
             
             this.size_label_value = new Label () {
@@ -75,7 +75,7 @@ namespace SparkleShare {
             
             Label history_label = new Label () {
                 Content    = "History:",
-				FontWeight = FontWeights.Bold
+                FontWeight = FontWeights.Bold
             };
             
             this.history_label_value = new Label () {
@@ -90,8 +90,8 @@ namespace SparkleShare {
                 Height = 1,
                 Fill   = new SolidColorBrush (Color.FromRgb (223, 223, 223))    
             };
-			
-			Shapes.Rectangle background = new Shapes.Rectangle () {
+            
+            Shapes.Rectangle background = new Shapes.Rectangle () {
                 Width  = Width,
                 Height = Height,
                 Fill   = new SolidColorBrush (Color.FromRgb (250, 250, 250))    
@@ -102,12 +102,12 @@ namespace SparkleShare {
                 Height = Height - 36 - 11
             };
 
-			this.web_browser.ObjectForScripting = new SparkleScriptingObject ();;
-					
-			spinner = new SparkleSpinner (22);
-			
-			// Disable annoying IE clicking sound
-			CoInternetSetFeatureEnabled (21, 0x00000002, true);
+            this.web_browser.ObjectForScripting = new SparkleScriptingObject ();
+                    
+            spinner = new SparkleSpinner (22);
+            
+            // Disable annoying IE clicking sound
+            CoInternetSetFeatureEnabled (21, 0x00000002, true);
 
             
             this.canvas = new Canvas ();
@@ -132,18 +132,18 @@ namespace SparkleShare {
             this.canvas.Children.Add (background);
             Canvas.SetLeft (background, 0);
             Canvas.SetTop (background, 36);
-			
+            
             this.canvas.Children.Add (spinner);
             Canvas.SetLeft (spinner, (Width / 2) - 15);
             Canvas.SetTop (spinner, (Height / 2) - 22);
-			
+            
             this.canvas.Children.Add (line);
             Canvas.SetLeft (line, 0);
             Canvas.SetTop (line, 35);
-			
+            
 
             Closing += Close;
-			
+            
             Controller.ShowWindowEvent += delegate {
                Dispatcher.Invoke ((Action) delegate {
                     Show ();
@@ -158,9 +158,9 @@ namespace SparkleShare {
             Controller.HideWindowEvent += delegate {
                 Dispatcher.Invoke ((Action) delegate {
                     Hide ();
-					
-					if (this.canvas.Children.Contains (this.web_browser))
-                    	this.canvas.Children.Remove (this.web_browser);
+                    
+                    if (this.canvas.Children.Contains (this.web_browser))
+                        this.canvas.Children.Remove (this.web_browser);
                 });
             };
             
@@ -187,10 +187,10 @@ namespace SparkleShare {
             };
 
             Controller.ContentLoadingEvent += delegate {
-				this.spinner.Start ();
-				
-				if (this.canvas.Children.Contains (this.web_browser))
-					this.canvas.Children.Remove (this.web_browser);
+                this.spinner.Start ();
+                
+                if (this.canvas.Children.Contains (this.web_browser))
+                    this.canvas.Children.Remove (this.web_browser);
             };
         }
 
@@ -214,20 +214,20 @@ namespace SparkleShare {
             this.combo_box.Items.Add (item);
             this.combo_box.Items.Add (new Separator ());
             
-			this.combo_box.SelectedItem = combo_box.Items [0];
-			
-			int row = 2;
+            this.combo_box.SelectedItem = combo_box.Items [0];
+            
+            int row = 2;
             foreach (string folder in folders) {
                 this.combo_box.Items.Add (
                     new ComboBoxItem () { Content = folder }
                 );
-				
-				if (folder.Equals (Controller.SelectedFolder))
-					this.combo_box.SelectedItem = combo_box.Items [row];
-				
-				row++;
+                
+                if (folder.Equals (Controller.SelectedFolder))
+                    this.combo_box.SelectedItem = combo_box.Items [row];
+                
+                row++;
             }
-			
+            
             this.combo_box.SelectionChanged += delegate {
                 Dispatcher.Invoke ((Action) delegate {
                     int index = this.combo_box.SelectedIndex;
@@ -251,12 +251,12 @@ namespace SparkleShare {
             Thread thread = new Thread (new ThreadStart (delegate {
                 if (html == null)
                     html = Controller.HTML;
-				
-				string pixmaps_path = Path.Combine (
-					SparkleLib.SparkleConfig.DefaultConfig.TmpPath, "Pixmaps");
-				
-				pixmaps_path = pixmaps_path.Replace ("\\", "/");
-				
+                
+                string pixmaps_path = Path.Combine (
+                    SparkleLib.SparkleConfig.DefaultConfig.TmpPath, "Pixmaps");
+                
+                pixmaps_path = pixmaps_path.Replace ("\\", "/");
+                
                 html = html.Replace ("<a href=", "<a class='windows' href=");
                 html = html.Replace ("<!-- $body-font-family -->", "'Segoe UI', sans-serif");
                 html = html.Replace ("<!-- $day-entry-header-font-size -->", "13px");
@@ -266,27 +266,27 @@ namespace SparkleShare {
                 html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
                 html = html.Replace ("<!-- $a-color -->", "#0085cf");
                 html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
-			
-				html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
-			
-				html = html.Replace ("<!-- $document-added-background-image -->",
-					pixmaps_path + "/document-added-12.png");
-				
-				html = html.Replace ("<!-- $document-edited-background-image -->",
-					pixmaps_path + "/document-edited-12.png");
-				
-				html = html.Replace ("<!-- $document-deleted-background-image -->",
-					pixmaps_path + "/document-deleted-12.png");
-				
-				html = html.Replace ("<!-- $document-moved-background-image -->",
-					pixmaps_path + "/document-moved-12.png");
-				
-				
+            
+                html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
+            
+                html = html.Replace ("<!-- $document-added-background-image -->",
+                    pixmaps_path + "/document-added-12.png");
+                
+                html = html.Replace ("<!-- $document-edited-background-image -->",
+                    pixmaps_path + "/document-edited-12.png");
+                
+                html = html.Replace ("<!-- $document-deleted-background-image -->",
+                    pixmaps_path + "/document-deleted-12.png");
+                
+                html = html.Replace ("<!-- $document-moved-background-image -->",
+                    pixmaps_path + "/document-moved-12.png");
+                
+                
                 Dispatcher.Invoke ((Action) delegate {
                     this.spinner.Stop ();
-					
-					this.web_browser.NavigateToString (html);
-					
+                    
+                    this.web_browser.NavigateToString (html);
+                    
                     if (!this.canvas.Children.Contains (this.web_browser)) {
                         this.canvas.Children.Add (this.web_browser);
                         Canvas.SetLeft (this.web_browser, 0);
@@ -298,73 +298,73 @@ namespace SparkleShare {
             thread.Start ();
         }
         
-		
-		private void WriteOutImages ()
-		{
-			string tmp_path     = SparkleLib.SparkleConfig.DefaultConfig.TmpPath;
-			string pixmaps_path = Path.Combine (tmp_path, "Pixmaps");
-			
-			if (!Directory.Exists (pixmaps_path)) {
-				Directory.CreateDirectory (pixmaps_path);
-				
-				File.SetAttributes (tmp_path,
-					File.GetAttributes (tmp_path) | FileAttributes.Hidden);
-			}
-			
-			char [] letters = new char [] {'a', 'b', 'c',
-				'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'};
-			
-			foreach (char letter in letters) {	
-				BitmapSource image = SparkleUIHelpers.GetImageSource ("avatar-" + letter);
-				string file_path = Path.Combine (pixmaps_path, "avatar-" + letter + ".png");
-					
-				using (FileStream stream = new FileStream (file_path, FileMode.Create))
-			    {
-			        BitmapEncoder encoder = new PngBitmapEncoder ();
-			        encoder.Frames.Add (BitmapFrame.Create (image));
-			        encoder.Save (stream);
-			    }
-			}
-			
-			string [] actions = new string [] {"added",
-				"deleted", "edited", "moved"};
-			
-			foreach (string action in actions) {	
-				BitmapSource image = SparkleUIHelpers.GetImageSource ("document-" + action + "-12");
-				string file_path = Path.Combine (pixmaps_path, "document-" + action + "-12.png");
-					
-				using (FileStream stream = new FileStream (file_path, FileMode.Create))
-			    {
-			        BitmapEncoder encoder = new PngBitmapEncoder ();
-			        encoder.Frames.Add (BitmapFrame.Create (image));
-			        encoder.Save (stream);
-			    }
-			}
-		}
-		
+        
+        private void WriteOutImages ()
+        {
+            string tmp_path     = SparkleLib.SparkleConfig.DefaultConfig.TmpPath;
+            string pixmaps_path = Path.Combine (tmp_path, "Pixmaps");
+            
+            if (!Directory.Exists (pixmaps_path)) {
+                Directory.CreateDirectory (pixmaps_path);
+                
+                File.SetAttributes (tmp_path,
+                    File.GetAttributes (tmp_path) | FileAttributes.Hidden);
+            }
+            
+            char [] letters = new char [] {'a', 'b', 'c',
+                'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'};
+            
+            foreach (char letter in letters) {    
+                BitmapSource image = SparkleUIHelpers.GetImageSource ("avatar-" + letter);
+                string file_path = Path.Combine (pixmaps_path, "avatar-" + letter + ".png");
+                    
+                using (FileStream stream = new FileStream (file_path, FileMode.Create))
+                {
+                    BitmapEncoder encoder = new PngBitmapEncoder ();
+                    encoder.Frames.Add (BitmapFrame.Create (image));
+                    encoder.Save (stream);
+                }
+            }
+            
+            string [] actions = new string [] {"added",
+                "deleted", "edited", "moved"};
+            
+            foreach (string action in actions) {    
+                BitmapSource image = SparkleUIHelpers.GetImageSource ("document-" + action + "-12");
+                string file_path = Path.Combine (pixmaps_path, "document-" + action + "-12.png");
+                    
+                using (FileStream stream = new FileStream (file_path, FileMode.Create))
+                {
+                    BitmapEncoder encoder = new PngBitmapEncoder ();
+                    encoder.Frames.Add (BitmapFrame.Create (image));
+                    encoder.Save (stream);
+                }
+            }
+        }
+        
         
         private void Close (object sender, CancelEventArgs args)
         {
             Controller.WindowClosed ();
             args.Cancel = true;    
         }
-		
+        
 
-		[DllImport ("urlmon.dll")]
-		[PreserveSig]
-		[return:MarshalAs (UnmanagedType.Error)]
-		static extern int CoInternetSetFeatureEnabled (
-			int feature, [MarshalAs (UnmanagedType.U4)] int flags, bool enable);
+        [DllImport ("urlmon.dll")]
+        [PreserveSig]
+        [return:MarshalAs (UnmanagedType.Error)]
+        static extern int CoInternetSetFeatureEnabled (
+            int feature, [MarshalAs (UnmanagedType.U4)] int flags, bool enable);
     }
 
-	
-	[PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
+    
+    [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
     [ComVisible(true)]
     public class SparkleScriptingObject {
-		
+        
         public void LinkClicked (string url)
         {
-			SparkleUI.EventLog.Controller.LinkClicked (url);
+            SparkleUI.EventLog.Controller.LinkClicked (url);
         }
     }
 }
