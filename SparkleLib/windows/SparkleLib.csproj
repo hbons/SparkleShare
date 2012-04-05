@@ -101,6 +101,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GlobalAssemblyInfo.tt</DependentUpon>
     </Compile>
+    <Compile Include="..\SparkleExceptions.cs">
+      <Link>SparkleExceptions.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
