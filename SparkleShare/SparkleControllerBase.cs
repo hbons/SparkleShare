@@ -833,7 +833,7 @@ namespace SparkleShare {
                 process.StartInfo.FileName               = "ssh-keygen";
                 process.StartInfo.CreateNoWindow         = true;
 
-                process.StartInfo.Arguments = "-t rsa" + // crypto type
+                process.StartInfo.Arguments = "-t rsa " + // crypto type
                     "-P \"\" " + // password (none)
                     "-C \"" + System.Net.Dns.GetHostName () + "\" " + // key comment
                     "-f " + key_file_name; // file name
