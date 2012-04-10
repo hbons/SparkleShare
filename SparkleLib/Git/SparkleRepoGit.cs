@@ -828,13 +828,13 @@ namespace SparkleLib.Git {
         // Recursively gets a folder's size in bytes
         private double CalculateSizes (DirectoryInfo parent)
         {
-            if (!Directory.Exists (parent.ToString ()))
+            if (!Directory.Exists (parent.FullName))
                 return 0;
-
-            double size = 0;
 
             if (parent.Name.Equals ("rebase-apply"))
                 return 0;
+
+            double size = 0;
 
             try {
                 foreach (FileInfo file in parent.GetFiles ()) {
@@ -847,11 +847,18 @@ namespace SparkleLib.Git {
                     size += file.Length;
                 }
 
-                // FIXME: Doesn't seem to recurse on Windows
+            } catch (Exception e) {
+                SparkleHelpers.DebugInfo ("Local", "Error calculating size: " + e.Message);
+                return 0;
+            }
+
+
+            try {
                 foreach (DirectoryInfo directory in parent.GetDirectories ())
                     size += CalculateSizes (directory);
 
-            } catch (Exception) {
+            } catch (Exception e) {
+                SparkleHelpers.DebugInfo ("Local", "Error calculating size: " + e.Message);
                 return 0;
             }
 
