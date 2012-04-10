@@ -863,7 +863,7 @@ namespace SparkleShare {
                 mutable_attributes.Append (new NSAttributedString ("\n"));
                 mutable_attributes.Append (description_attributes);
 
-                cell.SetAttributedStringValue (mutable_attributes);
+                cell.AttributedStringValue = mutable_attributes;
                 Cells [i] = (NSAttributedString) cell.ObjectValue;
 
 
@@ -890,7 +890,7 @@ namespace SparkleShare {
                 selected_mutable_attributes.Append (new NSAttributedString ("\n"));
                 selected_mutable_attributes.Append (selected_description_attributes);
 
-                selected_cell.SetAttributedStringValue (selected_mutable_attributes);
+                selected_cell.AttributedStringValue = selected_mutable_attributes;
                 SelectedCells [i] = (NSAttributedString) selected_cell.ObjectValue;
 
                 i++;
