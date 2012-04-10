@@ -46,10 +46,10 @@ build/m4/shave/shave-libtool
 SparkleLib/Defines.cs
 SparkleLib/windows/Defines.cs
 SparkleLib/windows/GlobalAssemblyInfo.cs
-SparkleShare/sparkleshare
+SparkleShare/Linux/sparkleshare
 po/sparkleshare.pot
-SparkleShare/Nautilus/sparkleshare-nautilus-extension.py
-SparkleShare/Nautilus/sparkleshare-nautilus3-extension.py
+SparkleShare/Linux/Nautilus/sparkleshare-nautilus-extension.py
+SparkleShare/Linux/Nautilus/sparkleshare-nautilus3-extension.py
 gnome-doc-utils.make
 /sparkleshare-*
 data/plugins/*.xml
