@@ -238,12 +238,20 @@ namespace SparkleLib {
                 File.Create (known_hosts_file_path).Close ();
             }
 
-            if (File.ReadAllText (known_hosts_file_path).EndsWith ("\n"))
+            string host                 = RemoteUrl.Host;
+            string known_hosts          = File.ReadAllText (known_hosts_file_path);
+            string [] known_hosts_lines = File.ReadAllLines (known_hosts_file_path);
+
+            foreach (string line in known_hosts_lines) {
+                if (line.StartsWith (host + " "))
+                    return;
+            }
+
+            if (known_hosts.EndsWith ("\n"))
                 File.AppendAllText (known_hosts_file_path, host_key + "\n");
             else
                 File.AppendAllText (known_hosts_file_path, "\n" + host_key + "\n");
 
-            string host = RemoteUrl.Host;
             SparkleHelpers.DebugInfo ("Auth", "Accepted host key for " + host);
         }
     }
