@@ -1027,7 +1027,7 @@ namespace SparkleShare {
                 try {
                     Directory.Move (tmp_folder, target_folder_path);
 
-                    SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.RemoteUrl, backend);
+                    SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.RemoteUrl.ToString (), backend);
     
                     if (!string.IsNullOrEmpty (announcements_url)) {
                         SparkleConfig.DefaultConfig.SetFolderOptionalAttribute (target_folder_name,
@@ -1037,7 +1037,7 @@ namespace SparkleShare {
                     AddRepository (target_folder_path);
 
                     if (FolderFetched != null)
-                        FolderFetched (this.fetcher.RemoteUrl, warnings);
+                        FolderFetched (this.fetcher.RemoteUrl.ToString (), warnings);
 
                     if (FolderListChanged != null)
                     FolderListChanged ();
@@ -1056,7 +1056,7 @@ namespace SparkleShare {
 
             this.fetcher.Failed += delegate {
                 if (FolderFetchError != null)
-                    FolderFetchError (this.fetcher.RemoteUrl);
+                    FolderFetchError (this.fetcher.RemoteUrl.ToString ());
 
                 this.fetcher.Dispose ();
 				this.fetcher = null;

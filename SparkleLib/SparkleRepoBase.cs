@@ -430,7 +430,7 @@ namespace SparkleLib {
                 }
             };
 
-            // Start polling when the connection to the irc channel is lost
+            // Start polling when the connection to the channel is lost
             this.listener.Disconnected += delegate {
                 this.poll_interval = this.short_interval;
                 SparkleHelpers.DebugInfo (Name, "Falling back to polling");

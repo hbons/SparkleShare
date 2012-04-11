@@ -16,6 +16,7 @@
 
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -39,7 +40,7 @@ namespace SparkleLib {
         public abstract void Stop ();
 
         public string TargetFolder;
-        public string RemoteUrl;
+        public Uri RemoteUrl;
         public string [] ExcludeRules;
         public string [] Warnings;
         public bool IsActive { get; private set; }
@@ -51,7 +52,7 @@ namespace SparkleLib {
             string target_folder, bool fetch_prior_history)
         {
             TargetFolder = target_folder;
-            RemoteUrl    = server + "/" + remote_folder;
+            RemoteUrl    = new Uri (server + "/" + remote_folder);
             IsActive       = false;
 
             ExcludeRules = new string [] {
@@ -128,7 +129,6 @@ namespace SparkleLib {
         }
 
 
-        // Clones the remote repository
         public void Start ()
         {
             IsActive = true;
@@ -140,7 +140,7 @@ namespace SparkleLib {
             if (Directory.Exists (TargetFolder))
                 Directory.Delete (TargetFolder, true);
 
-            string host = GetHost (RemoteUrl);
+            string host = RemoteUrl.Host;
 
             if (String.IsNullOrEmpty (host)) {
                 if (Failed != null)
@@ -149,14 +149,17 @@ namespace SparkleLib {
                 return;
             }
 
-            DisableHostKeyCheckingForHost (host);
+            string host_key = GetHostKey ();
+            if (host_key != null)
+                AcceptHostKey (host_key);
+
+            Console.WriteLine (host_key);
 
             this.thread = new Thread (new ThreadStart (delegate {
                 if (Fetch ()) {
                     Thread.Sleep (500);
                     SparkleHelpers.DebugInfo ("Fetcher", "Finished");
 
-                    EnableHostKeyCheckingForHost (host);
                     IsActive = false;
 
                     if (Finished != null)
@@ -166,7 +169,6 @@ namespace SparkleLib {
                     Thread.Sleep (500);
                     SparkleHelpers.DebugInfo ("Fetcher", "Failed");
 
-                    EnableHostKeyCheckingForHost (host);
                     IsActive = false;
 
                     if (Failed != null)
@@ -191,111 +193,58 @@ namespace SparkleLib {
             if (ProgressChanged != null)
                 ProgressChanged (percentage);
         }
-    
-        
-        private void DisableHostKeyCheckingForHost (string host)
+
+
+        private string GetHostKey ()
         {
-            string path = SparkleConfig.DefaultConfig.HomePath;
+            string host = RemoteUrl.Host;
+            SparkleHelpers.DebugInfo ("Auth", "Fetching host key for " + host);
 
-            if (!(SparkleBackend.Platform == PlatformID.Unix ||
-                  SparkleBackend.Platform == PlatformID.MacOSX)) {
+            Process process = new Process () {
+                EnableRaisingEvents = true
+            };
 
-                path = Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%");
-            }
+            process.StartInfo.WorkingDirectory       = SparkleConfig.DefaultConfig.TmpPath;
+            process.StartInfo.UseShellExecute        = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.CreateNoWindow         = true;
 
-            string ssh_config_path      = Path.Combine (path, ".ssh");
-            string ssh_config_file_path = SparkleHelpers.CombineMore (path, ".ssh", "config");
-            string ssh_config           = "\n# <SparkleShare>" +
-                                          "\nHost " + host +
-                                          "\n\tStrictHostKeyChecking no" +
-                                          "\n# </SparkleShare>";
+            process.StartInfo.FileName  = "ssh-keyscan";
+            process.StartInfo.Arguments = "-t rsa " + host;
 
-            if (!Directory.Exists (ssh_config_path))
-                Directory.CreateDirectory (ssh_config_path);
+            process.Start ();
 
-            if (File.Exists (ssh_config_file_path)) {
-                TextWriter writer = File.AppendText (ssh_config_file_path);
-                writer.Write (ssh_config);
-                writer.Close ();
+            // Reading the standard output HAS to go before
+            // WaitForExit, or it will hang forever on output > 4096 bytes
+            string host_key = process.StandardOutput.ReadToEnd ().TrimEnd ();
+            process.WaitForExit ();
 
-            } else {
-                File.WriteAllText (ssh_config_file_path, ssh_config);
-            }
-
-            Chmod644 (ssh_config_file_path);
-            SparkleHelpers.DebugInfo ("Fetcher", "Disabled host key checking for " + host);
-        }
-        
-
-        private void EnableHostKeyCheckingForHost (string host)
-        {
-            string path = SparkleConfig.DefaultConfig.HomePath;
-
-            if (SparkleBackend.Platform != PlatformID.Unix &&
-                SparkleBackend.Platform != PlatformID.MacOSX) {
-
-                path = Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%");
-            }
-
-            string ssh_config_file_path = SparkleHelpers.CombineMore (path, ".ssh", "config");
-
-            if (File.Exists (ssh_config_file_path)) {
-                string current_ssh_config = File.ReadAllText (ssh_config_file_path);
-
-                current_ssh_config = current_ssh_config.Trim ();
-                string [] lines = current_ssh_config.Split ('\n');
-                string new_ssh_config = "";
-                bool in_sparkleshare_section = false;
-
-                foreach (string line in lines) {
-                    if (line.StartsWith ("# <SparkleShare>")) {
-                        in_sparkleshare_section = true;
-                        continue;
-                    }
-
-                    if (line.StartsWith ("# </SparkleShare>")) {
-                        in_sparkleshare_section = false;
-                        continue;
-                    }
-
-                    if (in_sparkleshare_section)
-                        continue;
-
-                    new_ssh_config += line + "\n"; // do not use Environment.NewLine because file is in unix format
-                }
-
-                if (string.IsNullOrEmpty (new_ssh_config.Trim ())) {
-                    File.Delete (ssh_config_file_path);
-
-                } else {
-                    File.WriteAllText (ssh_config_file_path, new_ssh_config.Trim ());
-                    Chmod644 (ssh_config_file_path);
-                }
-            }
-
-            SparkleHelpers.DebugInfo ("Fetcher", "Enabled host key checking for " + host);
-        }
-
-
-        private string GetHost (string url)
-        {
-            Regex regex = new Regex (@"(@|://)([a-z0-9\.-]+)(/|:)");
-            Match match = regex.Match (url);
-
-            if (match.Success)
-                return match.Groups [2].Value;
+            if (process.ExitCode == 0)
+                return host_key;
             else
                 return null;
         }
-        
-        
-        private void Chmod644 (string file_path)
+
+
+        private void AcceptHostKey (string host_key)
         {
-            // Hack to be able to set the permissions on a file
-            // that OpenSSH still likes without resorting to Mono.Unix
-            FileInfo file_info   = new FileInfo (file_path);
-            file_info.Attributes = FileAttributes.ReadOnly;
-            file_info.Attributes = FileAttributes.Normal;
+            string ssh_config_path       = Path.Combine (SparkleConfig.DefaultConfig.HomePath, ".ssh");
+            string known_hosts_file_path = Path.Combine (ssh_config_path, "known_hosts");
+
+            if (!File.Exists (known_hosts_file_path)) {
+                if (!Directory.Exists (ssh_config_path))
+                    Directory.CreateDirectory (ssh_config_path);
+
+                File.Create (known_hosts_file_path).Close ();
+            }
+
+            if (File.ReadAllText (known_hosts_file_path).EndsWith ("\n"))
+                File.AppendAllText (known_hosts_file_path, host_key + "\n");
+            else
+                File.AppendAllText (known_hosts_file_path, "\n" + host_key + "\n");
+
+            string host = RemoteUrl.Host;
+            SparkleHelpers.DebugInfo ("Auth", "Accepted host key for " + host);
         }
     }
 }
