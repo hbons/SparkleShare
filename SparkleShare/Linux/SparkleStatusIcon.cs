@@ -187,12 +187,6 @@ namespace SparkleShare {
                         this.menu.Add (more_item);
                     }
 
-                } else {
-                    MenuItem no_folders_item = new MenuItem (_("No projects yet")) {
-                        Sensitive   = false
-                    };
-
-                    this.menu.Add (no_folders_item);
                 }
 
                 this.menu.Add (new SeparatorMenuItem ());
@@ -217,7 +211,7 @@ namespace SparkleShare {
             this.menu.Add (new SeparatorMenuItem ());
 
             CheckMenuItem notify_item = new CheckMenuItem (_("Notifications")) {
-				Active = Program.Controller.NotificationsEnabled	
+				Active = (Controller.Folders.Length > 0 && Program.Controller.NotificationsEnabled)
 			};
                                       
                 notify_item.Activated += delegate {
