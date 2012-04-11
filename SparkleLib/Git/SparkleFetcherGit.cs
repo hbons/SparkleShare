@@ -201,9 +201,12 @@ namespace SparkleLib.Git {
 
         public override void Stop ()
         {
-            if (this.git != null && !this.git.HasExited) {
+            try {
                 this.git.Kill ();
                 this.git.Dispose ();
+
+            } catch (Exception e) {
+                SparkleHelpers.DebugInfo ("Fetcher", "Failed to cancel: " + e.Message);
             }
 
             Dispose ();
@@ -242,7 +245,7 @@ namespace SparkleLib.Git {
             writer.WriteLine (config);
             writer.Close ();
 
-            SparkleHelpers.DebugInfo ("Config", "Added configuration to '" + repo_config_file_path + "'");
+            SparkleHelpers.DebugInfo ("Fetcher", "Added configuration to '" + repo_config_file_path + "'");
         }
 
 
