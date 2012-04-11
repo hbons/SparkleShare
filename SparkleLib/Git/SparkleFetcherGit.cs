@@ -202,11 +202,12 @@ namespace SparkleLib.Git {
         public override void Stop ()
         {
             try {
+                this.git.Close ();
                 this.git.Kill ();
                 this.git.Dispose ();
 
             } catch (Exception e) {
-                SparkleHelpers.DebugInfo ("Fetcher", "Failed to cancel: " + e.Message);
+                SparkleHelpers.DebugInfo ("Fetcher", "Failed to cancel properly: " + e.Message);
             }
 
             Dispose ();
