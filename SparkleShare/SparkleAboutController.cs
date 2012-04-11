@@ -14,8 +14,10 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
 using System;
 using System.Net;
+
 using SparkleLib;
 
 namespace SparkleShare {
@@ -36,6 +38,7 @@ namespace SparkleShare {
             }
         }
 
+
         public SparkleAboutController ()
         {
             Program.Controller.ShowAboutWindowEvent += delegate {
@@ -44,10 +47,12 @@ namespace SparkleShare {
             };
         }
 
+
         public void WindowClosed ()
         {
             HideWindowEvent ();
         }
+
 
         private void CheckForNewVersion ()
         {
@@ -62,15 +67,15 @@ namespace SparkleShare {
 
                 string latest_version_string = args.Result.Trim ();
 
-                if (UpdateRequired (RunningVersion, latest_version_string)) {
+                if (UpdateRequired (RunningVersion, latest_version_string))
                     NewVersionEvent (latest_version_string);
-                } else {
+                else
                     VersionUpToDateEvent ();                    
-                }
             };
 
             web_client.DownloadStringAsync (uri);
         }
+
 
         private bool UpdateRequired (string running_version_string, string latest_version_string)
         {
@@ -94,8 +99,9 @@ namespace SparkleShare {
                 running_major = int.Parse (running_split [0]);
                 running_minor = int.Parse (running_split [1]);
                 running_build = int.Parse (running_split [2]);
-            } catch (Exception ex) {
-                throw new FormatException ("running_version_string", ex);
+
+            } catch (Exception e) {
+                throw new FormatException ("running_version_string", e);
             }
 
             int latest_major;
@@ -106,8 +112,9 @@ namespace SparkleShare {
                 latest_major = int.Parse (latest_split [0]);
                 latest_minor = int.Parse (latest_split [1]);
                 latest_build = int.Parse (latest_split [2]);
-            } catch (Exception ex) {
-                throw new FormatException ("latest_version_string", ex);
+
+            } catch (Exception e) {
+                throw new FormatException ("latest_version_string", e);
             }
 
             bool higher_major = latest_major > running_major;
