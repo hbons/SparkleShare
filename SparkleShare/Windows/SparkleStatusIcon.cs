@@ -141,8 +141,8 @@ namespace SparkleShare {
 			};
 
                 CheckBox notify_check_box = new CheckBox () {
-                    Margin    = new Thickness (6,0,0,0),
-                    IsChecked = Program.Controller.NotificationsEnabled
+                    Margin    = new Thickness (6, 0, 0, 0),
+                    IsChecked = (Controller.Folders.Length > 0 && Program.Controller.NotificationsEnabled)
                 };
 
                 notify_item.Icon = notify_check_box;
@@ -242,13 +242,6 @@ namespace SparkleShare {
                     this.context_menu.Items.Add (more_item);
 				}
 
-            } else {
-                SparkleMenuItem no_folders_item = new SparkleMenuItem () {
-                    Header    = "No projects yet",
-                    IsEnabled = false
-                };
-               
-                this.context_menu.Items.Add (no_folders_item);
             }
             
             this.context_menu.Items.Add (new Separator ());
