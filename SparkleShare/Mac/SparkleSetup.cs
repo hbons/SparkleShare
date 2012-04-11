@@ -607,7 +607,7 @@ namespace SparkleShare {
                         case PageType.Finished: {
     
                             Header      = "Project ‘" + Path.GetFileName (Controller.PreviousPath) +
-                                          "’ succesfully added!";
+                                          "’ added!";
                             Description = "Access the files from your SparkleShare folder.";
     
                             if (warnings != null) {
