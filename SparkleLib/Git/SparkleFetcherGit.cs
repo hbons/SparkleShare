@@ -35,27 +35,11 @@ namespace SparkleLib.Git {
         public SparkleFetcher (string server, string remote_path, string target_folder, bool fetch_prior_history) :
             base (server, remote_path, target_folder, fetch_prior_history)
         {
-			remote_path = remote_path.Trim ("/".ToCharArray ());
-			
-            if (server.EndsWith ("/"))
-                server = server.Substring (0, server.Length - 1);
-
-            if (!remote_path.StartsWith ("/"))
-                remote_path = "/" + remote_path;
-
-            Uri uri;
-
-            try {
-				uri = new Uri (server + remote_path);
-
-            } catch (UriFormatException) {
-				uri = new Uri ("ssh://" + server + remote_path);
-            }
-
+            Uri uri = RemoteUrl; 
 
             if (!uri.Scheme.Equals ("ssh") &&
                 !uri.Scheme.Equals ("git")) {
-				
+
 				uri = new Uri ("ssh://" + uri);
             }
 
