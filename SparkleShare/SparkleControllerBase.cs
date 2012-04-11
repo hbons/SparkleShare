@@ -814,48 +814,40 @@ namespace SparkleShare {
             string key_file_path = Path.Combine (keys_path, key_file_name);
 
             if (File.Exists (key_file_path)) {
-                SparkleHelpers.DebugInfo ("Auth", "Key already exists ('" + key_file_name + "'), " +
-                                          "leaving it untouched");
+                SparkleHelpers.DebugInfo ("Auth", "Keypair exists ('" + key_file_name + "'), leaving it untouched");
                 return;
+
+            } else {
+                if (!Directory.Exists (keys_path))
+                    Directory.CreateDirectory (keys_path);
             }
 
-            if (!Directory.Exists (keys_path))
-                Directory.CreateDirectory (keys_path);
+            Process process = new Process () {
+                EnableRaisingEvents = true
+            };
 
-            if (!File.Exists (key_file_name)) {
-                Process process = new Process () {
-                    EnableRaisingEvents = true
-                };
-                
-                process.StartInfo.WorkingDirectory       = keys_path;
-                process.StartInfo.UseShellExecute        = false;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.FileName               = "ssh-keygen";
-                process.StartInfo.CreateNoWindow         = true;
+            process.StartInfo.WorkingDirectory       = keys_path;
+            process.StartInfo.UseShellExecute        = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.FileName               = "ssh-keygen";
+            process.StartInfo.CreateNoWindow         = true;
 
-                process.StartInfo.Arguments = "-t rsa " + // crypto type
-                    "-P \"\" " + // password (none)
-                    "-C \"" + System.Net.Dns.GetHostName () + "\" " + // key comment
-                    "-f " + key_file_name; // file name
+            process.StartInfo.Arguments = "-t rsa " + // crypto type
+                "-P \"\" " + // password (none)
+                "-C \"" + System.Net.Dns.GetHostName () + "\" " + // key comment
+                "-f " + key_file_name; // file name
 
-                process.Start ();
-                process.WaitForExit ();
+            process.Start ();
+            process.WaitForExit ();
 
-                SparkleHelpers.DebugInfo ("Auth", "Created private key '" + key_file_name + "'");
-                SparkleHelpers.DebugInfo ("Auth", "Created public key  '" + key_file_name + ".pub'");
+            if (process.ExitCode == 0)
+                SparkleHelpers.DebugInfo ("Auth", "Created keypair '" + key_file_name + "'");
+            else
+                SparkleHelpers.DebugInfo ("Auth", "Could not create keypair '" + key_file_name + "'");
 
-                // Add some restrictions to what the key can
-                // do when uploaded to the server
-                // string public_key = File.ReadAllText (key_file_path + ".pub");
-                // public_key = "no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty " + public_key;
-                // File.WriteAllText (key_file_path + ".pub", public_key);
-
-                // Create an easily accessible copy of the public
-                // key in the user's SparkleShare folder
-                File.Copy (key_file_path + ".pub",
-                    Path.Combine (SparklePath, UserName + "'s key.txt"),
-                    true); // Overwriting is allowed
-            }
+            // Create an easily accessible copy of the public
+            // key in the user's SparkleShare folder
+            File.Copy (key_file_path + ".pub", Path.Combine (SparklePath, UserName + "'s key.txt"), true);
         }
 
 

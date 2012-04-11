@@ -227,7 +227,7 @@ namespace SparkleShare {
                     Program.Controller.GenerateKeyPair ();
                     Program.Controller.ImportPrivateKey ();
                 })
-            );
+            ).Start ();
 
             TutorialPageNumber = 1;
 
