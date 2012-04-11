@@ -48,12 +48,23 @@ namespace SparkleLib {
         private Thread thread;
 
 
-        public SparkleFetcherBase (string server, string remote_folder,
+        public SparkleFetcherBase (string server, string remote_path,
             string target_folder, bool fetch_prior_history)
         {
+            remote_path = remote_path.Trim ("/".ToCharArray ());
+
+            if (server.EndsWith ("/"))
+                server = server.Substring (0, server.Length - 1);
+
+            if (!remote_path.StartsWith ("/"))
+                remote_path = "/" + remote_path;
+
+            if (!server.Contains ("://"))
+                server = "ssh://" + server;
+
             TargetFolder = target_folder;
-            RemoteUrl    = new Uri (server + "/" + remote_folder);
-            IsActive       = false;
+            RemoteUrl    = new Uri (server + remote_path);
+            IsActive     = false;
 
             ExcludeRules = new string [] {
                 // gedit and emacs
@@ -149,11 +160,12 @@ namespace SparkleLib {
                 return;
             }
 
+
             string host_key = GetHostKey ();
+
             if (host_key != null)
                 AcceptHostKey (host_key);
 
-            Console.WriteLine (host_key);
 
             this.thread = new Thread (new ThreadStart (delegate {
                 if (Fetch ()) {
