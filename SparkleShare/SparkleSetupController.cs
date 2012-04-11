@@ -504,10 +504,10 @@ namespace SparkleShare {
             PreviousPath    = "";
             this.fetch_prior_history = false;
 
-            Program.Controller.UpdateState ();
-
             if (HideWindowEvent != null)
                 HideWindowEvent ();
+
+            Program.Controller.UpdateState ();
         }
 
 
