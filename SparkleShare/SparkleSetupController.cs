@@ -331,19 +331,20 @@ namespace SparkleShare {
 
         public void AddPageCompleted (string address, string remote_path)
         {
+            SyncingFolder = Path.GetFileNameWithoutExtension (remote_path);
+
+            if (ChangePageEvent != null)
+                ChangePageEvent (PageType.Syncing, null);
+
             address     = address.Trim ();
             remote_path = remote_path.Trim ();
             remote_path = remote_path.TrimEnd ("/".ToCharArray ());
 
             if (SelectedPlugin.PathUsesLowerCase)
                 remote_path = remote_path.ToLower ();
-			
-            SyncingFolder   = Path.GetFileNameWithoutExtension (remote_path);
+
             PreviousAddress = address;
             PreviousPath    = remote_path;
-
-            if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Syncing, null);
 
             Program.Controller.FolderFetched    += AddPageFetchedDelegate;
             Program.Controller.FolderFetchError += AddPageFetchErrorDelegate;
