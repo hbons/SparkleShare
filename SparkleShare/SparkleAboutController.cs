@@ -17,6 +17,7 @@
 
 using System;
 using System.Net;
+using System.Threading;
 
 using SparkleLib;
 
@@ -66,6 +67,7 @@ namespace SparkleShare {
                     return;
 
                 string latest_version_string = args.Result.Trim ();
+                Thread.Sleep (750);
 
                 if (UpdateRequired (RunningVersion, latest_version_string))
                     NewVersionEvent (latest_version_string);
