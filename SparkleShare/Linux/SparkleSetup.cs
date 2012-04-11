@@ -512,8 +512,7 @@ namespace SparkleShare {
                             SparkleUI.Bubbles.Controller.ShowBubble (title, subtext, null);
                         }
 
-                        Header      = _("Project ‘" + System.IO.Path.GetFileName (Controller.PreviousPath) +
-                                        "’ successfully added!");
+                        Header      = _("Project ‘" + System.IO.Path.GetFileName (Controller.PreviousPath) + "’ added!");
                         Description = _("Access the files from your SparkleShare folder.");
 
                         // A button that opens the synced folder
