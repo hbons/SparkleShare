@@ -87,7 +87,7 @@ namespace SparkleLib.Git {
 
 
             TargetFolder = target_folder;
-            RemoteUrl    = uri.ToString ();
+            RemoteUrl    = uri;
 
             this.fetch_prior_history = fetch_prior_history;
         }
@@ -108,7 +108,7 @@ namespace SparkleLib.Git {
                     "--progress " +
                     "\"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
             }
-            
+
             this.git.StartInfo.RedirectStandardError = true;
             this.git.Start ();
 
