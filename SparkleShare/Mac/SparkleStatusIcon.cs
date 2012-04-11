@@ -183,7 +183,7 @@ namespace SparkleShare {
                 }
 
                 this.notify_item = new NSMenuItem () {
-                    Enabled = true
+                    Enabled = (Controller.Folders.Length > 0)
                 };
 
                 if (Program.Controller.NotificationsEnabled)
@@ -270,12 +270,6 @@ namespace SparkleShare {
                         i++;
                     };
 
-                } else {
-                    this.folder_menu_items     = new NSMenuItem [1];
-                    this.folder_menu_items [0] = new NSMenuItem () {
-                        Title   = "No projects yet",
-                        Enabled = false
-                    };
                 }
 
 
