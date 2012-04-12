@@ -65,6 +65,12 @@ namespace SparkleShare {
             }
         }
 
+        public string Fingerprint {
+            get {
+                return GetValue ("info", "fingerprint");
+            }
+        }
+
         public string Address {
             get {
                 return GetValue ("address", "value");

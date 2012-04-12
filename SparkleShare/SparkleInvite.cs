@@ -29,6 +29,7 @@ namespace SparkleShare {
 
         public string Address { get; private set; }
         public string RemotePath { get; private set; }
+        public string Fingerprint { get; private set; }
         public string AcceptUrl { get; private set; }
         public string AnnouncementsUrl { get; private set; }
 
@@ -41,20 +42,6 @@ namespace SparkleShare {
         }
 
 
-        public SparkleInvite (string address, string remote_path,
-            string accept_url)
-        {
-            Initialize (address, remote_path, accept_url, null);
-        }
-
-
-        public SparkleInvite (string address, string remote_path,
-            string accept_url, string announcements_url)
-        {
-            Initialize (address, remote_path, accept_url, announcements_url);
-        }
-
-
         public SparkleInvite (string xml_file_path)
         {
             XmlDocument xml_document = new XmlDocument ();
@@ -64,11 +51,11 @@ namespace SparkleShare {
             string remote_path       = "";
             string accept_url        = "";
             string announcements_url = "";
+            string fingerprint       = "";
 
             try {
                 xml_document.Load (xml_file_path);
 
-                
                 node = xml_document.SelectSingleNode ("/sparkleshare/invite/address/text()");
                 if (node != null) { address = node.Value; }
 
@@ -81,8 +68,10 @@ namespace SparkleShare {
                 node = xml_document.SelectSingleNode ("/sparkleshare/invite/announcements_url/text()");
                 if (node != null) { announcements_url = node.Value; }
 
+                node = xml_document.SelectSingleNode ("/sparkleshare/invite/fingerprint/text()");
+                if (node != null) { fingerprint = node.Value; }
 
-                Initialize (address, remote_path, accept_url, announcements_url);
+                Initialize (address, remote_path, accept_url, announcements_url, fingerprint);
 
             } catch (XmlException e) {
                 SparkleHelpers.DebugInfo ("Invite", "Invalid XML: " + e.Message);
@@ -131,12 +120,13 @@ namespace SparkleShare {
 
 
         private void Initialize (string address, string remote_path,
-            string accept_url, string announcements_url)
+            string accept_url, string announcements_url, string fingerprint)
         {
             Address          = address;
             RemotePath       = remote_path;
             AcceptUrl        = accept_url;
             AnnouncementsUrl = announcements_url;
+            Fingerprint      = fingerprint;
         }
     }
 }
