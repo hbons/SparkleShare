@@ -954,7 +954,7 @@ namespace SparkleShare {
         }
 
 
-        public void FetchFolder (string address, string remote_path, string announcements_url,
+        public void FetchFolder (string address, string required_fingerprint, string remote_path, string announcements_url,
             bool fetch_prior_history)
         {
             if (announcements_url != null)
@@ -986,6 +986,7 @@ namespace SparkleShare {
                 this.fetcher = (SparkleFetcherBase) Activator.CreateInstance (
                         Type.GetType ("SparkleLib." + backend + ".SparkleFetcher, SparkleLib." + backend),
                             address,
+                            required_fingerprint,
                             remote_path,
                             tmp_folder,
                             fetch_prior_history

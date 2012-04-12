@@ -610,7 +610,7 @@ namespace SparkleShare {
                                           "’ added!";
                             Description = "Access the files from your SparkleShare folder.";
     
-                            if (warnings != null) {
+                            if (warnings.Length > 0) {
                                 WarningImage = NSImage.ImageNamed ("NSCaution");
                                 WarningImage.Size = new SizeF (24, 24);
     

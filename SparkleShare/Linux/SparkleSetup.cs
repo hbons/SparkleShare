@@ -529,7 +529,7 @@ namespace SparkleShare {
                         };
 
 
-                        if (warnings != null) {
+                        if (warnings.Length > 0) {
                             Image warning_image = new Image (
                                 SparkleUIHelpers.GetIcon ("dialog-warning", 24)
                             );

@@ -16,8 +16,11 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -42,16 +45,20 @@ namespace SparkleLib {
         public string TargetFolder;
         public Uri RemoteUrl;
         public string [] ExcludeRules;
-        public string [] Warnings;
+        public List<string> Warnings = new List<string> ();
         public bool IsActive { get; private set; }
+        public string RequiredFingerprint;
+        public bool FetchPriorHistory = false;
 
         private Thread thread;
 
 
-        public SparkleFetcherBase (string server, string remote_path,
+        public SparkleFetcherBase (string server, string required_fingerprint, string remote_path,
             string target_folder, bool fetch_prior_history)
         {
-            remote_path = remote_path.Trim ("/".ToCharArray ());
+            RequiredFingerprint = required_fingerprint;
+            FetchPriorHistory   = fetch_prior_history;
+            remote_path         = remote_path.Trim ("/".ToCharArray ());
 
             if (server.EndsWith ("/"))
                 server = server.Substring (0, server.Length - 1);
@@ -143,17 +150,19 @@ namespace SparkleLib {
         public void Start ()
         {
             IsActive = true;
-            SparkleHelpers.DebugInfo ("Fetcher", "[" + TargetFolder + "] Fetching folder: " + RemoteUrl);
 
             if (Started != null)
                 Started ();
 
+            SparkleHelpers.DebugInfo ("Fetcher", "[" + TargetFolder + "] Fetching folder: " + RemoteUrl);
+
             if (Directory.Exists (TargetFolder))
                 Directory.Delete (TargetFolder, true);
 
+
             string host = RemoteUrl.Host;
 
-            if (String.IsNullOrEmpty (host)) {
+            if (string.IsNullOrEmpty (host)) {
                 if (Failed != null)
                     Failed ();
 
@@ -163,8 +172,35 @@ namespace SparkleLib {
 
             string host_key = GetHostKey ();
 
-            if (host_key != null)
-                AcceptHostKey (host_key);
+            if (host_key == null) {
+                if (Failed != null)
+                    Failed ();
+
+                return;
+            }
+
+
+            bool warn = true;
+            if (RequiredFingerprint != null) {
+                string host_fingerprint = GetFingerprint (host_key);
+
+                if (!RequiredFingerprint.Equals (host_fingerprint)) {
+                    SparkleHelpers.DebugInfo ("Auth", "Fingerprint doesn't match");
+
+                    if (Failed != null)
+                        Failed ();
+
+                    return;
+                }
+
+                warn = false;
+                SparkleHelpers.DebugInfo ("Auth", "Fingerprint matches");
+
+            } else {
+               SparkleHelpers.DebugInfo ("Auth", "Skipping fingerprint check");
+            }
+
+            AcceptHostKey (host_key, warn);
 
 
             this.thread = new Thread (new ThreadStart (delegate {
@@ -175,7 +211,7 @@ namespace SparkleLib {
                     IsActive = false;
 
                     if (Finished != null)
-                        Finished (Warnings);
+                        Finished (Warnings.ToArray ());
 
                 } else {
                     Thread.Sleep (500);
@@ -228,7 +264,7 @@ namespace SparkleLib {
 
             // Reading the standard output HAS to go before
             // WaitForExit, or it will hang forever on output > 4096 bytes
-            string host_key = process.StandardOutput.ReadToEnd ().TrimEnd ();
+            string host_key = process.StandardOutput.ReadToEnd ().Trim ();
             process.WaitForExit ();
 
             if (process.ExitCode == 0)
@@ -238,7 +274,39 @@ namespace SparkleLib {
         }
 
 
-        private void AcceptHostKey (string host_key)
+        // FIXME: Calculate fingerprint natively: decode base64 -> md5
+        private string GetFingerprint (string public_key)
+        {
+            string tmp_file_path = Path.Combine (SparkleConfig.DefaultConfig.TmpPath, "hostkey.tmp");
+            File.WriteAllText (tmp_file_path, public_key + Environment.NewLine);
+
+            Process process = new Process () {
+                EnableRaisingEvents = true
+            };
+
+            process.StartInfo.WorkingDirectory       = SparkleConfig.DefaultConfig.TmpPath;
+            process.StartInfo.UseShellExecute        = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.CreateNoWindow         = true;
+
+            process.StartInfo.FileName  = "ssh-keygen";
+            process.StartInfo.Arguments = "-lf " + tmp_file_path;
+
+            process.Start ();
+
+            // Reading the standard output HAS to go before
+            // WaitForExit, or it will hang forever on output > 4096 bytes
+            string fingerprint = process.StandardOutput.ReadToEnd ().Trim ();
+            process.WaitForExit ();
+
+            fingerprint = fingerprint.Substring (fingerprint.IndexOf (" ") + 1, 47);
+            File.Delete (tmp_file_path);
+
+            return fingerprint;
+        }
+
+
+        private void AcceptHostKey (string host_key, bool warn)
         {
             string ssh_config_path       = Path.Combine (SparkleConfig.DefaultConfig.HomePath, ".ssh");
             string known_hosts_file_path = Path.Combine (ssh_config_path, "known_hosts");
@@ -265,6 +333,11 @@ namespace SparkleLib {
                 File.AppendAllText (known_hosts_file_path, "\n" + host_key + "\n");
 
             SparkleHelpers.DebugInfo ("Auth", "Accepted host key for " + host);
+
+            if (warn) {
+                Warnings.Add ("The accepted fingerprint is:\n" + GetFingerprint (host_key) +
+                    "\n\nIf the above key doesn't match due to a possible attack, delete this project folder immediately.");
+            }
         }
     }
 }

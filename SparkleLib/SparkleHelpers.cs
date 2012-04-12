@@ -79,9 +79,8 @@ namespace SparkleLib {
         // Check if a file is a symbolic link
         public static bool IsSymlink (string file)
         {
-            FileAttributes attr = File.GetAttributes (file);
-
-            return ((attr & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint);
+            FileAttributes attributes = File.GetAttributes (file);
+            return ((attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint);
         }
 
 
@@ -93,20 +92,13 @@ namespace SparkleLib {
         }
 
 
-        // Gets the relative path of two hierarchical absolute paths    
-        public static string DiffPaths (string target, string source)
-        {
-            return target.Replace (source + Path.DirectorySeparatorChar, "");      
-        }
-
-        public static bool IsWindows
-        {
-            get
-            {
+        public static bool IsWindows {
+            get {
                 PlatformID platform = Environment.OSVersion.Platform;
-                return (platform == PlatformID.Win32NT
-                    || platform == PlatformID.Win32S
-                    || platform == PlatformID.Win32Windows);
+
+                return (platform == PlatformID.Win32NT ||
+                        platform == PlatformID.Win32S  ||
+                        platform == PlatformID.Win32Windows);
             }
         }
     }
