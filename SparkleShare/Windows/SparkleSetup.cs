@@ -554,7 +554,7 @@ namespace SparkleShare {
                             Content = "Open folder"
                         };
 
-                        if (warnings != null) {
+                        if (warnings.Length > 0) {
 							Image warning_image = new Image () {
 								Source = Imaging.CreateBitmapSourceFromHIcon (Drawing.SystemIcons.Warning.Handle,
                                 	Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions ())
