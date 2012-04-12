@@ -6,6 +6,7 @@
         <_description>A free and easy interface for your computer</_description>
         <icon>gnome.png</icon>
         <backend>Git</backend>
+        <fingerprint>00:39:fd:1a:a4:2c:6b:28:b8:2e:95:31:c2:90:72:03</fingerprint>
     </info>
     <address>
       <value>ssh://git@gnome.org/</value>
