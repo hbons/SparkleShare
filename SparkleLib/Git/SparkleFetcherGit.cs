@@ -29,11 +29,11 @@ namespace SparkleLib.Git {
     public class SparkleFetcher : SparkleFetcherBase {
 
         private SparkleGit git;
-        private bool fetch_prior_history = false;
 
 
-        public SparkleFetcher (string server, string remote_path, string target_folder, bool fetch_prior_history) :
-            base (server, remote_path, target_folder, fetch_prior_history)
+        public SparkleFetcher (string server, string required_fingerprint, string remote_path,
+            string target_folder, bool fetch_prior_history) : base (server, required_fingerprint, remote_path,
+                target_folder, fetch_prior_history)
         {
             Uri uri = RemoteUrl; 
 
@@ -72,14 +72,12 @@ namespace SparkleLib.Git {
 
             TargetFolder = target_folder;
             RemoteUrl    = uri;
-
-            this.fetch_prior_history = fetch_prior_history;
         }
 
 
         public override bool Fetch ()
         {
-            if (this.fetch_prior_history) {
+            if (FetchPriorHistory) {
                 this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
                     "clone " +
                     "--progress " +
@@ -171,15 +169,10 @@ namespace SparkleLib.Git {
             string output = git.StandardOutput.ReadToEnd ().Trim ();
             git.WaitForExit ();
 
-            if (string.IsNullOrEmpty (output)) {
+            if (string.IsNullOrEmpty (output))
                 return;
-
-            } else {
-                Warnings = new string [] {
-                    string.Format ("You seem to have configured a system wide ‘gitignore’ file. " +
-                                   "This may affect SparkleShare files:\n\n{0}", output)
-                };
-            }
+            else
+                Warnings.Add ("You seem to have a system wide ‘gitignore’ file, this may affect SparkleShare files.");
         }
 
 

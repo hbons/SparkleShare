@@ -350,7 +350,7 @@ namespace SparkleShare {
             Program.Controller.FolderFetchError += AddPageFetchErrorDelegate;
             Program.Controller.FolderFetching   += SyncingPageFetchingDelegate;
 
-            Program.Controller.FetchFolder (address, remote_path,
+            Program.Controller.FetchFolder (address, SelectedPlugin.Fingerprint, remote_path,
                 SelectedPlugin.AnnouncementsUrl, this.fetch_prior_history);
         }
 
@@ -431,7 +431,7 @@ namespace SparkleShare {
             Program.Controller.FolderFetchError += InvitePageFetchErrorDelegate;
             Program.Controller.FolderFetching   += SyncingPageFetchingDelegate;
 
-            Program.Controller.FetchFolder (PendingInvite.Address,
+            Program.Controller.FetchFolder (PendingInvite.Address, PendingInvite.Fingerprint,
                 PendingInvite.RemotePath, PendingInvite.AnnouncementsUrl, false); // TODO: checkbox on invite page
         }
 
