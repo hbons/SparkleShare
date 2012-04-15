@@ -510,8 +510,8 @@ namespace SparkleShare {
             int midnight = (int) (DateTime.Today.AddDays (1) - new DateTime (1970, 1, 1)).TotalSeconds;
 
             string html = event_log_html.Replace ("<!-- $event-log-content -->", event_log)
-                .Replace ("<!-- $username -->", UserName)
-                .Replace ("<!-- $user-avatar-url -->", "file://" + GetAvatar (UserEmail, 48))
+                .Replace ("<!-- $username -->", CurrentUser.Name)
+                .Replace ("<!-- $user-avatar-url -->", "file://" + GetAvatar (CurrentUser.Email, 48))
                 .Replace ("<!-- $midnight -->", midnight.ToString ());
 
             return html;
@@ -722,7 +722,7 @@ namespace SparkleShare {
         public void ImportPrivateKey ()
         {
             string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
-            string key_file_name = "sparkleshare." + UserEmail + ".key";
+            string key_file_name = "sparkleshare." + CurrentUser.Email + ".key";
             string key_file_path = Path.Combine (keys_path, key_file_name);
 
             if (!File.Exists (key_file_path)) {
@@ -752,33 +752,19 @@ namespace SparkleShare {
             // key in the user's SparkleShare folder
             if (!File.Exists (pubkey_file_path))
                 File.Copy (pubkey_file_path,
-                    Path.Combine (SparklePath, UserName + "'s key.txt"),
+                    Path.Combine (SparklePath, CurrentUser.Name + "'s key.txt"),
                     true); // Overwriting is allowed
         }
 
 
         // Looks up the user's name from the global configuration
-        public string UserName
-        {
+        public SparkleUser CurrentUser {
             get {
-                return SparkleConfig.DefaultConfig.User.Name;
+                return SparkleConfig.DefaultConfig.User;
             }
 
             set {
-                SparkleConfig.DefaultConfig.User = new SparkleUser (value, UserEmail);
-            }
-        }
-
-
-        // Looks up the user's email from the global configuration
-        public string UserEmail
-        {
-            get {
-                return SparkleConfig.DefaultConfig.User.Email;
-            }
-                    
-            set {
-                SparkleConfig.DefaultConfig.User = new SparkleUser (UserName, value);
+                SparkleConfig.DefaultConfig.User = value;
             }
         }
         
@@ -787,7 +773,7 @@ namespace SparkleShare {
         public void GenerateKeyPair ()
         {
             string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
-            string key_file_name = "sparkleshare." + UserEmail + ".key";
+            string key_file_name = "sparkleshare." + CurrentUser.Email + ".key";
             string key_file_path = Path.Combine (keys_path, key_file_name);
 
             if (File.Exists (key_file_path)) {
@@ -824,7 +810,7 @@ namespace SparkleShare {
 
             // Create an easily accessible copy of the public
             // key in the user's SparkleShare folder
-            File.Copy (key_file_path + ".pub", Path.Combine (SparklePath, UserName + "'s key.txt"), true);
+            File.Copy (key_file_path + ".pub", Path.Combine (SparklePath, CurrentUser.Name + "'s key.txt"), true);
         }
 
 
