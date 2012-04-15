@@ -334,10 +334,8 @@ namespace SparkleLib {
 
             SparkleHelpers.DebugInfo ("Auth", "Accepted host key for " + host);
 
-            if (warn) {
-                Warnings.Add ("The accepted fingerprint is:\n" + GetFingerprint (host_key) +
-                    "\n\nIf the above key doesn't match due to a possible attack, delete this project folder immediately.");
-            }
+            if (warn)
+                Warnings.Add ("The following host key has been accepted:\n" + GetFingerprint (host_key));
         }
     }
 }
