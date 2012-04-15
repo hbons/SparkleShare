@@ -144,10 +144,10 @@ namespace SparkleShare {
         public abstract bool CreateSparkleShareFolder ();
 
         // Opens the SparkleShare folder or an (optional) subfolder
-        public abstract void OpenSparkleShareFolder (string subfolder);
+        public abstract void OpenFolder (string path);
 
         // Opens a file with the appropriate application
-        public abstract void OpenFile (string url);
+        public abstract void OpenFile (string path);
 
 
         private SparkleFetcherBase fetcher;
@@ -736,7 +736,13 @@ namespace SparkleShare {
 
         public void OpenSparkleShareFolder ()
         {
-            OpenSparkleShareFolder ("");
+            OpenFolder (SparkleConfig.DefaultConfig.FoldersPath);
+        }
+
+
+        public void OpenSparkleShareFolder (string name)
+        {
+            OpenFolder (new SparkleFolder (name).FullPath);
         }
 
         

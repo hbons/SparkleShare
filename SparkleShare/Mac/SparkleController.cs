@@ -186,13 +186,10 @@ namespace SparkleShare {
 		}
 
 		
-		// Opens the SparkleShare folder or an (optional) subfolder
-		public override void OpenSparkleShareFolder (string subfolder)
+		public override void OpenFolder (string path)
 		{
-			string folder = Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, subfolder);
-			folder.Replace (" ", "\\ "); // Escape space-characters			
-			
-			NSWorkspace.SharedWorkspace.OpenFile (folder);
+			path = path.Replace (" ", "\\ "); // Escape space-characters
+			NSWorkspace.SharedWorkspace.OpenFile (path);
 		}
 		
 		
