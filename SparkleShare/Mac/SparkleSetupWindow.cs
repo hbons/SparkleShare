@@ -120,10 +120,11 @@ namespace SparkleShare {
                     // Make the button a bit wider if the text is
                     // likely to be longer
                     if (button.Title.Contains (" ")) {
-                        button.Frame = new RectangleF (Frame.Width - 30 - (105 * i), 12, 120, 32);
+                        button.SizeToFit ();
+                        button.Frame = new RectangleF (Frame.Width - 30 - 15 - (105 * (i - 1)) - button.Frame.Width, 12, button.Frame.Width + 30, 32);
                         x += 15;
                     }
-                    
+
                     button.Font = SparkleUI.Font;
                     ContentView.AddSubview (button);
                     i++;
