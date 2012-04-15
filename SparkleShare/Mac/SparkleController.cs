@@ -188,7 +188,6 @@ namespace SparkleShare {
 
 		public override void OpenFolder (string path)
 		{
-			path = path.Replace (" ", "\\ "); // Escape space-characters
 			NSWorkspace.SharedWorkspace.OpenFile (path);
 		}
 		
