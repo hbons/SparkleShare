@@ -262,7 +262,7 @@ namespace SparkleShare {
 							"</DataTemplate>";
 
     					grid_view.Columns [0].CellTemplate = (DataTemplate) XamlReader.Parse (xaml);
-												
+
 						Style header_style = new Style(typeof (GridViewColumnHeader));
 						header_style.Setters.Add (new Setter (GridViewColumnHeader.VisibilityProperty, Visibility.Collapsed));
 					    grid_view.ColumnHeaderContainerStyle = header_style;
@@ -541,8 +541,7 @@ namespace SparkleShare {
                     }    
                         
                     case PageType.Finished: {
-                        Header = "Project ‘" + Path.GetFileName (Controller.PreviousPath) + "’ added!";
-                            
+                        Header = "Your shared project is ready!";
                         Description = "Access the files from your SparkleShare folder.";
                         
                         
@@ -551,12 +550,12 @@ namespace SparkleShare {
                         };
     
                         Button open_folder_button = new Button () {
-                            Content = "Open folder"
+                            Content = string.Format ("Open {0}", Path.GetFileName (Controller.PreviousPath))
                         };
 
                         if (warnings.Length > 0) {
 							Image warning_image = new Image () {
-								Source = Imaging.CreateBitmapSourceFromHIcon (Drawing.SystemIcons.Warning.Handle,
+								Source = Imaging.CreateBitmapSourceFromHIcon (Drawing.SystemIcons.Information.Handle,
                                 	Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions ())
 							};
 							

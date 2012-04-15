@@ -606,12 +606,11 @@ namespace SparkleShare {
     
                         case PageType.Finished: {
     
-                            Header      = "Project ‘" + Path.GetFileName (Controller.PreviousPath) +
-                                          "’ added!";
-                            Description = "Access the files from your SparkleShare folder.";
+                            Header      = "Your shared project is ready!";
+                            Description = "You can find it in your SparkleShare folder";
     
                             if (warnings.Length > 0) {
-                                WarningImage = NSImage.ImageNamed ("NSCaution");
+                                WarningImage = NSImage.ImageNamed ("NSInfo");
                                 WarningImage.Size = new SizeF (24, 24);
     
                                 WarningImageView = new NSImageView () {
@@ -620,7 +619,7 @@ namespace SparkleShare {
                                 };
     
                                 WarningTextField = new NSTextField () {
-                                    Frame           = new RectangleF (230, Frame.Height - 245, 325, 100),
+                                    Frame           = new RectangleF (225, Frame.Height - 245, 325, 100),
                                     StringValue     = warnings [0],
                                     BackgroundColor = NSColor.WindowBackground,
                                     Bordered        = false,
@@ -641,7 +640,7 @@ namespace SparkleShare {
                             };
     
                             OpenFolderButton = new NSButton () {
-                                Title = "Open Folder"
+                                Title = string.Format ("Open {0}", Path.GetFileName (Controller.PreviousPath))
                             };
     
                             OpenFolderButton.Activated += delegate {

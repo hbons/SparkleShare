@@ -506,17 +506,17 @@ namespace SparkleShare {
                         UrgencyHint = true;
 
                         if (!HasToplevelFocus) {
-                            string title   = _("Project successfully added!");
-                            string subtext = "";
+                            string title   = _("Your shared project is ready!");
+                            string subtext = "You can find it in your SparkleShare folder";
 
                             SparkleUI.Bubbles.Controller.ShowBubble (title, subtext, null);
                         }
 
-                        Header      = _("Project ‘" + System.IO.Path.GetFileName (Controller.PreviousPath) + "’ added!");
-                        Description = _("Access the files from your SparkleShare folder.");
+                        Header      = _("Your shared project is ready!");
+                        Description = _("You can find it in your SparkleShare folder");
 
                         // A button that opens the synced folder
-                        Button open_folder_button = new Button (_("Open Folder"));
+                        Button open_folder_button = new Button (string.Format ("Open {0}", Path.GetFileName (Controller.PreviousPath)));
 
                         open_folder_button.Clicked += delegate {
                             Controller.OpenFolderClicked ();
@@ -531,7 +531,7 @@ namespace SparkleShare {
 
                         if (warnings.Length > 0) {
                             Image warning_image = new Image (
-                                SparkleUIHelpers.GetIcon ("dialog-warning", 24)
+                                SparkleUIHelpers.GetIcon ("dialog-info", 24)
                             );
 
                             Label warning_label = new Label (warnings [0]) {
