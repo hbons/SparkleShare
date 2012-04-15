@@ -25,7 +25,7 @@ namespace SparkleLib {
 
         public SparkleUser User = new SparkleUser ("Unknown", "Unknown");
 
-        public string Folder;
+        public SparkleFolder Folder;
         public string Revision;
         public DateTime Timestamp;
         public DateTime FirstTimestamp;
@@ -74,6 +74,7 @@ namespace SparkleLib {
     }
 
 
+    // TODO: Move to its own file (and update all .csproj files)
     public class SparkleFolder {
 
         public string Name;
@@ -81,7 +82,12 @@ namespace SparkleLib {
 
         public string FullPath {
             get {
-                return Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, Name);
+                string custom_path = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (Name, "path");
+
+                if (custom_path != null)
+                    return Path.Combine (custom_path, Name);
+                else
+                    return Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, Name);
             }
         }
 

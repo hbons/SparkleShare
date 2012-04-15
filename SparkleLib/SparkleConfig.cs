@@ -256,13 +256,6 @@ namespace SparkleLib {
         }
 
 
-        public bool FolderExists (string name)
-        {
-            XmlNode folder = GetFolder (name);
-            return (folder != null);
-        }
-
-
         public string GetBackendForFolder (string name)
         {
             return GetFolderValue (name, "backend");
@@ -292,6 +285,7 @@ namespace SparkleLib {
             }
 
             Save ();
+
             return true;
         }
 
@@ -314,7 +308,7 @@ namespace SparkleLib {
 
         private XmlNode GetFolder (string name)
         {
-            return SelectSingleNode (String.Format("/sparkleshare/folder[name='{0}']", name));
+            return SelectSingleNode (string.Format ("/sparkleshare/folder[name='{0}']", name));
         }
 
 
