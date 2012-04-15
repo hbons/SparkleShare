@@ -87,16 +87,16 @@ namespace SparkleShare {
 
         public string GuessedUserName {
             get {
-                return Program.Controller.UserName;
+                return Program.Controller.CurrentUser.Name;
             }
         }
 
         public string GuessedUserEmail {
             get {
-                if (Program.Controller.UserEmail.Equals ("Unknown"))
+                if (Program.Controller.CurrentUser.Email.Equals ("Unknown"))
                     return "";
                 else
-                    return Program.Controller.UserEmail;
+                    return Program.Controller.CurrentUser.Email;
             }
         }
 
@@ -219,8 +219,7 @@ namespace SparkleShare {
         
         public void SetupPageCompleted (string full_name, string email)
         {
-            Program.Controller.UserName  = full_name;
-            Program.Controller.UserEmail = email;
+            Program.Controller.CurrentUser = new SparkleUser (full_name, email);
 
             new Thread (
                 new ThreadStart (delegate {
