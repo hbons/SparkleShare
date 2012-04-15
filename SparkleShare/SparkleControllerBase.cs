@@ -432,7 +432,7 @@ namespace SparkleShare {
 								event_entry += "<dd class='document moved'>";
                                 event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, file_path);
                                 event_entry += "<br>";
-                                event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, file_path);
+                                event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, to_file_path);
                                 event_entry += "</dd>";
 
                                 i++;
