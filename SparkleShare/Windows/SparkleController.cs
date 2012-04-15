@@ -180,17 +180,17 @@ namespace SparkleShare {
         }
 
 
-        public override void OpenFile (string url)
+        public override void OpenFile (string path)
         {
-			Process.Start (url);
+			Process.Start (path);
         }
 
 
-        public override void OpenSparkleShareFolder (string subfolder)
+        public override void OpenFolder (string path)
         {
             Process process             = new Process ();
             process.StartInfo.FileName  = "explorer";
-            process.StartInfo.Arguments = Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, subfolder);
+            process.StartInfo.Arguments = path;
             
             process.Start();
         }
