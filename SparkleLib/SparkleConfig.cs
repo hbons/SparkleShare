@@ -29,14 +29,13 @@ namespace SparkleLib {
             Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
                 "sparkleshare");
 
-        // TODO: declare elsewhere
         public static SparkleConfig DefaultConfig = new SparkleConfig (default_config_path, "config.xml");
         public static bool DebugMode = true;
-
 
         public string FullPath;
         public string TmpPath;
         public string LogFilePath;
+
 
         public string HomePath {
             get {
@@ -60,6 +59,7 @@ namespace SparkleLib {
             }
         }
 
+
         public string FoldersPath {
             get {
                 if (GetConfigOption ("folders_path") != null)
@@ -68,6 +68,7 @@ namespace SparkleLib {
                     return Path.Combine (HomePath, "SparkleShare");
             }
         }
+
 
         public SparkleConfig (string config_path, string config_file_name)
         {
@@ -205,8 +206,6 @@ namespace SparkleLib {
                 email_node.InnerText = user.Email;
 
                 Save ();
-
-                // ConfigureSSH ();
             }
         }
 
@@ -313,44 +312,6 @@ namespace SparkleLib {
         }
 
 
-        public List<string> Hosts {
-            get {
-                List<string> hosts = new List<string> ();
-
-                foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
-                    Uri uri = new Uri (node_folder ["url"].InnerText);
-
-                    if (!hosts.Contains (uri.Host))
-                        hosts.Add (uri.Host);
-                }
-
-              return hosts;
-           }
-        }
-
-
-        public List<string> HostsWithUsername {
-            get {
-                List<string> hosts = new List<string> ();
-
-                foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
-                    try {
-                        Uri uri = new Uri (node_folder ["url"].InnerText);
-
-                        if (uri.UserInfo != "git" && !hosts.Contains (uri.UserInfo + "@" + uri.Host))
-                            hosts.Add (uri.UserInfo + "@" + uri.Host);
-
-                    } catch (UriFormatException) {
-                        SparkleHelpers.DebugInfo ("Config",
-                            "Ignoring badly formatted URI: " + node_folder ["url"].InnerText);
-                    }
-                }
-
-              return hosts;
-           }
-        }
-
-
         private XmlNode GetFolder (string name)
         {
             return SelectSingleNode (String.Format("/sparkleshare/folder[name='{0}']", name));
@@ -408,23 +369,14 @@ namespace SparkleLib {
             Save (FullPath);
             SparkleHelpers.DebugInfo ("Config", "Updated \"" + FullPath + "\"");
         }
-
-
-        private void Chmod644 (string file_path)
-        {
-            // Hack to be able to set the permissions on a file
-            // that OpenSSH still likes without resorting to Mono.Unix
-            FileInfo file_info   = new FileInfo (file_path);
-            file_info.Attributes = FileAttributes.ReadOnly;
-            file_info.Attributes = FileAttributes.Normal;
-        }
     }
 
 
     public class ConfigFileNotFoundException : Exception {
 
-        public ConfigFileNotFoundException (string message) :
-            base (message) { }
+        public ConfigFileNotFoundException (string message) : base (message)
+        {
+        }
     }
 }
 
