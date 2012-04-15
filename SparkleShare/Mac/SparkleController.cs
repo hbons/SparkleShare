@@ -185,7 +185,7 @@ namespace SparkleShare {
             }
 		}
 
-		
+
 		public override void OpenFolder (string path)
 		{
 			path = path.Replace (" ", "\\ "); // Escape space-characters
