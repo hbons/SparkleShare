@@ -88,6 +88,14 @@ $ sudo apt-get install gtk-sharp2 mono-runtime mono-devel monodevelop \
   libwebkit-cil-dev intltool libtool python-nautilus libndesk-dbus-glib1.0-cil-dev
 ```
 
+### openSUSE:
+
+```bash
+$ sudo zypper install gtk-sharp2 mono-core mono-devel monodevelop \
+  ndesk-dbus-glib-devel python-nautilus-devel nant \
+  notify-sharp-devel webkit-sharp libwebkitgtk-devel libtool intltool
+```
+
 
 You can then build and install SparkleShare like this:
 
