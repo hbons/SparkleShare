@@ -74,6 +74,9 @@ namespace SparkleLib {
             IsActive     = false;
 
             ExcludeRules = new string [] {
+                // Various autosaving apps
+                "*.autosave",
+
                 // gedit and emacs
                 "*~",
 
