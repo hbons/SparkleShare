@@ -161,7 +161,7 @@ namespace SparkleLib.Git {
         {
             get {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Checking for remote changes...");
-                SparkleGit git = new SparkleGit (LocalPath, "ls-remote " + Url + " master");
+                SparkleGit git = new SparkleGit (LocalPath, "ls-remote \"" + Url + "\" master");
     
                 git.Start ();
                 git.WaitForExit ();
@@ -196,7 +196,7 @@ namespace SparkleLib.Git {
 
             SparkleGit git = new SparkleGit (LocalPath,
                 "push --progress " + // Redirects progress stats to standarderror
-                Url + " master");
+                "\"" + Url + "\" master");
 
             git.StartInfo.RedirectStandardError = true;
             git.Start ();
@@ -259,7 +259,7 @@ namespace SparkleLib.Git {
 
         public override bool SyncDown ()
         {
-            SparkleGit git = new SparkleGit (LocalPath, "fetch --progress " + Url);
+            SparkleGit git = new SparkleGit (LocalPath, "fetch --progress \"" + Url + "\" master");
 
             git.StartInfo.RedirectStandardError = true;
             git.Start ();
