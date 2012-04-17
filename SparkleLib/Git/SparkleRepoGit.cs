@@ -722,6 +722,9 @@ namespace SparkleLib.Git {
         {
             try {
                 foreach (string child_path in Directory.GetDirectories (path)) {
+                    if (SparkleHelpers.IsSymlink (child_path))
+                        continue;
+
                     if (child_path.EndsWith (".git")) {
                         if (child_path.Equals (Path.Combine (LocalPath, ".git")))
                             continue;
