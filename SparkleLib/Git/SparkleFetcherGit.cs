@@ -117,8 +117,12 @@ namespace SparkleLib.Git {
                     else
                         // "Compressing objects" stage
                         number = (number / 100 * 20);
+
+                } else {
+                    SparkleHelpers.DebugInfo ("Fetcher", line);
                 }
-                
+
+
                 if (number >= percentage) {
                     percentage = number;
 
