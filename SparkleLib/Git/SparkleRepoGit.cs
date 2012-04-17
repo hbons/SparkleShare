@@ -238,7 +238,11 @@ namespace SparkleLib.Git {
                             speed = speed.Replace ("MB/s", "ᴍʙ/s");
                         }
                     }
+
+                } else {
+                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] " + line);
                 }
+
 
                 if (number >= percentage) {
                     percentage = number;
@@ -295,7 +299,11 @@ namespace SparkleLib.Git {
                             speed = speed.Replace ("MB/s", "ᴍʙ/s");
                         }
                     }
+
+                } else {
+                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] " + line);
                 }
+                
 
                 if (number >= percentage) {
                     percentage = number;
@@ -714,8 +722,9 @@ namespace SparkleLib.Git {
         {
             try {
                 foreach (string child_path in Directory.GetDirectories (path)) {
-                    if (child_path.EndsWith (".git") &&
-                        !child_path.Equals (Path.Combine (LocalPath, ".git"))) {
+                    if (child_path.EndsWith (".git")) {
+                        if (child_path.Equals (Path.Combine (LocalPath, ".git")))
+                            continue;
     
                         string HEAD_file_path = Path.Combine (child_path, "HEAD");
     
@@ -724,9 +733,6 @@ namespace SparkleLib.Git {
                             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Renamed " + HEAD_file_path);
                         }
     
-                        continue;
-    
-                    } else if (child_path.EndsWith (".git")) {
                         continue;
                     }
     
