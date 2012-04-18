@@ -674,7 +674,7 @@ namespace SparkleShare {
                             case 3: {
                                 Header      = "The status icon is here to help";
                                 Description = "It shows the syncing progress, provides easy access to " +
-                                    "your projects and let's you view recent changes.";
+                                    "your projects and lets you view recent changes.";
     
                             
                                 Button continue_button = new Button () {
