@@ -214,7 +214,7 @@ namespace SparkleShare {
         {
             Process process = new Process ();
             process.StartInfo.FileName = "xdg-open";
-            process.StartInfo.Arguments = "\"" + url + "\"";
+            process.StartInfo.Arguments = "\"" + path + "\"";
             process.Start ();
         }
     }
