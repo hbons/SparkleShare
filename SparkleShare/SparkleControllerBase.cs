@@ -968,20 +968,21 @@ namespace SparkleShare {
             bool target_folder_exists = Directory.Exists (
                 Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, canonical_name));
 
-            // Add a numbered suffix to the name if a folder with the same name
-            // already exists. Example: "Folder (2)"
-            int i = 1;
-            while (target_folder_exists) {
-                i++;
-                target_folder_exists = Directory.Exists (
-                    Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, canonical_name + " (" + i + ")"));
-            }
-
-            string target_folder_name = canonical_name;
-            if (i > 1)
-                target_folder_name += " (" + i + ")";
 
             this.fetcher.Finished += delegate (string [] warnings) {
+
+                // Add a numbered suffix to the name if a folder with the same name
+                // already exists. Example: "Folder (2)"
+                int i = 1;
+                while (target_folder_exists) {
+                    i++;
+                    target_folder_exists = Directory.Exists (
+                        Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, canonical_name + " (" + i + ")"));
+                }
+
+                string target_folder_name = canonical_name;
+                if (i > 1)
+                    target_folder_name += " (" + i + ")";
 
                 // Needed to do the moving
                 SparkleHelpers.ClearAttributes (tmp_folder);
