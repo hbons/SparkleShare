@@ -149,9 +149,6 @@ namespace SparkleShare {
                     Show ();
                     Activate ();
                     BringIntoView ();
-                    
-                    UpdateContent (null);
-                    UpdateChooser (null);
                 });
             };
 

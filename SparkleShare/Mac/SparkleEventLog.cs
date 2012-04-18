@@ -54,12 +54,12 @@ namespace SparkleShare {
             {
                 Title    = "Recent Changes";
                 Delegate = new SparkleEventsDelegate ();
-                // TODO: Window needs to be made resizable
+                // TODO: Make window resizable
 
                 int width  = 480;
                 int height = 640;
-                float x = (float) (NSScreen.MainScreen.Frame.Width * 0.61);
-                float y = (float) (NSScreen.MainScreen.Frame.Height * 0.5 - (height * 0.5));
+                float x    = (float) (NSScreen.MainScreen.Frame.Width * 0.61);
+                float y    = (float) (NSScreen.MainScreen.Frame.Height * 0.5 - (height * 0.5));
 
                 SetFrame (new RectangleF (x, y, width, height), true);
 
@@ -188,9 +188,6 @@ namespace SparkleShare {
                 {
                     InvokeOnMainThread (delegate {
                         OrderFrontRegardless ();
-
-                        UpdateContent (null);
-                        UpdateChooser (null);
                     });
                 }
             };

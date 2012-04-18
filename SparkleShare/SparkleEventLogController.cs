@@ -155,6 +155,14 @@ namespace SparkleShare {
         public SparkleEventLogController ()
         {
             Program.Controller.ShowEventLogWindowEvent += delegate {
+                if (this.selected_folder == null) {
+                    if (UpdateChooserEvent != null)
+                        UpdateChooserEvent (Folders);
+
+                    if (UpdateContentEvent != null)
+                        UpdateContentEvent (HTML);
+                }
+
                 if (ShowWindowEvent != null)
                     ShowWindowEvent ();
             };
