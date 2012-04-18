@@ -188,10 +188,16 @@ namespace SparkleLib.Git {
                 this.git.Dispose ();
 
             } catch (Exception e) {
-                SparkleHelpers.DebugInfo ("Fetcher", "Failed to cancel properly: " + e.Message);
+                SparkleHelpers.DebugInfo ("Fetcher", "Failed to dispose properly: " + e.Message);
             }
 
-            Dispose ();
+            base.Dispose ();
+        }
+
+
+        new public void Dispose ()
+        {
+            Stop ();
         }
 
 
