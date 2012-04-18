@@ -56,8 +56,13 @@ namespace SparkleShare {
                 Delegate = new SparkleEventsDelegate ();
                 // TODO: Window needs to be made resizable
 
-                SetFrame (new RectangleF (0, 0, 480, 640), true);
-                Center ();
+                int width  = 480;
+                int height = 640;
+                float x = (float) (NSScreen.MainScreen.Frame.Width * 0.61);
+                float y = (float) (NSScreen.MainScreen.Frame.Height * 0.5 - (height * 0.5));
+
+                SetFrame (new RectangleF (x, y, width, height), true);
+
 
                 StyleMask = (NSWindowStyle.Closable |
                              NSWindowStyle.Miniaturizable |
@@ -69,7 +74,7 @@ namespace SparkleShare {
                 BackingType = NSBackingStore.Buffered;
 
 
-                this.web_view = new WebView (new RectangleF (0, 0, 480, 579), "", "") {
+                this.web_view = new WebView (new RectangleF (0, 0, 481, 579), "", "") {
                     PolicyDelegate = new SparkleWebPolicyDelegate ()
                 };
 
