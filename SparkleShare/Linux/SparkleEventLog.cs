@@ -135,9 +135,6 @@ namespace SparkleShare {
                 Application.Invoke (delegate {
                     ShowAll ();
                     Present ();
-
-                    UpdateChooser (null);
-                    UpdateContent (null);
                 });
             };
 
