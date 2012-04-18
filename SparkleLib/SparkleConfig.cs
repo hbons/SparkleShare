@@ -39,23 +39,12 @@ namespace SparkleLib {
 
         public string HomePath {
             get {
-                if (GetConfigOption ("home_path") != null) {
+                if (GetConfigOption ("home_path") != null)
                     return GetConfigOption ("home_path");
-
-                } else if (SparkleHelpers.IsWindows) {
-                    try {
-                        Environment.SpecialFolder folder =
-                            (Environment.SpecialFolder) Enum.Parse (
-                                typeof(Environment.SpecialFolder), "UserProfile");
-
-                        return (Environment.GetFolderPath (folder));
-
-                    } catch {
-                        return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
-                    }
-                } else
+                else if (SparkleHelpers.IsWindows)
+                    return Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
+                else
                     return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
-
             }
         }
 
