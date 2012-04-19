@@ -106,7 +106,7 @@ namespace SparkleShare {
             }
         }
 
-
+        private PageType current_page;
         private string saved_address     = "";
         private string saved_remote_path = "";
         private bool create_startup_item = true;
@@ -115,6 +115,10 @@ namespace SparkleShare {
 
         public SparkleSetupController ()
         {
+            ChangePageEvent += delegate (PageType page_type, string [] warnings) {
+                this.current_page = page_type;
+            };
+
             TutorialPageNumber = 0;
             PreviousAddress    = "";
             PreviousPath       = "";
@@ -156,6 +160,13 @@ namespace SparkleShare {
 
             Program.Controller.ShowSetupWindowEvent += delegate (PageType page_type) {
                 if (PendingInvite != null) {
+                    if (ShowWindowEvent != null)
+                        ShowWindowEvent ();
+
+                    return;
+                }
+
+                if (this.current_page == PageType.Syncing) {
                     if (ShowWindowEvent != null)
                         ShowWindowEvent ();
 
