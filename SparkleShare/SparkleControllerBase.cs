@@ -381,10 +381,12 @@ namespace SparkleShare {
                 }
             }
 
-            new Thread (new ThreadStart (delegate {
-                FetchAvatars (emails, 48);
-                FetchAvatars (emails, 36);
-            })).Start ();
+            new Thread (
+                new ThreadStart (delegate {
+                    FetchAvatars (emails, 48);
+                    FetchAvatars (emails, 36);
+                })
+            ).Start ();
 
             string event_log_html   = EventLogHTML;
             string day_entry_html   = DayEntryHTML;
