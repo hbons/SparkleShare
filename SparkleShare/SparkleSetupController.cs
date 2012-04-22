@@ -26,6 +26,7 @@ using SparkleLib;
 namespace SparkleShare {
 
     public enum PageType {
+        None,
         Setup,
         Add,
         Invite,
@@ -590,6 +591,8 @@ namespace SparkleShare {
             PreviousAddress = "";
             PreviousPath    = "";
             this.fetch_prior_history = false;
+
+            this.current_page = PageType.None;
 
             if (HideWindowEvent != null)
                 HideWindowEvent ();
