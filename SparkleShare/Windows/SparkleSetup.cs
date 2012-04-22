@@ -438,24 +438,24 @@ namespace SparkleShare {
                         
                         
                     case PageType.Syncing: {
-                        Header = "Adding project ‘" + Controller.SyncingFolder + "’…";
-                            Description = "This may take a while.\n" +
-                                          "Are you sure it’s not coffee o'clock?";
- 
-                        
+                        Header      = "Adding project ‘" + Controller.SyncingFolder + "’…";
+                        Description = "This may take a while.\n" +
+                            "Are you sure it’s not coffee o'clock?";
+
+
                         Button finish_button = new Button () {
                             Content   = "Finish",
                             IsEnabled = false
                         };
-    
+
                         Button cancel_button = new Button () {
                             Content = "Cancel"
                         };
-                        
+
                         ProgressBar progress_bar = new ProgressBar () {
-                            Width = 414,
+                            Width  = 414,
                             Height = 15,
-                            Value = 1
+                            Value  = Controller.ProgressBarPercentage;
                         };
                         
 						
@@ -541,8 +541,8 @@ namespace SparkleShare {
                     }    
                         
                     case PageType.Finished: {
-                        Header = "Your shared project is ready!";
-                        Description = "Access the files from your SparkleShare folder.";
+                        Header      = "Your shared project is ready!";
+                        Description = "You can find the files in your SparkleShare folder.";
                         
                         
                         Button finish_button = new Button () {

@@ -244,7 +244,7 @@ namespace SparkleShare {
         public void UIHasLoaded ()
         {
             if (FirstRun)
-                ShowSetupWindow (PageType.Setup);
+                ShowSetupWindow (PageType.CryptoPassword);
             else
                 new Thread (new ThreadStart (PopulateRepositories)).Start ();
         }
@@ -919,8 +919,8 @@ namespace SparkleShare {
         }
 
 
-        public void FetchFolder (string address, string required_fingerprint, string remote_path, string announcements_url,
-            bool fetch_prior_history)
+        public void StartFetcher (string address, string required_fingerprint,
+            string remote_path, string announcements_url, bool fetch_prior_history)
         {
             if (announcements_url != null)
                 announcements_url = announcements_url.Trim ();
@@ -935,17 +935,7 @@ namespace SparkleShare {
 
             string canonical_name = Path.GetFileNameWithoutExtension (remote_path);
             string tmp_folder     = Path.Combine (tmp_path, canonical_name);
-            string backend        = Path.GetExtension (remote_path);
-			
-            if (!string.IsNullOrEmpty (backend)) {
-                backend         = backend.Substring (1);
-                char [] letters = backend.ToCharArray ();
-                letters [0]     = char.ToUpper (letters [0]);
-                backend         = new string (letters);
-
-            } else {
-                backend = "Git";
-            }
+            string backend        = SparkleFetcherBase.GetBackend (remote_path);
 
             try {
                 this.fetcher = (SparkleFetcherBase) Activator.CreateInstance (
@@ -967,69 +957,29 @@ namespace SparkleShare {
                 return;
             }
 
-            bool target_folder_exists = Directory.Exists (
-                Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, canonical_name));
 
+            this.fetcher.Finished += delegate (bool repo_is_encrypted, bool repo_is_empty, string [] warnings) {
+                if (ShowSetupWindowEvent != null)
+                        ShowSetupWindowEvent (PageType.CryptoSetup);
 
-            this.fetcher.Finished += delegate (string [] warnings) {
+                if (repo_is_encrypted && repo_is_empty) {
+                    if (ShowSetupWindowEvent != null)
+                        ShowSetupWindowEvent (PageType.CryptoSetup);
 
-                // Add a numbered suffix to the name if a folder with the same name
-                // already exists. Example: "Folder (2)"
-                int i = 1;
-                while (target_folder_exists) {
-                    i++;
-                    target_folder_exists = Directory.Exists (
-                        Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, canonical_name + " (" + i + ")"));
+                } else if (repo_is_encrypted) {
+                    if (ShowSetupWindowEvent != null)
+                        ShowSetupWindowEvent (PageType.CryptoPassword);
+
+                } else {
+                    FinishFetcher ();
                 }
-
-                string target_folder_name = canonical_name;
-                if (i > 1)
-                    target_folder_name += " (" + i + ")";
-
-                // Needed to do the moving
-                SparkleHelpers.ClearAttributes (tmp_folder);
-                string target_folder_path = Path.Combine (
-                    SparkleConfig.DefaultConfig.FoldersPath, target_folder_name);
-
-                try {
-                    Directory.Move (tmp_folder, target_folder_path);
-
-                    SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.RemoteUrl.ToString (), backend);
-    
-                    if (!string.IsNullOrEmpty (announcements_url)) {
-                        SparkleConfig.DefaultConfig.SetFolderOptionalAttribute (target_folder_name,
-                            "announcements_url", announcements_url);
-                    }
-
-                    AddRepository (target_folder_path);
-
-                    if (FolderFetched != null)
-                        FolderFetched (this.fetcher.RemoteUrl.ToString (), warnings);
-
-                    if (FolderListChanged != null)
-                    FolderListChanged ();
-
-                } catch (Exception e) {
-                    SparkleHelpers.DebugInfo ("Controller", "Error moving folder: " + e.Message);
-                }
-
-                this.fetcher.Dispose ();
-                this.fetcher = null;
-				
-				// TODO: only remove stale repos
-                //if (Directory.Exists (tmp_path))
-                //    Directory.Delete (tmp_path, true);
             };
 
             this.fetcher.Failed += delegate {
                 if (FolderFetchError != null)
                     FolderFetchError (this.fetcher.RemoteUrl.ToString ());
 
-                this.fetcher.Dispose ();
-				this.fetcher = null;
-
-                if (Directory.Exists (tmp_path))
-                    Directory.Delete (tmp_path, true);
+                StopFetcher ();
             };
             
             this.fetcher.ProgressChanged += delegate (double percentage) {
@@ -1043,8 +993,94 @@ namespace SparkleShare {
 
         public void StopFetcher ()
         {
-            if (fetcher != null)
-                fetcher.Stop ();
+            if (this.fetcher != null)
+                this.fetcher.Stop ();
+
+            if (Directory.Exists (this.fetcher.TargetFolder)) {
+                try {
+                    Directory.Delete (this.fetcher.TargetFolder, true);
+                    SparkleHelpers.DebugInfo ("Controller",
+                        "Deleted " + this.fetcher.TargetFolder);
+
+                } catch (Exception e) {
+                    SparkleHelpers.DebugInfo ("Controller",
+                        "Failed to delete " + this.fetcher.TargetFolder + ": " + e.Message);
+                }
+            }
+
+            this.fetcher.Dispose ();
+            this.fetcher = null;
+        }
+
+
+        public void FinishFetcher (string password)
+        {
+            this.fetcher.EnableFetchedRepoCrypto (password);
+            FinishFetcher ();
+        }
+
+
+        public void FinishFetcher ()
+        {
+            this.fetcher.Complete ();
+
+            string canonical_name = Path.GetFileNameWithoutExtension (this.fetcher.RemoteUrl.AbsolutePath);
+
+            bool target_folder_exists = Directory.Exists (
+                Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, canonical_name));
+
+            // Add a numbered suffix to the name if a folder with the same name
+            // already exists. Example: "Folder (2)"
+            int suffix = 1;
+            while (target_folder_exists) {
+                suffix++;
+                target_folder_exists = Directory.Exists (
+                    Path.Combine (
+                        SparkleConfig.DefaultConfig.FoldersPath,
+                        canonical_name + " (" + suffix + ")"
+                    )
+                );
+            }
+
+            string target_folder_name = canonical_name;
+
+            if (suffix > 1)
+                target_folder_name += " (" + suffix + ")";
+
+            string target_folder_path = Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, target_folder_name);
+
+            try {
+                SparkleHelpers.ClearAttributes (this.fetcher.TargetFolder);
+                Directory.Move (this.fetcher.TargetFolder, target_folder_path);
+
+                string backend = SparkleFetcherBase.GetBackend (this.fetcher.RemoteUrl.AbsolutePath);
+                SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.RemoteUrl.ToString (), backend);
+
+           /*     if (!string.IsNullOrEmpty (announcements_url)) {
+                    SparkleConfig.DefaultConfig.SetFolderOptionalAttribute (
+                        target_folder_name, "announcements_url", announcements_url);
+                } TODO
+                 */
+
+                AddRepository (target_folder_path);
+
+                if (FolderFetched != null)
+                    FolderFetched (this.fetcher.RemoteUrl.ToString (), this.fetcher.Warnings.ToArray ());
+
+                if (FolderListChanged != null)
+                    FolderListChanged ();
+
+                this.fetcher = null;
+
+            } catch (Exception e) {
+                SparkleHelpers.DebugInfo ("Controller", "Error adding folder: " + e.Message);
+            }
+        }
+
+
+        public bool CheckPassword (string password)
+        {
+            return this.fetcher.IsFetchedRepoPasswordCorrect (password);
         }
 
 
