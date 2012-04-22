@@ -163,8 +163,7 @@ namespace SparkleShare {
                 ContentView.AddSubview (this.hidden_close_button);
 
 
-                (this.web_view.PolicyDelegate as
-                SparkleWebPolicyDelegate).LinkClicked += delegate (string href) {
+                (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate).LinkClicked += delegate (string href) {
                     Controller.LinkClicked (href);
                 };
             }
