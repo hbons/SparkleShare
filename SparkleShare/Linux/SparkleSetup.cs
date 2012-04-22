@@ -398,6 +398,8 @@ namespace SparkleShare {
                         Description = _("This may take a while.") + Environment.NewLine +
                                       _("Are you sure it’s not coffee o'clock?");
 
+                        this.progress_bar.Fraction = Controller.ProgressBarPercentage;
+
                         Button finish_button = new Button () {
                             Sensitive = false,
                             Label = _("Finish")
@@ -507,7 +509,7 @@ namespace SparkleShare {
 
                         if (!HasToplevelFocus) {
                             string title   = _("Your shared project is ready!");
-                            string subtext = "You can find it in your SparkleShare folder";
+                            string subtext = _("You can find the files in your SparkleShare folder.");
 
                             SparkleUI.Bubbles.Controller.ShowBubble (title, subtext, null);
                         }

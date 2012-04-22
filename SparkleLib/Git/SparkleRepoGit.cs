@@ -346,7 +346,7 @@ namespace SparkleLib.Git {
                 string [] lines = output.Split ("\n".ToCharArray ());
 
                 foreach (string line in lines) {
-                    if (line.Length > 1 && !line [1].Equals (" "))
+                    if (line.Trim ().Length > 0)
                         return true;
                 }
 
@@ -518,10 +518,9 @@ namespace SparkleLib.Git {
                     SparkleGit git_rebase_continue = new SparkleGit (LocalPath, "rebase --continue");
                     git_rebase_continue.Start ();
                     git_rebase_continue.WaitForExit ();
-                }
 
                 // The local version has been modified, but the server version was removed
-                if (line.StartsWith ("DU")) {
+                } else if (line.StartsWith ("DU")) {
 
                     // The modified local version is already in the
                     // checkout, so it just needs to be added.
@@ -536,21 +535,18 @@ namespace SparkleLib.Git {
                     SparkleGit git_rebase_continue = new SparkleGit (LocalPath, "rebase --continue");
                     git_rebase_continue.Start ();
                     git_rebase_continue.WaitForExit ();
-                }
 
                 // The server version has been modified, but the local version was removed
-                if (line.StartsWith ("UD")) {
+                } else if (line.StartsWith ("UD")) {
 
                     // We can just skip here, the server version is
                     // already in the checkout
                     SparkleGit git_rebase_skip = new SparkleGit (LocalPath, "rebase --skip");
                     git_rebase_skip.Start ();
                     git_rebase_skip.WaitForExit ();
-                }
 
                 // New local files
-                if (line.StartsWith ("??")) {
-
+                } else {
                     Add ();
 
                     SparkleGit git_rebase_continue = new SparkleGit (LocalPath, "rebase --continue");
@@ -668,9 +664,10 @@ namespace SparkleLib.Git {
                                 file_path = file_path.Substring (0,
                                     file_path.Length - ".empty".Length);
 
-                            if (change_type.Equals ("A") &&
-							    !file_path.Equals (".sparkleshare")) {
-								
+                            if (file_path.Equals (".sparkleshare"))
+                                continue;
+
+                            if (change_type.Equals ("A")) {
                                 change_set.Added.Add (file_path);
 
                             } else if (change_type.Equals ("M")) {
@@ -713,6 +710,16 @@ namespace SparkleLib.Git {
         }
 
 
+        public override void CreateInitialChangeSet ()
+        {
+            base.CreateInitialChangeSet ();
+
+            Add ();
+            string message = FormatCommitMessage ();
+            Commit (message);
+        }
+
+
         // Git doesn't track empty directories, so this method
         // fills them all with a hidden empty file.
         //
@@ -745,9 +752,11 @@ namespace SparkleLib.Git {
                 if (Directory.GetFiles (path).Length == 0 &&
                     Directory.GetDirectories (path).Length == 0 &&
                     !path.Equals (LocalPath)) {
-    
-                    File.Create (Path.Combine (path, ".empty")).Close ();
-                    File.SetAttributes (Path.Combine (path, ".empty"), FileAttributes.Hidden);
+
+                    if (!File.Exists (Path.Combine (path, ".empty"))) {
+                        File.WriteAllText (Path.Combine (path, ".empty"), "I'm a folder!");
+                        File.SetAttributes (Path.Combine (path, ".empty"), FileAttributes.Hidden);
+                    }
                 }
 
             } catch (IOException e) {
@@ -809,7 +818,7 @@ namespace SparkleLib.Git {
                 file_name = modified.Trim ("\"".ToCharArray ());
 
                 if (file_name.EndsWith (".empty"))
-                    file_name = file_name.Substring (0, file_name.Length - 6);
+                    continue;
 
                 message += "/ ‘" + file_name + "’" + n;
 
