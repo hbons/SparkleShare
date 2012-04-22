@@ -100,7 +100,6 @@ namespace SparkleShare {
             }
         }
 
-
         public List<string> Folders {
             get {
                 List<string> folders = SparkleConfig.DefaultConfig.Folders;
@@ -109,7 +108,6 @@ namespace SparkleShare {
                 return folders;
             }
         }
-
 
         public List<string> UnsyncedFolders {
             get {
@@ -124,7 +122,31 @@ namespace SparkleShare {
             }
         }
 
-        
+        public SparkleUser CurrentUser {
+            get {
+                return SparkleConfig.DefaultConfig.User;
+            }
+
+            set {
+                SparkleConfig.DefaultConfig.User = value;
+            }
+        }
+
+        public bool NotificationsEnabled {
+            get {
+                string notifications_enabled = SparkleConfig.DefaultConfig.GetConfigOption ("notifications");
+
+                if (string.IsNullOrEmpty (notifications_enabled)) {
+                    SparkleConfig.DefaultConfig.SetConfigOption ("notifications", bool.TrueString);
+                    return true;
+
+                } else {
+                    return notifications_enabled.Equals (bool.TrueString);
+                }
+            }
+        }
+
+
         // Path where the plugins are kept
         public abstract string PluginsPath { get; }
 
@@ -188,10 +210,21 @@ namespace SparkleShare {
                 Filter                = "*"
             };
 
-            // Remove the repository when a delete event occurs
+
             watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
-                RemoveRepository (args.FullPath);
-                SparkleConfig.DefaultConfig.RemoveFolder (Path.GetFileName (args.Name));
+                watcher.EnableRaisingEvents = false;
+
+                foreach (string folder_name in SparkleConfig.DefaultConfig.Folders) {
+                    string folder_path = new SparkleFolder (folder_name).FullPath;
+
+                    if (!Directory.Exists (folder_path)) {
+                        SparkleConfig.DefaultConfig.RemoveFolder (folder_name);
+                        RemoveRepository (folder_path);
+                    }
+                }
+
+                Thread.Sleep (250);
+                watcher.EnableRaisingEvents = true;
 
                 if (FolderListChanged != null)
                     FolderListChanged ();
@@ -269,7 +302,6 @@ namespace SparkleShare {
             if (ShowEventLogWindowEvent != null)
                 ShowEventLogWindowEvent ();
         }
-
 
 
         public List<SparkleChangeSet> GetLog ()
@@ -457,8 +489,7 @@ namespace SparkleShare {
                     string timestamp = change_set.Timestamp.ToString ("H:mm");
 
                     if (!change_set.FirstTimestamp.Equals (new DateTime ()))
-                        timestamp = change_set.FirstTimestamp.ToString ("H:mm") +
-                                    " – " + timestamp;
+                        timestamp = change_set.FirstTimestamp.ToString ("H:mm") + " – " + timestamp;
 
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.User.Name)
@@ -466,8 +497,7 @@ namespace SparkleShare {
                         .Replace ("<!-- $event-time -->", timestamp)
                         .Replace ("<!-- $event-folder -->", change_set.Folder.Name)
                         .Replace ("<!-- $event-url -->", change_set.Url.ToString ())
-                        .Replace ("<!-- $event-revision -->", change_set.Revision)
-                        .Replace ("<!-- $event-folder-color -->", AssignColor (change_set.Folder.Name));
+                        .Replace ("<!-- $event-revision -->", change_set.Revision);
                 }
 
                 string day_entry   = "";
@@ -662,22 +692,6 @@ namespace SparkleShare {
         }
 
 
-        public bool NotificationsEnabled {
-            get {
-                string notifications_enabled =
-                    SparkleConfig.DefaultConfig.GetConfigOption ("notifications");
-
-                if (String.IsNullOrEmpty (notifications_enabled)) {
-                    SparkleConfig.DefaultConfig.SetConfigOption ("notifications", bool.TrueString);
-                    return true;
-
-                } else {
-                    return notifications_enabled.Equals (bool.TrueString);
-                }
-            }
-        } 
-
-
         public void ToggleNotifications () {
             bool notifications_enabled =
                 SparkleConfig.DefaultConfig.GetConfigOption ("notifications")
@@ -758,18 +772,6 @@ namespace SparkleShare {
                     true); // Overwriting is allowed
         }
 
-
-        // Looks up the user's name from the global configuration
-        public SparkleUser CurrentUser {
-            get {
-                return SparkleConfig.DefaultConfig.User;
-            }
-
-            set {
-                SparkleConfig.DefaultConfig.User = value;
-            }
-        }
-        
 
         // Generates and installs an RSA keypair to identify this system
         public void GenerateKeyPair ()
@@ -993,8 +995,7 @@ namespace SparkleShare {
 
         public void StopFetcher ()
         {
-            if (this.fetcher != null)
-                this.fetcher.Stop ();
+            this.fetcher.Stop ();
 
             if (Directory.Exists (this.fetcher.TargetFolder)) {
                 try {
@@ -1070,6 +1071,7 @@ namespace SparkleShare {
                 if (FolderListChanged != null)
                     FolderListChanged ();
 
+                this.fetcher.Dispose ();
                 this.fetcher = null;
 
             } catch (Exception e) {
@@ -1084,44 +1086,12 @@ namespace SparkleShare {
         }
 
 
-        // Checks whether there are any folders syncing and
-        // quits if safe
-        public void TryQuit ()
-        {
-            foreach (SparkleRepoBase repo in Repositories) {
-                if (repo.Status == SyncStatus.SyncUp   ||
-                    repo.Status == SyncStatus.SyncDown ||
-                    repo.IsBuffering) {
-
-                    return;
-                }
-            }
-
-            Quit ();
-        }
-
-
         public virtual void Quit ()
         {
             foreach (SparkleRepoBase repo in Repositories)
                 repo.Dispose ();
 
             Environment.Exit (0);
-        }
-
-
-        private string [] tango_palette = new string [] {"#eaab00", "#e37222",
-            "#3892ab", "#33c2cb", "#19b271", "#9eab05", "#8599a8", "#9ca696",
-            "#b88454", "#cc0033", "#8f6678", "#8c6cd0", "#796cbf", "#4060af",
-            "#aa9c8f", "#818a8f"};
-
-        private string AssignColor (string s)
-        {
-            string hash    = "0" + GetMD5 (s).Substring (0, 8);
-            string numbers = Regex.Replace (hash, "[a-z]", "");
-            int number     = int.Parse (numbers);
-
-            return this.tango_palette [number % this.tango_palette.Length];
         }
 
 
@@ -1191,9 +1161,6 @@ namespace SparkleShare {
         }
     }
 
-
-    public class ChangeSet : SparkleChangeSet { }
-    
     
     // All change sets that happened on a day
     public class ActivityDay : List <SparkleChangeSet>
