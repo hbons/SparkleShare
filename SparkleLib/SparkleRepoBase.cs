@@ -165,10 +165,10 @@ namespace SparkleLib {
                 this.status = status;
             };
 
+            this.identifier = Identifier;
+
             if (CurrentRevision == null)
                 CreateInitialChangeSet ();
-			
-			this.identifier = Identifier;
 				
 
             CreateWatcher ();
