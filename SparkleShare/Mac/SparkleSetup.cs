@@ -39,6 +39,7 @@ namespace SparkleShare {
         private NSButton SkipTutorialButton;
         private NSButton StartupCheckButton;
         private NSButton HistoryCheckButton;
+        private NSButton ShowPasswordCheckButton;
         private NSButton OpenFolderButton;
         private NSButton FinishButton;
         private NSImage SlideImage;
@@ -54,6 +55,9 @@ namespace SparkleShare {
         private NSTextField PathTextField;
         private NSTextField PathLabel;
         private NSTextField PathHelpLabel;
+        private NSTextField PasswordTextField;
+        private NSTextField VisiblePasswordTextField;
+        private NSTextField PasswordLabel;
         private NSTextField WarningTextField;
         private NSImage WarningImage;
         private NSImageView WarningImageView;
@@ -509,7 +513,7 @@ namespace SparkleShare {
                                 MinValue = 0.0,
                                 MaxValue = 100.0,
                                 Indeterminate = false,
-                                DoubleValue = 1.0
+                                DoubleValue = Controller.ProgressBarPercentage
                             };
     
                             ProgressIndicator.StartAnimation (this);
@@ -603,11 +607,226 @@ namespace SparkleShare {
     
                             break;
                         }
-    
+
+
+                        case PageType.CryptoSetup: {
+
+                            Header       = "Set up file encryption";
+                            Description  = "This project is supposed to be encrypted, but it doesn't yet have a password set. Please provide a password below:";
+
+
+                            PasswordLabel = new NSTextField () {
+                                Alignment       = NSTextAlignment.Right,
+                                BackgroundColor = NSColor.WindowBackground,
+                                Bordered        = false,
+                                Editable        = false,
+                                Frame           = new RectangleF (155, Frame.Height - 204, 160, 17),
+                                StringValue     = "Password:",
+                                Font            = SparkleUI.BoldFont
+                            };
+
+                            PasswordTextField = new NSSecureTextField () {
+                                Frame       = new RectangleF (320, Frame.Height - 208, 196, 22),
+                                Delegate    = new SparkleTextFieldDelegate ()
+                            };
+
+                            VisiblePasswordTextField = new NSTextField () {
+                                Frame       = new RectangleF (320, Frame.Height - 208, 196, 22),
+                                Delegate    = new SparkleTextFieldDelegate ()
+                            };
+
+
+                            ShowPasswordCheckButton = new NSButton () {
+                                Frame = new RectangleF (318, Frame.Height - 235, 300, 18),
+                                Title = "Show password",
+                                State = NSCellStateValue.Off
+                            };
+
+                            ShowPasswordCheckButton.SetButtonType (NSButtonType.Switch);
+
+                            ShowPasswordCheckButton.Activated += delegate {
+                                if (PasswordTextField.Superview == ContentView) {
+                                    PasswordTextField.RemoveFromSuperview ();
+                                    ContentView.AddSubview (VisiblePasswordTextField);
+
+                                } else {
+                                    VisiblePasswordTextField.RemoveFromSuperview ();
+                                    ContentView.AddSubview (PasswordTextField);
+                                }
+                            };
+
+
+                            (PasswordTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
+                                VisiblePasswordTextField.StringValue = PasswordTextField.StringValue;
+                                Controller.CheckCryptoSetupPage (PasswordTextField.StringValue);
+                            };
+
+                            (VisiblePasswordTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
+                                PasswordTextField.StringValue = VisiblePasswordTextField.StringValue;
+                                Controller.CheckCryptoSetupPage (PasswordTextField.StringValue);
+                            };
+
+
+                            ContinueButton = new NSButton () {
+                                Title    = "Continue",
+                                Enabled  = false
+                            };
+
+                            ContinueButton.Activated += delegate {
+                               Controller.CryptoSetupPageCompleted (PasswordTextField.StringValue);
+                            };
+
+                            CancelButton = new NSButton () {
+                                Title = "Cancel"
+                            };
+
+                            CancelButton.Activated += delegate {
+                                Controller.CryptoPageCancelled ();
+                            };
+
+
+                            Controller.UpdateCryptoSetupContinueButtonEvent += delegate (bool button_enabled) {
+                                InvokeOnMainThread (delegate {
+                                    ContinueButton.Enabled = button_enabled;
+                                });
+                            };
+
+
+                            WarningImage = NSImage.ImageNamed ("NSInfo");
+                            WarningImage.Size = new SizeF (24, 24);
+
+                            WarningImageView = new NSImageView () {
+                                Image = WarningImage,
+                                Frame = new RectangleF (200, Frame.Height - 320, 24, 24)
+                            };
+
+                            WarningTextField = new NSTextField () {
+                                Frame           = new RectangleF (235, Frame.Height - 390, 325, 100),
+                                StringValue     = "This password can't be changed later, and your files can't be recovered if it's forgotten.",
+                                BackgroundColor = NSColor.WindowBackground,
+                                Bordered        = false,
+                                Editable        = false,
+                                Font            = SparkleUI.Font
+                            };
+
+
+                            ContentView.AddSubview (PasswordLabel);
+                            ContentView.AddSubview (PasswordTextField);
+                            ContentView.AddSubview (ShowPasswordCheckButton);
+                            ContentView.AddSubview (WarningImageView);
+                            ContentView.AddSubview (WarningTextField);
+
+                            Buttons.Add (ContinueButton);
+                            Buttons.Add (CancelButton);
+
+                            NSApplication.SharedApplication.RequestUserAttention
+                                (NSRequestUserAttentionType.CriticalRequest);
+
+                            break;
+                        }
+
+
+                        case PageType.CryptoPassword: {
+
+                            Header       = "This project contains encrypted files";
+                            Description  = "Please enter the password to see their contents.";
+
+
+                            PasswordLabel = new NSTextField () {
+                                Alignment       = NSTextAlignment.Right,
+                                BackgroundColor = NSColor.WindowBackground,
+                                Bordered        = false,
+                                Editable        = false,
+                                Frame           = new RectangleF (155, Frame.Height - 224, 160, 17),
+                                StringValue     = "Password:",
+                                Font            = SparkleUI.BoldFont
+                            };
+
+                            PasswordTextField = new NSSecureTextField () {
+                                Frame       = new RectangleF (320, Frame.Height - 228, 196, 22),
+                                Delegate    = new SparkleTextFieldDelegate ()
+                            };
+
+                            VisiblePasswordTextField = new NSTextField () {
+                                Frame       = new RectangleF (320, Frame.Height - 228, 196, 22),
+                                Delegate    = new SparkleTextFieldDelegate ()
+                            };
+
+
+                            ShowPasswordCheckButton = new NSButton () {
+                                Frame = new RectangleF (318, Frame.Height - 255, 300, 18),
+                                Title = "Show password",
+                                State = NSCellStateValue.Off
+                            };
+
+                            ShowPasswordCheckButton.SetButtonType (NSButtonType.Switch);
+
+                            ShowPasswordCheckButton.Activated += delegate {
+                                if (PasswordTextField.Superview == ContentView) {
+                                    PasswordTextField.RemoveFromSuperview ();
+                                    ContentView.AddSubview (VisiblePasswordTextField);
+
+                                } else {
+                                    VisiblePasswordTextField.RemoveFromSuperview ();
+                                    ContentView.AddSubview (PasswordTextField);
+                                }
+                            };
+
+
+                            (PasswordTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
+                                VisiblePasswordTextField.StringValue = PasswordTextField.StringValue;
+                                Controller.CheckCryptoPasswordPage (PasswordTextField.StringValue);
+                            };
+
+                            (VisiblePasswordTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
+                                PasswordTextField.StringValue = VisiblePasswordTextField.StringValue;
+                                Controller.CheckCryptoPasswordPage (PasswordTextField.StringValue);
+                            };
+
+
+                            ContinueButton = new NSButton () {
+                                Title    = "Continue",
+                                Enabled  = false
+                            };
+
+                            ContinueButton.Activated += delegate {
+                               Controller.CryptoPasswordPageCompleted (PasswordTextField.StringValue);
+                            };
+
+                            CancelButton = new NSButton () {
+                                Title = "Cancel"
+                            };
+
+                            CancelButton.Activated += delegate {
+                                Controller.CryptoPageCancelled ();
+                            };
+
+
+                            Controller.UpdateCryptoPasswordContinueButtonEvent += delegate (bool button_enabled) {
+                                InvokeOnMainThread (delegate {
+                                    ContinueButton.Enabled = button_enabled;
+                                });
+                            };
+
+
+                            ContentView.AddSubview (PasswordLabel);
+                            ContentView.AddSubview (PasswordTextField);
+                            ContentView.AddSubview (ShowPasswordCheckButton);
+
+                            Buttons.Add (ContinueButton);
+                            Buttons.Add (CancelButton);
+
+                            NSApplication.SharedApplication.RequestUserAttention
+                                (NSRequestUserAttentionType.CriticalRequest);
+
+                            break;
+                        }
+
+
                         case PageType.Finished: {
     
                             Header      = "Your shared project is ready!";
-                            Description = "You can find it in your SparkleShare folder";
+                            Description = "You can find the files in your SparkleShare folder.";
     
                             if (warnings.Length > 0) {
                                 WarningImage = NSImage.ImageNamed ("NSInfo");
@@ -615,11 +834,11 @@ namespace SparkleShare {
     
                                 WarningImageView = new NSImageView () {
                                     Image = WarningImage,
-                                    Frame = new RectangleF (190, Frame.Height - 175, 24, 24)
+                                    Frame = new RectangleF (200, Frame.Height - 175, 24, 24)
                                 };
     
                                 WarningTextField = new NSTextField () {
-                                    Frame           = new RectangleF (225, Frame.Height - 245, 325, 100),
+                                    Frame           = new RectangleF (235, Frame.Height - 245, 325, 100),
                                     StringValue     = warnings [0],
                                     BackgroundColor = NSColor.WindowBackground,
                                     Bordered        = false,
@@ -652,8 +871,6 @@ namespace SparkleShare {
     
                             NSApplication.SharedApplication.RequestUserAttention
                                 (NSRequestUserAttentionType.CriticalRequest);
-    
-                            NSSound.FromName ("Glass").Play ();
     
                             break;
                         }

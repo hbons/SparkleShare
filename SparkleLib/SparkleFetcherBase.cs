@@ -30,7 +30,7 @@ namespace SparkleLib {
     public abstract class SparkleFetcherBase {
 
         public delegate void StartedEventHandler ();
-        public delegate void FinishedEventHandler (string [] warnings);
+        public delegate void FinishedEventHandler (bool repo_is_encrypted, bool repo_is_empty, string [] warnings);
         public delegate void FailedEventHandler ();
         public delegate void ProgressChangedEventHandler (double percentage);
 
@@ -41,15 +41,24 @@ namespace SparkleLib {
 
         public abstract bool Fetch ();
         public abstract void Stop ();
+        public abstract void Complete ();
+        public abstract bool IsFetchedRepoEmpty { get; }
+        public abstract bool IsFetchedRepoPasswordCorrect (string password);
+        public abstract void EnableFetchedRepoCrypto (string password);
 
-        public string TargetFolder;
-        public Uri RemoteUrl;
-        public string [] ExcludeRules;
-        public List<string> Warnings = new List<string> ();
+        public Uri RemoteUrl { get; protected set; }
+        public string RequiredFingerprint { get; protected set; }
+        public readonly bool FetchPriorHistory = false;
+        public string TargetFolder { get; protected set; }
         public bool IsActive { get; private set; }
-        public string RequiredFingerprint;
-        public bool FetchPriorHistory = false;
 
+        public string [] Warnings {
+            get {
+                return this.warnings.ToArray ();
+            }
+        }
+
+        protected List<string> warnings = new List<string> ();
         private Thread thread;
 
 
@@ -72,81 +81,6 @@ namespace SparkleLib {
             TargetFolder = target_folder;
             RemoteUrl    = new Uri (server + remote_path);
             IsActive     = false;
-
-            ExcludeRules = new string [] {
-                // Various autosaving apps
-                "*.autosave",
-
-                // gedit and emacs
-                "*~",
-
-                // LibreOffice
-                ".~lock.*",
-
-                // Firefox and Chromium temporary download files
-                "*.part",
-                "*.crdownload",
-
-                // vi(m)
-                ".*.sw[a-z]",
-                "*.un~",
-                "*.swp",
-                "*.swo",
-
-                // KDE
-                ".directory",
-
-                // Mac OS X
-                ".DS_Store",
-                "Icon?",
-                "._*",
-                ".Spotlight-V100",
-                ".Trashes",
-
-                // Omnigraffle
-                "*(Autosaved).graffle",
-
-                // Windows
-                "Thumbs.db",
-                "Desktop.ini",
-
-                // MS Office
-                "~*.tmp",
-                "~*.TMP",
-                "*~*.tmp",
-                "*~*.TMP",
-                "~*.ppt",
-                "~*.PPT",
-                "~*.pptx",
-                "~*.PPTX",
-                "~*.xls",
-                "~*.XLS",
-                "~*.xlsx",
-                "~*.XLSX",
-                "~*.doc",
-                "~*.DOC",
-                "~*.docx",
-                "~*.DOCX",
-
-                // CVS
-                "*/CVS/*",
-                ".cvsignore",
-                "*/.cvsignore",
-
-                // Subversion
-                "/.svn/*",
-                "*/.svn/*",
-
-                // Mercurial
-                "/.hg/*",
-                "*/.hg/*",
-                "*/.hgignore",
-
-                // Bazaar
-                "/.bzr/*",
-                "*/.bzr/*",
-                "*/.bzrignore"
-            };
         }
 
 
@@ -163,19 +97,10 @@ namespace SparkleLib {
                 Directory.Delete (TargetFolder, true);
 
 
-            string host = RemoteUrl.Host;
-
-            if (string.IsNullOrEmpty (host)) {
-                if (Failed != null)
-                    Failed ();
-
-                return;
-            }
-
-
+            string host     = RemoteUrl.Host;
             string host_key = GetHostKey ();
 
-            if (host_key == null) {
+            if (string.IsNullOrEmpty (host) || host_key == null) {
                 if (Failed != null)
                     Failed ();
 
@@ -213,8 +138,10 @@ namespace SparkleLib {
 
                     IsActive = false;
 
+                    bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("crypto"); // TODO
+
                     if (Finished != null)
-                        Finished (Warnings.ToArray ());
+                        Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);
 
                 } else {
                     Thread.Sleep (500);
@@ -260,7 +187,7 @@ namespace SparkleLib {
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.CreateNoWindow         = true;
 
-            process.StartInfo.FileName  = "ssh-keyscan";
+            process.StartInfo.FileName = "ssh-keyscan";
             process.StartInfo.Arguments = "-t rsa " + host;
 
             process.Start ();
@@ -338,7 +265,100 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("Auth", "Accepted host key for " + host);
 
             if (warn)
-                Warnings.Add ("The following host key has been accepted:\n" + GetFingerprint (host_key));
+                this.warnings.Add ("The following host key has been accepted:\n" + GetFingerprint (host_key));
         }
+
+
+        public static string GetBackend (string path)
+        {
+            string extension = Path.GetExtension (path);
+
+            if (!string.IsNullOrEmpty (extension)) {
+                extension       = extension.Substring (1);
+                char [] letters = extension.ToCharArray ();
+                letters [0]     = char.ToUpper (letters [0]);
+
+                return new string (letters);
+
+            } else {
+                return  "Git";
+            }
+        }
+
+
+        protected string [] ExcludeRules = new string [] {
+            // Various autosaving apps
+            "*.autosave",
+
+            // gedit and emacs
+            "*~",
+
+            // LibreOffice
+            ".~lock.*",
+
+            // Firefox and Chromium temporary download files
+            "*.part",
+            "*.crdownload",
+
+            // vi(m)
+            ".*.sw[a-z]",
+            "*.un~",
+            "*.swp",
+            "*.swo",
+
+            // KDE
+            ".directory",
+
+            // Mac OS X
+            ".DS_Store",
+            "Icon?",
+            "._*",
+            ".Spotlight-V100",
+            ".Trashes",
+
+            // Omnigraffle
+            "*(Autosaved).graffle",
+
+            // Windows
+            "Thumbs.db",
+            "Desktop.ini",
+
+            // MS Office
+            "~*.tmp",
+            "~*.TMP",
+            "*~*.tmp",
+            "*~*.TMP",
+            "~*.ppt",
+            "~*.PPT",
+            "~*.pptx",
+            "~*.PPTX",
+            "~*.xls",
+            "~*.XLS",
+            "~*.xlsx",
+            "~*.XLSX",
+            "~*.doc",
+            "~*.DOC",
+            "~*.docx",
+            "~*.DOCX",
+
+            // CVS
+            "*/CVS/*",
+            ".cvsignore",
+            "*/.cvsignore",
+
+            // Subversion
+            "/.svn/*",
+            "*/.svn/*",
+
+            // Mercurial
+            "/.hg/*",
+            "*/.hg/*",
+            "*/.hgignore",
+
+            // Bazaar
+            "/.bzr/*",
+            "*/.bzr/*",
+            "*/.bzrignore"
+        };
     }
 }
