@@ -532,26 +532,23 @@ namespace SparkleLib {
 
         // Create an initial change set when the
         // user has fetched an empty remote folder
-        private void CreateInitialChangeSet ()
+        public virtual void CreateInitialChangeSet ()
         {
             string file_path = Path.Combine (LocalPath, "SparkleShare.txt");
-            TextWriter writer = new StreamWriter (file_path);
+            string n         = Environment.NewLine;
 
-            writer.WriteLine ("Congratulations, you've successfully created a SparkleShare repository!");
-            writer.WriteLine ("");
-            writer.WriteLine ("Any files you add or change in this folder will be automatically synced to ");
-            writer.WriteLine (Url + " and everyone connected to it.");
-            writer.WriteLine ("");
-            writer.WriteLine ("SparkleShare is a Free and Open Source software program that helps people ");
-            writer.WriteLine ("collaborate and share files. If you like what we do, please consider a small ");
-            writer.WriteLine ("donation to support the project: http://sparkleshare.org/support-us/");
-            writer.WriteLine ("");
-            writer.WriteLine ("Have fun! :)");
-            writer.WriteLine ("");
-
-            writer.Close ();
-
-            SyncUp ();
+            File.WriteAllText (file_path,
+                "Congratulations, you've successfully created a SparkleShare repository!" + n +
+                "" + n +
+                "Any files you add or change in this folder will be automatically synced to " + n +
+                Url + " and everyone connected to it." + n +
+                "" + n +
+                "SparkleShare is a Free and Open Source software program that helps people " + n +
+                "collaborate and share files. If you like what we do, please consider a small " + n +
+                "donation to support the project: http://sparkleshare.org/support-us/" + n +
+                "" + n +
+                "Have fun! :)" + n
+            );
         }
 
 

@@ -79,7 +79,7 @@ namespace SparkleShare {
                 Bordered        = false,
                 Editable        = false,
                 Font            = NSFontManager.SharedFontManager.FontWithFamily
-                    ("Lucida Grande", NSFontTraitMask.Condensed, 0, 12)
+                    ("Lucida Grande", NSFontTraitMask.Condensed, 0, 13)
             };
 
             if (Program.UI != null)
