@@ -189,6 +189,7 @@ namespace SparkleShare {
                 }
 
                 if (this.current_page == PageType.Syncing ||
+                    this.current_page == PageType.Finished ||
                     this.current_page == PageType.CryptoSetup ||
                     this.current_page == PageType.CryptoPassword) {
 

@@ -710,16 +710,6 @@ namespace SparkleLib.Git {
         }
 
 
-        public override void CreateInitialChangeSet ()
-        {
-            base.CreateInitialChangeSet ();
-
-            Add ();
-            string message = FormatCommitMessage ();
-            Commit (message);
-        }
-
-
         // Git doesn't track empty directories, so this method
         // fills them all with a hidden empty file.
         //
