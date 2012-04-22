@@ -145,10 +145,15 @@ namespace SparkleShare {
             if (Directory.Exists (Program.Controller.PluginsPath)) {
                 foreach (string xml_file_path in Directory.GetFiles (Program.Controller.PluginsPath, "*.xml")) {
                     // ...and "Own server" at the very top
-                    if (xml_file_path.EndsWith ("own-server.xml"))
+                    if (xml_file_path.EndsWith ("own-server.xml")) {
                         Plugins.Insert (0, new SparklePlugin (xml_file_path));
-                    else
+
+                    } else if (xml_file_path.EndsWith ("ssnet.xml")) {
+                        Plugins.Insert (1, new SparklePlugin (xml_file_path));
+
+                    } else {
                         Plugins.Add (new SparklePlugin (xml_file_path));
+                    }
                 }
             }
 
