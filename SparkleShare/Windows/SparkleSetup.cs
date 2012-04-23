@@ -439,9 +439,7 @@ namespace SparkleShare {
                         
                     case PageType.Syncing: {
                         Header      = "Adding project ‘" + Controller.SyncingFolder + "’…";
-                        Description = "This may take a while.\n" +
-                            "Are you sure it’s not coffee o'clock?";
-
+                        Description = "This may either take a short or a long time depending on the project's size."
 
                         Button finish_button = new Button () {
                             Content   = "Finish",
