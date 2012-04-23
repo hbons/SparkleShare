@@ -395,8 +395,7 @@ namespace SparkleShare {
                     case PageType.Syncing: {
 
                         Header      = String.Format (_("Adding project ‘{0}’…"), Controller.SyncingFolder);
-                        Description = _("This may take a while.") + Environment.NewLine +
-                                      _("Are you sure it’s not coffee o'clock?");
+                        Description = Description = _("This may either take a short or a long time depending on the project's size.");
 
                         this.progress_bar.Fraction = Controller.ProgressBarPercentage;
 
