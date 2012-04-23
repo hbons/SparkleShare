@@ -502,11 +502,9 @@ namespace SparkleShare {
                         }
     
                         case PageType.Syncing: {
-    
                             Header      = "Adding project ‘" + Controller.SyncingFolder + "’…";
-                            Description = "This may take a while.\n" +
-                                          "Are you sure it’s not coffee o'clock?";
-    
+                            Description = "This may either take a short or a long time depending on the project's size.";
+                                
                             ProgressIndicator = new NSProgressIndicator () {
                                 Frame    = new RectangleF (190, Frame.Height - 200, 640 - 150 - 80, 20),
                                 Style    = NSProgressIndicatorStyle.Bar,

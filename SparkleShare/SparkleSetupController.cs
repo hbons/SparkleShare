@@ -135,12 +135,15 @@ namespace SparkleShare {
             SyncingFolder      = "";
 
             string local_plugins_path = SparklePlugin.LocalPluginsPath;
+            int local_plugins_count   = 0;
 
             // Import all of the plugins
             if (Directory.Exists (local_plugins_path))
                 // Local plugins go first...
-                foreach (string xml_file_path in Directory.GetFiles (local_plugins_path, "*.xml"))
+                foreach (string xml_file_path in Directory.GetFiles (local_plugins_path, "*.xml")) {
                     Plugins.Add (new SparklePlugin (xml_file_path));
+                    local_plugins_count++;
+                }
 
             // ...system plugins after that...
             if (Directory.Exists (Program.Controller.PluginsPath)) {
@@ -150,7 +153,7 @@ namespace SparkleShare {
                         Plugins.Insert (0, new SparklePlugin (xml_file_path));
 
                     } else if (xml_file_path.EndsWith ("ssnet.xml")) {
-                        Plugins.Insert (1, new SparklePlugin (xml_file_path));
+                        Plugins.Insert ((local_plugins_count + 1), new SparklePlugin (xml_file_path));
 
                     } else {
                         Plugins.Add (new SparklePlugin (xml_file_path));
