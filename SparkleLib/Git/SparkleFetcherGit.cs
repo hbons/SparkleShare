@@ -293,8 +293,11 @@ namespace SparkleLib.Git {
             string n = Environment.NewLine;
 
             config = config.Replace ("[core]" + n,
-                "[core]" + n + "\tquotepath = false" + n + // Show special characters in the logs
+                "[core]" + n +
+                "\tquotepath = false" + n + // Show special characters in the logs
                 "\tpackedGitLimit = 128m" + n +
+                "\tautocrlf = false" + n +
+                "\tsafecrlf = false" + n +
                 "\tpackedGitWindowSize = 128m" + n);
 
             config = config.Replace ("[remote \"origin\"]" + n,
