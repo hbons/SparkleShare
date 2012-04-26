@@ -439,7 +439,7 @@ namespace SparkleShare {
                         
                     case PageType.Syncing: {
                         Header      = "Adding project ‘" + Controller.SyncingFolder + "’…";
-                        Description = "This may either take a short or a long time depending on the project's size."
+                        Description = "This may either take a short or a long time depending on the project's size.";
 
                         Button finish_button = new Button () {
                             Content   = "Finish",
@@ -453,7 +453,7 @@ namespace SparkleShare {
                         ProgressBar progress_bar = new ProgressBar () {
                             Width  = 414,
                             Height = 15,
-                            Value  = Controller.ProgressBarPercentage;
+                            Value  = Controller.ProgressBarPercentage
                         };
                         
 						
