@@ -1,4 +1,14 @@
-0.8.4 for Linux, Mac and Window (Sun Mar 18 2012)
+0.9.0 for Linux, Mac and Windows (???)
+
+	Hylke:
+	- Client side encryption using OpenSSL's AES
+	- Allow setting custom paths in config.xml
+	- Ship host keys of default plugins and verify on project add
+	- Don't touch the user's ~/.ssh/config to configure SSH
+	- Make fetching remote project's history optional
+
+
+0.8.4 for Linux, Mac and Windows (Sun Mar 18 2012)
 
 	Hylke:
 	- Show initial sync progress in taskbar item on Windows 7
