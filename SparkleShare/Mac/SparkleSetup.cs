@@ -423,7 +423,7 @@ namespace SparkleShare {
     
     
                             TableView.SelectRow (Controller.SelectedPluginIndex, false);
-    
+                            TableView.ScrollRowToVisible (Controller.SelectedPluginIndex);
     
                             (AddressTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
                                 Controller.CheckAddPage (
