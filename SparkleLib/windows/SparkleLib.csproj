@@ -163,6 +163,6 @@
     <VisualStudio />
   </ProjectExtensions>
   <PropertyGroup>
-    <PreBuildEvent>$(ProjectDir)transform_tt.cmd</PreBuildEvent>
+    <PreBuildEvent>"$(ProjectDir)transform_tt.cmd"</PreBuildEvent>
   </PropertyGroup>
 </Project>
