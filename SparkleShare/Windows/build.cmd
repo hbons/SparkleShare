@@ -11,8 +11,8 @@ set wixBinDir=%WIX%\bin
 if not exist ..\..\bin mkdir ..\..\bin
 copy ..\..\data\icons\sparkleshare.ico ..\..\bin\
 
-%msbuild% /t:Rebuild /p:Configuration=Release /p:Platform="AnyCPU"   %~dp0\tools\gettext-cs-utils\Gettext.CsUtils\Core\Gettext.Cs\Gettext.Cs.csproj
-%msbuild% /t:Rebuild /p:Configuration=Release /p:Platform="Any CPU" %~dp0\SparkleShare.sln
+%msbuild% /t:Rebuild /p:Configuration=Release /p:Platform="AnyCPU"   "%~dp0\tools\gettext-cs-utils\Gettext.CsUtils\Core\Gettext.Cs\Gettext.Cs.csproj"
+%msbuild% /t:Rebuild /p:Configuration=Release /p:Platform="Any CPU" "%~dp0\SparkleShare.sln"
 
 if "%1"=="installer" (
 	if exist "%wixBinDir%" (
