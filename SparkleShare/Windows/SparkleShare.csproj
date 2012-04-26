@@ -177,7 +177,7 @@
     </None>
   </ItemGroup>
   <PropertyGroup>
-    <PreBuildEvent>$(ProjectDir)transform_tt.cmd</PreBuildEvent>
+    <PreBuildEvent>"$(ProjectDir)transform_tt.cmd"</PreBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\..\data\about.png">
