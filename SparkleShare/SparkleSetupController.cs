@@ -176,12 +176,10 @@ namespace SparkleShare {
 
 
             Program.Controller.ShowSetupWindowEvent += delegate (PageType page_type) {
-                if (page_type == PageType.CryptoSetup ||
-                    page_type == PageType.CryptoPassword) {
-
+                if (page_type == PageType.CryptoSetup || page_type == PageType.CryptoPassword) {
                     if (ChangePageEvent != null)
                         ChangePageEvent (page_type, null);
-
+                    
                     return;
                 }
 

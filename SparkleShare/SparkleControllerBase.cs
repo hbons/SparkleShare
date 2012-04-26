@@ -277,7 +277,7 @@ namespace SparkleShare {
         public void UIHasLoaded ()
         {
             if (FirstRun)
-                ShowSetupWindow (PageType.CryptoPassword);
+                ShowSetupWindow (PageType.Setup);
             else
                 new Thread (new ThreadStart (PopulateRepositories)).Start ();
         }
@@ -961,9 +961,6 @@ namespace SparkleShare {
 
 
             this.fetcher.Finished += delegate (bool repo_is_encrypted, bool repo_is_empty, string [] warnings) {
-                if (ShowSetupWindowEvent != null)
-                        ShowSetupWindowEvent (PageType.CryptoSetup);
-
                 if (repo_is_encrypted && repo_is_empty) {
                     if (ShowSetupWindowEvent != null)
                         ShowSetupWindowEvent (PageType.CryptoSetup);
