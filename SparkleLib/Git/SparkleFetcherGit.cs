@@ -38,6 +38,8 @@ namespace SparkleLib.Git {
             Uri uri = RemoteUrl; 
 
             if (!uri.Scheme.Equals ("ssh") &&
+                !uri.Scheme.Equals ("https") &&
+                !uri.Scheme.Equals ("http") &&
                 !uri.Scheme.Equals ("git")) {
 
 				uri = new Uri ("ssh://" + uri);
@@ -61,11 +63,16 @@ namespace SparkleLib.Git {
                 uri = new Uri ("ssh://git@gnome.org/git" + uri.AbsolutePath);
 
             } else {
-                if (string.IsNullOrEmpty (uri.UserInfo)) {
-					if (uri.Port == -1)
+                if (string.IsNullOrEmpty (uri.UserInfo) &&
+                    !uri.Scheme.Equals ("https") &&
+                    !uri.Scheme.Equals ("http")) {
+
+                    if (uri.Port == -1) {
 						uri = new Uri (uri.Scheme + "://git@" + uri.Host + uri.AbsolutePath);
-					else
+
+                    } else {
 						uri = new Uri (uri.Scheme + "://git@" + uri.Host + ":" + uri.Port + uri.AbsolutePath);
+                    }
                 }
             }
 
