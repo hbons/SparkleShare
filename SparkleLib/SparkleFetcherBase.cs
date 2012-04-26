@@ -112,7 +112,9 @@ namespace SparkleLib {
             if (RequiredFingerprint != null) {
                 string host_fingerprint = GetFingerprint (host_key);
 
-                if (!RequiredFingerprint.Equals (host_fingerprint)) {
+                if (host_fingerprint == null ||
+                    !RequiredFingerprint.Equals (host_fingerprint)) {
+
                     SparkleHelpers.DebugInfo ("Auth", "Fingerprint doesn't match");
 
                     if (Failed != null)
@@ -229,7 +231,14 @@ namespace SparkleLib {
             string fingerprint = process.StandardOutput.ReadToEnd ().Trim ();
             process.WaitForExit ();
 
-            fingerprint = fingerprint.Substring (fingerprint.IndexOf (" ") + 1, 47);
+            try {
+                fingerprint = fingerprint.Substring (fingerprint.IndexOf (" ") + 1, 47);
+
+            } catch (Exception e) {
+                SparkleHelpers.DebugInfo ("Fetcher", "Not a valid fingerprint: " + e.Message);
+                return null;
+            }
+
             File.Delete (tmp_file_path);
 
             return fingerprint;
