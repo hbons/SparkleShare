@@ -172,9 +172,9 @@ namespace SparkleShare {
 
         private SparkleFetcherBase fetcher;
         private List<string> failed_avatars = new List<string> ();
-
-        private Object avatar_lock = new Object ();
-        private Object repo_lock   = new Object ();
+        private Object avatar_lock          = new Object ();
+        private Object repo_lock            = new Object ();
+        private Object delete_watcher_lock  = new Object ();
 
 
         // Short alias for the translations
@@ -210,24 +210,19 @@ namespace SparkleShare {
                 Filter                = "*"
             };
 
-
             watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
-                watcher.EnableRaisingEvents = false;
+                lock (this.delete_watcher_lock) {
+                    foreach (string folder_name in SparkleConfig.DefaultConfig.Folders) {
+                        string folder_path = new SparkleFolder (folder_name).FullPath;
 
-                foreach (string folder_name in SparkleConfig.DefaultConfig.Folders) {
-                    string folder_path = new SparkleFolder (folder_name).FullPath;
-
-                    if (!Directory.Exists (folder_path)) {
-                        SparkleConfig.DefaultConfig.RemoveFolder (folder_name);
-                        RemoveRepository (folder_path);
+                        if (!Directory.Exists (folder_path)) {
+                            SparkleConfig.DefaultConfig.RemoveFolder (folder_name);
+                            RemoveRepository (folder_path);
+                        }
                     }
+                    if (FolderListChanged != null)
+                        FolderListChanged ();
                 }
-
-                Thread.Sleep (250);
-                watcher.EnableRaisingEvents = true;
-
-                if (FolderListChanged != null)
-                    FolderListChanged ();
             };
 
             watcher.Created += delegate (object o, FileSystemEventArgs args) {
@@ -488,7 +483,8 @@ namespace SparkleShare {
 
                     string timestamp = change_set.Timestamp.ToString ("H:mm");
 
-                    if (!change_set.FirstTimestamp.Equals (new DateTime ()))
+                    if (!change_set.FirstTimestamp.Equals (new DateTime ()) &&
+                        !change_set.Timestamp.ToString ("H:mm").Equals (change_set.FirstTimestamp.ToString ("H:mm")))
                         timestamp = change_set.FirstTimestamp.ToString ("H:mm") + " – " + timestamp;
 
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
