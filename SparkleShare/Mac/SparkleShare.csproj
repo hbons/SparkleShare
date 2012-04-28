@@ -327,9 +327,6 @@
     <Content Include="..\..\data\plugins\own-server.png">
       <Link>Plugins\own-server.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\avatar-default.png">
-      <Link>Pixmaps\avatar-default.png</Link>
-    </Content>
     <Content Include="..\..\data\avatar-a.png">
       <Link>Pixmaps\avatar-a.png</Link>
     </Content>
