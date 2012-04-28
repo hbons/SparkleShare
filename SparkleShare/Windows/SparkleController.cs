@@ -45,8 +45,7 @@ namespace SparkleShare {
         {
             get {
                 return Path.Combine (
-                    Path.GetDirectoryName (Assembly.GetExecutingAssembly ().Location),
-                    "plugins"
+                    Path.GetDirectoryName (Assembly.GetExecutingAssembly ().Location), "plugins"
                 );
             }
         }
@@ -56,10 +55,10 @@ namespace SparkleShare {
         {
             // Add msysgit to path, as we cannot asume it is added to the path
             // Asume it is installed in @"<exec dir>\msysgit\bin"
-            string executable_dir = Path.GetDirectoryName (Forms.Application.ExecutablePath);
-            string msysgit = Path.Combine (executable_dir, "msysgit");
+            string executable_path = Path.GetDirectoryName (Forms.Application.ExecutablePath);
+            string msysgit_path    = Path.Combine (executable_path, "msysgit");
 
-            string new_PATH = msysgit + @"\bin" + ";" +
+            string new_PATH = msysgit_path + @"\bin" + ";" +
                 msysgit + @"\mingw\bin" + ";" +
                 msysgit + @"\cmd" + ";" +
                 Environment.ExpandEnvironmentVariables ("%PATH%");
@@ -67,6 +66,7 @@ namespace SparkleShare {
             Environment.SetEnvironmentVariable ("PATH", new_PATH);
             Environment.SetEnvironmentVariable ("PLINK_PROTOCOL", "ssh");
 
+            // TODO: Still needed?
             if (string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("HOME")))
                 Environment.SetEnvironmentVariable ("HOME",
                     Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%"));
@@ -76,8 +76,7 @@ namespace SparkleShare {
         }
 
 
-        public override string EventLogHTML
-        {
+        public override string EventLogHTML {
             get {
                 string html = SparkleUIHelpers.GetHTML ("event-log.html");
                 html        = html.Replace ("<!-- $jquery -->", SparkleUIHelpers.GetHTML ("jquery.js"));
@@ -87,16 +86,14 @@ namespace SparkleShare {
         }
 
 
-        public override string DayEntryHTML
-        {
+        public override string DayEntryHTML {
             get {
                 return SparkleUIHelpers.GetHTML ("day-entry.html");
             }
         }
 
 
-        public override string EventEntryHTML
-        {
+        public override string EventEntryHTML {
             get {
                 return SparkleUIHelpers.GetHTML ("event-entry.html");
             }
@@ -120,9 +117,9 @@ namespace SparkleShare {
         }
         
 
-        public override void InstallProtocolHandler()
+        public override void InstallProtocolHandler ()
         {
-		/* FIXME: Need to find a way to do this without administrator privileges (or move to the installer)
+		    /* FIXME: Need to find a way to do this without administrator privileges (or move to the installer)
 		 
             // Get assembly location
             string location   = System.Reflection.Assembly.GetExecutingAssembly ().Location;
@@ -140,7 +137,8 @@ namespace SparkleShare {
 
             string action_key = "HKEY_CLASSES_ROOT\\sparkleshare\\shell\\open\\command";
             Registry.SetValue (action_key, "", "\"" + invite_exe + "\" \"%1\"");
-        */
+
+            */
         }
 
 
@@ -207,54 +205,52 @@ namespace SparkleShare {
         {
             string auth_sock = Environment.GetEnvironmentVariable ("SSH_AUTH_SOCK");
 
-            if (string.IsNullOrEmpty (auth_sock)) {
-                Process process                          = new Process ();
-                process.StartInfo.FileName               = "ssh-agent";
-                process.StartInfo.UseShellExecute        = false;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.CreateNoWindow         = true;
+            if (!string.IsNullOrEmpty (auth_sock)) {
+                SparkleHelpers.DebugInfo ("Controller", "Using existing ssh-agent with PID=" + ssh_pid);
+                return;
+            }
 
-                process.Start ();
+            Process process                          = new Process ();
+            process.StartInfo.FileName               = "ssh-agent";
+            process.StartInfo.UseShellExecute        = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.CreateNoWindow         = true;
 
-                string output = process.StandardOutput.ReadToEnd ();
-                process.WaitForExit ();
+            process.Start ();
 
-                Match auth_sock_match = new Regex (@"SSH_AUTH_SOCK=([^;\n\r]*)").Match (output);
+            string output = process.StandardOutput.ReadToEnd ();
+            process.WaitForExit ();
 
-                if (auth_sock_match.Success)
-                    Environment.SetEnvironmentVariable ("SSH_AUTH_SOCK",
-                        auth_sock_match.Groups [1].Value);
+            Match auth_sock_match = new Regex (@"SSH_AUTH_SOCK=([^;\n\r]*)").Match (output);
+            Match ssh_pid_match   = new Regex (@"SSH_AGENT_PID=([^;\n\r]*)").Match (output);
 
-                Match ssh_pid_match =
-                    new Regex (@"SSH_AGENT_PID=([^;\n\r]*)").Match (output);
+            if (auth_sock_match.Success)
+                Environment.SetEnvironmentVariable ("SSH_AUTH_SOCK", auth_sock_match.Groups [1].Value);
 
-                if (ssh_pid_match.Success) {
-                    string ssh_pid = ssh_pid_match.Groups [1].Value;
+            if (ssh_pid_match.Success) {
+                string ssh_pid = ssh_pid_match.Groups [1].Value;
 
-                    Int32.TryParse (ssh_pid, out this.ssh_agent_pid);
-                    Environment.SetEnvironmentVariable ("SSH_AGENT_PID", ssh_pid);
+                Int32.TryParse (ssh_pid, out this.ssh_agent_pid);
+                Environment.SetEnvironmentVariable ("SSH_AGENT_PID", ssh_pid);
 
-                    SparkleHelpers.DebugInfo ("Controller",
-                        "ssh-agent started, PID=" + ssh_pid);
+                SparkleHelpers.DebugInfo ("Controller", "ssh-agent started, PID=" + ssh_pid);
 
-                } else {
-                    SparkleHelpers.DebugInfo ("Controller",
-                        "ssh-agent started, PID=unknown");
-                }
+            } else {
+                SparkleHelpers.DebugInfo ("Controller", "ssh-agent started, PID=Unknown");
             }
         }
 
 
         private void StopSSH ()
         {
-            if (ssh_agent_pid != 0) {
-                try {
-                    Process.GetProcessById (this.ssh_agent_pid).Kill ();
+            if (this.ssh_agent_pid == 0)
+                return;
 
-                } catch (ArgumentException) {
-                    SparkleHelpers.DebugInfo ("SSH",
-                        "Could not stop SSH: the process isn't running");
-                }
+            try {
+                Process.GetProcessById (this.ssh_agent_pid).Kill ();
+
+            } catch (ArgumentException e) {
+                SparkleHelpers.DebugInfo ("SSH", "Could not stop ssh-agent: " + e.Message);
             }
         }
     }
