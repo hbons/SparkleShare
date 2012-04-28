@@ -76,7 +76,6 @@ namespace SparkleLib {
                     Directory.Move (old_path, new_path);
 
                     Console.WriteLine ("Migrated SparkleShare folder to %USERPROFILE%");
-
                 }
 
             } catch (Exception e) {
@@ -92,7 +91,7 @@ namespace SparkleLib {
                     File.Delete (LogFilePath);
 
                 } catch (Exception) {
-                    // Don't delete the debug.log if 'tail' is reading it
+                    // Don't delete the debug.log if, for example, 'tail' is reading it
                 }
             }
 
