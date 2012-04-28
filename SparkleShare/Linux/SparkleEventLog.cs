@@ -53,6 +53,8 @@ namespace SparkleShare {
         public SparkleEventLog () : base ("")
         {
             SetSizeRequest (480, 640);
+
+            // TODO: right side of screen like on Mac
             SetPosition (WindowPosition.Center);
 
             Resizable   = true;

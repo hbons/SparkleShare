@@ -57,6 +57,8 @@ namespace SparkleShare {
             ResizeMode            = ResizeMode.NoResize;
             Background            = new SolidColorBrush (Color.FromRgb (240, 240, 240));    
             AllowsTransparency    = false;
+
+            // TODO: right side of screen like on Mac
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             
             WriteOutImages ();
