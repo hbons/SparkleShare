@@ -37,7 +37,9 @@ namespace SparkleShare {
         private Drawing.Bitmap error_icon;
 
         private ContextMenu context_menu;
-		
+
+
+        private SparkleMenuItem log_item;
         private SparkleMenuItem state_item;
         private SparkleMenuItem exit_item;
         
@@ -84,10 +86,17 @@ namespace SparkleShare {
 				});
 			};
             
-            Controller.UpdateQuitItemEvent += delegate (bool exit_item_enabled) {
+            Controller.UpdateQuitItemEvent += delegate (bool item_enabled) {
                   Dispatcher.Invoke ((Action) delegate {
-                    this.exit_item.IsEnabled = exit_item_enabled;
+                    this.exit_item.IsEnabled = item_enabled;
                     this.exit_item.UpdateLayout ();
+                });
+            };
+
+            Controller.UpdatOpenRecentEventsItemEvent += delegate (bool item_enabled) {
+                  Dispatcher.Invoke ((Action) delegate {
+                    this.log_item.IsEnabled = item_enabled;
+                    this.log_item.UpdateLayout ();
                 });
             };
         }
@@ -127,12 +136,12 @@ namespace SparkleShare {
                     Controller.AddHostedProjectClicked ();
                 };
             
-            SparkleMenuItem log_item = new SparkleMenuItem () {
+            this.log_item = new SparkleMenuItem () {
                 Header    = "View recent changes…",
-                IsEnabled = (Program.Controller.Folders.Count > 0)
+                IsEnabled = Controller.OpenRecentEventsItemEnabled;
             };
             
-                log_item.Click += delegate {
+                this.log_item.Click += delegate {
                     Controller.OpenRecentEventsClicked ();
                 };
             
@@ -246,7 +255,7 @@ namespace SparkleShare {
             
             this.context_menu.Items.Add (new Separator ());
             this.context_menu.Items.Add (add_item);
-            this.context_menu.Items.Add (log_item);
+            this.context_menu.Items.Add (this.log_item);
 			this.context_menu.Items.Add (new Separator ());
 			this.context_menu.Items.Add (notify_item);
             this.context_menu.Items.Add (new Separator ());

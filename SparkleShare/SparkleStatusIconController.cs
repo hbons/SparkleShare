@@ -46,6 +46,9 @@ namespace SparkleShare {
         public event UpdateQuitItemEventHandler UpdateQuitItemEvent;
         public delegate void UpdateQuitItemEventHandler (bool quit_item_enabled);
 
+        public event UpdateOpenRecentEventsItemEventHandler UpdateOpenRecentEventsItemEvent;
+        public delegate void UpdateOpenRecentEventsItemEventHandler (bool open_recent_events_item_enabled);
+
         public IconState CurrentState = IconState.Idle;
         public string StateText = "Welcome to SparkleShare!";
 
@@ -111,6 +114,14 @@ namespace SparkleShare {
             }
         }
 
+        public bool OpenRecentEventsItemEnabled {
+            get {
+                return (Program.Controller.RepositoriesLoaded &&
+                        Program.Controller.Folders.Count > 0);
+            }
+        }
+
+
 
         private Timer animation;
         private int animation_frame_number;
@@ -132,6 +143,9 @@ namespace SparkleShare {
 
                 if (UpdateStatusItemEvent != null)
                     UpdateStatusItemEvent (StateText);
+
+                if (UpdateOpenRecentEventsItemEvent != null)
+                    UpdateOpenRecentEventsItemEvent (OpenRecentEventsItemEnabled);
 
                 if (UpdateMenuEvent != null)
                     UpdateMenuEvent (CurrentState);
