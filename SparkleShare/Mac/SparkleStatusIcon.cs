@@ -135,6 +135,15 @@ namespace SparkleShare {
                     });
                 }
             };
+
+            Controller.UpdateOpenRecentEventsItemEvent += delegate (bool events_item_enabled) {
+                using (var a = new NSAutoreleasePool ())
+                {
+                    InvokeOnMainThread (delegate {
+                        this.recent_events_item.Enabled = events_item_enabled;
+                    });
+                }
+            };
         }
 
 
@@ -173,7 +182,7 @@ namespace SparkleShare {
 
                 this.recent_events_item = new NSMenuItem () {
                     Title   = "View Recent Changes…",
-                    Enabled = (Controller.Folders.Length > 0)
+                    Enabled = Controller.OpenRecentEventsItemEnabled
                 };
 
                 if (Controller.Folders.Length > 0) {

@@ -161,7 +161,7 @@ namespace SparkleLib.Git {
         {
             get {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Checking for remote changes...");
-                SparkleGit git = new SparkleGit (LocalPath, "ls-remote \"" + Url + "\" master");
+                SparkleGit git = new SparkleGit (LocalPath, "ls-remote \"" + RemoteUrl + "\" master");
     
                 git.Start ();
                 git.WaitForExit ();
@@ -196,7 +196,7 @@ namespace SparkleLib.Git {
 
             SparkleGit git = new SparkleGit (LocalPath,
                 "push --progress " + // Redirects progress stats to standarderror
-                "\"" + Url + "\" master");
+                "\"" + RemoteUrl + "\" master");
 
             git.StartInfo.RedirectStandardError = true;
             git.Start ();
@@ -253,6 +253,7 @@ namespace SparkleLib.Git {
             git.WaitForExit ();
 
             UpdateSizes ();
+            ChangeSets = GetChangeSets ();
 
             if (git.ExitCode == 0)
                 return true;
@@ -263,7 +264,7 @@ namespace SparkleLib.Git {
 
         public override bool SyncDown ()
         {
-            SparkleGit git = new SparkleGit (LocalPath, "fetch --progress \"" + Url + "\" master");
+            SparkleGit git = new SparkleGit (LocalPath, "fetch --progress \"" + RemoteUrl + "\" master");
 
             git.StartInfo.RedirectStandardError = true;
             git.Start ();
@@ -322,10 +323,13 @@ namespace SparkleLib.Git {
 					Path.Combine (LocalPath, ".sparkleshare"),
 					FileAttributes.Hidden
 				);
-                
+
+                ChangeSets = GetChangeSets ();
+
 				return true;
 
             } else {
+                ChangeSets = GetChangeSets ();
                 return false;
             }
         }
@@ -450,7 +454,7 @@ namespace SparkleLib.Git {
 
         private void ResolveConflict ()
         {
-            // This is al list of conflict status codes that Git uses, their
+            // This is a list of conflict status codes that Git uses, their
             // meaning, and how SparkleShare should handle them.
             //
             // DD    unmerged, both deleted    -> Do nothing
@@ -558,7 +562,7 @@ namespace SparkleLib.Git {
 
 
         // Returns a list of the latest change sets
-        public override List <SparkleChangeSet> GetChangeSets (int count)
+        public override List<SparkleChangeSet> GetChangeSets (int count)
         {
             if (count < 1)
                 count = 30;
@@ -637,7 +641,7 @@ namespace SparkleLib.Git {
                     change_set.Revision  = match.Groups [1].Value;
                     change_set.User      = new SparkleUser (match.Groups [2].Value, match.Groups [3].Value);
                     change_set.IsMagical = is_merge_commit;
-                    change_set.Url       = Url;
+                    change_set.RemoteUrl       = RemoteUrl;
 
                     change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
                         int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),

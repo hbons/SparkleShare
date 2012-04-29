@@ -32,6 +32,7 @@ namespace SparkleShare {
         private Gdk.Pixbuf [] animation_frames;
 
         private Menu menu;
+        private MenuItem recent_events_item;
         private MenuItem quit_item;
         private MenuItem state_item;
 
@@ -99,10 +100,17 @@ namespace SparkleShare {
                 });
             };
 
-            Controller.UpdateQuitItemEvent += delegate (bool quit_item_enabled) {
+            Controller.UpdateQuitItemEvent += delegate (bool item_enabled) {
                 Application.Invoke (delegate {
-                    this.quit_item.Sensitive = quit_item_enabled;
+                    this.quit_item.Sensitive = item_enabled;
                     this.quit_item.ShowAll ();
+                });
+            };
+
+            Controller.UpdateOpenRecentEventsItemEvent += delegate (bool item_enabled) {
+                Application.Invoke (delegate {
+                    this.recent_events_item.Sensitive = item_enabled;
+                    this.recent_events_item.ShowAll ();
                 });
             };
 
@@ -199,15 +207,15 @@ namespace SparkleShare {
 
             this.menu.Add (sync_item);
 
-            MenuItem recent_events_item = new MenuItem (_("View Recent Changes…"));
+            this.recent_events_item = new MenuItem (_("View Recent Changes…"));
 
-                recent_events_item.Sensitive = (Controller.Folders.Length > 0);
+                this.recent_events_item.Sensitive = Controller.OpenRecentEventsItemEnabled;
 
-                recent_events_item.Activated += delegate {
+                this.recent_events_item.Activated += delegate {
                     Controller.OpenRecentEventsClicked ();
                 };
 
-            this.menu.Add (recent_events_item);
+            this.menu.Add (this.recent_events_item);
             this.menu.Add (new SeparatorMenuItem ());
 
             CheckMenuItem notify_item = new CheckMenuItem (_("Notifications")) {
