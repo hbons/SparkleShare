@@ -59,8 +59,8 @@ namespace SparkleShare {
             string msysgit_path    = Path.Combine (executable_path, "msysgit");
 
             string new_PATH = msysgit_path + @"\bin" + ";" +
-                msysgit + @"\mingw\bin" + ";" +
-                msysgit + @"\cmd" + ";" +
+                msysgit_path + @"\mingw\bin" + ";" +
+                msysgit_path + @"\cmd" + ";" +
                 Environment.ExpandEnvironmentVariables ("%PATH%");
 
             Environment.SetEnvironmentVariable ("PATH", new_PATH);
@@ -206,7 +206,7 @@ namespace SparkleShare {
             string auth_sock = Environment.GetEnvironmentVariable ("SSH_AUTH_SOCK");
 
             if (!string.IsNullOrEmpty (auth_sock)) {
-                SparkleHelpers.DebugInfo ("Controller", "Using existing ssh-agent with PID=" + ssh_pid);
+                SparkleHelpers.DebugInfo ("Controller", "Using existing ssh-agent with PID=" + this.ssh_agent_pid);
                 return;
             }
 
