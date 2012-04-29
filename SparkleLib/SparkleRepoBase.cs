@@ -74,7 +74,8 @@ namespace SparkleLib {
 
         public readonly string LocalPath;
         public readonly string Name;
-        public readonly Uri Url;
+        public readonly Uri RemoteUrl;
+        public List<SparkleChangeSet> ChangeSets { get; protected set; }
 
         public abstract string ComputeIdentifier ();
         public abstract string CurrentRevision { get; }
@@ -88,6 +89,9 @@ namespace SparkleLib {
         public abstract bool SyncDown ();
         public abstract List<SparkleChangeSet> GetChangeSets (int count);
 
+        public List<SparkleChangeSet> GetChangeSets () {
+            return GetChangeSets (30);
+        }
 
         public bool ServerOnline {
             get {
@@ -157,7 +161,7 @@ namespace SparkleLib {
         {
             LocalPath = path;
             Name      = Path.GetFileName (LocalPath);
-            Url       = new Uri (SparkleConfig.DefaultConfig.GetUrlForFolder (Name));
+            RemoteUrl = new Uri (SparkleConfig.DefaultConfig.GetUrlForFolder (Name));
 
             this.poll_interval = this.short_interval;
 
@@ -169,7 +173,8 @@ namespace SparkleLib {
 
             if (CurrentRevision == null)
                 CreateInitialChangeSet ();
-				
+
+            ChangeSets = GetChangeSets ();
 
             CreateWatcher ();
             CreateListener ();
@@ -347,14 +352,12 @@ namespace SparkleLib {
                 this.server_online = true;
 
                 if (!pre_sync_revision.Equals (CurrentRevision)) {
-                    List<SparkleChangeSet> change_sets = GetChangeSets (1);
-
-                   if (change_sets != null && 
-					   change_sets.Count > 0 &&
-					   !change_sets [0].Added.Contains (".sparkleshare")) {
+                   if (ChangeSets != null &&
+					   ChangeSets.Count > 0 &&
+					   !ChangeSets [0].Added.Contains (".sparkleshare")) {
 						
                         if (NewChangeSet != null)
-                            NewChangeSet (change_sets [0]);
+                            NewChangeSet (ChangeSets [0]);
                     }
                 }
 
@@ -541,7 +544,7 @@ namespace SparkleLib {
                 "Congratulations, you've successfully created a SparkleShare repository!" + n +
                 "" + n +
                 "Any files you add or change in this folder will be automatically synced to " + n +
-                Url + " and everyone connected to it." + n +
+                RemoteUrl + " and everyone connected to it." + n +
                 "" + n +
                 "SparkleShare is a Free and Open Source software program that helps people " + n +
                 "collaborate and share files. If you like what we do, please consider a small " + n +

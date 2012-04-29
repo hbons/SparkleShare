@@ -43,6 +43,8 @@ namespace SparkleShare {
             }
         }
 
+        public bool RepositoriesLoaded { get; private set;}
+
         public List<SparkleRepoBase> repositories = new List<SparkleRepoBase> ();
         public readonly string SparklePath = SparkleConfig.DefaultConfig.FoldersPath;
 
@@ -220,6 +222,7 @@ namespace SparkleShare {
                             RemoveRepository (folder_path);
                         }
                     }
+
                     if (FolderListChanged != null)
                         FolderListChanged ();
                 }
@@ -304,7 +307,7 @@ namespace SparkleShare {
             List<SparkleChangeSet> list = new List<SparkleChangeSet> ();
 
             foreach (SparkleRepoBase repo in Repositories) {
-                List<SparkleChangeSet> change_sets = repo.GetChangeSets (30);
+                List<SparkleChangeSet> change_sets = repo.ChangeSets;
 
                 if (change_sets != null)
                     list.AddRange (change_sets);
@@ -328,11 +331,12 @@ namespace SparkleShare {
                 return GetLog ();
 
             string path  = new SparkleFolder (name).FullPath;
-            int log_size = 50;
 
-            foreach (SparkleRepoBase repo in Repositories) {
-                if (repo.LocalPath.Equals (path))
-                    return repo.GetChangeSets (log_size);
+            lock (this.repo_lock) {
+                foreach (SparkleRepoBase repo in Repositories) {
+                    if (repo.LocalPath.Equals (path))
+                        return repo.ChangeSets;
+                }
             }
 
             return null;
@@ -360,9 +364,9 @@ namespace SparkleShare {
 
                 bool change_set_inserted = false;
                 foreach (ActivityDay stored_activity_day in activity_days) {
-                    if (stored_activity_day.DateTime.Year  == change_set.Timestamp.Year &&
-                        stored_activity_day.DateTime.Month == change_set.Timestamp.Month &&
-                        stored_activity_day.DateTime.Day   == change_set.Timestamp.Day) {
+                    if (stored_activity_day.Date.Year  == change_set.Timestamp.Year &&
+                        stored_activity_day.Date.Month == change_set.Timestamp.Month &&
+                        stored_activity_day.Date.Day   == change_set.Timestamp.Day) {
 
                         bool squash = false;
                         foreach (SparkleChangeSet existing_set in stored_activity_day) {
@@ -492,7 +496,7 @@ namespace SparkleShare {
                         .Replace ("<!-- $event-avatar-url -->", change_set_avatar)
                         .Replace ("<!-- $event-time -->", timestamp)
                         .Replace ("<!-- $event-folder -->", change_set.Folder.Name)
-                        .Replace ("<!-- $event-url -->", change_set.Url.ToString ())
+                        .Replace ("<!-- $event-url -->", change_set.RemoteUrl.ToString ())
                         .Replace ("<!-- $event-revision -->", change_set.Revision);
                 }
 
@@ -500,34 +504,34 @@ namespace SparkleShare {
                 DateTime today     = DateTime.Now;
                 DateTime yesterday = DateTime.Now.AddDays (-1);
 
-                if (today.Day   == activity_day.DateTime.Day &&
-                    today.Month == activity_day.DateTime.Month && 
-                    today.Year  == activity_day.DateTime.Year) {
+                if (today.Day   == activity_day.Date.Day &&
+                    today.Month == activity_day.Date.Month &&
+                    today.Year  == activity_day.Date.Year) {
 
                     day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
-                        "<span id='today' name='" + activity_day.DateTime.ToString (_("dddd, MMMM d")) + "'>"
+                        "<span id='today' name='" + activity_day.Date.ToString (_("dddd, MMMM d")) + "'>"
                         + _("Today") + "</span>");
 
-                } else if (yesterday.Day   == activity_day.DateTime.Day &&
-                           yesterday.Month == activity_day.DateTime.Month &&
-                           yesterday.Year  == activity_day.DateTime.Year) {
+                } else if (yesterday.Day   == activity_day.Date.Day &&
+                           yesterday.Month == activity_day.Date.Month &&
+                           yesterday.Year  == activity_day.Date.Year) {
 
                     day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
-                        "<span id='yesterday' name='" + activity_day.DateTime.ToString (_("dddd, MMMM d")) + "'>"
+                        "<span id='yesterday' name='" + activity_day.Date.ToString (_("dddd, MMMM d")) + "'>"
                         + _("Yesterday") + "</span>");
 
                 } else {
-                    if (activity_day.DateTime.Year != DateTime.Now.Year) {
+                    if (activity_day.Date.Year != DateTime.Now.Year) {
 
                         // TRANSLATORS: This is the date in the event logs
                         day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
-                            activity_day.DateTime.ToString (_("dddd, MMMM d, yyyy")));
+                            activity_day.Date.ToString (_("dddd, MMMM d, yyyy")));
 
                     } else {
 
                         // TRANSLATORS: This is the date in the event logs, without the year
                         day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
-                            activity_day.DateTime.ToString (_("dddd, MMMM d")));
+                            activity_day.Date.ToString (_("dddd, MMMM d")));
                     }
                 }
 
@@ -638,9 +642,9 @@ namespace SparkleShare {
             };
 
 
-            lock (this.repo_lock) {
+            //lock (this.repo_lock) {
                 this.repositories.Add (repo);
-            }
+            //}
 
             repo.Initialize ();
         }
@@ -674,14 +678,18 @@ namespace SparkleShare {
         // folders in the SparkleShare folder
         private void PopulateRepositories ()
         {
-            foreach (string folder_name in SparkleConfig.DefaultConfig.Folders) {
-                string folder_path = new SparkleFolder (folder_name).FullPath;
+            lock (this.repo_lock) {
+                foreach (string folder_name in SparkleConfig.DefaultConfig.Folders) {
+                    string folder_path = new SparkleFolder (folder_name).FullPath;
 
-                if (Directory.Exists (folder_path))
-                    AddRepository (folder_path);
-                else
-                    SparkleConfig.DefaultConfig.RemoveFolder (folder_name);
+                    if (Directory.Exists (folder_path))
+                        AddRepository (folder_path);
+                    else
+                        SparkleConfig.DefaultConfig.RemoveFolder (folder_name);
+                }
             }
+
+            RepositoriesLoaded = true;
 
             if (FolderListChanged != null)
                 FolderListChanged ();
@@ -1056,7 +1064,9 @@ namespace SparkleShare {
                 } TODO
                  */
 
-                AddRepository (target_folder_path);
+                lock (this.repo_lock) {
+                    AddRepository (target_folder_path);
+                }
 
                 if (FolderFetched != null)
                     FolderFetched (this.fetcher.RemoteUrl.ToString (), this.fetcher.Warnings.ToArray ());
@@ -1111,11 +1121,8 @@ namespace SparkleShare {
 
         private string FormatBreadCrumbs (string path_root, string path)
         {
-			path_root = path_root.Replace ("/",
-				Path.DirectorySeparatorChar.ToString ());
-			
-			path = path.Replace ("/",
-				Path.DirectorySeparatorChar.ToString ());
+			path_root = path_root.Replace ("/", Path.DirectorySeparatorChar.ToString ());
+			path = path.Replace ("/", Path.DirectorySeparatorChar.ToString ());
 			
             string link      = "";
             string [] crumbs = path.Split (Path.DirectorySeparatorChar);
@@ -1158,12 +1165,11 @@ namespace SparkleShare {
     // All change sets that happened on a day
     public class ActivityDay : List <SparkleChangeSet>
     {
-        public DateTime DateTime;
+        public DateTime Date;
 
         public ActivityDay (DateTime date_time)
         {
-            DateTime = date_time;
-            DateTime = new DateTime (DateTime.Year, DateTime.Month, DateTime.Day);
+            Date = new DateTime (date_time.Year, date_time.Month, date_time.Day);
         }
     }
 }

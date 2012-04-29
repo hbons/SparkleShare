@@ -33,19 +33,19 @@ namespace SparkleShare {
         {
             Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
                 InvokeOnMainThread (delegate {
-                    if (!GrowlApplicationBridge.IsGrowlRunning ()) {
-                        NSApplication.SharedApplication.RequestUserAttention (
-                            NSRequestUserAttentionType.InformationalRequest);
-
-                        return;
-                    }
-
                     if (NSApplication.SharedApplication.DockTile.BadgeLabel == null) {
                         NSApplication.SharedApplication.DockTile.BadgeLabel = "1";
 
                     } else {
                         int events = int.Parse (NSApplication.SharedApplication.DockTile.BadgeLabel);
                         NSApplication.SharedApplication.DockTile.BadgeLabel = (events + 1).ToString ();
+                    }
+
+                    if (!GrowlApplicationBridge.IsGrowlRunning ()) {
+                        NSApplication.SharedApplication.RequestUserAttention (
+                            NSRequestUserAttentionType.InformationalRequest);
+
+                        return;
                     }
 
                     if (image_path != null) {
