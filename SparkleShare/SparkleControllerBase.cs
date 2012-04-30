@@ -772,8 +772,35 @@ namespace SparkleShare {
             // key in the user's SparkleShare folder
             if (!File.Exists (pubkey_file_path))
                 File.Copy (pubkey_file_path,
-                    Path.Combine (SparklePath, CurrentUser.Name + "'s key.txt"),
-                    true); // Overwriting is allowed
+                    Path.Combine (SparklePath, CurrentUser.Name + "'s key.txt"), true); // Overwriting is allowed
+
+            ListPrivateKeys ();
+        }
+
+
+        private void ListPrivateKeys ()
+        {
+            Process process = new Process () {
+                EnableRaisingEvents = true
+            };
+
+            process.StartInfo.WorkingDirectory       = SparkleConfig.DefaultConfig.TmpPath;
+            process.StartInfo.UseShellExecute        = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.CreateNoWindow         = true;
+
+            process.StartInfo.FileName = "ssh-add";
+            process.StartInfo.Arguments = "-l";
+
+            process.Start ();
+
+            // Reading the standard output HAS to go before
+            // WaitForExit, or it will hang forever on output > 4096 bytes
+            string keys_in_use = process.StandardOutput.ReadToEnd ().Trim ();
+            process.WaitForExit ();
+
+            SparkleHelpers.DebugInfo ("Auth",
+                "The following keys will be used by SparkleShare: " + Environment.NewLine + keys_in_use);
         }
 
 
