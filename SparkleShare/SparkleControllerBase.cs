@@ -611,7 +611,7 @@ namespace SparkleShare {
 
             repo.ConflictResolved += delegate {
                 if (AlertNotificationRaised != null)
-                    AlertNotificationRaised ("Conflict detected.",
+                    AlertNotificationRaised ("Conflict detected",
                         "Don't worry, SparkleShare made a copy of each conflicting file.");
             };
 
