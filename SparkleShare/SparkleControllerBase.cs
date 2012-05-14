@@ -641,11 +641,7 @@ namespace SparkleShare {
                 UpdateState ();
             };
 
-
-            //lock (this.repo_lock) {
-                this.repositories.Add (repo);
-            //}
-
+            this.repositories.Add (repo);
             repo.Initialize ();
         }
 
