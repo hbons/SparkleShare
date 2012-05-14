@@ -68,8 +68,7 @@ namespace SparkleLib {
 
                     try {
                         lock (this.socket_lock) {
-                            this.socket = new Socket (AddressFamily.InterNetwork,
-                                SocketType.Stream, ProtocolType.Tcp) {
+                            this.socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) {
                                 ReceiveTimeout = 5 * 1000,
                                 SendTimeout    = 5 * 1000
                             };
@@ -164,7 +163,6 @@ namespace SparkleLib {
 
                                     OnDisconnected ("Ping timeout");
                                     return;
-
                                 }
 
                                 Thread.Sleep (1000);

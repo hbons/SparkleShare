@@ -175,9 +175,13 @@ namespace SparkleLib {
                 CreateInitialChangeSet ();
 
             ChangeSets = GetChangeSets ();
-
             CreateWatcher ();
-            CreateListener ();
+
+            new Thread (
+                new ThreadStart (delegate {
+                    CreateListener ();
+                })
+            ).Start ();
 
             this.local_timer.Elapsed += delegate (object o, ElapsedEventArgs args) {
                 CheckForChanges ();
@@ -223,8 +227,6 @@ namespace SparkleLib {
 
         protected void OnConflictResolved ()
         {
-            HasUnsyncedChanges = true; // ?
-
             if (ConflictResolved != null)
                 ConflictResolved ();
         }
