@@ -320,7 +320,7 @@ namespace SparkleLib {
 
             // Mac OS X
             ".DS_Store",
-            "Icon?",
+            "Icon\r\r",
             "._*",
             ".Spotlight-V100",
             ".Trashes",
