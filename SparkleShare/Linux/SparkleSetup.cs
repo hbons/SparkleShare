@@ -327,11 +327,19 @@ namespace SparkleShare {
                                 add_button.Sensitive = button_enabled;                            
                             });
                         };
+						
 
+                        CheckButton check_button = new CheckButton ("Fetch prior history") {
+                            Active = false
+                        };
+
+                        check_button.Toggled += delegate {
+                            Controller.HistoryItemChanged (check_button.Active);
+                        };
+
+                        AddOption (check_button);
                         AddButton (cancel_button);
                         AddButton (add_button);
-
-
 
                         break;
                     }
