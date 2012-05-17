@@ -40,7 +40,6 @@ namespace SparkleShare {
         private ScrolledWindow scrolled_window;
         private WebView web_view;
         private SparkleSpinner spinner;
-        private string link_status;
 
 
         // Short alias for the translations
@@ -96,18 +95,8 @@ namespace SparkleShare {
                 Editable = false
             };
 
-            this.web_view.HoveringOverLink += delegate (object o, WebKit.HoveringOverLinkArgs args) {
-                this.link_status = args.Link;
-            };
 
-            this.web_view.NavigationRequested += delegate (object o, WebKit.NavigationRequestedArgs args) {
-                if (args.Request.Uri == this.link_status)
-                    Controller.LinkClicked (args.Request.Uri);
-
-                // Don't follow HREFs (as this would cause a page refresh)
-                if (!args.Request.Uri.Equals ("file:"))
-                    args.RetVal = 1;
-            };
+            this.web_view.NavigationRequested += WebViewNavigationRequested;
 
             this.scrolled_window.Add (this.web_view);
             this.content_wrapper.Add (this.spinner);
@@ -172,6 +161,15 @@ namespace SparkleShare {
                     this.history_label.ShowAll ();
                 });
             };
+        }
+        
+        
+        private void WebViewNavigationRequested (object o, WebKit.NavigationRequestedArgs args) {
+            Controller.LinkClicked (args.Request.Uri.Substring (7));
+
+            // Don't follow HREFs (as this would cause a page refresh)
+            if (!args.Request.Uri.Equals ("file:"))
+                args.RetVal = 1;
         }
 
 
@@ -263,21 +261,23 @@ namespace SparkleShare {
 				html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
                 
 				html = html.Replace ("<!-- $document-added-background-image -->", 
-					"file://" + IO.Path.Combine (icons_path + "document-added.png"));
-				
+					"file://" + IO.Path.Combine (icons_path, "document-added.png"));
+
 				html = html.Replace ("<!-- $document-edited-background-image -->", 
-					"file://" + IO.Path.Combine (icons_path + "document-edited.png"));
+					"file://" + IO.Path.Combine (icons_path, "document-edited.png"));
 				
 				html = html.Replace ("<!-- $document-deleted-background-image -->", 
-					"file://" + IO.Path.Combine (icons_path + "document-deleted.png"));
+					"file://" + IO.Path.Combine (icons_path, "document-deleted.png"));
 				
 				html = html.Replace ("<!-- $document-moved-background-image -->", 
-					"file://" + IO.Path.Combine (icons_path + "document-moved.png"));
+					"file://" + IO.Path.Combine (icons_path, "document-moved.png"));
                         
                 
                 Application.Invoke (delegate {
                     this.spinner.Stop ();
-                    this.web_view.LoadString (html, null, null, "file://");
+                                this.web_view.NavigationRequested -= WebViewNavigationRequested;
+                    this.web_view.LoadHtmlString (html, "file://");
+                                this.web_view.NavigationRequested += WebViewNavigationRequested;
                     this.content_wrapper.Remove (this.content_wrapper.Child);
                     this.content_wrapper.Add (this.scrolled_window);
                     this.content_wrapper.ShowAll ();

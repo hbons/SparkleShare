@@ -207,9 +207,12 @@ namespace SparkleShare {
 
         public void LinkClicked (string url)
         {
+            url = url.Replace ("%20", " ");
+        
             if (url.StartsWith (Path.VolumeSeparatorChar.ToString ()) ||
 			    url.Substring (1, 1).Equals (":")) {
 				
+				Console.WriteLine ("opening " + url);
                 Program.Controller.OpenFile (url);
             }
         }
