@@ -242,8 +242,9 @@ namespace SparkleShare {
             full_name = full_name.Trim ();
             email     = email.Trim ();
 
-            bool fields_valid = full_name != null && full_name.Trim().Length > 0 &&
-                IsValidEmail (email);
+            bool fields_valid = (full_name != null &&
+                                 full_name.Trim ().Length > 0 &&
+                                 IsValidEmail (email));
 
             if (UpdateSetupContinueButtonEvent != null)
                 UpdateSetupContinueButtonEvent (fields_valid);

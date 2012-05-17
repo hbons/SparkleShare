@@ -126,10 +126,7 @@ namespace SparkleShare {
 
 
         public void AddOption (Widget widget)
-        {
-			if (OptionArea.Children.Length > 0)
-				OptionArea.Remove (OptionArea.Children [0]);
-            
+        {            
 			OptionArea.Add (widget);
             ShowAll ();
         }
@@ -167,6 +164,9 @@ namespace SparkleShare {
         {
             Header      = "";
             Description = "";
+
+			if (OptionArea.Children.Length > 0)
+				OptionArea.Remove (OptionArea.Children [0]);
 
             if (Wrapper.Children.Length > 0)
                 Wrapper.Remove (Wrapper.Children [0]);

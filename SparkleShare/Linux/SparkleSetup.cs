@@ -403,9 +403,9 @@ namespace SparkleShare {
                     case PageType.Syncing: {
 
                         Header      = String.Format (_("Adding project ‘{0}’…"), Controller.SyncingFolder);
-                        Description = Description = _("This may either take a short or a long time depending on the project's size.");
+                        Description = _("This may either take a short or a long time depending on the project's size.");
 
-                        this.progress_bar.Fraction = Controller.ProgressBarPercentage;
+                        this.progress_bar.Fraction = Controller.ProgressBarPercentage / 100;
 
                         Button finish_button = new Button () {
                             Sensitive = false,
@@ -432,7 +432,7 @@ namespace SparkleShare {
                         if (this.progress_bar.Parent != null)
                            (this.progress_bar.Parent as Container).Remove (this.progress_bar);
 
-                        VBox bar_wrapper = new VBox (false , 0);
+                        VBox bar_wrapper = new VBox (false, 0);
                         bar_wrapper.PackStart (this.progress_bar, false, false, 0);
 
                         Add (bar_wrapper);
@@ -441,13 +441,13 @@ namespace SparkleShare {
                     }
 
                     case PageType.Error: {
-
-                        Header      = _("Something went wrong") + "…";
+                    
+                        Header = _("Something went wrong") + "…";
 
 						VBox points = new VBox (false, 0);
-						Image list_point_one   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16)) {  };
-						Image list_point_two   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16)) {  };
-						Image list_point_three = new Image (SparkleUIHelpers.GetIcon ("list-point", 16)) {  };
+						Image list_point_one   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
+						Image list_point_two   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
+						Image list_point_three = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
 
                         Label label_one = new Label () {
                             Text   = "Is the host online?",
