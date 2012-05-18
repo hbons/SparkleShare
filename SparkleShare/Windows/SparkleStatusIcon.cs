@@ -93,7 +93,7 @@ namespace SparkleShare {
                 });
             };
 
-            Controller.UpdatOpenRecentEventsItemEvent += delegate (bool item_enabled) {
+            Controller.UpdateOpenRecentEventsItemEvent += delegate (bool item_enabled) {
                   Dispatcher.Invoke ((Action) delegate {
                     this.log_item.IsEnabled = item_enabled;
                     this.log_item.UpdateLayout ();
@@ -138,7 +138,7 @@ namespace SparkleShare {
             
             this.log_item = new SparkleMenuItem () {
                 Header    = "View recent changes…",
-                IsEnabled = Controller.OpenRecentEventsItemEnabled;
+                IsEnabled = Controller.OpenRecentEventsItemEnabled
             };
             
                 this.log_item.Click += delegate {
