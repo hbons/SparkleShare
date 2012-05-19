@@ -139,20 +139,24 @@ namespace SparkleLib {
 		
 		public string Identifier {
 			get {
-				if (this.identifier == null) {
-					string id_path = Path.Combine (LocalPath, ".sparkleshare");
-					
-					if (File.Exists (id_path)) {
-						this.identifier = File.ReadAllText (id_path).Trim ();	
-					
-					} else {
-						this.identifier = ComputeIdentifier ();
-						File.WriteAllText (id_path, this.identifier);
-                    	File.SetAttributes (id_path, FileAttributes.Hidden);
-					}
-				}
+				if (this.identifier != null)
+                    return this.identifier;
+
+				string id_path = Path.Combine (LocalPath, ".sparkleshare");
 				
-				return this.identifier;
+				if (File.Exists (id_path))
+					this.identifier = File.ReadAllText (id_path).Trim ();
+
+                if (this.identifier != null && this.identifier.Length > 0) {
+                    return this.identifier;
+
+                } else {
+    				this.identifier = ComputeIdentifier ();
+    				File.WriteAllText (id_path, this.identifier);
+                	File.SetAttributes (id_path, FileAttributes.Hidden);
+
+				    return this.identifier;
+                }
 			}
 		}
 
