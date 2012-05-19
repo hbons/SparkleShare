@@ -109,7 +109,7 @@ namespace SparkleLib {
         {
             if (!this.channels.Contains (channel) && IsConnected) {
                 SparkleHelpers.DebugInfo ("Listener",
-                    "Subscribing to channel " + channel);
+                    "Subscribing to channel " + channel + " on " + Server);
 
                 this.channels.Add (channel);
                 AlsoListenToInternal (channel);

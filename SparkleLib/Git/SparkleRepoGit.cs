@@ -157,8 +157,7 @@ namespace SparkleLib.Git {
         }
 
 
-        public override bool HasRemoteChanges
-        {
+        public override bool HasRemoteChanges {
             get {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Checking for remote changes...");
                 SparkleGit git = new SparkleGit (LocalPath, "ls-remote \"" + RemoteUrl + "\" master");
@@ -391,17 +390,6 @@ namespace SparkleLib.Git {
 
             SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes staged");
         }
-
-
-        // Removes unneeded objects
-/*        private void CollectGarbage ()
-        {
-            SparkleGit git = new SparkleGit (LocalPath, "gc");
-            git.Start ();
-            git.WaitForExit ();
-
-            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Garbage collected.");
-        } */
 
 
         // Commits the made changes
