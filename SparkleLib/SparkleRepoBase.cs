@@ -35,8 +35,8 @@ namespace SparkleLib {
 
 
     public abstract class SparkleRepoBase {
-		
-		private string identifier;
+        
+        private string identifier;
         private TimeSpan short_interval = new TimeSpan (0, 0, 3, 0);
         private TimeSpan long_interval  = new TimeSpan (0, 0, 10, 0);
         private TimeSpan poll_interval;
@@ -136,29 +136,29 @@ namespace SparkleLib {
                 return this.is_buffering;
             }
         }
-		
-		public string Identifier {
-			get {
-				if (this.identifier != null)
+        
+        public string Identifier {
+            get {
+                if (this.identifier != null)
                     return this.identifier;
 
-				string id_path = Path.Combine (LocalPath, ".sparkleshare");
-				
-				if (File.Exists (id_path))
-					this.identifier = File.ReadAllText (id_path).Trim ();
+                string id_path = Path.Combine (LocalPath, ".sparkleshare");
+                
+                if (File.Exists (id_path))
+                    this.identifier = File.ReadAllText (id_path).Trim ();
 
                 if (this.identifier != null && this.identifier.Length > 0) {
                     return this.identifier;
 
                 } else {
-    				this.identifier = ComputeIdentifier ();
-    				File.WriteAllText (id_path, this.identifier);
-                	File.SetAttributes (id_path, FileAttributes.Hidden);
+                    this.identifier = ComputeIdentifier ();
+                    File.WriteAllText (id_path, this.identifier);
+                    File.SetAttributes (id_path, FileAttributes.Hidden);
 
-				    return this.identifier;
+                    return this.identifier;
                 }
-			}
-		}
+            }
+        }
 
 
         public SparkleRepoBase (string path)
@@ -359,9 +359,9 @@ namespace SparkleLib {
 
                 if (!pre_sync_revision.Equals (CurrentRevision)) {
                    if (ChangeSets != null &&
-					   ChangeSets.Count > 0 &&
-					   !ChangeSets [0].Added.Contains (".sparkleshare")) {
-						
+                       ChangeSets.Count > 0 &&
+                       !ChangeSets [0].Added.Contains (".sparkleshare")) {
+                        
                         if (NewChangeSet != null)
                             NewChangeSet (ChangeSets [0]);
                     }
@@ -371,13 +371,13 @@ namespace SparkleLib {
                 // conflict. Tries only once, then lets
                 // the timer try again periodically
                 if (HasUnsyncedChanges) {
-	                if (SyncStatusChanged != null)
-	                    SyncStatusChanged (SyncStatus.SyncUp);
-					
+                    if (SyncStatusChanged != null)
+                        SyncStatusChanged (SyncStatus.SyncUp);
+                    
                     SyncUp ();
-					HasUnsyncedChanges = false;
-				}
-				
+                    HasUnsyncedChanges = false;
+                }
+                
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.Idle);
 
@@ -397,7 +397,7 @@ namespace SparkleLib {
 
             this.remote_timer.Start ();
             EnableWatching ();
-		}
+        }
 
 
         private void CreateWatcher ()
