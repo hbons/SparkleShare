@@ -853,6 +853,15 @@ namespace SparkleShare {
         // Gets the avatar for a specific email address and size
         public void FetchAvatars (List<string> emails, int size)
         {
+            string fetch_gravatars_option = SparkleConfig.DefaultConfig.GetConfigOption ("fetch_gravatars");
+
+            if (fetch_gravatars_option != null &&
+                fetch_gravatars_option.Equals (bool.FalseString)) {
+
+                SparkleHelpers.DebugInfo ("Avatar", "Not fetching gravatars");
+                return;
+            }
+
             List<string> old_avatars = new List<string> ();
             bool avatar_fetched      = false;
             string avatar_path       = new string [] {
