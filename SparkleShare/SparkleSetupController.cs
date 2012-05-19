@@ -79,6 +79,7 @@ namespace SparkleShare {
         public readonly List<SparklePlugin> Plugins = new List<SparklePlugin> ();
         public SparklePlugin SelectedPlugin;
 
+        public bool WindowIsOpen { get; private set; }
         public SparkleInvite PendingInvite { get; private set; }
         public int TutorialPageNumber { get; private set; }
         public string PreviousUrl { get; private set; }
@@ -184,6 +185,8 @@ namespace SparkleShare {
                 }
 
                 if (PendingInvite != null) {
+                    WindowIsOpen = true;
+
                     if (ShowWindowEvent != null)
                         ShowWindowEvent ();
 
@@ -202,16 +205,29 @@ namespace SparkleShare {
                 }
 
                 if (page_type == PageType.Add) {
-                    if (!Program.Controller.FirstRun && TutorialPageNumber == 0) {
+                    if (WindowIsOpen) {
+                        if (this.current_page == PageType.Error) {
+                            if (ChangePageEvent != null)
+                                ChangePageEvent (page_type, null);
+                        }
+
+                        if (ShowWindowEvent != null)
+                            ShowWindowEvent ();
+
+                    } else if (!Program.Controller.FirstRun && TutorialPageNumber == 0) {
                         if (ChangePageEvent != null)
                             ChangePageEvent (page_type, null);
-                        
+
+                        WindowIsOpen = true;
+
                         if (ShowWindowEvent != null)
                             ShowWindowEvent ();
                     }
 
                     return;
                 }
+
+                WindowIsOpen = true;
 
                 if (ChangePageEvent != null)
                     ChangePageEvent (page_type, null);
@@ -231,6 +247,8 @@ namespace SparkleShare {
             PreviousUrl     = "";
 
             this.fetch_prior_history = false;
+
+            WindowIsOpen = false;
 
             if (HideWindowEvent != null)
                 HideWindowEvent ();
