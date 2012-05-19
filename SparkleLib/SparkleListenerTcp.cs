@@ -205,9 +205,6 @@ namespace SparkleLib {
 
         protected override void AlsoListenToInternal (string folder_identifier)
         {
-            SparkleHelpers.DebugInfo ("ListenerTcp",
-                "Subscribing to channel " + folder_identifier + " on " + Server);
-
             string to_send = "subscribe " + folder_identifier + "\n";
 
             try {
