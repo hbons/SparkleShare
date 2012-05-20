@@ -218,12 +218,23 @@ namespace SparkleShare {
             this.menu.Add (this.recent_events_item);
             this.menu.Add (new SeparatorMenuItem ());
 
-            CheckMenuItem notify_item = new CheckMenuItem (_("Notifications")) {
-				Active = (Controller.Folders.Length > 0 && Program.Controller.NotificationsEnabled)
-			};
-                                      
+            
+            MenuItem notify_item;
+                                                             
+                if (Program.Controller.NotificationsEnabled)
+                    notify_item = new MenuItem (_("Turn Notifications Off"));
+                else
+                    notify_item = new MenuItem (_("Turn Notifications On"));
+
                 notify_item.Activated += delegate {
-                    Program.Controller.ToggleNotifications ();
+					Application.Invoke (delegate {
+	                    Program.Controller.ToggleNotifications ();
+					
+					    if (Program.Controller.NotificationsEnabled)
+	                    	(notify_item.Child as Label).Text = _("Turn Notifications Off");
+	                	else
+	                    	(notify_item.Child as Label).Text = _("Turn Notifications On");
+					});
                 };
 
             this.menu.Add (notify_item);
