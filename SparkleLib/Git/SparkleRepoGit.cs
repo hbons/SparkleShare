@@ -736,8 +736,12 @@ namespace SparkleLib.Git {
                     !path.Equals (LocalPath)) {
 
                     if (!File.Exists (Path.Combine (path, ".empty"))) {
-                        File.WriteAllText (Path.Combine (path, ".empty"), "I'm a folder!");
-                        File.SetAttributes (Path.Combine (path, ".empty"), FileAttributes.Hidden);
+                        try {
+                            File.WriteAllText (Path.Combine (path, ".empty"), "I'm a folder!");
+                            File.SetAttributes (Path.Combine (path, ".empty"), FileAttributes.Hidden);
+                        } catch {
+                            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Failed adding empty folder " + path);
+                        }
                     }
                 }
 
