@@ -106,13 +106,13 @@ namespace SparkleShare {
                         
                         VBox wrapper = new VBox (false, 9);
                         wrapper.PackStart (table, true, false, 0);
-						
-							Button cancel_button = new Button (_("Cancel"));
+                        
+                            Button cancel_button = new Button (_("Cancel"));
 
                             cancel_button.Clicked += delegate {
                                 Controller.SetupPageCancelled ();
                             };
-						
+                        
                             Button continue_button = new Button (_("Continue")) {
                                 Sensitive = false
                             };
@@ -123,7 +123,7 @@ namespace SparkleShare {
 
                                 Controller.SetupPageCompleted (full_name, email);
                             };
-						
+                        
                         AddButton (cancel_button);
                         AddButton (continue_button);
                         Add (wrapper);
@@ -180,15 +180,15 @@ namespace SparkleShare {
                         tree.AppendColumn (service_column);
 
                         Entry address_entry = new Entry () {
-							Text = Controller.PreviousAddress,
-							Sensitive = (Controller.SelectedPlugin.Address == null)
-						};
-						
+                            Text = Controller.PreviousAddress,
+                            Sensitive = (Controller.SelectedPlugin.Address == null)
+                        };
+                        
                         Entry path_entry = new Entry () {
-			         	    Text = Controller.PreviousPath,
-							Sensitive = (Controller.SelectedPlugin.Path == null)
-						};
-						
+                             Text = Controller.PreviousPath,
+                            Sensitive = (Controller.SelectedPlugin.Path == null)
+                        };
+                        
                         Label address_example = new Label () {
                             Xalign = 0,
                             UseMarkup = true,
@@ -327,7 +327,7 @@ namespace SparkleShare {
                                 add_button.Sensitive = button_enabled;                            
                             });
                         };
-						
+                        
 
                         CheckButton check_button = new CheckButton ("Fetch prior history") {
                             Active = false
@@ -444,10 +444,10 @@ namespace SparkleShare {
                     
                         Header = _("Something went wrong") + "…";
 
-						VBox points = new VBox (false, 0);
-						Image list_point_one   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
-						Image list_point_two   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
-						Image list_point_three = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
+                        VBox points = new VBox (false, 0);
+                        Image list_point_one   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
+                        Image list_point_two   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
+                        Image list_point_three = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
 
                         Label label_one = new Label () {
                             Text   = "Is the host online?",
@@ -469,32 +469,32 @@ namespace SparkleShare {
                             Xalign = 0
                         };
 
-						
+                        
                         points.PackStart (new Label ("Please check the following:") { Xalign = 0 }, false, false, 6);
 
                         HBox point_one = new HBox (false, 0);
-						point_one.PackStart (list_point_one, false, false, 0);
-						point_one.PackStart (label_one, true, true, 12);
-						points.PackStart (point_one, false, false, 12);
-						
-						HBox point_two = new HBox (false, 0);
-						point_two.PackStart (list_point_two, false, false, 0);
-						point_two.PackStart (label_two, true, true, 12);
-						points.PackStart (point_two, false, false, 12);
+                        point_one.PackStart (list_point_one, false, false, 0);
+                        point_one.PackStart (label_one, true, true, 12);
+                        points.PackStart (point_one, false, false, 12);
+                        
+                        HBox point_two = new HBox (false, 0);
+                        point_two.PackStart (list_point_two, false, false, 0);
+                        point_two.PackStart (label_two, true, true, 12);
+                        points.PackStart (point_two, false, false, 12);
                           
                         HBox point_three = new HBox (false, 0);
-						point_three.PackStart (list_point_three, false, false, 0);
-						point_three.PackStart (label_three, true, true, 12);
-						points.PackStart (point_three, false, false, 12);
+                        point_three.PackStart (list_point_three, false, false, 0);
+                        point_three.PackStart (label_three, true, true, 12);
+                        points.PackStart (point_three, false, false, 12);
 
                         points.PackStart (new Label (""), true, true, 0);
 
-						Button cancel_button = new Button (_("Cancel"));
+                        Button cancel_button = new Button (_("Cancel"));
 
                             cancel_button.Clicked += delegate {
                                 Controller.PageCancelled ();
                             };
-						
+                        
                         Button try_again_button = new Button (_("Try Again…")) {
                             Sensitive = true
                         };
@@ -502,42 +502,42 @@ namespace SparkleShare {
                         try_again_button.Clicked += delegate {
                             Controller.ErrorPageCompleted ();
                         };
-						
-						AddButton (cancel_button);
+                        
+                        AddButton (cancel_button);
                         AddButton (try_again_button);
                         Add (points);
 
                         break;
                     }
-	
-					case PageType.CryptoSetup: {
+    
+                    case PageType.CryptoSetup: {
 
                         Header       = "Set up file encryption";
                         Description  = "This project is supposed to be encrypted, but it doesn't yet have a password set. Please provide one below.";
-						
-						Label password_label = new Label ("<b>" + _("Password:") + "</b>") {
+                        
+                        Label password_label = new Label ("<b>" + _("Password:") + "</b>") {
                             UseMarkup = true,
                             Xalign    = 1
                         };
 
                         Entry password_entry = new Entry () {
                             Xalign = 0,
-							Visibility = false
+                            Visibility = false
                         };
-						
-						CheckButton show_password_check_button = new CheckButton ("Show password") {
+                        
+                        CheckButton show_password_check_button = new CheckButton ("Show password") {
                             Active = false,
-							Xalign = 0
+                            Xalign = 0
                         };
-						
+                        
                         show_password_check_button.Toggled += delegate {
                             password_entry.Visibility = !password_entry.Visibility;
                         };
 
                         password_entry.Changed += delegate {
-							Controller.CheckCryptoSetupPage (password_entry.Text);
-						};
-						 
+                            Controller.CheckCryptoSetupPage (password_entry.Text);
+                        };
+                         
 
                         Button continue_button = new Button ("Continue") {
                             Sensitive = false
@@ -558,8 +558,8 @@ namespace SparkleShare {
                                 continue_button.Sensitive = button_enabled;
                             });
                         };
-						
-						
+                        
+                        
                         Table table = new Table (2, 3, true) {
                             RowSpacing    = 6,
                             ColumnSpacing = 6
@@ -574,15 +574,15 @@ namespace SparkleShare {
                         VBox wrapper = new VBox (false, 9);
                         wrapper.PackStart (table, true, false, 0);
 
-						
-	                    Image warning_image = new Image (
+                        
+                        Image warning_image = new Image (
                             SparkleUIHelpers.GetIcon ("dialog-information", 24)
                         );
 
                         Label warning_label = new Label () {
                             Xalign = 0,
                             Wrap   = true,
-							Text   = "This password can't be changed later, and your files can't be recovered if it's forgotten."
+                            Text   = "This password can't be changed later, and your files can't be recovered if it's forgotten."
                         };
 
                         HBox warning_layout = new HBox (false, 0);
@@ -593,46 +593,46 @@ namespace SparkleShare {
                         warning_wrapper.PackStart (warning_layout, false, false, 15);
 
                         wrapper.PackStart (warning_wrapper, false, false, 0);
-					
-						
-						Add (wrapper);
+                    
+                        
+                        Add (wrapper);
 
 
 
                         AddButton (cancel_button);
-						AddButton (continue_button);
+                        AddButton (continue_button);
 
                         break;
                     }
 
-					case PageType.CryptoPassword: {
+                    case PageType.CryptoPassword: {
 
                         Header       = "This project contains encrypted files";
                         Description  = "Please enter the password to see their contents.";
-						
-						Label password_label = new Label ("<b>" + _("Password:") + "</b>") {
+                        
+                        Label password_label = new Label ("<b>" + _("Password:") + "</b>") {
                             UseMarkup = true,
                             Xalign    = 1
                         };
 
                         Entry password_entry = new Entry () {
                             Xalign = 0,
-							Visibility = false
+                            Visibility = false
                         };
-						
-						CheckButton show_password_check_button = new CheckButton ("Show password") {
+                        
+                        CheckButton show_password_check_button = new CheckButton ("Show password") {
                             Active = false,
-							Xalign = 0
+                            Xalign = 0
                         };
-						
+                        
                         show_password_check_button.Toggled += delegate {
                             password_entry.Visibility = !password_entry.Visibility;
                         };
 
                         password_entry.Changed += delegate {
-							Controller.CheckCryptoPasswordPage (password_entry.Text);
-						};
-						 
+                            Controller.CheckCryptoPasswordPage (password_entry.Text);
+                        };
+                         
 
                         Button continue_button = new Button ("Continue") {
                             Sensitive = false
@@ -653,7 +653,7 @@ namespace SparkleShare {
                                 continue_button.Sensitive = button_enabled;
                             });
                         };
-						
+                        
                         Table table = new Table (2, 3, true) {
                             RowSpacing    = 6,
                             ColumnSpacing = 6
@@ -667,14 +667,14 @@ namespace SparkleShare {
                         VBox wrapper = new VBox (false, 9);
                         wrapper.PackStart (table, true, false, 0);
 
-						Add (wrapper);
+                        Add (wrapper);
 
                         AddButton (cancel_button);
-						AddButton (continue_button);
+                        AddButton (continue_button);
 
                         break;
                     }
-						
+                        
                     case PageType.Finished: {
 
                         UrgencyHint = true;
