@@ -37,13 +37,13 @@ namespace SparkleLib {
     public abstract class SparkleRepoBase {
         
         private string identifier;
-        private TimeSpan short_interval = new TimeSpan (0, 0, 3, 0);
-        private TimeSpan long_interval  = new TimeSpan (0, 0, 10, 0);
+        private TimeSpan short_interval = new TimeSpan (0, 0, 5, 0);
+        private TimeSpan long_interval  = new TimeSpan (0, 0, 15, 0);
         private TimeSpan poll_interval;
         private SparkleWatcher watcher;
         private SparkleListenerBase listener;
         private System.Timers.Timer local_timer  = new System.Timers.Timer () { Interval = 0.25 * 1000 };
-        private System.Timers.Timer remote_timer = new System.Timers.Timer () { Interval = 10 * 1000 };
+        private System.Timers.Timer remote_timer = new System.Timers.Timer () { Interval = 5 * 1000 };
         private DateTime last_poll               = DateTime.Now;
         private List<double> size_buffer         = new List<double> ();
         private Object change_lock               = new Object ();
@@ -583,7 +583,7 @@ namespace SparkleLib {
                 return 0;
 
             try {
-                foreach (FileInfo file in parent.GetFiles()) {
+                foreach (FileInfo file in parent.GetFiles ()) {
                     if (!file.Exists)
                         return 0;
 
