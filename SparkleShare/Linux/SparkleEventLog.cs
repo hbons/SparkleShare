@@ -53,8 +53,10 @@ namespace SparkleShare {
         {
             SetSizeRequest (480, 640);
 
-            // TODO: right side of screen like on Mac
-            SetPosition (WindowPosition.Center);
+            int x = (int) (Gdk.Screen.Default.Width * 0.61);
+            int y = (int) (Gdk.Screen.Default.Height * 0.5 - (HeightRequest * 0.5));
+			
+            Move (x, y);
 
             Resizable   = true;
             BorderWidth = 0;
