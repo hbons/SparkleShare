@@ -140,7 +140,7 @@ namespace SparkleShare {
             };
 
             VBox layout_vertical = new VBox (false, 0);
-            layout_vertical.PackStart (new Label (""), false, false, 0);
+            layout_vertical.PackStart (new Label (""), false, false, 6);
             layout_vertical.PackStart (header, false, false, 0);
 
             if (!string.IsNullOrEmpty (Description)) {
