@@ -10,7 +10,6 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>SparkleShare</RootNamespace>
     <AssemblyName>SparkleShare</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ReleaseVersion>0.8.4</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -37,34 +36,18 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="System.Xml">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="System.Core">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="System.Xml.Linq">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="System.Drawing">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="MonoMac">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Mono.Posix">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="MonoMac" />
+    <Reference Include="Mono.Posix" />
     <Reference Include="System.Net" />
-    <Reference Include="SparkleLib, Version=0.8.3.0, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="SparkleLib">
       <HintPath>..\..\bin\SparkleLib.dll</HintPath>
     </Reference>
-    <Reference Include="SparkleLib.Git, Version=0.8.3.0, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="SparkleLib.Git">
       <HintPath>..\..\bin\SparkleLib.Git.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -359,6 +342,12 @@
     </Content>
     <Content Include="..\..\data\avatar-k.png">
       <Link>Pixmaps\avatar-k.png</Link>
+    </Content>
+    <Content Include="..\..\data\plugins\ssnet.png">
+      <Link>Plugins\ssnet.png</Link>
+    </Content>
+    <Content Include="..\..\data\plugins\ssnet.xml">
+      <Link>Plugins\ssnet.xml</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>

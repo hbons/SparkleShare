@@ -206,9 +206,12 @@ namespace SparkleShare {
 
                 if (page_type == PageType.Add) {
                     if (WindowIsOpen) {
-                        if (this.current_page == PageType.Error) {
+                        if (this.current_page == PageType.Error ||
+                            this.current_page == PageType.Finished ||
+                            this.current_page == PageType.None) {
+                            
                             if (ChangePageEvent != null)
-                                ChangePageEvent (page_type, null);
+                                ChangePageEvent (PageType.Add, null);
                         }
 
                         if (ShowWindowEvent != null)
@@ -216,7 +219,7 @@ namespace SparkleShare {
 
                     } else if (!Program.Controller.FirstRun && TutorialPageNumber == 0) {
                         if (ChangePageEvent != null)
-                            ChangePageEvent (page_type, null);
+                            ChangePageEvent (PageType.Add, null);
 
                         WindowIsOpen = true;
 

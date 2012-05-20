@@ -107,11 +107,12 @@ namespace SparkleLib {
                         try {
                             // This blocks the thread
                             int i = 0;
+                            int timeout = 300;
                             while (this.socket.Available < 1) {
                                 try {
                                     // We've timed out, let's ping the server to
                                     // see if the connection is still up
-                                    if (i == 300) {
+                                    if (i == timeout) {
                                         SparkleHelpers.DebugInfo ("ListenerTcp",
                                             "Pinging " + Server);
 
@@ -137,7 +138,7 @@ namespace SparkleLib {
                                         // system likely woke up from sleep and we want to
                                         // simulate a disconnect
                                         int sleepiness = DateTime.Compare (
-                                            this.last_ping.AddMilliseconds (180 * 1000 * 1.2),
+                                            this.last_ping.AddMilliseconds (timeout * 1000 * 1.2),
                                             DateTime.Now
                                         );
 
