@@ -146,9 +146,10 @@ namespace SparkleShare {
             if (!string.IsNullOrEmpty (Description)) {
                 Label description = new Label (Description) {
                     Xalign = 0,
-                    Wrap   = true
+                    LineWrap = true,
+					LineWrapMode = Pango.WrapMode.WordChar
                 };
-
+				
                 layout_vertical.PackStart (description, false, false, 21);
             }
 
