@@ -111,7 +111,7 @@ namespace SparkleLib {
                                 try {
                                     // We've timed out, let's ping the server to
                                     // see if the connection is still up
-                                    if (i == 180) {
+                                    if (i == 300) {
                                         SparkleHelpers.DebugInfo ("ListenerTcp",
                                             "Pinging " + Server);
 
@@ -125,8 +125,7 @@ namespace SparkleLib {
                                             // 10057 means "Socket is not connected"
                                             throw new SocketException (10057);
 
-                                        SparkleHelpers.DebugInfo ("ListenerTcp",
-                                            "Received pong from " + Server);
+                                        SparkleHelpers.DebugInfo ("ListenerTcp", "Received pong from " + Server);
 
                                         i = 0;
                                         this.last_ping = DateTime.Now;
@@ -143,8 +142,7 @@ namespace SparkleLib {
                                         );
 
                                         if (sleepiness <= 0) {
-                                            SparkleHelpers.DebugInfo ("ListenerTcp",
-                                                "System woke up from sleep");
+                                            SparkleHelpers.DebugInfo ("ListenerTcp", "System woke up from sleep");
 
                                             // 10057 means "Socket is not connected"
                                             throw new SocketException (10057);
@@ -152,7 +150,7 @@ namespace SparkleLib {
                                     }
 
                                 // The ping failed: disconnect completely
-                                } catch (SocketException) {
+                                } catch (SocketException e) {
                                     this.is_connected  = false;
                                     this.is_connecting = false;
 
@@ -161,7 +159,7 @@ namespace SparkleLib {
                                         this.socket = null;
                                     }
 
-                                    OnDisconnected ("Ping timeout");
+                                    OnDisconnected ("Ping timeout: " + e.Message);
                                     return;
                                 }
 
@@ -169,7 +167,7 @@ namespace SparkleLib {
                                 i++;
                             }
 
-                        } catch (ObjectDisposedException) {
+                        } catch (Exception) {
                             return;
                         }
 
