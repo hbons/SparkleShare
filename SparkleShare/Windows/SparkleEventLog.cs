@@ -207,7 +207,7 @@ namespace SparkleShare {
             };
             
                 ComboBoxItem item = new ComboBoxItem () {
-                    Content = "All Projects"
+                    Content = "Summary"
                 };
             
             this.combo_box.Items.Add (item);
