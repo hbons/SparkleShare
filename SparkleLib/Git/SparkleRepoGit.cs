@@ -555,6 +555,8 @@ namespace SparkleLib.Git {
             if (count < 1)
                 count = 30;
 
+            count = 150;
+
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
 
             SparkleGit git_log = new SparkleGit (LocalPath,
@@ -690,12 +692,10 @@ namespace SparkleLib.Git {
                                 to_file_path = entry_line.Substring (tab_pos + 1);
 
                                 if (file_path.EndsWith (".empty"))
-                                    file_path = file_path.Substring (0,
-                                        file_path.Length - ".empty".Length);
+                                    file_path = file_path.Substring (0, file_path.Length - 6);
 
                                 if (to_file_path.EndsWith (".empty"))
-                                    to_file_path = to_file_path.Substring (0,
-                                        to_file_path.Length - ".empty".Length);
+                                    to_file_path = to_file_path.Substring (0, to_file_path.Length - 6);
 
                                 change_set.Changes.Add (
                                     new SparkleChange () {
@@ -709,14 +709,14 @@ namespace SparkleLib.Git {
                         }
                     }
 
-
                     if (change_set.Changes.Count > 0) {
                         if (change_sets.Count > 0) {
                             SparkleChangeSet last_change_set = change_sets [change_sets.Count - 1];
 
                             if (change_set.Timestamp.Year  == last_change_set.Timestamp.Year &&
                                 change_set.Timestamp.Month == last_change_set.Timestamp.Month &&
-                                change_set.Timestamp.Day   == last_change_set.Timestamp.Day) {
+                                change_set.Timestamp.Day   == last_change_set.Timestamp.Day &&
+                                change_set.User.Name.Equals (last_change_set.User.Name)) {
 
                                 last_change_set.Changes.AddRange (change_set.Changes);
 
