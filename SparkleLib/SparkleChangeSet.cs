@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SparkleLib {
 
@@ -32,11 +33,7 @@ namespace SparkleLib {
         public bool IsMagical = false;
         public Uri RemoteUrl;
 
-        public List<string> Added     = new List<string> ();
-        public List<string> Deleted   = new List<string> ();
-        public List<string> Edited    = new List<string> ();
-        public List<string> MovedFrom = new List<string> ();
-        public List<string> MovedTo   = new List<string> ();
+        public List<SparkleChange> Changes = new List<SparkleChange> ();
 		
 
         public string RelativeTimestamp {
@@ -71,6 +68,23 @@ namespace SparkleLib {
                     : "a year ago";
             }   
         }
+    }
+
+
+    public class SparkleChange {
+
+        public SparkleChangeType Type;
+        public string Path;
+        public string MovedPath;
+        public DateTime Timestamp;
+    }
+
+
+    public enum SparkleChangeType {
+        Added,
+        Edited,
+        Deleted,
+        Moved
     }
 
 

@@ -54,40 +54,26 @@ namespace SparkleShare {
 
         private string FormatMessage (SparkleChangeSet change_set)
         {
-            string file_name = "";
-            string message   = "";
+            string message = "";
 
-            if (change_set.Added.Count > 0) {
-                file_name = change_set.Added [0];
-                message = String.Format ("added ‘{0}’", file_name);
-            }
+            if (change_set.Changes [0].Type == SparkleChangeType.Deleted)
+                message = string.Format ("moved ‘{0}’", change_set.Changes [0].Path);
 
-            if (change_set.MovedFrom.Count > 0) {
-                file_name = change_set.MovedFrom [0];
-                message = String.Format ("moved ‘{0}’", file_name);
-            }
+            if (change_set.Changes [0].Type == SparkleChangeType.Moved)
+                message = string.Format ("moved ‘{0}’", change_set.Changes [0].Path);
 
-            if (change_set.Edited.Count > 0) {
-                file_name = change_set.Edited [0];
-                message = String.Format ("edited ‘{0}’", file_name);
-            }
+            if (change_set.Changes [0].Type == SparkleChangeType.Added)
+                message = string.Format ("added ‘{0}’", change_set.Changes [0].Path);
 
-            if (change_set.Deleted.Count > 0) {
-                file_name = change_set.Deleted [0];
-                message = String.Format ("deleted ‘{0}’", file_name);
-            }
+            if (change_set.Changes [0].Type == SparkleChangeType.Edited)
+                message = string.Format ("moved ‘{0}’", change_set.Changes [0].Path);
 
-            int changes_count = (change_set.Added.Count +
-                                 change_set.Edited.Count +
-                                 change_set.Deleted.Count +
-                                 change_set.MovedFrom.Count) - 1;
+            if (change_set.Changes.Count > 0) {
+                string msg = string.Format ("and {0} more", change_set.Changes.Count);
+                message    = message + " " + string.Format (msg, change_set.Changes.Count);
 
-            if (changes_count > 0) {
-                string msg = string.Format ("and {0} more", changes_count);
-                message += " " + String.Format (msg, changes_count);
-
-            } else if (changes_count < 0) {
-                message += "did something magical";
+            } else {
+                message = "did something magical";
             }
 
             return message;

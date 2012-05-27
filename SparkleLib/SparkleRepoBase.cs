@@ -359,10 +359,14 @@ namespace SparkleLib {
 
                 if (!pre_sync_revision.Equals (CurrentRevision)) {
                    if (ChangeSets != null &&
-                       ChangeSets.Count > 0 &&
-                       !ChangeSets [0].Added.Contains (".sparkleshare")) {
+                       ChangeSets.Count > 0) {
+
+                        bool emit_change_event = true;
+                        foreach (SparkleChange change in ChangeSets [0].Changes)
+                            if (change.Path.EndsWith (".sparkleshare"))
+                                emit_change_event = false;
                         
-                        if (NewChangeSet != null)
+                        if (NewChangeSet != null && emit_change_event)
                             NewChangeSet (ChangeSets [0]);
                     }
                 }
