@@ -194,7 +194,7 @@ namespace SparkleShare {
 
             ListStore store = new ListStore (typeof (string));
 
-            store.AppendValues (_("All Projects"));
+            store.AppendValues (_("Summary"));
             store.AppendValues ("---");
 			
 			this.combo_box.Model  = store;
