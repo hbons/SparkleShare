@@ -557,11 +557,9 @@ namespace SparkleLib.Git {
 
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
 
-            // Console.InputEncoding  = System.Text.Encoding.Unicode;
-            // Console.OutputEncoding = System.Text.Encoding.Unicode;
-
             SparkleGit git_log = new SparkleGit (LocalPath,
-                "log -" + count + " --raw -M --date=iso --format=medium --no-color");
+                "log -" + count + " --raw -M --date=iso --format=medium --no-color --no-merges");
+
             git_log.Start ();
 
             // Reading the standard output HAS to go before
@@ -660,13 +658,31 @@ namespace SparkleLib.Git {
                                 continue;
 
                             if (change_type.Equals ("A")) {
-                                change_set.Added.Add (file_path);
+                                change_set.Changes.Add (
+                                    new SparkleChange () {
+                                        Path      = file_path,
+                                        Timestamp = change_set.Timestamp,
+                                        Type      = SparkleChangeType.Added
+                                    }
+                                );
 
                             } else if (change_type.Equals ("M")) {
-                                change_set.Edited.Add (file_path);
+                                change_set.Changes.Add (
+                                    new SparkleChange () {
+                                        Path      = file_path,
+                                        Timestamp = change_set.Timestamp,
+                                        Type      = SparkleChangeType.Edited
+                                    }
+                                );
 
                             } else if (change_type.Equals ("D")) {
-                                change_set.Deleted.Add (file_path);
+                                change_set.Changes.Add (
+                                    new SparkleChange () {
+                                        Path      = file_path,
+                                        Timestamp = change_set.Timestamp,
+                                        Type      = SparkleChangeType.Deleted
+                                    }
+                                );
 
                             } else if (change_type.Equals ("R")) {
                                 int tab_pos  = entry_line.LastIndexOf ("\t");
@@ -681,19 +697,45 @@ namespace SparkleLib.Git {
                                     to_file_path = to_file_path.Substring (0,
                                         to_file_path.Length - ".empty".Length);
 
-                                change_set.MovedFrom.Add (file_path);
-                                change_set.MovedTo.Add (to_file_path);
+                                change_set.Changes.Add (
+                                    new SparkleChange () {
+                                        Path      = file_path,
+                                        MovedPath = to_file_path,
+                                        Timestamp = change_set.Timestamp,
+                                        Type      = SparkleChangeType.Moved
+                                    }
+                                );
                             }
                         }
                     }
 
 
-                    if ((change_set.Added.Count +
-                         change_set.Edited.Count +
-                         change_set.Deleted.Count +
-                         change_set.MovedFrom.Count) > 0) {
+                    if (change_set.Changes.Count > 0) {
+                        if (change_sets.Count > 0) {
+                            SparkleChangeSet last_change_set = change_sets [change_sets.Count - 1];
 
-                        change_sets.Add (change_set);
+                            if (change_set.Timestamp.Year  == last_change_set.Timestamp.Year &&
+                                change_set.Timestamp.Month == last_change_set.Timestamp.Month &&
+                                change_set.Timestamp.Day   == last_change_set.Timestamp.Day) {
+
+                                last_change_set.Changes.AddRange (change_set.Changes);
+
+                                if (DateTime.Compare (last_change_set.Timestamp, change_set.Timestamp) < 1) {
+                                    last_change_set.FirstTimestamp = last_change_set.Timestamp;
+                                    last_change_set.Timestamp      = change_set.Timestamp;
+                                    last_change_set.Revision       = change_set.Revision;
+
+                                } else {
+                                    last_change_set.FirstTimestamp = change_set.Timestamp;
+                                }
+
+                            } else {
+                                change_sets.Add (change_set);
+                            }
+
+                        } else {
+                            change_sets.Add (change_set);
+                        }
                     }
                 }
             }

@@ -368,37 +368,7 @@ namespace SparkleShare {
                         stored_activity_day.Date.Month == change_set.Timestamp.Month &&
                         stored_activity_day.Date.Day   == change_set.Timestamp.Day) {
 
-                        bool squash = false;
-                        foreach (SparkleChangeSet existing_set in stored_activity_day) {
-                            if (change_set.User.Name.Equals (existing_set.User.Name) &&
-                                change_set.User.Email.Equals (existing_set.User.Email) &&
-                                change_set.Folder.FullPath.Equals (existing_set.Folder.FullPath)) {
-
-                                existing_set.Added.AddRange (change_set.Added);
-                                existing_set.Edited.AddRange (change_set.Edited);
-                                existing_set.Deleted.AddRange (change_set.Deleted);
-                                existing_set.MovedFrom.AddRange (change_set.MovedFrom);
-                                existing_set.MovedTo.AddRange (change_set.MovedTo);
-                                
-                                existing_set.Added   = existing_set.Added.Distinct ().ToList ();
-                                existing_set.Edited  = existing_set.Edited.Distinct ().ToList ();
-                                existing_set.Deleted = existing_set.Deleted.Distinct ().ToList ();
-
-                                if (DateTime.Compare (existing_set.Timestamp, change_set.Timestamp) < 1) {
-                                    existing_set.FirstTimestamp = existing_set.Timestamp;
-                                    existing_set.Timestamp      = change_set.Timestamp;
-                                    existing_set.Revision       = change_set.Revision;
-
-                                } else {
-                                    existing_set.FirstTimestamp = change_set.Timestamp;
-                                }
-
-                                squash = true;
-                            }
-                        }
-
-                        if (!squash)
-                            stored_activity_day.Add (change_set);
+                        stored_activity_day.Add (change_set);
 
                         change_set_inserted = true;
                         break;
@@ -434,41 +404,21 @@ namespace SparkleShare {
                         event_entry += "<dd>Did something magical</dd>";
 
                     } else {
-                        if (change_set.Added.Count > 0) {
-                            foreach (string file_path in change_set.Added) {
-                                event_entry += "<dd class='document added'>";
-                                event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, file_path);
-                                event_entry += "</dd>";
-                            }
-                        }
-						
-                        if (change_set.Edited.Count > 0) {
-                            foreach (string file_path in change_set.Edited) {
-                                event_entry += "<dd class='document edited'>";
-                                event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, file_path);
-                                event_entry += "</dd>";
-                            }
-                        }
-    
-                        if (change_set.Deleted.Count > 0) {
-                            foreach (string file_path in change_set.Deleted) {
-                                event_entry += "<dd class='document deleted'>";
-                                event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, file_path);
-                                event_entry += "</dd>";
-                            }
-                        }
+                        foreach (SparkleChange change in change_set.Changes) {
+                            if (change.Type != SparkleChangeType.Moved) {
 
-                        if (change_set.MovedFrom.Count > 0) {
-                            int i = 0;
-                            foreach (string file_path in change_set.MovedFrom) {
-                                string to_file_path = change_set.MovedTo [i];
-								event_entry += "<dd class='document moved'>";
-                                event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, file_path);
+                                event_entry += "<dd class='document " + change.Type.ToString ().ToLower () + "'>";
+                                event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
+                                event_entry += "</dd>";
+
+                            } else {
+
+                        		event_entry += "<dd class='document moved'>";
+                                event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
                                 event_entry += "<br>";
-                                event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, to_file_path);
+                                event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.MovedPath);
                                 event_entry += "</dd>";
 
-                                i++;
                             }
                         }
                     }
