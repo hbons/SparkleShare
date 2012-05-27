@@ -420,10 +420,12 @@ namespace SparkleLib {
             if (this.listener.IsConnected) {
                 this.poll_interval = this.long_interval;
 
-                new Thread (new ThreadStart (delegate {
-                    if (!IsSyncing && HasRemoteChanges)
-                        SyncDownBase ();
-                })).Start ();
+                new Thread (
+                    new ThreadStart (delegate {
+                        if (!IsSyncing && HasRemoteChanges)
+                            SyncDownBase ();
+                    })
+                ).Start ();
             }
 
             // Stop polling when the connection to the irc channel is succesful
