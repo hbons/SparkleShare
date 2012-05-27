@@ -252,7 +252,7 @@ namespace SparkleShare {
                 this.popup_button.Font = NSFontManager.SharedFontManager.FontWithFamily
                     ("Lucida Grande", NSFontTraitMask.Condensed, 0, NSFont.SmallSystemFontSize);
     
-                this.popup_button.AddItem ("All Projects");
+                this.popup_button.AddItem ("Summary");
                 this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
 				
 				int row = 2;
