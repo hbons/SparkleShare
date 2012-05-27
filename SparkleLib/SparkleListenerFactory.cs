@@ -49,7 +49,7 @@ namespace SparkleLib {
                 // Please see the SparkleShare wiki if you wish to run
                 // your own service instead
 
-                uri = "tcp://notifications.sparkleshare.org:1986";
+                uri = "tcp://notifications.sparkleshare.org:80";
             }
 
             Uri announce_uri = new Uri (uri);

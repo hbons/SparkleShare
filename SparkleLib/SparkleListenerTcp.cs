@@ -64,7 +64,7 @@ namespace SparkleLib {
                     int port = Server.Port;
 
                     if (port < 0)
-                        port = 1986;
+                        port = 80;
 
                     try {
                         lock (this.socket_lock) {

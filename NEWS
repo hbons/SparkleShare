@@ -8,6 +8,7 @@
 	- Make fetching remote project's history optional
 	- Cached logs for faster event log loading/switching
 	- Sort event log file entries by time
+	- Change default notification service to use port 80
 
 	Travis:
 	- Rewrote the notification service, now more robust and reliable
