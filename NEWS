@@ -7,6 +7,10 @@
 	- Don't touch the user's ~/.ssh/config to configure SSH
 	- Make fetching remote project's history optional
 	- Cached logs for faster event log loading/switching
+	- Sort event log file entries by time
+
+	Travis:
+	- Rewrote the notification service, now more robust and reliable
 
 
 0.8.4 for Linux, Mac and Windows (Sun Mar 18 2012)
