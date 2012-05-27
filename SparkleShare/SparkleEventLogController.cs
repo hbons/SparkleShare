@@ -211,8 +211,7 @@ namespace SparkleShare {
         
             if (url.StartsWith (Path.VolumeSeparatorChar.ToString ()) ||
 			    url.Substring (1, 1).Equals (":")) {
-				
-				Console.WriteLine ("opening " + url);
+
                 Program.Controller.OpenFile (url);
             }
         }
