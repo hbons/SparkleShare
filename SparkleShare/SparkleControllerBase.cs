@@ -382,13 +382,6 @@ namespace SparkleShare {
                 }
             }
 
-            new Thread (
-                new ThreadStart (delegate {
-                    FetchAvatars (emails, 48);
-                    FetchAvatars (emails, 36);
-                })
-            ).Start ();
-
             string event_log_html   = EventLogHTML;
             string day_entry_html   = DayEntryHTML;
             string event_entry_html = EventEntryHTML;
@@ -433,7 +426,7 @@ namespace SparkleShare {
 							AssignAvatar (change_set.User.Email);
 					}
 					
-                    event_entry   += "</dl>";
+                    event_entry += "</dl>";
 
                     string timestamp = change_set.Timestamp.ToString ("H:mm");
 
@@ -495,6 +488,12 @@ namespace SparkleShare {
                 .Replace ("<!-- $username -->", CurrentUser.Name)
                 .Replace ("<!-- $user-avatar-url -->", "file://" + GetAvatar (CurrentUser.Email, 48))
                 .Replace ("<!-- $midnight -->", midnight.ToString ());
+
+            new Thread (
+                new ThreadStart (delegate {
+                    FetchAvatars (emails, 48);
+                })
+            ).Start ();
 
             return html;
         }
@@ -854,7 +853,7 @@ namespace SparkleShare {
                     // Fetch the avatar
                     byte [] buffer = client.DownloadData (url);
 
-                    // Write the avatar data to a
+                    // Write the avatar data to a file
                     // if not empty
                     if (buffer.Length > 255) {
                         avatar_fetched = true;
@@ -862,11 +861,12 @@ namespace SparkleShare {
                         lock (this.avatar_lock)
                             File.WriteAllBytes (avatar_file_path, buffer);
 
-                        SparkleHelpers.DebugInfo ("Avatar", "Fetched gravatar for " + email);
+                        SparkleHelpers.DebugInfo ("Avatar", "Fetched " + size + "x" + size + " gravatar for " + email);
                     }
 
                   } catch (WebException e) {
-                        SparkleHelpers.DebugInfo ("Avatar", "Failed fetching gravatar for " + email);
+                        SparkleHelpers.DebugInfo ("Avatar",
+                            "Failed fetching " + size + "x" + size + " gravatar for " + email);
 
                         // Stop downloading further avatars if we have no internet access
                         if (e.Status == WebExceptionStatus.Timeout)
@@ -893,17 +893,10 @@ namespace SparkleShare {
                 Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath), "icons",
                 size + "x" + size, "status", "avatar-" + email);
 
-            if (File.Exists (avatar_file_path)) {
+            if (File.Exists (avatar_file_path))
                 return avatar_file_path;
-
-            } else {
-                FetchAvatars (email, size);
-
-                if (File.Exists (avatar_file_path))
-                    return avatar_file_path;
-                else
-                    return null;
-            }
+            else
+                return null;
         }
 
 

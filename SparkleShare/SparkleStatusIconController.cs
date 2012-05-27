@@ -19,6 +19,8 @@ using System;
 using System.IO;
 using System.Timers;
 
+using Threading = System.Threading;
+
 using SparkleLib;
 
 namespace SparkleShare {
@@ -249,7 +251,11 @@ namespace SparkleShare {
 
         public void OpenRecentEventsClicked ()
         {
-            Program.Controller.ShowEventLogWindow ();
+            new Threading.Thread (
+                new Threading.ThreadStart (delegate {
+                    Program.Controller.ShowEventLogWindow ();
+                })
+            ).Start ();
         }
 
 
