@@ -401,6 +401,7 @@ namespace SparkleShare {
                             if (change.Type != SparkleChangeType.Moved) {
 
                                 event_entry += "<dd class='document " + change.Type.ToString ().ToLower () + "'>";
+                                event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") +"</small> &nbsp;";
                                 event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
                                 event_entry += "</dd>";
 
@@ -437,7 +438,6 @@ namespace SparkleShare {
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.User.Name)
                         .Replace ("<!-- $event-avatar-url -->", change_set_avatar)
-                        .Replace ("<!-- $event-time -->", timestamp)
                         .Replace ("<!-- $event-folder -->", change_set.Folder.Name)
                         .Replace ("<!-- $event-url -->", change_set.RemoteUrl.ToString ())
                         .Replace ("<!-- $event-revision -->", change_set.Revision);
