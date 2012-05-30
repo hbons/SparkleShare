@@ -6,7 +6,7 @@
 #  SparkleShare clients.
 #
 #  For information on running your own notification service:
-#  https://github.com/hbons/fanout.node.js
+#  https://github.com/travisghansen/fanout
 #
 #
 #  For use with Gitolite:
@@ -26,7 +26,7 @@
 
 #  Change these if you run your own service somewhere
 SERVER="notifications.sparkleshare.org"
-PORT="1986"
+PORT="80"
 
 #  Don't edit below this line
 exec > /dev/null 2>&1
