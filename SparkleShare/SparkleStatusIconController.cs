@@ -173,6 +173,9 @@ namespace SparkleShare {
 
                 if (UpdateIconEvent != null)
                     UpdateIconEvent (0);
+
+                if (UpdateMenuEvent != null)
+                    UpdateMenuEvent (CurrentState);
             };
 
             Program.Controller.OnSyncing += delegate {
