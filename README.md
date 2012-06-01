@@ -77,7 +77,8 @@ $ sudo apt-get install libappindicator0.1-cil-dev gtk-sharp2 mono-runtime mono-d
 ```bash
 $ sudo yum install gtk-sharp2-devel mono-core mono-devel monodevelop \
   ndesk-dbus-devel ndesk-dbus-glib-devel nautilus-python-devel nant \
-  notify-sharp-devel webkit-sharp-devel webkitgtk-devel libtool intltool
+  notify-sharp-devel webkit-sharp-devel webkitgtk-devel libtool intltool \
+  desktop-file-utils
 ```
 
 ### Debian:
@@ -85,14 +86,15 @@ $ sudo yum install gtk-sharp2-devel mono-core mono-devel monodevelop \
 ```bash
 $ sudo apt-get install gtk-sharp2 mono-runtime mono-devel monodevelop \
   libndesk-dbus1.0-cil-dev nant libnotify-cil-dev libgtk2.0-cil-dev mono-mcs mono-gmcs \
-  libwebkit-cil-dev intltool libtool python-nautilus libndesk-dbus-glib1.0-cil-dev
+  libwebkit-cil-dev intltool libtool python-nautilus libndesk-dbus-glib1.0-cil-dev \
+  desktop-file-utils
 ```
 
 ### openSUSE:
 
 ```bash
 $ sudo zypper install gtk-sharp2 mono-core mono-devel monodevelop \
-  ndesk-dbus-glib-devel python-nautilus-devel nant \
+  ndesk-dbus-glib-devel python-nautilus-devel nant desktop-file-utils \
   notify-sharp-devel webkit-sharp libwebkitgtk-devel libtool intltool
 ```
 
