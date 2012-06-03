@@ -776,9 +776,14 @@ namespace SparkleShare {
             process.StartInfo.FileName               = "ssh-keygen";
             process.StartInfo.CreateNoWindow         = true;
 
+            string computer_name = System.Net.Dns.GetHostName ();
+
+            if (computer_name.EndsWith (".local"))
+                computer_name = computer_name.Replace (".local", "");
+
             process.StartInfo.Arguments = "-t rsa " + // crypto type
                 "-P \"\" " + // password (none)
-                "-C \"" + System.Net.Dns.GetHostName () + "\" " + // key comment
+                "-C \"" + computer_name + "\" " + // key comment
                 "-f " + key_file_name; // file name
 
             process.Start ();
