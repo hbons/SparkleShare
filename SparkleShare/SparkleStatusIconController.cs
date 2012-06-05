@@ -87,7 +87,7 @@ namespace SparkleShare {
                 double size = 0;
 
                 foreach (SparkleRepoBase repo in Program.Controller.Repositories)
-                    size += repo.Size + repo.HistorySize;
+                    size += repo.Size;
 
                 if (size == 0)
                     return "";
