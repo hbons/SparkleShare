@@ -796,7 +796,7 @@ namespace SparkleShare {
 
             // Create an easily accessible copy of the public
             // key in the user's SparkleShare folder
-            File.Copy (key_file_path + ".pub", Path.Combine (SparklePath, CurrentUser.Name + "'s key.txt"), true);
+            File.Copy (key_file_path + ".pub", Path.Combine (SparklePath, CurrentUser.Name + "'s link code.txt"), true);
         }
 
 
