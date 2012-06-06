@@ -318,6 +318,8 @@ namespace SparkleShare {
             if (TutorialPageNumber == 5) {
                 TutorialPageNumber = 0;
 
+                WindowIsOpen = false;
+
                 if (HideWindowEvent != null)
                     HideWindowEvent ();
 
