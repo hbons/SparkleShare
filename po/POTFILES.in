@@ -7,6 +7,7 @@ data/plugins/github.xml.in
 data/plugins/gitorious.xml.in
 data/plugins/gnome.xml.in
 data/plugins/own-server.xml.in
+data/plugins/ssnet.xml.in
 SparkleShare/Linux/Nautilus/sparkleshare-nautilus-extension.py.in
 SparkleShare/Linux/Nautilus/sparkleshare-nautilus3-extension.py.in
 SparkleShare/Linux/Nautilus/sparkleshare-nautilus-extension.py

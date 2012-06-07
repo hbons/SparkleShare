@@ -7,6 +7,8 @@ EXTRA_DIST = \
 	gnome-doc-utils.make \
 	LICENSE \
 	TRADEMARK \
+	README.md \
+	NEWS \
 	AUTHORS
 
 DISTCLEANFILES = \
