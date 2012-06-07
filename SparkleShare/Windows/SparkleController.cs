@@ -76,7 +76,7 @@ namespace SparkleShare {
             get {
                 string html = SparkleUIHelpers.GetHTML ("event-log.html");
                 html        = html.Replace ("<!-- $jquery -->", SparkleUIHelpers.GetHTML ("jquery.js"));
-				
+                
                 return html;
             }
         }
@@ -98,10 +98,10 @@ namespace SparkleShare {
 
         public override void CreateStartupItem ()
         {
-			string startup_folder_path = Environment.GetFolderPath (
-				Environment.SpecialFolder.Startup);
-			
-			string shortcut_path = Path.Combine (startup_folder_path, "SparkleShare.lnk");
+            string startup_folder_path = Environment.GetFolderPath (
+                Environment.SpecialFolder.Startup);
+            
+            string shortcut_path = Path.Combine (startup_folder_path, "SparkleShare.lnk");
 
             if (File.Exists (shortcut_path))
                 File.Delete (shortcut_path);
@@ -115,8 +115,8 @@ namespace SparkleShare {
 
         public override void InstallProtocolHandler ()
         {
-		    /* FIXME: Need to find a way to do this without administrator privileges (or move to the installer)
-		 
+            /* FIXME: Need to find a way to do this without administrator privileges (or move to the installer)
+         
             // Get assembly location
             string location   = System.Reflection.Assembly.GetExecutingAssembly ().Location;
             string folder     = Path.GetDirectoryName (location);
@@ -140,15 +140,15 @@ namespace SparkleShare {
 
         public override void AddToBookmarks ()
         {
-			string user_profile_path = Environment.GetFolderPath (
-				Environment.SpecialFolder.UserProfile);
-			
-			string shortcut_path   = Path.Combine (user_profile_path, "Links", "SparkleShare.lnk");
+            string user_profile_path = Environment.GetFolderPath (
+                Environment.SpecialFolder.UserProfile);
+            
+            string shortcut_path   = Path.Combine (user_profile_path, "Links", "SparkleShare.lnk");
 
             if (File.Exists (shortcut_path))
                 File.Delete (shortcut_path);
 
-			string shortcut_target = SparkleConfig.DefaultConfig.FoldersPath;
+            string shortcut_target = SparkleConfig.DefaultConfig.FoldersPath;
 
             Shortcut shortcut = new Shortcut ();
             shortcut.Create (shortcut_path, shortcut_target);
@@ -176,7 +176,7 @@ namespace SparkleShare {
 
         public override void OpenFile (string path)
         {
-			Process.Start (path);
+            Process.Start (path);
         }
 
 
