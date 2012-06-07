@@ -142,7 +142,7 @@ namespace SparkleLib.Git {
                 if (File.Exists (rebase_apply_file))
                     File.Delete (rebase_apply_file);
 
-                SparkleGit git = new SparkleGit (LocalPath, "log -1 --format=%H");
+                SparkleGit git = new SparkleGit (LocalPath, "rev-parse HEAD");
                 git.Start ();
                 git.WaitForExit ();
 
