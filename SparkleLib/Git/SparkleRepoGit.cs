@@ -135,7 +135,6 @@ namespace SparkleLib.Git {
 
         public override string CurrentRevision {
             get {
-
                 // Remove stale rebase-apply files because it
                 // makes the method return the wrong hashes.
                 string rebase_apply_file = SparkleHelpers.CombineMore (LocalPath, ".git", "rebase-apply");
@@ -160,6 +159,8 @@ namespace SparkleLib.Git {
         public override bool HasRemoteChanges {
             get {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Checking for remote changes...");
+
+                string current_revision = CurrentRevision;
                 SparkleGit git = new SparkleGit (LocalPath, "ls-remote \"" + RemoteUrl + "\" master");
     
                 git.Start ();
@@ -169,14 +170,19 @@ namespace SparkleLib.Git {
                     return false;
     
                 string remote_revision = git.StandardOutput.ReadToEnd ().TrimEnd ();
+                remote_revision = remote_revision.Substring (0, 40);
     
-                if (!remote_revision.StartsWith (CurrentRevision)) {
+                if (!remote_revision.StartsWith (current_revision)) {
                     SparkleHelpers.DebugInfo ("Git",
-                        "[" + Name + "] Remote changes found. (" + remote_revision + ")");
+                        "[" + Name + "] Remote changes detected (local: " +
+                        current_revision + ", remote: " + remote_revision + ")");
 
                     return true;
 
                 } else {
+                    SparkleHelpers.DebugInfo ("Git",
+                        "[" + Name + "] No remote changes detected (local+remote: " + current_revision + ")");
+
                     return false;
                 }
             }
@@ -427,12 +433,12 @@ namespace SparkleLib.Git {
             git.WaitForExit ();
 
             if (git.ExitCode != 0) {
-                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected. Trying to get out...");
+                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected, trying to get out...");
 
                 while (HasLocalChanges)
                     ResolveConflict ();
 
-                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved.");
+                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved");
                 OnConflictResolved ();
             }
 
