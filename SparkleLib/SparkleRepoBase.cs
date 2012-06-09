@@ -277,7 +277,7 @@ namespace SparkleLib {
                 }
 
                 SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + args.Name + "'");
-                SparkleHelpers.DebugInfo ("Event", "[" + Name + "] Changes found, checking if settled.");
+                SparkleHelpers.DebugInfo ("Event", "[" + Name + "] Activity detected, waiting for it to settle...");
 
                 this.remote_timer.Stop ();
 
@@ -491,7 +491,7 @@ namespace SparkleLib {
                         this.size_buffer [1].Equals (this.size_buffer [2]) &&
                         this.size_buffer [2].Equals (this.size_buffer [3])) {
 
-                        SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Changes have settled.");
+                        SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Activities have settled");
                         this.is_buffering = false;
                         this.has_changed  = false;
 

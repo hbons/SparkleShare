@@ -746,7 +746,7 @@ namespace SparkleShare {
             process.WaitForExit ();
 
             SparkleHelpers.DebugInfo ("Auth",
-                "The following keys will be used by SparkleShare: " + Environment.NewLine + keys_in_use);
+                "The following keys will be available to SparkleShare: " + Environment.NewLine + keys_in_use);
         }
 
 
