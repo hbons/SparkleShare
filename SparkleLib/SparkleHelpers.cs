@@ -17,12 +17,14 @@
 
 using System;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SparkleLib {
     
     public static class SparkleHelpers {
 
-        private static object debug_lock = new object ();
+        private static Object debug_lock = new Object ();
 
         // Show debug info if needed
         public static void DebugInfo (string type, string message)
@@ -101,6 +103,15 @@ namespace SparkleLib {
                         platform == PlatformID.Win32Windows);
             }
         }
+
+
+        public static string SHA1 (string s)
+        {
+            SHA1 sha1         = new SHA1CryptoServiceProvider ();
+            Byte [] bytes     = ASCIIEncoding.Default.GetBytes (s);
+            Byte [] enc_bytes = sha1.ComputeHash (bytes);
+
+            return BitConverter.ToString (enc_bytes).ToLower ().Replace ("-", "");
+        }
     }
 }
-

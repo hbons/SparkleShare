@@ -140,7 +140,8 @@ namespace SparkleLib {
 
                     IsActive = false;
 
-                    bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("crypto"); // TODO
+                    // TODO: Find better way to determine if folder should have crypto setup
+                    bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("crypto");
 
                     if (Finished != null)
                         Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);

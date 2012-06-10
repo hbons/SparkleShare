@@ -137,7 +137,7 @@ namespace SparkleShare {
                 LineWrap     = true,
                 LineWrapMode = Pango.WrapMode.Word,
                 Markup       = "<span font_size='small' fgcolor='white'>" +
-                               "SparkleShare is Free and Open Source Software. You are free to use, modify, " +
+                               "SparkleShare Open Source software. You are free to use, modify, " +
                                "and redistribute it under the GNU General Public License version 3 or later." +
                                "</span>",
                 WidthRequest = 330,
