@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -35,15 +34,10 @@ namespace SparkleLib {
     }
 
 
-    public static class PollInterval {
-        public static TimeSpan Short { get { return new TimeSpan (0, 0, 5, 0); }}
-        public static TimeSpan Long  { get { return new TimeSpan (0, 0, 15, 0); }}
-    }
 
 
     public abstract class SparkleRepoBase {
 
-        public abstract string ComputeIdentifier ();
         public abstract string CurrentRevision { get; }
         public abstract double Size { get; }
         public abstract double HistorySize { get; }
@@ -95,9 +89,14 @@ namespace SparkleLib {
                     return this.identifier;
 
                 } else {
-                    this.identifier = ComputeIdentifier ();
+                    Random random   = new Random ();
+                    string number   = "" + random.Next () + "" + random.Next () + "" + random.Next ();
+                    this.identifier = SparkleHelpers.SHA1 (number);
+
                     File.WriteAllText (id_path, this.identifier);
                     File.SetAttributes (id_path, FileAttributes.Hidden);
+
+                    SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Assigned identifier: " + this.identifier);
 
                     return this.identifier;
                 }
@@ -131,6 +130,11 @@ namespace SparkleLib {
             }
         }
 
+        private static class PollInterval {
+            public static TimeSpan Short { get { return new TimeSpan (0, 0, 5, 0); }}
+            public static TimeSpan Long  { get { return new TimeSpan (0, 0, 15, 0); }}
+        }
+
 
         public SparkleRepoBase (string path)
         {
@@ -162,7 +166,7 @@ namespace SparkleLib {
                 bool time_to_poll = (DateTime.Compare (this.last_poll,
                     DateTime.Now.Subtract (this.poll_interval)) < 0);
 
-                if (time_to_poll) {
+                if (time_to_poll && !is_syncing) {
                     this.last_poll = DateTime.Now;
 
                     if (HasRemoteChanges)
@@ -182,13 +186,10 @@ namespace SparkleLib {
             // Sync up everything that changed
             // since we've been offline
             if (HasLocalChanges) {
-                this.watcher.Disable ();
                 SyncUpBase ();
 
                 while (HasUnsyncedChanges)
                     SyncUpBase ();
-
-                this.watcher.Enable ();
             }
 
             this.remote_timer.Start ();
@@ -208,7 +209,7 @@ namespace SparkleLib {
                 "Any files you add or change in this folder will be automatically synced to " + n +
                 RemoteUrl + " and everyone connected to it." + n +
                 "" + n +
-                "SparkleShare is a Free and Open Source software program that helps people " + n +
+                "SparkleShare is an Open Source software program that helps people " + n +
                 "collaborate and share files. If you like what we do, please consider a small " + n +
                 "donation to support the project: http://sparkleshare.org/support-us/" + n +
                 "" + n +

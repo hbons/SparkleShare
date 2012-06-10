@@ -1006,7 +1006,6 @@ namespace SparkleShare {
         public void FinishFetcher ()
         {
             this.fetcher.Complete ();
-
             string canonical_name = Path.GetFileNameWithoutExtension (this.fetcher.RemoteUrl.AbsolutePath);
 
             bool target_folder_exists = Directory.Exists (
@@ -1039,18 +1038,18 @@ namespace SparkleShare {
                 string backend = SparkleFetcherBase.GetBackend (this.fetcher.RemoteUrl.AbsolutePath);
                 SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.RemoteUrl.ToString (), backend);
 
-           /*     if (!string.IsNullOrEmpty (announcements_url)) {
+                if (FolderFetched != null)
+                    FolderFetched (this.fetcher.RemoteUrl.ToString (), this.fetcher.Warnings.ToArray ());
+
+                /* TODO
+                if (!string.IsNullOrEmpty (announcements_url)) {
                     SparkleConfig.DefaultConfig.SetFolderOptionalAttribute (
                         target_folder_name, "announcements_url", announcements_url);
-                } TODO
-                 */
+                */
 
                 lock (this.repo_lock) {
                     AddRepository (target_folder_path);
                 }
-
-                if (FolderFetched != null)
-                    FolderFetched (this.fetcher.RemoteUrl.ToString (), this.fetcher.Warnings.ToArray ());
 
                 if (FolderListChanged != null)
                     FolderListChanged ();

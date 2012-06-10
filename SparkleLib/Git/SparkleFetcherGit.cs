@@ -46,7 +46,6 @@ namespace SparkleLib.Git {
 				uri = new Uri ("ssh://" + uri);
             }
 
-
             if (uri.Host.Equals ("gitorious.org")) {
                 if (!uri.AbsolutePath.Equals ("/") &&
                     !uri.AbsolutePath.EndsWith (".git")) {
@@ -77,7 +76,6 @@ namespace SparkleLib.Git {
                 }
             }
 
-
             TargetFolder = target_folder;
             RemoteUrl    = uri;
         }
@@ -90,7 +88,6 @@ namespace SparkleLib.Git {
                     "clone " +
                     "--progress " +
                     "--no-checkout " +
-                    "--depth=1 " +
                     "\"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
 
             } else {
@@ -98,6 +95,7 @@ namespace SparkleLib.Git {
                     "clone " +
                     "--progress " +
                     "--no-checkout " +
+                    "--depth=1 " +
                     "\"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
             }
 
@@ -173,15 +171,15 @@ namespace SparkleLib.Git {
 
         public override bool IsFetchedRepoEmpty {
             get {
-                SparkleGit git = new SparkleGit (TargetFolder, "rev-list --reverse HEAD");
+                SparkleGit git = new SparkleGit (TargetFolder, "rev-parse HEAD");
                 git.Start ();
 
                 // Reading the standard output HAS to go before
                 // WaitForExit, or it will hang forever on output > 4096 bytes
-                string output = git.StandardOutput.ReadToEnd ();
+                git.StandardOutput.ReadToEnd ();
                 git.WaitForExit ();
 
-                return (output.Length < 40);
+                return (git.ExitCode != 0);
             }
         }
 
@@ -280,6 +278,9 @@ namespace SparkleLib.Git {
 
         public override void Complete ()
         {
+            if (IsFetchedRepoEmpty)
+                return;
+
             SparkleGit git = new SparkleGit (TargetFolder, "checkout HEAD");
             git.Start ();
 
@@ -440,7 +441,7 @@ namespace SparkleLib.Git {
 
         private void AddWarnings ()
         {
-            SparkleGit git = new SparkleGit (TargetFolder,
+            /*SparkleGit git = new SparkleGit (TargetFolder,
                 "config --global core.excludesfile");
 
             git.Start ();
@@ -454,6 +455,6 @@ namespace SparkleLib.Git {
                 return;
             else
                 this.warnings.Add ("You seem to have a system wide ‘gitignore’ file, this may affect SparkleShare files.");
-        }
+    */    }
     }
 }

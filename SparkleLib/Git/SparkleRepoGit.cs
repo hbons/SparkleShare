@@ -30,26 +30,6 @@ namespace SparkleLib.Git {
         }
 
 
-        public override string ComputeIdentifier () {
-            // Because git computes a hash based on content,
-            // author, and timestamp; it is unique enough to
-            // use the hash of the first commit as an identifier
-            // for our folder
-            SparkleGit git = new SparkleGit (LocalPath, "rev-list --reverse HEAD");
-            git.Start ();
-
-            // Reading the standard output HAS to go before
-            // WaitForExit, or it will hang forever on output > 4096 bytes
-            string output = git.StandardOutput.ReadToEnd ();
-            git.WaitForExit ();
-
-            if (output.Length < 40)
-                return null;
-
-            return output.Substring (0, 40);
-        }
-
-
         public override List<string> ExcludePaths {
             get {
                 List<string> rules = new List<string> ();
@@ -104,6 +84,13 @@ namespace SparkleLib.Git {
         }
 
 
+        public override void CreateInitialChangeSet ()
+        {
+            base.CreateInitialChangeSet ();
+            SyncUp (); // FIXME: Weird freeze happens when base class handles this
+        }
+
+
         public override string [] UnsyncedFilePaths {
             get {
                 List<string> file_paths = new List<string> ();
@@ -138,15 +125,17 @@ namespace SparkleLib.Git {
                 // Remove stale rebase-apply files because it
                 // makes the method return the wrong hashes.
                 string rebase_apply_file = SparkleHelpers.CombineMore (LocalPath, ".git", "rebase-apply");
+
                 if (File.Exists (rebase_apply_file))
                     File.Delete (rebase_apply_file);
 
                 SparkleGit git = new SparkleGit (LocalPath, "rev-parse HEAD");
                 git.Start ();
+                
+                string output = git.StandardOutput.ReadToEnd ();
                 git.WaitForExit ();
 
                 if (git.ExitCode == 0) {
-                    string output = git.StandardOutput.ReadToEnd ();
                     return output.TrimEnd ();
 
                 } else {
@@ -161,7 +150,7 @@ namespace SparkleLib.Git {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Checking for remote changes...");
 
                 string current_revision = CurrentRevision;
-                SparkleGit git = new SparkleGit (LocalPath, "ls-remote \"" + RemoteUrl + "\" master");
+                SparkleGit git = new SparkleGit (LocalPath, "ls-remote --exit-code \"" + RemoteUrl + "\" master");
     
                 git.Start ();
                 git.WaitForExit ();
@@ -197,7 +186,6 @@ namespace SparkleLib.Git {
                 string message = FormatCommitMessage ();
                 Commit (message);
             }
-
 
             SparkleGit git = new SparkleGit (LocalPath,
                 "push --progress " + // Redirects progress stats to standarderror
@@ -247,7 +235,6 @@ namespace SparkleLib.Git {
                 } else {
                     SparkleHelpers.DebugInfo ("Git", "[" + Name + "] " + line);
                 }
-
 
                 if (number >= percentage) {
                     percentage = number;
