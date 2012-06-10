@@ -117,7 +117,7 @@ namespace SparkleShare {
                 Foreground   = new SolidColorBrush (Colors.White),
                 Text         = "Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others.\n" +
                     "\n" +
-                    "SparkleShare is Free and Open Source Software. You are free to use, modify, " +
+                    "SparkleShare is Open Source software. You are free to use, modify, " +
                     "and redistribute it under the GNU General Public License version 3 or later.",
                 TextWrapping = TextWrapping.Wrap,
                 Width        = 318

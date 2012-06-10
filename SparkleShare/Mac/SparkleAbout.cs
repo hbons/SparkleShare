@@ -168,7 +168,7 @@ namespace SparkleShare {
                     StringValue     = @"Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others." +
                                        "\n" +
                                        "\n" +
-                                       "SparkleShare is Free and Open Source Software. You are free to use, modify, and redistribute it " +
+                                       "SparkleShare is Open Source software. You are free to use, modify, and redistribute it " +
                                        "under the GNU General Public License version 3 or later.",
                     Frame           = new RectangleF (295, Frame.Height - 260, 318, 98),
                     TextColor       = NSColor.White,
