@@ -42,15 +42,12 @@ namespace SparkleLib {
         private TimeSpan poll_interval;
         private SparkleWatcher watcher;
         private SparkleListenerBase listener;
-        private System.Timers.Timer local_timer  = new System.Timers.Timer () { Interval = 0.25 * 1000 };
         private System.Timers.Timer remote_timer = new System.Timers.Timer () { Interval = 5 * 1000 };
         private DateTime last_poll               = DateTime.Now;
-        private List<double> size_buffer         = new List<double> ();
-        private Object change_lock               = new Object ();
         private Object watch_lock                = new Object ();
+        private Object change_lock               = new Object ();
         private double progress_percentage       = 0.0;
         private string progress_speed            = "";
-        private bool has_changed                 = false;
         private bool is_buffering                = false;
         private bool server_online               = true;
         private SyncStatus status;
@@ -187,10 +184,6 @@ namespace SparkleLib {
                 })
             ).Start ();
 
-            this.local_timer.Elapsed += delegate (object o, ElapsedEventArgs args) {
-                CheckForChanges ();
-            };
-
             this.remote_timer.Elapsed += delegate {
                 bool time_to_poll = (DateTime.Compare (this.last_poll,
                     DateTime.Now.Subtract (this.poll_interval)) < 0);
@@ -225,7 +218,6 @@ namespace SparkleLib {
             }
 
             this.remote_timer.Start ();
-            this.local_timer.Start ();
         }
 
 
@@ -240,7 +232,6 @@ namespace SparkleLib {
         public void Dispose ()
         {
             this.remote_timer.Dispose ();
-            this.local_timer.Dispose ();
             this.listener.Dispose ();
         }
 
@@ -250,39 +241,53 @@ namespace SparkleLib {
         {
             // Check the watcher for the occasions where this
             // method is called directly
-            if (!this.watcher.EnableRaisingEvents)
+            if (!this.watcher.EnableRaisingEvents || this.is_buffering)
                 return;
 
-            string relative_path = args.FullPath.Replace (LocalPath, "");
+            lock (this.change_lock) {
+                string relative_path = args.FullPath.Replace (LocalPath, "");
 
-            foreach (string exclude_path in ExcludePaths) {
-                if (relative_path.Contains (exclude_path))
-                    return;
-            }
-
-            WatcherChangeTypes wct = args.ChangeType;
-
-            if (HasLocalChanges) {
-                this.is_buffering = true;
-
-                // We want to disable wathcing temporarily, but
-                // not stop the local timer
-                this.watcher.EnableRaisingEvents = false;
-
-                // Only fire the event if the timer has been stopped.
-                // This prevents multiple events from being raised whilst "buffering".
-                if (!this.has_changed) {
-                    if (ChangesDetected != null)
-                        ChangesDetected ();
+                foreach (string exclude_path in ExcludePaths) {
+                    if (relative_path.Contains (exclude_path))
+                        return;
                 }
 
-                SparkleHelpers.DebugInfo ("Event", "[" + Name + "] " + wct.ToString () + " '" + args.Name + "'");
-                SparkleHelpers.DebugInfo ("Event", "[" + Name + "] Activity detected, waiting for it to settle...");
+                if (!this.is_buffering && HasLocalChanges) {
+                    this.is_buffering = true;
+                    DisableWatching ();
+                    this.remote_timer.Stop ();
 
-                this.remote_timer.Stop ();
+                    SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Activity detected, waiting for it to settle...");
 
-                lock (this.change_lock) {
-                    this.has_changed = true;
+                    if (ChangesDetected != null)
+                        ChangesDetected ();
+
+                    List<double> size_buffer = new List<double> ();
+
+                    do {
+                        if (size_buffer.Count >= 4)
+                            size_buffer.RemoveAt (0);
+
+                        DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
+                        size_buffer.Add (CalculateSize (dir_info));
+
+                        if (size_buffer.Count >= 4 &&
+                            size_buffer [0].Equals (size_buffer [1]) &&
+                            size_buffer [1].Equals (size_buffer [2]) &&
+                            size_buffer [2].Equals (size_buffer [3])) {
+
+                            SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Activity has settled");
+                            this.is_buffering = false;
+
+                            DisableWatching ();
+                            while (HasLocalChanges)
+                                SyncUpBase ();
+                            EnableWatching ();
+                        }
+
+                        Thread.Sleep (500);
+
+                    } while (this.is_buffering);
                 }
             }
         }
@@ -476,40 +481,10 @@ namespace SparkleLib {
         }
 
 
-        private void CheckForChanges ()
-        {
-            lock (this.change_lock) {
-                if (this.has_changed) {
-                    if (this.size_buffer.Count >= 4)
-                        this.size_buffer.RemoveAt (0);
-
-                    DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
-                     this.size_buffer.Add (CalculateSize (dir_info));
-
-                    if (this.size_buffer.Count >= 4 &&
-                        this.size_buffer [0].Equals (this.size_buffer [1]) &&
-                        this.size_buffer [1].Equals (this.size_buffer [2]) &&
-                        this.size_buffer [2].Equals (this.size_buffer [3])) {
-
-                        SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Activities have settled");
-                        this.is_buffering = false;
-                        this.has_changed  = false;
-
-                        DisableWatching ();
-                        while (HasLocalChanges)
-                            SyncUpBase ();
-                        EnableWatching ();
-                    }
-                }
-            }
-        }
-
-
         protected void DisableWatching ()
         {
             lock (this.watch_lock) {
                 this.watcher.EnableRaisingEvents = false;
-                this.local_timer.Stop ();
             }
         }
 
@@ -518,7 +493,6 @@ namespace SparkleLib {
         {
             lock (this.watch_lock) {
                 this.watcher.EnableRaisingEvents = true;
-                this.local_timer.Start ();
             }
         }
 
