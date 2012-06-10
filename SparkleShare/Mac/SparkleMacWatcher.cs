@@ -192,7 +192,7 @@ namespace SparkleShare {
 
         [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
         private extern static IntPtr CFRunLoopGetMain ();
-
+      
         [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
         private extern static IntPtr FSEventStreamCreate (
             IntPtr allocator,

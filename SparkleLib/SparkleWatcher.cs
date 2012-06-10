@@ -25,6 +25,8 @@ namespace SparkleLib {
         public delegate void ChangeEventEventHandler (FileSystemEventArgs args);
         public event ChangeEventEventHandler ChangeEvent;
 
+        private Object thread_lock = new Object ();
+
 
         public SparkleWatcher (string path) : base (path)
         {
@@ -51,6 +53,20 @@ namespace SparkleLib {
                 if (ChangeEvent != null)
                     ChangeEvent (args);
             };
+        }
+
+
+        public void Enable ()
+        {
+            lock (this.thread_lock)
+                EnableRaisingEvents = true;
+        }
+
+
+        public void Disable ()
+        {
+            lock (this.thread_lock)
+                EnableRaisingEvents = false;
         }
     }
 }
