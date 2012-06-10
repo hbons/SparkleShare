@@ -44,7 +44,6 @@ namespace SparkleLib {
         private SparkleListenerBase listener;
         private System.Timers.Timer remote_timer = new System.Timers.Timer () { Interval = 5 * 1000 };
         private DateTime last_poll               = DateTime.Now;
-        private Object watch_lock                = new Object ();
         private Object change_lock               = new Object ();
         private double progress_percentage       = 0.0;
         private string progress_speed            = "";
@@ -176,7 +175,7 @@ namespace SparkleLib {
                 CreateInitialChangeSet ();
 
             ChangeSets = GetChangeSets ();
-            CreateWatcher ();
+            this.watcher = CreateWatcher ();
 
             new Thread (
                 new ThreadStart (delegate {
@@ -208,13 +207,13 @@ namespace SparkleLib {
             // Sync up everything that changed
             // since we've been offline
             if (HasLocalChanges) {
-                DisableWatching ();
+                this.watcher.Disable ();
                 SyncUpBase ();
 
                 while (HasUnsyncedChanges)
                     SyncUpBase ();
 
-                EnableWatching ();
+                this.watcher.Enable ();
             }
 
             this.remote_timer.Start ();
@@ -236,6 +235,18 @@ namespace SparkleLib {
         }
 
 
+        private SparkleWatcher CreateWatcher ()
+        {
+            SparkleWatcher watcher = new SparkleWatcher (LocalPath);
+
+            watcher.ChangeEvent += delegate (FileSystemEventArgs args) {
+                OnFileActivity (args);
+            };
+
+            return watcher;
+        }
+
+
         // Starts a timer when something changes
         public void OnFileActivity (FileSystemEventArgs args)
         {
@@ -254,7 +265,7 @@ namespace SparkleLib {
 
                 if (!this.is_buffering && HasLocalChanges) {
                     this.is_buffering = true;
-                    DisableWatching ();
+                    this.watcher.Disable ();
                     this.remote_timer.Stop ();
 
                     SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Activity detected, waiting for it to settle...");
@@ -268,8 +279,8 @@ namespace SparkleLib {
                         if (size_buffer.Count >= 4)
                             size_buffer.RemoveAt (0);
 
-                        DirectoryInfo dir_info = new DirectoryInfo (LocalPath);
-                        size_buffer.Add (CalculateSize (dir_info));
+                        DirectoryInfo info = new DirectoryInfo (LocalPath);
+                        size_buffer.Add (CalculateSize (info));
 
                         if (size_buffer.Count >= 4 &&
                             size_buffer [0].Equals (size_buffer [1]) &&
@@ -279,13 +290,14 @@ namespace SparkleLib {
                             SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Activity has settled");
                             this.is_buffering = false;
 
-                            DisableWatching ();
+                            this.watcher.Disable ();
                             while (HasLocalChanges)
                                 SyncUpBase ();
-                            EnableWatching ();
-                        }
+                            this.watcher.Enable ();
 
-                        Thread.Sleep (500);
+                        } else {
+                            Thread.Sleep (500);
+                        }
 
                     } while (this.is_buffering);
                 }
@@ -296,7 +308,7 @@ namespace SparkleLib {
         private void SyncUpBase ()
         {
             try {
-                DisableWatching ();
+                this.watcher.Disable ();
                 this.remote_timer.Stop ();
 
                 SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Initiated");
@@ -319,7 +331,7 @@ namespace SparkleLib {
 
                     HasUnsyncedChanges = true;
                     SyncDownBase ();
-                    DisableWatching ();
+                    this.watcher.Disable ();
 
                     if (this.server_online && SyncUp ()) {
                         HasUnsyncedChanges = false;
@@ -339,7 +351,7 @@ namespace SparkleLib {
 
             } finally {
                 this.remote_timer.Start ();
-                EnableWatching ();
+                this.watcher.Enable ();
 
                 this.progress_percentage = 0.0;
                 this.progress_speed      = "";
@@ -351,7 +363,7 @@ namespace SparkleLib {
         {
             SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Initiated");
             this.remote_timer.Stop ();
-            DisableWatching ();
+            this.watcher.Disable ();
 
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.SyncDown);
@@ -405,16 +417,7 @@ namespace SparkleLib {
                 SyncStatusChanged (SyncStatus.Idle);
 
             this.remote_timer.Start ();
-            EnableWatching ();
-        }
-
-
-        private void CreateWatcher ()
-        {
-            this.watcher = new SparkleWatcher (LocalPath);
-            this.watcher.ChangeEvent += delegate (FileSystemEventArgs args) {
-                OnFileActivity (args);
-            };
+            this.watcher.Enable ();
         }
 
 
@@ -478,22 +481,6 @@ namespace SparkleLib {
             // Start listening
             if (!this.listener.IsConnected && !this.listener.IsConnecting)
                 this.listener.Connect ();
-        }
-
-
-        protected void DisableWatching ()
-        {
-            lock (this.watch_lock) {
-                this.watcher.EnableRaisingEvents = false;
-            }
-        }
-
-
-        protected void EnableWatching ()
-        {
-            lock (this.watch_lock) {
-                this.watcher.EnableRaisingEvents = true;
-            }
         }
 
 

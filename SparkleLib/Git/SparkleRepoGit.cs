@@ -417,8 +417,6 @@ namespace SparkleLib.Git {
         // Merges the fetched changes
         private void Rebase ()
         {
-            DisableWatching ();
-
             if (HasLocalChanges) {
                 Add ();
 
@@ -441,8 +439,6 @@ namespace SparkleLib.Git {
                 SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved");
                 OnConflictResolved ();
             }
-
-            EnableWatching ();
         }
 
 
