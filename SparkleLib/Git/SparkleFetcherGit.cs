@@ -43,7 +43,7 @@ namespace SparkleLib.Git {
                 !uri.Scheme.Equals ("http") &&
                 !uri.Scheme.Equals ("git")) {
 
-				uri = new Uri ("ssh://" + uri);
+                uri = new Uri ("ssh://" + uri);
             }
 
             if (uri.Host.Equals ("gitorious.org")) {
@@ -67,12 +67,10 @@ namespace SparkleLib.Git {
                     !uri.Scheme.Equals ("https") &&
                     !uri.Scheme.Equals ("http")) {
 
-                    if (uri.Port == -1) {
-						uri = new Uri (uri.Scheme + "://git@" + uri.Host + uri.AbsolutePath);
-
-                    } else {
-						uri = new Uri (uri.Scheme + "://git@" + uri.Host + ":" + uri.Port + uri.AbsolutePath);
-                    }
+                    if (uri.Port == -1)
+                        uri = new Uri (uri.Scheme + "://git@" + uri.Host + uri.AbsolutePath);
+                    else
+                        uri = new Uri (uri.Scheme + "://git@" + uri.Host + ":" + uri.Port + uri.AbsolutePath);
                 }
             }
 
