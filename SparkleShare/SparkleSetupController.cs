@@ -384,7 +384,8 @@ namespace SparkleShare {
             bool fields_valid = (address != null &&
                                  address.Trim ().Length > 0 &&
                                  remote_path != null &&
-                                 remote_path.Trim ().Length > 0);
+                                 remote_path.Trim ().Length > 0 &&
+                                 !remote_path.Contains ("\""));
 
             if (UpdateAddProjectButtonEvent != null)
                 UpdateAddProjectButtonEvent (fields_valid);

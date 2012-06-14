@@ -84,7 +84,7 @@ namespace SparkleLib {
             }
 
             FullPath    = Path.Combine (config_path, config_file_name);
-            LogFilePath = Path.Combine (config_path, "debug.log");
+            LogFilePath = Path.Combine (config_path, "debug.txt");
 
             if (File.Exists (LogFilePath)) {
                 try {
@@ -296,7 +296,7 @@ namespace SparkleLib {
 
         private XmlNode GetFolder (string name)
         {
-            return SelectSingleNode (string.Format ("/sparkleshare/folder[name='{0}']", name));
+            return SelectSingleNode (string.Format ("/sparkleshare/folder[name=\"{0}\"]", name));
         }
 
 
