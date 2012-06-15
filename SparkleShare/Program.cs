@@ -21,7 +21,6 @@ using System.Threading;
 #if __MonoCS__
 using Mono.Unix;
 #endif
-using SparkleLib;
 
 namespace SparkleShare {
 
@@ -30,18 +29,18 @@ namespace SparkleShare {
 
         public static SparkleController Controller;
         public static SparkleUI UI;
-		
-		public static Mutex ProgramMutex = new Mutex (false, "SparkleShare");
+
+        private static Mutex program_mutex = new Mutex (false, "SparkleShare");
 		
 		
         // Short alias for the translations
         public static string _ (string s)
         {
-        #if __MonoCS__
+            #if __MonoCS__
             return Catalog.GetString (s);
-         #else
+            #else
             return Strings.T (s);
-         #endif
+            #endif
         }
         
      
@@ -50,33 +49,30 @@ namespace SparkleShare {
         #endif
         public static void Main (string [] args)
         {
-            // Parse the command line options
-            bool show_help       = false;
-            OptionSet option_set = new OptionSet () {
-                { "v|version", _("Print version information"), v => { PrintVersion (); } },
-                { "h|help", _("Show this help text"), v => show_help = v != null }
-            };
+            if (args.Length != 0 && !args [0].Equals ("start")) {
+                Console.WriteLine (" ");
+                Console.WriteLine ("SparkleShare is a collaboration and sharing tool that is ");
+                Console.WriteLine ("designed to keep things simple and to stay out of your way.");
+                Console.WriteLine (" ");
+                Console.WriteLine ("Version: " + SparkleLib.Defines.VERSION);
+                Console.WriteLine ("Copyright (C) 2010 Hylke Bons");
+                Console.WriteLine (" ");
+                Console.WriteLine ("This program comes with ABSOLUTELY NO WARRANTY.");
+                Console.WriteLine (" ");
+                Console.WriteLine ("This is free software, and you are welcome to redistribute it ");
+                Console.WriteLine ("under certain conditions. Please read the GNU GPLv3 for details.");
+                Console.WriteLine (" ");
+                Console.WriteLine ("Usage: sparkleshare [start|stop|restart]");
 
-            try {
-                option_set.Parse (args);
-
-            } catch (OptionException e) {
-                Console.Write ("SparkleShare: ");
-                Console.WriteLine (e.Message);
-                Console.WriteLine ("Try `sparkleshare --help' for more information.");
+                Environment.Exit (-1);
             }
-
-            if (show_help)
-                ShowHelp (option_set);
-
 			
-			// Only allow one instance of SparkleShare
-			if (!ProgramMutex.WaitOne (0, false)) {
+			// Only allow one instance of SparkleShare (on Windows)
+			if (!program_mutex.WaitOne (0, false)) {
 				Console.WriteLine ("SparkleShare is already running.");
 				Environment.Exit (-1);
 			}
-				
-			
+
             // Initialize the controller this way so that
             // there aren't any exceptions in the OS specific UI's
             Controller = new SparkleController ();
@@ -92,38 +88,6 @@ namespace SparkleShare {
             GC.Collect (GC.MaxGeneration, GCCollectionMode.Forced);
             GC.WaitForPendingFinalizers ();
             #endif
-        }
-
-
-        // Prints the help output
-        public static void ShowHelp (OptionSet option_set)
-        {
-            Console.WriteLine (" ");
-            Console.WriteLine (_("SparkleShare, a collaboration and sharing tool."));
-            Console.WriteLine (_("Copyright (C) 2010 Hylke Bons"));
-            Console.WriteLine (" ");
-            Console.WriteLine (_("This program comes with ABSOLUTELY NO WARRANTY."));
-            Console.WriteLine (" ");
-            Console.WriteLine (_("This is free software, and you are welcome to redistribute it "));
-            Console.WriteLine (_("under certain conditions. Please read the GNU GPLv3 for details."));
-            Console.WriteLine (" ");
-            Console.WriteLine (_("SparkleShare is a collaboration and sharing tool that is "));
-            Console.WriteLine (_("designed to keep things simple and to stay out of your way."));
-            Console.WriteLine (" ");
-            Console.WriteLine (_("Usage: sparkleshare [start|stop|restart|version] [OPTION]..."));
-            Console.WriteLine (_("Sync SparkleShare folder with remote repositories."));
-            Console.WriteLine (" ");
-            Console.WriteLine (_("Arguments:"));
-
-            option_set.WriteOptionDescriptions (Console.Out);
-            Environment.Exit (0);
-        }
-
-
-        public static void PrintVersion ()
-        {
-            Console.WriteLine (_("SparkleShare " + Defines.VERSION));
-            Environment.Exit (0);
         }
     }
 }
