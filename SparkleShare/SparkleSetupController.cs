@@ -263,8 +263,7 @@ namespace SparkleShare {
             full_name = full_name.Trim ();
             email     = email.Trim ();
 
-            bool fields_valid = (full_name != null &&
-                                 full_name.Trim ().Length > 0 &&
+            bool fields_valid = (!string.IsNullOrEmpty (full_name) &&
                                  IsValidEmail (email));
 
             if (UpdateSetupContinueButtonEvent != null)
@@ -381,10 +380,8 @@ namespace SparkleShare {
 
             this.saved_remote_path = remote_path;
 
-            bool fields_valid = (address != null &&
-                                 address.Trim ().Length > 0 &&
-                                 remote_path != null &&
-                                 remote_path.Trim ().Length > 0 &&
+            bool fields_valid = (!string.IsNullOrEmpty (address) &&
+                                 !string.IsNullOrEmpty (remote_path) &&
                                  !remote_path.Contains ("\""));
 
             if (UpdateAddProjectButtonEvent != null)
