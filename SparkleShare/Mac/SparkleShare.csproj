@@ -94,9 +94,6 @@
     <Compile Include="..\SparklePlugin.cs">
       <Link>SparklePlugin.cs</Link>
     </Compile>
-    <Compile Include="..\SparkleOptions.cs">
-      <Link>SparkleOptions.cs</Link>
-    </Compile>
     <Compile Include="SparkleAbout.cs" />
     <Compile Include="..\SparkleInvite.cs">
       <Link>SparkleInvite.cs</Link>
