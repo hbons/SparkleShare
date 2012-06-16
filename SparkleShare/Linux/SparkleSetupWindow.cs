@@ -38,7 +38,6 @@ namespace SparkleShare {
 
         public string Header;
         public string Description;
-        
         public string SecondaryTextColor;
         public string SecondaryTextColorSelected;
 

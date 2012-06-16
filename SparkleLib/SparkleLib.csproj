@@ -44,7 +44,7 @@
     <Compile Include="SparkleAnnouncement.cs" />
     <Compile Include="SparkleHelpers.cs" />
     <Compile Include="SparklePaths.cs" />
-    <Compile Include="SparkleChangeSet.cs" />
+    <Compile Include="SparkleWrappers.cs" />
     <Compile Include="SparkleListenerBase.cs" />
     <Compile Include="SparkleListenerFactory.cs" />
     <Compile Include="SparkleListenerTcp.cs" />
