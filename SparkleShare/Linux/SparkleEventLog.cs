@@ -51,7 +51,7 @@ namespace SparkleShare {
 
         public SparkleEventLog () : base ("")
         {
-            SetSizeRequest (480, 640);
+            SetSizeRequest (480, (int) (Gdk.Screen.Default.Height * 0.9));
 
             int x = (int) (Gdk.Screen.Default.Width * 0.61);
             int y = (int) (Gdk.Screen.Default.Height * 0.5 - (HeightRequest * 0.5));

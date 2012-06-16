@@ -91,7 +91,7 @@
     </Compile>
     <Compile Include="..\SparkleFetcherBase.cs" />
     <Compile Include="..\SparkleHelpers.cs" />
-    <Compile Include="..\SparkleChangeSet.cs" />
+    <Compile Include="..\SparkleWrappers.cs" />
     <Compile Include="..\SparkleListenerBase.cs" />
     <Compile Include="..\SparkleListenerTcp.cs" />
     <Compile Include="..\SparkleBackend.cs" />
