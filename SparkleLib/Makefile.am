@@ -5,7 +5,7 @@ SOURCES =  \
 	Defines.cs \
 	SparkleAnnouncement.cs \
 	SparkleBackend.cs \
-	SparkleChangeSet.cs \
+	SparkleWrappers.cs \
 	SparkleConfig.cs \
 	SparkleExceptions.cs \
 	SparkleExtensions.cs \

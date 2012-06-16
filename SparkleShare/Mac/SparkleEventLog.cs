@@ -30,9 +30,9 @@ namespace SparkleShare {
     public class SparkleEventLog : NSWindow {
 
         public SparkleEventLogController Controller = new SparkleEventLogController ();
+        public float TitlebarHeight;
 
         private WebView web_view;
-        private NSBox separator;
         private NSBox background;
         private NSPopUpButton popup_button;
         private NSProgressIndicator progress_indicator;
@@ -41,7 +41,7 @@ namespace SparkleShare {
         private NSTextField history_label;
         private NSTextField history_label_value;
         private NSButton hidden_close_button;
-        
+
 
         public SparkleEventLog (IntPtr handle) : base (handle)
         {
@@ -54,35 +54,35 @@ namespace SparkleShare {
             {
                 Title    = "Recent Changes";
                 Delegate = new SparkleEventsDelegate ();
-                // TODO: Make window resizable
 
-                int width  = 480;
-                int height = 640;
+                int min_width  = 480;
+                int min_height = (int) (NSScreen.MainScreen.Frame.Height * 0.9);
                 float x    = (float) (NSScreen.MainScreen.Frame.Width * 0.61);
-                float y    = (float) (NSScreen.MainScreen.Frame.Height * 0.5 - (height * 0.5));
+                float y    = (float) (NSScreen.MainScreen.Frame.Height * 0.5 - (min_height * 0.5));
 
-                SetFrame (new RectangleF (x, y, width, height), true);
+                SetFrame (new RectangleF (x, y, min_width, min_height), true);
 
 
                 StyleMask = (NSWindowStyle.Closable |
                              NSWindowStyle.Miniaturizable |
-                             NSWindowStyle.Titled);
+                             NSWindowStyle.Titled |
+                             NSWindowStyle.Resizable);
 
-                MaxSize     = new SizeF (480, 640);
-                MinSize     = new SizeF (480, 640);
-                HasShadow   = true;
-                BackingType = NSBackingStore.Buffered;
+                MinSize        = new SizeF (min_width, min_height);
+                HasShadow      = true;
+                BackingType    = NSBackingStore.Buffered;
+                TitlebarHeight = Frame.Height - ContentView.Frame.Height;
 
 
                 this.web_view = new WebView (new RectangleF (0, 0, 481, 579), "", "") {
-                    PolicyDelegate = new SparkleWebPolicyDelegate ()
+                    PolicyDelegate = new SparkleWebPolicyDelegate (),
+                    Frame = new RectangleF (new PointF (0, 0),
+                        new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
                 };
 
-
                 this.hidden_close_button = new NSButton () {
-                    Frame                     = new RectangleF (0, 0, 0, 0),
                     KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
-                    KeyEquivalent             = "w"
+                    KeyEquivalent = "w"
                 };
 
                 this.hidden_close_button.Activated += delegate {
@@ -95,7 +95,9 @@ namespace SparkleShare {
                     BackgroundColor = NSColor.WindowBackground,
                     Bordered        = false,
                     Editable        = false,
-                    Frame           = new RectangleF (0, 588, 60, 20),
+                    Frame           = new RectangleF (
+                        new PointF (0, ContentView.Frame.Height - 30),
+                        new SizeF (60, 20)),
                     StringValue     = "Size:",
                     Font            = SparkleUI.BoldFont
                 };
@@ -105,7 +107,9 @@ namespace SparkleShare {
                     BackgroundColor = NSColor.WindowBackground,
                     Bordered        = false,
                     Editable        = false,
-                    Frame           = new RectangleF (60, 588, 75, 20),
+                    Frame           = new RectangleF (
+                        new PointF (60, ContentView.Frame.Height - 30),
+                        new SizeF (60, 20)),
                     StringValue     = "…",
                     Font            = SparkleUI.Font
                 };
@@ -116,7 +120,9 @@ namespace SparkleShare {
                     BackgroundColor = NSColor.WindowBackground,
                     Bordered        = false,
                     Editable        = false,
-                    Frame           = new RectangleF (130, 588, 60, 20),
+                    Frame           = new RectangleF (
+                        new PointF (130, ContentView.Frame.Height - 30),
+                        new SizeF (60, 20)),
                     StringValue     = "History:",
                     Font            = SparkleUI.BoldFont
                 };
@@ -126,28 +132,34 @@ namespace SparkleShare {
                     BackgroundColor = NSColor.WindowBackground,
                     Bordered        = false,
                     Editable        = false,
-                    Frame           = new RectangleF (190, 588, 75, 20),
+                    Frame           = new RectangleF (
+                        new PointF (190, ContentView.Frame.Height - 30),
+                        new SizeF (60, 20)
+                    ),
                     StringValue     = "…",
                     Font            = SparkleUI.Font
                 };
 
-
-                this.separator = new NSBox (new RectangleF (0, 579, 480, 1)) {
-                    BorderColor = NSColor.LightGray,
-                    BoxType = NSBoxType.NSBoxCustom
+                this.popup_button = new NSPopUpButton () {
+                    Frame = new RectangleF (
+                        new PointF (ContentView.Frame.Width - 156 - 12, ContentView.Frame.Height - 33),
+                        new SizeF (156, 26)),
+                    PullsDown = false
                 };
 
-
-                this.background = new NSBox (new RectangleF (0, -1, 481, 581)) {
+                this.background = new NSBox () {
+                    Frame = new RectangleF (
+                        new PointF (0, -1),
+                        new SizeF (Frame.Width, this.web_view.Frame.Height + 2)),
                     FillColor = NSColor.White,
                     BoxType = NSBoxType.NSBoxCustom
                 };
 
-
                 this.progress_indicator = new NSProgressIndicator () {
-                    Style = NSProgressIndicatorStyle.Spinning,
-                    Frame = new RectangleF (this.web_view.Frame.Width / 2 - 10,
-                        this.web_view.Frame.Height / 2 + 10, 20, 20)
+                    Frame = new RectangleF (
+                        new PointF (Frame.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10),
+                        new SizeF (20, 20)),
+                    Style = NSProgressIndicatorStyle.Spinning
                 };
 
                 this.progress_indicator.StartAnimation (this);
@@ -157,7 +169,7 @@ namespace SparkleShare {
                 ContentView.AddSubview (this.size_label_value);
                 ContentView.AddSubview (this.history_label);
                 ContentView.AddSubview (this.history_label_value);
-                ContentView.AddSubview (this.separator);
+                ContentView.AddSubview (this.popup_button);
                 ContentView.AddSubview (this.progress_indicator);
                 ContentView.AddSubview (this.background);
                 ContentView.AddSubview (this.hidden_close_button);
@@ -166,6 +178,8 @@ namespace SparkleShare {
                 (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate).LinkClicked += delegate (string href) {
                     Controller.LinkClicked (href);
                 };
+
+                (Delegate as SparkleEventsDelegate).WindowResized += Relayout;
             }
 
 
@@ -175,7 +189,7 @@ namespace SparkleShare {
                 {
                     InvokeOnMainThread (delegate {
                         PerformClose (this);
-						
+
 						if (this.web_view.Superview == ContentView)
                             this.web_view.RemoveFromSuperview ();
                     });
@@ -233,24 +247,66 @@ namespace SparkleShare {
         }
 
 
+        public void Relayout (SizeF new_window_size)
+        {
+            InvokeOnMainThread (delegate {
+                this.web_view.Frame = new RectangleF (this.web_view.Frame.Location,
+                    new SizeF (new_window_size.Width, new_window_size.Height - TitlebarHeight - 39));
+
+                this.background.Frame = new RectangleF (this.background.Frame.Location,
+                    new SizeF (new_window_size.Width, new_window_size.Height - TitlebarHeight - 37));
+
+                this.size_label.Frame = new RectangleF (
+                    new PointF (this.size_label.Frame.X, new_window_size.Height - TitlebarHeight - 30),
+                    this.size_label.Frame.Size
+                );
+
+                this.size_label_value.Frame = new RectangleF (
+                    new PointF (this.size_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 30),
+                    this.size_label_value.Frame.Size
+                );
+
+                this.history_label.Frame = new RectangleF (
+                    new PointF (this.history_label.Frame.X, new_window_size.Height - TitlebarHeight - 30),
+                    this.history_label.Frame.Size
+                );
+
+                this.history_label_value.Frame = new RectangleF (
+                    new PointF (this.history_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 30),
+                    this.history_label_value.Frame.Size
+                );
+
+
+                // Needed to prevent redraw glitches
+                this.popup_button.RemoveFromSuperview ();
+
+                this.popup_button.Frame = new RectangleF (
+                    new PointF (new_window_size.Width - this.popup_button.Frame.Width - 12, new_window_size.Height - TitlebarHeight - 33),
+                    this.popup_button.Frame.Size
+                );
+
+                ContentView.AddSubview (this.popup_button);
+
+                this.progress_indicator.Frame = new RectangleF (
+                    new PointF (new_window_size.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10),
+                    this.progress_indicator.Frame.Size
+                );
+            });
+        }
+
+
         public void UpdateChooser (string [] folders)
         {
             using (var a = new NSAutoreleasePool ())
             {
                 if (folders == null)
                     folders = Controller.Folders;
-    
-                if (this.popup_button != null)
-                    this.popup_button.RemoveFromSuperview ();
-    
-                this.popup_button = new NSPopUpButton () {
-                    Frame     = new RectangleF (480 - 156 - 8, 640 - 31 - 24, 156, 26),
-                    PullsDown = false
-                };
-    
+
                 this.popup_button.Cell.ControlSize = NSControlSize.Small;
                 this.popup_button.Font = NSFontManager.SharedFontManager.FontWithFamily
                     ("Lucida Grande", NSFontTraitMask.Condensed, 0, NSFont.SmallSystemFontSize);
+
+                this.popup_button.RemoveAllItems ();
     
                 this.popup_button.AddItem ("Summary");
                 this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
@@ -278,8 +334,6 @@ namespace SparkleShare {
                         });
                     }
                 };
-
-                ContentView.AddSubview (this.popup_button);
             }
         }
 
@@ -357,6 +411,18 @@ namespace SparkleShare {
 
 
     public class SparkleEventsDelegate : NSWindowDelegate {
+
+        public event WindowResizedHandler WindowResized;
+        public delegate void WindowResizedHandler (SizeF new_window_size);
+
+
+        public override SizeF WillResize (NSWindow sender, SizeF to_frame_size)
+        {
+            if (WindowResized != null)
+                WindowResized (to_frame_size);
+
+            return to_frame_size;
+        }
 
         public override bool WindowShouldClose (NSObject sender)
         {
