@@ -475,8 +475,13 @@ namespace SparkleShare {
                         points.PackStart (point_two, false, false, 12);
 
                         if (warnings.Length > 0) {
+                            string warnings_markup = "";
+
+                            foreach (string warning in warnings)
+                                warnings_markup += "\n<b>" + warning + "</b>";
+
                             Label label_three = new Label () {
-                                Markup = "Here's the raw error message:\n<b>" + warnings [0]  + "</b>",
+                                Markup = "Here's the raw error message:" + warnings_markup,
                                 Wrap   = true,
                                 Xalign = 0
                             };
