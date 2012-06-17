@@ -128,8 +128,11 @@ namespace SparkleLib.Git {
                 } else {
                     SparkleHelpers.DebugInfo ("Fetcher", line);
 
-                    if (line.StartsWith ("fatal:"))
+                    if (line.StartsWith ("fatal:", true, null) ||
+                        line.StartsWith ("error:", true, null)) {
+
                         base.errors.Add (line);
+                    }
                 }
 
 

@@ -500,9 +500,13 @@ namespace SparkleShare {
                         help_block.Inlines.Add ("Do you have access rights to this remote project?");
 
                         if (warnings.Length > 0) {
-                            help_block.Inlines.Add ("\n\nHere's the raw error message:\n");
-                            help_block.Inlines.Add (new Bold (new Run (warning [0])));
                             bullets_block.Text += "\n\n•";
+                            help_block.Inlines.Add ("\n\nHere's the raw error message:");
+
+                            foreach (string warning in warnings) {
+                                help_block.Inlines.Add ("\n");
+                                help_block.Inlines.Add (new Bold (new Run (warning)));
+                            }
                         }
 
                         Button cancel_button = new Button () {

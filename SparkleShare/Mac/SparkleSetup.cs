@@ -578,8 +578,14 @@ namespace SparkleShare {
                                 "  <li>Do you have access rights to this remote project?</li>" +
                                 "</ul>";
 
-                            if (warnings.Length > 0)
-                                html = html.Replace ("</ul>", "<li>Here's the raw error message:<br/> <b>" + warnings [0] + "</b></li></ul>");
+                            if (warnings.Length > 0) {
+                                string warnings_markup = "";
+
+                                foreach (string warning in warnings)
+                                    warnings_markup += "<br><b>" + warning + "</b>";
+
+                                html = html.Replace ("</ul>", "<li>Here's the raw error message: " + warnings_markup + "</li></ul>");
+                            }
     
                             web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
                             web_view.DrawsBackground = false;
