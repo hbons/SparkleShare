@@ -17,7 +17,6 @@ SparkleShare/Linux/SparkleAbout.cs
 SparkleShare/Linux/SparkleController.cs
 SparkleShare/SparkleControllerBase.cs
 SparkleShare/Linux/SparkleEventLog.cs
-SparkleShare/SparkleOptions.cs
 SparkleShare/Linux/SparkleSetup.cs
 SparkleShare/Linux/SparkleSetupWindow.cs
 SparkleShare/Linux/SparkleStatusIcon.cs
