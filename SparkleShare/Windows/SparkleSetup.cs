@@ -64,7 +64,7 @@ namespace SparkleShare {
                     switch (type) {
                     case PageType.Setup: {
                         Header      = "Welcome to SparkleShare!";
-                           Description = "Before we get started, what's your name and email?\n" +
+                        Description = "Before we get started, what's your name and email?\n" +
                             "Don't worry, this information will only be visible to team members.";
         
                         
@@ -485,23 +485,26 @@ namespace SparkleShare {
                     case PageType.Error: {
                         Header      = "Something went wrong…";
                         Description = "Please check the following:";
- 
-                        
+
 						TextBlock help_block = new TextBlock () {
 							TextWrapping = TextWrapping.Wrap,
                 			Width        = 310	
 						};
-						
-						help_block.Inlines.Add ("Is the host online?\n\n");
-						help_block.Inlines.Add (new Bold (new Run (Controller.PreviousUrl)));
-						help_block.Inlines.Add (" is the address we've compiled. Does this look alright?\n\n");
-						help_block.Inlines.Add ("The host needs to know who you are. Did you upload the key that's in your SparkleShare folder?");
-						
-						TextBlock bullets_block = new TextBlock () {
-							Text = "•\n\n•\n\n\n•"
-						};
-						
-						
+
+                        TextBlock bullets_block = new TextBlock () {
+                            Text = "•\n\n•"
+                        };
+
+                        help_block.Inlines.Add (new Bold (new Run (Controller.PreviousUrl)));
+                        help_block.Inlines.Add (" is the address we've compiled. Does this look alright?\n\n");
+                        help_block.Inlines.Add ("Do you have access rights to this remote project?");
+
+                        if (warnings.Length > 0) {
+                            help_block.Inlines.Add ("\n\nHere's the raw error message:\n");
+                            help_block.Inlines.Add (new Bold (new Run (warning [0])));
+                            bullets_block.Text += "\n\n•";
+                        }
+
                         Button cancel_button = new Button () {
                             Content = "Cancel"
                         };
@@ -509,8 +512,7 @@ namespace SparkleShare {
                         Button try_again_button = new Button () {
                             Content = "Try again…"
                         };
-                        
-                        
+
 						
 				        ContentCanvas.Children.Add (bullets_block);
                         Canvas.SetLeft (bullets_block, 195);
