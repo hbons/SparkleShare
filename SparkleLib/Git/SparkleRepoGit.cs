@@ -158,8 +158,7 @@ namespace SparkleLib.Git {
                 if (git.ExitCode != 0)
                     return false;
     
-                string remote_revision = git.StandardOutput.ReadToEnd ().TrimEnd ();
-                remote_revision = remote_revision.Substring (0, 40);
+                string remote_revision = git.StandardOutput.ReadToEnd ().Substring (0, 40);
     
                 if (!remote_revision.StartsWith (current_revision)) {
                     SparkleHelpers.DebugInfo ("Git",

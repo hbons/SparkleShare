@@ -66,7 +66,7 @@ namespace SparkleShare {
         public delegate void FolderFetchedEventHandler (string remote_url, string [] warnings);
         
         public event FolderFetchErrorHandler FolderFetchError;
-        public delegate void FolderFetchErrorHandler (string remote_url);
+        public delegate void FolderFetchErrorHandler (string remote_url, string [] errors);
         
         public event FolderFetchingHandler FolderFetching;
         public delegate void FolderFetchingHandler (double percentage);
@@ -939,7 +939,9 @@ namespace SparkleShare {
                     "Failed to load \"" + backend + "\" backend for \"" + canonical_name + "\"");
 
                 if (FolderFetchError != null)
-                    FolderFetchError (Path.Combine (address, remote_path).Replace (@"\", "/"));
+                    FolderFetchError (
+                        Path.Combine (address, remote_path).Replace (@"\", "/"),
+                        new string [] {"Failed to load \"" + backend + "\" backend for \"" + canonical_name + "\""});
 
                 return;
             }
@@ -961,7 +963,7 @@ namespace SparkleShare {
 
             this.fetcher.Failed += delegate {
                 if (FolderFetchError != null)
-                    FolderFetchError (this.fetcher.RemoteUrl.ToString ());
+                    FolderFetchError (this.fetcher.RemoteUrl.ToString (), this.fetcher.Errors);
 
                 StopFetcher ();
             };

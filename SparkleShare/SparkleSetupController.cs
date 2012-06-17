@@ -453,13 +453,13 @@ namespace SparkleShare {
             Program.Controller.FolderFetching   -= SyncingPageFetchingDelegate;
         }
 
-        private void AddPageFetchErrorDelegate (string remote_url)
+        private void AddPageFetchErrorDelegate (string remote_url, string [] errors)
         {
             SyncingFolder = "";
             PreviousUrl   = remote_url;
-
+           
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Error, null);
+                ChangePageEvent (PageType.Error, errors);
 
             Program.Controller.FolderFetched    -= AddPageFetchedDelegate;
             Program.Controller.FolderFetchError -= AddPageFetchErrorDelegate;
@@ -515,13 +515,13 @@ namespace SparkleShare {
             Program.Controller.FolderFetching   -= SyncingPageFetchingDelegate;
         }
 
-        private void InvitePageFetchErrorDelegate (string remote_url)
+        private void InvitePageFetchErrorDelegate (string remote_url, string [] errors)
         {
             SyncingFolder = "";
             PreviousUrl   = remote_url;
 
             if (ChangePageEvent != null)
-                ChangePageEvent (PageType.Error, null);
+                ChangePageEvent (PageType.Error, errors);
 
             Program.Controller.FolderFetched    -= AddPageFetchedDelegate;
             Program.Controller.FolderFetchError -= AddPageFetchErrorDelegate;

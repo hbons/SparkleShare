@@ -574,10 +574,12 @@ namespace SparkleShare {
                                 "}" +
                                 "</style>" +
                                 "<ul>" +
-                                "  <li>Is the host online?</li>" +
                                 "  <li><b>" + Controller.PreviousUrl + "</b> is the address we've compiled. Does this look alright?</li>" +
-                                "  <li>The host needs to know who you are. Did you upload the key that's in your SparkleShare folder?</li>" +
+                                "  <li>Do you have access rights to this remote project?</li>" +
                                 "</ul>";
+
+                            if (warnings.Length > 0)
+                                html = html.Replace ("</ul>", "<li>Here's the raw error message:<br/> <b>" + warnings [0] + "</b></li></ul>");
     
                             web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
                             web_view.DrawsBackground = false;
