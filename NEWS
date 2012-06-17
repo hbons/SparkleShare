@@ -9,6 +9,7 @@
 	- Cached logs for faster event log loading/switching
 	- Sort event log file entries by time
 	- Change default notification service to use port 80
+	- Show backend error message(s) when on failed project add
 
 	Travis:
 	- Rewrote the notification service, now more robust and reliable
