@@ -16,8 +16,9 @@
 
 
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -126,6 +127,9 @@ namespace SparkleLib.Git {
 
                 } else {
                     SparkleHelpers.DebugInfo ("Fetcher", line);
+
+                    if (line.StartsWith ("fatal:"))
+                        base.errors.Add (line);
                 }
 
 
@@ -140,23 +144,25 @@ namespace SparkleLib.Git {
             }
             
             this.git.WaitForExit ();
+
             SparkleHelpers.DebugInfo ("Git", "Exit code: " + this.git.ExitCode);
 
             if (this.git.ExitCode == 0) {
                 while (percentage < 100) {
                     percentage += 25;
-    
+
                     if (percentage >= 100)
                         break;
 
                     Thread.Sleep (500);
                     base.OnProgressChanged (percentage);
                 }
-    
+
                 base.OnProgressChanged (100);
 
                 InstallConfiguration ();
                 InstallExcludeRules ();
+
                 AddWarnings ();
 
                 return true;
@@ -439,7 +445,8 @@ namespace SparkleLib.Git {
 
         private void AddWarnings ()
         {
-            /*SparkleGit git = new SparkleGit (TargetFolder,
+            /*
+            SparkleGit git = new SparkleGit (TargetFolder,
                 "config --global core.excludesfile");
 
             git.Start ();
@@ -453,6 +460,7 @@ namespace SparkleLib.Git {
                 return;
             else
                 this.warnings.Add ("You seem to have a system wide ‘gitignore’ file, this may affect SparkleShare files.");
-    */    }
+            */
+        }
     }
 }

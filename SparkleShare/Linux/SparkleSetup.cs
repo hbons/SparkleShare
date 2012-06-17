@@ -450,25 +450,17 @@ namespace SparkleShare {
                         Image list_point_three = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
 
                         Label label_one = new Label () {
-                            Text   = "Is the host online?",
+                            Markup = "<b>" + Controller.PreviousUrl + "</b> is the address we've compiled. " +
+                            "Does this look alright?",
                             Wrap   = true,
                             Xalign = 0
                         };
 
                         Label label_two = new Label () {
-                            Markup = "<b>" + Controller.PreviousUrl + "</b> is the address we've compiled. " +
-                                     "Does this look alright?",
+                            Text   = "Do you have access rights to this remote project?",
                             Wrap   = true,
                             Xalign = 0
                         };
-
-                        Label label_three = new Label () {
-                            Text   = "The host needs to know who you are. Did you upload the key that's in " +
-                                     "your SparkleShare folder?",
-                            Wrap   = true,
-                            Xalign = 0
-                        };
-
                         
                         points.PackStart (new Label ("Please check the following:") { Xalign = 0 }, false, false, 6);
 
@@ -481,11 +473,19 @@ namespace SparkleShare {
                         point_two.PackStart (list_point_two, false, false, 0);
                         point_two.PackStart (label_two, true, true, 12);
                         points.PackStart (point_two, false, false, 12);
-                          
-                        HBox point_three = new HBox (false, 0);
-                        point_three.PackStart (list_point_three, false, false, 0);
-                        point_three.PackStart (label_three, true, true, 12);
-                        points.PackStart (point_three, false, false, 12);
+
+                        if (warnings.Length > 0) {
+                            Label label_three = new Label () {
+                                Markup = "Here's the raw error message:\n<b>" + warnings [0]  + "</b>",
+                                Wrap   = true,
+                                Xalign = 0
+                            };
+
+                            HBox point_three = new HBox (false, 0);
+                            point_three.PackStart (list_point_three, false, false, 0);
+                            point_three.PackStart (label_three, true, true, 12);
+                            points.PackStart (point_three, false, false, 12);
+                        }
 
                         points.PackStart (new Label (""), true, true, 0);
 

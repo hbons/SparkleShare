@@ -58,7 +58,15 @@ namespace SparkleLib {
             }
         }
 
+        public string [] Errors {
+            get {
+                return this.errors.ToArray ();
+            }
+        }
+
         protected List<string> warnings = new List<string> ();
+        protected List<string> errors = new List<string> ();
+
         private Thread thread;
 
 

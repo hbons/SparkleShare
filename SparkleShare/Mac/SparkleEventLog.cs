@@ -152,8 +152,8 @@ namespace SparkleShare {
 
                 this.background = new NSBox () {
                     Frame = new RectangleF (
-                        new PointF (0, -1),
-                        new SizeF (Frame.Width, this.web_view.Frame.Height + 2)),
+                        new PointF (-1, -1),
+                        new SizeF (Frame.Width + 2, this.web_view.Frame.Height + 2)),
                     FillColor = NSColor.White,
                     BoxType = NSBoxType.NSBoxCustom
                 };
