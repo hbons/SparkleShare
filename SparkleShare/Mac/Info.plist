@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIconFile</key>
-	<string>sparkleshare</string>
+	<string>sparkleshare-app</string>
 	<key>CFBundleIdentifier</key>
 	<string>org.sparkleshare.sparkleshare</string>
 	<key>CFBundleName</key>
