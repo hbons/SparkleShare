@@ -584,30 +584,14 @@ namespace SparkleLib.Git {
 
             entries.Add (last_entry);
 
-            Regex merge_regex = new Regex (@"commit ([a-z0-9]{40})\n" +
-                                "Merge: .+ .+\n" +
-                                "Author: (.+) <(.+)>\n" +
-                                "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
-                                "([0-9]{2}):([0-9]{2}):([0-9]{2}) .([0-9]{4})\n" +
-                                "*", RegexOptions.Compiled);
-
-            Regex non_merge_regex = new Regex (@"commit ([a-z0-9]{40})\n" +
-                                "Author: (.+) <(.+)>\n" +
-                                "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
-                                "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
-                                "*", RegexOptions.Compiled);
+            Regex regex = new Regex (@"commit ([a-z0-9]{40})\n" +
+                "Author: (.+) <(.+)>\n" +
+                "*" +
+                "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
+                "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
+                "*", RegexOptions.Compiled);
 
             foreach (string log_entry in entries) {
-                Regex regex;
-                bool is_merge_commit = false;
-
-                if (log_entry.Contains ("\nMerge: ")) {
-                    regex = merge_regex;
-                    is_merge_commit = true;
-                } else {
-                    regex = non_merge_regex;
-                }
-
                 Match match = regex.Match (log_entry);
 
                 if (match.Success) {
@@ -616,8 +600,7 @@ namespace SparkleLib.Git {
                     change_set.Folder    = new SparkleFolder (Name);
                     change_set.Revision  = match.Groups [1].Value;
                     change_set.User      = new SparkleUser (match.Groups [2].Value, match.Groups [3].Value);
-                    change_set.IsMagical = is_merge_commit;
-                    change_set.RemoteUrl       = RemoteUrl;
+                    change_set.RemoteUrl = RemoteUrl;
 
                     change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
                         int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
@@ -687,10 +670,10 @@ namespace SparkleLib.Git {
 
                                 change_set.Changes.Add (
                                     new SparkleChange () {
-                                        Path      = file_path,
-                                        MovedPath = to_file_path,
-                                        Timestamp = change_set.Timestamp,
-                                        Type      = SparkleChangeType.Moved
+                                        Path        = file_path,
+                                        MovedToPath = to_file_path,
+                                        Timestamp   = change_set.Timestamp,
+                                        Type        = SparkleChangeType.Moved
                                     }
                                 );
                             }

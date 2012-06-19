@@ -393,28 +393,23 @@ namespace SparkleShare {
                 foreach (SparkleChangeSet change_set in activity_day) {
                     string event_entry = "<dl>";
 
-                    if (change_set.IsMagical) {
-                        event_entry += "<dd>Did something magical</dd>";
+                    foreach (SparkleChange change in change_set.Changes) {
+                        if (change.Type != SparkleChangeType.Moved) {
 
-                    } else {
-                        foreach (SparkleChange change in change_set.Changes) {
-                            if (change.Type != SparkleChangeType.Moved) {
+                            event_entry += "<dd class='document " + change.Type.ToString ().ToLower () + "'>";
+                            event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") +"</small> &nbsp;";
+                            event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
+                            event_entry += "</dd>";
 
-                                event_entry += "<dd class='document " + change.Type.ToString ().ToLower () + "'>";
-                                event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") +"</small> &nbsp;";
-                                event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
-                                event_entry += "</dd>";
+                        } else {
 
-                            } else {
+                    		event_entry += "<dd class='document moved'>";
+                            event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
+                            event_entry += "<br>";
+                            event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") +"</small> &nbsp;";
+                            event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.MovedToPath);
+                            event_entry += "</dd>";
 
-                        		event_entry += "<dd class='document moved'>";
-                                event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
-                                event_entry += "<br>";
-                                event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") +"</small> &nbsp;";
-                                event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.MovedPath);
-                                event_entry += "</dd>";
-
-                            }
                         }
                     }
 
