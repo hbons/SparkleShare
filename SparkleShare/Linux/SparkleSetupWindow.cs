@@ -126,7 +126,7 @@ namespace SparkleShare {
 
         public void AddOption (Widget widget)
         {            
-			OptionArea.Add (widget);
+            OptionArea.Add (widget);
             ShowAll ();
         }
 
@@ -146,9 +146,9 @@ namespace SparkleShare {
                 Label description = new Label (Description) {
                     Xalign = 0,
                     LineWrap = true,
-					LineWrapMode = Pango.WrapMode.WordChar
+                    LineWrapMode = Pango.WrapMode.WordChar
                 };
-				
+                
                 layout_vertical.PackStart (description, false, false, 21);
             }
 
@@ -159,14 +159,14 @@ namespace SparkleShare {
             ShowAll ();
         }
 
-
+    
         public void Reset ()
         {
             Header      = "";
             Description = "";
 
-			if (OptionArea.Children.Length > 0)
-				OptionArea.Remove (OptionArea.Children [0]);
+            if (OptionArea.Children.Length > 0)
+                OptionArea.Remove (OptionArea.Children [0]);
 
             if (Wrapper.Children.Length > 0)
                 Wrapper.Remove (Wrapper.Children [0]);

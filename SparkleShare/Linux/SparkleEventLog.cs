@@ -55,7 +55,7 @@ namespace SparkleShare {
 
             int x = (int) (Gdk.Screen.Default.Width * 0.61);
             int y = (int) (Gdk.Screen.Default.Height * 0.5 - (HeightRequest * 0.5));
-			
+            
             Move (x, y);
 
             Resizable   = true;
@@ -68,15 +68,15 @@ namespace SparkleShare {
                 Controller.WindowClosed ();
                 args.RetVal = true;
             };
-			
-			KeyPressEvent += delegate (object o, KeyPressEventArgs args) {
-				if (args.Event.Key == Gdk.Key.Escape ||
-				    (args.Event.State == Gdk.ModifierType.ControlMask) &&
-				     args.Event.Key == Gdk.Key.w) {
-					
-					Controller.WindowClosed ();
-			    }
-			};
+            
+            KeyPressEvent += delegate (object o, KeyPressEventArgs args) {
+                if (args.Event.Key == Gdk.Key.Escape ||
+                    (args.Event.State == Gdk.ModifierType.ControlMask) &&
+                     args.Event.Key == Gdk.Key.w) {
+                    
+                    Controller.WindowClosed ();
+                }
+            };
 
             this.size_label = new Label () {
                 Markup = "<b>Size:</b> …",
@@ -126,8 +126,8 @@ namespace SparkleShare {
             Controller.HideWindowEvent += delegate {
                 Application.Invoke (delegate {
                     HideAll ();
-					
-					if (this.content_wrapper.Child != null)
+                    
+                    if (this.content_wrapper.Child != null)
                         this.content_wrapper.Remove (this.content_wrapper.Child);
                 });
             };
@@ -204,19 +204,19 @@ namespace SparkleShare {
 
             store.AppendValues (_("Summary"));
             store.AppendValues ("---");
-			
-			this.combo_box.Model  = store;
-			this.combo_box.Active = 0;
-			
-			int row = 2;
-       		foreach (string folder in folders) {
-				store.AppendValues (folder);
-				
-				if (folder.Equals (Controller.SelectedFolder))
-					this.combo_box.Active = row;
-				
-				row++;
-        	}
+            
+            this.combo_box.Model  = store;
+            this.combo_box.Active = 0;
+            
+            int row = 2;
+               foreach (string folder in folders) {
+                store.AppendValues (folder);
+                
+                if (folder.Equals (Controller.SelectedFolder))
+                    this.combo_box.Active = row;
+                
+                row++;
+            }
 
             this.combo_box.RowSeparatorFunc = delegate (TreeModel model, TreeIter iter) {
                 string item = (string) this.combo_box.Model.GetValue (iter, 0);
@@ -252,10 +252,10 @@ namespace SparkleShare {
 
                 if (html == null)
                     return;
-				
-				string pixmaps_path = IO.Path.Combine (SparkleUI.AssetsPath, "pixmaps");
-				string icons_path  = new string [] {SparkleUI.AssetsPath, "icons",
-                	"hicolor", "12x12", "status"}.Combine ();
+                
+                string pixmaps_path = IO.Path.Combine (SparkleUI.AssetsPath, "pixmaps");
+                string icons_path  = new string [] {SparkleUI.AssetsPath, "icons",
+                    "hicolor", "12x12", "status"}.Combine ();
 
                 html = html.Replace ("<!-- $body-font-size -->", (double) (Style.FontDescription.Size / 1024 + 3) + "px");
                 html = html.Replace ("<!-- $day-entry-header-font-size -->", (Style.FontDescription.Size / 1024 + 3) + "px");
@@ -268,19 +268,19 @@ namespace SparkleShare {
                 html = html.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
                 html = html.Replace ("<!-- $small-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
              
-				html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
+                html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
                 
-				html = html.Replace ("<!-- $document-added-background-image -->", 
-					"file://" + IO.Path.Combine (icons_path, "document-added.png"));
+                html = html.Replace ("<!-- $document-added-background-image -->", 
+                    "file://" + IO.Path.Combine (icons_path, "document-added.png"));
 
-				html = html.Replace ("<!-- $document-edited-background-image -->", 
-					"file://" + IO.Path.Combine (icons_path, "document-edited.png"));
-				
-				html = html.Replace ("<!-- $document-deleted-background-image -->", 
-					"file://" + IO.Path.Combine (icons_path, "document-deleted.png"));
-				
-				html = html.Replace ("<!-- $document-moved-background-image -->", 
-					"file://" + IO.Path.Combine (icons_path, "document-moved.png"));
+                html = html.Replace ("<!-- $document-edited-background-image -->", 
+                    "file://" + IO.Path.Combine (icons_path, "document-edited.png"));
+                
+                html = html.Replace ("<!-- $document-deleted-background-image -->", 
+                    "file://" + IO.Path.Combine (icons_path, "document-deleted.png"));
+                
+                html = html.Replace ("<!-- $document-moved-background-image -->", 
+                    "file://" + IO.Path.Combine (icons_path, "document-moved.png"));
                         
                 
                 Application.Invoke (delegate {
