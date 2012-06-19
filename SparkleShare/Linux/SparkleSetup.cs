@@ -313,7 +313,9 @@ namespace SparkleShare {
                                 Controller.PageCancelled ();
                             };
 
-                            Button add_button = new Button (_("Add"));
+                            Button add_button = new Button (_("Add")) {
+							    Sensitive = false
+						    };
 
                             add_button.Clicked += delegate {
                                 string server         = address_entry.Text;

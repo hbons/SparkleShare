@@ -51,7 +51,7 @@ namespace SparkleShare {
 
         public SparkleEventLog () : base ("")
         {
-            SetSizeRequest (480, (int) (Gdk.Screen.Default.Height * 0.9));
+            SetSizeRequest (480, (int) (Gdk.Screen.Default.Height * 0.8));
 
             int x = (int) (Gdk.Screen.Default.Width * 0.61);
             int y = (int) (Gdk.Screen.Default.Height * 0.5 - (HeightRequest * 0.5));
@@ -68,6 +68,15 @@ namespace SparkleShare {
                 Controller.WindowClosed ();
                 args.RetVal = true;
             };
+			
+			KeyPressEvent += delegate (object o, KeyPressEventArgs args) {
+				if (args.Event.Key == Gdk.Key.Escape ||
+				    (args.Event.State == Gdk.ModifierType.ControlMask) &&
+				     args.Event.Key == Gdk.Key.w) {
+					
+					Controller.WindowClosed ();
+			    }
+			};
 
             this.size_label = new Label () {
                 Markup = "<b>Size:</b> …",
@@ -109,7 +118,6 @@ namespace SparkleShare {
             this.layout_horizontal.PackStart (layout_sizes, true, true, 12);
 
             layout_vertical.PackStart (this.layout_horizontal, false, false, 0);
-            layout_vertical.PackStart (CreateShortcutsBar (), false, false, 0);
             layout_vertical.PackStart (this.content_wrapper, true, true, 0);
 
             Add (layout_vertical);
@@ -287,50 +295,6 @@ namespace SparkleShare {
             }));
 
             thread.Start ();
-        }
-
-
-        private MenuBar CreateShortcutsBar ()
-        {
-            // Adds a hidden menubar that contains to enable keyboard
-            // shortcuts to close the log
-            MenuBar menu_bar = new MenuBar ();
-
-                MenuItem file_item = new MenuItem ("File");
-
-                    Menu file_menu = new Menu ();
-
-                        MenuItem close_1 = new MenuItem ("Close1");
-                        MenuItem close_2 = new MenuItem ("Close2");
-        
-                        // adds specific Ctrl+W and Esc key accelerators to Log Window
-                        AccelGroup accel_group = new AccelGroup ();
-                        AddAccelGroup (accel_group);
-
-                        // Close on Esc
-                        close_1.AddAccelerator ("activate", accel_group, new AccelKey (Gdk.Key.W,
-                            Gdk.ModifierType.ControlMask, AccelFlags.Visible));
-
-                        close_1.Activated += delegate { Controller.WindowClosed (); };
-
-                        // Close on Ctrl+W
-                        close_2.AddAccelerator ("activate", accel_group, new AccelKey (Gdk.Key.Escape,
-                            Gdk.ModifierType.None, AccelFlags.Visible));
-                        close_2.Activated += delegate { Controller.WindowClosed (); };
-
-                    file_menu.Append (close_1);
-                    file_menu.Append (close_2);
-
-                file_item.Submenu = file_menu;
-
-            menu_bar.Append (file_item);
-
-            // Hacky way to hide the menubar, but the accellerators
-            // will simply be disabled when using Hide ()
-            menu_bar.HeightRequest = 1;
-            menu_bar.ModifyBg (StateType.Normal, Style.Background (StateType.Normal));
-
-            return menu_bar;
         }
     }
 }
