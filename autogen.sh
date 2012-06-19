@@ -64,15 +64,6 @@ check_autotool_version $LIBTOOLIZE 1.4.3
 check_autotool_version intltoolize 0.35.0
 check_autotool_version pkg-config 0.14.0
 
-if [ $(pkg-config --modversion gnome-doc-utils 2> /dev/null) ]; then
-    run gnome-doc-prepare --automake --force
-else
-    echo "gnome-doc-utils not found; user help will not be built"
-    echo "AC_DEFUN([GNOME_DOC_INIT], [AC_MSG_NOTICE([])])" > build/m4/gnome-doc-utils.m4
-    ACLOCAL_FLAGS="-I build/m4 $ACLOCAL_FLAGS"
-    touch gnome-doc-utils.make
-fi
-
 run intltoolize --force --copy
 run $LIBTOOLIZE --force --copy --automake
 run aclocal -I build/m4/sparkleshare -I build/m4/shamrock -I build/m4/shave $ACLOCAL_FLAGS
