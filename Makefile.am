@@ -1,4 +1,4 @@
-basedirs = build SparkleLib SparkleLib/Git po
+basedirs = build SparkleLib SparkleLib/Git
 
 SUBDIRS = $(basedirs) $(GUISUBDIRS)
 DIST_SUBDIRS = $(basedirs) SparkleShare

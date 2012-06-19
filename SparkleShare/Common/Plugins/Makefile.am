@@ -15,7 +15,7 @@ dist_plugins_DATA = \
     ssnet.png \
     own-server.png
 
-@INTLTOOL_XML_RULE@
+#@INTLTOOL_XML_RULE@
 
 pluginsdir = $(pkgdatadir)/plugins/
 
