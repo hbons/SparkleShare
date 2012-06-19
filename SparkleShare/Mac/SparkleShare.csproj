@@ -108,16 +108,16 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Mono\MonoMac\v0.0\Mono.MonoMac.targets" />
   <ItemGroup>
-    <Content Include="..\..\data\html\day-entry.html">
+    <Content Include="..\Common\HTML\day-entry.html">
       <Link>HTML\day-entry.html</Link>
     </Content>
-    <Content Include="..\..\data\html\event-entry.html">
+    <Content Include="..\Common\HTML\event-entry.html">
       <Link>HTML\event-entry.html</Link>
     </Content>
-    <Content Include="..\..\data\html\event-log.html">
+    <Content Include="..\Common\HTML\event-log.html">
       <Link>HTML\event-log.html</Link>
     </Content>
-    <Content Include="..\..\data\side-splash.png">
+    <Content Include="..\Common\Pixmaps\side-splash.png">
       <Link>Pixmaps\side-splash.png</Link>
     </Content>
     <Content Include="Pixmaps\sparkleshare-folder.icns">
@@ -163,97 +163,22 @@
     <Content Include="Pixmaps\process-syncing-error-active.png">
       <Link>Pixmaps\process-syncing-error-active.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\document-added-12.png">
+    <Content Include="..\Linux\Pixmaps\icons\document-added-12.png">
       <Link>Pixmaps\document-added-12.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\document-edited-12.png">
+    <Content Include="..\Linux\Pixmaps\icons\document-edited-12.png">
       <Link>Pixmaps\document-edited-12.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\document-deleted-12.png">
+    <Content Include="..\Linux\Pixmaps\icons\document-deleted-12.png">
       <Link>Pixmaps\document-deleted-12.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\document-moved-12.png">
+    <Content Include="..\Linux\Pixmaps\icons\document-moved-12.png">
       <Link>Pixmaps\document-moved-12.png</Link>
     </Content>
-    <Content Include="..\..\po\ar.po">
-      <Link>Translations\ar.po</Link>
-    </Content>
-    <Content Include="..\..\po\bg.po">
-      <Link>Translations\bg.po</Link>
-    </Content>
-    <Content Include="..\..\po\ca.po">
-      <Link>Translations\ca.po</Link>
-    </Content>
-    <Content Include="..\..\po\cs_CZ.po">
-      <Link>Translations\cs_CZ.po</Link>
-    </Content>
-    <Content Include="..\..\po\da.po">
-      <Link>Translations\da.po</Link>
-    </Content>
-    <Content Include="..\..\po\de.po">
-      <Link>Translations\de.po</Link>
-    </Content>
-    <Content Include="..\..\po\el.po">
-      <Link>Translations\el.po</Link>
-    </Content>
-    <Content Include="..\..\po\eo.po">
-      <Link>Translations\eo.po</Link>
-    </Content>
-    <Content Include="..\..\po\es.po">
-      <Link>Translations\es.po</Link>
-    </Content>
-    <Content Include="..\..\po\fi.po">
-      <Link>Translations\fi.po</Link>
-    </Content>
-    <Content Include="..\..\po\fr.po">
-      <Link>Translations\fr.po</Link>
-    </Content>
-    <Content Include="..\..\po\he.po">
-      <Link>Translations\he.po</Link>
-    </Content>
-    <Content Include="..\..\po\hu.po">
-      <Link>Translations\hu.po</Link>
-    </Content>
-    <Content Include="..\..\po\it.po">
-      <Link>Translations\it.po</Link>
-    </Content>
-    <Content Include="..\..\po\ja.po">
-      <Link>Translations\ja.po</Link>
-    </Content>
-    <Content Include="..\..\po\nl.po">
-      <Link>Translations\nl.po</Link>
-    </Content>
-    <Content Include="..\..\po\no_NO.po">
-      <Link>Translations\no_NO.po</Link>
-    </Content>
-    <Content Include="..\..\po\pl.po">
-      <Link>Translations\pl.po</Link>
-    </Content>
-    <Content Include="..\..\po\pt_BR.po">
-      <Link>Translations\pt_BR.po</Link>
-    </Content>
-    <Content Include="..\..\po\ru.po">
-      <Link>Translations\ru.po</Link>
-    </Content>
-    <Content Include="..\..\po\sv.po">
-      <Link>Translations\sv.po</Link>
-    </Content>
-    <Content Include="..\..\po\te.po">
-      <Link>Translations\te.po</Link>
-    </Content>
-    <Content Include="..\..\po\uk.po">
-      <Link>Translations\uk.po</Link>
-    </Content>
-    <Content Include="..\..\po\zh_CN.po">
-      <Link>Translations\zh_CN.po</Link>
-    </Content>
-    <Content Include="..\..\po\zh_TW.po">
-      <Link>Translations\zh_TW.po</Link>
-    </Content>
-    <Content Include="..\..\data\about.png">
+    <Content Include="..\Common\Pixmaps\about.png">
       <Link>Pixmaps\about.png</Link>
     </Content>
-    <Content Include="..\..\data\html\jquery.js">
+    <Content Include="..\Common\HTML\jquery.js">
       <Link>HTML\jquery.js</Link>
     </Content>
     <Content Include="Pixmaps\tutorial-slide-1.png">
@@ -265,83 +190,82 @@
     <Content Include="Pixmaps\tutorial-slide-3.png">
       <Link>Pixmaps\tutorial-slide-3.png</Link>
     </Content>
-    <Content Include="..\..\data\tutorial-slide-4.png">
+    <Content Include="..\Common\Pixmaps\tutorial-slide-4.png">
       <Link>Pixmaps\tutorial-slide-4.png</Link>
     </Content>
-    <Content Include="..\..\data\plugins\bitbucket.xml">
+    <Content Include="..\Common\Plugins\bitbucket.xml">
       <Link>Plugins\bitbucket.xml</Link>
     </Content>
-    <Content Include="..\..\data\plugins\github.xml">
+    <Content Include="..\Common\Plugins\github.xml">
       <Link>Plugins\github.xml</Link>
     </Content>
-    <Content Include="..\..\data\plugins\gitorious.xml">
+    <Content Include="..\Common\Plugins\gitorious.xml">
       <Link>Plugins\gitorious.xml</Link>
     </Content>
-    <Content Include="..\..\data\plugins\gnome.xml">
+    <Content Include="..\Common\Plugins\gnome.xml">
       <Link>Plugins\gnome.xml</Link>
     </Content>
-    <Content Include="..\..\data\plugins\own-server.xml">
+    <Content Include="..\Common\Plugins\own-server.xml">
       <Link>Plugins\own-server.xml</Link>
     </Content>
-    <Content Include="..\..\data\plugins\bitbucket.png">
+    <Content Include="..\Common\Plugins\bitbucket.png">
       <Link>Plugins\bitbucket.png</Link>
     </Content>
-    <Content Include="..\..\data\plugins\github.png">
+    <Content Include="..\Common\Plugins\github.png">
       <Link>Plugins\github.png</Link>
     </Content>
-    <Content Include="..\..\data\plugins\gitorious.png">
+    <Content Include="..\Common\Plugins\gitorious.png">
       <Link>Plugins\gitorious.png</Link>
     </Content>
-    <Content Include="..\..\data\plugins\gnome.png">
+    <Content Include="..\Common\Plugins\gnome.png">
       <Link>Plugins\gnome.png</Link>
     </Content>
-    <Content Include="..\..\data\plugins\own-server.png">
+    <Content Include="..\Common\Plugins\own-server.png">
       <Link>Plugins\own-server.png</Link>
     </Content>
-    <Content Include="..\..\data\avatar-a.png">
+    <Content Include="..\Common\Pixmaps\avatar-a.png">
       <Link>Pixmaps\avatar-a.png</Link>
     </Content>
-    <Content Include="..\..\data\avatar-b.png">
+    <Content Include="..\Common\Pixmaps\avatar-b.png">
       <Link>Pixmaps\avatar-b.png</Link>
     </Content>
-    <Content Include="..\..\data\avatar-c.png">
+    <Content Include="..\Common\Pixmaps\avatar-c.png">
       <Link>Pixmaps\avatar-c.png</Link>
     </Content>
-    <Content Include="..\..\data\avatar-d.png">
+    <Content Include="..\Common\Pixmaps\avatar-d.png">
       <Link>Pixmaps\avatar-d.png</Link>
     </Content>
-    <Content Include="..\..\data\avatar-e.png">
+    <Content Include="..\Common\Pixmaps\avatar-e.png">
       <Link>Pixmaps\avatar-e.png</Link>
     </Content>
-    <Content Include="..\..\data\avatar-f.png">
+    <Content Include="..\Common\Pixmaps\avatar-f.png">
       <Link>Pixmaps\avatar-f.png</Link>
     </Content>
-    <Content Include="..\..\data\avatar-g.png">
+    <Content Include="..\Common\Pixmaps\avatar-g.png">
       <Link>Pixmaps\avatar-g.png</Link>
     </Content>
-    <Content Include="..\..\data\avatar-h.png">
+    <Content Include="..\Common\Pixmaps\avatar-h.png">
       <Link>Pixmaps\avatar-h.png</Link>
     </Content>
-    <Content Include="..\..\data\avatar-i.png">
+    <Content Include="..\Common\Pixmaps\avatar-i.png">
       <Link>Pixmaps\avatar-i.png</Link>
     </Content>
-    <Content Include="..\..\data\avatar-j.png">
+    <Content Include="..\Common\Pixmaps\avatar-j.png">
       <Link>Pixmaps\avatar-j.png</Link>
     </Content>
-    <Content Include="..\..\data\avatar-k.png">
+    <Content Include="..\Common\Pixmaps\avatar-k.png">
       <Link>Pixmaps\avatar-k.png</Link>
     </Content>
-    <Content Include="..\..\data\plugins\ssnet.png">
+    <Content Include="..\Common\Plugins\ssnet.png">
       <Link>Plugins\ssnet.png</Link>
     </Content>
-    <Content Include="..\..\data\plugins\ssnet.xml">
+    <Content Include="..\Common\Plugins\ssnet.xml">
       <Link>Plugins\ssnet.xml</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pixmaps\" />
     <Folder Include="HTML\" />
-    <Folder Include="Translations\" />
     <Folder Include="Plugins\" />
   </ItemGroup>
 </Project>
