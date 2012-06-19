@@ -32,12 +32,13 @@ namespace SparkleLib {
     public class SparkleChangeSet {
 
         public SparkleUser User = new SparkleUser ("Unknown", "Unknown");
+
         public SparkleFolder Folder;
+        public Uri RemoteUrl;
+
         public string Revision;
         public DateTime Timestamp;
         public DateTime FirstTimestamp;
-        public bool IsMagical;
-        public Uri RemoteUrl;
         public List<SparkleChange> Changes = new List<SparkleChange> ();
     }
 
@@ -46,7 +47,7 @@ namespace SparkleLib {
 
         public SparkleChangeType Type;
         public string Path;
-        public string MovedPath;
+        public string MovedToPath;
         public DateTime Timestamp;
     }
 
