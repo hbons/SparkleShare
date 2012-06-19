@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <plugin>
+    <info>
+        <name>Gitorious</name>
+        <name xml:lang="ar">Gitorious</name>
+        <name xml:lang="bg">Gitorious</name>
+        <name xml:lang="ca">Gitorious</name>
+        <name xml:lang="cs_CZ">Gitorious</name>
+        <name xml:lang="da">Gitorious</name>
+        <name xml:lang="de">Gitorious</name>
+        <name xml:lang="el">Gitorious</name>
+        <name xml:lang="eo">Gitorious</name>
+        <name xml:lang="es">Gitorious</name>
+        <name xml:lang="fi">Gitorious</name>
+        <name xml:lang="fr">Gitorious</name>
+        <name xml:lang="he">גיטוריוס</name>
+        <name xml:lang="hu">Gitorious</name>
+        <name xml:lang="it">Gitorius</name>
+        <name xml:lang="ja">Gitorious</name>
+        <name xml:lang="nl">Gitorious</name>
+        <name xml:lang="nn_NO">Gitorious</name>
+        <name xml:lang="no_NO">Gitorious</name>
+        <name xml:lang="pl">Gitorious</name>
+        <name xml:lang="pt_BR">Gitorious</name>
+        <name xml:lang="ru">Gitorious</name>
+        <name xml:lang="sk">Gitorious</name>
+        <name xml:lang="sl">Gitorious</name>
+        <name xml:lang="sr_RS">Гиториус</name>
+        <name xml:lang="sv">Gitorious</name>
+        <name xml:lang="uk">Gitorious</name>
+        <name xml:lang="zh_CN">Gitorious</name>
+        <name xml:lang="zh_TW">Gitorious</name>
+        <description>Open source infrastructure for hosting open source projects</description>
+        <description xml:lang="de">Quelloffene Infrastruktur zum hosten von quelloffenen Projekten</description>
+        <description xml:lang="el">Open source υποδομή για φιλοξενία open source projects</description>
+        <description xml:lang="es">Infraestructura de código libre para almacenar proyectos de código libre</description>
+        <description xml:lang="fr">Infrastructure open source d'hébergement de projets open source</description>
+        <description xml:lang="it">Infrastruttura Open sourc per lo hosting di progetti open source</description>
+        <description xml:lang="nl">Opensource infrastructuur voor het hosten van opensource projecten.</description>
+        <description xml:lang="pl">Infrastruktura o otwartym kodzie źródłowym dla projektów o otwartym kodzie źródłowym</description>
+        <description xml:lang="pt_BR">Infra-estrutura de código aberto para hospedagem de projetos com código aberto </description>
+        <description xml:lang="ru">Open source инфраструктура для размещения ваших open source проектов</description>
+        <description xml:lang="sv">Infrastruktur för delning av öppen källkod-projekt</description>
+        <description xml:lang="zh_CN">托管开源项目的开源架构</description>
+        <icon>gitorious.png</icon>
+        <backend>Git</backend>
+        <fingerprint>7e:af:8d:ec:f0:39:5e:ba:52:16:ce:19:fa:d4:b8:7d</fingerprint>
+    </info>
+    <address>
+      <value>ssh://git@gitorious.org/</value>
+      <example/>
+    </address>
+    <path>
+      <value/>
+      <example>/project/repository</example>
+      <example xml:lang="de">/Projekt/Ablage</example>
+      <example xml:lang="el">/project/repository</example>
+      <example xml:lang="es">/proyecto/repositorio</example>
+      <example xml:lang="fr">/projet/depot</example>
+      <example xml:lang="it">/progetto/repository</example>
+      <example xml:lang="nl">/project/repository</example>
+      <example xml:lang="pl">/projekt/repozytorium</example>
+      <example xml:lang="pt_BR">/projeto/repositório</example>
+      <example xml:lang="ru">/project/repository</example>
+      <example xml:lang="sv">/projekt/arkiv</example>
+      <example xml:lang="zh_CN">/project/repository</example>
+    </path>
+  </plugin>
+</sparkleshare>

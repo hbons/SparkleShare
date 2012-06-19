@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <plugin>
+    <info>
+        <name>On my own server</name>
+        <name xml:lang="de">Auf meinem eigenen Server</name>
+        <name xml:lang="el">Στον δικό μου server</name>
+        <name xml:lang="es">En mi propio servidor</name>
+        <name xml:lang="fr">Mon propre serveur</name>
+        <name xml:lang="he">שרת משלי</name>
+        <name xml:lang="it">Il mio server</name>
+        <name xml:lang="nl">Op mijn eigen server</name>
+        <name xml:lang="pl">Na własnym serwerze</name>
+        <name xml:lang="pt_BR">Em meu próprio servidor</name>
+        <name xml:lang="ru">Мой личный сервер</name>
+        <name xml:lang="sv">På min egen server</name>
+        <name xml:lang="zh_CN">拥有你自己的服务器</name>
+        <description>Everything under my control</description>
+        <description xml:lang="de">Alles unter meiner Kontrolle</description>
+        <description xml:lang="el">Όλα κάτω απ' τον δικό μου έλεγχο</description>
+        <description xml:lang="es">Todo bajo mi control</description>
+        <description xml:lang="fr">Tout est sous mon contrôle</description>
+        <description xml:lang="he">הכל תחת שליטתי</description>
+        <description xml:lang="it">Tutto sotto il mio controllo</description>
+        <description xml:lang="nl">Alles onder mijn controle</description>
+        <description xml:lang="pl">Wszystko pod własną kontrolą</description>
+        <description xml:lang="pt_BR">Tudo sob meu controle</description>
+        <description xml:lang="ru">Всё под моим контролем</description>
+        <description xml:lang="sv">Allting under min kontroll</description>
+        <description xml:lang="zh_CN">一切尽在你的掌控</description>
+        <icon>own-server.png</icon>
+        <backend>Git</backend>
+    </info>
+    <address>
+      <value/>
+      <example>[user@]hostname[:port]</example>
+    </address>
+    <path>
+      <value/>
+      <example>/path/to/project</example>
+      <example xml:lang="de">/Pfad/zum/Projekt</example>
+      <example xml:lang="el">/path/to/project</example>
+      <example xml:lang="es">/ruta/al/proyecto</example>
+      <example xml:lang="fr">/chemin/du/projet</example>
+      <example xml:lang="it">/percorso/per/progetto</example>
+      <example xml:lang="nl">/pad/naar/project</example>
+      <example xml:lang="pl">/ścieżka/do/projektu</example>
+      <example xml:lang="pt_BR">/caminho/para/projeto</example>
+      <example xml:lang="ru">/path/to/project</example>
+      <example xml:lang="sv">/sökväg/till/projekt</example>
+      <example xml:lang="zh_CN">/path/to/project</example>
+    </path>
+  </plugin>
+</sparkleshare>

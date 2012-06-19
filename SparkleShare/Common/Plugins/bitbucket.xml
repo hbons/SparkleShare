@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <plugin>
+    <info>
+        <name>Bitbucket</name>
+        <name xml:lang="de">Bitbucket</name>
+        <name xml:lang="el">Bitbucket</name>
+        <name xml:lang="es">Bitbucket</name>
+        <name xml:lang="fr">Bitbucket</name>
+        <name xml:lang="it">Bitbucket</name>
+        <name xml:lang="nl">Bitbucket</name>
+        <name xml:lang="pl">Bitbucket</name>
+        <name xml:lang="pt_BR">Bitbucket</name>
+        <name xml:lang="ru">Bitbucket</name>
+        <name xml:lang="sv">Bitbucket</name>
+        <name xml:lang="zh_CN">小桶</name>
+        <description>Free code hosting for Git and Mercurial</description>
+        <description xml:lang="de">Freies Code-Hosting für Git und Mercurial</description>
+        <description xml:lang="el">Δωρεάν φιλοξενία κώδικα για Git και Mercurial</description>
+        <description xml:lang="es">Alojamiento gratuito de código fuente para Git y Mercurial</description>
+        <description xml:lang="fr">Hébergement gratuit de code pour Git et Mercurial</description>
+        <description xml:lang="it">Hosting gratuito di codice per Git e Mercurial</description>
+        <description xml:lang="nl">Gratis hosting voor Git en Mercurial</description>
+        <description xml:lang="pl">Darmowe utrzymywanie kodu dla projektów zarządzanych przez git oraz Mercurial</description>
+        <description xml:lang="pt_BR">Hospedagem gratuita de código para Git e Mercurial</description>
+        <description xml:lang="ru">Бесплатный хостинг проектов и их совместной разработки, основанный на системе контроля версий Mercurial и Git</description>
+        <description xml:lang="sv">Gratis källkodslagring för Git och Mercurial</description>
+        <description xml:lang="zh_CN">免费的Git与Mercurial代码托管</description>
+        <icon>bitbucket.png</icon>
+        <backend>Git</backend>
+        <fingerprint>97:8c:1b:f2:6f:14:6b:5c:3b:ec:aa:46:46:74:7c:40</fingerprint>
+    </info>
+    <address>
+      <value>ssh://git@bitbucket.org/</value>
+      <example/>
+    </address>
+    <path>
+      <value/>
+      <example>/username/project</example>
+      <example xml:lang="de">/username/project</example>
+      <example xml:lang="el">/username/project</example>
+      <example xml:lang="es">/usuario/proyecto</example>
+      <example xml:lang="fr">/nom-d-utilisateur/projet</example>
+      <example xml:lang="it">/nome-utente/progetto</example>
+      <example xml:lang="nl">/gebruikersnaam/project</example>
+      <example xml:lang="pl">/nazwa uzytkownika/projekt</example>
+      <example xml:lang="pt_BR">/usuário/projeto</example>
+      <example xml:lang="ru">/username/project</example>
+      <example xml:lang="sv">/användare/projekt</example>
+      <example xml:lang="zh_CN">/username/project</example>
+      <uses_lower_case>True</uses_lower_case>
+    </path>
+  </plugin>
+</sparkleshare>

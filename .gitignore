@@ -1,5 +1,6 @@
 *~
 *.swp
+*.swo
 .DS_Store
 *.exe
 *.exe.mdb
