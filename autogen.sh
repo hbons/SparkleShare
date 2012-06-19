@@ -61,10 +61,10 @@ check_autotool_version aclocal 1.9
 check_autotool_version automake 1.9
 check_autotool_version autoconf 2.53
 check_autotool_version $LIBTOOLIZE 1.4.3
-check_autotool_version intltoolize 0.35.0
+#check_autotool_version intltoolize 0.35.0
 check_autotool_version pkg-config 0.14.0
 
-run intltoolize --force --copy
+#run intltoolize --force --copy
 run $LIBTOOLIZE --force --copy --automake
 run aclocal -I build/m4/sparkleshare -I build/m4/shamrock -I build/m4/shave $ACLOCAL_FLAGS
 run autoconf
