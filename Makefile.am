@@ -4,10 +4,10 @@ SUBDIRS = $(basedirs) $(GUISUBDIRS)
 DIST_SUBDIRS = $(basedirs) SparkleShare
 
 EXTRA_DIST = \
+	NEWS \
+        README.md \
 	legal/LICENSE \
 	legal/TRADEMARK \
-	README.md \
-	NEWS \
 	legal/AUTHORS
 
 DISTCLEANFILES = \
