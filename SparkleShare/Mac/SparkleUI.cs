@@ -35,25 +35,23 @@ namespace SparkleShare {
         public static SparkleBubbles Bubbles;
         public static SparkleAbout About;
 		
-		public static NSFont Font = NSFontManager.SharedFontManager.FontWithFamily
-			("Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
+		public static NSFont Font = NSFontManager.SharedFontManager.FontWithFamily (
+			"Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
 		
-        public static NSFont BoldFont = NSFontManager.SharedFontManager.FontWithFamily
-			("Lucida Grande", NSFontTraitMask.Bold, 0, 13);
+        public static NSFont BoldFont = NSFontManager.SharedFontManager.FontWithFamily (
+			"Lucida Grande", NSFontTraitMask.Bold, 0, 13);
 		
 
         public SparkleUI ()
         {
             using (var a = new NSAutoreleasePool ())
             {
-                Catalog.Init ("sparkleshare",
-                    Path.Combine (NSBundle.MainBundle.ResourcePath, "Translations"));
+                Catalog.Init ("sparkleshare", Path.Combine (NSBundle.MainBundle.ResourcePath, "Translations"));
 
                 GrowlApplicationBridge.WeakDelegate = this;
                 GrowlApplicationBridge.Delegate     = new SparkleGrowlDelegate ();
 
-                NSApplication.SharedApplication.ApplicationIconImage =
-					NSImage.ImageNamed ("sparkleshare-app.icns");
+                NSApplication.SharedApplication.ApplicationIconImage = NSImage.ImageNamed ("sparkleshare-app.icns");
 
                 SetFolderIcon ();
     
@@ -110,14 +108,6 @@ namespace SparkleShare {
         private void ShowDockIcon ()
         {
             NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
-        }
-
-
-        [Export("registrationDictionaryForGrowl")]
-        NSDictionary RegistrationDictionaryForGrowl ()
-        {
-            string path = NSBundle.MainBundle.PathForResource ("Growl", "plist");
-            return NSDictionary.FromFile (path);
         }
     }
 

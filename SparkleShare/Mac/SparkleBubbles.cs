@@ -41,13 +41,6 @@ namespace SparkleShare {
                         NSApplication.SharedApplication.DockTile.BadgeLabel = (events + 1).ToString ();
                     }
 
-                    if (!GrowlApplicationBridge.IsGrowlRunning ()) {
-                        NSApplication.SharedApplication.RequestUserAttention (
-                            NSRequestUserAttentionType.InformationalRequest);
-
-                        return;
-                    }
-
                     if (image_path != null) {
                         NSData image_data = NSData.FromFile (image_path);
                         GrowlApplicationBridge.Notify (title, subtext,
@@ -70,6 +63,14 @@ namespace SparkleShare {
         {
             NSApplication.SharedApplication.DockTile.BadgeLabel = null;
             SparkleUI.Bubbles.Controller.BubbleClicked ();
+        }
+
+
+        [Export("registrationDictionaryForGrowl")]
+        public override NSDictionary RegistrationDictionaryForGrowl ()
+        {
+            string path = NSBundle.MainBundle.PathForResource ("Growl", "plist");
+            return NSDictionary.FromFile (path);
         }
     }
 }
