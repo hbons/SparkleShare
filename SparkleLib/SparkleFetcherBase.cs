@@ -64,6 +64,7 @@ namespace SparkleLib {
             }
         }
 
+        
         protected List<string> warnings = new List<string> ();
         protected List<string> errors = new List<string> ();
 
