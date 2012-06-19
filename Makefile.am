@@ -5,11 +5,11 @@ DIST_SUBDIRS = $(basedirs) SparkleShare
 
 EXTRA_DIST = \
 	gnome-doc-utils.make \
-	LICENSE \
-	TRADEMARK \
+	legal/LICENSE \
+	legal/TRADEMARK \
 	README.md \
 	NEWS \
-	AUTHORS
+	legal/AUTHORS
 
 DISTCLEANFILES = \
 	intltool-extract        \
