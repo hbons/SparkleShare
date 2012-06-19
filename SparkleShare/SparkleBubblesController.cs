@@ -33,15 +33,16 @@ namespace SparkleShare {
             };
 
             Program.Controller.NotificationRaised += delegate (SparkleChangeSet change_set) {
-                ShowBubble (change_set.User.Name, FormatMessage (change_set),
-                    Program.Controller.GetAvatar (change_set.User.Email, 48));
+                if (Program.Controller.NotificationsEnabled)
+                    ShowBubble (change_set.User.Name, FormatMessage (change_set),
+                        Program.Controller.GetAvatar (change_set.User.Email, 48));
             };
         }
 
 
         public void ShowBubble (string title, string subtext, string image_path)
         {
-            if (ShowBubbleEvent != null && Program.Controller.NotificationsEnabled)
+            if (ShowBubbleEvent != null)
                 ShowBubbleEvent (title, subtext, image_path);
         }
 
