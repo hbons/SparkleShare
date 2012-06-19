@@ -53,7 +53,7 @@ namespace SparkleShare {
                 GrowlApplicationBridge.Delegate     = new SparkleGrowlDelegate ();
 
                 NSApplication.SharedApplication.ApplicationIconImage =
-					NSImage.ImageNamed ("sparkleshare.icns");
+					NSImage.ImageNamed ("sparkleshare-app.icns");
 
                 SetFolderIcon ();
     

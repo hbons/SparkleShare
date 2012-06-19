@@ -92,9 +92,7 @@ namespace SparkleShare {
                         case PageType.Setup: {
     
                             Header       = "Welcome to SparkleShare!";
-                            Description  = "Before we get started, what's your name and email?\n" +
-                                "Don't worry, this information will only be visible to team members.";
-    
+                            Description  = "First off, what's your name and email?\nThis information is only visible to team members.";
     
                             FullNameLabel = new NSTextField () {
                                 Alignment       = NSTextAlignment.Right,
@@ -906,7 +904,7 @@ namespace SparkleShare {
                                 };
     
                                 string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                                    "Pixmaps", "tutorial-slide-1-mac.png");
+                                    "Pixmaps", "tutorial-slide-1.png");
     
                                 SlideImage = new NSImage (slide_image_path) {
                                     Size = new SizeF (350, 200)
@@ -938,7 +936,7 @@ namespace SparkleShare {
                                 };
     
                                 string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                                    "Pixmaps", "tutorial-slide-2-mac.png");
+                                    "Pixmaps", "tutorial-slide-2.png");
     
                                 SlideImage = new NSImage (slide_image_path) {
                                     Size = new SizeF (350, 200)
@@ -969,7 +967,7 @@ namespace SparkleShare {
                                 };
     
                                 string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                                    "Pixmaps", "tutorial-slide-3-mac.png");
+                                    "Pixmaps", "tutorial-slide-3.png");
     
                                 SlideImage = new NSImage (slide_image_path) {
                                     Size = new SizeF (350, 200)

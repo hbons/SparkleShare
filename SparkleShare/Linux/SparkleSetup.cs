@@ -64,9 +64,7 @@ namespace SparkleShare {
                     case PageType.Setup: {
 
                         Header = _("Welcome to SparkleShare!");
-                        Description  = "Before we get started, what's your name and email? " +
-                            "Don't worry, this information will only be visible to team members.";
-
+                        Description  = "First off, what's your name and email?\nThis information is only visible to team members.";
 
                         Table table = new Table (2, 3, true) {
                             RowSpacing    = 6,
