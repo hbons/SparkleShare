@@ -79,14 +79,7 @@ AC_ARG_ENABLE(appindicator,
 	[enable_appindicator="auto"])
 
 OSNAME=`uname -s`
-
-if test "$OSNAME" = "Darwin" ; then
-	enable_gtkui = "xno"
-fi
-
-
-AM_CONDITIONAL(ENABLE_GTKUI, test x$enable_gtkui = xyes)
-if test "x$enable_gtkui" = "xyes" ; then
+if test "$OSNAME" = "Linux" ; then
 	dnl check for webkit-sharp
 	PKG_CHECK_MODULES(WEBKIT_SHARP, webkit-sharp-1.0, have_webkit_sharp=yes, have_webkit_sharp=no)
 	if test "x$have_webkit_sharp" = "xno" ; then
