@@ -41,13 +41,14 @@ MonoDevelop and start the build (Build > Build All).
 To create the <tt>SparkleShare.app</tt>, make sure the project is focused, select <tt>Project</tt> from the menu bar 
 and click <tt>"Create Mac Installer..."</tt>. Make sure to select <tt>Don't link assemblies</tt>. 
 
-Save the <tt>SparkleShare.app</tt> somewhere. Copy `SparkleShare/Mac/config` to
- `SparkleShare.app/Contents/MonoBundle/config` (adjust the paths to where you saved the .app):
+Save the <tt>SparkleShare.app</tt> somewhere. We need to copy some files over:
 
 ```
 cp SparkleShare/Mac/config SparkleShare.app/Contents/MonoBundle/config
 cp /Library/Frameworks/Mono.framework/Versions/Current/lib/libintl.dylib SparkleShare.app/Contents/Resources
 ```
 
-Now you have a working bundle that you can run.
+**Note:** Adjust `SparkleShare.app/Contents/Resources` to where you saved the bundle.
+
+Now you have a working bundle that you can run by double-clicking.
 
