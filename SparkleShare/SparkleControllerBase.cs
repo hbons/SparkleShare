@@ -1141,17 +1141,17 @@ namespace SparkleShare {
 
             return link;
         }
-    }
 
-    
-    // All change sets that happened on a day
-    public class ActivityDay : List <SparkleChangeSet>
-    {
-        public DateTime Date;
-
-        public ActivityDay (DateTime date_time)
+        
+        // All change sets that happened on a day
+        private class ActivityDay : List <SparkleChangeSet>
         {
-            Date = new DateTime (date_time.Year, date_time.Month, date_time.Day);
+            public DateTime Date;
+    
+            public ActivityDay (DateTime date_time)
+            {
+                Date = new DateTime (date_time.Year, date_time.Month, date_time.Day);
+            }
         }
     }
 }

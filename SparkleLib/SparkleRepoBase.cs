@@ -34,8 +34,6 @@ namespace SparkleLib {
     }
 
 
-
-
     public abstract class SparkleRepoBase {
 
         public abstract string CurrentRevision { get; }
