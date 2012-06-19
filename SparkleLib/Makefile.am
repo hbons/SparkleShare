@@ -5,7 +5,6 @@ SOURCES =  \
 	Defines.cs \
 	SparkleAnnouncement.cs \
 	SparkleBackend.cs \
-	SparkleWrappers.cs \
 	SparkleConfig.cs \
 	SparkleExceptions.cs \
 	SparkleExtensions.cs \
@@ -16,7 +15,8 @@ SOURCES =  \
 	SparkleListenerTcp.cs \
 	SparkleRepoBase.cs \
 	SparkleUser.cs \
-	SparkleWatcher.cs
+	SparkleWatcher.cs \
+	SparkleWrappers.cs
 
 
 install-data-hook:

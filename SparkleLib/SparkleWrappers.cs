@@ -37,53 +37,19 @@ namespace SparkleLib {
         public string Revision;
         public DateTime Timestamp;
         public DateTime FirstTimestamp;
-        public bool IsMagical = false;
         public Uri RemoteUrl;
 
         public List<SparkleChange> Changes = new List<SparkleChange> ();
-		
-
-        public string RelativeTimestamp {
-            get {
-                TimeSpan time_span = DateTime.Now - Timestamp;
-
-                if (time_span <= TimeSpan.FromSeconds (60))
-                    return "just now";
-
-                if (time_span <= TimeSpan.FromMinutes (60))
-                    return time_span.Minutes > 1
-                        ? time_span.Minutes + " minutes ago"
-                        : "a minute ago";
-
-                if (time_span <= TimeSpan.FromHours (24))
-                    return time_span.Hours > 1
-                        ? time_span.Hours + " hours ago"
-                        : "an hour ago";
-
-                if (time_span <= TimeSpan.FromDays (30))
-                    return time_span.Days > 1
-                        ? time_span.Days + " days ago"
-                        : "a day ago";
-
-                if (time_span <= TimeSpan.FromDays (365))
-                    return time_span.Days > 30
-                    ? (time_span.Days / 30) + " months ago"
-                    : "a month ago";
-
-                return time_span.Days > 365
-                    ? (time_span.Days / 365) + " years ago"
-                    : "a year ago";
-            }   
-        }
     }
 
 
     public class SparkleChange {
 
         public SparkleChangeType Type;
+		public DateTime Timestamp;
+		
         public string Path;
-        public string MovedPath;
-        public DateTime Timestamp;
+        public string MovedToPath;
     }
 
 
