@@ -278,8 +278,6 @@ namespace SparkleShare {
                 ShowSetupWindow (PageType.Setup);
             else
                 new Thread (new ThreadStart (PopulateRepositories)).Start ();
-
-            AlertNotificationRaised ("2", "23");
         }
 
 
