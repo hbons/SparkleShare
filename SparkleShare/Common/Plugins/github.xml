@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <plugin>
+    <info>
+        <name>Github</name>
+        <name xml:lang="de">Github</name>
+        <name xml:lang="el">Github</name>
+        <name xml:lang="es">Github</name>
+        <name xml:lang="fr">Github</name>
+        <name xml:lang="it">Github</name>
+        <name xml:lang="ja">Github</name>
+        <name xml:lang="nl">Github</name>
+        <name xml:lang="pl">Github</name>
+        <name xml:lang="pt_BR">Github</name>
+        <name xml:lang="ru">Github</name>
+        <name xml:lang="sv">Github</name>
+        <name xml:lang="zh_CN">Github</name>
+        <description>Collaborate on projects hosted on Github</description>
+        <icon>github.png</icon>
+        <backend>Git</backend>
+        <fingerprint>16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48</fingerprint>
+    </info>
+    <address>
+      <value>ssh://git@github.com/</value>
+      <example/>
+    </address>
+    <path>
+      <value/>
+      <example>/username/project</example>
+      <example xml:lang="de">/username/project</example>
+      <example xml:lang="el">/username/project</example>
+      <example xml:lang="es">/usuario/proyecto</example>
+      <example xml:lang="fr">/nom-d-utilisateur/projet</example>
+      <example xml:lang="it">/nome-utente/progetto</example>
+      <example xml:lang="nl">/gebruikersnaam/project</example>
+      <example xml:lang="pl">/nazwa uzytkownika/projekt</example>
+      <example xml:lang="pt_BR">/usuário/projeto</example>
+      <example xml:lang="ru">/username/project</example>
+      <example xml:lang="sv">/användare/projekt</example>
+      <example xml:lang="zh_CN">/username/project</example>
+    </path>
+  </plugin>
+</sparkleshare>

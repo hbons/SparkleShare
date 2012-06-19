@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <plugin>
+    <info>
+        <name>The GNOME Project</name>
+        <name xml:lang="ar">مشروع جنوم.</name>
+        <name xml:lang="bg">Проектът GNOME</name>
+        <name xml:lang="ca">El projecte GNOME</name>
+        <name xml:lang="cs_CZ">Projekt GNOME</name>
+        <name xml:lang="da">GNOME-projektet</name>
+        <name xml:lang="de">Das GNOME Projekt</name>
+        <name xml:lang="el">Το GNOME Project</name>
+        <name xml:lang="eo">La GNOME-projekto</name>
+        <name xml:lang="es">El Proyecto GNOME</name>
+        <name xml:lang="fi">GNOME-projekti</name>
+        <name xml:lang="fr">Le projet GNOME</name>
+        <name xml:lang="he">פרוייקט גנום</name>
+        <name xml:lang="hu">A GNOME Project</name>
+        <name xml:lang="it">The GNOME Project</name>
+        <name xml:lang="ja">GNOMEプロジェクト</name>
+        <name xml:lang="nl">Het GNOME Project</name>
+        <name xml:lang="nn_NO">GNOME-prosjektet</name>
+        <name xml:lang="no_NO">GNOME Prosjektet</name>
+        <name xml:lang="pl">Projekt GNOME</name>
+        <name xml:lang="pt_BR">O projeto GNOME</name>
+        <name xml:lang="ru">The GNOME Project</name>
+        <name xml:lang="sl">Projekt GNOME</name>
+        <name xml:lang="sr_RS">Пројекат ГНОМ</name>
+        <name xml:lang="sv">GNOME-projektet</name>
+        <name xml:lang="uk">Проект GNOME</name>
+        <name xml:lang="zh_CN">GMOME项目</name>
+        <name xml:lang="zh_TW">GNOME 專案</name>
+        <description>A free and easy interface for your computer</description>
+        <description xml:lang="de">Eine freie und einfache Schnittstelle für deinen Computer</description>
+        <description xml:lang="el">Ένα ελεύθερο και απλό interface για τον υπολογιστή σου</description>
+        <description xml:lang="es">Una interfaz libre y sencilla para tu ordenador</description>
+        <description xml:lang="fr">Une interface facile et gratuite pour votre ordinateur</description>
+        <description xml:lang="it">Un'interfaccia gratuita e facile per il tuo computer</description>
+        <description xml:lang="nl">Een gratis en gemakkelijke interface voor uw computer</description>
+        <description xml:lang="pl">Wolny i prosty interfejs dla komputerów</description>
+        <description xml:lang="pt_BR">Uma interface fácil e gratuita para o seu computador</description>
+        <description xml:lang="ru">Бесплатный и простой интерфейс для вашего компьютера</description>
+        <description xml:lang="sv">Ett gratis och enkelt gränssnitt för din dator</description>
+        <description xml:lang="zh_CN">为你的计算机提供一个免费并且简单的接口</description>
+        <icon>gnome.png</icon>
+        <backend>Git</backend>
+        <fingerprint>00:39:fd:1a:a4:2c:6b:28:b8:2e:95:31:c2:90:72:03</fingerprint>
+    </info>
+    <address>
+      <value>ssh://git@gnome.org/</value>
+      <example/>
+    </address>
+    <path>
+      <value/>
+      <example>/project</example>
+      <example xml:lang="de">/Projekt</example>
+      <example xml:lang="el">/project</example>
+      <example xml:lang="es">/proyecto</example>
+      <example xml:lang="fr">/projet</example>
+      <example xml:lang="it">/progetto</example>
+      <example xml:lang="nl">/project</example>
+      <example xml:lang="pl">/project</example>
+      <example xml:lang="pt_BR">/projeto</example>
+      <example xml:lang="ru">/project</example>
+      <example xml:lang="sv">/projekt</example>
+      <example xml:lang="zh_CN">/project</example>
+    </path>
+  </plugin>
+</sparkleshare>

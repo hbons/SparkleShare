@@ -1,4 +1,5 @@
-SUBDIRS =	Linux
+SUBDIRS = Linux \
+	Common
 
 ASSEMBLY = SparkleShare
 TARGET = exe
