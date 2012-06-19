@@ -1,11 +1,8 @@
+## Building on Linux distributions
 
-## Running SparkleShare
+You can choose to build SparkleShare from source or get the packages through your distribution's repositories.
 
-### Linux
-
-You can choose to build from source or get the packages through your distribution's repositories.
-
-Requirements:
+To run SparkleShare, you'll need the following packages:
 
 ```
 curl
@@ -16,18 +13,22 @@ notify-sharp
 webkit-sharp
 ```
 
-Optional:
+**Note:** These packages may not overlap with the packages required to perform a build, so please make sure that at least the above packages are installed.
+
+Optional packages:
 
 ```
-nautilus-python
-gvfs
-libappindicator
+gvfs (to change file/folder icons)
+libappindicator (for Ubuntu integration)
+nautilus-python (for Nautilus integration)
 ```
 
+### Installing build requirements
 
-## Building on Linux
+You can use one of the commands listed below for the most used Linux distributions:
 
-### Ubuntu:
+
+#### Ubuntu
 
 ```bash
 $ sudo apt-get install libappindicator0.1-cil-dev gtk-sharp2 mono-runtime mono-devel \
@@ -35,7 +36,7 @@ $ sudo apt-get install libappindicator0.1-cil-dev gtk-sharp2 mono-runtime mono-d
   mono-gmcs libwebkit-cil-dev intltool libtool python-nautilus libndesk-dbus-glib1.0-cil-dev
 ```
 
-### Fedora:
+#### Fedora
 
 ```bash
 $ sudo yum install gtk-sharp2-devel mono-core mono-devel monodevelop \
@@ -44,7 +45,7 @@ $ sudo yum install gtk-sharp2-devel mono-core mono-devel monodevelop \
   desktop-file-utils
 ```
 
-### Debian:
+#### Debian
 
 ```bash
 $ sudo apt-get install gtk-sharp2 mono-runtime mono-devel monodevelop \
@@ -53,7 +54,7 @@ $ sudo apt-get install gtk-sharp2 mono-runtime mono-devel monodevelop \
   desktop-file-utils
 ```
 
-### openSUSE:
+### openSUSE
 
 ```bash
 $ sudo zypper install gtk-sharp2 mono-core mono-devel monodevelop \
@@ -61,8 +62,9 @@ $ sudo zypper install gtk-sharp2 mono-core mono-devel monodevelop \
   notify-sharp-devel webkit-sharp libwebkitgtk-devel libtool intltool
 ```
 
+### Starting the build
 
-You can then build and install SparkleShare like this:
+You can build and install SparkleShare like this:
 
 ```bash
 $ ./configure --prefix=/usr (or ./autogen.sh if you build from the repository)
@@ -70,5 +72,5 @@ $ make
 $ sudo make install
 ```
 
-**Note:**  The Nautilus extension will only be enabled if you build with `--prefix=/usr`.
+**Note:** The Nautilus extension will only be enabled if you build with `--prefix=/usr`.
 
