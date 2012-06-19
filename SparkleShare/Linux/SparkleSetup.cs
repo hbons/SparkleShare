@@ -314,8 +314,8 @@ namespace SparkleShare {
                             };
 
                             Button add_button = new Button (_("Add")) {
-							    Sensitive = false
-						    };
+                                Sensitive = false
+                            };
 
                             add_button.Clicked += delegate {
                                 string server         = address_entry.Text;
