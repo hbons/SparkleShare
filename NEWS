@@ -10,6 +10,8 @@
 	- Sort event log file entries by time
 	- Change default notification service to use port 80
 	- Show backend error message(s) when on failed project add
+	- Update Growl framework to version 1.3.1: A separate Growl 
+	  is no longer needed and ready for Mountain Lion's notifications
 
 	Travis:
 	- Rewrote the notification service, now more robust and reliable
