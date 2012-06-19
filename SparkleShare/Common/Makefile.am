@@ -1,0 +1,3 @@
+SUBDIRS = HTML \
+	Plugins \
+	Pixmaps
