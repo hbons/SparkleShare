@@ -1,6 +1,6 @@
 ## Building on Linux distributions
 
-You can choose to build SparkleShare from source or get the packages through your distribution's repositories.
+You can choose to build SparkleShare from source or to get the package through your distribution's repositories.
 
 To run SparkleShare, you'll need the following packages:
 
@@ -54,7 +54,7 @@ $ sudo apt-get install gtk-sharp2 mono-runtime mono-devel monodevelop \
   desktop-file-utils
 ```
 
-### openSUSE
+#### openSUSE
 
 ```bash
 $ sudo zypper install gtk-sharp2 mono-core mono-devel monodevelop \
@@ -73,4 +73,18 @@ $ sudo make install
 ```
 
 **Note:** The Nautilus extension will only be enabled if you build with `--prefix=/usr`.
+
+
+### Resetting SparkleShare settings
+
+```
+rm -Rf ~/SparkleShare
+rm -Rf ~/.config/sparkleshare
+```
+
+### Uninstalling
+
+```
+sudo make uninstall
+```
 
