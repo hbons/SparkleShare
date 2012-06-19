@@ -4,7 +4,6 @@ SUBDIRS = $(basedirs) $(GUISUBDIRS)
 DIST_SUBDIRS = $(basedirs) SparkleShare
 
 EXTRA_DIST = \
-	gnome-doc-utils.make \
 	legal/LICENSE \
 	legal/TRADEMARK \
 	README.md \
