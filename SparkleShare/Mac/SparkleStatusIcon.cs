@@ -83,7 +83,7 @@ namespace SparkleShare {
 
                 this.folder_image       = NSImage.ImageNamed ("NSFolder");
                 this.caution_image      = NSImage.ImageNamed ("NSCaution");
-                this.sparkleshare_image = NSImage.ImageNamed ("sparkleshare-mac");
+                this.sparkleshare_image = NSImage.ImageNamed ("sparkleshare-folder");
 
                 CreateMenu ();
             }
@@ -330,34 +330,34 @@ namespace SparkleShare {
         {
             this.animation_frames = new NSImage [] {
                 new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-sparkleshare-mac-i.png")),
+                    "Pixmaps", "process-syncing-i.png")),
                 new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-sparkleshare-mac-ii.png")),
+                    "Pixmaps", "process-syncing-ii.png")),
                 new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-sparkleshare-mac-iii.png")),
+                    "Pixmaps", "process-syncing-iii.png")),
                 new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-sparkleshare-mac-iiii.png")),
+                    "Pixmaps", "process-syncing-iiii.png")),
                 new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-sparkleshare-mac-iiiii.png"))
+                    "Pixmaps", "process-syncing-iiiii.png"))
             };
 
             this.animation_frames_active = new NSImage [] {
                 new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-sparkleshare-mac-i-active.png")),
+                    "Pixmaps", "process-syncing-i-active.png")),
                 new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-sparkleshare-mac-ii-active.png")),
+                    "Pixmaps", "process-syncing-ii-active.png")),
                 new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-sparkleshare-mac-iii-active.png")),
+                    "Pixmaps", "process-syncing-iii-active.png")),
                 new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-sparkleshare-mac-iiii-active.png")),
+                    "Pixmaps", "process-syncing-iiii-active.png")),
                 new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-sparkleshare-mac-iiiii-active.png"))
+                    "Pixmaps", "process-syncing-iiiii-active.png"))
             };
 			
             this.error_image        = new NSImage (NSBundle.MainBundle.ResourcePath +
-                "/Pixmaps/sparkleshare-syncing-error-mac.png");
+                "/Pixmaps/process-syncing-error.png");
             this.error_image_active = new NSImage (NSBundle.MainBundle.ResourcePath +
-                "/Pixmaps/sparkleshare-syncing-error-mac-active.png");
+                "/Pixmaps/process-syncing-error-active.png");
         }
     }
     

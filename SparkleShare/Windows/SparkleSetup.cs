@@ -64,9 +64,7 @@ namespace SparkleShare {
                     switch (type) {
                     case PageType.Setup: {
                         Header      = "Welcome to SparkleShare!";
-                        Description = "Before we get started, what's your name and email?\n" +
-                            "Don't worry, this information will only be visible to team members.";
-        
+                        Description  = "First off, what's your name and email?\nThis information is only visible to team members.";
                         
                         TextBlock name_label = new TextBlock () {
                             Text = "Full Name:",

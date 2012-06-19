@@ -120,48 +120,48 @@
     <Content Include="..\..\data\side-splash.png">
       <Link>Pixmaps\side-splash.png</Link>
     </Content>
-    <Content Include="..\..\data\sparkleshare-mac.icns">
-      <Link>sparkleshare-mac.icns</Link>
+    <Content Include="Pixmaps\sparkleshare-folder.icns">
+      <Link>sparkleshare-folder.icns</Link>
     </Content>
-    <Content Include="..\..\data\sparkleshare.icns">
-      <Link>sparkleshare.icns</Link>
+    <Content Include="Pixmaps\sparkleshare-app.icns">
+      <Link>sparkleshare-app.icns</Link>
     </Content>
-    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-i-active.png">
-      <Link>Pixmaps\process-syncing-sparkleshare-mac-i-active.png</Link>
+    <Content Include="Pixmaps\process-syncing-i-active.png">
+      <Link>Pixmaps\process-syncing-i-active.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-i.png">
-      <Link>Pixmaps\process-syncing-sparkleshare-mac-i.png</Link>
+    <Content Include="Pixmaps\process-syncing-i.png">
+      <Link>Pixmaps\process-syncing-i.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-ii-active.png">
-      <Link>Pixmaps\process-syncing-sparkleshare-mac-ii-active.png</Link>
+    <Content Include="Pixmaps\process-syncing-ii-active.png">
+      <Link>Pixmaps\process-syncing-ii-active.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-ii.png">
-      <Link>Pixmaps\process-syncing-sparkleshare-mac-ii.png</Link>
+    <Content Include="Pixmaps\process-syncing-ii.png">
+      <Link>Pixmaps\process-syncing-ii.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-iii-active.png">
-      <Link>Pixmaps\process-syncing-sparkleshare-mac-iii-active.png</Link>
+    <Content Include="Pixmaps\process-syncing-iii-active.png">
+      <Link>Pixmaps\process-syncing-iii-active.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-iii.png">
-      <Link>Pixmaps\process-syncing-sparkleshare-mac-iii.png</Link>
+    <Content Include="Pixmaps\process-syncing-iii.png">
+      <Link>Pixmaps\process-syncing-iii.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-iiii-active.png">
-      <Link>Pixmaps\process-syncing-sparkleshare-mac-iiii-active.png</Link>
+    <Content Include="Pixmaps\process-syncing-iiii-active.png">
+      <Link>Pixmaps\process-syncing-iiii-active.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-iiii.png">
-      <Link>Pixmaps\process-syncing-sparkleshare-mac-iiii.png</Link>
+    <Content Include="Pixmaps\process-syncing-iiii.png">
+      <Link>Pixmaps\process-syncing-iiii.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-iiiii-active.png">
-      <Link>Pixmaps\process-syncing-sparkleshare-mac-iiiii-active.png</Link>
+    <Content Include="Pixmaps\process-syncing-iiiii-active.png">
+      <Link>Pixmaps\process-syncing-iiiii-active.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\process-syncing-sparkleshare-mac-iiiii.png">
-      <Link>Pixmaps\process-syncing-sparkleshare-mac-iiiii.png</Link>
+    <Content Include="Pixmaps\process-syncing-iiiii.png">
+      <Link>Pixmaps\process-syncing-iiiii.png</Link>
     </Content>
     <Content Include="Growl.plist" />
-    <Content Include="..\..\data\icons\sparkleshare-syncing-error-mac.png">
-      <Link>Pixmaps\sparkleshare-syncing-error-mac.png</Link>
+    <Content Include="Pixmaps\process-syncing-error.png">
+      <Link>Pixmaps\process-syncing-error.png</Link>
     </Content>
-    <Content Include="..\..\data\icons\sparkleshare-syncing-error-mac-active.png">
-      <Link>Pixmaps\sparkleshare-syncing-error-mac-active.png</Link>
+    <Content Include="Pixmaps\process-syncing-error-active.png">
+      <Link>Pixmaps\process-syncing-error-active.png</Link>
     </Content>
     <Content Include="..\..\data\icons\document-added-12.png">
       <Link>Pixmaps\document-added-12.png</Link>
@@ -256,22 +256,13 @@
     <Content Include="..\..\data\html\jquery.js">
       <Link>HTML\jquery.js</Link>
     </Content>
-    <Content Include="..\..\data\tutorial-slide-1.png">
+    <Content Include="Pixmaps\tutorial-slide-1.png">
       <Link>Pixmaps\tutorial-slide-1.png</Link>
     </Content>
-    <Content Include="..\..\data\tutorial-slide-1-mac.png">
-      <Link>Pixmaps\tutorial-slide-1-mac.png</Link>
-    </Content>
-    <Content Include="..\..\data\tutorial-slide-2-mac.png">
-      <Link>Pixmaps\tutorial-slide-2-mac.png</Link>
-    </Content>
-    <Content Include="..\..\data\tutorial-slide-3-mac.png">
-      <Link>Pixmaps\tutorial-slide-3-mac.png</Link>
-    </Content>
-    <Content Include="..\..\data\tutorial-slide-2.png">
+    <Content Include="Pixmaps\tutorial-slide-2.png">
       <Link>Pixmaps\tutorial-slide-2.png</Link>
     </Content>
-    <Content Include="..\..\data\tutorial-slide-3.png">
+    <Content Include="Pixmaps\tutorial-slide-3.png">
       <Link>Pixmaps\tutorial-slide-3.png</Link>
     </Content>
     <Content Include="..\..\data\tutorial-slide-4.png">
