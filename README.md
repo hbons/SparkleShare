@@ -5,7 +5,7 @@ SparkleShare is an Open Source collaboration and sharing tool that is designed t
 
 ### Resources
 
-|||
+|                    |                                                   |
 |-------------------:|:--------------------------------------------------|
 |       **Website**: | http://www.sparkleshare.org/                      |
 |     **Downloads**: | https://github.com/hbons/SparkleShare/downloads   |
@@ -18,7 +18,7 @@ SparkleShare is an Open Source collaboration and sharing tool that is designed t
 
 ### License
 
-SparkleShare is Open Source software and licensed under the GNU General Public License version 3 or later. You are welcome to change and redistribute it under certain conditions.For more information see the legal/LICENSE file.
+SparkleShare is Open Source software and licensed under the `GNU General Public License version 3 or later`. You are welcome to change and redistribute it under certain conditions.For more information see the `legal/LICENSE` file.
 
 
 ### Building...
@@ -28,7 +28,7 @@ SparkleShare is Open Source software and licensed under the GNU General Public L
 [...on Windows](https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Windows/README.md)  
 
 
-### Finally
+### Finally...
 
 Have fun, make awesome. :)
 
