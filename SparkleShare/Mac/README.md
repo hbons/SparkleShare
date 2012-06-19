@@ -28,7 +28,7 @@ $ sudo port install git-core automake intltool libtool
 Start the first part of the build:
 
 ```bash
-$ ./autogen.sh --enable-gtkui=no
+$ ./autogen.sh
 $ make
 ```
 

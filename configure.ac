@@ -73,14 +73,17 @@ dnl package checks, common for all configs
 
 SPARKLESHARE_CHECK_GTK_SHARP
 
-AC_ARG_ENABLE(gtkui,
-	AS_HELP_STRING([--disable-gtkui], [Do not build the Gtk+ user interface]),
-	[ enable_gtkui=no ], [ enable_gtkui=yes ])
-
 AC_ARG_ENABLE(appindicator,
 	AS_HELP_STRING([--enable-appindicator[=@<:@no/auto/yes@:>@]],[Build support for application indicators ]),
 	[enable_appindicator=$enableval],
 	[enable_appindicator="auto"])
+
+OSNAME=`uname -s`
+
+if test "$OSNAME" = "Darwin" ; then
+	enable_gtkui = "xno"
+fi
+
 
 AM_CONDITIONAL(ENABLE_GTKUI, test x$enable_gtkui = xyes)
 if test "x$enable_gtkui" = "xyes" ; then
