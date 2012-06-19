@@ -22,9 +22,11 @@ SparkleShare is free and Open Source software and licensed under the GNU GPLv3 o
 
 ### Building...
 
-[...on Linux distributions](https://github.com/hbons/SparkleShare/SparkleShare/Linux/README.md)
-[...on Mac](https://github.com/hbons/SparkleShare/SparkleShare/Mac/README.md)
-[...on Windows](https://github.com/hbons/SparkleShare/SparkleShare/Windows/README.md)
+[...on Linux distributions](https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Linux/README.md)
+
+[...on Mac](https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Mac/README.md)
+
+[...on Windows](https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Windows/README.md)
 
 
 ### Finally
