@@ -1,6 +1,6 @@
 ## Building on Mac
 
-You can choose to build SparkleShare from source or download the SparkleShare bundle.
+You can choose to build SparkleShare from source or to download the SparkleShare bundle.
 
 
 ### Installing build requirements
@@ -51,4 +51,16 @@ cp /Library/Frameworks/Mono.framework/Versions/Current/lib/libintl.dylib Sparkle
 **Note:** Adjust `SparkleShare.app/Contents/Resources` to where you saved the bundle.
 
 Now you have a working bundle that you can run by double-clicking.
+
+
+### Resetting SparkleShare settings
+
+```
+rm -Rf ~/SparkleShare
+rm -Rf ~/.config/sparkleshare
+```
+
+### Uninstalling
+
+Simple remove the SparkleShare bundle.
 
