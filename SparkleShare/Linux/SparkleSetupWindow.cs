@@ -34,7 +34,7 @@ namespace SparkleShare {
         private VBox VBox;
         private VBox Wrapper;
         private VBox OptionArea;
-        private HButtonBox Buttons;
+        private HBox Buttons;
 
         public string Header;
         public string Description;
@@ -107,11 +107,12 @@ namespace SparkleShare {
         }
 
 
-        private HButtonBox CreateButtonBox ()
+        private HBox CreateButtonBox ()
         {
-            return new HButtonBox () {
+            return new HBox () {
                 BorderWidth = 0,
-                Layout      = ButtonBoxStyle.End,
+                //Layout      = ButtonBoxStyle.End,
+                Homogeneous = false,
                 Spacing     = 6
             };
         }
@@ -119,15 +120,14 @@ namespace SparkleShare {
 
         public void AddButton (Button button)
         {
+            (button.Child as Label).Xpad = 15;
             Buttons.Add (button);
-            ShowAll ();
         }
 
 
         public void AddOption (Widget widget)
         {            
             OptionArea.Add (widget);
-            ShowAll ();
         }
 
 
@@ -180,6 +180,13 @@ namespace SparkleShare {
         
         new public void ShowAll ()
         {
+            if (Buttons.Children.Length > 0) {
+                Button default_button = (Button) Buttons.Children [Buttons.Children.Length - 1];
+            
+                default_button.CanDefault = true;
+                Default = default_button;
+            }
+        
             Present ();
             base.ShowAll ();
         }
