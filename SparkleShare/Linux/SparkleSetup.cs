@@ -77,11 +77,13 @@ namespace SparkleShare {
                             };
 
                             Entry name_entry = new Entry (Controller.GuessedUserName) {
-                                Xalign = 0
+                                Xalign = 0,
+                                ActivatesDefault = true
                             };
 
                             Entry email_entry = new Entry (Controller.GuessedUserEmail) {
-                                Xalign = 0
+                                Xalign = 0,
+                                ActivatesDefault = true
                             };
                             
                             name_entry.Changed += delegate {
@@ -179,12 +181,14 @@ namespace SparkleShare {
 
                         Entry address_entry = new Entry () {
                             Text = Controller.PreviousAddress,
-                            Sensitive = (Controller.SelectedPlugin.Address == null)
+                            Sensitive = (Controller.SelectedPlugin.Address == null),
+                            ActivatesDefault = true
                         };
                         
                         Entry path_entry = new Entry () {
-                             Text = Controller.PreviousPath,
-                            Sensitive = (Controller.SelectedPlugin.Path == null)
+                            Text = Controller.PreviousPath,
+                            Sensitive = (Controller.SelectedPlugin.Path == null),
+                            ActivatesDefault = true
                         };
                         
                         Label address_example = new Label () {
@@ -231,7 +235,7 @@ namespace SparkleShare {
                         };
 
                         Controller.CheckAddPage (address_entry.Text, path_entry.Text, 1);
-
+                        
                         // Update the address field text when the selection changes
                         tree.CursorChanged += delegate (object sender, EventArgs e) {
                             Controller.SelectedPluginChanged (tree.SelectedRow);
@@ -340,6 +344,8 @@ namespace SparkleShare {
                         AddOption (check_button);
                         AddButton (cancel_button);
                         AddButton (add_button);
+                        
+                        Controller.CheckAddPage (address_entry.Text, path_entry.Text, 1);
 
                         break;
                     }
@@ -445,9 +451,9 @@ namespace SparkleShare {
                         Header = _("Something went wrong") + "…";
 
                         VBox points = new VBox (false, 0);
-                        Image list_point_one   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
-                        Image list_point_two   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
-                        Image list_point_three = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
+                        Image list_point_one   = new Image (SparkleUIHelpers.GetIcon ("go-next", 16));
+                        Image list_point_two   = new Image (SparkleUIHelpers.GetIcon ("go-next", 16));
+                        Image list_point_three = new Image (SparkleUIHelpers.GetIcon ("go-next", 16));
 
                         Label label_one = new Label () {
                             Markup = "<b>" + Controller.PreviousUrl + "</b> is the address we've compiled. " +
@@ -527,12 +533,13 @@ namespace SparkleShare {
 
                         Entry password_entry = new Entry () {
                             Xalign = 0,
-                            Visibility = false
+                            Visibility = false,
+                            ActivatesDefault = true
                         };
                         
                         CheckButton show_password_check_button = new CheckButton ("Show password") {
                             Active = false,
-                            Xalign = 0
+                            Xalign = 0,
                         };
                         
                         show_password_check_button.Toggled += delegate {
@@ -622,7 +629,8 @@ namespace SparkleShare {
 
                         Entry password_entry = new Entry () {
                             Xalign = 0,
-                            Visibility = false
+                            Visibility = false,
+                            ActivatesDefault = true
                         };
                         
                         CheckButton show_password_check_button = new CheckButton ("Show password") {
@@ -841,17 +849,21 @@ namespace SparkleShare {
             };
         }
 
-
+    
         private void RenderServiceColumn (TreeViewColumn column, CellRenderer cell,
             TreeModel model, TreeIter iter)
         {
             string markup           = (string) model.GetValue (iter, 1);
             TreeSelection selection = (column.TreeView as TreeView).Selection;
 
-            if (selection.IterIsSelected (iter))
-                markup = markup.Replace (SecondaryTextColor, SecondaryTextColorSelected);
-            else
+            if (selection.IterIsSelected (iter)) {
+                if (column.TreeView.HasFocus)
+                    markup = markup.Replace (SecondaryTextColor, SecondaryTextColorSelected);
+                else
+                    markup = markup.Replace (SecondaryTextColorSelected, SecondaryTextColor);
+            } else {
                 markup = markup.Replace (SecondaryTextColorSelected, SecondaryTextColor);
+            }
 
             (cell as CellRendererText).Markup = markup;
         }
