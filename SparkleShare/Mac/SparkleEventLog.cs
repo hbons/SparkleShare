@@ -63,7 +63,7 @@ namespace SparkleShare {
                 SetFrame (
                     new RectangleF (
                         new PointF (x, y),
-                        new SizeF (min_width, (int) (NSScreen.MainScreen.Frame.Height * 0.9))),
+                        new SizeF (min_width, (int) (NSScreen.MainScreen.Frame.Height * 0.85))),
                     true);
 
                 StyleMask = (NSWindowStyle.Closable |
