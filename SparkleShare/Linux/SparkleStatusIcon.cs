@@ -56,7 +56,7 @@ namespace SparkleShare {
 
             #if HAVE_APP_INDICATOR
             this.indicator = new ApplicationIndicator ("sparkleshare",
-                "process-syncing-sparkleshare-i", Category.ApplicationStatus);
+                "process-syncing-i", Category.ApplicationStatus);
 
             this.indicator.Status = Status.Attention;
             #else
@@ -74,7 +74,7 @@ namespace SparkleShare {
                 Application.Invoke (delegate {
                     if (icon_frame > -1) {
                         #if HAVE_APP_INDICATOR
-                        string icon_name = "process-syncing-sparkleshare-";
+                        string icon_name = "process-syncing-";
                         for (int i = 0; i <= icon_frame; i++)
                             icon_name += "i";
 
@@ -85,9 +85,9 @@ namespace SparkleShare {
 
                     } else {
                         #if HAVE_APP_INDICATOR
-                        this.indicator.IconName = "sparkleshare-syncing-error";
+                        this.indicator.IconName = "process-syncing-error";
                         #else
-						this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("sparkleshare-syncing-error", 24);
+						this.status_icon.Pixbuf = SparkleUIHelpers.GetIcon ("process-syncing-error", 24);
                         #endif
                     }
                 });
