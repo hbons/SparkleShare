@@ -124,11 +124,21 @@ for icon in $@; do
 
 	if test -z $size; then 
 		size=scalable;
+		
+		if [[ "${INSTALL_BASE_DIR}" == *ubuntu-mono-* ]]; then
+			install_dir=${INSTALL_DEST_DIR}${INSTALL_BASE_DIR}/$category/$size
+	    else
+    		install_dir=${INSTALL_DEST_DIR}${INSTALL_BASE_DIR}/$size/$category
+    	fi
 	else
-		size=${size}x${size};
+		if [[ "${INSTALL_BASE_DIR}" == *ubuntu-mono-* ]]; then
+			install_dir=${INSTALL_DEST_DIR}${INSTALL_BASE_DIR}/$category/$size
+		else
+			size=${size}x${size};
+			install_dir=${INSTALL_DEST_DIR}${INSTALL_BASE_DIR}/$size/$category
+		fi	
 	fi
-	
-	install_dir=${INSTALL_DEST_DIR}${INSTALL_BASE_DIR}/$size/$category
+
 	install_path=$install_dir/$install_name
 	
 	if test "x$INSTALL" = "xyes"; then

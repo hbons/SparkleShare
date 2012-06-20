@@ -1,3 +1,6 @@
+SUBDIRS = ubuntu-mono-dark \
+	ubuntu-mono-light
+
 theme = hicolor
 system_themedir = $(datadir)/icons/$(theme)
 app_themedir = $(pkgdatadir)/icons/$(theme)

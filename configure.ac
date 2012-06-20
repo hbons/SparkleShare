@@ -143,6 +143,8 @@ SparkleShare/Common/Pixmaps/Makefile
 SparkleShare/Linux/Makefile
 SparkleShare/Linux/Pixmaps/Makefile
 SparkleShare/Linux/Pixmaps/icons/Makefile
+SparkleShare/Linux/Pixmaps/icons/ubuntu-mono-dark/Makefile
+SparkleShare/Linux/Pixmaps/icons/ubuntu-mono-light/Makefile
 SparkleShare/Linux/sparkleshare
 SparkleShare/Linux/Nautilus/Makefile
 SparkleShare/Linux/Nautilus/sparkleshare-nautilus-extension.py

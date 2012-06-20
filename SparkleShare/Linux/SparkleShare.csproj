@@ -29,15 +29,22 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="System" />
     <Reference Include="Mono.Posix" />
     <Reference Include="notify-sharp, Version=0.4.0.0, Culture=neutral, PublicKeyToken=2df29c54e245917a">
       <Private>False</Private>
+      <Package>notify-sharp</Package>
+    </Reference>
+    <Reference Include="appindicator-sharp">
+      <HintPath>..\..\..\..\..\..\usr\lib\mono\gac\appindicator-sharp\0.2.0.0__bcae265d1c7ab4c2\appindicator-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ProjectExtensions>
@@ -57,26 +64,24 @@
   </ProjectExtensions>
   <ItemGroup>
     <Compile Include="SparkleBubbles.cs" />
-    <Compile Include="SparkleBubblesController.cs" />
     <Compile Include="SparkleController.cs" />
-    <Compile Include="SparkleEntry.cs" />
     <Compile Include="SparkleSetup.cs" />
-    <Compile Include="SparkleSetupController.cs" />
     <Compile Include="SparkleSetupWindow.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="SparkleSpinner.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
-    <Compile Include="SparkleStatusIconController.cs" />
     <Compile Include="SparkleUI.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
-    <Compile Include="SparkleEventLogController.cs" />
     <Compile Include="SparkleEventLog.cs" />
-    <Compile Include="SparkleAboutController.cs" />
     <Compile Include="SparkleAbout.cs" />
-    <Compile Include="SparkleExtensions.cs" />
-    <Compile Include="SparkleControllerBase.cs" />
-    <Compile Include="SparklePlugin.cs" />
-    <Compile Include="SparkleOptions.cs" />
-    <Compile Include="SparkleInvite.cs" />
+    <Compile Include="..\Program.cs" />
+    <Compile Include="..\SparkleAboutController.cs" />
+    <Compile Include="..\SparkleBubblesController.cs" />
+    <Compile Include="..\SparkleControllerBase.cs" />
+    <Compile Include="..\SparkleEventLogController.cs" />
+    <Compile Include="..\SparkleExtensions.cs" />
+    <Compile Include="..\SparkleInvite.cs" />
+    <Compile Include="..\SparklePlugin.cs" />
+    <Compile Include="..\SparkleSetupController.cs" />
+    <Compile Include="..\SparkleStatusIconController.cs" />
   </ItemGroup>
 </Project>
