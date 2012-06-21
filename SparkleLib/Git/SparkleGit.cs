@@ -48,7 +48,8 @@ namespace SparkleLib.Git {
 
         new public void Start ()
         {
-            SparkleHelpers.DebugInfo ("Cmd", "git " + StartInfo.Arguments);
+            SparkleHelpers.DebugInfo ("Cmd | " + System.IO.Path.GetFileName (StartInfo.WorkingDirectory),
+                "git " + StartInfo.Arguments);
 
             try {
                 base.Start ();
