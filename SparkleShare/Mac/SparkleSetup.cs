@@ -345,7 +345,7 @@ namespace SparkleShare {
                             };
     
                             ScrollView = new NSScrollView () {
-                                Frame               = new RectangleF (190, Frame.Height - 280, 408, 175),
+                                Frame               = new RectangleF (190, Frame.Height - 280, 408, 185),
                                 DocumentView        = TableView,
                                 HasVerticalScroller = true,
                                 BorderType          = NSBorderType.BezelBorder
