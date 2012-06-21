@@ -29,11 +29,8 @@ namespace SparkleLib {
         // Show debug info if needed
         public static void DebugInfo (string type, string message)
         {
-            if (!message.StartsWith ("["))
-                message = " " + message;
-
             string timestamp = DateTime.Now.ToString ("HH:mm:ss");
-            string line      = timestamp + " " + "[" + type + "]" + message;
+            string line      = timestamp + " | " + type + " | " + message;
 
             if (SparkleConfig.DebugMode)
                 Console.WriteLine (line);
