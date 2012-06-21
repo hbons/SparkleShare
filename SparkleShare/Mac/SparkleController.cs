@@ -139,35 +139,57 @@ namespace SparkleShare {
              // We ship SparkleShareInviteHandler.app in the bundle
         }
 
-		
+
 		// Adds the SparkleShare folder to the user's
 		// list of bookmarked places
 		public override void AddToBookmarks ()
-		{
-            // TODO: Waiting for NSMutableArray/Dictionary support
-         /* NSDictionary sidebar_plist = NSUserDefaults.StandardUserDefaults.PersistentDomainForName ("com.apple.sidebarlists");
+        {/*
+            NSMutableDictionary sidebar_plist = NSMutableDictionary.FromDictionary (
+                NSUserDefaults.StandardUserDefaults.PersistentDomainForName ("com.apple.sidebarlists"));
 
-            foreach (object sidebar_item in sidebar_plist.Keys) {
-                if (sidebar_item.ToString ().Equals ("useritems")) {
-                    NSDictionary user_items = (NSDictionary) sidebar_plist.ValueForKey (new NSString (sidebar_item.ToString ()));
+            // Go through the sidebar categories
+            foreach (NSString sidebar_category in sidebar_plist.Keys) {
 
-                    foreach (NSObject user_item in user_items.Keys) {
-                        if (user_item.ToString ().Equals ("CustomListItems")) {
-                            NSArray custom_items = (NSArray) user_items.ValueForKey (new NSString (user_item.ToString ()));
+                // Find the favorites
+                if (sidebar_category.ToString ().Equals ("favorites")) {
 
-                            NSDictionary new_dictionary = new NSDictionary ();
-                            new dictionary.SetValueForKey (new NSString ("Test"),  new NSString ("Name"));
+                    // Get the favorites
+                    NSMutableDictionary favorites = NSMutableDictionary.FromDictionary(
+                        (NSDictionary) sidebar_plist.ValueForKey (sidebar_category));
 
-                            custom_items.SetValueForKey (new_dictionary, new NSString ("Item 6"));
-                            user_items.SetValueForKey (custom_items, new NSString (user_item.ToString ()));
+                    // Go through the favorites
+                    foreach (NSString favorite in favorites.Keys) {
+
+                        // Find the custom favorites
+                        if (favorite.ToString ().Equals ("VolumesList")) {
+
+                            // Get the custom favorites
+                            NSMutableArray custom_favorites = (NSMutableArray) favorites.ValueForKey (favorite);
+
+                            NSMutableDictionary properties = new NSMutableDictionary ();
+                            properties.SetValueForKey (new NSString ("1935819892"), new NSString ("com.apple.LSSharedFileList.TemplateSystemSelector"));
+
+                            NSMutableDictionary new_favorite = new NSMutableDictionary ();
+                            new_favorite.SetValueForKey (new NSString ("SparkleShare"),  new NSString ("Name"));
+
+                            new_favorite.SetValueForKey (NSData.FromString ("ImgR SYSL fldr"),  new NSString ("Icon"));
+
+                            new_favorite.SetValueForKey (NSData.FromString (SparkleConfig.DefaultConfig.FoldersPath),
+                                new NSString ("Alias"));
+
+                            new_favorite.SetValueForKey (properties, new NSString ("CustomItemProperties"));
+
+                            // Add to the favorites
+                            custom_favorites.Add (new_favorite);
+                            favorites.SetValueForKey ((NSArray) custom_favorites, new NSString (favorite.ToString ()));
+                            sidebar_plist.SetValueForKey (favorites, new NSString (sidebar_category.ToString ()));
                         }
                     }
 
-                    sidebar_plist.SetValueForKey (user_items, new NSString (sidebar_item.ToString ()));
                 }
             }
 
-            NSUserDefaults.StandardUserDefaults.SetPersistentDomain (sidebar_plist, "com.apple.sidebarlists"); */
+            NSUserDefaults.StandardUserDefaults.SetPersistentDomain (sidebar_plist, "com.apple.sidebarlists");*/
 		}
 		
 

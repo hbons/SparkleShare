@@ -65,7 +65,7 @@ namespace SparkleShare {
             };
 
             HeaderTextField = new NSTextField () {
-                Frame           = new RectangleF (190, Frame.Height - 100, Frame.Width, 48),
+                Frame           = new RectangleF (190, Frame.Height - 80, Frame.Width, 24),
                 BackgroundColor = NSColor.WindowBackground,
                 Bordered        = false,
                 Editable        = false,
@@ -103,7 +103,7 @@ namespace SparkleShare {
             
             ContentView.AddSubview (HeaderTextField);
 
-            if (!Description.Equals (""))
+            if (!string.IsNullOrEmpty (Description))
                 ContentView.AddSubview (DescriptionTextField);
             
             ContentView.AddSubview (SideSplashView);
