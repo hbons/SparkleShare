@@ -147,7 +147,7 @@ namespace SparkleLib.Git {
 
         public override bool HasRemoteChanges {
             get {
-                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Checking for remote changes...");
+                SparkleHelpers.DebugInfo ("Git", Name + " | Checking for remote changes...");
 
                 string current_revision = CurrentRevision;
                 SparkleGit git = new SparkleGit (LocalPath, "ls-remote --exit-code \"" + RemoteUrl + "\" master");
@@ -162,14 +162,14 @@ namespace SparkleLib.Git {
     
                 if (!remote_revision.StartsWith (current_revision)) {
                     SparkleHelpers.DebugInfo ("Git",
-                        "[" + Name + "] Remote changes detected (local: " +
+                        Name + " | Remote changes detected (local: " +
                         current_revision + ", remote: " + remote_revision + ")");
 
                     return true;
 
                 } else {
                     SparkleHelpers.DebugInfo ("Git",
-                        "[" + Name + "] No remote changes detected (local+remote: " + current_revision + ")");
+                        Name + " | No remote changes detected (local+remote: " + current_revision + ")");
 
                     return false;
                 }
@@ -232,7 +232,7 @@ namespace SparkleLib.Git {
                     }
 
                 } else {
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] " + line);
+                    SparkleHelpers.DebugInfo ("Git", Name + " | " + line);
                 }
 
                 if (number >= percentage) {
@@ -293,7 +293,7 @@ namespace SparkleLib.Git {
                     }
 
                 } else {
-                    SparkleHelpers.DebugInfo ("Git", "[" + Name + "] " + line);
+                    SparkleHelpers.DebugInfo ("Git", Name + " | " + line);
                 }
                 
 
@@ -380,7 +380,7 @@ namespace SparkleLib.Git {
             git.Start ();
             git.WaitForExit ();
 
-            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Changes staged");
+            SparkleHelpers.DebugInfo ("Git", Name + " | Changes staged");
         }
 
 
@@ -396,7 +396,7 @@ namespace SparkleLib.Git {
             git.StandardOutput.ReadToEnd ();
             git.WaitForExit ();
 
-            SparkleHelpers.DebugInfo ("Commit", "[" + Name + "] " + message);
+            SparkleHelpers.DebugInfo ("Commit", Name + " | " + message);
         }
 
 
@@ -417,12 +417,12 @@ namespace SparkleLib.Git {
             git.WaitForExit ();
 
             if (git.ExitCode != 0) {
-                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict detected, trying to get out...");
+                SparkleHelpers.DebugInfo ("Git", Name + " | Conflict detected, trying to get out...");
 
                 while (HasLocalChanges)
                     ResolveConflict ();
 
-                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict resolved");
+                SparkleHelpers.DebugInfo ("Git", Name + " | Conflict resolved");
                 OnConflictResolved ();
             }
         }
@@ -463,7 +463,7 @@ namespace SparkleLib.Git {
                 string conflicting_path = line.Substring (3);
                 conflicting_path = conflicting_path.Trim ("\"".ToCharArray ());
 
-                SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Conflict type: " + line);
+                SparkleHelpers.DebugInfo ("Git", Name + " | Conflict type: " + line);
 
                 // Both the local and server version have been modified
                 if (line.StartsWith ("UU") || line.StartsWith ("AA") ||
@@ -735,7 +735,7 @@ namespace SparkleLib.Git {
     
                         if (File.Exists (HEAD_file_path)) {
                             File.Move (HEAD_file_path, HEAD_file_path + ".backup");
-                            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Renamed " + HEAD_file_path);
+                            SparkleHelpers.DebugInfo ("Git", Name + " | Renamed " + HEAD_file_path);
                         }
     
                         continue;
@@ -753,7 +753,7 @@ namespace SparkleLib.Git {
                             File.WriteAllText (Path.Combine (path, ".empty"), "I'm a folder!");
                             File.SetAttributes (Path.Combine (path, ".empty"), FileAttributes.Hidden);
                         } catch {
-                            SparkleHelpers.DebugInfo ("Git", "[" + Name + "] Failed adding empty folder " + path);
+                            SparkleHelpers.DebugInfo ("Git", Name + " | Failed adding empty folder " + path);
                         }
                     }
                 }

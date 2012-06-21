@@ -94,7 +94,7 @@ namespace SparkleLib {
                     File.WriteAllText (id_path, this.identifier);
                     File.SetAttributes (id_path, FileAttributes.Hidden);
 
-                    SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Assigned identifier: " + this.identifier);
+                    SparkleHelpers.DebugInfo ("Local", Name + " | Assigned identifier: " + this.identifier);
 
                     return this.identifier;
                 }
@@ -241,7 +241,7 @@ namespace SparkleLib {
                     this.watcher.Disable ();
                     this.remote_timer.Stop ();
 
-                    SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Activity detected, waiting for it to settle...");
+                    SparkleHelpers.DebugInfo ("Local", Name + " | Activity detected, waiting for it to settle...");
 
                     if (ChangesDetected != null)
                         ChangesDetected ();
@@ -260,7 +260,7 @@ namespace SparkleLib {
                             size_buffer [1].Equals (size_buffer [2]) &&
                             size_buffer [2].Equals (size_buffer [3])) {
 
-                            SparkleHelpers.DebugInfo ("Local", "[" + Name + "] Activity has settled");
+                            SparkleHelpers.DebugInfo ("Local", Name + " | Activity has settled");
                             IsBuffering = false;
 
                             this.watcher.Disable ();
@@ -291,13 +291,13 @@ namespace SparkleLib {
                 this.watcher.Disable ();
                 this.remote_timer.Stop ();
 
-                SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Initiated");
+                SparkleHelpers.DebugInfo ("SyncUp", Name + " | Initiated");
 
                 if (SyncStatusChanged != null)
                     SyncStatusChanged (SyncStatus.SyncUp);
 
                 if (SyncUp ()) {
-                    SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Done");
+                    SparkleHelpers.DebugInfo ("SyncUp", Name + " | Done");
 
                     HasUnsyncedChanges = false;
 
@@ -307,7 +307,7 @@ namespace SparkleLib {
                     this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
 
                 } else {
-                    SparkleHelpers.DebugInfo ("SyncUp", "[" + Name + "] Error");
+                    SparkleHelpers.DebugInfo ("SyncUp", Name + " | Error");
 
                     HasUnsyncedChanges = true;
                     SyncDownBase ();
@@ -341,7 +341,7 @@ namespace SparkleLib {
 
         private void SyncDownBase ()
         {
-            SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Initiated");
+            SparkleHelpers.DebugInfo ("SyncDown", Name + " | Initiated");
             this.remote_timer.Stop ();
             this.watcher.Disable ();
 
@@ -351,7 +351,7 @@ namespace SparkleLib {
             string pre_sync_revision = CurrentRevision;
 
             if (SyncDown ()) {
-                SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Done");
+                SparkleHelpers.DebugInfo ("SyncDown", Name + " | Done");
                 ServerOnline = true;
 
                 if (!pre_sync_revision.Equals (CurrentRevision)) {
@@ -383,7 +383,7 @@ namespace SparkleLib {
                     SyncStatusChanged (SyncStatus.Idle);
 
             } else {
-                SparkleHelpers.DebugInfo ("SyncDown", "[" + Name + "] Error");
+                SparkleHelpers.DebugInfo ("SyncDown", Name + " | Error");
                 ServerOnline = false;
 
                 if (SyncStatusChanged != null)
