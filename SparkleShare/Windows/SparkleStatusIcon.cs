@@ -114,7 +114,7 @@ namespace SparkleShare {
 			this.notify_icon.HeaderText = "SparkleShare\n" + Controller.StateText;
             
             Image folder_image = new Image () {
-            	Source = SparkleUIHelpers.GetImageSource ("folder-sparkleshare-windows-16"),
+            	Source = SparkleUIHelpers.GetImageSource ("sparkleshare-folder"),
                 Width  = 16,
             	Height = 16
 			};
@@ -192,7 +192,7 @@ namespace SparkleShare {
                     subfolder_item.Click += OpenFolderDelegate (folder_name);
                     
 					Image subfolder_image = new Image () {
-		            	Source = SparkleUIHelpers.GetImageSource ("folder-windows-16"),
+		            	Source = SparkleUIHelpers.GetImageSource ("folder"),
 		                Width  = 16,
 		            	Height = 16
 					};
@@ -225,7 +225,7 @@ namespace SparkleShare {
                     subfolder_item.Click += OpenFolderDelegate (folder_name);
                     
 					Image subfolder_image = new Image () {
-		            	Source = SparkleUIHelpers.GetImageSource ("folder-windows-16"),
+		            	Source = SparkleUIHelpers.GetImageSource ("folder"),
 		                Width  = 16,
 		            	Height = 16
 					};
@@ -282,14 +282,14 @@ namespace SparkleShare {
 		private void CreateAnimationFrames ()
         {
             this.animation_frames = new Drawing.Bitmap [] {
-	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-i"),
-	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-ii"),
-	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iii"),
-	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iiii"),
-	            SparkleUIHelpers.GetBitmap ("process-syncing-sparkleshare-windows-iiiii")
+	            SparkleUIHelpers.GetBitmap ("process-syncing-i"),
+	            SparkleUIHelpers.GetBitmap ("process-syncing-ii"),
+	            SparkleUIHelpers.GetBitmap ("process-syncing-iii"),
+	            SparkleUIHelpers.GetBitmap ("process-syncing-iiii"),
+	            SparkleUIHelpers.GetBitmap ("process-syncing-iiiii")
 			};
 			
-			this.error_icon = SparkleUIHelpers.GetBitmap ("sparkleshare-syncing-error-windows");
+			this.error_icon = SparkleUIHelpers.GetBitmap ("process-syncing-error");
         }
 
 
