@@ -181,7 +181,7 @@ namespace SparkleShare {
                 };
 
                 this.recent_events_item = new NSMenuItem () {
-                    Title   = "View Recent Changes…",
+                    Title   = "Recent Changes…",
                     Enabled = Controller.OpenRecentEventsItemEnabled
                 };
 
