@@ -391,8 +391,7 @@ namespace SparkleShare {
 
         public void AddPageCompleted (string address, string remote_path)
         {
-            SyncingFolder = Path.GetFileNameWithoutExtension (remote_path);
-
+            SyncingFolder         = Path.GetFileNameWithoutExtension (remote_path);
             ProgressBarPercentage = 1.0;
 
             if (ChangePageEvent != null)
@@ -412,8 +411,12 @@ namespace SparkleShare {
             Program.Controller.FolderFetchError += AddPageFetchErrorDelegate;
             Program.Controller.FolderFetching   += SyncingPageFetchingDelegate;
 
-            Program.Controller.StartFetcher (address, SelectedPlugin.Fingerprint, remote_path,
-                SelectedPlugin.AnnouncementsUrl, this.fetch_prior_history);
+            new Thread (
+                new ThreadStart (delegate {
+                    Program.Controller.StartFetcher (address, SelectedPlugin.Fingerprint, remote_path,
+                        SelectedPlugin.AnnouncementsUrl, this.fetch_prior_history);
+                })
+            ).Start ();
         }
 
         // The following private methods are
