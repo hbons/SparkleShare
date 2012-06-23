@@ -156,6 +156,9 @@ namespace SparkleShare {
 
         private void checkDirectory (string dir)
         {
+            if (dir == null)
+                return;
+
             DirectoryInfo parent = new DirectoryInfo (dir);
 
             if (!parent.FullName.Contains ("/.") &&
