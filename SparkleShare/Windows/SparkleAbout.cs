@@ -45,6 +45,7 @@ namespace SparkleShare {
             ResizeMode = ResizeMode.NoResize;
             Height     = 288;
             Width      = 640;
+            Icon       = SparkleUIHelpers.GetImageSource("sparkleshare-app", "ico");
             
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             
