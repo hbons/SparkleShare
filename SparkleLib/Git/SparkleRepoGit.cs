@@ -390,23 +390,25 @@ namespace SparkleLib.Git {
         // Commits the made changes
         private void Commit (string message)
 		{
+			SparkleGit git;
+
 			if (!this.author_set) {
-	            SparkleGit git_set_author = new SparkleGit (LocalPath,
+	            git = new SparkleGit (LocalPath,
 	                "config user.name \"" + SparkleConfig.DefaultConfig.User.Name + "\"");
 
-				git_set_author.Start ();
-				git_set_author.WaitForExit ();
+				git.Start ();
+				git.WaitForExit ();
 
-	            git_set_author = new SparkleGit (LocalPath,
+	            git = new SparkleGit (LocalPath,
 	                "config user.email \"" + SparkleConfig.DefaultConfig.User.Email + "\"");
 
-				git_set_author.Start ();
-				git_set_author.WaitForExit ();
+				git.Start ();
+				git.WaitForExit ();
 
 				this.author_set = true;
 			}
 
-            SparkleGit git = new SparkleGit (LocalPath,
+            git = new SparkleGit (LocalPath,
                 "commit -m \"" + message + "\" " +
                 "--author=\"" + SparkleConfig.DefaultConfig.User.Name +
                 " <" + SparkleConfig.DefaultConfig.User.Email + ">\"");
@@ -414,8 +416,6 @@ namespace SparkleLib.Git {
             git.Start ();
             git.StandardOutput.ReadToEnd ();
             git.WaitForExit ();
-
-            SparkleHelpers.DebugInfo ("Commit", Name + " | " + message);
         }
 
 
