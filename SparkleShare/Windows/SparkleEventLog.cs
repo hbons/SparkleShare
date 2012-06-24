@@ -51,16 +51,21 @@ namespace SparkleShare {
         
         public SparkleEventLog ()
         {
-            Title                 = "Recent Changes";
-            Height                = 640;
-            Width                 = 480;
-            ResizeMode            = ResizeMode.NoResize;
-            Background            = new SolidColorBrush (Color.FromRgb (240, 240, 240));    
-            AllowsTransparency    = false;
+            Title              = "Recent Changes";
+            Height             = 640;
+            Width              = 480;
+            ResizeMode         = ResizeMode.NoResize; // TODO
+            Background         = new SolidColorBrush (Color.FromRgb (240, 240, 240));    
+            AllowsTransparency = false;
+            Icon               = SparkleUIHelpers.GetImageSource("sparkleshare-app", "ico");
 
-            // TODO: right side of screen and 90% of height like on Mac
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            
+            int x = (int) (SystemParameters.PrimaryScreenWidth * 0.61);
+            int y = (int) (SystemParameters.PrimaryScreenHeight * 0.5 - (Height * 0.5));
+
+            WindowStartupLocation = WindowStartupLocation.Manual;
+            Left = x;
+            Top = y;
+
             WriteOutImages ();
                         
             Label size_label = new Label () {
