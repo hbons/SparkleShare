@@ -611,7 +611,7 @@ namespace SparkleShare {
                                     Height = 200
                                 };
                             
-                                slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-1-windows");
+                                slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-1");
                             
 								Button skip_tutorial_button = new Button () {
 									Content = "Skip tutorial"
@@ -656,7 +656,7 @@ namespace SparkleShare {
                                     Height = 200
                                 };
                             
-                                slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-2-windows");
+                                slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-2");
                             
                             
                                 ContentCanvas.Children.Add (slide_image);
@@ -688,7 +688,7 @@ namespace SparkleShare {
                                     Height = 200
                                 };
                             
-                                slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-3-windows");
+                                slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-3");
                             
                             
                                 ContentCanvas.Children.Add (slide_image);
