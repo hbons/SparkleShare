@@ -29,7 +29,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <ApplicationIcon>..\Common\Plugins\icons\sparkleshare.ico</ApplicationIcon>
+    <ApplicationIcon>Pixmaps\sparkleshare-app.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,9 +54,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -183,38 +181,8 @@
     <EmbeddedResource Include="..\Common\Pixmaps\side-splash.png">
       <Link>Pixmaps\side-splash.png</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Pixmaps\tutorial-slide-1.png">
-      <Link>Pixmaps\tutorial-slide-1.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Pixmaps\tutorial-slide-2.png">
-      <Link>Pixmaps\tutorial-slide-2.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Pixmaps\tutorial-slide-3.png">
-      <Link>Pixmaps\tutorial-slide-3.png</Link>
-    </EmbeddedResource>
     <EmbeddedResource Include="..\Common\Pixmaps\tutorial-slide-4.png">
       <Link>Pixmaps\tutorial-slide-4.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Windows\Pixmaps\process-syncing-i.png">
-      <Link>Pixmaps\process-syncing-i.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Windows\Pixmaps\process-syncing-ii.png">
-      <Link>Pixmaps\process-syncing-ii.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Windows\Pixmaps\process-syncing-iii.png">
-      <Link>Pixmaps\process-syncing-iii.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Windows\Pixmaps\process-syncing-iiii.png">
-      <Link>Pixmaps\process-syncing-iiii.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Windows\Pixmaps\process-syncing-iiiii.png">
-      <Link>Pixmaps\process-syncing-iiiii.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Windows\Pixmaps\process-syncing-error.png">
-      <Link>Pixmaps\process-syncing-error.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Windows\Pixmaps\folder.png">
-      <Link>Pixmaps\folder.png</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Common\HTML\day-entry.html">
       <Link>HTML\day-entry.html</Link>
@@ -326,7 +294,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Pixmaps\sparkleshare-app.ico" />
+    <EmbeddedResource Include="Pixmaps\folder.png" />
+    <EmbeddedResource Include="Pixmaps\process-syncing-error.png" />
+    <EmbeddedResource Include="Pixmaps\process-syncing-i.png" />
+    <EmbeddedResource Include="Pixmaps\process-syncing-ii.png" />
+    <EmbeddedResource Include="Pixmaps\process-syncing-iii.png" />
+    <EmbeddedResource Include="Pixmaps\process-syncing-iiii.png" />
+    <EmbeddedResource Include="Pixmaps\process-syncing-iiiii.png" />
+    <EmbeddedResource Include="Pixmaps\sparkleshare-app.ico" />
+    <EmbeddedResource Include="Pixmaps\sparkleshare-folder.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Pixmaps\tutorial-slide-1.png" />
+    <EmbeddedResource Include="Pixmaps\tutorial-slide-2.png" />
+    <EmbeddedResource Include="Pixmaps\tutorial-slide-3.png" />
+  </ItemGroup>
 </Project>
