@@ -12,7 +12,7 @@
     <AssemblyName>SparkleShareInviteOpener</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ApplicationIcon>..\..\..\data\icons\sparkleshare.ico</ApplicationIcon>
+    <ApplicationIcon>..\Pixmaps\sparkleshare-app.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
