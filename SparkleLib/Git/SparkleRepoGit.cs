@@ -25,6 +25,9 @@ namespace SparkleLib.Git {
 
     public class SparkleRepo : SparkleRepoBase {
 
+		private bool author_set = false;
+
+
         public SparkleRepo (string path) : base (path)
         {
         }
@@ -386,7 +389,23 @@ namespace SparkleLib.Git {
 
         // Commits the made changes
         private void Commit (string message)
-        {
+		{
+			if (!this.author_set) {
+	            SparkleGit git_set_author = new SparkleGit (LocalPath,
+	                "config user.name \"" + SparkleConfig.DefaultConfig.User.Name + "\"");
+
+				git_set_author.Start ();
+				git_set_author.WaitForExit ();
+
+	            git_set_author = new SparkleGit (LocalPath,
+	                "config user.email \"" + SparkleConfig.DefaultConfig.User.Email + "\"");
+
+				git_set_author.Start ();
+				git_set_author.WaitForExit ();
+
+				this.author_set = true;
+			}
+
             SparkleGit git = new SparkleGit (LocalPath,
                 "commit -m \"" + message + "\" " +
                 "--author=\"" + SparkleConfig.DefaultConfig.User.Name +
