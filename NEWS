@@ -1,7 +1,7 @@
-0.9.0 for Linux, Mac and Windows (???)
+0.9.0 for Linux, Mac and Windows (Wed Jun 27 2012)
 
 	Hylke:
-	- Client side encryption using OpenSSL's AES
+	- Expeimental client side encryption using OpenSSL's AES
 	- Allow setting custom paths in config.xml
 	- Ship host keys of default plugins and verify on project add
 	- Don't touch the user's ~/.ssh/config to configure SSH
