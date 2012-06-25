@@ -167,7 +167,6 @@ namespace SparkleShare {
 
                 this.progress_indicator.StartAnimation (this);
 
-
                 ContentView.AddSubview (this.size_label);
                 ContentView.AddSubview (this.size_label_value);
                 ContentView.AddSubview (this.history_label);
