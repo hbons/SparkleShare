@@ -288,15 +288,12 @@ namespace SparkleShare {
 
         private void CreateAnimationFrames ()
         {
-            this.animation_frames    = new Gdk.Pixbuf [5];
-            
-            for (int i = 0; i < this.animation_frames.Length; i++) {
-                string icon_name = "process-syncing-";
-                for (int j = 0; j <= i; j++)
-                    icon_name += "i";
-
-                animation_frames [i] = SparkleUIHelpers.GetIcon(icon_name, 24);
-            }
+            this.animation_frames     = new Gdk.Pixbuf [5];
+            this.animation_frames [0] = SparkleUIHelpers.GetIcon ("process-syncing-i", 24);
+            this.animation_frames [0] = SparkleUIHelpers.GetIcon ("process-syncing-ii", 24);
+            this.animation_frames [0] = SparkleUIHelpers.GetIcon ("process-syncing-iii", 24);
+            this.animation_frames [0] = SparkleUIHelpers.GetIcon ("process-syncing-iiii", 24);
+            this.animation_frames [0] = SparkleUIHelpers.GetIcon ("process-syncing-iiiii", 24);
         }
 
 
