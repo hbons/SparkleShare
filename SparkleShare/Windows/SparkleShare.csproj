@@ -106,11 +106,6 @@
     <Compile Include="SparkleSetup.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
-    <Compile Include="Strings.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Strings.tt</DependentUpon>
-    </Compile>
     <Compile Include="..\SparkleEventLogController.cs">
       <Link>SparkleEventLogController.cs</Link>
     </Compile>
@@ -287,10 +282,6 @@
     <None Include="..\Common\Plugins\own-server.xml">
       <Link>Plugins\own-server.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Strings.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Strings.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

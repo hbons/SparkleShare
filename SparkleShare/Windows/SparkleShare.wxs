@@ -23,11 +23,9 @@
               <File Id='SparkleLib.Git.dll' Name='SparkleLib.Git.dll' Source='!(wix.root)\bin\SparkleLib.Git.dll' DiskId='1' />
               <File Id='Gettext.Cs.dll' Name='Gettext.Cs.dll' Source='!(wix.root)\bin\Gettext.Cs.dll' DiskId='1' />
               <File Id='SparkleLib.dll' Name='SparkleLib.dll' Source='!(wix.root)\bin\SparkleLib.dll' DiskId='1' />
-              <File Id='sparkleshare.ico' Name='sparkleshare.ico' Source='!(wix.root)\data\icons\sparkleshare.ico' DiskId='1' />
+              <File Id='sparkleshare_app.ico' Name='sparkleshare.ico' Source='!(wix.root)\SparkleShare\Windows\Pixmaps\sparkleshare-app.ico' DiskId='1' />
             </Component>
             <Directory Id='MSYSGIT_DIR' Name='msysgit'>
-            </Directory>
-            <Directory Id='PO_DIR' Name='po'>
             </Directory>
             <Directory Id='PLUGINS_DIR' Name='plugins'>
             </Directory>
@@ -51,7 +49,6 @@
       <ComponentRef Id="Libraries" />
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentGroupRef Id='msysGitComponentGroup' />
-      <ComponentGroupRef Id='poComponentGroup' />
       <ComponentGroupRef Id='pluginsComponentGroup' />
     </Feature>
 
