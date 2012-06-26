@@ -484,6 +484,22 @@ namespace SparkleLib.Git {
 
                 SparkleHelpers.DebugInfo ("Git", Name + " | Conflict type: " + line);
 
+                // Ignore conflicts in the .sparkleshare file and use the local version
+                if (conflicting_path.EndsWith (".sparkleshare")) {
+                    // Recover local version
+                    SparkleGit git_theirs = new SparkleGit (LocalPath,
+                        "checkout --theirs \"" + conflicting_path + "\"");
+
+                    git_theirs.Start ();
+                    git_theirs.WaitForExit ();
+
+                    SparkleGit git_rebase_continue = new SparkleGit (LocalPath, "rebase --continue");
+                    git_rebase_continue.Start ();
+                    git_rebase_continue.WaitForExit ();
+
+                    continue;
+                }
+
                 // Both the local and server version have been modified
                 if (line.StartsWith ("UU") || line.StartsWith ("AA") ||
                     line.StartsWith ("AU") || line.StartsWith ("UA")) {
@@ -491,15 +507,17 @@ namespace SparkleLib.Git {
                     // Recover local version
                     SparkleGit git_theirs = new SparkleGit (LocalPath,
                         "checkout --theirs \"" + conflicting_path + "\"");
+
                     git_theirs.Start ();
                     git_theirs.WaitForExit ();
 
                     // Append a timestamp to local version.
                     // Windows doesn't allow colons in the file name, so
                     // we use "h" between the hours and minutes instead.
-                    string timestamp            = DateTime.Now.ToString ("MMM d H\\hmm");
-                    string their_path           = Path.GetFileNameWithoutExtension (conflicting_path) +
-                        " (" + SparkleConfig.DefaultConfig.User.Name + ", " + timestamp + ")" + Path.GetExtension (conflicting_path);
+                    string timestamp  = DateTime.Now.ToString ("MMM d H\\hmm");
+                    string their_path = Path.GetFileNameWithoutExtension (conflicting_path) +
+                        " (" + SparkleConfig.DefaultConfig.User.Name + ", " + timestamp + ")" +
+                        Path.GetExtension (conflicting_path);
                     
                     string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
                     string abs_their_path       = Path.Combine (LocalPath, their_path);
@@ -509,6 +527,7 @@ namespace SparkleLib.Git {
                     // Recover server version
                     SparkleGit git_ours = new SparkleGit (LocalPath,
                         "checkout --ours \"" + conflicting_path + "\"");
+
                     git_ours.Start ();
                     git_ours.WaitForExit ();
 
@@ -528,6 +547,7 @@ namespace SparkleLib.Git {
                     // we can't reuse the Add () method
                     SparkleGit git_add = new SparkleGit (LocalPath,
                         "add \"" + conflicting_path + "\"");
+
                     git_add.Start ();
                     git_add.WaitForExit ();
 
