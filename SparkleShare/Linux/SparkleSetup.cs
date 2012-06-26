@@ -448,7 +448,7 @@ namespace SparkleShare {
 
                     case PageType.Error: {
                     
-                        Header = _("Something went wrong") + "…";
+                        Header = _("Oops! Something went wrong") + "…";
 
                         VBox points = new VBox (false, 0);
                         Image list_point_one   = new Image (SparkleUIHelpers.GetIcon ("go-next", 16));
