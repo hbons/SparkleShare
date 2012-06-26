@@ -154,7 +154,7 @@ namespace SparkleShare {
                         Plugins.Insert (0, new SparklePlugin (xml_file_path));
 
                     } else if (xml_file_path.EndsWith ("ssnet.xml")) {
-                        Plugins.Insert ((local_plugins_count + 1), new SparklePlugin (xml_file_path));
+                        // Plugins.Insert ((local_plugins_count + 1), new SparklePlugin (xml_file_path)); TODO: Skip this plugin for now
 
                     } else {
                         Plugins.Add (new SparklePlugin (xml_file_path));
