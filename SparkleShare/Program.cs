@@ -39,7 +39,7 @@ namespace SparkleShare {
             #if __MonoCS__
             return Catalog.GetString (s);
             #else
-            return Strings.T (s);
+            return s;
             #endif
         }
         
