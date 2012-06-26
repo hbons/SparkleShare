@@ -481,7 +481,7 @@ namespace SparkleShare {
                         
                         
                     case PageType.Error: {
-                        Header      = "Something went wrong…";
+                        Header      = "Oops! Something went wrong…";
                         Description = "Please check the following:";
 
 						TextBlock help_block = new TextBlock () {
