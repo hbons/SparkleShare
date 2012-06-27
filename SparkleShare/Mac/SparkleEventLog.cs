@@ -342,47 +342,49 @@ namespace SparkleShare {
 
         public void UpdateContent (string html)
         {
-            Thread thread = new Thread (new ThreadStart (delegate {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    if (html == null)
-                        html = Controller.HTML;
-    
-					string pixmaps_path = "file://" + Path.Combine (
-						NSBundle.MainBundle.ResourcePath, "Pixmaps");
-					
-                    html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
-                    html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
-                    html = html.Replace ("<!-- $body-font-size -->", "13.4px");
-                    html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
-                    html = html.Replace ("<!-- $small-color -->", "#ddd");
-                    html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
-                    html = html.Replace ("<!-- $a-color -->", "#0085cf");
-                    html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
-					
-                    html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
-    
-                    html = html.Replace ("<!-- $document-added-background-image -->",
-                        pixmaps_path + "/document-added-12.png");
-    
-                    html = html.Replace ("<!-- $document-deleted-background-image -->",
-                        pixmaps_path + "/document-deleted-12.png");
-    
-                    html = html.Replace ("<!-- $document-edited-background-image -->",
-                        pixmaps_path + "/document-edited-12.png");
-    
-                    html = html.Replace ("<!-- $document-moved-background-image -->",
-                        pixmaps_path + "/document-moved-12.png");
-					
-                    InvokeOnMainThread (delegate {
-                        if (this.progress_indicator.Superview == ContentView)
-                            this.progress_indicator.RemoveFromSuperview ();
-    
-                        this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
-                        ContentView.AddSubview (this.web_view);
-                    });
+            Thread thread = new Thread (
+                new ThreadStart (delegate {
+                    using (var a = new NSAutoreleasePool ())
+                    {
+                        if (html == null)
+                            html = Controller.HTML;
+        
+    					string pixmaps_path = "file://" + Path.Combine (
+    						NSBundle.MainBundle.ResourcePath, "Pixmaps");
+    					
+                        html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
+                        html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
+                        html = html.Replace ("<!-- $body-font-size -->", "13.4px");
+                        html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
+                        html = html.Replace ("<!-- $small-color -->", "#ddd");
+                        html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
+                        html = html.Replace ("<!-- $a-color -->", "#0085cf");
+                        html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
+    					
+                        html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
+        
+                        html = html.Replace ("<!-- $document-added-background-image -->",
+                            pixmaps_path + "/document-added-12.png");
+        
+                        html = html.Replace ("<!-- $document-deleted-background-image -->",
+                            pixmaps_path + "/document-deleted-12.png");
+        
+                        html = html.Replace ("<!-- $document-edited-background-image -->",
+                            pixmaps_path + "/document-edited-12.png");
+
+                        html = html.Replace ("<!-- $document-moved-background-image -->",
+                            pixmaps_path + "/document-moved-12.png");
+    					
+                        InvokeOnMainThread (delegate {
+                            if (this.progress_indicator.Superview == ContentView)
+                                this.progress_indicator.RemoveFromSuperview ();
+        
+                            this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
+                            ContentView.AddSubview (this.web_view);
+                        });
+                    }
                 }
-            }));
+            ));
 
             thread.Start ();
         }
