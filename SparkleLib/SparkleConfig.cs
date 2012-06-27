@@ -84,7 +84,7 @@ namespace SparkleLib {
             }
 
             FullPath    = Path.Combine (config_path, config_file_name);
-            LogFilePath = Path.Combine (config_path, "debug.txt");
+            LogFilePath = Path.Combine (config_path, "debug-log.txt");
 
             if (File.Exists (LogFilePath)) {
                 try {
