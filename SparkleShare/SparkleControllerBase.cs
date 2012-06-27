@@ -945,6 +945,14 @@ namespace SparkleShare {
 
         public string GetAvatar (string email, int size)
         {
+            string fetch_gravatars_option = SparkleConfig.DefaultConfig.GetConfigOption ("fetch_gravatars");
+
+            if (fetch_gravatars_option != null &&
+                fetch_gravatars_option.Equals (bool.FalseString)) {
+
+                return null;
+            }
+
             email = email.ToLower ();
 
             string avatars_path = new string [] { Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath),
