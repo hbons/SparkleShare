@@ -156,20 +156,19 @@ namespace SparkleShare {
         {
             Program.Controller.ShowEventLogWindowEvent += delegate {
                 if (this.selected_folder == null) {
-                    if (UpdateChooserEvent != null)
-                        UpdateChooserEvent (Folders);
+                    new Thread (
+                        new ThreadStart (delegate {
+                            if (UpdateChooserEvent != null)
+                                UpdateChooserEvent (Folders);
 
-                    if (UpdateContentEvent != null)
-                        UpdateContentEvent (HTML);
+                            if (UpdateContentEvent != null)
+                                UpdateContentEvent (HTML);
+                        })
+                    ).Start ();
                 }
 
                 if (ShowWindowEvent != null)
                     ShowWindowEvent ();
-            };
-
-            Program.Controller.AvatarFetched += delegate {
-                if (UpdateContentEvent != null)
-                    UpdateContentEvent (HTML);
             };
 			
             Program.Controller.OnIdle += delegate {
