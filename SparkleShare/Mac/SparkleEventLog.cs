@@ -155,6 +155,7 @@ namespace SparkleShare {
                         new PointF (-1, -1),
                         new SizeF (Frame.Width + 2, this.web_view.Frame.Height + 2)),
                     FillColor = NSColor.White,
+                    BorderColor = NSColor.LightGray,
                     BoxType = NSBoxType.NSBoxCustom
                 };
 
