@@ -25,11 +25,15 @@ namespace SparkleLib.Git {
 
     public class SparkleRepo : SparkleRepoBase {
 
-		private bool author_set = false;
+		private bool author_set;
+        private bool use_mass_storage;
 
 
         public SparkleRepo (string path) : base (path)
         {
+            //this.use_mass_storage =
+                //SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (Name, "use_mass_storage")
+                  //  .Equals (bool.TrueString);
         }
 
 
@@ -188,6 +192,17 @@ namespace SparkleLib.Git {
                 string message = FormatCommitMessage ();
                 Commit (message);
             }
+
+            // TODO: set remote_url from config
+
+            if (this.use_mass_storage) {
+            /*    SparkleGit git_bin = new SparkleGitBin (LocalPath, "push");
+
+                git_bin.Start ();
+                git_bin.WaitForExit ();
+              */  // TODO: Progress
+            }
+
 
             SparkleGit git = new SparkleGit (LocalPath,
                 "push --progress " + // Redirects progress stats to standarderror
