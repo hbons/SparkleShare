@@ -485,13 +485,17 @@ namespace SparkleLib.Git {
                 SparkleHelpers.DebugInfo ("Git", Name + " | Conflict type: " + line);
 
                 // Ignore conflicts in the .sparkleshare file and use the local version
-                if (conflicting_path.EndsWith (".sparkleshare")) {
+                if (conflicting_path.EndsWith (".sparkleshare") ||
+                    conflicting_path.EndsWith (".empty")) {
+
                     // Recover local version
                     SparkleGit git_theirs = new SparkleGit (LocalPath,
                         "checkout --theirs \"" + conflicting_path + "\"");
 
                     git_theirs.Start ();
                     git_theirs.WaitForExit ();
+
+                    File.SetAttributes (Path.Combine (LocalPath, conflicting_path), FileAttributes.Hidden);
 
                     SparkleGit git_rebase_continue = new SparkleGit (LocalPath, "rebase --continue");
                     git_rebase_continue.Start ();
