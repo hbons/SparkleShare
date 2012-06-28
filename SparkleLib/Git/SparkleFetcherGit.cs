@@ -31,6 +31,7 @@ namespace SparkleLib.Git {
 
         private SparkleGit git;
         private string crypto_salt = "e0d592768d7cf99a"; // TODO: Make unique per repo
+        private bool use_mass_storage = false; // TODO
 
 
         public SparkleFetcher (string server, string required_fingerprint, string remote_path,
@@ -210,7 +211,7 @@ namespace SparkleLib.Git {
             string git_attributes_file_path = SparkleHelpers.CombineMore (
                 TargetFolder, ".git", "info", "attributes");
 
-            File.WriteAllText (git_attributes_file_path, "* filter=crypto");
+            File.AppendAllText (git_attributes_file_path, "\n* filter=crypto");
 
 
             // Store the password
@@ -303,6 +304,7 @@ namespace SparkleLib.Git {
 
             string n = Environment.NewLine;
 
+            // TODO: Use commands to configure
             config = config.Replace ("[core]" + n,
                 "[core]" + n +
                 "\tquotepath = false" + n + // Show special characters in the logs
@@ -326,6 +328,57 @@ namespace SparkleLib.Git {
 
             // Write the config to the file
             File.WriteAllText (repo_config_file_path, config);
+
+            if (this.use_mass_storage) {
+                SparkleGit git_config = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+                    "config filter.bin.clean \"git bin clean %f\"");
+
+                git_config.Start ();
+                git_config.WaitForExit ();
+
+
+                git_config = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+                    "config filter.bin.smudge \"git bin smudge\"");
+
+                git_config.Start ();
+                git_config.WaitForExit ();
+
+
+                git_config = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+                    "config git-bin.s3bucket \"your bucket name\"");
+
+                git_config.Start ();
+                git_config.WaitForExit ();
+
+
+                git_config = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+                    "config git-bin.s3key \"your key\"");
+
+                git_config.Start ();
+                git_config.WaitForExit ();
+
+
+                git_config = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+                    "config git-bin.s3secretKey \"your secret key\"");
+
+                git_config.Start ();
+                git_config.WaitForExit ();
+
+
+                git_config = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+                    "config git-bin.chunkSize 1m");
+
+                git_config.Start ();
+                git_config.WaitForExit ();
+
+
+                git_config = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+                    "config core.bigFileThreshold 2g");
+
+                git_config.Start ();
+                git_config.WaitForExit ();
+            }
+
             SparkleHelpers.DebugInfo ("Fetcher", "Added configuration to '" + repo_config_file_path + "'");
         }
 
@@ -349,9 +402,13 @@ namespace SparkleLib.Git {
             // File that lists the files we want don't want git to compress.
             // Not compressing the already compressed files saves us memory
             // usage and increases speed
-            string no_compression_rules_file_path = Path.Combine (info.FullName, "attributes");
-            writer = new StreamWriter (no_compression_rules_file_path);
+            string git_attributes_file_path = Path.Combine (info.FullName, "attributes");
+            writer = new StreamWriter (git_attributes_file_path);
 
+            if (this.use_mass_storage) {
+                writer.WriteLine ("* filter=bin binary");
+
+            } else {
                 // Images
                 writer.WriteLine ("*.jpg -delta");
                 writer.WriteLine ("*.jpeg -delta");
@@ -437,6 +494,7 @@ namespace SparkleLib.Git {
 
                 writer.WriteLine ("*.tar -delta");
                 writer.WriteLine ("*.TAR -delta");
+            }
 
             writer.Close ();
         }
