@@ -288,12 +288,8 @@ namespace SparkleLib.Git {
             if (IsFetchedRepoEmpty)
                 return;
 
-            SparkleGit git = new SparkleGit (TargetFolder, "checkout HEAD");
+            SparkleGit git = new SparkleGit (TargetFolder, "checkout --quiet HEAD");
             git.Start ();
-
-            // Reading the standard output HAS to go before
-            // WaitForExit, or it will hang forever on output > 4096 bytes
-            git.StandardOutput.ReadToEnd ();
             git.WaitForExit ();
         }
 
