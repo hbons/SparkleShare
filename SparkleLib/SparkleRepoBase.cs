@@ -229,17 +229,20 @@ namespace SparkleLib {
                 return;
 
             lock (this.change_lock) {
+                this.remote_timer.Stop ();
+
                 string relative_path = args.FullPath.Replace (LocalPath, "");
 
                 foreach (string exclude_path in ExcludePaths) {
-                    if (relative_path.Contains (exclude_path))
+                    if (relative_path.Contains (exclude_path)) {
+                        this.remote_timer.Start ();
                         return;
+                    }
                 }
 
                 if (!IsBuffering && HasLocalChanges) {
                     IsBuffering = true;
                     this.watcher.Disable ();
-                    this.remote_timer.Stop ();
 
                     SparkleHelpers.DebugInfo ("Local", Name + " | Activity detected, waiting for it to settle...");
 
@@ -274,6 +277,8 @@ namespace SparkleLib {
 
                     } while (IsBuffering);
                 }
+
+                this.remote_timer.Start ();
             }
         }
 
