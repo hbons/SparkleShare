@@ -232,7 +232,7 @@ namespace SparkleLib {
             process.StartInfo.CreateNoWindow         = true;
 
             process.StartInfo.FileName  = "ssh-keygen";
-            process.StartInfo.Arguments = "-lf " + tmp_file_path;
+            process.StartInfo.Arguments = "-lf \"" + tmp_file_path + "\"";
 
             process.Start ();
 
