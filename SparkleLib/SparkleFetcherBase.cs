@@ -100,7 +100,7 @@ namespace SparkleLib {
             if (Started != null)
                 Started ();
 
-            SparkleHelpers.DebugInfo ("Fetcher", "[" + TargetFolder + "] Fetching folder: " + RemoteUrl);
+            SparkleHelpers.DebugInfo ("Fetcher", TargetFolder + " | Fetching folder: " + RemoteUrl);
 
             if (Directory.Exists (TargetFolder))
                 Directory.Delete (TargetFolder, true);
