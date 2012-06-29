@@ -1,7 +1,7 @@
 0.9.0 for Linux, Mac and Windows (Wed Jun 27 2012)
 
 	Hylke:
-	- Expeimental client side encryption using OpenSSL's AES
+	- Experimental client side encryption using OpenSSL's AES
 	- Allow setting custom paths in config.xml
 	- Ship host keys of default plugins and verify on project add
 	- Don't touch the user's ~/.ssh/config to configure SSH
@@ -34,136 +34,137 @@
 
 0.8.3 for Linux, Mac and Windows (Sun Mar 11 2012):
 
-        Hylke:
+	Hylke:
 	- Windows version implemented with WPF
-        - Invites feature: link to a host with one click
-        - Implement sparklshare:// protocol handlers for invites
-        - "Add SparkleShare to login items" checkbox on the last tutorial page
-        - Text entries aren't being reset when selecting plugins in the setup dialog
-        - A variety of new default avatars (GNOME style)
-        - More useful hints below the entries in the setup dialog
-        - Breadcrumbs for paths in the event log: directories can be clicked
-        - Allow backends to be in separate binaries (by Shish)
-        - If the dock icon is visible and has a count badge, open event log on click
-        - Add previously successfully used hosts as plugins
+	- Invites feature: link to a host with one click
+	- Implement sparklshare:// protocol handlers for invites
+	- "Add SparkleShare to login items" checkbox on the last tutorial page
+	- Text entries aren't being reset when selecting plugins in the setup dialog
+	- A variety of new default avatars (GNOME style)
+	- More useful hints below the entries in the setup dialog
+	- Breadcrumbs for paths in the event log: directories can be clicked
+	- Allow backends to be in separate binaries (by Shish)
+	- If the dock icon is visible and has a count badge, open event log on click
+	- Add previously successfully used hosts as plugins
 
 
 0.8.2 for Linux and Mac (Sat Feb 11 2012):
 
-        Hylke:
-        - Use the more reliable and less resource intensive FSEvents on Mac.
-        - Improvements to the reconnect mechanism of the notification system
+	Hylke:
+	- Use the more reliable and less resource intensive FSEvents on Mac.
+	- Improvements to the reconnect mechanism of the notification system
 
 
 0.8.1 for Linux and Mac (Sun Jan 29 2012):
 
-        Hylke:
-        - Disable the Quit menu item when a sync is going on
-        - Show remote url when hovering project names in the log
-        - Fix the event log on Linux
-        - Allow server ports to be specified once again
-        - Open Folder button after setup now takes you to SparkleShare/subfolder
-        - Close event log on Cmd+W on Mac
+	Hylke:
+	- Disable the Quit menu item when a sync is going on
+	- Show remote url when hovering project names in the log
+	- Fix the event log on Linux
+	- Allow server ports to be specified once again
+	- Open Folder button after setup now takes you to SparkleShare/subfolder
+	- Close event log on Cmd+W on Mac
 
 
 0.8.0 for Linux and Mac (Sun Jan 22 2012):
 
-        Hylke:
-        - Show syncing progress in the status icon
-        - Hide dock icon on Mac until you open a window
-        - Update dates in the event log after midnight
-        - Don't let git compress already compressed files (.jpg .ogg .zip, etc.)
-        - Limit git's memory usage
-        - Ignore history of any added git/hg/bzr repositories, just add the files
-        - Spin status icon on syncing changes made before startup
+	Hylke:
+	- Show syncing progress in the status icon
+	- Hide dock icon on Mac until you open a window
+	- Update dates in the event log after midnight
+	- Don't let git compress already compressed files (.jpg .ogg .zip, etc.)
+	- Limit git's memory usage
+	- Ignore history of any added git/hg/bzr repositories, just add the files
+	- Spin status icon on syncing changes made before startup
 
 
 0.6.0 for Linux and Mac (Sun Dec 25 2011):
         
-        Hylke:
-        - Several fixes for annoying bugs and crashes
-        - Fix freeze on quit on Mac
-        - Show project and history size in the event log
+	Hylke:
+	- Several fixes for annoying bugs and crashes
+	- Fix freeze on quit on Mac
+	- Show project and history size in the event log
 
 
 0.4.2 for Linux and Mac (Fri Dec 2 2011):
-        Hylke: Fix crash trying to add a project
+	Hylke:
+	- Fix crash trying to add a project
 
 
 0.4.1 for Linux and Mac (Tue Nov 29 2011):
-        Hylke: Just some small tweaks and fixes:
+	Hylke: Just some small tweaks and fixes:
 
-        - Bundle git with the Mac application
-        - Warn about potential global gitignore files
-        - Remove SmartIrc4Net
-        - Build system fixes
+	- Bundle git with the Mac application
+	- Warn about potential global gitignore files
+	- Remove SmartIrc4Net
+	- Build system fixes
 	- Code cleanups
 
 
 0.4.0 for Linux and Mac (Sun Nov 12 2011):
-        Hylke: It has been a while since the last release. Since so many 
-        things changed, and it being (softly) incompatible with 0.2, I decided 
-        to call it 0.4. Here are the most important improvements:
+	Hylke: It has been a while since the last release. Since so many
+	things changed, and it being (softly) incompatible with 0.2, I decided
+	to call it 0.4. Here are the most important improvements:
 
-        - Support OS X Lion
-        - Revamped "Add Hosted Project..." dialog
-        - First run tutorial
-        - Clicking notifications opens the event log
-        - Support for organisation/host plugins
-        - Adding empty folders now works
-        - More useful error reporting
-        - Progress bar on the initial sync, and a button to cancel
-        - Replace IRC by a custom protocol as the default notification system
-        - Many many fixes for crashes and bugs
+	- Support OS X Lion
+	- Revamped "Add Hosted Project..." dialog
+	- First run tutorial
+	- Clicking notifications opens the event log
+	- Support for organisation/host plugins
+	- Adding empty folders now works
+	- More useful error reporting
+	- Progress bar on the initial sync, and a button to cancel
+	- Replace IRC by a custom protocol as the default notification system
+	- Many many fixes for crashes and bugs
 
-        Travis:
-        - Nautilus 3.x plugin
-        - Bugfixes
+	Travis:
+	- Nautilus 3.x plugin
+	- Bugfixes
 
 
 0.2.5 for Linux and Mac (Mon Jul 25 2011):
 
-        Hylke: Reimplement notes to be less buggy and backend independent. Polish
-        about dialog and event log html. Fix a bug where large collections of files 
-        weren't being synced when adding them at the same time. The event log now
-        collapses huge change sets and squashes events together by day when they
-        are on the same day and in the same folder. Add a controller per UI component 
-        to make the Windows verion easier to implement.
+	Hylke: Reimplement notes to be less buggy and backend independent. Polish
+	about dialog and event log html. Fix a bug where large collections of files
+	weren't being synced when adding them at the same time. The event log now
+	collapses huge change sets and squashes events together by day when they
+	are on the same day and in the same folder. Add a controller per UI component
+	to make the Windows verion easier to implement.
 
 
 0.2.4 for Linux and Mac (Wed Jun 29, 2011):
 
-        Hylke: Fix crash when setting up with an empty Git repository.
+	Hylke: Fix crash when setting up with an empty Git repository.
 
 
 0.2.3 for Linux and Mac (Tue Jun 28, 2011):
 
-        Hylke: Add the ability to add notes in the event logs. Fix some quirks
-        in the webkit view on Linux. Redid gravatar fetching parts to be more
-        efficient. Remove headless feature. Fix some small bugs and crashes.
-        SparkleShare will now also try to use your existing SSH keypair. Required
-        Git version is now 1.7.1 or later.
+	Hylke: Add the ability to add notes in the event logs. Fix some quirks
+	in the webkit view on Linux. Redid gravatar fetching parts to be more
+	efficient. Remove headless feature. Fix some small bugs and crashes.
+	SparkleShare will now also try to use your existing SSH keypair. Required
+	Git version is now 1.7.1 or later.
 
 
 0.2.2 for Linux and Mac (Tue Jun 14, 2011):
 
-        Hylke: Fix crash on first run when ~/.ssh doesn't exist. Sync algorithm
-        tweaks. New global event log. Ubuntu integration with libappindicator. Poll
-        sometimes even when using the notification service.
+	Hylke: Fix crash on first run when ~/.ssh doesn't exist. Sync algorithm
+	tweaks. New global event log. Ubuntu integration with libappindicator. Poll
+	sometimes even when using the notification service.
 
 
 0.2.1 for Linux and Mac (Wed Jun 8, 2011):
 
-        Hylke: Fix bug where host names with a "-" in them weren't accepted. Fix
-        crash that happens when the user doesn't have their "Real Name" set in the 
-        OS and a race condition connecting to the announcements server.
+	Hylke: Fix bug where host names with a "-" in them weren't accepted. Fix
+	crash that happens when the user doesn't have their "Real Name" set in the
+	OS and a race condition connecting to the announcements server.
 
 
 0.2 for Linux and Mac (Mon Jun 6, 2011):
 
 	Hylke: Removed the dependancy on GitSharp. File rename detection support
 	in the event logs. Fixed all crashes reported in RC1 and improved sync
-        algorithm. Redid collision detection and conflict resolving (use a copy
+	algorithm. Redid collision detection and conflict resolving (use a copy
 	of each version). Improved about dialogs with version checking. Pluggable
 	backend (experimental Mercurial support). Added support for Growl to show
 	notifications on Mac.
