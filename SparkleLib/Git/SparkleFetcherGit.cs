@@ -136,7 +136,6 @@ namespace SparkleLib.Git {
                     }
                 }
 
-
                 if (number >= percentage) {
                     percentage = number;
 
@@ -164,6 +163,7 @@ namespace SparkleLib.Git {
 
                 InstallConfiguration ();
                 InstallExcludeRules ();
+                InstallAttributeRules ();
 
                 AddWarnings ();
 
@@ -322,13 +322,13 @@ namespace SparkleLib.Git {
         public void InstallGitBinConfiguration ()
         {
             string [] settings = new string [] {
+                "core.bigFileThreshold 8g",
                 "config filter.bin.clean \"git bin clean %f\"",
                 "config filter.bin.smudge \"git bin smudge\"",
+                "git-bin.chunkSize 1m",
                 "git-bin.s3bucket \"your bucket name\"",
                 "git-bin.s3key \"your key\"",
-                "git-bin.s3secretKey \"your secret key\"",
-                "git-bin.chunkSize 1m",
-                "core.bigFileThreshold 8g"
+                "git-bin.s3secretKey \"your secret key\""
             };
 
             foreach (string setting in settings) {
@@ -342,27 +342,27 @@ namespace SparkleLib.Git {
         // Add a .gitignore file to the repo
         private void InstallExcludeRules ()
         {
-            DirectoryInfo info = Directory.CreateDirectory (
-                SparkleHelpers.CombineMore (TargetFolder, ".git", "info"));
-
-            // File that lists the files we want git to ignore
-            string exclude_rules_file_path = Path.Combine (info.FullName, "exclude");
+            // Compile a list of files we want Git to ignore
+            string exclude_rules_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "info", "exclude");
             TextWriter writer = new StreamWriter (exclude_rules_file_path);
 
             foreach (string exclude_rule in ExcludeRules)
                 writer.WriteLine (exclude_rule);
 
             writer.Close ();
+        }
 
 
-            string git_attributes_file_path = Path.Combine (info.FullName, "attributes");
-            writer = new StreamWriter (git_attributes_file_path);
+        private void InstallAttributeRules ()
+        {
+            string attribute_rules_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "info", "attributes");
+            TextWriter writer = new StreamWriter (attribute_rules_file_path);
 
             if (this.use_git_bin) {
                 writer.WriteLine ("* filter=bin binary");
 
             } else {
-                // Compile a list of files we don't want git to compress.
+                // Compile a list of files we don't want Git to compress.
                 // Not compressing already compressed files decreases memory usage and increases speed
                 string [] extensions = new string [] {
                     "jpg", "jpeg", "png", "tiff", "gif", // Images
