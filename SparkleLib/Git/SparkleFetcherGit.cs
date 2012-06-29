@@ -30,13 +30,13 @@ namespace SparkleLib.Git {
     public class SparkleFetcher : SparkleFetcherBase {
 
         private SparkleGit git;
+        private bool use_git_bin;
         private string crypto_salt = "e0d592768d7cf99a"; // TODO: Make unique per repo
-        private bool use_git_bin = false; // TODO
 
 
         public SparkleFetcher (string server, string required_fingerprint, string remote_path,
-            string target_folder, bool fetch_prior_history) : base (server, required_fingerprint, remote_path,
-                target_folder, fetch_prior_history)
+            string target_folder, bool fetch_prior_history) : base (server, required_fingerprint,
+                remote_path, target_folder, fetch_prior_history)
         {
             Uri uri = RemoteUrl;
 
@@ -61,6 +61,9 @@ namespace SparkleLib.Git {
             } else if (uri.Host.Equals ("github.com")) {
                 uri = new Uri ("ssh://git@github.com" + uri.AbsolutePath);
 
+            } else if (uri.Host.Equals ("bitbucket.org")) {
+                // Nothing really
+
             } else if (uri.Host.Equals ("gnome.org")) {
                 uri = new Uri ("ssh://git@gnome.org/git" + uri.AbsolutePath);
 
@@ -74,6 +77,8 @@ namespace SparkleLib.Git {
                     else
                         uri = new Uri (uri.Scheme + "://git@" + uri.Host + ":" + uri.Port + uri.AbsolutePath);
                 }
+
+                this.use_git_bin = true;
             }
 
             TargetFolder = target_folder;
@@ -305,7 +310,7 @@ namespace SparkleLib.Git {
                 "core.packedGitWindowSize 128m",
                 "pack.deltaCacheSize 128m",
                 "pack.packSizeLimit 128m",
-                "pack.windowMemory 128m",
+                "pack.windowMemory 128m"
             };
 
             foreach (string setting in settings) {
