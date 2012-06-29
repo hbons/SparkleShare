@@ -26,14 +26,16 @@ namespace SparkleLib.Git {
     public class SparkleRepo : SparkleRepoBase {
 
 		private bool author_set;
-        private bool use_mass_storage;
+        private bool use_git_bin;
 
 
         public SparkleRepo (string path) : base (path)
         {
-            //this.use_mass_storage =
-                //SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (Name, "use_mass_storage")
-                  //  .Equals (bool.TrueString);
+            SparkleGit git = new SparkleGit (LocalPath, "config --get filter.bin.clean");
+            git.Start ();
+            git.WaitForExit ();
+
+            this.use_git_bin = (git.ExitCode == 0);
         }
 
 
@@ -157,7 +159,7 @@ namespace SparkleLib.Git {
                 SparkleHelpers.DebugInfo ("Git", Name + " | Checking for remote changes...");
 
                 string current_revision = CurrentRevision;
-                SparkleGit git = new SparkleGit (LocalPath, "ls-remote --exit-code \"" + RemoteUrl + "\" master");
+                SparkleGit git = new SparkleGit (LocalPath, "ls-remote --heads --exit-code \"" + RemoteUrl + "\" master");
     
                 git.Start ();
                 git.WaitForExit ();
@@ -193,16 +195,13 @@ namespace SparkleLib.Git {
                 Commit (message);
             }
 
-            // TODO: set remote_url from config
-
-            if (this.use_mass_storage) {
-            /*    SparkleGit git_bin = new SparkleGitBin (LocalPath, "push");
-
+            if (this.use_git_bin) {
+                SparkleGitBin git_bin = new SparkleGitBin (LocalPath, "push");
                 git_bin.Start ();
                 git_bin.WaitForExit ();
-              */  // TODO: Progress
-            }
 
+                // TODO: Progress
+            }
 
             SparkleGit git = new SparkleGit (LocalPath,
                 "push --progress " + // Redirects progress stats to standarderror
@@ -264,10 +263,7 @@ namespace SparkleLib.Git {
             UpdateSizes ();
             ChangeSets = GetChangeSets ();
 
-            if (git.ExitCode == 0)
-                return true;
-            else
-                return false;
+            return (git.ExitCode == 0);
         }
 
 
