@@ -295,21 +295,21 @@ namespace SparkleLib.Git {
 
         private void InstallConfiguration ()
         {
-            string [] commands = new string [] {
-                "config core.quotepath false", // Don't quote "unusual" characters in path names
-                "config core.ignorecase false", // Be case sensitive explicitly to work on Mac
-                "config core.filemode false", // Ignore permission changes
-                "config core.autocrlf false", // Don't change file line endings
-                "config core.safecrlf false",
-                "config core.packedGitLimit 128m", // Some memory limiting options
-                "config core.packedGitWindowSize 128m",
-                "config pack.deltaCacheSize 128m",
-                "config pack.packSizeLimit 128m",
-                "config pack.windowMemory 128m",
+            string [] settings = new string [] {
+                "core.quotepath false", // Don't quote "unusual" characters in path names
+                "core.ignorecase false", // Be case sensitive explicitly to work on Mac
+                "core.filemode false", // Ignore permission changes
+                "core.autocrlf false", // Don't change file line endings
+                "core.safecrlf false",
+                "core.packedGitLimit 128m", // Some memory limiting options
+                "core.packedGitWindowSize 128m",
+                "pack.deltaCacheSize 128m",
+                "pack.packSizeLimit 128m",
+                "pack.windowMemory 128m",
             };
 
-            foreach (string command in commands) {
-                SparkleGit git_config = new SparkleGit (TargetFolder, command);
+            foreach (string setting in settings) {
+                SparkleGit git_config = new SparkleGit (TargetFolder, "config " + setting);
                 git_config.Start ();
                 git_config.WaitForExit ();
             }
@@ -321,18 +321,18 @@ namespace SparkleLib.Git {
 
         public void InstallGitBinConfiguration ()
         {
-            string [] commands = new string [] {
+            string [] settings = new string [] {
                 "config filter.bin.clean \"git bin clean %f\"",
                 "config filter.bin.smudge \"git bin smudge\"",
-                "config git-bin.s3bucket \"your bucket name\"",
-                "config git-bin.s3key \"your key\"",
-                "config git-bin.s3secretKey \"your secret key\"",
-                "config git-bin.chunkSize 1m",
-                "config core.bigFileThreshold 8g"
+                "git-bin.s3bucket \"your bucket name\"",
+                "git-bin.s3key \"your key\"",
+                "git-bin.s3secretKey \"your secret key\"",
+                "git-bin.chunkSize 1m",
+                "core.bigFileThreshold 8g"
             };
 
-            foreach (string command in commands) {
-                SparkleGit git_config = new SparkleGit (TargetFolder, command);
+            foreach (string setting in settings) {
+                SparkleGit git_config = new SparkleGit (TargetFolder, "config " + setting);
                 git_config.Start ();
                 git_config.WaitForExit ();
             }
@@ -355,9 +355,6 @@ namespace SparkleLib.Git {
             writer.Close ();
 
 
-            // File that lists the files we want don't want git to compress.
-            // Not compressing the already compressed files saves us memory
-            // usage and increases speed
             string git_attributes_file_path = Path.Combine (info.FullName, "attributes");
             writer = new StreamWriter (git_attributes_file_path);
 
@@ -365,91 +362,19 @@ namespace SparkleLib.Git {
                 writer.WriteLine ("* filter=bin binary");
 
             } else {
-                // Images
-                writer.WriteLine ("*.jpg -delta");
-                writer.WriteLine ("*.jpeg -delta");
-                writer.WriteLine ("*.JPG -delta");
-                writer.WriteLine ("*.JPEG -delta");
+                // Compile a list of files we don't want git to compress.
+                // Not compressing already compressed files decreases memory usage and increases speed
+                string [] extensions = new string [] {
+                    "jpg", "jpeg", "png", "tiff", "gif", // Images
+                    "flac", "mp3", "ogg", "oga", // Audio
+                    "avi", "mov", "mpg", "mpeg", "mkv", "ogv", "ogx", "webm", // Video
+                    "zip", "gz", "bz", "bz2", "rpm", "deb", "tgz", "rar", "ace", "7z", "pak", "tar" // Archives
+                };
 
-                writer.WriteLine ("*.png -delta");
-                writer.WriteLine ("*.PNG -delta");
-
-                writer.WriteLine ("*.tiff -delta");
-                writer.WriteLine ("*.TIFF -delta");
-
-                // Audio
-                writer.WriteLine ("*.flac -delta");
-                writer.WriteLine ("*.FLAC -delta");
-
-                writer.WriteLine ("*.mp3 -delta");
-                writer.WriteLine ("*.MP3 -delta");
-
-                writer.WriteLine ("*.ogg -delta");
-                writer.WriteLine ("*.OGG -delta");
-
-                writer.WriteLine ("*.oga -delta");
-                writer.WriteLine ("*.OGA -delta");
-
-                // Video
-                writer.WriteLine ("*.avi -delta");
-                writer.WriteLine ("*.AVI -delta");
-
-                writer.WriteLine ("*.mov -delta");
-                writer.WriteLine ("*.MOV -delta");
-
-                writer.WriteLine ("*.mpg -delta");
-                writer.WriteLine ("*.MPG -delta");
-                writer.WriteLine ("*.mpeg -delta");
-                writer.WriteLine ("*.MPEG -delta");
-
-                writer.WriteLine ("*.mkv -delta");
-                writer.WriteLine ("*.MKV -delta");
-
-                writer.WriteLine ("*.ogv -delta");
-                writer.WriteLine ("*.OGV -delta");
-
-                writer.WriteLine ("*.ogx -delta");
-                writer.WriteLine ("*.OGX -delta");
-
-                writer.WriteLine ("*.webm -delta");
-                writer.WriteLine ("*.WEBM -delta");
-
-                // Archives
-                writer.WriteLine ("*.zip -delta");
-                writer.WriteLine ("*.ZIP -delta");
-
-                writer.WriteLine ("*.gz -delta");
-                writer.WriteLine ("*.GZ -delta");
-
-                writer.WriteLine ("*.bz -delta");
-                writer.WriteLine ("*.BZ -delta");
-
-                writer.WriteLine ("*.bz2 -delta");
-                writer.WriteLine ("*.BZ2 -delta");
-
-                writer.WriteLine ("*.rpm -delta");
-                writer.WriteLine ("*.RPM -delta");
-
-                writer.WriteLine ("*.deb -delta");
-                writer.WriteLine ("*.DEB -delta");
-
-                writer.WriteLine ("*.tgz -delta");
-                writer.WriteLine ("*.TGZ -delta");
-
-                writer.WriteLine ("*.rar -delta");
-                writer.WriteLine ("*.RAR -delta");
-
-                writer.WriteLine ("*.ace -delta");
-                writer.WriteLine ("*.ACE -delta");
-
-                writer.WriteLine ("*.7z -delta");
-                writer.WriteLine ("*.7Z -delta");
-
-                writer.WriteLine ("*.pak -delta");
-                writer.WriteLine ("*.PAK -delta");
-
-                writer.WriteLine ("*.tar -delta");
-                writer.WriteLine ("*.TAR -delta");
+                foreach (string extension in extensions) {
+                    writer.WriteLine ("*." + extension + " -delta");
+                    writer.WriteLine ("*." + extension.ToUpper () + " -delta");
+                }
             }
 
             writer.Close ();
