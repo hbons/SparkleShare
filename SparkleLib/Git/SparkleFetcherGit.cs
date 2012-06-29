@@ -31,7 +31,7 @@ namespace SparkleLib.Git {
 
         private SparkleGit git;
         private string crypto_salt = "e0d592768d7cf99a"; // TODO: Make unique per repo
-        private bool use_mass_storage = false; // TODO
+        private bool use_git_bin = false; // TODO
 
 
         public SparkleFetcher (string server, string required_fingerprint, string remote_path,
@@ -148,8 +148,6 @@ namespace SparkleLib.Git {
             }
             
             this.git.WaitForExit ();
-
-            SparkleHelpers.DebugInfo ("Git", "Exit code: " + this.git.ExitCode);
 
             if (this.git.ExitCode == 0) {
                 while (percentage < 100) {
@@ -295,91 +293,49 @@ namespace SparkleLib.Git {
         }
 
 
-        // Install the user's name and email and some config into
-        // the newly cloned repository
         private void InstallConfiguration ()
         {
-            string repo_config_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "config");
-            string config = File.ReadAllText (repo_config_file_path);
+            string [] commands = new string [] {
+                "config core.quotepath false", // Don't quote "unusual" characters in path names
+                "config core.ignorecase false", // Be case sensitive explicitly to work on Mac
+                "config core.filemode false", // Ignore permission changes
+                "config core.autocrlf false", // Don't change file line endings
+                "config core.safecrlf false",
+                "config core.packedGitLimit 128m", // Some memory limiting options
+                "config core.packedGitWindowSize 128m",
+                "config pack.deltaCacheSize 128m",
+                "config pack.packSizeLimit 128m",
+                "config pack.windowMemory 128m",
+            };
 
-            string n = Environment.NewLine;
-
-            // TODO: Use commands to configure
-            config = config.Replace ("[core]" + n,
-                "[core]" + n +
-                "\tquotepath = false" + n + // Show special characters in the logs
-                "\tpackedGitLimit = 128m" + n +
-                "\tautocrlf = false" + n +
-                "\tsafecrlf = false" + n +
-                "\tpackedGitWindowSize = 128m" + n);
-
-            config = config.Replace ("[remote \"origin\"]" + n,
-                "[pack]" + n +
-                "\tdeltaCacheSize = 128m" + n +
-                "\tpackSizeLimit = 128m" + n +
-                "\twindowMemory = 128m" + n +
-                "[remote \"origin\"]" + n);
-
-            // Be case sensitive explicitly to work on Mac
-            config = config.Replace ("ignorecase = true", "ignorecase = false");
-
-            // Ignore permission changes
-            config = config.Replace ("filemode = true", "filemode = false");
-
-            // Write the config to the file
-            File.WriteAllText (repo_config_file_path, config);
-
-            if (this.use_mass_storage) {
-                SparkleGit git_config = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
-                    "config filter.bin.clean \"git bin clean %f\"");
-
-                git_config.Start ();
-                git_config.WaitForExit ();
-
-
-                git_config = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
-                    "config filter.bin.smudge \"git bin smudge\"");
-
-                git_config.Start ();
-                git_config.WaitForExit ();
-
-
-                git_config = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
-                    "config git-bin.s3bucket \"your bucket name\"");
-
-                git_config.Start ();
-                git_config.WaitForExit ();
-
-
-                git_config = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
-                    "config git-bin.s3key \"your key\"");
-
-                git_config.Start ();
-                git_config.WaitForExit ();
-
-
-                git_config = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
-                    "config git-bin.s3secretKey \"your secret key\"");
-
-                git_config.Start ();
-                git_config.WaitForExit ();
-
-
-                git_config = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
-                    "config git-bin.chunkSize 1m");
-
-                git_config.Start ();
-                git_config.WaitForExit ();
-
-
-                git_config = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
-                    "config core.bigFileThreshold 2g");
-
+            foreach (string command in commands) {
+                SparkleGit git_config = new SparkleGit (TargetFolder, command);
                 git_config.Start ();
                 git_config.WaitForExit ();
             }
 
-            SparkleHelpers.DebugInfo ("Fetcher", "Added configuration to '" + repo_config_file_path + "'");
+            if (this.use_git_bin)
+                InstallGitBinConfiguration ();
+        }
+
+
+        public void InstallGitBinConfiguration ()
+        {
+            string [] commands = new string [] {
+                "config filter.bin.clean \"git bin clean %f\"",
+                "config filter.bin.smudge \"git bin smudge\"",
+                "config git-bin.s3bucket \"your bucket name\"",
+                "config git-bin.s3key \"your key\"",
+                "config git-bin.s3secretKey \"your secret key\"",
+                "config git-bin.chunkSize 1m",
+                "config core.bigFileThreshold 8g"
+            };
+
+            foreach (string command in commands) {
+                SparkleGit git_config = new SparkleGit (TargetFolder, command);
+                git_config.Start ();
+                git_config.WaitForExit ();
+            }
         }
 
 
@@ -405,7 +361,7 @@ namespace SparkleLib.Git {
             string git_attributes_file_path = Path.Combine (info.FullName, "attributes");
             writer = new StreamWriter (git_attributes_file_path);
 
-            if (this.use_mass_storage) {
+            if (this.use_git_bin) {
                 writer.WriteLine ("* filter=bin binary");
 
             } else {
