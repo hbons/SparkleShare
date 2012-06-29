@@ -25,7 +25,8 @@ namespace SparkleLib.Git {
 
     public class SparkleRepo : SparkleRepoBase {
 
-		private bool author_set;
+		private bool user_is_set;
+        private bool remote_url_is_set;
         private bool use_git_bin;
 
 
@@ -195,7 +196,17 @@ namespace SparkleLib.Git {
                 Commit (message);
             }
 
+            SparkleGit git;
+
             if (this.use_git_bin) {
+                if (this.remote_url_is_set) {
+                    git = new SparkleGit (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
+                    git.Start ();
+                    git.WaitForExit ();
+
+                    this.remote_url_is_set = true;
+                }
+
                 SparkleGitBin git_bin = new SparkleGitBin (LocalPath, "push");
                 git_bin.Start ();
                 git_bin.WaitForExit ();
@@ -203,7 +214,7 @@ namespace SparkleLib.Git {
                 // TODO: Progress
             }
 
-            SparkleGit git = new SparkleGit (LocalPath,
+            git = new SparkleGit (LocalPath,
                 "push --progress " + // Redirects progress stats to standarderror
                 "\"" + RemoteUrl + "\" master");
 
@@ -403,7 +414,7 @@ namespace SparkleLib.Git {
 		{
 			SparkleGit git;
 
-			if (!this.author_set) {
+			if (!this.user_is_set) {
 	            git = new SparkleGit (LocalPath,
 	                "config user.name \"" + SparkleConfig.DefaultConfig.User.Name + "\"");
 
@@ -416,7 +427,7 @@ namespace SparkleLib.Git {
 				git.Start ();
 				git.WaitForExit ();
 
-				this.author_set = true;
+				this.user_is_set = true;
 			}
 
             git = new SparkleGit (LocalPath,
