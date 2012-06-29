@@ -274,7 +274,13 @@ namespace SparkleLib.Git {
             UpdateSizes ();
             ChangeSets = GetChangeSets ();
 
-            return (git.ExitCode == 0);
+            if (git.ExitCode == 0) {
+                ClearCache ();
+                return true;
+
+            } else {
+                return false;
+            }
         }
 
 
@@ -341,6 +347,7 @@ namespace SparkleLib.Git {
 				);
 
                 ChangeSets = GetChangeSets ();
+                ClearCache ();
 
 				return true;
 
@@ -777,6 +784,17 @@ namespace SparkleLib.Git {
             }
 
             return change_sets;
+        }
+
+
+        private void ClearCache ()
+        {
+            if (!this.use_git_bin)
+                return;
+
+            SparkleGitBin git_bin = new SparkleGitBin (LocalPath, "clear -f");
+            git_bin.Start ();
+            git_bin.WaitForExit ();
         }
 
 

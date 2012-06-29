@@ -81,6 +81,9 @@ namespace SparkleLib.Git {
                 this.use_git_bin = true;
             }
 
+
+            this.use_git_bin = true; // TODO: remove
+
             TargetFolder = target_folder;
             RemoteUrl    = uri;
         }
@@ -328,8 +331,8 @@ namespace SparkleLib.Git {
         {
             string [] settings = new string [] {
                 "core.bigFileThreshold 8g",
-                "config filter.bin.clean \"git bin clean %f\"",
-                "config filter.bin.smudge \"git bin smudge\"",
+                "filter.bin.clean \"git bin clean %f\"",
+                "filter.bin.smudge \"git bin smudge\"",
                 "git-bin.chunkSize 1m",
                 "git-bin.s3bucket \"your bucket name\"",
                 "git-bin.s3key \"your key\"",
