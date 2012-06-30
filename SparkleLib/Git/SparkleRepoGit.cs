@@ -509,7 +509,7 @@ namespace SparkleLib.Git {
 
             foreach (string line in lines) {
                 string conflicting_path = line.Substring (3);
-                conflicting_path = conflicting_path.Trim ("\"".ToCharArray ());
+                conflicting_path = this.EnsureSpecialCharacters (conflicting_path);
 
                 SparkleHelpers.DebugInfo ("Git", Name + " | Conflict type: " + line);
 
