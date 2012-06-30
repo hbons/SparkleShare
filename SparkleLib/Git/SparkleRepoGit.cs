@@ -664,6 +664,11 @@ namespace SparkleLib.Git {
 
                             string change_type = entry_line [37].ToString ();
                             string file_path   = entry_line.Substring (39);
+
+                            // Handle filepath with special characters
+                            file_path = EnsureSpecialCharacters (file_path);
+                            
+
                             string to_file_path;
 
                             if (file_path.EndsWith (".empty"))
@@ -704,6 +709,9 @@ namespace SparkleLib.Git {
                                 int tab_pos  = entry_line.LastIndexOf ("\t");
                                 file_path    = entry_line.Substring (42, tab_pos - 42);
                                 to_file_path = entry_line.Substring (tab_pos + 1);
+
+                                file_path = this.EnsureSpecialCharacters (file_path);
+                                to_file_path = this.EnsureSpecialCharacters (to_file_path);
 
                                 if (file_path.EndsWith (".empty"))
                                     file_path = file_path.Substring (0, file_path.Length - 6);
@@ -755,6 +763,49 @@ namespace SparkleLib.Git {
             }
 
             return change_sets;
+        }
+
+        private string EnsureSpecialCharacters (string file_path)
+        {
+            if (file_path.StartsWith("\""))
+            {
+                System.Diagnostics.Debug.Assert(file_path.Length > 2 && file_path.EndsWith("\""), "unexpected path");
+                file_path = ResolveSpecialChars(file_path.Substring(1, file_path.Length - 2));
+            }
+            return file_path;
+        }
+
+        /// <summary>
+        /// Resolves special characters like \303\244 (ä) to their real character 
+        /// </summary>
+        /// <param name="file_path"></param>
+        /// <returns></returns>
+        private string ResolveSpecialChars (string file_path)
+        {
+            var builder = new System.Text.StringBuilder(file_path.Length);
+            var codes = new List<byte>();
+            for (int i = 0; i < file_path.Length; i++)
+            {
+                while (file_path[i] == '\\' 
+                    && file_path.Length - i > 3
+                    && char.IsNumber(file_path[i + 1])
+                    && char.IsNumber(file_path[i + 2])
+                    && char.IsNumber(file_path[i + 3]))
+                {
+                    codes.Add (Convert.ToByte(file_path.Substring(i + 1, 3), 8));
+                    i += 4;
+                }
+
+                if (codes.Count > 0)
+                {
+                    builder.Append(System.Text.Encoding.UTF8.GetString (codes.ToArray ()));
+                    codes.Clear ();
+                }
+
+                builder.Append(file_path[i]);
+            }
+            return builder.ToString();
+            //System.Text.Encoding.UTF8.
         }
 
 
