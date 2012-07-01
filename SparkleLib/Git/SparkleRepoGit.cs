@@ -439,9 +439,14 @@ namespace SparkleLib.Git {
             if (git.ExitCode != 0) {
                 SparkleHelpers.DebugInfo ("Git", Name + " | Conflict detected, trying to get out...");
 
-                while (HasLocalChanges)
-                    ResolveConflict ();
-
+                while (HasLocalChanges) {
+                    try {
+                        ResolveConflict();
+                    }
+                    catch (IOException e) {
+                        SparkleHelpers.DebugInfo ("Exception", e.ToString ());
+                    }
+                }
                 SparkleHelpers.DebugInfo ("Git", Name + " | Conflict resolved");
                 OnConflictResolved ();
             }
