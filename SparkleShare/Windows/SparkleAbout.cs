@@ -55,7 +55,7 @@ namespace SparkleShare {
 
 
             Controller.ShowWindowEvent += delegate {
-               Dispatcher.Invoke ((Action) delegate {
+               Dispatcher.BeginInvoke ((Action) delegate {
                     Show ();
                     Activate ();
                     BringIntoView ();
@@ -63,27 +63,27 @@ namespace SparkleShare {
             };
 
             Controller.HideWindowEvent += delegate {
-                Dispatcher.Invoke ((Action) delegate {
+                Dispatcher.BeginInvoke((Action)delegate {
                     Hide ();
                 });
             };
 
             Controller.NewVersionEvent += delegate (string new_version) {
-                Dispatcher.Invoke ((Action) delegate {
+                Dispatcher.BeginInvoke((Action)delegate {
                     this.updates.Content = "A newer version (" + new_version + ") is available!";
                     this.updates.UpdateLayout ();
                 });
             };
 
             Controller.VersionUpToDateEvent += delegate {
-                Dispatcher.Invoke ((Action) delegate {
+                Dispatcher.BeginInvoke ((Action) delegate {
                     this.updates.Content = "You are running the latest version.";
                     this.updates.UpdateLayout ();
                 });
             };
 
             Controller.CheckingForNewVersionEvent += delegate {
-                Dispatcher.Invoke ((Action) delegate {
+                Dispatcher.BeginInvoke ((Action) delegate {
                     this.updates.Content = "Checking for updates...";
                     this.updates.UpdateLayout ();
                 });
