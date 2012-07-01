@@ -44,7 +44,7 @@ namespace SparkleShare {
         public SparkleSetup ()
         {
             Controller.ShowWindowEvent += delegate {
-               Dispatcher.Invoke ((Action) delegate {
+               Dispatcher.BeginInvoke ((Action) delegate {
                     Show ();
                     Activate ();
                     BringIntoView ();
@@ -52,13 +52,13 @@ namespace SparkleShare {
             };
 
             Controller.HideWindowEvent += delegate {
-                Dispatcher.Invoke ((Action) delegate {
+                Dispatcher.BeginInvoke ((Action) delegate {
                     Hide ();
                 });
             };
             
             Controller.ChangePageEvent += delegate (PageType type, string [] warnings) {
-                Dispatcher.Invoke ((Action) delegate {
+                Dispatcher.BeginInvoke ((Action) delegate {
                     Reset ();
                     
                     switch (type) {
@@ -126,7 +126,7 @@ namespace SparkleShare {
 						name_box.Select (name_box.Text.Length, 0);
                         
                         Controller.UpdateSetupContinueButtonEvent += delegate (bool enabled) {
-                        	Dispatcher.Invoke ((Action) delegate {
+                        	Dispatcher.BeginInvoke ((Action) delegate {
                                 continue_button.IsEnabled = enabled;
                             });
                         };
@@ -140,7 +140,7 @@ namespace SparkleShare {
                         };
                         
                         cancel_button.Click += delegate {
-                            Dispatcher.Invoke ((Action) delegate {
+                            Dispatcher.BeginInvoke ((Action) delegate {
                                 SparkleUI.StatusIcon.Dispose ();    
                                 Controller.SetupPageCancelled ();
                             });
@@ -382,7 +382,7 @@ namespace SparkleShare {
 						Controller.ChangeAddressFieldEvent += delegate (string text,
                             string example_text, FieldState state) {
 
-                            Dispatcher.Invoke ((Action) delegate {
+                            Dispatcher.BeginInvoke ((Action) delegate {
                                 address_box.Text        = text;
                                 address_box.IsEnabled   = (state == FieldState.Enabled);
                                 address_help_label.Text = example_text;
@@ -392,7 +392,7 @@ namespace SparkleShare {
                         Controller.ChangePathFieldEvent += delegate (string text,
                             string example_text, FieldState state) {
 
-                            Dispatcher.Invoke ((Action) delegate {
+                            Dispatcher.BeginInvoke ((Action) delegate {
                                 path_box.Text        = text;
                                 path_box.IsEnabled   = (state == FieldState.Enabled);
                                 path_help_label.Text = example_text;
@@ -400,7 +400,7 @@ namespace SparkleShare {
                         };
                         
                         Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
-                            Dispatcher.Invoke ((Action) delegate {
+                            Dispatcher.BeginInvoke ((Action) delegate {
                                 add_button.IsEnabled = button_enabled;
                             });
                         };
@@ -466,7 +466,7 @@ namespace SparkleShare {
                                                    
                          
                         Controller.UpdateProgressBarEvent += delegate (double percentage) {
-                            Dispatcher.Invoke ((Action) delegate {
+                            Dispatcher.BeginInvoke ((Action) delegate {
                                 progress_bar.Value = percentage;	
 								TaskbarItemInfo.ProgressValue = percentage / 100;
                             });
