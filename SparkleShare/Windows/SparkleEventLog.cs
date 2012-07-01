@@ -152,7 +152,7 @@ namespace SparkleShare {
             Closing += Close;
             
             Controller.ShowWindowEvent += delegate {
-               Dispatcher.Invoke ((Action) delegate {
+               Dispatcher.BeginInvoke ((Action) delegate {
                     Show ();
                     Activate ();
                     BringIntoView ();
@@ -160,7 +160,7 @@ namespace SparkleShare {
             };
 
             Controller.HideWindowEvent += delegate {
-                Dispatcher.Invoke ((Action) delegate {
+                Dispatcher.BeginInvoke ((Action) delegate {
                     Hide ();
                     
                     if (this.canvas.Children.Contains (this.web_browser))
@@ -169,7 +169,7 @@ namespace SparkleShare {
             };
             
             Controller.UpdateSizeInfoEvent += delegate (string size, string history_size) {
-                Dispatcher.Invoke ((Action) delegate {
+                Dispatcher.BeginInvoke ((Action) delegate {
                     this.size_label_value.Content = size;
                     this.size_label_value.UpdateLayout ();
                     
@@ -178,14 +178,14 @@ namespace SparkleShare {
                 });
             };
             
-            Controller.UpdateChooserEvent += delegate (string [] folders) {
-                Dispatcher.Invoke ((Action) delegate {
+            Controller.UpdateChooserEvent += delegate (SparkleFolder [] folders) {
+                Dispatcher.BeginInvoke ((Action) delegate {
                     UpdateChooser (folders);
                 });    
             };
 
             Controller.UpdateContentEvent += delegate (string html) {
-                Dispatcher.Invoke ((Action) delegate {
+                Dispatcher.BeginInvoke ((Action) delegate {
                     UpdateContent (html);
                 });
             };
@@ -233,7 +233,7 @@ namespace SparkleShare {
             }
             
             this.combo_box.SelectionChanged += delegate {
-                Dispatcher.Invoke ((Action) delegate {
+                Dispatcher.BeginInvoke ((Action) delegate {
                     int index = this.combo_box.SelectedIndex;
                     
                     if (index == 0)
@@ -286,7 +286,7 @@ namespace SparkleShare {
                     pixmaps_path + "/document-moved-12.png");
                 
                 
-                Dispatcher.Invoke ((Action) delegate {
+                Dispatcher.BeginInvoke ((Action) delegate {
                     this.spinner.Stop ();
                     
                     this.web_browser.NavigateToString (html);
