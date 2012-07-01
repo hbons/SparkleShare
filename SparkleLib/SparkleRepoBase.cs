@@ -78,7 +78,7 @@ namespace SparkleLib {
                 if (this.identifier != null)
                     return this.identifier;
 
-                string id_path = Path.Combine (LocalPath, ".sparkleshare");
+                string id_path = Path.Combine (LocalPath.FullPath, ".sparkleshare");
 
                 if (File.Exists (id_path))
                     this.identifier = File.ReadAllText (id_path).Trim ();
@@ -198,7 +198,7 @@ namespace SparkleLib {
         // user has fetched an empty remote folder
         public virtual void CreateInitialChangeSet ()
         {
-            string file_path = Path.Combine (LocalPath, "SparkleShare.txt");
+            string file_path = Path.Combine (LocalPath.FullPath, "SparkleShare.txt");
             string n         = Environment.NewLine;
 
             File.WriteAllText (file_path,
@@ -231,7 +231,7 @@ namespace SparkleLib {
             lock (this.change_lock) {
                 this.remote_timer.Stop ();
 
-                string relative_path = args.FullPath.Replace (LocalPath, "");
+                string relative_path = args.FullPath.Replace (LocalPath.FullPath, "");
 
                 foreach (string exclude_path in ExcludePaths) {
                     if (relative_path.Contains (exclude_path)) {
@@ -255,7 +255,7 @@ namespace SparkleLib {
                         if (size_buffer.Count >= 4)
                             size_buffer.RemoveAt (0);
 
-                        DirectoryInfo info = new DirectoryInfo (LocalPath);
+                        DirectoryInfo info = new DirectoryInfo (LocalPath.FullPath);
                         size_buffer.Add (CalculateSize (info));
 
                         if (size_buffer.Count >= 4 &&
@@ -408,7 +408,7 @@ namespace SparkleLib {
 
         private SparkleWatcher CreateWatcher ()
         {
-            SparkleWatcher watcher = new SparkleWatcher (LocalPath);
+            SparkleWatcher watcher = new SparkleWatcher (LocalPath.FullPath);
 
             watcher.ChangeEvent += delegate (FileSystemEventArgs args) {
                 OnFileActivity (args);

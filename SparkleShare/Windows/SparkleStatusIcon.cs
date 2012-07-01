@@ -184,12 +184,12 @@ namespace SparkleShare {
 			this.context_menu.Items.Add (folder_item);
 
             if (Controller.Folders.Length > 0) {
-                foreach (string folder_name in Controller.Folders) {     
+                foreach (var sparkle_folder in Controller.Folders) {     
                     SparkleMenuItem subfolder_item = new SparkleMenuItem () {
-                        Header = folder_name
+                        Header = sparkle_folder.Name
                     };
                     
-                    subfolder_item.Click += OpenFolderDelegate (folder_name);
+                    subfolder_item.Click += OpenFolderDelegate (sparkle_folder.Name);
                     
 					Image subfolder_image = new Image () {
 		            	Source = SparkleUIHelpers.GetImageSource ("folder"),
@@ -197,7 +197,7 @@ namespace SparkleShare {
 		            	Height = 16
 					};
 					
-                    if (Program.Controller.UnsyncedFolders.Contains (folder_name)) {
+                    if (Program.Controller.UnsyncedFolders.Contains (sparkle_folder)) {
                     	subfolder_item.Icon = new Image () {
 							Source = (BitmapSource) Imaging.CreateBitmapSourceFromHIcon (
 								System.Drawing.SystemIcons.Exclamation.Handle, 
@@ -217,12 +217,12 @@ namespace SparkleShare {
                     Header = "More projects"
                 };
 				
-                foreach (string folder_name in Controller.OverflowFolders) {     
+                foreach (var sparkle_folder in Controller.OverflowFolders) {     
                     SparkleMenuItem subfolder_item = new SparkleMenuItem () {
-                        Header = folder_name
+                        Header = sparkle_folder.Name
                     };
-                    
-                    subfolder_item.Click += OpenFolderDelegate (folder_name);
+
+                    subfolder_item.Click += OpenFolderDelegate(sparkle_folder.Name);
                     
 					Image subfolder_image = new Image () {
 		            	Source = SparkleUIHelpers.GetImageSource ("folder"),
@@ -230,7 +230,7 @@ namespace SparkleShare {
 		            	Height = 16
 					};
 					
-					if (Program.Controller.UnsyncedFolders.Contains (folder_name)) {
+					if (Program.Controller.UnsyncedFolders.Contains (sparkle_folder)) {
                     	subfolder_item.Icon = new Image () {
 							Source = (BitmapSource) Imaging.CreateBitmapSourceFromHIcon (
 								System.Drawing.SystemIcons.Exclamation.Handle, 

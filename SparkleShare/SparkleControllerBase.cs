@@ -99,22 +99,23 @@ namespace SparkleShare {
             }
         }
 
-        public List<string> Folders {
+        public List<SparkleFolder> Folders {
             get {
-                List<string> folders = SparkleConfig.DefaultConfig.Folders;
+                var folders = SparkleConfig.DefaultConfig.Folders;
                 folders.Sort ();
 
                 return folders;
             }
         }
 
-        public List<string> UnsyncedFolders {
+        public List<SparkleFolder> UnsyncedFolders
+        {
             get {
-                List<string> unsynced_folders = new List<string> ();
+                List<SparkleFolder> unsynced_folders = new List<SparkleFolder>();
 
                 foreach (SparkleRepoBase repo in Repositories) {
                     if (repo.HasUnsyncedChanges)
-                        unsynced_folders.Add (repo.Name);
+                        unsynced_folders.Add (new SparkleFolder(repo.Name));
                 }
 
                 return unsynced_folders;
@@ -209,12 +210,15 @@ namespace SparkleShare {
 
             watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
                 lock (this.delete_watcher_lock) {
-                    foreach (string folder_name in SparkleConfig.DefaultConfig.Folders) {
-                        string folder_path = new SparkleFolder (folder_name).FullPath;
+                    foreach (var sparkle_folder in SparkleConfig.DefaultConfig.Folders) {
 
-                        if (!Directory.Exists (folder_path)) {
-                            SparkleConfig.DefaultConfig.RemoveFolder (folder_name);
-                            RemoveRepository (folder_path);
+                        if (!Directory.Exists(sparkle_folder.FullPath)) {
+                            SparkleConfig.DefaultConfig.RemoveFolder (sparkle_folder);
+                            SparkleHelpers.DebugInfo (
+                                "Repro",
+                                "Deleting Repro " + sparkle_folder.Name + " (directory \"" + sparkle_folder.FullPath
+                                + "\"not found)");
+                            RemoveRepository (sparkle_folder);
                         }
                     }
 
@@ -576,14 +580,12 @@ namespace SparkleShare {
 
         // Removes a repository from the list of repositories and
         // updates the statusicon menu
-        private void RemoveRepository (string folder_path)
+        private void RemoveRepository (SparkleFolder sparkle_folder)
         {
-            string folder_name = Path.GetFileName (folder_path);
-
             for (int i = 0; i < Repositories.Length; i++) {
                 SparkleRepoBase repo = Repositories [i];
 
-                if (repo.Name.Equals (folder_name)) {
+                if (repo.Name.Equals (sparkle_folder.Name)) {
                     repo.Dispose ();
 
                     lock (this.repo_lock) {
@@ -603,13 +605,12 @@ namespace SparkleShare {
         private void PopulateRepositories ()
         {
             lock (this.repo_lock) {
-                foreach (string folder_name in SparkleConfig.DefaultConfig.Folders) {
-                    var sparkle_folder = new SparkleFolder (folder_name);
+                foreach (var sparkle_folder in SparkleConfig.DefaultConfig.Folders) {
 
                     if (Directory.Exists(sparkle_folder.FullPath))
                         AddRepository (sparkle_folder);
                     else
-                        SparkleConfig.DefaultConfig.RemoveFolder (folder_name);
+                        SparkleConfig.DefaultConfig.RemoveFolder (sparkle_folder);
                 }
             }
 

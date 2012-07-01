@@ -29,6 +29,7 @@ using System.Windows.Media.Imaging;
 using Shapes = System.Windows.Shapes;
 
 namespace SparkleShare {
+    using SparkleLib;
 
     public class SparkleEventLog : Window {
 
@@ -178,7 +179,7 @@ namespace SparkleShare {
                 });
             };
             
-            Controller.UpdateChooserEvent += delegate (string [] folders) {
+            Controller.UpdateChooserEvent += delegate (SparkleFolder [] folders) {
                 Dispatcher.Invoke ((Action) delegate {
                     UpdateChooser (folders);
                 });    
@@ -199,7 +200,7 @@ namespace SparkleShare {
         }
 
         
-        public void UpdateChooser (string [] folders)
+        public void UpdateChooser (SparkleFolder [] folders)
         {
             if (folders == null)
                 folders = Controller.Folders;
@@ -221,12 +222,12 @@ namespace SparkleShare {
             this.combo_box.SelectedItem = combo_box.Items [0];
             
             int row = 2;
-            foreach (string folder in folders) {
+            foreach (var folder in folders) {
                 this.combo_box.Items.Add (
-                    new ComboBoxItem () { Content = folder }
+                    new ComboBoxItem () { Content = folder.Name }
                 );
                 
-                if (folder.Equals (Controller.SelectedFolder))
+                if (folder.Name.Equals (Controller.SelectedFolder))
                     this.combo_box.SelectedItem = combo_box.Items [row];
                 
                 row++;
