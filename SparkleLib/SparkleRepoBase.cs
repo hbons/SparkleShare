@@ -63,7 +63,7 @@ namespace SparkleLib {
         public delegate void ChangesDetectedEventHandler ();
         public event ChangesDetectedEventHandler ChangesDetected;
 
-        public readonly string LocalPath;
+        public readonly SparkleFolder LocalPath;
         public readonly string Name;
         public readonly Uri RemoteUrl;
         public List<SparkleChangeSet> ChangeSets { get; protected set; }
@@ -134,11 +134,11 @@ namespace SparkleLib {
         }
 
 
-        public SparkleRepoBase (string path)
+        public SparkleRepoBase (SparkleFolder path)
         {
             LocalPath    = path;
-            Name         = Path.GetFileName (LocalPath);
-            RemoteUrl    = new Uri (SparkleConfig.DefaultConfig.GetUrlForFolder (Name));
+            Name         = LocalPath.Name;
+            RemoteUrl    = new Uri(SparkleConfig.DefaultConfig.GetUrlForFolder(LocalPath.Name));
             IsBuffering  = false;
             ServerOnline = true;
 

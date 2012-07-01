@@ -74,5 +74,10 @@ namespace SparkleLib {
         {
             Name = name;
         }
+
+        public static implicit operator String(SparkleFolder folder)
+        {
+            return folder.FullPath;
+        }
     }
 }

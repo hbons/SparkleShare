@@ -29,7 +29,7 @@ namespace SparkleLib.Git {
 		private bool author_set = false;
 
 
-        public SparkleRepo (string path) : base (path)
+        public SparkleRepo (SparkleFolder path) : base (path)
         {
         }
 
