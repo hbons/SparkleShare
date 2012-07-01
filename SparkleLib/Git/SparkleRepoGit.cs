@@ -410,7 +410,7 @@ namespace SparkleLib.Git {
 			}
 
             git = new SparkleGit (LocalPath,
-                "commit -m \"" + message + "\" " +
+                "commit --all --message=\"" + message + "\" " +
                 "--author=\"" + SparkleConfig.DefaultConfig.User.Name +
                 " <" + SparkleConfig.DefaultConfig.User.Email + ">\"");
 
@@ -454,12 +454,12 @@ namespace SparkleLib.Git {
             // meaning, and how SparkleShare should handle them.
             //
             // DD    unmerged, both deleted    -> Do nothing
-            // AU    unmerged, added by us     -> Use theirs, save ours as a timestamped copy
+            // AU    unmerged, added by us     -> Use server's, save ours as a timestamped copy
             // UD    unmerged, deleted by them -> Use ours
-            // UA    unmerged, added by them   -> Use theirs, save ours as a timestamped copy
-            // DU    unmerged, deleted by us   -> Use theirs
-            // AA    unmerged, both added      -> Use theirs, save ours as a timestamped copy
-            // UU    unmerged, both modified   -> Use theirs, save ours as a timestamped copy
+            // UA    unmerged, added by them   -> Use server's, save ours as a timestamped copy
+            // DU    unmerged, deleted by us   -> Use server's
+            // AA    unmerged, both added      -> Use server's, save ours as a timestamped copy
+            // UU    unmerged, both modified   -> Use server's, save ours as a timestamped copy
             // ??    unmerged, new files       -> Stage the new files
             //
             // Note that a rebase merge works by replaying each commit from the working branch on
@@ -467,7 +467,7 @@ namespace SparkleLib.Git {
             // side reported as 'ours' is the so-far rebased series, starting with upstream,
             // and 'theirs' is the working branch. In other words, the sides are swapped.
             //
-            // So: 'ours' means the 'server's version' and 'theirs' means the 'local version'
+            // So: 'ours' means the 'server's version' and 'theirs' means the 'local version' after this comment
 
             SparkleGit git_status = new SparkleGit (LocalPath, "status --porcelain");
             git_status.Start ();
@@ -498,9 +498,8 @@ namespace SparkleLib.Git {
 
                     File.SetAttributes (Path.Combine (LocalPath, conflicting_path), FileAttributes.Hidden);
 
-                    SparkleGit git_rebase_continue = new SparkleGit (LocalPath, "rebase --continue");
-                    git_rebase_continue.Start ();
-                    git_rebase_continue.WaitForExit ();
+                    Add ();
+                    RebaseContinue ();
 
                     continue;
                 }
@@ -523,7 +522,7 @@ namespace SparkleLib.Git {
                     string their_path = Path.GetFileNameWithoutExtension (conflicting_path) +
                         " (" + SparkleConfig.DefaultConfig.User.Name + ", " + timestamp + ")" +
                         Path.GetExtension (conflicting_path);
-                    
+
                     string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
                     string abs_their_path       = Path.Combine (LocalPath, their_path);
 
@@ -537,10 +536,7 @@ namespace SparkleLib.Git {
                     git_ours.WaitForExit ();
 
                     Add ();
-
-                    SparkleGit git_rebase_continue = new SparkleGit (LocalPath, "rebase --continue");
-                    git_rebase_continue.Start ();
-                    git_rebase_continue.WaitForExit ();
+                    RebaseContinue ();
 
                 // The local version has been modified, but the server version was removed
                 } else if (line.StartsWith ("DU")) {
@@ -556,9 +552,7 @@ namespace SparkleLib.Git {
                     git_add.Start ();
                     git_add.WaitForExit ();
 
-                    SparkleGit git_rebase_continue = new SparkleGit (LocalPath, "rebase --continue");
-                    git_rebase_continue.Start ();
-                    git_rebase_continue.WaitForExit ();
+                    RebaseContinue ();
 
                 // The server version has been modified, but the local version was removed
                 } else if (line.StartsWith ("UD")) {
@@ -572,12 +566,17 @@ namespace SparkleLib.Git {
                 // New local files
                 } else {
                     Add ();
-
-                    SparkleGit git_rebase_continue = new SparkleGit (LocalPath, "rebase --continue");
-                    git_rebase_continue.Start ();
-                    git_rebase_continue.WaitForExit ();
+                    RebaseContinue ();
                 }
             }
+        }
+
+
+        private void RebaseContinue ()
+        {
+            SparkleGit git = new SparkleGit (LocalPath, "rebase --continue");
+            git.Start ();
+            git.WaitForExit ();
         }
 
 
