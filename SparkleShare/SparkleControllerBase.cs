@@ -328,16 +328,15 @@ namespace SparkleShare {
         {
             if (name == null)
                 return GetLog ();
-
-            string path  = new SparkleFolder (name).FullPath;
-
+            
             lock (this.repo_lock) {
                 foreach (SparkleRepoBase repo in Repositories) {
-                    if (repo.LocalPath.Equals (path))
+                    if (repo.Name.Equals (name))
                         return repo.ChangeSets;
                 }
             }
 
+            //+ TODO: throwing exception or returning new List<SparkleChangeSet>()
             return null;
         }
         
