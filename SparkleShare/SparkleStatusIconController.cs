@@ -59,7 +59,7 @@ namespace SparkleShare {
         public readonly int MinSubmenuOverflowCount = 3;
 
 
-        public string [] Folders {
+        public SparkleFolder [] Folders {
             get {
                 int overflow_count = (Program.Controller.Folders.Count - MenuOverFlowThreshold);
 
@@ -70,14 +70,14 @@ namespace SparkleShare {
             }
         }
 
-        public string [] OverflowFolders {
+        public SparkleFolder [] OverflowFolders {
             get {
                 int overflow_count = (Program.Controller.Folders.Count - MenuOverFlowThreshold);
 
                 if (overflow_count >= MinSubmenuOverflowCount)
                     return Program.Controller.Folders.GetRange (MenuOverFlowThreshold, overflow_count).ToArray ();
                 else
-                    return new string [0];
+                    return new SparkleFolder [0];
             }
         }
 

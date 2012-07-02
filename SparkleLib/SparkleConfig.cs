@@ -197,13 +197,12 @@ namespace SparkleLib {
             }
         }
 
-
-        public List<string> Folders {
+        public List<SparkleFolder> Folders {
             get {
-                List<string> folders = new List<string> ();
+                var folders = new List<SparkleFolder>();
 
                 foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder"))
-                    folders.Add (node_folder ["name"].InnerText);
+                    folders.Add (new SparkleFolder ( node_folder ["name"].InnerText));
 
                 return folders;
             }
@@ -233,7 +232,7 @@ namespace SparkleLib {
         }
 
 
-        public void RemoveFolder (string name)
+        public void RemoveFolder (SparkleFolder name)
         {
             foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
                 if (node_folder ["name"].InnerText.Equals (name))

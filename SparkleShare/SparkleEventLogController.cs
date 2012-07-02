@@ -25,6 +25,7 @@ using System.Threading;
 using SparkleLib;
 
 namespace SparkleShare {
+    using System.Linq;
 
     public class SparkleEventLogController {
 
@@ -38,7 +39,7 @@ namespace SparkleShare {
         public delegate void UpdateContentEventEventHandler (string html);
 
         public event UpdateChooserEventHandler UpdateChooserEvent;
-        public delegate void UpdateChooserEventHandler (string [] folders);
+        public delegate void UpdateChooserEventHandler (SparkleFolder [] folders);
 
         public event UpdateSizeInfoEventHandler UpdateSizeInfoEvent;
         public delegate void UpdateSizeInfoEventHandler (string size, string history_size);
@@ -72,8 +73,8 @@ namespace SparkleShare {
 
                     // A short delay is less annoying than
                     // a flashing window
-					int delay = 500;
-					
+                    int delay = 500;
+                    
                     if (watch.ElapsedMilliseconds < delay)
                         Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
 
@@ -101,7 +102,7 @@ namespace SparkleShare {
             }
         }
 
-        public string [] Folders {
+        public SparkleFolder [] Folders {
             get {
                 return Program.Controller.Folders.ToArray ();
             }
@@ -170,18 +171,18 @@ namespace SparkleShare {
                 if (ShowWindowEvent != null)
                     ShowWindowEvent ();
             };
-			
+            
             Program.Controller.OnIdle += delegate {
                 if (UpdateContentEvent != null)
                     UpdateContentEvent (HTML);
-				
+                
                 if (UpdateSizeInfoEvent != null)
                     UpdateSizeInfoEvent (Size, HistorySize);
             };
-			
+            
             Program.Controller.FolderListChanged += delegate {
                 if (this.selected_folder != null &&
-                    !Program.Controller.Folders.Contains (this.selected_folder)) {
+                    !Program.Controller.Folders.Any(f => f.Name == this.selected_folder)) {
 
                     this.selected_folder = null;
                 }
@@ -199,8 +200,8 @@ namespace SparkleShare {
         {
             if (HideWindowEvent != null)
                 HideWindowEvent ();
-			
-			this.selected_folder = null;
+            
+            this.selected_folder = null;
         }
 
 
@@ -209,7 +210,7 @@ namespace SparkleShare {
             url = url.Replace ("%20", " ");
         
             if (url.StartsWith (Path.VolumeSeparatorChar.ToString ()) ||
-			    url.Substring (1, 1).Equals (":")) {
+                url.Substring (1, 1).Equals (":")) {
 
                 Program.Controller.OpenFile (url);
             }

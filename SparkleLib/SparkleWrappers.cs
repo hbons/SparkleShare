@@ -53,19 +53,25 @@ namespace SparkleLib {
     }
 
 
-    public class SparkleFolder {
+    public class SparkleFolder : IComparable<SparkleFolder> {
 
-        public string Name;
+        public string Name { get; private set; }
         public Uri RemoteAddress;
+
+        private string full_name = null;
 
         public string FullPath {
             get {
-                string custom_path = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (Name, "path");
+                if (full_name == null) {
+                    string custom_path = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute(Name, "path");
 
-                if (custom_path != null)
-                    return Path.Combine (custom_path, Name);
-                else
-                    return Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, Name);
+                    if (custom_path != null)
+                        full_name = custom_path;
+                    else
+                        full_name = Path.Combine(SparkleConfig.DefaultConfig.FoldersPath, Name);
+                }
+
+                return full_name;
             }
         }
 
@@ -73,6 +79,29 @@ namespace SparkleLib {
         public SparkleFolder (string name)
         {
             Name = name;
+        }
+        
+        public int CompareTo (SparkleFolder other) {
+            return Name.CompareTo (other.Name);
+        }
+
+        public bool Equals (SparkleFolder other) {
+            if (ReferenceEquals (null, other)) return false;
+            if (ReferenceEquals (this, other)) return true;
+            return Equals (other.Name, this.Name) && Equals (other.full_name, this.full_name);
+        }
+
+        public override bool Equals (object obj) {
+            if (ReferenceEquals (null, obj)) return false;
+            if (ReferenceEquals (this, obj)) return true;
+            if (obj.GetType () != typeof(SparkleFolder)) return false;
+            return Equals ((SparkleFolder)obj);
+        }
+
+        public override int GetHashCode () {
+            unchecked {
+                return ((this.Name != null ? this.Name.GetHashCode () : 0) * 397) ^ (this.full_name != null ? this.full_name.GetHashCode () : 0);
+            }
         }
     }
 }

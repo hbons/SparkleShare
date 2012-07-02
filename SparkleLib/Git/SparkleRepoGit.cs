@@ -29,7 +29,7 @@ namespace SparkleLib.Git {
 		private bool author_set = false;
 
 
-        public SparkleRepo (string path) : base (path)
+        public SparkleRepo (SparkleFolder path) : base (path)
         {
         }
 
@@ -46,7 +46,7 @@ namespace SparkleLib.Git {
 
         public override double Size {
             get {
-                string file_path = new string [] {LocalPath, ".git", "repo_size"}.Combine ();
+                string file_path = new string [] {LocalPath.FullPath, ".git", "repo_size"}.Combine ();
 
                 try {
                     return double.Parse (File.ReadAllText (file_path));
@@ -60,7 +60,7 @@ namespace SparkleLib.Git {
 
         public override double HistorySize {
             get {
-                string file_path = new string [] {LocalPath, ".git", "repo_history_size"}.Combine ();
+                string file_path = new string [] {LocalPath.FullPath, ".git", "repo_history_size"}.Combine ();
 
                 try {
                     return double.Parse (File.ReadAllText (file_path));
@@ -75,13 +75,13 @@ namespace SparkleLib.Git {
         private void UpdateSizes ()
         {
             double size = CalculateSizes (
-                new DirectoryInfo (LocalPath));
+                new DirectoryInfo (LocalPath.FullPath));
 
             double history_size = CalculateSizes (
-                new DirectoryInfo (Path.Combine (LocalPath, ".git")));
+                new DirectoryInfo (Path.Combine (LocalPath.FullPath, ".git")));
 
-            string size_file_path = new string [] {LocalPath, ".git", "repo_size"}.Combine ();
-            string history_size_file_path = new string [] {LocalPath, ".git", "repo_history_size"}.Combine ();
+            string size_file_path = new string [] {LocalPath.FullPath, ".git", "repo_size"}.Combine ();
+            string history_size_file_path = new string [] {LocalPath.FullPath, ".git", "repo_history_size"}.Combine ();
 
             File.WriteAllText (size_file_path, size.ToString ());
             File.WriteAllText (history_size_file_path, history_size.ToString ());
@@ -99,7 +99,7 @@ namespace SparkleLib.Git {
             get {
                 List<string> file_paths = new List<string> ();
 
-                SparkleGit git = new SparkleGit (LocalPath, "status --porcelain");
+                SparkleGit git = new SparkleGit (LocalPath.FullPath, "status --porcelain");
                 git.Start ();
 
                 // Reading the standard output HAS to go before
@@ -128,12 +128,12 @@ namespace SparkleLib.Git {
             get {
                 // Remove stale rebase-apply files because it
                 // makes the method return the wrong hashes.
-                string rebase_apply_file = SparkleHelpers.CombineMore (LocalPath, ".git", "rebase-apply");
+                string rebase_apply_file = SparkleHelpers.CombineMore (LocalPath.FullPath, ".git", "rebase-apply");
 
                 if (File.Exists (rebase_apply_file))
                     File.Delete (rebase_apply_file);
 
-                SparkleGit git = new SparkleGit (LocalPath, "rev-parse HEAD");
+                SparkleGit git = new SparkleGit (LocalPath.FullPath, "rev-parse HEAD");
                 git.Start ();
                 
                 string output = git.StandardOutput.ReadToEnd ();
@@ -154,7 +154,7 @@ namespace SparkleLib.Git {
                 SparkleHelpers.DebugInfo ("Git", Name + " | Checking for remote changes...");
 
                 string current_revision = CurrentRevision;
-                SparkleGit git = new SparkleGit (LocalPath, "ls-remote --exit-code \"" + RemoteUrl + "\" master");
+                SparkleGit git = new SparkleGit (LocalPath.FullPath, "ls-remote --exit-code \"" + RemoteUrl + "\" master");
     
                 git.Start ();
                 git.WaitForExit ();
@@ -190,7 +190,7 @@ namespace SparkleLib.Git {
                 Commit (message);
             }
 
-            SparkleGit git = new SparkleGit (LocalPath,
+            SparkleGit git = new SparkleGit (LocalPath.FullPath,
                 "push --progress " + // Redirects progress stats to standarderror
                 "\"" + RemoteUrl + "\" master");
 
@@ -259,7 +259,7 @@ namespace SparkleLib.Git {
 
         public override bool SyncDown ()
         {
-            SparkleGit git = new SparkleGit (LocalPath, "fetch --progress \"" + RemoteUrl + "\" master");
+            SparkleGit git = new SparkleGit (LocalPath.FullPath, "fetch --progress \"" + RemoteUrl + "\" master");
 
             git.StartInfo.RedirectStandardError = true;
             git.Start ();
@@ -315,7 +315,7 @@ namespace SparkleLib.Git {
                 Rebase ();
                 
 				File.SetAttributes (
-					Path.Combine (LocalPath, ".sparkleshare"),
+					Path.Combine (LocalPath.FullPath, ".sparkleshare"),
 					FileAttributes.Hidden
 				);
 
@@ -332,9 +332,9 @@ namespace SparkleLib.Git {
 
         public override bool HasLocalChanges {
             get {
-                PrepareDirectories (LocalPath);
+                PrepareDirectories (LocalPath.FullPath);
 
-                SparkleGit git = new SparkleGit (LocalPath, "status --porcelain");
+                SparkleGit git = new SparkleGit (LocalPath.FullPath, "status --porcelain");
                 git.Start ();
 
                 // Reading the standard output HAS to go before
@@ -356,14 +356,14 @@ namespace SparkleLib.Git {
 
         public override bool HasUnsyncedChanges {
             get {
-                string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath,
+                string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath.FullPath,
                     ".git", "has_unsynced_changes");
 
                 return File.Exists (unsynced_file_path);
             }
 
             set {
-                string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath,
+                string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath.FullPath,
                     ".git", "has_unsynced_changes");
 
                 if (value) {
@@ -380,7 +380,7 @@ namespace SparkleLib.Git {
         // Stages the made changes
         private void Add ()
         {
-            SparkleGit git = new SparkleGit (LocalPath, "add --all");
+            SparkleGit git = new SparkleGit (LocalPath.FullPath, "add --all");
             git.Start ();
             git.WaitForExit ();
 
@@ -394,13 +394,13 @@ namespace SparkleLib.Git {
 			SparkleGit git;
 
 			if (!this.author_set) {
-	            git = new SparkleGit (LocalPath,
+	            git = new SparkleGit (LocalPath.FullPath,
 	                "config user.name \"" + SparkleConfig.DefaultConfig.User.Name + "\"");
 
 				git.Start ();
 				git.WaitForExit ();
 
-	            git = new SparkleGit (LocalPath,
+	            git = new SparkleGit (LocalPath.FullPath,
 	                "config user.email \"" + SparkleConfig.DefaultConfig.User.Email + "\"");
 
 				git.Start ();
@@ -409,7 +409,7 @@ namespace SparkleLib.Git {
 				this.author_set = true;
 			}
 
-            git = new SparkleGit (LocalPath,
+            git = new SparkleGit (LocalPath.FullPath,
                 "commit --all --message=\"" + message + "\" " +
                 "--author=\"" + SparkleConfig.DefaultConfig.User.Name +
                 " <" + SparkleConfig.DefaultConfig.User.Email + ">\"");
@@ -430,7 +430,7 @@ namespace SparkleLib.Git {
                 Commit (commit_message);
             }
 
-            SparkleGit git = new SparkleGit (LocalPath, "rebase FETCH_HEAD");
+            SparkleGit git = new SparkleGit (LocalPath.FullPath, "rebase FETCH_HEAD");
             git.StartInfo.RedirectStandardOutput = false;
 
             git.Start ();
@@ -469,7 +469,7 @@ namespace SparkleLib.Git {
             //
             // So: 'ours' means the 'server's version' and 'theirs' means the 'local version' after this comment
 
-            SparkleGit git_status = new SparkleGit (LocalPath, "status --porcelain");
+            SparkleGit git_status = new SparkleGit (LocalPath.FullPath, "status --porcelain");
             git_status.Start ();
 
             // Reading the standard output HAS to go before
@@ -490,13 +490,13 @@ namespace SparkleLib.Git {
                     conflicting_path.EndsWith (".empty")) {
 
                     // Recover local version
-                    SparkleGit git_theirs = new SparkleGit (LocalPath,
+                    SparkleGit git_theirs = new SparkleGit (LocalPath.FullPath,
                         "checkout --theirs \"" + conflicting_path + "\"");
 
                     git_theirs.Start ();
                     git_theirs.WaitForExit ();
 
-                    File.SetAttributes (Path.Combine (LocalPath, conflicting_path), FileAttributes.Hidden);
+                    File.SetAttributes (Path.Combine (LocalPath.FullPath, conflicting_path), FileAttributes.Hidden);
 
                     Add ();
                     RebaseContinue ();
@@ -509,7 +509,7 @@ namespace SparkleLib.Git {
                     line.StartsWith ("AU") || line.StartsWith ("UA")) {
 
                     // Recover local version
-                    SparkleGit git_theirs = new SparkleGit (LocalPath,
+                    SparkleGit git_theirs = new SparkleGit (LocalPath.FullPath,
                         "checkout --theirs \"" + conflicting_path + "\"");
 
                     git_theirs.Start ();
@@ -522,14 +522,14 @@ namespace SparkleLib.Git {
                     string their_path = Path.GetFileNameWithoutExtension (conflicting_path) +
                         " (" + SparkleConfig.DefaultConfig.User.Name + ", " + timestamp + ")" +
                         Path.GetExtension (conflicting_path);
-
-                    string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
-                    string abs_their_path       = Path.Combine (LocalPath, their_path);
+                    
+                    string abs_conflicting_path = Path.Combine (LocalPath.FullPath, conflicting_path);
+                    string abs_their_path       = Path.Combine (LocalPath.FullPath, their_path);
 
                     File.Move (abs_conflicting_path, abs_their_path);
 
                     // Recover server version
-                    SparkleGit git_ours = new SparkleGit (LocalPath,
+                    SparkleGit git_ours = new SparkleGit (LocalPath.FullPath,
                         "checkout --ours \"" + conflicting_path + "\"");
 
                     git_ours.Start ();
@@ -537,7 +537,6 @@ namespace SparkleLib.Git {
 
                     Add ();
                     RebaseContinue ();
-
                 // The local version has been modified, but the server version was removed
                 } else if (line.StartsWith ("DU")) {
 
@@ -546,7 +545,7 @@ namespace SparkleLib.Git {
                     //
                     // We need to specifically mention the file, so
                     // we can't reuse the Add () method
-                    SparkleGit git_add = new SparkleGit (LocalPath,
+                    SparkleGit git_add = new SparkleGit (LocalPath.FullPath,
                         "add \"" + conflicting_path + "\"");
 
                     git_add.Start ();
@@ -559,7 +558,7 @@ namespace SparkleLib.Git {
 
                     // We can just skip here, the server version is
                     // already in the checkout
-                    SparkleGit git_rebase_skip = new SparkleGit (LocalPath, "rebase --skip");
+                    SparkleGit git_rebase_skip = new SparkleGit (LocalPath.FullPath, "rebase --skip");
                     git_rebase_skip.Start ();
                     git_rebase_skip.WaitForExit ();
 
@@ -574,7 +573,7 @@ namespace SparkleLib.Git {
 
         private void RebaseContinue ()
         {
-            SparkleGit git = new SparkleGit (LocalPath, "rebase --continue");
+            SparkleGit git = new SparkleGit (LocalPath.FullPath, "rebase --continue");
             git.Start ();
             git.WaitForExit ();
         }
@@ -590,7 +589,7 @@ namespace SparkleLib.Git {
 
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
 
-            SparkleGit git_log = new SparkleGit (LocalPath,
+            SparkleGit git_log = new SparkleGit (LocalPath.FullPath,
                 "log -" + count + " --raw -M --date=iso --format=medium --no-color --no-merges");
 
             git_log.Start ();
@@ -640,7 +639,7 @@ namespace SparkleLib.Git {
                 if (match.Success) {
                     SparkleChangeSet change_set = new SparkleChangeSet ();
 
-                    change_set.Folder    = new SparkleFolder (Name);
+                    change_set.Folder    = LocalPath;
                     change_set.Revision  = match.Groups [1].Value;
                     change_set.User      = new SparkleUser (match.Groups [2].Value, match.Groups [3].Value);
                     change_set.RemoteUrl = RemoteUrl;
@@ -822,7 +821,7 @@ namespace SparkleLib.Git {
                         continue;
 
                     if (child_path.EndsWith (".git")) {
-                        if (child_path.Equals (Path.Combine (LocalPath, ".git")))
+                        if (child_path.Equals (Path.Combine (LocalPath.FullPath, ".git")))
                             continue;
     
                         string HEAD_file_path = Path.Combine (child_path, "HEAD");
@@ -867,7 +866,7 @@ namespace SparkleLib.Git {
             string file_name      = "";
             string message        = "";
 
-            SparkleGit git_status = new SparkleGit (LocalPath, "status --porcelain");
+            SparkleGit git_status = new SparkleGit (LocalPath.FullPath, "status --porcelain");
             git_status.Start ();
 
             // Reading the standard output HAS to go before
