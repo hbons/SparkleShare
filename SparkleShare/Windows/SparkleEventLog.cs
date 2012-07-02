@@ -297,7 +297,7 @@ namespace SparkleShare {
                         Canvas.SetTop (this.web_browser, 36);
                     }
                 });
-            }));
+            })) { Name = "UpdateContentThread" };
 
             thread.Start ();
         }

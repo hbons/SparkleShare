@@ -190,7 +190,7 @@ namespace SparkleLib {
                         }
                     }
                 })
-            );
+            ) { Name = "ConnectThread" };
 
             this.thread.Start ();
         }

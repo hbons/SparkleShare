@@ -158,7 +158,7 @@ namespace SparkleLib {
                 new ThreadStart (delegate {
                     CreateListener ();
                 })
-            ).Start ();
+            ) { Name = "CreateListenerThread" }.Start();
 
             this.remote_timer.Elapsed += delegate {
                 bool time_to_poll = (DateTime.Compare (this.last_poll,
@@ -430,7 +430,7 @@ namespace SparkleLib {
                         if (!is_syncing && HasRemoteChanges)
                             SyncDownBase ();
                     })
-                ).Start ();
+                ) { Name = "SyncDownBaseThread" }.Start();
             }
 
             // Stop polling when the connection to the irc channel is succesful

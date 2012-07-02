@@ -141,7 +141,6 @@ namespace SparkleLib {
 
             AcceptHostKey (host_key, warn);
 
-
             this.thread = new Thread (new ThreadStart (delegate {
                 if (Fetch ()) {
                     Thread.Sleep (500);
@@ -164,7 +163,7 @@ namespace SparkleLib {
                     if (Failed != null)
                         Failed ();
                 }
-            }));
+            })) { Name = "FetchThread" };
 
             this.thread.Start ();
         }
