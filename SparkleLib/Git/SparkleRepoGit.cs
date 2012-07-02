@@ -467,15 +467,8 @@ namespace SparkleLib.Git {
             if (git.ExitCode != 0) {
                 SparkleHelpers.DebugInfo ("Git", Name + " | Conflict detected, trying to get out...");
 
-                while (HasLocalChanges) {
+                while (HasLocalChanges)
                     ResolveConflict ();
-                    Add ();
-
-                    git = new SparkleGit (LocalPath, "rebase --continue");
-                    git.StartInfo.RedirectStandardOutput = false;
-                    git.Start ();
-                    git.WaitForExit ();
-                }
 
                 SparkleHelpers.DebugInfo ("Git", Name + " | Conflict resolved");
                 OnConflictResolved ();
@@ -513,6 +506,7 @@ namespace SparkleLib.Git {
             git_status.WaitForExit ();
 
             string [] lines = output.Split ("\n".ToCharArray ());
+            bool changes_added = false;
 
             foreach (string line in lines) {
                 string conflicting_path = line.Substring (3);
@@ -532,6 +526,7 @@ namespace SparkleLib.Git {
                     git_theirs.WaitForExit ();
 
                     File.SetAttributes (Path.Combine (LocalPath, conflicting_path), FileAttributes.Hidden);
+                    changes_added = true;
 
                     continue;
                 }
@@ -567,6 +562,8 @@ namespace SparkleLib.Git {
                     git_ours.Start ();
                     git_ours.WaitForExit ();
 
+                    changes_added = true;
+
                 // The local version has been modified, but the server version was removed
                 } else if (line.StartsWith ("DU")) {
 
@@ -581,16 +578,21 @@ namespace SparkleLib.Git {
                     git_add.Start ();
                     git_add.WaitForExit ();
 
-                // The server version has been modified, but the local version was removed
-                } else if (line.StartsWith ("UD")) {
-
-                    // We can just skip here, the server version is
-                    // already in the checkout
-                    SparkleGit git_rebase_skip = new SparkleGit (LocalPath, "rebase --skip");
-                    git_rebase_skip.Start ();
-                    git_rebase_skip.WaitForExit ();
+                    changes_added = true;
                 }
             }
+
+            Add ();
+            SparkleGit git;
+
+            if (changes_added)
+                git = new SparkleGit (LocalPath, "rebase --continue");
+            else
+                git = new SparkleGit (LocalPath, "rebase --skip");
+
+            git.StartInfo.RedirectStandardOutput = false;
+            git.Start ();
+            git.WaitForExit ();
         }
 
 
@@ -917,7 +919,7 @@ namespace SparkleLib.Git {
                     }
 
                     string path = line.Substring (3).Trim ("\"".ToCharArray ());
-                    message +=  " ‘" + EnsureSpecialCharacters (path) + "’\n";
+                    message += " ‘" + EnsureSpecialCharacters (path) + "’\n";
                 }
 
                 count++;
