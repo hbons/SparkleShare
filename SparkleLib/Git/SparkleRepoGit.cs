@@ -576,7 +576,7 @@ namespace SparkleLib.Git {
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
 
             SparkleGit git_log = new SparkleGit (LocalPath,
-                "log -" + count + " --raw -M --date=iso --format=medium --no-color --no-merges");
+                "log -" + count + " --raw --find-renames --date=iso --format=medium --no-color --no-merges");
 
             git_log.Start ();
 
