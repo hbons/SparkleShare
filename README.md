@@ -5,7 +5,7 @@ SparkleShare is an Open Source collaboration and sharing tool that is designed t
 
 ### Resources
 
-|                    |                                                   |
+|||
 |-------------------:|:--------------------------------------------------|
 |       **Website**: | http://www.sparkleshare.org/                      |
 |     **Downloads**: | https://github.com/hbons/SparkleShare/downloads   |
