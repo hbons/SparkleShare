@@ -878,14 +878,14 @@ namespace SparkleLib.Git {
             string [] lines = output.Split ("\n".ToCharArray ());
             foreach (string line in lines) {
                 if (line.StartsWith ("A"))
-                    Added.Add (line.Substring (3));
+                    Added.Add (EnsureSpecialCharacters (line.Substring (3)));
                 else if (line.StartsWith ("M"))
-                    Modified.Add (line.Substring (3));
+                    Modified.Add (EnsureSpecialCharacters (line.Substring (3)));
                 else if (line.StartsWith ("D"))
-                    Removed.Add (line.Substring (3));
+                    Removed.Add (EnsureSpecialCharacters (line.Substring (3)));
                 else if (line.StartsWith ("R")) {
-                    Removed.Add (line.Substring (3, (line.IndexOf (" -> ") - 3)));
-                    Added.Add (line.Substring (line.IndexOf (" -> ") + 4));
+                    Removed.Add (EnsureSpecialCharacters (line.Substring (3, (line.IndexOf (" -> ") - 3))));
+                    Added.Add (EnsureSpecialCharacters (line.Substring (line.IndexOf (" -> ") + 4)));
                 }
             }
 
@@ -895,7 +895,7 @@ namespace SparkleLib.Git {
             string n = Environment.NewLine;
 
             foreach (string added in Added) {
-                file_name = added.Trim ("\"".ToCharArray ());
+                file_name = added;
 
                 if (file_name.EndsWith (".empty"))
                     file_name = file_name.Substring (0, file_name.Length - 6);
@@ -908,7 +908,7 @@ namespace SparkleLib.Git {
             }
 
             foreach (string modified in Modified) {
-                file_name = modified.Trim ("\"".ToCharArray ());
+                file_name = modified;
 
                 if (file_name.EndsWith (".empty"))
                     continue;
@@ -921,7 +921,7 @@ namespace SparkleLib.Git {
             }
 
             foreach (string removed in Removed) {
-                file_name = removed.Trim ("\"".ToCharArray ());
+                file_name = removed;
 
                 if (file_name.EndsWith (".empty"))
                     file_name = file_name.Substring (0, file_name.Length - 6);
@@ -933,7 +933,6 @@ namespace SparkleLib.Git {
                     return message + "..." + n;
             }
 
-            message = message.Replace ("\"", "");
             return message.TrimEnd ();
         }
 
