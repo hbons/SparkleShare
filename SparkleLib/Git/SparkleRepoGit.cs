@@ -461,15 +461,21 @@ namespace SparkleLib.Git {
 
             SparkleGit git = new SparkleGit (LocalPath, "rebase FETCH_HEAD");
             git.StartInfo.RedirectStandardOutput = false;
-
             git.Start ();
             git.WaitForExit ();
 
             if (git.ExitCode != 0) {
                 SparkleHelpers.DebugInfo ("Git", Name + " | Conflict detected, trying to get out...");
 
-                while (HasLocalChanges)
+                while (HasLocalChanges) {
                     ResolveConflict ();
+                    Add ();
+
+                    git = new SparkleGit (LocalPath, "rebase --continue");
+                    git.StartInfo.RedirectStandardOutput = false;
+                    git.Start ();
+                    git.WaitForExit ();
+                }
 
                 SparkleHelpers.DebugInfo ("Git", Name + " | Conflict resolved");
                 OnConflictResolved ();
@@ -527,9 +533,6 @@ namespace SparkleLib.Git {
 
                     File.SetAttributes (Path.Combine (LocalPath, conflicting_path), FileAttributes.Hidden);
 
-                    Add ();
-                    RebaseContinue ();
-
                     continue;
                 }
 
@@ -564,9 +567,6 @@ namespace SparkleLib.Git {
                     git_ours.Start ();
                     git_ours.WaitForExit ();
 
-                    Add ();
-                    RebaseContinue ();
-
                 // The local version has been modified, but the server version was removed
                 } else if (line.StartsWith ("DU")) {
 
@@ -581,8 +581,6 @@ namespace SparkleLib.Git {
                     git_add.Start ();
                     git_add.WaitForExit ();
 
-                    RebaseContinue ();
-
                 // The server version has been modified, but the local version was removed
                 } else if (line.StartsWith ("UD")) {
 
@@ -591,21 +589,8 @@ namespace SparkleLib.Git {
                     SparkleGit git_rebase_skip = new SparkleGit (LocalPath, "rebase --skip");
                     git_rebase_skip.Start ();
                     git_rebase_skip.WaitForExit ();
-
-                // New local files
-                } else {
-                    Add ();
-                    RebaseContinue ();
                 }
             }
-        }
-
-
-        private void RebaseContinue ()
-        {
-            SparkleGit git = new SparkleGit (LocalPath, "rebase --continue");
-            git.Start ();
-            git.WaitForExit ();
         }
 
 
@@ -901,70 +886,50 @@ namespace SparkleLib.Git {
         // Creates a pretty commit message based on what has changed
         private string FormatCommitMessage ()
         {
-            List<string> Added    = new List<string> ();
-            List<string> Modified = new List<string> ();
-            List<string> Removed  = new List<string> ();
-            string file_name      = "";
-            string message        = "";
+            int count = 0;
+            string message = "";
 
             SparkleGit git_status = new SparkleGit (LocalPath, "status --porcelain");
             git_status.Start ();
 
-            // Reading the standard output HAS to go before
-            // WaitForExit, or it will hang forever on output > 4096 bytes
-            string output = git_status.StandardOutput.ReadToEnd ().Trim ("\n".ToCharArray ());
-            git_status.WaitForExit ();
+            while (!git_status.StandardOutput.EndOfStream) {
+                string line = git_status.StandardOutput.ReadLine ();
 
-            string [] lines = output.Split ("\n".ToCharArray ());
-            foreach (string line in lines) {
-                if (line.EndsWith (".empty"))
+                if (line.EndsWith (".empty") || line.EndsWith (".empty\""))
                     continue;
 
-                if (line.StartsWith ("A"))
-                    Added.Add (line.Substring (3));
-                else if (line.StartsWith ("M"))
-                    Modified.Add (line.Substring (3));
-                else if (line.StartsWith ("D"))
-                    Removed.Add (line.Substring (3));
-                else if (line.StartsWith ("R")) {
-                    Removed.Add (line.Substring (3, (line.IndexOf (" -> ") - 3)));
-                    Added.Add (line.Substring (line.IndexOf (" -> ") + 4));
+                if (line.StartsWith ("R")) {
+                    string path = line.Substring (3, line.IndexOf (" -> ") - 3).Trim ("\"".ToCharArray ());
+                    string moved_to_path = line.Substring (line.IndexOf (" -> ") + 4).Trim ("\"".ToCharArray ());
+
+                    message +=  "- ‘" + EnsureSpecialCharacters (path) + "’\n";
+                    message +=  "+ ‘" + EnsureSpecialCharacters (moved_to_path) + "’\n";
+
+                } else {
+                    if (line.StartsWith ("M")) {
+                        message += "/";
+
+                    } else if (line.StartsWith ("D")) {
+                        message += "-";
+
+                    } else {
+                        message += "+";
+                    }
+
+                    string path = line.Substring (3).Trim ("\"".ToCharArray ());
+                    message +=  " ‘" + EnsureSpecialCharacters (path) + "’\n";
+                }
+
+                count++;
+                if (count == 10) {
+                    message += "...\n";
+                    break;
                 }
             }
 
-            int count     = 0;
-            int max_count = 20;
+            git_status.WaitForExit ();
+            message = message.Replace ("\"", "\\\"");
 
-            string n = Environment.NewLine;
-
-            foreach (string added in Added) {
-                file_name = added.Trim ("\"".ToCharArray ());
-                message += "+ ‘" + file_name + "’" + n;
-
-                count++;
-                if (count == max_count)
-                    return message + "...";
-            }
-
-            foreach (string modified in Modified) {
-                file_name = modified.Trim ("\"".ToCharArray ());
-                message += "/ ‘" + file_name + "’" + n;
-
-                count++;
-                if (count == max_count)
-                    return message + "...";
-            }
-
-            foreach (string removed in Removed) {
-                file_name = removed.Trim ("\"".ToCharArray ());
-                message += "- ‘" + file_name + "’" + n;
-
-                count++;
-                if (count == max_count)
-                    return message + "..." + n;
-            }
-
-            message = message.Replace ("\"", "");
             return message.TrimEnd ();
         }
 
