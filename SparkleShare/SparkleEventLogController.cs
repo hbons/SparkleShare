@@ -82,7 +82,7 @@ namespace SparkleShare {
     
                     if (UpdateSizeInfoEvent != null)
                         UpdateSizeInfoEvent (Size, HistorySize);
-                }));
+                })) { Name = "SetSelectedFolderThread" };
 
                 thread.Start ();
             }
@@ -164,7 +164,7 @@ namespace SparkleShare {
                             if (UpdateContentEvent != null)
                                 UpdateContentEvent (HTML);
                         })
-                    ).Start ();
+                    ) { Name = "UpdateEventsThread" }.Start();
                 }
 
                 if (ShowWindowEvent != null)

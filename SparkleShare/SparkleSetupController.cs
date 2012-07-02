@@ -286,7 +286,7 @@ namespace SparkleShare {
                     Program.Controller.GenerateKeyPair ();
                     Program.Controller.ImportPrivateKey ();
                 })
-            ).Start ();
+            ) { Name = "SetupPageCompletedThread" }.Start();
 
             TutorialPageNumber = 1;
 
@@ -416,7 +416,7 @@ namespace SparkleShare {
                     Program.Controller.StartFetcher (address, SelectedPlugin.Fingerprint, remote_path,
                         SelectedPlugin.AnnouncementsUrl, this.fetch_prior_history);
                 })
-            ).Start ();
+            ) { Name = "StartFetcherThread" }.Start();
         }
 
         // The following private methods are
@@ -597,7 +597,7 @@ namespace SparkleShare {
                     Thread.Sleep (1000);
                     Program.Controller.FinishFetcher (password);
                 })
-            ).Start ();
+            ) { Name = "NotifyFinishFetcherThread" }.Start();
         }
 
 

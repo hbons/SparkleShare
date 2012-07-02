@@ -67,7 +67,7 @@ namespace SparkleShare {
             };
 
             this.timer.Elapsed += delegate {
-	            Dispatcher.Invoke ((Action) delegate {
+	            Dispatcher.BeginInvoke ((Action) delegate {
 	                NextImage ();
 				});
             };

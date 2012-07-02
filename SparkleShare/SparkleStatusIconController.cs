@@ -179,31 +179,31 @@ namespace SparkleShare {
             };
 
             Program.Controller.OnSyncing += delegate {
-				int repos_syncing_up   = 0;
-				int repos_syncing_down = 0;
-				
-				foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
-					if (repo.Status == SyncStatus.SyncUp)
-						repos_syncing_up++;
-					
-					if (repo.Status == SyncStatus.SyncDown)
-						repos_syncing_down++;
-				}
-				
-				if (repos_syncing_up > 0 &&
-				    repos_syncing_down > 0) {
-					
-					CurrentState = IconState.Syncing;
+                int repos_syncing_up   = 0;
+                int repos_syncing_down = 0;
+                
+                foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
+                    if (repo.Status == SyncStatus.SyncUp)
+                        repos_syncing_up++;
+                    
+                    if (repo.Status == SyncStatus.SyncDown)
+                        repos_syncing_down++;
+                }
+                
+                if (repos_syncing_up > 0 &&
+                    repos_syncing_down > 0) {
+                    
+                    CurrentState = IconState.Syncing;
                     StateText    = "Syncing changes…";
-				
-				} else if (repos_syncing_down == 0) {
-					CurrentState = IconState.SyncingUp;
+                
+                } else if (repos_syncing_down == 0) {
+                    CurrentState = IconState.SyncingUp;
                     StateText    = "Sending changes…";
-					
-				} else {
-					CurrentState = IconState.SyncingDown;
+                    
+                } else {
+                    CurrentState = IconState.SyncingDown;
                     StateText    = "Receiving changes…";
-				}
+                }
 
                 StateText += " " + ProgressPercentage + "%  " + ProgressSpeed;
 
@@ -258,7 +258,7 @@ namespace SparkleShare {
                 new Threading.ThreadStart (delegate {
                     Program.Controller.ShowEventLogWindow ();
                 })
-            ).Start ();
+            ) { Name = "ShowEventLogWindowThread" }.Start();
         }
 
 
@@ -267,7 +267,7 @@ namespace SparkleShare {
             Program.Controller.ShowAboutWindow ();
         }
         
-		
+        
         public void QuitClicked ()
         {
             Program.Controller.Quit ();
