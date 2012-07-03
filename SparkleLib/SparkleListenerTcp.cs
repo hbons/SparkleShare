@@ -26,10 +26,9 @@ namespace SparkleLib {
 
         private Socket socket;
         private Thread thread;
-        private Object socket_lock  = new Object ();
-        private bool is_connected   = false;
-        private bool is_connecting  = false;
-        private DateTime last_ping  = DateTime.Now;
+        private bool is_connected  = false;
+        private bool is_connecting = false;
+        private DateTime last_ping = DateTime.Now;
 
 
         public SparkleListenerTcp (Uri server, string folder_identifier) :
@@ -40,16 +39,14 @@ namespace SparkleLib {
 
         public override bool IsConnected {
             get {
-                lock (this.socket_lock)
-                    return this.is_connected;
+                return this.is_connected;
             }
         }
 
 
         public override bool IsConnecting {
             get {
-                lock (this.socket_lock)
-                    return this.is_connecting;
+                return this.is_connecting;
             }
         }
 
@@ -67,24 +64,22 @@ namespace SparkleLib {
                         port = 80;
 
                     try {
-                        lock (this.socket_lock) {
-                            this.socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) {
-                                ReceiveTimeout = 5 * 1000,
-                                SendTimeout    = 5 * 1000
-                            };
+                        this.socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) {
+                            ReceiveTimeout = 5 * 1000,
+                            SendTimeout    = 5 * 1000
+                        };
 
-                            // Try to connect to the server
-                            this.socket.Connect (Server.Host, port);
+                        // Try to connect to the server
+                        this.socket.Connect (Server.Host, port);
 
-                            this.is_connecting = false;
-                            this.is_connected  = true;
+                        this.is_connecting = false;
+                        this.is_connected  = true;
 
-                            OnConnected ();
+                        OnConnected ();
 
-                            // Subscribe to channels of interest to us
-                            foreach (string channel in base.channels)
-                                AlsoListenToInternal (channel);
-                        }
+                        // Subscribe to channels of interest to us
+                        foreach (string channel in base.channels)
+                            AlsoListenToInternal (channel);
 
                     } catch (SocketException e) {
                         this.is_connected  = false;
@@ -119,8 +114,7 @@ namespace SparkleLib {
                                         byte [] ping_bytes = Encoding.UTF8.GetBytes ("ping\n");
                                         byte [] pong_bytes = new byte [4096];
 
-                                        lock (this.socket_lock)
-                                            this.socket.Send (ping_bytes);
+                                        this.socket.Send (ping_bytes);
 
                                         if (this.socket.Receive (pong_bytes) < 1)
                                             // 10057 means "Socket is not connected"
@@ -173,8 +167,7 @@ namespace SparkleLib {
                         }
 
                         if (this.socket.Available > 0)
-                            lock (this.socket_lock)
-                                bytes_read = this.socket.Receive (bytes);
+                            bytes_read = this.socket.Receive (bytes);
 
                         // Parse the received message
                         if (bytes_read > 0) {
@@ -207,9 +200,7 @@ namespace SparkleLib {
             string to_send = "subscribe " + folder_identifier + "\n";
 
             try {
-                lock (this.socket_lock)
-                    this.socket.Send (Encoding.UTF8.GetBytes (to_send));
-
+                this.socket.Send (Encoding.UTF8.GetBytes (to_send));
                 this.last_ping = DateTime.Now;
 
             } catch (Exception e) {
@@ -227,9 +218,8 @@ namespace SparkleLib {
                 + " " + announcement.Message + "\n";
 
             try {
-                lock (this.socket_lock)
-                    if (this.socket != null)
-                        this.socket.Send (Encoding.UTF8.GetBytes (to_send));
+                if (this.socket != null)
+                    this.socket.Send (Encoding.UTF8.GetBytes (to_send));
 
                 this.last_ping = DateTime.Now;
 
