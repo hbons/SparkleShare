@@ -64,7 +64,7 @@ namespace SparkleShare {
          
 			
 			Controller.UpdateIconEvent += delegate (int icon_frame) {
-				Dispatcher.Invoke ((Action) delegate {
+				Dispatcher.BeginInvoke ((Action) delegate {
 					if (icon_frame > -1)
 						this.notify_icon.Icon = animation_frames [icon_frame];
 					else
@@ -73,7 +73,7 @@ namespace SparkleShare {
 			};
 			
 			Controller.UpdateStatusItemEvent += delegate (string state_text) {
-				Dispatcher.Invoke ((Action) delegate {
+				Dispatcher.BeginInvoke ((Action) delegate {
 					this.state_item.Header = state_text;
 					this.state_item.UpdateLayout ();
 					this.notify_icon.HeaderText = "SparkleShare\n" + state_text;
@@ -81,20 +81,20 @@ namespace SparkleShare {
 			};
 			
 			Controller.UpdateMenuEvent += delegate (IconState state) {
-				Dispatcher.Invoke ((Action) delegate {
+				Dispatcher.BeginInvoke ((Action) delegate {
 					CreateMenu ();     
 				});
 			};
             
             Controller.UpdateQuitItemEvent += delegate (bool item_enabled) {
-                  Dispatcher.Invoke ((Action) delegate {
+                  Dispatcher.BeginInvoke ((Action) delegate {
                     this.exit_item.IsEnabled = item_enabled;
                     this.exit_item.UpdateLayout ();
                 });
             };
 
             Controller.UpdateOpenRecentEventsItemEvent += delegate (bool item_enabled) {
-                  Dispatcher.Invoke ((Action) delegate {
+                  Dispatcher.BeginInvoke ((Action) delegate {
                     this.log_item.IsEnabled = item_enabled;
                     this.log_item.UpdateLayout ();
                 });
