@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+
 using SparkleLib;
 
 namespace SparkleLib.Git {
@@ -74,11 +75,8 @@ namespace SparkleLib.Git {
 
         private void UpdateSizes ()
         {
-            double size = CalculateSizes (
-                new DirectoryInfo (LocalPath));
-
-            double history_size = CalculateSizes (
-                new DirectoryInfo (Path.Combine (LocalPath, ".git")));
+            double size         = CalculateSizes (new DirectoryInfo (LocalPath));
+            double history_size = CalculateSizes (new DirectoryInfo (Path.Combine (LocalPath, ".git")));
 
             string size_file_path = new string [] {LocalPath, ".git", "repo_size"}.Combine ();
             string history_size_file_path = new string [] {LocalPath, ".git", "repo_history_size"}.Combine ();
@@ -162,8 +160,9 @@ namespace SparkleLib.Git {
                 if (git.ExitCode != 0)
                     return false;
     
-                string remote_revision = git.StandardOutput.ReadToEnd ().Substring (0, 40);
-    
+                string output = git.StandardOutput.ReadToEnd ();
+                string remote_revision = output.Substring (0, 40);
+
                 if (!remote_revision.StartsWith (current_revision)) {
                     SparkleHelpers.DebugInfo ("Git",
                         Name + " | Remote changes detected (local: " +
@@ -888,9 +887,7 @@ namespace SparkleLib.Git {
             }
 
             git_status.WaitForExit ();
-            message = message.Replace ("\"", "\\\"");
-
-            return message.TrimEnd ();
+            return message.Replace ("\"", "\\\"");
         }
 
 
