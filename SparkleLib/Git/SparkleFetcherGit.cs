@@ -186,11 +186,13 @@ namespace SparkleLib.Git {
         public override bool IsFetchedRepoEmpty {
             get {
                 SparkleGit git = new SparkleGit (TargetFolder, "rev-parse HEAD");
+                git.StartInfo.RedirectStandardError = true;
                 git.Start ();
 
                 // Reading the standard output HAS to go before
                 // WaitForExit, or it will hang forever on output > 4096 bytes
                 git.StandardOutput.ReadToEnd ();
+                git.StandardError.ReadToEnd ();
                 git.WaitForExit ();
 
                 return (git.ExitCode != 0);
@@ -292,12 +294,13 @@ namespace SparkleLib.Git {
 
         public override void Complete ()
         {
-            if (IsFetchedRepoEmpty)
-                return;
+            if (!IsFetchedRepoEmpty) {
+                SparkleGit git = new SparkleGit (TargetFolder, "checkout --quiet HEAD");
+                git.Start ();
+                git.WaitForExit ();
+            }
 
-            SparkleGit git = new SparkleGit (TargetFolder, "checkout --quiet HEAD");
-            git.Start ();
-            git.WaitForExit ();
+            base.Complete ();
         }
 
 
