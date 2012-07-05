@@ -910,7 +910,8 @@ namespace SparkleShare {
                 Directory.Move (this.fetcher.TargetFolder, target_folder_path);
 
                 string backend = SparkleFetcherBase.GetBackend (this.fetcher.RemoteUrl.AbsolutePath);
-                SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.RemoteUrl.ToString (), backend);
+                SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.Identifier,
+                    this.fetcher.RemoteUrl.ToString (), backend);
 
                 if (FolderFetched != null)
                     FolderFetched (this.fetcher.RemoteUrl.ToString (), this.fetcher.Warnings.ToArray ());

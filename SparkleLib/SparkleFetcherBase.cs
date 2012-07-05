@@ -41,7 +41,6 @@ namespace SparkleLib {
 
         public abstract bool Fetch ();
         public abstract void Stop ();
-        public abstract void Complete ();
         public abstract bool IsFetchedRepoEmpty { get; }
         public abstract bool IsFetchedRepoPasswordCorrect (string password);
         public abstract void EnableFetchedRepoCrypto (string password);
@@ -51,6 +50,7 @@ namespace SparkleLib {
         public readonly bool FetchPriorHistory = false;
         public string TargetFolder { get; protected set; }
         public bool IsActive { get; private set; }
+        public string Identifier = CreateIdentifier ();
 
         public string [] Warnings {
             get {
@@ -170,12 +170,55 @@ namespace SparkleLib {
         }
 
 
+        public virtual void Complete ()
+        {
+            string identifier_path = Path.Combine (TargetFolder, ".sparkleshare");
+
+            if (!File.Exists (identifier_path))
+                File.WriteAllText (identifier_path, Identifier);
+
+            if (IsFetchedRepoEmpty)
+                CreateInitialChangeSet ();
+        }
+
+
+        // Create an initial change set when the
+        // user has fetched an empty remote folder
+        public void CreateInitialChangeSet ()
+        {
+            string file_path = Path.Combine (TargetFolder, "SparkleShare.txt");
+            string n = Environment.NewLine;
+
+            string text = "Congratulations, you've successfully created a SparkleShare repository!" + n +
+                n +
+                "Any files you add or change in this folder will be automatically synced to " + n +
+                RemoteUrl + " and everyone connected to it." + n +
+                n +
+                "SparkleShare is an Open Source software program that helps people " + n +
+                "collaborate and share files. If you like what we do, please consider a small " + n +
+                "donation to support the project: http://sparkleshare.org/support-us/" + n +
+                n +
+                "Have fun! :)" + n;
+
+            File.WriteAllText (file_path, text);
+        }
+
+
         public void Dispose ()
         {
             if (this.thread != null) {
                 this.thread.Abort ();
                 this.thread.Join ();
             }
+        }
+
+
+        public static string CreateIdentifier ()
+        {
+            Random random = new Random ();
+            string number = "" + random.Next () + "" + random.Next () + "" + random.Next ();
+
+            return SparkleHelpers.SHA1 (number);
         }
 
         
