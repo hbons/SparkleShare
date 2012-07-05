@@ -91,14 +91,7 @@ namespace SparkleLib.Git {
             File.WriteAllText (size_file_path, size.ToString ());
             File.WriteAllText (history_size_file_path, history_size.ToString ());
         }
-
-
-        public override void CreateInitialChangeSet ()
-        {
-            base.CreateInitialChangeSet ();
-            SyncUp (); // FIXME: Weird freeze happens when base class handles this
-        }
-
+        
 
         public override string [] UnsyncedFilePaths {
             get {
