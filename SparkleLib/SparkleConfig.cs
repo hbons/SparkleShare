@@ -248,6 +248,15 @@ namespace SparkleLib {
         }
 
 
+        public void RenameFolder (string identifier, string name)
+        {
+            XmlNode node_folder = SelectSingleNode (string.Format ("/sparkleshare/folder[identifier=\"{0}\"]", identifier));
+            node_folder ["name"].InnerText = name;
+
+            Save ();
+        }
+
+
         public string GetBackendForFolder (string name)
         {
             return GetFolderValue (name, "backend");
@@ -263,6 +272,17 @@ namespace SparkleLib {
         public string GetUrlForFolder (string name)
         {
             return GetFolderValue (name, "url");
+        }
+
+
+        public bool IdentifierExists (string identifier)
+        {
+            foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
+                if (node_folder ["identifier"].InnerText.Equals (identifier))
+                    return true;
+            }
+
+            return false;
         }
 
 
