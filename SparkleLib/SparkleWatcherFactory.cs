@@ -1,0 +1,50 @@
+//   SparkleShare, a collaboration and sharing tool.
+//   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
+//
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//   GNU General Public License for more details.
+//
+//   You should have received a copy of the GNU General Public License
+//   along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+namespace SparkleLib {
+
+    public static class SparkleListenerFactory {
+
+        private static List<SparkleWatcher> watchers = new List<SparkleWatcher> ();
+
+
+        public static SparkleWatcher CreateWatcher (string path_to_watch)
+        {
+            path_to_watch = Path.GetDirectoryName (path_to_watch);
+
+            foreach (SparkleWatcher watcher in watchers) {
+                if (watcher.Path.Equals (path_to_watch)) {
+                    SparkleHelpers.DebugInfo ("WatcherFactory",
+                        "Refered to existing watcher for " + path_to_watch);
+
+                    return watcher;
+                }
+            }
+
+            watchers.Add (new SparkleWatcher (path_to_watch));
+
+            SparkleHelpers.DebugInfo ("WatcherFactory",
+                "Issued new watcher for " + path_to_watch);
+
+            return watchers [watchers.Count - 1];
+        }
+    }
+}

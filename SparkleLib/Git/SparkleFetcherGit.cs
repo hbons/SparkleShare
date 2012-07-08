@@ -30,12 +30,13 @@ namespace SparkleLib.Git {
     public class SparkleFetcher : SparkleFetcherBase {
 
         private SparkleGit git;
+        private bool use_git_bin;
         private string crypto_salt = "e0d592768d7cf99a"; // TODO: Make unique per repo
 
 
         public SparkleFetcher (string server, string required_fingerprint, string remote_path,
-            string target_folder, bool fetch_prior_history) : base (server, required_fingerprint, remote_path,
-                target_folder, fetch_prior_history)
+            string target_folder, bool fetch_prior_history) : base (server, required_fingerprint,
+                remote_path, target_folder, fetch_prior_history)
         {
             Uri uri = RemoteUrl;
 
@@ -60,6 +61,9 @@ namespace SparkleLib.Git {
             } else if (uri.Host.Equals ("github.com")) {
                 uri = new Uri ("ssh://git@github.com" + uri.AbsolutePath);
 
+            } else if (uri.Host.Equals ("bitbucket.org")) {
+                // Nothing really
+
             } else if (uri.Host.Equals ("gnome.org")) {
                 uri = new Uri ("ssh://git@gnome.org/git" + uri.AbsolutePath);
 
@@ -73,6 +77,8 @@ namespace SparkleLib.Git {
                     else
                         uri = new Uri (uri.Scheme + "://git@" + uri.Host + ":" + uri.Port + uri.AbsolutePath);
                 }
+
+                this.use_git_bin = true;
             }
 
             TargetFolder = target_folder;
@@ -128,13 +134,20 @@ namespace SparkleLib.Git {
                 } else {
                     SparkleHelpers.DebugInfo ("Fetcher", line);
 
-                    if (line.StartsWith ("fatal:", true, null) ||
-                        line.StartsWith ("error:", true, null)) {
+                    line = line.Trim (new char [] {' ', '@'});
+
+                    if (line.StartsWith ("fatal:", StringComparison.InvariantCultureIgnoreCase) ||
+                        line.StartsWith ("error:", StringComparison.InvariantCultureIgnoreCase)) {
 
                         base.errors.Add (line);
+
+                    } else if (line.StartsWith ("WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!")) {
+                        base.errors.Add ("warning: Remote host identification has changed!");
+
+                    } else if (line.StartsWith ("WARNING: POSSIBLE DNS SPOOFING DETECTED!")) {
+                        base.errors.Add ("warning: Possible DNS spoofing detected!");
                     }
                 }
-
 
                 if (number >= percentage) {
                     percentage = number;
@@ -147,8 +160,6 @@ namespace SparkleLib.Git {
             }
             
             this.git.WaitForExit ();
-
-            SparkleHelpers.DebugInfo ("Git", "Exit code: " + this.git.ExitCode);
 
             if (this.git.ExitCode == 0) {
                 while (percentage < 100) {
@@ -165,6 +176,7 @@ namespace SparkleLib.Git {
 
                 InstallConfiguration ();
                 InstallExcludeRules ();
+                InstallAttributeRules ();
 
                 AddWarnings ();
 
@@ -179,11 +191,13 @@ namespace SparkleLib.Git {
         public override bool IsFetchedRepoEmpty {
             get {
                 SparkleGit git = new SparkleGit (TargetFolder, "rev-parse HEAD");
+                git.StartInfo.RedirectStandardError = true;
                 git.Start ();
 
                 // Reading the standard output HAS to go before
                 // WaitForExit, or it will hang forever on output > 4096 bytes
                 git.StandardOutput.ReadToEnd ();
+                git.StandardError.ReadToEnd ();
                 git.WaitForExit ();
 
                 return (git.ExitCode != 0);
@@ -210,7 +224,7 @@ namespace SparkleLib.Git {
             string git_attributes_file_path = SparkleHelpers.CombineMore (
                 TargetFolder, ".git", "info", "attributes");
 
-            File.WriteAllText (git_attributes_file_path, "* filter=crypto");
+            File.AppendAllText (git_attributes_file_path, "\n* filter=crypto");
 
 
             // Store the password
@@ -285,158 +299,99 @@ namespace SparkleLib.Git {
 
         public override void Complete ()
         {
-            if (IsFetchedRepoEmpty)
-                return;
+            if (!IsFetchedRepoEmpty) {
+                SparkleGit git = new SparkleGit (TargetFolder, "checkout --quiet HEAD");
+                git.Start ();
+                git.WaitForExit ();
+            }
 
-            SparkleGit git = new SparkleGit (TargetFolder, "checkout --quiet HEAD");
-            git.Start ();
-            git.WaitForExit ();
+            base.Complete ();
         }
 
 
-        // Install the user's name and email and some config into
-        // the newly cloned repository
         private void InstallConfiguration ()
         {
-            string repo_config_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "config");
-            string config = File.ReadAllText (repo_config_file_path);
+            string [] settings = new string [] {
+                "core.quotepath false", // Don't quote "unusual" characters in path names
+                "core.ignorecase false", // Be case sensitive explicitly to work on Mac
+                "core.filemode false", // Ignore permission changes
+                "core.autocrlf false", // Don't change file line endings
+                "core.safecrlf false",
+                "core.packedGitLimit 128m", // Some memory limiting options
+                "core.packedGitWindowSize 128m",
+                "pack.deltaCacheSize 128m",
+                "pack.packSizeLimit 128m",
+                "pack.windowMemory 128m"
+            };
 
-            string n = Environment.NewLine;
+            foreach (string setting in settings) {
+                SparkleGit git_config = new SparkleGit (TargetFolder, "config " + setting);
+                git_config.Start ();
+                git_config.WaitForExit ();
+            }
 
-            config = config.Replace ("[core]" + n,
-                "[core]" + n +
-                "\tquotepath = false" + n + // Show special characters in the logs
-                "\tpackedGitLimit = 128m" + n +
-                "\tautocrlf = false" + n +
-                "\tsafecrlf = false" + n +
-                "\tpackedGitWindowSize = 128m" + n);
+            if (this.use_git_bin)
+                InstallGitBinConfiguration ();
+        }
 
-            config = config.Replace ("[remote \"origin\"]" + n,
-                "[pack]" + n +
-                "\tdeltaCacheSize = 128m" + n +
-                "\tpackSizeLimit = 128m" + n +
-                "\twindowMemory = 128m" + n +
-                "[remote \"origin\"]" + n);
 
-            // Be case sensitive explicitly to work on Mac
-            config = config.Replace ("ignorecase = true", "ignorecase = false");
+        public void InstallGitBinConfiguration ()
+        {
+            string [] settings = new string [] {
+                "core.bigFileThreshold 8g",
+                "filter.bin.clean \"git bin clean %f\"",
+                "filter.bin.smudge \"git bin smudge\"",
+                "git-bin.chunkSize 1m",
+                "git-bin.s3bucket \"your bucket name\"",
+                "git-bin.s3key \"your key\"",
+                "git-bin.s3secretKey \"your secret key\""
+            };
 
-            // Ignore permission changes
-            config = config.Replace ("filemode = true", "filemode = false");
-
-            // Write the config to the file
-            File.WriteAllText (repo_config_file_path, config);
-            SparkleHelpers.DebugInfo ("Fetcher", "Added configuration to '" + repo_config_file_path + "'");
+            foreach (string setting in settings) {
+                SparkleGit git_config = new SparkleGit (TargetFolder, "config " + setting);
+                git_config.Start ();
+                git_config.WaitForExit ();
+            }
         }
 
 
         // Add a .gitignore file to the repo
         private void InstallExcludeRules ()
         {
-            DirectoryInfo info = Directory.CreateDirectory (
-                SparkleHelpers.CombineMore (TargetFolder, ".git", "info"));
-
-            // File that lists the files we want git to ignore
-            string exclude_rules_file_path = Path.Combine (info.FullName, "exclude");
+            // Compile a list of files we want Git to ignore
+            string exclude_rules_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "info", "exclude");
             TextWriter writer = new StreamWriter (exclude_rules_file_path);
 
             foreach (string exclude_rule in ExcludeRules)
                 writer.WriteLine (exclude_rule);
 
             writer.Close ();
+        }
 
 
-            // File that lists the files we want don't want git to compress.
-            // Not compressing the already compressed files saves us memory
-            // usage and increases speed
-            string no_compression_rules_file_path = Path.Combine (info.FullName, "attributes");
-            writer = new StreamWriter (no_compression_rules_file_path);
+        private void InstallAttributeRules ()
+        {
+            string attribute_rules_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "info", "attributes");
+            TextWriter writer = new StreamWriter (attribute_rules_file_path);
 
-                // Images
-                writer.WriteLine ("*.jpg -delta");
-                writer.WriteLine ("*.jpeg -delta");
-                writer.WriteLine ("*.JPG -delta");
-                writer.WriteLine ("*.JPEG -delta");
+            if (this.use_git_bin) {
+                writer.WriteLine ("* filter=bin binary");
 
-                writer.WriteLine ("*.png -delta");
-                writer.WriteLine ("*.PNG -delta");
+            } else {
+                // Compile a list of files we don't want Git to compress.
+                // Not compressing already compressed files decreases memory usage and increases speed
+                string [] extensions = new string [] {
+                    "jpg", "jpeg", "png", "tiff", "gif", // Images
+                    "flac", "mp3", "ogg", "oga", // Audio
+                    "avi", "mov", "mpg", "mpeg", "mkv", "ogv", "ogx", "webm", // Video
+                    "zip", "gz", "bz", "bz2", "rpm", "deb", "tgz", "rar", "ace", "7z", "pak", "tar" // Archives
+                };
 
-                writer.WriteLine ("*.tiff -delta");
-                writer.WriteLine ("*.TIFF -delta");
-
-                // Audio
-                writer.WriteLine ("*.flac -delta");
-                writer.WriteLine ("*.FLAC -delta");
-
-                writer.WriteLine ("*.mp3 -delta");
-                writer.WriteLine ("*.MP3 -delta");
-
-                writer.WriteLine ("*.ogg -delta");
-                writer.WriteLine ("*.OGG -delta");
-
-                writer.WriteLine ("*.oga -delta");
-                writer.WriteLine ("*.OGA -delta");
-
-                // Video
-                writer.WriteLine ("*.avi -delta");
-                writer.WriteLine ("*.AVI -delta");
-
-                writer.WriteLine ("*.mov -delta");
-                writer.WriteLine ("*.MOV -delta");
-
-                writer.WriteLine ("*.mpg -delta");
-                writer.WriteLine ("*.MPG -delta");
-                writer.WriteLine ("*.mpeg -delta");
-                writer.WriteLine ("*.MPEG -delta");
-
-                writer.WriteLine ("*.mkv -delta");
-                writer.WriteLine ("*.MKV -delta");
-
-                writer.WriteLine ("*.ogv -delta");
-                writer.WriteLine ("*.OGV -delta");
-
-                writer.WriteLine ("*.ogx -delta");
-                writer.WriteLine ("*.OGX -delta");
-
-                writer.WriteLine ("*.webm -delta");
-                writer.WriteLine ("*.WEBM -delta");
-
-                // Archives
-                writer.WriteLine ("*.zip -delta");
-                writer.WriteLine ("*.ZIP -delta");
-
-                writer.WriteLine ("*.gz -delta");
-                writer.WriteLine ("*.GZ -delta");
-
-                writer.WriteLine ("*.bz -delta");
-                writer.WriteLine ("*.BZ -delta");
-
-                writer.WriteLine ("*.bz2 -delta");
-                writer.WriteLine ("*.BZ2 -delta");
-
-                writer.WriteLine ("*.rpm -delta");
-                writer.WriteLine ("*.RPM -delta");
-
-                writer.WriteLine ("*.deb -delta");
-                writer.WriteLine ("*.DEB -delta");
-
-                writer.WriteLine ("*.tgz -delta");
-                writer.WriteLine ("*.TGZ -delta");
-
-                writer.WriteLine ("*.rar -delta");
-                writer.WriteLine ("*.RAR -delta");
-
-                writer.WriteLine ("*.ace -delta");
-                writer.WriteLine ("*.ACE -delta");
-
-                writer.WriteLine ("*.7z -delta");
-                writer.WriteLine ("*.7Z -delta");
-
-                writer.WriteLine ("*.pak -delta");
-                writer.WriteLine ("*.PAK -delta");
-
-                writer.WriteLine ("*.tar -delta");
-                writer.WriteLine ("*.TAR -delta");
+                foreach (string extension in extensions) {
+                    writer.WriteLine ("*." + extension + " -delta");
+                    writer.WriteLine ("*." + extension.ToUpper () + " -delta");
+                }
+            }
 
             writer.Close ();
         }

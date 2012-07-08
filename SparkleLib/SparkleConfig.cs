@@ -210,10 +210,13 @@ namespace SparkleLib {
         }
 
 
-        public void AddFolder (string name, string url, string backend)
+        public void AddFolder (string name, string identifier, string url, string backend)
         {
             XmlNode node_name = CreateElement ("name");
             node_name.InnerText = name;
+
+            XmlNode node_identifier = CreateElement ("identifier");
+            node_identifier.InnerText = identifier;
 
             XmlNode node_url = CreateElement ("url");
             node_url.InnerText = url;
@@ -223,6 +226,7 @@ namespace SparkleLib {
 
             XmlNode node_folder = CreateNode (XmlNodeType.Element, "folder", null);
             node_folder.AppendChild (node_name);
+            node_folder.AppendChild (node_identifier);
             node_folder.AppendChild (node_url);
             node_folder.AppendChild (node_backend);
 
@@ -244,15 +248,41 @@ namespace SparkleLib {
         }
 
 
+        public void RenameFolder (string identifier, string name)
+        {
+            XmlNode node_folder = SelectSingleNode (string.Format ("/sparkleshare/folder[identifier=\"{0}\"]", identifier));
+            node_folder ["name"].InnerText = name;
+
+            Save ();
+        }
+
+
         public string GetBackendForFolder (string name)
         {
             return GetFolderValue (name, "backend");
         }
 
 
+        public string GetIdentifierForFolder (string name)
+        {
+            return GetFolderValue (name, "identifier");
+        }
+
+
         public string GetUrlForFolder (string name)
         {
             return GetFolderValue (name, "url");
+        }
+
+
+        public bool IdentifierExists (string identifier)
+        {
+            foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
+                if (node_folder ["identifier"].InnerText.Equals (identifier))
+                    return true;
+            }
+
+            return false;
         }
 
 
@@ -304,11 +334,10 @@ namespace SparkleLib {
         {
             XmlNode folder = GetFolder(name);
 
-            if ((folder != null) && (folder [key] != null)) {
+            if ((folder != null) && (folder [key] != null))
                 return folder [key].InnerText;
-            }
-
-            return null;
+            else
+                return null;
         }
 
 

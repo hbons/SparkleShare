@@ -83,13 +83,16 @@ namespace SparkleLib {
                 if (File.Exists (id_path))
                     this.identifier = File.ReadAllText (id_path).Trim ();
 
-                if (this.identifier != null && this.identifier.Length > 0) {
+                if (!string.IsNullOrEmpty (this.identifier)) {
                     return this.identifier;
 
                 } else {
-                    Random random   = new Random ();
-                    string number   = "" + random.Next () + "" + random.Next () + "" + random.Next ();
-                    this.identifier = SparkleHelpers.SHA1 (number);
+                    string config_identifier = SparkleConfig.DefaultConfig.GetIdentifierForFolder (Name);
+
+                    if (!string.IsNullOrEmpty (config_identifier))
+                        this.identifier = config_identifier;
+                    else
+                        this.identifier = SparkleFetcherBase.CreateIdentifier ();
 
                     File.WriteAllText (id_path, this.identifier);
                     File.SetAttributes (id_path, FileAttributes.Hidden);
@@ -148,9 +151,6 @@ namespace SparkleLib {
 
             this.identifier = Identifier;
 
-            if (CurrentRevision == null)
-                CreateInitialChangeSet ();
-
             ChangeSets = GetChangeSets ();
             this.watcher = CreateWatcher ();
 
@@ -191,28 +191,6 @@ namespace SparkleLib {
             }
 
             this.remote_timer.Start ();
-        }
-
-
-        // Create an initial change set when the
-        // user has fetched an empty remote folder
-        public virtual void CreateInitialChangeSet ()
-        {
-            string file_path = Path.Combine (LocalPath, "SparkleShare.txt");
-            string n         = Environment.NewLine;
-
-            File.WriteAllText (file_path,
-                "Congratulations, you've successfully created a SparkleShare repository!" + n +
-                "" + n +
-                "Any files you add or change in this folder will be automatically synced to " + n +
-                RemoteUrl + " and everyone connected to it." + n +
-                "" + n +
-                "SparkleShare is an Open Source software program that helps people " + n +
-                "collaborate and share files. If you like what we do, please consider a small " + n +
-                "donation to support the project: http://sparkleshare.org/support-us/" + n +
-                "" + n +
-                "Have fun! :)" + n
-            );
         }
 
 
@@ -427,56 +405,66 @@ namespace SparkleLib {
 
                 new Thread (
                     new ThreadStart (delegate {
-                        if (!is_syncing && HasRemoteChanges)
+                        if (!is_syncing && !HasLocalChanges && HasRemoteChanges)
                             SyncDownBase ();
                     })
                 ).Start ();
             }
 
-            // Stop polling when the connection to the irc channel is succesful
-            this.listener.Connected += delegate {
-                this.poll_interval = PollInterval.Long;
-                this.last_poll = DateTime.Now;
-
-                if (!is_syncing) {
-                    // Check for changes manually one more time
-                    if (HasRemoteChanges)
-                        SyncDownBase ();
-
-                    // Push changes that were made since the last disconnect
-                    if (HasUnsyncedChanges)
-                        SyncUpBase ();
-                }
-            };
-
-            // Start polling when the connection to the channel is lost
-            this.listener.Disconnected += delegate {
-                this.poll_interval = PollInterval.Short;
-                SparkleHelpers.DebugInfo (Name, "Falling back to polling");
-            };
-
-            // Fetch changes when there is a message in the irc channel
-            this.listener.Received += delegate (SparkleAnnouncement announcement) {
-                string identifier = Identifier;
-
-                if (announcement.FolderIdentifier.Equals (identifier) &&
-                    !announcement.Message.Equals (CurrentRevision)) {
-
-                    while (this.is_syncing)
-                        System.Threading.Thread.Sleep (100);
-
-                    SparkleHelpers.DebugInfo ("Listener", "Syncing due to announcement");
-                    SyncDownBase ();
-
-                } else {
-                    if (announcement.FolderIdentifier.Equals (identifier))
-                        SparkleHelpers.DebugInfo ("Listener", "Not syncing, message is for current revision");
-                }
-            };
+            this.listener.Connected            += ListenerConnectedDelegate;
+            this.listener.Disconnected         += ListenerDisconnectedDelegate;
+            this.listener.AnnouncementReceived += ListenerAnnouncementReceivedDelegate;
 
             // Start listening
             if (!this.listener.IsConnected && !this.listener.IsConnecting)
                 this.listener.Connect ();
+        }
+
+
+        // Stop polling when the connection to the irc channel is succesful
+        private void ListenerConnectedDelegate ()
+        {
+            this.poll_interval = PollInterval.Long;
+            this.last_poll     = DateTime.Now;
+
+            if (!is_syncing) {
+                // Check for changes manually one more time
+                if (HasRemoteChanges)
+                    SyncDownBase ();
+
+                // Push changes that were made since the last disconnect
+                if (HasUnsyncedChanges)
+                    SyncUpBase ();
+            }
+        }
+
+
+        // Start polling when the connection to the channel is lost
+        private void ListenerDisconnectedDelegate ()
+        {
+            this.poll_interval = PollInterval.Short;
+            SparkleHelpers.DebugInfo (Name, "Falling back to polling");
+        }
+
+
+        // Fetch changes when there is an announcement
+        private void ListenerAnnouncementReceivedDelegate (SparkleAnnouncement announcement)
+        {
+            string identifier = Identifier;
+
+            if (announcement.FolderIdentifier.Equals (identifier) &&
+                !announcement.Message.Equals (CurrentRevision)) {
+
+                while (this.is_syncing)
+                System.Threading.Thread.Sleep (100);
+
+                SparkleHelpers.DebugInfo ("Listener", "Syncing due to announcement");
+                SyncDownBase ();
+
+            } else {
+                if (announcement.FolderIdentifier.Equals (identifier))
+                    SparkleHelpers.DebugInfo ("Listener", "Not syncing, message is for current revision");
+            }
         }
 
 
@@ -535,8 +523,15 @@ namespace SparkleLib {
 
         public void Dispose ()
         {
+            this.remote_timer.Stop ();
             this.remote_timer.Dispose ();
+
+            this.listener.Connected            -= ListenerConnectedDelegate;
+            this.listener.Disconnected         -= ListenerDisconnectedDelegate;
+            this.listener.AnnouncementReceived -= ListenerAnnouncementReceivedDelegate;
+
             this.listener.Dispose ();
+            this.watcher.Dispose ();
         }
     }
 }

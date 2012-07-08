@@ -31,8 +31,8 @@ namespace SparkleLib {
         public event DisconnectedEventHandler Disconnected;
         public delegate void DisconnectedEventHandler ();
 
-        public event ReceivedEventHandler Received;
-        public delegate void ReceivedEventHandler (SparkleAnnouncement announcement);
+        public event AnnouncementReceivedEventHandler AnnouncementReceived;
+        public delegate void AnnouncementReceivedEventHandler (SparkleAnnouncement announcement);
 
         public readonly Uri Server;
 
@@ -175,8 +175,8 @@ namespace SparkleLib {
             AddRecentAnnouncement (announcement);
             this.queue_down [announcement.FolderIdentifier] = announcement;
 
-            if (Received != null)
-                Received (announcement);
+            if (AnnouncementReceived != null)
+                AnnouncementReceived (announcement);
         }
 
 
