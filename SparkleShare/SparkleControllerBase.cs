@@ -34,12 +34,8 @@ namespace SparkleShare {
 
         public SparkleRepoBase [] Repositories {
             get {
-                lock (this.repo_lock) {
-                    SparkleRepoBase [] repositories =
-                        this.repositories.GetRange (0, this.repositories.Count).ToArray ();
-
-                    return repositories;
-                }
+                lock (this.repo_lock)
+                    return this.repositories.GetRange (0, this.repositories.Count).ToArray ();
             }
         }
 
@@ -170,8 +166,8 @@ namespace SparkleShare {
 
 
         private SparkleFetcherBase fetcher;
-        private Object repo_lock            = new Object ();
-        private Object delete_watcher_lock  = new Object ();
+        private Object repo_lock        = new Object ();
+        private Object check_repos_lock = new Object ();
 
 
         // Short alias for the translations
@@ -183,6 +179,113 @@ namespace SparkleShare {
 
         public SparkleControllerBase ()
         {
+        }
+
+
+        public void HandleInvite (FileSystemEventArgs args)
+        {
+            if (this.fetcher != null &&
+                this.fetcher.IsActive) {
+
+                if (AlertNotificationRaised != null)
+                    AlertNotificationRaised ("SparkleShare Setup seems busy",
+                        "Please wait for it to finish");
+
+            } else {
+                if (InviteReceived != null) {
+                    SparkleInvite invite = new SparkleInvite (args.FullPath);
+
+                    // It may be that the invite we received a path to isn't
+                    // fully downloaded yet, so we try to read it several times
+                    int tries = 0;
+                    while (!invite.IsValid) {
+                        Thread.Sleep (1 * 250);
+                        invite = new SparkleInvite (args.FullPath);
+                        tries++;
+                        if (tries > 20)
+                            break;
+                    }
+
+                    if (invite.IsValid) {
+                        InviteReceived (invite);
+
+                    } else {
+                        if (AlertNotificationRaised != null)
+                            AlertNotificationRaised ("Oh noes!",
+                                "This invite seems screwed up...");
+                    }
+
+                    File.Delete (args.FullPath);
+                }
+            }
+        }
+
+
+        public void CheckRepositories ()
+        {
+            lock (this.check_repos_lock) {
+                string path = SparkleConfig.DefaultConfig.FoldersPath;
+
+                foreach (string folder_path in Directory.GetDirectories (path)) {
+                    string folder_name = Path.GetFileName (folder_path);
+
+                    if (folder_name.Equals (".tmp"))
+                        continue;
+
+                    if (SparkleConfig.DefaultConfig.GetIdentifierForFolder (folder_name) == null) {
+                        string identifier_file_path = Path.Combine (folder_path, ".sparkleshare");
+
+                        if (!File.Exists (identifier_file_path))
+                            continue;
+
+                        string identifier = File.ReadAllText (identifier_file_path).Trim ();
+
+                        if (SparkleConfig.DefaultConfig.IdentifierExists (identifier)) {
+                            RemoveRepository (folder_path);
+                            SparkleConfig.DefaultConfig.RenameFolder (identifier, folder_name);
+
+                            string new_folder_path = Path.Combine (path, folder_name);
+                            AddRepository (new_folder_path);
+
+                            SparkleHelpers.DebugInfo ("Controller",
+                                "Renamed folder with identifier " + identifier + " to '" + folder_name + "'");
+                        }
+                    }
+                }
+
+                foreach (string folder_name in SparkleConfig.DefaultConfig.Folders) {
+                    string folder_path = new SparkleFolder (folder_name).FullPath;
+
+                    if (!Directory.Exists (folder_path)) {
+                        SparkleConfig.DefaultConfig.RemoveFolder (folder_name);
+                        RemoveRepository (folder_path);
+
+                        SparkleHelpers.DebugInfo ("Controller",
+                            "Removed folder '" + folder_name + "' from config");
+
+                    } else {
+                        AddRepository (folder_path);
+                    }
+                }
+
+                if (FolderListChanged != null)
+                    FolderListChanged ();
+            }
+        }
+
+
+        public void OnFolderActivity (object o, FileSystemEventArgs args)
+        {
+            if (args != null &&
+                args.ChangeType == WatcherChangeTypes.Created &&
+                args.FullPath.EndsWith (".xml")) {
+
+                HandleInvite (args);
+                return;
+
+            } else {
+                CheckRepositories ();
+            }
         }
 
 
@@ -201,69 +304,17 @@ namespace SparkleShare {
                 ImportPrivateKey ();
 
             // Watch the SparkleShare folder
-            FileSystemWatcher watcher = new FileSystemWatcher (SparkleConfig.DefaultConfig.FoldersPath) {
+            FileSystemWatcher watcher = new FileSystemWatcher () {
+                Filter                = "*",
                 IncludeSubdirectories = false,
-                EnableRaisingEvents   = true,
-                Filter                = "*"
+                Path                  = SparkleConfig.DefaultConfig.FoldersPath
             };
 
-            watcher.Deleted += delegate (object o, FileSystemEventArgs args) {
-                lock (this.delete_watcher_lock) {
-                    foreach (string folder_name in SparkleConfig.DefaultConfig.Folders) {
-                        string folder_path = new SparkleFolder (folder_name).FullPath;
+            watcher.Deleted += OnFolderActivity;
+            watcher.Created += OnFolderActivity;
+            watcher.Renamed += OnFolderActivity;
 
-                        if (!Directory.Exists (folder_path)) {
-                            SparkleConfig.DefaultConfig.RemoveFolder (folder_name);
-                            RemoveRepository (folder_path);
-                        }
-                    }
-
-                    if (FolderListChanged != null)
-                        FolderListChanged ();
-                }
-            };
-
-            watcher.Created += delegate (object o, FileSystemEventArgs args) {
-                if (!args.FullPath.EndsWith (".xml"))
-                    return;
-
-                if (this.fetcher != null &&
-                    this.fetcher.IsActive) {
-
-                    if (AlertNotificationRaised != null)
-                        AlertNotificationRaised ("SparkleShare Setup seems busy",
-                            "Please wait for it to finish");
-
-                } else {
-                    if (InviteReceived != null) {
-                        SparkleInvite invite = new SparkleInvite (args.FullPath);
-
-                        // It may be that the invite we received a path to isn't
-                        // fully downloaded yet, so we try to read it several times
-                        int tries = 0;
-                        while (!invite.IsValid) {
-                            Thread.Sleep (1 * 250);
-                            invite = new SparkleInvite (args.FullPath);
-                            tries++;
-                            if (tries > 20)
-                                break;
-                        }
-
-                        if (invite.IsValid) {
-                            InviteReceived (invite);
-
-                        } else {
-                            invite = null;
-
-                            if (AlertNotificationRaised != null)
-                                AlertNotificationRaised ("Oh noes!",
-                                    "This invite seems screwed up...");
-                        }
-
-                        File.Delete (args.FullPath);
-                    }
-                }
-            };
+            watcher.EnableRaisingEvents = true;
         }
 
 
@@ -327,11 +378,9 @@ namespace SparkleShare {
 
             string path  = new SparkleFolder (name).FullPath;
 
-            lock (this.repo_lock) {
-                foreach (SparkleRepoBase repo in Repositories) {
-                    if (repo.LocalPath.Equals (path))
-                        return repo.ChangeSets;
-                }
+            foreach (SparkleRepoBase repo in Repositories) {
+                if (repo.LocalPath.Equals (path))
+                    return repo.ChangeSets;
             }
 
             return null;
@@ -511,7 +560,6 @@ namespace SparkleShare {
         }
 
 
-        // Adds a repository to the list of repositories
         private void AddRepository (string folder_path)
         {
             SparkleRepoBase repo = null;
@@ -531,16 +579,8 @@ namespace SparkleShare {
                 return;
             }
 
-
-            repo.NewChangeSet += delegate (SparkleChangeSet change_set) {
-                if (NotificationRaised != null)
-                    NotificationRaised (change_set);
-            };
-
-            repo.ConflictResolved += delegate {
-                if (AlertNotificationRaised != null)
-                    AlertNotificationRaised ("Conflict detected",
-                        "Don't worry, SparkleShare made a copy of each conflicting file.");
+            repo.ChangesDetected += delegate {
+                UpdateState ();
             };
 
             repo.SyncStatusChanged += delegate (SyncStatus status) {
@@ -565,8 +605,15 @@ namespace SparkleShare {
                 UpdateState ();
             };
 
-            repo.ChangesDetected += delegate {
-                UpdateState ();
+            repo.NewChangeSet += delegate (SparkleChangeSet change_set) {
+                if (NotificationRaised != null)
+                    NotificationRaised (change_set);
+            };
+
+            repo.ConflictResolved += delegate {
+                if (AlertNotificationRaised != null)
+                    AlertNotificationRaised ("Conflict detected",
+                        "Don't worry, SparkleShare made a copy of each conflicting file.");
             };
 
             this.repositories.Add (repo);
@@ -574,45 +621,25 @@ namespace SparkleShare {
         }
 
 
-        // Removes a repository from the list of repositories and
-        // updates the statusicon menu
         private void RemoveRepository (string folder_path)
         {
-            string folder_name = Path.GetFileName (folder_path);
+            for (int i = 0; i < this.repositories.Count; i++) {
+                SparkleRepoBase repo = this.repositories [i];
 
-            for (int i = 0; i < Repositories.Length; i++) {
-                SparkleRepoBase repo = Repositories [i];
-
-                if (repo.Name.Equals (folder_name)) {
+                if (repo.LocalPath.Equals (folder_path)) {
                     repo.Dispose ();
-
-                    lock (this.repo_lock) {
-                        this.repositories.Remove (repo);
-                    }
+                    this.repositories.Remove (repo);
 
                     repo = null;
-                    break;
+                    return;
                 }
             }
-
         }
 
 
-        // Updates the list of repositories with all the
-        // folders in the SparkleShare folder
         private void PopulateRepositories ()
         {
-            lock (this.repo_lock) {
-                foreach (string folder_name in SparkleConfig.DefaultConfig.Folders) {
-                    string folder_path = new SparkleFolder (folder_name).FullPath;
-
-                    if (Directory.Exists (folder_path))
-                        AddRepository (folder_path);
-                    else
-                        SparkleConfig.DefaultConfig.RemoveFolder (folder_name);
-                }
-            }
-
+            CheckRepositories ();
             RepositoriesLoaded = true;
 
             if (FolderListChanged != null)
@@ -910,7 +937,8 @@ namespace SparkleShare {
                 Directory.Move (this.fetcher.TargetFolder, target_folder_path);
 
                 string backend = SparkleFetcherBase.GetBackend (this.fetcher.RemoteUrl.AbsolutePath);
-                SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.RemoteUrl.ToString (), backend);
+                SparkleConfig.DefaultConfig.AddFolder (target_folder_name, this.fetcher.Identifier,
+                    this.fetcher.RemoteUrl.ToString (), backend);
 
                 if (FolderFetched != null)
                     FolderFetched (this.fetcher.RemoteUrl.ToString (), this.fetcher.Warnings.ToArray ());
@@ -921,9 +949,7 @@ namespace SparkleShare {
                         target_folder_name, "announcements_url", announcements_url);
                 */
 
-                lock (this.repo_lock) {
-                    AddRepository (target_folder_path);
-                }
+                AddRepository (target_folder_path);
 
                 if (FolderListChanged != null)
                     FolderListChanged ();
