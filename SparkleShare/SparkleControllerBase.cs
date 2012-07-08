@@ -284,6 +284,12 @@ namespace SparkleShare {
                 return;
 
             } else {
+                if (Directory.Exists (args.FullPath) &&
+                    args.ChangeType == WatcherChangeTypes.Created) {
+
+                    return;
+                }
+
                 CheckRepositories ();
             }
         }

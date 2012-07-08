@@ -152,7 +152,7 @@ namespace SparkleLib {
             this.identifier = Identifier;
 
             ChangeSets = GetChangeSets ();
-            this.watcher = CreateWatcher ();
+            this.watcher = SparkleWatcherFactory.CreateWatcher (this);
 
             new Thread (
                 new ThreadStart (delegate {
@@ -201,11 +201,6 @@ namespace SparkleLib {
 
         public void OnFileActivity (FileSystemEventArgs args)
         {
-            // Check the watcher for the occasions where this
-            // method is called directly
-            if (!this.watcher.EnableRaisingEvents || IsBuffering)
-                return;
-
             lock (this.change_lock) {
                 this.remote_timer.Stop ();
 
@@ -220,7 +215,6 @@ namespace SparkleLib {
 
                 if (!IsBuffering && HasLocalChanges) {
                     IsBuffering = true;
-                    this.watcher.Disable ();
 
                     SparkleHelpers.DebugInfo ("Local", Name + " | Activity detected, waiting for it to settle...");
 
@@ -244,10 +238,8 @@ namespace SparkleLib {
                             SparkleHelpers.DebugInfo ("Local", Name + " | Activity has settled");
                             IsBuffering = false;
 
-                            this.watcher.Disable ();
                             while (HasLocalChanges)
                                 SyncUpBase ();
-                            this.watcher.Enable ();
 
                         } else {
                             Thread.Sleep (500);
@@ -271,7 +263,6 @@ namespace SparkleLib {
         private void SyncUpBase ()
         {
             try {
-                this.watcher.Disable ();
                 this.remote_timer.Stop ();
 
                 SparkleHelpers.DebugInfo ("SyncUp", Name + " | Initiated");
@@ -294,7 +285,6 @@ namespace SparkleLib {
 
                     HasUnsyncedChanges = true;
                     SyncDownBase ();
-                    this.watcher.Disable ();
 
                     if (ServerOnline && SyncUp ()) {
                         HasUnsyncedChanges = false;
@@ -314,7 +304,6 @@ namespace SparkleLib {
 
             } finally {
                 this.remote_timer.Start ();
-                this.watcher.Enable ();
 
                 ProgressPercentage = 0.0;
                 ProgressSpeed      = "";
@@ -326,7 +315,6 @@ namespace SparkleLib {
         {
             SparkleHelpers.DebugInfo ("SyncDown", Name + " | Initiated");
             this.remote_timer.Stop ();
-            this.watcher.Disable ();
 
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.SyncDown);
@@ -380,19 +368,6 @@ namespace SparkleLib {
                 SyncStatusChanged (SyncStatus.Idle);
 
             this.remote_timer.Start ();
-            this.watcher.Enable ();
-        }
-
-
-        private SparkleWatcher CreateWatcher ()
-        {
-            SparkleWatcher watcher = new SparkleWatcher (LocalPath);
-
-            watcher.ChangeEvent += delegate (FileSystemEventArgs args) {
-                OnFileActivity (args);
-            };
-
-            return watcher;
         }
 
 
@@ -456,7 +431,7 @@ namespace SparkleLib {
                 !announcement.Message.Equals (CurrentRevision)) {
 
                 while (this.is_syncing)
-                System.Threading.Thread.Sleep (100);
+                    Thread.Sleep (100);
 
                 SparkleHelpers.DebugInfo ("Listener", "Syncing due to announcement");
                 SyncDownBase ();
