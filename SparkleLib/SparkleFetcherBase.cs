@@ -231,10 +231,8 @@ namespace SparkleLib {
 
         public static string CreateIdentifier ()
         {
-            Random random = new Random ();
-            string number = "" + random.Next () + "" + random.Next () + "" + random.Next ();
-
-            return SparkleHelpers.SHA1 (number);
+            string random = Path.GetRandomFileName ();
+            return SparkleHelpers.SHA1 (random);
         }
 
 
