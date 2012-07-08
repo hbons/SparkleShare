@@ -137,10 +137,18 @@ namespace SparkleLib.Git {
                 } else {
                     SparkleHelpers.DebugInfo ("Fetcher", line);
 
-                    if (line.StartsWith ("fatal:", true, null) ||
-                        line.StartsWith ("error:", true, null)) {
+                    line = line.Trim (new char [] {' ', '@'});
+
+                    if (line.StartsWith ("fatal:", StringComparison.InvariantCultureIgnoreCase) ||
+                        line.StartsWith ("error:", StringComparison.InvariantCultureIgnoreCase)) {
 
                         base.errors.Add (line);
+
+                    } else if (line.StartsWith ("WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!")) {
+                        base.errors.Add ("warning: Remote host identification has changed!");
+
+                    } else if (line.StartsWith ("WARNING: POSSIBLE DNS SPOOFING DETECTED!")) {
+                        base.errors.Add ("warning: Possible DNS spoofing detected!");
                     }
                 }
 
