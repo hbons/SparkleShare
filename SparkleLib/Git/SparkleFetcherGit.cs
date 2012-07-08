@@ -81,9 +81,6 @@ namespace SparkleLib.Git {
                 this.use_git_bin = true;
             }
 
-
-            this.use_git_bin = true; // TODO: remove
-
             TargetFolder = target_folder;
             RemoteUrl    = uri;
         }
