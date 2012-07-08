@@ -27,11 +27,18 @@ namespace SparkleLib.Git {
 
     public class SparkleRepo : SparkleRepoBase {
 
-		private bool author_set = false;
+		private bool user_is_set;
+        private bool remote_url_is_set;
+        private bool use_git_bin;
 
 
         public SparkleRepo (string path) : base (path)
         {
+            SparkleGit git = new SparkleGit (LocalPath, "config --get filter.bin.clean");
+            git.Start ();
+            git.WaitForExit ();
+
+            this.use_git_bin = (git.ExitCode == 0);
         }
 
 
@@ -84,14 +91,7 @@ namespace SparkleLib.Git {
             File.WriteAllText (size_file_path, size.ToString ());
             File.WriteAllText (history_size_file_path, history_size.ToString ());
         }
-
-
-        public override void CreateInitialChangeSet ()
-        {
-            base.CreateInitialChangeSet ();
-            SyncUp (); // FIXME: Weird freeze happens when base class handles this
-        }
-
+        
 
         public override string [] UnsyncedFilePaths {
             get {
@@ -152,7 +152,7 @@ namespace SparkleLib.Git {
                 SparkleHelpers.DebugInfo ("Git", Name + " | Checking for remote changes...");
 
                 string current_revision = CurrentRevision;
-                SparkleGit git = new SparkleGit (LocalPath, "ls-remote --exit-code \"" + RemoteUrl + "\" master");
+                SparkleGit git = new SparkleGit (LocalPath, "ls-remote --heads --exit-code \"" + RemoteUrl + "\" master");
     
                 git.Start ();
                 git.WaitForExit ();
@@ -189,7 +189,25 @@ namespace SparkleLib.Git {
                 Commit (message);
             }
 
-            SparkleGit git = new SparkleGit (LocalPath,
+            SparkleGit git;
+
+            if (this.use_git_bin) {
+                if (this.remote_url_is_set) {
+                    git = new SparkleGit (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
+                    git.Start ();
+                    git.WaitForExit ();
+
+                    this.remote_url_is_set = true;
+                }
+
+                SparkleGitBin git_bin = new SparkleGitBin (LocalPath, "push");
+                git_bin.Start ();
+                git_bin.WaitForExit ();
+
+                // TODO: Progress
+            }
+
+            git = new SparkleGit (LocalPath,
                 "push --progress " + // Redirects progress stats to standarderror
                 "\"" + RemoteUrl + "\" master");
 
@@ -249,10 +267,13 @@ namespace SparkleLib.Git {
             UpdateSizes ();
             ChangeSets = GetChangeSets ();
 
-            if (git.ExitCode == 0)
+            if (git.ExitCode == 0) {
+                ClearCache ();
                 return true;
-            else
+
+            } else {
                 return false;
+            }
         }
 
 
@@ -319,6 +340,7 @@ namespace SparkleLib.Git {
 				);
 
                 ChangeSets = GetChangeSets ();
+                ClearCache ();
 
 				return true;
 
@@ -383,7 +405,7 @@ namespace SparkleLib.Git {
 		{
 			SparkleGit git;
 
-			if (!this.author_set) {
+			if (!this.user_is_set) {
 	            git = new SparkleGit (LocalPath,
 	                "config user.name \"" + SparkleConfig.DefaultConfig.User.Name + "\"");
 
@@ -396,7 +418,7 @@ namespace SparkleLib.Git {
 				git.Start ();
 				git.WaitForExit ();
 
-				this.author_set = true;
+				this.user_is_set = true;
 			}
 
             git = new SparkleGit (LocalPath,
@@ -760,11 +782,6 @@ namespace SparkleLib.Git {
         }
 
 
-        /// <summary>
-        /// Resolves special characters like \303\244 (ä) to their real character 
-        /// </summary>
-        /// <param name="file_path"></param>
-        /// <returns></returns>
         private string ResolveSpecialChars (string s)
         {
             StringBuilder builder = new StringBuilder (s.Length);
@@ -790,6 +807,17 @@ namespace SparkleLib.Git {
             }
 
             return builder.ToString ();
+        }
+
+
+        private void ClearCache ()
+        {
+            if (!this.use_git_bin)
+                return;
+
+            SparkleGitBin git_bin = new SparkleGitBin (LocalPath, "clear -f");
+            git_bin.Start ();
+            git_bin.WaitForExit ();
         }
 
 

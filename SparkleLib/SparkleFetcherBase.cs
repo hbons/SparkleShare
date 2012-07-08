@@ -41,7 +41,6 @@ namespace SparkleLib {
 
         public abstract bool Fetch ();
         public abstract void Stop ();
-        public abstract void Complete ();
         public abstract bool IsFetchedRepoEmpty { get; }
         public abstract bool IsFetchedRepoPasswordCorrect (string password);
         public abstract void EnableFetchedRepoCrypto (string password);
@@ -51,6 +50,7 @@ namespace SparkleLib {
         public readonly bool FetchPriorHistory = false;
         public string TargetFolder { get; protected set; }
         public bool IsActive { get; private set; }
+        public string Identifier;
 
         public string [] Warnings {
             get {
@@ -66,13 +66,34 @@ namespace SparkleLib {
 
         
         protected List<string> warnings = new List<string> ();
-        protected List<string> errors = new List<string> ();
+        protected List<string> errors   = new List<string> ();
+
+        protected string [] ExcludeRules = new string [] {
+            "*.autosave", // Various autosaving apps
+            "*~", // gedit and emacs
+            ".~lock.*", // LibreOffice
+            "*.part", "*.crdownload", // Firefox and Chromium temporary download files
+            ".*.sw[a-z]", "*.un~", "*.swp", "*.swo", // vi(m)
+            ".directory", // KDE
+            ".DS_Store", "Icon\r\r", "._*", ".Spotlight-V100", ".Trashes", // Mac OS X
+            "*(Autosaved).graffle", // Omnigraffle
+            "Thumbs.db", "Desktop.ini", // Windows
+            "~*.tmp", "~*.TMP", "*~*.tmp", "*~*.TMP", // MS Office
+            "~*.ppt", "~*.PPT", "~*.pptx", "~*.PPTX",
+            "~*.xls", "~*.XLS", "~*.xlsx", "~*.XLSX",
+            "~*.doc", "~*.DOC", "~*.docx", "~*.DOCX",
+            "*/CVS/*", ".cvsignore", "*/.cvsignore", // CVS
+            "/.svn/*", "*/.svn/*", // Subversion
+            "/.hg/*", "*/.hg/*", "*/.hgignore", // Mercurial
+            "/.bzr/*", "*/.bzr/*", "*/.bzrignore" // Bazaar
+        };
+
 
         private Thread thread;
 
 
-        public SparkleFetcherBase (string server, string required_fingerprint, string remote_path,
-            string target_folder, bool fetch_prior_history)
+        public SparkleFetcherBase (string server, string required_fingerprint,
+            string remote_path, string target_folder, bool fetch_prior_history)
         {
             RequiredFingerprint = required_fingerprint;
             FetchPriorHistory   = fetch_prior_history;
@@ -100,11 +121,10 @@ namespace SparkleLib {
             if (Started != null)
                 Started ();
 
-            SparkleHelpers.DebugInfo ("Fetcher", "[" + TargetFolder + "] Fetching folder: " + RemoteUrl);
+            SparkleHelpers.DebugInfo ("Fetcher", TargetFolder + " | Fetching folder: " + RemoteUrl);
 
             if (Directory.Exists (TargetFolder))
                 Directory.Delete (TargetFolder, true);
-
 
             string host     = RemoteUrl.Host;
             string host_key = GetHostKey ();
@@ -115,7 +135,6 @@ namespace SparkleLib {
 
                 return;
             }
-
 
             bool warn = true;
             if (RequiredFingerprint != null) {
@@ -141,32 +160,96 @@ namespace SparkleLib {
 
             AcceptHostKey (host_key, warn);
 
+            this.thread = new Thread (
+                new ThreadStart (delegate {
+                    if (Fetch ()) {
+                        Thread.Sleep (500);
+                        SparkleHelpers.DebugInfo ("Fetcher", "Finished");
 
-            this.thread = new Thread (new ThreadStart (delegate {
-                if (Fetch ()) {
-                    Thread.Sleep (500);
-                    SparkleHelpers.DebugInfo ("Fetcher", "Finished");
+                        IsActive = false;
 
-                    IsActive = false;
+                        // TODO: Find better way to determine if folder should have crypto setup
+                        bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("crypto");
 
-                    // TODO: Find better way to determine if folder should have crypto setup
-                    bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("crypto");
+                        if (Finished != null)
+                            Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);
 
-                    if (Finished != null)
-                        Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);
+                    } else {
+                        Thread.Sleep (500);
+                        SparkleHelpers.DebugInfo ("Fetcher", "Failed");
 
-                } else {
-                    Thread.Sleep (500);
-                    SparkleHelpers.DebugInfo ("Fetcher", "Failed");
+                        IsActive = false;
 
-                    IsActive = false;
-
-                    if (Failed != null)
-                        Failed ();
-                }
-            }));
+                        if (Failed != null)
+                            Failed ();
+                    }
+                })
+            );
 
             this.thread.Start ();
+        }
+
+
+        public virtual void Complete ()
+        {
+            string identifier_path = Path.Combine (TargetFolder, ".sparkleshare");
+
+            if (File.Exists (identifier_path)) {
+                Identifier = File.ReadAllText (identifier_path).Trim ();
+
+            } else {
+                Identifier = CreateIdentifier ();
+                File.WriteAllText (identifier_path, Identifier);
+            }
+
+            if (IsFetchedRepoEmpty)
+                CreateInitialChangeSet ();
+        }
+
+
+        // Create an initial change set when the
+        // user has fetched an empty remote folder
+        public void CreateInitialChangeSet ()
+        {
+            string file_path = Path.Combine (TargetFolder, "SparkleShare.txt");
+            string n = Environment.NewLine;
+
+            string text = "Congratulations, you've successfully created a SparkleShare repository!" + n +
+                n +
+                "Any files you add or change in this folder will be automatically synced to " + n +
+                RemoteUrl + " and everyone connected to it." + n +
+                n +
+                "SparkleShare is an Open Source software program that helps people " + n +
+                "collaborate and share files. If you like what we do, please consider a small " + n +
+                "donation to support the project: http://sparkleshare.org/support-us/" + n +
+                n +
+                "Have fun! :)" + n;
+
+            File.WriteAllText (file_path, text);
+        }
+
+
+        public static string CreateIdentifier ()
+        {
+            string random = Path.GetRandomFileName ();
+            return SparkleHelpers.SHA1 (random);
+        }
+
+
+        public static string GetBackend (string path)
+        {
+            string extension = Path.GetExtension (path);
+
+            if (!string.IsNullOrEmpty (extension)) {
+                extension       = extension.Substring (1);
+                char [] letters = extension.ToCharArray ();
+                letters [0]     = char.ToUpper (letters [0]);
+
+                return new string (letters);
+
+            } else {
+                return  "Git";
+            }
         }
 
 
@@ -178,7 +261,7 @@ namespace SparkleLib {
             }
         }
 
-        
+
         protected void OnProgressChanged (double percentage) {
             if (ProgressChanged != null)
                 ProgressChanged (percentage);
@@ -199,7 +282,7 @@ namespace SparkleLib {
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.CreateNoWindow         = true;
 
-            process.StartInfo.FileName = "ssh-keyscan";
+            process.StartInfo.FileName  = "ssh-keyscan";
             process.StartInfo.Arguments = "-t rsa " + host;
 
             process.Start ();
@@ -240,7 +323,7 @@ namespace SparkleLib {
             // WaitForExit, or it will hang forever on output > 4096 bytes
             string fingerprint = process.StandardOutput.ReadToEnd ().Trim ();
             process.WaitForExit ();
-            
+
             File.Delete (tmp_file_path);
 
             try {
@@ -286,98 +369,5 @@ namespace SparkleLib {
             if (warn)
                 this.warnings.Add ("The following host key has been accepted:\n" + GetFingerprint (host_key));
         }
-
-
-        public static string GetBackend (string path)
-        {
-            string extension = Path.GetExtension (path);
-
-            if (!string.IsNullOrEmpty (extension)) {
-                extension       = extension.Substring (1);
-                char [] letters = extension.ToCharArray ();
-                letters [0]     = char.ToUpper (letters [0]);
-
-                return new string (letters);
-
-            } else {
-                return  "Git";
-            }
-        }
-
-
-        protected string [] ExcludeRules = new string [] {
-            // Various autosaving apps
-            "*.autosave",
-
-            // gedit and emacs
-            "*~",
-
-            // LibreOffice
-            ".~lock.*",
-
-            // Firefox and Chromium temporary download files
-            "*.part",
-            "*.crdownload",
-
-            // vi(m)
-            ".*.sw[a-z]",
-            "*.un~",
-            "*.swp",
-            "*.swo",
-
-            // KDE
-            ".directory",
-
-            // Mac OS X
-            ".DS_Store",
-            "Icon\r\r",
-            "._*",
-            ".Spotlight-V100",
-            ".Trashes",
-
-            // Omnigraffle
-            "*(Autosaved).graffle",
-
-            // Windows
-            "Thumbs.db",
-            "Desktop.ini",
-
-            // MS Office
-            "~*.tmp",
-            "~*.TMP",
-            "*~*.tmp",
-            "*~*.TMP",
-            "~*.ppt",
-            "~*.PPT",
-            "~*.pptx",
-            "~*.PPTX",
-            "~*.xls",
-            "~*.XLS",
-            "~*.xlsx",
-            "~*.XLSX",
-            "~*.doc",
-            "~*.DOC",
-            "~*.docx",
-            "~*.DOCX",
-
-            // CVS
-            "*/CVS/*",
-            ".cvsignore",
-            "*/.cvsignore",
-
-            // Subversion
-            "/.svn/*",
-            "*/.svn/*",
-
-            // Mercurial
-            "/.hg/*",
-            "*/.hg/*",
-            "*/.hgignore",
-
-            // Bazaar
-            "/.bzr/*",
-            "*/.bzr/*",
-            "*/.bzrignore"
-        };
     }
 }
