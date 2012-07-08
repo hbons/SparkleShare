@@ -16,57 +16,60 @@
 
 
 using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Threading;
+
+using IO = System.IO;
 
 namespace SparkleLib {
 
-    public class SparkleWatcher : FileSystemWatcher {
+    public class SparkleWatcher : IO.FileSystemWatcher {
 
-        public delegate void ChangeEventEventHandler (FileSystemEventArgs args);
-        public event ChangeEventEventHandler ChangeEvent;
-
-        private Object thread_lock = new Object ();
+        public List<SparkleRepoBase> ReposToNotify = new List<SparkleRepoBase> ();
 
 
-        public SparkleWatcher (string path) : base (path)
+        public SparkleWatcher (SparkleRepoBase repo)
         {
+            ReposToNotify.Add (repo);
+
+            Changed += Notify;
+            Created += Notify;
+            Deleted += Notify;
+            Renamed += Notify;
+
+            Filter = "*";
+            Path   = IO.Path.GetDirectoryName (repo.LocalPath);
+
             IncludeSubdirectories = true;
             EnableRaisingEvents   = true;
-            Filter                = "*";
-
-            Changed += delegate (object o, FileSystemEventArgs args) {
-                if (ChangeEvent != null)
-                    ChangeEvent (args);
-            };
-
-            Created += delegate (object o, FileSystemEventArgs args) {
-                if (ChangeEvent != null)
-                    ChangeEvent (args);
-            };
-
-            Deleted += delegate (object o, FileSystemEventArgs args) {
-                if (ChangeEvent != null)
-                    ChangeEvent (args);
-            };
-
-            Renamed += delegate (object o, RenamedEventArgs args) {
-                if (ChangeEvent != null)
-                    ChangeEvent (args);
-            };
         }
 
 
-        public void Enable ()
+        public void Notify (object sender, IO.FileSystemEventArgs args)
         {
-            lock (this.thread_lock)
-                EnableRaisingEvents = true;
-        }
+            char separator       = IO.Path.DirectorySeparatorChar;
+            string relative_path = args.FullPath.Substring (Path.Length);
+            relative_path        = relative_path.Trim (new char [] {' ', separator});
 
+            // Ignore changes that happened in the parent path
+            if (!relative_path.Contains (separator.ToString ()))
+                return;
 
-        public void Disable ()
-        {
-            lock (this.thread_lock)
-                EnableRaisingEvents = false;
+            string repo_name = relative_path.Substring (0, relative_path.IndexOf (separator));
+
+            foreach (SparkleRepoBase repo in ReposToNotify) {
+                if (repo.Name.Equals (repo_name) && !repo.IsBuffering &&
+                    (repo.Status != SyncStatus.SyncUp && repo.Status != SyncStatus.SyncDown)) {
+
+                    Thread thread = new Thread (
+                        new ThreadStart (delegate {
+                            repo.OnFileActivity (args);
+                        })
+                    );
+
+                    thread.Start ();
+                }
+            }
         }
     }
 }

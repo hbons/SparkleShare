@@ -53,22 +53,11 @@ using MonoMac.Foundation;
 
 namespace SparkleShare {
 
-    [Serializable]
-    public sealed class SparkleMacWatcherEventArgs : EventArgs {
+    public sealed class SparkleMacWatcher : IDisposable {
+        
+        public delegate void ChangedEventHandler (string path);
+        public event ChangedEventHandler Changed;
 
-        public string Path { get; private set; }
-
-
-        public SparkleMacWatcherEventArgs (string path)
-        {
-            Path = path;
-        }
-    }
-
-
-    public sealed class SparkleMacWatcher : IDisposable
-    {
-        public event EventHandler<SparkleMacWatcherEventArgs> Changed;
         public string Path { get; private set; }
 
 
@@ -186,7 +175,7 @@ namespace SparkleShare {
                 string path = paths [0];
                 path = path.Substring (Path.Length);
                 path = path.Trim ("/".ToCharArray ());
-                handler (this, new SparkleMacWatcherEventArgs (path));
+                handler (path);
             }
 
             GC.KeepAlive (this);

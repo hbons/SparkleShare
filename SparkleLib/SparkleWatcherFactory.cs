@@ -21,30 +21,43 @@ using System.IO;
 
 namespace SparkleLib {
 
-    public static class SparkleListenerFactory {
+    public static class SparkleWatcherFactory {
 
         private static List<SparkleWatcher> watchers = new List<SparkleWatcher> ();
 
 
-        public static SparkleWatcher CreateWatcher (string path_to_watch)
+        public static SparkleWatcher CreateWatcher (SparkleRepoBase repo_to_watch)
         {
-            path_to_watch = Path.GetDirectoryName (path_to_watch);
-
             foreach (SparkleWatcher watcher in watchers) {
-                if (watcher.Path.Equals (path_to_watch)) {
-                    SparkleHelpers.DebugInfo ("WatcherFactory",
-                        "Refered to existing watcher for " + path_to_watch);
+                foreach (SparkleRepoBase repo in watcher.ReposToNotify) {
+                    string path_to_watch = Path.GetDirectoryName (repo_to_watch.LocalPath);
 
-                    return watcher;
+                    if (watcher.Path.Equals (path_to_watch)) {
+                        watcher.ReposToNotify.Add (repo_to_watch);
+                        SparkleHelpers.DebugInfo ("WatcherFactory", "Refered to existing watcher for " + path_to_watch);
+
+                        return watcher;
+                    }
                 }
             }
 
-            watchers.Add (new SparkleWatcher (path_to_watch));
+            SparkleWatcher new_watcher = new SparkleWatcher (repo_to_watch);
+            watchers.Add (new_watcher);
 
-            SparkleHelpers.DebugInfo ("WatcherFactory",
-                "Issued new watcher for " + path_to_watch);
+            SparkleHelpers.DebugInfo ("WatcherFactory", "Issued new watcher for " + repo_to_watch.Name);
 
             return watchers [watchers.Count - 1];
+        }
+
+
+        public static void TriggerWatcherManually (FileSystemEventArgs args)
+        {
+            foreach (SparkleWatcher watcher in watchers) {
+                if (args.FullPath.StartsWith (watcher.Path)) {
+                    watcher.Notify (null, args);
+                    return;
+                }
+            }
         }
     }
 }
