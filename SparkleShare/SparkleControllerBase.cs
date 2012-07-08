@@ -262,6 +262,9 @@ namespace SparkleShare {
 
                         SparkleHelpers.DebugInfo ("Controller",
                             "Removed folder '" + folder_name + "' from config");
+
+                    } else {
+                        AddRepository (folder_path);
                     }
                 }
 
