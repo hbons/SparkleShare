@@ -121,7 +121,8 @@ namespace SparkleShare {
                     // likely to be longer
                     if (button.Title.Contains (" ")) {
                         button.SizeToFit ();
-                        button.Frame = new RectangleF (Frame.Width - 30 - 15 - (105 * (i - 1)) - button.Frame.Width, 12, button.Frame.Width + 30, 32);
+                        button.Frame = new RectangleF (Frame.Width - 30 - 15 - (105 * (i - 1)) - button.Frame.Width,
+                            12, button.Frame.Width + 30, 32);
                         x += 15;
                     }
 

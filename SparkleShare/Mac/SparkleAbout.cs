@@ -36,6 +36,9 @@ namespace SparkleShare {
         private NSTextField updates_text_field;
         private NSTextField credits_text_field;
         private NSButton hidden_close_button;
+        private SparkleLink website_link;
+        private SparkleLink credits_link;
+        private SparkleLink report_problem_link;
 
 
         public SparkleAbout (IntPtr handle) : base (handle) { }
@@ -55,6 +58,19 @@ namespace SparkleShare {
                 HasShadow   = true;
                 BackingType = NSBackingStore.Buffered;
 
+                this.website_link       = new SparkleLink ("Website", new NSUrl (Controller.WebsiteLinkAddress));
+                this.website_link.Frame = new RectangleF (new PointF (295, 25), this.website_link.Frame.Size);
+
+                this.credits_link = new SparkleLink ("Credits", new NSUrl (Controller.CreditsLinkAddress));
+                this.credits_link.Frame = new RectangleF (
+                    new PointF (this.website_link.Frame.X + this.website_link.Frame.Width + 10, 25),
+                    this.credits_link.Frame.Size);
+
+                this.report_problem_link = new SparkleLink ("Report a problem", new NSUrl (Controller.ReportProblemLinkAddress));
+                this.report_problem_link.Frame = new RectangleF (
+                    new PointF (this.credits_link.Frame.X + this.credits_link.Frame.Width + 10, 25),
+                    this.report_problem_link.Frame.Size);
+
                 this.hidden_close_button = new NSButton () {
                     Frame                     = new RectangleF (0, 0, 0, 0),
                     KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
@@ -65,9 +81,14 @@ namespace SparkleShare {
                     Controller.WindowClosed ();
                 };
 
+
                 ContentView.AddSubview (this.hidden_close_button);
 
                 CreateAbout ();
+
+                ContentView.AddSubview (this.website_link);
+                ContentView.AddSubview (this.credits_link);
+                ContentView.AddSubview (this.report_problem_link);
             }
 
             Controller.HideWindowEvent += delegate {
@@ -93,8 +114,7 @@ namespace SparkleShare {
                 {
                     InvokeOnMainThread (delegate {
                         this.updates_text_field.StringValue = "A newer version (" + new_version + ") is available!";
-                        this.updates_text_field.TextColor   =
-                            NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f);
+                        this.updates_text_field.TextColor   = NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f);
                     });
                 }
             };
@@ -104,8 +124,7 @@ namespace SparkleShare {
                 {
                     InvokeOnMainThread (delegate {
                         this.updates_text_field.StringValue = "You are running the latest version.";
-                        this.updates_text_field.TextColor   =
-                            NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f);
+                        this.updates_text_field.TextColor   = NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f);
                     });
                 }
             };
@@ -115,8 +134,7 @@ namespace SparkleShare {
                 {
                     InvokeOnMainThread (delegate {
                         this.updates_text_field.StringValue = "Checking for updates...";
-                        this.updates_text_field.TextColor   =
-                            NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f); // Tango Sky Blue #1
+                        this.updates_text_field.TextColor   = NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f);
                     });
                 }
             };
@@ -160,8 +178,7 @@ namespace SparkleShare {
                     DrawsBackground = false,
                     Font            = NSFontManager.SharedFontManager.FontWithFamily
                         ("Lucida Grande", NSFontTraitMask.Unbold, 0, 11),
-                    TextColor       =
-                        NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f) // Tango Sky Blue #1
+                    TextColor       = NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f) // Tango Sky Blue #1
                 };
 
                 this.credits_text_field = new NSTextField () {
@@ -175,22 +192,11 @@ namespace SparkleShare {
                     DrawsBackground = false,
                     Bordered        = false,
                     Editable        = false,
-                    Font            = NSFontManager.SharedFontManager.FontWithFamily
-                        ("Lucida Grande", NSFontTraitMask.Unbold, 0, 11),
+                    Font            = NSFontManager.SharedFontManager.FontWithFamily (
+                        "Lucida Grande", NSFontTraitMask.Unbold, 0, 11),
                 };
 
-    //            WebsiteButton.Activated += delegate {
-    //                NSUrl url = new NSUrl ("http://www.sparkleshare.org/");
-    //                NSWorkspace.SharedWorkspace.OpenUrl (url);
-    //            };
-
-    //            CreditsButton.Activated += delegate {
-    //                NSUrl url = new NSUrl ("http://www.sparkleshare.org/credits/");
-    //                NSWorkspace.SharedWorkspace.OpenUrl (url);
-    //            };
-
                 ContentView.AddSubview (this.about_image_view);
-
                 ContentView.AddSubview (this.version_text_field);
                 ContentView.AddSubview (this.updates_text_field);
                 ContentView.AddSubview (this.credits_text_field);
@@ -228,6 +234,50 @@ namespace SparkleShare {
         {
             (sender as SparkleAbout).Controller.WindowClosed ();
             return false;
+        }
+    }
+
+
+    public class SparkleLink : NSTextField {
+
+        private NSUrl url;
+
+
+        public SparkleLink (string text, NSUrl url) : base ()
+        {
+            this.url = url;
+
+            AllowsEditingTextAttributes = true;
+            BackgroundColor = NSColor.White;
+            Bordered        = false;
+            DrawsBackground = false;
+            Editable        = false;
+            Selectable      = false;
+
+            NSData name_data = NSData.FromString ("<a href='" + url +
+                "' style='font-size: 8pt; font-family: \"Lucida Grande\"; color: #739ECF'>" + text + "</a></font>");
+
+            NSDictionary name_dictionary       = new NSDictionary();
+            NSAttributedString name_attributes = new NSAttributedString (name_data, new NSUrl ("file://"), out name_dictionary);
+
+            NSMutableAttributedString s = new NSMutableAttributedString ();
+            s.Append (name_attributes);
+
+            Cell.AttributedStringValue = s;
+
+            SizeToFit ();
+        }
+
+
+        public override void MouseUp (NSEvent e)
+        {
+            NSWorkspace.SharedWorkspace.OpenUrl (url);
+        }
+
+
+        public override void ResetCursorRects ()
+        {
+            AddCursorRect (Bounds, NSCursor.PointingHandCursor);
         }
     }
 }
