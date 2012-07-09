@@ -178,7 +178,7 @@ namespace SparkleShare {
                 });
             };
             
-            Controller.UpdateChooserEvent += delegate (SparkleFolder [] folders) {
+            Controller.UpdateChooserEvent += delegate (string [] folders) {
                 Dispatcher.BeginInvoke ((Action) delegate {
                     UpdateChooser (folders);
                 });    
