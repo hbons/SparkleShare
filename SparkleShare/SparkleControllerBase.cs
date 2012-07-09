@@ -382,10 +382,8 @@ namespace SparkleShare {
             if (name == null)
                 return GetLog ();
 
-            string path  = new SparkleFolder (name).FullPath;
-
             foreach (SparkleRepoBase repo in Repositories) {
-                if (repo.LocalPath.Equals (path))
+                if (repo.Name.Equals (name))
                     return repo.ChangeSets;
             }
 
