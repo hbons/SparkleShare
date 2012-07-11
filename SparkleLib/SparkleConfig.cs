@@ -277,6 +277,9 @@ namespace SparkleLib {
 
         public bool IdentifierExists (string identifier)
         {
+            if (identifier == null)
+                throw new ArgumentNullException ();
+
             foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder")) {
                 XmlElement folder_id = node_folder ["identifier"];
 
