@@ -98,6 +98,9 @@
     <Compile Include="..\SparkleInvite.cs">
       <Link>SparkleInvite.cs</Link>
     </Compile>
+    <Compile Include="..\SparkleKeys.cs">
+      <Link>SparkleKeys.cs</Link>
+    </Compile>  
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" xmlns="" />
