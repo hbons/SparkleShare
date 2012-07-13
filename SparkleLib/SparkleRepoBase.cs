@@ -137,7 +137,7 @@ namespace SparkleLib {
         }
 
 
-        public SparkleRepoBase (string path)
+        public SparkleRepoBase (string path) // TODO: pass a config object
         {
             LocalPath    = path;
             Name         = Path.GetFileName (LocalPath);
@@ -238,8 +238,16 @@ namespace SparkleLib {
                             SparkleHelpers.DebugInfo ("Local", Name + " | Activity has settled");
                             IsBuffering = false;
 
-                            while (HasLocalChanges)
-                                SyncUpBase ();
+                            if (HasLocalChanges) {
+                                do {
+                                    SyncUpBase ();
+
+                                } while (HasLocalChanges);
+
+                            } else {
+                                if (SyncStatusChanged != null)
+                                    SyncStatusChanged (SyncStatus.Idle);
+                            }
 
                         } else {
                             Thread.Sleep (500);
