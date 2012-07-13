@@ -109,6 +109,9 @@
     <Compile Include="..\SparkleEventLogController.cs">
       <Link>SparkleEventLogController.cs</Link>
     </Compile>
+    <Compile Include="..\SparkleKeys.cs">
+      <Link>SparkleKeys.cs</Link>
+    </Compile>
     <Compile Include="SparkleSetupWindow.cs" />
     <Compile Include="..\Program.cs">
       <Link>Program.cs</Link>
