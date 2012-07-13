@@ -304,10 +304,37 @@ namespace SparkleShare {
             if (CreateSparkleShareFolder ())
                 AddToBookmarks ();
 
-            if (FirstRun)
+            if (FirstRun) {
                 SparkleConfig.DefaultConfig.SetConfigOption ("notifications", bool.TrueString);
-            else
-                ImportPrivateKey ();
+
+            } else {
+                string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
+                string key_file_name = "sparkleshare." + CurrentUser.Email + ".key";
+                string key_file_path = Path.Combine (keys_path, key_file_name);
+
+                // Be forgiving about the key's file name
+                if (!File.Exists (key_file_path)) {
+                    foreach (string file_name in Directory.GetFiles (keys_path)) {
+                        if (file_name.StartsWith ("sparkleshare") &&
+                            file_name.EndsWith (".key")) {
+
+                            key_file_path = Path.Combine (keys_path, file_name);
+                            break;
+                        }
+                    }
+                }
+
+                string pubkey_file_path    = key_file_path + ".pub";
+                string link_code_file_path = Path.Combine (SparklePath, CurrentUser.Name + "'s link code.txt");
+
+                // Create an easily accessible copy of the public
+                // key in the user's SparkleShare folder
+                if (File.Exists (pubkey_file_path) && !File.Exists (link_code_file_path))
+                    File.Copy (pubkey_file_path, link_code_file_path, true /* Overwriting allowed */ );
+
+                SparkleKeys.ImportPrivateKey (key_file_path);
+                SparkleKeys.ListPrivateKeys ();
+            }
 
             // Watch the SparkleShare folder
             FileSystemWatcher watcher = new FileSystemWatcher () {
@@ -573,7 +600,7 @@ namespace SparkleShare {
             try {
                 repo = (SparkleRepoBase) Activator.CreateInstance (
                     Type.GetType ("SparkleLib." + backend + ".SparkleRepo, SparkleLib." + backend),
-                        folder_path
+                        new object [] {folder_path, SparkleConfig.DefaultConfig}
                 );
 
             } catch {
@@ -689,123 +716,6 @@ namespace SparkleShare {
         public void OpenSparkleShareFolder (string name)
         {
             OpenFolder (new SparkleFolder (name).FullPath);
-        }
-
-        
-        // Adds the user's SparkleShare key to the ssh-agent,
-        // so all activity is done with this key
-        public void ImportPrivateKey ()
-        {
-            string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
-            string key_file_name = "sparkleshare." + CurrentUser.Email + ".key";
-            string key_file_path = Path.Combine (keys_path, key_file_name);
-
-            if (!File.Exists (key_file_path)) {
-                foreach (string file_name in Directory.GetFiles (keys_path)) {
-                    if (file_name.StartsWith ("sparkleshare") &&
-                        file_name.EndsWith (".key")) {
-
-                        key_file_path = Path.Combine (keys_path, file_name);
-                        break;
-                    }
-                }
-            }
-
-            Process process = new Process ();
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.UseShellExecute        = false;
-            process.StartInfo.FileName               = "ssh-add";
-            process.StartInfo.Arguments              = "\"" + key_file_path + "\"";
-            process.StartInfo.CreateNoWindow         = true;
-
-            process.Start ();
-            process.WaitForExit ();
-
-            string pubkey_file_path = key_file_path + ".pub";
-
-            // Create an easily accessible copy of the public
-            // key in the user's SparkleShare folder
-            if (!File.Exists (pubkey_file_path))
-                File.Copy (pubkey_file_path,
-                    Path.Combine (SparklePath, CurrentUser.Name + "'s key.txt"), true); // Overwriting is allowed
-
-            ListPrivateKeys ();
-        }
-
-
-        private void ListPrivateKeys ()
-        {
-            Process process = new Process () {
-                EnableRaisingEvents = true
-            };
-
-            process.StartInfo.WorkingDirectory       = SparkleConfig.DefaultConfig.TmpPath;
-            process.StartInfo.UseShellExecute        = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.CreateNoWindow         = true;
-
-            process.StartInfo.FileName = "ssh-add";
-            process.StartInfo.Arguments = "-l";
-
-            process.Start ();
-
-            // Reading the standard output HAS to go before
-            // WaitForExit, or it will hang forever on output > 4096 bytes
-            string keys_in_use = process.StandardOutput.ReadToEnd ().Trim ();
-            process.WaitForExit ();
-
-            SparkleHelpers.DebugInfo ("Auth",
-                "The following keys will be available to SparkleShare: " + Environment.NewLine + keys_in_use);
-        }
-
-
-        // Generates and installs an RSA keypair to identify this system
-        public void GenerateKeyPair ()
-        {
-            string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
-            string key_file_name = "sparkleshare." + CurrentUser.Email + ".key";
-            string key_file_path = Path.Combine (keys_path, key_file_name);
-
-            if (File.Exists (key_file_path)) {
-                SparkleHelpers.DebugInfo ("Auth", "Keypair exists ('" + key_file_name + "'), leaving it untouched");
-                return;
-
-            } else {
-                if (!Directory.Exists (keys_path))
-                    Directory.CreateDirectory (keys_path);
-            }
-
-            Process process = new Process () {
-                EnableRaisingEvents = true
-            };
-
-            process.StartInfo.WorkingDirectory       = keys_path;
-            process.StartInfo.UseShellExecute        = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.FileName               = "ssh-keygen";
-            process.StartInfo.CreateNoWindow         = true;
-
-            string computer_name = System.Net.Dns.GetHostName ();
-
-            if (computer_name.EndsWith (".local"))
-                computer_name = computer_name.Replace (".local", "");
-
-            process.StartInfo.Arguments = "-t rsa " + // crypto type
-                "-P \"\" " + // password (none)
-                "-C \"" + computer_name + "\" " + // key comment
-                "-f " + key_file_name; // file name
-
-            process.Start ();
-            process.WaitForExit ();
-
-            if (process.ExitCode == 0)
-                SparkleHelpers.DebugInfo ("Auth", "Created keypair '" + key_file_name + "'");
-            else
-                SparkleHelpers.DebugInfo ("Auth", "Could not create keypair '" + key_file_name + "'");
-
-            // Create an easily accessible copy of the public
-            // key in the user's SparkleShare folder
-            File.Copy (key_file_path + ".pub", Path.Combine (SparklePath, CurrentUser.Name + "'s link code.txt"), true);
         }
 
 
@@ -1097,7 +1007,7 @@ namespace SparkleShare {
 
         
         // All change sets that happened on a day
-        private class ActivityDay : List <SparkleChangeSet>
+        private class ActivityDay : List<SparkleChangeSet>
         {
             public DateTime Date;
     
