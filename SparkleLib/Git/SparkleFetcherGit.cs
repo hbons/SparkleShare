@@ -96,7 +96,7 @@ namespace SparkleLib.Git {
                     "\"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
 
             } else {
-                    this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
+                this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
                     "clone " +
                     "--progress " +
                     "--no-checkout " +
