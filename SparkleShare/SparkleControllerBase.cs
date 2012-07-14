@@ -716,7 +716,7 @@ namespace SparkleShare {
             }
 
             WebClient client = new WebClient ();
-            string url =  "http://gravatar.com/avatar/" + SparkleHelpers.MD5 (email) + ".jpg?s=" + size + "&d=404";
+            string url =  "https://gravatar.com/avatar/" + SparkleHelpers.MD5 (email) + ".jpg?s=" + size + "&d=404";
 
             try {
                 byte [] buffer = client.DownloadData (url);
