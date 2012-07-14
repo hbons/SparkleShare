@@ -509,9 +509,6 @@ namespace SparkleLib {
             this.listener.Connected            -= ListenerConnectedDelegate;
             this.listener.Disconnected         -= ListenerDisconnectedDelegate;
             this.listener.AnnouncementReceived -= ListenerAnnouncementReceivedDelegate;
-
-            this.listener.Dispose ();
-            this.watcher.Dispose ();
         }
     }
 }
