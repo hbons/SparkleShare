@@ -47,10 +47,7 @@ namespace SparkleLib {
 
         public string FoldersPath {
             get {
-                if (GetConfigOption ("folders_path") != null)
-                    return GetConfigOption ("folders_path");
-                else
-                    return Path.Combine (HomePath, "SparkleShare");
+                return Path.Combine (HomePath, "SparkleShare");
             }
         }
 
