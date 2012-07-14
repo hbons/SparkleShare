@@ -286,8 +286,8 @@ namespace SparkleShare {
                     string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
                     string key_file_name = "sparkleshare." + Program.Controller.CurrentUser.Email;
 
-                    string private_key_file_path = SparkleKeys.GenerateKeyPair (keys_path, key_file_name);
-                    SparkleKeys.ImportPrivateKey (private_key_file_path);
+                    string [] key_pair = SparkleKeys.GenerateKeyPair (keys_path, key_file_name);
+                    SparkleKeys.ImportPrivateKey (key_pair [0]);
 
                     string link_code_file_path = Path.Combine (Program.Controller.FoldersPath,
                         Program.Controller.CurrentUser.Name + "'s link code.txt");
