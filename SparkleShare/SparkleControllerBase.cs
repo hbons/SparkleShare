@@ -693,7 +693,7 @@ namespace SparkleShare {
 
         public string GetAvatar (string email, int size)
         {
-            string fetch_gravatars_option = this.config.GetConfigOption ("fetch_gravatars");
+            string fetch_gravatars_option = this.config.GetConfigOption ("fetch_avatars");
 
             if (fetch_gravatars_option != null &&
                 fetch_gravatars_option.Equals (bool.FalseString)) {
