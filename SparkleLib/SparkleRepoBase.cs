@@ -111,15 +111,14 @@ namespace SparkleLib {
         }
 
 
-        private string identifier;
+        protected SparkleConfig local_config;
 
+
+        private string identifier;
         private SparkleWatcher watcher;
         private SparkleListenerBase listener;
-
         private TimeSpan poll_interval = PollInterval.Short;
-
-        private Object change_lock = new Object ();
-        private DateTime last_poll = DateTime.Now;
+        private DateTime last_poll     = DateTime.Now;
 
         private Timers.Timer remote_timer = new Timers.Timer () {
             Interval = 5000
@@ -132,12 +131,9 @@ namespace SparkleLib {
         }
 
         private static class PollInterval {
-            public static TimeSpan Short { get { return new TimeSpan (0, 0, 5, 0); }}
-            public static TimeSpan Long  { get { return new TimeSpan (0, 0, 15, 0); }}
+            public static readonly TimeSpan Short = new TimeSpan (0, 0, 5, 0);
+            public static readonly TimeSpan Long  = new TimeSpan (0, 0, 15, 0);
         }
-
-
-        protected SparkleConfig local_config;
 
 
         public SparkleRepoBase (string path, SparkleConfig config)
@@ -275,17 +271,29 @@ namespace SparkleLib {
 
         private void SyncUpBase ()
         {
-            try {
-                this.remote_timer.Stop ();
+            SparkleHelpers.DebugInfo ("SyncUp", Name + " | Initiated");
+            HasUnsyncedChanges = true;
 
-                SparkleHelpers.DebugInfo ("SyncUp", Name + " | Initiated");
+            this.remote_timer.Stop ();
+
+            if (SyncStatusChanged != null)
+                SyncStatusChanged (SyncStatus.SyncUp);
+
+
+            if (SyncUp ()) {
+                SparkleHelpers.DebugInfo ("SyncUp", Name + " | Done");
+                HasUnsyncedChanges = false;
 
                 if (SyncStatusChanged != null)
-                    SyncStatusChanged (SyncStatus.SyncUp);
+                    SyncStatusChanged (SyncStatus.Idle);
 
-                if (SyncUp ()) {
-                    SparkleHelpers.DebugInfo ("SyncUp", Name + " | Done");
+                this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
 
+            } else {
+                SparkleHelpers.DebugInfo ("SyncUp", Name + " | Error");
+                SyncDownBase ();
+
+                if (ServerOnline && SyncUp ()) {
                     HasUnsyncedChanges = false;
 
                     if (SyncStatusChanged != null)
@@ -294,33 +302,17 @@ namespace SparkleLib {
                     this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
 
                 } else {
-                    SparkleHelpers.DebugInfo ("SyncUp", Name + " | Error");
+                    ServerOnline = false;
 
-                    HasUnsyncedChanges = true;
-                    SyncDownBase ();
-
-                    if (ServerOnline && SyncUp ()) {
-                        HasUnsyncedChanges = false;
-
-                        if (SyncStatusChanged != null)
-                            SyncStatusChanged (SyncStatus.Idle);
-
-                        this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
-
-                    } else {
-                        ServerOnline = false;
-
-                        if (SyncStatusChanged != null)
-                            SyncStatusChanged (SyncStatus.Error);
-                    }
+                    if (SyncStatusChanged != null)
+                        SyncStatusChanged (SyncStatus.Error);
                 }
-
-            } finally {
-                this.remote_timer.Start ();
-
-                ProgressPercentage = 0.0;
-                ProgressSpeed      = "";
             }
+
+            this.remote_timer.Start ();
+
+            ProgressPercentage = 0.0;
+            ProgressSpeed      = "";
         }
 
 
