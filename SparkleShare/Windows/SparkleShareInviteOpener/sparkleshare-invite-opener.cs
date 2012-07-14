@@ -47,7 +47,7 @@ namespace SparkleShare {
                 Console.WriteLine ("Failed downloading invite: " + safe_url);
 
                 try {
-                    xml = web_client.DownloadString (safe_url);
+                    xml = web_client.DownloadString (unsafe_url);
 
                 } catch {
                     Console.WriteLine ("Failed downloading invite: " + unsafe_url);
