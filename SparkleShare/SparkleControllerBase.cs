@@ -274,9 +274,9 @@ namespace SparkleShare {
                         new object [] {folder_path, this.config}
                 );
 
-            } catch {
+            } catch (Exception e) {
                 SparkleHelpers.DebugInfo ("Controller",
-                    "Failed to load \"" + backend + "\" backend for \"" + folder_name + "\"");
+                    "Failed to load '" + backend + "' backend for '" + folder_name + "': " + e.Message);
 
                 return;
             }
@@ -512,9 +512,9 @@ namespace SparkleShare {
                             fetch_prior_history
                 );
 
-            } catch {
+            } catch (Exception e) {
                 SparkleHelpers.DebugInfo ("Controller",
-                    "Failed to load \"" + backend + "\" backend for \"" + canonical_name + "\"");
+                    "Failed to load '" + backend + "' backend for '" + canonical_name + "' " + e.Message);
 
                 if (FolderFetchError != null)
                     FolderFetchError (
@@ -615,30 +615,32 @@ namespace SparkleShare {
                 SparkleHelpers.ClearAttributes (this.fetcher.TargetFolder);
                 Directory.Move (this.fetcher.TargetFolder, target_folder_path);
 
-                string backend = SparkleFetcherBase.GetBackend (this.fetcher.RemoteUrl.AbsolutePath);
-                this.config.AddFolder (target_folder_name, this.fetcher.Identifier,
-                    this.fetcher.RemoteUrl.ToString (), backend);
-
-                if (FolderFetched != null)
-                    FolderFetched (this.fetcher.RemoteUrl.ToString (), this.fetcher.Warnings.ToArray ());
-
-                /* TODO
-                if (!string.IsNullOrEmpty (announcements_url)) {
-                    this.config.SetFolderOptionalAttribute (
-                        target_folder_name, "announcements_url", announcements_url);
-                */
-
-                AddRepository (target_folder_path);
-
-                if (FolderListChanged != null)
-                    FolderListChanged ();
-
-                this.fetcher.Dispose ();
-                this.fetcher = null;
-
             } catch (Exception e) {
-                SparkleHelpers.DebugInfo ("Controller", "Error adding folder: " + e.Message);
+                SparkleHelpers.DebugInfo ("Controller", "Error moving directory: " + e.Message);
+                return;
             }
+
+            string backend = SparkleFetcherBase.GetBackend (this.fetcher.RemoteUrl.AbsolutePath);
+
+            this.config.AddFolder (target_folder_name, this.fetcher.Identifier,
+                this.fetcher.RemoteUrl.ToString (), backend);
+
+            if (FolderFetched != null)
+                FolderFetched (this.fetcher.RemoteUrl.ToString (), this.fetcher.Warnings.ToArray ());
+
+            /* TODO
+            if (!string.IsNullOrEmpty (announcements_url)) {
+                this.config.SetFolderOptionalAttribute (
+                    target_folder_name, "announcements_url", announcements_url);
+            */
+
+            AddRepository (target_folder_path);
+
+            if (FolderListChanged != null)
+                FolderListChanged ();
+
+            this.fetcher.Dispose ();
+            this.fetcher = null;
         }
 
 
