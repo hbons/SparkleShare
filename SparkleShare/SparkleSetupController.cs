@@ -289,7 +289,7 @@ namespace SparkleShare {
                     string private_key_file_path = SparkleKeys.GenerateKeyPair (keys_path, key_file_name);
                     SparkleKeys.ImportPrivateKey (private_key_file_path);
 
-                    string link_code_file_path = Path.Combine (Program.Controller.SparklePath,
+                    string link_code_file_path = Path.Combine (Program.Controller.FoldersPath,
                         Program.Controller.CurrentUser.Name + "'s link code.txt");
 
                     // Create an easily accessible copy of the public
@@ -633,7 +633,7 @@ namespace SparkleShare {
             if (HideWindowEvent != null)
                 HideWindowEvent ();
 
-            Program.Controller.UpdateState ();
+            //Program.Controller.UpdateState (); TODO: still relevant?
         }
 
 

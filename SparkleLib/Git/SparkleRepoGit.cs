@@ -32,7 +32,7 @@ namespace SparkleLib.Git {
         private bool use_git_bin;
 
 
-        public SparkleRepo (string path) : base (path)
+        public SparkleRepo (string path, SparkleConfig config) : base (path, config)
         {
             SparkleGit git = new SparkleGit (LocalPath, "config --get filter.bin.clean");
             git.Start ();
@@ -199,7 +199,7 @@ namespace SparkleLib.Git {
 
                     this.remote_url_is_set = true;
                 }
-
+                Console.WriteLine (this.use_git_bin);
                 SparkleGitBin git_bin = new SparkleGitBin (LocalPath, "push");
                 git_bin.Start ();
                 git_bin.WaitForExit ();
@@ -407,13 +407,13 @@ namespace SparkleLib.Git {
 
 			if (!this.user_is_set) {
 	            git = new SparkleGit (LocalPath,
-	                "config user.name \"" + SparkleConfig.DefaultConfig.User.Name + "\"");
+	                "config user.name \"" + base.local_config.User.Name + "\"");
 
 				git.Start ();
 				git.WaitForExit ();
 
 	            git = new SparkleGit (LocalPath,
-	                "config user.email \"" + SparkleConfig.DefaultConfig.User.Email + "\"");
+	                "config user.email \"" + base.local_config.User.Email + "\"");
 
 				git.Start ();
 				git.WaitForExit ();
@@ -423,8 +423,8 @@ namespace SparkleLib.Git {
 
             git = new SparkleGit (LocalPath,
                 "commit --all --message=\"" + message + "\" " +
-                "--author=\"" + SparkleConfig.DefaultConfig.User.Name +
-                " <" + SparkleConfig.DefaultConfig.User.Email + ">\"");
+                "--author=\"" + base.local_config.User.Name +
+                " <" + base.local_config.User.Email + ">\"");
 
             git.Start ();
             git.StandardOutput.ReadToEnd ();
@@ -537,7 +537,7 @@ namespace SparkleLib.Git {
                     // we use "h" between the hours and minutes instead.
                     string timestamp  = DateTime.Now.ToString ("MMM d H\\hmm");
                     string their_path = Path.GetFileNameWithoutExtension (conflicting_path) +
-                        " (" + SparkleConfig.DefaultConfig.User.Name + ", " + timestamp + ")" +
+                        " (" + base.local_config.User.Name + ", " + timestamp + ")" +
                         Path.GetExtension (conflicting_path);
 
                     string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
@@ -684,6 +684,8 @@ namespace SparkleLib.Git {
                             if (file_path.Equals (".sparkleshare"))
                                 continue;
 
+                            file_path = file_path.Replace ("\\\"", "\"");
+
                             if (change_type.Equals ("A")) {
                                 change_set.Changes.Add (
                                     new SparkleChange () {
@@ -718,6 +720,9 @@ namespace SparkleLib.Git {
 
                                 file_path    = EnsureSpecialCharacters (file_path);
                                 to_file_path = EnsureSpecialCharacters (to_file_path);
+
+                                file_path = file_path.Replace ("\\\"", "\"");
+                                to_file_path = to_file_path.Replace ("\\\"", "\"");
 
                                 if (file_path.EndsWith (".empty"))
                                     file_path = file_path.Substring (0, file_path.Length - 6);
@@ -915,7 +920,7 @@ namespace SparkleLib.Git {
             }
 
             git_status.WaitForExit ();
-            return message.Replace ("\"", "\\\"");
+            return message;
         }
 
 

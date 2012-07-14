@@ -25,11 +25,7 @@ namespace SparkleLib {
 
     public class SparkleConfig : XmlDocument {
 
-        private static string default_config_path = Path.Combine (
-            Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
-                "sparkleshare");
-
-        public static SparkleConfig DefaultConfig = new SparkleConfig (default_config_path, "config.xml");
+        public static SparkleConfig DefaultConfig;
         public static bool DebugMode = true;
 
         public string FullPath;
