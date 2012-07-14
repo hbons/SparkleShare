@@ -206,63 +206,63 @@ namespace SparkleLib {
 
         public void OnFileActivity (FileSystemEventArgs args)
         {
-            lock (this.change_lock) {
-                this.remote_timer.Stop ();
+            if (IsBuffering)
+                return;
 
-                string relative_path = args.FullPath.Replace (LocalPath, "");
+            string relative_path = args.FullPath.Replace (LocalPath, "");
 
-                foreach (string exclude_path in ExcludePaths) {
-                    if (relative_path.Contains (exclude_path)) {
-                        this.remote_timer.Start ();
-                        return;
-                    }
-                }
-
-                if (!IsBuffering && HasLocalChanges) {
-                    IsBuffering = true;
-
-                    SparkleHelpers.DebugInfo ("Local", Name + " | Activity detected, waiting for it to settle...");
-
-                    if (ChangesDetected != null)
-                        ChangesDetected ();
-
-                    List<double> size_buffer = new List<double> ();
-
-                    do {
-                        if (size_buffer.Count >= 4)
-                            size_buffer.RemoveAt (0);
-
-                        DirectoryInfo info = new DirectoryInfo (LocalPath);
-                        size_buffer.Add (CalculateSize (info));
-
-                        if (size_buffer.Count >= 4 &&
-                            size_buffer [0].Equals (size_buffer [1]) &&
-                            size_buffer [1].Equals (size_buffer [2]) &&
-                            size_buffer [2].Equals (size_buffer [3])) {
-
-                            SparkleHelpers.DebugInfo ("Local", Name + " | Activity has settled");
-                            IsBuffering = false;
-
-                            if (HasLocalChanges) {
-                                do {
-                                    SyncUpBase ();
-
-                                } while (HasLocalChanges);
-
-                            } else {
-                                if (SyncStatusChanged != null)
-                                    SyncStatusChanged (SyncStatus.Idle);
-                            }
-
-                        } else {
-                            Thread.Sleep (500);
-                        }
-
-                    } while (IsBuffering);
-                }
-
-                this.remote_timer.Start ();
+            foreach (string exclude_path in ExcludePaths) {
+                if (relative_path.Contains (exclude_path))
+                    return;
             }
+
+            if (IsBuffering || !HasLocalChanges)
+                return;
+
+            IsBuffering = true;
+            this.remote_timer.Stop ();
+
+            SparkleHelpers.DebugInfo ("Local", Name + " | Activity detected, waiting for it to settle...");
+
+            if (ChangesDetected != null)
+                ChangesDetected ();
+
+            List<double> size_buffer = new List<double> ();
+
+            do {
+                if (size_buffer.Count >= 4)
+                    size_buffer.RemoveAt (0);
+
+                DirectoryInfo info = new DirectoryInfo (LocalPath);
+                size_buffer.Add (CalculateSize (info));
+
+                if (size_buffer.Count >= 4 &&
+                    size_buffer [0].Equals (size_buffer [1]) &&
+                    size_buffer [1].Equals (size_buffer [2]) &&
+                    size_buffer [2].Equals (size_buffer [3])) {
+
+                    SparkleHelpers.DebugInfo ("Local", Name + " | Activity has settled");
+                    IsBuffering = false;
+
+                    if (HasLocalChanges) {
+                        do {
+                            SyncUpBase ();
+
+                        } while (HasLocalChanges);
+
+                    } else {
+                        if (SyncStatusChanged != null)
+                            SyncStatusChanged (SyncStatus.Idle);
+                    }
+
+                } else {
+                    Thread.Sleep (500);
+                }
+
+            } while (IsBuffering);
+
+
+            this.remote_timer.Start ();
         }
 
 
