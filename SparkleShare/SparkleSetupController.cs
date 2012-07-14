@@ -294,7 +294,7 @@ namespace SparkleShare {
 
                     // Create an easily accessible copy of the public
                     // key in the user's SparkleShare folder
-                    File.Copy (private_key_file_path + ".pub", link_code_file_path, true);
+                    File.Copy (key_pair [1], link_code_file_path, true);
                 })
             ).Start ();
 

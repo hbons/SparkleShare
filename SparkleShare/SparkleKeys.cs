@@ -65,7 +65,7 @@ namespace SparkleShare {
             else
                 SparkleHelpers.DebugInfo ("Auth", "Could not create key pair '" + key_file_path + "'");
 
-            return return new string [] { key_file_path, key_file_path + ".pub" };
+            return new string [] { key_file_path, key_file_path + ".pub" };
         }
 
 
