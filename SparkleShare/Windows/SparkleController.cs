@@ -140,29 +140,23 @@ namespace SparkleShare {
 
         public override void AddToBookmarks ()
         {
-            string user_profile_path = Environment.GetFolderPath (
-                Environment.SpecialFolder.UserProfile);
-            
-            string shortcut_path   = Path.Combine (user_profile_path, "Links", "SparkleShare.lnk");
+            string user_profile_path = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
+            string shortcut_path     = Path.Combine (user_profile_path, "Links", "SparkleShare.lnk");
 
             if (File.Exists (shortcut_path))
                 File.Delete (shortcut_path);
 
-            string shortcut_target = SparkleConfig.DefaultConfig.FoldersPath;
-
             Shortcut shortcut = new Shortcut ();
-            shortcut.Create (shortcut_path, shortcut_target);
+            shortcut.Create (FoldersPath, shortcut_target);
         }
 
 
         public override bool CreateSparkleShareFolder ()
         {
-            if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
-                Directory.CreateDirectory(SparkleConfig.DefaultConfig.FoldersPath);
-                Directory.CreateDirectory(SparkleConfig.DefaultConfig.TmpPath);
+            if (!Directory.Exists (FoldersPath)) {
+                Directory.CreateDirectory (FoldersPath);
 
-                SparkleHelpers.DebugInfo("Config", "Created \"" +
-                    SparkleConfig.DefaultConfig.FoldersPath + "\"");
+                SparkleHelpers.DebugInfo ("Config", "Created '" + FoldersPath + "'");
 
                 // TODO: Set a custom SparkleShare folder icon
 
