@@ -166,15 +166,19 @@ namespace SparkleShare {
 
             NSUserDefaults.StandardUserDefaults.SetPersistentDomain (sidebar_plist, "com.apple.sidebarlists");*/
 		}
-		
 
-		// Creates the SparkleShare folder in the user's home folder
+
 		public override bool CreateSparkleShareFolder ()
 		{
-            this.watcher = new SparkleMacWatcher (SparkleConfig.DefaultConfig.FoldersPath);
+            this.watcher = new SparkleMacWatcher (Program.Controller.FoldersPath);
 
-            if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
-                Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
+            if (!Directory.Exists (Program.Controller.FoldersPath)) {
+                Directory.CreateDirectory (Program.Controller.FoldersPath);
+
+                NSWorkspace.SharedWorkspace.SetIconforFile (
+                    NSImage.ImageNamed ("sparkleshare-folder.icns"), FoldersPath,
+                    NSWorkspaceIconCreationOptions.NSExclude10_4Elements);
+
                 return true;
 
             } else {
@@ -188,7 +192,14 @@ namespace SparkleShare {
 			NSWorkspace.SharedWorkspace.OpenFile (path);
 		}
 		
-		
+
+        public override void OpenFile (string path)
+        {
+            path = Uri.UnescapeDataString (path);
+            NSWorkspace.SharedWorkspace.OpenFile (path);
+        }
+
+
 		public override string EventLogHTML
 		{
 			get {
@@ -242,12 +253,5 @@ namespace SparkleShare {
                 }
 			}
 		}
-
-
-        public override void OpenFile (string url)
-        {
-            url = url.Replace ("%20", " ");
-            NSWorkspace.SharedWorkspace.OpenFile (url);
-        }
 	}
 }

@@ -73,15 +73,11 @@ namespace SparkleShare {
 				Environment.Exit (-1);
 			}
 
-            // Initialize the controller this way so that
-            // there aren't any exceptions in the OS specific UI's
             Controller = new SparkleController ();
             Controller.Initialize ();
-        
-            if (Controller != null) {
-                UI = new SparkleUI ();
-                UI.Run ();
-            }
+
+            UI = new SparkleUI ();
+            UI.Run ();
          
             #if !__MonoCS__
             // Suppress assertion messages in debug mode
