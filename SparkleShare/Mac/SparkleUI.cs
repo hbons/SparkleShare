@@ -78,7 +78,7 @@ namespace SparkleShare {
                 NSImage folder_icon = new NSImage (folder_icon_path);
 
                 NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon,
-                    Program.Controller.SparklePath, 0);
+                    Program.Controller.FoldersPath, 0);
             }
         }
 

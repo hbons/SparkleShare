@@ -87,7 +87,7 @@ namespace SparkleLib {
                     return this.identifier;
 
                 } else {
-                    string config_identifier = SparkleConfig.DefaultConfig.GetIdentifierForFolder (Name);
+                    string config_identifier = this.local_config.GetIdentifierForFolder (Name);
 
                     if (!string.IsNullOrEmpty (config_identifier))
                         this.identifier = config_identifier;
@@ -137,11 +137,16 @@ namespace SparkleLib {
         }
 
 
-        public SparkleRepoBase (string path) // TODO: pass a config object
+        protected SparkleConfig local_config;
+
+
+        public SparkleRepoBase (string path, SparkleConfig config)
         {
+            this.local_config = config;
+
             LocalPath    = path;
             Name         = Path.GetFileName (LocalPath);
-            RemoteUrl    = new Uri (SparkleConfig.DefaultConfig.GetUrlForFolder (Name));
+            RemoteUrl    = new Uri (this.local_config.GetUrlForFolder (Name));
             IsBuffering  = false;
             ServerOnline = true;
 
