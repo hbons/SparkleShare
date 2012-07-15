@@ -248,7 +248,7 @@ namespace SparkleShare {
             if (FirstRun)
                 ShowSetupWindow (PageType.Setup);
             else
-                new Thread (new ThreadStart (PopulateRepositories)).Start ();
+                new Thread (() => PopulateRepositories ()).Start ();
         }
 
 

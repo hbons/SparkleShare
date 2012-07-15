@@ -59,5 +59,16 @@ namespace SparkleLib {
                 }
             }
         }
+
+
+        public static void DisposeWatcher (SparkleRepoBase repo)
+        {
+            foreach (SparkleWatcher watcher in watchers) {
+                if (watcher.ReposToNotify.Contains (repo)) {
+                    watcher.ReposToNotify.Remove (repo);
+                    return;
+                }
+            }
+        }
     }
 }

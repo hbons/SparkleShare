@@ -115,7 +115,6 @@ namespace SparkleLib {
 
 
         private string identifier;
-        private SparkleWatcher watcher;
         private SparkleListenerBase listener;
         private TimeSpan poll_interval = PollInterval.Short;
         private DateTime last_poll     = DateTime.Now;
@@ -153,7 +152,7 @@ namespace SparkleLib {
             this.identifier = Identifier;
 
             ChangeSets = GetChangeSets ();
-            this.watcher = SparkleWatcherFactory.CreateWatcher (this);
+            SparkleWatcherFactory.CreateWatcher (this);
 
             new Thread (
                 new ThreadStart (delegate {
@@ -205,6 +204,9 @@ namespace SparkleLib {
             if (IsBuffering)
                 return;
 
+            if (ChangesDetected != null)
+                ChangesDetected ();
+
             string relative_path = args.FullPath.Replace (LocalPath, "");
 
             foreach (string exclude_path in ExcludePaths) {
@@ -215,13 +217,10 @@ namespace SparkleLib {
             if (IsBuffering || !HasLocalChanges)
                 return;
 
-            IsBuffering = true;
-            this.remote_timer.Stop ();
-
             SparkleHelpers.DebugInfo ("Local", Name + " | Activity detected, waiting for it to settle...");
 
-            if (ChangesDetected != null)
-                ChangesDetected ();
+            IsBuffering = true;
+            this.remote_timer.Stop ();
 
             List<double> size_buffer = new List<double> ();
 
@@ -509,6 +508,8 @@ namespace SparkleLib {
             this.listener.Connected            -= ListenerConnectedDelegate;
             this.listener.Disconnected         -= ListenerDisconnectedDelegate;
             this.listener.AnnouncementReceived -= ListenerAnnouncementReceivedDelegate;
+
+            SparkleWatcherFactory.DisposeWatcher (this);
         }
     }
 }
