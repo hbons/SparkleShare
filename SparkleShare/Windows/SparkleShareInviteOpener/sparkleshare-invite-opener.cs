@@ -34,28 +34,22 @@ namespace SparkleShare {
 
         public SparkleInviteOpen (string url)
         {
-            string safe_url   = url.Replace ("sparkleshare://", "https://");
-            string unsafe_url = url.Replace ("sparkleshare://", "http://");
-            string xml        = "";
+            string xml = "";
 
             WebClient web_client = new WebClient ();
 
             try {
-                xml = web_client.DownloadString (safe_url);
+                xml = web_client.DownloadString (url);
 
-            } catch {
-                Console.WriteLine ("Failed downloading invite: " + safe_url);
-
-                try {
-                    xml = web_client.DownloadString (safe_url);
-
-                } catch {
-                    Console.WriteLine ("Failed downloading invite: " + unsafe_url);
-                }
+            } catch (Exception e) {
+                Console.WriteLine ("Failed downloading invite: " + safe_url + ": " + e.Message);
+                Environment.Exit (-1);
             }
 
+            string file_name = DateTime.UtcNow.Millisecond.ToString () + ".xml";
+
             string home_path   = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
-            string target_path = Path.Combine (home_path, "SparkleShare");
+            string target_path = Path.Combine (home_path, "SparkleShare", file_name);
 
             if (xml.Contains ("<sparkleshare>")) {
                 File.WriteAllText (target_path, xml);
