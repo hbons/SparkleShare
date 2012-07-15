@@ -174,11 +174,6 @@ namespace SparkleShare {
 
             if (!Directory.Exists (Program.Controller.FoldersPath)) {
                 Directory.CreateDirectory (Program.Controller.FoldersPath);
-
-                NSWorkspace.SharedWorkspace.SetIconforFile (
-                    NSImage.ImageNamed ("sparkleshare-folder.icns"), FoldersPath,
-                    NSWorkspaceIconCreationOptions.NSExclude10_4Elements);
-
                 return true;
 
             } else {
