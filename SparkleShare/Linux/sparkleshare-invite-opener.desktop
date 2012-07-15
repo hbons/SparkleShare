@@ -3,5 +3,5 @@ Type=Application
 Name=SparkleShareInviteOpener
 Exec=sparkleshare open %U
 Terminal=false
-MimeType=application/x-sparkleshare;x-scheme-handler/sparkleshare;
+MimeType=application/x-sparkleshare;x-scheme-handler/sparkleshare;application/x-sparkleshare-unsafe;x-scheme-handler/sparkleshare-unsafe;
 NoDisplay=true
