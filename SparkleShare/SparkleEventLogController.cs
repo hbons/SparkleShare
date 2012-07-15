@@ -66,7 +66,7 @@ namespace SparkleShare {
                 Stopwatch watch = new Stopwatch ();
                 watch.Start ();
 
-                Thread thread = new Thread (new ThreadStart (delegate {
+                new Thread (() => {
                     string html = HTML;
                     watch.Stop ();
 
@@ -82,9 +82,8 @@ namespace SparkleShare {
     
                     if (UpdateSizeInfoEvent != null)
                         UpdateSizeInfoEvent (Size, HistorySize);
-                }));
 
-                thread.Start ();
+                }).Start ();
             }
         }
 
@@ -156,15 +155,14 @@ namespace SparkleShare {
         {
             Program.Controller.ShowEventLogWindowEvent += delegate {
                 if (this.selected_folder == null) {
-                    new Thread (
-                        new ThreadStart (delegate {
-                            if (UpdateChooserEvent != null)
-                                UpdateChooserEvent (Folders);
+                    new Thread (() => {
+                        if (UpdateChooserEvent != null)
+                            UpdateChooserEvent (Folders);
 
-                            if (UpdateContentEvent != null)
-                                UpdateContentEvent (HTML);
-                        })
-                    ).Start ();
+                        if (UpdateContentEvent != null)
+                            UpdateContentEvent (HTML);
+
+                    }).Start ();
                 }
 
                 if (ShowWindowEvent != null)
@@ -297,33 +295,30 @@ namespace SparkleShare {
 
                     foreach (SparkleChange change in change_set.Changes) {
                         if (change.Type != SparkleChangeType.Moved) {
-
                             event_entry += "<dd class='document " + change.Type.ToString ().ToLower () + "'>";
                             event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") +"</small> &nbsp;";
                             event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
                             event_entry += "</dd>";
 
                         } else {
-
-                         event_entry += "<dd class='document moved'>";
+                            event_entry += "<dd class='document moved'>";
                             event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
                             event_entry += "<br>";
                             event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") +"</small> &nbsp;";
                             event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.MovedToPath);
                             event_entry += "</dd>";
-
                         }
                     }
 
                     string change_set_avatar = Program.Controller.GetAvatar (change_set.User.Email, 48);
 
-                 if (change_set_avatar != null) {
+                    if (change_set_avatar != null) {
                         change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
 
-                 } else {
+                    } else {
                         change_set_avatar = "file://<!-- $pixmaps-path -->/" +
-                         Program.Controller.AssignAvatar (change_set.User.Email);
-                 }
+                        Program.Controller.AssignAvatar (change_set.User.Email);
+                    }
 
                     event_entry += "</dl>";
 
@@ -363,14 +358,10 @@ namespace SparkleShare {
 
                 } else {
                     if (activity_day.Date.Year != DateTime.Now.Year) {
-
-                        // TRANSLATORS: This is the date in the event logs
                         day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
                             activity_day.Date.ToString ("dddd, MMMM d, yyyy"));
 
                     } else {
-
-                        // TRANSLATORS: This is the date in the event logs, without the year
                         day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
                             activity_day.Date.ToString ("dddd, MMMM d"));
                     }
@@ -378,7 +369,6 @@ namespace SparkleShare {
 
                 event_log += day_entry.Replace ("<!-- $day-entry-content -->", event_entries);
             }
-
 
             int midnight = (int) (DateTime.Today.AddDays (1) - new DateTime (1970, 1, 1)).TotalSeconds;
 
@@ -391,16 +381,14 @@ namespace SparkleShare {
 
         private string FormatBreadCrumbs (string path_root, string path)
         {
-             path_root = path_root.Replace ("/", Path.DirectorySeparatorChar.ToString ());
-             path = path.Replace ("/", Path.DirectorySeparatorChar.ToString ());
-
-            string link      = "";
-            string [] crumbs = path.Split (Path.DirectorySeparatorChar);
-
-            int i = 0;
-            string new_path_root = path_root;
+            path_root                = path_root.Replace ("/", Path.DirectorySeparatorChar.ToString ());
+            path                     = path.Replace ("/", Path.DirectorySeparatorChar.ToString ());
+            string new_path_root     = path_root;
+            string [] crumbs         = path.Split (Path.DirectorySeparatorChar);
+            string link              = "";
             bool previous_was_folder = false;
 
+            int i = 0;
             foreach (string crumb in crumbs) {
                 if (string.IsNullOrEmpty (crumb))
                     continue;
