@@ -18,6 +18,7 @@ SOURCES =  \
 	../SparkleEventLogController.cs \
 	../SparkleExtensions.cs \
 	../SparkleInvite.cs \
+	../SparkleKeys.cs \
 	../SparklePlugin.cs \
 	../SparkleSetupController.cs \
 	../SparkleStatusIconController.cs \
