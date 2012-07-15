@@ -43,13 +43,6 @@ namespace SparkleShare {
             new string [] {Defines.PREFIX, "share", "sparkleshare"}.Combine ();
 
 
-        // Short alias for the translations
-        public static string _(string s)
-        {
-            return Program._ (s);
-        }
-
-
         public SparkleUI ()
         {
             Application.Init ();
