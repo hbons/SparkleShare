@@ -31,17 +31,6 @@ namespace SparkleShare {
         public static SparkleUI UI;
 
         private static Mutex program_mutex = new Mutex (false, "SparkleShare");
-		
-		
-        // Short alias for the translations
-        public static string _ (string s)
-        {
-            #if __MonoCS__
-            return Catalog.GetString (s);
-            #else
-            return s;
-            #endif
-        }
         
      
         #if !__MonoCS__
@@ -54,7 +43,7 @@ namespace SparkleShare {
                 Console.WriteLine ("SparkleShare is a collaboration and sharing tool that is ");
                 Console.WriteLine ("designed to keep things simple and to stay out of your way.");
                 Console.WriteLine (" ");
-                Console.WriteLine ("Version: " + SparkleLib.Defines.VERSION);
+                Console.WriteLine ("Version: " + SparkleLib.SparkleBackend.Version);
                 Console.WriteLine ("Copyright (C) 2010 Hylke Bons");
                 Console.WriteLine (" ");
                 Console.WriteLine ("This program comes with ABSOLUTELY NO WARRANTY.");

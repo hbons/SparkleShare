@@ -21,7 +21,8 @@ using System.Windows.Forms;
 namespace SparkleShare {
 
     public class SparkleUI {
-        
+
+        // TODO: These don't need to be static
         public static SparkleSetup Setup;
         public static SparkleEventLog EventLog;
         public static SparkleBubbles Bubbles;

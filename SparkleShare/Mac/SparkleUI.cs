@@ -29,11 +29,11 @@ namespace SparkleShare {
 
     public class SparkleUI : AppDelegate {
 
-        public static SparkleStatusIcon StatusIcon;
-        public static SparkleEventLog EventLog;
-        public static SparkleSetup Setup;
-        public static SparkleBubbles Bubbles;
-        public static SparkleAbout About;
+        public SparkleStatusIcon StatusIcon;
+        public SparkleEventLog EventLog;
+        public SparkleSetup Setup;
+        public SparkleBubbles Bubbles;
+        public SparkleAbout About;
 		
 		public static NSFont Font = NSFontManager.SharedFontManager.FontWithFamily (
 			"Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
