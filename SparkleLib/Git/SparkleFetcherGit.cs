@@ -316,6 +316,7 @@ namespace SparkleLib.Git {
                 "core.ignorecase false", // Be case sensitive explicitly to work on Mac
                 "core.filemode false", // Ignore permission changes
                 "core.autocrlf false", // Don't change file line endings
+                "core.precomposedunicode true", // Use the same Unicode form on all filesystems
                 "core.safecrlf false",
                 "core.packedGitLimit 128m", // Some memory limiting options
                 "core.packedGitWindowSize 128m",
