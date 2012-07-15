@@ -154,11 +154,7 @@ namespace SparkleLib {
             ChangeSets = GetChangeSets ();
             SparkleWatcherFactory.CreateWatcher (this);
 
-            new Thread (
-                new ThreadStart (delegate {
-                    CreateListener ();
-                })
-            ).Start ();
+            new Thread (() => CreateListener ()).Start ();
 
             this.remote_timer.Elapsed += delegate {
                 bool time_to_poll = (DateTime.Compare (this.last_poll,
@@ -382,12 +378,11 @@ namespace SparkleLib {
             if (this.listener.IsConnected) {
                 this.poll_interval = PollInterval.Long;
 
-                new Thread (
-                    new ThreadStart (delegate {
-                        if (!is_syncing && !HasLocalChanges && HasRemoteChanges)
-                            SyncDownBase ();
-                    })
-                ).Start ();
+                new Thread (() => {
+                    if (!is_syncing && !HasLocalChanges && HasRemoteChanges)
+                        SyncDownBase ();
+
+                }).Start ();
             }
 
             this.listener.Connected            += ListenerConnectedDelegate;
