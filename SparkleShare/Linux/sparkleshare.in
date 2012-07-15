@@ -65,7 +65,7 @@ case $1 in
     invite=`date -u +%N`
     open=`echo $2 | sed s/sparkleshare:/https:/`
     open=`echo $open | sed s/sparkleshare-unsafe:/http:/`
-    curl -o ~/SparkleShare/$invite.xml $open
+    curl -o ~/SparkleShare/$invite.xml $open --insecure
     ;;
   *)
     mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" --help
