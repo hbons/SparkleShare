@@ -43,12 +43,10 @@ namespace SparkleShare {
 
                     if (image_path != null) {
                         NSData image_data = NSData.FromFile (image_path);
-                        GrowlApplicationBridge.Notify (title, subtext,
-                            "Event", image_data, 0, false, new NSString (""));
+                        GrowlApplicationBridge.Notify (title, subtext, "Event", image_data, 0, false, new NSString (""));
 
                     } else {
-                        GrowlApplicationBridge.Notify (title, subtext,
-                            "Event", null, 0, false, new NSString (""));
+                        GrowlApplicationBridge.Notify (title, subtext, "Event", null, 0, false, new NSString (""));
                     }
                 });
             };
@@ -62,7 +60,7 @@ namespace SparkleShare {
         public override void GrowlNotificationWasClicked (NSObject o)
         {
             NSApplication.SharedApplication.DockTile.BadgeLabel = null;
-            SparkleUI.Bubbles.Controller.BubbleClicked ();
+            Program.UI.Bubbles.Controller.BubbleClicked ();
         }
 
 

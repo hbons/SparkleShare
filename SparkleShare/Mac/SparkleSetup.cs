@@ -1134,8 +1134,8 @@ namespace SparkleShare {
         {
             if (table_column.HeaderToolTip.Equals ("Description")) {
                 if (table_view.SelectedRow == row_index &&
-                    SparkleUI.Setup.IsKeyWindow &&
-                    SparkleUI.Setup.FirstResponder == table_view) {
+                    Program.UI.Setup.IsKeyWindow &&
+                    Program.UI.Setup.FirstResponder == table_view) {
 
                     return SelectedCells [row_index];
 
