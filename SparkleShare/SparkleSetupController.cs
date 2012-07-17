@@ -164,7 +164,6 @@ namespace SparkleShare {
 
             SelectedPlugin = Plugins [0];
 
-
             Program.Controller.InviteReceived += delegate (SparkleInvite invite) {
                 PendingInvite = invite;
 
@@ -174,7 +173,6 @@ namespace SparkleShare {
                 if (ShowWindowEvent != null)
                     ShowWindowEvent ();
             };
-
 
             Program.Controller.ShowSetupWindowEvent += delegate (PageType page_type) {
                 if (page_type == PageType.CryptoSetup || page_type == PageType.CryptoPassword) {
@@ -263,8 +261,7 @@ namespace SparkleShare {
             full_name = full_name.Trim ();
             email     = email.Trim ();
 
-            bool fields_valid = (!string.IsNullOrEmpty (full_name) &&
-                                 IsValidEmail (email));
+            bool fields_valid = (!string.IsNullOrEmpty (full_name) && IsValidEmail (email));
 
             if (UpdateSetupContinueButtonEvent != null)
                 UpdateSetupContinueButtonEvent (fields_valid);
@@ -544,13 +541,12 @@ namespace SparkleShare {
         {
             Program.Controller.StopFetcher ();
 
-            if (ChangePageEvent == null)
-                return;
-
-            if (PendingInvite != null)
-                ChangePageEvent (PageType.Invite, null);
-            else
-                ChangePageEvent (PageType.Add, null);
+            if (ChangePageEvent != null) {
+                if (PendingInvite != null)
+                    ChangePageEvent (PageType.Invite, null);
+                else
+                    ChangePageEvent (PageType.Add, null);
+            }
         }
 
 
@@ -610,9 +606,7 @@ namespace SparkleShare {
 
         public void OpenFolderClicked ()
         {
-            Program.Controller.OpenSparkleShareFolder (
-                Path.GetFileName (PreviousPath));
-
+            Program.Controller.OpenSparkleShareFolder (Path.GetFileName (PreviousPath));
             FinishPageCompleted ();
         }
 
@@ -629,17 +623,12 @@ namespace SparkleShare {
 
             if (HideWindowEvent != null)
                 HideWindowEvent ();
-
-            //Program.Controller.UpdateState (); TODO: still relevant?
         }
 
 
         private bool IsValidEmail (string email)
         {
-            Regex regex = new Regex (@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$",
-                RegexOptions.IgnoreCase);
-
-            return regex.IsMatch (email);
+            return new Regex (@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$", RegexOptions.IgnoreCase).IsMatch (email);
         }
     }
 }

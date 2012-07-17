@@ -33,9 +33,8 @@ namespace SparkleShare {
             };
 
             Program.Controller.NotificationRaised += delegate (SparkleChangeSet change_set) {
-                if (Program.Controller.NotificationsEnabled)
-                    ShowBubble (change_set.User.Name, FormatMessage (change_set),
-                        Program.Controller.GetAvatar (change_set.User.Email, 48));
+                ShowBubble (change_set.User.Name, FormatMessage (change_set),
+                    Program.Controller.GetAvatar (change_set.User.Email, 48));
             };
         }
 
@@ -55,29 +54,23 @@ namespace SparkleShare {
 
         private string FormatMessage (SparkleChangeSet change_set)
         {
-            string message = "";
+            string message = "added ‘{0}’";
 
-            if (change_set.Changes [0].Type == SparkleChangeType.Deleted)
-                message = string.Format ("moved ‘{0}’", change_set.Changes [0].Path);
-
-            if (change_set.Changes [0].Type == SparkleChangeType.Moved)
-                message = string.Format ("moved ‘{0}’", change_set.Changes [0].Path);
-
-            if (change_set.Changes [0].Type == SparkleChangeType.Added)
-                message = string.Format ("added ‘{0}’", change_set.Changes [0].Path);
-
-            if (change_set.Changes [0].Type == SparkleChangeType.Edited)
-                message = string.Format ("moved ‘{0}’", change_set.Changes [0].Path);
-
-            if (change_set.Changes.Count > 0) {
-                string msg = string.Format ("and {0} more", change_set.Changes.Count);
-                message    = message + " " + string.Format (msg, change_set.Changes.Count);
-
-            } else {
-                message = "did something magical";
+            switch (change_set.Changes [0].Type) {
+                case SparkleChangeType.Edited:  message = "edited ‘{0}’"; break;
+                case SparkleChangeType.Deleted: message = "deleted ‘{0}’"; break;
+                case SparkleChangeType.Moved:   message = "moved ‘{0}’"; break;
             }
 
-            return message;
+            if (change_set.Changes.Count == 1) {
+                return message = string.Format (message, change_set.Changes [0].Path);
+
+            } else if (change_set.Changes.Count > 1) {
+                return string.Format (message + " and {0} more", change_set.Changes.Count - 1);
+
+            } else {
+                return "did something magical";
+            }
         }
     }
 }

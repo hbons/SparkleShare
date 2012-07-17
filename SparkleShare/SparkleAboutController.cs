@@ -99,12 +99,12 @@ namespace SparkleShare {
 
             int running_major;
             int running_minor;
-            int running_build;
+            int running_micro;
             try {
-                string[] running_split = running_version_string.Split ('.');
+                string [] running_split = running_version_string.Split ('.');
                 running_major = int.Parse (running_split [0]);
                 running_minor = int.Parse (running_split [1]);
-                running_build = int.Parse (running_split [2]);
+                running_micro = int.Parse (running_split [2]);
 
             } catch (Exception e) {
                 throw new FormatException ("running_version_string", e);
@@ -112,12 +112,12 @@ namespace SparkleShare {
 
             int latest_major;
             int latest_minor;
-            int latest_build;
+            int latest_micro;
             try {
-                string[] latest_split = latest_version_string.Split ('.');
+                string [] latest_split = latest_version_string.Split ('.');
                 latest_major = int.Parse (latest_split [0]);
                 latest_minor = int.Parse (latest_split [1]);
-                latest_build = int.Parse (latest_split [2]);
+                latest_micro = int.Parse (latest_split [2]);
 
             } catch (Exception e) {
                 throw new FormatException ("latest_version_string", e);
@@ -125,9 +125,9 @@ namespace SparkleShare {
 
             bool higher_major = latest_major > running_major;
             bool higher_minor = latest_major == running_major && latest_minor > running_minor;
-            bool higher_build = latest_major == running_major && latest_minor == running_minor && latest_build > running_build;
+            bool higher_micro = latest_major == running_major && latest_minor == running_minor && latest_micro > running_micro;
 
-            return higher_major || higher_minor || higher_build;
+            return (higher_major || higher_minor || higher_micro);
         }
     }
 }

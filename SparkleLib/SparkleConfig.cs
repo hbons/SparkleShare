@@ -105,7 +105,6 @@ namespace SparkleLib {
                 CreateInitialConfig ();
 
             } catch (XmlException) {
-
                 FileInfo file = new FileInfo (FullPath);
 
                 if (file.Length == 0) {
@@ -180,10 +179,10 @@ namespace SparkleLib {
             set {
                 SparkleUser user = (SparkleUser) value;
 
-                XmlNode name_node = SelectSingleNode ("/sparkleshare/user/name/text()");
+                XmlNode name_node   = SelectSingleNode ("/sparkleshare/user/name/text()");
                 name_node.InnerText = user.Name;
 
-                XmlNode email_node = SelectSingleNode ("/sparkleshare/user/email/text()");
+                XmlNode email_node   = SelectSingleNode ("/sparkleshare/user/email/text()");
                 email_node.InnerText = user.Email;
 
                 Save ();
@@ -205,16 +204,16 @@ namespace SparkleLib {
 
         public void AddFolder (string name, string identifier, string url, string backend)
         {
-            XmlNode node_name = CreateElement ("name");
+            XmlNode node_name   = CreateElement ("name");
             node_name.InnerText = name;
 
-            XmlNode node_identifier = CreateElement ("identifier");
+            XmlNode node_identifier   = CreateElement ("identifier");
             node_identifier.InnerText = identifier;
 
-            XmlNode node_url = CreateElement ("url");
+            XmlNode node_url   = CreateElement ("url");
             node_url.InnerText = url;
 
-            XmlNode node_backend = CreateElement ("backend");
+            XmlNode node_backend   = CreateElement ("backend");
             node_backend.InnerText = backend;
 
             XmlNode node_folder = CreateNode (XmlNodeType.Element, "folder", null);
@@ -365,7 +364,7 @@ namespace SparkleLib {
                 node_root.AppendChild (node);
             }
 
-            SparkleHelpers.DebugInfo ("Config", "Updated " + name + ":" + content);
+            SparkleHelpers.DebugInfo ("Config", "Updated option " + name + ":" + content);
             Save ();
         }
 
@@ -373,19 +372,10 @@ namespace SparkleLib {
         private void Save ()
         {
             if (!File.Exists (FullPath))
-                throw new ConfigFileNotFoundException (FullPath + " does not exist");
+                throw new FileNotFoundException (FullPath + " does not exist");
 
             Save (FullPath);
-            SparkleHelpers.DebugInfo ("Config", "Updated \"" + FullPath + "\"");
-        }
-    }
-
-
-    public class ConfigFileNotFoundException : Exception {
-
-        public ConfigFileNotFoundException (string message) : base (message)
-        {
+            SparkleHelpers.DebugInfo ("Config", "Writen to '" + FullPath + "'");
         }
     }
 }
-
