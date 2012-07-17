@@ -31,8 +31,7 @@ namespace SparkleLib {
         private DateTime last_ping = DateTime.Now;
 
 
-        public SparkleListenerTcp (Uri server, string folder_identifier) :
-            base (server, folder_identifier)
+        public SparkleListenerTcp (Uri server, string folder_identifier) : base (server, folder_identifier)
         {
         }
 
@@ -179,12 +178,9 @@ namespace SparkleLib {
                         string folder_identifier = line.Substring (0, line.IndexOf ("!"));
                         string message           = CleanMessage (line.Substring (line.IndexOf ("!") + 1));
 
-                        if (!folder_identifier.Equals ("debug") &&
-                            !String.IsNullOrEmpty (message)) {
-
-                            // We have a message!
+                        // We have a message!
+                        if (!folder_identifier.Equals ("debug") && !String.IsNullOrEmpty (message))
                             OnAnnouncement (new SparkleAnnouncement (folder_identifier, message));
-                        }
                     }
                 }
             });
@@ -212,8 +208,7 @@ namespace SparkleLib {
 
         protected override void AnnounceInternal (SparkleAnnouncement announcement)
         {
-            string to_send = "announce " + announcement.FolderIdentifier
-                + " " + announcement.Message + "\n";
+            string to_send = "announce " + announcement.FolderIdentifier + " " + announcement.Message + "\n";
 
             try {
                 if (this.socket != null)
@@ -244,9 +239,9 @@ namespace SparkleLib {
 
         private string CleanMessage (string message)
         {
-            return message.Trim ()
-                .Replace ("\n", "")
-                .Replace ("\0", "");
+            message = message.Replace ("\n", "");
+            message = message.Replace ("\0", "");
+            return message.Trim ();
         }
     }
 }

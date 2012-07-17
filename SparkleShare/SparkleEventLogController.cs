@@ -111,9 +111,10 @@ namespace SparkleShare {
                 double size = 0;
 
                 foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
-                    if (this.selected_folder == null)
+                    if (this.selected_folder == null) {
                         size += repo.Size;
-                    else if (this.selected_folder.Equals (repo.Name)) {
+
+                    } else if (this.selected_folder.Equals (repo.Name)) {
                         if (repo.Size == 0)
                             return "???";
                         else
@@ -133,9 +134,10 @@ namespace SparkleShare {
                 double size = 0;
 
                 foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
-                    if (this.selected_folder == null)
+                    if (this.selected_folder == null) {
                         size += repo.HistorySize;
-                    else if (this.selected_folder.Equals (repo.Name)) {
+
+                    } else if (this.selected_folder.Equals (repo.Name)) {
                         if (repo.HistorySize == 0)
                             return "???";
                         else
@@ -178,11 +180,8 @@ namespace SparkleShare {
             };
 			
             Program.Controller.FolderListChanged += delegate {
-                if (this.selected_folder != null &&
-                    !Program.Controller.Folders.Contains (this.selected_folder)) {
-
+                if (this.selected_folder != null && !Program.Controller.Folders.Contains (this.selected_folder))
                     this.selected_folder = null;
-                }
 
                 if (UpdateChooserEvent != null)
                     UpdateChooserEvent (Folders);
@@ -325,8 +324,10 @@ namespace SparkleShare {
                     string timestamp = change_set.Timestamp.ToString ("H:mm");
 
                     if (!change_set.FirstTimestamp.Equals (new DateTime ()) &&
-                        !change_set.Timestamp.ToString ("H:mm").Equals (change_set.FirstTimestamp.ToString ("H:mm")))
+                        !change_set.Timestamp.ToString ("H:mm").Equals (change_set.FirstTimestamp.ToString ("H:mm"))) {
+
                         timestamp = change_set.FirstTimestamp.ToString ("H:mm") + " – " + timestamp;
+                    }
 
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.User.Name)
@@ -345,16 +346,18 @@ namespace SparkleShare {
                     today.Year  == activity_day.Date.Year) {
 
                     day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
-                        "<span id='today' name='" + activity_day.Date.ToString ("dddd, MMMM d") + "'>"
-                        + "Today" + "</span>");
+                        "<span id='today' name='" +
+                         activity_day.Date.ToString ("dddd, MMMM d") + "'>" + "Today" +
+                        "</span>");
 
                 } else if (yesterday.Day   == activity_day.Date.Day &&
                            yesterday.Month == activity_day.Date.Month &&
                            yesterday.Year  == activity_day.Date.Year) {
 
                     day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
-                        "<span id='yesterday' name='" + activity_day.Date.ToString ("dddd, MMMM d") + "'>"
-                        + "Yesterday" + "</span>");
+                        "<span id='yesterday' name='" + activity_day.Date.ToString ("dddd, MMMM d") + "'>" +
+                        "Yesterday" +
+                        "</span>");
 
                 } else {
                     if (activity_day.Date.Year != DateTime.Now.Year) {
@@ -372,8 +375,8 @@ namespace SparkleShare {
 
             int midnight = (int) (DateTime.Today.AddDays (1) - new DateTime (1970, 1, 1)).TotalSeconds;
 
-            string html = event_log_html.Replace ("<!-- $event-log-content -->", event_log)
-                .Replace ("<!-- $midnight -->", midnight.ToString ());
+            string html = event_log_html.Replace ("<!-- $event-log-content -->", event_log);
+            html = html.Replace ("<!-- $midnight -->", midnight.ToString ());
 
             return html;
         }

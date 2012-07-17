@@ -218,7 +218,6 @@ namespace SparkleShare {
                     // key in the user's SparkleShare folder
                     if (File.Exists (pubkey_file_path) && !File.Exists (link_code_file_path))
                         File.Copy (pubkey_file_path, link_code_file_path, true /* Overwriting allowed */ );
-
                 }
 
                 SparkleKeys.ListPrivateKeys ();
@@ -241,20 +240,19 @@ namespace SparkleShare {
 
         public void UIHasLoaded ()
         {
-            if (FirstRun)
+            if (FirstRun) {
                 ShowSetupWindow (PageType.Setup);
-            else
-                new Thread (() => PopulateRepositories ()).Start ();
-        }
 
+            } else {
+                new Thread (() => {
+                    CheckRepositories ();
+                    RepositoriesLoaded = true;
 
-        private void PopulateRepositories ()
-        {
-            CheckRepositories ();
-            RepositoriesLoaded = true;
+                    if (FolderListChanged != null)
+                        FolderListChanged ();
 
-            if (FolderListChanged != null)
-                FolderListChanged ();
+                }).Start ();
+            }
         }
 
 
@@ -304,7 +302,7 @@ namespace SparkleShare {
             };
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set) {
-                if (NotificationRaised != null)
+                if (NotificationsEnabled && NotificationRaised != null)
                     NotificationRaised (change_set);
             };
 
@@ -406,17 +404,14 @@ namespace SparkleShare {
                 }
             }
 
-            if (has_syncing_repos) {
-                if (OnSyncing != null)
-                    OnSyncing ();
+            if (has_syncing_repos && OnSyncing != null) {
+                OnSyncing ();
 
-            } else if (has_unsynced_repos) {
-                if (OnError != null)
-                    OnError ();
+            } else if (has_unsynced_repos && OnError != null) {
+                OnError ();
 
-            } else {
-                if (OnIdle != null)
-                    OnIdle ();
+            } else if (OnIdle != null) {
+                OnIdle ();
             }
         }
 
@@ -441,6 +436,7 @@ namespace SparkleShare {
             }
         }
 
+
         public void HandleInvite (FileSystemEventArgs args)
         {
             if (this.fetcher != null &&
@@ -458,21 +454,20 @@ namespace SparkleShare {
                     // fully downloaded yet, so we try to read it several times
                     int tries = 0;
                     while (!invite.IsValid) {
-                        Thread.Sleep (1 * 250);
+                        Thread.Sleep (250);
                         invite = new SparkleInvite (args.FullPath);
                         tries++;
-                        if (tries > 20)
+
+                        if (tries > 20) {
+                            if (AlertNotificationRaised != null)
+                                AlertNotificationRaised ("Oh noes!", "This invite seems screwed up...");
+
                             break;
+                        }
                     }
 
-                    if (invite.IsValid) {
+                    if (invite.IsValid)
                         InviteReceived (invite);
-
-                    } else {
-                        if (AlertNotificationRaised != null)
-                            AlertNotificationRaised ("Oh noes!",
-                                "This invite seems screwed up...");
-                    }
 
                     File.Delete (args.FullPath);
                 }
@@ -681,11 +676,7 @@ namespace SparkleShare {
 
         public void ToggleNotifications () {
             bool notifications_enabled = this.config.GetConfigOption ("notifications").Equals (bool.TrueString);
-
-            if (notifications_enabled)
-                this.config.SetConfigOption ("notifications", bool.FalseString);
-            else
-                this.config.SetConfigOption ("notifications", bool.TrueString);
+            this.config.SetConfigOption ("notifications", (!notifications_enabled).ToString ());
         }
 
 

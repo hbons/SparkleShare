@@ -116,8 +116,11 @@ namespace SparkleLib {
 
         private string identifier;
         private SparkleListenerBase listener;
-        private TimeSpan poll_interval = PollInterval.Short;
-        private DateTime last_poll     = DateTime.Now;
+        private TimeSpan poll_interval            = PollInterval.Short;
+        private DateTime last_poll                = DateTime.Now;
+        private DateTime progress_last_change     = DateTime.Now;
+        private TimeSpan progress_change_interval = new TimeSpan (0, 0, 0, 1);
+
 
         private Timers.Timer remote_timer = new Timers.Timer () {
             Interval = 5000
@@ -138,22 +141,19 @@ namespace SparkleLib {
         public SparkleRepoBase (string path, SparkleConfig config)
         {
             this.local_config = config;
-
-            LocalPath    = path;
-            Name         = Path.GetFileName (LocalPath);
-            RemoteUrl    = new Uri (this.local_config.GetUrlForFolder (Name));
-            IsBuffering  = false;
-            ServerOnline = true;
+            LocalPath         = path;
+            Name              = Path.GetFileName (LocalPath);
+            RemoteUrl         = new Uri (this.local_config.GetUrlForFolder (Name));
+            IsBuffering       = false;
+            ServerOnline      = true;
+            this.identifier   = Identifier;
+            ChangeSets        = GetChangeSets ();
 
             SyncStatusChanged += delegate (SyncStatus status) {
                 Status = status;
             };
 
-            this.identifier = Identifier;
-
-            ChangeSets = GetChangeSets ();
             SparkleWatcherFactory.CreateWatcher (this);
-
             new Thread (() => CreateListener ()).Start ();
 
             this.remote_timer.Elapsed += delegate {
@@ -252,7 +252,6 @@ namespace SparkleLib {
 
             } while (IsBuffering);
 
-
             this.remote_timer.Start ();
         }
 
@@ -261,6 +260,25 @@ namespace SparkleLib {
         {
             if (ConflictResolved != null)
                 ConflictResolved ();
+        }
+
+
+        protected void OnProgressChanged (double progress_percentage, string progress_speed)
+        {
+            // Only trigger the ProgressChanged event once per second
+            if (DateTime.Compare (this.progress_last_change, DateTime.Now.Subtract (this.progress_change_interval)) >= 0)
+                return;
+
+            if (ProgressChanged != null) {
+                if (progress_percentage == 100.0)
+                    progress_percentage = 99.0;
+
+                ProgressPercentage        = progress_percentage;
+                ProgressSpeed             = progress_speed;
+                this.progress_last_change = DateTime.Now;
+
+                ProgressChanged (progress_percentage, progress_speed);
+            }
         }
 
 
@@ -273,7 +291,6 @@ namespace SparkleLib {
 
             if (SyncStatusChanged != null)
                 SyncStatusChanged (SyncStatus.SyncUp);
-
 
             if (SyncUp ()) {
                 SparkleHelpers.DebugInfo ("SyncUp", Name + " | Done");
@@ -438,29 +455,6 @@ namespace SparkleLib {
             } else {
                 if (announcement.FolderIdentifier.Equals (identifier))
                     SparkleHelpers.DebugInfo ("Listener", "Not syncing, message is for current revision");
-            }
-        }
-
-
-        private DateTime progress_last_change     = DateTime.Now;
-        private TimeSpan progress_change_interval = new TimeSpan (0, 0, 0, 1);
-
-        protected void OnProgressChanged (double progress_percentage, string progress_speed)
-        {
-            // Only trigger the ProgressChanged event once per second
-            if (DateTime.Compare (this.progress_last_change, DateTime.Now.Subtract (this.progress_change_interval)) >= 0)
-                return;
-
-            if (ProgressChanged != null) {
-                if (progress_percentage == 100.0)
-                    progress_percentage = 99.0;
-
-                ProgressPercentage = progress_percentage;
-                ProgressSpeed      = progress_speed;
-
-                this.progress_last_change = DateTime.Now;
-
-                ProgressChanged (progress_percentage, progress_speed);
             }
         }
 
