@@ -200,31 +200,27 @@ namespace SparkleShare {
                 this.config.SetConfigOption ("notifications", bool.TrueString);
 
             } else {
-                string keys_path     = Path.GetDirectoryName (this.config.FullPath);
-                string key_file_name = "sparkleshare." + CurrentUser.Email + ".key";
-                string key_file_path = Path.Combine (keys_path, key_file_name);
+                string keys_path = Path.GetDirectoryName (this.config.FullPath);
+                string key_file_path = "";
 
-                // Be forgiving about the key's file name
-                if (!File.Exists (key_file_path)) {
-                    foreach (string file_name in Directory.GetFiles (keys_path)) {
-                        if (file_name.StartsWith ("sparkleshare") &&
-                            file_name.EndsWith (".key")) {
-
-                            key_file_path = Path.Combine (keys_path, file_name);
-                            break;
-                        }
+                foreach (string file_name in Directory.GetFiles (keys_path)) {
+                    if (file_name.EndsWith (".key")) {
+                        key_file_path = Path.Combine (keys_path, file_name);
+                        SparkleKeys.ImportPrivateKey (key_file_path);
                     }
                 }
 
-                string pubkey_file_path    = key_file_path + ".pub";
-                string link_code_file_path = Path.Combine (FoldersPath, CurrentUser.Name + "'s link code.txt");
+                if (!string.IsNullOrEmpty (key_file_path)) {
+                    string pubkey_file_path    = key_file_path + ".pub";
+                    string link_code_file_path = Path.Combine (FoldersPath, CurrentUser.Name + "'s link code.txt");
 
-                // Create an easily accessible copy of the public
-                // key in the user's SparkleShare folder
-                if (File.Exists (pubkey_file_path) && !File.Exists (link_code_file_path))
-                    File.Copy (pubkey_file_path, link_code_file_path, true /* Overwriting allowed */ );
+                    // Create an easily accessible copy of the public
+                    // key in the user's SparkleShare folder
+                    if (File.Exists (pubkey_file_path) && !File.Exists (link_code_file_path))
+                        File.Copy (pubkey_file_path, link_code_file_path, true /* Overwriting allowed */ );
 
-                SparkleKeys.ImportPrivateKey (key_file_path);
+                }
+
                 SparkleKeys.ListPrivateKeys ();
             }
 
