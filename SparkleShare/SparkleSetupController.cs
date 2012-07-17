@@ -281,22 +281,21 @@ namespace SparkleShare {
         {
             Program.Controller.CurrentUser = new SparkleUser (full_name, email);
 
-            new Thread (
-                new ThreadStart (delegate {
-                    string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
-                    string key_file_name = "sparkleshare." + Program.Controller.CurrentUser.Email;
+            new Thread (() => {
+                string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
+                string key_file_name = DateTime.Now.ToString ("YYYY-MM-dd HH\\hmm");
 
-                    string [] key_pair = SparkleKeys.GenerateKeyPair (keys_path, key_file_name);
-                    SparkleKeys.ImportPrivateKey (key_pair [0]);
+                string [] key_pair = SparkleKeys.GenerateKeyPair (keys_path, key_file_name);
+                SparkleKeys.ImportPrivateKey (key_pair [0]);
 
-                    string link_code_file_path = Path.Combine (Program.Controller.FoldersPath,
-                        Program.Controller.CurrentUser.Name + "'s link code.txt");
+                string link_code_file_path = Path.Combine (Program.Controller.FoldersPath,
+                    Program.Controller.CurrentUser.Name + "'s link code.txt");
 
-                    // Create an easily accessible copy of the public
-                    // key in the user's SparkleShare folder
-                    File.Copy (key_pair [1], link_code_file_path, true);
-                })
-            ).Start ();
+                // Create an easily accessible copy of the public
+                // key in the user's SparkleShare folder
+                File.Copy (key_pair [1], link_code_file_path, true);
+
+            }).Start ();
 
             TutorialPageNumber = 1;
 
@@ -421,12 +420,11 @@ namespace SparkleShare {
             Program.Controller.FolderFetchError += AddPageFetchErrorDelegate;
             Program.Controller.FolderFetching   += SyncingPageFetchingDelegate;
 
-            new Thread (
-                new ThreadStart (delegate {
-                    Program.Controller.StartFetcher (address, SelectedPlugin.Fingerprint, remote_path,
-                        SelectedPlugin.AnnouncementsUrl, this.fetch_prior_history);
-                })
-            ).Start ();
+            new Thread (() => {
+                Program.Controller.StartFetcher (address, SelectedPlugin.Fingerprint, remote_path,
+                    SelectedPlugin.AnnouncementsUrl, this.fetch_prior_history);
+
+            }).Start ();
         }
 
         // The following private methods are
@@ -602,12 +600,11 @@ namespace SparkleShare {
             if (ChangePageEvent != null)
                 ChangePageEvent (PageType.Syncing, null);
 
-            new Thread (
-                new ThreadStart (delegate {
-                    Thread.Sleep (1000);
-                    Program.Controller.FinishFetcher (password);
-                })
-            ).Start ();
+            new Thread (() => {
+                Thread.Sleep (1000);
+                Program.Controller.FinishFetcher (password);
+
+            }).Start ();
         }
 
 

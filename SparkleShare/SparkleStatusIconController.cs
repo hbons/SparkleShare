@@ -254,11 +254,10 @@ namespace SparkleShare {
 
         public void OpenRecentEventsClicked ()
         {
-            new Threading.Thread (
-                new Threading.ThreadStart (delegate {
-                    Program.Controller.ShowEventLogWindow ();
-                })
-            ).Start ();
+            new Threading.Thread (() => {
+                Program.Controller.ShowEventLogWindow ();
+
+            }).Start ();
         }
 
 
