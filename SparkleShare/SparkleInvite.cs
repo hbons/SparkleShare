@@ -36,8 +36,7 @@ namespace SparkleShare {
 
         public bool IsValid {
             get {
-                return (!string.IsNullOrEmpty (Address) &&
-                        !string.IsNullOrEmpty (RemotePath));
+                return (!string.IsNullOrEmpty (Address) && !string.IsNullOrEmpty (RemotePath));
             }
         }
 
@@ -101,7 +100,6 @@ namespace SparkleShare {
                 WebResponse response = request.GetResponse ();
                 response.Close ();
 
-
                 if ((response as HttpWebResponse).StatusCode == HttpStatusCode.OK) {
                     SparkleHelpers.DebugInfo ("Invite", "Uploaded public key to " + AcceptUrl);
                     return true;
@@ -113,7 +111,6 @@ namespace SparkleShare {
 
             } catch (WebException e) {
                 SparkleHelpers.DebugInfo ("Invite", "Failed uploading public key to " + AcceptUrl + ": " + e.Message);
-
                 return false;
             }
         }

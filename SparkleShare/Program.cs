@@ -39,19 +39,20 @@ namespace SparkleShare {
         public static void Main (string [] args)
         {
             if (args.Length != 0 && !args [0].Equals ("start")) {
-                Console.WriteLine (" ");
-                Console.WriteLine ("SparkleShare is a collaboration and sharing tool that is ");
-                Console.WriteLine ("designed to keep things simple and to stay out of your way.");
-                Console.WriteLine (" ");
-                Console.WriteLine ("Version: " + SparkleLib.SparkleBackend.Version);
-                Console.WriteLine ("Copyright (C) 2010 Hylke Bons");
-                Console.WriteLine (" ");
-                Console.WriteLine ("This program comes with ABSOLUTELY NO WARRANTY.");
-                Console.WriteLine (" ");
-                Console.WriteLine ("This is free software, and you are welcome to redistribute it ");
-                Console.WriteLine ("under certain conditions. Please read the GNU GPLv3 for details.");
-                Console.WriteLine (" ");
-                Console.WriteLine ("Usage: sparkleshare [start|stop|restart]");
+                string n = Environment.NewLine;
+
+                Console.WriteLine (n +
+                    "SparkleShare is a collaboration and sharing tool that is" + n +
+                    "designed to keep things simple and to stay out of your way." + n +
+                    n +
+                    "Version: " + SparkleLib.SparkleBackend.Version + n +
+                    "Copyright (C) 2010 Hylke Bons" + n +
+                    "This program comes with ABSOLUTELY NO WARRANTY." + n +
+                    n +
+                    "This is free software, and you are welcome to redistribute it" + n +
+                    "under certain conditions. Please read the GNU GPLv3 for details." + n +
+                    n +
+                    "Usage: sparkleshare [start|stop|restart]");
 
                 Environment.Exit (-1);
             }

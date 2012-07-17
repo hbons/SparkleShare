@@ -22,7 +22,7 @@ namespace SparkleShare {
 
     public static class Extensions {
 
-        public static string Combine (this String [] parts)
+        public static string Combine (this string [] parts)
         {
             string new_path = "";
 
