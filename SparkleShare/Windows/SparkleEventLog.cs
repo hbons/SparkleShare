@@ -42,13 +42,6 @@ namespace SparkleShare {
         private SparkleSpinner spinner;
         
         
-        // Short alias for the translations
-        public static string _(string s)
-        {
-            return Program._(s);
-        }
-
-        
         public SparkleEventLog ()
         {
             Title              = "Recent Changes";
