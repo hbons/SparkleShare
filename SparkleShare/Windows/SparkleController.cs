@@ -147,7 +147,7 @@ namespace SparkleShare {
                 File.Delete (shortcut_path);
 
             Shortcut shortcut = new Shortcut ();
-            shortcut.Create (FoldersPath, shortcut_target);
+            shortcut.Create (FoldersPath, shortcut_path);
         }
 
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="..\SparkleWatcher.cs">
       <Link>SparkleWatcher.cs</Link>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="..\SparkleWatcherFactory.cs">
       <Link>SparkleWatcherFactory.cs</Link>
