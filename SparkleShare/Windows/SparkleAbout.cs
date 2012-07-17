@@ -32,13 +32,6 @@ namespace SparkleShare {
         private Label updates;
 
 
-        // Short alias for the translations
-        public static string _(string s)
-        {
-            return Program._(s);
-        }
-
-
         public SparkleAbout ()
         {
             Title      = "About SparkleShare";
