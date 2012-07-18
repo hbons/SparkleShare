@@ -48,6 +48,7 @@ SparkleLib/Defines.cs
 SparkleLib/windows/Defines.cs
 SparkleLib/windows/GlobalAssemblyInfo.cs
 SparkleShare/Linux/sparkleshare
+SparkleShare/Mac/git
 po/sparkleshare.pot
 SparkleShare/Linux/Nautilus/sparkleshare-nautilus-extension.py
 SparkleShare/Linux/Nautilus/sparkleshare-nautilus3-extension.py
