@@ -29,11 +29,11 @@ namespace SparkleShare {
 
     public class SparkleUI : AppDelegate {
 
-        public static SparkleStatusIcon StatusIcon;
-        public static SparkleEventLog EventLog;
-        public static SparkleSetup Setup;
-        public static SparkleBubbles Bubbles;
-        public static SparkleAbout About;
+        public SparkleStatusIcon StatusIcon;
+        public SparkleEventLog EventLog;
+        public SparkleSetup Setup;
+        public SparkleBubbles Bubbles;
+        public SparkleAbout About;
 		
 		public static NSFont Font = NSFontManager.SharedFontManager.FontWithFamily (
 			"Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
@@ -70,15 +70,8 @@ namespace SparkleShare {
         {
             using (var a = new NSAutoreleasePool ())
             {
-                string folder_icon_path = Path.Combine (
-					NSBundle.MainBundle.ResourcePath,
-                    "sparkleshare-mac.icns"
-				);
-
-                NSImage folder_icon = new NSImage (folder_icon_path);
-
-                NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon,
-                    Program.Controller.SparklePath, 0);
+                NSImage folder_icon = NSImage.ImageNamed ("sparkleshare-folder.icns");
+                NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon, Program.Controller.FoldersPath, 0);
             }
         }
 

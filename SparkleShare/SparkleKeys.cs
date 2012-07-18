@@ -26,14 +26,14 @@ namespace SparkleShare {
 
     public static class SparkleKeys {
 
-        public static string GenerateKeyPair (string output_path, string key_name)
+        public static string [] GenerateKeyPair (string output_path, string key_name)
         {
             key_name += ".key";
             string key_file_path = Path.Combine (output_path, key_name);
 
             if (File.Exists (key_file_path)) {
                 SparkleHelpers.DebugInfo ("Auth", "A key pair exists ('" + key_name + "'), leaving it untouched");
-                return key_file_path;
+                return new string [] { key_file_path, key_file_path + ".pub" };
 
             } else {
                 if (!Directory.Exists (output_path))
@@ -65,7 +65,7 @@ namespace SparkleShare {
             else
                 SparkleHelpers.DebugInfo ("Auth", "Could not create key pair '" + key_file_path + "'");
 
-            return key_file_path;
+            return new string [] { key_file_path, key_file_path + ".pub" };
         }
 
 
@@ -73,10 +73,11 @@ namespace SparkleShare {
         {
             Process process = new Process ();
 
-            process.StartInfo.FileName        = "ssh-add";
-            process.StartInfo.Arguments       = "\"" + key_file_path + "\"";
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.CreateNoWindow  = true;
+            process.StartInfo.FileName              = "ssh-add";
+            process.StartInfo.Arguments             = "\"" + key_file_path + "\"";
+            process.StartInfo.UseShellExecute       = false;
+            process.StartInfo.CreateNoWindow        = true;
+            process.StartInfo.RedirectStandardError = true;
 
             process.Start ();
             process.WaitForExit ();
@@ -105,7 +106,7 @@ namespace SparkleShare {
             string keys_in_use = process.StandardOutput.ReadToEnd ();
             process.WaitForExit ();
 
-            SparkleHelpers.DebugInfo ("Auth", "The following keys will be available to SparkleShare: " +
+            SparkleHelpers.DebugInfo ("Auth", "The following keys may be used: " +
                 Environment.NewLine + keys_in_use.Trim ());
         }
     }

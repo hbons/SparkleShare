@@ -66,7 +66,7 @@ namespace SparkleShare {
                 Stopwatch watch = new Stopwatch ();
                 watch.Start ();
 
-                Thread thread = new Thread (new ThreadStart (delegate {
+                new Thread (() => {
                     string html = HTML;
                     watch.Stop ();
 
@@ -82,17 +82,16 @@ namespace SparkleShare {
     
                     if (UpdateSizeInfoEvent != null)
                         UpdateSizeInfoEvent (Size, HistorySize);
-                }));
 
-                thread.Start ();
+                }).Start ();
             }
         }
 
         public string HTML {
             get {
-                List<SparkleChangeSet> change_sets = Program.Controller.GetLog (this.selected_folder);
+                List<SparkleChangeSet> change_sets = GetLog (this.selected_folder);
 
-                string html = Program.Controller.GetHTMLLog (change_sets);
+                string html = GetHTMLLog (change_sets);
 
                 if (UpdateSizeInfoEvent != null)
                     UpdateSizeInfoEvent (Size, HistorySize);
@@ -112,9 +111,10 @@ namespace SparkleShare {
                 double size = 0;
 
                 foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
-                    if (this.selected_folder == null)
+                    if (this.selected_folder == null) {
                         size += repo.Size;
-                    else if (this.selected_folder.Equals (repo.Name)) {
+
+                    } else if (this.selected_folder.Equals (repo.Name)) {
                         if (repo.Size == 0)
                             return "???";
                         else
@@ -134,9 +134,10 @@ namespace SparkleShare {
                 double size = 0;
 
                 foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
-                    if (this.selected_folder == null)
+                    if (this.selected_folder == null) {
                         size += repo.HistorySize;
-                    else if (this.selected_folder.Equals (repo.Name)) {
+
+                    } else if (this.selected_folder.Equals (repo.Name)) {
                         if (repo.HistorySize == 0)
                             return "???";
                         else
@@ -156,15 +157,14 @@ namespace SparkleShare {
         {
             Program.Controller.ShowEventLogWindowEvent += delegate {
                 if (this.selected_folder == null) {
-                    new Thread (
-                        new ThreadStart (delegate {
-                            if (UpdateChooserEvent != null)
-                                UpdateChooserEvent (Folders);
+                    new Thread (() => {
+                        if (UpdateChooserEvent != null)
+                            UpdateChooserEvent (Folders);
 
-                            if (UpdateContentEvent != null)
-                                UpdateContentEvent (HTML);
-                        })
-                    ).Start ();
+                        if (UpdateContentEvent != null)
+                            UpdateContentEvent (HTML);
+
+                    }).Start ();
                 }
 
                 if (ShowWindowEvent != null)
@@ -180,11 +180,8 @@ namespace SparkleShare {
             };
 			
             Program.Controller.FolderListChanged += delegate {
-                if (this.selected_folder != null &&
-                    !Program.Controller.Folders.Contains (this.selected_folder)) {
-
+                if (this.selected_folder != null && !Program.Controller.Folders.Contains (this.selected_folder))
                     this.selected_folder = null;
-                }
 
                 if (UpdateChooserEvent != null)
                     UpdateChooserEvent (Folders);
@@ -212,6 +209,227 @@ namespace SparkleShare {
 			    url.Substring (1, 1).Equals (":")) {
 
                 Program.Controller.OpenFile (url);
+            }
+        }
+
+
+        private List<SparkleChangeSet> GetLog ()
+        {
+            List<SparkleChangeSet> list = new List<SparkleChangeSet> ();
+
+            foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
+                List<SparkleChangeSet> change_sets = repo.ChangeSets;
+
+                if (change_sets != null)
+                    list.AddRange (change_sets);
+                else
+                    SparkleHelpers.DebugInfo ("Log", "Could not create log for " + repo.Name);
+            }
+
+            list.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
+            list.Reverse ();
+
+            if (list.Count > 100)
+                return list.GetRange (0, 100);
+            else
+                return list.GetRange (0, list.Count);
+        }
+
+
+        private List<SparkleChangeSet> GetLog (string name)
+        {
+            if (name == null)
+                return GetLog ();
+
+            foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
+                if (repo.Name.Equals (name))
+                    return repo.ChangeSets;
+            }
+
+            return null;
+        }
+
+
+        public string GetHTMLLog (List<SparkleChangeSet> change_sets)
+        {
+            List <ActivityDay> activity_days = new List <ActivityDay> ();
+
+            change_sets.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
+            change_sets.Reverse ();
+
+            if (change_sets.Count == 0)
+                return null;
+
+            foreach (SparkleChangeSet change_set in change_sets) {
+                bool change_set_inserted = false;
+                foreach (ActivityDay stored_activity_day in activity_days) {
+                    if (stored_activity_day.Date.Year  == change_set.Timestamp.Year &&
+                        stored_activity_day.Date.Month == change_set.Timestamp.Month &&
+                        stored_activity_day.Date.Day   == change_set.Timestamp.Day) {
+
+                        stored_activity_day.Add (change_set);
+
+                        change_set_inserted = true;
+                        break;
+                    }
+                }
+
+                if (!change_set_inserted) {
+                    ActivityDay activity_day = new ActivityDay (change_set.Timestamp);
+                    activity_day.Add (change_set);
+                    activity_days.Add (activity_day);
+                }
+            }
+
+            string event_log_html   = Program.Controller.EventLogHTML;
+            string day_entry_html   = Program.Controller.DayEntryHTML;
+            string event_entry_html = Program.Controller.EventEntryHTML;
+            string event_log        = "";
+
+            foreach (ActivityDay activity_day in activity_days) {
+                string event_entries = "";
+
+                foreach (SparkleChangeSet change_set in activity_day) {
+                    string event_entry = "<dl>";
+
+                    foreach (SparkleChange change in change_set.Changes) {
+                        if (change.Type != SparkleChangeType.Moved) {
+                            event_entry += "<dd class='document " + change.Type.ToString ().ToLower () + "'>";
+                            event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") +"</small> &nbsp;";
+                            event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
+                            event_entry += "</dd>";
+
+                        } else {
+                            event_entry += "<dd class='document moved'>";
+                            event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
+                            event_entry += "<br>";
+                            event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") +"</small> &nbsp;";
+                            event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.MovedToPath);
+                            event_entry += "</dd>";
+                        }
+                    }
+
+                    string change_set_avatar = Program.Controller.GetAvatar (change_set.User.Email, 48);
+
+                    if (change_set_avatar != null) {
+                        change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
+
+                    } else {
+                        change_set_avatar = "file://<!-- $pixmaps-path -->/" +
+                        Program.Controller.AssignAvatar (change_set.User.Email);
+                    }
+
+                    event_entry += "</dl>";
+
+                    string timestamp = change_set.Timestamp.ToString ("H:mm");
+
+                    if (!change_set.FirstTimestamp.Equals (new DateTime ()) &&
+                        !change_set.Timestamp.ToString ("H:mm").Equals (change_set.FirstTimestamp.ToString ("H:mm"))) {
+
+                        timestamp = change_set.FirstTimestamp.ToString ("H:mm") + " – " + timestamp;
+                    }
+
+                    event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
+                        .Replace ("<!-- $event-user-name -->", change_set.User.Name)
+                        .Replace ("<!-- $event-avatar-url -->", change_set_avatar)
+                        .Replace ("<!-- $event-folder -->", change_set.Folder.Name)
+                        .Replace ("<!-- $event-url -->", change_set.RemoteUrl.ToString ())
+                        .Replace ("<!-- $event-revision -->", change_set.Revision);
+                }
+
+                string day_entry   = "";
+                DateTime today     = DateTime.Now;
+                DateTime yesterday = DateTime.Now.AddDays (-1);
+
+                if (today.Day   == activity_day.Date.Day &&
+                    today.Month == activity_day.Date.Month &&
+                    today.Year  == activity_day.Date.Year) {
+
+                    day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
+                        "<span id='today' name='" +
+                         activity_day.Date.ToString ("dddd, MMMM d") + "'>" + "Today" +
+                        "</span>");
+
+                } else if (yesterday.Day   == activity_day.Date.Day &&
+                           yesterday.Month == activity_day.Date.Month &&
+                           yesterday.Year  == activity_day.Date.Year) {
+
+                    day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
+                        "<span id='yesterday' name='" + activity_day.Date.ToString ("dddd, MMMM d") + "'>" +
+                        "Yesterday" +
+                        "</span>");
+
+                } else {
+                    if (activity_day.Date.Year != DateTime.Now.Year) {
+                        day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
+                            activity_day.Date.ToString ("dddd, MMMM d, yyyy"));
+
+                    } else {
+                        day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
+                            activity_day.Date.ToString ("dddd, MMMM d"));
+                    }
+                }
+
+                event_log += day_entry.Replace ("<!-- $day-entry-content -->", event_entries);
+            }
+
+            int midnight = (int) (DateTime.Today.AddDays (1) - new DateTime (1970, 1, 1)).TotalSeconds;
+
+            string html = event_log_html.Replace ("<!-- $event-log-content -->", event_log);
+            html = html.Replace ("<!-- $midnight -->", midnight.ToString ());
+
+            return html;
+        }
+
+
+        private string FormatBreadCrumbs (string path_root, string path)
+        {
+            path_root                = path_root.Replace ("/", Path.DirectorySeparatorChar.ToString ());
+            path                     = path.Replace ("/", Path.DirectorySeparatorChar.ToString ());
+            string new_path_root     = path_root;
+            string [] crumbs         = path.Split (Path.DirectorySeparatorChar);
+            string link              = "";
+            bool previous_was_folder = false;
+
+            int i = 0;
+            foreach (string crumb in crumbs) {
+                if (string.IsNullOrEmpty (crumb))
+                    continue;
+
+                string crumb_path = Path.Combine (new_path_root, crumb);
+
+                if (Directory.Exists (crumb_path)) {
+                    link += "<a href='" + crumb_path + "'>" + crumb + Path.DirectorySeparatorChar + "</a>";
+                    previous_was_folder = true;
+
+                } else if (File.Exists (crumb_path)) {
+                    link += "<a href='" + crumb_path + "'>" + crumb + "</a>";
+                    previous_was_folder = false;
+
+                } else {
+                    if (i > 0 && !previous_was_folder)
+                        link += Path.DirectorySeparatorChar;
+
+                    link += crumb;
+                    previous_was_folder = false;
+                }
+
+                new_path_root = Path.Combine (new_path_root, crumb);
+                i++;
+            }
+
+            return link;
+        }
+
+
+        // All change sets that happened on a day
+        private class ActivityDay : List<SparkleChangeSet>
+        {
+            public DateTime Date;
+
+            public ActivityDay (DateTime date_time)
+            {
+                Date = new DateTime (date_time.Year, date_time.Month, date_time.Day);
             }
         }
     }

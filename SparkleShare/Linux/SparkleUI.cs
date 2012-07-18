@@ -31,7 +31,8 @@ using SparkleLib;
 namespace SparkleShare {
 
     public class SparkleUI {
-        
+
+        // TODO: These don't need to be static
         public static SparkleStatusIcon StatusIcon;
         public static SparkleEventLog EventLog;
         public static SparkleBubbles Bubbles;
@@ -40,13 +41,6 @@ namespace SparkleShare {
 
         public static string AssetsPath =
             new string [] {Defines.PREFIX, "share", "sparkleshare"}.Combine ();
-
-
-        // Short alias for the translations
-        public static string _(string s)
-        {
-            return Program._ (s);
-        }
 
 
         public SparkleUI ()

@@ -28,6 +28,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>sparkleshare</string>
+				<string>sparkleshare-unsafe</string>
 			</array>
 		</dict>
 	</array>
@@ -49,7 +50,7 @@
 		<key>positionOfDivider</key>
 		<real>333</real>
 		<key>savedFrame</key>
-		<string>263 111 773 597 0 0 1280 778 </string>
+		<string>308 97 773 597 0 0 1366 746 </string>
 		<key>selectedTabView</key>
 		<string>event log</string>
 	</dict>

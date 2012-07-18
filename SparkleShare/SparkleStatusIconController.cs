@@ -55,16 +55,16 @@ namespace SparkleShare {
         public string StateText = "Welcome to SparkleShare!";
 
 
-        public readonly int MenuOverFlowThreshold   = 9;
+        public readonly int MenuOverflowThreshold   = 9;
         public readonly int MinSubmenuOverflowCount = 3;
 
 
         public string [] Folders {
             get {
-                int overflow_count = (Program.Controller.Folders.Count - MenuOverFlowThreshold);
+                int overflow_count = (Program.Controller.Folders.Count - MenuOverflowThreshold);
 
                 if (overflow_count >= MinSubmenuOverflowCount)
-                    return Program.Controller.Folders.GetRange (0, MenuOverFlowThreshold).ToArray ();
+                    return Program.Controller.Folders.GetRange (0, MenuOverflowThreshold).ToArray ();
                 else
                     return Program.Controller.Folders.ToArray ();
             }
@@ -72,15 +72,14 @@ namespace SparkleShare {
 
         public string [] OverflowFolders {
             get {
-                int overflow_count = (Program.Controller.Folders.Count - MenuOverFlowThreshold);
+                int overflow_count = (Program.Controller.Folders.Count - MenuOverflowThreshold);
 
                 if (overflow_count >= MinSubmenuOverflowCount)
-                    return Program.Controller.Folders.GetRange (MenuOverFlowThreshold, overflow_count).ToArray ();
+                    return Program.Controller.Folders.GetRange (MenuOverflowThreshold, overflow_count).ToArray ();
                 else
                     return new string [0];
             }
         }
-
 
         public string FolderSize {
             get {
@@ -110,19 +109,15 @@ namespace SparkleShare {
 
         public bool QuitItemEnabled {
             get {
-                return (CurrentState != IconState.Syncing &&
-                        CurrentState != IconState.SyncingDown &&
-                        CurrentState != IconState.SyncingUp);
+                return (CurrentState == IconState.Idle || CurrentState == IconState.Error);
             }
         }
 
         public bool OpenRecentEventsItemEnabled {
             get {
-                return (Program.Controller.RepositoriesLoaded &&
-                        Program.Controller.Folders.Count > 0);
+                return (Program.Controller.RepositoriesLoaded && Program.Controller.Folders.Count > 0);
             }
         }
-
 
 
         private Timer animation;
@@ -254,11 +249,7 @@ namespace SparkleShare {
 
         public void OpenRecentEventsClicked ()
         {
-            new Threading.Thread (
-                new Threading.ThreadStart (delegate {
-                    Program.Controller.ShowEventLogWindow ();
-                })
-            ).Start ();
+            new Threading.Thread (() => Program.Controller.ShowEventLogWindow ()).Start ();
         }
 
 

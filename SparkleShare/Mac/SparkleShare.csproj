@@ -100,7 +100,7 @@
     </Compile>
     <Compile Include="..\SparkleKeys.cs">
       <Link>SparkleKeys.cs</Link>
-    </Compile>  
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" xmlns="" />
@@ -159,7 +159,6 @@
     <Content Include="Pixmaps\process-syncing-iiiii.png">
       <Link>Pixmaps\process-syncing-iiiii.png</Link>
     </Content>
-    <Content Include="Growl.plist" />
     <Content Include="Pixmaps\process-syncing-error.png">
       <Link>Pixmaps\process-syncing-error.png</Link>
     </Content>
@@ -265,6 +264,7 @@
     <Content Include="..\Common\Plugins\ssnet.xml">
       <Link>Plugins\ssnet.xml</Link>
     </Content>
+    <Content Include="Growl.plist" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pixmaps\" />
