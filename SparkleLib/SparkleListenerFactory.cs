@@ -32,25 +32,21 @@ namespace SparkleLib {
 
             // Check if the user wants a use a custom notification service for this folder
             if (string.IsNullOrEmpty (uri))
-                uri = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (
-                    folder_name, "announcements_url");
+                uri = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (folder_name, "announcements_url");
 
-            // Fall back to the fallback service is neither is the case
-            if (string.IsNullOrEmpty (uri)) {
-                // This is SparkleShare's centralized notification service.
-                // It communicates "It's time to sync!" signals between clients.
-                //
-                // Here's how it works: the client listens to a channel (the
-                // folder identifier, a SHA-1 hash) for when it's time to sync.
-                // Clients also send the current revision hash to the channel
-                // for other clients to pick up when you've synced up any
-                // changes.
-                //
-                // Please see the SparkleShare wiki if you wish to run
-                // your own service instead
-
+            // This is SparkleShare's centralized notification service.
+            // It communicates "It's time to sync!" signals between clients.
+            //
+            // Here's how it works: the client listens to a channel (the
+            // folder identifier, a SHA-1 hash) for when it's time to sync.
+            // Clients also send the current revision hash to the channel
+            // for other clients to pick up when you've synced up any
+            // changes.
+            //
+            // Please see the SparkleShare wiki if you wish to run
+            // your own service instead
+            if (string.IsNullOrEmpty (uri))
                 uri = "tcp://notifications.sparkleshare.org:80";
-            }
 
             Uri announce_uri = new Uri (uri);
 
@@ -58,8 +54,7 @@ namespace SparkleLib {
             // the number of connections as low as possible
             foreach (SparkleListenerBase listener in listeners) {
                 if (listener.Server.Equals (announce_uri)) {
-                    SparkleHelpers.DebugInfo ("ListenerFactory",
-                        "Refered to existing " + announce_uri.Scheme +
+                    SparkleHelpers.DebugInfo ("ListenerFactory", "Refered to existing " + announce_uri.Scheme +
                         " listener for " + announce_uri);
 
                     // We already seem to have a listener for this server,
@@ -80,8 +75,8 @@ namespace SparkleLib {
                 break;
             }
 
-            SparkleHelpers.DebugInfo ("ListenerFactory",
-                "Issued new " + announce_uri.Scheme + " listener for " + announce_uri);
+            SparkleHelpers.DebugInfo ("ListenerFactory", "Issued new " + announce_uri.Scheme +
+                " listener for " + announce_uri);
 
             return (SparkleListenerBase) listeners [listeners.Count - 1];
         }
