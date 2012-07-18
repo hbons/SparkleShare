@@ -36,19 +36,19 @@ namespace SparkleShare {
 
     public class SparkleStatusIconController {
 
-        public event UpdateIconEventHandler UpdateIconEvent;
+        public event UpdateIconEventHandler UpdateIconEvent = delegate { };
         public delegate void UpdateIconEventHandler (int icon_frame);
 
-        public event UpdateMenuEventHandler UpdateMenuEvent;
+        public event UpdateMenuEventHandler UpdateMenuEvent = delegate { };
         public delegate void UpdateMenuEventHandler (IconState state);
 
-        public event UpdateStatusItemEventHandler UpdateStatusItemEvent;
+        public event UpdateStatusItemEventHandler UpdateStatusItemEvent = delegate { };
         public delegate void UpdateStatusItemEventHandler (string state_text);
 
-        public event UpdateQuitItemEventHandler UpdateQuitItemEvent;
+        public event UpdateQuitItemEventHandler UpdateQuitItemEvent = delegate { };
         public delegate void UpdateQuitItemEventHandler (bool quit_item_enabled);
 
-        public event UpdateOpenRecentEventsItemEventHandler UpdateOpenRecentEventsItemEvent;
+        public event UpdateOpenRecentEventsItemEventHandler UpdateOpenRecentEventsItemEvent = delegate { };
         public delegate void UpdateOpenRecentEventsItemEventHandler (bool open_recent_events_item_enabled);
 
         public IconState CurrentState = IconState.Idle;
@@ -138,14 +138,9 @@ namespace SparkleShare {
                         StateText = "Files up to date " + FolderSize;
                 }
 
-                if (UpdateStatusItemEvent != null)
-                    UpdateStatusItemEvent (StateText);
-
-                if (UpdateOpenRecentEventsItemEvent != null)
-                    UpdateOpenRecentEventsItemEvent (OpenRecentEventsItemEnabled);
-
-                if (UpdateMenuEvent != null)
-                    UpdateMenuEvent (CurrentState);
+                UpdateStatusItemEvent (StateText);
+                UpdateOpenRecentEventsItemEvent (OpenRecentEventsItemEnabled);
+                UpdateMenuEvent (CurrentState);
             };
 
             Program.Controller.OnIdle += delegate {
@@ -158,19 +153,13 @@ namespace SparkleShare {
                         StateText = "Files up to date " + FolderSize;
                 }
 
-                if (UpdateQuitItemEvent != null)
-                    UpdateQuitItemEvent (QuitItemEnabled);
-
-                if (UpdateStatusItemEvent != null)
-                    UpdateStatusItemEvent (StateText);
+                UpdateQuitItemEvent (QuitItemEnabled);
+                UpdateStatusItemEvent (StateText);
 
                 this.animation.Stop ();
 
-                if (UpdateIconEvent != null)
-                    UpdateIconEvent (0);
-
-                if (UpdateMenuEvent != null)
-                    UpdateMenuEvent (CurrentState);
+                UpdateIconEvent (0);
+                UpdateMenuEvent (CurrentState);
             };
 
             Program.Controller.OnSyncing += delegate {
@@ -202,11 +191,8 @@ namespace SparkleShare {
 
                 StateText += " " + ProgressPercentage + "%  " + ProgressSpeed;
 
-                if (UpdateStatusItemEvent != null)
-                    UpdateStatusItemEvent (StateText);
-
-                if (UpdateQuitItemEvent != null)
-                    UpdateQuitItemEvent (QuitItemEnabled);
+                UpdateStatusItemEvent (StateText);
+                UpdateQuitItemEvent (QuitItemEnabled);
 
                 this.animation.Start ();
             };
@@ -215,16 +201,12 @@ namespace SparkleShare {
                 CurrentState = IconState.Error;
                 StateText    = "Failed to send some changes";
 
-                if (UpdateQuitItemEvent != null)
-                    UpdateQuitItemEvent (QuitItemEnabled);
-
-                if (UpdateStatusItemEvent != null)
-                    UpdateStatusItemEvent (StateText);
+                UpdateQuitItemEvent (QuitItemEnabled);
+                UpdateStatusItemEvent (StateText);
 
                 this.animation.Stop ();
 
-                if (UpdateIconEvent != null)
-                    UpdateIconEvent (-1);
+                UpdateIconEvent (-1);
             };
         }
 
@@ -279,8 +261,7 @@ namespace SparkleShare {
                 else
                     this.animation_frame_number = 0;
 
-                if (UpdateIconEvent != null)
-                    UpdateIconEvent (this.animation_frame_number);
+                UpdateIconEvent (this.animation_frame_number);
             };
         }
     }

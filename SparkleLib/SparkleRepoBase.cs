@@ -48,20 +48,18 @@ namespace SparkleLib {
         public abstract List<SparkleChangeSet> GetChangeSets (int count);
 
 
+        public event SyncStatusChangedEventHandler SyncStatusChanged = delegate { };
         public delegate void SyncStatusChangedEventHandler (SyncStatus new_status);
-        public event SyncStatusChangedEventHandler SyncStatusChanged;
 
+        public event ProgressChangedEventHandler ProgressChanged = delegate { };
         public delegate void ProgressChangedEventHandler (double percentage, string speed);
-        public event ProgressChangedEventHandler ProgressChanged;
 
+        public event NewChangeSetEventHandler NewChangeSet = delegate { };
         public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set);
-        public event NewChangeSetEventHandler NewChangeSet;
 
-        public delegate void ConflictResolvedEventHandler ();
-        public event ConflictResolvedEventHandler ConflictResolved;
+        public event Action ConflictResolved = delegate { };
+        public event Action ChangesDetected = delegate { };
 
-        public delegate void ChangesDetectedEventHandler ();
-        public event ChangesDetectedEventHandler ChangesDetected;
 
         public readonly string LocalPath;
         public readonly string Name;
@@ -200,9 +198,7 @@ namespace SparkleLib {
             if (IsBuffering)
                 return;
 
-            if (ChangesDetected != null)
-                ChangesDetected ();
-
+            ChangesDetected ();
             string relative_path = args.FullPath.Replace (LocalPath, "");
 
             foreach (string exclude_path in ExcludePaths) {
@@ -242,8 +238,7 @@ namespace SparkleLib {
                         } while (HasLocalChanges);
 
                     } else {
-                        if (SyncStatusChanged != null)
-                            SyncStatusChanged (SyncStatus.Idle);
+                        SyncStatusChanged (SyncStatus.Idle);
                     }
 
                 } else {
@@ -258,8 +253,7 @@ namespace SparkleLib {
 
         protected void OnConflictResolved ()
         {
-            if (ConflictResolved != null)
-                ConflictResolved ();
+            ConflictResolved ();
         }
 
 
@@ -269,16 +263,14 @@ namespace SparkleLib {
             if (DateTime.Compare (this.progress_last_change, DateTime.Now.Subtract (this.progress_change_interval)) >= 0)
                 return;
 
-            if (ProgressChanged != null) {
-                if (progress_percentage == 100.0)
-                    progress_percentage = 99.0;
+            if (progress_percentage == 100.0)
+                progress_percentage = 99.0;
 
-                ProgressPercentage        = progress_percentage;
-                ProgressSpeed             = progress_speed;
-                this.progress_last_change = DateTime.Now;
+            ProgressPercentage        = progress_percentage;
+            ProgressSpeed             = progress_speed;
+            this.progress_last_change = DateTime.Now;
 
-                ProgressChanged (progress_percentage, progress_speed);
-            }
+            ProgressChanged (progress_percentage, progress_speed);
         }
 
 
@@ -288,16 +280,13 @@ namespace SparkleLib {
             HasUnsyncedChanges = true;
 
             this.remote_timer.Stop ();
-
-            if (SyncStatusChanged != null)
-                SyncStatusChanged (SyncStatus.SyncUp);
+            SyncStatusChanged (SyncStatus.SyncUp);
 
             if (SyncUp ()) {
                 SparkleHelpers.DebugInfo ("SyncUp", Name + " | Done");
-                HasUnsyncedChanges = false;
 
-                if (SyncStatusChanged != null)
-                    SyncStatusChanged (SyncStatus.Idle);
+                HasUnsyncedChanges = false;
+                SyncStatusChanged (SyncStatus.Idle);
 
                 this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
 
@@ -307,17 +296,13 @@ namespace SparkleLib {
 
                 if (ServerOnline && SyncUp ()) {
                     HasUnsyncedChanges = false;
-
-                    if (SyncStatusChanged != null)
-                        SyncStatusChanged (SyncStatus.Idle);
+                    SyncStatusChanged (SyncStatus.Idle);
 
                     this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
 
                 } else {
                     ServerOnline = false;
-
-                    if (SyncStatusChanged != null)
-                        SyncStatusChanged (SyncStatus.Error);
+                    SyncStatusChanged (SyncStatus.Error);
                 }
             }
 
@@ -333,9 +318,7 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("SyncDown", Name + " | Initiated");
             this.remote_timer.Stop ();
 
-            if (SyncStatusChanged != null)
-                SyncStatusChanged (SyncStatus.SyncDown);
-
+            SyncStatusChanged (SyncStatus.SyncDown);
             string pre_sync_revision = CurrentRevision;
 
             if (SyncDown ()) {
@@ -347,11 +330,14 @@ namespace SparkleLib {
                        ChangeSets.Count > 0) {
 
                         bool emit_change_event = true;
-                        foreach (SparkleChange change in ChangeSets [0].Changes)
-                            if (change.Path.EndsWith (".sparkleshare"))
+                        foreach (SparkleChange change in ChangeSets [0].Changes) {
+                            if (change.Path.EndsWith (".sparkleshare")) {
                                 emit_change_event = false;
+                                break;
+                            }
+                        }
                         
-                        if (NewChangeSet != null && emit_change_event)
+                        if (emit_change_event)
                             NewChangeSet (ChangeSets [0]);
                     }
                 }
@@ -360,29 +346,25 @@ namespace SparkleLib {
                 // conflict. Tries only once, then lets
                 // the timer try again periodically
                 if (HasUnsyncedChanges) {
-                    if (SyncStatusChanged != null)
-                        SyncStatusChanged (SyncStatus.SyncUp);
+                    SyncStatusChanged (SyncStatus.SyncUp);
                     
                     SyncUp ();
                     HasUnsyncedChanges = false;
                 }
-                
-                if (SyncStatusChanged != null)
-                    SyncStatusChanged (SyncStatus.Idle);
+
+                SyncStatusChanged (SyncStatus.Idle);
 
             } else {
                 SparkleHelpers.DebugInfo ("SyncDown", Name + " | Error");
                 ServerOnline = false;
 
-                if (SyncStatusChanged != null)
-                    SyncStatusChanged (SyncStatus.Error);
+                SyncStatusChanged (SyncStatus.Error);
             }
 
             ProgressPercentage = 0.0;
             ProgressSpeed      = "";
 
-            if (SyncStatusChanged != null)
-                SyncStatusChanged (SyncStatus.Idle);
+            SyncStatusChanged (SyncStatus.Idle);
 
             this.remote_timer.Start ();
         }
