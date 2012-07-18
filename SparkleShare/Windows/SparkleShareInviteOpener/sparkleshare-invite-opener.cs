@@ -49,12 +49,13 @@ namespace SparkleShare {
             string file_name = DateTime.UtcNow.Millisecond.ToString () + ".xml";
 
             string home_path   = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
-            string target_path = Path.Combine (home_path, "SparkleShare", file_name);
+            string target_path = Path.Combine(Path.Combine (home_path, "SparkleShare"), file_name);
 
             if (xml.Contains ("<sparkleshare>")) {
                 File.WriteAllText (target_path, xml);
-                Console.WriteLine ("Downloaded invite: " + safe_url);
+                Console.WriteLine ("Downloaded invite: " + url);
             }
         }
     }
 }
+
