@@ -24,7 +24,16 @@ Install <tt>git</tt>, <tt>automake</tt>, <tt>libtool</tt> and <tt>intltool</tt> 
 ```bash
 $ sudo port install git-core automake intltool libtool
 ```
-   
+
+Get a Git install, and place both the `bin` and `libexec` directories in `SparkleShare/Mac/git`.
+The exact commands depend on where you installed/have Git. Assuming it's in `/usr/local`:
+
+```bash
+$ mkdir SparkleShare/Mac/git
+$ cp -R /usr/local/git/bin SparkleShare/Mac/git
+$ cp -R /usr/local/git/libexec SparkleShare/Mac/git
+```
+
 Start the first part of the build:
 
 ```bash
