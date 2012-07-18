@@ -29,15 +29,15 @@ namespace SparkleLib {
     // Sets up a fetcher that can get remote folders
     public abstract class SparkleFetcherBase {
 
-        public delegate void StartedEventHandler ();
+        public event Action Started = delegate { };
+        public event Action Failed = delegate { };
+
+        public event FinishedEventHandler Finished = delegate { };
         public delegate void FinishedEventHandler (bool repo_is_encrypted, bool repo_is_empty, string [] warnings);
-        public delegate void FailedEventHandler ();
+
+        public event ProgressChangedEventHandler ProgressChanged = delegate { };
         public delegate void ProgressChangedEventHandler (double percentage);
 
-        public event StartedEventHandler Started;
-        public event FinishedEventHandler Finished;
-        public event FailedEventHandler Failed;
-        public event ProgressChangedEventHandler ProgressChanged;
 
         public abstract bool Fetch ();
         public abstract void Stop ();
@@ -117,9 +117,7 @@ namespace SparkleLib {
         public void Start ()
         {
             IsActive = true;
-
-            if (Started != null)
-                Started ();
+            Started ();
 
             SparkleHelpers.DebugInfo ("Fetcher", TargetFolder + " | Fetching folder: " + RemoteUrl);
 
@@ -130,9 +128,7 @@ namespace SparkleLib {
             string host_key = GetHostKey ();
 
             if (string.IsNullOrEmpty (host) || host_key == null) {
-                if (Failed != null)
-                    Failed ();
-
+                Failed ();
                 return;
             }
 
@@ -144,9 +140,7 @@ namespace SparkleLib {
                     !RequiredFingerprint.Equals (host_fingerprint)) {
 
                     SparkleHelpers.DebugInfo ("Auth", "Fingerprint doesn't match");
-
-                    if (Failed != null)
-                        Failed ();
+                    Failed ();
 
                     return;
                 }
@@ -170,18 +164,14 @@ namespace SparkleLib {
 
                         // TODO: Find better way to determine if folder should have crypto setup
                         bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("crypto");
-
-                        if (Finished != null)
-                            Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);
+                        Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);
 
                     } else {
                         Thread.Sleep (500);
                         SparkleHelpers.DebugInfo ("Fetcher", "Failed");
 
                         IsActive = false;
-
-                        if (Failed != null)
-                            Failed ();
+                        Failed ();
                     }
                 })
             );
@@ -263,8 +253,7 @@ namespace SparkleLib {
 
 
         protected void OnProgressChanged (double percentage) {
-            if (ProgressChanged != null)
-                ProgressChanged (percentage);
+            ProgressChanged (percentage);
         }
 
 

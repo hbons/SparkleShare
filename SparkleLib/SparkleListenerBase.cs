@@ -25,13 +25,10 @@ namespace SparkleLib {
     // listens for change notifications
     public abstract class SparkleListenerBase {
 
-        public event ConnectedEventHandler Connected;
-        public delegate void ConnectedEventHandler ();
+        public event Action Connected = delegate { };
+        public event Action Disconnected = delegate { };
 
-        public event DisconnectedEventHandler Disconnected;
-        public delegate void DisconnectedEventHandler ();
-
-        public event AnnouncementReceivedEventHandler AnnouncementReceived;
+        public event AnnouncementReceivedEventHandler AnnouncementReceived = delegate { };
         public delegate void AnnouncementReceivedEventHandler (SparkleAnnouncement announcement);
 
         public readonly Uri Server;
@@ -118,9 +115,7 @@ namespace SparkleLib {
         public void OnConnected ()
         {
             SparkleHelpers.DebugInfo ("Listener", "Listening for announcements on " + Server);
-
-            if (Connected != null)
-                Connected ();
+            Connected ();
 
             if (this.queue_up.Count > 0) {
                 SparkleHelpers.DebugInfo ("Listener", "Delivering " + this.queue_up.Count + " queued messages...");
@@ -138,9 +133,7 @@ namespace SparkleLib {
         public void OnDisconnected (string message)
         {
             SparkleHelpers.DebugInfo ("Listener", "Disconnected from " + Server + ": " + message);
-
-            if (Disconnected != null)
-                Disconnected ();
+            Disconnected ();
         }
 
 
@@ -163,8 +156,7 @@ namespace SparkleLib {
             AddRecentAnnouncement (announcement);
             this.queue_down [announcement.FolderIdentifier] = announcement;
 
-            if (AnnouncementReceived != null)
-                AnnouncementReceived (announcement);
+            AnnouncementReceived (announcement);
         }
 
 

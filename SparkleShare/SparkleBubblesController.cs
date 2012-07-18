@@ -22,7 +22,7 @@ namespace SparkleShare {
 
     public class SparkleBubblesController {
 
-        public event ShowBubbleEventHandler ShowBubbleEvent;
+        public event ShowBubbleEventHandler ShowBubbleEvent = delegate { };
         public delegate void ShowBubbleEventHandler (string title, string subtext, string image_path);
 
 
@@ -41,8 +41,7 @@ namespace SparkleShare {
 
         public void ShowBubble (string title, string subtext, string image_path)
         {
-            if (ShowBubbleEvent != null)
-                ShowBubbleEvent (title, subtext, image_path);
+            ShowBubbleEvent (title, subtext, image_path);
         }
 
 
