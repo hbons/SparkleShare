@@ -18,10 +18,6 @@
 using System;
 using System.Threading;
 
-#if __MonoCS__
-using Mono.Unix;
-#endif
-
 namespace SparkleShare {
 
     // This is SparkleShare!

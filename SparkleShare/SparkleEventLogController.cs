@@ -45,6 +45,8 @@ namespace SparkleShare {
         private string selected_folder;
 
 
+        public bool WindowIsOpen { get; private set; }
+
         public string SelectedFolder {
             get {
                 return this.selected_folder;
@@ -144,6 +146,9 @@ namespace SparkleShare {
         public SparkleEventLogController ()
         {
             Program.Controller.ShowEventLogWindowEvent += delegate {
+                if (!WindowIsOpen)
+                    ContentLoadingEvent ();
+
                 if (this.selected_folder == null) {
                     new Thread (() => {
                         UpdateChooserEvent (Folders);
@@ -152,6 +157,7 @@ namespace SparkleShare {
                     }).Start ();
                 }
 
+                WindowIsOpen = true;
                 ShowWindowEvent ();
             };
 			
@@ -172,6 +178,7 @@ namespace SparkleShare {
 
         public void WindowClosed ()
         {
+            WindowIsOpen = false;
             HideWindowEvent ();
 			this.selected_folder = null;
         }

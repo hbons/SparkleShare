@@ -177,7 +177,7 @@ namespace SparkleShare {
 
         public virtual void Initialize ()
         {
-            SparklePlugin.PluginsPath   = PluginsPath;
+            SparklePlugin.PluginsPath = PluginsPath;
             InstallProtocolHandler ();
 
             // Create the SparkleShare folder and add it to the bookmarks

@@ -233,7 +233,10 @@ namespace SparkleShare {
                         if (this.web_view.Superview == ContentView)
                             this.web_view.RemoveFromSuperview ();
 
-                        ContentView.AddSubview (this.progress_indicator);
+                        if (this.progress_indicator.Superview != ContentView)
+                            ContentView.AddSubview (this.progress_indicator);
+
+                        this.progress_indicator.StartAnimation (this);
                     });
                 }
             };
