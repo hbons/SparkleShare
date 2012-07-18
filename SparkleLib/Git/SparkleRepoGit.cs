@@ -54,10 +54,11 @@ namespace SparkleLib.Git {
 
         public override double Size {
             get {
-                string file_path = new string [] {LocalPath, ".git", "repo_size"}.Combine ();
+                string file_path = new string [] { LocalPath, ".git", "repo_size" }.Combine ();
 
                 try {
-                    return double.Parse (File.ReadAllText (file_path));
+                    string size = File.ReadAllText (file_path);
+                    return double.Parse (size);
 
                 } catch {
                     return 0;
@@ -68,10 +69,11 @@ namespace SparkleLib.Git {
 
         public override double HistorySize {
             get {
-                string file_path = new string [] {LocalPath, ".git", "repo_history_size"}.Combine ();
+                string file_path = new string [] { LocalPath, ".git", "repo_history_size" }.Combine ();
 
                 try {
-                    return double.Parse (File.ReadAllText (file_path));
+                    string size = File.ReadAllText (file_path);
+                    return double.Parse (size);
 
                 } catch {
                     return 0;
@@ -85,8 +87,8 @@ namespace SparkleLib.Git {
             double size         = CalculateSizes (new DirectoryInfo (LocalPath));
             double history_size = CalculateSizes (new DirectoryInfo (Path.Combine (LocalPath, ".git")));
 
-            string size_file_path = new string [] {LocalPath, ".git", "repo_size"}.Combine ();
-            string history_size_file_path = new string [] {LocalPath, ".git", "repo_history_size"}.Combine ();
+            string size_file_path = new string [] { LocalPath, ".git", "repo_size" }.Combine ();
+            string history_size_file_path = new string [] { LocalPath, ".git", "repo_history_size" }.Combine ();
 
             File.WriteAllText (size_file_path, size.ToString ());
             File.WriteAllText (history_size_file_path, history_size.ToString ());
@@ -113,6 +115,7 @@ namespace SparkleLib.Git {
 
                         string path = line.Substring (3);
                         path        = path.Trim ("\"".ToCharArray ());
+
                         file_paths.Add (path);
                     }
                 }
@@ -164,16 +167,13 @@ namespace SparkleLib.Git {
                 string remote_revision = output.Substring (0, 40);
 
                 if (!remote_revision.StartsWith (current_revision)) {
-                    SparkleHelpers.DebugInfo ("Git",
-                        Name + " | Remote changes detected (local: " +
-                        current_revision + ", remote: " + remote_revision + ")");
+                    SparkleHelpers.DebugInfo ("Git", Name + " | Remote changes found, local: " +
+                        current_revision + ", remote: " + remote_revision);
 
                     return true;
 
                 } else {
-                    SparkleHelpers.DebugInfo ("Git",
-                        Name + " | No remote changes detected (local+remote: " + current_revision + ")");
-
+                    SparkleHelpers.DebugInfo ("Git", Name + " | No remote changes, local+remote: " + current_revision);
                     return false;
                 }
             }
@@ -199,7 +199,7 @@ namespace SparkleLib.Git {
 
                     this.remote_url_is_set = true;
                 }
-                Console.WriteLine (this.use_git_bin);
+
                 SparkleGitBin git_bin = new SparkleGitBin (LocalPath, "push");
                 git_bin.Start ();
                 git_bin.WaitForExit ();
@@ -333,11 +333,9 @@ namespace SparkleLib.Git {
 
             if (git.ExitCode == 0) {
                 Rebase ();
-                
-				File.SetAttributes (
-					Path.Combine (LocalPath, ".sparkleshare"),
-					FileAttributes.Hidden
-				);
+
+                string identifier_file_path = Path.Combine (LocalPath, ".sparkleshare");
+				File.SetAttributes (identifier_file_path, FileAttributes.Hidden);
 
                 ChangeSets = GetChangeSets ();
                 ClearCache ();
@@ -368,23 +366,17 @@ namespace SparkleLib.Git {
 
         public override bool HasUnsyncedChanges {
             get {
-                string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath,
-                    ".git", "has_unsynced_changes");
-
+                string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath, ".git", "has_unsynced_changes");
                 return File.Exists (unsynced_file_path);
             }
 
             set {
-                string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath,
-                    ".git", "has_unsynced_changes");
+                string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath, ".git", "has_unsynced_changes");
 
-                if (value) {
-                    if (!File.Exists (unsynced_file_path))
-                        File.Create (unsynced_file_path).Close ();
-
-                } else {
+                if (value)
+                    File.WriteAllText (unsynced_file_path, "");
+                else
                     File.Delete (unsynced_file_path);
-                }
             }
         }
 
@@ -662,24 +654,19 @@ namespace SparkleLib.Git {
                     change_set.Timestamp = change_set.Timestamp.AddHours (their_offset * -1);
                     change_set.Timestamp = change_set.Timestamp.AddHours (our_offset);
 
-
                     string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
 
                     foreach (string entry_line in entry_lines) {
                         if (entry_line.StartsWith (":")) {
-
                             string change_type = entry_line [37].ToString ();
                             string file_path   = entry_line.Substring (39);
 
                             // Handle filepath with special characters
                             file_path = EnsureSpecialCharacters (file_path);
-                            
-
                             string to_file_path;
 
                             if (file_path.EndsWith (".empty"))
-                                file_path = file_path.Substring (0,
-                                    file_path.Length - ".empty".Length);
+                                file_path = file_path.Substring (0, file_path.Length - ".empty".Length);
 
                             if (file_path.Equals (".sparkleshare"))
                                 continue;
@@ -863,6 +850,7 @@ namespace SparkleLib.Git {
                         try {
                             File.WriteAllText (Path.Combine (path, ".empty"), "I'm a folder!");
                             File.SetAttributes (Path.Combine (path, ".empty"), FileAttributes.Hidden);
+
                         } catch {
                             SparkleHelpers.DebugInfo ("Git", Name + " | Failed adding empty folder " + path);
                         }
@@ -878,7 +866,7 @@ namespace SparkleLib.Git {
         // Creates a pretty commit message based on what has changed
         private string FormatCommitMessage ()
         {
-            int count = 0;
+            int count      = 0;
             string message = "";
 
             SparkleGit git_status = new SparkleGit (LocalPath, "status --porcelain");
@@ -894,8 +882,8 @@ namespace SparkleLib.Git {
                     string path = line.Substring (3, line.IndexOf (" -> ") - 3).Trim ("\"".ToCharArray ());
                     string moved_to_path = line.Substring (line.IndexOf (" -> ") + 4).Trim ("\"".ToCharArray ());
 
-                    message +=  "- ‘" + EnsureSpecialCharacters (path) + "’\n";
-                    message +=  "+ ‘" + EnsureSpecialCharacters (moved_to_path) + "’\n";
+                    message +=  "< ‘" + EnsureSpecialCharacters (path) + "’\n";
+                    message +=  "> ‘" + EnsureSpecialCharacters (moved_to_path) + "’\n";
 
                 } else {
                     if (line.StartsWith ("M")) {
@@ -927,10 +915,7 @@ namespace SparkleLib.Git {
         // Recursively gets a folder's size in bytes
         private double CalculateSizes (DirectoryInfo parent)
         {
-            if (!Directory.Exists (parent.FullName))
-                return 0;
-
-            if (parent.Name.Equals ("rebase-apply"))
+            if (!Directory.Exists (parent.FullName) || parent.Name.Equals ("rebase-apply"))
                 return 0;
 
             double size = 0;
