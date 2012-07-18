@@ -1,8 +1,0 @@
-#!/bin/sh
-if test "z$*" = zversion ||
-   test "z$*" = z--version
-then
-	echo 'git-gui version 0.14.0-dirty'
-else
-	exec '/usr/local/git/share/git-gui/lib/Git Gui.app/Contents/MacOS/Wish' "$0" "$@"
-fi
