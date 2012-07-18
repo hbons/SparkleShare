@@ -28,23 +28,19 @@ namespace SparkleShare {
 
     public class SparkleEventLogController {
 
-        public event ShowWindowEventHandler ShowWindowEvent;
-        public delegate void ShowWindowEventHandler ();
+        public event Action ShowWindowEvent = delegate { };
+        public event Action HideWindowEvent = delegate { };
+        public event Action ContentLoadingEvent = delegate { };
 
-        public event HideWindowEventHandler HideWindowEvent;
-        public delegate void HideWindowEventHandler ();
-
-        public event UpdateContentEventEventHandler UpdateContentEvent;
+        public event UpdateContentEventEventHandler UpdateContentEvent = delegate { };
         public delegate void UpdateContentEventEventHandler (string html);
 
-        public event UpdateChooserEventHandler UpdateChooserEvent;
+        public event UpdateChooserEventHandler UpdateChooserEvent = delegate { };
         public delegate void UpdateChooserEventHandler (string [] folders);
 
-        public event UpdateSizeInfoEventHandler UpdateSizeInfoEvent;
+        public event UpdateSizeInfoEventHandler UpdateSizeInfoEvent = delegate { };
         public delegate void UpdateSizeInfoEventHandler (string size, string history_size);
 
-        public event ContentLoadingEventHandler ContentLoadingEvent;
-        public delegate void ContentLoadingEventHandler ();
 
         private string selected_folder;
 
@@ -57,11 +53,8 @@ namespace SparkleShare {
             set {
                 this.selected_folder = value;
 
-                if (ContentLoadingEvent != null)
-                    ContentLoadingEvent ();
-
-                if (UpdateSizeInfoEvent != null)
-                    UpdateSizeInfoEvent ("…", "…");
+                ContentLoadingEvent ();
+                UpdateSizeInfoEvent ("…", "…");
 
                 Stopwatch watch = new Stopwatch ();
                 watch.Start ();
@@ -77,11 +70,8 @@ namespace SparkleShare {
                     if (watch.ElapsedMilliseconds < delay)
                         Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
 
-                    if (UpdateContentEvent != null)
-                        UpdateContentEvent (html);
-    
-                    if (UpdateSizeInfoEvent != null)
-                        UpdateSizeInfoEvent (Size, HistorySize);
+                    UpdateContentEvent (html);
+                    UpdateSizeInfoEvent (Size, HistorySize);
 
                 }).Start ();
             }
@@ -92,9 +82,7 @@ namespace SparkleShare {
                 List<SparkleChangeSet> change_sets = GetLog (this.selected_folder);
 
                 string html = GetHTMLLog (change_sets);
-
-                if (UpdateSizeInfoEvent != null)
-                    UpdateSizeInfoEvent (Size, HistorySize);
+                UpdateSizeInfoEvent (Size, HistorySize);
 
                 return html;
             }
@@ -158,45 +146,33 @@ namespace SparkleShare {
             Program.Controller.ShowEventLogWindowEvent += delegate {
                 if (this.selected_folder == null) {
                     new Thread (() => {
-                        if (UpdateChooserEvent != null)
-                            UpdateChooserEvent (Folders);
-
-                        if (UpdateContentEvent != null)
-                            UpdateContentEvent (HTML);
+                        UpdateChooserEvent (Folders);
+                        UpdateContentEvent (HTML);
 
                     }).Start ();
                 }
 
-                if (ShowWindowEvent != null)
-                    ShowWindowEvent ();
+                ShowWindowEvent ();
             };
 			
             Program.Controller.OnIdle += delegate {
-                if (UpdateContentEvent != null)
-                    UpdateContentEvent (HTML);
-				
-                if (UpdateSizeInfoEvent != null)
-                    UpdateSizeInfoEvent (Size, HistorySize);
+                UpdateContentEvent (HTML);
+                UpdateSizeInfoEvent (Size, HistorySize);
             };
 			
             Program.Controller.FolderListChanged += delegate {
                 if (this.selected_folder != null && !Program.Controller.Folders.Contains (this.selected_folder))
                     this.selected_folder = null;
 
-                if (UpdateChooserEvent != null)
-                    UpdateChooserEvent (Folders);
-
-                if (UpdateSizeInfoEvent != null)
-                    UpdateSizeInfoEvent (Size, HistorySize);
+                UpdateChooserEvent (Folders);
+                UpdateSizeInfoEvent (Size, HistorySize);
             };
         }
 
 
         public void WindowClosed ()
         {
-            if (HideWindowEvent != null)
-                HideWindowEvent ();
-			
+            HideWindowEvent ();
 			this.selected_folder = null;
         }
 
