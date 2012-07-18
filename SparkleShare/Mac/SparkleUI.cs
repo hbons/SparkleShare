@@ -19,7 +19,6 @@ using System;
 using System.Drawing;
 using System.IO;
 
-using Mono.Unix;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
@@ -46,8 +45,6 @@ namespace SparkleShare {
         {
             using (var a = new NSAutoreleasePool ())
             {
-                Catalog.Init ("sparkleshare", Path.Combine (NSBundle.MainBundle.ResourcePath, "Translations"));
-
                 GrowlApplicationBridge.WeakDelegate = this;
                 GrowlApplicationBridge.Delegate     = new SparkleGrowlDelegate ();
 

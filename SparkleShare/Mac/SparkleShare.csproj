@@ -42,7 +42,6 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="MonoMac" />
-    <Reference Include="Mono.Posix" />
     <Reference Include="System.Net" />
     <Reference Include="SparkleLib">
       <HintPath>..\..\bin\SparkleLib.dll</HintPath>

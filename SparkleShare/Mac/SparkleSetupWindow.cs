@@ -24,7 +24,6 @@ using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
 using MonoMac.WebKit;
-using Mono.Unix;
 
 namespace SparkleShare {
 
@@ -52,8 +51,7 @@ namespace SparkleShare {
 
             Center ();
 
-            string side_splash_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                "Pixmaps", "side-splash.png");
+            string side_splash_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "side-splash.png");
 
             SideSplash = new NSImage (side_splash_path) {
                 Size = new SizeF (150, 482)
@@ -69,8 +67,8 @@ namespace SparkleShare {
                 BackgroundColor = NSColor.WindowBackground,
                 Bordered        = false,
                 Editable        = false,
-                Font            = NSFontManager.SharedFontManager.FontWithFamily
-                    ("Lucida Grande", NSFontTraitMask.Bold, 0, 15)
+                Font            = NSFontManager.SharedFontManager.FontWithFamily (
+                    "Lucida Grande", NSFontTraitMask.Bold, 0, 15)
             };
             
             DescriptionTextField = new NSTextField () {
@@ -78,8 +76,8 @@ namespace SparkleShare {
                 BackgroundColor = NSColor.WindowBackground,
                 Bordered        = false,
                 Editable        = false,
-                Font            = NSFontManager.SharedFontManager.FontWithFamily
-                    ("Lucida Grande", NSFontTraitMask.Condensed, 0, 13)
+                Font            = NSFontManager.SharedFontManager.FontWithFamily (
+                    "Lucida Grande", NSFontTraitMask.Condensed, 0, 13)
             };
 
             if (Program.UI != null)

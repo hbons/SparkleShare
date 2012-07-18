@@ -19,7 +19,6 @@ using System;
 using System.Drawing;
 using System.IO;
 
-using Mono.Unix;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
@@ -57,13 +56,6 @@ namespace SparkleShare {
 
         private EventHandler [] folder_tasks;
         private EventHandler [] overflow_tasks;
-
-        
-        // Short alias for the translations
-        public static string _ (string s)
-        {
-            return Catalog.GetString (s);
-        }
 
         
         public SparkleStatusIcon () : base ()
