@@ -222,7 +222,7 @@ namespace SparkleShare {
                     return repo.ChangeSets;
             }
 
-            return null;
+            return new List<SparkleChangeSet> ();
         }
 
 
@@ -234,7 +234,7 @@ namespace SparkleShare {
             change_sets.Reverse ();
 
             if (change_sets.Count == 0)
-                return null;
+                return "";
 
             foreach (SparkleChangeSet change_set in change_sets) {
                 bool change_set_inserted = false;
