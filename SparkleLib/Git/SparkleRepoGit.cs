@@ -265,7 +265,6 @@ namespace SparkleLib.Git {
             git.WaitForExit ();
 
             UpdateSizes ();
-            ChangeSets = GetChangeSets ();
 
             if (git.ExitCode == 0) {
                 ClearCache ();
@@ -337,13 +336,11 @@ namespace SparkleLib.Git {
                 string identifier_file_path = Path.Combine (LocalPath, ".sparkleshare");
 				File.SetAttributes (identifier_file_path, FileAttributes.Hidden);
 
-                ChangeSets = GetChangeSets ();
                 ClearCache ();
 
 				return true;
 
             } else {
-                ChangeSets = GetChangeSets ();
                 return false;
             }
         }
