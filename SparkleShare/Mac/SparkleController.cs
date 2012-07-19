@@ -198,17 +198,12 @@ namespace SparkleShare {
 		{
 			get {
                 using (var a = new NSAutoreleasePool ()) {
-    				string resource_path = NSBundle.MainBundle.ResourcePath;
-    				string html_path     = Path.Combine (resource_path, "HTML", "event-log.html");
-    				string html          = File.ReadAllText (html_path);
-    
-                    string jquery_file_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                        "HTML", "jquery.js");
-    
-                    string jquery = File.ReadAllText (jquery_file_path);
-                    html          = html.Replace ("<!-- $jquery -->", jquery);
-    
-                    return html;
+                    string html_path        = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "event-log.html");
+                    string jquery_file_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "jquery.js");
+                    string html             = File.ReadAllText (html_path);
+                    string jquery           = File.ReadAllText (jquery_file_path);
+
+                    return html.Replace ("<!-- $jquery -->", jquery);
                 }
 			}
 		}
@@ -219,14 +214,8 @@ namespace SparkleShare {
 			get {
                 using (var a = new NSAutoreleasePool ())
                 {
-    				string resource_path = NSBundle.MainBundle.ResourcePath;
-    				string html_path     = Path.Combine (resource_path, "HTML", "day-entry.html");
-    				
-    				StreamReader reader = new StreamReader (html_path);
-    				string html = reader.ReadToEnd ();
-    				reader.Close ();
-    				
-    				return html;
+                    string html_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "day-entry.html");
+                    return File.ReadAllText (html_path);
                 }
 			}
 		}
@@ -236,14 +225,8 @@ namespace SparkleShare {
 		{
 			get {
                 using (var a = new NSAutoreleasePool ()) {
-    				string resource_path = NSBundle.MainBundle.ResourcePath;
-    				string html_path     = Path.Combine (resource_path, "HTML", "event-entry.html");
-    				
-    				StreamReader reader = new StreamReader (html_path);
-    				string html = reader.ReadToEnd ();
-    				reader.Close ();
-    				
-    				return html;
+    				string html_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "event-entry.html");
+    				return File.ReadAllText (html_path);
                 }
 			}
 		}
