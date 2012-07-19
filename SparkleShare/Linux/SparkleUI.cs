@@ -39,8 +39,7 @@ namespace SparkleShare {
         public static SparkleSetup Setup;
         public static SparkleAbout About;
 
-        public static string AssetsPath =
-            new string [] {Defines.PREFIX, "share", "sparkleshare"}.Combine ();
+        public static string AssetsPath = new string [] { Defines.PREFIX, "share", "sparkleshare" }.Combine ();
 
 
         public SparkleUI ()
