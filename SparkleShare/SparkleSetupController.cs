@@ -296,7 +296,7 @@ namespace SparkleShare {
                 HideWindowEvent ();
 
                 if (this.create_startup_item)
-                    Program.Controller.CreateStartupItem ();
+                    new Thread (() => Program.Controller.CreateStartupItem ()).Start ();
 
             } else {
                 ChangePageEvent (PageType.Tutorial, null);
