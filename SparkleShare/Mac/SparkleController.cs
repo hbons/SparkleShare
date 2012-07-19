@@ -83,28 +83,16 @@ namespace SparkleShare {
             // There aren't any bindings in MonoMac to support this yet, so
             // we call out to an applescript to do the job
             Process process = new Process ();
-            process.EnableRaisingEvents              = true;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.UseShellExecute        = false;
-            process.StartInfo.FileName               = "osascript";
-            process.StartInfo.CreateNoWindow         = true;
-
-            string app_path = Path.GetDirectoryName (NSBundle.MainBundle.ResourcePath);
-            app_path        = Path.GetDirectoryName (app_path);
+            process.StartInfo.FileName        = "osascript";
+            process.StartInfo.UseShellExecute = false;
 
             process.StartInfo.Arguments = "-e 'tell application \"System Events\" to " +
-                "make login item at end with properties {path:\"" + app_path + "\", hidden:false}'";
+                "make login item at end with properties {path:\"" + NSBundle.MainBundle.BundlePath + "\", hidden:false}'";
 
-            process.Exited += delegate {
-                SparkleHelpers.DebugInfo ("Controller", "Added " + app_path + " to login items");
-            };
+            process.Start ();
+            process.WaitForExit ();
 
-            try {
-                process.Start ();
-
-            } catch (Exception e) {
-                SparkleHelpers.DebugInfo ("Controller", "Failed adding " + app_path + " to login items: " + e.Message);
-            }
+            SparkleHelpers.DebugInfo ("Controller", "Added " + NSBundle.MainBundle.BundlePath + " to login items");
 		}
 
 
@@ -194,41 +182,48 @@ namespace SparkleShare {
         }
 
 
+        private string event_log_html;
 		public override string EventLogHTML
 		{
 			get {
-                using (var a = new NSAutoreleasePool ()) {
-                    string html_path        = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "event-log.html");
+                if (string.IsNullOrEmpty (this.event_log_html)) {
+                    string html_file_path   = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "event-log.html");
                     string jquery_file_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "jquery.js");
-                    string html             = File.ReadAllText (html_path);
+                    string html             = File.ReadAllText (html_file_path);
                     string jquery           = File.ReadAllText (jquery_file_path);
-
-                    return html.Replace ("<!-- $jquery -->", jquery);
+                    this.event_log_html     = html.Replace ("<!-- $jquery -->", jquery);
                 }
+
+                return this.event_log_html;
 			}
 		}
 
-		
+
+        private string day_entry_html;
 		public override string DayEntryHTML
 		{
 			get {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    string html_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "day-entry.html");
-                    return File.ReadAllText (html_path);
+                if (string.IsNullOrEmpty (this.day_entry_html)) {
+                    string html_file_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "day-entry.html");
+                    this.day_entry_html   = File.ReadAllText (html_file_path);
                 }
+
+                return this.day_entry_html;
 			}
 		}
 		
-	
-		public override string EventEntryHTML
-		{
-			get {
-                using (var a = new NSAutoreleasePool ()) {
-    				string html_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "event-entry.html");
-    				return File.ReadAllText (html_path);
-                }
-			}
-		}
+
+        private string event_entry_html;
+        public override string EventEntryHTML
+        {
+            get {
+                   if (string.IsNullOrEmpty (this.event_entry_html)) {
+                       string html_file_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "event-entry.html");
+                       this.event_entry_html = File.ReadAllText (html_file_path);
+                   }
+
+                   return this.event_entry_html;
+            }
+        }
 	}
 }
