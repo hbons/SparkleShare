@@ -282,10 +282,11 @@ namespace SparkleLib {
 
             if (SyncUp ()) {
                 SparkleHelpers.DebugInfo ("SyncUp", Name + " | Done");
-
                 HasUnsyncedChanges = false;
-                SyncStatusChanged (SyncStatus.Idle);
 
+                ChangeSets = GetChangeSets ();
+
+                SyncStatusChanged (SyncStatus.Idle);
                 this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
 
             } else {
@@ -320,21 +321,20 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("SyncDown", Name + " | Done");
                 ServerOnline = true;
 
-                if (!pre_sync_revision.Equals (CurrentRevision)) {
-                   if (ChangeSets != null &&
-                       ChangeSets.Count > 0) {
+                ChangeSets = GetChangeSets ();
 
-                        bool emit_change_event = true;
-                        foreach (SparkleChange change in ChangeSets [0].Changes) {
-                            if (change.Path.EndsWith (".sparkleshare")) {
-                                emit_change_event = false;
-                                break;
-                            }
+                if (!pre_sync_revision.Equals (CurrentRevision) && ChangeSets != null && ChangeSets.Count > 0) {
+                    bool emit_change_event = true;
+
+                    foreach (SparkleChange change in ChangeSets [0].Changes) {
+                        if (change.Path.EndsWith (".sparkleshare")) {
+                            emit_change_event = false;
+                            break;
                         }
-                        
-                        if (emit_change_event)
-                            NewChangeSet (ChangeSets [0]);
                     }
+                    
+                    if (emit_change_event)
+                        NewChangeSet (ChangeSets [0]);
                 }
 
                 // There could be changes from a resolved
@@ -352,6 +352,8 @@ namespace SparkleLib {
             } else {
                 SparkleHelpers.DebugInfo ("SyncDown", Name + " | Error");
                 ServerOnline = false;
+
+                ChangeSets = GetChangeSets ();
 
                 SyncStatusChanged (SyncStatus.Error);
             }
