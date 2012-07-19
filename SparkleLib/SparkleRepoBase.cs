@@ -155,8 +155,11 @@ namespace SparkleLib {
             new Thread (() => CreateListener ()).Start ();
 
             this.remote_timer.Elapsed += delegate {
-                bool time_to_poll = (DateTime.Compare (this.last_poll,
-                    DateTime.Now.Subtract (this.poll_interval)) < 0);
+                if (this.is_syncing || IsBuffering)
+                    return;
+
+                int time_comparison = DateTime.Compare (this.last_poll, DateTime.Now.Subtract (this.poll_interval));
+                bool time_to_poll =  (time_comparison < 0);
 
                 if (time_to_poll && !is_syncing) {
                     this.last_poll = DateTime.Now;
@@ -210,9 +213,7 @@ namespace SparkleLib {
                 return;
 
             SparkleHelpers.DebugInfo ("Local", Name + " | Activity detected, waiting for it to settle...");
-
             IsBuffering = true;
-            this.remote_timer.Stop ();
 
             List<double> size_buffer = new List<double> ();
 
@@ -246,8 +247,6 @@ namespace SparkleLib {
                 }
 
             } while (IsBuffering);
-
-            this.remote_timer.Start ();
         }
 
 
@@ -279,7 +278,6 @@ namespace SparkleLib {
             SparkleHelpers.DebugInfo ("SyncUp", Name + " | Initiated");
             HasUnsyncedChanges = true;
 
-            this.remote_timer.Stop ();
             SyncStatusChanged (SyncStatus.SyncUp);
 
             if (SyncUp ()) {
@@ -306,8 +304,6 @@ namespace SparkleLib {
                 }
             }
 
-            this.remote_timer.Start ();
-
             ProgressPercentage = 0.0;
             ProgressSpeed      = "";
         }
@@ -316,7 +312,6 @@ namespace SparkleLib {
         private void SyncDownBase ()
         {
             SparkleHelpers.DebugInfo ("SyncDown", Name + " | Initiated");
-            this.remote_timer.Stop ();
 
             SyncStatusChanged (SyncStatus.SyncDown);
             string pre_sync_revision = CurrentRevision;
@@ -365,8 +360,6 @@ namespace SparkleLib {
             ProgressSpeed      = "";
 
             SyncStatusChanged (SyncStatus.Idle);
-
-            this.remote_timer.Start ();
         }
 
 
