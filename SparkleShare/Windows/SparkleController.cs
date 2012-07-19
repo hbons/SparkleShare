@@ -44,9 +44,7 @@ namespace SparkleShare {
         public override string PluginsPath
         {
             get {
-                return Path.Combine (
-                    Path.GetDirectoryName (Assembly.GetExecutingAssembly ().Location), "plugins"
-                );
+                return Path.Combine (Path.GetDirectoryName (Assembly.GetExecutingAssembly ().Location), "plugins");
             }
         }
 
@@ -75,9 +73,7 @@ namespace SparkleShare {
         public override string EventLogHTML {
             get {
                 string html = SparkleUIHelpers.GetHTML ("event-log.html");
-                html        = html.Replace ("<!-- $jquery -->", SparkleUIHelpers.GetHTML ("jquery.js"));
-                
-                return html;
+                return html.Replace ("<!-- $jquery -->", SparkleUIHelpers.GetHTML ("jquery.js"));
             }
         }
 
@@ -98,10 +94,8 @@ namespace SparkleShare {
 
         public override void CreateStartupItem ()
         {
-            string startup_folder_path = Environment.GetFolderPath (
-                Environment.SpecialFolder.Startup);
-            
-            string shortcut_path = Path.Combine (startup_folder_path, "SparkleShare.lnk");
+            string startup_folder_path = Environment.GetFolderPath (Environment.SpecialFolder.Startup);
+            string shortcut_path       = Path.Combine (startup_folder_path, "SparkleShare.lnk");
 
             if (File.Exists (shortcut_path))
                 File.Delete (shortcut_path);
@@ -115,26 +109,7 @@ namespace SparkleShare {
 
         public override void InstallProtocolHandler ()
         {
-            /* FIXME: Need to find a way to do this without administrator privileges (or move to the installer)
-         
-            // Get assembly location
-            string location   = System.Reflection.Assembly.GetExecutingAssembly ().Location;
-            string folder     = Path.GetDirectoryName (location);
-            string invite_exe = Path.Combine (folder, "SparkleShareInviteOpener.exe");
-
-            // Register protocol handler as explained in
-            // http://msdn.microsoft.com/en-us/library/ie/aa767914(v=vs.85).aspx
-            string main_key = "HKEY_CLASSES_ROOT\\sparkleshare";
-            Registry.SetValue (main_key, "", "SparkleShare Invite Opener");
-            Registry.SetValue (main_key, "URL Protocol", "");
-
-            string icon_key = "HKEY_CLASSES_ROOT\\sparkleshare\\DefaultIcon";
-            Registry.SetValue (icon_key, "", invite_exe + ",1");
-
-            string action_key = "HKEY_CLASSES_ROOT\\sparkleshare\\shell\\open\\command";
-            Registry.SetValue (action_key, "", "\"" + invite_exe + "\" \"%1\"");
-
-            */
+            // We ship a separate .exe for this
         }
 
 
@@ -180,7 +155,7 @@ namespace SparkleShare {
             process.StartInfo.FileName  = "explorer";
             process.StartInfo.Arguments = path;
             
-            process.Start();
+            process.Start ();
         }
 
 
