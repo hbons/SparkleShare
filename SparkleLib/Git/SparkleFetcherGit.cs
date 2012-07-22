@@ -78,7 +78,7 @@ namespace SparkleLib.Git {
                         uri = new Uri (uri.Scheme + "://git@" + uri.Host + ":" + uri.Port + uri.AbsolutePath);
                 }
 
-                this.use_git_bin = true;
+                this.use_git_bin = false; // TODO
             }
 
             TargetFolder = target_folder;
