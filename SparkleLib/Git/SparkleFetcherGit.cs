@@ -16,7 +16,6 @@
 
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -40,10 +39,8 @@ namespace SparkleLib.Git {
         {
             Uri uri = RemoteUrl;
 
-            if (!uri.Scheme.Equals ("ssh") &&
-                !uri.Scheme.Equals ("https") &&
-                !uri.Scheme.Equals ("http") &&
-                !uri.Scheme.Equals ("git")) {
+            if (!uri.Scheme.Equals ("ssh") && !uri.Scheme.Equals ("https") &&
+                !uri.Scheme.Equals ("http") && !uri.Scheme.Equals ("git")) {
 
                 uri = new Uri ("ssh://" + uri);
             }
@@ -90,18 +87,11 @@ namespace SparkleLib.Git {
         {
             if (FetchPriorHistory) {
                 this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
-                    "clone " +
-                    "--progress " +
-                    "--no-checkout " +
-                    "\"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
+                    "clone --progress --no-checkout \"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
 
             } else {
                 this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
-                    "clone " +
-                    "--progress " +
-                    "--no-checkout " +
-                    "--depth=1 " +
-                    "\"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
+                    "clone --progress --no-checkout --depth=1 \"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
             }
 
             this.git.StartInfo.RedirectStandardError = true;
@@ -125,15 +115,12 @@ namespace SparkleLib.Git {
                     // objects" stage which we count as 20% of the total progress, and 
                     // the "Receiving objects" stage which we count as the last 80%
                     if (line.Contains ("|"))
-                        // "Receiving objects" stage
-                        number = (number / 100 * 80 + 20);
+                        number = (number / 100 * 80 + 20); // "Receiving objects" stage
                     else
-                        // "Compressing objects" stage
-                        number = (number / 100 * 20);
+                        number = (number / 100 * 20); // "Compressing objects" stage
 
                 } else {
                     SparkleHelpers.DebugInfo ("Fetcher", line);
-
                     line = line.Trim (new char [] {' ', '@'});
 
                     if (line.StartsWith ("fatal:", StringComparison.InvariantCultureIgnoreCase) ||
@@ -219,13 +206,9 @@ namespace SparkleLib.Git {
 
             File.WriteAllText (repo_config_file_path, config);
 
-
             // Pass all files through the crypto filter
-            string git_attributes_file_path = SparkleHelpers.CombineMore (
-                TargetFolder, ".git", "info", "attributes");
-
+            string git_attributes_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "info", "attributes");
             File.AppendAllText (git_attributes_file_path, "\n* filter=crypto");
-
 
             // Store the password
             string password_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "password");
@@ -246,12 +229,10 @@ namespace SparkleLib.Git {
                 string output = git.StandardOutput.ReadToEnd ();
                 git.WaitForExit ();
 
-                if (git.ExitCode != 0) {
+                if (git.ExitCode != 0)
                     return false;
-
-                } else {
+                else
                     File.WriteAllText (password_check_file_path, output);
-                }
             }
 
             Process process = new Process () {
@@ -268,10 +249,6 @@ namespace SparkleLib.Git {
                 " -pass pass:\"" + password + "\" -in " + password_check_file_path;
 
             process.Start ();
-
-            // Reading the standard output HAS to go before
-            // WaitForExit, or it will hang forever on output > 4096 bytes
-            process.StandardOutput.ReadToEnd ();
             process.WaitForExit ();
 
             if (process.ExitCode == 0) {
@@ -359,21 +336,17 @@ namespace SparkleLib.Git {
         // Add a .gitignore file to the repo
         private void InstallExcludeRules ()
         {
-            // Compile a list of files we want Git to ignore
+            string exclude_rules           = string.Join (Environment.NewLine, ExcludeRules);
             string exclude_rules_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "info", "exclude");
-            TextWriter writer = new StreamWriter (exclude_rules_file_path);
 
-            foreach (string exclude_rule in ExcludeRules)
-                writer.WriteLine (exclude_rule);
-
-            writer.Close ();
+            File.WriteAllText (exclude_rules_file_path, exclude_rules);
         }
 
 
         private void InstallAttributeRules ()
         {
             string attribute_rules_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "info", "attributes");
-            TextWriter writer = new StreamWriter (attribute_rules_file_path);
+            TextWriter writer                = new StreamWriter (attribute_rules_file_path);
 
             if (this.use_git_bin) {
                 writer.WriteLine ("* filter=bin binary");
