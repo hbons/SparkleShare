@@ -61,13 +61,7 @@ namespace SparkleLib {
                 if (repo.Name.Equals (repo_name) && !repo.IsBuffering &&
                     (repo.Status != SyncStatus.SyncUp && repo.Status != SyncStatus.SyncDown)) {
 
-                    Thread thread = new Thread (
-                        new ThreadStart (delegate {
-                            repo.OnFileActivity (args);
-                        })
-                    );
-
-                    thread.Start ();
+                    new Thread (() => repo.OnFileActivity (args)).Start ();
                 }
             }
         }

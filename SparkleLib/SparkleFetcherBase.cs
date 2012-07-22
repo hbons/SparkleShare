@@ -154,27 +154,25 @@ namespace SparkleLib {
 
             AcceptHostKey (host_key, warn);
 
-            this.thread = new Thread (
-                new ThreadStart (delegate {
-                    if (Fetch ()) {
-                        Thread.Sleep (500);
-                        SparkleHelpers.DebugInfo ("Fetcher", "Finished");
+            this.thread = new Thread (() => {
+                if (Fetch ()) {
+                    Thread.Sleep (500);
+                    SparkleHelpers.DebugInfo ("Fetcher", "Finished");
 
-                        IsActive = false;
+                    IsActive = false;
 
-                        // TODO: Find better way to determine if folder should have crypto setup
-                        bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("crypto");
-                        Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);
+                    // TODO: Find better way to determine if folder should have crypto setup
+                    bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("crypto");
+                    Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);
 
-                    } else {
-                        Thread.Sleep (500);
-                        SparkleHelpers.DebugInfo ("Fetcher", "Failed");
+                } else {
+                    Thread.Sleep (500);
+                    SparkleHelpers.DebugInfo ("Fetcher", "Failed");
 
-                        IsActive = false;
-                        Failed ();
-                    }
-                })
-            );
+                    IsActive = false;
+                    Failed ();
+                }
+            });
 
             this.thread.Start ();
         }
@@ -238,7 +236,7 @@ namespace SparkleLib {
                 return new string (letters);
 
             } else {
-                return  "Git";
+                return "Git";
             }
         }
 
