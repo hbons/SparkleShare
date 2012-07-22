@@ -140,12 +140,10 @@ namespace SparkleLib.Git {
                 string output = git.StandardOutput.ReadToEnd ();
                 git.WaitForExit ();
 
-                if (git.ExitCode == 0) {
+                if (git.ExitCode == 0)
                     return output.TrimEnd ();
-
-                } else {
+                else
                     return null;
-                }
             }
         }
 
@@ -238,7 +236,6 @@ namespace SparkleLib.Git {
                             int quota_limit = int.Parse (line.Substring (21).Trim ());
                             throw new QuotaExceededException ("Quota exceeded", quota_limit);
                         }
-
 
                         // "Writing objects" stage
                         number = (number / 100 * 80 + 20);
@@ -395,25 +392,19 @@ namespace SparkleLib.Git {
 			SparkleGit git;
 
 			if (!this.user_is_set) {
-	            git = new SparkleGit (LocalPath,
-	                "config user.name \"" + base.local_config.User.Name + "\"");
-
+	            git = new SparkleGit (LocalPath, "config user.name \"" + base.local_config.User.Name + "\"");
 				git.Start ();
 				git.WaitForExit ();
 
-	            git = new SparkleGit (LocalPath,
-	                "config user.email \"" + base.local_config.User.Email + "\"");
-
+	            git = new SparkleGit (LocalPath, "config user.email \"" + base.local_config.User.Email + "\"");
 				git.Start ();
 				git.WaitForExit ();
 
 				this.user_is_set = true;
 			}
 
-            git = new SparkleGit (LocalPath,
-                "commit --all --message=\"" + message + "\" " +
-                "--author=\"" + base.local_config.User.Name +
-                " <" + base.local_config.User.Email + ">\"");
+            git = new SparkleGit (LocalPath, "commit --all --message=\"" + message + "\" " +
+                "--author=\"" + base.local_config.User.Name + " <" + base.local_config.User.Email + ">\"");
 
             git.Start ();
             git.StandardOutput.ReadToEnd ();
@@ -515,9 +506,7 @@ namespace SparkleLib.Git {
                     line.StartsWith ("AU") || line.StartsWith ("UA")) {
 
                     // Recover local version
-                    SparkleGit git_theirs = new SparkleGit (LocalPath,
-                        "checkout --theirs \"" + conflicting_path + "\"");
-
+                    SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
                     git_theirs.Start ();
                     git_theirs.WaitForExit ();
 
@@ -526,8 +515,7 @@ namespace SparkleLib.Git {
                     // we use "h" between the hours and minutes instead.
                     string timestamp  = DateTime.Now.ToString ("MMM d H\\hmm");
                     string their_path = Path.GetFileNameWithoutExtension (conflicting_path) +
-                        " (" + base.local_config.User.Name + ", " + timestamp + ")" +
-                        Path.GetExtension (conflicting_path);
+                        " (" + base.local_config.User.Name + ", " + timestamp + ")" + Path.GetExtension (conflicting_path);
 
                     string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
                     string abs_their_path       = Path.Combine (LocalPath, their_path);
@@ -535,9 +523,7 @@ namespace SparkleLib.Git {
                     File.Move (abs_conflicting_path, abs_their_path);
 
                     // Recover server version
-                    SparkleGit git_ours = new SparkleGit (LocalPath,
-                        "checkout --ours \"" + conflicting_path + "\"");
-
+                    SparkleGit git_ours = new SparkleGit (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
                     git_ours.Start ();
                     git_ours.WaitForExit ();
 
@@ -551,9 +537,7 @@ namespace SparkleLib.Git {
                     //
                     // We need to specifically mention the file, so
                     // we can't reuse the Add () method
-                    SparkleGit git_add = new SparkleGit (LocalPath,
-                        "add \"" + conflicting_path + "\"");
-
+                    SparkleGit git_add = new SparkleGit (LocalPath, "add \"" + conflicting_path + "\"");
                     git_add.Start ();
                     git_add.WaitForExit ();
 
@@ -582,11 +566,10 @@ namespace SparkleLib.Git {
                 count = 30;
 
             count = 150;
-
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
 
-            SparkleGit git_log = new SparkleGit (LocalPath,
-                "log -" + count + " --raw --find-renames --date=iso --format=medium --no-color --no-merges");
+            SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count +
+                " --raw --find-renames --date=iso --format=medium --no-color --no-merges");
 
             git_log.Start ();
 
