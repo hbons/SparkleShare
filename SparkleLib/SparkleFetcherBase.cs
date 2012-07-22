@@ -19,9 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace SparkleLib {
@@ -264,13 +261,12 @@ namespace SparkleLib {
                 EnableRaisingEvents = true
             };
 
+            process.StartInfo.FileName               = "ssh-keyscan";
+            process.StartInfo.Arguments              = "-t rsa " + host;
             process.StartInfo.WorkingDirectory       = SparkleConfig.DefaultConfig.TmpPath;
             process.StartInfo.UseShellExecute        = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.CreateNoWindow         = true;
-
-            process.StartInfo.FileName  = "ssh-keyscan";
-            process.StartInfo.Arguments = "-t rsa " + host;
 
             process.Start ();
 
@@ -296,13 +292,12 @@ namespace SparkleLib {
                 EnableRaisingEvents = true
             };
 
+            process.StartInfo.FileName               = "ssh-keygen";
+            process.StartInfo.Arguments              = "-lf \"" + tmp_file_path + "\"";
             process.StartInfo.WorkingDirectory       = SparkleConfig.DefaultConfig.TmpPath;
             process.StartInfo.UseShellExecute        = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.CreateNoWindow         = true;
-
-            process.StartInfo.FileName  = "ssh-keygen";
-            process.StartInfo.Arguments = "-lf \"" + tmp_file_path + "\"";
 
             process.Start ();
 
