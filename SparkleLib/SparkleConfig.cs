@@ -354,7 +354,7 @@ namespace SparkleLib {
                 throw new FileNotFoundException (FullPath + " does not exist");
 
             Save (FullPath);
-            SparkleHelpers.DebugInfo ("Config", "Writen to '" + FullPath + "'");
+            SparkleHelpers.DebugInfo ("Config", "Wrote to '" + FullPath + "'");
         }
     }
 }
