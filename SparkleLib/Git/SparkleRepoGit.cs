@@ -43,7 +43,7 @@ namespace SparkleLib.Git {
             string rebase_apply_path = SparkleHelpers.CombineMore (LocalPath, ".git", "rebase-apply");
 
             if (Directory.Exists (rebase_apply_path)) {
-                SparkleGit git = new SparkleGit (LocalPath, "rebase --abort");
+                git = new SparkleGit (LocalPath, "rebase --abort");
                 git.Start ();
                 git.WaitForExit ();
             }
