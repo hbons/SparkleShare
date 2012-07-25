@@ -82,9 +82,6 @@
       <Link>SparkleWatcher.cs</Link>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="..\SparkleWatcherFactory.cs">
-      <Link>SparkleWatcherFactory.cs</Link>
-    </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Defines.cs">
       <DependentUpon>Defines.tt</DependentUpon>
