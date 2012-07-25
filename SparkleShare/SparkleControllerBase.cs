@@ -251,7 +251,7 @@ namespace SparkleShare {
             try {
                 repo = (SparkleRepoBase) Activator.CreateInstance (
                     Type.GetType ("SparkleLib." + backend + ".SparkleRepo, SparkleLib." + backend),
-                        new object [] {folder_path, this.config}
+                        new object [] { folder_path, this.config }
                 );
 
             } catch (Exception e) {
@@ -271,13 +271,7 @@ namespace SparkleShare {
                     ProgressSpeed      = "";
                 }
 
-                if (status == SyncStatus.Idle     ||
-                    status == SyncStatus.SyncUp   ||
-                    status == SyncStatus.SyncDown ||
-                    status == SyncStatus.Error) {
-
-                    UpdateState ();
-                }
+                UpdateState ();
             };
 
             repo.ProgressChanged += delegate (double percentage, string speed) {
@@ -310,8 +304,8 @@ namespace SparkleShare {
                 if (repo.LocalPath.Equals (folder_path)) {
                     repo.Dispose ();
                     this.repositories.Remove (repo);
-
                     repo = null;
+
                     return;
                 }
             }
@@ -373,30 +367,22 @@ namespace SparkleShare {
         // Fires events for the current syncing state
         private void UpdateState ()
         {
-            bool has_syncing_repos  = false;
             bool has_unsynced_repos = false;
 
             foreach (SparkleRepoBase repo in Repositories) {
-                if (repo.Status == SyncStatus.SyncDown ||
-                    repo.Status == SyncStatus.SyncUp   ||
-                    repo.IsBuffering) {
-
-                    has_syncing_repos = true;
+                if (repo.Status == SyncStatus.SyncDown || repo.Status == SyncStatus.SyncUp || repo.IsBuffering) {
+                    OnSyncing ();
+                    return;
 
                 } else if (repo.HasUnsyncedChanges) {
                     has_unsynced_repos = true;
                 }
             }
 
-            if (has_syncing_repos) {
-                OnSyncing ();
-
-            } else if (has_unsynced_repos) {
+            if (has_unsynced_repos)
                 OnError ();
-
-            } else {
+            else
                 OnIdle ();
-            }
         }
 
 
@@ -468,12 +454,8 @@ namespace SparkleShare {
 
             try {
                 this.fetcher = (SparkleFetcherBase) Activator.CreateInstance (
-                        Type.GetType ("SparkleLib." + backend + ".SparkleFetcher, SparkleLib." + backend),
-                            address,
-                            required_fingerprint,
-                            remote_path,
-                            tmp_folder,
-                            fetch_prior_history
+                    Type.GetType ("SparkleLib." + backend + ".SparkleFetcher, SparkleLib." + backend),
+                        address, required_fingerprint, remote_path, tmp_folder, fetch_prior_history
                 );
 
             } catch (Exception e) {
