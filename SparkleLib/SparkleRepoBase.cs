@@ -114,15 +114,12 @@ namespace SparkleLib {
 
         private string identifier;
         private SparkleListenerBase listener;
+        private SparkleWatcher watcher;
         private TimeSpan poll_interval            = PollInterval.Short;
         private DateTime last_poll                = DateTime.Now;
         private DateTime progress_last_change     = DateTime.Now;
         private TimeSpan progress_change_interval = new TimeSpan (0, 0, 0, 1);
-
-
-        private Timers.Timer remote_timer = new Timers.Timer () {
-            Interval = 5000
-        };
+        private Timers.Timer remote_timer = new Timers.Timer () { Interval = 5000 };
 
         private bool is_syncing {
             get {
@@ -151,7 +148,7 @@ namespace SparkleLib {
                 Status = status;
             };
 
-            SparkleWatcherFactory.CreateWatcher (this);
+            this.watcher = new SparkleWatcher (LocalPath);
             new Thread (() => CreateListener ()).Start ();
 
             this.remote_timer.Elapsed += delegate {
@@ -178,6 +175,8 @@ namespace SparkleLib {
 
         public void Initialize ()
         {
+            this.watcher.ChangeEvent += OnFileActivity;
+
             // Sync up everything that changed
             // since we've been offline
             if (HasLocalChanges) {
@@ -212,8 +211,10 @@ namespace SparkleLib {
             if (IsBuffering || !HasLocalChanges)
                 return;
 
-            SparkleHelpers.DebugInfo ("Local", Name + " | Activity detected, waiting for it to settle...");
             IsBuffering = true;
+            this.watcher.Disable ();
+
+            SparkleHelpers.DebugInfo ("Local", Name + " | Activity detected, waiting for it to settle...");
 
             List<double> size_buffer = new List<double> ();
 
@@ -247,6 +248,8 @@ namespace SparkleLib {
                 }
 
             } while (IsBuffering);
+
+            this.watcher.Enable ();
         }
 
 
@@ -275,6 +278,8 @@ namespace SparkleLib {
 
         private void SyncUpBase ()
         {
+            this.watcher.Disable ();
+
             SparkleHelpers.DebugInfo ("SyncUp", Name + " | Initiated");
             HasUnsyncedChanges = true;
 
@@ -282,9 +287,9 @@ namespace SparkleLib {
 
             if (SyncUp ()) {
                 SparkleHelpers.DebugInfo ("SyncUp", Name + " | Done");
-                HasUnsyncedChanges = false;
-
                 ChangeSets = GetChangeSets ();
+
+                HasUnsyncedChanges = false;
 
                 SyncStatusChanged (SyncStatus.Idle);
                 this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
@@ -293,10 +298,12 @@ namespace SparkleLib {
                 SparkleHelpers.DebugInfo ("SyncUp", Name + " | Error");
                 SyncDownBase ();
 
+                this.watcher.Disable ();
+
                 if (ServerOnline && SyncUp ()) {
                     HasUnsyncedChanges = false;
-                    SyncStatusChanged (SyncStatus.Idle);
 
+                    SyncStatusChanged (SyncStatus.Idle);
                     this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
 
                 } else {
@@ -307,11 +314,15 @@ namespace SparkleLib {
 
             ProgressPercentage = 0.0;
             ProgressSpeed      = "";
+
+            this.watcher.Enable ();
         }
 
 
         private void SyncDownBase ()
         {
+            this.watcher.Disable ();
+
             SparkleHelpers.DebugInfo ("SyncDown", Name + " | Initiated");
 
             SyncStatusChanged (SyncStatus.SyncDown);
@@ -360,6 +371,8 @@ namespace SparkleLib {
 
             ProgressPercentage = 0.0;
             ProgressSpeed      = "";
+
+            this.watcher.Enable ();
 
             SyncStatusChanged (SyncStatus.Idle);
         }
@@ -475,7 +488,7 @@ namespace SparkleLib {
             this.listener.Disconnected         -= ListenerDisconnectedDelegate;
             this.listener.AnnouncementReceived -= ListenerAnnouncementReceivedDelegate;
 
-            SparkleWatcherFactory.DisposeWatcher (this);
+            this.watcher.Dispose ();
         }
     }
 }

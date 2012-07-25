@@ -16,7 +16,6 @@ SOURCES =  \
 	SparkleRepoBase.cs \
 	SparkleUser.cs \
 	SparkleWatcher.cs \
-	SparkleWatcherFactory.cs \
 	SparkleWrappers.cs
 
 
