@@ -43,7 +43,6 @@ namespace SparkleShare {
                 args.RetVal = true;
             };
 
-
             DefaultSize    = new Gdk.Size (600, 260);
             Resizable      = false;
             BorderWidth    = 0;
@@ -52,8 +51,7 @@ namespace SparkleShare {
             Title          = _("About SparkleShare");
             AppPaintable   = true;
 
-            string image_path = new string [] {SparkleUI.AssetsPath,
-                 "pixmaps", "about.png"}.Combine ();
+            string image_path = new string [] { SparkleUI.AssetsPath, "pixmaps", "about.png" }.Combine ();
 
             Realize ();
             Gdk.Pixbuf buf = new Gdk.Pixbuf (image_path);
@@ -62,7 +60,6 @@ namespace SparkleShare {
             GdkWindow.SetBackPixmap (map, false);
 
             CreateAbout ();
-            
 
             Controller.HideWindowEvent += delegate {
                 Application.Invoke (delegate {
@@ -80,7 +77,7 @@ namespace SparkleShare {
             Controller.NewVersionEvent += delegate (string new_version) {
                 Application.Invoke (delegate {
                     this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#729fcf'>{0}</span>",
-                        String.Format ("A newer version ({0}) is available!", new_version));
+                        string.Format ("A newer version ({0}) is available!", new_version));
 
                     this.updates.ShowAll ();
                 });
@@ -109,17 +106,14 @@ namespace SparkleShare {
         private void CreateAbout ()
         {
             Label version = new Label () {
-                Markup = "<span font_size='small' fgcolor='white'>" +
-                         "version " + Controller.RunningVersion +
-                         "</span>",
+                Markup = string.Format ("<span font_size='small' fgcolor='white'>version {0}</span>",
+                    Controller.RunningVersion),
                 Xalign = 0,
                 Xpad = 300
             };
 
             this.updates = new Label () {
-                Markup = "<span font_size='small' fgcolor='#729fcf'>" +
-                         "Checking for updates..." +
-                         "</span>",
+                Markup = "<span font_size='small' fgcolor='#729fcf'>Checking for updates...</span>",
                 Xalign = 0,
                 Xpad = 300
             };
