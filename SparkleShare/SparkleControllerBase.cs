@@ -402,19 +402,15 @@ namespace SparkleShare {
 
         public void OnFolderActivity (object o, FileSystemEventArgs args)
         {
-            if (args != null &&
-                args.ChangeType == WatcherChangeTypes.Created &&
-                args.FullPath.EndsWith (".xml")) {
+            if (args != null && args.FullPath.EndsWith (".xml") &&
+                args.ChangeType == WatcherChangeTypes.Created) {
 
                 HandleInvite (args);
                 return;
 
             } else {
-                if (Directory.Exists (args.FullPath) &&
-                    args.ChangeType == WatcherChangeTypes.Created) {
-
+                if (Directory.Exists (args.FullPath) && args.ChangeType == WatcherChangeTypes.Created)
                     return;
-                }
 
                 CheckRepositories ();
             }
