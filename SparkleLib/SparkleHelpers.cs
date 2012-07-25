@@ -35,12 +35,8 @@ namespace SparkleLib {
             if (SparkleConfig.DebugMode)
                 Console.WriteLine (line);
 
-            lock (debug_lock) {
-                File.AppendAllText (
-                    SparkleConfig.DefaultConfig.LogFilePath,
-                    line + Environment.NewLine
-                );
-            }
+            lock (debug_lock)
+                File.AppendAllText (SparkleConfig.DefaultConfig.LogFilePath, line + Environment.NewLine);
         }
 
 
@@ -60,18 +56,19 @@ namespace SparkleLib {
         // Recursively sets access rights of a folder to 'Normal'
         public static void ClearAttributes (string path)
         {
-            if (Directory.Exists (path)) {
-                string [] folders = Directory .GetDirectories (path);
+            if (!Directory.Exists (path))
+                return;
 
-                foreach (string folder in folders)
-                    ClearAttributes (folder);
+            string [] folders = Directory.GetDirectories (path);
 
-                string [] files = Directory .GetFiles(path);
+            foreach (string folder in folders)
+                ClearAttributes (folder);
 
-                foreach (string file in files)
-                    if (!IsSymlink (file))
-                        File.SetAttributes (file, FileAttributes.Normal);
-            }
+            string [] files = Directory.GetFiles(path);
+
+            foreach (string file in files)
+                if (!IsSymlink (file))
+                    File.SetAttributes (file, FileAttributes.Normal);
         }
 
 
@@ -93,11 +90,9 @@ namespace SparkleLib {
 
         public static bool IsWindows {
             get {
-                PlatformID platform = Environment.OSVersion.Platform;
-
-                return (platform == PlatformID.Win32NT ||
-                        platform == PlatformID.Win32S  ||
-                        platform == PlatformID.Win32Windows);
+                return (Environment.OSVersion.Platform == PlatformID.Win32NT ||
+                        Environment.OSVersion.Platform == PlatformID.Win32S  ||
+                        Environment.OSVersion.Platform == PlatformID.Win32Windows);
             }
         }
 

@@ -252,7 +252,7 @@ namespace SparkleShare {
             this.animation_frame_number = 0;
 
             this.animation = new Timer () {
-                Interval = 40
+                Interval = 100
             };
 
             this.animation.Elapsed += delegate {
