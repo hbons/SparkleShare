@@ -37,8 +37,16 @@ namespace SparkleLib.Git {
             SparkleGit git = new SparkleGit (LocalPath, "config --get filter.bin.clean");
             git.Start ();
             git.WaitForExit ();
-
+            
             this.use_git_bin = (git.ExitCode == 0);
+
+            string rebase_apply_path = SparkleHelpers.CombineMore (LocalPath, ".git", "rebase-apply");
+
+            if (Directory.Exists (rebase_apply_path)) {
+                SparkleGit git = new SparkleGit (LocalPath, "rebase --abort");
+                git.Start ();
+                git.WaitForExit ();
+            }
         }
 
 
@@ -127,13 +135,6 @@ namespace SparkleLib.Git {
 
         public override string CurrentRevision {
             get {
-                // Remove stale rebase-apply files because it
-                // makes the method return the wrong hashes.
-                string rebase_apply_file = SparkleHelpers.CombineMore (LocalPath, ".git", "rebase-apply");
-
-                if (File.Exists (rebase_apply_file))
-                    File.Delete (rebase_apply_file);
-
                 SparkleGit git = new SparkleGit (LocalPath, "rev-parse HEAD");
                 git.Start ();
                 
@@ -141,7 +142,7 @@ namespace SparkleLib.Git {
                 git.WaitForExit ();
 
                 if (git.ExitCode == 0)
-                    return output.TrimEnd ();
+                    return output.Trim ();
                 else
                     return null;
             }
