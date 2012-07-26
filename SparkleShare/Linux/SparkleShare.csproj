@@ -57,26 +57,25 @@
   </ProjectExtensions>
   <ItemGroup>
     <Compile Include="SparkleBubbles.cs" />
-    <Compile Include="SparkleBubblesController.cs" />
     <Compile Include="SparkleController.cs" />
-    <Compile Include="SparkleEntry.cs" />
     <Compile Include="SparkleSetup.cs" />
-    <Compile Include="SparkleSetupController.cs" />
     <Compile Include="SparkleSetupWindow.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="SparkleSpinner.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
-    <Compile Include="SparkleStatusIconController.cs" />
     <Compile Include="SparkleUI.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
-    <Compile Include="SparkleEventLogController.cs" />
     <Compile Include="SparkleEventLog.cs" />
-    <Compile Include="SparkleAboutController.cs" />
     <Compile Include="SparkleAbout.cs" />
-    <Compile Include="SparkleExtensions.cs" />
-    <Compile Include="SparkleControllerBase.cs" />
-    <Compile Include="SparklePlugin.cs" />
-    <Compile Include="SparkleOptions.cs" />
-    <Compile Include="SparkleInvite.cs" />
+    <Compile Include="..\Program.cs" />
+    <Compile Include="..\SparkleAboutController.cs" />
+    <Compile Include="..\SparkleBubblesController.cs" />
+    <Compile Include="..\SparkleControllerBase.cs" />
+    <Compile Include="..\SparkleEventLogController.cs" />
+    <Compile Include="..\SparkleExtensions.cs" />
+    <Compile Include="..\SparkleInvite.cs" />
+    <Compile Include="..\SparkleKeys.cs" />
+    <Compile Include="..\SparklePlugin.cs" />
+    <Compile Include="..\SparkleSetupController.cs" />
+    <Compile Include="..\SparkleStatusIconController.cs" />
   </ItemGroup>
 </Project>

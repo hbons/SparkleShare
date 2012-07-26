@@ -25,7 +25,8 @@ namespace SparkleLib {
 
         public static string Version {
             get {
-                return Assembly.GetExecutingAssembly ().GetName ().Version.ToString ();
+                string version = "" + Assembly.GetExecutingAssembly ().GetName ().Version;
+                return version.Substring (0, version.Length - 2);
             }
         }
 

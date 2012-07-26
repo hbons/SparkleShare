@@ -32,13 +32,6 @@ namespace SparkleShare {
         public SparkleSetupController Controller = new SparkleSetupController ();
 
         private ProgressBar progress_bar = new ProgressBar ();
-        
-
-        // Short alias for the translations
-        public static string _ (string s)
-        {
-            return Catalog.GetString (s);
-        }
 
 
         public SparkleSetup () : base ()
@@ -63,15 +56,15 @@ namespace SparkleShare {
                     switch (type) {
                     case PageType.Setup: {
 
-                        Header = _("Welcome to SparkleShare!");
-                        Description  = "First off, what's your name and email?\nThis information is only visible to team members.";
+                        Header      = "Welcome to SparkleShare!";
+                        Description = "First off, what's your name and email?\nThis information is only visible to team members.";
 
                         Table table = new Table (2, 3, true) {
                             RowSpacing    = 6,
                             ColumnSpacing = 6
                         };
 
-                            Label name_label = new Label ("<b>" + _("Full Name:") + "</b>") {
+                            Label name_label = new Label ("<b>" + "Full Name:" + "</b>") {
                                 UseMarkup = true,
                                 Xalign    = 1
                             };
@@ -94,7 +87,7 @@ namespace SparkleShare {
                                 Controller.CheckSetupPage (name_entry.Text, email_entry.Text);
                             };
 
-                            Label email_label = new Label ("<b>" + _("Email:") + "</b>") {
+                            Label email_label = new Label ("<b>" + "Email:" + "</b>") {
                                 UseMarkup = true,
                                 Xalign    = 1
                             };
@@ -107,13 +100,13 @@ namespace SparkleShare {
                         VBox wrapper = new VBox (false, 9);
                         wrapper.PackStart (table, true, false, 0);
                         
-                            Button cancel_button = new Button (_("Cancel"));
+                            Button cancel_button = new Button ("Cancel");
 
                             cancel_button.Clicked += delegate {
                                 Controller.SetupPageCancelled ();
                             };
                         
-                            Button continue_button = new Button (_("Continue")) {
+                            Button continue_button = new Button ("Continue") {
                                 Sensitive = false
                             };
 
@@ -142,7 +135,7 @@ namespace SparkleShare {
 
                     case PageType.Add: {
 
-                        Header = _("Where's your project hosted?");
+                        Header = "Where's your project hosted?";
 
                         VBox layout_vertical = new VBox (false, 12);
                         HBox layout_fields   = new HBox (true, 12);
@@ -280,7 +273,7 @@ namespace SparkleShare {
                         };
 
                                 layout_address.PackStart (new Label () {
-                                        Markup = "<b>" + _("Address:") + "</b>",
+                                        Markup = "<b>" + "Address:" + "</b>",
                                         Xalign = 0
                                     }, true, true, 0);
 
@@ -292,7 +285,7 @@ namespace SparkleShare {
                                     };
 
                                 layout_path.PackStart (new Label () {
-                                        Markup = "<b>" + _("Remote Path:") + "</b>",
+                                        Markup = "<b>" + "Remote Path:" + "</b>",
                                         Xalign = 0
                                     }, true, true, 0);
                                 
@@ -309,13 +302,13 @@ namespace SparkleShare {
                         Add (layout_vertical);
 
                             // Cancel button
-                            Button cancel_button = new Button (_("Cancel"));
+                            Button cancel_button = new Button ("Cancel");
 
                             cancel_button.Clicked += delegate {
                                 Controller.PageCancelled ();
                             };
 
-                            Button add_button = new Button (_("Add")) {
+                            Button add_button = new Button ("Add") {
                                 Sensitive = false
                             };
 
@@ -352,8 +345,8 @@ namespace SparkleShare {
 
                     case PageType.Invite: {
 
-                        Header      = _("You've received an invite!");
-                        Description = _("Do you want to add this project to SparkleShare?");
+                        Header      = "You've received an invite!";
+                        Description = "Do you want to add this project to SparkleShare?";
 
 
                         Table table = new Table (2, 3, true) {
@@ -361,11 +354,11 @@ namespace SparkleShare {
                             ColumnSpacing = 6
                         };
 
-                            Label address_label = new Label (_("Address:")) {
+                            Label address_label = new Label ("Address:") {
                                 Xalign    = 1
                             };
 
-                            Label path_label = new Label (_("Remote Path:")) {
+                            Label path_label = new Label ("Remote Path:") {
                                 Xalign    = 1
                             };
 
@@ -387,13 +380,13 @@ namespace SparkleShare {
                         VBox wrapper = new VBox (false, 9);
                         wrapper.PackStart (table, true, false, 0);
 
-                            Button cancel_button = new Button (_("Cancel"));
+                            Button cancel_button = new Button ("Cancel");
 
                             cancel_button.Clicked += delegate {
                                 Controller.PageCancelled ();
                             };
 
-                            Button add_button = new Button (_("Add"));
+                            Button add_button = new Button ("Add");
 
                             add_button.Clicked += delegate {
                                 Controller.InvitePageCompleted ();
@@ -408,18 +401,18 @@ namespace SparkleShare {
 
                     case PageType.Syncing: {
 
-                        Header      = String.Format (_("Adding project ‘{0}’…"), Controller.SyncingFolder);
-                        Description = _("This may either take a short or a long time depending on the project's size.");
+                        Header      = String.Format ("Adding project ‘{0}’…", Controller.SyncingFolder);
+                        Description = "This may either take a short or a long time depending on the project's size.";
 
                         this.progress_bar.Fraction = Controller.ProgressBarPercentage / 100;
 
                         Button finish_button = new Button () {
                             Sensitive = false,
-                            Label = _("Finish")
+                            Label = "Finish"
                         };
 
                         Button cancel_button = new Button () {
-                            Label = _("Cancel")
+                            Label = "Cancel"
                         };
 
                         cancel_button.Clicked += delegate {
@@ -448,7 +441,7 @@ namespace SparkleShare {
 
                     case PageType.Error: {
                     
-                        Header = _("Oops! Something went wrong") + "…";
+                        Header = "Oops! Something went wrong" + "…";
 
                         VBox points = new VBox (false, 0);
                         Image list_point_one   = new Image (SparkleUIHelpers.GetIcon ("go-next", 16));
@@ -500,13 +493,13 @@ namespace SparkleShare {
 
                         points.PackStart (new Label (""), true, true, 0);
 
-                        Button cancel_button = new Button (_("Cancel"));
+                        Button cancel_button = new Button ("Cancel");
 
                             cancel_button.Clicked += delegate {
                                 Controller.PageCancelled ();
                             };
                         
-                        Button try_again_button = new Button (_("Try Again…")) {
+                        Button try_again_button = new Button ("Try Again…") {
                             Sensitive = true
                         };
 
@@ -526,7 +519,7 @@ namespace SparkleShare {
                         Header       = "Set up file encryption";
                         Description  = "This project is supposed to be encrypted, but it doesn't yet have a password set. Please provide one below.";
                         
-                        Label password_label = new Label ("<b>" + _("Password:") + "</b>") {
+                        Label password_label = new Label ("<b>" + "Password:" + "</b>") {
                             UseMarkup = true,
                             Xalign    = 1
                         };
@@ -622,7 +615,7 @@ namespace SparkleShare {
                         Header       = "This project contains encrypted files";
                         Description  = "Please enter the password to see their contents.";
                         
-                        Label password_label = new Label ("<b>" + _("Password:") + "</b>") {
+                        Label password_label = new Label ("<b>" + "Password:" + "</b>") {
                             UseMarkup = true,
                             Xalign    = 1
                         };
@@ -693,23 +686,24 @@ namespace SparkleShare {
                         UrgencyHint = true;
 
                         if (!HasToplevelFocus) {
-                            string title   = _("Your shared project is ready!");
-                            string subtext = _("You can find the files in your SparkleShare folder.");
+                            string title   = "Your shared project is ready!";
+                            string subtext = "You can find the files in your SparkleShare folder.");
 
                             SparkleUI.Bubbles.Controller.ShowBubble (title, subtext, null);
                         }
 
-                        Header      = _("Your shared project is ready!");
-                        Description = _("You can find it in your SparkleShare folder");
+                        Header      = "Your shared project is ready!";
+                        Description = "You can find it in your SparkleShare folder";
 
                         // A button that opens the synced folder
-                        Button open_folder_button = new Button (string.Format ("Open {0}", System.IO.Path.GetFileName (Controller.PreviousPath)));
+                        Button open_folder_button = new Button (string.Format ("Open {0}",
+                            System.IO.Path.GetFileName (Controller.PreviousPath)));
 
                         open_folder_button.Clicked += delegate {
                             Controller.OpenFolderClicked ();
                         };
 
-                        Button finish_button = new Button (_("Finish"));
+                        Button finish_button = new Button ("Finish");
 
                         finish_button.Clicked += delegate {
                             Controller.FinishPageCompleted ();
@@ -751,16 +745,16 @@ namespace SparkleShare {
 
                         switch (Controller.TutorialPageNumber) {
                         case 1: {
-                            Header      = _("What's happening next?");
+                            Header      = "What's happening next?";
                             Description = "SparkleShare creates a special folder on your computer " +
                                 "that will keep track of your projects.";
 
-                            Button skip_tutorial_button = new Button (_("Skip Tutorial"));
+                            Button skip_tutorial_button = new Button ("Skip Tutorial");
                             skip_tutorial_button.Clicked += delegate {
                                 Controller.TutorialSkipped ();
                             };
 
-                            Button continue_button = new Button (_("Continue"));
+                            Button continue_button = new Button ("Continue");
                             continue_button.Clicked += delegate {
                                 Controller.TutorialPageCompleted ();
                             };
@@ -776,11 +770,11 @@ namespace SparkleShare {
                         }
 
                         case 2: {
-                            Header      = _("Sharing files with others");
-                            Description = _("All files added to your project folders are synced automatically with " +
-                                "the host and your team members.");
+                            Header      = "Sharing files with others";
+                            Description = "All files added to your project folders are synced automatically with " +
+                                "the host and your team members.";
 
-                            Button continue_button = new Button (_("Continue"));
+                            Button continue_button = new Button ("Continue");
                             continue_button.Clicked += delegate {
                                 Controller.TutorialPageCompleted ();
                             };
@@ -794,11 +788,11 @@ namespace SparkleShare {
                         }
 
                         case 3: {
-                            Header      = _("The status icon is here to help");
-                            Description = _("It shows the syncing progress, provides easy access to " +
-                                "your projects and let's you view recent changes.");
+                            Header      = "The status icon is here to help";
+                            Description = "It shows the syncing progress, provides easy access to " +
+                                "your projects and let's you view recent changes.";
 
-                            Button continue_button = new Button (_("Continue"));
+                            Button continue_button = new Button ("Continue");
                             continue_button.Clicked += delegate {
                                 Controller.TutorialPageCompleted ();
                             };
@@ -812,13 +806,13 @@ namespace SparkleShare {
                         }
 
                         case 4: {
-                            Header      = _("Adding projects to SparkleShare");
-                            Description = _("You can do this through the status icon menu, or by clicking " +
-                                "magic buttons on webpages that look like this:");
+                            Header      = "Adding projects to SparkleShare";
+                            Description = "You can do this through the status icon menu, or by clicking " +
+                                "magic buttons on webpages that look like this:";
 
                             Image slide = SparkleUIHelpers.GetImage ("tutorial-slide-4.png");
 
-                            Button finish_button = new Button (_("Finish"));
+                            Button finish_button = new Button ("Finish");
                             finish_button.Clicked += delegate {
                                 Controller.TutorialPageCompleted ();
                             };
