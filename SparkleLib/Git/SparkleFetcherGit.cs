@@ -278,8 +278,7 @@ namespace SparkleLib.Git {
         {
             if (!IsFetchedRepoEmpty) {
                 SparkleGit git = new SparkleGit (TargetFolder, "checkout --quiet HEAD");
-                git.Start ();
-                git.WaitForExit ();
+                git.StartAndWaitForExit ();
             }
 
             base.Complete ();
@@ -304,8 +303,7 @@ namespace SparkleLib.Git {
 
             foreach (string setting in settings) {
                 SparkleGit git_config = new SparkleGit (TargetFolder, "config " + setting);
-                git_config.Start ();
-                git_config.WaitForExit ();
+                git_config.StartAndWaitForExit ();
             }
 
             if (this.use_git_bin)
@@ -327,8 +325,7 @@ namespace SparkleLib.Git {
 
             foreach (string setting in settings) {
                 SparkleGit git_config = new SparkleGit (TargetFolder, "config " + setting);
-                git_config.Start ();
-                git_config.WaitForExit ();
+                git_config.StartAndWaitForExit ();
             }
         }
 

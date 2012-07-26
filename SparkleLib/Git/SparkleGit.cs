@@ -46,6 +46,26 @@ namespace SparkleLib.Git {
         }
 
 
+        public void StartAndWaitForExit ()
+        {
+            Start ();
+            WaitForExit ();
+        }
+
+
+        public string StartAndReadStandardOutput ()
+        {
+            Start ();
+
+            // Reading the standard output HAS to go before
+            // WaitForExit, or it will hang forever on output > 4096 bytes
+            string output = StandardOutput.ReadToEnd ();
+            WaitForExit ();
+
+            return output.TrimEnd ();
+        }
+
+
         protected string LocateCommand (string name)
         {
             string [] possible_command_paths = new string [] {
