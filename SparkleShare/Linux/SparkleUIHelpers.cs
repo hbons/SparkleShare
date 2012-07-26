@@ -41,13 +41,10 @@ namespace SparkleShare {
         {
             IconTheme icon_theme = new IconTheme ();
 
-            icon_theme.AppendSearchPath (
-                Path.Combine (SparkleUI.AssetsPath, "icons")
-            );
+            icon_theme.AppendSearchPath (Path.Combine (SparkleUI.AssetsPath, "icons"));
 
             icon_theme.AppendSearchPath (
-                Path.Combine (Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath), "icons")
-            );
+                Path.Combine (Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath), "icons"));
 
             try {
                 return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
@@ -65,9 +62,7 @@ namespace SparkleShare {
 
         public static Image GetImage (string name)
         {
-            string image_path = SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare",
-                "pixmaps", name);
-
+            string image_path = SparkleHelpers.CombineMore (Defines.INSTALL_DIR, "pixmaps", name);
             return new Image (image_path);
         }
 

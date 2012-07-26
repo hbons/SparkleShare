@@ -32,7 +32,7 @@ namespace SparkleShare {
 
         public override string PluginsPath {
             get {
-                return SparkleHelpers.CombineMore (Defines.DATAROOTDIR, "sparkleshare", "plugins");
+                return SparkleHelpers.CombineMore (Defines.INSTALL_DIR, "plugins");
             }
         }
 
@@ -157,11 +157,8 @@ namespace SparkleShare {
 
         public override string EventLogHTML {
             get {
-                string html_path = new string [] { Defines.PREFIX, "share",
-                    "sparkleshare", "html", "event-log.html" }.Combine ();
-
-                string jquery_file_path = new string [] { Defines.PREFIX, "share",
-                    "sparkleshare", "html", "jquery.js" }.Combine ();
+                string html_path = new string [] { Defines.INSTALL_DIR, "html", "event-log.html" }.Combine ();
+                string jquery_file_path = new string [] { Defines.INSTALL_DIR, "html", "jquery.js" }.Combine ();
 
                 string html   = File.ReadAllText (html_path);
                 string jquery = File.ReadAllText (jquery_file_path);
@@ -173,9 +170,7 @@ namespace SparkleShare {
         
         public override string DayEntryHTML {
             get {
-                string path = new string [] { Defines.PREFIX, "share",
-                    "sparkleshare", "html", "day-entry.html" }.Combine ();
-            
+                string path = new string [] { Defines.INSTALL_DIR, "html", "day-entry.html" }.Combine ();
                 return File.ReadAllText (path);
             }
         }
@@ -183,9 +178,7 @@ namespace SparkleShare {
         
         public override string EventEntryHTML {
             get {
-                string path = new string [] {Defines.PREFIX,
-                    "share", "sparkleshare", "html", "event-entry.html"}.Combine ();
-            
+                string path = new string [] { Defines.INSTALL_DIR, "html", "event-entry.html" }.Combine ();
                 return File.ReadAllText (path);
             }
         }
@@ -199,8 +192,8 @@ namespace SparkleShare {
 
         public override void OpenFile (string path)
         {
-            Process process = new Process ();
-            process.StartInfo.FileName = "xdg-open";
+            Process process             = new Process ();
+            process.StartInfo.FileName  = "xdg-open";
             process.StartInfo.Arguments = "\"" + path + "\"";
             process.Start ();
         }
