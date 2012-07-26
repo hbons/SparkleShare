@@ -41,13 +41,6 @@ namespace SparkleShare {
         #else
         private StatusIcon status_icon;
         #endif
-        
-
-        // Short alias for the translations
-        public static string _ (string s)
-        {
-            return Catalog.GetString (s);
-        }
 
 
         public SparkleStatusIcon ()
@@ -207,7 +200,7 @@ namespace SparkleShare {
 
                 this.menu.Add (new SeparatorMenuItem ());
 
-                MenuItem sync_item = new MenuItem (_("Add Hosted Project…"));
+                MenuItem sync_item = new MenuItem ("Add Hosted Project…");
 
                 sync_item.Activated += delegate {
                     Controller.AddHostedProjectClicked ();
@@ -215,7 +208,7 @@ namespace SparkleShare {
 
             this.menu.Add (sync_item);
 
-            this.recent_events_item = new MenuItem (_("Recent Changes…"));
+            this.recent_events_item = new MenuItem ("Recent Changes…");
 
                 this.recent_events_item.Sensitive = Controller.OpenRecentEventsItemEnabled;
 
@@ -230,18 +223,18 @@ namespace SparkleShare {
             MenuItem notify_item;
                                                              
                 if (Program.Controller.NotificationsEnabled)
-                    notify_item = new MenuItem (_("Turn Notifications Off"));
+                    notify_item = new MenuItem ("Turn Notifications Off");
                 else
-                    notify_item = new MenuItem (_("Turn Notifications On"));
+                    notify_item = new MenuItem ("Turn Notifications On");
 
                 notify_item.Activated += delegate {
 					Application.Invoke (delegate {
 	                    Program.Controller.ToggleNotifications ();
 					
 					    if (Program.Controller.NotificationsEnabled)
-	                    	(notify_item.Child as Label).Text = _("Turn Notifications Off");
+	                    	(notify_item.Child as Label).Text = "Turn Notifications Off";
 	                	else
-	                    	(notify_item.Child as Label).Text = _("Turn Notifications On");
+	                    	(notify_item.Child as Label).Text = "Turn Notifications On";
 					});
                 };
 
@@ -249,7 +242,7 @@ namespace SparkleShare {
             this.menu.Add (new SeparatorMenuItem ());
 
 
-                MenuItem about_item = new MenuItem (_("About SparkleShare"));
+                MenuItem about_item = new MenuItem ("About SparkleShare");
 
                 about_item.Activated += delegate {
                     Controller.AboutClicked ();
@@ -259,7 +252,7 @@ namespace SparkleShare {
             this.menu.Add (new SeparatorMenuItem ());
 
 
-                this.quit_item = new MenuItem (_("Quit")) {
+                this.quit_item = new MenuItem ("Quit") {
                     Sensitive = Controller.QuitItemEnabled
                 };
 

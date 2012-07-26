@@ -1,7 +1,0 @@
-[main]
-host = https://www.transifex.net
-
-[sparkleshare.UI]
-file_filter = SparkleShare/Common/Translations/<lang>.po
-source_file = SparkleShare/Common/Translations/sparkleshare.pot
-source_lang = en

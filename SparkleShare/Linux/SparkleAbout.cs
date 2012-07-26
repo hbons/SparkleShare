@@ -29,13 +29,6 @@ namespace SparkleShare {
         private Label updates;
 
 
-        // Short alias for the translations
-        public static string _ (string s)
-        {
-            return Catalog.GetString (s);
-        }
-
-
         public SparkleAbout () : base ("")
         {
             DeleteEvent += delegate (object o, DeleteEventArgs args) {
@@ -48,7 +41,7 @@ namespace SparkleShare {
             BorderWidth    = 0;
             IconName       = "folder-sparkleshare";
             WindowPosition = WindowPosition.Center;
-            Title          = _("About SparkleShare");
+            Title          = "About SparkleShare";
             AppPaintable   = true;
 
             string image_path = new string [] { SparkleUI.AssetsPath, "pixmaps", "about.png" }.Combine ();
