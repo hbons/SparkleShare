@@ -132,7 +132,6 @@ build/Makefile
 build/m4/Makefile
 build/m4/shave/shave
 build/m4/shave/shave-libtool
-SparkleLib/AssemblyInfo.cs
 SparkleLib/Defines.cs
 SparkleLib/Makefile
 SparkleLib/Git/Makefile

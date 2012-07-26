@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -9,6 +9,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>SparkleLib</RootNamespace>
     <AssemblyName>SparkleLib</AssemblyName>
+    <ReleaseVersion />
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,15 +37,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SparkleRepoBase.cs" />
-    <Compile Include="Git/SparkleRepoGit.cs" />
-    <Compile Include="Hg/SparkleRepoHg.cs" />
     <Compile Include="SparkleFetcherBase.cs" />
-    <Compile Include="Git/SparkleFetcherGit.cs" />
-    <Compile Include="Hg/SparkleFetcherHg.cs" />
     <Compile Include="Defines.cs" />
     <Compile Include="SparkleAnnouncement.cs" />
     <Compile Include="SparkleHelpers.cs" />
-    <Compile Include="SparklePaths.cs" />
     <Compile Include="SparkleWrappers.cs" />
     <Compile Include="SparkleListenerBase.cs" />
     <Compile Include="SparkleListenerFactory.cs" />
@@ -52,11 +49,13 @@
     <Compile Include="SparkleConfig.cs" />
     <Compile Include="SparkleWatcher.cs" />
     <Compile Include="SparkleExtensions.cs" />
+    <Compile Include="SparkleExceptions.cs" />
+    <Compile Include="SparkleUser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>
-      <Properties InternalTargetFrameworkVersion="3.5">
+      <Properties>
         <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="true" RelativeMakefileName="Makefile.am">
           <BuildFilesVar Sync="true" Name="SOURCES" />
           <DeployFilesVar />

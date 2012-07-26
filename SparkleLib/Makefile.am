@@ -1,6 +1,8 @@
 ASSEMBLY = SparkleLib
 TARGET = library
 
+ASSEMBLY_INFO_SOURCE = Defines.cs
+
 SOURCES =  \
 	Defines.cs \
 	SparkleAnnouncement.cs \

@@ -16,7 +16,7 @@
 
 
 using System;
-using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace SparkleLib {
@@ -25,14 +25,9 @@ namespace SparkleLib {
 
         public static string Version {
             get {
-                return Defines.VERSION;
+                return Assembly.GetExecutingAssembly ().GetName ().Version.ToString ();
             }
         }
-
-
-        // Strange magic needed by Platform ()
-        [DllImport ("libc")]
-        private static extern int uname (IntPtr buf);
 
 
         // This fixes the PlatformID enumeration for MacOSX in Environment.OSVersion.Platform,
@@ -56,5 +51,9 @@ namespace SparkleLib {
                 return Environment.OSVersion.Platform;
             }
         }
+
+
+        [DllImport ("libc")]
+        private static extern int uname (IntPtr buf);
     }
 }
