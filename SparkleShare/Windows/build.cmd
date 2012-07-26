@@ -1,6 +1,6 @@
 @echo off
 
-call %~dp0\..\..\data\plugins\build.cmd
+call %~dp0\..\Common\Plugins\build.cmd
 
 set WinDirNet=%WinDir%\Microsoft.NET\Framework
 set msbuild="%WinDirNet%\v4.0\msbuild.exe"
