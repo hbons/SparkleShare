@@ -42,13 +42,6 @@ namespace SparkleShare {
         private SparkleSpinner spinner;
 
 
-        // Short alias for the translations
-        public static string _ (string s)
-        {
-            return Catalog.GetString (s);
-        }
-
-
         public SparkleEventLog () : base ("")
         {
             SetSizeRequest (480, (int) (Gdk.Screen.Default.Height * 0.8));
@@ -61,7 +54,7 @@ namespace SparkleShare {
             Resizable   = true;
             BorderWidth = 0;
 
-            Title = _("Recent Changes");
+            Title = "Recent Changes";
             IconName = "folder-sparkleshare";
 
             DeleteEvent += delegate (object o, DeleteEventArgs args) {
@@ -202,7 +195,7 @@ namespace SparkleShare {
 
             ListStore store = new ListStore (typeof (string));
 
-            store.AppendValues (_("Summary"));
+            store.AppendValues ("Summary");
             store.AppendValues ("---");
             
             this.combo_box.Model  = store;

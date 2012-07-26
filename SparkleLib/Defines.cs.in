@@ -14,11 +14,15 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
 using System;
 using System.Reflection;
 
-[assembly: AssemblyTitle("SparkleLib")]
-[assembly: AssemblyVersion("0.9.0.0")]
+[assembly:AssemblyTitle ("SparkleLib")]
+[assembly:AssemblyVersion ("@VERSION@")]
+[assembly:AssemblyCopyright ("Copyright (c) 2010 Hylke Bons and others")]
+[assembly:AssemblyTrademark ("SparkleShare is a trademark of SparkleShare Ltd.")]
+
 namespace SparkleLib {
 
     public class Defines {
