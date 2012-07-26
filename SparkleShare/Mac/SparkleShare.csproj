@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
@@ -10,9 +10,10 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>SparkleShare</RootNamespace>
     <AssemblyName>SparkleShare</AssemblyName>
-    <ReleaseVersion>0.9.0</ReleaseVersion>
+    <ReleaseVersion>
+    </ReleaseVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -20,19 +21,11 @@
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
         <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r git ${TargetDir}/${SolutionName}.app/Contents/Resources; cp -r SparkleShareInviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="true" />
       </CustomCommands>
     </CustomCommands>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
@@ -43,12 +36,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="MonoMac" />
     <Reference Include="System.Net" />
-    <Reference Include="SparkleLib">
-      <HintPath>..\..\bin\SparkleLib.dll</HintPath>
-    </Reference>
-    <Reference Include="SparkleLib.Git">
-      <HintPath>..\..\bin\SparkleLib.Git.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDelegate.cs">
@@ -269,5 +256,15 @@
     <Folder Include="Pixmaps\" />
     <Folder Include="HTML\" />
     <Folder Include="Plugins\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SparkleLib\SparkleLib.csproj">
+      <Project>{2C914413-B31C-4362-93C7-1AE34F09112A}</Project>
+      <Name>SparkleLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SparkleLib\Git\SparkleLib.Git.csproj">
+      <Project>{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}</Project>
+      <Name>SparkleLib.Git</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
