@@ -30,6 +30,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <ApplicationIcon>Pixmaps\sparkleshare-app.ico</ApplicationIcon>
+    <ReleaseVersion />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,12 +71,6 @@
     <Reference Include="System.Xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\SparkleLib\windows\GlobalAssemblyInfo.cs">
-      <Link>GlobalAssemblyInfo.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GlobalAssemblyInfo.tt</DependentUpon>
-    </Compile>
     <Compile Include="..\SparkleBubblesController.cs">
       <Link>SparkleBubblesController.cs</Link>
     </Compile>
@@ -94,7 +89,6 @@
     <Compile Include="..\SparkleStatusIconController.cs">
       <Link>SparkleStatusIconController.cs</Link>
     </Compile>
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="..\SparkleSetupController.cs" />
     <Compile Include="SparkleShortcut.cs" />
     <Compile Include="SparkleUI.cs" />
@@ -118,12 +112,6 @@
     </Compile>
     <Compile Include="SparkleNotifyIcon.cs" />
     <Compile Include="SparkleSpinner.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\SparkleLib\windows\SparkleLib.csproj">
-      <Project>{2C914413-B31C-4362-93C7-1AE34F09112A}</Project>
-      <Name>SparkleLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
@@ -161,13 +149,6 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\SparkleLib\windows\GlobalAssemblyInfo.tt">
-      <Link>GlobalAssemblyInfo.tt</Link>
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>GlobalAssemblyInfo.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <PropertyGroup>
     <PreBuildEvent>"$(ProjectDir)transform_tt.cmd"</PreBuildEvent>
@@ -302,5 +283,11 @@
     <EmbeddedResource Include="Pixmaps\tutorial-slide-1.png" />
     <EmbeddedResource Include="Pixmaps\tutorial-slide-2.png" />
     <EmbeddedResource Include="Pixmaps\tutorial-slide-3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SparkleLib\SparkleLib.csproj">
+      <Project>{2C914413-B31C-4362-93C7-1AE34F09112A}</Project>
+      <Name>SparkleLib</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

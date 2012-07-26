@@ -15,16 +15,13 @@
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Reflection;
 
+[assembly: AssemblyTitle("SparkleLib")]
+[assembly: AssemblyVersion("0.9.0.0")]
 namespace SparkleLib {
 
-	public class Defines {
-
-		public const string VERSION         = "@VERSION@";
-		public const string LOCALE_DIR      = "@prefix@/share/locale";
-		public const string DATAROOTDIR     = "@expanded_datadir@";
-		public const string GETTEXT_PACKAGE = "@GETTEXT_PACKAGE@";
-		public const string PREFIX          = "@prefix@";
-	}
+    public class Defines {
+        public const string INSTALL_DIR = "@expanded_datadir@/sparkleshare";
+    }
 }
-

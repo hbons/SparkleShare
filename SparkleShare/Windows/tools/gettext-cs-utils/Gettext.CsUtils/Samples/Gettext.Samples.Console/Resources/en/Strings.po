@@ -1,3 +1,0 @@
-#: E:\Gettext\cs-utils\Gettext.CsUtils\Samples\Gettext.Samples.Console\Program.cs:15
-msgid "Hello world"
-msgstr ""
