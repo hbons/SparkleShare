@@ -596,12 +596,8 @@ namespace SparkleLib.Git {
 
                     foreach (string entry_line in entry_lines) {
                         if (entry_line.StartsWith (":")) {
-                            string change_type = entry_line [37].ToString ();
+                            string type_letter = entry_line [37].ToString ();
                             string file_path   = entry_line.Substring (39);
-
-                            // Handle filepath with special characters
-                            file_path = EnsureSpecialCharacters (file_path);
-                            string to_file_path;
 
                             if (file_path.EndsWith (".empty"))
                                 file_path = file_path.Substring (0, file_path.Length - ".empty".Length);
@@ -609,39 +605,13 @@ namespace SparkleLib.Git {
                             if (file_path.Equals (".sparkleshare"))
                                 continue;
 
+                            file_path = EnsureSpecialCharacters (file_path);
                             file_path = file_path.Replace ("\\\"", "\"");
 
-                            if (change_type.Equals ("A")) {
-                                change_set.Changes.Add (
-                                    new SparkleChange () {
-                                        Path      = file_path,
-                                        Timestamp = change_set.Timestamp,
-                                        Type      = SparkleChangeType.Added
-                                    }
-                                );
-
-                            } else if (change_type.Equals ("M")) {
-                                change_set.Changes.Add (
-                                    new SparkleChange () {
-                                        Path      = file_path,
-                                        Timestamp = change_set.Timestamp,
-                                        Type      = SparkleChangeType.Edited
-                                    }
-                                );
-
-                            } else if (change_type.Equals ("D")) {
-                                change_set.Changes.Add (
-                                    new SparkleChange () {
-                                        Path      = file_path,
-                                        Timestamp = change_set.Timestamp,
-                                        Type      = SparkleChangeType.Deleted
-                                    }
-                                );
-
-                            } else if (change_type.Equals ("R")) {
-                                int tab_pos  = entry_line.LastIndexOf ("\t");
-                                file_path    = entry_line.Substring (42, tab_pos - 42);
-                                to_file_path = entry_line.Substring (tab_pos + 1);
+                            if (!type_letter.Equals ("R")) {
+                                int tab_pos         = entry_line.LastIndexOf ("\t");
+                                file_path           = entry_line.Substring (42, tab_pos - 42);
+                                string to_file_path = entry_line.Substring (tab_pos + 1);
 
                                 file_path    = EnsureSpecialCharacters (file_path);
                                 to_file_path = EnsureSpecialCharacters (to_file_path);
@@ -661,6 +631,24 @@ namespace SparkleLib.Git {
                                         MovedToPath = to_file_path,
                                         Timestamp   = change_set.Timestamp,
                                         Type        = SparkleChangeType.Moved
+                                    }
+                                );
+
+                            } else {
+                                SparkleChangeType change_type = SparkleChangeType.Added;
+
+                                if (type_letter.Equals ("M")) {
+                                    change_type = SparkleChangeType.Edited;
+
+                                } else if (type_letter.Equals ("D")) {
+                                    change_type = SparkleChangeType.Deleted;
+                                }
+
+                                change_set.Changes.Add (
+                                    new SparkleChange () {
+                                        Path      = file_path,
+                                        Timestamp = change_set.Timestamp,
+                                        Type      = change_type
                                     }
                                 );
                             }
