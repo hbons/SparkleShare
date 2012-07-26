@@ -608,7 +608,7 @@ namespace SparkleLib.Git {
                             file_path = EnsureSpecialCharacters (file_path);
                             file_path = file_path.Replace ("\\\"", "\"");
 
-                            if (!type_letter.Equals ("R")) {
+                            if (type_letter.Equals ("R")) {
                                 int tab_pos         = entry_line.LastIndexOf ("\t");
                                 file_path           = entry_line.Substring (42, tab_pos - 42);
                                 string to_file_path = entry_line.Substring (tab_pos + 1);
