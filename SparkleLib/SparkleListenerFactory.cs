@@ -50,12 +50,11 @@ namespace SparkleLib {
 
             Uri announce_uri = new Uri (uri);
 
-            // We use only one listener per notification service to keep
+            // Use only one listener per notification service to keep
             // the number of connections as low as possible
             foreach (SparkleListenerBase listener in listeners) {
                 if (listener.Server.Equals (announce_uri)) {
-                    SparkleHelpers.DebugInfo ("ListenerFactory", "Refered to existing " + announce_uri.Scheme +
-                        " listener for " + announce_uri);
+                    SparkleHelpers.DebugInfo ("ListenerFactory", "Refered to existing listener for " + announce_uri);
 
                     // We already seem to have a listener for this server,
                     // refer to the existing one instead
@@ -64,19 +63,8 @@ namespace SparkleLib {
                 }
             }
 
-            // Create a new listener with the appropriate
-            // type if one doesn't exist yet for that server
-            switch (announce_uri.Scheme) {
-            case "tcp":
-                listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
-                break;
-            default:
-                listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
-                break;
-            }
-
-            SparkleHelpers.DebugInfo ("ListenerFactory", "Issued new " + announce_uri.Scheme +
-                " listener for " + announce_uri);
+            listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
+            SparkleHelpers.DebugInfo ("ListenerFactory", "Issued new listener for " + announce_uri);
 
             return (SparkleListenerBase) listeners [listeners.Count - 1];
         }
