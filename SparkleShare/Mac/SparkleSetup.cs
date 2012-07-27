@@ -451,7 +451,7 @@ namespace SparkleShare {
 
             if (type == PageType.Syncing) {
                 Header      = "Adding project ‘" + Controller.SyncingFolder + "’…";
-                Description = "This may take a while on big projects. Isn't it coffee-o'clock?";
+                Description = "This may take a while on big projects.\nIsn't it coffee-o'clock?";
 
 
                 ProgressIndicator = new NSProgressIndicator () {
@@ -491,7 +491,7 @@ namespace SparkleShare {
                 Buttons.Add (FinishButton);
                 Buttons.Add (CancelButton);
             }
-
+            
             if (type == PageType.Error) {
                 Header      = "Oops! Something went wrong…";
                 Description = "Please check the following:";
