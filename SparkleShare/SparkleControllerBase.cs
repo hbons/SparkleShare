@@ -417,11 +417,11 @@ namespace SparkleShare {
                 // fully downloaded yet, so we try to read it several times
                 int tries = 0;
                 while (!invite.IsValid) {
-                    Thread.Sleep (250);
+                    Thread.Sleep (100);
                     invite = new SparkleInvite (args.FullPath);
                     tries++;
 
-                    if (tries > 20) {
+                    if (tries > 10) {
                         AlertNotificationRaised ("Oh noes!", "This invite seems screwed up...");
                         break;
                     }

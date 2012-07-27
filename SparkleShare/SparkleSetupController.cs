@@ -429,17 +429,20 @@ namespace SparkleShare {
 
             ChangePageEvent (PageType.Syncing, null);
 
-            if (!PendingInvite.Accept ()) {
-                ChangePageEvent (PageType.Error, null);
-                return;
-            }
+            new Thread (() => {
+                if (!PendingInvite.Accept ()) {
+                    ChangePageEvent (PageType.Error, null);
+                    return;
+                }
 
-            Program.Controller.FolderFetched    += InvitePageFetchedDelegate;
-            Program.Controller.FolderFetchError += InvitePageFetchErrorDelegate;
-            Program.Controller.FolderFetching   += SyncingPageFetchingDelegate;
+                Program.Controller.FolderFetched    += InvitePageFetchedDelegate;
+                Program.Controller.FolderFetchError += InvitePageFetchErrorDelegate;
+                Program.Controller.FolderFetching   += SyncingPageFetchingDelegate;
 
-            Program.Controller.StartFetcher (PendingInvite.Address, PendingInvite.Fingerprint,
-                PendingInvite.RemotePath, PendingInvite.AnnouncementsUrl, false); // TODO: checkbox on invite page
+                Program.Controller.StartFetcher (PendingInvite.Address, PendingInvite.Fingerprint,
+                    PendingInvite.RemotePath, PendingInvite.AnnouncementsUrl, false); // TODO: checkbox on invite page
+
+            }).Start ();
         }
 
         // The following private methods are
