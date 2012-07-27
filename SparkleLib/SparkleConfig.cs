@@ -70,10 +70,6 @@ namespace SparkleLib {
             if (!Directory.Exists (config_path))
                 Directory.CreateDirectory (config_path);
 
-            string icons_path = Path.Combine (config_path, "icons");
-            if (!Directory.Exists (icons_path))
-                Directory.CreateDirectory (icons_path);
-
             try {
               Load (FullPath);
 
