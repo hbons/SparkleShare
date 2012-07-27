@@ -382,8 +382,7 @@ namespace SparkleShare {
                 try {
                     string address = remote_url.Replace (uri.AbsolutePath, "");
     
-                    new_plugin = SparklePlugin.Create (
-                        uri.Host, address, address, "", "", "/path/to/project");
+                    new_plugin = SparklePlugin.Create (uri.Host, address, address, "", "", "/path/to/project");
     
                     if (new_plugin != null) {
                         Plugins.Insert (1, new_plugin);
@@ -430,8 +429,11 @@ namespace SparkleShare {
             ChangePageEvent (PageType.Syncing, null);
 
             new Thread (() => {
-                if (!PendingInvite.Accept ()) {
-                    ChangePageEvent (PageType.Error, null);
+                if (!PendingInvite.Accept (Program.Controller.CurrentUser.PublicKey)) {
+                    PreviousUrl = PendingInvite.Address +
+                        PendingInvite.RemotePath.TrimStart ("/".ToCharArray ());
+
+                    ChangePageEvent (PageType.Error, new string [] { "error: Failed to upload the public key" });
                     return;
                 }
 

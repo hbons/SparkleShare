@@ -79,38 +79,40 @@ namespace SparkleShare {
         }
 
 
-        public bool Accept ()
+        public bool Accept (string public_key)
         {
             if (string.IsNullOrEmpty (AcceptUrl))
                 return true;
 
+            string post_data   = "public_key=" + public_key;
+            byte [] post_bytes = Encoding.UTF8.GetBytes (post_data);
+
+            WebRequest request  = WebRequest.Create (AcceptUrl);
+
+            request.Method        = "POST";
+            request.ContentType   = "application/x-www-form-urlencoded";
+            request.ContentLength = post_bytes.Length;
+
+            Stream data_stream = request.GetRequestStream ();
+            data_stream.Write (post_bytes, 0, post_bytes.Length);
+            data_stream.Close ();
+
+            HttpWebResponse response = null;
+
             try {
-                WebRequest request  = WebRequest.Create (AcceptUrl);
-
-                request.Method        = "POST";
-                request.ContentType   = "application/x-www-form-urlencoded";
-                string post_data      = "pubkey=" + SparkleConfig.DefaultConfig.User.PublicKey;
-                byte [] post_bytes    = Encoding.UTF8.GetBytes (post_data);
-                request.ContentLength = post_bytes.Length;
-
-                Stream data_stream = request.GetRequestStream ();
-                data_stream.Write (post_bytes, 0, post_bytes.Length);
-                data_stream.Close ();
-
-                WebResponse response = request.GetResponse ();
+                response = (HttpWebResponse) request.GetResponse ();
                 response.Close ();
-
-                if ((response as HttpWebResponse).StatusCode == HttpStatusCode.OK) {
-                    SparkleHelpers.DebugInfo ("Invite", "Uploaded public key to " + AcceptUrl);
-                    return true;
-
-                } else {
-                    SparkleHelpers.DebugInfo ("Invite", "Failed uploading public key to " + AcceptUrl);
-                    return false;
-                }
 
             } catch (WebException e) {
                 SparkleHelpers.DebugInfo ("Invite", "Failed uploading public key to " + AcceptUrl + ": " + e.Message);
+                return false;
+            }
+
+            if (response != null && response.StatusCode == HttpStatusCode.OK) {
+                SparkleHelpers.DebugInfo ("Invite", "Uploaded public key to " + AcceptUrl);
+                return true;
+
+            } else {
                 return false;
             }
         }
