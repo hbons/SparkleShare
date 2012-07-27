@@ -92,21 +92,6 @@ namespace SparkleShare {
             }
         }
 
-        public string GuessedUserName {
-            get {
-                return Program.Controller.CurrentUser.Name;
-            }
-        }
-
-        public string GuessedUserEmail {
-            get {
-                if (Program.Controller.CurrentUser.Email.Equals ("Unknown"))
-                    return "";
-                else
-                    return Program.Controller.CurrentUser.Email;
-            }
-        }
-
         public bool FetchPriorHistory {
             get {
                 return this.fetch_prior_history;
@@ -253,7 +238,7 @@ namespace SparkleShare {
 
             new Thread (() => {
                 string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
-                string key_file_name = DateTime.Now.ToString ("YYYY-MM-dd HH\\hmm");
+                string key_file_name = DateTime.Now.ToString ("yyyy-MM-dd HH\\hmm");
 
                 string [] key_pair = SparkleKeys.GenerateKeyPair (keys_path, key_file_name);
                 SparkleKeys.ImportPrivateKey (key_pair [0]);
