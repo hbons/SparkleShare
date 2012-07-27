@@ -157,7 +157,7 @@ msgstr ""
 
 #: ../SparkleShare/Program.cs:91
 msgid "SparkleShare automatically syncs Git repositories in "
-msgstr "SparkleShare sincroniza automaticamente repositorios Git en "
+msgstr "SparkleShare sincroniza automáticamente repositorios Git en "
 
 #: ../SparkleShare/Program.cs:92
 msgid "the ~/SparkleShare folder with their remote origins."
@@ -281,7 +281,7 @@ msgstr "Intenta de nuevo..."
 #: ../SparkleShare/SparkleSetup.cs:432
 #, csharp-format
 msgid "‘{0}’ has been successfully added"
-msgstr "'{0}' Ha sido añadido correctamente"
+msgstr "'{0}' ha sido añadido correctamente"
 
 #: ../SparkleShare/SparkleSetup.cs:438
 msgid "Project successfully added!"
