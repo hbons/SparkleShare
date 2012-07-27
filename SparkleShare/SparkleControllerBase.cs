@@ -623,10 +623,10 @@ namespace SparkleShare {
 
         public string GetAvatar (string email, int size)
         {
-            string fetch_gravatars_option = this.config.GetConfigOption ("fetch_avatars");
+            string fetch_avatars_option = this.config.GetConfigOption ("fetch_avatars");
 
-            if (fetch_gravatars_option != null &&
-                fetch_gravatars_option.Equals (bool.FalseString)) {
+            if (fetch_avatars_option != null &&
+                fetch_avatars_option.Equals (bool.FalseString)) {
 
                 return null;
             }
@@ -634,9 +634,9 @@ namespace SparkleShare {
             email = email.ToLower ();
 
             string avatars_path = new string [] { Path.GetDirectoryName (this.config.FullPath),
-                "icons", size + "x" + size, "status" }.Combine ();
+                "avatars", size + "x" + size }.Combine ();
 
-            string avatar_file_path = Path.Combine (avatars_path, "avatar-" + email);
+            string avatar_file_path = Path.Combine (avatars_path, SparkleHelpers.MD5 (email) + ".jpg");
 
             if (File.Exists (avatar_file_path)) {
                 if (new FileInfo (avatar_file_path).CreationTime < DateTime.Now.AddDays (-1))
@@ -658,7 +658,7 @@ namespace SparkleShare {
                     }
 
                     File.WriteAllBytes (avatar_file_path, buffer);
-                    SparkleHelpers.DebugInfo ("Controller", "Fetched " + size + "x" + size + " gravatar for " + email);
+                    SparkleHelpers.DebugInfo ("Controller", "Fetched " + size + "x" + size + " avatar for " + email);
 
                     return avatar_file_path;
 
