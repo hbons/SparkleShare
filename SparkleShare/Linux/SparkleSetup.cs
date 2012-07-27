@@ -473,7 +473,7 @@ namespace SparkleShare {
                         point_two.PackStart (label_two, true, true, 12);
                         points.PackStart (point_two, false, false, 12);
 
-                        if (warnings.Length > 0) {
+                        if (warnings != null && warnings.Length > 0) {
                             string warnings_markup = "";
 
                             foreach (string warning in warnings)
