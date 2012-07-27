@@ -133,10 +133,10 @@ namespace SparkleLib {
             if (RequiredFingerprint != null) {
                 string host_fingerprint = GetFingerprint (host_key);
 
-                if (host_fingerprint == null ||
-                    !RequiredFingerprint.Equals (host_fingerprint)) {
-
+                if (host_fingerprint == null || !RequiredFingerprint.Equals (host_fingerprint)) {
                     SparkleHelpers.DebugInfo ("Auth", "Fingerprint doesn't match");
+
+                    this.errors.Add ("error: Host fingerprint doesn't match");
                     Failed ();
 
                     return;
