@@ -79,7 +79,7 @@ namespace SparkleShare {
         }
 
 
-        public bool Accept ()
+        public bool Accept (string [] warnings)
         {
             if (string.IsNullOrEmpty (AcceptUrl))
                 return true;
@@ -106,11 +106,13 @@ namespace SparkleShare {
 
                 } else {
                     SparkleHelpers.DebugInfo ("Invite", "Failed uploading public key to " + AcceptUrl);
+                    warnings[0] = "Failed uploading public key to " + AcceptUrl;
                     return false;
                 }
 
             } catch (WebException e) {
                 SparkleHelpers.DebugInfo ("Invite", "Failed uploading public key to " + AcceptUrl + ": " + e.Message);
+                warnings[0] = "Failed uploading public key to " + AcceptUrl + ": " + e.Message;
                 return false;
             }
         }

@@ -430,8 +430,9 @@ namespace SparkleShare {
             ChangePageEvent (PageType.Syncing, null);
 
             new Thread (() => {
-                if (!PendingInvite.Accept ()) {
-                    ChangePageEvent (PageType.Error, null);
+            	string [] warnings = new string [1];
+                if (!PendingInvite.Accept (warnings)) {
+                    ChangePageEvent (PageType.Error, warnings);
                     return;
                 }
 
