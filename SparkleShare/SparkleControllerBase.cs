@@ -195,17 +195,21 @@ namespace SparkleShare {
                     if (file_name.EndsWith (".key")) {
                         key_file_path = Path.Combine (keys_path, file_name);
                         SparkleKeys.ImportPrivateKey (key_file_path);
+
+                        break;
                     }
                 }
 
                 if (!string.IsNullOrEmpty (key_file_path)) {
-                    string pubkey_file_path    = key_file_path + ".pub";
-                    string link_code_file_path = Path.Combine (FoldersPath, CurrentUser.Name + "'s link code.txt");
+                    string public_key_file_path = key_file_path + ".pub";
+                    string link_code_file_path  = Path.Combine (FoldersPath, CurrentUser.Name + "'s link code.txt");
 
                     // Create an easily accessible copy of the public
                     // key in the user's SparkleShare folder
-                    if (File.Exists (pubkey_file_path) && !File.Exists (link_code_file_path))
-                        File.Copy (pubkey_file_path, link_code_file_path, true /* Overwriting allowed */ );
+                    if (File.Exists (public_key_file_path) && !File.Exists (link_code_file_path))
+                        File.Copy (public_key_file_path, link_code_file_path, true);
+
+                    CurrentUser.PublicKey = File.ReadAllText (public_key_file_path);
                 }
 
                 SparkleKeys.ListPrivateKeys ();
