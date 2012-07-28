@@ -113,7 +113,7 @@ namespace SparkleShare {
             Controller.UpdateMenuEvent += delegate {
                 using (var a = new NSAutoreleasePool ())
                 {
-                    InvokeOnMainThread (() => CreateMenu);
+                    InvokeOnMainThread (() => CreateMenu ());
                 }
             };
 
