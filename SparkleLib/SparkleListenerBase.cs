@@ -76,19 +76,19 @@ namespace SparkleLib {
         {
             if (!IsRecentAnnouncement (announcement)) {
                 if (IsConnected) {
-                    SparkleHelpers.DebugInfo ("Listener", "Announcing message " + announcement.Message +
+                    SparkleLogger.LogInfo ("Listener", "Announcing message " + announcement.Message +
                         " to " + announcement.FolderIdentifier + " on " + Server);
 
                     AnnounceInternal (announcement);
                     AddRecentAnnouncement (announcement);
 
                 } else {
-                    SparkleHelpers.DebugInfo ("Listener", "Can't send message to " + Server + ". Queuing message");
+                    SparkleLogger.LogInfo ("Listener", "Can't send message to " + Server + ". Queuing message");
                     this.queue_up [announcement.FolderIdentifier] = announcement;
                 }
 
             } else {
-                SparkleHelpers.DebugInfo ("Listener", "Already processed message " + announcement.Message +
+                SparkleLogger.LogInfo ("Listener", "Already processed message " + announcement.Message +
                     " to " + announcement.FolderIdentifier + " from " + Server);
             }
         }
@@ -97,7 +97,7 @@ namespace SparkleLib {
         public void AlsoListenTo (string channel)
         {
             if (!this.channels.Contains (channel) && IsConnected) {
-                SparkleHelpers.DebugInfo ("Listener", "Subscribing to channel " + channel + " on " + Server);
+                SparkleLogger.LogInfo ("Listener", "Subscribing to channel " + channel + " on " + Server);
 
                 this.channels.Add (channel);
                 AlsoListenToInternal (channel);
@@ -107,18 +107,18 @@ namespace SparkleLib {
 
         public void Reconnect ()
         {
-            SparkleHelpers.DebugInfo ("Listener", "Trying to reconnect to " + Server);
+            SparkleLogger.LogInfo ("Listener", "Trying to reconnect to " + Server);
             Connect ();
         }
 
 
         public void OnConnected ()
         {
-            SparkleHelpers.DebugInfo ("Listener", "Listening for announcements on " + Server);
+            SparkleLogger.LogInfo ("Listener", "Listening for announcements on " + Server);
             Connected ();
 
             if (this.queue_up.Count > 0) {
-                SparkleHelpers.DebugInfo ("Listener", "Delivering " + this.queue_up.Count + " queued messages...");
+                SparkleLogger.LogInfo ("Listener", "Delivering " + this.queue_up.Count + " queued messages...");
 
                 foreach (KeyValuePair<string, SparkleAnnouncement> item in this.queue_up) {
                     SparkleAnnouncement announcement = item.Value;
@@ -132,25 +132,25 @@ namespace SparkleLib {
 
         public void OnDisconnected (string message)
         {
-            SparkleHelpers.DebugInfo ("Listener", "Disconnected from " + Server + ": " + message);
+            SparkleLogger.LogInfo ("Listener", "Disconnected from " + Server + ": " + message);
             Disconnected ();
         }
 
 
         public void OnAnnouncement (SparkleAnnouncement announcement)
         {
-            SparkleHelpers.DebugInfo ("Listener",
+            SparkleLogger.LogInfo ("Listener",
                 "Got message " + announcement.Message + " from " +
                 announcement.FolderIdentifier + " on " + Server);
 
             if (IsRecentAnnouncement (announcement)) {
-                SparkleHelpers.DebugInfo ("Listener", "Ignoring previously processed message " + announcement.Message +
+                SparkleLogger.LogInfo ("Listener", "Ignoring previously processed message " + announcement.Message +
                     " from " + announcement.FolderIdentifier + " on " + Server);
                 
                   return;
             }
 
-            SparkleHelpers.DebugInfo ("Listener", "Processing message " + announcement.Message + " from " +
+            SparkleLogger.LogInfo ("Listener", "Processing message " + announcement.Message + " from " +
                 announcement.FolderIdentifier + " on " + Server);
 
             AddRecentAnnouncement (announcement);

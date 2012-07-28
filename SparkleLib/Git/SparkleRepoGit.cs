@@ -40,7 +40,7 @@ namespace SparkleLib.Git {
             
             this.use_git_bin = (git.ExitCode == 0);
 
-            string rebase_apply_path = SparkleHelpers.CombineMore (LocalPath, ".git", "rebase-apply");
+            string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
 
             if (Directory.Exists (rebase_apply_path)) {
                 git = new SparkleGit (LocalPath, "rebase --abort");
@@ -141,7 +141,7 @@ namespace SparkleLib.Git {
 
         public override bool HasRemoteChanges {
             get {
-                SparkleHelpers.DebugInfo ("Git", Name + " | Checking for remote changes...");
+                SparkleLogger.LogInfo ("Git", Name + " | Checking for remote changes...");
                 string current_revision = CurrentRevision;
 
                 SparkleGit git = new SparkleGit (LocalPath, "ls-remote --heads --exit-code \"" + RemoteUrl + "\" master");
@@ -153,13 +153,13 @@ namespace SparkleLib.Git {
                 string remote_revision = output.Substring (0, 40);
 
                 if (!remote_revision.StartsWith (current_revision)) {
-                    SparkleHelpers.DebugInfo ("Git", Name + " | Remote changes found, local: " +
+                    SparkleLogger.LogInfo ("Git", Name + " | Remote changes found, local: " +
                         current_revision + ", remote: " + remote_revision);
 
                     return true;
 
                 } else {
-                    SparkleHelpers.DebugInfo ("Git", Name + " | No remote changes, local+remote: " + current_revision);
+                    SparkleLogger.LogInfo ("Git", Name + " | No remote changes, local+remote: " + current_revision);
                     return false;
                 }
             }
@@ -236,7 +236,7 @@ namespace SparkleLib.Git {
                     }
 
                 } else {
-                    SparkleHelpers.DebugInfo ("Git", Name + " | " + line);
+                    SparkleLogger.LogInfo ("Git", Name + " | " + line);
                 }
 
                 if (number >= percentage) {
@@ -298,7 +298,7 @@ namespace SparkleLib.Git {
                     }
 
                 } else {
-                    SparkleHelpers.DebugInfo ("Git", Name + " | " + line);
+                    SparkleLogger.LogInfo ("Git", Name + " | " + line);
                 }
                 
 
@@ -341,12 +341,12 @@ namespace SparkleLib.Git {
 
         public override bool HasUnsyncedChanges {
             get {
-                string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath, ".git", "has_unsynced_changes");
+                string unsynced_file_path =  new string [] { LocalPath, ".git", "has_unsynced_changes" }.Combine ();
                 return File.Exists (unsynced_file_path);
             }
 
             set {
-                string unsynced_file_path = SparkleHelpers.CombineMore (LocalPath, ".git", "has_unsynced_changes");
+                string unsynced_file_path = new string [] { LocalPath, ".git", "has_unsynced_changes" }.Combine ();
 
                 if (value)
                     File.WriteAllText (unsynced_file_path, "");
@@ -362,7 +362,7 @@ namespace SparkleLib.Git {
             SparkleGit git = new SparkleGit (LocalPath, "add --all");
             git.StartAndWaitForExit ();
 
-            SparkleHelpers.DebugInfo ("Git", Name + " | Changes staged");
+            SparkleLogger.LogInfo ("Git", Name + " | Changes staged");
         }
 
 
@@ -403,19 +403,19 @@ namespace SparkleLib.Git {
             git.StartAndWaitForExit ();
 
             if (git.ExitCode != 0) {
-                SparkleHelpers.DebugInfo ("Git", Name + " | Conflict detected, trying to get out...");
+                SparkleLogger.LogInfo ("Git", Name + " | Conflict detected, trying to get out...");
 
                 while (HasLocalChanges) {
                     try {
                         ResolveConflict ();
 
                     } catch (IOException e) {
-                        SparkleHelpers.DebugInfo ("Git",
+                        SparkleLogger.LogInfo ("Git",
                             Name + " | Failed to resolve conflict, trying again... (" + e.Message + ")");
                     }
                 }
 
-                SparkleHelpers.DebugInfo ("Git", Name + " | Conflict resolved");
+                SparkleLogger.LogInfo ("Git", Name + " | Conflict resolved");
                 OnConflictResolved ();
             }
         }
@@ -452,7 +452,7 @@ namespace SparkleLib.Git {
                 string conflicting_path = line.Substring (3);
                 conflicting_path        = EnsureSpecialCharacters (conflicting_path);
 
-                SparkleHelpers.DebugInfo ("Git", Name + " | Conflict type: " + line);
+                SparkleLogger.LogInfo ("Git", Name + " | Conflict type: " + line);
 
                 // Ignore conflicts in the .sparkleshare file and use the local version
                 if (conflicting_path.EndsWith (".sparkleshare") ||
@@ -747,7 +747,7 @@ namespace SparkleLib.Git {
         {
             try {
                 foreach (string child_path in Directory.GetDirectories (path)) {
-                    if (SparkleHelpers.IsSymlink (child_path))
+                    if (IsSymlink (child_path))
                         continue;
 
                     if (child_path.EndsWith (".git")) {
@@ -758,7 +758,7 @@ namespace SparkleLib.Git {
     
                         if (File.Exists (HEAD_file_path)) {
                             File.Move (HEAD_file_path, HEAD_file_path + ".backup");
-                            SparkleHelpers.DebugInfo ("Git", Name + " | Renamed " + HEAD_file_path);
+                            SparkleLogger.LogInfo ("Git", Name + " | Renamed " + HEAD_file_path);
                         }
     
                         continue;
@@ -777,13 +777,13 @@ namespace SparkleLib.Git {
                             File.SetAttributes (Path.Combine (path, ".empty"), FileAttributes.Hidden);
 
                         } catch {
-                            SparkleHelpers.DebugInfo ("Git", Name + " | Failed adding empty folder " + path);
+                            SparkleLogger.LogInfo ("Git", Name + " | Failed adding empty folder " + path);
                         }
                     }
                 }
 
             } catch (IOException e) {
-                SparkleHelpers.DebugInfo ("Git", "Failed preparing directory: " + e.Message);
+                SparkleLogger.LogInfo ("Git", "Failed preparing directory: " + e.Message);
             }
         }
 
@@ -857,7 +857,7 @@ namespace SparkleLib.Git {
                 }
 
             } catch (Exception e) {
-                SparkleHelpers.DebugInfo ("Local", "Error calculating size: " + e.Message);
+                SparkleLogger.LogInfo ("Local", "Error calculating size: " + e.Message);
                 return 0;
             }
 
@@ -867,11 +867,18 @@ namespace SparkleLib.Git {
                     size += CalculateSizes (directory);
 
             } catch (Exception e) {
-                SparkleHelpers.DebugInfo ("Local", "Error calculating size: " + e.Message);
+                SparkleLogger.LogInfo ("Local", "Error calculating size: " + e.Message);
                 return 0;
             }
 
             return size;
+        }
+
+        
+        private bool IsSymlink (string file)
+        {
+            FileAttributes attributes = File.GetAttributes (file);
+            return ((attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint);
         }
     }
 }

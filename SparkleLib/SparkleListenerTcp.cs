@@ -106,7 +106,7 @@ namespace SparkleLib {
                                 // We've timed out, let's ping the server to
                                 // see if the connection is still up
                                 if (i == timeout) {
-                                    SparkleHelpers.DebugInfo ("ListenerTcp",
+                                    SparkleLogger.LogInfo ("ListenerTcp",
                                         "Pinging " + Server);
 
                                     byte [] ping_bytes = Encoding.UTF8.GetBytes ("ping\n");
@@ -118,7 +118,7 @@ namespace SparkleLib {
                                         // 10057 means "Socket is not connected"
                                         throw new SocketException (10057);
 
-                                    SparkleHelpers.DebugInfo ("ListenerTcp", "Received pong from " + Server);
+                                    SparkleLogger.LogInfo ("ListenerTcp", "Received pong from " + Server);
 
                                     i = 0;
                                     this.last_ping = DateTime.Now;
@@ -135,7 +135,7 @@ namespace SparkleLib {
                                     );
 
                                     if (sleepiness <= 0) {
-                                        SparkleHelpers.DebugInfo ("ListenerTcp", "System woke up from sleep");
+                                        SparkleLogger.LogInfo ("ListenerTcp", "System woke up from sleep");
 
                                         // 10057 means "Socket is not connected"
                                         throw new SocketException (10057);

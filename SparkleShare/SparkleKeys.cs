@@ -32,7 +32,7 @@ namespace SparkleShare {
             string key_file_path = Path.Combine (output_path, key_name);
 
             if (File.Exists (key_file_path)) {
-                SparkleHelpers.DebugInfo ("Auth", "A key pair exists ('" + key_name + "'), leaving it untouched");
+                SparkleLogger.LogInfo ("Auth", "A key pair exists ('" + key_name + "'), leaving it untouched");
                 return new string [] { key_file_path, key_file_path + ".pub" };
 
             } else {
@@ -61,9 +61,9 @@ namespace SparkleShare {
             process.WaitForExit ();
 
             if (process.ExitCode == 0)
-                SparkleHelpers.DebugInfo ("Auth", "Created keypair '" + key_file_path + "'");
+                SparkleLogger.LogInfo ("Auth", "Created keypair '" + key_file_path + "'");
             else
-                SparkleHelpers.DebugInfo ("Auth", "Could not create key pair '" + key_file_path + "'");
+                SparkleLogger.LogInfo ("Auth", "Could not create key pair '" + key_file_path + "'");
 
             return new string [] { key_file_path, key_file_path + ".pub" };
         }
@@ -83,9 +83,9 @@ namespace SparkleShare {
             process.WaitForExit ();
 
             if (process.ExitCode == 0)
-                SparkleHelpers.DebugInfo ("Auth", "Imported key '" + key_file_path + "'");
+                SparkleLogger.LogInfo ("Auth", "Imported key '" + key_file_path + "'");
             else
-                SparkleHelpers.DebugInfo ("Auth", "Could not import key '" + key_file_path + "'");
+                SparkleLogger.LogInfo ("Auth", "Could not import key '" + key_file_path + "'");
         }
 
 
@@ -106,7 +106,7 @@ namespace SparkleShare {
             string keys_in_use = process.StandardOutput.ReadToEnd ();
             process.WaitForExit ();
 
-            SparkleHelpers.DebugInfo ("Auth", "The following keys may be used: " +
+            SparkleLogger.LogInfo ("Auth", "The following keys may be used: " +
                 Environment.NewLine + keys_in_use.Trim ());
         }
     }

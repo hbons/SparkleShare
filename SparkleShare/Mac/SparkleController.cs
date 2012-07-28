@@ -111,7 +111,7 @@ namespace SparkleShare {
             process.Start ();
             process.WaitForExit ();
 
-            SparkleHelpers.DebugInfo ("Controller", "Added " + NSBundle.MainBundle.BundlePath + " to login items");
+            SparkleLogger.LogInfo ("Controller", "Added " + NSBundle.MainBundle.BundlePath + " to login items");
 		}
 
 

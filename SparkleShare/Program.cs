@@ -18,6 +18,8 @@
 using System;
 using System.Threading;
 
+using SparkleLib;
+
 namespace SparkleShare {
 
     // This is SparkleShare!
@@ -34,7 +36,9 @@ namespace SparkleShare {
         #endif
         public static void Main (string [] args)
         {
-            if (args.Length != 0 && !args [0].Equals ("start")) {
+            if (args.Length != 0 && !args [0].Equals ("start") &&
+                SparkleBackend.Platform != PlatformID.MacOSX) {
+
                 string n = Environment.NewLine;
 
                 Console.WriteLine (n +

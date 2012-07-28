@@ -386,11 +386,11 @@ namespace SparkleShare {
     
                     if (new_plugin != null) {
                         Plugins.Insert (1, new_plugin);
-                        SparkleHelpers.DebugInfo ("Controller", "Added plugin for " + uri.Host);
+                        SparkleLogger.LogInfo ("Controller", "Added plugin for " + uri.Host);
                     }
 
                 } catch {
-                    SparkleHelpers.DebugInfo ("Controller", "Failed adding plugin for " + uri.Host);
+                    SparkleLogger.LogInfo ("Controller", "Failed adding plugin for " + uri.Host);
                 }
             }
 
