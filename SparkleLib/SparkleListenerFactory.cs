@@ -37,12 +37,6 @@ namespace SparkleLib {
             // This is SparkleShare's centralized notification service.
             // It communicates "It's time to sync!" signals between clients.
             //
-            // Here's how it works: the client listens to a channel (the
-            // folder identifier, a SHA-1 hash) for when it's time to sync.
-            // Clients also send the current revision hash to the channel
-            // for other clients to pick up when you've synced up any
-            // changes.
-            //
             // Please see the SparkleShare wiki if you wish to run
             // your own service instead
             if (string.IsNullOrEmpty (uri))

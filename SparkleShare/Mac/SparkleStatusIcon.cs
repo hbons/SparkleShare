@@ -113,9 +113,7 @@ namespace SparkleShare {
             Controller.UpdateMenuEvent += delegate {
                 using (var a = new NSAutoreleasePool ())
                 {
-                    InvokeOnMainThread (delegate {
-                        CreateMenu ();
-                    });
+                    InvokeOnMainThread (() => CreateMenu);
                 }
             };
 
@@ -321,35 +319,26 @@ namespace SparkleShare {
         private void CreateAnimationFrames ()
         {
             this.animation_frames = new NSImage [] {
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-i.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-ii.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-iii.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-iiii.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-iiiii.png"))
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-i.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-ii.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-iii.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-iiii.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-iiiii.png"))
             };
 
             this.animation_frames_active = new NSImage [] {
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-i-active.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-ii-active.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-iii-active.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-iiii-active.png")),
-                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "process-syncing-iiiii-active.png"))
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-i-active.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-ii-active.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-iii-active.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-iiii-active.png")),
+                new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-iiiii-active.png"))
             };
 			
-            this.error_image        = new NSImage (NSBundle.MainBundle.ResourcePath +
-                "/Pixmaps/process-syncing-error.png");
-            this.error_image_active = new NSImage (NSBundle.MainBundle.ResourcePath +
-                "/Pixmaps/process-syncing-error-active.png");
+            this.error_image = new NSImage (
+                Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-error.png"));
+
+            this.error_image_active = new NSImage (
+                Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-error.png"));
         }
     }
     

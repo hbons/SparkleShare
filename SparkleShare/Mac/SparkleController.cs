@@ -102,8 +102,9 @@ namespace SparkleShare {
             // There aren't any bindings in MonoMac to support this yet, so
             // we call out to an applescript to do the job
             Process process = new Process ();
-            process.StartInfo.FileName        = "osascript";
-            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.FileName               = "osascript";
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.UseShellExecute        = false;
 
             process.StartInfo.Arguments = "-e 'tell application \"System Events\" to " +
                 "make login item at end with properties {path:\"" + NSBundle.MainBundle.BundlePath + "\", hidden:false}'";
