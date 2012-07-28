@@ -38,7 +38,7 @@ namespace SparkleLib {
                 if (GetConfigOption ("home_path") != null)
                     return GetConfigOption ("home_path");
 
-                if (SparkleHelpers.IsWindows)
+                if (SparkleBackend.Platform == PlatformID.Win32NT)
                     return Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
                 else
                     return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
@@ -139,9 +139,7 @@ namespace SparkleLib {
                 string email = email_node.Value;
 
                 string pubkey_file_path = Path.Combine (
-                    Path.GetDirectoryName (FullPath),
-                    "sparkleshare." + email + ".key.pub"
-                );
+                    Path.GetDirectoryName (FullPath), "sparkleshare." + email + ".key.pub");
 
                 SparkleUser user = new SparkleUser (name, email);
 
@@ -179,19 +177,18 @@ namespace SparkleLib {
 
         public void AddFolder (string name, string identifier, string url, string backend)
         {
-            XmlNode node_name   = CreateElement ("name");
-            node_name.InnerText = name;
+            XmlNode node_name       = CreateElement ("name");
+            XmlNode node_identifier = CreateElement ("identifier");
+            XmlNode node_url        = CreateElement ("url");
+            XmlNode node_backend    = CreateElement ("backend");
 
-            XmlNode node_identifier   = CreateElement ("identifier");
+            node_name.InnerText       = name;
             node_identifier.InnerText = identifier;
-
-            XmlNode node_url   = CreateElement ("url");
-            node_url.InnerText = url;
-
-            XmlNode node_backend   = CreateElement ("backend");
-            node_backend.InnerText = backend;
+            node_url.InnerText        = url;
+            node_backend.InnerText    = backend;
 
             XmlNode node_folder = CreateNode (XmlNodeType.Element, "folder", null);
+
             node_folder.AppendChild (node_name);
             node_folder.AppendChild (node_identifier);
             node_folder.AppendChild (node_url);
@@ -217,9 +214,10 @@ namespace SparkleLib {
 
         public void RenameFolder (string identifier, string name)
         {
-            XmlNode node_folder = SelectSingleNode (string.Format ("/sparkleshare/folder[identifier=\"{0}\"]", identifier));
-            node_folder ["name"].InnerText = name;
+            XmlNode node_folder = SelectSingleNode (
+                string.Format ("/sparkleshare/folder[identifier=\"{0}\"]", identifier));
 
+            node_folder ["name"].InnerText = name;
             Save ();
         }
 
@@ -339,8 +337,8 @@ namespace SparkleLib {
                 node_root.AppendChild (node);
             }
 
-            SparkleHelpers.DebugInfo ("Config", "Updated option " + name + ":" + content);
             Save ();
+            SparkleLogger.LogInfo ("Config", "Updated option " + name + ":" + content);
         }
 
 
@@ -350,7 +348,7 @@ namespace SparkleLib {
                 throw new FileNotFoundException (FullPath + " does not exist");
 
             Save (FullPath);
-            SparkleHelpers.DebugInfo ("Config", "Wrote to '" + FullPath + "'");
+            SparkleLogger.LogInfo ("Config", "Wrote to '" + FullPath + "'");
         }
     }
 }

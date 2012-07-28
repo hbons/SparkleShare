@@ -73,7 +73,7 @@ namespace SparkleShare {
                 Initialize (address, remote_path, accept_url, announcements_url, fingerprint);
 
             } catch (XmlException e) {
-                SparkleHelpers.DebugInfo ("Invite", "Invalid XML: " + e.Message);
+                SparkleLogger.LogInfo ("Invite", "Invalid XML: " + e.Message);
                 return;
             }
         }
@@ -104,12 +104,12 @@ namespace SparkleShare {
                 response.Close ();
 
             } catch (WebException e) {
-                SparkleHelpers.DebugInfo ("Invite", "Failed uploading public key to " + AcceptUrl + ": " + e.Message);
+                SparkleLogger.LogInfo ("Invite", "Failed uploading public key to " + AcceptUrl + ": " + e.Message);
                 return false;
             }
 
             if (response != null && response.StatusCode == HttpStatusCode.OK) {
-                SparkleHelpers.DebugInfo ("Invite", "Uploaded public key to " + AcceptUrl);
+                SparkleLogger.LogInfo ("Invite", "Uploaded public key to " + AcceptUrl);
                 return true;
 
             } else {

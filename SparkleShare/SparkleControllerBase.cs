@@ -259,7 +259,7 @@ namespace SparkleShare {
                 );
 
             } catch (Exception e) {
-                SparkleHelpers.DebugInfo ("Controller",
+                SparkleLogger.LogInfo ("Controller",
                     "Failed to load '" + backend + "' backend for '" + folder_name + "': " + e.Message);
 
                 return;
@@ -342,7 +342,7 @@ namespace SparkleShare {
                             string new_folder_path = Path.Combine (path, folder_name);
                             AddRepository (new_folder_path);
 
-                            SparkleHelpers.DebugInfo ("Controller",
+                            SparkleLogger.LogInfo ("Controller",
                                 "Renamed folder with identifier " + identifier + " to '" + folder_name + "'");
                         }
                     }
@@ -355,7 +355,7 @@ namespace SparkleShare {
                         this.config.RemoveFolder (folder_name);
                         RemoveRepository (folder_path);
 
-                        SparkleHelpers.DebugInfo ("Controller",
+                        SparkleLogger.LogInfo ("Controller",
                             "Removed folder '" + folder_name + "' from config");
 
                     } else {
@@ -387,6 +387,31 @@ namespace SparkleShare {
                 OnError ();
             else
                 OnIdle ();
+        }
+
+
+        private void ClearFolderAttributes (string path)
+        {
+            if (!Directory.Exists (path))
+                return;
+
+            string [] folders = Directory.GetDirectories (path);
+
+            foreach (string folder in folders)
+                ClearFolderAttributes (folder);
+
+            string [] files = Directory.GetFiles(path);
+
+            foreach (string file in files)
+                if (!IsSymlink (file))
+                    File.SetAttributes (file, FileAttributes.Normal);
+        }
+
+
+        private bool IsSymlink (string file)
+        {
+            FileAttributes attributes = File.GetAttributes (file);
+            return ((attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint);
         }
 
 
@@ -463,7 +488,7 @@ namespace SparkleShare {
                 );
 
             } catch (Exception e) {
-                SparkleHelpers.DebugInfo ("Controller",
+                SparkleLogger.LogInfo ("Controller",
                     "Failed to load '" + backend + "' backend for '" + canonical_name + "' " + e.Message);
 
                 FolderFetchError (Path.Combine (address, remote_path).Replace (@"\", "/"),
@@ -505,10 +530,10 @@ namespace SparkleShare {
             if (Directory.Exists (this.fetcher.TargetFolder)) {
                 try {
                     Directory.Delete (this.fetcher.TargetFolder, true);
-                    SparkleHelpers.DebugInfo ("Controller", "Deleted " + this.fetcher.TargetFolder);
+                    SparkleLogger.LogInfo ("Controller", "Deleted " + this.fetcher.TargetFolder);
 
                 } catch (Exception e) {
-                    SparkleHelpers.DebugInfo ("Controller",
+                    SparkleLogger.LogInfo ("Controller",
                         "Failed to delete " + this.fetcher.TargetFolder + ": " + e.Message);
                 }
             }
@@ -554,11 +579,11 @@ namespace SparkleShare {
             string target_folder_path = Path.Combine (this.config.FoldersPath, target_folder_name);
 
             try {
-                SparkleHelpers.ClearAttributes (this.fetcher.TargetFolder);
+                ClearFolderAttributes (this.fetcher.TargetFolder);
                 Directory.Move (this.fetcher.TargetFolder, target_folder_path);
 
             } catch (Exception e) {
-                SparkleHelpers.DebugInfo ("Controller", "Error moving directory: " + e.Message);
+                SparkleLogger.LogInfo ("Controller", "Error moving directory: " + e.Message);
                 return;
             }
 
@@ -640,7 +665,7 @@ namespace SparkleShare {
             string avatars_path = new string [] { Path.GetDirectoryName (this.config.FullPath),
                 "avatars", size + "x" + size }.Combine ();
 
-            string avatar_file_path = Path.Combine (avatars_path, SparkleHelpers.MD5 (email) + ".jpg");
+            string avatar_file_path = Path.Combine (avatars_path, email.MD5 () + ".jpg");
 
             if (File.Exists (avatar_file_path)) {
                 if (new FileInfo (avatar_file_path).CreationTime < DateTime.Now.AddDays (-1))
@@ -650,7 +675,7 @@ namespace SparkleShare {
             }
 
             WebClient client = new WebClient ();
-            string url =  "https://gravatar.com/avatar/" + SparkleHelpers.MD5 (email) + ".jpg?s=" + size + "&d=404";
+            string url =  "https://gravatar.com/avatar/" + email.MD5 () + ".jpg?s=" + size + "&d=404";
 
             try {
                 byte [] buffer = client.DownloadData (url);
@@ -658,11 +683,11 @@ namespace SparkleShare {
                 if (buffer.Length > 255) {
                     if (!Directory.Exists (avatars_path)) {
                         Directory.CreateDirectory (avatars_path);
-                        SparkleHelpers.DebugInfo ("Controller", "Created '" + avatars_path + "'");
+                        SparkleLogger.LogInfo ("Controller", "Created '" + avatars_path + "'");
                     }
 
                     File.WriteAllBytes (avatar_file_path, buffer);
-                    SparkleHelpers.DebugInfo ("Controller", "Fetched " + size + "x" + size + " avatar for " + email);
+                    SparkleLogger.LogInfo ("Controller", "Fetched " + size + "x" + size + " avatar for " + email);
 
                     return avatar_file_path;
 
@@ -678,7 +703,7 @@ namespace SparkleShare {
 
         public string AssignAvatar (string s)
         {
-            string hash    = "0" + SparkleHelpers.MD5 (s).Substring (0, 8);
+            string hash    = "0" + s.MD5 ().Substring (0, 8);
             string numbers = Regex.Replace (hash, "[a-z]", "");
             int number     = int.Parse (numbers);
             string letters = "abcdefghijklmnopqrstuvwxyz";

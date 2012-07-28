@@ -17,12 +17,14 @@
 
 using System;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SparkleLib {
 
     public static class Extensions {
 
-        public static string Combine (this String [] parts)
+        public static string Combine (this string [] parts)
         {
             string new_path = "";
 
@@ -30,6 +32,26 @@ namespace SparkleLib {
                 new_path = Path.Combine (new_path, part);
 
             return new_path;
+        }
+
+        
+        public static string SHA1 (this string s)
+        {
+            SHA1 sha1         = new SHA1CryptoServiceProvider ();
+            byte [] bytes     = ASCIIEncoding.Default.GetBytes (s);
+            byte [] enc_bytes = sha1.ComputeHash (bytes);
+
+            return BitConverter.ToString (enc_bytes).ToLower ().Replace ("-", "");
+        }
+
+
+        public static string MD5 (this string s)
+        {
+            MD5 md5           = new MD5CryptoServiceProvider ();
+            byte [] bytes     = ASCIIEncoding.Default.GetBytes (s);
+            byte [] enc_bytes = md5.ComputeHash (bytes);
+
+            return BitConverter.ToString (enc_bytes).ToLower ().Replace ("-", "");
         }
     }
 }

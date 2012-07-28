@@ -116,7 +116,7 @@ namespace SparkleLib {
             IsActive = true;
             Started ();
 
-            SparkleHelpers.DebugInfo ("Fetcher", TargetFolder + " | Fetching folder: " + RemoteUrl);
+            SparkleLogger.LogInfo ("Fetcher", TargetFolder + " | Fetching folder: " + RemoteUrl);
 
             if (Directory.Exists (TargetFolder))
                 Directory.Delete (TargetFolder, true);
@@ -134,7 +134,7 @@ namespace SparkleLib {
                 string host_fingerprint = GetFingerprint (host_key);
 
                 if (host_fingerprint == null || !RequiredFingerprint.Equals (host_fingerprint)) {
-                    SparkleHelpers.DebugInfo ("Auth", "Fingerprint doesn't match");
+                    SparkleLogger.LogInfo ("Auth", "Fingerprint doesn't match");
 
                     this.errors.Add ("error: Host fingerprint doesn't match");
                     Failed ();
@@ -143,10 +143,10 @@ namespace SparkleLib {
                 }
 
                 warn = false;
-                SparkleHelpers.DebugInfo ("Auth", "Fingerprint matches");
+                SparkleLogger.LogInfo ("Auth", "Fingerprint matches");
 
             } else {
-               SparkleHelpers.DebugInfo ("Auth", "Skipping fingerprint check");
+               SparkleLogger.LogInfo ("Auth", "Skipping fingerprint check");
             }
 
             AcceptHostKey (host_key, warn);
@@ -154,7 +154,7 @@ namespace SparkleLib {
             this.thread = new Thread (() => {
                 if (Fetch ()) {
                     Thread.Sleep (500);
-                    SparkleHelpers.DebugInfo ("Fetcher", "Finished");
+                    SparkleLogger.LogInfo ("Fetcher", "Finished");
 
                     IsActive = false;
 
@@ -164,7 +164,7 @@ namespace SparkleLib {
 
                 } else {
                     Thread.Sleep (500);
-                    SparkleHelpers.DebugInfo ("Fetcher", "Failed");
+                    SparkleLogger.LogInfo ("Fetcher", "Failed");
 
                     IsActive = false;
                     Failed ();
@@ -217,7 +217,7 @@ namespace SparkleLib {
         public static string CreateIdentifier ()
         {
             string random = Path.GetRandomFileName ();
-            return SparkleHelpers.SHA1 (random);
+            return random.SHA1 ();
         }
 
 
@@ -255,7 +255,7 @@ namespace SparkleLib {
         private string GetHostKey ()
         {
             string host = RemoteUrl.Host;
-            SparkleHelpers.DebugInfo ("Auth", "Fetching host key for " + host);
+            SparkleLogger.LogInfo ("Auth", "Fetching host key for " + host);
 
             Process process = new Process () {
                 EnableRaisingEvents = true
@@ -312,7 +312,7 @@ namespace SparkleLib {
                 fingerprint = fingerprint.Substring (fingerprint.IndexOf (" ") + 1, 47);
 
             } catch (Exception e) {
-                SparkleHelpers.DebugInfo ("Fetcher", "Not a valid fingerprint: " + e.Message);
+                SparkleLogger.LogInfo ("Fetcher", "Not a valid fingerprint: " + e.Message);
                 return null;
             }
 
@@ -346,7 +346,7 @@ namespace SparkleLib {
             else
                 File.AppendAllText (known_hosts_file_path, "\n" + host_key + "\n");
 
-            SparkleHelpers.DebugInfo ("Auth", "Accepted host key for " + host);
+            SparkleLogger.LogInfo ("Auth", "Accepted host key for " + host);
 
             if (warn)
                 this.warnings.Add ("The following host key has been accepted:\n" + GetFingerprint (host_key));

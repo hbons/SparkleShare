@@ -33,14 +33,14 @@ namespace SparkleLib.Git {
 
         new public void Start ()
         {
-            SparkleHelpers.DebugInfo ("Cmd | " + System.IO.Path.GetFileName (StartInfo.WorkingDirectory),
+            SparkleLogger.LogInfo ("Cmd | " + System.IO.Path.GetFileName (StartInfo.WorkingDirectory),
                 System.IO.Path.GetFileName (StartInfo.FileName) + " " + StartInfo.Arguments);
 
             try {
                 base.Start ();
 
             } catch (Exception e) {
-                SparkleHelpers.DebugInfo ("Cmd", "Couldn't execute command: " + e.Message);
+                SparkleLogger.LogInfo ("Cmd", "Couldn't execute command: " + e.Message);
                 Environment.Exit (-1);
             }
         }
