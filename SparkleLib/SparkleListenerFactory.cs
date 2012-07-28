@@ -54,7 +54,7 @@ namespace SparkleLib {
             // the number of connections as low as possible
             foreach (SparkleListenerBase listener in listeners) {
                 if (listener.Server.Equals (announce_uri)) {
-                    SparkleHelpers.DebugInfo ("ListenerFactory", "Refered to existing listener for " + announce_uri);
+                    SparkleLogger.LogInfo ("ListenerFactory", "Refered to existing listener for " + announce_uri);
 
                     // We already seem to have a listener for this server,
                     // refer to the existing one instead
@@ -64,7 +64,7 @@ namespace SparkleLib {
             }
 
             listeners.Add (new SparkleListenerTcp (announce_uri, folder_identifier));
-            SparkleHelpers.DebugInfo ("ListenerFactory", "Issued new listener for " + announce_uri);
+            SparkleLogger.LogInfo ("ListenerFactory", "Issued new listener for " + announce_uri);
 
             return (SparkleListenerBase) listeners [listeners.Count - 1];
         }

@@ -206,7 +206,7 @@ namespace SparkleShare {
                 if (change_sets != null)
                     list.AddRange (change_sets);
                 else
-                    SparkleHelpers.DebugInfo ("Log", "Could not create log for " + repo.Name);
+                    SparkleLogger.LogInfo ("Log", "Could not create log for " + repo.Name);
             }
 
             list.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));

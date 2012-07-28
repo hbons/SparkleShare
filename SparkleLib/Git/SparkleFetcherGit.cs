@@ -120,7 +120,7 @@ namespace SparkleLib.Git {
                         number = (number / 100 * 20); // "Compressing objects" stage
 
                 } else {
-                    SparkleHelpers.DebugInfo ("Fetcher", line);
+                    SparkleLogger.LogInfo ("Fetcher", line);
                     line = line.Trim (new char [] {' ', '@'});
 
                     if (line.StartsWith ("fatal:", StringComparison.InvariantCultureIgnoreCase) ||
@@ -195,7 +195,7 @@ namespace SparkleLib.Git {
         public override void EnableFetchedRepoCrypto (string password)
         {
             // Define the crypto filter in the config
-            string repo_config_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "config");
+            string repo_config_file_path = new string [] { TargetFolder, ".git", "config" }.Combine ();
             string config = File.ReadAllText (repo_config_file_path);
 
             string n = Environment.NewLine;
@@ -207,11 +207,11 @@ namespace SparkleLib.Git {
             File.WriteAllText (repo_config_file_path, config);
 
             // Pass all files through the crypto filter
-            string git_attributes_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "info", "attributes");
+            string git_attributes_file_path = new string [] { TargetFolder, ".git", "info", "attributes" }.Combine ();
             File.AppendAllText (git_attributes_file_path, "\n* filter=crypto");
 
             // Store the password
-            string password_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "password");
+            string password_file_path = new string [] { TargetFolder, ".git", "password" }.Combine ();
             File.WriteAllText (password_file_path, password.Trim ());
         }
 
@@ -269,7 +269,7 @@ namespace SparkleLib.Git {
                 this.git.Dispose ();
 
             } catch (Exception e) {
-                SparkleHelpers.DebugInfo ("Fetcher", "Failed to dispose properly: " + e.Message);
+                SparkleLogger.LogInfo ("Fetcher", "Failed to dispose properly: " + e.Message);
             }
         }
 
@@ -334,7 +334,7 @@ namespace SparkleLib.Git {
         private void InstallExcludeRules ()
         {
             string exclude_rules           = string.Join (Environment.NewLine, ExcludeRules);
-            string exclude_rules_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "info", "exclude");
+            string exclude_rules_file_path = new string [] { TargetFolder, ".git", "info", "exclude" }.Combine ();
 
             File.WriteAllText (exclude_rules_file_path, exclude_rules);
         }
@@ -342,7 +342,7 @@ namespace SparkleLib.Git {
 
         private void InstallAttributeRules ()
         {
-            string attribute_rules_file_path = SparkleHelpers.CombineMore (TargetFolder, ".git", "info", "attributes");
+            string attribute_rules_file_path = new string [] { TargetFolder, ".git", "info", "attributes" }.Combine ();
             TextWriter writer                = new StreamWriter (attribute_rules_file_path);
 
             if (this.use_git_bin) {

@@ -95,7 +95,7 @@ namespace SparkleLib {
                     File.WriteAllText (id_path, this.identifier);
                     File.SetAttributes (id_path, FileAttributes.Hidden);
 
-                    SparkleHelpers.DebugInfo ("Local", Name + " | Assigned identifier: " + this.identifier);
+                    SparkleLogger.LogInfo ("Local", Name + " | Assigned identifier: " + this.identifier);
 
                     return this.identifier;
                 }
@@ -214,7 +214,7 @@ namespace SparkleLib {
             IsBuffering = true;
             this.watcher.Disable ();
 
-            SparkleHelpers.DebugInfo ("Local", Name + " | Activity detected, waiting for it to settle...");
+            SparkleLogger.LogInfo ("Local", Name + " | Activity detected, waiting for it to settle...");
 
             List<double> size_buffer = new List<double> ();
 
@@ -230,7 +230,7 @@ namespace SparkleLib {
                     size_buffer [1].Equals (size_buffer [2]) &&
                     size_buffer [2].Equals (size_buffer [3])) {
 
-                    SparkleHelpers.DebugInfo ("Local", Name + " | Activity has settled");
+                    SparkleLogger.LogInfo ("Local", Name + " | Activity has settled");
                     IsBuffering = false;
 
                     if (HasLocalChanges) {
@@ -280,13 +280,13 @@ namespace SparkleLib {
         {
             this.watcher.Disable ();
 
-            SparkleHelpers.DebugInfo ("SyncUp", Name + " | Initiated");
+            SparkleLogger.LogInfo ("SyncUp", Name + " | Initiated");
             HasUnsyncedChanges = true;
 
             SyncStatusChanged (SyncStatus.SyncUp);
 
             if (SyncUp ()) {
-                SparkleHelpers.DebugInfo ("SyncUp", Name + " | Done");
+                SparkleLogger.LogInfo ("SyncUp", Name + " | Done");
                 ChangeSets = GetChangeSets ();
 
                 HasUnsyncedChanges = false;
@@ -295,7 +295,7 @@ namespace SparkleLib {
                 this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
 
             } else {
-                SparkleHelpers.DebugInfo ("SyncUp", Name + " | Error");
+                SparkleLogger.LogInfo ("SyncUp", Name + " | Error");
                 SyncDownBase ();
 
                 this.watcher.Disable ();
@@ -323,13 +323,13 @@ namespace SparkleLib {
         {
             this.watcher.Disable ();
 
-            SparkleHelpers.DebugInfo ("SyncDown", Name + " | Initiated");
+            SparkleLogger.LogInfo ("SyncDown", Name + " | Initiated");
 
             SyncStatusChanged (SyncStatus.SyncDown);
             string pre_sync_revision = CurrentRevision;
 
             if (SyncDown ()) {
-                SparkleHelpers.DebugInfo ("SyncDown", Name + " | Done");
+                SparkleLogger.LogInfo ("SyncDown", Name + " | Done");
                 ServerOnline = true;
 
                 ChangeSets = GetChangeSets ();
@@ -361,7 +361,7 @@ namespace SparkleLib {
                 SyncStatusChanged (SyncStatus.Idle);
 
             } else {
-                SparkleHelpers.DebugInfo ("SyncDown", Name + " | Error");
+                SparkleLogger.LogInfo ("SyncDown", Name + " | Error");
                 ServerOnline = false;
 
                 ChangeSets = GetChangeSets ();
@@ -424,7 +424,7 @@ namespace SparkleLib {
         private void ListenerDisconnectedDelegate ()
         {
             this.poll_interval = PollInterval.Short;
-            SparkleHelpers.DebugInfo (Name, "Falling back to polling");
+            SparkleLogger.LogInfo (Name, "Falling back to polling");
         }
 
 
@@ -439,12 +439,12 @@ namespace SparkleLib {
                 while (this.is_syncing)
                     Thread.Sleep (100);
 
-                SparkleHelpers.DebugInfo ("Listener", "Syncing due to announcement");
+                SparkleLogger.LogInfo ("Listener", "Syncing due to announcement");
                 SyncDownBase ();
 
             } else {
                 if (announcement.FolderIdentifier.Equals (identifier))
-                    SparkleHelpers.DebugInfo ("Listener", "Not syncing, message is for current revision");
+                    SparkleLogger.LogInfo ("Listener", "Not syncing, message is for current revision");
             }
         }
 
