@@ -29,18 +29,15 @@ namespace SparkleShare {
         public static string LocalPluginsPath = new string [] {
             Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "sparkleshare", "plugins" }.Combine ();
 
-
-        public string Name {
-            get {
-                return GetValue ("info", "name");
-            }
-        }
-
-        public string Description {
-            get {
-                return GetValue ("info", "description");
-            }
-        }
+        public string Name { get { return GetValue ("info", "name"); } }
+        public string Description { get { return GetValue ("info", "description"); } }
+        public string Backend { get { return GetValue ("info", "backend"); } }
+        public string Fingerprint { get { return GetValue ("info", "fingerprint"); } }
+        public string AnnouncementsUrl { get { return GetValue ("info", "announcements_url"); } }
+        public string Address { get { return GetValue ("address", "value"); } }
+        public string AddressExample { get { return GetValue ("address", "example"); } }
+        public string Path { get { return GetValue ("path", "value"); } }
+        public string PathExample { get { return GetValue ("path", "example"); } }
 
         public string ImagePath {
             get {
@@ -51,48 +48,6 @@ namespace SparkleShare {
                     return image_path;
                 else
                     return IO.Path.Combine (PluginsPath, image_file_name);
-            }
-        }
-
-        public string Backend {
-            get {
-                return GetValue ("info", "backend");
-            }
-        }
-
-        public string Fingerprint {
-            get {
-                return GetValue ("info", "fingerprint");
-            }
-        }
-
-        public string Address {
-            get {
-                return GetValue ("address", "value");
-            }
-        }
-
-        public string AddressExample {
-            get {
-                return GetValue ("address", "example");
-            }
-        }
-
-        public string Path {
-            get {
-                return GetValue ("path", "value");
-            }
-        }
-
-        public string PathExample {
-            get {
-                return GetValue ("path", "example");
-            }
-        }
-
-        public string AnnouncementsUrl {
-            get {
-                return GetValue ("info", "announcements_url");
             }
         }
 		

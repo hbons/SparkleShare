@@ -1,19 +1,3 @@
-//   SparkleShare, a collaboration and sharing tool.
-//   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
-//
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-//   GNU General Public License for more details.
-//
-//   You should have received a copy of the GNU General Public License
-//   along with this program. If not, see <http://www.gnu.org/licenses/>.
-
 //   Originally taken from:
 //   https://github.com/jesse99/Continuum/blob/master/source/shared/DirectoryWatcher.cs
 //   Modified to use MonoMac and integrate into SparkleShare
@@ -120,7 +104,6 @@ namespace SparkleShare {
                 GC.SuppressFinalize (this);
                 throw new InvalidOperationException ("Failed to start FSEvent stream for " + path);
             }
-
         }
 
 
@@ -186,36 +169,23 @@ namespace SparkleShare {
         private extern static IntPtr CFRunLoopGetMain ();
       
         [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
-        private extern static IntPtr FSEventStreamCreate (
-            IntPtr allocator,
-            FSEventStreamCallback callback,
-            IntPtr context,
-            IntPtr pathsToWatch,
-            ulong sinceWhen,
-            double latency,
-            FSEventStreamCreateFlags flags);
+        private extern static IntPtr FSEventStreamCreate (IntPtr allocator, FSEventStreamCallback callback,
+            IntPtr context, IntPtr pathsToWatch, ulong sinceWhen, double latency, FSEventStreamCreateFlags flags);
 
         [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
-        private extern static void FSEventStreamScheduleWithRunLoop (
-            IntPtr streamRef,
-            IntPtr runLoop,
-            IntPtr runLoopMode);
+        private extern static void FSEventStreamScheduleWithRunLoop (IntPtr streamRef, IntPtr runLoop, IntPtr runLoopMode);
 
-        [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
         [return: MarshalAs (UnmanagedType.U1)]
-        private extern static bool FSEventStreamStart (
-            IntPtr streamRef);
+        [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
+        private extern static bool FSEventStreamStart (IntPtr streamRef);
 
         [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
-        private extern static void FSEventStreamStop (
-            IntPtr streamRef);
+        private extern static void FSEventStreamStop (IntPtr streamRef);
 
         [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
-        private extern static void FSEventStreamInvalidate (
-            IntPtr streamRef);
+        private extern static void FSEventStreamInvalidate (IntPtr streamRef);
 
         [DllImport("/System/Library/Frameworks/CoreServices.framework/CoreServices")]
-        private extern static void FSEventStreamRelease (
-            IntPtr streamRef);
+        private extern static void FSEventStreamRelease (IntPtr streamRef);
     }
 }

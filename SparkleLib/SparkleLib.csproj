@@ -37,7 +37,6 @@
   <ItemGroup>
     <Compile Include="SparkleRepoBase.cs" />
     <Compile Include="SparkleFetcherBase.cs" />
-    <Compile Include="SparkleAnnouncement.cs" />
     <Compile Include="SparkleWrappers.cs" />
     <Compile Include="SparkleListenerBase.cs" />
     <Compile Include="SparkleListenerFactory.cs" />

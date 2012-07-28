@@ -22,8 +22,8 @@ namespace SparkleLib {
 
     public class SparkleWatcher : FileSystemWatcher {
 
+        public event ChangeEventEventHandler ChangeEvent = delegate { };
         public delegate void ChangeEventEventHandler (FileSystemEventArgs args);
-        public event ChangeEventEventHandler ChangeEvent;
 
         private Object thread_lock = new Object ();
 
@@ -34,25 +34,16 @@ namespace SparkleLib {
             EnableRaisingEvents   = true;
             Filter                = "*";
 
-            Changed += delegate (object o, FileSystemEventArgs args) {
-                if (ChangeEvent != null)
-                    ChangeEvent (args);
-            };
+            Changed += OnChanged;
+            Created += OnChanged;
+            Deleted += OnChanged;
+            Renamed += OnChanged;
+        }
 
-            Created += delegate (object o, FileSystemEventArgs args) {
-                if (ChangeEvent != null)
-                    ChangeEvent (args);
-            };
 
-            Deleted += delegate (object o, FileSystemEventArgs args) {
-                if (ChangeEvent != null)
-                    ChangeEvent (args);
-            };
-
-            Renamed += delegate (object o, RenamedEventArgs args) {
-                if (ChangeEvent != null)
-                    ChangeEvent (args);
-            };
+        private void OnChanged (object sender, FileSystemEventArgs args)
+        {
+            ChangeEvent (args);
         }
 
 

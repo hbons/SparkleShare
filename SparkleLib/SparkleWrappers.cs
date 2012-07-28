@@ -75,4 +75,18 @@ namespace SparkleLib {
             Name = name;
         }
     }
+
+
+    public class SparkleAnnouncement {
+
+        public readonly string FolderIdentifier;
+        public readonly string Message;
+
+
+        public SparkleAnnouncement (string folder_identifier, string message)
+        {
+            FolderIdentifier = folder_identifier;
+            Message          = message;
+        }
+    }
 }
