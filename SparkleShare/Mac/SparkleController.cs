@@ -237,12 +237,12 @@ namespace SparkleShare {
         public override string EventEntryHTML
         {
             get {
-                   if (string.IsNullOrEmpty (this.event_entry_html)) {
-                       string html_file_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "event-entry.html");
-                       this.event_entry_html = File.ReadAllText (html_file_path);
-                   }
+               if (string.IsNullOrEmpty (this.event_entry_html)) {
+                   string html_file_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "event-entry.html");
+                   this.event_entry_html = File.ReadAllText (html_file_path);
+               }
 
-                   return this.event_entry_html;
+               return this.event_entry_html;
             }
         }
 	}

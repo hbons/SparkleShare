@@ -33,10 +33,10 @@ namespace SparkleShare {
         public string Header;
         public string Description;
 
-        private NSImage SideSplash;
-        private NSImageView SideSplashView;
-        private NSTextField HeaderTextField;
-        private NSTextField DescriptionTextField;
+        private NSImage side_splash;
+        private NSImageView side_splash_view;
+        private NSTextField header_text_field;
+        private NSTextField description_text_field;
 
 
         public SparkleSetupWindow () : base ()
@@ -53,16 +53,16 @@ namespace SparkleShare {
 
             string side_splash_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "side-splash.png");
 
-            SideSplash = new NSImage (side_splash_path) {
+            this.side_splash = new NSImage (side_splash_path) {
                 Size = new SizeF (150, 482)
             };
 
-            SideSplashView = new NSImageView () {
-                Image = SideSplash,
+            this.side_splash_view = new NSImageView () {
+                Image = this.side_splash,
                 Frame = new RectangleF (0, 0, 150, 482)
             };
 
-            HeaderTextField = new NSTextField () {
+            this.header_text_field = new NSTextField () {
                 Frame           = new RectangleF (190, Frame.Height - 80, Frame.Width, 24),
                 BackgroundColor = NSColor.WindowBackground,
                 Bordered        = false,
@@ -71,7 +71,7 @@ namespace SparkleShare {
                     "Lucida Grande", NSFontTraitMask.Bold, 0, 15)
             };
             
-            DescriptionTextField = new NSTextField () {
+            this.description_text_field = new NSTextField () {
                 Frame           = new RectangleF (190, Frame.Height - 130, 640 - 240, 44),
                 BackgroundColor = NSColor.WindowBackground,
                 Bordered        = false,
@@ -96,15 +96,15 @@ namespace SparkleShare {
 
         public void ShowAll ()
         {
-            HeaderTextField.StringValue      = Header;
-            DescriptionTextField.StringValue = Description;
+            this.header_text_field.StringValue      = Header;
+            this.description_text_field.StringValue = Description;
             
-            ContentView.AddSubview (HeaderTextField);
+            ContentView.AddSubview (this.header_text_field);
 
             if (!string.IsNullOrEmpty (Description))
-                ContentView.AddSubview (DescriptionTextField);
+                ContentView.AddSubview (this.description_text_field);
             
-            ContentView.AddSubview (SideSplashView);
+            ContentView.AddSubview (this.side_splash_view);
             
             int i = 1;
             int x = 0;
