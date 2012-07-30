@@ -290,4 +290,7 @@
       <Name>SparkleLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Pixmaps\sparkleshare-folder.ico" />
+  </ItemGroup>
 </Project>

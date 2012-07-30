@@ -130,16 +130,29 @@ namespace SparkleShare {
         {
             if (!Directory.Exists (FoldersPath)) {
                 Directory.CreateDirectory (FoldersPath);
-
-                SparkleHelpers.DebugInfo ("Config", "Created '" + FoldersPath + "'");
-
-                // TODO: Set a custom SparkleShare folder icon
+                File.SetAttributes (FoldersPath, File.GetAttributes (FoldersPath) | FileAttributes.System);
 
                 return true;
 
-            } else {
-                return false;
+            } else if (!File.Exists (icon_file_path)) {
+                string ini_file_path  = Path.Combine (FoldersPath, "desktop.ini");
+                string app_path       = Path.GetDirectoryName (Application.ExecutablePath);
+                string icon_file_path = Path.Combine (app_path, "Pixmaps", "sparkleshare-folder.ico");
+
+                string ini_file "[.ShellClassInfo]" +
+                    "IconFile=" + icon_file_path +
+                    "IconIndex=0" +
+                    "InfoTip=SparkleShare";
+
+                File.WriteAllText (ini_file_path, ini_file);
+                
+                File.SetAttributes (ini_file_path,
+                    File.GetAttributes (ini_file_path) | FileAttributes.Hidden | FileAttributes.System);
+        
+                SparkleHelpers.DebugInfo ("Config", "Created '" + FoldersPath + "'");
             }
+
+            return false;
         }
 
 
