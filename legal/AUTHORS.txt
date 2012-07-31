@@ -48,7 +48,6 @@ Artwork:
 	Jakub Steiner <jimmac@redhat.com>
 	Hylke Bons <hylkebons@gmail.com>
 	Lapo Calamandrei <calamandrei@gmail.com>
-	Yusuke Kamiyamane <p.yusukekamiyamane.com>
 
 
 Thanks very much!
