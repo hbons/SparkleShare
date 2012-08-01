@@ -73,6 +73,7 @@ $ sudo make install
 ```
 
 **Note:** The Nautilus extension will only be enabled if you build with `--prefix=/usr`.
+**Note:** If there is no "configure" file, first run "./autogen.sh"
 
 
 ### Resetting SparkleShare settings
