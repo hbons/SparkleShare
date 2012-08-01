@@ -36,5 +36,46 @@ namespace SparkleLib {
             lock (debug_lock)
                 File.AppendAllText (SparkleConfig.DefaultConfig.LogFilePath, line + Environment.NewLine);
         }
+
+
+        public static void WriteCrashReport (Exception e)
+        {
+            string home_path = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+
+            if (SparkleBackend.Platform == PlatformID.Win32NT)
+                home_path = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
+
+            string crash_report_file_path = new string [] { home_path, "SparkleShare", "crash_report.txt" }.Combine ();
+
+            string n = Environment.NewLine;
+            string crash_report = "Oops! SparkleShare has crashed... :(" + n + n +
+                "If you want to help fix this crash, please report it at " + n +
+                "https://github.com/hbons/SparkleShare/issues and include the lines below." + n + n +
+                "Remove any sensitive information like file names, IP addresses, domain names, etc. if needed." + n + n +
+                "------" +  n + n +
+                "SparkleShare version: " + SparkleLib.SparkleBackend.Version + n +
+                "Operating system: " + SparkleLib.SparkleBackend.Platform + " " + Environment.OSVersion + n;
+
+            crash_report += n + e.Message + n + e.StackTrace + n;
+
+            if (e.InnerException != null)
+                crash_report += n + e.InnerException.Message + n + e.InnerException.StackTrace + n;
+
+            if (SparkleConfig.DefaultConfig != null && File.Exists (SparkleConfig.DefaultConfig.LogFilePath)) {
+                string debug_log      = File.ReadAllText (SparkleConfig.DefaultConfig.LogFilePath);
+                string [] debug_lines = debug_log.Split (Environment.NewLine.ToCharArray ()); 
+                int line_count        = 50;
+                    
+                if (debug_lines.Length > line_count) {
+                    crash_report += string.Join (Environment.NewLine, debug_lines,
+                        (debug_lines.Length - line_count), line_count) + n;
+                
+                } else {
+                    crash_report += debug_log + n;
+                }
+            }
+
+            File.WriteAllText (crash_report_file_path, crash_report);
+        }
     }
 }

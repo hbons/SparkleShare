@@ -491,7 +491,7 @@ namespace SparkleShare {
                 Buttons.Add (FinishButton);
                 Buttons.Add (CancelButton);
             }
-            
+
             if (type == PageType.Error) {
                 Header      = "Oops! Something went wrong…";
                 Description = "Please check the following:";
