@@ -35,9 +35,6 @@ namespace SparkleLib {
 
         public string HomePath {
             get {
-                if (GetConfigOption ("home_path") != null)
-                    return GetConfigOption ("home_path");
-
                 if (SparkleBackend.Platform == PlatformID.Win32NT)
                     return Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
                 else
@@ -56,7 +53,7 @@ namespace SparkleLib {
         public SparkleConfig (string config_path, string config_file_name)
         {
             FullPath    = Path.Combine (config_path, config_file_name);
-            LogFilePath = Path.Combine (config_path, "debug-log.txt");
+            LogFilePath = Path.Combine (config_path, "debug_log.txt");
 
             if (File.Exists (LogFilePath)) {
                 try {
