@@ -522,22 +522,59 @@ namespace SparkleLib.Git {
         }
 
 
-        // Returns a list of the latest change sets
+        public override void RevertFile (string path, string revision)
+        {
+            if (path == null)
+                throw new ArgumentNullException ("path");
+
+            if (revision == null)
+                throw new ArgumentNullException ("revision");
+
+            SparkleGit git = new SparkleGit (LocalPath, "checkout " + revision + " \"" + path + "\"");
+            git.StartAndWaitForExit ();
+
+            if (git.ExitCode == 0)
+                SparkleLogger.LogInfo ("Git", Name + " | Checked out \"" + path + "\" (" + revision + ")");
+             else
+                SparkleLogger.LogInfo ("Git", Name + " | Failed to check out \"" + path + "\" (" + revision + ")");
+        }
+
+
+        public override List<SparkleChangeSet> GetChangeSets (string path, int count)
+        {
+            return GetChangeSetsInternal (path, count);
+        }   
+
+
         public override List<SparkleChangeSet> GetChangeSets (int count)
         {
+            return GetChangeSetsInternal (null, count);
+        }
+
+
+        private List<SparkleChangeSet> GetChangeSetsInternal (string path, int count)
+        {
             if (count < 1)
-                count = 30;
+                throw new ArgumentOutOfRangeException ("count");
 
             count = 150;
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
 
-            SparkleGit git_log = new SparkleGit (LocalPath, "log -" + count +
-                " --raw --find-renames --date=iso --format=medium --no-color --no-merges");
+            SparkleGit git;
 
-            string output = git_log.StartAndReadStandardOutput ();
+            if (path == null) {
+                git = new SparkleGit (LocalPath, "log -" + count + " --raw --find-renames --date=iso " +
+                    "--format=medium --no-color --no-merges");
 
-            string [] lines       = output.Split ("\n".ToCharArray ());
-            List <string> entries = new List <string> ();
+            } else {
+                git = new SparkleGit (LocalPath, "log -" + count + " --raw --find-renames --date=iso " +
+                    "--format=medium --no-color --no-merges -- " + path);
+            }
+
+            string output = git.StartAndReadStandardOutput ();
+
+            string [] lines      = output.Split ("\n".ToCharArray ());
+            List<string> entries = new List <string> ();
 
             int line_number = 0;
             bool first_pass = true;
@@ -641,7 +678,7 @@ namespace SparkleLib.Git {
                                     change_type = SparkleChangeType.Edited;
 
                                 } else if (type_letter.Equals ("D")) {
-                                    change_type = SparkleChangeType.Deleted;
+                                   change_type = SparkleChangeType.Deleted;
                                 }
 
                                 change_set.Changes.Add (
@@ -655,33 +692,46 @@ namespace SparkleLib.Git {
                         }
                     }
 
-                    if (change_set.Changes.Count > 0) {
-                        if (change_sets.Count > 0) {
-                            SparkleChangeSet last_change_set = change_sets [change_sets.Count - 1];
+                    if (change_sets.Count > 0 && path == null) {
+                        SparkleChangeSet last_change_set = change_sets [change_sets.Count - 1];
 
-                            if (change_set.Timestamp.Year  == last_change_set.Timestamp.Year &&
-                                change_set.Timestamp.Month == last_change_set.Timestamp.Month &&
-                                change_set.Timestamp.Day   == last_change_set.Timestamp.Day &&
-                                change_set.User.Name.Equals (last_change_set.User.Name)) {
+                        if (change_set.Timestamp.Year  == last_change_set.Timestamp.Year &&
+                            change_set.Timestamp.Month == last_change_set.Timestamp.Month &&
+                            change_set.Timestamp.Day   == last_change_set.Timestamp.Day &&
+                            change_set.User.Name.Equals (last_change_set.User.Name)) {
 
-                                last_change_set.Changes.AddRange (change_set.Changes);
+                            last_change_set.Changes.AddRange (change_set.Changes);
 
-                                if (DateTime.Compare (last_change_set.Timestamp, change_set.Timestamp) < 1) {
-                                    last_change_set.FirstTimestamp = last_change_set.Timestamp;
-                                    last_change_set.Timestamp      = change_set.Timestamp;
-                                    last_change_set.Revision       = change_set.Revision;
-
-                                } else {
-                                    last_change_set.FirstTimestamp = change_set.Timestamp;
-                                }
+                            if (DateTime.Compare (last_change_set.Timestamp, change_set.Timestamp) < 1) {
+                                last_change_set.FirstTimestamp = last_change_set.Timestamp;
+                                last_change_set.Timestamp      = change_set.Timestamp;
+                                last_change_set.Revision       = change_set.Revision;
 
                             } else {
-                                change_sets.Add (change_set);
+                                last_change_set.FirstTimestamp = change_set.Timestamp;
                             }
 
                         } else {
                             change_sets.Add (change_set);
                         }
+
+                    } else {
+                        if (path != null) {
+                            bool skip_change_set = false;;
+
+                            foreach (SparkleChange change in change_set.Changes) {
+                                if ((change.Type == SparkleChangeType.Deleted ||
+                                     change.Type == SparkleChangeType.Moved) && change.Path.Equals (path)) {
+
+                                     skip_change_set = true;
+                                }
+                            }
+
+                            if (skip_change_set)
+                                continue;
+                        }
+                                        
+                        change_sets.Add (change_set);
                     }
                 }
             }
