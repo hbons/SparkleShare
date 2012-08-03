@@ -287,7 +287,7 @@ namespace SparkleShare {
                 SparkleUIHelpers.GetIcon ("process-syncing-iii", 24),
                 SparkleUIHelpers.GetIcon ("process-syncing-iiii", 24),
                 SparkleUIHelpers.GetIcon ("process-syncing-iiiii", 24)
-            }
+            };
         }
 
 
