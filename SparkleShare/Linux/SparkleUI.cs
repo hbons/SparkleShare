@@ -16,16 +16,8 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 
 using Gtk;
-using Mono.Unix;
-using Mono.Unix.Native;
 using SparkleLib;
 
 namespace SparkleShare {
@@ -45,9 +37,6 @@ namespace SparkleShare {
         public SparkleUI ()
         {
             Application.Init ();
-
-            // Use translations
-            Catalog.Init (Defines.GETTEXT_PACKAGE, Defines.LOCALE_DIR);
 
             Setup      = new SparkleSetup ();
             EventLog   = new SparkleEventLog ();

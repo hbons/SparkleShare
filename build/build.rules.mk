@@ -3,14 +3,8 @@ BUILD_DATA_DIR = $(top_builddir)/bin/share/$(PACKAGE)
 
 # Since all other attempts failed, we currently go this way:
 # This code adds the file specified in ASSEMBLY_INFO_SOURCE to SOURCES_BUILD.
-# If no such file is specified, the default AssemblyInfo.cs is used.
 ASSEMBLY_INFO_SOURCE_REAL = \
-	$(shell if [ "$(ASSEMBLY_INFO_SOURCE)" ]; \
-	then \
-		echo "$(addprefix $(srcdir)/, $(ASSEMBLY_INFO_SOURCE))"; \
-	else \
-		echo "$(top_srcdir)/SparkleLib/AssemblyInfo.cs"; \
-	fi)
+	$(addprefix $(srcdir)/, $(ASSEMBLY_INFO_SOURCE))
 
 SOURCES_BUILD = $(addprefix $(srcdir)/, $(SOURCES))
 SOURCES_BUILD += $(ASSEMBLY_INFO_SOURCE_REAL)
