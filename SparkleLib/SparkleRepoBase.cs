@@ -46,7 +46,8 @@ namespace SparkleLib {
         public abstract bool SyncUp ();
         public abstract bool SyncDown ();
         public abstract List<SparkleChangeSet> GetChangeSets (int count);
-
+        public abstract List<SparkleChangeSet> GetChangeSets (string path, int count);
+        public abstract void RevertFile (string path, string revision);
 
         public event SyncStatusChangedEventHandler SyncStatusChanged = delegate { };
         public delegate void SyncStatusChangedEventHandler (SyncStatus new_status);
