@@ -32,7 +32,7 @@ namespace SparkleShare {
 
         public override string PluginsPath {
             get {
-                return SparkleHelpers.CombineMore (Defines.INSTALL_DIR, "plugins");
+                return new string [] { Defines.INSTALL_DIR, "plugins" }.Combine ();
             }
         }
 

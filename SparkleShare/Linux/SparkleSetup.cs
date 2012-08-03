@@ -69,12 +69,12 @@ namespace SparkleShare {
                                 Xalign    = 1
                             };
 
-                            Entry name_entry = new Entry (Controller.GuessedUserName) {
+                            Entry name_entry = new Entry (UnixUserInfo.GetRealUser ().RealName) {
                                 Xalign = 0,
                                 ActivatesDefault = true
                             };
 
-                            Entry email_entry = new Entry (Controller.GuessedUserEmail) {
+                            Entry email_entry = new Entry () {
                                 Xalign = 0,
                                 ActivatesDefault = true
                             };
