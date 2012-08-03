@@ -687,7 +687,7 @@ namespace SparkleShare {
 
                         if (!HasToplevelFocus) {
                             string title   = "Your shared project is ready!";
-                            string subtext = "You can find the files in your SparkleShare folder.");
+                            string subtext = "You can find the files in your SparkleShare folder.";
 
                             SparkleUI.Bubbles.Controller.ShowBubble (title, subtext, null);
                         }
