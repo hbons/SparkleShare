@@ -36,8 +36,7 @@ namespace SparkleShare {
 			Width  = size;
 			Height = size;
 
-			BitmapSource spinner_gallery =
-				SparkleUIHelpers.GetImageSource ("process-working-22");
+			BitmapSource spinner_gallery = SparkleUIHelpers.GetImageSource ("process-working-22");
            			
             int frames_in_width  = spinner_gallery.PixelWidth / size;
             int frames_in_height = spinner_gallery.PixelHeight / size;
@@ -50,10 +49,8 @@ namespace SparkleShare {
             for (int y = 0; y < frames_in_height; y++) {
                 for (int x = 0; x < frames_in_width; x++) {
                     if (!(y == 0 && x == 0)) {
-						CroppedBitmap crop = new CroppedBitmap (
-							spinner_gallery,
-							new Int32Rect (size * x, size * y, size, size)
-						);
+						CroppedBitmap crop = new CroppedBitmap (spinner_gallery, 
+                            new Int32Rect (size * x, size * y, size, size));
 						
 						this.images [i]        = new Image ();
 						this.images [i].Source = crop;
