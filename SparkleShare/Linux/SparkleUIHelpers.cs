@@ -14,27 +14,14 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using Gtk;
-using SparkleLib;
 using System;
 using System.IO;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
+
+using Gtk;
 
 namespace SparkleShare {
 
     public static class SparkleUIHelpers {
-
-        // Creates an MD5 hash of input
-        public static string GetMD5 (string s)
-        {
-            MD5 md5 = new MD5CryptoServiceProvider ();
-            Byte[] bytes = ASCIIEncoding.Default.GetBytes (s);
-            Byte[] encodedBytes = md5.ComputeHash (bytes);
-            return BitConverter.ToString (encodedBytes).ToLower ().Replace ("-", "");
-        }
-
 
         // Looks up an icon from the system's theme
         public static Gdk.Pixbuf GetIcon (string name, int size)
