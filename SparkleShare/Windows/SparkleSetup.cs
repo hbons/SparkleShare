@@ -141,7 +141,7 @@ namespace SparkleShare {
                         
                         cancel_button.Click += delegate {
                             Dispatcher.BeginInvoke ((Action) delegate {
-                                SparkleUI.StatusIcon.Dispose ();    
+                                Program.UI.StatusIcon.Dispose ();    
                                 Controller.SetupPageCancelled ();
                             });
                         };
