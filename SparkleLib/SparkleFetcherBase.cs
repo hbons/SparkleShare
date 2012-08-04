@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
 
 namespace SparkleLib {
@@ -282,41 +283,21 @@ namespace SparkleLib {
         }
 
 
-        // FIXME: Calculate fingerprint natively: decode base64 -> md5
         private string GetFingerprint (string public_key)
         {
-            string tmp_file_path = Path.Combine (SparkleConfig.DefaultConfig.TmpPath, "hostkey.tmp");
-            File.WriteAllText (tmp_file_path, public_key + Environment.NewLine);
-
-            Process process = new Process () {
-                EnableRaisingEvents = true
-            };
-
-            process.StartInfo.FileName               = "ssh-keygen";
-            process.StartInfo.Arguments              = "-lf \"" + tmp_file_path + "\"";
-            process.StartInfo.WorkingDirectory       = SparkleConfig.DefaultConfig.TmpPath;
-            process.StartInfo.UseShellExecute        = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.CreateNoWindow         = true;
-
-            process.Start ();
-
-            // Reading the standard output HAS to go before
-            // WaitForExit, or it will hang forever on output > 4096 bytes
-            string fingerprint = process.StandardOutput.ReadToEnd ().Trim ();
-            process.WaitForExit ();
-
-            File.Delete (tmp_file_path);
-
             try {
-                fingerprint = fingerprint.Substring (fingerprint.IndexOf (" ") + 1, 47);
+                MD5 md5            = new MD5CryptoServiceProvider ();
+                string key         = public_key.Split (" ".ToCharArray ()) [2];
+                byte [] b64_bytes  = Convert.FromBase64String (key);
+                byte [] md5_bytes  = md5.ComputeHash (b64_bytes);
+                string fingerprint = BitConverter.ToString (md5_bytes);
+
+                return fingerprint.ToLower ().Replace ("-", ":");
 
             } catch (Exception e) {
-                SparkleLogger.LogInfo ("Fetcher", "Not a valid fingerprint: " + e.Message);
+                SparkleLogger.LogInfo ("Fetcher", "Failed creating fingerprint: " + e.Message + e.StackTrace);
                 return null;
             }
-
-            return fingerprint;
         }
 
 
