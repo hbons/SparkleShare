@@ -530,6 +530,8 @@ namespace SparkleLib.Git {
             if (revision == null)
                 throw new ArgumentNullException ("revision");
 
+            path = path.Replace ("\\", "/");
+
             SparkleGit git = new SparkleGit (LocalPath, "checkout " + revision + " \"" + path + "\"");
             git.StartAndWaitForExit ();
 
@@ -567,6 +569,8 @@ namespace SparkleLib.Git {
                     "--format=medium --no-color --no-merges");
 
             } else {
+                path = path.Replace ("\\", "/");
+
                 git = new SparkleGit (LocalPath, "log -" + count + " --raw --find-renames --date=iso " +
                     "--format=medium --no-color --no-merges -- " + path);
             }

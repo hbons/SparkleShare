@@ -70,9 +70,9 @@ namespace SparkleLib.Git {
                     !uri.Scheme.Equals ("http")) {
 
                     if (uri.Port == -1)
-                        uri = new Uri (uri.Scheme + "://git@" + uri.Host + uri.AbsolutePath);
+                        uri = new Uri (uri.Scheme + "://storage@" + uri.Host + uri.AbsolutePath);
                     else
-                        uri = new Uri (uri.Scheme + "://git@" + uri.Host + ":" + uri.Port + uri.AbsolutePath);
+                        uri = new Uri (uri.Scheme + "://storage@" + uri.Host + ":" + uri.Port + uri.AbsolutePath);
                 }
 
                 this.use_git_bin = false; // TODO

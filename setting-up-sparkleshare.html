@@ -1,0 +1,114 @@
+<html>
+  <head>
+    <title>Setting up SparkleShare</title>
+    <style>
+      body {
+        background-color: #2e3436;
+        color: #d3d7cf;
+        margin: 4em;
+      }
+      
+      pre {
+        background-color: rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1.5em;
+        font-size: 1em;
+        line-height: 1.5em;
+        margin: 2em;
+        width: 40em;
+        line-height: 1.7em;
+        position: relative;
+      }
+      
+      p {
+        line-height: 1.7em;
+        width: 40em;
+        margin-left: 1em;
+      }
+      
+      .comment {
+        opacity: 0.5;
+      }
+      
+      .inline {
+        color: rgba(255, 255, 255, 0.7);
+        background-color: rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.3em;
+        font-family: monospace;
+      }
+      
+      h2, h3 {
+        margin-top: 2em; 
+      }
+      
+      h3 {
+        margin-left: 1em;
+      }
+    </style>
+  </head>
+  <body>
+
+<h1>Setting up SparkleShare</h1>
+
+<h2>1. Setting up the server</h2>
+
+<h3>1.1. Creating a new user</h3>
+
+<pre>
+<span class="comment"># Create a new user called "storage"</span>
+sudo useradd storage --create-home --user-group
+</pre>
+
+<p>All clients connect through this user account, there's not need to add more users to link more clients.</p>
+
+<h3>1.2. Configuring SSH</h3>
+
+<pre>
+<span class="comment"># Create a file to store authorized public keys</span>
+sudo mkdir /home/storage/.ssh
+sudo touch /home/storage/.ssh/authorized_keys
+
+<span class="comment"># Set the right permissions in the file</span>
+sudo chmod 700 /home/storage/.ssh
+sudo chmod 600 /home/storage/.ssh/authorized_keys
+</pre>
+
+<p>Every SparkleShare client uses its own SSH public key. This key can be found in <span class="inline">~/SparkleShare/Your Name's link code.txt</span> after you've started and configured a client for the first time. Paste the contents of this file on a new line in <span class="inline">authorized_keys</span> to link a client.</p>
+
+<p>Open <span class="inline">/etc/ssh/sshd_config</span> in an editor and add the following lines:</p>
+
+<pre>
+Match User storage
+    PasswordAuthentication no
+</pre>
+
+<p>Finally, restart the SSH daemon to use the new configuration:</p>
+
+<pre>
+<span class="comment"># Restart SSH</span>
+sudo /etc/init.d/ssh restart <span class="comment"># on Debian</span>
+sudo /etc/init.d/sshd restart <span class="comment"># on Fedora</span>
+</pre>
+
+<h3>1.3. Setting up Git repositories</h3>
+
+<pre>
+<span class="comment"># Install Git</span>
+sudo apt-get install git-core
+sudo yum install git
+
+<span class="comment"># Create a Git repository (create as many as you need)</span>
+sudo git init --bare /home/storage/MyProject
+sudo chown -R storage:storage /home/storage
+</pre>
+
+<h2>2. Setting up a client</h2>
+
+<p>Click the SparkleShare status icon and select <span class="inline">Add Hosted Project</span>. Select <span class="inline">On my own server</span>, enter your server address in the <span class="inline">Address</span> field and <span class="inline">/home/storage/MyProject</span> in the <span class="inline">Remote Path</span> field. Click <span class="inline">Add</span>.</p>
+
+<p>SparkleShare has now been linked to your server!</p>
+
+  </body>
+</html>
+
