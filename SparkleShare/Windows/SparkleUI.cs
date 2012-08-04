@@ -22,12 +22,11 @@ namespace SparkleShare {
 
     public class SparkleUI {
 
-        // TODO: These don't need to be static
-        public static SparkleSetup Setup;
-        public static SparkleEventLog EventLog;
-        public static SparkleBubbles Bubbles;
-        public static SparkleStatusIcon StatusIcon;
-        public static SparkleAbout About;
+        public SparkleSetup Setup;
+        public SparkleEventLog EventLog;
+        public SparkleBubbles Bubbles;
+        public SparkleStatusIcon StatusIcon;
+        public SparkleAbout About;
 
 
         public SparkleUI ()
