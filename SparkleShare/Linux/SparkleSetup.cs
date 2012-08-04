@@ -689,7 +689,7 @@ namespace SparkleShare {
                             string title   = "Your shared project is ready!";
                             string subtext = "You can find the files in your SparkleShare folder.";
 
-                            SparkleUI.Bubbles.Controller.ShowBubble (title, subtext, null);
+                            Program.UI.Bubbles.Controller.ShowBubble (title, subtext, null);
                         }
 
                         Header      = "Your shared project is ready!";

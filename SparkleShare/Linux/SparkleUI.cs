@@ -24,12 +24,11 @@ namespace SparkleShare {
 
     public class SparkleUI {
 
-        // TODO: These don't need to be static
-        public static SparkleStatusIcon StatusIcon;
-        public static SparkleEventLog EventLog;
-        public static SparkleBubbles Bubbles;
-        public static SparkleSetup Setup;
-        public static SparkleAbout About;
+        public SparkleStatusIcon StatusIcon;
+        public SparkleEventLog EventLog;
+        public SparkleBubbles Bubbles;
+        public SparkleSetup Setup;
+        public SparkleAbout About;
 
         public static string AssetsPath = Defines.INSTALL_DIR;
 
