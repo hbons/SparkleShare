@@ -291,8 +291,9 @@ namespace SparkleShare {
             };
 
             repo.ConflictResolved += delegate {
-                AlertNotificationRaised ("Conflict detected",
-                    "Don't worry, SparkleShare made a copy of each conflicting file.");
+                if (NotificationsEnabled)
+                    AlertNotificationRaised ("Conflict detected",
+                        "Don't worry, SparkleShare made a copy of each conflicting file.");
             };
 
             this.repositories.Add (repo);
