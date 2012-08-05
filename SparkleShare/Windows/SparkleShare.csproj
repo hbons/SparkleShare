@@ -150,9 +150,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
-  <PropertyGroup>
-    <PreBuildEvent>"$(ProjectDir)transform_tt.cmd"</PreBuildEvent>
-  </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Common\Pixmaps\about.png">
       <Link>Pixmaps\about.png</Link>
