@@ -30,7 +30,7 @@ namespace SparkleShare {
         public SparkleSetup Setup;
         public SparkleAbout About;
 
-        public static string AssetsPath = Defines.INSTALL_DIR;
+        public string AssetsPath = Defines.INSTALL_DIR;
 
 
         public SparkleUI ()
