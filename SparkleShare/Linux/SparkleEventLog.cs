@@ -276,7 +276,7 @@ namespace SparkleShare {
                     "file://" + IO.Path.Combine (icons_path, "document-moved.png"));
                         
                 
-                Application.Invoke (delegate {
+                Application.Invoke (() => {
                     this.spinner.Stop ();
                                 this.web_view.NavigationRequested -= WebViewNavigationRequested;
                     this.web_view.LoadHtmlString (html, "file://");
@@ -285,7 +285,7 @@ namespace SparkleShare {
                     this.content_wrapper.Add (this.scrolled_window);
                     this.content_wrapper.ShowAll ();
                 });
-            }));
+            });
 
             thread.Start ();
         }
