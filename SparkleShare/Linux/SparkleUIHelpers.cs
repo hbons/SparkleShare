@@ -45,7 +45,7 @@ namespace SparkleShare {
 
         public static Image GetImage (string name)
         {
-            string image_path = SparkleHelpers.CombineMore (Defines.INSTALL_DIR, "pixmaps", name);
+            string image_path = new string [] { Defines.INSTALL_DIR, "pixmaps", name };
             return new Image (image_path);
         }
 
