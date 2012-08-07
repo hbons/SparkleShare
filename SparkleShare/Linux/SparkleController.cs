@@ -61,10 +61,10 @@ namespace SparkleShare {
                         "X-GNOME-Autostart-enabled=true\n" +
                         "Categories=Network");
 
-                    SparkleHelpers.DebugInfo ("Controller", "Added SparkleShare to login items");
+                    SparkleLogger.LogInfo ("Controller", "Added SparkleShare to login items");
 
                 } catch (Exception e) {
-                    SparkleHelpers.DebugInfo ("Controller", "Failed adding SparkleShare to login items: " + e.Message);
+                    SparkleLogger.LogInfo ("Controller", "Failed adding SparkleShare to login items: " + e.Message);
                 }
             }
         }
@@ -122,7 +122,7 @@ namespace SparkleShare {
         {
             if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
                 Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
-                SparkleHelpers.DebugInfo ("Controller", "Created '" + SparkleConfig.DefaultConfig.FoldersPath + "'");
+                SparkleLogger.LogInfo ("Controller", "Created '" + SparkleConfig.DefaultConfig.FoldersPath + "'");
 
                 string gvfs_command_path = new string [] { Path.VolumeSeparatorChar.ToString (),
                         "usr", "bin", "gvfs-set-attribute" }.Combine ();

@@ -239,7 +239,7 @@ namespace SparkleShare {
 
         public void UpdateContent (string html)
         {
-            Thread thread = new Thread (new ThreadStart (delegate {
+            Thread thread = new Thread (() => {
                 if (html == null)
                     html = Controller.HTML;
 
