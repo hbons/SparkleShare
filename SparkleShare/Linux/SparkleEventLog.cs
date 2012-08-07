@@ -276,11 +276,13 @@ namespace SparkleShare {
                     "file://" + IO.Path.Combine (icons_path, "document-moved.png"));
                         
                 
-                Application.Invoke (() => {
+                Application.Invoke (delegate {
                     this.spinner.Stop ();
-                                this.web_view.NavigationRequested -= WebViewNavigationRequested;
+
+                    this.web_view.NavigationRequested -= WebViewNavigationRequested;
                     this.web_view.LoadHtmlString (html, "file://");
-                                this.web_view.NavigationRequested += WebViewNavigationRequested;
+                    this.web_view.NavigationRequested += WebViewNavigationRequested;
+
                     this.content_wrapper.Remove (this.content_wrapper.Child);
                     this.content_wrapper.Add (this.scrolled_window);
                     this.content_wrapper.ShowAll ();
