@@ -96,10 +96,11 @@ namespace SparkleLib {
 
         public void AlsoListenTo (string channel)
         {
-            if (!this.channels.Contains (channel) && IsConnected) {
-                SparkleLogger.LogInfo ("Listener", "Subscribing to channel " + channel + " on " + Server);
-
+            if (!this.channels.Contains (channel))
                 this.channels.Add (channel);
+
+            if (IsConnected) {
+                SparkleLogger.LogInfo ("Listener", "Subscribing to channel " + channel + " on " + Server);
                 AlsoListenToInternal (channel);
             }
         }
@@ -114,6 +115,11 @@ namespace SparkleLib {
 
         public void OnConnected ()
         {
+            foreach (string channel in this.channels.GetRange (0, this.channels.Count)) {
+                SparkleLogger.LogInfo ("Listener", "Subscribing to channel " + channel + " on " + Server);
+                AlsoListenToInternal (channel);
+            }
+
             SparkleLogger.LogInfo ("Listener", "Listening for announcements on " + Server);
             Connected ();
 
@@ -139,8 +145,7 @@ namespace SparkleLib {
 
         public void OnAnnouncement (SparkleAnnouncement announcement)
         {
-            SparkleLogger.LogInfo ("Listener",
-                "Got message " + announcement.Message + " from " +
+            SparkleLogger.LogInfo ("Listener", "Got message " + announcement.Message + " from " +
                 announcement.FolderIdentifier + " on " + Server);
 
             if (IsRecentAnnouncement (announcement)) {
