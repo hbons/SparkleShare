@@ -72,12 +72,14 @@ namespace SparkleShare {
                             TextAlignment = TextAlignment.Right,
                             FontWeight = FontWeights.Bold
                         };
-                                                    
+                        
+						string name = System.Security.Principal.WindowsIdentity.GetCurrent ().Name;
+						name = name.Split ("\\".ToCharArray ()) [1];
+
                         TextBox name_box = new TextBox () {
-                            Text  = Controller.GuessedUserName,
+                            Text  = name,
                             Width = 175
                         };
-                        
                         
                         TextBlock email_label = new TextBlock () {
                             Text    = "Email:",
@@ -87,11 +89,9 @@ namespace SparkleShare {
                         };
                         
                         TextBox email_box = new TextBox () {
-                            Width = 175,
-                            Text = Controller.GuessedUserEmail
+                            Width = 175
                         };
-                        
-                        
+                                        
                         
                         Button cancel_button = new Button () {
                             Content = "Cancel"
