@@ -150,6 +150,12 @@ namespace SparkleShare {
 
                 notify_item.Icon = notify_check_box;
 
+				notify_check_box.Click += delegate {
+					this.context_menu.IsOpen = false;
+					Program.Controller.ToggleNotifications ();
+					notify_check_box.IsChecked = Program.Controller.NotificationsEnabled;
+				};
+
                 notify_item.Click += delegate {
                     Program.Controller.ToggleNotifications ();
                     notify_check_box.IsChecked = Program.Controller.NotificationsEnabled;
