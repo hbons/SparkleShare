@@ -18,7 +18,6 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Security.Principal;
 using System.Xml;
 
 namespace SparkleLib {

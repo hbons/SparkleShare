@@ -128,29 +128,39 @@ namespace SparkleShare {
 
         public override bool CreateSparkleShareFolder ()
         {
-            if (!Directory.Exists (FoldersPath)) {
-                Directory.CreateDirectory (FoldersPath);
-                File.SetAttributes (FoldersPath, File.GetAttributes (FoldersPath) | FileAttributes.System);
+            if (Directory.Exists (FoldersPath))
+				return false;
 
-                return true;
+            Directory.CreateDirectory (FoldersPath);
+            File.SetAttributes (FoldersPath, File.GetAttributes (FoldersPath) | FileAttributes.System);
 
-            } else if (!File.Exists (icon_file_path)) {
+			SparkleLogger.LogInfo ("Config", "Created '" + FoldersPath + "'");
+
+			string app_path       = Path.GetDirectoryName (Forms.Application.ExecutablePath);
+            string icon_file_path = Path.Combine (app_path, "Pixmaps", "sparkleshare-folder.ico");
+
+			if (!File.Exists (icon_file_path)) {
                 string ini_file_path  = Path.Combine (FoldersPath, "desktop.ini");
-                string app_path       = Path.GetDirectoryName (Application.ExecutablePath);
-                string icon_file_path = Path.Combine (app_path, "Pixmaps", "sparkleshare-folder.ico");
-
-                string ini_file "[.ShellClassInfo]" +
+                
+                string ini_file = "[.ShellClassInfo]" +
                     "IconFile=" + icon_file_path +
                     "IconIndex=0" +
                     "InfoTip=SparkleShare";
 
-                File.WriteAllText (ini_file_path, ini_file);
-                
-                File.SetAttributes (ini_file_path,
-                    File.GetAttributes (ini_file_path) | FileAttributes.Hidden | FileAttributes.System);
-        
-                SparkleHelpers.DebugInfo ("Config", "Created '" + FoldersPath + "'");
-            }
+				try {
+					File.Create (ini_file_path).Close ();
+	                File.WriteAllText (ini_file_path, ini_file);
+	                
+	                File.SetAttributes (ini_file_path,
+	                    File.GetAttributes (ini_file_path) | FileAttributes.Hidden | FileAttributes.System);
+
+				} catch (IOException e) {
+					SparkleLogger.LogInfo ("Config",
+						"Failed setting icon for '" + FoldersPath + "': " + e.Message);
+				}
+
+                return true;
+			}
 
             return false;
         }
@@ -184,7 +194,7 @@ namespace SparkleShare {
             string auth_sock = Environment.GetEnvironmentVariable ("SSH_AUTH_SOCK");
 
             if (!string.IsNullOrEmpty (auth_sock)) {
-                SparkleHelpers.DebugInfo ("Controller", "Using existing ssh-agent with PID=" + this.ssh_agent_pid);
+                SparkleLogger.LogInfo ("Controller", "Using existing ssh-agent with PID=" + this.ssh_agent_pid);
                 return;
             }
 
@@ -211,10 +221,10 @@ namespace SparkleShare {
                 Int32.TryParse (ssh_pid, out this.ssh_agent_pid);
                 Environment.SetEnvironmentVariable ("SSH_AGENT_PID", ssh_pid);
 
-                SparkleHelpers.DebugInfo ("Controller", "ssh-agent started, PID=" + ssh_pid);
+                SparkleLogger.LogInfo ("Controller", "ssh-agent started, PID=" + ssh_pid);
 
             } else {
-                SparkleHelpers.DebugInfo ("Controller", "ssh-agent started, PID=Unknown");
+                SparkleLogger.LogInfo ("Controller", "ssh-agent started, PID=Unknown");
             }
         }
 
@@ -228,7 +238,7 @@ namespace SparkleShare {
                 Process.GetProcessById (this.ssh_agent_pid).Kill ();
 
             } catch (ArgumentException e) {
-                SparkleHelpers.DebugInfo ("SSH", "Could not stop ssh-agent: " + e.Message);
+                SparkleLogger.LogInfo ("SSH", "Could not stop ssh-agent: " + e.Message);
             }
         }
     }
