@@ -139,7 +139,7 @@ namespace SparkleShare {
                 string app_path       = Path.GetDirectoryName (Application.ExecutablePath);
                 string icon_file_path = Path.Combine (app_path, "Pixmaps", "sparkleshare-folder.ico");
 
-                string ini_file "[.ShellClassInfo]" +
+                string ini_file = "[.ShellClassInfo]" +
                     "IconFile=" + icon_file_path +
                     "IconIndex=0" +
                     "InfoTip=SparkleShare";
@@ -148,8 +148,8 @@ namespace SparkleShare {
                 
                 File.SetAttributes (ini_file_path,
                     File.GetAttributes (ini_file_path) | FileAttributes.Hidden | FileAttributes.System);
-        
-                SparkleHelpers.DebugInfo ("Config", "Created '" + FoldersPath + "'");
+
+                SparkleLogger.LogInfo("Config", "Created '" + FoldersPath + "'");
             }
 
             return false;
