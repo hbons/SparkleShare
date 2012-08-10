@@ -184,7 +184,7 @@ namespace SparkleShare {
             string auth_sock = Environment.GetEnvironmentVariable ("SSH_AUTH_SOCK");
 
             if (!string.IsNullOrEmpty (auth_sock)) {
-                SparkleHelpers.DebugInfo ("Controller", "Using existing ssh-agent with PID=" + this.ssh_agent_pid);
+                SparkleLogger.LogInfo ("Controller", "Using existing ssh-agent with PID=" + this.ssh_agent_pid);
                 return;
             }
 
@@ -211,10 +211,10 @@ namespace SparkleShare {
                 Int32.TryParse (ssh_pid, out this.ssh_agent_pid);
                 Environment.SetEnvironmentVariable ("SSH_AGENT_PID", ssh_pid);
 
-                SparkleHelpers.DebugInfo ("Controller", "ssh-agent started, PID=" + ssh_pid);
+                SparkleLogger.LogInfo ("Controller", "ssh-agent started, PID=" + ssh_pid);
 
             } else {
-                SparkleHelpers.DebugInfo ("Controller", "ssh-agent started, PID=Unknown");
+                SparkleLogger.LogInfo ("Controller", "ssh-agent started, PID=Unknown");
             }
         }
 
@@ -228,7 +228,7 @@ namespace SparkleShare {
                 Process.GetProcessById (this.ssh_agent_pid).Kill ();
 
             } catch (ArgumentException e) {
-                SparkleHelpers.DebugInfo ("SSH", "Could not stop ssh-agent: " + e.Message);
+                SparkleLogger.LogInfo ("SSH", "Could not stop ssh-agent: " + e.Message);
             }
         }
     }
