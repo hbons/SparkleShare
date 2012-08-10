@@ -22,7 +22,7 @@
     <WarningLevel>4</WarningLevel>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -r git ${TargetDir}/${SolutionName}.app/Contents/Resources; cp -r SparkleShareInviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="true" />
+        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -R Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -R git ${TargetDir}/${SolutionName}.app/Contents/Resources; cp -R SparkleShareInviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources" />
       </CustomCommands>
     </CustomCommands>
     <EnableCodeSigning>false</EnableCodeSigning>
