@@ -128,6 +128,10 @@ namespace SparkleShare {
 
         public override bool CreateSparkleShareFolder ()
         {
+            string ini_file_path = Path.Combine(FoldersPath, "desktop.ini");
+            string app_path = Path.GetDirectoryName(Forms.Application.ExecutablePath);
+            string icon_file_path = Path.Combine(app_path, "Pixmaps", "sparkleshare-folder.ico");
+
             if (!Directory.Exists (FoldersPath)) {
                 Directory.CreateDirectory (FoldersPath);
                 File.SetAttributes (FoldersPath, File.GetAttributes (FoldersPath) | FileAttributes.System);
@@ -135,9 +139,6 @@ namespace SparkleShare {
                 return true;
 
             } else if (!File.Exists (icon_file_path)) {
-                string ini_file_path  = Path.Combine (FoldersPath, "desktop.ini");
-                string app_path       = Path.GetDirectoryName (Application.ExecutablePath);
-                string icon_file_path = Path.Combine (app_path, "Pixmaps", "sparkleshare-folder.ico");
 
                 string ini_file = "[.ShellClassInfo]" +
                     "IconFile=" + icon_file_path +
