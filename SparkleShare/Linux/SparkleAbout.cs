@@ -44,7 +44,7 @@ namespace SparkleShare {
             Title          = "About SparkleShare";
             AppPaintable   = true;
 
-            string image_path = new string [] { Program.UI.AssetsPath, "pixmaps", "about.png" }.Combine ();
+            string image_path = new string [] { SparkleUI.AssetsPath, "pixmaps", "about.png" }.Combine ();
 
             Realize ();
             Gdk.Pixbuf buf = new Gdk.Pixbuf (image_path);
