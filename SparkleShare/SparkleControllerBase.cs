@@ -666,7 +666,7 @@ namespace SparkleShare {
             string avatars_path = new string [] { Path.GetDirectoryName (this.config.FullPath),
                 "avatars", size + "x" + size }.Combine ();
 
-            string avatar_file_path = Path.Combine (avatars_path, email.MD5 () + ".jpg");
+            string avatar_file_path = Path.Combine (avatars_path, email.MD5 () + ".png");
 
             if (File.Exists (avatar_file_path)) {
                 if (new FileInfo (avatar_file_path).CreationTime < DateTime.Now.AddDays (-1))
@@ -676,7 +676,7 @@ namespace SparkleShare {
             }
 
             WebClient client = new WebClient ();
-            string url =  "https://gravatar.com/avatar/" + email.MD5 () + ".jpg?s=" + size + "&d=404";
+            string url =  "https://gravatar.com/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
 
             try {
                 byte [] buffer = client.DownloadData (url);
@@ -696,7 +696,8 @@ namespace SparkleShare {
                     return null;
                 }
 
-            } catch (WebException) {
+            } catch (WebException e) {
+				SparkleLogger.LogInfo ("Controller", "Error fetching avatar: " + e.Message);
                 return null;
             }
         }

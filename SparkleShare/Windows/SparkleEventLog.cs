@@ -279,8 +279,7 @@ namespace SparkleShare {
                 
                 html = html.Replace ("<!-- $document-moved-background-image -->",
                     pixmaps_path + "/document-moved-12.png");
-                
-                
+
                 Dispatcher.BeginInvoke ((Action) delegate {
                     this.spinner.Stop ();
                     
