@@ -37,7 +37,8 @@ namespace SparkleShare {
         public static void Main (string [] args)
         {
             if (args.Length != 0 && !args [0].Equals ("start") &&
-                SparkleBackend.Platform != PlatformID.MacOSX) {
+                SparkleBackend.Platform != PlatformID.MacOSX &&
+                SparkleBackend.Platform != PlatformID.Win32NT) {
 
                 string n = Environment.NewLine;
 
@@ -53,10 +54,10 @@ namespace SparkleShare {
                     "under certain conditions. Please read the GNU GPLv3 for details." + n +
                     n +
                     "Usage: sparkleshare [start|stop|restart]");
-
+				Console.WriteLine ("SparkleShare is already running.");
                 Environment.Exit (-1);
             }
-			
+
 			// Only allow one instance of SparkleShare (on Windows)
 			if (!program_mutex.WaitOne (0, false)) {
 				Console.WriteLine ("SparkleShare is already running.");

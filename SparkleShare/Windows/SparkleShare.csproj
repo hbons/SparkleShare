@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <ProjectGuid>{728483AA-E34B-4441-BF2C-C8BC2901E4E0}</ProjectGuid>
@@ -32,17 +32,6 @@
     <ApplicationIcon>Pixmaps\sparkleshare-app.ico</ApplicationIcon>
     <ReleaseVersion />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\bin</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
@@ -64,9 +53,6 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsBase" />
-    <Reference Include="Gettext.Cs">
-      <HintPath>..\..\bin\Gettext.Cs.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsFormsIntegration" />
     <Reference Include="System.Xaml" />
   </ItemGroup>
@@ -241,6 +227,12 @@
     <None Include="..\Common\Plugins\bitbucket.png">
       <Link>Plugins\bitbucket.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Common\Plugins\ssnet.png">
+      <Link>Plugins\ssnet.png</Link>
+    </None>
+    <None Include="..\Common\Plugins\ssnet.xml">
+      <Link>Plugins\ssnet.xml</Link>
     </None>
   </ItemGroup>
   <ItemGroup>

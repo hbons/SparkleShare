@@ -21,7 +21,6 @@
             </Component>
             <Component Id='Libraries' Guid='0DA692D5-4DBE-4251-9F62-E7C1A76F10E1'>
               <File Id='SparkleLib.Git.dll' Name='SparkleLib.Git.dll' Source='!(wix.root)\bin\SparkleLib.Git.dll' DiskId='1' />
-              <File Id='Gettext.Cs.dll' Name='Gettext.Cs.dll' Source='!(wix.root)\bin\Gettext.Cs.dll' DiskId='1' />
               <File Id='SparkleLib.dll' Name='SparkleLib.dll' Source='!(wix.root)\bin\SparkleLib.dll' DiskId='1' />
               <File Id='sparkleshare_app.ico' Name='sparkleshare.ico' Source='!(wix.root)\SparkleShare\Windows\Pixmaps\sparkleshare-app.ico' DiskId='1' />
             </Component>

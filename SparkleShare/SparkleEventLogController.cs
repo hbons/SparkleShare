@@ -295,11 +295,11 @@ namespace SparkleShare {
                     string change_set_avatar = Program.Controller.GetAvatar (change_set.User.Email, 48);
 
                     if (change_set_avatar != null) {
-                        change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
-
+				       	change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
+				
                     } else {
                         change_set_avatar = "file://<!-- $pixmaps-path -->/" +
-                        Program.Controller.AssignAvatar (change_set.User.Email);
+                        	Program.Controller.AssignAvatar (change_set.User.Email);
                     }
 
                     event_entry += "</dl>";
