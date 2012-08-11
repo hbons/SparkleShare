@@ -58,15 +58,15 @@ namespace SparkleShare {
                 HasShadow   = true;
                 BackingType = NSBackingStore.Buffered;
 
-                this.website_link       = new SparkleLink ("Website", new NSUrl (Controller.WebsiteLinkAddress));
+                this.website_link       = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
                 this.website_link.Frame = new RectangleF (new PointF (295, 25), this.website_link.Frame.Size);
 
-                this.credits_link = new SparkleLink ("Credits", new NSUrl (Controller.CreditsLinkAddress));
+                this.credits_link = new SparkleLink ("Credits", Controller.CreditsLinkAddress);
                 this.credits_link.Frame = new RectangleF (
                     new PointF (this.website_link.Frame.X + this.website_link.Frame.Width + 10, 25),
                     this.credits_link.Frame.Size);
 
-                this.report_problem_link = new SparkleLink ("Report a problem", new NSUrl (Controller.ReportProblemLinkAddress));
+                this.report_problem_link = new SparkleLink ("Report a problem", Controller.ReportProblemLinkAddress);
                 this.report_problem_link.Frame = new RectangleF (
                     new PointF (this.credits_link.Frame.X + this.credits_link.Frame.Width + 10, 25),
                     this.report_problem_link.Frame.Size);
@@ -243,9 +243,9 @@ namespace SparkleShare {
         private NSUrl url;
 
 
-        public SparkleLink (string text, NSUrl url) : base ()
+        public SparkleLink (string text, string address) : base ()
         {
-            this.url = url;
+            this.url = new NSUrl (address);
 
             AllowsEditingTextAttributes = true;
             BackgroundColor = NSColor.White;
