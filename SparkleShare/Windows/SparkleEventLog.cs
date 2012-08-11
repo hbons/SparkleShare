@@ -184,10 +184,12 @@ namespace SparkleShare {
             };
 
             Controller.ContentLoadingEvent += delegate {
-                this.spinner.Start ();
-                
-                if (this.canvas.Children.Contains (this.web_browser))
-                    this.canvas.Children.Remove (this.web_browser);
+				Dispatcher.BeginInvoke ((Action) delegate {
+	                this.spinner.Start ();
+	                
+	                if (this.canvas.Children.Contains (this.web_browser))
+	                    this.canvas.Children.Remove (this.web_browser);
+				});
             };
         }
 
