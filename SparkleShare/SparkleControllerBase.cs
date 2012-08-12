@@ -160,6 +160,7 @@ namespace SparkleShare {
 
         private SparkleConfig config;
         private SparkleFetcherBase fetcher;
+        private FileSystemWatcher watcher;
         private Object repo_lock        = new Object ();
         private Object check_repos_lock = new Object ();
 
@@ -216,7 +217,7 @@ namespace SparkleShare {
             }
 
             // Watch the SparkleShare folder
-            FileSystemWatcher watcher = new FileSystemWatcher () {
+            this.watcher = new FileSystemWatcher () {
                 Filter                = "*",
                 IncludeSubdirectories = false,
                 Path                  = FoldersPath
@@ -547,7 +548,10 @@ namespace SparkleShare {
         public void FinishFetcher (string password)
         {
             this.fetcher.EnableFetchedRepoCrypto (password);
+
+            this.watcher.EnableRaisingEvents = false;
             FinishFetcher ();
+            this.watcher.EnableRaisingEvents = true;
         }
 
 
@@ -565,11 +569,7 @@ namespace SparkleShare {
             while (target_folder_exists) {
                 suffix++;
                 target_folder_exists = Directory.Exists (
-                    Path.Combine (
-                        this.config.FoldersPath,
-                        canonical_name + " (" + suffix + ")"
-                    )
-                );
+                    Path.Combine (this.config.FoldersPath, canonical_name + " (" + suffix + ")"));
             }
 
             string target_folder_name = canonical_name;
