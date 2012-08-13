@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
@@ -22,18 +22,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="SparkleFetcherGit.cs">
-      <Link>SparkleFetcherGit.cs</Link>
-    </Compile>
-    <Compile Include="SparkleGit.cs">
-      <SubType>Component</SubType>
-      <Link>SparkleGit.cs</Link>
-    </Compile>
-    <Compile Include="SparkleRepoGit.cs">
-      <Link>SparkleRepoGit.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

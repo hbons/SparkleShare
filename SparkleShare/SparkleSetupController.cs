@@ -85,6 +85,24 @@ namespace SparkleShare {
         public string SyncingFolder { get; private set; }
         public double ProgressBarPercentage  { get; private set; }
 
+        public string GuessedUserName
+        {
+            get
+            {
+                return Program.Controller.CurrentUser.Name;
+            }
+        }
+
+        public string GuessedUserEmail
+        {
+            get
+            {
+                if (Program.Controller.CurrentUser.Email.Equals("Unknown"))
+                    return "";
+                else
+                    return Program.Controller.CurrentUser.Email;
+            }
+        }
 
         public int SelectedPluginIndex {
             get {
