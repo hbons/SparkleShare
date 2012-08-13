@@ -24,18 +24,6 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SparkleFetcherGit.cs">
-      <Link>SparkleFetcherGit.cs</Link>
-    </Compile>
-    <Compile Include="SparkleGit.cs">
-      <SubType>Component</SubType>
-      <Link>SparkleGit.cs</Link>
-    </Compile>
-    <Compile Include="SparkleRepoGit.cs">
-      <Link>SparkleRepoGit.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
   </ItemGroup>
