@@ -44,4 +44,9 @@
       <Name>SparkleLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SparkleFetcherGit.cs" />
+    <Compile Include="SparkleGit.cs" />
+    <Compile Include="SparkleRepoGit.cs" />
+  </ItemGroup>
 </Project>
