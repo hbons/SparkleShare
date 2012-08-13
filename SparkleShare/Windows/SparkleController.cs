@@ -128,30 +128,39 @@ namespace SparkleShare {
 
         public override bool CreateSparkleShareFolder ()
         {
-            string ini_file_path = Path.Combine(FoldersPath, "desktop.ini");
-            string app_path = Path.GetDirectoryName(Forms.Application.ExecutablePath);
-            string icon_file_path = Path.Combine(app_path, "Pixmaps", "sparkleshare-folder.ico");
+            if (Directory.Exists (FoldersPath))
+				return false;
 
-            if (!Directory.Exists (FoldersPath)) {
-                Directory.CreateDirectory (FoldersPath);
-                File.SetAttributes (FoldersPath, File.GetAttributes (FoldersPath) | FileAttributes.System);
+            Directory.CreateDirectory (FoldersPath);
+            File.SetAttributes (FoldersPath, File.GetAttributes (FoldersPath) | FileAttributes.System);
 
-                return true;
+			SparkleLogger.LogInfo ("Config", "Created '" + FoldersPath + "'");
 
-            } else if (!File.Exists (icon_file_path)) {
+			string app_path       = Path.GetDirectoryName (Forms.Application.ExecutablePath);
+            string icon_file_path = Path.Combine (app_path, "Pixmaps", "sparkleshare-folder.ico");
 
+			if (!File.Exists (icon_file_path)) {
+                string ini_file_path  = Path.Combine (FoldersPath, "desktop.ini");
+                
                 string ini_file = "[.ShellClassInfo]" +
                     "IconFile=" + icon_file_path +
                     "IconIndex=0" +
                     "InfoTip=SparkleShare";
 
-                File.WriteAllText (ini_file_path, ini_file);
-                
-                File.SetAttributes (ini_file_path,
-                    File.GetAttributes (ini_file_path) | FileAttributes.Hidden | FileAttributes.System);
+				try {
+					File.Create (ini_file_path).Close ();
+	                File.WriteAllText (ini_file_path, ini_file);
+	                
+	                File.SetAttributes (ini_file_path,
+	                    File.GetAttributes (ini_file_path) | FileAttributes.Hidden | FileAttributes.System);
 
-                SparkleLogger.LogInfo("Config", "Created '" + FoldersPath + "'");
-            }
+				} catch (IOException e) {
+					SparkleLogger.LogInfo ("Config",
+						"Failed setting icon for '" + FoldersPath + "': " + e.Message);
+				}
+
+                return true;
+			}
 
             return false;
         }

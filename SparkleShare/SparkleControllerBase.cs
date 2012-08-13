@@ -160,6 +160,7 @@ namespace SparkleShare {
 
         private SparkleConfig config;
         private SparkleFetcherBase fetcher;
+        private FileSystemWatcher watcher;
         private Object repo_lock        = new Object ();
         private Object check_repos_lock = new Object ();
 
@@ -216,7 +217,7 @@ namespace SparkleShare {
             }
 
             // Watch the SparkleShare folder
-            FileSystemWatcher watcher = new FileSystemWatcher () {
+            this.watcher = new FileSystemWatcher () {
                 Filter                = "*",
                 IncludeSubdirectories = false,
                 Path                  = FoldersPath
@@ -547,7 +548,10 @@ namespace SparkleShare {
         public void FinishFetcher (string password)
         {
             this.fetcher.EnableFetchedRepoCrypto (password);
+
+            this.watcher.EnableRaisingEvents = false;
             FinishFetcher ();
+            this.watcher.EnableRaisingEvents = true;
         }
 
 
@@ -565,11 +569,7 @@ namespace SparkleShare {
             while (target_folder_exists) {
                 suffix++;
                 target_folder_exists = Directory.Exists (
-                    Path.Combine (
-                        this.config.FoldersPath,
-                        canonical_name + " (" + suffix + ")"
-                    )
-                );
+                    Path.Combine (this.config.FoldersPath, canonical_name + " (" + suffix + ")"));
             }
 
             string target_folder_name = canonical_name;
@@ -666,7 +666,7 @@ namespace SparkleShare {
             string avatars_path = new string [] { Path.GetDirectoryName (this.config.FullPath),
                 "avatars", size + "x" + size }.Combine ();
 
-            string avatar_file_path = Path.Combine (avatars_path, email.MD5 () + ".jpg");
+            string avatar_file_path = Path.Combine (avatars_path, email.MD5 () + ".png");
 
             if (File.Exists (avatar_file_path)) {
                 if (new FileInfo (avatar_file_path).CreationTime < DateTime.Now.AddDays (-1))
@@ -676,7 +676,7 @@ namespace SparkleShare {
             }
 
             WebClient client = new WebClient ();
-            string url =  "https://gravatar.com/avatar/" + email.MD5 () + ".jpg?s=" + size + "&d=404";
+            string url =  "https://gravatar.com/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
 
             try {
                 byte [] buffer = client.DownloadData (url);
@@ -696,7 +696,8 @@ namespace SparkleShare {
                     return null;
                 }
 
-            } catch (WebException) {
+            } catch (WebException e) {
+				SparkleLogger.LogInfo ("Controller", "Error fetching avatar: " + e.Message);
                 return null;
             }
         }

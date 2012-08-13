@@ -184,10 +184,12 @@ namespace SparkleShare {
             };
 
             Controller.ContentLoadingEvent += delegate {
-                this.spinner.Start ();
-                
-                if (this.canvas.Children.Contains (this.web_browser))
-                    this.canvas.Children.Remove (this.web_browser);
+				Dispatcher.BeginInvoke ((Action) delegate {
+	                this.spinner.Start ();
+	                
+	                if (this.canvas.Children.Contains (this.web_browser))
+	                    this.canvas.Children.Remove (this.web_browser);
+				});
             };
         }
 
@@ -277,8 +279,7 @@ namespace SparkleShare {
                 
                 html = html.Replace ("<!-- $document-moved-background-image -->",
                     pixmaps_path + "/document-moved-12.png");
-                
-                
+
                 Dispatcher.BeginInvoke ((Action) delegate {
                     this.spinner.Stop ();
                     
