@@ -39,6 +39,8 @@ namespace SparkleShare {
             url = url.Replace ("sparkleshare-unsafe:", "http:");
             url = url.Replace ("sparkleshare:", "https:");
 
+            url = url.Replace("sparkleshare-unsafe:", "").Replace("sparkleshare:", "");
+
             WebClient web_client = new WebClient ();
 
             try {
