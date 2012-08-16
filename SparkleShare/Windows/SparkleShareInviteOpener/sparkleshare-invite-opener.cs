@@ -35,9 +35,10 @@ namespace SparkleShare {
         public SparkleInviteOpen (string url)
         {
             string xml = "";
-            
-            url = url.Replace ("sparkleshare-unsafe:", "http:");
-            url = url.Replace ("sparkleshare:", "https:");
+
+            // Windows sometimes doesn't strip off protocol handlers            
+            url = url.Replace ("sparkleshare-unsafe:", "");
+            url = url.Replace ("sparkleshare:", "");
 
             WebClient web_client = new WebClient ();
 
