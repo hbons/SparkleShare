@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='windows-1252'?>
-<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi' xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
   <Product Name='SparkleShare' Id='184950D5-67F6-4D06-9717-7E2F1607A7B0' UpgradeCode='D3DF1D99-87F5-47A7-A349-863DD6E4B73A'
     Language='1033' Codepage='1252' Version='0.8.1' Manufacturer='SparkleShare'>
@@ -39,6 +39,17 @@
             <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
             <RegistryValue Root="HKCU" Key="Software\Microsoft\SparkleShare" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
           </Component>
+          <Component Id="SparkleShareProtocolHandler" Guid="b83a4473-a26f-491a-bcd7-b999a8f6e551">
+            <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare" Value="SparkleShare Invite Opener" Type="string" />
+            <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare" Name="URL Protocol" Value="" Type="string" />
+            <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare" Name="DefaultIcon" Value="[INSTALLDIR]SparkleShareInviteOpener,1" Type="string" />
+            <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare\shell\open\command" Value='"[INSTALLDIR]SparkleShareInviteOpener" "https:%1"' Type="string" />
+
+            <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare-unsafe" Value="SparkleShare Invite Opener" Type="string" />
+            <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare-unsafe" Name="URL Protocol" Value="" Type="string" />
+            <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare-unsafe" Name="DefaultIcon" Value="[INSTALLDIR]SparkleShareInviteOpener,1" Type="string" />
+            <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare-unsafe\shell\open\command" Value='"[INSTALLDIR]SparkleShareInviteOpener" "http:%1"' Type="string" />
+          </Component>
       </Directory>
     </Directory>
 
@@ -47,6 +58,7 @@
       <ComponentRef Id="SparkleShareInviteOpener.exe" />
       <ComponentRef Id="Libraries" />
       <ComponentRef Id="ApplicationShortcut" />
+      <ComponentRef Id="SparkleShareProtocolHandler" />
       <ComponentGroupRef Id='msysGitComponentGroup' />
       <ComponentGroupRef Id='pluginsComponentGroup' />
     </Feature>
@@ -55,8 +67,16 @@
 
     <UI>
       <UIRef Id="WixUI_InstallDir" />
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
     </UI>
-    
+
+    <util:CloseApplication Id="CloseApplication" Target="SparkleShare.exe" RebootPrompt="no" ElevatedCloseMessage="yes" CloseMessage="yes" />
+
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch SparkleShare" />
+    <Property Id="WixShellExecTarget" Value="[#SparkleShare.exe]" />
+    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+    
   </Product>
 </Wix>
