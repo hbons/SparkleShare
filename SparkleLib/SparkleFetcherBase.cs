@@ -200,10 +200,17 @@ namespace SparkleLib {
             string file_path = Path.Combine (TargetFolder, "SparkleShare.txt");
             string n = Environment.NewLine;
 
+            UriBuilder uri_builder = new UriBuilder (RemoteUrl);
+
+            if (RemoteUrl.Scheme.StartsWith ("http")) {
+                uri_builder.UserName = "";
+                uri_builder.Password = "";
+            }
+
             string text = "Congratulations, you've successfully created a SparkleShare repository!" + n +
                 n +
                 "Any files you add or change in this folder will be automatically synced to " + n +
-                RemoteUrl + " and everyone connected to it." + n +
+                uri_builder.ToString () + " and everyone connected to it." + n +
                 n +
                 "SparkleShare is an Open Source software program that helps people " + n +
                 "collaborate and share files. If you like what we do, please consider a small " + n +
