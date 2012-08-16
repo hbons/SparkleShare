@@ -35,6 +35,9 @@ namespace SparkleShare {
         public SparkleInviteOpen (string url)
         {
             string xml = "";
+            
+            url = url.Replace ("sparkleshare-unsafe:", "http:");
+            url = url.Replace ("sparkleshare:", "https:");
 
             WebClient web_client = new WebClient ();
 
@@ -48,7 +51,7 @@ namespace SparkleShare {
 
             string file_name = DateTime.UtcNow.Millisecond.ToString () + ".xml";
 
-            string home_path   = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+            string home_path   = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
             string target_path = Path.Combine (home_path, "SparkleShare", file_name);
 
             if (xml.Contains ("<sparkleshare>")) {
