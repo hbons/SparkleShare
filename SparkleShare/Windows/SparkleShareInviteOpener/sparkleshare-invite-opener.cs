@@ -36,8 +36,11 @@ namespace SparkleShare {
         {
             string xml = "";
             
-            url = url.Replace ("sparkleshare-unsafe:", "http:");
-            url = url.Replace ("sparkleshare:", "https:");
+            // protocol handler prefixes http or https as appropriate, but windows sometimes does and sometimes doesn't strip off the
+            // sparkleshare(-unsafe) handler, possibly passing something like 'http:sparkleshare://blablabla'. This replace line fixes that.
+            // if we don't prefix the url in the handler call, we may sometimes be passed only '//blablabla' with no way to know whether
+            // sparkleshare or sparkleshare-unsafe was requested.
+            url = url.Replace("sparkleshare-unsafe:", "").Replace("sparkleshare:", "");
 
             WebClient web_client = new WebClient ();
 
