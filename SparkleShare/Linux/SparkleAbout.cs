@@ -16,6 +16,7 @@
 
 
 using System;
+using System.Diagnostics;
 
 using Gtk;
 using Mono.Unix;
@@ -133,20 +134,61 @@ namespace SparkleShare {
                 Xpad         = 300,
             };
 
-            VBox layout_horizontal = new VBox (false, 0) {
+            VBox layout_vertical = new VBox (false, 0) {
                 BorderWidth   = 0,
                 HeightRequest = 260,
                 WidthRequest  = 640
             };
-
-            layout_horizontal.PackStart (new Label (""), false, false, 42);
-            layout_horizontal.PackStart (version, false, false, 0);
-            layout_horizontal.PackStart (this.updates, false, false, 0);
-            layout_horizontal.PackStart (copyright, false, false, 9);
-            layout_horizontal.PackStart (license, false, false, 0);
-            layout_horizontal.PackStart (new Label (""), false, false, 0);
-
-            Add (layout_horizontal);
+			
+			HBox links_layout = new HBox (false, 6);
+			
+			SparkleLink website_link        = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
+			SparkleLink credits_link        = new SparkleLink ("Credits", Controller.CreditsLinkAddress);
+			SparkleLink report_problem_link = new SparkleLink ("Report a problem", Controller.ReportProblemLinkAddress);
+			
+			links_layout.PackStart (new Label (""), false, false, 143);
+			links_layout.PackStart (website_link, false, false, 9);
+			links_layout.PackStart (credits_link, false, false, 9);
+			links_layout.PackStart (report_problem_link, false, false, 9);
+			
+            layout_vertical.PackStart (new Label (""), false, false, 42);
+            layout_vertical.PackStart (version, false, false, 0);
+            layout_vertical.PackStart (this.updates, false, false, 0);
+            layout_vertical.PackStart (copyright, false, false, 9);
+            layout_vertical.PackStart (license, false, false, 0);
+			layout_vertical.PackStart (links_layout, false, false, 12);
+			
+            Add (layout_vertical);
         }
     }
+	
+	
+	public class SparkleLink : EventBox {
+		
+		public SparkleLink (string text, string address)
+		{
+			VisibleWindow = false;
+			
+			Label label = new Label () {
+				Markup = "<span size='small' fgcolor='#729fcf' underline='single'>" + text + "</span>"
+			};
+			
+			EnterNotifyEvent += delegate {
+				GdkWindow.Cursor = new Gdk.Cursor (Gdk.CursorType.Hand1);	
+			};
+			
+			LeaveNotifyEvent += delegate {
+				GdkWindow.Cursor = new Gdk.Cursor (Gdk.CursorType.Arrow);	
+			};
+			
+			ButtonPressEvent += delegate {
+				Process process = new Process ();
+				process.StartInfo.FileName  = "xdg-open";
+				process.StartInfo.Arguments = address;
+				process.Start ();
+			};
+			
+			Add (label);
+		}
+	}
 }
