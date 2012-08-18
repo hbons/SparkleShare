@@ -2,7 +2,7 @@
 Type=Application
 Name=SparkleShare
 Exec=sparkleshare start
-Icon=folder-sparkleshare
+Icon=sparkleshare
 Terminal=false
 X-GNOME-Autostart-enabled=true
 Categories=Network;

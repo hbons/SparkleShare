@@ -135,7 +135,7 @@ namespace SparkleShare {
             this.menu.Add (new SeparatorMenuItem ());
 
                 ImageMenuItem folder_item = new SparkleMenuItem ("SparkleShare"){
-                    Image = new Image (SparkleUIHelpers.GetIcon ("folder-sparkleshare", 16))
+                    Image = new Image (SparkleUIHelpers.GetIcon ("sparkleshare", 16))
                 };
 
                 folder_item.Activated += delegate {
