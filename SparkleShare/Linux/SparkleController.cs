@@ -120,38 +120,35 @@ namespace SparkleShare {
         // Creates the SparkleShare folder in the user's home folder
         public override bool CreateSparkleShareFolder ()
         {
+			bool folder_created = false;
+			
             if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
                 Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
                 SparkleLogger.LogInfo ("Controller", "Created '" + SparkleConfig.DefaultConfig.FoldersPath + "'");
+				
+				folder_created = true;
+			}
 
-                string gvfs_command_path = new string [] { Path.VolumeSeparatorChar.ToString (),
-                        "usr", "bin", "gvfs-set-attribute" }.Combine ();
+            string gvfs_command_path = new string [] { Path.VolumeSeparatorChar.ToString (),
+            	"usr", "bin", "gvfs-set-attribute" }.Combine ();
+			
+            // Add a special icon to the SparkleShare folder
+            if (File.Exists (gvfs_command_path)) {
+                Process process = new Process ();
+                process.StartInfo.FileName = "gvfs-set-attribute";
 
-                // Add a special icon to the SparkleShare folder
-                if (File.Exists (gvfs_command_path)) {
-                    Process process = new Process ();
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.FileName        = "gvfs-set-attribute";
+                process.Start ();
+                process.WaitForExit ();
 
-                    // Clear the custom (legacy) icon path
-                    process.StartInfo.Arguments = "-t unset " +
-                        SparkleConfig.DefaultConfig.FoldersPath + " metadata::custom-icon";
+                // Give the SparkleShare folder an icon name, so that it scales
+                process.StartInfo.Arguments = SparkleConfig.DefaultConfig.FoldersPath +
+                    " metadata::custom-icon-name 'sparkleshare'";
 
-                    process.Start ();
-                    process.WaitForExit ();
-
-                    // Give the SparkleShare folder an icon name, so that it scales
-                    process.StartInfo.Arguments = SparkleConfig.DefaultConfig.FoldersPath +
-                        " metadata::custom-icon-name 'folder-sparkleshare'";
-
-                    process.Start ();
-                    process.WaitForExit ();
-                }
-
-                return true;
+                process.Start ();
+                process.WaitForExit ();
             }
 
-            return false;
+            return folder_created;
         }
         
 
