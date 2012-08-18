@@ -83,6 +83,18 @@ rm -Rf ~/SparkleShare
 rm -Rf ~/.config/sparkleshare
 ```
 
+
+### Updating the version number
+
+Change the verion number in the following files before making a release:
+
+```
+configure.ac
+SparkleLib/Defines.cs
+SparkleShare/Windows/SparkleShare.wxs
+```
+
+
 ### Uninstalling
 
 ```
