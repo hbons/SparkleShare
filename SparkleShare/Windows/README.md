@@ -36,6 +36,17 @@ This will create `SparkleShare.msi` in the same directory.
 Remove `My Documents\SparkleShare` and `AppData\Roaming\sparkleshare` (`AppData` is hidden by default).
 
 
+### Updating the version number
+
+Change the verion number in the following files before making a release:
+
+```
+configure.ac
+SparkleLib/Defines.cs
+SparkleShare/Windows/SparkleShare.wxs
+```
+
+
 ### Uninstalling
 
 You can uninstall SparkleShare through the Windows Control Panel.
