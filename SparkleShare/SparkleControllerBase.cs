@@ -20,8 +20,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Security.Cryptography;
 
 using SparkleLib;
 
@@ -651,8 +654,12 @@ namespace SparkleShare {
         }
 
 
+        private List<string> skipped_avatars = new List<string> ();
+
         public string GetAvatar (string email, int size)
         {
+            ServicePointManager.ServerCertificateValidationCallback = GetAvatarValidationCallBack;
+
             string fetch_avatars_option = this.config.GetConfigOption ("fetch_avatars");
 
             if (fetch_avatars_option != null &&
@@ -662,6 +669,9 @@ namespace SparkleShare {
             }
 
             email = email.ToLower ();
+
+            if (this.skipped_avatars.Contains (email))
+                return null;
 
             string avatars_path = new string [] { Path.GetDirectoryName (this.config.FullPath),
                 "avatars", size + "x" + size }.Combine ();
@@ -697,8 +707,34 @@ namespace SparkleShare {
                 }
 
             } catch (WebException e) {
-				SparkleLogger.LogInfo ("Controller", "Error fetching avatar: " + e.Message);
+                SparkleLogger.LogInfo ("Controller", "Error fetching avatar for " + email + ": " + e.Message);
+                skipped_avatars.Add (email);
+
                 return null;
+            }
+        }
+
+
+        private bool GetAvatarValidationCallBack (Object sender, X509Certificate certificate,
+            X509Chain chain, SslPolicyErrors errors)
+        {
+            X509Certificate2 certificate2 = new X509Certificate2 (certificate.GetRawCertData ());
+
+            // On some systems (mostly Linux) we can't assume the needed certificates are
+            // available, so we have to check the certificate's SHA-1 fingerprint manually.
+            //
+            // Obtained from https://www.gravatar.com/ on Aug 18 2012 and
+            // expires on Oct 24 2015.
+            string gravatar_cert_fingerprint = "217ACB08C0A1ACC23A21B6ECDE82CD45E14DEC19";
+
+            if (certificate2.Thumbprint.Equals (gravatar_cert_fingerprint)) {
+                return true;
+            
+            } else {
+                SparkleLogger.LogInfo ("Controller",
+                    "Not connecting to https://www.gravatar.com/ due to invalid certificate");
+
+                return false;
             }
         }
 
