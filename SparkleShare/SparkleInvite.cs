@@ -81,6 +81,10 @@ namespace SparkleShare {
 
         public bool Accept (string public_key)
         {
+            ServicePointManager.ServerCertificateValidationCallback = delegate {
+                return true;
+            };
+
             if (string.IsNullOrEmpty (AcceptUrl))
                 return true;
 
