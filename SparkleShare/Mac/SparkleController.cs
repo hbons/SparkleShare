@@ -18,6 +18,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 using MonoMac.Foundation;
 using MonoMac.AppKit;
@@ -68,8 +69,9 @@ namespace SparkleShare {
         {
             base.Initialize ();
 
+            SparkleRepoBase.UseCustomWatcher = true;
+
             this.watcher.Changed += delegate (string path) {
-                // Don't even bother with paths in .git/
                 if (path.Contains (".git"))
                     return;
 
@@ -80,18 +82,16 @@ namespace SparkleShare {
                 else
                     repo_name = path;
 
-                // Ignore changes in the root of each subfolder, these
-                // are already handled by the repository
-                if (Path.GetFileNameWithoutExtension (path).Equals (repo_name))
-                    return;
-
                 repo_name = repo_name.Trim ("/".ToCharArray ());
                 FileSystemEventArgs fse_args = new FileSystemEventArgs (WatcherChangeTypes.Changed,
                     Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, path), Path.GetFileName (path));
 
                 foreach (SparkleRepoBase repo in Repositories) {
-                    if (repo.Name.Equals (repo_name))
-                        repo.OnFileActivity (fse_args);
+                    if (repo.Name.Equals (repo_name)) {
+                        new Thread (() => {
+                            repo.OnFileActivity (fse_args);
+                        }).Start ();
+                    }
                 }
             };
         }
