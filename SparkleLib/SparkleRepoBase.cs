@@ -36,6 +36,8 @@ namespace SparkleLib {
 
     public abstract class SparkleRepoBase {
 
+        public static bool UseCustomWatcher = false;
+
         public abstract string CurrentRevision { get; }
         public abstract double Size { get; }
         public abstract double HistorySize { get; }
@@ -149,7 +151,9 @@ namespace SparkleLib {
                 Status = status;
             };
 
-            this.watcher = new SparkleWatcher (LocalPath);
+            if (!UseCustomWatcher)
+                this.watcher = new SparkleWatcher (LocalPath);
+
             new Thread (() => CreateListener ()).Start ();
 
             this.remote_timer.Elapsed += delegate {
@@ -176,7 +180,8 @@ namespace SparkleLib {
 
         public void Initialize ()
         {
-            this.watcher.ChangeEvent += OnFileActivity;
+            if (!UseCustomWatcher)
+                this.watcher.ChangeEvent += OnFileActivity;
 
             // Sync up everything that changed
             // since we've been offline
@@ -213,7 +218,9 @@ namespace SparkleLib {
                 return;
 
             IsBuffering = true;
-            this.watcher.Disable ();
+
+            if (!UseCustomWatcher)
+                this.watcher.Disable ();
 
             SparkleLogger.LogInfo ("Local", Name + " | Activity detected, waiting for it to settle...");
 
@@ -250,7 +257,8 @@ namespace SparkleLib {
 
             } while (IsBuffering);
 
-            this.watcher.Enable ();
+            if (!UseCustomWatcher)
+                this.watcher.Enable ();
         }
 
 
@@ -279,7 +287,8 @@ namespace SparkleLib {
 
         private void SyncUpBase ()
         {
-            this.watcher.Disable ();
+            if (!UseCustomWatcher)
+                this.watcher.Disable ();
 
             SparkleLogger.LogInfo ("SyncUp", Name + " | Initiated");
             HasUnsyncedChanges = true;
@@ -299,7 +308,8 @@ namespace SparkleLib {
                 SparkleLogger.LogInfo ("SyncUp", Name + " | Error");
                 SyncDownBase ();
 
-                this.watcher.Disable ();
+                if (!UseCustomWatcher)
+                    this.watcher.Disable ();
 
                 if (ServerOnline && SyncUp ()) {
                     HasUnsyncedChanges = false;
@@ -316,13 +326,15 @@ namespace SparkleLib {
             ProgressPercentage = 0.0;
             ProgressSpeed      = "";
 
-            this.watcher.Enable ();
+            if (!UseCustomWatcher)
+                this.watcher.Enable ();
         }
 
 
         private void SyncDownBase ()
         {
-            this.watcher.Disable ();
+            if (!UseCustomWatcher)
+                this.watcher.Disable ();
 
             SparkleLogger.LogInfo ("SyncDown", Name + " | Initiated");
 
@@ -373,7 +385,8 @@ namespace SparkleLib {
             ProgressPercentage = 0.0;
             ProgressSpeed      = "";
 
-            this.watcher.Enable ();
+            if (!UseCustomWatcher)
+                this.watcher.Enable ();
 
             SyncStatusChanged (SyncStatus.Idle);
         }
@@ -489,7 +502,8 @@ namespace SparkleLib {
             this.listener.Disconnected         -= ListenerDisconnectedDelegate;
             this.listener.AnnouncementReceived -= ListenerAnnouncementReceivedDelegate;
 
-            this.watcher.Dispose ();
+            if (!UseCustomWatcher)
+                this.watcher.Dispose ();
         }
     }
 }
