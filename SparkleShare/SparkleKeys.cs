@@ -18,7 +18,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
 
 using SparkleLib;
 
@@ -47,7 +46,7 @@ namespace SparkleShare {
             process.StartInfo.UseShellExecute  = false;
             process.StartInfo.CreateNoWindow   = true;
 
-            string computer_name = Dns.GetHostName ();
+            string computer_name = System.Net.Dns.GetHostName ();
 
             if (computer_name.EndsWith (".local"))
                 computer_name = computer_name.Substring (0, computer_name.Length - 6);
