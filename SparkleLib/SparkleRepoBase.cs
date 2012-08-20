@@ -18,8 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 
 using Timers = System.Timers;
@@ -122,7 +120,7 @@ namespace SparkleLib {
         private DateTime last_poll                = DateTime.Now;
         private DateTime progress_last_change     = DateTime.Now;
         private TimeSpan progress_change_interval = new TimeSpan (0, 0, 0, 1);
-        private Timers.Timer remote_timer = new Timers.Timer () { Interval = 5000 };
+        private Timers.Timer remote_timer         = new Timers.Timer () { Interval = 5000 };
 
         private bool is_syncing {
             get {
