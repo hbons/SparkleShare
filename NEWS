@@ -1,3 +1,17 @@
+0.9.1 for Linux, Mac and Windows (Mon Aug 27 2012)
+
+        Hylke:
+        - Use HTTPS to fetch gravatars
+        - Website links in the about dialog
+        - Scalable custom folder icon in Nautilus 3.x
+        - Default host user is now "storage" instead of "git"
+        - Create crash reports in ~/SparkleShare when things go wrong
+        - New Windows folder icons
+        - Project folders can now be renamed in the file manager
+        - Resizable event log on Mac
+        - Fix some bugs in conflict resolution mechanism
+
+
 0.9.0 for Linux, Mac and Windows (Wed Jun 27 2012)
 
 	Hylke:
