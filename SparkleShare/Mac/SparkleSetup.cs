@@ -451,7 +451,7 @@ namespace SparkleShare {
 
             if (type == PageType.Syncing) {
                 Header      = "Adding project ‘" + Controller.SyncingFolder + "’…";
-                Description = "This may take a while on big projects.\nIsn't it coffee-o'clock?";
+                Description = "This may take a while for large projects.\nIsn't it coffee-o'clock?";
 
 
                 ProgressIndicator = new NSProgressIndicator () {
