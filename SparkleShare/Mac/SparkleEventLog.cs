@@ -78,7 +78,6 @@ namespace SparkleShare {
 
 
                 this.web_view = new WebView (new RectangleF (0, 0, 481, 579), "", "") {
-                    PolicyDelegate = new SparkleWebPolicyDelegate (),
                     Frame = new RectangleF (new PointF (0, 0),
                         new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
                 };
@@ -177,11 +176,6 @@ namespace SparkleShare {
                 ContentView.AddSubview (this.background);
                 ContentView.AddSubview (this.hidden_close_button);
 
-
-                (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate).LinkClicked += delegate (string href) {
-                    Controller.LinkClicked (href);
-                };
-
                 (Delegate as SparkleEventsDelegate).WindowResized += Relayout;
             }
 
@@ -232,7 +226,7 @@ namespace SparkleShare {
                     InvokeOnMainThread (delegate {
                         if (this.web_view.Superview == ContentView)
                             this.web_view.RemoveFromSuperview ();
-
+                        
                         if (this.progress_indicator.Superview != ContentView)
                             ContentView.AddSubview (this.progress_indicator);
 
@@ -383,8 +377,23 @@ namespace SparkleShare {
                             if (this.progress_indicator.Superview == ContentView)
                                 this.progress_indicator.RemoveFromSuperview ();
         
+                            this.web_view = new WebView (new RectangleF (0, 0, 481, 579), "", "") {
+                                Frame = new RectangleF (new PointF (0, 0),
+                                    new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
+                            };
+
                             this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
-                            ContentView.AddSubview (this.web_view);
+
+                            web_view.PolicyDelegate = new SparkleWebPolicyDelegate ();
+                                ContentView.AddSubview (this.web_view);
+
+                            (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate).LinkClicked +=
+                                delegate (string href) {
+                                    if (href.StartsWith ("file:///"))
+                                        href = href.Substring (7);
+
+                                    Controller.LinkClicked (href);
+                                };
                         });
                     }
                 }
