@@ -27,6 +27,10 @@ namespace SparkleShare {
         public static Gdk.Pixbuf GetIcon (string name, int size)
         {
             IconTheme icon_theme = new IconTheme ();
+			
+			foreach (string search_path in IconTheme.Default.SearchPath)
+				icon_theme.AppendSearchPath (search_path);	
+			
             icon_theme.AppendSearchPath (Path.Combine (SparkleUI.AssetsPath, "icons"));
 
             try {
