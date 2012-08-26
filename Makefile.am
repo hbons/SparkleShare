@@ -6,9 +6,9 @@ DIST_SUBDIRS = $(basedirs) SparkleShare
 EXTRA_DIST = \
 	NEWS \
         README.md \
-	legal/LICENSE \
-	legal/TRADEMARK \
-	legal/AUTHORS
+	legal/LICENSE.txt \
+	legal/TRADEMARK.txt \
+	legal/AUTHORS.txt
 
 DISTCLEANFILES = \
 	intltool-extract        \
