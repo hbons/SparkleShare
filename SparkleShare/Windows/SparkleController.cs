@@ -191,11 +191,21 @@ namespace SparkleShare {
 
         private void StartSSH ()
         {
-            string auth_sock = Environment.GetEnvironmentVariable ("SSH_AUTH_SOCK");
+            string auth_agent_pid = Environment.GetEnvironmentVariable("SSH_AGENT_PID");
 
-            if (!string.IsNullOrEmpty (auth_sock)) {
-                SparkleLogger.LogInfo ("Controller", "Using existing ssh-agent with PID=" + this.ssh_agent_pid);
-                return;
+            if (!string.IsNullOrEmpty (auth_agent_pid)) {
+                SparkleLogger.LogInfo("Controller", "Trying existing ssh-agent with PID=" + auth_agent_pid);
+                this.ssh_agent_pid = Convert.ToInt32(auth_agent_pid);
+                try
+                {
+                    Process ssh_agent = Process.GetProcessById(this.ssh_agent_pid);
+                    SparkleLogger.LogInfo("Controller", "Using existing ssh-agent with PID=" + this.ssh_agent_pid);
+                    return;
+                }
+                catch (ArgumentException e)
+                {
+                    SparkleLogger.LogInfo("Controller", "ssh-agent with PID=" + auth_agent_pid + " does not exist. Starting a new one");
+                }
             }
 
             Process process                          = new Process ();
@@ -213,7 +223,7 @@ namespace SparkleShare {
             Match ssh_pid_match   = new Regex (@"SSH_AGENT_PID=([^;\n\r]*)").Match (output);
 
             if (auth_sock_match.Success)
-                Environment.SetEnvironmentVariable ("SSH_AUTH_SOCK", auth_sock_match.Groups [1].Value);
+                Environment.SetEnvironmentVariable("SSH_AUTH_SOCK", auth_sock_match.Groups[1].Value);
 
             if (ssh_pid_match.Success) {
                 string ssh_pid = ssh_pid_match.Groups [1].Value;
