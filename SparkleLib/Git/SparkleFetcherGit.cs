@@ -333,8 +333,13 @@ namespace SparkleLib.Git {
         // Add a .gitignore file to the repo
         private void InstallExcludeRules ()
         {
+            string git_info_path = new string [] { TargetFolder, ".git", "info" }.Combine ();
+
+            if (!Directory.Exists (git_info_path))
+                Directory.CreateDirectory (git_info_path);
+
             string exclude_rules           = string.Join (Environment.NewLine, ExcludeRules);
-            string exclude_rules_file_path = new string [] { TargetFolder, ".git", "info", "exclude" }.Combine ();
+            string exclude_rules_file_path = new string [] { git_info_path, "exclude" }.Combine ();
 
             File.WriteAllText (exclude_rules_file_path, exclude_rules);
         }
