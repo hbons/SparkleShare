@@ -248,10 +248,8 @@ namespace SparkleLib {
 
         public void Dispose ()
         {
-            if (this.thread != null) {
+            if (this.thread != null)
                 this.thread.Abort ();
-                this.thread.Join ();
-            }
         }
 
 
