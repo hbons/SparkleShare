@@ -203,7 +203,7 @@ namespace SparkleShare {
 
                     return;
 
-                } catch (ArgumentException e) {
+                } catch (ArgumentException) {
                     SparkleLogger.LogInfo ("Controller", "ssh-agent with PID=" + auth_agent_pid + " does not exist. Starting a new one...");
                 }
             }
