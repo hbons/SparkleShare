@@ -62,9 +62,9 @@ namespace SparkleShare {
             }
         }
 
-
         private XmlDocument xml = new XmlDocument ();
         private string plugin_directory;
+
 
         public SparklePlugin (string plugin_path)
         {
