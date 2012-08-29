@@ -1,3 +1,9 @@
+0.9.2 for Linux, Mac and Windows (Wed Aug 29 2012)
+
+        Hylke:
+        - This release fixes a crash that can happen after adding a new
+          project as well ssh-agent sometimes not starting on Windows
+
 0.9.1 for Linux, Mac and Windows (Mon Aug 27 2012)
 
         Hylke:
