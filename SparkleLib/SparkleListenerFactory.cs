@@ -40,7 +40,7 @@ namespace SparkleLib {
             // Please see the SparkleShare wiki if you wish to run
             // your own service instead
             if (string.IsNullOrEmpty (uri))
-                uri = "tcp://notifications.sparkleshare.org:80";
+                uri = "tcp://notifications.sparkleshare.org:443";
 
             Uri announce_uri = new Uri (uri);
 
