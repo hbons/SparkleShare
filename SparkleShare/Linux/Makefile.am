@@ -40,3 +40,7 @@ bin_SCRIPTS = sparkleshare
 Applicationsdir = $(datadir)/applications
 dist_Applications_DATA = sparkleshare.desktop \
 	sparkleshare-invite-opener.desktop
+
+install-data-hook:
+	test -f $(datadir)/applications/defaults.list && \
+	test -z $(DESTDIR) && update-desktop-database $(datadir)/applications || :
