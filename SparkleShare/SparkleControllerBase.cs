@@ -552,14 +552,14 @@ namespace SparkleShare {
         {
             this.fetcher.EnableFetchedRepoCrypto (password);
 
-            this.watcher.EnableRaisingEvents = false;
             FinishFetcher ();
-            this.watcher.EnableRaisingEvents = true;
         }
 
 
         public void FinishFetcher ()
         {
+            this.watcher.EnableRaisingEvents = false;
+
             this.fetcher.Complete ();
             string canonical_name = Path.GetFileNameWithoutExtension (this.fetcher.RemoteUrl.AbsolutePath);
 
@@ -609,6 +609,8 @@ namespace SparkleShare {
 
             this.fetcher.Dispose ();
             this.fetcher = null;
+
+            this.watcher.EnableRaisingEvents = true;
         }
 
 
