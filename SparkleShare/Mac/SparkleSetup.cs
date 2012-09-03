@@ -48,6 +48,7 @@ namespace SparkleShare {
         private NSProgressIndicator ProgressIndicator;
         private NSTextField EmailLabel;
         private NSTextField EmailTextField;
+        private NSTextField EmailHelpLabel;
         private NSTextField FullNameTextField;
         private NSTextField FullNameLabel;
         private NSTextField AddressTextField;
@@ -134,6 +135,19 @@ namespace SparkleShare {
                     Delegate    = new SparkleTextFieldDelegate ()
                 };
 
+                EmailHelpLabel = new NSTextField () {
+                    BackgroundColor = NSColor.WindowBackground,
+                    Bordered        = false,
+                    TextColor       = NSColor.DisabledControlText,
+                    Editable        = false,
+                    Frame           = new RectangleF (330, Frame.Height - 290, 204, 17),
+                    Font            = NSFontManager.SharedFontManager.FontWithFamily ("Lucida Grande",
+                        NSFontTraitMask.Condensed, 0, 11),
+                    StringValue = "(used to find your Gravatar)"
+                };
+
+
+
                 CancelButton = new NSButton () {
                     Title = "Cancel"
                 };
@@ -174,6 +188,7 @@ namespace SparkleShare {
                 ContentView.AddSubview (FullNameTextField);
                 ContentView.AddSubview (EmailLabel);
                 ContentView.AddSubview (EmailTextField);
+                ContentView.AddSubview (EmailHelpLabel);
 
                 Buttons.Add (ContinueButton);
                 Buttons.Add (CancelButton);
