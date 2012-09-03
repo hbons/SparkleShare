@@ -6,7 +6,7 @@ To run SparkleShare, you'll need the following packages:
 
 ```
 curl
-git >= 1.7.3
+git >= 1.7.6
 gtk-sharp2
 mono-core >= 2.8
 notify-sharp
