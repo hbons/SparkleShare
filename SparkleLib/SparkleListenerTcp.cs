@@ -59,7 +59,7 @@ namespace SparkleLib {
                 int port = Server.Port;
 
                 if (port < 0)
-                    port = 80;
+                    port = 443;
 
                 try {
                     this.socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) {
