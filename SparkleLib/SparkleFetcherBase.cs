@@ -282,7 +282,7 @@ namespace SparkleLib {
             string host_key = process.StandardOutput.ReadToEnd ().Trim ();
             process.WaitForExit ();
 
-            if (process.ExitCode == 0 && host_key != null)
+            if (process.ExitCode == 0 && host_key != "")
                 return host_key;
             else
                 return null;
