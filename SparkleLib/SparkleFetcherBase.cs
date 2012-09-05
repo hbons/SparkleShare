@@ -261,6 +261,7 @@ namespace SparkleLib {
         private string GetHostKey ()
         {
             string host = RemoteUrl.Host;
+            int port    = RemoteUrl.Port;
             SparkleLogger.LogInfo ("Auth", "Fetching host key for " + host);
 
             Process process = new Process () {
@@ -268,7 +269,7 @@ namespace SparkleLib {
             };
 
             process.StartInfo.FileName               = "ssh-keyscan";
-            process.StartInfo.Arguments              = "-t rsa " + host;
+            process.StartInfo.Arguments              = "-t rsa -p " + port.ToString() + " " + host;
             process.StartInfo.WorkingDirectory       = SparkleConfig.DefaultConfig.TmpPath;
             process.StartInfo.UseShellExecute        = false;
             process.StartInfo.RedirectStandardOutput = true;
@@ -281,7 +282,7 @@ namespace SparkleLib {
             string host_key = process.StandardOutput.ReadToEnd ().Trim ();
             process.WaitForExit ();
 
-            if (process.ExitCode == 0)
+            if (process.ExitCode == 0 && host_key != "")
                 return host_key;
             else
                 return null;
