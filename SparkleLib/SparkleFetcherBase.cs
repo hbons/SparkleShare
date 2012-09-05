@@ -261,7 +261,7 @@ namespace SparkleLib {
         private string GetHostKey ()
         {
             string host = RemoteUrl.Host;
-			int port	= RemoteUrl.Port;
+            int port    = RemoteUrl.Port;
             SparkleLogger.LogInfo ("Auth", "Fetching host key for " + host);
 
             Process process = new Process () {
