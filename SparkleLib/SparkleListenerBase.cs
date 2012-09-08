@@ -50,7 +50,6 @@ namespace SparkleLib {
             new Dictionary<string, List<SparkleAnnouncement>> ();
 
         private Dictionary<string, SparkleAnnouncement> queue_up   = new Dictionary<string, SparkleAnnouncement> ();
-        private Dictionary<string, SparkleAnnouncement> queue_down = new Dictionary<string, SparkleAnnouncement> ();
 
         private Timer reconnect_timer = new Timer {
             Interval = 60 * 1000,
@@ -130,8 +129,6 @@ namespace SparkleLib {
                     SparkleAnnouncement announcement = item.Value;
                     Announce (announcement);
                 }
-
-                this.queue_down.Clear ();
             }
         }
 
@@ -148,19 +145,10 @@ namespace SparkleLib {
             SparkleLogger.LogInfo ("Listener", "Got message " + announcement.Message + " from " +
                 announcement.FolderIdentifier + " on " + Server);
 
-            if (IsRecentAnnouncement (announcement)) {
-                SparkleLogger.LogInfo ("Listener", "Ignoring previously processed message " + announcement.Message +
-                    " from " + announcement.FolderIdentifier + " on " + Server);
-                
-                  return;
-            }
-
-            SparkleLogger.LogInfo ("Listener", "Processing message " + announcement.Message + " from " +
-                announcement.FolderIdentifier + " on " + Server);
+            if (IsRecentAnnouncement (announcement))
+                return;
 
             AddRecentAnnouncement (announcement);
-            this.queue_down [announcement.FolderIdentifier] = announcement;
-
             AnnouncementReceived (announcement);
         }
 

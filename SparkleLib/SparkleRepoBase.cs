@@ -451,12 +451,12 @@ namespace SparkleLib {
                 while (this.is_syncing)
                     Thread.Sleep (100);
 
-                SparkleLogger.LogInfo ("Listener", "Syncing due to announcement");
+                SparkleLogger.LogInfo (Name, "Syncing due to announcement");
                 SyncDownBase ();
 
             } else {
                 if (announcement.FolderIdentifier.Equals (identifier))
-                    SparkleLogger.LogInfo ("Listener", "Not syncing, message is for current revision");
+                    SparkleLogger.LogInfo (Name, "Not syncing, message is for current revision");
             }
         }
 
