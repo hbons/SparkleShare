@@ -178,7 +178,7 @@ namespace SparkleLib {
 
             } else {
                 foreach (SparkleAnnouncement recent_announcement in GetRecentAnnouncements (announcement.FolderIdentifier)) {
-                    if (recent_announcement.Message.Equals (recent_announcement.Message))
+                    if (recent_announcement.Message.Equals (announcement.Message))
                         return true;
                 }
 
