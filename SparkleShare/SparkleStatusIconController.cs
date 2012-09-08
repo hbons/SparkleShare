@@ -161,6 +161,8 @@ namespace SparkleShare {
                 UpdateMenuEvent (CurrentState);
             };
 
+            int periods = 3;
+
             Program.Controller.OnSyncing += delegate {
 				int repos_syncing_up   = 0;
 				int repos_syncing_down = 0;
@@ -177,23 +179,32 @@ namespace SparkleShare {
 				    repos_syncing_down > 0) {
 					
 					CurrentState = IconState.Syncing;
-                    StateText    = "Syncing changes…";
+                    StateText    = "Syncing changes";
 				
 				} else if (repos_syncing_down == 0) {
 					CurrentState = IconState.SyncingUp;
-                    StateText    = "Sending changes…";
+                    StateText    = "Sending changes";
 					
 				} else {
 					CurrentState = IconState.SyncingDown;
-                    StateText    = "Receiving changes…";
+                    StateText    = "Receiving changes";
 				}
+
+                periods++;
+
+                for (int i = 0; i < periods; i++)
+                    StateText += ".";
+
+                if (periods == 3)
+                    periods = 0;
 
                 StateText += " " + ProgressPercentage + "%  " + ProgressSpeed;
 
                 UpdateStatusItemEvent (StateText);
                 UpdateQuitItemEvent (QuitItemEnabled);
 
-                this.animation.Start ();
+                if (!this.animation.Enabled)
+                    this.animation.Start ();
             };
 
             Program.Controller.OnError += delegate {
