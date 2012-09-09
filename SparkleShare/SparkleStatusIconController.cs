@@ -36,7 +36,7 @@ namespace SparkleShare {
     public class SparkleStatusIconController {
 
         public event UpdateIconEventHandler UpdateIconEvent = delegate { };
-        public delegate void UpdateIconEventHandler (int icon_frame);
+        public delegate void UpdateIconEventHandler (IconState state);
 
         public event UpdateMenuEventHandler UpdateMenuEvent = delegate { };
         public delegate void UpdateMenuEventHandler (IconState state);
@@ -119,14 +119,8 @@ namespace SparkleShare {
         }
 
 
-        private Timer animation;
-        private int animation_frame_number;
-
-
         public SparkleStatusIconController ()
         {
-            InitAnimation ();
-
             Program.Controller.FolderListChanged += delegate {
                 if (CurrentState != IconState.Error) {
                     CurrentState = IconState.Idle;
@@ -155,9 +149,7 @@ namespace SparkleShare {
                 UpdateQuitItemEvent (QuitItemEnabled);
                 UpdateStatusItemEvent (StateText);
 
-                this.animation.Stop ();
-
-                UpdateIconEvent (0);
+                UpdateIconEvent (CurrentState);
                 UpdateMenuEvent (CurrentState);
             };
 
@@ -200,11 +192,9 @@ namespace SparkleShare {
 
                 StateText += " " + ProgressPercentage + "%  " + ProgressSpeed;
 
+                UpdateIconEvent (CurrentState);
                 UpdateStatusItemEvent (StateText);
                 UpdateQuitItemEvent (QuitItemEnabled);
-
-                if (!this.animation.Enabled)
-                    this.animation.Start ();
             };
 
             Program.Controller.OnError += delegate {
@@ -213,10 +203,8 @@ namespace SparkleShare {
 
                 UpdateQuitItemEvent (QuitItemEnabled);
                 UpdateStatusItemEvent (StateText);
-
-                this.animation.Stop ();
-
-                UpdateIconEvent (-1);
+                
+                UpdateIconEvent (CurrentState);
             };
         }
 
@@ -254,25 +242,6 @@ namespace SparkleShare {
         public void QuitClicked ()
         {
             Program.Controller.Quit ();
-        }
-
-
-        private void InitAnimation ()
-        {
-            this.animation_frame_number = 0;
-
-            this.animation = new Timer () {
-                Interval = 50
-            };
-
-            this.animation.Elapsed += delegate {
-                if (this.animation_frame_number < 4)
-                    this.animation_frame_number++;
-                else
-                    this.animation_frame_number = 0;
-
-                UpdateIconEvent (this.animation_frame_number);
-            };
         }
     }
 }
