@@ -2,11 +2,10 @@ dark_theme = ubuntu-mono-dark
 dark_themedir = /usr/share/icons/$(dark_theme)
 
 dark_theme_icons = \
-	status,process-syncing-i-24.png \
-	status,process-syncing-ii-24.png \
-	status,process-syncing-iii-24.png \
-	status,process-syncing-iiii-24.png \
-	status,process-syncing-iiiii-24.png \
+	status,process-syncing-idle-24.png \
+	status,process-syncing-up-24.png \
+	status,process-syncing-down-24.png \
+	status,process-syncing-24.png \
 	status,process-syncing-error-24.png
 
 install_icon_exec = $(top_srcdir)/build/icon-theme-installer \

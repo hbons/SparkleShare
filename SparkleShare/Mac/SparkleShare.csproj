@@ -15,21 +15,21 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>False</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -R Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -R git ${TargetDir}/${SolutionName}.app/Contents/Resources; cp -R SparkleShareInviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="true" />
+        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -R Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks; cp -R git ${TargetDir}/${SolutionName}.app/Contents/Resources; cp -R SparkleShareInviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
-    <EnableCodeSigning>false</EnableCodeSigning>
-    <CreatePackage>false</CreatePackage>
-    <EnablePackageSigning>false</EnablePackageSigning>
-    <IncludeMonoRuntime>true</IncludeMonoRuntime>
-    <ConsolePause>false</ConsolePause>
+    <EnableCodeSigning>False</EnableCodeSigning>
+    <CreatePackage>False</CreatePackage>
+    <EnablePackageSigning>False</EnablePackageSigning>
+    <IncludeMonoRuntime>True</IncludeMonoRuntime>
+    <ConsolePause>False</ConsolePause>
     <CodeSigningKey>Mac Developer</CodeSigningKey>
     <PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
   </PropertyGroup>
@@ -119,42 +119,6 @@
     </Content>
     <Content Include="Pixmaps\sparkleshare-app.icns">
       <Link>sparkleshare-app.icns</Link>
-    </Content>
-    <Content Include="Pixmaps\process-syncing-i-active.png">
-      <Link>Pixmaps\process-syncing-i-active.png</Link>
-    </Content>
-    <Content Include="Pixmaps\process-syncing-i.png">
-      <Link>Pixmaps\process-syncing-i.png</Link>
-    </Content>
-    <Content Include="Pixmaps\process-syncing-ii-active.png">
-      <Link>Pixmaps\process-syncing-ii-active.png</Link>
-    </Content>
-    <Content Include="Pixmaps\process-syncing-ii.png">
-      <Link>Pixmaps\process-syncing-ii.png</Link>
-    </Content>
-    <Content Include="Pixmaps\process-syncing-iii-active.png">
-      <Link>Pixmaps\process-syncing-iii-active.png</Link>
-    </Content>
-    <Content Include="Pixmaps\process-syncing-iii.png">
-      <Link>Pixmaps\process-syncing-iii.png</Link>
-    </Content>
-    <Content Include="Pixmaps\process-syncing-iiii-active.png">
-      <Link>Pixmaps\process-syncing-iiii-active.png</Link>
-    </Content>
-    <Content Include="Pixmaps\process-syncing-iiii.png">
-      <Link>Pixmaps\process-syncing-iiii.png</Link>
-    </Content>
-    <Content Include="Pixmaps\process-syncing-iiiii-active.png">
-      <Link>Pixmaps\process-syncing-iiiii-active.png</Link>
-    </Content>
-    <Content Include="Pixmaps\process-syncing-iiiii.png">
-      <Link>Pixmaps\process-syncing-iiiii.png</Link>
-    </Content>
-    <Content Include="Pixmaps\process-syncing-error.png">
-      <Link>Pixmaps\process-syncing-error.png</Link>
-    </Content>
-    <Content Include="Pixmaps\process-syncing-error-active.png">
-      <Link>Pixmaps\process-syncing-error-active.png</Link>
     </Content>
     <Content Include="..\Linux\Pixmaps\icons\document-added-12.png">
       <Link>Pixmaps\document-added-12.png</Link>
@@ -256,6 +220,16 @@
       <Link>Plugins\ssnet.xml</Link>
     </Content>
     <Content Include="Growl.plist" />
+    <Content Include="Pixmaps\process-syncing-active.png" />
+    <Content Include="Pixmaps\process-syncing-down-active.png" />
+    <Content Include="Pixmaps\process-syncing-down.png" />
+    <Content Include="Pixmaps\process-syncing-error-active.png" />
+    <Content Include="Pixmaps\process-syncing-error.png" />
+    <Content Include="Pixmaps\process-syncing-idle-active.png" />
+    <Content Include="Pixmaps\process-syncing-idle.png" />
+    <Content Include="Pixmaps\process-syncing-up-active.png" />
+    <Content Include="Pixmaps\process-syncing-up.png" />
+    <Content Include="Pixmaps\process-syncing.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pixmaps\" />

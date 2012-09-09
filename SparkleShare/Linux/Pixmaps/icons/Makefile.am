@@ -21,11 +21,9 @@ app_theme_icons = \
 	places,sparkleshare-256.png \
 	places,sparkleshare-32.png \
 	places,sparkleshare-48.png \
-	status,process-syncing-i-24.png \
-	status,process-syncing-ii-24.png \
-	status,process-syncing-iii-24.png \
-	status,process-syncing-iiii-24.png \
-	status,process-syncing-iiiii-24.png \
+	status,process-syncing-up-24.png \
+	status,process-syncing-down-24.png \
+	status,process-syncing-24.png \
 	status,process-syncing-error-24.png	\
 	status,document-added-12.png \
 	status,document-edited-12.png \
