@@ -75,10 +75,6 @@ namespace SparkleLib {
 
                     OnConnected ();
 
-                    // Subscribe to channels of interest to us
-                    foreach (string channel in base.channels)
-                        AlsoListenToInternal (channel);
-
                 } catch (SocketException e) {
                     this.is_connected  = false;
                     this.is_connecting = false;
