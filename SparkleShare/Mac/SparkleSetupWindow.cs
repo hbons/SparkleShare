@@ -31,7 +31,7 @@ namespace SparkleShare {
 
         public List <NSButton> Buttons = new List <NSButton> ();
         public string Header;
-        public string Description;
+        new public string Description;
 
         private NSImage side_splash;
         private NSImageView side_splash_view;
