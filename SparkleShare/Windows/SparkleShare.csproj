@@ -34,7 +34,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>False</Optimize>
     <OutputPath>..\..\bin</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -103,7 +103,7 @@
     <MonoDevelop>
       <Properties>
         <MonoDevelop.Autotools.MakefileInfo RelativeMakefileName="Makefile.am">
-          <BuildFilesVar Sync="true" Name="SOURCES" />
+          <BuildFilesVar Sync="True" Name="SOURCES" />
           <DeployFilesVar />
           <ResourcesVar />
           <OthersVar />
@@ -206,6 +206,10 @@
     <EmbeddedResource Include="..\Linux\Pixmaps\icons\process-working-22.png">
       <Link>Pixmaps\process-working-22.png</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="Pixmaps\process-syncing-down.png" />
+    <EmbeddedResource Include="Pixmaps\process-syncing-idle.png" />
+    <EmbeddedResource Include="Pixmaps\process-syncing-up.png" />
+    <EmbeddedResource Include="Pixmaps\process-syncing.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Common\Plugins\github.png">
@@ -260,11 +264,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Pixmaps\folder.png" />
     <EmbeddedResource Include="Pixmaps\process-syncing-error.png" />
-    <EmbeddedResource Include="Pixmaps\process-syncing-i.png" />
-    <EmbeddedResource Include="Pixmaps\process-syncing-ii.png" />
-    <EmbeddedResource Include="Pixmaps\process-syncing-iii.png" />
-    <EmbeddedResource Include="Pixmaps\process-syncing-iiii.png" />
-    <EmbeddedResource Include="Pixmaps\process-syncing-iiiii.png" />
     <EmbeddedResource Include="Pixmaps\sparkleshare-app.ico" />
     <EmbeddedResource Include="Pixmaps\sparkleshare-folder.png" />
   </ItemGroup>

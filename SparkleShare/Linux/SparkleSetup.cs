@@ -109,7 +109,7 @@ namespace SparkleShare {
                                 Sensitive = false
                             };
 
-                            continue_button.Clicked += delegate (object o, EventArgs args) {
+                            continue_button.Clicked += delegate {
                                 Controller.SetupPageCompleted (name_entry.Text, email_entry.Text);
                             };
                         
