@@ -32,9 +32,12 @@ namespace SparkleShare {
     public class SparkleStatusIcon : Control {
         
         public SparkleStatusIconController Controller = new SparkleStatusIconController();
-
-        private Drawing.Bitmap [] animation_frames;
-        private Drawing.Bitmap error_icon;
+        
+        private Drawing.Bitmap syncing_idle_image;
+        private Drawing.Bitmap syncing_up_image;
+        private Drawing.Bitmap syncing_down_image;
+        private Drawing.Bitmap syncing_image;
+        private Drawing.Bitmap syncing_error_image;
 
         private ContextMenu context_menu;
 
@@ -45,25 +48,45 @@ namespace SparkleShare {
         
         private SparkleNotifyIcon notify_icon = new SparkleNotifyIcon ();
 
-        
-       
+
         public SparkleStatusIcon ()
 		{
-			CreateAnimationFrames ();
-
-			this.notify_icon.Icon = animation_frames [0];
+            this.syncing_idle_image  = SparkleUIHelpers.GetBitmap ("process-syncing-idle"),
+            this.syncing_up_image    = SparkleUIHelpers.GetBitmap ("process-syncing-up"),
+            this.syncing_down_image  = SparkleUIHelpers.GetBitmap ("process-syncing-down"),
+            this.syncing_image       = SparkleUIHelpers.GetBitmap ("process-syncing"),
+            this.syncing_error_image = SparkleUIHelpers.GetBitmap ("process-syncing-error")
+            
+            this.notify_icon.Icon = this.syncing_idle_image;
             this.notify_icon.HeaderText = "SparkleShare";
 
             CreateMenu ();
-         
 			
-			Controller.UpdateIconEvent += delegate (int icon_frame) {
+			Controller.UpdateIconEvent += delegate (IconState state) {
 				Dispatcher.BeginInvoke ((Action) delegate {
-					if (icon_frame > -1)
-						this.notify_icon.Icon = animation_frames [icon_frame];
-					else
-						this.notify_icon.Icon = this.error_icon;
-				});				
+                    switch (state) {
+                    case IconState.Idle: {
+                        this.notify_icon.Icon = this.syncing_idle_image;
+                        break;
+                    }
+                    case IconState.SyncingUp: {
+                        this.notify_icon.Icon = this.syncing_up_image;
+                        break;
+                    }
+                    case IconState.SyncingDown: {
+                        this.notify_icon.Icon = this.syncing_down_image;
+                        break;
+                    }
+                    case IconState.Syncing: {
+                        this.notify_icon.Icon = this.syncing_image_image;
+                        break;
+                    }
+                    case IconState.Error: {
+                        this.notify_icon.Icon = this.syncing_error_image;
+                        break;
+                    }
+                    }
+                });				
 			};
 			
 			Controller.UpdateStatusItemEvent += delegate (string state_text) {
@@ -276,20 +299,6 @@ namespace SparkleShare {
         public void Dispose ()
         {
             this.notify_icon.Dispose ();
-        }
-		
-		
-		private void CreateAnimationFrames ()
-        {
-            this.animation_frames = new Drawing.Bitmap [] {
-	            SparkleUIHelpers.GetBitmap ("process-syncing-i"),
-	            SparkleUIHelpers.GetBitmap ("process-syncing-ii"),
-	            SparkleUIHelpers.GetBitmap ("process-syncing-iii"),
-	            SparkleUIHelpers.GetBitmap ("process-syncing-iiii"),
-	            SparkleUIHelpers.GetBitmap ("process-syncing-iiiii")
-			};
-			
-			this.error_icon = SparkleUIHelpers.GetBitmap ("process-syncing-error");
         }
 
 
