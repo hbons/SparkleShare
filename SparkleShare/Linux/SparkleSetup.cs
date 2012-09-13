@@ -110,10 +110,7 @@ namespace SparkleShare {
                             };
 
                             continue_button.Clicked += delegate (object o, EventArgs args) {
-                                string full_name = name_entry.Text;
-                                string email     = email_entry.Text;
-
-                                Controller.SetupPageCompleted (full_name, email);
+                                Controller.SetupPageCompleted (name_entry.Text, email_entry.Text);
                             };
                         
                         AddButton (cancel_button);
@@ -312,10 +309,7 @@ namespace SparkleShare {
                             };
 
                             add_button.Clicked += delegate {
-                                string server         = address_entry.Text;
-                                string folder_name    = path_entry.Text;
-
-                                Controller.AddPageCompleted (server, folder_name);
+                                Controller.AddPageCompleted (address_entry.Text, path_entry.Text);
                             };
 
                         Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
