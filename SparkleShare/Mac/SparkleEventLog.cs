@@ -185,10 +185,9 @@ namespace SparkleShare {
                 using (var a = new NSAutoreleasePool ())
                 {
                     InvokeOnMainThread (delegate {
+                        this.web_view.Hidden = true;
+                        this.progress_indicator.Hidden = true;
                         PerformClose (this);
-
-						if (this.web_view.Superview == ContentView)
-                            this.web_view.RemoveFromSuperview ();
                     });
                 }
             };
@@ -224,11 +223,8 @@ namespace SparkleShare {
                 using (var a = new NSAutoreleasePool ())
                 {
                     InvokeOnMainThread (delegate {
-                        if (this.web_view.Superview == ContentView)
-                            this.web_view.RemoveFromSuperview ();
-                        
-                        if (this.progress_indicator.Superview != ContentView)
-                            ContentView.AddSubview (this.progress_indicator);
+                        this.web_view.Hidden = true;
+                        this.progress_indicator.Hidden = false;
 
                         this.progress_indicator.StartAnimation (this);
                     });
@@ -276,9 +272,7 @@ namespace SparkleShare {
                     this.history_label_value.Frame.Size
                 );
 
-
-                // Needed to prevent redraw glitches
-                this.popup_button.RemoveFromSuperview ();
+                this.popup_button.RemoveFromSuperview (); // Needed to prevent redraw glitches
 
                 this.popup_button.Frame = new RectangleF (
                     new PointF (new_window_size.Width - this.popup_button.Frame.Width - 12, new_window_size.Height - TitlebarHeight - 33),
@@ -374,9 +368,6 @@ namespace SparkleShare {
                             pixmaps_path + "/document-moved-12.png");
     					
                         InvokeOnMainThread (delegate {
-                            if (this.progress_indicator.Superview == ContentView)
-                                this.progress_indicator.RemoveFromSuperview ();
-        
                             this.web_view = new WebView (new RectangleF (0, 0, 481, 579), "", "") {
                                 Frame = new RectangleF (new PointF (0, 0),
                                     new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
@@ -394,6 +385,9 @@ namespace SparkleShare {
 
                                     Controller.LinkClicked (href);
                                 };
+
+                            this.progress_indicator.Hidden = true;
+                            this.web_view.Hidden = false;
                         });
                     }
                 }
