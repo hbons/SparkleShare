@@ -169,15 +169,15 @@ namespace SparkleShare {
 				    repos_syncing_down > 0) {
 					
 					CurrentState = IconState.Syncing;
-                    StateText    = "Syncing changes";
+                    StateText    = "Syncing changes…";
 				
 				} else if (repos_syncing_down == 0) {
 					CurrentState = IconState.SyncingUp;
-                    StateText    = "Sending changes";
+                    StateText    = "Sending changes…";
 					
 				} else {
 					CurrentState = IconState.SyncingDown;
-                    StateText    = "Receiving changes";
+                    StateText    = "Receiving changes…";
 				}
 
                 StateText += " " + ProgressPercentage + "%  " + ProgressSpeed;
