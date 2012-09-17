@@ -51,11 +51,11 @@ namespace SparkleShare {
 
         public SparkleStatusIcon ()
 		{
-            this.syncing_idle_image  = SparkleUIHelpers.GetBitmap ("process-syncing-idle"),
-            this.syncing_up_image    = SparkleUIHelpers.GetBitmap ("process-syncing-up"),
-            this.syncing_down_image  = SparkleUIHelpers.GetBitmap ("process-syncing-down"),
-            this.syncing_image       = SparkleUIHelpers.GetBitmap ("process-syncing"),
-            this.syncing_error_image = SparkleUIHelpers.GetBitmap ("process-syncing-error")
+            this.syncing_idle_image  = SparkleUIHelpers.GetBitmap ("process-syncing-idle");
+            this.syncing_up_image    = SparkleUIHelpers.GetBitmap ("process-syncing-up");
+            this.syncing_down_image  = SparkleUIHelpers.GetBitmap ("process-syncing-down");
+            this.syncing_image       = SparkleUIHelpers.GetBitmap ("process-syncing");
+            this.syncing_error_image = SparkleUIHelpers.GetBitmap ("process-syncing-error");
             
             this.notify_icon.Icon = this.syncing_idle_image;
             this.notify_icon.HeaderText = "SparkleShare";
@@ -78,7 +78,7 @@ namespace SparkleShare {
                         break;
                     }
                     case IconState.Syncing: {
-                        this.notify_icon.Icon = this.syncing_image_image;
+                        this.notify_icon.Icon = this.syncing_image;
                         break;
                     }
                     case IconState.Error: {
