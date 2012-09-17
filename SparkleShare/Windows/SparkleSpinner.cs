@@ -25,51 +25,49 @@ namespace SparkleShare {
 
     public class SparkleSpinner : Image {
 
-        private Image [] images;
         private Timer timer;
-		private int num_steps;
-        private int current_step = 0;
 
 
         public SparkleSpinner (int size) : base ()
-        {			
-			Width  = size;
-			Height = size;
+        {           
+            Width  = size;
+            Height = size;
 
-			BitmapSource spinner_gallery = SparkleUIHelpers.GetImageSource ("process-working-22");
-           			
-            int frames_in_width  = spinner_gallery.PixelWidth / size;
-            int frames_in_height = spinner_gallery.PixelHeight / size;
-
-            this.num_steps = (frames_in_width * frames_in_height) - 1;
-            this.images    = new Image [this.num_steps];
+            int current_frame            = 0;
+            BitmapSource spinner_gallery = SparkleUIHelpers.Getframesource ("process-working-22");
+            int frames_in_width          = spinner_gallery.PixelWidth / size;
+            int frames_in_height         = spinner_gallery.PixelHeight / size;
+            int frame_count              = (frames_in_width * frames_in_height) - 1;
+            Image [] frames              = new Image [frame_count];
 
             int i = 0;
-
             for (int y = 0; y < frames_in_height; y++) {
                 for (int x = 0; x < frames_in_width; x++) {
                     if (!(y == 0 && x == 0)) {
 						CroppedBitmap crop = new CroppedBitmap (spinner_gallery, 
                             new Int32Rect (size * x, size * y, size, size));
 						
-						this.images [i]        = new Image ();
-						this.images [i].Source = crop;
+						frames [i]        = new Image ();
+						frames [i].Source = crop;
                         i++;
                     }
                 }
             }
 
             this.timer = new Timer () {
-                Interval = 400 / this.num_steps
+                Interval = 400 / frame_count
             };
 
             this.timer.Elapsed += delegate {
 	            Dispatcher.BeginInvoke ((Action) delegate {
-	                NextImage ();
+                    if (current_frame < frame_count - 1)
+                        current_frame++;
+                    else
+                        current_frame = 0;
+                    
+                    Source = this.frames [current_frame].Source;
 				});
             };
-
-            Start ();
         }
 		
 		
@@ -82,24 +80,6 @@ namespace SparkleShare {
         public void Stop ()
         {
             this.timer.Stop ();
-			this.current_step = 0;
-        }
-		
-		
-        private void NextImage ()
-        {
-            if (this.current_step < this.num_steps - 1)
-                this.current_step++;
-            else
-                this.current_step = 0;
-
-			SetImage ();
-        }
-
-
-        private void SetImage ()
-        {
-            Source = this.images [this.current_step].Source;
         }
     }
 }
