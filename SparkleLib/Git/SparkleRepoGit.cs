@@ -28,17 +28,18 @@ namespace SparkleLib.Git {
     public class SparkleRepo : SparkleRepoBase {
 
 		private bool user_is_set;
-        private bool remote_url_is_set;
         private bool use_git_bin;
 
 
         public SparkleRepo (string path, SparkleConfig config) : base (path, config)
         {
             SparkleGit git = new SparkleGit (LocalPath, "config --get filter.bin.clean");
-            git.Start ();
-            git.WaitForExit ();
-            
+            git.StartAndWaitForExit ();
+
             this.use_git_bin = (git.ExitCode == 0);
+
+            git = new SparkleGit (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
+            git.StartAndWaitForExit ();
 
             string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
 
@@ -178,13 +179,6 @@ namespace SparkleLib.Git {
             SparkleGit git;
 
             if (this.use_git_bin) {
-                if (this.remote_url_is_set) {
-                    git = new SparkleGit (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
-                    git.StartAndWaitForExit ();
-
-                    this.remote_url_is_set = true;
-                }
-
                 SparkleGitBin git_bin = new SparkleGitBin (LocalPath, "push");
                 git_bin.StartAndWaitForExit ();
 
