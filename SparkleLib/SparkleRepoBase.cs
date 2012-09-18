@@ -32,6 +32,15 @@ namespace SparkleLib {
     }
 
 
+    public enum ErrorStatus {
+        None,
+        HostUnreachable,
+        HostIdentityChanged,
+        AuthenticationFailed,
+        DiskSpaceExcedeed
+    }
+
+
     public abstract class SparkleRepoBase {
 
         public static bool UseCustomWatcher = false;
@@ -67,7 +76,7 @@ namespace SparkleLib {
         public readonly Uri RemoteUrl;
         public List<SparkleChangeSet> ChangeSets { get; protected set; }
         public SyncStatus Status { get; private set; }
-        public bool ServerOnline { get; private set; }
+        public ErrorStatus Error { get; protected set; }
         public bool IsBuffering { get; private set; }
         public double ProgressPercentage { get; private set; }
         public string ProgressSpeed { get; private set; }
@@ -136,12 +145,13 @@ namespace SparkleLib {
 
         public SparkleRepoBase (string path, SparkleConfig config)
         {
+            Status            = SyncStatus.Idle;
+            Error             = ErrorStatus.None;
             this.local_config = config;
             LocalPath         = path;
             Name              = Path.GetFileName (LocalPath);
             RemoteUrl         = new Uri (this.local_config.GetUrlForFolder (Name));
             IsBuffering       = false;
-            ServerOnline      = true;
             this.identifier   = Identifier;
             ChangeSets        = GetChangeSets ();
 
@@ -170,7 +180,7 @@ namespace SparkleLib {
 
                 // In the unlikely case that we haven't synced up our
                 // changes or the server was down, sync up again
-                if (HasUnsyncedChanges && !is_syncing && ServerOnline)
+                if (HasUnsyncedChanges && !is_syncing && Error == ErrorStatus.None)
                     SyncUpBase ();
             };
         }
@@ -309,14 +319,13 @@ namespace SparkleLib {
                 if (!UseCustomWatcher)
                     this.watcher.Disable ();
 
-                if (ServerOnline && SyncUp ()) {
+                if (Error == ErrorStatus.None && SyncUp ()) {
                     HasUnsyncedChanges = false;
 
                     SyncStatusChanged (SyncStatus.Idle);
                     this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
 
                 } else {
-                    ServerOnline = false;
                     SyncStatusChanged (SyncStatus.Error);
                 }
             }
@@ -341,7 +350,7 @@ namespace SparkleLib {
 
             if (SyncDown ()) {
                 SparkleLogger.LogInfo ("SyncDown", Name + " | Done");
-                ServerOnline = true;
+                Error = ErrorStatus.None;
 
                 ChangeSets = GetChangeSets ();
 
@@ -373,10 +382,8 @@ namespace SparkleLib {
 
             } else {
                 SparkleLogger.LogInfo ("SyncDown", Name + " | Error");
-                ServerOnline = false;
 
                 ChangeSets = GetChangeSets ();
-
                 SyncStatusChanged (SyncStatus.Error);
             }
 
