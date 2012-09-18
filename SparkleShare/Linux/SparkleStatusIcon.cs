@@ -130,7 +130,7 @@ namespace SparkleShare {
                 });
             };
 
-            Controller.UpdateOpenRecentEventsItemEvent += delegate (bool item_enabled) {
+            Controller.UpdateRecentEventsItemEvent += delegate (bool item_enabled) {
                 Application.Invoke (delegate {
                     this.recent_events_item.Sensitive = item_enabled;
                     this.recent_events_item.ShowAll ();
@@ -167,46 +167,66 @@ namespace SparkleShare {
             this.menu.Add (folder_item);
 
                 if (Program.Controller.Folders.Count > 0) {
+                    int i = 0;
                     foreach (string folder_name in Controller.Folders) {
+                        ImageMenuItem item = new SparkleMenuItem (folder_name);
                         Gdk.Pixbuf folder_icon;
 
-                        if (Program.Controller.UnsyncedFolders.Contains (folder_name)) {
-                            folder_icon = IconTheme.Default.LoadIcon ("dialog-error", 16,
+                        if (!string.IsNullOrEmpty (Controller.FolderErrors [i])) {
+                            folder_icon = IconTheme.Default.LoadIcon ("dialog-warning", 16,
                                 IconLookupFlags.GenericFallback);
+
+                            item.Submenu = new Menu ();
+                                
+                            MenuItem error_item = new MenuItem (Controller.FolderErrors [i]) {
+                                Sensitive = false
+                            };
+                            
+                            item.Submenu.Add (error_item);
 
                         } else {
                             folder_icon = IconTheme.Default.LoadIcon ("folder", 16,
                                 IconLookupFlags.GenericFallback);
                         }
 
-                        ImageMenuItem subfolder_item = new SparkleMenuItem (folder_name) {
-                            Image = new Image (folder_icon)
-                        };
+                        item.Image = new Image (folder_icon);
 
-                        subfolder_item.Activated += OpenFolderDelegate (folder_name);
-                        this.menu.Add (subfolder_item);
+                        item.Activated += OpenFolderDelegate (folder_name);
+                        this.menu.Add (item);
+
+                        i++;
                     }
 
                     Menu submenu = new Menu ();
 
+                    i = 0;
                     foreach (string folder_name in Controller.OverflowFolders) {
+                        ImageMenuItem item = new SparkleMenuItem (folder_name);
                         Gdk.Pixbuf folder_icon;
 
-                        if (Program.Controller.UnsyncedFolders.Contains (folder_name)) {
-                            folder_icon = IconTheme.Default.LoadIcon ("dialog-error", 16,
+                        if (!string.IsNullOrEmpty (Controller.OverflowFolderErrors [i])) {
+                            folder_icon = IconTheme.Default.LoadIcon ("dialog-warning", 16,
                                 IconLookupFlags.GenericFallback);
+
+                            item.Submenu = new Menu ();
+                            
+                            MenuItem error_item = new MenuItem (Controller.OverflowFolderErrors [i]) {
+                                Sensitive = false
+                            };
+                            
+                            item.Submenu.Add (error_item);
 
                         } else {
                             folder_icon = IconTheme.Default.LoadIcon ("folder", 16,
                                 IconLookupFlags.GenericFallback);
                         }
 
-                        ImageMenuItem subfolder_item = new SparkleMenuItem (folder_name) {
-                            Image = new Image (folder_icon)
-                        };
+                        item.Image = new Image (folder_icon);
+                    
+                        item.Activated += OpenFolderDelegate (folder_name);
+                        submenu.Add (item);
 
-                        subfolder_item.Activated += OpenFolderDelegate (folder_name);
-                        submenu.Add (subfolder_item);
+                        i++;
                     }
 
                     if (submenu.Children.Length > 0) {
@@ -232,10 +252,10 @@ namespace SparkleShare {
 
             this.recent_events_item = new MenuItem ("Recent Changes…");
 
-                this.recent_events_item.Sensitive = Controller.OpenRecentEventsItemEnabled;
+                this.recent_events_item.Sensitive = Controller.RecentEventsItemEnabled;
 
                 this.recent_events_item.Activated += delegate {
-                    Controller.OpenRecentEventsClicked ();
+                    Controller.RecentEventsClicked ();
                 };
 
             this.menu.Add (this.recent_events_item);

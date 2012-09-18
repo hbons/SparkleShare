@@ -110,7 +110,7 @@ namespace SparkleShare {
                 });
             };
 
-            Controller.UpdateOpenRecentEventsItemEvent += delegate (bool item_enabled) {
+            Controller.UpdateRecentEventsItemEvent += delegate (bool item_enabled) {
                   Dispatcher.BeginInvoke ((Action) delegate {
                     this.log_item.IsEnabled = item_enabled;
                     this.log_item.UpdateLayout ();
@@ -155,11 +155,11 @@ namespace SparkleShare {
             
             this.log_item = new SparkleMenuItem () {
                 Header    = "Recent changes…",
-                IsEnabled = Controller.OpenRecentEventsItemEnabled
+                IsEnabled = Controller.RecentEventsItemEnabled
             };
             
                 this.log_item.Click += delegate {
-                    Controller.OpenRecentEventsClicked ();
+                    Controller.RecentEventsClicked ();
                 };
             
             SparkleMenuItem notify_item = new SparkleMenuItem () {
@@ -207,6 +207,7 @@ namespace SparkleShare {
 			this.context_menu.Items.Add (folder_item);
 
             if (Controller.Folders.Length > 0) {
+                int i = 0;
                 foreach (string folder_name in Controller.Folders) {     
                     SparkleMenuItem subfolder_item = new SparkleMenuItem () {
                         Header = folder_name
@@ -220,26 +221,35 @@ namespace SparkleShare {
 		            	Height = 16
 					};
 					
-                    if (Program.Controller.UnsyncedFolders.Contains (folder_name)) {
-                    	subfolder_item.Icon = new Image () {
-							Source = (BitmapSource) Imaging.CreateBitmapSourceFromHIcon (
-								System.Drawing.SystemIcons.Exclamation.Handle, 
-								Int32Rect.Empty,
-								BitmapSizeOptions.FromWidthAndHeight (16,16)
-							)
-						};  
-						
+                    if (!string.IsNullOrEmpty (Controller.FolderErrors [i])) {
+                        subfolder_item.Icon = new Image () {
+                            Source = (BitmapSource) Imaging.CreateBitmapSourceFromHIcon (
+                                System.Drawing.SystemIcons.Exclamation.Handle, Int32Rect.Empty,
+                                BitmapSizeOptions.FromWidthAndHeight (16,16)
+                            )
+                        };
+
+                        SparkleMenuItem error_item = new SparkleMenuItem () {
+                            Header    = Controller.FolderErrors [i],
+                            IsEnabled = false
+                        };
+
+                        subfolder_item.Items.Add (error_item);
+                    	
 					} else {
                     	subfolder_item.Icon = subfolder_image;
 					}
 					
 					this.context_menu.Items.Add (subfolder_item);
+
+                    i++;
 				}
 				
 				SparkleMenuItem more_item = new SparkleMenuItem () {
                     Header = "More projects"
                 };
 				
+                i = 0;
                 foreach (string folder_name in Controller.OverflowFolders) {     
                     SparkleMenuItem subfolder_item = new SparkleMenuItem () {
                         Header = folder_name
@@ -253,20 +263,28 @@ namespace SparkleShare {
 		            	Height = 16
 					};
 					
-					if (Program.Controller.UnsyncedFolders.Contains (folder_name)) {
-                    	subfolder_item.Icon = new Image () {
-							Source = (BitmapSource) Imaging.CreateBitmapSourceFromHIcon (
-								System.Drawing.SystemIcons.Exclamation.Handle, 
-								Int32Rect.Empty,
-								BitmapSizeOptions.FromWidthAndHeight (16,16)
-							)
-						};  
-						
+				    if (!string.IsNullOrEmpty (Controller.OverflowFolderErrors [i])) {
+                        subfolder_item.Icon = new Image () {
+                            Source = (BitmapSource) Imaging.CreateBitmapSourceFromHIcon (
+                                System.Drawing.SystemIcons.Exclamation.Handle, Int32Rect.Empty,
+                                BitmapSizeOptions.FromWidthAndHeight (16,16)
+                            )
+                        };
+
+                        SparkleMenuItem error_item = new SparkleMenuItem () {
+                            Header    = Controller.OverflowFolderErrors [i],
+                            IsEnabled = false
+                        };
+                        
+                        subfolder_item.Items.Add (error_item);
+            			
 					} else {
                         subfolder_item.Icon = subfolder_image;
 					}
 					
 					more_item.Items.Add (subfolder_item);
+
+                    i++;
                 }
 				
 				if (more_item.Items.Count > 0) {

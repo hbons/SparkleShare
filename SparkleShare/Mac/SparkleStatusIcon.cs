@@ -162,7 +162,7 @@ namespace SparkleShare {
                 }
             };
 
-            Controller.UpdateOpenRecentEventsItemEvent += delegate (bool events_item_enabled) {
+            Controller.UpdateRecentEventsItemEvent += delegate (bool events_item_enabled) {
                 using (var a = new NSAutoreleasePool ())
                 {
                     InvokeOnMainThread (delegate {
@@ -208,12 +208,12 @@ namespace SparkleShare {
 
                 this.recent_events_item = new NSMenuItem () {
                     Title   = "Recent Changes…",
-                    Enabled = Controller.OpenRecentEventsItemEnabled
+                    Enabled = Controller.RecentEventsItemEnabled
                 };
 
                 if (Controller.Folders.Length > 0) {
                     this.recent_events_item.Activated += delegate {
-                        Controller.OpenRecentEventsClicked ();
+                        Controller.RecentEventsClicked ();
                     };
                 }
 
@@ -272,10 +272,19 @@ namespace SparkleShare {
                         NSMenuItem item = new NSMenuItem ();
                         item.Title      = folder_name;
 
-                        if (Program.Controller.UnsyncedFolders.Contains (folder_name))
-                            item.Image = this.caution_image;
-                        else
+                        if (!string.IsNullOrEmpty (Controller.FolderErrors [i])) {
+                            item.Image   = this.caution_image;
+                            item.Submenu = new NSMenu ();
+
+                            NSMenuItem error_item = new NSMenuItem () {
+                                Title = Controller.FolderErrors [i]
+                            };
+
+                            item.Submenu.AddItem (error_item);
+                        
+                        } else {
                             item.Image = this.folder_image;
+                        }
 
                         item.Image.Size = new SizeF (16, 16);
                         this.folder_tasks [i] = OpenFolderDelegate (folder_name);
@@ -291,10 +300,19 @@ namespace SparkleShare {
                         NSMenuItem item = new NSMenuItem ();
                         item.Title      = folder_name;
 
-                        if (Program.Controller.UnsyncedFolders.Contains (folder_name))
-                            item.Image = this.caution_image;
-                        else
+                        if (!string.IsNullOrEmpty (Controller.OverflowFolderErrors [i])) {
+                            item.Image   = this.caution_image;    
+                            item.Submenu = new NSMenu ();
+                            
+                            NSMenuItem error_item = new NSMenuItem () {
+                                Title = Controller.OverflowFolderErrors [i]
+                            };
+                            
+                            item.Submenu.AddItem (error_item);
+                    
+                        } else {
                             item.Image = this.folder_image;
+                        }
 
                         item.Image.Size   = new SizeF (16, 16);
                         this.overflow_tasks [i] = OpenFolderDelegate (folder_name);
