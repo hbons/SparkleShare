@@ -96,19 +96,6 @@ namespace SparkleShare {
             }
         }
 
-        public List<string> UnsyncedFolders {
-            get {
-                List<string> unsynced_folders = new List<string> ();
-
-                foreach (SparkleRepoBase repo in Repositories) {
-                    if (repo.HasUnsyncedChanges)
-                        unsynced_folders.Add (repo.Name);
-                }
-
-                return unsynced_folders;
-            }
-        }
-
         public SparkleUser CurrentUser {
             get {
                 return this.config.User;
