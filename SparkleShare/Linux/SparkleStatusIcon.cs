@@ -182,7 +182,7 @@ namespace SparkleShare {
                                 Sensitive = false
                             };
                             
-                            item.Submenu.Add (error_item);
+                            (item.Submenu as Menu).Add (error_item);
 
                         } else {
                             folder_icon = IconTheme.Default.LoadIcon ("folder", 16,
@@ -214,7 +214,7 @@ namespace SparkleShare {
                                 Sensitive = false
                             };
                             
-                            item.Submenu.Add (error_item);
+                            (item.Submenu as Menu).Add (error_item);
 
                         } else {
                             folder_icon = IconTheme.Default.LoadIcon ("folder", 16,
