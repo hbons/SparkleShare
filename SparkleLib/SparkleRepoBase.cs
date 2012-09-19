@@ -278,6 +278,9 @@ namespace SparkleLib {
 
         protected void OnProgressChanged (double progress_percentage, string progress_speed)
         {
+            if (progress_percentage < 1)
+                return;
+
             // Only trigger the ProgressChanged event once per second
             if (DateTime.Compare (this.progress_last_change, DateTime.Now.Subtract (this.progress_change_interval)) >= 0)
                 return;
