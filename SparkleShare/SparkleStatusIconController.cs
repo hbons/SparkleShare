@@ -252,7 +252,7 @@ namespace SparkleShare {
                     error_message = "Authentication failed";
                     
                 } else if (repo.Error == ErrorStatus.DiskSpaceExcedeed) {
-                    error_message = "Host identity changed";
+                    error_message = "Out of disk space";
                     
                 } else {
                     error_message = "";
