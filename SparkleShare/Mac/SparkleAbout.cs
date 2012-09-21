@@ -39,6 +39,7 @@ namespace SparkleShare {
         private SparkleLink website_link;
         private SparkleLink credits_link;
         private SparkleLink report_problem_link;
+        private SparkleLink debug_log_link;
 
 
         public SparkleAbout (IntPtr handle) : base (handle) { }
@@ -71,6 +72,11 @@ namespace SparkleShare {
                     new PointF (this.credits_link.Frame.X + this.credits_link.Frame.Width + 10, 25),
                     this.report_problem_link.Frame.Size);
 
+                this.debug_log_link = new SparkleLink ("Debug log", Controller.DebugLogLinkAddress);
+                this.debug_log_link.Frame = new RectangleF (
+                    new PointF (this.report_problem_link.Frame.X + this.report_problem_link.Frame.Width + 10, 25),
+                    this.debug_log_link.Frame.Size);
+
                 this.hidden_close_button = new NSButton () {
                     Frame                     = new RectangleF (0, 0, 0, 0),
                     KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
@@ -89,6 +95,7 @@ namespace SparkleShare {
                 ContentView.AddSubview (this.website_link);
                 ContentView.AddSubview (this.credits_link);
                 ContentView.AddSubview (this.report_problem_link);
+                ContentView.AddSubview (this.debug_log_link);
             }
 
             Controller.HideWindowEvent += delegate {
@@ -183,10 +190,10 @@ namespace SparkleShare {
 
                 this.credits_text_field = new NSTextField () {
                     StringValue     = @"Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others." +
-                                       "\n" +
-                                       "\n" +
-                                       "SparkleShare is Open Source software. You are free to use, modify, and redistribute it " +
-                                       "under the GNU General Public License version 3 or later.",
+                    "\n" +
+                    "\n" +
+                    "SparkleShare is Open Source software. You are free to use, modify, and redistribute it " +
+                    "under the GNU General Public License version 3 or later.",
                     Frame           = new RectangleF (295, Frame.Height - 260, 318, 98),
                     TextColor       = NSColor.White,
                     DrawsBackground = false,
