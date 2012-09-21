@@ -90,8 +90,6 @@ namespace SparkleShare {
         public List<string> Folders {
             get {
                 List<string> folders = this.config.Folders;
-                folders.Sort ();
-
                 return folders;
             }
         }
@@ -313,6 +311,7 @@ namespace SparkleShare {
             lock (this.check_repos_lock) {
                 string path = this.config.FoldersPath;
 
+                // Detect any renames
                 foreach (string folder_path in Directory.GetDirectories (path)) {
                     string folder_name = Path.GetFileName (folder_path);
 
@@ -340,6 +339,7 @@ namespace SparkleShare {
                     }
                 }
 
+                // Remove any deleted folders
                 foreach (string folder_name in this.config.Folders) {
                     string folder_path = new SparkleFolder (folder_name).FullPath;
 
@@ -347,12 +347,20 @@ namespace SparkleShare {
                         this.config.RemoveFolder (folder_name);
                         RemoveRepository (folder_path);
 
-                        SparkleLogger.LogInfo ("Controller",
-                            "Removed folder '" + folder_name + "' from config");
+                        SparkleLogger.LogInfo ("Controller", "Removed folder '" + folder_name + "' from config");
 
                     } else {
                         AddRepository (folder_path);
                     }
+                }
+
+                // Remove any duplicate folders
+                string previous_name = "";
+                foreach (string folder_name in this.config.Folders) {
+                    if (!string.IsNullOrEmpty (previous_name) && folder_name.Equals (previous_name))
+                        this.config.RemoveFolder (folder_name);
+                    else
+                        previous_name = folder_name;
                 }
 
                 FolderListChanged ();
