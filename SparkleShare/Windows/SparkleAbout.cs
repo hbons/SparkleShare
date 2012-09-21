@@ -119,7 +119,8 @@ namespace SparkleShare {
             
 			SparkleLink website_link = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
 			SparkleLink credits_link = new SparkleLink ("Credits", Controller.CreditsLinkAddress);
-			SparkleLink report_problem_link = new SparkleLink ("Report a problem", Controller.ReportProblemLinkAddress);
+            SparkleLink report_problem_link = new SparkleLink ("Report a problem", Controller.ReportProblemLinkAddress);
+            SparkleLink debug_log_link = new SparkleLink ("Debig log", Controller.DebugLogLinkAddress);
 
             Canvas canvas = new Canvas ();
             
@@ -147,9 +148,14 @@ namespace SparkleShare {
             Canvas.SetLeft (credits_link, 289 + website_link.ActualWidth + 60);
             Canvas.SetTop (credits_link, 222);
 
-			canvas.Children.Add (report_problem_link);
+            canvas.Children.Add (report_problem_link);
             Canvas.SetLeft (report_problem_link, 289 + website_link.ActualWidth + credits_link.ActualWidth + 115);
-            Canvas.SetTop (report_problem_link, 222);   
+            Canvas.SetTop (report_problem_link, 222);  
+
+            canvas.Children.Add (debug_log_link);
+            Canvas.SetLeft (debug_log_link, 289 + website_link.ActualWidth + credits_link.ActualWidth +
+                report_problem_link.ActualWidth + 180);
+            Canvas.SetTop (debug_log_link, 222);  
             
             Content = canvas;
         }

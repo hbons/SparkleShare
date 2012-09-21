@@ -94,6 +94,12 @@ namespace SparkleShare {
             }
         }
 
+        public string ConfigPath {
+            get {
+                return this.config.LogFilePath;
+            }
+        }
+
         public SparkleUser CurrentUser {
             get {
                 return this.config.User;
