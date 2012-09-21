@@ -169,6 +169,8 @@ namespace SparkleLib {
                 foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder"))
                     folders.Add (node_folder ["name"].InnerText);
 
+                folders.Sort ();
+
                 return folders;
             }
         }
