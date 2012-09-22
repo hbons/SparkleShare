@@ -886,6 +886,7 @@ namespace SparkleLib.Git {
                 }
             }
 
+            git_status.StandardOutput.ReadToEnd();
             git_status.WaitForExit ();
             return message;
         }
