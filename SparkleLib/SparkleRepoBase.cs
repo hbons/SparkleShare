@@ -209,23 +209,26 @@ namespace SparkleLib {
         }
 
 
+        private Object buffer_lock = new Object ();
+
         public void OnFileActivity (FileSystemEventArgs args)
         {
             if (IsBuffering)
                 return;
 
-            ChangesDetected ();
-            string relative_path = args.FullPath.Replace (LocalPath, "");
-
             foreach (string exclude_path in ExcludePaths) {
-                if (relative_path.Contains (exclude_path))
+                if (args.FullPath.Contains (exclude_path))
                     return;
             }
 
-            if (IsBuffering || !HasLocalChanges)
-                return;
+            lock (this.buffer_lock) {
+                if (IsBuffering || !HasLocalChanges)
+                    return;
 
-            IsBuffering = true;
+                IsBuffering = true;
+            }
+
+            ChangesDetected ();
 
             if (!UseCustomWatcher)
                 this.watcher.Disable ();
