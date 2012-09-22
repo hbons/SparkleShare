@@ -193,10 +193,10 @@ namespace SparkleLib {
 
             // Sync up everything that changed
             // since we've been offline
-            if (HasLocalChanges) {
+            if (!this.is_syncing && (HasLocalChanges || HasUnsyncedChanges)) {
                 SyncUpBase ();
 
-                while (HasUnsyncedChanges)
+                while (HasLocalChanges)
                     SyncUpBase ();
             }
 
@@ -408,7 +408,7 @@ namespace SparkleLib {
                 this.poll_interval = PollInterval.Long;
 
                 new Thread (() => {
-                    if (!is_syncing && !HasLocalChanges && HasRemoteChanges)
+                    if (!this.is_syncing && !HasLocalChanges && HasRemoteChanges)
                         SyncDownBase ();
 
                 }).Start ();
@@ -430,7 +430,7 @@ namespace SparkleLib {
             this.poll_interval = PollInterval.Long;
             this.last_poll     = DateTime.Now;
 
-            if (!is_syncing) {
+            if (!this.is_syncing) {
                 // Check for changes manually one more time
                 if (HasRemoteChanges)
                     SyncDownBase ();
