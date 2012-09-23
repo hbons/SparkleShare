@@ -23,7 +23,7 @@ namespace SparkleLib {
     public static class SparkleLogger {
 
         private static Object debug_lock = new Object ();
-
+        private static int log_size = 0;
 
         public static void LogInfo (string type, string message)
         {
@@ -33,8 +33,17 @@ namespace SparkleLib {
             if (SparkleConfig.DebugMode)
                 Console.WriteLine (line);
 
-            lock (debug_lock)
-                File.AppendAllText (SparkleConfig.DefaultConfig.LogFilePath, line + Environment.NewLine);
+            lock (debug_lock) {
+                // Don't let the log get bigger than 1000 lines
+                if (log_size >= 1000) {
+                    File.WriteAllText (SparkleConfig.DefaultConfig.LogFilePath, line + Environment.NewLine);
+                    log_size = 0;
+
+                } else {
+                    File.AppendAllText (SparkleConfig.DefaultConfig.LogFilePath, line + Environment.NewLine);
+                    log_size++;
+                }
+            }
         }
 
 
