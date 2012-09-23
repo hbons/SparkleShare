@@ -880,7 +880,7 @@ namespace SparkleLib.Git {
                 string line = git_status.StandardOutput.ReadLine ();
 
                 if (line.EndsWith (".empty") || line.EndsWith (".empty\""))
-                    continue;
+                    line = line.Replace (".empty", "");
 
                 if (line.StartsWith ("R")) {
                     string path = line.Substring (3, line.IndexOf (" -> ") - 3).Trim ("\"".ToCharArray ());
