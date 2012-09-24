@@ -33,7 +33,7 @@ namespace SparkleShare {
             int frames_in_width        = spinner_gallery.Width / size;
             int frames_in_height       = spinner_gallery.Height / size;
             int frame_count            = (frames_in_width * frames_in_height) - 1;
-            Gdk.Pixbuf [] frames       = new Gdk.Pixbuf [frame_count - 1];
+            Gdk.Pixbuf [] frames       = new Gdk.Pixbuf [frame_count];
 
             int i = 0;
             for (int y = 0; y < frames_in_height; y++) {
