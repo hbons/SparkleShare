@@ -50,9 +50,8 @@ namespace SparkleShare {
         public SparkleStatusIcon ()
         {
             #if HAVE_APP_INDICATOR
-            this.indicator = new ApplicationIndicator ("sparkleshare",
-                "process-syncing-i", Category.ApplicationStatus);
-
+            this.indicator = new ApplicationIndicator ("sparkleshare", "sparkleshare", Category.ApplicationStatus);
+            this.indicator.IconName = "sparkleshare";
             this.indicator.Status = Status.Active;
             #else
 			this.status_icon        = new StatusIcon ();
