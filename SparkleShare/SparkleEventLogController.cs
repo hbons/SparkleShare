@@ -311,14 +311,14 @@ namespace SparkleShare {
                         timestamp = change_set.FirstTimestamp.ToString ("H:mm") + " – " + timestamp;
                     }
 
-                    if (this.selected_folder == null)
-                        event_entry_html = event_entry_html.Replace ("<!-- $event-folder -->", change_set.Folder.Name);
-
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.User.Name)
                         .Replace ("<!-- $event-avatar-url -->", change_set_avatar)
                         .Replace ("<!-- $event-url -->", change_set.RemoteUrl.ToString ())
                         .Replace ("<!-- $event-revision -->", change_set.Revision);
+
+                    if (this.selected_folder == null) 
+                        event_entries = event_entries.Replace ("<!-- $event-folder -->", " @ " + change_set.Folder.Name);
                 }
 
                 string day_entry   = "";
