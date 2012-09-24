@@ -145,12 +145,13 @@ namespace SparkleShare {
 			SparkleLink website_link        = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
 			SparkleLink credits_link        = new SparkleLink ("Credits", Controller.CreditsLinkAddress);
             SparkleLink report_problem_link = new SparkleLink ("Report a problem", Controller.ReportProblemLinkAddress);
-            SparkleLink report_problem_link = new SparkleLink ("Debug log", Controller.DebugLogLinkAddress);
+            SparkleLink debug_log_link = new SparkleLink ("Debug log", Controller.DebugLogLinkAddress);
 			
 			links_layout.PackStart (new Label (""), false, false, 143);
 			links_layout.PackStart (website_link, false, false, 9);
 			links_layout.PackStart (credits_link, false, false, 9);
-			links_layout.PackStart (report_problem_link, false, false, 9);
+            links_layout.PackStart (report_problem_link, false, false, 9);
+            links_layout.PackStart (debug_log_link, false, false, 9);
 			
             layout_vertical.PackStart (new Label (""), false, false, 42);
             layout_vertical.PackStart (version, false, false, 0);
