@@ -66,7 +66,7 @@ namespace SparkleShare {
 
                     // A short delay is less annoying than
                     // a flashing window
-					int delay = 500;
+					int delay = 1000;
 					
                     if (watch.ElapsedMilliseconds < delay)
                         Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
@@ -145,15 +145,27 @@ namespace SparkleShare {
         public SparkleEventLogController ()
         {
             Program.Controller.ShowEventLogWindowEvent += delegate {
-                if (!WindowIsOpen)
+                if (!WindowIsOpen) {
                     ContentLoadingEvent ();
 
-                if (this.selected_folder == null) {
-                    new Thread (() => {
-                        UpdateChooserEvent (Folders);
-                        UpdateContentEvent (HTML);
+                    if (this.selected_folder == null) {
+                        new Thread (() => {
+                            Stopwatch watch = new Stopwatch ();
 
-                    }).Start ();
+                            watch.Start ();
+                            string html = HTML;
+                            watch.Stop ();
+                                
+                            int delay = 1000;
+                                
+                            if (watch.ElapsedMilliseconds < delay)
+                                Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
+
+                            UpdateChooserEvent (Folders);
+                            UpdateContentEvent (html);
+
+                        }).Start ();
+                    }
                 }
 
                 WindowIsOpen = true;
