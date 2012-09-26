@@ -1,8 +1,23 @@
+0.9.3 for Linux, Mac and Windows (??? 2012)
+
+        Hylke:
+        - Fix endless loop when adding empty folders
+        - Fix freeze when adding lots of files
+        - Fix using hosts with a non-standard SSH port
+        - Fix receiving of notification service message after the first one
+        - Use port 443 on the notification service to work better in
+          restricted networks
+        - New non-animating status icons
+        - More descriptive error reporting in the status icon
+        - Add link to debug log in the about dialog
+
+
 0.9.2 for Linux, Mac and Windows (Wed Aug 29 2012)
 
         Hylke:
         - This release fixes a crash that can happen after adding a new
           project as well ssh-agent sometimes not starting on Windows
+
 
 0.9.1 for Linux, Mac and Windows (Mon Aug 27 2012)
 
