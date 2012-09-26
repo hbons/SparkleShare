@@ -4,11 +4,11 @@ SUBDIRS = $(basedirs) $(GUISUBDIRS)
 DIST_SUBDIRS = $(basedirs) SparkleShare
 
 EXTRA_DIST = \
-	NEWS \
+	News.txt \
         README.md \
-	legal/LICENSE.txt \
-	legal/TRADEMARK.txt \
-	legal/AUTHORS.txt
+	legal/License.txt \
+	legal/Trademark.txt \
+	legal/Authors.txt
 
 DISTCLEANFILES = \
 	intltool-extract        \
