@@ -9,14 +9,13 @@ SparkleShare is an Open Source collaboration and sharing tool that is designed t
 |-------------------:|:--------------------------------------------------|
 |       **Website**: | http://www.sparkleshare.org/                      |
 |       **Twitter**: | https://www.twitter.com/SparkleShare              |
-|     **Downloads**: | https://github.com/hbons/SparkleShare/downloads   |
 |   **Development**: | https://github.com/hbons/SparkleShare             |
 |   **IRC channel**: | #sparkleshare on irc.gnome.org                    |
 
 
 ### License
 
-SparkleShare is Open Source software and licensed under the `GNU General Public License version 3 or later`. You are welcome to change and redistribute it under certain conditions.For more information see the `legal/LICENSE` file.
+SparkleShare is Open Source software and licensed under the `GNU General Public License version 3 or later`. You are welcome to change and redistribute it under certain conditions.For more information see the `legal/License.txt` file.
 
 
 ### Setting up a host
