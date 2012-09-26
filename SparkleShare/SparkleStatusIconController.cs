@@ -166,7 +166,8 @@ namespace SparkleShare {
                     StateText    = "Receiving changes…";
 				}
 
-                StateText += " " + ProgressPercentage + "%  " + ProgressSpeed;
+                if (ProgressPercentage > 0)
+                    StateText += " " + ProgressPercentage + "%  " + ProgressSpeed;
 
                 UpdateIconEvent (CurrentState);
                 UpdateStatusItemEvent (StateText);

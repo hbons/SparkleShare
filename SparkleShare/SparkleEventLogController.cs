@@ -66,7 +66,7 @@ namespace SparkleShare {
 
                     // A short delay is less annoying than
                     // a flashing window
-					int delay = 1000;
+					int delay = 500;
 					
                     if (watch.ElapsedMilliseconds < delay)
                         Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
@@ -81,9 +81,7 @@ namespace SparkleShare {
         public string HTML {
             get {
                 List<SparkleChangeSet> change_sets = GetLog (this.selected_folder);
-
                 string html = GetHTMLLog (change_sets);
-                UpdateSizeInfoEvent (Size, HistorySize);
 
                 return html;
             }
@@ -147,6 +145,7 @@ namespace SparkleShare {
             Program.Controller.ShowEventLogWindowEvent += delegate {
                 if (!WindowIsOpen) {
                     ContentLoadingEvent ();
+                    UpdateSizeInfoEvent ("…", "…");
 
                     if (this.selected_folder == null) {
                         new Thread (() => {
@@ -156,13 +155,14 @@ namespace SparkleShare {
                             string html = HTML;
                             watch.Stop ();
                                 
-                            int delay = 1000;
+                            int delay = 500;
                                 
                             if (watch.ElapsedMilliseconds < delay)
                                 Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
 
                             UpdateChooserEvent (Folders);
                             UpdateContentEvent (html);
+                            UpdateSizeInfoEvent (Size, HistorySize);
 
                         }).Start ();
                     }
@@ -173,7 +173,21 @@ namespace SparkleShare {
             };
 			
             Program.Controller.OnIdle += delegate {
-                UpdateContentEvent (HTML);
+                ContentLoadingEvent ();
+                UpdateSizeInfoEvent ("…", "…");
+
+                Stopwatch watch = new Stopwatch ();
+                
+                watch.Start ();
+                string html = HTML;
+                watch.Stop ();
+                
+                int delay = 500;
+                
+                if (watch.ElapsedMilliseconds < delay)
+                    Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
+
+                UpdateContentEvent (html);
                 UpdateSizeInfoEvent (Size, HistorySize);
             };
 			
