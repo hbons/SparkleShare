@@ -201,7 +201,7 @@ namespace SparkleShare {
 
         public void AddHostedProjectClicked ()
         {
-            Program.Controller.ShowSetupWindow (PageType.Add);
+            new Thread (() => Program.Controller.ShowSetupWindow (PageType.Add)).Start ();
         }
 
 
