@@ -66,10 +66,8 @@ namespace SparkleShare {
                         new SizeF (min_width, (int) (NSScreen.MainScreen.Frame.Height * 0.85))),
                     true);
 
-                StyleMask = (NSWindowStyle.Closable |
-                             NSWindowStyle.Miniaturizable |
-                             NSWindowStyle.Titled |
-                             NSWindowStyle.Resizable);
+                StyleMask = (NSWindowStyle.Closable | NSWindowStyle.Miniaturizable |
+                             NSWindowStyle.Titled | NSWindowStyle.Resizable);
 
                 MinSize        = new SizeF (min_width, min_height);
                 HasShadow      = true;
@@ -185,7 +183,6 @@ namespace SparkleShare {
                 using (var a = new NSAutoreleasePool ())
                 {
                     InvokeOnMainThread (delegate {
-                        this.web_view.Hidden = true;
                         this.progress_indicator.Hidden = true;
                         PerformClose (this);
                     });
@@ -214,6 +211,7 @@ namespace SparkleShare {
                 using (var a = new NSAutoreleasePool ())
                 {
                     InvokeOnMainThread (delegate {
+                        this.progress_indicator.Hidden = true;
                         UpdateContent (html);
                     });
                 }
@@ -223,7 +221,7 @@ namespace SparkleShare {
                 using (var a = new NSAutoreleasePool ())
                 {
                     InvokeOnMainThread (delegate {
-                        this.web_view.Hidden = true;
+                        this.web_view.RemoveFromSuperview ();
                         this.progress_indicator.Hidden = false;
 
                         this.progress_indicator.StartAnimation (this);
@@ -341,8 +339,7 @@ namespace SparkleShare {
                         if (html == null)
                             html = Controller.HTML;
         
-    					string pixmaps_path = "file://" + Path.Combine (
-    						NSBundle.MainBundle.ResourcePath, "Pixmaps");
+    					string pixmaps_path = "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps");
     					
                         html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
                         html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
@@ -376,7 +373,7 @@ namespace SparkleShare {
                             this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
 
                             web_view.PolicyDelegate = new SparkleWebPolicyDelegate ();
-                                ContentView.AddSubview (this.web_view);
+                            ContentView.AddSubview (this.web_view);
 
                             (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate).LinkClicked +=
                                 delegate (string href) {
@@ -387,7 +384,6 @@ namespace SparkleShare {
                                 };
 
                             this.progress_indicator.Hidden = true;
-                            this.web_view.Hidden = false;
                         });
                     }
                 }
