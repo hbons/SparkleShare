@@ -28,10 +28,11 @@ namespace SparkleShare {
         {
             IconTheme icon_theme = new IconTheme ();
 			
-//			foreach (string search_path in IconTheme.Default.SearchPath)
-//				icon_theme.AppendSearchPath (search_path);	
+//          foreach (string search_path in IconTheme.Default.SearchPath)
+//              icon_theme.AppendSearchPath (search_path);	
 
-            // FIXME: Temporary hack to work around a bug in IconTheme.SearchPath in Gtk# on 64-bit systems
+            // FIXME: Temporary workaround for a bug in IconTheme.SearchPath in Gtk# on 64-bit systems
+            // https://github.com/mono/gtk-sharp/commit/9c54fd5ae77f63d11fdc6873a3cb90691990e37f
             icon_theme.AppendSearchPath ("/usr/share/icons");
             icon_theme.AppendSearchPath ("/usr/local/share/icons");
             icon_theme.AppendSearchPath ("/opt/local/share/icons");
