@@ -541,7 +541,189 @@ namespace SparkleShare {
                         
                         break;
                     }    
+
+                    case PageType.CryptoSetup: {
                         
+                        Header      = "Set up file encryption!";
+                        Description = "This project is supposed to be encrypted, but it doesn't yet have a password set. Please provide one below.";
+                        
+                        TextBlock password_label = new TextBlock () {
+                            Text       = "Password:",
+                            FontWeight = FontWeights.Bold
+                        };
+                        
+                        PasswordBox password_box = new PasswordBox () {
+                            Width = 200
+                        };
+                        
+                        TextBox visible_password_box = new TextBox () {
+                            Width = 200,
+                            Visibility = Visibility.Hidden
+                        };
+                        
+                        CheckBox show_password_checkbox = new CheckBox () {
+                            Content = "Show password",
+                            IsChecked = false
+                        };
+                        
+                        show_password_checkbox.Checked += delegate {
+                            visible_password_box.Text = password_box.Password;
+                            visible_password_box.Visibility = Visibility.Visible;
+                            password_box.Visibility = Visibility.Hidden;
+                        };
+                        
+                        show_password_checkbox.Unchecked += delegate {
+                            password_box.Password = visible_password_box.Text;
+                            password_box.Visibility = Visibility.Visible;
+                            visible_password_box.Visibility = Visibility.Hidden;
+                        };
+                        
+                        password_box.PasswordChanged += delegate {
+                            Controller.CheckCryptoSetupPage (password_box.Password);
+                        };
+                        
+                        visible_password_box.TextChanged += delegate {
+                            Controller.CheckCryptoSetupPage (visible_password_box.Text);
+                        };
+                        
+                        Button continue_button = new Button () {
+                            Content = "Continue"
+                        };
+                        
+                        continue_button.Click += delegate {
+                            if (show_password_checkbox.IsChecked == true)
+                                Controller.CryptoSetupPageCompleted (visible_password_box.Text);
+                            else
+                                Controller.CryptoSetupPageCompleted (password_box.Password);
+                        };
+                        
+                        Button cancel_button = new Button () {
+                            Content = "Cancel"
+                        };
+                        
+                        cancel_button.Click += delegate {
+                            Controller.CryptoPageCancelled ();
+                        };
+                        
+                        Controller.UpdateCryptoSetupContinueButtonEvent += delegate (bool button_enabled) {
+                            Dispatcher.BeginInvoke ((Action) delegate {
+                                continue_button.IsEnabled = button_enabled;
+                            });
+                        };
+                        
+                        ContentCanvas.Children.Add (password_label);
+                        Canvas.SetLeft (password_label, 180);
+                        Canvas.SetTop (password_label, 200);
+                        
+                        ContentCanvas.Children.Add (password_box);
+                        Canvas.SetLeft (password_box, 340);
+                        Canvas.SetTop (password_box, 200);
+                        
+                        ContentCanvas.Children.Add (visible_password_box);
+                        Canvas.SetLeft (visible_password_box, 340);
+                        Canvas.SetTop (visible_password_box, 200);
+                        
+                        ContentCanvas.Children.Add (show_password_checkbox);
+                        Canvas.SetLeft (show_password_checkbox, 340);
+                        Canvas.SetTop (show_password_checkbox, 225);
+                        
+                        Buttons.Add (continue_button);
+                        Buttons.Add (cancel_button);
+                        
+                        break;
+                    }
+                        
+                    case PageType.CryptoPassword: {
+                        
+                        Header      = "This project contains encrypted files";
+                        Description = "Please enter the password to see their contents.";
+                        
+                        TextBlock password_label = new TextBlock () {
+                            Text       = "Password:",
+                            FontWeight = FontWeights.Bold
+                        };
+                        
+                        PasswordBox password_box = new PasswordBox () {
+                            Width = 200
+                        };
+                        
+                        TextBox visible_password_box = new TextBox () {
+                            Width = 200,
+                            Visibility = Visibility.Hidden
+                        };
+                        
+                        CheckBox show_password_checkbox = new CheckBox () {
+                            Content = "Show password",
+                            IsChecked = false
+                        };
+                        
+                        show_password_checkbox.Checked += delegate {
+                            visible_password_box.Text = password_box.Password;
+                            visible_password_box.Visibility = Visibility.Visible;
+                            password_box.Visibility = Visibility.Hidden;
+                        };
+                        
+                        show_password_checkbox.Unchecked += delegate {
+                            password_box.Password = visible_password_box.Text;
+                            password_box.Visibility = Visibility.Visible;
+                            visible_password_box.Visibility = Visibility.Hidden;
+                        };
+                        
+                        password_box.PasswordChanged += delegate {
+                            Controller.CheckCryptoPasswordPage (password_box.Password);
+                        };
+                        
+                        visible_password_box.TextChanged += delegate {
+                            Controller.CheckCryptoPasswordPage (visible_password_box.Text);
+                        };
+                        
+                        Button continue_button = new Button () {
+                            Content = "Continue"
+                        };
+                        
+                        continue_button.Click += delegate {
+                            if (show_password_checkbox.IsChecked == true)
+                                Controller.CryptoPasswordPageCompleted (visible_password_box.Text);
+                            else
+                                Controller.CryptoPasswordPageCompleted (password_box.Password);
+                        };
+                        
+                        Button cancel_button = new Button () {
+                            Content = "Cancel"
+                        };
+                        
+                        cancel_button.Click += delegate {
+                            Controller.CryptoPageCancelled ();
+                        };
+                        
+                        Controller.UpdateCryptoPasswordContinueButtonEvent += delegate (bool button_enabled) {
+                            Dispatcher.BeginInvoke ((Action) delegate {
+                                continue_button.IsEnabled = button_enabled;
+                            });
+                        };
+                        
+                        ContentCanvas.Children.Add (password_label);
+                        Canvas.SetLeft (password_label, 180);
+                        Canvas.SetTop (password_label, 200);
+                        
+                        ContentCanvas.Children.Add (password_box);
+                        Canvas.SetLeft (password_box, 340);
+                        Canvas.SetTop (password_box, 200);
+                        
+                        ContentCanvas.Children.Add (visible_password_box);
+                        Canvas.SetLeft (visible_password_box, 340);
+                        Canvas.SetTop (visible_password_box, 200);
+                        
+                        ContentCanvas.Children.Add (show_password_checkbox);
+                        Canvas.SetLeft (show_password_checkbox, 340);
+                        Canvas.SetTop (show_password_checkbox, 225);
+                        
+                        Buttons.Add (continue_button);
+                        Buttons.Add (cancel_button);
+                        
+                        break;
+                    }
+
                     case PageType.Finished: {
                         Header      = "Your shared project is ready!";
                         Description = "You can find the files in your SparkleShare folder.";
