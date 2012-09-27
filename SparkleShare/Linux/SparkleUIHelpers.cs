@@ -28,9 +28,14 @@ namespace SparkleShare {
         {
             IconTheme icon_theme = new IconTheme ();
 			
-			foreach (string search_path in IconTheme.Default.SearchPath)
-				icon_theme.AppendSearchPath (search_path);	
-			
+//			foreach (string search_path in IconTheme.Default.SearchPath)
+//				icon_theme.AppendSearchPath (search_path);	
+
+            // FIXME: Temporary hack to work around a bug in IconTheme.SearchPath in Gtk# on 64-bit systems
+            icon_theme.AppendSearchPath ("/usr/share/icons");
+            icon_theme.AppendSearchPath ("/usr/local/share/icons");
+            icon_theme.AppendSearchPath ("/opt/local/share/icons");
+
             icon_theme.AppendSearchPath (Path.Combine (SparkleUI.AssetsPath, "icons"));
 
             try {
