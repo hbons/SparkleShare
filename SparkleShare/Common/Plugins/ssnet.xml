@@ -14,17 +14,7 @@
     <path>
       <value/>
       <example>/username/project</example>
-      <example xml:lang="de">/username/project</example>
-      <example xml:lang="el">/username/project</example>
-      <example xml:lang="es">/usuario/proyecto</example>
-      <example xml:lang="fr">/nom-d-utilisateur/projet</example>
-      <example xml:lang="it">/nome-utente/progetto</example>
-      <example xml:lang="nl">/gebruikersnaam/project</example>
-      <example xml:lang="pl">/nazwa uzytkownika/projekt</example>
-      <example xml:lang="pt_BR">/usuário/projeto</example>
-      <example xml:lang="ru">/username/project</example>
-      <example xml:lang="sv">/användare/projekt</example>
-      <example xml:lang="zh_CN">/username/project</example>
     </path>
   </plugin>
 </sparkleshare>
+
