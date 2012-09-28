@@ -65,7 +65,7 @@ namespace SparkleShare {
                                 Xalign    = 1
                             };
 
-                            Entry name_entry = new Entry (username) {
+                            Entry name_entry = new Entry () {
                                 Xalign = 0,
                                 ActivatesDefault = true
                             };
