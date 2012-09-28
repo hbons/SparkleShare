@@ -761,7 +761,7 @@ namespace SparkleShare {
 						TaskbarItemInfo.ProgressValue = 0.0;
 						TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
 
-                        Buttons.Add(open_folder_button);
+                        Buttons.Add (open_folder_button);
                         Buttons.Add (finish_button);
                         
 
