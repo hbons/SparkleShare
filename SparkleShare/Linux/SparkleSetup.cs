@@ -65,13 +65,15 @@ namespace SparkleShare {
                                 Xalign    = 1
                             };
 
-                            string username = UnixUserInfo.GetRealUser ().RealName;
-                            username        = username.TrimEnd (",".ToCharArray ());
-
                             Entry name_entry = new Entry (username) {
                                 Xalign = 0,
                                 ActivatesDefault = true
                             };
+
+                            string username = UnixUserInfo.GetRealUser ().RealName;
+                            
+                            if (!string.IsNullOrEmpty (username))
+                                name_entry.Text = username.TrimEnd (",".ToCharArray ());
 
                             Entry email_entry = new Entry () {
                                 Xalign = 0,
