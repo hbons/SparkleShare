@@ -174,8 +174,10 @@ namespace SparkleLib {
                 if (time_to_poll && !is_syncing) {
                     this.last_poll = DateTime.Now;
 
-                    if (HasRemoteChanges)
+                    if (HasRemoteChanges) {
+                        this.poll_interval = PollInterval.Long
                         SyncDownBase ();
+                    }
                 }
 
                 // In the unlikely case that we haven't synced up our
@@ -314,6 +316,7 @@ namespace SparkleLib {
                 ChangeSets = GetChangeSets ();
 
                 HasUnsyncedChanges = false;
+                PollInterval = PollInterval.Long;
 
                 SyncStatusChanged (SyncStatus.Idle);
                 this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
@@ -332,6 +335,7 @@ namespace SparkleLib {
                     this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
 
                 } else {
+                    PollInterval = PollInterval.Short;
                     SyncStatusChanged (SyncStatus.Error);
                 }
             }
