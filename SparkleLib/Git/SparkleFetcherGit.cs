@@ -30,7 +30,39 @@ namespace SparkleLib.Git {
 
         private SparkleGit git;
         private bool use_git_bin;
-        private string crypto_salt = "e0d592768d7cf99a"; // TODO: Make unique per repo
+
+        private string cached_salt;
+
+        private string crypto_salt {
+            get {
+                if (!string.IsNullOrEmpty (this.cached_salt))
+                    return this.cached_salt;
+
+                // Check if the repo's salt is stored in a branch...
+                SparkleGit git = new SparkleGit (TargetFolder, "branch -a");
+                string [] branches = git.StartAndReadStandardOutput ().Split (Environment.NewLine.ToCharArray ());
+                // TODO double check env.newline ^
+					
+                foreach (string branch in branches) {
+					if (branch.StartsWith ("  remotes/origin/salt-")) {
+                        this.cached_salt = branch.Substring (22);
+                        break;
+                    }
+                }
+
+                // ...if not, create a new salt for the repo
+                if (string.IsNullOrEmpty (this.cached_salt)) {
+                    this.cached_salt      = GenerateCryptoSalt ();
+                    string salt_file_path = new string [] { TargetFolder, ".git", "salt" }.Combine ();
+
+                    // Temporarily store the salt in a file, so the Repo can
+                    // push it to a branch on the host later
+                    File.WriteAllText (salt_file_path, this.cached_salt);
+                }
+
+                return this.cached_salt;
+            }
+        }
 
 
         public SparkleFetcher (string server, string required_fingerprint, string remote_path,

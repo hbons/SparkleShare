@@ -341,6 +341,7 @@ namespace SparkleShare {
         public void AddPageCompleted (string address, string remote_path)
         {
             SyncingFolder         = Path.GetFileNameWithoutExtension (remote_path);
+			SyncingFolder         = SyncingFolder.Replace ("-crypto", "");
             ProgressBarPercentage = 1.0;
 
             ChangePageEvent (PageType.Syncing, null);
