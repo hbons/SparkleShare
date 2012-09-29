@@ -734,7 +734,7 @@ namespace SparkleShare {
                         };
     
                         Button open_folder_button = new Button () {
-                            Content = string.Format ("Open {0}", Path.GetFileName (Controller.PreviousPath))
+                            Content = "Show folder"
                         };
 
                         if (warnings.Length > 0) {
