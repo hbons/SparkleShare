@@ -805,7 +805,7 @@ namespace SparkleShare {
 
 
                 OpenFolderButton = new NSButton () {
-                    Title = string.Format ("Open {0}", Path.GetFileName (Controller.PreviousPath))
+                    Title = "Show folder"
                 };
 
                 FinishButton = new NSButton () {

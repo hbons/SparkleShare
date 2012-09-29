@@ -563,6 +563,7 @@ namespace SparkleShare {
 
             this.fetcher.Complete ();
             string canonical_name = Path.GetFileNameWithoutExtension (this.fetcher.RemoteUrl.AbsolutePath);
+			canonical_name = canonical_name.Replace ("-crypto", "");
 
             bool target_folder_exists = Directory.Exists (
                 Path.Combine (this.config.FoldersPath, canonical_name));

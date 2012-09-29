@@ -160,7 +160,7 @@ namespace SparkleLib {
                     IsActive = false;
 
                     // TODO: Find better way to determine if folder should have crypto setup
-                    bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("crypto");
+                    bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("-crypto");
                     Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);
 
                 } else {
@@ -207,18 +207,23 @@ namespace SparkleLib {
                 uri_builder.Password = "";
             }
 
-            string text = "Congratulations, you've successfully created a SparkleShare repository!" + n +
-                n +
-                "Any files you add or change in this folder will be automatically synced to " + n +
-                uri_builder.ToString () + " and everyone connected to it." + n +
-                n +
-                "SparkleShare is an Open Source software program that helps people " + n +
-                "collaborate and share files. If you like what we do, please consider a small " + n +
-                "donation to support the project: http://sparkleshare.org/support-us/" + n +
-                n +
-                "Have fun! :)" + n;
+            // TODO: Find better way to determine if folder should have crypto setup
+            bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("crypto");
 
-            File.WriteAllText (file_path, text);
+            if (!repo_is_encrypted) {
+                string text = "Congratulations, you've successfully created a SparkleShare repository!" + n +
+                    n +
+                    "Any files you add or change in this folder will be automatically synced to " + n +
+                    uri_builder.ToString () + " and everyone connected to it." + n +
+                    n +
+                    "SparkleShare is an Open Source software program that helps people " + n +
+                    "collaborate and share files. If you like what we do, please consider a small " + n +
+                    "donation to support the project: http://www.sparkleshare.org/" + n +
+                    n +
+                    "Have fun! :)" + n;
+
+                File.WriteAllText (file_path, text);
+            }
         }
 
 
@@ -255,6 +260,23 @@ namespace SparkleLib {
 
         protected void OnProgressChanged (double percentage) {
             ProgressChanged (percentage);
+        }
+
+
+        protected string GenerateCryptoSalt ()
+        {
+            int seed             = new Random ().Next (1, int.MaxValue);
+            string allowed_chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
+            char [] chars        = new char [256];
+            Random random        = new Random (seed);
+                
+            for (var i = 0; i < 256; i++)
+                chars [i] = allowed_chars [random.Next (0, allowed_chars.Length)];
+                
+			string salt = new string (chars);
+			salt        = salt.SHA1 ();
+
+            return salt.Substring (0, 16);
         }
 
 

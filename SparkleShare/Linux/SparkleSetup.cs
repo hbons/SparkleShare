@@ -691,8 +691,7 @@ namespace SparkleShare {
                         Description = "You can find it in your SparkleShare folder";
 
                         // A button that opens the synced folder
-                        Button open_folder_button = new Button (string.Format ("Open {0}",
-                            System.IO.Path.GetFileName (Controller.PreviousPath)));
+                        Button open_folder_button = new Button ("Show Folder");
 
                         open_folder_button.Clicked += delegate {
                             Controller.OpenFolderClicked ();
