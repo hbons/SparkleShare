@@ -260,16 +260,17 @@ namespace SparkleShare {
 
         public string GetHTMLLog (List<SparkleChangeSet> change_sets)
         {
+            if (change_sets.Count == 0)
+                return "";
+			
             List <ActivityDay> activity_days = new List <ActivityDay> ();
 
             change_sets.Sort ((x, y) => (x.Timestamp.CompareTo (y.Timestamp)));
             change_sets.Reverse ();
 
-            if (change_sets.Count == 0)
-                return "";
-
             foreach (SparkleChangeSet change_set in change_sets) {
                 bool change_set_inserted = false;
+            
                 foreach (ActivityDay stored_activity_day in activity_days) {
                     if (stored_activity_day.Date.Year  == change_set.Timestamp.Year &&
                         stored_activity_day.Date.Month == change_set.Timestamp.Month &&
