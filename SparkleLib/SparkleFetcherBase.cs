@@ -208,10 +208,14 @@ namespace SparkleLib {
             }
 
             // TODO: Find better way to determine if folder should have crypto setup
-            bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("crypto");
+            bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("-crypto");
+            string text;
 
-            if (!repo_is_encrypted) {
-                string text = "Congratulations, you've successfully created a SparkleShare repository!" + n +
+            if (repo_is_encrypted) {
+                text = GenerateCryptoSalt () + " Secret project! " + GenerateCryptoSalt ();
+
+            } else {
+                text = "Congratulations, you've successfully created a SparkleShare repository!" + n +
                     n +
                     "Any files you add or change in this folder will be automatically synced to " + n +
                     uri_builder.ToString () + " and everyone connected to it." + n +
@@ -221,9 +225,9 @@ namespace SparkleLib {
                     "donation to support the project: http://www.sparkleshare.org/" + n +
                     n +
                     "Have fun! :)" + n;
-
-                File.WriteAllText (file_path, text);
             }
+
+            File.WriteAllText (file_path, text);
         }
 
 
