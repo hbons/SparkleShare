@@ -28,21 +28,15 @@
                 }
               }, 60 * 1000);
 
-              $('.buddy-icon').each (function () {
-                if ($(this).css('backgroundImage').indexOf ('@') != -1) {
-                  $(this).css ('backgroundColor', '#fff');
-                }
-              });
-
               // Hide the 'Show all' link when there are less than 10 events
               $('.show').each (function () {
-                var entries = $(this).parent ().find ('dl').children ().length;
+                var entry_count = $(this).parent ().find ('dl').children ().length;
 
-                if (entries <= 10) {
+                if (entry_count <= 10) {
                   $(this).hide ();
                 } else {
                   // Append the number of entries
-                  $(this).html ('Show all ' + entries + '…');
+                  $(this).html ('Show all ' + entry_count + '…');
                 }
               });
 
@@ -74,14 +68,9 @@
                 color: <!-- $secondary-font-color -->;
             }
 
-            .moved-arrow {
-                color: <!-- $secondary-font-color -->;
-            }
-
             .day-entry-header {
                 color: #aaa;
                 margin-left: 32px;
-                display: block;
                 padding-top: 22px;
                 font-weight: bold;
             }
@@ -95,16 +84,15 @@
             a:hover {
                 color: <!-- $a-hover-color -->;
                 text-decoration: underline;
+                cursor: pointer;
             }
 
             .event-timestamp {
-                float: left;
                 font-size: 80%;
                 color: <!-- $secondary-font-color -->;
             }
 
             .event-user-name {
-                float: left;
                 font-weight: bold;
             }
 
@@ -114,50 +102,27 @@
             }
 
             .event-entry {
-                padding-top: 24px;
-                padding-bottom: 14px;
+                padding: 24px 14px 14px 64px;
+                margin: 0 32px 0 32px;
                 border-bottom: 1px #ddd solid;
-                padding-left: 64px;
-                margin-left: 32px;
-                margin-right: 32px;
                 background-repeat: no-repeat;
                 background-position: 36px 24px;
-                display: block;
-                min-height: 64px;
+                min-height: 100px;
             }
 
-            .action {
+            a.show {
                 font-size: 80%;
                 margin-bottom: 9px;
-                color: <!-- $a-color -->;
-            }
-
-            .action:hover {
-                color: <!-- $a-hover-color -->;
-                cursor: pointer;
-            }
-
-            .clearer {
-                clear: both;
-                backround-color: blue;
-                margin: 0;
-                padding: 0;
-                height: 0;
             }
 
             .separator {
-                clear: both;
                 border-bottom: 1px #ccc solid;
-                margin-top: 24px;
-                margin-bottom: 24px;
+                margin: 24px 0 24px 0;
             }
 
             dl {
-                padding : 0;
-                margin:  0;
-                margin-bottom: 12px;
-                padding-top: 6px;
-                clear: both;
+                padding : 6px 0 0 0;
+                margin:  0 0 12px 0;
                 table-layout: fixed;
             }
             
@@ -166,18 +131,11 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 width: 90%;
-                padding: 0;
-                padding-bottom: 1px;
-                padding-left: 20px;
-                margin: 0;
-                margin-bottom: 4px;
+                padding: 0 0 1px 20px;
+                margin: 0 0 4px 0;
                 background-repeat: no-repeat;
                 background-position: center left;
-            }
-
-            .document {
                 text-overflow: ellipsis;
-                width: 100%;
                 white-space: nowrap;
             }
 
