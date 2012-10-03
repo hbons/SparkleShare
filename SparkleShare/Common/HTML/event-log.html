@@ -3,10 +3,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>SparkleShare Event Log</title>
-        <script type="text/javascript">
-          <!-- $jquery -->
-        </script>
-
+        
+        <script type="text/javascript"><!-- $jquery --></script>
         <script type="text/javascript">
           $(document).ready(function () {
               $('dl dd:nth-child(-n+10)').css('display', 'block');
@@ -63,22 +61,15 @@
                 -webkit-user-select: none;
             }
 
-            small {
-                font-size: <!-- $small-font-size -->;
-                color: <!-- $secondary-font-color -->;
-            }
-
-            .day-entry-header {
-                color: #aaa;
-                margin-left: 32px;
-                padding-top: 22px;
-                font-weight: bold;
-            }
-                        
             a {
                 color: <!-- $a-color -->;
                 text-decoration: none;
                 outline: 0;
+            }
+            
+            a.show {
+                font-size: 80%;
+                margin-bottom: 9px;
             }
 
             a:hover {
@@ -86,40 +77,12 @@
                 text-decoration: underline;
                 cursor: pointer;
             }
-
-            .event-timestamp {
-                font-size: 80%;
+            
+            small {
+                font-size: <!-- $small-font-size -->;
                 color: <!-- $secondary-font-color -->;
             }
-
-            .event-user-name {
-                font-weight: bold;
-            }
-
-            .event-folder {
-                color: <!-- $secondary-font-color -->;
-                font-size: 80%;
-            }
-
-            .event-entry {
-                padding: 24px 14px 14px 64px;
-                margin: 0 32px 0 32px;
-                border-bottom: 1px #ddd solid;
-                background-repeat: no-repeat;
-                background-position: 36px 24px;
-                min-height: 100px;
-            }
-
-            a.show {
-                font-size: 80%;
-                margin-bottom: 9px;
-            }
-
-            .separator {
-                border-bottom: 1px #ccc solid;
-                margin: 24px 0 24px 0;
-            }
-
+            
             dl {
                 padding : 6px 0 0 0;
                 margin:  0 0 12px 0;
@@ -139,6 +102,51 @@
                 white-space: nowrap;
             }
 
+            .day-entry-header {
+                color: #aaa;
+                margin-left: 32px;
+                padding-top: 22px;
+                font-weight: bold;
+            }
+            
+            .event-entry {
+                padding: 24px 14px 14px 64px;
+                margin: 0 32px 0 32px;
+                border-bottom: 1px #ddd solid;
+                background-repeat: no-repeat;
+                background-position: 36px 24px;
+                min-height: 100px;
+            }
+            
+            .no-buddy-icon {
+                width: 48px;
+                background-image: url('<!-- $no-buddy-icon-background-image -->');
+                background-repeat: no-repeat;
+                background-position: top center; 
+            }
+            
+            .event-user-name {
+                font-weight: bold;
+            }
+            
+            .event-avatar {
+                width: 48px;
+                height: 48px;
+                border-radius: 4px;
+                position: absolute;
+                left: 32px;
+            }
+
+            .event-folder {
+                color: <!-- $secondary-font-color -->;
+                font-size: 80%;
+            }
+
+            .separator {
+                border-bottom: 1px #ccc solid;
+                margin: 24px 0 24px 0;
+            }
+
             .added {
                 background-image: url('<!-- $document-added-background-image -->');
             }
@@ -153,27 +161,7 @@
 
             .moved {
                 background-image: url('<!-- $document-moved-background-image -->');
-            }
-
-            .no-buddy-icon {
-                position: relative;
-                top: 0;
-                left: 0;
-                float: left;
-                margin-right: 12px;
-                width: 48px;
-                background-image: url('<!-- $no-buddy-icon-background-image -->');
-                background-repeat: no-repeat;
-                background-position: top center; 
-            }
-
-            .event-avatar {
-                width: 48px;
-                height: 48px;
-                border-radius: 4px;
-                position: absolute;
-                left: 32px;
-            }
+            }            
         </style>
     </head>
     <body oncontextmenu="return false;">
