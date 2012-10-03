@@ -372,7 +372,17 @@ namespace SparkleShare {
     
     
     public class SparkleStatusIconMenuDelegate : NSMenuDelegate {
-        
+
+        public SparkleStatusIconMenuDelegate ()
+        {
+        }
+
+
+        public SparkleStatusIconMenuDelegate (IntPtr handle) : base (handle)
+        {
+        }
+
+
         public override void MenuWillHighlightItem (NSMenu menu, NSMenuItem item)
         {
         }
