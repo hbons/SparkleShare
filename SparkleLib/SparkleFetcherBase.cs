@@ -186,16 +186,15 @@ namespace SparkleLib {
             } else {
                 Identifier = CreateIdentifier ();
                 File.WriteAllText (identifier_path, Identifier);
-            }
 
-            if (IsFetchedRepoEmpty)
                 CreateInitialChangeSet ();
+            }
         }
 
 
         // Create an initial change set when the
         // user has fetched an empty remote folder
-        public void CreateInitialChangeSet ()
+        private void CreateInitialChangeSet ()
         {
             string file_path = Path.Combine (TargetFolder, "SparkleShare.txt");
             string n = Environment.NewLine;
@@ -207,7 +206,6 @@ namespace SparkleLib {
                 uri_builder.Password = "";
             }
 
-            // TODO: Find better way to determine if folder should have crypto setup
             bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("-crypto");
             string text;
 
@@ -237,24 +235,6 @@ namespace SparkleLib {
             return random.SHA1 ();
         }
 
-
-        public static string GetBackend (string path)
-        {
-            string extension = Path.GetExtension (path);
-
-            if (!string.IsNullOrEmpty (extension)) {
-                extension       = extension.Substring (1);
-                char [] letters = extension.ToCharArray ();
-                letters [0]     = char.ToUpper (letters [0]);
-
-                return new string (letters);
-
-            } else {
-                return "Git";
-            }
-        }
-
-
         public void Dispose ()
         {
             if (this.thread != null)
@@ -269,17 +249,7 @@ namespace SparkleLib {
 
         protected string GenerateCryptoSalt ()
         {
-            int seed             = new Random ().Next (1, int.MaxValue);
-            string allowed_chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
-            char [] chars        = new char [256];
-            Random random        = new Random (seed);
-                
-            for (var i = 0; i < 256; i++)
-                chars [i] = allowed_chars [random.Next (0, allowed_chars.Length)];
-                
-			string salt = new string (chars);
-			salt        = salt.SHA1 ();
-
+            string salt = Path.GetRandomFileName ().SHA1 ();
             return salt.Substring (0, 16);
         }
 
@@ -367,6 +337,23 @@ namespace SparkleLib {
 
             if (warn)
                 this.warnings.Add ("The following host key has been accepted:\n" + GetFingerprint (host_key));
+        }
+
+
+        public static string GetBackend (string path)
+        {
+            string extension = Path.GetExtension (path);
+            
+            if (!string.IsNullOrEmpty (extension)) {
+                extension       = extension.Substring (1);
+                char [] letters = extension.ToCharArray ();
+                letters [0]     = char.ToUpper (letters [0]);
+                
+                return new string (letters);
+                
+            } else {
+                return "Git";
+            }
         }
     }
 }
