@@ -30,12 +30,10 @@
               $('.show').each (function () {
                 var entry_count = $(this).parent ().find ('dl').children ().length;
 
-                if (entry_count <= 10) {
-                  $(this).hide ();
-                } else {
-                  // Append the number of entries
+                if (entry_count > 10)
                   $(this).html ('Show all ' + entry_count + '…');
-                }
+                else
+                  $(this).hide ();
               });
 
               // When 'Show all' is clicked, show all collapsed events
