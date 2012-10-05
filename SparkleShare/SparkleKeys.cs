@@ -52,9 +52,9 @@ namespace SparkleShare {
                 computer_name = computer_name.Substring (0, computer_name.Length - 6);
 
             process.StartInfo.Arguments = "-t rsa " + // crypto type
-                "-P \"\"" /* password (none) */ + " " +
-                "-C \"" + computer_name + "\"" /* key comment */ + " " +
-                "-f \"" + key_name + "\"" /* file name */;
+                "-P \"\" " + // empty password
+                "-C \"" + computer_name + "\" " + // key comment
+                "-f \"" + key_name + "\""; // file name
 
             process.Start ();
             process.WaitForExit ();

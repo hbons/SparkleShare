@@ -122,35 +122,38 @@ namespace SparkleLib {
             if (Directory.Exists (TargetFolder))
                 Directory.Delete (TargetFolder, true);
 
-            string host     = RemoteUrl.Host;
-            string host_key = GetHostKey ();
+            string host_key = "";
 
-            if (string.IsNullOrEmpty (host) || host_key == null) {
-                Failed ();
-                return;
-            }
-
-            bool warn = true;
-            if (RequiredFingerprint != null) {
-                string host_fingerprint = GetFingerprint (host_key);
-
-                if (host_fingerprint == null || !RequiredFingerprint.Equals (host_fingerprint)) {
-                    SparkleLogger.LogInfo ("Auth", "Fingerprint doesn't match");
-
-                    this.errors.Add ("error: Host fingerprint doesn't match");
+            if (!RemoteUrl.Scheme.StartsWith ("http")) {
+                host_key = FetchHostKey ();
+                
+                if (string.IsNullOrEmpty (RemoteUrl.Host) || host_key == null) {
                     Failed ();
-
                     return;
                 }
+            
+                bool warn = true;
+                if (RequiredFingerprint != null) {
+                    string host_fingerprint = GetFingerprint (host_key);
 
-                warn = false;
-                SparkleLogger.LogInfo ("Auth", "Fingerprint matches");
+                    if (host_fingerprint == null || !RequiredFingerprint.Equals (host_fingerprint)) {
+                        SparkleLogger.LogInfo ("Auth", "Fingerprint doesn't match");
 
-            } else {
-               SparkleLogger.LogInfo ("Auth", "Skipping fingerprint check");
+                        this.errors.Add ("error: Host fingerprint doesn't match");
+                        Failed ();
+
+                        return;
+                    }
+
+                    warn = false;
+                    SparkleLogger.LogInfo ("Auth", "Fingerprint matches");
+
+                } else {
+                   SparkleLogger.LogInfo ("Auth", "Skipping fingerprint check");
+                }
+
+                AcceptHostKey (host_key, warn);
             }
-
-            AcceptHostKey (host_key, warn);
 
             this.thread = new Thread (() => {
                 if (Fetch ()) {
@@ -159,8 +162,7 @@ namespace SparkleLib {
 
                     IsActive = false;
 
-                    // TODO: Find better way to determine if folder should have crypto setup
-                    bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("-crypto");
+                    bool repo_is_encrypted = RemoteUrl.AbsolutePath.Contains ("-crypto");
                     Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);
 
                 } else {
@@ -206,7 +208,7 @@ namespace SparkleLib {
                 uri_builder.Password = "";
             }
 
-            bool repo_is_encrypted = RemoteUrl.ToString ().Contains ("-crypto");
+            bool repo_is_encrypted = RemoteUrl.AbsolutePath.Contains ("-crypto");
             string text;
 
             if (repo_is_encrypted) {
@@ -235,6 +237,7 @@ namespace SparkleLib {
             return random.SHA1 ();
         }
 
+
         public void Dispose ()
         {
             if (this.thread != null)
@@ -254,7 +257,7 @@ namespace SparkleLib {
         }
 
 
-        private string GetHostKey ()
+        private string FetchHostKey ()
         {
             string host = RemoteUrl.Host;
             int port    = RemoteUrl.Port;
