@@ -77,7 +77,7 @@ namespace SparkleLib.Git {
                 uri = new Uri ("ssh://" + uri);
             }
 
-            if (uri.Host.Equals ("gitorious.org")) {
+            if (uri.Host.Equals ("gitorious.org") && !uri.Scheme.StartsWith ("http")) {
                 if (!uri.AbsolutePath.Equals ("/") &&
                     !uri.AbsolutePath.EndsWith (".git")) {
 
@@ -87,20 +87,17 @@ namespace SparkleLib.Git {
                     uri = new Uri ("ssh://git@gitorious.org" + uri.AbsolutePath);
                 }
 
-            } else if (uri.Host.Equals ("github.com")) {
+            } else if (uri.Host.Equals ("github.com") && !uri.Scheme.StartsWith ("http")) {
                 uri = new Uri ("ssh://git@github.com" + uri.AbsolutePath);
 
-            } else if (uri.Host.Equals ("bitbucket.org")) {
+            } else if (uri.Host.Equals ("bitbucket.org") && !uri.Scheme.StartsWith ("http")) {
                 // Nothing really
 
             } else if (uri.Host.Equals ("gnome.org")) {
                 uri = new Uri ("ssh://git@gnome.org/git" + uri.AbsolutePath);
 
             } else {
-                if (string.IsNullOrEmpty (uri.UserInfo) &&
-                    !uri.Scheme.Equals ("https") &&
-                    !uri.Scheme.Equals ("http")) {
-
+                if (string.IsNullOrEmpty (uri.UserInfo) && !uri.Scheme.StartsWith ("http")) {
                     if (uri.Port == -1)
                         uri = new Uri (uri.Scheme + "://storage@" + uri.Host + uri.AbsolutePath);
                     else
@@ -296,9 +293,11 @@ namespace SparkleLib.Git {
         public override void Stop ()
         {
             try {
-                this.git.Close ();
-                this.git.Kill ();
-                this.git.Dispose ();
+                if (this.git != null) {
+                    this.git.Close ();
+                    this.git.Kill ();
+                    this.git.Dispose ();
+                }
 
             } catch (Exception e) {
                 SparkleLogger.LogInfo ("Fetcher", "Failed to dispose properly: " + e.Message);

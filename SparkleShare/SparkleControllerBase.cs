@@ -432,7 +432,7 @@ namespace SparkleShare {
             } else {
                 if (Directory.Exists (args.FullPath) && args.ChangeType == WatcherChangeTypes.Created)
                     return;
-
+                
                 CheckRepositories ();
             }
         }
@@ -540,19 +540,20 @@ namespace SparkleShare {
 
                 } catch (Exception e) {
                     SparkleLogger.LogInfo ("Controller",
-                        "Failed to delete " + this.fetcher.TargetFolder + ": " + e.Message);
+                        "Failed to delete '" + this.fetcher.TargetFolder + "': " + e.Message);
                 }
             }
 
             this.fetcher.Dispose ();
             this.fetcher = null;
+
+            this.watcher.EnableRaisingEvents = true;
         }
 
 
         public void FinishFetcher (string password)
         {
             this.fetcher.EnableFetchedRepoCrypto (password);
-
             FinishFetcher ();
         }
 
@@ -590,6 +591,7 @@ namespace SparkleShare {
 
             } catch (Exception e) {
                 SparkleLogger.LogInfo ("Controller", "Error moving directory: " + e.Message);
+                this.watcher.EnableRaisingEvents = true;
                 return;
             }
 
@@ -599,12 +601,6 @@ namespace SparkleShare {
                 this.fetcher.RemoteUrl.ToString (), backend);
 
             FolderFetched (this.fetcher.RemoteUrl.ToString (), this.fetcher.Warnings.ToArray ());
-
-            /* TODO
-            if (!string.IsNullOrEmpty (announcements_url)) {
-                this.config.SetFolderOptionalAttribute (
-                    target_folder_name, "announcements_url", announcements_url);
-            */
 
             AddRepository (target_folder_path);
             FolderListChanged ();
