@@ -171,7 +171,7 @@ namespace SparkleShare {
 
 	public class SparkleLink : Label {
 
-		public SparkleLink (string title, string address)
+		public SparkleLink (string title, string url)
 		{
 			FontSize   = 11;
 			Cursor     = Cursors.Hand;
@@ -193,7 +193,7 @@ namespace SparkleShare {
 			Content = text_block;
 
 			MouseUp += delegate {
-				Process.Start (new ProcessStartInfo (address));
+				Program.Controller.OpenWebsite (url);
 			};            
 		}
 	}
