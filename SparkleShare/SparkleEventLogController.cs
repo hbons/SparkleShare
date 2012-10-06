@@ -217,6 +217,9 @@ namespace SparkleShare {
 			    url.Substring (1, 1).Equals (":")) {
 
                 Program.Controller.OpenFile (url);
+            
+            } else if (url.StartsWith ("http")) {
+                Program.Controller.OpenWebsite (url);
             }
         }
 

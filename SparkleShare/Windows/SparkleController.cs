@@ -172,14 +172,20 @@ namespace SparkleShare {
         }
 
 
-        public override void OpenFolder (string path)
-        {
-            Process process             = new Process ();
-            process.StartInfo.FileName  = "explorer";
-            process.StartInfo.Arguments = path;
-            
-            process.Start ();
-        }
+		public override void OpenFolder (string path)
+		{
+			Process process             = new Process ();
+			process.StartInfo.FileName  = "explorer";
+			process.StartInfo.Arguments = path;
+			
+			process.Start ();
+		}
+
+
+		public override void OpenWebsite (string url)
+		{
+			Process.Start (new ProcessStartInfo (url));
+		}
 
 
         public override void Quit ()

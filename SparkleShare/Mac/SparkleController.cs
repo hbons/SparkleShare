@@ -194,11 +194,17 @@ namespace SparkleShare {
 			NSWorkspace.SharedWorkspace.OpenFile (path);
 		}
 		
-
+        
         public override void OpenFile (string path)
         {
             path = Uri.UnescapeDataString (path);
             NSWorkspace.SharedWorkspace.OpenFile (path);
+        }
+
+        
+        public override void OpenWebsite (string url)
+        {
+            NSWorkspace.SharedWorkspace.OpenUrl (new NSUrl (url));
         }
 
 

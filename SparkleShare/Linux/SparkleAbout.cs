@@ -167,7 +167,7 @@ namespace SparkleShare {
 	
 	public class SparkleLink : EventBox {
 		
-		public SparkleLink (string text, string address)
+		public SparkleLink (string text, string url)
 		{
 			VisibleWindow = false;
 			
@@ -184,10 +184,7 @@ namespace SparkleShare {
 			};
 			
 			ButtonPressEvent += delegate {
-				Process process = new Process ();
-				process.StartInfo.FileName  = "xdg-open";
-				process.StartInfo.Arguments = address;
-				process.Start ();
+				Program.Controller.OpenWebsite (url);
 			};
 			
 			Add (label);

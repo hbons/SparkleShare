@@ -147,9 +147,12 @@ namespace SparkleShare {
 
         // Opens the SparkleShare folder or an (optional) subfolder
         public abstract void OpenFolder (string path);
-
+        
         // Opens a file with the appropriate application
         public abstract void OpenFile (string path);
+        
+        // Opens a file with the appropriate application
+        public abstract void OpenWebsite (string url);
 
 
         private SparkleConfig config;

@@ -194,5 +194,11 @@ namespace SparkleShare {
             process.StartInfo.Arguments = "\"" + path + "\"";
             process.Start ();
         }
+
+
+		public override void OpenWebsite (string url)
+		{
+			OpenFile (url);
+		}
     }
 }
