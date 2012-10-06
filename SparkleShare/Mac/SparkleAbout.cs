@@ -261,7 +261,7 @@ namespace SparkleShare {
             Editable        = false;
             Selectable      = false;
 
-            NSData name_data = NSData.FromString ("<a href='" + url +
+            NSData name_data = NSData.FromString ("<a href='" + this.url +
                 "' style='font-size: 8pt; font-family: \"Lucida Grande\"; color: #739ECF'>" + text + "</a></font>");
 
             NSDictionary name_dictionary       = new NSDictionary();
@@ -278,7 +278,7 @@ namespace SparkleShare {
 
         public override void MouseUp (NSEvent e)
         {
-            NSWorkspace.SharedWorkspace.OpenUrl (url);
+            Program.Controller.OpenWebsite (this.url.ToString ());
         }
 
 

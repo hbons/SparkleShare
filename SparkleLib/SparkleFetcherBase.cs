@@ -134,7 +134,7 @@ namespace SparkleLib {
             
                 bool warn = true;
                 if (RequiredFingerprint != null) {
-                    string host_fingerprint = GetFingerprint (host_key);
+                    string host_fingerprint = DeriveFingerprint (host_key);
 
                     if (host_fingerprint == null || !RequiredFingerprint.Equals (host_fingerprint)) {
                         SparkleLogger.LogInfo ("Auth", "Fingerprint doesn't match");
@@ -292,7 +292,7 @@ namespace SparkleLib {
         }
 
 
-        private string GetFingerprint (string public_key)
+        private string DeriveFingerprint (string public_key)
         {
             try {
                 MD5 md5            = new MD5CryptoServiceProvider ();
@@ -339,7 +339,7 @@ namespace SparkleLib {
             SparkleLogger.LogInfo ("Auth", "Accepted host key for " + host);
 
             if (warn)
-                this.warnings.Add ("The following host key has been accepted:\n" + GetFingerprint (host_key));
+                this.warnings.Add ("The following host key has been accepted:\n" + DeriveFingerprint (host_key));
         }
 
 
