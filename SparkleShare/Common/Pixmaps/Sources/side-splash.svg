@@ -32,24 +32,13 @@
      inkscape:document-units="px"
      inkscape:current-layer="g8506"
      showgrid="false"
-     inkscape:window-width="1440"
-     inkscape:window-height="842"
-     inkscape:window-x="-1"
-     inkscape:window-y="26"
+     inkscape:window-width="1362"
+     inkscape:window-height="724"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <defs
      id="defs8765">
-    <radialGradient
-       r="73.079796"
-       fy="423.06143"
-       fx="138.22266"
-       cy="423.06143"
-       cx="138.22266"
-       gradientTransform="matrix(2.7535912,-5.2275014e-7,4.9956873e-7,2.9977309,-440.46603,-789.77953)"
-       gradientUnits="userSpaceOnUse"
-       id="radialGradient8554"
-       xlink:href="#linearGradient7605"
-       inkscape:collect="always" />
     <linearGradient
        id="linearGradient7605"
        inkscape:collect="always">
@@ -608,16 +597,6 @@
        y2="385.79074" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient97855"
-       id="linearGradient75956"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.6031387,0,0,1.320142,-335.96248,-128.42873)"
-       x1="437.71024"
-       y1="431.8201"
-       x2="437.71024"
-       y2="776.56293" />
-    <linearGradient
-       inkscape:collect="always"
        id="linearGradient97855">
       <stop
          style="stop-color:#72cfcf;stop-opacity:1"
@@ -644,27 +623,6 @@
          transform="matrix(0.6027834,0.79790486,0.79790486,-0.6027834,0,0)" />
     </clipPath>
     <linearGradient
-       y2="776.56293"
-       x2="437.71024"
-       y1="431.8201"
-       x1="437.71024"
-       gradientTransform="matrix(1.4148952,0,0,1.1651284,-617.69281,-374.63045)"
-       gradientUnits="userSpaceOnUse"
-       id="linearGradient100921"
-       xlink:href="#linearGradient97855"
-       inkscape:collect="always" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient7605"
-       id="radialGradient100996"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2.7535912,-5.2275014e-7,4.9956873e-7,2.9977309,-440.46603,-789.77953)"
-       cx="138.22266"
-       cy="423.06143"
-       fx="138.22266"
-       fy="423.06143"
-       r="73.079796" />
-    <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient97855"
        id="linearGradient100998"
@@ -674,17 +632,6 @@
        y1="431.8201"
        x2="437.71024"
        y2="776.56293" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient7605"
-       id="radialGradient101001"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2.7535912,-5.2275014e-7,4.9956873e-7,2.9977309,-440.46603,-789.77953)"
-       cx="138.22266"
-       cy="423.06143"
-       fx="138.22266"
-       fy="423.06143"
-       r="73.079796" />
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath101003">
@@ -717,7 +664,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>

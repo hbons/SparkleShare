@@ -12,10 +12,10 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg3039"
    version="1.1"
-   inkscape:version="0.48.0 r9654"
+   inkscape:version="0.48.2 r9819"
    width="128"
    height="128"
-   sodipodi:docname="sparkleshare-osx.svg"
+   sodipodi:docname="folder-icons-mac.svg"
    inkscape:export-filename="/Users/hbons/Desktop/256.png"
    inkscape:export-xdpi="180"
    inkscape:export-ydpi="180">
@@ -27,7 +27,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -354,26 +354,6 @@
        y1="197.87167"
        x2="-853.72583"
        y2="107.44276" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient9390"
-       id="linearGradient3113"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.25,0,0,0.21526493,117.54625,2.5378311)"
-       x1="-853.72583"
-       y1="197.87167"
-       x2="-853.72583"
-       y2="95.43541" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient9390"
-       id="linearGradient3145"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.25,0,0,0.21526493,127.54625,2.5378311)"
-       x1="-853.72583"
-       y1="197.87167"
-       x2="-853.72583"
-       y2="95.43541" />
   </defs>
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -385,7 +365,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1273"
-     inkscape:window-height="749"
+     inkscape:window-height="724"
      id="namedview3041"
      showgrid="false"
      inkscape:zoom="1"
