@@ -190,39 +190,6 @@
     <Content Include="..\Common\Plugins\own-server.png">
       <Link>Plugins\own-server.png</Link>
     </Content>
-    <Content Include="..\Common\Pixmaps\avatar-a.png">
-      <Link>Pixmaps\avatar-a.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\avatar-b.png">
-      <Link>Pixmaps\avatar-b.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\avatar-c.png">
-      <Link>Pixmaps\avatar-c.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\avatar-d.png">
-      <Link>Pixmaps\avatar-d.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\avatar-e.png">
-      <Link>Pixmaps\avatar-e.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\avatar-f.png">
-      <Link>Pixmaps\avatar-f.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\avatar-g.png">
-      <Link>Pixmaps\avatar-g.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\avatar-h.png">
-      <Link>Pixmaps\avatar-h.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\avatar-i.png">
-      <Link>Pixmaps\avatar-i.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\avatar-j.png">
-      <Link>Pixmaps\avatar-j.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\avatar-k.png">
-      <Link>Pixmaps\avatar-k.png</Link>
-    </Content>
     <Content Include="..\Common\Plugins\ssnet.png">
       <Link>Plugins\ssnet.png</Link>
     </Content>
@@ -240,6 +207,9 @@
     <Content Include="Pixmaps\process-syncing-up-active.png" />
     <Content Include="Pixmaps\process-syncing-up.png" />
     <Content Include="Pixmaps\process-syncing.png" />
+    <Content Include="..\Common\Pixmaps\user-icon-default.png">
+      <Link>Pixmaps\user-icon-default.png</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pixmaps\" />

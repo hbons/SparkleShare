@@ -158,38 +158,8 @@
     <EmbeddedResource Include="..\Common\HTML\jquery.js">
       <Link>HTML\jquery.js</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\avatar-a.png">
-      <Link>Pixmaps\avatar-a.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\avatar-b.png">
-      <Link>Pixmaps\avatar-b.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\avatar-c.png">
-      <Link>Pixmaps\avatar-c.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\avatar-d.png">
-      <Link>Pixmaps\avatar-d.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\avatar-e.png">
-      <Link>Pixmaps\avatar-e.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\avatar-f.png">
-      <Link>Pixmaps\avatar-f.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\avatar-g.png">
-      <Link>Pixmaps\avatar-g.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\avatar-h.png">
-      <Link>Pixmaps\avatar-h.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\avatar-i.png">
-      <Link>Pixmaps\avatar-i.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\avatar-j.png">
-      <Link>Pixmaps\avatar-j.png</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\avatar-k.png">
-      <Link>Pixmaps\avatar-k.png</Link>
+    <EmbeddedResource Include="..\Common\Pixmaps\user-icon-default.png">
+      <Link>Pixmaps\user-icon-default.png</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Linux\Pixmaps\icons\document-added-12.png">
       <Link>Pixmaps\document-added-12.png</Link>

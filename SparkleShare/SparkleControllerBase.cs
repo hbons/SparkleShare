@@ -742,17 +742,6 @@ namespace SparkleShare {
         }
 
 
-        public string AssignAvatar (string s)
-        {
-            string hash    = "0" + s.MD5 ().Substring (0, 8);
-            string numbers = Regex.Replace (hash, "[a-z]", "");
-            int number     = int.Parse (numbers);
-            string letters = "abcdefghijklmnopqrstuvwxyz";
-
-            return "avatar-" + letters [(number % 11)] + ".png";
-        }
-
-
         // Format a file size nicely with small caps.
         // Example: 1048576 becomes "1 ᴍʙ"
         public string FormatSize (double byte_count)

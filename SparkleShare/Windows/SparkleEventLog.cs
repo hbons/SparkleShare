@@ -308,28 +308,22 @@ namespace SparkleShare {
                 File.SetAttributes (tmp_path,
                     File.GetAttributes (tmp_path) | FileAttributes.Hidden);
             }
-            
-            char [] letters = new char [] {'a', 'b', 'c',
-                'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'};
-            
-            foreach (char letter in letters) {    
-                BitmapSource image = SparkleUIHelpers.GetImageSource ("avatar-" + letter);
-                string file_path = Path.Combine (pixmaps_path, "avatar-" + letter + ".png");
-                    
-                using (FileStream stream = new FileStream (file_path, FileMode.Create))
-                {
-                    BitmapEncoder encoder = new PngBitmapEncoder ();
-                    encoder.Frames.Add (BitmapFrame.Create (image));
-                    encoder.Save (stream);
-                }
+              
+            BitmapSource image = SparkleUIHelpers.GetImageSource ("user-icon-default");
+            string file_path   = Path.Combine (pixmaps_path, "user-icon-default.png");
+                
+            using (FileStream stream = new FileStream (file_path, FileMode.Create))
+            {
+                BitmapEncoder encoder = new PngBitmapEncoder ();
+                encoder.Frames.Add (BitmapFrame.Create (image));
+                encoder.Save (stream);
             }
-            
-            string [] actions = new string [] {"added",
-                "deleted", "edited", "moved"};
+              
+            string [] actions = new string [] {"added", "deleted", "edited", "moved"};
             
             foreach (string action in actions) {    
                 BitmapSource image = SparkleUIHelpers.GetImageSource ("document-" + action + "-12");
-                string file_path = Path.Combine (pixmaps_path, "document-" + action + "-12.png");
+                string file_path   = Path.Combine (pixmaps_path, "document-" + action + "-12.png");
                     
                 using (FileStream stream = new FileStream (file_path, FileMode.Create))
                 {
