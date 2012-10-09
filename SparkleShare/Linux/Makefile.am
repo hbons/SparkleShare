@@ -1,5 +1,4 @@
-SUBDIRS = Nautilus \
-	Pixmaps
+SUBDIRS = Pixmaps
 
 ASSEMBLY = SparkleShare
 TARGET = exe

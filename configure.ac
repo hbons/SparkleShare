@@ -118,9 +118,6 @@ AC_SUBST([GUISUBDIRS])
 
 SHAMROCK_CHECK_NUNIT
 
-dnl Get nautilus extensions directory
-SPARKLESHARE_NAUTILUS_PYTHON
-
 SHAVE_INIT([build/m4/shave], [enable])
 
 AC_OUTPUT([
@@ -141,9 +138,6 @@ SparkleShare/Linux/Pixmaps/icons/Makefile
 SparkleShare/Linux/Pixmaps/icons/ubuntu-mono-dark/Makefile
 SparkleShare/Linux/Pixmaps/icons/ubuntu-mono-light/Makefile
 SparkleShare/Linux/sparkleshare
-SparkleShare/Linux/Nautilus/Makefile
-SparkleShare/Linux/Nautilus/sparkleshare-nautilus-extension.py
-SparkleShare/Linux/Nautilus/sparkleshare-nautilus3-extension.py
 SparkleShare/Makefile
 Makefile
 ])
@@ -154,8 +148,6 @@ SparkleShare ${VERSION}
 Configuration:
        Prefix              : ${prefix}
        Build Gtk+ UI       : ${enable_gtkui}
-       Nautilus 2.x plugin : ${have_nautilus2_python}
-       Nautilus 3.x plugin : ${have_nautilus3_python}
 
 "
 
