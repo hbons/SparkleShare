@@ -237,18 +237,19 @@ namespace SparkleShare {
             Program.Controller.CurrentUser = new SparkleUser (full_name, email);
 
             new Thread (() => {
-                string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
-                string key_file_name = DateTime.Now.ToString ("yyyy-MM-dd HH\\hmm");
+                string link_code_file_path = Path.Combine (Program.Controller.FoldersPath, "Your link code.txt");
 
-                string [] key_pair = SparkleKeys.GenerateKeyPair (keys_path, key_file_name);
-                SparkleKeys.ImportPrivateKey (key_pair [0]);
+                if (File.Exists (link_code_file_path)) {
+                    string name = Program.Controller.CurrentUser.Name.Split (" ".ToCharArray ()) [0];
 
-                string link_code_file_path = Path.Combine (Program.Controller.FoldersPath,
-                    Program.Controller.CurrentUser.Name + "'s link code.txt");
+                    if (name.EndsWith ("s"))
+                        name += "'";
+                    else
+                        name += "'s";
 
-                // Create an easily accessible copy of the public
-                // key in the user's SparkleShare folder
-                File.Copy (key_pair [1], link_code_file_path, true);
+                    string new_file_path = Path.Combine (Program.Controller.FoldersPath, name + " link code.txt");
+                    File.Move (link_code_file_path, new_file_path);
+                }
 
             }).Start ();
 

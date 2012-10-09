@@ -200,7 +200,14 @@ namespace SparkleShare {
 
                 if (!string.IsNullOrEmpty (key_file_path)) {
                     string public_key_file_path = key_file_path + ".pub";
-                    string link_code_file_path  = Path.Combine (FoldersPath, CurrentUser.Name + "'s link code.txt");
+                    string name                 = Program.Controller.CurrentUser.Name.Split (" ".ToCharArray ()) [0];
+                    
+                    if (name.EndsWith ("s"))
+                        name += "'";
+                    else
+                        name += "'s";
+
+                    string link_code_file_path  = Path.Combine (FoldersPath, name + " link code.txt");
 
                     // Create an easily accessible copy of the public
                     // key in the user's SparkleShare folder
@@ -232,6 +239,21 @@ namespace SparkleShare {
         {
             if (FirstRun) {
                 ShowSetupWindow (PageType.Setup);
+
+                new Thread (() => {
+                    string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
+                    string key_file_name = DateTime.Now.ToString ("yyyy-MM-dd HH\\hmm");
+                    
+                    string [] key_pair = SparkleKeys.GenerateKeyPair (keys_path, key_file_name);
+                    SparkleKeys.ImportPrivateKey (key_pair [0]);
+                    
+                    string link_code_file_path = Path.Combine (Program.Controller.FoldersPath, "Your link code.txt");
+                    
+                    // Create an easily accessible copy of the public
+                    // key in the user's SparkleShare folder
+                    File.Copy (key_pair [1], link_code_file_path, true);
+                    
+                }).Start ();
 
             } else {
                 new Thread (() => {
