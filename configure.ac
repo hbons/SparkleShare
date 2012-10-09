@@ -146,8 +146,7 @@ echo "
 SparkleShare ${VERSION}
 
 Configuration:
-       Prefix              : ${prefix}
-       Build Gtk+ UI       : ${enable_gtkui}
+       Prefix : ${prefix}
 
 "
 
