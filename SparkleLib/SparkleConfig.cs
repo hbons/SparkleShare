@@ -25,7 +25,7 @@ namespace SparkleLib {
     public class SparkleConfig : XmlDocument {
 
         public static SparkleConfig DefaultConfig;
-        public static bool DebugMode = true;
+        public static bool DebugMode = false;
 
         public string FullPath;
         public string TmpPath;
