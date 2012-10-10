@@ -137,9 +137,6 @@ namespace SparkleShare {
                 Process process = new Process ();
                 process.StartInfo.FileName = "gvfs-set-attribute";
 
-                process.Start ();
-                process.WaitForExit ();
-
                 // Give the SparkleShare folder an icon name, so that it scales
                 process.StartInfo.Arguments = SparkleConfig.DefaultConfig.FoldersPath +
                     " metadata::custom-icon-name 'sparkleshare'";
