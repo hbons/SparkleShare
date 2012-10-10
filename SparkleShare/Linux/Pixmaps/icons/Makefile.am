@@ -1,5 +1,6 @@
 SUBDIRS = ubuntu-mono-dark \
-	ubuntu-mono-light
+	ubuntu-mono-light\
+	gnome
 
 theme = hicolor
 system_themedir = $(datadir)/icons/$(theme)
