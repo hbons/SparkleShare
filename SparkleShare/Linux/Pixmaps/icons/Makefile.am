@@ -11,7 +11,8 @@ system_theme_icons = \
 	apps,sparkleshare-24.png \
 	apps,sparkleshare-256.png \
 	apps,sparkleshare-32.png \
-	apps,sparkleshare-48.png
+	apps,sparkleshare-48.png \
+	apps,sparkleshare-symbolic.svg
 
 app_theme_icons = \
 	animations,process-working-22.png \
