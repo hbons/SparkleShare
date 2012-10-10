@@ -135,6 +135,7 @@ SparkleShare/Common/Pixmaps/Makefile
 SparkleShare/Linux/Makefile
 SparkleShare/Linux/Pixmaps/Makefile
 SparkleShare/Linux/Pixmaps/icons/Makefile
+SparkleShare/Linux/Pixmaps/icons/gnome/Makefile
 SparkleShare/Linux/Pixmaps/icons/ubuntu-mono-dark/Makefile
 SparkleShare/Linux/Pixmaps/icons/ubuntu-mono-light/Makefile
 SparkleShare/Linux/sparkleshare
