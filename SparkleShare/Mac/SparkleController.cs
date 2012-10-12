@@ -72,26 +72,15 @@ namespace SparkleShare {
             SparkleRepoBase.UseCustomWatcher = true;
 
             this.watcher.Changed += delegate (string path) {
-                if (path.Contains (".git"))
-                    return;
-
-                string repo_name;
-
-                if (path.Contains ("/"))
-                    repo_name = path.Substring (0, path.IndexOf ("/"));
-                else
-                    repo_name = path;
-
-                repo_name = repo_name.Trim ("/".ToCharArray ());
                 FileSystemEventArgs fse_args = new FileSystemEventArgs (WatcherChangeTypes.Changed,
                     Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, path), Path.GetFileName (path));
 
+                // FIXME: There are cases where the wrong repo is triggered, so
+                // we trigger all of them for now. Causes only slightly more overhead
                 foreach (SparkleRepoBase repo in Repositories) {
-                    if (repo.Name.Equals (repo_name)) {
-                        new Thread (() => {
-                            repo.OnFileActivity (fse_args);
-                        }).Start ();
-                    }
+                    new Thread (() => {
+                        repo.OnFileActivity (fse_args);
+                    }).Start ();
                 }
             };
         }
