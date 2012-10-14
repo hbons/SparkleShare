@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 using SparkleLib;
@@ -36,12 +37,16 @@ namespace SparkleShare {
 
         public event UpdateChooserEventHandler UpdateChooserEvent = delegate { };
         public delegate void UpdateChooserEventHandler (string [] folders);
-
+        
         public event UpdateSizeInfoEventHandler UpdateSizeInfoEvent = delegate { };
         public delegate void UpdateSizeInfoEventHandler (string size, string history_size);
+        
+        public event ShowSaveDialogEventHandler ShowSaveDialogEvent = delegate { };
+        public delegate void ShowSaveDialogEventHandler (string file_name, string target_folder_path);
 
 
         private string selected_folder;
+        private RevisionInfo restore_revision_info;
 
 
         public bool WindowIsOpen { get; private set; }
@@ -220,7 +225,110 @@ namespace SparkleShare {
             
             } else if (url.StartsWith ("http")) {
                 Program.Controller.OpenWebsite (url);
+            
+            
+            } else if (url.StartsWith ("restore://") && this.restore_revision_info == null) {
+                Regex regex = new Regex ("restore://(.+)/([a-f0-9]+)/(.+)", RegexOptions.Compiled);
+                Match match = regex.Match (url);
+                
+                if (match.Success) {
+                    this.restore_revision_info = new RevisionInfo () {
+                        Folder   = new SparkleFolder (match.Groups [1].Value),
+                        Revision = match.Groups [2].Value,
+                        FilePath = match.Groups [3].Value
+                    };
+
+                    string file_name = Path.GetFileNameWithoutExtension (this.restore_revision_info.FilePath) +
+                        " (restored)" + Path.GetExtension (this.restore_revision_info.FilePath);
+
+                    string target_folder_path = Path.Combine (this.restore_revision_info.Folder.FullPath,
+                        Path.GetDirectoryName (this.restore_revision_info.FilePath));
+
+                    ShowSaveDialogEvent (file_name, target_folder_path);
+
+                } else {
+                    // TODO: remove
+                    Program.UI.Bubbles.Controller.ShowBubble ("no match", url, "");
+                }
+
+
+            } else if (url.StartsWith ("history://")) {
+                string html = "";
+                string folder = url.Replace ("history://", "").Split ("/".ToCharArray ()) [0];
+                string path = url.Replace ("history://" + folder + "/", "");
+
+                // TODO: put html into page
+
+                foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
+                    if (repo.Name.Equals (folder)) {
+                        List<SparkleChangeSet>  change_sets = repo.GetChangeSets (path, 30);
+                    
+                        html += "<div class='day-entry-header'>Revisions for &ldquo;"
+                            + Path.GetFileName (path) + "&rdquo;</div>";
+                       
+                        
+                        html += "<table>";
+
+                        int count = 0;
+                        foreach (SparkleChangeSet change_set in change_sets) {
+                            count++;
+                            if (count == 1)
+                                continue;
+                        
+                            foreach (SparkleChange change in change_set.Changes) {
+                                if (change.Type == SparkleChangeType.Deleted && change.Path.Equals (path))
+                                    continue; // TODO: in repo?
+                            }
+
+                            string change_set_avatar = Program.Controller.GetAvatar (change_set.User.Email, 24);
+                            
+                            if (change_set_avatar != null)
+                                change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
+                            else
+                                change_set_avatar = "file://<!-- $pixmaps-path -->/user-icon-default.png";
+
+                            html += "<tr>" +
+                                "<td class='avatar'><img src='" + change_set_avatar + "'></td>" +
+                                "<td class='name'><b>" + change_set.User.Name + "</b></td>" +
+                                "<td class='date'>" + change_set.Timestamp.ToString ("d MMM yyyy") + "</td>" +
+                                "<td class='time'>" + change_set.Timestamp.ToString ("HH:mm") + "</td>" +
+                                    "<td class='restore'><a href='restore://" + change_set.Folder.Name + "/" + change_set.Revision + "/" + path + "' title='restore://" + change_set.Folder.Name + "/" + change_set.Revision + "/" + path + "'>Restore...</a></td>" +
+                                "</tr>";
+
+                            count++;
+                        }
+
+                        
+                        html += "</table>";
+
+                        break;
+                    }
+                }
+
+
+                UpdateContentEvent (Program.Controller.EventLogHTML.Replace ("<!-- $event-log-content -->", html));
             }
+        }
+
+
+        public void SaveDialogCompleted (string target_file_path)
+        {
+            foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
+                if (repo.Name.Equals (this.restore_revision_info.Folder.Name)) {
+                    repo.RestoreFile (this.restore_revision_info.FilePath,
+                        this.restore_revision_info.Revision, target_file_path);
+
+                    break;
+                }
+            }
+
+            this.restore_revision_info = null;
+        }
+
+
+        public void SaveDialogCancelled ()
+        {
+            this.restore_revision_info = null;
         }
 
 
@@ -307,7 +415,16 @@ namespace SparkleShare {
                     foreach (SparkleChange change in change_set.Changes) {
                         if (change.Type != SparkleChangeType.Moved) {
                             event_entry += "<dd class='" + change.Type.ToString ().ToLower () + "'>";
-                            event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") +"</small> &nbsp;";
+
+                            if (!change.IsFolder) {
+                                event_entry += "<small><a href=\"history://" + change_set.Folder.Name + "/" + 
+                                    change.Path + "\" title=\"View revisions\">" + change.Timestamp.ToString ("HH:mm") +
+                                    "</a></small> &nbsp;";
+
+                            } else {
+                                event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") + "</small> &nbsp;";
+                            }
+
                             event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
                             event_entry += "</dd>";
 
@@ -443,6 +560,13 @@ namespace SparkleShare {
             {
                 Date = new DateTime (date_time.Year, date_time.Month, date_time.Day);
             }
+        }
+
+
+        private class RevisionInfo {
+            public SparkleFolder Folder;
+            public string FilePath;
+            public string Revision;
         }
     }
 }
