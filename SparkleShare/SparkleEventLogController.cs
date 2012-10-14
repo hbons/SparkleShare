@@ -47,6 +47,7 @@ namespace SparkleShare {
 
         private string selected_folder;
         private RevisionInfo restore_revision_info;
+        private bool history_view_active;
 
 
         public bool WindowIsOpen { get; private set; }
@@ -62,10 +63,10 @@ namespace SparkleShare {
                 ContentLoadingEvent ();
                 UpdateSizeInfoEvent ("…", "…");
 
-                Stopwatch watch = new Stopwatch ();
-                watch.Start ();
-
                 new Thread (() => {
+                    Stopwatch watch = new Stopwatch ();
+                    watch.Start ();
+
                     string html = HTML;
                     watch.Stop ();
 
@@ -85,6 +86,8 @@ namespace SparkleShare {
 
         public string HTML {
             get {
+                this.history_view_active = false;
+
                 List<SparkleChangeSet> change_sets = GetLog (this.selected_folder);
                 string html = GetHTMLLog (change_sets);
 
@@ -178,6 +181,9 @@ namespace SparkleShare {
             };
 			
             Program.Controller.OnIdle += delegate {
+                if (this.history_view_active)
+                    return;
+
                 ContentLoadingEvent ();
                 UpdateSizeInfoEvent ("…", "…");
 
@@ -228,18 +234,21 @@ namespace SparkleShare {
             
             
             } else if (url.StartsWith ("restore://") && this.restore_revision_info == null) {
-                Regex regex = new Regex ("restore://(.+)/([a-f0-9]+)/(.+)", RegexOptions.Compiled);
+                Regex regex = new Regex ("restore://(.+)/([a-f0-9]+)/(.+)/(.{3} [0-9]+ [0-9]+h[0-9]+)/(.+)", RegexOptions.Compiled);
                 Match match = regex.Match (url);
                 
                 if (match.Success) {
+                    string author_name = match.Groups [3].Value;
+                    string timestamp   = match.Groups [4].Value;
+
                     this.restore_revision_info = new RevisionInfo () {
                         Folder   = new SparkleFolder (match.Groups [1].Value),
                         Revision = match.Groups [2].Value,
-                        FilePath = match.Groups [3].Value
+                        FilePath = match.Groups [5].Value
                     };
 
                     string file_name = Path.GetFileNameWithoutExtension (this.restore_revision_info.FilePath) +
-                        " (restored)" + Path.GetExtension (this.restore_revision_info.FilePath);
+                        " (" + author_name + " " + timestamp + ")" + Path.GetExtension (this.restore_revision_info.FilePath);
 
                     string target_folder_path = Path.Combine (this.restore_revision_info.Folder.FullPath,
                         Path.GetDirectoryName (this.restore_revision_info.FilePath));
@@ -253,6 +262,9 @@ namespace SparkleShare {
 
 
             } else if (url.StartsWith ("history://")) {
+                this.history_view_active = true;
+
+                ContentLoadingEvent ();
                 UpdateSizeInfoEvent ("…", "…");
 
                 string html = "";
@@ -263,51 +275,68 @@ namespace SparkleShare {
 
                 foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
                     if (repo.Name.Equals (folder)) {
-                        List<SparkleChangeSet>  change_sets = repo.GetChangeSets (path, 30);
-                    
-                        html += "<div class='day-entry-header'>Revisions for &ldquo;"
-                            + Path.GetFileName (path) + "&rdquo;</div>";
-                       
-                        
-                        html += "<table>";
 
-                        int count = 0;
-                        foreach (SparkleChangeSet change_set in change_sets) {
-                            count++;
-                            if (count == 1)
-                                continue;
-                        
-                            foreach (SparkleChange change in change_set.Changes) {
-                                if (change.Type == SparkleChangeType.Deleted && change.Path.Equals (path))
-                                    continue; // TODO: in repo?
+                        new Thread (() => {
+                            Stopwatch watch = new Stopwatch ();
+                            
+                            watch.Start ();
+
+                            List<SparkleChangeSet>  change_sets = repo.GetChangeSets (path, 30);
+                    
+                            if (change_sets.Count > 1) {
+                                html += "<div class='day-entry-header'>Revisions for &ldquo;";
+                                html += Path.GetFileName (path) + "&rdquo;</div>";
+                            
+                            } else {
+                                html += "<div class='day-entry-header'>No revisions yet for &ldquo;";
+                                html += Path.GetFileName (path) + "&rdquo;</div>";
                             }
 
-                            string change_set_avatar = Program.Controller.GetAvatar (change_set.User.Email, 24);
+                            html += "<b>&laquo; Back</b>";
+                            html += "<table>";
+
+                            int count = 0;
+                            foreach (SparkleChangeSet change_set in change_sets) {
+                                count++;
+                                if (count == 1)
+                                    continue;
+
+                                string change_set_avatar = Program.Controller.GetAvatar (change_set.User.Email, 24);
+                                
+                                if (change_set_avatar != null)
+                                    change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
+                                else
+                                    change_set_avatar = "file://<!-- $pixmaps-path -->/user-icon-default.png";
+
+                                html += "<tr>" +
+                                    "<td class='avatar'><img src='" + change_set_avatar + "'></td>" +
+                                    "<td class='name'>" + change_set.User.Name + "</td>" +
+                                    "<td class='date'>" + change_set.Timestamp.ToString ("d MMM yyyy") + "</td>" +
+                                    "<td class='time'>" + change_set.Timestamp.ToString ("HH:mm") + "</td>" +
+                                    "<td class='restore'>" +
+                                        "<a href='restore://" + change_set.Folder.Name + "/" + 
+                                        change_set.Revision + "/" + change_set.User.Name + "/" + 
+                                        change_set.Timestamp.ToString ("MMM d H\\hmm") + "/" +
+                                        path + "'>Restore&hellip;</a></td>" +
+                                    "</tr>";
+
+                                count++;
+                            }
+
+                            html += "</table>";
+                            watch.Stop ();
                             
-                            if (change_set_avatar != null)
-                                change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
-                            else
-                                change_set_avatar = "file://<!-- $pixmaps-path -->/user-icon-default.png";
+                            int delay = 500;
+                            
+                            if (watch.ElapsedMilliseconds < delay)
+                                Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
 
-                            html += "<tr>" +
-                                "<td class='avatar'><img src='" + change_set_avatar + "'></td>" +
-                                "<td class='name'><b>" + change_set.User.Name + "</b></td>" +
-                                "<td class='date'>" + change_set.Timestamp.ToString ("d MMM yyyy") + "</td>" +
-                                "<td class='time'>" + change_set.Timestamp.ToString ("HH:mm") + "</td>" +
-                                    "<td class='restore'><a href='restore://" + change_set.Folder.Name + "/" + change_set.Revision + "/" + path + "' title='restore://" + change_set.Folder.Name + "/" + change_set.Revision + "/" + path + "'>Restore...</a></td>" +
-                                "</tr>";
-
-                            count++;
-                        }
-
-                        
-                        html += "</table>";
+                            UpdateContentEvent (Program.Controller.EventLogHTML.Replace ("<!-- $event-log-content -->", html));
+                        }).Start ();
 
                         break;
                     }
                 }
-
-                UpdateContentEvent (Program.Controller.EventLogHTML.Replace ("<!-- $event-log-content -->", html));
             }
         }
 
