@@ -553,8 +553,9 @@ namespace SparkleLib.Git {
 
             if (revision == null)
                 throw new ArgumentNullException ("revision");
-
+            
             path = path.Replace ("\\", "/");
+
             SparkleLogger.LogInfo ("Git", Name + " | Restoring \"" + path + "\" (revision " + revision + ")");
 
             // FIXME: git-show doesn't decrypt objects, so we can't use it to retrieve
@@ -581,9 +582,7 @@ namespace SparkleLib.Git {
             
             // The correct way
             } else {
-                path = path.Replace (" ", "\\ ");
-
-                SparkleGit git = new SparkleGit (LocalPath, "show " + revision + ":" + path + "");
+                SparkleGit git = new SparkleGit (LocalPath, "show " + revision + ":\"" + path + "\"");
                 git.Start ();
 
                 FileStream stream = File.OpenWrite (target_file_path);    
