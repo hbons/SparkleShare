@@ -76,7 +76,7 @@
                 cursor: pointer;
             }
             
-            small {
+            small, small a {
                 font-size: <!-- $small-font-size -->;
                 color: <!-- $secondary-font-color -->;
             }
@@ -152,7 +152,52 @@
 
             .moved {
                 background-image: url('<!-- $document-moved-background-image -->');
-            }            
+            }
+            
+            table {
+                padding: 18px 32px;
+                width: 100%;
+            }
+            
+            td {
+              padding: 0;
+              margin: 0;
+            }
+            
+            td.name {
+                width: 45%;
+            }           
+            
+            td.time {
+                font-size: <!-- $small-font-size -->;
+                color: <!-- $secondary-font-color -->;
+                padding-right: 9px;
+                width: 20px;
+                padding-top: 2px;
+            }
+            
+            td.date {
+                font-size: <!-- $small-font-size -->;
+                color: <!-- $secondary-font-color -->;
+                text-align: right;
+                padding-right: 6px;
+                padding-top: 2px;
+            }  
+            
+            td.restore {
+                text-align: right;
+            }
+            
+            td.avatar {
+                width: 32px;
+            }
+            
+            td.avatar img {
+                margin-top: 2px;
+                border-radius: 3px;
+                width: 24px;
+                height: 24px;
+            }
         </style>
     </head>
     <body oncontextmenu="return false;">
