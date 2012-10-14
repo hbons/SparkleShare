@@ -218,9 +218,11 @@ namespace SparkleLib {
             if (IsBuffering)
                 return;
 
-            foreach (string exclude_path in ExcludePaths) {
-                if (args.FullPath.Contains (exclude_path))
-                    return;
+            if (args != null) {
+                foreach (string exclude_path in ExcludePaths) {
+                    if (args.FullPath.Contains (exclude_path))
+                        return;
+                }
             }
 
             lock (this.buffer_lock) {

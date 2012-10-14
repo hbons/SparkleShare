@@ -253,6 +253,8 @@ namespace SparkleShare {
 
 
             } else if (url.StartsWith ("history://")) {
+                UpdateSizeInfoEvent ("…", "…");
+
                 string html = "";
                 string folder = url.Replace ("history://", "").Split ("/".ToCharArray ()) [0];
                 string path = url.Replace ("history://" + folder + "/", "");
@@ -305,7 +307,6 @@ namespace SparkleShare {
                     }
                 }
 
-
                 UpdateContentEvent (Program.Controller.EventLogHTML.Replace ("<!-- $event-log-content -->", html));
             }
         }
@@ -323,6 +324,7 @@ namespace SparkleShare {
             }
 
             this.restore_revision_info = null;
+            Program.Controller.OpenFolder (Path.GetDirectoryName (target_file_path));
         }
 
 
