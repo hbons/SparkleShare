@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 using SparkleLib;
 
@@ -29,6 +30,7 @@ namespace SparkleLib.Git {
 
 		private bool user_is_set;
         private bool use_git_bin;
+        private bool is_encrypted;
 
 
         public SparkleRepo (string path, SparkleConfig config) : base (path, config)
@@ -50,6 +52,11 @@ namespace SparkleLib.Git {
                 git = new SparkleGit (LocalPath, "rebase --abort");
                 git.StartAndWaitForExit ();
             }
+
+            string password_file_path = Path.Combine (LocalPath, ".git", "password");
+
+            if (File.Exists (password_file_path))
+                this.is_encrypted = true;
         }
 
 
@@ -548,14 +555,46 @@ namespace SparkleLib.Git {
                 throw new ArgumentNullException ("revision");
 
             path = path.Replace ("\\", "/");
+            SparkleLogger.LogInfo ("Git", Name + " | Restoring \"" + path + "\" (revision " + revision + ")");
 
-            SparkleGit git = new SparkleGit (LocalPath, "checkout " + revision + " \"" + path + "\"");
-            git.StartAndWaitForExit ();
+            // FIXME: git-show doesn't decrypt objects, so we can't use it to retrieve
+            // files from the index. This is a suboptimal workaround but it does the job
+            if (this.is_encrypted) {
+                // Restore the older file...
+                SparkleGit git = new SparkleGit (LocalPath, "checkout " + revision + " \"" + path + "\"");
+                git.StartAndWaitForExit ();
 
-            if (git.ExitCode == 0)
-                SparkleLogger.LogInfo ("Git", Name + " | Checked out \"" + path + "\" (" + revision + ")");
-             else
-                SparkleLogger.LogInfo ("Git", Name + " | Failed to check out \"" + path + "\" (" + revision + ")");
+                string local_file_path = Path.Combine (LocalPath, path);
+
+                // ...move it...
+                try {
+                    File.Move (local_file_path, target_file_path);
+                
+                } catch {
+                    SparkleLogger.LogInfo ("Git",
+                        Name + " | Could not move \"" + local_file_path + "\" to \"" + target_file_path + "\"");
+                }
+
+                // ...and restore the most recent revision
+                git = new SparkleGit (LocalPath, "checkout " + CurrentRevision + " \"" + path + "\"");
+                git.StartAndWaitForExit ();
+            
+            // The correct way
+            } else {
+                path = path.Replace (" ", "\\ ");
+
+                SparkleGit git = new SparkleGit (LocalPath, "show " + revision + ":" + path + "");
+                git.Start ();
+
+                FileStream stream = File.OpenWrite (target_file_path);    
+                git.StandardOutput.BaseStream.CopyTo (stream);
+                stream.Close ();
+
+                git.WaitForExit ();
+            }
+
+            if (target_file_path.StartsWith (LocalPath))
+                new Thread (() => OnFileActivity (null)).Start ();
         }
 
 
