@@ -252,10 +252,13 @@ namespace SparkleShare {
                             PreventsApplicationTerminationWhenModal = false
                         };
 
-                        if ((NSPanelButtonType) panel.RunModal ()== NSPanelButtonType.Ok)
-                            Controller.SaveDialogCompleted ("f");
-                        else
+                        if ((NSPanelButtonType) panel.RunModal ()== NSPanelButtonType.Ok) {
+                            string target_file_path = Path.Combine (panel.DirectoryUrl.RelativePath, panel.NameFieldStringValue);
+                            Controller.SaveDialogCompleted (target_file_path);
+                        
+                        } else {
                             Controller.SaveDialogCancelled ();
+                        }
                     });
                 }
             };
