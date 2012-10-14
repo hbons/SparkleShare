@@ -539,7 +539,7 @@ namespace SparkleLib.Git {
         }
 
 
-        public override void RevertFile (string path, string revision)
+        public override void RestoreFile (string path, string revision, string target_file_path)
         {
             if (path == null)
                 throw new ArgumentNullException ("path");
@@ -614,7 +614,7 @@ namespace SparkleLib.Git {
                 path = path.Replace ("\\", "/");
 
                 git = new SparkleGit (LocalPath, "log -" + count + " --raw --find-renames --date=iso " +
-                    "--format=medium --no-color --no-merges -- " + path);
+                    "--format=medium --no-color --no-merges -- \"" + path + "\"");
             }
 
             string output = git.StartAndReadStandardOutput ();
@@ -681,12 +681,15 @@ namespace SparkleLib.Git {
                         if (entry_line.StartsWith (":")) {
                             string type_letter = entry_line [37].ToString ();
                             string file_path   = entry_line.Substring (39);
-
-                            if (file_path.EndsWith (".empty"))
-                                file_path = file_path.Substring (0, file_path.Length - ".empty".Length);
+                            bool change_is_folder = false;
 
                             if (file_path.Equals (".sparkleshare"))
                                 continue;
+
+                            if (file_path.EndsWith (".empty")) { 
+                                file_path        = file_path.Substring (0, file_path.Length - ".empty".Length);
+                                change_is_folder = true;
+                            }
 
                             file_path = EnsureSpecialCharacters (file_path);
                             file_path = file_path.Replace ("\\\"", "\"");
@@ -702,15 +705,20 @@ namespace SparkleLib.Git {
                                 file_path = file_path.Replace ("\\\"", "\"");
                                 to_file_path = to_file_path.Replace ("\\\"", "\"");
 
-                                if (file_path.EndsWith (".empty"))
+                                if (file_path.EndsWith (".empty")) {
                                     file_path = file_path.Substring (0, file_path.Length - 6);
+                                    change_is_folder = true;
+                                }
 
-                                if (to_file_path.EndsWith (".empty"))
+                                if (to_file_path.EndsWith (".empty")) {
                                     to_file_path = to_file_path.Substring (0, to_file_path.Length - 6);
+                                    change_is_folder = true;
+                                }
 
                                 change_set.Changes.Add (
                                     new SparkleChange () {
                                         Path        = file_path,
+                                        IsFolder    = change_is_folder,
                                         MovedToPath = to_file_path,
                                         Timestamp   = change_set.Timestamp,
                                         Type        = SparkleChangeType.Moved
@@ -730,6 +738,7 @@ namespace SparkleLib.Git {
                                 change_set.Changes.Add (
                                     new SparkleChange () {
                                         Path      = file_path,
+                                        IsFolder  = change_is_folder,
                                         Timestamp = change_set.Timestamp,
                                         Type      = change_type
                                     }
