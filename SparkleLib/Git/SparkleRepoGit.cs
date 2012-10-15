@@ -603,10 +603,16 @@ namespace SparkleLib.Git {
             return GetChangeSetsInternal (path, count);
         }   
 
-
+        
         public override List<SparkleChangeSet> GetChangeSets (int count)
         {
             return GetChangeSetsInternal (null, count);
+        }
+
+
+        public override List<SparkleChangeSet> GetChangeSets ()
+        {
+            return GetChangeSetsInternal (null, 150);
         }
 
 
@@ -629,6 +635,7 @@ namespace SparkleLib.Git {
             if (Error != ErrorStatus.None) {
                 SparkleLogger.LogInfo ("Git", Name + " | Error status changed to " + Error);
                 return true;
+            
             } else {
                 return false;
             }
@@ -640,9 +647,7 @@ namespace SparkleLib.Git {
             if (count < 1)
                 throw new ArgumentOutOfRangeException ("count");
 
-            count = 150;
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
-
             SparkleGit git;
 
             if (path == null) {
