@@ -51,7 +51,7 @@ namespace SparkleShare {
             #if HAVE_APP_INDICATOR
             this.indicator = new ApplicationIndicator ("sparkleshare", "sparkleshare", Category.ApplicationStatus);
             this.indicator.IconName = "process-syncing-idle";
-            this.indicator.Status = Status.Active;
+            this.indicator.Status   = Status.Active;
             #else
 			this.status_icon        = new StatusIcon ();
             this.status_icon.Pixbuf = this.syncing_idle_image;
