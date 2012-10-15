@@ -44,14 +44,13 @@ namespace SparkleShare {
         private Gdk.Pixbuf syncing_image       = SparkleUIHelpers.GetIcon ("process-syncing", 24);
         private Gdk.Pixbuf syncing_error_image = SparkleUIHelpers.GetIcon ("process-syncing-error", 24);
         #endif
-        
 
 
         public SparkleStatusIcon ()
         {
             #if HAVE_APP_INDICATOR
             this.indicator = new ApplicationIndicator ("sparkleshare", "sparkleshare", Category.ApplicationStatus);
-            this.indicator.IconName = "sparkleshare";
+            this.indicator.IconName = "process-syncing-idle";
             this.indicator.Status = Status.Active;
             #else
 			this.status_icon        = new StatusIcon ();
@@ -68,7 +67,7 @@ namespace SparkleShare {
                     switch (state) {
                     case IconState.Idle: {
                         #if HAVE_APP_INDICATOR
-                        this.indicator.IconName = "sparkleshare";
+                        this.indicator.IconName = "process-syncing-idle";
                         #else
                         this.status_icon.Pixbuf = this.syncing_idle_image;
                         #endif
