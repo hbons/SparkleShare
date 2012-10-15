@@ -54,6 +54,7 @@ namespace SparkleLib {
         public abstract bool HasRemoteChanges { get; }
         public abstract bool SyncUp ();
         public abstract bool SyncDown ();
+        public abstract List<SparkleChangeSet> GetChangeSets ();
         public abstract List<SparkleChangeSet> GetChangeSets (int count);
         public abstract List<SparkleChangeSet> GetChangeSets (string path, int count);
         public abstract void RestoreFile (string path, string revision, string target_file_path);
@@ -203,11 +204,6 @@ namespace SparkleLib {
             }
 
             this.remote_timer.Start ();
-        }
-
-
-        public List<SparkleChangeSet> GetChangeSets () {
-            return GetChangeSets (30);
         }
 
 
