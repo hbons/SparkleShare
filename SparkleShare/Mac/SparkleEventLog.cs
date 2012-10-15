@@ -80,6 +80,7 @@ namespace SparkleShare {
                         new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
                 };
 
+
                 this.hidden_close_button = new NSButton () {
                     KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
                     KeyEquivalent = "w"
@@ -397,7 +398,7 @@ namespace SparkleShare {
 
                             this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
 
-                            web_view.PolicyDelegate = new SparkleWebPolicyDelegate ();
+                            this.web_view.PolicyDelegate = new SparkleWebPolicyDelegate ();
                             ContentView.AddSubview (this.web_view);
 
                             (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate).LinkClicked +=
