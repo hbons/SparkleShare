@@ -170,6 +170,7 @@ namespace SparkleShare {
                                 Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
 
                             UpdateChooserEvent (Folders);
+                            UpdateChooserEnablementEvent (true);
                             UpdateContentEvent (html);
                             UpdateSizeInfoEvent (Size, HistorySize);
 
@@ -471,6 +472,7 @@ namespace SparkleShare {
 
                         } else {
                             event_entry += "<dd class='moved'>";
+                            event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") +"</small> &nbsp;";
                             event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
                             event_entry += "<br>";
                             event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") +"</small> &nbsp;";
