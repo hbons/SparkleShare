@@ -198,12 +198,21 @@ namespace SparkleShare {
                     });
                 }
             };
-
+            
             Controller.UpdateChooserEvent += delegate (string [] folders) {
                 using (var a = new NSAutoreleasePool ())
                 {
                     InvokeOnMainThread (delegate {
                         UpdateChooser (folders);
+                    });
+                }
+            };
+
+            Controller.UpdateChooserEnablementEvent += delegate (bool enabled) {
+                using (var a = new NSAutoreleasePool ())
+                {
+                    InvokeOnMainThread (delegate {
+                        this.popup_button.Enabled = enabled;
                     });
                 }
             };

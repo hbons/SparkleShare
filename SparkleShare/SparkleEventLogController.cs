@@ -34,9 +34,12 @@ namespace SparkleShare {
 
         public event UpdateContentEventEventHandler UpdateContentEvent = delegate { };
         public delegate void UpdateContentEventEventHandler (string html);
-
+        
         public event UpdateChooserEventHandler UpdateChooserEvent = delegate { };
         public delegate void UpdateChooserEventHandler (string [] folders);
+        
+        public event UpdateChooserEnablementEventHandler UpdateChooserEnablementEvent = delegate { };
+        public delegate void UpdateChooserEnablementEventHandler (bool enabled);
         
         public event UpdateSizeInfoEventHandler UpdateSizeInfoEvent = delegate { };
         public delegate void UpdateSizeInfoEventHandler (string size, string history_size);
@@ -258,81 +261,44 @@ namespace SparkleShare {
             } else if (url.StartsWith ("back://")) {
                 this.history_view_active = false;
                 SelectedFolder           = this.selected_folder; // TODO: Return to the same position on the page
-                
+
+                UpdateChooserEnablementEvent (true);
+
             } else if (url.StartsWith ("history://")) {
                 this.history_view_active = true;
 
                 ContentLoadingEvent ();
                 UpdateSizeInfoEvent ("…", "…");
+                UpdateChooserEnablementEvent (false);
 
-                string html = "";
-                string folder = url.Replace ("history://", "").Split ("/".ToCharArray ()) [0];
-                string path = url.Replace ("history://" + folder + "/", "");
+                string folder    = url.Replace ("history://", "").Split ("/".ToCharArray ()) [0];
+                string file_path = url.Replace ("history://" + folder + "/", "");
 
-                // TODO: put html into page
+                SparkleRepoBase repo;
 
-                foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
-                    if (repo.Name.Equals (folder)) {
-
-                        new Thread (() => {
-                            Stopwatch watch = new Stopwatch ();
-                            
-                            watch.Start ();
-
-                            List<SparkleChangeSet> change_sets = repo.GetChangeSets (path, 30);
-                    
-                            html += "<div class='history-header'><a href='back://'>&laquo; Back</a> &nbsp;|&nbsp; ";
-
-                            if (change_sets.Count > 1)
-                                html += "Revisions for &ldquo;";
-                            else
-                                html += "No revisions for &ldquo;";
-
-                            html += Path.GetFileName (path) + "&rdquo;";
-                            html += "</div><table>";
-
-                            int count = 0;
-                            foreach (SparkleChangeSet change_set in change_sets) {
-                                count++;
-                                if (count == 1)
-                                    continue;
-
-                                string change_set_avatar = Program.Controller.GetAvatar (change_set.User.Email, 24);
-                                
-                                if (change_set_avatar != null)
-                                    change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
-                                else
-                                    change_set_avatar = "file://<!-- $pixmaps-path -->/user-icon-default.png";
-
-                                html += "<tr>" +
-                                    "<td class='avatar'><img src='" + change_set_avatar + "'></td>" +
-                                    "<td class='name'>" + change_set.User.Name + "</td>" +
-                                    "<td class='date'>" + change_set.Timestamp.ToString ("d MMM yyyy") + "</td>" +
-                                    "<td class='time'>" + change_set.Timestamp.ToString ("HH:mm") + "</td>" +
-                                    "<td class='restore'>" +
-                                        "<a href='restore://" + change_set.Folder.Name + "/" + 
-                                        change_set.Revision + "/" + change_set.User.Name + "/" + 
-                                        change_set.Timestamp.ToString ("MMM d H\\hmm") + "/" +
-                                        path + "'>Restore&hellip;</a></td>" +
-                                    "</tr>";
-
-                                count++;
-                            }
-
-                            html += "</table>";
-                            watch.Stop ();
-                            
-                            int delay = 500;
-                            
-                            if (watch.ElapsedMilliseconds < delay)
-                                Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
-
-                            UpdateContentEvent (Program.Controller.EventLogHTML.Replace ("<!-- $event-log-content -->", html));
-                        }).Start ();
-
+                foreach (SparkleRepoBase test_repo in Program.Controller.Repositories) {
+                    if (test_repo.Name.Equals (folder)) {
+                        repo = test_repo;
                         break;
                     }
                 }
+
+                new Thread (() => {
+                    Stopwatch watch = new Stopwatch ();
+                    watch.Start ();
+
+                    List<SparkleChangeSet> change_sets = repo.GetChangeSets (file_path, 30);
+                    string html = GetHistoryHTMLLog (change_sets, file_path);
+
+                    watch.Stop ();
+                    int delay = 500;
+                    
+                    if (watch.ElapsedMilliseconds < delay)
+                        Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
+
+                    UpdateContentEvent (html);
+
+                }).Start ();
             }
         }
 
@@ -393,6 +359,54 @@ namespace SparkleShare {
             }
 
             return new List<SparkleChangeSet> ();
+        }
+
+
+        public string GetHistoryHTMLLog (List<SparkleChangeSet> change_sets, string file_path)
+        {
+            string html = "<div class='history-header'><a href='back://'>&laquo; Back</a> &nbsp;|&nbsp; ";
+
+            if (change_sets.Count > 1)
+                html += "Revisions for &ldquo;";
+            else
+                html += "No revisions for &ldquo;";
+            
+            html += Path.GetFileName (file_path) + "&rdquo;";
+            html += "</div><table>";
+            
+            int count = 0;
+            foreach (SparkleChangeSet change_set in change_sets) {
+                count++;
+
+                if (count == 1)
+                    continue;
+                
+                string change_set_avatar = Program.Controller.GetAvatar (change_set.User.Email, 24);
+                
+                if (change_set_avatar != null)
+                    change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
+                else
+                    change_set_avatar = "file://<!-- $pixmaps-path -->/user-icon-default.png";
+                
+                html += "<tr>" +
+                            "<td class='avatar'><img src='" + change_set_avatar + "'></td>" +
+                            "<td class='name'>" + change_set.User.Name + "</td>" +
+                            "<td class='date'>" + change_set.Timestamp.ToString ("d MMM yyyy") + "</td>" +
+                            "<td class='time'>" + change_set.Timestamp.ToString ("HH:mm") + "</td>" +
+                            "<td class='restore'>" +
+                                "<a href='restore://" + change_set.Folder.Name + "/" + 
+                                change_set.Revision + "/" + change_set.User.Name + "/" + 
+                                change_set.Timestamp.ToString ("MMM d H\\hmm") + "/" +
+                                file_path + "'>Restore&hellip;</a>" +
+                            "</td>" +
+                        "</tr>";
+                
+                count++;
+            }
+
+            html += "</table>";
+            
+            return Program.Controller.EventLogHTML.Replace ("<!-- $event-log-content -->", html);
         }
 
 
