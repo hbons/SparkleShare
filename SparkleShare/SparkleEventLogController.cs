@@ -226,7 +226,7 @@ namespace SparkleShare {
         {
             url = url.Replace ("%20", " ");
         
-            if (url.StartsWith (Path.VolumeSeparatorChar.ToString ()) ||
+            if (url.StartsWith ("file://") ||
 			    url.Substring (1, 1).Equals (":")) {
 
                 Program.Controller.OpenFile (url);
