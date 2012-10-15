@@ -86,8 +86,6 @@ namespace SparkleShare {
 
         public string HTML {
             get {
-                this.history_view_active = false;
-
                 List<SparkleChangeSet> change_sets = GetLog (this.selected_folder);
                 string html = GetHTMLLog (change_sets);
 
@@ -255,12 +253,12 @@ namespace SparkleShare {
 
                     ShowSaveDialogEvent (file_name, target_folder_path);
 
-                } else {
-                    // TODO: remove
-                    Program.UI.Bubbles.Controller.ShowBubble ("no match", url, "");
                 }
-
-
+                
+            } else if (url.StartsWith ("back://")) {
+                this.history_view_active = false;
+                SelectedFolder           = this.selected_folder; // TODO: Return to the same position on the page
+                
             } else if (url.StartsWith ("history://")) {
                 this.history_view_active = true;
 
@@ -281,19 +279,17 @@ namespace SparkleShare {
                             
                             watch.Start ();
 
-                            List<SparkleChangeSet>  change_sets = repo.GetChangeSets (path, 30);
+                            List<SparkleChangeSet> change_sets = repo.GetChangeSets (path, 30);
                     
-                            if (change_sets.Count > 1) {
-                                html += "<div class='day-entry-header'>Revisions for &ldquo;";
-                                html += Path.GetFileName (path) + "&rdquo;</div>";
-                            
-                            } else {
-                                html += "<div class='day-entry-header'>No revisions yet for &ldquo;";
-                                html += Path.GetFileName (path) + "&rdquo;</div>";
-                            }
+                            html += "<div class='history-header'><a href='back://'>&laquo; Back</a> &nbsp;|&nbsp; ";
 
-                            html += "<b>&laquo; Back</b>";
-                            html += "<table>";
+                            if (change_sets.Count > 1)
+                                html += "Revisions for &ldquo;";
+                            else
+                                html += "No revisions for &ldquo;";
+
+                            html += Path.GetFileName (path) + "&rdquo;";
+                            html += "</div><table>";
 
                             int count = 0;
                             foreach (SparkleChangeSet change_set in change_sets) {
