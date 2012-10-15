@@ -475,6 +475,7 @@ namespace SparkleLib.Git {
             foreach (string line in lines) {
                 string conflicting_path = line.Substring (3);
                 conflicting_path        = EnsureSpecialCharacters (conflicting_path);
+                conflicting_path        = conflicting_path.Replace ("\"", "\\\"");
 
                 SparkleLogger.LogInfo ("Git", Name + " | Conflict type: " + line);
 
@@ -553,8 +554,6 @@ namespace SparkleLib.Git {
 
             if (revision == null)
                 throw new ArgumentNullException ("revision");
-            
-            path = path.Replace ("\\", "/");
 
             SparkleLogger.LogInfo ("Git", Name + " | Restoring \"" + path + "\" (revision " + revision + ")");
 
@@ -582,6 +581,8 @@ namespace SparkleLib.Git {
             
             // The correct way
             } else {
+                path = path.Replace ("\"", "\\\"");
+
                 SparkleGit git = new SparkleGit (LocalPath, "show " + revision + ":\"" + path + "\"");
                 git.Start ();
 
