@@ -364,14 +364,15 @@ namespace SparkleShare {
 
         public string GetHistoryHTMLLog (List<SparkleChangeSet> change_sets, string file_path)
         {
-            string html = "<div class='history-header'><a class='windows' href='back://'>&laquo; Back</a> &nbsp;|&nbsp; ";
+            string html = "<div class='history-header'>" +
+                "<a class='windows' href='back://'>&laquo; Back</a> &nbsp;|&nbsp; ";
 
             if (change_sets.Count > 1)
-                html += "Revisions for &ldquo;";
+                html += "Revisions for <b>&ldquo;";
             else
-                html += "No revisions for &ldquo;";
+                html += "No revisions for <b>&ldquo;";
             
-            html += Path.GetFileName (file_path) + "&rdquo;";
+            html += Path.GetFileName (file_path) + "&rdquo;</b>";
 			html += "</div><div class='table-wrapper'><table>";
             
             int count = 0;
