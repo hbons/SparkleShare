@@ -224,6 +224,8 @@ namespace SparkleShare {
 
         public void LinkClicked (string url)
         {
+
+
             url = url.Replace ("%20", " ");
         
             if (url.StartsWith ("file://") ||
@@ -256,7 +258,6 @@ namespace SparkleShare {
                         Path.GetDirectoryName (this.restore_revision_info.FilePath));
 
                     ShowSaveDialogEvent (file_name, target_folder_path);
-
                 }
                 
             } else if (url.StartsWith ("back://")) {
@@ -275,31 +276,29 @@ namespace SparkleShare {
                 string folder    = url.Replace ("history://", "").Split ("/".ToCharArray ()) [0];
                 string file_path = url.Replace ("history://" + folder + "/", "");
 
-                SparkleRepoBase repo;
+                foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
+                    if (!repo.Name.Equals (folder))
+						continue;
 
-                foreach (SparkleRepoBase test_repo in Program.Controller.Repositories) {
-                    if (test_repo.Name.Equals (folder)) {
-                        repo = test_repo;
-                        break;
-                    }
+			        new Thread (() => {
+	                    Stopwatch watch = new Stopwatch ();
+	                    watch.Start ();
+
+	                    List<SparkleChangeSet> change_sets = repo.GetChangeSets (file_path);
+	                    string html = GetHistoryHTMLLog (change_sets, file_path);
+
+	                    watch.Stop ();
+	                    int delay = 500;
+	                    
+	                    if (watch.ElapsedMilliseconds < delay)
+	                        Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
+
+	                    UpdateContentEvent (html);
+
+                	}).Start ();
+
+                    break;
                 }
-
-                new Thread (() => {
-                    Stopwatch watch = new Stopwatch ();
-                    watch.Start ();
-
-                    List<SparkleChangeSet> change_sets = repo.GetChangeSets (file_path);
-                    string html = GetHistoryHTMLLog (change_sets, file_path);
-
-                    watch.Stop ();
-                    int delay = 500;
-                    
-                    if (watch.ElapsedMilliseconds < delay)
-                        Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
-
-                    UpdateContentEvent (html);
-
-                }).Start ();
             }
         }
 
@@ -365,7 +364,7 @@ namespace SparkleShare {
 
         public string GetHistoryHTMLLog (List<SparkleChangeSet> change_sets, string file_path)
         {
-            string html = "<div class='history-header'><a href='back://'>&laquo; Back</a> &nbsp;|&nbsp; ";
+            string html = "<div class='history-header'><a class='windows' href='back://'>&laquo; Back</a> &nbsp;|&nbsp; ";
 
             if (change_sets.Count > 1)
                 html += "Revisions for &ldquo;";
@@ -373,7 +372,7 @@ namespace SparkleShare {
                 html += "No revisions for &ldquo;";
             
             html += Path.GetFileName (file_path) + "&rdquo;";
-            html += "</div><table>";
+			html += "</div><div class='table-wrapper'><table>";
             
             int count = 0;
             foreach (SparkleChangeSet change_set in change_sets) {
@@ -405,9 +404,10 @@ namespace SparkleShare {
                 count++;
             }
 
-            html += "</table>";
-            
-            return Program.Controller.EventLogHTML.Replace ("<!-- $event-log-content -->", html);
+            html += "</table></div>";
+            html = Program.Controller.EventLogHTML.Replace ("<!-- $event-log-content -->", html);
+
+			return html.Replace ("<!-- $midnight -->", "1000000000000000000");
         }
 
 
