@@ -598,21 +598,15 @@ namespace SparkleLib.Git {
         }
 
 
-        public override List<SparkleChangeSet> GetChangeSets (string path, int count)
+        public override List<SparkleChangeSet> GetChangeSets (string path)
         {
-            return GetChangeSetsInternal (path, count);
+            return GetChangeSetsInternal (path);
         }   
-
-        
-        public override List<SparkleChangeSet> GetChangeSets (int count)
-        {
-            return GetChangeSetsInternal (null, count);
-        }
 
 
         public override List<SparkleChangeSet> GetChangeSets ()
         {
-            return GetChangeSetsInternal (null, 150);
+            return GetChangeSetsInternal (null);
         }
 
 
@@ -642,22 +636,19 @@ namespace SparkleLib.Git {
         }
 
 
-        private List<SparkleChangeSet> GetChangeSetsInternal (string path, int count)
+        private List<SparkleChangeSet> GetChangeSetsInternal (string path)
         {
-            if (count < 1)
-                throw new ArgumentOutOfRangeException ("count");
-
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
             SparkleGit git;
 
             if (path == null) {
-                git = new SparkleGit (LocalPath, "log -" + count + " --raw --find-renames --date=iso " +
+                git = new SparkleGit (LocalPath, "log --since=1.month --raw --find-renames --date=iso " +
                     "--format=medium --no-color --no-merges");
 
             } else {
                 path = path.Replace ("\\", "/");
 
-                git = new SparkleGit (LocalPath, "log -" + count + " --raw --find-renames --date=iso " +
+                git = new SparkleGit (LocalPath, "log --raw --find-renames --date=iso " +
                     "--format=medium --no-color --no-merges -- \"" + path + "\"");
             }
 
