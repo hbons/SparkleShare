@@ -288,7 +288,7 @@ namespace SparkleShare {
                     Stopwatch watch = new Stopwatch ();
                     watch.Start ();
 
-                    List<SparkleChangeSet> change_sets = repo.GetChangeSets (file_path, 100);
+                    List<SparkleChangeSet> change_sets = repo.GetChangeSets (file_path);
                     string html = GetHistoryHTMLLog (change_sets, file_path);
 
                     watch.Stop ();
