@@ -310,17 +310,10 @@ namespace SparkleShare {
 
                 Dispatcher.BeginInvoke ((Action) delegate {
                     this.spinner.Stop ();
-                    this.web_browser.ObjectForScripting = new SparkleScriptingObject ();
-					//if (html != null) {
-                    	this.web_browser.NavigateToString (html);
-						SparkleLib.SparkleLogger.LogInfo ("FFF", ""+html);
-					//}
-              /*      this.web_browser.Navigating += delegate(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e) {
-				Program.UI.EventLog.Controller.LinkClicked (e.Uri.ToString());
-						if (e.Uri.ToString().StartsWith ("back://"))
-				e.Cancel = true;
-
-			};*/
+            
+					this.web_browser.ObjectForScripting = new SparkleScriptingObject ();
+			    	this.web_browser.NavigateToString (html);
+				
                     if (!this.canvas.Children.Contains (this.web_browser)) {
                         this.canvas.Children.Add (this.web_browser);
                         Canvas.SetLeft (this.web_browser, 0);
