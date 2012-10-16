@@ -184,6 +184,7 @@ namespace SparkleLib {
 
             if (File.Exists (identifier_path)) {
                 Identifier = File.ReadAllText (identifier_path).Trim ();
+				File.SetAttributes (identifier_path, FileAttributes.Hidden);
 
             } else {
                 Identifier = CreateIdentifier ();
