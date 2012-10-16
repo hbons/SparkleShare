@@ -70,10 +70,10 @@ namespace SparkleShare {
                                 ActivatesDefault = true
                             };
 
-                            string username = UnixUserInfo.GetRealUser ().RealName;
+                            UnixUserInfo user_info = UnixUserInfo.GetRealUser ();
                             
-                            if (!string.IsNullOrEmpty (username))
-                                name_entry.Text = username.TrimEnd (",".ToCharArray ());
+                            if (user_info != null && user_info.RealName != null)
+                                name_entry.Text = user_info.RealName.TrimEnd (",".ToCharArray ());
 
                             Entry email_entry = new Entry () {
                                 Xalign = 0,
