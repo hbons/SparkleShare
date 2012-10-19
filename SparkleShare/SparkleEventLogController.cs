@@ -224,18 +224,10 @@ namespace SparkleShare {
 
         public void LinkClicked (string url)
         {
-
-
             url = url.Replace ("%20", " ");
-        
-            if (url.StartsWith ("file://") ||
-			    url.Substring (1, 1).Equals (":")) {
-
-                Program.Controller.OpenFile (url);
             
-            } else if (url.StartsWith ("http")) {
+            if (url.StartsWith ("http")) {
                 Program.Controller.OpenWebsite (url);
-            
             
             } else if (url.StartsWith ("restore://") && this.restore_revision_info == null) {
                 Regex regex = new Regex ("restore://(.+)/([a-f0-9]+)/(.+)/(.{3} [0-9]+ [0-9]+h[0-9]+)/(.+)", RegexOptions.Compiled);
@@ -299,7 +291,10 @@ namespace SparkleShare {
 
                     break;
                 }
-            }
+
+            } else {
+                Program.Controller.OpenFile (url);
+            }   
         }
 
 
@@ -408,7 +403,7 @@ namespace SparkleShare {
             html += "</table></div>";
             html = Program.Controller.EventLogHTML.Replace ("<!-- $event-log-content -->", html);
 
-			return html.Replace ("<!-- $midnight -->", "1000000000000000000");
+			return html.Replace ("<!-- $midnight -->", "100000000");
         }
 
 
