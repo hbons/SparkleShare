@@ -83,5 +83,5 @@ SparkleShare/Windows/SparkleShare.wxs
 
 ### Uninstalling
 
-Simple remove the SparkleShare bundle.
+Simply remove the SparkleShare bundle.
 
