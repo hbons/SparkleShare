@@ -1,4 +1,15 @@
-0.9.3 for Linux, Mac and Windows (??? 2012)
+0.9.4 for Linux, Mac and Windows (Fri Oct 19 2012)
+
+        Hylke:
+        - Remove Nautilus extension
+        - Restore previous revisions of files from the event log
+        - Fix Mac file system watcher not always triggering
+        - Add symbolic icon for GNOME 3 (by Lapo)
+        - New Bitbucket and default user icon
+        - For encrypted projects, use a different salt for each project
+
+
+0.9.3 for Linux, Mac and Windows (Mon Oct 1 2012)
 
         Hylke:
         - Fix endless loop when adding empty folders

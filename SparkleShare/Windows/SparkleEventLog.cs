@@ -105,7 +105,6 @@ namespace SparkleShare {
             this.web_browser.ObjectForScripting = new SparkleScriptingObject ();
                     
 
-
             spinner = new SparkleSpinner (22);
             
             // Disable annoying IE clicking sound
