@@ -131,10 +131,33 @@ namespace SparkleShare {
                     Present ();
                 });
             };
+			
+			Controller.ShowSaveDialogEvent += delegate (string file_name, string target_folder_path) {
+                Application.Invoke (delegate {
+                    FileChooserDialog dialog = new FileChooserDialog ("Restore from History",
+						this, FileChooserAction.Save, "Cancel", ResponseType.Cancel, "Save", ResponseType.Ok);
+					
+					dialog.CurrentName = file_name;
+					dialog.SetCurrentFolder (target_folder_path);
+					
+					if (dialog.Run () == (int) ResponseType.Ok)
+						Controller.SaveDialogCompleted (dialog.Filename);
+					else
+						Controller.SaveDialogCancelled ();
+					
+					dialog.Destroy ();
+                });
+            };
 
             Controller.UpdateChooserEvent += delegate (string [] folders) {
                 Application.Invoke (delegate {
                     UpdateChooser (folders);
+                });
+            };
+			
+			Controller.UpdateChooserEnablementEvent += delegate (bool enabled) {
+                Application.Invoke (delegate {
+                    this.combo_box.Sensitive = enabled;
                 });
             };
 
@@ -168,7 +191,7 @@ namespace SparkleShare {
         
         
         private void WebViewNavigationRequested (object o, WebKit.NavigationRequestedArgs args) {
-            Controller.LinkClicked (args.Request.Uri.Substring (7));
+            Controller.LinkClicked (args.Request.Uri);
 
             // Don't follow HREFs (as this would cause a page refresh)
             if (!args.Request.Uri.Equals ("file:"))
@@ -260,7 +283,8 @@ namespace SparkleShare {
                 html = html.Replace ("<!-- $day-entry-header-background-color -->", SparkleUIHelpers.GdkColorToHex (Style.Background (StateType.Normal)));
                 html = html.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
                 html = html.Replace ("<!-- $small-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
-             
+                html = html.Replace ("<!-- $small-font-size -->", "85%");
+				
                 html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
                 
                 html = html.Replace ("<!-- $document-added-background-image -->", 
