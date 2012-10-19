@@ -10,8 +10,9 @@
               $('dl dd:nth-child(-n+10)').css('display', 'block');
               $('.day-entry-content .event-entry:last-child').css('border', 'none');
             
-              $('dd a.windows').click(function () {
+              $('a').click(function (event) {
                   window.external.LinkClicked($(this).attr("href"));
+                  event.preventDefault();
               });
 
               // Update the Today and Yesterday labels after midnight
@@ -26,7 +27,7 @@
                 }
               }, 60 * 1000);
 
-              // Hide the 'Show all' link when there are less than 10 events
+              // Hide the 'Show all' link when there are fewer than 10 events
               $('.show').each (function () {
                 var entry_count = $(this).parent ().find ('dl').children ().length;
 
@@ -67,7 +68,6 @@
             
             a.show {
                 font-size: 80%;
-                margin-bottom: 9px;
             }
 
             a:hover {
@@ -76,7 +76,7 @@
                 cursor: pointer;
             }
             
-            small {
+            small, small a, small a:hover {
                 font-size: <!-- $small-font-size -->;
                 color: <!-- $secondary-font-color -->;
             }
@@ -91,13 +91,12 @@
                 display: none;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                white-space: nowrap;
                 width: 90%;
                 padding: 0 0 1px 20px;
                 margin: 0 0 4px 0;
                 background-repeat: no-repeat;
                 background-position: center left;
-                text-overflow: ellipsis;
-                white-space: nowrap;
             }
 
             .day-entry-header {
@@ -107,13 +106,24 @@
                 font-weight: bold;
             }
             
+            .history-header {
+                color: #aaa;
+                padding-top: 22px;
+                float: left;
+                width: 90%;
+                margin-left: 32px;
+                margin-right: 32px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            
             .event-entry {
                 padding: 24px 14px 14px 64px;
                 margin: 0 32px 0 32px;
                 border-bottom: 1px #ddd solid;
                 background-repeat: no-repeat;
                 background-position: 36px 24px;
-                min-height: 100px;
             }
             
             .event-user-name {
@@ -152,7 +162,54 @@
 
             .moved {
                 background-image: url('<!-- $document-moved-background-image -->');
-            }            
+            }
+            
+            table {
+                width: 100%;
+            }
+            
+            .table-wrapper {
+            	padding: 64px 32px;
+            }
+            
+            td {
+              padding: 0;
+              margin: 0;
+            }
+            
+            td.name {
+                font-weight: bold;
+                width: 45%;
+            }           
+            
+            td.time {
+                color: <!-- $secondary-font-color -->;
+                padding-right: 9px;
+                font-size: <!-- $small-font-size -->;
+            }
+            
+            td.date {
+                color: <!-- $secondary-font-color -->;
+                text-align: right;
+                padding-right: 6px;
+                font-size: <!-- $small-font-size -->;
+            }  
+            
+            td.restore {
+                text-align: right;
+                font-size: <!-- $small-font-size -->;
+            }
+            
+            td.avatar {
+                width: 32px;
+            }
+            
+            td.avatar img {
+                margin-top: 2px;
+                border-radius: 3px;
+                width: 24px;
+                height: 24px;
+            }
         </style>
     </head>
     <body oncontextmenu="return false;">

@@ -260,6 +260,7 @@ namespace SparkleShare {
                     CheckRepositories ();
                     RepositoriesLoaded = true;
                     FolderListChanged ();
+                    UpdateState ();
 
                 }).Start ();
             }

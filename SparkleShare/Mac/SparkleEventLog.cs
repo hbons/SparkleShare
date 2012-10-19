@@ -80,6 +80,7 @@ namespace SparkleShare {
                         new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
                 };
 
+
                 this.hidden_close_button = new NSButton () {
                     KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
                     KeyEquivalent = "w"
@@ -197,12 +198,21 @@ namespace SparkleShare {
                     });
                 }
             };
-
+            
             Controller.UpdateChooserEvent += delegate (string [] folders) {
                 using (var a = new NSAutoreleasePool ())
                 {
                     InvokeOnMainThread (delegate {
                         UpdateChooser (folders);
+                    });
+                }
+            };
+
+            Controller.UpdateChooserEnablementEvent += delegate (bool enabled) {
+                using (var a = new NSAutoreleasePool ())
+                {
+                    InvokeOnMainThread (delegate {
+                        this.popup_button.Enabled = enabled;
                     });
                 }
             };
@@ -228,13 +238,37 @@ namespace SparkleShare {
                     });
                 }
             };
-
+            
             Controller.UpdateSizeInfoEvent += delegate (string size, string history_size) {
                 using (var a = new NSAutoreleasePool ())
                 {
                     InvokeOnMainThread (delegate {
                         this.size_label_value.StringValue    = size;
                         this.history_label_value.StringValue = history_size;
+                    });
+                }
+            };
+
+            Controller.ShowSaveDialogEvent += delegate (string file_name, string target_folder_path) {
+                using (var a = new NSAutoreleasePool ())
+                {
+                    InvokeOnMainThread (() => {
+                        // TODO: Make this a sheet
+                        NSSavePanel panel = new NSSavePanel () {
+                            DirectoryUrl         = new NSUrl (target_folder_path, true),
+                            NameFieldStringValue = file_name,
+                            ParentWindow         = this,
+                            Title                = "Restore from History",
+                            PreventsApplicationTerminationWhenModal = false
+                        };
+
+                        if ((NSPanelButtonType) panel.RunModal ()== NSPanelButtonType.Ok) {
+                            string target_file_path = Path.Combine (panel.DirectoryUrl.RelativePath, panel.NameFieldStringValue);
+                            Controller.SaveDialogCompleted (target_file_path);
+                        
+                        } else {
+                            Controller.SaveDialogCancelled ();
+                        }
                     });
                 }
             };
@@ -346,6 +380,7 @@ namespace SparkleShare {
                         html = html.Replace ("<!-- $body-font-size -->", "13.4px");
                         html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
                         html = html.Replace ("<!-- $small-color -->", "#ddd");
+                        html = html.Replace ("<!-- $small-font-size -->", "10px");
                         html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
                         html = html.Replace ("<!-- $a-color -->", "#0085cf");
                         html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
@@ -372,7 +407,7 @@ namespace SparkleShare {
 
                             this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
 
-                            web_view.PolicyDelegate = new SparkleWebPolicyDelegate ();
+                            this.web_view.PolicyDelegate = new SparkleWebPolicyDelegate ();
                             ContentView.AddSubview (this.web_view);
 
                             (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate).LinkClicked +=

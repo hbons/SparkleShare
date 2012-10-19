@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 using SparkleLib;
 
@@ -29,6 +30,7 @@ namespace SparkleLib.Git {
 
 		private bool user_is_set;
         private bool use_git_bin;
+        private bool is_encrypted;
 
 
         public SparkleRepo (string path, SparkleConfig config) : base (path, config)
@@ -50,6 +52,11 @@ namespace SparkleLib.Git {
                 git = new SparkleGit (LocalPath, "rebase --abort");
                 git.StartAndWaitForExit ();
             }
+
+            string password_file_path = Path.Combine (LocalPath, ".git", "password");
+
+            if (File.Exists (password_file_path))
+                this.is_encrypted = true;
         }
 
 
@@ -238,9 +245,8 @@ namespace SparkleLib.Git {
                         if (line.Contains ("|")) {
                             speed = line.Substring (line.IndexOf ("|") + 1).Trim ();
                             speed = speed.Replace (", done.", "").Trim ();
-                            speed = speed.Replace ("i", "");
-                            speed = speed.Replace ("KB/s", "ᴋʙ/s");
-                            speed = speed.Replace ("MB/s", "ᴍʙ/s");
+                            speed = speed.Replace ("KiB/s", "ᴋʙ/s");
+                            speed = speed.Replace ("MiB/s", "ᴍʙ/s");
                         }
                     }
 
@@ -468,6 +474,7 @@ namespace SparkleLib.Git {
             foreach (string line in lines) {
                 string conflicting_path = line.Substring (3);
                 conflicting_path        = EnsureSpecialCharacters (conflicting_path);
+                conflicting_path        = conflicting_path.Replace ("\"", "\\\"");
 
                 SparkleLogger.LogInfo ("Git", Name + " | Conflict type: " + line);
 
@@ -539,7 +546,7 @@ namespace SparkleLib.Git {
         }
 
 
-        public override void RevertFile (string path, string revision)
+        public override void RestoreFile (string path, string revision, string target_file_path)
         {
             if (path == null)
                 throw new ArgumentNullException ("path");
@@ -547,27 +554,58 @@ namespace SparkleLib.Git {
             if (revision == null)
                 throw new ArgumentNullException ("revision");
 
-            path = path.Replace ("\\", "/");
+            SparkleLogger.LogInfo ("Git", Name + " | Restoring \"" + path + "\" (revision " + revision + ")");
 
-            SparkleGit git = new SparkleGit (LocalPath, "checkout " + revision + " \"" + path + "\"");
-            git.StartAndWaitForExit ();
+            // FIXME: git-show doesn't decrypt objects, so we can't use it to retrieve
+            // files from the index. This is a suboptimal workaround but it does the job
+            if (this.is_encrypted) {
+                // Restore the older file...
+                SparkleGit git = new SparkleGit (LocalPath, "checkout " + revision + " \"" + path + "\"");
+                git.StartAndWaitForExit ();
 
-            if (git.ExitCode == 0)
-                SparkleLogger.LogInfo ("Git", Name + " | Checked out \"" + path + "\" (" + revision + ")");
-             else
-                SparkleLogger.LogInfo ("Git", Name + " | Failed to check out \"" + path + "\" (" + revision + ")");
+                string local_file_path = Path.Combine (LocalPath, path);
+
+                // ...move it...
+                try {
+                    File.Move (local_file_path, target_file_path);
+                
+                } catch {
+                    SparkleLogger.LogInfo ("Git",
+                        Name + " | Could not move \"" + local_file_path + "\" to \"" + target_file_path + "\"");
+                }
+
+                // ...and restore the most recent revision
+                git = new SparkleGit (LocalPath, "checkout " + CurrentRevision + " \"" + path + "\"");
+                git.StartAndWaitForExit ();
+            
+            // The correct way
+            } else {
+                path = path.Replace ("\"", "\\\"");
+
+                SparkleGit git = new SparkleGit (LocalPath, "show " + revision + ":\"" + path + "\"");
+                git.Start ();
+
+                FileStream stream = File.OpenWrite (target_file_path);    
+                git.StandardOutput.BaseStream.CopyTo (stream);
+                stream.Close ();
+
+                git.WaitForExit ();
+            }
+
+            if (target_file_path.StartsWith (LocalPath))
+                new Thread (() => OnFileActivity (null)).Start ();
         }
 
 
-        public override List<SparkleChangeSet> GetChangeSets (string path, int count)
+        public override List<SparkleChangeSet> GetChangeSets (string path)
         {
-            return GetChangeSetsInternal (path, count);
+            return GetChangeSetsInternal (path);
         }   
 
 
-        public override List<SparkleChangeSet> GetChangeSets (int count)
+        public override List<SparkleChangeSet> GetChangeSets ()
         {
-            return GetChangeSetsInternal (null, count);
+            return GetChangeSetsInternal (null);
         }
 
 
@@ -590,31 +628,27 @@ namespace SparkleLib.Git {
             if (Error != ErrorStatus.None) {
                 SparkleLogger.LogInfo ("Git", Name + " | Error status changed to " + Error);
                 return true;
+            
             } else {
                 return false;
             }
         }
 
 
-        private List<SparkleChangeSet> GetChangeSetsInternal (string path, int count)
+        private List<SparkleChangeSet> GetChangeSetsInternal (string path)
         {
-            if (count < 1)
-                throw new ArgumentOutOfRangeException ("count");
-
-            count = 150;
             List <SparkleChangeSet> change_sets = new List <SparkleChangeSet> ();
-
             SparkleGit git;
 
             if (path == null) {
-                git = new SparkleGit (LocalPath, "log -" + count + " --raw --find-renames --date=iso " +
+                git = new SparkleGit (LocalPath, "log --since=1.month --raw --find-renames --date=iso " +
                     "--format=medium --no-color --no-merges");
 
             } else {
                 path = path.Replace ("\\", "/");
 
-                git = new SparkleGit (LocalPath, "log -" + count + " --raw --find-renames --date=iso " +
-                    "--format=medium --no-color --no-merges -- " + path);
+                git = new SparkleGit (LocalPath, "log --raw --find-renames --date=iso " +
+                    "--format=medium --no-color --no-merges -- \"" + path + "\"");
             }
 
             string output = git.StartAndReadStandardOutput ();
@@ -681,12 +715,15 @@ namespace SparkleLib.Git {
                         if (entry_line.StartsWith (":")) {
                             string type_letter = entry_line [37].ToString ();
                             string file_path   = entry_line.Substring (39);
-
-                            if (file_path.EndsWith (".empty"))
-                                file_path = file_path.Substring (0, file_path.Length - ".empty".Length);
+                            bool change_is_folder = false;
 
                             if (file_path.Equals (".sparkleshare"))
                                 continue;
+
+                            if (file_path.EndsWith (".empty")) { 
+                                file_path        = file_path.Substring (0, file_path.Length - ".empty".Length);
+                                change_is_folder = true;
+                            }
 
                             file_path = EnsureSpecialCharacters (file_path);
                             file_path = file_path.Replace ("\\\"", "\"");
@@ -702,15 +739,20 @@ namespace SparkleLib.Git {
                                 file_path = file_path.Replace ("\\\"", "\"");
                                 to_file_path = to_file_path.Replace ("\\\"", "\"");
 
-                                if (file_path.EndsWith (".empty"))
+                                if (file_path.EndsWith (".empty")) {
                                     file_path = file_path.Substring (0, file_path.Length - 6);
+                                    change_is_folder = true;
+                                }
 
-                                if (to_file_path.EndsWith (".empty"))
+                                if (to_file_path.EndsWith (".empty")) {
                                     to_file_path = to_file_path.Substring (0, to_file_path.Length - 6);
+                                    change_is_folder = true;
+                                }
 
                                 change_set.Changes.Add (
                                     new SparkleChange () {
                                         Path        = file_path,
+                                        IsFolder    = change_is_folder,
                                         MovedToPath = to_file_path,
                                         Timestamp   = change_set.Timestamp,
                                         Type        = SparkleChangeType.Moved
@@ -730,6 +772,7 @@ namespace SparkleLib.Git {
                                 change_set.Changes.Add (
                                     new SparkleChange () {
                                         Path      = file_path,
+                                        IsFolder  = change_is_folder,
                                         Timestamp = change_set.Timestamp,
                                         Type      = change_type
                                     }

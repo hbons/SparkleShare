@@ -54,9 +54,9 @@ namespace SparkleLib {
         public abstract bool HasRemoteChanges { get; }
         public abstract bool SyncUp ();
         public abstract bool SyncDown ();
-        public abstract List<SparkleChangeSet> GetChangeSets (int count);
-        public abstract List<SparkleChangeSet> GetChangeSets (string path, int count);
-        public abstract void RevertFile (string path, string revision);
+        public abstract List<SparkleChangeSet> GetChangeSets ();
+        public abstract List<SparkleChangeSet> GetChangeSets (string path);
+        public abstract void RestoreFile (string path, string revision, string target_file_path);
 
         public event SyncStatusChangedEventHandler SyncStatusChanged = delegate { };
         public delegate void SyncStatusChangedEventHandler (SyncStatus new_status);
@@ -195,19 +195,17 @@ namespace SparkleLib {
 
             // Sync up everything that changed
             // since we've been offline
-            if (!this.is_syncing && (HasLocalChanges || HasUnsyncedChanges)) {
-                SyncUpBase ();
-
-                while (HasLocalChanges)
+            new Thread (() => {
+                if (!this.is_syncing && (HasLocalChanges || HasUnsyncedChanges)) {
                     SyncUpBase ();
-            }
 
-            this.remote_timer.Start ();
-        }
+                    while (HasLocalChanges && !this.is_syncing)
+                        SyncUpBase ();
+                }
 
-
-        public List<SparkleChangeSet> GetChangeSets () {
-            return GetChangeSets (30);
+                this.remote_timer.Start ();
+            
+            }).Start ();
         }
 
 
@@ -218,9 +216,11 @@ namespace SparkleLib {
             if (IsBuffering)
                 return;
 
-            foreach (string exclude_path in ExcludePaths) {
-                if (args.FullPath.Contains (exclude_path))
-                    return;
+            if (args != null) {
+                foreach (string exclude_path in ExcludePaths) {
+                    if (args.FullPath.Contains (exclude_path))
+                        return;
+                }
             }
 
             lock (this.buffer_lock) {
