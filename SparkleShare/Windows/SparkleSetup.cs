@@ -544,7 +544,7 @@ namespace SparkleShare {
 
                     case PageType.CryptoSetup: {
                         
-                        Header      = "Set up file encryption!";
+                        Header      = "Set up file encryption";
                         Description = "This project is supposed to be encrypted, but it doesn't yet have a password set. Please provide one below.";
                         
                         TextBlock password_label = new TextBlock () {
@@ -566,15 +566,26 @@ namespace SparkleShare {
                             IsChecked = false
                         };
                         
+						TextBlock info_label = new TextBlock () {
+                            Text       = "This password can't be changed later, and your files can't be recovered if it's forgotten.",
+							TextWrapping = TextWrapping.Wrap,
+							Width = 315
+                        };
+
+						Image warning_image = new Image () {
+							Source = Imaging.CreateBitmapSourceFromHIcon (Drawing.SystemIcons.Information.Handle,
+                            	Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions ())
+						};
+
                         show_password_checkbox.Checked += delegate {
-                            visible_password_box.Text = password_box.Password;
+                            visible_password_box.Text       = password_box.Password;
                             visible_password_box.Visibility = Visibility.Visible;
-                            password_box.Visibility = Visibility.Hidden;
+                            password_box.Visibility         = Visibility.Hidden;
                         };
                         
                         show_password_checkbox.Unchecked += delegate {
-                            password_box.Password = visible_password_box.Text;
-                            password_box.Visibility = Visibility.Visible;
+                            password_box.Password           = visible_password_box.Text;
+                            password_box.Visibility         = Visibility.Visible;
                             visible_password_box.Visibility = Visibility.Hidden;
                         };
                         
@@ -587,7 +598,8 @@ namespace SparkleShare {
                         };
                         
                         Button continue_button = new Button () {
-                            Content = "Continue"
+                            Content = "Continue",
+							IsEnabled = false
                         };
                         
                         continue_button.Click += delegate {
@@ -612,21 +624,29 @@ namespace SparkleShare {
                         };
                         
                         ContentCanvas.Children.Add (password_label);
-                        Canvas.SetLeft (password_label, 180);
-                        Canvas.SetTop (password_label, 200);
+                        Canvas.SetLeft (password_label, 270);
+                        Canvas.SetTop (password_label, 180);
                         
                         ContentCanvas.Children.Add (password_box);
-                        Canvas.SetLeft (password_box, 340);
-                        Canvas.SetTop (password_box, 200);
+                        Canvas.SetLeft (password_box, 335);
+                        Canvas.SetTop (password_box, 180);
                         
                         ContentCanvas.Children.Add (visible_password_box);
-                        Canvas.SetLeft (visible_password_box, 340);
-                        Canvas.SetTop (visible_password_box, 200);
+                        Canvas.SetLeft (visible_password_box, 335);
+                        Canvas.SetTop (visible_password_box, 180);
                         
                         ContentCanvas.Children.Add (show_password_checkbox);
-                        Canvas.SetLeft (show_password_checkbox, 340);
-                        Canvas.SetTop (show_password_checkbox, 225);
-                        
+                        Canvas.SetLeft (show_password_checkbox, 338);
+                        Canvas.SetTop (show_password_checkbox, 208);
+
+						ContentCanvas.Children.Add (info_label);
+                        Canvas.SetLeft (info_label, 240);
+                        Canvas.SetTop (info_label, 300);
+                       	                                              
+				        ContentCanvas.Children.Add (warning_image);
+                        Canvas.SetLeft (warning_image, 193);
+                        Canvas.SetTop (warning_image, 300);
+					
                         Buttons.Add (continue_button);
                         Buttons.Add (cancel_button);
                         
@@ -678,7 +698,8 @@ namespace SparkleShare {
                         };
                         
                         Button continue_button = new Button () {
-                            Content = "Continue"
+                            Content = "Continue",
+							IsEnabled = false
                         };
                         
                         continue_button.Click += delegate {
@@ -703,20 +724,20 @@ namespace SparkleShare {
                         };
                         
                         ContentCanvas.Children.Add (password_label);
-                        Canvas.SetLeft (password_label, 180);
-                        Canvas.SetTop (password_label, 200);
+                        Canvas.SetLeft (password_label, 270);
+                        Canvas.SetTop (password_label, 180);
                         
                         ContentCanvas.Children.Add (password_box);
-                        Canvas.SetLeft (password_box, 340);
-                        Canvas.SetTop (password_box, 200);
+                        Canvas.SetLeft (password_box, 335);
+                        Canvas.SetTop (password_box, 180);
                         
                         ContentCanvas.Children.Add (visible_password_box);
-                        Canvas.SetLeft (visible_password_box, 340);
-                        Canvas.SetTop (visible_password_box, 200);
+                        Canvas.SetLeft (visible_password_box, 335);
+                        Canvas.SetTop (visible_password_box, 180);
                         
                         ContentCanvas.Children.Add (show_password_checkbox);
-                        Canvas.SetLeft (show_password_checkbox, 340);
-                        Canvas.SetTop (show_password_checkbox, 225);
+                        Canvas.SetLeft (show_password_checkbox, 338);
+                        Canvas.SetTop (show_password_checkbox, 208);
                         
                         Buttons.Add (continue_button);
                         Buttons.Add (cancel_button);
