@@ -40,6 +40,8 @@ namespace SparkleLib.Git {
 
                 // Check if the repo's salt is stored in a branch...
                 SparkleGit git = new SparkleGit (TargetFolder, "branch -a");
+                git.StartAndWaitForExit ();
+
                 string [] branches = git.StartAndReadStandardOutput ().Split (Environment.NewLine.ToCharArray ());
                 // TODO double check env.newline ^
 					
