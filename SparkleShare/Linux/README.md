@@ -63,12 +63,10 @@ $ sudo zypper install gtk-sharp2 mono-core mono-devel monodevelop ndesk-dbus-gli
 You can build and install SparkleShare like this:
 
 ```bash
-$ ./configure --prefix=/usr (or ./autogen.sh if you build from the repository)
+$ ./configure (or ./autogen.sh if you build from the repository)
 $ make
 $ sudo make install
 ```
-
-**Note:** If there is no `configure` file, first run `./autogen.sh`
 
 
 ### Resetting SparkleShare settings
@@ -76,17 +74,6 @@ $ sudo make install
 ```
 rm -Rf ~/SparkleShare
 rm -Rf ~/.config/sparkleshare
-```
-
-
-### Updating the version number
-
-Change the verion number in the following files before making a release:
-
-```
-configure.ac
-SparkleLib/Defines.cs
-SparkleShare/Windows/SparkleShare.wxs
 ```
 
 
