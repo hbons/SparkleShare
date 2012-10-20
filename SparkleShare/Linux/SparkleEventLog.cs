@@ -263,12 +263,6 @@ namespace SparkleShare {
         public void UpdateContent (string html)
         {
             Thread thread = new Thread (() => {
-                if (html == null)
-                    html = Controller.HTML;
-
-                if (html == null)
-                    return;
-                
                 string pixmaps_path = IO.Path.Combine (SparkleUI.AssetsPath, "pixmaps");
                 string icons_path  = new string [] {SparkleUI.AssetsPath, "icons",
                     "hicolor", "12x12", "status"}.Combine ();

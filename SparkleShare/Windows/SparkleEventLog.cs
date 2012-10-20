@@ -273,10 +273,7 @@ namespace SparkleShare {
         
         public void UpdateContent (string html)
         {
-            Thread thread = new Thread (new ThreadStart (delegate {
-                if (html == null)
-                    html = Controller.HTML;
-                
+            new Thread (() => {
                 string pixmaps_path = Path.Combine (
                     SparkleLib.SparkleConfig.DefaultConfig.TmpPath, "Pixmaps");
                 
@@ -310,8 +307,8 @@ namespace SparkleShare {
                 Dispatcher.BeginInvoke ((Action) delegate {
                     this.spinner.Stop ();
             
-					this.web_browser.ObjectForScripting = new SparkleScriptingObject ();
-			    	this.web_browser.NavigateToString (html);
+					this.web_browser.ObjectForScripting = new SparkleScriptingObject ();  	
+					this.web_browser.NavigateToString (html);
 				
                     if (!this.canvas.Children.Contains (this.web_browser)) {
                         this.canvas.Children.Add (this.web_browser);
@@ -319,9 +316,8 @@ namespace SparkleShare {
                         Canvas.SetTop (this.web_browser, 36);
                     }
                 });
-            }));
 
-            thread.Start ();
+			}).Start ();
         }
         
         
