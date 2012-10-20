@@ -10,7 +10,7 @@
               $('dl dd:nth-child(-n+10)').css('display', 'block');
               $('.day-entry-content .event-entry:last-child').css('border', 'none');
             
-              $('a').click(function (event) {
+              $('a').not('.show').click(function (event) {
                   window.external.LinkClicked($(this).attr("href"));
                   event.preventDefault();
               });
