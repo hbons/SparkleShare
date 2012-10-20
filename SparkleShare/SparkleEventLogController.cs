@@ -80,7 +80,9 @@ namespace SparkleShare {
                     if (watch.ElapsedMilliseconds < delay)
                         Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
 
-                    UpdateContentEvent (html);
+					if (!string.IsNullOrEmpty (html))
+                    	UpdateContentEvent (html);
+
                     UpdateSizeInfoEvent (Size, HistorySize);
 
                 }).Start ();
@@ -171,8 +173,11 @@ namespace SparkleShare {
 
                             UpdateChooserEvent (Folders);
                             UpdateChooserEnablementEvent (true);
-                            UpdateContentEvent (html);
-                            UpdateSizeInfoEvent (Size, HistorySize);
+
+							if (!string.IsNullOrEmpty (html))
+                            	UpdateContentEvent (html);
+                            
+							UpdateSizeInfoEvent (Size, HistorySize);
 
                         }).Start ();
                     }
@@ -200,7 +205,9 @@ namespace SparkleShare {
                 if (watch.ElapsedMilliseconds < delay)
                     Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
 
-                UpdateContentEvent (html);
+				if (!string.IsNullOrEmpty (html))
+                	UpdateContentEvent (html);
+
                 UpdateSizeInfoEvent (Size, HistorySize);
             };
 			
@@ -285,7 +292,8 @@ namespace SparkleShare {
 	                    if (watch.ElapsedMilliseconds < delay)
 	                        Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
 
-	                    UpdateContentEvent (html);
+						if (!string.IsNullOrEmpty (html))
+	                    	UpdateContentEvent (html);
 
                 	}).Start ();
 
