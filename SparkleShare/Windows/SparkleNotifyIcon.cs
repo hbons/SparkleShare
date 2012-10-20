@@ -117,10 +117,10 @@ namespace SparkleShare {
             "MouseClick", RoutingStrategy.Bubble, typeof (MouseButtonEventHandler), typeof (SparkleNotifyIcon));
 
         public readonly RoutedEvent MouseDoubleClickEvent = EventManager.RegisterRoutedEvent(
-            "MouseDoubleClick",	RoutingStrategy.Bubble,	typeof (MouseButtonEventHandler), typeof (SparkleNotifyIcon));
+            "MouseDoubleClick",    RoutingStrategy.Bubble,    typeof (MouseButtonEventHandler), typeof (SparkleNotifyIcon));
 
         public readonly DependencyProperty TextProperty = DependencyProperty.Register(
-            "Text",	typeof(string), typeof (SparkleNotifyIcon), new PropertyMetadata (OnTextChanged));
+            "Text",    typeof(string), typeof (SparkleNotifyIcon), new PropertyMetadata (OnTextChanged));
 
         
         private string header_text;
@@ -154,7 +154,7 @@ namespace SparkleShare {
             // TODO:
             // - Use the image pointed to by image_path
             // - Find a way to use the prettier (Win7?) balloons
-            this.notify_icon.ShowBalloonTip (5 * 1000, title, subtext, Forms.ToolTipIcon.Info);	
+            this.notify_icon.ShowBalloonTip (5 * 1000, title, subtext, Forms.ToolTipIcon.Info);    
         }
         
 
@@ -241,7 +241,7 @@ namespace SparkleShare {
                 struct_pointer, typeof (MouseLLHook));
             
             return new Point (mouse_hook.X, mouse_hook.Y);
-        }		
+        }        
         
         
         private int OnMouseEventProc (int code, int button, IntPtr data_pointer)
@@ -277,7 +277,7 @@ namespace SparkleShare {
                     GetModuleHandle (module.ModuleName), 0);
             }
 
-            if (this.mouse_hook_handle == 0)			
+            if (this.mouse_hook_handle == 0)            
                 throw new Win32Exception (Marshal.GetLastWin32Error ());
         }
 

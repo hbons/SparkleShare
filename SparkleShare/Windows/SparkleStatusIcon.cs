@@ -50,7 +50,7 @@ namespace SparkleShare {
 
 
         public SparkleStatusIcon ()
-		{
+        {
             this.syncing_idle_image  = SparkleUIHelpers.GetBitmap ("process-syncing-idle");
             this.syncing_up_image    = SparkleUIHelpers.GetBitmap ("process-syncing-up");
             this.syncing_down_image  = SparkleUIHelpers.GetBitmap ("process-syncing-down");
@@ -61,9 +61,9 @@ namespace SparkleShare {
             this.notify_icon.HeaderText = "SparkleShare";
 
             CreateMenu ();
-			
-			Controller.UpdateIconEvent += delegate (IconState state) {
-				Dispatcher.BeginInvoke ((Action) delegate {
+            
+            Controller.UpdateIconEvent += delegate (IconState state) {
+                Dispatcher.BeginInvoke ((Action) delegate {
                     switch (state) {
                     case IconState.Idle: {
                         this.notify_icon.Icon = this.syncing_idle_image;
@@ -86,22 +86,22 @@ namespace SparkleShare {
                         break;
                     }
                     }
-                });				
-			};
-			
-			Controller.UpdateStatusItemEvent += delegate (string state_text) {
-				Dispatcher.BeginInvoke ((Action) delegate {
-					this.state_item.Header = state_text;
-					this.state_item.UpdateLayout ();
-					this.notify_icon.HeaderText = "SparkleShare\n" + state_text;
-				});
-			};
-			
-			Controller.UpdateMenuEvent += delegate (IconState state) {
-				Dispatcher.BeginInvoke ((Action) delegate {
-					CreateMenu ();     
-				});
-			};
+                });                
+            };
+            
+            Controller.UpdateStatusItemEvent += delegate (string state_text) {
+                Dispatcher.BeginInvoke ((Action) delegate {
+                    this.state_item.Header = state_text;
+                    this.state_item.UpdateLayout ();
+                    this.notify_icon.HeaderText = "SparkleShare\n" + state_text;
+                });
+            };
+            
+            Controller.UpdateMenuEvent += delegate (IconState state) {
+                Dispatcher.BeginInvoke ((Action) delegate {
+                    CreateMenu ();     
+                });
+            };
             
             Controller.UpdateQuitItemEvent += delegate (bool item_enabled) {
                   Dispatcher.BeginInvoke ((Action) delegate {
@@ -120,14 +120,14 @@ namespace SparkleShare {
                 Header    = Controller.StateText,
                 IsEnabled = false
             };
-			
-			this.notify_icon.HeaderText = "SparkleShare\n" + Controller.StateText;
+            
+            this.notify_icon.HeaderText = "SparkleShare\n" + Controller.StateText;
             
             Image folder_image = new Image () {
-            	Source = SparkleUIHelpers.GetImageSource ("sparkleshare-folder"),
+                Source = SparkleUIHelpers.GetImageSource ("sparkleshare-folder"),
                 Width  = 16,
-            	Height = 16
-			};
+                Height = 16
+            };
             
             SparkleMenuItem folder_item = new SparkleMenuItem () {
                 Header = "SparkleShare",
@@ -156,8 +156,8 @@ namespace SparkleShare {
                 };
             
             SparkleMenuItem notify_item = new SparkleMenuItem () {
-				Header = "Notifications"
-			};
+                Header = "Notifications"
+            };
 
                 CheckBox notify_check_box = new CheckBox () {
                     Margin    = new Thickness (6, 0, 0, 0),
@@ -166,11 +166,11 @@ namespace SparkleShare {
 
                 notify_item.Icon = notify_check_box;
 
-				notify_check_box.Click += delegate {
-					this.context_menu.IsOpen = false;
-					Program.Controller.ToggleNotifications ();
-					notify_check_box.IsChecked = Program.Controller.NotificationsEnabled;
-				};
+                notify_check_box.Click += delegate {
+                    this.context_menu.IsOpen = false;
+                    Program.Controller.ToggleNotifications ();
+                    notify_check_box.IsChecked = Program.Controller.NotificationsEnabled;
+                };
 
                 notify_item.Click += delegate {
                     Program.Controller.ToggleNotifications ();
@@ -197,7 +197,7 @@ namespace SparkleShare {
             
             this.context_menu.Items.Add (this.state_item);
             this.context_menu.Items.Add (new Separator ());
-			this.context_menu.Items.Add (folder_item);
+            this.context_menu.Items.Add (folder_item);
 
             if (Controller.Folders.Length > 0) {
                 int i = 0;
@@ -208,12 +208,12 @@ namespace SparkleShare {
                     
                     subfolder_item.Click += OpenFolderDelegate (folder_name);
                     
-					Image subfolder_image = new Image () {
-		            	Source = SparkleUIHelpers.GetImageSource ("folder"),
-		                Width  = 16,
-		            	Height = 16
-					};
-					
+                    Image subfolder_image = new Image () {
+                        Source = SparkleUIHelpers.GetImageSource ("folder"),
+                        Width  = 16,
+                        Height = 16
+                    };
+                    
                     if (!string.IsNullOrEmpty (Controller.FolderErrors [i])) {
                         subfolder_item.Icon = new Image () {
                             Source = (BitmapSource) Imaging.CreateBitmapSourceFromHIcon (
@@ -228,20 +228,20 @@ namespace SparkleShare {
                         };
 
                         subfolder_item.Items.Add (error_item);
-                    	
-					} else {
-                    	subfolder_item.Icon = subfolder_image;
-					}
-					
-					this.context_menu.Items.Add (subfolder_item);
+                        
+                    } else {
+                        subfolder_item.Icon = subfolder_image;
+                    }
+                    
+                    this.context_menu.Items.Add (subfolder_item);
 
                     i++;
-				}
-				
-				SparkleMenuItem more_item = new SparkleMenuItem () {
+                }
+                
+                SparkleMenuItem more_item = new SparkleMenuItem () {
                     Header = "More projects"
                 };
-				
+                
                 i = 0;
                 foreach (string folder_name in Controller.OverflowFolders) {     
                     SparkleMenuItem subfolder_item = new SparkleMenuItem () {
@@ -250,13 +250,13 @@ namespace SparkleShare {
                     
                     subfolder_item.Click += OpenFolderDelegate (folder_name);
                     
-					Image subfolder_image = new Image () {
-		            	Source = SparkleUIHelpers.GetImageSource ("folder"),
-		                Width  = 16,
-		            	Height = 16
-					};
-					
-				    if (!string.IsNullOrEmpty (Controller.OverflowFolderErrors [i])) {
+                    Image subfolder_image = new Image () {
+                        Source = SparkleUIHelpers.GetImageSource ("folder"),
+                        Width  = 16,
+                        Height = 16
+                    };
+                    
+                    if (!string.IsNullOrEmpty (Controller.OverflowFolderErrors [i])) {
                         subfolder_item.Icon = new Image () {
                             Source = (BitmapSource) Imaging.CreateBitmapSourceFromHIcon (
                                 System.Drawing.SystemIcons.Exclamation.Handle, Int32Rect.Empty,
@@ -270,34 +270,34 @@ namespace SparkleShare {
                         };
                         
                         subfolder_item.Items.Add (error_item);
-            			
-					} else {
+                        
+                    } else {
                         subfolder_item.Icon = subfolder_image;
-					}
-					
-					more_item.Items.Add (subfolder_item);
+                    }
+                    
+                    more_item.Items.Add (subfolder_item);
 
                     i++;
                 }
-				
-				if (more_item.Items.Count > 0) {
+                
+                if (more_item.Items.Count > 0) {
                     this.context_menu.Items.Add (new Separator ());
                     this.context_menu.Items.Add (more_item);
-				}
+                }
 
             }
             
             this.context_menu.Items.Add (new Separator ());
             this.context_menu.Items.Add (add_item);
             this.context_menu.Items.Add (this.log_item);
-			this.context_menu.Items.Add (new Separator ());
-			this.context_menu.Items.Add (notify_item);
+            this.context_menu.Items.Add (new Separator ());
+            this.context_menu.Items.Add (notify_item);
             this.context_menu.Items.Add (new Separator ());
             this.context_menu.Items.Add (about_item);
             this.context_menu.Items.Add (new Separator ());
             this.context_menu.Items.Add (this.exit_item);
-			
-			this.notify_icon.ContextMenu = this.context_menu;
+            
+            this.notify_icon.ContextMenu = this.context_menu;
         }
 
         

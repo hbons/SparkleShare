@@ -46,9 +46,9 @@ namespace SparkleLib {
     public class SparkleChange {
 
         public SparkleChangeType Type;
-		public DateTime Timestamp;
+        public DateTime Timestamp;
         public bool IsFolder = false;
-		
+        
         public string Path;
         public string MovedToPath;
     }

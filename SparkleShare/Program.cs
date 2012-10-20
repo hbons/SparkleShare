@@ -54,15 +54,15 @@ namespace SparkleShare {
                     "under certain conditions. Please read the GNU GPLv3 for details." + n +
                     n +
                     "Usage: sparkleshare [start|stop|restart]");
-				Console.WriteLine ("SparkleShare is already running.");
+                Console.WriteLine ("SparkleShare is already running.");
                 Environment.Exit (-1);
             }
 
-			// Only allow one instance of SparkleShare (on Windows)
-			if (!program_mutex.WaitOne (0, false)) {
-				Console.WriteLine ("SparkleShare is already running.");
-				Environment.Exit (-1);
-			}
+            // Only allow one instance of SparkleShare (on Windows)
+            if (!program_mutex.WaitOne (0, false)) {
+                Console.WriteLine ("SparkleShare is already running.");
+                Environment.Exit (-1);
+            }
 
             try {
                 Controller = new SparkleController ();

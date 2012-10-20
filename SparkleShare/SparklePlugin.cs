@@ -50,7 +50,7 @@ namespace SparkleShare {
                     return IO.Path.Combine (PluginsPath, image_file_name);
             }
         }
-		
+        
         public bool PathUsesLowerCase {
             get {
                 string uses_lower_case = GetValue ("path", "uses_lower_case");

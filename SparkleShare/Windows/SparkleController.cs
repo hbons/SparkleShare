@@ -129,17 +129,17 @@ namespace SparkleShare {
         public override bool CreateSparkleShareFolder ()
         {
             if (Directory.Exists (FoldersPath))
-				return false;
+                return false;
 
             Directory.CreateDirectory (FoldersPath);
             File.SetAttributes (FoldersPath, File.GetAttributes (FoldersPath) | FileAttributes.System);
 
-			SparkleLogger.LogInfo ("Config", "Created '" + FoldersPath + "'");
+            SparkleLogger.LogInfo ("Config", "Created '" + FoldersPath + "'");
 
-			string app_path       = Path.GetDirectoryName (Forms.Application.ExecutablePath);
+            string app_path       = Path.GetDirectoryName (Forms.Application.ExecutablePath);
             string icon_file_path = Path.Combine (app_path, "Pixmaps", "sparkleshare-folder.ico");
 
-			if (!File.Exists (icon_file_path)) {
+            if (!File.Exists (icon_file_path)) {
                 string ini_file_path  = Path.Combine (FoldersPath, "desktop.ini");
                 
                 string ini_file = "[.ShellClassInfo]" +
@@ -147,20 +147,20 @@ namespace SparkleShare {
                     "IconIndex=0" +
                     "InfoTip=SparkleShare";
 
-				try {
-					File.Create (ini_file_path).Close ();
-	                File.WriteAllText (ini_file_path, ini_file);
-	                
-	                File.SetAttributes (ini_file_path,
-	                    File.GetAttributes (ini_file_path) | FileAttributes.Hidden | FileAttributes.System);
+                try {
+                    File.Create (ini_file_path).Close ();
+                    File.WriteAllText (ini_file_path, ini_file);
+                    
+                    File.SetAttributes (ini_file_path,
+                        File.GetAttributes (ini_file_path) | FileAttributes.Hidden | FileAttributes.System);
 
-				} catch (IOException e) {
-					SparkleLogger.LogInfo ("Config",
-						"Failed setting icon for '" + FoldersPath + "': " + e.Message);
-				}
+                } catch (IOException e) {
+                    SparkleLogger.LogInfo ("Config",
+                        "Failed setting icon for '" + FoldersPath + "': " + e.Message);
+                }
 
                 return true;
-			}
+            }
 
             return false;
         }
@@ -172,20 +172,20 @@ namespace SparkleShare {
         }
 
 
-		public override void OpenFolder (string path)
-		{
-			Process process             = new Process ();
-			process.StartInfo.FileName  = "explorer";
-			process.StartInfo.Arguments = path;
-			
-			process.Start ();
-		}
+        public override void OpenFolder (string path)
+        {
+            Process process             = new Process ();
+            process.StartInfo.FileName  = "explorer";
+            process.StartInfo.Arguments = path;
+            
+            process.Start ();
+        }
 
 
-		public override void OpenWebsite (string url)
-		{
-			Process.Start (new ProcessStartInfo (url));
-		}
+        public override void OpenWebsite (string url)
+        {
+            Process.Start (new ProcessStartInfo (url));
+        }
 
 
         public override void Quit ()
