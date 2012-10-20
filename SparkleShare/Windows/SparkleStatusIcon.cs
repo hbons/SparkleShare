@@ -109,13 +109,6 @@ namespace SparkleShare {
                     this.exit_item.UpdateLayout ();
                 });
             };
-
-            Controller.UpdateRecentEventsItemEvent += delegate (bool item_enabled) {
-                  Dispatcher.BeginInvoke ((Action) delegate {
-                    this.log_item.IsEnabled = item_enabled;
-                    this.log_item.UpdateLayout ();
-                });
-            };
         }
 
 
