@@ -28,7 +28,7 @@ namespace SparkleLib.Git {
 
     public class SparkleRepo : SparkleRepoBase {
 
-		private bool user_is_set;
+        private bool user_is_set;
         private bool use_git_bin;
         private bool is_encrypted;
 
@@ -185,22 +185,6 @@ namespace SparkleLib.Git {
 
                 string message = FormatCommitMessage ();
                 Commit (message);
-
-                string salt_file_path = new string [] { LocalPath, ".git", "salt" }.Combine ();
-
-                // If the repo is encrypted, create a branch to 
-                // store the in and push it to the host
-                if (File.Exists (salt_file_path)) {
-                    string salt = File.ReadAllText (salt_file_path).Trim ();
-
-                    SparkleGit git_salt = new SparkleGit (LocalPath, "branch salt-" + salt);
-                    git_salt.StartAndWaitForExit ();
-
-                    git_salt = new SparkleGit (LocalPath, "push origin salt-" + salt);
-                    git_salt.StartAndWaitForExit ();
-
-                    File.Delete (salt_file_path);
-                }
             }
 
             SparkleGit git;
@@ -268,6 +252,23 @@ namespace SparkleLib.Git {
 
             if (git.ExitCode == 0) {
                 ClearCache ();
+
+                string salt_file_path = new string [] { LocalPath, ".git", "salt" }.Combine ();
+
+                // If the repo is encrypted, create a branch to 
+                // store the in and push it to the host
+                if (File.Exists (salt_file_path)) {
+                    string salt = File.ReadAllText (salt_file_path).Trim ();
+
+                    SparkleGit git_salt = new SparkleGit (LocalPath, "branch salt-" + salt);
+                    git_salt.StartAndWaitForExit ();
+
+                    git_salt = new SparkleGit (LocalPath, "push origin salt-" + salt);
+                    git_salt.StartAndWaitForExit ();
+
+                    File.Delete (salt_file_path);
+                }
+
                 return true;
 
             } else {
@@ -337,11 +338,11 @@ namespace SparkleLib.Git {
                 Rebase ();
 
                 string identifier_file_path = Path.Combine (LocalPath, ".sparkleshare");
-				File.SetAttributes (identifier_file_path, FileAttributes.Hidden);
+                File.SetAttributes (identifier_file_path, FileAttributes.Hidden);
 
                 ClearCache ();
 
-				return true;
+                return true;
 
             } else {
                 Error = ErrorStatus.HostUnreachable;
@@ -391,18 +392,18 @@ namespace SparkleLib.Git {
 
         // Commits the made changes
         private void Commit (string message)
-		{
-			SparkleGit git;
+        {
+            SparkleGit git;
 
-			if (!this.user_is_set) {
-	            git = new SparkleGit (LocalPath, "config user.name \"" + base.local_config.User.Name + "\"");
-				git.StartAndWaitForExit ();
+            if (!this.user_is_set) {
+                git = new SparkleGit (LocalPath, "config user.name \"" + base.local_config.User.Name + "\"");
+                git.StartAndWaitForExit ();
 
-	            git = new SparkleGit (LocalPath, "config user.email \"" + base.local_config.User.Email + "\"");
-				git.StartAndWaitForExit ();
+                git = new SparkleGit (LocalPath, "config user.email \"" + base.local_config.User.Email + "\"");
+                git.StartAndWaitForExit ();
 
-				this.user_is_set = true;
-			}
+                this.user_is_set = true;
+            }
 
             git = new SparkleGit (LocalPath, "commit --all --message=\"" + message + "\" " +
                 "--author=\"" + base.local_config.User.Name + " <" + base.local_config.User.Email + ">\"");
