@@ -117,8 +117,8 @@ namespace SparkleShare {
                 Width        = 318
             };
             
-			SparkleLink website_link = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
-			SparkleLink credits_link = new SparkleLink ("Credits", Controller.CreditsLinkAddress);
+            SparkleLink website_link = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
+            SparkleLink credits_link = new SparkleLink ("Credits", Controller.CreditsLinkAddress);
             SparkleLink report_problem_link = new SparkleLink ("Report a problem", Controller.ReportProblemLinkAddress);
             SparkleLink debug_log_link = new SparkleLink ("Debug log", Controller.DebugLogLinkAddress);
 
@@ -140,11 +140,11 @@ namespace SparkleShare {
             Canvas.SetLeft (credits, 294);
             Canvas.SetTop (credits, 142);   
 
-			canvas.Children.Add (website_link);
+            canvas.Children.Add (website_link);
             Canvas.SetLeft (website_link, 289);
             Canvas.SetTop (website_link, 222);   
 
-			canvas.Children.Add (credits_link);
+            canvas.Children.Add (credits_link);
             Canvas.SetLeft (credits_link, 289 + website_link.ActualWidth + 60);
             Canvas.SetTop (credits_link, 222);
 
@@ -169,32 +169,32 @@ namespace SparkleShare {
     }
 
 
-	public class SparkleLink : Label {
+    public class SparkleLink : Label {
 
-		public SparkleLink (string title, string url)
-		{
-			FontSize   = 11;
-			Cursor     = Cursors.Hand;
-			Foreground = new SolidColorBrush (Color.FromRgb (135, 178, 227));
+        public SparkleLink (string title, string url)
+        {
+            FontSize   = 11;
+            Cursor     = Cursors.Hand;
+            Foreground = new SolidColorBrush (Color.FromRgb (135, 178, 227));
 
-			TextDecoration underline = new TextDecoration () {
-				Pen              = new Pen (new SolidColorBrush (Color.FromRgb (135, 178, 227)), 1),
-				PenThicknessUnit = TextDecorationUnit.FontRecommended
-			};
+            TextDecoration underline = new TextDecoration () {
+                Pen              = new Pen (new SolidColorBrush (Color.FromRgb (135, 178, 227)), 1),
+                PenThicknessUnit = TextDecorationUnit.FontRecommended
+            };
 
-			TextDecorationCollection collection = new TextDecorationCollection ();
-			collection.Add (underline);
+            TextDecorationCollection collection = new TextDecorationCollection ();
+            collection.Add (underline);
 
-			TextBlock text_block = new TextBlock () {
-				Text            = title,
-				TextDecorations = collection
-			};
+            TextBlock text_block = new TextBlock () {
+                Text            = title,
+                TextDecorations = collection
+            };
 
-			Content = text_block;
+            Content = text_block;
 
-			MouseUp += delegate {
-				Program.Controller.OpenWebsite (url);
-			};            
-		}
-	}
+            MouseUp += delegate {
+                Program.Controller.OpenWebsite (url);
+            };            
+        }
+    }
 }

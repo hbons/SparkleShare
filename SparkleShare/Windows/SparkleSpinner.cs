@@ -44,11 +44,11 @@ namespace SparkleShare {
             for (int y = 0; y < frames_in_height; y++) {
                 for (int x = 0; x < frames_in_width; x++) {
                     if (!(y == 0 && x == 0)) {
-						CroppedBitmap crop = new CroppedBitmap (spinner_gallery, 
+                        CroppedBitmap crop = new CroppedBitmap (spinner_gallery, 
                             new Int32Rect (size * x, size * y, size, size));
-						
-						frames [i]        = new Image ();
-						frames [i].Source = crop;
+                        
+                        frames [i]        = new Image ();
+                        frames [i].Source = crop;
                         i++;
                     }
                 }
@@ -59,18 +59,18 @@ namespace SparkleShare {
             };
 
             this.timer.Elapsed += delegate {
-	            Dispatcher.BeginInvoke ((Action) delegate {
+                Dispatcher.BeginInvoke ((Action) delegate {
                     if (current_frame < frame_count - 1)
                         current_frame++;
                     else
                         current_frame = 0;
                     
                     Source = frames [current_frame].Source;
-				});
+                });
             };
         }
-		
-		
+        
+        
         public void Start ()
         {
             this.timer.Start ();

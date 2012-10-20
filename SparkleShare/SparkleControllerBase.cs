@@ -504,7 +504,7 @@ namespace SparkleShare {
 
             string tmp_path = this.config.TmpPath;
 
-			if (!Directory.Exists (tmp_path)) {
+            if (!Directory.Exists (tmp_path)) {
                 Directory.CreateDirectory (tmp_path);
                 File.SetAttributes (tmp_path, File.GetAttributes (tmp_path) | FileAttributes.Hidden);
             }
@@ -590,7 +590,7 @@ namespace SparkleShare {
 
             this.fetcher.Complete ();
             string canonical_name = Path.GetFileNameWithoutExtension (this.fetcher.RemoteUrl.AbsolutePath);
-			canonical_name = canonical_name.Replace ("-crypto", "");
+            canonical_name = canonical_name.Replace ("-crypto", "");
 
             bool target_folder_exists = Directory.Exists (
                 Path.Combine (this.config.FoldersPath, canonical_name));
