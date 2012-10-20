@@ -129,13 +129,6 @@ namespace SparkleShare {
                 });
             };
 
-            Controller.UpdateRecentEventsItemEvent += delegate (bool item_enabled) {
-                Application.Invoke (delegate {
-                    this.recent_events_item.Sensitive = item_enabled;
-                    this.recent_events_item.ShowAll ();
-                });
-            };
-
             Controller.UpdateMenuEvent += delegate (IconState state) {
                 Application.Invoke (delegate {
                     CreateMenu ();

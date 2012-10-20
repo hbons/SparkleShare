@@ -161,15 +161,6 @@ namespace SparkleShare {
                     });
                 }
             };
-
-            Controller.UpdateRecentEventsItemEvent += delegate (bool events_item_enabled) {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    InvokeOnMainThread (delegate {
-                        this.recent_events_item.Enabled = events_item_enabled;
-                    });
-                }
-            };
         }
 
 

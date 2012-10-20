@@ -45,9 +45,6 @@ namespace SparkleShare {
         public event UpdateQuitItemEventHandler UpdateQuitItemEvent = delegate { };
         public delegate void UpdateQuitItemEventHandler (bool quit_item_enabled);
 
-        public event UpdateRecentEventsItemEventHandler UpdateRecentEventsItemEvent = delegate { };
-        public delegate void UpdateRecentEventsItemEventHandler (bool recent_events_item_enabled);
-
         public IconState CurrentState = IconState.Idle;
         public string StateText = "Welcome to SparkleShare!";
 
@@ -95,7 +92,7 @@ namespace SparkleShare {
 
         public bool RecentEventsItemEnabled {
             get {
-                return (Program.Controller.RepositoriesLoaded && Program.Controller.Folders.Count > 0);
+                return (Program.Controller.Folders.Count > 0);
             }
         }
 
@@ -117,7 +114,6 @@ namespace SparkleShare {
                 UpdateFolders ();
 
                 UpdateStatusItemEvent (StateText);
-                UpdateRecentEventsItemEvent (RecentEventsItemEnabled);
                 UpdateMenuEvent (CurrentState);
             };
 
@@ -208,7 +204,13 @@ namespace SparkleShare {
 
         public void RecentEventsClicked ()
         {
-            new Thread (() => Program.Controller.ShowEventLogWindow ()).Start ();
+            new Thread (() => {
+                while (!Program.Controller.RepositoriesLoaded)
+                    Thread.Sleep (100);
+
+                Program.Controller.ShowEventLogWindow ();
+            
+            }).Start ();
         }
 
 
