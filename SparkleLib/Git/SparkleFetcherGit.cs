@@ -42,12 +42,14 @@ namespace SparkleLib.Git {
                 SparkleGit git = new SparkleGit (TargetFolder, "branch -a");
                 git.StartAndWaitForExit ();
 
-                string [] branches = git.StartAndReadStandardOutput ().Split (Environment.NewLine.ToCharArray ());
-                // TODO double check env.newline ^
-					
-                foreach (string branch in branches) {
-					if (branch.StartsWith ("  remotes/origin/salt-")) {
-                        this.cached_salt = branch.Substring (22);
+                string [] branches = git.StartAndReadStandardOutput ().Split ("\n".ToCharArray ());
+				Regex salt_regex = new Regex ("remotes/origin/salt-(.+)");
+                
+				foreach (string branch in branches) {
+					Match salt_match = salt_regex.Match (branch);
+
+					if (salt_match.Success) {
+						this.cached_salt = salt_match.Groups [1].Value;
                         break;
                     }
                 }
@@ -57,7 +59,7 @@ namespace SparkleLib.Git {
                     this.cached_salt      = GenerateCryptoSalt ();
                     string salt_file_path = new string [] { TargetFolder, ".git", "salt" }.Combine ();
 
-                    // Temporarily store the salt in a file, so the Repo can
+                    // Temporarily store the salt in a file, so the Repo object can
                     // push it to a branch on the host later
                     File.WriteAllText (salt_file_path, this.cached_salt);
                 }
@@ -180,6 +182,9 @@ namespace SparkleLib.Git {
             this.git.WaitForExit ();
 
             if (this.git.ExitCode == 0) {
+				SparkleGit git_fetch = new SparkleGit (TargetFolder, "fetch --all");
+				git_fetch.StartAndWaitForExit ();
+
                 while (percentage < 100) {
                     percentage += 25;
 
@@ -231,9 +236,11 @@ namespace SparkleLib.Git {
 
             string n = Environment.NewLine;
 
+			string salt = this.crypto_salt;
+
             config += "[filter \"crypto\"]" + n +
-                "\tsmudge = openssl enc -d -aes-256-cbc -base64 -S " + this.crypto_salt + " -pass file:.git/password" + n +
-                "\tclean  = openssl enc -e -aes-256-cbc -base64 -S " + this.crypto_salt + " -pass file:.git/password" + n;
+                "\tsmudge = openssl enc -d -aes-256-cbc -base64 -S " + salt + " -pass file:.git/password" + n +
+                "\tclean  = openssl enc -e -aes-256-cbc -base64 -S " + salt + " -pass file:.git/password" + n;
 
             File.WriteAllText (repo_config_file_path, config);
 
