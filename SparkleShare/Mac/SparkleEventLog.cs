@@ -372,9 +372,6 @@ namespace SparkleShare {
                 new ThreadStart (delegate {
                     using (var a = new NSAutoreleasePool ())
                     {
-                        if (html == null)
-                            html = Controller.HTML;
-        
     					string pixmaps_path = "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps");
     					
                         html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
