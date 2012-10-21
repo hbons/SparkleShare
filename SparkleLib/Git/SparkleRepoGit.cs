@@ -336,10 +336,6 @@ namespace SparkleLib.Git {
 
             if (git.ExitCode == 0) {
                 Rebase ();
-
-                string identifier_file_path = Path.Combine (LocalPath, ".sparkleshare");
-                File.SetAttributes (identifier_file_path, FileAttributes.Hidden);
-
                 ClearCache ();
 
                 return true;
