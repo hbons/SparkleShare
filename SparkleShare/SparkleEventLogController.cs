@@ -231,6 +231,9 @@ namespace SparkleShare {
 
         public void LinkClicked (string url)
         {
+			if (!url.StartsWith ("about:") || string.IsNullOrEmpty (url))
+				return;
+				
             url = url.Replace ("%20", " ");
             
             if (url.StartsWith ("http")) {
