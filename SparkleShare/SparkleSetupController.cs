@@ -541,10 +541,10 @@ namespace SparkleShare {
             string folder_name = Path.GetFileName (PreviousPath);
 
             if (PreviousPath.EndsWith ("-crypto"))
-                folder_name = PreviousPath.Replace ("-crypto", "");
+                folder_name = folder_name.Replace ("-crypto", "");
 
             if (PreviousPath.EndsWith ("-crypto.git"))
-                folder_name = PreviousPath.Replace ("-crypto.git", "");
+                folder_name = folder_name.Replace ("-crypto.git", "");
 
             Program.Controller.OpenSparkleShareFolder (folder_name);
             FinishPageCompleted ();
