@@ -691,10 +691,10 @@ namespace SparkleShare {
                         Description = "You can find it in your SparkleShare folder";
 
                         // A button that opens the synced folder
-                        Button open_folder_button = new Button ("Show Folder");
+                        Button show_files_button = new Button ("Show Files");
 
-                        open_folder_button.Clicked += delegate {
-                            Controller.OpenFolderClicked ();
+                        show_files_button.Clicked += delegate {
+                            Controller.ShowFilesClicked ();
                         };
 
                         Button finish_button = new Button ("Finish");
@@ -706,8 +706,7 @@ namespace SparkleShare {
 
                         if (warnings.Length > 0) {
                             Image warning_image = new Image (
-                                SparkleUIHelpers.GetIcon ("dialog-information", 24)
-                            );
+                                SparkleUIHelpers.GetIcon ("dialog-information", 24));
 
                             Label warning_label = new Label (warnings [0]) {
                                 Xalign = 0,
@@ -728,7 +727,7 @@ namespace SparkleShare {
                         }
 
 
-                        AddButton (open_folder_button);
+                        AddButton (show_files_button);
                         AddButton (finish_button);
 
                         break;

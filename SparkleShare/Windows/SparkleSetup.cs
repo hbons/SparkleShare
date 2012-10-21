@@ -754,8 +754,8 @@ namespace SparkleShare {
                             Content = "Finish"
                         };
     
-                        Button open_folder_button = new Button () {
-                            Content = "Show folder"
+                        Button show_files_button = new Button () {
+                            Content = "Show files"
                         };
 
                         if (warnings.Length > 0) {
@@ -782,7 +782,7 @@ namespace SparkleShare {
 						TaskbarItemInfo.ProgressValue = 0.0;
 						TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
 
-                        Buttons.Add (open_folder_button);
+                        Buttons.Add (show_files_button);
                         Buttons.Add (finish_button);
                         
 
@@ -790,8 +790,8 @@ namespace SparkleShare {
                             Controller.FinishPageCompleted ();
                         };
 
-                        open_folder_button.Click += delegate {
-                            Controller.OpenFolderClicked ();
+                        show_files_button.Click += delegate {
+                            Controller.ShowFilesClicked ();
                         };
                         
                        
