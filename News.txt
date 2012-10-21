@@ -1,4 +1,15 @@
-0.9.4 for Linux, Mac and Windows (Fri Oct 19 2012)
+0.9.5 for Linux, Mac and Windows (Sun Oct 21 2012):
+
+        Hylke:
+        - Fix "Show all" link not working in event log
+        - Fix wrong version number in the Windows about dialog
+        - Fix some problems with encrypted projects
+        - Fix .sparkleshare file not always being hidden on Windows
+        - Fix "Open files" button when an encrypted project has been added
+        - Fix a crash of the event log on Windows
+
+
+0.9.4 for Linux, Mac and Windows (Fri Oct 19 2012):
 
         Hylke:
         - Remove Nautilus extension
@@ -9,7 +20,7 @@
         - For encrypted projects, use a different salt for each project
 
 
-0.9.3 for Linux, Mac and Windows (Mon Oct 1 2012)
+0.9.3 for Linux, Mac and Windows (Mon Oct 1 2012):
 
         Hylke:
         - Fix endless loop when adding empty folders
@@ -23,14 +34,14 @@
           restricted networks
 
 
-0.9.2 for Linux, Mac and Windows (Wed Aug 29 2012)
+0.9.2 for Linux, Mac and Windows (Wed Aug 29 2012):
 
         Hylke:
         - This release fixes a crash that can happen after adding a new
           project as well ssh-agent sometimes not starting on Windows
 
 
-0.9.1 for Linux, Mac and Windows (Mon Aug 27 2012)
+0.9.1 for Linux, Mac and Windows (Mon Aug 27 2012):
 
         Hylke:
         - Use HTTPS to fetch gravatars
@@ -44,7 +55,7 @@
         - Fix some bugs in conflict resolution mechanism
 
 
-0.9.0 for Linux, Mac and Windows (Wed Jun 27 2012)
+0.9.0 for Linux, Mac and Windows (Wed Jun 27 2012):
 
 	Hylke:
 	- Experimental client side encryption using OpenSSL's AES
@@ -64,7 +75,7 @@
 	- Rewrote the notification service, now more robust and reliable
 
 
-0.8.4 for Linux, Mac and Windows (Sun Mar 18 2012)
+0.8.4 for Linux, Mac and Windows (Sun Mar 18 2012):
 
 	Hylke:
 	- Show initial sync progress in taskbar item on Windows 7
