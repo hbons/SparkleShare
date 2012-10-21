@@ -536,7 +536,7 @@ namespace SparkleShare {
         }
 
 
-        public void OpenFolderClicked ()
+        public void ShowFilesClicked ()
         {
             string folder_name = Path.GetFileName (PreviousPath);
 
