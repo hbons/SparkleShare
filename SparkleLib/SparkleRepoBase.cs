@@ -155,6 +155,9 @@ namespace SparkleLib {
             this.identifier   = Identifier;
             ChangeSets        = GetChangeSets ();
 
+			string identifier_file_path = Path.Combine (LocalPath, ".sparkleshare");
+			File.SetAttributes (identifier_file_path, FileAttributes.Hidden);
+
             SyncStatusChanged += delegate (SyncStatus status) {
                 Status = status;
             };
@@ -361,6 +364,9 @@ namespace SparkleLib {
             if (SyncDown ()) {
                 SparkleLogger.LogInfo ("SyncDown", Name + " | Done");
                 Error = ErrorStatus.None;
+
+				string identifier_file_path = Path.Combine (LocalPath, ".sparkleshare");
+				File.SetAttributes (identifier_file_path, FileAttributes.Hidden);
 
                 ChangeSets = GetChangeSets ();
 
