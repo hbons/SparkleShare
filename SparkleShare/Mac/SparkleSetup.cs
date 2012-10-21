@@ -41,7 +41,7 @@ namespace SparkleShare {
         private NSButton StartupCheckButton;
         private NSButton HistoryCheckButton;
         private NSButton ShowPasswordCheckButton;
-        private NSButton OpenFolderButton;
+        private NSButton ShowFilesButton;
         private NSButton FinishButton;
         private NSImage SlideImage;
         private NSImageView SlideImageView;
@@ -804,8 +804,8 @@ namespace SparkleShare {
                 }
 
 
-                OpenFolderButton = new NSButton () {
-                    Title = "Show folder"
+                ShowFilesButton = new NSButton () {
+                    Title = "Show files"
                 };
 
                 FinishButton = new NSButton () {
@@ -813,8 +813,8 @@ namespace SparkleShare {
                 };
 
 
-                OpenFolderButton.Activated += delegate {
-                    Controller.OpenFolderClicked ();
+                ShowFilesButton.Activated += delegate {
+                    Controller.ShowFilesClicked ();
                 };
 
                 FinishButton.Activated += delegate {
@@ -823,7 +823,7 @@ namespace SparkleShare {
 
 
                 Buttons.Add (FinishButton);
-                Buttons.Add (OpenFolderButton);
+                Buttons.Add (ShowFilesButton);
 
                 NSApplication.SharedApplication.RequestUserAttention (NSRequestUserAttentionType.CriticalRequest);
             }
