@@ -262,52 +262,35 @@ namespace SparkleShare {
 
         public void UpdateContent (string html)
         {
-            Thread thread = new Thread (() => {
-                string pixmaps_path = IO.Path.Combine (SparkleUI.AssetsPath, "pixmaps");
-                string icons_path  = new string [] {SparkleUI.AssetsPath, "icons",
-                    "hicolor", "12x12", "status"}.Combine ();
+            string pixmaps_path = IO.Path.Combine (SparkleUI.AssetsPath, "pixmaps");
+            string icons_path   = new string [] {SparkleUI.AssetsPath, "icons", "hicolor", "12x12", "status"}.Combine ();
 
-                html = html.Replace ("<!-- $body-font-size -->", (double) (Style.FontDescription.Size / 1024 + 3) + "px");
-                html = html.Replace ("<!-- $day-entry-header-font-size -->", (Style.FontDescription.Size / 1024 + 3) + "px");
-                html = html.Replace ("<!-- $a-color -->", "#0085cf");
-                html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
-                html = html.Replace ("<!-- $body-font-family -->", "\"" + Style.FontDescription.Family + "\"");
-                html = html.Replace ("<!-- $body-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Normal)));
-                html = html.Replace ("<!-- $body-background-color -->", SparkleUIHelpers.GdkColorToHex (new TreeView ().Style.Base (StateType.Normal)));
-                html = html.Replace ("<!-- $day-entry-header-background-color -->", SparkleUIHelpers.GdkColorToHex (Style.Background (StateType.Normal)));
-                html = html.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
-                html = html.Replace ("<!-- $small-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
-                html = html.Replace ("<!-- $small-font-size -->", "85%");
-				
-                html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
-                
-                html = html.Replace ("<!-- $document-added-background-image -->", 
-                    "file://" + IO.Path.Combine (icons_path, "document-added.png"));
+            html = html.Replace ("<!-- $body-font-size -->", (double) (Style.FontDescription.Size / 1024 + 3) + "px");
+            html = html.Replace ("<!-- $day-entry-header-font-size -->", (Style.FontDescription.Size / 1024 + 3) + "px");
+            html = html.Replace ("<!-- $a-color -->", "#0085cf");
+            html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
+            html = html.Replace ("<!-- $body-font-family -->", "\"" + Style.FontDescription.Family + "\"");
+            html = html.Replace ("<!-- $body-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Normal)));
+            html = html.Replace ("<!-- $body-background-color -->", SparkleUIHelpers.GdkColorToHex (new TreeView ().Style.Base (StateType.Normal)));
+            html = html.Replace ("<!-- $day-entry-header-background-color -->", SparkleUIHelpers.GdkColorToHex (Style.Background (StateType.Normal)));
+            html = html.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
+            html = html.Replace ("<!-- $small-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
+            html = html.Replace ("<!-- $small-font-size -->", "85%");
+            html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
+			html = html.Replace ("<!-- $document-added-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-added.png"));
+            html = html.Replace ("<!-- $document-edited-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-edited.png"));
+            html = html.Replace ("<!-- $document-deleted-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-deleted.png"));
+            html = html.Replace ("<!-- $document-moved-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-moved.png"));
+                    
+            this.spinner.Stop ();
 
-                html = html.Replace ("<!-- $document-edited-background-image -->", 
-                    "file://" + IO.Path.Combine (icons_path, "document-edited.png"));
-                
-                html = html.Replace ("<!-- $document-deleted-background-image -->", 
-                    "file://" + IO.Path.Combine (icons_path, "document-deleted.png"));
-                
-                html = html.Replace ("<!-- $document-moved-background-image -->", 
-                    "file://" + IO.Path.Combine (icons_path, "document-moved.png"));
-                        
-                
-                Application.Invoke (delegate {
-                    this.spinner.Stop ();
+            this.web_view.NavigationRequested -= WebViewNavigationRequested;
+            this.web_view.LoadHtmlString (html, "file://");
+            this.web_view.NavigationRequested += WebViewNavigationRequested;
 
-                    this.web_view.NavigationRequested -= WebViewNavigationRequested;
-                    this.web_view.LoadHtmlString (html, "file://");
-                    this.web_view.NavigationRequested += WebViewNavigationRequested;
-
-                    this.content_wrapper.Remove (this.content_wrapper.Child);
-                    this.content_wrapper.Add (this.scrolled_window);
-                    this.content_wrapper.ShowAll ();
-                });
-            });
-
-            thread.Start ();
+            this.content_wrapper.Remove (this.content_wrapper.Child);
+            this.content_wrapper.Add (this.scrolled_window);
+            this.content_wrapper.ShowAll ();
         }
     }
 }

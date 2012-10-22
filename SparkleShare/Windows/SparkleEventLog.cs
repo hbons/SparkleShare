@@ -273,51 +273,35 @@ namespace SparkleShare {
         
         public void UpdateContent (string html)
         {
-            new Thread (() => {
-                string pixmaps_path = Path.Combine (
-                    SparkleLib.SparkleConfig.DefaultConfig.TmpPath, "Pixmaps");
-                
-                pixmaps_path = pixmaps_path.Replace ("\\", "/");
-                
-                html = html.Replace ("<a href=", "<a class='windows' href=");
-                html = html.Replace ("<!-- $body-font-family -->", "'Segoe UI', sans-serif");
-                html = html.Replace ("<!-- $day-entry-header-font-size -->", "13px");
-                html = html.Replace ("<!-- $body-font-size -->", "12px");
-                html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
-                html = html.Replace ("<!-- $small-color -->", "#ddd");
-				html = html.Replace ("<!-- $small-font-size -->", "90%");
-                html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
-                html = html.Replace ("<!-- $a-color -->", "#0085cf");
-                html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
+            string pixmaps_path = Path.Combine (SparkleLib.SparkleConfig.DefaultConfig.TmpPath, "Pixmaps");
+            pixmaps_path        = pixmaps_path.Replace ("\\", "/");
             
-                html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
-            
-                html = html.Replace ("<!-- $document-added-background-image -->",
-                    pixmaps_path + "/document-added-12.png");
-                
-                html = html.Replace ("<!-- $document-edited-background-image -->",
-                    pixmaps_path + "/document-edited-12.png");
-                
-                html = html.Replace ("<!-- $document-deleted-background-image -->",
-                    pixmaps_path + "/document-deleted-12.png");
-                
-                html = html.Replace ("<!-- $document-moved-background-image -->",
-                    pixmaps_path + "/document-moved-12.png");
+            html = html.Replace ("<a href=", "<a class='windows' href=");
+            html = html.Replace ("<!-- $body-font-family -->", "'Segoe UI', sans-serif");
+            html = html.Replace ("<!-- $day-entry-header-font-size -->", "13px");
+            html = html.Replace ("<!-- $body-font-size -->", "12px");
+            html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
+            html = html.Replace ("<!-- $small-color -->", "#ddd");
+			html = html.Replace ("<!-- $small-font-size -->", "90%");
+            html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
+            html = html.Replace ("<!-- $a-color -->", "#0085cf");
+            html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
+            html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
+            html = html.Replace ("<!-- $document-added-background-image -->", pixmaps_path + "/document-added-12.png");
+            html = html.Replace ("<!-- $document-edited-background-image -->", pixmaps_path + "/document-edited-12.png");
+            html = html.Replace ("<!-- $document-deleted-background-image -->", pixmaps_path + "/document-deleted-12.png");
+            html = html.Replace ("<!-- $document-moved-background-image -->", pixmaps_path + "/document-moved-12.png");
 
-                Dispatcher.BeginInvoke ((Action) delegate {
-                    this.spinner.Stop ();
-            
-					this.web_browser.ObjectForScripting = new SparkleScriptingObject ();  	
-					this.web_browser.NavigateToString (html);
-				
-                    if (!this.canvas.Children.Contains (this.web_browser)) {
-                        this.canvas.Children.Add (this.web_browser);
-                        Canvas.SetLeft (this.web_browser, 0);
-                        Canvas.SetTop (this.web_browser, 36);
-                    }
-                });
-
-			}).Start ();
+            this.spinner.Stop ();
+    
+			this.web_browser.ObjectForScripting = new SparkleScriptingObject ();  	
+			this.web_browser.NavigateToString (html);
+		
+            if (!this.canvas.Children.Contains (this.web_browser)) {
+                this.canvas.Children.Add (this.web_browser);
+                Canvas.SetLeft (this.web_browser, 0);
+                Canvas.SetTop (this.web_browser, 36);
+            }
         }
         
         
