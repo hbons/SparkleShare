@@ -757,9 +757,7 @@ namespace SparkleShare {
                 return true;
             
             } else {
-                SparkleLogger.LogInfo ("Controller",
-                    "Not connecting to https://www.gravatar.com/ due to invalid certificate");
-
+                SparkleLogger.LogInfo ("Controller", "Invalid certificate for https://www.gravatar.com/");
                 return false;
             }
         }
