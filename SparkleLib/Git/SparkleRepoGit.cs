@@ -196,9 +196,7 @@ namespace SparkleLib.Git {
                 // TODO: Progress
             }
 
-            git = new SparkleGit (LocalPath,
-                "push --progress " + // Redirects progress stats to standarderror
-                "\"" + RemoteUrl + "\" master");
+            git = new SparkleGit (LocalPath, "push --progress \"" + RemoteUrl + "\" master");
 
             git.StartInfo.RedirectStandardError = true;
             git.Start ();
@@ -311,9 +309,8 @@ namespace SparkleLib.Git {
                         if (line.Contains ("|")) {
                             speed = line.Substring (line.IndexOf ("|") + 1).Trim ();
                             speed = speed.Replace (", done.", "").Trim ();
-                            speed = speed.Replace ("i", "");
-                            speed = speed.Replace ("KB/s", "ᴋʙ/s");
-                            speed = speed.Replace ("MB/s", "ᴍʙ/s");
+                            speed = speed.Replace ("KiB/s", "ᴋʙ/s");
+                            speed = speed.Replace ("MiB/s", "ᴍʙ/s");
                         }
                     }
 
