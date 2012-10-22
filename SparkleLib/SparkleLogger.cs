@@ -63,9 +63,9 @@ namespace SparkleLib {
                 "Remove any sensitive information like file names, IP addresses, domain names, etc. if needed." + n + n +
                 "------" +  n + n +
                 "SparkleShare version: " + SparkleLib.SparkleBackend.Version + n +
-                "Operating system: " + SparkleLib.SparkleBackend.Platform + " " + Environment.OSVersion + n;
+                "Operating system:     " + SparkleLib.SparkleBackend.Platform + " " + Environment.OSVersion + n;
 
-            crash_report += n + e.Message + n + e.StackTrace + n;
+            crash_report += e.GetType () + ": " + e.Message + n + e.StackTrace + n;
 
             if (e.InnerException != null)
                 crash_report += n + e.InnerException.Message + n + e.InnerException.StackTrace + n;
