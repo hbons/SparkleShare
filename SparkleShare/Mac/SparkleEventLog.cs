@@ -368,59 +368,45 @@ namespace SparkleShare {
 
         public void UpdateContent (string html)
         {
-            new Thread (() => {
-                using (var a = new NSAutoreleasePool ())
-                {
-					string pixmaps_path = "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps");
-					
-                    html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
-                    html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
-                    html = html.Replace ("<!-- $body-font-size -->", "13.4px");
-                    html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
-                    html = html.Replace ("<!-- $small-color -->", "#ddd");
-                    html = html.Replace ("<!-- $small-font-size -->", "10px");
-                    html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
-                    html = html.Replace ("<!-- $a-color -->", "#0085cf");
-                    html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
-					
-                    html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
-    
-                    html = html.Replace ("<!-- $document-added-background-image -->",
-                        pixmaps_path + "/document-added-12.png");
-    
-                    html = html.Replace ("<!-- $document-deleted-background-image -->",
-                        pixmaps_path + "/document-deleted-12.png");
-    
-                    html = html.Replace ("<!-- $document-edited-background-image -->",
-                        pixmaps_path + "/document-edited-12.png");
+            using (var a = new NSAutoreleasePool ())
+            {
+				string pixmaps_path = "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps");
+				
+                html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
+                html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
+                html = html.Replace ("<!-- $body-font-size -->", "13.4px");
+                html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
+                html = html.Replace ("<!-- $small-color -->", "#ddd");
+                html = html.Replace ("<!-- $small-font-size -->", "10px");
+                html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
+                html = html.Replace ("<!-- $a-color -->", "#0085cf");
+                html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
+                html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
+                html = html.Replace ("<!-- $document-added-background-image -->", pixmaps_path + "/document-added-12.png");
+                html = html.Replace ("<!-- $document-deleted-background-image -->", pixmaps_path + "/document-deleted-12.png");
+                html = html.Replace ("<!-- $document-edited-background-image -->", pixmaps_path + "/document-edited-12.png");
+                html = html.Replace ("<!-- $document-moved-background-image -->", pixmaps_path + "/document-moved-12.png");
+				
+                this.web_view = new WebView (new RectangleF (0, 0, 481, 579), "", "") {
+                    Frame = new RectangleF (new PointF (0, 0),
+                        new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
+                };
 
-                    html = html.Replace ("<!-- $document-moved-background-image -->",
-                        pixmaps_path + "/document-moved-12.png");
-					
-                    InvokeOnMainThread (delegate {
-                        this.web_view = new WebView (new RectangleF (0, 0, 481, 579), "", "") {
-                            Frame = new RectangleF (new PointF (0, 0),
-                                new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
-                        };
+                this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
 
-                        this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
+                this.web_view.PolicyDelegate = new SparkleWebPolicyDelegate ();
+                ContentView.AddSubview (this.web_view);
 
-                        this.web_view.PolicyDelegate = new SparkleWebPolicyDelegate ();
-                        ContentView.AddSubview (this.web_view);
+                (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate).LinkClicked +=
+                    delegate (string href) {
+                        if (href.StartsWith ("file:///"))
+                            href = href.Substring (7);
 
-                        (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate).LinkClicked +=
-                            delegate (string href) {
-                                if (href.StartsWith ("file:///"))
-                                    href = href.Substring (7);
+                        Controller.LinkClicked (href);
+                    };
 
-                                Controller.LinkClicked (href);
-                            };
-
-                        this.progress_indicator.Hidden = true;
-                    });
-                }
-
-            }).Start ();
+                this.progress_indicator.Hidden = true;
+            }
         }
 
 
