@@ -73,6 +73,7 @@ namespace SparkleShare {
                     NewVersionEvent (latest_version);
                 else
                     VersionUpToDateEvent ();
+
             } catch {
             }
         }

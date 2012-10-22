@@ -54,7 +54,7 @@ namespace SparkleShare {
                     "under certain conditions. Please read the GNU GPLv3 for details." + n +
                     n +
                     "Usage: sparkleshare [start|stop|restart]");
-                Console.WriteLine ("SparkleShare is already running.");
+
                 Environment.Exit (-1);
             }
 
