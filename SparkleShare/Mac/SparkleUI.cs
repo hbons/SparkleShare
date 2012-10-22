@@ -103,16 +103,7 @@ namespace SparkleShare {
 
 
     public partial class AppDelegate : NSApplicationDelegate {
-
-        public override void WillBecomeActive (NSNotification notification)
-        {
-            if (NSApplication.SharedApplication.DockTile.BadgeLabel != null) {
-                Program.Controller.ShowEventLogWindow ();
-                NSApplication.SharedApplication.DockTile.BadgeLabel = null;
-            }
-        }
-
-
+     
         public override void WillTerminate (NSNotification notification)
         {
             Program.Controller.Quit ();
