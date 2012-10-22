@@ -33,14 +33,6 @@ namespace SparkleShare {
         {
             Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
                 InvokeOnMainThread (delegate {
-                    if (NSApplication.SharedApplication.DockTile.BadgeLabel == null) {
-                        NSApplication.SharedApplication.DockTile.BadgeLabel = "1";
-
-                    } else {
-                        int events = int.Parse (NSApplication.SharedApplication.DockTile.BadgeLabel);
-                        NSApplication.SharedApplication.DockTile.BadgeLabel = (events + 1).ToString ();
-                    }
-
                     if (image_path != null) {
                         NSData image_data = NSData.FromFile (image_path);
                         GrowlApplicationBridge.Notify (title, subtext, "Event", image_data, 0, false, new NSString (""));
@@ -59,7 +51,6 @@ namespace SparkleShare {
         [Export("growlNotificationWasClicked")]
         public override void GrowlNotificationWasClicked (NSObject o)
         {
-            NSApplication.SharedApplication.DockTile.BadgeLabel = null;
             Program.UI.Bubbles.Controller.BubbleClicked ();
         }
 

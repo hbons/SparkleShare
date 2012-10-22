@@ -377,13 +377,5 @@ namespace SparkleShare {
         public override void MenuWillHighlightItem (NSMenu menu, NSMenuItem item)
         {
         }
-
-    
-        public override void MenuWillOpen (NSMenu menu)
-        {
-            InvokeOnMainThread (() => {
-                NSApplication.SharedApplication.DockTile.BadgeLabel = null;
-            });
-        }
     }
 }
