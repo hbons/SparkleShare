@@ -58,16 +58,11 @@ namespace SparkleShare {
         private DateTime last_found_timestamp;
         private IntPtr m_stream;
         private FSEventStreamCallback m_callback; // need to keep a reference around so that it isn't GC'ed
-        private static readonly IntPtr kCFRunLoopDefaultMode = (new NSString ("kCFRunLoopDefaultMode")).Handle;
+        private static readonly IntPtr kCFRunLoopDefaultMode = new NSString ("kCFRunLoopDefaultMode").Handle;
         private ulong kFSEventStreamEventIdSinceNow          = 0xFFFFFFFFFFFFFFFFUL;
 
-        private delegate void FSEventStreamCallback (
-            IntPtr streamRef,
-            IntPtr clientCallBackInfo,
-            int numEvents,
-            IntPtr eventPaths,
-            IntPtr eventFlags,
-            IntPtr eventIds);
+        private delegate void FSEventStreamCallback (IntPtr streamRef, IntPtr clientCallBackInfo,
+            int numEvents, IntPtr eventPaths, IntPtr eventFlags, IntPtr eventIds);
 
 
         ~SparkleMacWatcher ()
