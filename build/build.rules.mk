@@ -9,7 +9,6 @@ ASSEMBLY_INFO_SOURCE_REAL = \
 SOURCES_BUILD = $(addprefix $(srcdir)/, $(SOURCES))
 SOURCES_BUILD += $(ASSEMBLY_INFO_SOURCE_REAL)
 
-
 RESOURCES_EXPANDED = $(addprefix $(srcdir)/, $(RESOURCES))
 RESOURCES_BUILD = $(foreach resource, $(RESOURCES_EXPANDED), \
 	-resource:$(resource),$(notdir $(resource)))
