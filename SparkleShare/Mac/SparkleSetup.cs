@@ -559,7 +559,7 @@ namespace SparkleShare {
                 };
 
                 TryAgainButton = new NSButton () {
-                    Title = "Try again…"
+                    Title = "Try Again…"
                 };
 
 
@@ -805,7 +805,7 @@ namespace SparkleShare {
 
 
                 ShowFilesButton = new NSButton () {
-                    Title = "Show files"
+                    Title = "Show Files…"
                 };
 
                 FinishButton = new NSButton () {
