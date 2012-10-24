@@ -231,8 +231,8 @@ namespace SparkleShare {
 
         public void LinkClicked (string url)
         {
-			if (!url.StartsWith ("about:") || string.IsNullOrEmpty (url))
-				return;
+            if (url.StartsWith ("about:") || string.IsNullOrEmpty (url))
+                return;
 				
             url = url.Replace ("%20", " ");
             
@@ -270,7 +270,7 @@ namespace SparkleShare {
 
             } else if (url.StartsWith ("history://")) {
                 this.history_view_active = true;
-
+                Program.UI.Bubbles.Controller.ShowBubble ("F", "f", "");
                 ContentLoadingEvent ();
                 UpdateSizeInfoEvent ("…", "…");
                 UpdateChooserEnablementEvent (false);
