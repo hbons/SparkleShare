@@ -131,9 +131,9 @@ namespace SparkleShare {
             if (Directory.Exists (FoldersPath))
                 return false;
 
-            Directory.CreateDirectory (FoldersPath);
-            File.SetAttributes (FoldersPath, File.GetAttributes (FoldersPath) | FileAttributes.System);
+        	Directory.CreateDirectory (FoldersPath);
 
+			File.SetAttributes (FoldersPath, File.GetAttributes (FoldersPath) | FileAttributes.System);
             SparkleLogger.LogInfo ("Config", "Created '" + FoldersPath + "'");
 
             string app_path       = Path.GetDirectoryName (Forms.Application.ExecutablePath);
@@ -155,8 +155,7 @@ namespace SparkleShare {
                         File.GetAttributes (ini_file_path) | FileAttributes.Hidden | FileAttributes.System);
 
                 } catch (IOException e) {
-                    SparkleLogger.LogInfo ("Config",
-                        "Failed setting icon for '" + FoldersPath + "': " + e.Message);
+                    SparkleLogger.LogInfo ("Config", "Failed setting icon for '" + FoldersPath + "': " + e.Message);
                 }
 
                 return true;
