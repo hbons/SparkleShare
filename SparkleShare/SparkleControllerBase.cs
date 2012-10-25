@@ -161,6 +161,8 @@ namespace SparkleShare {
         private Object repo_lock        = new Object ();
         private Object check_repos_lock = new Object ();
 
+        private bool lost_folders_path = false;
+
 
         public SparkleControllerBase ()
         {
@@ -178,9 +180,14 @@ namespace SparkleShare {
             SparklePlugin.PluginsPath = PluginsPath;
             InstallProtocolHandler ();
 
-            // Create the SparkleShare folder and add it to the bookmarks
-            if (CreateSparkleShareFolder ())
-                AddToBookmarks ();
+            try {
+                // Create the SparkleShare folder and add it to the bookmarks
+                if (CreateSparkleShareFolder ())
+                    AddToBookmarks ();
+
+            } catch (DirectoryNotFoundException) {
+                this.lost_folders_path = true;
+            }
 
             if (FirstRun) {
                 this.config.SetConfigOption ("notifications", bool.TrueString);
@@ -237,6 +244,13 @@ namespace SparkleShare {
 
         public void UIHasLoaded ()
         {
+            if (this.lost_folders_path) {
+                Program.UI.Bubbles.Controller.ShowBubble ("Where's your SparkleShare folder?",
+                    "Did you put it on a disattached drive?", null);
+            
+                Environment.Exit (-1);
+            }
+
             if (FirstRun) {
                 ShowSetupWindow (PageType.Setup);
 
