@@ -123,8 +123,8 @@ namespace SparkleShare {
 			bool folder_created = false;
 			
             if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
-                Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
-                SparkleLogger.LogInfo ("Controller", "Created '" + SparkleConfig.DefaultConfig.FoldersPath + "'");
+            	Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
+				SparkleLogger.LogInfo ("Controller", "Created '" + SparkleConfig.DefaultConfig.FoldersPath + "'");
 				
 				folder_created = true;
 			}
