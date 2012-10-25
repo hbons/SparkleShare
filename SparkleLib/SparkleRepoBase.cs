@@ -216,7 +216,7 @@ namespace SparkleLib {
 
         public void OnFileActivity (FileSystemEventArgs args)
         {
-            if (IsBuffering)
+            if (IsBuffering || this.is_syncing)
                 return;
 
             if (args != null) {
