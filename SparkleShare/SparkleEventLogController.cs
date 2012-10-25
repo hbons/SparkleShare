@@ -270,7 +270,7 @@ namespace SparkleShare {
 
             } else if (url.StartsWith ("history://")) {
                 this.history_view_active = true;
-                Program.UI.Bubbles.Controller.ShowBubble ("F", "f", "");
+
                 ContentLoadingEvent ();
                 UpdateSizeInfoEvent ("…", "…");
                 UpdateChooserEnablementEvent (false);
