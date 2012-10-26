@@ -909,32 +909,21 @@ namespace SparkleShare {
                             }
                             
                             case 4: {
-                                Header      = "Adding projects to SparkleShare";
-                                Description = "You can do this through the status icon menu, or by clicking " +
-                                    "magic buttons on webpages that look like this:";
-                            
+								Header      = "Here's your unique link code";
+								Description = "You'll need it whenever you want to link this computer to a host" +
+									" (we keep a copy in your SparkleShare folder).";
                             
                                 Button finish_button = new Button () {
                                     Content = "Finish"
                                 };
                                 
-                                WPF.Image slide_image = new WPF.Image () {
-                                    Width  = 350,
-                                    Height = 64
-                                };
                                 
-                                slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-4");
-    
                                 CheckBox check_box = new CheckBox () {
                                     Content   = "Add SparkleShare to startup items",
                                     IsChecked = true
                                 };
                             
                             
-                                ContentCanvas.Children.Add (slide_image);
-                                Canvas.SetLeft (slide_image, 215);
-                                Canvas.SetTop (slide_image, 130);
-
                                 ContentCanvas.Children.Add (check_box);
                                 Canvas.SetLeft (check_box, 185);
                                 Canvas.SetBottom (check_box, 12);

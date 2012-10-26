@@ -143,9 +143,6 @@
     <EmbeddedResource Include="..\Common\Pixmaps\side-splash.png">
       <Link>Pixmaps\side-splash.png</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\tutorial-slide-4.png">
-      <Link>Pixmaps\tutorial-slide-4.png</Link>
-    </EmbeddedResource>
     <EmbeddedResource Include="..\Common\HTML\day-entry.html">
       <Link>HTML\day-entry.html</Link>
     </EmbeddedResource>

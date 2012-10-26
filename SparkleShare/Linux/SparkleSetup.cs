@@ -799,14 +799,14 @@ namespace SparkleShare {
                         }
 
                         case 4: {
-                            Header      = "Adding projects to SparkleShare";
-                            Description = "You can do this through the status icon menu, or by clicking " +
-                                "magic buttons on webpages that look like this:";
+							Header      = "Here's your unique link code";
+							Description = "You'll need it whenever you want to link this computer to a host" +
+								" (we keep a copy in your SparkleShare folder).";
 
-                            Image slide = SparkleUIHelpers.GetImage ("tutorial-slide-4.png");
-
+                            
                             Button finish_button = new Button ("Finish");
-                            finish_button.Clicked += delegate {
+                            
+							finish_button.Clicked += delegate {
                                 Controller.TutorialPageCompleted ();
                             };
 
@@ -819,7 +819,6 @@ namespace SparkleShare {
                                 Controller.StartupItemChanged (check_button.Active);
                             };
 
-                            Add (slide);
                             AddOption (check_button);
                             AddButton (finish_button);
 
