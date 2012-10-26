@@ -35,6 +35,7 @@ namespace SparkleShare {
 
         private NSButton ContinueButton;
         private NSButton AddButton;
+        private NSButton CopyButton;
         private NSButton TryAgainButton;
         private NSButton CancelButton;
         private NSButton SkipTutorialButton;
@@ -51,6 +52,7 @@ namespace SparkleShare {
         private NSTextField EmailHelpLabel;
         private NSTextField FullNameTextField;
         private NSTextField FullNameLabel;
+        private NSTextField LinkCodeTextField;
         private NSTextField AddressTextField;
         private NSTextField AddressLabel;
         private NSTextField AddressHelpLabel;
@@ -832,17 +834,18 @@ namespace SparkleShare {
                 string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
                     "Pixmaps", "tutorial-slide-" + Controller.TutorialPageNumber + ".png");
 
-                SlideImage = new NSImage (slide_image_path) {
-                    Size = new SizeF (350, 200)
-                };
+                if (File.Exists (slide_image_path)) {
+                    SlideImage = new NSImage (slide_image_path) {
+                        Size = new SizeF (350, 200)
+                    };
 
-                SlideImageView = new NSImageView () {
-                    Image = SlideImage,
-                    Frame = new RectangleF (215, Frame.Height - 350, 350, 200)
-                };
+                    SlideImageView = new NSImageView () {
+                        Image = SlideImage,
+                        Frame = new RectangleF (215, Frame.Height - 350, 350, 200)
+                    };
 
-                ContentView.AddSubview (SlideImageView);
-
+                    ContentView.AddSubview (SlideImageView);
+                }
 
                 switch (Controller.TutorialPageNumber) {
 
@@ -915,11 +918,26 @@ namespace SparkleShare {
                     }
 
                     case 4: {
-                        Header      = "Adding projects to SparkleShare";
-                        Description = "You can do this through the status icon menu, or by clicking " +
-                            "magic buttons on webpages that look like this:";
+                        Header      = "Here's your unique link code";
+                        Description = "You'll need it whenever you want to link this computer to a host" +
+                            " (we keep a copy in your SparkleShare folder).";
 
+                        LinkCodeTextField = new NSTextField () {
+                            StringValue = Program.Controller.CurrentUser.PublicKey,
+                            Enabled     = false,
+                            Selectable  = false,
+                            Frame       = new RectangleF (230, Frame.Height - 238, 246, 22)
+                        };
 
+                        LinkCodeTextField.Cell.UsesSingleLineMode = true;
+                        LinkCodeTextField.Cell.LineBreakMode      = NSLineBreakMode.TruncatingTail;
+                        
+                        CopyButton = new NSButton () {
+                            Title = "Copy",
+                            BezelStyle = NSBezelStyle.RoundRect,
+                            Frame       = new RectangleF (480, Frame.Height - 238, 60, 22)
+                        };
+                        
                         StartupCheckButton = new NSButton () {
                             Frame = new RectangleF (190, Frame.Height - 400, 300, 18),
                             Title = "Add SparkleShare to startup items",
@@ -932,8 +950,11 @@ namespace SparkleShare {
                             Title = "Finish"
                         };
 
-                        SlideImage.Size = new SizeF (350, 64);
-
+                        CopyButton.Activated += delegate {
+                            NSPasteboard.GeneralPasteboard.ClearContents ();
+                            NSPasteboard.GeneralPasteboard.SetStringForType (LinkCodeTextField.StringValue,
+                                "NSStringPboardType");
+                        };
 
                         StartupCheckButton.Activated += delegate {
                             Controller.StartupItemChanged (StartupCheckButton.State == NSCellStateValue.On);
@@ -942,9 +963,11 @@ namespace SparkleShare {
                         FinishButton.Activated += delegate {
                             Controller.TutorialPageCompleted ();
                         };
-
-
+                    
+                        ContentView.AddSubview (LinkCodeTextField);
+                        ContentView.AddSubview (CopyButton);
                         ContentView.AddSubview (StartupCheckButton);
+
                         Buttons.Add (FinishButton);
 
                         break;

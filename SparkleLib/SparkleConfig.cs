@@ -131,19 +131,16 @@ namespace SparkleLib {
 
         public SparkleUser User {
             get {
-                XmlNode name_node = SelectSingleNode ("/sparkleshare/user/name/text()");
-                string name  = name_node.Value;
-
+                XmlNode name_node  = SelectSingleNode ("/sparkleshare/user/name/text()");
                 XmlNode email_node = SelectSingleNode ("/sparkleshare/user/email/text()");
-                string email = email_node.Value;
+                string user_name   = name_node.Value;
+                string user_email  = email_node.Value;
 
-                string pubkey_file_path = Path.Combine (
-                    Path.GetDirectoryName (FullPath), "sparkleshare." + email + ".key.pub");
+                SparkleUser user            = new SparkleUser (user_name, user_email);
+                string [] pubkey_file_paths = Directory.GetFiles (Path.GetDirectoryName (FullPath), "*.pub");
 
-                SparkleUser user = new SparkleUser (name, email);
-
-                if (File.Exists (pubkey_file_path))
-                    user.PublicKey = File.ReadAllText (pubkey_file_path);
+                if (pubkey_file_paths.Length > 0)
+                    user.PublicKey = File.ReadAllText (pubkey_file_paths [0]);
 
                 return user;
             }
@@ -151,10 +148,9 @@ namespace SparkleLib {
             set {
                 SparkleUser user = (SparkleUser) value;
 
-                XmlNode name_node   = SelectSingleNode ("/sparkleshare/user/name/text()");
-                name_node.InnerText = user.Name;
-
+                XmlNode name_node    = SelectSingleNode ("/sparkleshare/user/name/text()");
                 XmlNode email_node   = SelectSingleNode ("/sparkleshare/user/email/text()");
+                name_node.InnerText  = user.Name;
                 email_node.InnerText = user.Email;
 
                 Save ();

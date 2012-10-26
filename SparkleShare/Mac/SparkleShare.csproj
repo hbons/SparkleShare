@@ -157,9 +157,6 @@
     <Content Include="Pixmaps\tutorial-slide-3.png">
       <Link>Pixmaps\tutorial-slide-3.png</Link>
     </Content>
-    <Content Include="..\Common\Pixmaps\tutorial-slide-4.png">
-      <Link>Pixmaps\tutorial-slide-4.png</Link>
-    </Content>
     <Content Include="..\Common\Plugins\bitbucket.xml">
       <Link>Plugins\bitbucket.xml</Link>
     </Content>
