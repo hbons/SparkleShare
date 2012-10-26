@@ -50,7 +50,8 @@ namespace SparkleShare {
 
                 NSApplication.SharedApplication.ApplicationIconImage = NSImage.ImageNamed ("sparkleshare-app.icns");
 
-                SetFolderIcon ();
+                NSWorkspace.SharedWorkspace.SetIconforFile (NSImage.ImageNamed ("sparkleshare-folder.icns"),
+                    Program.Controller.FoldersPath, 0);
     
                 Setup      = new SparkleSetup ();
                 EventLog   = new SparkleEventLog ();
@@ -59,16 +60,6 @@ namespace SparkleShare {
                 StatusIcon = new SparkleStatusIcon ();
 
                 Program.Controller.UIHasLoaded ();
-            }
-        }
-    
-
-        public void SetFolderIcon ()
-        {
-            using (var a = new NSAutoreleasePool ())
-            {
-                NSImage folder_icon = NSImage.ImageNamed ("sparkleshare-folder.icns");
-                NSWorkspace.SharedWorkspace.SetIconforFile (folder_icon, Program.Controller.FoldersPath, 0);
             }
         }
 
