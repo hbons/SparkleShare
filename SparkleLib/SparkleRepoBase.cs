@@ -227,7 +227,7 @@ namespace SparkleLib {
             }
 
             lock (this.buffer_lock) {
-                if (IsBuffering || !HasLocalChanges)
+                if (IsBuffering || this.is_syncing || !HasLocalChanges)
                     return;
 
                 IsBuffering = true;

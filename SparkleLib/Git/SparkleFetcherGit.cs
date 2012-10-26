@@ -338,7 +338,8 @@ namespace SparkleLib.Git {
                 "core.packedGitWindowSize 128m",
                 "pack.deltaCacheSize 128m",
                 "pack.packSizeLimit 128m",
-                "pack.windowMemory 128m"
+                "pack.windowMemory 128m",
+                "push.default matching"
             };
 
             foreach (string setting in settings) {
