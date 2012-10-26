@@ -163,7 +163,7 @@ namespace SparkleLib.Git {
 
                 string remote_revision = output.Substring (0, 40);
 
-                if (!remote_revision.StartsWith (current_revision)) {
+                if (!string.IsNullOrEmpty (remote_revision) && !remote_revision.StartsWith (current_revision)) {
                     SparkleLogger.LogInfo ("Git", Name + " | Remote changes found, local: " +
                         current_revision + ", remote: " + remote_revision);
 
