@@ -157,6 +157,11 @@ namespace SparkleShare {
                     Canvas.SetBottom (button, 9);
                     
                     right += (int) button.Width + 9;
+
+					if ((button.Content as string).Equals ("Continue")) {
+						Buttons [Buttons.Count - 1].IsDefault = false;
+						button.IsDefault      = true;
+					}
                 }
             }
             
