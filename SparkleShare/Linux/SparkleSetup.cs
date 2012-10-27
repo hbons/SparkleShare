@@ -806,18 +806,46 @@ namespace SparkleShare {
                             
                             Button finish_button = new Button ("Finish");
                             
-							finish_button.Clicked += delegate {
-                                Controller.TutorialPageCompleted ();
+                            VBox layout_vertical = new VBox (false, 0) {
+                                BorderWidth = 48
                             };
+                            
+                            HBox layout_horizontal = new HBox (false, 6);
 
+                            Entry link_code_entry = new Entry () {
+                                Text      = Program.Controller.CurrentUser.PublicKey,
+                                Sensitive = false
+                            };
+                            
+                            Button copy_button = new Button (" Copy "); 
 
                             CheckButton check_button = new CheckButton ("Add SparkleShare to startup items") {
                                 Active = true
                             };
+                            
 
                             check_button.Toggled += delegate {
                                 Controller.StartupItemChanged (check_button.Active);
                             };
+                            
+                            copy_button.Clicked += delegate {
+                                Clipboard clip_board = Clipboard.Get (Gdk.Atom.Intern ("CLIPBOARD", false));
+                                clip_board.Text      = link_code_entry.Text;
+                            };
+                            
+                            finish_button.Clicked += delegate {
+                                Controller.TutorialPageCompleted ();
+                            };
+                            
+                            
+                            layout_horizontal.PackStart (link_code_entry, true, true, 0);
+                            layout_horizontal.PackStart (copy_button, false, false, 0);
+                            
+                            layout_vertical.PackStart (new Label (""), true, true, 0);
+                            layout_vertical.PackStart (layout_horizontal, false, false, 0);
+                            layout_vertical.PackStart (new Label (""), true, true, 18);
+                            
+                            Add (layout_vertical);
 
                             AddOption (check_button);
                             AddButton (finish_button);
