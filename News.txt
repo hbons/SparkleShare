@@ -1,3 +1,14 @@
+0.9.6 for Linux, Mac and Windows (Sat Oct 27 2012):
+
+        Hylke:
+        - Show link code and Copy button on last tutorial page
+        - Fix crash when the SparkleShare folder is on an unmounted drive
+        - Fix crash of the event log on Windows
+        - Keep Continue button in the same place on each tutorial page
+        - Remove dock icon badging on Mac now that Mountain Lion has 
+          a notification queue
+
+
 0.9.5 for Linux, Mac and Windows (Sun Oct 21 2012):
 
         Hylke:
