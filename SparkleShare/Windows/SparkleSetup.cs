@@ -119,8 +119,8 @@ namespace SparkleShare {
                         Canvas.SetLeft (email_box, 340);
                         Canvas.SetTop (email_box, 230);
                         
-                        Buttons.Add (continue_button);
                         Buttons.Add (cancel_button);
+						Buttons.Add (continue_button);
                         
 						name_box.Focus ();
 						name_box.Select (name_box.Text.Length, 0);
@@ -801,7 +801,6 @@ namespace SparkleShare {
                     }
                         
                     case PageType.Tutorial: {
-                        
                         switch (Controller.TutorialPageNumber) {
                             case 1: {
                                 Header      = "What's happening next?";
@@ -829,8 +828,8 @@ namespace SparkleShare {
                                 Canvas.SetLeft (slide_image, 215);
                                 Canvas.SetTop (slide_image, 130);
                             
-								Buttons.Add (continue_button);
 								Buttons.Add (skip_tutorial_button);
+								Buttons.Add (continue_button);
                                
                                 
                                 skip_tutorial_button.Click += delegate {
@@ -881,7 +880,6 @@ namespace SparkleShare {
                                 Description = "It shows the syncing progress, provides easy access to " +
                                     "your projects and lets you view recent changes.";
     
-                            
                                 Button continue_button = new Button () {
                                     Content = "Continue"
                                 };
@@ -913,21 +911,42 @@ namespace SparkleShare {
 								Description = "You'll need it whenever you want to link this computer to a host" +
 									" (we keep a copy in your SparkleShare folder).";
                             
-                                Button finish_button = new Button () {
-                                    Content = "Finish"
+
+								TextBox link_code_text_box = new TextBox () {
+									Text         = Program.Controller.CurrentUser.PublicKey,
+									Width        = 250,
+									MaxLines     = 1,
+									TextWrapping = TextWrapping.NoWrap,
+									IsEnabled    = false
+								};
+
+                                Button copy_button = new Button () {
+                                    Content = "Copy",
+									Width   = 60
                                 };
-                                
+
+								Button finish_button = new Button () {
+									Content = "Finish"
+								};
                                 
                                 CheckBox check_box = new CheckBox () {
                                     Content   = "Add SparkleShare to startup items",
                                     IsChecked = true
                                 };
                             
-                            
+							
+								ContentCanvas.Children.Add (link_code_text_box);
+								Canvas.SetLeft (link_code_text_box, 235);
+								Canvas.SetTop (link_code_text_box, 190);
+
+								ContentCanvas.Children.Add (copy_button);
+								Canvas.SetLeft (copy_button, 490);
+								Canvas.SetTop (copy_button, 190);
+
                                 ContentCanvas.Children.Add (check_box);
                                 Canvas.SetLeft (check_box, 185);
                                 Canvas.SetBottom (check_box, 12);
-                                
+
                                 Buttons.Add (finish_button);
                                 
                                 
@@ -938,6 +957,10 @@ namespace SparkleShare {
                                 finish_button.Click += delegate {
                                     Controller.TutorialPageCompleted ();
                                 };
+
+								copy_button.Click += delegate {
+									Clipboard.SetData(DataFormats.Text, link_code_text_box.Text);
+								};
     
                                 break;
                             }
