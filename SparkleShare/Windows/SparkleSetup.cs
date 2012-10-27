@@ -877,7 +877,7 @@ namespace SparkleShare {
                             }
                             
                             case 3: {
-                                Header      = "The status icon is here to help";
+                                Header      = "The status icon helps you";
                                 Description = "It shows the syncing progress, provides easy access to " +
                                     "your projects and lets you view recent changes.";
     
