@@ -43,17 +43,7 @@ namespace SparkleShare {
         
         public SparkleController () : base ()
         {
-            using (var a = new NSAutoreleasePool ())
-            {
-                string content_path = Directory.GetParent (System.AppDomain.CurrentDomain.BaseDirectory).ToString ();
-    
-                string app_path   = Directory.GetParent (content_path).ToString ();
-                string growl_path = Path.Combine (app_path, "Frameworks", "Growl.framework", "Growl");
-    
-                // Needed for Growl
-                Dlfcn.dlopen (growl_path, 0);
-                NSApplication.Init ();
-            }
+            NSApplication.Init ();
 
             // Let's use the bundled git first
             SparkleLib.Git.SparkleGit.GitPath  = Path.Combine (NSBundle.MainBundle.ResourcePath, "git", "libexec", "git-core", "git");
@@ -79,6 +69,7 @@ namespace SparkleShare {
                     }).Start ();
                 }
             };
+
         }
 
 

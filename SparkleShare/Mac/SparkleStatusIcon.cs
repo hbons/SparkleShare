@@ -42,7 +42,6 @@ namespace SparkleShare {
         private NSMenuItem more_item;
         private NSMenuItem add_item;
         private NSMenuItem about_item;
-        private NSMenuItem notify_item;
         private NSMenuItem recent_events_item;
         private NSMenuItem quit_item;
         
@@ -208,26 +207,6 @@ namespace SparkleShare {
                     };
                 }
 
-                this.notify_item = new NSMenuItem () {
-                    Enabled = (Controller.Folders.Length > 0)
-                };
-
-                if (Program.Controller.NotificationsEnabled)
-                    this.notify_item.Title = "Turn Notifications Off";
-                else
-                    this.notify_item.Title = "Turn Notifications On";
-
-                this.notify_item.Activated += delegate {
-                    Program.Controller.ToggleNotifications ();
-
-                    InvokeOnMainThread (delegate {
-                        if (Program.Controller.NotificationsEnabled)
-                            this.notify_item.Title = "Turn Notifications Off";
-                        else
-                            this.notify_item.Title = "Turn Notifications On";
-                    });
-                };
-
                 this.about_item = new NSMenuItem () {
                     Title   = "About SparkleShare",
                     Enabled = true
@@ -339,9 +318,7 @@ namespace SparkleShare {
                 this.menu.AddItem (this.add_item);
                 this.menu.AddItem (this.recent_events_item);
                 this.menu.AddItem (NSMenuItem.SeparatorItem);
-                this.menu.AddItem (this.notify_item);
-                this.menu.AddItem (NSMenuItem.SeparatorItem);
-				this.menu.AddItem (this.about_item);
+                this.menu.AddItem (this.about_item);
 			    this.menu.AddItem (NSMenuItem.SeparatorItem);
                 this.menu.AddItem (this.quit_item);
 
