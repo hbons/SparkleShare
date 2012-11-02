@@ -22,7 +22,6 @@ using System.IO;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
-using MonoMac.Growl;
 
 namespace SparkleShare {
 
@@ -45,9 +44,6 @@ namespace SparkleShare {
         {
             using (var a = new NSAutoreleasePool ())
             {
-                GrowlApplicationBridge.WeakDelegate = this;
-                GrowlApplicationBridge.Delegate     = new SparkleGrowlDelegate ();
-
                 NSApplication.SharedApplication.ApplicationIconImage = NSImage.ImageNamed ("sparkleshare-app.icns");
 
                 NSWorkspace.SharedWorkspace.SetIconforFile (NSImage.ImageNamed ("sparkleshare-folder.icns"),
@@ -101,3 +97,4 @@ namespace SparkleShare {
         }
     }
 }
+    

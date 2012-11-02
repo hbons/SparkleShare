@@ -20,7 +20,6 @@ using System.IO;
 
 using MonoMac.AppKit;
 using MonoMac.Foundation;
-using MonoMac.Growl;
 
 namespace SparkleShare {
     
@@ -33,33 +32,22 @@ namespace SparkleShare {
         {
             Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
                 InvokeOnMainThread (delegate {
-                    if (image_path != null) {
-                        NSData image_data = NSData.FromFile (image_path);
-                        GrowlApplicationBridge.Notify (title, subtext, "Event", image_data, 0, false, new NSString (""));
+                    NSUserNotification notification = new NSUserNotification () {
+                        Title           = title,
+                        InformativeText = subtext,
+                        DeliveryDate    = DateTime.Now
+                    };
+                    
+                    NSUserNotificationCenter center  = NSUserNotificationCenter.DefaultUserNotificationCenter;
+                    center.ShouldPresentNotification = (c, n) => { return true; };
 
-                    } else {
-                        GrowlApplicationBridge.Notify (title, subtext, "Event", null, 0, false, new NSString (""));
-                    }
+                    center.DidActivateNotification += delegate {
+                        Controller.BubbleClicked ();
+                    };
+
+                    center.ScheduleNotification (notification);
                 });
             };
-        }
-    }
-
-
-    public class SparkleGrowlDelegate : GrowlDelegate {
-
-        [Export("growlNotificationWasClicked")]
-        public override void GrowlNotificationWasClicked (NSObject o)
-        {
-            Program.UI.Bubbles.Controller.BubbleClicked ();
-        }
-
-
-        [Export("registrationDictionaryForGrowl")]
-        public override NSDictionary RegistrationDictionaryForGrowl ()
-        {
-            string path = NSBundle.MainBundle.PathForResource ("Growl", "plist");
-            return NSDictionary.FromFile (path);
         }
     }
 }
