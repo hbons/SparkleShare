@@ -22,7 +22,6 @@ using System.Collections.Generic;
 
 using MonoMac.AppKit;
 using MonoMac.Foundation;
-using MonoMac.Growl;
 
 namespace SparkleShare {
     

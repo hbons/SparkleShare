@@ -22,7 +22,7 @@
     <WarningLevel>4</WarningLevel>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks &amp;&amp; cp -R Growl.framework ${TargetDir}/${SolutionName}.app/Contents/Frameworks &amp;&amp; cp -R git ${TargetDir}/${SolutionName}.app/Contents/Resources &amp;&amp; cp -R SparkleShareInviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="True" />
+        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks &amp;&amp; cp -R git ${TargetDir}/${SolutionName}.app/Contents/Resources &amp;&amp; cp -R SparkleShareInviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
     <EnableCodeSigning>False</EnableCodeSigning>
@@ -48,9 +48,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="MonoMac" />
     <Reference Include="System.Net" />
     <Reference Include="Mono.Posix" />
+    <Reference Include="MonoMac">
+      <HintPath>..\..\..\monomac\src\MonoMac.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDelegate.cs">
@@ -193,7 +195,6 @@
     <Content Include="..\Common\Plugins\ssnet.xml">
       <Link>Plugins\ssnet.xml</Link>
     </Content>
-    <Content Include="Growl.plist" />
     <Content Include="Pixmaps\process-syncing-active.png" />
     <Content Include="Pixmaps\process-syncing-down-active.png" />
     <Content Include="Pixmaps\process-syncing-down.png" />
