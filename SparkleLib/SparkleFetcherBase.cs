@@ -210,23 +210,18 @@ namespace SparkleLib {
                 uri_builder.Password = "";
             }
 
-            bool repo_is_encrypted = RemoteUrl.AbsolutePath.Contains ("-crypto");
-            string text;
+            string text = "Congratulations, you've successfully created a SparkleShare repository!" + n +
+                n +
+                "Any files you add or change in this folder will be automatically synced to " + n +
+                uri_builder.ToString () + " and everyone connected to it." + n +
+                n +
+                "SparkleShare is an Open Source software program that helps people collaborate and " + n +
+                "share files. If you like what we do, consider buying us a beer: http://www.sparkleshare.org/" + n +
+                n +
+                "Have fun! :)" + n;
 
-            if (repo_is_encrypted) {
-                text = GenerateCryptoSalt () + " Secret project! " + GenerateCryptoSalt ();
-
-            } else {
-                text = "Congratulations, you've successfully created a SparkleShare repository!" + n +
-                    n +
-                    "Any files you add or change in this folder will be automatically synced to " + n +
-                    uri_builder.ToString () + " and everyone connected to it." + n +
-                    n +
-                    "SparkleShare is an Open Source software program that helps people collaborate and " + n +
-                    "share files. If you like what we do, consider buying us a beer: http://www.sparkleshare.org/" + n +
-                    n +
-                    "Have fun! :)" + n;
-            }
+            if (RemoteUrl.AbsolutePath.Contains ("-crypto"))
+                text = text.Replace ("a SparkleShare repository", "an encrypted SparkleShare repository");
 
             File.WriteAllText (file_path, text);
         }
