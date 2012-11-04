@@ -315,8 +315,8 @@ namespace SparkleShare {
                 }
 
                 this.menu.AddItem (NSMenuItem.SeparatorItem);
-                this.menu.AddItem (this.add_item);
                 this.menu.AddItem (this.recent_events_item);
+                this.menu.AddItem (this.add_item);
                 this.menu.AddItem (NSMenuItem.SeparatorItem);
                 this.menu.AddItem (this.about_item);
 			    this.menu.AddItem (NSMenuItem.SeparatorItem);
