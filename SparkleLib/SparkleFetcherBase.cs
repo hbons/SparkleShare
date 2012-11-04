@@ -343,11 +343,10 @@ namespace SparkleLib {
 
         public static string GetBackend (string address)
         {
-            Uri uri           = new Uri (address);
-            int index_of_plus = uri.Scheme.IndexOf ("+");
+            if (address.StartsWith ("ssh+")) {
+				string backend = address.Substring (0, address.IndexOf ("://"));
+				backend        = backend.Substring (4);
 
-            if (index_of_plus > -1) {
-                string backend = uri.Scheme.Substring (index_of_plus + 1);
                 return char.ToUpper (backend [0]) + backend.Substring (1);
 
             } else {
