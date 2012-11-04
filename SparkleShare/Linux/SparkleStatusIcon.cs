@@ -234,6 +234,18 @@ namespace SparkleShare {
 
                 this.menu.Add (new SeparatorMenuItem ());
 
+			
+			this.recent_events_item = new MenuItem ("Recent Changes…");
+			
+				this.recent_events_item.Sensitive = Controller.RecentEventsItemEnabled;
+				
+				this.recent_events_item.Activated += delegate {
+					Controller.RecentEventsClicked ();
+				};
+			
+			this.menu.Add (this.recent_events_item);
+
+
                 MenuItem sync_item = new MenuItem ("Add Hosted Project…");
 
                 sync_item.Activated += delegate {
@@ -241,16 +253,6 @@ namespace SparkleShare {
                 };
 
             this.menu.Add (sync_item);
-
-            this.recent_events_item = new MenuItem ("Recent Changes…");
-
-                this.recent_events_item.Sensitive = Controller.RecentEventsItemEnabled;
-
-                this.recent_events_item.Activated += delegate {
-                    Controller.RecentEventsClicked ();
-                };
-
-            this.menu.Add (this.recent_events_item);
             this.menu.Add (new SeparatorMenuItem ());
 
             
