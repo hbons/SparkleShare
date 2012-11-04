@@ -1,3 +1,10 @@
+0.9.7 for Linux, Mac and Windows (???):
+
+        Hylke:
+        - Remove Growl and use native OS X notifications
+        - Treat underscores in project names as spaces in folder names      
+
+
 0.9.6 for Linux, Mac and Windows (Sat Oct 27 2012):
 
         Hylke:
