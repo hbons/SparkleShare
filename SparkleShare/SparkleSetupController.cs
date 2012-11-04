@@ -539,6 +539,7 @@ namespace SparkleShare {
         public void ShowFilesClicked ()
         {
             string folder_name = Path.GetFileName (PreviousPath);
+            folder_name        = folder_name.Replace ("_", " ");
 
             if (PreviousPath.EndsWith ("-crypto"))
                 folder_name = folder_name.Replace ("-crypto", "");
