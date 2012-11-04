@@ -288,8 +288,8 @@ namespace SparkleShare {
             }
             
             this.context_menu.Items.Add (new Separator ());
+			this.context_menu.Items.Add (this.log_item);
             this.context_menu.Items.Add (add_item);
-            this.context_menu.Items.Add (this.log_item);
             this.context_menu.Items.Add (new Separator ());
             this.context_menu.Items.Add (notify_item);
             this.context_menu.Items.Add (new Separator ());
