@@ -136,7 +136,8 @@ namespace SparkleShare {
                         Plugins.Insert (0, new SparklePlugin (xml_file_path));
 
                     } else if (xml_file_path.EndsWith ("ssnet.xml")) {
-                        // Plugins.Insert ((local_plugins_count + 1), new SparklePlugin (xml_file_path)); TODO: Skip this plugin for now
+                        // Plugins.Insert ((local_plugins_count + 1), new SparklePlugin (xml_file_path)); 
+                        // TODO: Skip this plugin for now
 
                     } else {
                         Plugins.Add (new SparklePlugin (xml_file_path));
@@ -341,7 +342,11 @@ namespace SparkleShare {
 
         public void AddPageCompleted (string address, string remote_path)
         {
-            SyncingFolder         = Path.GetFileNameWithoutExtension (remote_path);
+            SyncingFolder = Path.GetFileName (remote_path);
+
+            if (remote_path.EndsWith (".git"))
+                SyncingFolder = remote_path.Substring (0, remote_path.Length - 4);
+
             SyncingFolder         = SyncingFolder.Replace ("-crypto", "");
             ProgressBarPercentage = 1.0;
 
@@ -424,7 +429,12 @@ namespace SparkleShare {
 
         public void InvitePageCompleted ()
         {
-            SyncingFolder   = Path.GetFileNameWithoutExtension (PendingInvite.RemotePath);
+            SyncingFolder = Path.GetFileName (PendingInvite.RemotePath);
+
+            if (PendingInvite.RemotePath.EndsWith (".git"))
+                SyncingFolder = PendingInvite.RemotePath.Substring (0, PendingInvite.RemotePath.Length - 4);
+
+            SyncingFolder   = SyncingFolder.Replace ("-crypto", "");
             PreviousAddress = PendingInvite.Address;
             PreviousPath    = PendingInvite.RemotePath;
 
