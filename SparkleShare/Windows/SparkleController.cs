@@ -62,7 +62,6 @@ namespace SparkleShare {
                 Environment.ExpandEnvironmentVariables ("%PATH%");
 
             Environment.SetEnvironmentVariable ("PATH", new_PATH);
-            Environment.SetEnvironmentVariable ("PLINK_PROTOCOL", "ssh");
             Environment.SetEnvironmentVariable ("HOME", Environment.GetFolderPath (Environment.SpecialFolder.UserProfile));
 
             StartSSH ();
