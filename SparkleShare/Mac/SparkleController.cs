@@ -63,11 +63,8 @@ namespace SparkleShare {
 
                 // FIXME: There are cases where the wrong repo is triggered, so
                 // we trigger all of them for now. Causes only slightly more overhead
-                foreach (SparkleRepoBase repo in Repositories) {
-                    new Thread (() => {
-                        repo.OnFileActivity (fse_args);
-                    }).Start ();
-                }
+                foreach (SparkleRepoBase repo in Repositories)
+                    new Thread (() => { repo.OnFileActivity (fse_args); }).Start ();
             };
 
         }
