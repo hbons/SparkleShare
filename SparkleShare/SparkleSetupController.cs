@@ -347,7 +347,8 @@ namespace SparkleShare {
             if (remote_path.EndsWith (".git"))
                 SyncingFolder = remote_path.Substring (0, remote_path.Length - 4);
 
-            SyncingFolder         = SyncingFolder.Replace ("-crypto", "");
+			SyncingFolder         = SyncingFolder.Replace ("-crypto", "");
+			SyncingFolder         = SyncingFolder.Replace ("_", " ");
             ProgressBarPercentage = 1.0;
 
             ChangePageEvent (PageType.Syncing, null);
@@ -434,7 +435,8 @@ namespace SparkleShare {
             if (PendingInvite.RemotePath.EndsWith (".git"))
                 SyncingFolder = PendingInvite.RemotePath.Substring (0, PendingInvite.RemotePath.Length - 4);
 
-            SyncingFolder   = SyncingFolder.Replace ("-crypto", "");
+			SyncingFolder   = SyncingFolder.Replace ("-crypto", "");
+			SyncingFolder   = SyncingFolder.Replace ("_", " ");
             PreviousAddress = PendingInvite.Address;
             PreviousPath    = PendingInvite.RemotePath;
 
