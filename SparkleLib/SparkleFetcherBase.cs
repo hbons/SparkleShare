@@ -339,17 +339,15 @@ namespace SparkleLib {
         }
 
 
-        public static string GetBackend (string path)
+        public static string GetBackend (string address)
         {
-            string extension = Path.GetExtension (path);
-            
-            if (!string.IsNullOrEmpty (extension)) {
-                extension       = extension.Substring (1);
-                char [] letters = extension.ToCharArray ();
-                letters [0]     = char.ToUpper (letters [0]);
-                
-                return new string (letters);
-                
+            Uri uri           = new Uri (address);
+            int index_of_plus = uri.Scheme.IndexOf ("+");
+
+            if (index_of_plus > -1) {
+                string backend = uri.Scheme.Substring (index_of_plus + 1);
+                return char.ToUpper (backend [0]) + backend.Substring (1);
+
             } else {
                 return "Git";
             }
