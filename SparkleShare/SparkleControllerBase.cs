@@ -523,9 +523,12 @@ namespace SparkleShare {
                 File.SetAttributes (tmp_path, File.GetAttributes (tmp_path) | FileAttributes.Hidden);
             }
 
-            string canonical_name = Path.GetFileNameWithoutExtension (remote_path);
+            string canonical_name = Path.GetFileName (remote_path);
             string tmp_folder     = Path.Combine (tmp_path, canonical_name);
-            string backend        = SparkleFetcherBase.GetBackend (remote_path);
+            string backend        = SparkleFetcherBase.GetBackend (address);
+
+            if (address.StartsWith ("ssh+"))
+                address = "ssh" + address.Substring (address.IndexOf ("://"));
 
             try {
                 this.fetcher = (SparkleFetcherBase) Activator.CreateInstance (
@@ -603,7 +606,7 @@ namespace SparkleShare {
             this.watcher.EnableRaisingEvents = false;
 
             this.fetcher.Complete ();
-            string canonical_name = Path.GetFileNameWithoutExtension (this.fetcher.RemoteUrl.AbsolutePath);
+            string canonical_name = Path.GetFileName (this.fetcher.RemoteUrl.AbsolutePath);
 
             canonical_name = canonical_name.Replace ("-crypto", "");
             canonical_name = canonical_name.Replace ("_", " ");

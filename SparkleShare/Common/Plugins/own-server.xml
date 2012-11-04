@@ -9,7 +9,7 @@
     </info>
     <address>
       <value/>
-      <example>[user@]hostname[:port]</example>
+      <example>ssh://[user@]hostname[:port]</example>
     </address>
     <path>
       <value/>
