@@ -221,7 +221,7 @@ namespace SparkleLib {
 
             if (args != null) {
                 foreach (string exclude_path in ExcludePaths) {
-                    if (args.FullPath.Contains (exclude_path))
+                    if (args.FullPath.Contains (Path.DirectorySeparatorChar + exclude_path))
                         return;
                 }
             }
