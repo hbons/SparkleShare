@@ -28,7 +28,7 @@ using SparkleLib;
 
 namespace SparkleShare {
 
-	public class SparkleController : SparkleControllerBase {
+    public class SparkleController : SparkleControllerBase {
 
         public override string PluginsPath {
             get {
@@ -70,8 +70,8 @@ namespace SparkleShare {
         }
 
 
-		public override void CreateStartupItem ()
-		{
+        public override void CreateStartupItem ()
+        {
             // There aren't any bindings in MonoMac to support this yet, so
             // we call out to an applescript to do the job
             Process process = new Process ();
@@ -84,7 +84,7 @@ namespace SparkleShare {
             process.WaitForExit ();
 
             SparkleLogger.LogInfo ("Controller", "Added " + NSBundle.MainBundle.BundlePath + " to login items");
-		}
+        }
 
 
         public override void InstallProtocolHandler ()
@@ -93,9 +93,9 @@ namespace SparkleShare {
         }
 
 
-		// Adds the SparkleShare folder to the user's
-		// list of bookmarked places
-		public override void AddToBookmarks ()
+        // Adds the SparkleShare folder to the user's
+        // list of bookmarked places
+        public override void AddToBookmarks ()
         {/*
             NSMutableDictionary sidebar_plist = NSMutableDictionary.FromDictionary (
                 NSUserDefaults.StandardUserDefaults.PersistentDomainForName ("com.apple.sidebarlists"));
@@ -143,11 +143,11 @@ namespace SparkleShare {
             }
 
             NSUserDefaults.StandardUserDefaults.SetPersistentDomain (sidebar_plist, "com.apple.sidebarlists");*/
-		}
+        }
 
 
-		public override bool CreateSparkleShareFolder ()
-		{
+        public override bool CreateSparkleShareFolder ()
+        {
             this.watcher = new SparkleMacWatcher (Program.Controller.FoldersPath);
 
             if (!Directory.Exists (Program.Controller.FoldersPath)) {
@@ -161,14 +161,15 @@ namespace SparkleShare {
             }
 
             return false;
-		}
+        }
 
 
-		public override void OpenFolder (string path)
-		{
-			NSWorkspace.SharedWorkspace.OpenFile (path);
-		}
-		
+        public override void OpenFolder (string path)
+        {
+            path = Uri.UnescapeDataString (path);
+            NSWorkspace.SharedWorkspace.OpenFile (path);
+        }
+        
         
         public override void OpenFile (string path)
         {
@@ -184,9 +185,9 @@ namespace SparkleShare {
 
 
         private string event_log_html;
-		public override string EventLogHTML
-		{
-			get {
+        public override string EventLogHTML
+        {
+            get {
                 if (string.IsNullOrEmpty (this.event_log_html)) {
                     string html_file_path   = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "event-log.html");
                     string jquery_file_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "jquery.js");
@@ -196,23 +197,23 @@ namespace SparkleShare {
                 }
 
                 return this.event_log_html;
-			}
-		}
+            }
+        }
 
 
         private string day_entry_html;
-		public override string DayEntryHTML
-		{
-			get {
+        public override string DayEntryHTML
+        {
+            get {
                 if (string.IsNullOrEmpty (this.day_entry_html)) {
                     string html_file_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "HTML", "day-entry.html");
                     this.day_entry_html   = File.ReadAllText (html_file_path);
                 }
 
                 return this.day_entry_html;
-			}
-		}
-		
+            }
+        }
+        
 
         private string event_entry_html;
         public override string EventEntryHTML
@@ -226,5 +227,5 @@ namespace SparkleShare {
                return this.event_entry_html;
             }
         }
-	}
+    }
 }
