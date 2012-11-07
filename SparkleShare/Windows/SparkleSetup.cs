@@ -543,10 +543,9 @@ namespace SparkleShare {
                     }    
 
                     case PageType.CryptoSetup: {
-                        
                         Header      = "Set up file encryption";
-                        Description = "This project is supposed to be encrypted, but it doesn't yet have a password set. Please provide one below.";
-                        
+						Description = "Please a provide a strong password that you don't use elsewhere below:";
+
                         TextBlock password_label = new TextBlock () {
                             Text       = "Password:",
                             FontWeight = FontWeights.Bold
@@ -567,9 +566,9 @@ namespace SparkleShare {
                         };
                         
 						TextBlock info_label = new TextBlock () {
-                            Text       = "This password can't be changed later, and your files can't be recovered if it's forgotten.",
+                            Text         = "This password can't be changed later, and your files can't be recovered if it's forgotten.",
 							TextWrapping = TextWrapping.Wrap,
-							Width = 315
+							Width        = 315
                         };
 
 						Image warning_image = new Image () {

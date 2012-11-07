@@ -582,7 +582,7 @@ namespace SparkleShare {
 
             if (type == PageType.CryptoSetup) {
                 Header      = "Set up file encryption";
-                Description = "This project is supposed to be encrypted, but it doesn't yet have a password set. Please provide one below:";
+                Description = "Please a provide a strong password that you don't use elsewhere below:";
 
 
                 PasswordLabel = new NSTextField () {
