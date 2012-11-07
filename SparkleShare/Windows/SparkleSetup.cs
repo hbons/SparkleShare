@@ -73,8 +73,8 @@ namespace SparkleShare {
                             FontWeight = FontWeights.Bold
                         };
                         
-						string name = System.Security.Principal.WindowsIdentity.GetCurrent ().Name;
-						name = name.Split ("\\".ToCharArray ()) [1];
+                        string name = System.Security.Principal.WindowsIdentity.GetCurrent ().Name;
+                        name = name.Split ("\\".ToCharArray ()) [1];
 
                         TextBox name_box = new TextBox () {
                             Text  = name,
@@ -120,13 +120,13 @@ namespace SparkleShare {
                         Canvas.SetTop (email_box, 230);
                         
                         Buttons.Add (cancel_button);
-						Buttons.Add (continue_button);
+                        Buttons.Add (continue_button);
                         
-						name_box.Focus ();
-						name_box.Select (name_box.Text.Length, 0);
+                        name_box.Focus ();
+                        name_box.Select (name_box.Text.Length, 0);
                         
                         Controller.UpdateSetupContinueButtonEvent += delegate (bool enabled) {
-                        	Dispatcher.BeginInvoke ((Action) delegate {
+                            Dispatcher.BeginInvoke ((Action) delegate {
                                 continue_button.IsEnabled = enabled;
                             });
                         };
@@ -238,45 +238,45 @@ namespace SparkleShare {
                         };
                         
                         GridView grid_view = new GridView () {
-							AllowsColumnReorder = false
-						};
-						
-						grid_view.Columns.Add (new GridViewColumn ());
-					
-						string xaml =	
-							"<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"" +
-							"  xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\">" +
-						    "  <Grid>" +
-						    "    <StackPanel Orientation=\"Horizontal\">" +
-						    "      <Image Margin=\"5,0,0,0\" Source=\"{Binding Image}\" Height=\"24\" Width=\"24\"/>" +
-						    "      <StackPanel>" +
-							"        <TextBlock Padding=\"10,4,0,0\" FontWeight=\"Bold\" Text=\"{Binding Name}\">" +
-							"        </TextBlock>" +
-							"        <TextBlock Padding=\"10,0,0,4\" Opacity=\"0.5\" Text=\"{Binding Description}\">" +
-							"        </TextBlock>" +
-							"      </StackPanel>" +
-							"    </StackPanel>" +
-							"  </Grid>" +
-							"</DataTemplate>";
+                            AllowsColumnReorder = false
+                        };
+                        
+                        grid_view.Columns.Add (new GridViewColumn ());
+                    
+                        string xaml =    
+                            "<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"" +
+                            "  xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\">" +
+                            "  <Grid>" +
+                            "    <StackPanel Orientation=\"Horizontal\">" +
+                            "      <Image Margin=\"5,0,0,0\" Source=\"{Binding Image}\" Height=\"24\" Width=\"24\"/>" +
+                            "      <StackPanel>" +
+                            "        <TextBlock Padding=\"10,4,0,0\" FontWeight=\"Bold\" Text=\"{Binding Name}\">" +
+                            "        </TextBlock>" +
+                            "        <TextBlock Padding=\"10,0,0,4\" Opacity=\"0.5\" Text=\"{Binding Description}\">" +
+                            "        </TextBlock>" +
+                            "      </StackPanel>" +
+                            "    </StackPanel>" +
+                            "  </Grid>" +
+                            "</DataTemplate>";
 
-    					grid_view.Columns [0].CellTemplate = (DataTemplate) XamlReader.Parse (xaml);
+                        grid_view.Columns [0].CellTemplate = (DataTemplate) XamlReader.Parse (xaml);
 
-						Style header_style = new Style(typeof (GridViewColumnHeader));
-						header_style.Setters.Add (new Setter (GridViewColumnHeader.VisibilityProperty, Visibility.Collapsed));
-					    grid_view.ColumnHeaderContainerStyle = header_style;
-					    
+                        Style header_style = new Style(typeof (GridViewColumnHeader));
+                        header_style.Setters.Add (new Setter (GridViewColumnHeader.VisibilityProperty, Visibility.Collapsed));
+                        grid_view.ColumnHeaderContainerStyle = header_style;
+                        
                         foreach (SparklePlugin plugin in Controller.Plugins) {
                             // FIXME: images are blurry
                             BitmapFrame image = BitmapFrame.Create (
-								new Uri (plugin.ImagePath)
-							);
-							
+                                new Uri (plugin.ImagePath)
+                            );
+                            
                             list_view.Items.Add (
                                 new {
                                     Name        = plugin.Name,
-									Description = plugin.Description,
-									Image       = image
-								}
+                                    Description = plugin.Description,
+                                    Image       = image
+                                }
                             );
                         }        
                         
@@ -318,7 +318,7 @@ namespace SparkleShare {
                             Width      = 200,
                             Foreground = new SolidColorBrush (Color.FromRgb (128, 128, 128))
                         };
-						
+                        
                         Button cancel_button = new Button () {
                             Content = "Cancel"
                         };
@@ -332,11 +332,11 @@ namespace SparkleShare {
                             Content   = "Fetch prior revisions",
                             IsChecked = Controller.FetchPriorHistory
                         };
-						
-						history_check_box.Click += delegate {
-							Controller.HistoryItemChanged (history_check_box.IsChecked.Value);
-						};
-						
+                        
+                        history_check_box.Click += delegate {
+                            Controller.HistoryItemChanged (history_check_box.IsChecked.Value);
+                        };
+                        
                         ContentCanvas.Children.Add (history_check_box);
                         Canvas.SetLeft (history_check_box, 185);
                         Canvas.SetBottom (history_check_box, 12);
@@ -369,17 +369,17 @@ namespace SparkleShare {
                         Canvas.SetTop (path_help_label, 330);
                         Canvas.SetRight (path_help_label, 30);
                         
-						TaskbarItemInfo.ProgressValue = 0.0;
-						TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
-						
+                        TaskbarItemInfo.ProgressValue = 0.0;
+                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                        
                         Buttons.Add (add_button);
                         Buttons.Add (cancel_button);
                         
-						address_box.Focus ();
+                        address_box.Focus ();
                         address_box.Select (address_box.Text.Length, 0);
-						
+                        
 
-						Controller.ChangeAddressFieldEvent += delegate (string text,
+                        Controller.ChangeAddressFieldEvent += delegate (string text,
                             string example_text, FieldState state) {
 
                             Dispatcher.BeginInvoke ((Action) delegate {
@@ -454,21 +454,21 @@ namespace SparkleShare {
                             Value  = Controller.ProgressBarPercentage
                         };
                         
-						
+                        
                         ContentCanvas.Children.Add (progress_bar);
                         Canvas.SetLeft (progress_bar, 185);
                         Canvas.SetTop (progress_bar, 150);
                         
-						TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-						
+                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                        
                         Buttons.Add (cancel_button);
                         Buttons.Add(finish_button);
                                                    
                          
                         Controller.UpdateProgressBarEvent += delegate (double percentage) {
                             Dispatcher.BeginInvoke ((Action) delegate {
-                                progress_bar.Value = percentage;	
-								TaskbarItemInfo.ProgressValue = percentage / 100;
+                                progress_bar.Value = percentage;    
+                                TaskbarItemInfo.ProgressValue = percentage / 100;
                             });
                         };
     
@@ -484,10 +484,10 @@ namespace SparkleShare {
                         Header      = "Oops! Something went wrong…";
                         Description = "Please check the following:";
 
-						TextBlock help_block = new TextBlock () {
-							TextWrapping = TextWrapping.Wrap,
-                			Width        = 310	
-						};
+                        TextBlock help_block = new TextBlock () {
+                            TextWrapping = TextWrapping.Wrap,
+                            Width        = 310    
+                        };
 
                         TextBlock bullets_block = new TextBlock () {
                             Text = "•\n\n\n•"
@@ -515,18 +515,18 @@ namespace SparkleShare {
                             Content = "Try again…"
                         };
 
-						
-				        ContentCanvas.Children.Add (bullets_block);
+                        
+                        ContentCanvas.Children.Add (bullets_block);
                         Canvas.SetLeft (bullets_block, 195);
                         Canvas.SetTop (bullets_block, 100);
-						
-				        ContentCanvas.Children.Add (help_block);
+                        
+                        ContentCanvas.Children.Add (help_block);
                         Canvas.SetLeft (help_block, 210);
                         Canvas.SetTop (help_block, 100);
                         
-						TaskbarItemInfo.ProgressValue = 1.0;
-						TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Error;
-						
+                        TaskbarItemInfo.ProgressValue = 1.0;
+                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Error;
+                        
                         Buttons.Add (try_again_button);
                         Buttons.Add (cancel_button);
     
@@ -544,7 +544,7 @@ namespace SparkleShare {
 
                     case PageType.CryptoSetup: {
                         Header      = "Set up file encryption";
-						Description = "Please a provide a strong password that you don't use elsewhere below:";
+                        Description = "Please a provide a strong password that you don't use elsewhere below:";
 
                         TextBlock password_label = new TextBlock () {
                             Text       = "Password:",
@@ -565,16 +565,16 @@ namespace SparkleShare {
                             IsChecked = false
                         };
                         
-						TextBlock info_label = new TextBlock () {
+                        TextBlock info_label = new TextBlock () {
                             Text         = "This password can't be changed later, and your files can't be recovered if it's forgotten.",
-							TextWrapping = TextWrapping.Wrap,
-							Width        = 315
+                            TextWrapping = TextWrapping.Wrap,
+                            Width        = 315
                         };
 
-						Image warning_image = new Image () {
-							Source = Imaging.CreateBitmapSourceFromHIcon (Drawing.SystemIcons.Information.Handle,
-                            	Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions ())
-						};
+                        Image warning_image = new Image () {
+                            Source = Imaging.CreateBitmapSourceFromHIcon (Drawing.SystemIcons.Information.Handle,
+                                Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions ())
+                        };
 
                         show_password_checkbox.Checked += delegate {
                             visible_password_box.Text       = password_box.Password;
@@ -598,7 +598,7 @@ namespace SparkleShare {
                         
                         Button continue_button = new Button () {
                             Content = "Continue",
-							IsEnabled = false
+                            IsEnabled = false
                         };
                         
                         continue_button.Click += delegate {
@@ -638,14 +638,14 @@ namespace SparkleShare {
                         Canvas.SetLeft (show_password_checkbox, 338);
                         Canvas.SetTop (show_password_checkbox, 208);
 
-						ContentCanvas.Children.Add (info_label);
+                        ContentCanvas.Children.Add (info_label);
                         Canvas.SetLeft (info_label, 240);
                         Canvas.SetTop (info_label, 300);
-                       	                                              
-				        ContentCanvas.Children.Add (warning_image);
+                                                                         
+                        ContentCanvas.Children.Add (warning_image);
                         Canvas.SetLeft (warning_image, 193);
                         Canvas.SetTop (warning_image, 300);
-					
+                    
                         Buttons.Add (continue_button);
                         Buttons.Add (cancel_button);
                         
@@ -698,7 +698,7 @@ namespace SparkleShare {
                         
                         Button continue_button = new Button () {
                             Content = "Continue",
-							IsEnabled = false
+                            IsEnabled = false
                         };
                         
                         continue_button.Click += delegate {
@@ -754,32 +754,32 @@ namespace SparkleShare {
                         };
     
                         Button show_files_button = new Button () {
-							Content = "Show files…"
+                            Content = "Show files…"
                         };
 
                         if (warnings.Length > 0) {
-							Image warning_image = new Image () {
-								Source = Imaging.CreateBitmapSourceFromHIcon (Drawing.SystemIcons.Information.Handle,
-                                	Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions ())
-							};
-							
+                            Image warning_image = new Image () {
+                                Source = Imaging.CreateBitmapSourceFromHIcon (Drawing.SystemIcons.Information.Handle,
+                                    Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions ())
+                            };
+                            
                             TextBlock warning_block = new TextBlock () {
-								Text         = warnings [0],
-								Width        = 310,
-								TextWrapping = TextWrapping.Wrap
-							};
-							                                                    
-					        ContentCanvas.Children.Add (warning_image);
-	                        Canvas.SetLeft (warning_image, 193);
-	                        Canvas.SetTop (warning_image, 100);
-							                                                    
-					        ContentCanvas.Children.Add (warning_block);
-	                        Canvas.SetLeft (warning_block, 240);
-	                        Canvas.SetTop (warning_block, 100);
-						}
-						
-						TaskbarItemInfo.ProgressValue = 0.0;
-						TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                                Text         = warnings [0],
+                                Width        = 310,
+                                TextWrapping = TextWrapping.Wrap
+                            };
+                                                                                
+                            ContentCanvas.Children.Add (warning_image);
+                            Canvas.SetLeft (warning_image, 193);
+                            Canvas.SetTop (warning_image, 100);
+                                                                                
+                            ContentCanvas.Children.Add (warning_block);
+                            Canvas.SetLeft (warning_block, 240);
+                            Canvas.SetTop (warning_block, 100);
+                        }
+                        
+                        TaskbarItemInfo.ProgressValue = 0.0;
+                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
 
                         Buttons.Add (show_files_button);
                         Buttons.Add (finish_button);
@@ -814,21 +814,21 @@ namespace SparkleShare {
                             
                                 slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-1");
                             
-								Button skip_tutorial_button = new Button () {
-									Content = "Skip tutorial"
-								};
-								
-								Button continue_button = new Button () {
-									Content = "Continue"
-								};
-							
+                                Button skip_tutorial_button = new Button () {
+                                    Content = "Skip tutorial"
+                                };
+                                
+                                Button continue_button = new Button () {
+                                    Content = "Continue"
+                                };
+                            
                             
                                 ContentCanvas.Children.Add (slide_image);
                                 Canvas.SetLeft (slide_image, 215);
                                 Canvas.SetTop (slide_image, 130);
                             
-								Buttons.Add (skip_tutorial_button);
-								Buttons.Add (continue_button);
+                                Buttons.Add (skip_tutorial_button);
+                                Buttons.Add (continue_button);
                                
                                 
                                 skip_tutorial_button.Click += delegate {
@@ -906,41 +906,41 @@ namespace SparkleShare {
                             }
                             
                             case 4: {
-								Header      = "Here's your unique link code";
-								Description = "You'll need it whenever you want to link this computer to a host" +
-									" (we keep a copy in your SparkleShare folder).";
+                                Header      = "Here's your unique link code";
+                                Description = "You'll need it whenever you want to link this computer to a host" +
+                                    " (we keep a copy in your SparkleShare folder).";
                             
 
-								TextBox link_code_text_box = new TextBox () {
-									Text         = Program.Controller.CurrentUser.PublicKey,
-									Width        = 250,
-									MaxLines     = 1,
-									TextWrapping = TextWrapping.NoWrap,
-									IsEnabled    = false
-								};
+                                TextBox link_code_text_box = new TextBox () {
+                                    Text         = Program.Controller.CurrentUser.PublicKey,
+                                    Width        = 250,
+                                    MaxLines     = 1,
+                                    TextWrapping = TextWrapping.NoWrap,
+                                    IsEnabled    = false
+                                };
 
                                 Button copy_button = new Button () {
                                     Content = "Copy",
-									Width   = 60
+                                    Width   = 60
                                 };
 
-								Button finish_button = new Button () {
-									Content = "Finish"
-								};
+                                Button finish_button = new Button () {
+                                    Content = "Finish"
+                                };
                                 
                                 CheckBox check_box = new CheckBox () {
                                     Content   = "Add SparkleShare to startup items",
                                     IsChecked = true
                                 };
                             
-							
-								ContentCanvas.Children.Add (link_code_text_box);
-								Canvas.SetLeft (link_code_text_box, 235);
-								Canvas.SetTop (link_code_text_box, 190);
+                            
+                                ContentCanvas.Children.Add (link_code_text_box);
+                                Canvas.SetLeft (link_code_text_box, 235);
+                                Canvas.SetTop (link_code_text_box, 190);
 
-								ContentCanvas.Children.Add (copy_button);
-								Canvas.SetLeft (copy_button, 490);
-								Canvas.SetTop (copy_button, 190);
+                                ContentCanvas.Children.Add (copy_button);
+                                Canvas.SetLeft (copy_button, 490);
+                                Canvas.SetTop (copy_button, 190);
 
                                 ContentCanvas.Children.Add (check_box);
                                 Canvas.SetLeft (check_box, 185);
@@ -957,9 +957,9 @@ namespace SparkleShare {
                                     Controller.TutorialPageCompleted ();
                                 };
 
-								copy_button.Click += delegate {
-									Clipboard.SetData(DataFormats.Text, link_code_text_box.Text);
-								};
+                                copy_button.Click += delegate {
+                                    Clipboard.SetData(DataFormats.Text, link_code_text_box.Text);
+                                };
     
                                 break;
                             }

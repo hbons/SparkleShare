@@ -510,9 +510,8 @@ namespace SparkleShare {
                     }
     
                     case PageType.CryptoSetup: {
-
                         Header      = "Set up file encryption";
-						Description = "Please a provide a strong password that you don't use elsewhere below:";
+                        Description = "Please a provide a strong password that you don't use elsewhere below:";
 
                         Label password_label = new Label ("<b>" + "Password:" + "</b>") {
                             UseMarkup = true,
@@ -691,7 +690,7 @@ namespace SparkleShare {
                         Description = "You can find it in your SparkleShare folder";
 
                         // A button that opens the synced folder
-						Button show_files_button = new Button ("Show Files…");
+                        Button show_files_button = new Button ("Show Files…");
 
                         show_files_button.Clicked += delegate {
                             Controller.ShowFilesClicked ();
@@ -799,9 +798,9 @@ namespace SparkleShare {
                         }
 
                         case 4: {
-							Header      = "Here's your unique link code";
-							Description = "You'll need it whenever you want to link this computer to a host" +
-								" (we keep a copy in your SparkleShare folder).";
+                            Header      = "Here's your unique link code";
+                            Description = "You'll need it whenever you want to link this computer to a host" +
+                                " (we keep a copy in your SparkleShare folder).";
 
                             
                             Button finish_button = new Button ("Finish");
