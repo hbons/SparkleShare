@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -563,6 +564,11 @@ namespace SparkleShare {
 
         private string FormatBreadCrumbs (string path_root, string path)
         {
+            byte [] path_root_bytes = Encoding.Default.GetBytes (path_root);
+            byte [] path_bytes      = Encoding.Default.GetBytes (path);
+            path_root               = Encoding.UTF8.GetString (path_root_bytes);
+            path                    = Encoding.UTF8.GetString (path_bytes);
+
             path_root                = path_root.Replace ("/", Path.DirectorySeparatorChar.ToString ());
             path                     = path.Replace ("/", Path.DirectorySeparatorChar.ToString ());
             string new_path_root     = path_root;
