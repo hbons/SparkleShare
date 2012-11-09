@@ -4,6 +4,7 @@
         - Remove Growl and use native OS X notifications
         - Treat underscores in project names as spaces for the folder names      
         - Allow periods "." in project names
+        - Depend on git >= 1.7.12
 
 
 0.9.6 for Linux, Mac and Windows (Sat Oct 27 2012):
