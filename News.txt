@@ -5,6 +5,8 @@
         - Treat underscores in project names as spaces for the folder names      
         - Allow periods "." in project names
         - Depend on git >= 1.7.12
+        - Fix Mac unicode compatibility (could cause duplicate files or folders
+          between different platfoems)
 
 
 0.9.6 for Linux, Mac and Windows (Sat Oct 27 2012):
