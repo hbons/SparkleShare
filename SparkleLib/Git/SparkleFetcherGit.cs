@@ -97,9 +97,6 @@ namespace SparkleLib.Git {
             } else if (uri.Host.Equals ("bitbucket.org") && !uri.Scheme.StartsWith ("http")) {
                 // Nothing really
 
-            } else if (uri.Host.Equals ("gnome.org")) {
-                uri = new Uri ("ssh://git@gnome.org/git" + uri.AbsolutePath);
-
             } else {
                 if (string.IsNullOrEmpty (uri.UserInfo) && !uri.Scheme.StartsWith ("http")) {
                     if (uri.Port == -1)

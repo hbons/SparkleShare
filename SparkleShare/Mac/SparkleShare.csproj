@@ -168,9 +168,6 @@
     <Content Include="..\Common\Plugins\gitorious.xml">
       <Link>Plugins\gitorious.xml</Link>
     </Content>
-    <Content Include="..\Common\Plugins\gnome.xml">
-      <Link>Plugins\gnome.xml</Link>
-    </Content>
     <Content Include="..\Common\Plugins\own-server.xml">
       <Link>Plugins\own-server.xml</Link>
     </Content>
@@ -182,9 +179,6 @@
     </Content>
     <Content Include="..\Common\Plugins\gitorious.png">
       <Link>Plugins\gitorious.png</Link>
-    </Content>
-    <Content Include="..\Common\Plugins\gnome.png">
-      <Link>Plugins\gnome.png</Link>
     </Content>
     <Content Include="..\Common\Plugins\own-server.png">
       <Link>Plugins\own-server.png</Link>
