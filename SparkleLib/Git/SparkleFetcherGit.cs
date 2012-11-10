@@ -408,6 +408,9 @@ namespace SparkleLib.Git {
                     writer.WriteLine ("*." + extension + " -delta");
                     writer.WriteLine ("*." + extension.ToUpper () + " -delta");
                 }
+                
+                writer.WriteLine ("*.txt text");
+                writer.WriteLine ("*.TXT text");
             }
 
             writer.Close ();
