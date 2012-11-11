@@ -30,16 +30,13 @@ namespace SparkleShare {
         public SparkleStatusIconController Controller = new SparkleStatusIconController ();
 
         private NSMenu menu;
-        private NSMenu submenu;
 
         private NSStatusItem status_item;
         private NSMenuItem state_item;
         private NSMenuItem folder_item;
 
         private NSMenuItem [] folder_menu_items;
-        private NSMenuItem [] submenu_items;
 
-        private NSMenuItem more_item;
         private NSMenuItem add_item;
         private NSMenuItem about_item;
         private NSMenuItem recent_events_item;
@@ -62,7 +59,6 @@ namespace SparkleShare {
         private NSImage sparkleshare_image;
 
         private EventHandler [] folder_tasks;
-        private EventHandler [] overflow_tasks;
 
         
         public SparkleStatusIcon () : base ()
@@ -231,12 +227,10 @@ namespace SparkleShare {
                 this.menu.AddItem (this.folder_item);
 
                 this.folder_menu_items = new NSMenuItem [Controller.Folders.Length];
-                this.submenu_items     = new NSMenuItem [Controller.OverflowFolders.Length];
 
                 if (Controller.Folders.Length > 0) {
                     this.folder_tasks   = new EventHandler [Controller.Folders.Length];
-                    this.overflow_tasks = new EventHandler [Controller.OverflowFolders.Length];
-
+                
                     int i = 0;
                     foreach (string folder_name in Controller.Folders) {
                         NSMenuItem item = new NSMenuItem ();
@@ -264,55 +258,11 @@ namespace SparkleShare {
 
                         i++;
                     };
-
-                    i = 0;
-                    foreach (string folder_name in Controller.OverflowFolders) {
-                        NSMenuItem item = new NSMenuItem ();
-                        item.Title      = folder_name;
-
-                        if (!string.IsNullOrEmpty (Controller.OverflowFolderErrors [i])) {
-                            item.Image   = this.caution_image;    
-                            item.Submenu = new NSMenu ();
-                            
-                            NSMenuItem error_item = new NSMenuItem () {
-                                Title = Controller.OverflowFolderErrors [i]
-                            };
-                            
-                            item.Submenu.AddItem (error_item);
-                    
-                        } else {
-                            item.Image = this.folder_image;
-                        }
-
-                        item.Image.Size   = new SizeF (16, 16);
-                        this.overflow_tasks [i] = OpenFolderDelegate (folder_name);
-
-                        this.submenu_items [i] = item;
-                        this.submenu_items [i].Activated += this.overflow_tasks [i];
-
-                        i++;
-                    };
-
                 }
-
 
                 foreach (NSMenuItem item in this.folder_menu_items)
                     this.menu.AddItem (item);
 
-                if (this.submenu_items.Length > 0) {
-                    this.submenu = new NSMenu ();
-
-                    foreach (NSMenuItem item in this.submenu_items)
-                        this.submenu.AddItem (item);
-
-                    this.more_item = new NSMenuItem () {
-                        Title = "More Projects",
-                        Submenu = this.submenu
-                    };
-
-                    this.menu.AddItem (NSMenuItem.SeparatorItem);
-                    this.menu.AddItem (this.more_item);
-                }
 
                 this.menu.AddItem (NSMenuItem.SeparatorItem);
                 this.menu.AddItem (this.recent_events_item);

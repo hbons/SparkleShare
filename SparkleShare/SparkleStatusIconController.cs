@@ -48,14 +48,8 @@ namespace SparkleShare {
         public IconState CurrentState = IconState.Idle;
         public string StateText = "Welcome to SparkleShare!";
 
-        public readonly int MenuOverflowThreshold   = 9;
-        public readonly int MinSubmenuOverflowCount = 3;
-
         public string [] Folders;
         public string [] FolderErrors;
-        
-        public string [] OverflowFolders;
-        public string [] OverflowFolderErrors;
         
 
         public string FolderSize {
@@ -228,49 +222,29 @@ namespace SparkleShare {
 
         private void UpdateFolders ()
         {
-            int overflow_count = (Program.Controller.Folders.Count - MenuOverflowThreshold);
+            Folders      = Program.Controller.Folders.ToArray ();
+            FolderErrors = new string [Folders.Length];
 
-            if (overflow_count >= MinSubmenuOverflowCount) {
-                Folders = Program.Controller.Folders.GetRange (0, MenuOverflowThreshold).ToArray ();
-                OverflowFolders = Program.Controller.Folders.GetRange (MenuOverflowThreshold, overflow_count).ToArray ();
-            } else {
-                Folders = Program.Controller.Folders.ToArray ();
-                OverflowFolders = new string [0];
-            }
-
-            string [] errors = new string [Folders.Length];
-            string [] overflow_errors = new string [OverflowFolders.Length];
-            
             int i = 0;
             foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
-                string error_message;
-
                 if (repo.Error == ErrorStatus.HostUnreachable) {
-                    error_message = "Host unreachable";
+                    FolderErrors [i] = "Host unreachable";
                     
                 } else if (repo.Error == ErrorStatus.HostIdentityChanged) {
-                    error_message = "Host identity changed";
+                    FolderErrors [i] = "Host identity changed";
                     
                 } else if (repo.Error == ErrorStatus.AuthenticationFailed) {
-                    error_message = "Authentication failed";
+                    FolderErrors [i] = "Authentication failed";
                     
                 } else if (repo.Error == ErrorStatus.DiskSpaceExcedeed) {
-                    error_message = "Out of disk space";
+                    FolderErrors [i] = "Out of disk space";
                     
                 } else {
-                    error_message = "";
+                    FolderErrors [i] = "";
                 }
-
-                if (i > Folders.Length - 1)
-                    overflow_errors [i] = error_message;
-                else
-                    errors [i] = error_message;
-
+                    
                 i++;
             }
-
-            FolderErrors         = errors;
-            OverflowFolderErrors = overflow_errors;
         }
     }
 }
