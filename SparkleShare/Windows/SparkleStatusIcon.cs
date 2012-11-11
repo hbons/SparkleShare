@@ -237,54 +237,6 @@ namespace SparkleShare {
 
                     i++;
                 }
-                
-                SparkleMenuItem more_item = new SparkleMenuItem () {
-                    Header = "More projects"
-                };
-                
-                i = 0;
-                foreach (string folder_name in Controller.OverflowFolders) {     
-                    SparkleMenuItem subfolder_item = new SparkleMenuItem () {
-                        Header = folder_name
-                    };
-                    
-                    subfolder_item.Click += OpenFolderDelegate (folder_name);
-                    
-                    Image subfolder_image = new Image () {
-                        Source = SparkleUIHelpers.GetImageSource ("folder"),
-                        Width  = 16,
-                        Height = 16
-                    };
-                    
-                    if (!string.IsNullOrEmpty (Controller.OverflowFolderErrors [i])) {
-                        subfolder_item.Icon = new Image () {
-                            Source = (BitmapSource) Imaging.CreateBitmapSourceFromHIcon (
-                                System.Drawing.SystemIcons.Exclamation.Handle, Int32Rect.Empty,
-                                BitmapSizeOptions.FromWidthAndHeight (16,16)
-                            )
-                        };
-
-                        SparkleMenuItem error_item = new SparkleMenuItem () {
-                            Header    = Controller.OverflowFolderErrors [i],
-                            IsEnabled = false
-                        };
-                        
-                        subfolder_item.Items.Add (error_item);
-                        
-                    } else {
-                        subfolder_item.Icon = subfolder_image;
-                    }
-                    
-                    more_item.Items.Add (subfolder_item);
-
-                    i++;
-                }
-                
-                if (more_item.Items.Count > 0) {
-                    this.context_menu.Items.Add (new Separator ());
-                    this.context_menu.Items.Add (more_item);
-                }
-
             }
             
             this.context_menu.Items.Add (new Separator ());
