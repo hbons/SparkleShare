@@ -66,7 +66,11 @@ namespace SparkleShare {
 
             } else if (change_set.Changes.Count > 1) {
                 message = string.Format (message, change_set.Changes [0].Path);
-                return string.Format (message + " and {0} more", change_set.Changes.Count - 1);
+
+                if ((change_set.Changes.Count - 1) == 1)
+                    return string.Format (message + " and one other event", change_set.Changes.Count - 1);
+                else
+                    return string.Format (message + " and {0} other events", change_set.Changes.Count - 1);
 
             } else {
                 return "did something magical";
