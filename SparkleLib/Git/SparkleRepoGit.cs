@@ -37,8 +37,11 @@ namespace SparkleLib.Git {
         {
             // TODO: Set git locale to en-US
 
+            SparkleGit git = new SparkleGit (LocalPath, "config core.ignorecase false");
+            git.StartAndWaitForExit ();
+
             // Check if we should use git-bin
-            SparkleGit git = new SparkleGit (LocalPath, "config --get filter.bin.clean");
+            git = new SparkleGit (LocalPath, "config --get filter.bin.clean");
             git.StartAndWaitForExit ();
 
             this.use_git_bin = (git.ExitCode == 0);
@@ -415,26 +418,41 @@ namespace SparkleLib.Git {
                 Commit (commit_message);
             }
 
-            SparkleGit git = new SparkleGit (LocalPath, "rebase FETCH_HEAD");
-            git.StartInfo.RedirectStandardOutput = false;
+            // Temporarily change the ignorecase setting to true to avoid
+            // conflicts in file names due to case changes
+            SparkleGit git = new SparkleGit (LocalPath, "config core.ignorecase true");
             git.StartAndWaitForExit ();
+
+            git = new SparkleGit (LocalPath, "rebase FETCH_HEAD");
+            git.StartInfo.RedirectStandardOutput = false;
+
+            string error_output = git.StartAndReadStandardError ();
 
             if (git.ExitCode != 0) {
                 SparkleLogger.LogInfo ("Git", Name + " | Conflict detected, trying to get out...");
+
+                // error: cannot stat 'filename': Permission denied
+                if (SparkleBackend.Platform != PlatformID.Unix && 
+                    error_output.Contains ("error: cannot stat")) {
+
+                    // TODO
+                }
 
                 while (HasLocalChanges) {
                     try {
                         ResolveConflict ();
 
                     } catch (IOException e) {
-                        SparkleLogger.LogInfo ("Git",
-                            Name + " | Failed to resolve conflict, trying again... (" + e.Message + ")");
+                        SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again... (" + e.Message + ")");
                     }
                 }
 
                 SparkleLogger.LogInfo ("Git", Name + " | Conflict resolved");
                 OnConflictResolved ();
             }
+
+            git = new SparkleGit (LocalPath, "config core.ignorecase false");
+            git.StartAndWaitForExit ();
         }
 
 

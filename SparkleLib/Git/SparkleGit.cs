@@ -56,12 +56,26 @@ namespace SparkleLib.Git {
         public string StartAndReadStandardOutput ()
         {
             Start ();
-
+            
             // Reading the standard output HAS to go before
             // WaitForExit, or it will hang forever on output > 4096 bytes
             string output = StandardOutput.ReadToEnd ();
             WaitForExit ();
+            
+            return output.TrimEnd ();
+        }
 
+
+        public string StartAndReadStandardError ()
+        {
+            StartInfo.RedirectStandardError = true;
+            Start ();
+            
+            // Reading the standard output HAS to go before
+            // WaitForExit, or it will hang forever on output > 4096 bytes
+            string output = StandardError.ReadToEnd ();
+            WaitForExit ();
+            
             return output.TrimEnd ();
         }
 
