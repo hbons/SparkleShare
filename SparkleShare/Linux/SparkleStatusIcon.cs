@@ -190,50 +190,9 @@ namespace SparkleShare {
                     }
 
                     Menu submenu = new Menu ();
-
-                    i = 0;
-                    foreach (string folder_name in Controller.OverflowFolders) {
-                        ImageMenuItem item = new SparkleMenuItem (folder_name);
-                        Gdk.Pixbuf folder_icon;
-
-                        if (!string.IsNullOrEmpty (Controller.OverflowFolderErrors [i])) {
-                            folder_icon = IconTheme.Default.LoadIcon ("dialog-warning", 16,
-                                IconLookupFlags.GenericFallback);
-
-                            item.Submenu = new Menu ();
-                            
-                            MenuItem error_item = new MenuItem (Controller.OverflowFolderErrors [i]) {
-                                Sensitive = false
-                            };
-                            
-                            (item.Submenu as Menu).Add (error_item);
-
-                        } else {
-                            folder_icon = IconTheme.Default.LoadIcon ("folder", 16,
-                                IconLookupFlags.GenericFallback);
-                        }
-
-                        item.Image = new Image (folder_icon);
-                    
-                        item.Activated += OpenFolderDelegate (folder_name);
-                        submenu.Add (item);
-
-                        i++;
-                    }
-
-                    if (submenu.Children.Length > 0) {
-                        SparkleMenuItem more_item = new SparkleMenuItem ("More Projects") {
-                            Submenu = submenu
-                        };
-
-                        this.menu.Add (new SeparatorMenuItem ());
-                        this.menu.Add (more_item);
-                    }
-
                 }
 
                 this.menu.Add (new SeparatorMenuItem ());
-
 			
 			this.recent_events_item = new MenuItem ("Recent Changes…");
 			
