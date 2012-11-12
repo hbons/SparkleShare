@@ -32,6 +32,27 @@ namespace SparkleLib.Git {
         private bool use_git_bin;
         private bool is_encrypted;
 
+        private string cached_branch;
+
+        private string branch {
+            get {
+                if (string.IsNullOrEmpty (this.cached_branch)) {
+                    string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
+                    SparkleGit git;
+
+                    if (Directory.Exists (rebase_apply_path)) {
+                        git = new SparkleGit (LocalPath, "rebase --abort");
+                        git.StartAndWaitForExit ();
+                    }
+
+                    git = new SparkleGit (LocalPath, "rev-parse --abbrev-ref HEAD");
+                    this.cached_branch = git.StartAndReadStandardOutput ();
+                }
+
+                return this.cached_branch;
+            }
+        }
+
 
         public SparkleRepo (string path, SparkleConfig config) : base (path, config)
         {
@@ -48,13 +69,6 @@ namespace SparkleLib.Git {
 
             git = new SparkleGit (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
             git.StartAndWaitForExit ();
-
-            string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
-
-            if (Directory.Exists (rebase_apply_path)) {
-                git = new SparkleGit (LocalPath, "rebase --abort");
-                git.StartAndWaitForExit ();
-            }
 
             string password_file_path = Path.Combine (LocalPath, ".git", "password");
 
@@ -158,7 +172,7 @@ namespace SparkleLib.Git {
                 SparkleLogger.LogInfo ("Git", Name + " | Checking for remote changes...");
                 string current_revision = CurrentRevision;
 
-                SparkleGit git = new SparkleGit (LocalPath, "ls-remote --heads --exit-code \"" + RemoteUrl + "\" master");
+                SparkleGit git = new SparkleGit (LocalPath, "ls-remote --heads --exit-code \"" + RemoteUrl + "\" " + this.branch);
                 string output  = git.StartAndReadStandardOutput ();
 
                 if (git.ExitCode != 0)
@@ -199,7 +213,7 @@ namespace SparkleLib.Git {
                 // TODO: Progress
             }
 
-            git = new SparkleGit (LocalPath, "push --progress \"" + RemoteUrl + "\" master");
+            git = new SparkleGit (LocalPath, "push --progress \"" + RemoteUrl + "\" " + this.branch);
 
             git.StartInfo.RedirectStandardError = true;
             git.Start ();
@@ -281,7 +295,7 @@ namespace SparkleLib.Git {
 
         public override bool SyncDown ()
         {
-            SparkleGit git = new SparkleGit (LocalPath, "fetch --progress \"" + RemoteUrl + "\" master");
+            SparkleGit git = new SparkleGit (LocalPath, "fetch --progress \"" + RemoteUrl + "\" " + this.branch);
 
             git.StartInfo.RedirectStandardError = true;
             git.Start ();
