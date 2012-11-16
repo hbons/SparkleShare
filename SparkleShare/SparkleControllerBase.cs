@@ -338,13 +338,10 @@ namespace SparkleShare {
 
         private void RemoveRepository (string folder_path)
         {
-            for (int i = 0; i < this.repositories.Count; i++) {
-                SparkleRepoBase repo = this.repositories [i];
-
+            foreach (SparkleRepoBase repo in this.repositories) {
                 if (repo.LocalPath.Equals (folder_path)) {
-                    repo.Dispose ();
                     this.repositories.Remove (repo);
-                    repo = null;
+                    repo.Dispose ();
 
                     return;
                 }
@@ -470,9 +467,11 @@ namespace SparkleShare {
                 return;
 
             } else {
+                Thread.Sleep (1000);
+
                 if (Directory.Exists (args.FullPath) && args.ChangeType == WatcherChangeTypes.Created)
                     return;
-                
+
                 CheckRepositories ();
             }
         }
