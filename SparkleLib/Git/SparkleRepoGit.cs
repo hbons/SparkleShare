@@ -38,14 +38,19 @@ namespace SparkleLib.Git {
             get {
                 if (string.IsNullOrEmpty (this.cached_branch)) {
                     string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
-                    SparkleGit git;
 
                     if (Directory.Exists (rebase_apply_path)) {
-                        git = new SparkleGit (LocalPath, "rebase --abort");
-                        git.StartAndWaitForExit ();
+                        while (HasLocalChanges) {
+                            try {
+                                ResolveConflict ();
+                                
+                            } catch (IOException e) {
+                                SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again... (" + e.Message + ")");
+                            }
+                        }
                     }
 
-                    git = new SparkleGit (LocalPath, "rev-parse --abbrev-ref HEAD");
+                    SparkleGit git = new SparkleGit (LocalPath, "rev-parse --abbrev-ref HEAD");
                     this.cached_branch = git.StartAndReadStandardOutput ();
                 }
 
