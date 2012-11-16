@@ -38,7 +38,6 @@ Start the first part of the build:
 
 ```bash
 $ ./autogen.sh
-$ make
 ```
 
 Now that you have compiled the libraries, open `SparkleShare/Mac/SparkleShare.sln` in
