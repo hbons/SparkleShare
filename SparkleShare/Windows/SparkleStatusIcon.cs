@@ -203,7 +203,7 @@ namespace SparkleShare {
                 int i = 0;
                 foreach (string folder_name in Controller.Folders) {     
                     SparkleMenuItem subfolder_item = new SparkleMenuItem () {
-                        Header = folder_name
+                        Header = folder_name.Replace ("_", "__")
                     };
                     
                     subfolder_item.Click += OpenFolderDelegate (folder_name);
