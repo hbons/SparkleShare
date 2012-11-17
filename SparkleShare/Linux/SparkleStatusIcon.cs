@@ -182,6 +182,7 @@ namespace SparkleShare {
                         }
 
                         item.Image = new Image (folder_icon);
+                        (item.Child as Label).UseUnderline = false;
 
                         item.Activated += OpenFolderDelegate (folder_name);
                         this.menu.Add (item);
