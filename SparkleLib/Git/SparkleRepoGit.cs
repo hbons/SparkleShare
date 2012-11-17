@@ -354,10 +354,13 @@ namespace SparkleLib.Git {
             UpdateSizes ();
 
             if (git.ExitCode == 0) {
-                Rebase ();
-                ClearCache ();
-
-                return true;
+                if (Rebase ()) {
+                    ClearCache ();
+                    return true;
+                
+                } else {
+                    return false;
+                }
 
             } else {
                 Error = ErrorStatus.HostUnreachable;
@@ -428,7 +431,7 @@ namespace SparkleLib.Git {
 
 
         // Merges the fetched changes
-        private void Rebase ()
+        private bool Rebase ()
         {
             if (HasLocalChanges) {
                 Add ();
@@ -448,14 +451,21 @@ namespace SparkleLib.Git {
             string error_output = git.StartAndReadStandardError ();
 
             if (git.ExitCode != 0) {
-                SparkleLogger.LogInfo ("Git", Name + " | Conflict detected, trying to get out...");
-
                 // error: cannot stat 'filename': Permission denied
-                if (SparkleBackend.Platform != PlatformID.Unix && 
-                    error_output.Contains ("error: cannot stat")) {
+                if (error_output.Contains ("error: cannot stat")) {
+                    Error = ErrorStatus.LockedFiles;
+                    SparkleLogger.LogInfo ("Git", Name + " | Error status changed to " + Error);
 
-                    // TODO
+                    git = new SparkleGit (LocalPath, "rebase --abort");
+                    git.StartAndWaitForExit ();
+
+                    git = new SparkleGit (LocalPath, "config core.ignorecase false");
+                    git.StartAndWaitForExit ();
+
+                    return false;
                 }
+
+                SparkleLogger.LogInfo ("Git", Name + " | Conflict detected, trying to get out...");
 
                 while (HasLocalChanges) {
                     try {
@@ -472,6 +482,8 @@ namespace SparkleLib.Git {
 
             git = new SparkleGit (LocalPath, "config core.ignorecase false");
             git.StartAndWaitForExit ();
+
+            return true;
         }
 
 
@@ -643,7 +655,7 @@ namespace SparkleLib.Git {
         private bool FindError (string line)
         {
             Error = ErrorStatus.None;
-                
+
             if (line.StartsWith ("WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!") ||
                 line.StartsWith ("WARNING: POSSIBLE DNS SPOOFING DETECTED!")) {
                 

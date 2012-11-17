@@ -190,6 +190,15 @@ namespace SparkleShare {
         }
 
 
+        public void TryAgainClicked (string subfolder)
+        {
+            foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
+                if (repo.Name.Equals (subfolder))
+                    repo.ForceRetry ();
+            }
+        }
+
+
         public void AddHostedProjectClicked ()
         {
             new Thread (() => Program.Controller.ShowSetupWindow (PageType.Add)).Start ();
@@ -228,16 +237,19 @@ namespace SparkleShare {
             int i = 0;
             foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
                 if (repo.Error == ErrorStatus.HostUnreachable) {
-                    FolderErrors [i] = "Host unreachable";
+                    FolderErrors [i] = "Can't reach the host";
                     
                 } else if (repo.Error == ErrorStatus.HostIdentityChanged) {
-                    FolderErrors [i] = "Host identity changed";
+                    FolderErrors [i] = "The host's identity has changed";
                     
                 } else if (repo.Error == ErrorStatus.AuthenticationFailed) {
                     FolderErrors [i] = "Authentication failed";
                     
                 } else if (repo.Error == ErrorStatus.DiskSpaceExcedeed) {
-                    FolderErrors [i] = "Out of disk space";
+                    FolderErrors [i] = "Host is out of disk space";
+
+                } else if (repo.Error == ErrorStatus.LockedFiles) {
+                    FolderErrors [i] = "Some local files are locked or in use";
                     
                 } else {
                     FolderErrors [i] = "";

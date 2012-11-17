@@ -37,7 +37,8 @@ namespace SparkleLib {
         HostUnreachable,
         HostIdentityChanged,
         AuthenticationFailed,
-        DiskSpaceExcedeed
+        DiskSpaceExcedeed,
+        LockedFiles
     }
 
 
@@ -275,6 +276,18 @@ namespace SparkleLib {
 
             if (!UseCustomWatcher)
                 this.watcher.Enable ();
+        }
+
+
+        public void ForceRetry ()
+        {
+            if (Error == ErrorStatus.None)
+                return;
+            
+            if (Error == ErrorStatus.LockedFiles)
+                SyncDownBase ();
+            else
+                SyncUpBase ();
         }
 
 

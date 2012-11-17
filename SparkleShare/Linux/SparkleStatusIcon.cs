@@ -165,20 +165,22 @@ namespace SparkleShare {
                         Gdk.Pixbuf folder_icon;
 
                         if (!string.IsNullOrEmpty (Controller.FolderErrors [i])) {
-                            folder_icon = IconTheme.Default.LoadIcon ("dialog-warning", 16,
-                                IconLookupFlags.GenericFallback);
-
+                            folder_icon = IconTheme.Default.LoadIcon ("dialog-warning", 16, IconLookupFlags.GenericFallback);
                             item.Submenu = new Menu ();
                                 
                             MenuItem error_item = new MenuItem (Controller.FolderErrors [i]) {
                                 Sensitive = false
                             };
                             
+                            MenuItem try_again_item = new MenuItem ("Try Again");
+                            try_again_item.Activated += TryAgainDelegate (folder_name);
+
                             (item.Submenu as Menu).Add (error_item);
+                            (item.Submenu as Menu).Add (new SeparatorMenuItem ();
+                            (item.Submenu as Menu).Add (try_again_item);
 
                         } else {
-                            folder_icon = IconTheme.Default.LoadIcon ("folder", 16,
-                                IconLookupFlags.GenericFallback);
+                            folder_icon = IconTheme.Default.LoadIcon ("folder", 16, IconLookupFlags.GenericFallback);
                         }
 
                         item.Image = new Image (folder_icon);
@@ -263,12 +265,18 @@ namespace SparkleShare {
         }
 
 
-        // A method reference that makes sure that opening the
-        // event log for each repository works correctly
         private EventHandler OpenFolderDelegate (string name)
         {
             return delegate {
                 Controller.SubfolderClicked (name);
+            };
+        }
+
+                        
+        private EventHandler TryAgainDelegate (string name)
+        {
+            return delegate {
+                Controller.TryAgainClicked (name);
             };
         }
 		
