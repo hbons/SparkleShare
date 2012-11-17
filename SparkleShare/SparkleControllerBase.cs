@@ -45,7 +45,8 @@ namespace SparkleShare {
         public string FoldersPath { get; private set; }
 
         public double ProgressPercentage = 0.0;
-        public string ProgressSpeed      = "";
+        public double ProgressSpeedUp    = 0.0;
+        public double ProgressSpeedDown  = 0.0;
 
 
         public event ShowSetupWindowEventHandler ShowSetupWindowEvent = delegate { };
@@ -307,15 +308,33 @@ namespace SparkleShare {
             repo.SyncStatusChanged += delegate (SyncStatus status) {
                 if (status == SyncStatus.Idle) {
                     ProgressPercentage = 0.0;
-                    ProgressSpeed      = "";
+                    ProgressSpeedUp    = 0.0;
+                    ProgressSpeedDown  = 0.0;
                 }
 
                 UpdateState ();
             };
 
-            repo.ProgressChanged += delegate (double percentage, string speed) {
-                ProgressPercentage = percentage;
-                ProgressSpeed      = speed;
+            repo.ProgressChanged += delegate {
+                ProgressPercentage = 0.0;
+                ProgressSpeedUp    = 0.0;
+                ProgressSpeedDown  = 0.0;
+
+                double percentage = 0.0;
+                int repo_count    = 0;
+
+                foreach (SparkleRepoBase rep in Repositories) {
+                    if (rep.ProgressPercentage > 0) {
+                        percentage += rep.ProgressPercentage;
+                        repo_count++;
+                    }
+                    
+                    if (rep.Status == SyncStatus.SyncUp)
+                        ProgressSpeedUp += rep.ProgressSpeed;
+
+                    if (rep.Status == SyncStatus.SyncDown)
+                        ProgressSpeedDown += rep.ProgressSpeed;
+                }
 
                 UpdateState ();
             };
@@ -778,23 +797,6 @@ namespace SparkleShare {
                 SparkleLogger.LogInfo ("Controller", "Invalid certificate for https://www.gravatar.com/");
                 return false;
             }
-        }
-
-
-        // Format a file size nicely with small caps.
-        // Example: 1048576 becomes "1 ᴍʙ"
-        public string FormatSize (double byte_count)
-        {
-            if (byte_count >= 1099511627776)
-                return String.Format ("{0:##.##} ᴛʙ", Math.Round (byte_count / 1099511627776, 1));
-            else if (byte_count >= 1073741824)
-                return String.Format ("{0:##.##} ɢʙ", Math.Round (byte_count / 1073741824, 1));
-            else if (byte_count >= 1048576)
-                return String.Format ("{0:##.##} ᴍʙ", Math.Round (byte_count / 1048576, 0));
-            else if (byte_count >= 1024)
-                return String.Format ("{0:##.##} ᴋʙ", Math.Round (byte_count / 1024, 0));
-            else
-                return byte_count.ToString () + " bytes";
         }
 
 
