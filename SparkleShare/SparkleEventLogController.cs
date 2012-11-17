@@ -117,14 +117,14 @@ namespace SparkleShare {
                         if (repo.Size == 0)
                             return "???";
                         else
-                            return Program.Controller.FormatSize (repo.Size);
+                            return repo.Size.ToSize ();
                     }
                 }
 
                 if (size == 0)
                     return "???";
                 else
-                    return Program.Controller.FormatSize (size);
+                    return size.ToSize ();
             }
         }
 
@@ -140,14 +140,14 @@ namespace SparkleShare {
                         if (repo.HistorySize == 0)
                             return "???";
                         else
-                            return Program.Controller.FormatSize (repo.HistorySize);
+                            return repo.HistorySize.ToSize ();
                     }
                 }
 
                 if (size == 0)
                     return "???";
                 else
-                    return Program.Controller.FormatSize (size);
+                    return size.ToSize ();
             }
         }
 
