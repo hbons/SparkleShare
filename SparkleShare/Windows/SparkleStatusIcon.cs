@@ -226,8 +226,16 @@ namespace SparkleShare {
                             Header    = Controller.FolderErrors [i],
                             IsEnabled = false
                         };
+                        
+                        SparkleMenuItem try_again_item = new SparkleMenuItem () {
+                            Header = "Try again"
+                        };
+
+                        try_again_item.Click += TryAgainDelegate (folder_name);
 
                         subfolder_item.Items.Add (error_item);
+                        subfolder_item.Items.Add (new Separator ());
+                        subfolder_item.Items.Add (try_again_item);
                         
                     } else {
                         subfolder_item.Icon = subfolder_image;
@@ -265,12 +273,18 @@ namespace SparkleShare {
         }
 
 
-        // A method reference that makes sure that opening the
-        // event log for each repository works correctly
         private RoutedEventHandler OpenFolderDelegate (string folder_name)
         {
             return delegate {
                 Controller.SubfolderClicked (folder_name);
+            };
+        }
+
+        
+        private EventHandler TryAgainDelegate (string name)
+        {
+            return delegate {
+                Controller.TryAgainClicked (name);
             };
         }
     }
