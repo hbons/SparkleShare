@@ -57,8 +57,9 @@ namespace SparkleShare {
         private NSImage folder_image;
         private NSImage caution_image;
         private NSImage sparkleshare_image;
-
+        
         private EventHandler [] folder_tasks;
+        private EventHandler [] try_again_tasks;
 
         
         public SparkleStatusIcon () : base ()
@@ -229,8 +230,9 @@ namespace SparkleShare {
                 this.folder_menu_items = new NSMenuItem [Controller.Folders.Length];
 
                 if (Controller.Folders.Length > 0) {
-                    this.folder_tasks   = new EventHandler [Controller.Folders.Length];
-                
+                    this.folder_tasks    = new EventHandler [Controller.Folders.Length];
+                    this.try_again_tasks = new EventHandler [Controller.Folders.Length];
+
                     int i = 0;
                     foreach (string folder_name in Controller.Folders) {
                         NSMenuItem item = new NSMenuItem ();
@@ -244,8 +246,17 @@ namespace SparkleShare {
                                 Title = Controller.FolderErrors [i]
                             };
 
+                            NSMenuItem try_again_item = new NSMenuItem () {
+                                Title = "Try Again"
+                            };
+
+                            this.try_again_tasks [i] = TryAgainDelegate (folder_name);
+                            try_again_item.Activated += this.try_again_tasks [i];
+                            
                             item.Submenu.AddItem (error_item);
-                        
+                            item.Submenu.AddItem (NSMenuItem.SeparatorItem);
+                            item.Submenu.AddItem (try_again_item);
+
                         } else {
                             item.Image = this.folder_image;
                         }
@@ -278,12 +289,18 @@ namespace SparkleShare {
         }
 
 
-        // A method reference that makes sure that opening the
-        // event log for each repository works correctly
         private EventHandler OpenFolderDelegate (string name)
         {
             return delegate {
                 Controller.SubfolderClicked (name);
+            };
+        }
+
+
+        private EventHandler TryAgainDelegate (string name)
+        {
+            return delegate {
+                Controller.TryAgainClicked (name);
             };
         }
     }
