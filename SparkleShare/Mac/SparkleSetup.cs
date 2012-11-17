@@ -534,6 +534,7 @@ namespace SparkleShare {
                     "  margin-left: 0;" +
                     "  padding-left: 0;" +
                     "  line-height: 20px;" +
+                    "  word-wrap: break-word;" +
                     "}" +
                     "ul {" +
                     "  padding-left: 24px;" +
