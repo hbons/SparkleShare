@@ -229,7 +229,7 @@ namespace SparkleLib.Git {
             while (!git.StandardError.EndOfStream) {
                 string line   = git.StandardError.ReadLine ();
                 Match match   = progress_regex.Match (line);
-                string speed  = "";
+                double speed  = 0.0;
                 double number = 0.0;
 
                 if (match.Success) {
@@ -247,10 +247,16 @@ namespace SparkleLib.Git {
                         number = (number / 100 * 80 + 20);
 
                         if (line.Contains ("|")) {
-                            speed = line.Substring (line.IndexOf ("|") + 1).Trim ();
-                            speed = speed.Replace (", done.", "").Trim ();
-                            speed = speed.Replace ("KiB/s", "ᴋʙ/s");
-                            speed = speed.Replace ("MiB/s", "ᴍʙ/s");
+                            string s = line.Substring (line.IndexOf ("|") + 1).Trim ();
+                            s = s.Replace (", done.", "").Trim ();
+                            s = s.Replace ("KiB/s", "ᴋʙ/s");
+                            s = s.Replace ("MiB/s", "ᴍʙ/s");
+                            
+                            if (line.Contains ("KiB/s"))
+                                speed = double.Parse (s);
+
+                            if (line.Contains ("MiB/s"))
+                                speed = double.Parse (s);
                         }
                     }
 
@@ -311,7 +317,7 @@ namespace SparkleLib.Git {
             while (!git.StandardError.EndOfStream) {
                 string line   = git.StandardError.ReadLine ();
                 Match match   = progress_regex.Match (line);
-                string speed  = "";
+                double speed  = 0.0;
                 double number = 0.0;
 
                 if (match.Success) {
@@ -329,10 +335,16 @@ namespace SparkleLib.Git {
                         number = (number / 100 * 80 + 20);
 
                         if (line.Contains ("|")) {
-                            speed = line.Substring (line.IndexOf ("|") + 1).Trim ();
-                            speed = speed.Replace (", done.", "").Trim ();
-                            speed = speed.Replace ("KiB/s", "ᴋʙ/s");
-                            speed = speed.Replace ("MiB/s", "ᴍʙ/s");
+                            string s = line.Substring (line.IndexOf ("|") + 1).Trim ();
+                            s = s.Replace (", done.", "").Trim ();
+                            s = s.Replace ("KiB/s", "ᴋʙ/s");
+                            s = s.Replace ("MiB/s", "ᴍʙ/s");
+                            
+                            if (line.Contains ("KiB/s"))
+                                speed = double.Parse (s);
+                            
+                            if (line.Contains ("MiB/s"))
+                                speed = double.Parse (s);
                         }
                     }
 
@@ -451,6 +463,7 @@ namespace SparkleLib.Git {
             string error_output = git.StartAndReadStandardError ();
 
             if (git.ExitCode != 0) {
+                // Stop when we can't rebase due to locked local files
                 // error: cannot stat 'filename': Permission denied
                 if (error_output.Contains ("error: cannot stat")) {
                     Error = ErrorStatus.LockedFiles;

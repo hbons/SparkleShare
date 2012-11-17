@@ -62,7 +62,7 @@ namespace SparkleShare {
                 if (size == 0)
                     return "";
                 else
-                    return "— " + Program.Controller.FormatSize (size);
+                    return "— " + size.ToSize ();
             }
         }
 
@@ -74,7 +74,22 @@ namespace SparkleShare {
 
         public string ProgressSpeed {
             get {
-                return Program.Controller.ProgressSpeed;
+                string progress_speed = "";
+
+                if (Program.Controller.ProgressSpeedDown == 0 && Program.Controller.ProgressSpeedUp > 0) {
+                    progress_speed = Program.Controller.ProgressSpeedUp.ToSize () + "/s ";
+
+                } else if (Program.Controller.ProgressSpeedUp == 0 && Program.Controller.ProgressSpeedDown > 0) {
+                    progress_speed = Program.Controller.ProgressSpeedDown.ToSize () + "/s ";
+                        
+                } else if (Program.Controller.ProgressSpeedUp   > 0 &&
+                           Program.Controller.ProgressSpeedDown > 0) {
+
+                    progress_speed = "Up: " + Program.Controller.ProgressSpeedUp.ToSize () + "/s " +
+                        "Down: " + Program.Controller.ProgressSpeedDown.ToSize () + "/s";
+                }
+
+                return progress_speed;
             }
         }
 

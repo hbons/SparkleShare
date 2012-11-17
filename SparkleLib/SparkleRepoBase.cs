@@ -63,7 +63,7 @@ namespace SparkleLib {
         public delegate void SyncStatusChangedEventHandler (SyncStatus new_status);
 
         public event ProgressChangedEventHandler ProgressChanged = delegate { };
-        public delegate void ProgressChangedEventHandler (double percentage, string speed);
+        public delegate void ProgressChangedEventHandler ();
 
         public event NewChangeSetEventHandler NewChangeSet = delegate { };
         public delegate void NewChangeSetEventHandler (SparkleChangeSet change_set);
@@ -80,7 +80,7 @@ namespace SparkleLib {
         public ErrorStatus Error { get; protected set; }
         public bool IsBuffering { get; private set; }
         public double ProgressPercentage { get; private set; }
-        public string ProgressSpeed { get; private set; }
+        public double ProgressSpeed { get; private set; }
 
         public string Identifier {
             get {
@@ -297,7 +297,7 @@ namespace SparkleLib {
         }
 
 
-        protected void OnProgressChanged (double progress_percentage, string progress_speed)
+        protected void OnProgressChanged (double progress_percentage, double progress_speed)
         {
             if (progress_percentage < 1)
                 return;
@@ -313,7 +313,7 @@ namespace SparkleLib {
             ProgressSpeed             = progress_speed;
             this.progress_last_change = DateTime.Now;
 
-            ProgressChanged (progress_percentage, progress_speed);
+            ProgressChanged ();
         }
 
 
@@ -357,7 +357,7 @@ namespace SparkleLib {
             }
 
             ProgressPercentage = 0.0;
-            ProgressSpeed      = "";
+            ProgressSpeed      = 0.0;
 
             if (!UseCustomWatcher)
                 this.watcher.Enable ();
@@ -417,7 +417,7 @@ namespace SparkleLib {
             }
 
             ProgressPercentage = 0.0;
-            ProgressSpeed      = "";
+            ProgressSpeed      = 0.0;
 
             if (!UseCustomWatcher)
                 this.watcher.Enable ();
