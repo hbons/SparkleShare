@@ -68,8 +68,10 @@ namespace SparkleShare {
                 Bordered        = false,
                 Editable        = false,
                 Font            = NSFontManager.SharedFontManager.FontWithFamily (
-                    "Lucida Grande", NSFontTraitMask.Bold, 0, 15)
+                    "Lucida Grande", NSFontTraitMask.Bold, 0, 15),
             };
+
+            this.header_text_field.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
             
             this.description_text_field = new NSTextField () {
                 Frame           = new RectangleF (190, Frame.Height - 130, 640 - 240, 44),
