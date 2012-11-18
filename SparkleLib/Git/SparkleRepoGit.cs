@@ -34,6 +34,16 @@ namespace SparkleLib.Git {
 
         private string cached_branch;
 
+        private Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
+        private Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
+
+        private Regex log_regex = new Regex (@"commit ([a-z0-9]{40})\n" +
+                                              "Author: (.+) <(.+)>\n" +
+                                              "*" +
+                                              "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
+                                              "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
+                                              "*", RegexOptions.Compiled);
+
         private string branch {
             get {
                 if (string.IsNullOrEmpty (this.cached_branch)) {
@@ -224,11 +234,10 @@ namespace SparkleLib.Git {
             git.Start ();
 
             double percentage = 1.0;
-            Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
 
             while (!git.StandardError.EndOfStream) {
                 string line   = git.StandardError.ReadLine ();
-                Match match   = progress_regex.Match (line);
+                Match match   = this.progress_regex.Match (line);
                 double speed  = 0.0;
                 double number = 0.0;
 
@@ -245,9 +254,7 @@ namespace SparkleLib.Git {
                     } else {
                         // "Writing objects" stage
                         number = (number / 100 * 80 + 20);
-
-                        Regex speed_regex = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
-                        Match speed_match = speed_regex.Match (line);
+                        Match speed_match = this.speed_regex.Match (line);
 
                         if (speed_match.Success) {
                             speed = double.Parse (speed_match.Groups [1].Value) * 1024;
@@ -309,11 +316,10 @@ namespace SparkleLib.Git {
             git.Start ();
 
             double percentage = 1.0;
-            Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
 
             while (!git.StandardError.EndOfStream) {
                 string line   = git.StandardError.ReadLine ();
-                Match match   = progress_regex.Match (line);
+                Match match   = this.progress_regex.Match (line);
                 double speed  = 0.0;
                 double number = 0.0;
 
@@ -330,9 +336,7 @@ namespace SparkleLib.Git {
                     } else {
                         // "Writing objects" stage
                         number = (number / 100 * 80 + 20);
-                        
-                        Regex speed_regex = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
-                        Match speed_match = speed_regex.Match (line);
+                        Match speed_match = this.speed_regex.Match (line);
                         
                         if (speed_match.Success) {
                             speed = double.Parse (speed_match.Groups [1].Value) * 1024;
@@ -732,15 +736,9 @@ namespace SparkleLib.Git {
 
             entries.Add (last_entry);
 
-            Regex regex = new Regex (@"commit ([a-z0-9]{40})\n" +
-                "Author: (.+) <(.+)>\n" +
-                "*" +
-                "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
-                "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
-                "*", RegexOptions.Compiled);
 
             foreach (string log_entry in entries) {
-                Match match = regex.Match (log_entry);
+                Match match = this.log_regex.Match (log_entry);
 
                 if (match.Success) {
                     SparkleChangeSet change_set = new SparkleChangeSet ();
