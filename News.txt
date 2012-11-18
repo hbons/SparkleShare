@@ -1,4 +1,20 @@
-0.9.7 for Linux, Mac and Windows (???):
+0.9.8 for Linux, Mac and Windows (Sun Nov 18 2012):
+
+        Hylke:
+        - Show both the cumulative upload and download speeds when multiple
+          projects are syncing at the same time
+        - Defer receiving changes when affected files are locked and show
+          a warning in the statusicon (mostly affects Windows)
+        - Fix an issue where changing the case of a file name that will be
+          synced to Windows or Mac would result in a no longer syncable project
+        - Add a "Try Again" action underneath every error reported in the
+          statusicon to force a retry
+        - Always sync to the default git branch even when it's not named
+          "master" (e.g. "gh-pages")
+        - Fix unicode characters displaying weirdly in the event log
+
+
+0.9.7 for Linux, Mac and Windows (Sat Nov 10 2012):
 
         Hylke:
         - Remove Growl and use native OS X notifications
@@ -6,7 +22,7 @@
         - Allow periods "." in project names
         - Depend on git >= 1.7.12
         - Fix Mac unicode compatibility (could cause duplicate files or folders
-          between different platfoems)
+          between different platforms)
 
 
 0.9.6 for Linux, Mac and Windows (Sat Oct 27 2012):
