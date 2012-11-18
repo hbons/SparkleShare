@@ -251,12 +251,17 @@ namespace SparkleLib.Git {
                             s = s.Replace (", done.", "").Trim ();
                             s = s.Replace ("KiB/s", "ᴋʙ/s");
                             s = s.Replace ("MiB/s", "ᴍʙ/s");
-                            
-                            if (line.Contains ("KiB/s"))
-                                speed = double.Parse (s);
 
-                            if (line.Contains ("MiB/s"))
-                                speed = double.Parse (s);
+                            try {
+                                if (line.Contains ("KiB/s"))
+                                    speed = double.Parse (s);
+
+                                if (line.Contains ("MiB/s"))
+                                    speed = double.Parse (s);
+                            
+                            } catch {
+                                speed = 0.0;
+                            }
                         }
                     }
 
@@ -339,12 +344,17 @@ namespace SparkleLib.Git {
                             s = s.Replace (", done.", "").Trim ();
                             s = s.Replace ("KiB/s", "ᴋʙ/s");
                             s = s.Replace ("MiB/s", "ᴍʙ/s");
-                            
-                            if (line.Contains ("KiB/s"))
-                                speed = double.Parse (s);
-                            
-                            if (line.Contains ("MiB/s"))
-                                speed = double.Parse (s);
+
+                            try {
+                                if (line.Contains ("KiB/s"))
+                                    speed = double.Parse (s);
+                                
+                                if (line.Contains ("MiB/s"))
+                                    speed = double.Parse (s);
+
+                            } catch {
+                                speed = 0.0;
+                            }
                         }
                     }
 
