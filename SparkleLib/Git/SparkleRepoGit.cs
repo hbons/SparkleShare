@@ -246,23 +246,15 @@ namespace SparkleLib.Git {
                         // "Writing objects" stage
                         number = (number / 100 * 80 + 20);
 
-                        if (line.Contains ("|")) {
-                            string s = line.Substring (line.IndexOf ("|") + 1).Trim ();
-                            s = s.Replace (", done.", "").Trim ();
-                            s = s.Replace ("KiB/s", "ᴋʙ/s");
-                            s = s.Replace ("MiB/s", "ᴍʙ/s");
+                        Regex speed_regex = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
+                        Match speed_match = speed_regex.Match (line);
 
-                            try {
-                                if (line.Contains ("KiB/s"))
-                                    speed = double.Parse (s);
+                        if (speed_match.Success) {
+                            speed = double.Parse (speed_match.Groups [1].Value) * 1024;
 
-                                if (line.Contains ("MiB/s"))
-                                    speed = double.Parse (s);
-                            
-                            } catch {
-                                speed = 0.0;
-                            }
-                        }
+                            if (speed_match.Groups [2].Value.Equals ("M"))
+                                speed = speed * 1024;
+                        }    
                     }
 
                 } else {
@@ -338,23 +330,15 @@ namespace SparkleLib.Git {
                     } else {
                         // "Writing objects" stage
                         number = (number / 100 * 80 + 20);
-
-                        if (line.Contains ("|")) {
-                            string s = line.Substring (line.IndexOf ("|") + 1).Trim ();
-                            s = s.Replace (", done.", "").Trim ();
-                            s = s.Replace ("KiB/s", "ᴋʙ/s");
-                            s = s.Replace ("MiB/s", "ᴍʙ/s");
-
-                            try {
-                                if (line.Contains ("KiB/s"))
-                                    speed = double.Parse (s);
-                                
-                                if (line.Contains ("MiB/s"))
-                                    speed = double.Parse (s);
-
-                            } catch {
-                                speed = 0.0;
-                            }
+                        
+                        Regex speed_regex = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
+                        Match speed_match = speed_regex.Match (line);
+                        
+                        if (speed_match.Success) {
+                            speed = double.Parse (speed_match.Groups [1].Value) * 1024;
+                            
+                            if (speed_match.Groups [2].Value.Equals ("M"))
+                                speed = speed * 1024;
                         }
                     }
 
