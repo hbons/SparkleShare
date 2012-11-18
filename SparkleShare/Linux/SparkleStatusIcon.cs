@@ -176,7 +176,7 @@ namespace SparkleShare {
                             try_again_item.Activated += Controller.TryAgainDelegate (folder_name);
 
                             (item.Submenu as Menu).Add (error_item);
-                            (item.Submenu as Menu).Add (new SeparatorMenuItem ();
+                            (item.Submenu as Menu).Add (new SeparatorMenuItem ());
                             (item.Submenu as Menu).Add (try_again_item);
 
                         } else {
