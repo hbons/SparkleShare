@@ -31,65 +31,45 @@ namespace SparkleShare {
 
         private NSMenu menu;
 
-        private NSStatusItem status_item;
+        private NSStatusItem status_item = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
         private NSMenuItem state_item;
         private NSMenuItem folder_item;
-
+        
         private NSMenuItem [] folder_menu_items;
+        private NSMenuItem [] error_menu_items;
+        private NSMenuItem [] try_again_menu_items;
 
         private NSMenuItem add_item;
         private NSMenuItem about_item;
         private NSMenuItem recent_events_item;
         private NSMenuItem quit_item;
         
-        private NSImage syncing_idle_image;
-        private NSImage syncing_up_image;
-        private NSImage syncing_down_image;
-        private NSImage syncing_image;
-        private NSImage syncing_error_image;
-
-        private NSImage syncing_idle_image_active;
-        private NSImage syncing_up_image_active;
-        private NSImage syncing_down_image_active;
-        private NSImage syncing_image_active;
-        private NSImage syncing_error_image_active;
-
-        private NSImage folder_image;
-        private NSImage caution_image;
-        private NSImage sparkleshare_image;
+        private NSImage syncing_idle_image  = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-idle.png"));
+        private NSImage syncing_up_image    = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-up.png"));
+        private NSImage syncing_down_image  = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-down.png"));
+        private NSImage syncing_image       = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing.png"));
+        private NSImage syncing_error_image = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-error.png"));
         
-        private EventHandler [] folder_tasks;
-        private EventHandler [] try_again_tasks;
+        private NSImage syncing_idle_image_active  = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-idle-active.png"));
+        private NSImage syncing_up_image_active    = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-up-active.png"));
+        private NSImage syncing_down_image_active  = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-down-active.png"));
+        private NSImage syncing_image_active       = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-active.png"));
+        private NSImage syncing_error_image_active = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-error-active.png"));
+
+        private NSImage folder_image       = NSImage.ImageNamed ("NSFolder");
+        private NSImage caution_image      = NSImage.ImageNamed ("NSCaution");
+        private NSImage sparkleshare_image = NSImage.ImageNamed ("sparkleshare-folder");
 
         
         public SparkleStatusIcon () : base ()
         {
             using (var a = new NSAutoreleasePool ())
             {
-                this.status_item = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
-                this.status_item.HighlightMode = true;
-
-                this.syncing_idle_image  = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-idle.png"));
-                this.syncing_up_image    = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-up.png"));
-                this.syncing_down_image  = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-down.png"));
-                this.syncing_image       = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing.png"));
-                this.syncing_error_image = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-error.png"));
-                
-                this.syncing_idle_image_active  = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-idle-active.png"));
-                this.syncing_up_image_active    = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-up-active.png"));
-                this.syncing_down_image_active  = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-down-active.png"));
-                this.syncing_image_active       = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-active.png"));
-                this.syncing_error_image_active = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-error-active.png"));
-
-                this.status_item.Image      = this.syncing_idle_image;
-                this.status_item.Image.Size = new SizeF (16, 16);
-
+                this.status_item.HighlightMode       = true;
+                this.status_item.Image               = this.syncing_idle_image;
                 this.status_item.AlternateImage      = this.syncing_idle_image_active;
+                this.status_item.Image.Size          = new SizeF (16, 16);
                 this.status_item.AlternateImage.Size = new SizeF (16, 16);
-
-                this.folder_image       = NSImage.ImageNamed ("NSFolder");
-                this.caution_image      = NSImage.ImageNamed ("NSCaution");
-                this.sparkleshare_image = NSImage.ImageNamed ("sparkleshare-folder");
 
                 CreateMenu ();
             }
@@ -228,10 +208,10 @@ namespace SparkleShare {
                 this.menu.AddItem (this.folder_item);
 
                 this.folder_menu_items = new NSMenuItem [Controller.Folders.Length];
+                this.error_menu_items  = new NSMenuItem [Controller.Folders.Length];
+                this.try_again_menu_items = new NSMenuItem [Controller.Folders.Length];
 
                 if (Controller.Folders.Length > 0) {
-                    this.folder_tasks    = new EventHandler [Controller.Folders.Length];
-                    this.try_again_tasks = new EventHandler [Controller.Folders.Length];
 
                     int i = 0;
                     foreach (string folder_name in Controller.Folders) {
@@ -242,30 +222,28 @@ namespace SparkleShare {
                             item.Image   = this.caution_image;
                             item.Submenu = new NSMenu ();
 
-                            NSMenuItem error_item = new NSMenuItem () {
+                            this.error_menu_items [i] = new NSMenuItem () {
                                 Title = Controller.FolderErrors [i]
                             };
 
-                            NSMenuItem try_again_item = new NSMenuItem () {
+                            this.try_again_menu_items [i] = new NSMenuItem () { // TODO: retain
                                 Title = "Try Again"
                             };
 
-                            this.try_again_tasks [i] = TryAgainDelegate (folder_name);
-                            try_again_item.Activated += this.try_again_tasks [i];
+                            this.try_again_menu_items [i].Activated += Controller.TryAgainDelegate (folder_name);;
                             
-                            item.Submenu.AddItem (error_item);
+                            item.Submenu.AddItem (this.error_menu_items [i]);
                             item.Submenu.AddItem (NSMenuItem.SeparatorItem);
-                            item.Submenu.AddItem (try_again_item);
+                            item.Submenu.AddItem (this.try_again_menu_items [i]);
 
                         } else {
                             item.Image = this.folder_image;
                         }
 
                         item.Image.Size = new SizeF (16, 16);
-                        this.folder_tasks [i] = OpenFolderDelegate (folder_name);
 
                         this.folder_menu_items [i] = item;
-                        this.folder_menu_items [i].Activated += this.folder_tasks [i];
+                        this.folder_menu_items [i].Activated += Controller.OpenFolderDelegate (folder_name);
 
                         i++;
                     };
@@ -286,22 +264,6 @@ namespace SparkleShare {
                 this.menu.Delegate    = new SparkleStatusIconMenuDelegate ();
                 this.status_item.Menu = this.menu;
             }
-        }
-
-
-        private EventHandler OpenFolderDelegate (string name)
-        {
-            return delegate {
-                Controller.SubfolderClicked (name);
-            };
-        }
-
-
-        private EventHandler TryAgainDelegate (string name)
-        {
-            return delegate {
-                Controller.TryAgainClicked (name);
-            };
         }
     }
     

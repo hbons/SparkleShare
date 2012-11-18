@@ -33,14 +33,13 @@ namespace SparkleShare {
         
         public SparkleStatusIconController Controller = new SparkleStatusIconController();
         
-        private Drawing.Bitmap syncing_idle_image;
-        private Drawing.Bitmap syncing_up_image;
-        private Drawing.Bitmap syncing_down_image;
-        private Drawing.Bitmap syncing_image;
-        private Drawing.Bitmap syncing_error_image;
+        private Drawing.Bitmap syncing_idle_image  = SparkleUIHelpers.GetBitmap ("process-syncing-idle");
+        private Drawing.Bitmap syncing_up_image    = SparkleUIHelpers.GetBitmap ("process-syncing-up");
+        private Drawing.Bitmap syncing_down_image  = SparkleUIHelpers.GetBitmap ("process-syncing-down");
+        private Drawing.Bitmap syncing_image       = SparkleUIHelpers.GetBitmap ("process-syncing");
+        private Drawing.Bitmap syncing_error_image = SparkleUIHelpers.GetBitmap ("process-syncing-error");
 
         private ContextMenu context_menu;
-
 
         private SparkleMenuItem log_item;
         private SparkleMenuItem state_item;
@@ -51,14 +50,8 @@ namespace SparkleShare {
 
         public SparkleStatusIcon ()
         {
-            this.syncing_idle_image  = SparkleUIHelpers.GetBitmap ("process-syncing-idle");
-            this.syncing_up_image    = SparkleUIHelpers.GetBitmap ("process-syncing-up");
-            this.syncing_down_image  = SparkleUIHelpers.GetBitmap ("process-syncing-down");
-            this.syncing_image       = SparkleUIHelpers.GetBitmap ("process-syncing");
-            this.syncing_error_image = SparkleUIHelpers.GetBitmap ("process-syncing-error");
-            
-            this.notify_icon.Icon = this.syncing_idle_image;
             this.notify_icon.HeaderText = "SparkleShare";
+            this.notify_icon.Icon       = this.syncing_idle_image;
 
             CreateMenu ();
             
@@ -206,7 +199,7 @@ namespace SparkleShare {
                         Header = folder_name.Replace ("_", "__")
                     };
                     
-                    subfolder_item.Click += OpenFolderDelegate (folder_name);
+                    subfolder_item.Click += Controller.OpenFolderDelegate (folder_name);
                     
                     Image subfolder_image = new Image () {
                         Source = SparkleUIHelpers.GetImageSource ("folder"),
@@ -218,8 +211,7 @@ namespace SparkleShare {
                         subfolder_item.Icon = new Image () {
                             Source = (BitmapSource) Imaging.CreateBitmapSourceFromHIcon (
                                 System.Drawing.SystemIcons.Exclamation.Handle, Int32Rect.Empty,
-                                BitmapSizeOptions.FromWidthAndHeight (16,16)
-                            )
+                                BitmapSizeOptions.FromWidthAndHeight (16,16))
                         };
 
                         SparkleMenuItem error_item = new SparkleMenuItem () {
@@ -231,7 +223,7 @@ namespace SparkleShare {
                             Header = "Try again"
                         };
 
-                        try_again_item.Click += TryAgainDelegate (folder_name);
+                        try_again_item.Click += Controller.TryAgainDelegate (folder_name);
 
                         subfolder_item.Items.Add (error_item);
                         subfolder_item.Items.Add (new Separator ());
@@ -270,22 +262,6 @@ namespace SparkleShare {
         public void Dispose ()
         {
             this.notify_icon.Dispose ();
-        }
-
-
-        private RoutedEventHandler OpenFolderDelegate (string folder_name)
-        {
-            return delegate {
-                Controller.SubfolderClicked (folder_name);
-            };
-        }
-
-        
-        private EventHandler TryAgainDelegate (string name)
-        {
-            return delegate {
-                Controller.TryAgainClicked (name);
-            };
         }
     }
     

@@ -70,7 +70,7 @@ namespace SparkleShare {
                 Font            = NSFontManager.SharedFontManager.FontWithFamily (
                     "Lucida Grande", NSFontTraitMask.Bold, 0, 15),
             };
-
+            
             this.header_text_field.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
             
             this.description_text_field = new NSTextField () {
