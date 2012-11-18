@@ -26,6 +26,6 @@ using System.Reflection;
 namespace SparkleLib {
 
     public class Defines {
-        public const string INSTALL_DIR = "/usr/local/share/sparkleshare";
+        public const string INSTALL_DIR = "/usr/share/sparkleshare";
     }
 }
