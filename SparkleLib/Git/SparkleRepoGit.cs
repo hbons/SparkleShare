@@ -668,7 +668,9 @@ namespace SparkleLib.Git {
                 
                 Error = ErrorStatus.HostIdentityChanged;
                 
-            } else if (line.StartsWith ("Permission denied")) {
+            } else if (line.StartsWith ("Permission denied") ||
+                       line.StartsWith ("ssh_exchange_identification: Connection closed by remote host")) {
+
                 Error = ErrorStatus.AuthenticationFailed;
                 
             } else if (line.StartsWith ("error: Disk space exceeded")) {
