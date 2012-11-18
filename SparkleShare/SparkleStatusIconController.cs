@@ -209,7 +209,7 @@ namespace SparkleShare {
         {
             foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
                 if (repo.Name.Equals (subfolder))
-                    repo.ForceRetry ();
+                    new Thread (() => repo.ForceRetry ()).Start ();
             }
         }
 
