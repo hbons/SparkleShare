@@ -336,7 +336,9 @@ namespace SparkleShare {
                         ProgressSpeedDown += rep.ProgressSpeed;
                 }
 
-                ProgressPercentage = percentage / repo_count;
+                if (repo_count > 0)
+                    ProgressPercentage = percentage / repo_count;
+
                 UpdateState ();
             };
 
