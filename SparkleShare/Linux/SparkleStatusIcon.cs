@@ -173,7 +173,7 @@ namespace SparkleShare {
                             };
                             
                             MenuItem try_again_item = new MenuItem ("Try Again");
-                            try_again_item.Activated += TryAgainDelegate (folder_name);
+                            try_again_item.Activated += Controller.TryAgainDelegate (folder_name);
 
                             (item.Submenu as Menu).Add (error_item);
                             (item.Submenu as Menu).Add (new SeparatorMenuItem ();
@@ -186,7 +186,7 @@ namespace SparkleShare {
                         item.Image = new Image (folder_icon);
                         (item.Child as Label).UseUnderline = false;
 
-                        item.Activated += OpenFolderDelegate (folder_name);
+                        item.Activated += Controller.OpenFolderDelegate (folder_name);
                         this.menu.Add (item);
 
                         i++;
@@ -262,22 +262,6 @@ namespace SparkleShare {
             #if HAVE_APP_INDICATOR
             this.indicator.Menu = this.menu;
             #endif
-        }
-
-
-        private EventHandler OpenFolderDelegate (string name)
-        {
-            return delegate {
-                Controller.SubfolderClicked (name);
-            };
-        }
-
-                        
-        private EventHandler TryAgainDelegate (string name)
-        {
-            return delegate {
-                Controller.TryAgainClicked (name);
-            };
         }
 		
 

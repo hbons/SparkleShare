@@ -244,6 +244,22 @@ namespace SparkleShare {
         }
 
 
+        public EventHandler OpenFolderDelegate (string subfolder)
+        {
+            return delegate {
+                SubfolderClicked (subfolder);
+            };
+        }
+        
+        
+        public EventHandler TryAgainDelegate (string subfolder)
+        {
+            return delegate {
+                TryAgainClicked (subfolder);
+            };
+        }
+
+
         private void UpdateFolders ()
         {
             Folders      = Program.Controller.Folders.ToArray ();
