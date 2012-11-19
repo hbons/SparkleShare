@@ -241,7 +241,7 @@ namespace SparkleShare {
                 Program.Controller.OpenWebsite (url);
             
             } else if (url.StartsWith ("restore://") && this.restore_revision_info == null) {
-                Regex regex = new Regex ("restore://(.+)/([a-f0-9]+)/(.+)/(.{3} [0-9]+ [0-9]+h[0-9]+)/(.+)", RegexOptions.Compiled);
+                Regex regex = new Regex ("restore://(.+)/([a-f0-9]+)/(.+)/(.{3} [0-9]+ [0-9]+h[0-9]+)/(.+)");
                 Match match = regex.Match (url);
                 
                 if (match.Success) {
