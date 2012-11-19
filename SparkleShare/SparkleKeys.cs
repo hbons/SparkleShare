@@ -33,29 +33,20 @@ namespace SparkleShare {
             if (File.Exists (key_file_path)) {
                 SparkleLogger.LogInfo ("Auth", "A key pair exists ('" + key_name + "'), leaving it untouched");
                 return new string [] { key_file_path, key_file_path + ".pub" };
-
-            } else {
-                if (!Directory.Exists (output_path))
-                    Directory.CreateDirectory (output_path);
             }
-
-            Process process = new Process ();
-
-            process.StartInfo.FileName         = "ssh-keygen";
-            process.StartInfo.WorkingDirectory = output_path;
-            process.StartInfo.UseShellExecute  = false;
-            process.StartInfo.CreateNoWindow   = true;
 
             string computer_name = System.Net.Dns.GetHostName ();
 
             if (computer_name.EndsWith (".local"))
                 computer_name = computer_name.Substring (0, computer_name.Length - 6);
 
-            process.StartInfo.Arguments = "-t rsa " + // crypto type
+            string arguments = "-t rsa " + // crypto type
                 "-P \"\" " + // empty password
                 "-C \"" + computer_name + "\" " + // key comment
                 "-f \"" + key_name + "\""; // file name
 
+            SparkleKeyProcess process = new SparkleKeyProcess ("ssh-keygen", arguments);
+            process.StartInfo.WorkingDirectory = output_path;
             process.Start ();
             process.WaitForExit ();
 
@@ -70,14 +61,7 @@ namespace SparkleShare {
 
         public static void ImportPrivateKey (string key_file_path)
         {
-            Process process = new Process ();
-
-            process.StartInfo.FileName              = "ssh-add";
-            process.StartInfo.Arguments             = "\"" + key_file_path + "\"";
-            process.StartInfo.UseShellExecute       = false;
-            process.StartInfo.CreateNoWindow        = true;
-            process.StartInfo.RedirectStandardError = true;
-
+            SparkleKeyProcess process = new SparkleKeyProcess ("ssh-add", "\"" + key_file_path + "\"");
             process.Start ();
             process.WaitForExit ();
 
@@ -90,23 +74,26 @@ namespace SparkleShare {
 
         public static void ListPrivateKeys ()
         {
-            Process process = new Process ();
-
-            process.StartInfo.FileName               = "ssh-add";
-            process.StartInfo.Arguments              = "-l";
-            process.StartInfo.UseShellExecute        = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.CreateNoWindow         = true;
-
+            SparkleKeyProcess process = new SparkleKeyProcess ("ssh-add", "-l");
             process.Start ();
-
-            // Reading the standard output HAS to go before
-            // WaitForExit, or it will hang forever on output > 4096 bytes
             string keys_in_use = process.StandardOutput.ReadToEnd ();
             process.WaitForExit ();
 
-            SparkleLogger.LogInfo ("Auth", "The following keys may be used: " +
-                Environment.NewLine + keys_in_use.Trim ());
+            SparkleLogger.LogInfo ("Auth", "The following keys may be used:\n" + keys_in_use.Trim ());
+        }
+
+
+        private class SparkleKeyProcess : Process {
+
+            public SparkleKeyProcess (string command, string arguments) : base ()
+            {
+                StartInfo.FileName               = command;
+                StartInfo.Arguments              = arguments;
+                StartInfo.UseShellExecute        = false;
+                StartInfo.RedirectStandardOutput = true;
+                StartInfo.RedirectStandardError  = true;
+                StartInfo.CreateNoWindow         = true;
+            }
         }
     }
 }
