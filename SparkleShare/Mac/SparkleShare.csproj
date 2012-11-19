@@ -71,7 +71,6 @@
     </Compile>
     <Compile Include="SparkleMacWatcher.cs" />
     <Compile Include="SparkleEventLog.cs" />
-    <Compile Include="SparkleBadger.cs" />
     <Compile Include="SparkleBubbles.cs" />
     <Compile Include="SparkleSetup.cs" />
     <Compile Include="SparkleSetupWindow.cs" />
