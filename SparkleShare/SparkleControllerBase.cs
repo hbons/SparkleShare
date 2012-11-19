@@ -455,7 +455,7 @@ namespace SparkleShare {
         }
 
 
-        private void ClearFolderAttributes (string path)
+        private void ClearDirectoryAttributes (string path)
         {
             if (!Directory.Exists (path))
                 return;
@@ -463,7 +463,7 @@ namespace SparkleShare {
             string [] folders = Directory.GetDirectories (path);
 
             foreach (string folder in folders)
-                ClearFolderAttributes (folder);
+                ClearDirectoryAttributes (folder);
 
             string [] files = Directory.GetFiles(path);
 
@@ -652,13 +652,20 @@ namespace SparkleShare {
             string target_folder_path = Path.Combine (this.config.FoldersPath, target_folder_name);
 
             try {
-                ClearFolderAttributes (this.fetcher.TargetFolder);
                 Directory.Move (this.fetcher.TargetFolder, target_folder_path);
 
             } catch (Exception e) {
-                SparkleLogger.LogInfo ("Controller", "Error moving directory: " + e.Message);
-                this.watcher.EnableRaisingEvents = true;
-                return;
+                SparkleLogger.LogInfo ("Controller", "Error moving directory: \"" + e.Message + "\", trying again...");
+
+                try {
+                    ClearDirectoryAttributes (this.fetcher.TargetFolder);
+                    Directory.Move (this.fetcher.TargetFolder, target_folder_path);
+
+                } catch (Exception x) {
+                    SparkleLogger.LogInfo ("Controller", "Error moving directory: " + x.Message);
+                    this.watcher.EnableRaisingEvents = true;
+                    return;
+                }
             }
 
             string backend = SparkleFetcherBase.GetBackend (this.fetcher.RemoteUrl.AbsolutePath);
