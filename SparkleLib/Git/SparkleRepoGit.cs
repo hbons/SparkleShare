@@ -49,14 +49,12 @@ namespace SparkleLib.Git {
                 if (string.IsNullOrEmpty (this.cached_branch)) {
                     string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
 
-                    if (Directory.Exists (rebase_apply_path)) {
-                        while (HasLocalChanges) {
-                            try {
-                                ResolveConflict ();
-                                
-                            } catch (IOException e) {
-                                SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again... (" + e.Message + ")");
-                            }
+                    while (Directory.Exists (rebase_apply_path) && HasLocalChanges) {
+                        try {
+                            ResolveConflict ();
+                            
+                        } catch (IOException e) {
+                            SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again... (" + e.Message + ")");
                         }
                     }
 
@@ -477,8 +475,9 @@ namespace SparkleLib.Git {
                 }
 
                 SparkleLogger.LogInfo ("Git", Name + " | Conflict detected, trying to get out...");
-
-                while (HasLocalChanges) {
+                string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
+                
+                while (Directory.Exists (rebase_apply_path) && HasLocalChanges) {
                     try {
                         ResolveConflict ();
 
