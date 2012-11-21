@@ -472,22 +472,23 @@ namespace SparkleLib.Git {
                     git.StartAndWaitForExit ();
 
                     return false;
-                }
-
-                SparkleLogger.LogInfo ("Git", Name + " | Conflict detected, trying to get out...");
-                string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
                 
-                while (Directory.Exists (rebase_apply_path) && HasLocalChanges) {
-                    try {
-                        ResolveConflict ();
+                } else {
+                    SparkleLogger.LogInfo ("Git", Name + " | Conflict detected, trying to get out...");
+                    string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
+                    
+                    while (Directory.Exists (rebase_apply_path) && HasLocalChanges) {
+                        try {
+                            ResolveConflict ();
 
-                    } catch (IOException e) {
-                        SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again... (" + e.Message + ")");
+                        } catch (IOException e) {
+                            SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again... (" + e.Message + ")");
+                        }
                     }
-                }
 
-                SparkleLogger.LogInfo ("Git", Name + " | Conflict resolved");
-                OnConflictResolved ();
+                    SparkleLogger.LogInfo ("Git", Name + " | Conflict resolved");
+                    OnConflictResolved ();
+                }
             }
 
             git = new SparkleGit (LocalPath, "config core.ignorecase false");
