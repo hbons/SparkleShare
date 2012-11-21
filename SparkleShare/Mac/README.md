@@ -19,10 +19,10 @@ $ export PKG_CONFIG=/Library/Frameworks/Mono.framework/Versions/Current/bin/pkg-
 $ export PKG_CONFIG_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
 ```
 
-Install <tt>git</tt>, <tt>automake</tt>, <tt>libtool</tt> and <tt>intltool</tt> using <tt>MacPorts</tt>:
+Install <tt>git</tt>, <tt>automake</tt>, <tt>libtool</tt>, <tt>pkgconfig</tt> and <tt>intltool</tt> using <tt>MacPorts</tt>:
 
 ```bash
-$ sudo port install git-core automake intltool libtool
+$ sudo port install git-core automake intltool pkgconfig libtool
 ```
 
 Get a Git install, and place both the `bin` and `libexec` directories in `SparkleShare/Mac/git`.
