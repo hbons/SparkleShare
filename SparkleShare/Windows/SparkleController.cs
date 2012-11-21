@@ -236,7 +236,7 @@ namespace SparkleShare {
                 SparkleLogger.LogInfo ("Controller", "ssh-agent started, PID=" + this.ssh_agent_pid);
 
             } else {
-                SparkleLogger.LogInfo ("Controller", "ssh-agent started, PID=Unknown");
+                SparkleLogger.LogInfo ("Controller", "Could not start ssh-agent:" + output);
             }
         }
 
