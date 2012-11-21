@@ -667,8 +667,8 @@ namespace SparkleLib.Git {
         {
             Error = ErrorStatus.None;
 
-            if (line.StartsWith ("WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!") ||
-                line.StartsWith ("WARNING: POSSIBLE DNS SPOOFING DETECTED!")) {
+            if (line.Contains ("WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!") ||
+                line.Contains ("WARNING: POSSIBLE DNS SPOOFING DETECTED!")) {
                 
                 Error = ErrorStatus.HostIdentityChanged;
                 
