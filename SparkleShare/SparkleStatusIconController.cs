@@ -117,7 +117,7 @@ namespace SparkleShare {
                     if (Program.Controller.Folders.Count == 0)
                         StateText = "Welcome to SparkleShare!";
                     else
-                        StateText = "Files up to date " + FolderSize;
+                        StateText = "Projects up to date " + FolderSize;
                 }
 
                 UpdateFolders ();
@@ -135,7 +135,7 @@ namespace SparkleShare {
                     if (Program.Controller.Folders.Count == 0)
                         StateText = "Welcome to SparkleShare!";
                     else
-                        StateText = "Files up to date " + FolderSize;
+                        StateText = "Projects up to date " + FolderSize;
                 }
 
                 UpdateQuitItemEvent (QuitItemEnabled);
