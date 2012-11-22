@@ -112,6 +112,21 @@
     <None Include="..\Common\Pixmaps\side-splash%402x.png">
       <Link>Pixmaps\side-splash%402x.png</Link>
     </None>
+    <None Include="..\Common\Plugins\bitbucket%402x.png">
+      <Link>Plugins\bitbucket%402x.png</Link>
+    </None>
+    <None Include="..\Common\Plugins\github%402x.png">
+      <Link>Plugins\github%402x.png</Link>
+    </None>
+    <None Include="..\Common\Plugins\gitorious%402x.png">
+      <Link>Plugins\gitorious%402x.png</Link>
+    </None>
+    <None Include="..\Common\Plugins\own-server%402x.png">
+      <Link>Plugins\own-server%402x.png</Link>
+    </None>
+    <None Include="..\Common\Plugins\ssnet%402x.png">
+      <Link>Plugins\ssnet%402x.png</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Mono\MonoMac\v0.0\Mono.MonoMac.targets" />
