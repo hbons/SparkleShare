@@ -43,6 +43,16 @@ $ ./autogen.sh
 Now that you have compiled the libraries, open `SparkleShare/Mac/SparkleShare.sln` in
 MonoDevelop and start the build (Build > Build All).
 
+If you get `Are you missing a using directive or an assembly reference?` errors related to MacOS objects, then run:
+
+```
+git clone https://github.com/mono/monomac
+git clone https://github.com/mono/maccore
+cd monomac
+make
+```
+
+It should generate `MonoMac.dll`. Copy it over any `MonoMac.dll` you might have on your system, then restart Monodevelop, and the project should now build fine.
 
 ### Creating a Mac bundle
 
