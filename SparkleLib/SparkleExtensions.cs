@@ -68,7 +68,7 @@ namespace SparkleLib {
             else if (byte_count >= 1024)
                 return String.Format ("{0:##.##} ᴋʙ", Math.Round (byte_count / 1024, 0));
             else
-                return byte_count.ToString () + " bytes";
+                return byte_count.ToString () + " ʙ";
         }
     }
 }

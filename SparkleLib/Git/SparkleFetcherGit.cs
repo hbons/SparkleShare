@@ -294,7 +294,7 @@ namespace SparkleLib.Git {
                 }
 
             } catch (Exception e) {
-                SparkleLogger.LogInfo ("Fetcher", "Failed to dispose properly: " + e.Message);
+                SparkleLogger.LogInfo ("Fetcher", "Failed to dispose properly", e);
             }
         }
 
