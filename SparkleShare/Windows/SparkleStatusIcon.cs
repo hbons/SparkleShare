@@ -126,10 +126,6 @@ namespace SparkleShare {
                 Header = "SparkleShare",
                 Icon   = folder_image
             };
-        
-                folder_item.Click += delegate {
-                    Controller.SparkleShareClicked ();
-                };
             
             SparkleMenuItem add_item = new SparkleMenuItem () {
                 Header = "Add hosted project…"
@@ -238,14 +234,14 @@ namespace SparkleShare {
                     i++;
                 }
             }
-            
-            this.context_menu.Items.Add (new Separator ());
-			this.context_menu.Items.Add (this.log_item);
-            this.context_menu.Items.Add (add_item);
-            this.context_menu.Items.Add (new Separator ());
-            this.context_menu.Items.Add (notify_item);
-            this.context_menu.Items.Add (new Separator ());
-            this.context_menu.Items.Add (about_item);
+
+            folder_item.Items.Add (this.log_item);
+            folder_item.Items.Add (add_item);
+            folder_item.Items.Add (new Separator ());
+            folder_item.Items.Add (notify_item);
+            folder_item.Items.Add (new Separator ());
+            folder_item.Items.Add (about_item);
+
             this.context_menu.Items.Add (new Separator ());
             this.context_menu.Items.Add (this.exit_item);
             
