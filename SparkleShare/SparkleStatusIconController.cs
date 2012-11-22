@@ -193,12 +193,6 @@ namespace SparkleShare {
         }
 
 
-        public void SparkleShareClicked ()
-        {
-            Program.Controller.OpenSparkleShareFolder ();
-        }
-
-
         public void SubfolderClicked (string subfolder)
         {
             Program.Controller.OpenSparkleShareFolder (subfolder);
