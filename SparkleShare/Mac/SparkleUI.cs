@@ -77,7 +77,7 @@ namespace SparkleShare {
 
         private void HideDockIcon ()
         {
-            // Currently not supported, here for completeness sake (see Apple's docs)
+            // Currently not supported by Apple's API
             // NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.None;
         }
 
