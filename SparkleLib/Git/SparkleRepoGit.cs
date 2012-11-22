@@ -411,8 +411,6 @@ namespace SparkleLib.Git {
         {
             SparkleGit git = new SparkleGit (LocalPath, "add --all");
             git.StartAndWaitForExit ();
-
-            SparkleLogger.LogInfo ("Git", Name + " | Changes staged");
         }
 
 
@@ -533,9 +531,7 @@ namespace SparkleLib.Git {
                 SparkleLogger.LogInfo ("Git", Name + " | Conflict type: " + line);
 
                 // Ignore conflicts in the .sparkleshare file and use the local version
-                if (conflicting_path.EndsWith (".sparkleshare") ||
-                    conflicting_path.EndsWith (".empty")) {
-
+                if (conflicting_path.EndsWith (".sparkleshare") || conflicting_path.EndsWith (".empty")) {
                     // Recover local version
                     SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
                     git_theirs.StartAndWaitForExit ();
@@ -574,12 +570,8 @@ namespace SparkleLib.Git {
 
                 // The local version has been modified, but the server version was removed
                 } else if (line.StartsWith ("DU")) {
-
-                    // The modified local version is already in the
-                    // checkout, so it just needs to be added.
-                    //
-                    // We need to specifically mention the file, so
-                    // we can't reuse the Add () method
+                    // The modified local version is already in the checkout, so it just needs to be added.
+                    // We need to specifically mention the file, so we can't reuse the Add () method
                     SparkleGit git_add = new SparkleGit (LocalPath, "add \"" + conflicting_path + "\"");
                     git_add.StartAndWaitForExit ();
 
