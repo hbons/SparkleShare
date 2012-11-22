@@ -32,13 +32,13 @@
      inkscape:window-height="696"
      id="namedview3143"
      showgrid="false"
-     inkscape:zoom="2"
+     inkscape:zoom="1"
      inkscape:cx="202.9899"
      inkscape:cy="256.41535"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g2886"
+     inkscape:current-layer="g2946"
      showborder="false" />
   <defs
      id="defs8765">
@@ -2444,12 +2444,6 @@
                 </g>
               </g>
             </g>
-            <path
-               inkscape:connector-curvature="0"
-               d="m 45.90624,74.999997 c -2.13796,0 -3.90625,1.768288 -3.90625,3.90625 l 0,136.562503 c 0,0 220.00001,-98.90625 220.00001,-98.90625 l 0,-37.656253 c 0,-2.137958 -1.7683,-3.90625 -3.90625,-3.90625 l -212.18751,0 z"
-               id="path2612-0"
-               sodipodi:nodetypes="ccccccc"
-               style="opacity:0.34482757;fill:url(#radialGradient11551-8);fill-opacity:1;stroke:none;display:inline;enable-background:new" />
           </g>
         </g>
       </g>
