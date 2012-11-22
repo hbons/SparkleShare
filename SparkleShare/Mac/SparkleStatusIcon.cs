@@ -154,12 +154,11 @@ namespace SparkleShare {
                 };
 
                 this.folder_item = new NSMenuItem () {
-                    Title = "SparkleShare"
-                };
-
-                this.folder_item.Image      = this.sparkleshare_image;
-                this.folder_item.Image.Size = new SizeF (16, 16);
-                this.folder_item.Enabled    = true;
+                    Title      = "SparkleShare",
+                    Image      = this.sparkleshare_image,
+                    Image.Size = new SizeF (16, 16),
+                    Enabled    = true
+                }
 
                 this.add_item = new NSMenuItem () {
                     Title   = "Add Hosted Project…",
@@ -218,7 +217,6 @@ namespace SparkleShare {
                 this.try_again_menu_items = new NSMenuItem [Controller.Folders.Length];
 
                 if (Controller.Folders.Length > 0) {
-
                     int i = 0;
                     foreach (string folder_name in Controller.Folders) {
                         NSMenuItem item = new NSMenuItem ();
@@ -232,9 +230,8 @@ namespace SparkleShare {
                                 Title = Controller.FolderErrors [i]
                             };
 
-                            this.try_again_menu_items [i] = new NSMenuItem () { // TODO: retain
-                                Title = "Try Again"
-                            };
+                            this.try_again_menu_items [i] = new NSMenuItem ();
+                            this.try_again_menu_items [i].Title = "Try Again";
 
                             this.try_again_menu_items [i].Activated += Controller.TryAgainDelegate (folder_name);;
                             
