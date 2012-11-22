@@ -23,7 +23,6 @@ using System.IO;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
-using MonoMac.WebKit;
 
 namespace SparkleShare {
 

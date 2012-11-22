@@ -6,7 +6,6 @@ ASSEMBLY_INFO_SOURCE = Defines.cs
 SOURCES =  \
 	SparkleBackend.cs \
 	SparkleConfig.cs \
-	SparkleExceptions.cs \
 	SparkleExtensions.cs \
 	SparkleFetcherBase.cs \
 	SparkleListenerBase.cs \
