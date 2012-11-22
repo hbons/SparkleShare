@@ -162,8 +162,8 @@ namespace SparkleLib {
 
                     IsActive = false;
 
-                    bool repo_is_encrypted = 
-                        (RemoteUrl.AbsolutePath.Contains ("-crypto") || RemoteUrl.Host.Equals ("sparkleshare.net"));
+                    bool repo_is_encrypted = (RemoteUrl.AbsolutePath.Contains ("-crypto") ||
+                                              RemoteUrl.Host.Equals ("sparkleshare.net"));
 
                     Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);
 
@@ -257,29 +257,22 @@ namespace SparkleLib {
 
         private string FetchHostKey ()
         {
-            string host = RemoteUrl.Host;
-            int port    = RemoteUrl.Port;
+            SparkleLogger.LogInfo ("Auth", "Fetching host key for " + RemoteUrl.Host);
 
-            if (port < 1)
-                port = 22;
-
-            SparkleLogger.LogInfo ("Auth", "Fetching host key for " + host);
-
-            Process process = new Process () {
-                EnableRaisingEvents = true
-            };
-
+            Process process = new Process ();
             process.StartInfo.FileName               = "ssh-keyscan";
-            process.StartInfo.Arguments              = "-t rsa -p " + port + " " + host;
             process.StartInfo.WorkingDirectory       = SparkleConfig.DefaultConfig.TmpPath;
             process.StartInfo.UseShellExecute        = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.CreateNoWindow         = true;
+            process.EnableRaisingEvents              = true;
+
+            if (RemoteUrl.Port < 1)
+                process.StartInfo.Arguments = "-t rsa -p 22 " + RemoteUrl.Host;
+            else
+                process.StartInfo.Arguments = "-t rsa -p " + RemoteUrl.Port + " " + RemoteUrl.Host;
 
             process.Start ();
-
-            // Reading the standard output HAS to go before
-            // WaitForExit, or it will hang forever on output > 4096 bytes
             string host_key = process.StandardOutput.ReadToEnd ().Trim ();
             process.WaitForExit ();
 
@@ -302,7 +295,7 @@ namespace SparkleLib {
                 return fingerprint.ToLower ().Replace ("-", ":");
 
             } catch (Exception e) {
-                SparkleLogger.LogInfo ("Fetcher", "Failed creating fingerprint: " + e.Message + e.StackTrace);
+                SparkleLogger.LogInfo ("Fetcher", "Failed creating fingerprint: " + e.Message + " " + e.StackTrace);
                 return null;
             }
         }

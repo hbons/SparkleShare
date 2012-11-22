@@ -27,8 +27,17 @@ namespace SparkleLib {
 
         public static void LogInfo (string type, string message)
         {
+            LogInfo (type, message, null);
+        }
+
+
+        public static void LogInfo (string type, string message, Exception exception)
+        {
             string timestamp = DateTime.Now.ToString ("HH:mm:ss");
             string line      = timestamp + " | " + type + " | " + message;
+
+            if (exception != null)
+                line += ": " + exception.Message + " " + exception.StackTrace;
 
             if (SparkleConfig.DebugMode)
                 Console.WriteLine (line);

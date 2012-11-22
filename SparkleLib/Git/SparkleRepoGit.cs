@@ -34,19 +34,27 @@ namespace SparkleLib.Git {
 
         private string cached_branch;
 
+        private Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
+        private Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
+
+        private Regex log_regex = new Regex (@"commit ([a-z0-9]{40})\n" +
+                                              "Author: (.+) <(.+)>\n" +
+                                              "*" +
+                                              "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
+                                              "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
+                                              "*", RegexOptions.Compiled);
+
         private string branch {
             get {
                 if (string.IsNullOrEmpty (this.cached_branch)) {
                     string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
 
-                    if (Directory.Exists (rebase_apply_path)) {
-                        while (HasLocalChanges) {
-                            try {
-                                ResolveConflict ();
-                                
-                            } catch (IOException e) {
-                                SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again... (" + e.Message + ")");
-                            }
+                    while (Directory.Exists (rebase_apply_path) && HasLocalChanges) {
+                        try {
+                            ResolveConflict ();
+                            
+                        } catch (IOException e) {
+                            SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again... (" + e.Message + ")");
                         }
                     }
 
@@ -224,11 +232,10 @@ namespace SparkleLib.Git {
             git.Start ();
 
             double percentage = 1.0;
-            Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
 
             while (!git.StandardError.EndOfStream) {
                 string line   = git.StandardError.ReadLine ();
-                Match match   = progress_regex.Match (line);
+                Match match   = this.progress_regex.Match (line);
                 double speed  = 0.0;
                 double number = 0.0;
 
@@ -245,9 +252,7 @@ namespace SparkleLib.Git {
                     } else {
                         // "Writing objects" stage
                         number = (number / 100 * 80 + 20);
-
-                        Regex speed_regex = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
-                        Match speed_match = speed_regex.Match (line);
+                        Match speed_match = this.speed_regex.Match (line);
 
                         if (speed_match.Success) {
                             speed = double.Parse (speed_match.Groups [1].Value) * 1024;
@@ -309,11 +314,10 @@ namespace SparkleLib.Git {
             git.Start ();
 
             double percentage = 1.0;
-            Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
 
             while (!git.StandardError.EndOfStream) {
                 string line   = git.StandardError.ReadLine ();
-                Match match   = progress_regex.Match (line);
+                Match match   = this.progress_regex.Match (line);
                 double speed  = 0.0;
                 double number = 0.0;
 
@@ -330,9 +334,7 @@ namespace SparkleLib.Git {
                     } else {
                         // "Writing objects" stage
                         number = (number / 100 * 80 + 20);
-                        
-                        Regex speed_regex = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
-                        Match speed_match = speed_regex.Match (line);
+                        Match speed_match = this.speed_regex.Match (line);
                         
                         if (speed_match.Success) {
                             speed = double.Parse (speed_match.Groups [1].Value) * 1024;
@@ -409,8 +411,6 @@ namespace SparkleLib.Git {
         {
             SparkleGit git = new SparkleGit (LocalPath, "add --all");
             git.StartAndWaitForExit ();
-
-            SparkleLogger.LogInfo ("Git", Name + " | Changes staged");
         }
 
 
@@ -470,21 +470,23 @@ namespace SparkleLib.Git {
                     git.StartAndWaitForExit ();
 
                     return false;
-                }
+                
+                } else {
+                    SparkleLogger.LogInfo ("Git", Name + " | Conflict detected, trying to get out...");
+                    string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
+                    
+                    while (Directory.Exists (rebase_apply_path) && HasLocalChanges) {
+                        try {
+                            ResolveConflict ();
 
-                SparkleLogger.LogInfo ("Git", Name + " | Conflict detected, trying to get out...");
-
-                while (HasLocalChanges) {
-                    try {
-                        ResolveConflict ();
-
-                    } catch (IOException e) {
-                        SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again... (" + e.Message + ")");
+                        } catch (IOException e) {
+                            SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again... (" + e.Message + ")");
+                        }
                     }
-                }
 
-                SparkleLogger.LogInfo ("Git", Name + " | Conflict resolved");
-                OnConflictResolved ();
+                    SparkleLogger.LogInfo ("Git", Name + " | Conflict resolved");
+                    OnConflictResolved ();
+                }
             }
 
             git = new SparkleGit (LocalPath, "config core.ignorecase false");
@@ -529,9 +531,7 @@ namespace SparkleLib.Git {
                 SparkleLogger.LogInfo ("Git", Name + " | Conflict type: " + line);
 
                 // Ignore conflicts in the .sparkleshare file and use the local version
-                if (conflicting_path.EndsWith (".sparkleshare") ||
-                    conflicting_path.EndsWith (".empty")) {
-
+                if (conflicting_path.EndsWith (".sparkleshare") || conflicting_path.EndsWith (".empty")) {
                     // Recover local version
                     SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
                     git_theirs.StartAndWaitForExit ();
@@ -570,12 +570,8 @@ namespace SparkleLib.Git {
 
                 // The local version has been modified, but the server version was removed
                 } else if (line.StartsWith ("DU")) {
-
-                    // The modified local version is already in the
-                    // checkout, so it just needs to be added.
-                    //
-                    // We need to specifically mention the file, so
-                    // we can't reuse the Add () method
+                    // The modified local version is already in the checkout, so it just needs to be added.
+                    // We need to specifically mention the file, so we can't reuse the Add () method
                     SparkleGit git_add = new SparkleGit (LocalPath, "add \"" + conflicting_path + "\"");
                     git_add.StartAndWaitForExit ();
 
@@ -663,8 +659,8 @@ namespace SparkleLib.Git {
         {
             Error = ErrorStatus.None;
 
-            if (line.StartsWith ("WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!") ||
-                line.StartsWith ("WARNING: POSSIBLE DNS SPOOFING DETECTED!")) {
+            if (line.Contains ("WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!") ||
+                line.Contains ("WARNING: POSSIBLE DNS SPOOFING DETECTED!")) {
                 
                 Error = ErrorStatus.HostIdentityChanged;
                 
@@ -732,15 +728,9 @@ namespace SparkleLib.Git {
 
             entries.Add (last_entry);
 
-            Regex regex = new Regex (@"commit ([a-z0-9]{40})\n" +
-                "Author: (.+) <(.+)>\n" +
-                "*" +
-                "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
-                "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
-                "*", RegexOptions.Compiled);
 
             foreach (string log_entry in entries) {
-                Match match = regex.Match (log_entry);
+                Match match = this.log_regex.Match (log_entry);
 
                 if (match.Success) {
                     SparkleChangeSet change_set = new SparkleChangeSet ();
