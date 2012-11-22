@@ -34,13 +34,13 @@
      fit-margin-right="0"
      fit-margin-bottom="0"
      showborder="false"
-     inkscape:zoom="0.35355339"
-     inkscape:cx="59.805297"
+     inkscape:zoom="1"
+     inkscape:cx="172.52608"
      inkscape:cy="90.406735"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-x="310"
+     inkscape:window-y="75"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg2" />
+     inkscape:current-layer="layer1" />
   <defs
      id="defs4">
     <linearGradient
@@ -2088,7 +2088,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -2098,7 +2098,10 @@
     <g
        id="g101011"
        transform="translate(-65.909,-78.641)"
-       clip-path="url(#clipPath101490)">
+       clip-path="url(#clipPath101490)"
+       inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Common/Pixmaps/about@2x.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180">
       <rect
          id="rect3322-0"
          height="500"
