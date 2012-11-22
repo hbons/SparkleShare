@@ -157,10 +157,6 @@ namespace SparkleShare {
                     Title = "SparkleShare"
                 };
 
-                this.folder_item.Activated += delegate {
-                    Controller.SparkleShareClicked ();
-                };
-
                 this.folder_item.Image      = this.sparkleshare_image;
                 this.folder_item.Image.Size = new SizeF (16, 16);
                 this.folder_item.Enabled    = true;
