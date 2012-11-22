@@ -120,7 +120,6 @@ namespace SparkleShare {
                 {
                     InvokeOnMainThread (delegate {
                         this.updates_text_field.StringValue = "A newer version (" + new_version + ") is available!";
-                        this.updates_text_field.TextColor   = NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f);
                     });
                 }
             };
@@ -130,7 +129,6 @@ namespace SparkleShare {
                 {
                     InvokeOnMainThread (delegate {
                         this.updates_text_field.StringValue = "You are running the latest version.";
-                        this.updates_text_field.TextColor   = NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f);
                     });
                 }
             };
@@ -140,7 +138,6 @@ namespace SparkleShare {
                 {
                     InvokeOnMainThread (delegate {
                         this.updates_text_field.StringValue = "Checking for updates...";
-                        this.updates_text_field.TextColor   = NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f);
                     });
                 }
             };
