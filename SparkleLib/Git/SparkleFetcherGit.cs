@@ -211,14 +211,7 @@ namespace SparkleLib.Git {
         public override bool IsFetchedRepoEmpty {
             get {
                 SparkleGit git = new SparkleGit (TargetFolder, "rev-parse HEAD");
-                git.StartInfo.RedirectStandardError = true;
-                git.Start ();
-
-                // Reading the standard output HAS to go before
-                // WaitForExit, or it will hang forever on output > 4096 bytes
-                git.StandardOutput.ReadToEnd ();
-                git.StandardError.ReadToEnd ();
-                git.WaitForExit ();
+                git.StartAndWaitForExit ();
 
                 return (git.ExitCode != 0);
             }
@@ -257,17 +250,12 @@ namespace SparkleLib.Git {
 
             if (!File.Exists (password_check_file_path)) {
                 SparkleGit git = new SparkleGit (TargetFolder, "show HEAD:.sparkleshare");
-                git.Start ();
+                string output = git.StartAndReadStandardOutput ();
 
-                // Reading the standard output HAS to go before
-                // WaitForExit, or it will hang forever on output > 4096 bytes
-                string output = git.StandardOutput.ReadToEnd ();
-                git.WaitForExit ();
-
-                if (git.ExitCode != 0)
-                    return false;
-                else
+                if (git.ExitCode == 0)
                     File.WriteAllText (password_check_file_path, output);
+                else
+                    return false;
             }
 
             Process process = new Process () {
