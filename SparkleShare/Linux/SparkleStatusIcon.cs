@@ -151,10 +151,6 @@ namespace SparkleShare {
                 ImageMenuItem folder_item = new SparkleMenuItem ("SparkleShare"){
                     Image = new Image (SparkleUIHelpers.GetIcon ("sparkleshare", 16))
                 };
-
-                folder_item.Activated += delegate {
-                    Controller.SparkleShareClicked ();
-                };
                 
             this.menu.Add (folder_item);
 
@@ -205,7 +201,6 @@ namespace SparkleShare {
 					Controller.RecentEventsClicked ();
 				};
 			
-			this.menu.Add (this.recent_events_item);
 
 
                 MenuItem sync_item = new MenuItem ("Add Hosted Project…");
@@ -214,8 +209,6 @@ namespace SparkleShare {
                     Controller.AddHostedProjectClicked ();
                 };
 
-            this.menu.Add (sync_item);
-            this.menu.Add (new SeparatorMenuItem ());
 
             
             MenuItem notify_item;
@@ -236,8 +229,6 @@ namespace SparkleShare {
 					});
                 };
 
-            this.menu.Add (notify_item);
-            this.menu.Add (new SeparatorMenuItem ());
 
                 MenuItem about_item = new MenuItem ("About SparkleShare");
 
@@ -245,8 +236,6 @@ namespace SparkleShare {
                     Controller.AboutClicked ();
                 };
 
-            this.menu.Add (about_item);
-            this.menu.Add (new SeparatorMenuItem ());
 
                 this.quit_item = new MenuItem ("Quit") {
                     Sensitive = Controller.QuitItemEnabled
@@ -256,6 +245,14 @@ namespace SparkleShare {
                     Controller.QuitClicked ();
                 };
 
+            folder_item.Submenu = new Menu ();
+			(folder_item.Submenu as Menu).Add (this.recent_events_item);
+            (folder_item.Submenu as Menu).Add (sync_item);
+            (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
+            (folder_item.Submenu as Menu).Add (notify_item);
+            (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
+            (folder_item.Submenu as Menu).Add (about_item);
+            
             this.menu.Add (this.quit_item);
             this.menu.ShowAll ();
 
