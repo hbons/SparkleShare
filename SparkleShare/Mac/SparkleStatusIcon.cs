@@ -30,6 +30,7 @@ namespace SparkleShare {
         public SparkleStatusIconController Controller = new SparkleStatusIconController ();
 
         private NSMenu menu;
+        private NSMenu submenu;
 
         private NSStatusItem status_item = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
         private NSMenuItem state_item;
@@ -207,6 +208,15 @@ namespace SparkleShare {
                 this.menu.AddItem (NSMenuItem.SeparatorItem);
                 this.menu.AddItem (this.folder_item);
 
+                this.submenu = new NSMenu ();
+                
+                this.submenu.AddItem (this.recent_events_item);
+                this.submenu.AddItem (this.add_item);
+                this.submenu.AddItem (NSMenuItem.SeparatorItem);
+                this.submenu.AddItem (this.about_item);
+                
+                this.folder_item.Submenu = this.submenu;
+
                 this.folder_menu_items = new NSMenuItem [Controller.Folders.Length];
                 this.error_menu_items  = new NSMenuItem [Controller.Folders.Length];
                 this.try_again_menu_items = new NSMenuItem [Controller.Folders.Length];
@@ -252,13 +262,7 @@ namespace SparkleShare {
                 foreach (NSMenuItem item in this.folder_menu_items)
                     this.menu.AddItem (item);
 
-
                 this.menu.AddItem (NSMenuItem.SeparatorItem);
-                this.menu.AddItem (this.recent_events_item);
-                this.menu.AddItem (this.add_item);
-                this.menu.AddItem (NSMenuItem.SeparatorItem);
-                this.menu.AddItem (this.about_item);
-			    this.menu.AddItem (NSMenuItem.SeparatorItem);
                 this.menu.AddItem (this.quit_item);
 
                 this.menu.Delegate    = new SparkleStatusIconMenuDelegate ();
