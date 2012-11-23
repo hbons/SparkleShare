@@ -155,10 +155,11 @@ namespace SparkleShare {
 
                 this.folder_item = new NSMenuItem () {
                     Title      = "SparkleShare",
-                    Image      = this.sparkleshare_image,
-                    Image.Size = new SizeF (16, 16),
                     Enabled    = true
-                }
+                };
+
+                this.folder_item.Image      = this.sparkleshare_image;
+                this.folder_item.Image.Size = new SizeF (16, 16);
 
                 this.add_item = new NSMenuItem () {
                     Title   = "Add Hosted Project…",

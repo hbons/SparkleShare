@@ -272,9 +272,12 @@ namespace SparkleShare {
                     
                 } else if (repo.Error == ErrorStatus.DiskSpaceExcedeed) {
                     FolderErrors [i] = "Host is out of disk space";
-
+                    
                 } else if (repo.Error == ErrorStatus.LockedFiles) {
                     FolderErrors [i] = "Some local files are locked or in use";
+
+                } else if (repo.Error == ErrorStatus.NotFound) {
+                    FolderErrors [i] = "No such project found";
                     
                 } else {
                     FolderErrors [i] = "";
