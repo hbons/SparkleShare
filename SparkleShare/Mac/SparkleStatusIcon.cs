@@ -29,17 +29,13 @@ namespace SparkleShare {
 
         public SparkleStatusIconController Controller = new SparkleStatusIconController ();
 
+        private NSStatusItem status_item = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
+
         private NSMenu menu;
         private NSMenu submenu;
 
-        private NSStatusItem status_item = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
         private NSMenuItem state_item;
         private NSMenuItem folder_item;
-        
-        private NSMenuItem [] folder_menu_items;
-        private NSMenuItem [] error_menu_items;
-        private NSMenuItem [] try_again_menu_items;
-
         private NSMenuItem add_item;
         private NSMenuItem about_item;
         private NSMenuItem recent_events_item;
@@ -61,26 +57,24 @@ namespace SparkleShare {
         private NSImage caution_image      = NSImage.ImageNamed ("NSCaution");
         private NSImage sparkleshare_image = NSImage.ImageNamed ("sparkleshare-folder");
 
-        
+        private NSMenuItem [] folder_menu_items;
+        private NSMenuItem [] error_menu_items;
+        private NSMenuItem [] try_again_menu_items;
+
+
         public SparkleStatusIcon () : base ()
         {
-            using (var a = new NSAutoreleasePool ())
-            {
-                this.status_item.HighlightMode       = true;
-                this.status_item.Image               = this.syncing_idle_image;
-                this.status_item.AlternateImage      = this.syncing_idle_image_active;
-                this.status_item.Image.Size          = new SizeF (16, 16);
-                this.status_item.AlternateImage.Size = new SizeF (16, 16);
+            this.status_item.HighlightMode       = true;
+            this.status_item.Image               = this.syncing_idle_image;
+            this.status_item.AlternateImage      = this.syncing_idle_image_active;
+            this.status_item.Image.Size          = new SizeF (16, 16);
+            this.status_item.AlternateImage.Size = new SizeF (16, 16);
 
-                CreateMenu ();
-            }
-			
+            CreateMenu ();
 
             Controller.UpdateIconEvent += delegate (IconState state) {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    InvokeOnMainThread (delegate {
-                        switch (state) {
+                Program.Controller.Invoke (() => {
+                    switch (state) {
                         case IconState.Idle: {
                             this.status_item.Image          = this.syncing_idle_image;
                             this.status_item.AlternateImage = this.syncing_idle_image_active;
@@ -106,161 +100,144 @@ namespace SparkleShare {
                             this.status_item.AlternateImage = this.syncing_error_image_active;
                             break;
                         }
-                        }
+                    }
 
-                        this.status_item.Image.Size = new SizeF (16, 16);
-                        this.status_item.AlternateImage.Size = new SizeF (16, 16);
-                    });
-                }
+                    this.status_item.Image.Size = new SizeF (16, 16);
+                    this.status_item.AlternateImage.Size = new SizeF (16, 16);
+                });
             };
-
+            
             Controller.UpdateStatusItemEvent += delegate (string state_text) {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    InvokeOnMainThread (delegate {
-                        this.state_item.Title = state_text;
-                    });
-                }
+                Program.Controller.Invoke (() => { this.state_item.Title = state_text; });
             };
 
             Controller.UpdateMenuEvent += delegate {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    InvokeOnMainThread (() => CreateMenu ());
-                }
+                Program.Controller.Invoke (() => CreateMenu ());
             };
 
             Controller.UpdateQuitItemEvent += delegate (bool quit_item_enabled) {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    InvokeOnMainThread (delegate {
-                        this.quit_item.Enabled = quit_item_enabled;
-                    });
-                }
+                Program.Controller.Invoke (() => { this.quit_item.Enabled = quit_item_enabled; });
             };
         }
 
 
         public void CreateMenu ()
         {
-            using (NSAutoreleasePool a = new NSAutoreleasePool ())
-            {
-                this.menu                  = new NSMenu ();
-                this.menu.AutoEnablesItems = false;
+            this.menu                  = new NSMenu ();
+            this.menu.AutoEnablesItems = false;
 
-                this.state_item = new NSMenuItem () {
-                    Title   = Controller.StateText,
-                    Enabled = false
+            this.state_item = new NSMenuItem () {
+                Title   = Controller.StateText,
+                Enabled = false
+            };
+
+            this.folder_item = new NSMenuItem () {
+                Title      = "SparkleShare",
+                Enabled    = true
+            };
+
+            this.folder_item.Image      = this.sparkleshare_image;
+            this.folder_item.Image.Size = new SizeF (16, 16);
+
+            this.add_item = new NSMenuItem () {
+                Title   = "Add Hosted Project…",
+                Enabled = true
+            };
+
+            this.add_item.Activated += delegate {
+                Controller.AddHostedProjectClicked ();
+            };
+
+            this.recent_events_item = new NSMenuItem () {
+                Title   = "Recent Changes…",
+                Enabled = Controller.RecentEventsItemEnabled
+            };
+
+            if (Controller.Folders.Length > 0) {
+                this.recent_events_item.Activated += delegate {
+                    Controller.RecentEventsClicked ();
                 };
-
-                this.folder_item = new NSMenuItem () {
-                    Title      = "SparkleShare",
-                    Enabled    = true
-                };
-
-                this.folder_item.Image      = this.sparkleshare_image;
-                this.folder_item.Image.Size = new SizeF (16, 16);
-
-                this.add_item = new NSMenuItem () {
-                    Title   = "Add Hosted Project…",
-                    Enabled = true
-                };
-
-                this.add_item.Activated += delegate {
-                    Controller.AddHostedProjectClicked ();
-                };
-
-                this.recent_events_item = new NSMenuItem () {
-                    Title   = "Recent Changes…",
-                    Enabled = Controller.RecentEventsItemEnabled
-                };
-
-                if (Controller.Folders.Length > 0) {
-                    this.recent_events_item.Activated += delegate {
-                        Controller.RecentEventsClicked ();
-                    };
-                }
-
-                this.about_item = new NSMenuItem () {
-                    Title   = "About SparkleShare",
-                    Enabled = true
-                };
-
-                this.about_item.Activated += delegate {
-                    Controller.AboutClicked ();
-                };
-
-                this.quit_item = new NSMenuItem () {
-                    Title   = "Quit",
-                    Enabled = Controller.QuitItemEnabled
-                };
-
-                this.quit_item.Activated += delegate {
-                    Controller.QuitClicked ();
-                };
-
-
-                this.menu.AddItem (this.state_item);
-                this.menu.AddItem (NSMenuItem.SeparatorItem);
-                this.menu.AddItem (this.folder_item);
-
-                this.submenu = new NSMenu ();
-                
-                this.submenu.AddItem (this.recent_events_item);
-                this.submenu.AddItem (this.add_item);
-                this.submenu.AddItem (NSMenuItem.SeparatorItem);
-                this.submenu.AddItem (this.about_item);
-                
-                this.folder_item.Submenu = this.submenu;
-
-                this.folder_menu_items = new NSMenuItem [Controller.Folders.Length];
-                this.error_menu_items  = new NSMenuItem [Controller.Folders.Length];
-                this.try_again_menu_items = new NSMenuItem [Controller.Folders.Length];
-
-                if (Controller.Folders.Length > 0) {
-                    int i = 0;
-                    foreach (string folder_name in Controller.Folders) {
-                        NSMenuItem item = new NSMenuItem ();
-                        item.Title      = folder_name;
-                        this.folder_menu_items [i] = item;
-
-                        if (!string.IsNullOrEmpty (Controller.FolderErrors [i])) {
-                            item.Image   = this.caution_image;
-                            item.Submenu = new NSMenu ();
-
-                            this.error_menu_items [i] = new NSMenuItem () {
-                                Title = Controller.FolderErrors [i]
-                            };
-
-                            this.try_again_menu_items [i] = new NSMenuItem ();
-                            this.try_again_menu_items [i].Title = "Try Again";
-
-                            this.try_again_menu_items [i].Activated += Controller.TryAgainDelegate (folder_name);;
-                            
-                            item.Submenu.AddItem (this.error_menu_items [i]);
-                            item.Submenu.AddItem (NSMenuItem.SeparatorItem);
-                            item.Submenu.AddItem (this.try_again_menu_items [i]);
-
-                        } else {
-                            item.Image = this.folder_image;
-                            this.folder_menu_items [i].Activated += Controller.OpenFolderDelegate (folder_name);
-                        }
-
-                        item.Image.Size = new SizeF (16, 16);
-
-                        i++;
-                    };
-                }
-
-                foreach (NSMenuItem item in this.folder_menu_items)
-                    this.menu.AddItem (item);
-
-                this.menu.AddItem (NSMenuItem.SeparatorItem);
-                this.menu.AddItem (this.quit_item);
-
-                this.menu.Delegate    = new SparkleStatusIconMenuDelegate ();
-                this.status_item.Menu = this.menu;
             }
+
+            this.about_item = new NSMenuItem () {
+                Title   = "About SparkleShare",
+                Enabled = true
+            };
+
+            this.about_item.Activated += delegate {
+                Controller.AboutClicked ();
+            };
+
+            this.quit_item = new NSMenuItem () {
+                Title   = "Quit",
+                Enabled = Controller.QuitItemEnabled
+            };
+
+            this.quit_item.Activated += delegate {
+                Controller.QuitClicked ();
+            };
+
+
+            this.menu.AddItem (this.state_item);
+            this.menu.AddItem (NSMenuItem.SeparatorItem);
+            this.menu.AddItem (this.folder_item);
+
+            this.submenu = new NSMenu ();
+            
+            this.submenu.AddItem (this.recent_events_item);
+            this.submenu.AddItem (this.add_item);
+            this.submenu.AddItem (NSMenuItem.SeparatorItem);
+            this.submenu.AddItem (this.about_item);
+            
+            this.folder_item.Submenu = this.submenu;
+
+            this.folder_menu_items = new NSMenuItem [Controller.Folders.Length];
+            this.error_menu_items  = new NSMenuItem [Controller.Folders.Length];
+            this.try_again_menu_items = new NSMenuItem [Controller.Folders.Length];
+
+            if (Controller.Folders.Length > 0) {
+                int i = 0;
+                foreach (string folder_name in Controller.Folders) {
+                    NSMenuItem item = new NSMenuItem ();
+                    item.Title      = folder_name;
+                    this.folder_menu_items [i] = item;
+
+                    if (!string.IsNullOrEmpty (Controller.FolderErrors [i])) {
+                        item.Image   = this.caution_image;
+                        item.Submenu = new NSMenu ();
+
+                        this.error_menu_items [i] = new NSMenuItem () {
+                            Title = Controller.FolderErrors [i]
+                        };
+
+                        this.try_again_menu_items [i] = new NSMenuItem ();
+                        this.try_again_menu_items [i].Title = "Try Again";
+
+                        this.try_again_menu_items [i].Activated += Controller.TryAgainDelegate (folder_name);;
+                        
+                        item.Submenu.AddItem (this.error_menu_items [i]);
+                        item.Submenu.AddItem (NSMenuItem.SeparatorItem);
+                        item.Submenu.AddItem (this.try_again_menu_items [i]);
+
+                    } else {
+                        item.Image = this.folder_image;
+                        this.folder_menu_items [i].Activated += Controller.OpenFolderDelegate (folder_name);
+                    }
+
+                    item.Image.Size = new SizeF (16, 16);
+
+                    i++;
+                };
+            }
+
+            foreach (NSMenuItem item in this.folder_menu_items)
+                this.menu.AddItem (item);
+
+            this.menu.AddItem (NSMenuItem.SeparatorItem);
+            this.menu.AddItem (this.quit_item);
+
+            this.menu.Delegate    = new SparkleStatusIconMenuDelegate ();
+            this.status_item.Menu = this.menu;
         }
     }
     

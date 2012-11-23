@@ -50,363 +50,317 @@ namespace SparkleShare {
 
         public SparkleEventLog () : base ()
         {
-            using (var a = new NSAutoreleasePool ())
-            {
-                Title    = "Recent Changes";
-                Delegate = new SparkleEventsDelegate ();
+            Title    = "Recent Changes";
+            Delegate = new SparkleEventsDelegate ();
 
-                int min_width  = 480;
-                int min_height = 640;
-                float x    = (float) (NSScreen.MainScreen.Frame.Width * 0.61);
-                float y    = (float) (NSScreen.MainScreen.Frame.Height * 0.5 - (min_height * 0.5));
+            int min_width  = 480;
+            int min_height = 640;
+            float x    = (float) (NSScreen.MainScreen.Frame.Width * 0.61);
+            float y    = (float) (NSScreen.MainScreen.Frame.Height * 0.5 - (min_height * 0.5));
 
-                SetFrame (
-                    new RectangleF (
-                        new PointF (x, y),
-                        new SizeF (min_width, (int) (NSScreen.MainScreen.Frame.Height * 0.85))),
-                    true);
+            SetFrame (
+                new RectangleF (
+                    new PointF (x, y),
+                    new SizeF (min_width, (int) (NSScreen.MainScreen.Frame.Height * 0.85))),
+                true);
 
-                StyleMask = (NSWindowStyle.Closable | NSWindowStyle.Miniaturizable |
-                             NSWindowStyle.Titled | NSWindowStyle.Resizable);
+            StyleMask = (NSWindowStyle.Closable | NSWindowStyle.Miniaturizable |
+                         NSWindowStyle.Titled | NSWindowStyle.Resizable);
 
-                MinSize        = new SizeF (min_width, min_height);
-                HasShadow      = true;
-                BackingType    = NSBackingStore.Buffered;
-                TitlebarHeight = Frame.Height - ContentView.Frame.Height;
+            MinSize        = new SizeF (min_width, min_height);
+            HasShadow      = true;
+            BackingType    = NSBackingStore.Buffered;
+            TitlebarHeight = Frame.Height - ContentView.Frame.Height;
 
 
-                this.web_view = new WebView (new RectangleF (0, 0, 481, 579), "", "") {
-                    Frame = new RectangleF (new PointF (0, 0),
-                        new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
-                };
+            this.web_view = new WebView (new RectangleF (0, 0, 481, 579), "", "") {
+                Frame = new RectangleF (new PointF (0, 0),
+                    new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
+            };
 
 
-                this.hidden_close_button = new NSButton () {
-                    KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
-                    KeyEquivalent = "w"
-                };
+            this.hidden_close_button = new NSButton () {
+                KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
+                KeyEquivalent = "w"
+            };
 
-                this.hidden_close_button.Activated += delegate {
-                    Controller.WindowClosed ();
-                };
-
-
-                this.size_label = new NSTextField () {
-                    Alignment       = NSTextAlignment.Right,
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
-                    Frame           = new RectangleF (
-                        new PointF (0, ContentView.Frame.Height - 30),
-                        new SizeF (60, 20)),
-                    StringValue     = "Size:",
-                    Font            = SparkleUI.BoldFont
-                };
-
-                this.size_label_value = new NSTextField () {
-                    Alignment       = NSTextAlignment.Left,
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
-                    Frame           = new RectangleF (
-                        new PointF (60, ContentView.Frame.Height - 30),
-                        new SizeF (60, 20)),
-                    StringValue     = "…",
-                    Font            = SparkleUI.Font
-                };
+            this.hidden_close_button.Activated += delegate {
+                Controller.WindowClosed ();
+            };
 
 
-                this.history_label = new NSTextField () {
-                    Alignment       = NSTextAlignment.Right,
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
-                    Frame           = new RectangleF (
-                        new PointF (130, ContentView.Frame.Height - 30),
-                        new SizeF (60, 20)),
-                    StringValue     = "History:",
-                    Font            = SparkleUI.BoldFont
-                };
+            this.size_label = new NSTextField () {
+                Alignment       = NSTextAlignment.Right,
+                BackgroundColor = NSColor.WindowBackground,
+                Bordered        = false,
+                Editable        = false,
+                Frame           = new RectangleF (
+                    new PointF (0, ContentView.Frame.Height - 30),
+                    new SizeF (60, 20)),
+                StringValue     = "Size:",
+                Font            = SparkleUI.BoldFont
+            };
 
-                this.history_label_value = new NSTextField () {
-                    Alignment       = NSTextAlignment.Left,
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
-                    Frame           = new RectangleF (
-                        new PointF (190, ContentView.Frame.Height - 30),
-                        new SizeF (60, 20)
-                    ),
-                    StringValue     = "…",
-                    Font            = SparkleUI.Font
-                };
+            this.size_label_value = new NSTextField () {
+                Alignment       = NSTextAlignment.Left,
+                BackgroundColor = NSColor.WindowBackground,
+                Bordered        = false,
+                Editable        = false,
+                Frame           = new RectangleF (
+                    new PointF (60, ContentView.Frame.Height - 30),
+                    new SizeF (60, 20)),
+                StringValue     = "…",
+                Font            = SparkleUI.Font
+            };
 
-                this.popup_button = new NSPopUpButton () {
-                    Frame = new RectangleF (
-                        new PointF (ContentView.Frame.Width - 156 - 12, ContentView.Frame.Height - 33),
-                        new SizeF (156, 26)),
-                    PullsDown = false
-                };
 
-                this.background = new NSBox () {
-                    Frame = new RectangleF (
-                        new PointF (-1, -1),
-                        new SizeF (Frame.Width + 2, this.web_view.Frame.Height + 2)),
-                    FillColor = NSColor.White,
-                    BorderColor = NSColor.LightGray,
-                    BoxType = NSBoxType.NSBoxCustom
-                };
+            this.history_label = new NSTextField () {
+                Alignment       = NSTextAlignment.Right,
+                BackgroundColor = NSColor.WindowBackground,
+                Bordered        = false,
+                Editable        = false,
+                Frame           = new RectangleF (
+                    new PointF (130, ContentView.Frame.Height - 30),
+                    new SizeF (60, 20)),
+                StringValue     = "History:",
+                Font            = SparkleUI.BoldFont
+            };
 
-                this.progress_indicator = new NSProgressIndicator () {
-                    Frame = new RectangleF (
-                        new PointF (Frame.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10),
-                        new SizeF (20, 20)),
-                    Style = NSProgressIndicatorStyle.Spinning
-                };
+            this.history_label_value = new NSTextField () {
+                Alignment       = NSTextAlignment.Left,
+                BackgroundColor = NSColor.WindowBackground,
+                Bordered        = false,
+                Editable        = false,
+                Frame           = new RectangleF (
+                    new PointF (190, ContentView.Frame.Height - 30),
+                    new SizeF (60, 20)
+                ),
+                StringValue     = "…",
+                Font            = SparkleUI.Font
+            };
 
-                this.progress_indicator.StartAnimation (this);
+            this.popup_button = new NSPopUpButton () {
+                Frame = new RectangleF (
+                    new PointF (ContentView.Frame.Width - 156 - 12, ContentView.Frame.Height - 33),
+                    new SizeF (156, 26)),
+                PullsDown = false
+            };
 
-                ContentView.AddSubview (this.size_label);
-                ContentView.AddSubview (this.size_label_value);
-                ContentView.AddSubview (this.history_label);
-                ContentView.AddSubview (this.history_label_value);
-                ContentView.AddSubview (this.popup_button);
-                ContentView.AddSubview (this.progress_indicator);
-                ContentView.AddSubview (this.background);
-                ContentView.AddSubview (this.hidden_close_button);
+            this.background = new NSBox () {
+                Frame = new RectangleF (
+                    new PointF (-1, -1),
+                    new SizeF (Frame.Width + 2, this.web_view.Frame.Height + 2)),
+                FillColor = NSColor.White,
+                BorderColor = NSColor.LightGray,
+                BoxType = NSBoxType.NSBoxCustom
+            };
 
-                (Delegate as SparkleEventsDelegate).WindowResized += Relayout;
-            }
+            this.progress_indicator = new NSProgressIndicator () {
+                Frame = new RectangleF (
+                    new PointF (Frame.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10),
+                    new SizeF (20, 20)),
+                Style = NSProgressIndicatorStyle.Spinning
+            };
+
+            this.progress_indicator.StartAnimation (this);
+
+            ContentView.AddSubview (this.size_label);
+            ContentView.AddSubview (this.size_label_value);
+            ContentView.AddSubview (this.history_label);
+            ContentView.AddSubview (this.history_label_value);
+            ContentView.AddSubview (this.popup_button);
+            ContentView.AddSubview (this.progress_indicator);
+            ContentView.AddSubview (this.background);
+            ContentView.AddSubview (this.hidden_close_button);
+
+            (Delegate as SparkleEventsDelegate).WindowResized += delegate (SizeF new_window_size) {
+                Program.Controller.Invoke (() => {
+                    Relayout (new_window_size);
+                });
+            };
 
 
             // Hook up the controller events
             Controller.HideWindowEvent += delegate {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    InvokeOnMainThread (delegate {
-                        this.progress_indicator.Hidden = true;
-                        PerformClose (this);
-                    });
-                }
+                Program.Controller.Invoke (() => {
+                    this.progress_indicator.Hidden = true;
+                    PerformClose (this);
+                });
             };
 
             Controller.ShowWindowEvent += delegate {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    InvokeOnMainThread (delegate {
-                        OrderFrontRegardless ();
-                    });
-                }
+                Program.Controller.Invoke (() => OrderFrontRegardless ());
             };
             
             Controller.UpdateChooserEvent += delegate (string [] folders) {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    InvokeOnMainThread (delegate {
-                        UpdateChooser (folders);
-                    });
-                }
+                Program.Controller.Invoke (() => UpdateChooser (folders));
             };
 
             Controller.UpdateChooserEnablementEvent += delegate (bool enabled) {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    InvokeOnMainThread (delegate {
-                        this.popup_button.Enabled = enabled;
-                    });
-                }
+                Program.Controller.Invoke (() => { this.popup_button.Enabled = enabled; });
             };
 
             Controller.UpdateContentEvent += delegate (string html) {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    InvokeOnMainThread (delegate {
-                        this.progress_indicator.Hidden = true;
-                        UpdateContent (html);
-                    });
-                }
+                Program.Controller.Invoke (() => {
+                    this.progress_indicator.Hidden = true;
+                    UpdateContent (html);
+                });
             };
 
             Controller.ContentLoadingEvent += delegate {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    InvokeOnMainThread (delegate {
-                        this.web_view.RemoveFromSuperview ();
-                        this.progress_indicator.Hidden = false;
-
-                        this.progress_indicator.StartAnimation (this);
-                    });
-                }
+                Program.Controller.Invoke (() => {
+                    this.web_view.RemoveFromSuperview ();
+                    this.progress_indicator.Hidden = false;
+                    this.progress_indicator.StartAnimation (this);
+                });
             };
             
             Controller.UpdateSizeInfoEvent += delegate (string size, string history_size) {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    InvokeOnMainThread (delegate {
-                        this.size_label_value.StringValue    = size;
-                        this.history_label_value.StringValue = history_size;
-                    });
-                }
+                Program.Controller.Invoke (() => {
+                    this.size_label_value.StringValue    = size;
+                    this.history_label_value.StringValue = history_size;
+                });
             };
 
             Controller.ShowSaveDialogEvent += delegate (string file_name, string target_folder_path) {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    InvokeOnMainThread (() => {
-                        // TODO: Make this a sheet
-                        NSSavePanel panel = new NSSavePanel () {
-                            DirectoryUrl         = new NSUrl (target_folder_path, true),
-                            NameFieldStringValue = file_name,
-                            ParentWindow         = this,
-                            Title                = "Restore from History",
-                            PreventsApplicationTerminationWhenModal = false
-                        };
+                Program.Controller.Invoke (() => {
+                    NSSavePanel panel = new NSSavePanel () {
+                        DirectoryUrl         = new NSUrl (target_folder_path, true),
+                        NameFieldStringValue = file_name,
+                        ParentWindow         = this,
+                        Title                = "Restore from History",
+                        PreventsApplicationTerminationWhenModal = false
+                    };
 
-                        if ((NSPanelButtonType) panel.RunModal () == NSPanelButtonType.Ok) {
-                            string target_file_path = Path.Combine (panel.DirectoryUrl.RelativePath,
-                                panel.NameFieldStringValue);
-
-                            Controller.SaveDialogCompleted (target_file_path);
-                        
-                        } else {
-                            Controller.SaveDialogCancelled ();
-                        }
-                    });
-                }
+                    if ((NSPanelButtonType) panel.RunModal () == NSPanelButtonType.Ok) {
+                        string target_file_path = Path.Combine (panel.DirectoryUrl.RelativePath, panel.NameFieldStringValue);
+                        Controller.SaveDialogCompleted (target_file_path);
+                    
+                    } else {
+                        Controller.SaveDialogCancelled ();
+                    }
+                });
             };
         }
 
 
         public void Relayout (SizeF new_window_size)
         {
-            InvokeOnMainThread (delegate {
-                this.web_view.Frame = new RectangleF (this.web_view.Frame.Location,
-                    new SizeF (new_window_size.Width, new_window_size.Height - TitlebarHeight - 39));
+            this.web_view.Frame = new RectangleF (this.web_view.Frame.Location,
+                new SizeF (new_window_size.Width, new_window_size.Height - TitlebarHeight - 39));
 
-                this.background.Frame = new RectangleF (this.background.Frame.Location,
-                    new SizeF (new_window_size.Width, new_window_size.Height - TitlebarHeight - 37));
+            this.background.Frame = new RectangleF (this.background.Frame.Location,
+                new SizeF (new_window_size.Width, new_window_size.Height - TitlebarHeight - 37));
 
-                this.size_label.Frame = new RectangleF (
-                    new PointF (this.size_label.Frame.X, new_window_size.Height - TitlebarHeight - 30),
-                    this.size_label.Frame.Size
-                );
+            this.size_label.Frame = new RectangleF (
+                new PointF (this.size_label.Frame.X, new_window_size.Height - TitlebarHeight - 30),
+                this.size_label.Frame.Size
+            );
 
-                this.size_label_value.Frame = new RectangleF (
-                    new PointF (this.size_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 30),
-                    this.size_label_value.Frame.Size
-                );
+            this.size_label_value.Frame = new RectangleF (
+                new PointF (this.size_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 30),
+                this.size_label_value.Frame.Size
+            );
 
-                this.history_label.Frame = new RectangleF (
-                    new PointF (this.history_label.Frame.X, new_window_size.Height - TitlebarHeight - 30),
-                    this.history_label.Frame.Size
-                );
+            this.history_label.Frame = new RectangleF (
+                new PointF (this.history_label.Frame.X, new_window_size.Height - TitlebarHeight - 30),
+                this.history_label.Frame.Size
+            );
 
-                this.history_label_value.Frame = new RectangleF (
-                    new PointF (this.history_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 30),
-                    this.history_label_value.Frame.Size
-                );
+            this.history_label_value.Frame = new RectangleF (
+                new PointF (this.history_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 30),
+                this.history_label_value.Frame.Size
+            );
 
-                this.popup_button.RemoveFromSuperview (); // Needed to prevent redraw glitches
+            this.popup_button.RemoveFromSuperview (); // Needed to prevent redraw glitches
 
-                this.popup_button.Frame = new RectangleF (
-                    new PointF (new_window_size.Width - this.popup_button.Frame.Width - 12, new_window_size.Height - TitlebarHeight - 33),
-                    this.popup_button.Frame.Size
-                );
+            this.popup_button.Frame = new RectangleF (
+                new PointF (new_window_size.Width - this.popup_button.Frame.Width - 12, new_window_size.Height - TitlebarHeight - 33),
+                this.popup_button.Frame.Size
+            );
 
-                ContentView.AddSubview (this.popup_button);
+            ContentView.AddSubview (this.popup_button);
 
-                this.progress_indicator.Frame = new RectangleF (
-                    new PointF (new_window_size.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10),
-                    this.progress_indicator.Frame.Size
-                );
-            });
+            this.progress_indicator.Frame = new RectangleF (
+                new PointF (new_window_size.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10),
+                this.progress_indicator.Frame.Size
+            );
         }
 
 
         public void UpdateChooser (string [] folders)
         {
-            using (var a = new NSAutoreleasePool ())
-            {
-                if (folders == null)
-                    folders = Controller.Folders;
+            if (folders == null)
+                folders = Controller.Folders;
 
-                this.popup_button.Cell.ControlSize = NSControlSize.Small;
-                this.popup_button.Font = NSFontManager.SharedFontManager.FontWithFamily
-                    ("Lucida Grande", NSFontTraitMask.Condensed, 0, NSFont.SmallSystemFontSize);
+            this.popup_button.Cell.ControlSize = NSControlSize.Small;
+            this.popup_button.Font = NSFontManager.SharedFontManager.FontWithFamily
+                ("Lucida Grande", NSFontTraitMask.Condensed, 0, NSFont.SmallSystemFontSize);
 
-                this.popup_button.RemoveAllItems ();
-    
-                this.popup_button.AddItem ("Summary");
-                this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
+            this.popup_button.RemoveAllItems ();
+
+            this.popup_button.AddItem ("Summary");
+            this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
+			
+			int row = 2;
+       		foreach (string folder in folders) {
+                this.popup_button.AddItem (folder);
 				
-				int row = 2;
-           		foreach (string folder in folders) {
-	                this.popup_button.AddItem (folder);
-					
-					if (folder.Equals (Controller.SelectedFolder))
-						this.popup_button.SelectItem (row);
-					
-					row++;
-            	}
+				if (folder.Equals (Controller.SelectedFolder))
+					this.popup_button.SelectItem (row);
 				
-                this.popup_button.AddItems (folders);
-    
-                this.popup_button.Activated += delegate {
-                    using (var b = new NSAutoreleasePool ())
-                    {
-                        InvokeOnMainThread (delegate {
-                            if (this.popup_button.IndexOfSelectedItem == 0)
-                                Controller.SelectedFolder = null;
-                            else
-                                Controller.SelectedFolder = this.popup_button.SelectedItem.Title;
-                        });
-                    }
-                };
-            }
+				row++;
+        	}
+			
+            this.popup_button.AddItems (folders);
+
+            this.popup_button.Activated += delegate {
+                Program.Controller.Invoke (() => {
+                    if (this.popup_button.IndexOfSelectedItem == 0)
+                        Controller.SelectedFolder = null;
+                    else
+                        Controller.SelectedFolder = this.popup_button.SelectedItem.Title;
+                });
+            };
         }
 
 
         public void UpdateContent (string html)
         {
-            using (var a = new NSAutoreleasePool ())
-            {
-				string pixmaps_path = "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps");
-				
-                html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
-                html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
-                html = html.Replace ("<!-- $body-font-size -->", "13.4px");
-                html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
-                html = html.Replace ("<!-- $small-color -->", "#ddd");
-                html = html.Replace ("<!-- $small-font-size -->", "10px");
-                html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
-                html = html.Replace ("<!-- $a-color -->", "#0085cf");
-                html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
-                html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
-                html = html.Replace ("<!-- $document-added-background-image -->", pixmaps_path + "/document-added-12.png");
-                html = html.Replace ("<!-- $document-deleted-background-image -->", pixmaps_path + "/document-deleted-12.png");
-                html = html.Replace ("<!-- $document-edited-background-image -->", pixmaps_path + "/document-edited-12.png");
-                html = html.Replace ("<!-- $document-moved-background-image -->", pixmaps_path + "/document-moved-12.png");
-				
-                this.web_view = new WebView (new RectangleF (0, 0, 481, 579), "", "") {
-                    Frame = new RectangleF (new PointF (0, 0),
-                        new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
-                };
+		    string pixmaps_path = "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps");
+			
+            html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
+            html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
+            html = html.Replace ("<!-- $body-font-size -->", "13.4px");
+            html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
+            html = html.Replace ("<!-- $small-color -->", "#ddd");
+            html = html.Replace ("<!-- $small-font-size -->", "10px");
+            html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
+            html = html.Replace ("<!-- $a-color -->", "#0085cf");
+            html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
+            html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
+            html = html.Replace ("<!-- $document-added-background-image -->", pixmaps_path + "/document-added-12.png");
+            html = html.Replace ("<!-- $document-deleted-background-image -->", pixmaps_path + "/document-deleted-12.png");
+            html = html.Replace ("<!-- $document-edited-background-image -->", pixmaps_path + "/document-edited-12.png");
+            html = html.Replace ("<!-- $document-moved-background-image -->", pixmaps_path + "/document-moved-12.png");
+			
+            this.web_view = new WebView (new RectangleF (0, 0, 481, 579), "", "") {
+                Frame = new RectangleF (new PointF (0, 0), new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
+            };
 
-                this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
+            this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
 
-                this.web_view.PolicyDelegate = new SparkleWebPolicyDelegate ();
-                ContentView.AddSubview (this.web_view);
+            this.web_view.PolicyDelegate = new SparkleWebPolicyDelegate ();
+            ContentView.AddSubview (this.web_view);
 
-                (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate).LinkClicked +=
-                    delegate (string href) {
-                        if (href.StartsWith ("file:///"))
-                            href = href.Substring (7);
+            (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate).LinkClicked += delegate (string href) {
+                if (href.StartsWith ("file:///"))
+                    href = href.Substring (7);
 
-                        Controller.LinkClicked (href);
-                    };
+                Controller.LinkClicked (href);
+            };
 
-                this.progress_indicator.Hidden = true;
-            }
+            this.progress_indicator.Hidden = true;
         }
 
 

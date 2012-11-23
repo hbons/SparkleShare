@@ -42,21 +42,20 @@ namespace SparkleShare {
 
         public SparkleUI ()
         {
-            using (var a = new NSAutoreleasePool ())
-            {
-                NSApplication.SharedApplication.ApplicationIconImage = NSImage.ImageNamed ("sparkleshare-app.icns");
-
+            Program.Controller.Invoke (() => {
                 NSWorkspace.SharedWorkspace.SetIconforFile (NSImage.ImageNamed ("sparkleshare-folder.icns"),
                     Program.Controller.FoldersPath, 0);
-    
-                Setup      = new SparkleSetup ();
-                EventLog   = new SparkleEventLog ();
-                About      = new SparkleAbout ();
-                Bubbles    = new SparkleBubbles ();
-                StatusIcon = new SparkleStatusIcon ();
 
-                Program.Controller.UIHasLoaded ();
-            }
+                NSApplication.SharedApplication.ApplicationIconImage = NSImage.ImageNamed ("sparkleshare-app.icns");
+    
+                    Setup      = new SparkleSetup ();
+                    EventLog   = new SparkleEventLog ();
+                    About      = new SparkleAbout ();
+                    Bubbles    = new SparkleBubbles ();
+                    StatusIcon = new SparkleStatusIcon ();
+            });
+
+            Program.Controller.UIHasLoaded ();
         }
 
 
