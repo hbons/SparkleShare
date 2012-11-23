@@ -38,7 +38,8 @@ namespace SparkleLib {
         HostIdentityChanged,
         AuthenticationFailed,
         DiskSpaceExcedeed,
-        LockedFiles
+        LockedFiles,
+        NotFound
     }
 
 
