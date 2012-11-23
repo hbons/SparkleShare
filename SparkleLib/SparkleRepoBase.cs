@@ -282,7 +282,7 @@ namespace SparkleLib {
 
         public void ForceRetry ()
         {
-            if (Error == ErrorStatus.None)
+            if (Error == ErrorStatus.None || this.is_syncing)
                 return;
             
             if (Error == ErrorStatus.LockedFiles)
