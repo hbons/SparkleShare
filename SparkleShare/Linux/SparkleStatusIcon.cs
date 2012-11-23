@@ -177,12 +177,12 @@ namespace SparkleShare {
 
                         } else {
                             folder_icon = IconTheme.Default.LoadIcon ("folder", 16, IconLookupFlags.GenericFallback);
+                            item.Activated += Controller.OpenFolderDelegate (folder_name);
                         }
 
                         item.Image = new Image (folder_icon);
                         (item.Child as Label).UseUnderline = false;
 
-                        item.Activated += Controller.OpenFolderDelegate (folder_name);
                         this.menu.Add (item);
 
                         i++;
