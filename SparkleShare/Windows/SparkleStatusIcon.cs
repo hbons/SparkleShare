@@ -195,8 +195,6 @@ namespace SparkleShare {
                         Header = folder_name.Replace ("_", "__")
                     };
                     
-                    subfolder_item.Click += Controller.OpenFolderDelegate (folder_name);
-                    
                     Image subfolder_image = new Image () {
                         Source = SparkleUIHelpers.GetImageSource ("folder"),
                         Width  = 16,
@@ -227,6 +225,7 @@ namespace SparkleShare {
                         
                     } else {
                         subfolder_item.Icon = subfolder_image;
+                        subfolder_item.Click += Controller.OpenFolderDelegate (folder_name);
                     }
                     
                     this.context_menu.Items.Add (subfolder_item);
