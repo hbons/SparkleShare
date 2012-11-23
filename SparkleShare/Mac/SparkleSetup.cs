@@ -33,68 +33,43 @@ namespace SparkleShare {
 
         public SparkleSetupController Controller = new SparkleSetupController ();
 
-        private NSButton ContinueButton;
-        private NSButton AddButton;
-        private NSButton CopyButton;
-        private NSButton TryAgainButton;
-        private NSButton CancelButton;
-        private NSButton SkipTutorialButton;
-        private NSButton StartupCheckButton;
-        private NSButton HistoryCheckButton;
-        private NSButton ShowPasswordCheckButton;
-        private NSButton ShowFilesButton;
-        private NSButton FinishButton;
-        private NSImage SlideImage;
-        private NSImageView SlideImageView;
+        private NSButton ContinueButton, AddButton, CopyButton, TryAgainButton, CancelButton, 
+            SkipTutorialButton, FinishButton, ShowFilesButton;
+
+        private NSTextField FullNameTextField, FullNameLabel, EmailLabel, EmailTextField, EmailHelpLabel,
+        LinkCodeTextField, AddressTextField, AddressLabel, AddressHelpLabel, PathTextField, PathLabel,
+        PathHelpLabel, PasswordTextField, VisiblePasswordTextField, PasswordLabel, WarningTextField;
+
+        private NSButton StartupCheckButton, HistoryCheckButton, ShowPasswordCheckButton;
         private NSProgressIndicator ProgressIndicator;
-        private NSTextField EmailLabel;
-        private NSTextField EmailTextField;
-        private NSTextField EmailHelpLabel;
-        private NSTextField FullNameTextField;
-        private NSTextField FullNameLabel;
-        private NSTextField LinkCodeTextField;
-        private NSTextField AddressTextField;
-        private NSTextField AddressLabel;
-        private NSTextField AddressHelpLabel;
-        private NSTextField PathTextField;
-        private NSTextField PathLabel;
-        private NSTextField PathHelpLabel;
-        private NSTextField PasswordTextField;
-        private NSTextField VisiblePasswordTextField;
-        private NSTextField PasswordLabel;
-        private NSTextField WarningTextField;
-        private NSImage WarningImage;
-        private NSImageView WarningImageView;
+        private NSImage WarningImage, SlideImage;
+        private NSImageView WarningImageView, SlideImageView;
+        private NSTableColumn IconColumn, DescriptionColumn;
         private NSTableView TableView;
         private NSScrollView ScrollView;
-        private NSTableColumn IconColumn;
-        private NSTableColumn DescriptionColumn;
         private SparkleDataSource DataSource;
 
 
         public SparkleSetup () : base ()
         {
             Controller.HideWindowEvent += delegate {
-                InvokeOnMainThread (delegate {
+                Program.Controller.Invoke (() => {
                     PerformClose (this);
                 });
             };
 
             Controller.ShowWindowEvent += delegate {
-                InvokeOnMainThread (delegate {
+                Program.Controller.Invoke (() => {
                     OrderFrontRegardless ();
                 });
             };
 
             Controller.ChangePageEvent += delegate (PageType type, string [] warnings) {
-                using (var a = new NSAutoreleasePool ())
-                {
-                    InvokeOnMainThread (delegate {
-                        Reset ();
-                        ShowPage (type, warnings);
-                        ShowAll ();
-                    });
-                }
+                Program.Controller.Invoke (() => {
+                    Reset ();
+                    ShowPage (type, warnings);
+                    ShowAll ();
+                });
             };
         }
 
@@ -180,7 +155,7 @@ namespace SparkleShare {
                 };
 
                 Controller.UpdateSetupContinueButtonEvent += delegate (bool button_enabled) {
-                    InvokeOnMainThread (delegate {
+                    Program.Controller.Invoke (() => {
                         ContinueButton.Enabled = button_enabled;
                     });
                 };
@@ -399,7 +374,7 @@ namespace SparkleShare {
                 Controller.ChangeAddressFieldEvent += delegate (string text,
                     string example_text, FieldState state) {
 
-                    InvokeOnMainThread (delegate {
+                    Program.Controller.Invoke (() => {
                         AddressTextField.StringValue = text;
                         AddressTextField.Enabled     = (state == FieldState.Enabled);
                         AddressHelpLabel.StringValue = example_text;
@@ -409,7 +384,7 @@ namespace SparkleShare {
                 Controller.ChangePathFieldEvent += delegate (string text,
                     string example_text, FieldState state) {
 
-                    InvokeOnMainThread (delegate {
+                    Program.Controller.Invoke (() => {
                         PathTextField.StringValue = text;
                         PathTextField.Enabled     = (state == FieldState.Enabled);
                         PathHelpLabel.StringValue = example_text;
@@ -445,7 +420,7 @@ namespace SparkleShare {
                 };
 
                 Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
-                    InvokeOnMainThread (delegate {
+                    Program.Controller.Invoke (() => {
                         AddButton.Enabled = button_enabled;
                     });
                 };
@@ -493,7 +468,7 @@ namespace SparkleShare {
 
 
                 Controller.UpdateProgressBarEvent += delegate (double percentage) {
-                    InvokeOnMainThread (() => {
+                    Program.Controller.Invoke (() => {
                         ProgressIndicator.DoubleValue = percentage;
                     });
                 };
@@ -664,7 +639,7 @@ namespace SparkleShare {
 
 
                 Controller.UpdateCryptoSetupContinueButtonEvent += delegate (bool button_enabled) {
-                    InvokeOnMainThread (() => {
+                    Program.Controller.Invoke (() => {
                         ContinueButton.Enabled = button_enabled;
                     });
                 };
@@ -733,7 +708,7 @@ namespace SparkleShare {
 
 
                 Controller.UpdateCryptoPasswordContinueButtonEvent += delegate (bool button_enabled) {
-                    InvokeOnMainThread (() => {
+                    Program.Controller.Invoke (() => {
                         ContinueButton.Enabled = button_enabled;
                     });
                 };

@@ -227,5 +227,17 @@ namespace SparkleShare {
                return this.event_entry_html;
             }
         }
+
+
+        public delegate void Code ();
+        private NSObject obj = new NSObject ();
+
+        public void Invoke (Code code)
+        {
+            using (var a = new NSAutoreleasePool ())
+            {
+                obj.InvokeOnMainThread (() => code ());
+            }
+        }
     }
 }
