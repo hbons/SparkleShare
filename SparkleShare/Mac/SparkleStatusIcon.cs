@@ -222,6 +222,7 @@ namespace SparkleShare {
                     foreach (string folder_name in Controller.Folders) {
                         NSMenuItem item = new NSMenuItem ();
                         item.Title      = folder_name;
+                        this.folder_menu_items [i] = item;
 
                         if (!string.IsNullOrEmpty (Controller.FolderErrors [i])) {
                             item.Image   = this.caution_image;
@@ -242,12 +243,10 @@ namespace SparkleShare {
 
                         } else {
                             item.Image = this.folder_image;
+                            this.folder_menu_items [i].Activated += Controller.OpenFolderDelegate (folder_name);
                         }
 
                         item.Image.Size = new SizeF (16, 16);
-
-                        this.folder_menu_items [i] = item;
-                        this.folder_menu_items [i].Activated += Controller.OpenFolderDelegate (folder_name);
 
                         i++;
                     };
