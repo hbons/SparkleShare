@@ -670,9 +670,9 @@ namespace SparkleLib.Git {
                 Error = ErrorStatus.AuthenticationFailed;
                 
             } else if (line.StartsWith ("error: Disk space exceeded")) {
-                Error = ErrorStatus.DiskSpaceExcedeed;
+                Error = ErrorStatus.DiskSpaceExceeded;
             
-            } else if (line.EndsWithWith ("does not appear to be a git repository")) {
+            } else if (line.EndsWith ("does not appear to be a git repository")) {
                 Error = ErrorStatus.NotFound;
             }
             
