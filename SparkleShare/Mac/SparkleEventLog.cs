@@ -36,10 +36,7 @@ namespace SparkleShare {
         private NSBox background;
         private NSPopUpButton popup_button;
         private NSProgressIndicator progress_indicator;
-        private NSTextField size_label;
-        private NSTextField size_label_value;
-        private NSTextField history_label;
-        private NSTextField history_label_value;
+        private NSTextField size_label, size_label_value, history_label, history_label_value;
         private NSButton hidden_close_button;
 
 
@@ -174,9 +171,7 @@ namespace SparkleShare {
             ContentView.AddSubview (this.hidden_close_button);
 
             (Delegate as SparkleEventsDelegate).WindowResized += delegate (SizeF new_window_size) {
-                Program.Controller.Invoke (() => {
-                    Relayout (new_window_size);
-                });
+                Program.Controller.Invoke (() => Relayout (new_window_size));
             };
 
 
@@ -254,37 +249,31 @@ namespace SparkleShare {
 
             this.size_label.Frame = new RectangleF (
                 new PointF (this.size_label.Frame.X, new_window_size.Height - TitlebarHeight - 30),
-                this.size_label.Frame.Size
-            );
+                this.size_label.Frame.Size);
 
             this.size_label_value.Frame = new RectangleF (
                 new PointF (this.size_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 30),
-                this.size_label_value.Frame.Size
-            );
+                this.size_label_value.Frame.Size);
 
             this.history_label.Frame = new RectangleF (
                 new PointF (this.history_label.Frame.X, new_window_size.Height - TitlebarHeight - 30),
-                this.history_label.Frame.Size
-            );
+                this.history_label.Frame.Size);
 
             this.history_label_value.Frame = new RectangleF (
                 new PointF (this.history_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 30),
-                this.history_label_value.Frame.Size
-            );
+                this.history_label_value.Frame.Size);
+
+            this.progress_indicator.Frame = new RectangleF (
+                new PointF (new_window_size.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10),
+                this.progress_indicator.Frame.Size);
 
             this.popup_button.RemoveFromSuperview (); // Needed to prevent redraw glitches
 
             this.popup_button.Frame = new RectangleF (
                 new PointF (new_window_size.Width - this.popup_button.Frame.Width - 12, new_window_size.Height - TitlebarHeight - 33),
-                this.popup_button.Frame.Size
-            );
+                this.popup_button.Frame.Size);
 
             ContentView.AddSubview (this.popup_button);
-
-            this.progress_indicator.Frame = new RectangleF (
-                new PointF (new_window_size.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10),
-                this.progress_indicator.Frame.Size
-            );
         }
 
 
