@@ -40,10 +40,7 @@ namespace SparkleShare {
         private NSButton hidden_close_button;
 
 
-        public SparkleEventLog (IntPtr handle) : base (handle)
-        {
-        }
-
+        public SparkleEventLog (IntPtr handle) : base (handle) { }
 
         public SparkleEventLog () : base ()
         {
@@ -283,8 +280,8 @@ namespace SparkleShare {
                 folders = Controller.Folders;
 
             this.popup_button.Cell.ControlSize = NSControlSize.Small;
-            this.popup_button.Font = NSFontManager.SharedFontManager.FontWithFamily
-                ("Lucida Grande", NSFontTraitMask.Condensed, 0, NSFont.SmallSystemFontSize);
+            this.popup_button.Font = NSFontManager.SharedFontManager.FontWithFamily (
+                "Lucida Grande", NSFontTraitMask.Condensed, 0, NSFont.SmallSystemFontSize);
 
             this.popup_button.RemoveAllItems ();
 

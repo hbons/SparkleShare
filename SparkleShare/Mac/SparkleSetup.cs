@@ -812,12 +812,12 @@ namespace SparkleShare {
 
                 if (File.Exists (slide_image_path)) {
                     SlideImage = new NSImage (slide_image_path) {
-                        Size = new SizeF (350, 200)
+                        Size = new SizeF (324, 200)
                     };
 
                     SlideImageView = new NSImageView () {
                         Image = SlideImage,
-                        Frame = new RectangleF (215, Frame.Height - 350, 350, 200)
+                        Frame = new RectangleF (228, Frame.Height - 350, 324, 200)
                     };
 
                     ContentView.AddSubview (SlideImageView);
@@ -1060,14 +1060,12 @@ namespace SparkleShare {
 
 
     public class SparkleTextFieldDelegate : NSTextFieldDelegate {
-
-        public event StringValueChangedHandler StringValueChanged;
-        public delegate void StringValueChangedHandler ();
+        
+        public event Action StringValueChanged = delegate { };
 
 
         public override void Changed (NSNotification notification)
         {
-            if (StringValueChanged != null)
                 StringValueChanged ();
         }
     }
@@ -1075,14 +1073,12 @@ namespace SparkleShare {
 
     public class SparkleTableViewDelegate : NSTableViewDelegate {
 
-        public event SelectionChangedHandler SelectionChanged;
-        public delegate void SelectionChangedHandler ();
+        public event Action SelectionChanged = delegate { };
 
 
         public override void SelectionDidChange (NSNotification notification)
         {
-            if (SelectionChanged != null)
-                SelectionChanged ();
+            SelectionChanged ();
         }
     }
 }
