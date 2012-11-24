@@ -31,14 +31,9 @@ namespace SparkleShare {
 
         private NSImage about_image;
         private NSImageView about_image_view;
-        private NSTextField version_text_field;
-        private NSTextField updates_text_field;
-        private NSTextField credits_text_field;
+        private NSTextField version_text_field, updates_text_field, credits_text_field;
         private NSButton hidden_close_button;
-        private SparkleLink website_link;
-        private SparkleLink credits_link;
-        private SparkleLink report_problem_link;
-        private SparkleLink debug_log_link;
+        private SparkleLink website_link, credits_link, report_problem_link, debug_log_link;
 
 
         public SparkleAbout (IntPtr handle) : base (handle) { }

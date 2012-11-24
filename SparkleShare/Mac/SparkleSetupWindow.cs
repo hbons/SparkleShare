@@ -34,8 +34,7 @@ namespace SparkleShare {
 
         private NSImage side_splash;
         private NSImageView side_splash_view;
-        private NSTextField header_text_field;
-        private NSTextField description_text_field;
+        private NSTextField header_text_field, description_text_field;
 
 
         public SparkleSetupWindow () : base ()
