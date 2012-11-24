@@ -16,7 +16,6 @@
 
 
 using System;
-using System.IO;
 
 using MonoMac.AppKit;
 using MonoMac.Foundation;
@@ -44,10 +43,7 @@ namespace SparkleShare {
                     
                     NSUserNotificationCenter center  = NSUserNotificationCenter.DefaultUserNotificationCenter;
                     center.ShouldPresentNotification = delegate { return true; };
-
-                    center.DidActivateNotification += delegate {
-                        Controller.BubbleClicked ();
-                    };
+                    center.DidActivateNotification   += delegate { Controller.BubbleClicked (); };
 
                     center.ScheduleNotification (notification);
                 });

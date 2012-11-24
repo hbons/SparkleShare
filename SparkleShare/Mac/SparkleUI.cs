@@ -48,11 +48,11 @@ namespace SparkleShare {
 
                 NSApplication.SharedApplication.ApplicationIconImage = NSImage.ImageNamed ("sparkleshare-app.icns");
     
-                    Setup      = new SparkleSetup ();
-                    EventLog   = new SparkleEventLog ();
-                    About      = new SparkleAbout ();
-                    Bubbles    = new SparkleBubbles ();
-                    StatusIcon = new SparkleStatusIcon ();
+                Setup      = new SparkleSetup ();
+                EventLog   = new SparkleEventLog ();
+                About      = new SparkleAbout ();
+                Bubbles    = new SparkleBubbles ();
+                StatusIcon = new SparkleStatusIcon ();
             });
 
             Program.Controller.UIHasLoaded ();
