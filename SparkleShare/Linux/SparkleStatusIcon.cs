@@ -130,124 +130,88 @@ namespace SparkleShare {
             };
 
             Controller.UpdateMenuEvent += delegate (IconState state) {
-                Application.Invoke (delegate {
-                    CreateMenu ();
-                });
+                Application.Invoke (delegate { CreateMenu (); });
             };
         }
 
 
         public void CreateMenu ()
         {
-            this.menu = new Menu ();
+            this.menu       = new Menu ();
+            this.state_item = new MenuItem (Controller.StateText) { Sensitive = false };
 
-                this.state_item = new MenuItem (Controller.StateText) {
-                    Sensitive = false
-                };
+            ImageMenuItem folder_item = new SparkleMenuItem ("SparkleShare");
+            folder_item.Image = new Image (SparkleUIHelpers.GetIcon ("sparkleshare", 16));
 
             this.menu.Add (this.state_item);
-            this.menu.Add (new SeparatorMenuItem ());
-
-                ImageMenuItem folder_item = new SparkleMenuItem ("SparkleShare"){
-                    Image = new Image (SparkleUIHelpers.GetIcon ("sparkleshare", 16))
-                };
-                
+            this.menu.Add (new SeparatorMenuItem ());                
             this.menu.Add (folder_item);
 
-                if (Program.Controller.Folders.Count > 0) {
-                    int i = 0;
-                    foreach (string folder_name in Controller.Folders) {
-                        ImageMenuItem item = new SparkleMenuItem (folder_name);
-                        Gdk.Pixbuf folder_icon;
+            if (Program.Controller.Folders.Count > 0) {
+                int i = 0;
+                foreach (string folder_name in Controller.Folders) {
+                    ImageMenuItem item = new SparkleMenuItem (folder_name);
+                    Gdk.Pixbuf folder_icon;
 
-                        if (!string.IsNullOrEmpty (Controller.FolderErrors [i])) {
-                            folder_icon = IconTheme.Default.LoadIcon ("dialog-warning", 16, IconLookupFlags.GenericFallback);
-                            item.Submenu = new Menu ();
-                                
-                            MenuItem error_item = new MenuItem (Controller.FolderErrors [i]) {
-                                Sensitive = false
-                            };
+                    if (!string.IsNullOrEmpty (Controller.FolderErrors [i])) {
+                        folder_icon = IconTheme.Default.LoadIcon ("dialog-warning", 16, IconLookupFlags.GenericFallback);
+                        item.Submenu = new Menu ();
                             
-                            MenuItem try_again_item = new MenuItem ("Try Again");
-                            try_again_item.Activated += Controller.TryAgainDelegate (folder_name);
+                        MenuItem error_item = new MenuItem (Controller.FolderErrors [i]) { Sensitive = false };
+                        MenuItem try_again_item = new MenuItem ("Try Again");
+                        try_again_item.Activated += Controller.TryAgainDelegate (folder_name);
 
-                            (item.Submenu as Menu).Add (error_item);
-                            (item.Submenu as Menu).Add (new SeparatorMenuItem ());
-                            (item.Submenu as Menu).Add (try_again_item);
+                        (item.Submenu as Menu).Add (error_item);
+                        (item.Submenu as Menu).Add (new SeparatorMenuItem ());
+                        (item.Submenu as Menu).Add (try_again_item);
 
-                        } else {
-                            folder_icon = IconTheme.Default.LoadIcon ("folder", 16, IconLookupFlags.GenericFallback);
-                            item.Activated += Controller.OpenFolderDelegate (folder_name);
-                        }
-
-                        item.Image = new Image (folder_icon);
-                        (item.Child as Label).UseUnderline = false;
-
-                        this.menu.Add (item);
-
-                        i++;
+                    } else {
+                        folder_icon = IconTheme.Default.LoadIcon ("folder", 16, IconLookupFlags.GenericFallback);
+                        item.Activated += Controller.OpenFolderDelegate (folder_name);
                     }
 
-                    Menu submenu = new Menu ();
+                    (item.Child as Label).UseUnderline = false;
+                    item.Image = new Image (folder_icon);
+                    this.menu.Add (item);
+                    
+                    i++;
                 }
+            }
 
-                this.menu.Add (new SeparatorMenuItem ());
-			
 			this.recent_events_item = new MenuItem ("Recent Changes…");
-			
-				this.recent_events_item.Sensitive = Controller.RecentEventsItemEnabled;
-				
-				this.recent_events_item.Activated += delegate {
-					Controller.RecentEventsClicked ();
-				};
-			
+			this.recent_events_item.Sensitive = Controller.RecentEventsItemEnabled;
+			this.recent_events_item.Activated += Controller.RecentEventsClicked;
 
-
-                MenuItem sync_item = new MenuItem ("Add Hosted Project…");
-
-                sync_item.Activated += delegate {
-                    Controller.AddHostedProjectClicked ();
-                };
-
-
+            MenuItem add_item = new MenuItem ("Add Hosted Project…");
+            add_item.Activated += Controller.AddHostedProjectClicked;
             
             MenuItem notify_item;
                                                              
-                if (Program.Controller.NotificationsEnabled)
-                    notify_item = new MenuItem ("Turn Notifications Off");
-                else
-                    notify_item = new MenuItem ("Turn Notifications On");
+            if (Program.Controller.NotificationsEnabled)
+                notify_item = new MenuItem ("Turn Notifications Off");
+            else
+                notify_item = new MenuItem ("Turn Notifications On");
 
-                notify_item.Activated += delegate {
-					Application.Invoke (delegate {
-	                    Program.Controller.ToggleNotifications ();
-					
-					    if (Program.Controller.NotificationsEnabled)
-	                    	(notify_item.Child as Label).Text = "Turn Notifications Off";
-	                	else
-	                    	(notify_item.Child as Label).Text = "Turn Notifications On";
-					});
-                };
+            notify_item.Activated += delegate {
+                Program.Controller.ToggleNotifications ();
 
+				Application.Invoke (delegate {				
+				    if (Program.Controller.NotificationsEnabled)
+                    	(notify_item.Child as Label).Text = "Turn Notifications Off";
+                	else
+                    	(notify_item.Child as Label).Text = "Turn Notifications On";
+				});
+            };
 
-                MenuItem about_item = new MenuItem ("About SparkleShare");
+            MenuItem about_item = new MenuItem ("About SparkleShare");
+            about_item.Activated += Controller.AboutClicked;
 
-                about_item.Activated += delegate {
-                    Controller.AboutClicked ();
-                };
-
-
-                this.quit_item = new MenuItem ("Quit") {
-                    Sensitive = Controller.QuitItemEnabled
-                };
-
-                this.quit_item.Activated += delegate {
-                    Controller.QuitClicked ();
-                };
+            this.quit_item = new MenuItem ("Quit") { Sensitive = Controller.QuitItemEnabled };
+            this.quit_item.Activated += Controller.QuitClicked;
 
             folder_item.Submenu = new Menu ();
 			(folder_item.Submenu as Menu).Add (this.recent_events_item);
-            (folder_item.Submenu as Menu).Add (sync_item);
+            (folder_item.Submenu as Menu).Add (add_item);
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
             (folder_item.Submenu as Menu).Add (notify_item);
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
