@@ -114,8 +114,6 @@ namespace SparkleShare {
                 IsEnabled = false
             };
             
-            this.notify_icon.HeaderText = "SparkleShare\n" + Controller.StateText;
-            
             Image folder_image = new Image () {
                 Source = SparkleUIHelpers.GetImageSource ("sparkleshare-folder"),
                 Width  = 16,
@@ -127,61 +125,44 @@ namespace SparkleShare {
                 Icon   = folder_image
             };
             
-            SparkleMenuItem add_item = new SparkleMenuItem () {
-                Header = "Add hosted project…"
-            };
-            
-                add_item.Click += delegate {
-                    Controller.AddHostedProjectClicked ();
-                };
+            SparkleMenuItem add_item = new SparkleMenuItem () { Header = "Add hosted project…" };
             
             this.log_item = new SparkleMenuItem () {
                 Header    = "Recent changes…",
                 IsEnabled = Controller.RecentEventsItemEnabled
             };
-            
-                this.log_item.Click += delegate {
-                    Controller.RecentEventsClicked ();
-                };
-            
-            SparkleMenuItem notify_item = new SparkleMenuItem () {
-                Header = "Notifications"
-            };
 
-                CheckBox notify_check_box = new CheckBox () {
-                    Margin    = new Thickness (6, 0, 0, 0),
-                    IsChecked = (Controller.Folders.Length > 0 && Program.Controller.NotificationsEnabled)
-                };
-
-                notify_item.Icon = notify_check_box;
-
-                notify_check_box.Click += delegate {
-                    this.context_menu.IsOpen = false;
-                    Program.Controller.ToggleNotifications ();
-                    notify_check_box.IsChecked = Program.Controller.NotificationsEnabled;
-                };
-
-                notify_item.Click += delegate {
-                    Program.Controller.ToggleNotifications ();
-                    notify_check_box.IsChecked = Program.Controller.NotificationsEnabled;
-                };
-            
-            SparkleMenuItem about_item = new SparkleMenuItem () {
-                Header = "About SparkleShare"
+            CheckBox notify_check_box = new CheckBox () {
+                Margin    = new Thickness (6, 0, 0, 0),
+                IsChecked = (Controller.Folders.Length > 0 && Program.Controller.NotificationsEnabled)
             };
             
-                about_item.Click += delegate {
-                     Controller.AboutClicked ();
-                };
+            SparkleMenuItem notify_item = new SparkleMenuItem () { Header = "Notifications" };
+            notify_item.Icon = notify_check_box;
+
+            SparkleMenuItem about_item = new SparkleMenuItem () { Header = "About SparkleShare" };
+            this.exit_item = new SparkleMenuItem () { Header = "Exit" };
             
-            this.exit_item = new SparkleMenuItem () {
-                Header = "Exit"
+            
+            add_item.Click      += Controller.AddHostedProjectClicked;
+            this.log_item.Click += Controller.RecentEventsClicked;
+            about_item.Click    += Controller.AboutClicked;
+            
+            notify_check_box.Click += delegate {
+                this.context_menu.IsOpen = false;
+                Program.Controller.ToggleNotifications ();
+                notify_check_box.IsChecked = Program.Controller.NotificationsEnabled;
             };
             
-                this.exit_item.Click += delegate {
-                    this.notify_icon.Dispose ();
-                    Controller.QuitClicked ();
-                };
+            notify_item.Click += delegate {
+                Program.Controller.ToggleNotifications ();
+                notify_check_box.IsChecked = Program.Controller.NotificationsEnabled;
+            };
+            
+            this.exit_item.Click += delegate {
+                this.notify_icon.Dispose ();
+                Controller.QuitClicked ();
+            };
             
             
             this.context_menu.Items.Add (this.state_item);
@@ -229,7 +210,6 @@ namespace SparkleShare {
                     }
                     
                     this.context_menu.Items.Add (subfolder_item);
-
                     i++;
                 }
             }
