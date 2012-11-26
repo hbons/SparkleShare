@@ -21,7 +21,6 @@ using System.IO;
 
 using MonoMac.AppKit;
 using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
 
 namespace SparkleShare {
 
@@ -29,11 +28,11 @@ namespace SparkleShare {
 
         public SparkleAboutController Controller = new SparkleAboutController ();
 
+        private NSTextField version_text_field, updates_text_field, credits_text_field;
+        private SparkleLink website_link, credits_link, report_problem_link, debug_log_link;
         private NSImage about_image;
         private NSImageView about_image_view;
-        private NSTextField version_text_field, updates_text_field, credits_text_field;
         private NSButton hidden_close_button;
-        private SparkleLink website_link, credits_link, report_problem_link, debug_log_link;
 
 
         public SparkleAbout (IntPtr handle) : base (handle) { }
@@ -51,43 +50,7 @@ namespace SparkleShare {
             HasShadow   = true;
             BackingType = NSBackingStore.Buffered;
 
-            this.website_link       = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
-            this.website_link.Frame = new RectangleF (new PointF (295, 25), this.website_link.Frame.Size);
-
-            this.credits_link = new SparkleLink ("Credits", Controller.CreditsLinkAddress);
-            this.credits_link.Frame = new RectangleF (
-                new PointF (this.website_link.Frame.X + this.website_link.Frame.Width + 10, 25),
-                this.credits_link.Frame.Size);
-
-            this.report_problem_link = new SparkleLink ("Report a problem", Controller.ReportProblemLinkAddress);
-            this.report_problem_link.Frame = new RectangleF (
-                new PointF (this.credits_link.Frame.X + this.credits_link.Frame.Width + 10, 25),
-                this.report_problem_link.Frame.Size);
-
-            this.debug_log_link = new SparkleLink ("Debug log", Controller.DebugLogLinkAddress);
-            this.debug_log_link.Frame = new RectangleF (
-                new PointF (this.report_problem_link.Frame.X + this.report_problem_link.Frame.Width + 10, 25),
-                this.debug_log_link.Frame.Size);
-
-            this.hidden_close_button = new NSButton () {
-                Frame                     = new RectangleF (0, 0, 0, 0),
-                KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
-                KeyEquivalent             = "w"
-            };
-
-            this.hidden_close_button.Activated += delegate {
-                Controller.WindowClosed ();
-            };
-
-
-            ContentView.AddSubview (this.hidden_close_button);
-
             CreateAbout ();
-
-            ContentView.AddSubview (this.website_link);
-            ContentView.AddSubview (this.credits_link);
-            ContentView.AddSubview (this.report_problem_link);
-            ContentView.AddSubview (this.debug_log_link);
 
             Controller.HideWindowEvent += delegate {
                 Program.Controller.Invoke (() => PerformClose (this));
@@ -120,15 +83,12 @@ namespace SparkleShare {
         private void CreateAbout ()
         {
             string about_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "about.png");
-
-            this.about_image = new NSImage (about_image_path);
-            this.about_image.Size = new SizeF (640, 260);
+            this.about_image        = new NSImage (about_image_path) { Size = new SizeF (640, 260) };
 
             this.about_image_view = new NSImageView () {
                 Image = this.about_image,
                 Frame = new RectangleF (0, 0, 640, 260)
             };
-
 
             this.version_text_field = new NSTextField () {
                 StringValue     = "version " + Controller.RunningVersion,
@@ -138,8 +98,8 @@ namespace SparkleShare {
                 Editable        = false,
                 DrawsBackground = false,
                 TextColor       = NSColor.White,
-                Font            = NSFontManager.SharedFontManager.FontWithFamily
-                    ("Lucida Grande", NSFontTraitMask.Unbold, 0, 11)
+                Font            = NSFontManager.SharedFontManager.FontWithFamily (
+                    "Lucida Grande", NSFontTraitMask.Unbold, 0, 11)
             };
 
             this.updates_text_field = new NSTextField () {
@@ -148,9 +108,9 @@ namespace SparkleShare {
                 Bordered        = false,
                 Editable        = false,
                 DrawsBackground = false,
-                Font            = NSFontManager.SharedFontManager.FontWithFamily
-                    ("Lucida Grande", NSFontTraitMask.Unbold, 0, 11),
-                TextColor       = NSColor.FromCalibratedRgba (0.45f, 0.62f, 0.81f, 1.0f) // Tango Sky Blue #1
+                TextColor       = NSColor.FromCalibratedRgba (1.0f, 1.0f, 1.0f, 0.5f),
+                Font            = NSFontManager.SharedFontManager.FontWithFamily (
+                    "Lucida Grande", NSFontTraitMask.Unbold, 0, 11)
             };
 
             this.credits_text_field = new NSTextField () {
@@ -168,10 +128,45 @@ namespace SparkleShare {
                     "Lucida Grande", NSFontTraitMask.Unbold, 0, 11),
             };
 
+            this.website_link       = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
+            this.website_link.Frame = new RectangleF (new PointF (295, 25), this.website_link.Frame.Size);
+            
+            this.credits_link       = new SparkleLink ("Credits", Controller.CreditsLinkAddress);
+            this.credits_link.Frame = new RectangleF (
+                new PointF (this.website_link.Frame.X + this.website_link.Frame.Width + 10, 25),
+                this.credits_link.Frame.Size);
+            
+            this.report_problem_link       = new SparkleLink ("Report a problem", Controller.ReportProblemLinkAddress);
+            this.report_problem_link.Frame = new RectangleF (
+                new PointF (this.credits_link.Frame.X + this.credits_link.Frame.Width + 10, 25),
+                this.report_problem_link.Frame.Size);
+            
+            this.debug_log_link       = new SparkleLink ("Debug log", Controller.DebugLogLinkAddress);
+            this.debug_log_link.Frame = new RectangleF (
+                new PointF (this.report_problem_link.Frame.X + this.report_problem_link.Frame.Width + 10, 25),
+                this.debug_log_link.Frame.Size);
+            
+            this.hidden_close_button = new NSButton () {
+                Frame                     = new RectangleF (0, 0, 0, 0),
+                KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
+                KeyEquivalent             = "w"
+            };
+
+
+            this.hidden_close_button.Activated += delegate {
+                Controller.WindowClosed ();
+            };
+            
+            
+            ContentView.AddSubview (this.hidden_close_button);
             ContentView.AddSubview (this.about_image_view);
             ContentView.AddSubview (this.version_text_field);
             ContentView.AddSubview (this.updates_text_field);
             ContentView.AddSubview (this.credits_text_field);
+            ContentView.AddSubview (this.website_link);
+            ContentView.AddSubview (this.credits_link);
+            ContentView.AddSubview (this.report_problem_link);
+            ContentView.AddSubview (this.debug_log_link);
         }
 
 
@@ -235,7 +230,6 @@ namespace SparkleShare {
             s.Append (name_attributes);
 
             Cell.AttributedStringValue = s;
-
             SizeToFit ();
         }
 

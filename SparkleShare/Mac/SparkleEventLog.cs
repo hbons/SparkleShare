@@ -376,15 +376,12 @@ namespace SparkleShare {
 
     public class SparkleEventsDelegate : NSWindowDelegate {
 
-        public event WindowResizedHandler WindowResized;
+        public event WindowResizedHandler WindowResized = delegate { };
         public delegate void WindowResizedHandler (SizeF new_window_size);
-
 
         public override SizeF WillResize (NSWindow sender, SizeF to_frame_size)
         {
-            if (WindowResized != null)
-                WindowResized (to_frame_size);
-
+            WindowResized (to_frame_size);
             return to_frame_size;
         }
 
@@ -398,15 +395,13 @@ namespace SparkleShare {
     
     public class SparkleWebPolicyDelegate : WebPolicyDelegate {
 
-        public event LinkClickedHandler LinkClicked;
+        public event LinkClickedHandler LinkClicked = delegate { };
         public delegate void LinkClickedHandler (string href);
-
 
         public override void DecidePolicyForNavigation (WebView web_view, NSDictionary action_info,
             NSUrlRequest request, WebFrame frame, NSObject decision_token)
         {
-            if (LinkClicked != null)
-                LinkClicked (request.Url.ToString ());
+            LinkClicked (request.Url.ToString ());
         }
     }
 }
