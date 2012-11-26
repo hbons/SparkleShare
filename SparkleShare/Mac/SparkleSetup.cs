@@ -957,9 +957,8 @@ namespace SparkleShare {
     [Register("SparkleDataSource")]
     public class SparkleDataSource : NSTableViewDataSource {
 
-        public List<object> Items ;
-        public NSAttributedString [] Cells;
-        public NSAttributedString [] SelectedCells;
+        public List<object> Items;
+        public NSAttributedString [] Cells, SelectedCells;
 
 
         public SparkleDataSource (List<SparklePlugin> plugins)
@@ -1063,7 +1062,6 @@ namespace SparkleShare {
         
         public event Action StringValueChanged = delegate { };
 
-
         public override void Changed (NSNotification notification)
         {
                 StringValueChanged ();
@@ -1074,7 +1072,6 @@ namespace SparkleShare {
     public class SparkleTableViewDelegate : NSTableViewDelegate {
 
         public event Action SelectionChanged = delegate { };
-
 
         public override void SelectionDidChange (NSNotification notification)
         {

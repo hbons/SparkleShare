@@ -26,8 +26,8 @@ namespace SparkleShare {
 
         public static string PluginsPath = "";
 
-        public static string LocalPluginsPath = new string [] {
-            Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "sparkleshare", "plugins" }.Combine ();
+        public static string LocalPluginsPath = IO.Path.Combine (
+            Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "sparkleshare", "plugins");
 
         public string Name { get { return GetValue ("info", "name"); } }
         public string Description { get { return GetValue ("info", "description"); } }

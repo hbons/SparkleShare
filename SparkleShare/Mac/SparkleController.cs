@@ -22,7 +22,6 @@ using System.Threading;
 
 using MonoMac.Foundation;
 using MonoMac.AppKit;
-using MonoMac.ObjCRuntime;
 
 using SparkleLib;
 
@@ -93,56 +92,9 @@ namespace SparkleShare {
         }
 
 
-        // Adds the SparkleShare folder to the user's
-        // list of bookmarked places
         public override void AddToBookmarks ()
-        {/*
-            NSMutableDictionary sidebar_plist = NSMutableDictionary.FromDictionary (
-                NSUserDefaults.StandardUserDefaults.PersistentDomainForName ("com.apple.sidebarlists"));
-
-            // Go through the sidebar categories
-            foreach (NSString sidebar_category in sidebar_plist.Keys) {
-
-                // Find the favorites
-                if (sidebar_category.ToString ().Equals ("favorites")) {
-
-                    // Get the favorites
-                    NSMutableDictionary favorites = NSMutableDictionary.FromDictionary(
-                        (NSDictionary) sidebar_plist.ValueForKey (sidebar_category));
-
-                    // Go through the favorites
-                    foreach (NSString favorite in favorites.Keys) {
-
-                        // Find the custom favorites
-                        if (favorite.ToString ().Equals ("VolumesList")) {
-
-                            // Get the custom favorites
-                            NSMutableArray custom_favorites = (NSMutableArray) favorites.ValueForKey (favorite);
-
-                            NSMutableDictionary properties = new NSMutableDictionary ();
-                            properties.SetValueForKey (new NSString ("1935819892"), new NSString ("com.apple.LSSharedFileList.TemplateSystemSelector"));
-
-                            NSMutableDictionary new_favorite = new NSMutableDictionary ();
-                            new_favorite.SetValueForKey (new NSString ("SparkleShare"),  new NSString ("Name"));
-
-                            new_favorite.SetValueForKey (NSData.FromString ("ImgR SYSL fldr"),  new NSString ("Icon"));
-
-                            new_favorite.SetValueForKey (NSData.FromString (SparkleConfig.DefaultConfig.FoldersPath),
-                                new NSString ("Alias"));
-
-                            new_favorite.SetValueForKey (properties, new NSString ("CustomItemProperties"));
-
-                            // Add to the favorites
-                            custom_favorites.Add (new_favorite);
-                            favorites.SetValueForKey ((NSArray) custom_favorites, new NSString (favorite.ToString ()));
-                            sidebar_plist.SetValueForKey (favorites, new NSString (sidebar_category.ToString ()));
-                        }
-                    }
-
-                }
-            }
-
-            NSUserDefaults.StandardUserDefaults.SetPersistentDomain (sidebar_plist, "com.apple.sidebarlists");*/
+        {
+            // TODO
         }
 
 
@@ -157,7 +109,6 @@ namespace SparkleShare {
                     Program.Controller.FoldersPath, 0);
 
                 return true;
-
             }
 
             return false;
