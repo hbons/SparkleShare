@@ -40,6 +40,32 @@ namespace SparkleLib {
         public Uri RemoteUrl;
 
         public List<SparkleChange> Changes = new List<SparkleChange> ();
+
+        public string ToMessage ()
+        {
+            string message = "added ‘{0}’";
+            
+            switch (Changes [0].Type) {
+            case SparkleChangeType.Edited:  message = "edited ‘{0}’"; break;
+            case SparkleChangeType.Deleted: message = "deleted ‘{0}’"; break;
+            case SparkleChangeType.Moved:   message = "moved ‘{0}’"; break;
+            }
+            
+            if (Changes.Count == 1) {
+                return message = string.Format (message, Changes [0].Path);
+                
+            } else if (Changes.Count > 1) {
+                message = string.Format (message, Changes [0].Path);
+                
+                if ((Changes.Count - 1) == 1)
+                    return string.Format (message + " and one other event", Changes.Count - 1);
+                else
+                    return string.Format (message + " and {0} other events", Changes.Count - 1);
+                
+            } else {
+                return "did something magical";
+            }
+        }
     }
 
 

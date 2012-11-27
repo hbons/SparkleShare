@@ -284,7 +284,7 @@ namespace SparkleLib.Git {
                 string salt_file_path = new string [] { LocalPath, ".git", "salt" }.Combine ();
 
                 // If the repo is encrypted, create a branch to 
-                // store the in and push it to the host
+                // store the salt in and push it to the host
                 if (File.Exists (salt_file_path)) {
                     string salt = File.ReadAllText (salt_file_path).Trim ();
 
