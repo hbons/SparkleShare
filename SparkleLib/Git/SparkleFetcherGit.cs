@@ -39,19 +39,15 @@ namespace SparkleLib.Git {
                     return this.cached_salt;
 
                 // Check if the repo's salt is stored in a branch...
-                SparkleGit git = new SparkleGit (TargetFolder, "branch -a");
-                git.StartAndWaitForExit ();
-
-                string [] branches = git.StartAndReadStandardOutput ().Split ("\n".ToCharArray ());
-				Regex salt_regex = new Regex ("remotes/origin/salt-(.+)");
+                SparkleGit git   = new SparkleGit (TargetFolder, "ls-remote --heads");
+                string branches  = git.StartAndReadStandardOutput ();
+                Regex salt_regex = new Regex ("refs/heads/salt-([0-9a-f]+)");
                 
-				foreach (string branch in branches) {
-					Match salt_match = salt_regex.Match (branch);
+				Match salt_match = salt_regex.Match (branches);
 
-					if (salt_match.Success) {
-						this.cached_salt = salt_match.Groups [1].Value;
-                        break;
-                    }
+				if (salt_match.Success) {
+					this.cached_salt = salt_match.Groups [1].Value;
+                    SparkleLogger.LogInfo ("SALT", salt_match.Groups [1].Value);
                 }
 
                 // ...if not, create a new salt for the repo
@@ -179,9 +175,6 @@ namespace SparkleLib.Git {
             this.git.WaitForExit ();
 
             if (this.git.ExitCode == 0) {
-				SparkleGit git_fetch = new SparkleGit (TargetFolder, "fetch --all");
-				git_fetch.StartAndWaitForExit ();
-
                 while (percentage < 100) {
                     percentage += 25;
 
