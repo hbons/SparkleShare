@@ -22,7 +22,6 @@ using System.IO;
 
 using MonoMac.Foundation;
 using MonoMac.AppKit;
-using MonoMac.ObjCRuntime;
 using MonoMac.WebKit;
 
 using Mono.Unix;
@@ -36,7 +35,7 @@ namespace SparkleShare {
         private NSButton ContinueButton, AddButton, CopyButton, TryAgainButton, CancelButton, 
             SkipTutorialButton, FinishButton, ShowFilesButton;
 
-        private NSTextField FullNameTextField, FullNameLabel, EmailLabel, EmailTextField, EmailHelpLabel,
+        private NSTextField FullNameTextField, FullNameLabel, EmailLabel, EmailTextField,
         LinkCodeTextField, AddressTextField, AddressLabel, AddressHelpLabel, PathTextField, PathLabel,
         PathHelpLabel, PasswordTextField, VisiblePasswordTextField, PasswordLabel, WarningTextField;
 
@@ -81,14 +80,10 @@ namespace SparkleShare {
                 Description = "First off, what's your name and email?\n(visible only to team members)";
 
 
-                FullNameLabel = new NSTextField () {
+                FullNameLabel = new SparkleLabel () {
                     Alignment       = NSTextAlignment.Right,
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
                     Frame           = new RectangleF (165, Frame.Height - 234, 160, 17),
-                    StringValue     = "Full Name:",
-                    Font            = SparkleUI.Font
+                    StringValue     = "Full Name:"
                 };
 
                 FullNameTextField = new NSTextField () {
@@ -97,32 +92,16 @@ namespace SparkleShare {
                     Delegate    = new SparkleTextFieldDelegate ()
                 };
 
-                EmailLabel = new NSTextField () {
+                EmailLabel = new SparkleLabel () {
                     Alignment       = NSTextAlignment.Right,
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
                     Frame           = new RectangleF (165, Frame.Height - 264, 160, 17),
-                    StringValue     = "Email:",
-                    Font            = SparkleUI.Font
+                    StringValue     = "Email:"
                 };
 
                 EmailTextField = new NSTextField () {
                     Frame       = new RectangleF (330, Frame.Height - 268, 196, 22),
                     Delegate    = new SparkleTextFieldDelegate ()
                 };
-
-                EmailHelpLabel = new NSTextField () {
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    TextColor       = NSColor.DisabledControlText,
-                    Editable        = false,
-                    Frame           = new RectangleF (330, Frame.Height - 290, 204, 17),
-                    Font            = NSFontManager.SharedFontManager.FontWithFamily ("Lucida Grande",
-                        NSFontTraitMask.Condensed, 0, 11),
-                    StringValue = "(used to find your Gravatar)"
-                };
-
 
 
                 CancelButton = new NSButton () {
@@ -165,7 +144,6 @@ namespace SparkleShare {
                 ContentView.AddSubview (FullNameTextField);
                 ContentView.AddSubview (EmailLabel);
                 ContentView.AddSubview (EmailTextField);
-                ContentView.AddSubview (EmailHelpLabel);
 
                 Buttons.Add (ContinueButton);
                 Buttons.Add (CancelButton);
@@ -178,41 +156,25 @@ namespace SparkleShare {
                 Description = "Do you want to add this project to SparkleShare?";
 
 
-                AddressLabel = new NSTextField () {
+                AddressLabel = new SparkleLabel () {
                     Alignment       = NSTextAlignment.Right,
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
                     Frame           = new RectangleF (165, Frame.Height - 240, 160, 17),
-                    StringValue     = "Address:",
-                    Font            = SparkleUI.Font
+                    StringValue     = "Address:"
                 };
 
-                PathLabel = new NSTextField () {
+                PathLabel = new SparkleLabel () {
                     Alignment       = NSTextAlignment.Right,
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
                     Frame           = new RectangleF (165, Frame.Height - 264, 160, 17),
-                    StringValue     = "Remote Path:",
-                    Font            = SparkleUI.Font
+                    StringValue     = "Remote Path:"
                 };
 
-                AddressTextField = new NSTextField () {
-                    Alignment       = NSTextAlignment.Left,
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
+                AddressTextField = new SparkleLabel () {
                     Frame           = new RectangleF (330, Frame.Height - 240, 260, 17),
                     StringValue     = Controller.PendingInvite.Address,
                     Font            = SparkleUI.BoldFont
                 };
 
-                PathTextField = new NSTextField () {
-                    Alignment       = NSTextAlignment.Left,
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
+                PathTextField = new SparkleLabel () {
                     Frame           = new RectangleF (330, Frame.Height - 264, 260, 17),
                     StringValue     = Controller.PendingInvite.RemotePath,
                     Font            = SparkleUI.BoldFont
@@ -250,11 +212,7 @@ namespace SparkleShare {
                 Description = "";
 
 
-                AddressLabel = new NSTextField () {
-                    Alignment       = NSTextAlignment.Left,
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
+                AddressLabel = new SparkleLabel () {
                     Frame           = new RectangleF (190, Frame.Height - 308, 160, 17),
                     StringValue     = "Address:",
                     Font            = SparkleUI.BoldFont
@@ -270,11 +228,7 @@ namespace SparkleShare {
 
                 AddressTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
-                PathLabel = new NSTextField () {
-                    Alignment       = NSTextAlignment.Left,
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
+                PathLabel = new SparkleLabel () {
                     Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 308, 160, 17),
                     StringValue     = "Remote Path:",
                     Font            = SparkleUI.BoldFont
@@ -289,22 +243,16 @@ namespace SparkleShare {
 
                 PathTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
-                PathHelpLabel = new NSTextField () {
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
+                PathHelpLabel = new SparkleLabel () {
                     TextColor       = NSColor.DisabledControlText,
-                    Editable        = false,
                     Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 355, 204, 17),
                     Font            = NSFontManager.SharedFontManager.FontWithFamily ("Lucida Grande",
                         NSFontTraitMask.Condensed, 0, 11),
                     StringValue = "" + Controller.SelectedPlugin.PathExample
                 };
 
-                AddressHelpLabel = new NSTextField () {
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
+                AddressHelpLabel = new SparkleLabel () {
                     TextColor       = NSColor.DisabledControlText,
-                    Editable        = false,
                     Frame           = new RectangleF (190, Frame.Height - 355, 204, 17),
                     Font            = NSFontManager.SharedFontManager.FontWithFamily ("Lucida Grande",
                         NSFontTraitMask.Condensed, 0, 11),
@@ -371,9 +319,7 @@ namespace SparkleShare {
                 };
 
 
-                Controller.ChangeAddressFieldEvent += delegate (string text,
-                    string example_text, FieldState state) {
-
+                Controller.ChangeAddressFieldEvent += delegate (string text, string example_text, FieldState state) {
                     Program.Controller.Invoke (() => {
                         AddressTextField.StringValue = text;
                         AddressTextField.Enabled     = (state == FieldState.Enabled);
@@ -381,9 +327,7 @@ namespace SparkleShare {
                     });
                 };
 
-                Controller.ChangePathFieldEvent += delegate (string text,
-                    string example_text, FieldState state) {
-
+                Controller.ChangePathFieldEvent += delegate (string text, string example_text, FieldState state) {
                     Program.Controller.Invoke (() => {
                         PathTextField.StringValue = text;
                         PathTextField.Enabled     = (state == FieldState.Enabled);
@@ -556,33 +500,40 @@ namespace SparkleShare {
                 Buttons.Add (CancelButton);
             }
 
-            if (type == PageType.CryptoSetup) {
-                Header      = "Set up file encryption";
-                Description = "Please a provide a strong password that you don't use elsewhere below:";
+            if (type == PageType.CryptoSetup || type == PageType.CryptoPassword) {
+                if (type == PageType.CryptoSetup) {
+                    Header      = "Set up file encryption";
+                    Description = "Please a provide a strong password that you don't use elsewhere below:";
+                
+                } else {
+                    Header      = "This project contains encrypted files";
+                    Description = "Please enter the password to see their contents.";
+                }
 
+                int extra_pos_y = 0;
 
-                PasswordLabel = new NSTextField () {
+                if (type == PageType.CryptoPassword)
+                    extra_pos_y = 20;
+  
+                PasswordLabel = new SparkleLabel () {
                     Alignment       = NSTextAlignment.Right,
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
-                    Frame           = new RectangleF (155, Frame.Height - 204, 160, 17),
+                    Frame           = new RectangleF (155, Frame.Height - 204 - extra_pos_y, 160, 17),
                     StringValue     = "Password:",
                     Font            = SparkleUI.BoldFont
                 };
 
                 PasswordTextField = new NSSecureTextField () {
-                    Frame       = new RectangleF (320, Frame.Height - 208, 196, 22),
+                    Frame       = new RectangleF (320, Frame.Height - 208 - extra_pos_y, 196, 22),
                     Delegate    = new SparkleTextFieldDelegate ()
                 };
 
                 VisiblePasswordTextField = new NSTextField () {
-                    Frame       = new RectangleF (320, Frame.Height - 208, 196, 22),
+                    Frame       = new RectangleF (320, Frame.Height - 208 - extra_pos_y, 196, 22),
                     Delegate    = new SparkleTextFieldDelegate ()
                 };
 
                 ShowPasswordCheckButton = new NSButton () {
-                    Frame = new RectangleF (318, Frame.Height - 235, 300, 18),
+                    Frame = new RectangleF (318, Frame.Height - 235 - extra_pos_y, 300, 18),
                     Title = "Show password",
                     State = NSCellStateValue.Off
                 };
@@ -597,13 +548,9 @@ namespace SparkleShare {
                     Frame = new RectangleF (200, Frame.Height - 320, 24, 24)
                 };
 
-                WarningTextField = new NSTextField () {
-                    Frame           = new RectangleF (235, Frame.Height - 390, 325, 100),
-                    StringValue     = "This password can't be changed later, and your files can't be recovered if it's forgotten.",
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
-                    Font            = SparkleUI.Font
+                WarningTextField = new SparkleLabel () {
+                    Frame       = new RectangleF (235, Frame.Height - 390, 325, 100),
+                    StringValue = "This password can't be changed later, and your files can't be recovered if it's forgotten."
                 };
 
                 CancelButton = new NSButton () {
@@ -629,23 +576,36 @@ namespace SparkleShare {
 
                 (PasswordTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
                     VisiblePasswordTextField.StringValue = PasswordTextField.StringValue;
-                    Controller.CheckCryptoSetupPage (PasswordTextField.StringValue);
+
+                    if (type == PageType.CryptoSetup)
+                        Controller.CheckCryptoSetupPage (PasswordTextField.StringValue);
+                    else
+                        Controller.CheckCryptoPasswordPage (PasswordTextField.StringValue);
                 };
 
                 (VisiblePasswordTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
                     PasswordTextField.StringValue = VisiblePasswordTextField.StringValue;
-                    Controller.CheckCryptoSetupPage (PasswordTextField.StringValue);
+                    
+                    if (type == PageType.CryptoSetup)
+                        Controller.CheckCryptoSetupPage (PasswordTextField.StringValue);
+                    else
+                        Controller.CheckCryptoPasswordPage (PasswordTextField.StringValue);
                 };
 
+                
+                Controller.UpdateCryptoPasswordContinueButtonEvent += delegate (bool button_enabled) {
+                    Program.Controller.Invoke (() => { ContinueButton.Enabled = button_enabled; });
+                };
 
                 Controller.UpdateCryptoSetupContinueButtonEvent += delegate (bool button_enabled) {
-                    Program.Controller.Invoke (() => {
-                        ContinueButton.Enabled = button_enabled;
-                    });
+                    Program.Controller.Invoke (() => { ContinueButton.Enabled = button_enabled; });
                 };
-
+                
                 ContinueButton.Activated += delegate {
-                   Controller.CryptoSetupPageCompleted (PasswordTextField.StringValue);
+                    if (type == PageType.CryptoSetup)
+                        Controller.CryptoSetupPageCompleted (PasswordTextField.StringValue);
+                    else
+                        Controller.CryptoPasswordPageCompleted (PasswordTextField.StringValue);
                 };
 
                 CancelButton.Activated += delegate {
@@ -656,96 +616,11 @@ namespace SparkleShare {
                 ContentView.AddSubview (PasswordLabel);
                 ContentView.AddSubview (PasswordTextField);
                 ContentView.AddSubview (ShowPasswordCheckButton);
-                ContentView.AddSubview (WarningImageView);
-                ContentView.AddSubview (WarningTextField);
 
-                Buttons.Add (ContinueButton);
-                Buttons.Add (CancelButton);
-
-                NSApplication.SharedApplication.RequestUserAttention (NSRequestUserAttentionType.CriticalRequest);
-            }
-
-            if (type == PageType.CryptoPassword) {
-                Header      = "This project contains encrypted files";
-                Description = "Please enter the password to see their contents.";
-
-                PasswordLabel = new NSTextField () {
-                    Alignment       = NSTextAlignment.Right,
-                    BackgroundColor = NSColor.WindowBackground,
-                    Bordered        = false,
-                    Editable        = false,
-                    Frame           = new RectangleF (155, Frame.Height - 224, 160, 17),
-                    StringValue     = "Password:",
-                    Font            = SparkleUI.BoldFont
-                };
-
-                PasswordTextField = new NSSecureTextField () {
-                    Frame       = new RectangleF (320, Frame.Height - 228, 196, 22),
-                    Delegate    = new SparkleTextFieldDelegate ()
-                };
-
-                VisiblePasswordTextField = new NSTextField () {
-                    Frame       = new RectangleF (320, Frame.Height - 228, 196, 22),
-                    Delegate    = new SparkleTextFieldDelegate ()
-                };
-
-                ShowPasswordCheckButton = new NSButton () {
-                    Frame = new RectangleF (318, Frame.Height - 255, 300, 18),
-                    Title = "Show password",
-                    State = NSCellStateValue.Off
-                };
-
-                ShowPasswordCheckButton.SetButtonType (NSButtonType.Switch);
-
-                CancelButton = new NSButton () {
-                    Title = "Cancel"
-                };
-
-                ContinueButton = new NSButton () {
-                    Title    = "Continue",
-                    Enabled  = false
-                };
-
-
-                Controller.UpdateCryptoPasswordContinueButtonEvent += delegate (bool button_enabled) {
-                    Program.Controller.Invoke (() => {
-                        ContinueButton.Enabled = button_enabled;
-                    });
-                };
-
-                ShowPasswordCheckButton.Activated += delegate {
-                    if (PasswordTextField.Superview == ContentView) {
-                        PasswordTextField.RemoveFromSuperview ();
-                        ContentView.AddSubview (VisiblePasswordTextField);
-
-                    } else {
-                        VisiblePasswordTextField.RemoveFromSuperview ();
-                        ContentView.AddSubview (PasswordTextField);
-                    }
-                };
-
-                (PasswordTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
-                    VisiblePasswordTextField.StringValue = PasswordTextField.StringValue;
-                    Controller.CheckCryptoPasswordPage (PasswordTextField.StringValue);
-                };
-
-                (VisiblePasswordTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
-                    PasswordTextField.StringValue = VisiblePasswordTextField.StringValue;
-                    Controller.CheckCryptoPasswordPage (PasswordTextField.StringValue);
-                };
-
-                ContinueButton.Activated += delegate {
-                   Controller.CryptoPasswordPageCompleted (PasswordTextField.StringValue);
-                };
-
-                CancelButton.Activated += delegate {
-                    Controller.CryptoPageCancelled ();
-                };
-
-
-                ContentView.AddSubview (PasswordLabel);
-                ContentView.AddSubview (PasswordTextField);
-                ContentView.AddSubview (ShowPasswordCheckButton);
+                if (type == PageType.CryptoSetup) {
+                    ContentView.AddSubview (WarningImageView);
+                    ContentView.AddSubview (WarningTextField);
+                }
 
                 Buttons.Add (ContinueButton);
                 Buttons.Add (CancelButton);
@@ -768,13 +643,9 @@ namespace SparkleShare {
                         Frame = new RectangleF (200, Frame.Height - 175, 24, 24)
                     };
 
-                    WarningTextField = new NSTextField () {
-                        Frame           = new RectangleF (235, Frame.Height - 245, 325, 100),
-                        StringValue     = warnings [0],
-                        BackgroundColor = NSColor.WindowBackground,
-                        Bordered        = false,
-                        Editable        = false,
-                        Font            = SparkleUI.Font
+                    WarningTextField = new SparkleLabel () {
+                        Frame       = new RectangleF (235, Frame.Height - 245, 325, 100),
+                        StringValue = warnings [0]
                     };
 
                     ContentView.AddSubview (WarningImageView);
@@ -1076,6 +947,18 @@ namespace SparkleShare {
         public override void SelectionDidChange (NSNotification notification)
         {
             SelectionChanged ();
+        }
+    }
+
+
+    public class SparkleLabel : NSTextField {
+
+        public SparkleLabel () : base () 
+        {
+            BackgroundColor = NSColor.WindowBackground;
+            Bordered        = false;
+            Editable        = false;
+            Font            = SparkleUI.Font;
         }
     }
 }
