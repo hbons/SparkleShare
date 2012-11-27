@@ -16,6 +16,8 @@
 
 
 using System;
+using System.Text;
+
 using SparkleLib;
 
 namespace SparkleShare {
@@ -33,7 +35,7 @@ namespace SparkleShare {
             };
 
             Program.Controller.NotificationRaised += delegate (SparkleChangeSet change_set) {
-                ShowBubble (change_set.User.Name, FormatMessage (change_set),
+                ShowBubble (change_set.User.Name, change_set.ToMessage (),
                     Program.Controller.GetAvatar (change_set.User.Email, 48));
             };
         }
@@ -41,6 +43,11 @@ namespace SparkleShare {
 
         public void ShowBubble (string title, string subtext, string image_path)
         {
+            byte [] title_bytes   = Encoding.Default.GetBytes (title);
+            byte [] subtext_bytes = Encoding.Default.GetBytes (subtext);
+            title                 = Encoding.UTF8.GetString (title_bytes);
+            subtext               = Encoding.UTF8.GetString (subtext_bytes);
+
             ShowBubbleEvent (title, subtext, image_path);
         }
 
@@ -48,33 +55,6 @@ namespace SparkleShare {
         public void BubbleClicked ()
         {
             Program.Controller.ShowEventLogWindow ();
-        }
-
-
-        private string FormatMessage (SparkleChangeSet change_set)
-        {
-            string message = "added ‘{0}’";
-
-            switch (change_set.Changes [0].Type) {
-                case SparkleChangeType.Edited:  message = "edited ‘{0}’"; break;
-                case SparkleChangeType.Deleted: message = "deleted ‘{0}’"; break;
-                case SparkleChangeType.Moved:   message = "moved ‘{0}’"; break;
-            }
-
-            if (change_set.Changes.Count == 1) {
-                return message = string.Format (message, change_set.Changes [0].Path);
-
-            } else if (change_set.Changes.Count > 1) {
-                message = string.Format (message, change_set.Changes [0].Path);
-
-                if ((change_set.Changes.Count - 1) == 1)
-                    return string.Format (message + " and one other event", change_set.Changes.Count - 1);
-                else
-                    return string.Format (message + " and {0} other events", change_set.Changes.Count - 1);
-
-            } else {
-                return "did something magical";
-            }
         }
     }
 }

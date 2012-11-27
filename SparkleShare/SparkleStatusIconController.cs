@@ -256,6 +256,8 @@ namespace SparkleShare {
 
             int i = 0;
             foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
+                FolderErrors [i] = "";
+                
                 if (repo.Error == ErrorStatus.HostUnreachable) {
                     FolderErrors [i] = "Can't reach the host";
                     
@@ -272,12 +274,9 @@ namespace SparkleShare {
                     FolderErrors [i] = "Some local files are locked or in use";
 
                 } else if (repo.Error == ErrorStatus.NotFound) {
-                    FolderErrors [i] = "Project doesn't exist on host";
-                    
-                } else {
-                    FolderErrors [i] = "";
+                    FolderErrors [i] = "Project doesn't exist on host";   
                 }
-                    
+
                 i++;
             }
         }
