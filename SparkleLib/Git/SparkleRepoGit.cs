@@ -46,21 +46,22 @@ namespace SparkleLib.Git {
 
         private string branch {
             get {
-                if (string.IsNullOrEmpty (this.cached_branch)) {
-                    string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
+                if (!string.IsNullOrEmpty (this.cached_branch)) 
+                    return this.cached_branch;
 
-                    while (Directory.Exists (rebase_apply_path) && HasLocalChanges) {
-                        try {
-                            ResolveConflict ();
-                            
-                        } catch (IOException e) {
-                            SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again... (" + e.Message + ")");
-                        }
+                string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
+
+                while (Directory.Exists (rebase_apply_path) && HasLocalChanges) {
+                    try {
+                        ResolveConflict ();
+                        
+                    } catch (IOException e) {
+                        SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again...", e);
                     }
-
-                    SparkleGit git = new SparkleGit (LocalPath, "rev-parse --abbrev-ref HEAD");
-                    this.cached_branch = git.StartAndReadStandardOutput ();
                 }
+
+                SparkleGit git = new SparkleGit (LocalPath, "rev-parse --abbrev-ref HEAD");
+                this.cached_branch = git.StartAndReadStandardOutput ();
 
                 return this.cached_branch;
             }
@@ -480,7 +481,7 @@ namespace SparkleLib.Git {
                             ResolveConflict ();
 
                         } catch (IOException e) {
-                            SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again... (" + e.Message + ")");
+                            SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again...", e);
                         }
                     }
 
@@ -967,7 +968,7 @@ namespace SparkleLib.Git {
                 }
 
             } catch (IOException e) {
-                SparkleLogger.LogInfo ("Git", "Failed preparing directory: " + e.Message);
+                SparkleLogger.LogInfo ("Git", "Failed preparing directory", e);
             }
         }
 
@@ -1043,7 +1044,7 @@ namespace SparkleLib.Git {
                 }
 
             } catch (Exception e) {
-                SparkleLogger.LogInfo ("Local", "Error calculating size: " + e.Message);
+                SparkleLogger.LogInfo ("Local", "Error calculating size", e);
                 return 0;
             }
 
@@ -1053,7 +1054,7 @@ namespace SparkleLib.Git {
                     size += CalculateSizes (directory);
 
             } catch (Exception e) {
-                SparkleLogger.LogInfo ("Local", "Error calculating size: " + e.Message);
+                SparkleLogger.LogInfo ("Local", "Error calculating size", e);
                 return 0;
             }
 
