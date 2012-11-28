@@ -93,15 +93,15 @@ namespace SparkleShare {
             }
         }
 
-        public bool QuitItemEnabled {
-            get {
-                return (CurrentState == IconState.Idle || CurrentState == IconState.Error);
-            }
-        }
-
         public bool RecentEventsItemEnabled {
             get {
                 return (Program.Controller.Folders.Count > 0);
+            }
+        }
+
+        public bool QuitItemEnabled {
+            get {
+                return (CurrentState == IconState.Idle || CurrentState == IconState.Error);
             }
         }
 
@@ -138,8 +138,6 @@ namespace SparkleShare {
                         StateText = "Projects up to date " + FolderSize;
                 }
 
-                UpdateQuitItemEvent (QuitItemEnabled);
-                UpdateStatusItemEvent (StateText);
                 UpdateIconEvent (CurrentState);
                 UpdateMenuEvent (CurrentState);
             };
@@ -185,8 +183,6 @@ namespace SparkleShare {
 
                 UpdateFolders ();
                 
-                UpdateQuitItemEvent (QuitItemEnabled);
-                UpdateStatusItemEvent (StateText);
                 UpdateIconEvent (CurrentState);
                 UpdateMenuEvent (CurrentState);
             };
@@ -204,6 +200,18 @@ namespace SparkleShare {
             foreach (SparkleRepoBase repo in Program.Controller.Repositories)
                 if (repo.Name.Equals (subfolder))
                     new Thread (() => repo.ForceRetry ()).Start ();
+        }
+
+        
+        public EventHandler OpenFolderDelegate (string subfolder)
+        {
+            return delegate { SubfolderClicked (subfolder); };
+        }
+        
+        
+        public EventHandler TryAgainDelegate (string subfolder)
+        {
+            return delegate { TryAgainClicked (subfolder); };
         }
 
 
@@ -234,18 +242,6 @@ namespace SparkleShare {
         public void QuitClicked (object sender, EventArgs args)
         {
             Program.Controller.Quit ();
-        }
-
-
-        public EventHandler OpenFolderDelegate (string subfolder)
-        {
-            return delegate { SubfolderClicked (subfolder); };
-        }
-        
-        
-        public EventHandler TryAgainDelegate (string subfolder)
-        {
-            return delegate { TryAgainClicked (subfolder); };
         }
 
 
