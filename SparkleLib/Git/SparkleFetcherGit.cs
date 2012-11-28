@@ -42,13 +42,10 @@ namespace SparkleLib.Git {
                 SparkleGit git   = new SparkleGit (TargetFolder, "ls-remote --heads");
                 string branches  = git.StartAndReadStandardOutput ();
                 Regex salt_regex = new Regex ("refs/heads/salt-([0-9a-f]+)");
-                
 				Match salt_match = salt_regex.Match (branches);
 
-				if (salt_match.Success) {
+				if (salt_match.Success)
 					this.cached_salt = salt_match.Groups [1].Value;
-                    SparkleLogger.LogInfo ("SALT", salt_match.Groups [1].Value);
-                }
 
                 // ...if not, create a new salt for the repo
                 if (string.IsNullOrEmpty (this.cached_salt)) {

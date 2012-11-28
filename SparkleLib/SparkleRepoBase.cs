@@ -147,6 +147,8 @@ namespace SparkleLib {
 
         public SparkleRepoBase (string path, SparkleConfig config)
         {
+            SparkleLogger.LogInfo (path, "Initializing...");
+
             Status            = SyncStatus.Idle;
             Error             = ErrorStatus.None;
             this.local_config = config;
