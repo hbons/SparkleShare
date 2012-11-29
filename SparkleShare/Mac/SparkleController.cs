@@ -49,7 +49,7 @@ namespace SparkleShare {
             SparkleLib.Git.SparkleGit.ExecPath = Path.Combine (NSBundle.MainBundle.ResourcePath, "git", "libexec", "git-core");
         }
 
-
+        
         public override void Initialize ()
         {
             base.Initialize ();
@@ -60,12 +60,25 @@ namespace SparkleShare {
                 FileSystemEventArgs fse_args = new FileSystemEventArgs (WatcherChangeTypes.Changed,
                     Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, path), Path.GetFileName (path));
 
+                FileActivityTask [] tasks = new FileActivityTask [Repositories.Length];
+
                 // FIXME: There are cases where the wrong repo is triggered, so
                 // we trigger all of them for now. Causes only slightly more overhead
-                foreach (SparkleRepoBase repo in Repositories)
-                    new Thread (() => { repo.OnFileActivity (fse_args); }).Start ();
+                int i = 0;
+                foreach (SparkleRepoBase repo in Repositories) {
+                    tasks [i] = MacActivityTask (repo, fse_args);
+                    tasks [i] ();
+                    i++;
+                }
             };
 
+        }
+
+
+        private delegate void FileActivityTask ();
+
+        private FileActivityTask MacActivityTask (SparkleRepoBase repo, FileSystemEventArgs fse_args) {
+            return delegate { new Thread (() => { repo.OnFileActivity (fse_args); }).Start (); };
         }
 
 
