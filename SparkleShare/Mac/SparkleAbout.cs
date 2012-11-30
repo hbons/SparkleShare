@@ -50,7 +50,18 @@ namespace SparkleShare {
             HasShadow   = true;
             BackingType = NSBackingStore.Buffered;
 
+            this.hidden_close_button = new NSButton () {
+                Frame                     = new RectangleF (0, 0, 0, 0),
+                KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
+                KeyEquivalent             = "w"
+            };
+
             CreateAbout ();
+
+
+            this.hidden_close_button.Activated += delegate {
+                Controller.WindowClosed ();
+            };
 
             Controller.HideWindowEvent += delegate {
                 Program.Controller.Invoke (() => PerformClose (this));
@@ -77,6 +88,9 @@ namespace SparkleShare {
                     this.updates_text_field.StringValue = "Checking for updates...";
                 });
             };
+
+
+            ContentView.AddSubview (this.hidden_close_button);
         }
 
 
@@ -90,40 +104,32 @@ namespace SparkleShare {
                 Frame = new RectangleF (0, 0, 640, 260)
             };
 
-            this.version_text_field = new NSTextField () {
-                StringValue     = "version " + Controller.RunningVersion,
-                Frame           = new RectangleF (295, 140, 318, 22),
-                BackgroundColor = NSColor.White,
-                Bordered        = false,
-                Editable        = false,
+            this.version_text_field = new SparkleLabel ("version " + Controller.RunningVersion, NSTextAlignment.Left) {
                 DrawsBackground = false,
+                Frame           = new RectangleF (295, 140, 318, 22),
                 TextColor       = NSColor.White,
                 Font            = NSFontManager.SharedFontManager.FontWithFamily (
                     "Lucida Grande", NSFontTraitMask.Unbold, 0, 11)
             };
 
-            this.updates_text_field = new NSTextField () {
-                StringValue     = "Checking for updates...",
-                Frame           = new RectangleF (295, Frame.Height - 232, 318, 98),
-                Bordered        = false,
-                Editable        = false,
+            this.updates_text_field = new SparkleLabel ("Checking for updates...", NSTextAlignment.Left) {
                 DrawsBackground = false,
+                Frame           = new RectangleF (295, Frame.Height - 232, 318, 98),
                 TextColor       = NSColor.FromCalibratedRgba (1.0f, 1.0f, 1.0f, 0.5f),
                 Font            = NSFontManager.SharedFontManager.FontWithFamily (
                     "Lucida Grande", NSFontTraitMask.Unbold, 0, 11)
             };
 
-            this.credits_text_field = new NSTextField () {
-                StringValue     = @"Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others." +
+            this.credits_text_field = new SparkleLabel (
+                @"Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others." +
                 "\n" +
                 "\n" +
                 "SparkleShare is Open Source software. You are free to use, modify, and redistribute it " +
-                "under the GNU General Public License version 3 or later.",
+                "under the GNU General Public License version 3 or later.", NSTextAlignment.Left) {
+                
+                DrawsBackground = false,
                 Frame           = new RectangleF (295, Frame.Height - 260, 318, 98),
                 TextColor       = NSColor.White,
-                DrawsBackground = false,
-                Bordered        = false,
-                Editable        = false,
                 Font            = NSFontManager.SharedFontManager.FontWithFamily (
                     "Lucida Grande", NSFontTraitMask.Unbold, 0, 11),
             };
@@ -145,20 +151,8 @@ namespace SparkleShare {
             this.debug_log_link.Frame = new RectangleF (
                 new PointF (this.report_problem_link.Frame.X + this.report_problem_link.Frame.Width + 10, 25),
                 this.debug_log_link.Frame.Size);
-            
-            this.hidden_close_button = new NSButton () {
-                Frame                     = new RectangleF (0, 0, 0, 0),
-                KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
-                KeyEquivalent             = "w"
-            };
 
 
-            this.hidden_close_button.Activated += delegate {
-                Controller.WindowClosed ();
-            };
-            
-            
-            ContentView.AddSubview (this.hidden_close_button);
             ContentView.AddSubview (this.about_image_view);
             ContentView.AddSubview (this.version_text_field);
             ContentView.AddSubview (this.updates_text_field);
