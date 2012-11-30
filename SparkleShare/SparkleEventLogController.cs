@@ -68,18 +68,9 @@ namespace SparkleShare {
                 UpdateSizeInfoEvent ("…", "…");
 
                 new Thread (() => {
-                    Stopwatch watch = new Stopwatch ();
-                    watch.Start ();
-
+                    SparkleDelay delay = new SparkleDelay ();
                     string html = HTML;
-                    watch.Stop ();
-
-                    // A short delay is less annoying than
-                    // a flashing window
-					int delay = 500;
-					
-                    if (watch.ElapsedMilliseconds < delay)
-                        Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
+                    delay.Stop ();
 
 					if (!string.IsNullOrEmpty (html))
                     	UpdateContentEvent (html);
@@ -161,16 +152,9 @@ namespace SparkleShare {
 
                     if (this.selected_folder == null) {
                         new Thread (() => {
-                            Stopwatch watch = new Stopwatch ();
-
-                            watch.Start ();
+                            SparkleDelay delay = new SparkleDelay ();
                             string html = HTML;
-                            watch.Stop ();
-                                
-                            int delay = 500;
-                                
-                            if (watch.ElapsedMilliseconds < delay)
-                                Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
+                            delay.Stop ();
 
                             UpdateChooserEvent (Folders);
                             UpdateChooserEnablementEvent (true);
@@ -195,16 +179,9 @@ namespace SparkleShare {
                 ContentLoadingEvent ();
                 UpdateSizeInfoEvent ("…", "…");
 
-                Stopwatch watch = new Stopwatch ();
-                
-                watch.Start ();
+                SparkleDelay delay = new SparkleDelay ();
                 string html = HTML;
-                watch.Stop ();
-                
-                int delay = 500;
-                
-                if (watch.ElapsedMilliseconds < delay)
-                    Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
+                delay.Stop ();
 
 				if (!string.IsNullOrEmpty (html))
                 	UpdateContentEvent (html);
@@ -287,17 +264,10 @@ namespace SparkleShare {
 						continue;
 
 			        new Thread (() => {
-	                    Stopwatch watch = new Stopwatch ();
-	                    watch.Start ();
-
-	                    List<SparkleChangeSet> change_sets = repo.GetChangeSets (file_path);
-	                    string html = GetHistoryHTMLLog (change_sets, file_path);
-
-	                    watch.Stop ();
-	                    int delay = 500;
-	                    
-	                    if (watch.ElapsedMilliseconds < delay)
-	                        Thread.Sleep (delay - (int) watch.ElapsedMilliseconds);
+                        SparkleDelay delay = new SparkleDelay ();
+                        List<SparkleChangeSet> change_sets = repo.GetChangeSets (file_path);
+                        string html = GetHistoryHTMLLog (change_sets, file_path);
+                        delay.Stop ();
 
 						if (!string.IsNullOrEmpty (html))
 	                    	UpdateContentEvent (html);
@@ -626,6 +596,24 @@ namespace SparkleShare {
             public SparkleFolder Folder;
             public string FilePath;
             public string Revision;
+        }
+
+
+        private class SparkleDelay : Stopwatch {
+
+            public SparkleDelay () : base ()
+            {
+                Start ();
+            }
+
+
+            new public void Stop ()
+            {
+                base.Stop ();
+
+                if (ElapsedMilliseconds < 500)
+                    Thread.Sleep (500 - (int) ElapsedMilliseconds);
+            }
         }
     }
 }

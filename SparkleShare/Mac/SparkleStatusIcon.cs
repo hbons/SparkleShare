@@ -56,8 +56,6 @@ namespace SparkleShare {
             this.status_item.HighlightMode       = true;
             this.status_item.Image               = this.syncing_idle_image;
             this.status_item.AlternateImage      = this.syncing_idle_image_active;
-            this.status_item.Image.Size          = new SizeF (16, 16);
-            this.status_item.AlternateImage.Size = new SizeF (16, 16);
 
             CreateMenu ();
 
@@ -90,9 +88,6 @@ namespace SparkleShare {
                             break;
                         }
                     }
-
-                    this.status_item.Image.Size          = new SizeF (16, 16);
-                    this.status_item.AlternateImage.Size = new SizeF (16, 16);
                 });
             };
             
@@ -114,12 +109,10 @@ namespace SparkleShare {
         {
             this.menu = new NSMenu () { AutoEnablesItems = false };
 
-
             this.state_item = new NSMenuItem () {
                 Title   = Controller.StateText,
                 Enabled = false
             };
-
 
             this.folder_item = new NSMenuItem () {
                 Title   = "SparkleShare",
@@ -129,39 +122,25 @@ namespace SparkleShare {
             this.folder_item.Image      = this.sparkleshare_image;
             this.folder_item.Image.Size = new SizeF (16, 16);
 
-
             this.add_item = new NSMenuItem () {
                 Title   = "Add Hosted Project…",
                 Enabled = true
             };
-
-            this.add_item.Activated += Controller.AddHostedProjectClicked;
-
 
             this.recent_events_item = new NSMenuItem () {
                 Title   = "Recent Changes…",
                 Enabled = Controller.RecentEventsItemEnabled
             };
 
-            if (Controller.RecentEventsItemEnabled)
-                this.recent_events_item.Activated += Controller.RecentEventsClicked;
-
-
             this.about_item = new NSMenuItem () {
                 Title   = "About SparkleShare",
                 Enabled = true
             };
 
-            this.about_item.Activated += Controller.AboutClicked;
-
-
             this.quit_item = new NSMenuItem () {
                 Title   = "Quit",
                 Enabled = Controller.QuitItemEnabled
             };
-
-            this.quit_item.Activated += Controller.QuitClicked;
-
 
             this.folder_menu_items    = new NSMenuItem [Controller.Folders.Length];
             this.error_menu_items     = new NSMenuItem [Controller.Folders.Length];
@@ -197,6 +176,14 @@ namespace SparkleShare {
                     i++;
                 };
             }
+
+            
+            if (Controller.RecentEventsItemEnabled)
+                this.recent_events_item.Activated += Controller.RecentEventsClicked;
+
+            this.add_item.Activated += Controller.AddHostedProjectClicked;
+            this.about_item.Activated += Controller.AboutClicked;
+            this.quit_item.Activated += Controller.QuitClicked;
 
 
             this.menu.AddItem (this.state_item);
