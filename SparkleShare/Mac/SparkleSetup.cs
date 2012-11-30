@@ -52,15 +52,11 @@ namespace SparkleShare {
         public SparkleSetup () : base ()
         {
             Controller.HideWindowEvent += delegate {
-                Program.Controller.Invoke (() => {
-                    PerformClose (this);
-                });
+                Program.Controller.Invoke (() => PerformClose (this));
             };
 
             Controller.ShowWindowEvent += delegate {
-                Program.Controller.Invoke (() => {
-                    OrderFrontRegardless ();
-                });
+                Program.Controller.Invoke (() => OrderFrontRegardless ());
             };
 
             Controller.ChangePageEvent += delegate (PageType type, string [] warnings) {
@@ -79,12 +75,8 @@ namespace SparkleShare {
                 Header      = "Welcome to SparkleShare!";
                 Description = "First off, what's your name and email?\n(visible only to team members)";
 
-
-                FullNameLabel = new SparkleLabel () {
-                    Alignment       = NSTextAlignment.Right,
-                    Frame           = new RectangleF (165, Frame.Height - 234, 160, 17),
-                    StringValue     = "Full Name:"
-                };
+                FullNameLabel       = new SparkleLabel ("Full Name:", NSTextAlignment.Right);
+                FullNameLabel.Frame = new RectangleF (165, Frame.Height - 234, 160, 17);
 
                 FullNameTextField = new NSTextField () {
                     Frame       = new RectangleF (330, Frame.Height - 238, 196, 22),
@@ -92,21 +84,15 @@ namespace SparkleShare {
                     Delegate    = new SparkleTextFieldDelegate ()
                 };
 
-                EmailLabel = new SparkleLabel () {
-                    Alignment       = NSTextAlignment.Right,
-                    Frame           = new RectangleF (165, Frame.Height - 264, 160, 17),
-                    StringValue     = "Email:"
-                };
-
+                EmailLabel       = new SparkleLabel ("Email:", NSTextAlignment.Right);
+                EmailLabel.Frame = new RectangleF (165, Frame.Height - 264, 160, 17);
+                    
                 EmailTextField = new NSTextField () {
                     Frame       = new RectangleF (330, Frame.Height - 268, 196, 22),
                     Delegate    = new SparkleTextFieldDelegate ()
                 };
 
-
-                CancelButton = new NSButton () {
-                    Title = "Cancel"
-                };
+                CancelButton = new NSButton () { Title = "Cancel" };
 
                 ContinueButton = new NSButton () {
                     Title    = "Continue",
@@ -129,9 +115,7 @@ namespace SparkleShare {
                     Controller.SetupPageCompleted (full_name, email);
                 };
 
-                CancelButton.Activated += delegate {
-                    Controller.SetupPageCancelled ();
-                };
+                CancelButton.Activated += delegate { Controller.SetupPageCancelled (); };
 
                 Controller.UpdateSetupContinueButtonEvent += delegate (bool button_enabled) {
                     Program.Controller.Invoke (() => {
@@ -155,47 +139,28 @@ namespace SparkleShare {
                 Header      = "You've received an invite!";
                 Description = "Do you want to add this project to SparkleShare?";
 
-
-                AddressLabel = new SparkleLabel () {
-                    Alignment       = NSTextAlignment.Right,
-                    Frame           = new RectangleF (165, Frame.Height - 240, 160, 17),
-                    StringValue     = "Address:"
+                AddressLabel       = new SparkleLabel ("Address:", NSTextAlignment.Right);
+                AddressLabel.Frame = new RectangleF (165, Frame.Height - 240, 160, 17);
+     
+                AddressTextField = new SparkleLabel (Controller.PendingInvite.Address, NSTextAlignment.Left) {
+                    Frame = new RectangleF (330, Frame.Height - 240, 260, 17),
+                    Font  = SparkleUI.BoldFont
                 };
 
-                PathLabel = new SparkleLabel () {
-                    Alignment       = NSTextAlignment.Right,
-                    Frame           = new RectangleF (165, Frame.Height - 264, 160, 17),
-                    StringValue     = "Remote Path:"
+                PathLabel       = new SparkleLabel ("Remote Path:", NSTextAlignment.Right);
+                PathLabel.Frame = new RectangleF (165, Frame.Height - 264, 160, 17);
+
+                PathTextField = new SparkleLabel (Controller.PendingInvite.RemotePath, NSTextAlignment.Left) {
+                    Frame = new RectangleF (330, Frame.Height - 264, 260, 17),
+                    Font  = SparkleUI.BoldFont
                 };
 
-                AddressTextField = new SparkleLabel () {
-                    Frame           = new RectangleF (330, Frame.Height - 240, 260, 17),
-                    StringValue     = Controller.PendingInvite.Address,
-                    Font            = SparkleUI.BoldFont
-                };
-
-                PathTextField = new SparkleLabel () {
-                    Frame           = new RectangleF (330, Frame.Height - 264, 260, 17),
-                    StringValue     = Controller.PendingInvite.RemotePath,
-                    Font            = SparkleUI.BoldFont
-                };
-
-                CancelButton = new NSButton () {
-                    Title = "Cancel"
-                };
-
-                AddButton = new NSButton () {
-                    Title = "Add"
-                };
+                CancelButton = new NSButton () { Title = "Cancel" };
+                AddButton = new NSButton () { Title = "Add" };
 
 
-                CancelButton.Activated += delegate {
-                    Controller.PageCancelled ();
-                };
-
-                AddButton.Activated += delegate {
-                    Controller.InvitePageCompleted ();
-                };
+                CancelButton.Activated += delegate { Controller.PageCancelled (); };
+                AddButton.Activated += delegate { Controller.InvitePageCompleted (); };
 
 
                 ContentView.AddSubview (AddressLabel);
@@ -211,11 +176,9 @@ namespace SparkleShare {
                 Header      = "Where's your project hosted?";
                 Description = "";
 
-
-                AddressLabel = new SparkleLabel () {
-                    Frame           = new RectangleF (190, Frame.Height - 308, 160, 17),
-                    StringValue     = "Address:",
-                    Font            = SparkleUI.BoldFont
+                AddressLabel = new SparkleLabel ("Address:", NSTextAlignment.Left) {
+                    Frame = new RectangleF (190, Frame.Height - 308, 160, 17),
+                    Font  = SparkleUI.BoldFont
                 };
 
                 AddressTextField = new NSTextField () {
@@ -228,10 +191,9 @@ namespace SparkleShare {
 
                 AddressTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
-                PathLabel = new SparkleLabel () {
-                    Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 308, 160, 17),
-                    StringValue     = "Remote Path:",
-                    Font            = SparkleUI.BoldFont
+                PathLabel = new SparkleLabel ("Remote Path:", NSTextAlignment.Left) {
+                    Frame = new RectangleF (190 + 196 + 16, Frame.Height - 308, 160, 17),
+                    Font  = SparkleUI.BoldFont
                 };
 
                 PathTextField = new NSTextField () {
@@ -243,20 +205,18 @@ namespace SparkleShare {
 
                 PathTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
-                PathHelpLabel = new SparkleLabel () {
+                PathHelpLabel = new SparkleLabel (Controller.SelectedPlugin.PathExample, NSTextAlignment.Left) {
                     TextColor       = NSColor.DisabledControlText,
                     Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 355, 204, 17),
                     Font            = NSFontManager.SharedFontManager.FontWithFamily ("Lucida Grande",
                         NSFontTraitMask.Condensed, 0, 11),
-                    StringValue = "" + Controller.SelectedPlugin.PathExample
                 };
 
-                AddressHelpLabel = new SparkleLabel () {
+                AddressHelpLabel = new SparkleLabel (Controller.SelectedPlugin.AddressExample, NSTextAlignment.Left) {
                     TextColor       = NSColor.DisabledControlText,
                     Frame           = new RectangleF (190, Frame.Height - 355, 204, 17),
                     Font            = NSFontManager.SharedFontManager.FontWithFamily ("Lucida Grande",
                         NSFontTraitMask.Condensed, 0, 11),
-                    StringValue = "" + Controller.SelectedPlugin.AddressExample
                 };
 
                 TableView = new NSTableView () {
@@ -275,11 +235,9 @@ namespace SparkleShare {
                 };
 
                 IconColumn = new NSTableColumn (new NSImage ()) {
-                    Width = 36,
+                    Width         = 36,
                     HeaderToolTip = "Icon",
-                    DataCell = new NSImageCell () {
-                        ImageAlignment = NSImageAlignment.Right
-                    }
+                    DataCell      = new NSImageCell () { ImageAlignment = NSImageAlignment.Right }
                 };
 
                 DescriptionColumn = new NSTableColumn () {
@@ -314,9 +272,7 @@ namespace SparkleShare {
                     Enabled = false
                 };
 
-                CancelButton = new NSButton () {
-                    Title = "Cancel"
-                };
+                CancelButton = new NSButton () { Title = "Cancel" };
 
 
                 Controller.ChangeAddressFieldEvent += delegate (string text, string example_text, FieldState state) {
@@ -359,9 +315,7 @@ namespace SparkleShare {
                     Controller.AddPageCompleted (AddressTextField.StringValue, PathTextField.StringValue);
                 };
 
-                CancelButton.Activated += delegate {
-                    Controller.PageCancelled ();
-                };
+                CancelButton.Activated += delegate { Controller.PageCancelled (); };
 
                 Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
                     Program.Controller.Invoke (() => {
@@ -389,7 +343,6 @@ namespace SparkleShare {
                 Header      = "Adding project ‘" + Controller.SyncingFolder + "’…";
                 Description = "This may take a while for large projects.\nIsn't it coffee-o'clock?";
 
-
                 ProgressIndicator = new NSProgressIndicator () {
                     Frame         = new RectangleF (190, Frame.Height - 200, 640 - 150 - 80, 20),
                     Style         = NSProgressIndicatorStyle.Bar,
@@ -401,9 +354,7 @@ namespace SparkleShare {
 
                 ProgressIndicator.StartAnimation (this);
 
-                CancelButton = new NSButton () {
-                    Title = "Cancel"
-                };
+                CancelButton = new NSButton () { Title = "Cancel" };
 
                 FinishButton = new NSButton () {
                     Title = "Finish",
@@ -417,9 +368,7 @@ namespace SparkleShare {
                     });
                 };
 
-                CancelButton.Activated += delegate {
-                    Controller.SyncingCancelled ();
-                };
+                CancelButton.Activated += delegate { Controller.SyncingCancelled (); };
 
 
                 ContentView.AddSubview (ProgressIndicator);
@@ -431,7 +380,6 @@ namespace SparkleShare {
             if (type == PageType.Error) {
                 Header      = "Oops! Something went wrong…";
                 Description = "Please check the following:";
-
 
                 // Displaying marked up text with Cocoa is
                 // a pain, so we just use a webview instead
@@ -476,22 +424,12 @@ namespace SparkleShare {
                 web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
                 web_view.DrawsBackground = false;
 
-                CancelButton = new NSButton () {
-                    Title = "Cancel"
-                };
-
-                TryAgainButton = new NSButton () {
-                    Title = "Try Again…"
-                };
+                CancelButton = new NSButton () { Title = "Cancel" };
+                TryAgainButton = new NSButton () { Title = "Try Again…" };
 
 
-                CancelButton.Activated += delegate {
-                    Controller.PageCancelled ();
-                };
-
-                TryAgainButton.Activated += delegate {
-                    Controller.ErrorPageCompleted ();
-                };
+                CancelButton.Activated += delegate { Controller.PageCancelled (); };
+                TryAgainButton.Activated += delegate { Controller.ErrorPageCompleted (); };
 
 
                 ContentView.AddSubview (web_view);
@@ -515,10 +453,8 @@ namespace SparkleShare {
                 if (type == PageType.CryptoPassword)
                     extra_pos_y = 20;
   
-                PasswordLabel = new SparkleLabel () {
-                    Alignment       = NSTextAlignment.Right,
+                PasswordLabel = new SparkleLabel ("Password:", NSTextAlignment.Right) {
                     Frame           = new RectangleF (155, Frame.Height - 204 - extra_pos_y, 160, 17),
-                    StringValue     = "Password:",
                     Font            = SparkleUI.BoldFont
                 };
 
@@ -548,14 +484,11 @@ namespace SparkleShare {
                     Frame = new RectangleF (200, Frame.Height - 320, 24, 24)
                 };
 
-                WarningTextField = new SparkleLabel () {
-                    Frame       = new RectangleF (235, Frame.Height - 390, 325, 100),
-                    StringValue = "This password can't be changed later, and your files can't be recovered if it's forgotten."
+                WarningTextField = new SparkleLabel ("This password can't be changed later, and your files can't be recovered if it's forgotten.", NSTextAlignment.Left) {
+                    Frame = new RectangleF (235, Frame.Height - 390, 325, 100),
                 };
 
-                CancelButton = new NSButton () {
-                    Title = "Cancel"
-                };
+                CancelButton = new NSButton () { Title = "Cancel" };
 
                 ContinueButton = new NSButton () {
                     Title    = "Continue",
@@ -592,7 +525,6 @@ namespace SparkleShare {
                         Controller.CheckCryptoPasswordPage (PasswordTextField.StringValue);
                 };
 
-                
                 Controller.UpdateCryptoPasswordContinueButtonEvent += delegate (bool button_enabled) {
                     Program.Controller.Invoke (() => { ContinueButton.Enabled = button_enabled; });
                 };
@@ -608,9 +540,7 @@ namespace SparkleShare {
                         Controller.CryptoPasswordPageCompleted (PasswordTextField.StringValue);
                 };
 
-                CancelButton.Activated += delegate {
-                    Controller.CryptoPageCancelled ();
-                };
+                CancelButton.Activated += delegate { Controller.CryptoPageCancelled (); };
 
 
                 ContentView.AddSubview (PasswordLabel);
@@ -633,7 +563,6 @@ namespace SparkleShare {
                 Header      = "Your shared project is ready!";
                 Description = "You can find the files in your SparkleShare folder.";
 
-
                 if (warnings.Length > 0) {
                     WarningImage = NSImage.ImageNamed ("NSInfo");
                     WarningImage.Size = new SizeF (24, 24);
@@ -643,32 +572,19 @@ namespace SparkleShare {
                         Frame = new RectangleF (200, Frame.Height - 175, 24, 24)
                     };
 
-                    WarningTextField = new SparkleLabel () {
-                        Frame       = new RectangleF (235, Frame.Height - 245, 325, 100),
-                        StringValue = warnings [0]
-                    };
+                    WarningTextField = new SparkleLabel (warnings [0], NSTextAlignment.Left);
+                    WarningTextField.Frame       = new RectangleF (235, Frame.Height - 245, 325, 100);
 
                     ContentView.AddSubview (WarningImageView);
                     ContentView.AddSubview (WarningTextField);
                 }
 
-
-                ShowFilesButton = new NSButton () {
-                    Title = "Show Files…"
-                };
-
-                FinishButton = new NSButton () {
-                    Title = "Finish"
-                };
+                ShowFilesButton = new NSButton () { Title = "Show Files…" };
+                FinishButton    = new NSButton () { Title = "Finish" };
 
 
-                ShowFilesButton.Activated += delegate {
-                    Controller.ShowFilesClicked ();
-                };
-
-                FinishButton.Activated += delegate {
-                    Controller.FinishPageCompleted ();
-                };
+                ShowFilesButton.Activated += delegate { Controller.ShowFilesClicked (); };
+                FinishButton.Activated += delegate { Controller.FinishPageCompleted (); };
 
 
                 Buttons.Add (FinishButton);
@@ -701,23 +617,12 @@ namespace SparkleShare {
                         Description = "SparkleShare creates a special folder on your computer " +
                             "that will keep track of your projects.";
 
-
-                        SkipTutorialButton = new NSButton () {
-                            Title = "Skip Tutorial"
-                        };
-
-                        ContinueButton = new NSButton () {
-                            Title = "Continue"
-                        };
+                        SkipTutorialButton = new NSButton () { Title = "Skip Tutorial" };
+                        ContinueButton     = new NSButton () { Title = "Continue" };
 
 
-                        SkipTutorialButton.Activated += delegate {
-                            Controller.TutorialSkipped ();
-                        };
-
-                        ContinueButton.Activated += delegate {
-                            Controller.TutorialPageCompleted ();
-                        };
+                        SkipTutorialButton.Activated += delegate { Controller.TutorialSkipped (); };
+                        ContinueButton.Activated     += delegate { Controller.TutorialPageCompleted (); };
 
 
                         ContentView.AddSubview (SlideImageView);
@@ -733,14 +638,8 @@ namespace SparkleShare {
                         Description = "All files added to your project folders are synced automatically with " +
                             "the host and your team members.";
 
-                        ContinueButton = new NSButton () {
-                            Title = "Continue"
-                        };
-
-                        ContinueButton.Activated += delegate {
-                            Controller.TutorialPageCompleted ();
-                        };
-
+                        ContinueButton = new NSButton () { Title = "Continue" };
+                        ContinueButton.Activated += delegate { Controller.TutorialPageCompleted (); };
                         Buttons.Add (ContinueButton);
 
                         break;
@@ -751,14 +650,8 @@ namespace SparkleShare {
                         Description = "It shows the syncing progress, provides easy access to " +
                             "your projects and let's you view recent changes.";
 
-                        ContinueButton = new NSButton () {
-                            Title = "Continue"
-                        };
-
-                        ContinueButton.Activated += delegate {
-                            Controller.TutorialPageCompleted ();
-                        };
-
+                        ContinueButton = new NSButton () { Title = "Continue" };
+                        ContinueButton.Activated += delegate { Controller.TutorialPageCompleted (); };
                         Buttons.Add (ContinueButton);
 
                         break;
@@ -780,9 +673,9 @@ namespace SparkleShare {
                         LinkCodeTextField.Cell.LineBreakMode      = NSLineBreakMode.TruncatingTail;
                         
                         CopyButton = new NSButton () {
-                            Title = "Copy",
+                            Title      = "Copy",
                             BezelStyle = NSBezelStyle.RoundRect,
-                            Frame       = new RectangleF (480, Frame.Height - 238, 60, 22)
+                            Frame      = new RectangleF (480, Frame.Height - 238, 60, 22)
                         };
                         
                         StartupCheckButton = new NSButton () {
@@ -793,9 +686,8 @@ namespace SparkleShare {
 
                         StartupCheckButton.SetButtonType (NSButtonType.Switch);
 
-                        FinishButton = new NSButton () {
-                            Title = "Finish"
-                        };
+                        FinishButton = new NSButton () { Title = "Finish" };
+
 
                         CopyButton.Activated += delegate {
                             NSPasteboard.GeneralPasteboard.ClearContents ();
@@ -807,10 +699,9 @@ namespace SparkleShare {
                             Controller.StartupItemChanged (StartupCheckButton.State == NSCellStateValue.On);
                         };
 
-                        FinishButton.Activated += delegate {
-                            Controller.TutorialPageCompleted ();
-                        };
-                    
+                        FinishButton.Activated += delegate { Controller.TutorialPageCompleted (); };
+
+
                         ContentView.AddSubview (LinkCodeTextField);
                         ContentView.AddSubview (CopyButton);
                         ContentView.AddSubview (StartupCheckButton);
@@ -953,8 +844,10 @@ namespace SparkleShare {
 
     public class SparkleLabel : NSTextField {
 
-        public SparkleLabel () : base () 
+        public SparkleLabel (string label, NSTextAlignment alignment)
         {
+            Alignment       = alignment;
+            StringValue     = label;
             BackgroundColor = NSColor.WindowBackground;
             Bordered        = false;
             Editable        = false;
