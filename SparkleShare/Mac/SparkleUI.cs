@@ -16,12 +16,9 @@
 
     
 using System;
-using System.Drawing;
-using System.IO;
 
 using MonoMac.Foundation;
 using MonoMac.AppKit;
-using MonoMac.ObjCRuntime;
 
 namespace SparkleShare {
 
@@ -43,8 +40,8 @@ namespace SparkleShare {
         public SparkleUI ()
         {
             Program.Controller.Invoke (() => {
-                NSWorkspace.SharedWorkspace.SetIconforFile (NSImage.ImageNamed ("sparkleshare-folder.icns"),
-                    Program.Controller.FoldersPath, 0);
+                NSWorkspace.SharedWorkspace.SetIconforFile (
+                    NSImage.ImageNamed ("sparkleshare-folder.icns"), Program.Controller.FoldersPath, 0);
 
                 NSApplication.SharedApplication.ApplicationIconImage = NSImage.ImageNamed ("sparkleshare-app.icns");
     
@@ -68,22 +65,7 @@ namespace SparkleShare {
         public void UpdateDockIconVisibility ()
         {
             if (Setup.IsVisible || EventLog.IsVisible || About.IsVisible)
-                ShowDockIcon ();
-            else
-                HideDockIcon ();
-        }
-
-
-        private void HideDockIcon ()
-        {
-            // Currently not supported by Apple's API
-            // NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.None;
-        }
-
-
-        private void ShowDockIcon ()
-        {
-            NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
+                NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
         }
     }
 
@@ -96,4 +78,3 @@ namespace SparkleShare {
         }
     }
 }
-    
