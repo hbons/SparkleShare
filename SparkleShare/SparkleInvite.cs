@@ -70,12 +70,12 @@ namespace SparkleShare {
                 node = xml_document.SelectSingleNode ("/sparkleshare/invite/fingerprint/text()");
                 if (node != null) { fingerprint = node.Value; }
 
-                Initialize (address, remote_path, accept_url, announcements_url, fingerprint);
-
             } catch (XmlException e) {
-                SparkleLogger.LogInfo ("Invite", "Invalid XML: " + e.Message);
+                SparkleLogger.LogInfo ("Invite", "Error parsing XML", e);
                 return;
             }
+
+            Initialize (address, remote_path, accept_url, announcements_url, fingerprint);
         }
 
 
