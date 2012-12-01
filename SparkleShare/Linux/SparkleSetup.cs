@@ -51,7 +51,6 @@ namespace SparkleShare {
 
                     switch (type) {
                     case PageType.Setup: {
-
                         Header      = "Welcome to SparkleShare!";
                         Description = "First off, what's your name and email?\nThis information is only visible to team members.";
 
@@ -132,7 +131,6 @@ namespace SparkleShare {
                     } 
 
                     case PageType.Add: {
-
                         Header = "Where's your project hosted?";
 
                         VBox layout_vertical = new VBox (false, 12);
@@ -339,7 +337,6 @@ namespace SparkleShare {
                     }
 
                     case PageType.Invite: {
-
                         Header      = "You've received an invite!";
                         Description = "Do you want to add this project to SparkleShare?";
 
@@ -435,7 +432,6 @@ namespace SparkleShare {
                     }
 
                     case PageType.Error: {
-                    
                         Header = "Oops! Something went wrong" + "…";
 
                         VBox points = new VBox (false, 0);
@@ -564,7 +560,6 @@ namespace SparkleShare {
                             ColumnSpacing = 6
                         };
 
-
                         table.Attach (password_label, 0, 1, 0, 1);
                         table.Attach (password_entry, 1, 2, 0, 1);
                         
@@ -596,8 +591,6 @@ namespace SparkleShare {
                         
                         Add (wrapper);
 
-
-
                         AddButton (cancel_button);
                         AddButton (continue_button);
 
@@ -605,7 +598,6 @@ namespace SparkleShare {
                     }
 
                     case PageType.CryptoPassword: {
-
                         Header       = "This project contains encrypted files";
                         Description  = "Please enter the password to see their contents.";
                         
@@ -676,15 +668,7 @@ namespace SparkleShare {
                     }
                         
                     case PageType.Finished: {
-
                         UrgencyHint = true;
-
-                        if (!HasToplevelFocus) {
-                            string title   = "Your shared project is ready!";
-                            string subtext = "You can find the files in your SparkleShare folder.";
-
-                            Program.UI.Bubbles.Controller.ShowBubble (title, subtext, null);
-                        }
 
                         Header      = "Your shared project is ready!";
                         Description = "You can find it in your SparkleShare folder";
@@ -734,7 +718,6 @@ namespace SparkleShare {
 
 
                     case PageType.Tutorial: {
-
                         switch (Controller.TutorialPageNumber) {
                         case 1: {
                             Header      = "What's happening next?";
@@ -874,6 +857,7 @@ namespace SparkleShare {
                     markup = markup.Replace (SecondaryTextColor, SecondaryTextColorSelected);
                 else
                     markup = markup.Replace (SecondaryTextColorSelected, SecondaryTextColor);
+                    
             } else {
                 markup = markup.Replace (SecondaryTextColorSelected, SecondaryTextColor);
             }
