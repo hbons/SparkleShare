@@ -216,7 +216,8 @@ namespace SparkleShare {
             (folder_item.Submenu as Menu).Add (notify_item);
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
             (folder_item.Submenu as Menu).Add (about_item);
-            
+
+            this.menu.Add (new SeparatorMenuItem ());            
             this.menu.Add (this.quit_item);
             this.menu.ShowAll ();
 
