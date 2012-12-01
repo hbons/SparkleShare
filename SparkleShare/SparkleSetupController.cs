@@ -249,6 +249,10 @@ namespace SparkleShare {
                         name += "'s";
 
                     string new_file_path = Path.Combine (Program.Controller.FoldersPath, name + " link code.txt");
+
+                    if (File.Exists (new_file_path))
+                        File.Delete (new_file_path);
+
                     File.Move (link_code_file_path, new_file_path);
                 }
 
