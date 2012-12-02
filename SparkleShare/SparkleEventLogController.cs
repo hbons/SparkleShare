@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -372,7 +373,9 @@ namespace SparkleShare {
                 html += "<tr>" +
                             "<td class='avatar'><img src='" + change_set_avatar + "'></td>" +
                             "<td class='name'>" + change_set.User.Name + "</td>" +
-                            "<td class='date'>" + change_set.Timestamp.ToString ("d MMM yyyy") + "</td>" +
+                            "<td class='date'>" + 
+                                change_set.Timestamp.ToString ("d MMM yyyy", CultureInfo.InvariantCulture) + 
+                            "</td>" +
                             "<td class='time'>" + change_set.Timestamp.ToString ("HH:mm") + "</td>" +
                             "<td class='restore'>" +
                                 "<a href='restore://" + change_set.Folder.Name + "/" + 
