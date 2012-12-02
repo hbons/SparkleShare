@@ -139,6 +139,7 @@ namespace SparkleShare {
                 }
 
                 UpdateIconEvent (CurrentState);
+                UpdateStatusItemEvent (StateText);
                 UpdateMenuEvent (CurrentState);
             };
 
@@ -184,6 +185,7 @@ namespace SparkleShare {
                 UpdateFolders ();
                 
                 UpdateIconEvent (CurrentState);
+                UpdateStatusItemEvent (StateText);
                 UpdateMenuEvent (CurrentState);
             };
         }
