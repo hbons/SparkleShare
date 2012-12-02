@@ -496,6 +496,14 @@ namespace SparkleShare {
                 };
 
 
+                Controller.UpdateCryptoPasswordContinueButtonEvent += delegate (bool button_enabled) {
+                    Program.Controller.Invoke (() => { ContinueButton.Enabled = button_enabled; });
+                };
+
+                Controller.UpdateCryptoSetupContinueButtonEvent += delegate (bool button_enabled) {
+                    Program.Controller.Invoke (() => { ContinueButton.Enabled = button_enabled; });
+                };
+                
                 ShowPasswordCheckButton.Activated += delegate {
                     if (PasswordTextField.Superview == ContentView) {
                         PasswordTextField.RemoveFromSuperview ();
@@ -525,14 +533,6 @@ namespace SparkleShare {
                         Controller.CheckCryptoPasswordPage (PasswordTextField.StringValue);
                 };
 
-                Controller.UpdateCryptoPasswordContinueButtonEvent += delegate (bool button_enabled) {
-                    Program.Controller.Invoke (() => { ContinueButton.Enabled = button_enabled; });
-                };
-
-                Controller.UpdateCryptoSetupContinueButtonEvent += delegate (bool button_enabled) {
-                    Program.Controller.Invoke (() => { ContinueButton.Enabled = button_enabled; });
-                };
-                
                 ContinueButton.Activated += delegate {
                     if (type == PageType.CryptoSetup)
                         Controller.CryptoSetupPageCompleted (PasswordTextField.StringValue);
@@ -611,7 +611,6 @@ namespace SparkleShare {
                 }
 
                 switch (Controller.TutorialPageNumber) {
-
                     case 1: {
                         Header      = "What's happening next?";
                         Description = "SparkleShare creates a special folder on your computer " +
