@@ -30,11 +30,10 @@ namespace SparkleShare {
         public SparkleBubbles ()
         {
             Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
-                // Notification center was introduced in Mountain Lion
                 if (Environment.OSVersion.Version.Major < 12)
-                    return;
+                    return; // The notification center was introduced in Mountain Lion
 
-                InvokeOnMainThread (delegate {
+                InvokeOnMainThread (() => {
                     NSUserNotification notification = new NSUserNotification () {
                         Title           = title,
                         InformativeText = subtext,
@@ -43,7 +42,7 @@ namespace SparkleShare {
                     
                     NSUserNotificationCenter center  = NSUserNotificationCenter.DefaultUserNotificationCenter;
                     center.ShouldPresentNotification = delegate { return true; };
-                    center.DidActivateNotification   += delegate { Controller.BubbleClicked (); };
+                    center.DidActivateNotification  += delegate { Controller.BubbleClicked (); };
 
                     center.ScheduleNotification (notification);
                 });

@@ -59,9 +59,7 @@ namespace SparkleShare {
             CreateAbout ();
 
 
-            this.hidden_close_button.Activated += delegate {
-                Controller.WindowClosed ();
-            };
+            this.hidden_close_button.Activated += delegate { Controller.WindowClosed (); };
 
             Controller.HideWindowEvent += delegate {
                 Program.Controller.Invoke (() => PerformClose (this));
@@ -71,22 +69,8 @@ namespace SparkleShare {
                 Program.Controller.Invoke (() => OrderFrontRegardless ());
             };
 
-            Controller.NewVersionEvent += delegate (string new_version) {
-                Program.Controller.Invoke (() => {
-                    this.updates_text_field.StringValue = "A newer version (" + new_version + ") is available!";
-                });
-            };
-
-            Controller.VersionUpToDateEvent += delegate {
-                Program.Controller.Invoke (() => {
-                    this.updates_text_field.StringValue = "You are running the latest version.";
-                });
-            };
-
-            Controller.CheckingForNewVersionEvent += delegate {
-                Program.Controller.Invoke (() => {
-                    this.updates_text_field.StringValue = "Checking for updates...";
-                });
+            Controller.UpdateLabelEvent += delegate (string text) {
+                Program.Controller.Invoke (() => { this.updates_text_field.StringValue = text; });
             };
 
 
