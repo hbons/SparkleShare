@@ -136,7 +136,6 @@ namespace SparkleShare {
                 new PointF (this.report_problem_link.Frame.X + this.report_problem_link.Frame.Width + 10, 25),
                 this.debug_log_link.Frame.Size);
 
-
             ContentView.AddSubview (this.about_image_view);
             ContentView.AddSubview (this.version_text_field);
             ContentView.AddSubview (this.updates_text_field);
@@ -169,58 +168,58 @@ namespace SparkleShare {
 
             return;
         }
-    }
 
 
-    public class SparkleAboutDelegate : NSWindowDelegate {
+        private class SparkleAboutDelegate : NSWindowDelegate {
+            
+            public override bool WindowShouldClose (NSObject sender)
+            {
+                (sender as SparkleAbout).Controller.WindowClosed ();
+                return false;
+            }
+        }
         
-        public override bool WindowShouldClose (NSObject sender)
-        {
-            (sender as SparkleAbout).Controller.WindowClosed ();
-            return false;
-        }
-    }
-
-
-    public class SparkleLink : NSTextField {
-
-        private NSUrl url;
-
-
-        public SparkleLink (string text, string address) : base ()
-        {
-            this.url = new NSUrl (address);
-
-            AllowsEditingTextAttributes = true;
-            BackgroundColor = NSColor.White;
-            Bordered        = false;
-            DrawsBackground = false;
-            Editable        = false;
-            Selectable      = false;
-
-            NSData name_data = NSData.FromString ("<a href='" + this.url +
-                "' style='font-size: 8pt; font-family: \"Lucida Grande\"; color: #739ECF'>" + text + "</a></font>");
-
-            NSDictionary name_dictionary       = new NSDictionary();
-            NSAttributedString name_attributes = new NSAttributedString (name_data, new NSUrl ("file://"), out name_dictionary);
-
-            NSMutableAttributedString s = new NSMutableAttributedString ();
-            s.Append (name_attributes);
-
-            Cell.AttributedStringValue = s;
-            SizeToFit ();
-        }
-
-
-        public override void MouseUp (NSEvent e)
-        {
-            Program.Controller.OpenWebsite (this.url.ToString ());
-        }
-
-
-        public override void ResetCursorRects ()
-        {
-            AddCursorRect (Bounds, NSCursor.PointingHandCursor);
+        
+        private class SparkleLink : NSTextField {
+            
+            private NSUrl url;
+            
+            
+            public SparkleLink (string text, string address) : base ()
+            {
+                this.url = new NSUrl (address);
+                
+                AllowsEditingTextAttributes = true;
+                BackgroundColor = NSColor.White;
+                Bordered        = false;
+                DrawsBackground = false;
+                Editable        = false;
+                Selectable      = false;
+                
+                NSData name_data = NSData.FromString ("<a href='" + this.url +
+                    "' style='font-size: 8pt; font-family: \"Lucida Grande\"; color: #739ECF'>" + text + "</a></font>");
+                
+                NSDictionary name_dictionary       = new NSDictionary();
+                NSAttributedString name_attributes = new NSAttributedString (name_data, new NSUrl ("file://"), out name_dictionary);
+                
+                NSMutableAttributedString s = new NSMutableAttributedString ();
+                s.Append (name_attributes);
+                
+                Cell.AttributedStringValue = s;
+                SizeToFit ();
+            }
+            
+            
+            public override void MouseUp (NSEvent e)
+            {
+                Program.Controller.OpenWebsite (this.url.ToString ());
+            }
+            
+            
+            public override void ResetCursorRects ()
+            {
+                AddCursorRect (Bounds, NSCursor.PointingHandCursor);
+            }
         }
     }
 }

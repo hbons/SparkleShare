@@ -179,11 +179,11 @@ namespace SparkleShare {
 
             
             if (Controller.RecentEventsItemEnabled)
-                this.recent_events_item.Activated += Controller.RecentEventsClicked;
+                this.recent_events_item.Activated += delegate { Controller.RecentEventsClicked (); };
 
-            this.add_item.Activated += Controller.AddHostedProjectClicked;
-            this.about_item.Activated += Controller.AboutClicked;
-            this.quit_item.Activated += Controller.QuitClicked;
+            this.add_item.Activated   += delegate { Controller.AddHostedProjectClicked (); };
+            this.about_item.Activated += delegate { Controller.AboutClicked (); };
+            this.quit_item.Activated  += delegate { Controller.QuitClicked (); };
 
 
             this.menu.AddItem (this.state_item);

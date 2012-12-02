@@ -73,6 +73,7 @@ namespace SparkleShare {
                     UpdateLabelEvent ("You are running the latest version.");
 
             } catch {
+                UpdateLabelEvent ("Version check failed.");
             }
         }
     }
