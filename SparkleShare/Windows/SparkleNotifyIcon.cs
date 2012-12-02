@@ -259,7 +259,7 @@ namespace SparkleShare {
 
 					if (!context_menu_rect.Contains(hit_point)) {
 						new Thread (() => {
-							Thread.Sleep (500);
+							Thread.Sleep (750);
 
 							Dispatcher.BeginInvoke ((Action) delegate {
 								ContextMenu.IsOpen = false;
