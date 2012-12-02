@@ -144,9 +144,9 @@ namespace SparkleShare {
             this.exit_item = new SparkleMenuItem () { Header = "Exit" };
             
             
-            add_item.Click      += Controller.AddHostedProjectClicked;
-            this.log_item.Click += Controller.RecentEventsClicked;
-            about_item.Click    += Controller.AboutClicked;
+			add_item.Click      += delegate { Controller.AddHostedProjectClicked (); };
+			this.log_item.Click += delegate { Controller.RecentEventsClicked (); };
+			about_item.Click    += delegate { Controller.AboutClicked (); };
             
             notify_check_box.Click += delegate {
                 this.context_menu.IsOpen = false;
@@ -198,7 +198,7 @@ namespace SparkleShare {
                             Header = "Try again"
                         };
 
-                        try_again_item.Click += Controller.TryAgainDelegate (folder_name);
+						try_again_item.Click += delegate { Controller.TryAgainDelegate (folder_name); };
 
                         subfolder_item.Items.Add (error_item);
                         subfolder_item.Items.Add (new Separator ());
@@ -206,7 +206,7 @@ namespace SparkleShare {
                         
                     } else {
                         subfolder_item.Icon = subfolder_image;
-                        subfolder_item.Click += Controller.OpenFolderDelegate (folder_name);
+						subfolder_item.Click += delegate { Controller.OpenFolderDelegate (folder_name); };
                     }
                     
                     this.context_menu.Items.Add (subfolder_item);

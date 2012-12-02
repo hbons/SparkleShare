@@ -19,6 +19,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -253,11 +254,18 @@ namespace SparkleShare {
             try {
                 if (button == left_button_down || button == right_button_down)
                 {
-                    Rect context_menu_rect = GetContextMenuRect(ContextMenu);
-                    Point hit_point = GetHitPoint(data_pointer);
+                    Rect context_menu_rect = GetContextMenuRect (ContextMenu);
+                    Point hit_point = GetHitPoint (data_pointer);
 
-                    if (!context_menu_rect.Contains(hit_point))
-                        ContextMenu.IsOpen = false;
+					if (!context_menu_rect.Contains(hit_point)) {
+						new Thread (() => {
+							Thread.Sleep (500);
+
+							Dispatcher.BeginInvoke ((Action) delegate {
+								ContextMenu.IsOpen = false;
+							});
+						}).Start ();
+					}
                 }
             } 
             finally {
