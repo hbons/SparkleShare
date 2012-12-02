@@ -231,7 +231,7 @@ namespace SparkleShare {
 
             if (ssh_pid_match.Success) {
                 Int32.TryParse (ssh_pid_match.Groups [1].Value, out this.ssh_agent_pid);
-                Environment.SetEnvironmentVariable ("SSH_AGENT_PID", this.ssh_agent_pid);
+                Environment.SetEnvironmentVariable ("SSH_AGENT_PID", "" + this.ssh_agent_pid);
 
                 SparkleLogger.LogInfo ("Controller", "ssh-agent started, PID=" + this.ssh_agent_pid);
 
