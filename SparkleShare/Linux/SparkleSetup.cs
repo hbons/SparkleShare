@@ -241,40 +241,39 @@ namespace SparkleShare {
                             path_entry.Sensitive = false;
 
                         // TODO: Scroll to the selection
-
                         return true;
+                        
                     } else {
                         return false;
                     }
                 }));
 
-
                 address_entry.Changed += delegate {
                     Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree.SelectedRow);
                 };
 
-                        layout_address.PackStart (new Label () {
-                                Markup = "<b>" + "Address:" + "</b>",
-                                Xalign = 0
-                            }, true, true, 0);
+                layout_address.PackStart (new Label () {
+                        Markup = "<b>" + "Address:" + "</b>",
+                        Xalign = 0
+                    }, true, true, 0);
 
-                        layout_address.PackStart (address_entry, false, false, 0);
-                        layout_address.PackStart (address_example, false, false, 0);
+                layout_address.PackStart (address_entry, false, false, 0);
+                layout_address.PackStart (address_example, false, false, 0);
 
-                            path_entry.Changed += delegate {
-                                Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree.SelectedRow);
-                            };
+                path_entry.Changed += delegate {
+                    Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree.SelectedRow);
+                };
 
-                        layout_path.PackStart (new Label () {
-                                Markup = "<b>" + "Remote Path:" + "</b>",
-                                Xalign = 0
-                            }, true, true, 0);
-                        
-                        layout_path.PackStart (path_entry, false, false, 0);
-                        layout_path.PackStart (path_example, false, false, 0);
+                layout_path.PackStart (new Label () {
+                    Markup = "<b>" + "Remote Path:" + "</b>",
+                    Xalign = 0
+                }, true, true, 0);
+                
+                layout_path.PackStart (path_entry, false, false, 0);
+                layout_path.PackStart (path_example, false, false, 0);
 
-                    layout_fields.PackStart (layout_address);
-                    layout_fields.PackStart (layout_path);
+                layout_fields.PackStart (layout_address);
+                layout_fields.PackStart (layout_path);
 
                 layout_vertical.PackStart (new Label (""), false, false, 0);
                 layout_vertical.PackStart (scrolled_window, true, true, 0);
@@ -282,25 +281,22 @@ namespace SparkleShare {
 
                 Add (layout_vertical);
 
-                    // Cancel button
-                    Button cancel_button = new Button ("Cancel");
-                    Button add_button = new Button ("Add") { Sensitive = false };
+                Button cancel_button = new Button ("Cancel");
+                Button add_button = new Button ("Add") { Sensitive = false };
 
-                    cancel_button.Clicked += delegate { Controller.PageCancelled (); };
+                cancel_button.Clicked += delegate { Controller.PageCancelled (); };
 
-                    add_button.Clicked += delegate {
-                        Controller.AddPageCompleted (address_entry.Text, path_entry.Text);
-                    };
+                add_button.Clicked += delegate {
+                    Controller.AddPageCompleted (address_entry.Text, path_entry.Text);
+                };
 
                 Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
                     Application.Invoke (delegate {
                         add_button.Sensitive = button_enabled;                            
                     });
                 };
-                
 
                 CheckButton check_button = new CheckButton ("Fetch prior history") { Active = false };
-
                 check_button.Toggled += delegate { Controller.HistoryItemChanged (check_button.Active); };
 
                 AddOption (check_button);
