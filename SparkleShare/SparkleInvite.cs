@@ -25,14 +25,13 @@ using SparkleLib;
 
 namespace SparkleShare {
 
-    public class SparkleInvite {
+    public class SparkleInvite : XmlDocument {
 
         public string Address { get; private set; }
         public string RemotePath { get; private set; }
         public string Fingerprint { get; private set; }
         public string AcceptUrl { get; private set; }
         public string AnnouncementsUrl { get; private set; }
-
 
         public bool IsValid {
             get {
@@ -41,49 +40,27 @@ namespace SparkleShare {
         }
 
 
-        public SparkleInvite (string xml_file_path)
+        public SparkleInvite (string xml_file_path) : base ()
         {
-            XmlDocument xml_document = new XmlDocument ();
-            XmlNode node;
-
-            string address           = "";
-            string remote_path       = "";
-            string accept_url        = "";
-            string announcements_url = "";
-            string fingerprint       = "";
-
             try {
-                xml_document.Load (xml_file_path);
-
-                node = xml_document.SelectSingleNode ("/sparkleshare/invite/address/text()");
-                if (node != null) { address = node.Value; }
-
-                node = xml_document.SelectSingleNode ("/sparkleshare/invite/remote_path/text()");
-                if (node != null) { remote_path = node.Value; }
-
-                node = xml_document.SelectSingleNode ("/sparkleshare/invite/accept_url/text()");
-                if (node != null) { accept_url = node.Value; }
-
-                node = xml_document.SelectSingleNode ("/sparkleshare/invite/announcements_url/text()");
-                if (node != null) { announcements_url = node.Value; }
-
-                node = xml_document.SelectSingleNode ("/sparkleshare/invite/fingerprint/text()");
-                if (node != null) { fingerprint = node.Value; }
+                Load (xml_file_path);
 
             } catch (XmlException e) {
                 SparkleLogger.LogInfo ("Invite", "Error parsing XML", e);
                 return;
             }
 
-            Initialize (address, remote_path, accept_url, announcements_url, fingerprint);
+            Address          = ReadField ("address");
+            RemotePath       = ReadField ("remote_path");
+            AcceptUrl        = ReadField ("accept_url");
+            AnnouncementsUrl = ReadField ("announcements_url");
+            Fingerprint      = ReadField ("fingerprint");
         }
 
 
         public bool Accept (string public_key)
         {
-            ServicePointManager.ServerCertificateValidationCallback = delegate {
-                return true;
-            };
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 
             if (string.IsNullOrEmpty (AcceptUrl))
                 return true;
@@ -91,8 +68,7 @@ namespace SparkleShare {
             string post_data   = "public_key=" + public_key;
             byte [] post_bytes = Encoding.UTF8.GetBytes (post_data);
 
-            WebRequest request  = WebRequest.Create (AcceptUrl);
-
+            WebRequest request    = WebRequest.Create (AcceptUrl);
             request.Method        = "POST";
             request.ContentType   = "application/x-www-form-urlencoded";
             request.ContentLength = post_bytes.Length;
@@ -108,28 +84,33 @@ namespace SparkleShare {
                 response.Close ();
 
             } catch (WebException e) {
-                SparkleLogger.LogInfo ("Invite", "Failed uploading public key to " + AcceptUrl + ": " + e.Message);
+                SparkleLogger.LogInfo ("Invite", "Failed uploading public key to " + AcceptUrl + "", e);
                 return false;
             }
 
             if (response != null && response.StatusCode == HttpStatusCode.OK) {
                 SparkleLogger.LogInfo ("Invite", "Uploaded public key to " + AcceptUrl);
                 return true;
-
-            } else {
-                return false;
             }
+
+            return false;
         }
 
 
-        private void Initialize (string address, string remote_path,
-            string accept_url, string announcements_url, string fingerprint)
+        private string ReadField (string name)
         {
-            Address          = address;
-            RemotePath       = remote_path;
-            AcceptUrl        = accept_url;
-            AnnouncementsUrl = announcements_url;
-            Fingerprint      = fingerprint;
+            try {
+                XmlNode node = SelectSingleNode ("/sparkleshare/invite/" + name + "/text()");
+                
+                if (node != null)
+                    return node.Value;    
+                else 
+                    return "";
+                
+            } catch (XmlException e) {
+                SparkleLogger.LogInfo ("Invite", "Error reading field '" + name + "'", e);
+                return "";
+            }
         }
     }
 }
