@@ -177,6 +177,12 @@
     <EmbeddedResource Include="Pixmaps\process-syncing-idle.png" />
     <EmbeddedResource Include="Pixmaps\process-syncing-up.png" />
     <EmbeddedResource Include="Pixmaps\process-syncing.png" />
+    <EmbeddedResource Include="..\Common\Pixmaps\tutorial-slide-1.png">
+      <Link>Pixmaps\tutorial-slide-1.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Common\Pixmaps\tutorial-slide-2.png">
+      <Link>Pixmaps\tutorial-slide-2.png</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Common\Plugins\github.png">
@@ -185,10 +191,6 @@
     </None>
     <None Include="..\Common\Plugins\gitorious.png">
       <Link>Plugins\gitorious.png</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Common\Plugins\gnome.png">
-      <Link>Plugins\gnome.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\Common\Plugins\own-server.png">
@@ -219,10 +221,6 @@
       <Link>Plugins\gitorious.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Plugins\gnome.xml">
-      <Link>Plugins\gnome.xml</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="..\Common\Plugins\own-server.xml">
       <Link>Plugins\own-server.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -235,8 +233,6 @@
     <EmbeddedResource Include="Pixmaps\sparkleshare-folder.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Pixmaps\tutorial-slide-1.png" />
-    <EmbeddedResource Include="Pixmaps\tutorial-slide-2.png" />
     <EmbeddedResource Include="Pixmaps\tutorial-slide-3.png" />
   </ItemGroup>
   <ItemGroup>

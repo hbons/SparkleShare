@@ -217,7 +217,7 @@ namespace SparkleShare {
         }
 
 
-        public void RecentEventsClicked (object sender, EventArgs args)
+        public void RecentEventsClicked ()
         {
             new Thread (() => {
                 while (!Program.Controller.RepositoriesLoaded)
@@ -229,19 +229,19 @@ namespace SparkleShare {
         }
 
 
-        public void AddHostedProjectClicked (object sender, EventArgs args)
+        public void AddHostedProjectClicked ()
         {
             new Thread (() => Program.Controller.ShowSetupWindow (PageType.Add)).Start ();
         }
 
 
-        public void AboutClicked (object sender, EventArgs args)
+        public void AboutClicked ()
         {
             Program.Controller.ShowAboutWindow ();
         }
         
 		
-        public void QuitClicked (object sender, EventArgs args)
+        public void QuitClicked ()
         {
             Program.Controller.Quit ();
         }
