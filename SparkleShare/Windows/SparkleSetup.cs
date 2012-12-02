@@ -808,7 +808,7 @@ namespace SparkleShare {
     
                             
                                 WPF.Image slide_image = new WPF.Image () {
-                                    Width  = 350,
+                                    Width  = 324,
                                     Height = 200
                                 };
                             
@@ -824,7 +824,7 @@ namespace SparkleShare {
                             
                             
                                 ContentCanvas.Children.Add (slide_image);
-                                Canvas.SetLeft (slide_image, 215);
+                                Canvas.SetLeft (slide_image, 228);
                                 Canvas.SetTop (slide_image, 130);
                             
                                 Buttons.Add (skip_tutorial_button);
@@ -853,7 +853,7 @@ namespace SparkleShare {
                                 };
                                 
                                 WPF.Image slide_image = new WPF.Image () {
-                                    Width  = 350,
+                                    Width  = 324,
                                     Height = 200
                                 };
                             
@@ -861,7 +861,7 @@ namespace SparkleShare {
                             
                             
                                 ContentCanvas.Children.Add (slide_image);
-                                Canvas.SetLeft (slide_image, 215);
+                                Canvas.SetLeft (slide_image, 228);
                                 Canvas.SetTop (slide_image, 130);
                             
                                 Buttons.Add (continue_button);
@@ -884,7 +884,7 @@ namespace SparkleShare {
                                 };
                                 
                                 WPF.Image slide_image = new WPF.Image () {
-                                    Width  = 350,
+                                    Width  = 324,
                                     Height = 200
                                 };
                             
@@ -892,7 +892,7 @@ namespace SparkleShare {
                             
                             
                                 ContentCanvas.Children.Add (slide_image);
-                                Canvas.SetLeft (slide_image, 215);
+                                Canvas.SetLeft (slide_image, 228);
                                 Canvas.SetTop (slide_image, 130);
                             
                                 Buttons.Add (continue_button);                                
