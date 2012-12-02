@@ -53,9 +53,9 @@ namespace SparkleShare {
 
         public SparkleStatusIcon ()
         {
-            this.status_item.HighlightMode       = true;
-            this.status_item.Image               = this.syncing_idle_image;
-            this.status_item.AlternateImage      = this.syncing_idle_image_active;
+            this.status_item.HighlightMode  = true;
+            this.status_item.Image          = this.syncing_idle_image;
+            this.status_item.AlternateImage = this.syncing_idle_image_active;
 
             CreateMenu ();
 
