@@ -180,11 +180,8 @@ namespace SparkleShare {
 
 			this.recent_events_item = new MenuItem ("Recent Changes…");
 			this.recent_events_item.Sensitive = Controller.RecentEventsItemEnabled;
-			this.recent_events_item.Activated += Controller.RecentEventsClicked;
-
+            this.quit_item    = new MenuItem ("Quit") { Sensitive = Controller.QuitItemEnabled };
             MenuItem add_item = new MenuItem ("Add Hosted Project…");
-            add_item.Activated += Controller.AddHostedProjectClicked;
-            
             MenuItem notify_item;
                                                              
             if (Program.Controller.NotificationsEnabled)
@@ -204,10 +201,11 @@ namespace SparkleShare {
             };
 
             MenuItem about_item = new MenuItem ("About SparkleShare");
-            about_item.Activated += Controller.AboutClicked;
-
-            this.quit_item = new MenuItem ("Quit") { Sensitive = Controller.QuitItemEnabled };
-            this.quit_item.Activated += Controller.QuitClicked;
+            
+            about_item.Activated              += delegate { Controller.AboutClicked (); };
+            add_item.Activated                += delegate { Controller.AddHostedProjectClicked (); };
+			this.recent_events_item.Activated += delegate { Controller.RecentEventsClicked (); };
+            this.quit_item.Activated          += delegate { Controller.QuitClicked (); };
 
             folder_item.Submenu = new Menu ();
 			(folder_item.Submenu as Menu).Add (this.recent_events_item);
