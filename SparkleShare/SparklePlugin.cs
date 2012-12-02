@@ -22,14 +22,14 @@ using IO = System.IO;
 
 namespace SparkleShare {
 
-    public class SparklePlugin {
+    public class SparklePlugin : XmlDocument {
 
         public static string PluginsPath = "";
 
         public static string LocalPluginsPath = IO.Path.Combine (
             Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "sparkleshare", "plugins");
 
-        public string Name { get { return GetValue ("info", "name"); } }
+        new public string Name { get { return GetValue ("info", "name"); } }
         public string Description { get { return GetValue ("info", "description"); } }
         public string Backend { get { return GetValue ("info", "backend"); } }
         public string Fingerprint { get { return GetValue ("info", "fingerprint"); } }
@@ -62,14 +62,13 @@ namespace SparkleShare {
             }
         }
 
-        private XmlDocument xml = new XmlDocument ();
         private string plugin_directory;
 
 
         public SparklePlugin (string plugin_path)
         {
             this.plugin_directory = System.IO.Path.GetDirectoryName (plugin_path);
-            this.xml.Load (plugin_path);
+            Load (plugin_path);
         }
 
 
@@ -107,14 +106,13 @@ namespace SparkleShare {
                 IO.Directory.CreateDirectory (LocalPluginsPath);
 
             IO.File.WriteAllText (plugin_path, plugin_xml);
-
             return new SparklePlugin (plugin_path);
         }
 
 
         private string GetValue (string a, string b)
         {
-            XmlNode node = this.xml.SelectSingleNode ("/sparkleshare/plugin/" + a + "/" + b + "/text()");
+            XmlNode node = SelectSingleNode ("/sparkleshare/plugin/" + a + "/" + b + "/text()");
 
             if (node != null && !string.IsNullOrEmpty (node.Value))
                 return node.Value;

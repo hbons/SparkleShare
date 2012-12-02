@@ -25,11 +25,9 @@ namespace SparkleShare {
 
         public event Action ShowWindowEvent = delegate { };
         public event Action HideWindowEvent = delegate { };
-        public event Action VersionUpToDateEvent = delegate { };
-        public event Action CheckingForNewVersionEvent = delegate { };
 
-        public event NewVersionEventDelegate NewVersionEvent = delegate { };
-        public delegate void NewVersionEventDelegate (string new_version_string);
+        public event UpdateLabelEventDelegate UpdateLabelEvent = delegate { };
+        public delegate void UpdateLabelEventDelegate (string text);
 
         public readonly string WebsiteLinkAddress       = "http://www.sparkleshare.org/";
         public readonly string CreditsLinkAddress       = "http://www.github.com/hbons/SparkleShare/tree/master/legal/AUTHORS";
@@ -60,7 +58,7 @@ namespace SparkleShare {
 
         private void CheckForNewVersion ()
         {
-            CheckingForNewVersionEvent ();
+            UpdateLabelEvent ("Checking for updates...");
             Thread.Sleep (500);
 
             WebClient web_client = new WebClient ();
@@ -70,9 +68,9 @@ namespace SparkleShare {
                 string latest_version = web_client.DownloadString (uri);
             
                 if (new Version (latest_version) > new Version (RunningVersion))
-                    NewVersionEvent (latest_version);
+                    UpdateLabelEvent ("A newer version (" + latest_version + ") is available!");
                 else
-                    VersionUpToDateEvent ();
+                    UpdateLabelEvent ("You are running the latest version.");
 
             } catch {
             }
