@@ -140,10 +140,11 @@ namespace SparkleShare {
 
             if (!File.Exists (icon_file_path)) {
                 string ini_file_path  = Path.Combine (FoldersPath, "desktop.ini");
-                
-                string ini_file = "[.ShellClassInfo]" +
-                    "IconFile=" + icon_file_path +
-                    "IconIndex=0" +
+                string n = Environment.NewLine;
+
+                string ini_file = "[.ShellClassInfo]" + n +
+                    "IconFile=" + icon_file_path + n +
+                    "IconIndex=0" + n +
                     "InfoTip=SparkleShare";
 
                 try {
