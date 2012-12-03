@@ -1,3 +1,14 @@
+0.9.9 for Linux, Mac and Windows (Mon Dec 3 2012):
+
+        Hylke:
+        - Add high resolution images for retina displays on macs
+        - Put uncommonly used menu items in a submenu in the statusicon
+        - Fix an issue connecting to encrypted projects
+        - New tutorial slides
+        - Detect more types of sync errors
+        - Various small fixes and cleanups
+
+
 0.9.8 for Linux, Mac and Windows (Sun Nov 18 2012):
 
         Hylke:
