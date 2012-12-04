@@ -603,7 +603,7 @@ namespace SparkleLib.Git {
 
             SparkleLogger.LogInfo ("Git", Name + " | Restoring \"" + path + "\" (revision " + revision + ")");
 
-            // FIXME: git-show doesn't decrypt objects, so we can't use it to retrieve
+            // git-show doesn't decrypt objects, so we can't use it to retrieve
             // files from the index. This is a suboptimal workaround but it does the job
             if (this.is_encrypted) {
                 // Restore the older file...
