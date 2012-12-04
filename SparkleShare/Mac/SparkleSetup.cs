@@ -845,8 +845,10 @@ namespace SparkleShare {
 
         public SparkleLabel (string label, NSTextAlignment alignment)
         {
+            if (!string.IsNullOrEmpty (label))
+                StringValue = label;
+
             Alignment       = alignment;
-            StringValue     = label;
             BackgroundColor = NSColor.WindowBackground;
             Bordered        = false;
             Editable        = false;
