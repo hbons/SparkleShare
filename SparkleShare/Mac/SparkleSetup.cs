@@ -234,7 +234,7 @@ namespace SparkleShare {
                     BorderType          = NSBorderType.BezelBorder
                 };
 
-                IconColumn = new NSTableColumn (new NSImage ()) {
+                IconColumn = new NSTableColumn () {
                     Width         = 36,
                     HeaderToolTip = "Icon",
                     DataCell      = new NSImageCell () { ImageAlignment = NSImageAlignment.Right }
