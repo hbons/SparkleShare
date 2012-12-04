@@ -48,8 +48,8 @@ namespace SparkleShare {
         public IconState CurrentState = IconState.Idle;
         public string StateText       = "Welcome to SparkleShare!";
 
-        public string [] Folders;
-        public string [] FolderErrors;
+        public string [] Folders      = new string [0];
+        public string [] FolderErrors = new string [0];
         
 
         public string FolderSize {
@@ -95,7 +95,7 @@ namespace SparkleShare {
 
         public bool RecentEventsItemEnabled {
             get {
-                return (Program.Controller.Folders.Count > 0);
+                return (Folders.Length > 0);
             }
         }
 
@@ -114,7 +114,7 @@ namespace SparkleShare {
                 if (CurrentState != IconState.Error) {
                     CurrentState = IconState.Idle;
 
-                    if (Program.Controller.Folders.Count == 0)
+                    if (Folders.Length == 0)
                         StateText = "Welcome to SparkleShare!";
                     else
                         StateText = "Projects up to date " + FolderSize;
@@ -132,7 +132,7 @@ namespace SparkleShare {
                 if (CurrentState != IconState.Error) {
                     CurrentState = IconState.Idle;
 
-                    if (Program.Controller.Folders.Count == 0)
+                    if (Folders.Length == 0)
                         StateText = "Welcome to SparkleShare!";
                     else
                         StateText = "Projects up to date " + FolderSize;

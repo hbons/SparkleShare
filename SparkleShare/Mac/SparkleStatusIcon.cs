@@ -96,6 +96,9 @@ namespace SparkleShare {
             };
 
             Controller.UpdateMenuEvent += delegate {
+                while ((this.menu.Delegate as SparkleMenuDelegate).MenuIsOpen)
+                    System.Threading.Thread.Sleep (100);
+
                 Program.Controller.Invoke (() => CreateMenu ());
             };
 
@@ -205,7 +208,35 @@ namespace SparkleShare {
             this.menu.AddItem (NSMenuItem.SeparatorItem);
             this.menu.AddItem (this.quit_item);
 
+            this.menu.Delegate    = new SparkleMenuDelegate ();
             this.status_item.Menu = this.menu;
         }
+    
+
+        private class SparkleMenuDelegate : NSMenuDelegate {
+            
+            public SparkleMenuDelegate (IntPtr handle) : base (handle) { }
+            public SparkleMenuDelegate () { }
+
+            public bool MenuIsOpen { get; private set; }
+
+            
+            public override void MenuWillHighlightItem (NSMenu menu, NSMenuItem item)
+            {
+            }
+
+
+            public override void MenuWillOpen (NSMenu menu)
+            {
+                MenuIsOpen = true;
+            }
+
+
+            public override void MenuDidClose (NSMenu menu)
+            {
+                MenuIsOpen = false;
+            }
+        }
+    
     }
 }
