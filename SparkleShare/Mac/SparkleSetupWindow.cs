@@ -37,6 +37,8 @@ namespace SparkleShare {
         private NSTextField header_text_field, description_text_field;
 
 
+        public SparkleSetupWindow (IntPtr handle) : base (handle) { }
+
         public SparkleSetupWindow () : base ()
         {
             SetFrame (new RectangleF (0, 0, 640, 420), true);
@@ -121,7 +123,7 @@ namespace SparkleShare {
                         button.SizeToFit ();
                         button.Frame = new RectangleF (Frame.Width - 30 - 15 - (105 * (i - 1)) - button.Frame.Width,
                             12, button.Frame.Width + 30, 32);
-                        x += 15;
+                        x += 22;
                     }
 
                     button.Font = SparkleUI.Font;
