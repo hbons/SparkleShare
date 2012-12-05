@@ -128,8 +128,6 @@ namespace SparkleShare {
             };
 
             Program.Controller.OnIdle += delegate {
-                UpdateFolders ();
-
                 if (CurrentState != IconState.Error) {
                     CurrentState = IconState.Idle;
 
@@ -138,6 +136,8 @@ namespace SparkleShare {
                     else
                         StateText = "Projects up to date " + FolderSize;
                 }
+
+                UpdateFolders ();
 
                 UpdateIconEvent (CurrentState);
                 UpdateStatusItemEvent (StateText);
