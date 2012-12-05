@@ -16,6 +16,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 
 using SparkleLib;
@@ -249,34 +250,37 @@ namespace SparkleShare {
 
         private void UpdateFolders ()
         {
-            Folders      = Program.Controller.Folders.ToArray ();
-            FolderErrors = new string [Folders.Length];
+            List<string> folders = new List<string> ();
+            List<string> folder_errors = new List<string> ();
 
-            int i = 0;
             foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
-                FolderErrors [i] = "";
+                folders.Add (repo.Name);
                 
                 if (repo.Error == ErrorStatus.HostUnreachable) {
-                    FolderErrors [i] = "Can't reach the host";
+                    folder_errors.Add ("Can't reach the host");
                     
                 } else if (repo.Error == ErrorStatus.HostIdentityChanged) {
-                    FolderErrors [i] = "The host's identity has changed";
+                    folder_errors.Add ("The host's identity has changed");
                     
                 } else if (repo.Error == ErrorStatus.AuthenticationFailed) {
-                    FolderErrors [i] = "Authentication failed";
+                    folder_errors.Add ("Authentication failed");
                     
                 } else if (repo.Error == ErrorStatus.DiskSpaceExceeded) {
-                    FolderErrors [i] = "Host is out of disk space";
+                    folder_errors.Add ("Host is out of disk space");
                     
                 } else if (repo.Error == ErrorStatus.LockedFiles) {
-                    FolderErrors [i] = "Some local files are locked or in use";
+                    folder_errors.Add ("Some local files are locked or in use");
 
                 } else if (repo.Error == ErrorStatus.NotFound) {
-                    FolderErrors [i] = "Project doesn't exist on host";   
+                    folder_errors.Add ("Project doesn't exist on host");  
+                
+                } else {
+                    folder_errors.Add ("");
                 }
-
-                i++;
             }
+
+            Folders = folders.ToArray ();
+            FolderErrors = folder_errors.ToArray ();
         }
     }
 }
