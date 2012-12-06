@@ -219,43 +219,54 @@ namespace SparkleShare {
                         NSFontTraitMask.Condensed, 0, 11),
                 };
 
-                TableView = new NSTableView () {
-                    Frame            = new RectangleF (0, 0, 0, 0),
-                    RowHeight        = 34,
-                    IntercellSpacing = new SizeF (8, 12),
-                    HeaderView       = null,
-                    Delegate         = new SparkleTableViewDelegate ()
-                };
+                if (TableView == null) {
+                    TableView = new NSTableView () {
+                        Frame            = new RectangleF (0, 0, 0, 0),
+                        RowHeight        = 34,
+                        IntercellSpacing = new SizeF (8, 12),
+                        HeaderView       = null,
+                        Delegate         = new SparkleTableViewDelegate ()
+                    };
 
-                ScrollView = new NSScrollView () {
-                    Frame               = new RectangleF (190, Frame.Height - 280, 408, 185),
-                    DocumentView        = TableView,
-                    HasVerticalScroller = true,
-                    BorderType          = NSBorderType.BezelBorder
-                };
+                    ScrollView = new NSScrollView () {
+                        Frame               = new RectangleF (190, Frame.Height - 280, 408, 185),
+                        DocumentView        = TableView,
+                        HasVerticalScroller = true,
+                        BorderType          = NSBorderType.BezelBorder
+                    };
 
-                IconColumn = new NSTableColumn () {
-                    Width         = 36,
-                    HeaderToolTip = "Icon",
-                    DataCell      = new NSImageCell () { ImageAlignment = NSImageAlignment.Right }
-                };
+                    IconColumn = new NSTableColumn () {
+                        Width         = 36,
+                        HeaderToolTip = "Icon",
+                        DataCell      = new NSImageCell () { ImageAlignment = NSImageAlignment.Right }
+                    };
 
-                DescriptionColumn = new NSTableColumn () {
-                    Width         = 350,
-                    HeaderToolTip = "Description",
-                    Editable      = false
-                };
+                    DescriptionColumn = new NSTableColumn () {
+                        Width         = 350,
+                        HeaderToolTip = "Description",
+                        Editable      = false
+                    };
 
-                DescriptionColumn.DataCell.Font = NSFontManager.SharedFontManager.FontWithFamily ("Lucida Grande",
-                    NSFontTraitMask.Condensed, 0, 11);
+                    DescriptionColumn.DataCell.Font = NSFontManager.SharedFontManager.FontWithFamily ("Lucida Grande",
+                        NSFontTraitMask.Condensed, 0, 11);
 
-                TableView.AddColumn (IconColumn);
-                TableView.AddColumn (DescriptionColumn);
+                    TableView.AddColumn (IconColumn);
+                    TableView.AddColumn (DescriptionColumn);
 
-                DataSource = new SparkleDataSource (Controller.Plugins);
+                    DataSource = new SparkleDataSource (Controller.Plugins);
 
-                TableView.DataSource = DataSource;
-                TableView.ReloadData ();
+                    TableView.DataSource = DataSource;
+                    TableView.ReloadData ();
+
+                    
+                    TableView.SelectRow (Controller.SelectedPluginIndex, false);
+                    TableView.ScrollRowToVisible (Controller.SelectedPluginIndex);
+                    
+                    (TableView.Delegate as SparkleTableViewDelegate).SelectionChanged += delegate {
+                        Controller.SelectedPluginChanged (TableView.SelectedRow);
+                        Controller.CheckAddPage (AddressTextField.StringValue, PathTextField.StringValue, TableView.SelectedRow);
+                    };
+                }
 
                 HistoryCheckButton = new NSButton () {
                     Frame = new RectangleF (190, Frame.Height - 400, 300, 18),
@@ -291,8 +302,6 @@ namespace SparkleShare {
                     });
                 };
 
-                TableView.SelectRow (Controller.SelectedPluginIndex, false);
-                TableView.ScrollRowToVisible (Controller.SelectedPluginIndex);
 
                 (AddressTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
                     Controller.CheckAddPage (AddressTextField.StringValue, PathTextField.StringValue, TableView.SelectedRow);
@@ -302,10 +311,6 @@ namespace SparkleShare {
                     Controller.CheckAddPage (AddressTextField.StringValue, PathTextField.StringValue, TableView.SelectedRow);
                 };
 
-                (TableView.Delegate as SparkleTableViewDelegate).SelectionChanged += delegate {
-                    Controller.SelectedPluginChanged (TableView.SelectedRow);
-                    Controller.CheckAddPage (AddressTextField.StringValue, PathTextField.StringValue, TableView.SelectedRow);
-                };
 
                 HistoryCheckButton.Activated += delegate {
                     Controller.HistoryItemChanged (HistoryCheckButton.State == NSCellStateValue.On);
@@ -322,7 +327,6 @@ namespace SparkleShare {
                         AddButton.Enabled = button_enabled;
                     });
                 };
-
 
                 ContentView.AddSubview (ScrollView);
                 ContentView.AddSubview (AddressLabel);
