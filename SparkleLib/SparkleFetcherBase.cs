@@ -128,7 +128,9 @@ namespace SparkleLib {
                 host_key = FetchHostKey ();
                 
                 if (string.IsNullOrEmpty (RemoteUrl.Host) || host_key == null) {
+                    SparkleLogger.LogInfo ("Auth", "Could not fetch host key");
                     Failed ();
+
                     return;
                 }
             
@@ -271,6 +273,8 @@ namespace SparkleLib {
                 process.StartInfo.Arguments = "-t rsa -p 22 " + RemoteUrl.Host;
             else
                 process.StartInfo.Arguments = "-t rsa -p " + RemoteUrl.Port + " " + RemoteUrl.Host;
+
+            SparkleLogger.LogInfo ("Cmd", process.StartInfo.FileName + " " + process.StartInfo.Arguments);
 
             process.Start ();
             string host_key = process.StandardOutput.ReadToEnd ().Trim ();
