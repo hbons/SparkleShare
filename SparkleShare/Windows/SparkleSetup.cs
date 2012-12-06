@@ -792,10 +792,7 @@ namespace SparkleShare {
                         show_files_button.Click += delegate {
                             Controller.ShowFilesClicked ();
                         };
-                        
-                       
-                        SystemSounds.Exclamation.Play ();
-                        
+
                         break;
                     }
                         
