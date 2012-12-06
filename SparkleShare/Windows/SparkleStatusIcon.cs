@@ -206,7 +206,7 @@ namespace SparkleShare {
                         
                     } else {
                         subfolder_item.Icon = subfolder_image;
-						subfolder_item.Click += delegate { Controller.OpenFolderDelegate (folder_name); };
+						subfolder_item.Click += new RoutedEventHandler (Controller.OpenFolderDelegate (folder_name));
                     }
                     
                     this.context_menu.Items.Add (subfolder_item);
