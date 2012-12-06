@@ -25,7 +25,7 @@ namespace SparkleLib {
     public class SparkleConfig : XmlDocument {
 
         public static SparkleConfig DefaultConfig;
-        public static bool DebugMode = false;
+        public static bool DebugMode = true;
 
         public string FullPath;
         public string TmpPath;
@@ -291,23 +291,6 @@ namespace SparkleLib {
         }
 
 
-        private XmlNode GetFolder (string name)
-        {
-            return SelectSingleNode (string.Format ("/sparkleshare/folder[name=\"{0}\"]", name));
-        }
-
-
-        private string GetFolderValue (string name, string key)
-        {
-            XmlNode folder = GetFolder(name);
-
-            if ((folder != null) && (folder [key] != null))
-                return folder [key].InnerText;
-            else
-                return null;
-        }
-
-
         public string GetConfigOption (string name)
         {
             XmlNode node = SelectSingleNode ("/sparkleshare/" + name);
@@ -336,6 +319,23 @@ namespace SparkleLib {
 
             Save ();
             SparkleLogger.LogInfo ("Config", "Updated option " + name + ":" + content);
+        }
+
+
+        private XmlNode GetFolder (string name)
+        {
+            return SelectSingleNode (string.Format ("/sparkleshare/folder[name=\"{0}\"]", name));
+        }
+        
+        
+        private string GetFolderValue (string name, string key)
+        {
+            XmlNode folder = GetFolder(name);
+            
+            if ((folder != null) && (folder [key] != null))
+                return folder [key].InnerText;
+            else
+                return null;
         }
 
 
