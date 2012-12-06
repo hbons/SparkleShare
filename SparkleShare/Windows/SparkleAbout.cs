@@ -89,7 +89,7 @@ namespace SparkleShare {
             this.updates = new Label () {
                 Content    = "Checking for updates...",
                 FontSize   = 11,
-                Foreground = new SolidColorBrush (Color.FromRgb (135, 178, 227))
+                Foreground = new SolidColorBrush (Color.FromArgb (128, 255, 255, 255))
             };
             
             TextBlock credits = new TextBlock () {
