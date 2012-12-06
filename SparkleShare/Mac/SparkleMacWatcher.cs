@@ -1,8 +1,9 @@
 //   Originally taken from:
 //   https://github.com/jesse99/Continuum/blob/master/source/shared/DirectoryWatcher.cs
 //   Modified to use MonoMac and integrate into SparkleShare
-
+//
 //   Copyright (C) 2008 Jesse Jones
+//   Copyright (C) 2012 Hylke Bons
 //
 //   Permission is hereby granted, free of charge, to any person obtaining
 //   a copy of this software and associated documentation files (the
