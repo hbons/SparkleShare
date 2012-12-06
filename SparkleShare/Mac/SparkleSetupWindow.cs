@@ -22,7 +22,6 @@ using System.IO;
 
 using MonoMac.Foundation;
 using MonoMac.AppKit;
-using MonoMac.ObjCRuntime;
 
 namespace SparkleShare {
 
@@ -52,35 +51,26 @@ namespace SparkleShare {
             Center ();
 
             string side_splash_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "side-splash.png");
-
-            this.side_splash = new NSImage (side_splash_path) {
-                Size = new SizeF (150, 482)
-            };
+            this.side_splash = new NSImage (side_splash_path) { Size = new SizeF (150, 482) };
 
             this.side_splash_view = new NSImageView () {
                 Image = this.side_splash,
                 Frame = new RectangleF (0, 0, 150, 482)
             };
 
-            this.header_text_field = new NSTextField () {
-                Frame           = new RectangleF (190, Frame.Height - 80, Frame.Width, 24),
-                BackgroundColor = NSColor.WindowBackground,
-                Bordered        = false,
-                Editable        = false,
-                Font            = NSFontManager.SharedFontManager.FontWithFamily (
+            this.header_text_field = new SparkleLabel ("", NSTextAlignment.Left) {
+                Frame = new RectangleF (190, Frame.Height - 80, Frame.Width, 24),
+                Font  = NSFontManager.SharedFontManager.FontWithFamily (
                     "Lucida Grande", NSFontTraitMask.Bold, 0, 15),
             };
-            
-            this.header_text_field.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
-            
-            this.description_text_field = new NSTextField () {
-                Frame           = new RectangleF (190, Frame.Height - 130, 640 - 240, 44),
-                BackgroundColor = NSColor.WindowBackground,
-                Bordered        = false,
-                Editable        = false,
-                Font            = NSFontManager.SharedFontManager.FontWithFamily (
+
+            this.description_text_field = new SparkleLabel ("", NSTextAlignment.Left) {
+                Frame = new RectangleF (190, Frame.Height - 130, 640 - 240, 44),
+                Font  = NSFontManager.SharedFontManager.FontWithFamily (
                     "Lucida Grande", NSFontTraitMask.Condensed, 0, 13)
             };
+
+            this.header_text_field.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
             if (Program.UI != null)
                 Program.UI.UpdateDockIconVisibility ();
@@ -101,13 +91,12 @@ namespace SparkleShare {
             this.header_text_field.StringValue      = Header;
             this.description_text_field.StringValue = Description;
             
+            ContentView.AddSubview (this.side_splash_view);
             ContentView.AddSubview (this.header_text_field);
 
             if (!string.IsNullOrEmpty (Description))
                 ContentView.AddSubview (this.description_text_field);
-            
-            ContentView.AddSubview (this.side_splash_view);
-            
+
             int i = 1;
             int x = 0;
             if (Buttons.Count > 0) {
@@ -115,18 +104,18 @@ namespace SparkleShare {
                 
                 foreach (NSButton button in Buttons) {
                     button.BezelStyle = NSBezelStyle.Rounded;
-                    button.Frame = new RectangleF (Frame.Width - 15 - x - (105 * i), 12, 105, 32);
+                    button.Frame      = new RectangleF (Frame.Width - 15 - x - (105 * i), 12, 105, 32);
+                    button.Font       = SparkleUI.Font;
 
-                    // Make the button a bit wider if the text is
-                    // likely to be longer
+                    // Make the button a bit wider if the text is likely to be longer
                     if (button.Title.Contains (" ")) {
                         button.SizeToFit ();
                         button.Frame = new RectangleF (Frame.Width - 30 - 15 - (105 * (i - 1)) - button.Frame.Width,
                             12, button.Frame.Width + 30, 32);
+
                         x += 22;
                     }
 
-                    button.Font = SparkleUI.Font;
                     ContentView.AddSubview (button);
                     i++;
                 }
