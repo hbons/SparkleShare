@@ -1,3 +1,11 @@
+0.9.10 for Linux, Mac and Windows (Fri Dec 7 2012):
+
+        Hylke:
+        - Fix folders not opening from statusicon menu on Windows
+        - Fix freeze on Mac when retrying a failed add a project attempt
+        - Fix a freeze on Mac when updating the status icon when the menu is open
+
+
 0.9.9 for Linux, Mac and Windows (Mon Dec 3 2012):
 
         Hylke:
