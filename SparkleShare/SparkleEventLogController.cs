@@ -380,7 +380,7 @@ namespace SparkleShare {
                             "<td class='restore'>" +
                                 "<a href='restore://" + change_set.Folder.Name + "/" + 
                                 change_set.Revision + "/" + change_set.User.Name + "/" + 
-                                change_set.Timestamp.ToString ("MMM d H\\hmm") + "/" +
+                                change_set.Timestamp.ToString ("MMM d H\\hmm", CultureInfo.InvariantCulture) + "/" +
                                 file_path + "'>Restore&hellip;</a>" +
                             "</td>" +
                         "</tr>";
@@ -503,7 +503,7 @@ namespace SparkleShare {
 
                     day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
                         "<span id='today' name='" +
-                         activity_day.Date.ToString ("dddd, MMMM d") + "'>" + "Today" +
+                         activity_day.Date.ToString ("dddd, MMMM d", CultureInfo.InvariantCulture) + "'>" + "Today" +
                         "</span>");
 
                 } else if (yesterday.Day   == activity_day.Date.Day &&
@@ -511,18 +511,18 @@ namespace SparkleShare {
                            yesterday.Year  == activity_day.Date.Year) {
 
                     day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
-                        "<span id='yesterday' name='" + activity_day.Date.ToString ("dddd, MMMM d") + "'>" +
+                        "<span id='yesterday' name='" + activity_day.Date.ToString ("dddd, MMMM d", CultureInfo.InvariantCulture) + "'>" +
                         "Yesterday" +
                         "</span>");
 
                 } else {
                     if (activity_day.Date.Year != DateTime.Now.Year) {
                         day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
-                            activity_day.Date.ToString ("dddd, MMMM d, yyyy"));
+                            activity_day.Date.ToString ("dddd, MMMM d, yyyy", CultureInfo.InvariantCulture));
 
                     } else {
                         day_entry = day_entry_html.Replace ("<!-- $day-entry-header -->",
-                            activity_day.Date.ToString ("dddd, MMMM d"));
+                            activity_day.Date.ToString ("dddd, MMMM d", CultureInfo.InvariantCulture));
                     }
                 }
 
