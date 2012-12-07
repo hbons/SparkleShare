@@ -36,7 +36,12 @@ namespace SparkleShare {
 
         public string RunningVersion {
             get {
-                return SparkleLib.SparkleBackend.Version;
+                string version = SparkleLib.SparkleBackend.Version;
+
+                if (version.EndsWith (".0"))
+                    version = version.Substring (0, version.Length - 2);
+
+                return version;
             }
         }
 
