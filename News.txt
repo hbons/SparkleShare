@@ -1,4 +1,4 @@
-1.0.0 for Linux, Mac and Windows (???):
+1.0.0 for Linux, Mac and Windows (Sun Dec 9 2012):
 
         Hylke:
         - Rebrand 0.9.10 with some minor changes to 1.0.0
