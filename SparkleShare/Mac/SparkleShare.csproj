@@ -105,21 +105,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
-    <None Include="..\Common\Plugins\bitbucket%402x.png">
-      <Link>Plugins\bitbucket%402x.png</Link>
-    </None>
-    <None Include="..\Common\Plugins\github%402x.png">
-      <Link>Plugins\github%402x.png</Link>
-    </None>
-    <None Include="..\Common\Plugins\gitorious%402x.png">
-      <Link>Plugins\gitorious%402x.png</Link>
-    </None>
-    <None Include="..\Common\Plugins\own-server%402x.png">
-      <Link>Plugins\own-server%402x.png</Link>
-    </None>
-    <None Include="..\Common\Plugins\ssnet%402x.png">
-      <Link>Plugins\ssnet%402x.png</Link>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Mono\MonoMac\v0.0\Mono.MonoMac.targets" />
@@ -133,110 +118,18 @@
     <Content Include="..\Common\HTML\event-log.html">
       <Link>HTML\event-log.html</Link>
     </Content>
-    <Content Include="..\Common\Pixmaps\side-splash.png">
-      <Link>Pixmaps\side-splash.png</Link>
-    </Content>
-    <Content Include="Pixmaps\sparkleshare-folder.icns">
+    <Content Include="Resources\sparkleshare-folder.icns">
       <Link>sparkleshare-folder.icns</Link>
     </Content>
-    <Content Include="Pixmaps\sparkleshare-app.icns">
+    <Content Include="Resources\sparkleshare-app.icns">
       <Link>sparkleshare-app.icns</Link>
-    </Content>
-    <Content Include="..\Linux\Pixmaps\icons\document-added-12.png">
-      <Link>Pixmaps\document-added-12.png</Link>
-    </Content>
-    <Content Include="..\Linux\Pixmaps\icons\document-edited-12.png">
-      <Link>Pixmaps\document-edited-12.png</Link>
-    </Content>
-    <Content Include="..\Linux\Pixmaps\icons\document-deleted-12.png">
-      <Link>Pixmaps\document-deleted-12.png</Link>
-    </Content>
-    <Content Include="..\Linux\Pixmaps\icons\document-moved-12.png">
-      <Link>Pixmaps\document-moved-12.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\about.png">
-      <Link>Pixmaps\about.png</Link>
     </Content>
     <Content Include="..\Common\HTML\jquery.js">
       <Link>HTML\jquery.js</Link>
     </Content>
-    <Content Include="Pixmaps\tutorial-slide-3.png">
-      <Link>Pixmaps\tutorial-slide-3.png</Link>
-    </Content>
-    <Content Include="..\Common\Plugins\bitbucket.xml">
-      <Link>Plugins\bitbucket.xml</Link>
-    </Content>
-    <Content Include="..\Common\Plugins\github.xml">
-      <Link>Plugins\github.xml</Link>
-    </Content>
-    <Content Include="..\Common\Plugins\gitorious.xml">
-      <Link>Plugins\gitorious.xml</Link>
-    </Content>
-    <Content Include="..\Common\Plugins\own-server.xml">
-      <Link>Plugins\own-server.xml</Link>
-    </Content>
-    <Content Include="..\Common\Plugins\bitbucket.png">
-      <Link>Plugins\bitbucket.png</Link>
-    </Content>
-    <Content Include="..\Common\Plugins\github.png">
-      <Link>Plugins\github.png</Link>
-    </Content>
-    <Content Include="..\Common\Plugins\gitorious.png">
-      <Link>Plugins\gitorious.png</Link>
-    </Content>
-    <Content Include="..\Common\Plugins\own-server.png">
-      <Link>Plugins\own-server.png</Link>
-    </Content>
-    <Content Include="..\Common\Plugins\ssnet.png">
-      <Link>Plugins\ssnet.png</Link>
-    </Content>
-    <Content Include="..\Common\Plugins\ssnet.xml">
-      <Link>Plugins\ssnet.xml</Link>
-    </Content>
-    <Content Include="Pixmaps\process-syncing-active.png" />
-    <Content Include="Pixmaps\process-syncing-down-active.png" />
-    <Content Include="Pixmaps\process-syncing-down.png" />
-    <Content Include="Pixmaps\process-syncing-error-active.png" />
-    <Content Include="Pixmaps\process-syncing-error.png" />
-    <Content Include="Pixmaps\process-syncing-idle-active.png" />
-    <Content Include="Pixmaps\process-syncing-idle.png" />
-    <Content Include="Pixmaps\process-syncing-up-active.png" />
-    <Content Include="Pixmaps\process-syncing-up.png" />
-    <Content Include="Pixmaps\process-syncing.png" />
-    <Content Include="..\Common\Pixmaps\user-icon-default.png">
-      <Link>Pixmaps\user-icon-default.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\side-splash%402x.png">
-      <Link>Pixmaps\side-splash%402x.png</Link>
-    </Content>
-    <Content Include="Pixmaps\process-syncing-active%402x.png" />
-    <Content Include="Pixmaps\process-syncing-down-active%402x.png" />
-    <Content Include="Pixmaps\process-syncing-down%402x.png" />
-    <Content Include="Pixmaps\process-syncing-error-active%402x.png" />
-    <Content Include="Pixmaps\process-syncing-error%402x.png" />
-    <Content Include="Pixmaps\process-syncing-idle-active%402x.png" />
-    <Content Include="Pixmaps\process-syncing-idle%402x.png" />
-    <Content Include="Pixmaps\process-syncing-up-active%402x.png" />
-    <Content Include="Pixmaps\process-syncing-up%402x.png" />
-    <Content Include="Pixmaps\process-syncing%402x.png" />
-    <Content Include="..\Common\Pixmaps\about%402x.png">
-      <Link>Pixmaps\about%402x.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\tutorial-slide-1.png">
-      <Link>Pixmaps\tutorial-slide-1.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\tutorial-slide-1%402x.png">
-      <Link>Pixmaps\tutorial-slide-1%402x.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\tutorial-slide-2.png">
-      <Link>Pixmaps\tutorial-slide-2.png</Link>
-    </Content>
-    <Content Include="..\Common\Pixmaps\tutorial-slide-2%402x.png">
-      <Link>Pixmaps\tutorial-slide-2%402x.png</Link>
-    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Pixmaps\" />
+    <Folder Include="Resources\" />
     <Folder Include="HTML\" />
     <Folder Include="Plugins\" />
   </ItemGroup>
@@ -249,5 +142,115 @@
       <Project>{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}</Project>
       <Name>SparkleLib.Git</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\Common\Pixmaps\side-splash.png">
+      <Link>Resources\side-splash.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Linux\Pixmaps\icons\document-added-12.png">
+      <Link>Resources\document-added-12.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Linux\Pixmaps\icons\document-edited-12.png">
+      <Link>Resources\document-edited-12.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Linux\Pixmaps\icons\document-deleted-12.png">
+      <Link>Resources\document-deleted-12.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Linux\Pixmaps\icons\document-moved-12.png">
+      <Link>Resources\document-moved-12.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Pixmaps\about.png">
+      <Link>Resources\about.png</Link>
+    </BundleResource>
+    <BundleResource Include="Resources\tutorial-slide-3.png">
+      <Link>Resources\tutorial-slide-3.png</Link>
+    </BundleResource>
+    <BundleResource Include="Resources\process-syncing-active.png" />
+    <BundleResource Include="Resources\process-syncing-down-active.png" />
+    <BundleResource Include="Resources\process-syncing-down.png" />
+    <BundleResource Include="Resources\process-syncing-error-active.png" />
+    <BundleResource Include="Resources\process-syncing-error.png" />
+    <BundleResource Include="Resources\process-syncing-idle-active.png" />
+    <BundleResource Include="Resources\process-syncing-idle.png" />
+    <BundleResource Include="Resources\process-syncing-up-active.png" />
+    <BundleResource Include="Resources\process-syncing-up.png" />
+    <BundleResource Include="Resources\process-syncing.png" />
+    <BundleResource Include="..\Common\Pixmaps\user-icon-default.png">
+      <Link>Resources\user-icon-default.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Pixmaps\side-splash%402x.png">
+      <Link>Resources\side-splash%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="Resources\process-syncing-active%402x.png" />
+    <BundleResource Include="Resources\process-syncing-down-active%402x.png" />
+    <BundleResource Include="Resources\process-syncing-down%402x.png" />
+    <BundleResource Include="Resources\process-syncing-error-active%402x.png" />
+    <BundleResource Include="Resources\process-syncing-error%402x.png" />
+    <BundleResource Include="Resources\process-syncing-idle-active%402x.png" />
+    <BundleResource Include="Resources\process-syncing-idle%402x.png" />
+    <BundleResource Include="Resources\process-syncing-up-active%402x.png" />
+    <BundleResource Include="Resources\process-syncing-up%402x.png" />
+    <BundleResource Include="Resources\process-syncing%402x.png" />
+    <BundleResource Include="..\Common\Pixmaps\about%402x.png">
+      <Link>Resources\about%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Pixmaps\tutorial-slide-1.png">
+      <Link>Resources\tutorial-slide-1.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Pixmaps\tutorial-slide-1%402x.png">
+      <Link>Resources\tutorial-slide-1%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Pixmaps\tutorial-slide-2.png">
+      <Link>Resources\tutorial-slide-2.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Pixmaps\tutorial-slide-2%402x.png">
+      <Link>Resources\tutorial-slide-2%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\bitbucket%402x.png">
+      <Link>Plugins\bitbucket%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\github%402x.png">
+      <Link>Plugins\github%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\gitorious%402x.png">
+      <Link>Plugins\gitorious%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\own-server%402x.png">
+      <Link>Plugins\own-server%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\ssnet%402x.png">
+      <Link>Plugins\ssnet%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\bitbucket.xml">
+      <Link>Plugins\bitbucket.xml</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\github.xml">
+      <Link>Plugins\github.xml</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\gitorious.xml">
+      <Link>Plugins\gitorious.xml</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\own-server.xml">
+      <Link>Plugins\own-server.xml</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\bitbucket.png">
+      <Link>Plugins\bitbucket.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\github.png">
+      <Link>Plugins\github.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\gitorious.png">
+      <Link>Plugins\gitorious.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\own-server.png">
+      <Link>Plugins\own-server.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\ssnet.png">
+      <Link>Plugins\ssnet.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\ssnet.xml">
+      <Link>Plugins\ssnet.xml</Link>
+    </BundleResource>
+    <BundleResource Include="Resources\tutorial-slide-3%402x.png" />
   </ItemGroup>
 </Project>
