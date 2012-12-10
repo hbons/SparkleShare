@@ -598,13 +598,9 @@ namespace SparkleShare {
             }
 
             if (type == PageType.Tutorial) {
-                string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "tutorial-slide-" + Controller.TutorialPageNumber + ".png");
-
-                if (File.Exists (slide_image_path)) {
-                    SlideImage = new NSImage (slide_image_path) {
-                        Size = new SizeF (324, 200)
-                    };
+                SlideImage = NSImage.ImageNamed ("tutorial-slide-" + Controller.TutorialPageNumber);
+                if (SlideImage != null) {
+                    SlideImage.Size = new SizeF (324, 200);
 
                     SlideImageView = new NSImageView () {
                         Image = SlideImage,
