@@ -80,8 +80,8 @@ namespace SparkleShare {
 
         private void CreateAbout ()
         {
-            string about_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "about.png");
-            this.about_image        = new NSImage (about_image_path) { Size = new SizeF (640, 260) };
+            this.about_image = NSImage.ImageNamed ("about");
+            this.about_image.Size = new SizeF (640, 260);
 
             this.about_image_view = new NSImageView () {
                 Image = this.about_image,
