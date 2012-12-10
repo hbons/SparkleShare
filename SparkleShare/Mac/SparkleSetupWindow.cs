@@ -50,8 +50,8 @@ namespace SparkleShare {
 
             Center ();
 
-            string side_splash_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "side-splash.png");
-            this.side_splash = new NSImage (side_splash_path) { Size = new SizeF (150, 482) };
+            this.side_splash = NSImage.ImageNamed ("side-splash");
+            this.side_splash.Size = new SizeF (150, 482);
 
             this.side_splash_view = new NSImageView () {
                 Image = this.side_splash,
