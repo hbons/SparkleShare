@@ -253,7 +253,7 @@ namespace SparkleShare {
                     TableView.AddColumn (IconColumn);
                     TableView.AddColumn (DescriptionColumn);
 
-                    DataSource = new SparkleDataSource (Controller.Plugins);
+                    DataSource = new SparkleDataSource (BackingScaleFactor, Controller.Plugins);
 
                     TableView.DataSource = DataSource;
                     TableView.ReloadData ();
@@ -598,13 +598,9 @@ namespace SparkleShare {
             }
 
             if (type == PageType.Tutorial) {
-                string slide_image_path = Path.Combine (NSBundle.MainBundle.ResourcePath,
-                    "Pixmaps", "tutorial-slide-" + Controller.TutorialPageNumber + ".png");
-
-                if (File.Exists (slide_image_path)) {
-                    SlideImage = new NSImage (slide_image_path) {
-                        Size = new SizeF (324, 200)
-                    };
+                SlideImage = NSImage.ImageNamed ("tutorial-slide-" + Controller.TutorialPageNumber);
+                if (SlideImage != null) {
+                    SlideImage.Size = new SizeF (324, 200);
 
                     SlideImageView = new NSImageView () {
                         Image = SlideImage,
@@ -725,12 +721,15 @@ namespace SparkleShare {
         public List<object> Items;
         public NSAttributedString [] Cells, SelectedCells;
 
+        int backingScaleFactor;
 
-        public SparkleDataSource (List<SparklePlugin> plugins)
+        public SparkleDataSource (float backingScaleFactor, List<SparklePlugin> plugins)
         {
             Items         = new List <object> ();
             Cells         = new NSAttributedString [plugins.Count];
             SelectedCells = new NSAttributedString [plugins.Count];
+
+            this.backingScaleFactor = (int)backingScaleFactor;
 
             int i = 0;
             foreach (SparklePlugin plugin in plugins) {
@@ -815,7 +814,22 @@ namespace SparkleShare {
                 }
 
             } else {
-                return new NSImage ((Items [row_index] as SparklePlugin).ImagePath) {
+                var plugin = (SparklePlugin)Items [row_index];
+                var path = plugin.ImagePath;
+
+                if (backingScaleFactor >= 2) {
+                    var hi_path = String.Format ("{0}@{1}x{2}",
+                        Path.Combine (Path.GetDirectoryName (path), Path.GetFileNameWithoutExtension (path)),
+                        backingScaleFactor,
+                        Path.GetExtension (path)
+                    );
+
+                    if (File.Exists (hi_path)) {
+                        path = hi_path;
+                    }
+                }
+
+                return new NSImage (path) {
                     Size = new SizeF (24, 24)
                 };
             }
