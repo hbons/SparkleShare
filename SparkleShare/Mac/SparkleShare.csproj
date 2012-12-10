@@ -251,5 +251,6 @@
     <BundleResource Include="..\Common\Plugins\ssnet.xml">
       <Link>Plugins\ssnet.xml</Link>
     </BundleResource>
+    <BundleResource Include="Resources\tutorial-slide-3%402x.png" />
   </ItemGroup>
 </Project>
