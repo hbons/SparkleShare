@@ -34,17 +34,17 @@ namespace SparkleShare {
         private NSMenuItem state_item, folder_item, add_item, about_item, recent_events_item, quit_item;
         private NSMenuItem [] folder_menu_items, error_menu_items, try_again_menu_items;
         
-        private NSImage syncing_idle_image  = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-idle.png"));
-        private NSImage syncing_up_image    = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-up.png"));
-        private NSImage syncing_down_image  = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-down.png"));
-        private NSImage syncing_image       = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing.png"));
-        private NSImage syncing_error_image = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-error.png"));
+        private NSImage syncing_idle_image  = NSImage.ImageNamed ("process-syncing-idle");
+        private NSImage syncing_up_image    = NSImage.ImageNamed ("process-syncing-up");
+        private NSImage syncing_down_image  = NSImage.ImageNamed ("process-syncing-down");
+        private NSImage syncing_image       = NSImage.ImageNamed ("process-syncing");
+        private NSImage syncing_error_image = NSImage.ImageNamed ("process-syncing-error");
         
-        private NSImage syncing_idle_image_active  = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-idle-active.png"));
-        private NSImage syncing_up_image_active    = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-up-active.png"));
-        private NSImage syncing_down_image_active  = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-down-active.png"));
-        private NSImage syncing_image_active       = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-active.png"));
-        private NSImage syncing_error_image_active = new NSImage (Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps", "process-syncing-error-active.png"));
+        private NSImage syncing_idle_image_active  = NSImage.ImageNamed ("process-syncing-idle-active");
+        private NSImage syncing_up_image_active    = NSImage.ImageNamed ("process-syncing-up-active");
+        private NSImage syncing_down_image_active  = NSImage.ImageNamed ("process-syncing-down-active");
+        private NSImage syncing_image_active       = NSImage.ImageNamed ("process-syncing-active");
+        private NSImage syncing_error_image_active = NSImage.ImageNamed ("process-syncing-error-active");
         
         private NSImage folder_image       = NSImage.ImageNamed ("NSFolder");
         private NSImage caution_image      = NSImage.ImageNamed ("NSCaution");
