@@ -66,7 +66,9 @@ cp SparkleShare/Mac/config SparkleShare.app/Contents/MonoBundle/config
 cp /Library/Frameworks/Mono.framework/Versions/Current/lib/libintl.dylib SparkleShare.app/Contents/Resources
 ```
 
-**Note:** Adjust `SparkleShare.app/Contents` to where you saved the bundle.
+To play nice with GateKeeper, open `SparkleShare.app/Contents/Info.plist` and remove the `CFBundleResourceSpecification` property.
+
+**Note:** Adjust `SparkleShare.app/Contents/...` to where you saved the bundle.
 
 Now you have a working bundle that you can run by double-clicking.
 
