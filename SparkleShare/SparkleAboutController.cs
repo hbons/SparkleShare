@@ -70,7 +70,7 @@ namespace SparkleShare {
             Uri uri = new Uri ("http://www.sparkleshare.org/version");
 
             try {
-                string latest_version = web_client.DownloadString (uri);
+                string latest_version = web_client.DownloadString (uri).Trim ();
             
                 if (new Version (latest_version) > new Version (RunningVersion))
                     UpdateLabelEvent ("A newer version (" + latest_version + ") is available!");
