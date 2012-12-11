@@ -96,7 +96,7 @@ namespace SparkleShare {
 
         public bool RecentEventsItemEnabled {
             get {
-                return (Folders.Length > 0);
+                return (Program.Controller.Repositories.Length > 0);
             }
         }
 
