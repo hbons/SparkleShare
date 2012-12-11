@@ -681,6 +681,8 @@ namespace SparkleShare {
             this.config.AddFolder (target_folder_name, this.fetcher.Identifier,
                 this.fetcher.RemoteUrl.ToString (), backend);
 
+            RepositoriesLoaded = true;
+
             FolderFetched (this.fetcher.RemoteUrl.ToString (), this.fetcher.Warnings.ToArray ());
 
             AddRepository (target_folder_path);
