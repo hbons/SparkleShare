@@ -376,7 +376,7 @@ namespace SparkleLib.Git {
                     "jpg", "jpeg", "png", "tiff", "gif", // Images
                     "flac", "mp3", "ogg", "oga", // Audio
                     "avi", "mov", "mpg", "mpeg", "mkv", "ogv", "ogx", "webm", // Video
-                    "zip", "gz", "bz", "bz2", "rpm", "deb", "tgz", "rar", "ace", "7z", "pak", "tar", "iso" // Archives
+                    "zip", "gz", "bz", "bz2", "rpm", "deb", "tgz", "rar", "ace", "7z", "pak", "tc", "iso" // Archives
                 };
 
                 foreach (string extension in extensions) {
