@@ -80,11 +80,16 @@ namespace SparkleLib.Git {
             git.StartAndWaitForExit ();
 
             this.use_git_bin = (git.ExitCode == 0);
+
+            if (this.use_git_bin) {
+                git = new SparkleGit (LocalPath, "config git-bin.sshUrl \"" + RemoteUrl + "\"");
+                git.StartAndWaitForExit ();
             
+                git = new SparkleGit (LocalPath, "config git-bin.sshPrivateKeyFile \"" + config.User.PrivateKeyFilePath + "\"");
+                git.StartAndWaitForExit ();
+            }
+
             git = new SparkleGit (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
-            git.StartAndWaitForExit ();
-            
-            git = new SparkleGit (LocalPath, "config git-bin.sshUrl \"" + RemoteUrl + "\"");
             git.StartAndWaitForExit ();
 
             string password_file_path = Path.Combine (LocalPath, ".git", "password");
