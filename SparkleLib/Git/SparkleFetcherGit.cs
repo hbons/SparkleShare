@@ -330,7 +330,7 @@ namespace SparkleLib.Git {
         public void InstallGitBinConfiguration ()
         {
             string [] settings = new string [] {
-                "core.bigFileThreshold 8g",
+                "core.bigFileThreshold 1024g",
                 "filter.bin.clean \"git bin clean %f\"",
                 "filter.bin.smudge \"git bin smudge\"",
                 "git-bin.chunkSize 1m",
