@@ -253,7 +253,7 @@ namespace SparkleShare {
 
                 new Thread (() => {
                     string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
-                    string key_file_name = DateTime.Now.ToString ("yyyy-MM-dd HH\\hmm");
+                    string key_file_name = DateTime.Now.ToString ("yyyy-MM-dd_HH\\hmm");
                     
                     string [] key_pair = SparkleKeys.GenerateKeyPair (keys_path, key_file_name);
                     SparkleKeys.ImportPrivateKey (key_pair [0]);
