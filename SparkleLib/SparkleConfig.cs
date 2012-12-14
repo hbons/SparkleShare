@@ -136,11 +136,17 @@ namespace SparkleLib {
                 string user_name   = name_node.Value;
                 string user_email  = email_node.Value;
 
-                SparkleUser user            = new SparkleUser (user_name, user_email);
-                string [] pubkey_file_paths = Directory.GetFiles (Path.GetDirectoryName (FullPath), "*.pub");
+                SparkleUser user = new SparkleUser (user_name, user_email);
 
-                if (pubkey_file_paths.Length > 0)
-                    user.PublicKey = File.ReadAllText (pubkey_file_paths [0]);
+                string [] private_key_file_paths = Directory.GetFiles (Path.GetDirectoryName (FullPath), "*.key");
+                
+                if (private_key_file_paths.Length > 0) {
+                    user.PrivateKey         = File.ReadAllText (private_key_file_paths [0]);
+                    user.PrivateKeyFilePath = private_key_file_paths [0];
+
+                    user.PublicKey         = File.ReadAllText (private_key_file_paths [0] + ".pub");
+                    user.PublicKeyFilePath = private_key_file_paths [0] + ".pub";
+                }
 
                 return user;
             }
