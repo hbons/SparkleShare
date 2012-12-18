@@ -105,7 +105,7 @@ namespace SparkleLib.Git {
             git = new SparkleGit (LocalPath, "config git-bin.sshUrl \"" + RemoteUrl + "\"");
             git.StartAndWaitForExit ();
             
-            git = new SparkleGit (LocalPath, "config git-bin.sshPrivateKeyFile \"" + config.User.PrivateKeyFilePath + "\"");
+            git = new SparkleGit (LocalPath, "config git-bin.sshPrivateKeyFile \"" + base.local_config.User.PrivateKeyFilePath + "\"");
             git.StartAndWaitForExit ();
         }
 
