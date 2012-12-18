@@ -81,13 +81,8 @@ namespace SparkleLib.Git {
 
             this.use_git_bin = (git.ExitCode == 0);
 
-            if (this.use_git_bin) {
-                git = new SparkleGit (LocalPath, "config git-bin.sshUrl \"" + RemoteUrl + "\"");
-                git.StartAndWaitForExit ();
-            
-                git = new SparkleGit (LocalPath, "config git-bin.sshPrivateKeyFile \"" + config.User.PrivateKeyFilePath + "\"");
-                git.StartAndWaitForExit ();
-            }
+            if (this.use_git_bin)
+                ConfigureGitBin ();
 
             git = new SparkleGit (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
             git.StartAndWaitForExit ();
@@ -96,6 +91,22 @@ namespace SparkleLib.Git {
 
             if (File.Exists (password_file_path))
                 this.is_encrypted = true;
+        }
+
+
+        private void ConfigureGitBin ()
+        {
+            SparkleGit git = new SparkleGit (LocalPath, "config filter.bin.clean \"git bin clean %f\"");
+            git.StartAndWaitForExit ();
+            
+            git = new SparkleGit (LocalPath, "config filter.bin.smudge \"git bin smudge\"");
+            git.StartAndWaitForExit ();
+
+            git = new SparkleGit (LocalPath, "config git-bin.sshUrl \"" + RemoteUrl + "\"");
+            git.StartAndWaitForExit ();
+            
+            git = new SparkleGit (LocalPath, "config git-bin.sshPrivateKeyFile \"" + config.User.PrivateKeyFilePath + "\"");
+            git.StartAndWaitForExit ();
         }
 
 
