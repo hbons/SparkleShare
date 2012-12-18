@@ -16,12 +16,12 @@ system_theme_icons = \
 
 app_theme_icons = \
 	animations,process-working-22.png \
-	places,sparkleshare-16.png \
-	places,sparkleshare-22.png \
-	places,sparkleshare-24.png \
-	places,sparkleshare-256.png \
-	places,sparkleshare-32.png \
-	places,sparkleshare-48.png \
+	apps,sparkleshare-16.png \
+	apps,sparkleshare-22.png \
+	apps,sparkleshare-24.png \
+	apps,sparkleshare-256.png \
+	apps,sparkleshare-32.png \
+	apps,sparkleshare-48.png \
 	status,process-syncing-up-24.png \
 	status,process-syncing-down-24.png \
 	status,process-syncing-24.png \
