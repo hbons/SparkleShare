@@ -313,7 +313,7 @@ namespace SparkleShare {
 
         public void UpdateContent (string html)
         {
-		    string pixmaps_path = "file://" + Path.Combine (NSBundle.MainBundle.ResourcePath, "Pixmaps");
+		    string pixmaps_path = "file://" + NSBundle.MainBundle.ResourcePath;
 			
             html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
             html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
