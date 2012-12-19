@@ -466,9 +466,20 @@ namespace SparkleLib.Git {
                 Commit (commit_message);
             }
 
+            SparkleGit git;
+            string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
+
+            // Stop if we're already in a rebase because something went wrong
+            if (Directory.Exists (rebase_apply_path)) {
+                git = new SparkleGit (LocalPath, "rebase --abort");
+                git.StartAndWaitForExit ();
+
+                return false;
+            }
+
             // Temporarily change the ignorecase setting to true to avoid
-            // conflicts in file names due to case changes
-            SparkleGit git = new SparkleGit (LocalPath, "config core.ignorecase true");
+            // conflicts in file names due to letter case changes
+            git = new SparkleGit (LocalPath, "config core.ignorecase true");
             git.StartAndWaitForExit ();
 
             git = new SparkleGit (LocalPath, "rebase FETCH_HEAD");
@@ -493,7 +504,6 @@ namespace SparkleLib.Git {
                 
                 } else {
                     SparkleLogger.LogInfo ("Git", Name + " | Conflict detected, trying to get out...");
-                    string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
                     
                     while (Directory.Exists (rebase_apply_path) && HasLocalChanges) {
                         try {
