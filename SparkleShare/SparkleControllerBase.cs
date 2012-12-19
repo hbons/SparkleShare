@@ -676,7 +676,7 @@ namespace SparkleShare {
                 }
             }
 
-            string backend = SparkleFetcherBase.GetBackend (this.fetcher.RemoteUrl.AbsolutePath);
+            string backend = SparkleFetcherBase.GetBackend (this.fetcher.RemoteUrl.ToString ());
 
             this.config.AddFolder (target_folder_name, this.fetcher.Identifier,
                 this.fetcher.RemoteUrl.ToString (), backend);
