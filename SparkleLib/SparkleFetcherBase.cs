@@ -107,6 +107,10 @@ namespace SparkleLib {
                 server = "ssh://" + server;
 
             TargetFolder = target_folder;
+
+            if (server.StartsWith ("ssh+"))
+                server = "ssh" + server.Substring (address.IndexOf ("://"));
+
             RemoteUrl    = new Uri (server + remote_path);
             IsActive     = false;
         }
