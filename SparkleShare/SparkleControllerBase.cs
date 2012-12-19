@@ -551,9 +551,6 @@ namespace SparkleShare {
             string tmp_folder     = Path.Combine (tmp_path, canonical_name);
             string backend        = SparkleFetcherBase.GetBackend (address);
 
-            if (address.StartsWith ("ssh+"))
-                address = "ssh" + address.Substring (address.IndexOf ("://"));
-
             try {
                 this.fetcher = (SparkleFetcherBase) Activator.CreateInstance (
                     Type.GetType ("SparkleLib." + backend + ".SparkleFetcher, SparkleLib." + backend),
