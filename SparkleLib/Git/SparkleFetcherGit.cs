@@ -332,11 +332,7 @@ namespace SparkleLib.Git {
             string [] settings = new string [] {
                 "core.bigFileThreshold 1024g",
                 "filter.bin.clean \"git bin clean %f\"",
-                "filter.bin.smudge \"git bin smudge\"",
-                "git-bin.chunkSize 1m",
-                "git-bin.s3bucket \"your bucket name\"",
-                "git-bin.s3key \"your key\"",
-                "git-bin.s3secretKey \"your secret key\""
+                "filter.bin.smudge \"git bin smudge\""
             };
 
             foreach (string setting in settings) {
