@@ -335,8 +335,15 @@ namespace SparkleShare {
                 return GetLog ();
 
             foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
-                if (repo.Name.Equals (name))
-                    return repo.ChangeSets;
+                if (repo.Name.Equals (name)) {
+                    List<SparkleChangeSet> change_sets = repo.ChangeSets;
+
+                    if (change_sets != null)
+                        return change_sets;
+                    else
+                        break;
+                }
+
             }
 
             return new List<SparkleChangeSet> ();
@@ -398,7 +405,7 @@ namespace SparkleShare {
         public string GetHTMLLog (List<SparkleChangeSet> change_sets)
         {
             if (change_sets.Count == 0)
-                return "";
+                return ""; // TODO "Project does not have a history"
 			
             List <ActivityDay> activity_days = new List <ActivityDay> ();
 
