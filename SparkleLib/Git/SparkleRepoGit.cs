@@ -102,10 +102,10 @@ namespace SparkleLib.Git {
             git = new SparkleGit (LocalPath, "config filter.bin.smudge \"git bin smudge\"");
             git.StartAndWaitForExit ();
 
-            git = new SparkleGit (LocalPath, "config git-bin.sshUrl \"" + RemoteUrl + "\"");
+            git = new SparkleGit (LocalPath, "config git-bin.sftpUrl \"" + RemoteUrl + "\"");
             git.StartAndWaitForExit ();
             
-            git = new SparkleGit (LocalPath, "config git-bin.sshPrivateKeyFile \"" + base.local_config.User.PrivateKeyFilePath + "\"");
+            git = new SparkleGit (LocalPath, "config git-bin.sftpPrivateKeyFile \"" + base.local_config.User.PrivateKeyFilePath + "\"");
             git.StartAndWaitForExit ();
         }
 
@@ -237,8 +237,6 @@ namespace SparkleLib.Git {
                 Commit (message);
             }
 
-            SparkleGit git;
-
             if (this.use_git_bin) {
                 SparkleGitBin git_bin = new SparkleGitBin (LocalPath, "push");
                 git_bin.StartAndWaitForExit ();
@@ -246,8 +244,7 @@ namespace SparkleLib.Git {
                 // TODO: Progress
             }
 
-            git = new SparkleGit (LocalPath, "push --progress \"" + RemoteUrl + "\" " + this.branch);
-
+            SparkleGit git = new SparkleGit (LocalPath, "push --progress \"" + RemoteUrl + "\" " + this.branch);
             git.StartInfo.RedirectStandardError = true;
             git.Start ();
 
