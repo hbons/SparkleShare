@@ -66,6 +66,9 @@ namespace SparkleLib.Git {
             string target_folder, bool fetch_prior_history) : base (server, required_fingerprint,
                 remote_path, target_folder, fetch_prior_history)
         {
+            if (RemoteUrl.ToString ().StartsWith ("ssh+"))
+                RemoteUrl = new Uri ("ssh" + RemoteUrl.ToString ().Substring (RemoteUrl.ToString ().IndexOf ("://")));
+
             Uri uri = RemoteUrl;
 
             if (!uri.Scheme.Equals ("ssh") && !uri.Scheme.Equals ("https") &&
