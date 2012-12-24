@@ -28,6 +28,16 @@ namespace SparkleLib.Git {
 
     public class SparkleRepo : SparkleRepoBase {
 
+        private SparkleGitConfig _sparkle_git_config = null;
+        private SparkleGitConfig sparkle_git_config {
+            get {
+                if (_sparkle_git_config == null)
+                    _sparkle_git_config = new SparkleGitConfig(LocalPath);
+
+                return _sparkle_git_config;
+            }
+        }
+
         private bool user_is_set;
         private bool use_git_bin;
         private bool is_encrypted;
@@ -230,6 +240,8 @@ namespace SparkleLib.Git {
 
         public override bool SyncUp ()
         {
+            sparkle_git_config.SaveRepoInfo ();
+
             if (HasLocalChanges) {
                 Add ();
 
@@ -384,6 +396,8 @@ namespace SparkleLib.Git {
             if (git.ExitCode == 0) {
                 if (Rebase ()) {
                     ClearCache ();
+                    sparkle_git_config.LoadRepoInfo ();
+                    
                     return true;
                 
                 } else {
@@ -551,7 +565,7 @@ namespace SparkleLib.Git {
                 SparkleLogger.LogInfo ("Git", Name + " | Conflict type: " + line);
 
                 // Ignore conflicts in the .sparkleshare file and use the local version
-                if (conflicting_path.EndsWith (".sparkleshare") || conflicting_path.EndsWith (".empty")) {
+                if (conflicting_path.EndsWith (".sparkleshare") || conflicting_path.StartsWith (".sparkleshare-git/")) {
                     // Recover local version
                     SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
                     git_theirs.StartAndWaitForExit ();
@@ -780,15 +794,9 @@ namespace SparkleLib.Git {
                         if (entry_line.StartsWith (":")) {
                             string type_letter = entry_line [37].ToString ();
                             string file_path   = entry_line.Substring (39);
-                            bool change_is_folder = false;
 
                             if (file_path.Equals (".sparkleshare"))
                                 continue;
-
-                            if (file_path.EndsWith (".empty")) { 
-                                file_path        = file_path.Substring (0, file_path.Length - ".empty".Length);
-                                change_is_folder = true;
-                            }
 
                             file_path = EnsureSpecialCharacters (file_path);
                             file_path = file_path.Replace ("\\\"", "\"");
@@ -804,20 +812,9 @@ namespace SparkleLib.Git {
                                 file_path = file_path.Replace ("\\\"", "\"");
                                 to_file_path = to_file_path.Replace ("\\\"", "\"");
 
-                                if (file_path.EndsWith (".empty")) {
-                                    file_path = file_path.Substring (0, file_path.Length - 6);
-                                    change_is_folder = true;
-                                }
-
-                                if (to_file_path.EndsWith (".empty")) {
-                                    to_file_path = to_file_path.Substring (0, to_file_path.Length - 6);
-                                    change_is_folder = true;
-                                }
-
                                 change_set.Changes.Add (
                                     new SparkleChange () {
                                         Path        = file_path,
-                                        IsFolder    = change_is_folder,
                                         MovedToPath = to_file_path,
                                         Timestamp   = change_set.Timestamp,
                                         Type        = SparkleChangeType.Moved
@@ -837,7 +834,6 @@ namespace SparkleLib.Git {
                                 change_set.Changes.Add (
                                     new SparkleChange () {
                                         Path      = file_path,
-                                        IsFolder  = change_is_folder,
                                         Timestamp = change_set.Timestamp,
                                         Type      = change_type
                                     }
@@ -943,7 +939,7 @@ namespace SparkleLib.Git {
 
 
         // Git doesn't track empty directories, so this method
-        // fills them all with a hidden empty file.
+        // adds them to a special file that is tracked by git.
         //
         // It also prevents git repositories from becoming
         // git submodules by renaming the .git/HEAD file
@@ -957,38 +953,36 @@ namespace SparkleLib.Git {
                     if (child_path.EndsWith (".git")) {
                         if (child_path.Equals (Path.Combine (LocalPath, ".git")))
                             continue;
-    
+
                         string HEAD_file_path = Path.Combine (child_path, "HEAD");
-    
+
                         if (File.Exists (HEAD_file_path)) {
                             File.Move (HEAD_file_path, HEAD_file_path + ".backup");
                             SparkleLogger.LogInfo ("Git", Name + " | Renamed " + HEAD_file_path);
                         }
-    
+
                         continue;
                     }
     
                     PrepareDirectories (child_path);
                 }
-    
+
                 if (Directory.GetFiles (path).Length == 0 &&
                     Directory.GetDirectories (path).Length == 0 &&
                     !path.Equals (LocalPath)) {
 
-                    if (!File.Exists (Path.Combine (path, ".empty"))) {
-                        try {
-                            File.WriteAllText (Path.Combine (path, ".empty"), "I'm a folder!");
-                            File.SetAttributes (Path.Combine (path, ".empty"), FileAttributes.Hidden);
-
-                        } catch {
-                            SparkleLogger.LogInfo ("Git", Name + " | Failed adding empty folder " + path);
-                        }
-                    }
+                    sparkle_git_config.AddEmptyDirectory (path);
+                } else {
+                    // Remove from empty list if it does actually have something
+                    sparkle_git_config.RemoveEmptyDirectory (path);
                 }
 
             } catch (IOException e) {
                 SparkleLogger.LogInfo ("Git", "Failed preparing directory", e);
             }
+
+            if (path == LocalPath)
+                sparkle_git_config.SaveRepoInfo ();
         }
 
 
@@ -1055,9 +1049,6 @@ namespace SparkleLib.Git {
                 foreach (FileInfo file in parent.GetFiles ()) {
                     if (!file.Exists)
                         return 0;
-
-                    if (file.Name.Equals (".empty"))
-                        File.SetAttributes (file.FullName, FileAttributes.Hidden);
 
                     size += file.Length;
                 }

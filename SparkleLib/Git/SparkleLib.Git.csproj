@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="SparkleFetcherGit.cs" />
     <Compile Include="SparkleGit.cs" />
+    <Compile Include="SparkleGitConfig.cs" />
     <Compile Include="SparkleRepoGit.cs" />
   </ItemGroup>
 </Project>
