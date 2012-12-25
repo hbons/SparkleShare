@@ -1069,8 +1069,12 @@ namespace SparkleLib.Git {
 
 
             try {
-                foreach (DirectoryInfo directory in parent.GetDirectories ())
-                    size += CalculateSizes (directory);
+                foreach (DirectoryInfo directory in parent.GetDirectories ()) {
+                    // Do not include LocalPath/.git file if it is a subdirectory
+                    //   This will not affect calling CalculateSizes on /.git directly
+                    if (directory.FullName != Path.Combine (LocalPath, ".git"))
+                        size += CalculateSizes (directory);
+                }
 
             } catch (Exception e) {
                 SparkleLogger.LogInfo ("Local", "Error calculating size", e);
