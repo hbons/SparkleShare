@@ -13,8 +13,11 @@ namespace SparkleLib.Git
         private readonly string LocalPath;
 
         private readonly string empty_directories_file;
+
         private SortedSet<string> empty_directories = new SortedSet<string>();
+        private bool empty_directories_changed = false;
         private object empty_directories_lock = new object();
+        
 
         public SparkleGitConfig(string path)
         {
@@ -77,7 +80,26 @@ namespace SparkleLib.Git
                     }
                 }
 
-                bool isSaved = false;
+                
+                bool isSaved = true;
+
+                // Verify we need to write out the data
+                string[] old_empty_directories = File.ReadAllLines (empty_directories_file);
+                if (old_empty_directories.Length == empty_directories_relative.Count)
+                {
+                    for (int x = 0; x < empty_directories_relative.Count; ++x)
+                    {
+                        if (old_empty_directories[x] != empty_directories_relative[x])
+                        {
+                            isSaved = false;
+                            break;
+                        }
+                    }
+                } else {
+                    isSaved = false;
+                }
+
+                // Save data if needed, ensure it gets written
                 while (! isSaved)
                 {
                     try {
