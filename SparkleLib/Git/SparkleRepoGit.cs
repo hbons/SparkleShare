@@ -17,11 +17,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-
 using SparkleLib;
 
 namespace SparkleLib.Git {
@@ -260,7 +260,7 @@ namespace SparkleLib.Git {
                 double number = 0.0;
 
                 if (match.Success) {
-                    number = double.Parse (match.Groups [1].Value);
+                    number = double.Parse (match.Groups [1].Value, new CultureInfo("en-US"));
 
                     // The pushing progress consists of two stages: the "Compressing
                     // objects" stage which we count as 20% of the total progress, and
@@ -275,7 +275,7 @@ namespace SparkleLib.Git {
                         Match speed_match = this.speed_regex.Match (line);
 
                         if (speed_match.Success) {
-                            speed = double.Parse (speed_match.Groups [1].Value) * 1024;
+                            speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo("en-US")) * 1024;
 
                             if (speed_match.Groups [2].Value.Equals ("M"))
                                 speed = speed * 1024;
@@ -342,7 +342,7 @@ namespace SparkleLib.Git {
                 double number = 0.0;
 
                 if (match.Success) {
-                    number = double.Parse (match.Groups [1].Value);
+                    number = double.Parse (match.Groups [1].Value, new CultureInfo("en-US"));
 
                     // The fetching progress consists of two stages: the "Compressing
                     // objects" stage which we count as 20% of the total progress, and
@@ -357,7 +357,7 @@ namespace SparkleLib.Git {
                         Match speed_match = this.speed_regex.Match (line);
                         
                         if (speed_match.Success) {
-                            speed = double.Parse (speed_match.Groups [1].Value) * 1024;
+                            speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo("en-US")) * 1024;
                             
                             if (speed_match.Groups [2].Value.Equals ("M"))
                                 speed = speed * 1024;
