@@ -449,14 +449,9 @@ namespace SparkleShare {
                         if (change.Type != SparkleChangeType.Moved) {
                             event_entry += "<dd class='" + change.Type.ToString ().ToLower () + "'>";
 
-                            if (!change.IsFolder) {
-                                event_entry += "<small><a href=\"history://" + change_set.Folder.Name + "/" + 
-                                    change.Path + "\" title=\"View revisions\">" + change.Timestamp.ToString ("HH:mm") +
-                                    "</a></small> &nbsp;";
-
-                            } else {
-                                event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") + "</small> &nbsp;";
-                            }
+                            event_entry += "<small><a href=\"history://" + change_set.Folder.Name + "/" + 
+                                change.Path + "\" title=\"View revisions\">" + change.Timestamp.ToString ("HH:mm") +
+                                "</a></small> &nbsp;";
 
                             event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
                             event_entry += "</dd>";

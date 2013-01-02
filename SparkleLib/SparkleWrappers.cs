@@ -73,7 +73,6 @@ namespace SparkleLib {
 
         public SparkleChangeType Type;
         public DateTime Timestamp;
-        public bool IsFolder = false;
         
         public string Path;
         public string MovedToPath;
