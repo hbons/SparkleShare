@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -165,7 +166,7 @@ namespace SparkleLib.Git
                 
                 // Try to parse the version
                 try {
-                    current_repo_version = int.Parse(version_string);
+                    current_repo_version = int.Parse(version_string, new CultureInfo("en-US"));
                 } catch {
                     File.Delete (sparkleshare_git_version_file);
                 }
@@ -217,7 +218,7 @@ namespace SparkleLib.Git
             }
 
             // Write out the final version we updated to
-            File.WriteAllText (sparkleshare_git_version_file, current_repo_version.ToString());
+            File.WriteAllText (sparkleshare_git_version_file, current_repo_version.ToString(new CultureInfo("en-US")));
         }
 
 
