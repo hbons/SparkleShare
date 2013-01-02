@@ -17,10 +17,10 @@
 
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
-
 using SparkleLib;
 
 namespace SparkleLib.Git {
@@ -135,7 +135,7 @@ namespace SparkleLib.Git {
                 
                 double number = 0.0;
                 if (match.Success) {
-                    number = double.Parse (match.Groups [1].Value);
+                    number = double.Parse (match.Groups [1].Value, new CultureInfo("en-US"));
                     
                     // The cloning progress consists of two stages: the "Compressing 
                     // objects" stage which we count as 20% of the total progress, and 
