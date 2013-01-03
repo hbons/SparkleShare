@@ -83,6 +83,7 @@ namespace SparkleLib.Git {
         protected string LocateCommand (string name)
         {
             string [] possible_command_paths = new string [] {
+                Defines.INSTALL_DIR + "/bin/" + name;
                 "/usr/bin/" + name,
                 "/usr/local/bin/" + name,
                 "/opt/local/bin/" + name
