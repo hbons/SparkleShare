@@ -635,7 +635,7 @@ namespace SparkleShare {
             this.watcher.EnableRaisingEvents = false;
 
             this.fetcher.Complete ();
-            string canonical_name = Path.GetFileName (this.fetcher.RemoteUrl.AbsolutePath);
+            string canonical_name = Path.GetFileName (this.fetcher.RemoteUrl.LocalPath);
 
             canonical_name = canonical_name.Replace ("-crypto", "");
             canonical_name = canonical_name.Replace ("_", " ");
@@ -676,7 +676,7 @@ namespace SparkleShare {
                 }
             }
 
-            string backend = SparkleFetcherBase.GetBackend (this.fetcher.RemoteUrl.AbsolutePath);
+            string backend = SparkleFetcherBase.GetBackend (this.fetcher.RemoteUrl.LocalPath);
 
             this.config.AddFolder (target_folder_name, this.fetcher.Identifier,
                 this.fetcher.RemoteUrl.ToString (), backend);
