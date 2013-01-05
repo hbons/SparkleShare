@@ -196,6 +196,15 @@ namespace SparkleShare {
                 foreach (string file_name in Directory.GetFiles (keys_path)) {
                     if (file_name.EndsWith (".key")) {
                         key_file_path = Path.Combine (keys_path, file_name);
+
+                        // Replace spaces with underscores in old keys
+                        if (file_name.Contains (" ")) {
+                            string new_file_name = file_name.Replace (" ", "_");
+                            File.Move (key_file_path, Path.Combine (keys_path));
+                            File.Move (key_file_path + ".pub", Path.Combine (keys_path, new_file_name + ".pub"));
+                            key_file_path = Path.Combine (keys_path, new_file_name);
+                        }
+
                         SparkleKeys.ImportPrivateKey (key_file_path);
 
                         break;
