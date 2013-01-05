@@ -240,9 +240,9 @@ namespace SparkleShare {
                 Path                  = FoldersPath
             };
 
-            watcher.Deleted += OnFolderActivity;
             watcher.Created += OnFolderActivity;
-            watcher.Renamed += OnFolderActivity;
+            // FIXME watcher.Deleted += OnFolderActivity;
+            // FIXME watcher.Renamed += OnFolderActivity;
 
             watcher.EnableRaisingEvents = true;
         }
@@ -478,14 +478,14 @@ namespace SparkleShare {
                 HandleInvite (args);
                 return;
 
-            } else {
+            }/* else { FIXME: on the fly folder removal doesn't always work. disabling for now
                 Thread.Sleep (1000);
 
                 if (Directory.Exists (args.FullPath) && args.ChangeType == WatcherChangeTypes.Created)
                     return;
 
                 CheckRepositories ();
-            }
+            }*/
         }
 
 
