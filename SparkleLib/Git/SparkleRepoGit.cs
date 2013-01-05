@@ -565,13 +565,22 @@ namespace SparkleLib.Git {
                 SparkleLogger.LogInfo ("Git", Name + " | Conflict type: " + line);
 
                 // Ignore conflicts in the .sparkleshare file and use the local version
-                if (conflicting_path.EndsWith (".sparkleshare") || conflicting_path.StartsWith (".sparkleshare-git/")) {
+                if (conflicting_path.EndsWith (".sparkleshare")) {
                     // Recover local version
                     SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
                     git_theirs.StartAndWaitForExit ();
 
                     File.SetAttributes (Path.Combine (LocalPath, conflicting_path), FileAttributes.Hidden);
                     changes_added = true;
+
+                    continue;
+                }
+
+                // Ignore conflicts in the SparkleGitConfig folder and use the remote version
+                if (conflicting_path.StartsWith (".sparkleshare-git/")) {
+                    // Recover remote version
+                    SparkleGit git_ours = new SparkleGit (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
+                    git_ours.StartAndWaitForExit ();
 
                     continue;
                 }
@@ -736,23 +745,31 @@ namespace SparkleLib.Git {
                     "--format=medium --no-color --no-merges -- \"" + path + "\"");
             }
 
-            string output = git.StartAndReadStandardOutput ();
+            string output   = git.StartAndReadStandardOutput ();
+            string [] lines = output.Split ("\n".ToCharArray ());
 
-            string [] lines      = output.Split ("\n".ToCharArray ());
-            List<string> entries = new List <string> ();
+            List<KeyValuePair<string, string>> entries = new List <KeyValuePair<string, string>> ();
 
             int line_number = 0;
             bool first_pass = true;
+            string commit = "";
             string entry = "", last_entry = "";
             foreach (string line in lines) {
-                if (line.StartsWith ("commit") && !first_pass) {
-                    entries.Add (entry);
-                    entry = "";
-                    line_number = 0;
+                if (line.StartsWith ("commit")) {
 
-                } else {
-                    first_pass = false;
+                    if (!first_pass) {
+                        entries.Add (new KeyValuePair<string, string> (commit, entry));
+                        entry = "";
+                        line_number = 0;
+                    } else {
+                        first_pass = false;
+                    }
+
+                    // Read the commit hash
+                    commit = line.Substring(7);
                 }
+
+
 
                 // Only parse 250 files to prevent memory issues
                 if (line_number < 254) {
@@ -763,11 +780,11 @@ namespace SparkleLib.Git {
                 last_entry = entry;
             }
 
-            entries.Add (last_entry);
+            entries.Add (new KeyValuePair<string, string> (commit, last_entry));
 
 
-            foreach (string log_entry in entries) {
-                Match match = this.log_regex.Match (log_entry);
+            foreach (KeyValuePair<string, string> log_entry in entries) {
+                Match match = this.log_regex.Match (log_entry.Value);
 
                 if (match.Success) {
                     SparkleChangeSet change_set = new SparkleChangeSet ();
@@ -788,7 +805,8 @@ namespace SparkleLib.Git {
                     change_set.Timestamp = change_set.Timestamp.AddHours (their_offset * -1);
                     change_set.Timestamp = change_set.Timestamp.AddHours (our_offset);
 
-                    string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
+                    string [] entry_lines = log_entry.Value.Split ("\n".ToCharArray ());
+                    string metadata_folder = sparkle_git_config.MetadataPath.Replace (LocalPath, "").Replace ("\\", "/").TrimStart ("/".ToCharArray ());
 
                     foreach (string entry_line in entry_lines) {
                         if (entry_line.StartsWith (":")) {
@@ -800,6 +818,12 @@ namespace SparkleLib.Git {
 
                             file_path = EnsureSpecialCharacters (file_path);
                             file_path = file_path.Replace ("\\\"", "\"");
+
+                            if (file_path.StartsWith (metadata_folder))
+                            {
+                                change_set.Changes.AddRange (sparkle_git_config.GetChanges (path, log_entry.Key, type_letter, file_path, change_set.Timestamp));
+                                continue;
+                            }
 
                             if (type_letter.Equals ("R")) {
                                 int tab_pos         = entry_line.LastIndexOf ("\t");

@@ -11,19 +11,21 @@ namespace SparkleLib.Git
 {
     class SparkleGitConfig
     {
+        public readonly string MetadataPath;
+
         private readonly string LocalPath;
 
         private readonly string empty_directories_file;
 
         private SortedSet<string> empty_directories = new SortedSet<string>();
-        private bool empty_directories_changed = false;
         private object empty_directories_lock = new object();
         
 
         public SparkleGitConfig(string path)
         {
             LocalPath = path;
-            empty_directories_file = Path.Combine (LocalPath, ".sparkleshare-git", "empty_directories");
+            MetadataPath = Path.Combine(LocalPath, ".sparkleshare-git");
+            empty_directories_file = Path.Combine (MetadataPath, "empty_directories");
             
             // Update repo information files
             UpgradeRepoInfo ();
@@ -69,16 +71,14 @@ namespace SparkleLib.Git
                     empty_directories.Remove(empty_directory);
 
                 // Replace LocalPath in all empty directories, only save relative paths to file
+                //   Also convert all \s to / and remove leading if needed
                 List<string> empty_directories_relative = new List<string>(empty_directories);
                 for (int x = 0; x < empty_directories_relative.Count; ++x)
                 {
-                    empty_directories_relative[x] = empty_directories_relative[x].Replace(LocalPath, "");
+                    empty_directories_relative[x] = empty_directories_relative[x].Replace(LocalPath, "").Replace ("\\", "/");
 
-                    if (empty_directories_relative[x][0] == Path.DirectorySeparatorChar || 
-                        empty_directories_relative[x][0] == Path.AltDirectorySeparatorChar)
-                    {
+                    if (empty_directories_relative[x][0] == '/')
                         empty_directories_relative[x] = empty_directories_relative[x].Substring(1);
-                    }
                 }
 
                 
@@ -108,7 +108,7 @@ namespace SparkleLib.Git
                         File.WriteAllLines (empty_directories_file, empty_directories_relative);
                         isSaved = true;
                     } catch (Exception) {
-                        Thread.Sleep(0);
+                        Thread.Yield ();
                     }
                 }
             }
@@ -129,6 +129,111 @@ namespace SparkleLib.Git
                 empty_directories.Remove(path);
         }
 
+        public List<SparkleChange> GetChanges (string path, string commit, string type_letter, string file_path, DateTime change_set_timestamp)
+        {
+            List<SparkleChange> file_changes = new List<SparkleChange> ();
+
+            if (file_path == ".sparkleshare-git/empty_directories" && (type_letter.Equals ("A") || type_letter.Equals ("M"))) {
+
+                // Get log to determine fill vs deletion
+                SparkleGit git_log;
+                if (path == null) {
+                    git_log = new SparkleGit (LocalPath, "log --raw --find-renames --date=iso " +
+                        "--format=medium --no-color --no-merges " + commit + "~1.." + commit);
+                } else {
+                    path = path.Replace ("\\", "/");
+                    git_log = new SparkleGit (LocalPath, "log --raw --find-renames --date=iso " +
+                        "--format=medium --no-color --no-merges " + commit + "~1.." + commit + " -- \"" + path + "\"");
+                }
+
+                string log_output   = git_log.StartAndReadStandardOutput();
+                string [] log_lines = log_output.Split("\n".ToCharArray());
+
+                // Get diff to determine what empty directories were added/deleted                
+                SparkleGit git_diff = new SparkleGit (LocalPath, "diff --minimal " + commit + "~1 " + commit +
+                    " -- \"" + file_path + "\"");
+                
+                string diff_output   = git_diff.StartAndReadStandardOutput ();
+                string [] diff_lines = diff_output.Split ("\n".ToCharArray ());
+
+                // Process through to the actual line changes
+                bool within_changes = false;
+                foreach (string diff_line in diff_lines) {
+
+                    // Wait until we find a change boundary marker
+                    if (diff_line.StartsWith ("@@") && diff_line.EndsWith ("@@")) {
+                        within_changes = true;
+
+                    } else if (within_changes) {
+                        // Actually at a change line, require it start with +/-
+                        if (diff_line.StartsWith ("+") || diff_line.StartsWith("-")) {
+                            string empty_folder = diff_line.Substring (1).TrimEnd ();
+
+                            // Remember if a file within the folder is added or removed.  This will help us determine filling the folder vs emptying the folder
+                            bool file_added   = false;
+                            bool file_removed = false;
+                            foreach (string log_line in log_lines) {       
+                                // Break out if both happened, no need to keep looking
+                                if (file_added && file_removed)
+                                    break;
+                                
+                                // Check for file being added or deleted
+                                if (log_line.StartsWith (":") && log_line[37] == 'A' && log_line.Substring (39).StartsWith (empty_folder))
+                                    file_added = true;
+                                else if (log_line.StartsWith (":") && log_line[37] == 'D' && log_line.Substring (39).StartsWith (empty_folder))
+                                    file_removed = true;
+                                
+                            }
+
+                            foreach (string inner_diff_line in diff_lines) {
+                                // Break out if both happened, no need to keep looking
+                                if (file_added && file_removed)
+                                    break;
+                                
+                                // Don't count our current line
+                                if (inner_diff_line == diff_line)
+                                    continue;
+
+                                // Check for folder being added or deleted
+                                if (inner_diff_line.StartsWith ("+") && inner_diff_line.Substring (1).StartsWith (empty_folder))
+                                    file_added = true;
+                                else if (inner_diff_line.StartsWith ("-") && inner_diff_line.Substring (1).StartsWith (empty_folder))
+                                    file_removed = true;
+                            }
+
+                            if (diff_line.StartsWith ("+") ) {
+                                // Folder was either emptied or created
+                                if (! file_removed) {
+                                    // Empty folder created
+                                    SparkleChange add_change = new SparkleChange() {
+                                        Type = SparkleChangeType.Added,
+                                        Path = empty_folder,
+                                        Timestamp = change_set_timestamp
+                                    };
+                                            
+                                    file_changes.Add(add_change);
+                                }
+                            } else {
+                                // Folder was either filled or deleted
+                                if (! file_added) {
+                                    // Empty folder deleted
+                                    SparkleChange deleted_change = new SparkleChange() {
+                                        Type = SparkleChangeType.Deleted,
+                                        Path = empty_folder,
+                                        Timestamp = change_set_timestamp
+                                    };
+
+                                    file_changes.Add(deleted_change);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return file_changes;
+        }
+
 
         private void CreateEmptyDirectories ()
         {
@@ -146,7 +251,7 @@ namespace SparkleLib.Git
 
         private void UpgradeRepoInfo ()
         {
-            string sparkleshare_git_folder = Path.Combine(LocalPath, ".sparkleshare-git");
+            string sparkleshare_git_folder = MetadataPath;
             
             // Create information folder if it doesn't exist
             if (!Directory.Exists(sparkleshare_git_folder))
