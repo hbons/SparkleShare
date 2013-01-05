@@ -203,11 +203,11 @@ namespace SparkleLib {
             // Sync up everything that changed
             // since we've been offline
             new Thread (() => {
-                if (!this.is_syncing && (HasLocalChanges || HasUnsyncedChanges)) {
-                    SyncUpBase ();
-
-                    while (HasLocalChanges && !this.is_syncing)
+                if (!this.is_syncing && (HasUnsyncedChanges || HasLocalChanges)) {
+                    do {
                         SyncUpBase ();
+
+                    } while (!this.is_syncing && HasLocalChanges);
                 }
 
                 this.remote_timer.Start ();
