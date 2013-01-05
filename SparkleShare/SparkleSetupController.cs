@@ -392,7 +392,7 @@ namespace SparkleShare {
                 Uri uri = new Uri (remote_url);
 
                 try {
-                    string address = remote_url.Replace (uri.AbsolutePath, "");
+                    string address = uri.ToString ().Replace (uri.LocalPath, "");
     
                     new_plugin = SparklePlugin.Create (uri.Host, address, address, "", "", "/path/to/project");
     
