@@ -343,7 +343,6 @@ namespace SparkleShare {
                     else
                         break;
                 }
-
             }
 
             return new List<SparkleChangeSet> ();
