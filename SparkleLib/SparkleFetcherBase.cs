@@ -165,7 +165,7 @@ namespace SparkleLib {
 
                     IsActive = false;
 
-                    bool repo_is_encrypted = (RemoteUrl.LocalPath.Contains ("-crypto") ||
+                    bool repo_is_encrypted = (RemoteUrl.AbsolutePath.Contains ("-crypto") ||
                                               RemoteUrl.Host.Equals ("sparkleshare.net"));
 
                     Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);
@@ -225,7 +225,7 @@ namespace SparkleLib {
                 n +
                 "Have fun! :)" + n;
 
-            if (RemoteUrl.LocalPath.Contains ("-crypto") || RemoteUrl.Host.Equals ("sparkleshare.net"))
+            if (RemoteUrl.AbsolutePath.Contains ("-crypto") || RemoteUrl.Host.Equals ("sparkleshare.net"))
                 text = text.Replace ("a SparkleShare repository", "an encrypted SparkleShare repository");
 
             File.WriteAllText (file_path, text);

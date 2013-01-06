@@ -78,17 +78,17 @@ namespace SparkleLib.Git {
             }
 
             if (uri.Host.Equals ("gitorious.org") && !uri.Scheme.StartsWith ("http")) {
-                if (!uri.LocalPath.Equals ("/") &&
-                    !uri.LocalPath.EndsWith (".git")) {
+                if (!uri.AbsolutePath.Equals ("/") &&
+                    !uri.AbsolutePath.EndsWith (".git")) {
 
-                    uri = new Uri (Path.Combine( "ssh://git@gitorious.org", uri.LocalPath, ".git"));
+                    uri = new Uri ("ssh://git@gitorious.org" + uri.AbsolutePath + ".git");
 
                 } else {
-                    uri = new Uri (Path.Combine ("ssh://git@gitorious.org", uri.LocalPath));
+                    uri = new Uri ("ssh://git@gitorious.org" + uri.AbsolutePath);
                 }
 
             } else if (uri.Host.Equals ("github.com") && !uri.Scheme.StartsWith ("http")) {
-                uri = new Uri (Path.Combine("ssh://git@github.com", uri.LocalPath));
+                uri = new Uri ("ssh://git@github.com" + uri.AbsolutePath);
 
             } else if (uri.Host.Equals ("bitbucket.org") && !uri.Scheme.StartsWith ("http")) {
                 // Nothing really
@@ -96,9 +96,9 @@ namespace SparkleLib.Git {
             } else {
                 if (string.IsNullOrEmpty (uri.UserInfo) && !uri.Scheme.StartsWith ("http")) {
                     if (uri.Port == -1)
-                        uri = new Uri (Path.Combine (uri.Scheme + "://storage@" + uri.Host, uri.LocalPath));
+                        uri = new Uri (uri.Scheme + "://storage@" + uri.Host + uri.AbsolutePath);
                     else
-                        uri = new Uri (Path.Combine (uri.Scheme + "://storage@" + uri.Host + ":" + uri.Port, uri.LocalPath));
+                        uri = new Uri (uri.Scheme + "://storage@" + uri.Host + ":" + uri.Port + uri.AbsolutePath);
                 }
 
                 this.use_git_bin = false; // TODO
