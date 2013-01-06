@@ -19,13 +19,13 @@ using System;
 using System.Reflection;
 
 [assembly:AssemblyTitle ("SparkleLib")]
-[assembly:AssemblyVersion ("1.0.0")]
+[assembly:AssemblyVersion ("1.1.0")]
 [assembly:AssemblyCopyright ("Copyright (c) 2010 Hylke Bons and others")]
 [assembly:AssemblyTrademark ("SparkleShare is a trademark of SparkleShare Ltd.")]
 
 namespace SparkleLib {
 
     public class Defines {
-        public const string INSTALL_DIR = "/usr/share/sparkleshare";
+        public const string INSTALL_DIR = "/usr/local/share/sparkleshare";
     }
 }
