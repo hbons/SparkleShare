@@ -230,10 +230,10 @@ namespace SparkleLib.Git {
 
         public override bool SyncUp ()
         {
-            if (HasLocalChanges) {
-                Add ();
+            string message = FormatCommitMessage ();
 
-                string message = FormatCommitMessage ();
+            if (message != null) {
+                Add ();
                 Commit (message);
             }
 
@@ -456,11 +456,11 @@ namespace SparkleLib.Git {
         // Merges the fetched changes
         private bool Rebase ()
         {
-            if (HasLocalChanges) {
+            string message = FormatCommitMessage ();
+            
+            if (message != null) {
                 Add ();
-
-                string commit_message = FormatCommitMessage ();
-                Commit (commit_message);
+                Commit (message);
             }
 
             SparkleGit git;
@@ -1046,7 +1046,10 @@ namespace SparkleLib.Git {
             git_status.StandardOutput.ReadToEnd ();
             git_status.WaitForExit ();
 
-            return message;
+            if (string.IsNullOrWhiteSpace (message))
+                return null;
+            else
+                return message;
         }
 
 

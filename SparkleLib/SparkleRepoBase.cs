@@ -245,12 +245,12 @@ namespace SparkleLib {
             SparkleLogger.LogInfo ("Local", Name + " | Activity detected, waiting for it to settle...");
 
             List<double> size_buffer = new List<double> ();
+            DirectoryInfo info = new DirectoryInfo (LocalPath);
 
             do {
                 if (size_buffer.Count >= 4)
                     size_buffer.RemoveAt (0);
 
-                DirectoryInfo info = new DirectoryInfo (LocalPath);
                 size_buffer.Add (CalculateSize (info));
 
                 if (size_buffer.Count >= 4 &&
