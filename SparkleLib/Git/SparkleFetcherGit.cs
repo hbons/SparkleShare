@@ -135,7 +135,7 @@ namespace SparkleLib.Git {
                 
                 double number = 0.0;
                 if (match.Success) {
-                    number = double.Parse (match.Groups [1].Value, new CultureInfo("en-US"));
+                    number = double.Parse (match.Groups [1].Value, new CultureInfo ("en-US"));
                     
                     // The cloning progress consists of two stages: the "Compressing 
                     // objects" stage which we count as 20% of the total progress, and 
