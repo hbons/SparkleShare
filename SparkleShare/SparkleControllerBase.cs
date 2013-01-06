@@ -641,7 +641,7 @@ namespace SparkleShare {
             this.watcher.EnableRaisingEvents = false;
 
             this.fetcher.Complete ();
-            string canonical_name = Path.GetFileName (this.fetcher.RemoteUrl.LocalPath);
+            string canonical_name = Path.GetFileName (this.fetcher.RemoteUrl.AbsolutePath);
 
             canonical_name = canonical_name.Replace ("-crypto", "");
             canonical_name = canonical_name.Replace ("_", " ");
