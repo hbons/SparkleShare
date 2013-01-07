@@ -645,6 +645,7 @@ namespace SparkleShare {
 
             canonical_name = canonical_name.Replace ("-crypto", "");
             canonical_name = canonical_name.Replace ("_", " ");
+            canonical_name = canonical_name.Replace ("%20", " ");
 
             bool target_folder_exists = Directory.Exists (
                 Path.Combine (this.config.FoldersPath, canonical_name));
