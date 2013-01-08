@@ -83,7 +83,7 @@ namespace SparkleLib {
         public double ProgressPercentage { get; private set; }
         public double ProgressSpeed { get; private set; }
 
-        public string Identifier {
+        public virtual string Identifier {
             get {
                 if (this.identifier != null)
                     return this.identifier;
