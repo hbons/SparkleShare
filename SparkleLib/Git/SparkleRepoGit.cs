@@ -1061,41 +1061,39 @@ namespace SparkleLib.Git {
 
 
         // Recursively gets a folder's size in bytes
-        private double CalculateSizes (DirectoryInfo parent)
+        private long CalculateSizes (DirectoryInfo parent)
         {
-            if (!Directory.Exists (parent.FullName) || parent.Name.Equals ("rebase-apply"))
-                return 0;
-
-            double size = 0;
-
-            try {
-                foreach (FileInfo file in parent.GetFiles ()) {
-                    if (!file.Exists)
-                        return 0;
-
-                    if (file.Name.Equals (".empty"))
-                        File.SetAttributes (file.FullName, FileAttributes.Hidden);
-
-                    size += file.Length;
-                }
-
-            } catch (Exception e) {
-                SparkleLogger.LogInfo ("Local", "Error calculating size", e);
-                return 0;
-            }
-
+            long size = 0;
 
             try {
                 foreach (DirectoryInfo directory in parent.GetDirectories ()) {
-                    // Do not include LocalPath/.git file if it is a subdirectory
-                    //   This will not affect calling CalculateSizes on /.git directly
-                    if (directory.FullName != Path.Combine (LocalPath, ".git"))
-                        size += CalculateSizes (directory);
+                    if (directory.IsSymlink () ||
+                        directory.Name.Equals (".git") || 
+                        directory.Name.Equals ("rebase-apply")) {
+
+                        continue;
+                    }
+
+                    size += CalculateSizes (directory);
                 }
 
             } catch (Exception e) {
-                SparkleLogger.LogInfo ("Local", "Error calculating size", e);
-                return 0;
+                SparkleLogger.LogInfo ("Local", "Error calculating directory size", e);
+            }
+
+            try {
+                foreach (FileInfo file in parent.GetFiles ()) {
+                    if (file.IsSymlink ())
+                        continue;
+                    
+                    if (file.Name.Equals (".empty"))
+                        File.SetAttributes (file.FullName, FileAttributes.Hidden);
+                    else
+                        size += file.Length;
+                }
+                
+            } catch (Exception e) {
+                SparkleLogger.LogInfo ("Local", "Error calculating file size", e);
             }
 
             return size;
