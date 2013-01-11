@@ -30,6 +30,9 @@ namespace SparkleShare {
         public SparkleBubbles ()
         {
             Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
+                if (!Program.UI.Controller.NotificationsEnabled)
+                    return;
+
                 try {
                     Notification notification = new Notification () {
                         Summary = title,
