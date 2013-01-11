@@ -731,6 +731,13 @@ namespace SparkleLib.Git {
 
             string output = git.StartAndReadStandardOutput ();
 
+            if (path == null && string.IsNullOrWhiteSpace (output)) {
+                git = new SparkleGit (LocalPath, "log -n 75 --raw --find-renames --date=iso " +
+                    "--format=medium --no-color --no-merges");
+
+                output = git.StartAndReadStandardOutput ();
+            }
+
             string [] lines      = output.Split ("\n".ToCharArray ());
             List<string> entries = new List <string> ();
 
