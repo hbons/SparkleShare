@@ -444,13 +444,11 @@ namespace SparkleShare {
             };
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set) {
-                if (NotificationsEnabled)
-                    NotificationRaised (change_set);
+                NotificationRaised (change_set);
             };
 
             repo.ConflictResolved += delegate {
-                if (NotificationsEnabled)
-                    AlertNotificationRaised ("Conflict happened", "Don't worry, we've made a copy of each conflicting file.");
+                AlertNotificationRaised ("Conflict happened", "Don't worry, we've made a copy of each conflicting file.");
             };
 
             this.repositories.Add (repo);
