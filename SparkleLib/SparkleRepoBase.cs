@@ -501,29 +501,22 @@ namespace SparkleLib {
 
 
         // Recursively gets a folder's size in bytes
-        private double CalculateSize (DirectoryInfo parent)
+        private long CalculateSize (DirectoryInfo parent)
         {
-            if (!Directory.Exists (parent.ToString ()))
-                return 0;
-
-            double size = 0;
-
             if (ExcludePaths.Contains (parent.Name))
                 return 0;
 
+            long size = 0;
+
             try {
-                foreach (FileInfo file in parent.GetFiles ()) {
-                    if (!file.Exists)
-                        return 0;
-
-                    size += file.Length;
-                }
-
                 foreach (DirectoryInfo directory in parent.GetDirectories ())
                     size += CalculateSize (directory);
 
-            } catch (Exception) {
-                return 0;
+                foreach (FileInfo file in parent.GetFiles ())
+                    size += file.Length;
+
+            } catch (Exception e) {
+                SparkleLogger.LogInfo ("Local", "Error calculating directory size", e);
             }
 
             return size;

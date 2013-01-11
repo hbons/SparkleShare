@@ -70,5 +70,11 @@ namespace SparkleLib {
             else
                 return byte_count.ToString () + " ʙ";
         }
+
+
+        public static bool IsSymlink (this FileSystemInfo file)
+        {
+            return ((file.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint);
+        }
     }
 }
