@@ -134,7 +134,7 @@ namespace SparkleShare {
 
             CheckBox notify_check_box = new CheckBox () {
                 Margin    = new Thickness (6, 0, 0, 0),
-                IsChecked = (Controller.Folders.Length > 0 && Program.Controller.NotificationsEnabled)
+                IsChecked = Program.Controller.NotificationsEnabled
             };
             
             SparkleMenuItem notify_item = new SparkleMenuItem () { Header = "Notifications" };
