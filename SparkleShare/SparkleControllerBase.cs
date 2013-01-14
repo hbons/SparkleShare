@@ -746,8 +746,8 @@ namespace SparkleShare {
                     return null;
                 }
 
-            } catch (WebException e) {
-                SparkleLogger.LogInfo ("Controller", "Error fetching avatar for " + email + ": " + e.Message);
+            } catch (Exception e) {
+                SparkleLogger.LogInfo ("Controller", "Error fetching avatar for " + email, e);
                 skipped_avatars.Add (email);
 
                 return null;
