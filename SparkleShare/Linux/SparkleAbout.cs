@@ -44,6 +44,7 @@ namespace SparkleShare {
             WindowPosition = WindowPosition.Center;
             Title          = "About SparkleShare";
             AppPaintable   = true;
+            TypeHint       = Gdk.WindowTypeHint.Dialog;
 
             string image_path = new string [] { SparkleUI.AssetsPath, "pixmaps", "about.png" }.Combine ();
 
