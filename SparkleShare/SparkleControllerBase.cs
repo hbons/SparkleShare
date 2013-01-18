@@ -640,6 +640,9 @@ namespace SparkleShare {
 
             this.fetcher.Complete ();
             string canonical_name = Path.GetFileName (this.fetcher.RemoteUrl.AbsolutePath);
+            
+            if (canonical_name.EndsWith (".git"))
+                canonical_name = canonical_name.Replace (".git", "");
 
             canonical_name = canonical_name.Replace ("-crypto", "");
             canonical_name = canonical_name.Replace ("_", " ");
