@@ -50,21 +50,11 @@ namespace SparkleLib {
             case SparkleChangeType.Deleted: message = "deleted ‘{0}’"; break;
             case SparkleChangeType.Moved:   message = "moved ‘{0}’"; break;
             }
-            
-            if (Changes.Count == 1) {
-                return message = string.Format (message, Changes [0].Path);
-                
-            } else if (Changes.Count > 1) {
-                message = string.Format (message, Changes [0].Path);
-                
-                if ((Changes.Count - 1) == 1)
-                    return string.Format (message + " and one other event", Changes.Count - 1);
-                else
-                    return string.Format (message + " and {0} other events", Changes.Count - 1);
-                
-            } else {
+
+            if (Changes.Count > 0)
+                return string.Format (message, Changes [0].Path);
+            else
                 return "did something magical";
-            }
         }
     }
 
