@@ -386,7 +386,10 @@ namespace SparkleLib {
 
                 ChangeSets = GetChangeSets ();
 
-                if (!pre_sync_revision.Equals (CurrentRevision) && ChangeSets != null && ChangeSets.Count > 0) {
+                if (!pre_sync_revision.Equals (CurrentRevision) &&
+                    ChangeSets != null && ChangeSets.Count > 0 &&
+                    !ChangeSets [0].User.Name.Equals (this.local_config.User.Name)) {
+
                     bool emit_change_event = true;
 
                     foreach (SparkleChange change in ChangeSets [0].Changes) {
