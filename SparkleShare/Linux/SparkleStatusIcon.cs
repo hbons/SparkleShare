@@ -38,11 +38,11 @@ namespace SparkleShare {
         #else
         private StatusIcon status_icon;
 
-        private Gdk.Pixbuf syncing_idle_image  = SparkleUIHelpers.GetIcon ("sparkleshare", 24);
-        private Gdk.Pixbuf syncing_up_image    = SparkleUIHelpers.GetIcon ("process-syncing-up", 24);
-        private Gdk.Pixbuf syncing_down_image  = SparkleUIHelpers.GetIcon ("process-syncing-down", 24);
-        private Gdk.Pixbuf syncing_image       = SparkleUIHelpers.GetIcon ("process-syncing", 24);
-        private Gdk.Pixbuf syncing_error_image = SparkleUIHelpers.GetIcon ("process-syncing-error", 24);
+        private Gdk.Pixbuf syncing_idle_image  = SparkleUIHelpers.GetIcon ("sparkleshare", 48);
+        private Gdk.Pixbuf syncing_up_image    = SparkleUIHelpers.GetIcon ("process-syncing-up", 48);
+        private Gdk.Pixbuf syncing_down_image  = SparkleUIHelpers.GetIcon ("process-syncing-down", 48);
+        private Gdk.Pixbuf syncing_image       = SparkleUIHelpers.GetIcon ("process-syncing", 48);
+        private Gdk.Pixbuf syncing_error_image = SparkleUIHelpers.GetIcon ("process-syncing-error", 48);
         #endif
 
 
