@@ -26,6 +26,10 @@ app_theme_icons = \
 	status,process-syncing-down-24.png \
 	status,process-syncing-24.png \
 	status,process-syncing-error-24.png	\
+	status,process-syncing-up-48.png \
+	status,process-syncing-down-48.png \
+	status,process-syncing-48.png \
+	status,process-syncing-error-48.png	\
 	status,document-added-12.png \
 	status,document-edited-12.png \
 	status,document-deleted-12.png \
