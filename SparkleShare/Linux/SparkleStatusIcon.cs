@@ -37,12 +37,6 @@ namespace SparkleShare {
         private ApplicationIndicator indicator;
         #else
         private StatusIcon status_icon;
-
-        private Gdk.Pixbuf syncing_idle_image  = SparkleUIHelpers.GetIcon ("sparkleshare", 48);
-        private Gdk.Pixbuf syncing_up_image    = SparkleUIHelpers.GetIcon ("process-syncing-up", 48);
-        private Gdk.Pixbuf syncing_down_image  = SparkleUIHelpers.GetIcon ("process-syncing-down", 48);
-        private Gdk.Pixbuf syncing_image       = SparkleUIHelpers.GetIcon ("process-syncing", 48);
-        private Gdk.Pixbuf syncing_error_image = SparkleUIHelpers.GetIcon ("process-syncing-error", 48);
         #endif
 
 
@@ -53,8 +47,8 @@ namespace SparkleShare {
             this.indicator.IconName = "process-syncing-idle";
             this.indicator.Status   = Status.Active;
             #else
-			this.status_icon        = new StatusIcon ();
-            this.status_icon.Pixbuf = this.syncing_idle_image;
+			this.status_icon          = new StatusIcon ();
+            this.status_icon.IconName = "sparkleshare";
 
             this.status_icon.Activate  += ShowMenu; // Primary mouse button click
             this.status_icon.PopupMenu += ShowMenu; // Secondary mouse button click
@@ -69,7 +63,7 @@ namespace SparkleShare {
                         #if HAVE_APP_INDICATOR
                         this.indicator.IconName = "process-syncing-idle";
                         #else
-                        this.status_icon.Pixbuf = this.syncing_idle_image;
+                        this.status_icon.IconName = "sparkleshare";
                         #endif
                         break;
                     }
@@ -77,7 +71,7 @@ namespace SparkleShare {
                         #if HAVE_APP_INDICATOR
                         this.indicator.IconName = "process-syncing-up";
                         #else
-                        this.status_icon.Pixbuf = this.syncing_up_image;
+                        this.status_icon.IconName = "process-syncing-up";
                         #endif
                         break;
                     }
@@ -85,7 +79,7 @@ namespace SparkleShare {
                         #if HAVE_APP_INDICATOR
                         this.indicator.IconName = "process-syncing-down";
                         #else
-                        this.status_icon.Pixbuf = this.syncing_down_image;
+                        this.status_icon.IconName = "process-syncing-down";
                         #endif
                         break;
                     }
@@ -93,7 +87,7 @@ namespace SparkleShare {
                         #if HAVE_APP_INDICATOR
                         this.indicator.IconName = "process-syncing";
                         #else
-                        this.status_icon.Pixbuf = this.syncing_image;
+                        this.status_icon.IconName = "process-syncing";
                         #endif
                         break;
                     }
@@ -101,7 +95,7 @@ namespace SparkleShare {
                         #if HAVE_APP_INDICATOR
                         this.indicator.IconName = "process-syncing-error";
                         #else
-                        this.status_icon.Pixbuf = this.syncing_error_image;
+                        this.status_icon.IconName = "process-syncing-error";
                         #endif
                         break;
                     }
