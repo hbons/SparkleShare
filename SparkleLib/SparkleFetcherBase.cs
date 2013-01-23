@@ -270,21 +270,25 @@ namespace SparkleLib {
             process.StartInfo.CreateNoWindow         = true;
             process.EnableRaisingEvents              = true;
 
-            if (RemoteUrl.Port < 1)
-                process.StartInfo.Arguments = "-t rsa -p 22 " + RemoteUrl.Host;
-            else
-                process.StartInfo.Arguments = "-t rsa -p " + RemoteUrl.Port + " " + RemoteUrl.Host;
+            string [] key_types = {"rsa", "dsa", "ecdsa"};
 
-            SparkleLogger.LogInfo ("Cmd", process.StartInfo.FileName + " " + process.StartInfo.Arguments);
+            foreach (string key_type in key_types) {
+                if (RemoteUrl.Port < 1)
+                    process.StartInfo.Arguments = "-t " + key_type + " -p 22 " + RemoteUrl.Host;
+                else
+                    process.StartInfo.Arguments = "-t " + key_type + " -p " + RemoteUrl.Port + " " + RemoteUrl.Host;
 
-            process.Start ();
-            string host_key = process.StandardOutput.ReadToEnd ().Trim ();
-            process.WaitForExit ();
+                SparkleLogger.LogInfo ("Cmd", process.StartInfo.FileName + " " + process.StartInfo.Arguments);
 
-            if (process.ExitCode == 0 && !string.IsNullOrEmpty (host_key))
-                return host_key;
-            else
-                return null;
+                process.Start ();
+                string host_key = process.StandardOutput.ReadToEnd ().Trim ();
+                process.WaitForExit ();
+
+                if (process.ExitCode == 0 && !string.IsNullOrWhiteSpace (host_key))
+                    return host_key;
+            }
+
+            return null;
         }
 
 
