@@ -211,19 +211,27 @@ namespace SparkleLib.Git {
                 if (git.ExitCode != 0)
                     return false;
 
-                string remote_revision = output.Substring (0, 40);
+                string remote_revision = "" + output.Substring (0, 40);
 
-                if (!string.IsNullOrEmpty (remote_revision) && !remote_revision.StartsWith (current_revision)) {
-                    SparkleLogger.LogInfo ("Git", Name + " | Remote changes found, local: " +
-                        current_revision + ", remote: " + remote_revision);
+                if (!remote_revision.Equals (current_revision)) {
+                    git = new SparkleGit (LocalPath, "merge-base " + remote_revision + " master");
+                    git.StartAndWaitForExit ();
 
-                    Error = ErrorStatus.None;
-                    return true;
+                    if (git.ExitCode != 0) {
+                        SparkleLogger.LogInfo ("Git", Name + " | Remote changes found, local: " +
+                            current_revision + ", remote: " + remote_revision);
 
-                } else {
-                    SparkleLogger.LogInfo ("Git", Name + " | No remote changes, local+remote: " + current_revision);
-                    return false;
-                }
+                        Error = ErrorStatus.None;
+                        return true;
+                    
+                    } else {
+                        SparkleLogger.LogInfo ("Git", Name + " | Remote " + remote_revision + " is already in our history");
+                        return false;
+                    }
+                } 
+
+                SparkleLogger.LogInfo ("Git", Name + " | No remote changes, local+remote: " + current_revision);
+                return false;
             }
         }
 
