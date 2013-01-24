@@ -19,6 +19,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
+using Mono.Unix.Native;
 using SparkleLib;
 
 namespace SparkleShare {
@@ -124,8 +125,9 @@ namespace SparkleShare {
 			
             if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
             	Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
+                Syscall.chmod (SparkleConfig.DefaultConfig.FoldersPath, (FilePermissions) 448); // 448 -> 700
+
 				SparkleLogger.LogInfo ("Controller", "Created '" + SparkleConfig.DefaultConfig.FoldersPath + "'");
-				
 				folder_created = true;
 			}
 
