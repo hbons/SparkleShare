@@ -23,6 +23,7 @@ using System.Threading;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 
+using Mono.Unix.Native;
 using SparkleLib;
 
 namespace SparkleShare {
@@ -120,6 +121,8 @@ namespace SparkleShare {
 
                 NSWorkspace.SharedWorkspace.SetIconforFile (NSImage.ImageNamed ("sparkleshare-folder.icns"),
                     Program.Controller.FoldersPath, 0);
+
+                Syscall.chmod (Program.Controller.FoldersPath, (FilePermissions) 448); // 448 -> 700
 
                 return true;
             }
