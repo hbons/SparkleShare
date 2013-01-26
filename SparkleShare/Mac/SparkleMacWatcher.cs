@@ -154,7 +154,9 @@ namespace SparkleShare {
                 string path = paths [0];
                 path = path.Substring (Path.Length);
                 path = path.Trim ("/".ToCharArray ());
-                handler (path);
+
+                if (!string.IsNullOrWhiteSpace (path))
+                    handler (path);
             }
 
             GC.KeepAlive (this);
