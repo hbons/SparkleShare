@@ -56,11 +56,10 @@ namespace SparkleShare {
             base.Initialize ();
 
             SparkleRepoBase.UseCustomWatcher = true;
+            this.watcher = new SparkleMacWatcher (Program.Controller.FoldersPath);
 
             this.watcher.Changed += delegate (string path) {
-                FileSystemEventArgs fse_args = new FileSystemEventArgs (WatcherChangeTypes.Changed,
-                    Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, path), Path.GetFileName (path));
-
+                FileSystemEventArgs fse_args = new FileSystemEventArgs (WatcherChangeTypes.Changed, path, "Unknown_File");
                 FileActivityTask [] tasks = new FileActivityTask [Repositories.Length];
 
                 // FIXME: There are cases where the wrong repo is triggered, so
@@ -114,8 +113,6 @@ namespace SparkleShare {
 
         public override bool CreateSparkleShareFolder ()
         {
-            this.watcher = new SparkleMacWatcher (Program.Controller.FoldersPath);
-
             if (!Directory.Exists (Program.Controller.FoldersPath)) {
                 Directory.CreateDirectory (Program.Controller.FoldersPath);
 
