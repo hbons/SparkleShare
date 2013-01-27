@@ -78,9 +78,7 @@ namespace SparkleShare {
 
 
         public bool FirstRun {
-            get {
-                return this.config.User.Email.Equals ("Unknown");
-            }
+            get { return this.config.User.Email.Equals ("Unknown"); }
         }
 
         public List<string> Folders {
@@ -91,19 +89,12 @@ namespace SparkleShare {
         }
 
         public string ConfigPath {
-            get {
-                return this.config.LogFilePath;
-            }
+            get { return this.config.LogFilePath; }
         }
 
         public SparkleUser CurrentUser {
-            get {
-                return this.config.User;
-            }
-
-            set {
-                this.config.User = value;
-            }
+            get { return this.config.User; }
+            set { this.config.User = value; }
         }
 
         public bool NotificationsEnabled {
@@ -541,12 +532,8 @@ namespace SparkleShare {
         }
 
 
-        public void StartFetcher (string address, string required_fingerprint,
-            string remote_path, string announcements_url, bool fetch_prior_history)
+        public void StartFetcher (SparkleFetcherInfo info)
         {
-            if (announcements_url != null)
-                announcements_url = announcements_url.Trim ();
-
             string tmp_path = this.config.TmpPath;
 
             if (!Directory.Exists (tmp_path)) {
@@ -554,21 +541,19 @@ namespace SparkleShare {
                 File.SetAttributes (tmp_path, File.GetAttributes (tmp_path) | FileAttributes.Hidden);
             }
 
-            string canonical_name = Path.GetFileName (remote_path);
-            string tmp_folder     = Path.Combine (tmp_path, canonical_name);
-            string backend        = SparkleFetcherBase.GetBackend (address);
+            string canonical_name = Path.GetFileName (info.RemotePath);
+            string backend        = SparkleFetcherBase.GetBackend (info.Address);
+            info.TargetDirectory  = Path.Combine (tmp_path, canonical_name);
 
             try {
                 this.fetcher = (SparkleFetcherBase) Activator.CreateInstance (
-                    Type.GetType ("SparkleLib." + backend + ".SparkleFetcher, SparkleLib." + backend),
-                        address, required_fingerprint, remote_path, tmp_folder, fetch_prior_history
-                );
+                    Type.GetType ("SparkleLib." + backend + ".SparkleFetcher, SparkleLib." + backend), info);
 
             } catch (Exception e) {
                 SparkleLogger.LogInfo ("Controller",
                     "Failed to load '" + backend + "' backend for '" + canonical_name + "' " + e.Message);
 
-                FolderFetchError (Path.Combine (address, remote_path).Replace (@"\", "/"),
+                FolderFetchError (Path.Combine (info.Address, info.RemotePath).Replace (@"\", "/"),
                     new string [] {"Failed to load \"" + backend + "\" backend for \"" + canonical_name + "\""});
 
                 return;
@@ -689,8 +674,12 @@ namespace SparkleShare {
             this.config.AddFolder (target_folder_name, this.fetcher.Identifier,
                 this.fetcher.RemoteUrl.ToString (), backend);
 
-            RepositoriesLoaded = true;
+            if (this.fetcher.OriginalFetcherInfo.AnnouncementsUrl != null) {
+                this.config.SetFolderOptionalAttribute (target_folder_name, "announcements_url",
+                    this.fetcher.OriginalFetcherInfo.AnnouncementsUrl);
+            }
 
+            RepositoriesLoaded = true;
             FolderFetched (this.fetcher.RemoteUrl.ToString (), this.fetcher.Warnings.ToArray ());
 
             AddRepository (target_folder_path);
