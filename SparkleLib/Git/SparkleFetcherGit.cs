@@ -62,9 +62,7 @@ namespace SparkleLib.Git {
         }
 
 
-        public SparkleFetcher (string server, string required_fingerprint, string remote_path,
-            string target_folder, bool fetch_prior_history) : base (server, required_fingerprint,
-                remote_path, target_folder, fetch_prior_history)
+        public SparkleFetcher (SparkleFetcherInfo info) : base (info)
         {
             if (RemoteUrl.ToString ().StartsWith ("ssh+"))
                 RemoteUrl = new Uri ("ssh" + RemoteUrl.ToString ().Substring (RemoteUrl.ToString ().IndexOf ("://")));
@@ -104,8 +102,7 @@ namespace SparkleLib.Git {
                 this.use_git_bin = false; // TODO
             }
 
-            TargetFolder = target_folder;
-            RemoteUrl    = uri;
+            RemoteUrl = uri;
         }
 
 

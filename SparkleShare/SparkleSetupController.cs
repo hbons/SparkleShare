@@ -371,11 +371,15 @@ namespace SparkleShare {
             Program.Controller.FolderFetchError += AddPageFetchErrorDelegate;
             Program.Controller.FolderFetching   += SyncingPageFetchingDelegate;
 
-            new Thread (() => {
-                Program.Controller.StartFetcher (address, SelectedPlugin.Fingerprint, remote_path,
-                    SelectedPlugin.AnnouncementsUrl, this.fetch_prior_history);
+            SparkleFetcherInfo info = new SparkleFetcherInfo {
+                Address           = address,
+                Fingerprint       = SelectedPlugin.Fingerprint,
+                RemotePath        = remote_path,
+                FetchPriorHistory = this.fetch_prior_history,
+                AnnouncementsUrl  = SelectedPlugin.AnnouncementsUrl
+            };
 
-            }).Start ();
+            new Thread (() => { Program.Controller.StartFetcher (info); }).Start ();
         }
 
         // The following private methods are
@@ -448,9 +452,7 @@ namespace SparkleShare {
 
             new Thread (() => {
                 if (!PendingInvite.Accept (Program.Controller.CurrentUser.PublicKey)) {
-                    PreviousUrl = PendingInvite.Address +
-                        PendingInvite.RemotePath.TrimStart ("/".ToCharArray ());
-
+                    PreviousUrl = PendingInvite.Address + PendingInvite.RemotePath.TrimStart ("/".ToCharArray ());
                     ChangePageEvent (PageType.Error, new string [] { "error: Failed to upload the public key" });
                     return;
                 }
@@ -459,8 +461,15 @@ namespace SparkleShare {
                 Program.Controller.FolderFetchError += InvitePageFetchErrorDelegate;
                 Program.Controller.FolderFetching   += SyncingPageFetchingDelegate;
 
-                Program.Controller.StartFetcher (PendingInvite.Address, PendingInvite.Fingerprint,
-                    PendingInvite.RemotePath, PendingInvite.AnnouncementsUrl, false); // TODO: checkbox on invite page
+                SparkleFetcherInfo info = new SparkleFetcherInfo {
+                    Address           = PendingInvite.Address,
+                    Fingerprint       = PendingInvite.Fingerprint,
+                    RemotePath        = PendingInvite.RemotePath,
+                    FetchPriorHistory = false, // TODO: checkbox on invite page
+                    AnnouncementsUrl  = PendingInvite.AnnouncementsUrl
+                };
+
+                Program.Controller.StartFetcher (info);
 
             }).Start ();
         }
