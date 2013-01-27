@@ -280,7 +280,11 @@ namespace SparkleLib.Git {
                         Match speed_match = this.speed_regex.Match (line);
 
                         if (speed_match.Success) {
-                            speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo ("en-US")) * 1024;
+                            try {
+                                speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo ("en-US")) * 1024;
+                            
+                            } catch (FormatException) {
+                            }
 
                             if (speed_match.Groups [2].Value.Equals ("M"))
                                 speed = speed * 1024;
@@ -362,7 +366,11 @@ namespace SparkleLib.Git {
                         Match speed_match = this.speed_regex.Match (line);
                         
                         if (speed_match.Success) {
-                            speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo ("en-US")) * 1024;
+                            try {
+                                speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo ("en-US")) * 1024;
+                                
+                            } catch (FormatException) {
+                            }
                             
                             if (speed_match.Groups [2].Value.Equals ("M"))
                                 speed = speed * 1024;
