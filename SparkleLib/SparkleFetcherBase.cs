@@ -24,7 +24,16 @@ using System.Threading;
 
 namespace SparkleLib {
 
-    // Sets up a fetcher that can get remote folders
+    public class SparkleFetcherInfo {
+        public string Address;
+        public string Fingerprint;
+        public string RemotePath;
+        public string TargetDirectory;
+        public string AnnouncementsUrl;
+        public bool FetchPriorHistory;
+    }
+
+
     public abstract class SparkleFetcherBase {
 
         public event Action Started = delegate { };
@@ -49,6 +58,7 @@ namespace SparkleLib {
         public string TargetFolder { get; protected set; }
         public bool IsActive { get; private set; }
         public string Identifier;
+        public SparkleFetcherInfo OriginalFetcherInfo;
 
         public string [] Warnings {
             get {
@@ -73,7 +83,7 @@ namespace SparkleLib {
             "*.part", "*.crdownload", // Firefox and Chromium temporary download files
             ".*.sw[a-z]", "*.un~", "*.swp", "*.swo", // vi(m)
             ".directory", // KDE
-            ".DS_Store", "Icon\r\r", "._*", ".Spotlight-V100", ".Trashes", // Mac OS X
+            ".DS_Store", "Icon\r", "._*", ".Spotlight-V100", ".Trashes", // Mac OS X
             "*(Autosaved).graffle", // Omnigraffle
             "Thumbs.db", "Desktop.ini", // Windows
             "~*.tmp", "~*.TMP", "*~*.tmp", "*~*.TMP", // MS Office
@@ -90,25 +100,26 @@ namespace SparkleLib {
         private Thread thread;
 
 
-        public SparkleFetcherBase (string server, string required_fingerprint,
-            string remote_path, string target_folder, bool fetch_prior_history)
+        public SparkleFetcherBase (SparkleFetcherInfo info)
         {
-            RequiredFingerprint = required_fingerprint;
-            FetchPriorHistory   = fetch_prior_history;
-            remote_path         = remote_path.Trim ("/".ToCharArray ());
+            OriginalFetcherInfo = info;
+            RequiredFingerprint = info.Fingerprint;
+            FetchPriorHistory   = info.FetchPriorHistory;
+            string remote_path  = info.RemotePath.Trim ("/".ToCharArray ());
+            string address      = info.Address;
 
-            if (server.EndsWith ("/"))
-                server = server.Substring (0, server.Length - 1);
+            if (address.EndsWith ("/"))
+                address = address.Substring (0, address.Length - 1);
 
             if (!remote_path.StartsWith ("/"))
                 remote_path = "/" + remote_path;
 
-            if (!server.Contains ("://"))
-                server = "ssh://" + server;
+            if (!address.Contains ("://"))
+                address = "ssh://" + address;
 
-            TargetFolder = target_folder;
+            TargetFolder = info.TargetDirectory;
 
-            RemoteUrl = new Uri (server + remote_path);
+            RemoteUrl = new Uri (address + remote_path);
             IsActive  = false;
         }
 
