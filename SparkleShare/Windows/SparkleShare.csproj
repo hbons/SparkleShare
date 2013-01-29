@@ -203,12 +203,18 @@
     </None>
     <None Include="..\Common\Plugins\ssnet.png">
       <Link>Plugins\ssnet.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Plugins\ssnet.xml">
-      <Link>Plugins\ssnet.xml</Link>
+    <None Include="..\Common\Plugins\planio.png">
+      <Link>Plugins\planio.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Common\Plugins\ssnet.xml">
+      <Link>Plugins\ssnet.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\Common\Plugins\bitbucket.xml">
       <Link>Plugins\bitbucket.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -223,6 +229,10 @@
     </None>
     <None Include="..\Common\Plugins\own-server.xml">
       <Link>Plugins\own-server.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Common\Plugins\planio.xml">
+      <Link>Plugins\planio.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
