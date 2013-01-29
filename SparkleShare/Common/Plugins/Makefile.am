@@ -4,10 +4,12 @@ dist_plugins_DATA = \
     gitorious.xml \
     ssnet.xml \
     own-server.xml \
+    planio.xml \
     github.png \
     gitorious.png \
     bitbucket.png \
     ssnet.png \
+    planio.png \
     own-server.png
 
 pluginsdir = $(pkgdatadir)/plugins/

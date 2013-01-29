@@ -252,5 +252,14 @@
       <Link>Plugins\ssnet.xml</Link>
     </BundleResource>
     <BundleResource Include="Resources\tutorial-slide-3%402x.png" />
+    <BundleResource Include="..\Common\Plugins\planio.png">
+      <Link>Plugins\planio.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\planio.xml">
+      <Link>Plugins\planio.xml</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Plugins\planio%402x.png">
+      <Link>Plugins\planio%402x.png</Link>
+    </BundleResource>
   </ItemGroup>
 </Project>
