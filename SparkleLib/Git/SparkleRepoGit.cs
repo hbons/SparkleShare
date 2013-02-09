@@ -161,30 +161,6 @@ namespace SparkleLib.Git {
             File.WriteAllText (size_file_path, size.ToString ());
             File.WriteAllText (history_size_file_path, history_size.ToString ());
         }
-        
-
-        public override string [] UnsyncedFilePaths {
-            get {
-                List<string> file_paths = new List<string> ();
-                SparkleGit git          = new SparkleGit (LocalPath, "status --porcelain");
-                string output           = git.StartAndReadStandardOutput ();
-                string [] lines         = output.Split ("\n".ToCharArray ());
-
-                foreach (string line in lines) {
-                    if (line [1].ToString ().Equals ("M") ||
-                        line [1].ToString ().Equals ("?") ||
-                        line [1].ToString ().Equals ("A")) {
-
-                        string path = line.Substring (3);
-                        path        = path.Trim ("\"".ToCharArray ());
-
-                        file_paths.Add (path);
-                    }
-                }
-
-                return file_paths.ToArray ();
-            }
-        }
 
 
         public override string CurrentRevision {
