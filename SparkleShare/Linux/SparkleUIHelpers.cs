@@ -23,7 +23,6 @@ namespace SparkleShare {
 
     public static class SparkleUIHelpers {
 
-        // Looks up an icon from the system's theme
         public static Gdk.Pixbuf GetIcon (string name, int size)
         {
             IconTheme icon_theme = new IconTheme ();
@@ -36,7 +35,6 @@ namespace SparkleShare {
             icon_theme.AppendSearchPath ("/usr/share/icons");
             icon_theme.AppendSearchPath ("/usr/local/share/icons");
             icon_theme.AppendSearchPath ("/opt/local/share/icons");
-
             icon_theme.AppendSearchPath (Path.Combine (SparkleUI.AssetsPath, "icons"));
 
             try {
