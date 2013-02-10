@@ -563,7 +563,7 @@ namespace SparkleShare {
                 if (string.IsNullOrEmpty (crumb))
                     continue;
 
-                string crumb_path = Path.Combine (new_path_root, crumb);
+                string crumb_path = SafeCombine (new_path_root, crumb);
 
                 if (Directory.Exists (crumb_path)) {
                     link += "<a href='" + crumb_path + "'>" + crumb + Path.DirectorySeparatorChar + "</a>";
@@ -581,11 +581,25 @@ namespace SparkleShare {
                     previous_was_folder = false;
                 }
 
-                new_path_root = Path.Combine (new_path_root, crumb);
+                new_path_root = SafeCombine (new_path_root, crumb);
                 i++;
             }
 
             return link;
+        }
+
+
+        private string SafeCombine (string path1, string path2)
+        {
+            string result = path1;
+            
+            if (!result.EndsWith (Path.DirectorySeparatorChar.ToString ()))
+                result += Path.DirectorySeparatorChar;
+
+            if (path2.StartsWith (Path.DirectorySeparatorChar.ToString ()))
+                path2 = path2.Substring (1);
+
+            return result + path2;
         }
 
 
