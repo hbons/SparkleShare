@@ -191,7 +191,7 @@ namespace SparkleShare {
                         // Replace spaces with underscores in old keys
                         if (file_name.Contains (" ")) {
                             string new_file_name = file_name.Replace (" ", "_");
-                            File.Move (key_file_path, Path.Combine (keys_path));
+                            File.Move (key_file_path, Path.Combine (keys_path, new_file_name));
                             File.Move (key_file_path + ".pub", Path.Combine (keys_path, new_file_name + ".pub"));
                             key_file_path = Path.Combine (keys_path, new_file_name);
                         }
