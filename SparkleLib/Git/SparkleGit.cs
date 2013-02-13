@@ -103,6 +103,7 @@ namespace SparkleLib.Git {
 
         public static string ExecPath;
         public static string GitPath;
+        public static string SSHPath;
 
 
         public SparkleGit (string path, string args) : base (path, args)
@@ -116,6 +117,9 @@ namespace SparkleLib.Git {
             StartInfo.UseShellExecute        = false;
             StartInfo.WorkingDirectory       = path;
             StartInfo.CreateNoWindow         = true;
+
+            if (!string.IsNullOrEmpty (SSHPath))
+                StartInfo.EnvironmentVariables.Add ("GIT_SSH", SSHPath);
 
             if (string.IsNullOrEmpty (ExecPath))
                 StartInfo.Arguments = args;
