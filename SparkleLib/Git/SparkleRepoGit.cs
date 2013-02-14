@@ -784,6 +784,9 @@ namespace SparkleLib.Git {
 
                     foreach (string entry_line in entry_lines) {
                         if (entry_line.StartsWith (":")) {
+                            if (entry_line.Contains ("\\177"))
+                                continue;
+
                             string type_letter = entry_line [37].ToString ();
                             string file_path   = entry_line.Substring (39);
                             bool change_is_folder = false;
