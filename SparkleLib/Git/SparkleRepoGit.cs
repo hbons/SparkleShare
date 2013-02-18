@@ -70,8 +70,6 @@ namespace SparkleLib.Git {
 
         public SparkleRepo (string path, SparkleConfig config) : base (path, config)
         {
-            // TODO: Set git locale to en-US
-
             SparkleGit git = new SparkleGit (LocalPath, "config core.ignorecase false");
             git.StartAndWaitForExit ();
 
