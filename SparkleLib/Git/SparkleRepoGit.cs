@@ -1016,7 +1016,7 @@ namespace SparkleLib.Git {
                 if (line.EndsWith (".empty") || line.EndsWith (".empty\""))
                     line = line.Replace (".empty", "");
 
-                if (line.StartsWith ("R")) {
+                if (line.StartsWith (" R")) {
                     string path = line.Substring (3, line.IndexOf (" -> ") - 3).Trim ("\"".ToCharArray ());
                     string moved_to_path = line.Substring (line.IndexOf (" -> ") + 4).Trim ("\"".ToCharArray ());
 
@@ -1024,10 +1024,10 @@ namespace SparkleLib.Git {
                     message +=  "> ‘" + EnsureSpecialCharacters (moved_to_path) + "’\n";
 
                 } else {
-                    if (line.StartsWith ("M")) {
+                    if (line.StartsWith (" M")) {
                         message += "/";
 
-                    } else if (line.StartsWith ("D")) {
+                    } else if (line.StartsWith (" D")) {
                         message += "-";
 
                     } else {
