@@ -117,6 +117,8 @@ namespace SparkleLib.Git {
             StartInfo.WorkingDirectory       = path;
             StartInfo.CreateNoWindow         = true;
 
+            StartInfo.EnvironmentVariables.Add ("LANG", "en_US");
+
             if (string.IsNullOrEmpty (ExecPath))
                 StartInfo.Arguments = args;
             else
