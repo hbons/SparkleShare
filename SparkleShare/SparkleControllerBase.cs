@@ -270,7 +270,6 @@ namespace SparkleShare {
                 new Thread (() => {
                     CheckRepositories ();
                     RepositoriesLoaded = true;
-                    FolderListChanged ();
                     UpdateState ();
 
                 }).Start ();
@@ -371,7 +370,7 @@ namespace SparkleShare {
                     else
                         previous_name = folder_name;
                 }
-                
+
                 FolderListChanged ();
             }
         }
