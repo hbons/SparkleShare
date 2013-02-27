@@ -188,8 +188,6 @@ namespace SparkleLib.Git {
                 InstallExcludeRules ();
                 InstallAttributeRules ();
 
-                AddWarnings ();
-
                 return true;
 
             } else {
@@ -309,6 +307,7 @@ namespace SparkleLib.Git {
                 "core.autocrlf false", // Don't change file line endings
                 "core.precomposeunicode true", // Use the same Unicode form on all filesystems
                 "core.safecrlf false",
+                "core.exludesfile \"\"",
                 "core.packedGitLimit 128m", // Some memory limiting options
                 "core.packedGitWindowSize 128m",
                 "pack.deltaCacheSize 128m",
@@ -385,21 +384,6 @@ namespace SparkleLib.Git {
             }
 
             writer.Close ();
-        }
-
-
-        private void AddWarnings ()
-        {
-            if (this.warnings.Count > 0)
-                return;
-
-            SparkleGit git = new SparkleGit (TargetFolder, "config --global core.excludesfile");
-            string output = git.StartAndReadStandardOutput ();
-
-            if (string.IsNullOrEmpty (output))
-                return;
-            else
-                this.warnings.Add ("You seem to have a system wide ‘gitignore’ file, this may affect SparkleShare files.");
         }
     }
 }
