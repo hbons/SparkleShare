@@ -151,12 +151,14 @@ namespace SparkleShare {
 
             var handler = Changed;
             if (handler != null) {
-                string path = paths [0];
-                path = path.Substring (Path.Length);
-                path = path.Trim ("/".ToCharArray ());
+                if (paths [0].Length >= Path.Length) {
+                    string path = paths [0];
+                    path = path.Substring (Path.Length);
+                    path = path.Trim ("/".ToCharArray ());
 
-                if (!string.IsNullOrWhiteSpace (path))
-                    handler (path);
+                    if (!string.IsNullOrWhiteSpace (path))
+                        handler (path);
+                }
             }
 
             GC.KeepAlive (this);
