@@ -688,16 +688,11 @@ namespace SparkleShare {
                         FinishButton = new NSButton () { Title = "Finish" };
 
 
-                        CopyButton.Activated += delegate {
-                            NSPasteboard.GeneralPasteboard.ClearContents ();
-                            NSPasteboard.GeneralPasteboard.SetStringForType (LinkCodeTextField.StringValue,
-                                "NSStringPboardType");
-                        };
-
                         StartupCheckButton.Activated += delegate {
                             Controller.StartupItemChanged (StartupCheckButton.State == NSCellStateValue.On);
                         };
 
+                        CopyButton.Activated += delegate { Controller.CopyToClipboardClicked (); };
                         FinishButton.Activated += delegate { Controller.TutorialPageCompleted (); };
 
 
