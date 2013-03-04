@@ -187,6 +187,12 @@ namespace SparkleShare {
         }
 
 
+        public override void CopyToClipBoardClicked (string text)
+        {
+            Clipboard.SetData (DataFormats.Text, text);
+        }
+
+
         public override void Quit ()
         {
             StopSSH ();

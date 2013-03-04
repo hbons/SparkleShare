@@ -137,6 +137,9 @@ namespace SparkleShare {
         // Opens a file with the appropriate application
         public abstract void OpenWebsite (string url);
 
+        // Copies text to the clipboard
+        public abstract void CopyToClipboard (string text);
+
         public abstract string EventLogHTML { get; }
         public abstract string DayEntryHTML { get; }
         public abstract string EventEntryHTML { get; }

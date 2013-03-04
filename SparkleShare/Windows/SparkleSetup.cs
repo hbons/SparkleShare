@@ -946,21 +946,14 @@ namespace SparkleShare {
                                 Buttons.Add (finish_button);
                                 
                                 
-                                check_box.Click += delegate {
-                                    Controller.StartupItemChanged (check_box.IsChecked.Value);
-                                };
-                            
-                                finish_button.Click += delegate {
-                                    Controller.TutorialPageCompleted ();
-                                };
-
-                                copy_button.Click += delegate {
-                                    Clipboard.SetData(DataFormats.Text, link_code_text_box.Text);
-                                };
+                                check_box.Click += delegate { Controller.StartupItemChanged (check_box.IsChecked.Value); };
+                                finish_button.Click += delegate { Controller.TutorialPageCompleted (); };
+                                copy_button.Click += delegate { Controller.CopyToClipboardClicked () };
     
                                 break;
                             }
                         }
+
                         break;
                     }
                     }

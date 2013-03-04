@@ -100,6 +100,12 @@ namespace SparkleShare {
             }
         }
 
+        public bool LinkCodeItemEnabled {
+            get {
+                return !Program.Controller.FirstRun;
+            }
+        }
+
         public bool QuitItemEnabled {
             get {
                 return (CurrentState == IconState.Idle || CurrentState == IconState.Error);
@@ -233,6 +239,12 @@ namespace SparkleShare {
         public void AddHostedProjectClicked ()
         {
             new Thread (() => Program.Controller.ShowSetupWindow (PageType.Add)).Start ();
+        }
+
+
+        public void CopyToClipboardClicked ()
+        {
+            Program.Controller.CopyToClipboard (Program.Controller.CurrentUser.PublicKey);
         }
 
 

@@ -640,11 +640,7 @@ namespace SparkleShare {
                     check_button.Active = true;
 
                     
-                    copy_button.Clicked += delegate {
-                        Clipboard clip_board = Clipboard.Get (Gdk.Atom.Intern ("CLIPBOARD", false));
-                        clip_board.Text      = link_code_entry.Text;
-                    };
-                    
+                    copy_button.Clicked += delegate { Controller.CopyToClipboardClicked (); };
                     check_button.Toggled  += delegate { Controller.StartupItemChanged (check_button.Active); };
                     finish_button.Clicked += delegate { Controller.TutorialPageCompleted (); };
                     
