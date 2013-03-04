@@ -29,11 +29,13 @@ namespace SparkleShare {
         public SparkleStatusIconController Controller = new SparkleStatusIconController ();
 
         private NSStatusItem status_item = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
-        private NSMenu menu, submenu;
+        private NSMenu menu, submenu, link_code_submenu;
 
-        private NSMenuItem state_item, folder_item, add_item, about_item, recent_events_item, quit_item;
+        private NSMenuItem state_item, folder_item, add_item, about_item, recent_events_item, quit_item,
+            code_item, copy_item, link_code_item;
+
         private NSMenuItem [] folder_menu_items, error_menu_items, try_again_menu_items;
-        
+
         private NSImage syncing_idle_image  = NSImage.ImageNamed ("process-syncing-idle");
         private NSImage syncing_up_image    = NSImage.ImageNamed ("process-syncing-up");
         private NSImage syncing_down_image  = NSImage.ImageNamed ("process-syncing-down");
@@ -135,6 +137,26 @@ namespace SparkleShare {
                 Enabled = Controller.RecentEventsItemEnabled
             };
 
+            this.link_code_item = new NSMenuItem ();
+            this.link_code_item.Title = "Link Code";
+
+            if (Controller.LinkCodeItemEnabled) {
+                this.link_code_submenu = new NSMenu ();
+
+                this.code_item = new NSMenuItem ();
+                this.code_item.Title = Program.Controller.CurrentUser.PublicKey.Substring (0, 20) + "...";
+
+                this.copy_item = new NSMenuItem ();
+                this.copy_item.Title = "Copy to Clipboard";
+                this.copy_item.Activated += delegate { Controller.CopyToClipboardClicked (); };
+
+                this.link_code_submenu.AddItem (this.code_item);
+                this.link_code_submenu.AddItem (NSMenuItem.SeparatorItem);
+                this.link_code_submenu.AddItem (this.copy_item);
+            
+                this.link_code_item.Submenu = this.link_code_submenu;
+            }
+
             this.about_item = new NSMenuItem () {
                 Title   = "About SparkleShare",
                 Enabled = true
@@ -194,9 +216,11 @@ namespace SparkleShare {
             this.menu.AddItem (this.folder_item);
             
             this.submenu = new NSMenu ();
-            
+
             this.submenu.AddItem (this.recent_events_item);
             this.submenu.AddItem (this.add_item);
+            this.submenu.AddItem (NSMenuItem.SeparatorItem);
+            this.submenu.AddItem (link_code_item);
             this.submenu.AddItem (NSMenuItem.SeparatorItem);
             this.submenu.AddItem (this.about_item);
             

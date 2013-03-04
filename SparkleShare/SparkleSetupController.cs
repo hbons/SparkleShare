@@ -561,6 +561,12 @@ namespace SparkleShare {
         }
 
 
+        public void CopyToClipboardClicked ()
+        {
+            Program.Controller.CopyToClipboard (Program.Controller.CurrentUser.PublicKey);
+        }
+
+
         public void ShowFilesClicked ()
         {
             string folder_name = Path.GetFileName (PreviousPath);

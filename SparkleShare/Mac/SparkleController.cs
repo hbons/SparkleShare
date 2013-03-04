@@ -148,6 +148,13 @@ namespace SparkleShare {
         }
 
 
+        public override void CopyToClipboard (string text)
+        {
+            NSPasteboard.GeneralPasteboard.ClearContents ();
+            NSPasteboard.GeneralPasteboard.SetStringForType (text, "NSStringPboardType");
+        }
+
+
         private string event_log_html;
         public override string EventLogHTML
         {
