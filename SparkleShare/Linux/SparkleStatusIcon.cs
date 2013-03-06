@@ -194,6 +194,22 @@ namespace SparkleShare {
 				});
             };
 
+            MenuItem link_code_item = new MenuItem ("Link Code");
+            
+            if (Controller.LinkCodeItemEnabled) {
+                link_code_item.Submenu = new Menu ();
+                
+                MenuItem code_item = new MenuItem ();
+                (code_item.Child as Label).Text = Program.Controller.CurrentUser.PublicKey.Substring (0, 20) + "...";
+                
+                MenuItem copy_item = new MenuItem ("Copy to Clipboard");
+                copy_item.Activated += delegate { Controller.CopyToClipboardClicked (); };
+                
+                (link_code_item.Submenu as Menu).Add (code_item);
+                (link_code_item.Submenu as Menu).Add (new SeperatorMenuItem ());
+                (link_code_item.Submenu as Menu).Add (copy_item);
+            }
+
             MenuItem about_item = new MenuItem ("About SparkleShare");
             
             about_item.Activated              += delegate { Controller.AboutClicked (); };
@@ -206,6 +222,8 @@ namespace SparkleShare {
             (folder_item.Submenu as Menu).Add (add_item);
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
             (folder_item.Submenu as Menu).Add (notify_item);
+            (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
+            (folder_item.Submenu as Menu).Add (link_code_item);
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
             (folder_item.Submenu as Menu).Add (about_item);
 
