@@ -904,8 +904,8 @@ namespace SparkleShare {
                             
                             case 4: {
                                 Header      = "Here's your unique link code";
-                                Description = "You'll need it whenever you want to link this computer to a host" +
-                                    " (we keep a copy in your SparkleShare folder).";
+                                Description = "You'll need it whenever you want to link this computer to a host. " +
+                                    "You can also find it in the status icon menu.";
                             
 
                                 TextBox link_code_text_box = new TextBox () {
