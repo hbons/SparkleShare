@@ -132,6 +132,20 @@ namespace SparkleShare {
                 IsEnabled = Controller.RecentEventsItemEnabled
             };
 
+            SparkleMenuItem link_code_item = new SparkleMenuItem () { Header = "Client ID" };
+            
+            if (Controller.LinkCodeItemEnabled) {
+                SparkleMenuItem code_item = new SparkleMenuItem ();
+                code_item.Header = Program.Controller.CurrentUser.PublicKey.Substring (0, 20) + "...";
+                
+                SparkleMenuItem copy_item = new SparkleMenuItem () { Header = "Copy to Clipboard" };
+                copy_item.Click += delegate { Controller.CopyToClipboardClicked (); };
+                
+                link_code_item.Items.Add (code_item);
+                link_code_item.Items.Add (new Separator);
+                link_code_item.Items.Add (this.copy_item);
+            }
+
             CheckBox notify_check_box = new CheckBox () {
                 Margin    = new Thickness (6, 0, 0, 0),
                 IsChecked = Program.Controller.NotificationsEnabled
@@ -218,6 +232,8 @@ namespace SparkleShare {
             folder_item.Items.Add (add_item);
             folder_item.Items.Add (new Separator ());
             folder_item.Items.Add (notify_item);
+            folder_item.Items.Add (new Separator ());
+            folder_item.Items.Add (link_code_item);
             folder_item.Items.Add (new Separator ());
             folder_item.Items.Add (about_item);
 
