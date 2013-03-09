@@ -138,7 +138,7 @@ namespace SparkleShare {
             };
 
             this.link_code_item = new NSMenuItem ();
-            this.link_code_item.Title = "Link Code";
+            this.link_code_item.Title = "Client ID";
 
             if (Controller.LinkCodeItemEnabled) {
                 this.link_code_submenu = new NSMenu ();

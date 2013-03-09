@@ -194,7 +194,7 @@ namespace SparkleShare {
 				});
             };
 
-            MenuItem link_code_item = new MenuItem ("Link Code");
+            MenuItem link_code_item = new MenuItem ("Client ID");
             
             if (Controller.LinkCodeItemEnabled) {
                 link_code_item.Submenu = new Menu ();

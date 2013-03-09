@@ -621,7 +621,7 @@ namespace SparkleShare {
                 }
 
                 case 4: {
-                    Header      = "Here's your unique link code";
+                    Header      = "Here's your unique client ID";
                     Description = "You'll need it whenever you want to link this computer to a host. " +
                         "You can also find it in the status icon menu.";
 
