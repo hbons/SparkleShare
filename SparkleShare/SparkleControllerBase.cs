@@ -570,12 +570,11 @@ namespace SparkleShare {
 
             if (Directory.Exists (this.fetcher.TargetFolder)) {
                 try {
-                    Directory.Delete (this.fetcher.TargetFolder, true);
-                    SparkleLogger.LogInfo ("Controller", "Deleted " + this.fetcher.TargetFolder);
+                    Directory.Delete (this.fetcher.TargetFolder, true /* Recursive */ );
+                    SparkleLogger.LogInfo ("Controller", "Deleted '" + this.fetcher.TargetFolder + "'");
 
                 } catch (Exception e) {
-                    SparkleLogger.LogInfo ("Controller",
-                        "Failed to delete '" + this.fetcher.TargetFolder + "': " + e.Message);
+                    SparkleLogger.LogInfo ("Controller", "Failed to delete '" + this.fetcher.TargetFolder + "'", e);
                 }
             }
 
@@ -636,14 +635,17 @@ namespace SparkleShare {
                 Directory.Move (this.fetcher.TargetFolder, target_folder_path);
 
             } catch (Exception e) {
-                SparkleLogger.LogInfo ("Controller", "Error moving directory: \"" + e.Message + "\", trying again...");
+                SparkleLogger.LogInfo ("Controller", "Error moving directory, trying again...", e);
 
                 try {
                     ClearDirectoryAttributes (this.fetcher.TargetFolder);
                     Directory.Move (this.fetcher.TargetFolder, target_folder_path);
 
                 } catch (Exception x) {
-                    SparkleLogger.LogInfo ("Controller", "Error moving directory: " + x.Message);
+                    SparkleLogger.LogInfo ("Controller", "Error moving directory", x);
+                    
+                    this.fetcher.Dispose ();
+                    this.fetcher = null;
                     this.watcher.EnableRaisingEvents = true;
                     return;
                 }
@@ -747,13 +749,12 @@ namespace SparkleShare {
             // Obtained from https://www.gravatar.com/ on Aug 18 2012 and expires on Oct 24 2015.
             string gravatar_cert_fingerprint = "217ACB08C0A1ACC23A21B6ECDE82CD45E14DEC19";
 
-            if (certificate2.Thumbprint.Equals (gravatar_cert_fingerprint)) {
-                return true;
-            
-            } else {
+            if (!certificate2.Thumbprint.Equals (gravatar_cert_fingerprint)) {
                 SparkleLogger.LogInfo ("Controller", "Invalid certificate for https://www.gravatar.com/");
                 return false;
             }
+
+            return true;
         }
 
 
