@@ -25,7 +25,7 @@ Install <tt>git</tt>, <tt>automake</tt>, <tt>libtool</tt>, <tt>pkgconfig</tt> an
 $ sudo port install git-core automake intltool pkgconfig libtool
 ```
 
-Get a Git install, and place both the `bin` and `libexec` directories in `SparkleShare/Mac/git`.
+Get a [Git](http://code.google.com/p/git-osx-installer/) install, and place both the `bin` and `libexec` directories in `SparkleShare/Mac/git`.
 The exact commands depend on where you installed/have Git. Assuming it's in `/usr/local`:
 
 ```bash
