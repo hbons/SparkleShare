@@ -206,7 +206,7 @@ namespace SparkleShare {
                 copy_item.Activated += delegate { Controller.CopyToClipboardClicked (); };
                 
                 (link_code_item.Submenu as Menu).Add (code_item);
-                (link_code_item.Submenu as Menu).Add (new SeperatorMenuItem ());
+                (link_code_item.Submenu as Menu).Add (new SeparatorMenuItem ());
                 (link_code_item.Submenu as Menu).Add (copy_item);
             }
 
