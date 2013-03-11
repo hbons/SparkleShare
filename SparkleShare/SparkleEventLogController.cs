@@ -496,8 +496,10 @@ namespace SparkleShare {
                         .Replace ("<!-- $event-url -->", change_set.RemoteUrl.ToString ())
                         .Replace ("<!-- $event-revision -->", change_set.Revision);
 
-                    if (this.selected_folder == null) 
+                    if (this.selected_folder == null) {
                         event_entries = event_entries.Replace ("<!-- $event-folder -->", " @ " + change_set.Folder.Name);
+                        event_entries = event_entries.Replace ("<!-- $event-folder-url -->", change_set.Folder.FullPath);
+                    }
                 }
 
                 string day_entry   = "";
