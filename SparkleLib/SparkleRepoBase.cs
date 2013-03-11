@@ -38,7 +38,7 @@ namespace SparkleLib {
         HostIdentityChanged,
         AuthenticationFailed,
         DiskSpaceExceeded,
-        LockedFiles,
+        UnreadableFiles,
         NotFound
     }
 
@@ -264,6 +264,9 @@ namespace SparkleLib {
                         do {
                             SyncUpBase ();
 
+                            if (Error == ErrorStatus.UnreadableFiles)
+                                return;
+
                         } while (HasLocalChanges);
 
                     } else {
@@ -285,11 +288,8 @@ namespace SparkleLib {
         {
             if (Error == ErrorStatus.None || this.is_syncing)
                 return;
-            
-            if (Error == ErrorStatus.LockedFiles)
-                SyncDownBase ();
-            else
-                SyncUpBase ();
+
+            SyncUpBase ();
         }
 
 
@@ -466,7 +466,6 @@ namespace SparkleLib {
 
                 SparkleLogger.LogInfo (Name, "Syncing due to announcement");
                 SyncDownBase ();
-
             }
         }
 

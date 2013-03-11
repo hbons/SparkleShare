@@ -212,13 +212,16 @@ namespace SparkleLib.Git {
 
         public override bool SyncUp ()
         {
-            string message = FormatCommitMessage ();
-
-            if (message != null) {
-                Add ();
-                Commit (message);
+            if (!Add ()) {
+                Error = ErrorStatus.UnreadableFiles;
+                return false;
             }
 
+            string message = FormatCommitMessage ();
+
+            if (message != null)
+                Commit (message);
+ 
             if (this.use_git_bin) {
                 SparkleGitBin git_bin = new SparkleGitBin (LocalPath, "push");
                 git_bin.StartAndWaitForExit ();
@@ -414,10 +417,12 @@ namespace SparkleLib.Git {
 
 
         // Stages the made changes
-        private void Add ()
+        private bool Add ()
         {
             SparkleGit git = new SparkleGit (LocalPath, "add --all");
             git.StartAndWaitForExit ();
+
+            return (git.ExitCode == 0);
         }
 
 
@@ -478,7 +483,7 @@ namespace SparkleLib.Git {
                 // Stop when we can't rebase due to locked local files
                 // error: cannot stat 'filename': Permission denied
                 if (error_output.Contains ("error: cannot stat")) {
-                    Error = ErrorStatus.LockedFiles;
+                    Error = ErrorStatus.UnreadableFiles;
                     SparkleLogger.LogInfo ("Git", Name + " | Error status changed to " + Error);
 
                     git = new SparkleGit (LocalPath, "rebase --abort");
