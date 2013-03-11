@@ -1,3 +1,19 @@
+1.1 for Linux, Mac and Windows (???):
+
+       Hylke:
+       - Fixed retina Mac support by Aaron Bockover
+       - Don't sync files with names that are problematic on Windows
+       - Show Client ID (link code) in the status icon menu
+       - Don't show notifications for changes that you made yourself
+       - Use large message tray icon on GNOME 3
+       - Added a plugin for plan.io
+       - Work with host keys other than just RSA
+       - "%20" and "_" in project names become spaces in folder names
+       - Stricter permissions on the SparkleShare folder on Unix systems
+       - Open folders in the event log by clicking project names
+       - Many bug fixes and tweaks
+
+
 1.0.0 for Linux, Mac and Windows (Sun Dec 9 2012):
 
         Hylke:
