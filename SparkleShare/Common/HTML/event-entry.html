@@ -1,6 +1,13 @@
 <div class='event-entry'>
-    <a href="http://gravatar.com/" title="<!-- $event-user-email --> | Click to change your user icon"><div class='event-avatar' style='background-image: url("<!-- $event-avatar-url -->");'></div></a>
-    <div class='event-user-name'><!-- $event-user-name --><span class='event-folder'><!-- $event-folder --></span></div>
+    <a href='http://gravatar.com/' title="<!-- $event-user-email --> | Click to change your user icon">
+     <div class='event-avatar' style='background-image: url("<!-- $event-avatar-url -->");'></div>
+    </a>
+    <div class='event-user-name'>
+      <!-- $event-user-name -->
+        <span class='event-folder'>
+          <a href='<!-- $event-folder-url -->'><!-- $event-folder --></a>
+        </span>
+    </div>
     <!-- $event-entry-content -->
     <a class="show">Show all</a>
 </div>
