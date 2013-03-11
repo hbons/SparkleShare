@@ -199,8 +199,8 @@ namespace SparkleShare {
             if (Controller.LinkCodeItemEnabled) {
                 link_code_item.Submenu = new Menu ();
                 
-                MenuItem code_item = new MenuItem ();
-                (code_item.Child as Label).Text = Program.Controller.CurrentUser.PublicKey.Substring (0, 20) + "...";
+                string link_code = Program.Controller.CurrentUser.PublicKey.Substring (0, 20) + "...";
+                MenuItem code_item = new MenuItem (link_code) { Sensitive = false };
                 
                 MenuItem copy_item = new MenuItem ("Copy to Clipboard");
                 copy_item.Activated += delegate { Controller.CopyToClipboardClicked (); };
