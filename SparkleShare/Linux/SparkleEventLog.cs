@@ -64,8 +64,7 @@ namespace SparkleShare {
             
             KeyPressEvent += delegate (object o, KeyPressEventArgs args) {
                 if (args.Event.Key == Gdk.Key.Escape ||
-                    (args.Event.State == Gdk.ModifierType.ControlMask) &&
-                     args.Event.Key == Gdk.Key.w) {
+                    (args.Event.State == Gdk.ModifierType.ControlMask && args.Event.Key == Gdk.Key.w)) {
                     
                     Controller.WindowClosed ();
                 }
