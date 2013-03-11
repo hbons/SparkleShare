@@ -118,8 +118,12 @@ namespace SparkleLib.Git {
             StartInfo.WorkingDirectory       = path;
             StartInfo.CreateNoWindow         = true;
 
-            if (!string.IsNullOrEmpty (SSHPath))
-                StartInfo.EnvironmentVariables.Add ("GIT_SSH", SSHPath);
+            if (!string.IsNullOrEmpty (SSHPath)) {
+                if (StartInfo.EnvironmentVariables.ContainsKey ("GIT_SSH"))
+                    StartInfo.EnvironmentVariables ["GIT_SSH"] = SSHPath;
+                else
+                    StartInfo.EnvironmentVariables.Add ("GIT_SSH", SSHPath);
+            }
 
             if (string.IsNullOrEmpty (ExecPath))
                 StartInfo.Arguments = args;
