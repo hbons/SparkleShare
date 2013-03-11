@@ -32,11 +32,6 @@ namespace SparkleShare {
 
         public SparkleAbout () : base ("")
         {
-            DeleteEvent += delegate (object o, DeleteEventArgs args) {
-                Controller.WindowClosed ();
-                args.RetVal = true;
-            };
-
             DefaultSize    = new Gdk.Size (600, 260);
             Resizable      = false;
             BorderWidth    = 0;
@@ -55,6 +50,19 @@ namespace SparkleShare {
 
             CreateAbout ();
 
+
+            DeleteEvent += delegate (object o, DeleteEventArgs args) {
+                Controller.WindowClosed ();
+                args.RetVal = true;
+            };
+            
+            KeyPressEvent += delegate (object o, KeyPressEventArgs args) {
+                if (args.Event.Key == Gdk.Key.Escape ||
+                    (args.Event.State == Gdk.ModifierType.ControlMask && args.Event.Key == Gdk.Key.w)) {
+                    
+                    Controller.WindowClosed ();
+                }
+            };
 
             Controller.HideWindowEvent += delegate {
                 Application.Invoke (delegate {
