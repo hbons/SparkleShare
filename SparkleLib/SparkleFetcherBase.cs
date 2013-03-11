@@ -93,7 +93,9 @@ namespace SparkleLib {
             "*/CVS/*", ".cvsignore", "*/.cvsignore", // CVS
             "/.svn/*", "*/.svn/*", // Subversion
             "/.hg/*", "*/.hg/*", "*/.hgignore", // Mercurial
-            "/.bzr/*", "*/.bzr/*", "*/.bzrignore" // Bazaar
+            "/.bzr/*", "*/.bzr/*", "*/.bzrignore", // Bazaar
+            "*<*", "*>*", "*:*", "*\"*", "*|*", "*\\?*", "*\\**", "*\\\\*" // Not allowed on Windows systems,
+            // see (http://msdn.microsoft.com/en-us/library/aa365247(v=vs.85).aspx)
         };
 
 
