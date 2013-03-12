@@ -55,8 +55,14 @@ namespace SparkleShare {
             
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             Content               = ContentCanvas;
-            
+
+            // Remove the close button
             Closing += Close;
+            SourceInitialized += delegate {
+                WindowInteropHelper helper = new WindowInteropHelper (this);
+                int style = GetWindowLong (helper.Handle, -16);
+                SetWindowLong (helper.Handle, -16, style & ~0×00080000);
+            };
             
             this.bar = new Rectangle () {
                 Width  = Width,
@@ -69,8 +75,7 @@ namespace SparkleShare {
                 Height = 1,
                 Fill   = new SolidColorBrush (Color.FromRgb (223, 223, 223))    
             };
-                    
-            
+
             this.side_splash = new Image () {
                 Width  = 150,
                 Height = 482
@@ -173,5 +178,12 @@ namespace SparkleShare {
         {
             args.Cancel = true;    
         }
+
+
+        [DllImport("user32.dll")]
+        private extern static int SetWindowLong (IntPtr hwnd, int index, int value);
+
+        [DllImport("user32.dll")]
+        private extern static int GetWindowLong (IntPtr hwnd, int index);
     }
 }
