@@ -59,9 +59,11 @@ namespace SparkleShare {
             // Remove the close button
             Closing += Close;
             SourceInitialized += delegate {
+                const int gwl_style = -16;
+                const int ws_sysmenu = 0×00080000; 
                 WindowInteropHelper helper = new WindowInteropHelper (this);
-                int style = GetWindowLong (helper.Handle, -16);
-                SetWindowLong (helper.Handle, -16, style & ~0×00080000);
+                int style = GetWindowLong (helper.Handle, gwl_style);
+                SetWindowLong (helper.Handle, gwl_style, style & ~ws_sysmenu);
             };
             
             this.bar = new Rectangle () {
