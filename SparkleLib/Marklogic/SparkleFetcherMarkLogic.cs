@@ -49,6 +49,8 @@ namespace SparkleLib.Marklogic {
             Options opts = new Options ();
             opts.setConnectionString (RemoteUrl.AbsoluteUri);
             connection.configure (opts);
+            SparkleLogger.LogInfo ("Fetcher", "MarkLogic Connection configured. Syncing for first time. Values: " + connection.options.ToString());
+            SparkleLogger.LogInfo ("Fetcher", "MarkLogic Connection string: " + connection.options.getConnectionString());
 
 
             bool result = SparkleLib.Marklogic.SparkleRepo.doSyncDown (connection,"0",TargetFolder);

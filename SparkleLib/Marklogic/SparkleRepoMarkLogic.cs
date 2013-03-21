@@ -232,6 +232,8 @@ namespace SparkleLib.Marklogic {
         }
 
         public static bool doSyncDown(Connection cn,string currentRevision,string local) {
+            try {
+            SparkleLogger.LogInfo ("MarklogicRepo", "doSyncDown()");
             
             // fetch current last-modified date locally
             // fetch all URIs remotely modified since this version
@@ -243,6 +245,7 @@ namespace SparkleLib.Marklogic {
             // remember to save the highest revision that is downloaded
             // fetch each and store locally
             
+            SparkleLogger.LogInfo ("MarklogicRepo", "fetching remote modifications");
             DocRefs remoteModifications = cn.listURIsModifiedSince (cn.options.baseuri, currentRevision);
             ArrayList uriList = remoteModifications.toArrayList();
             bool totalSuccess = true;
@@ -251,6 +254,7 @@ namespace SparkleLib.Marklogic {
             long latestRevision = 0;
             
             foreach (string uri in uriList) {
+                SparkleLogger.LogInfo ("MarklogicRepo", "remote URI found: " + uri + ". Fetching file to " + local);
                 SyncFileResult result = doFetchFile(cn,uri,local);
                 totalSuccess = totalSuccess & result.success;
                 if (result.success) {
@@ -266,8 +270,10 @@ namespace SparkleLib.Marklogic {
                 //CurrentRevision = latestRevision;
                 return true;
             }
+            } catch (Exception e) {
+                SparkleLogger.LogInfo ("MarklogicRepo", "ERROR: " + e.ToString());
+            }
             return false;
-            
 
 
         }
