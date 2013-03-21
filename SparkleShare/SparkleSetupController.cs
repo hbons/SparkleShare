@@ -376,7 +376,8 @@ namespace SparkleShare {
                 Fingerprint       = SelectedPlugin.Fingerprint,
                 RemotePath        = remote_path,
                 FetchPriorHistory = this.fetch_prior_history,
-                AnnouncementsUrl  = SelectedPlugin.AnnouncementsUrl
+                AnnouncementsUrl  = SelectedPlugin.AnnouncementsUrl,
+                Backend           = SelectedPlugin.Backend
             };
 
             new Thread (() => { Program.Controller.StartFetcher (info); }).Start ();

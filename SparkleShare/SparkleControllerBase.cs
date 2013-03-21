@@ -522,7 +522,12 @@ namespace SparkleShare {
             }
 
             string canonical_name = Path.GetFileName (info.RemotePath);
-            string backend        = SparkleFetcherBase.GetBackend (info.Address);
+            string backend = null; 
+            if (null != info.Backend && !"".Equals (info.Backend.Trim ())) {
+                backend = info.Backend; // Takes value of Backend from the XML plugin, if present, rather than attempting to read from the URL
+            } else {
+                backend = SparkleFetcherBase.GetBackend (info.Address); 
+            }
             info.TargetDirectory  = Path.Combine (tmp_path, canonical_name);
 
             try {
