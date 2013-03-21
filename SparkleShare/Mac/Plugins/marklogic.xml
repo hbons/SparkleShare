@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <plugin>
+    <info>
+        <name>Marklogic</name>
+        <description>MarkLogic V6+ REST based connection - Enterprise NoSQL</description>
+        <icon>marklogic.png</icon>
+        <backend>Marklogic</backend>
+        <fingerprint>11:11:11:d7:33:7e:38:43:40:70:ca:2d:3a:24:05:22</fingerprint>
+    </info>
+    <address>
+      <value/>
+      <example>ssl+marklogic://username:password@myserver.com:1234</example>
+    </address>
+    <path>
+      <value/>
+      <example>/myprojecturi/</example>
+    </path>
+  </plugin>
+</sparkleshare>
