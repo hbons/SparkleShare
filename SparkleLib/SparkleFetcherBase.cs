@@ -26,6 +26,7 @@ namespace SparkleLib {
 
     public class SparkleFetcherInfo {
         public string Address;
+        public string Backend; // The backend configured in the plugin xml file, if present
         public string Fingerprint;
         public string RemotePath;
         public string TargetDirectory;
@@ -59,6 +60,9 @@ namespace SparkleLib {
         public bool IsActive { get; private set; }
         public string Identifier;
         public SparkleFetcherInfo OriginalFetcherInfo;
+
+        public bool UseSSHKeys { get; protected set; }
+        public bool ParseRemoteUrl { get; protected set; }
 
         public string [] Warnings {
             get {
@@ -123,6 +127,9 @@ namespace SparkleLib {
 
             RemoteUrl = new Uri (address + remote_path);
             IsActive  = false;
+
+            UseSSHKeys = true; // default for GIT repositories
+            ParseRemoteUrl = true; // default for GIT repositories
         }
 
 
@@ -138,7 +145,7 @@ namespace SparkleLib {
 
             string host_key = "";
 
-            if (!RemoteUrl.Scheme.StartsWith ("http")) {
+            if (UseSSHKeys && !RemoteUrl.Scheme.StartsWith ("http")) {
                 host_key = FetchHostKey ();
                 
                 if (string.IsNullOrEmpty (RemoteUrl.Host) || host_key == null) {
@@ -178,7 +185,7 @@ namespace SparkleLib {
 
                     IsActive = false;
 
-                    bool repo_is_encrypted = (RemoteUrl.AbsolutePath.Contains ("-crypto") ||
+                    bool repo_is_encrypted = ParseRemoteUrl && (RemoteUrl.AbsolutePath.Contains ("-crypto") ||
                                               RemoteUrl.Host.Equals ("sparkleshare.net"));
 
                     Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);
@@ -238,7 +245,7 @@ namespace SparkleLib {
                 n +
                 "Have fun! :)" + n;
 
-            if (RemoteUrl.AbsolutePath.Contains ("-crypto") || RemoteUrl.Host.Equals ("sparkleshare.net"))
+            if (ParseRemoteUrl && (RemoteUrl.AbsolutePath.Contains ("-crypto") || RemoteUrl.Host.Equals ("sparkleshare.net")))
                 text = text.Replace ("a SparkleShare repository", "an encrypted SparkleShare repository");
 
             File.WriteAllText (file_path, text);

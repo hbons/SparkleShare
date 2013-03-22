@@ -1,0 +1,29 @@
+These are notes to aid development of the ML Sparkle Backend
+
+
+REST functions required
+/ Login (Digest, Basic, with https)
+- Search for all docs under a URI, returning URIs (first sync)
+/ Search for all docs since last modified date under a URI, returning URIs (subsequent syncs)
+- Ensure auto directory (URL?) creation is on, on the ML server
+/ Begin transaction
+/ Commit transaction
+/ Rollback transaction
+/ Put document
+/ Get document(s)
+/ Delete document
+
+Questions outstanding
+/ Do we have a .NET REST wrapper?
+- How do we handle local deletes?
+- How do we handle remote deletes? (Warn, ask user: Option A: delete locally, Option B: Keep files (added to remote on next sync) )
+
+
+SparkleShare specific work
++ plugin XML descriptor
++ Link ML project to main project resources
+- Compilation config in main project
+- Ensure files linked in
+- basic test
+
+*** replace current (broken) folder-is-connection-url method with configuration saved on this new sync connection

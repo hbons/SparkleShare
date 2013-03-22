@@ -46,3 +46,9 @@ _ReSharper.*
 *.wxs
 *.dotCover
 
+
+SparkleShare/Mac/SparkleShare.sln
+
+SparkleLib/Defines.cs
+
+SparkleShare/Mac/SparkleShare.csproj
