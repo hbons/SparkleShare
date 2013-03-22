@@ -77,6 +77,9 @@
     <Reference Include="ServiceStack">
       <HintPath>..\..\..\..\lib\ServiceStack-v3.9.32\ServiceStack.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\..\..\..\lib\ServiceStack-v3.9.32\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -90,6 +93,10 @@
   <ItemGroup>
     <Compile Include="SparkleRepoMarkLogic.cs" />
     <Compile Include="SparkleFetcherMarkLogic.cs" />
+    <Compile Include="SparkleShareLogger.cs">
+      <DependentUpon>Notes.txt</DependentUpon>
+    </Compile>
+    <Compile Include="SparkleShareLogFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SparkleLib.csproj">

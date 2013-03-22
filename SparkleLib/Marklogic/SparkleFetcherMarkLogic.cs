@@ -10,6 +10,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using SparkleLib;
 using MarkLogicLib;
+using ServiceStack.Logging.Support.Logging;
+using ServiceStack.Logging;
 
 namespace SparkleLib.Marklogic {
 
@@ -18,6 +20,11 @@ namespace SparkleLib.Marklogic {
 
         public SparkleFetcher (SparkleFetcherInfo info) : base (info)
         {
+            
+            
+            // configure service stack logger
+            LogManager.LogFactory = new SparkleShareLogFactory ();
+
             UseSSHKeys = false;
             ParseRemoteUrl = false;
         }
