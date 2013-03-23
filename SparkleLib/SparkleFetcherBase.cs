@@ -26,8 +26,9 @@ namespace SparkleLib {
 
     public class SparkleFetcherInfo {
         public string Address;
-        public string Fingerprint;
         public string RemotePath;
+        public string Backend;
+        public string Fingerprint;
         public string TargetDirectory;
         public string AnnouncementsUrl;
         public bool FetchPriorHistory;

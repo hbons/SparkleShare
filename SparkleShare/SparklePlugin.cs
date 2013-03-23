@@ -43,7 +43,7 @@ namespace SparkleShare {
             get {
                 string image_file_name = GetValue ("info", "icon");
                 string image_path      = IO.Path.Combine (this.plugin_directory, image_file_name);
-
+                
                 if (IO.File.Exists (image_path))
                     return image_path;
                 else

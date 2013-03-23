@@ -542,7 +542,11 @@ namespace SparkleShare {
             }
 
             string canonical_name = Path.GetFileName (info.RemotePath);
-            string backend        = SparkleFetcherBase.GetBackend (info.Address);
+            string backend        = info.Backend; 
+
+            if (string.IsNullOrEmpty (backend))
+                backend = SparkleFetcherBase.GetBackend (info.Address); 
+ 
             info.TargetDirectory  = Path.Combine (tmp_path, canonical_name);
 
             try {
