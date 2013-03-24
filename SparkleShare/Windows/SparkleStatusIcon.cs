@@ -142,8 +142,8 @@ namespace SparkleShare {
                 copy_item.Click += delegate { Controller.CopyToClipboardClicked (); };
                 
                 link_code_item.Items.Add (code_item);
-                link_code_item.Items.Add (new Separator);
-                link_code_item.Items.Add (this.copy_item);
+                link_code_item.Items.Add (new Separator());
+                link_code_item.Items.Add (copy_item);
             }
 
             CheckBox notify_check_box = new CheckBox () {
