@@ -187,7 +187,8 @@ namespace SparkleShare {
                 string keys_path = Path.GetDirectoryName (this.config.FullPath);
                 string key_file_path = "";
 
-                foreach (string file_name in Directory.GetFiles (keys_path)) {
+                foreach (string file_path in Directory.GetFiles (keys_path)) {
+                    string file_name = Path.GetFileName(file_path);
                     if (file_name.EndsWith (".key")) {
                         key_file_path = Path.Combine (keys_path, file_name);
 
