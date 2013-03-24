@@ -25,8 +25,7 @@ using SparkleLib;
 
 namespace SparkleLib.Git {
 
-    // Sets up a fetcher that can get remote folders
-    public class SparkleFetcher : SparkleFetcherBase {
+    public class SparkleFetcher : SparkleFetcherSSH {
 
         private SparkleGit git;
         private bool use_git_bin;
