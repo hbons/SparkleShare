@@ -25,8 +25,7 @@ using SparkleLib;
 
 namespace SparkleLib.Git {
 
-    // Sets up a fetcher that can get remote folders
-    public class SparkleFetcher : SparkleFetcherBase {
+    public class SparkleFetcher : SparkleFetcherSSH {
 
         private SparkleGit git;
         private bool use_git_bin;
@@ -187,8 +186,6 @@ namespace SparkleLib.Git {
                 InstallConfiguration ();
                 InstallExcludeRules ();
                 InstallAttributeRules ();
-
-                AddWarnings ();
 
                 return true;
 
@@ -385,21 +382,6 @@ namespace SparkleLib.Git {
             }
 
             writer.Close ();
-        }
-
-
-        private void AddWarnings ()
-        {
-            if (this.warnings.Count > 0)
-                return;
-
-            SparkleGit git = new SparkleGit (TargetFolder, "config --global core.excludesfile");
-            string output = git.StartAndReadStandardOutput ();
-
-            if (string.IsNullOrEmpty (output))
-                return;
-            else
-                this.warnings.Add ("You seem to have a system wide ‘gitignore’ file, this may affect SparkleShare files.");
         }
     }
 }

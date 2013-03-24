@@ -43,6 +43,7 @@
     <Compile Include="SparkleUser.cs" />
     <Compile Include="SparkleLogger.cs" />
     <Compile Include="Defines.cs" />
+    <Compile Include="SparkleFetcherSSH.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
