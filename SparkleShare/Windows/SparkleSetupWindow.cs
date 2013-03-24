@@ -24,6 +24,8 @@ using System.Windows.Forms.Integration;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Shell;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
 
 namespace SparkleShare {
 
@@ -60,7 +62,7 @@ namespace SparkleShare {
             Closing += Close;
             SourceInitialized += delegate {
                 const int gwl_style = -16;
-                const int ws_sysmenu = 0×00080000; 
+                const int ws_sysmenu = 0x00080000; 
                 WindowInteropHelper helper = new WindowInteropHelper (this);
                 int style = GetWindowLong (helper.Handle, gwl_style);
                 SetWindowLong (helper.Handle, gwl_style, style & ~ws_sysmenu);

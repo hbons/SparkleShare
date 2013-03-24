@@ -28,6 +28,7 @@ using Forms = System.Windows.Forms;
 
 using Microsoft.Win32;
 using SparkleLib;
+using System.Windows;
 
 namespace SparkleShare {
 
@@ -187,7 +188,7 @@ namespace SparkleShare {
         }
 
 
-        public override void CopyToClipBoardClicked (string text)
+        public override void CopyToClipboard (string text)
         {
             Clipboard.SetData (DataFormats.Text, text);
         }
