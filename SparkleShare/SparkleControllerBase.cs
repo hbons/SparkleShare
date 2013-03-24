@@ -211,13 +211,6 @@ namespace SparkleShare {
                     else
                         name += "'s";
 
-                    string link_code_file_path  = Path.Combine (FoldersPath, name + " link code.txt");
-
-                    // Create an easily accessible copy of the public
-                    // key in the user's SparkleShare folder
-                    if (File.Exists (public_key_file_path) && !File.Exists (link_code_file_path))
-                        File.Copy (public_key_file_path, link_code_file_path, true);
-
                     CurrentUser.PublicKey = File.ReadAllText (public_key_file_path);
                 }
 

@@ -9,6 +9,7 @@ SOURCES =  \
 	SparkleConfig.cs \
 	SparkleExtensions.cs \
 	SparkleFetcherBase.cs \
+	SparkleFetcherSSH.cs \
 	SparkleListenerBase.cs \
 	SparkleListenerFactory.cs \
 	SparkleListenerTcp.cs \
