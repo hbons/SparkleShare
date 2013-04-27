@@ -107,6 +107,9 @@ namespace SparkleLib.Git {
 
         public override bool Fetch ()
         {
+            if (!base.Fetch ())
+                return false;
+
             if (FetchPriorHistory) {
                 this.git = new SparkleGit (SparkleConfig.DefaultConfig.TmpPath,
                     "clone --progress --no-checkout \"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
