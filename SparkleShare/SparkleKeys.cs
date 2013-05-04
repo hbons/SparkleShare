@@ -68,7 +68,8 @@ namespace SparkleShare {
             if (process.ExitCode == 0)
                 SparkleLogger.LogInfo ("Auth", "Imported key '" + key_file_path + "'");
             else
-                SparkleLogger.LogInfo ("Auth", "Could not import key '" + key_file_path + "'");
+                SparkleLogger.LogInfo ("Auth", "Could not import key '" + key_file_path + "'",
+                    process.StandardError.ReadToEnd ());
         }
 
 
