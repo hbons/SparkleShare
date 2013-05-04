@@ -242,7 +242,12 @@ namespace SparkleLib.Git {
                 double number = 0.0;
 
                 if (match.Success) {
-                    number = double.Parse (match.Groups [1].Value, new CultureInfo ("en-US"));
+                    try {
+                        number = double.Parse (match.Groups [1].Value, new CultureInfo ("en-US"));
+                    
+                    } catch (FormatException) {
+                        SparkleLogger.LogInfo ("Git", "Error parsing progress: \"" + match.Groups [1] + "\"");
+                    }
 
                     // The pushing progress consists of two stages: the "Compressing
                     // objects" stage which we count as 20% of the total progress, and
@@ -261,6 +266,7 @@ namespace SparkleLib.Git {
                                 speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo ("en-US")) * 1024;
                             
                             } catch (FormatException) {
+                                SparkleLogger.LogInfo ("Git", "Error parsing speed: \"" + speed_match.Groups [1] + "\"");
                             }
 
                             if (speed_match.Groups [2].Value.Equals ("M"))
@@ -328,7 +334,12 @@ namespace SparkleLib.Git {
                 double number = 0.0;
 
                 if (match.Success) {
-                    number = double.Parse (match.Groups [1].Value, new CultureInfo ("en-US"));
+                    try {
+                        number = double.Parse (match.Groups [1].Value, new CultureInfo ("en-US"));   
+                    
+                    } catch (FormatException) {
+                        SparkleLogger.LogInfo ("Git", "Error parsing progress: \"" + match.Groups [1] + "\"");
+                    }
 
                     // The fetching progress consists of two stages: the "Compressing
                     // objects" stage which we count as 20% of the total progress, and
@@ -347,6 +358,7 @@ namespace SparkleLib.Git {
                                 speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo ("en-US")) * 1024;
                                 
                             } catch (FormatException) {
+                                SparkleLogger.LogInfo ("Git", "Error parsing speed: \"" + speed_match.Groups [1] + "\"");
                             }
                             
                             if (speed_match.Groups [2].Value.Equals ("M"))
