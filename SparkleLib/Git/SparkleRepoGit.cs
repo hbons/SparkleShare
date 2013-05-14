@@ -895,18 +895,18 @@ namespace SparkleLib.Git {
 
                     } else {
                         if (path != null) {
-                            bool skip_change_set = false;;
+                            List<SparkleChange> changes_to_skip = new List<SparkleChange> ();
 
                             foreach (SparkleChange change in change_set.Changes) {
-                                if ((change.Type == SparkleChangeType.Deleted ||
-                                     change.Type == SparkleChangeType.Moved) && change.Path.Equals (path)) {
+                                if ((change.Type == SparkleChangeType.Deleted || change.Type == SparkleChangeType.Moved)
+                                    && change.Path.Equals (path)) {
 
-                                     skip_change_set = true;
+                                    changes_to_skip.Add (change);
                                 }
                             }
 
-                            if (skip_change_set)
-                                continue;
+                            foreach (SparkleChange change_to_skip in changes_to_skip)
+                                change_set.Changes.Remove (change_to_skip);
                         }
                                         
                         change_sets.Add (change_set);
