@@ -397,7 +397,6 @@ namespace SparkleShare {
 
                 try {
                     string address = remote_url.Replace (uri.AbsolutePath, "");
-    
                     new_plugin = SparklePlugin.Create (uri.Host, address, address, "", "", "/path/to/project");
     
                     if (new_plugin != null) {
@@ -524,15 +523,15 @@ namespace SparkleShare {
 
         public void CheckCryptoSetupPage (string password)
         {
-            bool valid_password = (password.Length > 0 && !password.Contains (" "));
-            UpdateCryptoSetupContinueButtonEvent (valid_password);
+            bool is_valid_password = (password.Length > 0 && !password.StartsWith (" ") && !password.EndsWith (" "));
+            UpdateCryptoSetupContinueButtonEvent (is_valid_password);
         }
 
 
         public void CheckCryptoPasswordPage (string password)
         {
-            bool password_correct = Program.Controller.CheckPassword (password);
-            UpdateCryptoPasswordContinueButtonEvent (password_correct);
+            bool is_password_correct = Program.Controller.CheckPassword (password);
+            UpdateCryptoPasswordContinueButtonEvent (is_password_correct);
         }
 
 
