@@ -219,7 +219,7 @@ namespace SparkleShare {
                         NSFontTraitMask.Condensed, 0, 11),
                 };
 
-                if (TableView == null) {
+                if (TableView == null || TableView.RowCount != Controller.Plugins.Count) {
                     TableView = new NSTableView () {
                         Frame            = new RectangleF (0, 0, 0, 0),
                         RowHeight        = 34,
