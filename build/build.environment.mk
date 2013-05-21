@@ -7,6 +7,7 @@ DIR_BIN = $(top_builddir)/bin
 
 # External libraries to link against, generated from configure
 LINK_SYSTEM = -r:System
+LINK_SYSTEM_WEB = -r:System.Web
 LINK_MONO_POSIX = -r:Mono.Posix
 
 LINK_GLIB = $(GLIBSHARP_LIBS)
@@ -24,7 +25,7 @@ REF_SPARKLELIB = $(LINK_SYSTEM) $(LINK_MONO_POSIX)
 LINK_SPARKLELIB = -r:$(DIR_BIN)/SparkleLib.dll
 LINK_SPARKLELIB_DEPS = $(REF_SPARKLELIB) $(LINK_SPARKLELIB)
 
-REF_SPARKLESHARE = $(LINK_DBUS) $(LINK_GTK) $(LINK_SPARKLELIB_DEPS) $(LINK_APP_INDICATOR)
+REF_SPARKLESHARE = $(LINK_SYSTEM_WEB) $(LINK_DBUS) $(LINK_GTK) $(LINK_SPARKLELIB_DEPS) $(LINK_APP_INDICATOR)
 
 # Cute hack to replace a space with something
 colon:= :
