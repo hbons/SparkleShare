@@ -37,8 +37,7 @@ namespace SparkleShare {
             string xml = "";
 
             // Windows sometimes doesn't strip off protocol handlers            
-            url = url.Replace ("sparkleshare-unsafe:", "");
-            url = url.Replace ("sparkleshare:", "");
+            url = url.Replace ("sparkleshare://addProject/", "");
 
             WebClient web_client = new WebClient ();
 
