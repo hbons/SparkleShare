@@ -102,7 +102,7 @@ namespace SparkleShare {
 
         public bool LinkCodeItemEnabled {
             get {
-                return !Program.Controller.FirstRun;
+                return !string.IsNullOrEmpty (Program.Controller.CurrentUser.PublicKey);
             }
         }
 

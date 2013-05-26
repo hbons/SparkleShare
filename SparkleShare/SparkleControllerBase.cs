@@ -245,7 +245,8 @@ namespace SparkleShare {
                     SparkleKeys.ImportPrivateKey (key_pair [0]);
 
                     CurrentUser.PublicKey = File.ReadAllText (key_pair [1]);
-                    
+                    FolderListChanged (); // FIXME: Hacky way to update status icon menu to show the key
+
                 }).Start ();
 
             } else {
