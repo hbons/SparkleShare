@@ -257,16 +257,15 @@ namespace SparkleShare {
 
                     TableView.DataSource = DataSource;
                     TableView.ReloadData ();
-
-                    
-                    TableView.SelectRow (Controller.SelectedPluginIndex, false);
-                    TableView.ScrollRowToVisible (Controller.SelectedPluginIndex);
                     
                     (TableView.Delegate as SparkleTableViewDelegate).SelectionChanged += delegate {
                         Controller.SelectedPluginChanged (TableView.SelectedRow);
                         Controller.CheckAddPage (AddressTextField.StringValue, PathTextField.StringValue, TableView.SelectedRow);
                     };
                 }
+                
+                TableView.SelectRow (Controller.SelectedPluginIndex, false);
+                TableView.ScrollRowToVisible (Controller.SelectedPluginIndex);
 
                 HistoryCheckButton = new NSButton () {
                     Frame = new RectangleF (190, Frame.Height - 400, 300, 18),
