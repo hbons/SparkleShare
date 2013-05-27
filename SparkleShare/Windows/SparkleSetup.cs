@@ -495,7 +495,7 @@ namespace SparkleShare {
 
                         help_block.Inlines.Add (new Bold (new Run (Controller.PreviousUrl)));
                         help_block.Inlines.Add (" is the address we've compiled. Does this look alright?\n\n");
-                        help_block.Inlines.Add ("Do you have access rights to this remote project?");
+                        help_block.Inlines.Add ("Is this computer's Client ID known by the host??");
 
                         if (warnings.Length > 0) {
                             bullets_block.Text += "\n\n•";

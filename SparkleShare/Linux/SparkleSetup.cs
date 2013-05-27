@@ -391,7 +391,7 @@ namespace SparkleShare {
                 };
 
                 Label label_two = new Label () {
-                    Text   = "Do you have access rights to this remote project?",
+                    Text   = "Is this computer's Client ID known by the host?",
                     Wrap   = true,
                     Xalign = 0
                 };
