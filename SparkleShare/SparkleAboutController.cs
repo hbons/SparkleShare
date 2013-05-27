@@ -34,20 +34,13 @@ namespace SparkleShare {
         public readonly string ReportProblemLinkAddress = "http://www.github.com/hbons/SparkleShare/issues";
         public readonly string DebugLogLinkAddress      = "file://" + Program.Controller.ConfigPath;
 
-        public string RunningVersion {
-            get {
-                string version = SparkleLib.SparkleBackend.Version;
-
-                if (version.EndsWith (".0"))
-                    version = version.Substring (0, version.Length - 2);
-
-                return version;
-            }
-        }
+        public string RunningVersion;
 
 
         public SparkleAboutController ()
         {
+            RunningVersion = SparkleLib.SparkleBackend.Version;
+
             Program.Controller.ShowAboutWindowEvent += delegate {
                 ShowWindowEvent ();
                 new Thread (() => CheckForNewVersion ()).Start ();
