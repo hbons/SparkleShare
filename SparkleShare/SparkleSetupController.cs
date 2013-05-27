@@ -237,27 +237,6 @@ namespace SparkleShare {
         {
             Program.Controller.CurrentUser = new SparkleUser (full_name, email);
 
-            new Thread (() => {
-                string link_code_file_path = Path.Combine (Program.Controller.FoldersPath, "Your link code.txt");
-
-                if (File.Exists (link_code_file_path)) {
-                    string name = Program.Controller.CurrentUser.Name.Split (" ".ToCharArray ()) [0];
-
-                    if (name.EndsWith ("s"))
-                        name += "'";
-                    else
-                        name += "'s";
-
-                    string new_file_path = Path.Combine (Program.Controller.FoldersPath, name + " link code.txt");
-
-                    if (File.Exists (new_file_path))
-                        File.Delete (new_file_path);
-
-                    File.Move (link_code_file_path, new_file_path);
-                }
-
-            }).Start ();
-
             TutorialPageNumber = 1;
             ChangePageEvent (PageType.Tutorial, null);
         }
