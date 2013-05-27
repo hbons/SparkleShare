@@ -412,7 +412,7 @@ namespace SparkleShare {
                     "</style>" +
                     "<ul>" +
                     "  <li><b>" + Controller.PreviousUrl + "</b> is the address we've compiled. Does this look alright?</li>" +
-                    "  <li>Do you have access rights to this remote project?</li>" +
+                    "  <li>Is this computer's Client ID known by the host?</li>" +
                     "</ul>";
 
                 if (warnings.Length > 0) {
