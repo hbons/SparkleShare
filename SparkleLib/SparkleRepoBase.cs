@@ -260,12 +260,19 @@ namespace SparkleLib {
                     SparkleLogger.LogInfo ("Local", Name + " | Activity has settled");
                     IsBuffering = false;
 
-                    if (HasLocalChanges) {
+                    bool first_sync = true;
+
+                    if (HasLocalChanges && Status == SyncStatus.Idle) {
                         do {
+                            if (!first_sync)
+                                SparkleLogger.LogInfo ("Local", Name + " | More changes found");
+
                             SyncUpBase ();
 
                             if (Error == ErrorStatus.UnreadableFiles)
                                 return;
+
+                            first_sync = false;
 
                         } while (HasLocalChanges);
 
