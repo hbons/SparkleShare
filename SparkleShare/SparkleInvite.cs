@@ -66,7 +66,7 @@ namespace SparkleShare {
             if (string.IsNullOrEmpty (AcceptUrl))
                 return true;
 
-            string post_data   = "public_key=" + HttpUtility.UrlEncode (public_key);
+            string post_data   = "public_key=" + Uri.EscapeDataString (public_key);
             byte [] post_bytes = Encoding.UTF8.GetBytes (post_data);
 
             WebRequest request    = WebRequest.Create (AcceptUrl);
