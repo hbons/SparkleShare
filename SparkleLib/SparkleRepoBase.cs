@@ -158,8 +158,6 @@ namespace SparkleLib {
 			string identifier_file_path = Path.Combine (LocalPath, ".sparkleshare");
 			File.SetAttributes (identifier_file_path, FileAttributes.Hidden);
 
-            SyncStatusChanged += delegate (SyncStatus status) { Status = status; };
-
             if (!UseCustomWatcher)
                 this.watcher = new SparkleWatcher (LocalPath);
 
@@ -277,7 +275,8 @@ namespace SparkleLib {
                         } while (HasLocalChanges);
 
                     } else {
-                        SyncStatusChanged (SyncStatus.Idle);
+                        Status = SyncStatus.Idle;
+                        SyncStatusChanged (Status);
                     }
 
                 } else {
@@ -334,7 +333,8 @@ namespace SparkleLib {
             SparkleLogger.LogInfo ("SyncUp", Name + " | Initiated");
             HasUnsyncedChanges = true;
 
-            SyncStatusChanged (SyncStatus.SyncUp);
+            Status = SyncStatus.SyncUp;
+            SyncStatusChanged (Status);
 
             if (SyncUp ()) {
                 SparkleLogger.LogInfo ("SyncUp", Name + " | Done");
@@ -343,8 +343,10 @@ namespace SparkleLib {
                 HasUnsyncedChanges = false;
                 this.poll_interval = PollInterval.Long;
 
-                SyncStatusChanged (SyncStatus.Idle);
                 this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
+
+                Status = SyncStatus.Idle;
+                SyncStatusChanged (Status);
 
             } else {
                 SparkleLogger.LogInfo ("SyncUp", Name + " | Error");
@@ -357,11 +359,15 @@ namespace SparkleLib {
                     HasUnsyncedChanges = false;
 
                     this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
-                    SyncStatusChanged (SyncStatus.Idle);
+
+                    Status = SyncStatus.Idle;
+                    SyncStatusChanged (Status);
 
                 } else {
                     this.poll_interval = PollInterval.Short;
-                    SyncStatusChanged (SyncStatus.Error);
+
+                    Status = SyncStatus.Error;
+                    SyncStatusChanged (Status);
                 }
             }
 
@@ -380,7 +386,9 @@ namespace SparkleLib {
 
             SparkleLogger.LogInfo ("SyncDown", Name + " | Initiated");
 
-            SyncStatusChanged (SyncStatus.SyncDown);
+            Status = SyncStatus.SyncDown;
+            SyncStatusChanged (Status);
+
             string pre_sync_revision = CurrentRevision;
 
             if (SyncDown ()) {
@@ -413,25 +421,30 @@ namespace SparkleLib {
                 // conflict. Tries only once, then lets
                 // the timer try again periodically
                 if (HasUnsyncedChanges) {
-                    SyncStatusChanged (SyncStatus.SyncUp);
+                    Status = SyncStatus.SyncUp;
+                    SyncStatusChanged (Status);
                     
                     if (SyncUp ())
                         HasUnsyncedChanges = false;
                 }
 
-                SyncStatusChanged (SyncStatus.Idle);
+                Status = SyncStatus.Idle;
+                SyncStatusChanged (Status);
 
             } else {
                 SparkleLogger.LogInfo ("SyncDown", Name + " | Error");
 
                 ChangeSets = GetChangeSets ();
-                SyncStatusChanged (SyncStatus.Error);
+
+                Status = SyncStatus.Error;
+                SyncStatusChanged (Status);
             }
 
             ProgressPercentage = 0.0;
             ProgressSpeed      = 0.0;
 
-            SyncStatusChanged (SyncStatus.Idle);
+            Status = SyncStatus.Idle;
+            SyncStatusChanged (Status);
 
             if (!UseCustomWatcher)
                 this.watcher.Enable ();
