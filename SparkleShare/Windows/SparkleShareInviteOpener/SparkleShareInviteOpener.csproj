@@ -6,7 +6,7 @@
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SparkleShareInviteOpener</RootNamespace>
     <AssemblyName>SparkleShareInviteOpener</AssemblyName>
