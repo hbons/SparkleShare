@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace SparkleShare {
 
@@ -39,6 +40,8 @@ namespace SparkleShare {
             // Windows sometimes doesn't strip off protocol handlers            
             url = url.Replace ("sparkleshare://addProject/", "");
 
+            // Outlook breaks URLs
+            url = Regex.Replace (url, "(https?:)/([^/])", "$1//$2");
             WebClient web_client = new WebClient ();
 
             try {
