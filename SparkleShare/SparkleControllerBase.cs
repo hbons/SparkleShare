@@ -496,18 +496,21 @@ namespace SparkleShare {
         private void UpdateState ()
         {
             bool has_unsynced_repos = false;
-            
+            bool has_syncing_repos  = false;
+
             foreach (SparkleRepoBase repo in Repositories) {
                 if (repo.Status == SyncStatus.SyncDown || repo.Status == SyncStatus.SyncUp || repo.IsBuffering) {
-                    OnSyncing ();
-                    return;
+                    has_syncing_repos = true;
+                    break;
                     
-                } else if (repo.HasUnsyncedChanges) {
+                } else if (repo.Status == SyncStatus.Idle && repo.HasUnsyncedChanges) {
                     has_unsynced_repos = true;
                 }
             }
-            
-            if (has_unsynced_repos)
+
+            if (has_syncing_repos)
+                OnSyncing ();
+            else if (has_unsynced_repos)
                 OnError ();
             else
                 OnIdle ();
