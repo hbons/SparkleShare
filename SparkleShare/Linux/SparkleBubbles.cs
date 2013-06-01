@@ -19,6 +19,7 @@ using System;
 
 using Gtk;
 using Notifications;
+using SparkleLib;
 
 namespace SparkleShare {
     
@@ -53,9 +54,8 @@ namespace SparkleShare {
 
                     notification.Show ();
 
-                } catch (Exception) {
-                    // Ignore exceptions thrown by libnotify,
-                    // they're not important enough to crash
+                } catch (Exception e) {
+                    Logger.LogInfo ("Notification", "Error showing notification: ", e);
                 }
             };
         }
