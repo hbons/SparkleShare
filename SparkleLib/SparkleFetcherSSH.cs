@@ -33,8 +33,21 @@ namespace SparkleLib {
                 
                 bool warn = true;
                 if (RequiredFingerprint != null) {
-                    string host_fingerprint = DeriveFingerprint (host_key);
+                    string host_fingerprint;
+
+                    try {
+                        host_fingerprint = DeriveFingerprint (host_key);
                     
+                    } catch (InvalidOperationException e) {
+                        // "Unapproved cryptographic algorithms" won't work when FIPS is enabled on Windows.
+                        // Software like Cisco AnyConnect can demand this feature is on, so we show an error
+                        SparkleLogger.LogInfo ("Auth", "Unable to derive fingerprint: ", e);
+                        this.errors.Add ("error: Can't check fingerprint due to FIPS being enabled");
+                        
+                        return false;
+                    }
+
+
                     if (host_fingerprint == null || !RequiredFingerprint.Equals (host_fingerprint)) {
                         SparkleLogger.LogInfo ("Auth", "Fingerprint doesn't match");
                         this.errors.Add ("error: Host fingerprint doesn't match");
