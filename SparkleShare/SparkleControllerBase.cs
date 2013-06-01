@@ -695,7 +695,15 @@ namespace SparkleShare {
             string avatars_path = new string [] { Path.GetDirectoryName (this.config.FullPath),
                 "avatars", size + "x" + size }.Combine ();
 
-            string avatar_file_path = Path.Combine (avatars_path, email.MD5 () + ".png");
+            string avatar_file_path;
+
+            try {
+                avatar_file_path = Path.Combine (avatars_path, email.MD5 () + ".png");
+            
+            } catch (InvalidOperationException e) {
+                SparkleLogger.LogInfo ("Controller", "Error fetching avatar for " + email, e);
+                return null;
+            }
 
             if (File.Exists (avatar_file_path)) {
                 if (new FileInfo (avatar_file_path).CreationTime < DateTime.Now.AddDays (-1))
