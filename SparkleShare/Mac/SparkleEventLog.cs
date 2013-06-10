@@ -49,13 +49,15 @@ namespace SparkleShare {
 
             int min_width  = 480;
             int min_height = 640;
+            int height     = (int) (NSScreen.MainScreen.Frame.Height * 0.85);
+
             float x    = (float) (NSScreen.MainScreen.Frame.Width * 0.61);
-            float y    = (float) (NSScreen.MainScreen.Frame.Height * 0.5 - (min_height * 0.5));
+            float y    = (float) (NSScreen.MainScreen.Frame.Height * 0.5 - (height * 0.5));
 
             SetFrame (
                 new RectangleF (
                     new PointF (x, y),
-                    new SizeF (min_width, (int) (NSScreen.MainScreen.Frame.Height * 0.85))),
+                    new SizeF (min_width, height)),
                 true);
 
             StyleMask = (NSWindowStyle.Closable | NSWindowStyle.Miniaturizable |
