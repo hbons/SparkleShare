@@ -184,14 +184,12 @@ namespace SparkleShare {
                             ChangePageEvent (PageType.Add, null);
                         }
 
-                        ShowWindowEvent ();
-
                     } else if (!Program.Controller.FirstRun && TutorialPageNumber == 0) {
                         WindowIsOpen = true;
                         ChangePageEvent (PageType.Add, null);
-                        ShowWindowEvent ();
                     }
 
+                    ShowWindowEvent ();
                     return;
                 }
 
@@ -206,10 +204,13 @@ namespace SparkleShare {
         {
             PendingInvite   = null;
             SelectedPlugin  = Plugins [0];
+
             PreviousAddress = "";
             PreviousPath    = "";
             PreviousUrl     = "";
 
+            this.saved_address     = "";
+            this.saved_remote_path = "";
             this.fetch_prior_history = false;
 
             WindowIsOpen = false;
@@ -570,6 +571,7 @@ namespace SparkleShare {
             this.fetch_prior_history = false;
 
             this.current_page = PageType.None;
+            WindowIsOpen = false;
             HideWindowEvent ();
         }
 
