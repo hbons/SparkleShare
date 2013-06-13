@@ -59,6 +59,7 @@ namespace SparkleShare {
 
             if (xml.Contains ("<sparkleshare>")) {
                 File.WriteAllText (target_path, xml);
+                File.SetAttributes (target_path, FileAttributes.Hidden);
                 Console.WriteLine ("Downloaded invite: " + url);
             }
         }
