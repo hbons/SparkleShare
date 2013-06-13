@@ -64,7 +64,7 @@ case $1 in
   open|--open)
     invite=`date -u +%N`
     open=`echo $2 | sed 's/sparkleshare:\/\/addProject\///'`
-    curl --insecure --output ~/SparkleShare/$invite.xml $open
+    curl --insecure --output ~/SparkleShare/.$invite.xml $open
     ;;
   *)
     mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" --help
