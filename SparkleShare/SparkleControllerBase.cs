@@ -251,6 +251,7 @@ namespace SparkleShare {
 
             } else {
                 new Thread (() => {
+                    StartupInviteScan ();
                     CheckRepositories ();
                     RepositoriesLoaded = true;
                     UpdateState ();
@@ -440,6 +441,12 @@ namespace SparkleShare {
             }
         }
 
+        private void StartupInviteScan ()
+        {
+            foreach (string invite in Directory.GetFiles (FoldersPath, "*.xml")) {
+                HandleInvite (invite);
+            }
+        }
 
         private void OnFolderActivity (object o, FileSystemEventArgs args)
         {
@@ -462,20 +469,25 @@ namespace SparkleShare {
 
         private void HandleInvite (FileSystemEventArgs args)
         {
+            HandleInvite (args.FullPath);
+        }
+
+        private void HandleInvite (string path)
+        {
             if (this.fetcher != null &&
                 this.fetcher.IsActive) {
 
                 AlertNotificationRaised ("SparkleShare Setup seems busy", "Please wait for it to finish");
 
             } else {
-                SparkleInvite invite = new SparkleInvite (args.FullPath);
+                SparkleInvite invite = new SparkleInvite (path);
 
                 // It may be that the invite we received a path to isn't
                 // fully downloaded yet, so we try to read it several times
                 int tries = 0;
                 while (!invite.IsValid) {
                     Thread.Sleep (100);
-                    invite = new SparkleInvite (args.FullPath);
+                    invite = new SparkleInvite (path);
                     tries++;
 
                     if (tries > 10) {
@@ -487,7 +499,7 @@ namespace SparkleShare {
                 if (invite.IsValid)
                     InviteReceived (invite);
 
-                File.Delete (args.FullPath);
+                File.Delete (path);
             }
         }
 
