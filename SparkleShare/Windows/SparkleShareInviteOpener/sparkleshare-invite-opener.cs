@@ -24,8 +24,8 @@ namespace SparkleShare {
 
     public class SparkleShare {
 
-        public static void Main (string [] args) {
-
+        public static void Main (string [] args)
+        {
             new SparkleInviteOpen (args [0]);
         }
     }
@@ -61,6 +61,8 @@ namespace SparkleShare {
                 File.WriteAllText (target_path, xml);
                 File.SetAttributes (target_path, FileAttributes.Hidden);
                 Console.WriteLine ("Downloaded invite: " + url);
+
+                // TODO: Start SparkleShare.exe
             }
         }
     }
