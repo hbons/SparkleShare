@@ -187,7 +187,7 @@ namespace SparkleLib {
                 if (HasUnsyncedChanges && !this.is_syncing && Error == ErrorStatus.None)
                     SyncUpBase ();
 
-                if (Status != SyncStatus.Idle && Status != Error) {
+                if (Status != SyncStatus.Idle && Status != SyncStatus.Error) {
                     Status = SyncStatus.Idle;
                     SyncStatusChanged (Status);
                 }
