@@ -280,7 +280,7 @@ namespace SparkleLib {
                         } while (HasLocalChanges);
                     } 
 
-                    if (Status != SyncStatus.Idle && Status != Error) {
+                    if (Status != SyncStatus.Idle && Status != SyncStatus.Error) {
                         Status = SyncStatus.Idle;
                         SyncStatusChanged (Status);
                     }
