@@ -1,3 +1,13 @@
+1.2.0 for Linux, Mac and Windows (???):
+      
+      Hylke:
+      - Fixes to the invite feature, now works when SparkleShare 
+        isn't running, by Jo Shields
+      - Don't crash, but complain when FIPS is enabled on Windows
+      - Fix some interface logic in Add dialog
+      - Fix some inaccurate sync state messages in the status icon
+
+
 1.1.0 for Linux, Mac and Windows (Sun 26 May 2013):
 
        Hylke:
