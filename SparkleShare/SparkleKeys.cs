@@ -61,6 +61,10 @@ namespace SparkleShare {
 
         public static void ImportPrivateKey (string key_file_path)
         {
+            // Use forward slashes when dealing with Windows domain accounts
+            if (key_file_path.StartsWith ("\\\\"))
+                key_file_path = key_file_path.Replace ("\\", "/");
+
             SparkleKeyProcess process = new SparkleKeyProcess ("ssh-add", "\"" + key_file_path + "\"");
             process.Start ();
             process.WaitForExit ();
