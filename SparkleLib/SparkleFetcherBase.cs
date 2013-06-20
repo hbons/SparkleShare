@@ -56,7 +56,7 @@ namespace SparkleLib {
         public string RequiredFingerprint { get; protected set; }
         public readonly bool FetchPriorHistory = false;
         public string TargetFolder { get; protected set; }
-        public bool IsActive { get; private set; }
+        public bool IsActive { get; protected set; }
         public string Identifier;
         public SparkleFetcherInfo OriginalFetcherInfo;
 
@@ -150,10 +150,16 @@ namespace SparkleLib {
 
                 } else {
                     Thread.Sleep (500);
-                    SparkleLogger.LogInfo ("Fetcher", "Failed");
+
+                    if (IsActive) {
+                        SparkleLogger.LogInfo ("Fetcher", "Failed");
+                        Failed ();
+                    
+                    } else {
+                        SparkleLogger.LogInfo ("Fetcher", "Failed: cancelled by user");
+                    }
 
                     IsActive = false;
-                    Failed ();
                 }
             });
 
