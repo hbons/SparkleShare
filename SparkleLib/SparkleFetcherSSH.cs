@@ -47,7 +47,6 @@ namespace SparkleLib {
                         return false;
                     }
 
-
                     if (host_fingerprint == null || !RequiredFingerprint.Equals (host_fingerprint)) {
                         SparkleLogger.LogInfo ("Auth", "Fingerprint doesn't match");
                         this.errors.Add ("error: Host fingerprint doesn't match");
