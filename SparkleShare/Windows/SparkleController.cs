@@ -68,7 +68,7 @@ namespace SparkleShare {
             Environment.SetEnvironmentVariable ("HOME", Environment.GetFolderPath (Environment.SpecialFolder.UserProfile));
 
             StartSSH ();
-            SparkleLib.SparkleGit.SparkleGit.SSHPath = Path.Combine (msysgit_path, "bin", "ssh.exe");
+            SparkleLib.Git.SparkleGit.SSHPath = Path.Combine (msysgit_path, "bin", "ssh.exe");
 
             base.Initialize ();
         }
