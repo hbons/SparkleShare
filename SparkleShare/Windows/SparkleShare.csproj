@@ -246,6 +246,10 @@
     <EmbeddedResource Include="Pixmaps\tutorial-slide-3.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SparkleLib\Git\SparkleLib.Git.csproj">
+      <Project>{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}</Project>
+      <Name>SparkleLib.Git</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SparkleLib\SparkleLib.csproj">
       <Project>{2C914413-B31C-4362-93C7-1AE34F09112A}</Project>
       <Name>SparkleLib</Name>
