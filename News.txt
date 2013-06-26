@@ -6,6 +6,9 @@
       - Don't crash, but complain when FIPS is enabled on Windows
       - Fix some interface logic in Add dialog
       - Fix some inaccurate sync state messages in the status icon
+      - Fix conflict when running when TortoiseGit is installed
+      - Fix blank Add dialog on OS X Snow Leopard
+      - Fix crash when user cancels initial project download
 
 
 1.1.0 for Linux, Mac and Windows (Sun 26 May 2013):
