@@ -253,7 +253,7 @@ namespace SparkleShare {
                     TableView.AddColumn (IconColumn);
                     TableView.AddColumn (DescriptionColumn);
 
-                    // The notification center was introduced in Mountain Lion
+                    // Hi-res display support was added after Snow Leopard
                     if (Environment.OSVersion.Version.Major < 11)
                         DataSource = new SparkleDataSource (1, Controller.Plugins);
                     else
