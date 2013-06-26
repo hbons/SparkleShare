@@ -253,7 +253,11 @@ namespace SparkleShare {
                     TableView.AddColumn (IconColumn);
                     TableView.AddColumn (DescriptionColumn);
 
-                    DataSource = new SparkleDataSource (BackingScaleFactor, Controller.Plugins);
+                    // The notification center was introduced in Mountain Lion
+                    if (Environment.OSVersion.Version.Major < 11)
+                        DataSource = new SparkleDataSource (1, Controller.Plugins);
+                    else
+                        DataSource = new SparkleDataSource (BackingScaleFactor, Controller.Plugins);
 
                     TableView.DataSource = DataSource;
                     TableView.ReloadData ();
@@ -715,15 +719,15 @@ namespace SparkleShare {
         public List<object> Items;
         public NSAttributedString [] Cells, SelectedCells;
 
-        int backingScaleFactor;
+        int backing_scale_factor;
 
-        public SparkleDataSource (float backingScaleFactor, List<SparklePlugin> plugins)
+        public SparkleDataSource (float backing_scale_factor, List<SparklePlugin> plugins)
         {
             Items         = new List <object> ();
             Cells         = new NSAttributedString [plugins.Count];
             SelectedCells = new NSAttributedString [plugins.Count];
 
-            this.backingScaleFactor = (int)backingScaleFactor;
+            this.backing_scale_factor = (int) backing_scale_factor;
 
             int i = 0;
             foreach (SparklePlugin plugin in plugins) {
@@ -811,10 +815,10 @@ namespace SparkleShare {
                 var plugin = (SparklePlugin)Items [row_index];
                 var path = plugin.ImagePath;
 
-                if (backingScaleFactor >= 2) {
+                if (backing_scale_factor >= 2) {
                     var hi_path = String.Format ("{0}@{1}x{2}",
                         Path.Combine (Path.GetDirectoryName (path), Path.GetFileNameWithoutExtension (path)),
-                        backingScaleFactor,
+                        backing_scale_factor,
                         Path.GetExtension (path)
                     );
 
