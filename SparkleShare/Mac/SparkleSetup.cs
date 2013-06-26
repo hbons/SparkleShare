@@ -812,24 +812,20 @@ namespace SparkleShare {
                 }
 
             } else {
-                var plugin = (SparklePlugin)Items [row_index];
-                var path = plugin.ImagePath;
+                SparklePlugin plugin = (SparklePlugin) Items [row_index];
+                string path = plugin.ImagePath;
 
                 if (backing_scale_factor >= 2) {
-                    var hi_path = String.Format ("{0}@{1}x{2}",
+                    string hi_path = String.Format ("{0}@{1}x{2}",
                         Path.Combine (Path.GetDirectoryName (path), Path.GetFileNameWithoutExtension (path)),
-                        backing_scale_factor,
-                        Path.GetExtension (path)
+                        backing_scale_factor, Path.GetExtension (path)
                     );
 
-                    if (File.Exists (hi_path)) {
+                    if (File.Exists (hi_path))
                         path = hi_path;
-                    }
                 }
 
-                return new NSImage (path) {
-                    Size = new SizeF (24, 24)
-                };
+                return new NSImage (path) { Size = new SizeF (24, 24) };
             }
         }
     }

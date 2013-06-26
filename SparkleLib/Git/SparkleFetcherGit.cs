@@ -172,7 +172,7 @@ namespace SparkleLib.Git {
                     }
                 }
             
-            } catch (Exception e) {
+            } catch (Exception) {
                 IsActive = false;
                 return false;
             }
