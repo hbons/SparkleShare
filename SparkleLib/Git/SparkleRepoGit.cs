@@ -51,6 +51,9 @@ namespace SparkleLib.Git {
 
                 string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
 
+                SparkleGit git = new SparkleGit (LocalPath, "config core.ignorecase true");
+                git.StartAndWaitForExit ();
+
                 while (Directory.Exists (rebase_apply_path) && HasLocalChanges) {
                     try {
                         ResolveConflict ();
@@ -60,7 +63,10 @@ namespace SparkleLib.Git {
                     }
                 }
 
-                SparkleGit git = new SparkleGit (LocalPath, "rev-parse --abbrev-ref HEAD");
+                git = new SparkleGit (LocalPath, "config core.ignorecase false");
+                git.StartAndWaitForExit ();
+
+                git = new SparkleGit (LocalPath, "rev-parse --abbrev-ref HEAD");
                 this.cached_branch = git.StartAndReadStandardOutput ();
 
                 return this.cached_branch;
@@ -560,12 +566,14 @@ namespace SparkleLib.Git {
             foreach (string line in lines) {
                 string conflicting_path = line.Substring (3);
                 conflicting_path        = EnsureSpecialCharacters (conflicting_path);
-                conflicting_path        = conflicting_path.Replace ("\"", "\\\"");
+                conflicting_path        = conflicting_path.Trim ("\"".ToCharArray ());
 
                 SparkleLogger.LogInfo ("Git", Name + " | Conflict type: " + line);
 
                 // Ignore conflicts in the .sparkleshare file and use the local version
                 if (conflicting_path.EndsWith (".sparkleshare") || conflicting_path.EndsWith (".empty")) {
+                    SparkleLogger.LogInfo ("Git", Name + " | Ignoring conflict in special file: " + conflicting_path);
+
                     // Recover local version
                     SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
                     git_theirs.StartAndWaitForExit ();
@@ -579,6 +587,8 @@ namespace SparkleLib.Git {
                 // Both the local and server version have been modified
                 if (line.StartsWith ("UU") || line.StartsWith ("AA") ||
                     line.StartsWith ("AU") || line.StartsWith ("UA")) {
+
+                    SparkleLogger.LogInfo ("Git", Name + " | Resolving: " + line);
 
                     // Recover local version
                     SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
@@ -594,7 +604,8 @@ namespace SparkleLib.Git {
                     string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
                     string abs_their_path       = Path.Combine (LocalPath, their_path);
 
-                    File.Move (abs_conflicting_path, abs_their_path);
+                    if (File.Exists (abs_conflicting_path) && !File.Exists (abs_their_path))
+                        File.Move (abs_conflicting_path, abs_their_path);
 
                     // Recover server version
                     SparkleGit git_ours = new SparkleGit (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
@@ -604,12 +615,17 @@ namespace SparkleLib.Git {
 
                 // The local version has been modified, but the server version was removed
                 } else if (line.StartsWith ("DU")) {
+                    SparkleLogger.LogInfo ("Git", Name + " | Resolving: " + line);
+
                     // The modified local version is already in the checkout, so it just needs to be added.
                     // We need to specifically mention the file, so we can't reuse the Add () method
                     SparkleGit git_add = new SparkleGit (LocalPath, "add \"" + conflicting_path + "\"");
                     git_add.StartAndWaitForExit ();
 
                     changes_added = true;
+                
+                } else {
+                    SparkleLogger.LogInfo ("Git", Name + " | No need to resolve: " + line);
                 }
             }
 
