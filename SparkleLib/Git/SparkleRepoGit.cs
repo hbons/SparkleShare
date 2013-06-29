@@ -764,6 +764,7 @@ namespace SparkleLib.Git {
             string [] lines      = output.Split ("\n".ToCharArray ());
             List<string> entries = new List <string> ();
 
+            // Split up commit entries
             int line_number = 0;
             bool first_pass = true;
             string entry = "", last_entry = "";
@@ -777,8 +778,8 @@ namespace SparkleLib.Git {
                     first_pass = false;
                 }
 
-                // Only parse 250 files to prevent memory issues
-                if (line_number < 254) {
+                // Only parse first 250 files to prevent memory issues
+                if (line_number < 250) {
                     entry += line + "\n";
                     line_number++;
                 }
@@ -788,145 +789,139 @@ namespace SparkleLib.Git {
 
             entries.Add (last_entry);
 
-
+            // Parse commit entries
             foreach (string log_entry in entries) {
                 Match match = this.log_regex.Match (log_entry);
 
-                if (match.Success) {
-                    SparkleChangeSet change_set = new SparkleChangeSet ();
+                if (!match.Success)
+                    continue;
 
-                    change_set.Folder    = new SparkleFolder (Name);
-                    change_set.Revision  = match.Groups [1].Value;
-                    change_set.User      = new SparkleUser (match.Groups [2].Value, match.Groups [3].Value);
-                    change_set.RemoteUrl = RemoteUrl;
+                SparkleChangeSet change_set = new SparkleChangeSet ();
 
-                    change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
-                        int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
-                        int.Parse (match.Groups [7].Value), int.Parse (match.Groups [8].Value),
-                        int.Parse (match.Groups [9].Value));
+                change_set.Folder    = new SparkleFolder (Name);
+                change_set.Revision  = match.Groups [1].Value;
+                change_set.User      = new SparkleUser (match.Groups [2].Value, match.Groups [3].Value);
+                change_set.RemoteUrl = RemoteUrl;
 
-                    string time_zone     = match.Groups [10].Value;
-                    int our_offset       = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
-                    int their_offset     = int.Parse (time_zone.Substring (0, 3));
-                    change_set.Timestamp = change_set.Timestamp.AddHours (their_offset * -1);
-                    change_set.Timestamp = change_set.Timestamp.AddHours (our_offset);
+                change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
+                    int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
+                    int.Parse (match.Groups [7].Value), int.Parse (match.Groups [8].Value),
+                    int.Parse (match.Groups [9].Value));
 
-                    string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
+                string time_zone     = match.Groups [10].Value;
+                int our_offset       = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
+                int their_offset     = int.Parse (time_zone.Substring (0, 3));
+                change_set.Timestamp = change_set.Timestamp.AddHours (their_offset * -1);
+                change_set.Timestamp = change_set.Timestamp.AddHours (our_offset);
 
-                    foreach (string entry_line in entry_lines) {
-                        if (entry_line.StartsWith (":")) {
-                            if (entry_line.Contains ("\\177"))
-                                continue;
+                string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
 
-                            string type_letter = entry_line [37].ToString ();
-                            string file_path   = entry_line.Substring (39);
-                            bool change_is_folder = false;
+                // Parse file list. Lines containing file changes start with ":"
+                foreach (string entry_line in entry_lines) {
+                    // Skip lines containing backspace characters
+                    if (!entry_line.StartsWith (":") || entry_line.Contains ("\\177"))
+                        continue;
 
-                            if (file_path.Equals (".sparkleshare"))
-                                continue;
+                    string file_path = entry_line.Substring (39);
 
-                            if (file_path.EndsWith (".empty")) { 
-                                file_path        = file_path.Substring (0, file_path.Length - ".empty".Length);
-                                change_is_folder = true;
-                            }
+                    if (file_path.Equals (".sparkleshare"))
+                        continue;
 
-                            file_path = EnsureSpecialCharacters (file_path);
-                            file_path = file_path.Replace ("\\\"", "\"");
+                    string type_letter    = entry_line [37].ToString ();
+                    bool change_is_folder = false;
 
-                            if (type_letter.Equals ("R")) {
-                                int tab_pos         = entry_line.LastIndexOf ("\t");
-                                file_path           = entry_line.Substring (42, tab_pos - 42);
-                                string to_file_path = entry_line.Substring (tab_pos + 1);
-
-                                file_path    = EnsureSpecialCharacters (file_path);
-                                to_file_path = EnsureSpecialCharacters (to_file_path);
-
-                                file_path = file_path.Replace ("\\\"", "\"");
-                                to_file_path = to_file_path.Replace ("\\\"", "\"");
-
-                                if (file_path.EndsWith (".empty")) {
-                                    file_path = file_path.Substring (0, file_path.Length - 6);
-                                    change_is_folder = true;
-                                }
-
-                                if (to_file_path.EndsWith (".empty")) {
-                                    to_file_path = to_file_path.Substring (0, to_file_path.Length - 6);
-                                    change_is_folder = true;
-                                }
-
-                                change_set.Changes.Add (
-                                    new SparkleChange () {
-                                        Path        = file_path,
-                                        IsFolder    = change_is_folder,
-                                        MovedToPath = to_file_path,
-                                        Timestamp   = change_set.Timestamp,
-                                        Type        = SparkleChangeType.Moved
-                                    }
-                                );
-
-                            } else {
-                                SparkleChangeType change_type = SparkleChangeType.Added;
-
-                                if (type_letter.Equals ("M")) {
-                                    change_type = SparkleChangeType.Edited;
-
-                                } else if (type_letter.Equals ("D")) {
-                                   change_type = SparkleChangeType.Deleted;
-                                }
-
-                                change_set.Changes.Add (
-                                    new SparkleChange () {
-                                        Path      = file_path,
-                                        IsFolder  = change_is_folder,
-                                        Timestamp = change_set.Timestamp,
-                                        Type      = change_type
-                                    }
-                                );
-                            }
-                        }
+                    if (file_path.EndsWith (".empty")) { 
+                        file_path        = file_path.Substring (0, file_path.Length - ".empty".Length);
+                        change_is_folder = true;
                     }
 
-                    if (change_sets.Count > 0 && path == null) {
-                        SparkleChangeSet last_change_set = change_sets [change_sets.Count - 1];
+                    file_path = EnsureSpecialCharacters (file_path);
+                    file_path = file_path.Replace ("\\\"", "\"");
 
-                        if (change_set.Timestamp.Year  == last_change_set.Timestamp.Year &&
-                            change_set.Timestamp.Month == last_change_set.Timestamp.Month &&
-                            change_set.Timestamp.Day   == last_change_set.Timestamp.Day &&
-                            change_set.User.Name.Equals (last_change_set.User.Name)) {
+                    SparkleChange change = new SparkleChange () {
+                        Path      = file_path,
+                        IsFolder  = change_is_folder,
+                        Timestamp = change_set.Timestamp,
+                        Type      = SparkleChangeType.Added
+                    };
 
-                            last_change_set.Changes.AddRange (change_set.Changes);
+                    if (type_letter.Equals ("R")) {
+                        int tab_pos         = entry_line.LastIndexOf ("\t");
+                        file_path           = entry_line.Substring (42, tab_pos - 42);
+                        string to_file_path = entry_line.Substring (tab_pos + 1);
 
-                            if (DateTime.Compare (last_change_set.Timestamp, change_set.Timestamp) < 1) {
-                                last_change_set.FirstTimestamp = last_change_set.Timestamp;
-                                last_change_set.Timestamp      = change_set.Timestamp;
-                                last_change_set.Revision       = change_set.Revision;
+                        file_path    = EnsureSpecialCharacters (file_path);
+                        to_file_path = EnsureSpecialCharacters (to_file_path);
 
-                            } else {
-                                last_change_set.FirstTimestamp = change_set.Timestamp;
-                            }
+                        file_path    = file_path.Replace ("\\\"", "\"");
+                        to_file_path = to_file_path.Replace ("\\\"", "\"");
+
+                        if (file_path.EndsWith (".empty")) {
+                            file_path = file_path.Substring (0, file_path.Length - 6);
+                            change_is_folder = true;
+                        }
+
+                        if (to_file_path.EndsWith (".empty")) {
+                            to_file_path = to_file_path.Substring (0, to_file_path.Length - 6);
+                            change_is_folder = true;
+                        }
+                               
+                        change.Path        = file_path;
+                        change.MovedToPath = to_file_path;
+                        change.Type        = SparkleChangeType.Moved;
+
+                    } else if (type_letter.Equals ("M")) {
+                        change.Type = SparkleChangeType.Edited;
+
+                    } else if (type_letter.Equals ("D")) {
+                        change.Type = SparkleChangeType.Deleted;
+                    }
+
+                    change_set.Changes.Add (change);
+                }
+
+                // Group commits per user, per day
+                if (change_sets.Count > 0 && path == null) {
+                    SparkleChangeSet last_change_set = change_sets [change_sets.Count - 1];
+
+                    if (change_set.Timestamp.Year  == last_change_set.Timestamp.Year &&
+                        change_set.Timestamp.Month == last_change_set.Timestamp.Month &&
+                        change_set.Timestamp.Day   == last_change_set.Timestamp.Day &&
+                        change_set.User.Name.Equals (last_change_set.User.Name)) {
+
+                        last_change_set.Changes.AddRange (change_set.Changes);
+
+                        if (DateTime.Compare (last_change_set.Timestamp, change_set.Timestamp) < 1) {
+                            last_change_set.FirstTimestamp = last_change_set.Timestamp;
+                            last_change_set.Timestamp      = change_set.Timestamp;
+                            last_change_set.Revision       = change_set.Revision;
 
                         } else {
-                            change_sets.Add (change_set);
+                            last_change_set.FirstTimestamp = change_set.Timestamp;
                         }
 
                     } else {
-                        if (path != null) {
-                            List<SparkleChange> changes_to_skip = new List<SparkleChange> ();
-
-                            foreach (SparkleChange change in change_set.Changes) {
-                                if ((change.Type == SparkleChangeType.Deleted || change.Type == SparkleChangeType.Moved)
-                                    && change.Path.Equals (path)) {
-
-                                    changes_to_skip.Add (change);
-                                }
-                            }
-
-                            foreach (SparkleChange change_to_skip in changes_to_skip)
-                                change_set.Changes.Remove (change_to_skip);
-                        }
-                                        
                         change_sets.Add (change_set);
                     }
+
+                } else {
+                    // Don't show removals or moves in the revision list of a file
+                    if (path != null) {
+                        List<SparkleChange> changes_to_skip = new List<SparkleChange> ();
+
+                        foreach (SparkleChange change in change_set.Changes) {
+                            if ((change.Type == SparkleChangeType.Deleted || change.Type == SparkleChangeType.Moved)
+                                && change.Path.Equals (path)) {
+
+                                changes_to_skip.Add (change);
+                            }
+                        }
+
+                        foreach (SparkleChange change_to_skip in changes_to_skip)
+                            change_set.Changes.Remove (change_to_skip);
+                    }
+                                    
+                    change_sets.Add (change_set);
                 }
             }
 
