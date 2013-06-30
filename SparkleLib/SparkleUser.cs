@@ -24,6 +24,8 @@ namespace SparkleLib {
         public readonly string Name;
         public readonly string Email;
 
+        public string AvatarFilePath;
+
         public string PrivateKey;
         public string PrivateKeyFilePath;
 

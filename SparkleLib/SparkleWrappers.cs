@@ -43,12 +43,12 @@ namespace SparkleLib {
 
         public string ToMessage ()
         {
-            string message = "added '{0}'";
+            string message = "added: {0}";
             
             switch (Changes [0].Type) {
-            case SparkleChangeType.Edited:  message = "edited '{0}'"; break;
-            case SparkleChangeType.Deleted: message = "deleted '{0}'"; break;
-            case SparkleChangeType.Moved:   message = "moved '{0}'"; break;
+            case SparkleChangeType.Edited:  message = "edited: {0}"; break;
+            case SparkleChangeType.Deleted: message = "deleted: {0}"; break;
+            case SparkleChangeType.Moved:   message = "moved: {0}"; break;
             }
 
             if (Changes.Count > 0)
