@@ -588,20 +588,9 @@ namespace SparkleShare {
         public void StopFetcher ()
         {
             this.fetcher.Stop ();
-
-            if (Directory.Exists (this.fetcher.TargetFolder)) {
-                try {
-                    Directory.Delete (this.fetcher.TargetFolder, true /* Recursive */ );
-                    SparkleLogger.LogInfo ("Controller", "Deleted '" + this.fetcher.TargetFolder + "'");
-
-                } catch (Exception e) {
-                    SparkleLogger.LogInfo ("Controller", "Failed to delete '" + this.fetcher.TargetFolder + "'", e);
-                }
-            }
-
             this.fetcher.Dispose ();
-            this.fetcher = null;
 
+            this.fetcher = null;
             this.watcher.EnableRaisingEvents = true;
         }
 
