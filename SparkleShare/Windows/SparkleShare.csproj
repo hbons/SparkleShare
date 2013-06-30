@@ -79,6 +79,7 @@
     <Compile Include="SparkleShortcut.cs" />
     <Compile Include="SparkleUI.cs" />
     <Compile Include="..\SparkleAboutController.cs" />
+    <Compile Include="..\SparkleAvatars.cs" />
     <Compile Include="SparkleBubbles.cs" />
     <Compile Include="SparkleAbout.cs" />
     <Compile Include="SparkleController.cs" />
