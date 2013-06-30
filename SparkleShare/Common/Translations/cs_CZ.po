@@ -4,6 +4,7 @@
 # Jiri Slezka <jiri.slezka@slu.cz>, 2011.
 #   <zzanzare@gmail.com>, 2011.
 # zzanzare <zzanzare@gmail.com>, 2011.
+# Martin Vancl <tux.martin@gmail.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
@@ -67,11 +68,11 @@ msgstr ""
 
 #: ../data/plugins/own-server.xml.in.h:2
 msgid "Everything under my control"
-msgstr ""
+msgstr "Vše pod vlastní kontrolou"
 
 #: ../data/plugins/own-server.xml.in.h:3
 msgid "On my own server"
-msgstr ""
+msgstr "Vlastní server"
 
 #: ../SparkleShare/Mac/SparkleStatusIcon.cs:70
 #: ../SparkleShare/Mac/SparkleStatusIcon.cs:88
@@ -99,7 +100,7 @@ msgstr "Něco není synchronizováno"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
 msgid "Copy Web Link"
-msgstr "Copy Web Link"
+msgstr "Kopírovat webový odkaz"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
 msgid "Copy the web address of this file to the clipboard"
@@ -178,11 +179,11 @@ msgstr "O SparkleShare"
 #: ../SparkleShare/SparkleAbout.cs:70
 #, csharp-format
 msgid "A newer version ({0}) is available!"
-msgstr ""
+msgstr "Je dostupná nová verze ({0})!"
 
 #: ../SparkleShare/SparkleAbout.cs:79
 msgid "You are running the latest version."
-msgstr "Provozujete aktuální verzi."
+msgstr "Používáte aktuální verzi."
 
 #: ../SparkleShare/SparkleAbout.cs:88 ../SparkleShare/SparkleAbout.cs:113
 msgid "Checking for updates..."
@@ -259,15 +260,15 @@ msgstr "Další"
 
 #: ../SparkleShare/SparkleSetup.cs:129
 msgid "Where's your project hosted?"
-msgstr ""
+msgstr "Kde je projekt hostován?"
 
 #: ../SparkleShare/SparkleSetup.cs:275
 msgid "Address"
-msgstr ""
+msgstr "Adresa"
 
 #: ../SparkleShare/SparkleSetup.cs:295
 msgid "Remote Path"
-msgstr ""
+msgstr "Vzdálená cesta"
 
 #. Cancel button
 #: ../SparkleShare/SparkleSetup.cs:309 ../SparkleShare/SparkleSetup.cs:345
@@ -282,7 +283,7 @@ msgstr ""
 #: ../SparkleShare/SparkleSetup.cs:335
 #, csharp-format
 msgid "Adding project ‘{0}’…"
-msgstr ""
+msgstr "Přidávám projekt ‘{0}’…"
 
 #: ../SparkleShare/SparkleSetup.cs:336
 msgid "This may take a while."
@@ -299,11 +300,11 @@ msgstr "Dokončit"
 
 #: ../SparkleShare/SparkleSetup.cs:374
 msgid "Something went wrong"
-msgstr ""
+msgstr "Něco je špatně"
 
 #: ../SparkleShare/SparkleSetup.cs:422
 msgid "Try Again…"
-msgstr ""
+msgstr "Zkusit znovu…"
 
 #: ../SparkleShare/SparkleSetup.cs:441
 #, csharp-format
@@ -312,11 +313,11 @@ msgstr "'{0}' byl úspěšně přidán"
 
 #: ../SparkleShare/SparkleSetup.cs:447
 msgid "Project successfully added!"
-msgstr ""
+msgstr "Projekt byl úspěšne přidán!"
 
 #: ../SparkleShare/SparkleSetup.cs:448
 msgid "Access the files from your SparkleShare folder."
-msgstr ""
+msgstr "Zobrazit soubory ve SparkleShare složce."
 
 #. A button that opens the synced folder
 #: ../SparkleShare/SparkleSetup.cs:451
@@ -335,16 +336,16 @@ msgstr ""
 
 #: ../SparkleShare/SparkleSetup.cs:481
 msgid "Skip Tutorial"
-msgstr ""
+msgstr "Přeskočit tutoriál"
 
 #: ../SparkleShare/SparkleSetup.cs:486 ../SparkleShare/SparkleSetup.cs:506
 #: ../SparkleShare/SparkleSetup.cs:524
 msgid "Continue"
-msgstr ""
+msgstr "Pokračovat"
 
 #: ../SparkleShare/SparkleSetup.cs:502
 msgid "Sharing files with others"
-msgstr ""
+msgstr "Sdílet soubory s ostatními"
 
 #: ../SparkleShare/SparkleSetup.cs:503
 msgid ""
@@ -354,7 +355,7 @@ msgstr ""
 
 #: ../SparkleShare/SparkleSetup.cs:520
 msgid "The status icon is here to help"
-msgstr ""
+msgstr "Stavová ikona je tady, aby vám pomohla"
 
 #: ../SparkleShare/SparkleSetup.cs:521
 msgid ""
@@ -364,7 +365,7 @@ msgstr ""
 
 #: ../SparkleShare/SparkleSetup.cs:538
 msgid "Adding projects to SparkleShare"
-msgstr ""
+msgstr "Přidávám projekt do SparkleShare"
 
 #: ../SparkleShare/SparkleSetup.cs:539
 msgid ""
@@ -382,7 +383,7 @@ msgstr ""
 #: ../SparkleShare/SparkleSetup.cs:551
 #: ../SparkleShare/SparkleStatusIcon.cs:238
 msgid "Add Hosted Project…"
-msgstr ""
+msgstr "Přidat hostovaný projekt…"
 
 #: ../SparkleShare/SparkleSetupWindow.cs:44
 msgid "SparkleShare Setup"
@@ -390,11 +391,11 @@ msgstr "Nastavení SparkleShare"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:228
 msgid "No projects yet"
-msgstr ""
+msgstr "Nemáte žádné projekty"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:262
 msgid "Open Recent Events"
-msgstr ""
+msgstr "Otevřít nedávné události"
 
 #: ../SparkleShare/SparkleStatusIcon.cs:282
 msgid "Turn Notifications Off"
