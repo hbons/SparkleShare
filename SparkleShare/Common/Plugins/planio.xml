@@ -3,7 +3,7 @@
   <plugin>
     <info>
         <name>Planio</name>
-        <description>500MB of unlimited free hosted Git repos &amp; project management</description>
+        <description>500MB of unlimited free hosted Git repos and project management</description>
         <icon>planio.png</icon>
         <backend>Git</backend>
         <fingerprint>77:d1:54:d7:33:7e:38:43:40:70:ca:2d:3a:24:05:22</fingerprint>
