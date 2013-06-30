@@ -569,9 +569,12 @@ namespace SparkleShare {
             PreviousUrl     = "";
             PreviousAddress = "";
             PreviousPath    = "";
-            this.fetch_prior_history = false;
 
+            this.fetch_prior_history = false;
+            this.saved_address     = "";
+            this.saved_remote_path = "";
             this.current_page = PageType.None;
+
             WindowIsOpen = false;
             HideWindowEvent ();
         }
