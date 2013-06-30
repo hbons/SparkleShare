@@ -22,7 +22,7 @@ SOURCES =  \
 	../SparkleSetupController.cs \
 	../SparkleStatusIconController.cs \
 	SparkleAbout.cs \
-	SparkleAvatars.cs \
+	../SparkleAvatars.cs \
 	SparkleBubbles.cs \
 	SparkleController.cs \
 	SparkleEventLog.cs \
