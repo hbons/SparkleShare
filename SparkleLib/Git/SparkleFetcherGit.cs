@@ -254,10 +254,8 @@ namespace SparkleLib.Git {
                     return false;
             }
 
-            Process process = new Process () {
-                EnableRaisingEvents = true
-            };
-
+            Process process = new Process ();
+            process.EnableRaisingEvents              = true;
             process.StartInfo.WorkingDirectory       = TargetFolder;
             process.StartInfo.UseShellExecute        = false;
             process.StartInfo.RedirectStandardOutput = true;
@@ -266,6 +264,9 @@ namespace SparkleLib.Git {
             process.StartInfo.FileName  = "openssl";
             process.StartInfo.Arguments = "enc -d -aes-256-cbc -base64 -S " + this.crypto_salt +
                 " -pass pass:\"" + password + "\" -in " + password_check_file_path;
+
+            SparkleLogger.LogInfo ("Cmd | " + System.IO.Path.GetFileName (process.StartInfo.WorkingDirectory),
+                System.IO.Path.GetFileName (process.StartInfo.FileName) + " " + process.StartInfo.Arguments);
 
             process.Start ();
             process.WaitForExit ();
@@ -290,6 +291,16 @@ namespace SparkleLib.Git {
 
             } catch (Exception e) {
                 SparkleLogger.LogInfo ("Fetcher", "Failed to dispose properly", e);
+            }
+
+            if (Directory.Exists (TargetFolder)) {
+                try {
+                    Directory.Delete (TargetFolder, true /* Recursive */ );
+                    SparkleLogger.LogInfo ("Fetcher", "Deleted '" + TargetFolder + "'");
+                    
+                } catch (Exception e) {
+                    SparkleLogger.LogInfo ("Fetcher", "Failed to delete '" + TargetFolder + "'", e);
+                }
             }
         }
 
