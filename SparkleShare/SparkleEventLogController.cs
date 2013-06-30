@@ -368,13 +368,13 @@ namespace SparkleShare {
 
                 if (count == 1)
                     continue;
-                
-                string change_set_avatar = Program.Controller.GetAvatar (change_set.User.Email, 24);
-                
-                if (change_set_avatar != null)
+
+                string change_set_avatar = "file://<!-- $pixmaps-path -->/user-icon-default.png";
+
+                if (Program.Controller.AvatarsEnabled) {
+                    change_set_avatar = SparkleAvatars.GetAvatar (change_set.User.Email, 24, Program.Controller.Config.FullPath);
                     change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
-                else
-                    change_set_avatar = "file://<!-- $pixmaps-path -->/user-icon-default.png";
+                }
                 
                 html += "<tr>" +
                             "<td class='avatar'><img src='" + change_set_avatar + "'></td>" +
@@ -472,12 +472,12 @@ namespace SparkleShare {
                         }
                     }
 
-                    string change_set_avatar = Program.Controller.GetAvatar (change_set.User.Email, 48);
-
-                    if (change_set_avatar != null)
-				       	change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
-                    else
-                        change_set_avatar = "file://<!-- $pixmaps-path -->/user-icon-default.png";
+                    string change_set_avatar = "file://<!-- $pixmaps-path -->/user-icon-default.png";
+                    
+                    if (Program.Controller.AvatarsEnabled) {
+                        change_set_avatar = SparkleAvatars.GetAvatar (change_set.User.Email, 48, Program.Controller.Config.FullPath);
+                        change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
+                    }
 
                     event_entry += "</dl>";
 

@@ -32,7 +32,7 @@ namespace SparkleShare {
         public readonly string WebsiteLinkAddress       = "http://www.sparkleshare.org/";
         public readonly string CreditsLinkAddress       = "http://www.github.com/hbons/SparkleShare/tree/master/legal/AUTHORS";
         public readonly string ReportProblemLinkAddress = "http://www.github.com/hbons/SparkleShare/issues";
-        public readonly string DebugLogLinkAddress      = "file://" + Program.Controller.ConfigPath;
+        public readonly string DebugLogLinkAddress      = "file://" + Program.Controller.Config.LogFilePath;
 
         public string RunningVersion;
 

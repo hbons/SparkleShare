@@ -35,8 +35,7 @@ namespace SparkleShare {
             };
 
             Program.Controller.NotificationRaised += delegate (SparkleChangeSet change_set) {
-                ShowBubble (change_set.User.Name, change_set.ToMessage (),
-                    Program.Controller.GetAvatar (change_set.User.Email, 48));
+                ShowBubble (change_set.User.Name, change_set.ToMessage (), change_set.User.AvatarFilePath);
             };
         }
 

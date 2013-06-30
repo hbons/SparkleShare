@@ -39,7 +39,7 @@ namespace SparkleShare {
                         InformativeText = subtext,
                         DeliveryDate    = DateTime.Now
                     };
-                    
+
                     NSUserNotificationCenter center  = NSUserNotificationCenter.DefaultUserNotificationCenter;
                     center.ShouldPresentNotification = delegate { return true; };
                     center.DidActivateNotification  += delegate { Controller.BubbleClicked (); };

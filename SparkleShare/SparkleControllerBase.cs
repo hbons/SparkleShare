@@ -19,9 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
 using SparkleLib;
@@ -37,7 +34,9 @@ namespace SparkleShare {
             }
         }
 
-        public bool RepositoriesLoaded { get; private set;}
+
+        public SparkleConfig Config { get; private set; }
+        public bool RepositoriesLoaded { get; private set; }
         public string FoldersPath { get; private set; }
 
         public double ProgressPercentage = 0.0;
@@ -78,36 +77,43 @@ namespace SparkleShare {
 
 
         public bool FirstRun {
-            get { return this.config.User.Email.Equals ("Unknown"); }
+            get { return Config.User.Email.Equals ("Unknown"); }
         }
 
         public List<string> Folders {
             get {
-                List<string> folders = this.config.Folders;
+                List<string> folders = Config.Folders;
                 return folders;
             }
         }
 
-        public string ConfigPath {
-            get { return this.config.LogFilePath; }
-        }
-
         public SparkleUser CurrentUser {
-            get { return this.config.User; }
-            set { this.config.User = value; }
+            get { return Config.User; }
+            set { Config.User = value; }
         }
 
         public bool NotificationsEnabled {
             get {
-                string notifications_enabled = this.config.GetConfigOption ("notifications");
+                string notifications_enabled = Config.GetConfigOption ("notifications");
 
                 if (string.IsNullOrEmpty (notifications_enabled)) {
-                    this.config.SetConfigOption ("notifications", bool.TrueString);
+                    Config.SetConfigOption ("notifications", bool.TrueString);
                     return true;
 
                 } else {
                     return notifications_enabled.Equals (bool.TrueString);
                 }
+            }
+        }
+
+        public bool AvatarsEnabled {
+            get {
+                string fetch_avatars_option = Config.GetConfigOption ("fetch_avatars");
+                
+                if (fetch_avatars_option != null && fetch_avatars_option.Equals (bool.FalseString))
+                    return false;
+                
+                return true;
             }
         }
 
@@ -145,12 +151,10 @@ namespace SparkleShare {
         public abstract string EventEntryHTML { get; }
 
 
-        private SparkleConfig config;
         private SparkleFetcherBase fetcher;
         private FileSystemWatcher watcher;
         private Object repo_lock = new Object ();
         private Object check_repos_lock = new Object ();
-        private List<string> skipped_avatars = new List<string> ();
         private List<SparkleRepoBase> repositories = new List<SparkleRepoBase> ();
         private bool lost_folders_path = false;
 
@@ -160,9 +164,9 @@ namespace SparkleShare {
             string app_data_path = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
             string config_path   = Path.Combine (app_data_path, "sparkleshare");
             
-            this.config                 = new SparkleConfig (config_path, "config.xml");
-            SparkleConfig.DefaultConfig = this.config;
-            FoldersPath                 = this.config.FoldersPath;
+            Config                      = new SparkleConfig (config_path, "config.xml");
+            SparkleConfig.DefaultConfig = Config;
+            FoldersPath                 = Config.FoldersPath;
         }
 
 
@@ -181,10 +185,10 @@ namespace SparkleShare {
             }
 
             if (FirstRun) {
-                this.config.SetConfigOption ("notifications", bool.TrueString);
+                Config.SetConfigOption ("notifications", bool.TrueString);
 
             } else {
-                string keys_path = Path.GetDirectoryName (this.config.FullPath);
+                string keys_path = Path.GetDirectoryName (Config.FullPath);
                 string key_file_path = "";
 
                 foreach (string file_path in Directory.GetFiles (keys_path)) {
@@ -281,7 +285,7 @@ namespace SparkleShare {
         
         public void OpenSparkleShareFolder ()
         {
-            OpenFolder (this.config.FoldersPath);
+            OpenFolder (Config.FoldersPath);
         }
         
         
@@ -293,15 +297,15 @@ namespace SparkleShare {
         
         public void ToggleNotifications ()
         {
-            bool notifications_enabled = this.config.GetConfigOption ("notifications").Equals (bool.TrueString);
-            this.config.SetConfigOption ("notifications", (!notifications_enabled).ToString ());
+            bool notifications_enabled = Config.GetConfigOption ("notifications").Equals (bool.TrueString);
+            Config.SetConfigOption ("notifications", (!notifications_enabled).ToString ());
         }
 
         
         private void CheckRepositories ()
         {
             lock (this.check_repos_lock) {
-                string path = this.config.FoldersPath;
+                string path = Config.FoldersPath;
                 
                 // Detect any renames
                 foreach (string folder_path in Directory.GetDirectories (path)) {
@@ -310,7 +314,7 @@ namespace SparkleShare {
                     if (folder_name.Equals (".tmp"))
                         continue;
                     
-                    if (this.config.GetIdentifierForFolder (folder_name) == null) {
+                    if (Config.GetIdentifierForFolder (folder_name) == null) {
                         string identifier_file_path = Path.Combine (folder_path, ".sparkleshare");
                         
                         if (!File.Exists (identifier_file_path))
@@ -318,9 +322,9 @@ namespace SparkleShare {
                         
                         string identifier = File.ReadAllText (identifier_file_path).Trim ();
                         
-                        if (this.config.IdentifierExists (identifier)) {
+                        if (Config.IdentifierExists (identifier)) {
                             RemoveRepository (folder_path);
-                            this.config.RenameFolder (identifier, folder_name);
+                            Config.RenameFolder (identifier, folder_name);
                             
                             string new_folder_path = Path.Combine (path, folder_name);
                             AddRepository (new_folder_path);
@@ -332,11 +336,11 @@ namespace SparkleShare {
                 }
                 
                 // Remove any deleted folders
-                foreach (string folder_name in this.config.Folders) {
+                foreach (string folder_name in Config.Folders) {
                     string folder_path = new SparkleFolder (folder_name).FullPath;
                     
                     if (!Directory.Exists (folder_path)) {
-                        this.config.RemoveFolder (folder_name);
+                        Config.RemoveFolder (folder_name);
                         RemoveRepository (folder_path);
                         
                         SparkleLogger.LogInfo ("Controller", "Removed folder '" + folder_name + "' from config");
@@ -348,9 +352,9 @@ namespace SparkleShare {
                 
                 // Remove any duplicate folders
                 string previous_name = "";
-                foreach (string folder_name in this.config.Folders) {
+                foreach (string folder_name in Config.Folders) {
                     if (!string.IsNullOrEmpty (previous_name) && folder_name.Equals (previous_name))
-                        this.config.RemoveFolder (folder_name);
+                        Config.RemoveFolder (folder_name);
                     else
                         previous_name = folder_name;
                 }
@@ -364,12 +368,12 @@ namespace SparkleShare {
         {
             SparkleRepoBase repo = null;
             string folder_name   = Path.GetFileName (folder_path);
-            string backend       = this.config.GetBackendForFolder (folder_name);
+            string backend       = Config.GetBackendForFolder (folder_name);
 
             try {
                 repo = (SparkleRepoBase) Activator.CreateInstance (
                     Type.GetType ("SparkleLib." + backend + ".SparkleRepo, SparkleLib." + backend),
-                    new object [] { folder_path, this.config });
+                    new object [] { folder_path, Config });
 
             } catch (Exception e) {
                 SparkleLogger.LogInfo ("Controller", "Failed to load backend '" + backend + "' for '" + folder_name + "': ", e);
@@ -418,6 +422,9 @@ namespace SparkleShare {
             };
 
             repo.NewChangeSet += delegate (SparkleChangeSet change_set) {
+                if (AvatarsEnabled)
+                    change_set.User.AvatarFilePath = SparkleAvatars.GetAvatar (change_set.User.Email, 48, Config.FullPath);
+
                 NotificationRaised (change_set);
             };
 
@@ -441,12 +448,6 @@ namespace SparkleShare {
             }
         }
 
-        private void StartupInviteScan ()
-        {
-            foreach (string invite in Directory.GetFiles (FoldersPath, "*.xml")) {
-                HandleInvite (invite);
-            }
-        }
 
         private void OnFolderActivity (object o, FileSystemEventArgs args)
         {
@@ -467,10 +468,19 @@ namespace SparkleShare {
         }
 
 
+        private void StartupInviteScan ()
+        {
+            foreach (string invite in Directory.GetFiles (FoldersPath, "*.xml")) {
+                HandleInvite (invite);
+            }
+        }
+
+
         private void HandleInvite (FileSystemEventArgs args)
         {
             HandleInvite (args.FullPath);
         }
+
 
         private void HandleInvite (string path)
         {
@@ -531,7 +541,7 @@ namespace SparkleShare {
 
         public void StartFetcher (SparkleFetcherInfo info)
         {
-            string tmp_path = this.config.TmpPath;
+            string tmp_path = Config.TmpPath;
 
             if (!Directory.Exists (tmp_path)) {
                 Directory.CreateDirectory (tmp_path);
@@ -623,7 +633,7 @@ namespace SparkleShare {
             canonical_name = canonical_name.Replace ("%20", " ");
 
             bool target_folder_exists = Directory.Exists (
-                Path.Combine (this.config.FoldersPath, canonical_name));
+                Path.Combine (Config.FoldersPath, canonical_name));
 
             // Add a numbered suffix to the name if a folder with the same name
             // already exists. Example: "Folder (2)"
@@ -631,7 +641,7 @@ namespace SparkleShare {
             while (target_folder_exists) {
                 suffix++;
                 target_folder_exists = Directory.Exists (
-                    Path.Combine (this.config.FoldersPath, canonical_name + " (" + suffix + ")"));
+                    Path.Combine (Config.FoldersPath, canonical_name + " (" + suffix + ")"));
             }
 
             string target_folder_name = canonical_name;
@@ -639,7 +649,7 @@ namespace SparkleShare {
             if (suffix > 1)
                 target_folder_name += " (" + suffix + ")";
 
-            string target_folder_path = Path.Combine (this.config.FoldersPath, target_folder_name);
+            string target_folder_path = Path.Combine (Config.FoldersPath, target_folder_name);
 
             try {
                 Directory.Move (this.fetcher.TargetFolder, target_folder_path);
@@ -663,11 +673,11 @@ namespace SparkleShare {
 
             string backend = SparkleFetcherBase.GetBackend (this.fetcher.RemoteUrl.ToString ());
 
-            this.config.AddFolder (target_folder_name, this.fetcher.Identifier,
+            Config.AddFolder (target_folder_name, this.fetcher.Identifier,
                 this.fetcher.RemoteUrl.ToString (), backend);
 
             if (this.fetcher.OriginalFetcherInfo.AnnouncementsUrl != null) {
-                this.config.SetFolderOptionalAttribute (target_folder_name, "announcements_url",
+                Config.SetFolderOptionalAttribute (target_folder_name, "announcements_url",
                     this.fetcher.OriginalFetcherInfo.AnnouncementsUrl);
             }
 
@@ -684,95 +694,12 @@ namespace SparkleShare {
         }
 
 
-        public string GetAvatar (string email, int size)
-        {
-            ServicePointManager.ServerCertificateValidationCallback = GetAvatarValidationCallBack;
-            string fetch_avatars_option = this.config.GetConfigOption ("fetch_avatars");
-
-            if (fetch_avatars_option != null && fetch_avatars_option.Equals (bool.FalseString))
-                return null;
-
-            email = email.ToLower ();
-
-            if (this.skipped_avatars.Contains (email))
-                return null;
-
-            string avatars_path = new string [] { Path.GetDirectoryName (this.config.FullPath),
-                "avatars", size + "x" + size }.Combine ();
-
-            string avatar_file_path;
-
-            try {
-                avatar_file_path = Path.Combine (avatars_path, email.MD5 () + ".png");
-            
-            } catch (InvalidOperationException e) {
-                SparkleLogger.LogInfo ("Controller", "Error fetching avatar for " + email, e);
-                return null;
-            }
-
-            if (File.Exists (avatar_file_path)) {
-                if (new FileInfo (avatar_file_path).CreationTime < DateTime.Now.AddDays (-1))
-                    File.Delete (avatar_file_path);
-                else
-                    return avatar_file_path;
-            }
-
-            WebClient client = new WebClient ();
-            string url =  "https://gravatar.com/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
-
-            try {
-                byte [] buffer = client.DownloadData (url);
-
-                if (buffer.Length > 255) {
-                    if (!Directory.Exists (avatars_path)) {
-                        Directory.CreateDirectory (avatars_path);
-                        SparkleLogger.LogInfo ("Controller", "Created '" + avatars_path + "'");
-                    }
-
-                    File.WriteAllBytes (avatar_file_path, buffer);
-                    SparkleLogger.LogInfo ("Controller", "Fetched " + size + "x" + size + " avatar for " + email);
-
-                    return avatar_file_path;
-
-                } else {
-                    return null;
-                }
-
-            } catch (Exception e) {
-                SparkleLogger.LogInfo ("Controller", "Error fetching avatar for " + email, e);
-                skipped_avatars.Add (email);
-
-                return null;
-            }
-        }
-
-
         public virtual void Quit ()
         {
             foreach (SparkleRepoBase repo in Repositories)
                 repo.Dispose ();
             
             Environment.Exit (0);
-        }
-
-
-        private bool GetAvatarValidationCallBack (Object sender,
-            X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
-        {
-            X509Certificate2 certificate2 = new X509Certificate2 (certificate.GetRawCertData ());
-
-            // On some systems (mostly Linux) we can't assume the needed certificates are
-            // available, so we have to check the certificate's SHA-1 fingerprint manually.
-            //
-            // Obtained from https://www.gravatar.com/ on Aug 18 2012 and expires on Oct 24 2015.
-            string gravatar_cert_fingerprint = "217ACB08C0A1ACC23A21B6ECDE82CD45E14DEC19";
-
-            if (!certificate2.Thumbprint.Equals (gravatar_cert_fingerprint)) {
-                SparkleLogger.LogInfo ("Controller", "Invalid certificate for https://www.gravatar.com/");
-                return false;
-            }
-
-            return true;
         }
 
 
