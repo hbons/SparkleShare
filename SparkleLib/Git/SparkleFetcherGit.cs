@@ -263,7 +263,7 @@ namespace SparkleLib.Git {
 
             process.StartInfo.FileName  = "openssl";
             process.StartInfo.Arguments = "enc -d -aes-256-cbc -base64 -S " + this.crypto_salt +
-                " -pass pass:\"" + password + "\" -in " + password_check_file_path;
+                " -pass pass:\"" + password + "\" -in \"" + password_check_file_path + "\"";
 
             SparkleLogger.LogInfo ("Cmd | " + System.IO.Path.GetFileName (process.StartInfo.WorkingDirectory),
                 System.IO.Path.GetFileName (process.StartInfo.FileName) + " " + process.StartInfo.Arguments);
