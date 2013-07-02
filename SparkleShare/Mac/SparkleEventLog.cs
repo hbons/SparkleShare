@@ -34,6 +34,7 @@ namespace SparkleShare {
 
         private WebView web_view;
         private NSBox background;
+        private NSBox cover;
         private NSPopUpButton popup_button;
         private NSProgressIndicator progress_indicator;
         private NSTextField size_label, size_label_value, history_label, history_label_value;
@@ -74,6 +75,14 @@ namespace SparkleShare {
                     new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
             };
 
+            this.cover = new NSBox () {
+                Frame = new RectangleF (
+                    new PointF (-1, -1),
+                    new SizeF (Frame.Width + 2, this.web_view.Frame.Height + 1)),
+                FillColor = NSColor.White,
+                BorderType = NSBorderType.NoBorder,
+                BoxType = NSBoxType.NSBoxCustom
+            };
 
             this.hidden_close_button = new NSButton () {
                 KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
@@ -196,6 +205,7 @@ namespace SparkleShare {
 
             Controller.UpdateContentEvent += delegate (string html) {
                 Program.Controller.Invoke (() => {
+                    this.cover.RemoveFromSuperview ();
                     this.progress_indicator.Hidden = true;
                     UpdateContent (html);
                 });
@@ -204,6 +214,8 @@ namespace SparkleShare {
             Controller.ContentLoadingEvent += delegate {
                 Program.Controller.Invoke (() => {
                     this.web_view.RemoveFromSuperview ();
+                    // FIXME: Hack to hide that the WebView sometimes doesn't disappear
+                    ContentView.AddSubview (this.cover);
                     this.progress_indicator.Hidden = false;
                     this.progress_indicator.StartAnimation (this);
                 });
@@ -241,6 +253,9 @@ namespace SparkleShare {
         public void Relayout (SizeF new_window_size)
         {
             this.web_view.Frame = new RectangleF (this.web_view.Frame.Location,
+                new SizeF (new_window_size.Width, new_window_size.Height - TitlebarHeight - 39));
+
+            this.cover.Frame = new RectangleF (this.cover.Frame.Location,
                 new SizeF (new_window_size.Width, new_window_size.Height - TitlebarHeight - 39));
 
             this.background.Frame = new RectangleF (this.background.Frame.Location,
