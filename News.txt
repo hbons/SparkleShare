@@ -1,14 +1,16 @@
-1.2.0 for Linux, Mac and Windows (???):
-      
+1.2.0 for Linux, Mac and Windows (??? Jul 2013):
+
       Hylke:
-      - Fixes to the invite feature, now works when SparkleShare 
-        isn't running, by Jo Shields
+      - Fixes to the invite feature, now works when SparkleShare isn't
+        running yet (by Jo Shields)
       - Don't crash, but complain when FIPS is enabled on Windows
       - Fix some interface logic in Add dialog
       - Fix some inaccurate sync state messages in the status icon
       - Fix conflict when running when TortoiseGit is installed
       - Fix blank Add dialog on OS X Snow Leopard
       - Fix crash when user cancels initial project download
+      - Fix Continue button not enabling when entering encryption password
+      - Fix Planio plugin name showing up as Gitorious on Linux
 
 
 1.1.0 for Linux, Mac and Windows (Sun 26 May 2013):
