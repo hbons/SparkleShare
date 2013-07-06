@@ -513,6 +513,7 @@ namespace SparkleLib.Git {
                     return false;
                 
                 } else {
+                    SparkleLogger.LogInfo ("", error_output);
                     SparkleLogger.LogInfo ("Git", Name + " | Conflict detected, trying to get out...");
                     
                     while (Directory.Exists (rebase_apply_path) && HasLocalChanges) {
@@ -584,11 +585,11 @@ namespace SparkleLib.Git {
                     continue;
                 }
 
+                SparkleLogger.LogInfo ("Git", Name + " | Resolving: " + line);
+
                 // Both the local and server version have been modified
                 if (line.StartsWith ("UU") || line.StartsWith ("AA") ||
                     line.StartsWith ("AU") || line.StartsWith ("UA")) {
-
-                    SparkleLogger.LogInfo ("Git", Name + " | Resolving: " + line);
 
                     // Recover local version
                     SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
@@ -615,7 +616,6 @@ namespace SparkleLib.Git {
 
                 // The local version has been modified, but the server version was removed
                 } else if (line.StartsWith ("DU")) {
-                    SparkleLogger.LogInfo ("Git", Name + " | Resolving: " + line);
 
                     // The modified local version is already in the checkout, so it just needs to be added.
                     // We need to specifically mention the file, so we can't reuse the Add () method
@@ -624,8 +624,21 @@ namespace SparkleLib.Git {
 
                     changes_added = true;
                 
-                } else {
+                // The server version has been modified, but the local version was removed
+                } else if (line.StartsWith ("UD")) {
+                    
+                    // Recover server version
+                    SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
+                    git_theirs.StartAndWaitForExit ();
+                    changes_added = true;
+
+                // Server and local versions were removed
+                } else if (line.StartsWith ("DD")) {
                     SparkleLogger.LogInfo ("Git", Name + " | No need to resolve: " + line);
+
+                // New local files
+                } else if (line.StartsWith ("??")) {
+                    changes_added = true;
                 }
             }
 
@@ -693,18 +706,6 @@ namespace SparkleLib.Git {
         }
 
 
-        public override List<SparkleChangeSet> GetChangeSets (string path)
-        {
-            return GetChangeSetsInternal (path);
-        }   
-
-
-        public override List<SparkleChangeSet> GetChangeSets ()
-        {
-            return GetChangeSetsInternal (null);
-        }
-
-
         private bool FindError (string line)
         {
             Error = ErrorStatus.None;
@@ -737,6 +738,16 @@ namespace SparkleLib.Git {
             }
         }
 
+
+        public override List<SparkleChangeSet> GetChangeSets ()
+        {
+            return GetChangeSetsInternal (null);
+        }
+
+        public override List<SparkleChangeSet> GetChangeSets (string path)
+        {
+            return GetChangeSetsInternal (path);
+        }   
 
         private List<SparkleChangeSet> GetChangeSetsInternal (string path)
         {
