@@ -720,7 +720,7 @@ namespace SparkleLib.Git {
                 Error = ErrorStatus.AuthenticationFailed;
                 
             } else if (line.StartsWith ("error: Disk space exceeded") ||
-                       line.Endswith ("No space left on device")) {
+                       line.EndsWith ("No space left on device")) {
                 Error = ErrorStatus.DiskSpaceExceeded;
             
             } else if (line.EndsWith ("does not appear to be a git repository")) {
@@ -836,7 +836,14 @@ namespace SparkleLib.Git {
                         change_is_folder = true;
                     }
 
-                    file_path = EnsureSpecialCharacters (file_path);
+                    try {
+                        file_path = EnsureSpecialCharacters (file_path);
+                        
+                    } catch (Exception e) {
+                        SparkleLogger.LogInfo ("Local", "Error parsing file name '" + file_path + "'", e);
+                        continue;
+                    }
+
                     file_path = file_path.Replace ("\\\"", "\"");
 
                     SparkleChange change = new SparkleChange () {
@@ -851,8 +858,21 @@ namespace SparkleLib.Git {
                         file_path           = entry_line.Substring (42, tab_pos - 42);
                         string to_file_path = entry_line.Substring (tab_pos + 1);
 
-                        file_path    = EnsureSpecialCharacters (file_path);
-                        to_file_path = EnsureSpecialCharacters (to_file_path);
+                        try {
+                            file_path = EnsureSpecialCharacters (file_path);
+                            
+                        } catch (Exception e) {
+                            SparkleLogger.LogInfo ("Local", "Error parsing file name '" + file_path + "'", e);
+                            continue;
+                        }
+
+                        try {
+                            to_file_path = EnsureSpecialCharacters (to_file_path);
+
+                        } catch (Exception e) {
+                            SparkleLogger.LogInfo ("Local", "Error parsing file name '" + to_file_path + "'", e);
+                            continue;
+                        }
 
                         file_path    = file_path.Replace ("\\\"", "\"");
                         to_file_path = to_file_path.Replace ("\\\"", "\"");
