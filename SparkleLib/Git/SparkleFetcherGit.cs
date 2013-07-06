@@ -325,7 +325,7 @@ namespace SparkleLib.Git {
                 "core.autocrlf false", // Don't change file line endings
                 "core.precomposeunicode true", // Use the same Unicode form on all filesystems
                 "core.safecrlf false",
-                "core.exludesfile \"\"",
+                "core.excludesfile \"\"",
                 "core.packedGitLimit 128m", // Some memory limiting options
                 "core.packedGitWindowSize 128m",
                 "pack.deltaCacheSize 128m",
