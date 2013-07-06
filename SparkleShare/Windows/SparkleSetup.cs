@@ -64,7 +64,7 @@ namespace SparkleShare {
                     switch (type) {
                     case PageType.Setup: {
                         Header      = "Welcome to SparkleShare!";
-                        Description  = "First off, what's your name and email?\nThis information is only visible to team members.";
+                        Description  = "First off, what’s your name and email?\n(Visible only to team members)";
                         
                         TextBlock name_label = new TextBlock () {
                             Text = "Full Name:",
@@ -156,7 +156,7 @@ namespace SparkleShare {
                     }
 
                     case PageType.Invite: {
-                        Header      = "You've received an invite!";
+                        Header      = "You’ve received an invite!";
                            Description = "Do you want to add this project to SparkleShare?";
         
                         
@@ -228,7 +228,7 @@ namespace SparkleShare {
                     }
                         
                     case PageType.Add: {
-                        Header = "Where's your project hosted?";
+                        Header = "Where’s your project hosted?";
                         
 
                         ListView list_view = new ListView () {
@@ -437,7 +437,7 @@ namespace SparkleShare {
                         
                     case PageType.Syncing: {
                         Header      = "Adding project ‘" + Controller.SyncingFolder + "’…";
-                        Description = "This may take a while for large projects.\nIsn't it coffee-o'clock?";
+                        Description = "This may take a while for large projects.\nIsn’t it coffee-o’clock?";
 
                         Button finish_button = new Button () {
                             Content   = "Finish",
@@ -494,12 +494,12 @@ namespace SparkleShare {
                         };
 
                         help_block.Inlines.Add (new Bold (new Run (Controller.PreviousUrl)));
-                        help_block.Inlines.Add (" is the address we've compiled. Does this look alright?\n\n");
-                        help_block.Inlines.Add ("Is this computer's Client ID known by the host??");
+                        help_block.Inlines.Add (" is the address we’ve compiled. Does this look alright?\n\n");
+                        help_block.Inlines.Add ("Is this computer’s Client ID known by the host??");
 
                         if (warnings.Length > 0) {
                             bullets_block.Text += "\n\n•";
-                            help_block.Inlines.Add ("\n\nHere's the raw error message:");
+                            help_block.Inlines.Add ("\n\nHere’s the raw error message:");
 
                             foreach (string warning in warnings) {
                                 help_block.Inlines.Add ("\n");
@@ -544,7 +544,7 @@ namespace SparkleShare {
 
                     case PageType.CryptoSetup: {
                         Header      = "Set up file encryption";
-                        Description = "Please a provide a strong password that you don't use elsewhere below:";
+                        Description = "Please a provide a strong password that you don’t use elsewhere.";
 
                         TextBlock password_label = new TextBlock () {
                             Text       = "Password:",
@@ -566,7 +566,7 @@ namespace SparkleShare {
                         };
                         
                         TextBlock info_label = new TextBlock () {
-                            Text         = "This password can't be changed later, and your files can't be recovered if it's forgotten.",
+                            Text         = "This password can’t be changed later, and your files can’t be recovered if it’s forgotten.",
                             TextWrapping = TextWrapping.Wrap,
                             Width        = 315
                         };
@@ -799,7 +799,7 @@ namespace SparkleShare {
                     case PageType.Tutorial: {
                         switch (Controller.TutorialPageNumber) {
                             case 1: {
-                                Header      = "What's happening next?";
+                                Header      = "What’s happening next?";
                                 Description = "SparkleShare creates a special folder on your computer " +
                                     "that will keep track of your projects.";
     
@@ -874,7 +874,7 @@ namespace SparkleShare {
                             case 3: {
                                 Header      = "The status icon helps you";
                                 Description = "It shows the syncing progress, provides easy access to " +
-                                    "your projects and lets you view recent changes.";
+                                    "your projects, and lets you view recent changes.";
     
                                 Button continue_button = new Button () {
                                     Content = "Continue"
@@ -903,8 +903,8 @@ namespace SparkleShare {
                             }
                             
                             case 4: {
-                                Header      = "Here's your unique client ID";
-                                Description = "You'll need it whenever you want to link this computer to a host. " +
+                                Header      = "Here’s your unique Client ID";
+                                Description = "You’ll need it whenever you want to link this computer to a host. " +
                                     "You can also find it in the status icon menu.";
                             
 

@@ -55,7 +55,7 @@ namespace SparkleShare {
         {
             if (type == PageType.Setup) {
                 Header      = "Welcome to SparkleShare!";
-                Description = "First off, what's your name and email?\nThis information is only visible to team members.";
+                Description = "First off, what’s your name and email?\n(Visible only to team members)";
 
                 Table table = new Table (2, 3, true) {
                     RowSpacing    = 6,
@@ -120,7 +120,7 @@ namespace SparkleShare {
             }
 
             if (type == PageType.Add) {
-                Header = "Where's your project hosted?";
+                Header = "Where’s your project hosted?";
 
                 VBox layout_vertical = new VBox (false, 12);
                 HBox layout_fields   = new HBox (true, 12);
@@ -307,7 +307,7 @@ namespace SparkleShare {
             }
 
             if (type == PageType.Invite) {
-                Header      = "You've received an invite!";
+                Header      = "You’ve received an invite!";
                 Description = "Do you want to add this project to SparkleShare?";
 
                 Table table = new Table (2, 3, true) {
@@ -351,7 +351,7 @@ namespace SparkleShare {
 
             if (type == PageType.Syncing) {
                 Header      = String.Format ("Adding project ‘{0}’…", Controller.SyncingFolder);
-                Description = "This may take a while for large projects.\nIsn't it coffee-o'clock?";
+                Description = "This may take a while for large projects.\nIsn’t it coffee-o’clock?";
 
                 ProgressBar progress_bar = new ProgressBar ();
                 progress_bar.Fraction    = Controller.ProgressBarPercentage / 100;
@@ -384,14 +384,14 @@ namespace SparkleShare {
                 Image list_point_three = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
 
                 Label label_one = new Label () {
-                    Markup = "<b>" + Controller.PreviousUrl + "</b> is the address we've compiled. " +
+                    Markup = "<b>" + Controller.PreviousUrl + "</b> is the address we’ve compiled. " +
                     "Does this look alright?",
                     Wrap   = true,
                     Xalign = 0
                 };
 
                 Label label_two = new Label () {
-                    Text   = "Is this computer's Client ID known by the host?",
+                    Text   = "Is this computer’s Client ID known by the host?",
                     Wrap   = true,
                     Xalign = 0
                 };
@@ -415,7 +415,7 @@ namespace SparkleShare {
                         warnings_markup += "\n<b>" + warning + "</b>";
 
                     Label label_three = new Label () {
-                        Markup = "Here's the raw error message:" + warnings_markup,
+                        Markup = "Here’s the raw error message:" + warnings_markup,
                         Wrap   = true,
                         Xalign = 0
                     };
@@ -444,7 +444,7 @@ namespace SparkleShare {
             if (type == PageType.CryptoSetup || type == PageType.CryptoPassword) {
                 if (type == PageType.CryptoSetup) {
                     Header      = "Set up file encryption";
-                    Description = "Please a provide a strong password that you don't use elsewhere below:";
+                    Description = "Please a provide a strong password that you don’t use elsewhere.";
                 
                 } else {
                     Header      = "This project contains encrypted files";
@@ -486,7 +486,7 @@ namespace SparkleShare {
                 Label warning_label = new Label () {
                     Xalign = 0,
                     Wrap   = true,
-                    Text   = "This password can't be changed later, and your files can't be recovered if it's forgotten."
+                    Text   = "This password can’t be changed later, and your files can’t be recovered if it’s forgotten."
                 };
 
                 HBox warning_layout = new HBox (false, 0);
@@ -540,7 +540,7 @@ namespace SparkleShare {
                 
             if (type == PageType.Finished) {
                 Header      = "Your shared project is ready!";
-                Description = "You can find it in your SparkleShare folder";
+                Description = "You can find the files in your SparkleShare folder.";
                 
                 UrgencyHint = true;
 
@@ -580,7 +580,7 @@ namespace SparkleShare {
             if (type == PageType.Tutorial) {
                 switch (Controller.TutorialPageNumber) {
                 case 1: {
-                    Header      = "What's happening next?";
+                    Header      = "What’s happening next?";
                     Description = "SparkleShare creates a special folder on your computer " +
                         "that will keep track of your projects.";
 
@@ -611,7 +611,7 @@ namespace SparkleShare {
                 case 3: {
                     Header      = "The status icon helps you";
                     Description = "It shows the syncing progress, provides easy access to " +
-                        "your projects and let's you view recent changes.";
+                        "your projects, and lets you view recent changes.";
 
                     Button continue_button = new Button ("Continue");
                     continue_button.Clicked += delegate { Controller.TutorialPageCompleted (); };
@@ -621,8 +621,8 @@ namespace SparkleShare {
                 }
 
                 case 4: {
-                    Header      = "Here's your unique client ID";
-                    Description = "You'll need it whenever you want to link this computer to a host. " +
+                    Header      = "Here’s your unique Client ID";
+                    Description = "You’ll need it whenever you want to link this computer to a host. " +
                         "You can also find it in the status icon menu.";
 
                     Button finish_button = new Button ("Finish");                            
