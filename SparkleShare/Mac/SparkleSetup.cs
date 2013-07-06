@@ -73,7 +73,7 @@ namespace SparkleShare {
         {
             if (type == PageType.Setup) {
                 Header      = "Welcome to SparkleShare!";
-                Description = "First off, what's your name and email?\n(visible only to team members)";
+                Description = "First off, what’s your name and email?\n(visible only to team members)";
 
                 FullNameLabel       = new SparkleLabel ("Full Name:", NSTextAlignment.Right);
                 FullNameLabel.Frame = new RectangleF (165, Frame.Height - 234, 160, 17);
@@ -136,7 +136,7 @@ namespace SparkleShare {
             }
 
             if (type == PageType.Invite) {
-                Header      = "You've received an invite!";
+                Header      = "You’ve received an invite!";
                 Description = "Do you want to add this project to SparkleShare?";
 
                 AddressLabel       = new SparkleLabel ("Address:", NSTextAlignment.Right);
@@ -173,7 +173,7 @@ namespace SparkleShare {
             }
 
             if (type == PageType.Add) {
-                Header      = "Where's your project hosted?";
+                Header      = "Where’s your project hosted?";
                 Description = "";
 
                 AddressLabel = new SparkleLabel ("Address:", NSTextAlignment.Left) {
@@ -348,7 +348,7 @@ namespace SparkleShare {
 
             if (type == PageType.Syncing) {
                 Header      = "Adding project ‘" + Controller.SyncingFolder + "’…";
-                Description = "This may take a while for large projects.\nIsn't it coffee-o'clock?";
+                Description = "This may take a while for large projects.\nIsn’t it coffee-o’clock?";
 
                 ProgressIndicator = new NSProgressIndicator () {
                     Frame         = new RectangleF (190, Frame.Height - 200, 640 - 150 - 80, 20),
@@ -415,8 +415,8 @@ namespace SparkleShare {
                     "}" +
                     "</style>" +
                     "<ul>" +
-                    "  <li><b>" + Controller.PreviousUrl + "</b> is the address we've compiled. Does this look alright?</li>" +
-                    "  <li>Is this computer's Client ID known by the host?</li>" +
+                    "  <li><b>" + Controller.PreviousUrl + "</b> is the address we’ve compiled. Does this look alright?</li>" +
+                    "  <li>Is this computer’s Client ID known by the host?</li>" +
                     "</ul>";
 
                 if (warnings.Length > 0) {
@@ -425,7 +425,7 @@ namespace SparkleShare {
                     foreach (string warning in warnings)
                         warnings_markup += "<br><b>" + warning + "</b>";
 
-                    html = html.Replace ("</ul>", "<li>Here's the raw error message: " + warnings_markup + "</li></ul>");
+                    html = html.Replace ("</ul>", "<li>Here’s the raw error message: " + warnings_markup + "</li></ul>");
                 }
 
                 web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
@@ -448,7 +448,7 @@ namespace SparkleShare {
             if (type == PageType.CryptoSetup || type == PageType.CryptoPassword) {
                 if (type == PageType.CryptoSetup) {
                     Header      = "Set up file encryption";
-                    Description = "Please a provide a strong password that you don't use elsewhere below:";
+                    Description = "Please a provide a strong password that you don’t use elsewhere.";
                 
                 } else {
                     Header      = "This project contains encrypted files";
@@ -491,7 +491,7 @@ namespace SparkleShare {
                     Frame = new RectangleF (200, Frame.Height - 320, 24, 24)
                 };
 
-                WarningTextField = new SparkleLabel ("This password can't be changed later, and your files can't be recovered if it's forgotten.", NSTextAlignment.Left) {
+                WarningTextField = new SparkleLabel ("This password can’t be changed later, and your files can’t be recovered if it’s forgotten.", NSTextAlignment.Left) {
                     Frame = new RectangleF (235, Frame.Height - 390, 325, 100),
                 };
 
@@ -615,7 +615,7 @@ namespace SparkleShare {
 
                 switch (Controller.TutorialPageNumber) {
                     case 1: {
-                        Header      = "What's happening next?";
+                        Header      = "What’s happening next?";
                         Description = "SparkleShare creates a special folder on your computer " +
                             "that will keep track of your projects.";
 
@@ -650,7 +650,7 @@ namespace SparkleShare {
                     case 3: {
                         Header      = "The status icon helps you";
                         Description = "It shows the syncing progress, provides easy access to " +
-                            "your projects and let's you view recent changes.";
+                            "your projects, and lets you view recent changes.";
 
                         ContinueButton = new NSButton () { Title = "Continue" };
                         ContinueButton.Activated += delegate { Controller.TutorialPageCompleted (); };
@@ -660,9 +660,9 @@ namespace SparkleShare {
                     }
 
                     case 4: {
-                        Header      = "Here's your unique client ID";
-                        Description = "You'll need it whenever you want to link this computer to a host. " +
-                            " You can also find it in the status icon menu.";
+                        Header      = "Here’s your unique Client ID";
+                        Description = "You’ll need it whenever you want to link this computer to a host. " +
+                            "You can also find it in the status icon menu.";
 
                         LinkCodeTextField = new NSTextField () {
                             StringValue = Program.Controller.CurrentUser.PublicKey,
