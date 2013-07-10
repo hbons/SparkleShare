@@ -229,7 +229,7 @@ namespace SparkleShare {
                     this.restore_revision_info = new RevisionInfo () {
                         Folder   = new SparkleFolder (match.Groups [1].Value),
                         Revision = match.Groups [2].Value,
-                        FilePath = match.Groups [5].Value
+                        FilePath = Uri.UnescapeDataString (match.Groups [5].Value)
                     };
 
                     string file_name = Path.GetFileNameWithoutExtension (this.restore_revision_info.FilePath) +
@@ -257,8 +257,7 @@ namespace SparkleShare {
                 string folder    = url.Replace ("history://", "").Split ("/".ToCharArray ()) [0];
                 string file_path = url.Replace ("history://" + folder + "/", "");
 
-                byte [] file_path_bytes = Encoding.Default.GetBytes (file_path);
-                file_path = Encoding.UTF8.GetString (file_path_bytes);
+                file_path = Uri.UnescapeDataString (file_path);
 
                 foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
                     if (!repo.Name.Equals (folder))
@@ -358,7 +357,7 @@ namespace SparkleShare {
                 html += "Revisions for <b>&ldquo;";
             else
                 html += "No revisions for <b>&ldquo;";
-            
+
             html += Path.GetFileName (file_path) + "&rdquo;</b>";
 			html += "</div><div class='table-wrapper'><table>";
 
