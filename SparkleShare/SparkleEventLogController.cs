@@ -361,23 +361,13 @@ namespace SparkleShare {
             
             html += Path.GetFileName (file_path) + "&rdquo;</b>";
 			html += "</div><div class='table-wrapper'><table>";
-            
-            int count = 0;
+
+            if (change_sets.Count > 0)
+                change_sets.RemoveAt (0);
+
             foreach (SparkleChangeSet change_set in change_sets) {
-                count++;
-
-                if (count == 1)
-                    continue;
-
-                string change_set_avatar = "file://<!-- $pixmaps-path -->/user-icon-default.png";
-
-                if (Program.Controller.AvatarsEnabled) {
-                    change_set_avatar = SparkleAvatars.GetAvatar (change_set.User.Email, 24, Program.Controller.Config.FullPath);
-                    change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
-                }
-                
                 html += "<tr>" +
-                            "<td class='avatar'><img src='" + change_set_avatar + "'></td>" +
+                            "<td class='avatar'><img src='" + GetAvatarFilePath (change_set.User) + "'></td>" +
                             "<td class='name'>" + change_set.User.Name + "</td>" +
                             "<td class='date'>" + 
                                 change_set.Timestamp.ToString ("d MMM yyyy", CultureInfo.InvariantCulture) + 
@@ -390,8 +380,6 @@ namespace SparkleShare {
                                 file_path + "'>Restore&hellip;</a>" +
                             "</td>" +
                         "</tr>";
-                
-                count++;
             }
 
             html += "</table></div>";
@@ -472,13 +460,6 @@ namespace SparkleShare {
                         }
                     }
 
-                    string change_set_avatar = "file://<!-- $pixmaps-path -->/user-icon-default.png";
-                    
-                    if (Program.Controller.AvatarsEnabled) {
-                        change_set_avatar = SparkleAvatars.GetAvatar (change_set.User.Email, 48, Program.Controller.Config.FullPath);
-                        change_set_avatar = "file://" + change_set_avatar.Replace ("\\", "/");
-                    }
-
                     event_entry += "</dl>";
 
                     string timestamp = change_set.Timestamp.ToString ("H:mm");
@@ -492,7 +473,7 @@ namespace SparkleShare {
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.User.Name)
                         .Replace ("<!-- $event-user-email -->", change_set.User.Email)
-                        .Replace ("<!-- $event-avatar-url -->", change_set_avatar)
+                        .Replace ("<!-- $event-avatar-url -->", GetAvatarFilePath (change_set.User))
                         .Replace ("<!-- $event-url -->", change_set.RemoteUrl.ToString ())
                         .Replace ("<!-- $event-revision -->", change_set.Revision);
 
@@ -603,6 +584,20 @@ namespace SparkleShare {
                 path2 = path2.Substring (1);
 
             return result + path2;
+        }
+
+
+        private string GetAvatarFilePath (SparkleUser user)
+        {
+            if (!Program.Controller.AvatarsEnabled)
+                return "<!-- $pixmaps-path -->/user-icon-default.png";
+              
+            string fetched_avatar = SparkleAvatars.GetAvatar (user.Email, 48, Program.Controller.Config.FullPath);
+                
+            if (!string.IsNullOrEmpty (fetched_avatar))
+                return "file://" + fetched_avatar.Replace ("\\", "/");
+            else
+                return "<!-- $pixmaps-path -->/user-icon-default.png";
         }
 
 
