@@ -54,16 +54,25 @@ namespace SparkleLib {
 
         public SparkleConfig (string config_path, string config_file_name)
         {
-            FullPath    = Path.Combine (config_path, config_file_name);
-            LogFilePath = Path.Combine (config_path, "debug_log.txt");
+            FullPath         = Path.Combine (config_path, config_file_name);
+            string logs_path = Path.Combine (config_path, "logs");
 
-            if (File.Exists (LogFilePath)) {
-                try {
-                    File.Delete (LogFilePath);
+            int i = 1;
+            do {
+                LogFilePath = Path.Combine (
+                    logs_path, "debug_log_" + DateTime.Now.ToString ("yyyy-MM-dd") + "." +  i + ".txt");
 
-                } catch (Exception) {
-                    // Don't delete the debug.log if, for example, 'tail' is reading it
-                }
+                i++;
+
+            } while (File.Exists (LogFilePath));
+
+            if (!Directory.Exists (logs_path))
+                Directory.CreateDirectory (logs_path);
+
+            // Delete logs older than a week
+            foreach (FileInfo file in new DirectoryInfo (logs_path).GetFiles ("debug_log*.txt")) {
+                if (file.LastWriteTime < DateTime.Now.AddDays (-7))
+                    file.Delete ();
             }
 
             if (!Directory.Exists (config_path))
