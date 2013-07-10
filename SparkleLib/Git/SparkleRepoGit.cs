@@ -630,6 +630,7 @@ namespace SparkleLib.Git {
                     // Recover server version
                     SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
                     git_theirs.StartAndWaitForExit ();
+
                     changes_added = true;
 
                 // Server and local versions were removed
@@ -638,7 +639,11 @@ namespace SparkleLib.Git {
 
                 // New local files
                 } else if (line.StartsWith ("??")) {
+                    SparkleLogger.LogInfo ("Git", Name + " | Found new file, no need to resolve: " + line);
                     changes_added = true;
+                
+                } else {
+                    SparkleLogger.LogInfo ("Git", Name + " | Don't know what to do with: " + line);
                 }
             }
 
