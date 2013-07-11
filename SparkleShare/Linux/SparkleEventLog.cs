@@ -131,20 +131,21 @@ namespace SparkleShare {
                 });
             };
 			
-			Controller.ShowSaveDialogEvent += delegate (string file_name, string target_folder_path) {
+            Controller.ShowSaveDialogEvent += delegate (string file_name, string target_folder_path) {
                 Application.Invoke (delegate {
                     FileChooserDialog dialog = new FileChooserDialog ("Restore from History",
-						this, FileChooserAction.Save, "Cancel", ResponseType.Cancel, "Save", ResponseType.Ok);
+                        this, FileChooserAction.Save, "Cancel", ResponseType.Cancel, "Save", ResponseType.Ok);
 					
-					dialog.CurrentName = file_name;
-					dialog.SetCurrentFolder (target_folder_path);
-					
-					if (dialog.Run () == (int) ResponseType.Ok)
-						Controller.SaveDialogCompleted (dialog.Filename);
-					else
-						Controller.SaveDialogCancelled ();
-					
-					dialog.Destroy ();
+                    dialog.CurrentName = file_name;
+                    dialog.DoOverwriteConfirmation = true;
+                    dialog.SetCurrentFolder (target_folder_path);
+
+                    if (dialog.Run () == (int) ResponseType.Ok)
+                        Controller.SaveDialogCompleted (dialog.Filename);
+                    else
+                        Controller.SaveDialogCancelled ();
+
+                    dialog.Destroy ();
                 });
             };
 
@@ -154,7 +155,7 @@ namespace SparkleShare {
                 });
             };
 			
-			Controller.UpdateChooserEnablementEvent += delegate (bool enabled) {
+            Controller.UpdateChooserEnablementEvent += delegate (bool enabled) {
                 Application.Invoke (delegate {
                     this.combo_box.Sensitive = enabled;
                 });
