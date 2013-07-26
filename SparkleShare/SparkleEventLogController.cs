@@ -28,7 +28,7 @@ using SparkleLib;
 
 namespace SparkleShare {
 
-    public class SparkleEventLogController {
+    public class SparkleRecentChangesController {
 
         public event Action ShowWindowEvent = delegate { };
         public event Action HideWindowEvent = delegate { };
@@ -144,7 +144,7 @@ namespace SparkleShare {
         }
 
 
-        public SparkleEventLogController ()
+        public SparkleRecentChangesController ()
         {
             Program.Controller.ShowEventLogWindowEvent += delegate {
                 if (!WindowIsOpen) {
