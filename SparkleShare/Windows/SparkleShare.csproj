@@ -41,6 +41,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="System" />
@@ -76,6 +79,10 @@
       <Link>SparkleStatusIconController.cs</Link>
     </Compile>
     <Compile Include="..\SparkleSetupController.cs" />
+    <Compile Include="SparkleRecentChangesWindow.xaml.cs">
+      <DependentUpon>SparkleRecentChangesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SparkleScriptingObject.cs" />
     <Compile Include="SparkleShortcut.cs" />
     <Compile Include="SparkleUI.cs" />
     <Compile Include="..\SparkleAboutController.cs" />
@@ -99,6 +106,7 @@
     </Compile>
     <Compile Include="SparkleNotifyIcon.cs" />
     <Compile Include="SparkleSpinner.cs" />
+    <Compile Include="WPFChromeExtensions.cs" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
@@ -152,6 +160,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\Common\HTML\event-log.html">
       <Link>HTML\event-log.html</Link>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Common\HTML\jquery.js">
       <Link>HTML\jquery.js</Link>
@@ -258,5 +267,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Pixmaps\sparkleshare-folder.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="SparkleRecentChangesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>
