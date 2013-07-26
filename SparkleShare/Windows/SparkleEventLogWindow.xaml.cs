@@ -17,7 +17,7 @@ namespace SparkleShare
     /// </summary>
     public partial class SparkleEventLogWindow : Window
     {
-        public SparkleRecentChangesController Controller = new SparkleRecentChangesController ();
+        public SparkleEventLogController Controller = new SparkleEventLogController ();
 
         [DllImport("urlmon.dll")]
         [PreserveSig]
