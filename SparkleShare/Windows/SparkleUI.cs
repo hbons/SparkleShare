@@ -23,7 +23,7 @@ namespace SparkleShare {
     public class SparkleUI {
 
         public SparkleSetup Setup;
-        public SparkleRecentChangesWindow EventLog;
+        public SparkleEventLogWindow EventLog;
         public SparkleBubbles Bubbles;
         public SparkleStatusIcon StatusIcon;
         public SparkleAbout About;
@@ -35,7 +35,7 @@ namespace SparkleShare {
             // don't have the smooth ease in animation, but appear abruptly. 
             // The ease out animation always seems to work
             Setup      = new SparkleSetup ();
-            EventLog = new SparkleRecentChangesWindow();
+            EventLog = new SparkleEventLogWindow();
             About      = new SparkleAbout ();
             Bubbles    = new SparkleBubbles ();
             StatusIcon = new SparkleStatusIcon ();

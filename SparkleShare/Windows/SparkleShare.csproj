@@ -79,8 +79,8 @@
       <Link>SparkleStatusIconController.cs</Link>
     </Compile>
     <Compile Include="..\SparkleSetupController.cs" />
-    <Compile Include="SparkleRecentChangesWindow.xaml.cs">
-      <DependentUpon>SparkleRecentChangesWindow.xaml</DependentUpon>
+    <Compile Include="SparkleEventLogWindow.xaml.cs">
+      <DependentUpon>SparkleEventLogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SparkleScriptingObject.cs" />
     <Compile Include="SparkleShortcut.cs" />
@@ -90,7 +90,6 @@
     <Compile Include="SparkleBubbles.cs" />
     <Compile Include="SparkleAbout.cs" />
     <Compile Include="SparkleController.cs" />
-    <Compile Include="SparkleEventLog.cs" />
     <Compile Include="SparkleSetup.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
@@ -269,7 +268,7 @@
     <Content Include="Pixmaps\sparkleshare-folder.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="SparkleRecentChangesWindow.xaml">
+    <Page Include="SparkleEventLogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

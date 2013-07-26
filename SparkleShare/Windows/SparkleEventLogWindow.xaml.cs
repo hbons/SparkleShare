@@ -15,9 +15,9 @@ namespace SparkleShare
     /// <summary>
     /// Logics for the recent-changes-window.
     /// </summary>
-    public partial class SparkleRecentChangesWindow : Window
+    public partial class SparkleEventLogWindow : Window
     {
-        public SparkleEventLogController Controller = new SparkleEventLogController ();
+        public SparkleRecentChangesController Controller = new SparkleRecentChangesController ();
 
         [DllImport("urlmon.dll")]
         [PreserveSig]
@@ -25,9 +25,9 @@ namespace SparkleShare
         static extern int CoInternetSetFeatureEnabled(int feature, [MarshalAs(UnmanagedType.U4)] int flags, bool enable);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SparkleRecentChangesWindow"/> class.
+        /// Initializes a new instance of the <see cref="SparkleEventLogWindow"/> class.
         /// </summary>
-        public SparkleRecentChangesWindow ()
+        public SparkleEventLogWindow ()
         {
             this.InitializeComponent ();
 
