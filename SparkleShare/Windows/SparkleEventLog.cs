@@ -47,7 +47,7 @@ namespace SparkleShare {
             Title              = "Recent Changes";
             Height             = 640;
             Width              = 480;
-            ResizeMode         = ResizeMode.NoResize; // TODO
+            ResizeMode         = ResizeMode.CanResize; // TODO
             Background         = new SolidColorBrush (Color.FromRgb (240, 240, 240));    
             AllowsTransparency = false;
             Icon               = SparkleUIHelpers.GetImageSource ("sparkleshare-app", "ico");
@@ -357,14 +357,13 @@ namespace SparkleShare {
 			[MarshalAs (UnmanagedType.U4)] int flags, bool enable);
     }
 
-    
-    [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
-    [ComVisible(true)]
-    public class SparkleScriptingObject {
+    //[PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
+    //[ComVisible(true)]
+    //public class SparkleScriptingObject {
         
-        public void LinkClicked (string url)
-        {
-            Program.UI.EventLog.Controller.LinkClicked (url);
-        }
-    }
+    //    public void LinkClicked (string url)
+    //    {
+    //        Program.UI.EventLog.Controller.LinkClicked (url);
+    //    }
+    //}
 }
