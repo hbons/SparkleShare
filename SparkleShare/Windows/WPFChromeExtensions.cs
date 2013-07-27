@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using System.Runtime.InteropServices;
+using System.Windows;
+
 namespace SparkleShare
 {
-    using System.Runtime.InteropServices;
-    using System.Windows;
-
     /// <summary>
     /// Thanks to Matt Hamilton for this code!
     /// See http://stackoverflow.com/questions/339620/how-do-i-remove-minimize-and-maximize-from-a-resizable-window-in-wpf

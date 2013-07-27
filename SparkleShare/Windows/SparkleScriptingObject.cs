@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using System.Runtime.InteropServices;
+using System.Security.Permissions;
+
 namespace SparkleShare
 {
-    using System.Runtime.InteropServices;
-    using System.Security.Permissions;
-
     [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
     [ComVisible(true)]
     public class SparkleScriptingObject

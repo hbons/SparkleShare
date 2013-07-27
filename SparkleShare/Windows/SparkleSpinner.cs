@@ -20,10 +20,9 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.ComponentModel;
 
 namespace SparkleShare {
-    using System.ComponentModel;
-
     public class SparkleSpinner : Image {
 
         private Timer timer;
