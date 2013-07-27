@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:sparkleShare="clr-namespace:SparkleShare"
         mc:Ignorable="d" 
-             Height="640" SizeToContent="WidthAndHeight" Title="Recent Changes" MinHeight="640" MinWidth="490" MaxWidth="490">
+             Height="640" SizeToContent="WidthAndHeight" Title="Recent Changes" MinHeight="640" MinWidth="490">
     <Grid x:Name="grid_Base" Background="White">
         <Border VerticalAlignment="Top" Height="35" Background="#FFF0F0F0" BorderBrush="#FFDFDFDF" BorderThickness="0,0,0,1">
             <Grid>
@@ -16,18 +16,23 @@
         </Border>
         
         <Grid Margin="0, 35, 0, 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <sparkleShare:SparkleSpinner x:Name="spinner" />
-            <WebBrowser  x:Name="webbrowser" Height="{Binding ElementName=sizingControl, Path=ActualHeight}" />                
+            <WebBrowser  x:Name="webbrowser" Height="{Binding ElementName=sizingControlHeight, Path=ActualHeight}" Width="{Binding ElementName=sizingControlWidth, Path=ActualWidth}" />
 
             <!-- Unfortunatly WPF allways resizes from child to parent. Unfortunatley the webbrowser takes all space it gets -> stupid!
                  To correct this "feature" we use a dummy control in a different column to bind the height to.
                  Compare: http://stackoverflow.com/questions/7300975/prevent-parent-from-being-resized-by-child -->
-            <Rectangle Name="sizingControl" Grid.Column="1" Visibility="Hidden" />
+            <Rectangle Name="sizingControlHeight" Grid.Column="1" Visibility="Hidden" />
+            <Rectangle Name="sizingControlWidth" Grid.Column="0" Grid.Row="1" Visibility="Hidden" />
         </Grid>               
     </Grid>
 </Window>
