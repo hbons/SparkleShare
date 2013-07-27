@@ -22,14 +22,21 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace SparkleShare {
+    using System.ComponentModel;
 
     public class SparkleSpinner : Image {
 
         private Timer timer;
 
+        public SparkleSpinner ()
+            : this (22) {            
+        }
 
-        public SparkleSpinner (int size) : base ()
-        {           
+        public SparkleSpinner (int size) : base () {
+            if (DesignerProperties.GetIsInDesignMode(this)) {
+                return;
+            }
+            
             Width  = size;
             Height = size;
 
