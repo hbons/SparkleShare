@@ -84,6 +84,7 @@ namespace SparkleLib {
             "*.part", "*.crdownload", // Firefox and Chromium temporary download files
             ".*.sw[a-z]", "*.un~", "*.swp", "*.swo", // vi(m)
             ".directory", // KDE
+            "*.kate-swp", // Kate
             ".DS_Store", "Icon\r", "._*", ".Spotlight-V100", ".Trashes", // Mac OS X
             "*(Autosaved).graffle", // Omnigraffle
             "Thumbs.db", "Desktop.ini", // Windows
