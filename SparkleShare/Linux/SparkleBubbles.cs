@@ -35,6 +35,16 @@ namespace SparkleShare {
                     return;
 
                 try {
+                    // Debug information for https://github.com/hbons/SparkleShare/issues/1362
+                    if (title.Length > 255) {
+                        SparkleLogger.LogInfo ("Notification", "Long string detected, truncating 'title'");
+                        title = title.Substring (0, 255) + "...";
+                    
+                    } else if (subtext.Length > 255) {
+                        SparkleLogger.LogInfo ("Notification", "Long string detected, truncating 'subtext'");
+                        title = title.Substring (0, 255) + "...";
+                    }
+
                     Notification notification = new Notification () {
                         Summary = title,
                         Body    = subtext,
