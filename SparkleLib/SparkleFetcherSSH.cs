@@ -16,11 +16,12 @@ namespace SparkleLib {
 
         public override bool Fetch ()
         {
-            if (RemoteUrl.Host.EndsWith(".onion")) {
+            if (RemoteUrl.Host.EndsWith (".onion")) {
                 // Tor has special domain names called ".onion addresses".  They can only be
                 // resolved by using a proxy via tor. While the rest of the openssh suite
                 // fully supports proxying, ssh-keyscan does not, so we can't use it for .onion
                 SparkleLogger.LogInfo ("Auth", "using tor .onion address skipping ssh-keyscan");
+
             } else if (!RemoteUrl.Scheme.StartsWith ("http")) {
                 string host_key = FetchHostKey ();
                 
