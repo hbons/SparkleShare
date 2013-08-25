@@ -29,8 +29,11 @@ namespace SparkleLib.Git {
 
         private SparkleGit git;
         private bool use_git_bin;
-
         private string cached_salt;
+
+        private Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
+        private Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
+
 
         private string crypto_salt {
             get {
@@ -123,7 +126,6 @@ namespace SparkleLib.Git {
             this.git.Start ();
 
             double percentage = 1.0;
-            Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
 
             DateTime last_change     = DateTime.Now;
             TimeSpan change_interval = new TimeSpan (0, 0, 0, 1);
@@ -131,19 +133,42 @@ namespace SparkleLib.Git {
             try {
                 while (!this.git.StandardError.EndOfStream) {
                     string line = this.git.StandardError.ReadLine ();
-                    Match match = progress_regex.Match (line);
+                    Match match = this.progress_regex.Match (line);
                     
                     double number = 0.0;
+                    double speed  = 0.0; 
                     if (match.Success) {
-                        number = double.Parse (match.Groups [1].Value, new CultureInfo ("en-US"));
+                        try {
+                            number = double.Parse (match.Groups [1].Value, new CultureInfo ("en-US"));
+                            
+                        } catch (FormatException) {
+                            SparkleLogger.LogInfo ("Git", "Error parsing progress: \"" + match.Groups [1] + "\"");
+                        }
                         
-                        // The cloning progress consists of two stages: the "Compressing 
-                        // objects" stage which we count as 20% of the total progress, and 
-                        // the "Receiving objects" stage which we count as the last 80%
-                        if (line.Contains ("|"))
-                            number = (number / 100 * 80 + 20); // "Receiving objects" stage
-                        else
-                            number = (number / 100 * 20); // "Compressing objects" stage
+                        // The pushing progress consists of two stages: the "Compressing
+                        // objects" stage which we count as 20% of the total progress, and
+                        // the "Writing objects" stage which we count as the last 80%
+                        if (line.Contains ("Compressing")) {
+                            // "Compressing objects" stage
+                            number = (number / 100 * 20);
+                            
+                        } else {
+                            // "Writing objects" stage
+                            number = (number / 100 * 80 + 20);
+                            Match speed_match = this.speed_regex.Match (line);
+                            
+                            if (speed_match.Success) {
+                                try {
+                                    speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo ("en-US")) * 1024;
+
+                                } catch (FormatException) {
+                                    SparkleLogger.LogInfo ("Git", "Error parsing speed: \"" + speed_match.Groups [1] + "\"");
+                                }
+                                
+                                if (speed_match.Groups [2].Value.Equals ("M"))
+                                    speed = speed * 1024;
+                            }    
+                        }
 
                     } else {
                         SparkleLogger.LogInfo ("Fetcher", line);
@@ -166,7 +191,7 @@ namespace SparkleLib.Git {
                         percentage = number;
 
                         if (DateTime.Compare (last_change, DateTime.Now.Subtract (change_interval)) < 0) {
-                            base.OnProgressChanged (percentage);
+                            base.OnProgressChanged (percentage, speed);
                             last_change = DateTime.Now;
                         }
                     }
@@ -187,10 +212,10 @@ namespace SparkleLib.Git {
                         break;
 
                     Thread.Sleep (500);
-                    base.OnProgressChanged (percentage);
+                    base.OnProgressChanged (percentage, 0);
                 }
 
-                base.OnProgressChanged (100);
+                base.OnProgressChanged (100, 0);
 
                 InstallConfiguration ();
                 InstallExcludeRules ();

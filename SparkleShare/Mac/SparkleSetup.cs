@@ -37,7 +37,7 @@ namespace SparkleShare {
 
         private NSTextField FullNameTextField, FullNameLabel, EmailLabel, EmailTextField,
         LinkCodeTextField, AddressTextField, AddressLabel, AddressHelpLabel, PathTextField, PathLabel,
-        PathHelpLabel, PasswordTextField, VisiblePasswordTextField, PasswordLabel, WarningTextField;
+        PathHelpLabel, ProgressLabel, PasswordTextField, VisiblePasswordTextField, PasswordLabel, WarningTextField;
 
         private NSButton StartupCheckButton, HistoryCheckButton, ShowPasswordCheckButton;
         private NSProgressIndicator ProgressIndicator;
@@ -368,16 +368,22 @@ namespace SparkleShare {
                     Enabled = false
                 };
 
+                ProgressLabel       = new SparkleLabel ("", NSTextAlignment.Right);
+                ProgressLabel.Frame = new RectangleF (Frame.Width - 40 - 75, 185, 75, 25);
 
-                Controller.UpdateProgressBarEvent += delegate (double percentage) {
+
+                Controller.UpdateProgressBarEvent += delegate (double percentage, string speed) {
                     Program.Controller.Invoke (() => {
                         ProgressIndicator.DoubleValue = percentage;
+                        ProgressLabel.StringValue     = speed;
                     });
                 };
+
 
                 CancelButton.Activated += delegate { Controller.SyncingCancelled (); };
 
 
+                ContentView.AddSubview (ProgressLabel);
                 ContentView.AddSubview (ProgressIndicator);
 
                 Buttons.Add (FinishButton);
