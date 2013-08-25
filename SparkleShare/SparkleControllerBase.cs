@@ -57,7 +57,7 @@ namespace SparkleShare {
         public delegate void FolderFetchErrorHandler (string remote_url, string [] errors);
         
         public event FolderFetchingHandler FolderFetching = delegate { };
-        public delegate void FolderFetchingHandler (double percentage);
+        public delegate void FolderFetchingHandler (double percentage, double speed);
 
 
         public event Action FolderListChanged = delegate { };
@@ -433,6 +433,7 @@ namespace SparkleShare {
             };
 
             this.repositories.Add (repo);
+            this.repositories.Sort ((x, y) => string.Compare (x.Name, y.Name));
             repo.Initialize ();
         }
 
@@ -587,8 +588,8 @@ namespace SparkleShare {
                 StopFetcher ();
             };
             
-            this.fetcher.ProgressChanged += delegate (double percentage) {
-                FolderFetching (percentage);
+            this.fetcher.ProgressChanged += delegate (double percentage, double speed) {
+                FolderFetching (percentage, speed);
             };
 
             this.fetcher.Start ();

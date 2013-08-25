@@ -44,7 +44,7 @@ namespace SparkleLib {
         public delegate void FinishedEventHandler (bool repo_is_encrypted, bool repo_is_empty, string [] warnings);
 
         public event ProgressChangedEventHandler ProgressChanged = delegate { };
-        public delegate void ProgressChangedEventHandler (double percentage);
+        public delegate void ProgressChangedEventHandler (double percentage, double speed);
 
 
         public abstract bool Fetch ();
@@ -52,6 +52,9 @@ namespace SparkleLib {
         public abstract bool IsFetchedRepoEmpty { get; }
         public abstract bool IsFetchedRepoPasswordCorrect (string password);
         public abstract void EnableFetchedRepoCrypto (string password);
+
+        public double ProgressPercentage { get; private set; }
+        public double ProgressSpeed { get; private set; }
 
         public Uri RemoteUrl { get; protected set; }
         public string RequiredFingerprint { get; protected set; }
@@ -232,8 +235,8 @@ namespace SparkleLib {
         }
 
 
-        protected void OnProgressChanged (double percentage) {
-            ProgressChanged (percentage);
+        protected void OnProgressChanged (double percentage, double speed) {
+            ProgressChanged (percentage, speed);
         }
 
 
