@@ -456,7 +456,7 @@ namespace SparkleShare {
 
                         TextBlock progress_label = new TextBlock () {
                             Width = 414,
-                            Text = "Starting...",
+                            Text = "Preparing to fetch files…",
                             TextAlignment = TextAlignment.Right
                         };
 
