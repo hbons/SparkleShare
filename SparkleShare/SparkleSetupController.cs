@@ -416,7 +416,7 @@ namespace SparkleShare {
             if (speed == 0.0)
                 UpdateProgressBarEvent (ProgressBarPercentage, "");
             else
-                UpdateProgressBarEvent (ProgressBarPercentage, speed.ToSize () + "/s");
+                UpdateProgressBarEvent (ProgressBarPercentage, "Fetching files… " + speed.ToSize () + "/s");
         }
 
 

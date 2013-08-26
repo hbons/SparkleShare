@@ -368,8 +368,8 @@ namespace SparkleShare {
                     Enabled = false
                 };
 
-                ProgressLabel       = new SparkleLabel ("", NSTextAlignment.Right);
-                ProgressLabel.Frame = new RectangleF (Frame.Width - 40 - 75, 185, 75, 25);
+                ProgressLabel       = new SparkleLabel ("Preparing to fetch files…", NSTextAlignment.Right);
+                ProgressLabel.Frame = new RectangleF (Frame.Width - 40 - 250, 185, 250, 25);
 
 
                 Controller.UpdateProgressBarEvent += delegate (double percentage, string speed) {
