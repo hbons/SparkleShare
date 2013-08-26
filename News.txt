@@ -1,4 +1,4 @@
-1.2.0 for Linux, Mac and Windows (??? Jul 2013):
+1.2.0 for Linux, Mac and Windows (??? Aug 2013):
 
       Hylke:
       - Fixes to the invite feature, now works when SparkleShare isn't
@@ -11,6 +11,7 @@
       - Fix crash when user cancels initial project download
       - Fix Continue button not enabling when entering encryption password
       - Fix Planio plugin name showing up as Gitorious on Linux
+      - Show download speed on initial project add
 
 
 1.1.0 for Linux, Mac and Windows (Sun 26 May 2013):
