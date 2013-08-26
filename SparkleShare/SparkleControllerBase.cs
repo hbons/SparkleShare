@@ -161,6 +161,7 @@ namespace SparkleShare {
 
         public SparkleControllerBase ()
         {
+
             string app_data_path = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
             string config_path   = Path.Combine (app_data_path, "sparkleshare");
             
@@ -172,11 +173,13 @@ namespace SparkleShare {
 
         public virtual void Initialize ()
         {
+            SparkleLogger.LogInfo ("Environment", "SparkleShare version: " + SparkleLib.SparkleBackend.Version +
+                ", Operating system: " + SparkleLib.SparkleBackend.Platform + " (" + Environment.OSVersion + ")");
+
             SparklePlugin.PluginsPath = PluginsPath;
             InstallProtocolHandler ();
 
             try {
-                // Create the SparkleShare folder and add it to the bookmarks
                 if (CreateSparkleShareFolder ())
                     AddToBookmarks ();
 
