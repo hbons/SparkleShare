@@ -115,7 +115,7 @@ namespace SparkleLib {
 
                 user_name = Environment.UserName;
                 if (string.IsNullOrEmpty (user_name))
-                    user_name = "";
+                    user_name = "Unknown";
                 else
                     user_name = user_name.TrimEnd (",".ToCharArray ());
 
@@ -123,9 +123,7 @@ namespace SparkleLib {
                 user_name = Environment.UserName;
             }
 
-            if (string.IsNullOrEmpty (user_name))
-                user_name = "Unknown";
-
+            
             string n = Environment.NewLine;
             File.WriteAllText (FullPath,
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + n +
