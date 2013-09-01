@@ -39,8 +39,8 @@ namespace SparkleShare {
             About      = new SparkleAbout ();
             Bubbles    = new SparkleBubbles ();
             StatusIcon = new SparkleStatusIcon ();
-            
-            Program.Controller.UIHasLoaded ();
+
+            Program.Controller.UIHasLoaded();
         }
 
         

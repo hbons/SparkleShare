@@ -242,7 +242,7 @@ namespace SparkleShare {
             }
 
             if (FirstRun) {
-                ShowSetupWindow (PageType.Setup);
+                ShowSetupWindow(PageType.Setup);
 
                 new Thread (() => {
                     string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
@@ -264,6 +264,8 @@ namespace SparkleShare {
                     UpdateState ();
 
                 }).Start ();
+
+                ShowSetupWindow(PageType.AlreadyRunning);
             }
         }
 

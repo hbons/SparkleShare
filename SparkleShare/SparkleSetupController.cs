@@ -28,6 +28,7 @@ namespace SparkleShare {
     public enum PageType {
         None,
         Setup,
+        AlreadyRunning,
         Add,
         Invite,
         Syncing,

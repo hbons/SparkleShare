@@ -61,7 +61,12 @@ namespace SparkleShare {
             // Only allow one instance of SparkleShare (on Windows)
             if (!program_mutex.WaitOne (0, false)) {
                 Console.WriteLine ("SparkleShare is already running.");
-                Environment.Exit (-1);
+
+                Controller = new SparkleController ();
+                Controller.Initialize ();
+
+                UI = new SparkleUI ();
+                UI.Run ();
             }
 
             try {
