@@ -26,12 +26,13 @@ namespace SparkleLib {
 
         public static string Combine (this string [] parts)
         {
-            string new_path = "";
-
+            StringBuilder new_path = new StringBuilder();
+            
             foreach (string part in parts)
-                new_path = Path.Combine (new_path, part);
-
-            return new_path;
+                new_path.Append(part + "\\"");
+                
+            new_path = new_path.Remove(new_path.Length - 1,1);
+            return new_path.ToString();
         }
 
         
