@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+ <id type="desktop">sparkleshare.desktop</id>
+ <licence>CC0</licence>
+ <name>SparkleShare</name>
+ <summary>Easy file sharing based on git repositories</summary>
+ <description>
+  <p>
+  Easy file sharing based on git repositories. A special folder is setup and directories/files placed within are placed in a git-based version control system and synchronized elsewhere.
+  </p>
+  <p>SparkleShare creates a special folder on your computer. You can add remotely hosted folders (or "projects") to this folder. These projects will be automatically kept in sync with both the host and all of your peers when someone adds, removes or edits a file.</p>
+ </description>
+ <url type="homepage">http://sparkleshare.org</url>
+</application>
