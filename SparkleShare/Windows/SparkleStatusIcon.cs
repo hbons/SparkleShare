@@ -150,9 +150,17 @@ namespace SparkleShare {
                 Margin    = new Thickness (6, 0, 0, 0),
                 IsChecked = Program.Controller.NotificationsEnabled
             };
+
+            CheckBox isPaused_check_box = new CheckBox() {
+                Margin = new Thickness(6, 0, 0, 0),
+                IsChecked = Program.Controller.IsPaused
+            };
             
             SparkleMenuItem notify_item = new SparkleMenuItem () { Header = "Notifications" };
             notify_item.Icon = notify_check_box;
+
+            SparkleMenuItem is_paused_item = new SparkleMenuItem() { Header = "Paused" };
+            is_paused_item.Icon = isPaused_check_box;
 
             SparkleMenuItem about_item = new SparkleMenuItem () { Header = "About SparkleShare" };
             this.exit_item = new SparkleMenuItem () { Header = "Exit" };
@@ -171,6 +179,18 @@ namespace SparkleShare {
             notify_item.Click += delegate {
                 Program.Controller.ToggleNotifications ();
                 notify_check_box.IsChecked = Program.Controller.NotificationsEnabled;
+            };
+
+            isPaused_check_box.Click += delegate {
+                this.context_menu.IsOpen = false;
+                Program.Controller.IsPaused = !Program.Controller.IsPaused;
+                isPaused_check_box.IsChecked = Program.Controller.IsPaused;
+            };
+
+            is_paused_item.Click += delegate {
+                this.context_menu.IsOpen = false;
+                Program.Controller.IsPaused = !Program.Controller.IsPaused;
+                isPaused_check_box.IsChecked = Program.Controller.IsPaused;
             };
             
             this.exit_item.Click += delegate {
@@ -232,6 +252,8 @@ namespace SparkleShare {
             folder_item.Items.Add (add_item);
             folder_item.Items.Add (new Separator ());
             folder_item.Items.Add (notify_item);
+            folder_item.Items.Add (new Separator ());
+            folder_item.Items.Add(is_paused_item);
             folder_item.Items.Add (new Separator ());
             folder_item.Items.Add (link_code_item);
             folder_item.Items.Add (new Separator ());

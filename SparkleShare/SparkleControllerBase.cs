@@ -43,6 +43,18 @@ namespace SparkleShare {
         public double ProgressSpeedUp    = 0.0;
         public double ProgressSpeedDown  = 0.0;
 
+        private bool is_paused;
+        public bool IsPaused
+        {
+            get { return is_paused; }
+            set
+            {
+                is_paused = value;
+                IsPausedChangedEvent (is_paused);
+            }
+        }
+        public event IsPausedChangedEventHandler IsPausedChangedEvent = delegate {};
+        public delegate void IsPausedChangedEventHandler (bool is_paused);
 
         public event ShowSetupWindowEventHandler ShowSetupWindowEvent = delegate { };
         public delegate void ShowSetupWindowEventHandler (PageType page_type);
@@ -383,6 +395,9 @@ namespace SparkleShare {
             repo.ChangesDetected += delegate {
                 UpdateState ();
             };
+
+            IsPausedChangedEvent += repo.ChangePauseState;
+            IsPausedChangedEvent (IsPaused);
 
             repo.SyncStatusChanged += delegate (SyncStatus status) {
                 if (status == SyncStatus.Idle) {

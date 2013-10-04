@@ -63,6 +63,7 @@ namespace SparkleLib {
 
 
         public static bool UseCustomWatcher = false;
+        public bool IsPaused { get; set; }
 
 
         public event SyncStatusChangedEventHandler SyncStatusChanged = delegate { };
@@ -140,6 +141,11 @@ namespace SparkleLib {
             public static readonly TimeSpan Long  = new TimeSpan (0, 0, 15, 0);
         }
 
+        public void ChangePauseState (bool is_paused)
+        {
+
+            this.IsPaused = is_paused;
+        }
 
         public SparkleRepoBase (string path, SparkleConfig config)
         {
@@ -222,6 +228,10 @@ namespace SparkleLib {
 
         public void OnFileActivity (FileSystemEventArgs args)
         {
+
+            if (IsPaused) 
+                return;
+
             if (IsBuffering || this.is_syncing)
                 return;
 
@@ -286,7 +296,7 @@ namespace SparkleLib {
                     }
 
                 } else {
-                    Thread.Sleep (500);
+                    Thread.Sleep (1000);
                 }
 
             } while (IsBuffering);
