@@ -453,11 +453,21 @@ namespace SparkleShare {
                             Height = 15,
                             Value  = Controller.ProgressBarPercentage
                         };
-                        
-                        
+
+                        TextBlock progress_label = new TextBlock () {
+                            Width = 414,
+                            Text = "Preparing to fetch files…",
+                            TextAlignment = TextAlignment.Right
+                        };
+
                         ContentCanvas.Children.Add (progress_bar);
+                        ContentCanvas.Children.Add (progress_label);
+
                         Canvas.SetLeft (progress_bar, 185);
                         Canvas.SetTop (progress_bar, 150);
+
+                        Canvas.SetLeft (progress_label, 185);
+                        Canvas.SetTop (progress_label, 165);
                         
                         TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                         
@@ -465,10 +475,11 @@ namespace SparkleShare {
                         Buttons.Add(finish_button);
                                                    
                          
-                        Controller.UpdateProgressBarEvent += delegate (double percentage) {
+                        Controller.UpdateProgressBarEvent += delegate (double percentage, string speed) {
                             Dispatcher.BeginInvoke ((Action) delegate {
                                 progress_bar.Value = percentage;    
                                 TaskbarItemInfo.ProgressValue = percentage / 100;
+                                progress_label.Text = speed;
                             });
                         };
     

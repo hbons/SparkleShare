@@ -57,7 +57,7 @@ namespace SparkleShare {
         public delegate void FolderFetchErrorHandler (string remote_url, string [] errors);
         
         public event FolderFetchingHandler FolderFetching = delegate { };
-        public delegate void FolderFetchingHandler (double percentage);
+        public delegate void FolderFetchingHandler (double percentage, double speed);
 
 
         public event Action FolderListChanged = delegate { };
@@ -161,6 +161,7 @@ namespace SparkleShare {
 
         public SparkleControllerBase ()
         {
+
             string app_data_path = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
             string config_path   = Path.Combine (app_data_path, "sparkleshare");
             
@@ -172,11 +173,13 @@ namespace SparkleShare {
 
         public virtual void Initialize ()
         {
+            SparkleLogger.LogInfo ("Environment", "SparkleShare version: " + SparkleLib.SparkleBackend.Version +
+                ", Operating system: " + SparkleLib.SparkleBackend.Platform + " (" + Environment.OSVersion + ")");
+
             SparklePlugin.PluginsPath = PluginsPath;
             InstallProtocolHandler ();
 
             try {
-                // Create the SparkleShare folder and add it to the bookmarks
                 if (CreateSparkleShareFolder ())
                     AddToBookmarks ();
 
@@ -433,6 +436,7 @@ namespace SparkleShare {
             };
 
             this.repositories.Add (repo);
+            this.repositories.Sort ((x, y) => string.Compare (x.Name, y.Name));
             repo.Initialize ();
         }
 
@@ -587,8 +591,8 @@ namespace SparkleShare {
                 StopFetcher ();
             };
             
-            this.fetcher.ProgressChanged += delegate (double percentage) {
-                FolderFetching (percentage);
+            this.fetcher.ProgressChanged += delegate (double percentage, double speed) {
+                FolderFetching (percentage, speed);
             };
 
             this.fetcher.Start ();

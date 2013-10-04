@@ -60,11 +60,11 @@ namespace SparkleLib {
         public static string ToSize (this double byte_count)
         {
             if (byte_count >= 1099511627776)
-                return String.Format ("{0:##.##} ᴛʙ", Math.Round (byte_count / 1099511627776, 1));
+                return String.Format ("{0:##.##} ᴛʙ", Math.Round (byte_count / 1099511627776, 2));
             else if (byte_count >= 1073741824)
                 return String.Format ("{0:##.##} ɢʙ", Math.Round (byte_count / 1073741824, 1));
             else if (byte_count >= 1048576)
-                return String.Format ("{0:##.##} ᴍʙ", Math.Round (byte_count / 1048576, 0));
+                return String.Format ("{0:##.##} ᴍʙ", Math.Round (byte_count / 1048576, 1));
             else if (byte_count >= 1024)
                 return String.Format ("{0:##.##} ᴋʙ", Math.Round (byte_count / 1024, 0));
             else
