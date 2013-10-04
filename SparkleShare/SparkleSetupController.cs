@@ -53,7 +53,7 @@ namespace SparkleShare {
         public delegate void ChangePageEventHandler (PageType page, string [] warnings);
         
         public event UpdateProgressBarEventHandler UpdateProgressBarEvent = delegate { };
-        public delegate void UpdateProgressBarEventHandler (double percentage);
+        public delegate void UpdateProgressBarEventHandler (double percentage, string speed);
 
         public event UpdateSetupContinueButtonEventHandler UpdateSetupContinueButtonEvent = delegate { };
         public delegate void UpdateSetupContinueButtonEventHandler (bool button_enabled);
@@ -409,10 +409,14 @@ namespace SparkleShare {
             Program.Controller.FolderFetching   -= SyncingPageFetchingDelegate;
         }
 
-        private void SyncingPageFetchingDelegate (double percentage)
+        private void SyncingPageFetchingDelegate (double percentage, double speed)
         {
             ProgressBarPercentage = percentage;
-            UpdateProgressBarEvent (ProgressBarPercentage);
+
+            if (speed == 0.0)
+                UpdateProgressBarEvent (ProgressBarPercentage, "");
+            else
+                UpdateProgressBarEvent (ProgressBarPercentage, "Fetching files… " + speed.ToSize () + "/s");
         }
 
 

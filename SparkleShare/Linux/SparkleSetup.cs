@@ -360,7 +360,8 @@ namespace SparkleShare {
                 Button finish_button = new Button ("Finish") { Sensitive = false };
                 
 
-                Controller.UpdateProgressBarEvent += delegate (double percentage) {
+                Controller.UpdateProgressBarEvent += delegate (double percentage, string speed) {
+                    // TODO: Add label to show download speed
                     Application.Invoke (delegate { progress_bar.Fraction = percentage / 100; });
                 };
                 
