@@ -143,18 +143,29 @@ namespace SparkleLib {
 
         public void ChangePauseState (bool is_paused)
         {
-            if (is_paused != IsPaused)
+            if (is_paused != this.IsPaused)
             {
                 SparkleLogger.LogInfo("Local", Name + " | State changed to: IsPaused: " + is_paused);
                 this.IsPaused = is_paused;
 
-                if (!is_paused)
+                if (!this.IsPaused)
                 {
-                    SparkleLogger.LogInfo("Local", Name + " | Am now awake, checking for changes...");
+                    SparkleLogger.LogInfo ("Local", Name + " | Am now awake, checking for changes...");
+
+                    if (!UseCustomWatcher)
+                        this.watcher.Enable ();
+
                     OnElapsedEventHandler (this, null);
                 }
+                else
+                {
+                    SparkleLogger.LogInfo("Local", Name + " | Am now sleeping...");
 
-                remote_timer.Enabled = !is_paused;
+                    if (!UseCustomWatcher)
+                        this.watcher.Disable ();
+                }
+
+                this.remote_timer.Enabled = !this.IsPaused;
             }
         }
 
@@ -244,10 +255,6 @@ namespace SparkleLib {
 
         public void OnFileActivity (FileSystemEventArgs args)
         {
-
-            if (IsPaused) 
-                return;
-
             if (IsBuffering || this.is_syncing)
                 return;
 
@@ -513,7 +520,7 @@ namespace SparkleLib {
             if (!announcement.FolderIdentifier.Equals (identifier))
                 return;
                 
-            if (!announcement.Message.Equals (CurrentRevision)) {
+            if (!announcement.Message.Equals (CurrentRevision) && !IsPaused) {
                 while (this.is_syncing)
                     Thread.Sleep (100);
 
