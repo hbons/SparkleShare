@@ -143,8 +143,19 @@ namespace SparkleLib {
 
         public void ChangePauseState (bool is_paused)
         {
+            if (is_paused != IsPaused)
+            {
+                SparkleLogger.LogInfo("Local", Name + " | State changed to: IsPaused: " + is_paused);
+                this.IsPaused = is_paused;
 
-            this.IsPaused = is_paused;
+                if (!is_paused)
+                {
+                    SparkleLogger.LogInfo("Local", Name + " | Am now awake, checking for changes...");
+                    OnElapsedEventHandler (this, null);
+                }
+
+                remote_timer.Enabled = !is_paused;
+            }
         }
 
         public SparkleRepoBase (string path, SparkleConfig config)
@@ -169,35 +180,40 @@ namespace SparkleLib {
 
             new Thread (() => CreateListener ()).Start ();
 
-            this.remote_timer.Elapsed += delegate {
-                if (this.is_syncing || IsBuffering)
-                    return;
+            this.remote_timer.Elapsed += OnElapsedEventHandler;
+        }
 
-                int time_comparison = DateTime.Compare (this.last_poll, DateTime.Now.Subtract (this.poll_interval));
+        private void OnElapsedEventHandler (object sender, Timers.ElapsedEventArgs e)
+        {
+            if (this.is_syncing || IsBuffering)
+                return;
 
-                if (time_comparison < 0) {
-                    if (HasUnsyncedChanges && !this.is_syncing)
-                        SyncUpBase ();
+            int time_comparison = DateTime.Compare (this.last_poll, DateTime.Now.Subtract (this.poll_interval));
 
-                    this.last_poll = DateTime.Now;
-
-                    if (HasRemoteChanges && !this.is_syncing)
-                        SyncDownBase ();
-
-                    if (this.listener.IsConnected)
-                        this.poll_interval = PollInterval.Long;
-                }
-
-                // In the unlikely case that we haven't synced up our
-                // changes or the server was down, sync up again
-                if (HasUnsyncedChanges && !this.is_syncing && Error == ErrorStatus.None)
+            if (time_comparison < 0)
+            {
+                if (HasUnsyncedChanges && !this.is_syncing)
                     SyncUpBase ();
 
-                if (Status != SyncStatus.Idle && Status != SyncStatus.Error) {
-                    Status = SyncStatus.Idle;
-                    SyncStatusChanged (Status);
-                }
-            };
+                this.last_poll = DateTime.Now;
+
+                if (HasRemoteChanges && !this.is_syncing)
+                    SyncDownBase ();
+
+                if (this.listener.IsConnected)
+                    this.poll_interval = PollInterval.Long;
+            }
+
+            // In the unlikely case that we haven't synced up our
+            // changes or the server was down, sync up again
+            if (HasUnsyncedChanges && !this.is_syncing && Error == ErrorStatus.None)
+                SyncUpBase ();
+
+            if (Status != SyncStatus.Idle && Status != SyncStatus.Error)
+            {
+                Status = SyncStatus.Idle;
+                SyncStatusChanged (Status);
+            }
         }
 
 
