@@ -44,10 +44,11 @@ namespace SparkleShare {
 
         public SparkleEventLog () : base ("")
         {
-            SetSizeRequest (480, (int) (Gdk.Screen.Default.Height * 0.8));
+            Gdk.Rectangle monitor_0_rect = Gdk.Screen.Default.GetMonitorGeometry(0);
+            SetDefaultSize (480, (int) (monitor_0_rect.Height * 0.8));
 
-            int x = (int) (Gdk.Screen.Default.Width * 0.61);
-            int y = (int) (Gdk.Screen.Default.Height * 0.5 - (HeightRequest * 0.5));
+            int x = (int) (monitor_0_rect.Width * 0.61);
+            int y = (int) (monitor_0_rect.Height * 0.5 - (HeightRequest * 0.5));
             
             Move (x, y);
 
