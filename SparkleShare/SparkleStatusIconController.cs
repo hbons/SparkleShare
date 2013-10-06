@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Timers = System.Timers;
 
 using SparkleLib;
 
@@ -195,6 +196,19 @@ namespace SparkleShare {
                 UpdateStatusItemEvent (StateText);
                 UpdateMenuEvent (CurrentState);
             };
+
+
+            // FIXME: Hack to work around a race condition causing
+            // the icon to not always show the right state
+            Timers.Timer timer = new Timers.Timer () { Interval = 30 * 1000 };
+
+            timer.Elapsed += delegate {
+                UpdateIconEvent (CurrentState);
+                UpdateStatusItemEvent (StateText);
+                UpdateMenuEvent (CurrentState);
+            };
+
+            timer.Start ();
         }
 
 
