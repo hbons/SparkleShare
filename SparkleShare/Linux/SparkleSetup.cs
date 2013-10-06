@@ -359,10 +359,17 @@ namespace SparkleShare {
                 Button cancel_button = new Button () { Label = "Cancel" };
                 Button finish_button = new Button ("Finish") { Sensitive = false };
                 
+                Label progress_label = new Label ("Preparing to fetch files…") {
+                    Justify = Justification.Right,
+                    Xalign  = 1
+                };
+                
 
                 Controller.UpdateProgressBarEvent += delegate (double percentage, string speed) {
-                    // TODO: Add label to show download speed
-                    Application.Invoke (delegate { progress_bar.Fraction = percentage / 100; });
+                    Application.Invoke (delegate {
+                        progress_bar.Fraction = percentage / 100;
+                        progress_label.Text   = speed;
+                    });
                 };
                 
                 cancel_button.Clicked += delegate { Controller.SyncingCancelled (); };
@@ -370,6 +377,7 @@ namespace SparkleShare {
 
                 VBox bar_wrapper = new VBox (false, 0);
                 bar_wrapper.PackStart (progress_bar, false, false, 21);
+                bar_wrapper.PackStart (progress_label, false, true, 0);
 
                 Add (bar_wrapper);
                 AddButton (cancel_button);
