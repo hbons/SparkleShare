@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=SparkleShare
+Comment=Easy file sharing based on git repositories
 Exec=sparkleshare start
 Icon=sparkleshare
 Terminal=false
