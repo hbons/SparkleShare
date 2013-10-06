@@ -467,7 +467,7 @@ namespace SparkleShare {
                         Canvas.SetTop (progress_bar, 150);
 
                         Canvas.SetLeft (progress_label, 185);
-                        Canvas.SetTop (progress_label, 165);
+                        Canvas.SetTop (progress_label, 175);
                         
                         TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                         
