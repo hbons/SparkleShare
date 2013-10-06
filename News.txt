@@ -1,4 +1,4 @@
-1.2.0 for Linux, Mac and Windows (??? Aug 2013):
+1.2.0 for Linux, Mac and Windows (Sun 6 Oct 2013):
 
       Hylke:
       - Fixes to the invite feature, now works when SparkleShare isn't
