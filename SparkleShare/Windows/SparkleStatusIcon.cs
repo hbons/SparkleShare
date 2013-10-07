@@ -351,7 +351,6 @@ namespace SparkleShare {
             header_panel.Children.Add(header_label);
 
             this.Header = header_panel;
-            this.Items.Add (new Label ());
         }
 
         public event RoutedEventHandler OpenClicked;
