@@ -23,10 +23,6 @@ if ENABLE_TESTS
     ENABLE_TESTS_FLAG = "-define:ENABLE_TESTS"
 endif
 
-if ENABLE_ATK
-    ENABLE_ATK_FLAG = "-define:ENABLE_ATK"
-endif
-
 FILTERED_LINK = $(shell echo "$(LINK)" | $(UNIQUE_FILTER_PIPE))
 DEP_LINK = $(shell echo "$(LINK)" | $(UNIQUE_FILTER_PIPE) | sed s,-r:,,g | grep '$(top_builddir)/bin/')
 
