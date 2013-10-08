@@ -21,7 +21,7 @@ using System.Threading;
 
 using Gtk;
 using Mono.Unix;
-using WebKit;
+// using WebKit;
 
 using IO = System.IO;
 
@@ -38,7 +38,7 @@ namespace SparkleShare {
         private HBox combo_box_wrapper;
         private EventBox content_wrapper;
         private ScrolledWindow scrolled_window;
-        private WebView web_view;
+//        private WebView web_view;
         private SparkleSpinner spinner;
 
 
@@ -90,19 +90,20 @@ namespace SparkleShare {
             this.content_wrapper = new EventBox ();
             this.scrolled_window = new ScrolledWindow ();
 
-            Gdk.Color white = new Gdk.Color();
-            Gdk.Color.Parse ("white", ref white);
+            // TODO: check
+            CssProvider css_provider= new CssProvider ();
+            css_provider.LoadFromData ("GtkWindow { background-color: #ffffff; }");
+            StyleContext.AddProvider (css_provider, 800);
 
-            this.content_wrapper.ModifyBg (StateType.Normal, white);
-
+/*
             this.web_view = new WebView () {
                 Editable = false
             };
 
 
             this.web_view.NavigationRequested += WebViewNavigationRequested;
-
-            this.scrolled_window.Add (this.web_view);
+*/
+            this.scrolled_window.Add (new Button ("WebView"));
             this.content_wrapper.Add (this.spinner);
 
             this.spinner.Start ();
@@ -118,7 +119,7 @@ namespace SparkleShare {
 
             Controller.HideWindowEvent += delegate {
                 Application.Invoke (delegate {
-                    HideAll ();
+                    Hide ();
                     
                     if (this.content_wrapper.Child != null)
                         this.content_wrapper.Remove (this.content_wrapper.Child);
@@ -190,7 +191,7 @@ namespace SparkleShare {
             };
         }
         
-        
+/*        
         private void WebViewNavigationRequested (object o, WebKit.NavigationRequestedArgs args) {
             Controller.LinkClicked (args.Request.Uri);
 
@@ -198,7 +199,7 @@ namespace SparkleShare {
             if (!args.Request.Uri.Equals ("file:"))
                 args.RetVal = 1;
         }
-
+*/
 
         public void UpdateChooser (string [] folders)
         {
@@ -235,7 +236,7 @@ namespace SparkleShare {
                 row++;
             }
 
-            this.combo_box.RowSeparatorFunc = delegate (TreeModel model, TreeIter iter) {
+            this.combo_box.RowSeparatorFunc = delegate (ITreeModel model, TreeIter iter) {
                 string item = (string) this.combo_box.Model.GetValue (iter, 0);
                 return (item == "---");
             };
@@ -266,16 +267,16 @@ namespace SparkleShare {
             string pixmaps_path = IO.Path.Combine (SparkleUI.AssetsPath, "pixmaps");
             string icons_path   = new string [] {SparkleUI.AssetsPath, "icons", "hicolor", "12x12", "status"}.Combine ();
 
-            html = html.Replace ("<!-- $body-font-size -->", (double) (Style.FontDescription.Size / 1024 + 3) + "px");
-            html = html.Replace ("<!-- $day-entry-header-font-size -->", (Style.FontDescription.Size / 1024 + 3) + "px");
-            html = html.Replace ("<!-- $a-color -->", "#0085cf");
             html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
-            html = html.Replace ("<!-- $body-font-family -->", "\"" + Style.FontDescription.Family + "\"");
-            html = html.Replace ("<!-- $body-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Normal)));
-            html = html.Replace ("<!-- $body-background-color -->", SparkleUIHelpers.GdkColorToHex (new TreeView ().Style.Base (StateType.Normal)));
-            html = html.Replace ("<!-- $day-entry-header-background-color -->", SparkleUIHelpers.GdkColorToHex (Style.Background (StateType.Normal)));
-            html = html.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
-            html = html.Replace ("<!-- $small-color -->", SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive)));
+            html = html.Replace ("<!-- $a-color -->", "#0085cf");
+            html = html.Replace ("<!-- $body-background-color -->", SparkleUIHelpers.RGBAToHex (new TreeView ().StyleContext.GetBackgroundColor (StateFlags.Normal)));
+            html = html.Replace ("<!-- $body-color -->", SparkleUIHelpers.RGBAToHex (StyleContext.GetColor (StateFlags.Normal)));
+            html = html.Replace ("<!-- $body-font-family -->", "\"" + StyleContext.GetFont (StateFlags.Normal).Family + "\"");
+            html = html.Replace ("<!-- $body-font-size -->", (double) (StyleContext.GetFont (StateFlags.Normal).Size / 1024 + 3) + "px");
+            html = html.Replace ("<!-- $day-entry-header-font-size -->", (StyleContext.GetFont (StateFlags.Normal).Size / 1024 + 3) + "px");
+            html = html.Replace ("<!-- $day-entry-header-background-color -->", SparkleUIHelpers.RGBAToHex (StyleContext.GetBackgroundColor (StateFlags.Normal)));
+            html = html.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.RGBAToHex (StyleContext.GetColor (StateFlags.Insensitive)));
+            html = html.Replace ("<!-- $small-color -->", SparkleUIHelpers.RGBAToHex (StyleContext.GetColor (StateFlags.Insensitive)));
             html = html.Replace ("<!-- $small-font-size -->", "85%");
             html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
 			html = html.Replace ("<!-- $document-added-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-added.png"));
@@ -284,11 +285,11 @@ namespace SparkleShare {
             html = html.Replace ("<!-- $document-moved-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-moved.png"));
                     
             this.spinner.Stop ();
-
+/*
             this.web_view.NavigationRequested -= WebViewNavigationRequested;
             this.web_view.LoadHtmlString (html, "file://");
             this.web_view.NavigationRequested += WebViewNavigationRequested;
-
+*/
             this.content_wrapper.Remove (this.content_wrapper.Child);
             this.content_wrapper.Add (this.scrolled_window);
             this.content_wrapper.ShowAll ();
