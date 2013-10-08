@@ -98,6 +98,8 @@ if test "$OSNAME" = "Linux" ; then
 							 enable_appindicator="no")
 	fi
 
+        enable_appindicator="no"
+
 	if test x$enable_appindicator = xyes ; then
 			PKG_CHECK_EXISTS([appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED],,
 							 AC_MSG_ERROR([appindicator-sharp-0.1 is not installed]))
