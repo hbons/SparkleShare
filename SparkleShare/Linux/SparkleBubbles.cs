@@ -18,7 +18,7 @@
 using System;
 
 using Gtk;
-using Notifications;
+//using Notifications;
 using SparkleLib;
 
 namespace SparkleShare {
@@ -29,22 +29,12 @@ namespace SparkleShare {
 
 
         public SparkleBubbles ()
-        {
+        {/*
             Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
                 if (!Program.Controller.NotificationsEnabled)
                     return;
 
                 try {
-                    // Debug information for https://github.com/hbons/SparkleShare/issues/1362
-                    if (title.Length > 255) {
-                        SparkleLogger.LogInfo ("Notification", "Long string detected, truncating 'title'");
-                        title = title.Substring (0, 255) + "...";
-                    
-                    } else if (subtext.Length > 255) {
-                        SparkleLogger.LogInfo ("Notification", "Long string detected, truncating 'subtext'");
-                        title = title.Substring (0, 255) + "...";
-                    }
-
                     Notification notification = new Notification () {
                         Summary = title,
                         Body    = subtext,
@@ -67,7 +57,7 @@ namespace SparkleShare {
                 } catch (Exception e) {
                     SparkleLogger.LogInfo ("Notification", "Error showing notification: ", e);
                 }
-            };
+            };*/
         }
     }
 }
