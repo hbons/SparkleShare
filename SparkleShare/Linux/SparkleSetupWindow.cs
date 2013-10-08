@@ -57,13 +57,14 @@ namespace SparkleShare {
                 args.RetVal = true;
             };
 
-            SecondaryTextColor = SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive));
+            Gdk.Color color = SparkleUIHelpers.RGBAToColor (StyleContext.GetColor (StateFlags.Insensitive));
+            SecondaryTextColor = SparkleUIHelpers.ColorToHex (color);
                         
             SecondaryTextColorSelected =
-                SparkleUIHelpers.GdkColorToHex (
+                SparkleUIHelpers.ColorToHex (
                     MixColors (
-                        new TreeView ().Style.Foreground (StateType.Selected),
-                        new TreeView ().Style.Background (StateType.Selected),
+                        new TreeView ().StyleContext.GetColor (StateFlags.Selected),
+                        new TreeView ().StyleContext.GetBackgroundColor (StateFlags.Selected),
                         0.15
                     )
                 );
@@ -95,17 +96,10 @@ namespace SparkleShare {
                 VBox.PackStart (Wrapper, true, true, 0);
                 VBox.PackStart (layout_horizontal, false, false, 15);
 
-                EventBox box = new EventBox ();
-                Gdk.Color bg_color = new Gdk.Color ();
-                Gdk.Color.Parse ("#000", ref bg_color);
-                box.ModifyBg (StateType.Normal, bg_color);
-
                 Image side_splash = SparkleUIHelpers.GetImage ("side-splash.png");
                 side_splash.Yalign = 1;
 
-            box.Add (side_splash);
-
-            HBox.PackStart (box, false, false, 0);
+            HBox.PackStart (side_splash, false, false, 0);
             HBox.PackStart (VBox, true, true, 30);
 
             base.Add (HBox);
@@ -197,7 +191,7 @@ namespace SparkleShare {
         }
         
         
-        private Gdk.Color MixColors (Gdk.Color first_color, Gdk.Color second_color, double ratio)
+        private Gdk.Color MixColors (Gdk.RGBA first_color, Gdk.RGBA second_color, double ratio)
         {
             return new Gdk.Color (
                 Convert.ToByte ((255 * (Math.Min (65535, first_color.Red * (1.0 - ratio) +

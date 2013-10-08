@@ -60,12 +60,27 @@ namespace SparkleShare {
 
         // Converts a Gdk RGB color to a hex value.
         // Example: from "rgb:0,0,0" to "#000000"
-        public static string GdkColorToHex (Gdk.Color color)
+        public static string ColorToHex (Gdk.Color color)
         {
             return String.Format ("#{0:X2}{1:X2}{2:X2}",
                 (int) Math.Truncate (color.Red   / 256.00),
                 (int) Math.Truncate (color.Green / 256.00),
                 (int) Math.Truncate (color.Blue  / 256.00));
+        }
+        
+        
+        public static string RGBAToHex (Gdk.RGBA rgba)
+        {
+            return ColorToHex (RGBAToColor (rgba));
+        }
+        
+        
+        public static Gdk.Color RGBAToColor (Gdk.RGBA rgba) {
+            return new Gdk.Color () {
+                Red   = (ushort) (rgba.Red * 65535),
+                Green = (ushort) (rgba.Green * 65535),
+                Blue  = (ushort)(rgba.Blue * 65535)
+            };
         }
     }
 }

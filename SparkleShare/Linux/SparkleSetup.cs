@@ -29,9 +29,10 @@ namespace SparkleShare {
 
 
         public SparkleSetup () : base ()
-        {
+        {var about = new SparkleAbout ();
+        about.ShowAll();
             Controller.HideWindowEvent += delegate {
-                Application.Invoke (delegate { HideAll (); });
+                Application.Invoke (delegate { Hide (); });
             };
 
             Controller.ShowWindowEvent += delegate {
@@ -55,7 +56,7 @@ namespace SparkleShare {
         {
             if (type == PageType.Setup) {
                 Header      = "Welcome to SparkleShare!";
-                Description = "First off, what’s your name and email?\n(Visible only to team members)";
+                Description = "First off, what’s your name and email?\n(visible only to team members)";
 
                 Table table = new Table (2, 3, true) {
                     RowSpacing    = 6,
@@ -216,7 +217,7 @@ namespace SparkleShare {
                     // TODO: Scroll to selected row when using arrow keys
                 };
 
-                tree.Model.Foreach (new TreeModelForeachFunc (delegate (TreeModel model,
+                tree.Model.Foreach (new TreeModelForeachFunc (delegate (ITreeModel model,
                     TreePath path, TreeIter iter) {
 
                     string address;
@@ -272,8 +273,8 @@ namespace SparkleShare {
                 layout_path.PackStart (path_entry, false, false, 0);
                 layout_path.PackStart (path_example, false, false, 0);
 
-                layout_fields.PackStart (layout_address);
-                layout_fields.PackStart (layout_path);
+                layout_fields.PackStart (layout_address, false, false, 0);
+                layout_fields.PackStart (layout_path, false, false, 0);
 
                 layout_vertical.PackStart (new Label (""), false, false, 0);
                 layout_vertical.PackStart (scrolled_window, true, true, 0);
@@ -679,7 +680,7 @@ namespace SparkleShare {
 
     
         private void RenderServiceColumn (TreeViewColumn column, CellRenderer cell,
-            TreeModel model, TreeIter iter)
+            ITreeModel model, TreeIter iter)
         {
             string markup           = (string) model.GetValue (iter, 1);
             TreeSelection selection = (column.TreeView as TreeView).Selection;
@@ -704,7 +705,7 @@ namespace SparkleShare {
             {
                 get {
                     TreeIter iter;
-                    TreeModel model;
+                    ITreeModel model;
 
                     Selection.GetSelected (out model, out iter);
                     return int.Parse (model.GetPath (iter).ToString ());
