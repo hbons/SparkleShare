@@ -39,7 +39,8 @@ namespace SparkleShare {
         private EventBox content_wrapper;
         private ScrolledWindow scrolled_window;
 //        private WebView web_view;
-        private SparkleSpinner spinner;
+        private VBox spinner_wrapper;
+        private Spinner spinner;
 
 
         public SparkleEventLog () : base ("")
@@ -86,26 +87,28 @@ namespace SparkleShare {
             layout_sizes.Add (this.history_label);
 
             VBox layout_vertical = new VBox (false, 0);
-            this.spinner         = new SparkleSpinner (22);
+            this.spinner         = new Spinner ();
+            this.spinner_wrapper = new VBox ();
             this.content_wrapper = new EventBox ();
             this.scrolled_window = new ScrolledWindow ();
 
             this.content_wrapper.OverrideBackgroundColor (StateFlags.Normal,
                 new Gdk.RGBA () { Red = 1, Green = 1, Blue=1, Alpha = 1 });
 
-/*
-            this.web_view = new WebView () {
-                Editable = false
-            };
+//          this.web_view = new WebView () { Editable = false };
+//          this.web_view.NavigationRequested += WebViewNavigationRequested;
 
-
-            this.web_view.NavigationRequested += WebViewNavigationRequested;
-*/
-//            this.scrolled_window.Add (this.web_view);
+//          this.scrolled_window.Add (this.web_view);
             this.scrolled_window.AddWithViewport (new Button ("WebView"));
-            this.content_wrapper.Add (this.spinner);
-
+            
+            this.spinner_wrapper = new VBox (false, 0);
+            this.spinner_wrapper.PackStart (new Label(""), true, true, 0);
+            this.spinner_wrapper.PackStart (this.spinner, false, false, 0);
+            this.spinner_wrapper.PackStart (new Label(""), true, true, 0);            
+            this.spinner.SetSizeRequest (24, 24);
             this.spinner.Start ();
+
+            this.content_wrapper.Add (this.spinner_wrapper);
 
             this.layout_horizontal = new HBox (true, 0);
             this.layout_horizontal.PackStart (layout_sizes, true, true, 12);
@@ -157,15 +160,11 @@ namespace SparkleShare {
             };
 			
             Controller.UpdateChooserEnablementEvent += delegate (bool enabled) {
-                Application.Invoke (delegate {
-                    this.combo_box.Sensitive = enabled;
-                });
+                Application.Invoke (delegate { this.combo_box.Sensitive = enabled; });
             };
 
             Controller.UpdateContentEvent += delegate (string html) {
-                 Application.Invoke (delegate {
-                    UpdateContent (html);
-                });
+                 Application.Invoke (delegate { UpdateContent (html); });
             };
 
             Controller.ContentLoadingEvent += delegate {
@@ -173,7 +172,7 @@ namespace SparkleShare {
                     if (this.content_wrapper.Child != null)
                         this.content_wrapper.Remove (this.content_wrapper.Child);
 
-                    this.content_wrapper.Add (this.spinner);
+                    this.content_wrapper.Add (this.spinner_wrapper);
                     this.spinner.Start ();
                     this.content_wrapper.ShowAll ();
                 });
