@@ -90,10 +90,8 @@ namespace SparkleShare {
             this.content_wrapper = new EventBox ();
             this.scrolled_window = new ScrolledWindow ();
 
-            // TODO: check
-            CssProvider css_provider= new CssProvider ();
-            css_provider.LoadFromData ("GtkWindow { background-color: #ffffff; }");
-            StyleContext.AddProvider (css_provider, 800);
+            this.content_wrapper.OverrideBackgroundColor (StateFlags.Normal,
+                new Gdk.RGBA () { Red = 1, Green = 1, Blue=1, Alpha = 1 });
 
 /*
             this.web_view = new WebView () {
