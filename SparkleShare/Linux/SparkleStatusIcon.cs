@@ -19,7 +19,7 @@ using System;
 
 using Gtk;
 #if HAVE_APP_INDICATOR
-using AppIndicator;
+using AppIndicator3;
 #endif
 
 namespace SparkleShare {
@@ -34,7 +34,7 @@ namespace SparkleShare {
         private MenuItem state_item;
 
         #if HAVE_APP_INDICATOR
-        private ApplicationIndicator indicator;
+        private Indicator indicator;
         #else
         private StatusIcon status_icon;
         #endif
@@ -43,9 +43,9 @@ namespace SparkleShare {
         public SparkleStatusIcon ()
         {
             #if HAVE_APP_INDICATOR
-            this.indicator = new ApplicationIndicator ("sparkleshare", "sparkleshare", Category.ApplicationStatus);
+            this.indicator = new Indicator ("sparkleshare", "sparkleshare", (int) IndicatorCategory.ApplicationStatus);
             this.indicator.IconName = "process-syncing-idle";
-            this.indicator.Status   = Status.Active;
+            this.indicator.Status   = (int) IndicatorStatus.Active;
             #else
 			this.status_icon          = new StatusIcon ();
             this.status_icon.IconName = "sparkleshare";
@@ -103,8 +103,8 @@ namespace SparkleShare {
 
                     #if HAVE_APP_INDICATOR
                     // Force update of the status icon
-                    this.indicator.Status = Status.Attention;
-                    this.indicator.Status = Status.Active;
+                    this.indicator.Status = (int) IndicatorStatus.Attention;
+                    this.indicator.Status = (int) IndicatorStatus.Active;
                     #endif
                 });
             };
