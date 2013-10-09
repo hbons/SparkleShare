@@ -127,15 +127,19 @@ namespace SparkleShare {
                 VBox layout_address  = new VBox (true, 0);
                 VBox layout_path     = new VBox (true, 0);
 
-                ListStore store = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (SparklePlugin));
+                ListStore store = new ListStore (typeof (string), typeof (Gdk.Pixbuf), typeof (string), typeof (SparklePlugin));
 
                 SparkleTreeView tree_view = new SparkleTreeView (store) { HeadersVisible = false };
                 ScrolledWindow scrolled_window = new ScrolledWindow () { ShadowType = ShadowType.In };
                 scrolled_window.SetPolicy (PolicyType.Never, PolicyType.Automatic);
 
+                // Padding column
+                tree_view.AppendColumn ("Padding", new Gtk.CellRendererText (), "text", 0);
+                tree_view.Columns [0].Cells [0].Xpad = 4;
+
                 // Icon column
-                tree_view.AppendColumn ("Icon", new Gtk.CellRendererPixbuf (), "pixbuf", 0);
-                tree_view.Columns [0].Cells [0].Xpad = 6;
+                tree_view.AppendColumn ("Icon", new Gtk.CellRendererPixbuf (), "pixbuf", 1);
+                tree_view.Columns [1].Cells [0].Xpad = 4;
 
                 // Service column
                 TreeViewColumn service_column = new TreeViewColumn () { Title = "Service" };
@@ -144,7 +148,7 @@ namespace SparkleShare {
                 service_column.SetCellDataFunc (service_cell, new TreeCellDataFunc (RenderServiceColumn));
 
                 foreach (SparklePlugin plugin in Controller.Plugins) {
-                    store.AppendValues (new Gdk.Pixbuf (plugin.ImagePath),
+                    store.AppendValues ("", new Gdk.Pixbuf (plugin.ImagePath),
                         "<span size=\"small\"><b>" + plugin.Name + "</b>\n" +
                             "<span fgcolor=\"" + SecondaryTextColor + "\">" + plugin.Description + "</span>" +
                         "</span>", plugin);
@@ -684,7 +688,7 @@ namespace SparkleShare {
         private void RenderServiceColumn (TreeViewColumn column, CellRenderer cell,
             ITreeModel model, TreeIter iter)
         {
-            string markup = (string) model.GetValue (iter, 1);
+            string markup = (string) model.GetValue (iter, 2);
             TreeSelection selection = (column.TreeView as TreeView).Selection;
 
             if (selection.IterIsSelected (iter)) {
