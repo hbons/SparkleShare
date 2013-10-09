@@ -31,8 +31,6 @@ PKG_CHECK_EXISTS([mono >= 2.8],
 [SHAMROCK_FIND_MONO_4_0_COMPILER
 SHAMROCK_CHECK_MONO_4_0_GAC_ASSEMBLIES([
     System
-    System.Security
-    Mono.Posix
 ])]
 )
 
@@ -58,14 +56,6 @@ if test -z "$CONFIG_REQUESTED" ; then
 	AM_CONDITIONAL(ENABLE_DEBUG, true)
 	enable_debug=yes
 fi
-
-
-dnl package checks, common for all configs
-#PKG_CHECK_MODULES([NDESK_DBUS], [ndesk-dbus-1.0])
-#AC_SUBST(NDESK_DBUS_LIBS)
-#PKG_CHECK_MODULES([NDESK_DBUS_GLIB], [ndesk-dbus-glib-1.0])
-#AC_SUBST(NDESK_DBUS_GLIB_LIBS)
-
 
 SPARKLESHARE_CHECK_GTK_SHARP
 
