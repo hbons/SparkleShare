@@ -191,39 +191,8 @@ namespace SparkleShare {
 
                 // Select the first plugin by default
                 TreeSelection default_selection = tree_view.Selection;
-                TreePath default_path = new TreePath ("0");
+                TreePath default_path = new TreePath ("" + Controller.SelectedPluginIndex);
                 default_selection.SelectPath (default_path);
-                Controller.SelectedPluginChanged (0);
-
-                Controller.ChangeAddressFieldEvent += delegate (string text,
-                    string example_text, FieldState state) {
-
-                    Application.Invoke (delegate {
-                        address_entry.Text      = text;
-                        address_entry.Sensitive = (state == FieldState.Enabled);
-                        address_example.Markup  =  "<span size=\"small\" fgcolor=\"" +
-                            SecondaryTextColor + "\">" + example_text + "</span>";
-                    });
-                };
-
-                Controller.ChangePathFieldEvent += delegate (string text,
-                    string example_text, FieldState state) {
-
-                    Application.Invoke (delegate {
-                        path_entry.Text      = text;
-                        path_entry.Sensitive = (state == FieldState.Enabled);
-                        path_example.Markup  =  "<span size=\"small\" fgcolor=\""
-                            + SecondaryTextColor + "\">" + example_text + "</span>";
-                    });
-                };
-
-                Controller.CheckAddPage (address_entry.Text, path_entry.Text, 1);
-                
-                // Update the address field text when the selection changes
-                tree_view.CursorChanged += delegate (object sender, EventArgs e) {
-                    Controller.SelectedPluginChanged (tree_view.SelectedRow);
-                    // TODO: Scroll to selected row when using arrow keys
-                };
 
                 tree_view.Model.Foreach (new TreeModelForeachFunc (delegate (ITreeModel model,
                     TreePath path, TreeIter iter) {
@@ -257,10 +226,6 @@ namespace SparkleShare {
                     }
                 }));
 
-                address_entry.Changed += delegate {
-                    Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree_view.SelectedRow);
-                };
-
                 layout_address.PackStart (new Label () {
                         Markup = "<b>" + "Address" + "</b>",
                         Xalign = 0
@@ -293,17 +258,46 @@ namespace SparkleShare {
                 Button cancel_button = new Button ("Cancel");
                 Button add_button = new Button ("Add") { Sensitive = false };
 
-                cancel_button.Clicked += delegate { Controller.PageCancelled (); };
 
-                add_button.Clicked += delegate {
-                    Controller.AddPageCompleted (address_entry.Text, path_entry.Text);
+                Controller.ChangeAddressFieldEvent += delegate (string text,
+                    string example_text, FieldState state) {
+
+                    Application.Invoke (delegate {
+                        address_entry.Text      = text;
+                        address_entry.Sensitive = (state == FieldState.Enabled);
+                        address_example.Markup  =  "<span size=\"small\" fgcolor=\"" +
+                            SecondaryTextColor + "\">" + example_text + "</span>";
+                    });
+                };
+
+                Controller.ChangePathFieldEvent += delegate (string text,
+                    string example_text, FieldState state) {
+
+                    Application.Invoke (delegate {
+                        path_entry.Text      = text;
+                        path_entry.Sensitive = (state == FieldState.Enabled);
+                        path_example.Markup  =  "<span size=\"small\" fgcolor=\""
+                            + SecondaryTextColor + "\">" + example_text + "</span>";
+                    });
                 };
 
                 Controller.UpdateAddProjectButtonEvent += delegate (bool button_enabled) {
-                    Application.Invoke (delegate {
-                        add_button.Sensitive = button_enabled;                            
-                    });
+                    Application.Invoke (delegate { add_button.Sensitive = button_enabled; });
                 };
+
+
+                tree_view.CursorChanged += delegate (object sender, EventArgs e) {
+                    Controller.SelectedPluginChanged (tree_view.SelectedRow);
+                    // TODO: Scroll to selected row when using arrow keys
+                };
+
+                address_entry.Changed += delegate {
+                    Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree_view.SelectedRow);
+                };
+
+                cancel_button.Clicked += delegate { Controller.PageCancelled (); };
+                add_button.Clicked += delegate { Controller.AddPageCompleted (address_entry.Text, path_entry.Text); };
+
 
                 CheckButton check_button = new CheckButton ("Fetch prior history") { Active = false };
                 check_button.Toggled += delegate { Controller.HistoryItemChanged (check_button.Active); };
