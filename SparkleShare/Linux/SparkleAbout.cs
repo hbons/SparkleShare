@@ -41,6 +41,7 @@ namespace SparkleShare {
 
             CssProvider css_provider = new CssProvider ();
             string image_path        = new string [] { SparkleUI.AssetsPath, "pixmaps", "about.png" }.Combine ();
+
             css_provider.LoadFromData ("GtkWindow {" +
                 "background-image: url('" + image_path + "');" +
                 "background-repeat: no-repeat;" +
