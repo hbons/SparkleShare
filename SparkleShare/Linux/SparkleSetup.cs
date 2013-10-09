@@ -467,7 +467,7 @@ namespace SparkleShare {
                     Description = "Please enter the password to see their contents.";
                 }
 
-                Label password_label = new Label ("<b>" + "Password:" + "</b>") {
+                Label password_label = new Label ("<b>" + "Password" + "</b>") {
                     UseMarkup = true,
                     Xalign    = 1
                 };
@@ -552,6 +552,8 @@ namespace SparkleShare {
 
                 AddButton (cancel_button);
                 AddButton (continue_button);
+
+                password_entry.GrabFocus ();
             }
                 
             if (type == PageType.Finished) {
