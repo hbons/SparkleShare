@@ -180,8 +180,8 @@ namespace SparkleShare {
 
             Controller.UpdateSizeInfoEvent += delegate (string size, string history_size) {
                 Application.Invoke (delegate {
-                    this.size_label.Markup    = "<b>Size:</b> " + size;
-                    this.history_label.Markup = "<b>History:</b> " + history_size;
+                    this.size_label.Markup    = "<b>Size</b>  " + size;
+                    this.history_label.Markup = "<b>History</b>  " + history_size;
 
                     this.size_label.ShowAll ();
                     this.history_label.ShowAll ();

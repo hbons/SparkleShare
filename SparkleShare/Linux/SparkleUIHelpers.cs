@@ -67,13 +67,7 @@ namespace SparkleShare {
                 (int) Math.Truncate (color.Green / 256.00),
                 (int) Math.Truncate (color.Blue  / 256.00));
         }
-        
-        
-        public static string RGBAToHex (Gdk.RGBA rgba)
-        {
-            return ColorToHex (RGBAToColor (rgba));
-        }
-        
+
         
         public static Gdk.Color RGBAToColor (Gdk.RGBA rgba) {
             return new Gdk.Color () {
@@ -81,6 +75,12 @@ namespace SparkleShare {
                 Green = (ushort) (rgba.Green * 65535),
                 Blue  = (ushort)(rgba.Blue * 65535)
             };
+        }
+
+
+        public static string RGBAToHex (Gdk.RGBA rgba)
+        {
+            return ColorToHex (RGBAToColor (rgba));
         }
     }
 }

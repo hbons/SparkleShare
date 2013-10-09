@@ -129,13 +129,13 @@ namespace SparkleShare {
 
                 ListStore store = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (SparklePlugin));
 
-                SparkleTreeView tree = new SparkleTreeView (store) { HeadersVisible = false };
+                SparkleTreeView tree_view = new SparkleTreeView (store) { HeadersVisible = false };
                 ScrolledWindow scrolled_window = new ScrolledWindow () { ShadowType = ShadowType.In };
-                scrolled_window.AddWithViewport (tree);
+                scrolled_window.SetPolicy (PolicyType.Never, PolicyType.Automatic);
 
                 // Icon column
-                tree.AppendColumn ("Icon", new Gtk.CellRendererPixbuf (), "pixbuf", 0);
-                tree.Columns [0].Cells [0].Xpad = 6;
+                tree_view.AppendColumn ("Icon", new Gtk.CellRendererPixbuf (), "pixbuf", 0);
+                tree_view.Columns [0].Cells [0].Xpad = 6;
 
                 // Service column
                 TreeViewColumn service_column = new TreeViewColumn () { Title = "Service" };
@@ -146,12 +146,12 @@ namespace SparkleShare {
                 foreach (SparklePlugin plugin in Controller.Plugins) {
                     store.AppendValues (new Gdk.Pixbuf (plugin.ImagePath),
                         "<span size=\"small\"><b>" + plugin.Name + "</b>\n" +
-                          "<span fgcolor=\"" + SecondaryTextColorSelected + "\">" +
-                          plugin.Description + "</span>" +
+                            "<span fgcolor=\"" + SecondaryTextColor + "\">" + plugin.Description + "</span>" +
                         "</span>", plugin);
                 }
 
-                tree.AppendColumn (service_column);
+                tree_view.AppendColumn (service_column);
+                scrolled_window.AddWithViewport (tree_view);
 
                 Entry address_entry = new Entry () {
                     Text = Controller.PreviousAddress,
@@ -181,7 +181,7 @@ namespace SparkleShare {
 
 
                 // Select the first plugin by default
-                TreeSelection default_selection = tree.Selection;
+                TreeSelection default_selection = tree_view.Selection;
                 TreePath default_path = new TreePath ("0");
                 default_selection.SelectPath (default_path);
                 Controller.SelectedPluginChanged (0);
@@ -211,12 +211,12 @@ namespace SparkleShare {
                 Controller.CheckAddPage (address_entry.Text, path_entry.Text, 1);
                 
                 // Update the address field text when the selection changes
-                tree.CursorChanged += delegate (object sender, EventArgs e) {
-                    Controller.SelectedPluginChanged (tree.SelectedRow);
+                tree_view.CursorChanged += delegate (object sender, EventArgs e) {
+                    Controller.SelectedPluginChanged (tree_view.SelectedRow);
                     // TODO: Scroll to selected row when using arrow keys
                 };
 
-                tree.Model.Foreach (new TreeModelForeachFunc (delegate (ITreeModel model,
+                tree_view.Model.Foreach (new TreeModelForeachFunc (delegate (ITreeModel model,
                     TreePath path, TreeIter iter) {
 
                     string address;
@@ -231,7 +231,7 @@ namespace SparkleShare {
                     if (!string.IsNullOrEmpty (address) &&
                         address.Equals (Controller.PreviousAddress)) {
 
-                        tree.SetCursor (path, service_column, false);
+                        tree_view.SetCursor (path, service_column, false);
                         SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
 
                         if (plugin.Address != null) {
@@ -249,11 +249,11 @@ namespace SparkleShare {
                 }));
 
                 address_entry.Changed += delegate {
-                    Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree.SelectedRow);
+                    Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree_view.SelectedRow);
                 };
 
                 layout_address.PackStart (new Label () {
-                        Markup = "<b>" + "Address:" + "</b>",
+                        Markup = "<b>" + "Address" + "</b>",
                         Xalign = 0
                     }, true, true, 0);
 
@@ -261,11 +261,11 @@ namespace SparkleShare {
                 layout_address.PackStart (address_example, false, false, 0);
 
                 path_entry.Changed += delegate {
-                    Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree.SelectedRow);
+                    Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree_view.SelectedRow);
                 };
 
                 layout_path.PackStart (new Label () {
-                    Markup = "<b>" + "Remote Path:" + "</b>",
+                    Markup = "<b>" + "Remote Path" + "</b>",
                     Xalign = 0
                 }, true, true, 0);
                 
@@ -302,8 +302,11 @@ namespace SparkleShare {
                 AddOption (check_button);
                 AddButton (cancel_button);
                 AddButton (add_button);
-                
+
+                // TODO: unfocused treeview row: make background grey                
+
                 Controller.CheckAddPage (address_entry.Text, path_entry.Text, 1);
+                tree_view.GrabFocus ();
             }
 
             if (type == PageType.Invite) {
@@ -681,7 +684,7 @@ namespace SparkleShare {
         private void RenderServiceColumn (TreeViewColumn column, CellRenderer cell,
             ITreeModel model, TreeIter iter)
         {
-            string markup           = (string) model.GetValue (iter, 1);
+            string markup = (string) model.GetValue (iter, 1);
             TreeSelection selection = (column.TreeView as TreeView).Selection;
 
             if (selection.IterIsSelected (iter)) {
