@@ -117,6 +117,11 @@ namespace SparkleShare {
                 Add (wrapper);
 
                 Controller.CheckSetupPage (name_entry.Text, email_entry.Text);
+
+                if (name_entry.Text.Equals (""))
+                    name_entry.GrabFocus ();
+                else
+                    email_entry.GrabFocus ();
             }
 
             if (type == PageType.Add) {
