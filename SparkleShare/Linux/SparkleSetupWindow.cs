@@ -53,22 +53,17 @@ namespace SparkleShare {
             Deletable      = false;
             TypeHint       = Gdk.WindowTypeHint.Dialog;
 
-            DeleteEvent += delegate (object sender, DeleteEventArgs args) {
-                args.RetVal = true;
-            };
+            DeleteEvent += delegate (object sender, DeleteEventArgs args) { args.RetVal = true; };
 
             Gdk.Color color = SparkleUIHelpers.RGBAToColor (StyleContext.GetColor (StateFlags.Insensitive));
             SecondaryTextColor = SparkleUIHelpers.ColorToHex (color);
-                        
-            SecondaryTextColorSelected =
-                SparkleUIHelpers.ColorToHex (
-                    MixColors (
-                        new TreeView ().StyleContext.GetColor (StateFlags.Selected),
-                        new TreeView ().StyleContext.GetBackgroundColor (StateFlags.Selected),
-                        0.15
-                    )
-                );
-
+                    
+            color = MixColors (
+                SparkleUIHelpers.RGBAToColor (new TreeView ().StyleContext.GetColor (StateFlags.Selected)),
+                SparkleUIHelpers.RGBAToColor (new TreeView ().StyleContext.GetBackgroundColor (StateFlags.Selected)),
+                0.39);
+    
+            SecondaryTextColorSelected = SparkleUIHelpers.ColorToHex (color);
             SetSizeRequest (680, 400);
 
             HBox = new HBox (false, 0);
@@ -183,15 +178,15 @@ namespace SparkleShare {
         }
         
         
-        private Gdk.Color MixColors (Gdk.RGBA first_color, Gdk.RGBA second_color, double ratio)
+        private Gdk.Color MixColors (Gdk.Color first_color, Gdk.Color second_color, double ratio)
         {
             return new Gdk.Color (
                 Convert.ToByte ((255 * (Math.Min (65535, first_color.Red * (1.0 - ratio) +
-                    second_color.Red   * ratio))) / 65535),
+                    second_color.Red * ratio))) / 65535),
                 Convert.ToByte ((255 * (Math.Min (65535, first_color.Green * (1.0 - ratio) +
                     second_color.Green * ratio))) / 65535),
                 Convert.ToByte ((255 * (Math.Min (65535, first_color.Blue * (1.0 - ratio) +
-                    second_color.Blue  * ratio))) / 65535)
+                    second_color.Blue * ratio))) / 65535)
             );
         }
     }
