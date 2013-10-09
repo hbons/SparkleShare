@@ -103,7 +103,8 @@ namespace SparkleShare {
 
             this.web_view.NavigationRequested += WebViewNavigationRequested;
 */
-            this.scrolled_window.Add (new Button ("WebView"));
+//            this.scrolled_window.Add (this.web_view);
+            this.scrolled_window.AddWithViewport (new Button ("WebView"));
             this.content_wrapper.Add (this.spinner);
 
             this.spinner.Start ();
