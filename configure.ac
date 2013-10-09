@@ -90,21 +90,19 @@ if test "$OSNAME" = "Linux" ; then
 	fi
 	AC_SUBST(NOTIFY_SHARP_LIBS)
 
-	APPINDICATOR_REQUIRED=0.0.7
+	APPINDICATOR_REQUIRED=0.1
 
 	if test x$enable_appindicator = xauto ; then
-			PKG_CHECK_EXISTS([appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED],
+			PKG_CHECK_EXISTS([appindicator3-sharp-0.1 >= $APPINDICATOR_REQUIRED],
 							 enable_appindicator="yes",
 							 enable_appindicator="no")
 	fi
 
-        enable_appindicator="no"
-
 	if test x$enable_appindicator = xyes ; then
-			PKG_CHECK_EXISTS([appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED],,
-							 AC_MSG_ERROR([appindicator-sharp-0.1 is not installed]))
+			PKG_CHECK_EXISTS([appindicator3-sharp-0.1 >= $APPINDICATOR_REQUIRED],,
+							 AC_MSG_ERROR([appindicator3-sharp-0.1 is not installed]))
 			PKG_CHECK_MODULES(APP_INDICATOR,
-							appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED)
+							appindicator3-sharp-0.1 >= $APPINDICATOR_REQUIRED)
 			AC_SUBST(APP_INDICATOR_CFLAGS)
 			AC_SUBST(APP_INDICATOR_LIBS)
 			AC_DEFINE(HAVE_APP_INDICATOR, 1, [Have AppIndicator])
