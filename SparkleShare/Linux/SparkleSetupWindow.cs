@@ -75,20 +75,12 @@ namespace SparkleShare {
 
                 VBox = new VBox (false, 0);
 
-                    Wrapper = new VBox (false, 0) {
-                        BorderWidth = 0
-                    };
-
-                    OptionArea = new VBox (false, 0) {
-                        BorderWidth = 0
-                    };
+                    Wrapper = new VBox (false, 0);
+                    OptionArea = new VBox (false, 0);
 
                     Buttons = CreateButtonBox ();
 
-
-                HBox layout_horizontal = new HBox (false , 0) {
-                    BorderWidth = 0
-                };
+                HBox layout_horizontal = new HBox (false , 48);
 
                 layout_horizontal.PackStart (OptionArea, true, true, 0);
                 layout_horizontal.PackStart (Buttons, false, false, 0);

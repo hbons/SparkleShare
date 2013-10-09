@@ -123,15 +123,15 @@ namespace SparkleShare {
             if (type == PageType.Add) {
                 Header = "Where’s your project hosted?";
 
-                VBox layout_vertical = new VBox (false, 12);
-                HBox layout_fields   = new HBox (true, 12);
+                VBox layout_vertical = new VBox (false, 16);
+                HBox layout_fields   = new HBox (true, 32);
                 VBox layout_address  = new VBox (true, 0);
                 VBox layout_path     = new VBox (true, 0);
 
                 ListStore store = new ListStore (typeof (Gdk.Pixbuf), typeof (string), typeof (SparklePlugin));
 
                 SparkleTreeView tree = new SparkleTreeView (store) { HeadersVisible = false };
-                ScrolledWindow scrolled_window = new ScrolledWindow ();
+                ScrolledWindow scrolled_window = new ScrolledWindow () { ShadowType = ShadowType.In };
                 scrolled_window.AddWithViewport (tree);
 
                 // Icon column
@@ -140,7 +140,7 @@ namespace SparkleShare {
 
                 // Service column
                 TreeViewColumn service_column = new TreeViewColumn () { Title = "Service" };
-                CellRendererText service_cell = new CellRendererText () { Ypad = 4 };
+                CellRendererText service_cell = new CellRendererText () { Ypad = 8 };
                 service_column.PackStart (service_cell, true);
                 service_column.SetCellDataFunc (service_cell, new TreeCellDataFunc (RenderServiceColumn));
 
@@ -273,8 +273,8 @@ namespace SparkleShare {
                 layout_path.PackStart (path_entry, false, false, 0);
                 layout_path.PackStart (path_example, false, false, 0);
 
-                layout_fields.PackStart (layout_address, false, false, 0);
-                layout_fields.PackStart (layout_path, false, false, 0);
+                layout_fields.PackStart (layout_address, true, true, 0);
+                layout_fields.PackStart (layout_path, true, true, 0);
 
                 layout_vertical.PackStart (new Label (""), false, false, 0);
                 layout_vertical.PackStart (scrolled_window, true, true, 0);
