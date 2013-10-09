@@ -60,7 +60,8 @@ namespace SparkleShare {
             Controller.ChangePageEvent += delegate (PageType type, string [] warnings) {
                 Dispatcher.BeginInvoke ((Action) delegate {
                     Reset ();
-                    
+
+                    // TODO: Remove switch statement for ifs
                     switch (type) {
                     case PageType.Setup: {
                         Header      = "Welcome to SparkleShare!";
@@ -122,9 +123,6 @@ namespace SparkleShare {
                         Buttons.Add (cancel_button);
                         Buttons.Add (continue_button);
                         
-                        name_box.Focus ();
-                        name_box.Select (name_box.Text.Length, 0);
-                        
                         Controller.UpdateSetupContinueButtonEvent += delegate (bool enabled) {
                             Dispatcher.BeginInvoke ((Action) delegate {
                                 continue_button.IsEnabled = enabled;
@@ -151,7 +149,12 @@ namespace SparkleShare {
                         };
                         
                         Controller.CheckSetupPage (name_box.Text, email_box.Text);
-                        
+
+                        if (name_box.Text.Equals ("")) {
+                            name_box.Focus ();
+                        else
+                            email_box.Focus ();
+
                         break;
                     }
 
