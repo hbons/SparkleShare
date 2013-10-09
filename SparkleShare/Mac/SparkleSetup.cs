@@ -133,6 +133,11 @@ namespace SparkleShare {
                 Buttons.Add (CancelButton);
 
                 Controller.CheckSetupPage (FullNameTextField.StringValue, EmailTextField.StringValue);
+
+                if (FullNameTextField.StringValue.Equals (""))
+                    MakeFirstResponder ((NSResponder) FullNameTextField);
+                else
+                    MakeFirstResponder ((NSResponder) EmailTextField);
             }
 
             if (type == PageType.Invite) {
