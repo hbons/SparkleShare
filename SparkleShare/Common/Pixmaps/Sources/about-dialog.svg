@@ -14,7 +14,7 @@
    height="260"
    width="640"
    version="1.1"
-   inkscape:version="0.48.2 r9819"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="about-dialog.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -34,11 +34,11 @@
      fit-margin-right="0"
      fit-margin-bottom="0"
      showborder="false"
-     inkscape:zoom="1"
-     inkscape:cx="172.52608"
-     inkscape:cy="90.406735"
+     inkscape:zoom="0.5"
+     inkscape:cx="454.44819"
+     inkscape:cy="126.31199"
      inkscape:window-x="310"
-     inkscape:window-y="75"
+     inkscape:window-y="63"
      inkscape:window-maximized="0"
      inkscape:current-layer="layer1" />
   <defs
@@ -60,29 +60,6 @@
          stop-color="#3465a4"
          offset="1" />
     </linearGradient>
-    <clipPath
-       id="clipPath76786"
-       clipPathUnits="userSpaceOnUse">
-      <rect
-         id="rect76788"
-         transform="matrix(0.60278,0.7979,0.7979,-0.60278,0,0)"
-         height="321.82999"
-         width="654.53998"
-         y="-407.10001"
-         x="617.64001"
-         style="fill:url(#linearGradient76790)" />
-    </clipPath>
-    <clipPath
-       id="clipPath101490"
-       clipPathUnits="userSpaceOnUse">
-      <rect
-         id="rect101492"
-         height="260"
-         width="640"
-         y="645.98999"
-         x="147.08"
-         style="fill:url(#linearGradient101494)" />
-    </clipPath>
     <linearGradient
        id="linearGradient101494"
        x1="437.70999"
@@ -2074,11 +2051,52 @@
        xlink:href="#linearGradient75956"
        id="linearGradient8143"
        gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.7690459,0,0,1.3201,-349.09096,-128.43)"
+       x1="437.70999"
+       y1="553.48291"
+       x2="437.70999"
+       y2="818.36084" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient75956"
+       id="linearGradient4246"
+       gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(1.6031,0,0,1.3201,-335.96,-128.43)"
        x1="437.70999"
        y1="553.48291"
        x2="437.70999"
        y2="818.36084" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient101494"
+       id="linearGradient4250"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1272499,0,0,0.68647,-8.0178756,287.619)"
+       x1="437.70999"
+       y1="525.46002"
+       x2="437.70999"
+       y2="863.81" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4254">
+      <rect
+         style="fill:url(#linearGradient4258)"
+         x="147.08"
+         y="645.98999"
+         width="720"
+         height="260"
+         id="rect4256" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient101494"
+       id="linearGradient4258"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1272499,0,0,0.68647,57.891124,366.26)"
+       x1="437.70999"
+       y1="525.46002"
+       x2="437.70999"
+       y2="863.81" />
   </defs>
   <metadata
      id="metadata7">
@@ -2098,21 +2116,21 @@
     <g
        id="g101011"
        transform="translate(-65.909,-78.641)"
-       clip-path="url(#clipPath101490)"
-       inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Common/Pixmaps/about@2x.png"
+       clip-path="url(#clipPath4254)"
+       inkscape:export-filename="/home/hylke/Projects/SparkleShare/SparkleShare/Common/Pixmaps/about@2x.png"
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180">
       <rect
          id="rect3322-0"
          height="500"
-         width="1024"
+         width="1130"
          y="409.51001"
          x="-209.11"
          style="fill:url(#linearGradient8143)" />
       <g
          id="g76634"
          transform="matrix(0.94303,1.2396,1.2483,-0.93649,-1175.4,1042)"
-         clip-path="url(#clipPath76786)"
+         clip-path="none"
          style="opacity:0.3">
         <path
            id="path76622"
@@ -2187,6 +2205,14 @@
            d="m 281.43,-272.16 c 41.897,0 83.613,5.492 124.08,16.336 l -124.08,463.08 z"
            inkscape:connector-curvature="0" />
       </g>
+      <rect
+         style="fill:url(#linearGradient76790)"
+         x="-209.12357"
+         y="409.52542"
+         width="1024.0005"
+         height="499.98679"
+         transform="matrix(1,-1.2325673e-5,-4.2720841e-6,1,0,0)"
+         id="rect4252" />
     </g>
     <g
        id="g6982"
