@@ -18,7 +18,7 @@
 using System;
 
 using Gtk;
-//using Notifications;
+using Notifications;
 using SparkleLib;
 
 namespace SparkleShare {
@@ -29,7 +29,7 @@ namespace SparkleShare {
 
 
         public SparkleBubbles ()
-        {/*
+        {
             Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
                 if (!Program.Controller.NotificationsEnabled)
                     return;
@@ -57,7 +57,7 @@ namespace SparkleShare {
                 } catch (Exception e) {
                     SparkleLogger.LogInfo ("Notification", "Error showing notification: ", e);
                 }
-            };*/
+            };
         }
     }
 }
