@@ -29,8 +29,7 @@ namespace SparkleShare {
 
 
         public SparkleSetup () : base ()
-        {var about = new SparkleAbout ();
-        about.ShowAll();
+        {
             Controller.HideWindowEvent += delegate {
                 Application.Invoke (delegate { Hide (); });
             };
