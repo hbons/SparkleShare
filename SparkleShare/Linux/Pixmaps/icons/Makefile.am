@@ -23,7 +23,6 @@ system_theme_icons = \
     status,process-syncing-error-48.png
 
 app_theme_icons = \
-	animations,process-working-22.png \
 	status,document-added-12.png \
 	status,document-edited-12.png \
 	status,document-deleted-12.png \
