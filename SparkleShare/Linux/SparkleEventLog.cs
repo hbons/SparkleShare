@@ -284,14 +284,17 @@ namespace SparkleShare {
             html = html.Replace ("<!-- $document-moved-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-moved.png"));
                     
             this.spinner.Stop ();
+            this.scrolled_window.Remove (this.web_view);
+            this.web_view.Dispose ();
 
-            this.web_view.NavigationRequested -= WebViewNavigationRequested;
+            this.web_view = new WebView () { Editable = false };
             this.web_view.LoadHtmlString (html, "file://");
             this.web_view.NavigationRequested += WebViewNavigationRequested;
+            this.scrolled_window.Add (this.web_view);
 
             this.content_wrapper.Remove (this.content_wrapper.Child);
             this.content_wrapper.Add (this.scrolled_window);
-            this.content_wrapper.ShowAll ();
+            this.scrolled_window.ShowAll ();
         }
     }
 }
