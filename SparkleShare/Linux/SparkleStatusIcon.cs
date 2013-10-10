@@ -58,53 +58,28 @@ namespace SparkleShare {
 
             Controller.UpdateIconEvent += delegate (IconState state) {
                 Application.Invoke (delegate {
-                    switch (state) {
-                    case IconState.Idle: {
-                        #if HAVE_APP_INDICATOR
-                        this.indicator.IconName = "process-syncing-idle";
-                        #else
-                        this.status_icon.IconName = "sparkleshare";
-                        #endif
-                        break;
-                    }
-                    case IconState.SyncingUp: {
-                        #if HAVE_APP_INDICATOR
-                        this.indicator.IconName = "process-syncing-up";
-                        #else
-                        this.status_icon.IconName = "process-syncing-up";
-                        #endif
-                        break;
-                    }
-                    case IconState.SyncingDown: {                   
-                        #if HAVE_APP_INDICATOR
-                        this.indicator.IconName = "process-syncing-down";
-                        #else
-                        this.status_icon.IconName = "process-syncing-down";
-                        #endif
-                        break;
-                    }
-                    case IconState.Syncing: {
-                        #if HAVE_APP_INDICATOR
-                        this.indicator.IconName = "process-syncing";
-                        #else
-                        this.status_icon.IconName = "process-syncing";
-                        #endif
-                        break;
-                    }
-                    case IconState.Error: {
-                        #if HAVE_APP_INDICATOR
-                        this.indicator.IconName = "process-syncing-error";
-                        #else
-                        this.status_icon.IconName = "process-syncing-error";
-                        #endif
-                        break;
-                    }
-                    }
+                    #if HAVE_APP_INDICATOR
+                    string icon_name = "process-syncing-idle";
+                    #else
+                    string icon_name = "sparkleshare";
+                    #endif
+
+                    if (state == IconState.SyncingUp)
+                        icon_name = "process-syncing-up";
+                    else if (state == IconState.SyncingDown)
+                        icon_name = "process-syncing-down";
+                    else if (state == IconState.Syncing)
+                        icon_name = "process-syncing";
+                    else if (state == IconState.Error)
+                        icon_name = "process-syncing-error";
 
                     #if HAVE_APP_INDICATOR
-                    // Force update of the status icon
+                    this.indicator.IconName = icon_name;
+
                     this.indicator.Status = Status.Attention;
                     this.indicator.Status = Status.Active;
+                    #else
+                    this.status_icon.IconName = icon_name
                     #endif
                 });
             };
