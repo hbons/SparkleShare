@@ -15,7 +15,6 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.IO;
 
 using Gtk;
 
@@ -35,7 +34,7 @@ namespace SparkleShare {
             icon_theme.AppendSearchPath ("/usr/share/icons");
             icon_theme.AppendSearchPath ("/usr/local/share/icons");
             icon_theme.AppendSearchPath ("/opt/local/share/icons");
-            icon_theme.AppendSearchPath (Path.Combine (SparkleUI.AssetsPath, "icons"));
+            icon_theme.AppendSearchPath (new string [] {SparkleUI.AssetsPath, "icons"}.Combine ());
 
             try {
                 return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);

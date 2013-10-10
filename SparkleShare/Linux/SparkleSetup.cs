@@ -16,7 +16,6 @@
 
 
 using System;
-using System.IO;
 
 using Gtk;
 using Mono.Unix;
