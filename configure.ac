@@ -66,12 +66,12 @@ AC_ARG_ENABLE(appindicator,
 
 OSNAME=`uname -s`
 if test "$OSNAME" = "Linux" ; then
-	dnl check for webkit-sharp
-	PKG_CHECK_MODULES(WEBKIT_SHARP, webkit-sharp-1.0, have_webkit_sharp=yes, have_webkit_sharp=no)
-	if test "x$have_webkit_sharp" = "xno" ; then
-		AC_ERROR("webkit-sharp is a required dependency: you need to install the appropriate devel package before you can compile")
+	dnl check for webkitgtk-sharp
+	PKG_CHECK_MODULES(WEBKIT_SHARP, webkitgtk-sharp-3.0, have_webkitgtk_sharp=yes, have_webkitgtk_sharp=no)
+	if test "x$have_webkitgtk_sharp" = "xno" ; then
+		AC_ERROR("webkitgtk-sharp is a required dependency: you need to install the appropriate devel package before you can compile")
 	fi
-	AC_SUBST(WEBKIT_SHARP_LIBS)
+	AC_SUBST(WEBKITGTK_SHARP_LIBS)
 
 	dnl check for notify-sharp
 	PKG_CHECK_MODULES(NOTIFY_SHARP, notify-sharp, have_notify_sharp=yes, have_notify_sharp=no)
