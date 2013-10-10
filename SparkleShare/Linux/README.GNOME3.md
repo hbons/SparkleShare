@@ -19,7 +19,7 @@ https://github.com/mono/gtk-sharp
 Install the `notify-sharp` bindings from:
 https://github.com/meebey/notify-sharp
 
-Install the `webkit-sharp` bindings from:
+Install the `webkitgtk-sharp` bindings from:
 https://github.com/xDarkice/webkitgtk-sharp
 
 All with the usual:
