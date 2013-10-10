@@ -16,8 +16,6 @@
 
 
 using System;
-using System.Diagnostics;
-
 using Gtk;
 
 namespace SparkleShare {
@@ -64,8 +62,8 @@ namespace SparkleShare {
 
             Controller.UpdateLabelEvent += delegate (string text) {
                 Application.Invoke (delegate {
-                    this.updates.Markup = String.Format ("<span font_size='small' fgcolor='#8cc4ff'>{0}</span>", text);
-                    this.updates.ShowAll ();
+                    this.updates.Text = text;
+                    this.updates.ShowAll();
                 });
             };
 
@@ -76,6 +74,15 @@ namespace SparkleShare {
 
         private void CreateAbout ()
         {
+            Gdk.RGBA white = new Gdk.RGBA ();
+            white.Parse ("#ffffff");
+
+            Gdk.RGBA highlight = new Gdk.RGBA ();
+            highlight.Parse ("#a8bbcf");
+
+            Pango.FontDescription font = StyleContext.GetFont (StateFlags.Normal);
+            font.Size = 9 * 1024;
+
             CssProvider css_provider = new CssProvider ();
             string image_path        = new string [] { SparkleUI.AssetsPath, "pixmaps", "about.png" }.Combine ();
 
@@ -87,51 +94,54 @@ namespace SparkleShare {
             
             StyleContext.AddProvider (css_provider, 800);
 
-            Label version = new Label () {
-                Markup = string.Format ("<span font_size='small' fgcolor='white'>version {0}</span>",
-                    Controller.RunningVersion),
-                Xalign = 0,
-                Xpad = 0
-            };
-
-            this.updates = new Label () {
-                Markup = "<span font_size='small' fgcolor='#a8bbcf'>Checking for updates...</span>",
-                Xalign = 0,
-                Xpad = 0
-            };
-
-            Label copyright = new Label () {
-                Markup = "<span font_size='small' fgcolor='white'>" +
-                         "Copyright © 2010–" + DateTime.Now.Year + " " +
-                         "Hylke Bons and others." +
-                         "</span>",
-                Xalign = 0,
-                Xpad   = 0
-            };
-
-            Label license = new Label () {
-                LineWrap     = true,
-                LineWrapMode = Pango.WrapMode.Word,
-                Markup       = "<span font_size='small' fgcolor='white'>" +
-                               "SparkleShare is Open Source software. You are free to use, modify, " +
-                               "and redistribute it under the GNU General Public License version 3 or later." +
-                               "</span>",
-                Wrap         = true,
-                Xalign       = 0
-            };
-
             VBox layout_vertical = new VBox (false, 0);            
             HBox links_layout = new HBox (false, 16);
+
+
+            Label version = new Label () {
+                Text   = "version " + Controller.RunningVersion,
+                Xalign = 0, Xpad   = 0
+            };
+
+            version.OverrideFont (font);
+            version.OverrideColor (StateFlags.Normal, white);
+
+
+            this.updates = new Label ("Checking for updates…") {
+                Xalign = 0, Xpad = 0
+            };
+
+            this.updates.OverrideFont (font);
+            this.updates.OverrideColor (StateFlags.Normal, highlight);
+
+
+            Label copyright = new Label () {
+                Text = "Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others.",
+                Xalign = 0, Xpad   = 0
+            };
+
+            copyright.OverrideFont (font);
+            copyright.OverrideColor (StateFlags.Normal, white);
+
+
+            TextView license          = new TextView ();
+            TextBuffer license_buffer = license.Buffer;
+            license.WrapMode          = WrapMode.Word;
+            license.Sensitive         = false;
+
+            license_buffer.Text = "SparkleShare is Open Source and you’re free to use, change, " +
+                "and share it under the GNU GPLv3.";
+
+            license.OverrideBackgroundColor (StateFlags.Normal, new Gdk.RGBA () { Alpha = 0 });
+            license.OverrideFont (font);
+            license.OverrideColor (StateFlags.Normal, white);
+
             
             SparkleLink website_link        = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
             SparkleLink credits_link        = new SparkleLink ("Credits", Controller.CreditsLinkAddress);
             SparkleLink report_problem_link = new SparkleLink ("Report a problem", Controller.ReportProblemLinkAddress);
             SparkleLink debug_log_link = new SparkleLink ("Debug log", Controller.DebugLogLinkAddress);
-            
-            links_layout.PackStart (website_link, false, false, 0);
-            links_layout.PackStart (credits_link, false, false, 0);
-            links_layout.PackStart (report_problem_link, false, false, 0);
-            links_layout.PackStart (debug_log_link, false, false, 0);
+
 
             layout_vertical.PackStart (new Label (""), true, true, 0);            
             layout_vertical.PackStart (version, false, false, 0);
@@ -139,6 +149,11 @@ namespace SparkleShare {
             layout_vertical.PackStart (copyright, false, false, 6);
             layout_vertical.PackStart (license, false, false, 6);
             layout_vertical.PackStart (links_layout, false, false, 16);
+
+            links_layout.PackStart (website_link, false, false, 0);
+            links_layout.PackStart (credits_link, false, false, 0);
+            links_layout.PackStart (report_problem_link, false, false, 0);
+            links_layout.PackStart (debug_log_link, false, false, 0);
             
             HBox layout_horizontal = new HBox (false, 0);
             layout_horizontal.PackStart (new Label (""), false, false, 149);
@@ -154,10 +169,19 @@ namespace SparkleShare {
         public SparkleLink (string text, string url)
         {
             VisibleWindow = false;
-            
+
             Label label = new Label () {
-                Markup = "<span size='small' fgcolor='#729fcf' underline='single'>" + text + "</span>"
+                Markup = "<span underline='single'>" + text + "</span>"
             };
+
+            Gdk.RGBA highlight = new Gdk.RGBA ();
+            highlight.Parse ("#729fcf");
+
+            Pango.FontDescription font = new Button ().StyleContext.GetFont (StateFlags.Normal);
+            font.Size = 9 * 1024;
+
+            label.OverrideFont (font);
+            label.OverrideColor (StateFlags.Normal, highlight);
             
             EnterNotifyEvent += delegate { Window.Cursor = new Gdk.Cursor (Gdk.CursorType.Hand1); };
             LeaveNotifyEvent += delegate { Window.Cursor = new Gdk.Cursor (Gdk.CursorType.Arrow); };
