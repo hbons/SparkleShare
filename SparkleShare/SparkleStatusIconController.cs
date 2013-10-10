@@ -205,7 +205,6 @@ namespace SparkleShare {
             timer.Elapsed += delegate {
                 UpdateIconEvent (CurrentState);
                 UpdateStatusItemEvent (StateText);
-                UpdateMenuEvent (CurrentState);
             };
 
             timer.Start ();
