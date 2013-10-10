@@ -16,14 +16,7 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Timers;
-
 using Gtk;
-using Mono.Unix;
 
 namespace SparkleShare {
 
@@ -43,15 +36,15 @@ namespace SparkleShare {
 
         public Container Content;
 
-        public SparkleSetupWindow () : base ("")
+        public SparkleSetupWindow () : base ("SparkleShare Setup")
         {
-            Title          = Catalog.GetString ("SparkleShare Setup");
-            BorderWidth    = 0;
             IconName       = "folder-sparkleshare";
             Resizable      = false;
             WindowPosition = WindowPosition.Center;
             Deletable      = false;
             TypeHint       = Gdk.WindowTypeHint.Dialog;
+
+            SetSizeRequest (680, 400);
 
             DeleteEvent += delegate (object sender, DeleteEventArgs args) { args.RetVal = true; };
 
@@ -64,7 +57,6 @@ namespace SparkleShare {
                 0.39);
     
             SecondaryTextColorSelected = SparkleUIHelpers.ColorToHex (color);
-            SetSizeRequest (680, 400);
 
             HBox = new HBox (false, 0);
 
@@ -97,7 +89,6 @@ namespace SparkleShare {
         {
             return new HBox () {
                 BorderWidth = 0,
-                //Layout      = ButtonBoxStyle.End,
                 Homogeneous = false,
                 Spacing     = 6
             };
@@ -142,7 +133,6 @@ namespace SparkleShare {
                 layout_vertical.PackStart (widget, true, true, 0);
 
             Wrapper.PackStart (layout_vertical, true, true, 0);
-            ShowAll ();
         }
 
     
@@ -159,8 +149,6 @@ namespace SparkleShare {
 
             foreach (Button button in Buttons)
                 Buttons.Remove (button);
-
-            ShowAll ();
         }
         
         
