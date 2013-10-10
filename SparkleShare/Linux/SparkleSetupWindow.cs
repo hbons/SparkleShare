@@ -36,6 +36,7 @@ namespace SparkleShare {
 
         public Container Content;
 
+
         public SparkleSetupWindow () : base ("SparkleShare Setup")
         {
             IconName       = "folder-sparkleshare";
