@@ -12,6 +12,7 @@ endif
 SOURCES =  \
 	../Program.cs \
 	../SparkleAboutController.cs \
+	../SparkleAvatars.cs \
 	../SparkleBubblesController.cs \
 	../SparkleControllerBase.cs \
 	../SparkleEventLogController.cs \
@@ -22,7 +23,6 @@ SOURCES =  \
 	../SparkleSetupController.cs \
 	../SparkleStatusIconController.cs \
 	SparkleAbout.cs \
-	../SparkleAvatars.cs \
 	SparkleBubbles.cs \
 	SparkleController.cs \
 	SparkleEventLog.cs \
