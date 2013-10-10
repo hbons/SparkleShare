@@ -30,27 +30,14 @@ namespace SparkleShare {
         private Label updates;
 
 
-        public SparkleAbout () : base ("")
+        public SparkleAbout () : base ("About SparkleShare")
         {
-            SetSizeRequest (600, 260);
-            Resizable      = false;
-            BorderWidth    = 0;
             IconName       = "folder-sparkleshare";
+            Resizable      = false;
             WindowPosition = WindowPosition.Center;
-            Title          = "About SparkleShare";
 
-            CssProvider css_provider = new CssProvider ();
-            string image_path        = new string [] { SparkleUI.AssetsPath, "pixmaps", "about.png" }.Combine ();
+            SetSizeRequest (600, 260);
 
-            css_provider.LoadFromData ("GtkWindow {" +
-                "background-image: url('" + image_path + "');" +
-                "background-repeat: no-repeat;" +
-                "background-position: left bottom;" +
-                "}");
-            
-            StyleContext.AddProvider (css_provider, 800);
-
-            CreateAbout ();
 
             DeleteEvent += delegate (object o, DeleteEventArgs args) {
                 Controller.WindowClosed ();
@@ -82,11 +69,25 @@ namespace SparkleShare {
                     this.updates.ShowAll ();
                 });
             };
+
+
+            CreateAbout ();
         }
 
 
         private void CreateAbout ()
         {
+            CssProvider css_provider = new CssProvider ();
+            string image_path        = new string [] { SparkleUI.AssetsPath, "pixmaps", "about.png" }.Combine ();
+
+            css_provider.LoadFromData ("GtkWindow {" +
+                "background-image: url('" + image_path + "');" +
+                "background-repeat: no-repeat;" +
+                "background-position: left bottom;" +
+                "}");
+            
+            StyleContext.AddProvider (css_provider, 800);
+
             Label version = new Label () {
                 Markup = string.Format ("<span font_size='small' fgcolor='white'>version {0}</span>",
                     Controller.RunningVersion),
