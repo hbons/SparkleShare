@@ -14,13 +14,13 @@ you will need to get the the dependencies from the specific locations listed
 below, where they are GTK+3-enabled.
 
 Install the `gtk-sharp3` bindings from:
-    https://github.com/mono/gtk-sharp
+https://github.com/mono/gtk-sharp
 
 Install the `notify-sharp` bindings from:
-    https://github.com/meebey/notify-sharp
+https://github.com/meebey/notify-sharp
 
 Install the `webkit-sharp` bindings from:
-    https://github.com/xDarkice/webkitgtk-sharp
+https://github.com/xDarkice/webkitgtk-sharp
 
 All with the usual:
 
@@ -33,5 +33,5 @@ sudo make install
 ### Ubuntu
 
 If you're using Ubuntu, install `appindicator-sharp` bindings from:
-    https://github.com/xDarkice/appindicator-sharp
+https://github.com/xDarkice/appindicator-sharp
 
