@@ -99,6 +99,8 @@ namespace SparkleLib {
             }
 
             File.WriteAllText (crash_report_file_path, crash_report);
+            Console.WriteLine (DateTime.Now.ToString ("HH:mm:ss") + " | Wrote crash report to " + crash_report_file_path);
         }
     }
 }
+
