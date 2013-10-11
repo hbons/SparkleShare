@@ -302,8 +302,6 @@ namespace SparkleShare {
                 AddButton (cancel_button);
                 AddButton (add_button);
 
-                // TODO: unfocused treeview row: make background grey                
-
                 Controller.CheckAddPage (address_entry.Text, path_entry.Text, 1);
                 tree_view.GrabFocus ();
             }
