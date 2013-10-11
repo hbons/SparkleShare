@@ -22,19 +22,15 @@ namespace SparkleShare {
 
     public class SparkleSetupWindow : Window    {
 
-        // TODO: caps
-        private HBox HBox;
-        private VBox VBox;
-        private VBox Wrapper;
-        private VBox OptionArea;
-        private HBox Buttons;
+        private EventBox content_area;
+        private EventBox option_area;
+        private HBox buttons;
 
         public string Header;
         public string Description;
-        public string SecondaryTextColor;
-        public string SecondaryTextColorSelected;
 
-        public Container Content;
+        public readonly string SecondaryTextColor;
+        public readonly string SecondaryTextColorSelected;
 
 
         public SparkleSetupWindow () : base ("SparkleShare Setup")
@@ -59,30 +55,30 @@ namespace SparkleShare {
     
             SecondaryTextColorSelected = SparkleUIHelpers.ColorToHex (color);
 
-            HBox = new HBox (false, 0);
+            HBox layout_horizontal = new HBox (false, 0);
 
-                VBox = new VBox (false, 0);
+                VBox layout_vertical = new VBox (false, 0);
 
-                    Wrapper = new VBox (false, 0);
-                    OptionArea = new VBox (false, 0);
+                    this.content_area    = new EventBox ();
+                    this.option_area = new EventBox ();
 
-                    Buttons = CreateButtonBox ();
+                    this.buttons = CreateButtonBox ();
 
-                HBox layout_horizontal = new HBox (false , 48);
+                HBox layout_actions = new HBox (false , 48);
 
-                layout_horizontal.PackStart (OptionArea, true, true, 0);
-                layout_horizontal.PackStart (Buttons, false, false, 0);
+                layout_actions.PackStart (this.option_area, true, true, 0);
+                layout_actions.PackStart (this.buttons, false, false, 0);
 
-                VBox.PackStart (Wrapper, true, true, 0);
-                VBox.PackStart (layout_horizontal, false, false, 15);
+                layout_vertical.PackStart (this.content_area, true, true, 0);
+                layout_vertical.PackStart (layout_actions, false, false, 15);
 
                 Image side_splash = SparkleUIHelpers.GetImage ("side-splash.png");
                 side_splash.Yalign = 1;
 
-            HBox.PackStart (side_splash, false, false, 0);
-            HBox.PackStart (VBox, true, true, 30);
+            layout_horizontal.PackStart (side_splash, false, false, 0);
+            layout_horizontal.PackStart (layout_vertical, true, true, 30);
 
-            base.Add (HBox);
+            base.Add (layout_horizontal);
         }
 
 
@@ -99,13 +95,13 @@ namespace SparkleShare {
         public void AddButton (Button button)
         {
             (button.Child as Label).Xpad = 15;
-            Buttons.Add (button);
+            this.buttons.Add (button);
         }
 
 
         public void AddOption (Widget widget)
         {            
-            OptionArea.Add (widget);
+            this.option_area.Add (widget);
         }
 
 
@@ -133,7 +129,7 @@ namespace SparkleShare {
             if (widget != null)
                 layout_vertical.PackStart (widget, true, true, 0);
 
-            Wrapper.PackStart (layout_vertical, true, true, 0);
+            this.content_area.Add (layout_vertical);
         }
 
     
@@ -142,21 +138,21 @@ namespace SparkleShare {
             Header      = "";
             Description = "";
 
-            if (OptionArea.Children.Length > 0)
-                OptionArea.Remove (OptionArea.Children [0]);
+            if (this.option_area.Children.Length > 0)
+                this.option_area.Remove (this.option_area.Children [0]);
 
-            if (Wrapper.Children.Length > 0)
-                Wrapper.Remove (Wrapper.Children [0]);
+            if (this.content_area.Children.Length > 0)
+                this.content_area.Remove (this.content_area.Children [0]);
 
-            foreach (Button button in Buttons)
-                Buttons.Remove (button);
+            foreach (Button button in this.buttons)
+                this.buttons.Remove (button);
         }
         
         
         new public void ShowAll ()
         {
-            if (Buttons.Children.Length > 0) {
-                Button default_button = (Button) Buttons.Children [Buttons.Children.Length - 1];
+            if (this.buttons.Children.Length > 0) {
+                Button default_button = (Button) this.buttons.Children [this.buttons.Children.Length - 1];
             
                 default_button.CanDefault = true;
                 Default = default_button;
