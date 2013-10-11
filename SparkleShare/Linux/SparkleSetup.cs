@@ -159,7 +159,7 @@ namespace SparkleShare {
                 }
 
                 tree_view.AppendColumn (service_column);
-                scrolled_window.AddWithViewport (tree_view);
+                scrolled_window.Add (tree_view);
 
                 Entry address_entry = new Entry () {
                     Text = Controller.PreviousAddress,
@@ -188,42 +188,40 @@ namespace SparkleShare {
                 };
 
 
-                // Select the first plugin by default
                 TreeSelection default_selection = tree_view.Selection;
                 TreePath default_path = new TreePath ("" + Controller.SelectedPluginIndex);
                 default_selection.SelectPath (default_path);
 
-                tree_view.Model.Foreach (new TreeModelForeachFunc (delegate (ITreeModel model,
-                    TreePath path, TreeIter iter) {
+                tree_view.Model.Foreach (new TreeModelForeachFunc (
+                    delegate (ITreeModel model, TreePath path, TreeIter iter) {
+                        string address;
 
-                    string address;
+                        try {
+                            address = (model.GetValue (iter, 2) as SparklePlugin).Address;
 
-                    try {
-                        address = (model.GetValue (iter, 2) as SparklePlugin).Address;
+                        } catch (NullReferenceException) {
+                            address = "";
+                        }
 
-                    } catch (NullReferenceException) {
-                        address = "";
+                        if (!string.IsNullOrEmpty (address) &&
+                            address.Equals (Controller.PreviousAddress)) {
+
+                            tree_view.SetCursor (path, service_column, false);
+                            SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
+
+                            if (plugin.Address != null) {
+                                address_entry.Sensitive = false;}
+
+                            if (plugin.Path != null)
+                                path_entry.Sensitive = false;
+
+                            return true;
+                            
+                        } else {
+                            return false;
+                        }
                     }
-
-                    if (!string.IsNullOrEmpty (address) &&
-                        address.Equals (Controller.PreviousAddress)) {
-
-                        tree_view.SetCursor (path, service_column, false);
-                        SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
-
-                        if (plugin.Address != null) {
-                            address_entry.Sensitive = false;}
-
-                        if (plugin.Path != null)
-                            path_entry.Sensitive = false;
-
-                        // TODO: Scroll to the selection
-                        return true;
-                        
-                    } else {
-                        return false;
-                    }
-                }));
+                ));
 
                 layout_address.PackStart (new Label () {
                         Markup = "<b>" + "Address" + "</b>",
@@ -287,7 +285,6 @@ namespace SparkleShare {
 
                 tree_view.CursorChanged += delegate (object sender, EventArgs e) {
                     Controller.SelectedPluginChanged (tree_view.SelectedRow);
-                    // TODO: Scroll to selected row when using arrow keys
                 };
 
                 address_entry.Changed += delegate {
