@@ -51,10 +51,12 @@ namespace SparkleShare {
             
             this.size_label    = new Label () { Xalign = 0, Markup = "<b>Size:</b> …" };
             this.history_label = new Label () { Xalign = 0, Markup = "<b>History:</b> …" };
-            
-            HBox layout_sizes = new HBox (false, 12);
-            layout_sizes.Add (this.size_label);
-            layout_sizes.Add (this.history_label);
+
+            this.size_label.SetSizeRequest (100, 24);
+
+            HBox layout_sizes = new HBox (false, 0);
+            layout_sizes.PackStart (this.size_label, false, false, 12);
+            layout_sizes.PackStart (this.history_label, false, false, 0);
 
             VBox layout_vertical = new VBox (false, 0);
             this.spinner         = new Spinner ();
@@ -79,10 +81,11 @@ namespace SparkleShare {
 
             this.content_wrapper.Add (this.spinner_wrapper);
 
-            this.layout_horizontal = new HBox (true, 0);
+            this.layout_horizontal = new HBox (false, 0);
             this.layout_horizontal.PackStart (layout_sizes, true, true, 12);
 
             layout_vertical.PackStart (this.layout_horizontal, false, false, 0);
+            layout_vertical.PackStart (new HSeparator (), false, false, 0);
             layout_vertical.PackStart (this.content_wrapper, true, true, 0);
 
             Add (layout_vertical);
@@ -219,11 +222,11 @@ namespace SparkleShare {
                     Controller.SelectedFolder = selection;
             };
 
-            this.combo_box_wrapper.PackStart (new Label (" "), false, false, 9);
-            this.combo_box_wrapper.PackStart (this.combo_box, true, true, 0);
+            this.combo_box_wrapper.Add (this.combo_box);
+            this.combo_box.GrabFocus ();
 
-            this.layout_horizontal.BorderWidth = 9;
-            this.layout_horizontal.PackStart (this.combo_box_wrapper, true, true, 0);
+            this.layout_horizontal.BorderWidth = 6;
+            this.layout_horizontal.PackStart (this.combo_box_wrapper, false, false, 0);
             this.layout_horizontal.ShowAll ();
         }
 
