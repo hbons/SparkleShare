@@ -688,15 +688,10 @@ namespace SparkleShare {
             string markup = (string) model.GetValue (iter, 2);
             TreeSelection selection = (column.TreeView as TreeView).Selection;
 
-            if (selection.IterIsSelected (iter)) {
-                if (column.TreeView.HasFocus)
-                    markup = markup.Replace (SecondaryTextColor, SecondaryTextColorSelected);
-                else
-                    markup = markup.Replace (SecondaryTextColorSelected, SecondaryTextColor);
-                    
-            } else {
+            if (selection.IterIsSelected (iter))
+                markup = markup.Replace (SecondaryTextColor, SecondaryTextColorSelected);
+            else
                 markup = markup.Replace (SecondaryTextColorSelected, SecondaryTextColor);
-            }
 
             (cell as CellRendererText).Markup = markup;
         }
