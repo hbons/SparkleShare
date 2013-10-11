@@ -152,6 +152,8 @@ namespace SparkleShare {
 			this.recent_events_item.Sensitive = Controller.RecentEventsItemEnabled;
             this.quit_item    = new MenuItem ("Quit") { Sensitive = Controller.QuitItemEnabled };
             MenuItem add_item = new MenuItem ("Add Hosted Project…");
+
+            #if HAVE_APP_INDICATOR
             MenuItem notify_item;
                                                              
             if (Program.Controller.NotificationsEnabled)
@@ -169,6 +171,7 @@ namespace SparkleShare {
                     	(notify_item.Child as Label).Text = "Turn Notifications On";
 				});
             };
+            #endif
 
             MenuItem link_code_item = new MenuItem ("Client ID");
             
@@ -196,8 +199,10 @@ namespace SparkleShare {
             folder_item.Submenu = new Menu ();
 			(folder_item.Submenu as Menu).Add (this.recent_events_item);
             (folder_item.Submenu as Menu).Add (add_item);
+            #if HAVE_APP_INDICATOR
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
             (folder_item.Submenu as Menu).Add (notify_item);
+            #endif
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
             (folder_item.Submenu as Menu).Add (link_code_item);
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
