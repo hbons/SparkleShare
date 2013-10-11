@@ -34,24 +34,14 @@ namespace SparkleShare {
                 if (!Program.Controller.NotificationsEnabled)
                     return;
 
-                try {
-                    // Debug information for https://github.com/hbons/SparkleShare/issues/1362
-                    if (title.Length > 255) {
-                        SparkleLogger.LogInfo ("Notification", "Long string detected, truncating 'title'");
-                        title = title.Substring (0, 255) + "...";
-                    
-                    } else if (subtext.Length > 255) {
-                        SparkleLogger.LogInfo ("Notification", "Long string detected, truncating 'subtext'");
-                        title = title.Substring (0, 255) + "...";
-                    }
-
+                Application.Invoke (delegate {
                     Notification notification = new Notification () {
                         Summary = title,
                         Body    = subtext,
                         Timeout = 5 * 1000,
                         Urgency = Urgency.Low
                     };
-    
+        
                     if (image_path != null)
                         notification.Icon = new Gdk.Pixbuf (image_path);
                     else
@@ -62,11 +52,13 @@ namespace SparkleShare {
                             Controller.BubbleClicked ();
                     };
 
-                    notification.Show ();
+                    try {
+                        notification.Show ();
 
-                } catch (Exception e) {
-                    SparkleLogger.LogInfo ("Notification", "Error showing notification: ", e);
-                }
+                    } catch (Exception e) {
+                        SparkleLogger.LogInfo ("Notification", "Error showing notification: ", e);
+                    }
+                });
             };
         }
     }
