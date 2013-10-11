@@ -12,10 +12,10 @@
 //   GNU General Public License for more details.
 //
 //   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//   along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 
 using System;
-
 using Gtk;
 
 namespace SparkleShare {
@@ -25,16 +25,10 @@ namespace SparkleShare {
         public static Gdk.Pixbuf GetIcon (string name, int size)
         {
             IconTheme icon_theme = new IconTheme ();
-			
-//          foreach (string search_path in IconTheme.Default.SearchPath)
-//              icon_theme.AppendSearchPath (search_path);	
-
-            // FIXME: Temporary workaround for a bug in IconTheme.SearchPath in Gtk# on 64-bit systems
-            // https://github.com/mono/gtk-sharp/commit/9c54fd5ae77f63d11fdc6873a3cb90691990e37f
-            icon_theme.AppendSearchPath ("/usr/share/icons");
-            icon_theme.AppendSearchPath ("/usr/local/share/icons");
-            icon_theme.AppendSearchPath ("/opt/local/share/icons");
             icon_theme.AppendSearchPath (new string [] {SparkleUI.AssetsPath, "icons"}.Combine ());
+			
+            foreach (string search_path in IconTheme.Default.SearchPath)
+               icon_theme.AppendSearchPath (search_path);	
 
             try {
                 return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
