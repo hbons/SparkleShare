@@ -34,14 +34,14 @@ namespace SparkleShare {
                 if (!Program.Controller.NotificationsEnabled)
                     return;
 
-                try {
+                Application.Invoke (delegate {
                     Notification notification = new Notification () {
                         Summary = title,
                         Body    = subtext,
                         Timeout = 5 * 1000,
                         Urgency = Urgency.Low
                     };
-    
+        
                     if (image_path != null)
                         notification.Icon = new Gdk.Pixbuf (image_path);
                     else
@@ -52,11 +52,13 @@ namespace SparkleShare {
                             Controller.BubbleClicked ();
                     };
 
-                    notification.Show ();
+                    try {
+                        notification.Show ();
 
-                } catch (Exception e) {
-                    SparkleLogger.LogInfo ("Notification", "Error showing notification: ", e);
-                }
+                    } catch (Exception e) {
+                        SparkleLogger.LogInfo ("Notification", "Error showing notification: ", e);
+                    }
+                });
             };
         }
     }
