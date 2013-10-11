@@ -8,7 +8,8 @@ EXTRA_DIST = \
         README.md \
 	legal/License.txt \
 	legal/Trademark.txt \
-	legal/Authors.txt
+	legal/Authors.txt \
+	SparkleShare/Linux/sparkleshare.appdata.xml
 
 DISTCLEANFILES = \
 	intltool-extract        \
