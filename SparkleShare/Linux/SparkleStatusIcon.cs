@@ -79,7 +79,7 @@ namespace SparkleShare {
                     this.indicator.Status = Status.Attention;
                     this.indicator.Status = Status.Active;
                     #else
-                    this.status_icon.IconName = icon_name
+                    this.status_icon.IconName = icon_name;
                     #endif
                 });
             };
