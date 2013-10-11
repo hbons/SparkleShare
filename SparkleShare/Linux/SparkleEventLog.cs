@@ -37,6 +37,8 @@ namespace SparkleShare {
         private Spinner spinner;
         private WebView web_view;
 
+        private int pos_x, pos_y;
+
 
         public SparkleEventLog () : base ("Recent Changes")
         {
@@ -44,11 +46,9 @@ namespace SparkleShare {
             SetSizeRequest (480, (int) (monitor_0_rect.Height * 0.8));
 
             IconName = "folder-sparkleshare";
-            int x = (int) (monitor_0_rect.Width * 0.61);
-            int y = (int) (monitor_0_rect.Height * 0.5 - (HeightRequest * 0.5));
+            this.pos_x = (int) (monitor_0_rect.Width * 0.61);
+            this.pos_y = (int) (monitor_0_rect.Height * 0.5 - (HeightRequest * 0.5));
             
-            Move (x, y);
-
             this.size_label    = new Label () { Xalign = 0, Markup = "<b>Size:</b> …" };
             this.history_label = new Label () { Xalign = 0, Markup = "<b>History:</b> …" };
             
@@ -99,6 +99,7 @@ namespace SparkleShare {
 
             Controller.ShowWindowEvent += delegate {
                 Application.Invoke (delegate {
+                    Move (this.pos_x, this.pos_y);
                     ShowAll ();
                     Present ();
                 });
