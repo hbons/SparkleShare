@@ -275,6 +275,7 @@ namespace SparkleShare {
                 
                 TableView.SelectRow (Controller.SelectedPluginIndex, false);
                 TableView.ScrollRowToVisible (Controller.SelectedPluginIndex);
+                MakeFirstResponder ((NSResponder) TableView);
 
                 HistoryCheckButton = new NSButton () {
                     Frame = new RectangleF (190, Frame.Height - 400, 300, 18),
