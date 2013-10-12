@@ -166,7 +166,7 @@ namespace SparkleShare {
                     Sensitive = (Controller.SelectedPlugin.Address == null),
                     ActivatesDefault = true
                 };
-                
+
                 Entry path_entry = new Entry () {
                     Text = Controller.PreviousPath,
                     Sensitive = (Controller.SelectedPlugin.Path == null),
@@ -209,8 +209,8 @@ namespace SparkleShare {
                             tree_view.SetCursor (path, service_column, false);
                             SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
 
-                            if (plugin.Address != null) {
-                                address_entry.Sensitive = false;}
+                            if (plugin.Address != null)
+                                address_entry.Sensitive = false;
 
                             if (plugin.Path != null)
                                 path_entry.Sensitive = false;
@@ -250,10 +250,18 @@ namespace SparkleShare {
                 layout_vertical.PackStart (scrolled_window, true, true, 0);
                 layout_vertical.PackStart (layout_fields, false, false, 0);
 
-                tree_view.GrabFocus ();
                 tree_view.ScrollToCell (new TreePath ("" + Controller.SelectedPluginIndex), null, true, 0, 0);
 
                 Add (layout_vertical);
+
+
+                if (string.IsNullOrEmpty (path_entry.Text)) {
+                    address_entry.GrabFocus ();
+                    address_entry.Position = -1;
+                } else {
+                    path_entry.GrabFocus ();
+                    path_entry.Position = -1;
+                }
 
                 Button cancel_button = new Button ("Cancel");
                 Button add_button = new Button ("Add") { Sensitive = false };
