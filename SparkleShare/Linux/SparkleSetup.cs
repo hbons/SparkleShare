@@ -250,6 +250,9 @@ namespace SparkleShare {
                 layout_vertical.PackStart (scrolled_window, true, true, 0);
                 layout_vertical.PackStart (layout_fields, false, false, 0);
 
+                tree_view.GrabFocus ();
+                tree_view.ScrollToCell (new TreePath ("" + Controller.SelectedPluginIndex), null, true, 0, 0);
+
                 Add (layout_vertical);
 
                 Button cancel_button = new Button ("Cancel");
@@ -303,7 +306,6 @@ namespace SparkleShare {
                 AddButton (add_button);
 
                 Controller.CheckAddPage (address_entry.Text, path_entry.Text, 1);
-                tree_view.GrabFocus ();
             }
 
             if (type == PageType.Invite) {
