@@ -116,7 +116,7 @@ namespace SparkleShare {
 
 
             Label copyright = new Label () {
-                Text = "Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others.",
+                Markup = string.Format ("Copyright © 2010–{0} Hylke Bons and others.", DateTime.Now.Year),
                 Xalign = 0, Xpad   = 0
             };
 
@@ -140,7 +140,7 @@ namespace SparkleShare {
             SparkleLink website_link        = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
             SparkleLink credits_link        = new SparkleLink ("Credits", Controller.CreditsLinkAddress);
             SparkleLink report_problem_link = new SparkleLink ("Report a problem", Controller.ReportProblemLinkAddress);
-            SparkleLink debug_log_link = new SparkleLink ("Debug log", Controller.DebugLogLinkAddress);
+            SparkleLink debug_log_link      = new SparkleLink ("Debug log", Controller.DebugLogLinkAddress);
 
 
             layout_vertical.PackStart (new Label (""), true, true, 0);            
@@ -164,30 +164,17 @@ namespace SparkleShare {
     }
     
     
-    public class SparkleLink : EventBox {
+    public class SparkleLink : Label {
         
         public SparkleLink (string text, string url)
         {
-            VisibleWindow = false;
+            Markup = string.Format ("<a href=\"{0}\"><span fgcolor=\"#729fcf\">{1}</span></a>", url, text);	
+            CanFocus = false;
 
-            Label label = new Label () {
-                Markup = "<span underline='single'>" + text + "</span>"
-            };
-
-            Gdk.RGBA highlight = new Gdk.RGBA ();
-            highlight.Parse ("#729fcf");
-
-            Pango.FontDescription font = new Button ().StyleContext.GetFont (StateFlags.Normal);
+            Pango.FontDescription font = StyleContext.GetFont (StateFlags.Normal);
             font.Size = 9 * 1024;
 
-            label.OverrideFont (font);
-            label.OverrideColor (StateFlags.Normal, highlight);
-            
-            EnterNotifyEvent += delegate { Window.Cursor = new Gdk.Cursor (Gdk.CursorType.Hand1); };
-            LeaveNotifyEvent += delegate { Window.Cursor = new Gdk.Cursor (Gdk.CursorType.Arrow); };
-            ButtonPressEvent += delegate { Program.Controller.OpenWebsite (url); };
-            
-            Add (label);
+            OverrideFont (font);
         }
     }
 }
