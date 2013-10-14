@@ -25,36 +25,36 @@ namespace SparkleShare {
 
     public class SparkleUI {
 
+        public static string AssetsPath = Defines.INSTALL_DIR;
+
         public SparkleStatusIcon StatusIcon;
         public SparkleEventLog EventLog;
         public SparkleBubbles Bubbles;
         public SparkleSetup Setup;
         public SparkleAbout About;
 
-        public static string AssetsPath = Defines.INSTALL_DIR;
-
         private Gtk.Application application;
 
-        // TODO: port sparkleshare.in
+
         public SparkleUI ()
         {
-            application = new Gtk.Application ("org.sparkleshare.sparkleshare", 0);
+            this.application = new Gtk.Application ("org.sparkleshare.sparkleshare", 0);
 
-            application.Register (null);
-            application.Activated += ApplicationActivatedDelegate;
+            this.application.Register (null);
+            this.application.Activated += ApplicationActivatedDelegate;
         }
 
 
         public void Run ()
         {   
-            (application as GLib.Application).Run (0, null);
+            (this.application as GLib.Application).Run (0, null);
         }
 
 
         private void ApplicationActivatedDelegate (object sender, EventArgs args)
         {
-            if (application.Windows.Length > 0) {
-                foreach (Window window in application.Windows) {
+            if (this.application.Windows.Length > 0) {
+                foreach (Window window in this.application.Windows) {
                     if (window.Visible)
                         window.Present ();
                 }
@@ -66,9 +66,9 @@ namespace SparkleShare {
                 Bubbles    = new SparkleBubbles ();
                 StatusIcon = new SparkleStatusIcon ();
 
-                Setup.Application    = application;
-                EventLog.Application = application;
-                About.Application    = application;
+                Setup.Application    = this.application;
+                EventLog.Application = this.application;
+                About.Application    = this.application;
 
                 Program.Controller.UIHasLoaded ();
             }
