@@ -5,60 +5,16 @@ if [[ $UID -eq 0 ]]; then
   exit 1
 fi
 
-if [ "$XDG_RUNTIME_DIR" ]; then
-  pidfile=${XDG_RUNTIME_DIR}/sparkleshare.pid
-else
-  pidfile=~/.sparkleshare-$(hostname)-${USER}.pid
-fi
-
 start() {
-  if [ -e "${pidfile}" ]; then
-    sparklepid=`cat ${pidfile}`
-    if [ -n "`ps -p ${sparklepid} | grep ${sparklepid}`" ]; then
-      echo "SparkleShare is already running."
-      exit 0
-    else
-      echo "Stale SparkleShare PID file found, starting a new instance..."
-      rm -f $pidfile
-    fi
-  fi
-
-  echo -n "Starting SparkleShare... "
   if [ -n "${SSH_AGENT_PID}" -o -n "${SSH_AUTH_SOCK}" ] ; then
     mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
   else
     ssh-agent mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
   fi
-  ( umask 066; echo $! > ${pidfile} )
-  echo "Done."
-}
-
-stop() {
-  if [ -e "${pidfile}" ]; then
-    sparklepid=`cat ${pidfile}`
-    if [ -n "`ps -p ${sparklepid} | grep ${sparklepid}`" ]; then
-      echo -n "Stopping SparkleShare... "
-      kill ${sparklepid}
-      rm -f ${pidfile}
-      echo "Done."
-    else
-      echo "SparkleShare is not running, removing stale PID file..."
-      rm -f ${pidfile}
-    fi
-  else
-    echo "SparkleShare is not running."
-  fi
 }
 
 case $1 in
   start|--start)
-    start
-    ;;
-  stop|--stop)
-    stop
-    ;;
-  restart|--restart)
-    stop
     start
     ;;
   open|--open)
