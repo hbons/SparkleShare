@@ -17,6 +17,7 @@
 
 using System;
 
+using GLib;
 using Gtk;
 using SparkleLib;
 
@@ -32,25 +33,45 @@ namespace SparkleShare {
 
         public static string AssetsPath = Defines.INSTALL_DIR;
 
+        private Gtk.Application application;
 
+        // TODO: port sparkleshare.in
         public SparkleUI ()
         {
-            Application.Init ();
+            application = new Gtk.Application ("org.sparkleshare.sparkleshare", 0);
 
-            Setup      = new SparkleSetup ();
-            EventLog   = new SparkleEventLog ();
-            About      = new SparkleAbout ();
-            Bubbles    = new SparkleBubbles ();
-            StatusIcon = new SparkleStatusIcon ();
-        
-			Program.Controller.UIHasLoaded ();
+            application.Register (null);
+            application.Activated += ApplicationActivatedDelegate;
         }
 
 
-        // Runs the application
         public void Run ()
+        {   
+            (application as GLib.Application).Run (0, null);
+        }
+
+
+        private void ApplicationActivatedDelegate (object sender, EventArgs args)
         {
-            Application.Run ();
+            if (application.Windows.Length > 0) {
+                foreach (Window window in application.Windows) {
+                    if (window.Visible)
+                        window.Present ();
+                }
+
+            } else {
+                Setup      = new SparkleSetup ();
+                EventLog   = new SparkleEventLog ();
+                About      = new SparkleAbout ();
+                Bubbles    = new SparkleBubbles ();
+                StatusIcon = new SparkleStatusIcon ();
+
+                Setup.Application    = application;
+                EventLog.Application = application;
+                About.Application    = application;
+
+                Program.Controller.UIHasLoaded ();
+            }
         }
     }
 }
