@@ -1,3 +1,27 @@
+1.3.0 for Linux, Mac and Windows (??? 2013):
+
+      Hylke:
+      This release focuses mainly on the move to GTK+3 and GNOME 3 integration.
+      If you're running SparkleShare on GNOME you're in for a treat. Special thanks
+      go to Bertrand Lorentz, Mirco Bauer and Stephan Sundermann for help with
+      the bindings, build system adjustments, and other things:
+
+      - Port interface from GTK+2 to GTK+3, replace widget implementations with new APIs
+      - Use GTK+3 compatible bindings for libnotify, webkitgtk, and appindicator
+      - Many style usability and behaviour fixes in the setup dialog
+      - Fix annoying flicker when changing projects on the Recent Changes window
+      - Improved window scalability of the Recent Changes window and about dialog
+      - Remove menu item that toggles notifications (this can now be done in
+        GNOME's system menu)
+      - Refocus on existing SparkleShare instance when starting multiple times
+      - Include an appdata XML file for the GNOME Software application
+      - Show correct icon and application name on GNOME 3 and Ubuntu
+
+      Cross-platform changes:
+      - Relicense SparkleLib, SparkleShare's common library, to GNU LGPLv3+
+      - Set default focus on widgets for different forms in setup dialog 
+
+
 1.2.0 for Linux, Mac and Windows (Sun 6 Oct 2013):
 
       Hylke:
