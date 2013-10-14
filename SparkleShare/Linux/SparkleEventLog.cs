@@ -42,10 +42,12 @@ namespace SparkleShare {
 
         public SparkleEventLog () : base ("Recent Changes")
         {
+            SetWmclass ("SparkleShare", "SparkleShare");
+
             Gdk.Rectangle monitor_0_rect = Gdk.Screen.Default.GetMonitorGeometry (0);
             SetSizeRequest (480, (int) (monitor_0_rect.Height * 0.8));
 
-            IconName = "folder-sparkleshare";
+            IconName = "sparkleshare";
             this.pos_x = (int) (monitor_0_rect.Width * 0.61);
             this.pos_y = (int) (monitor_0_rect.Height * 0.5 - (HeightRequest * 0.5));
             
