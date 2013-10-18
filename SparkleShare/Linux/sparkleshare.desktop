@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=SparkleShare
+Comment=Self hosted, instant, secure file sync
 Exec=sparkleshare start
 Icon=sparkleshare
 Terminal=false

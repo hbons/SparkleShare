@@ -44,10 +44,11 @@ namespace SparkleShare {
 
         public SparkleEventLog () : base ("")
         {
-            SetSizeRequest (480, (int) (Gdk.Screen.Default.Height * 0.8));
+            Gdk.Rectangle monitor_0_rect = Gdk.Screen.Default.GetMonitorGeometry (0);
+            SetSizeRequest (480, (int) (monitor_0_rect.Height * 0.8));
 
-            int x = (int) (Gdk.Screen.Default.Width * 0.61);
-            int y = (int) (Gdk.Screen.Default.Height * 0.5 - (HeightRequest * 0.5));
+            int x = (int) (monitor_0_rect.Width * 0.61);
+            int y = (int) (monitor_0_rect.Height * 0.5 - (HeightRequest * 0.5));
             
             Move (x, y);
 
@@ -283,14 +284,17 @@ namespace SparkleShare {
             html = html.Replace ("<!-- $document-moved-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-moved.png"));
                     
             this.spinner.Stop ();
+            this.scrolled_window.Remove (this.web_view);
+            this.web_view.Dispose ();
 
-            this.web_view.NavigationRequested -= WebViewNavigationRequested;
+            this.web_view = new WebView () { Editable = false };
             this.web_view.LoadHtmlString (html, "file://");
             this.web_view.NavigationRequested += WebViewNavigationRequested;
+            this.scrolled_window.Add (this.web_view);
 
             this.content_wrapper.Remove (this.content_wrapper.Child);
             this.content_wrapper.Add (this.scrolled_window);
-            this.content_wrapper.ShowAll ();
+            this.scrolled_window.ShowAll ();
         }
     }
 }

@@ -133,6 +133,11 @@ namespace SparkleShare {
                 Buttons.Add (CancelButton);
 
                 Controller.CheckSetupPage (FullNameTextField.StringValue, EmailTextField.StringValue);
+
+                if (FullNameTextField.StringValue.Equals (""))
+                    MakeFirstResponder ((NSResponder) FullNameTextField);
+                else
+                    MakeFirstResponder ((NSResponder) EmailTextField);
             }
 
             if (type == PageType.Invite) {
@@ -270,6 +275,7 @@ namespace SparkleShare {
                 
                 TableView.SelectRow (Controller.SelectedPluginIndex, false);
                 TableView.ScrollRowToVisible (Controller.SelectedPluginIndex);
+                MakeFirstResponder ((NSResponder) TableView);
 
                 HistoryCheckButton = new NSButton () {
                     Frame = new RectangleF (190, Frame.Height - 400, 300, 18),
