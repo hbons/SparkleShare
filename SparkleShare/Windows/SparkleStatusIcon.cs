@@ -23,7 +23,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-
+using SparkleLib;
 using Drawing = System.Drawing;
 using Forms = System.Windows.Forms;
 
@@ -151,7 +151,7 @@ namespace SparkleShare {
                 IsChecked = Program.Controller.NotificationsEnabled
             };
 
-            CheckBox isPaused_check_box = new CheckBox() {
+            CheckBox is_all_paused_check_box = new CheckBox() {
                 Margin = new Thickness(6, 0, 0, 0),
                 IsChecked = Program.Controller.IsPaused
             };
@@ -159,8 +159,8 @@ namespace SparkleShare {
             SparkleMenuItem notify_item = new SparkleMenuItem () { Header = "Notifications" };
             notify_item.Icon = notify_check_box;
 
-            SparkleMenuItem is_paused_item = new SparkleMenuItem() { Header = "Paused" };
-            is_paused_item.Icon = isPaused_check_box;
+            SparkleMenuItem is_all_paused_item = new SparkleMenuItem() { Header = "All Paused" };
+            is_all_paused_item.Icon = is_all_paused_check_box;
 
             SparkleMenuItem about_item = new SparkleMenuItem () { Header = "About SparkleShare" };
             this.exit_item = new SparkleMenuItem () { Header = "Exit" };
@@ -181,16 +181,16 @@ namespace SparkleShare {
                 notify_check_box.IsChecked = Program.Controller.NotificationsEnabled;
             };
 
-            isPaused_check_box.Click += delegate {
+            is_all_paused_check_box.Click += delegate {
                 this.context_menu.IsOpen = false;
                 Program.Controller.IsPaused = !Program.Controller.IsPaused;
-                isPaused_check_box.IsChecked = Program.Controller.IsPaused;
+                is_all_paused_check_box.IsChecked = Program.Controller.IsPaused;
             };
 
-            is_paused_item.Click += delegate {
+            is_all_paused_item.Click += delegate {
                 this.context_menu.IsOpen = false;
                 Program.Controller.IsPaused = !Program.Controller.IsPaused;
-                isPaused_check_box.IsChecked = Program.Controller.IsPaused;
+                is_all_paused_check_box.IsChecked = Program.Controller.IsPaused;
             };
             
             this.exit_item.Click += delegate {
@@ -205,16 +205,18 @@ namespace SparkleShare {
 
             if (Controller.Folders.Length > 0) {
                 int i = 0;
-                foreach (string folder_name in Controller.Folders) {     
-                    SparkleMenuItem subfolder_item = new SparkleMenuItem () {
-                        Header = folder_name.Replace ("_", "__")
-                    };
-                    
+                foreach (string folder_name in Controller.Folders)
+                {
+                    SparkleSubFolderItem subfolder_item = new SparkleSubFolderItem (folder_name.Replace ("_", "__"));
                     Image subfolder_image = new Image () {
                         Source = SparkleUIHelpers.GetImageSource ("folder"),
                         Width  = 16,
                         Height = 16
                     };
+
+                    subfolder_item.Icon = subfolder_image;
+                    subfolder_item.OpenClicked += new RoutedEventHandler(Controller.OpenFolderDelegate(folder_name));
+                    subfolder_item.OpenClicked += (sender, args) => context_menu.IsOpen = false;
                     
                     if (!string.IsNullOrEmpty (Controller.FolderErrors [i])) {
                         subfolder_item.Icon = new Image () {
@@ -238,9 +240,32 @@ namespace SparkleShare {
                         subfolder_item.Items.Add (new Separator ());
                         subfolder_item.Items.Add (try_again_item);
                         
-                    } else {
-                        subfolder_item.Icon = subfolder_image;
-						subfolder_item.Click += new RoutedEventHandler (Controller.OpenFolderDelegate (folder_name));
+                    } else
+                    {
+                        SparkleRepoBase repo = FindRepo (folder_name);
+                        
+                        CheckBox check_box = new CheckBox
+                        {
+                            Margin = new Thickness(6, 0, 0, 0),
+                            IsChecked = (repo.Status == SyncStatus.Paused)
+                        };
+
+                        SparkleMenuItem pause_item = new SparkleMenuItem() {
+                            Header = "Paused",
+                            Icon = check_box
+                        };
+
+                        check_box.Click += delegate {
+                            context_menu.IsOpen = false;
+                            repo.ChangePauseState (repo.Status != SyncStatus.Paused);
+                        };
+
+                        pause_item.Click += delegate {
+                            context_menu.IsOpen = false;
+                            repo.ChangePauseState (repo.Status != SyncStatus.Paused);
+                        };
+
+                        subfolder_item.Items.Add (pause_item);
                     }
                     
                     this.context_menu.Items.Add (subfolder_item);
@@ -253,7 +278,7 @@ namespace SparkleShare {
             folder_item.Items.Add (new Separator ());
             folder_item.Items.Add (notify_item);
             folder_item.Items.Add (new Separator ());
-            folder_item.Items.Add(is_paused_item);
+            folder_item.Items.Add(is_all_paused_item);
             folder_item.Items.Add (new Separator ());
             folder_item.Items.Add (link_code_item);
             folder_item.Items.Add (new Separator ());
@@ -265,6 +290,16 @@ namespace SparkleShare {
             this.notify_icon.ContextMenu = this.context_menu;
         }
 
+        private SparkleRepoBase FindRepo(string folder_name)
+        {
+            foreach (SparkleRepoBase repository in Program.Controller.Repositories)
+            {
+                if (repository.Name.Equals (folder_name))
+                    return repository;
+            }
+
+            return null;
+        }
         
         public void ShowBalloon (string title, string subtext, string image_path)
         {
@@ -284,6 +319,46 @@ namespace SparkleShare {
         public SparkleMenuItem () : base ()
         {
             Padding = new Thickness (6, 3, 4, 0);
+        }
+    }
+
+    public class SparkleSubFolderItem : MenuItem {
+
+        public SparkleSubFolderItem (string header) : base ()
+        {
+            Padding = new Thickness (6, 3, 4, 0);
+
+            Label header_label = new Label
+            {
+                Content = header,
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+
+            Button open_button = new Button
+            {
+                VerticalAlignment = VerticalAlignment.Center,
+                Content = "Open",
+                Margin = new Thickness (0, 0, 2, 0),
+                FontSize = 10
+            };
+            open_button.Click += OnOpen;
+
+            StackPanel header_panel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal
+            };
+            header_panel.Children.Add (open_button);
+            header_panel.Children.Add(header_label);
+
+            this.Header = header_panel;
+        }
+
+        public event RoutedEventHandler OpenClicked;
+        protected virtual void OnOpen (object sender, RoutedEventArgs routed_event_args)
+        {
+            RoutedEventHandler handler = OpenClicked;
+            if (handler != null)
+                handler(sender, routed_event_args);
         }
     }
 }

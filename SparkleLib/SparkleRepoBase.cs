@@ -28,7 +28,9 @@ namespace SparkleLib {
         Idle,
         SyncUp,
         SyncDown,
-        Error
+        Error, 
+        Paused, 
+        Resumed
     }
 
 
@@ -63,7 +65,6 @@ namespace SparkleLib {
 
 
         public static bool UseCustomWatcher = false;
-        public bool IsPaused { get; set; }
 
 
         public event SyncStatusChangedEventHandler SyncStatusChanged = delegate { };
@@ -141,34 +142,6 @@ namespace SparkleLib {
             public static readonly TimeSpan Long  = new TimeSpan (0, 0, 15, 0);
         }
 
-        public void ChangePauseState (bool is_paused)
-        {
-            if (is_paused != this.IsPaused)
-            {
-                SparkleLogger.LogInfo("Local", Name + " | State changed to: IsPaused: " + is_paused);
-                this.IsPaused = is_paused;
-
-                if (!this.IsPaused)
-                {
-                    SparkleLogger.LogInfo ("Local", Name + " | Am now awake, checking for changes...");
-
-                    if (!UseCustomWatcher)
-                        this.watcher.Enable ();
-
-                    OnElapsedEventHandler (this, null);
-                }
-                else
-                {
-                    SparkleLogger.LogInfo("Local", Name + " | Am now sleeping...");
-
-                    if (!UseCustomWatcher)
-                        this.watcher.Disable ();
-                }
-
-                this.remote_timer.Enabled = !this.IsPaused;
-            }
-        }
-
         public SparkleRepoBase (string path, SparkleConfig config)
         {
             SparkleLogger.LogInfo (path, "Initializing...");
@@ -192,6 +165,36 @@ namespace SparkleLib {
             new Thread (() => CreateListener ()).Start ();
 
             this.remote_timer.Elapsed += OnElapsedEventHandler;
+
+            SyncStatusChanged += OnSyncStatusChanged;
+        }
+
+        private void OnSyncStatusChanged (SyncStatus new_status)
+        {
+            switch (new_status)
+            {
+                case SyncStatus.Paused:
+                    SparkleLogger.LogInfo ("Local", Name + " | Am now sleeping...");
+                    if (!UseCustomWatcher)
+                        this.watcher.Disable();
+                    this.remote_timer.Stop ();
+                    break;
+                case SyncStatus.Resumed:
+                    SparkleLogger.LogInfo("Local", Name + " | Am now awake, checking for changes...");
+                    Status = SyncStatus.Idle;
+                    ForceRetry ();
+                    if (!UseCustomWatcher)
+                        this.watcher.Enable();
+                    OnElapsedEventHandler(this, null);
+                    this.remote_timer.Start();
+                    break;
+            }
+        }
+
+        public void ChangePauseState (bool is_paused)
+        {
+            Status = (is_paused) ? SyncStatus.Paused : SyncStatus.Resumed;
+            SyncStatusChanged (Status);
         }
 
         private void OnElapsedEventHandler (object sender, Timers.ElapsedEventArgs e)
@@ -517,10 +520,13 @@ namespace SparkleLib {
         {
             string identifier = Identifier;
 
+            while(Status == SyncStatus.Paused)
+                Thread.Sleep(100);
+
             if (!announcement.FolderIdentifier.Equals (identifier))
                 return;
                 
-            if (!announcement.Message.Equals (CurrentRevision) && !IsPaused) {
+            if (!announcement.Message.Equals (CurrentRevision)) {
                 while (this.is_syncing)
                     Thread.Sleep (100);
 

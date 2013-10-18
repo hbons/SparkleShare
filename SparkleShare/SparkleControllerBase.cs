@@ -43,14 +43,14 @@ namespace SparkleShare {
         public double ProgressSpeedUp    = 0.0;
         public double ProgressSpeedDown  = 0.0;
 
-        private bool is_paused;
+        private bool _isPaused;
         public bool IsPaused
         {
-            get { return is_paused; }
+            get { return _isPaused; }
             set
             {
-                is_paused = value;
-                IsPausedChangedEvent (is_paused);
+                _isPaused = value;
+                IsPausedChangedEvent (_isPaused);
             }
         }
         public event IsPausedChangedEventHandler IsPausedChangedEvent = delegate {};
