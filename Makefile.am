@@ -6,7 +6,8 @@ DIST_SUBDIRS = $(basedirs) SparkleShare
 EXTRA_DIST = \
 	News.txt \
         README.md \
-	legal/License.txt \
+	legal/License_for_SparkleShare.txt \
+	legal/License_for_SparkleLib.txt \
 	legal/Trademark.txt \
 	legal/Authors.txt \
 	SparkleShare/Linux/sparkleshare.appdata.xml
