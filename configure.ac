@@ -67,7 +67,7 @@ AC_ARG_ENABLE(appindicator,
 OSNAME=`uname -s`
 if test "$OSNAME" = "Linux" ; then
 	dnl check for webkitgtk-sharp
-	PKG_CHECK_MODULES(WEBKIT_SHARP, webkitgtk-sharp-3.0, have_webkitgtk_sharp=yes, have_webkitgtk_sharp=no)
+	PKG_CHECK_MODULES(WEBKITGTK_SHARP, webkitgtk-sharp-3.0, have_webkitgtk_sharp=yes, have_webkitgtk_sharp=no)
 	if test "x$have_webkitgtk_sharp" = "xno" ; then
 		AC_ERROR("webkitgtk-sharp is a required dependency: you need to install the appropriate devel package before you can compile")
 	fi
