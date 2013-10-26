@@ -141,7 +141,7 @@ namespace SparkleShare {
         public abstract void OpenFile (string path);
         
         // Opens a file with the appropriate application
-        public abstract void OpenWebsite (string url);
+        public virtual void OpenWebsite (string url) { }
 
         // Copies text to the clipboard
         public abstract void CopyToClipboard (string text);
