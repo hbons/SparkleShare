@@ -57,8 +57,6 @@ if test -z "$CONFIG_REQUESTED" ; then
 	enable_debug=yes
 fi
 
-SPARKLESHARE_CHECK_GTK_SHARP
-
 AC_ARG_ENABLE(appindicator,
 	AS_HELP_STRING([--enable-appindicator[=@<:@no/auto/yes@:>@]],[Build support for application indicators ]),
 	[enable_appindicator=$enableval],
@@ -66,6 +64,8 @@ AC_ARG_ENABLE(appindicator,
 
 OSNAME=`uname -s`
 if test "$OSNAME" = "Linux" ; then
+	SPARKLESHARE_CHECK_GTK_SHARP
+
 	dnl check for webkitgtk-sharp
 	PKG_CHECK_MODULES(WEBKITGTK_SHARP, webkitgtk-sharp-3.0, have_webkitgtk_sharp=yes, have_webkitgtk_sharp=no)
 	if test "x$have_webkitgtk_sharp" = "xno" ; then
