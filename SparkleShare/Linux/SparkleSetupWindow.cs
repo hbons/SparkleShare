@@ -16,99 +16,72 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Timers;
-
 using Gtk;
-using Mono.Unix;
 
 namespace SparkleShare {
 
     public class SparkleSetupWindow : Window    {
 
-        // TODO: caps
-        private HBox HBox;
-        private VBox VBox;
-        private VBox Wrapper;
-        private VBox OptionArea;
-        private HBox Buttons;
+        private EventBox content_area;
+        private EventBox option_area;
+        private HBox buttons;
 
         public string Header;
         public string Description;
-        public string SecondaryTextColor;
-        public string SecondaryTextColorSelected;
 
-        public Container Content;
+        public readonly string SecondaryTextColor;
+        public readonly string SecondaryTextColorSelected;
 
-        public SparkleSetupWindow () : base ("")
+
+        public SparkleSetupWindow () : base ("SparkleShare Setup")
         {
-            Title          = Catalog.GetString ("SparkleShare Setup");
-            BorderWidth    = 0;
-            IconName       = "folder-sparkleshare";
+            SetWmclass ("SparkleShare", "SparkleShare");
+
+            IconName       = "sparkleshare";
             Resizable      = false;
             WindowPosition = WindowPosition.Center;
             Deletable      = false;
             TypeHint       = Gdk.WindowTypeHint.Dialog;
 
-            DeleteEvent += delegate (object sender, DeleteEventArgs args) {
-                args.RetVal = true;
-            };
-
-            SecondaryTextColor = SparkleUIHelpers.GdkColorToHex (Style.Foreground (StateType.Insensitive));
-                        
-            SecondaryTextColorSelected =
-                SparkleUIHelpers.GdkColorToHex (
-                    MixColors (
-                        new TreeView ().Style.Foreground (StateType.Selected),
-                        new TreeView ().Style.Background (StateType.Selected),
-                        0.15
-                    )
-                );
 
             SetSizeRequest (680, 400);
 
-            HBox = new HBox (false, 0);
+            DeleteEvent += delegate (object sender, DeleteEventArgs args) { args.RetVal = true; };
 
-                VBox = new VBox (false, 0);
+            Gdk.Color color = SparkleUIHelpers.RGBAToColor (StyleContext.GetColor (StateFlags.Insensitive));
+            SecondaryTextColor = SparkleUIHelpers.ColorToHex (color);
+                    
+            color = MixColors (
+                SparkleUIHelpers.RGBAToColor (new TreeView ().StyleContext.GetColor (StateFlags.Selected)),
+                SparkleUIHelpers.RGBAToColor (new TreeView ().StyleContext.GetBackgroundColor (StateFlags.Selected)),
+                0.39);
+    
+            SecondaryTextColorSelected = SparkleUIHelpers.ColorToHex (color);
 
-                    Wrapper = new VBox (false, 0) {
-                        BorderWidth = 0
-                    };
+            HBox layout_horizontal = new HBox (false, 0);
 
-                    OptionArea = new VBox (false, 0) {
-                        BorderWidth = 0
-                    };
+                VBox layout_vertical = new VBox (false, 0);
 
-                    Buttons = CreateButtonBox ();
+                    this.content_area    = new EventBox ();
+                    this.option_area = new EventBox ();
 
+                    this.buttons = CreateButtonBox ();
 
-                HBox layout_horizontal = new HBox (false , 0) {
-                    BorderWidth = 0
-                };
+                HBox layout_actions = new HBox (false , 48);
 
-                layout_horizontal.PackStart (OptionArea, true, true, 0);
-                layout_horizontal.PackStart (Buttons, false, false, 0);
+                layout_actions.PackStart (this.option_area, true, true, 0);
+                layout_actions.PackStart (this.buttons, false, false, 0);
 
-                VBox.PackStart (Wrapper, true, true, 0);
-                VBox.PackStart (layout_horizontal, false, false, 15);
-
-                EventBox box = new EventBox ();
-                Gdk.Color bg_color = new Gdk.Color ();
-                Gdk.Color.Parse ("#000", ref bg_color);
-                box.ModifyBg (StateType.Normal, bg_color);
+                layout_vertical.PackStart (this.content_area, true, true, 0);
+                layout_vertical.PackStart (layout_actions, false, false, 15);
 
                 Image side_splash = SparkleUIHelpers.GetImage ("side-splash.png");
                 side_splash.Yalign = 1;
 
-            box.Add (side_splash);
+            layout_horizontal.PackStart (side_splash, false, false, 0);
+            layout_horizontal.PackStart (layout_vertical, true, true, 30);
 
-            HBox.PackStart (box, false, false, 0);
-            HBox.PackStart (VBox, true, true, 30);
-
-            base.Add (HBox);
+            base.Add (layout_horizontal);
         }
 
 
@@ -116,7 +89,6 @@ namespace SparkleShare {
         {
             return new HBox () {
                 BorderWidth = 0,
-                //Layout      = ButtonBoxStyle.End,
                 Homogeneous = false,
                 Spacing     = 6
             };
@@ -126,13 +98,13 @@ namespace SparkleShare {
         public void AddButton (Button button)
         {
             (button.Child as Label).Xpad = 15;
-            Buttons.Add (button);
+            this.buttons.Add (button);
         }
 
 
         public void AddOption (Widget widget)
         {            
-            OptionArea.Add (widget);
+            this.option_area.Add (widget);
         }
 
 
@@ -160,8 +132,7 @@ namespace SparkleShare {
             if (widget != null)
                 layout_vertical.PackStart (widget, true, true, 0);
 
-            Wrapper.PackStart (layout_vertical, true, true, 0);
-            ShowAll ();
+            this.content_area.Add (layout_vertical);
         }
 
     
@@ -170,23 +141,21 @@ namespace SparkleShare {
             Header      = "";
             Description = "";
 
-            if (OptionArea.Children.Length > 0)
-                OptionArea.Remove (OptionArea.Children [0]);
+            if (this.option_area.Children.Length > 0)
+                this.option_area.Remove (this.option_area.Children [0]);
 
-            if (Wrapper.Children.Length > 0)
-                Wrapper.Remove (Wrapper.Children [0]);
+            if (this.content_area.Children.Length > 0)
+                this.content_area.Remove (this.content_area.Children [0]);
 
-            foreach (Button button in Buttons)
-                Buttons.Remove (button);
-
-            ShowAll ();
+            foreach (Button button in this.buttons)
+                this.buttons.Remove (button);
         }
         
         
         new public void ShowAll ()
         {
-            if (Buttons.Children.Length > 0) {
-                Button default_button = (Button) Buttons.Children [Buttons.Children.Length - 1];
+            if (this.buttons.Children.Length > 0) {
+                Button default_button = (Button) this.buttons.Children [this.buttons.Children.Length - 1];
             
                 default_button.CanDefault = true;
                 Default = default_button;
@@ -201,11 +170,11 @@ namespace SparkleShare {
         {
             return new Gdk.Color (
                 Convert.ToByte ((255 * (Math.Min (65535, first_color.Red * (1.0 - ratio) +
-                    second_color.Red   * ratio))) / 65535),
+                    second_color.Red * ratio))) / 65535),
                 Convert.ToByte ((255 * (Math.Min (65535, first_color.Green * (1.0 - ratio) +
                     second_color.Green * ratio))) / 65535),
                 Convert.ToByte ((255 * (Math.Min (65535, first_color.Blue * (1.0 - ratio) +
-                    second_color.Blue  * ratio))) / 65535)
+                    second_color.Blue * ratio))) / 65535)
             );
         }
     }

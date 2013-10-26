@@ -17,6 +17,7 @@
 
 using System;
 
+using GLib;
 using Gtk;
 using SparkleLib;
 
@@ -24,33 +25,53 @@ namespace SparkleShare {
 
     public class SparkleUI {
 
+        public static string AssetsPath = Defines.INSTALL_DIR;
+
         public SparkleStatusIcon StatusIcon;
         public SparkleEventLog EventLog;
         public SparkleBubbles Bubbles;
         public SparkleSetup Setup;
         public SparkleAbout About;
 
-        public static string AssetsPath = Defines.INSTALL_DIR;
+        private Gtk.Application application;
 
 
         public SparkleUI ()
         {
-            Application.Init ();
+            this.application = new Gtk.Application ("org.sparkleshare.sparkleshare", 0);
 
-            Setup      = new SparkleSetup ();
-            EventLog   = new SparkleEventLog ();
-            About      = new SparkleAbout ();
-            Bubbles    = new SparkleBubbles ();
-            StatusIcon = new SparkleStatusIcon ();
-        
-			Program.Controller.UIHasLoaded ();
+            this.application.Register (null);
+            this.application.Activated += ApplicationActivatedDelegate;
         }
 
 
-        // Runs the application
         public void Run ()
+        {   
+            (this.application as GLib.Application).Run (0, null);
+        }
+
+
+        private void ApplicationActivatedDelegate (object sender, EventArgs args)
         {
-            Application.Run ();
+            if (this.application.Windows.Length > 0) {
+                foreach (Window window in this.application.Windows) {
+                    if (window.Visible)
+                        window.Present ();
+                }
+
+            } else {
+                Setup      = new SparkleSetup ();
+                EventLog   = new SparkleEventLog ();
+                About      = new SparkleAbout ();
+                Bubbles    = new SparkleBubbles ();
+                StatusIcon = new SparkleStatusIcon ();
+
+                Setup.Application    = this.application;
+                EventLog.Application = this.application;
+                About.Application    = this.application;
+
+                Program.Controller.UIHasLoaded ();
+            }
         }
     }
 }

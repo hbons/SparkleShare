@@ -12,11 +12,10 @@
 //   GNU General Public License for more details.
 //
 //   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//   along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 
 using System;
-using System.IO;
-
 using Gtk;
 
 namespace SparkleShare {
@@ -26,16 +25,10 @@ namespace SparkleShare {
         public static Gdk.Pixbuf GetIcon (string name, int size)
         {
             IconTheme icon_theme = new IconTheme ();
+            icon_theme.AppendSearchPath (new string [] {SparkleUI.AssetsPath, "icons"}.Combine ());
 			
-//          foreach (string search_path in IconTheme.Default.SearchPath)
-//              icon_theme.AppendSearchPath (search_path);	
-
-            // FIXME: Temporary workaround for a bug in IconTheme.SearchPath in Gtk# on 64-bit systems
-            // https://github.com/mono/gtk-sharp/commit/9c54fd5ae77f63d11fdc6873a3cb90691990e37f
-            icon_theme.AppendSearchPath ("/usr/share/icons");
-            icon_theme.AppendSearchPath ("/usr/local/share/icons");
-            icon_theme.AppendSearchPath ("/opt/local/share/icons");
-            icon_theme.AppendSearchPath (Path.Combine (SparkleUI.AssetsPath, "icons"));
+            foreach (string search_path in IconTheme.Default.SearchPath)
+               icon_theme.AppendSearchPath (search_path);	
 
             try {
                 return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
@@ -60,12 +53,27 @@ namespace SparkleShare {
 
         // Converts a Gdk RGB color to a hex value.
         // Example: from "rgb:0,0,0" to "#000000"
-        public static string GdkColorToHex (Gdk.Color color)
+        public static string ColorToHex (Gdk.Color color)
         {
             return String.Format ("#{0:X2}{1:X2}{2:X2}",
                 (int) Math.Truncate (color.Red   / 256.00),
                 (int) Math.Truncate (color.Green / 256.00),
                 (int) Math.Truncate (color.Blue  / 256.00));
+        }
+
+        
+        public static Gdk.Color RGBAToColor (Gdk.RGBA rgba) {
+            return new Gdk.Color () {
+                Red   = (ushort) (rgba.Red * 65535),
+                Green = (ushort) (rgba.Green * 65535),
+                Blue  = (ushort)(rgba.Blue * 65535)
+            };
+        }
+
+
+        public static string RGBAToHex (Gdk.RGBA rgba)
+        {
+            return ColorToHex (RGBAToColor (rgba));
         }
     }
 }

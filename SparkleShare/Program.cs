@@ -36,7 +36,7 @@ namespace SparkleShare {
         #endif
         public static void Main (string [] args)
         {
-            if (args.Length != 0 && !args [0].Equals ("start") &&
+            if (args.Length != 0 && !args [0].Equals ("help") &&
                 SparkleBackend.Platform != PlatformID.MacOSX &&
                 SparkleBackend.Platform != PlatformID.Win32NT) {
 
@@ -47,13 +47,13 @@ namespace SparkleShare {
                     "designed to keep things simple and to stay out of your way." + n +
                     n +
                     "Version: " + SparkleLib.SparkleBackend.Version + n +
-                    "Copyright (C) 2010 Hylke Bons" + n +
+                    "Copyright (C) 2010 Hylke Bons and others" + n +
                     "This program comes with ABSOLUTELY NO WARRANTY." + n +
                     n +
                     "This is free software, and you are welcome to redistribute it" + n +
                     "under certain conditions. Please read the GNU GPLv3 for details." + n +
                     n +
-                    "Usage: sparkleshare [start|stop|restart]");
+                    "Usage: sparkleshare [start|open]");
 
                 Environment.Exit (-1);
             }
