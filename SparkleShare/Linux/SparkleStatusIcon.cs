@@ -19,7 +19,7 @@ using System;
 
 using Gtk;
 #if HAVE_APP_INDICATOR
-using AppIndicator;
+using AppIndicator3;
 #endif
 
 namespace SparkleShare {
@@ -34,7 +34,7 @@ namespace SparkleShare {
         private MenuItem state_item;
 
         #if HAVE_APP_INDICATOR
-        private ApplicationIndicator indicator;
+        private Indicator indicator;
         #else
         private StatusIcon status_icon;
         #endif
@@ -43,9 +43,9 @@ namespace SparkleShare {
         public SparkleStatusIcon ()
         {
             #if HAVE_APP_INDICATOR
-            this.indicator = new ApplicationIndicator ("sparkleshare", "sparkleshare", Category.ApplicationStatus);
+            this.indicator = new Indicator ("sparkleshare", "sparkleshare", (int) IndicatorCategory.ApplicationStatus);
             this.indicator.IconName = "process-syncing-idle";
-            this.indicator.Status   = Status.Active;
+            this.indicator.Status   = (int) IndicatorStatus.Active;
             #else
 			this.status_icon          = new StatusIcon ();
             this.status_icon.IconName = "sparkleshare";
@@ -76,8 +76,9 @@ namespace SparkleShare {
                     #if HAVE_APP_INDICATOR
                     this.indicator.IconName = icon_name;
 
-                    this.indicator.Status = Status.Attention;
-                    this.indicator.Status = Status.Active;
+                    // Force update of the status icon
+                    this.indicator.Status = (int) IndicatorStatus.Attention;
+                    this.indicator.Status = (int) IndicatorStatus.Active;
                     #else
                     this.status_icon.IconName = icon_name;
                     #endif
@@ -151,6 +152,8 @@ namespace SparkleShare {
 			this.recent_events_item.Sensitive = Controller.RecentEventsItemEnabled;
             this.quit_item    = new MenuItem ("Quit") { Sensitive = Controller.QuitItemEnabled };
             MenuItem add_item = new MenuItem ("Add Hosted Project…");
+
+            #if HAVE_APP_INDICATOR
             MenuItem notify_item;
                                                              
             if (Program.Controller.NotificationsEnabled)
@@ -168,6 +171,7 @@ namespace SparkleShare {
                     	(notify_item.Child as Label).Text = "Turn Notifications On";
 				});
             };
+            #endif
 
             MenuItem link_code_item = new MenuItem ("Client ID");
             
@@ -195,8 +199,10 @@ namespace SparkleShare {
             folder_item.Submenu = new Menu ();
 			(folder_item.Submenu as Menu).Add (this.recent_events_item);
             (folder_item.Submenu as Menu).Add (add_item);
+            #if HAVE_APP_INDICATOR
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
             (folder_item.Submenu as Menu).Add (notify_item);
+            #endif
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
             (folder_item.Submenu as Menu).Add (link_code_item);
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
