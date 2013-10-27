@@ -3,9 +3,6 @@
 SparkleShare now successfully runs on the GNOME 3 platform!
 Here's how you compile it against GTK+3 and other dependencies.
 
-Check out the `GNOME3` git branch from:
-    https://github.com/hbons/SparkleShare
-
 You will still need to have the regular build dependencies installed:
     https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Linux/README.md
 
