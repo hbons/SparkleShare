@@ -34,8 +34,6 @@ SHAMROCK_CHECK_MONO_4_0_GAC_ASSEMBLIES([
 ])]
 )
 
-SPARKLESHARE_CHECK_NOTIFY_SHARP
-
 AC_ARG_ENABLE(debug,
 	AC_HELP_STRING([--enable-debug],
 		[Use 'DEBUG' Configuration [default=YES]]),
@@ -66,19 +64,14 @@ OSNAME=`uname -s`
 if test "$OSNAME" = "Linux" ; then
 	SPARKLESHARE_CHECK_GTK_SHARP
 
+	PKG_CHECK_MODULES(NOTIFY_SHARP, notify-sharp-3.0)
+
 	dnl check for webkitgtk-sharp
 	PKG_CHECK_MODULES(WEBKITGTK_SHARP, webkitgtk-sharp-3.0, have_webkitgtk_sharp=yes, have_webkitgtk_sharp=no)
 	if test "x$have_webkitgtk_sharp" = "xno" ; then
 		AC_ERROR("webkitgtk-sharp is a required dependency: you need to install the appropriate devel package before you can compile")
 	fi
 	AC_SUBST(WEBKITGTK_SHARP_LIBS)
-
-	dnl check for notify-sharp
-	PKG_CHECK_MODULES(NOTIFY_SHARP, notify-sharp, have_notify_sharp=yes, have_notify_sharp=no)
-	if test "x$have_notify_sharp" = "xno" ; then
-		AC_ERROR("notify-sharp is a required dependency: you need to install the appropriate devel package before you can compile")
-	fi
-	AC_SUBST(NOTIFY_SHARP_LIBS)
 
 	APPINDICATOR_REQUIRED=0.1
 
