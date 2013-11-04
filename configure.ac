@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-m4_define([sparkleshare_version], [1.2])
+m4_define([sparkleshare_version], [1.3])
 
 AC_PREREQ([2.54])
 AC_INIT([SparkleShare], sparkleshare_version)
@@ -31,8 +31,6 @@ PKG_CHECK_EXISTS([mono >= 2.8],
 [SHAMROCK_FIND_MONO_4_0_COMPILER
 SHAMROCK_CHECK_MONO_4_0_GAC_ASSEMBLIES([
     System
-    System.Security
-    Mono.Posix
 ])]
 )
 
@@ -59,16 +57,6 @@ if test -z "$CONFIG_REQUESTED" ; then
 	enable_debug=yes
 fi
 
-
-dnl package checks, common for all configs
-#PKG_CHECK_MODULES([NDESK_DBUS], [ndesk-dbus-1.0])
-#AC_SUBST(NDESK_DBUS_LIBS)
-#PKG_CHECK_MODULES([NDESK_DBUS_GLIB], [ndesk-dbus-glib-1.0])
-#AC_SUBST(NDESK_DBUS_GLIB_LIBS)
-
-
-SPARKLESHARE_CHECK_GTK_SHARP
-
 AC_ARG_ENABLE(appindicator,
 	AS_HELP_STRING([--enable-appindicator[=@<:@no/auto/yes@:>@]],[Build support for application indicators ]),
 	[enable_appindicator=$enableval],
@@ -76,12 +64,14 @@ AC_ARG_ENABLE(appindicator,
 
 OSNAME=`uname -s`
 if test "$OSNAME" = "Linux" ; then
-	dnl check for webkit-sharp
-	PKG_CHECK_MODULES(WEBKIT_SHARP, webkit-sharp-1.0, have_webkit_sharp=yes, have_webkit_sharp=no)
-	if test "x$have_webkit_sharp" = "xno" ; then
-		AC_ERROR("webkit-sharp is a required dependency: you need to install the appropriate devel package before you can compile")
+	SPARKLESHARE_CHECK_GTK_SHARP
+
+	dnl check for webkitgtk-sharp
+	PKG_CHECK_MODULES(WEBKITGTK_SHARP, webkitgtk-sharp-3.0, have_webkitgtk_sharp=yes, have_webkitgtk_sharp=no)
+	if test "x$have_webkitgtk_sharp" = "xno" ; then
+		AC_ERROR("webkitgtk-sharp is a required dependency: you need to install the appropriate devel package before you can compile")
 	fi
-	AC_SUBST(WEBKIT_SHARP_LIBS)
+	AC_SUBST(WEBKITGTK_SHARP_LIBS)
 
 	dnl check for notify-sharp
 	PKG_CHECK_MODULES(NOTIFY_SHARP, notify-sharp, have_notify_sharp=yes, have_notify_sharp=no)
@@ -90,19 +80,19 @@ if test "$OSNAME" = "Linux" ; then
 	fi
 	AC_SUBST(NOTIFY_SHARP_LIBS)
 
-	APPINDICATOR_REQUIRED=0.0.7
+	APPINDICATOR_REQUIRED=0.1
 
 	if test x$enable_appindicator = xauto ; then
-			PKG_CHECK_EXISTS([appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED],
+			PKG_CHECK_EXISTS([appindicator3-sharp-0.1 >= $APPINDICATOR_REQUIRED],
 							 enable_appindicator="yes",
 							 enable_appindicator="no")
 	fi
 
 	if test x$enable_appindicator = xyes ; then
-			PKG_CHECK_EXISTS([appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED],,
-							 AC_MSG_ERROR([appindicator-sharp-0.1 is not installed]))
+			PKG_CHECK_EXISTS([appindicator3-sharp-0.1 >= $APPINDICATOR_REQUIRED],,
+							 AC_MSG_ERROR([appindicator3-sharp-0.1 is not installed]))
 			PKG_CHECK_MODULES(APP_INDICATOR,
-							appindicator-sharp-0.1 >= $APPINDICATOR_REQUIRED)
+							appindicator3-sharp-0.1 >= $APPINDICATOR_REQUIRED)
 			AC_SUBST(APP_INDICATOR_CFLAGS)
 			AC_SUBST(APP_INDICATOR_LIBS)
 			AC_DEFINE(HAVE_APP_INDICATOR, 1, [Have AppIndicator])

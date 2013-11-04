@@ -1,4 +1,4 @@
-1.3.0 for Linux, Mac and Windows (??? 2013):
+1.3.0 for Linux (Sat Oct 26 2013):
 
       Hylke:
       This release focuses mainly on the move to GTK+3 and GNOME 3 integration.
