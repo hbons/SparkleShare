@@ -12,6 +12,7 @@ below, where they are GTK+3-enabled.
 
 Install the `gtk-sharp3` bindings from:
 https://github.com/mono/gtk-sharp
+or on Ubuntu, get it from this PPA: https://launchpad.net/~meebey/+archive/mono-preview
 
 Install the `notify-sharp` bindings from:
 https://github.com/meebey/notify-sharp
