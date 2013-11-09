@@ -18,9 +18,9 @@ https://launchpad.net/~meebey/+archive/mono-preview
 Install the `notify-sharp` bindings from:  
 https://git.gnome.org/browse/notify-sharp/
 
-Install the `webkitgtk-sharp` and `soup-sharp` bindings from:  
-https://github.com/xDarkice/webkitgtk-sharp  
-https://github.com/xDarkice/soup-sharp
+Install the `soup-sharp` and `webkitgtk-sharp` bindings from:  
+https://github.com/xDarkice/soup-sharp  
+https://github.com/xDarkice/webkitgtk-sharp
 
 All with the usual:
 
