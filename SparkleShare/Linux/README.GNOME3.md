@@ -4,7 +4,7 @@ SparkleShare now successfully runs on the GNOME 3 platform!
 Here's how you compile it against GTK+3 and other dependencies.
 
 You will still need to have the regular build dependencies installed:  
-    https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Linux/README.md
+https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Linux/README.md
 
 The C# bindings that SparkleShare uses need to be recompiled against GTK+3, so  
 you will need to get the the dependencies from the specific locations listed  
@@ -18,8 +18,9 @@ https://launchpad.net/~meebey/+archive/mono-preview
 Install the `notify-sharp` bindings from:  
 https://git.gnome.org/browse/notify-sharp/
 
-Install the `webkitgtk-sharp` bindings from:  
+Install the `webkitgtk-sharp` and `soup-sharp` bindings from:  
 https://github.com/xDarkice/webkitgtk-sharp
+https://github.com/xDarkice/soup-sharp
 
 All with the usual:
 
