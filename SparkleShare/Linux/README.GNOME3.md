@@ -10,9 +10,10 @@ The C# bindings that SparkleShare uses need to be recompiled against GTK+3, so
 you will need to get the the dependencies from the specific locations listed
 below, where they are GTK+3-enabled.
 
-Install the `gtk-sharp3` bindings from:
+Install the `gtk-sharp3` bindings from:  
 https://github.com/mono/gtk-sharp
-or on Ubuntu, get it from this PPA: https://launchpad.net/~meebey/+archive/mono-preview
+Or on Ubuntu, get it from this PPA:  
+https://launchpad.net/~meebey/+archive/mono-preview
 
 Install the `notify-sharp` bindings from:
 https://github.com/meebey/notify-sharp
