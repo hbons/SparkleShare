@@ -11,7 +11,7 @@ you will need to get the the dependencies from the specific locations listed
 below, where they are GTK+3-enabled.
 
 Install the `gtk-sharp3` bindings from:  
-https://github.com/mono/gtk-sharp
+https://github.com/mono/gtk-sharp  
 Or on Ubuntu, get it from this PPA:  
 https://launchpad.net/~meebey/+archive/mono-preview
 
