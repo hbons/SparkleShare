@@ -19,7 +19,7 @@ Install the `notify-sharp` bindings from:
 https://git.gnome.org/browse/notify-sharp/
 
 Install the `webkitgtk-sharp` and `soup-sharp` bindings from:  
-https://github.com/xDarkice/webkitgtk-sharp
+https://github.com/xDarkice/webkitgtk-sharp  
 https://github.com/xDarkice/soup-sharp
 
 All with the usual:
