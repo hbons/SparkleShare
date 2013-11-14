@@ -28,7 +28,9 @@ namespace SparkleLib {
         Idle,
         SyncUp,
         SyncDown,
-        Error
+        Error, 
+        Paused, 
+        Resumed
     }
 
 
@@ -140,7 +142,6 @@ namespace SparkleLib {
             public static readonly TimeSpan Long  = new TimeSpan (0, 0, 15, 0);
         }
 
-
         public SparkleRepoBase (string path, SparkleConfig config)
         {
             SparkleLogger.LogInfo (path, "Initializing...");
@@ -163,35 +164,70 @@ namespace SparkleLib {
 
             new Thread (() => CreateListener ()).Start ();
 
-            this.remote_timer.Elapsed += delegate {
-                if (this.is_syncing || IsBuffering)
-                    return;
+            this.remote_timer.Elapsed += OnElapsedEventHandler;
 
-                int time_comparison = DateTime.Compare (this.last_poll, DateTime.Now.Subtract (this.poll_interval));
+            SyncStatusChanged += OnSyncStatusChanged;
+        }
 
-                if (time_comparison < 0) {
-                    if (HasUnsyncedChanges && !this.is_syncing)
-                        SyncUpBase ();
+        private void OnSyncStatusChanged (SyncStatus new_status)
+        {
+            switch (new_status)
+            {
+                case SyncStatus.Paused:
+                    SparkleLogger.LogInfo ("Local", Name + " | Am now sleeping...");
+                    if (!UseCustomWatcher)
+                        this.watcher.Disable();
+                    this.remote_timer.Stop ();
+                    break;
+                case SyncStatus.Resumed:
+                    SparkleLogger.LogInfo("Local", Name + " | Am now awake, checking for changes...");
+                    Status = SyncStatus.Idle;
+                    ForceRetry ();
+                    if (!UseCustomWatcher)
+                        this.watcher.Enable();
+                    OnElapsedEventHandler(this, null);
+                    this.remote_timer.Start();
+                    break;
+            }
+        }
 
-                    this.last_poll = DateTime.Now;
+        public void ChangePauseState (bool is_paused)
+        {
+            Status = (is_paused) ? SyncStatus.Paused : SyncStatus.Resumed;
+            SyncStatusChanged (Status);
+        }
 
-                    if (HasRemoteChanges && !this.is_syncing)
-                        SyncDownBase ();
+        private void OnElapsedEventHandler (object sender, Timers.ElapsedEventArgs e)
+        {
+            if (this.is_syncing || IsBuffering)
+                return;
 
-                    if (this.listener.IsConnected)
-                        this.poll_interval = PollInterval.Long;
-                }
+            int time_comparison = DateTime.Compare (this.last_poll, DateTime.Now.Subtract (this.poll_interval));
 
-                // In the unlikely case that we haven't synced up our
-                // changes or the server was down, sync up again
-                if (HasUnsyncedChanges && !this.is_syncing && Error == ErrorStatus.None)
+            if (time_comparison < 0)
+            {
+                if (HasUnsyncedChanges && !this.is_syncing)
                     SyncUpBase ();
 
-                if (Status != SyncStatus.Idle && Status != SyncStatus.Error) {
-                    Status = SyncStatus.Idle;
-                    SyncStatusChanged (Status);
-                }
-            };
+                this.last_poll = DateTime.Now;
+
+                if (HasRemoteChanges && !this.is_syncing)
+                    SyncDownBase ();
+
+                if (this.listener.IsConnected)
+                    this.poll_interval = PollInterval.Long;
+            }
+
+            // In the unlikely case that we haven't synced up our
+            // changes or the server was down, sync up again
+            if (HasUnsyncedChanges && !this.is_syncing && Error == ErrorStatus.None)
+                SyncUpBase ();
+
+            if (Status != SyncStatus.Idle && Status != SyncStatus.Error)
+            {
+                Status = SyncStatus.Idle;
+                SyncStatusChanged (Status);
+            }
         }
 
 
@@ -286,7 +322,7 @@ namespace SparkleLib {
                     }
 
                 } else {
-                    Thread.Sleep (500);
+                    Thread.Sleep (1000);
                 }
 
             } while (IsBuffering);
@@ -483,6 +519,9 @@ namespace SparkleLib {
         private void ListenerAnnouncementReceivedDelegate (SparkleAnnouncement announcement)
         {
             string identifier = Identifier;
+
+            while(Status == SyncStatus.Paused)
+                Thread.Sleep(100);
 
             if (!announcement.FolderIdentifier.Equals (identifier))
                 return;
