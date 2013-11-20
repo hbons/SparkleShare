@@ -150,7 +150,7 @@ namespace SparkleShare {
                         
                         Controller.CheckSetupPage (name_box.Text, email_box.Text);
 
-                        if (name_box.Text.Equals ("")) {
+                        if (name_box.Text.Equals ("")) 
                             name_box.Focus ();
                         else
                             email_box.Focus ();
