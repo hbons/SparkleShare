@@ -13,12 +13,12 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
 using System;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading;
+using SparkleLib;
 
 namespace SparkleShare {
 
@@ -33,22 +33,38 @@ namespace SparkleShare {
 
     public class SparkleInviteOpen {
 
-        public SparkleInviteOpen (string url)
+        public SparkleConfig Config { get; private set; }
+
+        public SparkleInviteOpen()
+        {
+            string app_data_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string config_path = Path.Combine(app_data_path, "sparkleshare");
+
+            Config = new SparkleConfig(config_path, "config.xml");
+            SparkleConfig.DefaultConfig = Config;
+        }
+
+        public SparkleInviteOpen (string url) : this()
         {
             string xml = "";
 
+            SparkleLogger.LogInfo("Invite", "Before parse: " + url);
+
             // Windows sometimes doesn't strip off protocol handlers            
             url = url.Replace ("sparkleshare://addProject/", "");
+            url = url.Replace ("sparkleshare-unsafe://addProject/", "");
 
             // Outlook breaks URLs
             url = Regex.Replace (url, "(https?:)/([^/])", "$1//$2");
             WebClient web_client = new WebClient ();
 
+            SparkleLogger.LogInfo("Invite", "Received invite url: " + url);
+
             try {
                 xml = web_client.DownloadString (url);
 
             } catch (Exception e) {
-                Console.WriteLine ("Failed downloading invite: " + url + ": " + e.Message);
+                SparkleLogger.LogInfo ("Invite", "Failed downloading invite: " + url, e);
                 Environment.Exit (-1);
             }
 
@@ -60,7 +76,7 @@ namespace SparkleShare {
             if (xml.Contains ("<sparkleshare>")) {
                 File.WriteAllText (target_path, xml);
                 File.SetAttributes (target_path, FileAttributes.Hidden);
-                Console.WriteLine ("Downloaded invite: " + url);
+                SparkleLogger.LogInfo("Invite", "Downloaded invite: " + url);
 
                 // TODO: Start SparkleShare.exe
             }
