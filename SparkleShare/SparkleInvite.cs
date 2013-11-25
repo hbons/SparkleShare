@@ -20,6 +20,9 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Xml;
+using System.Linq;
+using System.Collections.Generic;
+using System.Xml.Linq;
 
 using SparkleLib;
 
@@ -39,6 +42,23 @@ namespace SparkleShare {
             }
         }
 
+        public static IEnumerable<SparkleInvite> GetInvites(string xml_file_path)
+        {
+            string xml = File.ReadAllText(xml_file_path);
+
+            return XElement.Parse(xml)
+                .Elements("invite")
+                .Select(f => new SparkleInvite(f));
+        }
+
+        public SparkleInvite(XElement invite) : base()
+        {
+            Address = ReadField(invite, "address");
+            RemotePath = ReadField(invite, "remote_path");
+            AcceptUrl = ReadField(invite, "accept_url");
+            AnnouncementsUrl = ReadField(invite, "announcements_url");
+            Fingerprint = ReadField(invite, "fingerprint");
+        }
 
         public SparkleInvite (string xml_file_path) : base ()
         {
@@ -109,6 +129,26 @@ namespace SparkleShare {
                 
             } catch (XmlException e) {
                 SparkleLogger.LogInfo ("Invite", "Error reading field '" + name + "'", e);
+                return "";
+            }
+        }
+
+
+        private string ReadField(XElement invite, string name)
+        {
+            try
+            {
+                XElement element = invite.Element(name);
+
+                if (element != null && !element.IsEmpty)
+                    return element.Value;
+                else
+                    return "";
+
+            }
+            catch (Exception e)
+            {
+                SparkleLogger.LogInfo("Invite", "Error reading field '" + name + "'", e);
                 return "";
             }
         }

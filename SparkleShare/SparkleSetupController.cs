@@ -76,6 +76,8 @@ namespace SparkleShare {
         public readonly List<SparklePlugin> Plugins = new List<SparklePlugin> ();
         public SparklePlugin SelectedPlugin;
 
+        public Queue<SparkleInvite> Invites = new Queue<SparkleInvite> ();
+
         public bool WindowIsOpen { get; private set; }
         public SparkleInvite PendingInvite { get; private set; }
         public int TutorialPageNumber { get; private set; }
@@ -147,11 +149,12 @@ namespace SparkleShare {
 
             SelectedPlugin = Plugins [0];
 
-            Program.Controller.InviteReceived += delegate (SparkleInvite invite) {
-                PendingInvite = invite;
+            Program.Controller.AddInvite += delegate(SparkleInvite invite) {
+                Invites.Enqueue(invite);
+            };
 
-                ChangePageEvent (PageType.Invite, null);
-                ShowWindowEvent ();
+            Program.Controller.InvitesReceived += delegate () {
+                OpenInvite();
             };
 
             Program.Controller.ShowSetupWindowEvent += delegate (PageType page_type) {
@@ -199,6 +202,16 @@ namespace SparkleShare {
             };
         }
 
+        public void OpenInvite()
+        {
+            if (Invites.Count != 0)
+            {
+                PendingInvite = Invites.Dequeue();
+
+                ChangePageEvent(PageType.Invite, null);
+                ShowWindowEvent();
+            }
+        }
 
         public void PageCancelled ()
         {
@@ -215,6 +228,7 @@ namespace SparkleShare {
 
             WindowIsOpen = false;
             HideWindowEvent ();
+            OpenInvite ();
         }
 
 
@@ -456,6 +470,8 @@ namespace SparkleShare {
                 Program.Controller.StartFetcher (info);
 
             }).Start ();
+
+            OpenInvite ();
         }
 
         // The following private methods are
