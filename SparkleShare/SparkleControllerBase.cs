@@ -66,8 +66,11 @@ namespace SparkleShare {
         public event Action OnError = delegate { };
 
 
-        public event InviteReceivedHandler InviteReceived = delegate { };
-        public delegate void InviteReceivedHandler (SparkleInvite invite);
+        public event InvitesReceivedHandler InvitesReceived = delegate { };
+        public delegate void InvitesReceivedHandler ();
+
+        public event AddInviteHandler AddInvite = delegate { };
+        public delegate void AddInviteHandler (SparkleInvite invite);
 
         public event NotificationRaisedEventHandler NotificationRaised = delegate { };
         public delegate void NotificationRaisedEventHandler (SparkleChangeSet change_set);
@@ -508,24 +511,33 @@ namespace SparkleShare {
                 AlertNotificationRaised ("SparkleShare Setup seems busy", "Please wait for it to finish");
 
             } else {
-                SparkleInvite invite = new SparkleInvite (path);
+                IEnumerable<SparkleInvite> invites = SparkleInvite.GetInvites (path);
 
-                // It may be that the invite we received a path to isn't
-                // fully downloaded yet, so we try to read it several times
-                int tries = 0;
-                while (!invite.IsValid) {
-                    Thread.Sleep (100);
-                    invite = new SparkleInvite (path);
-                    tries++;
+                foreach (var invite in invites)
+                {
+                    // It may be that the invite we received a path to isn't
+                    // fully downloaded yet, so we try to read it several times
+                    //int tries = 0;
+                    //while (!invite.IsValid)
+                    //{
+                    //    Thread.Sleep(100);
+                    //    invite = new SparkleInvite(path);
+                    //    tries++;
 
-                    if (tries > 10) {
-                        AlertNotificationRaised ("Oh noes!", "This invite seems screwed up...");
-                        break;
+                    //    if (tries > 10)
+                    //    {
+                    //        AlertNotificationRaised("Oh noes!", "This invite seems screwed up...");
+                    //        break;
+                    //    }
+                    //}
+
+                    if (invite.IsValid)
+                    {
+                        AddInvite (invite);
                     }
                 }
 
-                if (invite.IsValid)
-                    InviteReceived (invite);
+                InvitesReceived ();
 
                 File.Delete (path);
             }
