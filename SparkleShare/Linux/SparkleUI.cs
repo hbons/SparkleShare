@@ -54,10 +54,17 @@ namespace SparkleShare {
         private void ApplicationActivatedDelegate (object sender, EventArgs args)
         {
             if (this.application.Windows.Length > 0) {
+                bool has_visible_windows = false;
+
                 foreach (Window window in this.application.Windows) {
-                    if (window.Visible)
+                    if (window.Visible) {
                         window.Present ();
+                        has_visible_windows = true;
+                    }
                 }
+
+                if (!has_visible_windows)
+                    Program.Controller.HandleReopen ();
 
             } else {
                 Setup      = new SparkleSetup ();

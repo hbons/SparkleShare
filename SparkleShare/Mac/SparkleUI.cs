@@ -58,7 +58,7 @@ namespace SparkleShare {
 
         public void Run ()
         {
-            NSApplication.Main (new string [0]);
+            NSApplication.Main (Program.Arguments);
         }
 
 
@@ -75,6 +75,15 @@ namespace SparkleShare {
         public override void WillTerminate (NSNotification notification)
         {
             Program.Controller.Quit ();
+        }
+
+        
+        public override bool ApplicationShouldHandleReopen (NSApplication sender, bool has_visible_windows)
+        {
+            if (!has_visible_windows)
+                Program.Controller.HandleReopen ();
+
+            return true;
         }
     }
 }
