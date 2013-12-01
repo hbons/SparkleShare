@@ -27,6 +27,7 @@ namespace SparkleShare {
 
         public static SparkleController Controller;
         public static SparkleUI UI;
+        public static string [] Arguments;
 
         private static Mutex program_mutex = new Mutex (false, "SparkleShare");
         
@@ -36,6 +37,8 @@ namespace SparkleShare {
         #endif
         public static void Main (string [] args)
         {
+            Arguments = args;
+
             if (args.Length != 0 && !args [0].Equals ("help") &&
                 SparkleBackend.Platform != PlatformID.MacOSX &&
                 SparkleBackend.Platform != PlatformID.Win32NT) {
