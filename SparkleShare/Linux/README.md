@@ -1,16 +1,14 @@
 ## Building on Linux distributions
 
 You can choose to build SparkleShare from source or to get the package through your distribution's repositories.
-
 To run SparkleShare, you'll need the following packages:
 
 ```
-curl
 git >= 1.8
-gtk-sharp2
+gtk-sharp3
 mono-core >= 2.8
 notify-sharp
-webkit-sharp
+webkitgtk-sharp
 ```
 
 **Note:** These packages may not overlap with the packages required to perform a build, so please make sure that at least the above packages are installed.
@@ -20,43 +18,51 @@ Optional packages:
 ```
 gvfs (to change file/folder icons)
 libappindicator (for Ubuntu integration)
+curl (to make the "sparkleshare://" protocol handler work)
 ```
 
-### Installing build requirements
 
-You can use one of the commands listed below for the most used Linux distributions:
+### Installing common build requirements
+
+You can use one of the commands listed below for the most used Linux distributions:  
+
+desktop-file-utils
+intltool
+libtool
+mono-devel
+mono-gmcs
+mono-mcs
+monodevelop
+nant
 
 
-#### Ubuntu
 
-```bash
-$ sudo apt-get install libappindicator0.1-cil-dev gtk-sharp2 mono-runtime mono-devel \
-  monodevelop libndesk-dbus1.0-cil-dev nant libnotify-cil-dev libgtk2.0-cil-dev mono-mcs \
-  mono-gmcs libwebkit-cil-dev intltool libtool libndesk-dbus-glib1.0-cil-dev
+### Installing additional source build requirements
+
+Install the `gtk-sharp3` bindings from:  
+https://github.com/mono/gtk-sharp  
+Or on Ubuntu, get it from this PPA:  
+https://launchpad.net/~meebey/+archive/mono-preview
+
+Install the `notify-sharp` bindings from:  
+https://git.gnome.org/browse/notify-sharp/
+
+Install the `soup-sharp` and `webkitgtk-sharp` bindings from:  
+https://github.com/xDarkice/soup-sharp  
+https://github.com/xDarkice/webkitgtk-sharp
+
+All with the usual:
+
+```
+./autogen.sh
+make
+sudo make install
 ```
 
-#### Fedora
+If you're using Ubuntu, also install the `appindicator-sharp` bindings from:  
+https://github.com/xDarkice/appindicator-sharp
 
-```bash
-$ sudo yum install gtk-sharp2-devel mono-core mono-devel monodevelop ndesk-dbus-devel \
-  ndesk-dbus-glib-devel nant notify-sharp-devel webkit-sharp-devel webkitgtk-devel libtool \
-  intltool desktop-file-utils
-```
 
-#### Debian
-
-```bash
-$ sudo apt-get install gtk-sharp2 mono-runtime mono-devel monodevelop libndesk-dbus1.0-cil-dev \
-  nant libnotify-cil-dev libgtk2.0-cil-dev mono-mcs mono-gmcs libwebkit-cil-dev intltool libtool \
-  libndesk-dbus-glib1.0-cil-dev desktop-file-utils
-```
-
-#### openSUSE
-
-```bash
-$ sudo zypper install gtk-sharp2 mono-core mono-devel monodevelop ndesk-dbus-glib-devel nant \
-  desktop-file-utils notify-sharp-devel webkit-sharp libwebkitgtk-devel libtool intltool
-```
 
 ### Starting the build
 
@@ -82,4 +88,3 @@ rm -Rf ~/.config/sparkleshare
 ```
 sudo make uninstall
 ```
-

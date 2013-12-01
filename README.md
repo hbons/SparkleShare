@@ -29,8 +29,6 @@ You can use any host that runs Git. For a simple setup script, check out [Dazzle
 [...on Mac](https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Mac/README.md)  
 [...on Windows](https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Windows/README.md)  
 
-[...on GNOME 3](https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Linux/README.GNOME3.md)
-
 SparkleShare bundles Git on Mac on Windows. On Linux distributions you will need to to install the `git` or `git-core` package.
 
 
