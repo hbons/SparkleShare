@@ -194,7 +194,12 @@ namespace SparkleShare {
 
         public override void CopyToClipboard (string text)
         {
-            Clipboard.SetData (DataFormats.Text, text);
+            try {
+                Clipboard.SetData (DataFormats.Text, text);
+            
+            } catch (COMException e) {
+                SparkleLogger.LogInfo ("Controller", "Copy to clipboard failed", e);
+            }
         }
 
 
