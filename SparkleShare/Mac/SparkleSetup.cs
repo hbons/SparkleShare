@@ -574,6 +574,7 @@ namespace SparkleShare {
                 Buttons.Add (ContinueButton);
                 Buttons.Add (CancelButton);
 
+                MakeFirstResponder ((NSResponder) PasswordTextField);
                 NSApplication.SharedApplication.RequestUserAttention (NSRequestUserAttentionType.CriticalRequest);
             }
 
