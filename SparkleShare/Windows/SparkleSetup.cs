@@ -557,6 +557,7 @@ namespace SparkleShare {
                     }    
 
                     case PageType.CryptoSetup: {
+                        // TODO: Merge crypto pages
                         Header      = "Set up file encryption";
                         Description = "Please a provide a strong password that you don’t use elsewhere.";
 
@@ -662,7 +663,9 @@ namespace SparkleShare {
                     
                         Buttons.Add (continue_button);
                         Buttons.Add (cancel_button);
-                        
+
+                        password_box.Focus ();
+
                         break;
                     }
                         
@@ -754,6 +757,8 @@ namespace SparkleShare {
                         
                         Buttons.Add (continue_button);
                         Buttons.Add (cancel_button);
+
+                        password_box.Focus ();
                         
                         break;
                     }
