@@ -40,7 +40,6 @@ namespace SparkleShare {
     
         public SparkleSetupController Controller = new SparkleSetupController ();
         
-        
         public SparkleSetup ()
         {
             Controller.ShowWindowEvent += delegate {
@@ -157,6 +156,43 @@ namespace SparkleShare {
 
                         break;
                     }
+
+                    case PageType.AlreadyRunning:
+                           Header      = "SparkleShare is already running!";
+                           Description = "Check out your projects.";
+                           int top = 100;
+
+                           Button okay = new Button() {
+                               Content = "Okay"
+                           };
+
+                           Buttons.Add (okay);
+                           
+                           okay.Click += delegate {
+                               Controller.PageCancelled();
+
+                               Environment.Exit(-1);
+                           };
+
+                           SparkleLib.SparkleConfig Config = SparkleLib.SparkleConfig.DefaultConfig;
+
+                           List<string> str_folders = Config.Folders;
+
+                           foreach (string str_folder in str_folders)
+                           {
+                               SparkleShare.CustomControls.LinkLabel project_label = new SparkleShare.CustomControls.LinkLabel()
+                               {
+                                   Link = Config.FoldersPath + "\\" + str_folder,
+                                   Content = str_folder
+                               };
+
+                               ContentCanvas.Children.Add(project_label);
+                               Canvas.SetLeft(project_label, 180);
+                               Canvas.SetTop(project_label, top);
+
+                               top += 20;
+                           }
+                        break;
 
                     case PageType.Invite: {
                         Header      = "You’ve received an invite!";
