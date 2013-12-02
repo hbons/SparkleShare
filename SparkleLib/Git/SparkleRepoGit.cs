@@ -36,25 +36,29 @@ namespace SparkleLib.Git {
 
         private Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
         private Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
+        
+        private Regex log_regex = new Regex (@"commit ([a-f0-9]{40})*\n" +
+                                             "Author: (.+) <(.+)>\n" +
+                                             "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
+                                             "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
+                                             "*", RegexOptions.Compiled);
 
-        private Regex log_regex = new Regex (@"commit ([a-z0-9]{40})\n" +
-                                              "Author: (.+) <(.+)>\n" +
-                                              "*" +
-                                              "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
-                                              "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
-                                              "*", RegexOptions.Compiled);
+        private Regex merge_regex = new Regex (@"commit ([a-f0-9]{40})\n" +
+                                               "Merge: [a-f0-9]{7} [a-f0-9]{7}\n" +
+                                               "Author: (.+) <(.+)>\n" +
+                                               "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
+                                               "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
+                                               "*", RegexOptions.Compiled);
 
         private string branch {
             get {
                 if (!string.IsNullOrEmpty (this.cached_branch)) 
                     return this.cached_branch;
 
-                string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
-
                 SparkleGit git = new SparkleGit (LocalPath, "config core.ignorecase true");
                 git.StartAndWaitForExit ();
 
-                while (Directory.Exists (rebase_apply_path) && HasLocalChanges) {
+                while (this.in_merge && HasLocalChanges) {
                     try {
                         ResolveConflict ();
                         
@@ -70,6 +74,14 @@ namespace SparkleLib.Git {
                 this.cached_branch = git.StartAndReadStandardOutput ();
 
                 return this.cached_branch;
+            }
+        }
+
+
+        private bool in_merge {
+            get {
+                string merge_file_path = new string [] { LocalPath, ".git", "MERGE_HEAD" }.Combine ();
+                return File.Exists (merge_file_path);
             }
         }
 
@@ -390,7 +402,7 @@ namespace SparkleLib.Git {
             UpdateSizes ();
 
             if (git.ExitCode == 0) {
-                if (Rebase ()) {
+                if (Merge ()) {
                     ClearCache ();
                     return true;
                 
@@ -467,7 +479,7 @@ namespace SparkleLib.Git {
 
 
         // Merges the fetched changes
-        private bool Rebase ()
+        private bool Merge ()
         {
             string message = FormatCommitMessage ();
             
@@ -477,14 +489,13 @@ namespace SparkleLib.Git {
             }
 
             SparkleGit git;
-            string rebase_apply_path = new string [] { LocalPath, ".git", "rebase-apply" }.Combine ();
 
-            // Stop if we're already in a rebase because something went wrong
-            if (Directory.Exists (rebase_apply_path)) {
-                git = new SparkleGit (LocalPath, "rebase --abort");
-                git.StartAndWaitForExit ();
-
-                return false;
+            // Stop if we're already in a merge because something went wrong
+            if (this.in_merge) {
+                 git = new SparkleGit (LocalPath, "merge --abort");
+                 git.StartAndWaitForExit ();
+            
+                 return false;
             }
 
             // Temporarily change the ignorecase setting to true to avoid
@@ -492,19 +503,19 @@ namespace SparkleLib.Git {
             git = new SparkleGit (LocalPath, "config core.ignorecase true");
             git.StartAndWaitForExit ();
 
-            git = new SparkleGit (LocalPath, "rebase FETCH_HEAD");
+            git = new SparkleGit (LocalPath, "merge FETCH_HEAD");
             git.StartInfo.RedirectStandardOutput = false;
 
             string error_output = git.StartAndReadStandardError ();
 
             if (git.ExitCode != 0) {
-                // Stop when we can't rebase due to locked local files
+                // Stop when we can't merge due to locked local files
                 // error: cannot stat 'filename': Permission denied
                 if (error_output.Contains ("error: cannot stat")) {
                     Error = ErrorStatus.UnreadableFiles;
                     SparkleLogger.LogInfo ("Git", Name + " | Error status changed to " + Error);
 
-                    git = new SparkleGit (LocalPath, "rebase --abort");
+                    git = new SparkleGit (LocalPath, "merge --abort");
                     git.StartAndWaitForExit ();
 
                     git = new SparkleGit (LocalPath, "config core.ignorecase false");
@@ -513,10 +524,10 @@ namespace SparkleLib.Git {
                     return false;
                 
                 } else {
-                    SparkleLogger.LogInfo ("", error_output);
+                    SparkleLogger.LogInfo ("Git", error_output);
                     SparkleLogger.LogInfo ("Git", Name + " | Conflict detected, trying to get out...");
                     
-                    while (Directory.Exists (rebase_apply_path) && HasLocalChanges) {
+                    while (this.in_merge && HasLocalChanges) {
                         try {
                             ResolveConflict ();
 
@@ -526,7 +537,6 @@ namespace SparkleLib.Git {
                     }
 
                     SparkleLogger.LogInfo ("Git", Name + " | Conflict resolved");
-                    OnConflictResolved ();
                 }
             }
 
@@ -550,19 +560,12 @@ namespace SparkleLib.Git {
             // AA    unmerged, both added      -> Use server's, save ours as a timestamped copy
             // UU    unmerged, both modified   -> Use server's, save ours as a timestamped copy
             // ??    unmerged, new files       -> Stage the new files
-            //
-            // Note that a rebase merge works by replaying each commit from the working branch on
-            // top of the upstream branch. Because of this, when a merge conflict happens the
-            // side reported as 'ours' is the so-far rebased series, starting with upstream,
-            // and 'theirs' is the working branch. In other words, the sides are swapped.
-            //
-            // So: 'ours' means the 'server's version' and 'theirs' means the 'local version' after this comment
 
             SparkleGit git_status = new SparkleGit (LocalPath, "status --porcelain");
             string output         = git_status.StartAndReadStandardOutput ();
 
             string [] lines = output.Split ("\n".ToCharArray ());
-            bool changes_added = false;
+            bool trigger_conflict_event = false;
 
             foreach (string line in lines) {
                 string conflicting_path = line.Substring (3);
@@ -576,45 +579,45 @@ namespace SparkleLib.Git {
                     SparkleLogger.LogInfo ("Git", Name + " | Ignoring conflict in special file: " + conflicting_path);
 
                     // Recover local version
-                    SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
-                    git_theirs.StartAndWaitForExit ();
+                    SparkleGit git_ours = new SparkleGit (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
+                    git_ours.StartAndWaitForExit ();
 
                     File.SetAttributes (Path.Combine (LocalPath, conflicting_path), FileAttributes.Hidden);
-                    changes_added = true;
-
+            
                     continue;
                 }
 
-                SparkleLogger.LogInfo ("Git", Name + " | Resolving: " + line);
+                SparkleLogger.LogInfo ("Git", Name + " | Resolving: " + conflicting_path);
 
                 // Both the local and server version have been modified
                 if (line.StartsWith ("UU") || line.StartsWith ("AA") ||
                     line.StartsWith ("AU") || line.StartsWith ("UA")) {
 
                     // Recover local version
-                    SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
-                    git_theirs.StartAndWaitForExit ();
+                    SparkleGit git_ours = new SparkleGit (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
+                    git_ours.StartAndWaitForExit ();
 
                     // Append a timestamp to local version.
                     // Windows doesn't allow colons in the file name, so
                     // we use "h" between the hours and minutes instead.
                     string timestamp  = DateTime.Now.ToString ("MMM d H\\hmm");
-                    string their_path = Path.GetFileNameWithoutExtension (conflicting_path) +
+                    string our_path = Path.GetFileNameWithoutExtension (conflicting_path) +
                         " (" + base.local_config.User.Name + ", " + timestamp + ")" + Path.GetExtension (conflicting_path);
 
                     string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
-                    string abs_their_path       = Path.Combine (LocalPath, their_path);
+                    string abs_our_path         = Path.Combine (LocalPath, our_path);
 
-                    if (File.Exists (abs_conflicting_path) && !File.Exists (abs_their_path))
-                        File.Move (abs_conflicting_path, abs_their_path);
+                    if (File.Exists (abs_conflicting_path) && !File.Exists (abs_our_path))
+                        File.Move (abs_conflicting_path, abs_our_path);
 
                     // Recover server version
-                    SparkleGit git_ours = new SparkleGit (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
-                    git_ours.StartAndWaitForExit ();
+                    SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
+                    git_theirs.StartAndWaitForExit ();
 
-                    changes_added = true;
+                    trigger_conflict_event = true;
 
-                // The local version has been modified, but the server version was removed
+            
+                // The server version has been modified, but the local version was removed
                 } else if (line.StartsWith ("DU")) {
 
                     // The modified local version is already in the checkout, so it just needs to be added.
@@ -622,17 +625,15 @@ namespace SparkleLib.Git {
                     SparkleGit git_add = new SparkleGit (LocalPath, "add \"" + conflicting_path + "\"");
                     git_add.StartAndWaitForExit ();
 
-                    changes_added = true;
                 
-                // The server version has been modified, but the local version was removed
+                // The local version has been modified, but the server version was removed
                 } else if (line.StartsWith ("UD")) {
                     
                     // Recover server version
-                    SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
+                    SparkleGit git_theirs = new SparkleGit (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
                     git_theirs.StartAndWaitForExit ();
 
-                    changes_added = true;
-
+            
                 // Server and local versions were removed
                 } else if (line.StartsWith ("DD")) {
                     SparkleLogger.LogInfo ("Git", Name + " | No need to resolve: " + line);
@@ -640,7 +641,6 @@ namespace SparkleLib.Git {
                 // New local files
                 } else if (line.StartsWith ("??")) {
                     SparkleLogger.LogInfo ("Git", Name + " | Found new file, no need to resolve: " + line);
-                    changes_added = true;
                 
                 } else {
                     SparkleLogger.LogInfo ("Git", Name + " | Don't know what to do with: " + line);
@@ -648,15 +648,13 @@ namespace SparkleLib.Git {
             }
 
             Add ();
-            SparkleGit git;
 
-            if (changes_added)
-                git = new SparkleGit (LocalPath, "rebase --continue");
-            else
-                git = new SparkleGit (LocalPath, "rebase --skip");
-
+            SparkleGit git = new SparkleGit (LocalPath, "commit --message \"Conflict resolution by SparkleShare\"");
             git.StartInfo.RedirectStandardOutput = false;
             git.StartAndWaitForExit ();
+
+            if (trigger_conflict_event)
+                OnConflictResolved ();
         }
 
 
@@ -761,7 +759,7 @@ namespace SparkleLib.Git {
 
             if (path == null) {
                 git = new SparkleGit (LocalPath, "log --since=1.month --raw --find-renames --date=iso " +
-                    "--format=medium --no-color --no-merges");
+                    "--format=medium --no-color -m --first-parent");
 
             } else {
                 path = path.Replace ("\\", "/");
@@ -774,7 +772,7 @@ namespace SparkleLib.Git {
 
             if (path == null && string.IsNullOrWhiteSpace (output)) {
                 git = new SparkleGit (LocalPath, "log -n 75 --raw --find-renames --date=iso " +
-                    "--format=medium --no-color --no-merges");
+                    "--format=medium --no-color -m --first-parent");
 
                 output = git.StartAndReadStandardOutput ();
             }
@@ -811,8 +809,12 @@ namespace SparkleLib.Git {
             foreach (string log_entry in entries) {
                 Match match = this.log_regex.Match (log_entry);
 
-                if (!match.Success)
-                    continue;
+                if (!match.Success) {
+                    match = this.merge_regex.Match (log_entry);
+
+                    if (!match.Success)
+                        continue;
+                }
 
                 SparkleChangeSet change_set = new SparkleChangeSet ();
 
