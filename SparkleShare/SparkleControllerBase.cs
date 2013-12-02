@@ -446,7 +446,7 @@ namespace SparkleShare {
             };
 
             repo.ConflictResolved += delegate {
-                AlertNotificationRaised ("Conflict happened", "Don't worry, we've made a copy of each conflicting file.");
+                AlertNotificationRaised ("Some files were in conflict", "Don't worry, we've kept copy of each conflicting file.");
             };
 
             this.repositories.Add (repo);
