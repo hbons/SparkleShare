@@ -439,7 +439,7 @@ namespace SparkleShare {
                             if (!change.IsFolder) {
                                 event_entry += "<small><a href=\"history://" + change_set.Folder.Name + "/" + 
                                     change.Path + "\" title=\"View revisions\">" + change.Timestamp.ToString ("HH:mm") +
-                                    "</a></small> &nbsp;";
+                                    " &#x25BE;</a></small> &nbsp;";
 
                             } else {
                                 event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") + "</small> &nbsp;";
