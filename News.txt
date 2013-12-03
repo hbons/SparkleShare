@@ -1,3 +1,14 @@
+1.4.0 for Linux, Mac and Windows (???):
+
+     Hylke:
+     - Check user's local bin folders for git binary
+     - Show a notification after trying to start the app multiple times
+     - Set default focus on password fields when setting up encryption
+     - Show disclosure triangly on Recent Changes window timestamps
+     - Fix some conflict resolution issues by merging instead of rebasing on the remote
+     - Fix crash when copying to clipboard on Windows
+
+
 1.3.0 for Linux (Sat Oct 26 2013):
 
       Hylke:
