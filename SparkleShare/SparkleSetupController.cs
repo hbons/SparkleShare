@@ -515,8 +515,10 @@ namespace SparkleShare {
 
         public void CheckCryptoPasswordPage (string password)
         {
-            bool is_password_correct = Program.Controller.CheckPassword (password);
-            UpdateCryptoPasswordContinueButtonEvent (is_password_correct);
+            new Thread(() => {
+                bool is_password_correct = Program.Controller.CheckPassword (password);
+                UpdateCryptoPasswordContinueButtonEvent (is_password_correct);
+            }).Start ();
         }
 
 
