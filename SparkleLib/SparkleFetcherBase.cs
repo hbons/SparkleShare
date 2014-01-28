@@ -140,13 +140,10 @@ namespace SparkleLib {
             SparkleLogger.LogInfo ("Fetcher", TargetFolder + " | Fetching folder: " + RemoteUrl);
 
             //Try/Catch to deal with such: "Access to the path 'pack-cba65e494e55d964e49b9a7f420c6f5d7d6ca1f6.idx' is denied."
-            try
-            {
+            try {
                 if (Directory.Exists(TargetFolder))
                     Directory.Delete(TargetFolder, true);
-            }
-            catch (Exception)
-            {
+            } catch (Exception) {
                 this.errors.Add("Failed to delete old folder before fetching new content: " + TargetFolder + " Check that it isn't read-only. You may need to reboot.");
                 Failed();
                 return;
