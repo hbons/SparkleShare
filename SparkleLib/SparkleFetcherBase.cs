@@ -139,8 +139,15 @@ namespace SparkleLib {
 
             SparkleLogger.LogInfo ("Fetcher", TargetFolder + " | Fetching folder: " + RemoteUrl);
 
-            if (Directory.Exists (TargetFolder))    
-                Directory.Delete (TargetFolder, true);
+            try {
+                if (Directory.Exists (TargetFolder))
+                    Directory.Delete (TargetFolder, true);
+            
+            } catch (IOException) {
+                this.errors.Add ("\"" + TargetFolder + "\" is read-only.");
+                Failed ();
+                return;
+            }
 
             this.thread = new Thread (() => {
                 if (Fetch ()) {
