@@ -71,10 +71,16 @@ namespace SparkleShare {
                     ActivatesDefault = true
                 };
 
-                UnixUserInfo user_info = UnixUserInfo.GetRealUser ();
+		try {
+                    UnixUserInfo user_info = UnixUserInfo.GetRealUser ();
                 
-                if (user_info != null && user_info.RealName != null)
-                    name_entry.Text = user_info.RealName.TrimEnd (",".ToCharArray ());
+                    if (user_info != null && user_info.RealName != null)
+                        // Some systems append a series of "," for some reason
+                        name_entry.Text = user_info.RealName.TrimEnd (",".ToCharArray ());
+
+                } catch (ArgumentException) {
+                    // No username, not a big deal
+                }
 
                 Entry email_entry = new Entry () {
                     Xalign = 0,
