@@ -3,15 +3,17 @@
 You can choose to build SparkleShare from source or to get the package through your distribution's repositories.
 To run SparkleShare, you'll need the following packages:
 
+**Note:** Git 1.9 changed the way local projects without a history are handled, and may cause protocol errors. Until a solution is found, it's recommended to use Git 1.8.
+
 ```
-git >= 1.8
+git 1.8.x
 gtk-sharp3
 mono-core >= 2.8
 notify-sharp
 webkitgtk-sharp
 ```
 
-**Note:** These packages may not overlap with the packages required to perform a build, so please make sure that at least the above packages are installed.
+**Note:** These packages may not overlap with the packages required to perform a build, so please make sure that at least the above packages are installed. 
 
 Optional packages:
 
