@@ -19,7 +19,7 @@ ASSEMBLY_FILE = $(top_builddir)/bin/$(ASSEMBLY).$(ASSEMBLY_EXTENSION)
 INSTALL_DIR_RESOLVED = $(firstword $(subst , $(DEFAULT_INSTALL_DIR), $(INSTALL_DIR)))
 
 if ENABLE_TESTS
-    LINK = " $(NUNIT_LIBS)"
+    LINK_TESTS = "$(NUNIT_LIBS)"
     ENABLE_TESTS_FLAG = "-define:ENABLE_TESTS"
 endif
 
