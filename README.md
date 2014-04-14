@@ -15,7 +15,7 @@ SparkleShare is an Open Source collaboration and sharing tool that is designed t
 
 ### License
 
-SparkleShare is Open Source software and licensed under the `GNU General Public License version 3 or later`. You are welcome to change and redistribute it under certain conditions.For more information see the `legal/License.txt` file.
+SparkleShare is Open Source software and licensed under the `GNU General Public License version 3 or later`. You are welcome to change and redistribute it under certain conditions. For more information see the [license](legal/License.txt) file.
 
 
 ### Setting up a host
@@ -25,11 +25,11 @@ You can use any host that runs Git. For a simple setup script, check out [Dazzle
 
 ### Building...
 
-[...on Linux distributions](https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Linux/README.md)  
-[...on Mac](https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Mac/README.md)  
-[...on Windows](https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Windows/README.md)  
+[...on Linux distributions](SparkleShare/Linux/README.md)  
+[...on Mac](SparkleShare/Mac/README.md)  
+[...on Windows](SparkleShare/Windows/README.md)  
 
-SparkleShare bundles Git on Mac on Windows. On Linux distributions you will need to to install the `git` or `git-core` package.
+SparkleShare bundles Git on Mac and Windows. On Linux distributions you will need to to install the `git` or `git-core` package.
 
 
 ### Finally...
