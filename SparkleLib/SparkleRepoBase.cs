@@ -130,6 +130,7 @@ namespace SparkleLib {
         private DateTime last_poll            = DateTime.Now;
         private DateTime progress_last_change = DateTime.Now;
         private Timers.Timer remote_timer     = new Timers.Timer () { Interval = 5000 };
+        private DisconnectReason last_disconnect_reason = DisconnectReason.None;
 
         private bool is_syncing {
             get { return (Status == SyncStatus.SyncUp || Status == SyncStatus.SyncDown || IsBuffering); }
@@ -163,35 +164,39 @@ namespace SparkleLib {
 
             new Thread (() => CreateListener ()).Start ();
 
-            this.remote_timer.Elapsed += delegate {
-                if (this.is_syncing || IsBuffering)
-                    return;
+            this.remote_timer.Elapsed += RemoteTimerElapsedDelegate;
+        }
 
-                int time_comparison = DateTime.Compare (this.last_poll, DateTime.Now.Subtract (this.poll_interval));
 
-                if (time_comparison < 0) {
-                    if (HasUnsyncedChanges && !this.is_syncing)
-                        SyncUpBase ();
-
-                    this.last_poll = DateTime.Now;
-
-                    if (HasRemoteChanges && !this.is_syncing)
-                        SyncDownBase ();
-
-                    if (this.listener.IsConnected)
-                        this.poll_interval = PollInterval.Long;
-                }
-
-                // In the unlikely case that we haven't synced up our
-                // changes or the server was down, sync up again
-                if (HasUnsyncedChanges && !this.is_syncing && Error == ErrorStatus.None)
+        private void RemoteTimerElapsedDelegate (object sender, EventArgs args)
+        {
+            if (this.is_syncing || IsBuffering)
+                return;
+            
+            int time_comparison = DateTime.Compare (this.last_poll, DateTime.Now.Subtract (this.poll_interval));
+            
+            if (time_comparison < 0) {
+                if (HasUnsyncedChanges && !this.is_syncing)
                     SyncUpBase ();
-
-                if (Status != SyncStatus.Idle && Status != SyncStatus.Error) {
-                    Status = SyncStatus.Idle;
-                    SyncStatusChanged (Status);
-                }
-            };
+                
+                this.last_poll = DateTime.Now;
+                
+                if (HasRemoteChanges && !this.is_syncing)
+                    SyncDownBase ();
+                
+                if (this.listener.IsConnected)
+                    this.poll_interval = PollInterval.Long;
+            }
+            
+            // In the unlikely case that we haven't synced up our
+            // changes or the server was down, sync up again
+            if (HasUnsyncedChanges && !this.is_syncing && Error == ErrorStatus.None)
+                SyncUpBase ();
+            
+            if (Status != SyncStatus.Idle && Status != SyncStatus.Error) {
+                Status = SyncStatus.Idle;
+                SyncStatusChanged (Status);
+            }
         }
 
 
@@ -465,6 +470,7 @@ namespace SparkleLib {
             if (this.listener.IsConnected)
                 this.poll_interval = PollInterval.Long;
 
+            this.listener.Connected            += ListenerConnectedDelegate;
             this.listener.Disconnected         += ListenerDisconnectedDelegate;
             this.listener.AnnouncementReceived += ListenerAnnouncementReceivedDelegate;
 
@@ -472,11 +478,42 @@ namespace SparkleLib {
                 this.listener.Connect ();
         }
 
-
-        private void ListenerDisconnectedDelegate ()
+        
+        private void ListenerConnectedDelegate ()
         {
-            this.poll_interval = PollInterval.Short;
+            if (this.last_disconnect_reason == DisconnectReason.SystemSleep) {
+                this.last_disconnect_reason = DisconnectReason.None;
+
+                if (HasRemoteChanges && !this.is_syncing)
+                    SyncDownBase ();
+            }
+
+            this.poll_interval = PollInterval.Long;
+        }
+
+
+        private void ListenerDisconnectedDelegate (DisconnectReason reason)
+        {
             SparkleLogger.LogInfo (Name, "Falling back to regular polling");
+            this.poll_interval = PollInterval.Short;
+
+            this.last_disconnect_reason = reason;
+
+            if (reason == DisconnectReason.SystemSleep) {
+                this.remote_timer.Stop ();
+
+                int backoff_time = 2;
+
+                do {
+                    SparkleLogger.LogInfo (Name, "Next reconnect attempt in " + backoff_time + " seconds");
+                    Thread.Sleep (backoff_time * 1000);
+                    this.listener.Connect ();
+                    backoff_time *= 2;
+                
+                } while (backoff_time < 64 && !this.listener.IsConnected);
+
+                this.remote_timer.Start ();
+            }
         }
 
 
