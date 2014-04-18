@@ -82,7 +82,7 @@ namespace SparkleLib {
                     if (this.socket != null)
                         this.socket.Close ();
 
-                    OnDisconnected (e.Message);
+                    OnDisconnected (SparkleLib.DisconnectReason.TimeOut, e.Message);
                     return;
                 }
 
@@ -94,16 +94,17 @@ namespace SparkleLib {
                 // Wait for messages
                 while (this.is_connected) {
                     try {
-                        // This blocks the thread
                         int i = 0;
                         int timeout = 300;
+                        DisconnectReason reason = DisconnectReason.TimeOut;
+
+                        // This blocks the thread
                         while (this.socket.Available < 1) {
                             try {
                                 // We've timed out, let's ping the server to
                                 // see if the connection is still up
                                 if (i == timeout) {
-                                    SparkleLogger.LogInfo ("ListenerTcp",
-                                        "Pinging " + Server);
+                                    SparkleLogger.LogInfo ("ListenerTcp", "Pinging " + Server);
 
                                     byte [] ping_bytes = Encoding.UTF8.GetBytes ("ping\n");
                                     byte [] pong_bytes = new byte [4096];
@@ -132,6 +133,7 @@ namespace SparkleLib {
 
                                     if (sleepiness <= 0) {
                                         SparkleLogger.LogInfo ("ListenerTcp", "System woke up from sleep");
+                                        reason = DisconnectReason.SystemSleep;
 
                                         // 10057 means "Socket is not connected"
                                         throw new SocketException (10057);
@@ -148,7 +150,7 @@ namespace SparkleLib {
                                     this.socket = null;
                                 }
 
-                                OnDisconnected ("Ping timeout: " + e.Message);
+                                OnDisconnected (reason, "Ping timeout: " + e.Message);
                                 return;
                             }
 
@@ -197,7 +199,7 @@ namespace SparkleLib {
                 this.is_connected  = false;
                 this.is_connecting = false;
 
-                OnDisconnected (e.Message);
+                OnDisconnected (DisconnectReason.TimeOut, e.Message);
             }
         }
 
@@ -216,7 +218,7 @@ namespace SparkleLib {
                 this.is_connected  = false;
                 this.is_connecting = false;
 
-                OnDisconnected (e.Message);
+                OnDisconnected (DisconnectReason.TimeOut, e.Message);
             }
         }
 

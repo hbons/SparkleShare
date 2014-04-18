@@ -21,12 +21,21 @@ using System.Timers;
 
 namespace SparkleLib {
 
+    public enum DisconnectReason {
+        None,
+        TimeOut,
+        SystemSleep
+    }
+
+
     // A persistent connection to the server that
     // listens for change notifications
     public abstract class SparkleListenerBase {
 
         public event Action Connected = delegate { };
-        public event Action Disconnected = delegate { };
+        
+        public event DisconnectedEventHandler Disconnected = delegate { };
+        public delegate void DisconnectedEventHandler (DisconnectReason reason);
 
         public event AnnouncementReceivedEventHandler AnnouncementReceived = delegate { };
         public delegate void AnnouncementReceivedEventHandler (SparkleAnnouncement announcement);
@@ -133,10 +142,10 @@ namespace SparkleLib {
         }
 
 
-        public void OnDisconnected (string message)
+        public void OnDisconnected (DisconnectReason reason, string message)
         {
             SparkleLogger.LogInfo ("Listener", "Disconnected from " + Server + ": " + message);
-            Disconnected ();
+            Disconnected (reason);
         }
 
 
