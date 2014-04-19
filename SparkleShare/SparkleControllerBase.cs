@@ -446,12 +446,13 @@ namespace SparkleShare {
             };
 
             repo.ConflictResolved += delegate {
-                AlertNotificationRaised ("Some files were in conflict", "Don't worry, we've kept copy of each conflicting file.");
+                AlertNotificationRaised ("Resolved a file collision",
+                    "Local and server versions were kept.");
             };
 
             this.repositories.Add (repo);
             this.repositories.Sort ((x, y) => string.Compare (x.Name, y.Name));
-            repo.Initialize ();
+            repo.Initialize (); 
         }
 
 
