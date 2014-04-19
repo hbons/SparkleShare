@@ -232,16 +232,19 @@ namespace SparkleShare {
         }
 
 
-
         private int reopen_attempt_counts = 0;
 
         public void HandleReopen ()
         {
-            reopen_attempt_counts++;
-
-            if (reopen_attempt_counts > 1) {
+            if (Repositories.Length > 0) {
+                ShowEventLogWindow ();
+            
+            } else if (reopen_attempt_counts > 1) {
                 AlertNotificationRaised ("Hello!", "SparkleShare sits right here, as a status icon.");
                 reopen_attempt_counts = 0;
+            
+            } else {
+                reopen_attempt_counts++;
             }
         }
 
