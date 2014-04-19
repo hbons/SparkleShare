@@ -7,6 +7,7 @@
      - Show disclosure triangly on Recent Changes window timestamps
      - Fix some conflict resolution issues by merging instead of rebasing on the remote
      - Fix crash when copying to clipboard on Windows
+     - Sync more quickly after the system wakes up from sleep
 
 
 1.3.0 for Linux (Sat Oct 26 2013):
