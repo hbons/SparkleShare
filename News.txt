@@ -1,4 +1,4 @@
-1.4.0 for Linux, Mac and Windows (???):
+1.4.0 for Linux, Mac and Windows (Sun Apr 20, 2014):
 
      Hylke:
      - Check user's local bin folders for git binary
@@ -8,6 +8,7 @@
      - Fix some conflict resolution issues by merging instead of rebasing on the remote
      - Fix crash when copying to clipboard on Windows
      - Sync more quickly after the system wakes up from sleep
+     - Fix conflict resolution when renaming folders
 
 
 1.3.0 for Linux (Sat Oct 26 2013):
