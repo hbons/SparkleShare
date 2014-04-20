@@ -531,7 +531,7 @@ namespace SparkleLib.Git {
                         try {
                             ResolveConflict ();
 
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             SparkleLogger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again...", e);
                         }
                     }
@@ -572,9 +572,18 @@ namespace SparkleLib.Git {
                 conflicting_path        = EnsureSpecialCharacters (conflicting_path);
                 conflicting_path        = conflicting_path.Trim ("\"".ToCharArray ());
 
+                // Remove possible rename indicators
+                string [] separators = {" -> \"", " -> "};
+                foreach (string separator in separators) {
+                    if (conflicting_path.Contains (separator)) {
+                        conflicting_path = conflicting_path.Substring (
+                            conflicting_path.IndexOf (separator) + separator.Length);
+                    }
+                }
+
                 SparkleLogger.LogInfo ("Git", Name + " | Conflict type: " + line);
 
-                // Ignore conflicts in the .sparkleshare file and use the local version
+                // Ignore conflicts in hidden files and use the local versions
                 if (conflicting_path.EndsWith (".sparkleshare") || conflicting_path.EndsWith (".empty")) {
                     SparkleLogger.LogInfo ("Git", Name + " | Ignoring conflict in special file: " + conflicting_path);
 
@@ -582,7 +591,10 @@ namespace SparkleLib.Git {
                     SparkleGit git_ours = new SparkleGit (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
                     git_ours.StartAndWaitForExit ();
 
-                    File.SetAttributes (Path.Combine (LocalPath, conflicting_path), FileAttributes.Hidden);
+                    string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
+
+                    if (File.Exists (abs_conflicting_path))
+                        File.SetAttributes (abs_conflicting_path, FileAttributes.Hidden);
             
                     continue;
                 }
