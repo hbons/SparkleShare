@@ -26,8 +26,9 @@ curl (to make the "sparkleshare://" protocol handler work)
 
 ### Installing common build requirements
 
-You can use one of the commands listed below for the most used Linux distributions:  
+You will need the packages listed below for the most used Linux distributions:  
 
+```
 desktop-file-utils
 intltool
 libtool
@@ -36,7 +37,7 @@ mono-gmcs
 mono-mcs
 monodevelop
 nant
-
+```
 
 
 ### Installing additional source build requirements
