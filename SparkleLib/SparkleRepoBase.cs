@@ -39,7 +39,8 @@ namespace SparkleLib {
         AuthenticationFailed,
         DiskSpaceExceeded,
         UnreadableFiles,
-        NotFound
+        NotFound,
+        IncompatibleClientServer
     }
 
 
