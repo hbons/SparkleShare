@@ -298,9 +298,12 @@ namespace SparkleShare {
                         
                     } else if (repo.Error == ErrorStatus.UnreadableFiles) {
                         folder_errors.Add ("Some local files are unreadable or in use");
-
+                        
                     } else if (repo.Error == ErrorStatus.NotFound) {
-                        folder_errors.Add ("Project doesn't exist on host");  
+                        folder_errors.Add ("Project doesn't exist on host"); 
+                        
+                    } else if (repo.Error == ErrorStatus.IncompatibleClientServer) {
+                        folder_errors.Add ("Incompatible client/server versions"); 
                     
                     } else {
                         folder_errors.Add ("");

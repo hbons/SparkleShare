@@ -734,9 +734,12 @@ namespace SparkleLib.Git {
                        line.StartsWith ("ssh_exchange_identification: Connection closed by remote host")) {
 
                 Error = ErrorStatus.AuthenticationFailed;
-
+                
             } else if (line.EndsWith ("does not appear to be a git repository")) {
-                Error = ErrorStatus.NotFound;            
+                Error = ErrorStatus.NotFound;  
+
+            } else if (line.EndsWith ("expected old/new/ref, got 'shallow")) {
+                Error = ErrorStatus.IncompatibleClientServer;
                 
             } else if (line.StartsWith ("error: Disk space exceeded") ||
                        line.EndsWith ("No space left on device")) {
