@@ -187,6 +187,8 @@ namespace SparkleShare {
                 this.lost_folders_path = true;
             }
 
+            bool keys_imported = false;
+
             if (FirstRun) {
                 Config.SetConfigOption ("notifications", bool.TrueString);
 
@@ -208,13 +210,24 @@ namespace SparkleShare {
                         }
 
                         SparkleKeys.ImportPrivateKey (key_file_path);
+                        keys_imported = true;
 
                         break;
                     }
                 }
 
-                CurrentUser.PublicKey = File.ReadAllText (key_file_path + ".pub");
+                if (keys_imported) {
+                    CurrentUser.PublicKey = File.ReadAllText (key_file_path + ".pub");
+                
+                } else {
+                    string [] key_pair = CreateKeys ();
+
+                    SparkleKeys.ImportPrivateKey (key_pair [0]);
+                    CurrentUser.PublicKey = File.ReadAllText (key_pair [1]);    
+                }
+
                 SparkleKeys.ListPrivateKeys ();
+                FolderListChanged (); // FIXME: Hacky way to update status icon menu to show the key
             }
 
             // Watch the SparkleShare folder
@@ -261,14 +274,12 @@ namespace SparkleShare {
             if (FirstRun) {
                 ShowSetupWindow (PageType.Setup);
 
-                new Thread (() => {
-                    string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
-                    string key_file_name = DateTime.Now.ToString ("yyyy-MM-dd_HH\\hmm");
-                    
-                    string [] key_pair = SparkleKeys.GenerateKeyPair (keys_path, key_file_name);
-                    SparkleKeys.ImportPrivateKey (key_pair [0]);
+                new Thread (() => { 
+                    string [] key_pair = CreateKeys ();
 
+                    SparkleKeys.ImportPrivateKey (key_pair [0]);                    
                     CurrentUser.PublicKey = File.ReadAllText (key_pair [1]);
+
                     FolderListChanged (); // FIXME: Hacky way to update status icon menu to show the key
 
                 }).Start ();
@@ -740,6 +751,15 @@ namespace SparkleShare {
             foreach (string file in files)
                 if (!IsSymlink (file))
                     File.SetAttributes (file, FileAttributes.Normal);
+        }
+
+
+        private string [] CreateKeys ()
+        {
+            string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
+            string key_file_name = DateTime.Now.ToString ("yyyy-MM-dd_HH\\hmm");
+            
+            return SparkleKeys.GenerateKeyPair (keys_path, key_file_name);
         }
         
         
