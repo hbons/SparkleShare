@@ -46,6 +46,7 @@ namespace SparkleShare
         {
             InitializeComponent ();
 
+
             Background = new SolidColorBrush (Color.FromRgb(240, 240, 240));
             AllowsTransparency = false;
             Icon = SparkleUIHelpers.GetImageSource ("sparkleshare-app", "ico");
@@ -148,7 +149,7 @@ namespace SparkleShare
             pixmaps_path = pixmaps_path.Replace ("\\", "/");
 
 			html = html.Replace ("<a href=", "<a class='windows' href=");
-			html = html.Replace ("<!-- $body-font-family -->", "'Segoe UI', sans-serif");
+			html = html.Replace ("<!-- $body-font-family -->", "Segoe UI");
 			html = html.Replace ("<!-- $day-entry-header-font-size -->", "13px");
 			html = html.Replace ("<!-- $body-font-size -->", "12px");
 			html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
