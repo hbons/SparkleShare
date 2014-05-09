@@ -28,9 +28,9 @@
             <sparkleShare:SparkleSpinner x:Name="spinner" />
             <WebBrowser  x:Name="webbrowser" Height="{Binding ElementName=sizingControlHeight, Path=ActualHeight}" Width="{Binding ElementName=sizingControlWidth, Path=ActualWidth}" />
 
-            <!-- Unfortunatly WPF allways resizes from child to parent. Unfortunatley the webbrowser takes all space it gets -> stupid!
+            <!-- WPF always resizes from child to parent. Unfortunately the webbrowser takes all space it gets.
                  To correct this "feature" we use a dummy control in a different column to bind the height to.
-                 Compare: http://stackoverflow.com/questions/7300975/prevent-parent-from-being-resized-by-child -->
+                 See: http://stackoverflow.com/questions/7300975/prevent-parent-from-being-resized-by-child -->
             <Rectangle Name="sizingControlHeight" Grid.Column="1" Visibility="Hidden" />
             <Rectangle Name="sizingControlWidth" Grid.Column="0" Grid.Row="1" Visibility="Hidden" />
         </Grid>               
