@@ -97,8 +97,8 @@ namespace SparkleShare
             // On some systems (mostly Linux) we can't assume the needed certificates are
             // available, so we have to check the certificate's SHA-1 fingerprint manually.
             //
-            // Obtained from https://www.gravatar.com/ on April 14 2014 and expires on Oct 14 2015.
-            string gravatar_cert_fingerprint = "F9A8DEE3E94415B542177166A7C69F99745E050A";
+			// Obtained from https://www.gravatar.com/ on May 8 2014 and expires on Oct 14 2015.
+			string gravatar_cert_fingerprint = "DB3053FD4950A211F8827D7B201E6CA004EBB73F";
 
             if (!certificate2.Thumbprint.Equals (gravatar_cert_fingerprint)) {
                 SparkleLogger.LogInfo ("Avatars", "Invalid certificate for https://www.gravatar.com/");
