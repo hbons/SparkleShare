@@ -30,7 +30,8 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <ApplicationIcon>Pixmaps\sparkleshare-app.ico</ApplicationIcon>
-    <ReleaseVersion />
+    <ReleaseVersion>
+    </ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -79,7 +80,6 @@
     <Compile Include="SparkleEventLogWindow.xaml.cs">
       <DependentUpon>SparkleEventLogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SparkleScriptingObject.cs" />
     <Compile Include="SparkleShortcut.cs" />
     <Compile Include="SparkleUI.cs" />
     <Compile Include="..\SparkleAboutController.cs" />
@@ -102,7 +102,6 @@
     </Compile>
     <Compile Include="SparkleNotifyIcon.cs" />
     <Compile Include="SparkleSpinner.cs" />
-    <Compile Include="WPFChromeExtensions.cs" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
