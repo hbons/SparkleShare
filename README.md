@@ -2,6 +2,8 @@
 
 SparkleShare is an Open Source collaboration and sharing tool that is designed to keep things simple and to stay out of your way. It allows you to instantly sync with [Git](http://www.git-scm.org/) repositories and is available for Linux distributions, Mac and Windows.
 
+[![Bountysource](https://www.bountysource.com/badge/tracker?tracker_id=6747)](https://www.bountysource.com/trackers/6747-sparkleshare?utm_source=6747&utm_medium=shield&utm_campaign=TRACKER_BADGE)
+
 
 ### Resources
 
