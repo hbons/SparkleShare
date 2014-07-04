@@ -742,7 +742,8 @@ namespace SparkleLib.Git {
                 Error = ErrorStatus.IncompatibleClientServer;
                 
             } else if (line.StartsWith ("error: Disk space exceeded") ||
-                       line.EndsWith ("No space left on device")) {
+                       line.EndsWith ("No space left on device") ||
+                       line.EndsWith ("file write error (Disk quota exceeded)")) {
 
                 Error = ErrorStatus.DiskSpaceExceeded;
             }
