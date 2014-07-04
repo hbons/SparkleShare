@@ -49,6 +49,7 @@ namespace SparkleShare {
             MinSize     = new SizeF (640, 281);
             HasShadow   = true;
             BackingType = NSBackingStore.Buffered;
+            Level       = NSWindowLevel.Floating;
 
             this.hidden_close_button = new NSButton () {
                 Frame                     = new RectangleF (0, 0, 0, 0),

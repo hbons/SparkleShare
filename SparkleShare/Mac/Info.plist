@@ -8,9 +8,9 @@
 	<string>org.sparkleshare.sparkleshare</string>
 	<key>CFBundleName</key>
 	<string>SparkleShare</string>
-	<key>CFBundleVersion</key>
-	<string>1.4</string>
 	<key>CFBundleShortVersionString</key>
+	<string>1.4</string>
+	<key>CFBundleVersion</key>
 	<string>1.4</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.productivity</string>
