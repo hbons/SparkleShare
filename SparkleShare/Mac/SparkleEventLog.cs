@@ -68,6 +68,7 @@ namespace SparkleShare {
             HasShadow      = true;
             BackingType    = NSBackingStore.Buffered;
             TitlebarHeight = Frame.Height - ContentView.Frame.Height;
+            Level          = NSWindowLevel.Floating;
 
 
             this.web_view = new WebView (new RectangleF (0, 0, 481, 579), "", "") {

@@ -64,8 +64,8 @@ namespace SparkleShare {
 
         public void UpdateDockIconVisibility ()
         {
-            if (Setup.IsVisible || EventLog.IsVisible || About.IsVisible)
-                NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
+//          if (Setup.IsVisible || EventLog.IsVisible || About.IsVisible)
+//              NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
         }
     }
 
