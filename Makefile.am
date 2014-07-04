@@ -10,7 +10,7 @@ EXTRA_DIST = \
 	legal/License_for_SparkleLib.txt \
 	legal/Trademark.txt \
 	legal/Authors.txt \
-        SparkleShare/Linux/README.md \
+	SparkleShare/Linux/README.md \
 	SparkleShare/Linux/sparkleshare.appdata.xml
 
 DISTCLEANFILES = \
