@@ -142,15 +142,7 @@ namespace SparkleLib {
 
                             // The ping failed: disconnect completely
                             } catch (SocketException e) {
-                                this.is_connected  = false;
-                                this.is_connecting = false;
-
-                                if (this.socket != null) {
-                                    this.socket.Close ();
-                                    this.socket = null;
-                                }
-
-                                OnDisconnected (reason, "Ping timeout: " + e.Message);
+                                Disconnect(reason, "Ping timeout: " + e.Message);
                                 return;
                             }
 
@@ -162,23 +154,28 @@ namespace SparkleLib {
                         return;
                     }
 
-                    if (this.socket.Available > 0)
-                        bytes_read = this.socket.Receive (bytes);
+                    try {
+                        if (this.socket.Available > 0)
+                            bytes_read = this.socket.Receive (bytes);
 
-                    // Parse the received message
-                    if (bytes_read > 0) {
-                        string received = Encoding.UTF8.GetString (bytes);
-                        string line     = received.Substring (0, received.IndexOf ("\n"));
+                        // Parse the received message
+                        if (bytes_read > 0) {
+                            string received = Encoding.UTF8.GetString (bytes);
+                            string line     = received.Substring (0, received.IndexOf ("\n"));
 
-                        if (!line.Contains ("!"))
-                            continue;
+                            if (!line.Contains ("!"))
+                                continue;
 
-                        string folder_identifier = line.Substring (0, line.IndexOf ("!"));
-                        string message           = CleanMessage (line.Substring (line.IndexOf ("!") + 1));
+                            string folder_identifier = line.Substring (0, line.IndexOf ("!"));
+                            string message           = CleanMessage (line.Substring (line.IndexOf ("!") + 1));
 
-                        // We have a message!
-                        if (!folder_identifier.Equals ("debug") && !String.IsNullOrEmpty (message))
-                            OnAnnouncement (new SparkleAnnouncement (folder_identifier, message));
+                            // We have a message!
+                            if (!folder_identifier.Equals ("debug") && !String.IsNullOrEmpty (message))
+                                OnAnnouncement (new SparkleAnnouncement (folder_identifier, message));
+                        }
+                    } catch (SocketException e) {
+                        Disconnect(DisconnectReason.TimeOut, "Timeout during receiving: " + e.Message);
+                        return;
                     }
                 }
             });
@@ -186,6 +183,18 @@ namespace SparkleLib {
             this.thread.Start ();
         }
 
+        private void Disconnect(DisconnectReason reason, string message)
+        {
+            this.is_connected  = false;
+            this.is_connecting = false;
+
+            if (this.socket != null) {
+                this.socket.Close ();
+                this.socket = null;
+            }
+
+            OnDisconnected (reason, message);
+        }
 
         protected override void AlsoListenToInternal (string folder_identifier)
         {
