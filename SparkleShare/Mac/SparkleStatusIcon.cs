@@ -30,7 +30,7 @@ namespace SparkleShare {
 
         private NSStatusItem status_item = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
         private NSMenu menu, submenu, link_code_submenu;
-        private SparkleMenuDelegate menuDelegate;
+        private SparkleMenuDelegate menu_delegate;
 
         private NSMenuItem state_item, folder_item, add_item, about_item, recent_events_item, quit_item,
             code_item, copy_item, link_code_item;
@@ -99,8 +99,9 @@ namespace SparkleShare {
             };
 
             Controller.UpdateMenuEvent += delegate {
-                while (this.menuDelegate.MenuIsOpen)
+                while (this.menu_delegate.MenuIsOpen)
                     System.Threading.Thread.Sleep (100);
+
                 Program.Controller.Invoke (() => CreateMenu ());
             };
 
@@ -232,8 +233,8 @@ namespace SparkleShare {
             this.menu.AddItem (NSMenuItem.SeparatorItem);
             this.menu.AddItem (this.quit_item);
 
-            this.menuDelegate = new SparkleMenuDelegate ();
-            this.menu.Delegate    = this.menuDelegate;
+            this.menu_delegate    = new SparkleMenuDelegate ();
+            this.menu.Delegate    = this.menu_delegate;
             this.status_item.Menu = this.menu;
         }
     
