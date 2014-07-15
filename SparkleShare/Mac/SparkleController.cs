@@ -45,6 +45,8 @@ namespace SparkleShare {
         {
             NSApplication.Init ();
 
+            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+
             // Let's use the bundled git first
             SparkleLib.Git.SparkleGit.GitPath  = Path.Combine (NSBundle.MainBundle.ResourcePath, "git", "libexec", "git-core", "git");
             SparkleLib.Git.SparkleGit.ExecPath = Path.Combine (NSBundle.MainBundle.ResourcePath, "git", "libexec", "git-core");
@@ -208,6 +210,19 @@ namespace SparkleShare {
             using (var a = new NSAutoreleasePool ())
             {
                 obj.InvokeOnMainThread (() => code ());
+            }
+        }
+
+        void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            try
+            {
+                var ex = (Exception)e.ExceptionObject;
+                SparkleLogger.LogInfo("Controller", "Fatal Exception", ex);
+            }
+            finally
+            {
+                NSApplication.SharedApplication.Terminate(NSApplication.SharedApplication);
             }
         }
     }
