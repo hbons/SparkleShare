@@ -88,11 +88,11 @@ namespace SparkleShare {
             #endif
         }
 
-        static void OnUnhandledException(object sender, UnhandledExceptionEventArgs exceptionArgs)
+        static void OnUnhandledException(object sender, UnhandledExceptionEventArgs exception_args)
         {
             try
             {
-                var e = (Exception)exceptionArgs.ExceptionObject;
+                var e = (Exception)exception_args.ExceptionObject;
                 SparkleLogger.WriteCrashReport(e);
             }
             finally
