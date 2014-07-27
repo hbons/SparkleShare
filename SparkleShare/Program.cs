@@ -67,20 +67,14 @@ namespace SparkleShare {
                 Environment.Exit (-1);
             }
 
-            try {
-                AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
-                Controller = new SparkleController ();
-                Controller.Initialize ();
+            Controller = new SparkleController ();
+            Controller.Initialize ();
 
-                UI = new SparkleUI ();
-                UI.Run ();
-            
-            } catch (Exception e) {
-                SparkleLogger.WriteCrashReport (e);
-                Environment.Exit (-1);
-            }
-         
+            UI = new SparkleUI ();
+            UI.Run ();
+
             #if !__MonoCS__
             // Suppress assertion messages in debug mode
             GC.Collect (GC.MaxGeneration, GCCollectionMode.Forced);
@@ -88,15 +82,13 @@ namespace SparkleShare {
             #endif
         }
 
-        static void OnUnhandledException(object sender, UnhandledExceptionEventArgs exception_args)
+        private static void OnUnhandledException (object sender, UnhandledExceptionEventArgs exception_args)
         {
-            try
-            {
-                var e = (Exception)exception_args.ExceptionObject;
-                SparkleLogger.WriteCrashReport(e);
-            }
-            finally
-            {
+            try {
+                Exception e = (Exception) exception_args.ExceptionObject;
+                SparkleLogger.WriteCrashReport (e);
+            
+            } finally {
                 Environment.Exit (-1);
             }
         }
