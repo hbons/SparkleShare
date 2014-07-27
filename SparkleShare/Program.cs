@@ -68,6 +68,8 @@ namespace SparkleShare {
             }
 
             try {
+                AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+
                 Controller = new SparkleController ();
                 Controller.Initialize ();
 
@@ -84,6 +86,19 @@ namespace SparkleShare {
             GC.Collect (GC.MaxGeneration, GCCollectionMode.Forced);
             GC.WaitForPendingFinalizers ();
             #endif
+        }
+
+        static void OnUnhandledException(object sender, UnhandledExceptionEventArgs exception_args)
+        {
+            try
+            {
+                var e = (Exception)exception_args.ExceptionObject;
+                SparkleLogger.WriteCrashReport(e);
+            }
+            finally
+            {
+                Environment.Exit (-1);
+            }
         }
     }
 }
