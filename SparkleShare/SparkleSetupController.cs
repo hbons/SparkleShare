@@ -508,17 +508,17 @@ namespace SparkleShare {
 
         public void CheckCryptoSetupPage (string password)
         {
-            bool is_valid_password = (password.Length > 0 && !password.StartsWith (" ") && !password.EndsWith (" "));
-            UpdateCryptoSetupContinueButtonEvent (is_valid_password);
+            new Thread (() => {
+                bool is_valid_password = (password.Length > 0 && !password.StartsWith (" ") && !password.EndsWith (" "));
+                UpdateCryptoSetupContinueButtonEvent (is_valid_password);
+            }).Start ();
         }
 
 
         public void CheckCryptoPasswordPage (string password)
         {
-            new Thread(() => {
-                bool is_password_correct = Program.Controller.CheckPassword (password);
-                UpdateCryptoPasswordContinueButtonEvent (is_password_correct);
-            }).Start ();
+            bool is_password_correct = Program.Controller.CheckPassword (password);
+            UpdateCryptoPasswordContinueButtonEvent (is_password_correct);
         }
 
 
