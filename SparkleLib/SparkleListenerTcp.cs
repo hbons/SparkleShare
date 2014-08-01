@@ -75,7 +75,7 @@ namespace SparkleLib {
 
                     OnConnected ();
 
-                } catch (SocketException e) {
+                } catch (Exception e) {
                     this.is_connected  = false;
                     this.is_connecting = false;
 
