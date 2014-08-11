@@ -12,6 +12,7 @@ SparkleShare is an Open Source collaboration and sharing tool that is designed t
 |       **Website**: | http://www.sparkleshare.org/                      |
 |       **Twitter**: | https://www.twitter.com/SparkleShare              |
 |   **Development**: | https://github.com/hbons/SparkleShare             |
+| **Documentation**: | https://github.com/hbons/SparkleShare/wiki
 |   **IRC channel**: | #sparkleshare on irc.gnome.org                    |
 
 
