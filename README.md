@@ -18,7 +18,9 @@ SparkleShare is an Open Source collaboration and sharing tool that is designed t
 
 ### License
 
-SparkleShare is Open Source software and licensed under the `GNU General Public License version 3 or later`. You are welcome to change and redistribute it under certain conditions. For more information see the [license](legal/License.txt) file.
+SparkleShare is Open Source software and licensed under the `GNU General Public License version 3`. You are welcome to change and redistribute it under certain conditions. For more information see the [license](legal/License_for_SparkleShare.txt) file.
+
+The SparkleShare library (`SparkleLib`) is licensed under the `GNU Lesser General Public License version 3`. For more information see the [License](legal/legal/License_for_SparkleLib.txt).
 
 
 ### Setting up a host
