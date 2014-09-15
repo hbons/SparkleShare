@@ -6,7 +6,7 @@ You can choose to build SparkleShare from source or to run the Windows installer
 
 Install version 4.0 of the [.NET Framework](http://www.microsoft.com/download/en/details.aspx?id=17851) if you haven't already.
 
-Install [msysGit](http://code.google.com/p/msysgit/downloads/list?q=full+installer+official+git) and copy the contents of the install folder
+Install [msysGit](http://msysgit.github.io/) and copy the contents of the install folder
 (`C:\Program Files (x86)\Git` by default) to `C:\path\to\SparkleShare-sources\bin\msysgit\` (create the "bin"-folder in the SparkleShare source directory).
 
 Open a command prompt and execute the following:
