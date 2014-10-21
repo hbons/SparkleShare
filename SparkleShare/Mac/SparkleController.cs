@@ -25,6 +25,7 @@ using MonoMac.AppKit;
 
 using Mono.Unix.Native;
 using SparkleLib;
+using System.Collections.Generic;
 
 namespace SparkleShare {
 
@@ -58,22 +59,50 @@ namespace SparkleShare {
             SparkleRepoBase.UseCustomWatcher = true;
             this.watcher = new SparkleMacWatcher (Program.Controller.FoldersPath);
 
-            this.watcher.Changed += delegate (string path) {
-                FileSystemEventArgs fse_args = new FileSystemEventArgs (WatcherChangeTypes.Changed, path, "Unknown_File");
-                FileActivityTask [] tasks = new FileActivityTask [Repositories.Length];
-
-                // FIXME: There are cases where the wrong repo is triggered, so
-                // we trigger all of them for now. Causes only slightly more overhead
-                int i = 0;
-                foreach (SparkleRepoBase repo in Repositories) {
-                    tasks [i] = MacActivityTask (repo, fse_args);
-                    tasks [i] ();
-                    i++;
-                }
-            };
-
+            this.watcher.Changed += OnFilesChanged;
         }
 
+        private void OnFilesChanged(List<string> changedFilesInBasedir)
+        {
+            Dictionary<SparkleRepoBase, List<string>> changeDict = new Dictionary<SparkleRepoBase, List<string>> ();
+
+            foreach (string file in changedFilesInBasedir) {
+                string repo_name;
+                int pathSepIndex = file.IndexOf (Path.DirectorySeparatorChar);
+
+                if (pathSepIndex >= 0)
+                    repo_name = file.Substring (0, pathSepIndex);
+                else
+                    repo_name = file;
+
+                repo_name = Path.GetFileNameWithoutExtension (repo_name);
+
+                SparkleRepoBase repo = GetRepositoryByName (repo_name);
+                if (repo == null)
+                    continue;
+
+                List<string> changes;
+
+                if (changeDict.ContainsKey (repo))
+                    changes = changeDict [repo];
+                else {
+                    changes = new List<string> ();
+                    changeDict.Add (repo, changes);
+                }
+
+                changes.Add (Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, file));
+            }
+
+            foreach (SparkleRepoBase repo in changeDict.Keys) {
+                foreach (string file in changeDict[repo]) {
+                    FileActivityTask task = MacActivityTask (
+                        repo,
+                        new FileSystemEventArgs(WatcherChangeTypes.Changed, file, "unknown")
+                    );
+                    task ();
+                }
+            }
+        }
 
         private delegate void FileActivityTask ();
 
