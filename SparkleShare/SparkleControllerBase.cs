@@ -30,32 +30,32 @@ namespace SparkleShare {
         public SparkleRepoBase [] Repositories {
             get {
                 lock (this.repo_lock)
-                    return this.sortedRepositories.GetRange (0, this.sortedRepositories.Count).ToArray ();
+                    return this.sorted_repositories.GetRange (0, this.sorted_repositories.Count).ToArray ();
             }
         }
 
         private void AddRepository(SparkleRepoBase repo)
         {
             lock (this.repo_lock) {
-                sortedRepositories.Add (repo);
-                repositoryDict.Add (repo.Name, repo);
-                sortedRepositories.Sort ((x, y) => string.Compare (x.Name, y.Name));
+                sorted_repositories.Add (repo);
+                repository_dict.Add (repo.Name, repo);
+                sorted_repositories.Sort ((x, y) => string.Compare (x.Name, y.Name));
             }
         }
 
         private void RemoveRepository(SparkleRepoBase repo)
         {
             lock (this.repo_lock) {
-                sortedRepositories.Remove (repo);
-                repositoryDict.Remove (repo.Name);
+                sorted_repositories.Remove (repo);
+                repository_dict.Remove (repo.Name);
             }
         }
 
         public SparkleRepoBase GetRepositoryByName(string name)
         {
             lock (this.repo_lock) {
-                if(repositoryDict.ContainsKey(name))
-                    return repositoryDict [name];
+                if(repository_dict.ContainsKey(name))
+                    return repository_dict [name];
 
                 return null;
             }
@@ -181,8 +181,8 @@ namespace SparkleShare {
         private FileSystemWatcher watcher;
         private Object repo_lock = new Object ();
         private Object check_repos_lock = new Object ();
-        private List<SparkleRepoBase> sortedRepositories = new List<SparkleRepoBase> ();
-        private Dictionary<string, SparkleRepoBase> repositoryDict = new Dictionary<string, SparkleRepoBase> ();
+        private List<SparkleRepoBase> sorted_repositories = new List<SparkleRepoBase> ();
+        private Dictionary<string, SparkleRepoBase> repository_dict = new Dictionary<string, SparkleRepoBase> ();
         private bool lost_folders_path = false;
 
 
@@ -498,7 +498,7 @@ namespace SparkleShare {
 
         private void RemoveRepository (string folder_path)
         {
-            foreach (SparkleRepoBase repo in this.sortedRepositories) {
+            foreach (SparkleRepoBase repo in this.sorted_repositories) {
                 if (repo.LocalPath.Equals (folder_path)) {
                     RemoveRepository (repo);
                     repo.Dispose ();
