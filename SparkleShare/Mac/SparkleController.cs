@@ -62,16 +62,16 @@ namespace SparkleShare {
             this.watcher.Changed += OnFilesChanged;
         }
 
-        private void OnFilesChanged(List<string> changedFilesInBasedir)
+        private void OnFilesChanged(List<string> changed_files_in_basedir)
         {
-            Dictionary<SparkleRepoBase, List<string>> changeDict = new Dictionary<SparkleRepoBase, List<string>> ();
+            Dictionary<SparkleRepoBase, List<string>> change_dict = new Dictionary<SparkleRepoBase, List<string>> ();
 
-            foreach (string file in changedFilesInBasedir) {
+            foreach (string file in changed_files_in_basedir) {
                 string repo_name;
-                int pathSepIndex = file.IndexOf (Path.DirectorySeparatorChar);
+                int path_sep_index = file.IndexOf (Path.DirectorySeparatorChar);
 
-                if (pathSepIndex >= 0)
-                    repo_name = file.Substring (0, pathSepIndex);
+                if (path_sep_index >= 0)
+                    repo_name = file.Substring (0, path_sep_index);
                 else
                     repo_name = file;
 
@@ -83,18 +83,18 @@ namespace SparkleShare {
 
                 List<string> changes;
 
-                if (changeDict.ContainsKey (repo))
-                    changes = changeDict [repo];
+                if (change_dict.ContainsKey (repo))
+                    changes = change_dict [repo];
                 else {
                     changes = new List<string> ();
-                    changeDict.Add (repo, changes);
+                    change_dict.Add (repo, changes);
                 }
 
                 changes.Add (Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, file));
             }
 
-            foreach (SparkleRepoBase repo in changeDict.Keys) {
-                foreach (string file in changeDict[repo]) {
+            foreach (SparkleRepoBase repo in change_dict.Keys) {
+                foreach (string file in change_dict[repo]) {
                     FileActivityTask task = MacActivityTask (
                         repo,
                         new FileSystemEventArgs(WatcherChangeTypes.Changed, file, "unknown")
