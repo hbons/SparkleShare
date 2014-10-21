@@ -30,10 +30,36 @@ namespace SparkleShare {
         public SparkleRepoBase [] Repositories {
             get {
                 lock (this.repo_lock)
-                    return this.repositories.GetRange (0, this.repositories.Count).ToArray ();
+                    return this.sortedRepositories.GetRange (0, this.sortedRepositories.Count).ToArray ();
             }
         }
 
+        private void AddRepository(SparkleRepoBase repo)
+        {
+            lock (this.repo_lock) {
+                sortedRepositories.Add (repo);
+                repositoryDict.Add (repo.Name, repo);
+                sortedRepositories.Sort ((x, y) => string.Compare (x.Name, y.Name));
+            }
+        }
+
+        private void RemoveRepository(SparkleRepoBase repo)
+        {
+            lock (this.repo_lock) {
+                sortedRepositories.Remove (repo);
+                repositoryDict.Remove (repo.Name);
+            }
+        }
+
+        public SparkleRepoBase GetRepositoryByName(string name)
+        {
+            lock (this.repo_lock) {
+                if(repositoryDict.ContainsKey(name))
+                    return repositoryDict [name];
+
+                return null;
+            }
+        }
 
         public SparkleConfig Config { get; private set; }
         public bool RepositoriesLoaded { get; private set; }
@@ -155,7 +181,8 @@ namespace SparkleShare {
         private FileSystemWatcher watcher;
         private Object repo_lock = new Object ();
         private Object check_repos_lock = new Object ();
-        private List<SparkleRepoBase> repositories = new List<SparkleRepoBase> ();
+        private List<SparkleRepoBase> sortedRepositories = new List<SparkleRepoBase> ();
+        private Dictionary<string, SparkleRepoBase> repositoryDict = new Dictionary<string, SparkleRepoBase> ();
         private bool lost_folders_path = false;
 
 
@@ -464,17 +491,16 @@ namespace SparkleShare {
                     "Local and server versions were kept.");
             };
 
-            this.repositories.Add (repo);
-            this.repositories.Sort ((x, y) => string.Compare (x.Name, y.Name));
+            AddRepository (repo);
             repo.Initialize (); 
         }
 
 
         private void RemoveRepository (string folder_path)
         {
-            foreach (SparkleRepoBase repo in this.repositories) {
+            foreach (SparkleRepoBase repo in this.sortedRepositories) {
                 if (repo.LocalPath.Equals (folder_path)) {
-                    this.repositories.Remove (repo);
+                    RemoveRepository (repo);
                     repo.Dispose ();
                     return;
                 }
