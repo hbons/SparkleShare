@@ -151,19 +151,19 @@ namespace SparkleShare {
 
             var handler = Changed;
             if (handler != null) {
-                List<string> filteredPaths = new List<string> ();
+                List<string> filtered_paths = new List<string> ();
                 foreach (var path in paths) {
                     if (path.Length > BasePath.Length) {
                         var t = path.Substring (BasePath.Length);
                         t = t.Trim ("/".ToCharArray ());
 
                         if (!string.IsNullOrWhiteSpace (t))
-                            filteredPaths.Add(t);
+                            filtered_paths.Add(t);
                     }
                 }
 
-                if(filteredPaths.Count > 0)
-                    handler (filteredPaths);
+                if(filtered_paths.Count > 0)
+                    handler (filtered_paths);
             }
 
             GC.KeepAlive (this);
