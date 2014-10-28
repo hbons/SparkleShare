@@ -761,6 +761,13 @@ namespace SparkleLib.Git {
         }
 
 
+        public override List<SparkleChange> UnsyncedChanges {
+          get {
+              return ParseStatus ();
+            }
+        }
+
+
         public override List<SparkleChangeSet> GetChangeSets ()
         {
             return GetChangeSetsInternal (null);
@@ -1136,11 +1143,8 @@ namespace SparkleLib.Git {
             
             git_status.StandardOutput.ReadToEnd ();
             git_status.WaitForExit ();
-            
-            if (changes.Count == 0)
-                return null;
-            else
-                return changes;
+
+            return changes;
         }
 
 
