@@ -60,6 +60,7 @@ namespace SparkleLib {
         public abstract double HistorySize { get; }
 
         public abstract List<string> ExcludePaths { get; }
+        public abstract List<SparkleChange> UnsyncedChanges { get; }
         public abstract List<SparkleChangeSet> GetChangeSets ();
         public abstract List<SparkleChangeSet> GetChangeSets (string path);
 
@@ -83,7 +84,7 @@ namespace SparkleLib {
         public readonly string LocalPath;
         public readonly string Name;
         public readonly Uri RemoteUrl;
-        public List<SparkleChangeSet> ChangeSets { get; protected set; }
+        public List<SparkleChangeSet> ChangeSets { get; private set; }
         public SyncStatus Status { get; private set; }
         public ErrorStatus Error { get; protected set; }
         public bool IsBuffering { get; private set; }
@@ -229,7 +230,7 @@ namespace SparkleLib {
 
         public void OnFileActivity (FileSystemEventArgs args)
         {
-            if (IsBuffering || this.is_syncing || Status == SyncStatus.Paused)
+            if (IsBuffering || this.is_syncing)
                 return;
 
             if (args != null) {
@@ -237,6 +238,11 @@ namespace SparkleLib {
                     if (args.FullPath.Contains (Path.DirectorySeparatorChar + exclude_path))
                         return;
                 }
+            }
+            
+            if (Status == SyncStatus.Paused) {
+                ChangesDetected ();
+                return;
             }
 
             lock (this.buffer_lock) {
