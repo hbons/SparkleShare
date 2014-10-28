@@ -235,7 +235,10 @@ namespace SparkleLib.Git {
                 return false;
             }
 
-            string message = FormatCommitMessage ();
+            string message = base.status_message;
+
+            if (string.IsNullOrEmpty (message))
+                message = FormatCommitMessage ();
 
             if (message != null)
                 Commit (message);
