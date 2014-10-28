@@ -26,6 +26,7 @@ namespace SparkleLib {
 
     public enum SyncStatus {
         Idle,
+        Paused,
         SyncUp,
         SyncDown,
         Error
@@ -171,7 +172,7 @@ namespace SparkleLib {
 
         private void RemoteTimerElapsedDelegate (object sender, EventArgs args)
         {
-            if (this.is_syncing || IsBuffering)
+            if (this.is_syncing || IsBuffering || Status == SyncStatus.Paused)
                 return;
             
             int time_comparison = DateTime.Compare (this.last_poll, DateTime.Now.Subtract (this.poll_interval));
@@ -228,7 +229,7 @@ namespace SparkleLib {
 
         public void OnFileActivity (FileSystemEventArgs args)
         {
-            if (IsBuffering || this.is_syncing)
+            if (IsBuffering || this.is_syncing || Status == SyncStatus.Paused)
                 return;
 
             if (args != null) {
@@ -530,7 +531,11 @@ namespace SparkleLib {
                     Thread.Sleep (100);
 
                 SparkleLogger.LogInfo (Name, "Syncing due to announcement");
-                SyncDownBase ();
+
+                if (Status == SyncStatus.Paused)
+                    SparkleLogger.LogInfo (Name, "We're paused, skipping sync");
+                else
+                    SyncDownBase ();
             }
         }
 
