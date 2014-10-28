@@ -389,6 +389,8 @@ namespace SparkleLib {
 
             if (!UseCustomWatcher)
                 this.watcher.Enable ();
+
+            this.status_message = "";
         }
 
 
@@ -560,6 +562,24 @@ namespace SparkleLib {
             }
 
             return size;
+        }
+
+
+        public void Pause ()
+        {
+            if (Status == SyncStatus.Idle)
+                Status = SyncStatus.Paused;
+        }
+
+
+        protected string status_message = "";
+
+        public void Resume (string message)
+        {
+            this.status_message = message;
+
+            if (Status == SyncStatus.Paused)
+                Status = SyncStatus.Idle;
         }
 
 
