@@ -734,7 +734,8 @@ namespace SparkleLib.Git {
                 Error = ErrorStatus.HostIdentityChanged;
                 
             } else if (line.StartsWith ("Permission denied") ||
-                       line.StartsWith ("ssh_exchange_identification: Connection closed by remote host")) {
+                       line.StartsWith ("ssh_exchange_identification: Connection closed by remote host") ||
+                       line.StartsWith ("The authenticity of host")) {
 
                 Error = ErrorStatus.AuthenticationFailed;
                 
