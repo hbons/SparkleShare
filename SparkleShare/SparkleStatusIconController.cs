@@ -33,6 +33,66 @@ namespace SparkleShare {
     }
 
 
+    public class ProjectInfo {
+
+        private SparkleRepoBase repo;
+
+        public string Name { get { return this.repo.Name; }}
+        public string Path { get { return this.repo.LocalPath; }}
+
+        public bool IsPaused { get { return this.repo.Status == SyncStatus.Paused; }}
+        public bool HasError { get { return this.repo.Status == SyncStatus.Error; }}
+
+
+        public string StatusMessage {
+            get {
+                string status_message = "Last sync at <time>";
+                
+                if (IsPaused) {
+                    status_message = "Paused";
+
+                } else if (this.repo.Status == SyncStatus.Error) {
+                    switch (this.repo.Error) {
+                    case ErrorStatus.HostUnreachable: return "Can't reach the host";
+                    case ErrorStatus.HostIdentityChanged: return "The host's identity has changed";
+                    case ErrorStatus.AuthenticationFailed: return "Authentication failed";
+                    case ErrorStatus.DiskSpaceExceeded: return "Host is out of disk space";
+                    case ErrorStatus.UnreadableFiles: return "Some local files are unreadable or in use";
+                    case ErrorStatus.NotFound: return "Project doesn't exist on host";
+                    case ErrorStatus.IncompatibleClientServer: return "Incompatible client/server versions";
+                    }
+                }
+
+                return status_message;
+            }
+        }
+
+
+        public Dictionary<string, string> UnsyncedChangesInfo {
+            get { 
+                Dictionary<string, string> changes_info = new Dictionary<string, string> ();
+            
+                foreach (SparkleChange change in repo.UnsyncedChanges) {
+                    switch (change.Type) {
+                    case SparkleChangeType.Added:   changes_info [change.Path] = "document-added-12.png"; break;
+                    case SparkleChangeType.Edited:  changes_info [change.Path] = "document-edited-12.png"; break;
+                    case SparkleChangeType.Deleted: changes_info [change.Path] = "document-deleted-12.png"; break;
+                    case SparkleChangeType.Moved:   changes_info [change.MovedToPath] = "document-moved-12.png"; break;
+                    }
+                }
+
+                return changes_info;
+            }
+        }
+
+
+        public ProjectInfo (SparkleRepoBase repo)
+        {
+            this.repo = repo;
+        }
+    }
+
+
     public class SparkleStatusIconController {
 
         public event UpdateIconEventHandler UpdateIconEvent = delegate { };
@@ -50,9 +110,8 @@ namespace SparkleShare {
         public IconState CurrentState = IconState.Idle;
         public string StateText       = "Welcome to SparkleShare!";
 
-        public string [] Folders      = new string [0];
-        public string [] FolderErrors = new string [0];
-        
+        public ProjectInfo [] Projects = new ProjectInfo [0];
+
 
         public string FolderSize {
             get {
@@ -122,7 +181,7 @@ namespace SparkleShare {
                 if (CurrentState != IconState.Error) {
                     CurrentState = IconState.Idle;
 
-                    if (Folders.Length == 0)
+                    if (Projects.Length == 0)
                         StateText = "Welcome to SparkleShare!";
                     else
                         StateText = "Projects up to date " + FolderSize;
@@ -138,7 +197,7 @@ namespace SparkleShare {
                 if (CurrentState != IconState.Error) {
                     CurrentState = IconState.Idle;
 
-                    if (Folders.Length == 0)
+                    if (Projects.Length == 0)
                         StateText = "Welcome to SparkleShare!";
                     else
                         StateText = "Projects up to date " + FolderSize;
@@ -273,45 +332,17 @@ namespace SparkleShare {
         }
 
 
-        private Object folders_lock = new Object ();
+        private Object projects_lock = new Object ();
 
         private void UpdateFolders ()
         {
-            lock (this.folders_lock) {
-                List<string> folders = new List<string> ();
-                List<string> folder_errors = new List<string> ();
+            lock (this.projects_lock) {
+                List<ProjectInfo> projects = new List<ProjectInfo> ();
 
-                foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
-                    folders.Add (repo.Name);
-                    
-                    if (repo.Error == ErrorStatus.HostUnreachable) {
-                        folder_errors.Add ("Can't reach the host");
-                        
-                    } else if (repo.Error == ErrorStatus.HostIdentityChanged) {
-                        folder_errors.Add ("The host's identity has changed");
-                        
-                    } else if (repo.Error == ErrorStatus.AuthenticationFailed) {
-                        folder_errors.Add ("Authentication failed");
-                        
-                    } else if (repo.Error == ErrorStatus.DiskSpaceExceeded) {
-                        folder_errors.Add ("Host is out of disk space");
-                        
-                    } else if (repo.Error == ErrorStatus.UnreadableFiles) {
-                        folder_errors.Add ("Some local files are unreadable or in use");
-                        
-                    } else if (repo.Error == ErrorStatus.NotFound) {
-                        folder_errors.Add ("Project doesn't exist on host"); 
-                        
-                    } else if (repo.Error == ErrorStatus.IncompatibleClientServer) {
-                        folder_errors.Add ("Incompatible client/server versions"); 
-                    
-                    } else {
-                        folder_errors.Add ("");
-                    }
-                }
-
-                Folders = folders.ToArray ();
-                FolderErrors = folder_errors.ToArray ();
+                foreach (SparkleRepoBase repo in Program.Controller.Repositories)
+                    projects.Add (new ProjectInfo (repo));
+            
+                Projects = projects.ToArray ();
             }
         }
     }
