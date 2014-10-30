@@ -158,8 +158,12 @@ namespace SparkleLib {
             this.identifier   = Identifier;
             ChangeSets        = GetChangeSets ();
 
-			string identifier_file_path = Path.Combine (LocalPath, ".sparkleshare");
-			File.SetAttributes (identifier_file_path, FileAttributes.Hidden);
+            string is_paused = this.local_config.GetFolderOptionalAttribute (Name, "paused");
+            if (is_paused != null && is_paused.Equals (bool.TrueString))
+                Status = SyncStatus.Paused;
+
+            string identifier_file_path = Path.Combine (LocalPath, ".sparkleshare");
+            File.SetAttributes (identifier_file_path, FileAttributes.Hidden);
 
             if (!UseCustomWatcher)
                 this.watcher = new SparkleWatcher (LocalPath);
@@ -572,8 +576,10 @@ namespace SparkleLib {
 
         public void Pause ()
         {
-            if (Status == SyncStatus.Idle)
+            if (Status == SyncStatus.Idle) {
+                this.local_config.SetFolderOptionalAttribute (Name, "paused", bool.TrueString);
                 Status = SyncStatus.Paused;
+            }
         }
 
 
@@ -583,8 +589,10 @@ namespace SparkleLib {
         {
             this.status_message = message;
 
-            if (Status == SyncStatus.Paused)
+            if (Status == SyncStatus.Paused) {
+                this.local_config.SetFolderOptionalAttribute (Name, "paused", bool.FalseString);
                 Status = SyncStatus.Idle;
+            }
         }
 
 
