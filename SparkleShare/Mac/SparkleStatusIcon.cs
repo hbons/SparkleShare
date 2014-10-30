@@ -16,6 +16,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
@@ -35,7 +36,8 @@ namespace SparkleShare {
         private NSMenuItem state_item, folder_item, add_item, about_item, recent_events_item, quit_item,
             code_item, copy_item, link_code_item;
 
-        private NSMenuItem [] folder_menu_items, error_menu_items, try_again_menu_items;
+        private NSMenuItem [] folder_menu_items, try_again_menu_items, pause_menu_items,
+            resume_menu_items, state_menu_items;
 
         private NSImage syncing_idle_image  = NSImage.ImageNamed ("process-syncing-idle");
         private NSImage syncing_up_image    = NSImage.ImageNamed ("process-syncing-up");
@@ -95,7 +97,15 @@ namespace SparkleShare {
             };
             
             Controller.UpdateStatusItemEvent += delegate (string state_text) {
-                Program.Controller.Invoke (() => { this.state_item.Title = state_text; });
+                Program.Controller.Invoke (() => {
+                    this.state_item.Title = state_text;
+
+
+                    if (Controller.Projects.Length == this.state_menu_items.Length) {
+                        for (int i = 0; i < Controller.Projects.Length; i++)
+                            this.state_menu_items [i].Title = Controller.Projects [i].StatusMessage;
+                    }
+                });
             };
 
             Controller.UpdateMenuEvent += delegate {
@@ -168,35 +178,62 @@ namespace SparkleShare {
                 Enabled = Controller.QuitItemEnabled
             };
 
-            this.folder_menu_items    = new NSMenuItem [Controller.Folders.Length];
-            this.error_menu_items     = new NSMenuItem [Controller.Folders.Length];
-            this.try_again_menu_items = new NSMenuItem [Controller.Folders.Length];
+            this.folder_menu_items    = new NSMenuItem [Controller.Projects.Length];
+            this.try_again_menu_items = new NSMenuItem [Controller.Projects.Length];
+            this.pause_menu_items     = new NSMenuItem [Controller.Projects.Length];
+            this.resume_menu_items    = new NSMenuItem [Controller.Projects.Length];
+            this.state_menu_items     = new NSMenuItem [Controller.Projects.Length];
 
-            if (Controller.Folders.Length > 0) {
+            if (Controller.Projects.Length > 0) {
                 int i = 0;
-                foreach (string folder_name in Controller.Folders) {
-                    NSMenuItem item = new NSMenuItem () { Title = folder_name };
+                foreach (ProjectInfo project in Controller.Projects) {
+                    NSMenuItem item = new NSMenuItem () { Title = project.Name };
                     this.folder_menu_items [i] = item;
 
-                    if (!string.IsNullOrEmpty (Controller.FolderErrors [i])) {
-                        item.Image   = this.caution_image;
-                        item.Submenu = new NSMenu ();
+                    item.Submenu = new NSMenu ();
+                    item.Image   = this.folder_image;
 
-                        this.error_menu_items [i]       = new NSMenuItem ();
-                        this.error_menu_items [i].Title = Controller.FolderErrors [i];
+                    this.state_menu_items [i] = new NSMenuItem (project.StatusMessage);
 
-                        this.try_again_menu_items [i]           = new NSMenuItem ();
-                        this.try_again_menu_items [i].Title     = "Try Again";
-                        this.try_again_menu_items [i].Activated += Controller.TryAgainDelegate (folder_name);;
+                    item.Submenu.AddItem (this.state_menu_items [i]);
+                    item.Submenu.AddItem (NSMenuItem.SeparatorItem);
 
-                        item.Submenu.AddItem (this.error_menu_items [i]);
-                        item.Submenu.AddItem (NSMenuItem.SeparatorItem);
-                        item.Submenu.AddItem (this.try_again_menu_items [i]);
+                    if (project.IsPaused) {
+                        if (project.UnsyncedChangesInfo.Count > 0) {
+                            foreach (KeyValuePair<string, string> pair in project.UnsyncedChangesInfo)
+                                item.Submenu.AddItem (new NSMenuItem (pair.Key) {
+                                    Image = NSImage.ImageNamed (pair.Value)
+                                });
 
+                            item.Submenu.AddItem (NSMenuItem.SeparatorItem);
+                            this.resume_menu_items [i] = new NSMenuItem ("Sync and Resume…"); 
+                        
+                        } else {
+                            this.resume_menu_items [i] = new NSMenuItem ("Resume");
+                        }
+
+                        this.resume_menu_items [i].Activated += Controller.ResumeDelegate (project.Name);
+                        item.Submenu.AddItem (this.resume_menu_items [i]);
+                    
                     } else {
-                        item.Image = this.folder_image;
-                        this.folder_menu_items [i].Activated += Controller.OpenFolderDelegate (folder_name);
+                        if (Controller.Projects [i].HasError) {
+                            item.Image = this.caution_image;
+                            
+                            this.try_again_menu_items [i]           = new NSMenuItem ();
+                            this.try_again_menu_items [i].Title     = "Try Again";
+                            this.try_again_menu_items [i].Activated += Controller.TryAgainDelegate (project.Name);
+                            
+                            item.Submenu.AddItem (this.try_again_menu_items [i]);
+                            
+                        } else {
+                            this.pause_menu_items [i] = new NSMenuItem ("Pause"); 
+                            this.pause_menu_items [i].Activated += Controller.PauseDelegate (project.Name);
+                            item.Submenu.AddItem (this.pause_menu_items [i]);
+                        }
                     }
+
+                    if (!Controller.Projects [i].HasError)
+                        this.folder_menu_items [i].Activated += Controller.OpenFolderDelegate (project.Name);
 
                     item.Image.Size = new SizeF (16, 16);
                     i++;
@@ -263,6 +300,5 @@ namespace SparkleShare {
                 MenuIsOpen = false;
             }
         }
-    
     }
 }
