@@ -47,7 +47,6 @@ namespace SparkleLib {
 
     public abstract class SparkleRepoBase {
 
-
         public abstract bool SyncUp ();
         public abstract bool SyncDown ();
         public abstract void RestoreFile (string path, string revision, string target_file_path);
@@ -63,7 +62,6 @@ namespace SparkleLib {
         public abstract List<SparkleChange> UnsyncedChanges { get; }
         public abstract List<SparkleChangeSet> GetChangeSets ();
         public abstract List<SparkleChangeSet> GetChangeSets (string path);
-
 
         public static bool UseCustomWatcher = false;
 
@@ -90,6 +88,7 @@ namespace SparkleLib {
         public bool IsBuffering { get; private set; }
         public double ProgressPercentage { get; private set; }
         public double ProgressSpeed { get; private set; }
+        public DateTime LastSync { get { return ChangeSets [0].Timestamp; }}
 
         public virtual string Identifier {
             get {
