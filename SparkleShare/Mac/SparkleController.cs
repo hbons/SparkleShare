@@ -77,7 +77,7 @@ namespace SparkleShare {
                     repo_name = file;
 
                 repo_name = Path.GetFileNameWithoutExtension (repo_name);
-                SparkleRepoBase repo = GetRepositoryByName (repo_name);
+                SparkleRepoBase repo = GetRepoByName (repo_name);
 
                 if (repo == null)
                     continue;
