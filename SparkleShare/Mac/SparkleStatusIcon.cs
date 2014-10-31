@@ -221,12 +221,13 @@ namespace SparkleShare {
                             this.try_again_menu_items [i]           = new NSMenuItem ();
                             this.try_again_menu_items [i].Title     = "Try Again";
                             this.try_again_menu_items [i].Activated += Controller.TryAgainDelegate (project.Name);
-                            
+
                             item.Submenu.AddItem (this.try_again_menu_items [i]);
                             
                         } else {
                             this.pause_menu_items [i] = new NSMenuItem ("Pause"); 
                             this.pause_menu_items [i].Activated += Controller.PauseDelegate (project.Name);
+
                             item.Submenu.AddItem (this.pause_menu_items [i]);
                         }
                     }
