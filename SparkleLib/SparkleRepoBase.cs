@@ -210,14 +210,16 @@ namespace SparkleLib {
         {
             // Sync up everything that changed since we've been offline
             new Thread (() => {
-                if (HasRemoteChanges)
-                    SyncDownBase ();
+                if (Status != SyncStatus.Paused) {
+                    if (HasRemoteChanges)
+                        SyncDownBase ();
 
-                if (HasUnsyncedChanges || HasLocalChanges) {
-                    do {
-                        SyncUpBase ();
+                    if (HasUnsyncedChanges || HasLocalChanges) {
+                        do {
+                            SyncUpBase ();
 
-                    } while (HasLocalChanges);
+                        } while (HasLocalChanges);
+                    }
                 }
                 
                 if (!UseCustomWatcher)
@@ -314,10 +316,8 @@ namespace SparkleLib {
 
         public void ForceRetry ()
         {
-            if (Error == ErrorStatus.None || this.is_syncing)
-                return;
-
-            SyncUpBase ();
+            if (Error != ErrorStatus.None && !this.is_syncing)
+                SyncUpBase ();
         }
 
 
@@ -592,6 +592,8 @@ namespace SparkleLib {
             if (Status == SyncStatus.Paused) {
                 this.local_config.SetFolderOptionalAttribute (Name, "paused", bool.FalseString);
                 Status = SyncStatus.Idle;
+
+                SyncUpBase ();
             }
         }
 
