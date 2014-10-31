@@ -593,7 +593,12 @@ namespace SparkleLib {
                 this.local_config.SetFolderOptionalAttribute (Name, "paused", bool.FalseString);
                 Status = SyncStatus.Idle;
 
-                SyncUpBase ();
+                if (HasUnsyncedChanges || HasLocalChanges) {
+                    do {
+                        SyncUpBase ();
+                        
+                    } while (HasLocalChanges);
+                }
             }
         }
 
