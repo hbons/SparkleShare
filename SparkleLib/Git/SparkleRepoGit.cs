@@ -1112,8 +1112,8 @@ namespace SparkleLib.Git {
                 SparkleChange change;
                 
                 if (line.StartsWith ("R")) {
-                    string path = line.Substring (3, line.IndexOf (" -> ") - 3).Trim ("\"".ToCharArray ());
-                    string moved_to_path = line.Substring (line.IndexOf (" -> ") + 4).Trim ("\"".ToCharArray ());
+                    string path = line.Substring (3, line.IndexOf (" -> ") - 3).Trim ("\" ".ToCharArray ());
+                    string moved_to_path = line.Substring (line.IndexOf (" -> ") + 4).Trim ("\" ".ToCharArray ());
                     
                     change = new SparkleChange () {
                         Type = SparkleChangeType.Moved,
@@ -1122,7 +1122,7 @@ namespace SparkleLib.Git {
                     };
                     
                 } else {
-                    string path = line.Substring (3).Trim ("\"".ToCharArray ());
+                    string path = line.Substring (2).Trim ("\" ".ToCharArray ());
                     change = new SparkleChange () { Path = EnsureSpecialCharacters (path) };
                     change.Type = SparkleChangeType.Added;
 
