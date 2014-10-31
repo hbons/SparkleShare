@@ -62,9 +62,10 @@ namespace SparkleShare {
             this.watcher.Changed += OnFilesChanged;
         }
 
-        private void OnFilesChanged(List<string> changed_files_in_basedir)
+
+        private void OnFilesChanged (List<string> changed_files_in_basedir)
         {
-            Dictionary<SparkleRepoBase, List<string>> change_dict = new Dictionary<SparkleRepoBase, List<string>> ();
+            List<string> triggered_repos = new List<string> ();
 
             foreach (string file in changed_files_in_basedir) {
                 string repo_name;
@@ -76,31 +77,20 @@ namespace SparkleShare {
                     repo_name = file;
 
                 repo_name = Path.GetFileNameWithoutExtension (repo_name);
-
                 SparkleRepoBase repo = GetRepositoryByName (repo_name);
+
                 if (repo == null)
                     continue;
 
-                List<string> changes;
+                if (!triggered_repos.Contains (repo_name)) {
+                    triggered_repos.Add (repo_name);
 
-                if (change_dict.ContainsKey (repo))
-                    changes = change_dict [repo];
-                else {
-                    changes = new List<string> ();
-                    change_dict.Add (repo, changes);
-                }
-
-                changes.Add (Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, file));
-            }
-
-            foreach (SparkleRepoBase repo in change_dict.Keys) {
-                foreach (string file in change_dict[repo]) {
-                    FileActivityTask task = MacActivityTask (
-                        repo,
-                        new FileSystemEventArgs(WatcherChangeTypes.Changed, file, "unknown")
-                    );
+                    FileActivityTask task = MacActivityTask (repo,
+                        new FileSystemEventArgs (WatcherChangeTypes.Changed, file, "Unknown"));
+                    
                     task ();
                 }
+
             }
         }
 
