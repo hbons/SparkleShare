@@ -40,7 +40,7 @@ namespace SparkleShare {
 
     public sealed class SparkleMacWatcher : IDisposable {
         
-        public delegate void ChangedEventHandler (List<string> path);
+        public delegate void ChangedEventHandler (List<string> paths);
         public event ChangedEventHandler Changed;
 
         public string BasePath { get; private set; }
