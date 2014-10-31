@@ -40,10 +40,10 @@ namespace SparkleShare {
 
     public sealed class SparkleMacWatcher : IDisposable {
         
-        public delegate void ChangedEventHandler (string path);
+        public delegate void ChangedEventHandler (List<string> path);
         public event ChangedEventHandler Changed;
 
-        public string Path { get; private set; }
+        public string BasePath { get; private set; }
 
 
         [Flags]
@@ -74,7 +74,7 @@ namespace SparkleShare {
 
         public SparkleMacWatcher (string path)
         {
-            Path       = path;
+            BasePath   = path;
             m_callback = DoCallback;
 
             NSString [] s  = new NSString [1];
@@ -151,14 +151,19 @@ namespace SparkleShare {
 
             var handler = Changed;
             if (handler != null) {
-                if (paths [0].Length >= Path.Length) {
-                    string path = paths [0];
-                    path = path.Substring (Path.Length);
-                    path = path.Trim ("/".ToCharArray ());
+                List<string> filtered_paths = new List<string> ();
+                foreach (var path in paths) {
+                    if (path.Length > BasePath.Length) {
+                        var t = path.Substring (BasePath.Length);
+                        t = t.Trim ("/".ToCharArray ());
 
-                    if (!string.IsNullOrWhiteSpace (path))
-                        handler (path);
+                        if (!string.IsNullOrWhiteSpace (t))
+                            filtered_paths.Add(t);
+                    }
                 }
+
+                if(filtered_paths.Count > 0)
+                    handler (filtered_paths);
             }
 
             GC.KeepAlive (this);
