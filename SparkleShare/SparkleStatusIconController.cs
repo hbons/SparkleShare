@@ -314,9 +314,8 @@ namespace SparkleShare {
 
         public void ResumeClicked (string project)
         {
-            GetRepoByName (project).Resume ("");
+            new Thread (() => GetRepoByName (project).Resume ("")).Start ();
             UpdateMenuEvent (CurrentState);
-            TryAgainClicked (project);
         }
 
         public void TryAgainClicked (string project)
