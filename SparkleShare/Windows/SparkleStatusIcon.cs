@@ -183,6 +183,10 @@ namespace SparkleShare {
             this.context_menu.Items.Add (new Separator ());
             this.context_menu.Items.Add (folder_item);
 
+
+
+
+            /*
             if (Controller.Folders.Length > 0) {
                 int i = 0;
                 foreach (string folder_name in Controller.Folders) {     
@@ -226,7 +230,7 @@ namespace SparkleShare {
                     this.context_menu.Items.Add (subfolder_item);
                     i++;
                 }
-            }
+            }*/
 
             folder_item.Items.Add (this.log_item);
             folder_item.Items.Add (add_item);
