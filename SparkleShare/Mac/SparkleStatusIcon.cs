@@ -100,7 +100,6 @@ namespace SparkleShare {
                 Program.Controller.Invoke (() => {
                     this.state_item.Title = state_text;
 
-
                     if (Controller.Projects.Length == this.state_menu_items.Length) {
                         for (int i = 0; i < Controller.Projects.Length; i++)
                             this.state_menu_items [i].Title = Controller.Projects [i].StatusMessage;
