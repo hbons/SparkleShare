@@ -158,7 +158,7 @@ namespace SparkleShare {
                                 });
                             
                             (item.Submenu as Menu).Add (new SeparatorMenuItem ());
-                            resume_menu_items = new MenuItem ("Sync and Resume…"); 
+                            resume_item = new MenuItem ("Sync and Resume…"); 
                             
                         } else {
                             resume_item = new MenuItem ("Resume");
