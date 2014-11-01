@@ -178,10 +178,7 @@ namespace SparkleShare {
                 if (CurrentState != IconState.Error) {
                     CurrentState = IconState.Idle;
 
-                    if (Projects.Length == 0)
-                        StateText = "Welcome to SparkleShare!";
-                    else
-                        StateText = "Projects up to date";
+                    UpdateStateText ();
                 }
 
                 UpdateFolders ();
@@ -194,10 +191,7 @@ namespace SparkleShare {
                 if (CurrentState != IconState.Error) {
                     CurrentState = IconState.Idle;
 
-                    if (Projects.Length == 0)
-                        StateText = "Welcome to SparkleShare!";
-                    else
-                        StateText = "Projects up to date";
+                    UpdateStateText ();
                 }
 
                 UpdateFolders ();
@@ -269,6 +263,30 @@ namespace SparkleShare {
         }
 
 
+        private string UpdateStateText ()
+        {
+            if (Projects.Length == 0)
+                return StateText = "Welcome to SparkleShare!";
+            else
+                return StateText = "Projects up to date " + GetPausedCount ();
+        }
+
+
+        private string GetPausedCount ()
+        {
+            int paused_projects = 0;
+            
+            foreach (ProjectInfo project in Projects)
+                if (project.IsPaused)
+                    paused_projects++;
+
+            if (paused_projects > 0) 
+                return string.Format ("— {0} paused", paused_projects);
+            else
+                return "";
+        }
+
+
         // Main menu items
         public void RecentEventsClicked ()
         {
@@ -311,6 +329,7 @@ namespace SparkleShare {
         public void PauseClicked (string project)
         {
             Program.Controller.GetRepoByName (project).Pause ();
+            UpdateStateText ();
             UpdateMenuEvent (CurrentState);
         }
 
@@ -320,10 +339,14 @@ namespace SparkleShare {
                 Program.Controller.ShowNoteWindow (project);
             
             } else {
-              new Thread (() => Program.Controller.GetRepoByName (project).Resume ("")).Start ();
-            }
+              new System.Threading.Thread (() => {
+                    Program.Controller.GetRepoByName (project).Resume ("");
+                    
+                    UpdateStateText ();
+                    UpdateMenuEvent (CurrentState);
 
-            UpdateMenuEvent (CurrentState);
+                }).Start ();
+            }
         }
 
         public void TryAgainClicked (string project)

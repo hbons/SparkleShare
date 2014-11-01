@@ -21,58 +21,45 @@ using System.Threading;
 
 namespace SparkleShare {
 
-    public class SparkleAboutController {
+    public class SparkleNoteController {
 
         public event Action ShowWindowEvent = delegate { };
         public event Action HideWindowEvent = delegate { };
 
-        public event UpdateLabelEventDelegate UpdateLabelEvent = delegate { };
-        public delegate void UpdateLabelEventDelegate (string text);
+        public event UpdateTitleEventDelegate UpdateTitleEvent = delegate { };
+        public delegate void UpdateTitleEventDelegate (string title);
 
-        public readonly string WebsiteLinkAddress       = "http://www.sparkleshare.org/";
-        public readonly string CreditsLinkAddress       = "http://github.com/hbons/SparkleShare/blob/master/legal/Authors.txt";
-        public readonly string ReportProblemLinkAddress = "http://www.github.com/hbons/SparkleShare/issues";
-        public readonly string DebugLogLinkAddress      = "file://" + Program.Controller.Config.LogFilePath;
-
-        public string RunningVersion;
+        public string CurrentProject { get; private set; }
 
 
-        public SparkleAboutController ()
+        public SparkleNoteController ()
         {
             RunningVersion = SparkleLib.SparkleBackend.Version;
 
-            Program.Controller.ShowAboutWindowEvent += delegate {
+            Program.Controller.ShowNoteWindowEvent += delegate (string project) {
+                CurrentProject = project;
                 ShowWindowEvent ();
-                new Thread (() => CheckForNewVersion ()).Start ();
+                UpdateTitleEvent (CurrentProject);
             };
+        }
+
+
+        public void CancelClicked ()
+        {
+            HideWindowEvent ();
+        }
+
+
+        public void SyncClicked (string note)
+        {
+            HideWindowEvent ();
+            new Thread (() => Program.Controller.GetRepoByName (CurrentProject).Resume (note)).Start ();
         }
 
 
         public void WindowClosed ()
         {
             HideWindowEvent ();
-        }
-
-
-        private void CheckForNewVersion ()
-        {
-            UpdateLabelEvent ("Checking for updates...");
-            Thread.Sleep (500);
-
-            WebClient web_client = new WebClient ();
-            Uri uri = new Uri ("http://www.sparkleshare.org/version");
-
-            try {
-                string latest_version = web_client.DownloadString (uri).Trim ();
-            
-                if (new Version (latest_version) > new Version (RunningVersion))
-                    UpdateLabelEvent ("A newer version (" + latest_version + ") is available!");
-                else
-                    UpdateLabelEvent ("You are running the latest version.");
-
-            } catch {
-                UpdateLabelEvent ("Version check failed.");
-            }
         }
     }
 }
