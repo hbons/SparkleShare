@@ -4,7 +4,6 @@ TARGET = library
 ASSEMBLY_INFO_SOURCE = Defines.cs
 
 SOURCES =  \
-	Defines.cs \
 	SparkleBackend.cs \
 	SparkleConfig.cs \
 	SparkleExtensions.cs \
