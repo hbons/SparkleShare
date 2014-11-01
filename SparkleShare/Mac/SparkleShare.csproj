@@ -100,6 +100,10 @@
       <Link>SparkleKeys.cs</Link>
     </Compile>
     <Compile Include="..\SparkleAvatars.cs" />
+    <Compile Include="..\SparkleNoteController.cs">
+      <Link>SparkleNoteController.cs</Link>
+    </Compile>
+    <Compile Include="SparkleNote.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" xmlns="" />
@@ -261,6 +265,12 @@
     </BundleResource>
     <BundleResource Include="..\Common\Plugins\planio%402x.png">
       <Link>Plugins\planio%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Pixmaps\text-balloon.png">
+      <Link>Resources\text-balloon.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Pixmaps\text-balloon%402x.png">
+      <Link>Resources\text-balloon%402x.png</Link>
     </BundleResource>
   </ItemGroup>
 </Project>
