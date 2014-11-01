@@ -235,7 +235,7 @@ namespace SparkleLib.Git {
                 return false;
             }
 
-            string message = base.status_message;
+            string message = base.status_message.Replace ("\"", "\\\"");
 
             if (string.IsNullOrEmpty (message))
                 message = FormatCommitMessage ();
