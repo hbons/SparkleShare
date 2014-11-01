@@ -339,7 +339,7 @@ namespace SparkleShare {
                 Program.Controller.ShowNoteWindow (project);
             
             } else {
-              new System.Threading.Thread (() => {
+              new Thread (() => {
                     Program.Controller.GetRepoByName (project).Resume ("");
                     
                     UpdateStateText ();

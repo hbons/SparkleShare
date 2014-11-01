@@ -29,7 +29,8 @@ namespace SparkleShare {
         public SparkleSetup Setup;
         public SparkleBubbles Bubbles;
         public SparkleAbout About;
-		
+        public SparkleNote Note;
+
 		public static NSFont Font = NSFontManager.SharedFontManager.FontWithFamily (
 			"Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
 		
@@ -48,6 +49,7 @@ namespace SparkleShare {
                 Setup      = new SparkleSetup ();
                 EventLog   = new SparkleEventLog ();
                 About      = new SparkleAbout ();
+                Note       = new SparkleNote ();
                 Bubbles    = new SparkleBubbles ();
                 StatusIcon = new SparkleStatusIcon ();
             });
