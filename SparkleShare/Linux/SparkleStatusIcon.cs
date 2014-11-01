@@ -153,7 +153,7 @@ namespace SparkleShare {
                             foreach (KeyValuePair<string, string> pair in project.UnsyncedChangesInfo)
                                 (item.Submenu as Menu).Add (new MenuItem (pair.Key) {
                                     Image = new Image () {
-                                        File = new string [] {icons_path, pair.Value.Replace ("-12", ""))}.Combine () },
+                                        File = new string [] {icons_path, pair.Value.Replace ("-12", "")}.Combine () },
                                     Sensitive = false
                                 });
                             
