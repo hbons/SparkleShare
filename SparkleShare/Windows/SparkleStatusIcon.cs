@@ -16,6 +16,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -44,7 +45,8 @@ namespace SparkleShare {
         private SparkleMenuItem log_item;
         private SparkleMenuItem state_item;
         private SparkleMenuItem exit_item;
-        
+        private SparkleMenuItem [] state_menu_items;
+
         private SparkleNotifyIcon notify_icon = new SparkleNotifyIcon ();
 
 
@@ -86,6 +88,12 @@ namespace SparkleShare {
                 Dispatcher.BeginInvoke ((Action) delegate {
                     this.state_item.Header = state_text;
                     this.state_item.UpdateLayout ();
+
+                    if (Controller.Projects.Length == this.state_menu_items.Length) {
+                        for (int i = 0; i < Controller.Projects.Length; i++)
+                            this.state_menu_items [i].Header = Controller.Projects [i].StatusMessage;
+                    }
+
                     this.notify_icon.HeaderText = "SparkleShare\n" + state_text;
                 });
             };
@@ -183,50 +191,74 @@ namespace SparkleShare {
             this.context_menu.Items.Add (new Separator ());
             this.context_menu.Items.Add (folder_item);
 
-            if (Controller.Folders.Length > 0) {
+            this.state_menu_items = new SparkleMenuItem [Controller.Projects.Length];
+
+            if (Controller.Projects.Length > 0) {
                 int i = 0;
-                foreach (string folder_name in Controller.Folders) {     
+                foreach (ProjectInfo project in Controller.Projects) {
                     SparkleMenuItem subfolder_item = new SparkleMenuItem () {
-                        Header = folder_name.Replace ("_", "__")
+                        Header = project.Name.Replace ("_", "__")
                     };
-                    
-                    Image subfolder_image = new Image () {
+
+                    item.Icon = new Image () {
                         Source = SparkleUIHelpers.GetImageSource ("folder"),
                         Width  = 16,
                         Height = 16
                     };
-                    
-                    if (!string.IsNullOrEmpty (Controller.FolderErrors [i])) {
-                        subfolder_item.Icon = new Image () {
-                            Source = (BitmapSource) Imaging.CreateBitmapSourceFromHIcon (
-                                System.Drawing.SystemIcons.Exclamation.Handle, Int32Rect.Empty,
-                                BitmapSizeOptions.FromWidthAndHeight (16,16))
-                        };
 
-                        SparkleMenuItem error_item = new SparkleMenuItem () {
-                            Header    = Controller.FolderErrors [i],
-                            IsEnabled = false
-                        };
+                    this.state_menu_items [i] = new SparkleMenuItem () {
+                        Header = project.StatusMessage,
+                        IsEnabled = false
+                    };
+
+                    item.Items.Add (this.state_menu_items [i]);
+                    item.Items.Add (new Separator ());
+
+                    if (project.IsPaused) {
+                        SparkleMenuItem resume_item;
                         
-                        SparkleMenuItem try_again_item = new SparkleMenuItem () {
-                            Header = "Try again"
-                        };
-
-						try_again_item.Click += delegate { Controller.TryAgainDelegate (folder_name); };
-
-                        subfolder_item.Items.Add (error_item);
-                        subfolder_item.Items.Add (new Separator ());
-                        subfolder_item.Items.Add (try_again_item);
+                        if (project.UnsyncedChangesInfo.Count > 0) {
+                            foreach (KeyValuePair<string, string> pair in project.UnsyncedChangesInfo)
+                                item.Items.Add (new SparkleMenuItem () {
+                                    Header = pair.Key,
+                                    // TODO image
+                                    IsEnabled = false
+                                });
+                            
+                            item.Items.Add (new Separator ());
+                            resume_item = new SparkleMenuItem () { Header = "Sync and Resume…" }; 
+                            
+                        } else {
+                            resume_item = new SparkleMenuItem () { Header = "Resume" };
+                        }
                         
+                        resume_item.Click += Controller.ResumeDelegate (project.Name);
+                        item.Items.Add (resume_item);
+
                     } else {
-                        subfolder_item.Icon = subfolder_image;
-						subfolder_item.Click += new RoutedEventHandler (Controller.OpenFolderDelegate (folder_name));
+                        if (Controller.Projects [i].HasError) {
+                            item.Icon = new Image () {
+                                Source = (BitmapSource) Imaging.CreateBitmapSourceFromHIcon (
+                                    System.Drawing.SystemIcons.Exclamation.Handle, Int32Rect.Empty,
+                                    BitmapSizeOptions.FromWidthAndHeight (16,16))
+                            };
+
+                            SparkleMenuItem try_again_item = new SparkleMenuItem () { Header = "Try Again" };
+                            try_again_item.Click += Controller.TryAgainDelegate (project.Name);
+                            item.Items.Add (try_again_item);
+                            
+                        } else {
+                            SparkleMenuItem pause_item = new SparkleMenuItem () { Header = "Pause" };
+                            pause_item.Click += Controller.PauseDelegate (project.Name);
+                            item.Items.Add (pause_item);
+                        }
                     }
                     
-                    this.context_menu.Items.Add (subfolder_item);
+                    this.context_menu.Items.Add (item);
                     i++;
-                }
+                };
             }
+
 
             folder_item.Items.Add (this.log_item);
             folder_item.Items.Add (add_item);
