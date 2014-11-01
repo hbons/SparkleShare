@@ -74,7 +74,10 @@ namespace SparkleShare {
         
         public event ShowSetupWindowEventHandler ShowSetupWindowEvent = delegate { };
         public delegate void ShowSetupWindowEventHandler (PageType page_type);
-        
+
+        public event ShowNoteWindowEventHandler ShowNoteWindowEvent = delegate { };
+        public delegate void ShowNoteWindowEventHandler (string project);
+
         public event Action ShowAboutWindowEvent = delegate { };
         public event Action ShowEventLogWindowEvent = delegate { };
         
@@ -334,6 +337,12 @@ namespace SparkleShare {
         {
             ShowAboutWindowEvent ();
         }
+
+
+        public void ShowNoteWindow (string project)
+        {
+            ShowNoteWindowEvent (project);
+        }
         
         
         public void ShowEventLogWindow ()
@@ -496,9 +505,7 @@ namespace SparkleShare {
             repo.Initialize (); 
         }
         
-        
-        
-        
+
         private void OnFolderActivity (object o, FileSystemEventArgs args)
         {
             if (args != null && args.FullPath.EndsWith (".xml") &&
