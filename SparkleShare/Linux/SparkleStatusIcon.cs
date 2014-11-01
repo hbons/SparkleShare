@@ -16,6 +16,7 @@
 
 
 using System;
+using System.Collections.Generic;
 
 using Gtk;
 #if HAVE_APP_INDICATOR
@@ -32,6 +33,7 @@ namespace SparkleShare {
         private MenuItem recent_events_item;
         private MenuItem quit_item;
         private MenuItem state_item;
+        private SparkleMenuItem [] state_menu_items;
 
         #if HAVE_APP_INDICATOR
         private Indicator indicator;
@@ -89,6 +91,13 @@ namespace SparkleShare {
                 Application.Invoke (delegate {
                     (this.state_item.Child as Label).Text = state_text;
                     this.state_item.ShowAll ();
+
+                    if (Controller.Projects.Length == this.state_menu_items.Length) {
+                        for (int i = 0; i < Controller.Projects.Length; i++) {
+                            (this.state_menu_items [i].Child as Label).Text = Controller.Projects [i].StatusMessage;
+                            this.state_menu_items [i].ShowAll ();
+                        }
+                    }
                 });
             };
 
@@ -117,35 +126,68 @@ namespace SparkleShare {
             this.menu.Add (new SeparatorMenuItem ());                
             this.menu.Add (folder_item);
 
-            if (Program.Controller.Folders.Count > 0) {
+            
+            this.state_menu_items = new SparkleMenuItem [Controller.Projects.Length];
+
+            if (Controller.Projects.Length > 0) {
                 int i = 0;
-                foreach (string folder_name in Controller.Folders) {
-                    ImageMenuItem item = new SparkleMenuItem (folder_name);
+                foreach (ProjectInfo project in Controller.Projects) {
+                    SparkleMenuItem item = new SparkleMenuItem (project.Name);
+
                     Gdk.Pixbuf folder_icon;
+                    folder_icon = IconTheme.Default.LoadIcon ("folder", 16, IconLookupFlags.GenericFallback);
 
-                    if (!string.IsNullOrEmpty (Controller.FolderErrors [i])) {
-                        folder_icon = IconTheme.Default.LoadIcon ("dialog-warning", 16, IconLookupFlags.GenericFallback);
-                        item.Submenu = new Menu ();
+                    item.Submenu = new Menu ();
+
+                    this.state_menu_items [i] = new MenuItem (project.StatusMessage) { Sensitive = false };
+
+                    (item.Submenu as Menu).Add (this.state_menu_items [i]);
+                    (item.Submenu as Menu).Add (new SeparatorMenuItem ());
+
+                    if (project.IsPaused) {
+                        MenuItem resume_item;
+
+                        if (project.UnsyncedChangesInfo.Count > 0) {
+                            string icons_path   = new string [] {SparkleUI.AssetsPath, "icons", "hicolor", "12x12", "status"}.Combine ();
+
+                            foreach (KeyValuePair<string, string> pair in project.UnsyncedChangesInfo)
+                                (item.Submenu as Menu).Add (new MenuItem (pair.Key) {
+                                    Image = new Image () {
+                                        File = new string [] {icons_path, pair.Value.Replace ("-12", ""))}.Combine () },
+                                    Sensitive = false
+                                });
                             
-                        MenuItem error_item = new MenuItem (Controller.FolderErrors [i]) { Sensitive = false };
-                        MenuItem try_again_item = new MenuItem ("Try Again");
-                        try_again_item.Activated += Controller.TryAgainDelegate (folder_name);
-
-                        (item.Submenu as Menu).Add (error_item);
-                        (item.Submenu as Menu).Add (new SeparatorMenuItem ());
-                        (item.Submenu as Menu).Add (try_again_item);
-
+                            (item.Submenu as Menu).Add (new SeparatorMenuItem ());
+                            resume_item = new MenuItem ("Sync and Resume…"); 
+                            
+                        } else {
+                            resume_item = new MenuItem ("Resume");
+                        }
+                        
+                        resume_item.Activated += Controller.ResumeDelegate (project.Name);
+                        (item.Submenu as Menu).Add (resume_item);
+                        
                     } else {
-                        folder_icon = IconTheme.Default.LoadIcon ("folder", 16, IconLookupFlags.GenericFallback);
-                        item.Activated += Controller.OpenFolderDelegate (folder_name);
+                        if (Controller.Projects [i].HasError) {
+                            folder_icon = IconTheme.Default.LoadIcon ("dialog-warning", 16, IconLookupFlags.GenericFallback);
+                            
+                            MenuItem try_again_item = new MenuItem ("Try Again");
+                            try_again_item.Activated += Controller.TryAgainDelegate (project.Name);
+                            (item.Submenu as Menu).Add (try_again_item);
+
+                        } else {
+                            MenuItem pause_item = new MenuItem ("Pause");
+                            pause_item.Activated += Controller.PauseDelegate (project.Name);
+                            (item.Submenu as Menu).Add (pause_item);
+                        }
                     }
 
                     (item.Child as Label).UseUnderline = false;
                     item.Image = new Image (folder_icon);
                     this.menu.Add (item);
-                    
+
                     i++;
-                }
+                };
             }
 
 			this.recent_events_item = new MenuItem ("Recent Changes…");

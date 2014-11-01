@@ -76,5 +76,34 @@ namespace SparkleLib {
         {
             return ((file.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint);
         }
+
+
+        public static string ToPrettyDate (this DateTime timestamp)
+        {
+            TimeSpan time_diff = DateTime.Now.Subtract(timestamp);
+            int day_diff       = (int) time_diff.TotalDays;                
+                
+            if (day_diff == 0) {
+                return "at " + timestamp.ToString ("HH:mm");
+
+            } else if (day_diff == 1) {
+                return "yesterday at " + timestamp.ToString ("HH:mm");
+            
+            } else if (day_diff < 7) {
+                return timestamp.ToString ("dddd");                     
+            
+            } else if (day_diff < 31) {
+                if (day_diff < 14)
+                    return "last week";
+                else
+                    return string.Format ("{0} weeks ago", Math.Ceiling ((double) day_diff / 7));
+
+            } else if (day_diff < 62) {
+                return "last month";
+
+            } else { 
+                return string.Format ("{0} months ago", Math.Ceiling ((double) day_diff / 31));
+            }
+        }
     }
 }

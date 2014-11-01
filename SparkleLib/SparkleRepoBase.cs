@@ -26,6 +26,7 @@ namespace SparkleLib {
 
     public enum SyncStatus {
         Idle,
+        Paused,
         SyncUp,
         SyncDown,
         Error
@@ -46,7 +47,6 @@ namespace SparkleLib {
 
     public abstract class SparkleRepoBase {
 
-
         public abstract bool SyncUp ();
         public abstract bool SyncDown ();
         public abstract void RestoreFile (string path, string revision, string target_file_path);
@@ -59,9 +59,9 @@ namespace SparkleLib {
         public abstract double HistorySize { get; }
 
         public abstract List<string> ExcludePaths { get; }
+        public abstract List<SparkleChange> UnsyncedChanges { get; }
         public abstract List<SparkleChangeSet> GetChangeSets ();
         public abstract List<SparkleChangeSet> GetChangeSets (string path);
-
 
         public static bool UseCustomWatcher = false;
 
@@ -82,12 +82,13 @@ namespace SparkleLib {
         public readonly string LocalPath;
         public readonly string Name;
         public readonly Uri RemoteUrl;
-        public List<SparkleChangeSet> ChangeSets { get; protected set; }
+        public List<SparkleChangeSet> ChangeSets { get; private set; }
         public SyncStatus Status { get; private set; }
         public ErrorStatus Error { get; protected set; }
         public bool IsBuffering { get; private set; }
         public double ProgressPercentage { get; private set; }
         public double ProgressSpeed { get; private set; }
+        public DateTime LastSync { get { return ChangeSets [0].Timestamp; }}
 
         public virtual string Identifier {
             get {
@@ -157,8 +158,12 @@ namespace SparkleLib {
             this.identifier   = Identifier;
             ChangeSets        = GetChangeSets ();
 
-			string identifier_file_path = Path.Combine (LocalPath, ".sparkleshare");
-			File.SetAttributes (identifier_file_path, FileAttributes.Hidden);
+            string is_paused = this.local_config.GetFolderOptionalAttribute (Name, "paused");
+            if (is_paused != null && is_paused.Equals (bool.TrueString))
+                Status = SyncStatus.Paused;
+
+            string identifier_file_path = Path.Combine (LocalPath, ".sparkleshare");
+            File.SetAttributes (identifier_file_path, FileAttributes.Hidden);
 
             if (!UseCustomWatcher)
                 this.watcher = new SparkleWatcher (LocalPath);
@@ -171,7 +176,7 @@ namespace SparkleLib {
 
         private void RemoteTimerElapsedDelegate (object sender, EventArgs args)
         {
-            if (this.is_syncing || IsBuffering)
+            if (this.is_syncing || IsBuffering || Status == SyncStatus.Paused)
                 return;
             
             int time_comparison = DateTime.Compare (this.last_poll, DateTime.Now.Subtract (this.poll_interval));
@@ -205,14 +210,16 @@ namespace SparkleLib {
         {
             // Sync up everything that changed since we've been offline
             new Thread (() => {
-                if (HasRemoteChanges)
-                    SyncDownBase ();
+                if (Status != SyncStatus.Paused) {
+                    if (HasRemoteChanges)
+                        SyncDownBase ();
 
-                if (HasUnsyncedChanges || HasLocalChanges) {
-                    do {
-                        SyncUpBase ();
+                    if (HasUnsyncedChanges || HasLocalChanges) {
+                        do {
+                            SyncUpBase ();
 
-                    } while (HasLocalChanges);
+                        } while (HasLocalChanges);
+                    }
                 }
                 
                 if (!UseCustomWatcher)
@@ -236,6 +243,11 @@ namespace SparkleLib {
                     if (args.FullPath.Contains (Path.DirectorySeparatorChar + exclude_path))
                         return;
                 }
+            }
+            
+            if (Status == SyncStatus.Paused) {
+                ChangesDetected ();
+                return;
             }
 
             lock (this.buffer_lock) {
@@ -304,10 +316,8 @@ namespace SparkleLib {
 
         public void ForceRetry ()
         {
-            if (Error == ErrorStatus.None || this.is_syncing)
-                return;
-
-            SyncUpBase ();
+            if (Error != ErrorStatus.None && !this.is_syncing)
+                SyncUpBase ();
         }
 
 
@@ -388,6 +398,8 @@ namespace SparkleLib {
 
             if (!UseCustomWatcher)
                 this.watcher.Enable ();
+
+            this.status_message = "";
         }
 
 
@@ -530,7 +542,11 @@ namespace SparkleLib {
                     Thread.Sleep (100);
 
                 SparkleLogger.LogInfo (Name, "Syncing due to announcement");
-                SyncDownBase ();
+
+                if (Status == SyncStatus.Paused)
+                    SparkleLogger.LogInfo (Name, "We're paused, skipping sync");
+                else
+                    SyncDownBase ();
             }
         }
 
@@ -555,6 +571,35 @@ namespace SparkleLib {
             }
 
             return size;
+        }
+
+
+        public void Pause ()
+        {
+            if (Status == SyncStatus.Idle) {
+                this.local_config.SetFolderOptionalAttribute (Name, "paused", bool.TrueString);
+                Status = SyncStatus.Paused;
+            }
+        }
+
+
+        protected string status_message = "";
+
+        public void Resume (string message)
+        {
+            this.status_message = message;
+
+            if (Status == SyncStatus.Paused) {
+                this.local_config.SetFolderOptionalAttribute (Name, "paused", bool.FalseString);
+                Status = SyncStatus.Idle;
+
+                if (HasUnsyncedChanges || HasLocalChanges) {
+                    do {
+                        SyncUpBase ();
+                        
+                    } while (HasLocalChanges);
+                }
+            }
         }
 
 

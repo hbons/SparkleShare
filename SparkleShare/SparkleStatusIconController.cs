@@ -33,6 +33,77 @@ namespace SparkleShare {
     }
 
 
+    public class ProjectInfo {
+
+        private SparkleRepoBase repo;
+
+        public string Name { get { return this.repo.Name; }}
+        public string Path { get { return this.repo.LocalPath; }}
+
+        public bool IsPaused { get { return this.repo.Status == SyncStatus.Paused; }}
+        public bool HasError { get { return this.repo.Status == SyncStatus.Error; }}
+
+
+        public string StatusMessage {
+            get {
+                string status_message = string.Format ("Synced {0}", this.repo.LastSync.ToPrettyDate ());
+
+                if (this.repo.Status == SyncStatus.SyncUp)
+                    status_message = "Sending changes… " + this.repo.ProgressPercentage + "%";
+            
+                if (this.repo.Status == SyncStatus.SyncDown)
+                    status_message = "Receiving changes… " + this.repo.ProgressPercentage + "%";
+
+                if (this.repo.Status == SyncStatus.SyncUp || this.repo.Status == SyncStatus.SyncDown) {
+                    if (this.repo.ProgressSpeed > 0)
+                        status_message += " " + this.repo.ProgressSpeed.ToSize () + "/s";
+                }
+
+                if (IsPaused) {
+                    return "Paused";
+
+                } else if (HasError) {
+                    switch (this.repo.Error) {
+                    case ErrorStatus.HostUnreachable: return "Can’t reach the host";
+                    case ErrorStatus.HostIdentityChanged: return "The host’s identity has changed";
+                    case ErrorStatus.AuthenticationFailed: return "Authentication failed";
+                    case ErrorStatus.DiskSpaceExceeded: return "Host is out of disk space";
+                    case ErrorStatus.UnreadableFiles: return "Some local files are unreadable or in use";
+                    case ErrorStatus.NotFound: return "Project doesn’t exist on host";
+                    case ErrorStatus.IncompatibleClientServer: return "Incompatible client/server versions";
+                    }
+                }
+
+                return status_message;
+            }
+        }
+
+
+        public Dictionary<string, string> UnsyncedChangesInfo {
+            get { 
+                Dictionary<string, string> changes_info = new Dictionary<string, string> ();
+            
+                foreach (SparkleChange change in repo.UnsyncedChanges) {
+                    switch (change.Type) {
+                    case SparkleChangeType.Added:   changes_info [change.Path] = "document-added-12.png"; break;
+                    case SparkleChangeType.Edited:  changes_info [change.Path] = "document-edited-12.png"; break;
+                    case SparkleChangeType.Deleted: changes_info [change.Path] = "document-deleted-12.png"; break;
+                    case SparkleChangeType.Moved:   changes_info [change.MovedToPath] = "document-moved-12.png"; break;
+                    }
+                }
+
+                return changes_info;
+            }
+        }
+
+
+        public ProjectInfo (SparkleRepoBase repo)
+        {
+            this.repo = repo;
+        }
+    }
+
+
     public class SparkleStatusIconController {
 
         public event UpdateIconEventHandler UpdateIconEvent = delegate { };
@@ -50,23 +121,8 @@ namespace SparkleShare {
         public IconState CurrentState = IconState.Idle;
         public string StateText       = "Welcome to SparkleShare!";
 
-        public string [] Folders      = new string [0];
-        public string [] FolderErrors = new string [0];
-        
+        public ProjectInfo [] Projects = new ProjectInfo [0];
 
-        public string FolderSize {
-            get {
-                double size = 0;
-
-                foreach (SparkleRepoBase repo in Program.Controller.Repositories)
-                    size += repo.Size;
-
-                if (size == 0)
-                    return "";
-                else
-                    return "— " + size.ToSize ();
-            }
-        }
 
         public int ProgressPercentage {
             get {
@@ -122,10 +178,10 @@ namespace SparkleShare {
                 if (CurrentState != IconState.Error) {
                     CurrentState = IconState.Idle;
 
-                    if (Folders.Length == 0)
+                    if (Projects.Length == 0)
                         StateText = "Welcome to SparkleShare!";
                     else
-                        StateText = "Projects up to date " + FolderSize;
+                        StateText = "Projects up to date";
                 }
 
                 UpdateFolders ();
@@ -138,16 +194,17 @@ namespace SparkleShare {
                 if (CurrentState != IconState.Error) {
                     CurrentState = IconState.Idle;
 
-                    if (Folders.Length == 0)
+                    if (Projects.Length == 0)
                         StateText = "Welcome to SparkleShare!";
                     else
-                        StateText = "Projects up to date " + FolderSize;
+                        StateText = "Projects up to date";
                 }
 
                 UpdateFolders ();
 
                 UpdateIconEvent (CurrentState);
                 UpdateStatusItemEvent (StateText);
+                UpdateQuitItemEvent (QuitItemEnabled);
                 UpdateMenuEvent (CurrentState);
             };
 
@@ -188,17 +245,18 @@ namespace SparkleShare {
 
             Program.Controller.OnError += delegate {
                 CurrentState = IconState.Error;
-                StateText    = "Failed to send some changes";
+                StateText    = "Some changes weren’t synced";
 
                 UpdateFolders ();
                 
                 UpdateIconEvent (CurrentState);
                 UpdateStatusItemEvent (StateText);
+                UpdateQuitItemEvent (QuitItemEnabled);
                 UpdateMenuEvent (CurrentState);
             };
 
 
-            // FIXME: Hack to work around a race condition causing
+            // FIXME: Work around a race condition causing
             // the icon to not always show the right state
             Timers.Timer timer = new Timers.Timer () { Interval = 30 * 1000 };
 
@@ -211,32 +269,7 @@ namespace SparkleShare {
         }
 
 
-        public void SubfolderClicked (string subfolder)
-        {
-            Program.Controller.OpenSparkleShareFolder (subfolder);
-        }
-
-
-        public void TryAgainClicked (string subfolder)
-        {
-            foreach (SparkleRepoBase repo in Program.Controller.Repositories)
-                if (repo.Name.Equals (subfolder))
-                    new Thread (() => repo.ForceRetry ()).Start ();
-        }
-
-        
-        public EventHandler OpenFolderDelegate (string subfolder)
-        {
-            return delegate { SubfolderClicked (subfolder); };
-        }
-        
-        
-        public EventHandler TryAgainDelegate (string subfolder)
-        {
-            return delegate { TryAgainClicked (subfolder); };
-        }
-
-
+        // Main menu items
         public void RecentEventsClicked ()
         {
             new Thread (() => {
@@ -248,71 +281,95 @@ namespace SparkleShare {
             }).Start ();
         }
 
-
         public void AddHostedProjectClicked ()
         {
             new Thread (() => Program.Controller.ShowSetupWindow (PageType.Add)).Start ();
         }
-
 
         public void CopyToClipboardClicked ()
         {
             Program.Controller.CopyToClipboard (Program.Controller.CurrentUser.PublicKey);
         }
 
-
         public void AboutClicked ()
         {
             Program.Controller.ShowAboutWindow ();
         }
-        
-		
+
         public void QuitClicked ()
         {
             Program.Controller.Quit ();
         }
 
 
-        private Object folders_lock = new Object ();
+        // Project items
+        public void ProjectClicked (string project)
+        {
+            Program.Controller.OpenSparkleShareFolder (project);
+        }
+
+        public void PauseClicked (string project)
+        {
+            GetRepoByName (project).Pause ();
+            UpdateMenuEvent (CurrentState);
+        }
+
+        public void ResumeClicked (string project)
+        {
+            new Thread (() => GetRepoByName (project).Resume ("")).Start ();
+            UpdateMenuEvent (CurrentState);
+        }
+
+        public void TryAgainClicked (string project)
+        {
+            new Thread (() => GetRepoByName (project).ForceRetry ()).Start ();
+        }
+
+
+        // Helper delegates
+        public EventHandler OpenFolderDelegate (string project)
+        {
+            return delegate { ProjectClicked (project); };
+        }
+        
+        public EventHandler TryAgainDelegate (string project)
+        {
+            return delegate { TryAgainClicked (project); };
+        }
+        
+        public EventHandler PauseDelegate (string project)
+        {
+            return delegate { PauseClicked (project); };
+        }
+        
+        public EventHandler ResumeDelegate (string project)
+        {
+            return delegate { ResumeClicked (project); };
+        }
+
+
+        private Object projects_lock = new Object ();
 
         private void UpdateFolders ()
         {
-            lock (this.folders_lock) {
-                List<string> folders = new List<string> ();
-                List<string> folder_errors = new List<string> ();
+            lock (this.projects_lock) {
+                List<ProjectInfo> projects = new List<ProjectInfo> ();
 
-                foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
-                    folders.Add (repo.Name);
-                    
-                    if (repo.Error == ErrorStatus.HostUnreachable) {
-                        folder_errors.Add ("Can't reach the host");
-                        
-                    } else if (repo.Error == ErrorStatus.HostIdentityChanged) {
-                        folder_errors.Add ("The host's identity has changed");
-                        
-                    } else if (repo.Error == ErrorStatus.AuthenticationFailed) {
-                        folder_errors.Add ("Authentication failed");
-                        
-                    } else if (repo.Error == ErrorStatus.DiskSpaceExceeded) {
-                        folder_errors.Add ("Host is out of disk space");
-                        
-                    } else if (repo.Error == ErrorStatus.UnreadableFiles) {
-                        folder_errors.Add ("Some local files are unreadable or in use");
-                        
-                    } else if (repo.Error == ErrorStatus.NotFound) {
-                        folder_errors.Add ("Project doesn't exist on host"); 
-                        
-                    } else if (repo.Error == ErrorStatus.IncompatibleClientServer) {
-                        folder_errors.Add ("Incompatible client/server versions"); 
-                    
-                    } else {
-                        folder_errors.Add ("");
-                    }
-                }
-
-                Folders = folders.ToArray ();
-                FolderErrors = folder_errors.ToArray ();
+                foreach (SparkleRepoBase repo in Program.Controller.Repositories)
+                    projects.Add (new ProjectInfo (repo));
+            
+                Projects = projects.ToArray ();
             }
+        }
+
+
+        private SparkleRepoBase GetRepoByName (string name)
+        {
+            foreach (SparkleRepoBase repo in Program.Controller.Repositories)
+                if (repo.Name.Equals (name))
+                    return repo;
+
+            return null;
         }
     }
 }
