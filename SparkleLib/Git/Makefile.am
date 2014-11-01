@@ -1,8 +1,6 @@
 ASSEMBLY = SparkleLib.Git
 TARGET = library
 
-ASSEMBLY_INFO_SOURCE = ../Defines.cs
-
 LINK = -r:$(DIR_BIN)/SparkleLib.dll
 
 SOURCES =  \
