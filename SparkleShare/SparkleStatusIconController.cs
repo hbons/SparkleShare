@@ -310,19 +310,25 @@ namespace SparkleShare {
 
         public void PauseClicked (string project)
         {
-            GetRepoByName (project).Pause ();
+            Program.Controller.GetRepoByName (project).Pause ();
             UpdateMenuEvent (CurrentState);
         }
 
         public void ResumeClicked (string project)
         {
-            new Thread (() => GetRepoByName (project).Resume ("")).Start ();
+            if (Program.Controller.GetRepoByName (project).UnsyncedChanges.Count > 0) {
+                Program.Controller.ShowNoteWindow (project);
+            
+            } else {
+              new Thread (() => Program.Controller.GetRepoByName (project).Resume ("")).Start ();
+            }
+
             UpdateMenuEvent (CurrentState);
         }
 
         public void TryAgainClicked (string project)
         {
-            new Thread (() => GetRepoByName (project).ForceRetry ()).Start ();
+            new Thread (() => Program.Controller.GetRepoByName (project).ForceRetry ()).Start ();
         }
 
 
@@ -360,16 +366,6 @@ namespace SparkleShare {
             
                 Projects = projects.ToArray ();
             }
-        }
-
-
-        private SparkleRepoBase GetRepoByName (string name)
-        {
-            foreach (SparkleRepoBase repo in Program.Controller.Repositories)
-                if (repo.Name.Equals (name))
-                    return repo;
-
-            return null;
         }
     }
 }
