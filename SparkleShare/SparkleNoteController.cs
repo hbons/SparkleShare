@@ -29,18 +29,20 @@ namespace SparkleShare {
         public event UpdateTitleEventDelegate UpdateTitleEvent = delegate { };
         public delegate void UpdateTitleEventDelegate (string title);
 
+        public string AvatarFilePath = "";
         public string CurrentProject { get; private set; }
 
 
         public SparkleNoteController ()
         {
-            RunningVersion = SparkleLib.SparkleBackend.Version;
-
             Program.Controller.ShowNoteWindowEvent += delegate (string project) {
                 CurrentProject = project;
                 ShowWindowEvent ();
                 UpdateTitleEvent (CurrentProject);
             };
+
+            AvatarFilePath = SparkleAvatars.GetAvatar (Program.Controller.CurrentUser.Email,
+                48, Program.Controller.Config.FullPath);
         }
 
 

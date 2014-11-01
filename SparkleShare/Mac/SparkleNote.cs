@@ -24,29 +24,29 @@ using MonoMac.Foundation;
 
 namespace SparkleShare {
 
-    public class SparkleAbout : NSWindow {
+    public class SparkleNote : NSWindow {
 
-        public SparkleAboutController Controller = new SparkleAboutController ();
+        public SparkleNoteController Controller = new SparkleNoteController ();
 
-        private NSTextField version_text_field, updates_text_field, credits_text_field;
-        private SparkleLink website_link, credits_link, report_problem_link, debug_log_link;
-        private NSImage about_image;
-        private NSImageView about_image_view;
-        private NSButton hidden_close_button;
+        private NSImage user_image, balloon_image;
+        private NSImageView user_image_view, balloon_image_view;
+        private NSButton hidden_close_button, cancel_button, sync_button;
+        private NSBox cover;
+        private NSTextField user_name_text_field, user_email_text_field, balloon_text_field;
 
 
-        public SparkleAbout (IntPtr handle) : base (handle) { }
+        public SparkleNote (IntPtr handle) : base (handle) { }
 
-        public SparkleAbout () : base ()
+        public SparkleNote () : base ()
         {
-            SetFrame (new RectangleF (0, 0, 640, 281), true);
+            SetFrame (new RectangleF (0, 0, 480, 240), true);
             Center ();
 
-            Delegate    = new SparkleAboutDelegate ();
+            Delegate    = new SparkleNoteDelegate ();
             StyleMask   = (NSWindowStyle.Closable | NSWindowStyle.Titled);
-            Title       = "About SparkleShare";
-            MaxSize     = new SizeF (640, 281);
-            MinSize     = new SizeF (640, 281);
+            Title       = "Add Note";
+            MaxSize     = new SizeF (480, 240);
+            MinSize     = new SizeF (480, 240);
             HasShadow   = true;
             BackingType = NSBackingStore.Buffered;
             Level       = NSWindowLevel.Floating;
@@ -57,7 +57,7 @@ namespace SparkleShare {
                 KeyEquivalent             = "w"
             };
 
-            CreateAbout ();
+            CreateNote ();
 
 
             this.hidden_close_button.Activated += delegate { Controller.WindowClosed (); };
@@ -68,10 +68,11 @@ namespace SparkleShare {
 
             Controller.ShowWindowEvent += delegate {
                 Program.Controller.Invoke (() => OrderFrontRegardless ());
+                CreateNote ();
             };
 
-            Controller.UpdateLabelEvent += delegate (string text) {
-                Program.Controller.Invoke (() => { this.updates_text_field.StringValue = text; });
+            Controller.UpdateTitleEvent += delegate (string title) {
+                Program.Controller.Invoke (() => { Title = title; });
             };
 
 
@@ -79,72 +80,120 @@ namespace SparkleShare {
         }
 
 
-        private void CreateAbout ()
+        private void CreateNote ()
         {
-            this.about_image = NSImage.ImageNamed ("about");
-            this.about_image.Size = new SizeF (720, 260);
-
-            this.about_image_view = new NSImageView () {
-                Image = this.about_image,
-                Frame = new RectangleF (0, 0, 720, 260)
+            this.cover = new NSBox () {
+                Frame = new RectangleF (
+                    new PointF (-1, 58),
+                    new SizeF (Frame.Width + 2, this.ContentView.Frame.Height + 1)),
+                FillColor = NSColor.FromCalibratedRgba (0.77f, 0.77f, 0.75f, 1.0f),
+                BorderColor = NSColor.LightGray,
+                BoxType = NSBoxType.NSBoxCustom
             };
 
-            this.version_text_field = new SparkleLabel ("version " + Controller.RunningVersion, NSTextAlignment.Left) {
-                DrawsBackground = false,
-                Frame           = new RectangleF (295, 140, 318, 22),
-                TextColor       = NSColor.White,
-                Font            = NSFontManager.SharedFontManager.FontWithFamily (
-                    "Lucida Grande", NSFontTraitMask.Unbold, 0, 11)
-            };
 
-            this.updates_text_field = new SparkleLabel ("Checking for updates...", NSTextAlignment.Left) {
-                DrawsBackground = false,
-                Frame           = new RectangleF (295, Frame.Height - 232, 318, 98),
-                TextColor       = NSColor.FromCalibratedRgba (1.0f, 1.0f, 1.0f, 0.5f),
-                Font            = NSFontManager.SharedFontManager.FontWithFamily (
-                    "Lucida Grande", NSFontTraitMask.Unbold, 0, 11)
+            this.user_name_text_field = new NSTextField () {
+                Alignment       = NSTextAlignment.Left,
+                BackgroundColor = NSColor.FromCalibratedRgba (0.77f, 0.77f, 0.75f, 1.0f),
+                Bordered        = false,
+                Editable        = false,
+                Frame           = new RectangleF (
+                    new PointF (85, ContentView.Frame.Height - 42),
+                    new SizeF (320, 20)),
+                StringValue     = Program.Controller.CurrentUser.Name,
+                Font            = SparkleUI.BoldFont
             };
-
-            this.credits_text_field = new SparkleLabel (
-                @"Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others." +
-                "\n" +
-                "\n" +
-                "SparkleShare is Open Source software. You are free to use, modify, and redistribute it " +
-                "under the GNU General Public License version 3 or later.", NSTextAlignment.Left) {
-                
-                DrawsBackground = false,
-                Frame           = new RectangleF (295, Frame.Height - 260, 318, 98),
-                TextColor       = NSColor.White,
-                Font            = NSFontManager.SharedFontManager.FontWithFamily (
-                    "Lucida Grande", NSFontTraitMask.Unbold, 0, 11),
-            };
-
-            this.website_link       = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
-            this.website_link.Frame = new RectangleF (new PointF (295, 25), this.website_link.Frame.Size);
             
-            this.credits_link       = new SparkleLink ("Credits", Controller.CreditsLinkAddress);
-            this.credits_link.Frame = new RectangleF (
-                new PointF (this.website_link.Frame.X + this.website_link.Frame.Width + 10, 25),
-                this.credits_link.Frame.Size);
-            
-            this.report_problem_link       = new SparkleLink ("Report a problem", Controller.ReportProblemLinkAddress);
-            this.report_problem_link.Frame = new RectangleF (
-                new PointF (this.credits_link.Frame.X + this.credits_link.Frame.Width + 10, 25),
-                this.report_problem_link.Frame.Size);
-            
-            this.debug_log_link       = new SparkleLink ("Debug log", Controller.DebugLogLinkAddress);
-            this.debug_log_link.Frame = new RectangleF (
-                new PointF (this.report_problem_link.Frame.X + this.report_problem_link.Frame.Width + 10, 25),
-                this.debug_log_link.Frame.Size);
+            this.user_email_text_field = new NSTextField () {
+                Alignment       = NSTextAlignment.Left,
+                BackgroundColor = NSColor.FromCalibratedRgba (0.77f, 0.77f, 0.75f, 1.0f),
+                TextColor       = NSColor.DisabledControlText,
+                Bordered        = false,
+                Editable        = false,
+                Frame           = new RectangleF (
+                    new PointF (85, ContentView.Frame.Height - 60),
+                    new SizeF (320, 20)),
+                StringValue     = Program.Controller.CurrentUser.Email,
+                Font            = SparkleUI.Font
+            };
 
-            ContentView.AddSubview (this.about_image_view);
-            ContentView.AddSubview (this.version_text_field);
-            ContentView.AddSubview (this.updates_text_field);
-            ContentView.AddSubview (this.credits_text_field);
-            ContentView.AddSubview (this.website_link);
-            ContentView.AddSubview (this.credits_link);
-            ContentView.AddSubview (this.report_problem_link);
-            ContentView.AddSubview (this.debug_log_link);
+            
+            this.balloon_text_field = new NSTextField () {
+                Alignment       = NSTextAlignment.Left,
+                BackgroundColor = NSColor.White,
+                Bordered        = false,
+                Editable        = true,
+                Frame           = new RectangleF (
+                    new PointF (30, ContentView.Frame.Height - 137),
+                    new SizeF (418, 48))
+            };
+
+            (this.balloon_text_field.Cell as NSTextFieldCell).PlaceholderString  = "Anything to add?";
+            (this.balloon_text_field.Cell as NSTextFieldCell).LineBreakMode      = NSLineBreakMode.ByWordWrapping;
+            (this.balloon_text_field.Cell as NSTextFieldCell).UsesSingleLineMode = false;
+
+            this.balloon_text_field.Cell.FocusRingType = NSFocusRingType.None;
+
+            
+            this.cancel_button = new NSButton () {
+                Title = "Cancel",
+                BezelStyle = NSBezelStyle.Rounded,
+                Frame      = new RectangleF (Frame.Width - 15 - 105 * 2, 12, 105, 32),
+                Font       = SparkleUI.Font
+            };
+
+            this.sync_button = new NSButton () {
+                Title = "Sync",
+                BezelStyle = NSBezelStyle.Rounded,
+                Frame      = new RectangleF (Frame.Width - 15 - 105, 12, 105, 32),
+                Font       = SparkleUI.Font
+            };
+
+            this.cancel_button.Activated += delegate { Controller.CancelClicked (); };
+            this.sync_button.Activated += delegate { Controller.SyncClicked (this.balloon_text_field.StringValue); };
+
+            DefaultButtonCell = this.sync_button.Cell;
+
+
+            if (BackingScaleFactor >= 2)
+                this.balloon_image = NSImage.ImageNamed ("text-balloon@2x");
+            else
+                this.balloon_image = NSImage.ImageNamed ("text-balloon");
+
+            this.balloon_image.Size = new SizeF (438, 72);
+            this.balloon_image_view = new NSImageView () { 
+                Image = this.balloon_image,
+                Frame = new RectangleF (21, ContentView.Frame.Height - 145, 438, 72)
+            };
+
+
+            if (!string.IsNullOrEmpty (Controller.AvatarFilePath))
+                this.user_image = new NSImage (Controller.AvatarFilePath);
+            else
+                this.user_image = NSImage.ImageNamed ("user-icon-default");
+
+            this.user_image.Size = new SizeF (48, 48);
+            this.user_image_view = new NSImageView () {
+                Image = this.user_image,
+                Frame = new RectangleF (21, ContentView.Frame.Height - 65, 48, 48)
+            };
+
+            this.user_image_view.WantsLayer          = true;
+            this.user_image_view.Layer.CornerRadius  = 5.0f;
+            this.user_image_view.Layer.MasksToBounds = true;
+
+
+            ContentView.AddSubview (this.cover);
+            ContentView.AddSubview (this.cancel_button);
+            ContentView.AddSubview (this.sync_button);
+            ContentView.AddSubview (this.user_name_text_field);
+            ContentView.AddSubview (this.user_email_text_field);
+
+            ContentView.AddSubview (this.user_image_view);
+            ContentView.AddSubview (this.balloon_image_view);
+            ContentView.AddSubview (this.balloon_text_field);
+
+            MakeFirstResponder ((NSResponder) this.balloon_text_field);
         }
 
 
@@ -170,56 +219,18 @@ namespace SparkleShare {
             return;
         }
 
+        public override bool AcceptsFirstResponder ()
+        {
+            return true;
+        }
 
-        private class SparkleAboutDelegate : NSWindowDelegate {
+
+        private class SparkleNoteDelegate : NSWindowDelegate {
             
             public override bool WindowShouldClose (NSObject sender)
             {
-                (sender as SparkleAbout).Controller.WindowClosed ();
+                (sender as SparkleNote).Controller.WindowClosed ();
                 return false;
-            }
-        }
-        
-        
-        private class SparkleLink : NSTextField {
-            
-            private NSUrl url;
-            
-            
-            public SparkleLink (string text, string address) : base ()
-            {
-                this.url = new NSUrl (address);
-                
-                AllowsEditingTextAttributes = true;
-                BackgroundColor = NSColor.White;
-                Bordered        = false;
-                DrawsBackground = false;
-                Editable        = false;
-                Selectable      = false;
-                
-                NSData name_data = NSData.FromString ("<a href='" + this.url +
-                    "' style='font-size: 8pt; font-family: \"Lucida Grande\"; color: #739ECF'>" + text + "</a></font>");
-                
-                NSDictionary name_dictionary       = new NSDictionary();
-                NSAttributedString name_attributes = new NSAttributedString (name_data, new NSUrl ("file://"), out name_dictionary);
-                
-                NSMutableAttributedString s = new NSMutableAttributedString ();
-                s.Append (name_attributes);
-                
-                Cell.AttributedStringValue = s;
-                SizeToFit ();
-            }
-            
-            
-            public override void MouseUp (NSEvent e)
-            {
-                Program.Controller.OpenWebsite (this.url.ToString ());
-            }
-            
-            
-            public override void ResetCursorRects ()
-            {
-                AddCursorRect (Bounds, NSCursor.PointingHandCursor);
             }
         }
     }
