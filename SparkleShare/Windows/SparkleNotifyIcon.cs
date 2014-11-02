@@ -17,12 +17,9 @@
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Markup;
 
@@ -33,330 +30,158 @@ namespace SparkleShare {
 
     [ContentProperty("Text")]
     [DefaultEvent("MouseDoubleClick")]
-    public class SparkleNotifyIcon : FrameworkElement, IAddChild {
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-        private static extern IntPtr GetModuleHandle(string module_name);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        private static extern int CallNextHookEx (int hook_id, int code, int param, IntPtr data_pointer);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        private static extern int SetWindowsHookEx (int hook_id, HookProc function, IntPtr instance, int thread_id);
+    public class SparkleNotifyIcon : UIElement, IAddChild {
 
         [DllImport("user32.dll", EntryPoint = "DestroyIcon")]
-        static extern bool DestroyIcon (IntPtr hIcon);
-        
-        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall, SetLastError = true)]
-        private static extern int UnhookWindowsHookEx (int hook_id);
+        static extern bool DestroyIcon(IntPtr h_icon);
 
-        [StructLayout (LayoutKind.Sequential)]
-        private struct MouseLLHook
-        {
-            internal int X;
-            internal int Y;
-            internal int MouseData;
-            internal int Flags;
-            internal int Time;
-            internal int Info;
-        }
-
-        
         public Drawing.Bitmap Icon {
             set {
-                this.notify_icon.Icon = GetIconFromBitmap (value);
+                NotifyIcon.Icon = GetIconFromBitmap(value);
             }
+        }
+
+        public string Text {
+            get {
+                return (string) GetValue(TextProperty);
+            }
+            set {
+                var text = value;
+
+                if(!string.IsNullOrEmpty(HeaderText))
+                    text = HeaderText + "\n" + text;
+
+                SetValue(TextProperty, text);
+            }
+        }
+
+        public ContextMenu ContextMenu {
+            get;
+            set;
         }
 
         public string HeaderText {
-            get {
-                return header_text;
-            }
-            
-            set {
-                header_text = value;
-            }
-        }
-        
-        public string Text {
-            get {
-                return (string) GetValue (TextProperty);
-            }
-            
-            set {
-                string text = value;
-                
-                if (!string.IsNullOrEmpty (header_text))
-                    text = header_text + "\n" + text;
-                    
-                SetValue (TextProperty, text);
-            }
+            get;
+            set;
         }
 
-        public event MouseButtonEventHandler MouseClick {
-            add {
-                AddHandler (MouseClickEvent, value);
-            }
-
-            remove {
-                RemoveHandler (MouseClickEvent, value);
-            }
+        private Forms.NotifyIcon NotifyIcon {
+            get;
+            set;
         }
 
-        public event MouseButtonEventHandler MouseDoubleClick {
-            add {
-                AddHandler (MouseDoubleClickEvent, value);
-            }
-
-            remove {
-                RemoveHandler (MouseDoubleClickEvent, value);
-            }
-        }
-
-
-        public readonly RoutedEvent MouseClickEvent = EventManager.RegisterRoutedEvent (
-            "MouseClick", RoutingStrategy.Bubble, typeof (MouseButtonEventHandler), typeof (SparkleNotifyIcon));
+        public readonly RoutedEvent MouseClickEvent = EventManager.RegisterRoutedEvent(
+            "MouseClick", RoutingStrategy.Bubble, typeof(MouseButtonEventHandler), typeof(SparkleNotifyIcon));
 
         public readonly RoutedEvent MouseDoubleClickEvent = EventManager.RegisterRoutedEvent(
-            "MouseDoubleClick",    RoutingStrategy.Bubble,    typeof (MouseButtonEventHandler), typeof (SparkleNotifyIcon));
+            "MouseDoubleClick", RoutingStrategy.Bubble, typeof(MouseButtonEventHandler), typeof(SparkleNotifyIcon));
 
         public readonly DependencyProperty TextProperty = DependencyProperty.Register(
-            "Text",    typeof(string), typeof (SparkleNotifyIcon), new PropertyMetadata (OnTextChanged));
+            "Text", typeof(string), typeof(SparkleNotifyIcon), new PropertyMetadata(OnTextChanged));
 
-        
-        private string header_text;
-        private Forms.NotifyIcon notify_icon;
-        private HookProc hook_proc_ref;
-        private int mouse_hook_handle;
-        private delegate int HookProc (int code, int param, IntPtr struct_pointer);
-        
-        
-        public SparkleNotifyIcon ()
-        {
-            VisibilityProperty.OverrideMetadata (typeof (SparkleNotifyIcon),
-                new PropertyMetadata (OnVisibilityChanged));
-            
-            this.notify_icon = new Forms.NotifyIcon () {
-                Text    = Text,
-                Visible = true
+        public SparkleNotifyIcon() {
+            VisibilityProperty.OverrideMetadata(typeof(SparkleNotifyIcon), new PropertyMetadata(OnVisibilityChanged));
+
+            NotifyIcon = new Forms.NotifyIcon {
+                Text = Text,
+                Visible = true,
+                ContextMenu = new Forms.ContextMenu()
             };
-
-            this.notify_icon.MouseDown        += OnMouseDown;
-            this.notify_icon.MouseUp          += OnMouseUp;
-            this.notify_icon.MouseClick       += OnMouseClick;
-            this.notify_icon.MouseDoubleClick += OnMouseDoubleClick;
-
-            this.hook_proc_ref = OnMouseEventProc;
+            NotifyIcon.MouseDown += OnMouseDown;
+            NotifyIcon.MouseUp += OnMouseUp;
+            NotifyIcon.MouseClick += OnMouseClick;
+            NotifyIcon.MouseDoubleClick += OnMouseDoubleClick;
         }
-        
-        
-        public void ShowBalloonTip (string title, string subtext, string image_path)
-        {
+
+        public void ShowBalloonTip(string title, string subtext, string image_path) {
             // TODO:
             // - Use the image pointed to by image_path
             // - Find a way to use the prettier (Win7?) balloons
-            this.notify_icon.ShowBalloonTip (5 * 1000, title, subtext, Forms.ToolTipIcon.Info);    
+            NotifyIcon.ShowBalloonTip(5 * 1000, title, subtext, Forms.ToolTipIcon.Info);
         }
-        
 
-        public void Dispose()
-        {
-            this.notify_icon.Dispose();
+        public void Dispose() {
+            NotifyIcon.Dispose();
         }
 
 
-        void IAddChild.AddChild (object value)
-        {
-            throw new InvalidOperationException ();
+        void IAddChild.AddChild(object value) {
+            throw new InvalidOperationException();
         }
 
-        
-        void IAddChild.AddText (string text)
-        {
-            if (text == null)
-                throw new ArgumentNullException ();
+        void IAddChild.AddText(string text) {
+            if(text == null)
+                throw new ArgumentNullException();
 
             Text = text;
         }
 
-    
-        private static MouseButtonEventArgs CreateMouseButtonEventArgs(
-            RoutedEvent handler, Forms.MouseButtons button)
-        {
+        private static MouseButtonEventArgs CreateMouseButtonEventArgs(RoutedEvent handler, Forms.MouseButtons button) {
             MouseButton mouse_button;
 
-            if (button == Forms.MouseButtons.Left) {
+            if(button == Forms.MouseButtons.Left) {
                 mouse_button = MouseButton.Left;
-    
-            } else if (button == Forms.MouseButtons.Right) {
+
+            } else if(button == Forms.MouseButtons.Right) {
                 mouse_button = MouseButton.Right;
-                        
-            } else if (button == Forms.MouseButtons.Middle) {
+
+            } else if(button == Forms.MouseButtons.Middle) {
                 mouse_button = MouseButton.Middle;
-                        
-            } else if (button == Forms.MouseButtons.XButton1) {
+
+            } else if(button == Forms.MouseButtons.XButton1) {
                 mouse_button = MouseButton.XButton1;
-                            
-            } else if (button == Forms.MouseButtons.XButton2) {
+
+            } else if(button == Forms.MouseButtons.XButton2) {
                 mouse_button = MouseButton.XButton2;
-                            
+
             } else {
-                throw new InvalidOperationException ();
+                throw new InvalidOperationException();
             }
 
-            return new MouseButtonEventArgs (InputManager.Current.PrimaryMouseDevice, 0, mouse_button) {
+            return new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, mouse_button) {
                 RoutedEvent = handler
             };
         }
 
-
-        private void ShowContextMenu ()
-        {
-            if (ContextMenu != null) {
-                ContextMenu.Opened += OnContextMenuOpened;
-                ContextMenu.Closed += OnContextMenuClosed;
-                
-                ContextMenu.Placement = PlacementMode.Mouse;
-                ContextMenu.IsOpen    = true;
-            }
-        }
-        
-
-        private Rect GetContextMenuRect (ContextMenu menu)
-        {
-            var source = PresentationSource.FromVisual (menu);
-            if (source != null) {
-                Point start_point = menu.PointToScreen(new Point(0, 0));
-                Point end_point = menu.PointToScreen(new Point(menu.ActualWidth, menu.ActualHeight));
-
-                return new Rect(start_point, end_point);
-            }
-
-            return new Rect();
-        }
-
-
-        private Point GetHitPoint (IntPtr struct_pointer)
-        {
-            MouseLLHook mouse_hook = (MouseLLHook) Marshal.PtrToStructure (
-                struct_pointer, typeof (MouseLLHook));
-            
-            return new Point (mouse_hook.X, mouse_hook.Y);
-        }        
-        
-        
-        private int OnMouseEventProc (int code, int button, IntPtr data_pointer)
-        {
-            int left_button_down  = 0x201;
-            int right_button_down = 0x204;
-
-            int ret;
-            try {
-                if (button == left_button_down || button == right_button_down)
-                {
-                    Rect context_menu_rect = GetContextMenuRect (ContextMenu);
-                    Point hit_point = GetHitPoint (data_pointer);
-
-					if (!context_menu_rect.Contains(hit_point)) {
-						new Thread (() => {
-							Thread.Sleep (750);
-
-							Dispatcher.BeginInvoke ((Action) delegate {
-								ContextMenu.IsOpen = false;
-							});
-						}).Start ();
-					}
-                }
-            } 
-            finally {
-                ret = CallNextHookEx(this.mouse_hook_handle, code, button, data_pointer);
-            }
-
-            return ret;
-        }
-        
-        
-        private void OnContextMenuOpened (object sender, RoutedEventArgs args)
-        {
-            using (Process process      = Process.GetCurrentProcess ())
-            using (ProcessModule module = process.MainModule)
-            {
-                this.mouse_hook_handle = SetWindowsHookEx (14, this.hook_proc_ref, 
-                    GetModuleHandle (module.ModuleName), 0);
-            }
-
-            if (this.mouse_hook_handle == 0)            
-                throw new Win32Exception (Marshal.GetLastWin32Error ());
-        }
-
-
-        private void OnContextMenuClosed (object sender, RoutedEventArgs args)
-        {
-            UnhookWindowsHookEx (this.mouse_hook_handle);
-
-            ContextMenu.Opened -= OnContextMenuOpened;
-            ContextMenu.Closed -= OnContextMenuClosed;
-        }
-        
-        
-        private void OnVisibilityChanged (DependencyObject target,
-            DependencyPropertyChangedEventArgs args)
-        {
-            SparkleNotifyIcon control   = (SparkleNotifyIcon) target;
-            control.notify_icon.Visible = (control.Visibility == Visibility.Visible);
-        }
-        
-        
-        private void OnMouseDown(object sender, Forms.MouseEventArgs args)
-        {
-            RaiseEvent (CreateMouseButtonEventArgs (MouseDownEvent, args.Button));
-        }
-        
-        
-        private void OnMouseClick (object sender, Forms.MouseEventArgs args)
-        {
-            RaiseEvent (CreateMouseButtonEventArgs (MouseClickEvent, args.Button));
-        }
-        
-        
-        private void OnMouseDoubleClick (object sender, Forms.MouseEventArgs args)
-        {
-            RaiseEvent (CreateMouseButtonEventArgs (MouseDoubleClickEvent, args.Button));
-        }
-
-
-        private void OnMouseUp (object sender, Forms.MouseEventArgs args)
-        {
-            if (args.Button == Forms.MouseButtons.Left ||
-                args.Button == Forms.MouseButtons.Right) {
-                
-                ShowContextMenu ();
-            }
-
-            RaiseEvent (CreateMouseButtonEventArgs (MouseUpEvent, args.Button));
-        }
-
-
-        protected override void OnVisualParentChanged (DependencyObject parent)
-        {
-            base.OnVisualParentChanged (parent);
-        }
-
-
-        private static void OnTextChanged (DependencyObject target,
-            DependencyPropertyChangedEventArgs args)
-        {
+        private void OnVisibilityChanged(DependencyObject target, DependencyPropertyChangedEventArgs args) {
             SparkleNotifyIcon control = (SparkleNotifyIcon) target;
-            control.notify_icon.Text  = control.Text;
+            control.NotifyIcon.Visible = (control.Visibility == Visibility.Visible);
         }
-        
 
-        private Drawing.Icon GetIconFromBitmap (Drawing.Bitmap bitmap)
-        {
-            IntPtr unmanaged_icon = bitmap.GetHicon ();
-            Drawing.Icon icon = (Drawing.Icon) Drawing.Icon.FromHandle (unmanaged_icon).Clone ();
-            DestroyIcon (unmanaged_icon);
-            
+        private void OnMouseDown(object sender, Forms.MouseEventArgs args) {
+            RaiseEvent(CreateMouseButtonEventArgs(MouseDownEvent, args.Button));
+        }
+
+        private void OnMouseClick(object sender, Forms.MouseEventArgs args) {
+            RaiseEvent(CreateMouseButtonEventArgs(MouseClickEvent, args.Button));
+        }
+
+        private void OnMouseDoubleClick(object sender, Forms.MouseEventArgs args) {
+            RaiseEvent(CreateMouseButtonEventArgs(MouseDoubleClickEvent, args.Button));
+        }
+
+        private void OnMouseUp(object sender, Forms.MouseEventArgs args) {
+
+            if(args.Button == Forms.MouseButtons.Right) {
+
+                ContextMenu.IsOpen = true;
+                ContextMenu.StaysOpen = false;
+            }
+
+            RaiseEvent(CreateMouseButtonEventArgs(MouseUpEvent, args.Button));
+        }
+
+        private static void OnTextChanged(DependencyObject target, DependencyPropertyChangedEventArgs args) {
+            SparkleNotifyIcon control = (SparkleNotifyIcon) target;
+            control.NotifyIcon.Text = control.Text;
+        }
+
+
+        private static Drawing.Icon GetIconFromBitmap(Drawing.Bitmap bitmap) {
+            IntPtr unmanaged_icon = bitmap.GetHicon();
+            Drawing.Icon icon = (Drawing.Icon) Drawing.Icon.FromHandle(unmanaged_icon).Clone();
+            DestroyIcon(unmanaged_icon);
+
             return icon;
         }
     }
