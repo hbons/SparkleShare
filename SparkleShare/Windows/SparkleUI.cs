@@ -16,7 +16,10 @@
 
 
 using System;
+using System.Threading;
 using System.Windows.Forms;
+
+using SparkleLib;
 
 namespace SparkleShare {
 
@@ -46,8 +49,21 @@ namespace SparkleShare {
         
         public void Run ()
         {
+            Application.ThreadException += OnUnhandledException;
+            Application.SetUnhandledExceptionMode (UnhandledExceptionMode.CatchException);
             Application.Run ();
             StatusIcon.Dispose ();
+        }
+
+        private static void OnUnhandledException (object sender, ThreadExceptionEventArgs exception_args)
+        {
+            try {
+                Exception e = (Exception) exception_args.Exception;
+                SparkleLogger.WriteCrashReport (e);
+            
+            } finally {
+                Environment.Exit (-1);
+            }
         }
     }
 }
