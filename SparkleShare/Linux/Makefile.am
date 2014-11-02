@@ -19,6 +19,7 @@ SOURCES =  \
 	../SparkleExtensions.cs \
 	../SparkleInvite.cs \
 	../SparkleKeys.cs \
+	../SparkleNoteController.cs \
 	../SparklePlugin.cs \
 	../SparkleSetupController.cs \
 	../SparkleStatusIconController.cs \
@@ -26,6 +27,7 @@ SOURCES =  \
 	SparkleBubbles.cs \
 	SparkleController.cs \
 	SparkleEventLog.cs \
+	SparkleNote.cs \
 	SparkleSetup.cs \
 	SparkleSetupWindow.cs \
 	SparkleStatusIcon.cs \
