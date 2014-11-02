@@ -7,6 +7,7 @@
      - Update certificate for Gravatar
      - Resizable "Recent Changes" window on Windows
      - Several stability fixes
+     - Improvements to filesystem watcher and exclude list
 
 
 1.4.0 for Linux, Mac and Windows (Sun Apr 20, 2014):

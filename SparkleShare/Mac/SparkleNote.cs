@@ -17,7 +17,6 @@
 
 using System;
 using System.Drawing;
-using System.IO;
 
 using MonoMac.AppKit;
 using MonoMac.Foundation;
