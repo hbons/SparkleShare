@@ -257,6 +257,9 @@ namespace SparkleShare {
                 string folder    = url.Replace ("history://", "").Split ("/".ToCharArray ()) [0];
                 string file_path = url.Replace ("history://" + folder + "/", "");
 
+                byte [] file_path_bytes = Encoding.Default.GetBytes (file_path);
+                file_path               = Encoding.UTF8.GetString (file_path_bytes);
+
                 file_path = Uri.UnescapeDataString (file_path);
 
                 foreach (SparkleRepoBase repo in Program.Controller.Repositories) {
