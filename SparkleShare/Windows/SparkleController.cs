@@ -178,11 +178,7 @@ namespace SparkleShare {
 
         public override void OpenFolder (string path)
         {
-            Process process             = new Process ();
-            process.StartInfo.FileName  = "explorer";
-            process.StartInfo.Arguments = path;
-            
-            process.Start ();
+            Process.Start (path);
         }
 
 
