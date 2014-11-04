@@ -193,6 +193,7 @@ namespace SparkleShare {
 
             this.state_menu_items = new SparkleMenuItem [Controller.Projects.Length];
 
+            /*
             if (Controller.Projects.Length > 0) {
                 int i = 0;
                 foreach (ProjectInfo project in Controller.Projects) {
@@ -257,7 +258,7 @@ namespace SparkleShare {
                     this.context_menu.Items.Add (item);
                     i++;
                 };
-            }
+            } */
 
 
             folder_item.Items.Add (this.log_item);
