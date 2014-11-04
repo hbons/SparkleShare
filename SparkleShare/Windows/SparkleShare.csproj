@@ -34,13 +34,22 @@
     </ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>False</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
     <OutputPath>..\..\bin</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <PlatformTarget>x86</PlatformTarget>
+    <DefineConstants>TRACE</DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -251,16 +260,6 @@
     <EmbeddedResource Include="Pixmaps\tutorial-slide-3.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SparkleLib\Git\SparkleLib.Git.csproj">
-      <Project>{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}</Project>
-      <Name>SparkleLib.Git</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SparkleLib\SparkleLib.csproj">
-      <Project>{2C914413-B31C-4362-93C7-1AE34F09112A}</Project>
-      <Name>SparkleLib</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Pixmaps\sparkleshare-folder.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -268,5 +267,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="SparkleLib\Git\SparkleLib.Git.csproj">
+      <Project>{7f0db8d0-e278-4955-8204-fc391b99f7c1}</Project>
+      <Name>SparkleLib.Git</Name>
+    </ProjectReference>
+    <ProjectReference Include="SparkleLib\SparkleLib.csproj">
+      <Project>{748f6316-37b4-46fd-a011-af073bc7c02d}</Project>
+      <Name>SparkleLib</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
