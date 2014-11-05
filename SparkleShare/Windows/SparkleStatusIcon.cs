@@ -224,6 +224,13 @@ namespace SparkleShare {
                                     // TODO image
                                     IsEnabled = false
                                 });
+
+                            if (!string.IsNullOrEmpty (project.MoreUnsyncedChanges)) {
+                                item.Items.Add (new SparkleMenuItem () {
+                                    Header = project.MoreUnsyncedChanges,
+                                    IsEnabled = false
+                                });
+                            }
                             
                             item.Items.Add (new Separator ());
                             resume_item = new SparkleMenuItem () { Header = "Sync and Resume…" }; 

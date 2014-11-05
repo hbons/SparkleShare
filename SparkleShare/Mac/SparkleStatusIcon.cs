@@ -204,6 +204,9 @@ namespace SparkleShare {
                                     Image = NSImage.ImageNamed (pair.Value)
                                 });
 
+                            if (!string.IsNullOrEmpty (project.MoreUnsyncedChanges))
+                                item.Submenu.AddItem (new NSMenuItem (project.MoreUnsyncedChanges));
+
                             item.Submenu.AddItem (NSMenuItem.SeparatorItem);
                             this.resume_menu_items [i] = new NSMenuItem ("Sync and Resume…"); 
                         
