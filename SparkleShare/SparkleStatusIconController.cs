@@ -79,11 +79,19 @@ namespace SparkleShare {
         }
 
 
+        public string MoreUnsyncedChanges = "";
+
         public Dictionary<string, string> UnsyncedChangesInfo {
             get { 
                 Dictionary<string, string> changes_info = new Dictionary<string, string> ();
             
+                int changes_count = 0;
                 foreach (SparkleChange change in repo.UnsyncedChanges) {
+                    changes_count++;
+
+                    if (changes_count > 10)
+                        continue;
+
                     switch (change.Type) {
                     case SparkleChangeType.Added:   changes_info [change.Path] = "document-added-12.png"; break;
                     case SparkleChangeType.Edited:  changes_info [change.Path] = "document-edited-12.png"; break;
@@ -91,6 +99,9 @@ namespace SparkleShare {
                     case SparkleChangeType.Moved:   changes_info [change.MovedToPath] = "document-moved-12.png"; break;
                     }
                 }
+
+                if (changes_count > 10)
+                    MoreUnsyncedChanges = string.Format ("and {0} more", changes_count - 10);
 
                 return changes_info;
             }

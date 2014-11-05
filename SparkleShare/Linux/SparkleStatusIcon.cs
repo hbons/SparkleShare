@@ -156,6 +156,12 @@ namespace SparkleShare {
                                         File = new string [] {icons_path, pair.Value.Replace ("-12", "")}.Combine () },
                                     Sensitive = false
                                 });
+
+                            if (!string.IsNullOrEmpty (project.MoreUnsyncedChanges)) {
+                                (item.Submenu as Menu).Add (new MenuItem (MoreUnsyncedChanges) {
+                                    Sensitive = false
+                                });
+                            }
                             
                             (item.Submenu as Menu).Add (new SeparatorMenuItem ());
                             resume_item = new MenuItem ("Sync and Resume…"); 
