@@ -1136,10 +1136,6 @@ namespace SparkleLib.Git {
                 }
 
                 changes.Add (change);
-                
-                count++;
-                if (count == 10)
-                    break;
             }
             
             git_status.StandardOutput.ReadToEnd ();
