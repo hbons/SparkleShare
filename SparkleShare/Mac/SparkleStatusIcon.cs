@@ -45,12 +45,6 @@ namespace SparkleShare {
         private NSImage syncing_image       = NSImage.ImageNamed ("process-syncing");
         private NSImage syncing_error_image = NSImage.ImageNamed ("process-syncing-error");
         
-        private NSImage syncing_idle_image_active  = NSImage.ImageNamed ("process-syncing-idle-active");
-        private NSImage syncing_up_image_active    = NSImage.ImageNamed ("process-syncing-up-active");
-        private NSImage syncing_down_image_active  = NSImage.ImageNamed ("process-syncing-down-active");
-        private NSImage syncing_image_active       = NSImage.ImageNamed ("process-syncing-active");
-        private NSImage syncing_error_image_active = NSImage.ImageNamed ("process-syncing-error-active");
-        
         private NSImage folder_image       = NSImage.ImageNamed ("NSFolder");
         private NSImage caution_image      = NSImage.ImageNamed ("NSCaution");
         private NSImage sparkleshare_image = NSImage.ImageNamed ("sparkleshare-folder");
@@ -60,39 +54,22 @@ namespace SparkleShare {
         {
             this.status_item.HighlightMode  = true;
             this.status_item.Image          = this.syncing_idle_image;
-            this.status_item.AlternateImage = this.syncing_idle_image_active;
+            this.status_item.Image.Template = true;
+
 
             CreateMenu ();
 
             Controller.UpdateIconEvent += delegate (IconState state) {
                 Program.Controller.Invoke (() => {
                     switch (state) {
-                        case IconState.Idle: {
-                            this.status_item.Image          = this.syncing_idle_image;
-                            this.status_item.AlternateImage = this.syncing_idle_image_active;
-                            break;
-                        }
-                        case IconState.SyncingUp: {
-                            this.status_item.Image          = this.syncing_up_image;
-                            this.status_item.AlternateImage = this.syncing_up_image_active;
-                            break;
-                        }
-                        case IconState.SyncingDown: {
-                            this.status_item.Image          = this.syncing_down_image;
-                            this.status_item.AlternateImage = this.syncing_down_image_active;
-                            break;
-                        }
-                        case IconState.Syncing: {
-                            this.status_item.Image          = this.syncing_image;
-                            this.status_item.AlternateImage = this.syncing_image_active;
-                            break;
-                        }
-                        case IconState.Error: {
-                            this.status_item.Image          = this.syncing_error_image;
-                            this.status_item.AlternateImage = this.syncing_error_image_active;
-                            break;
-                        }
+                    case IconState.Idle: { this.status_item.Image = this.syncing_idle_image; break; }
+                    case IconState.SyncingUp: { this.status_item.Image = this.syncing_up_image; break; }
+                    case IconState.SyncingDown: { this.status_item.Image = this.syncing_down_image; break; }
+                    case IconState.Syncing: { this.status_item.Image = this.syncing_image; break; }
+                    case IconState.Error: { this.status_item.Image = this.syncing_error_image; break; }
                     }
+
+                    this.status_item.Image.Template = true;
                 });
             };
             
