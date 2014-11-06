@@ -115,7 +115,7 @@ namespace SparkleShare {
                     new PointF (60, ContentView.Frame.Height - 27),
                     new SizeF (60, 20)),
                 StringValue     = "…",
-                Font            = SparkleUI.BoldFont
+                Font            = NSFont.FromFontName (SparkleUI.FontName + " Bold", NSFont.SystemFontSize)
             };
 
 
@@ -140,7 +140,7 @@ namespace SparkleShare {
                     new SizeF (60, 20)
                 ),
                 StringValue     = "…",
-                Font            = SparkleUI.BoldFont
+                Font            = NSFont.FromFontName (SparkleUI.FontName + " Bold", NSFont.SystemFontSize)
             };
 
             this.popup_button = new NSPopUpButton () {

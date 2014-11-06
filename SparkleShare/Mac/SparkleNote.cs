@@ -100,7 +100,7 @@ namespace SparkleShare {
                     new PointF (85, ContentView.Frame.Height - 41),
                     new SizeF (320, 22)),
                 StringValue     = Program.Controller.CurrentUser.Name,
-                Font            = SparkleUI.BoldFont
+                Font            = NSFont.FromFontName (SparkleUI.FontName + " Bold", NSFont.SystemFontSize)
             };
             
             this.user_email_text_field = new NSTextField () {
