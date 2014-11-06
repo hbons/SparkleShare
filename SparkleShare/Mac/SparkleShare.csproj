@@ -170,14 +170,9 @@
     <BundleResource Include="Resources\tutorial-slide-3.png">
       <Link>Resources\tutorial-slide-3.png</Link>
     </BundleResource>
-    <BundleResource Include="Resources\process-syncing-active.png" />
-    <BundleResource Include="Resources\process-syncing-down-active.png" />
     <BundleResource Include="Resources\process-syncing-down.png" />
-    <BundleResource Include="Resources\process-syncing-error-active.png" />
     <BundleResource Include="Resources\process-syncing-error.png" />
-    <BundleResource Include="Resources\process-syncing-idle-active.png" />
     <BundleResource Include="Resources\process-syncing-idle.png" />
-    <BundleResource Include="Resources\process-syncing-up-active.png" />
     <BundleResource Include="Resources\process-syncing-up.png" />
     <BundleResource Include="Resources\process-syncing.png" />
     <BundleResource Include="..\Common\Pixmaps\user-icon-default.png">
@@ -186,14 +181,9 @@
     <BundleResource Include="..\Common\Pixmaps\side-splash%402x.png">
       <Link>Resources\side-splash%402x.png</Link>
     </BundleResource>
-    <BundleResource Include="Resources\process-syncing-active%402x.png" />
-    <BundleResource Include="Resources\process-syncing-down-active%402x.png" />
     <BundleResource Include="Resources\process-syncing-down%402x.png" />
-    <BundleResource Include="Resources\process-syncing-error-active%402x.png" />
     <BundleResource Include="Resources\process-syncing-error%402x.png" />
-    <BundleResource Include="Resources\process-syncing-idle-active%402x.png" />
     <BundleResource Include="Resources\process-syncing-idle%402x.png" />
-    <BundleResource Include="Resources\process-syncing-up-active%402x.png" />
     <BundleResource Include="Resources\process-syncing-up%402x.png" />
     <BundleResource Include="Resources\process-syncing%402x.png" />
     <BundleResource Include="..\Common\Pixmaps\about%402x.png">
