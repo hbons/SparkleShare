@@ -1,6 +1,7 @@
 1.5.0 for Linux, Mac and Windows (???):
 
      Hylke
+     - Mac UI updates to integrate well with Yosemite
      - Per folder sync status in icon menu
      - Add ability to pause sync and add a commit message on resume
      - Remove dock icon on Mac and force windows on top
