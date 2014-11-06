@@ -30,16 +30,14 @@ namespace SparkleShare {
         public SparkleBubbles Bubbles;
         public SparkleAbout About;
         public SparkleNote Note;
-
-		public static NSFont Font = NSFontManager.SharedFontManager.FontWithFamily (
-			"Lucida Grande", NSFontTraitMask.Condensed, 0, 13);
 		
-        public static NSFont BoldFont = NSFontManager.SharedFontManager.FontWithFamily (
-			"Lucida Grande", NSFontTraitMask.Bold, 0, 13);
-		
+        public static string FontName = "Helvetica Neue";
 
         public SparkleUI ()
         {
+            if (Environment.OSVersion.Version.Major < 14)
+                FontName = "Lucida Grande";
+
             Program.Controller.Invoke (() => {
                 NSWorkspace.SharedWorkspace.SetIconforFile (
                     NSImage.ImageNamed ("sparkleshare-folder.icns"), Program.Controller.FoldersPath, 0);
