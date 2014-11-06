@@ -101,10 +101,9 @@ namespace SparkleShare {
                 Bordered        = false,
                 Editable        = false,
                 Frame           = new RectangleF (
-                    new PointF (0, ContentView.Frame.Height - 30),
+                    new PointF (0, ContentView.Frame.Height - 31),
                     new SizeF (60, 20)),
-                StringValue     = "Size:",
-                Font            = SparkleUI.BoldFont
+                StringValue     = "Size:"
             };
 
             this.size_label_value = new NSTextField () {
@@ -113,10 +112,10 @@ namespace SparkleShare {
                 Bordered        = false,
                 Editable        = false,
                 Frame           = new RectangleF (
-                    new PointF (60, ContentView.Frame.Height - 30),
+                    new PointF (60, ContentView.Frame.Height - 27),
                     new SizeF (60, 20)),
                 StringValue     = "…",
-                Font            = SparkleUI.Font
+                Font            = NSFont.FromFontName (SparkleUI.FontName + " Bold", NSFont.SystemFontSize)
             };
 
 
@@ -126,10 +125,9 @@ namespace SparkleShare {
                 Bordered        = false,
                 Editable        = false,
                 Frame           = new RectangleF (
-                    new PointF (130, ContentView.Frame.Height - 30),
+                    new PointF (130, ContentView.Frame.Height - 31),
                     new SizeF (60, 20)),
-                StringValue     = "History:",
-                Font            = SparkleUI.BoldFont
+                StringValue     = "History:"
             };
 
             this.history_label_value = new NSTextField () {
@@ -138,11 +136,11 @@ namespace SparkleShare {
                 Bordered        = false,
                 Editable        = false,
                 Frame           = new RectangleF (
-                    new PointF (190, ContentView.Frame.Height - 30),
+                    new PointF (190, ContentView.Frame.Height - 27),
                     new SizeF (60, 20)
                 ),
                 StringValue     = "…",
-                Font            = SparkleUI.Font
+                Font            = NSFont.FromFontName (SparkleUI.FontName + " Bold", NSFont.SystemFontSize)
             };
 
             this.popup_button = new NSPopUpButton () {
@@ -267,7 +265,7 @@ namespace SparkleShare {
                 this.size_label.Frame.Size);
 
             this.size_label_value.Frame = new RectangleF (
-                new PointF (this.size_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 30),
+                new PointF (this.size_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 27),
                 this.size_label_value.Frame.Size);
 
             this.history_label.Frame = new RectangleF (
@@ -275,7 +273,7 @@ namespace SparkleShare {
                 this.history_label.Frame.Size);
 
             this.history_label_value.Frame = new RectangleF (
-                new PointF (this.history_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 30),
+                new PointF (this.history_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 27),
                 this.history_label_value.Frame.Size);
 
             this.progress_indicator.Frame = new RectangleF (
@@ -296,10 +294,6 @@ namespace SparkleShare {
         {
             if (folders == null)
                 folders = Controller.Folders;
-
-            this.popup_button.Cell.ControlSize = NSControlSize.Small;
-            this.popup_button.Font = NSFontManager.SharedFontManager.FontWithFamily (
-                "Lucida Grande", NSFontTraitMask.Condensed, 0, NSFont.SmallSystemFontSize);
 
             this.popup_button.RemoveAllItems ();
 
@@ -333,14 +327,14 @@ namespace SparkleShare {
         {
 		    string pixmaps_path = "file://" + NSBundle.MainBundle.ResourcePath;
 			
-            html = html.Replace ("<!-- $body-font-family -->", "Lucida Grande");
+            html = html.Replace ("<!-- $body-font-family -->", "Helvetica Neue");
             html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
             html = html.Replace ("<!-- $body-font-size -->", "13.4px");
             html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
             html = html.Replace ("<!-- $small-color -->", "#ddd");
             html = html.Replace ("<!-- $small-font-size -->", "10px");
             html = html.Replace ("<!-- $day-entry-header-background-color -->", "#f5f5f5");
-            html = html.Replace ("<!-- $a-color -->", "#0085cf");
+            html = html.Replace ("<!-- $a-color -->", "#009ff8");
             html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
             html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
             html = html.Replace ("<!-- $document-added-background-image -->", pixmaps_path + "/document-added-12.png");

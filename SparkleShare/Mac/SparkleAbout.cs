@@ -92,31 +92,24 @@ namespace SparkleShare {
             this.version_text_field = new SparkleLabel ("version " + Controller.RunningVersion, NSTextAlignment.Left) {
                 DrawsBackground = false,
                 Frame           = new RectangleF (295, 140, 318, 22),
-                TextColor       = NSColor.White,
-                Font            = NSFontManager.SharedFontManager.FontWithFamily (
-                    "Lucida Grande", NSFontTraitMask.Unbold, 0, 11)
+                TextColor       = NSColor.White
             };
 
             this.updates_text_field = new SparkleLabel ("Checking for updates...", NSTextAlignment.Left) {
                 DrawsBackground = false,
                 Frame           = new RectangleF (295, Frame.Height - 232, 318, 98),
-                TextColor       = NSColor.FromCalibratedRgba (1.0f, 1.0f, 1.0f, 0.5f),
-                Font            = NSFontManager.SharedFontManager.FontWithFamily (
-                    "Lucida Grande", NSFontTraitMask.Unbold, 0, 11)
+                TextColor       = NSColor.FromCalibratedRgba (1.0f, 1.0f, 1.0f, 0.5f)
             };
 
             this.credits_text_field = new SparkleLabel (
                 @"Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others." +
-                "\n" +
-                "\n" +
-                "SparkleShare is Open Source software. You are free to use, modify, and redistribute it " +
-                "under the GNU General Public License version 3 or later.", NSTextAlignment.Left) {
+                "\n\n" + 
+                "SparkleShare is Open Source. You are free to use, modify, and redistribute it " +
+                "under the GNU GPLv3.", NSTextAlignment.Left) {
                 
                 DrawsBackground = false,
                 Frame           = new RectangleF (295, Frame.Height - 260, 318, 98),
-                TextColor       = NSColor.White,
-                Font            = NSFontManager.SharedFontManager.FontWithFamily (
-                    "Lucida Grande", NSFontTraitMask.Unbold, 0, 11),
+                TextColor       = NSColor.White
             };
 
             this.website_link       = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
@@ -198,7 +191,7 @@ namespace SparkleShare {
                 Selectable      = false;
                 
                 NSData name_data = NSData.FromString ("<a href='" + this.url +
-                    "' style='font-size: 8pt; font-family: \"Lucida Grande\"; color: #739ECF'>" + text + "</a></font>");
+                    "' style='font-size: 9pt; font-family: \"Helvetica Neue\"; color: #739ECF'>" + text + "</a></font>");
                 
                 NSDictionary name_dictionary       = new NSDictionary();
                 NSAttributedString name_attributes = new NSAttributedString (name_data, new NSUrl ("file://"), out name_dictionary);
