@@ -193,10 +193,11 @@ namespace SparkleShare {
 
             this.state_menu_items = new SparkleMenuItem [Controller.Projects.Length];
 
+            // FIXME Add event handlers for pausing
             if (Controller.Projects.Length > 0) {
                 int i = 0;
                 foreach (ProjectInfo project in Controller.Projects) {
-                    SparkleMenuItem subfolder_item = new SparkleMenuItem () {
+                    SparkleMenuItem item = new SparkleMenuItem () {
                         Header = project.Name.Replace ("_", "__")
                     };
 
@@ -239,7 +240,7 @@ namespace SparkleShare {
                             resume_item = new SparkleMenuItem () { Header = "Resume" };
                         }
                         
-                        resume_item.Click += Controller.ResumeDelegate (project.Name);
+                        //resume_item.Click += Controller.ResumeDelegate (project.Name);
                         item.Items.Add (resume_item);
 
                     } else {
@@ -251,12 +252,12 @@ namespace SparkleShare {
                             };
 
                             SparkleMenuItem try_again_item = new SparkleMenuItem () { Header = "Try Again" };
-                            try_again_item.Click += Controller.TryAgainDelegate (project.Name);
+                            //try_again_item.Click += Controller.TryAgainDelegate (project.Name);
                             item.Items.Add (try_again_item);
                             
                         } else {
                             SparkleMenuItem pause_item = new SparkleMenuItem () { Header = "Pause" };
-                            pause_item.Click += Controller.PauseDelegate (project.Name);
+                            //pause_item.Click += Controller.PauseDelegate (project.Name);
                             item.Items.Add (pause_item);
                         }
                     }
