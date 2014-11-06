@@ -97,10 +97,10 @@ namespace SparkleShare {
                 Bordered        = false,
                 Editable        = false,
                 Frame           = new RectangleF (
-                    new PointF (85, ContentView.Frame.Height - 42),
-                    new SizeF (320, 20)),
+                    new PointF (85, ContentView.Frame.Height - 41),
+                    new SizeF (320, 22)),
                 StringValue     = Program.Controller.CurrentUser.Name,
-                Font            = SparkleUI.BoldFont
+                Font            = NSFont.FromFontName (SparkleUI.FontName + " Bold", NSFont.SystemFontSize)
             };
             
             this.user_email_text_field = new NSTextField () {
@@ -113,7 +113,6 @@ namespace SparkleShare {
                     new PointF (85, ContentView.Frame.Height - 60),
                     new SizeF (320, 20)),
                 StringValue     = Program.Controller.CurrentUser.Email,
-                Font            = SparkleUI.Font
             };
 
             
@@ -138,14 +137,12 @@ namespace SparkleShare {
                 Title = "Cancel",
                 BezelStyle = NSBezelStyle.Rounded,
                 Frame      = new RectangleF (Frame.Width - 15 - 105 * 2, 12, 105, 32),
-                Font       = SparkleUI.Font
             };
 
             this.sync_button = new NSButton () {
                 Title = "Sync",
                 BezelStyle = NSBezelStyle.Rounded,
                 Frame      = new RectangleF (Frame.Width - 15 - 105, 12, 105, 32),
-                Font       = SparkleUI.Font
             };
 
             this.cancel_button.Activated += delegate { Controller.CancelClicked (); };

@@ -145,19 +145,20 @@ namespace SparkleShare {
                 Description = "Do you want to add this project to SparkleShare?";
 
                 AddressLabel       = new SparkleLabel ("Address:", NSTextAlignment.Right);
-                AddressLabel.Frame = new RectangleF (165, Frame.Height - 240, 160, 17);
+                AddressLabel.Frame = new RectangleF (165, Frame.Height - 238, 160, 17);
+                AddressLabel.Font  = NSFont.FromFontName (SparkleUI.FontName + " Bold", NSFont.SystemFontSize);
      
                 AddressTextField = new SparkleLabel (Controller.PendingInvite.Address, NSTextAlignment.Left) {
-                    Frame = new RectangleF (330, Frame.Height - 240, 260, 17),
-                    Font  = SparkleUI.BoldFont
+                    Frame = new RectangleF (330, Frame.Height - 240, 260, 17)
                 };
 
                 PathLabel       = new SparkleLabel ("Remote Path:", NSTextAlignment.Right);
-                PathLabel.Frame = new RectangleF (165, Frame.Height - 264, 160, 17);
+                PathLabel.Frame = new RectangleF (165, Frame.Height - 262, 160, 17);
+                PathLabel.Font  = NSFont.FromFontName (SparkleUI.FontName + " Bold", NSFont.SystemFontSize);
+
 
                 PathTextField = new SparkleLabel (Controller.PendingInvite.RemotePath, NSTextAlignment.Left) {
-                    Frame = new RectangleF (330, Frame.Height - 264, 260, 17),
-                    Font  = SparkleUI.BoldFont
+                    Frame = new RectangleF (330, Frame.Height - 264, 260, 17)
                 };
 
                 CancelButton = new NSButton () { Title = "Cancel" };
@@ -183,12 +184,11 @@ namespace SparkleShare {
 
                 AddressLabel = new SparkleLabel ("Address:", NSTextAlignment.Left) {
                     Frame = new RectangleF (190, Frame.Height - 308, 160, 17),
-                    Font  = SparkleUI.BoldFont
+                    Font  = NSFont.FromFontName (SparkleUI.FontName + " Bold", NSFont.SystemFontSize)
                 };
 
                 AddressTextField = new NSTextField () {
                     Frame       = new RectangleF (190, Frame.Height - 336, 196, 22),
-                    Font        = SparkleUI.Font,
                     Enabled     = (Controller.SelectedPlugin.Address == null),
                     Delegate    = new SparkleTextFieldDelegate (),
                     StringValue = "" + Controller.PreviousAddress
@@ -198,7 +198,7 @@ namespace SparkleShare {
 
                 PathLabel = new SparkleLabel ("Remote Path:", NSTextAlignment.Left) {
                     Frame = new RectangleF (190 + 196 + 16, Frame.Height - 308, 160, 17),
-                    Font  = SparkleUI.BoldFont
+                    Font  = NSFont.FromFontName (SparkleUI.FontName + " Bold", NSFont.SystemFontSize)
                 };
 
                 PathTextField = new NSTextField () {
@@ -212,22 +212,18 @@ namespace SparkleShare {
 
                 PathHelpLabel = new SparkleLabel (Controller.SelectedPlugin.PathExample, NSTextAlignment.Left) {
                     TextColor       = NSColor.DisabledControlText,
-                    Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 355, 204, 17),
-                    Font            = NSFontManager.SharedFontManager.FontWithFamily ("Lucida Grande",
-                        NSFontTraitMask.Condensed, 0, 11),
+                    Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 358, 204, 19)
                 };
 
                 AddressHelpLabel = new SparkleLabel (Controller.SelectedPlugin.AddressExample, NSTextAlignment.Left) {
                     TextColor       = NSColor.DisabledControlText,
-                    Frame           = new RectangleF (190, Frame.Height - 355, 204, 17),
-                    Font            = NSFontManager.SharedFontManager.FontWithFamily ("Lucida Grande",
-                        NSFontTraitMask.Condensed, 0, 11),
+                    Frame           = new RectangleF (190, Frame.Height - 358, 204, 19)
                 };
 
                 if (TableView == null || TableView.RowCount != Controller.Plugins.Count) {
                     TableView = new NSTableView () {
                         Frame            = new RectangleF (0, 0, 0, 0),
-                        RowHeight        = 34,
+                        RowHeight        = 38,
                         IntercellSpacing = new SizeF (8, 12),
                         HeaderView       = null,
                         Delegate         = new SparkleTableViewDelegate ()
@@ -252,8 +248,8 @@ namespace SparkleShare {
                         Editable      = false
                     };
 
-                    DescriptionColumn.DataCell.Font = NSFontManager.SharedFontManager.FontWithFamily ("Lucida Grande",
-                        NSFontTraitMask.Condensed, 0, 11);
+                    DescriptionColumn.DataCell.Font = NSFontManager.SharedFontManager.FontWithFamily (
+                        SparkleUI.FontName, NSFontTraitMask.Condensed, 0, 11);
 
                     TableView.AddColumn (IconColumn);
                     TableView.AddColumn (DescriptionColumn);
@@ -407,7 +403,7 @@ namespace SparkleShare {
 
                 string html = "<style>" +
                     "* {" +
-                    "  font-family: 'Lucida Grande';" +
+                    "  font-family: '" + SparkleUI.FontName + " Bold" + "';" +
                     "  font-size: 12px; cursor: default;" +
                     "}" +
                     "body {" +
@@ -473,8 +469,8 @@ namespace SparkleShare {
                     extra_pos_y = 20;
   
                 PasswordLabel = new SparkleLabel ("Password:", NSTextAlignment.Right) {
-                    Frame           = new RectangleF (155, Frame.Height - 204 - extra_pos_y, 160, 17),
-                    Font            = SparkleUI.BoldFont
+                    Frame           = new RectangleF (155, Frame.Height - 202 - extra_pos_y, 160, 17),
+                    Font            = NSFont.FromFontName (SparkleUI.FontName + " Bold", NSFont.SystemFontSize)
                 };
 
                 PasswordTextField = new NSSecureTextField () {
@@ -748,14 +744,14 @@ namespace SparkleShare {
 
                 NSTextFieldCell cell = new NSTextFieldCell ();
 
-                NSData name_data = NSData.FromString ("<font face='Lucida Grande'><b>" + plugin.Name + "</b></font>");
+                NSData name_data = NSData.FromString ("<font face='" + SparkleUI.FontName + "'><b>" + plugin.Name + "</b></font>");
 
                 NSDictionary name_dictionary       = new NSDictionary();
                 NSAttributedString name_attributes = new NSAttributedString (
                     name_data, new NSUrl ("file://"), out name_dictionary);
 
                 NSData description_data = NSData.FromString (
-                    "<small><font style='line-height: 150%' color='#aaa' face='Lucida Grande'>" + plugin.Description + "</font></small>");
+                    "<small><font style='line-height: 150%' color='#aaa' face='" + SparkleUI.FontName + "'>" + plugin.Description + "</font></small>");
 
                 NSDictionary description_dictionary       = new NSDictionary();
                 NSAttributedString description_attributes = new NSAttributedString (
@@ -771,14 +767,14 @@ namespace SparkleShare {
                 NSTextFieldCell selected_cell = new NSTextFieldCell ();
 
                 NSData selected_name_data = NSData.FromString (
-                    "<font color='white' face='Lucida Grande'><b>" + plugin.Name + "</b></font>");
+                    "<font color='white' face='" + SparkleUI.FontName +"'><b>" + plugin.Name + "</b></font>");
 
                 NSDictionary selected_name_dictionary = new NSDictionary ();
                 NSAttributedString selected_name_attributes = new NSAttributedString (
                     selected_name_data, new NSUrl ("file://"), out selected_name_dictionary);
 
                 NSData selected_description_data = NSData.FromString (
-                    "<small><font style='line-height: 150%' color='#9bbaeb' face='Lucida Grande'>" +
+                    "<small><font style='line-height: 150%' color='#9bbaeb' face='" + SparkleUI.FontName + "'>" +
                     plugin.Description + "</font></small>");
 
                 NSDictionary selected_description_dictionary       = new NSDictionary ();
@@ -877,7 +873,6 @@ namespace SparkleShare {
             BackgroundColor = NSColor.WindowBackground;
             Bordered        = false;
             Editable        = false;
-            Font            = SparkleUI.Font;
         }
     }
 }

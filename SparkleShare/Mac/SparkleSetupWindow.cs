@@ -62,13 +62,11 @@ namespace SparkleShare {
             this.header_text_field = new SparkleLabel ("", NSTextAlignment.Left) {
                 Frame = new RectangleF (190, Frame.Height - 80, Frame.Width, 24),
                 Font  = NSFontManager.SharedFontManager.FontWithFamily (
-                    "Lucida Grande", NSFontTraitMask.Bold, 0, 15),
+                    SparkleUI.FontName, NSFontTraitMask.Bold, 0, 16)
             };
 
             this.description_text_field = new SparkleLabel ("", NSTextAlignment.Left) {
-                Frame = new RectangleF (190, Frame.Height - 130, 640 - 240, 44),
-                Font  = NSFontManager.SharedFontManager.FontWithFamily (
-                    "Lucida Grande", NSFontTraitMask.Condensed, 0, 13)
+                Frame = new RectangleF (190, Frame.Height - 130, 640 - 240, 44)
             };
 
             this.header_text_field.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
@@ -106,7 +104,6 @@ namespace SparkleShare {
                 foreach (NSButton button in Buttons) {
                     button.BezelStyle = NSBezelStyle.Rounded;
                     button.Frame      = new RectangleF (Frame.Width - 15 - x - (105 * i), 12, 105, 32);
-                    button.Font       = SparkleUI.Font;
 
                     // Make the button a bit wider if the text is likely to be longer
                     if (button.Title.Contains (" ")) {
