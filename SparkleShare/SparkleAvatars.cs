@@ -69,8 +69,12 @@ namespace SparkleShare
             try {
                 byte [] buffer = client.DownloadData (url);
 
-                if (client.ResponseHeaders ["content-type"].Equals(MediaTypeNames.Image.Jpeg, StringComparison.InvariantCultureIgnoreCase)) {
+                if (client.ResponseHeaders ["content-type"].Equals (MediaTypeNames.Image.Jpeg, StringComparison.InvariantCultureIgnoreCase)) {
                     avatar_file_path += ".jpg";
+
+                } else if (client.ResponseHeaders ["content-type"].Equals (MediaTypeNames.Image.Gif, StringComparison.InvariantCultureIgnoreCase)) {
+                    avatar_file_path += ".gif";
+                
                 } else {
                     avatar_file_path += ".png";
                 }
