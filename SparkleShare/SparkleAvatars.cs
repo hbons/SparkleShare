@@ -46,7 +46,7 @@ namespace SparkleShare
             // Search avatars by file name, ignore extension
             // Delete files over a day old
             // Return first matching file
-            foreach (string file_path in Directory.GetFiles (avatars_path, email.MD5 ())) {
+            foreach (string file_path in Directory.GetFiles (avatars_path, email.MD5 () + "*")) {
                 if (new FileInfo (file_path).CreationTime < DateTime.Now.AddDays (-1))
                     File.Delete (file_path);
                 else
