@@ -403,7 +403,7 @@ namespace SparkleShare {
 
                 string html = "<style>" +
                     "* {" +
-                    "  font-family: '" + SparkleUI.FontName + " Bold" + "';" +
+                    "  font-family: '" + SparkleUI.FontName + "';" +
                     "  font-size: 12px; cursor: default;" +
                     "}" +
                     "body {" +
