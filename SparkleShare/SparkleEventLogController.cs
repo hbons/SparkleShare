@@ -472,6 +472,7 @@ namespace SparkleShare {
                         timestamp = change_set.FirstTimestamp.ToString ("H:mm") + " – " + timestamp;
                     }
 
+                    // TODO: List commit messages if there are any
                     event_entries += event_entry_html.Replace ("<!-- $event-entry-content -->", event_entry)
                         .Replace ("<!-- $event-user-name -->", change_set.User.Name)
                         .Replace ("<!-- $event-user-email -->", change_set.User.Email)
