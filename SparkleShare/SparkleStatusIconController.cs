@@ -46,7 +46,10 @@ namespace SparkleShare {
 
         public string StatusMessage {
             get {
-                string status_message = string.Format ("Synced {0}", this.repo.LastSync.ToPrettyDate ());
+                string status_message = "Waiting to sync";
+                
+                if (!this.repo.LastSync.Equals (DateTime.MinValue))
+                    status_message = string.Format ("Synced {0}", this.repo.LastSync.ToPrettyDate ());
 
                 if (this.repo.Status == SyncStatus.SyncUp)
                     status_message = "Sending changes… " + this.repo.ProgressPercentage + "%";

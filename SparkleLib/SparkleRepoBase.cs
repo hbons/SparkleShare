@@ -88,7 +88,15 @@ namespace SparkleLib {
         public bool IsBuffering { get; private set; }
         public double ProgressPercentage { get; private set; }
         public double ProgressSpeed { get; private set; }
-        public DateTime LastSync { get { return ChangeSets [0].Timestamp; }}
+
+        public DateTime LastSync {
+            get {
+                if (ChangeSets != null && ChangeSets.Count > 0)
+                    return ChangeSets [0].Timestamp;
+                else
+                    return DateTime.MinValue;
+            }
+        }
 
         public virtual string Identifier {
             get {

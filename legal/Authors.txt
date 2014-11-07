@@ -1,16 +1,8 @@
-Points of contact:
+Maintainer:
 
-	Maintainer:
 	Hylke Bons <hylkebons@gmail.com>
 
-	Marketing:
-	Alexandre Saiz Verdaguer <alex@sparkleshare.net>
-
-	Translations:
-	Łukasz Jernaś <deejay1@srem.org>
-
-
-Code:
+Contributors:
 
 	Alejandro Serrano <trupill@gmail.com>
 	Alexandre Saiz Verdaguer <a@alexandresaiz.com>
@@ -40,14 +32,13 @@ Code:
 	Travis Glenn Hansen <travisghansen@yahoo.com>
 	Vincent Untz <vuntz@gnome.org>
 	Will Thompson <will@willthompson.co.uk>
-	
-	
-Artwork:
+		
+Designers:
 
 	Andreas Nilsson <andreasn@gnome.org>
 	Jakub Steiner <jimmac@redhat.com>
 	Hylke Bons <hylkebons@gmail.com>
 	Lapo Calamandrei <calamandrei@gmail.com>
 
-
 Thanks very much!
+
