@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Mime;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 
@@ -68,7 +69,7 @@ namespace SparkleShare
             try {
                 byte [] buffer = client.DownloadData (url);
 
-                if (client.ResponseHeaders ["content-type"].Equals("image/jpeg", StringComparison.InvariantCultureIgnoreCase)) {
+                if (client.ResponseHeaders ["content-type"].Equals(MediaTypeNames.Image.Jpeg, StringComparison.InvariantCultureIgnoreCase)) {
                     avatar_file_path += ".jpg";
                 } else {
                     avatar_file_path += ".png";
