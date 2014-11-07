@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Mime;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 
@@ -41,22 +42,25 @@ namespace SparkleShare
             
             string avatars_path = new string [] { Path.GetDirectoryName (target_path),
                 "avatars", size + "x" + size }.Combine ();
-            
+
+            // Search avatars by file name, ignore extension
+            // Delete files over a day old
+            // Return first matching file
+            foreach (string file_path in Directory.GetFiles (avatars_path, email.MD5 ())) {
+                if (new FileInfo (file_path).CreationTime < DateTime.Now.AddDays (-1))
+                    File.Delete (file_path);
+                else
+                    return file_path;
+            }
+
             string avatar_file_path;
-            
+
             try {
-                avatar_file_path = Path.Combine (avatars_path, email.MD5 () + ".png");
-                
+                avatar_file_path = Path.Combine (avatars_path, email.MD5 ());
+
             } catch (InvalidOperationException e) {
                 SparkleLogger.LogInfo ("Avatars", "Error fetching avatar for " + email, e);
                 return null;
-            }
-            
-            if (File.Exists (avatar_file_path)) {
-                if (new FileInfo (avatar_file_path).CreationTime < DateTime.Now.AddDays (-1))
-                    File.Delete (avatar_file_path);
-                else
-                    return avatar_file_path;
             }
             
             WebClient client = new WebClient ();
@@ -64,6 +68,12 @@ namespace SparkleShare
             
             try {
                 byte [] buffer = client.DownloadData (url);
+
+                if (client.ResponseHeaders ["content-type"].Equals(MediaTypeNames.Image.Jpeg, StringComparison.InvariantCultureIgnoreCase)) {
+                    avatar_file_path += ".jpg";
+                } else {
+                    avatar_file_path += ".png";
+                }
                 
                 if (buffer.Length > 255) {
                     if (!Directory.Exists (avatars_path)) {
