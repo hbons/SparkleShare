@@ -344,10 +344,10 @@ namespace SparkleLib.Git {
         private void InstallConfiguration ()
         {
             string [] settings = new string [] {
+                "core.autocrlf input",
                 "core.quotepath false", // Don't quote "unusual" characters in path names
                 "core.ignorecase false", // Be case sensitive explicitly to work on Mac
                 "core.filemode false", // Ignore permission changes
-                "core.autocrlf false", // Don't change file line endings
                 "core.precomposeunicode true", // Use the same Unicode form on all filesystems
                 "core.safecrlf false",
                 "core.excludesfile \"\"",
@@ -358,6 +358,9 @@ namespace SparkleLib.Git {
                 "pack.windowMemory 128m",
                 "push.default matching"
             };
+
+            if (SparkleBackend.Platform == PlatformID.Win32NT)
+                settings [0] = "core.autocrlf true";
 
             foreach (string setting in settings) {
                 SparkleGit git_config = new SparkleGit (TargetFolder, "config " + setting);
