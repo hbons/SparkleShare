@@ -1098,8 +1098,7 @@ namespace SparkleLib.Git {
         private List<SparkleChange> ParseStatus ()
         {
             List<SparkleChange> changes = new List<SparkleChange> ();
-            int count = 0;
-            
+
             SparkleGit git_status = new SparkleGit (LocalPath, "status --porcelain");
             git_status.Start ();
             
