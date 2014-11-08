@@ -29,7 +29,7 @@ namespace SparkleShare {
 
     public class SparkleAbout : Window {
 
-        public SparkleAboutController Controller = new SparkleAboutController ();
+        public AboutController Controller = new AboutController();
 
         private Label updates;
 

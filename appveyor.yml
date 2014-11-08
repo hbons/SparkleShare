@@ -1,0 +1,72 @@
+# AppVeyor CI build file, https://ci.appveyor.com/project/BarryThePenguin/sparkleshare
+
+# Notes:
+#   - Minimal appveyor.yml file is an empty file. All sections are optional.
+#   - Indent each level of configuration with 2 spaces. Do not use tabs!
+#   - All section names are case-sensitive.
+#   - Section names should be unique on each level.
+
+# Don't edit manually! Use `build.bat version` command instead!
+version: 1.5.0-build-0{build}
+
+shallow_clone: true
+
+pull_requests:
+  do_not_increment_build_number: true
+
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+# Operating system (build VM template)
+os: Default Azure
+
+# environment variables
+environment:
+  BuildEnvironment: appveyor
+  GitHubToken:
+    secure: 45uthv69j72y/KVzOlba+FrWLQgojn0oUw3IHuSMq70cE1N++7VYlr2eTTrOBDD/
+
+# branches to build
+branches:
+  # whitelist
+  only:
+    - master
+    - dev
+    # tags
+    - /\d+\.\d+\.\d+/
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+
+# to run your custom scripts instead of automatic MSBuild
+build_script: build.bat installer
+
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+
+test: off
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
+
+artifacts:
+  - path: 'SparkleShare\Windows\build\Releases\*'
+    name: releases
+
+#---------------------------------#
+#      deployment configuration   #
+#---------------------------------#
+
+deploy:
+  - provider: GitHub
+    auth_token:
+      secure: Kror0h62L7arI9dYyXlNTYSpUv0whVxMcx6ZBeqViAB8yl4LEK9/uGLE95GgDIfi
+    artifact: releases
+    draft: true
+    on:
+      branch: /\d+\.\d+\.\d+/
+      appveyor_repo_tag: true

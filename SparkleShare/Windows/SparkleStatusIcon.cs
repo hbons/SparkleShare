@@ -28,7 +28,7 @@ namespace SparkleShare {
 
     public class SparkleStatusIcon : Control {
 
-        public SparkleStatusIconController Controller = new SparkleStatusIconController();
+        public StatusIconController Controller = new StatusIconController();
 
         private readonly Drawing.Bitmap syncing_idle_image = SparkleUIHelpers.GetBitmap("process-syncing-idle");
         private readonly Drawing.Bitmap syncing_up_image = SparkleUIHelpers.GetBitmap("process-syncing-up");
@@ -142,7 +142,7 @@ namespace SparkleShare {
 
             if(Controller.LinkCodeItemEnabled) {
                 SparkleMenuItem code_item = new SparkleMenuItem {
-                    Header = SparkleShare.Controller.CurrentUser.PublicKey.Substring(0, 20) + "..."
+                    Header = SparkleShare.Controller.UserAuthenticationInfo.PublicKey.Substring(0, 20) + "..."
                 };
 
                 SparkleMenuItem copy_item = new SparkleMenuItem {

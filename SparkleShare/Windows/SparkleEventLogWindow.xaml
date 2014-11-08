@@ -25,7 +25,7 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <sparkleShare:SparkleSpinner x:Name="spinner" />
+            <sparkleShare:Spinner x:Name="spinner" />
             <WebBrowser  x:Name="webbrowser" Height="{Binding ElementName=sizingControlHeight, Path=ActualHeight}" Width="{Binding ElementName=sizingControlWidth, Path=ActualWidth}" />
 
             <!-- WPF always resizes from child to parent. Unfortunately the webbrowser takes all space it gets.

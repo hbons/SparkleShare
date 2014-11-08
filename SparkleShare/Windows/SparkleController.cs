@@ -28,14 +28,16 @@ using System.Threading;
 using System.Windows;
 using Forms = System.Windows.Forms;
 using Microsoft.Win32;
+using System.Threading.Tasks;
 
 using Sparkles;
 
 namespace SparkleShare {
 
-    public class SparkleController : SparkleControllerBase {
+    public class Controller : BaseController {
 
-        public SparkleController ()
+        public Controller (Configuration config)
+            : base (config)
         {
         }
 
@@ -90,21 +92,15 @@ namespace SparkleShare {
             }
         }
 
+        public override void SetFolderIcon()
+        {
+            
+        }
 
         public override void CreateStartupItem ()
         {
-            string startup_folder_path = Environment.GetFolderPath (Environment.SpecialFolder.Startup);
-            string shortcut_path       = Path.Combine (startup_folder_path, "SparkleShare.lnk");
-
-            if (File.Exists (shortcut_path))
-                File.Delete (shortcut_path);
-
-            string shortcut_target = Forms.Application.ExecutablePath;
-
-            Shortcut shortcut = new Shortcut ();
-            shortcut.Create (shortcut_path, shortcut_target);
+            SparkleShare.UI.Updater.CreateStartupItem ();
         }
-        
 
         public override void InstallProtocolHandler ()
         {
@@ -112,7 +108,7 @@ namespace SparkleShare {
         }
 
 
-        public override void AddToBookmarks ()
+        public void AddToBookmarks ()
         {
             string user_profile_path = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
             string shortcut_path     = Path.Combine (user_profile_path, "Links", "SparkleShare.lnk");
@@ -124,7 +120,6 @@ namespace SparkleShare {
             shortcut.Create (FoldersPath, shortcut_path);
         }
 
-
         public override bool CreateSparkleShareFolder ()
         {
             if (Directory.Exists (FoldersPath))
@@ -133,7 +128,7 @@ namespace SparkleShare {
         	Directory.CreateDirectory (FoldersPath);
 
 			File.SetAttributes (FoldersPath, File.GetAttributes (FoldersPath) | FileAttributes.System);
-            SparkleLogger.LogInfo ("Config", "Created '" + FoldersPath + "'");
+            Logger.LogInfo ("Config", "Created '" + FoldersPath + "'");
 
             string app_path       = Path.GetDirectoryName (Forms.Application.ExecutablePath);
             string icon_file_path = Path.Combine (app_path, "Images", "sparkleshare-folder.ico");
@@ -150,12 +145,12 @@ namespace SparkleShare {
                 try {
                     File.Create (ini_file_path).Close ();
                     File.WriteAllText (ini_file_path, ini_file);
-                    
+
                     File.SetAttributes (ini_file_path,
                         File.GetAttributes (ini_file_path) | FileAttributes.Hidden | FileAttributes.System);
 
                 } catch (IOException e) {
-                    SparkleLogger.LogInfo ("Config", "Failed setting icon for '" + FoldersPath + "': " + e.Message);
+                    Logger.LogInfo ("Config", "Failed setting icon for '" + FoldersPath + "': " + e.Message);
                 }
 
                 return true;
@@ -187,9 +182,9 @@ namespace SparkleShare {
         {
             try {
                 Clipboard.SetData (DataFormats.Text, text);
-            
+
             } catch (COMException e) {
-                SparkleLogger.LogInfo ("Controller", "Copy to clipboard failed", e);
+                Logger.LogInfo ("Controller", "Copy to clipboard failed", e);
             }
         }
 

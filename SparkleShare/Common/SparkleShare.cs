@@ -29,8 +29,8 @@ namespace SparkleShare {
         public static string [] Arguments;
 
         static Mutex program_mutex = new Mutex (false, "SparkleShare");
-        
-     
+
+
         #if !__MonoCS__
         [STAThread]
         #endif
@@ -57,6 +57,12 @@ namespace SparkleShare {
                 Environment.Exit (0);
             }
 
+            #if !__MonoCS__
+            // Handle Squirrel Events
+            var updater = new SparkleUpdater ();
+            updater.HandleEvents (args);
+            #endif
+
             // Only allow one instance of SparkleShare (on Windows)
             if (!program_mutex.WaitOne (0, false)) {
                 Console.WriteLine ("SparkleShare is already running.");
@@ -65,10 +71,15 @@ namespace SparkleShare {
 
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
-            Controller = new Controller ();
+            Controller = new Controller (Configuration.DefaultConfiguration);
             Controller.Initialize ();
 
             UI = new UserInterface ();
+
+            #if !__MonoCS__
+            UI.Updater = updater;
+            #endif
+
             UI.Run ();
 
             #if !__MonoCS__

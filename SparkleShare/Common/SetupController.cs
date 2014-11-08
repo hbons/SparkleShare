@@ -564,4 +564,6 @@ namespace SparkleShare {
             return new Regex (@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]+$", RegexOptions.IgnoreCase).IsMatch (email);
         }
     }
+
+
 }

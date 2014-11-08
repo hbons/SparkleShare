@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>SparkleShare</id>
+    <version>0.0.0</version>
+    <title>SparkleShare</title>
+    <authors>Hylke Bons</authors>
+    <owners>hbons</owners>
+    <licenseUrl>https://github.com/hbons/SparkleShare/blob/master/legal/License_for_SparkleShare.txt</licenseUrl>
+    <projectUrl>http://sparkleshare.org/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Windows/Pixmaps/sparkleshare-app.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Open Source collaboration and sharing tool</description>
+    <copyright>Copyright 2016</copyright>
+  </metadata>
+  <files>
+    <file src="bin\*.exe" target="lib\net45" />
+    <file src="bin\*.dll" target="lib\net45" />
+    <file src="bin\msysgit\**" target="lib\net45\msysgit" />
+    <file src="bin\Plugins\**" target="lib\net45\Plugins" />
+    <file src="bin\SparkleLib.Git.dll" target="lib\net45" />
+    <file src="bin\SparkleShare.exe.config" target="lib\net45" />
+  </files>
+</package>

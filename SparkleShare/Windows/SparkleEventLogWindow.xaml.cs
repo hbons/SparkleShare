@@ -29,12 +29,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 using Microsoft.Win32;
+using Sparkles;
 
 namespace SparkleShare
 {
     public partial class SparkleEventLogWindow : Window
     {
-        public SparkleEventLogController Controller = new SparkleEventLogController ();
+        public EventLogController Controller = new EventLogController();
 
         [DllImport("urlmon.dll")]
         [PreserveSig]
@@ -145,7 +146,7 @@ namespace SparkleShare
 
         private void UpdateContent (string html)
         {
-            string pixmaps_path = Path.Combine (Sparkles.SparkleConfig.DefaultConfig.TmpPath, "Images");
+            string pixmaps_path = Path.Combine (Configuration.DefaultConfiguration.TmpPath, "Images");
             pixmaps_path = pixmaps_path.Replace ("\\", "/");
 
 			html = html.Replace ("<a href=", "<a class='windows' href=");
@@ -207,7 +208,7 @@ namespace SparkleShare
  
         private void WriteOutImages ()
         {
-            string tmp_path = Sparkles.SparkleConfig.DefaultConfig.TmpPath;
+            string tmp_path = Configuration.DefaultConfiguration.TmpPath;
 			string pixmaps_path = Path.Combine (tmp_path, "Images");
 
 			if (!Directory.Exists (pixmaps_path))

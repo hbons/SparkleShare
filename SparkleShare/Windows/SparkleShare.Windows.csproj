@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <ProjectGuid>{728483AA-E34B-4441-BF2C-C8BC2901E4E0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AssemblyName>SparkleShare</AssemblyName>
@@ -32,6 +32,8 @@
     <ApplicationIcon>Images\sparkleshare-app.ico</ApplicationIcon>
     <ReleaseVersion>
     </ReleaseVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,6 +45,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DefineConstants>TRACE</DefineConstants>
     <DebugSymbols>true</DebugSymbols>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <OutputPath>..\..\bin\</OutputPath>
@@ -50,74 +53,67 @@
     <ErrorReport>prompt</ErrorReport>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <WarningLevel>4</WarningLevel>
-    <Optimize>false</Optimize>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Xml" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="System.Xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\SparkleBubblesController.cs">
+    <Compile Include="..\Common\BubblesController.cs">
       <Link>SparkleBubblesController.cs</Link>
     </Compile>
-    <Compile Include="..\SparkleControllerBase.cs">
+    <Compile Include="..\Common\BaseController.cs">
       <Link>SparkleControllerBase.cs</Link>
     </Compile>
-    <Compile Include="..\SparkleExtensions.cs">
-      <Link>SparkleExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\SparkleInvite.cs">
-      <Link>SparkleInvite.cs</Link>
-    </Compile>
-    <Compile Include="..\SparkleNoteController.cs">
+    <Compile Include="..\Common\NoteController.cs">
       <Link>SparkleNoteController.cs</Link>
     </Compile>
-    <Compile Include="..\SparklePlugin.cs">
-      <Link>SparklePlugin.cs</Link>
+    <Compile Include="..\Common\SparkleShare.cs">
+      <Link>SparkleShare.cs</Link>
     </Compile>
-    <Compile Include="..\SparkleStatusIconController.cs">
+    <Compile Include="..\Common\StatusIconController.cs">
       <Link>SparkleStatusIconController.cs</Link>
     </Compile>
-    <Compile Include="..\SparkleSetupController.cs" />
+    <Compile Include="..\Common\SetupController.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SparkleEventLogWindow.xaml.cs">
       <DependentUpon>SparkleEventLogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SparkleNote.xaml.cs">
-      <DependentUpon>SparkleNote.xaml</DependentUpon>
+    <Compile Include="Note.xaml.cs">
+      <DependentUpon>Note.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SparkleProtocolHandler.cs" />
     <Compile Include="SparkleShortcut.cs" />
-    <Compile Include="SparkleUI.cs" />
-    <Compile Include="..\SparkleAboutController.cs" />
-    <Compile Include="..\SparkleAvatars.cs" />
+    <Compile Include="UserInterface.cs" />
+    <Compile Include="..\Common\AboutController.cs" />
+    <Compile Include="..\Common\Avatars.cs" />
     <Compile Include="SparkleBubbles.cs" />
     <Compile Include="SparkleAbout.cs" />
     <Compile Include="SparkleController.cs" />
     <Compile Include="SparkleSetup.cs" />
     <Compile Include="SparkleStatusIcon.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
-    <Compile Include="..\SparkleEventLogController.cs">
+    <Compile Include="..\Common\EventLogController.cs">
       <Link>SparkleEventLogController.cs</Link>
     </Compile>
     <Compile Include="SparkleSetupWindow.cs" />
-    <Compile Include="..\Program.cs">
-      <Link>Program.cs</Link>
-    </Compile>
     <Compile Include="SparkleNotifyIcon.cs" />
-    <Compile Include="SparkleSpinner.cs" />
+    <Compile Include="Spinner.cs" />
+    <Compile Include="SparkleUpdater.cs" />
   </ItemGroup>
   <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <MonoDevelop.Autotools.MakefileInfo RelativeMakefileName="Makefile.am">
+          <BuildFilesVar Sync="True" Name="SOURCES" />
+          <DeployFilesVar />
+          <ResourcesVar />
+          <OthersVar />
+          <GacRefVar />
+          <AsmRefVar />
+          <ProjectRefVar />
+        </MonoDevelop.Autotools.MakefileInfo>
+      </Properties>
+    </MonoDevelop>
     <VisualStudio />
   </ProjectExtensions>
   <ItemGroup>
@@ -191,54 +187,56 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Common\Presets\github.png">
-      <Link>Presets\github.png</Link>
+    <None Include="..\Common\Plugins\github.png">
+      <Link>Plugins\github.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Presets\gitorious.png">
-      <Link>Presets\gitorious.png</Link>
+    <None Include="..\Common\Plugins\gitorious.png">
+      <Link>Plugins\gitorious.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Presets\own-server.png">
-      <Link>Presets\own-server.png</Link>
+    <None Include="..\Common\Plugins\own-server.png">
+      <Link>Plugins\own-server.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Presets\bitbucket.png">
-      <Link>Presets\bitbucket.png</Link>
+    <None Include="..\Common\Plugins\bitbucket.png">
+      <Link>Plugins\bitbucket.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Presets\ssnet.png">
-      <Link>Presets\ssnet.png</Link>
+    <None Include="..\Common\Plugins\ssnet.png">
+      <Link>Plugins\ssnet.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Presets\planio.png">
-      <Link>Presets\planio.png</Link>
+    <None Include="..\Common\Plugins\planio.png">
+      <Link>Plugins\planio.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Common\Presets\ssnet.xml">
-      <Link>Presets\ssnet.xml</Link>
+    <None Include="..\Common\Plugins\ssnet.xml">
+      <Link>Plugins\ssnet.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Presets\bitbucket.xml">
-      <Link>Presets\bitbucket.xml</Link>
+    <None Include="..\Common\Plugins\bitbucket.xml">
+      <Link>Plugins\bitbucket.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Presets\github.xml">
-      <Link>Presets\github.xml</Link>
+    <None Include="..\Common\Plugins\github.xml">
+      <Link>Plugins\github.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Presets\gitorious.xml">
-      <Link>Presets\gitorious.xml</Link>
+    <None Include="..\Common\Plugins\gitorious.xml">
+      <Link>Plugins\gitorious.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Presets\own-server.xml">
-      <Link>Presets\own-server.xml</Link>
+    <None Include="..\Common\Plugins\own-server.xml">
+      <Link>Plugins\own-server.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Presets\planio.xml">
-      <Link>Presets\planio.xml</Link>
+    <None Include="..\Common\Plugins\planio.xml">
+      <Link>Plugins\planio.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -262,9 +260,81 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SparkleNote.xaml">
+    <Page Include="Note.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Sparkles\Git\Sparkles.Git.csproj">
+      <Project>{009fdcd7-1d57-4202-bb6d-8477d8c6b8ee}</Project>
+      <Name>Sparkles.Git</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sparkles\Sparkles.csproj">
+      <Project>{2c914413-b31c-4362-93c7-1ae34f09112a}</Project>
+      <Name>Sparkles</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="DeltaCompressionDotNet">
+      <HintPath>..\..\packages\DeltaCompressionDotNet.1.0.0\lib\net45\DeltaCompressionDotNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DeltaCompressionDotNet.MsDelta">
+      <HintPath>..\..\packages\DeltaCompressionDotNet.1.0.0\lib\net45\DeltaCompressionDotNet.MsDelta.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DeltaCompressionDotNet.PatchApi">
+      <HintPath>..\..\packages\DeltaCompressionDotNet.1.0.0\lib\net45\DeltaCompressionDotNet.PatchApi.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\packages\squirrel.windows.1.4.0\lib\Net45\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil">
+      <HintPath>..\..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Mdb">
+      <HintPath>..\..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.Mdb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb">
+      <HintPath>..\..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.Pdb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks">
+      <HintPath>..\..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.Rocks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NuGet.Squirrel">
+      <HintPath>..\..\packages\squirrel.windows.1.4.0\lib\Net45\NuGet.Squirrel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Splat">
+      <HintPath>..\..\packages\Splat.1.6.2\lib\Net45\Splat.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Squirrel">
+      <HintPath>..\..\packages\squirrel.windows.1.4.0\lib\Net45\Squirrel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.XML" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
 </Project>

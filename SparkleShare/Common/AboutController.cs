@@ -18,6 +18,7 @@
 using System;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Sparkles;
 
@@ -34,10 +35,9 @@ namespace SparkleShare {
         public readonly string WebsiteLinkAddress       = "https://www.sparkleshare.org/";
         public readonly string CreditsLinkAddress       = "https://github.com/hbons/SparkleShare/blob/master/legal/Authors.txt";
         public readonly string ReportProblemLinkAddress = "https://www.github.com/hbons/SparkleShare/issues";
-        public readonly string DebugLogLinkAddress      = "file://" + SparkleShare.Controller.Config.LogFilePath;
+        public readonly string DebugLogLinkAddress      = "file://" + Configuration.DefaultConfiguration.LogFilePath;
 
         public string RunningVersion;
-
 
         public AboutController ()
         {
@@ -58,24 +58,38 @@ namespace SparkleShare {
 
         void CheckForNewVersion ()
         {
-            UpdateLabelEvent ("Checking for updates…");
-            Thread.Sleep (500);
+            UpdateLabelEvent ("Checking for updates...");
+            var progressSource = new ProgressSource ();
 
-            var web_client = new WebClient ();
-            var uri = new Uri ("http://www.sparkleshare.org/version");
+            EventHandler<int> progressSourceOnProgress = ((sender, p) =>
+                UpdateLabelEvent ("Checking for updates... " + p + "%"));
+
+            progressSource.Progress += progressSourceOnProgress;
 
             try {
-                string latest_version = web_client.DownloadString (uri);
-                latest_version = latest_version.Trim ();
-            
-                if (new Version (latest_version) > new Version (RunningVersion))
-                    UpdateLabelEvent ("An update (version " + latest_version + ") is available!");
-                else
-                    UpdateLabelEvent ("✓ You are running the latest version");
-
-            } catch {
-                UpdateLabelEvent ("Couldn’t check for updates\t");
+                var result = SparkleShare.Updater.CheckForNewVersion (progressSource);
+                UpdateLabelEvent (result);
+            } finally {
+                progressSource.Progress -= progressSourceOnProgress;
             }
+
+            //UpdateLabelEvent ("Checking for updates…");
+            //Thread.Sleep (500);
+
+            //var web_client = new WebClient ();
+            //var uri = new Uri ("http://www.sparkleshare.org/version");
+
+            //try {
+            //    string latest_version = web_client.DownloadString (uri);
+            //    latest_version = latest_version.Trim ();
+
+            //    if (new Version (latest_version) > new Version (RunningVersion))
+            //        UpdateLabelEvent ("An update (version " + latest_version + ") is available!");
+            //    else
+            //        UpdateLabelEvent ("✓ You are running the latest version");
+
+            //} catch {
+            //    UpdateLabelEvent ("Couldn’t check for updates\t");
         }
     }
 }

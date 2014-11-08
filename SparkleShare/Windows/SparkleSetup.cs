@@ -15,30 +15,24 @@
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
+using Sparkles;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Media;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shell;
 
 using Drawing = System.Drawing;
 using Imaging = System.Windows.Interop.Imaging;
-using WPF = System.Windows.Controls;
 
 namespace SparkleShare {
 
     public class SparkleSetup : SparkleSetupWindow {
     
-        public SparkleSetupController Controller = new SparkleSetupController ();
+        public SetupController Controller = new SetupController();
         
         
         public SparkleSetup ()
@@ -268,7 +262,7 @@ namespace SparkleShare {
                         header_style.Setters.Add (new Setter (GridViewColumnHeader.VisibilityProperty, Visibility.Collapsed));
                         grid_view.ColumnHeaderContainerStyle = header_style;
                         
-                        foreach (SparklePreset plugin in Controller.Presets) {
+                        foreach (Preset plugin in Controller.Presets) {
                             // FIXME: images are blurry
                             BitmapFrame image = BitmapFrame.Create (
                                 new Uri (plugin.ImagePath)
@@ -811,167 +805,6 @@ namespace SparkleShare {
                         show_files_button.Click += delegate {
                             Controller.ShowFilesClicked ();
                         };
-
-                        break;
-                    }
-                        
-                    case PageType.Tutorial: {
-                        switch (Controller.TutorialPageNumber) {
-                            case 1: {
-                                Header      = "What’s happening next?";
-                                Description = "SparkleShare creates a special folder on your computer " +
-                                    "that will keep track of your projects.";
-    
-                            
-                                WPF.Image slide_image = new WPF.Image () {
-                                    Width  = 324,
-                                    Height = 200
-                                };
-                            
-                                slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-1");
-                            
-                                Button skip_tutorial_button = new Button () {
-                                    Content = "Skip tutorial"
-                                };
-                                
-                                Button continue_button = new Button () {
-                                    Content = "Continue"
-                                };
-                            
-                            
-                                ContentCanvas.Children.Add (slide_image);
-                                Canvas.SetLeft (slide_image, 228);
-                                Canvas.SetTop (slide_image, 130);
-                            
-                                Buttons.Add (skip_tutorial_button);
-                                Buttons.Add (continue_button);
-                               
-                                
-                                skip_tutorial_button.Click += delegate {
-                                    Controller.TutorialSkipped ();
-                                };
-                                
-                                continue_button.Click += delegate {
-                                    Controller.TutorialPageCompleted ();
-                                };
-                            
-                                break;
-                            }
-                        
-                            case 2: {
-                                Header      = "Sharing files with others";
-                                Description = "All files added to your project folders are synced automatically with " +
-                                    "the host and your team members.";
-    
-                            
-                                Button continue_button = new Button () {
-                                    Content = "Continue"
-                                };
-                                
-                                WPF.Image slide_image = new WPF.Image () {
-                                    Width  = 324,
-                                    Height = 200
-                                };
-                            
-                                slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-2");
-                            
-                            
-                                ContentCanvas.Children.Add (slide_image);
-                                Canvas.SetLeft (slide_image, 228);
-                                Canvas.SetTop (slide_image, 130);
-                            
-                                Buttons.Add (continue_button);
-                            
-                                
-                                continue_button.Click += delegate {
-                                    Controller.TutorialPageCompleted ();
-                                };
-                            
-                                break;
-                            }
-                            
-                            case 3: {
-                                Header      = "The status icon helps you";
-                                Description = "It shows the syncing progress, provides easy access to " +
-                                    "your projects, and lets you view recent changes.";
-    
-                                Button continue_button = new Button () {
-                                    Content = "Continue"
-                                };
-                                
-                                WPF.Image slide_image = new WPF.Image () {
-                                    Width  = 324,
-                                    Height = 200
-                                };
-                            
-                                slide_image.Source = SparkleUIHelpers.GetImageSource ("tutorial-slide-3");
-                            
-                            
-                                ContentCanvas.Children.Add (slide_image);
-                                Canvas.SetLeft (slide_image, 228);
-                                Canvas.SetTop (slide_image, 130);
-                            
-                                Buttons.Add (continue_button);                                
-                            
-                            
-                                continue_button.Click += delegate {
-                                    Controller.TutorialPageCompleted ();
-                                };
-                            
-                                break;
-                            }
-                            
-                            case 4: {
-                                Header      = "Here’s your unique Client ID";
-                                Description = "You’ll need it whenever you want to link this computer to a host. " +
-                                    "You can also find it in the status icon menu.";
-                            
-
-                                TextBox link_code_text_box = new TextBox () {
-                                    Text         = SparkleShare.Controller.CurrentUser.PublicKey,
-                                    Width        = 250,
-                                    MaxLines     = 1,
-                                    TextWrapping = TextWrapping.NoWrap,
-                                    IsEnabled    = false
-                                };
-
-                                Button copy_button = new Button () {
-                                    Content = "Copy",
-                                    Width   = 60
-                                };
-
-                                Button finish_button = new Button () {
-                                    Content = "Finish"
-                                };
-                                
-                                CheckBox check_box = new CheckBox () {
-                                    Content   = "Add SparkleShare to startup items",
-                                    IsChecked = true
-                                };
-                            
-                            
-                                ContentCanvas.Children.Add (link_code_text_box);
-                                Canvas.SetLeft (link_code_text_box, 235);
-                                Canvas.SetTop (link_code_text_box, 190);
-
-                                ContentCanvas.Children.Add (copy_button);
-                                Canvas.SetLeft (copy_button, 490);
-                                Canvas.SetTop (copy_button, 190);
-
-                                ContentCanvas.Children.Add (check_box);
-                                Canvas.SetLeft (check_box, 185);
-                                Canvas.SetBottom (check_box, 12);
-
-                                Buttons.Add (finish_button);
-                                
-                                
-                                check_box.Click += delegate { Controller.StartupItemChanged (check_box.IsChecked.Value); };
-                                finish_button.Click += delegate { Controller.TutorialPageCompleted (); };
-                                copy_button.Click += delegate { Controller.CopyToClipboardClicked(); };
-    
-                                break;
-                            }
-                        }
 
                         break;
                     }
