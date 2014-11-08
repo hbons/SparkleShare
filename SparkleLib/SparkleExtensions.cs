@@ -80,17 +80,18 @@ namespace SparkleLib {
 
         public static string ToPrettyDate (this DateTime timestamp)
         {
-            TimeSpan time_diff = DateTime.Now.Subtract(timestamp);
+            TimeSpan time_diff = DateTime.Now.Subtract (timestamp);
             int day_diff       = (int) time_diff.TotalDays;                
-                
-            if (day_diff == 0) {
-                return "at " + timestamp.ToString ("HH:mm");
+            DateTime yesterday = DateTime.Today.AddDays (-1);
 
-            } else if (day_diff == 1) {
+            if (timestamp >= yesterday && timestamp < DateTime.Today) {
                 return "yesterday at " + timestamp.ToString ("HH:mm");
+
+            } else if (day_diff == 0) {
+                return "today at " + timestamp.ToString ("HH:mm");
             
             } else if (day_diff < 7) {
-                return timestamp.ToString ("dddd");                     
+                return timestamp.ToString ("dddd");
             
             } else if (day_diff < 31) {
                 if (day_diff < 14)
