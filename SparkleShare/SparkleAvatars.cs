@@ -48,7 +48,7 @@ namespace SparkleShare
             // Return first matching file
             if (Directory.Exists (avatars_path)) {
                 foreach (string file_path in Directory.GetFiles (avatars_path, email.MD5 () + "*")) {
-                    if (new FileInfo (file_path).CreationTime < DateTime.Now.AddDays (-1))
+                    if (new FileInfo (file_path).LastWriteTime < DateTime.Now.AddDays (-1))
                         File.Delete (file_path);
                     else
                         return file_path;
