@@ -30,6 +30,7 @@ namespace SparkleShare {
         public SparkleBubbles Bubbles;
         public SparkleStatusIcon StatusIcon;
         public SparkleAbout About;
+        public SparkleNote Note;
 
         static SparkleUI ()
         {
@@ -43,12 +44,13 @@ namespace SparkleShare {
             // FIXME: The second time windows are shown, the windows
             // don't have the smooth ease in animation, but appear abruptly. 
             // The ease out animation always seems to work
-            Setup      = new SparkleSetup ();
-            EventLog = new SparkleEventLogWindow();
-            About      = new SparkleAbout ();
-            Bubbles    = new SparkleBubbles ();
-            StatusIcon = new SparkleStatusIcon ();
-            
+            Setup       = new SparkleSetup ();
+            EventLog    = new SparkleEventLogWindow();
+            About       = new SparkleAbout ();
+            Bubbles     = new SparkleBubbles ();
+            StatusIcon  = new SparkleStatusIcon ();
+            Note        = new SparkleNote ();
+
             Program.Controller.UIHasLoaded ();
         }
 
