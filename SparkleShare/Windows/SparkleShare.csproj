@@ -79,6 +79,9 @@
     <Compile Include="..\SparkleInvite.cs">
       <Link>SparkleInvite.cs</Link>
     </Compile>
+    <Compile Include="..\SparkleNoteController.cs">
+      <Link>SparkleNoteController.cs</Link>
+    </Compile>
     <Compile Include="..\SparklePlugin.cs">
       <Link>SparklePlugin.cs</Link>
     </Compile>
@@ -88,6 +91,9 @@
     <Compile Include="..\SparkleSetupController.cs" />
     <Compile Include="SparkleEventLogWindow.xaml.cs">
       <DependentUpon>SparkleEventLogWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SparkleNote.xaml.cs">
+      <DependentUpon>SparkleNote.xaml</DependentUpon>
     </Compile>
     <Compile Include="SparkleShortcut.cs" />
     <Compile Include="SparkleUI.cs" />
@@ -260,10 +266,17 @@
     <EmbeddedResource Include="Pixmaps\tutorial-slide-3.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="..\Common\Pixmaps\text-balloon.png">
+      <Link>Pixmaps\text-balloon.png</Link>
+    </Resource>
     <Content Include="Pixmaps\sparkleshare-folder.ico" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="SparkleEventLogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SparkleNote.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
