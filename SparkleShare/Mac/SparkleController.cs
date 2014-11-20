@@ -135,8 +135,16 @@ namespace SparkleShare {
             if (!Directory.Exists (Program.Controller.FoldersPath)) {
                 Directory.CreateDirectory (Program.Controller.FoldersPath);
 
-                NSWorkspace.SharedWorkspace.SetIconforFile (NSImage.ImageNamed ("sparkleshare-folder.icns"),
-                    Program.Controller.FoldersPath, 0);
+                if (Environment.OSVersion.Version.Major >= 14) {
+                    NSWorkspace.SharedWorkspace.SetIconforFile (
+                        NSImage.ImageNamed ("sparkleshare-folder-yosemite.icns"),
+                        Program.Controller.FoldersPath, 0);
+
+                } else {
+                    NSWorkspace.SharedWorkspace.SetIconforFile (
+                        NSImage.ImageNamed ("sparkleshare-folder.icns"),
+                        Program.Controller.FoldersPath, 0);
+                }
 
                 Syscall.chmod (Program.Controller.FoldersPath, (FilePermissions) 448); // 448 -> 700
 
