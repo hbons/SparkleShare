@@ -56,6 +56,8 @@ namespace SparkleShare {
             this.status_item.Image          = this.syncing_idle_image;
             this.status_item.Image.Template = true;
 
+            if (Environment.OSVersion.Version.Major >= 14)
+                this.sparkleshare_image = NSImage.ImageNamed ("sparkleshare-folder-yosemite");
 
             CreateMenu ();
 
