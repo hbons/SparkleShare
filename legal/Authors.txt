@@ -13,6 +13,7 @@ Code:
 	Gabriel Burt <gabriel.burt@gmail.com>
 	Garrett LeSage <garrett@novell.com>
 	Hylke Bons <hylkebons@gmail.com>
+	Jonathan Haines <jonno.haines@gmail.com>
 	Kristi Tsukida <kristi.tsukida@gmail.com>
 	Konstantinos Vaggelakos <kozze89@gmail.com>
 	Lars Falk-Petersen <dev@falk-petersen.no>
