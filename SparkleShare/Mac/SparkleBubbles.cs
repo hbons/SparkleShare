@@ -29,24 +29,26 @@ namespace SparkleShare {
 
         public SparkleBubbles ()
         {
-            Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
-                if (Environment.OSVersion.Version.Major < 12)
-                    return; // The notification center was introduced in Mountain Lion
+            // The notification center was introduced in Mountain Lion
+            if (Environment.OSVersion.Version.Major >= 12)
+                Controller.ShowBubbleEvent += ShowBubbleEvent;
+        }
 
-                InvokeOnMainThread (() => {
-                    NSUserNotification notification = new NSUserNotification () {
-                        Title           = title,
-                        InformativeText = subtext,
-                        DeliveryDate    = DateTime.Now
-                    };
 
-                    NSUserNotificationCenter center  = NSUserNotificationCenter.DefaultUserNotificationCenter;
-                    center.ShouldPresentNotification = delegate { return true; };
-                    center.DidActivateNotification  += delegate { Controller.BubbleClicked (); };
+        private void ShowBubbleEvent (string title, string subtext, string image_path) {
+            InvokeOnMainThread (() => {
+                NSUserNotification notification = new NSUserNotification () {
+                    Title           = title,
+                    InformativeText = subtext,
+                    DeliveryDate    = DateTime.Now
+                };
 
-                    center.ScheduleNotification (notification);
-                });
-            };
+                NSUserNotificationCenter center  = NSUserNotificationCenter.DefaultUserNotificationCenter;
+                center.ShouldPresentNotification = delegate { return true; };
+                center.DidActivateNotification  += delegate { Controller.BubbleClicked (); };
+
+                center.ScheduleNotification (notification);
+            });
         }
     }
 }
