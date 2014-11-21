@@ -2,7 +2,7 @@ Maintainer:
 
 	Hylke Bons <hylkebons@gmail.com>
 
-Contributors:
+Code:
 
 	Alejandro Serrano <trupill@gmail.com>
 	Alexandre Saiz Verdaguer <a@alexandresaiz.com>
@@ -33,12 +33,13 @@ Contributors:
 	Vincent Untz <vuntz@gnome.org>
 	Will Thompson <will@willthompson.co.uk>
 		
-Designers:
+Design:
 
 	Andreas Nilsson <andreasn@gnome.org>
 	Jakub Steiner <jimmac@redhat.com>
 	Hylke Bons <hylkebons@gmail.com>
 	Lapo Calamandrei <calamandrei@gmail.com>
+	Sam Hewitt <hewittsamuel@gmail.com>
 
 Thanks very much!
 
