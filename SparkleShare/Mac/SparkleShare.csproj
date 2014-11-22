@@ -17,19 +17,19 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>False</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks &amp;&amp; cp -R git ${TargetDir}/${SolutionName}.app/Contents/Resources &amp;&amp; cp -R SparkleShareInviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources" externalConsole="True" />
+        <Command type="AfterBuild" command="sh -c 'mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks &amp;&amp; cp -R git ${TargetDir}/${SolutionName}.app/Contents/Resources &amp;&amp; cp -R SparkleShareInviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources'" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
     <EnableCodeSigning>False</EnableCodeSigning>
     <CreatePackage>False</CreatePackage>
     <EnablePackageSigning>False</EnablePackageSigning>
-    <IncludeMonoRuntime>True</IncludeMonoRuntime>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
     <ConsolePause>False</ConsolePause>
     <CodeSigningKey>Mac Developer</CodeSigningKey>
     <PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
@@ -37,7 +37,6 @@
     <UseRefCounting>false</UseRefCounting>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>none</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <WarningLevel>4</WarningLevel>
@@ -46,6 +45,9 @@
     <EnableCodeSigning>False</EnableCodeSigning>
     <CreatePackage>False</CreatePackage>
     <UseSGen>false</UseSGen>
+    <DebugSymbols>true</DebugSymbols>
+    <UseSGen>false</UseSGen>
+    <DefineConstants>DEBUG</DefineConstants>
     <UseRefCounting>false</UseRefCounting>
   </PropertyGroup>
   <ItemGroup>
