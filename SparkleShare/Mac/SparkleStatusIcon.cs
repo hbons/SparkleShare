@@ -47,7 +47,7 @@ namespace SparkleShare {
         
         private NSImage folder_image       = NSImage.ImageNamed ("NSFolder");
         private NSImage caution_image      = NSImage.ImageNamed ("NSCaution");
-        private string sparkleshare_image_name = "sparkleshare-folder.icns";
+        private NSImage sparkleshare_image;
 
 
         public SparkleStatusIcon ()
@@ -57,8 +57,9 @@ namespace SparkleShare {
             this.status_item.Image.Template = true;
 
             if (Environment.OSVersion.Version.Major >= 14)
-                this.sparkleshare_image_name = "sparkleshare-folder-yosemite.icns";
-                
+                this.sparkleshare_image = (NSImage)NSImage.ImageNamed ("sparkleshare-folder-yosemite.icns").Copy();
+            else
+                this.sparkleshare_image = (NSImage)NSImage.ImageNamed ("sparkleshare-folder.icns").Copy();
 
             CreateMenu ();
 
@@ -114,7 +115,7 @@ namespace SparkleShare {
                 Enabled = true
             };
 
-            this.folder_item.Image = NSImage.ImageNamed(this.sparkleshare_image_name);
+            this.folder_item.Image = this.sparkleshare_image;
             this.folder_item.Image.Size = new SizeF (16, 16);
 
             this.add_item = new NSMenuItem () {
