@@ -23,16 +23,14 @@
     <WarningLevel>4</WarningLevel>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="sh -c 'mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks &amp;&amp; cp -R git ${TargetDir}/${SolutionName}.app/Contents/Resources &amp;&amp; cp -R SparkleShareInviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources'" externalConsole="True" />
+        <Command type="AfterBuild" command="${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app" />
       </CustomCommands>
     </CustomCommands>
     <EnableCodeSigning>False</EnableCodeSigning>
     <CreatePackage>False</CreatePackage>
     <EnablePackageSigning>False</EnablePackageSigning>
-    <IncludeMonoRuntime>True</IncludeMonoRuntime>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
     <ConsolePause>False</ConsolePause>
-    <CodeSigningKey>Mac Developer</CodeSigningKey>
-    <PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
     <UseSGen>false</UseSGen>
     <UseRefCounting>false</UseRefCounting>
   </PropertyGroup>
@@ -44,7 +42,7 @@
     <WarningLevel>4</WarningLevel>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="sh -c 'mkdir -p ${TargetDir}/${SolutionName}.app/Contents/Frameworks &amp;&amp; cp -R git ${TargetDir}/${SolutionName}.app/Contents/Resources &amp;&amp; cp -R SparkleShareInviteOpener.app ${TargetDir}/${SolutionName}.app/Contents/Resources'" externalConsole="True" />
+        <Command type="AfterBuild" command="${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app" />
       </CustomCommands>
     </CustomCommands>
     <EnableCodeSigning>False</EnableCodeSigning>
@@ -52,11 +50,25 @@
     <EnablePackageSigning>False</EnablePackageSigning>
     <IncludeMonoRuntime>false</IncludeMonoRuntime>
     <ConsolePause>False</ConsolePause>
-    <CodeSigningKey>Mac Developer</CodeSigningKey>
-    <PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
     <DebugSymbols>true</DebugSymbols>
     <UseSGen>false</UseSGen>
     <UseRefCounting>false</UseRefCounting>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseDist|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\ReleaseDist</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <UseSGen>false</UseSGen>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <EnablePackageSigning>false</EnablePackageSigning>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="AfterBuild" command="${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app" />
+        <Command type="AfterBuild" command="${ProjectDir}/packReleaseDist.sh ${TargetDir}/${SolutionName}.app" />
+      </CustomCommands>
+    </CustomCommands>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <CreatePackage>false</CreatePackage>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
