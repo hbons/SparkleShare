@@ -11,20 +11,27 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Release|Any CPU = Release|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		ReleaseDist|Any CPU = ReleaseDist|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}.ReleaseDist|Any CPU.ActiveCfg = Release|Any CPU
+		{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}.ReleaseDist|Any CPU.Build.0 = Release|Any CPU
 		{2C914413-B31C-4362-93C7-1AE34F09112A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2C914413-B31C-4362-93C7-1AE34F09112A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C914413-B31C-4362-93C7-1AE34F09112A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C914413-B31C-4362-93C7-1AE34F09112A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C914413-B31C-4362-93C7-1AE34F09112A}.ReleaseDist|Any CPU.ActiveCfg = Release|Any CPU
+		{2C914413-B31C-4362-93C7-1AE34F09112A}.ReleaseDist|Any CPU.Build.0 = Release|Any CPU
 		{CF5BC8DB-A633-4FCC-8A3E-E3AC9B59FABC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CF5BC8DB-A633-4FCC-8A3E-E3AC9B59FABC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF5BC8DB-A633-4FCC-8A3E-E3AC9B59FABC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF5BC8DB-A633-4FCC-8A3E-E3AC9B59FABC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF5BC8DB-A633-4FCC-8A3E-E3AC9B59FABC}.ReleaseDist|Any CPU.ActiveCfg = ReleaseDist|Any CPU
+		{CF5BC8DB-A633-4FCC-8A3E-E3AC9B59FABC}.ReleaseDist|Any CPU.Build.0 = ReleaseDist|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = SparkleShare.csproj
