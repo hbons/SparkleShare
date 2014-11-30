@@ -5,73 +5,51 @@ You can choose to build SparkleShare from source or to download the SparkleShare
 
 ### Installing build requirements
 
-Install [Xcode](https://developer.apple.com/xcode/), the [Mono Framework](http://www.mono-project.com/) 
-and [MonoDevelop](http://monodevelop.com/).
 
-Start MonoDevelop and install the MonoMac add-in (it's in the menus: <tt>MonoDevelop</tt> > <tt>Add-in Manager</tt>).
+Install
 
+* Xcode
+  
+  Install Xcode from *App Store* or download manually from [Apple XCode](https://developer.apple.com/xcode/)
 
-You may need to adjust some environment variables to let the build environment tools find mono:
-   
-```bash
-$ export PATH=/Library/Frameworks/Mono.framework/Versions/Current/bin:$PATH
-$ export PKG_CONFIG=/Library/Frameworks/Mono.framework/Versions/Current/bin/pkg-config
-$ export PKG_CONFIG_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
-```
+* MonoDevelop
 
-Install <tt>git</tt>, <tt>automake</tt>, <tt>libtool</tt>, <tt>pkgconfig</tt> and <tt>intltool</tt> using <tt>MacPorts</tt>:
+  Install Xamarin Studio from [MonoDevelop](http://monodevelop.com/download/), Xamarin comes with the Mono framework
+
+The required `git` binaries are now built automatically. For doing this and for building the distribution release, where Mono libraries are merged into SparkleShare, we need 
+ the packes <tt>autoconf</tt> and <tt>pkg-config</tt>. You can install these using `homebrew`
 
 ```bash
-$ sudo port install git-core automake intltool pkgconfig libtool
+$ brew port install autoconf pkg-config
 ```
 
-Get a [Git](http://code.google.com/p/git-osx-installer/) install, and place both the `bin` and `libexec` directories in `SparkleShare/Mac/git`.
-The exact commands depend on where you installed/have Git. Assuming it's in `/usr/local`:
+### Building
 
-```bash
-$ mkdir SparkleShare/Mac/git
-$ cp -R /usr/local/git/bin SparkleShare/Mac/git
-$ cp -R /usr/local/git/libexec SparkleShare/Mac/git
-```
+There are three build configurations available:
 
-Start the first part of the build:
+* Debug
 
-```bash
-$ ./autogen.sh
-```
+  with debug symbols and having the Symbol DEBUG defined, does require an installed Mono framework
+  
+* Release
 
-Now that you have compiled the libraries, open `SparkleShare/Mac/SparkleShare.sln` in
-MonoDevelop and start the build (Build > Build All).
+  without debug symbols, does require an installed Mono framework
+  
+* ReleaseDist
 
-If you get `Are you missing a using directive or an assembly reference?` errors related to MacOS objects, then run:
+  without debug symbols, the Mono framework is linked statically into the binary, so it does not require an installed Mono framework
 
-```
-git clone https://github.com/mono/monomac
-git clone https://github.com/mono/maccore
-cd monomac
-make
-```
+To build any of these configurations,
 
-It should generate `MonoMac.dll`. Copy it over any `MonoMac.dll` you might have on your system, then restart Monodevelop, and the project should now build fine.
+* open SparkleShare.sln
+* select the required configuraion
+* select <tt>Build</tt> from the menu bar and click <tt>"Build SparkleShare"</tt>.
 
-### Creating a Mac bundle
-
-To create the <tt>SparkleShare.app</tt> select <tt>Build</tt> from the menu bar 
-and click <tt>"Build SparkleShare"</tt>.
-
-You'll find a SparkleShare.app in SparkleShare/Mac/bin. Now we need to copy some files over:
+To build SparkleShare from a command line (e.g. for using a CI system), use this command:
 
 ```
-cp SparkleShare/Mac/config SparkleShare.app/Contents/MonoBundle/config
-cp /Library/Frameworks/Mono.framework/Versions/Current/lib/libintl.dylib SparkleShare.app/Contents/Resources
+/Applications/Xamarin\ Studio.app/Contents/MacOS/mdtool -v build "--configuration:ReleaseDist" "${WORKSPACE}/SparkleShare/Mac/SparkleShare.sln"
 ```
-
-To play nice with GateKeeper, open `SparkleShare.app/Contents/Info.plist` and remove the `CFBundleResourceSpecification` property.
-
-**Note:** Adjust `SparkleShare.app/Contents/...` to where you saved the bundle.
-
-Now you have a working bundle that you can run by double-clicking.
-
 
 ### Resetting SparkleShare settings
 
