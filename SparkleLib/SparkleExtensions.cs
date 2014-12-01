@@ -106,5 +106,21 @@ namespace SparkleLib {
                 return string.Format ("{0} months ago", Math.Ceiling ((double) day_diff / 31));
             }
         }
+
+
+        public static string ReplaceUnderscoreWithSpace (this string s)
+        {
+            int len = s.Length, lead = 0, trail = 0;
+            for (int i = 0; i < len && s[i] == '_'; i++, lead++)
+                ; // nop
+            for (int i = len - 1; i >= lead && s[i] == '_'; i--, trail++)
+                ; // nop
+            if (lead == 0 && trail == 0)
+                return s.Replace("_", " "); // fast code path
+            else
+                return s.Substring (0, lead) +
+                       s.Substring (lead, len - lead - trail).Replace ("_", " ") +
+                       s.Substring (len - trail, trail);
+        }
     }
 }
