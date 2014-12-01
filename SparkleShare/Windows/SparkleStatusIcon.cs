@@ -229,6 +229,20 @@ namespace SparkleShare {
                     subfolder_item.Items.Add(state_menu_items[i]);
                     subfolder_item.Items.Add(new Separator());
 
+                    SparkleMenuItem open_item = new SparkleMenuItem {
+                        Header = "Open folder",
+                        Icon = new Image
+                        {
+                            Source = SparkleUIHelpers.GetImageSource("folder"),
+                            Width = 16,
+                            Height = 16
+                        }
+                    };
+
+                    open_item.Click += new RoutedEventHandler(Controller.OpenFolderDelegate(project.Name));
+                    subfolder_item.Items.Add(open_item);
+                    subfolder_item.Items.Add(new Separator());
+
                     if(project.IsPaused) {
                         SparkleMenuItem resume_item;
 
