@@ -48,7 +48,7 @@ Or on Ubuntu, get it from this PPA:
 https://launchpad.net/~meebey/+archive/mono-preview
 
 Install the `notify-sharp` bindings from:  
-https://git.gnome.org/browse/notify-sharp/
+https://download.gnome.org/sources/notify-sharp/3.0/
 
 Install the `soup-sharp` and `webkitgtk-sharp` bindings from:  
 https://github.com/xDarkice/soup-sharp  
