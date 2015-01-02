@@ -241,27 +241,25 @@ namespace SparkleLib.Git {
 
         public override void EnableFetchedRepoCrypto (string password)
         {
-            // Define the crypto filter in the config
-            string repo_config_file_path = new string [] { TargetFolder, ".git", "config" }.Combine ();
-            string config = File.ReadAllText (repo_config_file_path);
+            // Set up the encryption filter
+            SparkleGit git_config_smudge = new SparkleGit (TargetFolder,
+                "config filter.encryption.smudge \"openssl enc -d -aes-256-cbc -base64 -S " + this.crypto_salt +
+                " -pass file:.git/info/encryption_password\"");
 
-            string n = Environment.NewLine;
+            SparkleGit git_config_clean = new SparkleGit (TargetFolder,
+                "config filter.encryption.clean  \"openssl enc -e -aes-256-cbc -base64 -S " + this.crypto_salt +
+                " -pass file:.git/info/encryption_password\"");
 
-			string salt = this.crypto_salt;
+            git_config_smudge.StartAndWaitForExit ();
+            git_config_clean.StartAndWaitForExit ();
 
-            config += "[filter \"crypto\"]" + n +
-                "\tsmudge = openssl enc -d -aes-256-cbc -base64 -S " + salt + " -pass file:.git/password" + n +
-                "\tclean  = openssl enc -e -aes-256-cbc -base64 -S " + salt + " -pass file:.git/password" + n;
-
-            File.WriteAllText (repo_config_file_path, config);
-
-            // Pass all files through the crypto filter
+            // Pass all files through the encryption filter
             string git_attributes_file_path = new string [] { TargetFolder, ".git", "info", "attributes" }.Combine ();
-            File.AppendAllText (git_attributes_file_path, "\n* filter=crypto");
+            File.WriteAllText (git_attributes_file_path, "\n* filter=encryption");
 
             // Store the password
-            string password_file_path = new string [] { TargetFolder, ".git", "password" }.Combine ();
-            File.WriteAllText (password_file_path, password.Trim ());
+            string password_file_path = new string [] { TargetFolder, ".git", "info", "encryption_password" }.Combine ();
+            File.WriteAllText (password_file_path, password);
         }
 
 
