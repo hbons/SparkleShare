@@ -9,7 +9,8 @@
      - Resizable "Recent Changes" window on Windows
      - Several stability fixes
      - Improvements to filesystem watcher and exclude list
-
+     - Use more secure 4096 bit SSH keys
+     - Use hashed and salted password to encrypt files
 
 1.4.0 for Linux, Mac and Windows (Sun Apr 20, 2014):
 
