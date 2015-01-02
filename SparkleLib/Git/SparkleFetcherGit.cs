@@ -34,6 +34,7 @@ namespace SparkleLib.Git {
         private Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
         private Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
 
+        private bool crypto_password_is_hashed = true;
 
         private string crypto_salt {
             get {
@@ -259,7 +260,11 @@ namespace SparkleLib.Git {
 
             // Store the password
             string password_file_path = new string [] { TargetFolder, ".git", "info", "encryption_password" }.Combine ();
-            File.WriteAllText (password_file_path, password);
+
+            if (this.crypto_password_is_hashed)
+                File.WriteAllText (password_file_path, password.SHA256 (this.crypto_salt));
+            else
+                File.WriteAllText (password_file_path, password);
         }
 
 
@@ -279,28 +284,40 @@ namespace SparkleLib.Git {
 
             Process process = new Process ();
             process.EnableRaisingEvents              = true;
+            process.StartInfo.FileName               = "openssl";
             process.StartInfo.WorkingDirectory       = TargetFolder;
             process.StartInfo.UseShellExecute        = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.CreateNoWindow         = true;
 
-            process.StartInfo.FileName  = "openssl";
-            process.StartInfo.Arguments = "enc -d -aes-256-cbc -base64 -pass pass:\"" + password + "\"" +
-                " -in \"" + password_check_file_path + "\"";
+            string [] possible_passwords = new string [] {
+                password.SHA256 (this.crypto_salt),
+                password
+            };
 
-            SparkleLogger.LogInfo ("Cmd | " + System.IO.Path.GetFileName (process.StartInfo.WorkingDirectory),
-                System.IO.Path.GetFileName (process.StartInfo.FileName) + " " + process.StartInfo.Arguments);
+            int i = 0;
+            foreach (string possible_password in possible_passwords) {
+                process.StartInfo.Arguments = "enc -d -aes-256-cbc -base64 -pass pass:\"" + possible_password + "\"" +
+                    " -in \"" + password_check_file_path + "\"";
 
-            process.Start ();
-            process.WaitForExit ();
+                SparkleLogger.LogInfo ("Cmd | " + System.IO.Path.GetFileName (process.StartInfo.WorkingDirectory),
+                    System.IO.Path.GetFileName (process.StartInfo.FileName) + " " + process.StartInfo.Arguments);
 
-            if (process.ExitCode == 0) {
-                File.Delete (password_check_file_path);
-                return true;
+                process.Start ();
+                process.WaitForExit ();
 
-            } else {
-                return false;
+                if (process.ExitCode == 0) {
+                    if (i > 0)
+                        crypto_password_is_hashed = false;
+
+                    File.Delete (password_check_file_path);
+                    return true;
+                }
+
+                i++;
             }
+
+            return false;
         }
 
 
