@@ -45,6 +45,26 @@ namespace SparkleLib {
         }
 
 
+        public static string SHA256 (this string s)
+        {
+            SHA256 sha256        = new SHA256CryptoServiceProvider ();
+            byte [] bytes        = ASCIIEncoding.Default.GetBytes (s);
+            byte [] sha256_bytes = sha256.ComputeHash (bytes);
+
+            return BitConverter.ToString (sha256_bytes).ToLower ().Replace ("-", "");
+        }
+
+
+        public static string SHA256 (this string s, string salt)
+        {
+            SHA256 sha256        = new SHA256CryptoServiceProvider ();
+            byte [] bytes        = ASCIIEncoding.Default.GetBytes (s + salt);
+            byte [] sha256_bytes = sha256.ComputeHash (bytes);
+
+            return BitConverter.ToString (sha256_bytes).ToLower ().Replace ("-", "");
+        }
+
+
         public static string MD5 (this string s)
         {
             MD5 md5           = new MD5CryptoServiceProvider ();
