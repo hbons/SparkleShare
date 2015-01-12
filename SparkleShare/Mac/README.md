@@ -20,7 +20,7 @@ The required `git` binaries are now built automatically. For doing this and for 
  the packes <tt>autoconf</tt> and <tt>pkg-config</tt>. You can install these using `homebrew`
 
 ```bash
-$ brew port install autoconf pkg-config
+$ brew install autoconf pkg-config
 ```
 
 ### Building
