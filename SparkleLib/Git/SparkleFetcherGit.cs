@@ -2,8 +2,8 @@
 //   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
 //
 //   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU Lesser General Public License as 
-//   published by the Free Software Foundation, either version 3 of the 
+//   it under the terms of the GNU Lesser General Public License as
+//   published by the Free Software Foundation, either version 3 of the
 //   License, or (at your option) any later version.
 //
 //   This program is distributed in the hope that it will be useful,
@@ -135,29 +135,29 @@ namespace SparkleLib.Git {
                 while (!this.git.StandardError.EndOfStream) {
                     string line = this.git.StandardError.ReadLine ();
                     Match match = this.progress_regex.Match (line);
-                    
+
                     double number = 0.0;
-                    double speed  = 0.0; 
+                    double speed  = 0.0;
                     if (match.Success) {
                         try {
                             number = double.Parse (match.Groups [1].Value, new CultureInfo ("en-US"));
-                            
+
                         } catch (FormatException) {
                             SparkleLogger.LogInfo ("Git", "Error parsing progress: \"" + match.Groups [1] + "\"");
                         }
-                        
+
                         // The pushing progress consists of two stages: the "Compressing
                         // objects" stage which we count as 20% of the total progress, and
                         // the "Writing objects" stage which we count as the last 80%
                         if (line.Contains ("Compressing")) {
                             // "Compressing objects" stage
                             number = (number / 100 * 20);
-                            
+
                         } else {
                             // "Writing objects" stage
                             number = (number / 100 * 80 + 20);
                             Match speed_match = this.speed_regex.Match (line);
-                            
+
                             if (speed_match.Success) {
                                 try {
                                     speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo ("en-US")) * 1024;
@@ -165,10 +165,10 @@ namespace SparkleLib.Git {
                                 } catch (FormatException) {
                                     SparkleLogger.LogInfo ("Git", "Error parsing speed: \"" + speed_match.Groups [1] + "\"");
                                 }
-                                
+
                                 if (speed_match.Groups [2].Value.Equals ("M"))
                                     speed = speed * 1024;
-                            }    
+                            }
                         }
 
                     } else {
@@ -197,7 +197,7 @@ namespace SparkleLib.Git {
                         }
                     }
                 }
-            
+
             } catch (Exception) {
                 IsActive = false;
                 return false;
@@ -308,7 +308,7 @@ namespace SparkleLib.Git {
 
                 if (process.ExitCode == 0) {
                     if (i > 0)
-                        crypto_password_is_hashed = false;
+                        this.crypto_password_is_hashed = false;
 
                     File.Delete (password_check_file_path);
                     return true;
@@ -337,7 +337,7 @@ namespace SparkleLib.Git {
                 try {
                     Directory.Delete (TargetFolder, true /* Recursive */ );
                     SparkleLogger.LogInfo ("Fetcher", "Deleted '" + TargetFolder + "'");
-                    
+
                 } catch (Exception e) {
                     SparkleLogger.LogInfo ("Fetcher", "Failed to delete '" + TargetFolder + "'", e);
                 }
@@ -439,7 +439,7 @@ namespace SparkleLib.Git {
                     writer.WriteLine ("*." + extension + " -delta");
                     writer.WriteLine ("*." + extension.ToUpper () + " -delta");
                 }
-                
+
                 writer.WriteLine ("*.txt text");
                 writer.WriteLine ("*.TXT text");
             }
