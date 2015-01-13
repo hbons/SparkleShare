@@ -786,7 +786,7 @@ namespace SparkleLib.Git {
 
             if (path == null) {
                 git = new SparkleGit (LocalPath, "log --since=1.month --raw --find-renames --date=iso " +
-                    "--format=medium --no-color -m --first-parent");
+                    "--format=medium --no-color --no-merges");
 
             } else {
                 path = path.Replace ("\\", "/");
@@ -799,7 +799,7 @@ namespace SparkleLib.Git {
 
             if (path == null && string.IsNullOrWhiteSpace (output)) {
                 git = new SparkleGit (LocalPath, "log -n 75 --raw --find-renames --date=iso " +
-                    "--format=medium --no-color -m --first-parent");
+                    "--format=medium --no-color --no-merges");
 
                 output = git.StartAndReadStandardOutput ();
             }
