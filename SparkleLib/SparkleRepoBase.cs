@@ -619,6 +619,8 @@ namespace SparkleLib {
             this.listener.Disconnected         -= ListenerDisconnectedDelegate;
             this.listener.AnnouncementReceived -= ListenerAnnouncementReceivedDelegate;
 
+            this.listener.Dispose ();
+
             if (!UseCustomWatcher)
                 this.watcher.Dispose ();
         }
