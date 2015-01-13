@@ -237,11 +237,13 @@ namespace SparkleLib {
 
         public override void Dispose ()
         {
+            if (this.socket != null) {
+                this.socket.Close ();
+                this.socket = null;
+            }
+
             this.thread.Abort ();
             this.thread.Join ();
-
-            if (this.socket != null)
-                this.socket.Close ();
 
             base.Dispose ();
         }
