@@ -164,7 +164,10 @@ namespace SparkleLib {
 
         public virtual void Dispose ()
         {
-            this.reconnect_timer.Dispose ();
+            if (this.reconnect_timer != null) {
+                this.reconnect_timer.Stop ();
+                this.reconnect_timer.Dispose ();
+            }
         }
 
 
