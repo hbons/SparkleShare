@@ -43,7 +43,7 @@ namespace SparkleShare {
             string arguments = "-t rsa " + // crypto type
                 "-b 4096 " + // key size
                 "-P \"\" " + // empty password
-                "-C \"" + computer_name + "\" " + // key comment
+                "-C \"" + computer_name + " (SparkleShare)\" " + // key comment
                 "-f \"" + key_name + "\""; // file name
 
             SparkleKeyProcess process = new SparkleKeyProcess ("ssh-keygen", arguments);
