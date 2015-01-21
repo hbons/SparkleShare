@@ -1,6 +1,6 @@
 1.5.0 for Linux, Mac and Windows (???):
 
-     Hylke
+     Hylke:
      - Mac UI updates to integrate well with Yosemite
      - Per folder sync status in icon menu
      - Add ability to pause sync and add a commit message on resume
@@ -11,6 +11,8 @@
      - Improvements to filesystem watcher and exclude list
      - Use more secure 4096 bit SSH keys
      - Use hashed and salted password to encrypt files
+     - Fix change attribution in Recent Changes window on merges
+
 
 1.4.0 for Linux, Mac and Windows (Sun Apr 20, 2014):
 
