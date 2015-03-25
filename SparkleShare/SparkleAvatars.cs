@@ -34,7 +34,10 @@ namespace SparkleShare
 
         public static string GetAvatar (string email, int size, string target_path)
         {
+            #if __MonoCS__
             ServicePointManager.ServerCertificateValidationCallback = GetAvatarValidationCallBack;
+            #endif
+
             email = email.ToLower ();
             
             if (skipped_avatars.Contains (email))
