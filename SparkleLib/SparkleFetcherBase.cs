@@ -192,7 +192,8 @@ namespace SparkleLib {
                 Identifier = CreateIdentifier ();
                 File.WriteAllText (identifier_path, Identifier);
 
-                CreateInitialChangeSet ();
+                if (IsFetchedRepoEmpty)
+                    CreateInitialChangeSet ();
             }
 
             File.SetAttributes (identifier_path, FileAttributes.Hidden);
