@@ -130,7 +130,7 @@ namespace SparkleLib {
         }
 
 
-        protected SparkleConfig local_config;
+        protected ISparkleConfig local_config;
 
 
         private string identifier;
@@ -152,7 +152,7 @@ namespace SparkleLib {
         }
 
 
-        public SparkleRepoBase (string path, SparkleConfig config)
+        public SparkleRepoBase (string path, ISparkleConfig config)
         {
             SparkleLogger.LogInfo (path, "Initializing...");
 

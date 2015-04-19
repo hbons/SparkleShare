@@ -22,15 +22,38 @@ using System.Xml;
 
 namespace SparkleLib {
 
-    public class SparkleConfig : XmlDocument {
+    public interface ISparkleConfig {
+        string FullPath { get; }
+        string TmpPath { get; }
+        string HomePath { get; }
+        string FoldersPath { get; }
+        string LogFilePath { get; }
+        SparkleUser User { get; set; }
+        List<string> Folders { get; }
+        void AddFolder (string name, string identifier, string url, string backend);
+        void RemoveFolder (string name);
+        void RenameFolder (string identifier, string name);
+        string GetBackendForFolder (string name);
+        string GetIdentifierForFolder (string name);
+        string GetUrlForFolder (string name);
+        bool IdentifierExists (string identifier);
+        bool SetFolderOptionalAttribute (string folder_name, string key, string value);
+        string GetFolderOptionalAttribute (string folder_name, string key);
+        string GetConfigOption (string name);
+        void SetConfigOption (string name, string content);
+    }
 
-        public static SparkleConfig DefaultConfig;
+    public sealed class SparkleConfig : XmlDocument, ISparkleConfig {
+
+        public static ISparkleConfig DefaultConfig;
         public static bool DebugMode = true;
 
-        public string FullPath;
-        public string TmpPath;
-        public string LogFilePath;
+        public string FullPath { get { return Path.Combine(config_path, config_file_name); } }
+        public string TmpPath { get { return Path.Combine(FoldersPath, ".tmp"); } }
+        public string LogFilePath { get; private set; }
 
+        private readonly string config_path;
+        private readonly string config_file_name;
 
         public string HomePath {
             get {
@@ -54,8 +77,10 @@ namespace SparkleLib {
 
         public SparkleConfig (string config_path, string config_file_name)
         {
-            FullPath         = Path.Combine (config_path, config_file_name);
-            string logs_path = Path.Combine (config_path, "logs");
+            this.config_path = config_path;
+            this.config_file_name = config_file_name;
+
+            string logs_path = Path.Combine(config_path, "logs");
 
             int i = 1;
             do {
@@ -100,7 +125,6 @@ namespace SparkleLib {
 
             } finally {
                 Load (FullPath);
-                TmpPath = Path.Combine (FoldersPath, ".tmp");
                 Directory.CreateDirectory (TmpPath);
             }
         }

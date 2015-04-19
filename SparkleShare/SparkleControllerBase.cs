@@ -63,7 +63,7 @@ namespace SparkleShare {
         }
         
         
-        public SparkleConfig Config { get; private set; }
+        public ISparkleConfig Config { get; private set; }
         public bool RepositoriesLoaded { get; private set; }
         public string FoldersPath { get; private set; }
         
