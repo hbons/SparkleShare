@@ -193,11 +193,7 @@ namespace SparkleShare {
         public SparkleControllerBase ()
         {
             
-            string app_data_path = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
-            string config_path   = Path.Combine (app_data_path, "sparkleshare");
-            
-            Config                      = new SparkleConfig (config_path, "config.xml");
-            SparkleConfig.DefaultConfig = Config;
+            Config                      = SparkleConfig.DefaultConfig;
             FoldersPath                 = Config.FoldersPath;
         }
         

@@ -16,6 +16,7 @@
 
 
 using System;
+using System.IO;
 using System.Threading;
 
 using SparkleLib;
@@ -68,6 +69,11 @@ namespace SparkleShare {
             }
 
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+
+            string app_data_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string config_path = Path.Combine(app_data_path, "sparkleshare");
+
+            SparkleConfig.DefaultConfig = new SparkleConfig(config_path, "config.xml");
 
             Controller = new SparkleController ();
             Controller.Initialize ();
