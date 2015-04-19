@@ -47,6 +47,11 @@ namespace SparkleLib {
             if (SparkleConfig.DebugMode)
                 Console.WriteLine (line);
 
+            // TODO add config as a dependancy
+            if (SparkleConfig.DefaultConfig == null || !File.Exists (SparkleConfig.DefaultConfig.LogFilePath)) {
+                return;
+            }
+
             lock (debug_lock) {
                 // Don't let the log get bigger than 1000 lines
                 if (log_size >= 1000) {
