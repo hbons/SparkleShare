@@ -355,7 +355,7 @@ namespace SparkleShare {
         
         public void OpenSparkleShareFolder (string name)
         {
-            OpenFolder (new SparkleFolder (name).FullPath);
+            OpenFolder (new SparkleFolder (Config).GetInfo (name).FullName);
         }
         
         
@@ -401,7 +401,7 @@ namespace SparkleShare {
                 
                 // Remove any deleted folders
                 foreach (string folder_name in Config.Folders) {
-                    string folder_path = new SparkleFolder (folder_name).FullPath;
+                    string folder_path = new SparkleFolder (Config).GetInfo (folder_name).FullName;
                     
                     if (!Directory.Exists (folder_path)) {
                         Config.RemoveFolder (folder_name);

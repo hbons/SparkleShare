@@ -282,11 +282,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="SparkleLib\Git\SparkleLib.Git.csproj">
+    <ProjectReference Include="..\..\SparkleLib\Git\SparkleLib.Git.csproj">
       <Project>{7f0db8d0-e278-4955-8204-fc391b99f7c1}</Project>
       <Name>SparkleLib.Git</Name>
     </ProjectReference>
-    <ProjectReference Include="SparkleLib\SparkleLib.csproj">
+    <ProjectReference Include="..\..\SparkleLib\SparkleLib.csproj">
       <Project>{748f6316-37b4-46fd-a011-af073bc7c02d}</Project>
       <Name>SparkleLib</Name>
     </ProjectReference>

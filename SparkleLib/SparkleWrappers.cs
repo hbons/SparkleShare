@@ -33,7 +33,7 @@ namespace SparkleLib {
 
         public SparkleUser User = new SparkleUser ("Unknown", "Unknown");
 
-        public SparkleFolder Folder;
+        public DirectoryInfo Folder;
         public string Revision;
         public DateTime Timestamp;
         public DateTime FirstTimestamp;
@@ -67,30 +67,6 @@ namespace SparkleLib {
         
         public string Path;
         public string MovedToPath;
-    }
-
-
-    public class SparkleFolder {
-
-        public string Name;
-        public Uri RemoteAddress;
-
-        public string FullPath {
-            get {
-                string custom_path = SparkleConfig.DefaultConfig.GetFolderOptionalAttribute (Name, "path");
-
-                if (custom_path != null)
-                    return Path.Combine (custom_path, Name);
-                else
-                    return Path.Combine (SparkleConfig.DefaultConfig.FoldersPath, Name);
-            }
-        }
-
-
-        public SparkleFolder (string name)
-        {
-            Name = name;
-        }
     }
 
 

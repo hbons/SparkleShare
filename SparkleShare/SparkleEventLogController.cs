@@ -227,7 +227,7 @@ namespace SparkleShare {
                     string timestamp   = match.Groups [4].Value;
 
                     this.restore_revision_info = new RevisionInfo () {
-                        Folder   = new SparkleFolder (match.Groups [1].Value),
+                        Folder   = new SparkleFolder (SparkleConfig.DefaultConfig).GetInfo (match.Groups [1].Value),
                         Revision = match.Groups [2].Value,
                         FilePath = Uri.UnescapeDataString (match.Groups [5].Value)
                     };
@@ -235,7 +235,7 @@ namespace SparkleShare {
                     string file_name = Path.GetFileNameWithoutExtension (this.restore_revision_info.FilePath) +
                         " (" + author_name + " " + timestamp + ")" + Path.GetExtension (this.restore_revision_info.FilePath);
 
-                    string target_folder_path = Path.Combine (this.restore_revision_info.Folder.FullPath,
+                    string target_folder_path = Path.Combine (this.restore_revision_info.Folder.FullName,
                         Path.GetDirectoryName (this.restore_revision_info.FilePath));
 
                     ShowSaveDialogEvent (file_name, target_folder_path);
@@ -440,7 +440,7 @@ namespace SparkleShare {
                             event_entry += "<dd class='" + change.Type.ToString ().ToLower () + "'>";
 
                             if (!change.IsFolder) {
-                                event_entry += "<small><a href=\"history://" + change_set.Folder.Name + "/" + 
+                                event_entry += "<small><a href=\"history://" + change_set.Folder.FullName + "/" + 
                                     change.Path + "\" title=\"View revisions\">" + change.Timestamp.ToString ("HH:mm") +
                                     " &#x25BE;</a></small> &nbsp;";
 
@@ -448,16 +448,16 @@ namespace SparkleShare {
                                 event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") + "</small> &nbsp;";
                             }
 
-                            event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
+                            event_entry += FormatBreadCrumbs (change_set.Folder.FullName, change.Path);
                             event_entry += "</dd>";
 
                         } else {
                             event_entry += "<dd class='moved'>";
                             event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") +"</small> &nbsp;";
-                            event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.Path);
+                            event_entry += FormatBreadCrumbs (change_set.Folder.FullName, change.Path);
                             event_entry += "<br>";
                             event_entry += "<small>" + change.Timestamp.ToString ("HH:mm") +"</small> &nbsp;";
-                            event_entry += FormatBreadCrumbs (change_set.Folder.FullPath, change.MovedToPath);
+                            event_entry += FormatBreadCrumbs (change_set.Folder.FullName, change.MovedToPath);
                             event_entry += "</dd>";
                         }
                     }
@@ -482,7 +482,7 @@ namespace SparkleShare {
 
                     if (this.selected_folder == null) {
                         event_entries = event_entries.Replace ("<!-- $event-folder -->", " @ " + change_set.Folder.Name);
-                        event_entries = event_entries.Replace ("<!-- $event-folder-url -->", change_set.Folder.FullPath);
+                        event_entries = event_entries.Replace ("<!-- $event-folder-url -->", change_set.Folder.FullName);
                     }
                 }
 
@@ -617,7 +617,7 @@ namespace SparkleShare {
 
 
         private class RevisionInfo {
-            public SparkleFolder Folder;
+            public DirectoryInfo Folder;
             public string FilePath;
             public string Revision;
         }

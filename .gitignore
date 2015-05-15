@@ -46,3 +46,6 @@ _ReSharper.*
 *.wxs
 *.dotCover
 
+**/packages/*
+**/coverage/*
+results.xml

@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2C914413-B31C-4362-93C7-1AE34F09112A}</ProjectGuid>
+    <ProjectGuid>{748F6316-37B4-46FD-A011-AF073BC7C02D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>SparkleLib</RootNamespace>
     <AssemblyName>SparkleLib</AssemblyName>
@@ -32,6 +32,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SparkleFolder.cs" />
     <Compile Include="SparkleRepoBase.cs" />
     <Compile Include="SparkleFetcherBase.cs" />
     <Compile Include="SparkleWrappers.cs" />
@@ -40,7 +41,9 @@
     <Compile Include="SparkleListenerTcp.cs" />
     <Compile Include="SparkleBackend.cs" />
     <Compile Include="SparkleConfig.cs" />
-    <Compile Include="SparkleWatcher.cs" />
+    <Compile Include="SparkleWatcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SparkleExtensions.cs" />
     <Compile Include="SparkleUser.cs" />
     <Compile Include="SparkleLogger.cs" />
