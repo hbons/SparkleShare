@@ -20,12 +20,12 @@ using Gtk;
 
 namespace SparkleShare {
 
-    public class SparkleAbout : Window {
+    public class SparkleNote : Window {
 
         public SparkleNoteController Controller = new SparkleNoteController ();
 
 
-        public SparkleAbout () : base ("Sync")
+        public SparkleNote () : base ("Sync")
         {
             SetWmclass ("SparkleShare", "SparkleShare");
 
