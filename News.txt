@@ -12,6 +12,7 @@
      - Use more secure 4096 bit SSH keys
      - Use hashed and salted password to encrypt files
      - Fix change attribution in Recent Changes window on merges
+     - Fix disabled Continue button when entering encryption password
 
 
 1.4.0 for Linux, Mac and Windows (Sun Apr 20, 2014):
