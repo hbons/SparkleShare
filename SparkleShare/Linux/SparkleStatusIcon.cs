@@ -148,14 +148,18 @@ namespace SparkleShare {
                         MenuItem resume_item;
 
                         if (project.UnsyncedChangesInfo.Count > 0) {
-                            string icons_path   = new string [] {SparkleUI.AssetsPath, "icons", "hicolor", "12x12", "status"}.Combine ();
+                            string icons_path = new string [] {
+                                SparkleUI.AssetsPath, "icons", "hicolor", "12x12", "status"}.Combine ();
 
-                            foreach (KeyValuePair<string, string> pair in project.UnsyncedChangesInfo)
-                                (item.Submenu as Menu).Add (new MenuItem (pair.Key) {
-                                 //   Image = new Image () {
-                                   //     File = new string [] {icons_path, pair.Value.Replace ("-12", "")}.Combine () },
+                            foreach (KeyValuePair<string, string> pair in project.UnsyncedChangesInfo) {
+                                string icon_path = new string [] {
+                                    icons_path, pair.Value.Replace ("-12", "")}.Combine ();
+
+                                (item.Submenu as Menu).Add (new SparkleMenuItem (pair.Key) {
+                                    Image     = new Image (icon_path),
                                     Sensitive = false
                                 });
+                            }
 
                             if (!string.IsNullOrEmpty (project.MoreUnsyncedChanges)) {
                                 (item.Submenu as Menu).Add (new MenuItem (project.MoreUnsyncedChanges) {
