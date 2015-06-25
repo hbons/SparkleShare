@@ -55,10 +55,9 @@ AC_DEFUN([_SHAMROCK_CHECK_MONO_GAC_ASSEMBLIES],
 	for asm in $(echo "$*" | cut -d, -f3- | sed 's/\,/ /g')
 	do
 		AC_MSG_CHECKING([for Mono $2 GAC for $asm.dll])
-		if test \
-			-e "$($PKG_CONFIG --variable=libdir $1)/mono/$2/$asm.dll" -o \
-			-e "$($PKG_CONFIG --variable=prefix $1)/lib/mono/$2/$asm.dll"; \
-			then \
+
+		eval "gacutil -l | grep '^$asm, ' &> /dev/null"
+		if test $? == 0; then
 			AC_MSG_RESULT([found])
 		else
 			AC_MSG_RESULT([not found])
