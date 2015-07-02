@@ -141,7 +141,7 @@ namespace SparkleShare {
             get {
                 string fetch_avatars_option = Config.GetConfigOption ("fetch_avatars");
                 
-                if (fetch_avatars_option != null && fetch_avatars_option.Equals (bool.FalseString))
+                if (fetch_avatars_option == null || fetch_avatars_option.Equals (bool.FalseString))
                     return false;
                 
                 return true;
@@ -222,7 +222,7 @@ namespace SparkleShare {
             
             if (FirstRun) {
                 Config.SetConfigOption ("notifications", bool.TrueString);
-                
+
             } else {
                 string keys_path = Path.GetDirectoryName (Config.FullPath);
                 string key_file_path = "";
