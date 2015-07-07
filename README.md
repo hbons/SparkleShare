@@ -12,16 +12,11 @@ SparkleShare creates a special folder on your computer. You can add remotely hos
 
 ## Setting up a host
 
-SparkleShare uses the version control system [Git](https://git-scm.com/) under the hood, so setting up a host yourself is relatively easy. Using your own host gives you more privacy and control, as well as lots of cheap storage space and higher transfer speeds. We've made a simple [script](https://github.com/hbons/Dazzle) that does the hard work for you.
+SparkleShare uses the version control system [Git](https://git-scm.com/) under the hood, so setting up a host yourself is relatively easy. Using your own host gives you more privacy and control, as well as lots of cheap storage space and higher transfer speeds. We've made a simple [script](https://github.com/hbons/Dazzle) that does the hard work for you. If you need to manage a lot of projects and/or users it may be worth setting up a [GitLab](https://www.gitlabhq.com) instance.
 
 
 ## Useful links
 [Website](http://www.sparkleshare.org/), [Twitter](https://www.twitter.com/SparkleShare), [Wiki](https://www.github.com/hbons/SparkleShare/wiki), and [Source Code](https://www.github.com/hbons/SparkleShare). Join the chat: #sparkleshare on irc.gnome.org. 
-
-
-## Setting up a host
-
-You can use any host that runs Git. For a simple setup script, check out [Dazzle](https://github.com/hbons/Dazzle). If you need to manage a lot of projects and/or users it may be worth looking at [Gitlab](http://www.gitlabhq.com).
 
 
 ## Compiling from source
