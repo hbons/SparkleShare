@@ -16,7 +16,7 @@ SparkleShare uses the version control system [Git](https://git-scm.com/) under t
 
 
 ## Useful links
-[Official Website](http://www.sparkleshare.org/), [Twitter](https://www.twitter.com/SparkleShare), [Wiki](https://www.github.com/hbons/SparkleShare/wiki), and [Source](https://www.github.com/hbons/SparkleShare). Join the chat: #sparkleshare on irc.gnome.org. 
+[Website](http://www.sparkleshare.org/), [Twitter](https://www.twitter.com/SparkleShare), [Wiki](https://www.github.com/hbons/SparkleShare/wiki), and [Source](https://www.github.com/hbons/SparkleShare). Join the chat: #sparkleshare on irc.gnome.org. 
 
 
 ## Setting up a host
