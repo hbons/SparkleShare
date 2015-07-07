@@ -30,7 +30,7 @@ Here are instructions to build SparkleShare on [Linux distributions](SparkleShar
 
 
 ## Free and Open Source
-SparkleShare is Free and Open Source software and licensed under the [GNU General Public License version 3 or later](legal/License_for_SparkleShare.txt). You are welcome to change and redistribute it under certain conditions. Its library `SparkleLib` is licensed under the [legal/License_for_SparkleLib.txt](GNU Lesser General Public License version 3) or later.
+`SparkleShare` is Free and Open Source software and licensed under the [GNU General Public License version 3 or later](legal/License_for_SparkleShare.txt). You are welcome to change and redistribute it under certain conditions. Its library `SparkleLib` is licensed under the [GNU Lesser General Public License version 3 or later](legal/License_for_SparkleLib.txt).
 
 
 ## Finally
