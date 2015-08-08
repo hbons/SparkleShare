@@ -54,7 +54,7 @@ namespace SparkleShare {
 
 				notification.Closed += delegate (object o, EventArgs args) {
 					if ((args as CloseArgs).Reason == CloseReason.User)
-					Controller.BubbleClicked ();
+						Controller.BubbleClicked ();
 				};
 
 				try {
