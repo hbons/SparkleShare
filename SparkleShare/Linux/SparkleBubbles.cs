@@ -39,31 +39,31 @@ namespace SparkleShare {
             if (!Program.Controller.NotificationsEnabled)
                 return;
 
-	        Application.Invoke (delegate {
-	            Notification notification = new Notification () {
-		            Summary = title,
-		            Body    = subtext,
-		            Timeout = 5 * 1000,
-		            Urgency = Urgency.Low
-	            };
+			Application.Invoke (delegate {
+				Notification notification = new Notification () {
+					Summary = title,
+					Body    = subtext,
+					Timeout = 5 * 1000,
+					Urgency = Urgency.Low
+				};
 
-	            if (image_path != null)
-		            notification.Icon = new Gdk.Pixbuf (image_path);
-	            else
-		            notification.IconName = "folder-sparkleshare";
+				if (image_path != null)
+					notification.Icon = new Gdk.Pixbuf (image_path);
+				else
+					notification.IconName = "folder-sparkleshare";
 
-	            notification.Closed += delegate (object o, EventArgs args) {
-		            if ((args as CloseArgs).Reason == CloseReason.User)
-		                Controller.BubbleClicked ();
-	            };
+				notification.Closed += delegate (object o, EventArgs args) {
+					if ((args as CloseArgs).Reason == CloseReason.User)
+					Controller.BubbleClicked ();
+				};
 
-	            try {
-		            notification.Show ();
+				try {
+					notification.Show ();
 
-	            } catch (Exception e) {
-		            SparkleLogger.LogInfo ("Notification", "Error showing notification: ", e);
-	            }
-	        });
+				} catch (Exception e) {
+					SparkleLogger.LogInfo ("Notification", "Error showing notification: ", e);
+				}
+			});
         }
     }
 }
