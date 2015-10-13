@@ -7,6 +7,7 @@
         <icon>planio.png</icon>
         <backend>Git</backend>
         <fingerprint>77:d1:54:d7:33:7e:38:43:40:70:ca:2d:3a:24:05:22</fingerprint>
+        <announcements_url>tcp://sparkleshare-notifications.plan.io:443</announcements_url>
     </info>
     <address>
       <value/>
