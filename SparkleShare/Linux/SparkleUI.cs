@@ -32,6 +32,10 @@ namespace SparkleShare {
         public SparkleBubbles Bubbles;
         public SparkleSetup Setup;
         public SparkleAbout About;
+        public SparkleNote Note;
+
+        public readonly string SecondaryTextColor;
+        public readonly string SecondaryTextColorSelected;
 
         private Gtk.Application application;
 
@@ -42,12 +46,22 @@ namespace SparkleShare {
 
             this.application.Register (null);
             this.application.Activated += ApplicationActivatedDelegate;
+
+            Gdk.Color color = SparkleUIHelpers.RGBAToColor (new Label().StyleContext.GetColor (StateFlags.Insensitive));
+            SecondaryTextColor = SparkleUIHelpers.ColorToHex (color);
+                    
+            color = SparkleUIHelpers.MixColors (
+                SparkleUIHelpers.RGBAToColor (new TreeView ().StyleContext.GetColor (StateFlags.Selected)),
+                SparkleUIHelpers.RGBAToColor (new TreeView ().StyleContext.GetBackgroundColor (StateFlags.Selected)),
+                0.39);
+    
+            SecondaryTextColorSelected = SparkleUIHelpers.ColorToHex (color);
         }
 
 
         public void Run ()
         {   
-            (this.application as GLib.Application).Run (0, null);
+            (this.application as GLib.Application).Run (null, null);
         }
 
 
@@ -72,6 +86,7 @@ namespace SparkleShare {
                 About      = new SparkleAbout ();
                 Bubbles    = new SparkleBubbles ();
                 StatusIcon = new SparkleStatusIcon ();
+                Note       = new SparkleNote ();
 
                 Setup.Application    = this.application;
                 EventLog.Application = this.application;

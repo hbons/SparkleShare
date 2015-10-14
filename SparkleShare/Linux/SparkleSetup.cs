@@ -160,7 +160,7 @@ namespace SparkleShare {
                 foreach (SparklePlugin plugin in Controller.Plugins) {
                     store.AppendValues ("", new Gdk.Pixbuf (plugin.ImagePath),
                         "<span size=\"small\"><b>" + plugin.Name + "</b>\n" +
-                            "<span fgcolor=\"" + SecondaryTextColor + "\">" + plugin.Description + "</span>" +
+                            "<span fgcolor=\"" + Program.UI.SecondaryTextColor + "\">" + plugin.Description + "</span>" +
                         "</span>", plugin);
                 }
 
@@ -183,14 +183,14 @@ namespace SparkleShare {
                     Xalign = 0,
                     UseMarkup = true,
                     Markup = "<span size=\"small\" fgcolor=\"" +
-                        SecondaryTextColor + "\">" + Controller.SelectedPlugin.AddressExample + "</span>"
+                        Program.UI.SecondaryTextColor + "\">" + Controller.SelectedPlugin.AddressExample + "</span>"
                 };
 
                 Label path_example = new Label () {
                     Xalign = 0,
                     UseMarkup = true,
                     Markup = "<span size=\"small\" fgcolor=\"" +
-                        SecondaryTextColor + "\">" + Controller.SelectedPlugin.PathExample + "</span>"
+                        Program.UI.SecondaryTextColor + "\">" + Controller.SelectedPlugin.PathExample + "</span>"
                 };
 
 
@@ -280,7 +280,7 @@ namespace SparkleShare {
                         address_entry.Text      = text;
                         address_entry.Sensitive = (state == FieldState.Enabled);
                         address_example.Markup  =  "<span size=\"small\" fgcolor=\"" +
-                            SecondaryTextColor + "\">" + example_text + "</span>";
+                            Program.UI.SecondaryTextColor + "\">" + example_text + "</span>";
                     });
                 };
 
@@ -291,7 +291,7 @@ namespace SparkleShare {
                         path_entry.Text      = text;
                         path_entry.Sensitive = (state == FieldState.Enabled);
                         path_example.Markup  =  "<span size=\"small\" fgcolor=\""
-                            + SecondaryTextColor + "\">" + example_text + "</span>";
+                            + Program.UI.SecondaryTextColor + "\">" + example_text + "</span>";
                     });
                 };
 
@@ -704,9 +704,9 @@ namespace SparkleShare {
             TreeSelection selection = (column.TreeView as TreeView).Selection;
 
             if (selection.IterIsSelected (iter))
-                markup = markup.Replace (SecondaryTextColor, SecondaryTextColorSelected);
+                markup = markup.Replace (Program.UI.SecondaryTextColor, Program.UI.SecondaryTextColorSelected);
             else
-                markup = markup.Replace (SecondaryTextColorSelected, SecondaryTextColor);
+                markup = markup.Replace (Program.UI.SecondaryTextColorSelected, Program.UI.SecondaryTextColor);
 
             (cell as CellRendererText).Markup = markup;
         }

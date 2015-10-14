@@ -50,45 +50,19 @@ AC_DEFUN([SHAMROCK_CHECK_MONO2_MODULE_NOBAIL],
 	_SHAMROCK_CHECK_MONO_MODULE_NOBAIL(mono-2, $1)
 ])
 
-AC_DEFUN([_SHAMROCK_CHECK_MONO_GAC_ASSEMBLIES],
+AC_DEFUN([SHAMROCK_CHECK_MONO_GAC_ASSEMBLIES],
 [
 	for asm in $(echo "$*" | cut -d, -f3- | sed 's/\,/ /g')
 	do
 		AC_MSG_CHECKING([for Mono $2 GAC for $asm.dll])
-		if test \
-			-e "$($PKG_CONFIG --variable=libdir $1)/mono/$2/$asm.dll" -o \
-			-e "$($PKG_CONFIG --variable=prefix $1)/lib/mono/$2/$asm.dll"; \
-			then \
+
+		eval "gacutil -l | grep '^$asm, ' &> /dev/null"
+		if test $? == 0; then
 			AC_MSG_RESULT([found])
 		else
 			AC_MSG_RESULT([not found])
 			AC_MSG_ERROR([missing required Mono $2 assembly: $asm.dll])
 		fi
 	done
-])
-
-AC_DEFUN([SHAMROCK_CHECK_MONO_1_0_GAC_ASSEMBLIES],
-[
-	_SHAMROCK_CHECK_MONO_GAC_ASSEMBLIES(mono, 1.0, $*)
-])
-
-AC_DEFUN([SHAMROCK_CHECK_MONO_2_0_GAC_ASSEMBLIES],
-[
-	_SHAMROCK_CHECK_MONO_GAC_ASSEMBLIES(mono, 2.0, $*)
-])
-
-AC_DEFUN([SHAMROCK_CHECK_MONO2_2_0_GAC_ASSEMBLIES],
-[
-	_SHAMROCK_CHECK_MONO_GAC_ASSEMBLIES(mono-2, 2.0, $*)
-])
-
-AC_DEFUN([SHAMROCK_CHECK_MONO_4_0_GAC_ASSEMBLIES],
-[
-	_SHAMROCK_CHECK_MONO_GAC_ASSEMBLIES(mono, 4.0, $*)
-])
-
-AC_DEFUN([SHAMROCK_CHECK_MONO2_4_0_GAC_ASSEMBLIES],
-[
-	_SHAMROCK_CHECK_MONO_GAC_ASSEMBLIES(mono-2, 4.0, $*)
 ])
 

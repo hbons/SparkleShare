@@ -30,36 +30,41 @@ namespace SparkleShare {
 
         public SparkleBubbles ()
         {
-            Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
-                if (!Program.Controller.NotificationsEnabled)
-                    return;
+            Controller.ShowBubbleEvent += ShowBubbleEvent;
+        }
 
-                Application.Invoke (delegate {
-                    Notification notification = new Notification () {
-                        Summary = title,
-                        Body    = subtext,
-                        Timeout = 5 * 1000,
-                        Urgency = Urgency.Low
-                    };
-        
-                    if (image_path != null)
-                        notification.Icon = new Gdk.Pixbuf (image_path);
-                    else
-                        notification.IconName = "folder-sparkleshare";
 
-                    notification.Closed += delegate (object o, EventArgs args) {
-                        if ((args as CloseArgs).Reason == CloseReason.User)
-                            Controller.BubbleClicked ();
-                    };
+        private void ShowBubbleEvent (string title, string subtext, string image_path)
+        {
+            if (!Program.Controller.NotificationsEnabled)
+                return;
 
-                    try {
-                        notification.Show ();
+			Application.Invoke (delegate {
+				Notification notification = new Notification () {
+					Summary = title,
+					Body    = subtext,
+					Timeout = 5 * 1000,
+					Urgency = Urgency.Low
+				};
 
-                    } catch (Exception e) {
-                        SparkleLogger.LogInfo ("Notification", "Error showing notification: ", e);
-                    }
-                });
-            };
+				if (image_path != null)
+					notification.Icon = new Gdk.Pixbuf (image_path);
+				else
+					notification.IconName = "folder-sparkleshare";
+
+				notification.Closed += delegate (object o, EventArgs args) {
+					if ((args as CloseArgs).Reason == CloseReason.User)
+						Controller.BubbleClicked ();
+				};
+
+				try {
+					notification.Show ();
+
+				} catch (Exception e) {
+					SparkleLogger.LogInfo ("Notification", "Error showing notification: ", e);
+				}
+			});
         }
     }
 }
+

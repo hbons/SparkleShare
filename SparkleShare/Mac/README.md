@@ -1,26 +1,18 @@
 ## Building on Mac
 
-You can choose to build SparkleShare from source or to download the SparkleShare bundle.
+You can build SparkleShare from source or download the SparkleShare bundle.
 
 
 ### Installing build requirements
 
-
-Install
-
-* Xcode
-  
-  Install Xcode from *App Store* or download manually from [Apple XCode](https://developer.apple.com/xcode/)
-
-* MonoDevelop
-
-  Install Xamarin Studio from [MonoDevelop](http://monodevelop.com/download/), Xamarin comes with the Mono framework
+  Install [Xcode](https://itunes.apple.com/gb/app/xcode/id497799835?mt=12) from the Mac App Store, or [download](https://developer.apple.com/xcode/) it manually.
+  Install [Xamarin Studio](http://monodevelop.com/download/).
 
 The required `git` binaries are now built automatically. For doing this and for building the distribution release, where Mono libraries are merged into SparkleShare, we need 
- the packes <tt>autoconf</tt> and <tt>pkg-config</tt>. You can install these using `homebrew`
+ the packes <tt>autoconf</tt> and <tt>pkg-config</tt>. You can install these in several ways, here's how it's done using [Homebrew](http://brew.sh/):
 
 ```bash
-$ brew install autoconf pkg-config
+brew install autoconf automake libtool pkg-config
 ```
 
 ### Building
@@ -29,27 +21,28 @@ There are three build configurations available:
 
 * Debug
 
-  with debug symbols and having the Symbol DEBUG defined, does require an installed Mono framework
+  with debug symbols and having the Symbol DEBUG defined. Requires an installed Mono framework.
   
 * Release
 
-  without debug symbols, does require an installed Mono framework
+  without debug symbols. Requires an installed Mono framework.
   
 * ReleaseDist
 
-  without debug symbols, the Mono framework is linked statically into the binary, so it does not require an installed Mono framework
+  without debug symbols, the Mono framework is linked statically into the binary, so it does not require an installed Mono framework.
 
 To build any of these configurations,
 
-* open SparkleShare.sln
-* select the required configuraion
-* select <tt>Build</tt> from the menu bar and click <tt>"Build SparkleShare"</tt>.
+* open `./SparkleShare/Mac/SparkleShare.sln`
+* select the required configuration
+* select `Build`, then `"Build SparkleShare"` from the menu
 
 To build SparkleShare from a command line (e.g. for using a CI system), use this command:
 
+```bash
+/Applications/Xamarin\ Studio.app/Contents/MacOS/mdtool -v build "--configuration:ReleaseDist" "./SparkleShare/Mac/SparkleShare.sln"
 ```
-/Applications/Xamarin\ Studio.app/Contents/MacOS/mdtool -v build "--configuration:ReleaseDist" "${WORKSPACE}/SparkleShare/Mac/SparkleShare.sln"
-```
+
 
 ### Resetting SparkleShare settings
 
@@ -62,4 +55,3 @@ rm -Rf ~/.config/sparkleshare
 ### Uninstalling
 
 Simply remove the SparkleShare bundle.
-
