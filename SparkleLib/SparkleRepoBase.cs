@@ -613,8 +613,12 @@ namespace SparkleLib {
 
         public void Dispose ()
         {
-            this.remote_timer.Stop ();
-            this.remote_timer.Dispose ();
+            if (remote_timer != null) {
+                this.remote_timer.Elapsed -= RemoteTimerElapsedDelegate;
+                this.remote_timer.Stop ();
+                this.remote_timer.Dispose ();
+                this.remote_timer = null;
+            }
 
             this.listener.Disconnected         -= ListenerDisconnectedDelegate;
             this.listener.AnnouncementReceived -= ListenerAnnouncementReceivedDelegate;
