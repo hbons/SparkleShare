@@ -1,6 +1,6 @@
 Maintainer:
 
-	Hylke Bons <hylkebons@gmail.com>
+	Hylke Bons <hi@planetpeanut.uk>
 
 Code:
 
