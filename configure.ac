@@ -5,6 +5,9 @@ AC_PREREQ([2.54])
 AC_INIT([SparkleShare], sparkleshare_version)
 AM_INIT_AUTOMAKE([1.11 dist-bzip2 dist-zip foreign tar-pax])
 AM_MAINTAINER_MODE
+LT_INIT
+
+AC_CONFIG_MACRO_DIRS([build/m4/sparkleshare build/m4/shamrock build/m4/shave])
 
 dnl Export Version Info
 AC_SUBST([ASM_VERSION], [sparkleshare_version])
@@ -14,8 +17,6 @@ AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 if test "x$PKG_CONFIG" = "xno"; then
         AC_MSG_ERROR([pkg-config is not installed])
 fi
-
-AC_SUBST([ACLOCAL_AMFLAGS], ["-I build/m4/sparkleshare -I build/m4/shamrock -I build/m4/shave \${ACLOCAL_FLAGS}"])
 
 SHAMROCK_EXPAND_LIBDIR
 SHAMROCK_EXPAND_BINDIR
