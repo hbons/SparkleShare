@@ -12,7 +12,7 @@ Code:
 	Chris Magee <chris.magee@gametheworld.com>
 	Gabriel Burt <gabriel.burt@gmail.com>
 	Garrett LeSage <garrett@novell.com>
-	Hylke Bons <hylkebons@gmail.com>
+	Hylke Bons <hi@planetpeanut.uk>
 	Jonathan Haines <jonno.haines@gmail.com>
 	Kristi Tsukida <kristi.tsukida@gmail.com>
 	Konstantinos Vaggelakos <kozze89@gmail.com>
@@ -39,7 +39,7 @@ Design:
 
 	Andreas Nilsson <andreasn@gnome.org>
 	Jakub Steiner <jimmac@redhat.com>
-	Hylke Bons <hylkebons@gmail.com>
+	Hylke Bons <hi@planetpeanut.uk>
 	Lapo Calamandrei <calamandrei@gmail.com>
 	Sam Hewitt <hewittsamuel@gmail.com>
 
