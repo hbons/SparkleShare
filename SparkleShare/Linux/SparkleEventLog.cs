@@ -70,6 +70,7 @@ namespace SparkleShare {
                 new Gdk.RGBA () { Red = 1, Green = 1, Blue=1, Alpha = 1 });
 
             this.web_view = new WebView () { Editable = false };
+			this.web_view.Settings.EnablePlugins = false;
             this.web_view.NavigationRequested += WebViewNavigationRequested;
 
             this.scrolled_window.Add (this.web_view);
