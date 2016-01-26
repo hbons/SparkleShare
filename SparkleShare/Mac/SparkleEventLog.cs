@@ -76,6 +76,8 @@ namespace SparkleShare {
                     new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
             };
 
+            this.web_view.Preferences.PlugInsEnabled = false;
+
             this.cover = new NSBox () {
                 Frame = new RectangleF (
                     new PointF (-1, -1),
