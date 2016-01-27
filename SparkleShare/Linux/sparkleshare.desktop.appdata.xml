@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application>
+<component type="desktop">
   <id type="desktop">sparkleshare.desktop</id>
-  <licence>CC0</licence>
+  <metadata_licence>CC0-1.0</metadata_licence>
+  <project_license>GPL-3.0</project_license>
   <name>SparkleShare</name>
   <summary>Self hosted, instant, secure file sync</summary>
   <description>
@@ -23,4 +24,4 @@
     <p>Have fun!</p>
   </description>
   <url type="homepage">http://www.sparkleshare.org/</url>
-</application>
+</component>
