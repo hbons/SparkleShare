@@ -18,7 +18,7 @@
 using System;
 
 using Gtk;
-using WebKit;
+// using WebKit;
 
 namespace SparkleShare {
 
@@ -35,7 +35,7 @@ namespace SparkleShare {
         private ScrolledWindow scrolled_window;
         private VBox spinner_wrapper;
         private Spinner spinner;
-        private WebView web_view;
+//      private WebView web_view;
 
         private int pos_x, pos_y;
 
@@ -69,11 +69,11 @@ namespace SparkleShare {
             this.content_wrapper.OverrideBackgroundColor (StateFlags.Normal,
                 new Gdk.RGBA () { Red = 1, Green = 1, Blue=1, Alpha = 1 });
 
-            this.web_view = new WebView () { Editable = false };
-			this.web_view.Settings.EnablePlugins = false;
-            this.web_view.NavigationRequested += WebViewNavigationRequested;
+//          this.web_view = new WebView () { Editable = false };
+//          this.web_view.Settings.EnablePlugins = false;
+//          this.web_view.NavigationRequested += WebViewNavigationRequested;
 
-            this.scrolled_window.Add (this.web_view);
+            this.scrolled_window.Add (new Button ("WebView"));
             
             this.spinner_wrapper = new VBox (false, 0);
             this.spinner_wrapper.PackStart (new Label(""), true, true, 0);
@@ -264,27 +264,27 @@ namespace SparkleShare {
             html = html.Replace ("<!-- $document-moved-background-image -->", "file://" + new string [] {icons_path, "document-moved.png"}.Combine ());
                     
             this.spinner.Stop ();
-            this.scrolled_window.Remove (this.web_view);
-            this.web_view.Dispose ();
+//          this.scrolled_window.Remove (this.web_view);
+//          this.web_view.Dispose ();
 
-            this.web_view = new WebView () { Editable = false };
-            this.web_view.LoadString (html, "text/html", "UTF-8", "file://");
-            this.web_view.NavigationRequested += WebViewNavigationRequested;
-            this.scrolled_window.Add (this.web_view);
+//          this.web_view = new WebView () { Editable = false };
+//          this.web_view.LoadString (html, "text/html", "UTF-8", "file://");
+//          this.web_view.NavigationRequested += WebViewNavigationRequested;
+//          this.scrolled_window.Add (this.web_view);
 
             this.content_wrapper.Remove (this.content_wrapper.Child);
             this.content_wrapper.Add (this.scrolled_window);
             this.scrolled_window.ShowAll ();
         }
 
-
+/*
         private void WebViewNavigationRequested (object o, WebKit.NavigationRequestedArgs args) {
             Controller.LinkClicked (args.Request.Uri);
 
             // Don't follow HREFs (as this would cause a page refresh)
             if (!args.Request.Uri.Equals ("file:"))
                 args.RetVal = 1;
-        }
+        }*/
     }
 }
 
