@@ -46,8 +46,7 @@ namespace SparkleShare {
                 string n = Environment.NewLine;
 
                 Console.WriteLine (n +
-                    "SparkleShare is a collaboration and sharing tool that is" + n +
-                    "designed to keep things simple and to stay out of your way." + n +
+                    "Share and collaborate by syncing with any Git repository instantly." + n +
                     n +
                     "Version: " + SparkleLib.SparkleBackend.Version + n +
                     "Copyright (C) 2010 Hylke Bons and others" + n +
