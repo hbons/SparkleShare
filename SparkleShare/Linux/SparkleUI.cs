@@ -42,7 +42,7 @@ namespace SparkleShare {
 
         public SparkleUI ()
         {
-            this.application = new Gtk.Application ("org.sparkleshare.sparkleshare", 0);
+            this.application = new Gtk.Application ("org.sparkleshare.SparkleShare", 0);
 
             this.application.Register (null);
             this.application.Activated += ApplicationActivatedDelegate;
