@@ -6,6 +6,10 @@ theme = hicolor
 system_themedir = $(datadir)/icons/$(theme)
 app_themedir = $(pkgdatadir)/icons/$(theme)
 
+if BUILD_XDG_APP
+system_themedir = app_themedir
+endif
+
 system_theme_icons = \
 	apps,sparkleshare-16.png \
 	apps,sparkleshare-22.png	\
