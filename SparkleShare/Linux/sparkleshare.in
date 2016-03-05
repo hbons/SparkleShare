@@ -5,25 +5,18 @@ if [[ $UID -eq 0 ]]; then
   exit 1
 fi
 
-start() {
-  if [ -n "${SSH_AGENT_PID}" -o -n "${SSH_AUTH_SOCK}" ] ; then
-    mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
-  else
-    ssh-agent mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2 &
-  fi
-}
-
 case $1 in
-  start|--start)
-    start
-    ;;
   open|--open)
     invite=`date -u +%N`
     open=`echo $2 | sed 's/sparkleshare:\/\/addProject\///'`
     curl --insecure --output ~/SparkleShare/.$invite.xml $open
     start
     ;;
-  *)
+  help|--help)
     mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" --help
     ;;
+  *)
+    mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2
+    ;;
 esac
+
