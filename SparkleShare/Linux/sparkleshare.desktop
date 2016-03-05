@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
 Name=SparkleShare
-Comment=Self hosted, instant, secure file sync
-Exec=sparkleshare start
+Exec=sparkleshare
 Icon=sparkleshare
 Terminal=false
+Categories=Network;FileTransfer;GNOME;GTK;
 X-GNOME-Autostart-enabled=true
-Categories=Network;
+

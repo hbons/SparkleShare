@@ -21,7 +21,6 @@ using System.Reflection;
 [assembly:AssemblyTitle ("SparkleLib")]
 [assembly:AssemblyVersion ("@VERSION@")]
 [assembly:AssemblyCopyright ("Copyright (c) 2010 Hylke Bons and others")]
-[assembly:AssemblyTrademark ("SparkleShare is a trademark of SparkleShare Ltd.")]
 
 namespace SparkleLib {
 
@@ -29,3 +28,4 @@ namespace SparkleLib {
         public const string INSTALL_DIR = "@expanded_datadir@/sparkleshare";
     }
 }
+
