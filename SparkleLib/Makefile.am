@@ -13,6 +13,7 @@ SOURCES =  \
 	SparkleListenerFactory.cs \
 	SparkleListenerTcp.cs \
 	SparkleLogger.cs \
+	SparkleProcess.cs \
 	SparkleRepoBase.cs \
 	SparkleUser.cs \
 	SparkleWatcher.cs \
