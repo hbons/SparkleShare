@@ -63,7 +63,6 @@ AC_ARG_ENABLE(appindicator,
 OSNAME=`uname -s`
 if test "$OSNAME" = "Linux" ; then
 	SPARKLESHARE_CHECK_GTK_SHARP
-
 	PKG_CHECK_MODULES(NOTIFY_SHARP, notify-sharp-3.0)
 
 #	dnl check for webkitgtk-sharp
@@ -97,6 +96,8 @@ else
 fi
 
 AM_CONDITIONAL(HAVE_APP_INDICATOR, test x"$enable_appindicator" = xyes)
+AM_CONDITIONAL(BUILD_XDG_APP, test x"$prefix" = "/app")
+
 AC_SUBST([GUISUBDIRS])
 
 SHAMROCK_CHECK_NUNIT
