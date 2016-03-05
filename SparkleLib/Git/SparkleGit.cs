@@ -18,87 +18,10 @@
 using System;
 using System.IO;
 using System.Diagnostics;
+
 using SparkleLib;
 
 namespace SparkleLib.Git {
-
-    public abstract class SparkleProcess : Process {
-
-        public SparkleProcess (string path, string args) : base ()
-        {
-            StartInfo.FileName  = path;
-            StartInfo.Arguments = args;
-        }
-
-
-        new public void Start ()
-        {
-            SparkleLogger.LogInfo ("Cmd | " + System.IO.Path.GetFileName (StartInfo.WorkingDirectory),
-                System.IO.Path.GetFileName (StartInfo.FileName) + " " + StartInfo.Arguments);
-
-            try {
-                base.Start ();
-
-            } catch (Exception e) {
-                SparkleLogger.LogInfo ("Cmd", "Couldn't execute command: " + e.Message);
-                Environment.Exit (-1);
-            }
-        }
-
-
-        public void StartAndWaitForExit ()
-        {
-            Start ();
-            WaitForExit ();
-        }
-
-
-        public string StartAndReadStandardOutput ()
-        {
-            Start ();
-            
-            // Reading the standard output HAS to go before
-            // WaitForExit, or it will hang forever on output > 4096 bytes
-            string output = StandardOutput.ReadToEnd ();
-            WaitForExit ();
-            
-            return output.TrimEnd ();
-        }
-
-
-        public string StartAndReadStandardError ()
-        {
-            StartInfo.RedirectStandardError = true;
-            Start ();
-            
-            // Reading the standard output HAS to go before
-            // WaitForExit, or it will hang forever on output > 4096 bytes
-            string output = StandardError.ReadToEnd ();
-            WaitForExit ();
-            
-            return output.TrimEnd ();
-        }
-
-
-        protected string LocateCommand (string name)
-        {
-            string [] possible_command_paths = new string [] {
-                Environment.GetFolderPath (Environment.SpecialFolder.Personal) + "/bin/" + name,
-                Defines.INSTALL_DIR + "/bin/" + name,
-                "/usr/local/bin/" + name,
-                "/usr/bin/" + name,
-                "/opt/local/bin/" + name
-            };
-
-            foreach (string path in possible_command_paths) {
-                if (File.Exists (path))
-                    return path;
-            }
-
-            return name;
-        }
-    }
-
 
     public class SparkleGit : SparkleProcess {
 
@@ -112,12 +35,8 @@ namespace SparkleLib.Git {
             if (string.IsNullOrEmpty (GitPath))
                 GitPath = LocateCommand ("git");
 
-            EnableRaisingEvents              = true;
-            StartInfo.FileName               = GitPath;
-            StartInfo.RedirectStandardOutput = true;
-            StartInfo.UseShellExecute        = false;
-            StartInfo.WorkingDirectory       = path;
-            StartInfo.CreateNoWindow         = true;
+            StartInfo.FileName         = GitPath;
+            StartInfo.WorkingDirectory = path;
 
             if (StartInfo.EnvironmentVariables.ContainsKey ("LANG"))
                 StartInfo.EnvironmentVariables ["LANG"] = "en_US";
