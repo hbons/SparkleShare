@@ -46,15 +46,10 @@ namespace SparkleShare {
                 "-C \"" + computer_name + " (SparkleShare)\" " + // key comment
                 "-f \"" + key_name + "\""; // file name
 
-            SparkleKeyProcess process = new SparkleKeyProcess ("ssh-keygen", arguments);
+            SparkleProcess process = new SparkleProcess ("ssh-keygen", arguments);
             process.StartInfo.WorkingDirectory = output_path;
             process.Start ();
             process.WaitForExit ();
-
-            if (process.ExitCode == 0)
-                SparkleLogger.LogInfo ("Auth", "Created keypair '" + key_file_path + "'");
-            else
-                SparkleLogger.LogInfo ("Auth", "Could not create key pair '" + key_file_path + "'");
 
             return new string [] { key_file_path, key_file_path + ".pub" };
         }
@@ -62,25 +57,21 @@ namespace SparkleShare {
 
         public static void ImportPrivateKey (string key_file_path)
         {
+            StartKeyAgent ();
+
             // Use forward slashes when dealing with Windows domain accounts
             if (key_file_path.StartsWith ("\\\\"))
                 key_file_path = key_file_path.Replace ("\\", "/");
 
-            SparkleKeyProcess process = new SparkleKeyProcess ("ssh-add", "\"" + key_file_path + "\"");
+            SparkleProcess process = new SparkleProcess ("ssh-add", "\"" + key_file_path + "\"");
             process.Start ();
             process.WaitForExit ();
-
-            if (process.ExitCode == 0)
-                SparkleLogger.LogInfo ("Auth", "Imported key '" + key_file_path + "'");
-            else
-                SparkleLogger.LogInfo ("Auth", "Could not import key '" + key_file_path + "', " +
-                    process.StandardError.ReadToEnd ());
         }
 
 
         public static void ListPrivateKeys ()
         {
-            SparkleKeyProcess process = new SparkleKeyProcess ("ssh-add", "-l");
+            SparkleProcess process = new SparkleProcess ("ssh-add", "-l");
             process.Start ();
             string keys_in_use = process.StandardOutput.ReadToEnd ();
             process.WaitForExit ();
@@ -89,16 +80,16 @@ namespace SparkleShare {
         }
 
 
-        private class SparkleKeyProcess : Process {
+        private static void StartKeyAgent ()
+        {
+            Process [] processes = Process.GetProcessesByName ("ssh-agent");
 
-            public SparkleKeyProcess (string command, string arguments) : base ()
-            {
-                StartInfo.FileName               = command;
-                StartInfo.Arguments              = arguments;
-                StartInfo.UseShellExecute        = false;
-                StartInfo.RedirectStandardOutput = true;
-                StartInfo.RedirectStandardError  = true;
-                StartInfo.CreateNoWindow         = true;
+            if (processes.Length == 0) {
+                SparkleLogger.LogInfo ("Auth", "No key agent running, starting one...");
+
+                SparkleProcess process = new SparkleProcess ("ssh-agent", "");
+                process.Start ();
+                process.WaitForExit ();
             }
         }
     }
