@@ -98,6 +98,7 @@ namespace SparkleShare {
 
             Button cancel_button = new Button ("Cancel");
             Button sync_button   = new Button ("Sync"); // TODO: Make default button
+			sync_button.CanDefault = true;
 
             cancel_button.Clicked += delegate { Controller.CancelClicked (); };
             sync_button.Clicked   += delegate { Controller.SyncClicked (balloon.Buffer.Text); };
@@ -130,8 +131,6 @@ namespace SparkleShare {
             layout_vertical.PackStart (balloon, false, false, 0);
             layout_vertical.PackStart (buttons, false, false, 0);
 
-            // FIXME: Doesn't work
-            CanDefault = true;
             Default = sync_button;
 
             Add (layout_vertical);
