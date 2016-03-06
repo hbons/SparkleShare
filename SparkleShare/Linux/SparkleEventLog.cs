@@ -44,6 +44,8 @@ namespace SparkleShare {
         {
             SetWmclass ("SparkleShare", "SparkleShare");
 
+            TypeHint = Gdk.WindowTypeHint.Dialog;
+
             Gdk.Rectangle monitor_0_rect = Gdk.Screen.Default.GetMonitorGeometry (0);
             SetSizeRequest (480, (int) (monitor_0_rect.Height * 0.8));
 
@@ -66,8 +68,9 @@ namespace SparkleShare {
             this.content_wrapper = new EventBox ();
             this.scrolled_window = new ScrolledWindow ();
 
-            this.content_wrapper.OverrideBackgroundColor (StateFlags.Normal,
-                new Gdk.RGBA () { Red = 1, Green = 1, Blue=1, Alpha = 1 });
+            CssProvider css_provider = new CssProvider ();
+            css_provider.LoadFromData ("GtkEventBox { background-color: #ffffff; }");
+            this.content_wrapper.StyleContext.AddProvider (css_provider, 800);
 
 //          this.web_view = new WebView () { Editable = false };
 //          this.web_view.Settings.EnablePlugins = false;
@@ -245,8 +248,11 @@ namespace SparkleShare {
             html = html.Replace ("<!-- $body-font-family -->", StyleContext.GetFont (StateFlags.Normal).Family);
             html = html.Replace ("<!-- $body-font-size -->", (double) (StyleContext.GetFont (StateFlags.Normal).Size / 1024 + 3) + "px");
             html = html.Replace ("<!-- $body-color -->", SparkleUIHelpers.RGBAToHex (StyleContext.GetColor (StateFlags.Normal)));
-            html = html.Replace ("<!-- $body-background-color -->",
-                SparkleUIHelpers.RGBAToHex (new TreeView ().StyleContext.GetBackgroundColor (StateFlags.Normal)));
+     //       html = html.Replace ("<!-- $body-background-color -->",
+       //         SparkleUIHelpers.RGBAToHex (new TreeView ().StyleContext.GetStyleProperty ("background-color")));
+
+Console.WriteLine(new TreeView ().StyleContext.GetStyleProperty ("background-color"));
+Console.WriteLine(StyleContext.GetStyleProperty ("color"));
 
             html = html.Replace ("<!-- $day-entry-header-font-size -->", (StyleContext.GetFont (StateFlags.Normal).Size / 1024 + 3) + "px");
             html = html.Replace ("<!-- $day-entry-header-background-color -->",
