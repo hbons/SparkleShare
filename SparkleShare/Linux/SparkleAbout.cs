@@ -86,14 +86,14 @@ namespace SparkleShare {
             font.Size = 9 * 1024;
 
             CssProvider css_provider = new CssProvider ();
-            string image_path        = new string [] { SparkleUI.AssetsPath, "pixmaps", "about.png" }.Combine ();
+            Image image = SparkleUIHelpers.GetImage("about.png");
 
             css_provider.LoadFromData ("GtkWindow {" +
-                "background-image: url('" + image_path + "');" +
+                "background-image: url('" + image.File + "');" +
                 "background-repeat: no-repeat;" +
                 "background-position: left bottom;" +
                 "}");
-            
+
             StyleContext.AddProvider (css_provider, 800);
 
             VBox layout_vertical = new VBox (false, 0);            
