@@ -18,6 +18,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 
 using SparkleLib;
 
@@ -88,8 +89,12 @@ namespace SparkleShare {
                 SparkleLogger.LogInfo ("Auth", "No key agent running, starting one...");
 
                 SparkleProcess process = new SparkleProcess ("ssh-agent", "");
-                process.Start ();
-                process.WaitForExit ();
+                string output = process.StartAndReadStandardOutput ();
+
+                Match auth_sock_match = new Regex (@"SSH_AUTH_SOCK=([^;\n\r]*)").Match (output);
+
+                if (auth_sock_match.Success)
+                    Environment.SetEnvironmentVariable ("SSH_AUTH_SOCK", auth_sock_match.Groups [1].Value);
             }
         }
     }
