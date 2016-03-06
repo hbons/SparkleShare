@@ -31,7 +31,7 @@ namespace SparkleShare {
 
             IconName       = "sparkleshare";
             Resizable      = false;
-            WindowPosition = WindowPosition.Center;
+            WindowPosition = WindowPosition.CenterAlways;
             BorderWidth    = 16;
 
             SetSizeRequest (480, 120);

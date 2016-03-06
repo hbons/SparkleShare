@@ -33,7 +33,8 @@ namespace SparkleShare {
 
             IconName       = "sparkleshare";
             Resizable      = false;
-            WindowPosition = WindowPosition.Center;
+            WindowPosition = WindowPosition.CenterAlways;
+            TypeHint       = Gdk.WindowTypeHint.Dialog;
 
             SetSizeRequest (600, 260);
 
@@ -76,54 +77,45 @@ namespace SparkleShare {
 
         private void CreateAbout ()
         {
-            Gdk.RGBA white = new Gdk.RGBA ();
-            white.Parse ("#ffffff");
-
-            Gdk.RGBA highlight = new Gdk.RGBA ();
-            highlight.Parse ("#a8bbcf");
-
-            Pango.FontDescription font = StyleContext.GetFont (StateFlags.Normal);
-            font.Size = 9 * 1024;
-
-            CssProvider css_provider = new CssProvider ();
+            CssProvider window_css_provider = new CssProvider ();
             Image image = SparkleUIHelpers.GetImage("about.png");
 
-            css_provider.LoadFromData ("GtkWindow {" +
+            window_css_provider.LoadFromData ("GtkWindow {" +
                 "background-image: url('" + image.File + "');" +
                 "background-repeat: no-repeat;" +
                 "background-position: left bottom;" +
                 "}");
 
-            StyleContext.AddProvider (css_provider, 800);
+            StyleContext.AddProvider (window_css_provider, 800);
 
             VBox layout_vertical = new VBox (false, 0);            
             HBox links_layout = new HBox (false, 16);
 
+            CssProvider label_css_provider = new CssProvider ();
+            label_css_provider.LoadFromData ("GtkLabel { color: #fff; font-size: 10px; background-color: rgba(0, 0, 0, 0); }");
+
+            CssProvider label_highlight_css_provider = new CssProvider ();
+            label_highlight_css_provider.LoadFromData ("GtkLabel { color: #a8bbcf; font-size: 10px; }");
 
             Label version = new Label () {
                 Text   = "version " + Controller.RunningVersion,
                 Xalign = 0, Xpad   = 0
             };
 
-            version.OverrideFont (font);
-            version.OverrideColor (StateFlags.Normal, white);
-
+            version.StyleContext.AddProvider (label_css_provider, 800);
 
             this.updates = new Label ("Checking for updates…") {
                 Xalign = 0, Xpad = 0
             };
 
-            this.updates.OverrideFont (font);
-            this.updates.OverrideColor (StateFlags.Normal, highlight);
-
+            this.updates.StyleContext.AddProvider (label_highlight_css_provider, 800);
 
             Label copyright = new Label () {
                 Markup = string.Format ("Copyright © 2010–{0} Hylke Bons and others.", DateTime.Now.Year),
                 Xalign = 0, Xpad   = 0
             };
 
-            copyright.OverrideFont (font);
-            copyright.OverrideColor (StateFlags.Normal, white);
+            copyright.StyleContext.AddProvider (label_css_provider, 800);
 
 
             TextView license          = new TextView ();
@@ -134,9 +126,7 @@ namespace SparkleShare {
             license_buffer.Text = "SparkleShare is Open Source and you’re free to use, change, " +
                 "and share it under the GNU GPLv3.";
 
-            license.OverrideBackgroundColor (StateFlags.Normal, new Gdk.RGBA () { Alpha = 0 });
-            license.OverrideFont (font);
-            license.OverrideColor (StateFlags.Normal, white);
+            version.StyleContext.AddProvider (label_css_provider, 800);
 
             
             SparkleLink website_link        = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
@@ -174,12 +164,7 @@ namespace SparkleShare {
             CanFocus = false;
 
             CssProvider css_provider = new CssProvider ();
-
-            css_provider.LoadFromData ("GtkLabel {" +
-                "color: #729fcf;" +
-                "cursor: pointer;" +
-                "}");
-
+            css_provider.LoadFromData ("GtkLabel { color: #729fcf; font-size: 10px; }");
             StyleContext.AddProvider (css_provider, 800);
         }
     }

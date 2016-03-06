@@ -36,7 +36,7 @@ namespace SparkleShare {
 
             IconName       = "sparkleshare";
             Resizable      = false;
-            WindowPosition = WindowPosition.Center;
+            WindowPosition = WindowPosition.CenterAlways;
             Deletable      = false;
             TypeHint       = Gdk.WindowTypeHint.Dialog;
 
@@ -147,9 +147,10 @@ namespace SparkleShare {
                 default_button.CanDefault = true;
                 Default = default_button;
             }
-        
+
             Present ();
             base.ShowAll ();
         }
     }
 }
+
