@@ -170,13 +170,17 @@ namespace SparkleShare {
         
         public SparkleLink (string text, string url)
         {
-            Markup = string.Format ("<a href=\"{0}\"><span fgcolor=\"#729fcf\">{1}</span></a>", url, text);	
+            Markup = string.Format ("<a href=\"{0}\">{1}</a>", url, text);	
             CanFocus = false;
 
-            Pango.FontDescription font = StyleContext.GetFont (StateFlags.Normal);
-            font.Size = 9 * 1024;
+            CssProvider css_provider = new CssProvider ();
 
-            OverrideFont (font);
+            css_provider.LoadFromData ("GtkLabel {" +
+                "color: #729fcf;" +
+                "cursor: pointer;" +
+                "}");
+
+            StyleContext.AddProvider (css_provider, 800);
         }
     }
 }
