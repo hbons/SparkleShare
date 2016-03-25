@@ -16,14 +16,12 @@
 
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
-using System.Threading;
 
 namespace SparkleLib {
-
+    
     public abstract class SparkleFetcherSSH : SparkleFetcherBase {
 
         public SparkleFetcherSSH (SparkleFetcherInfo info) : base (info)
@@ -33,54 +31,58 @@ namespace SparkleLib {
 
         public override bool Fetch ()
         {
+            // Tor has special domain names called ".onion addresses". They can only be
+            // resolved by using a proxy via tor. While the rest of the openssh suite
+            // fully supports proxying, ssh-keyscan does not, so we can't use it for .onion
             if (RemoteUrl.Host.EndsWith (".onion")) {
-                // Tor has special domain names called ".onion addresses".  They can only be
-                // resolved by using a proxy via tor. While the rest of the openssh suite
-                // fully supports proxying, ssh-keyscan does not, so we can't use it for .onion
                 SparkleLogger.LogInfo ("Auth", "using tor .onion address skipping ssh-keyscan");
+                return true;
+            }
 
-            } else if (!RemoteUrl.Scheme.StartsWith ("http")) {
-                string host_key = FetchHostKey ();
+            if (RemoteUrl.Scheme.StartsWith ("http"))
+                return true;
+            
+            string host_key = FetchHostKey ();
+            
+            if (string.IsNullOrEmpty (RemoteUrl.Host) || host_key == null) {
+                SparkleLogger.LogInfo ("Auth", "Could not fetch host key");
+                this.errors.Add ("error: Could not fetch host key");
                 
-                if (string.IsNullOrEmpty (RemoteUrl.Host) || host_key == null) {
-                    SparkleLogger.LogInfo ("Auth", "Could not fetch host key");
-                    this.errors.Add ("error: Could not fetch host key");
+                return false;
+            }
+            
+            bool warn = true;
+
+            if (RequiredFingerprint != null) {
+                string host_fingerprint;
+
+                try {
+                    host_fingerprint = DeriveFingerprint (host_key);
+                
+                } catch (InvalidOperationException e) {
+                    // "Unapproved cryptographic algorithms" won't work when FIPS is enabled on Windows.
+                    // Software like Cisco AnyConnect can demand this feature is on, so we show an error
+                    SparkleLogger.LogInfo ("Auth", "Unable to derive fingerprint: ", e);
+                    this.errors.Add ("error: Can't check fingerprint due to FIPS being enabled");
+                    
+                    return false;
+                }
+
+                if (host_fingerprint == null || !RequiredFingerprint.Equals (host_fingerprint)) {
+                    SparkleLogger.LogInfo ("Auth", "Fingerprint doesn't match");
+                    this.errors.Add ("error: Host fingerprint doesn't match");
                     
                     return false;
                 }
                 
-                bool warn = true;
-                if (RequiredFingerprint != null) {
-                    string host_fingerprint;
-
-                    try {
-                        host_fingerprint = DeriveFingerprint (host_key);
-                    
-                    } catch (InvalidOperationException e) {
-                        // "Unapproved cryptographic algorithms" won't work when FIPS is enabled on Windows.
-                        // Software like Cisco AnyConnect can demand this feature is on, so we show an error
-                        SparkleLogger.LogInfo ("Auth", "Unable to derive fingerprint: ", e);
-                        this.errors.Add ("error: Can't check fingerprint due to FIPS being enabled");
-                        
-                        return false;
-                    }
-
-                    if (host_fingerprint == null || !RequiredFingerprint.Equals (host_fingerprint)) {
-                        SparkleLogger.LogInfo ("Auth", "Fingerprint doesn't match");
-                        this.errors.Add ("error: Host fingerprint doesn't match");
-                        
-                        return false;
-                    }
-                    
-                    warn = false;
-                    SparkleLogger.LogInfo ("Auth", "Fingerprint matches");
-                    
-                } else {
-                    SparkleLogger.LogInfo ("Auth", "Skipping fingerprint check");
-                }
+                warn = false;
+                SparkleLogger.LogInfo ("Auth", "Fingerprint matches");
                 
-                AcceptHostKey (host_key, warn);
+            } else {
+                SparkleLogger.LogInfo ("Auth", "Skipping fingerprint check");
             }
+            
+            AcceptHostKey (host_key, warn);
             
             return true;
         }
@@ -140,7 +142,10 @@ namespace SparkleLib {
         
         private void AcceptHostKey (string host_key, bool warn)
         {
-            string ssh_config_path       = Path.Combine (SparkleConfig.DefaultConfig.HomePath, ".ssh");
+            // TODO: Make a proper member for this
+            string config_path = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
+
+            string ssh_config_path       = Path.Combine (config_path, "ssh");
             string known_hosts_file_path = Path.Combine (ssh_config_path, "known_hosts");
             
             if (!File.Exists (known_hosts_file_path)) {
