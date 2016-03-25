@@ -49,10 +49,10 @@ namespace SparkleLib.Git {
                 StartInfo.EnvironmentVariables.Add ("GIT_TERMINAL_PROMPT", "0");
 
             if (!string.IsNullOrEmpty (SSHPath)) {
-                if (StartInfo.EnvironmentVariables.ContainsKey ("GIT_SSH"))
-                    StartInfo.EnvironmentVariables ["GIT_SSH"] = SSHPath;
+                if (StartInfo.EnvironmentVariables.ContainsKey ("GIT_SSH_COMMAND"))
+                    StartInfo.EnvironmentVariables ["GIT_SSH_COMMAND"] = SSHPath;
                 else
-                    StartInfo.EnvironmentVariables.Add ("GIT_SSH", SSHPath);
+                    StartInfo.EnvironmentVariables.Add ("GIT_SSH_COMMAND", SSHPath);
             }
 
             if (string.IsNullOrEmpty (ExecPath))
