@@ -43,14 +43,14 @@ namespace SparkleLib {
                 return true;
             
             string host_key = FetchHostKey ();
-            
+
             if (string.IsNullOrEmpty (RemoteUrl.Host) || host_key == null) {
                 SparkleLogger.LogInfo ("Auth", "Could not fetch host key");
                 this.errors.Add ("error: Could not fetch host key");
-                
+
                 return false;
             }
-            
+
             bool warn = true;
 
             if (RequiredFingerprint != null) {
