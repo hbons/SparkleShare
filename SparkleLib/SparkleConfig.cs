@@ -145,7 +145,8 @@ namespace SparkleLib {
 
                 SparkleUser user = new SparkleUser (user_name, user_email);
 
-                string [] private_key_file_paths = Directory.GetFiles (Path.GetDirectoryName (FullPath), "*.key");
+                string ssh_path = Path.Combine (Path.GetDirectoryName (FullPath), "ssh");
+                string [] private_key_file_paths = Directory.GetFiles(ssh_path, "*.key");
                 
                 if (private_key_file_paths.Length > 0) {
                     user.PrivateKey         = File.ReadAllText (private_key_file_paths [0]);
