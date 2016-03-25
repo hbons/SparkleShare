@@ -16,8 +16,9 @@
 
 
 using System;
-using System.Net;
 using System.Threading;
+
+using SparkleLib;
 
 namespace SparkleShare {
 
@@ -29,20 +30,17 @@ namespace SparkleShare {
         public event UpdateTitleEventDelegate UpdateTitleEvent = delegate { };
         public delegate void UpdateTitleEventDelegate (string title);
 
-        public string AvatarFilePath = "";
+        public readonly string AvatarFilePath = "";
         public string CurrentProject { get; private set; }
 
 
         public SparkleNoteController ()
         {
-            Program.Controller.ShowNoteWindowEvent += delegate (string project) {
-                CurrentProject = project;
-                ShowWindowEvent ();
-                UpdateTitleEvent (CurrentProject);
-            };
+            Program.Controller.ShowNoteWindowEvent += OnNoteWindowEvent;
 
-            AvatarFilePath = SparkleAvatars.GetAvatar (Program.Controller.CurrentUser.Email,
-                48, Program.Controller.Config.FullPath);
+            if (Program.Controller.AvatarsEnabled && !Program.Controller.FirstRun)
+                AvatarFilePath = SparkleAvatars.GetAvatar (Program.Controller.CurrentUser.Email,
+                    48, Program.Controller.Config.FullPath);
         }
 
 
@@ -55,13 +53,29 @@ namespace SparkleShare {
         public void SyncClicked (string note)
         {
             HideWindowEvent ();
-            new Thread (() => Program.Controller.GetRepoByName (CurrentProject).Resume (note)).Start ();
+            new Thread (() => ResumeWithNote (note)).Start ();
         }
 
 
         public void WindowClosed ()
         {
             HideWindowEvent ();
+        }
+
+
+        void OnNoteWindowEvent (string project)
+        {
+            CurrentProject = project;
+
+            ShowWindowEvent ();
+            UpdateTitleEvent (CurrentProject);
+        }
+
+
+        void ResumeWithNote (string note)
+        {
+            SparkleRepoBase repo = Program.Controller.GetRepoByName (CurrentProject);
+            repo.Resume (note);
         }
     }
 }
