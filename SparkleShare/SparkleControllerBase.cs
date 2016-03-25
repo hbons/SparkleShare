@@ -780,7 +780,10 @@ namespace SparkleShare {
         
         private string [] CreateKeys ()
         {
-            string keys_path     = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
+            // TODO: Make a proper member for this
+            string config_path = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
+
+            string keys_path     = Path.Combine (config_path, "ssh");
             string key_file_name = DateTime.Now.ToString ("yyyy-MM-dd_HH\\hmm");
             
             return SparkleKeys.GenerateKeyPair (keys_path, key_file_name);

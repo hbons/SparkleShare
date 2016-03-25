@@ -31,6 +31,9 @@ namespace SparkleShare {
             key_name += ".key";
             string key_file_path = Path.Combine (output_path, key_name);
 
+            if (!Directory.Exists (output_path))
+                Directory.CreateDirectory (output_path);
+
             if (File.Exists (key_file_path)) {
                 SparkleLogger.LogInfo ("Auth", "A key pair exists ('" + key_name + "'), leaving it untouched");
                 return new string [] { key_file_path, key_file_path + ".pub" };
