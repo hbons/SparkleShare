@@ -26,24 +26,21 @@ namespace SparkleLib {
 
         public static SSHAuthenticationInfo DefaultAuthenticationInfo;
 
+        public string PrivateKeyFilePath { get; private set; }
+        public string PrivateKey { get; private set; }
 
-        public string PrivateKeyFilePath;
-        public string PrivateKey;
+        public string PublicKeyFilePath { get; private set; }
+        public string PublicKey { get; private set; }
 
-        public string PublicKeyFilePath;
-        public string PublicKey;
-
-        public string KnownHostsFilePath;
+        public string KnownHostsFilePath { get; private set; }
 
 
-        string Path;
+        readonly string Path;
 
 
         public SSHAuthenticationInfo ()
         {
-            string config_path = IO.Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
-            Path = IO.Path.Combine (config_path, "ssh");
-
+            Path = IO.Path.Combine (IO.Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath), "ssh");
             KnownHostsFilePath = IO.Path.Combine (Path, "known_hosts");
 
             if (IO.Directory.Exists (Path)) {
@@ -84,7 +81,6 @@ namespace SparkleLib {
         bool CreateKeyPair ()
         {
             string key_file_name = DateTime.Now.ToString ("yyyy-MM-dd_HH\\hmm") + ".key";
-            string key_file_path = IO.Path.Combine (Path, key_file_name);
             string computer_name = Dns.GetHostName ();
 
             if (computer_name.EndsWith (".local"))
@@ -102,24 +98,18 @@ namespace SparkleLib {
 
             var process = new SparkleProcess ("ssh-keygen", arguments);
             process.StartInfo.WorkingDirectory = Path;
-
             process.Start ();
             process.WaitForExit ();
 
             if (process.ExitCode == 0) {
-                PrivateKeyFilePath = key_file_path;
-                PrivateKey = IO.File.ReadAllText (key_file_path);
-
-                PublicKeyFilePath = key_file_path + ".pub";
-                PublicKey = IO.File.ReadAllText (key_file_path + ".pub");
-
                 SparkleLogger.LogInfo ("Auth", "Created key pair: " + key_file_name);
-                return true;
+                ImportKeys ();
 
-            } else {
-                SparkleLogger.LogInfo ("Auth", "Could not create key pair");
-                return false;
+                return true;
             }
+
+            SparkleLogger.LogInfo ("Auth", "Could not create key pair");
+            return false;
         }
     }
 }
