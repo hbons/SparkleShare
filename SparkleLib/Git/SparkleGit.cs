@@ -13,6 +13,7 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
+using System;
 
 
 namespace SparkleLib.Git {
@@ -32,27 +33,32 @@ namespace SparkleLib.Git {
             StartInfo.FileName         = GitPath;
             StartInfo.WorkingDirectory = path;
 
-            if (StartInfo.EnvironmentVariables.ContainsKey ("LANG"))
-                StartInfo.EnvironmentVariables ["LANG"] = "en_US";
-            else
-                StartInfo.EnvironmentVariables.Add ("LANG", "en_US");
+            if (string.IsNullOrEmpty (SSHPath))
+                SSHPath = "ssh";
 
-            if (StartInfo.EnvironmentVariables.ContainsKey ("GIT_TERMINAL_PROMPT"))
-                StartInfo.EnvironmentVariables ["GIT_TERMINAL_PROMPT"] = "0";
-            else
-                StartInfo.EnvironmentVariables.Add ("GIT_TERMINAL_PROMPT", "0");
+            string GIT_SSH_COMMAND = SSHPath + " " +
+                "-o UserKnownHostsFile=" + SSHAuthenticationInfo.DefaultAuthenticationInfo.KnownHostsFilePath + " " +
+                "-o PasswordAuthentication=no " +
+                "-F /dev/null " + // Ignore the environment's SSH config file
+                "-i " + SSHAuthenticationInfo.DefaultAuthenticationInfo.PrivateKeyFilePath;
 
-            if (!string.IsNullOrEmpty (SSHPath)) {
-                if (StartInfo.EnvironmentVariables.ContainsKey ("GIT_SSH_COMMAND"))
-                    StartInfo.EnvironmentVariables ["GIT_SSH_COMMAND"] = SSHPath;
-                else
-                    StartInfo.EnvironmentVariables.Add ("GIT_SSH_COMMAND", SSHPath);
-            }
+            SetEnvironmentVariable ("GIT_SSH_COMMAND", GIT_SSH_COMMAND);
+            SetEnvironmentVariable ("LANG", "en_US");
+            SetEnvironmentVariable ("GIT_TERMINAL_PROMPT", "0");
 
             if (string.IsNullOrEmpty (ExecPath))
                 StartInfo.Arguments = args;
             else
                 StartInfo.Arguments = "--exec-path=\"" + ExecPath + "\" " + args;
+        }
+
+
+        void SetEnvironmentVariable (string variable, string content)
+        {
+            if (StartInfo.EnvironmentVariables.ContainsKey (variable))
+                StartInfo.EnvironmentVariables [variable] = content;
+            else
+                StartInfo.EnvironmentVariables.Add (variable, content);
         }
     }
 }
