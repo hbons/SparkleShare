@@ -1,0 +1,124 @@
+﻿//   SparkleShare, a collaboration and sharing tool.
+//   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
+//
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU Lesser General Public License as 
+//   published by the Free Software Foundation, either version 3 of the 
+//   License, or (at your option) any later version.
+//
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//   GNU General Public License for more details.
+//
+//   You should have received a copy of the GNU General Public License
+//   along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+using System;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
+using System.Net;
+
+using IO = System.IO;
+
+namespace SparkleLib {
+
+    public class SSHAuthenticationInfo : AuthenticationInfo {
+
+        public string PrivateKeyFilePath;
+        public string PrivateKey;
+
+        public string PublicKeyFilePath;
+        public string PublicKey;
+
+        public string KnownHostsFilePath;
+
+        string Path;
+
+
+        public SSHAuthenticationInfo ()
+        {
+            string config_path = IO.Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
+            Path = IO.Path.Combine (config_path, "ssh");
+
+            KnownHostsFilePath = IO.Path.Combine (Path, "known_hosts");
+
+            if (!IO.Directory.Exists (Path)) {
+                IO.Directory.CreateDirectory (Path);
+                CreateKeyPair ();
+            
+            } else {
+                foreach (string file_path in IO.Directory.GetFiles (Path)) {
+                    if (file_path.EndsWith (".key")) {
+                        PrivateKeyFilePath = file_path;
+                        PrivateKey         = IO.File.ReadAllText (file_path);
+                    }
+
+                    if (file_path.EndsWith (".key.pub")) {
+                        PublicKeyFilePath = file_path;
+                        PublicKey         = IO.File.ReadAllText (file_path);
+                    }
+                }
+            }
+        }
+
+
+        bool CreateKeyPair ()
+        {
+            string key_file_name = DateTime.Now.ToString ("yyyy-MM-dd_HH\\hmm") + ".key";
+            string key_file_path = IO.Path.Combine (Path, key_file_name);
+            string computer_name = Dns.GetHostName ();
+
+            if (computer_name.EndsWith (".local"))
+                computer_name = computer_name.Substring (0, computer_name.Length - ".local".Length);
+
+            string arguments =
+                "-t rsa "  + // Crypto type
+                "-b 4096 " + // Key size
+                "-P \"\" " + // No password
+                "-C \"" + computer_name + " (SparkleShare)\" " + // Key comment
+                "-f \"" + key_file_name + "\"";
+
+            var process = new SparkleProcess ("ssh-keygen", arguments);
+            process.StartInfo.WorkingDirectory = Path;
+
+            process.Start ();
+            process.WaitForExit ();
+
+            if (process.ExitCode == 0) {
+                Properties ["PrivateKeyFilePath"] = key_file_path;
+                Properties ["PrivateKey"] = IO.File.ReadAllText (key_file_path);
+
+                Properties ["PublicKeyFilePath"] = key_file_path + ".pub";
+                Properties ["PublicKey"] = IO.File.ReadAllText (key_file_path + ".pub");
+
+                SparkleLogger.LogInfo ("Auth", "Created key pair: " + key_file_name);
+                return true;
+
+            } else {
+                SparkleLogger.LogInfo ("Auth", "Could not create key pair");
+                return false;
+            }
+        }
+
+
+        void StartKeyAgent ()
+        {
+            Process [] processes = Process.GetProcessesByName ("ssh-agent");
+
+            if (processes.Length > 1)
+                return;
+            
+            SparkleLogger.LogInfo ("Auth", "No key agent running, starting one...");
+
+            SparkleProcess process = new SparkleProcess ("ssh-agent", "");
+            string output = process.StartAndReadStandardOutput ();
+
+            Match auth_sock_match = new Regex (@"SSH_AUTH_SOCK=([^;\n\r]*)").Match (output);
+
+            if (auth_sock_match.Success)
+                Environment.SetEnvironmentVariable ("SSH_AUTH_SOCK", auth_sock_match.Groups [1].Value);
+        }
+    }
+}
