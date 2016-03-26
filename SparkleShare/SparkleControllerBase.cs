@@ -22,7 +22,6 @@ using System.Linq;
 using System.Threading;
 
 using SparkleLib;
-using SparkleLib.Git;
 
 namespace SparkleShare {
     
