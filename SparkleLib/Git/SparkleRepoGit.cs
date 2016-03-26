@@ -29,7 +29,6 @@ namespace SparkleLib.Git {
     public class SparkleRepo : SparkleRepoBase {
 
         private bool user_is_set;
-        private bool use_git_bin;
         private bool is_encrypted;
 
         private string cached_branch;
@@ -91,15 +90,6 @@ namespace SparkleLib.Git {
             SparkleGit git = new SparkleGit (LocalPath, "config core.ignorecase false");
             git.StartAndWaitForExit ();
 
-            // Check if we should use git-bin
-            git = new SparkleGit (LocalPath, "config --get filter.bin.clean");
-            git.StartAndWaitForExit ();
-
-            this.use_git_bin = (git.ExitCode == 0);
-
-            if (this.use_git_bin)
-                ConfigureGitBin ();
-
             git = new SparkleGit (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
             git.StartAndWaitForExit ();
 
@@ -107,22 +97,6 @@ namespace SparkleLib.Git {
 
             if (File.Exists (password_file_path))
                 this.is_encrypted = true;
-        }
-
-
-        private void ConfigureGitBin ()
-        {
-            SparkleGit git = new SparkleGit (LocalPath, "config filter.bin.clean \"git bin clean %f\"");
-            git.StartAndWaitForExit ();
-            
-            git = new SparkleGit (LocalPath, "config filter.bin.smudge \"git bin smudge\"");
-            git.StartAndWaitForExit ();
-
-            git = new SparkleGit (LocalPath, "config git-bin.sftpUrl \"" + RemoteUrl + "\"");
-            git.StartAndWaitForExit ();
-            
-            git = new SparkleGit (LocalPath, "config git-bin.sftpPrivateKeyFile \"" + base.local_config.User.PrivateKeyFilePath + "\"");
-            git.StartAndWaitForExit ();
         }
 
 
@@ -242,13 +216,6 @@ namespace SparkleLib.Git {
 
             if (message != null)
                 Commit (message);
- 
-            if (this.use_git_bin) {
-                SparkleGitBin git_bin = new SparkleGitBin (LocalPath, "push");
-                git_bin.StartAndWaitForExit ();
-
-                // TODO: Progress
-            }
 
             SparkleGit git = new SparkleGit (LocalPath, "push --progress \"" + RemoteUrl + "\" " + this.branch);
             git.StartInfo.RedirectStandardError = true;
@@ -312,8 +279,6 @@ namespace SparkleLib.Git {
             UpdateSizes ();
 
             if (git.ExitCode == 0) {
-                ClearCache ();
-
                 string salt_file_path = new string [] { LocalPath, ".git", "salt" }.Combine ();
 
                 // If the repo is encrypted, create a branch to 
@@ -405,13 +370,10 @@ namespace SparkleLib.Git {
             UpdateSizes ();
 
             if (git.ExitCode == 0) {
-                if (Merge ()) {
-                    ClearCache ();
+                if (Merge ())
                     return true;
-                
-                } else {
+                else
                     return false;
-                }
 
             } else {
                 Error = ErrorStatus.HostUnreachable;
@@ -1031,16 +993,6 @@ namespace SparkleLib.Git {
             }
 
             return builder.ToString ();
-        }
-
-
-        private void ClearCache ()
-        {
-            if (!this.use_git_bin)
-                return;
-
-            SparkleGitBin git_bin = new SparkleGitBin (LocalPath, "clear -f");
-            git_bin.StartAndWaitForExit ();
         }
 
 

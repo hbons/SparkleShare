@@ -28,7 +28,6 @@ namespace SparkleLib.Git {
     public class SparkleFetcher : SparkleFetcherSSH {
 
         private SparkleGit git;
-        private bool use_git_bin;
         private string cached_salt;
 
         private Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
@@ -101,8 +100,6 @@ namespace SparkleLib.Git {
                     else
                         uri = new Uri (uri.Scheme + "://storage@" + uri.Host + ":" + uri.Port + uri.AbsolutePath);
                 }
-
-                this.use_git_bin = false; // TODO
             }
 
             RemoteUrl = uri;
@@ -381,24 +378,6 @@ namespace SparkleLib.Git {
                 SparkleGit git_config = new SparkleGit (TargetFolder, "config " + setting);
                 git_config.StartAndWaitForExit ();
             }
-
-            if (this.use_git_bin)
-                InstallGitBinConfiguration ();
-        }
-
-
-        public void InstallGitBinConfiguration ()
-        {
-            string [] settings = new string [] {
-                "core.bigFileThreshold 1024g",
-                "filter.bin.clean \"git bin clean %f\"",
-                "filter.bin.smudge \"git bin smudge\""
-            };
-
-            foreach (string setting in settings) {
-                SparkleGit git_config = new SparkleGit (TargetFolder, "config " + setting);
-                git_config.StartAndWaitForExit ();
-            }
         }
 
 
@@ -422,28 +401,22 @@ namespace SparkleLib.Git {
             string attribute_rules_file_path = new string [] { TargetFolder, ".git", "info", "attributes" }.Combine ();
             TextWriter writer                = new StreamWriter (attribute_rules_file_path);
 
-            if (this.use_git_bin) {
-                writer.WriteLine ("* filter=bin binary");
+            // Compile a list of files we don't want Git to compress.
+            // Not compressing already compressed files decreases memory usage and increases speed
+            string [] extensions = new string [] {
+                "jpg", "jpeg", "png", "tiff", "gif", // Images
+                "flac", "mp3", "ogg", "oga", // Audio
+                "avi", "mov", "mpg", "mpeg", "mkv", "ogv", "ogx", "webm", // Video
+                "zip", "gz", "bz", "bz2", "rpm", "deb", "tgz", "rar", "ace", "7z", "pak", "tc", "iso", ".dmg" // Archives
+            };
 
-            } else {
-                // Compile a list of files we don't want Git to compress.
-                // Not compressing already compressed files decreases memory usage and increases speed
-                string [] extensions = new string [] {
-                    "jpg", "jpeg", "png", "tiff", "gif", // Images
-                    "flac", "mp3", "ogg", "oga", // Audio
-                    "avi", "mov", "mpg", "mpeg", "mkv", "ogv", "ogx", "webm", // Video
-                    "zip", "gz", "bz", "bz2", "rpm", "deb", "tgz", "rar", "ace", "7z", "pak", "tc", "iso", ".dmg" // Archives
-                };
-
-                foreach (string extension in extensions) {
-                    writer.WriteLine ("*." + extension + " -delta");
-                    writer.WriteLine ("*." + extension.ToUpper () + " -delta");
-                }
-
-                writer.WriteLine ("*.txt text");
-                writer.WriteLine ("*.TXT text");
+            foreach (string extension in extensions) {
+                writer.WriteLine ("*." + extension + " -delta");
+                writer.WriteLine ("*." + extension.ToUpper () + " -delta");
             }
 
+            writer.WriteLine ("*.txt text");
+            writer.WriteLine ("*.TXT text");
             writer.Close ();
         }
     }
