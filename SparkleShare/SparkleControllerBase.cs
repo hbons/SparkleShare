@@ -200,9 +200,13 @@ namespace SparkleShare {
             string app_data_path = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
             string config_path   = Path.Combine (app_data_path, "sparkleshare");
             
-            Config                      = new SparkleConfig (config_path, "config.xml");
+            Config = new SparkleConfig (config_path, "config.xml");
             SparkleConfig.DefaultConfig = Config;
-            FoldersPath                 = Config.FoldersPath;
+
+            UserAuthenticationInfo = new SSHAuthenticationInfo ();
+            SSHAuthenticationInfo.DefaultAuthenticationInfo = UserAuthenticationInfo;
+
+            FoldersPath = Config.FoldersPath;
         }
         
         
@@ -210,7 +214,7 @@ namespace SparkleShare {
         {
             SparkleLogger.LogInfo ("Environment", SparkleLib.SparkleBackend.Platform + " (" + Environment.OSVersion + ")");
             // TODO: SparkleLogger.LogInfo ("Environment", "Git version: ");
-            SparkleLogger.LogInfo ("Environment", "SparkleShare  " + SparkleLib.SparkleBackend.Version);
+            SparkleLogger.LogInfo ("Environment", "SparkleShare " + SparkleLib.SparkleBackend.Version);
             
             SparklePlugin.PluginsPath = PluginsPath;
             InstallProtocolHandler ();
@@ -222,9 +226,6 @@ namespace SparkleShare {
             } catch (DirectoryNotFoundException) {
                 this.lost_folders_path = true;
             }
-
-            UserAuthenticationInfo = new SSHAuthenticationInfo ();
-            FolderListChanged (); // FIXME: Hacky way to update status icon menu to show the key
 
             // Watch the SparkleShare folder
             this.watcher = new FileSystemWatcher () {
