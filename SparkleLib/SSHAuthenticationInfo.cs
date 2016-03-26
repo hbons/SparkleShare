@@ -26,6 +26,9 @@ namespace SparkleLib {
 
     public class SSHAuthenticationInfo : AuthenticationInfo {
 
+        public static SSHAuthenticationInfo DefaultAuthenticationInfo;
+
+
         public string PrivateKeyFilePath;
         public string PrivateKey;
 
@@ -33,6 +36,7 @@ namespace SparkleLib {
         public string PublicKey;
 
         public string KnownHostsFilePath;
+
 
         string Path;
 
