@@ -16,8 +16,6 @@
 
 
 using System;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
 using System.Net;
 
 using IO = System.IO;
@@ -122,25 +120,6 @@ namespace SparkleLib {
                 SparkleLogger.LogInfo ("Auth", "Could not create key pair");
                 return false;
             }
-        }
-
-
-        void StartKeyAgent ()
-        {
-            Process [] processes = Process.GetProcessesByName ("ssh-agent");
-
-            if (processes.Length > 1)
-                return;
-            
-            SparkleLogger.LogInfo ("Auth", "No key agent running, starting one...");
-
-            var process = new SparkleProcess ("ssh-agent", null);
-            string output = process.StartAndReadStandardOutput ();
-
-            Match auth_sock_match = new Regex (@"SSH_AUTH_SOCK=([^;\n\r]*)").Match (output);
-
-            if (auth_sock_match.Success)
-                Environment.SetEnvironmentVariable ("SSH_AUTH_SOCK", auth_sock_match.Groups [1].Value);
         }
     }
 }
