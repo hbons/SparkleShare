@@ -19,12 +19,11 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
-namespace SparkleLib
-{
+namespace SparkleLib {
+
     public class SparkleProcess : Process {
 
-        public SparkleProcess (string path, string args) : base ()
-        {
+         public SparkleProcess (string path, string args)        {
             StartInfo.FileName               = path;
             StartInfo.Arguments              = args;
             StartInfo.UseShellExecute        = false;
@@ -37,8 +36,8 @@ namespace SparkleLib
 
         new public void Start ()
         {
-            SparkleLogger.LogInfo ("Cmd | " + System.IO.Path.GetFileName (StartInfo.WorkingDirectory),
-                System.IO.Path.GetFileName (StartInfo.FileName) + " " + StartInfo.Arguments);
+            SparkleLogger.LogInfo ("Cmd | " + Path.GetFileName (StartInfo.WorkingDirectory),
+                Path.GetFileName (StartInfo.FileName) + " " + StartInfo.Arguments);
 
             try {
                 base.Start ();
@@ -86,7 +85,7 @@ namespace SparkleLib
 
         protected string LocateCommand (string name)
         {
-            string [] possible_command_paths = new string [] {
+            string [] possible_command_paths = {
                 Environment.GetFolderPath (Environment.SpecialFolder.Personal) + "/bin/" + name,
                 Defines.INSTALL_DIR + "/bin/" + name,
                 "/usr/local/bin/" + name,

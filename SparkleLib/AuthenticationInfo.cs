@@ -1,4 +1,4 @@
-//   SparkleShare, a collaboration and sharing tool.
+﻿//   SparkleShare, a collaboration and sharing tool.
 //   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
 //
 //   This program is free software: you can redistribute it and/or modify
@@ -17,18 +17,7 @@
 
 namespace SparkleLib {
 
-    public class SparkleUser {
-
-        public readonly string Name;
-        public readonly string Email;
-
-        public string AvatarFilePath;
-
-
-        public SparkleUser (string name, string email)
-        {
-            Name  = name;
-            Email = email;
-        }
+    public abstract class AuthenticationInfo
+    {
     }
 }

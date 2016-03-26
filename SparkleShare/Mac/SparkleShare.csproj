@@ -33,6 +33,7 @@
     <ConsolePause>False</ConsolePause>
     <UseSGen>false</UseSGen>
     <UseRefCounting>false</UseRefCounting>
+    <Profiling>false</Profiling>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <Optimize>False</Optimize>
@@ -53,6 +54,7 @@
     <DebugSymbols>true</DebugSymbols>
     <UseSGen>false</UseSGen>
     <UseRefCounting>false</UseRefCounting>
+    <Profiling>false</Profiling>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseDist|AnyCPU' ">
     <Optimize>false</Optimize>
@@ -69,6 +71,8 @@
     </CustomCommands>
     <EnableCodeSigning>false</EnableCodeSigning>
     <CreatePackage>false</CreatePackage>
+    <UseRefCounting>false</UseRefCounting>
+    <Profiling>false</Profiling>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -123,9 +127,6 @@
     <Compile Include="..\SparkleInvite.cs">
       <Link>SparkleInvite.cs</Link>
     </Compile>
-    <Compile Include="..\SparkleKeys.cs">
-      <Link>SparkleKeys.cs</Link>
-    </Compile>
     <Compile Include="..\SparkleAvatars.cs" />
     <Compile Include="..\SparkleNoteController.cs">
       <Link>SparkleNoteController.cs</Link>
@@ -133,7 +134,7 @@
     <Compile Include="SparkleNote.cs" />
   </ItemGroup>
   <ItemGroup>
-    <InterfaceDefinition Include="MainMenu.xib" xmlns="" />
+    <InterfaceDefinition Include="MainMenu.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
