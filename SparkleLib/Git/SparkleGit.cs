@@ -41,12 +41,12 @@ namespace SparkleLib.Git {
                 "-F /dev/null " + // Ignore the environment's SSH config file
                 "-i " + SSHAuthenticationInfo.DefaultAuthenticationInfo.PrivateKeyFilePath;
 
-            SetEnvironmentVariable ("GIT_SSH_COMMAND", GIT_SSH_COMMAND);
-            SetEnvironmentVariable ("LANG", "en_US");
-            SetEnvironmentVariable ("GIT_TERMINAL_PROMPT", "0");
-
             if (!string.IsNullOrEmpty (ExecPath))
                 SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
+
+            SetEnvironmentVariable ("GIT_SSH_COMMAND", GIT_SSH_COMMAND);
+            SetEnvironmentVariable ("GIT_TERMINAL_PROMPT", "0");
+			SetEnvironmentVariable ("LANG", "en_US");
         }
 
 
