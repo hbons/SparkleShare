@@ -61,25 +61,4 @@ namespace SparkleLib.Git {
                 StartInfo.Arguments = "--exec-path=\"" + ExecPath + "\" " + args;
         }
     }
-
-
-    public class SparkleGitBin : SparkleProcess {
-
-        public static string GitBinPath;
-
-
-        public SparkleGitBin (string path, string args) : base (path, args)
-        {
-            if (string.IsNullOrEmpty (GitBinPath))
-                GitBinPath = LocateCommand ("git-bin");
-
-            EnableRaisingEvents              = true;
-            StartInfo.FileName               = GitBinPath;
-            StartInfo.RedirectStandardOutput = true;
-            StartInfo.UseShellExecute        = false;
-            StartInfo.WorkingDirectory       = path;
-            StartInfo.CreateNoWindow         = true;
-            StartInfo.Arguments              = args;
-        }
-    }
 }
