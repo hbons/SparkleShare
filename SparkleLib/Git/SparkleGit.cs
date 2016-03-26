@@ -13,7 +13,6 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
-using System;
 
 
 namespace SparkleLib.Git {
@@ -46,10 +45,8 @@ namespace SparkleLib.Git {
             SetEnvironmentVariable ("LANG", "en_US");
             SetEnvironmentVariable ("GIT_TERMINAL_PROMPT", "0");
 
-            if (string.IsNullOrEmpty (ExecPath))
-                StartInfo.Arguments = args;
-            else
-                StartInfo.Arguments = "--exec-path=\"" + ExecPath + "\" " + args;
+            if (!string.IsNullOrEmpty (ExecPath))
+                SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
         }
 
 
