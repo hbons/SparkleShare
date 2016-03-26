@@ -49,7 +49,7 @@ namespace SparkleShare {
                 string status_message = "Waiting to sync";
                 
                 if (!this.repo.LastSync.Equals (DateTime.MinValue))
-                    status_message = string.Format ("Synced {0}", this.repo.LastSync.ToPrettyDate ());
+                    status_message = string.Format ("✓ Synced {0}", this.repo.LastSync.ToPrettyDate ());
 
                 if (this.repo.Status == SyncStatus.SyncUp)
                     status_message = "Sending changes… " + this.repo.ProgressPercentage + "%";
@@ -173,7 +173,7 @@ namespace SparkleShare {
 
         public bool LinkCodeItemEnabled {
             get {
-                return !string.IsNullOrEmpty (Program.Controller.CurrentUser.PublicKey);
+                return !string.IsNullOrEmpty (Program.Controller.UserAuthenticationInfo.PublicKey);
             }
         }
 
@@ -282,7 +282,7 @@ namespace SparkleShare {
             if (Projects.Length == 0)
                 return StateText = "Welcome to SparkleShare!";
             else
-                return StateText = "Projects up to date " + GetPausedCount ();
+                return StateText = "✓ Projects up to date " + GetPausedCount ();
         }
 
 
@@ -320,7 +320,7 @@ namespace SparkleShare {
 
         public void CopyToClipboardClicked ()
         {
-            Program.Controller.CopyToClipboard (Program.Controller.CurrentUser.PublicKey);
+            Program.Controller.CopyToClipboard (Program.Controller.UserAuthenticationInfo.PublicKey);
         }
 
         public void AboutClicked ()

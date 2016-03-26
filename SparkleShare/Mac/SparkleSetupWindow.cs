@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 
 using MonoMac.Foundation;
 using MonoMac.AppKit;
@@ -31,14 +30,15 @@ namespace SparkleShare {
         public string Header;
         new public string Description;
 
-        private NSImage side_splash;
-        private NSImageView side_splash_view;
-        private NSTextField header_text_field, description_text_field;
+        NSImage side_splash;
+        NSImageView side_splash_view;
+        NSTextField header_text_field;
+        NSTextField description_text_field;
 
 
         public SparkleSetupWindow (IntPtr handle) : base (handle) { }
 
-        public SparkleSetupWindow () : base ()
+        public SparkleSetupWindow ()
         {
             SetFrame (new RectangleF (0, 0, 640, 420), true);
 
@@ -132,13 +132,13 @@ namespace SparkleShare {
             if (Program.UI != null)
                 Program.UI.UpdateDockIconVisibility ();
             
-            base.OrderFrontRegardless ();
+            OrderFrontRegardless ();
         }
 
 
         public override void PerformClose (NSObject sender)
         {
-            base.OrderOut (this);
+            OrderOut (this);
             NSApplication.SharedApplication.RemoveWindowsItem (this);
 
             if (Program.UI != null)

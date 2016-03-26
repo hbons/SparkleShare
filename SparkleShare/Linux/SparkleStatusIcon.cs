@@ -230,7 +230,7 @@ namespace SparkleShare {
             if (Controller.LinkCodeItemEnabled) {
                 link_code_item.Submenu = new Menu ();
                 
-                string link_code = Program.Controller.CurrentUser.PublicKey.Substring (0, 20) + "...";
+                string link_code = Program.Controller.UserAuthenticationInfo.PublicKey.Substring (0, 20) + "...";
                 MenuItem code_item = new MenuItem (link_code) { Sensitive = false };
                 
                 MenuItem copy_item = new MenuItem ("Copy to Clipboard");

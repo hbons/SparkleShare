@@ -1,12 +1,11 @@
 ## Building on Linux distributions
 
 You can choose to build SparkleShare from source or to get the package through your distribution's repositories.
-To run SparkleShare, you'll need the following packages:
+To run SparkleShare, you'll need these packages:
 
-**Note:** Git 1.9 changed the way local projects without a history are handled, and may cause protocol errors. Until a solution is found, it's recommended to use Git 1.8.
 
 ```
-git 1.8.x
+git >= 2.3
 gtk-sharp3
 mono-core >= 2.8
 notify-sharp
@@ -67,7 +66,7 @@ https://github.com/xDarkice/appindicator-sharp
 
 
 
-### Starting the build
+### Start the build
 
 You can build and install SparkleShare like this:
 
@@ -78,7 +77,7 @@ $ sudo make install
 ```
 
 
-### Resetting SparkleShare settings
+### Reset SparkleShare settings
 
 ```
 rm -Rf ~/SparkleShare
@@ -86,8 +85,9 @@ rm -Rf ~/.config/sparkleshare
 ```
 
 
-### Uninstalling
+### Uninstall
 
 ```
 sudo make uninstall
 ```
+

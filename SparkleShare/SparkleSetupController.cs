@@ -435,7 +435,7 @@ namespace SparkleShare {
             ChangePageEvent (PageType.Syncing, null);
 
             new Thread (() => {
-                if (!PendingInvite.Accept (Program.Controller.CurrentUser.PublicKey)) {
+                if (!PendingInvite.Accept (Program.Controller.UserAuthenticationInfo.PublicKey)) {
                     PreviousUrl = PendingInvite.Address + PendingInvite.RemotePath.TrimStart ("/".ToCharArray ());
                     ChangePageEvent (PageType.Error, new string [] { "error: Failed to upload the public key" });
                     return;
@@ -549,7 +549,7 @@ namespace SparkleShare {
 
         public void CopyToClipboardClicked ()
         {
-            Program.Controller.CopyToClipboard (Program.Controller.CurrentUser.PublicKey);
+            Program.Controller.CopyToClipboard (Program.Controller.UserAuthenticationInfo.PublicKey);
         }
 
 

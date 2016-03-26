@@ -135,7 +135,7 @@ namespace SparkleShare {
                 this.link_code_submenu = new NSMenu ();
 
                 this.code_item = new NSMenuItem ();
-                this.code_item.Title = Program.Controller.CurrentUser.PublicKey.Substring (0, 20) + "...";
+                this.code_item.Title = Program.Controller.UserAuthenticationInfo.PublicKey.Substring (0, 20) + "...";
 
                 this.copy_item = new NSMenuItem ();
                 this.copy_item.Title = "Copy to Clipboard";
