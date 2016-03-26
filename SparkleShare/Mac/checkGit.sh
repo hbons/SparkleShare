@@ -26,7 +26,7 @@ then
     cd git-${gitVersion}
 
     make configure
-    ./configure --prefix=${projectFolder}/git
+    ./configure --prefix=${projectFolder}/git --with-openssl=no
     make install
     cd ..
 
