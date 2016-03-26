@@ -674,7 +674,7 @@ namespace SparkleShare {
                             "You can also find it in the status icon menu.";
 
                         LinkCodeTextField = new NSTextField () {
-                            StringValue = Program.Controller.CurrentUser.PublicKey,
+                            StringValue = Program.Controller.UserAuthenticationInfo.PublicKey,
                             Enabled     = false,
                             Selectable  = false,
                             Frame       = new RectangleF (230, Frame.Height - 238, 246, 22)
