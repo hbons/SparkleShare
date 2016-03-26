@@ -223,16 +223,8 @@ namespace SparkleShare {
                 this.lost_folders_path = true;
             }
 
-            if (FirstRun) {
-                new Thread (() => {
-                    UserAuthenticationInfo = new SSHAuthenticationInfo ();
-                    FolderListChanged (); // FIXME: Hacky way to update status icon menu to show the key    
-                }).Start ();
-
-            } else {
-                UserAuthenticationInfo = new SSHAuthenticationInfo ();
-                FolderListChanged ();
-            }
+            UserAuthenticationInfo = new SSHAuthenticationInfo ();
+            FolderListChanged (); // FIXME: Hacky way to update status icon menu to show the key
 
             // Watch the SparkleShare folder
             this.watcher = new FileSystemWatcher () {
