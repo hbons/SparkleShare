@@ -554,7 +554,7 @@ namespace SparkleShare {
             string backend        = info.Backend; 
             
             if (string.IsNullOrEmpty (backend))
-                backend = SparkleFetcherBase.GetBackend (info.Address); 
+                backend = SparkleFetcherBase.GetBackend (info.Address);
             
             info.TargetDirectory  = Path.Combine (tmp_path, canonical_name);
             
