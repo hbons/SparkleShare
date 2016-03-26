@@ -123,7 +123,7 @@ namespace SparkleLib {
                 user_name = Environment.UserName;
             }
 
-            
+            // TODO: Don't do this manually
             string n = Environment.NewLine;
             File.WriteAllText (FullPath,
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + n +
@@ -132,6 +132,7 @@ namespace SparkleLib {
                 "    <name>" + user_name + "</name>" + n +
                 "    <email>Unknown</email>" + n +
                 "  </user>" + n +
+                "  <notifications>True</notifications>" + n +
                 "</sparkleshare>");
         }
 
@@ -140,30 +141,19 @@ namespace SparkleLib {
             get {
                 XmlNode name_node  = SelectSingleNode ("/sparkleshare/user/name/text()");
                 XmlNode email_node = SelectSingleNode ("/sparkleshare/user/email/text()");
-                string user_name   = name_node.Value;
-                string user_email  = email_node.Value;
 
-                SparkleUser user = new SparkleUser (user_name, user_email);
+                string name  = name_node.Value;
+                string email = email_node.Value;
 
-                string ssh_path = Path.Combine (Path.GetDirectoryName (FullPath), "ssh");
-                string [] private_key_file_paths = Directory.GetFiles(ssh_path, "*.key");
-                
-                if (private_key_file_paths.Length > 0) {
-                    user.PrivateKey         = File.ReadAllText (private_key_file_paths [0]);
-                    user.PrivateKeyFilePath = private_key_file_paths [0];
-
-                    user.PublicKey         = File.ReadAllText (private_key_file_paths [0] + ".pub");
-                    user.PublicKeyFilePath = private_key_file_paths [0] + ".pub";
-                }
-
-                return user;
+                return new SparkleUser (name, email);
             }
 
             set {
                 SparkleUser user = (SparkleUser) value;
 
-                XmlNode name_node    = SelectSingleNode ("/sparkleshare/user/name/text()");
-                XmlNode email_node   = SelectSingleNode ("/sparkleshare/user/email/text()");
+                XmlNode name_node  = SelectSingleNode ("/sparkleshare/user/name/text()");
+                XmlNode email_node = SelectSingleNode ("/sparkleshare/user/email/text()");
+
                 name_node.InnerText  = user.Name;
                 email_node.InnerText = user.Email;
 

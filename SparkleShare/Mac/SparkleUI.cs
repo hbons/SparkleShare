@@ -14,11 +14,11 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-    
+
 using System;
 
-using MonoMac.Foundation;
 using MonoMac.AppKit;
+using MonoMac.Foundation;
 
 namespace SparkleShare {
 
@@ -32,6 +32,7 @@ namespace SparkleShare {
         public SparkleNote Note;
 		
         public static string FontName = "Helvetica Neue";
+
 
         public SparkleUI ()
         {
@@ -72,8 +73,8 @@ namespace SparkleShare {
 
         public void UpdateDockIconVisibility ()
         {
-//          if (Setup.IsVisible || EventLog.IsVisible || About.IsVisible)
-//              NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
+            // if (Setup.IsVisible || EventLog.IsVisible || About.IsVisible)
+            //     NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
         }
     }
 

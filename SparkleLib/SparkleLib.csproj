@@ -47,6 +47,8 @@
     <Compile Include="Defines.cs" />
     <Compile Include="SparkleFetcherSSH.cs" />
     <Compile Include="SparkleProcess.cs" />
+    <Compile Include="AuthenticationInfo.cs" />
+    <Compile Include="SSHAuthenticationInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

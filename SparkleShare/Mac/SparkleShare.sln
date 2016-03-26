@@ -34,7 +34,6 @@ Global
 		{CF5BC8DB-A633-4FCC-8A3E-E3AC9B59FABC}.ReleaseDist|Any CPU.Build.0 = ReleaseDist|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = SparkleShare.csproj
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = None
@@ -52,5 +51,6 @@ Global
 		$4.inheritsScope = text/plain
 		$4.scope = text/plain
 		version = 
+		StartupItem = SparkleShare.csproj
 	EndGlobalSection
 EndGlobal

@@ -68,7 +68,7 @@ namespace SparkleShare
                 return null;
             }
             
-            WebClient client = new WebClient ();
+            var client = new WebClient ();
             string url =  "https://gravatar.com/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
             
             try {

@@ -658,7 +658,7 @@ namespace SparkleShare {
                     HBox layout_horizontal = new HBox (false, 6);
 
                     Entry link_code_entry = new Entry () {
-                        Text      = Program.Controller.CurrentUser.PublicKey,
+                        Text      = Program.Controller.UserAuthenticationInfo.PublicKey,
                         Sensitive = false
                     };
                     

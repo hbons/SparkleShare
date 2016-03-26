@@ -22,6 +22,7 @@ using System.Linq;
 using System.Threading;
 
 using SparkleLib;
+using SparkleLib.Git;
 
 namespace SparkleShare {
     
@@ -117,12 +118,16 @@ namespace SparkleShare {
                 return folders;
             }
         }
-        
+
+
         public SparkleUser CurrentUser {
             get { return Config.User; }
             set { Config.User = value; }
         }
-        
+
+        public SSHAuthenticationInfo UserAuthenticationInfo;
+
+
         public bool NotificationsEnabled {
             get {
                 string notifications_enabled = Config.GetConfigOption ("notifications");
@@ -204,8 +209,9 @@ namespace SparkleShare {
         
         public virtual void Initialize ()
         {
-            SparkleLogger.LogInfo ("Environment", "SparkleShare version: " + SparkleLib.SparkleBackend.Version +
-                                   ", Operating system: " + SparkleLib.SparkleBackend.Platform + " (" + Environment.OSVersion + ")");
+            SparkleLogger.LogInfo ("Environment", SparkleLib.SparkleBackend.Platform + " (" + Environment.OSVersion + ")");
+            // TODO: SparkleLogger.LogInfo ("Environment", "Git version: ");
+            SparkleLogger.LogInfo ("Environment", "SparkleShare  " + SparkleLib.SparkleBackend.Version);
             
             SparklePlugin.PluginsPath = PluginsPath;
             InstallProtocolHandler ();
@@ -217,50 +223,18 @@ namespace SparkleShare {
             } catch (DirectoryNotFoundException) {
                 this.lost_folders_path = true;
             }
-            
-            bool keys_imported = false;
-            
+
             if (FirstRun) {
-                Config.SetConfigOption ("notifications", bool.TrueString);
+                new Thread (() => {
+                    UserAuthenticationInfo = new SSHAuthenticationInfo ();
+                    FolderListChanged (); // FIXME: Hacky way to update status icon menu to show the key    
+                }).Start ();
 
             } else {
-                string keys_path = Path.GetDirectoryName (Config.FullPath);
-                string key_file_path = "";
-                
-                foreach (string file_path in Directory.GetFiles (keys_path)) {
-                    string file_name = Path.GetFileName(file_path);
-                    if (file_name.EndsWith (".key")) {
-                        key_file_path = Path.Combine (keys_path, file_name);
-                        
-                        // Replace spaces with underscores in old keys
-                        if (file_name.Contains (" ")) {
-                            string new_file_name = file_name.Replace (" ", "_");
-                            File.Move (key_file_path, Path.Combine (keys_path, new_file_name));
-                            File.Move (key_file_path + ".pub", Path.Combine (keys_path, new_file_name + ".pub"));
-                            key_file_path = Path.Combine (keys_path, new_file_name);
-                        }
-                        
-                        SparkleKeys.ImportPrivateKey (key_file_path);
-                        keys_imported = true;
-                        
-                        break;
-                    }
-                }
-                
-                if (keys_imported) {
-                    CurrentUser.PublicKey = File.ReadAllText (key_file_path + ".pub");
-                    
-                } else {
-                    string [] key_pair = CreateKeys ();
-                    
-                    SparkleKeys.ImportPrivateKey (key_pair [0]);
-                    CurrentUser.PublicKey = File.ReadAllText (key_pair [1]);    
-                }
-                
-                SparkleKeys.ListPrivateKeys ();
-                FolderListChanged (); // FIXME: Hacky way to update status icon menu to show the key
+                UserAuthenticationInfo = new SSHAuthenticationInfo ();
+                FolderListChanged ();
             }
-            
+
             // Watch the SparkleShare folder
             this.watcher = new FileSystemWatcher () {
                 Filter                = "*",
@@ -269,9 +243,6 @@ namespace SparkleShare {
             };
             
             watcher.Created += OnFolderActivity;
-            // FIXME watcher.Deleted += OnFolderActivity;
-            // FIXME watcher.Renamed += OnFolderActivity;
-            
             watcher.EnableRaisingEvents = true;
         }
         
@@ -304,16 +275,6 @@ namespace SparkleShare {
             
             if (FirstRun) {
                 ShowSetupWindow (PageType.Setup);
-                
-                new Thread (() => { 
-                    string [] key_pair = CreateKeys ();
-                    
-                    SparkleKeys.ImportPrivateKey (key_pair [0]);                    
-                    CurrentUser.PublicKey = File.ReadAllText (key_pair [1]);
-                    
-                    FolderListChanged (); // FIXME: Hacky way to update status icon menu to show the key
-                    
-                }).Start ();
                 
             } else {
                 new Thread (() => {
@@ -504,24 +465,16 @@ namespace SparkleShare {
             AddRepository (repo);
             repo.Initialize (); 
         }
-        
+
 
         private void OnFolderActivity (object o, FileSystemEventArgs args)
         {
             if (args != null && args.FullPath.EndsWith (".xml") &&
                 args.ChangeType == WatcherChangeTypes.Created) {
-                
+
                 HandleInvite (args);
                 return;
-                
-            }/* else { FIXME: on the fly folder removal doesn't always work. disabling for now
-                Thread.Sleep (1000);
-
-                if (Directory.Exists (args.FullPath) && args.ChangeType == WatcherChangeTypes.Created)
-                    return;
-
-                CheckRepositories ();
-            }*/
+            }
         }
         
         
@@ -758,37 +711,25 @@ namespace SparkleShare {
             
             Environment.Exit (0);
         }
-        
-        
+
+
         private void ClearDirectoryAttributes (string path)
         {
             if (!Directory.Exists (path))
                 return;
-            
+
             string [] folders = Directory.GetDirectories (path);
-            
+
             foreach (string folder in folders)
                 ClearDirectoryAttributes (folder);
-            
-            string [] files = Directory.GetFiles(path);
-            
+
+            string [] files = Directory.GetFiles (path);
+
             foreach (string file in files)
                 if (!IsSymlink (file))
                     File.SetAttributes (file, FileAttributes.Normal);
         }
-        
-        
-        private string [] CreateKeys ()
-        {
-            // TODO: Make a proper member for this
-            string config_path = Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath);
 
-            string keys_path     = Path.Combine (config_path, "ssh");
-            string key_file_name = DateTime.Now.ToString ("yyyy-MM-dd_HH\\hmm");
-            
-            return SparkleKeys.GenerateKeyPair (keys_path, key_file_name);
-        }
-        
         
         private bool IsSymlink (string file)
         {

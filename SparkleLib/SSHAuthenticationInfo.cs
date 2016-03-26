@@ -87,11 +87,11 @@ namespace SparkleLib {
             process.WaitForExit ();
 
             if (process.ExitCode == 0) {
-                Properties ["PrivateKeyFilePath"] = key_file_path;
-                Properties ["PrivateKey"] = IO.File.ReadAllText (key_file_path);
+                PrivateKeyFilePath = key_file_path;
+                PrivateKey = IO.File.ReadAllText (key_file_path);
 
-                Properties ["PublicKeyFilePath"] = key_file_path + ".pub";
-                Properties ["PublicKey"] = IO.File.ReadAllText (key_file_path + ".pub");
+                PublicKeyFilePath = key_file_path + ".pub";
+                PublicKey = IO.File.ReadAllText (key_file_path + ".pub");
 
                 SparkleLogger.LogInfo ("Auth", "Created key pair: " + key_file_name);
                 return true;
@@ -112,7 +112,7 @@ namespace SparkleLib {
             
             SparkleLogger.LogInfo ("Auth", "No key agent running, starting one...");
 
-            SparkleProcess process = new SparkleProcess ("ssh-agent", "");
+            var process = new SparkleProcess ("ssh-agent", null);
             string output = process.StartAndReadStandardOutput ();
 
             Match auth_sock_match = new Regex (@"SSH_AUTH_SOCK=([^;\n\r]*)").Match (output);
