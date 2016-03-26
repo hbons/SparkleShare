@@ -48,22 +48,37 @@ namespace SparkleLib {
 
             KnownHostsFilePath = IO.Path.Combine (Path, "known_hosts");
 
-            if (!IO.Directory.Exists (Path)) {
+            if (IO.Directory.Exists (Path)) {
+                ImportKeys ();
+
+            } else {
                 IO.Directory.CreateDirectory (Path);
                 CreateKeyPair ();
-            
-            } else {
-                foreach (string file_path in IO.Directory.GetFiles (Path)) {
-                    if (file_path.EndsWith (".key")) {
-                        PrivateKeyFilePath = file_path;
-                        PrivateKey         = IO.File.ReadAllText (file_path);
-                    }
+            }
+        }
 
-                    if (file_path.EndsWith (".key.pub")) {
-                        PublicKeyFilePath = file_path;
-                        PublicKey         = IO.File.ReadAllText (file_path);
-                    }
+
+        void ImportKeys ()
+        {
+            bool key_found = false;
+
+            foreach (string file_path in IO.Directory.GetFiles (Path)) {
+                if (file_path.EndsWith (".key")) {
+                    PrivateKeyFilePath = file_path;
+                    PublicKeyFilePath = file_path + ".pub";
+
+                    key_found = true;
+                    break;
                 }
+            }
+
+            if (key_found) {
+                PrivateKey = IO.File.ReadAllText (PrivateKeyFilePath);
+                PublicKey = IO.File.ReadAllText (PublicKeyFilePath);
+
+            } else {
+                CreateKeyPair ();
+                ImportKeys ();
             }
         }
 
@@ -76,6 +91,9 @@ namespace SparkleLib {
 
             if (computer_name.EndsWith (".local"))
                 computer_name = computer_name.Substring (0, computer_name.Length - ".local".Length);
+
+            if (computer_name.EndsWith (".config"))
+                computer_name = computer_name.Substring (0, computer_name.Length - ".config".Length);
 
             string arguments =
                 "-t rsa "  + // Crypto type
