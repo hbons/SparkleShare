@@ -41,7 +41,9 @@ namespace SparkleLib {
         public SSHAuthenticationInfo ()
         {
             Path = IO.Path.Combine (IO.Path.GetDirectoryName (SparkleConfig.DefaultConfig.FullPath), "ssh");
+
             KnownHostsFilePath = IO.Path.Combine (Path, "known_hosts");
+            KnownHostsFilePath = MakeWindowsDomainAccountSafe (KnownHostsFilePath);
 
             if (IO.Directory.Exists (Path)) {
                 ImportKeys ();
@@ -68,6 +70,9 @@ namespace SparkleLib {
             }
 
             if (key_found) {
+                PrivateKeyFilePath = MakeWindowsDomainAccountSafe (PrivateKeyFilePath);
+                PublicKeyFilePath  = MakeWindowsDomainAccountSafe (PublicKeyFilePath);
+
                 PrivateKey = IO.File.ReadAllText (PrivateKeyFilePath);
                 PublicKey  = IO.File.ReadAllText (PublicKeyFilePath);
 
@@ -107,6 +112,16 @@ namespace SparkleLib {
 
             SparkleLogger.LogInfo ("Auth", "Could not create key pair");
             return false;
+        }
+
+
+        // Use forward slashes in paths when dealing with Windows domain accounts
+        string MakeWindowsDomainAccountSafe (string path)
+        {
+            if (path.StartsWith ("\\\\"))
+                return path.Replace ("\\", "/");
+
+            return path;
         }
     }
 }
