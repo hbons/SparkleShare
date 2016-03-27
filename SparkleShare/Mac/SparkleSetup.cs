@@ -440,7 +440,7 @@ namespace SparkleShare {
                 web_view.DrawsBackground = false;
 
                 CancelButton = new NSButton () { Title = "Cancel" };
-                TryAgainButton = new NSButton () { Title = "Try Again…" };
+                TryAgainButton = new NSButton () { Title = "Retry" };
 
 
                 CancelButton.Activated += delegate { Controller.PageCancelled (); };
