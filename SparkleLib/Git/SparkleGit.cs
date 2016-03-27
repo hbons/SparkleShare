@@ -36,10 +36,10 @@ namespace SparkleLib.Git {
                 SSHPath = "ssh";
 
             string GIT_SSH_COMMAND = SSHPath + " " +
-                "-o UserKnownHostsFile=" + SSHAuthenticationInfo.DefaultAuthenticationInfo.KnownHostsFilePath + " " +
+                "-i \"" + SSHAuthenticationInfo.DefaultAuthenticationInfo.PrivateKeyFilePath + "\" " +
+                "-o UserKnownHostsFile=\"" + SSHAuthenticationInfo.DefaultAuthenticationInfo.KnownHostsFilePath + "\" " +
                 "-o PasswordAuthentication=no " +
-                "-F /dev/null " + // Ignore the environment's SSH config file
-                "-i " + SSHAuthenticationInfo.DefaultAuthenticationInfo.PrivateKeyFilePath;
+                "-F /dev/null"; // Ignore the environment's SSH config file
 
             if (!string.IsNullOrEmpty (ExecPath))
                 SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
