@@ -60,7 +60,7 @@ namespace SparkleLib {
             foreach (string file_path in IO.Directory.GetFiles (Path)) {
                 if (file_path.EndsWith (".key")) {
                     PrivateKeyFilePath = file_path;
-                    PublicKeyFilePath = file_path + ".pub";
+                    PublicKeyFilePath  = file_path + ".pub";
 
                     key_found = true;
                     break;
@@ -69,7 +69,7 @@ namespace SparkleLib {
 
             if (key_found) {
                 PrivateKey = IO.File.ReadAllText (PrivateKeyFilePath);
-                PublicKey = IO.File.ReadAllText (PublicKeyFilePath);
+                PublicKey  = IO.File.ReadAllText (PublicKeyFilePath);
 
             } else {
                 CreateKeyPair ();
@@ -83,11 +83,8 @@ namespace SparkleLib {
             string key_file_name = DateTime.Now.ToString ("yyyy-MM-dd_HH\\hmm") + ".key";
             string computer_name = Dns.GetHostName ();
 
-            if (computer_name.EndsWith (".local"))
-                computer_name = computer_name.Substring (0, computer_name.Length - ".local".Length);
-
-            if (computer_name.EndsWith (".config"))
-                computer_name = computer_name.Substring (0, computer_name.Length - ".config".Length);
+            if (computer_name.EndsWith (".local") || computer_name.EndsWith (".config"))
+                computer_name = computer_name.Substring (0, computer_name.LastIndexOf ("."));
 
             string arguments =
                 "-t rsa "  + // Crypto type
