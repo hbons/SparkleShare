@@ -595,7 +595,7 @@ namespace SparkleShare {
                     ContentView.AddSubview (WarningTextField);
                 }
 
-                ShowFilesButton = new NSButton () { Title = "Show Files…" };
+                ShowFilesButton = new NSButton () { Title = "Show Files" };
                 FinishButton    = new NSButton () { Title = "Finish" };
 
 

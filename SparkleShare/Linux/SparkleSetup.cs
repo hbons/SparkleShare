@@ -455,7 +455,7 @@ namespace SparkleShare {
                 points.PackStart (new Label (""), true, true, 0);
 
                 Button cancel_button = new Button ("Cancel");
-                Button try_again_button = new Button ("Try Again…") { Sensitive = true };
+                Button try_again_button = new Button ("Retry") { Sensitive = true };
 
 
                 cancel_button.Clicked += delegate { Controller.PageCancelled (); };
@@ -572,7 +572,7 @@ namespace SparkleShare {
                 
                 UrgencyHint = true;
 
-                Button show_files_button = new Button ("Show Files…");
+                Button show_files_button = new Button ("Show Files");
                 Button finish_button     = new Button ("Finish");
 
 

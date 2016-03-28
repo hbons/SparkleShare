@@ -351,7 +351,7 @@ namespace SparkleLib.Git {
                 "-in \"" + password_check_file_path + "\"";
 
             var process = new SparkleProcess ("openssl", args);
-            process.StartInfo.WorkingDirectory = TargetFolder;    
+            process.StartInfo.WorkingDirectory = TargetFolder;
 
             process.StartAndWaitForExit ();
 
