@@ -172,5 +172,10 @@ namespace SparkleShare {
             Clipboard clipboard = Clipboard.Get (Gdk.Atom.Intern ("CLIPBOARD", false));
             clipboard.Text      = text;
         }
+
+
+        public override void InstallProtocolHandler ()
+        {
+        }
     }
 }
