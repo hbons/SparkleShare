@@ -11,12 +11,12 @@ system_themedir = app_themedir
 endif
 
 system_theme_icons = \
-	apps,sparkleshare-16.png \
-	apps,sparkleshare-22.png	\
-	apps,sparkleshare-24.png \
-	apps,sparkleshare-256.png \
-	apps,sparkleshare-32.png \
+	apps,org.sparkleshare.SparkleShare-16.png \
+	apps,org.sparkleshare.SparkleShare-22.png \
+	apps,org.sparkleshare.SparkleShare-24.png \
+	apps,org.sparkleshare.SparkleShare-32.png \
 	apps,org.sparkleshare.SparkleShare-48.png \
+        apps,org.sparkleshare.SparkleShare-256.png \
 	status,process-syncing-up-24.png \
 	status,process-syncing-down-24.png \
 	status,process-syncing-24.png \
