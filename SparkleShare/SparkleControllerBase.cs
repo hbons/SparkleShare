@@ -164,10 +164,7 @@ namespace SparkleShare {
 
         // Installs the sparkleshare:// protocol handler
         public abstract void SetFolderIcon ();
-        
-        // Adds the SparkleShare folder to the sidebar
-        public abstract void AddToBookmarks ();
-        
+
         // Creates the SparkleShare folder in the user's home folder
         public abstract bool CreateSparkleShareFolder ();
         
@@ -222,8 +219,7 @@ namespace SparkleShare {
             InstallProtocolHandler ();
             
             try {
-                if (CreateSparkleShareFolder ())
-                    AddToBookmarks ();
+                CreateSparkleShareFolder ();
 
             } catch (DirectoryNotFoundException) {
                 this.lost_folders_path = true;
