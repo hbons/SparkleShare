@@ -50,7 +50,7 @@ namespace SparkleShare {
             this.indicator.Status   = (int) IndicatorStatus.Active;
             #else
 			this.status_icon          = new StatusIcon ();
-            this.status_icon.IconName = "sparkleshare";
+            this.status_icon.IconName = "org.sparkleshare.SparkleShare";
 
             this.status_icon.Activate  += ShowMenu; // Primary mouse button click
             this.status_icon.PopupMenu += ShowMenu; // Secondary mouse button click
@@ -63,7 +63,7 @@ namespace SparkleShare {
                     #if HAVE_APP_INDICATOR
                     string icon_name = "process-syncing-idle";
                     #else
-                    string icon_name = "sparkleshare";
+                    string icon_name = "org.sparkleshare.SparkleShare";
                     #endif
 
                     if (state == IconState.SyncingUp)
@@ -120,7 +120,7 @@ namespace SparkleShare {
             this.state_item = new MenuItem (Controller.StateText) { Sensitive = false };
 
             ImageMenuItem folder_item = new SparkleMenuItem ("SparkleShare");
-            folder_item.Image = new Image (SparkleUIHelpers.GetIcon ("sparkleshare", 16));
+            folder_item.Image = new Image (SparkleUIHelpers.GetIcon ("org.sparkleshare.SparkleShare", 16));
 
             this.menu.Add (this.state_item);
             this.menu.Add (new SeparatorMenuItem ());                
