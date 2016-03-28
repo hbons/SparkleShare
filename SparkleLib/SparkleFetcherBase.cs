@@ -249,13 +249,6 @@ namespace SparkleLib {
         }
 
 
-        protected string GenerateCryptoSalt ()
-        {
-            string salt = Path.GetRandomFileName ().SHA1 ();
-            return salt.Substring (0, 16);
-        }
-
-
         public static string GetBackend (string address)
         {
             if (address.StartsWith ("ssh+")) {
