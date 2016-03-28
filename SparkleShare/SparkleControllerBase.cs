@@ -158,12 +158,14 @@ namespace SparkleShare {
         
         // Enables SparkleShare to start automatically at login
         public abstract void CreateStartupItem ();
-        
+
         // Installs the sparkleshare:// protocol handler
         public abstract void InstallProtocolHandler ();
+
+        // Installs the sparkleshare:// protocol handler
+        public abstract void SetFolderIcon ();
         
-        // Adds the SparkleShare folder to the user's
-        // list of bookmarked places
+        // Adds the SparkleShare folder to the sidebar
         public abstract void AddToBookmarks ();
         
         // Creates the SparkleShare folder in the user's home folder
@@ -222,10 +224,12 @@ namespace SparkleShare {
             try {
                 if (CreateSparkleShareFolder ())
                     AddToBookmarks ();
-                
+
             } catch (DirectoryNotFoundException) {
                 this.lost_folders_path = true;
             }
+
+            SetFolderIcon ();
 
             // Watch the SparkleShare folder
             this.watcher = new FileSystemWatcher () {
