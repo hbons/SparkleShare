@@ -31,7 +31,7 @@ namespace SparkleShare {
         {
             SetWmclass ("SparkleShare", "SparkleShare");
 
-            IconName       = "sparkleshare";
+            IconName       = "org.sparkleshare.SparkleShare";
             Resizable      = false;
             WindowPosition = WindowPosition.CenterAlways;
             TypeHint       = Gdk.WindowTypeHint.Dialog;
