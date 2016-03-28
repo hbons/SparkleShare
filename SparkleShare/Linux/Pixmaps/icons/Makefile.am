@@ -16,7 +16,7 @@ system_theme_icons = \
 	apps,sparkleshare-24.png \
 	apps,sparkleshare-256.png \
 	apps,sparkleshare-32.png \
-	apps,sparkleshare-48.png \
+	apps,org.sparkleshare.SparkleShare-48.png \
 	status,process-syncing-up-24.png \
 	status,process-syncing-down-24.png \
 	status,process-syncing-24.png \
