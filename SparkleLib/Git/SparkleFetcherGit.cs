@@ -313,11 +313,13 @@ namespace SparkleLib.Git {
         {
             // Set up the encryption filter
             SparkleGit git_config_smudge = new SparkleGit (TargetFolder,
-                "config filter.encryption.smudge \"openssl enc -d -aes-256-cbc -base64 -salt" + " " +
+                "config filter.encryption.smudge \"openssl enc -d -aes-256-cbc -base64" + " " +
+                 "-S " + password.SHA256 (this.password_salt) + " " +
                 "-pass file:.git/info/encryption_password\"");
 
             SparkleGit git_config_clean = new SparkleGit (TargetFolder,
-                "config filter.encryption.clean  \"openssl enc -e -aes-256-cbc -base64 -salt" + " " +
+                "config filter.encryption.clean  \"openssl enc -e -aes-256-cbc -base64" + " " +
+                 "-S " + password.SHA256 (this.password_salt) + " " +
                 "-pass file:.git/info/encryption_password\"");
 
             git_config_smudge.StartAndWaitForExit ();
