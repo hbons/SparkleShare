@@ -253,7 +253,7 @@ namespace SparkleLib.Git {
 
             // Pass all files through the encryption filter
             string git_attributes_file_path = new string [] { TargetFolder, ".git", "info", "attributes" }.Combine ();
-            File.WriteAllText (git_attributes_file_path, "\n* filter=encryption");
+            File.WriteAllText (git_attributes_file_path, "* filter=encryption");
 
             // Store the password
             string password_file_path = new string [] { TargetFolder, ".git", "info", "encryption_password" }.Combine ();
