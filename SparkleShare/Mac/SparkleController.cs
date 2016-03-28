@@ -124,12 +124,6 @@ namespace SparkleShare {
         }
 
 
-        public override void AddToBookmarks ()
-        {
-            // TODO
-        }
-
-
         public override bool CreateSparkleShareFolder ()
         {
             if (!Directory.Exists (Program.Controller.FoldersPath)) {

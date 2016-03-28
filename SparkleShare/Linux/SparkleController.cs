@@ -28,14 +28,14 @@ namespace SparkleShare {
 
     public class SparkleController : SparkleControllerBase {
 
-        public SparkleController () : base ()
+        public SparkleController ()
         {
         }
 
 
         public override string PluginsPath {
             get {
-                return new string [] { Defines.INSTALL_DIR, "plugins" }.Combine ();
+                return Path.Combine (Defines.INSTALL_DIR, "plugins");
             }
         }
 
@@ -47,48 +47,31 @@ namespace SparkleShare {
             string autostart_path = Path.Combine (
                 Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "autostart");
 
-            string desktopfile_path = Path.Combine (autostart_path, "sparkleshare.desktop");
+            string autostart_file_path = Path.Combine (autostart_path, "org.sparkleshare.SparkleShare.Autostart.desktop");
 
-            if (!Directory.Exists (autostart_path))
+            if (File.Exists (autostart_file_path))
+				return;
+ 
+			if (!Directory.Exists (autostart_path))
                 Directory.CreateDirectory (autostart_path);
 
-            if (!File.Exists (desktopfile_path)) {
-                try {
-                    File.WriteAllText (desktopfile_path,
-                        "[Desktop Entry]\n" +
-                        "Type=Application\n" +
-                        "Name=SparkleShare\n" +
-                        "Exec=sparkleshare start\n" +
-                        "Icon=folder-sparkleshare\n" +
-                        "Terminal=false\n" +
-                        "X-GNOME-Autostart-enabled=true\n" +
-                        "Categories=Network");
+			try {
+                File.WriteAllText (autostart_file_path,
+                    "[Desktop Entry]\n" +
+                    "Type=Application\n" +
+                    "Name=SparkleShare\n" +
+                    "Exec=sparkleshare\n" +
+                    "Icon=org.sparkleshare.SparkleShare\n" +
+                    "Terminal=false\n" +
+                    "X-GNOME-Autostart-enabled=true\n" +
+                    "Categories=Network");
 
-                    SparkleLogger.LogInfo ("Controller", "Added SparkleShare to login items");
+                SparkleLogger.LogInfo ("Controller", "Added SparkleShare to login items");
 
-                } catch (Exception e) {
-                    SparkleLogger.LogInfo ("Controller", "Failed adding SparkleShare to login items: " + e.Message);
-                }
+            } catch (Exception e) {
+                SparkleLogger.LogInfo ("Controller", "Failed adding SparkleShare to login items: " + e.Message);
             }
-        }
-
-
-        // Adds the SparkleShare folder to the user's
-        // list of bookmarked places
-        public override void AddToBookmarks ()
-        {
-            string bookmarks_file_path   = Path.Combine (SparkleConfig.DefaultConfig.HomePath, ".gtk-bookmarks");
-            string sparkleshare_bookmark = "file://" + FoldersPath + " SparkleShare";
-
-            if (File.Exists (bookmarks_file_path)) {
-                string bookmarks = File.ReadAllText (bookmarks_file_path);
-
-                if (!bookmarks.Contains (sparkleshare_bookmark))
-                    File.AppendAllText (bookmarks_file_path, "file://" + FoldersPath + " SparkleShare");
-
-            } else {
-                File.WriteAllText (bookmarks_file_path, "file://" + FoldersPath + " SparkleShare");
-            }
+            
         }
 
 
@@ -135,7 +118,23 @@ namespace SparkleShare {
             }
         }
 
-            
+
+        public override void CopyToClipboard (string text)
+        {
+            Clipboard clipboard = Clipboard.Get (Gdk.Atom.Intern ("CLIPBOARD", false));
+            clipboard.Text      = text;
+        }
+
+
+        public override void SetFolderIcon ()
+        {
+            var process = new SparkleProcess ("gvfs-set-attribute", SparkleConfig.DefaultConfig.FoldersPath + " " +
+                "metadata::custom-icon-name org.sparkleshare.SparkleShare");
+
+			process.StartAndWaitForExit ();
+        }
+
+
         public override void OpenFolder (string path)
         {
             OpenFile (path);
@@ -151,24 +150,8 @@ namespace SparkleShare {
         }
 
 
-        public override void CopyToClipboard (string text)
-        {
-            Clipboard clipboard = Clipboard.Get (Gdk.Atom.Intern ("CLIPBOARD", false));
-            clipboard.Text      = text;
-        }
-
-
         public override void InstallProtocolHandler ()
         {
-        }
-
-
-        public override void SetFolderIcon ()
-        {
-            var process = new SparkleProcess ("gvfs-set-attribute", SparkleConfig.DefaultConfig.FoldersPath + " " +
-                "metadata::custom-icon-name org.sparkleshare.SparkleShare");
-
-			process.StartAndWaitForExit ();
         }
     }
 }
