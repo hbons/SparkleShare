@@ -16,16 +16,15 @@
 
 
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
+using Mono.Unix.Native;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 
-using Mono.Unix.Native;
 using SparkleLib;
-using System.Collections.Generic;
 
 namespace SparkleShare {
 
@@ -37,12 +36,8 @@ namespace SparkleShare {
             }
         }
 
-        // We have to use our own custom made folder watcher, as
-        // System.IO.FileSystemWatcher fails watching subfolders on Mac
-        private SparkleMacWatcher watcher;
-
         
-        public SparkleController () : base ()
+        public SparkleController ()
         {
             NSApplication.Init ();
 
@@ -57,15 +52,26 @@ namespace SparkleShare {
             base.Initialize ();
 
             SparkleRepoBase.UseCustomWatcher = true;
-            this.watcher = new SparkleMacWatcher (Program.Controller.FoldersPath);
 
+            this.watcher = new SparkleMacWatcher (Program.Controller.FoldersPath);
             this.watcher.Changed += OnFilesChanged;
         }
 
 
-        private void OnFilesChanged (List<string> changed_files_in_basedir)
+        // We have to use our own custom made folder watcher, as
+        // System.IO.FileSystemWatcher fails watching subfolders on Mac
+        SparkleMacWatcher watcher;
+
+        delegate void FileActivityTask ();
+
+        FileActivityTask MacActivityTask (SparkleRepoBase repo, FileSystemEventArgs fse_args)
         {
-            List<string> triggered_repos = new List<string> ();
+            return delegate { new Thread (() => { repo.OnFileActivity (fse_args); }).Start (); };
+        }
+
+        void OnFilesChanged (List<string> changed_files_in_basedir)
+        {
+            var triggered_repos = new List<string> ();
 
             foreach (string file in changed_files_in_basedir) {
                 string repo_name;
@@ -94,25 +100,18 @@ namespace SparkleShare {
             }
         }
 
-        private delegate void FileActivityTask ();
-
-        private FileActivityTask MacActivityTask (SparkleRepoBase repo, FileSystemEventArgs fse_args) {
-            return delegate { new Thread (() => { repo.OnFileActivity (fse_args); }).Start (); };
-        }
-
 
         public override void CreateStartupItem ()
         {
             // There aren't any bindings in MonoMac to support this yet, so
             // we call out to an applescript to do the job
-            Process process = new Process ();
-            process.StartInfo.FileName        = "osascript";
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.Arguments       = "-e 'tell application \"System Events\" to " +
-                "make login item at end with properties {path:\"" + NSBundle.MainBundle.BundlePath + "\", hidden:false}'";
 
-            process.Start ();
-            process.WaitForExit ();
+            string args = "-e 'tell application \"System Events\" to " +
+                "make login item at end with properties " +
+                "{path:\"" + NSBundle.MainBundle.BundlePath + "\", hidden:false}'";
+
+            var process = new SparkleProcess ("osascript", args);
+            process.StartAndWaitForExit ();
 
             SparkleLogger.LogInfo ("Controller", "Added " + NSBundle.MainBundle.BundlePath + " to login items");
         }
@@ -179,7 +178,7 @@ namespace SparkleShare {
         }
 
 
-        private string event_log_html;
+        string event_log_html;
         public override string EventLogHTML
         {
             get {
@@ -196,7 +195,7 @@ namespace SparkleShare {
         }
 
 
-        private string day_entry_html;
+        string day_entry_html;
         public override string DayEntryHTML
         {
             get {
@@ -210,7 +209,7 @@ namespace SparkleShare {
         }
         
 
-        private string event_entry_html;
+        string event_entry_html;
         public override string EventEntryHTML
         {
             get {
@@ -225,7 +224,7 @@ namespace SparkleShare {
 
 
         public delegate void Code ();
-        private NSObject obj = new NSObject ();
+        readonly NSObject obj = new NSObject ();
 
         public void Invoke (Code code)
         {
