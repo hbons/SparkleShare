@@ -364,12 +364,5 @@ namespace SparkleLib.Git {
 
             return false;
         }
-
-
-        string GenerateCryptoSalt ()
-        {
-            string salt = Path.GetRandomFileName ().SHA1 ();
-            return salt.Substring (0, 16);
-        }
     }
 }
