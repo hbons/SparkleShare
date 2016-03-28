@@ -82,7 +82,6 @@ namespace SparkleShare {
                 Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
                 Syscall.chmod (SparkleConfig.DefaultConfig.FoldersPath, (FilePermissions) 448); // 448 -> 700
 
-                SparkleLogger.LogInfo ("Controller", "Created '" + SparkleConfig.DefaultConfig.FoldersPath + "'");
                 return true;
             }
 
