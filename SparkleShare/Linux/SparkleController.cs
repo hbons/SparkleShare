@@ -19,9 +19,10 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
+using SparkleLib;
+
 using Gtk;
 using Mono.Unix.Native;
-using SparkleLib;
 
 namespace SparkleShare {
 
@@ -94,32 +95,15 @@ namespace SparkleShare {
         // Creates the SparkleShare folder in the user's home folder
         public override bool CreateSparkleShareFolder ()
         {
-            bool folder_created = false;
-
             if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
                 Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
                 Syscall.chmod (SparkleConfig.DefaultConfig.FoldersPath, (FilePermissions) 448); // 448 -> 700
 
                 SparkleLogger.LogInfo ("Controller", "Created '" + SparkleConfig.DefaultConfig.FoldersPath + "'");
-                folder_created = true;
+                return true;
             }
 
-            string gvfs_command_path = new string [] { Path.VolumeSeparatorChar.ToString (),
-                "usr", "bin", "gvfs-set-attribute" }.Combine ();
-
-            // Add a special icon to the SparkleShare folder
-            if (File.Exists (gvfs_command_path)) {
-                var process = new Process ();
-
-                process.StartInfo.FileName  = "gvfs-set-attribute";
-                process.StartInfo.Arguments = SparkleConfig.DefaultConfig.FoldersPath +
-                    " metadata::custom-icon-name 'folder-sparkleshare'";
-
-                process.Start ();
-                process.WaitForExit ();
-            }
-
-            return folder_created;
+            return false;
         }
         
 
@@ -177,5 +161,14 @@ namespace SparkleShare {
         public override void InstallProtocolHandler ()
         {
         }
+
+
+		public override void SetFolderIcon ()
+		{
+            var process = new SparkleProcess ("gvfs-set-attribute", SparkleConfig.DefaultConfig.FoldersPath + " " +
+            	"metadata::custom-icon-name 'org.sparkleshare.SparkleShare'");
+
+			process.StartAndWaitForExit ();
+		}
     }
 }
