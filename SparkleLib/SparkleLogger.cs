@@ -22,8 +22,9 @@ namespace SparkleLib {
     
     public static class SparkleLogger {
 
-        private static Object debug_lock = new Object ();
-        private static int log_size = 0;
+        static object debug_lock = new object ();
+        static int log_size;
+
 
         public static void LogInfo (string type, string message)
         {
@@ -37,9 +38,9 @@ namespace SparkleLib {
             string line;
 
             if (string.IsNullOrEmpty (type))
-                line = timestamp + " | " + message;
+                line = timestamp + " " + message;
             else
-                line = timestamp + " | " + type + " | " + message;
+                line = timestamp + " " + type + " | " + message;
 
             if (exception != null)
                 line += ": " + exception.Message + " " + exception.StackTrace;
@@ -48,7 +49,6 @@ namespace SparkleLib {
                 Console.WriteLine (line);
 
             lock (debug_lock) {
-                // Don't let the log get bigger than 1000 lines
                 if (log_size >= 1000) {
                     File.WriteAllText (SparkleConfig.DefaultConfig.LogFilePath, line + Environment.NewLine);
                     log_size = 0;
@@ -76,8 +76,8 @@ namespace SparkleLib {
                 "https://github.com/hbons/SparkleShare/issues and include the lines below." + n + n +
                 "Remove any sensitive information like file names, IP addresses, domain names, etc. if needed." + n + n +
                 "------" +  n + n +
-                "SparkleShare version: " + SparkleLib.SparkleBackend.Version + n +
-                "Operating system:     " + SparkleLib.SparkleBackend.Platform + " (" + Environment.OSVersion + ")" + n;
+                "SparkleShare version: " + SparkleBackend.Version + n +
+                "Operating system:     " + SparkleBackend.Platform + " (" + Environment.OSVersion + ")" + n;
 
             crash_report += e.GetType () + ": " + e.Message + n + e.StackTrace + n;
 
@@ -103,4 +103,3 @@ namespace SparkleLib {
         }
     }
 }
-
