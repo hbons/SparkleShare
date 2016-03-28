@@ -36,8 +36,12 @@ namespace SparkleLib {
 
         new public void Start ()
         {
-            SparkleLogger.LogInfo ("Cmd | " + Path.GetFileName (StartInfo.WorkingDirectory),
-                Path.GetFileName (StartInfo.FileName) + " " + StartInfo.Arguments);
+            string folder = "";
+
+            if (!string.IsNullOrEmpty (StartInfo.WorkingDirectory))
+                folder = Path.GetFileName (StartInfo.WorkingDirectory) + " | ";
+                
+            SparkleLogger.LogInfo ("Cmd", folder + Path.GetFileName (StartInfo.FileName) + " " + StartInfo.Arguments);
 
             try {
                 base.Start ();
