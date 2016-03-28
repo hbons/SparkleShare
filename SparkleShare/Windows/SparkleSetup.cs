@@ -773,7 +773,7 @@ namespace SparkleShare {
                         };
     
                         Button show_files_button = new Button () {
-                            Content = "Show files…"
+                            Content = "Show files"
                         };
 
                         if (warnings.Length > 0) {
