@@ -38,7 +38,7 @@ include $(top_srcdir)/build/build.mk
 bin_SCRIPTS = sparkleshare
 
 Applicationsdir = $(datadir)/applications
-dist_Applications_DATA = sparkleshare.desktop \
+dist_Applications_DATA = org.sparkleshare.SparkleShare.desktop \
 	sparkleshare-invite-opener.desktop
 
 install-data-hook:
