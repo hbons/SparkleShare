@@ -277,29 +277,11 @@ namespace SparkleLib.Git {
             git.WaitForExit ();
             UpdateSizes ();
 
-            if (git.ExitCode == 0) {
-                string salt_file_path = new string [] { LocalPath, ".git", "salt" }.Combine ();
-
-                // If the repo is encrypted, create a branch to 
-                // store the salt in and push it to the host
-                if (File.Exists (salt_file_path)) {
-                    string salt = File.ReadAllText (salt_file_path).Trim ();
-
-                    SparkleGit git_salt = new SparkleGit (LocalPath, "branch salt-" + salt);
-                    git_salt.StartAndWaitForExit ();
-
-                    git_salt = new SparkleGit (LocalPath, "push origin salt-" + salt);
-                    git_salt.StartAndWaitForExit ();
-
-                    File.Delete (salt_file_path);
-                }
-
+            if (git.ExitCode == 0)
                 return true;
 
-            } else {
-                Error = ErrorStatus.HostUnreachable;
-                return false;
-            }
+            Error = ErrorStatus.HostUnreachable;
+            return false;
         }
 
 

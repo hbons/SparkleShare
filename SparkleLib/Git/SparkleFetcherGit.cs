@@ -16,50 +16,29 @@
 
 
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
-using SparkleLib;
 
 namespace SparkleLib.Git {
 
     public class SparkleFetcher : SparkleFetcherSSH {
 
-        private SparkleGit git;
-        private string cached_salt;
+        SparkleGit git;
 
-        private Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
-        private Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
+        Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
+        Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
 
-        private bool crypto_password_is_hashed = true;
+        string password_salt = "662282447f6bbb8c8e15fb32dd09e3e708c32bc8";
 
-        private string crypto_salt {
+
+        public override bool IsFetchedRepoEmpty {
             get {
-                if (!string.IsNullOrEmpty (this.cached_salt))
-                    return this.cached_salt;
+                SparkleGit git = new SparkleGit (TargetFolder, "rev-parse HEAD");
+                git.StartAndWaitForExit ();
 
-                // Check if the repo's salt is stored in a branch...
-                SparkleGit git   = new SparkleGit (TargetFolder, "ls-remote --heads");
-                string branches  = git.StartAndReadStandardOutput ();
-                Regex salt_regex = new Regex ("refs/heads/salt-([0-9a-f]+)");
-				Match salt_match = salt_regex.Match (branches);
-
-				if (salt_match.Success)
-					this.cached_salt = salt_match.Groups [1].Value;
-
-                // ...if not, create a new salt for the repo
-                if (string.IsNullOrEmpty (this.cached_salt)) {
-                    this.cached_salt      = GenerateCryptoSalt ();
-                    string salt_file_path = new string [] { TargetFolder, ".git", "salt" }.Combine ();
-
-                    // Temporarily store the salt in a file, so the Repo object can
-                    // push it to a branch on the host later
-                    File.WriteAllText (salt_file_path, this.cached_salt);
-                }
-
-                return this.cached_salt;
+                return (git.ExitCode != 0);
             }
         }
 
@@ -227,97 +206,6 @@ namespace SparkleLib.Git {
         }
 
 
-        public override bool IsFetchedRepoEmpty {
-            get {
-                SparkleGit git = new SparkleGit (TargetFolder, "rev-parse HEAD");
-                git.StartAndWaitForExit ();
-
-                return (git.ExitCode != 0);
-            }
-        }
-
-
-        public override void EnableFetchedRepoCrypto (string password)
-        {
-            // Set up the encryption filter
-            SparkleGit git_config_smudge = new SparkleGit (TargetFolder,
-                "config filter.encryption.smudge \"openssl enc -d -aes-256-cbc -base64 -S " + this.crypto_salt +
-                " -pass file:.git/info/encryption_password\"");
-
-            SparkleGit git_config_clean = new SparkleGit (TargetFolder,
-                "config filter.encryption.clean  \"openssl enc -e -aes-256-cbc -base64 -S " + this.crypto_salt +
-                " -pass file:.git/info/encryption_password\"");
-
-            git_config_smudge.StartAndWaitForExit ();
-            git_config_clean.StartAndWaitForExit ();
-
-            // Pass all files through the encryption filter
-            string git_attributes_file_path = new string [] { TargetFolder, ".git", "info", "attributes" }.Combine ();
-            File.WriteAllText (git_attributes_file_path, "* filter=encryption");
-
-            // Store the password
-            string password_file_path = new string [] { TargetFolder, ".git", "info", "encryption_password" }.Combine ();
-
-            if (this.crypto_password_is_hashed)
-                File.WriteAllText (password_file_path, password.SHA256 (this.crypto_salt));
-            else
-                File.WriteAllText (password_file_path, password);
-        }
-
-
-        public override bool IsFetchedRepoPasswordCorrect (string password)
-        {
-            string password_check_file_path = Path.Combine (TargetFolder, ".sparkleshare");
-
-            if (!File.Exists (password_check_file_path)) {
-                SparkleGit git = new SparkleGit (TargetFolder, "show HEAD:.sparkleshare");
-                string output = git.StartAndReadStandardOutput ();
-
-                if (git.ExitCode == 0)
-                    File.WriteAllText (password_check_file_path, output);
-                else
-                    return false;
-            }
-
-            Process process = new Process ();
-            process.EnableRaisingEvents              = true;
-            process.StartInfo.FileName               = "openssl";
-            process.StartInfo.WorkingDirectory       = TargetFolder;
-            process.StartInfo.UseShellExecute        = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.CreateNoWindow         = true;
-
-            string [] possible_passwords = new string [] {
-                password.SHA256 (this.crypto_salt),
-                password
-            };
-
-            int i = 0;
-            foreach (string possible_password in possible_passwords) {
-                process.StartInfo.Arguments = "enc -d -aes-256-cbc -base64 -pass pass:\"" + possible_password + "\"" +
-                    " -in \"" + password_check_file_path + "\"";
-
-                SparkleLogger.LogInfo ("Cmd | " + System.IO.Path.GetFileName (process.StartInfo.WorkingDirectory),
-                    System.IO.Path.GetFileName (process.StartInfo.FileName) + " " + process.StartInfo.Arguments);
-
-                process.Start ();
-                process.WaitForExit ();
-
-                if (process.ExitCode == 0) {
-                    if (i > 0)
-                        this.crypto_password_is_hashed = false;
-
-                    File.Delete (password_check_file_path);
-                    return true;
-                }
-
-                i++;
-            }
-
-            return false;
-        }
-
-
         public override void Stop ()
         {
             try {
@@ -353,7 +241,7 @@ namespace SparkleLib.Git {
         }
 
 
-        private void InstallConfiguration ()
+        void InstallConfiguration ()
         {
             string [] settings = new string [] {
                 "core.autocrlf input",
@@ -382,7 +270,7 @@ namespace SparkleLib.Git {
 
 
         // Add a .gitignore file to the repo
-        private void InstallExcludeRules ()
+        void InstallExcludeRules ()
         {
             string git_info_path = new string [] { TargetFolder, ".git", "info" }.Combine ();
 
@@ -396,7 +284,7 @@ namespace SparkleLib.Git {
         }
 
 
-        private void InstallAttributeRules ()
+        void InstallAttributeRules ()
         {
             string attribute_rules_file_path = new string [] { TargetFolder, ".git", "info", "attributes" }.Combine ();
             TextWriter writer                = new StreamWriter (attribute_rules_file_path);
@@ -418,6 +306,68 @@ namespace SparkleLib.Git {
             writer.WriteLine ("*.txt text");
             writer.WriteLine ("*.TXT text");
             writer.Close ();
+        }
+
+
+        public override void EnableFetchedRepoCrypto (string password)
+        {
+            // Set up the encryption filter
+            SparkleGit git_config_smudge = new SparkleGit (TargetFolder,
+                "config filter.encryption.smudge \"openssl enc -d -aes-256-cbc -base64 -salt" + " " +
+                "-pass file:.git/info/encryption_password\"");
+
+            SparkleGit git_config_clean = new SparkleGit (TargetFolder,
+                "config filter.encryption.clean  \"openssl enc -e -aes-256-cbc -base64 -salt" + " " +
+                "-pass file:.git/info/encryption_password\"");
+
+            git_config_smudge.StartAndWaitForExit ();
+            git_config_clean.StartAndWaitForExit ();
+
+            // Pass all files through the encryption filter
+            string git_attributes_file_path = new string [] { TargetFolder, ".git", "info", "attributes" }.Combine ();
+            File.WriteAllText (git_attributes_file_path, "* filter=encryption");
+
+            // Store the password
+            string password_file_path = new string [] { TargetFolder, ".git", "info", "encryption_password" }.Combine ();
+            File.WriteAllText (password_file_path, password.SHA256 (this.password_salt));
+        }
+
+
+        public override bool IsFetchedRepoPasswordCorrect (string password)
+        {
+            string password_check_file_path = Path.Combine (TargetFolder, ".sparkleshare");
+
+            if (!File.Exists (password_check_file_path)) {
+                SparkleGit git = new SparkleGit (TargetFolder, "show HEAD:.sparkleshare");
+                string output = git.StartAndReadStandardOutput ();
+
+                if (git.ExitCode == 0)
+                    File.WriteAllText (password_check_file_path, output);
+                else
+                    return false;
+            }
+
+            string args = "enc -d -aes-256-cbc -base64 -salt -pass pass:" + password.SHA256 (this.password_salt) + " " + 
+                "-in \"" + password_check_file_path + "\"";
+
+            var process = new SparkleProcess ("openssl", args);
+            process.StartInfo.WorkingDirectory = TargetFolder;    
+
+            process.StartAndWaitForExit ();
+
+            if (process.ExitCode == 0) {
+                File.Delete (password_check_file_path);
+                return true;
+            }
+
+            return false;
+        }
+
+
+        string GenerateCryptoSalt ()
+        {
+            string salt = Path.GetRandomFileName ().SHA1 ();
+            return salt.Substring (0, 16);
         }
     }
 }
