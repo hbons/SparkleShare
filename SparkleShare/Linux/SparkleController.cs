@@ -163,12 +163,12 @@ namespace SparkleShare {
         }
 
 
-		public override void SetFolderIcon ()
-		{
+        public override void SetFolderIcon ()
+        {
             var process = new SparkleProcess ("gvfs-set-attribute", SparkleConfig.DefaultConfig.FoldersPath + " " +
-            	"metadata::custom-icon-name 'org.sparkleshare.SparkleShare'");
+                "metadata::custom-icon-name org.sparkleshare.SparkleShare");
 
 			process.StartAndWaitForExit ();
-		}
+        }
     }
 }
