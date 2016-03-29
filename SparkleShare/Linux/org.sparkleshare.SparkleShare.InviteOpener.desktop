@@ -1,7 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=SparkleShareInviteOpener
+Name=SparkleShare
 Exec=sparkleshare open %U
 Terminal=false
 MimeType=application/x-sparkleshare;x-scheme-handler/sparkleshare;
 NoDisplay=true
+
