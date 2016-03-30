@@ -5,13 +5,12 @@ DIST_SUBDIRS = $(basedirs) SparkleShare
 
 EXTRA_DIST = \
 	News.txt \
-        README.md \
+    README.md \
 	legal/License_for_SparkleShare.txt \
 	legal/License_for_SparkleLib.txt \
-	legal/Trademark.txt \
 	legal/Authors.txt \
 	SparkleShare/Linux/README.md \
-	SparkleShare/Linux/sparkleshare.appdata.xml
+	SparkleShare/Linux/org.sparkleshare.SparkleShare.appdata.xml
 
 DISTCLEANFILES = \
 	intltool-extract        \

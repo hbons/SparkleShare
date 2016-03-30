@@ -4,9 +4,9 @@ TARGET = library
 LINK = -r:$(DIR_BIN)/SparkleLib.dll
 
 SOURCES =  \
-	SparkleGit.cs \
-	SparkleFetcherGit.cs \
-	SparkleRepoGit.cs
+	GitCommand.cs \
+	GitFetcher.cs \
+	GitRepository.cs
 
 
 install-data-hook:

@@ -38,17 +38,39 @@
     <Compile Include="Logger.cs" />
     <Compile Include="Defines.cs" />
     <Compile Include="Command.cs" />
-    <Compile Include="Fetcher\SSHFetcher.cs" />
-    <Compile Include="Fetcher\BaseFetcher.cs" />
-    <Compile Include="Listener\BaseListener.cs" />
-    <Compile Include="Listener\ListenerFactory.cs" />
-    <Compile Include="Listener\TcpListener.cs" />
-    <Compile Include="AuthenticationInfo\SSHAuthenticationInfo.cs" />
-    <Compile Include="AuthenticationInfo\AuthenticationInfo.cs" />
-    <Compile Include="Repository\BaseRepository.cs" />
-    <Compile Include="Repository\ChangeSet.cs" />
-    <Compile Include="Repository\User.cs" />
-    <Compile Include="Repository\Watcher.cs" />
+    <Compile Include="SSHFetcher.cs">
+      <Link>Fetcher\SSHFetcher.cs</Link>
+    </Compile>
+    <Compile Include="BaseFetcher.cs">
+      <Link>Fetcher\BaseFetcher.cs</Link>
+    </Compile>
+    <Compile Include="TcpListener.cs">
+      <Link>Listener\TcpListener.cs</Link>
+    </Compile>
+    <Compile Include="BaseListener.cs">
+      <Link>Listener\BaseListener.cs</Link>
+    </Compile>
+    <Compile Include="ListenerFactory.cs">
+      <Link>Listener\ListenerFactory.cs</Link>
+    </Compile>
+    <Compile Include="SSHAuthenticationInfo.cs">
+      <Link>AuthenticationInfo\SSHAuthenticationInfo.cs</Link>
+    </Compile>
+    <Compile Include="AuthenticationInfo.cs">
+      <Link>AuthenticationInfo\AuthenticationInfo.cs</Link>
+    </Compile>
+    <Compile Include="BaseRepository.cs">
+      <Link>Repository\BaseRepository.cs</Link>
+    </Compile>
+    <Compile Include="ChangeSet.cs">
+      <Link>Repository\ChangeSet.cs</Link>
+    </Compile>
+    <Compile Include="User.cs">
+      <Link>Repository\User.cs</Link>
+    </Compile>
+    <Compile Include="Watcher.cs">
+      <Link>Repository\Watcher.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Fetcher\" />

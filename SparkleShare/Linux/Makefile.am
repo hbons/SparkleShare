@@ -10,7 +10,7 @@ BUILD_DEFINES = "-define:HAVE_APP_INDICATOR"
 endif
 
 SOURCES =  \
-	../Common/Program.cs \
+	../Common/SparkleShare.cs \
 	../Common/AboutController.cs \
 	../Common/Avatars.cs \
 	../Common/BubblesController.cs \
@@ -38,7 +38,7 @@ bin_SCRIPTS = sparkleshare
 
 Applicationsdir = $(datadir)/applications
 dist_Applications_DATA = org.sparkleshare.SparkleShare.desktop \
-	org.sparkleshare.SparkleShare.InviteOpener.desktop
+	org.sparkleshare.SparkleShare.Invites.desktop
 
 install-data-hook:
 	test -f $(datadir)/applications/defaults.list && \

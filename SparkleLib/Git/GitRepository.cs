@@ -705,7 +705,7 @@ namespace SparkleLib.Git {
         }
 
 
-        public override List<SparkleChange> UnsyncedChanges {
+        public override List<Change> UnsyncedChanges {
           get {
               return ParseStatus ();
             }
@@ -835,11 +835,11 @@ namespace SparkleLib.Git {
 
                     file_path = file_path.Replace ("\\\"", "\"");
 
-                    SparkleChange change = new SparkleChange () {
+                    Change change = new Change () {
                         Path      = file_path,
                         IsFolder  = change_is_folder,
                         Timestamp = change_set.Timestamp,
-                        Type      = SparkleChangeType.Added
+                        Type      = ChangeType.Added
                     };
 
                     if (type_letter.Equals ("R")) {
@@ -878,13 +878,13 @@ namespace SparkleLib.Git {
                                
                         change.Path        = file_path;
                         change.MovedToPath = to_file_path;
-                        change.Type        = SparkleChangeType.Moved;
+                        change.Type        = ChangeType.Moved;
 
                     } else if (type_letter.Equals ("M")) {
-                        change.Type = SparkleChangeType.Edited;
+                        change.Type = ChangeType.Edited;
 
                     } else if (type_letter.Equals ("D")) {
-                        change.Type = SparkleChangeType.Deleted;
+                        change.Type = ChangeType.Deleted;
                     }
 
                     change_set.Changes.Add (change);
@@ -917,17 +917,17 @@ namespace SparkleLib.Git {
                 } else {
                     // Don't show removals or moves in the revision list of a file
                     if (path != null) {
-                        List<SparkleChange> changes_to_skip = new List<SparkleChange> ();
+                        List<Change> changes_to_skip = new List<Change> ();
 
-                        foreach (SparkleChange change in change_set.Changes) {
-                            if ((change.Type == SparkleChangeType.Deleted || change.Type == SparkleChangeType.Moved)
+                        foreach (Change change in change_set.Changes) {
+                            if ((change.Type == ChangeType.Deleted || change.Type == ChangeType.Moved)
                                 && change.Path.Equals (path)) {
 
                                 changes_to_skip.Add (change);
                             }
                         }
 
-                        foreach (SparkleChange change_to_skip in changes_to_skip)
+                        foreach (Change change_to_skip in changes_to_skip)
                             change_set.Changes.Remove (change_to_skip);
                     }
                                     
@@ -1028,9 +1028,9 @@ namespace SparkleLib.Git {
 
 
 
-        private List<SparkleChange> ParseStatus ()
+        private List<Change> ParseStatus ()
         {
-            List<SparkleChange> changes = new List<SparkleChange> ();
+            List<Change> changes = new List<Change> ();
 
             GitCommand git_status = new GitCommand (LocalPath, "status --porcelain");
             git_status.Start ();
@@ -1042,28 +1042,28 @@ namespace SparkleLib.Git {
                 if (line.EndsWith (".empty") || line.EndsWith (".empty\""))
                     line = line.Replace (".empty", "");
 
-                SparkleChange change;
+                Change change;
                 
                 if (line.StartsWith ("R")) {
                     string path = line.Substring (3, line.IndexOf (" -> ") - 3).Trim ("\" ".ToCharArray ());
                     string moved_to_path = line.Substring (line.IndexOf (" -> ") + 4).Trim ("\" ".ToCharArray ());
                     
-                    change = new SparkleChange () {
-                        Type = SparkleChangeType.Moved,
+                    change = new Change () {
+                        Type = ChangeType.Moved,
                         Path = EnsureSpecialCharacters (path),
                         MovedToPath = EnsureSpecialCharacters (moved_to_path)
                     };
                     
                 } else {
                     string path = line.Substring (2).Trim ("\" ".ToCharArray ());
-                    change = new SparkleChange () { Path = EnsureSpecialCharacters (path) };
-                    change.Type = SparkleChangeType.Added;
+                    change = new Change () { Path = EnsureSpecialCharacters (path) };
+                    change.Type = ChangeType.Added;
 
                     if (line.StartsWith ("M")) {
-                        change.Type = SparkleChangeType.Edited;
+                        change.Type = ChangeType.Edited;
                         
                     } else if (line.StartsWith ("D")) {
-                        change.Type = SparkleChangeType.Deleted;
+                        change.Type = ChangeType.Deleted;
                     }
                 }
 
@@ -1082,19 +1082,19 @@ namespace SparkleLib.Git {
         {
             string message = "";
 
-            foreach (SparkleChange change in ParseStatus ()) {
-                if (change.Type == SparkleChangeType.Moved) {
+            foreach (Change change in ParseStatus ()) {
+                if (change.Type == ChangeType.Moved) {
                     message +=  "< ‘" + EnsureSpecialCharacters (change.Path) + "’\n";
                     message +=  "> ‘" + EnsureSpecialCharacters (change.MovedToPath) + "’\n";
 
                 } else {
-                    if (change.Type == SparkleChangeType.Edited) {
+                    if (change.Type == ChangeType.Edited) {
                         message += "/";
 
-                    } else if (change.Type == SparkleChangeType.Deleted) {
+                    } else if (change.Type == ChangeType.Deleted) {
                         message += "-";
 
-                    } else if (change.Type == SparkleChangeType.Added) {
+                    } else if (change.Type == ChangeType.Added) {
                         message += "+";
                     }
 
