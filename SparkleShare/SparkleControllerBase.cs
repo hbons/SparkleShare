@@ -22,6 +22,7 @@ using System.Linq;
 using System.Threading;
 
 using SparkleLib;
+using SparkleLib.Git;
 
 namespace SparkleShare {
     
@@ -211,9 +212,9 @@ namespace SparkleShare {
         
         public virtual void Initialize ()
         {
-            SparkleLogger.LogInfo ("Environment", SparkleLib.SparkleBackend.Platform + " (" + Environment.OSVersion + ")");
-            // TODO: SparkleLogger.LogInfo ("Environment", "Git version: ");
-            SparkleLogger.LogInfo ("Environment", "SparkleShare " + SparkleLib.SparkleBackend.Version);
+            SparkleLogger.LogInfo ("Environment", "SparkleShare " + SparkleBackend.Version);
+            SparkleLogger.LogInfo ("Environment", "Git " + SparkleGit.GitVersion);
+            SparkleLogger.LogInfo ("Environment", SparkleBackend.Platform + " (" + Environment.OSVersion + ")");
             
             SparklePlugin.PluginsPath = PluginsPath;
             InstallProtocolHandler ();
