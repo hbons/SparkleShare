@@ -25,7 +25,7 @@ namespace SparkleLib {
         public event ChangeEventEventHandler ChangeEvent = delegate { };
         public delegate void ChangeEventEventHandler (FileSystemEventArgs args);
 
-        private Object thread_lock = new Object ();
+        private object thread_lock = new object ();
 
 
         public SparkleWatcher (string path) : base (path)

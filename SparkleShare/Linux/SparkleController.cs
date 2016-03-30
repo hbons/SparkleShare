@@ -19,10 +19,10 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
-using SparkleLib;
-
 using Gtk;
 using Mono.Unix.Native;
+
+using SparkleLib;
 
 namespace SparkleShare {
 
@@ -44,34 +44,35 @@ namespace SparkleShare {
         // start SparkleShare automatically at login
         public override void CreateStartupItem ()
         {
-            string autostart_path = Path.Combine (
-                Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "autostart");
-
+            string autostart_path      = Path.Combine (Config.HomePath, ".config", "autostart");
             string autostart_file_path = Path.Combine (autostart_path, "org.sparkleshare.SparkleShare.Autostart.desktop");
 
             if (File.Exists (autostart_file_path))
-				return;
+                return;
  
-			if (!Directory.Exists (autostart_path))
+            if (!Directory.Exists (autostart_path))
                 Directory.CreateDirectory (autostart_path);
 
-			try {
+            string autostart_exec = "sparkleshare";
+
+            if (Defines.INSTALL_DIR.StartsWith ("/app/"))
+                autostart_exec = "xdg-app run org.sparkleshare.SparkleShare";
+
+            try {
                 File.WriteAllText (autostart_file_path,
                     "[Desktop Entry]\n" +
-                    "Type=Application\n" +
                     "Name=SparkleShare\n" +
-                    "Exec=sparkleshare\n" +
+                    "Type=Application\n" +
+                    "Exec=" + autostart_exec + "\n" +
                     "Icon=org.sparkleshare.SparkleShare\n" +
                     "Terminal=false\n" +
-                    "X-GNOME-Autostart-enabled=true\n" +
-                    "Categories=Network");
+                    "X-GNOME-Autostart-enabled=true\n");
 
-                SparkleLogger.LogInfo ("Controller", "Added SparkleShare to login items");
+                SparkleLogger.LogInfo ("Controller", "Added SparkleShare to startup items");
 
             } catch (Exception e) {
-                SparkleLogger.LogInfo ("Controller", "Failed adding SparkleShare to login items: " + e.Message);
+                SparkleLogger.LogInfo ("Controller", "Failed to add SparkleShare to startup items", e);
             }
-            
         }
 
 
@@ -130,7 +131,7 @@ namespace SparkleShare {
             var process = new SparkleProcess ("gvfs-set-attribute", SparkleConfig.DefaultConfig.FoldersPath + " " +
                 "metadata::custom-icon-name org.sparkleshare.SparkleShare");
 
-			process.StartAndWaitForExit ();
+            process.StartAndWaitForExit ();
         }
 
 
@@ -142,10 +143,7 @@ namespace SparkleShare {
 
         public override void OpenFile (string path)
         {
-            Process process             = new Process ();
-            process.StartInfo.FileName  = "xdg-open";
-            process.StartInfo.Arguments = "\"" + path + "\"";
-            process.Start ();
+			new SparkleProcess ("xdg-open", "\"" + path + "\"").Start ();
         }
 
 

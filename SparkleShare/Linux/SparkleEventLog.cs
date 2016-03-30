@@ -48,10 +48,11 @@ namespace SparkleShare {
             IconName = "org.sparkleshare.SparkleShare";
 
             Gdk.Rectangle monitor_0_rect = Gdk.Screen.Default.GetMonitorGeometry (0);
-            SetSizeRequest (480, (int) (monitor_0_rect.Height * 0.8));
+            SetSizeRequest (480, 640);
+			Resize (480, (int)(monitor_0_rect.Height * 0.8));
 
             this.pos_x = (int) (monitor_0_rect.Width * 0.61);
-            this.pos_y = (int) (monitor_0_rect.Height * 0.5 - (HeightRequest * 0.5));
+            this.pos_y = (int) (monitor_0_rect.Height * 0.5 - (AllocatedHeight * 0.5));
             
             this.size_label    = new Label () { Xalign = 0, Markup = "<b>Size:</b> …" };
             this.history_label = new Label () { Xalign = 0, Markup = "<b>History:</b> …" };
