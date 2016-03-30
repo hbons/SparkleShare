@@ -24,21 +24,18 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Forms = System.Windows.Forms;
 
-using Microsoft.Win32;
-using SparkleLib;
 using System.Windows;
+using Forms = System.Windows.Forms;
+using Microsoft.Win32;
 
+using SparkleLib;
 
 namespace SparkleShare {
 
     public class SparkleController : SparkleControllerBase {
 
-        private int ssh_agent_pid;
-
-
-        public SparkleController () : base ()
+        public SparkleController ()
         {
         }
 

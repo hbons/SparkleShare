@@ -239,7 +239,7 @@ namespace SparkleShare {
         }
         
         
-        private int reopen_attempt_counts = 0;
+        int reopen_attempt_counts = 0;
         
         public void HandleReopen ()
         {
@@ -323,7 +323,7 @@ namespace SparkleShare {
         }
         
         
-        private void CheckRepositories ()
+        void CheckRepositories ()
         {
             lock (this.check_repos_lock) {
                 string path = Config.FoldersPath;
@@ -385,7 +385,7 @@ namespace SparkleShare {
         }
         
         
-        private void AddRepository (string folder_path)
+        void AddRepository (string folder_path)
         {
             SparkleRepoBase repo = null;
             string folder_name   = Path.GetFileName (folder_path);
@@ -459,7 +459,7 @@ namespace SparkleShare {
         }
 
 
-        private void OnFolderActivity (object o, FileSystemEventArgs args)
+        void OnFolderActivity (object o, FileSystemEventArgs args)
         {
             if (args != null && args.FullPath.EndsWith (".xml") &&
                 args.ChangeType == WatcherChangeTypes.Created) {
@@ -470,7 +470,7 @@ namespace SparkleShare {
         }
         
         
-        private void StartupInviteScan ()
+        void StartupInviteScan ()
         {
             foreach (string invite in Directory.GetFiles (FoldersPath, "*.xml")) {
                 HandleInvite (invite);
@@ -478,13 +478,13 @@ namespace SparkleShare {
         }
         
         
-        private void HandleInvite (FileSystemEventArgs args)
+        void HandleInvite (FileSystemEventArgs args)
         {
             HandleInvite (args.FullPath);
         }
         
         
-        private void HandleInvite (string path)
+        void HandleInvite (string path)
         {
             if (this.fetcher != null &&
                 this.fetcher.IsActive) {
@@ -517,7 +517,7 @@ namespace SparkleShare {
         
         
         // Fires events for the current syncing state
-        private void UpdateState ()
+        void UpdateState ()
         {
             bool has_unsynced_repos = false;
             bool has_syncing_repos  = false;
@@ -705,7 +705,7 @@ namespace SparkleShare {
         }
 
 
-        private void ClearDirectoryAttributes (string path)
+        void ClearDirectoryAttributes (string path)
         {
             if (!Directory.Exists (path))
                 return;
@@ -723,7 +723,7 @@ namespace SparkleShare {
         }
 
         
-        private bool IsSymlink (string file)
+        bool IsSymlink (string file)
         {
             FileAttributes attributes = File.GetAttributes (file);
             return ((attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint);
