@@ -28,4 +28,3 @@ namespace SparkleLib {
         public const string INSTALL_DIR = "@expanded_datadir@/sparkleshare";
     }
 }
-
