@@ -23,14 +23,25 @@ namespace SparkleLib {
 
     public class SparkleProcess : Process {
 
-         public SparkleProcess (string path, string args)        {
-            StartInfo.FileName               = path;
-            StartInfo.Arguments              = args;
-            StartInfo.UseShellExecute        = false;
+        bool write_output;
+
+
+        public SparkleProcess (string path, string args) : this (path, args, false)
+        {
+        }
+
+
+        public SparkleProcess (string path, string args, bool write_output)
+        {
+            this.write_output = write_output;
+
+            StartInfo.FileName = path;
+            StartInfo.Arguments = args;
+            StartInfo.UseShellExecute = false;
             StartInfo.RedirectStandardOutput = true;
-            StartInfo.RedirectStandardError  = true;
-            StartInfo.CreateNoWindow         = true;
-            EnableRaisingEvents              = true;
+            StartInfo.RedirectStandardError = true;
+            StartInfo.CreateNoWindow = true;
+            EnableRaisingEvents = true;
         }
 
 
@@ -41,7 +52,8 @@ namespace SparkleLib {
             if (!string.IsNullOrEmpty (StartInfo.WorkingDirectory))
                 folder = Path.GetFileName (StartInfo.WorkingDirectory) + " | ";
                 
-            SparkleLogger.LogInfo ("Cmd", folder + Path.GetFileName (StartInfo.FileName) + " " + StartInfo.Arguments);
+            if (this.write_output)
+                SparkleLogger.LogInfo ("Cmd", folder + Path.GetFileName (StartInfo.FileName) + " " + StartInfo.Arguments);
 
             try {
                 base.Start ();

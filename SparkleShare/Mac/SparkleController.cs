@@ -25,6 +25,7 @@ using MonoMac.Foundation;
 using MonoMac.AppKit;
 
 using SparkleLib;
+using SparkleLib.Git;
 
 namespace SparkleShare {
 
@@ -41,9 +42,8 @@ namespace SparkleShare {
         {
             NSApplication.Init ();
 
-            // Let's use the bundled git first
-            SparkleLib.Git.SparkleGit.GitPath  = Path.Combine (NSBundle.MainBundle.ResourcePath, "git", "libexec", "git-core", "git");
-            SparkleLib.Git.SparkleGit.ExecPath = Path.Combine (NSBundle.MainBundle.ResourcePath, "git", "libexec", "git-core");
+            SparkleGit.GitPath  = Path.Combine (NSBundle.MainBundle.ResourcePath, "git", "libexec", "git-core", "git");
+            SparkleGit.ExecPath = Path.Combine (NSBundle.MainBundle.ResourcePath, "git", "libexec", "git-core");
         }
 
         

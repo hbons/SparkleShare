@@ -19,17 +19,25 @@ namespace SparkleLib.Git {
 
     public class SparkleGit : SparkleProcess {
 
-        public static string ExecPath;
-        public static string GitPath;
         public static string SSHPath;
+        public static string GitPath;
+        public static string ExecPath;
+
+
+        public static string GitVersion {
+            get {
+                string git_version = new SparkleProcess (GitPath, "--version").StartAndReadStandardOutput ();
+                return git_version.Replace ("git version ", "");
+            }
+        }
 
 
         public SparkleGit (string path, string args) : base (path, args)
         {
-            if (string.IsNullOrEmpty (GitPath))
+            if (GitPath == null)
                 GitPath = LocateCommand ("git");
 
-            StartInfo.FileName         = GitPath;
+            StartInfo.FileName = GitPath;
             StartInfo.WorkingDirectory = path;
 
             if (string.IsNullOrEmpty (SSHPath))
@@ -41,7 +49,7 @@ namespace SparkleLib.Git {
                 "-o PasswordAuthentication=no " +
                 "-F /dev/null"; // Ignore the environment's SSH config file
 
-            if (!string.IsNullOrEmpty (ExecPath))
+            if (ExecPath == null)
                 SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
 
             SetEnvironmentVariable ("GIT_SSH_COMMAND", GIT_SSH_COMMAND);
