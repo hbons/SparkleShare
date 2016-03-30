@@ -5,22 +5,21 @@ ASSEMBLY_INFO_SOURCE = Defines.cs
 
 SOURCES =  \
 	AuthenticationInfo.cs \
+	Backend.cs \
+	BaseFetcher.cs \
+	BaseListener.cs \
+	BaseRepository.cs \
+	Command.cs \
+	Config.cs \
+	Extensions.cs \
+	ListenerFactory.cs \
+	Logger.cs \
 	SSHAuthenticationInfo.cs \
-	SparkleBackend.cs \
-	SparkleConfig.cs \
-	SparkleExtensions.cs \
-	SparkleFetcherBase.cs \
-	SparkleFetcherSSH.cs \
-	SparkleListenerBase.cs \
-	SparkleListenerFactory.cs \
-	SparkleListenerTcp.cs \
-	SparkleLogger.cs \
-	SparkleProcess.cs \
-	SparkleRepoBase.cs \
-	SparkleUser.cs \
-	SparkleWatcher.cs \
-	SparkleWrappers.cs
-
+	SSHFetcher.cs \
+	TcpListener.cs \
+	User.cs \
+	Watcher.cs \
+	Wrappers.cs
 
 install-data-hook:
 	for ASM in $(EXTRA_BUNDLE); do \
