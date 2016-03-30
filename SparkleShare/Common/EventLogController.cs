@@ -435,8 +435,8 @@ namespace SparkleShare {
                 foreach (ChangeSet change_set in activity_day) {
                     string event_entry = "<dl>";
 
-                    foreach (SparkleChange change in change_set.Changes) {
-                        if (change.Type != SparkleChangeType.Moved) {
+                    foreach (Change change in change_set.Changes) {
+                        if (change.Type != ChangeType.Moved) {
                             event_entry += "<dd class='" + change.Type.ToString ().ToLower () + "'>";
 
                             if (!change.IsFolder) {

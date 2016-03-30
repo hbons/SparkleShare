@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-  <id type="desktop">sparkleshare.desktop</id>
+  <id type="desktop">org.sparkleshare.SparkleShare.desktop</id>
   <metadata_licence>CC0-1.0</metadata_licence>
   <project_license>GPL-3.0</project_license>
   <name>SparkleShare</name>
@@ -25,3 +25,4 @@
   </description>
   <url type="homepage">http://www.sparkleshare.org/</url>
 </component>
+

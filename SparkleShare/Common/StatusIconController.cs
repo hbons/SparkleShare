@@ -89,17 +89,17 @@ namespace SparkleShare {
                 Dictionary<string, string> changes_info = new Dictionary<string, string> ();
             
                 int changes_count = 0;
-                foreach (SparkleChange change in repo.UnsyncedChanges) {
+                foreach (Change change in repo.UnsyncedChanges) {
                     changes_count++;
 
                     if (changes_count > 10)
                         continue;
 
                     switch (change.Type) {
-                    case SparkleChangeType.Added:   changes_info [change.Path] = "document-added-12.png"; break;
-                    case SparkleChangeType.Edited:  changes_info [change.Path] = "document-edited-12.png"; break;
-                    case SparkleChangeType.Deleted: changes_info [change.Path] = "document-deleted-12.png"; break;
-                    case SparkleChangeType.Moved:   changes_info [change.MovedToPath] = "document-moved-12.png"; break;
+                    case ChangeType.Added:   changes_info [change.Path] = "document-added-12.png"; break;
+                    case ChangeType.Edited:  changes_info [change.Path] = "document-edited-12.png"; break;
+                    case ChangeType.Deleted: changes_info [change.Path] = "document-deleted-12.png"; break;
+                    case ChangeType.Moved:   changes_info [change.MovedToPath] = "document-moved-12.png"; break;
                     }
                 }
 

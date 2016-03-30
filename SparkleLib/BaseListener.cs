@@ -38,7 +38,7 @@ namespace SparkleLib {
         public delegate void DisconnectedEventHandler (DisconnectReason reason);
 
         public event AnnouncementReceivedEventHandler AnnouncementReceived = delegate { };
-        public delegate void AnnouncementReceivedEventHandler (SparkleAnnouncement announcement);
+        public delegate void AnnouncementReceivedEventHandler (Announcement announcement);
 
         public readonly Uri Server;
 
@@ -47,7 +47,7 @@ namespace SparkleLib {
         public abstract bool IsConnecting { get; }
 
 
-        protected abstract void AnnounceInternal (SparkleAnnouncement announcent);
+        protected abstract void AnnounceInternal (Announcement announcent);
         protected abstract void AlsoListenToInternal (string folder_identifier);
 
         protected List<string> channels = new List<string> ();
@@ -55,10 +55,10 @@ namespace SparkleLib {
 
         private int max_recent_announcements = 10;
 
-        private Dictionary<string, List<SparkleAnnouncement>> recent_announcements =
-            new Dictionary<string, List<SparkleAnnouncement>> ();
+        private Dictionary<string, List<Announcement>> recent_announcements =
+            new Dictionary<string, List<Announcement>> ();
 
-        private Dictionary<string, SparkleAnnouncement> queue_up   = new Dictionary<string, SparkleAnnouncement> ();
+        private Dictionary<string, Announcement> queue_up   = new Dictionary<string, Announcement> ();
 
         private Timer reconnect_timer = new Timer {
             Interval = 60 * 1000,
@@ -81,7 +81,7 @@ namespace SparkleLib {
                 Reconnect ();
         }
 
-        public void Announce (SparkleAnnouncement announcement)
+        public void Announce (Announcement announcement)
         {
             if (!IsRecentAnnouncement (announcement)) {
                 if (IsConnected) {
@@ -135,8 +135,8 @@ namespace SparkleLib {
             if (this.queue_up.Count > 0) {
                 Logger.LogInfo ("Listener", "Delivering " + this.queue_up.Count + " queued messages...");
 
-                foreach (KeyValuePair<string, SparkleAnnouncement> item in this.queue_up) {
-                    SparkleAnnouncement announcement = item.Value;
+                foreach (KeyValuePair<string, Announcement> item in this.queue_up) {
+                    Announcement announcement = item.Value;
                     Announce (announcement);
                 }
             }
@@ -150,7 +150,7 @@ namespace SparkleLib {
         }
 
 
-        public void OnAnnouncement (SparkleAnnouncement announcement)
+        public void OnAnnouncement (Announcement announcement)
         {
             Logger.LogInfo ("Listener", "Got message " + announcement.Message + " from " +
                 announcement.FolderIdentifier + " on " + Server);
@@ -176,13 +176,13 @@ namespace SparkleLib {
         }
 
 
-        private bool IsRecentAnnouncement (SparkleAnnouncement announcement)
+        private bool IsRecentAnnouncement (Announcement announcement)
         {
             if (!this.recent_announcements.ContainsKey (announcement.FolderIdentifier)) {
                 return false;
 
             } else {
-                foreach (SparkleAnnouncement recent_announcement in GetRecentAnnouncements (announcement.FolderIdentifier)) {
+                foreach (Announcement recent_announcement in GetRecentAnnouncements (announcement.FolderIdentifier)) {
                     if (recent_announcement.Message.Equals (announcement.Message))
                         return true;
                 }
@@ -192,18 +192,18 @@ namespace SparkleLib {
         }
 
 
-        private List<SparkleAnnouncement> GetRecentAnnouncements (string folder_identifier)
+        private List<Announcement> GetRecentAnnouncements (string folder_identifier)
         {
             if (!this.recent_announcements.ContainsKey (folder_identifier))
-                this.recent_announcements [folder_identifier] = new List<SparkleAnnouncement> ();
+                this.recent_announcements [folder_identifier] = new List<Announcement> ();
 
             return this.recent_announcements [folder_identifier];
         }
 
 
-        private void AddRecentAnnouncement (SparkleAnnouncement announcement)
+        private void AddRecentAnnouncement (Announcement announcement)
         {
-            List<SparkleAnnouncement> recent_announcements =
+            List<Announcement> recent_announcements =
                 GetRecentAnnouncements (announcement.FolderIdentifier);
 
             if (!IsRecentAnnouncement (announcement))

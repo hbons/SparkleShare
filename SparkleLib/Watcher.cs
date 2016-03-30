@@ -15,7 +15,6 @@
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-using System;
 using System.IO;
 
 namespace SparkleLib {
@@ -25,7 +24,7 @@ namespace SparkleLib {
         public event ChangeEventEventHandler ChangeEvent = delegate { };
         public delegate void ChangeEventEventHandler (FileSystemEventArgs args);
 
-        private object thread_lock = new object ();
+        object thread_lock = new object ();
 
 
         public Watcher (string path) : base (path)
@@ -41,7 +40,7 @@ namespace SparkleLib {
         }
 
 
-        private void OnChanged (object sender, FileSystemEventArgs args)
+        void OnChanged (object sender, FileSystemEventArgs args)
         {
             ChangeEvent (args);
         }
