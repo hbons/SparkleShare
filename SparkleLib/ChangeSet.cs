@@ -21,7 +21,7 @@ using System.Collections.Generic;
 
 namespace SparkleLib {
 
-    public enum SparkleChangeType {
+    public enum ChangeType {
         Added,
         Edited,
         Deleted,
@@ -39,16 +39,16 @@ namespace SparkleLib {
         public DateTime FirstTimestamp;
         public Uri RemoteUrl;
 
-        public List<SparkleChange> Changes = new List<SparkleChange> ();
+        public List<Change> Changes = new List<Change> ();
 
         public string ToMessage ()
         {
             string message = "added: {0}";
             
             switch (Changes [0].Type) {
-            case SparkleChangeType.Edited:  message = "edited: {0}"; break;
-            case SparkleChangeType.Deleted: message = "deleted: {0}"; break;
-            case SparkleChangeType.Moved:   message = "moved: {0}"; break;
+            case ChangeType.Edited:  message = "edited: {0}"; break;
+            case ChangeType.Deleted: message = "deleted: {0}"; break;
+            case ChangeType.Moved:   message = "moved: {0}"; break;
             }
 
             if (Changes.Count > 0)
@@ -59,9 +59,9 @@ namespace SparkleLib {
     }
 
 
-    public class SparkleChange {
+    public class Change {
 
-        public SparkleChangeType Type;
+        public ChangeType Type;
         public DateTime Timestamp;
         public bool IsFolder = false;
         
@@ -94,13 +94,13 @@ namespace SparkleLib {
     }
 
 
-    public class SparkleAnnouncement {
+    public class Announcement {
 
         public readonly string FolderIdentifier;
         public readonly string Message;
 
 
-        public SparkleAnnouncement (string folder_identifier, string message)
+        public Announcement (string folder_identifier, string message)
         {
             FolderIdentifier = folder_identifier;
             Message          = message;

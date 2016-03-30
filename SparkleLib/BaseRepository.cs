@@ -59,7 +59,7 @@ namespace SparkleLib {
         public abstract double HistorySize { get; }
 
         public abstract List<string> ExcludePaths { get; }
-        public abstract List<SparkleChange> UnsyncedChanges { get; }
+        public abstract List<Change> UnsyncedChanges { get; }
         public abstract List<ChangeSet> GetChangeSets ();
         public abstract List<ChangeSet> GetChangeSets (string path);
 
@@ -373,7 +373,7 @@ namespace SparkleLib {
                 HasUnsyncedChanges = false;
                 this.poll_interval = PollInterval.Long;
 
-                this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
+                this.listener.Announce (new Announcement (Identifier, CurrentRevision));
 
                 Status = SyncStatus.Idle;
                 SyncStatusChanged (Status);
@@ -388,7 +388,7 @@ namespace SparkleLib {
                 if (Error == ErrorStatus.None && SyncUp ()) {
                     HasUnsyncedChanges = false;
 
-                    this.listener.Announce (new SparkleAnnouncement (Identifier, CurrentRevision));
+                    this.listener.Announce (new Announcement (Identifier, CurrentRevision));
 
                     Status = SyncStatus.Idle;
                     SyncStatusChanged (Status);
@@ -437,7 +437,7 @@ namespace SparkleLib {
 
                     bool emit_change_event = true;
 
-                    foreach (SparkleChange change in ChangeSets [0].Changes) {
+                    foreach (Change change in ChangeSets [0].Changes) {
                         if (change.Path.EndsWith (".sparkleshare")) {
                             emit_change_event = false;
                             break;
@@ -538,7 +538,7 @@ namespace SparkleLib {
         }
 
 
-        private void ListenerAnnouncementReceivedDelegate (SparkleAnnouncement announcement)
+        private void ListenerAnnouncementReceivedDelegate (Announcement announcement)
         {
             string identifier = Identifier;
 

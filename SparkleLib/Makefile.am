@@ -9,8 +9,9 @@ SOURCES =  \
 	BaseFetcher.cs \
 	BaseListener.cs \
 	BaseRepository.cs \
+	ChangeSet.cs \
 	Command.cs \
-	Config.cs \
+	Configuration.cs \
 	Extensions.cs \
 	ListenerFactory.cs \
 	Logger.cs \
@@ -18,8 +19,7 @@ SOURCES =  \
 	SSHFetcher.cs \
 	TcpListener.cs \
 	User.cs \
-	Watcher.cs \
-	Wrappers.cs
+	Watcher.cs
 
 install-data-hook:
 	for ASM in $(EXTRA_BUNDLE); do \

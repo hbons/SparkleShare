@@ -171,7 +171,7 @@ namespace SparkleLib {
 
                             // We have a message!
                             if (!folder_identifier.Equals ("debug") && !string.IsNullOrEmpty (message))
-                                OnAnnouncement (new SparkleAnnouncement (folder_identifier, message));
+                                OnAnnouncement (new Announcement (folder_identifier, message));
                         }
 
                     } catch (SocketException e) {
@@ -216,7 +216,7 @@ namespace SparkleLib {
         }
 
 
-        protected override void AnnounceInternal (SparkleAnnouncement announcement)
+        protected override void AnnounceInternal (Announcement announcement)
         {
             string to_send = "announce " + announcement.FolderIdentifier + " " + announcement.Message + "\n";
 
