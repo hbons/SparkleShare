@@ -10,28 +10,27 @@ BUILD_DEFINES = "-define:HAVE_APP_INDICATOR"
 endif
 
 SOURCES =  \
-	../Program.cs \
-	../SparkleAboutController.cs \
-	../SparkleAvatars.cs \
-	../SparkleBubblesController.cs \
-	../SparkleControllerBase.cs \
-	../SparkleEventLogController.cs \
-	../SparkleExtensions.cs \
-	../SparkleInvite.cs \
-	../SparkleNoteController.cs \
-	../SparklePlugin.cs \
-	../SparkleSetupController.cs \
-	../SparkleStatusIconController.cs \
-	SparkleAbout.cs \
-	SparkleBubbles.cs \
-	SparkleController.cs \
-	SparkleEventLog.cs \
-	SparkleNote.cs \
-	SparkleSetup.cs \
-	SparkleSetupWindow.cs \
-	SparkleStatusIcon.cs \
-	SparkleUI.cs \
-	SparkleUIHelpers.cs
+	../Common/Program.cs \
+	../Common/AboutController.cs \
+	../Common/Avatars.cs \
+	../Common/BubblesController.cs \
+	../Common/BaseController.cs \
+	../Common/EventLogController.cs \
+	../Common/Invite.cs \
+	../Common/NoteController.cs \
+	../Common/Plugin.cs \
+	../Common/SetupController.cs \
+	../Common/StatusIconController.cs \
+	About.cs \
+	Bubbles.cs \
+	Controller.cs \
+	EventLog.cs \
+	Note.cs \
+	Setup.cs \
+	SetupWindow.cs \
+	StatusIcon.cs \
+	UserInterface.cs \
+	UserInterfaceHelpers.cs
 
 include $(top_srcdir)/build/build.mk
 

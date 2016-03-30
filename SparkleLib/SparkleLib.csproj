@@ -32,23 +32,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SparkleRepoBase.cs" />
-    <Compile Include="SparkleFetcherBase.cs" />
-    <Compile Include="SparkleWrappers.cs" />
-    <Compile Include="SparkleListenerBase.cs" />
-    <Compile Include="SparkleListenerFactory.cs" />
-    <Compile Include="SparkleListenerTcp.cs" />
-    <Compile Include="SparkleBackend.cs" />
-    <Compile Include="SparkleConfig.cs" />
-    <Compile Include="SparkleWatcher.cs" />
-    <Compile Include="SparkleExtensions.cs" />
-    <Compile Include="SparkleUser.cs" />
-    <Compile Include="SparkleLogger.cs" />
+    <Compile Include="Backend.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Defines.cs" />
-    <Compile Include="SparkleFetcherSSH.cs" />
-    <Compile Include="SparkleProcess.cs" />
-    <Compile Include="AuthenticationInfo.cs" />
-    <Compile Include="SSHAuthenticationInfo.cs" />
+    <Compile Include="Command.cs" />
+    <Compile Include="Fetcher\SSHFetcher.cs" />
+    <Compile Include="Fetcher\BaseFetcher.cs" />
+    <Compile Include="Listener\BaseListener.cs" />
+    <Compile Include="Listener\ListenerFactory.cs" />
+    <Compile Include="Listener\TcpListener.cs" />
+    <Compile Include="AuthenticationInfo\SSHAuthenticationInfo.cs" />
+    <Compile Include="AuthenticationInfo\AuthenticationInfo.cs" />
+    <Compile Include="Repository\BaseRepository.cs" />
+    <Compile Include="Repository\ChangeSet.cs" />
+    <Compile Include="Repository\User.cs" />
+    <Compile Include="Repository\Watcher.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Fetcher\" />
+    <Folder Include="Listener\" />
+    <Folder Include="AuthenticationInfo\" />
+    <Folder Include="Repository\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
