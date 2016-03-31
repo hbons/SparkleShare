@@ -278,6 +278,8 @@ namespace SparkleShare {
                     
                 }).Start ();
             }
+
+            AlertNotificationRaised ("Hello!", "This is a test");
         }
         
         
