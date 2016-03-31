@@ -138,7 +138,7 @@ namespace SparkleShare {
 
         public override void SetFolderIcon ()
         {
-           /* if (Environment.OSVersion.Version.Major >= 14) {
+            if (Environment.OSVersion.Version.Major >= 14) {
                 NSWorkspace.SharedWorkspace.SetIconforFile (
                     NSImage.ImageNamed ("sparkleshare-folder-yosemite.icns"),
                     SparkleShare.Controller.FoldersPath, 0);
@@ -147,7 +147,7 @@ namespace SparkleShare {
                 NSWorkspace.SharedWorkspace.SetIconforFile (
                     NSImage.ImageNamed ("sparkleshare-folder.icns"),
                     SparkleShare.Controller.FoldersPath, 0);
-            }*/
+            }
         }
 
 
