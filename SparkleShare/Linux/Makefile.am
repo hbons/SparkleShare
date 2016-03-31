@@ -38,7 +38,8 @@ bin_SCRIPTS = sparkleshare
 Applicationsdir = $(datadir)/applications
 dist_Applications_DATA = \
 	org.sparkleshare.SparkleShare.desktop \
-	org.sparkleshare.SparkleShare.Invites.desktop
+	org.sparkleshare.SparkleShare.Invites.desktop \
+        SparkleShare.Autostart.desktop
 
 install-data-hook:
 	test -f $(datadir)/applications/defaults.list && \

@@ -22,7 +22,7 @@ namespace Sparkles {
 
     public static class ListenerFactory {
 
-        private static List<BaseListener> listeners = new List<BaseListener> ();
+        static readonly List<BaseListener> listeners = new List<BaseListener> ();
 
 
         public static BaseListener CreateListener (string folder_name, string folder_identifier)
@@ -40,9 +40,9 @@ namespace Sparkles {
             // Please see the SparkleShare wiki if you wish to run
             // your own service instead
             if (string.IsNullOrEmpty (uri))
-                uri = "tcp://notifications.sparkleshare.org:443";
+                uri = "tcp://announcements.sparkleshare.org:443";
 
-            Uri announce_uri = new Uri (uri);
+            var announce_uri = new Uri (uri);
 
             // Use only one listener per notification service to keep
             // the number of connections as low as possible
@@ -53,14 +53,14 @@ namespace Sparkles {
                     // We already seem to have a listener for this server,
                     // refer to the existing one instead
                     listener.AlsoListenTo (folder_identifier);
-                    return (BaseListener) listener;
+                    return listener;
                 }
             }
 
             listeners.Add (new TcpListener (announce_uri, folder_identifier));
             Logger.LogInfo ("ListenerFactory", "Issued new listener for " + announce_uri);
 
-            return (BaseListener) listeners [listeners.Count - 1];
+            return listeners [listeners.Count - 1];
         }
     }
 }

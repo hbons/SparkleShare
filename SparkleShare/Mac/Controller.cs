@@ -58,71 +58,6 @@ namespace SparkleShare {
         }
 
 
-        // We have to use our own custom made folder watcher, as
-        // System.IO.FileSystemWatcher fails watching subfolders on Mac
-        SparkleMacWatcher watcher;
-
-        delegate void FileActivityTask ();
-
-        FileActivityTask MacActivityTask (BaseRepository repo, FileSystemEventArgs fse_args)
-        {
-            return delegate { new Thread (() => { repo.OnFileActivity (fse_args); }).Start (); };
-        }
-
-        void OnFilesChanged (List<string> changed_files_in_basedir)
-        {
-            var triggered_repos = new List<string> ();
-
-            foreach (string file in changed_files_in_basedir) {
-                string repo_name;
-                int path_sep_index = file.IndexOf (Path.DirectorySeparatorChar);
-
-                if (path_sep_index >= 0)
-                    repo_name = file.Substring (0, path_sep_index);
-                else
-                    repo_name = file;
-
-                repo_name = Path.GetFileNameWithoutExtension (repo_name);
-                BaseRepository repo = GetRepoByName (repo_name);
-
-                if (repo == null)
-                    continue;
-
-                if (!triggered_repos.Contains (repo_name)) {
-                    triggered_repos.Add (repo_name);
-
-                    FileActivityTask task = MacActivityTask (repo,
-                        new FileSystemEventArgs (WatcherChangeTypes.Changed, file, "Unknown"));
-                    
-                    task ();
-                }
-
-            }
-        }
-
-
-        public override void CreateStartupItem ()
-        {
-            // There aren't any bindings in MonoMac to support this yet, so
-            // we call out to an applescript to do the job
-
-            string args = "-e 'tell application \"System Events\" to " +
-                "make login item at end with properties " +
-                "{path:\"" + NSBundle.MainBundle.BundlePath + "\", hidden:false}'";
-
-            var process = new Command ("osascript", args);
-            process.StartAndWaitForExit ();
-
-            Logger.LogInfo ("Controller", "Added " + NSBundle.MainBundle.BundlePath + " to login items");
-        }
-
-
-        public override void InstallProtocolHandler ()
-        {
-             // We ship SparkleShareInviteHandler.app in the bundle
-        }
-
-
         public override bool CreateSparkleShareFolder ()
         {
             if (!Directory.Exists (SparkleShare.Controller.FoldersPath)) {
@@ -151,6 +86,34 @@ namespace SparkleShare {
         }
 
 
+		public override void CreateStartupItem ()
+		{
+			// There aren't any bindings in MonoMac to support this yet, so
+			// we call out to an applescript to do the job
+			
+			string args = "-e 'tell application \"System Events\" to " +
+				"make login item at end with properties " +
+				"{path:\"" + NSBundle.MainBundle.BundlePath + "\", hidden:false}'";
+			
+			var process = new Command ("osascript", args);
+			process.StartAndWaitForExit ();
+			
+			Logger.LogInfo ("Controller", "Added " + NSBundle.MainBundle.BundlePath + " to login items");
+		}
+		
+
+        public override void InstallProtocolHandler ()
+        {
+        }
+
+
+		public override void CopyToClipboard (string text)
+		{
+			NSPasteboard.GeneralPasteboard.ClearContents ();
+			NSPasteboard.GeneralPasteboard.SetStringForType (text, "NSStringPboardType");
+		}
+
+
         public override void OpenFolder (string path)
         {
             path = Uri.UnescapeDataString (path);
@@ -168,13 +131,6 @@ namespace SparkleShare {
         public override void OpenWebsite (string url)
         {
             NSWorkspace.SharedWorkspace.OpenUrl (new NSUrl (url));
-        }
-
-
-        public override void CopyToClipboard (string text)
-        {
-            NSPasteboard.GeneralPasteboard.ClearContents ();
-            NSPasteboard.GeneralPasteboard.SetStringForType (text, "NSStringPboardType");
         }
 
 
@@ -219,6 +175,48 @@ namespace SparkleShare {
                }
 
                return this.event_entry_html;
+            }
+        }
+
+
+        SparkleMacWatcher watcher;
+        delegate void FileActivityTask ();
+
+        // We have to use our own custom made folder watcher, as
+        // System.IO.FileSystemWatcher fails watching subfolders on Mac
+        FileActivityTask MacActivityTask (BaseRepository repo, FileSystemEventArgs fse_args)
+        {
+            return delegate { new Thread (() => { repo.OnFileActivity (fse_args); }).Start (); };
+        }
+
+        void OnFilesChanged (List<string> changed_files_in_basedir)
+        {
+            var triggered_repos = new List<string> ();
+
+            foreach (string file in changed_files_in_basedir) {
+                string repo_name;
+                int path_sep_index = file.IndexOf (Path.DirectorySeparatorChar);
+
+                if (path_sep_index >= 0)
+                    repo_name = file.Substring (0, path_sep_index);
+                else
+                    repo_name = file;
+
+                repo_name = Path.GetFileNameWithoutExtension (repo_name);
+                BaseRepository repo = GetRepoByName (repo_name);
+
+                if (repo == null)
+                    continue;
+
+                if (!triggered_repos.Contains (repo_name)) {
+                    triggered_repos.Add (repo_name);
+
+                    FileActivityTask task = MacActivityTask (repo,
+                        new FileSystemEventArgs (WatcherChangeTypes.Changed, file, "Unknown"));
+
+                    task ();
+                }
+
             }
         }
 
