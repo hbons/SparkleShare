@@ -202,54 +202,54 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Common\Plugins\github.png">
-      <Link>Plugins\github.png</Link>
+    <None Include="..\Common\Presets\github.png">
+      <Link>Presets\github.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Plugins\gitorious.png">
-      <Link>Plugins\gitorious.png</Link>
+    <None Include="..\Common\Presets\gitorious.png">
+      <Link>Presets\gitorious.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Plugins\own-server.png">
-      <Link>Plugins\own-server.png</Link>
+    <None Include="..\Common\Presets\own-server.png">
+      <Link>Presets\own-server.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Plugins\bitbucket.png">
-      <Link>Plugins\bitbucket.png</Link>
+    <None Include="..\Common\Presets\bitbucket.png">
+      <Link>Presets\bitbucket.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Plugins\ssnet.png">
-      <Link>Plugins\ssnet.png</Link>
+    <None Include="..\Common\Presets\ssnet.png">
+      <Link>Presets\ssnet.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Plugins\planio.png">
-      <Link>Plugins\planio.png</Link>
+    <None Include="..\Common\Presets\planio.png">
+      <Link>Presets\planio.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Common\Plugins\ssnet.xml">
-      <Link>Plugins\ssnet.xml</Link>
+    <None Include="..\Common\Presets\ssnet.xml">
+      <Link>Presets\ssnet.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Plugins\bitbucket.xml">
-      <Link>Plugins\bitbucket.xml</Link>
+    <None Include="..\Common\Presets\bitbucket.xml">
+      <Link>Presets\bitbucket.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Plugins\github.xml">
-      <Link>Plugins\github.xml</Link>
+    <None Include="..\Common\Presets\github.xml">
+      <Link>Presets\github.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Plugins\gitorious.xml">
-      <Link>Plugins\gitorious.xml</Link>
+    <None Include="..\Common\Presets\gitorious.xml">
+      <Link>Presets\gitorious.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Plugins\own-server.xml">
-      <Link>Plugins\own-server.xml</Link>
+    <None Include="..\Common\Presets\own-server.xml">
+      <Link>Presets\own-server.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Plugins\planio.xml">
-      <Link>Plugins\planio.xml</Link>
+    <None Include="..\Common\Presets\planio.xml">
+      <Link>Presets\planio.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -281,11 +281,11 @@
   <ItemGroup>
     <ProjectReference Include="SparkleLib\Git\SparkleLib.Git.csproj">
       <Project>{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}</Project>
-      <Name>SparkleLib.Git</Name>
+      <Name>Sparkles.Git</Name>
     </ProjectReference>
     <ProjectReference Include="SparkleLib\SparkleLib.csproj">
       <Project>{2C914413-B31C-4362-93C7-1AE34F09112A}</Project>
-      <Name>SparkleLib</Name>
+      <Name>Sparkles</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

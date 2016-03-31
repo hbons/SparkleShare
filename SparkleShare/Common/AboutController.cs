@@ -19,6 +19,8 @@ using System;
 using System.Net;
 using System.Threading;
 
+using Sparkles;
+
 namespace SparkleShare {
 
     public class SparkleAboutController {
@@ -39,11 +41,11 @@ namespace SparkleShare {
 
         public SparkleAboutController ()
         {
-            RunningVersion = SparkleLib.Backend.Version;
+            RunningVersion = InstallationInfo.Version;
 
             SparkleShare.Controller.ShowAboutWindowEvent += delegate {
                 ShowWindowEvent ();
-                new Thread (() => CheckForNewVersion ()).Start ();
+                new Thread (CheckForNewVersion).Start ();
             };
         }
 
@@ -54,13 +56,13 @@ namespace SparkleShare {
         }
 
 
-        private void CheckForNewVersion ()
+        void CheckForNewVersion ()
         {
             UpdateLabelEvent ("Checking for updates...");
             Thread.Sleep (500);
 
-            WebClient web_client = new WebClient ();
-            Uri uri = new Uri ("http://www.sparkleshare.org/version");
+            var web_client = new WebClient ();
+            var uri = new Uri ("http://www.sparkleshare.org/version");
 
             try {
                 string latest_version = web_client.DownloadString (uri).Trim ();

@@ -18,3 +18,4 @@ uninstall-hook:
 
 MAINTAINERCLEANFILES = Makefile.in
 EXTRA_DIST = $(wildcard *.png *.svg)
+

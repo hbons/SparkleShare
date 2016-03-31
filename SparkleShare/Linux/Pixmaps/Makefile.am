@@ -7,3 +7,4 @@ pixmapsdir = $(pkgdatadir)/pixmaps/
 
 MAINTAINERCLEANFILES = \
 	Makefile.in
+

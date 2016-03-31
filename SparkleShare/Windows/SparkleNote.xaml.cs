@@ -22,7 +22,7 @@ using System.Windows;
 using System.Windows.Forms.Integration;
 using System.Windows.Media;
 
-using SparkleLib;
+using Sparkles;
 
 namespace SparkleShare {
 
