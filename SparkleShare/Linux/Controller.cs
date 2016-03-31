@@ -32,43 +32,42 @@ namespace SparkleShare {
         {
         }
 
+        public override bool CreateSparkleShareFolder ()
+        {
+			CreateStartupItem ();
 
-        public override string PresetsPath {
-            get {
-                return Path.Combine (InstallationInfo.Directory, "presets");
-            }
+            if (Directory.Exists (Configuration.DefaultConfig.FoldersPath))
+                return false;
+            
+            Directory.CreateDirectory (Configuration.DefaultConfig.FoldersPath);
+            Syscall.chmod (Configuration.DefaultConfig.FoldersPath, (FilePermissions) 448); // 448 -> 700
+
+            return false;
+        }
+        
+
+        public override void SetFolderIcon ()
+        {
+            var command = new Command ("gvfs-set-attribute", Configuration.DefaultConfig.FoldersPath + " " +
+                "metadata::custom-icon-name org.sparkleshare.SparkleShare");
+
+            command.StartAndWaitForExit ();
         }
 
 
-        // Creates a .desktop entry in autostart folder to
-        // start SparkleShare automatically at login
         public override void CreateStartupItem ()
         {
-            string autostart_path      = Path.Combine (Config.HomePath, ".config", "autostart");
-            string autostart_file_path = Path.Combine (autostart_path, "org.sparkleshare.SparkleShare.Autostart.desktop");
+            string autostart_file_path = Path.Combine (Path.GetDirectoryName (InstallationInfo.Directory),
+                "applications", "SparkleShare.Autostart.desktop");
+            
+            string autostart_file_dest = Path.Combine (Config.HomePath, ".config", "autostart", "SparkleShare.Autostart.desktop");
+			string autostart_path = Path.GetDirectoryName (autostart_file_dest);
 
-            if (File.Exists (autostart_file_path))
-                return;
- 
-            if (!Directory.Exists (autostart_path))
+			if (!Directory.Exists (autostart_path))
                 Directory.CreateDirectory (autostart_path);
 
-            string autostart_exec = "sparkleshare";
-
-            if (InstallationInfo.Directory.StartsWith ("/app/"))
-                autostart_exec = "xdg-app run org.sparkleshare.SparkleShare";
-
-			// TODO: Ship as .desktop file and copy in place
             try {
-                File.WriteAllText (autostart_file_path,
-                    "[Desktop Entry]\n" +
-                    "Name=SparkleShare\n" +
-                    "Type=Application\n" +
-                    "Exec=" + autostart_exec + "\n" +
-                    "Icon=org.sparkleshare.SparkleShare\n" +
-                    "Terminal=false\n" +
-                    "X-GNOME-Autostart-enabled=true\n");
-
+                File.Copy (autostart_file_path, autostart_file_dest);
                 Logger.LogInfo ("Controller", "Added SparkleShare to startup items");
 
             } catch (Exception e) {
@@ -77,24 +76,33 @@ namespace SparkleShare {
         }
 
 
-        // Creates the SparkleShare folder in the user's home folder
-        public override bool CreateSparkleShareFolder ()
+        public override void InstallProtocolHandler ()
         {
-            if (!Directory.Exists (Configuration.DefaultConfig.FoldersPath)) {
-                Directory.CreateDirectory (Configuration.DefaultConfig.FoldersPath);
-                Syscall.chmod (Configuration.DefaultConfig.FoldersPath, (FilePermissions) 448); // 448 -> 700
-
-                return true;
-            }
-
-            return false;
         }
         
+
+		public override void CopyToClipboard (string text)
+        {
+			Clipboard.Get (Gdk.Atom.Intern ("CLIPBOARD", false)).Text = text;
+        }
+
+
+        public override void OpenFolder (string path)
+        {
+            OpenFile (path);
+        }
+
+
+        public override void OpenFile (string path)
+        {
+            new Command ("xdg-open", "\"" + path + "\"").Start ();
+        }
+
 
         public override string EventLogHTML {
             get {
                 string html_path = Path.Combine (InstallationInfo.Directory, "html", "event-log.html");
-				string jquery_file_path = Path.Combine (InstallationInfo.Directory, "html", "jquery.js");
+                string jquery_file_path = Path.Combine (InstallationInfo.Directory, "html", "jquery.js");
 
                 string html   = File.ReadAllText (html_path);
                 string jquery = File.ReadAllText (jquery_file_path);
@@ -120,36 +128,10 @@ namespace SparkleShare {
         }
 
 
-        public override void CopyToClipboard (string text)
-        {
-            Clipboard clipboard = Clipboard.Get (Gdk.Atom.Intern ("CLIPBOARD", false));
-            clipboard.Text      = text;
-        }
-
-
-        public override void SetFolderIcon ()
-        {
-            var process = new Command ("gvfs-set-attribute", Configuration.DefaultConfig.FoldersPath + " " +
-                "metadata::custom-icon-name org.sparkleshare.SparkleShare");
-
-            process.StartAndWaitForExit ();
-        }
-
-
-        public override void OpenFolder (string path)
-        {
-            OpenFile (path);
-        }
-
-
-        public override void OpenFile (string path)
-        {
-			new Command ("xdg-open", "\"" + path + "\"").Start ();
-        }
-
-
-        public override void InstallProtocolHandler ()
-        {
+        public override string PresetsPath {
+            get {
+                return Path.Combine (InstallationInfo.Directory, "presets");
+            }
         }
     }
 }

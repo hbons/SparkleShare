@@ -5,5 +5,4 @@ Exec=sparkleshare
 Icon=org.sparkleshare.SparkleShare
 Terminal=false
 Categories=Network;FileTransfer;GNOME;GTK;
-X-GNOME-Autostart-enabled=true
 
