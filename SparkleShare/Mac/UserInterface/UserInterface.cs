@@ -30,18 +30,12 @@ namespace SparkleShare {
         public Bubbles Bubbles;
         public About About;
         public Note Note;
-		
-        public static string FontName = "Helvetica Neue";
 
 
         public UserInterface ()
         {
-            // TODO: SF Font
-            if (Environment.OSVersion.Version.Major < 14)
-                FontName = "Lucida Grande";
-
             SparkleShare.Controller.Invoke (() => {
-    //            NSApplication.SharedApplication.ApplicationIconImage = NSImage.ImageNamed ("Resources/sparkleshare-app.icns");
+                NSApplication.SharedApplication.ApplicationIconImage = NSImage.ImageNamed ("sparkleshare-app.icns");
     
                 Setup      = new Setup ();
                 EventLog   = new EventLog ();
@@ -61,10 +55,16 @@ namespace SparkleShare {
         }
 
 
-        public void UpdateDockIconVisibility ()
-        {
-            // if (Setup.IsVisible || EventLog.IsVisible || About.IsVisible)
-            //     NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Regular;
+        public static string FontName {
+            get {
+                if (Environment.OSVersion.Version.Major < 14)
+                    return "Lucida Grande";
+
+                if (Environment.OSVersion.Version.Major < 15)
+                    return "Helvetica Neue";
+
+                return "SF UI Text";
+            }
         }
     }
 
