@@ -329,7 +329,7 @@ namespace SparkleShare {
         {
 		    string pixmaps_path = "file://" + NSBundle.MainBundle.ResourcePath;
 			
-            html = html.Replace ("<!-- $body-font-family -->", "Helvetica Neue");
+            html = html.Replace ("<!-- $body-font-family -->", UserInterface.FontName);
             html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
             html = html.Replace ("<!-- $body-font-size -->", "13.4px");
             html = html.Replace ("<!-- $secondary-font-color -->", "#bbb");
@@ -368,10 +368,6 @@ namespace SparkleShare {
         {
             NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
             MakeKeyAndOrderFront (this);
-
-            if (SparkleShare.UI != null)
-                SparkleShare.UI.UpdateDockIconVisibility ();
-
             base.OrderFrontRegardless ();
         }
 
@@ -379,10 +375,6 @@ namespace SparkleShare {
         public override void PerformClose (NSObject sender)
         {
             base.OrderOut (this);
-
-            if (SparkleShare.UI != null)
-                SparkleShare.UI.UpdateDockIconVisibility ();
-
             return;
         }
     }

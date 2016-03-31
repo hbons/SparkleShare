@@ -70,9 +70,6 @@ namespace SparkleShare {
             };
 
             this.header_text_field.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
-
-            if (SparkleShare.UI != null)
-                SparkleShare.UI.UpdateDockIconVisibility ();
         }
 
         
@@ -128,10 +125,6 @@ namespace SparkleShare {
             NSApplication.SharedApplication.AddWindowsItem (this, "SparkleShare Setup", false);
             NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
             MakeKeyAndOrderFront (this);
-
-            if (SparkleShare.UI != null)
-                SparkleShare.UI.UpdateDockIconVisibility ();
-            
             OrderFrontRegardless ();
         }
 
@@ -140,9 +133,6 @@ namespace SparkleShare {
         {
             OrderOut (this);
             NSApplication.SharedApplication.RemoveWindowsItem (this);
-
-            if (SparkleShare.UI != null)
-                SparkleShare.UI.UpdateDockIconVisibility ();
 
             return;
         }

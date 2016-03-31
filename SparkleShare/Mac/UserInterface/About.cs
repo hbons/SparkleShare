@@ -144,10 +144,6 @@ namespace SparkleShare {
         {
             NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
             MakeKeyAndOrderFront (this);
-
-            if (SparkleShare.UI != null)
-                SparkleShare.UI.UpdateDockIconVisibility ();
-
             base.OrderFrontRegardless ();
         }
 
@@ -155,10 +151,6 @@ namespace SparkleShare {
         public override void PerformClose (NSObject sender)
         {
             base.OrderOut (this);
-
-            if (SparkleShare.UI != null)
-                SparkleShare.UI.UpdateDockIconVisibility ();
-
             return;
         }
 

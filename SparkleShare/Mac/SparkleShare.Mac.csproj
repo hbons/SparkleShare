@@ -148,17 +148,8 @@
     <Content Include="..\Common\HTML\event-log.html">
       <Link>HTML\event-log.html</Link>
     </Content>
-    <Content Include="Resources\sparkleshare-folder.icns">
-      <Link>Resources\sparkleshare-folder.icns</Link>
-    </Content>
-    <Content Include="Resources\sparkleshare-app.icns">
-      <Link>Resources\sparkleshare-app.icns</Link>
-    </Content>
     <Content Include="..\Common\HTML\jquery.js">
       <Link>HTML\jquery.js</Link>
-    </Content>
-    <Content Include="Resources\sparkleshare-folder-yosemite.icns">
-      <Link>Resources\sparkleshare-folder-yosemite.icns</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -263,6 +254,15 @@
     </BundleResource>
     <BundleResource Include="..\Common\Pixmaps\text-balloon%402x.png">
       <Link>Resources\text-balloon%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="Resources\sparkleshare-app.icns">
+      <Link>Resources\sparkleshare-app.icns</Link>
+    </BundleResource>
+    <BundleResource Include="Resources\sparkleshare-folder.icns">
+      <Link>Resources\sparkleshare-folder.icns</Link>
+    </BundleResource>
+    <BundleResource Include="Resources\sparkleshare-folder-yosemite.icns">
+      <Link>Resources\sparkleshare-folder-yosemite.icns</Link>
     </BundleResource>
   </ItemGroup>
   <ItemGroup>

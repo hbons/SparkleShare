@@ -197,10 +197,6 @@ namespace SparkleShare {
         {
             NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
             MakeKeyAndOrderFront (this);
-
-            if (SparkleShare.UI != null)
-                SparkleShare.UI.UpdateDockIconVisibility ();
-
             base.OrderFrontRegardless ();
         }
 
@@ -208,12 +204,9 @@ namespace SparkleShare {
         public override void PerformClose (NSObject sender)
         {
             base.OrderOut (this);
-
-            if (SparkleShare.UI != null)
-                SparkleShare.UI.UpdateDockIconVisibility ();
-
             return;
         }
+
 
         public override bool AcceptsFirstResponder ()
         {
@@ -221,7 +214,7 @@ namespace SparkleShare {
         }
 
 
-        private class SparkleNoteDelegate : NSWindowDelegate {
+        class SparkleNoteDelegate : NSWindowDelegate {
             
             public override bool WindowShouldClose (NSObject sender)
             {
