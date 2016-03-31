@@ -1,4 +1,4 @@
-dist_plugins_DATA = \
+dist_presets_DATA = \
     bitbucket.xml \
     github.xml \
     own-server.xml \
@@ -8,7 +8,7 @@ dist_plugins_DATA = \
     planio.png \
     own-server.png
 
-pluginsdir = $(pkgdatadir)/presets/
+presetsdir = $(pkgdatadir)/presets/
 
 MAINTAINERCLEANFILES = \
 	Makefile.in

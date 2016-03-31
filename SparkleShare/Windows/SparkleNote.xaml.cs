@@ -93,8 +93,8 @@ namespace SparkleShare {
 
             this.user_image.ImageSource = avatar;
             this.Title = Controller.CurrentProject ?? "Add Note";
-            this.user_name_text_block.Text = Program.Controller.CurrentUser.Name;
-            this.user_email_text_field.Text = Program.Controller.CurrentUser.Email;
+            this.user_name_text_block.Text = SparkleShare.Controller.CurrentUser.Name;
+            this.user_email_text_field.Text = SparkleShare.Controller.CurrentUser.Email;
             this.balloon_text_field.Text = default_text;
 
             ElementHost.EnableModelessKeyboardInterop (this);

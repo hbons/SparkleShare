@@ -26,6 +26,9 @@ namespace Sparkles.Git {
 
         public static string GitVersion {
             get {
+                if (GitPath == null)
+                    GitPath = LocateCommand ("git");
+
                 string git_version = new Command (GitPath, "--version").StartAndReadStandardOutput ();
                 return git_version.Replace ("git version ", "");
             }

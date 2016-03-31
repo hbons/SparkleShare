@@ -243,7 +243,7 @@ namespace Sparkles.Git {
 
         void InstallConfiguration ()
         {
-            string [] settings = new string [] {
+            string [] settings = {
                 "core.autocrlf input",
                 "core.quotepath false", // Don't quote "unusual" characters in path names
                 "core.ignorecase false", // Be case sensitive explicitly to work on Mac
@@ -272,13 +272,13 @@ namespace Sparkles.Git {
         // Add a .gitignore file to the repo
         void InstallExcludeRules ()
         {
-            string git_info_path = new string [] { TargetFolder, ".git", "info" }.Combine ();
+            string git_info_path = Path.Combine (TargetFolder, ".git", "info");
 
             if (!Directory.Exists (git_info_path))
                 Directory.CreateDirectory (git_info_path);
 
             string exclude_rules           = string.Join (Environment.NewLine, ExcludeRules);
-            string exclude_rules_file_path = new string [] { git_info_path, "exclude" }.Combine ();
+            string exclude_rules_file_path = Path.Combine (git_info_path, "exclude");
 
             File.WriteAllText (exclude_rules_file_path, exclude_rules);
         }
@@ -286,12 +286,12 @@ namespace Sparkles.Git {
 
         void InstallAttributeRules ()
         {
-            string attribute_rules_file_path = new string [] { TargetFolder, ".git", "info", "attributes" }.Combine ();
+            string attribute_rules_file_path = Path.Combine (TargetFolder, ".git", "info", "attributes");
             TextWriter writer                = new StreamWriter (attribute_rules_file_path);
 
             // Compile a list of files we don't want Git to compress.
             // Not compressing already compressed files decreases memory usage and increases speed
-            string [] extensions = new string [] {
+            string [] extensions = {
                 "jpg", "jpeg", "png", "tiff", "gif", // Images
                 "flac", "mp3", "ogg", "oga", // Audio
                 "avi", "mov", "mpg", "mpeg", "mkv", "ogv", "ogx", "webm", // Video
@@ -326,11 +326,11 @@ namespace Sparkles.Git {
             git_config_clean.StartAndWaitForExit ();
 
             // Pass all files through the encryption filter
-            string git_attributes_file_path = new string [] { TargetFolder, ".git", "info", "attributes" }.Combine ();
+            string git_attributes_file_path = Path.Combine (TargetFolder, ".git", "info", "attributes");
             File.WriteAllText (git_attributes_file_path, "* filter=encryption");
 
             // Store the password
-            string password_file_path = new string [] { TargetFolder, ".git", "info", "encryption_password" }.Combine ();
+            string password_file_path = Path.Combine (TargetFolder, ".git", "info", "encryption_password");
             File.WriteAllText (password_file_path, password.SHA256 (this.password_salt));
         }
 

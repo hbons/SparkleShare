@@ -26,7 +26,7 @@ namespace SparkleShare {
 
     public class UserInterface {
 
-        public static string AssetsPath = Defines.INSTALL_DIR;
+        public static string AssetsPath = InstallationInfo.Directory;
 
         public SparkleStatusIcon StatusIcon;
         public SparkleEventLog EventLog;
@@ -48,15 +48,15 @@ namespace SparkleShare {
             application.Register (null);
             application.Activated += ApplicationActivatedDelegate;
 
-            Gdk.Color color = SparkleUIHelpers.RGBAToColor (new Label().StyleContext.GetColor (StateFlags.Insensitive));
-            SecondaryTextColor = SparkleUIHelpers.ColorToHex (color);
+            Gdk.Color color = UserInterfaceHelpers.RGBAToColor (new Label().StyleContext.GetColor (StateFlags.Insensitive));
+            SecondaryTextColor = UserInterfaceHelpers.ColorToHex (color);
                     
-            color = SparkleUIHelpers.MixColors (
-                SparkleUIHelpers.RGBAToColor (new TreeView ().StyleContext.GetColor (StateFlags.Selected)),
-                SparkleUIHelpers.RGBAToColor (new TreeView ().StyleContext.GetBackgroundColor (StateFlags.Selected)),
+            color = UserInterfaceHelpers.MixColors (
+                UserInterfaceHelpers.RGBAToColor (new TreeView ().StyleContext.GetColor (StateFlags.Selected)),
+                UserInterfaceHelpers.RGBAToColor (new TreeView ().StyleContext.GetBackgroundColor (StateFlags.Selected)),
                 0.39);
     
-            SecondaryTextColorSelected = SparkleUIHelpers.ColorToHex (color);
+            SecondaryTextColorSelected = UserInterfaceHelpers.ColorToHex (color);
         }
 
 
@@ -79,7 +79,7 @@ namespace SparkleShare {
                 }
 
                 if (!has_visible_windows)
-                    Program.Controller.HandleReopen ();
+                    SparkleShare.Controller.HandleReopen ();
 
             } else {
                 Setup      = new SparkleSetup ();
@@ -93,7 +93,7 @@ namespace SparkleShare {
                 EventLog.Application = application;
                 About.Application    = application;
 
-                Program.Controller.UIHasLoaded ();
+                SparkleShare.Controller.UIHasLoaded ();
             }
         }
     }

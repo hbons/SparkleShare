@@ -24,17 +24,6 @@ namespace Sparkles {
 
     public static class Extensions {
 
-        public static string Combine (this string [] parts)
-        {
-            string new_path = "";
-
-            foreach (string part in parts)
-                new_path = Path.Combine (new_path, part);
-
-            return new_path;
-        }
-
-        
         public static string SHA1 (this string s)
         {
             SHA1 sha1          = new SHA1CryptoServiceProvider ();

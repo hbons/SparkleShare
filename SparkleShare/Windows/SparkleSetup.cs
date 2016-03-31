@@ -139,7 +139,7 @@ namespace SparkleShare {
                         
                         cancel_button.Click += delegate {
                             Dispatcher.BeginInvoke ((Action) delegate {
-                                Program.UI.StatusIcon.Dispose ();    
+                                SparkleShare.UI.StatusIcon.Dispose ();    
                                 Controller.SetupPageCancelled ();
                             });
                         };
@@ -928,7 +928,7 @@ namespace SparkleShare {
                             
 
                                 TextBox link_code_text_box = new TextBox () {
-                                    Text         = Program.Controller.CurrentUser.PublicKey,
+                                    Text         = SparkleShare.Controller.CurrentUser.PublicKey,
                                     Width        = 250,
                                     MaxLines     = 1,
                                     TextWrapping = TextWrapping.NoWrap,

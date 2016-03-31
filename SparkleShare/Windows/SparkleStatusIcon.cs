@@ -142,7 +142,7 @@ namespace SparkleShare {
 
             if(Controller.LinkCodeItemEnabled) {
                 SparkleMenuItem code_item = new SparkleMenuItem {
-                    Header = Program.Controller.CurrentUser.PublicKey.Substring(0, 20) + "..."
+                    Header = SparkleShare.Controller.CurrentUser.PublicKey.Substring(0, 20) + "..."
                 };
 
                 SparkleMenuItem copy_item = new SparkleMenuItem {
@@ -159,7 +159,7 @@ namespace SparkleShare {
 
             CheckBox notify_check_box = new CheckBox {
                 Margin = new Thickness(6, 0, 0, 0),
-                IsChecked = Program.Controller.NotificationsEnabled
+                IsChecked = SparkleShare.Controller.NotificationsEnabled
             };
 
             SparkleMenuItem notify_item = new SparkleMenuItem {
@@ -187,13 +187,13 @@ namespace SparkleShare {
 
             notify_check_box.Click += delegate {
                 this.context_menu.IsOpen = false;
-                Program.Controller.ToggleNotifications();
-                notify_check_box.IsChecked = Program.Controller.NotificationsEnabled;
+                SparkleShare.Controller.ToggleNotifications();
+                notify_check_box.IsChecked = SparkleShare.Controller.NotificationsEnabled;
             };
 
             notify_item.Click += delegate {
-                Program.Controller.ToggleNotifications();
-                notify_check_box.IsChecked = Program.Controller.NotificationsEnabled;
+                SparkleShare.Controller.ToggleNotifications();
+                notify_check_box.IsChecked = SparkleShare.Controller.NotificationsEnabled;
             };
 
             this.exit_item.Click += delegate {

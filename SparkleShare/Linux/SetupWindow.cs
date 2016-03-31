@@ -62,7 +62,7 @@ namespace SparkleShare {
                 layout_vertical.PackStart (this.content_area, true, true, 0);
                 layout_vertical.PackStart (layout_actions, false, false, 15);
 
-                Image side_splash = SparkleUIHelpers.GetImage ("side-splash.png");
+                Image side_splash = UserInterfaceHelpers.GetImage ("side-splash.png");
                 side_splash.Yalign = 1;
 
             layout_horizontal.PackStart (side_splash, false, false, 0);
