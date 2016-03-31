@@ -18,7 +18,6 @@ SOURCES =  \
 	../Common/EventLogController.cs \
 	../Common/Invite.cs \
 	../Common/NoteController.cs \
-	../Common/Plugin.cs \
 	../Common/SetupController.cs \
 	../Common/StatusIconController.cs \
 	About.cs \
@@ -37,9 +36,11 @@ include $(top_srcdir)/build/build.mk
 bin_SCRIPTS = sparkleshare
 
 Applicationsdir = $(datadir)/applications
-dist_Applications_DATA = org.sparkleshare.SparkleShare.desktop \
+dist_Applications_DATA = \
+	org.sparkleshare.SparkleShare.desktop \
 	org.sparkleshare.SparkleShare.Invites.desktop
 
 install-data-hook:
 	test -f $(datadir)/applications/defaults.list && \
 	test -z $(DESTDIR) && update-desktop-database $(datadir)/applications || :
+

@@ -109,12 +109,12 @@ build/Makefile
 build/m4/Makefile
 build/m4/shave/shave
 build/m4/shave/shave-libtool
-SparkleLib/Defines.cs
-SparkleLib/Makefile
-SparkleLib/Git/Makefile
+Sparkles/InstallationInfo.Directory.cs
+Sparkles/Makefile
+Sparkles/Git/Makefile
 SparkleShare/Common/Makefile
 SparkleShare/Common/HTML/Makefile
-SparkleShare/Common/Plugins/Makefile
+SparkleShare/Common/Presets/Makefile
 SparkleShare/Common/Pixmaps/Makefile
 SparkleShare/Linux/Makefile
 SparkleShare/Linux/Pixmaps/Makefile

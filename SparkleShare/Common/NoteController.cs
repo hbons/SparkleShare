@@ -18,7 +18,7 @@
 using System;
 using System.Threading;
 
-using SparkleLib;
+using Sparkles;
 
 namespace SparkleShare {
 

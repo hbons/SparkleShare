@@ -18,18 +18,17 @@
 using System;
 using System.Threading;
 
-using SparkleLib;
+using Sparkles;
 
 namespace SparkleShare {
 
-    // This is SparkleShare!
     public class SparkleShare {
 
         public static Controller Controller;
         public static UserInterface UI;
         public static string [] Arguments;
 
-        private static Mutex program_mutex = new Mutex (false, "SparkleShare");
+        static Mutex program_mutex = new Mutex (false, "SparkleShare");
         
      
         #if !__MonoCS__
@@ -39,25 +38,23 @@ namespace SparkleShare {
         {
             Arguments = args;
 
-            if (args.Length != 0 && !args [0].Equals ("help") &&
-                Backend.Platform != PlatformID.MacOSX &&
-                Backend.Platform != PlatformID.Win32NT) {
+            if (args.Length != 0 && (args [0].Equals ("help") || args [0].Equals ("version")) &&
+                InstallationInfo.Platform != PlatformID.MacOSX &&
+                InstallationInfo.Platform != PlatformID.Win32NT) {
 
                 string n = Environment.NewLine;
 
                 Console.WriteLine (n +
                     "Share and collaborate by syncing with any Git repository instantly." + n +
                     n +
-                    "Version: " + SparkleLib.Backend.Version + n +
+                   "Version: " + InstallationInfo.Version + n +
                     "Copyright (C) 2010 Hylke Bons and others" + n +
                     "This program comes with ABSOLUTELY NO WARRANTY." + n +
                     n +
                     "This is free software, and you are welcome to redistribute it" + n +
-                    "under certain conditions. Please read the GNU GPLv3 for details." + n +
-                    n +
-                    "Usage: sparkleshare [start|open]");
+                    "under certain conditions. Please read the GNU GPLv3 for details." + n);
 
-                Environment.Exit (-1);
+                Environment.Exit (0);
             }
 
             // Only allow one instance of SparkleShare (on Windows)
@@ -81,15 +78,11 @@ namespace SparkleShare {
             #endif
         }
 
-        private static void OnUnhandledException (object sender, UnhandledExceptionEventArgs exception_args)
+
+        static void OnUnhandledException (object sender, UnhandledExceptionEventArgs exception_args)
         {
-            try {
-                Exception e = (Exception) exception_args.ExceptionObject;
-                Logger.WriteCrashReport (e);
-            
-            } finally {
-                Environment.Exit (-1);
-            }
+            var exception = (Exception) exception_args.ExceptionObject;
+            Logger.WriteCrashReport (exception);
         }
     }
 }

@@ -268,7 +268,7 @@ namespace SparkleShare {
                         header_style.Setters.Add (new Setter (GridViewColumnHeader.VisibilityProperty, Visibility.Collapsed));
                         grid_view.ColumnHeaderContainerStyle = header_style;
                         
-                        foreach (SparklePlugin plugin in Controller.Plugins) {
+                        foreach (SparklePreset plugin in Controller.Presets) {
                             // FIXME: images are blurry
                             BitmapFrame image = BitmapFrame.Create (
                                 new Uri (plugin.ImagePath)
@@ -284,7 +284,7 @@ namespace SparkleShare {
                         }        
                         
                         list_view.View          = grid_view;
-                        list_view.SelectedIndex = Controller.SelectedPluginIndex;
+                        list_view.SelectedIndex = Controller.SelectedPresetIndex;
                         
                         TextBlock address_label = new TextBlock () {
                             Text       = "Address:",
@@ -294,11 +294,11 @@ namespace SparkleShare {
                         TextBox address_box = new TextBox () {
                             Width = 200,
                             Text  = Controller.PreviousAddress,
-                            IsEnabled = (Controller.SelectedPlugin.Address == null)
+                            IsEnabled = (Controller.SelectedPreset.Address == null)
                         };
                         
                         TextBlock address_help_label = new TextBlock () {
-                            Text       = Controller.SelectedPlugin.AddressExample,
+                            Text       = Controller.SelectedPreset.AddressExample,
                             FontSize   = 11,
                             Foreground = new SolidColorBrush (Color.FromRgb (128, 128, 128))
                         };
@@ -312,11 +312,11 @@ namespace SparkleShare {
                         TextBox path_box = new TextBox () {
                             Width = 200,
                             Text  = Controller.PreviousPath,
-                            IsEnabled = (Controller.SelectedPlugin.Path == null)
+                            IsEnabled = (Controller.SelectedPreset.Path == null)
                         };
                         
                         TextBlock path_help_label = new TextBlock () {
-                            Text       = Controller.SelectedPlugin.PathExample,
+                            Text       = Controller.SelectedPreset.PathExample,
                             FontSize   = 11,
                             Width      = 200,
                             Foreground = new SolidColorBrush (Color.FromRgb (128, 128, 128))
@@ -409,11 +409,11 @@ namespace SparkleShare {
                         };
                         
                         list_view.SelectionChanged += delegate {
-                            Controller.SelectedPluginChanged (list_view.SelectedIndex);
+                            Controller.SelectedPresetChanged (list_view.SelectedIndex);
                         };
                         
                         list_view.KeyDown += delegate {
-                            Controller.SelectedPluginChanged (list_view.SelectedIndex);
+                            Controller.SelectedPresetChanged (list_view.SelectedIndex);
                         };
 
                         Controller.CheckAddPage (address_box.Text, path_box.Text, list_view.SelectedIndex);

@@ -12,8 +12,8 @@ case $1 in
     curl --insecure --output ~/SparkleShare/.$invite.xml $open
     mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe"
     ;;
-  help|--help)
-    mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" --help
+  help|--help|version|--version)
+    mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" help
     ;;
   *)
     mono "@expanded_libdir@/@PACKAGE@/SparkleShare.exe" $2

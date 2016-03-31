@@ -18,7 +18,7 @@
 using System;
 using System.Text;
 
-using SparkleLib;
+using Sparkles;
 
 namespace SparkleShare {
 

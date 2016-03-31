@@ -21,7 +21,7 @@ using System.Net;
 using System.Text;
 using System.Xml;
 
-using SparkleLib;
+using Sparkles;
 
 namespace SparkleShare {
 

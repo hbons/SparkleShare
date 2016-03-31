@@ -41,18 +41,7 @@ namespace SparkleShare {
                 FontName = "Lucida Grande";
 
             SparkleShare.Controller.Invoke (() => {
-                if (Environment.OSVersion.Version.Major >= 14) {
-                    NSWorkspace.SharedWorkspace.SetIconforFile (
-                        NSImage.ImageNamed ("sparkleshare-folder-yosemite.icns"),
-                        SparkleShare.Controller.FoldersPath, 0);
-
-                } else {
-                    NSWorkspace.SharedWorkspace.SetIconforFile (
-                        NSImage.ImageNamed ("sparkleshare-folder.icns"),
-                        SparkleShare.Controller.FoldersPath, 0);
-                }
-
-                NSApplication.SharedApplication.ApplicationIconImage = NSImage.ImageNamed ("sparkleshare-app.icns");
+    //            NSApplication.SharedApplication.ApplicationIconImage = NSImage.ImageNamed ("Resources/sparkleshare-app.icns");
     
                 Setup      = new Setup ();
                 EventLog   = new EventLog ();

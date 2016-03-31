@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Timers = System.Timers;
 
-using SparkleLib;
+using Sparkles;
 
 namespace SparkleShare {
 

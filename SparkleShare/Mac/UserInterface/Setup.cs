@@ -189,7 +189,7 @@ namespace SparkleShare {
 
                 AddressTextField = new NSTextField () {
                     Frame       = new RectangleF (190, Frame.Height - 336, 196, 22),
-                    Enabled     = (Controller.SelectedPlugin.Address == null),
+                    Enabled     = (Controller.SelectedPreset.Address == null),
                     Delegate    = new SparkleTextFieldDelegate (),
                     StringValue = "" + Controller.PreviousAddress
                 };
@@ -203,24 +203,24 @@ namespace SparkleShare {
 
                 PathTextField = new NSTextField () {
                     Frame       = new RectangleF (190 + 196 + 16, Frame.Height - 336, 196, 22),
-                    Enabled     = (Controller.SelectedPlugin.Path == null),
+                    Enabled     = (Controller.SelectedPreset.Path == null),
                     Delegate    = new SparkleTextFieldDelegate (),
                     StringValue = "" + Controller.PreviousPath
                 };
 
                 PathTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
-                PathHelpLabel = new SparkleLabel (Controller.SelectedPlugin.PathExample, NSTextAlignment.Left) {
+                PathHelpLabel = new SparkleLabel (Controller.SelectedPreset.PathExample, NSTextAlignment.Left) {
                     TextColor       = NSColor.DisabledControlText,
                     Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 358, 204, 19)
                 };
 
-                AddressHelpLabel = new SparkleLabel (Controller.SelectedPlugin.AddressExample, NSTextAlignment.Left) {
+                AddressHelpLabel = new SparkleLabel (Controller.SelectedPreset.AddressExample, NSTextAlignment.Left) {
                     TextColor       = NSColor.DisabledControlText,
                     Frame           = new RectangleF (190, Frame.Height - 358, 204, 19)
                 };
 
-                if (TableView == null || TableView.RowCount != Controller.Plugins.Count) {
+                if (TableView == null || TableView.RowCount != Controller.Presets.Count) {
                     TableView = new NSTableView () {
                         Frame            = new RectangleF (0, 0, 0, 0),
                         RowHeight        = 38,
@@ -256,21 +256,21 @@ namespace SparkleShare {
 
                     // Hi-res display support was added after Snow Leopard
                     if (Environment.OSVersion.Version.Major < 11)
-                        DataSource = new SparkleDataSource (1, Controller.Plugins);
+                        DataSource = new SparkleDataSource (1, Controller.Presets);
                     else
-                        DataSource = new SparkleDataSource (BackingScaleFactor, Controller.Plugins);
+                        DataSource = new SparkleDataSource (BackingScaleFactor, Controller.Presets);
 
                     TableView.DataSource = DataSource;
                     TableView.ReloadData ();
                     
                     (TableView.Delegate as SparkleTableViewDelegate).SelectionChanged += delegate {
-                        Controller.SelectedPluginChanged (TableView.SelectedRow);
+                        Controller.SelectedPresetChanged (TableView.SelectedRow);
                         Controller.CheckAddPage (AddressTextField.StringValue, PathTextField.StringValue, TableView.SelectedRow);
                     };
                 }
                 
-                TableView.SelectRow (Controller.SelectedPluginIndex, false);
-                TableView.ScrollRowToVisible (Controller.SelectedPluginIndex);
+                TableView.SelectRow (Controller.SelectedPresetIndex, false);
+                TableView.ScrollRowToVisible (Controller.SelectedPresetIndex);
                 MakeFirstResponder ((NSResponder) TableView);
 
                 HistoryCheckButton = new NSButton () {
@@ -730,7 +730,7 @@ namespace SparkleShare {
 
         int backing_scale_factor;
 
-        public SparkleDataSource (float backing_scale_factor, List<Plugin> plugins)
+        public SparkleDataSource (float backing_scale_factor, List<Preset> plugins)
         {
             Items         = new List <object> ();
             Cells         = new NSAttributedString [plugins.Count];
@@ -739,7 +739,7 @@ namespace SparkleShare {
             this.backing_scale_factor = (int) backing_scale_factor;
 
             int i = 0;
-            foreach (Plugin plugin in plugins) {
+            foreach (Preset plugin in plugins) {
                 Items.Add (plugin);
 
                 NSTextFieldCell cell = new NSTextFieldCell ();
@@ -815,27 +815,24 @@ namespace SparkleShare {
                     SparkleShare.UI.Setup.FirstResponder == table_view) {
 
                     return SelectedCells [row_index];
-
-                } else {
-                    return Cells [row_index];
                 }
 
-            } else {
-                Plugin plugin = (Plugin) Items [row_index];
-                string path = plugin.ImagePath;
-
-                if (backing_scale_factor >= 2) {
-                    string hi_path = String.Format ("{0}@{1}x{2}",
-                        Path.Combine (Path.GetDirectoryName (path), Path.GetFileNameWithoutExtension (path)),
-                        backing_scale_factor, Path.GetExtension (path)
-                    );
-
-                    if (File.Exists (hi_path))
-                        path = hi_path;
-                }
-
-                return new NSImage (path) { Size = new SizeF (24, 24) };
+                return Cells [row_index];
             }
+
+            string image_path = (Items [row_index] as Preset).ImagePath;
+
+            if (backing_scale_factor >= 2) {
+                string hi_path = String.Format ("{0}@{1}x{2}",
+                    Path.Combine (Path.GetDirectoryName (image_path), Path.GetFileNameWithoutExtension (image_path)),
+                    backing_scale_factor, Path.GetExtension (image_path)
+                );
+
+                if (File.Exists (hi_path))
+                    image_path = hi_path;
+            }
+
+            return new NSImage (image_path) { Size = new SizeF (24, 24) };
         }
     }
 

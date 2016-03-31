@@ -19,7 +19,7 @@ using System;
 using System.Threading;
 using System.Windows.Forms;
 
-using SparkleLib;
+using Sparkles;
 
 namespace SparkleShare {
 

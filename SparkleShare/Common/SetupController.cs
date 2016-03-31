@@ -21,7 +21,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-using SparkleLib;
+using Sparkles;
 
 namespace SparkleShare {
 
@@ -73,8 +73,8 @@ namespace SparkleShare {
         public event ChangePathFieldEventHandler ChangePathFieldEvent = delegate { };
         public delegate void ChangePathFieldEventHandler (string text, string example_text, FieldState state);
 
-        public readonly List<Plugin> Plugins = new List<Plugin> ();
-        public Plugin SelectedPlugin;
+        public readonly List<Preset> Presets = new List<Preset> ();
+        public Preset SelectedPreset;
 
         public bool WindowIsOpen { get; private set; }
         public SparkleInvite PendingInvite { get; private set; }
@@ -86,9 +86,9 @@ namespace SparkleShare {
         public double ProgressBarPercentage  { get; private set; }
 
 
-        public int SelectedPluginIndex {
+        public int SelectedPresetIndex {
             get {
-                return Plugins.IndexOf (SelectedPlugin);
+                return Presets.IndexOf (SelectedPreset);
             }
         }
 
@@ -117,35 +117,29 @@ namespace SparkleShare {
             PreviousUrl        = "";
             SyncingFolder      = "";
 
-            string local_plugins_path = Plugin.LocalPluginsPath;
-            int local_plugins_count   = 0;
+            string local_presets_path = Preset.LocalPresetsPath;
+            int local_presets_count   = 0;
 
-            // Import all of the plugins
-            if (Directory.Exists (local_plugins_path))
-                // Local plugins go first...
-                foreach (string xml_file_path in Directory.GetFiles (local_plugins_path, "*.xml")) {
-                    Plugins.Add (new Plugin (xml_file_path));
-                    local_plugins_count++;
+            // Import all of the presets
+            if (Directory.Exists (local_presets_path))
+                // Local presets go first...
+                foreach (string xml_file_path in Directory.GetFiles (local_presets_path, "*.xml")) {
+                    Presets.Add (new Preset (xml_file_path));
+                    local_presets_count++;
                 }
 
-            // ...system plugins after that...
-            if (Directory.Exists (SparkleShare.Controller.PluginsPath)) {
-                foreach (string xml_file_path in Directory.GetFiles (SparkleShare.Controller.PluginsPath, "*.xml")) {
+            // ...system presets after that...
+            if (Directory.Exists (SparkleShare.Controller.PresetsPath)) {
+                foreach (string xml_file_path in Directory.GetFiles (SparkleShare.Controller.PresetsPath, "*.xml")) {
                     // ...and "Own server" at the very top
-                    if (xml_file_path.EndsWith ("own-server.xml")) {
-                        Plugins.Insert (0, new Plugin (xml_file_path));
-
-                    } else if (xml_file_path.EndsWith ("ssnet.xml")) {
-                        // Plugins.Insert ((local_plugins_count + 1), new SparklePlugin (xml_file_path)); 
-                        // TODO: Skip this plugin for now
-
-                    } else {
-                        Plugins.Add (new Plugin (xml_file_path));
-                    }
+                    if (xml_file_path.EndsWith ("own-server.xml"))
+                        Presets.Insert (0, new Preset (xml_file_path));
+                    else
+                        Presets.Add (new Preset (xml_file_path));
                 }
             }
 
-            SelectedPlugin = Plugins [0];
+            SelectedPreset = Presets [0];
 
             SparkleShare.Controller.InviteReceived += delegate (SparkleInvite invite) {
                 PendingInvite = invite;
@@ -203,7 +197,7 @@ namespace SparkleShare {
         public void PageCancelled ()
         {
             PendingInvite   = null;
-            SelectedPlugin  = Plugins [0];
+            SelectedPreset  = Presets [0];
 
             PreviousAddress = "";
             PreviousPath    = "";
@@ -275,25 +269,25 @@ namespace SparkleShare {
         }
 
 
-        public void SelectedPluginChanged (int plugin_index)
+        public void SelectedPresetChanged (int preset_index)
         {
-            SelectedPlugin = Plugins [plugin_index];
+            SelectedPreset = Presets [preset_index];
 
-            if (SelectedPlugin.Address != null) {
-                ChangeAddressFieldEvent (SelectedPlugin.Address, "", FieldState.Disabled);
+            if (SelectedPreset.Address != null) {
+                ChangeAddressFieldEvent (SelectedPreset.Address, "", FieldState.Disabled);
 
-            } else if (SelectedPlugin.AddressExample != null) {
-                ChangeAddressFieldEvent (this.saved_address, SelectedPlugin.AddressExample, FieldState.Enabled);
+            } else if (SelectedPreset.AddressExample != null) {
+                ChangeAddressFieldEvent (this.saved_address, SelectedPreset.AddressExample, FieldState.Enabled);
 
             } else {
                 ChangeAddressFieldEvent (this.saved_address, "", FieldState.Enabled);
             }
 
-            if (SelectedPlugin.Path != null) {
-                ChangePathFieldEvent (SelectedPlugin.Path, "", FieldState.Disabled);
+            if (SelectedPreset.Path != null) {
+                ChangePathFieldEvent (SelectedPreset.Path, "", FieldState.Disabled);
 
-            } else if (SelectedPlugin.PathExample != null) {
-                ChangePathFieldEvent (this.saved_remote_path, SelectedPlugin.PathExample, FieldState.Enabled);
+            } else if (SelectedPreset.PathExample != null) {
+                ChangePathFieldEvent (this.saved_remote_path, SelectedPreset.PathExample, FieldState.Enabled);
 
             } else {
                 ChangePathFieldEvent (this.saved_remote_path, "", FieldState.Enabled);
@@ -307,12 +301,12 @@ namespace SparkleShare {
         }
 
 
-        public void CheckAddPage (string address, string remote_path, int selected_plugin)
+        public void CheckAddPage (string address, string remote_path, int selected_preset)
         {
             address     = address.Trim ();
             remote_path = remote_path.Trim ();
 
-            if (selected_plugin == 0)
+            if (selected_preset == 0)
                 this.saved_address = address;
 
             this.saved_remote_path = remote_path;
@@ -341,7 +335,7 @@ namespace SparkleShare {
             remote_path = remote_path.Trim ();
             remote_path = remote_path.TrimEnd ("/".ToCharArray ());
 
-            if (SelectedPlugin.PathUsesLowerCase)
+            if (SelectedPreset.PathUsesLowerCase)
                 remote_path = remote_path.ToLower ();
 
             PreviousAddress = address;
@@ -353,11 +347,11 @@ namespace SparkleShare {
 
             SparkleFetcherInfo info = new SparkleFetcherInfo {
                 Address           = address,
-                Fingerprint       = SelectedPlugin.Fingerprint,
+                Fingerprint       = SelectedPreset.Fingerprint,
                 RemotePath        = remote_path,
                 FetchPriorHistory = this.fetch_prior_history,
-                AnnouncementsUrl  = SelectedPlugin.AnnouncementsUrl,
-                Backend           = SelectedPlugin.Backend 
+                AnnouncementsUrl  = SelectedPreset.AnnouncementsUrl,
+                Backend           = SelectedPreset.Backend 
             };
 
             new Thread (() => { SparkleShare.Controller.StartFetcher (info); }).Start ();
@@ -370,23 +364,23 @@ namespace SparkleShare {
         {
             SyncingFolder = "";
 
-            // Create a local plugin for succesfully added projects, so
+            // Create a local preset for succesfully added projects, so
             // so the user can easily use the same host again
-            if (SelectedPluginIndex == 0) {
-                Plugin new_plugin;
+            if (SelectedPresetIndex == 0) {
+                Preset new_preset;
                 Uri uri = new Uri (remote_url);
 
                 try {
                     string address = remote_url.Replace (uri.AbsolutePath, "");
-                    new_plugin = Plugin.Create (uri.Host, address, address, "", "", "/path/to/project");
+                    new_preset = Preset.Create (uri.Host, address, address, "", "", "/path/to/project");
     
-                    if (new_plugin != null) {
-                        Plugins.Insert (1, new_plugin);
-                        Logger.LogInfo ("Controller", "Added plugin for " + uri.Host);
+                    if (new_preset != null) {
+                        Presets.Insert (1, new_preset);
+                        Logger.LogInfo ("Controller", "Added preset for " + uri.Host);
                     }
 
                 } catch {
-                    Logger.LogInfo ("Controller", "Failed adding plugin for " + uri.Host);
+                    Logger.LogInfo ("Controller", "Failed adding preset for " + uri.Host);
                 }
             }
 
@@ -571,7 +565,7 @@ namespace SparkleShare {
 
         public void FinishPageCompleted ()
         {
-            SelectedPlugin  = Plugins [0];
+            SelectedPreset  = Presets [0];
             PreviousUrl     = "";
             PreviousAddress = "";
             PreviousPath    = "";

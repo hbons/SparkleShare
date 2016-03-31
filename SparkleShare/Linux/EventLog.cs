@@ -74,7 +74,7 @@ namespace SparkleShare {
             this.content_wrapper.StyleContext.AddProvider (css_provider, 800);
 
 //          this.web_view = new WebView () { Editable = false };
-//          this.web_view.Settings.EnablePlugins = false;
+//          this.web_view.Settings.EnablePresets = false;
 //          this.web_view.NavigationRequested += WebViewNavigationRequested;
 
             this.scrolled_window.Add (new Button ("WebView"));

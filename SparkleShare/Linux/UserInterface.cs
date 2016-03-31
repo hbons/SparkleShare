@@ -19,11 +19,12 @@ using System;
 
 using GLib;
 using Gtk;
-using SparkleLib;
+
+using Sparkles;
 
 namespace SparkleShare {
 
-    public class SparkleUI {
+    public class UserInterface {
 
         public static string AssetsPath = Defines.INSTALL_DIR;
 
@@ -37,15 +38,15 @@ namespace SparkleShare {
         public readonly string SecondaryTextColor;
         public readonly string SecondaryTextColorSelected;
 
-        private Gtk.Application application;
+        Gtk.Application application;
 
 
-        public SparkleUI ()
+        public UserInterface ()
         {
-            this.application = new Gtk.Application ("org.sparkleshare.SparkleShare", 0);
+            application = new Gtk.Application ("org.sparkleshare.SparkleShare", 0);
 
-            this.application.Register (null);
-            this.application.Activated += ApplicationActivatedDelegate;
+            application.Register (null);
+            application.Activated += ApplicationActivatedDelegate;
 
             Gdk.Color color = SparkleUIHelpers.RGBAToColor (new Label().StyleContext.GetColor (StateFlags.Insensitive));
             SecondaryTextColor = SparkleUIHelpers.ColorToHex (color);
@@ -61,16 +62,16 @@ namespace SparkleShare {
 
         public void Run ()
         {   
-            (this.application as GLib.Application).Run (null, null);
+            (application as GLib.Application).Run (null, null);
         }
 
 
-        private void ApplicationActivatedDelegate (object sender, EventArgs args)
+        void ApplicationActivatedDelegate (object sender, EventArgs args)
         {
-            if (this.application.Windows.Length > 0) {
+            if (application.Windows.Length > 0) {
                 bool has_visible_windows = false;
 
-                foreach (Window window in this.application.Windows) {
+                foreach (Window window in application.Windows) {
                     if (window.Visible) {
                         window.Present ();
                         has_visible_windows = true;
@@ -88,9 +89,9 @@ namespace SparkleShare {
                 StatusIcon = new SparkleStatusIcon ();
                 Note       = new SparkleNote ();
 
-                Setup.Application    = this.application;
-                EventLog.Application = this.application;
-                About.Application    = this.application;
+                Setup.Application    = application;
+                EventLog.Application = application;
+                About.Application    = application;
 
                 Program.Controller.UIHasLoaded ();
             }
