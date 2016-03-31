@@ -24,7 +24,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-using SparkleLib;
+using Sparkles;
 
 namespace SparkleShare {
 

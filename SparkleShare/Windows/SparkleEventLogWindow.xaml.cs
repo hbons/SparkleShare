@@ -145,7 +145,7 @@ namespace SparkleShare
 
         private void UpdateContent (string html)
         {
-            string pixmaps_path = Path.Combine (SparkleLib.SparkleConfig.DefaultConfig.TmpPath, "Pixmaps");
+            string pixmaps_path = Path.Combine (Sparkles.SparkleConfig.DefaultConfig.TmpPath, "Pixmaps");
             pixmaps_path = pixmaps_path.Replace ("\\", "/");
 
 			html = html.Replace ("<a href=", "<a class='windows' href=");
@@ -207,7 +207,7 @@ namespace SparkleShare
  
         private void WriteOutImages ()
         {
-            string tmp_path = SparkleLib.SparkleConfig.DefaultConfig.TmpPath;
+            string tmp_path = Sparkles.SparkleConfig.DefaultConfig.TmpPath;
 			string pixmaps_path = Path.Combine (tmp_path, "Pixmaps");
 
 			if (!Directory.Exists (pixmaps_path))

@@ -30,18 +30,20 @@ namespace SparkleShare {
         public SparkleEventLogController Controller = new SparkleEventLogController ();
         public float TitlebarHeight;
 
-        private WebView web_view;
-        private NSBox background;
-        private NSBox cover;
-        private NSPopUpButton popup_button;
-        private NSProgressIndicator progress_indicator;
-        private NSTextField size_label, size_label_value, history_label, history_label_value;
-        private NSButton hidden_close_button;
+        WebView web_view;
+        NSBox background;
+        NSBox cover;
+        NSPopUpButton popup_button;
+        NSProgressIndicator progress_indicator;
+        NSTextField size_label, size_label_value, history_label, history_label_value;
+        NSButton hidden_close_button;
 
 
-        public EventLog (IntPtr handle) : base (handle) { }
+        public EventLog (IntPtr handle) : base (handle)
+        {
+        }
 
-        public EventLog () : base ()
+        public EventLog ()
         {
             Title    = "Recent Changes";
             Delegate = new SparkleEventsDelegate ();

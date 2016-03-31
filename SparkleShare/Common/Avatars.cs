@@ -23,7 +23,7 @@ using System.Net.Mime;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 
-using SparkleLib;
+using Sparkles;
 
 namespace SparkleShare
 {

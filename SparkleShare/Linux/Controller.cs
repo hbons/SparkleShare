@@ -22,18 +22,18 @@ using System.IO;
 using Gtk;
 using Mono.Unix.Native;
 
-using SparkleLib;
+using Sparkles;
 
 namespace SparkleShare {
 
-    public class SparkleController : SparkleControllerBase {
+    public class SparkleController : ControllerBase {
 
         public SparkleController ()
         {
         }
 
 
-        public override string PluginsPath {
+        public override string PresetsPath {
             get {
                 return Path.Combine (Defines.INSTALL_DIR, "plugins");
             }
@@ -58,6 +58,7 @@ namespace SparkleShare {
             if (Defines.INSTALL_DIR.StartsWith ("/app/"))
                 autostart_exec = "xdg-app run org.sparkleshare.SparkleShare";
 
+			// TODO: Ship as .desktop file and copy in place
             try {
                 File.WriteAllText (autostart_file_path,
                     "[Desktop Entry]\n" +

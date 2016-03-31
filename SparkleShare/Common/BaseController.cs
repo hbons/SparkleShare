@@ -21,8 +21,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 
-using SparkleLib;
-using SparkleLib.Git;
+using Sparkles;
+using Sparkles.Git;
 
 namespace SparkleShare {
     
@@ -155,7 +155,7 @@ namespace SparkleShare {
         
         
         // Path where the plugins are kept
-        public abstract string PluginsPath { get; }
+        public abstract string PresetsPath { get; }
         
         // Enables SparkleShare to start automatically at login
         public abstract void CreateStartupItem ();
@@ -212,11 +212,11 @@ namespace SparkleShare {
         
         public virtual void Initialize ()
         {
-            Logger.LogInfo ("Environment", "SparkleShare " + Backend.Version);
+            Logger.LogInfo ("Environment", "SparkleShare " + InstallationInfo.Version);
             Logger.LogInfo ("Environment", "Git " + GitCommand.GitVersion);
-            Logger.LogInfo ("Environment", Backend.Platform + " (" + Environment.OSVersion + ")");
+            Logger.LogInfo ("Environment", InstallationInfo.Platform + " (" + Environment.OSVersion + ")");
             
-            Plugin.PluginsPath = PluginsPath;
+            Preset.PresetsPath = PresetsPath;
             InstallProtocolHandler ();
             
             try {
@@ -394,7 +394,7 @@ namespace SparkleShare {
             
             try {
                 repo = (BaseRepository) Activator.CreateInstance (
-                    Type.GetType ("SparkleLib." + backend + "." + backend + "Repository, SparkleLib." + backend),
+                    Type.GetType ("Sparkles." + backend + "." + backend + "Repository, Sparkles." + backend),
                     new object [] { folder_path, Config });
                 
             } catch (Exception e) {
@@ -561,7 +561,7 @@ namespace SparkleShare {
             
             try {
                 this.fetcher = (BaseFetcher) Activator.CreateInstance (
-                    Type.GetType ("SparkleLib." + backend + ".SparkleFetcher, SparkleLib." + backend), info);
+                    Type.GetType ("Sparkles." + backend + "." + backend + "Fetcher, Sparkles." + backend), info);
                 
             } catch (Exception e) {
                 Logger.LogInfo ("Controller",

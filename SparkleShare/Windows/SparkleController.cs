@@ -29,7 +29,7 @@ using System.Windows;
 using Forms = System.Windows.Forms;
 using Microsoft.Win32;
 
-using SparkleLib;
+using Sparkles;
 
 namespace SparkleShare {
 
@@ -40,7 +40,7 @@ namespace SparkleShare {
         }
 
 
-        public override string PluginsPath
+        public override string PresetsPath
         {
             get {
                 return Path.Combine (Path.GetDirectoryName (Assembly.GetExecutingAssembly ().Location), "plugins");
@@ -63,7 +63,7 @@ namespace SparkleShare {
             Environment.SetEnvironmentVariable ("PATH", new_PATH);
             Environment.SetEnvironmentVariable ("HOME", Environment.GetFolderPath (Environment.SpecialFolder.UserProfile));
 
-            SparkleLib.Git.SparkleGit.SSHPath = Path.Combine (msysgit_path, "bin", "ssh.exe");
+            Sparkles.Git.SparkleGit.SSHPath = Path.Combine (msysgit_path, "bin", "ssh.exe");
 
             base.Initialize ();
         }

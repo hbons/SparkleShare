@@ -137,7 +137,7 @@ namespace SparkleShare {
                 VBox layout_address  = new VBox (true, 0);
                 VBox layout_path     = new VBox (true, 0);
 
-                ListStore store = new ListStore (typeof (string), typeof (Gdk.Pixbuf), typeof (string), typeof (SparklePlugin));
+                ListStore store = new ListStore (typeof (string), typeof (Gdk.Pixbuf), typeof (string), typeof (SparklePreset));
 
                 SparkleTreeView tree_view = new SparkleTreeView (store) { HeadersVisible = false };
                 ScrolledWindow scrolled_window = new ScrolledWindow () { ShadowType = ShadowType.In };
@@ -157,7 +157,7 @@ namespace SparkleShare {
                 service_column.PackStart (service_cell, true);
                 service_column.SetCellDataFunc (service_cell, new TreeCellDataFunc (RenderServiceColumn));
 
-                foreach (SparklePlugin plugin in Controller.Plugins) {
+                foreach (SparklePreset plugin in Controller.Presets) {
                     store.AppendValues ("", new Gdk.Pixbuf (plugin.ImagePath),
                         "<span size=\"small\"><b>" + plugin.Name + "</b>\n" +
                             "<span fgcolor=\"" + Program.UI.SecondaryTextColor + "\">" + plugin.Description + "</span>" +
@@ -169,13 +169,13 @@ namespace SparkleShare {
 
                 Entry address_entry = new Entry () {
                     Text = Controller.PreviousAddress,
-                    Sensitive = (Controller.SelectedPlugin.Address == null),
+                    Sensitive = (Controller.SelectedPreset.Address == null),
                     ActivatesDefault = true
                 };
 
                 Entry path_entry = new Entry () {
                     Text = Controller.PreviousPath,
-                    Sensitive = (Controller.SelectedPlugin.Path == null),
+                    Sensitive = (Controller.SelectedPreset.Path == null),
                     ActivatesDefault = true
                 };
                 
@@ -183,19 +183,19 @@ namespace SparkleShare {
                     Xalign = 0,
                     UseMarkup = true,
                     Markup = "<span size=\"small\" fgcolor=\"" +
-                        Program.UI.SecondaryTextColor + "\">" + Controller.SelectedPlugin.AddressExample + "</span>"
+                        Program.UI.SecondaryTextColor + "\">" + Controller.SelectedPreset.AddressExample + "</span>"
                 };
 
                 Label path_example = new Label () {
                     Xalign = 0,
                     UseMarkup = true,
                     Markup = "<span size=\"small\" fgcolor=\"" +
-                        Program.UI.SecondaryTextColor + "\">" + Controller.SelectedPlugin.PathExample + "</span>"
+                        Program.UI.SecondaryTextColor + "\">" + Controller.SelectedPreset.PathExample + "</span>"
                 };
 
 
                 TreeSelection default_selection = tree_view.Selection;
-                TreePath default_path = new TreePath ("" + Controller.SelectedPluginIndex);
+                TreePath default_path = new TreePath ("" + Controller.SelectedPresetIndex);
                 default_selection.SelectPath (default_path);
 
                 tree_view.Model.Foreach (new TreeModelForeachFunc (
@@ -203,7 +203,7 @@ namespace SparkleShare {
                         string address;
 
                         try {
-                            address = (model.GetValue (iter, 2) as SparklePlugin).Address;
+                            address = (model.GetValue (iter, 2) as SparklePreset).Address;
 
                         } catch (NullReferenceException) {
                             address = "";
@@ -213,7 +213,7 @@ namespace SparkleShare {
                             address.Equals (Controller.PreviousAddress)) {
 
                             tree_view.SetCursor (path, service_column, false);
-                            SparklePlugin plugin = (SparklePlugin) model.GetValue (iter, 2);
+                            SparklePreset plugin = (SparklePreset) model.GetValue (iter, 2);
 
                             if (plugin.Address != null)
                                 address_entry.Sensitive = false;
@@ -256,7 +256,7 @@ namespace SparkleShare {
                 layout_vertical.PackStart (scrolled_window, true, true, 0);
                 layout_vertical.PackStart (layout_fields, false, false, 0);
 
-                tree_view.ScrollToCell (new TreePath ("" + Controller.SelectedPluginIndex), null, true, 0, 0);
+                tree_view.ScrollToCell (new TreePath ("" + Controller.SelectedPresetIndex), null, true, 0, 0);
 
                 Add (layout_vertical);
 
@@ -301,7 +301,7 @@ namespace SparkleShare {
 
 
                 tree_view.CursorChanged += delegate (object sender, EventArgs e) {
-                    Controller.SelectedPluginChanged (tree_view.SelectedRow);
+                    Controller.SelectedPresetChanged (tree_view.SelectedRow);
                 };
 
                 address_entry.Changed += delegate {
