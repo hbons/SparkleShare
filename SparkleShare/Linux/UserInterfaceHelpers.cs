@@ -16,16 +16,18 @@
 
 
 using System;
+using System.IO;
+
 using Gtk;
 
 namespace SparkleShare {
 
-    public static class SparkleUIHelpers {
+    public static class UserInterfaceHelpers {
 
         public static Gdk.Pixbuf GetIcon (string name, int size)
         {
             IconTheme icon_theme = new IconTheme ();
-            icon_theme.AppendSearchPath (new string [] {SparkleUI.AssetsPath, "icons"}.Combine ());
+			icon_theme.AppendSearchPath (Path.Combine (UserInterface.AssetsPath, "icons"));
 			
             foreach (string search_path in IconTheme.Default.SearchPath)
                icon_theme.AppendSearchPath (search_path);	
@@ -46,7 +48,7 @@ namespace SparkleShare {
 
         public static Image GetImage (string name)
         {
-            string image_path = new string [] { SparkleUI.AssetsPath, "pixmaps", name }.Combine ();
+            string image_path = Path.Combine (UserInterface.AssetsPath, "pixmaps", name);
             return new Image (image_path);
         }
 

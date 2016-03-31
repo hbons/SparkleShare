@@ -26,16 +26,16 @@ using Sparkles;
 
 namespace SparkleShare {
 
-    public class SparkleController : ControllerBase {
+    public class Controller : BaseController {
 
-        public SparkleController ()
+        public Controller ()
         {
         }
 
 
         public override string PresetsPath {
             get {
-                return Path.Combine (Defines.INSTALL_DIR, "plugins");
+                return Path.Combine (InstallationInfo.Directory, "presets");
             }
         }
 
@@ -55,7 +55,7 @@ namespace SparkleShare {
 
             string autostart_exec = "sparkleshare";
 
-            if (Defines.INSTALL_DIR.StartsWith ("/app/"))
+            if (InstallationInfo.Directory.StartsWith ("/app/"))
                 autostart_exec = "xdg-app run org.sparkleshare.SparkleShare";
 
 			// TODO: Ship as .desktop file and copy in place
@@ -69,10 +69,10 @@ namespace SparkleShare {
                     "Terminal=false\n" +
                     "X-GNOME-Autostart-enabled=true\n");
 
-                SparkleLogger.LogInfo ("Controller", "Added SparkleShare to startup items");
+                Logger.LogInfo ("Controller", "Added SparkleShare to startup items");
 
             } catch (Exception e) {
-                SparkleLogger.LogInfo ("Controller", "Failed to add SparkleShare to startup items", e);
+                Logger.LogInfo ("Controller", "Failed to add SparkleShare to startup items", e);
             }
         }
 
@@ -80,9 +80,9 @@ namespace SparkleShare {
         // Creates the SparkleShare folder in the user's home folder
         public override bool CreateSparkleShareFolder ()
         {
-            if (!Directory.Exists (SparkleConfig.DefaultConfig.FoldersPath)) {
-                Directory.CreateDirectory (SparkleConfig.DefaultConfig.FoldersPath);
-                Syscall.chmod (SparkleConfig.DefaultConfig.FoldersPath, (FilePermissions) 448); // 448 -> 700
+            if (!Directory.Exists (Configuration.DefaultConfig.FoldersPath)) {
+                Directory.CreateDirectory (Configuration.DefaultConfig.FoldersPath);
+                Syscall.chmod (Configuration.DefaultConfig.FoldersPath, (FilePermissions) 448); // 448 -> 700
 
                 return true;
             }
@@ -93,8 +93,8 @@ namespace SparkleShare {
 
         public override string EventLogHTML {
             get {
-                string html_path = new string [] { Defines.INSTALL_DIR, "html", "event-log.html" }.Combine ();
-                string jquery_file_path = new string [] { Defines.INSTALL_DIR, "html", "jquery.js" }.Combine ();
+                string html_path = Path.Combine (InstallationInfo.Directory, "html", "event-log.html");
+				string jquery_file_path = Path.Combine (InstallationInfo.Directory, "html", "jquery.js");
 
                 string html   = File.ReadAllText (html_path);
                 string jquery = File.ReadAllText (jquery_file_path);
@@ -106,7 +106,7 @@ namespace SparkleShare {
         
         public override string DayEntryHTML {
             get {
-                string path = new string [] { Defines.INSTALL_DIR, "html", "day-entry.html" }.Combine ();
+                string path = Path.Combine (InstallationInfo.Directory, "html", "day-entry.html");
                 return File.ReadAllText (path);
             }
         }
@@ -114,7 +114,7 @@ namespace SparkleShare {
         
         public override string EventEntryHTML {
             get {
-                string path = new string [] { Defines.INSTALL_DIR, "html", "event-entry.html" }.Combine ();
+                string path = Path.Combine (InstallationInfo.Directory, "html", "event-entry.html");
                 return File.ReadAllText (path);
             }
         }
@@ -129,7 +129,7 @@ namespace SparkleShare {
 
         public override void SetFolderIcon ()
         {
-            var process = new SparkleProcess ("gvfs-set-attribute", SparkleConfig.DefaultConfig.FoldersPath + " " +
+            var process = new Command ("gvfs-set-attribute", Configuration.DefaultConfig.FoldersPath + " " +
                 "metadata::custom-icon-name org.sparkleshare.SparkleShare");
 
             process.StartAndWaitForExit ();
@@ -144,7 +144,7 @@ namespace SparkleShare {
 
         public override void OpenFile (string path)
         {
-			new SparkleProcess ("xdg-open", "\"" + path + "\"").Start ();
+			new Command ("xdg-open", "\"" + path + "\"").Start ();
         }
 
 

@@ -99,7 +99,7 @@ namespace Sparkles {
         }
 
 
-        protected string LocateCommand (string name)
+        protected static string LocateCommand (string name)
         {
             string [] possible_command_paths = {
                 Environment.GetFolderPath (Environment.SpecialFolder.Personal) + "/bin/" + name,

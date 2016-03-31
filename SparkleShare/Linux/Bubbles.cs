@@ -37,7 +37,7 @@ namespace SparkleShare {
 
         private void ShowBubbleEvent (string title, string subtext, string image_path)
         {
-            if (!Program.Controller.NotificationsEnabled)
+            if (!SparkleShare.Controller.NotificationsEnabled)
                 return;
 
 			Application.Invoke (delegate {
@@ -57,7 +57,7 @@ namespace SparkleShare {
 					notification.Show ();
 
 				} catch (Exception e) {
-					SparkleLogger.LogInfo ("Notification", "Error showing notification: ", e);
+					Logger.LogInfo ("Notification", "Error showing notification: ", e);
 				}
 			});
         }

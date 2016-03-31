@@ -78,7 +78,7 @@ namespace Sparkles.Git {
 
         private bool in_merge {
             get {
-                string merge_file_path = new string [] { LocalPath, ".git", "MERGE_HEAD" }.Combine ();
+                string merge_file_path = Path.Combine (LocalPath, ".git", "MERGE_HEAD");
                 return File.Exists (merge_file_path);
             }
         }
@@ -111,7 +111,7 @@ namespace Sparkles.Git {
 
         public override double Size {
             get {
-                string file_path = new string [] { LocalPath, ".git", "info", "size" }.Combine ();
+                string file_path = Path.Combine (LocalPath, ".git", "info", "size");
 
                 try {
                     string size = File.ReadAllText (file_path);
@@ -126,7 +126,7 @@ namespace Sparkles.Git {
 
         public override double HistorySize {
             get {
-                string file_path = new string [] { LocalPath, ".git", "info", "history_size" }.Combine ();
+                string file_path = Path.Combine (LocalPath, ".git", "info", "history_size");
 
                 try {
                     string size = File.ReadAllText (file_path);
@@ -144,8 +144,8 @@ namespace Sparkles.Git {
             double size         = CalculateSizes (new DirectoryInfo (LocalPath));
             double history_size = CalculateSizes (new DirectoryInfo (Path.Combine (LocalPath, ".git")));
 
-            string size_file_path = new string [] { LocalPath, ".git", "info", "size" }.Combine ();
-            string history_size_file_path = new string [] { LocalPath, ".git", "info", "history_size" }.Combine ();
+            string size_file_path = Path.Combine (LocalPath, ".git", "info", "size");
+            string history_size_file_path = Path.Combine (LocalPath, ".git", "info", "history_size");
 
             File.WriteAllText (size_file_path, size.ToString ());
             File.WriteAllText (history_size_file_path, history_size.ToString ());
@@ -377,12 +377,12 @@ namespace Sparkles.Git {
 
         public override bool HasUnsyncedChanges {
             get {
-                string unsynced_file_path =  new string [] { LocalPath, ".git", "has_unsynced_changes" }.Combine ();
+                string unsynced_file_path =  Path.Combine (LocalPath, ".git", "has_unsynced_changes");
                 return File.Exists (unsynced_file_path);
             }
 
             set {
-                string unsynced_file_path = new string [] { LocalPath, ".git", "has_unsynced_changes" }.Combine ();
+                string unsynced_file_path = Path.Combine (LocalPath, ".git", "has_unsynced_changes");
 
                 if (value)
                     File.WriteAllText (unsynced_file_path, "");
@@ -1110,7 +1110,7 @@ namespace Sparkles.Git {
 
 
         // Recursively gets a folder's size in bytes
-        private long CalculateSizes (DirectoryInfo parent)
+        long CalculateSizes (DirectoryInfo parent)
         {
             long size = 0;
 
@@ -1149,7 +1149,7 @@ namespace Sparkles.Git {
         }
 
         
-        private bool IsSymlink (string file)
+        bool IsSymlink (string file)
         {
             FileAttributes attributes = File.GetAttributes (file);
             return ((attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint);

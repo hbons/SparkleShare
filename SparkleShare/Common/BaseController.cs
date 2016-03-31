@@ -36,7 +36,7 @@ namespace SparkleShare {
         }
         
         
-        private void AddRepository (BaseRepository repo)
+        void AddRepository (BaseRepository repo)
         {
             lock (this.repo_lock) {
                 this.repositories.Add (repo);
@@ -45,7 +45,7 @@ namespace SparkleShare {
         }
         
         
-        private void RemoveRepository (BaseRepository repo)
+        void RemoveRepository (BaseRepository repo)
         {
             lock (this.repo_lock)
                 this.repositories.Remove (repo);
@@ -186,12 +186,12 @@ namespace SparkleShare {
         public abstract string EventEntryHTML { get; }
         
         
-        private BaseFetcher fetcher;
-        private FileSystemWatcher watcher;
-        private Object repo_lock = new Object ();
-        private Object check_repos_lock = new Object ();
-        private List<BaseRepository> repositories = new List<BaseRepository> ();
-        private bool lost_folders_path = false;
+        BaseFetcher fetcher;
+        FileSystemWatcher watcher;
+        object repo_lock = new object ();
+        object check_repos_lock = new object ();
+        List<BaseRepository> repositories = new List<BaseRepository> ();
+        bool lost_folders_path = false;
         
         
         public BaseController ()

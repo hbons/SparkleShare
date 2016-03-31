@@ -51,7 +51,7 @@ namespace SparkleShare {
             StatusIcon  = new SparkleStatusIcon ();
             Note        = new SparkleNote ();
 
-            Program.Controller.UIHasLoaded ();
+            SparkleShare.Controller.UIHasLoaded ();
         }
 
         

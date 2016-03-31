@@ -730,28 +730,28 @@ namespace SparkleShare {
 
         int backing_scale_factor;
 
-        public SparkleDataSource (float backing_scale_factor, List<Preset> plugins)
+        public SparkleDataSource (float backing_scale_factor, List<Preset> presets)
         {
             Items         = new List <object> ();
-            Cells         = new NSAttributedString [plugins.Count];
-            SelectedCells = new NSAttributedString [plugins.Count];
+            Cells         = new NSAttributedString [presets.Count];
+            SelectedCells = new NSAttributedString [presets.Count];
 
             this.backing_scale_factor = (int) backing_scale_factor;
 
             int i = 0;
-            foreach (Preset plugin in plugins) {
-                Items.Add (plugin);
+            foreach (Preset preset in presets) {
+                Items.Add (preset);
 
                 NSTextFieldCell cell = new NSTextFieldCell ();
 
-                NSData name_data = NSData.FromString ("<font face='" + UserInterface.FontName + "'><b>" + plugin.Name + "</b></font>");
+                NSData name_data = NSData.FromString ("<font face='" + UserInterface.FontName + "'><b>" + preset.Name + "</b></font>");
 
                 NSDictionary name_dictionary       = new NSDictionary();
                 NSAttributedString name_attributes = new NSAttributedString (
                     name_data, new NSUrl ("file://"), out name_dictionary);
 
                 NSData description_data = NSData.FromString (
-                    "<small><font style='line-height: 150%' color='#aaa' face='" + UserInterface.FontName + "'>" + plugin.Description + "</font></small>");
+                    "<small><font style='line-height: 150%' color='#aaa' face='" + UserInterface.FontName + "'>" + preset.Description + "</font></small>");
 
                 NSDictionary description_dictionary       = new NSDictionary();
                 NSAttributedString description_attributes = new NSAttributedString (
@@ -767,7 +767,7 @@ namespace SparkleShare {
                 NSTextFieldCell selected_cell = new NSTextFieldCell ();
 
                 NSData selected_name_data = NSData.FromString (
-                    "<font color='white' face='" + UserInterface.FontName +"'><b>" + plugin.Name + "</b></font>");
+                    "<font color='white' face='" + UserInterface.FontName +"'><b>" + preset.Name + "</b></font>");
 
                 NSDictionary selected_name_dictionary = new NSDictionary ();
                 NSAttributedString selected_name_attributes = new NSAttributedString (
@@ -775,7 +775,7 @@ namespace SparkleShare {
 
                 NSData selected_description_data = NSData.FromString (
                     "<small><font style='line-height: 150%' color='#9bbaeb' face='" + UserInterface.FontName + "'>" +
-                    plugin.Description + "</font></small>");
+                    preset.Description + "</font></small>");
 
                 NSDictionary selected_description_dictionary       = new NSDictionary ();
                 NSAttributedString selected_description_attributes = new NSAttributedString (

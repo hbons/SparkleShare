@@ -254,7 +254,7 @@ namespace SparkleShare
 		{
 			public void LinkClicked(string url)
 			{
-				Program.UI.EventLog.Controller.LinkClicked(url);
+				SparkleShare.UI.EventLog.Controller.LinkClicked(url);
 			}
 		}
 

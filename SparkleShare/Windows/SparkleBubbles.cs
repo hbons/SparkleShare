@@ -27,10 +27,10 @@ namespace SparkleShare {
         public SparkleBubbles ()
         {
             Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
-                if (!Program.Controller.NotificationsEnabled)
+                if (!SparkleShare.Controller.NotificationsEnabled)
                     return;
 
-                Program.UI.StatusIcon.ShowBalloon (title, subtext, image_path);
+                SparkleShare.UI.StatusIcon.ShowBalloon (title, subtext, image_path);
             };
         }
     }
