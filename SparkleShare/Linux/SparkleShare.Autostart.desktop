@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=SparkleShare
 Type=Application
-Exec=sh -c \"if type "sparkleshare" > /dev/null; then sparkleshare else xdg-app run org.sparkleshare.SparkleShare fi"
+Exec=sh -c "type -P sparkleshare &>/dev/null && sparkleshare || xdg-app run org.sparkleshare.SparkleShare"
 Icon=org.sparkleshare.SparkleShare
 Terminal=false
 X-GNOME-Autostart-enabled=true
