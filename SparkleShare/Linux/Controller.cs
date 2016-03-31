@@ -34,8 +34,6 @@ namespace SparkleShare {
 
         public override bool CreateSparkleShareFolder ()
         {
-			CreateStartupItem ();
-
             if (Directory.Exists (Configuration.DefaultConfig.FoldersPath))
                 return false;
             
