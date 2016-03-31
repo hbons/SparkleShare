@@ -17,8 +17,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 using Gtk;
+
 #if HAVE_APP_INDICATOR
 using AppIndicator3;
 #endif
@@ -120,7 +122,7 @@ namespace SparkleShare {
             this.state_item = new MenuItem (Controller.StateText) { Sensitive = false };
 
             ImageMenuItem folder_item = new SparkleMenuItem ("SparkleShare");
-            folder_item.Image = new Image (SparkleUIHelpers.GetIcon ("org.sparkleshare.SparkleShare", 16));
+            folder_item.Image = new Image (UserInterfaceHelpers.GetIcon ("org.sparkleshare.SparkleShare", 16));
 
             this.menu.Add (this.state_item);
             this.menu.Add (new SeparatorMenuItem ());                
@@ -148,12 +150,10 @@ namespace SparkleShare {
                         MenuItem resume_item;
 
                         if (project.UnsyncedChangesInfo.Count > 0) {
-                            string icons_path = new string [] {
-                                SparkleUI.AssetsPath, "icons", "hicolor", "12x12", "status"}.Combine ();
+                            string icons_path = Path.Combine (UserInterface.AssetsPath, "icons", "hicolor", "12x12", "status");
 
                             foreach (KeyValuePair<string, string> pair in project.UnsyncedChangesInfo) {
-                                string icon_path = new string [] {
-                                    icons_path, pair.Value.Replace ("-12", "")}.Combine ();
+                                string icon_path = Path.Combine (icons_path, pair.Value.Replace ("-12", ""));
 
                                 (item.Submenu as Menu).Add (new SparkleMenuItem (pair.Key) {
                                     Image     = new Image (icon_path),
@@ -208,16 +208,16 @@ namespace SparkleShare {
             #if HAVE_APP_INDICATOR
             MenuItem notify_item;
                                                              
-            if (Program.Controller.NotificationsEnabled)
+            if (SparkleShare.Controller.NotificationsEnabled)
                 notify_item = new MenuItem ("Turn Notifications Off");
             else
                 notify_item = new MenuItem ("Turn Notifications On");
 
             notify_item.Activated += delegate {
-                Program.Controller.ToggleNotifications ();
+                SparkleShare.Controller.ToggleNotifications ();
 
 				Application.Invoke (delegate {				
-				    if (Program.Controller.NotificationsEnabled)
+				    if (SparkleShare.Controller.NotificationsEnabled)
                     	(notify_item.Child as Label).Text = "Turn Notifications Off";
                 	else
                     	(notify_item.Child as Label).Text = "Turn Notifications On";
@@ -230,7 +230,7 @@ namespace SparkleShare {
             if (Controller.LinkCodeItemEnabled) {
                 link_code_item.Submenu = new Menu ();
                 
-                string link_code = Program.Controller.UserAuthenticationInfo.PublicKey.Substring (0, 20) + "...";
+                string link_code = SparkleShare.Controller.UserAuthenticationInfo.PublicKey.Substring (0, 20) + "...";
                 MenuItem code_item = new MenuItem (link_code) { Sensitive = false };
                 
                 MenuItem copy_item = new MenuItem ("Copy to Clipboard");

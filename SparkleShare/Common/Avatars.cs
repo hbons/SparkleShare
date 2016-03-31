@@ -43,8 +43,7 @@ namespace SparkleShare
             if (skipped_avatars.Contains (email))
                 return null;
             
-            string avatars_path = new string [] { Path.GetDirectoryName (target_path),
-                "avatars", size + "x" + size }.Combine ();
+            string avatars_path = Path.Combine (Path.GetDirectoryName (target_path), "avatars", size + "x" + size);
 
             // Search avatars by file name, ignore extension
             // Delete files over a day old

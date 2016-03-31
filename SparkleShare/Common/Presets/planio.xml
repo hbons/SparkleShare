@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sparkleshare>
-  <plugin>
+  <preset>
     <info>
         <name>Planio</name>
         <description>500MB of unlimited free hosted Git repos and project management</description>
@@ -17,5 +17,5 @@
       <value/>
       <example>/[account]-[project].git</example>
     </path>
-  </plugin>
+  </preset>
 </sparkleshare>

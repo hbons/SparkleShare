@@ -179,7 +179,7 @@ namespace SparkleShare {
             Content = text_block;
 
             MouseUp += delegate {
-                Program.Controller.OpenWebsite (url);
+                SparkleShare.Controller.OpenWebsite (url);
             };            
         }
     }

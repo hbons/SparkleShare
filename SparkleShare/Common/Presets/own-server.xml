@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sparkleshare>
-  <plugin>
+  <preset>
     <info>
         <name>On my own server</name>
         <description>Everything under my control</description>
@@ -15,5 +15,5 @@
       <value/>
       <example>/path/to/project</example>
     </path>
-  </plugin>
+  </preset>
 </sparkleshare>

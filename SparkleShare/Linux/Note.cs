@@ -75,7 +75,7 @@ namespace SparkleShare {
             Image user_image = new Image (Controller.AvatarFilePath);
 
             /* TODO: Style the entry neatly, multiple lines, and add placeholder text
-            string balloon_image_path = new string [] { SparkleUI.AssetsPath, "pixmaps", "text-balloon.png" }.Combine ();
+            string balloon_image_path = new string [] { UserInterface.AssetsPath, "pixmaps", "text-balloon.png" }.Combine ();
             Image balloon_image = new Image (balloon_image_path);
             CssProvider balloon_css_provider = new CssProvider ();
 
@@ -113,8 +113,8 @@ namespace SparkleShare {
             };
 
             Label user_label = new Label () {
-                Markup = "<b>" + Program.Controller.CurrentUser.Name + "</b>\n" +
-                         "<span fgcolor=\"" + Program.UI.SecondaryTextColor + "\">" + Program.Controller.CurrentUser.Email +
+                Markup = "<b>" + SparkleShare.Controller.CurrentUser.Name + "</b>\n" +
+                         "<span fgcolor=\"" + SparkleShare.UI.SecondaryTextColor + "\">" + SparkleShare.Controller.CurrentUser.Email +
                          "</span>"
             };
 

@@ -80,7 +80,7 @@ namespace Sparkles {
         protected List<string> warnings = new List<string> ();
         protected List<string> errors   = new List<string> ();
 
-        protected string [] ExcludeRules = new string [] {
+        protected string [] ExcludeRules = {
             "*.autosave", // Various autosaving apps
             "*~", // gedit and emacs
             ".~lock.*", // LibreOffice

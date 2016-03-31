@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sparkleshare>
-  <plugin>
+  <preset>
     <info>
         <name>Bitbucket</name>
         <description>Free code hosting for Git and Mercurial</description>
@@ -17,5 +17,5 @@
       <example>/username/project</example>
       <uses_lower_case>True</uses_lower_case>
     </path>
-  </plugin>
+  </preset>
 </sparkleshare>

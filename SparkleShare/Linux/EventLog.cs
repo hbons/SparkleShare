@@ -16,6 +16,7 @@
 
 
 using System;
+using IO = System.IO;
 
 using Gtk;
 // using WebKit;
@@ -240,34 +241,34 @@ namespace SparkleShare {
 
         public void UpdateContent (string html)
         {
-            string pixmaps_path = new string [] {SparkleUI.AssetsPath, "pixmaps"}.Combine ();
-            string icons_path   = new string [] {SparkleUI.AssetsPath, "icons", "hicolor", "12x12", "status"}.Combine ();
+            string pixmaps_path = IO.Path.Combine (UserInterface.AssetsPath, "pixmaps");
+            string icons_path   = IO.Path.Combine (UserInterface.AssetsPath, "icons", "hicolor", "12x12", "status");
 
             html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
             html = html.Replace ("<!-- $a-color -->", "#0085cf");
 
             html = html.Replace ("<!-- $body-font-family -->", StyleContext.GetFont (StateFlags.Normal).Family);
             html = html.Replace ("<!-- $body-font-size -->", (double) (StyleContext.GetFont (StateFlags.Normal).Size / 1024 + 3) + "px");
-            html = html.Replace ("<!-- $body-color -->", SparkleUIHelpers.RGBAToHex (StyleContext.GetColor (StateFlags.Normal)));
+            html = html.Replace ("<!-- $body-color -->", UserInterfaceHelpers.RGBAToHex (StyleContext.GetColor (StateFlags.Normal)));
             
 			// TODO
 			// html = html.Replace ("<!-- $body-background-color -->", 
-            //     SparkleUIHelpers.RGBAToHex (new TreeView ().StyleContext.GetStyleProperty ("background-color")));
+            //     UserInterfaceHelpers.RGBAToHex (new TreeView ().StyleContext.GetStyleProperty ("background-color")));
 
             html = html.Replace ("<!-- $day-entry-header-font-size -->", (StyleContext.GetFont (StateFlags.Normal).Size / 1024 + 3) + "px");
             html = html.Replace ("<!-- $day-entry-header-background-color -->",
-                SparkleUIHelpers.RGBAToHex (StyleContext.GetBackgroundColor (StateFlags.Normal)));
+                UserInterfaceHelpers.RGBAToHex (StyleContext.GetBackgroundColor (StateFlags.Normal)));
 
-            html = html.Replace ("<!-- $secondary-font-color -->", SparkleUIHelpers.RGBAToHex (StyleContext.GetColor (StateFlags.Insensitive)));
+            html = html.Replace ("<!-- $secondary-font-color -->", UserInterfaceHelpers.RGBAToHex (StyleContext.GetColor (StateFlags.Insensitive)));
 
-            html = html.Replace ("<!-- $small-color -->", SparkleUIHelpers.RGBAToHex (StyleContext.GetColor (StateFlags.Insensitive)));
+            html = html.Replace ("<!-- $small-color -->", UserInterfaceHelpers.RGBAToHex (StyleContext.GetColor (StateFlags.Insensitive)));
             html = html.Replace ("<!-- $small-font-size -->", "90%");
 
             html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
-			html = html.Replace ("<!-- $document-added-background-image -->", "file://" + new string [] {icons_path, "document-added.png"}.Combine ());
-            html = html.Replace ("<!-- $document-edited-background-image -->", "file://" + new string [] {icons_path, "document-edited.png"}.Combine ());
-            html = html.Replace ("<!-- $document-deleted-background-image -->", "file://" + new string [] {icons_path, "document-deleted.png"}.Combine ());
-            html = html.Replace ("<!-- $document-moved-background-image -->", "file://" + new string [] {icons_path, "document-moved.png"}.Combine ());
+			html = html.Replace ("<!-- $document-added-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-added.png"));
+			html = html.Replace ("<!-- $document-edited-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-edited.png"));
+			html = html.Replace ("<!-- $document-deleted-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-deleted.png"));
+			html = html.Replace ("<!-- $document-moved-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-moved.png"));
                     
             this.spinner.Stop ();
 //          this.scrolled_window.Remove (this.web_view);

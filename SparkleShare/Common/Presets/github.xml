@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sparkleshare>
-  <plugin>
+  <preset>
     <info>
         <name>GitHub</name>
         <description>Collaborate on projects hosted on GitHub</description>
@@ -16,5 +16,5 @@
       <value/>
       <example>/username/project</example>
     </path>
-  </plugin>
+  </preset>
 </sparkleshare>

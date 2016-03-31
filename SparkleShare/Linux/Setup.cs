@@ -137,7 +137,7 @@ namespace SparkleShare {
                 VBox layout_address  = new VBox (true, 0);
                 VBox layout_path     = new VBox (true, 0);
 
-                ListStore store = new ListStore (typeof (string), typeof (Gdk.Pixbuf), typeof (string), typeof (SparklePreset));
+                ListStore store = new ListStore (typeof (string), typeof (Gdk.Pixbuf), typeof (string), typeof (Preset));
 
                 SparkleTreeView tree_view = new SparkleTreeView (store) { HeadersVisible = false };
                 ScrolledWindow scrolled_window = new ScrolledWindow () { ShadowType = ShadowType.In };
@@ -157,11 +157,11 @@ namespace SparkleShare {
                 service_column.PackStart (service_cell, true);
                 service_column.SetCellDataFunc (service_cell, new TreeCellDataFunc (RenderServiceColumn));
 
-                foreach (SparklePreset plugin in Controller.Presets) {
-                    store.AppendValues ("", new Gdk.Pixbuf (plugin.ImagePath),
-                        "<span size=\"small\"><b>" + plugin.Name + "</b>\n" +
-                            "<span fgcolor=\"" + Program.UI.SecondaryTextColor + "\">" + plugin.Description + "</span>" +
-                        "</span>", plugin);
+                foreach (Preset preset in Controller.Presets) {
+                    store.AppendValues ("", new Gdk.Pixbuf (preset.ImagePath),
+                        "<span size=\"small\"><b>" + preset.Name + "</b>\n" +
+                            "<span fgcolor=\"" + SparkleShare.UI.SecondaryTextColor + "\">" + preset.Description + "</span>" +
+                        "</span>", preset);
                 }
 
                 tree_view.AppendColumn (service_column);
@@ -183,14 +183,14 @@ namespace SparkleShare {
                     Xalign = 0,
                     UseMarkup = true,
                     Markup = "<span size=\"small\" fgcolor=\"" +
-                        Program.UI.SecondaryTextColor + "\">" + Controller.SelectedPreset.AddressExample + "</span>"
+                        SparkleShare.UI.SecondaryTextColor + "\">" + Controller.SelectedPreset.AddressExample + "</span>"
                 };
 
                 Label path_example = new Label () {
                     Xalign = 0,
                     UseMarkup = true,
                     Markup = "<span size=\"small\" fgcolor=\"" +
-                        Program.UI.SecondaryTextColor + "\">" + Controller.SelectedPreset.PathExample + "</span>"
+                        SparkleShare.UI.SecondaryTextColor + "\">" + Controller.SelectedPreset.PathExample + "</span>"
                 };
 
 
@@ -203,7 +203,7 @@ namespace SparkleShare {
                         string address;
 
                         try {
-                            address = (model.GetValue (iter, 2) as SparklePreset).Address;
+                            address = (model.GetValue (iter, 2) as Preset).Address;
 
                         } catch (NullReferenceException) {
                             address = "";
@@ -213,12 +213,12 @@ namespace SparkleShare {
                             address.Equals (Controller.PreviousAddress)) {
 
                             tree_view.SetCursor (path, service_column, false);
-                            SparklePreset plugin = (SparklePreset) model.GetValue (iter, 2);
+                            Preset preset = (Preset) model.GetValue (iter, 2);
 
-                            if (plugin.Address != null)
+                            if (preset.Address != null)
                                 address_entry.Sensitive = false;
 
-                            if (plugin.Path != null)
+                            if (preset.Path != null)
                                 path_entry.Sensitive = false;
 
                             return true;
@@ -280,7 +280,7 @@ namespace SparkleShare {
                         address_entry.Text      = text;
                         address_entry.Sensitive = (state == FieldState.Enabled);
                         address_example.Markup  =  "<span size=\"small\" fgcolor=\"" +
-                            Program.UI.SecondaryTextColor + "\">" + example_text + "</span>";
+                            SparkleShare.UI.SecondaryTextColor + "\">" + example_text + "</span>";
                     });
                 };
 
@@ -291,7 +291,7 @@ namespace SparkleShare {
                         path_entry.Text      = text;
                         path_entry.Sensitive = (state == FieldState.Enabled);
                         path_example.Markup  =  "<span size=\"small\" fgcolor=\""
-                            + Program.UI.SecondaryTextColor + "\">" + example_text + "</span>";
+                            + SparkleShare.UI.SecondaryTextColor + "\">" + example_text + "</span>";
                     });
                 };
 
@@ -405,9 +405,9 @@ namespace SparkleShare {
                 Header = "Oops! Something went wrong" + "…";
 
                 VBox points = new VBox (false, 0);
-                Image list_point_one   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
-                Image list_point_two   = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
-                Image list_point_three = new Image (SparkleUIHelpers.GetIcon ("list-point", 16));
+                Image list_point_one   = new Image (UserInterfaceHelpers.GetIcon ("list-point", 16));
+                Image list_point_two   = new Image (UserInterfaceHelpers.GetIcon ("list-point", 16));
+                Image list_point_three = new Image (UserInterfaceHelpers.GetIcon ("list-point", 16));
 
                 Label label_one = new Label () {
                     Markup = "<b>" + Controller.PreviousUrl + "</b> is the address we’ve compiled. " +
@@ -507,7 +507,7 @@ namespace SparkleShare {
                 wrapper.PackStart (table, true, false, 0);
    
                 Image warning_image = new Image (
-                    SparkleUIHelpers.GetIcon ("dialog-information", 24));
+                    UserInterfaceHelpers.GetIcon ("dialog-information", 24));
 
                 Label warning_label = new Label () {
                     Xalign = 0,
@@ -581,7 +581,7 @@ namespace SparkleShare {
 
 
                 if (warnings.Length > 0) {
-                    Image warning_image = new Image (SparkleUIHelpers.GetIcon ("dialog-information", 24));
+                    Image warning_image = new Image (UserInterfaceHelpers.GetIcon ("dialog-information", 24));
                     
                     Label warning_label = new Label (warnings [0]) {
                         Xalign = 0,
@@ -658,7 +658,7 @@ namespace SparkleShare {
                     HBox layout_horizontal = new HBox (false, 6);
 
                     Entry link_code_entry = new Entry () {
-                        Text      = Program.Controller.UserAuthenticationInfo.PublicKey,
+                        Text      = SparkleShare.Controller.UserAuthenticationInfo.PublicKey,
                         Sensitive = false
                     };
                     
@@ -690,7 +690,7 @@ namespace SparkleShare {
                 }
                 
                 if (Controller.TutorialPageNumber < 4) {
-                    Image slide = SparkleUIHelpers.GetImage ("tutorial-slide-" + Controller.TutorialPageNumber + ".png");
+                    Image slide = UserInterfaceHelpers.GetImage ("tutorial-slide-" + Controller.TutorialPageNumber + ".png");
                     Add (slide);
                 }
             }
@@ -704,9 +704,9 @@ namespace SparkleShare {
             TreeSelection selection = (column.TreeView as TreeView).Selection;
 
             if (selection.IterIsSelected (iter))
-                markup = markup.Replace (Program.UI.SecondaryTextColor, Program.UI.SecondaryTextColorSelected);
+                markup = markup.Replace (SparkleShare.UI.SecondaryTextColor, SparkleShare.UI.SecondaryTextColorSelected);
             else
-                markup = markup.Replace (Program.UI.SecondaryTextColorSelected, Program.UI.SecondaryTextColor);
+                markup = markup.Replace (SparkleShare.UI.SecondaryTextColorSelected, SparkleShare.UI.SecondaryTextColor);
 
             (cell as CellRendererText).Markup = markup;
         }

@@ -78,7 +78,7 @@ namespace SparkleShare {
         private void CreateAbout ()
         {
             CssProvider window_css_provider = new CssProvider ();
-            Image image = SparkleUIHelpers.GetImage("about.png");
+            Image image = UserInterfaceHelpers.GetImage("about.png");
 
             window_css_provider.LoadFromData ("GtkWindow {" +
                 "background-image: url('" + image.File + "');" +
