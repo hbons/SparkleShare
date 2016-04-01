@@ -250,13 +250,13 @@ namespace SparkleShare {
             } else if (reopen_attempt_counts > 1) {
                 AlertNotificationRaised ("Hello!", "SparkleShare sits right here, as a status icon.");
                 reopen_attempt_counts = 0;
-                
+
             } else {
                 reopen_attempt_counts++;
             }
         }
-        
-        
+
+
         public void UIHasLoaded ()
         {
             if (this.lost_folders_path) {

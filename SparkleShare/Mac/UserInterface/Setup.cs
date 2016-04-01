@@ -20,11 +20,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
+using Mono.Unix;
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.WebKit;
 
-using Mono.Unix;
+using Sparkles;
 
 namespace SparkleShare {
 

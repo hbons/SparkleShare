@@ -21,9 +21,7 @@ using System.Net;
 using System.Text;
 using System.Xml;
 
-using Sparkles;
-
-namespace SparkleShare {
+namespace Sparkles {
 
     public class SparkleInvite : XmlDocument {
 
