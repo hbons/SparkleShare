@@ -72,6 +72,7 @@
     </Compile>
     <Compile Include="InstallationInfo.cs" />
     <Compile Include="Preset.cs" />
+    <Compile Include="Invite.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Fetcher\" />

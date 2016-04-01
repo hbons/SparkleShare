@@ -698,7 +698,7 @@ namespace SparkleShare {
 
     
         private void RenderServiceColumn (TreeViewColumn column, CellRenderer cell,
-            ITreeModel model, TreeIter iter)
+            TreeModel model, TreeIter iter)
         {
             string markup = (string) model.GetValue (iter, 2);
             TreeSelection selection = (column.TreeView as TreeView).Selection;

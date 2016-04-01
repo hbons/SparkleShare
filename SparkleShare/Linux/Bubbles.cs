@@ -18,7 +18,7 @@
 using System;
 
 using Gtk;
-using Notifications;
+//using Notifications;
 
 using Sparkles;
 
@@ -27,7 +27,7 @@ namespace SparkleShare {
     public class SparkleBubbles {
 
         public SparkleBubblesController Controller = new SparkleBubblesController ();
-
+        /*
 
         public SparkleBubbles ()
         {
@@ -60,7 +60,6 @@ namespace SparkleShare {
 					Logger.LogInfo ("Notification", "Error showing notification: ", e);
 				}
 			});
-        }
+        }*/
     }
 }
-
