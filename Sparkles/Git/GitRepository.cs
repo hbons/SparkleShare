@@ -1116,7 +1116,7 @@ namespace Sparkles.Git {
 
             try {
                 foreach (DirectoryInfo directory in parent.GetDirectories ()) {
-                    if (directory.IsSymlink () ||
+                    if (directory.FullName.IsSymlink () ||
                         directory.Name.Equals (".git") || 
                         directory.Name.Equals ("rebase-apply")) {
 
@@ -1132,7 +1132,7 @@ namespace Sparkles.Git {
 
             try {
                 foreach (FileInfo file in parent.GetFiles ()) {
-                    if (file.IsSymlink ())
+                    if (file.FullName.IsSymlink ())
                         continue;
                     
                     if (file.Name.Equals (".empty"))
