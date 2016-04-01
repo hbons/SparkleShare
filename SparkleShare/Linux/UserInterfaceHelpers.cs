@@ -64,7 +64,7 @@ namespace SparkleShare {
         }
 
         
-        public static Gdk.Color RGBAToColor (Gdk.RGBA rgba) {
+        public static Gdk.Color RGBAToColor (Gdk.Rgb rgba) {
             return new Gdk.Color () {
                 Red   = (ushort) (rgba.Red * 65535),
                 Green = (ushort) (rgba.Green * 65535),
@@ -73,7 +73,7 @@ namespace SparkleShare {
         }
 
 
-        public static string RGBAToHex (Gdk.RGBA rgba)
+        public static string RGBAToHex (Gdk.Rgb rgba)
         {
             return ColorToHex (RGBAToColor (rgba));
         }
@@ -92,4 +92,3 @@ namespace SparkleShare {
         }
     }
 }
-

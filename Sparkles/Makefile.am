@@ -13,6 +13,7 @@ SOURCES =  \
 	Command.cs \
 	Configuration.cs \
 	Extensions.cs \
+	Invite.cs \
 	ListenerFactory.cs \
 	Logger.cs \
 	Preset.cs \

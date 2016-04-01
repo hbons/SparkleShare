@@ -95,10 +95,6 @@
       <Link>SparkleShare.cs</Link>
     </Compile>
     <Compile Include="MacWatcher.cs" />
-    <Compile Include="..\Common\Invite.cs">
-      <Link>Invite.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\Avatars.cs" />
     <Compile Include="..\Common\AboutController.cs">
       <Link>Controllers\AboutController.cs</Link>
     </Compile>
@@ -129,6 +125,9 @@
       <Link>Controllers\BaseController.cs</Link>
     </Compile>
     <Compile Include="Controller.cs" />
+    <Compile Include="..\Common\Avatars.cs">
+      <Link>UserInterface\Avatars.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />

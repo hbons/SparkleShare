@@ -20,7 +20,7 @@ using System.Xml;
 
 using IO = System.IO;
 
-namespace SparkleShare {
+namespace Sparkles {
 
     public class Preset : XmlDocument {
 
