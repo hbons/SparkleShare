@@ -26,6 +26,7 @@ using MonoMac.AppKit;
 
 using Sparkles;
 using Sparkles.Git;
+using System.Linq;
 
 namespace SparkleShare {
 
@@ -179,12 +180,13 @@ namespace SparkleShare {
         }
 
 
+        // We have to use our own custom made folder watcher, as
+        // System.IO.FileSystemWatcher fails watching subfolders on Mac
+
         SparkleMacWatcher watcher;
         delegate void FileActivityTask ();
 
-        // We have to use our own custom made folder watcher, as
-        // System.IO.FileSystemWatcher fails watching subfolders on Mac
-        FileActivityTask MacActivityTask (BaseRepository repo, FileSystemEventArgs fse_args)
+        FileActivityTask MacFileActivityTask (BaseRepository repo, FileSystemEventArgs fse_args)
         {
             return delegate { new Thread (() => { repo.OnFileActivity (fse_args); }).Start (); };
         }
@@ -193,30 +195,21 @@ namespace SparkleShare {
         {
             var triggered_repos = new List<string> ();
 
-            foreach (string file in changed_files_in_basedir) {
-                string repo_name;
-                int path_sep_index = file.IndexOf (Path.DirectorySeparatorChar);
+            foreach (string file_path in changed_files_in_basedir) {
+                string [] paths = file_path.Split (Path.DirectorySeparatorChar);
 
-                if (path_sep_index >= 0)
-                    repo_name = file.Substring (0, path_sep_index);
-                else
-                    repo_name = file;
-
-                repo_name = Path.GetFileNameWithoutExtension (repo_name);
-                BaseRepository repo = GetRepoByName (repo_name);
-
-                if (repo == null)
+                if (paths.Length < 2)
                     continue;
 
-                if (!triggered_repos.Contains (repo_name)) {
-                    triggered_repos.Add (repo_name);
+                BaseRepository repo = GetRepoByName (paths [1]);
 
-                    FileActivityTask task = MacActivityTask (repo,
-                        new FileSystemEventArgs (WatcherChangeTypes.Changed, file, "Unknown"));
+                if (repo != null && !triggered_repos.Contains (repo.Name)) {
+                    FileActivityTask task = MacFileActivityTask (repo,
+                        new FileSystemEventArgs (WatcherChangeTypes.Changed, file_path, "Unknown"));
 
                     task ();
+                    triggered_repos.Add (repo.Name);
                 }
-
             }
         }
 

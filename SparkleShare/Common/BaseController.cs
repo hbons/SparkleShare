@@ -327,65 +327,67 @@ namespace SparkleShare {
         void CheckRepositories ()
         {
             lock (this.check_repos_lock) {
-                string path = Config.FoldersPath;
-                
-                // Detect any renames
-                foreach (string folder_path in Directory.GetDirectories (path)) {
+                DetectRepositoryRenames ();
+                RemoveDeletedRepositories ();
+            }
+
+            FolderListChanged ();
+        }
+
+
+        void DetectRepositoryRenames ()
+        {
+            foreach (string group_path in Directory.GetDirectories (Config.FoldersPath)) {
+                if (group_path.EndsWith (".tmp"))
+                    continue;
+
+                foreach (string folder_path in Directory.GetDirectories (group_path)) {
                     string folder_name = Path.GetFileName (folder_path);
-                    
-                    if (folder_name.Equals (".tmp"))
+
+                    if (Config.GetIdentifierForFolder (folder_name) != null)
                         continue;
-                    
-                    if (Config.GetIdentifierForFolder (folder_name) == null) {
-                        string identifier_file_path = Path.Combine (folder_path, ".sparkleshare");
-                        
-                        if (!File.Exists (identifier_file_path))
-                            continue;
-                        
-                        string identifier = File.ReadAllText (identifier_file_path).Trim ();
-                        
-                        if (Config.IdentifierExists (identifier)) {
-                            RemoveRepository (GetRepoByName (folder_name));
-                            Config.RenameFolder (identifier, folder_name);
-                            
-                            string new_folder_path = Path.Combine (path, folder_name);
-                            AddRepository (new_folder_path);
-                            
-                            Logger.LogInfo ("Controller",
-                                                   "Renamed folder with identifier " + identifier + " to '" + folder_name + "'");
-                        }
-                    }
+
+                    string identifier_file_path = Path.Combine (folder_path, ".sparkleshare");
+
+                    if (!File.Exists (identifier_file_path))
+                        continue;
+
+                    string identifier = File.ReadAllText (identifier_file_path).Trim ();
+
+                    if (!Config.IdentifierExists (identifier))
+                        continue;
+
+                    RemoveRepository (GetRepoByName (folder_name));
+                    Config.RenameFolder (identifier, folder_name);
+
+                    string new_folder_path = Path.Combine (group_path, folder_name);
+                    AddRepository (new_folder_path);
+
+                    Logger.LogInfo ("Controller",
+                        "Renamed folder with identifier " + identifier + " to '" + folder_name + "'");
                 }
-                
-                // Remove any deleted folders
-                foreach (string folder_name in Config.Folders) {
-                    string folder_path = new SparkleFolder (folder_name).FullPath;
-                    
-                    if (!Directory.Exists (folder_path)) {
-                        Config.RemoveFolder (folder_name);
-                        RemoveRepository (GetRepoByName (folder_name));
-                        
-                        Logger.LogInfo ("Controller", "Removed folder '" + folder_name + "' from config");
-                        
-                    } else {
-                        AddRepository (folder_path);
-                    }
-                }
-                
-                // Remove any duplicate folders
-                string previous_name = "";
-                foreach (string folder_name in Config.Folders) {
-                    if (!string.IsNullOrEmpty (previous_name) && folder_name.Equals (previous_name))
-                        Config.RemoveFolder (folder_name);
-                    else
-                        previous_name = folder_name;
-                }
-                
-                FolderListChanged ();
             }
         }
-        
-        
+
+
+        void RemoveDeletedRepositories ()
+        {
+            foreach (string folder_name in Config.Folders) {
+                string folder_path = new SparkleFolder (folder_name).FullPath;
+
+                if (!Directory.Exists (folder_path)) {
+                    Config.RemoveFolder (folder_name);
+                    RemoveRepository (GetRepoByName (folder_name));
+
+                    Logger.LogInfo ("Controller", "Removed folder '" + folder_name + "' from config");
+
+                } else {
+                    AddRepository (folder_path);
+                }
+            }
+        }
+
+
         void AddRepository (string folder_path)
         {
             BaseRepository repo = null;
@@ -648,11 +650,16 @@ namespace SparkleShare {
             }
             
             string target_folder_name = canonical_name;
-            
+
             if (suffix > 1)
                 target_folder_name += " (" + suffix + ")";
-            
-            string target_folder_path = Path.Combine (Config.FoldersPath, target_folder_name);
+
+            string group_folder_path = Path.Combine (Config.FoldersPath, this.fetcher.RemoteUrl.Host);
+
+            if (!Directory.Exists (group_folder_path))
+                Directory.CreateDirectory (group_folder_path);
+
+            string target_folder_path = Path.Combine (group_folder_path, target_folder_name);
             
             try {
                 Directory.Move (this.fetcher.TargetFolder, target_folder_path);

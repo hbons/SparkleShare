@@ -63,7 +63,7 @@ namespace Sparkles {
 
         public ChangeType Type;
         public DateTime Timestamp;
-        public bool IsFolder = false;
+        public bool IsFolder;
         
         public string Path;
         public string MovedToPath;
@@ -81,8 +81,10 @@ namespace Sparkles {
 
                 if (custom_path != null)
                     return Path.Combine (custom_path, Name);
-                else
-                    return Path.Combine (Configuration.DefaultConfig.FoldersPath, Name);
+
+                return Path.Combine (Configuration.DefaultConfig.FoldersPath,
+                                     new Uri (Configuration.DefaultConfig.GetUrlForFolder (Name)).Host,
+                                     Name);
             }
         }
 
