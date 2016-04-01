@@ -721,15 +721,8 @@ namespace SparkleShare {
             string [] files = Directory.GetFiles (path);
 
             foreach (string file in files)
-                if (!IsSymlink (file))
+                if (file.IsSymlink ())
                     File.SetAttributes (file, FileAttributes.Normal);
-        }
-
-        
-        bool IsSymlink (string file)
-        {
-            FileAttributes attributes = File.GetAttributes (file);
-            return ((attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint);
         }
     }
 }
