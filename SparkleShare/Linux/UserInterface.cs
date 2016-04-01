@@ -48,7 +48,7 @@ namespace SparkleShare {
 
             Gdk.Color color = UserInterfaceHelpers.RGBAToColor (new Label().StyleContext.GetColor (StateFlags.Insensitive));
             SecondaryTextColor = UserInterfaceHelpers.ColorToHex (color);
-                    
+
             color = UserInterfaceHelpers.MixColors (
                 UserInterfaceHelpers.RGBAToColor (new TreeView ().StyleContext.GetColor (StateFlags.Selected)),
                 UserInterfaceHelpers.RGBAToColor (new TreeView ().StyleContext.GetBackgroundColor (StateFlags.Selected)),
