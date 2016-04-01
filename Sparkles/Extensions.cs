@@ -81,8 +81,9 @@ namespace Sparkles {
         }
 
 
-        public static bool IsSymlink (this FileSystemInfo file)
+        public static bool IsSymlink (this string path)
         {
+            var file = new FileInfo (path);
             return ((file.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint);
         }
 
