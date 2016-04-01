@@ -20,14 +20,16 @@ using System;
 using Gtk;
 using Mono.Unix;
 
+using Sparkles;
+
 namespace SparkleShare {
 
-    public class SparkleSetup : SparkleSetupWindow {
+    public class Setup : SetupWindow {
 
-        public SparkleSetupController Controller = new SparkleSetupController ();
+        public SetupController Controller = new SetupController ();
 
 
-        public SparkleSetup () : base ()
+        public Setup ()
         {
             Controller.HideWindowEvent += delegate {
                 Application.Invoke (delegate { Hide (); });
@@ -71,11 +73,11 @@ namespace SparkleShare {
                     ActivatesDefault = true
                 };
 
-		try {
+		        try {
                     UnixUserInfo user_info = UnixUserInfo.GetRealUser ();
                 
                     if (user_info != null && user_info.RealName != null)
-                        // Some systems append a series of "," for some reason
+                        // Some systems append a series of "," for some reason, TODO: Report upstream
                         name_entry.Text = user_info.RealName.TrimEnd (",".ToCharArray ());
 
                 } catch (ArgumentException) {
@@ -698,7 +700,7 @@ namespace SparkleShare {
 
     
         private void RenderServiceColumn (TreeViewColumn column, CellRenderer cell,
-            TreeModel model, TreeIter iter)
+            ITreeModel model, TreeIter iter)
         {
             string markup = (string) model.GetValue (iter, 2);
             TreeSelection selection = (column.TreeView as TreeView).Selection;

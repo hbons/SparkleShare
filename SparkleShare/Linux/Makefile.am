@@ -16,7 +16,6 @@ SOURCES =  \
 	../Common/BubblesController.cs \
 	../Common/BaseController.cs \
 	../Common/EventLogController.cs \
-	../Common/Invite.cs \
 	../Common/NoteController.cs \
 	../Common/SetupController.cs \
 	../Common/StatusIconController.cs \

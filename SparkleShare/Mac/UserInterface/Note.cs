@@ -25,7 +25,7 @@ namespace SparkleShare {
 
     public class Note : NSWindow {
 
-        public SparkleNoteController Controller = new SparkleNoteController ();
+        public NoteController Controller = new NoteController ();
 
         private NSImage user_image, balloon_image;
         private NSImageView user_image_view, balloon_image_view;

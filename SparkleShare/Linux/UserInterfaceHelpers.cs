@@ -57,14 +57,14 @@ namespace SparkleShare {
         // Example: from "rgb:0,0,0" to "#000000"
         public static string ColorToHex (Gdk.Color color)
         {
-            return String.Format ("#{0:X2}{1:X2}{2:X2}",
+            return string.Format ("#{0:X2}{1:X2}{2:X2}",
                 (int) Math.Truncate (color.Red   / 256.00),
                 (int) Math.Truncate (color.Green / 256.00),
                 (int) Math.Truncate (color.Blue  / 256.00));
         }
 
         
-        public static Gdk.Color RGBAToColor (Gdk.Rgb rgba) {
+        public static Gdk.Color RGBAToColor (Gdk.RGBA rgba) {
             return new Gdk.Color () {
                 Red   = (ushort) (rgba.Red * 65535),
                 Green = (ushort) (rgba.Green * 65535),
@@ -73,7 +73,7 @@ namespace SparkleShare {
         }
 
 
-        public static string RGBAToHex (Gdk.Rgb rgba)
+        public static string RGBAToHex (Gdk.RGBA rgba)
         {
             return ColorToHex (RGBAToColor (rgba));
         }
