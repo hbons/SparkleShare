@@ -18,7 +18,7 @@
 using System;
 
 using Gtk;
-//using Notifications;
+using Notifications;
 
 using Sparkles;
 
@@ -27,7 +27,7 @@ namespace SparkleShare {
     public class SparkleBubbles {
 
         public SparkleBubblesController Controller = new SparkleBubblesController ();
-        /*
+
 
         public SparkleBubbles ()
         {
@@ -35,7 +35,7 @@ namespace SparkleShare {
         }
 
 
-        private void ShowBubbleEvent (string title, string subtext, string image_path)
+        void ShowBubbleEvent (string title, string subtext, string image_path)
         {
             if (!SparkleShare.Controller.NotificationsEnabled)
                 return;
@@ -51,15 +51,15 @@ namespace SparkleShare {
 				if (image_path != null)
 					notification.Icon = new Gdk.Pixbuf (image_path);
 				else
-					notification.IconName = "folder-sparkleshare";
+					notification.IconName = "org.sparkleshare.SparkleShare";
 
 				try {
 					notification.Show ();
 
 				} catch (Exception e) {
-					Logger.LogInfo ("Notification", "Error showing notification: ", e);
+					Logger.LogInfo ("Notification", "Could not show notification: ", e);
 				}
 			});
-        }*/
+        }
     }
 }
