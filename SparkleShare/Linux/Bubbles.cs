@@ -24,12 +24,12 @@ using Sparkles;
 
 namespace SparkleShare {
     
-    public class SparkleBubbles {
+    public class Bubbles {
 
-        public SparkleBubblesController Controller = new SparkleBubblesController ();
+        public BubblesController Controller = new BubblesController ();
 
 
-        public SparkleBubbles ()
+        public Bubbles ()
         {
             Controller.ShowBubbleEvent += ShowBubbleEvent;
         }

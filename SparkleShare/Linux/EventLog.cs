@@ -23,9 +23,9 @@ using Gtk;
 
 namespace SparkleShare {
 
-    public class SparkleEventLog : Window {
+    public class EventLog : Window {
 
-        public SparkleEventLogController Controller = new SparkleEventLogController ();
+        public EventLogController Controller = new EventLogController ();
 
         private Label size_label;
         private Label history_label;
@@ -35,13 +35,13 @@ namespace SparkleShare {
         private HBox layout_horizontal;
         private ScrolledWindow scrolled_window;
         private VBox spinner_wrapper;
-     //   private Spinner spinner;
+        private Spinner spinner;
 //      private WebView web_view;
 
         private int pos_x, pos_y;
 
 
-        public SparkleEventLog () : base ("Recent Changes")
+        public EventLog () : base ("Recent Changes")
         {
             SetWmclass ("SparkleShare", "SparkleShare");
 
@@ -84,8 +84,8 @@ namespace SparkleShare {
             this.spinner_wrapper.PackStart (new Label(""), true, true, 0);
             this.spinner_wrapper.PackStart (this.spinner, false, false, 0);
             this.spinner_wrapper.PackStart (new Label(""), true, true, 0);            
-          //  this.spinner.SetSizeRequest (24, 24);
-        //    this.spinner.Start ();
+            this.spinner.SetSizeRequest (24, 24);
+            this.spinner.Start ();
 
             this.content_wrapper.Add (this.spinner_wrapper);
 

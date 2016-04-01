@@ -22,7 +22,7 @@ using Sparkles;
 
 namespace SparkleShare {
 
-    public class SparkleNoteController {
+    public class NoteController {
 
         public event Action ShowWindowEvent = delegate { };
         public event Action HideWindowEvent = delegate { };
@@ -34,7 +34,7 @@ namespace SparkleShare {
         public string CurrentProject { get; private set; }
 
 
-        public SparkleNoteController ()
+        public NoteController ()
         {
             SparkleShare.Controller.ShowNoteWindowEvent += OnNoteWindowEvent;
 

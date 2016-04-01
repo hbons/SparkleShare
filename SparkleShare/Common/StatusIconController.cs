@@ -118,7 +118,7 @@ namespace SparkleShare {
     }
 
 
-    public class SparkleStatusIconController {
+    public class StatusIconController {
 
         public event UpdateIconEventHandler UpdateIconEvent = delegate { };
         public delegate void UpdateIconEventHandler (IconState state);
@@ -184,7 +184,7 @@ namespace SparkleShare {
         }
 
 
-        public SparkleStatusIconController ()
+        public StatusIconController ()
         {
             UpdateFolders ();
 

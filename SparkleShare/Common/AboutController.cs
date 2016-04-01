@@ -23,7 +23,7 @@ using Sparkles;
 
 namespace SparkleShare {
 
-    public class SparkleAboutController {
+    public class AboutController {
 
         public event Action ShowWindowEvent = delegate { };
         public event Action HideWindowEvent = delegate { };
@@ -39,7 +39,7 @@ namespace SparkleShare {
         public string RunningVersion;
 
 
-        public SparkleAboutController ()
+        public AboutController ()
         {
             RunningVersion = InstallationInfo.Version;
 
