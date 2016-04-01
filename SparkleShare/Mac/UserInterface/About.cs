@@ -25,7 +25,7 @@ namespace SparkleShare {
 
     public class About : NSWindow {
 
-        public SparkleAboutController Controller = new SparkleAboutController ();
+        public AboutController Controller = new AboutController ();
 
         private NSTextField version_text_field, updates_text_field, credits_text_field;
         private SparkleLink website_link, credits_link, report_problem_link, debug_log_link;

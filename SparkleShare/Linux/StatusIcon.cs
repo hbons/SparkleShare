@@ -27,31 +27,31 @@ using AppIndicator3;
 
 namespace SparkleShare {
 
-    public class SparkleStatusIcon {
+    public class StatusIcon {
 
-        public SparkleStatusIconController Controller = new SparkleStatusIconController ();
+        public StatusIconController Controller = new StatusIconController ();
 
-        private Menu menu;
-        private MenuItem recent_events_item;
-        private MenuItem quit_item;
-        private MenuItem state_item;
-        private SparkleMenuItem [] state_menu_items;
+        Menu menu;
+        MenuItem recent_events_item;
+        MenuItem quit_item;
+        MenuItem state_item;
+        SparkleMenuItem [] state_menu_items;
 
         #if HAVE_APP_INDICATOR
-        private Indicator indicator;
+        Indicator indicator;
         #else
-        private StatusIcon status_icon;
+        Gtk.StatusIcon status_icon;
         #endif
 
 
-        public SparkleStatusIcon ()
+        public StatusIcon ()
         {
             #if HAVE_APP_INDICATOR
             this.indicator = new Indicator ("sparkleshare", "sparkleshare", (int) IndicatorCategory.ApplicationStatus);
             this.indicator.IconName = "process-syncing-idle";
             this.indicator.Status   = (int) IndicatorStatus.Active;
             #else
-			this.status_icon          = new StatusIcon ();
+			this.status_icon          = new Gtk.StatusIcon ();
             this.status_icon.IconName = "org.sparkleshare.SparkleShare";
 
             this.status_icon.Activate  += ShowMenu; // Primary mouse button click
@@ -281,7 +281,7 @@ namespace SparkleShare {
         // Makes sure the menu pops up in the right position
         private void SetPosition (Menu menu, out int x, out int y, out bool push_in)
         {
-            StatusIcon.PositionMenu (menu, out x, out y, out push_in, this.status_icon.Handle);
+            Gtk.StatusIcon.PositionMenu (menu, out x, out y, out push_in, this.status_icon.Handle);
         }
         #endif
     }

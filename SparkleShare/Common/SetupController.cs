@@ -44,7 +44,7 @@ namespace SparkleShare {
     }
 
 
-    public class SparkleSetupController {
+    public class SetupController {
 
         public event Action ShowWindowEvent = delegate { };
         public event Action HideWindowEvent = delegate { };
@@ -105,7 +105,7 @@ namespace SparkleShare {
         private bool fetch_prior_history = false;
 
 
-        public SparkleSetupController ()
+        public SetupController ()
         {
             ChangePageEvent += delegate (PageType page_type, string [] warnings) {
                 this.current_page = page_type;

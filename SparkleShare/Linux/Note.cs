@@ -15,17 +15,16 @@
 //   along with this program. If not, see (http://www.gnu.org/licenses/).
 
 
-using System;
 using Gtk;
 
 namespace SparkleShare {
 
-    public class SparkleNote : Window {
+    public class Note : Window {
 
-        public SparkleNoteController Controller = new SparkleNoteController ();
+        public NoteController Controller = new NoteController ();
 
 
-        public SparkleNote () : base ("Add Note")
+        public Note () : base ("Add Note")
         {
             SetWmclass ("SparkleShare", "SparkleShare");
 

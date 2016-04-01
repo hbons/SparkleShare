@@ -25,7 +25,7 @@ namespace SparkleShare {
 
     public class StatusIcon {
 
-        public SparkleStatusIconController Controller = new SparkleStatusIconController ();
+        public StatusIconController Controller = new StatusIconController ();
 
         private NSStatusItem status_item = NSStatusBar.SystemStatusBar.CreateStatusItem (28);
         private NSMenu menu, submenu, link_code_submenu;

@@ -20,7 +20,7 @@ using Gtk;
 
 namespace SparkleShare {
 
-    public class SparkleSetupWindow : Window    {
+    public class SetupWindow : Window    {
 
         private EventBox content_area;
         private EventBox option_area;
@@ -30,7 +30,7 @@ namespace SparkleShare {
         public string Description;
 
 
-        public SparkleSetupWindow () : base ("SparkleShare Setup")
+        public SetupWindow () : base ("SparkleShare Setup")
         {
             SetWmclass ("SparkleShare", "SparkleShare");
 

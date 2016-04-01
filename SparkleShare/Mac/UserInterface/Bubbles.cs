@@ -22,7 +22,7 @@ namespace SparkleShare {
     
     public class Bubbles : NSObject {
 
-        public SparkleBubblesController Controller = new SparkleBubblesController ();
+        public BubblesController Controller = new BubblesController ();
 
 
         public Bubbles ()
@@ -33,9 +33,9 @@ namespace SparkleShare {
         }
 
 
-        private void ShowBubbleEvent (string title, string subtext, string image_path) {
+        void ShowBubbleEvent (string title, string subtext, string image_path) {
             InvokeOnMainThread (() => {
-                NSUserNotification notification = new NSUserNotification () {
+                var notification = new NSUserNotification {
                     Title           = title,
                     InformativeText = subtext,
                     DeliveryDate    = DateTime.Now
@@ -43,8 +43,8 @@ namespace SparkleShare {
 
                 NSUserNotificationCenter center  = NSUserNotificationCenter.DefaultUserNotificationCenter;
                 center.ShouldPresentNotification = delegate { return true; };
-                center.DidActivateNotification  += delegate { Controller.BubbleClicked (); };
 
+                center.DidActivateNotification += delegate { Controller.BubbleClicked (); };
                 center.ScheduleNotification (notification);
             });
         }

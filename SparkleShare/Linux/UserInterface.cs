@@ -17,9 +17,7 @@
 
 using System;
 
-using GLib;
 using Gtk;
-
 using Sparkles;
 
 namespace SparkleShare {
@@ -28,22 +26,22 @@ namespace SparkleShare {
 
         public static string AssetsPath = InstallationInfo.Directory;
 
-        public SparkleStatusIcon StatusIcon;
-        public SparkleEventLog EventLog;
-        public SparkleBubbles Bubbles;
-        public SparkleSetup Setup;
+        public StatusIcon StatusIcon;
+        public EventLog EventLog;
+        public Bubbles Bubbles;
+        public Setup Setup;
         public SparkleAbout About;
-        public SparkleNote Note;
+        public Note Note;
 
         public readonly string SecondaryTextColor;
         public readonly string SecondaryTextColorSelected;
 
-        Gtk.Application application;
+        Application application;
 
 
         public UserInterface ()
         {
-            application = new Gtk.Application ("org.sparkleshare.SparkleShare", 0);
+            application = new Application ("org.sparkleshare.SparkleShare", 0);
 
             application.Register (null);
             application.Activated += ApplicationActivatedDelegate;
@@ -82,12 +80,12 @@ namespace SparkleShare {
                     SparkleShare.Controller.HandleReopen ();
 
             } else {
-                Setup      = new SparkleSetup ();
-                EventLog   = new SparkleEventLog ();
+                Setup      = new Setup ();
+                EventLog   = new EventLog ();
                 About      = new SparkleAbout ();
-                Bubbles    = new SparkleBubbles ();
-                StatusIcon = new SparkleStatusIcon ();
-                Note       = new SparkleNote ();
+                Bubbles    = new Bubbles ();
+                StatusIcon = new StatusIcon ();
+                Note       = new Note ();
 
                 Setup.Application    = application;
                 EventLog.Application = application;

@@ -15,20 +15,18 @@
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-using System;
 using System.Text;
-
 using Sparkles;
 
 namespace SparkleShare {
 
-    public class SparkleBubblesController {
+    public class BubblesController {
 
         public event ShowBubbleEventHandler ShowBubbleEvent = delegate { };
         public delegate void ShowBubbleEventHandler (string title, string subtext, string image_path);
 
 
-        public SparkleBubblesController ()
+        public BubblesController ()
         {
             SparkleShare.Controller.AlertNotificationRaised += delegate (string title, string message) {
                 ShowBubble (title, message, null);
