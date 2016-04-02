@@ -233,8 +233,18 @@ namespace Sparkles.Git {
         public override void Complete ()
         {
             if (!IsFetchedRepoEmpty) {
-                GitCommand git = new GitCommand (TargetFolder, "checkout --quiet HEAD");
-                git.StartAndWaitForExit ();
+                string branch = "HEAD";
+                string prefered_branch = "SparkleShare";
+
+                // Prefer the "SparkleShare" branch if it exists
+                var git_show_ref = new GitCommand (TargetFolder, "show-ref --verify --quiet refs/heads/" + prefered_branch);
+                git_show_ref.StartAndWaitForExit ();
+
+                if (git_show_ref.ExitCode == 0)
+                    branch = prefered_branch;
+
+                var git_checkout = new GitCommand (TargetFolder, "checkout --quiet " + branch);
+                git_checkout.StartAndWaitForExit ();
             }
 
             base.Complete ();
