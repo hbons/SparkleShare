@@ -22,7 +22,6 @@ using System.Linq;
 using System.Threading;
 
 using Sparkles;
-using Sparkles.Git;
 
 namespace SparkleShare {
     
@@ -213,7 +212,7 @@ namespace SparkleShare {
         public virtual void Initialize ()
         {
             Logger.LogInfo ("Environment", "SparkleShare " + InstallationInfo.Version);
-            Logger.LogInfo ("Environment", "Git " + GitCommand.GitVersion);
+            Logger.LogInfo ("Environment", "Git " + Sparkles.Git.GitCommand.GitVersion);
             Logger.LogInfo ("Environment", InstallationInfo.Platform + " (" + Environment.OSVersion + ")");
             
             Preset.PresetsPath = PresetsPath;
@@ -391,13 +390,13 @@ namespace SparkleShare {
         void AddRepository (string folder_path)
         {
             BaseRepository repo = null;
-            string folder_name   = Path.GetFileName (folder_path);
-            string backend       = Config.GetBackendForFolder (folder_name);
+            string folder_name  = Path.GetFileName (folder_path);
+            string backend      = Config.GetBackendForFolder (folder_name);
             
             try {
                 repo = (BaseRepository) Activator.CreateInstance (
                     Type.GetType ("Sparkles." + backend + "." + backend + "Repository, Sparkles." + backend),
-                    new object [] { folder_path, Config });
+                        new object [] { folder_path, Config, SSHAuthenticationInfo.DefaultAuthenticationInfo });
                 
             } catch (Exception e) {
                 Logger.LogInfo ("Controller", "Failed to load backend '" + backend + "' for '" + folder_name + "': ", e);

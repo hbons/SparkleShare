@@ -82,12 +82,12 @@ namespace Sparkles {
         public readonly string LocalPath;
         public readonly string Name;
         public readonly Uri RemoteUrl;
-        public List<ChangeSet> ChangeSets { get; private set; }
-        public SyncStatus Status { get; private set; }
+        public List<ChangeSet> ChangeSets { get; set; }
+        public SyncStatus Status { get; set; }
         public ErrorStatus Error { get; protected set; }
-        public bool IsBuffering { get; private set; }
-        public double ProgressPercentage { get; private set; }
-        public double ProgressSpeed { get; private set; }
+        public bool IsBuffering { get; set; }
+        public double ProgressPercentage { get; set; }
+        public double ProgressSpeed { get; set; }
 
         public DateTime LastSync {
             get {
@@ -132,21 +132,20 @@ namespace Sparkles {
 
         protected Configuration local_config;
 
+        string identifier;
+        BaseListener listener;
+        Watcher watcher;
+        TimeSpan poll_interval        = PollInterval.Short;
+        DateTime last_poll            = DateTime.Now;
+        DateTime progress_last_change = DateTime.Now;
+        Timers.Timer remote_timer     = new Timers.Timer () { Interval = 5000 };
+        DisconnectReason last_disconnect_reason = DisconnectReason.None;
 
-        private string identifier;
-        private BaseListener listener;
-        private Watcher watcher;
-        private TimeSpan poll_interval        = PollInterval.Short;
-        private DateTime last_poll            = DateTime.Now;
-        private DateTime progress_last_change = DateTime.Now;
-        private Timers.Timer remote_timer     = new Timers.Timer () { Interval = 5000 };
-        private DisconnectReason last_disconnect_reason = DisconnectReason.None;
-
-        private bool is_syncing {
+        bool is_syncing {
             get { return (Status == SyncStatus.SyncUp || Status == SyncStatus.SyncDown || IsBuffering); }
         }
 
-        private static class PollInterval {
+        static class PollInterval {
             public static readonly TimeSpan Short = new TimeSpan (0, 0, 5, 0);
             public static readonly TimeSpan Long  = new TimeSpan (0, 0, 15, 0);
         }
@@ -182,7 +181,7 @@ namespace Sparkles {
         }
 
 
-        private void RemoteTimerElapsedDelegate (object sender, EventArgs args)
+        void RemoteTimerElapsedDelegate (object sender, EventArgs args)
         {
             if (this.is_syncing || IsBuffering || Status == SyncStatus.Paused)
                 return;
@@ -239,7 +238,7 @@ namespace Sparkles {
         }
 
 
-        private Object buffer_lock = new Object ();
+        Object buffer_lock = new Object ();
 
         public void OnFileActivity (FileSystemEventArgs args)
         {
@@ -355,7 +354,7 @@ namespace Sparkles {
         }
 
 
-        private void SyncUpBase ()
+        void SyncUpBase ()
         {
             if (!UseCustomWatcher)
                 this.watcher.Disable ();
@@ -411,7 +410,7 @@ namespace Sparkles {
         }
 
 
-        private void SyncDownBase ()
+        void SyncDownBase ()
         {
             if (!UseCustomWatcher)
                 this.watcher.Disable ();
@@ -484,7 +483,7 @@ namespace Sparkles {
         }
 
 
-        private void CreateListener ()
+        void CreateListener ()
         {
             this.listener = ListenerFactory.CreateListener (Name, Identifier);
 
@@ -500,7 +499,7 @@ namespace Sparkles {
         }
 
         
-        private void ListenerConnectedDelegate ()
+        void ListenerConnectedDelegate ()
         {
             if (this.last_disconnect_reason == DisconnectReason.SystemSleep) {
                 this.last_disconnect_reason = DisconnectReason.None;
@@ -513,7 +512,7 @@ namespace Sparkles {
         }
 
 
-        private void ListenerDisconnectedDelegate (DisconnectReason reason)
+        void ListenerDisconnectedDelegate (DisconnectReason reason)
         {
             Logger.LogInfo (Name, "Falling back to regular polling");
             this.poll_interval = PollInterval.Short;
@@ -538,7 +537,7 @@ namespace Sparkles {
         }
 
 
-        private void ListenerAnnouncementReceivedDelegate (Announcement announcement)
+        void ListenerAnnouncementReceivedDelegate (Announcement announcement)
         {
             string identifier = Identifier;
 
@@ -560,7 +559,7 @@ namespace Sparkles {
 
 
         // Recursively gets a folder's size in bytes
-        private long CalculateSize (DirectoryInfo parent)
+        long CalculateSize (DirectoryInfo parent)
         {
             if (ExcludePaths.Contains (parent.Name))
                 return 0;

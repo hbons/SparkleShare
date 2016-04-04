@@ -27,33 +27,34 @@ namespace Sparkles.Git {
 
     public class GitRepository : BaseRepository {
 
-        private bool user_is_set;
-        private bool is_encrypted;
+        SSHAuthenticationInfo auth_info;
+        bool user_is_set;
+        bool is_encrypted;
 
-        private string cached_branch;
+        string cached_branch;
 
-        private Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
-        private Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
+        Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
+        Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
         
-        private Regex log_regex = new Regex (@"commit ([a-f0-9]{40})*\n" +
+        Regex log_regex = new Regex (@"commit ([a-f0-9]{40})*\n" +
                                              "Author: (.+) <(.+)>\n" +
                                              "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
                                              "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
                                              "*", RegexOptions.Compiled);
 
-        private Regex merge_regex = new Regex (@"commit ([a-f0-9]{40})\n" +
+        Regex merge_regex = new Regex (@"commit ([a-f0-9]{40})\n" +
                                                "Merge: [a-f0-9]{7} [a-f0-9]{7}\n" +
                                                "Author: (.+) <(.+)>\n" +
                                                "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
                                                "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
                                                "*", RegexOptions.Compiled);
 
-        private string branch {
+        string branch {
             get {
                 if (!string.IsNullOrEmpty (this.cached_branch)) 
                     return this.cached_branch;
 
-                GitCommand git = new GitCommand (LocalPath, "config core.ignorecase true");
+                var git = new GitCommand (LocalPath, "config core.ignorecase true");
                 git.StartAndWaitForExit ();
 
                 while (this.in_merge && HasLocalChanges) {
@@ -76,7 +77,7 @@ namespace Sparkles.Git {
         }
 
 
-        private bool in_merge {
+        bool in_merge {
             get {
                 string merge_file_path = Path.Combine (LocalPath, ".git", "MERGE_HEAD");
                 return File.Exists (merge_file_path);
@@ -84,9 +85,11 @@ namespace Sparkles.Git {
         }
 
 
-        public GitRepository (string path, Configuration config) : base (path, config)
+        public GitRepository (string path, Configuration config, SSHAuthenticationInfo auth_info) : base (path, config)
         {
-            GitCommand git = new GitCommand (LocalPath, "config core.ignorecase false");
+            this.auth_info = auth_info;
+
+            var git = new GitCommand (LocalPath, "config core.ignorecase false");
             git.StartAndWaitForExit ();
 
             git = new GitCommand (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
@@ -139,7 +142,7 @@ namespace Sparkles.Git {
         }
 
 
-        private void UpdateSizes ()
+        void UpdateSizes ()
         {
             double size         = CalculateSizes (new DirectoryInfo (LocalPath));
             double history_size = CalculateSizes (new DirectoryInfo (Path.Combine (LocalPath, ".git")));
@@ -154,13 +157,13 @@ namespace Sparkles.Git {
 
         public override string CurrentRevision {
             get {
-                GitCommand git = new GitCommand (LocalPath, "rev-parse HEAD");
+                var git = new GitCommand (LocalPath, "rev-parse HEAD");
                 string output  = git.StartAndReadStandardOutput ();
 
                 if (git.ExitCode == 0)
                     return output;
-                else
-                    return null;
+
+                return null;
             }
         }
 
@@ -170,7 +173,9 @@ namespace Sparkles.Git {
                 Logger.LogInfo ("Git", Name + " | Checking for remote changes...");
                 string current_revision = CurrentRevision;
 
-                GitCommand git = new GitCommand (LocalPath, "ls-remote --heads --exit-code \"" + RemoteUrl + "\" " + this.branch);
+                var git = new GitCommand (LocalPath,
+                    "ls-remote --heads --exit-code \"" + RemoteUrl + "\" " + this.branch, auth_info);
+
                 string output  = git.StartAndReadStandardOutput ();
 
                 if (git.ExitCode != 0)
@@ -216,7 +221,7 @@ namespace Sparkles.Git {
             if (message != null)
                 Commit (message);
 
-            GitCommand git = new GitCommand (LocalPath, "push --progress \"" + RemoteUrl + "\" " + this.branch);
+            var git = new GitCommand (LocalPath, "push --progress \"" + RemoteUrl + "\" " + this.branch, auth_info);
             git.StartInfo.RedirectStandardError = true;
             git.Start ();
 
@@ -287,7 +292,7 @@ namespace Sparkles.Git {
 
         public override bool SyncDown ()
         {
-            GitCommand git = new GitCommand (LocalPath, "fetch --progress \"" + RemoteUrl + "\" " + this.branch);
+            var git = new GitCommand (LocalPath, "fetch --progress \"" + RemoteUrl + "\" " + this.branch, auth_info);
 
             git.StartInfo.RedirectStandardError = true;
             git.Start ();
@@ -367,7 +372,7 @@ namespace Sparkles.Git {
             get {
                 PrepareDirectories (LocalPath);
 
-                GitCommand git = new GitCommand (LocalPath, "status --porcelain");
+                var git = new GitCommand (LocalPath, "status --porcelain");
                 string output  = git.StartAndReadStandardOutput ();
 
                 return !string.IsNullOrEmpty (output);
@@ -393,9 +398,9 @@ namespace Sparkles.Git {
 
 
         // Stages the made changes
-        private bool Add ()
+        bool Add ()
         {
-            GitCommand git = new GitCommand (LocalPath, "add --all");
+            var git = new GitCommand (LocalPath, "add --all");
             git.StartAndWaitForExit ();
 
             return (git.ExitCode == 0);
@@ -403,7 +408,7 @@ namespace Sparkles.Git {
 
 
         // Commits the made changes
-        private void Commit (string message)
+        void Commit (string message)
         {
             GitCommand git;
 
@@ -425,7 +430,7 @@ namespace Sparkles.Git {
 
 
         // Merges the fetched changes
-        private bool Merge ()
+        bool Merge ()
         {
             string message = FormatCommitMessage ();
             
@@ -493,7 +498,7 @@ namespace Sparkles.Git {
         }
 
 
-        private void ResolveConflict ()
+        void ResolveConflict ()
         {
             // This is a list of conflict status codes that Git uses, their
             // meaning, and how SparkleShare should handle them.
@@ -507,7 +512,7 @@ namespace Sparkles.Git {
             // UU    unmerged, both modified   -> Use server's, save ours as a timestamped copy
             // ??    unmerged, new files       -> Stage the new files
 
-            GitCommand git_status = new GitCommand (LocalPath, "status --porcelain");
+            var git_status = new GitCommand (LocalPath, "status --porcelain");
             string output         = git_status.StartAndReadStandardOutput ();
 
             string [] lines = output.Split ("\n".ToCharArray ());
@@ -534,7 +539,7 @@ namespace Sparkles.Git {
                     Logger.LogInfo ("Git", Name + " | Ignoring conflict in special file: " + conflicting_path);
 
                     // Recover local version
-                    GitCommand git_ours = new GitCommand (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
+                    var git_ours = new GitCommand (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
                     git_ours.StartAndWaitForExit ();
 
                     string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
@@ -552,7 +557,7 @@ namespace Sparkles.Git {
                     line.StartsWith ("AU") || line.StartsWith ("UA")) {
 
                     // Recover local version
-                    GitCommand git_ours = new GitCommand (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
+                    var git_ours = new GitCommand (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
                     git_ours.StartAndWaitForExit ();
 
                     // Append a timestamp to local version.
@@ -569,7 +574,7 @@ namespace Sparkles.Git {
                         File.Move (abs_conflicting_path, abs_our_path);
 
                     // Recover server version
-                    GitCommand git_theirs = new GitCommand (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
+                    var git_theirs = new GitCommand (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
                     git_theirs.StartAndWaitForExit ();
 
                     trigger_conflict_event = true;
@@ -580,7 +585,7 @@ namespace Sparkles.Git {
 
                     // The modified local version is already in the checkout, so it just needs to be added.
                     // We need to specifically mention the file, so we can't reuse the Add () method
-                    GitCommand git_add = new GitCommand (LocalPath, "add \"" + conflicting_path + "\"");
+                    var git_add = new GitCommand (LocalPath, "add \"" + conflicting_path + "\"");
                     git_add.StartAndWaitForExit ();
 
                 
@@ -588,7 +593,7 @@ namespace Sparkles.Git {
                 } else if (line.StartsWith ("UD")) {
                     
                     // Recover server version
-                    GitCommand git_theirs = new GitCommand (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
+                    var git_theirs = new GitCommand (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
                     git_theirs.StartAndWaitForExit ();
 
             
@@ -607,7 +612,7 @@ namespace Sparkles.Git {
 
             Add ();
 
-            GitCommand git = new GitCommand (LocalPath, "commit --message \"Conflict resolution by SparkleShare\"");
+            var git = new GitCommand (LocalPath, "commit --message \"Conflict resolution by SparkleShare\"");
             git.StartInfo.RedirectStandardOutput = false;
             git.StartAndWaitForExit ();
 
@@ -630,7 +635,7 @@ namespace Sparkles.Git {
             // files from the index. This is a suboptimal workaround but it does the job
             if (this.is_encrypted) {
                 // Restore the older file...
-                GitCommand git = new GitCommand (LocalPath, "checkout " + revision + " \"" + path + "\"");
+                var git = new GitCommand (LocalPath, "checkout " + revision + " \"" + path + "\"");
                 git.StartAndWaitForExit ();
 
                 string local_file_path = Path.Combine (LocalPath, path);
@@ -652,7 +657,7 @@ namespace Sparkles.Git {
             } else {
                 path = path.Replace ("\"", "\\\"");
 
-                GitCommand git = new GitCommand (LocalPath, "show " + revision + ":\"" + path + "\"");
+                var git = new GitCommand (LocalPath, "show " + revision + ":\"" + path + "\"");
                 git.Start ();
 
                 FileStream stream = File.OpenWrite (target_file_path);    
@@ -667,7 +672,7 @@ namespace Sparkles.Git {
         }
 
 
-        private bool FindError (string line)
+        bool FindError (string line)
         {
             Error = ErrorStatus.None;
 
@@ -722,9 +727,9 @@ namespace Sparkles.Git {
             return GetChangeSetsInternal (path);
         }   
 
-        private List<ChangeSet> GetChangeSetsInternal (string path)
+        List<ChangeSet> GetChangeSetsInternal (string path)
         {
-            List <ChangeSet> change_sets = new List <ChangeSet> ();
+            var change_sets = new List <ChangeSet> ();
             GitCommand git;
 
             if (path == null) {
@@ -939,7 +944,7 @@ namespace Sparkles.Git {
         }
 
 
-        private string EnsureSpecialCharacters (string path)
+        string EnsureSpecialCharacters (string path)
         {
             // The path is quoted if it contains special characters
             if (path.StartsWith ("\""))
@@ -949,7 +954,7 @@ namespace Sparkles.Git {
         }
 
 
-        private string ResolveSpecialChars (string s)
+        string ResolveSpecialChars (string s)
         {
             StringBuilder builder = new StringBuilder (s.Length);
             List<byte> codes      = new List<byte> ();
@@ -982,7 +987,7 @@ namespace Sparkles.Git {
         //
         // It also prevents git repositories from becoming
         // git submodules by renaming the .git/HEAD file
-        private void PrepareDirectories (string path)
+        void PrepareDirectories (string path)
         {
             try {
                 foreach (string child_path in Directory.GetDirectories (path)) {
@@ -1028,11 +1033,11 @@ namespace Sparkles.Git {
 
 
 
-        private List<Change> ParseStatus ()
+        List<Change> ParseStatus ()
         {
             List<Change> changes = new List<Change> ();
 
-            GitCommand git_status = new GitCommand (LocalPath, "status --porcelain");
+            var git_status = new GitCommand (LocalPath, "status --porcelain");
             git_status.Start ();
             
             while (!git_status.StandardOutput.EndOfStream) {
@@ -1078,7 +1083,7 @@ namespace Sparkles.Git {
 
 
         // Creates a pretty commit message based on what has changed
-        private string FormatCommitMessage ()
+        string FormatCommitMessage ()
         {
             string message = "";
 
@@ -1088,14 +1093,16 @@ namespace Sparkles.Git {
                     message +=  "> ‘" + EnsureSpecialCharacters (change.MovedToPath) + "’\n";
 
                 } else {
-                    if (change.Type == ChangeType.Edited) {
+                    switch (change.Type) {
+                    case ChangeType.Edited:
                         message += "/";
-
-                    } else if (change.Type == ChangeType.Deleted) {
+                        break;
+                    case ChangeType.Deleted:
                         message += "-";
-
-                    } else if (change.Type == ChangeType.Added) {
+                        break;
+                    case ChangeType.Added:
                         message += "+";
+                        break;
                     }
 
                     message += " ‘" + change.Path + "’\n";
