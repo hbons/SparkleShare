@@ -25,6 +25,7 @@ namespace Sparkles.Git {
 
     public class GitFetcher : SSHFetcher {
 
+        SSHAuthenticationInfo auth_info;
         GitCommand git;
 
         Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
@@ -43,8 +44,10 @@ namespace Sparkles.Git {
         }
 
 
-        public GitFetcher (SparkleFetcherInfo info) : base (info)
+        public GitFetcher (SparkleFetcherInfo fetcher_info, SSHAuthenticationInfo auth_info) : base (fetcher_info)
         {
+            this.auth_info = auth_info;
+
             if (RemoteUrl.ToString ().StartsWith ("ssh+"))
                 RemoteUrl = new Uri ("ssh" + RemoteUrl.ToString ().Substring (RemoteUrl.ToString ().IndexOf ("://")));
 
@@ -92,11 +95,11 @@ namespace Sparkles.Git {
 
             if (FetchPriorHistory) {
                 this.git = new GitCommand (Configuration.DefaultConfig.TmpPath,
-                    "clone --progress --no-checkout \"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
+                    "clone --progress --no-checkout \"" + RemoteUrl + "\" \"" + TargetFolder + "\"", auth_info);
 
             } else {
                 this.git = new GitCommand (Configuration.DefaultConfig.TmpPath,
-                    "clone --progress --no-checkout --depth=1 \"" + RemoteUrl + "\" \"" + TargetFolder + "\"");
+                    "clone --progress --no-checkout --depth=1 \"" + RemoteUrl + "\" \"" + TargetFolder + "\"", auth_info);
             }
 
             this.git.StartInfo.RedirectStandardError = true;

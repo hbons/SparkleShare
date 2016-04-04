@@ -156,9 +156,7 @@ namespace Sparkles {
                     Logger.LogInfo ("Fetcher", "Finished");
 
                     IsActive = false;
-
-                    bool repo_is_encrypted = (RemoteUrl.AbsolutePath.Contains ("-crypto") ||
-                                              RemoteUrl.Host.Equals ("sparkleshare.net"));
+                    bool repo_is_encrypted = RemoteUrl.AbsolutePath.Contains ("-crypto");
 
                     Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);
 
