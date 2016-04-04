@@ -35,38 +35,38 @@ namespace SparkleShare {
 
     public class ProjectInfo {
 
-        private BaseRepository repo;
+        readonly BaseRepository repo;
 
-        public string Name { get { return this.repo.Name; }}
-        public string Path { get { return this.repo.LocalPath; }}
+        public string Name { get { return repo.Name; }}
+        public string Path { get { return repo.LocalPath; }}
 
-        public bool IsPaused { get { return this.repo.Status == SyncStatus.Paused; }}
-        public bool HasError { get { return this.repo.Status == SyncStatus.Error; }}
+        public bool IsPaused { get { return repo.Status == SyncStatus.Paused; }}
+        public bool HasError { get { return repo.Status == SyncStatus.Error; }}
 
 
         public string StatusMessage {
             get {
                 string status_message = "Waiting to sync";
                 
-                if (!this.repo.LastSync.Equals (DateTime.MinValue))
-                    status_message = string.Format ("✓ Synced {0}", this.repo.LastSync.ToPrettyDate ());
+                if (!repo.LastSync.Equals (DateTime.MinValue))
+                    status_message = string.Format ("✓ Synced {0}", repo.LastSync.ToPrettyDate ());
 
-                if (this.repo.Status == SyncStatus.SyncUp)
-                    status_message = "Sending changes… " + this.repo.ProgressPercentage + "%";
+                if (repo.Status == SyncStatus.SyncUp)
+                    status_message = "Sending changes… " + repo.ProgressPercentage + "%";
             
-                if (this.repo.Status == SyncStatus.SyncDown)
-                    status_message = "Receiving changes… " + this.repo.ProgressPercentage + "%";
+                if (repo.Status == SyncStatus.SyncDown)
+                    status_message = "Receiving changes… " + repo.ProgressPercentage + "%";
 
-                if (this.repo.Status == SyncStatus.SyncUp || this.repo.Status == SyncStatus.SyncDown) {
-                    if (this.repo.ProgressSpeed > 0)
-                        status_message += " " + this.repo.ProgressSpeed.ToSize () + "/s";
+                if (repo.Status == SyncStatus.SyncUp || repo.Status == SyncStatus.SyncDown) {
+                    if (repo.ProgressSpeed > 0)
+                        status_message += " " + repo.ProgressSpeed.ToSize () + "/s";
                 }
 
-                if (IsPaused) {
+                if (IsPaused)
                     return "Paused";
 
-                } else if (HasError) {
-                    switch (this.repo.Error) {
+                if (HasError) {
+                    switch (repo.Error) {
                     case ErrorStatus.HostUnreachable: return "Can’t reach the host";
                     case ErrorStatus.HostIdentityChanged: return "The host’s identity has changed";
                     case ErrorStatus.AuthenticationFailed: return "Authentication failed";
@@ -86,7 +86,7 @@ namespace SparkleShare {
 
         public Dictionary<string, string> UnsyncedChangesInfo {
             get { 
-                Dictionary<string, string> changes_info = new Dictionary<string, string> ();
+                var changes_info = new Dictionary<string, string> ();
             
                 int changes_count = 0;
                 foreach (Change change in repo.UnsyncedChanges) {
@@ -148,14 +148,14 @@ namespace SparkleShare {
             get {
                 string progress_speed = "";
 
-                if (SparkleShare.Controller.ProgressSpeedDown == 0 && SparkleShare.Controller.ProgressSpeedUp > 0) {
+                if (SparkleShare.Controller.ProgressSpeedDown == 0.0 && SparkleShare.Controller.ProgressSpeedUp > 0.0) {
                     progress_speed = SparkleShare.Controller.ProgressSpeedUp.ToSize () + "/s ";
 
-                } else if (SparkleShare.Controller.ProgressSpeedUp == 0 && SparkleShare.Controller.ProgressSpeedDown > 0) {
+                } else if (SparkleShare.Controller.ProgressSpeedUp == 0.0 && SparkleShare.Controller.ProgressSpeedDown > 0.0) {
                     progress_speed = SparkleShare.Controller.ProgressSpeedDown.ToSize () + "/s ";
                         
-                } else if (SparkleShare.Controller.ProgressSpeedUp   > 0 &&
-                           SparkleShare.Controller.ProgressSpeedDown > 0) {
+                } else if (SparkleShare.Controller.ProgressSpeedUp   > 0.0 &&
+                           SparkleShare.Controller.ProgressSpeedDown > 0.0) {
 
                     progress_speed = "Up: " + SparkleShare.Controller.ProgressSpeedUp.ToSize () + "/s " +
                         "Down: " + SparkleShare.Controller.ProgressSpeedDown.ToSize () + "/s";
@@ -204,7 +204,6 @@ namespace SparkleShare {
             SparkleShare.Controller.OnIdle += delegate {
                 if (CurrentState != IconState.Error) {
                     CurrentState = IconState.Idle;
-
                     UpdateStateText ();
                 }
 
@@ -217,31 +216,31 @@ namespace SparkleShare {
             };
 
             SparkleShare.Controller.OnSyncing += delegate {
-				int repos_syncing_up   = 0;
-				int repos_syncing_down = 0;
-				
-				foreach (BaseRepository repo in SparkleShare.Controller.Repositories) {
-					if (repo.Status == SyncStatus.SyncUp)
-						repos_syncing_up++;
-					
-					if (repo.Status == SyncStatus.SyncDown)
-						repos_syncing_down++;
-				}
-				
-				if (repos_syncing_up > 0 &&
-				    repos_syncing_down > 0) {
-					
-					CurrentState = IconState.Syncing;
-                    StateText    = "Syncing changes…";
-				
-				} else if (repos_syncing_down == 0) {
-					CurrentState = IconState.SyncingUp;
-                    StateText    = "Sending changes…";
-					
-				} else {
-					CurrentState = IconState.SyncingDown;
-                    StateText    = "Receiving changes…";
-				}
+                int repos_syncing_up = 0;
+                int repos_syncing_down = 0;
+
+                foreach (BaseRepository repo in SparkleShare.Controller.Repositories) {
+                    if (repo.Status == SyncStatus.SyncUp)
+                        repos_syncing_up++;
+
+                    if (repo.Status == SyncStatus.SyncDown)
+                        repos_syncing_down++;
+                }
+
+                if (repos_syncing_up > 0 &&
+                    repos_syncing_down > 0) {
+
+                    CurrentState = IconState.Syncing;
+                    StateText    = "Syncing…";
+
+                } else if (repos_syncing_down == 0) {
+                    CurrentState = IconState.SyncingUp;
+                    StateText    = "Sending…";
+
+                } else {
+                    CurrentState = IconState.SyncingDown;
+                    StateText    = "Receiving…";
+                }
 
                 if (ProgressPercentage > 0)
                     StateText += " " + ProgressPercentage + "%  " + ProgressSpeed;
@@ -253,7 +252,7 @@ namespace SparkleShare {
 
             SparkleShare.Controller.OnError += delegate {
                 CurrentState = IconState.Error;
-                StateText    = "Some changes weren’t synced";
+                StateText = "Not everything synced";
 
                 UpdateFolders ();
                 
@@ -266,7 +265,7 @@ namespace SparkleShare {
 
             // FIXME: Work around a race condition causing
             // the icon to not always show the right state
-            Timers.Timer timer = new Timers.Timer () { Interval = 30 * 1000 };
+            var timer = new Timers.Timer { Interval = 30 * 1000 };
 
             timer.Elapsed += delegate {
                 UpdateIconEvent (CurrentState);
@@ -282,7 +281,7 @@ namespace SparkleShare {
             if (Projects.Length == 0)
                 return StateText = "Welcome to SparkleShare!";
             else
-                return StateText = "✓ Projects up to date " + GetPausedCount ();
+                return StateText = "✓ Synced " + GetPausedCount ();
         }
 
 
@@ -391,18 +390,18 @@ namespace SparkleShare {
         }
 
 
-        private Object projects_lock = new Object ();
+        readonly object projects_lock = new object ();
 
-        private void UpdateFolders ()
+        void UpdateFolders ()
         {
-            lock (this.projects_lock) {
-                List<ProjectInfo> projects = new List<ProjectInfo> ();
+            var projects = new List<ProjectInfo> ();
 
+            lock (projects_lock) {
                 foreach (BaseRepository repo in SparkleShare.Controller.Repositories)
                     projects.Add (new ProjectInfo (repo));
-            
-                Projects = projects.ToArray ();
             }
+
+            Projects = projects.ToArray ();
         }
     }
 }
