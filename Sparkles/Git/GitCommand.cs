@@ -13,6 +13,7 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
+using System;
 
 
 namespace Sparkles.Git {
@@ -20,8 +21,23 @@ namespace Sparkles.Git {
     public class GitCommand : Command {
 
         public static string SSHPath;
-        public static string GitPath;
         public static string ExecPath;
+
+
+        static string git_path;
+
+        public static string GitPath {
+            get {
+                if (git_path == null)
+                    git_path = LocateCommand ("git");
+
+                return git_path;
+            }
+
+            set {
+                git_path = value;
+            }
+        }
 
 
         public static string GitVersion {
@@ -35,27 +51,32 @@ namespace Sparkles.Git {
         }
 
 
-        public GitCommand (string path, string args) : base (path, args)
+        public GitCommand (string working_dir, string args) : this (working_dir, args, null)
         {
-            if (GitPath == null)
-                GitPath = LocateCommand ("git");
+        }
 
-            StartInfo.FileName = GitPath;
-            StartInfo.WorkingDirectory = path;
+
+        public GitCommand (string working_dir, string args, SSHAuthenticationInfo auth_info) : base (GitPath, args)
+        {
+            StartInfo.WorkingDirectory = working_dir;
 
             if (string.IsNullOrEmpty (SSHPath))
                 SSHPath = "ssh";
 
-            string GIT_SSH_COMMAND = SSHPath + " " +
-                "-i \"" + SSHAuthenticationInfo.DefaultAuthenticationInfo.PrivateKeyFilePath + "\" " +
-                "-o UserKnownHostsFile=\"" + SSHAuthenticationInfo.DefaultAuthenticationInfo.KnownHostsFilePath + "\" " +
-                "-o PasswordAuthentication=no " +
-                "-F /dev/null"; // Ignore the environment's SSH config file
+            string GIT_SSH_COMMAND = SSHPath;
+
+            if (auth_info != null) {
+                GIT_SSH_COMMAND = SSHPath + " " +
+                    "-i \"" + auth_info.PrivateKeyFilePath + "\" " +
+                    "-o UserKnownHostsFile=\"" + auth_info.KnownHostsFilePath + "\" " +
+                    "-o PasswordAuthentication=no " +
+                    "-F /dev/null"; // Ignore the environment's SSH config file
+            }
 
             if (ExecPath == null)
                 SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
 
-            SetEnvironmentVariable ("GIT_SSH_COMMAND", GIT_SSH_COMMAND);
+			SetEnvironmentVariable ("GIT_SSH_COMMAND", GIT_SSH_COMMAND);
             SetEnvironmentVariable ("GIT_TERMINAL_PROMPT", "0");
 			SetEnvironmentVariable ("LANG", "en_US");
         }
