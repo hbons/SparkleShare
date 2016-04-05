@@ -47,44 +47,20 @@ namespace Sparkles.Git {
         public GitFetcher (SparkleFetcherInfo fetcher_info, SSHAuthenticationInfo auth_info) : base (fetcher_info)
         {
             this.auth_info = auth_info;
+            var uri_builder = new UriBuilder (RemoteUrl);
 
-            if (RemoteUrl.ToString ().StartsWith ("ssh+"))
-                RemoteUrl = new Uri ("ssh" + RemoteUrl.ToString ().Substring (RemoteUrl.ToString ().IndexOf ("://")));
+            if (!RemoteUrl.Scheme.Equals ("ssh") && !RemoteUrl.Scheme.Equals ("git"))
+                uri_builder.Scheme = "ssh";
 
-            Uri uri = RemoteUrl;
+            if (RemoteUrl.Host.Equals ("github.com")) {
+                uri_builder.Scheme   = "ssh";
+                uri_builder.UserName = "git";
 
-            if (!uri.Scheme.Equals ("ssh") && !uri.Scheme.Equals ("https") &&
-                !uri.Scheme.Equals ("http") && !uri.Scheme.Equals ("git")) {
-
-                uri = new Uri ("ssh://" + uri);
+            } else if (string.IsNullOrEmpty (RemoteUrl.UserInfo)) {
+                uri_builder.UserName = "storage";
             }
 
-            if (uri.Host.Equals ("gitorious.org") && !uri.Scheme.StartsWith ("http")) {
-                if (!uri.AbsolutePath.Equals ("/") &&
-                    !uri.AbsolutePath.EndsWith (".git")) {
-
-                    uri = new Uri ("ssh://git@gitorious.org" + uri.AbsolutePath + ".git");
-
-                } else {
-                    uri = new Uri ("ssh://git@gitorious.org" + uri.AbsolutePath);
-                }
-
-            } else if (uri.Host.Equals ("github.com") && !uri.Scheme.StartsWith ("http")) {
-                uri = new Uri ("ssh://git@github.com" + uri.AbsolutePath);
-
-            } else if (uri.Host.Equals ("bitbucket.org") && !uri.Scheme.StartsWith ("http")) {
-                // Nothing really
-
-            } else {
-                if (string.IsNullOrEmpty (uri.UserInfo) && !uri.Scheme.StartsWith ("http")) {
-                    if (uri.Port == -1)
-                        uri = new Uri (uri.Scheme + "://storage@" + uri.Host + uri.AbsolutePath);
-                    else
-                        uri = new Uri (uri.Scheme + "://storage@" + uri.Host + ":" + uri.Port + uri.AbsolutePath);
-                }
-            }
-
-            RemoteUrl = uri;
+            RemoteUrl = uri_builder.Uri;
         }
 
 
