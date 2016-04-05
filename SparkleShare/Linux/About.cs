@@ -20,14 +20,14 @@ using Gtk;
 
 namespace SparkleShare {
 
-    public class SparkleAbout : Window {
+    public class About : Window {
 
         public AboutController Controller = new AboutController ();
 
-        private Label updates;
+        Label updates;
 
 
-        public SparkleAbout () : base ("About SparkleShare")
+        public About () : base ("About SparkleShare")
         {
             SetWmclass ("SparkleShare", "SparkleShare");
 
@@ -65,8 +65,8 @@ namespace SparkleShare {
 
             Controller.UpdateLabelEvent += delegate (string text) {
                 Application.Invoke (delegate {
-                    this.updates.Text = text;
-                    this.updates.ShowAll();
+                    updates.Text = text;
+                    updates.ShowAll();
                 });
             };
 
@@ -75,10 +75,10 @@ namespace SparkleShare {
         }
 
 
-        private void CreateAbout ()
+        void CreateAbout ()
         {
             CssProvider window_css_provider = new CssProvider ();
-            Image image = UserInterfaceHelpers.GetImage("about.png");
+            Image image = UserInterfaceHelpers.GetImage ("about.png");
 
             window_css_provider.LoadFromData ("GtkWindow {" +
                 "background-image: url('" + image.File + "');" +
@@ -88,8 +88,8 @@ namespace SparkleShare {
 
             StyleContext.AddProvider (window_css_provider, 800);
 
-            VBox layout_vertical = new VBox (false, 0);            
-            HBox links_layout = new HBox (false, 16);
+            var layout_vertical = new VBox (false, 0);
+            var links_layout = new HBox (false, 16);
 
             CssProvider label_css_provider = new CssProvider ();
             label_css_provider.LoadFromData ("GtkLabel { color: #fff; font-size: 10px; background-color: rgba(0, 0, 0, 0); }");
@@ -97,47 +97,46 @@ namespace SparkleShare {
             CssProvider label_highlight_css_provider = new CssProvider ();
             label_highlight_css_provider.LoadFromData ("GtkLabel { color: #a8bbcf; font-size: 10px; }");
 
-            Label version = new Label () {
-                Text   = "version " + Controller.RunningVersion,
-                Xalign = 0, Xpad   = 0
+            var version = new Label {
+                Text = "version " + Controller.RunningVersion,
+                Xalign = 0, Xpad = 0
             };
 
             version.StyleContext.AddProvider (label_css_provider, 800);
 
-            this.updates = new Label ("Checking for updates…") {
+            updates = new Label ("Checking for updates…") {
                 Xalign = 0, Xpad = 0
             };
 
-            this.updates.StyleContext.AddProvider (label_highlight_css_provider, 800);
+            updates.StyleContext.AddProvider (label_highlight_css_provider, 800);
 
-            Label copyright = new Label () {
+            var copyright = new Label {
                 Markup = string.Format ("Copyright © 2010–{0} Hylke Bons and others.", DateTime.Now.Year),
-                Xalign = 0, Xpad   = 0
+                Xalign = 0, Xpad = 0
             };
 
             copyright.StyleContext.AddProvider (label_css_provider, 800);
 
+            var license = new TextView {
+                Sensitive = false,
+                WrapMode = WrapMode.Word
+            };
 
-            TextView license          = new TextView ();
             TextBuffer license_buffer = license.Buffer;
-            license.WrapMode          = WrapMode.Word;
-            license.Sensitive         = false;
 
             license_buffer.Text = "SparkleShare is Open Source and you’re free to use, change, " +
                 "and share it under the GNU GPLv3.";
 
             version.StyleContext.AddProvider (label_css_provider, 800);
 
-            
-            SparkleLink website_link        = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
-            SparkleLink credits_link        = new SparkleLink ("Credits", Controller.CreditsLinkAddress);
-            SparkleLink report_problem_link = new SparkleLink ("Report a problem", Controller.ReportProblemLinkAddress);
-            SparkleLink debug_log_link      = new SparkleLink ("Debug log", Controller.DebugLogLinkAddress);
-
+            var website_link        = new Link ("Website", Controller.WebsiteLinkAddress);
+            var credits_link        = new Link ("Credits", Controller.CreditsLinkAddress);
+            var report_problem_link = new Link ("Report a problem", Controller.ReportProblemLinkAddress);
+            var debug_log_link      = new Link ("Debug log", Controller.DebugLogLinkAddress);
 
             layout_vertical.PackStart (new Label (""), true, true, 0);            
             layout_vertical.PackStart (version, false, false, 0);
-            layout_vertical.PackStart (this.updates, false, false, 0);
+            layout_vertical.PackStart (updates, false, false, 0);
             layout_vertical.PackStart (copyright, false, false, 6);
             layout_vertical.PackStart (license, false, false, 6);
             layout_vertical.PackStart (links_layout, false, false, 16);
@@ -147,7 +146,7 @@ namespace SparkleShare {
             links_layout.PackStart (report_problem_link, false, false, 0);
             links_layout.PackStart (debug_log_link, false, false, 0);
             
-            HBox layout_horizontal = new HBox (false, 0);
+            var layout_horizontal = new HBox (false, 0);
             layout_horizontal.PackStart (new Label (""), false, false, 149);
             layout_horizontal.PackStart (layout_vertical, false, false, 0);
 
@@ -156,11 +155,11 @@ namespace SparkleShare {
     }
     
     
-    public class SparkleLink : Label {
+    class Link : Label {
         
-        public SparkleLink (string text, string url)
+        public Link (string label, string url)
         {
-            Markup = string.Format ("<a href=\"{0}\">{1}</a>", url, text);	
+            Markup   = string.Format ("<a href=\"{0}\">{1}</a>", url, label);	
             CanFocus = false;
 
             CssProvider css_provider = new CssProvider ();
