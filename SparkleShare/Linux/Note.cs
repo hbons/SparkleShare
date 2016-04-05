@@ -71,7 +71,7 @@ namespace SparkleShare {
 
         private void CreateNote ()
         {
-            Image user_image = new Image (Controller.AvatarFilePath);
+            var user_image = new Image (Controller.AvatarFilePath);
 
             /* TODO: Style the entry neatly, multiple lines, and add placeholder text
             string balloon_image_path = new string [] { UserInterface.AssetsPath, "pixmaps", "text-balloon.png" }.Combine ();
@@ -87,31 +87,31 @@ namespace SparkleShare {
             balloon.StyleContext.AddProvider (balloon_css_provider, 800);
             */
 
-            Label balloon_label = new Label ("<b>Anything to add?</b>") {
+            var balloon_label = new Label ("<b>Anything to add?</b>") {
                 Xalign = 0,
                 UseMarkup = true
             };
 
-            Entry balloon = new Entry () { MaxLength = 144 };
+            var balloon = new Entry { MaxLength = 144 };
 
 
-            Button cancel_button = new Button ("Cancel");
-            Button sync_button   = new Button ("Sync"); // TODO: Make default button
+            var cancel_button = new Button ("Cancel");
+            var sync_button   = new Button ("Sync"); // TODO: Make default button
 			sync_button.CanDefault = true;
 
             cancel_button.Clicked += delegate { Controller.CancelClicked (); };
             sync_button.Clicked   += delegate { Controller.SyncClicked (balloon.Buffer.Text); };
 
 
-            VBox layout_vertical   = new VBox (false, 16);
-            HBox layout_horizontal = new HBox (false, 16);
+            var layout_vertical   = new VBox (false, 16);
+            var layout_horizontal = new HBox (false, 16);
 
-            HBox buttons           = new HBox () {
+            var buttons = new HBox {
                 Homogeneous = false,
                 Spacing     = 6
             };
 
-            Label user_label = new Label () {
+            var user_label = new Label {
                 Markup = "<b>" + SparkleShare.Controller.CurrentUser.Name + "</b>\n" +
                          "<span fgcolor=\"" + SparkleShare.UI.SecondaryTextColor + "\">" + SparkleShare.Controller.CurrentUser.Email +
                          "</span>"
