@@ -30,7 +30,7 @@ namespace SparkleShare {
         public EventLog EventLog;
         public Bubbles Bubbles;
         public Setup Setup;
-        public SparkleAbout About;
+        public About About;
         public Note Note;
 
         public readonly string SecondaryTextColor;
@@ -49,9 +49,11 @@ namespace SparkleShare {
             Gdk.Color color = UserInterfaceHelpers.RGBAToColor (new Label().StyleContext.GetColor (StateFlags.Insensitive));
             SecondaryTextColor = UserInterfaceHelpers.ColorToHex (color);
 
+            var tree_view = new TreeView ();
+
             color = UserInterfaceHelpers.MixColors (
-                UserInterfaceHelpers.RGBAToColor (new TreeView ().StyleContext.GetColor (StateFlags.Selected)),
-                UserInterfaceHelpers.RGBAToColor (new TreeView ().StyleContext.GetBackgroundColor (StateFlags.Selected)),
+                UserInterfaceHelpers.RGBAToColor (tree_view.StyleContext.GetColor (StateFlags.Selected)),
+                UserInterfaceHelpers.RGBAToColor (tree_view.StyleContext.GetBackgroundColor (StateFlags.Selected)),
                 0.39);
     
             SecondaryTextColorSelected = UserInterfaceHelpers.ColorToHex (color);
@@ -79,20 +81,21 @@ namespace SparkleShare {
                 if (!has_visible_windows)
                     SparkleShare.Controller.HandleReopen ();
 
-            } else {
-                Setup      = new Setup ();
-                EventLog   = new EventLog ();
-                About      = new SparkleAbout ();
-                Bubbles    = new Bubbles ();
-                StatusIcon = new StatusIcon ();
-                Note       = new Note ();
-
-                Setup.Application    = application;
-                EventLog.Application = application;
-                About.Application    = application;
-
-                SparkleShare.Controller.UIHasLoaded ();
+                return;
             }
+
+            Setup      = new Setup ();
+            EventLog   = new EventLog ();
+            About      = new About ();
+            Bubbles    = new Bubbles ();
+            StatusIcon = new StatusIcon ();
+            Note       = new Note ();
+
+            Setup.Application    = application;
+            EventLog.Application = application;
+            About.Application    = application;
+
+            SparkleShare.Controller.UIHasLoaded ();
         }
     }
 }

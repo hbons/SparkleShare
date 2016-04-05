@@ -40,7 +40,7 @@ namespace SparkleShare {
             if (!SparkleShare.Controller.NotificationsEnabled)
                 return;
 
-			Application.Invoke (delegate {
+            Application.Invoke (() => {
 				Notification notification = new Notification () {
 					Summary = title,
 					Body    = subtext,
