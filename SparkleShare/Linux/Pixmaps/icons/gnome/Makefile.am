@@ -1,7 +1,7 @@
 gnome_theme = gnome
 gnome_themedir = /usr/share/icons/$(gnome_theme)
 
-gnome_theme_icons = apps,sparkleshare-symbolic.svg
+gnome_theme_icons = apps,org.sparkleshare.SparkleShare-symbolic.svg
 
 install_icon_exec = $(top_srcdir)/build/icon-theme-installer \
 	-t "$(gnome_theme)" \
