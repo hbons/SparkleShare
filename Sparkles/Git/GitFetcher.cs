@@ -26,7 +26,7 @@ namespace Sparkles.Git {
     public class GitFetcher : SSHFetcher {
 
         SSHAuthenticationInfo auth_info;
-        GitCommand git;
+        GitCommand git_clone;
 
         Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
         Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
@@ -36,10 +36,10 @@ namespace Sparkles.Git {
 
         public override bool IsFetchedRepoEmpty {
             get {
-                GitCommand git = new GitCommand (TargetFolder, "rev-parse HEAD");
-                git.StartAndWaitForExit ();
+                var git_rev_parse = new GitCommand (TargetFolder, "rev-parse HEAD");
+                git_rev_parse.StartAndWaitForExit ();
 
-                return (git.ExitCode != 0);
+                return (git_rev_parse.ExitCode != 0);
             }
         }
 
@@ -70,26 +70,26 @@ namespace Sparkles.Git {
                 return false;
 
             if (FetchPriorHistory) {
-                this.git = new GitCommand (Configuration.DefaultConfig.TmpPath,
+                git_clone = new GitCommand (Configuration.DefaultConfig.TmpPath,
                     "clone --progress --no-checkout \"" + RemoteUrl + "\" \"" + TargetFolder + "\"", auth_info);
 
             } else {
-                this.git = new GitCommand (Configuration.DefaultConfig.TmpPath,
+                git_clone = new GitCommand (Configuration.DefaultConfig.TmpPath,
                     "clone --progress --no-checkout --depth=1 \"" + RemoteUrl + "\" \"" + TargetFolder + "\"", auth_info);
             }
 
-            this.git.StartInfo.RedirectStandardError = true;
-            this.git.Start ();
+            git_clone.StartInfo.RedirectStandardError = true;
+            git_clone.Start ();
 
             double percentage = 1.0;
 
-            DateTime last_change     = DateTime.Now;
-            TimeSpan change_interval = new TimeSpan (0, 0, 0, 1);
+            var last_change = DateTime.Now;
+            var change_interval = new TimeSpan (0, 0, 0, 1);
 
             try {
-                while (!this.git.StandardError.EndOfStream) {
-                    string line = this.git.StandardError.ReadLine ();
-                    Match match = this.progress_regex.Match (line);
+                while (!git_clone.StandardError.EndOfStream) {
+                    string line = git_clone.StandardError.ReadLine ();
+                    Match match = progress_regex.Match (line);
 
                     double number = 0.0;
                     double speed  = 0.0;
@@ -111,7 +111,7 @@ namespace Sparkles.Git {
                         } else {
                             // "Writing objects" stage
                             number = (number / 100 * 80 + 20);
-                            Match speed_match = this.speed_regex.Match (line);
+                            Match speed_match = speed_regex.Match (line);
 
                             if (speed_match.Success) {
                                 try {
@@ -133,13 +133,13 @@ namespace Sparkles.Git {
                         if (line.StartsWith ("fatal:", StringComparison.InvariantCultureIgnoreCase) ||
                             line.StartsWith ("error:", StringComparison.InvariantCultureIgnoreCase)) {
 
-                            base.errors.Add (line);
+                            errors.Add (line);
 
                         } else if (line.StartsWith ("WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!")) {
-                            base.errors.Add ("warning: Remote host identification has changed!");
+                            errors.Add ("warning: Remote host identification has changed!");
 
                         } else if (line.StartsWith ("WARNING: POSSIBLE DNS SPOOFING DETECTED!")) {
-                            base.errors.Add ("warning: Possible DNS spoofing detected!");
+                            errors.Add ("warning: Possible DNS spoofing detected!");
                         }
                     }
 
@@ -147,7 +147,7 @@ namespace Sparkles.Git {
                         percentage = number;
 
                         if (DateTime.Compare (last_change, DateTime.Now.Subtract (change_interval)) < 0) {
-                            base.OnProgressChanged (percentage, speed);
+                            OnProgressChanged (percentage, speed);
                             last_change = DateTime.Now;
                         }
                     }
@@ -158,39 +158,38 @@ namespace Sparkles.Git {
                 return false;
             }
 
-            this.git.WaitForExit ();
+            git_clone.WaitForExit ();
 
-            if (this.git.ExitCode == 0) {
-                while (percentage < 100) {
-                    percentage += 25;
-
-                    if (percentage >= 100)
-                        break;
-
-                    Thread.Sleep (500);
-                    base.OnProgressChanged (percentage, 0);
-                }
-
-                base.OnProgressChanged (100, 0);
-
-                InstallConfiguration ();
-                InstallExcludeRules ();
-                InstallAttributeRules ();
-
-                return true;
-
-            } else {
+            if (git_clone.ExitCode != 0)
                 return false;
+
+            while (percentage < 100) {
+                percentage += 25;
+
+                if (percentage >= 100)
+                    break;
+
+                Thread.Sleep (500);
+                OnProgressChanged (percentage, 0);
             }
+
+            OnProgressChanged (100, 0);
+
+            InstallConfiguration ();
+            InstallExcludeRules ();
+            InstallAttributeRules ();
+            InstallGitLFS ();
+
+            return true;
         }
 
 
         public override void Stop ()
         {
             try {
-                if (this.git != null && !this.git.HasExited) {
-                    this.git.Kill ();
-                    this.git.Dispose ();
+                if (git_clone != null && !git_clone.HasExited) {
+                    git_clone.Kill ();
+                    git_clone.Dispose ();
                 }
 
             } catch (Exception e) {
@@ -252,13 +251,68 @@ namespace Sparkles.Git {
                 settings [0] = "core.autocrlf true";
 
             foreach (string setting in settings) {
-                GitCommand git_config = new GitCommand (TargetFolder, "config " + setting);
+                var git_config = new GitCommand (TargetFolder, "config " + setting);
                 git_config.StartAndWaitForExit ();
             }
         }
 
 
-        // Add a .gitignore file to the repo
+        public override void EnableFetchedRepoCrypto (string password)
+        {
+            var git_config_smudge = new GitCommand (TargetFolder,
+                "config filter.encryption.smudge \"openssl enc -d -aes-256-cbc -base64" + " " +
+                "-S " + password.SHA256 (password_salt).Substring (0, 16) + " " +
+                "-pass file:.git/info/encryption_password\"");
+
+            var git_config_clean = new GitCommand (TargetFolder,
+                "config filter.encryption.clean  \"openssl enc -e -aes-256-cbc -base64" + " " +
+                "-S " + password.SHA256 (password_salt).Substring (0, 16) + " " +
+                "-pass file:.git/info/encryption_password\"");
+
+            git_config_smudge.StartAndWaitForExit ();
+            git_config_clean.StartAndWaitForExit ();
+
+            // Pass all files through the encryption filter
+            string git_attributes_file_path = Path.Combine (TargetFolder, ".git", "info", "attributes");
+            File.WriteAllText (git_attributes_file_path, "* filter=encryption");
+
+            // Store the password
+            string password_file_path = Path.Combine (TargetFolder, ".git", "info", "encryption_password");
+            File.WriteAllText (password_file_path, password.SHA256 (password_salt));
+        }
+
+
+        public override bool IsFetchedRepoPasswordCorrect (string password)
+        {
+            string password_check_file_path = Path.Combine (TargetFolder, ".sparkleshare");
+
+            if (!File.Exists (password_check_file_path)) {
+                var git_show = new GitCommand (TargetFolder, "show HEAD:.sparkleshare");
+                string output = git_show.StartAndReadStandardOutput ();
+
+                if (git_show.ExitCode == 0)
+                    File.WriteAllText (password_check_file_path, output);
+                else
+                    return false;
+            }
+
+            string args = "enc -d -aes-256-cbc -base64 -salt -pass pass:" + password.SHA256 (password_salt) + " " + 
+                "-in \"" + password_check_file_path + "\"";
+
+            var process = new Command ("openssl", args);
+            process.StartInfo.WorkingDirectory = TargetFolder;
+
+            process.StartAndWaitForExit ();
+
+            if (process.ExitCode == 0) {
+                File.Delete (password_check_file_path);
+                return true;
+            }
+
+            return false;
+        }
+
+
         void InstallExcludeRules ()
         {
             string git_info_path = Path.Combine (TargetFolder, ".git", "info");
@@ -266,7 +320,7 @@ namespace Sparkles.Git {
             if (!Directory.Exists (git_info_path))
                 Directory.CreateDirectory (git_info_path);
 
-            string exclude_rules           = string.Join (Environment.NewLine, ExcludeRules);
+            string exclude_rules = string.Join (Environment.NewLine, ExcludeRules);
             string exclude_rules_file_path = Path.Combine (git_info_path, "exclude");
 
             File.WriteAllText (exclude_rules_file_path, exclude_rules);
@@ -276,10 +330,10 @@ namespace Sparkles.Git {
         void InstallAttributeRules ()
         {
             string attribute_rules_file_path = Path.Combine (TargetFolder, ".git", "info", "attributes");
-            TextWriter writer                = new StreamWriter (attribute_rules_file_path);
+            TextWriter writer = new StreamWriter (attribute_rules_file_path);
 
-            // Compile a list of files we don't want Git to compress.
-            // Not compressing already compressed files decreases memory usage and increases speed
+            // Compile a list of files we don't want Git to compress. Not compressing
+            // already compressed files decreases memory usage and increases speed
             string [] extensions = {
                 "jpg", "jpeg", "png", "tiff", "gif", // Images
                 "flac", "mp3", "ogg", "oga", // Audio
@@ -298,60 +352,17 @@ namespace Sparkles.Git {
         }
 
 
-        public override void EnableFetchedRepoCrypto (string password)
+        void InstallGitLFS ()
         {
-            // Set up the encryption filter
-            GitCommand git_config_smudge = new GitCommand (TargetFolder,
-                "config filter.encryption.smudge \"openssl enc -d -aes-256-cbc -base64" + " " +
-                "-S " + password.SHA256 (this.password_salt).Substring (0, 16) + " " +
-                "-pass file:.git/info/encryption_password\"");
-
-            GitCommand git_config_clean = new GitCommand (TargetFolder,
-                "config filter.encryption.clean  \"openssl enc -e -aes-256-cbc -base64" + " " +
-                "-S " + password.SHA256 (this.password_salt).Substring (0, 16) + " " +
-                "-pass file:.git/info/encryption_password\"");
-
-            git_config_smudge.StartAndWaitForExit ();
-            git_config_clean.StartAndWaitForExit ();
-
-            // Pass all files through the encryption filter
-            string git_attributes_file_path = Path.Combine (TargetFolder, ".git", "info", "attributes");
-            File.WriteAllText (git_attributes_file_path, "* filter=encryption");
-
-            // Store the password
-            string password_file_path = Path.Combine (TargetFolder, ".git", "info", "encryption_password");
-            File.WriteAllText (password_file_path, password.SHA256 (this.password_salt));
+            var git_lfs = new GitCommand (TargetFolder, "lfs install --local");
+            git_lfs.StartAndWaitForExit ();
         }
 
 
-        public override bool IsFetchedRepoPasswordCorrect (string password)
+        void EnableGitLFS ()
         {
-            string password_check_file_path = Path.Combine (TargetFolder, ".sparkleshare");
-
-            if (!File.Exists (password_check_file_path)) {
-                GitCommand git = new GitCommand (TargetFolder, "show HEAD:.sparkleshare");
-                string output = git.StartAndReadStandardOutput ();
-
-                if (git.ExitCode == 0)
-                    File.WriteAllText (password_check_file_path, output);
-                else
-                    return false;
-            }
-
-            string args = "enc -d -aes-256-cbc -base64 -salt -pass pass:" + password.SHA256 (this.password_salt) + " " + 
-                "-in \"" + password_check_file_path + "\"";
-
-            var process = new Command ("openssl", args);
-            process.StartInfo.WorkingDirectory = TargetFolder;
-
-            process.StartAndWaitForExit ();
-
-            if (process.ExitCode == 0) {
-                File.Delete (password_check_file_path);
-                return true;
-            }
-
-            return false;
+            string git_attributes_file_path = Path.Combine (TargetFolder, ".gitattributes");
+            File.WriteAllText (git_attributes_file_path, "* filter=lfs diff=lfs merge=lfs -text");
         }
     }
 }
