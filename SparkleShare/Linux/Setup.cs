@@ -314,7 +314,7 @@ namespace SparkleShare {
                 add_button.Clicked += delegate { Controller.AddPageCompleted (address_entry.Text, path_entry.Text); };
 
 
-                CheckButton check_button = new CheckButton ("Fetch prior revisions") { Active = true };
+                CheckButton check_button = new CheckButton ("Fetch prior revisions") { Active = false };
                 check_button.Toggled += delegate { Controller.HistoryItemChanged (check_button.Active); };
 
                 AddOption (check_button);
