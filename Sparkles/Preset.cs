@@ -81,7 +81,7 @@ namespace Sparkles {
             if (IO.File.Exists (preset_path))
                 return null;
 
-            // TODO: Don't write maually
+            // TODO: Don't write manually
             string preset_xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<sparkleshare>" +
                 "  <preset>" +

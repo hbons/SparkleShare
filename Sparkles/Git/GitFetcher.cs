@@ -52,9 +52,14 @@ namespace Sparkles.Git {
             if (!RemoteUrl.Scheme.Equals ("ssh") && !RemoteUrl.Scheme.Equals ("git"))
                 uri_builder.Scheme = "ssh";
 
-            if (RemoteUrl.Host.Equals ("github.com")) {
+            if (RemoteUrl.Host.Equals ("github.com") ||
+                RemoteUrl.Host.Equals ("gitlab.com")) {
+
                 uri_builder.Scheme   = "ssh";
                 uri_builder.UserName = "git";
+
+                if (!RemoteUrl.AbsolutePath.EndsWith (".git"))
+                    uri_builder.Path += ".git";
 
             } else if (string.IsNullOrEmpty (RemoteUrl.UserInfo)) {
                 uri_builder.UserName = "storage";
@@ -273,6 +278,7 @@ namespace Sparkles.Git {
             git_config_clean.StartAndWaitForExit ();
 
             // Pass all files through the encryption filter
+            // TODO: diff=encryption merge=encryption -text?
             string git_attributes_file_path = Path.Combine (TargetFolder, ".git", "info", "attributes");
             File.WriteAllText (git_attributes_file_path, "* filter=encryption");
 
