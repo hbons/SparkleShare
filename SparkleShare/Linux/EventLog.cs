@@ -65,7 +65,7 @@ namespace SparkleShare {
             layout_sizes.PackStart (this.history_label, false, false, 0);
 
             VBox layout_vertical = new VBox (false, 0);
-         //   this.spinner         = new Spinner ();
+            this.spinner         = new Spinner ();
             this.spinner_wrapper = new VBox ();
             this.content_wrapper = new EventBox ();
             this.scrolled_window = new ScrolledWindow ();

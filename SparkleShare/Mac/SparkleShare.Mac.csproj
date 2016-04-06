@@ -152,13 +152,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
-    <Folder Include="HTML\" />
-    <Folder Include="Presets\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="UserInterface\" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="..\Common\Pixmaps\side-splash.png">
       <Link>Resources\side-splash.png</Link>
     </BundleResource>
