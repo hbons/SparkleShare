@@ -41,34 +41,29 @@ namespace SparkleShare {
             TypeHint       = Gdk.WindowTypeHint.Dialog;
 
 
-            SetSizeRequest (680, 400);
+            SetSizeRequest (400, 400);
 
             DeleteEvent += delegate (object sender, DeleteEventArgs args) { args.RetVal = true; };
 
-            HBox layout_horizontal = new HBox (false, 0);
 
-                VBox layout_vertical = new VBox (false, 0);
+                VBox layout_vertical = new VBox (false, 16);
+            layout_vertical.BorderWidth = 16;
 
                     this.content_area    = new EventBox ();
                     this.option_area = new EventBox ();
 
                     this.buttons = CreateButtonBox ();
 
-                HBox layout_actions = new HBox (false , 48);
+                HBox layout_actions = new HBox (false , 16);
 
                 layout_actions.PackStart (this.option_area, true, true, 0);
                 layout_actions.PackStart (this.buttons, false, false, 0);
 
                 layout_vertical.PackStart (this.content_area, true, true, 0);
-                layout_vertical.PackStart (layout_actions, false, false, 15);
+                layout_vertical.PackStart (layout_actions, false, false, 0);
 
-                Image side_splash = UserInterfaceHelpers.GetImage ("side-splash.png");
-                side_splash.Yalign = 1;
 
-            layout_horizontal.PackStart (side_splash, false, false, 0);
-            layout_horizontal.PackStart (layout_vertical, true, true, 30);
-
-            base.Add (layout_horizontal);
+            base.Add (layout_vertical);
         }
 
 
@@ -97,14 +92,9 @@ namespace SparkleShare {
 
         new public void Add (Widget widget)
         {
-            Label header = new Label ("<span size='large'><b>" + Header + "</b></span>") {
-                UseMarkup = true,
-                Xalign = 0,
-            };
+            Title = Header;
 
             VBox layout_vertical = new VBox (false, 0);
-            layout_vertical.PackStart (new Label (""), false, false, 6);
-            layout_vertical.PackStart (header, false, false, 0);
 
             if (!string.IsNullOrEmpty (Description)) {
                 Label description = new Label (Description) {
@@ -113,7 +103,7 @@ namespace SparkleShare {
                     LineWrapMode = Pango.WrapMode.WordChar
                 };
                 
-                layout_vertical.PackStart (description, false, false, 21);
+                layout_vertical.PackStart (description, false, false, 0);
             }
 
             if (widget != null)
@@ -146,6 +136,7 @@ namespace SparkleShare {
             
                 default_button.CanDefault = true;
                 Default = default_button;
+                default_button.StyleContext.AddClass ("suggested-action");
             }
 
             Present ();

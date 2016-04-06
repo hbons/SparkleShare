@@ -123,12 +123,12 @@ for icon in $@; do
 	install_name=$(basename $install_name)
 
 	if test -z $size; then 
-		size=scalable;
+		size=symbolic
 		
 		if [[ "${INSTALL_BASE_DIR}" == *ubuntu-mono-* ]]; then
 			install_dir=${INSTALL_DEST_DIR}${INSTALL_BASE_DIR}/$category/$size
-	    else
-    		install_dir=${INSTALL_DEST_DIR}${INSTALL_BASE_DIR}/$size/$category
+		else
+			install_dir=${INSTALL_DEST_DIR}${INSTALL_BASE_DIR}/$size/$category
     	fi
 	else
 		if [[ "${INSTALL_BASE_DIR}" == *ubuntu-mono-* ]]; then
