@@ -343,7 +343,7 @@ namespace SparkleShare {
                 foreach (string folder_path in Directory.GetDirectories (group_path)) {
                     string folder_name = Path.GetFileName (folder_path);
 
-                    if (Config.GetIdentifierForFolder (folder_name) != null)
+                    if (Config.IdentifierByName (folder_name) != null)
                         continue;
 
                     string identifier_file_path = Path.Combine (folder_path, ".sparkleshare");
@@ -391,7 +391,7 @@ namespace SparkleShare {
         {
             BaseRepository repo = null;
             string folder_name  = Path.GetFileName (folder_path);
-            string backend      = Config.GetBackendForFolder (folder_name);
+            string backend      = Config.BackendByName (folder_name);
             
             try {
                 repo = (BaseRepository) Activator.CreateInstance (

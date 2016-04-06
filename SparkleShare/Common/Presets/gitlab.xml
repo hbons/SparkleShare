@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <preset>
+    <info>
+        <name>GitLab.com</name>
+        <description>Open Source GitHub alternative</description>
+        <icon>gitlab.png</icon>
+        <backend>Git</backend>
+        <fingerprint>b6:03:0e:39:97:9e:d0:e7:24:ce:a3:77:3e:01:42:09</fingerprint>
+    </info>
+    <address>
+      <value>ssh://git@gitlab.com/</value>
+      <example/>
+    </address>
+    <path>
+      <value/>
+      <example>/username/project</example>
+    </path>
+  </preset>
+</sparkleshare>
+

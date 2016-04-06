@@ -263,6 +263,15 @@
     <BundleResource Include="Resources\sparkleshare-folder-yosemite.icns">
       <Link>Resources\sparkleshare-folder-yosemite.icns</Link>
     </BundleResource>
+    <BundleResource Include="..\Common\Presets\gitlab.png">
+      <Link>Presets\gitlab.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\gitlab%402x.png">
+      <Link>Presets\gitlab%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\gitlab.xml">
+      <Link>Presets\gitlab.xml</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Sparkles\Sparkles.csproj">
