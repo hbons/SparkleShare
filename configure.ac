@@ -105,6 +105,7 @@ SHAMROCK_CHECK_NUNIT
 SHAVE_INIT([build/m4/shave], [enable])
 
 AC_OUTPUT([
+Makefile
 build/Makefile
 build/m4/Makefile
 build/m4/shave/shave
@@ -112,6 +113,7 @@ build/m4/shave/shave-libtool
 Sparkles/InstallationInfo.Directory.cs
 Sparkles/Makefile
 Sparkles/Git/Makefile
+SparkleShare/Makefile
 SparkleShare/Common/Makefile
 SparkleShare/Common/HTML/Makefile
 SparkleShare/Common/Presets/Makefile
@@ -119,12 +121,10 @@ SparkleShare/Common/Pixmaps/Makefile
 SparkleShare/Linux/Makefile
 SparkleShare/Linux/Pixmaps/Makefile
 SparkleShare/Linux/Pixmaps/icons/Makefile
-SparkleShare/Linux/Pixmaps/icons/gnome/Makefile
+SparkleShare/Linux/Pixmaps/icons/hicolor/Makefile
 SparkleShare/Linux/Pixmaps/icons/ubuntu-mono-dark/Makefile
 SparkleShare/Linux/Pixmaps/icons/ubuntu-mono-light/Makefile
 SparkleShare/Linux/sparkleshare
-SparkleShare/Makefile
-Makefile
 ])
 
 echo "

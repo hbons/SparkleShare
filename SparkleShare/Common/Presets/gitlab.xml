@@ -2,7 +2,7 @@
 <sparkleshare>
   <preset>
     <info>
-        <name>GitLab.com</name>
+        <name>GitLab</name>
         <description>Open Source GitHub alternative</description>
         <icon>gitlab.png</icon>
         <backend>Git</backend>
