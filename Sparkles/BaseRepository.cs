@@ -112,7 +112,7 @@ namespace Sparkles {
                     return this.identifier;
 
                 } else {
-                    string config_identifier = this.local_config.GetIdentifierForFolder (Name);
+                    string config_identifier = this.local_config.IdentifierByName (Name);
 
                     if (!string.IsNullOrEmpty (config_identifier))
                         this.identifier = config_identifier;
@@ -160,7 +160,7 @@ namespace Sparkles {
             this.local_config = config;
             LocalPath         = path;
             Name              = Path.GetFileName (LocalPath);
-            RemoteUrl         = new Uri (this.local_config.GetUrlForFolder (Name));
+            RemoteUrl         = new Uri (this.local_config.UrlByName (Name));
             IsBuffering       = false;
             this.identifier   = Identifier;
             ChangeSets        = GetChangeSets ();

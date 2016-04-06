@@ -36,8 +36,8 @@ namespace Sparkles {
             get {
                 if (InstallationInfo.Platform == PlatformID.Win32NT)
                     return Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
-                else
-                    return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+
+                return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
             }
         }
 
@@ -46,8 +46,8 @@ namespace Sparkles {
             get {
                 if (GetConfigOption ("folders_path") != null)                      
                     return GetConfigOption ("folders_path");
-                else
-                    return Path.Combine (HomePath, "SparkleShare");
+                
+                return Path.Combine (HomePath, "SparkleShare");
             }
         }
 
@@ -79,7 +79,7 @@ namespace Sparkles {
                 Directory.CreateDirectory (config_path);
 
             try {
-              Load (FullPath);
+                Load (FullPath);
 
             } catch (TypeInitializationException) {
                 CreateInitialConfig ();
@@ -88,7 +88,7 @@ namespace Sparkles {
                 CreateInitialConfig ();
 
             } catch (XmlException) {
-                FileInfo file = new FileInfo (FullPath);
+                var file = new FileInfo (FullPath);
 
                 if (file.Length == 0) {
                     File.Delete (FullPath);
@@ -106,21 +106,17 @@ namespace Sparkles {
         }
 
 
-        private void CreateInitialConfig ()
+        void CreateInitialConfig ()
         {
-            string user_name = "Unknown";
+            string user_name = Environment.UserName;
 
             if (InstallationInfo.Platform == PlatformID.Unix ||
                 InstallationInfo.Platform == PlatformID.MacOSX) {
 
-                user_name = Environment.UserName;
                 if (string.IsNullOrEmpty (user_name))
                     user_name = "Unknown";
                 else
-                    user_name = user_name.TrimEnd (",".ToCharArray ());
-
-            } else {
-                user_name = Environment.UserName;
+                    user_name = user_name.TrimEnd (',');
             }
 
             // TODO: Don't do this manually
@@ -139,23 +135,15 @@ namespace Sparkles {
 
         public User User {
             get {
-                XmlNode name_node  = SelectSingleNode ("/sparkleshare/user/name/text()");
-                XmlNode email_node = SelectSingleNode ("/sparkleshare/user/email/text()");
-
-                string name  = name_node.Value;
-                string email = email_node.Value;
+                string name  = SelectSingleNode ("/sparkleshare/user/name/text()").Value;
+                string email = SelectSingleNode ("/sparkleshare/user/email/text()").Value;
 
                 return new User (name, email);
             }
 
             set {
-                User user = (User) value;
-
-                XmlNode name_node  = SelectSingleNode ("/sparkleshare/user/name/text()");
-                XmlNode email_node = SelectSingleNode ("/sparkleshare/user/email/text()");
-
-                name_node.InnerText  = user.Name;
-                email_node.InnerText = user.Email;
+                SelectSingleNode ("/sparkleshare/user/name/text()").InnerText  = value.Name;
+                SelectSingleNode ("/sparkleshare/user/email/text()").InnerText = value.Email;
 
                 Save ();
             }
@@ -164,13 +152,12 @@ namespace Sparkles {
 
         public List<string> Folders {
             get {
-                List<string> folders = new List<string> ();
+                var folders = new List<string> ();
 
                 foreach (XmlNode node_folder in SelectNodes ("/sparkleshare/folder"))
                     folders.Add (node_folder ["name"].InnerText);
 
                 folders.Sort ();
-
                 return folders;
             }
         }
@@ -213,31 +200,31 @@ namespace Sparkles {
         }
 
 
-        public void RenameFolder (string identifier, string name)
+        public void RenameFolder (string identifier, string new_name)
         {
             XmlNode node_folder = SelectSingleNode (
                 string.Format ("/sparkleshare/folder[identifier=\"{0}\"]", identifier));
 
-            node_folder ["name"].InnerText = name;
+            node_folder ["name"].InnerText = new_name;
             Save ();
         }
 
 
-        public string GetBackendForFolder (string name)
+        public string BackendByName (string name)
         {
-            return GetFolderValue (name, "backend");
+            return FolderValueByKey (name, "backend");
         }
 
 
-        public string GetIdentifierForFolder (string name)
+        public string IdentifierByName (string name)
         {
-            return GetFolderValue (name, "identifier");
+            return FolderValueByKey (name, "identifier");
         }
 
 
-        public string GetUrlForFolder (string name)
+        public string UrlByName (string name)
         {
-            return GetFolderValue (name, "url");
+            return FolderValueByKey (name, "url");
         }
 
 
@@ -259,7 +246,7 @@ namespace Sparkles {
 
         public bool SetFolderOptionalAttribute (string folder_name, string key, string value)
         {
-            XmlNode folder = GetFolder (folder_name);
+            XmlNode folder = FolderByName (folder_name);
 
             if (folder == null)
                 return false;
@@ -281,7 +268,7 @@ namespace Sparkles {
 
         public string GetFolderOptionalAttribute (string folder_name, string key)
         {
-            XmlNode folder = GetFolder (folder_name);
+            XmlNode folder = FolderByName (folder_name);
 
             if (folder != null) {
                 if (folder [key] != null)
@@ -326,24 +313,24 @@ namespace Sparkles {
         }
 
 
-        private XmlNode GetFolder (string name)
+        XmlNode FolderByName (string name)
         {
             return SelectSingleNode (string.Format ("/sparkleshare/folder[name=\"{0}\"]", name));
         }
         
         
-        private string GetFolderValue (string name, string key)
+        string FolderValueByKey (string name, string key)
         {
-            XmlNode folder = GetFolder(name);
+            XmlNode folder = FolderByName(name);
             
             if ((folder != null) && (folder [key] != null))
                 return folder [key].InnerText;
-            else
-                return null;
+            
+            return null;
         }
 
 
-        private void Save ()
+        void Save ()
         {
             if (!File.Exists (FullPath))
                 throw new FileNotFoundException (FullPath + " does not exist");

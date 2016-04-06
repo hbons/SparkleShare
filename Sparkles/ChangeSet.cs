@@ -83,7 +83,7 @@ namespace Sparkles {
                     return Path.Combine (custom_path, Name);
 
                 return Path.Combine (Configuration.DefaultConfig.FoldersPath,
-                                     new Uri (Configuration.DefaultConfig.GetUrlForFolder (Name)).Host,
+                                     new Uri (Configuration.DefaultConfig.UrlByName (Name)).Host,
                                      Name);
             }
         }
