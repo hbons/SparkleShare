@@ -63,7 +63,7 @@ namespace SparkleShare {
                     ColumnSpacing = 6
                 };
 
-                Label name_label = new Label ("<b>" + "Full Name:" + "</b>") {
+                Label name_label = new Label ("<b>" + "Your Name:" + "</b>") {
                     UseMarkup = true,
                     Xalign    = 1
                 };
@@ -254,7 +254,6 @@ namespace SparkleShare {
                 layout_fields.PackStart (layout_address, true, true, 0);
                 layout_fields.PackStart (layout_path, true, true, 0);
 
-                layout_vertical.PackStart (new Label (""), false, false, 0);
                 layout_vertical.PackStart (scrolled_window, true, true, 0);
                 layout_vertical.PackStart (layout_fields, false, false, 0);
 
