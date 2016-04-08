@@ -18,6 +18,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 
 namespace Sparkles {
 
@@ -37,10 +38,12 @@ namespace Sparkles {
 
             StartInfo.FileName = path;
             StartInfo.Arguments = args;
-            StartInfo.UseShellExecute = false;
+
+			StartInfo.CreateNoWindow = true;
             StartInfo.RedirectStandardOutput = true;
             StartInfo.RedirectStandardError = true;
-            StartInfo.CreateNoWindow = true;
+			StartInfo.UseShellExecute = false;
+
             EnableRaisingEvents = true;
         }
 
