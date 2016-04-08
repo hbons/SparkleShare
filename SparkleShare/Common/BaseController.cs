@@ -195,9 +195,12 @@ namespace SparkleShare {
         
         public BaseController ()
         {
-            
             string app_data_path = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
-            string config_path   = Path.Combine (app_data_path, "sparkleshare");
+
+            if (InstallationInfo.Platform == PlatformID.Unix)
+                app_data_path = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".config");
+
+            string config_path = Path.Combine (app_data_path, "org.sparkleshare.SparkleShare");
             
             Config = new Configuration (config_path, "config.xml");
             Configuration.DefaultConfig = Config;
@@ -390,8 +393,8 @@ namespace SparkleShare {
         void AddRepository (string folder_path)
         {
             BaseRepository repo = null;
-            string folder_name  = Path.GetFileName (folder_path);
-            string backend      = Config.BackendByName (folder_name);
+            string folder_name = Path.GetFileName (folder_path);
+            string backend = Config.BackendByName (folder_name);
             
             try {
                 repo = (BaseRepository) Activator.CreateInstance (
