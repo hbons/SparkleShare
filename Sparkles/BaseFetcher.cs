@@ -17,9 +17,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Security.Cryptography;
 using System.Threading;
 
 namespace Sparkles {
@@ -58,7 +56,7 @@ namespace Sparkles {
 
         public Uri RemoteUrl { get; protected set; }
         public string RequiredFingerprint { get; protected set; }
-        public readonly bool FetchPriorHistory = false;
+        public readonly bool FetchPriorHistory;
         public string TargetFolder { get; protected set; }
         public bool IsActive { get; protected set; }
         public string Identifier;
@@ -66,13 +64,13 @@ namespace Sparkles {
 
         public string [] Warnings {
             get {
-                return this.warnings.ToArray ();
+                return warnings.ToArray ();
             }
         }
 
         public string [] Errors {
             get {
-                return this.errors.ToArray ();
+                return errors.ToArray ();
             }
         }
 
@@ -106,10 +104,10 @@ namespace Sparkles {
         };
 
 
-        private Thread thread;
+        Thread thread;
 
 
-        public BaseFetcher (SparkleFetcherInfo info)
+        protected BaseFetcher (SparkleFetcherInfo info)
         {
             OriginalFetcherInfo = info;
             RequiredFingerprint = info.Fingerprint;
@@ -117,10 +115,10 @@ namespace Sparkles {
             string remote_path  = info.RemotePath.Trim ("/".ToCharArray ());
             string address      = info.Address;
 
-            if (address.EndsWith ("/"))
+            if (address.EndsWith ("/", StringComparison.InvariantCulture))
                 address = address.Substring (0, address.Length - 1);
 
-            if (!remote_path.StartsWith ("/"))
+            if (!remote_path.StartsWith ("/", StringComparison.InvariantCulture))
                 remote_path = "/" + remote_path;
 
             if (!address.Contains ("://"))
@@ -145,12 +143,13 @@ namespace Sparkles {
                     Directory.Delete (TargetFolder, true);
             
             } catch (IOException) {
-                this.errors.Add ("\"" + TargetFolder + "\" is read-only.");
+                errors.Add ("\"" + TargetFolder + "\" is read-only.");
                 Failed ();
+
                 return;
             }
 
-            this.thread = new Thread (() => {
+            thread = new Thread (() => {
                 if (Fetch ()) {
                     Thread.Sleep (500);
                     Logger.LogInfo ("Fetcher", "Finished");
@@ -175,7 +174,7 @@ namespace Sparkles {
                 }
             });
 
-            this.thread.Start ();
+            thread.Start ();
         }
 
 
@@ -200,14 +199,15 @@ namespace Sparkles {
 
         // Create an initial change set when the
         // user has fetched an empty remote folder
-        private void CreateInitialChangeSet ()
+        void CreateInitialChangeSet ()
         {
+			string n = Environment.NewLine;
             string file_path = Path.Combine (TargetFolder, "SparkleShare.txt");
-            string n = Environment.NewLine;
 
-            UriBuilder uri_builder = new UriBuilder (RemoteUrl);
+            var uri_builder = new UriBuilder (RemoteUrl);
 
-            if (RemoteUrl.Scheme.Contains ("http")) {
+            // Don't expose possible username or password
+            if (RemoteUrl.Scheme.StartsWith ("http", StringComparison.InvariantCultureIgnoreCase)) {
                 uri_builder.UserName = "";
                 uri_builder.Password = "";
             }
@@ -215,7 +215,7 @@ namespace Sparkles {
             string text = "Congratulations, you've successfully created a SparkleShare repository!" + n +
                 n +
                 "Any files you add or change in this folder will be automatically synced to " + n +
-                uri_builder.ToString () + " and everyone connected to it." + n +
+                uri_builder.Uri + " and everyone connected to it." + n +
                 n +
                 "SparkleShare is an Open Source software program that helps people collaborate and " + n +
                 "share files. If you like what we do, consider buying us a beer: http://www.sparkleshare.org/" + n +
@@ -231,14 +231,14 @@ namespace Sparkles {
 
         public static string CreateIdentifier ()
         {
-            return Path.GetRandomFileName ().SHA1 ();
+            return Path.GetRandomFileName ().SHA256 ();
         }
 
 
         public void Dispose ()
         {
-            if (this.thread != null)
-                this.thread.Abort ();
+            if (thread != null)
+                thread.Abort ();
         }
 
 
@@ -249,15 +249,14 @@ namespace Sparkles {
 
         public static string GetBackend (string address)
         {
-            if (address.StartsWith ("ssh+")) {
-				string backend = address.Substring (0, address.IndexOf ("://"));
-				backend        = backend.Substring (4);
+            if (address.StartsWith ("ssh+", StringComparison.InvariantCultureIgnoreCase)) {
+                string backend = address.Substring (0, address.IndexOf ("://", StringComparison.InvariantCulture));
+                backend = backend.Substring (4);
 
                 return char.ToUpper (backend [0]) + backend.Substring (1);
-
-            } else {
-                return "Git";
             }
+
+            return "Git";
         }
     }
 }

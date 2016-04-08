@@ -40,7 +40,7 @@ namespace SparkleShare {
 
             if (SparkleShare.Controller.AvatarsEnabled && !SparkleShare.Controller.FirstRun)
                 AvatarFilePath = Avatars.GetAvatar (SparkleShare.Controller.CurrentUser.Email,
-                    48, SparkleShare.Controller.Config.FullPath);
+                    48, SparkleShare.Controller.Config.DirectoryPath);
         }
 
 

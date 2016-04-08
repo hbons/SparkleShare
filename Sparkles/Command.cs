@@ -95,6 +95,8 @@ namespace Sparkles {
             string output = StandardError.ReadToEnd ();
             WaitForExit ();
 
+            StartInfo.RedirectStandardError = false;
+
             return output.TrimEnd ();
         }
 
