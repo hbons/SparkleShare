@@ -64,6 +64,9 @@ namespace SparkleShare {
 			if (!Directory.Exists (autostart_path))
                 Directory.CreateDirectory (autostart_path);
 
+            if (File.Exists (autostart_file_dest))
+                return;
+
             try {
                 File.Copy (autostart_file_path, autostart_file_dest);
                 Logger.LogInfo ("Controller", "Added SparkleShare to startup items");
