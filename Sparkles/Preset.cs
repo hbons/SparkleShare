@@ -72,7 +72,6 @@ namespace Sparkles {
         }
 
 
-        // TODO: Gitlab preset
         public static Preset Create (string name, string description, string address_value,
             string address_example, string path_value, string path_example)
         {

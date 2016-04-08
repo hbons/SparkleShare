@@ -75,11 +75,11 @@ namespace Sparkles.Git {
                 return false;
 
             if (FetchPriorHistory) {
-                git_clone = new GitCommand (Configuration.DefaultConfig.TmpPath,
+                git_clone = new GitCommand (Configuration.DefaultConfiguration.TmpPath,
                     "clone --progress --no-checkout \"" + RemoteUrl + "\" \"" + TargetFolder + "\"", auth_info);
 
             } else {
-                git_clone = new GitCommand (Configuration.DefaultConfig.TmpPath,
+                git_clone = new GitCommand (Configuration.DefaultConfiguration.TmpPath,
                     "clone --progress --no-checkout --depth=1 \"" + RemoteUrl + "\" \"" + TargetFolder + "\"", auth_info);
             }
 

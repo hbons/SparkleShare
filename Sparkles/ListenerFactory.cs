@@ -28,11 +28,11 @@ namespace Sparkles {
         public static BaseListener CreateListener (string folder_name, string folder_identifier)
         {
             // Check if the user wants to use a global custom notification service
-            string uri = Configuration.DefaultConfig.GetConfigOption ("announcements_url");
+            string uri = Configuration.DefaultConfiguration.GetConfigOption ("announcements_url");
 
             // Check if the user wants a use a custom notification service for this folder
             if (string.IsNullOrEmpty (uri))
-                uri = Configuration.DefaultConfig.GetFolderOptionalAttribute (folder_name, "announcements_url");
+                uri = Configuration.DefaultConfiguration.GetFolderOptionalAttribute (folder_name, "announcements_url");
 
             // This is SparkleShare's centralized notification service.
             // It communicates "It's time to sync!" signals between clients.

@@ -50,11 +50,11 @@ namespace Sparkles {
 
             lock (debug_lock) {
                 if (log_size >= 1000) {
-                    File.WriteAllText (Configuration.DefaultConfig.LogFilePath, line + Environment.NewLine);
+                    File.WriteAllText (Configuration.DefaultConfiguration.LogFilePath, line + Environment.NewLine);
                     log_size = 0;
 
                 } else {
-                    File.AppendAllText (Configuration.DefaultConfig.LogFilePath, line + Environment.NewLine);
+                    File.AppendAllText (Configuration.DefaultConfiguration.LogFilePath, line + Environment.NewLine);
                     log_size++;
                 }
             }
@@ -87,8 +87,8 @@ namespace Sparkles {
             if (e.InnerException != null)
                 crash_report += n + e.InnerException.Message + n + e.InnerException.StackTrace + n;
 
-            if (Configuration.DefaultConfig != null && File.Exists (Configuration.DefaultConfig.LogFilePath)) {
-                string debug_log      = File.ReadAllText (Configuration.DefaultConfig.LogFilePath);
+            if (Configuration.DefaultConfiguration != null && File.Exists (Configuration.DefaultConfiguration.LogFilePath)) {
+                string debug_log      = File.ReadAllText (Configuration.DefaultConfiguration.LogFilePath);
                 string [] debug_lines = debug_log.Split (Environment.NewLine.ToCharArray ()); 
                 int line_count        = 50;
                     

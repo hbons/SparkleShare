@@ -595,7 +595,7 @@ namespace SparkleShare {
             if (!SparkleShare.Controller.AvatarsEnabled)
                 return "<!-- $pixmaps-path -->/user-icon-default.png";
               
-            string fetched_avatar = Avatars.GetAvatar (user.Email, 48, SparkleShare.Controller.Config.FullPath);
+            string fetched_avatar = Avatars.GetAvatar (user.Email, 48, SparkleShare.Controller.Config.DirectoryPath);
                 
             if (!string.IsNullOrEmpty (fetched_avatar))
                 return "file://" + fetched_avatar.Replace ("\\", "/");

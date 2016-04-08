@@ -77,13 +77,13 @@ namespace Sparkles {
 
         public string FullPath {
             get {
-                string custom_path = Configuration.DefaultConfig.GetFolderOptionalAttribute (Name, "path");
+                string custom_path = Configuration.DefaultConfiguration.GetFolderOptionalAttribute (Name, "path");
 
                 if (custom_path != null)
                     return Path.Combine (custom_path, Name);
 
-                return Path.Combine (Configuration.DefaultConfig.FoldersPath,
-                                     new Uri (Configuration.DefaultConfig.UrlByName (Name)).Host,
+                return Path.Combine (Configuration.DefaultConfiguration.FoldersPath,
+                                     new Uri (Configuration.DefaultConfiguration.UrlByName (Name)).Host,
                                      Name);
             }
         }

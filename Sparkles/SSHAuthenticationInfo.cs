@@ -40,7 +40,7 @@ namespace Sparkles {
 
         public SSHAuthenticationInfo ()
         {
-            Path = IO.Path.Combine (IO.Path.GetDirectoryName (Configuration.DefaultConfig.FullPath), "ssh");
+            Path = IO.Path.Combine (Configuration.DefaultConfiguration.DirectoryPath, "ssh");
 
             KnownHostsFilePath = IO.Path.Combine (Path, "known_hosts");
             KnownHostsFilePath = MakeWindowsDomainAccountSafe (KnownHostsFilePath);
@@ -60,7 +60,7 @@ namespace Sparkles {
             bool key_found = false;
 
             foreach (string file_path in IO.Directory.GetFiles (Path)) {
-                if (file_path.EndsWith (".key")) {
+                if (file_path.EndsWith (".key", StringComparison.InvariantCultureIgnoreCase)) {
                     PrivateKeyFilePath = file_path;
                     PublicKeyFilePath  = file_path + ".pub";
 
@@ -88,8 +88,11 @@ namespace Sparkles {
             string key_file_name = DateTime.Now.ToString ("yyyy-MM-dd_HH\\hmm") + ".key";
             string computer_name = Dns.GetHostName ();
 
-            if (computer_name.EndsWith (".local") || computer_name.EndsWith (".config"))
-                computer_name = computer_name.Substring (0, computer_name.LastIndexOf ("."));
+            if (computer_name.EndsWith (".local",  StringComparison.InvariantCultureIgnoreCase) ||
+                computer_name.EndsWith (".config", StringComparison.InvariantCultureIgnoreCase))
+
+                computer_name = computer_name.Substring (0,
+                    computer_name.LastIndexOf (".", StringComparison.InvariantCulture));
 
             string arguments =
                 "-t rsa "  + // Crypto type
@@ -118,7 +121,7 @@ namespace Sparkles {
         // Use forward slashes in paths when dealing with Windows domain accounts
         string MakeWindowsDomainAccountSafe (string path)
         {
-            if (path.StartsWith ("\\\\"))
+            if (path.StartsWith ("\\\\", StringComparison.InvariantCulture))
                 return path.Replace ("\\", "/");
 
             return path;
