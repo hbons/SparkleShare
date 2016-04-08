@@ -24,19 +24,20 @@ namespace Sparkles {
 
     public class Configuration : XmlDocument {
 
-        public static Configuration DefaultConfig;
+        public static Configuration DefaultConfiguration;
         public static bool DebugMode = true;
 
-        public string FullPath;
-        public string TmpPath;
-        public string LogFilePath;
+		public readonly string DirectoryPath;
+        public readonly string FilePath;
+        public readonly string TmpPath;
+        public readonly string LogFilePath;
 
 
         public string HomePath {
             get {
                 if (InstallationInfo.Platform == PlatformID.Win32NT)
                     return Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
-
+                
                 return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
             }
         }
@@ -54,7 +55,9 @@ namespace Sparkles {
 
         public Configuration (string config_path, string config_file_name)
         {
-            FullPath         = Path.Combine (config_path, config_file_name);
+            FilePath = Path.Combine (config_path, config_file_name);
+            DirectoryPath = config_path;
+
             string logs_path = Path.Combine (config_path, "logs");
 
             int i = 1;
@@ -79,7 +82,7 @@ namespace Sparkles {
                 Directory.CreateDirectory (config_path);
 
             try {
-                Load (FullPath);
+                Load (FilePath);
 
             } catch (TypeInitializationException) {
                 CreateInitialConfig ();
@@ -88,18 +91,18 @@ namespace Sparkles {
                 CreateInitialConfig ();
 
             } catch (XmlException) {
-                var file = new FileInfo (FullPath);
+                var file = new FileInfo (FilePath);
 
                 if (file.Length == 0) {
-                    File.Delete (FullPath);
+                    File.Delete (FilePath);
                     CreateInitialConfig ();
 
                 } else {
-                    throw new XmlException (FullPath + " does not contain a valid config XML structure.");
+                    throw new XmlException (FilePath + " does not contain a valid config XML structure.");
                 }
 
             } finally {
-                Load (FullPath);
+                Load (FilePath);
                 TmpPath = Path.Combine (FoldersPath, ".tmp");
                 Directory.CreateDirectory (TmpPath);
             }
@@ -121,7 +124,7 @@ namespace Sparkles {
 
             // TODO: Don't do this manually
             string n = Environment.NewLine;
-            File.WriteAllText (FullPath,
+            File.WriteAllText (FilePath,
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + n +
                 "<sparkleshare>" + n +
                 "  <user>" + n +
@@ -332,11 +335,11 @@ namespace Sparkles {
 
         void Save ()
         {
-            if (!File.Exists (FullPath))
-                throw new FileNotFoundException (FullPath + " does not exist");
+            if (!File.Exists (FilePath))
+                throw new FileNotFoundException (FilePath + " does not exist");
 
-            Save (FullPath);
-            Logger.LogInfo ("Config", "Wrote to '" + FullPath + "'");
+            Save (FilePath);
+            Logger.LogInfo ("Config", "Wrote to '" + FilePath + "'");
         }
     }
 }
