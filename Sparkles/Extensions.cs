@@ -24,16 +24,6 @@ namespace Sparkles {
 
     public static class Extensions {
 
-        public static string SHA1 (this string s)
-        {
-            SHA1 sha1          = new SHA1CryptoServiceProvider ();
-            byte [] bytes      = ASCIIEncoding.Default.GetBytes (s);
-            byte [] sha1_bytes = sha1.ComputeHash (bytes);
-
-            return BitConverter.ToString (sha1_bytes).ToLower ().Replace ("-", "");
-        }
-
-
         public static string SHA256 (this string s)
         {
             SHA256 sha256        = new SHA256CryptoServiceProvider ();
@@ -69,15 +59,15 @@ namespace Sparkles {
         public static string ToSize (this double byte_count)
         {
             if (byte_count >= 1099511627776)
-                return String.Format ("{0:##.##} ᴛʙ", Math.Round (byte_count / 1099511627776, 2));
+                return string.Format ("{0:##.##} ᴛʙ", Math.Round (byte_count / 1099511627776, 2));
             else if (byte_count >= 1073741824)
-                return String.Format ("{0:##.##} ɢʙ", Math.Round (byte_count / 1073741824, 1));
+                return string.Format ("{0:##.##} ɢʙ", Math.Round (byte_count / 1073741824, 1));
             else if (byte_count >= 1048576)
-                return String.Format ("{0:##.##} ᴍʙ", Math.Round (byte_count / 1048576, 1));
+                return string.Format ("{0:##.##} ᴍʙ", Math.Round (byte_count / 1048576, 1));
             else if (byte_count >= 1024)
-                return String.Format ("{0:##.##} ᴋʙ", Math.Round (byte_count / 1024, 0));
+                return string.Format ("{0:##.##} ᴋʙ", Math.Round (byte_count / 1024, 0));
             else
-                return byte_count.ToString () + " ʙ";
+                return byte_count + " ʙ";
         }
 
 
@@ -91,7 +81,7 @@ namespace Sparkles {
         public static string ToPrettyDate (this DateTime timestamp)
         {
             TimeSpan time_diff = DateTime.Now.Subtract (timestamp);
-            int day_diff       = (int) time_diff.TotalDays;                
+            var day_diff = (int) time_diff.TotalDays;                
             DateTime yesterday = DateTime.Today.AddDays (-1);
 
             if (timestamp >= yesterday && timestamp < DateTime.Today) {

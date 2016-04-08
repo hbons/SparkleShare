@@ -202,8 +202,8 @@ namespace SparkleShare {
 
             string config_path = Path.Combine (app_data_path, "org.sparkleshare.SparkleShare");
             
-            Config = new Configuration (config_path, "config.xml");
-            Configuration.DefaultConfig = Config;
+            Config = new Configuration (config_path, "projects.xml");
+            Configuration.DefaultConfiguration = Config;
 
             UserAuthenticationInfo = new SSHAuthenticationInfo ();
             SSHAuthenticationInfo.DefaultAuthenticationInfo = UserAuthenticationInfo;
@@ -449,7 +449,7 @@ namespace SparkleShare {
             
             repo.NewChangeSet += delegate (ChangeSet change_set) {
                 if (AvatarsEnabled)
-                    change_set.User.AvatarFilePath = Avatars.GetAvatar (change_set.User.Email, 48, Config.FullPath);
+                    change_set.User.AvatarFilePath = Avatars.GetAvatar (change_set.User.Email, 48, Config.DirectoryPath);
                 
                 NotificationRaised (change_set);
             };

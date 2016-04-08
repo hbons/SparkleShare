@@ -34,11 +34,11 @@ namespace SparkleShare {
 
         public override bool CreateSparkleShareFolder ()
         {
-            if (Directory.Exists (Configuration.DefaultConfig.FoldersPath))
+            if (Directory.Exists (Configuration.DefaultConfiguration.FoldersPath))
                 return false;
             
-            Directory.CreateDirectory (Configuration.DefaultConfig.FoldersPath);
-            Syscall.chmod (Configuration.DefaultConfig.FoldersPath, (FilePermissions) 448); // 448 -> 700
+            Directory.CreateDirectory (Configuration.DefaultConfiguration.FoldersPath);
+            Syscall.chmod (Configuration.DefaultConfiguration.FoldersPath, (FilePermissions) 448); // 448 -> 700
 
             return false;
         }
@@ -46,7 +46,7 @@ namespace SparkleShare {
 
         public override void SetFolderIcon ()
         {
-            var command = new Command ("gvfs-set-attribute", Configuration.DefaultConfig.FoldersPath + " " +
+            var command = new Command ("gvfs-set-attribute", Configuration.DefaultConfiguration.FoldersPath + " " +
                 "metadata::custom-icon-name org.sparkleshare.SparkleShare");
 
             command.StartAndWaitForExit ();

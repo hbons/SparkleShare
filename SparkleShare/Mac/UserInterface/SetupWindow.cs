@@ -36,7 +36,6 @@ namespace SparkleShare {
         NSTextField description_text_field;
 
 
-        public SetupWindow (IntPtr handle) : base (handle) { }
 
         public SetupWindow ()
         {
