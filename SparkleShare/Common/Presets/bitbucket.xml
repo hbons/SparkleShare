@@ -6,7 +6,7 @@
         <description>Free code hosting for Git and Mercurial</description>
         <icon>bitbucket.png</icon>
         <backend>Git</backend>
-        <fingerprint>97:8c:1b:f2:6f:14:6b:5c:3b:ec:aa:46:46:74:7c:40</fingerprint>
+        <fingerprint>cf:35:d0:39:74:91:04:48:94:b6:e1:3c:02:29:09:60:ac:1b:1d:ac:6f:49:cd:28:8d:ec:fd:61:76:86:a7:50</fingerprint>
     </info>
     <address>
       <value>ssh://git@bitbucket.org/</value>
