@@ -6,7 +6,7 @@
         <description>Open Source GitHub alternative</description>
         <icon>gitlab.png</icon>
         <backend>Git</backend>
-        <fingerprint>b6:03:0e:39:97:9e:d0:e7:24:ce:a3:77:3e:01:42:09</fingerprint>
+        <fingerprint>44:e4:05:bc:f4:e1:1a:b5:b8:46:e5:8b:a0:bf:6d:ab:d2:3d:cc:9e:36:7c:ae:17:cb:0c:91:b5:b3:b3:fc:44</fingerprint>
     </info>
     <address>
       <value>ssh://git@gitlab.com/</value>
