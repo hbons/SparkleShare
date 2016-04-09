@@ -122,19 +122,22 @@ namespace Sparkles {
         }
         
         
-        private string DeriveFingerprint (string public_key)
+
+        string DeriveFingerprint (string public_key)
         {
             try {
-                MD5 md5            = new MD5CryptoServiceProvider ();
-                string key         = public_key.Split (" ".ToCharArray ()) [2];
-                byte [] b64_bytes  = Convert.FromBase64String (key);
-                byte [] md5_bytes  = md5.ComputeHash (b64_bytes);
-                string fingerprint = BitConverter.ToString (md5_bytes);
-                
+                SHA256 sha256 = new SHA256CryptoServiceProvider ();
+                string key = public_key.Split (" ".ToCharArray ()) [2];
+
+                byte [] base64_bytes = Convert.FromBase64String (key);
+                byte [] sha256_bytes = sha256.ComputeHash (base64_bytes);
+
+                string fingerprint = BitConverter.ToString (sha256_bytes);
+                Console.WriteLine( fingerprint.ToLower ().Replace ("-", ":"));
                 return fingerprint.ToLower ().Replace ("-", ":");
-                
+
             } catch (Exception e) {
-                Logger.LogInfo ("Fetcher", "Failed creating fingerprint: " + e.Message + " " + e.StackTrace);
+                Logger.LogInfo ("Fetcher", "Failed to create fingerprint: " + e.Message + " " + e.StackTrace);
                 return null;
             }
         }
