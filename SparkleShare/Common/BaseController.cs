@@ -562,7 +562,8 @@ namespace SparkleShare {
             
             try {
                 this.fetcher = (BaseFetcher) Activator.CreateInstance (
-                    Type.GetType ("Sparkles." + backend + "." + backend + "Fetcher, Sparkles." + backend), info);
+                    Type.GetType ("Sparkles." + backend + "." + backend + "Fetcher, Sparkles." + backend),
+                        new object [] { info, UserAuthenticationInfo});
                 
             } catch (Exception e) {
                 Logger.LogInfo ("Controller",
