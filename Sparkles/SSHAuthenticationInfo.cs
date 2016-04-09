@@ -101,12 +101,11 @@ namespace Sparkles {
                 "-C \"" + computer_name + " (SparkleShare)\" " + // Key comment
                 "-f \"" + key_file_name + "\"";
 
-            var process = new Command ("ssh-keygen", arguments);
-            process.StartInfo.WorkingDirectory = Path;
-            process.Start ();
-            process.WaitForExit ();
+            var ssh_keygen = new Command ("ssh-keygen", arguments);
+            ssh_keygen.StartInfo.WorkingDirectory = Path;
+            ssh_keygen.StartAndWaitForExit ();
 
-            if (process.ExitCode == 0) {
+            if (ssh_keygen.ExitCode == 0) {
                 Logger.LogInfo ("Auth", "Created key pair: " + key_file_name);
                 ImportKeys ();
 
