@@ -125,7 +125,9 @@
     <Compile Include="..\Common\BaseController.cs">
       <Link>Controllers\BaseController.cs</Link>
     </Compile>
-    <Compile Include="Controller.cs" />
+    <Compile Include="Controller.cs">
+      <Link>Controllers\Controller.cs</Link>
+    </Compile>
     <Compile Include="..\Common\Avatars.cs">
       <Link>UserInterface\Avatars.cs</Link>
     </Compile>
@@ -156,16 +158,16 @@
     <BundleResource Include="..\Common\Pixmaps\side-splash.png">
       <Link>Resources\side-splash.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Linux\Pixmaps\icons\document-added-12.png">
+    <BundleResource Include="..\Linux\Pixmaps\icons\hicolor\document-added-12.png">
       <Link>Resources\document-added-12.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Linux\Pixmaps\icons\document-edited-12.png">
+    <BundleResource Include="..\Linux\Pixmaps\icons\hicolor\document-edited-12.png">
       <Link>Resources\document-edited-12.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Linux\Pixmaps\icons\document-deleted-12.png">
+    <BundleResource Include="..\Linux\Pixmaps\icons\hicolor\document-deleted-12.png">
       <Link>Resources\document-deleted-12.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Linux\Pixmaps\icons\document-moved-12.png">
+    <BundleResource Include="..\Linux\Pixmaps\icons\hicolor\document-moved-12.png">
       <Link>Resources\document-moved-12.png</Link>
     </BundleResource>
     <BundleResource Include="..\Common\Pixmaps\about.png">
